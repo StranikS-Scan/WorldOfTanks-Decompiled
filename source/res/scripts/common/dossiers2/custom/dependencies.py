@@ -1,0 +1,683 @@
+# Embedded file name: scripts/common/dossiers2/custom/dependencies.py
+from dossiers2.custom.config import RECORD_CONFIGS
+from dossiers2.custom.cache import getCache
+from dossiers2.custom.utils import getVehicleNationID
+A15X15_STATS_DEPENDENCIES = {}
+
+def _set_A15X15_STATS_DEPENDENCIES():
+    global A15X15_STATS_DEPENDENCIES
+    A15X15_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
+     'frags': [_updateMedalCarius],
+     'frags8p': [_updateMedalEkins],
+     'damageDealt': [_updateMedalKnispel],
+     'damageReceived': [_updateMedalKnispel],
+     'spotted': [_updateMedalPoppel],
+     'capturePoints': [_updateMedalLeClerc],
+     'droppedCapturePoints': [_updateMedalLavrinenko]})
+
+
+A7X7_STATS_DEPENDENCIES = {}
+
+def _set_A7X7_STATS_DEPENDENCIES():
+    global A7X7_STATS_DEPENDENCIES
+    A7X7_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
+     'frags': [_updateMedalCarius],
+     'frags8p': [_updateMedalEkins],
+     'damageDealt': [_updateMedalKnispel],
+     'damageReceived': [_updateMedalKnispel],
+     'spotted': [_updateMedalPoppel],
+     'capturePoints': [_updateMedalLeClerc],
+     'droppedCapturePoints': [_updateMedalLavrinenko],
+     'wins': [_updateForTacticalOperations]})
+
+
+ACHIEVEMENT_DEPENDENCIES = {}
+
+def _set_ACHIEVEMENT_DEPENDENCIES():
+    global ACHIEVEMENT_DEPENDENCIES
+    ACHIEVEMENT_DEPENDENCIES.update({'warrior': [_updateBattleHeroes],
+     'invader': [_updateBattleHeroes],
+     'sniper': [_updateBattleHeroes],
+     'defender': [_updateBattleHeroes],
+     'steelwall': [_updateBattleHeroes],
+     'supporter': [_updateBattleHeroes],
+     'scout': [_updateBattleHeroes],
+     'evileye': [_updateBattleHeroes],
+     'battleHeroes': [_updateMedalKay],
+     'fragsBeast': [_updateBeasthunter],
+     'fragsSinai': [_updateSinai],
+     'fragsPatton': [_updatePattonValley],
+     'sniperSeries': [_updateMaxSniperSeries],
+     'maxSniperSeries': [_updateTitleSniper],
+     'invincibleSeries': [_updateMaxInvincibleSeries],
+     'maxInvincibleSeries': [_updateInvincible],
+     'diehardSeries': [_updateMaxDiehardSeries],
+     'maxDiehardSeries': [_updateDiehard],
+     'killingSeries': [_updateMaxKillingSeries],
+     'maxKillingSeries': [_updateHandOfDeath],
+     'piercingSeries': [_updateMaxPiercingSeries],
+     'maxPiercingSeries': [_updateArmorPiercer],
+     'sniper2': [_updateBattleHeroes],
+     'mainGun': [_updateBattleHeroes],
+     'WFC2014WinSeries': [_updateMaxWFC2014WinSeries]})
+
+
+ACHIEVEMENT7X7_DEPENDENCIES = {}
+
+def _set_ACHIEVEMENT7X7_DEPENDENCIES():
+    global ACHIEVEMENT7X7_DEPENDENCIES
+    ACHIEVEMENT7X7_DEPENDENCIES.update({'wolfAmongSheep': [_updateWolfAmongSheepMedal],
+     'geniusForWar': [_updateGeniusForWarMedal],
+     'crucialShot': [_updateCrucialShotMedal],
+     'tacticalBreakthroughSeries': [_updateMaxTacticalBreakthroughSeries, _updateTacticalBreakthrough],
+     'maxTacticalBreakthroughSeries': [_updateAwardCount],
+     'fightingReconnaissance': [_updateFightingReconnaissanceMedal],
+     'pyromaniac': [_updatePyromaniacMedal],
+     'ranger': [_updateRangerMedal],
+     'promisingFighter': [_updatePromisingFighterMedal],
+     'heavyFire': [_updateHeavyFireMedal],
+     'fireAndSteel': [_updateFireAndSteelMedal],
+     'guerrilla': [_updateGuerrillaMedal],
+     'bruteForce': [_updateBruteForceMedal],
+     'prematureDetonation': [_updatePrematureDetonationMedal],
+     'sentinel': [_updateSentinelMedal],
+     'infiltrator': [_updateInfiltratorMedal],
+     'wolfAmongSheepMedal': [_updateAwardCount],
+     'geniusForWarMedal': [_updateAwardCount],
+     'fightingReconnaissanceMedal': [_updateAwardCount],
+     'crucialShotMedal': [_updateAwardCount],
+     'promisingFighterMedal': [_updateAwardCount],
+     'heavyFireMedal': [_updateAwardCount],
+     'rangerMedal': [_updateAwardCount],
+     'fireAndSteelMedal': [_updateAwardCount],
+     'pyromaniacMedal': [_updateAwardCount],
+     'guerrillaMedal': [_updateAwardCount],
+     'infiltratorMedal': [_updateAwardCount],
+     'sentinelMedal': [_updateAwardCount],
+     'prematureDetonationMedal': [_updateAwardCount],
+     'bruteForceMedal': [_updateAwardCount],
+     'kingOfTheHill': [_updateAwardCount],
+     'armoredFist': [_updateAwardCount],
+     'godOfWar': [_updateAwardCount],
+     'willToWinSpirit': [_updateAwardCount],
+     'noMansLand': [_updateAwardCount],
+     'forTacticalOperations': [_updateAwardCount],
+     'awardCount': [_updateBattleTested]})
+
+
+HISTORICAL_ACHIEVEMENTS_DEPENDENCIES = {}
+
+def _set_HISTORICAL_ACHIEVEMENTS_DEPENDENCIES():
+    global HISTORICAL_ACHIEVEMENTS_DEPENDENCIES
+    HISTORICAL_ACHIEVEMENTS_DEPENDENCIES.update({'bothSidesWins': [_updateMakerOfHistoryMedal],
+     'weakVehiclesWins': [_updateGuardsManMedal]})
+
+
+HISTORICAL_STATS_DEPENDENCIES = {}
+
+def _set_HISTORICAL_STATS_DEPENDENCIES():
+    global HISTORICAL_STATS_DEPENDENCIES
+    HISTORICAL_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
+     'frags': [_updateMedalCarius],
+     'frags8p': [_updateMedalEkins],
+     'damageDealt': [_updateMedalKnispel],
+     'damageReceived': [_updateMedalKnispel],
+     'spotted': [_updateMedalPoppel],
+     'capturePoints': [_updateMedalLeClerc],
+     'droppedCapturePoints': [_updateMedalLavrinenko]})
+
+
+FORT_BATTLES_STATS_DEPENDENCIES = {}
+
+def _set_FORT_BATTLES_STATS_DEPENDENCIES():
+    global FORT_BATTLES_STATS_DEPENDENCIES
+    FORT_BATTLES_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
+     'frags': [_updateMedalCarius],
+     'frags8p': [_updateMedalEkins],
+     'damageDealt': [_updateMedalKnispel],
+     'damageReceived': [_updateMedalKnispel],
+     'spotted': [_updateMedalPoppel],
+     'capturePoints': [_updateMedalLeClerc],
+     'droppedCapturePoints': [_updateMedalLavrinenko]})
+
+
+FORT_SORTIES_STATS_DEPENDENCIES = {}
+
+def _set_FORT_SORTIES_STATS_DEPENDENCIES():
+    global FORT_SORTIES_STATS_DEPENDENCIES
+    FORT_SORTIES_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
+     'frags': [_updateMedalCarius],
+     'frags8p': [_updateMedalEkins],
+     'damageDealt': [_updateMedalKnispel],
+     'damageReceived': [_updateMedalKnispel],
+     'spotted': [_updateMedalPoppel],
+     'capturePoints': [_updateMedalLeClerc],
+     'droppedCapturePoints': [_updateMedalLavrinenko],
+     'wins': [_updateMedalKampfer]})
+
+
+FORT_MISC_DEPENDENCIES = {}
+
+def _set_FORT_MISC_DEPENDENCIES():
+    global FORT_MISC_DEPENDENCIES
+    FORT_MISC_DEPENDENCIES.update({'fortResourceInSorties': [_updateConquerorMedal]})
+
+
+VEH_TYPE_FRAGS_DEPENDENCIES = {}
+
+def _set_VEH_TYPE_FRAGS_DEPENDENCIES():
+    global VEH_TYPE_FRAGS_DEPENDENCIES
+    cache = getCache()
+    VEH_TYPE_FRAGS_DEPENDENCIES.update({cache['mausTypeCompDescr']: [_updateMousebane],
+     '_insert_': [_updateTankExpert]})
+
+
+CLAN_STATS_DEPENDENCIES = {}
+
+def _set_CLAN_STATS_DEPENDENCIES():
+    global CLAN_STATS_DEPENDENCIES
+    CLAN_STATS_DEPENDENCIES.update({'battlesCount': [_updateMedalRotmistrov]})
+
+
+def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    frags = 0
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
+        if block in dossierDescr:
+            frags += dossierDescr[block]['frags']
+
+    medalCariusCfg = RECORD_CONFIGS['medalCarius']
+    maxMedalClass = len(medalCariusCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if frags >= medalCariusCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierDescr['achievements']['medalCarius']
+    if curClass == 0 or curClass > medalClass:
+        dossierDescr['achievements']['medalCarius'] = medalClass
+
+
+def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    damage = 0
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
+        if block in dossierDescr:
+            damage += dossierDescr[block]['damageDealt']
+            damage += dossierDescr[block]['damageReceived']
+
+    medalKnispelCfg = RECORD_CONFIGS['medalKnispel']
+    maxMedalClass = len(medalKnispelCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if damage >= medalKnispelCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierDescr['achievements']['medalKnispel']
+    if curClass == 0 or curClass > medalClass:
+        dossierDescr['achievements']['medalKnispel'] = medalClass
+
+
+def _updateMedalPoppel(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    spotted = 0
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
+        if block in dossierDescr:
+            spotted += dossierDescr[block]['spotted']
+
+    medalPoppelCfg = RECORD_CONFIGS['medalPoppel']
+    maxMedalClass = len(medalPoppelCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if spotted >= medalPoppelCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierDescr['achievements']['medalPoppel']
+    if curClass == 0 or curClass > medalClass:
+        dossierDescr['achievements']['medalPoppel'] = medalClass
+
+
+def _updateMedalLeClerc(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    capturePoints = 0
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
+        if block in dossierDescr:
+            capturePoints += dossierDescr[block]['capturePoints']
+
+    medalLeClercCfg = RECORD_CONFIGS['medalLeClerc']
+    maxMedalClass = len(medalLeClercCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if capturePoints >= medalLeClercCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierDescr['achievements']['medalLeClerc']
+    if curClass == 0 or curClass > medalClass:
+        dossierDescr['achievements']['medalLeClerc'] = medalClass
+
+
+def _updateMedalLavrinenko(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    droppedCapturePoints = 0
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
+        if block in dossierDescr:
+            droppedCapturePoints += dossierDescr[block]['droppedCapturePoints']
+
+    medalLavrinenkoCfg = RECORD_CONFIGS['medalLavrinenko']
+    maxMedalClass = len(medalLavrinenkoCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if droppedCapturePoints >= medalLavrinenkoCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierDescr['achievements']['medalLavrinenko']
+    if curClass == 0 or curClass > medalClass:
+        dossierDescr['achievements']['medalLavrinenko'] = medalClass
+
+
+def _updateBattleHeroes(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    dossierBlockDescr['battleHeroes'] += value - prevValue
+
+
+def _updateMedalKay(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalKayCfg = RECORD_CONFIGS['medalKay']
+    maxMedalClass = len(medalKayCfg)
+    battleHeroes = dossierBlockDescr['battleHeroes']
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if battleHeroes >= medalKayCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierBlockDescr['medalKay']
+    if curClass == 0 or curClass > medalClass:
+        dossierBlockDescr['medalKay'] = medalClass
+
+
+def _updateMedalAbrams(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    winAndSurvived = 0
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
+        if block in dossierDescr:
+            winAndSurvived += dossierDescr[block]['winAndSurvived']
+
+    medalAbramsCfg = RECORD_CONFIGS['medalAbrams']
+    maxMedalClass = len(medalAbramsCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if winAndSurvived >= medalAbramsCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierDescr['achievements']['medalAbrams']
+    if curClass == 0 or curClass > medalClass:
+        dossierDescr['achievements']['medalAbrams'] = medalClass
+
+
+def _updateMedalEkins(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    frags8p = 0
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
+        if block in dossierDescr:
+            frags8p += dossierDescr[block]['frags8p']
+
+    medalEkinsCfg = RECORD_CONFIGS['medalEkins']
+    maxMedalClass = len(medalEkinsCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if frags8p >= medalEkinsCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierDescr['achievements']['medalEkins']
+    if curClass == 0 or curClass > medalClass:
+        dossierDescr['achievements']['medalEkins'] = medalClass
+
+
+def _updateBeasthunter(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medals, series = divmod(value, RECORD_CONFIGS['beasthunter'])
+    if dossierBlockDescr['beasthunter'] != medals:
+        dossierBlockDescr['beasthunter'] = medals
+
+
+def _updateSinai(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medals, series = divmod(value, RECORD_CONFIGS['sinai'])
+    if dossierBlockDescr['sinai'] != medals:
+        dossierBlockDescr['sinai'] = medals
+
+
+def _updatePattonValley(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medals, series = divmod(value, RECORD_CONFIGS['pattonValley'])
+    if dossierBlockDescr['pattonValley'] != medals:
+        dossierBlockDescr['pattonValley'] = medals
+
+
+def _updateMaxSniperSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxSniperSeries']:
+        dossierBlockDescr['maxSniperSeries'] = value
+
+
+def _updateTitleSniper(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= RECORD_CONFIGS['titleSniper']:
+        dossierDescr['singleAchievements']['titleSniper'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'titleSniper', 1)
+
+
+def _updateMaxInvincibleSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxInvincibleSeries']:
+        dossierBlockDescr['maxInvincibleSeries'] = value
+
+
+def _updateInvincible(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= RECORD_CONFIGS['invincible']:
+        dossierDescr['singleAchievements']['invincible'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'invincible', 1)
+
+
+def _updateMaxDiehardSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxDiehardSeries']:
+        dossierBlockDescr['maxDiehardSeries'] = value
+
+
+def _updateDiehard(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= RECORD_CONFIGS['diehard']:
+        dossierDescr['singleAchievements']['diehard'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'diehard', 1)
+
+
+def _updateMaxKillingSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxKillingSeries']:
+        dossierBlockDescr['maxKillingSeries'] = value
+
+
+def _updateHandOfDeath(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= RECORD_CONFIGS['handOfDeath']:
+        dossierDescr['singleAchievements']['handOfDeath'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'handOfDeath', 1)
+
+
+def _updateMaxPiercingSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxPiercingSeries']:
+        dossierBlockDescr['maxPiercingSeries'] = value
+
+
+def _updateArmorPiercer(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= RECORD_CONFIGS['armorPiercer']:
+        dossierDescr['singleAchievements']['armorPiercer'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'armorPiercer', 1)
+
+
+def _updateMaxWFC2014WinSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxWFC2014WinSeries']:
+        dossierBlockDescr['maxWFC2014WinSeries'] = value
+    if value >= 1:
+        dossierDescr['singleAchievements']['WFC2014'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'WFC2014', 1)
+
+
+def _updateMousebane(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medals, series = divmod(value, RECORD_CONFIGS['mousebane'])
+    if dossierDescr['achievements']['mousebane'] != medals:
+        dossierDescr['achievements']['mousebane'] = medals
+
+
+def _updateTankExpert(dossierDescr, dossierBlockDescr, key, value):
+    cache = getCache()
+    killedVehTypes = set(dossierBlockDescr.iterkeys())
+    vehiclesInTrees = cache['vehiclesInTrees']
+    if key not in vehiclesInTrees:
+        return
+    if not bool(vehiclesInTrees - killedVehTypes):
+        dossierDescr['achievements']['tankExpert'] = True
+        dossierDescr.addPopUp('achievements', 'tankExpert', True)
+    nationID = getVehicleNationID(key)
+    if not bool(cache['vehiclesInTreesByNation'][nationID] - killedVehTypes):
+        record = ''.join(['tankExpert', str(nationID)])
+        dossierDescr['achievements'][record] = True
+        dossierDescr.addPopUp('achievements', record, True)
+
+
+def _updateWolfAmongSheepMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['wolfAmongSheepMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['wolfAmongSheepMedal'] += medals
+        dossierBlockDescr['wolfAmongSheep'] = amountLeft
+
+
+def _updateGeniusForWarMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['geniusForWarMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['geniusForWarMedal'] += medals
+        dossierBlockDescr['geniusForWar'] = amountLeft
+
+
+def _updateCrucialShotMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['crucialShotMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['crucialShotMedal'] += medals
+        dossierBlockDescr['crucialShot'] = amountLeft
+
+
+def _updateMaxTacticalBreakthroughSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxTacticalBreakthroughSeries']:
+        dossierBlockDescr['maxTacticalBreakthroughSeries'] = value
+
+
+def _updateTacticalBreakthrough(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if dossierBlockDescr['tacticalBreakthroughSeries'] >= RECORD_CONFIGS['tacticalBreakthrough']:
+        dossierDescr['singleAchievements']['tacticalBreakthrough'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'tacticalBreakthrough', 1)
+
+
+def _updateFightingReconnaissanceMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['fightingReconnaissanceMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['fightingReconnaissanceMedal'] += medals
+        dossierBlockDescr['fightingReconnaissance'] = amountLeft
+
+
+def _updatePyromaniacMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['pyromaniacMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['pyromaniacMedal'] += medals
+        dossierBlockDescr['pyromaniac'] = amountLeft
+
+
+def _updateRangerMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['rangerMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['rangerMedal'] += medals
+        dossierBlockDescr['ranger'] = amountLeft
+
+
+def _updatePromisingFighterMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['promisingFighterMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['promisingFighterMedal'] += medals
+        dossierBlockDescr['promisingFighter'] = amountLeft
+
+
+def _updateHeavyFireMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['heavyFireMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['heavyFireMedal'] += medals
+        dossierBlockDescr['heavyFire'] = amountLeft
+
+
+def _updateFireAndSteelMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['fireAndSteelMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['fireAndSteelMedal'] += medals
+        dossierBlockDescr['fireAndSteel'] = amountLeft
+
+
+def _updateGuerrillaMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['guerrillaMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['guerrillaMedal'] += medals
+        dossierBlockDescr['guerrilla'] = amountLeft
+
+
+def _updateBruteForceMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['bruteForceMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['bruteForceMedal'] += medals
+        dossierBlockDescr['bruteForce'] = amountLeft
+
+
+def _updatePrematureDetonationMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['prematureDetonationMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['prematureDetonationMedal'] += medals
+        dossierBlockDescr['prematureDetonation'] = amountLeft
+
+
+def _updateSentinelMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['sentinelMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['sentinelMedal'] += medals
+        dossierBlockDescr['sentinel'] = amountLeft
+
+
+def _updateInfiltratorMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['infiltratorMedal']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['infiltratorMedal'] += medals
+        dossierBlockDescr['infiltrator'] = amountLeft
+
+
+def _updateAwardCount(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if key == 'maxTacticalBreakthroughSeries':
+        amountRequired = RECORD_CONFIGS['tacticalBreakthrough']
+        if prevValue < amountRequired <= value:
+            dossierBlockDescr['awardCount'] += 1
+    elif key == 'forTacticalOperations' and value - prevValue != 0:
+        dossierBlockDescr['awardCount'] += 1
+    else:
+        dossierBlockDescr['awardCount'] += value - prevValue
+
+
+def _updateBattleTested(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    awardCountCnfg = RECORD_CONFIGS['battleTested']
+    maxMedalClass = len(awardCountCnfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if value >= awardCountCnfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierBlockDescr['battleTested']
+    if curClass == 0 or curClass > medalClass:
+        dossierBlockDescr['battleTested'] = medalClass
+
+
+def _updateMakerOfHistoryMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    minWinsCnfg = RECORD_CONFIGS['makerOfHistory']
+    maxMedalClass = len(minWinsCnfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if value >= minWinsCnfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierBlockDescr['makerOfHistory']
+    if curClass == 0 or curClass > medalClass:
+        dossierBlockDescr['makerOfHistory'] = medalClass
+
+
+def _updateGuardsManMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    minWinsCnfg = RECORD_CONFIGS['guardsman']
+    maxMedalClass = len(minWinsCnfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if value >= minWinsCnfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    curClass = dossierBlockDescr['guardsman']
+    if curClass == 0 or curClass > medalClass:
+        dossierBlockDescr['guardsman'] = medalClass
+
+
+def _updateForTacticalOperations(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    wins7x7 = dossierBlockDescr['wins']
+    medalCfg = RECORD_CONFIGS['forTacticalOperations']
+    maxMedalClass = len(medalCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if wins7x7 >= medalCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        return
+
+    achievements7x7 = dossierDescr['achievements7x7']
+    curClass = achievements7x7['forTacticalOperations']
+    if curClass == 0 or curClass > medalClass:
+        achievements7x7['forTacticalOperations'] = medalClass
+
+
+def _updateConquerorMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    cfg = RECORD_CONFIGS['conqueror']
+    i = 0
+    for count in cfg:
+        if value < count:
+            break
+        i += 1
+
+    if i > 0:
+        medalClass = len(cfg) - i + 1
+        dossierDescr['fortAchievements']['conqueror'] = medalClass
+
+
+def _updateMedalKampfer(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    cfg = RECORD_CONFIGS['kampfer']
+    wins = dossierBlockDescr['wins']
+    i = 0
+    for count in cfg:
+        if wins < count:
+            break
+        i += 1
+
+    if i > 0:
+        medalClass = len(cfg) - i + 1
+        dossierDescr['fortAchievements']['kampfer'] = medalClass
+
+
+def _updateMedalRotmistrov(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    cfg = RECORD_CONFIGS['medalRotmistrov']
+    i = 0
+    for count in cfg:
+        if value < count:
+            break
+        i += 1
+
+    if i > 0:
+        medalClass = len(cfg) - i + 1
+        curClass = dossierDescr['clanAchievements']['medalRotmistrov']
+        if curClass == 0 or curClass > medalClass:
+            dossierDescr['clanAchievements']['medalRotmistrov'] = medalClass
+
+
+def init():
+    _set_A15X15_STATS_DEPENDENCIES()
+    _set_A7X7_STATS_DEPENDENCIES()
+    _set_ACHIEVEMENT_DEPENDENCIES()
+    _set_ACHIEVEMENT7X7_DEPENDENCIES()
+    _set_VEH_TYPE_FRAGS_DEPENDENCIES()
+    _set_HISTORICAL_STATS_DEPENDENCIES()
+    _set_HISTORICAL_ACHIEVEMENTS_DEPENDENCIES()
+    _set_FORT_BATTLES_STATS_DEPENDENCIES()
+    _set_FORT_SORTIES_STATS_DEPENDENCIES()
+    _set_FORT_MISC_DEPENDENCIES()
+    _set_CLAN_STATS_DEPENDENCIES()

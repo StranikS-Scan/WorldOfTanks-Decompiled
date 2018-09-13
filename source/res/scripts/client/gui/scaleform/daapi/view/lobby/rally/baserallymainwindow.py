@@ -1,41 +1,42 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyMainWindow.py
+import BigWorld
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from gui.prb_control.prb_helpers import GlobalListener
+from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
 from gui.Scaleform.daapi.view.meta.BaseRallyMainWindowMeta import BaseRallyMainWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.events import FocusEvent
 from messenger import MessengerEntry
+from messenger.ext import channel_num_gen
 from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
-from messenger.proto.bw import find_criteria
-__author__ = 'd_dichkovsky'
 
-class BaseRallyMainWindow(View, AbstractWindowView, BaseRallyMainWindowMeta):
+class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
+    LEADERSHIP_NOTIFICATION_TIME = 2.5
 
     def __init__(self):
         super(BaseRallyMainWindow, self).__init__()
-        self._viewToLoad = None
-        self._viewToUnload = None
         self._currentView = None
         self._isBackClicked = False
+        self._leadershipNotificationCallback = None
         return
+
+    def getClientID(self):
+        return channel_num_gen.getClientID4Prebattle(self.getPrbType())
+
+    def onFocusIn(self, alias):
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.getClientID()}))
 
     def getIntroViewAlias(self):
         return ''
 
-    def getFlashAliases(self):
-        return []
-
-    def getPythonAliases(self):
-        return []
-
     def getPrbType(self):
         return PREBATTLE_TYPE.NONE
 
-    def getNavigationKey(self):
-        return 'BaseRallyMainWindow'
+    def getPrbChatType(self):
+        return PREBATTLE_TYPE.UNIT
 
     @property
     def chat(self):
@@ -63,77 +64,47 @@ class BaseRallyMainWindow(View, AbstractWindowView, BaseRallyMainWindowMeta):
             self._requestViewLoad(self.getIntroViewAlias(), None, closeForced=closeForced)
         return
 
-    def _requestViewLoad(self, flashAlias, itemID, closeForced = False):
-        flashAliases = self.getFlashAliases()
-        pythonAliases = self.getPythonAliases()
-        if flashAlias in flashAliases:
-            pyAlias = pythonAliases[flashAliases.index(flashAlias)]
-            self._viewToLoad = (flashAlias, pyAlias, itemID)
-            self._processStacks(closeForced=closeForced)
-        else:
-            LOG_ERROR('Passed flash alias is not registered:', flashAlias)
+    def _applyViewLoad(self):
+        super(BaseRallyMainWindow, self)._applyViewLoad()
+        self._isBackClicked = False
 
-    def _closeCallback(self, canBeClosed):
-        self._viewToUnload = None
-        if canBeClosed:
-            NavigationStack.nav2Prev(self.getNavigationKey())
-            self._processStacks()
-        return
-
-    def _processStacks(self, closeForced = False):
-        if self._viewToUnload is not None:
-            flashAlias, pyAlias, itemID = self._viewToUnload
-            pyView = self.components.get(pyAlias)
-            if pyView is not None:
-                if not closeForced:
-                    pyView.canBeClosed(lambda canBeClosed: self._closeCallback(canBeClosed))
-                else:
-                    self._closeCallback(True)
-        elif self._viewToLoad is not None:
-            flashAlias, pyAlias, itemID = self._viewToLoad
-            self._currentView = flashAlias
-            self.as_loadViewS(flashAlias, pyAlias)
-            self._isBackClicked = False
-        return
+    def _populate(self):
+        super(BaseRallyMainWindow, self)._populate()
+        self.startGlobalListening()
+        self._showLeadershipNotification()
 
     def _dispose(self):
+        self.stopGlobalListening()
         chat = self.chat
         if chat:
             chat.minimize()
-        self._viewToLoad = None
-        self._viewToUnload = None
         self._currentView = None
+        self._clearLeadershipNotification()
         super(BaseRallyMainWindow, self)._dispose()
-        self.removeListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self._handleChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
-        super(BaseRallyMainWindow, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == MESSENGER_VIEW_ALIAS.CHANNEL_COMPONENT:
             channels = MessengerEntry.g_instance.gui.channelsCtrl
             controller = None
             if channels:
-                controller = channels.getControllerByCriteria(find_criteria.BWPrbChannelFindCriteria(self.getPrbType()))
+                controller = channels.getController(self.getClientID())
             if controller is not None:
                 controller.setView(viewPy)
             else:
                 self.addListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self._handleChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
             return
         else:
-            if self._viewToLoad is not None:
-                NavigationStack.nav2Next(self.getNavigationKey(), *self._viewToLoad)
-                flashAlias, pyAlias, itemID = self._viewToLoad
-                if pyAlias == alias:
-                    viewPy.setData(itemID)
-                    self._viewToLoad = None
+            super(BaseRallyMainWindow, self)._onRegisterFlashComponent(viewPy, alias)
             return
 
     def _onUnregisterFlashComponent(self, viewPy, alias):
-        super(BaseRallyMainWindow, self)._onUnregisterFlashComponent(viewPy, alias)
         if alias == MESSENGER_VIEW_ALIAS.CHANNEL_COMPONENT:
             chat = self.chat
             if chat:
                 chat.removeController()
+        self.removeListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self._handleChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
+        super(BaseRallyMainWindow, self)._onUnregisterFlashComponent(viewPy, alias)
 
     def _handleChannelControllerInited(self, event):
         ctx = event.ctx
@@ -146,8 +117,27 @@ class BaseRallyMainWindow(View, AbstractWindowView, BaseRallyMainWindowMeta):
             if controller is None:
                 LOG_ERROR('Channel controller is not defined', ctx)
                 return
-            if prbType is self.getPrbType():
+            if prbType is self.getPrbChatType():
                 chat = self.chat
                 if chat is not None:
                     controller.setView(chat)
             return
+
+    def _showLeadershipNotification(self):
+        functional = self.unitFunctional
+        if functional and functional.getShowLeadershipNotification():
+            self.as_showWaitingS(WAITING.PREBATTLE_GIVELEADERSHIP, {})
+            self._leadershipNotificationCallback = BigWorld.callback(self.LEADERSHIP_NOTIFICATION_TIME, self._cancelLeadershipNotification)
+
+    def _clearLeadershipNotification(self):
+        if self._leadershipNotificationCallback is not None:
+            BigWorld.cancelCallback(self._leadershipNotificationCallback)
+            self._leadershipNotificationCallback = None
+        return
+
+    def _cancelLeadershipNotification(self):
+        self._clearLeadershipNotification()
+        functional = self.unitFunctional
+        if functional:
+            functional.doLeadershipNotificationShown()
+        self.as_hideWaitingS()

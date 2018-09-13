@@ -1,5 +1,4 @@
 # Embedded file name: scripts/common/items/artefacts.py
-from types import IntType
 import items, nations
 from items import _xml, vehicles
 from debug_utils import *
@@ -75,7 +74,7 @@ class StaticFactorDevice(OptionalDevice):
             attrDict = getattr(vehicleDescr, self.__attr[0])
             attrName = self.__attr[1]
         val = attrDict[attrName]
-        if type(val) is IntType:
+        if type(val) is int:
             attrDict[attrName] = int(val * self.__factor)
         else:
             attrDict[attrName] = val * self.__factor
@@ -95,7 +94,7 @@ class StaticAdditiveDevice(OptionalDevice):
             attrDict = getattr(vehicleDescr, self.__attr[0])
             attrName = self.__attr[1]
         val = attrDict[attrName]
-        if type(val) is IntType:
+        if type(val) is int:
             attrDict[attrName] = int(val + self.__value)
         else:
             attrDict[attrName] = val + self.__value

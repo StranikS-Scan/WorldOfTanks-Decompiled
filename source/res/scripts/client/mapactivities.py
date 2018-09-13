@@ -49,6 +49,9 @@ class IMapActivity:
     def isPeriodic(self):
         return False
 
+    def isOver(self):
+        return False
+
 
 class MapActivities(object):
 
@@ -128,6 +131,11 @@ class MapActivities(object):
 
     def __onPeriodicTimer(self):
         self.__cbID = None
+        for activity in self.__currActivities:
+            if activity.isOver():
+                activity.stop()
+                self.__currActivities.remove(activity)
+
         for activity in self.__pendingActivities:
             if activity.canStart():
                 activity.start()
@@ -170,9 +178,8 @@ class WarplaneActivity(IMapActivity):
         self.__cbID = None
         self.__startTime = startTime
         self.__fadedIn = False
-        self.__period = self.__settings.readFloat('period', -1.0)
-        if self.isPeriodic() and Timer.getTime() > self.__startTime:
-            self.__startTime = math.floor((Timer.getTime() - self.__startTime) / self.__period) * self.__period + self.__startTime
+        self.__period = self.__settings.readFloat('period', 0.0)
+        self.clampStartTime()
         self.__firstLaunch = True
         self.__curve = BigWorld.WGActionCurve(self.__settings)
         self.__modelName = self.__curve.getChannelProperty(0, 'modelName').asString
@@ -188,6 +195,23 @@ class WarplaneActivity(IMapActivity):
     def isPeriodic(self):
         return self.__period > 0.0
 
+    def isOver(self):
+        return Timer.getTime() > self.__endTime
+
+    def clampStartTime(self):
+        if self.isPeriodic() and Timer.getTime() > self.__startTime:
+            self.__startTime = math.floor((Timer.getTime() - self.__startTime) / self.__period) * self.__period + self.__startTime
+
+    def setStartTime(self, parentStartTime):
+        if not self.__firstLaunch:
+            self.pause()
+        timeFrame = self.__settings.readVector2('startTime')
+        self.__startTime = parentStartTime + random.uniform(timeFrame[0], timeFrame[1])
+        self.clampStartTime()
+
+    def setPeriod(self, period):
+        self.__period = period
+
     def start(self):
         if self.__firstLaunch is True:
             BigWorld.addModel(self.__model)
@@ -200,18 +224,18 @@ class WarplaneActivity(IMapActivity):
                 self.__motor.restart(Timer.getTime() - self.__startTime)
             self.__firstLaunch = False
         else:
-            if self.__model is not None:
-                self.__model.visible = 1
-                if self.__motor is not None:
-                    self.__model.addMotor(self.__motor)
-                    self.__motor.restart()
-                    self.__endTime = self.__motor.totalTime + self.__startTime
+            self.pause()
+            if self.__motor is not None:
+                self.__model.addMotor(self.__motor)
+                self.__motor.restart()
+                self.__endTime = self.__motor.totalTime + self.__startTime
             if self.__cbID is not None:
                 BigWorld.cancelCallback(self.__cbID)
             if self.__sound is not None:
                 self.__sound.stop()
                 self.__sound = None
             self.__fadedIn = False
+        self.__model.visible = 1
         self.__startTime += self.__period
         self.__waitEnterWorld()
         return
@@ -242,6 +266,10 @@ class WarplaneActivity(IMapActivity):
         if self.__sound is not None:
             self.__sound.stop()
             self.__sound = None
+        if self.__particles is not None:
+            self.__particlesNode.detach(self.__particles)
+            self.__particlesNode = None
+            self.__particles = None
         if self.__model is not None:
             if self.__motor is not None and self.__motor in self.__model.motors:
                 self.__model.delMotor(self.__motor)
@@ -267,10 +295,7 @@ class WarplaneActivity(IMapActivity):
             if effectName != '':
                 Pixie.createBG(effectName, self.__onParticlesLoaded)
         elif visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
-            if self.__period <= 0.0:
-                self.stop()
-            else:
-                self.pause()
+            self.pause()
             return
         if self.__sound is not None:
             if self.__sound.isPlaying:
@@ -314,9 +339,87 @@ class WarplaneActivity(IMapActivity):
         return
 
 
+class ScenarioActivity(IMapActivity):
+
+    def __init__(self):
+        self.__cbID = None
+        self.__currentActivities = []
+        self.__pendingActivities = []
+        self.__startTime = sys.maxint
+        self.__period = 0.0
+        return
+
+    def create(self, settings, startTime):
+        self.__startTime = startTime
+        trajectories = settings['trajectories']
+        if trajectories is None:
+            return
+        else:
+            self.__period = settings.readFloat('period', 0.0)
+            for activityType, activityXML in trajectories.items():
+                activity = _createActivity(activityType)
+                if activity is not None:
+                    activity.create(activityXML, sys.maxint)
+                    self.__pendingActivities.append(activity)
+
+            return
+
+    def clampStartTime(self):
+        if self.isPeriodic() and Timer.getTime() > self.__startTime:
+            self.__startTime = math.floor((Timer.getTime() - self.__startTime) / self.__period) * self.__period + self.__startTime
+
+    def start(self):
+        self.__pendingActivities.extend(self.__currentActivities)
+        self.__currentActivities = []
+        for activity in self.__pendingActivities:
+            activity.setStartTime(self.__startTime)
+
+        self.__startTime += self.__period
+        self.__onPeriodicTimer()
+
+    def stop(self):
+        for activity in self.__currentActivities:
+            activity.stop()
+
+        for activity in self.__pendingActivities:
+            activity.stop()
+
+        self.__currentActivities = []
+        self.__pendingActivities = []
+
+    def canStart(self):
+        return Timer.getTime() >= self.__startTime
+
+    def isActive(self):
+        return Timer.getTime() >= self.__startTime
+
+    def isPeriodic(self):
+        return self.__period > 0.0
+
+    def __onPeriodicTimer(self):
+        self.__cbID = None
+        if not self.isPeriodic():
+            for activity in self.__currentActivities:
+                if activity.isOver():
+                    activity.stop()
+                    self.__currentActivities.remove(activity)
+
+        for activity in self.__pendingActivities:
+            if activity.canStart():
+                activity.start()
+                if not activity.isPeriodic():
+                    self.__currentActivities.append(activity)
+                    self.__pendingActivities.remove(activity)
+
+        BigWorld.callback(0.1, self.__onPeriodicTimer)
+        return
+
+
 def _createActivity(typeName):
     if typeName == 'warplane':
         return WarplaneActivity()
+    elif typeName == 'scenario':
+        return ScenarioActivity()
     else:
         return None
 

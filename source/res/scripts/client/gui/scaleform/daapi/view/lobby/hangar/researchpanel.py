@@ -2,6 +2,8 @@
 from CurrentVehicle import g_currentVehicle
 from adisp import process
 from debug_utils import LOG_ERROR
+from helpers.i18n import makeString
+from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.ResearchPanelMeta import ResearchPanelMeta
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
@@ -9,9 +11,6 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.utils.requesters import StatsRequester
 
 class ResearchPanel(ResearchPanelMeta, DAAPIModule):
-
-    def __init__(self):
-        super(ResearchPanel, self).__init__()
 
     def _populate(self):
         super(ResearchPanel, self)._populate()
@@ -38,11 +37,16 @@ class ResearchPanel(ResearchPanelMeta, DAAPIModule):
         if g_currentVehicle.isPresent():
             xps = yield StatsRequester().getVehicleTypeExperiences()
             xp = xps.get(g_currentVehicle.item.intCD, 0)
-            self.as_setEarnedXPS(xp)
-            self.as_setEliteS(g_currentVehicle.item.isElite)
+            isElite = g_currentVehicle.item.isElite
+            vTypeId = g_currentVehicle.item.type
+            vTypeName = makeString('#menu:header/vehicleType/elite/%s' % vTypeId) if isElite is True else makeString('#menu:header/vehicleType/%s' % vTypeId)
+            vDescription = makeString('#menu:header/level', vTypeName=vTypeName)
+            vLevel = makeString('#menu:header/level/%s' % g_currentVehicle.item.level)
+            vDescription = makeHtmlString('html_templates:lobby/header', 'vehicle-level', {'level': vLevel,
+             'vDescription': vDescription})
+            self.as_updateCurrentVehicleS(g_currentVehicle.item.userName, vTypeId, vDescription, xp, isElite)
         else:
-            self.as_setEarnedXPS(0)
-            self.as_setEliteS(False)
+            self.as_updateCurrentVehicleS('', '', '', 0, False)
             yield lambda callback = None: callback
         return
 

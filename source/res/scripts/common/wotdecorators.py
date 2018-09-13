@@ -1,5 +1,5 @@
 # Embedded file name: scripts/common/wotdecorators.py
-from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION
+from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, CRITICAL_ERROR
 from time_tracking import LOG_TIME_WARNING
 import time
 import time_tracking
@@ -22,8 +22,7 @@ def nofail(func):
             return func(*args, **kwArgs)
         except:
             LOG_WRAPPED_CURRENT_EXCEPTION(wrapper.__name__, func.__name__, func.func_code.co_filename, func.func_code.co_firstlineno + 1)
-            import sys
-            sys.exit()
+            CRITICAL_ERROR('Exception in no-fail code')
 
     return wrapper
 

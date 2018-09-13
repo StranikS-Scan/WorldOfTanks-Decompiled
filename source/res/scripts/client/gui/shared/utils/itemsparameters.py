@@ -178,7 +178,7 @@ class _ItemsParameters(object):
          'compatible': tuple(),
          'stats': list(),
          'base': list()}
-        vehicleHasTurrets = len(vehicleDescr.type.hull.get('fakeTurrets', {}).get('lobby', ())) != len(vehicleDescr.type.turrets)
+        vehicleHasTurrets = len(vehicleDescr.hull['fakeTurrets']['lobby']) != len(vehicleDescr.turrets)
         if isParameters:
             excluded = list()
             if not vehicleHasTurrets:

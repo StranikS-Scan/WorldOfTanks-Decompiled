@@ -2,4 +2,7 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyIntroView import BaseRallyIntroView
 
 class FortIntroMeta(BaseRallyIntroView):
-    pass
+
+    def as_setIntroDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setIntroData(data)

@@ -273,6 +273,8 @@ class VehicleStickers(object):
 
     def attach(self, modelsWithParentNodes, isDamaged, showDamageStickers):
         for componentName, (model, parentNode) in zip(VehicleStickers.COMPONENT_NAMES, modelsWithParentNodes):
+            if model is None or parentNode is None:
+                continue
             componentStickers = self.__stickers[componentName]
             componentStickers.stickers.attachStickers(model, parentNode, isDamaged)
             if showDamageStickers:
@@ -284,17 +286,20 @@ class VehicleStickers(object):
                     damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.textureName, damageSticker.bumpTextureName, damageSticker.rayStart, damageSticker.rayEnd, damageSticker.sizes, damageSticker.rayUp)
 
         gunModel, gunNode = modelsWithParentNodes[-1]
-        if self.__animateGunInsignia:
-            try:
-                gunNode = gunModel.root if isDamaged else gunModel.node(VehicleStickers.__INSIGNIA_NODE_NAME)
-            except:
-                LOG_ERROR('Cannot attach gun decals to model "%s" - it does not have node named "G"' % gunModel.sources[0])
-                return
-
+        if gunModel is None or gunNode is None:
+            return
         else:
-            gunNode = gunModel.root
-        self.__stickers['gunInsignia'].stickers.attachStickers(gunModel, gunNode, isDamaged)
-        return
+            if self.__animateGunInsignia:
+                try:
+                    gunNode = gunModel.root if isDamaged else gunModel.node(VehicleStickers.__INSIGNIA_NODE_NAME)
+                except:
+                    LOG_ERROR('Cannot attach gun decals to model "%s" - it does not have node named "G"' % gunModel.sources[0])
+                    return
+
+            else:
+                gunNode = gunModel.root
+            self.__stickers['gunInsignia'].stickers.attachStickers(gunModel, gunNode, isDamaged)
+            return
 
     def detach(self):
         for componentStickers in self.__stickers.itervalues():

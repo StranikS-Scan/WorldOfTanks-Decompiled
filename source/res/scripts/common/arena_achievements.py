@@ -90,4 +90,9 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6},
  'medalCoolBlood': {'maxDistance': 100,
                     'minKills': 2},
  'promisingFighter': {'maxPosInTopXPGainer': 3},
- 'heavyFire': {'maxPosInTopDamager': 3}}
+ 'heavyFire': {'maxPosInTopDamager': 3},
+ 'fighter': {'minKills': 4,
+             'maxKills': 5},
+ 'duelist': {'minKills': 2},
+ 'bonecrusher': {'minCrits': 5},
+ 'charmed': {'minVehs': 4}}

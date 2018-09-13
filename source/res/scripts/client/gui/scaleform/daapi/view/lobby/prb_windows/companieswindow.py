@@ -4,12 +4,12 @@ from gui.Scaleform.daapi.view.lobby.prb_windows import companies_dps
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattlesListWindow import PrebattlesListWindow
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
-from gui.prb_control.functional.company import CompanyListRequester
 from gui.prb_control.functional.default import PrbRosterRequester
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.prb_control.context import prb_ctx
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.CompaniesWindowMeta import CompaniesWindowMeta
+from gui.shared.events import FocusEvent
 from messenger.ext import channel_num_gen
 from messenger.m_constants import LAZY_CHANNEL
 
@@ -19,7 +19,6 @@ class CompaniesWindow(PrebattlesListWindow, CompaniesWindowMeta):
 
     def __init__(self):
         super(CompaniesWindow, self).__init__(LAZY_CHANNEL.COMPANIES)
-        self.__listRequester = CompanyListRequester()
         self.__rosterRequester = PrbRosterRequester()
         self.__listDP = None
         return
@@ -36,7 +35,7 @@ class CompaniesWindow(PrebattlesListWindow, CompaniesWindowMeta):
         yield self.prbDispatcher.join(prb_ctx.JoinCompanyCtx(prbID, waitingID='prebattle/join'))
 
     def refreshCompaniesList(self, owner, isNotInBattle, division):
-        self.__listRequester.request(prb_ctx.RequestCompaniesCtx(isNotInBattle, division, owner))
+        self.__getCompaniesList(isNotInBattle, division, owner)
 
     def requestPlayersList(self, prbID):
         self.__rosterRequester.request(prbID)
@@ -47,49 +46,36 @@ class CompaniesWindow(PrebattlesListWindow, CompaniesWindowMeta):
     def getClientID(self):
         return channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.COMPANIES)
 
-    def onPreQueueFunctionalInited(self):
-        self.as_disableCreateButtonS(True)
+    def onFocusIn(self, alias):
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.getClientID()}))
 
-    def onPreQueueFunctionalFinished(self):
-        self.as_disableCreateButtonS(False)
+    def onPrbListReceived(self, prebattles):
+        if self.__listDP is not None:
+            self.__listDP.buildList(prebattles)
+            self.__listDP.refresh()
+        return
 
-    def onPrbFunctionalInited(self):
-        self.as_disableCreateButtonS(True)
-
-    def onPrbFunctionalFinished(self):
-        self.as_disableCreateButtonS(False)
-
-    def onIntroUnitFunctionalInited(self):
-        self.as_disableCreateButtonS(True)
-
-    def onIntroUnitFunctionalFinished(self):
-        self.as_disableCreateButtonS(False)
-
-    def onUnitFunctionalInited(self):
-        self.as_disableCreateButtonS(True)
-
-    def onUnitFunctionalFinished(self):
-        self.as_disableCreateButtonS(False)
+    def onPrbRosterReceived(self, prbID, roster):
+        if self.__listDP is not None:
+            idx = self.__listDP.setPlayers(prbID, roster)
+            self.__listDP.refresh()
+            self.as_showPlayersListS(idx)
+        return
 
     def _populate(self):
         super(CompaniesWindow, self)._populate()
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__listDP = companies_dps.CompaniesDataProvider()
         self.__listDP.setFlashObject(self.as_getCompaniesListDPS())
-        self.as_disableCreateButtonS(self.prbDispatcher.hasModalEntity())
+        self.as_disableCreateButtonS(False)
         self.startGlobalListening()
-        self.__listRequester.start(self.__onCompaniesListReceived)
         self.__rosterRequester.start(self.__onRosterReceived)
         self.as_setDefaultFilterS('', False, 0)
-        if not self.__listRequester.isInCooldown():
-            self.__listRequester.request(prb_ctx.RequestCompaniesCtx(False, 0, ''))
-        else:
-            self.as_setRefreshCoolDownS(self.__listRequester.getCooldown())
+        self.__getCompaniesList()
 
     def _dispose(self):
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.stopGlobalListening()
-        self.__listRequester.stop()
         self.__rosterRequester.stop()
         if self.__listDP is not None:
             self.__listDP._dispose()
@@ -97,18 +83,9 @@ class CompaniesWindow(PrebattlesListWindow, CompaniesWindowMeta):
         super(CompaniesWindow, self)._dispose()
         return
 
-    def __onCompaniesListReceived(self, prebattles):
-        if self.__listDP is not None:
-            self.__listDP.buildList(prebattles)
-            self.__listDP.refresh()
-        return
-
-    def __onRosterReceived(self, prbID, roster):
-        if self.__listDP is not None:
-            idx = self.__listDP.setPlayers(prbID, roster)
-            self.__listDP.refresh()
-            self.as_showPlayersListS(idx)
-        return
+    @process
+    def __getCompaniesList(self, isNotInBattle = False, division = 0, owner = ''):
+        yield self.prbDispatcher.sendPrbRequest(prb_ctx.RequestCompaniesCtx(isNotInBattle, division, owner))
 
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.PREBATTLES_LIST:

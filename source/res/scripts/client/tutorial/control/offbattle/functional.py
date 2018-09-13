@@ -1,24 +1,40 @@
 # Embedded file name: scripts/client/tutorial/control/offbattle/functional.py
 import BigWorld
 import MusicController
+from adisp import process
 from gui import game_control
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.settings import FUNCTIONAL_EXIT
 from tutorial.control import TutorialProxyHolder
 from tutorial.control.functional import FunctionalEffect
 from tutorial.control.offbattle.context import OffbattleBonusesRequester
 from tutorial.control.offbattle.context import OffBattleClientCtx
 from tutorial.control.offbattle.context import _getBattleDescriptor
 from tutorial.gui import GUI_EFFECT_NAME
-from tutorial.logger import LOG_ERROR
+from tutorial.logger import LOG_ERROR, LOG_WARNING
 from tutorial.settings import PLAYER_XP_LEVEL
 
 class FunctionalEnterQueueEffect(FunctionalEffect):
 
     def triggerEffect(self):
-        enqueue = getattr(BigWorld.player(), 'enqueueTutorial', None)
-        if enqueue is None:
-            LOG_ERROR('BigWorld.player().enqueueTutorial not found')
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            self._doEffect(dispatcher)
+        else:
+            LOG_WARNING('Prebattle dispatcher is not defined')
+        return
+
+    @process
+    def _doEffect(self, dispatcher):
+        result = yield dispatcher.unlock(FUNCTIONAL_EXIT.BATTLE_TUTORIAL)
+        if not result:
+            self._tutorial.refuse()
             return
         else:
+            enqueue = getattr(BigWorld.player(), 'enqueueTutorial', None)
+            if enqueue is None:
+                LOG_ERROR('BigWorld.player().enqueueTutorial not found')
+                return
             activate = self._tutorial.getFlags().activateFlag
             flagID = self._effect.getTargetID()
             refuse = self._tutorial.refuse

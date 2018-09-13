@@ -5,12 +5,11 @@ import account_helpers
 from adisp import process
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString, DialogsInterface
-from gui.Scaleform.daapi.view.lobby.prb_windows.sf_settings import PRB_WINDOW_VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BaseRallyRoomViewMeta import BaseRallyRoomViewMeta
 from gui.Scaleform.framework import ViewTypes, AppRef
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT, REQUEST_TYPE
@@ -19,7 +18,6 @@ from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from messenger.proto.events import g_messengerEvents
-__author__ = 'd_dichkovsky'
 
 class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
 
@@ -149,9 +147,11 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         self._updateRallyData()
         self._setActionButtonState()
         g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
+        g_messengerEvents.users.onUsersRosterReceived += self._onUsersRosterReceived
 
     def _dispose(self):
         g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
+        g_messengerEvents.users.onUsersRosterReceived -= self._onUsersRosterReceived
         self._closeSendInvitesWindow()
         HideEvent = events.HideWindowEvent
         self.fireEvent(HideEvent(HideEvent.HIDE_VEHICLE_SELECTOR_WINDOW))
@@ -207,8 +207,12 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
             self.requestToKickUser(databaseID)
 
     def onSlotsHighlihgtingNeed(self, databaseID):
-        availableSlots = list(self.unitFunctional.getPlayerInfo(databaseID).getAvailableSlots(True))
+        availableSlots = self.getAvailableSlots(databaseID)
         self.as_highlightSlotsS(availableSlots)
+        return availableSlots
+
+    def getAvailableSlots(self, databaseID):
+        availableSlots = list(self.unitFunctional.getPlayerInfo(databaseID).getAvailableSlots(True))
         return availableSlots
 
     def editDescriptionRequest(self, description):
@@ -228,12 +232,15 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         if self._candidatesDP and self._candidatesDP.hasCandidate(user.getID()):
             self.rebuildCandidatesDP()
 
+    def _onUsersRosterReceived(self):
+        self._updateRallyData()
+
     def _updateVehiclesLabel(self, minVal, maxVal):
         self.as_setVehiclesTitleS(makeHtmlString('html_templates:lobby/rally/', 'vehiclesLabel', {'minValue': minVal,
          'maxValue': maxVal}))
 
     def _closeSendInvitesWindow(self):
-        self._destroyRelatedView(ViewTypes.WINDOW, PRB_WINDOW_VIEW_ALIAS.SEND_INVITES_WINDOW)
+        self._destroyRelatedView(ViewTypes.WINDOW, PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)
 
     def _destroyRelatedView(self, container, alias):
         container = self.app.containerManager.getContainer(container)

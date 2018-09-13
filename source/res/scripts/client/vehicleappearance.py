@@ -1,19 +1,17 @@
 # Embedded file name: scripts/client/VehicleAppearance.py
 import BigWorld
-import ResMgr
 import Math
-import Pixie
+from debug_utils import *
 import weakref
 import VehicleEffects
 from VehicleEffects import VehicleTrailEffects, VehicleExhaustEffects
 from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE
 import constants
-from debug_utils import *
-import helpers
-from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 import vehicle_extras
+from OcclusionDecal import OcclusionDecal
 from helpers import bound_effects, DecalMap, isPlayerAvatar
 from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
+from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 import items.vehicles
 import random
 import math
@@ -156,32 +154,36 @@ class VehicleAppearance(object):
     def __init__(self):
         self.__vt = None
         self.modelsDesc = {'chassis': {'model': None,
+                     'state': None,
                      'boundEffects': None,
                      '_visibility': (True, True),
                      '_fetchedModel': None,
-                     '_stateFunc': lambda vehicle, state: vehicle.typeDescriptor.chassis['models'][state],
-                     '_callbackFunc': '_VehicleAppearance__onChassisModelLoaded'},
+                     '_fetchedState': None,
+                     '_stateFunc': lambda vehicle, state: vehicle.typeDescriptor.chassis['models'][state]},
          'hull': {'model': None,
+                  'state': None,
                   'boundEffects': None,
                   '_visibility': (True, True),
                   '_node': None,
                   '_fetchedModel': None,
-                  '_stateFunc': lambda vehicle, state: vehicle.typeDescriptor.hull['models'][state],
-                  '_callbackFunc': '_VehicleAppearance__onHullModelLoaded'},
+                  '_fetchedState': None,
+                  '_stateFunc': lambda vehicle, state: vehicle.typeDescriptor.hull['models'][state]},
          'turret': {'model': None,
+                    'state': None,
                     'boundEffects': None,
                     '_visibility': (True, True),
                     '_node': None,
                     '_fetchedModel': None,
-                    '_stateFunc': lambda vehicle, state: vehicle.typeDescriptor.turret['models'][state],
-                    '_callbackFunc': '_VehicleAppearance__onTurretModelLoaded'},
+                    '_fetchedState': None,
+                    '_stateFunc': lambda vehicle, state: vehicle.typeDescriptor.turret['models'][state]},
          'gun': {'model': None,
+                 'state': None,
                  'boundEffects': None,
                  '_visibility': (True, True),
                  '_fetchedModel': None,
+                 '_fetchedState': None,
                  '_node': None,
-                 '_stateFunc': lambda vehicle, state: vehicle.typeDescriptor.gun['models'][state],
-                 '_callbackFunc': '_VehicleAppearance__onGunModelLoaded'}}
+                 '_stateFunc': lambda vehicle, state: vehicle.typeDescriptor.gun['models'][state]}}
         self.turretMatrix = Math.WGAdaptiveMatrixProvider()
         self.gunMatrix = Math.WGAdaptiveMatrixProvider()
         self.__vehicle = None
@@ -198,10 +200,8 @@ class VehicleAppearance(object):
         self.__fashion = None
         self.__crashedTracksCtrl = None
         self.__gunRecoil = None
-        self.__firstInit = True
-        self.__curDamageState = None
-        self.__loadingProgress = len(self.modelsDesc)
-        self.__actualDamageState = None
+        self.__currentDamageState = VehicleDamageState()
+        self.__loadingProgress = 0
         self.__invalidateLoading = False
         self.__effectsPlayer = None
         self.__engineMode = (0, 0)
@@ -219,18 +219,17 @@ class VehicleAppearance(object):
         self.__rightFrontLight = None
         self.__prevVelocity = None
         self.__prevTime = None
-        self.__useOcclusionDecal = True
-        self.__occlusionDecal = None
+        self.__chassisOcclusionDecal = OcclusionDecal()
         self.__vehicleStickers = None
         self.onModelChanged = Event()
         return
 
     def prerequisites(self, vehicle):
-        self.__curDamageState = self.__getDamageModelsState(vehicle.health)
+        self.__currentDamageState.update(vehicle.health, vehicle.isCrewActive, self.__isUnderWater)
         isPlayerVehicle = vehicle.id == BigWorld.player().playerVehicleID
         out = []
         for desc in self.modelsDesc.itervalues():
-            part = desc['_stateFunc'](vehicle, self.__curDamageState)
+            part = desc['_stateFunc'](vehicle, self.__currentDamageState.model)
             out.append(part)
             if isPlayerVehicle:
                 BigWorld.wg_setModelQuality(part, 1)
@@ -260,118 +259,127 @@ class VehicleAppearance(object):
         return out
 
     def destroy(self):
-        vehicle = self.__vehicle
-        self.__vehicle = None
-        self.__filter = None
-        if IS_DEVELOPMENT and _ENABLE_VEHICLE_VALIDATION and self.__validateCallbackId is not None:
-            BigWorld.cancelCallback(self.__validateCallbackId)
-            self.__validateCallbackId = None
-        if self.__engineSound is not None:
-            VehicleAppearance.VehicleSoundsChecker.removeSound(self.__engineSound)
-            self.__engineSound.stop()
-            self.__engineSound = None
-        if self.__movementSound is not None:
-            VehicleAppearance.VehicleSoundsChecker.removeSound(self.__movementSound)
-            self.__movementSound.stop()
-            self.__movementSound = None
-        if self.__vibrationsCtrl is not None:
-            self.__vibrationsCtrl.destroy()
-            self.__vibrationsCtrl = None
-        if self.__lightFxCtrl is not None:
-            self.__lightFxCtrl.destroy()
-            self.__lightFxCtrl = None
-        if self.__auxiliaryFxCtrl is not None:
-            self.__auxiliaryFxCtrl.destroy()
-            self.__auxiliaryFxCtrl = None
-        self.__stopEffects()
-        self.__destroyTrackDamageSounds()
-        if self.__trailEffects is not None:
-            self.__trailEffects.destroy()
-            self.__trailEffects = None
-        if self.__exhaustEffects is not None:
-            self.__exhaustEffects.destroy()
-            self.__exhaustEffects = None
-        vehicle.stopHornSound(True)
-        for desc in self.modelsDesc.iteritems():
-            boundEffects = desc[1].get('boundEffects', None)
-            if boundEffects is not None:
-                boundEffects.destroy()
+        if self.__vehicle is None:
+            return
+        else:
+            vehicle = self.__vehicle
+            self.__vehicle = None
+            self.__filter = None
+            if IS_DEVELOPMENT and _ENABLE_VEHICLE_VALIDATION and self.__validateCallbackId is not None:
+                BigWorld.cancelCallback(self.__validateCallbackId)
+                self.__validateCallbackId = None
+            if self.__engineSound is not None:
+                VehicleAppearance.VehicleSoundsChecker.removeSound(self.__engineSound)
+                self.__engineSound.stop()
+                self.__engineSound = None
+            if self.__movementSound is not None:
+                VehicleAppearance.VehicleSoundsChecker.removeSound(self.__movementSound)
+                self.__movementSound.stop()
+                self.__movementSound = None
+            if self.__vibrationsCtrl is not None:
+                self.__vibrationsCtrl.destroy()
+                self.__vibrationsCtrl = None
+            if self.__lightFxCtrl is not None:
+                self.__lightFxCtrl.destroy()
+                self.__lightFxCtrl = None
+            if self.__auxiliaryFxCtrl is not None:
+                self.__auxiliaryFxCtrl.destroy()
+                self.__auxiliaryFxCtrl = None
+            self.__stopEffects()
+            self.__destroyTrackDamageSounds()
+            if self.__trailEffects is not None:
+                self.__trailEffects.destroy()
+                self.__trailEffects = None
+            if self.__exhaustEffects is not None:
+                self.__exhaustEffects.destroy()
+                self.__exhaustEffects = None
+            vehicle.stopHornSound(True)
+            for desc in self.modelsDesc.iteritems():
+                boundEffects = desc[1].get('boundEffects', None)
+                if boundEffects is not None:
+                    boundEffects.destroy()
 
-        if vehicle.isPlayer:
-            player = BigWorld.player()
-            if player.inputHandler is not None:
-                arcadeCamera = player.inputHandler.ctrls['arcade'].camera
-                if arcadeCamera is not None:
-                    arcadeCamera.removeVehicleToCollideWith(self)
-            for desc in self.modelsDesc.itervalues():
-                part = desc['_stateFunc'](vehicle, 'undamaged')
-                BigWorld.wg_setModelQuality(part, 0)
+            if vehicle.isPlayer:
+                player = BigWorld.player()
+                if player.inputHandler is not None:
+                    arcadeCamera = player.inputHandler.ctrls['arcade'].camera
+                    if arcadeCamera is not None:
+                        arcadeCamera.removeVehicleToCollideWith(self)
+                for desc in self.modelsDesc.itervalues():
+                    part = desc['_stateFunc'](vehicle, 'undamaged')
+                    BigWorld.wg_setModelQuality(part, 0)
 
-        vehicle.model.delMotor(vehicle.model.motors[0])
-        vehicle.filter.vehicleCollisionCallback = None
-        self.__vehicleStickers = None
-        self.__removeHavok()
-        self.modelsDesc = None
-        self.onModelChanged = None
-        self.__occlusionDecal = None
-        id = getattr(self, '_VehicleAppearance__stippleCallbackID', None)
-        if id is not None:
-            BigWorld.cancelCallback(id)
-            self.__stippleCallbackID = None
-        if self.__periodicTimerID is not None:
-            BigWorld.cancelCallback(self.__periodicTimerID)
-            self.__periodicTimerID = None
-        if self.__periodicTimerIDEngine is not None:
-            BigWorld.cancelCallback(self.__periodicTimerIDEngine)
-            self.__periodicTimerIDEngine = None
-        self.__crashedTracksCtrl.destroy()
-        self.__crashedTracksCtrl = None
-        return
+            vehicle.model.delMotor(vehicle.model.motors[0])
+            vehicle.filter.vehicleCollisionCallback = None
+            self.__vehicleStickers = None
+            self.__removeHavok()
+            self.modelsDesc = None
+            self.onModelChanged = None
+            id = getattr(self, '_VehicleAppearance__stippleCallbackID', None)
+            if id is not None:
+                BigWorld.cancelCallback(id)
+                self.__stippleCallbackID = None
+            if self.__periodicTimerID is not None:
+                BigWorld.cancelCallback(self.__periodicTimerID)
+                self.__periodicTimerID = None
+            if self.__periodicTimerIDEngine is not None:
+                BigWorld.cancelCallback(self.__periodicTimerIDEngine)
+                self.__periodicTimerIDEngine = None
+            self.__crashedTracksCtrl.destroy()
+            self.__crashedTracksCtrl = None
+            self.__chassisOcclusionDecal.destroy()
+            self.__chassisOcclusionDecal = None
+            return
+
+    def preStart(self, typeDesc):
+        self.__typeDesc = typeDesc
+        self.__filter = BigWorld.WGVehicleFilter()
+        self.__filter.vehicleWidth = typeDesc.chassis['topRightCarryingPoint'][0] * 2
+        self.__filter.maxMove = typeDesc.physics['speedLimits'][0] * 2.0
+        self.__filter.vehicleMinNormalY = typeDesc.physics['minPlaneNormalY']
+        for p1, p2, p3 in typeDesc.physics['carryingTriangles']:
+            self.__filter.addTriangle((p1[0], 0, p1[1]), (p2[0], 0, p2[1]), (p3[0], 0, p3[1]))
+
+        self.setupGunMatrixTargets()
+        self.__createGunRecoil()
+        self.__createExhaust()
+        self.__fashion = BigWorld.WGVehicleFashion()
 
     def start(self, vehicle, prereqs = None):
         self.__vehicle = vehicle
-        descr = vehicle.typeDescriptor
         player = BigWorld.player()
+        modelsDesc = self.modelsDesc
         if prereqs is None:
-            descr.chassis['hitTester'].loadBspModel()
-            descr.hull['hitTester'].loadBspModel()
-            descr.turret['hitTester'].loadBspModel()
-        filter = BigWorld.WGVehicleFilter()
-        vehicle.filter = filter
-        filter.vehicleWidth = descr.chassis['topRightCarryingPoint'][0] * 2
-        filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
-        filter.maxMove = descr.physics['speedLimits'][0] * 2.0
-        filter.vehicleMinNormalY = descr.physics['minPlaneNormalY']
-        filter.isStrafing = vehicle.isStrafing
-        for p1, p2, p3 in descr.physics['carryingTriangles']:
-            filter.addTriangle((p1[0], 0, p1[1]), (p2[0], 0, p2[1]), (p3[0], 0, p3[1]))
-
-        self.setupGunMatrixTargets(filter)
-        self.__createGunRecoil()
+            self.__typeDesc.chassis['hitTester'].loadBspModel()
+            self.__typeDesc.hull['hitTester'].loadBspModel()
+            self.__typeDesc.turret['hitTester'].loadBspModel()
+        self.__filter.isStrafing = vehicle.isStrafing
+        self.__filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
+        vehicle.filter = self.__filter
         self.__createStickers(prereqs)
-        self.__createExhaust()
-        self.__crashedTracksCtrl = _CrashedTrackController(vehicle, self)
-        self.__createOcclusionDecal()
-        self.__fashion = BigWorld.WGVehicleFashion()
         _setupVehicleFashion(self, self.__fashion, self.__vehicle)
-        for desc in self.modelsDesc.itervalues():
-            modelName = desc['_stateFunc'](vehicle, self.__curDamageState)
+        currentModelState = self.__currentDamageState.model
+        for desc in modelsDesc.itervalues():
+            modelName = desc['_stateFunc'](vehicle, currentModelState)
             if prereqs is not None:
                 try:
                     desc['model'] = prereqs[modelName]
-                except Exception:
+                    desc['state'] = currentModelState
+                except:
                     LOG_ERROR("can't load model <%s> from prerequisites." % modelName)
 
                 if desc['model'] is None:
                     modelName = desc['_stateFunc'](vehicle, 'undamaged')
                     try:
                         desc['model'] = BigWorld.Model(modelName)
+                        desc['state'] = 'undamaged'
                     except:
-                        LOG_ERROR("can't load model <%s> for tank state %s - no model was loaded from prerequisites, direct load of the model has been failed" % (modelName, self.__curDamageState))
+                        LOG_ERROR("can't load model <%s> for tank state %s - no model was loaded from prerequisites, direct load of the model has been failed" % (modelName, self.__currentDamageState.model))
 
             else:
                 try:
                     desc['model'] = BigWorld.Model(modelName)
+                    desc['state'] = currentModelState
                 except:
                     LOG_ERROR("can't load model <%s> - prerequisites were empty, direct load of the model has been failed" % modelName)
 
@@ -379,43 +387,41 @@ class VehicleAppearance(object):
             if desc.has_key('boundEffects'):
                 desc['boundEffects'] = bound_effects.ModelBoundEffects(desc['model'])
 
-        self.__setupModels()
-        if self.__curDamageState == 'undamaged':
-            setupSplineTracks(self.__fashion, self.__vehicle.typeDescriptor, self.modelsDesc['chassis']['model'], prereqs)
-        state = self.__curDamageState
-        if state == 'destroyed':
-            self.__playEffect('destruction', SpecialKeyPointNames.STATIC)
-        elif state == 'exploded':
-            self.__playEffect('explosion', SpecialKeyPointNames.STATIC)
-        self.__firstInit = False
+        self.__loadingProgress = len(modelsDesc)
+        self.__setupModels(True)
+        if not VehicleDamageState.isDamagedModel(modelsDesc['chassis']['state']):
+            setupSplineTracks(self.__fashion, self.__vehicle.typeDescriptor, modelsDesc['chassis']['model'], prereqs)
+        if self.__currentDamageState.effect is not None:
+            self.__playEffect(self.__currentDamageState.effect, SpecialKeyPointNames.STATIC)
+        self.__crashedTracksCtrl = _CrashedTrackController(vehicle, self)
         if self.__invalidateLoading:
-            self.__invalidateLoading = True
-            self.__fetchModels(self.__actualDamageState)
+            self.__invalidateLoading = False
+            self.__fetchModels(self.__currentDamageState.model)
         if vehicle.isAlive():
             fakeModel = BigWorld.player().newFakeModel()
-            self.modelsDesc['hull']['model'].node('HP_Fire_1').attach(fakeModel)
+            modelsDesc['hull']['model'].node('HP_Fire_1').attach(fakeModel)
             if self.__vehicle.isPlayer:
-                if descr.engine['soundPC'] != '':
-                    event = descr.engine['soundPC']
+                if self.__typeDesc.engine['soundPC'] != '':
+                    event = self.__typeDesc.engine['soundPC']
                 else:
-                    event = descr.engine['sound']
-                if descr.chassis['soundPC'] != '':
-                    eventC = descr.chassis['soundPC']
+                    event = self.__typeDesc.engine['sound']
+                if self.__typeDesc.chassis['soundPC'] != '':
+                    eventC = self.__typeDesc.chassis['soundPC']
                 else:
-                    eventC = descr.chassis['sound']
+                    eventC = self.__typeDesc.chassis['sound']
             else:
-                if descr.engine['soundNPC'] != '':
-                    event = descr.engine['soundNPC']
+                if self.__typeDesc.engine['soundNPC'] != '':
+                    event = self.__typeDesc.engine['soundNPC']
                 else:
-                    event = descr.engine['sound']
-                if descr.chassis['soundNPC'] != '':
-                    eventC = descr.chassis['soundNPC']
+                    event = self.__typeDesc.engine['sound']
+                if self.__typeDesc.chassis['soundNPC'] != '':
+                    eventC = self.__typeDesc.chassis['soundNPC']
                 else:
-                    eventC = descr.chassis['sound']
+                    eventC = self.__typeDesc.chassis['sound']
             self.__engineSound = SoundGroups.g_instance.getSound(fakeModel, event)
             if self.__engineSound is None:
-                self.__engineSound = SoundGroups.g_instance.getSound(self.modelsDesc['hull']['model'], event)
-            self.__movementSound = SoundGroups.g_instance.getSound(self.modelsDesc['turret']['model'], eventC)
+                self.__engineSound = SoundGroups.g_instance.getSound(modelsDesc['hull']['model'], event)
+            self.__movementSound = SoundGroups.g_instance.getSound(modelsDesc['turret']['model'], eventC)
             self.__isEngineSoundMutedByLOD = False
         if vehicle.isAlive() and self.__vehicle.isPlayer:
             self.__vibrationsCtrl = VibrationControllersManager()
@@ -466,20 +472,22 @@ class VehicleAppearance(object):
                 VehicleAppearance.VehicleSoundsChecker.removeSound(self.__movementSound)
                 self.__movementSound.stop()
                 self.__movementSound = None
-        state = self.__getDamageModelsState(vehicle.health)
-        if state != self.__curDamageState:
-            if self.__loadingProgress == len(self.modelsDesc) and not self.__firstInit:
-                if state == 'undamaged':
+        currentState = self.__currentDamageState
+        previousState = currentState.state
+        currentState.update(vehicle.health, vehicle.isCrewActive, self.__isUnderWater)
+        if previousState != currentState.state:
+            if self.__loadingProgress == len(self.modelsDesc):
+                if currentState.effect is not None:
+                    self.__playEffect(currentState.effect)
+                else:
                     self.__stopEffects()
-                elif state == 'destroyed':
-                    self.__playEffect('destruction')
-                if state == 'exploded':
-                    self.__havokExplosion()
                 if vehicle.health <= 0:
-                    BigWorld.player().inputHandler.onVehicleDeath(vehicle, state == 'exploded')
-                self.__fetchModels(state)
-            else:
-                self.__actualDamageState = state
+                    BigWorld.player().inputHandler.onVehicleDeath(vehicle, currentState.state == 'ammoBayExplosion')
+                if currentState.model != self.modelsDesc['chassis']['state']:
+                    if VehicleDamageState.isExplodedModel(currentState.model):
+                        self.__havokExplosion()
+                    self.__fetchModels(currentState.model)
+            elif currentState.model != self.modelsDesc['chassis']['state']:
                 self.__invalidateLoading = True
         return
 
@@ -538,7 +546,7 @@ class VehicleAppearance(object):
         self.__vehicleStickers.addDamageSticker(code, componentName, stickerID, segStart, segEnd)
 
     def receiveShotImpulse(self, dir, impulse):
-        if self.__curDamageState == 'undamaged':
+        if not VehicleDamageState.isDamagedModel(self.modelsDesc['chassis']['state']):
             self.__fashion.receiveShotImpulse(dir, impulse)
             self.__crashedTracksCtrl.receiveShotImpulse(dir, impulse)
 
@@ -554,32 +562,36 @@ class VehicleAppearance(object):
         self.__crashedTracksCtrl.delTrack(isLeft)
 
     def __fetchModels(self, modelState):
-        self.__curDamageState = modelState
+        if self.__loadingProgress != len(self.modelsDesc):
+            raise Exception('Tried to break model loading process')
         self.__loadingProgress = 0
-        for desc in self.modelsDesc.itervalues():
-            BigWorld.fetchModel(desc['_stateFunc'](self.__vehicle, modelState), getattr(self, desc['_callbackFunc']))
+        for name, desc in self.modelsDesc.iteritems():
+            desc['_fetchedState'] = modelState
+            BigWorld.fetchModel(desc['_stateFunc'](self.__vehicle, modelState), partial(self.__onModelLoaded, name, modelState))
 
     def __attemptToSetupModels(self):
         self.__loadingProgress += 1
         if self.__loadingProgress == len(self.modelsDesc):
             if self.__invalidateLoading:
                 self.__invalidateLoading = False
-                self.__fetchModels(self.__actualDamageState)
+                self.__fetchModels(self.__currentDamageState.model)
             else:
                 self.__setupModels()
 
-    def __setupModels(self):
+    def __setupModels(self, isFirstInit = False):
         vehicle = self.__vehicle
-        chassis = self.modelsDesc['chassis']
-        hull = self.modelsDesc['hull']
-        turret = self.modelsDesc['turret']
-        gun = self.modelsDesc['gun']
-        if not self.__firstInit:
+        modelsDesc = self.modelsDesc
+        chassis = modelsDesc['chassis']
+        hull = modelsDesc['hull']
+        turret = modelsDesc['turret']
+        gun = modelsDesc['gun']
+        if not isFirstInit:
             self.__detachStickers()
             self.__removeHavok()
-            self.__destroyOcclusionDecal()
+            self.__chassisOcclusionDecal.detach()
             self.__destroyLampLights()
-            delattr(gun['model'], 'wg_gunRecoil')
+            if hasattr(gun['model'], 'wg_gunRecoil'):
+                delattr(gun['model'], 'wg_gunRecoil')
             self.__gunFireNode = None
             self.__attachExhaust(False)
             self.__trailEffects.stopEffects()
@@ -595,7 +607,12 @@ class VehicleAppearance(object):
             hull['model'] = hull['_fetchedModel']
             turret['model'] = turret['_fetchedModel']
             gun['model'] = gun['_fetchedModel']
-            delattr(vehicle.model, 'wg_fashion')
+            chassis['state'] = chassis['_fetchedState']
+            hull['state'] = hull['_fetchedState']
+            turret['state'] = turret['_fetchedState']
+            gun['state'] = gun['_fetchedState']
+            if hasattr(vehicle.model, 'wg_fashion'):
+                delattr(vehicle.model, 'wg_fashion')
         vehicle.model = None
         vehicle.model = chassis['model']
         vehicle.model.delMotor(vehicle.model.motors[0])
@@ -603,14 +620,13 @@ class VehicleAppearance(object):
         matrix.notModel = True
         vehicle.model.addMotor(BigWorld.Servo(matrix))
         self.__assembleModels()
-        if not self.__firstInit:
+        if not isFirstInit:
             chassis['boundEffects'].reattachTo(chassis['model'])
             hull['boundEffects'].reattachTo(hull['model'])
             turret['boundEffects'].reattachTo(turret['model'])
             gun['boundEffects'].reattachTo(gun['model'])
             self.__reattachEffects()
-        modelsState = self.__curDamageState
-        if modelsState == 'undamaged':
+        if not VehicleDamageState.isDamagedModel(chassis['state']):
             self.__attachStickers()
             try:
                 vehicle.model.wg_fashion = self.__fashion
@@ -621,21 +637,18 @@ class VehicleAppearance(object):
             gun['model'].wg_gunRecoil = self.__gunRecoil
             self.__createLampLights()
             self.__gunFireNode = gun['model'].node('HP_gunFire')
-        elif modelsState == 'destroyed' or modelsState == 'exploded':
+            self.__setupHavok()
+        else:
             self.__destroyExhaust()
             self.__attachStickers(items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha'], True)
-        else:
-            raise False or AssertionError
         self.__updateCamouflage()
-        self.__attachOcclusionDecal()
+        self.__chassisOcclusionDecal.attach(vehicle, self.modelsDesc)
         self.__applyVisibility()
         self.__vehicle.model.height = self.__computeVehicleHeight()
         self.onModelChanged()
         if 'observer' in vehicle.typeDescriptor.type.tags:
             vehicle.model.visible = False
             vehicle.model.visibleAttachments = False
-        if modelsState == 'undamaged':
-            self.__setupHavok()
         return
 
     def __reattachEffects(self):
@@ -648,12 +661,13 @@ class VehicleAppearance(object):
             self.__effectsPlayer.stop()
         enableDecal = True
         if kind in ('explosion', 'destruction'):
-            if self.isUnderwater:
-                return
             filter = self.__vehicle.filter
             isFlying = filter.numLeftTrackContacts < 2 and filter.numRightTrackContacts < 2
             if isFlying:
                 enableDecal = False
+        if self.isUnderwater:
+            if kind not in ('submersionDeath',):
+                return
         vehicle = self.__vehicle
         effects = vehicle.typeDescriptor.type.effects[kind]
         if not effects:
@@ -661,8 +675,8 @@ class VehicleAppearance(object):
         else:
             effects = random.choice(effects)
             modelMap = {}
-            for i, j in vehicle.appearance.modelsDesc.iteritems():
-                modelMap[i] = vehicle.appearance.modelsDesc[i]['model']
+            for i, j in self.modelsDesc.iteritems():
+                modelMap[i] = j['model']
 
             self.__effectsPlayer = EffectsListPlayer(effects[1], effects[0], showShockWave=vehicle.isPlayer, showFlashBang=vehicle.isPlayer, isPlayer=vehicle.isPlayer, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, -1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), modelMap=modelMap)
             self.__effectsPlayer.play(self.modelsDesc['hull']['model'], *modifs)
@@ -696,7 +710,7 @@ class VehicleAppearance(object):
                 weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in colors ])
                 colors = [ colors[i] & 16777215 | metallic << (3 - i) * 8 & 4278190080L for i in range(0, 4) ]
                 defaultTiling = camouflage['tiling'].get(vDesc.type.compactDescr)
-        if self.__curDamageState != 'undamaged':
+        if VehicleDamageState.isDamagedModel(self.modelsDesc['chassis']['state']):
             weights *= 0.1
         if camouflageParams is not None:
             _, camStartTime, camNumDays = camouflageParams
@@ -752,12 +766,16 @@ class VehicleAppearance(object):
 
         return
 
+    __SPORT_ACTIONS_CAMOUFLAGES = {'ussr:T62A_sport': (95, 94),
+     'usa:M24_Chaffee_GT': (82, 83)}
+
     def __getCamouflageParams(self, vehicle):
         vDesc = vehicle.typeDescriptor
         vehicleInfo = BigWorld.player().arena.vehicles.get(vehicle.id)
         if vehicleInfo is not None:
-            if vDesc.name == 'ussr:T62A_sport':
-                camouflageId = 95 if vehicleInfo['team'] == 1 else 94
+            camouflageIdPerTeam = VehicleAppearance.__SPORT_ACTIONS_CAMOUFLAGES.get(vDesc.name)
+            if camouflageIdPerTeam is not None:
+                camouflageId = camouflageIdPerTeam[0] if vehicleInfo['team'] == 1 else camouflageIdPerTeam[1]
                 return (camouflageId, time.time(), 100.0)
             camouflagePseudoname = vehicleInfo['events'].get('hunting', None)
             if camouflagePseudoname is not None:
@@ -846,8 +864,9 @@ class VehicleAppearance(object):
                 deepEnough = collRes is None
                 effectName = 'waterCollisionLight' if vehicleVelocity < heavyVelocityThreshold or not deepEnough else 'waterCollisionHeavy'
                 self.__vehicle.showCollisionEffect(waterHitPoint, effectName, Math.Vector3(0, 1, 0))
-        if self.isUnderwater and self.__effectsPlayer is not None:
-            self.__stopEffects()
+        if self.__effectsPlayer is not None:
+            if self.isUnderwater != (self.__currentDamageState.effect in ('submersionDeath',)):
+                self.__stopEffects()
         return
 
     def __onPeriodicTimerEngine(self):
@@ -921,25 +940,25 @@ class VehicleAppearance(object):
                 v = s / self.__vehicle.typeDescriptor.physics['speedLimits'][1]
             if self.__vt is not None:
                 self.__vt.addValue2('speed_rel', v)
-            if sound.hasParam('speed_rel'):
-                param = sound.param('speed_rel')
+            param = sound.param('speed_rel')
+            if param is not None:
                 param.value = v
             rots = self.__vehicle.filter.speedInfo.value[1]
             if self.__vt is not None:
                 self.__vt.addValue2('rot_speed_abs', rots)
-            if sound.hasParam('rot_speed_abs'):
-                param = sound.param('rot_speed_abs')
+            param = sound.param('rot_speed_abs')
+            if param is not None:
                 param.value = rots
             rotrel = rots / self.__vehicle.typeDescriptor.physics['rotationSpeedLimit']
             if self.__vt is not None:
                 self.__vt.addValue2('rot_speed_rel', rotrel)
-            if sound.hasParam('rot_speed_rel'):
-                param = sound.param('rot_speed_rel')
+            param = sound.param('rot_speed_rel')
+            if param is not None:
                 param.value = rotrel
             if self.__vt is not None:
                 self.__vt.addValue2('speed_abs', s)
-            if sound.hasParam('speed_abs'):
-                param = sound.param('speed_abs')
+            param = sound.param('speed_abs')
+            if param is not None:
                 param.value = s
             sr = self.__vehicle.typeDescriptor.physics['speedLimits'][0] + self.__vehicle.typeDescriptor.physics['speedLimits'][1]
             if self.__vt is not None:
@@ -950,19 +969,19 @@ class VehicleAppearance(object):
             gear_num = math.ceil(math.floor(math.fabs(s) * 50) / 50 / srg)
             if self.__vt is not None:
                 self.__vt.addValue2('gear', gear_num)
-            if sound.hasParam('gear_num'):
-                param = sound.param('gear_num')
+            param = sound.param('gear_num')
+            if param is not None:
                 param.value = gear_num
             rpm = math.fabs(1 + (s - gear_num * srg) / srg)
             if gear_num == 0:
                 rpm = 0
-            if sound.hasParam('RPM'):
-                param = sound.param('RPM')
+            param = sound.param('RPM')
+            if param is not None:
                 param.value = rpm
             if self.__vt is not None:
                 self.__vt.addValue2('RPM', rpm)
             a = 0
-            if self.__prevVelocity is not None and self.__prevTime is not None and BigWorld.time() != self.__prevTime:
+            if self.__prevVelocity is not None and self.__prevTime is not None:
                 a = (s - self.__prevVelocity) / (BigWorld.time() - self.__prevTime)
                 if a > 1.5:
                     a = 1.5
@@ -972,8 +991,8 @@ class VehicleAppearance(object):
                     self.__vt.addValue2('acc_abs', a)
             self.__prevVelocity = s
             self.__prevTime = BigWorld.time()
-            if sound.hasParam('acc_abs'):
-                param = sound.param('acc_abs')
+            param = sound.param('acc_abs')
+            if param is not None:
                 param.value = a
             if self.__engineMode[0] == 3:
                 l = 2
@@ -983,9 +1002,14 @@ class VehicleAppearance(object):
                 l = self.__engineMode[0]
             if self.__vt is not None:
                 self.__vt.addValue2('engine_load', l)
-            if sound.hasParam('engine_load'):
-                param = sound.param('engine_load')
+            param = sound.param('engine_load')
+            if param is not None:
                 param.value = l
+            param = sound.param('submersion')
+            if param is not None:
+                param.value = 1 if self.__isUnderWater else 0
+            if self.__vt is not None:
+                self.__vt.addValue2('submersion', self.__isUnderWater)
             return
 
     def __updateMovementSounds(self):
@@ -1007,7 +1031,6 @@ class VehicleAppearance(object):
                 VehicleAppearance.VehicleSoundsChecker.checkAndPlay(self.__movementSound)
         time = BigWorld.time()
         self.__updateTrackSounds()
-        self.__newEngine()
         return
 
     def __newTrackSounds(self):
@@ -1016,15 +1039,15 @@ class VehicleAppearance(object):
             return
         else:
             s = self.__vehicle.filter.speedInfo.value[0]
-            if sound.hasParam('speed_abs'):
-                param = sound.param('speed_abs')
+            param = sound.param('speed_abs')
+            if param is not None:
                 param.value = s
             rots = self.__vehicle.filter.speedInfo.value[1]
             rotrel = rots / self.__vehicle.typeDescriptor.physics['rotationSpeedLimit']
             if self.__vt is not None:
                 self.__vt.addValue2('rot_speed_rel', rotrel)
-            if sound.hasParam('rot_speed_rel'):
-                param = sound.param('rot_speed_rel')
+            param = sound.param('rot_speed_rel')
+            if param is not None:
                 param.value = rotrel
             return
 
@@ -1205,37 +1228,19 @@ class VehicleAppearance(object):
             self.__vibrationsCtrl.update(vehicle, crashedTrackCtrl.isLeftTrackBroken(), crashedTrackCtrl.isRightTrackBroken())
             return
 
-    def __getDamageModelsState(self, vehicleHealth):
-        if vehicleHealth > 0:
-            return 'undamaged'
-        elif vehicleHealth == 0:
-            return 'destroyed'
-        else:
-            return 'exploded'
-
-    def __onChassisModelLoaded(self, model):
-        self.__onModelLoaded('chassis', model)
-
-    def __onHullModelLoaded(self, model):
-        self.__onModelLoaded('hull', model)
-
-    def __onTurretModelLoaded(self, model):
-        self.__onModelLoaded('turret', model)
-
-    def __onGunModelLoaded(self, model):
-        self.__onModelLoaded('gun', model)
-
-    def __onModelLoaded(self, name, model):
+    def __onModelLoaded(self, name, state, model):
         if self.modelsDesc is None:
             return
         else:
             desc = self.modelsDesc[name]
+            if state != desc['_fetchedState']:
+                raise Exception('The wrong model state was loaded for ' + name)
             if model is not None:
                 desc['_fetchedModel'] = model
             else:
                 desc['_fetchedModel'] = desc['model']
-                modelState = desc['_stateFunc'](self.__vehicle, self.__curDamageState)
-                LOG_ERROR('Model %s not loaded.' % modelState)
+                desc['_fetchedState'] = desc['state']
+                LOG_ERROR('Model %s not loaded.' % state)
             self.__attemptToSetupModels()
             return
 
@@ -1247,7 +1252,8 @@ class VehicleAppearance(object):
         try:
             hull['_node'] = vehicle.model.node(_ROOT_NODE_NAME)
             hull['_node'].attach(hull['model'])
-            turret['_node'] = hull['model'].node('HP_turretJoint', self.turretMatrix)
+            turretJointName = self.__typeDesc.hull['turretHardPoints'][0]
+            turret['_node'] = hull['model'].node(turretJointName, self.turretMatrix)
             turret['_node'].attach(turret['model'])
             gun['_node'] = turret['model'].node('HP_gunJoint', self.gunMatrix)
             gun['_node'].attach(gun['model'])
@@ -1267,7 +1273,6 @@ class VehicleAppearance(object):
         return
 
     def __applyVisibility(self):
-        vehicle = self.__vehicle
         chassis = self.modelsDesc['chassis']
         hull = self.modelsDesc['hull']
         turret = self.modelsDesc['turret']
@@ -1285,7 +1290,7 @@ class VehicleAppearance(object):
         self.__validateCallbackId = None
         vehicle = self.__vehicle
         vDesc = vehicle.typeDescriptor
-        state = self.__curDamageState
+        state = self.__currentDamageState.model
         chassis = self.modelsDesc['chassis']
         hull = self.modelsDesc['hull']
         turret = self.modelsDesc['turret']
@@ -1296,7 +1301,7 @@ class VehicleAppearance(object):
         return
 
     def __createExhaust(self):
-        self.__exhaustEffects = VehicleExhaustEffects(self.__vehicle.typeDescriptor)
+        self.__exhaustEffects = VehicleExhaustEffects(self.__typeDesc)
 
     def __attachExhaust(self, attach):
         if attach:
@@ -1314,7 +1319,7 @@ class VehicleAppearance(object):
         self.__exhaustEffects.changeExhaust(self.__engineMode[0], self.detailedEngineState.rpm)
 
     def __createGunRecoil(self):
-        recoilDescr = self.__vehicle.typeDescriptor.gun['recoil']
+        recoilDescr = self.__typeDesc.gun['recoil']
         recoil = BigWorld.WGGunRecoil(_GUN_RECOIL_NODE_NAME)
         recoil.setLod(recoilDescr['lodDist'])
         recoil.setDuration(recoilDescr['backoffTime'], recoilDescr['returnTime'])
@@ -1322,26 +1327,26 @@ class VehicleAppearance(object):
         self.__gunRecoil = recoil
 
     def __createStickers(self, prereqs):
-        vDesc = self.__vehicle.typeDescriptor
         insigniaRank = self.__vehicle.publicInfo['marksOnGun']
         if BigWorld.player().arenaGuiType == ARENA_GUI_TYPE.HISTORICAL:
             insigniaRank = 0
-        self.__vehicleStickers = VehicleStickers(vDesc, insigniaRank)
+        self.__vehicleStickers = VehicleStickers(self.__typeDesc, insigniaRank)
         clanID = BigWorld.player().arena.vehicles[self.__vehicle.id]['clanDBID']
         self.__vehicleStickers.setClanID(clanID)
 
     def __attachStickers(self, alpha = 1.0, emblemsOnly = False):
         self.__vehicleStickers.alpha = alpha
-        isDamaged = self.__curDamageState != 'undamaged'
         ignoredComponents = set(('turret', 'gun')) if self.__vehicle.isTurretMarkedForDetachment else set()
         modelsAndParents = []
         for componentName in VehicleStickers.COMPONENT_NAMES:
             if componentName in ignoredComponents:
-                continue
-            modelDesc = self.modelsDesc[componentName]
-            modelsAndParents.append((modelDesc['model'], modelDesc['_node']))
+                modelsAndParents.append((None, None))
+            else:
+                modelDesc = self.modelsDesc[componentName]
+                modelsAndParents.append((modelDesc['model'], modelDesc['_node']))
 
-        self.__vehicleStickers.attach(modelsAndParents, isDamaged, not emblemsOnly)
+        self.__vehicleStickers.attach(modelsAndParents, VehicleDamageState.isDamagedModel(self.modelsDesc['chassis']['state']), not emblemsOnly)
+        return None
 
     def __detachStickers(self):
         self.__vehicleStickers.detach()
@@ -1413,44 +1418,6 @@ class VehicleAppearance(object):
         turretTopY = desc.chassis['hullPosition'][1] + desc.hull['turretPositions'][0][1] + turretBBox[1][1]
         gunTopY = desc.chassis['hullPosition'][1] + desc.hull['turretPositions'][0][1] + desc.turret['gunPosition'][1] + gunBBox[1][1]
         return max(hullTopY, max(turretTopY, gunTopY))
-
-    def __createOcclusionDecal(self):
-        if not self.__useOcclusionDecal:
-            return
-        self.__destroyOcclusionDecal()
-        diffTex = 'maps/spots/TankOcclusion/TankOcclusionMap.dds'
-        bumpTex = ''
-        hmTex = ''
-        priority = 0
-        mtype = 4
-        influence = 30
-        visibilityMask = 4294967295L
-        height = 0.0
-        stretchX = 1.5
-        stretchZ = 1.3
-        self.__occlusionDecal = BigWorld.WGOcclusionDecal()
-        self.__occlusionDecal.create(diffTex, bumpTex, hmTex, priority, mtype, influence, visibilityMask, height)
-        self.__occlusionDecal.setStretch(stretchX, stretchZ)
-
-    def __destroyOcclusionDecal(self):
-        if not self.__useOcclusionDecal:
-            return
-        else:
-            if self.__occlusionDecal is not None:
-                parent = self.modelsDesc['chassis']['model']
-                parent.root.detach(self.__occlusionDecal)
-                self.__occlusionDecal = None
-            return
-
-    def __attachOcclusionDecal(self):
-        if not self.__useOcclusionDecal:
-            return
-        else:
-            if self.__occlusionDecal is not None:
-                parent = self.modelsDesc['chassis']['model']
-                self.__occlusionDecal.setParent(parent)
-                parent.root.attach(self.__occlusionDecal)
-            return
 
     def __setupHavok(self):
         vehicle = self.__vehicle
@@ -1721,8 +1688,6 @@ class _SkeletonCollider():
         for boxAttach in self.__boxAttachments:
             vehicle.skeletonCollider.addCollider(boxAttach)
 
-        self.__vehicleHeight = self.__computeVehicleHeight()
-
     def destroy(self):
         delattr(self.__vehicle, 'skeletonCollider')
         self.__vehicle = None
@@ -1740,7 +1705,6 @@ class _SkeletonCollider():
         va['turret']['model'].node(collider.name).attach(collider)
         collider = self.__vehicle.skeletonCollider.getCollider(3)
         va['gun']['model'].node(collider.name).attach(collider)
-        self.__vehicle.model.height = self.__vehicleHeight
 
     def detach(self):
         va = self.__vAppearance.modelsDesc
@@ -1822,9 +1786,8 @@ def setupTracksFashion(fashion, vDesc, isCrashedTrack = False):
             fashion.addWheelGroup(group[0], group[4], nodes)
 
         for wheel in wheelsCfg['wheels']:
-            fashion.addWheel(wheel[0], wheel[2], wheel[1], wheel[3])
+            fashion.addWheel(wheel[0], wheel[2], wheel[1], wheel[3], wheel[4])
 
-        fashion.setLeadingWheelSyncAngle(wheelsCfg['leadingWheelSyncAngle'])
         for groundGroup in groundNodesCfg['groups']:
             nodes = _createWheelsListByTemplate(groundGroup[3], groundGroup[1], groundGroup[2])
             retValue = not fashion.addGroundNodesGroup(nodes, groundGroup[0], groundGroup[4], groundGroup[5])
@@ -1936,3 +1899,60 @@ def _validateCfgPos(srcModelDesc, dstModelDesc, cfgPos, paramName, vehicle, stat
          modelState))
         dstModelDesc['model'].visibleAttachments = True
         dstModelDesc['model'].visible = False
+
+
+class VehicleDamageState(object):
+    __healthToStateMap = {0: 'destruction',
+     constants.SPECIAL_VEHICLE_HEALTH.AMMO_BAY_DESTROYED: 'ammoBayBurnOff',
+     constants.SPECIAL_VEHICLE_HEALTH.TURRET_DETACHED: 'ammoBayExplosion',
+     constants.SPECIAL_VEHICLE_HEALTH.FUEL_EXPLODED: 'fuelExplosion',
+     constants.SPECIAL_VEHICLE_HEALTH.DESTR_BY_FALL_RAMMING: 'rammingDestruction'}
+
+    @staticmethod
+    def getState(health, isCrewActive, isUnderWater):
+        if health > 0:
+            if not isCrewActive:
+                if isUnderWater:
+                    return 'submersionDeath'
+                else:
+                    return 'crewDeath'
+            else:
+                return 'alive'
+        else:
+            return VehicleDamageState.__healthToStateMap[health]
+
+    __stateToModelEffectsMap = {'ammoBayExplosion': ('exploded', 'ammoBayExplosion'),
+     'ammoBayBurnOff': ('destroyed', 'ammoBayExplosion'),
+     'fuelExplosion': ('destroyed', 'fuelExplosion'),
+     'destruction': ('destroyed', 'destruction'),
+     'crewDeath': ('undamaged', 'crewDeath'),
+     'rammingDestruction': ('destroyed', 'rammingDestruction'),
+     'submersionDeath': ('undamaged', 'submersionDeath'),
+     'alive': ('undamaged', None)}
+
+    @staticmethod
+    def getStateParams(state):
+        return VehicleDamageState.__stateToModelEffectsMap[state]
+
+    state = property(lambda self: self.__state)
+    model = property(lambda self: self.__model)
+    effect = property(lambda self: self.__effect)
+
+    @staticmethod
+    def isDamagedModel(model):
+        return model != 'undamaged'
+
+    @staticmethod
+    def isExplodedModel(model):
+        return model == 'exploded'
+
+    def __init__(self):
+        self.__state = None
+        self.__model = None
+        self.__effect = None
+        return
+
+    def update(self, health, isCrewActive, isUnderWater):
+        self.__state = VehicleDamageState.getState(health, isCrewActive, isUnderWater)
+        params = VehicleDamageState.getStateParams(self.__state)
+        self.__model, self.__effect = params

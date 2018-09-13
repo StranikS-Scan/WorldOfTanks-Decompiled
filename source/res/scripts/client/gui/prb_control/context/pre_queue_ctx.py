@@ -3,21 +3,21 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import gameplay_ctx
 from gui.prb_control.context import PrbCtrlRequestCtx
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
+from gui.shared.utils.decorators import ReprInjector
 
 class _PreQueueRequestCtx(PrbCtrlRequestCtx):
 
-    def getEntityType(self):
+    def getCtrlType(self):
         return CTRL_ENTITY_TYPE.PREQUEUE
 
+
+@ReprInjector.simple(('getVehicleInventoryID', 'vInvID'), ('getGamePlayMask', 'gamePlayMask'), ('getWaitingID', 'waitingID'))
 
 class JoinRandomQueueCtx(_PreQueueRequestCtx):
 
     def __init__(self, demoArenaTypeID = 0, waitingID = ''):
-        super(JoinRandomQueueCtx, self).__init__(waitingID)
+        super(JoinRandomQueueCtx, self).__init__(waitingID=waitingID)
         self.__demoArenaTypeID = demoArenaTypeID
-
-    def __repr__(self):
-        return 'JoinRandomQueueCtx(vInvID = {0:n}, gamePlayMask = {1:n}, waitingID = {2:>s})'.format(self.getVehicleInventoryID(), self.getGamePlayMask(), self.getWaitingID())
 
     def getRequestType(self):
         return REQUEST_TYPE.JOIN
@@ -32,10 +32,9 @@ class JoinRandomQueueCtx(_PreQueueRequestCtx):
         return g_currentVehicle.invID
 
 
-class JoinEventBattlesQueueCtx(_PreQueueRequestCtx):
+@ReprInjector.simple(('getVehicleInventoryID', 'vInvID'), ('getWaitingID', 'waitingID'))
 
-    def __repr__(self):
-        return 'JoinEventBattlesQueueCtx(vInvID = {0:n}, waitingID = {1:>s})'.format(self.getVehicleInventoryID(), self.getWaitingID())
+class JoinEventBattlesQueueCtx(_PreQueueRequestCtx):
 
     def getRequestType(self):
         return REQUEST_TYPE.JOIN
@@ -44,15 +43,14 @@ class JoinEventBattlesQueueCtx(_PreQueueRequestCtx):
         return g_currentVehicle.invID
 
 
+@ReprInjector.simple(('getVehicleInventoryID', 'vInvID'), ('getHistBattleID', 'histBattleID'), ('getIsCreditsAmmo', 'isCreditsAmmo'), ('getWaitingID', 'waitingID'))
+
 class JoinHistoricalQueueCtx(_PreQueueRequestCtx):
 
     def __init__(self, histBattleID = 0, isCreditsAmmo = True, waitingID = ''):
-        super(JoinHistoricalQueueCtx, self).__init__(waitingID)
+        super(JoinHistoricalQueueCtx, self).__init__(waitingID=waitingID)
         self.__histBattleID = histBattleID
         self.__isCreditsAmmo = isCreditsAmmo
-
-    def __repr__(self):
-        return 'JoinHistoricalQueueCtx(vInvID = {0:n}, histBattleID = {1:n}, isCreditsAmmo = {2:n}, waitingID = {3:>s})'.format(self.getVehicleInventoryID(), self.getHistBattleID(), self.getIsCreditsAmmo(), self.getWaitingID())
 
     def getRequestType(self):
         return REQUEST_TYPE.JOIN
@@ -67,13 +65,27 @@ class JoinHistoricalQueueCtx(_PreQueueRequestCtx):
         return g_currentVehicle.invID
 
 
-class LeavePreQueueCtx(_PreQueueRequestCtx):
+@ReprInjector.withParent(('__queueType', 'queueType'))
 
-    def __repr__(self):
-        return 'LeavePreQueueCtx(waitingID = {0:>s})'.format(self.getWaitingID())
+class JoinModeCtx(_PreQueueRequestCtx):
+
+    def __init__(self, queueType, waitingID = ''):
+        super(JoinModeCtx, self).__init__(waitingID=waitingID)
+        self.__queueType = queueType
+
+    def getQueueType(self):
+        return self.__queueType
+
+    def getID(self):
+        return 0
+
+
+@ReprInjector.simple(('getWaitingID', 'waitingID'))
+
+class LeavePreQueueCtx(_PreQueueRequestCtx):
 
     def getRequestType(self):
         return REQUEST_TYPE.LEAVE
 
 
-__all__ = ('JoinRandomQueueCtx', 'JoinEventBattlesQueueCtx', 'JoinHistoricalQueueCtx', 'LeavePreQueueCtx')
+__all__ = ('JoinRandomQueueCtx', 'JoinEventBattlesQueueCtx', 'JoinHistoricalQueueCtx', 'JoinModeCtx', 'LeavePreQueueCtx')

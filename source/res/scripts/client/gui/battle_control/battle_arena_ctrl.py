@@ -6,7 +6,7 @@ from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui import game_control
 from gui.BattleContext import g_battleContext
 from gui.Scaleform import VoiceChatInterface
-from gui.arena_info import IArenaController, getPlayerVehicleID, isPlayerTeamKillSuspected, isEventBattle
+from gui.arena_info import IArenaController, getPlayerVehicleID, isPlayerTeamKillSuspected
 from gui.arena_info.arena_vos import VehicleActions
 from messenger.storage import storage_getter
 PLAYERS_PANEL_LENGTH = 15
@@ -163,10 +163,9 @@ class BattleArenaController(IArenaController):
 
     def __updateTeamData(self, isEnemy, arenaDP, isFragsUpdate = True):
         team = arenaDP.getNumberOfTeam(isEnemy)
-        oppositeTeam = arenaDP.getNumberOfTeam(not isEnemy)
         fragCorrelation = self.__battleUI.fragCorrelation
         if isFragsUpdate:
-            fragCorrelation.clear(team if not isEventBattle() else oppositeTeam)
+            fragCorrelation.clear(team)
         if isEnemy:
             playersPanel = self.__battleUI.rightPlayersPanel
         else:
@@ -191,9 +190,7 @@ class BattleArenaController(IArenaController):
                     continue
             elif isFragsUpdate:
                 fragCorrelation.addVehicle(team, vInfoVO.vehicleID, vInfoVO.vehicleType.getClassName(), vInfoVO.isAlive())
-                if isEventBattle():
-                    fragCorrelation.addFrags(team, count=vStatsVO.frags)
-                elif not vInfoVO.isAlive():
+                if not vInfoVO.isAlive():
                     fragCorrelation.addKilled(team)
             playerFullName = g_battleContext.getFullPlayerName(vID=vInfoVO.vehicleID, showVehShortName=False)
             if not playerFullName:
@@ -206,7 +203,6 @@ class BattleArenaController(IArenaController):
             valuesHashes.append(valuesHash)
 
         playersPanel.setTeamValuesData(self.__makeTeamValues(ctx, pNamesList, fragsList, vNamesList, valuesHashes))
-        fragCorrelation.playGoalSound()
 
     def __makeTeamValues(self, ctx, pNamesList, fragsList, vNamesList, valuesHashes):
         return {'team': 'team%d' % ctx.team,
@@ -238,7 +234,7 @@ class BattleArenaController(IArenaController):
          'icon': vTypeVO.iconPath,
          'vehicle': vTypeVO.shortName,
          'vehicleState': vInfoVO.vehicleStatus,
-         'frags': vStatsVO.frags if not isEventBattle() else 0,
+         'frags': vStatsVO.frags,
          'squad': ctx.getSquadIndex(vInfoVO),
          'clanAbbrev': playerVO.clanAbbrev,
          'speaking': isSpeaking(dbID),

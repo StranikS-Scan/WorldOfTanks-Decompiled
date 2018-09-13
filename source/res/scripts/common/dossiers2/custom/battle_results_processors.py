@@ -1,14 +1,15 @@
 # Embedded file name: scripts/common/dossiers2/custom/battle_results_processors.py
 import time
-from constants import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS, DESTR_CODES_BY_TAGS
+from constants import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS, DESTR_CODES_BY_TAGS, FORT_BATTLE_RESULT
 from dossiers2.custom import records
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
+from dossiers2.custom.records import RECORD_DB_IDS as DOSSIER_REC_DB_IDS
 _divisionToRecordNames = {'MIDDLE': ('middleBattlesCount', 'fortResourceInMiddle'),
  'CHAMPION': ('championBattlesCount', 'fortResourceInChampion'),
  'ABSOLUTE': ('absoluteBattlesCount', 'fortResourceInAbsolute')}
 
-def updateFortifiedRegionDossier(dossierDescr, divisionName, isWinner, fortResource, isCommander):
+def updateFortSortieDossier(dossierDescr, divisionName, winner, fortResource, isCommander):
     if divisionName not in _divisionToRecordNames:
         raise Exception, 'Unknown sortie division'
     counterRecordName, resourceRecordName = _divisionToRecordNames[divisionName]
@@ -17,11 +18,74 @@ def updateFortifiedRegionDossier(dossierDescr, divisionName, isWinner, fortResou
     if not isCommander:
         return
     sortieBlock['battlesCount'] += 1
-    if isWinner:
+    if winner == 1:
         sortieBlock['wins'] += 1
-    else:
+    if winner == 2:
         sortieBlock['losses'] += 1
     sortieBlock[counterRecordName] += 1
+
+
+def updateFortBattleDossier(dossierDescr, isDefence, isWinner, enemyBaseCaptured, ownBaseLost, combatCount, combatWins, enemyBuildingCapture, ownBuildingLost, resourceCapture, resourceLost, **kwargs):
+    block = dossierDescr['fortBattles']
+    block['battlesCount'] += 1
+    block['battlesHours'] += 1
+    if isDefence:
+        block['defenceCount'] += 1
+    else:
+        block['attackCount'] += 1
+    if enemyBaseCaptured:
+        block['enemyBaseCaptureCount'] += 1
+    if ownBaseLost:
+        block['ownBaseLossCount'] += 1
+    block['combatCount'] += combatCount
+    block['combatWins'] += combatWins
+    if isWinner == FORT_BATTLE_RESULT.WIN:
+        if not isDefence:
+            block['successAttackCount'] += 1
+        else:
+            block['successDefenceCount'] += 1
+    block['captureEnemyBuildingTotalCount'] += enemyBuildingCapture
+    block['lossOwnBuildingTotalCount'] += ownBuildingLost
+    block['resourceCaptureCount'] += resourceCapture
+    block['resourceLossCount'] += resourceLost
+
+
+def updateAccountDossierWithFortBattleResults(accountDBID, accDossierDescr, results):
+    fortResource = results['accDBIDToResource'].get(accountDBID, 0)
+    isDefence = results['isDefence']
+    ownBaseLost = results['ownBaseLost']
+    enemyBaseCaptured = results['enemyBaseCaptured']
+    participateInFinalBattle = accountDBID in results['finialBattleParticipants']
+    for blockName in ('fortMisc', 'fortMiscInClan'):
+        miscBlock = accDossierDescr.expand(blockName)
+        miscBlock['fortResourceInBattles'] += fortResource
+        if fortResource > miscBlock['maxFortResourceInBattles']:
+            miscBlock['maxFortResourceInBattles'] = fortResource
+        if isDefence:
+            miscBlock['defenceHours'] += 1
+            if not ownBaseLost:
+                miscBlock['successfulDefenceHours'] += 1
+        else:
+            miscBlock['attackNumber'] += 1
+        if enemyBaseCaptured and participateInFinalBattle:
+            miscBlock['enemyBasePlunderNumber'] += 1
+            if not isDefence:
+                miscBlock['enemyBasePlunderNumberInAttack'] += 1
+
+    isWinner = results['isWinner']
+    ownFortLevel = results['ownFortLevel']
+    enemyFortLevel = results['enemyFortLevel']
+    fortAchievements = accDossierDescr.expand('fortAchievements')
+    if isWinner == FORT_BATTLE_RESULT.WIN:
+        fortAchievements['wins'] += 1
+    if enemyBaseCaptured and enemyFortLevel >= ownFortLevel:
+        if isDefence:
+            fortAchievements['capturedBasesInDefence'] += 1
+        else:
+            fortAchievements['capturedBasesInAttack'] += 1
+    popUps = accDossierDescr.popPopUps()
+    results['dossierPopUps'] = [ (DOSSIER_REC_DB_IDS[block, record], value) for (block, record), value in popUps.iteritems() ]
+    return results
 
 
 def updateVehicleDossier(dossierDescr, battleResults, dossierXP, vehTypeCompDescr):
@@ -57,6 +121,8 @@ def __updateDossierCommonPart(dossierDescr, results, dossierXP):
         __updateAggregatedValues(dossierDescr.expand('historical'), dossierDescr.expand('historical'), results, dossierXP, frags8p)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_SORTIE):
         __updateAggregatedValues(dossierDescr.expand('fortSorties'), dossierDescr.expand('fortSorties'), results, dossierXP, frags8p)
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_FORT_BATTLE):
+        __updateAggregatedValues(dossierDescr.expand('fortBattles'), dossierDescr.expand('fortBattles'), results, dossierXP, frags8p)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS):
         for recordDBID in results['achievements'] + results['protoAchievements']:
             __processArenaAchievement(dossierDescr, recordDBID)
@@ -70,6 +136,8 @@ def __updateDossierCommonPart(dossierDescr, results, dossierXP):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxHistorical'), results, dossierXP)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXSORTIE):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxFortSorties'), results, dossierXP)
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXFORTBATTLE):
+        maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxFortBattles'), results, dossierXP)
     return (maxValuesChanged, frags8p)
 
 
@@ -180,6 +248,10 @@ def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results):
     achievements['movingAvgDamage'] = results['movingAvgDamage']
     if achievements['marksOnGun'] < results['marksOnGun']:
         achievements['marksOnGun'] = results['marksOnGun']
+    if results['winnerTeam'] == results['team'] and results['aimerSeries'] > 0:
+        dossierDescr['singleAchievements']['aimer'] = 1
+        if achievements['maxAimerSeries'] < results['aimerSeries']:
+            achievements['maxAimerSeries'] = results['aimerSeries']
     isSPG = isVehicleSPG(vehTypeCompDescr)
     _updatePerBattleSeries(achievements, 'invincibleSeries', results['killerID'] == 0 and results['damageReceived'] == 0 and not isSPG)
     _updatePerBattleSeries(achievements, 'diehardSeries', results['killerID'] == 0 and not isSPG)
@@ -216,6 +288,7 @@ def __updateAccountDossierImpl(dossierDescr, results, dossierXP, vehTypeCompDesc
              vehA15x15['wins'],
              vehDossierDescr['achievements']['markOfMastery'],
              vehA15x15['xp'])
+            _updatePerBattleSeries(dossierDescr['achievements'], 'reliableComradeSeries', results['tdamageDealt'] == 0 and not results['tdestroyedModules'])
         if bool(bonusCaps & BONUS_CAPS.DOSSIER_7X7):
             a7x7Cut = dossierDescr['a7x7Cut']
             vehA7x7 = vehDossierDescr['a7x7']
@@ -243,8 +316,14 @@ def __updateAccountDossierImpl(dossierDescr, results, dossierXP, vehTypeCompDesc
                 if fortResource > miscBlock['maxFortResourceInSorties']:
                     miscBlock['maxFortResourceInSorties'] = fortResource
 
+        if bool(bonusCaps & BONUS_CAPS.DOSSIER_FORT_BATTLE):
+            battleCut = dossierDescr['fortBattlesCut']
+            vehBattles = vehDossierDescr['fortBattles']
+            battleCut[vehTypeCompDescr] = (vehBattles['battlesCount'], vehBattles['wins'], vehBattles['xp'])
         if bool(bonusCaps & BONUS_CAPS.DOSSIER_SORTIE):
             __updateAggregatedValues(dossierDescr.expand('fortSortiesInClan'), dossierDescr.expand('fortSortiesInClan'), results, dossierXP, frags8p)
+        if bool(bonusCaps & BONUS_CAPS.DOSSIER_FORT_BATTLE):
+            __updateAggregatedValues(dossierDescr.expand('fortBattlesInClan'), dossierDescr.expand('fortBattlesInClan'), results, dossierXP, frags8p)
         bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS) and __updateAccountRecords(bonusCaps, dossierDescr, vehDossierDescr)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAX15X15):
         for record in maxValuesChanged:
@@ -264,6 +343,13 @@ def __updateAccountDossierImpl(dossierDescr, results, dossierXP, vehTypeCompDesc
 
         for record in maxValuesChanged:
             dossierDescr['maxFortSorties'][record] = vehTypeCompDescr
+
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXFORTBATTLE):
+        for record in __updateMaxValues(dossierDescr.expand('maxFortBattlesInClan'), results, dossierXP):
+            dossierDescr['maxFortBattlesInClan'][record] = vehTypeCompDescr
+
+        for record in maxValuesChanged:
+            dossierDescr['maxFortBattles'][record] = vehTypeCompDescr
 
     return
 
@@ -294,7 +380,10 @@ def __chooseAchievementBlock(bonusCaps):
     res = []
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15):
         targetBlock = 'achievements'
-        names = ('maxInvincibleSeries', 'maxDiehardSeries', 'maxSniperSeries', 'maxKillingSeries', 'maxPiercingSeries')
+        names = ('maxInvincibleSeries', 'maxDiehardSeries', 'maxSniperSeries', 'maxKillingSeries', 'maxPiercingSeries', 'maxAimerSeries')
+        res.append((targetBlock, names))
+        targetBlock = 'singleAchievements'
+        names = ('aimer',)
         res.append((targetBlock, names))
     elif bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7):
         targetBlock = 'achievements7x7'

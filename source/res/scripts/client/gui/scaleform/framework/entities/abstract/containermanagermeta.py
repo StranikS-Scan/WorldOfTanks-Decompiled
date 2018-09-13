@@ -48,3 +48,7 @@ class ContainerManagerMeta(DAAPIModule):
     def as_getViewTypeByTokenS(self, token):
         if self._isDAAPIInited():
             return self.flashObject.as_getViewTypeByToken(token)
+
+    def as_cancelLoadingsForContainerS(self, containerType):
+        if self._isDAAPIInited():
+            return self.flashObject.as_cancelLoadingsForContainer(containerType)

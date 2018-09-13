@@ -90,7 +90,6 @@ class PremiumForm(View, AbstractWindowView, PremiumFormMeta, AppRef):
                 else:
                     successMessage = SYSTEM_MESSAGES.PREMIUM_BUYINGSUCCESS
                 SystemMessages.pushI18nMessage(successMessage, days, formatPrice((0, premiumCost[int(days)])), type=SystemMessages.SM_TYPE.PurchaseForGold)
-            self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.UPDATE_TANK_PARAMS), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self.__systemErrorMessage(SYSTEM_MESSAGES.PREMIUM_SERVER_ERROR, days, SystemMessages.SM_TYPE.Error)
         Waiting.hide('loadStats')

@@ -37,8 +37,6 @@ class BusinessHandler(SequenceIDLoader):
          LoadEvent.LOAD_BATTLE_QUEUE: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
          LoadEvent.LOAD_BATTLE_LOADING: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
          LoadEvent.LOAD_TUTORIAL_LOADING: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_TRAININGS: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_TRAINING_ROOM: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
          ShowWindowEvent.SHOW_FREE_X_P_INFO_WINDOW: (self.__showFreeXPInfoWindow,),
          ShowWindowEvent.SHOW_TEST_WINDOW: (self.__showTestWindow,),
          ShowWindowEvent.SHOW_EULA: (self.__showEULA,),
@@ -55,7 +53,15 @@ class BusinessHandler(SequenceIDLoader):
          ShowPopoverEvent.SHOW_CREW_OPERATIONS_POPOVER: (self.__showCrewOperationsPopOver,),
          ShowPopoverEvent.SHOW_FORT_BUILDING_CARD_POPOVER_EVENT: (self.__showFortBuildingsPopOver,),
          ShowPopoverEvent.SHOW_FORT_ORDER_POPOVER_EVENT: (self.__showFortOrderPopover,),
+         ShowPopoverEvent.SHOW_FORT_BATTLE_DIRECTION_POPOVER_EVENT: (self.__showFortBattleDirectionPopover,),
+         ShowPopoverEvent.SHOW_FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_EVENT: (self.__showFortIntelligenceClanFilterPopover,),
          ShowPopoverEvent.SHOW_BATTLE_TYPE_SELECT_POPOVER_EVENT: (self.__showBattleTypeSelectPopover,),
+         ShowPopoverEvent.SHOW_ACCOUNT_POPOVER_EVENT: (self.__showAccountPopover,),
+         ShowPopoverEvent.SHOW_FORT_SETTINGS_PERIPHERY_POPOVER_EVENT: (self.__showFortSettingsPeripheryPopover,),
+         ShowPopoverEvent.SHOW_FORT_SETTINGS_DEFENCE_HOUR_POPOVER_EVENT: (self.__showFortSettingsDefenceHourPopover,),
+         ShowPopoverEvent.SHOW_FORT_SETTINGS_VACATION_POPOVER_EVENT: (self.__showFortSettingsVacationPopover,),
+         ShowPopoverEvent.SHOW_FORT_SETTINGS_DAYOFF_POPOVER_EVENT: (self.__showFortSettingsDayoffPopover,),
+         ShowPopoverEvent.SHOW_FORT_DATE_PICKER_POPOVER_EVENT: (self.__showFortDatePickerPopover,),
          ShowWindowEvent.SHOW_RETRAIN_CREW_WINDOW: (self.__showRetrainCrewWindow,),
          ShowWindowEvent.SHOW_SETTINGS_WINDOW: (self.__showSettingsWindow,),
          ShowWindowEvent.SHOW_DEMONSTRATOR_WINDOW: (self.__showDemonstratorWindow,),
@@ -67,8 +73,8 @@ class BusinessHandler(SequenceIDLoader):
          ShowWindowEvent.SHOW_TANKMAN_INFO: (self.__lobbyHdlr.showCrewTankmanInfo,),
          ShowWindowEvent.SHOW_BATTLE_RESULTS: (self.__lobbyHdlr.showBattleResults,),
          ShowWindowEvent.SHOW_EVENTS_WINDOW: (self.__lobbyHdlr.showEventsWindow,),
+         ShowWindowEvent.SHOW_HEADER_TUTORIAL_WINDOW: (self.__lobbyHdlr.showHeaderTutorialWindow,),
          ShowWindowEvent.SHOW_TANKMAN_DROP_SKILLS_WINDOW: (self.__lobbyHdlr.showTankmanDropSkillsWindow,),
-         ShowWindowEvent.SHOW_TRAINING_SETTINGS_WINDOW: (self.__lobbyHdlr.showTrainingSettingsWindow,),
          ShowWindowEvent.SHOW_BROWSER_WINDOW: (self.__lobbyHdlr.showBrowserWindow, EVENT_BUS_SCOPE.LOBBY),
          ShowDialogEvent.SHOW_SIMPLE_DLG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_ICON_DIALOG: (self.__dlgsHdlr,),
@@ -78,7 +84,9 @@ class BusinessHandler(SequenceIDLoader):
          ShowDialogEvent.SHOW_CONFIRM_MODULE: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_CAPTCHA_DIALOG: (self.__dlgsHdlr,),
-         ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: (self.__dlgsHdlr,)}
+         ShowDialogEvent.SHOW_HEADER_TUTORIAL_DIALOG: (self.__dlgsHdlr,),
+         ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: (self.__dlgsHdlr,),
+         ShowDialogEvent.SHOW_PUNISHMENT_DIALOG: (self.__dlgsHdlr,)}
 
     def _populate(self):
         EventSystemEntity._populate(self)
@@ -130,7 +138,7 @@ class BusinessHandler(SequenceIDLoader):
         self._loadView(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, event.meta, event.handler)
 
     def __showLoginQueue(self, event):
-        self._loadView(VIEW_ALIAS.LOGIN_QUEUE, event.waitingOpen, event.msg, event.waitingClose)
+        self._loadView(VIEW_ALIAS.LOGIN_QUEUE, event.waitingOpen, event.msg, event.waitingClose, event.showAutoLoginBtn)
 
     def __createAcc(self, event):
         self._loadView(VIEW_ALIAS.LOGIN_CREATE_AN_ACC, event.title, event.message, event.submit)
@@ -196,8 +204,32 @@ class BusinessHandler(SequenceIDLoader):
     def __showFortOrderPopover(self, event):
         self.app.loadView(FORTIFICATION_ALIASES.FORT_ORDER_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_ORDER_POPOVER_ALIAS, event.ctx)
 
+    def __showFortBattleDirectionPopover(self, event):
+        self.app.loadView(FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS, event.ctx)
+
+    def __showFortIntelligenceClanFilterPopover(self, event):
+        self.app.loadView(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS, event.ctx)
+
+    def __showFortSettingsPeripheryPopover(self, event):
+        self.app.loadView(FORTIFICATION_ALIASES.FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS, event.ctx)
+
+    def __showFortSettingsDefenceHourPopover(self, event):
+        self.app.loadView(FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS, event.ctx)
+
+    def __showFortSettingsVacationPopover(self, event):
+        self.app.loadView(FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS, event.ctx)
+
+    def __showFortSettingsDayoffPopover(self, event):
+        self.app.loadView(FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS, event.ctx)
+
+    def __showFortDatePickerPopover(self, event):
+        self.app.loadView(FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS, event.ctx)
+
     def __showBattleTypeSelectPopover(self, event):
         self.app.loadView(VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER, VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER, event.ctx)
+
+    def __showAccountPopover(self, event):
+        self.app.loadView(VIEW_ALIAS.ACCOUNT_POPOVER, VIEW_ALIAS.ACCOUNT_POPOVER, event.ctx)
 
     def __showRetrainCrewWindow(self, event):
         self._loadView(VIEW_ALIAS.RETRAIN_CREW, event.ctx)
@@ -240,8 +272,8 @@ class BusinessLobbyHandler(SequenceIDLoader):
         self.app.loadView(VIEW_ALIAS.PERSONAL_CASE, name, event.ctx)
 
     def showBattleResults(self, event):
-        name = 'battleResults' + str(event.ctx.get('arenaUniqueID'))
-        self.app.loadView(VIEW_ALIAS.BATTLE_RESULTS, name, event.ctx)
+        arenaUniqueID = event.ctx.get('data')
+        self.app.loadView(VIEW_ALIAS.BATTLE_RESULTS, 'battleResults' + str(arenaUniqueID), {'data': arenaUniqueID})
 
     def showEventsWindow(self, event):
         windowContainer = self.app.containerManager.getContainer(ViewTypes.WINDOW)
@@ -251,8 +283,8 @@ class BusinessLobbyHandler(SequenceIDLoader):
         self.app.loadView(VIEW_ALIAS.EVENTS_WINDOW, VIEW_ALIAS.EVENTS_WINDOW, event.ctx)
         return
 
-    def showTrainingSettingsWindow(self, event):
-        viewAlias = VIEW_ALIAS.TRAINING_SETTINGS_WINDOW
+    def showHeaderTutorialWindow(self, event):
+        viewAlias = VIEW_ALIAS.HEADER_TUTORIAL_WINDOW
         self.app.loadView(viewAlias, viewAlias, event.ctx)
 
     def showTankmanDropSkillsWindow(self, event):
@@ -288,9 +320,11 @@ class BusinessDlgsHandler(SequenceIDLoader):
          ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG: self.__demountDeviceDialogHandler,
          ShowDialogEvent.SHOW_DESTROY_DEVICE_DIALOG: self.__destroyDeviceDialogHandler,
          ShowDialogEvent.SHOW_CONFIRM_MODULE: self.__confirmModuleHandler,
+         ShowDialogEvent.SHOW_HEADER_TUTORIAL_DIALOG: self.__headerTutorialDialogHandler,
          ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG: self.__systemMsgDialogHandler,
          ShowDialogEvent.SHOW_CAPTCHA_DIALOG: self.__handleShowCaptcha,
-         ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: self.__dismissTankmanHandler}
+         ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: self.__dismissTankmanHandler,
+         ShowDialogEvent.SHOW_PUNISHMENT_DIALOG: self.__punishmentWindowHandler}
 
     def _dispose(self):
         self.handlers.clear()
@@ -307,6 +341,9 @@ class BusinessDlgsHandler(SequenceIDLoader):
     def __confirmModuleHandler(self, event):
         self._loadView(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, event.meta, event.handler)
 
+    def __headerTutorialDialogHandler(self, event):
+        self._loadView(VIEW_ALIAS.HEADER_TUTORIAL_DIALOG, event.meta, event.handler)
+
     def __iconDialogHandler(self, event):
         self._loadView(VIEW_ALIAS.ICON_DIALOG, event.meta, event.handler)
 
@@ -315,6 +352,9 @@ class BusinessDlgsHandler(SequenceIDLoader):
 
     def __demountDeviceDialogHandler(self, event):
         self._loadView(VIEW_ALIAS.DEMOUNT_DEVICE_DIALOG, event.meta, event.handler)
+
+    def __punishmentWindowHandler(self, event):
+        self._loadView(VIEW_ALIAS.PUNISHMENT_DIALOG, event.meta, event.handler)
 
     def __destroyDeviceDialogHandler(self, event):
         self._loadView(VIEW_ALIAS.DESTROY_DEVICE_DIALOG, event.meta, event.handler)

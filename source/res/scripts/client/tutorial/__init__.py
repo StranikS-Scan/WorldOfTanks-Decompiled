@@ -141,6 +141,18 @@ class Tutorial(object):
             ctx.cache.setRefused(False)
         self.run(ctx)
 
+    def reload(self, afterBattle = False):
+        if not self._tutorialStopped:
+            self._funcScene.reload()
+            self._sound.stop()
+            self._cache.setAfterBattle(afterBattle).write()
+            self._gui.reloadConfig(self._descriptor.getGuiFilePath())
+            self._gui.clear()
+            doc_loader.clearChapterData(self._data)
+            self.loadCurrentChapter(initial=True)
+        else:
+            LOG_ERROR('Tutorial is not running.')
+
     def __timeLoop(self):
         self.__callbackID = None
         if not self._tutorialStopped:

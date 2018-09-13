@@ -3,19 +3,20 @@ from constants import PREBATTLE_TYPE
 from gui.prb_control.items.prb_items import PlayerPrbInfo
 from gui.prb_control.items.unit_items import PlayerUnitInfo
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
+from gui.shared.utils.decorators import ReprInjector
+
+@ReprInjector.simple('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'hasLockedState', 'isIntroMode')
 
 class FunctionalState(object):
-    __slots__ = ('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'isIntroMode')
+    __slots__ = ('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'hasLockedState', 'isIntroMode')
 
-    def __init__(self, ctrlTypeID = 0, entityTypeID = 0, hasModalEntity = False, isIntroMode = False):
+    def __init__(self, ctrlTypeID = 0, entityTypeID = 0, hasModalEntity = False, hasLockedState = False, isIntroMode = False):
         super(FunctionalState, self).__init__()
         self.ctrlTypeID = ctrlTypeID
         self.entityTypeID = entityTypeID
         self.hasModalEntity = hasModalEntity
+        self.hasLockedState = hasLockedState
         self.isIntroMode = isIntroMode
-
-    def __repr__(self):
-        return 'FunctionalState(ctrlTypeID = {0!r:s}, entityTypeID = {1!r:s}, hasModalEntity = {2!r:s}, isIntroMode = {3!r:s})'.format(self.ctrlTypeID, self.entityTypeID, self.hasModalEntity, self.isIntroMode)
 
     def isInPrebattle(self, prbType = 0):
         result = False
@@ -55,6 +56,12 @@ class FunctionalState(object):
             else:
                 result = True
         return result
+
+    def isReadyActionSupported(self):
+        return self.hasModalEntity and not self.isIntroMode and (self.isInPrebattle() or self.isInUnit())
+
+    def isNavigationDisabled(self):
+        return self.hasLockedState and (self.isInPreQueue() or self.isInPrebattle(PREBATTLE_TYPE.COMPANY) or self.isInPrebattle(PREBATTLE_TYPE.SQUAD))
 
 
 class PlayerDecorator(object):

@@ -1,13 +1,20 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/rally_dps.py
 import BigWorld
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_text import STANDARD_TEXT
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makePlayerVO, makeUnitShortVO, makeSortiePlayerVO
 from gui.Scaleform.daapi.view.lobby.rally.data_providers import BaseRallyListDataProvider
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.managers.UtilsManager import UtilsManager, ImageUrlProperties
 from gui.prb_control.items.unit_items import getUnitCandidatesComparator
 from gui.prb_control.prb_helpers import unitFunctionalProperty
+from helpers import i18n
 from messenger import g_settings
 from messenger.storage import storage_getter
 
@@ -26,15 +33,18 @@ class CandidatesDataProvider(DAAPIDataProvider, AppRef):
         self._dispose()
 
     def clear(self):
-        self.__list = []
-        self.__mapping = {}
+        self._list = []
+        self._mapping = {}
 
     @property
     def collection(self):
-        return self.__list
+        return self._list
 
     def buildList(self, candidates):
         self.clear()
+        self._buildData(candidates)
+
+    def _buildData(self, candidates):
         if self.app is not None:
             isPlayerSpeaking = self.app.voiceChatManager.isPlayerSpeaking
         else:
@@ -45,8 +55,8 @@ class CandidatesDataProvider(DAAPIDataProvider, AppRef):
         sortedList = sorted(mapping, cmp=getUnitCandidatesComparator())
         for pInfo, user in sortedList:
             dbID = pInfo.dbID
-            self.__mapping[dbID] = len(self.__list)
-            self.__list.append(self._makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking(dbID)))
+            self._mapping[dbID] = len(self._list)
+            self._list.append(self._makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking(dbID)))
 
         return
 
@@ -57,7 +67,7 @@ class CandidatesDataProvider(DAAPIDataProvider, AppRef):
         return {}
 
     def hasCandidate(self, dbID):
-        return dbID in self.__mapping.keys()
+        return dbID in self._mapping.keys()
 
     def rebuild(self, candidates):
         self.buildList(candidates)
@@ -66,7 +76,7 @@ class CandidatesDataProvider(DAAPIDataProvider, AppRef):
     def setOnline(self, pInfo):
         dbID = pInfo.dbID
         if self.hasCandidate(dbID):
-            self.__list[self.__mapping[dbID]]['isOffline'] = pInfo.isOffline()
+            self._list[self._mapping[dbID]]['isOffline'] = pInfo.isOffline()
             self.refresh()
 
 
@@ -77,6 +87,51 @@ class SortieCandidatesDP(CandidatesDataProvider):
 
     def _makePlayerVO(self, pInfo, user, colorGetter, isPlayerSpeaking):
         return makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
+
+
+class SortieCandidatesLegionariesDP(SortieCandidatesDP):
+
+    def __init__(self):
+        super(SortieCandidatesDP, self).__init__()
+        self.__legionariesCount = 0
+
+    @property
+    def legionariesCount(self):
+        return self.__legionariesCount
+
+    def buildList(self, candidates):
+        self.clear()
+        self.__legionariesCount = 0
+        clanPlayers = {}
+        legionaryPlayers = {}
+        for key, value in candidates.iteritems():
+            if value.isLegionary():
+                legionaryPlayers[key] = value
+            else:
+                clanPlayers[key] = value
+
+        self.__legionariesCount = len(legionaryPlayers)
+        if clanPlayers:
+            self._buildData(clanPlayers)
+        self.__addAdditionalBlocks(len(clanPlayers), self.__legionariesCount)
+        if legionaryPlayers:
+            self._buildData(legionaryPlayers)
+
+    def __addAdditionalBlocks(self, playersCount, legionariesCount):
+        headerClanPlayers = {'headerText': fort_text.getText(STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_CLANPLAYERS))}
+        emptyRenders = {'emptyRender': True}
+        units = UtilsManager()
+        icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE
+        legionariesIcon = units.getHtmlIconText(ImageUrlProperties(icon, 16, 16, -4, 0))
+        textResult = legionariesIcon + fort_text.getText(STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS))
+        headerLegionasriesPlayers = {'headerText': textResult,
+         'headerToolTip': TOOLTIPS.FORTIFICATION_BATTLEROOMLEGIONARIES}
+        if playersCount > 0:
+            self._list.insert(0, headerClanPlayers)
+        if playersCount > 0 and legionariesCount > 0:
+            self._list.append(emptyRenders)
+        if legionariesCount > 0:
+            self._list.append(headerLegionasriesPlayers)
 
 
 class ManualSearchDataProvider(BaseRallyListDataProvider):
@@ -125,6 +180,22 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
              'server': pNameGetter(unitItem.peripheryID)})
 
         return self._selectedIdx
+
+    def updateListItem(self, userDBID):
+        for item in self.collection:
+            creator = item.get('creator', None)
+            if creator is None:
+                return
+            creatorDBID = creator.get('dbID', None)
+            if userDBID == creatorDBID:
+                userGetter = storage_getter('users')().getUser
+                colorGetter = g_settings.getColorScheme('rosters').getColors
+                colors = colorGetter(userGetter(creatorDBID).getGuiType())
+                creator['colors'] = colors
+                self.refresh()
+                return
+
+        return
 
     def updateList(self, selectedID, result):
         isFullUpdate, diff = False, []

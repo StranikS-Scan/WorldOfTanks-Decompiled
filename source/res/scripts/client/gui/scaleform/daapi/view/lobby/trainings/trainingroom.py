@@ -6,17 +6,18 @@ from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.daapi.settings import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.framework import AppRef, ViewTypes, g_entitiesFactories
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.prb_control import events_dispatcher
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.TrainingRoomMeta import TrainingRoomMeta
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.prb_helpers import PrbListener
-from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
-from gui.prb_control.settings import REQUEST_TYPE, GUI_EXIT, CTRL_ENTITY_TYPE
+from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME, FUNCTIONAL_EXIT
+from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import int2roman, i18n
 from messenger.ext import passCensor
@@ -24,8 +25,9 @@ from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
 from gui.LobbyContext import g_lobbyContext
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 
-class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
+class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, PrbListener):
 
     @storage_getter('users')
     def usersStorage(self):
@@ -40,7 +42,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
             self.__swapTeamsInMinimap(functional.getPlayerTeam())
         else:
             self.destroy()
-            events_dispatcher.loadTrainingList()
+            g_eventDispatcher.loadTrainingList()
             return
         self.startPrbListening()
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -49,11 +51,12 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
         g_messengerEvents.users.onUserRosterChanged += self.__me_onUserRosterChanged
 
     def _dispose(self):
-        super(TrainingRoom, self)._dispose()
         self.stopPrbListening()
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self.__updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         g_messengerEvents.users.onUserRosterChanged -= self.__me_onUserRosterChanged
+        self._closeWindow(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)
+        super(TrainingRoom, self)._dispose()
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
@@ -61,7 +64,14 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
             self.fireEvent(events.ShowViewEvent(events.ShowViewEvent.SHOW_LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showTrainingSettings(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_TRAINING_SETTINGS_WINDOW, ctx={'isCreateRequest': False}))
+        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_TRAINING_SETTINGS_WINDOW, ctx={'isCreateRequest': False}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def onWindowMinimize(self):
+        g_eventDispatcher.loadHangar()
+
+    def onTryClosing(self):
+        self._dispose()
+        return True
 
     def canSendInvite(self):
         return self.prbFunctional.getPermissions().canSendInvite()
@@ -125,7 +135,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
 
     @process
     def closeTrainingRoom(self):
-        result = yield self.prbDispatcher.leave(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave', guiExit=GUI_EXIT.TRAINING_LIST))
+        result = yield self.prbDispatcher.leave(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.INTRO_PREBATTLE))
         if not result:
             self.__showActionErrorMessage()
 
@@ -163,16 +173,6 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
             settings = self.prbFunctional.getSettings()
             self.as_setArenaVoipChannelsS(settings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS])
             self.__showActionErrorMessage()
-
-    def __closeWindows(self):
-        container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
-        if container is not None:
-            for viewAlias in [VIEW_ALIAS.TRAINING_SETTINGS_WINDOW, g_entitiesFactories.getAliasByEvent(events.ShowWindowEvent.SHOW_SEND_INVITES_WINDOW)]:
-                window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
-                if window is not None:
-                    window.destroy()
-
-        return
 
     def onPrbFunctionalFinished(self):
         self.__closeWindows()
@@ -223,6 +223,18 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
         if VIEW_ALIAS.MINIMAP_LOBBY in self.components:
             self.components[VIEW_ALIAS.MINIMAP_LOBBY].swapTeams(team)
 
+    def _closeWindow(self, windowAlias):
+        container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
+        if container is not None:
+            window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: windowAlias})
+            if window is not None:
+                window.destroy()
+        return
+
+    def __closeWindows(self):
+        self._closeWindow(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY)
+        self._closeWindow(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)
+
     def __showSettings(self, functional):
         settings = functional.getSettings()
         if settings is None:
@@ -259,7 +271,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
              'comment': comment,
              'arenaVoipChannels': settings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS],
              'canChangeArenaVOIP': permissions.canChangeArenaVOIP(),
-             'isObserverModeEnabled': GUI_SETTINGS.trainingObserverModeEnabled})
+             'isObserverModeEnabled': self.__isObserverModeEnabled()})
             return
 
     def __getCreatorFromRosters(self):
@@ -270,6 +282,10 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AppRef, PrbListener):
                     return account
 
         return None
+
+    def __isObserverModeEnabled(self):
+        minCount = self.prbFunctional.getSettings().getTeamLimits(1)['minCount']
+        return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
 
     def __showRosters(self, functional, rosters):
         accounts = rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]

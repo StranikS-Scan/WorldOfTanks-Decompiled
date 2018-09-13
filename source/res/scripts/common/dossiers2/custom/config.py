@@ -41,4 +41,9 @@ RECORD_CONFIGS = {'medalKay': (1, 10, 100, 1000),
              (10, (8, 10))),
  'conqueror': (100, 500, 1500, 3000),
  'kampfer': (5, 250, 500, 1000),
- 'medalRotmistrov': (3, 30, 150, 300)}
+ 'soldierOfFortune': (5, 50, 100, 200),
+ 'fireAndSword': (100, 500, 1500, 3000),
+ 'medalRotmistrov': (3, 30, 150, 300),
+ 'reliableComrade': 50,
+ 'crusher': 1,
+ 'counterblow': 1}

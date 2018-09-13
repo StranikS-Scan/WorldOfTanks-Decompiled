@@ -5,10 +5,23 @@ from account_helpers import getPlayerDatabaseID
 from adisp import async, process
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_ERROR
+from gui.shared.utils.functions import getClanRoleString
+from helpers import i18n
 from gui.shared.fortifications.fort_provider import ClientFortProvider
 from gui.shared.utils import code2str
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+CLAN_MEMBERS = {CLAN_MEMBER_FLAGS.LEADER: 'leader',
+ CLAN_MEMBER_FLAGS.VICE_LEADER: 'vice_leader',
+ CLAN_MEMBER_FLAGS.RECRUITER: 'recruiter',
+ CLAN_MEMBER_FLAGS.TREASURER: 'treasurer',
+ CLAN_MEMBER_FLAGS.DIPLOMAT: 'diplomat',
+ CLAN_MEMBER_FLAGS.COMMANDER: 'commander',
+ CLAN_MEMBER_FLAGS.PRIVATE: 'private',
+ CLAN_MEMBER_FLAGS.RECRUIT: 'recruit',
+ CLAN_MEMBER_FLAGS.STAFF: 'staff',
+ CLAN_MEMBER_FLAGS.JUNIOR: 'junior',
+ CLAN_MEMBER_FLAGS.RESERVIST: 'reservist'}
 
 class _ClanCache(object):
 
@@ -81,18 +94,19 @@ class _ClanCache(object):
         if info and len(info) > 1:
             return info
         else:
-            return None
+            return (None, None, -1, 0, 0)
 
     @property
-    def clanFullName(self):
-        result = self.clanInfo[0]
-        if result:
-            return '[%s]' % result
-        return result
+    def clanName(self):
+        return self.clanInfo[0]
+
+    @property
+    def clanAbbrev(self):
+        return self.clanInfo[1]
 
     @property
     def clanTag(self):
-        result = self.clanInfo[1]
+        result = self.clanAbbrev
         if result:
             return '[%s]' % result
         return result
@@ -151,6 +165,10 @@ class _ClanCache(object):
                 return
         callback(None)
         return
+
+    def getClanRoleUserString(self):
+        position = self.clanInfo[3]
+        return getClanRoleString(position)
 
     def _valueResponse(self, resID, value, callback):
         if resID < 0:

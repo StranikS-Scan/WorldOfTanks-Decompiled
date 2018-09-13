@@ -1,42 +1,29 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/training.py
 from functools import partial
 import BigWorld
+import account_helpers
 from PlayerEvents import g_playerEvents
 from adisp import process
-from constants import PREBATTLE_TYPE, PREBATTLE_CACHE_KEY, OBSERVER_VEH_INVENTORY_ID
+from constants import PREBATTLE_TYPE, PREBATTLE_CACHE_KEY
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui.prb_control import events_dispatcher, getClientPrebattle, isTraining
+from gui.prb_control import getClientPrebattle
 from gui.prb_control import getPrebattleType, getPrebattleRosters, prb_cooldown
 from gui.prb_control.context import prb_ctx
-from gui.prb_control.functional.default import PrbEntry, PrbFunctional
-from gui.prb_control.functional.interfaces import IPrbListUpdater
+from gui.prb_control.functional.default import PrbEntry, PrbFunctional, IntroPrbFunctional
+from gui.prb_control.functional.interfaces import IPrbListUpdater, IStatefulFunctional
 from gui.prb_control.items import prb_items, prb_seqs
 from gui.prb_control.restrictions.limits import TrainingLimits
 from gui.prb_control.restrictions.permissions import TrainingPrbPermissions
-from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
+from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, FUNCTIONAL_EXIT, PREBATTLE_ACTION_NAME
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, GUI_EXIT
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LoadEvent
 from gui.shared.utils.functions import checkAmmoLevel
 from prebattle_shared import decodeRoster
 
 class TrainingEntry(PrbEntry):
-
-    def doAction(self, action, dispatcher = None):
-        if action.actionName == PREBATTLE_ACTION_NAME.LEAVE_TRAINING_LIST:
-            events_dispatcher.loadHangar()
-        elif getClientPrebattle() is None:
-            self.__loadTrainingList()
-        elif isTraining():
-            if dispatcher is not None:
-                self.__loadTrainingRoom(dispatcher)
-            else:
-                LOG_ERROR('Dispatcher not found')
-        else:
-            LOG_ERROR('Player is joined to prebattle', getPrebattleType())
-        return True
 
     def create(self, ctx, callback = None):
         if not isinstance(ctx, prb_ctx.TrainingSettingsCtx):
@@ -60,20 +47,20 @@ class TrainingEntry(PrbEntry):
     def __loadTrainingList(self):
         result = yield checkAmmoLevel()
         if result:
-            events_dispatcher.loadTrainingList()
+            g_eventDispatcher.loadTrainingList()
 
     @process
     def __loadTrainingRoom(self, dispatcher):
         result = yield dispatcher.sendPrbRequest(prb_ctx.SetPlayerStateCtx(True, waitingID='prebattle/player_not_ready'))
         if result:
-            events_dispatcher.loadTrainingRoom()
+            g_eventDispatcher.loadTrainingRoom()
 
 
-class TrainingListRequester(IPrbListUpdater):
+class _TrainingListRequester(IPrbListUpdater):
     UPDATE_LIST_TIMEOUT = 5
 
     def __init__(self):
-        super(TrainingListRequester, self).__init__()
+        super(_TrainingListRequester, self).__init__()
         self.__callbackID = None
         self.__callback = None
         return
@@ -109,15 +96,45 @@ class TrainingListRequester(IPrbListUpdater):
     def __setTimeout(self):
         self.__callbackID = BigWorld.callback(self.UPDATE_LIST_TIMEOUT, self.__request)
 
-    def __pe_onPrebattlesListReceived(self, prbType, prbsCount, prebattles):
+    def __pe_onPrebattlesListReceived(self, prbType, _, prebattles):
         if prbType != PREBATTLE_TYPE.TRAINING:
             return
-        LOG_DEBUG('onPrebattlesListReceived', prbsCount)
         self.__callback(prb_seqs.PrbListIterator(prebattles))
         self.__setTimeout()
 
 
-class TrainingFunctional(PrbFunctional):
+class TrainingIntroFunctional(IntroPrbFunctional):
+
+    def __init__(self):
+        super(TrainingIntroFunctional, self).__init__(PREBATTLE_TYPE.TRAINING, _TrainingListRequester())
+
+    def init(self, clientPrb = None, ctx = None):
+        result = super(TrainingIntroFunctional, self).init()
+        g_eventDispatcher.loadTrainingList()
+        result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_PAGE)
+        g_eventDispatcher.updateUI()
+        return result
+
+    def fini(self, clientPrb = None, woEvents = False):
+        super(TrainingIntroFunctional, self).fini()
+        if self._exit != FUNCTIONAL_EXIT.PREBATTLE and not woEvents:
+            g_eventDispatcher.loadHangar()
+            g_eventDispatcher.removeTrainingFromCarousel()
+            g_eventDispatcher.updateUI()
+
+    def doAction(self, action = None, dispatcher = None):
+        g_eventDispatcher.loadTrainingList()
+        return True
+
+    def doSelectAction(self, action):
+        result = False
+        if action.actionName == PREBATTLE_ACTION_NAME.TRAINING:
+            g_eventDispatcher.loadTrainingList()
+            result = True
+        return result
+
+
+class TrainingFunctional(PrbFunctional, IStatefulFunctional):
     __loadEvents = (LoadEvent.LOAD_HANGAR,
      LoadEvent.LOAD_INVENTORY,
      LoadEvent.LOAD_SHOP,
@@ -136,9 +153,9 @@ class TrainingFunctional(PrbFunctional):
          REQUEST_TYPE.CHANGE_USER_STATUS: self.changeUserObserverStatus,
          REQUEST_TYPE.KICK: self.kickPlayer,
          REQUEST_TYPE.SEND_INVITE: self.sendInvites}
-        self._guiExit = GUI_EXIT.UNKNOWN
         super(TrainingFunctional, self).__init__(settings, permClass=TrainingPrbPermissions, limits=TrainingLimits(self), requestHandlers=requests)
         self.__settingRecords = []
+        self.__states = {}
 
     def init(self, clientPrb = None, ctx = None):
         result = super(TrainingFunctional, self).init(clientPrb=clientPrb)
@@ -149,6 +166,7 @@ class TrainingFunctional(PrbFunctional):
         self.__enterTrainingRoom()
         result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_WINDOW)
         result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_PAGE)
+        g_eventDispatcher.updateUI()
         return result
 
     def fini(self, clientPrb = None, woEvents = False):
@@ -158,13 +176,13 @@ class TrainingFunctional(PrbFunctional):
             remove(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
 
         if not woEvents:
-            if self._guiExit == GUI_EXIT.TRAINING_LIST:
-                events_dispatcher.loadTrainingList()
-            elif self._guiExit == GUI_EXIT.HANGAR:
-                events_dispatcher.loadHangar()
+            if self._exit == FUNCTIONAL_EXIT.INTRO_PREBATTLE:
+                g_eventDispatcher.loadTrainingList()
             else:
-                events_dispatcher.exitFromTrainingRoom()
-        events_dispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.TRAINING)
+                g_eventDispatcher.loadHangar()
+                g_eventDispatcher.removeTrainingFromCarousel(False)
+                g_eventDispatcher.updateUI()
+        g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.TRAINING)
 
     def getRosters(self, keys = None):
         rosters = getPrebattleRosters()
@@ -203,17 +221,12 @@ class TrainingFunctional(PrbFunctional):
         self.__enterTrainingRoom()
         return True
 
-    def doLeaveAction(self, dispatcher, ctx = None):
-        if ctx is None:
-            ctx = prb_ctx.LeavePrbCtx(guiExit=GUI_EXIT.HANGAR, waitingID='prebattle/leave')
-        if dispatcher._setRequestCtx(ctx):
-            self.leave(ctx)
-        return
-
-    def leave(self, ctx, callback = None):
-        ctx.startProcessing(callback)
-        self._guiExit = ctx.getGuiExit()
-        BigWorld.player().prb_leave(ctx.onResponseReceived)
+    def doSelectAction(self, action):
+        result = False
+        if action.actionName == PREBATTLE_ACTION_NAME.TRAINING:
+            self.__enterTrainingRoom()
+            result = True
+        return result
 
     def hasGUIPage(self):
         return True
@@ -317,14 +330,31 @@ class TrainingFunctional(PrbFunctional):
             if callback:
                 callback(False)
 
+    def prb_onPlayerStateChanged(self, pID, roster):
+        if pID == account_helpers.getPlayerID():
+            playerInfo = self.getPlayerInfo(pID=pID)
+            self.__states['isObserver'] = playerInfo.isVehicleSpecified() and playerInfo.getVehicle().isObserver
+        super(TrainingFunctional, self).prb_onPlayerStateChanged(pID, roster)
+
+    def getStates(self):
+        return ({}, self.__states)
+
+    def applyStates(self, states):
+        self.__states = states or {}
+
     def __enterTrainingRoom(self):
-        self.setPlayerState(prb_ctx.SetPlayerStateCtx(True, waitingID='prebattle/player_ready'), self.__onPlayerReady)
+        if self.__states.get('isObserver'):
+            self.changeUserObserverStatus(prb_ctx.SetPlayerObserverStateCtx(True, True, waitingID='prebattle/change_user_status'), self.__onPlayerReady)
+        else:
+            self.setPlayerState(prb_ctx.SetPlayerStateCtx(True, waitingID='prebattle/player_ready'), self.__onPlayerReady)
 
     def __onPlayerReady(self, result):
         if result:
-            events_dispatcher.loadTrainingRoom()
+            g_eventDispatcher.loadTrainingRoom()
         else:
-            events_dispatcher.loadHangar()
+            g_eventDispatcher.loadHangar()
+            g_eventDispatcher.removeTrainingFromCarousel()
+            g_eventDispatcher.addTrainingToCarousel(False)
 
     def __onSettingChanged(self, code, record = '', callback = None):
         if code < 0:

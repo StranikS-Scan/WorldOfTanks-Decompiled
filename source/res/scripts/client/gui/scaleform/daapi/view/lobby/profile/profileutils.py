@@ -1,26 +1,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
-import cPickle as pickle
 import BigWorld
-from debug_utils import LOG_DEBUG, LOG_ERROR
-from constants import CLAN_MEMBER_FLAGS
+from debug_utils import LOG_ERROR
+from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.ui.achievements import ACHIEVEMENT_SECTION, ACHIEVEMENT_TYPE
 from gui.shared import g_itemsCache
+from gui.shared.ClanCache import g_clanCache
 from gui.shared.gui_items.dossier import dumpDossier
-from gui.shared.gui_items.dossier.achievements import RareAchievement
 from gui.shared.gui_items.dossier.stats import _MaxVehicleStatsBlock
+from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.MENU import MENU
 from helpers.i18n import makeString
-CLAN_MEMBERS = {CLAN_MEMBER_FLAGS.LEADER: 'leader',
- CLAN_MEMBER_FLAGS.VICE_LEADER: 'vice_leader',
- CLAN_MEMBER_FLAGS.RECRUITER: 'recruiter',
- CLAN_MEMBER_FLAGS.TREASURER: 'treasurer',
- CLAN_MEMBER_FLAGS.DIPLOMAT: 'diplomat',
- CLAN_MEMBER_FLAGS.COMMANDER: 'commander',
- CLAN_MEMBER_FLAGS.PRIVATE: 'private',
- CLAN_MEMBER_FLAGS.RECRUIT: 'recruit'}
 
 class HeaderItemsTypes(object):
     VALUE_PREFIX = 'value_'
@@ -31,6 +23,7 @@ class HeaderItemsTypes(object):
 
 class ProfileUtils(object):
     UNAVAILABLE_VALUE = -1
+    UNAVAILABLE_SYMBOL = '--'
     VIEW_TYPE_TABLES = 0
     VIEW_TYPE_CHARTS = 1
 
@@ -63,7 +56,7 @@ class ProfileUtils(object):
 
     @staticmethod
     def packAchievement(achievement, dossier, isDossierForCurrentUser):
-        isRare = isinstance(achievement, RareAchievement)
+        isRare = isRareAchievement(achievement)
         rareIconID = None
         if isRare:
             rareIconID = achievement.requestImageID()
@@ -107,6 +100,12 @@ class ProfileUtils(object):
         return str(value)
 
     @staticmethod
+    def getFormattedWinsEfficiency(targetData):
+        winsEfficiency = targetData.getWinsEfficiency()
+        formattedWinsEfficiency = ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(winsEfficiency))
+        return formattedWinsEfficiency
+
+    @staticmethod
     def formatEfficiency(coeff2, valueReceiveFunction):
         if coeff2 > 0:
             return BigWorld.wg_getNiceNumberFormat(valueReceiveFunction())
@@ -115,12 +114,18 @@ class ProfileUtils(object):
 
     @staticmethod
     def packLditItemData(text, description, tooltip, icon, additionalData = None, viewType = HeaderItemsTypes.COMMON):
+        finalText = text
+        enabled = True
+        if text == -1 or text == '-1':
+            enabled = False
+            finalText = ProfileUtils.UNAVAILABLE_SYMBOL
         return {'type': viewType,
-         'text': text,
+         'text': finalText,
          'description': i18n.makeString(description),
          'iconPath': ProfileUtils.getIconPath(icon),
          'tooltip': tooltip,
-         'additionalData': additionalData}
+         'additionalData': additionalData,
+         'enabled': enabled}
 
     @staticmethod
     def getValueOrUnavailable(targetValue):
@@ -128,6 +133,10 @@ class ProfileUtils(object):
             return targetValue
         else:
             return ProfileUtils.UNAVAILABLE_VALUE
+
+    @staticmethod
+    def getDrawCount(battlesCount, lossesCount, winsCount):
+        return battlesCount - (winsCount + lossesCount)
 
     @staticmethod
     def getLabelDataObject(label, data):
@@ -159,6 +168,16 @@ class ProfileUtils(object):
         return result
 
     @staticmethod
+    def getTotalBattlesHeaderParam(targetData, description, tooltip):
+        battlesCount = targetData.getBattlesCount()
+        lossesCount = targetData.getLossesCount()
+        winsCount = targetData.getWinsCount()
+        drawsCount = ProfileUtils.getDrawCount(battlesCount, lossesCount, winsCount)
+        drawsStr = BigWorld.wg_getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
+        battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr]
+        return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(battlesCount), description, tooltip, 'battles40x32.png', {'tooltipData': ProfileUtils.createToolTipData(battlesToolTipData)}, HeaderItemsTypes.VALUES)
+
+    @staticmethod
     def getVehicleRecordTooltipData(getValueMethod):
         return ProfileUtils.getRecordTooltipDataByVehicle(g_itemsCache.items.getItemByCD(getValueMethod()))
 
@@ -170,11 +189,15 @@ class ProfileUtils(object):
             return ProfileUtils.createToolTipData(None)
 
     @staticmethod
-    def getAvgDamageBlockedValue(targetData):
-        value = ProfileUtils.formatEfficiency(targetData.getBattlesCountVer3(), targetData.getAvgDamageBlocked)
+    def getAvailableValueStr(value):
         if value != -1:
             return value
-        return '--'
+        return ProfileUtils.UNAVAILABLE_SYMBOL
+
+    @staticmethod
+    def getAvgDamageBlockedValue(targetData):
+        value = ProfileUtils.formatEfficiency(targetData.getBattlesCountVer3(), targetData.getAvgDamageBlocked)
+        return ProfileUtils.getAvailableValueStr(value)
 
 
 class DetailedStatisticsUtils(object):
@@ -192,7 +215,8 @@ class DetailedStatisticsUtils(object):
         lossesCount = targetData.getLossesCount()
         winsCount = targetData.getWinsCount()
         drawsCount = battlesCount - (winsCount + lossesCount)
-        battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), BigWorld.wg_getIntegralFormat(drawsCount)]
+        drawsStr = BigWorld.wg_getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
+        battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr]
         formattedBattlesCount = BigWorld.wg_getIntegralFormat(battlesCount)
         winsEfficiency = targetData.getWinsEfficiency()
         formattedWinsEfficiency = ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(winsEfficiency))
@@ -267,6 +291,5 @@ def getProfileCommonInfo(userName, dossier, clanInfo, clanEmblemId):
         value[clanNameProp] = cgi.escape(clanInfo[1])
         value[clanNameDescrProp] = cgi.escape(clanInfo[0])
         value[clanJoinTimeProp] = makeString(MENU.PROFILE_HEADER_CLAN_JOINDATE) % getGoldFmt(BigWorld.wg_getLongDateFormat(clanInfo[4]))
-        clanPosition = makeString('#menu:profile/header/clan/position/%s' % CLAN_MEMBERS[clanInfo[3]] if clanInfo[3] in CLAN_MEMBERS else '')
-        value[clanPositionProp] = getGoldFmt(clanPosition) if clanInfo[3] in CLAN_MEMBERS else ''
+        value[clanPositionProp] = getGoldFmt(getClanRoleString(clanInfo[3]))
     return value

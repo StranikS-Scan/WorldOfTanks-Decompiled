@@ -4,12 +4,13 @@ import VOIP
 import constants
 import CommandMapping
 from PlayerEvents import g_playerEvents
-from gui import GUI_SETTINGS, game_control, SystemMessages, makeHtmlString
+from gui import GUI_SETTINGS, game_control, SystemMessages
 import gui
 from gui.BattleContext import g_battleContext
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.utils.HangarSpace import g_hangarSpace
@@ -25,8 +26,8 @@ class LobbyView(View, LobbyPageMeta, AppRef):
      VIEW_ALIAS.LOBBY_SHOP,
      VIEW_ALIAS.LOBBY_PROFILE,
      VIEW_ALIAS.LOBBY_BARRACKS,
-     VIEW_ALIAS.LOBBY_TRAININGS,
-     VIEW_ALIAS.LOBBY_TRAINING_ROOM,
+     PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY,
+     PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY,
      VIEW_ALIAS.LOBBY_CUSTOMIZATION,
      VIEW_ALIAS.LOBBY_RESEARCH,
      VIEW_ALIAS.LOBBY_TECHTREE,
@@ -119,6 +120,6 @@ class LobbyView(View, LobbyPageMeta, AppRef):
 
     def __showBattleResults(self):
         if GUI_SETTINGS.battleStatsInHangar and g_battleContext.lastArenaUniqueID:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_BATTLE_RESULTS, {'arenaUniqueID': g_battleContext.lastArenaUniqueID}))
+            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_BATTLE_RESULTS, {'data': g_battleContext.lastArenaUniqueID}))
             g_battleContext.lastArenaUniqueID = None
         return

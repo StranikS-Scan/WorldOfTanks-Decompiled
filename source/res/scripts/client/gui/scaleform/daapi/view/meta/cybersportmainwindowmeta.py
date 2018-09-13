@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CyberSportMainWindowMeta.py
-from gui.Scaleform.daapi.view.lobby.rally.BaseRallyMainWindow import BaseRallyMainWindow
+from gui.Scaleform.daapi.view.lobby.rally.RallyMainWindowWithSearch import RallyMainWindowWithSearch
 
-class CyberSportMainWindowMeta(BaseRallyMainWindow):
+class CyberSportMainWindowMeta(RallyMainWindowWithSearch):
     pass

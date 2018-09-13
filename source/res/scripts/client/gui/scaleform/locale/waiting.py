@@ -81,6 +81,8 @@ class WAITING(object):
     TUTORIAL_QUEUE = '#waiting:tutorial-queue'
     WAITING_EBANK_RESPONSE = '#waiting:waiting_ebank_response'
     BUTTONS_EXITQUEUE = '#waiting:buttons/exitQueue'
+    BUTTONS_AUTOSEARCH = '#waiting:buttons/autoSearch'
+    BUTTONS_CANCEL = '#waiting:buttons/cancel'
     BUTTONS_CEASE = '#waiting:buttons/cease'
     BUTTONS_EXIT = '#waiting:buttons/exit'
     TITLES_QUEUE = '#waiting:titles/queue'
@@ -89,6 +91,7 @@ class WAITING(object):
     TITLES_CHECKOUT_ERROR = '#waiting:titles/checkout_error'
     TITLES_AUTO_LOGIN_QUERY_FAILED = '#waiting:titles/auto_login_query_failed'
     MESSAGE_QUEUE = '#waiting:message/queue'
+    MESSAGE_USEAUTOSEARCH = '#waiting:message/useAutoSearch'
     MESSAGE_AUTOLOGIN = '#waiting:message/autoLogin'
     MESSAGE_ANOTHER_PERIPHERY = '#waiting:message/another_periphery'
     MESSAGE_CHECKOUT_ERROR = '#waiting:message/checkout_error'
@@ -113,6 +116,7 @@ class WAITING(object):
     PREBATTLE_KICK = '#waiting:prebattle/kick'
     PREBATTLE_AUTO_SEARCH = '#waiting:prebattle/auto_search'
     PREBATTLE_BATTLE_QUEUE = '#waiting:prebattle/battle_queue'
+    PREBATTLE_GIVELEADERSHIP = '#waiting:prebattle/giveLeadership'
     FORT_SUBSCRIBE = '#waiting:fort/subscribe'
     FORT_UNSUBSCRIBE = '#waiting:fort/unsubscribe'
     FORT_CREATE = '#waiting:fort/create'
@@ -128,7 +132,14 @@ class WAITING(object):
     FORT_ORDER_ACTIVATE = '#waiting:fort/order/activate'
     FORT_SORTIE_CREATE = '#waiting:fort/sortie/create'
     FORT_SORTIE_GET = '#waiting:fort/sortie/get'
+    FORT_CARD_GET = '#waiting:fort/card/get'
+    FORT_SETTINGS = '#waiting:fort/settings'
+    FORT_FORTBATTLE_CREATEORJOIN = '#waiting:fort/fortBattle/createOrJoin'
+    FORT_ATTACK = '#waiting:fort/attack'
+    FORT_FAVORITE_ADD = '#waiting:fort/favorite/add'
+    FORT_FAVORITE_REMOVE = '#waiting:fort/favorite/remove'
     MESSAGE_ENUM = (MESSAGE_QUEUE,
+     MESSAGE_USEAUTOSEARCH,
      MESSAGE_AUTOLOGIN,
      MESSAGE_ANOTHER_PERIPHERY,
      MESSAGE_CHECKOUT_ERROR,

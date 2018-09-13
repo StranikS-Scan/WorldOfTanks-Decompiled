@@ -2,34 +2,12 @@
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
-from gui import SystemMessages
-from gui.Scaleform.locale.MENU import MENU
-from gui.prb_control.context.prb_ctx import SquadSettingsCtx
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.functional.interfaces import IPrbFunctional, IPreQueueFunctional
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 _PAN = PREBATTLE_ACTION_NAME
 
 class NoPrbFunctional(IPrbFunctional):
-
-    def canPlayerDoAction(self):
-        return (True, '')
-
-    def doAction(self, action = None, dispatcher = None):
-        result = False
-        if not g_currentVehicle.isLocked():
-            if action is not None and dispatcher is not None:
-                actionName = action.actionName
-                if actionName == PREBATTLE_ACTION_NAME.SQUAD:
-                    entry = dispatcher.getControlFactories().createEntry(SquadSettingsCtx())
-                    if entry:
-                        result = entry.doAction(action, dispatcher)
-                    else:
-                        LOG_ERROR('Can not create squad entry', action)
-        else:
-            result = True
-            SystemMessages.pushI18nMessage(MENU.HANGAR_VEHICLE_LOCKED, type=SystemMessages.SM_TYPE.Error)
-        return result
 
     def leave(self, ctx, callback = None):
         LOG_ERROR('NoPrbFunctional.leave was invoke', ctx)
@@ -45,7 +23,6 @@ class NoPrbFunctional(IPrbFunctional):
 class NoPreQueueFunctional(IPreQueueFunctional):
     CREATE_QUEUE_BY_ACTION = {_PAN.UNDEFINED: (QUEUE_TYPE.RANDOMS, True),
      _PAN.JOIN_RANDOM_QUEUE: (QUEUE_TYPE.RANDOMS, True),
-     _PAN.HISTORICAL: (QUEUE_TYPE.HISTORICAL, False),
      _PAN.JOIN_EVENT_BATTLES_QUEUE: (QUEUE_TYPE.EVENT_BATTLES, True)}
 
     def canPlayerDoAction(self):

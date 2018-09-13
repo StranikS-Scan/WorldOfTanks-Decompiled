@@ -3,7 +3,7 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class PopoverManagerMeta(DAAPIModule):
 
-    def requestShowPopover(self, alias, inXcoordinate, inYcoordinate, data):
+    def requestShowPopover(self, alias, data):
         self._printOverrideError('requestShowPopover')
 
     def requestHidePopover(self):

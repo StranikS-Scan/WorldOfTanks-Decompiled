@@ -1,8 +1,9 @@
 # Embedded file name: scripts/client/messenger/proto/entities.py
 from collections import deque
 from gui.LobbyContext import g_lobbyContext
-from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN
+from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE
 from messenger.proto.events import ChannelEvents, MemberEvents
+from messenger.storage import storage_getter
 
 class ChatEntity(object):
     __slots__ = ()
@@ -20,24 +21,99 @@ class ChatEntity(object):
         return 0
 
 
-class SendChatCommand(object):
+class _ChatCommand(ChatEntity):
+    __slots__ = ('_clientID', '_protoData')
 
-    def getProtoType(self):
-        return 0
+    def __init__(self, protoData, clientID = 0):
+        super(_ChatCommand, self).__init__()
+        self._protoData = protoData
+        self._clientID = clientID
 
-    def getCommand(self):
-        return None
+    def getClientID(self):
+        return self._clientID
 
-    def getParams(self):
-        return {}
-
-
-class ReceivedChatCommand(ChatEntity):
+    def setClientID(self, clientID):
+        self._clientID = clientID
 
     def getProtoData(self):
-        return None
+        return self._protoData
+
+    def getCommandType(self):
+        return MESSENGER_COMMAND_TYPE.UNDEFINED
 
     def getCommandText(self):
+        return ''
+
+
+class OutChatCommand(_ChatCommand):
+    pass
+
+
+class ReceivedBattleChatCommand(_ChatCommand):
+
+    def getCommandType(self):
+        return MESSENGER_COMMAND_TYPE.BATTLE
+
+    def getSenderID(self):
+        return 0L
+
+    def getFirstTargetID(self):
+        return 0
+
+    def getSecondTargetID(self):
+        return 0
+
+    def getCommandText(self):
+        return ''
+
+    def getVehMarker(self, mode = None, vehicle = None):
+        result = self._getCommandVehMarker()
+        if vehicle:
+            mode = 'SPG' if 'SPG' in vehicle.vehicleType.tags else ''
+        if mode:
+            result = '{0:>s}{1:>s}'.format(result, mode)
+        return result
+
+    def getVehMarkers(self, vehicle = None):
+        mode = ''
+        if vehicle:
+            mode = 'SPG' if 'SPG' in vehicle.vehicleType.tags else ''
+        return (self.getVehMarker(mode=mode), 'attackSender{0:>s}'.format(mode))
+
+    def getSoundEventName(self):
+        return 'chat_shortcut_common_fx'
+
+    def isIgnored(self):
+        user = storage_getter('users')().getUser(self.getSenderID())
+        if user:
+            return user.isIgnored()
+        return False
+
+    def isOnMinimap(self):
+        return False
+
+    def hasTarget(self):
+        return False
+
+    def isPrivate(self):
+        return False
+
+    def isPublic(self):
+        return True
+
+    def isReceiver(self):
+        return False
+
+    def isSender(self):
+        user = storage_getter('users')().getUser(self.getSenderID())
+        if user:
+            return user.isCurrentPlayer()
+        return False
+
+    def showMarkerForReceiver(self):
+        return False
+
+    def _getCommandVehMarker(self):
         return ''
 
 
@@ -157,10 +233,13 @@ class ChannelEntity(ChatEntity, ChannelEvents):
     def clear(self):
         super(ChannelEntity, self).clear()
         self._isJoined = False
+        self._data = None
         self._history.clear()
-        while len(self._members):
+        while self._members:
             _, member = self._members.popitem()
             member.clear()
+
+        return
 
     def _onMemberStatusChanged(self, member):
         self.onMemberStatusChanged(member)
@@ -213,9 +292,9 @@ class MemberEntity(ChatEntity, MemberEvents):
 
 
 class UserEntity(ChatEntity):
-    __slots__ = ('_databaseID', '_name', '_roster', '_isOnline', '_clanAbbrev', '_clanRole', '_isInXMPP')
+    __slots__ = ('_databaseID', '_name', '_roster', '_isOnline', '_clanAbbrev', '_clanRole', '_group', '_isInXMPP')
 
-    def __init__(self, databaseID, name = 'Unknown', roster = 0, isOnline = False, clanAbbrev = None, clanRole = 0, isInXMPP = False):
+    def __init__(self, databaseID, name = 'Unknown', roster = 0, isOnline = False, clanAbbrev = None, clanRole = 0, isInXMPP = False, group = None):
         super(UserEntity, self).__init__()
         self._databaseID = databaseID
         self._name = name
@@ -224,6 +303,7 @@ class UserEntity(ChatEntity):
         self._isInXMPP = isInXMPP
         self._clanAbbrev = clanAbbrev
         self._clanRole = clanRole
+        self._group = group
 
     def __repr__(self):
         return 'UserEntity(dbID={0!r:s}, fullName={1:>s}, roster={2:n}, isOnline={3!r:s}/{4!r:s}, clanRole={5:n})'.format(self._databaseID, self.getFullName(), self._roster, self._isOnline, self._isInXMPP, self._clanRole)
@@ -250,6 +330,9 @@ class UserEntity(ChatEntity):
         else:
             pDBID = None
         return g_lobbyContext.getPlayerFullName(self._name, clanAbbrev=clanAbbrev, pDBID=pDBID)
+
+    def getGroup(self):
+        return 'group_{0}'.format(1 if self._databaseID % 2 else 2)
 
     def getRoster(self):
         return self._roster

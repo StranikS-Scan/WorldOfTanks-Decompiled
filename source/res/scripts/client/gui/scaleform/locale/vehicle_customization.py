@@ -38,6 +38,7 @@ class VEHICLE_CUSTOMIZATION(object):
     CAMOUFLAGE_GERMANY_BICOLOR_POLYLINES = '#vehicle_customization:camouflage/germany/bicolor/Polylines'
     CAMOUFLAGE_GERMANY_BICOLOR_DIAGONAL_STRIPES = '#vehicle_customization:camouflage/germany/bicolor/Diagonal_Stripes'
     CAMOUFLAGE_GERMANY_BICOLOR_DARK_SPOTS = '#vehicle_customization:camouflage/germany/bicolor/Dark_Spots'
+    CAMOUFLAGE_GERMANY_DESERTTIGER = '#vehicle_customization:camouflage/germany/DesertTiger'
     CAMOUFLAGE_USA_BICOLOR_GUAMBICOLOR = '#vehicle_customization:camouflage/usa/bicolor/GuamBicolor'
     CAMOUFLAGE_USA_BICOLOR_IVOZIMABICOLOR = '#vehicle_customization:camouflage/usa/bicolor/IvozimaBicolor'
     CAMOUFLAGE_USA_BICOLOR_BRETAGNESKY = '#vehicle_customization:camouflage/usa/bicolor/BretagneSky'

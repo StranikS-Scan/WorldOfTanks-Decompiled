@@ -24,7 +24,7 @@ def isRequestInCoolDown(scopeID, rqTypeID):
     result = False
     uniqueID = (scopeID, rqTypeID)
     if uniqueID in _g_coolDowns:
-        result = _g_coolDowns[uniqueID] >= BigWorld.time()
+        result = _g_coolDowns[uniqueID] > BigWorld.time()
     return result
 
 
@@ -43,6 +43,10 @@ def getRequestInCoolDownMessage(requestName, coolDown = DEFAULT_COOLDOWN_TO_REQU
 def setRequestCoolDown(scopeID, rqTypeID, coolDown = DEFAULT_COOLDOWN_TO_REQUEST):
     _g_coolDowns[scopeID, rqTypeID] = BigWorld.time() + coolDown
     fireCoolDownEvent(scopeID, rqTypeID, coolDown=coolDown)
+
+
+def adjustRequestCoolDown(scopeID, rqTypeID, coolDown = DEFAULT_COOLDOWN_TO_REQUEST):
+    _g_coolDowns[scopeID, rqTypeID] = BigWorld.time() + coolDown
 
 
 def fireCoolDownEvent(scopeID, rqTypeID, coolDown = DEFAULT_COOLDOWN_TO_REQUEST):
@@ -81,6 +85,15 @@ class RequestCooldownManager(object):
             coolDown = self.getDefaultCoolDown()
         setRequestCoolDown(self._scopeID, rqTypeID, coolDown)
         return
+
+    def adjust(self, rqTypeID, coolDown = None):
+        if coolDown is None:
+            coolDown = self.getDefaultCoolDown()
+        adjustRequestCoolDown(self._scopeID, rqTypeID, coolDown)
+        return
+
+    def reset(self, rqTypeID):
+        setRequestCoolDown(self._scopeID, rqTypeID, -1)
 
     def validate(self, rqTypeID, coolDown = None):
         result = False

@@ -216,6 +216,7 @@ class DestructiblesCache():
                 desc['effectMtrlIdx'] = effectMtrlIdx
         if IS_CLIENT:
             _readAndMapEffect(desc, fragileSec, 'effect', self.__effects['fragiles'], filename)
+            _readAndMapEffect(desc, fragileSec, 'hitEffect', self.__effects['fragiles'], filename, False)
             _readAndMapEffect(desc, fragileSec, 'decayEffect', self.__effects['fragiles'], filename)
             desc['effectHP'] = fragileSec.readString('effectHP')
             desc['effectScale'] = fragileSec.readFloat('effectScale')
@@ -365,10 +366,8 @@ def _readPreferredTiltDirections(section):
     angles = _readFloatArray(section['preferredTiltDirections']) if section.has_key('preferredTiltDirections') else tuple()
     if angles:
         angles = map(lambda a: (a + 180.0) % 360.0 - 180.0, angles)
-        max_angle = max(angles)
-        min_angle = min(angles)
-        angles.append(max_angle - 360)
-        angles.append(min_angle + 360)
+        angles.append(max(angles) - 360)
+        angles.append(min(angles) + 360)
         angles = map(math.radians, angles)
     return angles
 

@@ -3,7 +3,6 @@ import BigWorld
 import Settings
 from enumerations import AttributeEnumItem, Enumeration
 from gui import game_control
-from gui.arena_info import getClientArena
 from gui.arena_info.ArenaLoadController import ArenaLoadController
 from gui.arena_info.ArenaDataProvider import ArenaDataProvider
 from gui.arena_info.listeners import ListenersCollection
@@ -87,31 +86,29 @@ class _BattleContext(object):
     def getVehIDByAccDBID(self, accDBID):
         return self.__arenaDP.getVehIDByAccDBID(accDBID)
 
-    def getFullPlayerNameWithParts(self, vData = None, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
+    def getFullPlayerNameWithParts(self, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
         FM = self.FORMAT_MASK
         key = FM.NONE
         vehShortName = ''
-        if vData is None:
-            arena = getClientArena()
-            if vID is None:
-                vID = self.__arenaDP.getVehIDByAccDBID(accID)
-            if vID in arena.vehicles:
-                vData = arena.vehicles[vID]
-            else:
-                vData = {}
+        vehName = ''
+        if vID is None:
+            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+        vInfo = self.__arenaDP.getVehicleInfo(vID)
         if accID is None:
-            accID = vData.get('accountDBID')
-        if showVehShortName and self.__isShowVehShortName:
-            vehType = vData.get('vehicleType')
-            if vehType is not None:
-                vehShortName = vehType.type.shortUserString
+            accID = vInfo.player.accountDBID
+        vehType = vInfo.vehicleType
+        if vehType is not None:
+            if showVehShortName and self.__isShowVehShortName:
+                vehName = vehShortName = vehType.shortName
                 key |= FM.VEHICLE
+            else:
+                vehName = vehType.name
         if pName is None:
-            pName = vData.get('name', '')
+            pName = vInfo.player.name
         pName = self.__normalizePName(pName)
         clanAbbrev = ''
         if showClan:
-            clanAbbrev = vData.get('clanAbbrev', '')
+            clanAbbrev = vInfo.player.clanAbbrev
             if clanAbbrev is not None and len(clanAbbrev) > 0:
                 key |= FM.CLAN
         regionCode = ''
@@ -127,10 +124,10 @@ class _BattleContext(object):
          pName,
          clanAbbrev,
          regionCode,
-         vehShortName)
+         vehName)
 
-    def getFullPlayerName(self, vData = None, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
-        return self.getFullPlayerNameWithParts(vData, vID, accID, pName, showVehShortName, showClan, showRegion)[0]
+    def getFullPlayerName(self, vID = None, accID = None, pName = None, showVehShortName = True, showClan = True, showRegion = True):
+        return self.getFullPlayerNameWithParts(vID, accID, pName, showVehShortName, showClan, showRegion)[0]
 
     def getRegionCode(self, dbID):
         regionCode = None
@@ -154,8 +151,13 @@ class _BattleContext(object):
     def isPlayerObserver(self):
         return self.isObserver(getattr(BigWorld.player(), 'playerVehicleID', -1))
 
-    def getPlayerEntityName(self, vID, vData):
-        if BigWorld.player().team == vData.get('team'):
+    def isInTeam(self, vID = None, accID = None, enemy = False):
+        if vID is None:
+            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+        return self.__arenaDP.getVehicleInfo(vID).team == self.__arenaDP.getNumberOfTeam(enemy)
+
+    def getPlayerEntityName(self, vID, team):
+        if BigWorld.player().team == team:
             if self.isSquadMan(vID=vID):
                 return PLAYER_ENTITY_NAME.squadman
             if self.isTeamKiller(vID=vID):

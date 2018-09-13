@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/BattleLoading.py
 import BattleReplay
 import constants
-from helpers import i18n
 from gui.BattleContext import g_battleContext
 from gui.arena_info import IArenaController, getClientArena, getArenaTypeID, isEventBattle
 from gui.arena_info.arena_vos import VehicleActions
@@ -129,8 +128,6 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
             self.as_setMapNameS(arenaType.name)
             self.as_setMapBGS(BattleLoading.MAP_BG_SOURCE % arenaType.geometryName)
         self.as_setTipS(tips.getTip())
-        if isEventBattle():
-            self.as_setTipTitleS(i18n.makeString('#menu:loading/helpTip/football'))
 
     def __addArenaExtraData(self, arenaDP):
         arena = getClientArena()

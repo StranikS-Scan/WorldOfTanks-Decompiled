@@ -4,9 +4,9 @@ from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOver
 from gui.Scaleform.daapi.view.meta.NotificationsListMeta import NotificationsListMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.shared.events import OpenLinkEvent
+from messenger.formatters import TimeFormatter
 from notification.NotificationLayoutView import NotificationLayoutView
 from notification import NotificationMVC
-from notification.NotificationsTimeFormatter import NotificationsTimeFormatter
 from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE
 
 class NotificationListView(NotificationsListMeta, View, NotificationLayoutView, SmartPopOverView):
@@ -29,7 +29,7 @@ class NotificationListView(NotificationsListMeta, View, NotificationLayoutView, 
         super(NotificationListView, self).destroy()
 
     def getMessageActualTime(self, msTime):
-        return NotificationsTimeFormatter.getActualTimeStr(msTime)
+        return TimeFormatter.getActualMsgTimeStr(msTime)
 
     def _populate(self):
         super(NotificationListView, self)._populate()

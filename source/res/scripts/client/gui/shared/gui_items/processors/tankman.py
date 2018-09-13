@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/tankman.py
 import BigWorld
 from debug_utils import LOG_DEBUG
+from items import tankmen
 from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -372,12 +373,17 @@ class TankmanDropSkills(ItemProcessor):
 
 class TankmanChangePassport(ItemProcessor):
 
-    def __init__(self, tankman, firstNameID, lastNameID, iconID, isFemale = False):
-        super(TankmanChangePassport, self).__init__(tankman, (plugins.MessageConfirmator('replacePassportConfirmation'),))
+    def __init__(self, tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup, isFemale = False):
+        hasUniqueData = self.__hasUniqueData(tankman, firstNameID, lastNameID, iconID)
+        super(TankmanChangePassport, self).__init__(tankman, (plugins.MessageConfirmator('replacePassport/unique' if hasUniqueData else 'replacePassportConfirmation'),))
         self.firstNameID = firstNameID
+        self.firstNameGroup = firstNameGroup
         self.lastNameID = lastNameID
+        self.lastNameGroup = lastNameGroup
         self.iconID = iconID
+        self.iconGroup = iconGroup
         self.isFemale = isFemale
+        self.isPremium = False
 
     def _errorHandler(self, code, errStr = '', ctx = None):
         return makeI18nError('replace_tankman/server_error')
@@ -387,5 +393,16 @@ class TankmanChangePassport(ItemProcessor):
         return makeI18nSuccess('replace_tankman/success', money=formatPrice((0, goldPrice)), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to change tankman passport:', self.item, self.firstNameID, self.lastNameID, self.iconID, self.isFemale)
-        BigWorld.player().inventory.replacePassport(self.item.invID, self.isFemale, self.firstNameID, self.lastNameID, self.iconID, lambda code: self._response(code, callback))
+        LOG_DEBUG('Make server request to change tankman passport:', self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID)
+        BigWorld.player().inventory.replacePassport(self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID, self.iconGroup, self.iconID, lambda code: self._response(code, callback))
+
+    @classmethod
+    def __hasUniqueData(cls, tankman, firstNameID, lastNameID, iconID):
+        tDescr = tankman.descriptor
+        nationConfig = tankmen.getNationConfig(tankman.nationID)
+        for group in nationConfig['normalGroups']:
+            if group.get('notInShop'):
+                if tDescr.firstNameID != firstNameID and firstNameID is not None and tDescr.firstNameID in group['firstNamesList'] or tDescr.lastNameID != lastNameID and lastNameID is not None and tDescr.lastNameID in group['lastNamesList'] or tDescr.iconID != iconID and iconID is not None and tDescr.iconID in group['iconsList']:
+                    return True
+
+        return False

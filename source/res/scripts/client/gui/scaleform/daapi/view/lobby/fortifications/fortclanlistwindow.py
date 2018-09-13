@@ -11,6 +11,7 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.ClanCache import g_clanCache
+from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
 
 class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRef, FortViewHelper):
@@ -50,7 +51,7 @@ class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRe
         self._update()
 
     def _getClanRole(self, member):
-        return fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(self.UI_ROLES_BIND[member.getClanRole()]))
+        return fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(getClanRoleString(member.getClanRole())))
 
     def _getWeekMiningStr(self, weekMining):
         randWeek = BigWorld.wg_getIntegralFormat(weekMining)
@@ -62,6 +63,9 @@ class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRe
 
     def onWindowClose(self):
         self.destroy()
+
+    def onClanMembersListChanged(self):
+        self._update()
 
     def onUpdated(self):
         self._update()

@@ -1,8 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 import BigWorld
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import GUI_NATIONS, getNationIndex
 from dossiers2.ui import layouts
-from gui.shared.fortifications import isFortificationEnabled
+from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, HeaderItemsTypes, DetailedStatisticsUtils
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
@@ -13,6 +14,12 @@ from helpers import i18n
 class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
 
     def __init__(self, *args):
+        try:
+            _, _, _, self.__ctx = args
+        except Exception:
+            LOG_ERROR('There is error while parsing profile stats page arguments', args)
+            self.__ctx = {}
+
         ProfileSection.__init__(self, *args)
         ProfileStatisticsMeta.__init__(self)
         self.__battleChartsStats = _BattleChartsStatistics()
@@ -25,7 +32,7 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
         self.as_setInitDataS({'dropDownProvider': dropDownProvider})
 
     def _sendAccountData(self, targetData, accountDossier):
-        formattedWinsEfficiency = self.__getFormattedWinsEfficiency(targetData)
+        formattedWinsEfficiency = ProfileUtils.getFormattedWinsEfficiency(targetData)
         dmgDealt = targetData.getDamageDealt()
         dmgReceived = targetData.getDamageReceived()
         damageEfficiency = BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getDamageEfficiency()))
@@ -45,7 +52,7 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
         dataList = []
         if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_TEAM:
             headerText = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_TEAM)
-            headerParams.append(self.__getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT))
+            headerParams.append(ProfileUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT))
             headerParams.append(ProfileUtils.packLditItemData(damageEfficiency, PROFILE.SECTION_STATISTICS_DETAILED_DAMAGECOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DAMAGECOEFF, 'dmgRatio40x32.png', {'tooltipData': ProfileUtils.createToolTipData((BigWorld.wg_getIntegralFormat(dmgDealt), BigWorld.wg_getIntegralFormat(dmgReceived)))}, HeaderItemsTypes.VALUES))
             headerParams.append(self.__packAvgDmgLditItemData(avgDmg))
             headerParams.append(self.__packAvgXPLditItemData(avgXP))
@@ -54,7 +61,7 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
             dataList.append(self.__getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData))
             dataList.append(self.__getChartsData(targetData))
         elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL:
-            headerParams.append(self.__getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT))
+            headerParams.append(ProfileUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT))
             headerText = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_HISTORICAL)
             histBattleFieldAchievesCount = 0
             for record in layouts.HISTORY_BATTLEFIELD_GROUP:
@@ -72,36 +79,51 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
             headerText = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_FORTIFICATIONS)
             fortBattlesTargetData = accountDossier.getFortBattlesStats()
             fortMiscTargetData = accountDossier.getFortMiscStats()
-            headerParams.append(ProfileUtils.packLditItemData('-1', PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES, 'battles40x32.png'))
-            headerParams.append(ProfileUtils.packLditItemData(self.__getFormattedWinsEfficiency(fortBattlesTargetData), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLESWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLESWINSEFFICIENCY, 'wins40x32.png'))
-            headerParams.append(self.__getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIE, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIE))
+            if isFortificationBattlesEnabled():
+                headerParams.append(ProfileUtils.getTotalBattlesHeaderParam(fortBattlesTargetData, PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES))
+                headerParams.append(ProfileUtils.packLditItemData(ProfileUtils.getFormattedWinsEfficiency(fortBattlesTargetData), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLESWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLESWINSEFFICIENCY, 'wins40x32.png'))
+            else:
+                headerParams.append(ProfileUtils.packLditItemData(str(ProfileUtils.UNAVAILABLE_VALUE), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLE_FORT_BATTLES, 'battles40x32.png'))
+                headerParams.append(ProfileUtils.packLditItemData(str(ProfileUtils.UNAVAILABLE_VALUE), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLESWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLE_FORT_WINSEFFICIENCY, 'wins40x32.png'))
+            headerParams.append(ProfileUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIE, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIE))
             headerParams.append(ProfileUtils.packLditItemData(formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIEWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIEWINSEFFICIENCY, 'wins40x32.png'))
             totalSortiesLoot = fortMiscTargetData.getLootInSorties()
             avgFortSortiesLoot = self.__getFortAvgLoot(targetData, totalSortiesLoot)
             headerParams.append(ProfileUtils.packLditItemData(str(avgFortSortiesLoot), PROFILE.SECTION_STATISTICS_SCORES_FORT_RESOURCE, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_RESOURCE, 'resources40x32.png'))
+            if isFortificationBattlesEnabled():
+                fortBattlesDetaildStatisticsTabData = self.__getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTBATTLES, fortBattlesTargetData)
+                fortBattlesDetaildStatisticsTabData['data'][0][0]['data'][0]['tooltip'] = PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FORT_BATTLESCOUNT
+                dataList.append(fortBattlesDetaildStatisticsTabData)
             dataList.append(self.__getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTSORTIE, targetData))
             specificData = []
-            battlesCount = targetData.getBattlesCount()
-            lossesCount = targetData.getLossesCount()
-            winsCount = targetData.getWinsCount()
-            drawsCount = battlesCount - (winsCount + lossesCount)
-            battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), BigWorld.wg_getIntegralFormat(drawsCount)]
+            battlesCount = fortBattlesTargetData.getBattlesCount()
+            lossesCount = fortBattlesTargetData.getLossesCount()
+            winsCount = fortBattlesTargetData.getWinsCount()
+            battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount)]
             formattedBattlesCount = BigWorld.wg_getIntegralFormat(battlesCount)
             specificDataColumn1 = []
+            if isFortificationBattlesEnabled():
+                specificDataColumn1.append(ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_FORTBATTLES, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTTOTALBATTLES, formattedBattlesCount, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES, ProfileUtils.createToolTipData(battlesToolTipData)), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLESTOTALWINS, ProfileUtils.getFormattedWinsEfficiency(fortBattlesTargetData), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLESWINS), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_LOOTING, fortMiscTargetData.getEnemyBasePlunderNumber(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_LOOTING)]))
             battlesCount = targetData.getBattlesCount()
             lossesCount = targetData.getLossesCount()
             winsCount = targetData.getWinsCount()
-            drawsCount = battlesCount - (winsCount + lossesCount)
+            drawsCount = ProfileUtils.getDrawCount(battlesCount, lossesCount, winsCount)
             battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), BigWorld.wg_getIntegralFormat(drawsCount)]
             formattedBattlesCount = BigWorld.wg_getIntegralFormat(battlesCount)
             specificDataColumn1.append(ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_FORTSORTIE, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIE, formattedBattlesCount, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIE, ProfileUtils.createToolTipData(battlesToolTipData)), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIETOTALWINS, formattedWinsEfficiency, PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIEWINS)]))
             specificData.append(specificDataColumn1)
-            specificData.append([ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RESOURCE, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIES_AVGRESOURCES, avgFortSortiesLoot, PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIES_AVGRESOURCES), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIES_TOTALRESOURCES, BigWorld.wg_getIntegralFormat(totalSortiesLoot), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIES_TOTALRESOURCES)])])
+            resourcesDataList = []
+            resourcesDataList.append(DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIES_AVGRESOURCES, avgFortSortiesLoot, PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIES_AVGRESOURCES))
+            resourcesDataList.append(DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIES_TOTALRESOURCES, BigWorld.wg_getIntegralFormat(totalSortiesLoot), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIES_TOTALRESOURCES))
+            if isFortificationBattlesEnabled():
+                resourcesDataList.append(DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_TOTALRESOURCES, BigWorld.wg_getIntegralFormat(fortMiscTargetData.getLootInBattles()), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_TOTALRESOURCES))
+                resourcesDataList.append(DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_MAXRESOURCES, BigWorld.wg_getIntegralFormat(fortMiscTargetData.getMaxLootInBattles()), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_MAXRESOURCES))
+            specificData.append([ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RESOURCE, resourcesDataList)])
             dataList.append(ProfileUtils.getLabelViewTypeDataObject(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_SPECIFIC, specificData, ProfileUtils.VIEW_TYPE_TABLES))
         else:
             maxExpToolTipData = ProfileUtils.getVehicleRecordTooltipData(targetData.getMaxXpVehicle)
             headerText = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_ALL)
-            headerParams.append(self.__getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT))
+            headerParams.append(ProfileUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT))
             headerParams.append(ProfileUtils.packLditItemData(formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS, 'wins40x32.png'))
             headerParams.append(self.__packAvgDmgLditItemData(avgDmg))
             headerParams.append(self.__packAvgXPLditItemData(avgXP))
@@ -123,14 +145,6 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
     def _receiveFortDossier(self, accountDossier):
         return accountDossier.getFortSortiesStats()
 
-    def __getTotalBattlesHeaderParam(self, targetData, description, tooltip):
-        battlesCount = targetData.getBattlesCount()
-        lossesCount = targetData.getLossesCount()
-        winsCount = targetData.getWinsCount()
-        drawsCount = battlesCount - (winsCount + lossesCount)
-        battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), BigWorld.wg_getIntegralFormat(drawsCount)]
-        return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(battlesCount), description, tooltip, 'battles40x32.png', {'tooltipData': ProfileUtils.createToolTipData(battlesToolTipData)}, HeaderItemsTypes.VALUES)
-
     def __getDetailedStatisticsData(self, label, targetData):
         detailedStatisticsData = DetailedStatisticsUtils.getStatistics(targetData)
         detailedStatisticsData[0]['data'].append(DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_CAPTUREPOINTS, BigWorld.wg_getIntegralFormat(targetData.getCapturePoints()), PROFILE.PROFILE_PARAMS_TOOLTIP_CAPTUREPOINTS))
@@ -149,11 +163,6 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
 
     def __packAvgXPLditItemData(self, avgExp):
         return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgExp), PROFILE.SECTION_STATISTICS_SCORES_AVGEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGEXP, 'avgExp40x32.png')
-
-    def __getFormattedWinsEfficiency(self, targetData):
-        winsEfficiency = targetData.getWinsEfficiency()
-        formattedWinsEfficiency = ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(winsEfficiency))
-        return formattedWinsEfficiency
 
     def _dispose(self):
         super(ProfileStatistics, self)._dispose()

@@ -58,7 +58,9 @@ class VehicleGunRotator(object):
         self.__gunMatrixAnimator.destroy(self.__avatar)
         self.__avatar = None
         self.__shotPointSourceFunctor = None
-        self.__turretRotationSoundEffect.destroy()
+        if self.__turretRotationSoundEffect is not None:
+            self.__turretRotationSoundEffect.destroy()
+            self.__turretRotationSoundEffect = None
         BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
         return
 
@@ -96,7 +98,9 @@ class VehicleGunRotator(object):
             if self.__clientMode and self.__showServerMarker:
                 self.__avatar.inputHandler.showGunMarker2(False)
             self.__isStarted = False
-            self.__turretRotationSoundEffect.stop()
+            if self.__turretRotationSoundEffect is not None:
+                self.__turretRotationSoundEffect.destroy()
+                self.__turretRotationSoundEffect = None
             return
 
     def applySettings(self, diff):
@@ -122,27 +126,34 @@ class VehicleGunRotator(object):
     def setShotPosition(self, shotPos, shotVec, dispersionAngle):
         if self.__clientMode and not self.__showServerMarker:
             return
-        self.__dispersionAngle = dispersionAngle
-        if not self.__clientMode and VehicleGunRotator.USE_LOCK_PREDICTION:
-            lockEnabled = BigWorld.player().inputHandler.getAimingMode(AIMING_MODE.TARGET_LOCK)
-            if lockEnabled:
-                predictedTargetPos = self.predictLockedTargetShotPoint()
-                dirToTarget = predictedTargetPos - shotPos
-                dirToTarget.normalise()
-                shotDir = Math.Vector3(shotVec)
-                shotDir.normalise()
-                if shotDir.dot(dirToTarget) > 0.0:
-                    return
-        markerPos, markerDir, markerSize, collData = self.__getGunMarkerPosition(shotPos, shotVec, dispersionAngle)
-        if self.__clientMode and self.__showServerMarker:
-            self.__avatar.inputHandler.updateGunMarker2(markerPos, markerDir, markerSize, SERVER_TICK_LENGTH, collData)
-        if not self.__clientMode:
-            self.__lastShotPoint = markerPos
-            self.__avatar.inputHandler.updateGunMarker(markerPos, markerDir, markerSize, SERVER_TICK_LENGTH, collData)
-            self.__turretYaw, self.__gunPitch = getShotAngles(self.__avatar.vehicleTypeDescriptor, self.__avatar.getOwnVehicleMatrix(), (self.__turretYaw, self.__gunPitch), markerPos, True)
-            self.__updateTurretMatrix(self.__turretYaw, SERVER_TICK_LENGTH)
-            self.__updateGunMatrix(self.__gunPitch, SERVER_TICK_LENGTH)
-            self.__markerInfo = (markerPos, markerDir, markerSize)
+        else:
+            self.__dispersionAngle = dispersionAngle
+            if not self.__clientMode and VehicleGunRotator.USE_LOCK_PREDICTION:
+                lockEnabled = BigWorld.player().inputHandler.getAimingMode(AIMING_MODE.TARGET_LOCK)
+                if lockEnabled:
+                    predictedTargetPos = self.predictLockedTargetShotPoint()
+                    dirToTarget = predictedTargetPos - shotPos
+                    dirToTarget.normalise()
+                    shotDir = Math.Vector3(shotVec)
+                    shotDir.normalise()
+                    if shotDir.dot(dirToTarget) > 0.0:
+                        return
+            markerPos, markerDir, markerSize, collData = self.__getGunMarkerPosition(shotPos, shotVec, dispersionAngle)
+            if self.__clientMode and self.__showServerMarker:
+                self.__avatar.inputHandler.updateGunMarker2(markerPos, markerDir, markerSize, SERVER_TICK_LENGTH, collData)
+            if not self.__clientMode:
+                self.__lastShotPoint = markerPos
+                self.__avatar.inputHandler.updateGunMarker(markerPos, markerDir, markerSize, SERVER_TICK_LENGTH, collData)
+                self.__turretYaw, self.__gunPitch = getShotAngles(self.__avatar.vehicleTypeDescriptor, self.__avatar.getOwnVehicleMatrix(), (self.__turretYaw, self.__gunPitch), markerPos, True)
+                descr = self.__avatar.vehicleTypeDescriptor
+                turretYawLimits = descr.gun['turretYawLimits']
+                closestLimit = self.__isOutOfLimits(self.__turretYaw, turretYawLimits)
+                if closestLimit is not None:
+                    self.__turretYaw = closestLimit
+                self.__updateTurretMatrix(self.__turretYaw, SERVER_TICK_LENGTH)
+                self.__updateGunMatrix(self.__gunPitch, SERVER_TICK_LENGTH)
+                self.__markerInfo = (markerPos, markerDir, markerSize)
+            return
 
     def predictLockedTargetShotPoint(self):
         autoAimVehicle = BigWorld.player().autoAimVehicle
@@ -510,7 +521,7 @@ class VehicleGunRotator(object):
             replayCtrl.setGunPitch(pitch)
 
     def __onCameraChanged(self, cameraName, currentVehicleId = None):
-        if self.__turretRotationSoundEffect is not None and cameraName != 'postmortem':
+        if self.__turretRotationSoundEffect is not None:
             self.__turretRotationSoundEffect.enable(_ENABLE_TURRET_ROTATOR_SOUND)
         g__attachToCam = cameraName == 'sniper'
         return
@@ -539,7 +550,7 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
     __MIN_ANGLE_TO_ENABLE_MANUAL = math.radians(0.1)
     __MIN_ANGLE_TO_ENABLE_GEAR = math.radians(10.0)
     __GEAR_KEYOFF_PARAM = 'on_off'
-    __MANUAL_WAIT_TIME = 0.2
+    __MANUAL_WAIT_TIME = 0.4
     __GEAR_DELAY_TIME = 0.2
 
     def __init__(self, updatePeriod = 0.0):
@@ -551,37 +562,23 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
             self.__manualSound = self.__getTurretSound(BigWorld.player().vehicleTypeDescriptor, 'turretRotatorSoundManual')
             self.__gearSound = self.__getTurretSound(BigWorld.player().vehicleTypeDescriptor, 'turretRotatorSoundGear')
 
-    def stop(self):
-        self.stopCallback(self.__startGearSound)
-        self.stopCallback(self.__stopManualSound)
-        CallbackDelayer.destroy(self)
-        if self.__manualSound is not None:
-            self.__manualSound.stop(True)
-        if self.__gearSound is not None:
-            self.__gearSound.stop(True)
-        return
-
     def destroy(self):
-        self.stopCallback(self.__startGearSound)
-        self.stopCallback(self.__stopManualSound)
         CallbackDelayer.destroy(self)
         if self.__manualSound is not None:
-            self.__manualSound.stop(True)
+            self.__manualSound.stop()
         if self.__gearSound is not None:
-            self.__gearSound.stop(True)
+            self.__gearSound.stop()
         return
 
     def enable(self, enableSound):
         if enableSound:
             self.delayCallback(self.__updatePeriod, self.__update)
         else:
-            self.stopCallback(self.__startGearSound)
-            self.stopCallback(self.__stopManualSound)
             CallbackDelayer.destroy(self)
             if self.__manualSound is not None:
-                self.__manualSound.stop(True)
+                self.__manualSound.stop()
             if self.__gearSound is not None:
-                self.__gearSound.stop(True)
+                self.__gearSound.stop()
         return
 
     def __getTurretSound(self, vehicleTypDescriptor, soundName):
@@ -654,7 +651,7 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
             if param is not None:
                 param.keyOff()
             else:
-                sound.stop(True)
+                sound.stop()
         return
 
     def __startGearSound(self):
@@ -665,5 +662,5 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
 
     def __stopManualSound(self):
         if self.__manualSound is not None:
-            self.__manualSound.stop(True)
+            self.__manualSound.stop()
         return

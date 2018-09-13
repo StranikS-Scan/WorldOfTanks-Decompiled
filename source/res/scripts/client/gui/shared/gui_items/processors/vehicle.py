@@ -86,7 +86,7 @@ class VehicleSeller(ItemProcessor):
 
     def __init__(self, vehicle, dismantlingGoldCost, shells = [], eqs = [], optDevs = [], inventory = [], isCrewDismiss = False):
         self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, dismantlingGoldCost)
-        barracksBerthsNeeded = len(filter(lambda item: item is not None, vehicle.crew))
+        barracksBerthsNeeded = len(filter(lambda (idx, item): item is not None, vehicle.crew))
         super(VehicleSeller, self).__init__(vehicle, (plugins.VehicleValidator(vehicle, False, prop={'isBroken': True,
           'isLocked': True}),
          plugins.VehicleSellValidator(vehicle),

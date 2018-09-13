@@ -36,6 +36,10 @@ class PrbSendInvitesWindow(View, PrbSendInvitesWindowMeta, AbstractWindowView, I
             self._showClanOnly = ctx['showClanOnly']
         else:
             self._showClanOnly = False
+        if 'invites' in ctx:
+            self._invites = ctx['invites']
+        else:
+            self._invites = ()
         return
 
     @prbDispatcherProperty
@@ -85,6 +89,7 @@ class PrbSendInvitesWindow(View, PrbSendInvitesWindowMeta, AbstractWindowView, I
         self._friendsDP.init(self.as_getFriendsDPS(), self._onlineMode)
         self._clanDP = users_data_providers.ClanMembersDataProvider()
         self._clanDP.init(self.as_getClanDPS(), self._onlineMode)
+        self._sendInvites()
 
     def _dispose(self):
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -99,6 +104,10 @@ class PrbSendInvitesWindow(View, PrbSendInvitesWindowMeta, AbstractWindowView, I
             self._clanDP = None
         super(PrbSendInvitesWindow, self)._dispose()
         return
+
+    def _sendInvites(self):
+        if self._invites:
+            self.as_setInvitesS(self._invites)
 
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.SEND_INVITE:

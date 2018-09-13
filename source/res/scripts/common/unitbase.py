@@ -8,7 +8,7 @@ import constants
 from constants import VEHICLE_CLASSES, VEHICLE_CLASS_INDICES, IS_DEVELOPMENT
 from items import vehicles
 import UnitRoster
-from UnitRoster import UnitRoster, BaseUnitRosterSlot, _getVehClassTag, _BAD_CLASS_INDEX, buildNamesDict, _reprBitMaskFromDict, SortieRoster6, SortieRoster8, SortieRoster10
+from UnitRoster import UnitRoster, BaseUnitRosterSlot, _getVehClassTag, _BAD_CLASS_INDEX, buildNamesDict, _reprBitMaskFromDict, SortieRoster6, SortieRoster8, SortieRoster10, FortRoster10
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from debug_utils import *
 
@@ -20,6 +20,7 @@ class UNIT_STATE:
     DEV_MODE = 16
     IN_ARENA = 32
     SORTIE = 64
+    FORT_BATTLE = 128
     DEFAULT = 0
     PRE_QUEUE = 0
     PRE_SEARCH = 0
@@ -77,7 +78,25 @@ class UNIT_ERROR:
     BAD_VEHICLE_LEVEL = 44
     CLAN_CHANGED = 45
     NO_CLAN_MEMBERS = 46
+    BAD_CLAN = 47
+    NO_PLAYER = 48
+    SLOT_RESERVED = 49
+    SLOT_OCCUPIED = 50
+    TOO_MANY_CLOSED_SLOTS = 51
+    SLOT_NOT_CLOSED = 52
+    CANT_PICK_LEADER = 53
+    RESTRICT_LEGIONARIES = 54
+    RESTRICT_INVITED = 55
+    VEHICLE_MISMATCH = 56
+    NO_VEHICLES = 57
+    TOO_MANY_LEGIONARIES = 58
+    VEHICLE_NOT_CHOSEN = 59
+    ALREADY_IN_SLOT = 60
+    FORT_BATTLE_END = 61
+    NO_AVAILABLE_SLOTS = 62
 
+
+OK = UNIT_ERROR.OK
 
 class UNIT_SLOT:
     ANY = -1
@@ -103,23 +122,26 @@ class UNIT_OP:
     SET_COMMENT = 13
     CHANGE_ROLE = 14
     MODAL_TIMESTAMP = 15
+    GIVE_LEADERSHIP = 16
 
 
 class UNIT_ROLE:
     DEFAULT = 0
     INVITED = 1
     COMMANDER_UPDATES = 2
-    ADD_REMOVE_MEMBERS = 4
-    INVITE_KICK_PLAYERS = 8
-    CHANGE_ROSTER = 16
+    CHANGE_ROSTER = 4
+    LEGIONARY = 16
     CLAN_OFFICER = 32
     IN_ARENA = 64
     OFFLINE = 128
     START_STOP_BATTLE = CHANGE_ROSTER
-    CREATOR = COMMANDER_UPDATES | ADD_REMOVE_MEMBERS | INVITE_KICK_PLAYERS | CHANGE_ROSTER | START_STOP_BATTLE
+    ADD_REMOVE_MEMBERS = CHANGE_ROSTER
+    INVITE_KICK_PLAYERS = CHANGE_ROSTER
+    CREATOR = COMMANDER_UPDATES | CHANGE_ROSTER
     SELF_ONLY = 65536
     SELF_UNLOCKED = 131072
     NON_IDLE = 262144
+    NO_LEGIONARY_CANDIDATES = 524288
 
 
 UNIT_ROLE_NAMES = buildNamesDict(UNIT_ROLE)
@@ -156,6 +178,7 @@ class UNIT_NOTIFY_CMD:
     TRANSFER_LEADERSHIP = 3
     PUBLISH_STATE_CHANGE = 4
     SET_MEMBER_READY = 5
+    KICK_ALL = 6
 
 
 class CLIENT_UNIT_CMD:
@@ -178,6 +201,7 @@ class CLIENT_UNIT_CMD:
     SET_ROSTER_SLOT = 16
     SET_UNIT_COMMENT = 17
     SET_UNIT_DEV_MODE = 18
+    GIVE_LEADERSHIP = 19
 
 
 class UNIT_NOTIFY_ID:
@@ -191,6 +215,7 @@ class UNIT_MGR_FLAGS:
     SORTIE_DIVISION_6 = 4
     SORTIE_DIVISION_8 = 8
     DIVISION_FLAG_MASK = SORTIE | SORTIE_DIVISION_8 | SORTIE_DIVISION_6
+    FORT_BATTLE = 16
 
 
 class ROSTER_TYPE:
@@ -198,7 +223,8 @@ class ROSTER_TYPE:
     SORTIE_ROSTER_6 = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_6
     SORTIE_ROSTER_8 = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8
     SORTIE_ROSTER_10 = UNIT_MGR_FLAGS.SORTIE
-    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6
+    FORT_ROSTER_10 = UNIT_MGR_FLAGS.FORT_BATTLE
+    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6 | UNIT_MGR_FLAGS.FORT_BATTLE
 
 
 class SORTIE_DIVISION(object):
@@ -217,7 +243,8 @@ SORTIE_DIVISION_FLAGS_TO_NAME = dict([ (flags, name) for name, flags in SORTIE_D
 ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.SORTIE_ROSTER_6: SortieRoster6,
  ROSTER_TYPE.SORTIE_ROSTER_8: SortieRoster8,
- ROSTER_TYPE.SORTIE_ROSTER_10: SortieRoster10}
+ ROSTER_TYPE.SORTIE_ROSTER_10: SortieRoster10,
+ ROSTER_TYPE.FORT_ROSTER_10: FortRoster10}
 
 class UnitBase(OpsUnpacker):
     _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qHi', '_setVehicle'),
@@ -237,7 +264,8 @@ class UnitBase(OpsUnpacker):
                            'S',
                            ['']),
      UNIT_OP.CHANGE_ROLE: ('qB', '_changePlayerRole'),
-     UNIT_OP.MODAL_TIMESTAMP: ('i', '_setModalTimestamp')})
+     UNIT_OP.MODAL_TIMESTAMP: ('i', '_setModalTimestamp'),
+     UNIT_OP.GIVE_LEADERSHIP: ('Q', '_giveLeadership')})
     MAX_PLAYERS = 250
 
     def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', packedUnit = '', rosterTypeID = ROSTER_TYPE.UNIT_ROSTER):
@@ -281,6 +309,7 @@ class UnitBase(OpsUnpacker):
             self._storeNotification(playerID, UNIT_NOTIFY_CMD.SET_VEHICLE, [vehInvID])
             self._dirty = 1
             return True
+        return False
 
     def _clearVehicle(self, playerID):
         self._vehicles.pop(playerID, None)
@@ -304,7 +333,7 @@ class UnitBase(OpsUnpacker):
     def _delMemberBySlot(self, slotIdx):
         member = self._members.get(slotIdx, None)
         if not member:
-            return False
+            return UNIT_ERROR.FAIL_UNIT_METHOD
         else:
             playerID = member['playerID']
             self.setMemberReady(playerID, False)
@@ -315,7 +344,7 @@ class UnitBase(OpsUnpacker):
             self._fullReadyMask &= clearMask
             self._dirty = 1
             self.storeOp(UNIT_OP.DEL_MEMBER, slotIdx)
-            return True
+            return OK
 
     def _addPlayer(self, playerID, **kwargs):
         self._players[playerID] = kwargs
@@ -528,13 +557,13 @@ class UnitBase(OpsUnpacker):
     def setMemberReady(self, playerID, isReady = True):
         slotIdx = self._playerSlots.get(playerID)
         if slotIdx is None:
-            return False
+            return UNIT_ERROR.BAD_SLOT_IDX
         else:
             prevReadyMask = self._readyMask
             if isReady:
                 veh = self._vehicles.get(playerID)
                 if veh is None:
-                    return False
+                    return UNIT_ERROR.VEHICLE_NOT_CHOSEN
                 newReadyMask = prevReadyMask | 1 << slotIdx
             else:
                 newReadyMask = prevReadyMask & ~(1 << slotIdx)
@@ -543,7 +572,7 @@ class UnitBase(OpsUnpacker):
                 self.storeOp(UNIT_OP.READY_MASK, newReadyMask)
                 self._dirty = 1
                 self._storeNotification(playerID, UNIT_NOTIFY_CMD.SET_MEMBER_READY, [isReady])
-            return True
+            return OK
 
     def _setModalTimestamp(self, timestamp):
         self._modalTimestamp = timestamp
@@ -563,7 +592,11 @@ class UnitBase(OpsUnpacker):
         self.storeOp(UNIT_OP.CLOSE_SLOT, slotIdx)
 
     def getMaxSlotCount(self):
-        return max(self._roster.slots.iterkeys()) / 2 + 1
+        if self._roster.slots:
+            _max = max(self._roster.slots.iterkeys())
+        else:
+            _max = 0
+        return _max / 2 + 1
 
     def getClosedSlotsCount(self):
         count = 0
@@ -613,6 +646,16 @@ class UnitBase(OpsUnpacker):
 
         return False
 
+    def getLegionaryCount(self):
+        count = 0
+        for playerID, slotIdx in self._playerSlots.iteritems():
+            playerData = self._players[playerID]
+            role = playerData.get('role', 0)
+            if role & UNIT_ROLE.LEGIONARY:
+                count += 1
+
+        return count
+
     def _openSlot(self, slotIdx):
         self._closedSlotMask &= ~(1 << slotIdx)
         self._freeSlots.add(slotIdx)
@@ -630,7 +673,7 @@ class UnitBase(OpsUnpacker):
         self._strComment = strComment
         self.storeOp(UNIT_OP.SET_COMMENT, strComment)
         self._dirty = 1
-        return True
+        return OK
 
     def _appendCmdrOp(self, op, packedArgs):
         pass
@@ -682,3 +725,19 @@ class UnitBase(OpsUnpacker):
         playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
         self._addPlayer(playerID, **playerInfo)
         return packedOps[sz + lenNickBytes + lenClanBytes:]
+
+    def _giveLeadership(self, memberDBID):
+        swapSlotIdx = self._playerSlots.get(memberDBID)
+        prevLeaderDBID = self._members[LEADER_SLOT]['playerID']
+        self.setMemberReady(memberDBID, False)
+        if swapSlotIdx is not None:
+            self._members[swapSlotIdx] = dict(playerID=prevLeaderDBID, slotIdx=swapSlotIdx)
+            self._playerSlots[prevLeaderDBID] = swapSlotIdx
+        else:
+            self._playerSlots.pop(prevLeaderDBID)
+        self._players[prevLeaderDBID]['role'] &= ~UNIT_ROLE.CREATOR
+        self._members[LEADER_SLOT] = dict(playerID=memberDBID, slotIdx=LEADER_SLOT)
+        self._playerSlots[memberDBID] = LEADER_SLOT
+        self._players[memberDBID]['role'] |= UNIT_ROLE.CREATOR
+        self.storeOp(UNIT_OP.GIVE_LEADERSHIP, memberDBID)
+        return

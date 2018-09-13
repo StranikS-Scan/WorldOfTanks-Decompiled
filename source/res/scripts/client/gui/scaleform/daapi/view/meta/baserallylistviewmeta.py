@@ -18,6 +18,10 @@ class BaseRallyListViewMeta(BaseRallyView):
         if self._isDAAPIInited():
             return self.flashObject.as_getSearchDP()
 
+    def as_setDetailsS(self, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setDetails(value)
+
     def as_setVehiclesTitleS(self, value):
         if self._isDAAPIInited():
             return self.flashObject.as_setVehiclesTitle(value)

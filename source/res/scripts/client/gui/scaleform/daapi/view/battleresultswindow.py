@@ -1,19 +1,22 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/BattleResultsWindow.py
 import re
 import math
-import operator
 import BigWorld
 import ArenaType
 from account_helpers.AccountSettings import AccountSettings
+from account_shared import getFairPlayViolationName
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.gui_items.dossier.achievements import MarkOnGunAchievement
+from gui.shared.fortifications.FortBuilding import FortBuilding
+from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
 from helpers import i18n
 from adisp import async, process
 from CurrentVehicle import g_currentVehicle
-from constants import ARENA_BONUS_TYPE, IS_DEVELOPMENT, ARENA_GUI_TYPE, IGR_TYPE
+from constants import ARENA_BONUS_TYPE, IS_DEVELOPMENT, ARENA_GUI_TYPE, IGR_TYPE, EVENT_TYPE
 from dossiers2.custom.records import RECORD_DB_IDS, DB_ID_TO_RECORD
 from dossiers2.ui import achievements
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD
@@ -33,6 +36,8 @@ from items.vehicles import VEHICLE_CLASS_TAGS
 RESULT_ = '#menu:finalStatistic/commonStats/resultlabel/{0}'
 BATTLE_RESULTS_STR = '#battle_results:{0}'
 FINISH_REASON = BATTLE_RESULTS_STR.format('finish/reason/{0}')
+CLAN_BATTLE_FINISH_REASON_DEF = BATTLE_RESULTS_STR.format('finish/clanBattle_reason_def/{0}')
+CLAN_BATTLE_FINISH_REASON_ATTACK = BATTLE_RESULTS_STR.format('finish/clanBattle_reason_attack/{0}')
 RESULT_LINE_STR = BATTLE_RESULTS_STR.format('details/calculations/{0}')
 STATS_KEY_BASE = BATTLE_RESULTS_STR.format('team/stats/labels_{0}')
 TIME_STATS_KEY_BASE = BATTLE_RESULTS_STR.format('details/time/lbl_{0}')
@@ -75,7 +80,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
 
     def __init__(self, ctx):
         super(BattleResultsWindow, self).__init__()
-        self.arenaUniqueID = ctx.get('arenaUniqueID')
+        self.arenaUniqueID = ctx.get('data')
         self.stats = None
         if IS_DEVELOPMENT:
             self.testData = ctx.get('testData')
@@ -233,6 +238,14 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         templateName = 'gold_small_inactive_label' if canBeFaded and value == 0 else 'gold_small_label'
         return makeHtmlString('html_templates:lobby/battle_results', templateName, {'value': valStr})
 
+    def __makePercentLabel(self, value):
+        valStr = BigWorld.wg_getGoldFormat(int(value))
+        templateName = 'percent'
+        if value < 0:
+            valStr = self.__makeRedLabel(valStr)
+            templateName = 'negative_percent'
+        return makeHtmlString('html_templates:lobby/battle_results', templateName, {'value': valStr})
+
     def __makeRedLabel(self, value):
         return makeHtmlString('html_templates:lobby/battle_results', 'negative_value', {'value': value})
 
@@ -276,12 +289,16 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         creditsPenalty = self.__calculateBaseCreditsPenalty(pData)
         creditsCompensation = self.__calculateBaseParam('creditsContributionIn', pData, premCreditsFactor)
         isNoPenalty = achievementCredits > 0
+        fairPlayViolationName = self.__getFairPlayViolationName(pData)
         creditsBase = pData.get('originalCredits', 0)
         creditsCell = creditsBase - achievementCredits + creditsPenalty - creditsCompensation - creditsToDraw
-        creditsCellPrem = int(creditsBase * premCreditsFactor) - int(achievementCredits * premCreditsFactor) + int(creditsPenalty * premCreditsFactor) - int(creditsToDraw * premCreditsFactor) - int(creditsCompensation * premCreditsFactor)
+        creditsCellPrem = int(creditsBase * premCreditsFactor) - int(achievementCredits * premCreditsFactor) + int(creditsPenalty * premCreditsFactor) - int(round(creditsToDraw * premCreditsFactor)) - int(round(creditsCompensation * premCreditsFactor))
         creditsCellStr = self.__makeCreditsLabel(creditsCell, not isPremium)
         creditsCellPremStr = self.__makeCreditsLabel(creditsCellPrem, isPremium)
-        pData['creditsStr'] = BigWorld.wg_getGoldFormat(creditsCellPrem if isPremium else creditsCell)
+        if fairPlayViolationName is not None:
+            pData['creditsStr'] = 0
+        else:
+            pData['creditsStr'] = BigWorld.wg_getGoldFormat(creditsCellPrem if isPremium else creditsCell)
         creditsData.append(self.__getStatsLine(self.__resultLabel('base'), creditsCellStr, None, creditsCellPremStr, None))
         achievementCreditsPrem = 0
         if isNoPenalty:
@@ -289,7 +306,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             achievementCreditsPrem = int(achievementCredits * premCreditsFactor)
             creditsData.append(self.__getStatsLine(self.__resultLabel('noPenalty'), self.__makeCreditsLabel(achievementCredits, not isPremium), None, self.__makeCreditsLabel(achievementCreditsPrem, isPremium), None))
         orderCredits = self.__calculateBaseParam('orderCredits', pData, premCreditsFactor)
-        orderCreditsPrem = int(orderCredits * premCreditsFactor)
+        orderCreditsPrem = int(round(orderCredits * premCreditsFactor))
         if orderCredits > 0 or orderCreditsPrem > 0:
             showIntermediateTotal = True
             orderCreditsStr = self.__makeCreditsLabel(orderCredits, not isPremium) if orderCredits else None
@@ -305,11 +322,14 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             showIntermediateTotal = True
             creditsData.append(self.__getStatsLine(self.__resultLabel('event'), creditsEventStr, goldEventStr, creditsEventPremStr, goldEventPremStr))
         creditsData.append(self.__getStatsLine())
+        if fairPlayViolationName is not None:
+            penaltyValue = self.__makePercentLabel(int(-100))
+            creditsData.append(self.__getStatsLine(self.__resultLabel('fairPlayViolation/' + fairPlayViolationName), penaltyValue, None, penaltyValue, None))
         creditsPenaltyStr = self.__makeCreditsLabel(int(-creditsPenalty), not isPremium)
         creditsPenaltyPremStr = self.__makeCreditsLabel(int(-creditsPenalty * premCreditsFactor), isPremium)
         creditsData.append(self.__getStatsLine(self.__resultLabel('friendlyFirePenalty'), creditsPenaltyStr, None, creditsPenaltyPremStr, None))
-        creditsCompensationStr = self.__makeCreditsLabel(int(creditsCompensation), not isPremium)
-        creditsCompensationPremStr = self.__makeCreditsLabel(int(creditsCompensation * premCreditsFactor), isPremium)
+        creditsCompensationStr = self.__makeCreditsLabel(int(round(creditsCompensation)), not isPremium)
+        creditsCompensationPremStr = self.__makeCreditsLabel(int(round(creditsCompensation * premCreditsFactor)), isPremium)
         creditsData.append(self.__getStatsLine(self.__resultLabel('friendlyFireCompensation'), creditsCompensationStr, None, creditsCompensationPremStr, None))
         creditsData.append(self.__getStatsLine())
         if creditsPenalty or creditsCompensation:
@@ -322,7 +342,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             creditsData.append(self.__getStatsLine())
         if showIntermediateTotal:
             c = int((creditsCell + achievementCredits + orderCredits + eventCredits - creditsPenalty + creditsCompensation) * aogasFactor)
-            cPrem = int((creditsCellPrem + achievementCreditsPrem + orderCreditsPrem + eventCredits - int(creditsPenalty * premCreditsFactor) + int(creditsCompensation * premCreditsFactor)) * aogasFactor)
+            cPrem = int((creditsCellPrem + achievementCreditsPrem + orderCreditsPrem + eventCredits - int(creditsPenalty * premCreditsFactor) + int(round(creditsCompensation * premCreditsFactor))) * aogasFactor)
             creditsData.append(self.__getStatsLine(self.__resultLabel('intermediateTotal'), self.__makeCreditsLabel(c), goldEventStr, self.__makeCreditsLabel(cPrem), goldEventPremStr))
             creditsData.append(self.__getStatsLine())
         creditsAutoRepair = pData.get('autoRepairCost', 0)
@@ -371,6 +391,10 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         xpBase = int(pData.get('originalXP', 0))
         xpCell = xpBase - achievementXP + xpPenalty
         xpCellPrem = int((xpBase - achievementXP + xpPenalty) * premXpFactor)
+        if fairPlayViolationName is not None:
+            pData['xpStr'] = 0
+        else:
+            pData['xpStr'] = BigWorld.wg_getIntegralFormat((xpCellPrem if isPremium else xpCell) * igrXpFactor * dailyXpFactor)
         xpCellStr = self.__makeXpLabel(xpCell, not isPremium)
         xpCellPremStr = self.__makeXpLabel(xpCellPrem, isPremium)
         freeXpBase = pData.get('originalFreeXP', 0)
@@ -382,9 +406,11 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         else:
             label = self.__resultLabel('base')
         xpData.append(self.__getStatsLine(label, xpCellStr, freeXpBaseStr, xpCellPremStr, freeXpBasePremStr))
-        pData['xpStr'] = BigWorld.wg_getIntegralFormat((xpCellPrem if isPremium else xpCell) * igrXpFactor * dailyXpFactor)
         if isNoPenalty:
             xpData.append(self.__getStatsLine(self.__resultLabel('noPenalty'), self.__makeXpLabel(achievementXP, not isPremium), self.__makeFreeXpLabel(achievementFreeXP, not isPremium), self.__makeXpLabel(int(achievementXP * premXpFactor), isPremium), self.__makeFreeXpLabel(int(achievementFreeXP * premXpFactor), isPremium)))
+        if fairPlayViolationName is not None:
+            penaltyXPVal = self.__makePercentLabel(int(-100))
+            xpData.append(self.__getStatsLine(self.__resultLabel('fairPlayViolation/' + fairPlayViolationName), penaltyXPVal, penaltyXPVal, penaltyXPVal, penaltyXPVal))
         xpPenaltyStr = self.__makeXpLabel(-xpPenalty, not isPremium)
         xpPenaltyPremStr = self.__makeXpLabel(int(-xpPenalty * premXpFactor), isPremium)
         xpData.append(self.__getStatsLine(self.__resultLabel('friendlyFirePenalty'), xpPenaltyStr, None, xpPenaltyPremStr, None))
@@ -400,13 +426,13 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             dailyXpStr = makeHtmlString('html_templates:lobby/battle_results', 'multy_xp_small_label', {'value': int(dailyXpFactor)})
             xpData.append(self.__getStatsLine(self.__resultLabel('firstWin'), dailyXpStr, dailyXpStr, dailyXpStr, dailyXpStr))
         orderXP = self.__calculateBaseParam('orderXP', pData, premXpFactor)
-        orderXPPrem = int(orderXP * premXpFactor)
+        orderXPPrem = int(round(orderXP * premXpFactor))
         if orderXP > 0:
             orderXPStr = self.__makeXpLabel(orderXP, not isPremium) if orderXP else None
             orderXPPremStr = self.__makeXpLabel(orderXPPrem, isPremium) if orderXPPrem else None
             xpData.append(self.__getStatsLine(self.__resultLabel('tacticalTraining'), orderXPStr, None, orderXPPremStr, None))
         orderFreeXP = self.__calculateBaseParam('orderFreeXP', pData, premXpFactor)
-        orderFreeXPPrem = int(orderFreeXP * premCreditsFactor)
+        orderFreeXPPrem = int(round(orderFreeXP * premCreditsFactor))
         if orderFreeXP > 0:
             orderFreeXPStr = self.__makeFreeXpLabel(orderFreeXP, not isPremium) if orderFreeXP else None
             orderFreeXPPremStr = self.__makeFreeXpLabel(orderFreeXPPrem, isPremium) if orderFreeXPPrem else None
@@ -471,7 +497,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
          'title': achieve.getUserName(),
          'description': achieve.getUserDescription(),
          'rareIconId': None,
-         'isEpic': achieve._getIconName() in achievements.BATTLE_ACHIEVES_WITH_RIBBON,
+         'isEpic': achieve.hasRibbon(),
          'specialIcon': specialIcon,
          'customData': customData}
 
@@ -592,24 +618,41 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_crit_label', {'image': '{0}Destroyed'.format(key),
          'value': i18n.makeString('#item_types:tankman/roles/{0}'.format(key))})
 
-    def __populateResultStrings(self, commonData, pData):
+    @classmethod
+    def __populateResultStrings(cls, commonData, pData):
+        bonusType = commonData.get('bonusType', 0)
         winnerTeam = commonData.get('winnerTeam', 0)
+        finishReason = commonData.get('finishReason', 0)
         if not winnerTeam:
             status = 'tie'
         elif winnerTeam == pData.get('team'):
             status = 'win'
         else:
             status = 'lose'
-        commonData['resultShortStr'] = status
-        commonData['resultStr'] = RESULT_.format(status)
-        if commonData.get('guiType', 0) != ARENA_GUI_TYPE.EVENT_BATTLES:
-            reason = commonData.get('finishReason', 0)
-            if reason == 1:
-                commonData['finishReasonStr'] = FINISH_REASON.format(''.join([str(reason), str(status)]))
+
+        def _finishReasonFormatter(formatter, **kwargs):
+            if finishReason == 1:
+                return i18n.makeString(formatter.format(''.join([str(finishReason), str(status)])), **kwargs)
+            return i18n.makeString(formatter.format(finishReason))
+
+        if bonusType == ARENA_BONUS_TYPE.FORT_BATTLE:
+            commonData['resultShortStr'] = 'clanBattle_%s' % status
+            fortBuilding = pData.get('fortBuilding', {})
+            buildTypeID, buildTeam = fortBuilding.get('buildTypeID'), fortBuilding.get('buildTeam')
+            if buildTypeID is not None:
+                buildingName = FortBuilding(typeID=buildTypeID).userName
             else:
-                commonData['finishReasonStr'] = FINISH_REASON.format(reason)
+                buildingName = ''
+            _frFormatter = lambda : _finishReasonFormatter(CLAN_BATTLE_FINISH_REASON_DEF if buildTeam == pData.get('team') else CLAN_BATTLE_FINISH_REASON_ATTACK, buildingName=buildingName)
+        else:
+            commonData['resultShortStr'] = status
+            _frFormatter = lambda : _finishReasonFormatter(FINISH_REASON)
+        if commonData.get('guiType', 0) != ARENA_GUI_TYPE.EVENT_BATTLES:
+            commonData['finishReasonStr'] = _frFormatter()
         else:
             commonData['finishReasonStr'] = ''
+        commonData['resultStr'] = RESULT_.format(status)
+        return
 
     def __populateTankSlot(self, commonData, pData, vehiclesData, playersData):
         playerNameData = self.__getPlayerName(pData.get('accountDBID', None), playersData)
@@ -708,6 +751,9 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         playerSquadId = 0
         playerDBID = pData.get('accountDBID')
         playerTeam = pData.get('team')
+        bonusType = commonData.get('bonusType', 0)
+        playerNamePosition = bonusType == ARENA_BONUS_TYPE.FORT_BATTLE
+        fairPlayViolationName = self.__getFairPlayViolationName(pData)
         for pId, pInfo in playersData.iteritems():
             row = None
             for vId, vInfo in vehiclesData.iteritems():
@@ -728,16 +774,18 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
                     row['showResources'] = bonusType == ARENA_BONUS_TYPE.SORTIE
                     if bonusType == ARENA_BONUS_TYPE.SORTIE:
                         row['resourceCount'] = vInfo.get('fortResource', 0)
-                    row['medalsCount'] = len(achievementsData)
                     achievementsList = []
-                    for achievementId in achievementsData:
-                        factory = getAchievementFactory(DB_ID_TO_RECORD[achievementId])
-                        if factory is not None:
-                            achive = factory.create(value=0)
-                            achievementsList.append(self._packAchievement(achive, isUnique=True))
+                    if not (pId == playerDBID and fairPlayViolationName is not None):
+                        for achievementId in achievementsData:
+                            factory = getAchievementFactory(DB_ID_TO_RECORD[achievementId])
+                            if factory is not None:
+                                achive = factory.create(value=0)
+                                if not achive.isApproachable():
+                                    achievementsList.append(self._packAchievement(achive, isUnique=True))
 
-                    achievementsList.sort(key=lambda k: k['isEpic'], reverse=True)
+                        achievementsList.sort(key=lambda k: k['isEpic'], reverse=True)
                     row['achievements'] = achievementsList
+                    row['medalsCount'] = len(achievementsList)
                     killerID = row.get('killerID', 0)
                     deathReason = row.get('deathReason', -1)
                     isPrematureLeave = vInfo.get('isPrematureLeave', False)
@@ -764,6 +812,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             playerNameData = self.__getPlayerName(pId, playersData)
             row['playerFullName'] = playerNameData[0]
             row['playerName'], row['playerClan'], row['playerRegion'], row['playerIgrType'] = playerNameData[1]
+            row['playerNamePosition'] = playerNamePosition
             row['playerInfo'] = {}
             row['isSelf'] = playerDBID == pId
             if playerDBID == pId:
@@ -829,12 +878,11 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
     def __calculateTotalCredits(self, pData, baseCredits, baseOrderCredits, creditsToDraw, usePremFactor = False):
         premFactor = pData.get('premiumCreditsFactor10', 10) / 10.0 if usePremFactor else 1.0
         isPrem = pData.get('isPremium', False)
-        credits = pData.get('credits', 0) - creditsToDraw * premFactor
+        credits = pData.get('credits', 0) - round(creditsToDraw * premFactor)
         if isPrem != usePremFactor:
             aogasFactor = pData.get('aogasFactor10', 10) / 10.0
             eventCredits = pData.get('eventCredits', 0)
-            orderCredits = pData.get('orderCredits', 0)
-            credits = int((int(int(baseCredits * premFactor) - creditsToDraw * premFactor) + baseOrderCredits * premFactor + eventCredits) * aogasFactor)
+            credits = int((int(int(baseCredits * premFactor) - round(creditsToDraw * premFactor)) + round(baseOrderCredits * premFactor) + eventCredits) * aogasFactor)
         return credits
 
     def __calculateTotalFreeXp(self, pData, baseFreeXp, baseOrderFreeXp, usePremFactor = False):
@@ -848,7 +896,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             igrFactor = pData.get('igrXPFactor10', 10) / 10.0
             premFactor = pData.get('premiumXPFactor10', 10) / 10.0 if usePremFactor else 1.0
             eventFreeXP = pData.get('eventFreeXP', 0)
-            freeXP = int((int(int(int(baseFreeXp * igrFactor) * premFactor) * dailyFactor) + int(baseOrderFreeXp * premFactor) + eventFreeXP) * aogasFactor)
+            freeXP = int((int(int(int(baseFreeXp * igrFactor) * premFactor) * dailyFactor) + int(round(baseOrderFreeXp * premFactor)) + eventFreeXP) * aogasFactor)
         return freeXP
 
     def __calculateTotalXp(self, pData, baseXp, baseOrderXp, usePremFactor = False):
@@ -860,7 +908,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             igrFactor = pData.get('igrXPFactor10', 10) / 10.0
             premFactor = pData.get('premiumXPFactor10', 10) / 10.0 if usePremFactor else 1.0
             eventXP = pData.get('eventXP', 0)
-            xp = int((int(int(int(baseXp * igrFactor) * premFactor) * dailyFactor) + int(baseOrderXp * premFactor) + eventXP) * aogasFactor)
+            xp = int((int(int(int(baseXp * igrFactor) * premFactor) * dailyFactor) + int(round(baseOrderXp * premFactor)) + eventXP) * aogasFactor)
         return xp
 
     def __calculateBaseCreditsPenalty(self, pData):
@@ -875,7 +923,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         isPremium = pData.get('isPremium', False)
         paramValue = pData.get(paramKey, 0)
         if isPremium:
-            paramValue = math.ceil(paramValue / premFactor)
+            paramValue = round(paramValue / premFactor)
         return paramValue
 
     def selectVehicle(self, inventoryId):
@@ -885,10 +933,16 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
     def __parseQuestsProgress(self, battleResults):
         questsProgress = battleResults.get('personal', {}).get('questsProgress', {})
 
+        def _isFortQuest(q):
+            return q.getType() == EVENT_TYPE.FORT_QUEST
+
         def _sortFunc(aData, bData):
             aQuest, aCurProg, aPrevProg, _, _ = aData
             bQuest, bCurProg, bPrevProg, _, _ = bData
             res = cmp(aQuest.isCompleted(aCurProg), bQuest.isCompleted(bCurProg))
+            if res:
+                return -res
+            res = cmp(_isFortQuest(aQuest), _isFortQuest(bQuest))
             if res:
                 return -res
             if aQuest.isCompleted() and bQuest.isCompleted(bCurProg):
@@ -937,7 +991,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             vehiclesData = results.get('vehicles', dict()).copy()
             commonData = results.get('common', dict()).copy()
             bonusType = commonData.get('bonusType', 0)
-            if bonusType == ARENA_BONUS_TYPE.SORTIE:
+            if bonusType == ARENA_BONUS_TYPE.SORTIE or bonusType == ARENA_BONUS_TYPE.FORT_BATTLE:
                 commonData['clans'] = self.__processClanData(personalData, playersData)
             else:
                 commonData['clans'] = {'allies': {'clanDBID': -1,
@@ -1022,3 +1076,10 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
                  'clanAbbrev': i18n.makeString(BATTLE_RESULTS.COMMON_CLANABBREV, clanAbbrev=pInfo.get('clanAbbrev'))}
 
         return resClans
+
+    def __getFairPlayViolationName(self, pData):
+        fairPlayViolationData = pData.get('fairplayViolations')
+        if fairPlayViolationData is not None:
+            return getFairPlayViolationName(fairPlayViolationData[1])
+        else:
+            return

@@ -4,6 +4,7 @@ from adisp import process
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control.prb_helpers import prbInvitesProperty, prbDispatcherProperty
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE
 from gui.shared.utils.requesters import StatsRequester
@@ -62,12 +63,12 @@ class _ShowArenaResultHandler(_ActionHandler):
         if not notification:
             LOG_ERROR('Notification not found', NOTIFICATION_TYPE.MESSAGE, entityID)
             return
-        arenaUniqueID = notification.getSavedID()
-        if not arenaUniqueID:
+        savedData = notification.getSavedData()
+        if not savedData:
             self._updateNotification(notification)
             LOG_ERROR('arenaUniqueID not found', notification)
             return
-        self._showWindow(notification, arenaUniqueID)
+        self._showWindow(notification, savedData)
 
     def _updateNotification(self, notification):
         _, formatted, settings = self.proto.serviceChannel.getMessage(notification.getID())
@@ -77,7 +78,7 @@ class _ShowArenaResultHandler(_ActionHandler):
             notification.update(formatted)
 
     def _showWindow(self, notification, arenaUniqueID):
-        g_eventBus.handleEvent(events.ShowWindowEvent(self.__eventType, {'arenaUniqueID': arenaUniqueID}))
+        g_eventBus.handleEvent(events.ShowWindowEvent(self.__eventType, {'data': arenaUniqueID}))
 
     def _showI18nMessage(self, key, msgType):
 
@@ -103,6 +104,22 @@ class ShowBattleResultsHandler(_ShowArenaResultHandler):
         Waiting.hide('loadStats')
         if results:
             super(ShowBattleResultsHandler, self)._showWindow(notification, arenaUniqueID)
+        else:
+            self._updateNotification(notification)
+
+
+class ShowFortBattleResultsHandler(_ShowArenaResultHandler):
+
+    def __init__(self):
+        super(ShowFortBattleResultsHandler, self).__init__(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_EVENT)
+
+    def _updateNotification(self, notification):
+        super(ShowFortBattleResultsHandler, self)._updateNotification(notification)
+        self._showI18nMessage('#battle_results:noData', SystemMessages.SM_TYPE.Warning)
+
+    def _showWindow(self, notification, data):
+        if data:
+            g_eventBus.handleEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_EVENT, {'data': data}), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self._updateNotification(notification)
 
@@ -199,6 +216,7 @@ class NotificationsActionsHandlers(object):
         nType = NOTIFICATION_TYPE
         self.__handlers = {(nType.MESSAGE, 'showBattleResults'): ShowBattleResultsHandler,
          (nType.MESSAGE, 'showTutorialBattleHistory'): ShowTutorialBattleHistoryHandler,
+         (nType.MESSAGE, 'showFortBattleResults'): ShowFortBattleResultsHandler,
          (nType.MESSAGE, 'openPollInBrowser'): OpenPollHandler,
          (nType.INVITE, 'acceptInvite'): AcceptPrbInviteHandler,
          (nType.INVITE, 'declineInvite'): DeclinePrbInviteHandler}

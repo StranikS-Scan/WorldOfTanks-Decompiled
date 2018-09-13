@@ -419,7 +419,7 @@ def enablePixie(pixie, turnOn):
 
 class DamageFromShotDecoder(object):
     ShotPoint = namedtuple('ShotPoint', ('componentName', 'matrix', 'hitEffectGroup'))
-    __hitEffectCodeToEffectGroup = ('armorRicochet', 'armorResisted', 'armorHit', 'armorHit', 'armorCriticalHit')
+    __hitEffectCodeToEffectGroup = ('armorBasicRicochet', 'armorRicochet', 'armorResisted', 'armorHit', 'armorHit', 'armorCriticalHit')
 
     @staticmethod
     def hasDamaged(vehicleHitEffectCode):
@@ -430,7 +430,7 @@ class DamageFromShotDecoder(object):
         resultPoints = []
         maxHitEffectCode = None
         pointsCount = len(encodedPoints)
-        for currPointIndex, encodedPoint in enumerate(encodedPoints):
+        for encodedPoint in encodedPoints:
             compName, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, vehicleDescr)
             if startPoint == endPoint:
                 continue
@@ -466,8 +466,6 @@ class DamageFromShotDecoder(object):
             matrix.setTranslate(startPoint + hitDir * minDist)
             matrix.preMultiply(rot)
             effectGroup = DamageFromShotDecoder.__hitEffectCodeToEffectGroup[hitEffectCode]
-            if hitEffectCode == VEHICLE_HIT_EFFECT.RICOCHET and currPointIndex < pointsCount - 1:
-                effectGroup = 'armorBasicRicochet'
             resultPoints.append(DamageFromShotDecoder.ShotPoint(compName, matrix, effectGroup))
 
         return (maxHitEffectCode, resultPoints)

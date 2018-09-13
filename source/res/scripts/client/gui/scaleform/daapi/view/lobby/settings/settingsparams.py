@@ -9,10 +9,6 @@ _DEFERRED_RENDER_IDX = 0
 
 class SettingsParams(AppRef):
 
-    def __init__(self):
-        super(SettingsParams, self).__init__()
-        self.SETTINGS = g_settingsCore.options
-
     def __settingsDiffPreprocessing(self, diff):
         if settings_constants.GRAPHICS.SMOOTHING in diff:
             rppSetting = graphics.GRAPHICS_SETTINGS.RENDER_PIPELINE
@@ -27,29 +23,28 @@ class SettingsParams(AppRef):
         return diff
 
     def getGameSettings(self):
-        settings_pack = self.SETTINGS.pack(settings_constants.GAME.ALL())
-        return settings_pack
+        return g_settingsCore.packSettings(settings_constants.GAME.ALL())
 
     def getSoundSettings(self):
-        return self.SETTINGS.pack(settings_constants.SOUND.ALL())
+        return g_settingsCore.packSettings(settings_constants.SOUND.ALL())
 
     def getGraphicsSettings(self):
-        return self.SETTINGS.pack(settings_constants.GRAPHICS.ALL())
+        return g_settingsCore.packSettings(settings_constants.GRAPHICS.ALL())
 
     def getMarkersSettings(self):
-        return self.SETTINGS.pack(settings_constants.MARKERS.ALL())
+        return g_settingsCore.packSettings(settings_constants.MARKERS.ALL())
 
     def getOtherSettings(self):
-        return self.SETTINGS.pack(settings_constants.OTHER.ALL())
+        return g_settingsCore.packSettings(settings_constants.OTHER.ALL())
 
     def getAimSettings(self):
-        return self.SETTINGS.pack(settings_constants.AIM.ALL())
+        return g_settingsCore.packSettings(settings_constants.AIM.ALL())
 
     def getControlsSettings(self):
-        return self.SETTINGS.pack(settings_constants.CONTROLS.ALL())
+        return g_settingsCore.packSettings(settings_constants.CONTROLS.ALL())
 
     def getMonitorSettings(self):
-        return self.SETTINGS.pack((settings_constants.GRAPHICS.MONITOR,
+        return g_settingsCore.packSettings((settings_constants.GRAPHICS.MONITOR,
          settings_constants.GRAPHICS.FULLSCREEN,
          settings_constants.GRAPHICS.WINDOW_SIZE,
          settings_constants.GRAPHICS.RESOLUTION,
@@ -57,19 +52,16 @@ class SettingsParams(AppRef):
          settings_constants.GRAPHICS.DYNAMIC_RENDERER))
 
     def preview(self, settingName, value):
-        setting = self.SETTINGS.getSetting(settingName)
-        if setting is not None:
-            setting.preview(value)
-        return
+        g_settingsCore.previewSetting(settingName, value)
 
     def revert(self):
-        self.SETTINGS.revert()
+        g_settingsCore.revertSettings()
         g_settingsCore.clearStorages()
 
     def apply(self, diff, restartApproved):
         diff = self.__settingsDiffPreprocessing(diff)
         applyMethod = self.getApplyMethod(diff)
-        self.SETTINGS.apply(diff)
+        g_settingsCore.applySettings(diff)
         confirmators = g_settingsCore.applyStorages(restartApproved)
         g_settingsCore.confirmChanges(confirmators)
         if len(set(graphics.GRAPHICS_SETTINGS.ALL()) & set(diff.keys())):
@@ -83,4 +75,4 @@ class SettingsParams(AppRef):
         if isFullscreen and isMonitorChanged:
             return options.APPLY_METHOD.RESTART
         else:
-            return self.SETTINGS.getApplyMethod(diff)
+            return g_settingsCore.getApplyMethod(diff)

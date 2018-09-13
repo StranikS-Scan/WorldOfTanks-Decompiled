@@ -3,14 +3,24 @@ from collections import defaultdict
 import sys
 from functools import wraps
 from warnings import warn_explicit
-from constants import IS_DEVELOPMENT, IS_CLIENT
+from constants import IS_DEVELOPMENT, IS_CLIENT, IS_CELLAPP, IS_BASEAPP
+_src_file_trim_to = ('tankfield/res/scripts/', len('tankfield/res/scripts/'))
+
+class CriticalError(BaseException):
+    pass
+
 
 def CRITICAL_ERROR(msg, *kargs):
     print _makeMsgHeader('CRITICAL ERROR', sys._getframe(1)), msg, kargs
     if IS_CLIENT:
         import BigWorld
         BigWorld.quit()
-    sys.exit()
+    elif IS_CELLAPP or IS_BASEAPP:
+        import BigWorld
+        BigWorld.shutDownApp()
+        raise CriticalError, msg
+    else:
+        sys.exit()
 
 
 def LOG_CURRENT_EXCEPTION():
@@ -115,6 +125,11 @@ def LOG_VLK(msg, *kargs):
         _doLog('VLK', msg, kargs)
 
 
+def LOG_OGNICK_DEV(msg, *kargs):
+    if IS_DEVELOPMENT:
+        _doLog('OGNICK', msg, kargs)
+
+
 def LOG_GUI(msg, *kargs):
     if IS_DEVELOPMENT or not IS_CLIENT:
         _doLog('GUI', msg, kargs)
@@ -149,7 +164,12 @@ def _doLog(s, msg, args):
 
 
 def _makeMsgHeader(s, frame):
-    return '[%s] (%s, %d):' % (s, frame.f_code.co_filename, frame.f_lineno)
+    filename = frame.f_code.co_filename
+    trim_to, trim_to_len = _src_file_trim_to
+    idx = filename.find(trim_to)
+    if idx != -1:
+        filename = filename[idx + trim_to_len:]
+    return '[%s] (%s, %d):' % (s, filename, frame.f_lineno)
 
 
 def trace(func):

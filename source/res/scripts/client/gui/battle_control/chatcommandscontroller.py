@@ -3,14 +3,13 @@ import weakref
 import math
 import BigWorld
 import BattleReplay
-from chat_shared import CHAT_COMMANDS
-from debug_utils import LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_ERROR
 from gui.BattleContext import g_battleContext
 from gui.arena_info import getPlayerVehicleID
 from gui.battle_control import avatar_getter
 from messenger import MessengerEntry
-from messenger.proto.bw.battle_chat_cmd import SendChatCommandDecorator
-from messenger.proto.bw.find_criteria import BWBattleTeamChannelFindCriteria
+from messenger.m_constants import MESSENGER_COMMAND_TYPE
+from messenger.proto import getBattleCommandFactory
 from messenger.proto.events import g_messengerEvents
 
 class ChatCommandsController(object):
@@ -18,51 +17,71 @@ class ChatCommandsController(object):
     def __init__(self):
         super(ChatCommandsController, self).__init__()
         self.__battleUI = None
+        self.__cmdFactories = None
         return
 
     def start(self, battleUI):
         self.__battleUI = weakref.proxy(battleUI)
+        self.__cmdFactories = getBattleCommandFactory()
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
         BattleReplay.g_replayCtrl.onCommandReceived += self.__me_onCommandReceived
 
     def stop(self):
         self.__battleUI = None
+        self.__cmdFactories = None
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
         BattleReplay.g_replayCtrl.onCommandReceived -= self.__me_onCommandReceived
         return
 
     def sendAttentionToCell(self, cellIdx):
         if avatar_getter.isForcedGuiControlMode():
-            self.__sendChatCommand(SendChatCommandDecorator(CHAT_COMMANDS.ATTENTIONTOCELL, second=cellIdx))
+            if not self.__cmdFactories:
+                LOG_ERROR('Commands factory is not defined')
+                return
+            command = self.__cmdFactories.createByCellIdx(cellIdx)
+            if command:
+                self.__sendChatCommand(command)
+            else:
+                LOG_ERROR('Minimap command not found', cellIdx)
 
     def sendCommand(self, cmdName):
         if not avatar_getter.isVehicleAlive():
             return
-        else:
-            command = CHAT_COMMANDS.lookup(cmdName)
-            if command is None:
-                LOG_ERROR('Command not found', cmdName)
-                return
-            if command == CHAT_COMMANDS.RELOADINGGUN:
-                decorator = self.__getReloadingCommand()
-            else:
-                decorator = SendChatCommandDecorator(command)
-            if decorator:
-                self.__sendChatCommand(decorator)
+        if not self.__cmdFactories:
+            LOG_ERROR('Commands factory is not defined')
             return
+        command = self.__cmdFactories.createByName(cmdName)
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            LOG_ERROR('Command is not found', cmdName)
 
     def sendTargetedCommand(self, cmdName, targetID):
         if not avatar_getter.isVehicleAlive():
             return
-        elif targetID is None:
+        if not self.__cmdFactories:
+            LOG_ERROR('Commands factory is not defined')
             return
+        command = self.__cmdFactories.createByNameTarget(cmdName, targetID)
+        if command:
+            self.__sendChatCommand(command)
         else:
-            command = CHAT_COMMANDS.lookup(cmdName)
-            if command is None:
-                LOG_ERROR('Command not found', cmdName)
-                return
-            self.__sendChatCommand(SendChatCommandDecorator(command, first=targetID))
+            LOG_ERROR('Targeted command is not found or targetID is not defined', cmdName)
+
+    def sendReloadingCommand(self):
+        if not avatar_getter.isPlayerOnArena():
             return
+        inputHandler = avatar_getter.getInputHandler()
+        if not inputHandler:
+            return
+        aim = inputHandler.aim
+        if not aim:
+            return
+        command = self.__cmdFactories.create4Reload(aim.isCasseteClip(), math.ceil(aim.getReloadingTimeLeft()), aim.getAmmoQuantityLeft())
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            LOG_ERROR('Can not create reloading command')
 
     def __playSound(self, cmd):
         soundNotifications = avatar_getter.getSoundNotifications()
@@ -92,38 +111,8 @@ class ChatCommandsController(object):
                 self.__battleUI.vMarkersManager.showActionMarker(entity.marker, markerName)
             return
 
-    def __getReloadingCommand(self):
-        if not avatar_getter.isPlayerOnArena():
-            return None
-        else:
-            inputHandler = avatar_getter.getInputHandler()
-            if not inputHandler:
-                return None
-            aim = inputHandler.aim
-            if not aim:
-                return None
-            reloadingTimeLeft = math.ceil(aim.getReloadingTimeLeft())
-            ammoQuantityLeft = aim.getAmmoQuantityLeft()
-            command = CHAT_COMMANDS.RELOADINGGUN
-            first, second = (0, 0)
-            if reloadingTimeLeft > 0:
-                first = reloadingTimeLeft
-                if aim.isCasseteClip():
-                    if ammoQuantityLeft > 0:
-                        command = CHAT_COMMANDS.RELOADING_CASSETE
-                        second = ammoQuantityLeft
-            elif ammoQuantityLeft == 0:
-                command = CHAT_COMMANDS.RELOADING_UNAVAILABLE
-            elif aim.isCasseteClip():
-                command = CHAT_COMMANDS.RELOADING_READY_CASSETE
-                first = ammoQuantityLeft
-            else:
-                command = CHAT_COMMANDS.RELOADING_READY
-            return SendChatCommandDecorator(command, first, second)
-
     def __sendChatCommand(self, command):
-        controls = MessengerEntry.g_instance.gui.channelsCtrl
-        controller = controls.getControllerByCriteria(BWBattleTeamChannelFindCriteria())
+        controller = MessengerEntry.g_instance.gui.channelsCtrl.getController(command.getClientID())
         if controller:
             controller.sendCommand(command)
 
@@ -171,10 +160,9 @@ class ChatCommandsController(object):
         return
 
     def __me_onCommandReceived(self, cmd):
-        if cmd.isIgnored():
-            LOG_DEBUG('Chat command is ignored', cmd)
+        if cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
             return
-        if cmd.getCommandIndex() == CHAT_COMMANDS.ATTENTIONTOCELL.index():
+        if cmd.isOnMinimap():
             self.__battleUI.minimap.markCell(cmd.getSecondTargetID(), 3.0)
         elif cmd.isPrivate():
             self.__handlePrivateCommand(cmd)

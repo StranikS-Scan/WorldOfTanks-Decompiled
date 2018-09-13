@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/messenger/m_constants.py
+from collections import namedtuple
 import chat_shared
 from constants import PREBATTLE_TYPE
 MESSENGER_XML_FILE = 'messenger'
@@ -28,6 +29,12 @@ class PROTO_TYPE(object):
     XMPP = 2
 
 
+class MESSENGER_COMMAND_TYPE(object):
+    UNDEFINED = 0
+    BATTLE = 1
+    ADMIN = 2
+
+
 PROTO_TYPE_NAMES = dict([ (v, k) for k, v in PROTO_TYPE.__dict__.iteritems() ])
 
 class LAZY_CHANNEL(object):
@@ -38,12 +45,21 @@ class LAZY_CHANNEL(object):
 
 
 class BATTLE_CHANNEL(object):
-    TEAM = (1, 'team', 'TEAM : ')
-    COMMON = (2, 'common', 'COMMON : ')
-    SQUAD = (0, 'squad', 'SQUAD : ')
-    INITIALIZED = TEAM[0] | COMMON[0]
+    _ITEM = namedtuple('_ITEM', 'initFlag name label')
+    TEAM = _ITEM(1, 'team', 'TEAM : ')
+    COMMON = _ITEM(2, 'common', 'COMMON : ')
+    SQUAD = _ITEM(0, 'squad', 'SQUAD : ')
+    REQUIRED = (TEAM, COMMON)
     ALL = (TEAM, COMMON, SQUAD)
-    NAMES = tuple((x[1] for x in ALL))
+    NAMES = tuple((x.name for x in ALL))
+
+    @classmethod
+    def isInitialized(cls, mask):
+        for item in cls.REQUIRED:
+            if not mask & item.initFlag:
+                return False
+
+        return True
 
 
 PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
@@ -51,7 +67,8 @@ PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD
  PREBATTLE_TYPE.TRAINING: chat_shared.CHAT_CHANNEL_TRAINING,
  PREBATTLE_TYPE.CLAN: chat_shared.CHAT_CHANNEL_PREBATTLE_CLAN,
  PREBATTLE_TYPE.TOURNAMENT: chat_shared.CHAT_CHANNEL_TOURNAMENT,
- PREBATTLE_TYPE.UNIT: chat_shared.CHAT_CHANNEL_UNIT}
+ PREBATTLE_TYPE.UNIT: chat_shared.CHAT_CHANNEL_UNIT,
+ PREBATTLE_TYPE.SORTIE: chat_shared.CHAT_CHANNEL_UNIT}
 PREBATTLE_CHAT_FLAG_TYPE = dict(((v, k) for k, v in PREBATTLE_TYPE_CHAT_FLAG.iteritems()))
 
 class USER_GUI_TYPE(object):

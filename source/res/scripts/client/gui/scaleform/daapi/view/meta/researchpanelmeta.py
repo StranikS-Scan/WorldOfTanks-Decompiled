@@ -6,6 +6,10 @@ class ResearchPanelMeta(DAAPIModule):
     def goToResearch(self):
         self._printOverrideError('goToResearch')
 
+    def as_updateCurrentVehicleS(self, name, type, vDescription, earnedXP, isElite):
+        if self._isDAAPIInited():
+            return self.flashObject.as_updateCurrentVehicle(name, type, vDescription, earnedXP, isElite)
+
     def as_setEarnedXPS(self, earnedXP):
         if self._isDAAPIInited():
             return self.flashObject.as_setEarnedXP(earnedXP)

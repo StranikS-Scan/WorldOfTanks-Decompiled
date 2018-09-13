@@ -116,12 +116,20 @@ class MESSENGER(object):
     DIALOGS_CONNECTINGTOSECURECHANNEL_ERRORS_INVALIDPASSWORD_TITLE = '#messenger:dialogs/connectingToSecureChannel/errors/invalidPassword/title'
     DIALOGS_CONNECTINGTOSECURECHANNEL_ERRORS_INVALIDPASSWORD_MESSAGE = '#messenger:dialogs/connectingToSecureChannel/errors/invalidPassword/message'
     DIALOGS_SERVICECHANNEL_TITLE = '#messenger:dialogs/serviceChannel/title'
+    DIALOGS_SQUAD_MESSAGE_ALLREADY = '#messenger:dialogs/squad/message/allReady'
+    DIALOGS_SQUAD_MESSAGE_GETREADY = '#messenger:dialogs/squad/message/getReady'
+    DIALOGS_SQUAD_MESSAGE_GETNOTREADY = '#messenger:dialogs/squad/message/getNotReady'
+    DIALOGS_SQUADCHANNEL_CHATNAME = '#messenger:dialogs/squadChannel/chatName'
+    DIALOGS_SQUADCHANNEL_MEMBERS = '#messenger:dialogs/squadChannel/members'
+    DIALOGS_SQUADCHANNEL_VEHICLES = '#messenger:dialogs/squadChannel/vehicles'
+    DIALOGS_SQUADCHANNEL_BATTLETYPE = '#messenger:dialogs/squadChannel/battleType'
+    DIALOGS_SQUADCHANNEL_BUTTONS_INVITE = '#messenger:dialogs/squadChannel/buttons/invite'
+    DIALOGS_SQUADCHANNEL_BUTTONS_RECOMMEND = '#messenger:dialogs/squadChannel/buttons/recommend'
+    DIALOGS_SQUADCHANNEL_BUTTONS_LEAVE = '#messenger:dialogs/squadChannel/buttons/leave'
     DIALOGS_SQUADCHANNEL_BUTTONS_READY = '#messenger:dialogs/squadChannel/buttons/ready'
     DIALOGS_SQUADCHANNEL_BUTTONS_NOTREADY = '#messenger:dialogs/squadChannel/buttons/notReady'
-    DIALOGS_SQUADCHANNEL_BUTTONS_LEAVE = '#messenger:dialogs/squadChannel/buttons/leave'
     DIALOGS_SQUADCHANNEL_BUTTONS_DISMISS = '#messenger:dialogs/squadChannel/buttons/dismiss'
     DIALOGS_SQUADCHANNEL_BUTTONS_AFK = '#messenger:dialogs/squadChannel/buttons/afk'
-    DIALOGS_SQUADCHANNEL_BUTTONS_INVITE = '#messenger:dialogs/squadChannel/buttons/invite'
     DIALOGS_SQUADCHANNEL_MESSEGE_NOPREMIUM = '#messenger:dialogs/squadChannel/messege/noPremium'
     DIALOGS_SQUADCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/squadChannel/context/kickPlayer'
     DIALOGS_TEAMCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/teamChannel/context/kickPlayer'
@@ -228,18 +236,6 @@ class MESSENGER(object):
     COMMAND_CREATEINVITE = '#messenger:command/createInvite'
     COMMAND_LEAVECHATCHANNEL = '#messenger:command/leaveChatChannel'
     COMMAND_REQUESTCHATCHANNELMEMBERS = '#messenger:command/requestChatChannelMembers'
-    COMMAND_ATTENTIONTOCELL_ARG0 = '#messenger:command/ATTENTIONTOCELL/arg0'
-    COMMAND_ATTACKENEMY_ARG0 = '#messenger:command/ATTACKENEMY/arg0'
-    COMMAND_TURNBACK_ARG0 = '#messenger:command/TURNBACK/arg0'
-    COMMAND_HELPMEEX_ARG0 = '#messenger:command/HELPMEEX/arg0'
-    COMMAND_SUPPORTMEWITHFIRE_ARG0 = '#messenger:command/SUPPORTMEWITHFIRE/arg0'
-    COMMAND_STOP_ARG0 = '#messenger:command/STOP/arg0'
-    COMMAND_FOLLOWME_ARG0 = '#messenger:command/FOLLOWME/arg0'
-    COMMAND_RELOADING_READY_CASSETE_RTIME = '#messenger:command/RELOADING_READY_CASSETE/rTime'
-    COMMAND_RELOADING_READY_CASSETE_AMMOINCASSETE = '#messenger:command/RELOADING_READY_CASSETE/ammoInCassete'
-    COMMAND_RELOADINGGUN_RTIME = '#messenger:command/RELOADINGGUN/rTime'
-    COMMAND_RELOADING_CASSETE_RTIME = '#messenger:command/RELOADING_CASSETE/rTime'
-    COMMAND_RELOADING_CASSETE_AMMOQUANTITYLEFT = '#messenger:command/RELOADING_CASSETE/ammoQuantityLeft'
     EVENTS_ENTERCHANNEL = '#messenger:events/enterChannel'
     EVENTS_LEAVECHANNEL = '#messenger:events/leaveChannel'
     SERVICECHANNELMESSAGES_PRIORITYMESSAGETITLE = '#messenger:serviceChannelMessages/priorityMessageTitle'
@@ -277,6 +273,10 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ITEMS = '#messenger:serviceChannelMessages/battleResults/quests/items'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ITEMS_NAME = '#messenger:serviceChannelMessages/battleResults/quests/items/name'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE = '#messenger:serviceChannelMessages/battleResults/fortResource'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_FORTBUILDING = '#messenger:serviceChannelMessages/battleResults/fortBuilding'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_CLAN = '#messenger:serviceChannelMessages/battleResults/fortResource/clan'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_PLAYER = '#messenger:serviceChannelMessages/battleResults/fortResource/player'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_FORT_CLAN = '#messenger:serviceChannelMessages/battleResults/fort/clan'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/results/finished'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FAILED = '#messenger:serviceChannelMessages/battleTutorial/results/failed'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/reasons/finished'
@@ -401,9 +401,22 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_HISTORICALCOSTSRESERVED_CREDITSDEBITED = '#messenger:serviceChannelMessages/historicalCostsReserved/creditsDebited'
     SERVICECHANNELMESSAGES_CLAN_LEFT_CLAN = '#messenger:serviceChannelMessages/clan/LEFT_CLAN'
     SERVICECHANNELMESSAGES_FORT_FORT_READY = '#messenger:serviceChannelMessages/fort/FORT_READY'
+    SERVICECHANNELMESSAGES_FORT_DEF_HOUR_SHUTDOWN = '#messenger:serviceChannelMessages/fort/DEF_HOUR_SHUTDOWN'
     SERVICECHANNELMESSAGES_FORT_RESERVE_ACTIVATED = '#messenger:serviceChannelMessages/fort/RESERVE_ACTIVATED'
     SERVICECHANNELMESSAGES_FORT_RESERVE_EXPIRED = '#messenger:serviceChannelMessages/fort/RESERVE_EXPIRED'
     SERVICECHANNELMESSAGES_FORT_RESERVE_PRODUCED = '#messenger:serviceChannelMessages/fort/RESERVE_PRODUCED'
     SERVICECHANNELMESSAGES_FORT_STORAGE_OVERFLOW = '#messenger:serviceChannelMessages/fort/STORAGE_OVERFLOW'
     SERVICECHANNELMESSAGES_FORT_ORDER_CANCELED = '#messenger:serviceChannelMessages/fort/ORDER_CANCELED'
     SERVICECHANNELMESSAGES_FORT_REATTACHED_TO_BASE = '#messenger:serviceChannelMessages/fort/REATTACHED_TO_BASE'
+    DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM = (DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_OFFLINE,
+     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_NOTREADY,
+     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_READY,
+     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_INBATTLE,
+     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_AFK)
+
+    @staticmethod
+    def dialogs_squadchannel_tooltips_status(key):
+        outcome = '#messenger:dialogs/squadChannel/tooltips/status/%s' % key
+        if outcome not in MESSENGER.DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome

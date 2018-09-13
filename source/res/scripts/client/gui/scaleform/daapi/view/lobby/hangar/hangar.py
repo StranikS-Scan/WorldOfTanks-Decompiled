@@ -1,8 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
-from constants import IGR_TYPE, QUEUE_TYPE
+from constants import IGR_TYPE, QUEUE_TYPE, IS_SHOW_SERVER_STATS
 from helpers import i18n
+from gui.shared.utils.functions import makeTooltip
 from gui import game_control, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -20,6 +21,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
+from ConnectionManager import connectionManager
 
 class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
@@ -40,6 +42,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_playerEvents.onBattleResultsReceived += self.onFittingUpdate
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrTypeChanged
+        game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
         g_prbCtrlEvents.onPreQueueFunctionalChanged += self.onPreQueueFunctionalChanged
         self.startGlobalListening()
         game_control.g_instance.aogas.enableNotifyAccount()
@@ -50,6 +53,8 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
          'stats.vehicleSellsLeft': self.onFittingUpdate,
          'stats.slots': self.onFittingUpdate})
         self.__onIgrTypeChanged()
+        if IS_SHOW_SERVER_STATS:
+            self._updateCurrentServerInfo()
         self.__updateAll()
 
     def onEscape(self):
@@ -61,7 +66,8 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         containerManager = self.app.containerManager
         dialogsContainer = containerManager.getContainer(ViewTypes.TOP_WINDOW)
         windowsContainer = containerManager.getContainer(ViewTypes.WINDOW)
-        if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount():
+        browserWindowContainer = containerManager.getContainer(ViewTypes.BROWSER)
+        if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount() and not browserWindowContainer.getViewCount():
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.SHOW_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
             self.as_showHelpLayoutS()
 
@@ -72,6 +78,13 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def toggleGUIEditor(self):
         self.app.toggleEditor()
 
+    def _updateCurrentServerInfo(self):
+        if connectionManager.serverUserName and IS_SHOW_SERVER_STATS:
+            tooltipBody = i18n.makeString('#tooltips:header/info/players_online_full/body')
+            tooltipFullData = makeTooltip('#tooltips:header/info/players_online_full/header', tooltipBody % {'servername': connectionManager.serverUserName})
+            self.as_setServerStatsInfoS(tooltipFullData)
+        self.__onStatsReceived(game_control.g_instance.serverStats.getStats())
+
     def _dispose(self):
         g_eventsCache.onSyncCompleted -= self.onEventsCacheResync
         g_itemsCache.onSyncCompleted -= self.onCacheResync
@@ -81,6 +94,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_playerEvents.onBattleResultsReceived -= self.onFittingUpdate
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         game_control.g_instance.igr.onIgrTypeChanged -= self.__onIgrTypeChanged
+        game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
         self.closeHelpLayout()
         self.stopGlobalListening()
         LobbySubView._dispose(self)
@@ -252,3 +266,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.as_setupAmmunitionPanelS(msg, msgLvl, maintenanceEnabled, customizationEnabled)
         self.as_setControlsVisibleS(g_currentVehicle.isPresent())
         return
+
+    def __onStatsReceived(self, stats):
+        if IS_SHOW_SERVER_STATS:
+            self.as_setServerStatsS(dict(stats))

@@ -7,9 +7,6 @@ from gui.prb_control.settings import FUNCTIONAL_EXIT, CTRL_ENTITY_TYPE
 
 class NotSupportedEntry(interfaces.IPrbEntry):
 
-    def doAction(self, action, dispatcher = None):
-        LOG_ERROR('NotSupportedEntry.doAction')
-
     def create(self, ctx, callback = None):
         LOG_ERROR('NotSupportedEntry.create')
 
@@ -45,10 +42,6 @@ class PrbNotSupportedFunctional(interfaces.IPrbFunctional):
         LOG_ERROR('PrbNotSupportedFunctional.showGUI. Prebattle is not supported', self._prbTypeName)
         return False
 
-    def isConfirmToChange(self, exit = FUNCTIONAL_EXIT.NO_FUNC):
-        LOG_ERROR('PrbNotSupportedFunctional.isConfirmToChange. Prebattle is not supported', self._prbTypeName)
-        return False
-
 
 class QueueNotSupportedFunctional(interfaces.IPreQueueFunctional):
 
@@ -76,8 +69,4 @@ class QueueNotSupportedFunctional(interfaces.IPreQueueFunctional):
 
     def hasGUIPage(self):
         LOG_ERROR('QueueNotSupportedFunctional.showGUI. Queue is not supported', self._queueTypeName)
-        return False
-
-    def isConfirmToChange(self, exit = FUNCTIONAL_EXIT.NO_FUNC):
-        LOG_ERROR('QueueNotSupportedFunctional.isConfirmToChange. Queue is not supported', self._queueTypeName)
         return False

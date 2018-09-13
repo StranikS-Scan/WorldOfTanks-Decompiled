@@ -1,17 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/historicalBattles/sf_settings.py
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.framework.managers.loaders import PackageBusinessHandler
-from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ViewSettings, ScopeTemplates
+from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplates
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowWindowEvent
 
-class HB_VIEW_ALIAS(object):
-    HISTORICAL_BATTLES_LIST_WINDOW = 'historicalBattles/HBListWindow'
-
-
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.historicalBattles.HistoricalBattlesListWindow import HistoricalBattlesListWindow
-    return [GroupedViewSettings(HB_VIEW_ALIAS.HISTORICAL_BATTLES_LIST_WINDOW, HistoricalBattlesListWindow, 'historicalBattlesListWindow.swf', ViewTypes.WINDOW, '', ShowWindowEvent.SHOW_HISTORICAL_BATTLES_WINDOW, ScopeTemplates.DEFAULT_SCOPE)]
+    return [GroupedViewSettings(PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY, HistoricalBattlesListWindow, 'historicalBattlesListWindow.swf', ViewTypes.WINDOW, '', ShowWindowEvent.SHOW_HISTORICAL_BATTLES_WINDOW, ScopeTemplates.DEFAULT_SCOPE)]
 
 
 def getBusinessHandlers():
@@ -25,5 +21,5 @@ class HistoricalBattlesBusinessHandler(PackageBusinessHandler):
         super(HistoricalBattlesBusinessHandler, self).__init__(listeners, EVENT_BUS_SCOPE.LOBBY)
 
     def __showHBListWindow(self, _):
-        alias = name = HB_VIEW_ALIAS.HISTORICAL_BATTLES_LIST_WINDOW
+        alias = name = PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY
         self.app.loadView(alias, name)

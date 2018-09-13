@@ -44,7 +44,7 @@ class ConnectionManager(Singleton):
         return ConnectionManager()
 
     def _singleton_init(self):
-        self.__host = g_preDefinedHosts._makeHostItem('', '')
+        self.__host = g_preDefinedHosts._makeHostItem('', '', '')
         self.searchServersCallbacks = Event()
         self.connectionStatusCallbacks = Event()
         self.__connectionStatus = CONNECTION_STATUS.disconnected
@@ -161,6 +161,10 @@ class ConnectionManager(Singleton):
     @property
     def serverUserName(self):
         return self.__host.name
+
+    @property
+    def serverUserNameShort(self):
+        return self.__host.shortName
 
     @property
     def peripheryID(self):

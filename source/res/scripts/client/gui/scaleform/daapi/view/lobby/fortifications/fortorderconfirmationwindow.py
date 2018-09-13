@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderConfirmationWindow.py
 import BigWorld
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.framework import AppRef
-from gui.shared.SoundEffectsId import SoundEffectsId
 from helpers import time_utils
 from adisp import process
 from gui import SystemMessages
@@ -69,12 +70,10 @@ class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, Abstrac
         count = int(count)
         result = yield self.fortProvider.sendRequest(OrderCtx(orderTypeID, count, waitingID='fort/order/add'))
         if result:
+            g_fortSoundController.playCreateOrder()
             order = self.fortCtrl.getFort().getOrder(orderTypeID)
-            if self.app.soundManager is not None:
-                self.app.soundManager.playEffectSound(SoundEffectsId.FORT_ORDER_INPROGRESS)
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ADDORDER, count=BigWorld.wg_getIntegralFormat(count), time=order.getProductionLeftTimeStr(), type=SystemMessages.SM_TYPE.Warning)
             self.destroy()
-        return
 
     def getTimeStr(self, time):
         return time_utils.getTillTimeString(time, FORTIFICATIONS.TIME_TIMEVALUE)
@@ -82,7 +81,8 @@ class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, Abstrac
     def onUpdated(self):
         self._prepareAndSendData()
 
-    def onBuildingRemoved(self, buildingTypeID):
-        order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(self._orderID))
-        if order.buildingID == buildingTypeID:
-            self.destroy()
+    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+        if reason == BUILDING_UPDATE_REASON.DELETED:
+            order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(self._orderID))
+            if order.buildingID == buildingTypeID:
+                self.destroy()

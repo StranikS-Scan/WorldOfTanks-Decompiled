@@ -9,6 +9,12 @@ class FortMainViewMeta(DAAPIModule):
     def onClanClick(self):
         self._printOverrideError('onClanClick')
 
+    def onCalendarClick(self):
+        self._printOverrideError('onCalendarClick')
+
+    def onSettingClick(self):
+        self._printOverrideError('onSettingClick')
+
     def onCreateDirectionClick(self, dirId):
         self._printOverrideError('onCreateDirectionClick')
 
@@ -36,6 +42,9 @@ class FortMainViewMeta(DAAPIModule):
     def onNextTransportingStep(self):
         self._printOverrideError('onNextTransportingStep')
 
+    def onViewReady(self):
+        self._printOverrideError('onViewReady')
+
     def as_switchModeS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_switchMode(data)
@@ -47,3 +56,11 @@ class FortMainViewMeta(DAAPIModule):
     def as_setMainDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setMainData(data)
+
+    def as_setHeaderMessageS(self, message):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setHeaderMessage(message)
+
+    def as_setBattlesDirectionDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setBattlesDirectionData(data)

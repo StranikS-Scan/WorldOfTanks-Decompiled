@@ -1,43 +1,31 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/squad.py
 import BigWorld
-from account_helpers import gameplay_ctx
+import constants
+from account_helpers import gameplay_ctx, getPlayerDatabaseID
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
-from gui.prb_control import events_dispatcher, getPrebattleRosters
+from gui.prb_control import getPrebattleRosters
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control import getClientPrebattle, getPrebattleType, prb_cooldown
-from gui.prb_control.context import prb_ctx
-from gui.prb_control.items import prb_items
+from gui.prb_control.context import prb_ctx, SendInvitesCtx
+from gui.prb_control.items import prb_items, unit_items
 from gui.prb_control.functional.decorators import vehicleAmmoCheck
 from gui.prb_control.functional.default import PrbEntry, PrbFunctional
 from gui.prb_control.restrictions.permissions import SquadPrbPermissions
 from gui.prb_control.restrictions.limits import SquadLimits
-from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
+from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelCarouselEvent
 
 class SquadEntry(PrbEntry):
 
-    def doAction(self, action, dispatcher = None):
-        result = False
-        if action.actionName == PREBATTLE_ACTION_NAME.SQUAD:
-            ctx = prb_ctx.SquadSettingsCtx(waitingID='prebattle/create')
-            if dispatcher is not None:
-                if dispatcher._setRequestCtx(ctx):
-                    self.create(ctx)
-            else:
-                LOG_ERROR('Prebattle dispatcher is required')
-            result = True
-        return result
+    def makeDefCtx(self):
+        return prb_ctx.SquadSettingsCtx('prebattle/create')
 
     def create(self, ctx, callback = None):
-        if not isinstance(ctx, prb_ctx.SquadSettingsCtx):
-            LOG_ERROR('Invalid context to create squad', ctx)
-            if callback:
-                callback(False)
-        elif prb_cooldown.validatePrbCreationCooldown():
+        if prb_cooldown.validatePrbCreationCooldown():
             if callback:
                 callback(False)
         elif getClientPrebattle() is None or ctx.isForced():
@@ -51,12 +39,16 @@ class SquadEntry(PrbEntry):
         return
 
     def join(self, ctx, callback = None):
-        LOG_ERROR('Player can join to squad by invite')
+        LOG_ERROR('Player can not join to squad by invite')
         if callback:
             callback(False)
 
+    def select(self, ctx, callback = None):
+        self.create(ctx, callback=callback)
+
 
 class SquadFunctional(PrbFunctional):
+    SLOTS_COUNT = 3
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.SET_TEAM_STATE: self.setTeamState,
@@ -68,17 +60,22 @@ class SquadFunctional(PrbFunctional):
 
     def init(self, clientPrb = None, ctx = None):
         result = super(SquadFunctional, self).init(clientPrb=clientPrb)
-        isInvitesOpen = False
+        isCreationCtx, accountsToInvite = False, []
         if ctx is not None:
-            isInvitesOpen = ctx.getRequestType() is REQUEST_TYPE.CREATE
+            isCreationCtx = ctx.getRequestType() is REQUEST_TYPE.CREATE
+            if isCreationCtx:
+                accountsToInvite = ctx.getAccountsToInvite()
         if self.getPlayerInfo().isReady() and self.getTeamState(team=1).isInQueue():
-            events_dispatcher.loadBattleQueue()
+            g_eventDispatcher.loadBattleQueue()
         else:
-            events_dispatcher.loadHangar()
-        events_dispatcher.loadSquad(isInvitesOpen=isInvitesOpen)
+            g_eventDispatcher.loadHangar()
+        g_eventDispatcher.loadSquad(isInvitesOpen=isCreationCtx and not accountsToInvite, isReady=self.__isTeamRead())
         g_eventBus.addListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
         result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_WINDOW)
         result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_PAGE)
+        g_eventDispatcher.updateUI()
+        if accountsToInvite:
+            self.request(SendInvitesCtx(accountsToInvite, ''))
         return result
 
     def isGUIProcessed(self):
@@ -92,9 +89,10 @@ class SquadFunctional(PrbFunctional):
     def fini(self, clientPrb = None, woEvents = False):
         super(SquadFunctional, self).fini(clientPrb=clientPrb, woEvents=woEvents)
         if not woEvents:
-            events_dispatcher.unloadSquad()
+            g_eventDispatcher.unloadSquad()
         else:
-            events_dispatcher.removeSquadFromCarousel()
+            g_eventDispatcher.removeSquadFromCarousel()
+        g_eventDispatcher.updateUI()
         g_eventBus.removeListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
 
     @vehicleAmmoCheck
@@ -102,7 +100,7 @@ class SquadFunctional(PrbFunctional):
         super(SquadFunctional, self).setPlayerState(ctx, callback)
 
     def showGUI(self):
-        events_dispatcher.loadSquad()
+        g_eventDispatcher.loadSquad()
 
     def getPlayersStateStats(self):
         return self._getPlayersStateStats(PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1)
@@ -120,12 +118,17 @@ class SquadFunctional(PrbFunctional):
             if stats.haveInBattle:
                 DialogsInterface.showI18nInfoDialog('squadHavePlayersInBattle', lambda result: None)
                 return True
+            if stats.playersCount == 1:
+                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNoPlayers'), self.__setCreatorReady)
+                return True
             notReadyCount = stats.notReadyCount
             if not self.getPlayerInfo().isReady():
                 notReadyCount -= 1
-            if notReadyCount > 0:
-                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNotReadyPlayers', messageCtx={'notReadyCount': notReadyCount,
-                 'playersCount': stats.playersCount}), self.__setCreatorReady)
+            if notReadyCount == 1:
+                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNotReadyPlayer'), self.__setCreatorReady)
+                return True
+            if notReadyCount > 1:
+                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNotReadyPlayers'), self.__setCreatorReady)
                 return True
             self.__setCreatorReady(True)
         elif self.getPlayerInfo().isReady():
@@ -134,6 +137,15 @@ class SquadFunctional(PrbFunctional):
             self.setPlayerState(prb_ctx.SetPlayerStateCtx(True, waitingID='prebattle/player_ready'))
         return True
 
+    def doSelectAction(self, action):
+        result = False
+        if action.actionName == PREBATTLE_ACTION_NAME.SQUAD:
+            g_eventDispatcher.showSquadWindow()
+            result = True
+        elif action.actionName == PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE:
+            result = True
+        return result
+
     def exitFromQueue(self):
         if self.isCreator():
             self.setTeamState(prb_ctx.SetTeamStateCtx(1, False, waitingID='prebattle/team_not_ready'))
@@ -141,29 +153,86 @@ class SquadFunctional(PrbFunctional):
             self.setPlayerState(prb_ctx.SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
         return True
 
+    def getUnitFullData(self, unitIdx = None):
+        dbID, rosters = getPlayerDatabaseID(), self.getRosters()
+        pInfo = unit_items.PlayerUnitInfo.fromPrbInfo(self.getPlayerInfo())
+        accounts = rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]
+        unitState = self._buildState()
+        unitStats = self._buildStats(accounts)
+        slotsIter = self._getSlotsIterator(accounts)
+        return (unitState,
+         unitStats,
+         pInfo,
+         slotsIter)
+
+    def kickPlayer(self, ctx, callback = None):
+        playerInfo = self.getPlayerInfoByDbID(ctx.getPlayerID())
+        super(SquadFunctional, self).kickPlayer(prb_ctx.KickPlayerCtx(playerInfo.accID), ctx.getWaitingID())
+
     def prb_onPlayerStateChanged(self, pID, roster):
         super(SquadFunctional, self).prb_onPlayerStateChanged(pID, roster)
         if self.__doTeamReady:
             self.__doTeamReady = False
             self.__setTeamReady()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
+        g_eventDispatcher.setSquadTeamReadyInCarousel(self.getPrbType(), self.__isTeamRead())
 
     def prb_onPlayerRosterChanged(self, pID, prevRoster, roster, actorID):
         super(SquadFunctional, self).prb_onPlayerRosterChanged(pID, prevRoster, roster, actorID)
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def prb_onPlayerRemoved(self, pID, roster, name):
         super(SquadFunctional, self).prb_onPlayerRemoved(pID, roster, name)
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
+        g_eventDispatcher.setSquadTeamReadyInCarousel(self.getPrbType(), self.__isTeamRead())
+
+    def prb_onPlayerAdded(self, pID, roster):
+        super(SquadFunctional, self).prb_onPlayerAdded(pID, roster)
+        g_eventDispatcher.setSquadTeamReadyInCarousel(self.getPrbType(), self.__isTeamRead())
 
     def prb_onTeamStatesReceived(self):
         super(SquadFunctional, self).prb_onTeamStatesReceived()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
         if self.getPlayerInfo().isReady() or self.isCreator():
             if self.getTeamState(team=1).isInQueue():
-                events_dispatcher.loadBattleQueue()
+                g_eventDispatcher.loadBattleQueue()
             else:
-                events_dispatcher.loadHangar()
+                g_eventDispatcher.loadHangar()
+
+    def _buildState(self):
+        return unit_items.UnitState(0, isReady=self.__isTeamRead())
+
+    def _buildStats(self, accounts):
+        readyCount = curTotalLevel = 0
+        occupiedSlotsCount = len(accounts)
+        openedSlotsCount = freeSlotsCount = self.SLOTS_COUNT - occupiedSlotsCount
+        for account in accounts:
+            if account.isReady():
+                readyCount += 1
+            if account.isVehicleSpecified():
+                curTotalLevel += account.getVehicle().level
+
+        return unit_items.UnitStats(readyCount, occupiedSlotsCount, openedSlotsCount, freeSlotsCount, curTotalLevel, self.SLOTS_COUNT * constants.MAX_VEHICLE_LEVEL)
+
+    def _getSlotsIterator(self, accounts):
+        for slotIdx, account in enumerate(sorted(accounts, cmp=prb_items.getPlayersComparator())):
+            state = unit_items.SlotState(False, False)
+            player = unit_items.PlayerUnitInfo.fromPrbInfo(account, slotIdx=slotIdx)
+            vehicleUnitData = None
+            if account.isVehicleSpecified():
+                vehiclePrbItem = account.getVehicle()
+                vehicleUnitData = {'vehLevel': vehiclePrbItem.level,
+                 'inNationIdx': vehiclePrbItem.innationID,
+                 'nationIdx': vehiclePrbItem.nationID,
+                 'vehInvID': vehiclePrbItem.invID,
+                 'vehTypeCompDescr': vehiclePrbItem.intCD,
+                 'vehClassIdx': constants.VEHICLE_CLASS_INDICES.get(vehiclePrbItem.type)}
+            yield unit_items.SlotInfo(slotIdx, state, player, vehicleUnitData)
+
+        for freeSlotIdx in range(len(accounts), self.SLOTS_COUNT):
+            yield unit_items.SlotInfo(freeSlotIdx, unit_items.SlotState(False, True), None, None)
+
+        return
 
     def __setCreatorReady(self, result):
         if not result:
@@ -180,5 +249,8 @@ class SquadFunctional(PrbFunctional):
     def __onCreatorReady(self, result):
         self.__doTeamReady = result
 
+    def __isTeamRead(self):
+        return not self.getPlayersStateStats().notReadyCount
+
     def __handleCarouselInited(self, _):
-        events_dispatcher.addSquadToCarousel()
+        g_eventDispatcher.addSquadToCarousel(self.__isTeamRead())

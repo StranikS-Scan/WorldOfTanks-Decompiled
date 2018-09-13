@@ -2,6 +2,7 @@
 import BigWorld
 import constants
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE
 from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipDataField, ToolTipParameterField, ToolTipAttrField, ToolTipData, getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
@@ -191,21 +192,22 @@ class VehicleParamsField(ToolTipParameterField):
         return result
 
     def _getParameterValue(self, paramName, paramsDict, rawParamsDict):
+        htmlText = makeHtmlString('html_templates:lobby/tank_params', paramName)
         if paramName == 'enginePowerPerTon':
-            return (paramName, BigWorld.wg_getNiceNumberFormat(rawParamsDict[paramName]))
+            return (htmlText, BigWorld.wg_getNiceNumberFormat(rawParamsDict[paramName]))
         if paramName == 'damageAvgPerMinute':
-            return (paramName, BigWorld.wg_getIntegralFormat(rawParamsDict[paramName]))
+            return (htmlText, BigWorld.wg_getIntegralFormat(rawParamsDict[paramName]))
         if paramName == 'damageAvg':
-            return (paramName, BigWorld.wg_getNiceNumberFormat(rawParamsDict[paramName]))
+            return (htmlText, BigWorld.wg_getNiceNumberFormat(rawParamsDict[paramName]))
         if paramName == 'reloadTimeSecs':
-            return (paramName, BigWorld.wg_getIntegralFormat(rawParamsDict[paramName]))
+            return (htmlText, BigWorld.wg_getIntegralFormat(rawParamsDict[paramName]))
         if paramName == 'explosionRadius':
-            return (paramName, BigWorld.wg_getNiceNumberFormat(rawParamsDict[paramName]))
+            return (htmlText, BigWorld.wg_getNiceNumberFormat(rawParamsDict[paramName]))
         if paramName == 'shotDispersionAngle':
-            return (paramName, BigWorld.wg_getNiceNumberFormat(rawParamsDict[paramName]))
+            return (htmlText, BigWorld.wg_getNiceNumberFormat(rawParamsDict[paramName]))
         if paramName in paramsDict:
-            return (paramName, paramsDict.get(paramName))
-        return (paramName, rawParamsDict.get(paramName))
+            return (htmlText, paramsDict.get(paramName))
+        return (htmlText, rawParamsDict.get(paramName))
 
 
 class VehicleLocksField(ToolTipParameterField):

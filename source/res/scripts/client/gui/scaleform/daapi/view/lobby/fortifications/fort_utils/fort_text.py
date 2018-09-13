@@ -7,6 +7,9 @@ PROMO_TITLE = 'promoTitle'
 PROMO_SUB_TITLE = 'promoSubTitle'
 HIGH_TITLE = 'highTitle'
 MIDDLE_TITLE = 'middleTitle'
+STATUS_CRITICAL_TEXT = 'statusCriticalText'
+STATUS_WARNING_TEXT = 'statusWarningText'
+STATUS_INFO_TEXT = 'statusInfoText'
 MAIN_TEXT = 'mainText'
 STANDARD_TEXT = 'standardText'
 DISABLE_TEXT = 'disabledText'
@@ -15,19 +18,30 @@ ALERT_TEXT = 'alertText'
 ERROR_TEXT = 'errorText'
 NEUTRAL_TEXT = 'neutralText'
 PURPLE_TEXT = 'purpleText'
+STATS_TEXT = 'statsText'
 CHECKMARK_ICON = 'checkmark'
 NUT_ICON = 'nut'
+PERCENT_ICON = 'percent'
 ALERT_ICON = 'alert'
+INFO_ICON = 'info'
 ORDER_IN_PROGRESS_ICON = 'order_in_progress'
 CLOCK_ICON = 'clock'
 NOT_AVAILABLE = 'notAvailable'
+LEVEL_5 = 'level5'
+LEVEL_10 = 'level10'
+SWORDS = 'swords'
 HUMANS = 'humans'
 ICONS = (NUT_ICON,
+ PERCENT_ICON,
  ALERT_ICON,
+ INFO_ICON,
  ORDER_IN_PROGRESS_ICON,
  CLOCK_ICON,
  CHECKMARK_ICON,
  NOT_AVAILABLE,
+ LEVEL_5,
+ LEVEL_10,
+ SWORDS,
  HUMANS)
 
 def getText(style = 'mainText', message = ''):

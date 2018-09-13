@@ -59,7 +59,9 @@ def _set_ACHIEVEMENT_DEPENDENCIES():
      'maxPiercingSeries': [_updateArmorPiercer],
      'sniper2': [_updateBattleHeroes],
      'mainGun': [_updateBattleHeroes],
-     'WFC2014WinSeries': [_updateMaxWFC2014WinSeries]})
+     'WFC2014WinSeries': [_updateMaxWFC2014WinSeries],
+     'reliableComradeSeries': [_updateReliableComrade],
+     'deathTrackWinSeries': [_updateMaxDeathTrackWinSeries]})
 
 
 ACHIEVEMENT7X7_DEPENDENCIES = {}
@@ -153,14 +155,24 @@ def _set_FORT_SORTIES_STATS_DEPENDENCIES():
      'spotted': [_updateMedalPoppel],
      'capturePoints': [_updateMedalLeClerc],
      'droppedCapturePoints': [_updateMedalLavrinenko],
-     'wins': [_updateMedalKampfer]})
+     'wins': [_updateSoldierOfFortune]})
 
 
 FORT_MISC_DEPENDENCIES = {}
 
 def _set_FORT_MISC_DEPENDENCIES():
     global FORT_MISC_DEPENDENCIES
-    FORT_MISC_DEPENDENCIES.update({'fortResourceInSorties': [_updateConquerorMedal]})
+    FORT_MISC_DEPENDENCIES.update({'fortResourceInSorties': [_updateConquerorMedal],
+     'fortResourceInBattles': [_updateFireAndSword]})
+
+
+FORT_ACHIEVEMENTS_DEPENDENCIES = {}
+
+def _set_FORT_ACHIEVEMENTS_DEPENDENCIES():
+    global FORT_ACHIEVEMENTS_DEPENDENCIES
+    FORT_ACHIEVEMENTS_DEPENDENCIES.update({'wins': [_updateKampfer],
+     'capturedBasesInAttack': [_updateCrusher],
+     'capturedBasesInDefence': [_updateCounterblow]})
 
 
 VEH_TYPE_FRAGS_DEPENDENCIES = {}
@@ -413,6 +425,22 @@ def _updateMaxWFC2014WinSeries(dossierDescr, dossierBlockDescr, key, value, prev
         dossierDescr.addPopUp('singleAchievements', 'WFC2014', 1)
 
 
+def _updateReliableComrade(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    amountRequired = RECORD_CONFIGS['reliableComrade']
+    if value >= amountRequired:
+        medals, amountLeft = divmod(value, amountRequired)
+        dossierBlockDescr['reliableComrade'] += medals
+        dossierBlockDescr['reliableComradeSeries'] = amountLeft
+
+
+def _updateMaxDeathTrackWinSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxDeathTrackWinSeries']:
+        dossierBlockDescr['maxDeathTrackWinSeries'] = value
+    if value >= 1:
+        dossierDescr['singleAchievements']['deathTrack'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'deathTrack', 1)
+
+
 def _updateMousebane(dossierDescr, dossierBlockDescr, key, value, prevValue):
     medals, series = divmod(value, RECORD_CONFIGS['mousebane'])
     if dossierDescr['achievements']['mousebane'] != medals:
@@ -628,30 +656,22 @@ def _updateForTacticalOperations(dossierDescr, dossierBlockDescr, key, value, pr
 
 
 def _updateConquerorMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    cfg = RECORD_CONFIGS['conqueror']
-    i = 0
-    for count in cfg:
-        if value < count:
-            break
-        i += 1
-
-    if i > 0:
-        medalClass = len(cfg) - i + 1
-        dossierDescr['fortAchievements']['conqueror'] = medalClass
+    medalName = 'conqueror'
+    medalClass = dossierDescr['fortAchievements'][medalName]
+    newMedalClass = __getNewMedalClass(medalName, value, medalClass)
+    if newMedalClass is not None:
+        dossierDescr['fortAchievements'][medalName] = newMedalClass
+    return
 
 
-def _updateMedalKampfer(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    cfg = RECORD_CONFIGS['kampfer']
+def _updateSoldierOfFortune(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'soldierOfFortune'
+    medalClass = dossierDescr['fortAchievements'][medalName]
     wins = dossierBlockDescr['wins']
-    i = 0
-    for count in cfg:
-        if wins < count:
-            break
-        i += 1
-
-    if i > 0:
-        medalClass = len(cfg) - i + 1
-        dossierDescr['fortAchievements']['kampfer'] = medalClass
+    newMedalClass = __getNewMedalClass(medalName, wins, medalClass)
+    if newMedalClass is not None:
+        dossierDescr['fortAchievements'][medalName] = newMedalClass
+    return
 
 
 def _updateMedalRotmistrov(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -664,9 +684,55 @@ def _updateMedalRotmistrov(dossierDescr, dossierBlockDescr, key, value, prevValu
 
     if i > 0:
         medalClass = len(cfg) - i + 1
-        curClass = dossierDescr['clanAchievements']['medalRotmistrov']
-        if curClass == 0 or curClass > medalClass:
-            dossierDescr['clanAchievements']['medalRotmistrov'] = medalClass
+        dossierDescr['clanAchievements']['medalRotmistrov'] = medalClass
+
+
+def _updateKampfer(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'kampfer'
+    medalClass = dossierDescr['fortAchievements'][medalName]
+    newMedalClass = __getNewMedalClass(medalName, value, medalClass)
+    if newMedalClass is not None:
+        dossierDescr['fortAchievements'][medalName] = newMedalClass
+    return
+
+
+def _updateFireAndSword(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'fireAndSword'
+    medalClass = dossierDescr['fortAchievements'][medalName]
+    newMedalClass = __getNewMedalClass(medalName, value, medalClass)
+    if newMedalClass is not None:
+        dossierDescr['fortAchievements'][medalName] = newMedalClass
+    return
+
+
+def _updateCrusher(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'crusher'
+    medalValue = dossierDescr['fortAchievements'][medalName]
+    cfg = RECORD_CONFIGS[medalName]
+    newValue = value // cfg
+    if newValue > medalValue:
+        dossierDescr['fortAchievements'][medalName] = newValue
+
+
+def _updateCounterblow(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'counterblow'
+    medalValue = dossierDescr['fortAchievements'][medalName]
+    cfg = RECORD_CONFIGS[medalName]
+    newValue = value // cfg
+    if newValue > medalValue:
+        dossierDescr['fortAchievements'][medalName] = newValue
+
+
+def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):
+    medalCfg = RECORD_CONFIGS[medalConfigName]
+    maxMedalClass = len(medalCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if valueToCheck >= medalCfg[maxMedalClass - medalClass]:
+            if curMedalClass == 0 or curMedalClass > medalClass:
+                return medalClass
+            break
+
+    return None
 
 
 def init():
@@ -680,4 +746,5 @@ def init():
     _set_FORT_BATTLES_STATS_DEPENDENCIES()
     _set_FORT_SORTIES_STATS_DEPENDENCIES()
     _set_FORT_MISC_DEPENDENCIES()
+    _set_FORT_ACHIEVEMENTS_DEPENDENCIES()
     _set_CLAN_STATS_DEPENDENCIES()

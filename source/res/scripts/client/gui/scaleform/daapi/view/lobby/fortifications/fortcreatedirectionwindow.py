@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortCreateDirectionWindow.py
-from debug_utils import LOG_DEBUG
 from fortified_regions import g_cache as g_fortCache
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortCreateDirectionWindowMeta import FortCreateDirectionWindowMeta
@@ -10,8 +10,8 @@ from gui.Scaleform.framework.entities.abstract.AbstractWindowView import Abstrac
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from gui.shared.fortifications.context import DirectionCtx
@@ -47,14 +47,17 @@ class FortCreateDirectionWindow(AbstractWindowView, View, FortCreateDirectionWin
             canBeClosed = isOpened and findFirst(lambda b: b is not None, buildings) is None
             buildingsData = []
             if isOpened:
-                for building in (b for b in buildings if b is not None):
-                    uid = self.UI_BUILDINGS_BIND[building.typeID]
-                    buildingsData.append({'uid': uid,
-                     'progress': self._getProgress(building.typeID, building.level),
-                     'toolTipData': [i18n.makeString('#fortifications:Buildings/buildingName/%s' % uid), self.getCommonBuildTooltipData(building)]})
+                for building in buildings:
+                    data = None
+                    if building is not None:
+                        uid = self.UI_BUILDINGS_BIND[building.typeID]
+                        data = {'uid': uid,
+                         'progress': self._getProgress(building.typeID, building.level),
+                         'toolTipData': [i18n.makeString('#fortifications:Buildings/buildingName/%s' % uid), self.getCommonBuildTooltipData(building)]}
+                    buildingsData.append(data)
 
             directions.append({'uid': direction,
-             'name': i18n.makeString('#fortifications:General/direction', value=i18n.makeString('#fortifications:General/directionName%d' % direction)),
+             'fullName': i18n.makeString('#fortifications:General/direction', value=i18n.makeString('#fortifications:General/directionName%d' % direction)),
              'isOpened': isOpened,
              'canBeClosed': canBeClosed,
              'closeButtonVisible': isOpened and openedDirectionsCount > 1,
@@ -73,16 +76,21 @@ class FortCreateDirectionWindow(AbstractWindowView, View, FortCreateDirectionWin
         ttDescr = ''
         if isAllDirctnsOpened:
             description = i18n.makeString(FORTIFICATIONS.FORTDIRECTIONSWINDOW_DESCR_COMPLETED)
+        elif self._isFortFrozen():
+            baseName = makeHtmlString('html_templates:lobby/fortifications', 'baseFrozen', {'baseName': i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGNAME_BASE_BUILDING) + '.'})
+            description = i18n.makeString(FORTIFICATIONS.FORTDIRECTIONSWINDOW_DESCR_BASEREPAIRREQUIRE, baseName=baseName)
+            ttHeader = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_DISABLEDBYFROZEN_HEADER)
+            ttDescr = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_DISABLEDBYFROZEN_BODY)
         else:
             if playersCount >= requiredPlayersCount:
                 template = 'valid'
                 canOpenDirections = True
-                ttHeader = i18n.makeString(FORTIFICATIONS.FORTDIRECTIONSWINDOW_BUTTON_NEWDIRECTION_TOOLTIP_ENABLED)
-                ttDescr = i18n.makeString(FORTIFICATIONS.FORTDIRECTIONSWINDOW_BUTTON_NEWDIRECTION_TOOLTIP_ENABLED_DESCR)
+                ttHeader = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_ENABLED_HEADER)
+                ttDescr = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_ENABLED_BODY)
             else:
                 template = 'notValid'
-                ttHeader = i18n.makeString(FORTIFICATIONS.FORTDIRECTIONSWINDOW_BUTTON_NEWDIRECTION_TOOLTIP_DISABLED)
-                ttDescr = i18n.makeString(FORTIFICATIONS.FORTDIRECTIONSWINDOW_BUTTON_NEWDIRECTION_TOOLTIP_DISABLED_DESCR, count=requiredPlayersCount)
+                ttHeader = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_DISABLEDBYPLAYERS_HEADER)
+                ttDescr = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_DISABLEDBYPLAYERS_BODY, count=requiredPlayersCount)
             playersLabel = makeHtmlString('html_templates:lobby/fortifications/playersCount', template, {'count': requiredPlayersCount})
             description = i18n.makeString(FORTIFICATIONS.FORTDIRECTIONSWINDOW_DESCR_REQUIREMENTS, count=playersLabel)
         self.as_setDescriptionS(description)
@@ -111,8 +119,6 @@ class FortCreateDirectionWindow(AbstractWindowView, View, FortCreateDirectionWin
         if confirmed:
             result = yield self.fortProvider.sendRequest(DirectionCtx(dirID, isOpen=False, waitingID='fort/direction/close'))
             if result:
+                g_fortSoundController.playDeleteDirection()
                 directionName = i18n.makeString('#fortifications:General/directionName%d' % dirID)
                 SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DIRECTIONCLOSED, direction=directionName, type=SystemMessages.SM_TYPE.Warning)
-                if self.app.soundManager is not None:
-                    self.app.soundManager.playEffectSound(SoundEffectsId.FORT_DIRECTION_CLOSE)
-        return

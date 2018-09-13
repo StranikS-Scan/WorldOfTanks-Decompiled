@@ -9,3 +9,4 @@ class ORDER_TYPES(object):
     ADDITIONAL_BRIEFING = 'additionalBriefing'
     TACTICAL_TRAINING = 'tacticalTraining'
     BATTLE_PAYMENTS = 'battlePayments'
+    SPECIAL_MISSION = 'specialMission'

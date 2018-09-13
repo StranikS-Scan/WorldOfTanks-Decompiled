@@ -268,13 +268,13 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__multiRespecTman_onShopSynced, tmenInvIDsAndCostTypeIdx, vehTypeCompDescr, callback))
             return
 
-    def replacePassport(self, tmanInvID, isFemale, firstNameID, lastNameID, iconID, callback):
+    def replacePassport(self, tmanInvID, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__replacePassport_onShopSynced, tmanInvID, isFemale, firstNameID, lastNameID, iconID, callback))
+            self.__account.shop.waitForSync(partial(self.__replacePassport_onShopSynced, tmanInvID, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, callback))
             return
 
     def freeXPToTankman(self, tmanInvID, freeXP, callback):
@@ -444,21 +444,24 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_MULTI_RESPEC, arr, proxy)
             return
 
-    def __replacePassport_onShopSynced(self, tmanInvID, isFemale, firstNameID, lastNameID, iconID, callback, resultID, shopRev):
+    def __replacePassport_onShopSynced(self, tmanInvID, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, callback, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
             return
         else:
-            arr = [shopRev, tmanInvID]
+            arr = [shopRev, tmanInvID, isPremium]
             if isFemale is None:
                 arr.append(-1)
             elif isFemale:
                 arr.append(1)
             else:
                 arr.append(0)
+            arr.append(fnGroupID)
             arr.append(firstNameID if firstNameID is not None else -1)
+            arr.append(lnGroupID)
             arr.append(lastNameID if lastNameID is not None else -1)
+            arr.append(iGroupID)
             arr.append(iconID if iconID is not None else -1)
             if callback is not None:
                 proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)

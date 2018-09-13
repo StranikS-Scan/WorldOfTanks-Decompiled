@@ -122,3 +122,7 @@ def strcmp(word1, word2):
             return int(round(_getSymOrderIdx(sym1) - _getSymOrderIdx(sym2)))
 
     return len(word1) - len(word2)
+
+
+def setHangarVisibility(isVisible):
+    BigWorld.worldDrawEnabled(isVisible)

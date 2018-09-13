@@ -3,30 +3,31 @@ import BigWorld
 from UnitBase import UNIT_BROWSER_ERROR
 from adisp import process
 from constants import PREBATTLE_TYPE
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, SystemMessages
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import RallyConfirmDialogMeta
+from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.managers.windows_stored_data import stored_window, DATA_TYPE, TARGET_ID
 from gui.Scaleform.daapi.view.meta.FortBattleRoomWindowMeta import FortBattleRoomWindowMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.prb_control import settings, events_dispatcher
+from gui.prb_control import settings
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.context.unit_ctx import JoinUnitCtx, LeaveUnitCtx
-from gui.prb_control.prb_helpers import GlobalListener, prbPeripheriesHandlerProperty
-from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, UNIT_MODE_FLAGS
+from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, UNIT_MODE_FLAGS, FUNCTIONAL_EXIT
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from gui.shared import events
-from gui.shared.fortifications.context import CreateSortieCtx
+from gui.shared.fortifications.context import CreateSortieCtx, CreateOrJoinFortBattleCtx
 from gui.shared.fortifications.fort_helpers import fortProviderProperty, FortListener
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 
-class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, FortListener):
+class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
 
     def __init__(self, ctx):
         self.__isMinimize = False
@@ -43,11 +44,11 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
 
     def onWindowClose(self):
         self.__clearCache()
-        self.prbDispatcher.doLeaveAction(LeaveUnitCtx(waitingID='prebattle/leave'))
+        self.prbDispatcher.doLeaveAction(LeaveUnitCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.NO_FUNC))
 
     def onWindowMinimize(self):
         self.__isMinimize = True
-        events_dispatcher.showUnitProgressInCarousel(PREBATTLE_TYPE.SORTIE)
+        g_eventDispatcher.showUnitProgressInCarousel(PREBATTLE_TYPE.SORTIE)
         self.destroy()
 
     def getIntroViewAlias(self):
@@ -63,11 +64,21 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
         return 'FortBattleRoomWindow'
 
     def getPrbType(self):
-        return PREBATTLE_TYPE.UNIT
+        return PREBATTLE_TYPE.SORTIE
 
     def onBrowseRallies(self):
         self._requestViewLoad(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_LIST_VIEW_UI, None)
         return
+
+    def onBrowseClanBattles(self):
+        self._requestViewLoad(FORTIFICATION_ALIASES.FORT_CLAN_BATTLE_LIST_VIEW_UI, None)
+        return
+
+    def onJoinClanBattle(self, battleID, slotIndex, peripheryID):
+        self.__handleCreateOrJoinFortBattle(peripheryID, battleID, slotIndex)
+
+    def onCreatedBattleRoom(self, battleID, peripheryID):
+        self.__handleCreateOrJoinFortBattle(peripheryID, battleID)
 
     def onCreateRally(self):
         if not BigWorld.player().isLongDisconnectedFromCenter:
@@ -81,11 +92,11 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
         ctx = JoinUnitCtx(rallyId, slotIndex, waitingID='prebattle/join')
         if g_lobbyContext.isAnotherPeriphery(peripheryID):
             if g_lobbyContext.isPeripheryAvailable(peripheryID):
-                self.__requestToReloginAndJoin(peripheryID, ctx)
+                self.__requestToReloginAndJoinSortie(peripheryID, ctx)
             else:
                 SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
         else:
-            self.__requestToJoin(ctx)
+            self.__requestToJoinSortie(ctx)
 
     def autoSearchCancel(self, value):
         self.currentState = value
@@ -97,7 +108,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
             self.unitFunctional.request(unit_ctx.BattleQueueUnitCtx(action=0))
 
     def onUnitFunctionalInited(self):
-        self._requestViewLoad(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_VIEW_UI, self.unitFunctional.getID())
+        self.__loadRoomView()
 
     def onUnitFunctionalFinished(self):
         if self.unitFunctional.getExit() == settings.FUNCTIONAL_EXIT.INTRO_UNIT:
@@ -130,6 +141,10 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
         else:
             self.as_autoSearchEnableBtnS(True)
 
+    def loadListView(self):
+        self._requestViewLoad(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_LIST_VIEW_UI, None)
+        return
+
     def onUnitRejoin(self):
         super(FortBattleRoomWindow, self).onUnitRejoin()
         self.__clearState()
@@ -142,30 +157,29 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
         super(FortBattleRoomWindow, self)._populate()
         from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
         selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.SORTIE)
-        self.startGlobalListening()
         self.addListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(FortEvent.TEST_CHOICE_DIVISION, self.__onLoadStart, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(FortEvent.CHOICE_DIVISION, self.__onLoadStart, scope=EVENT_BUS_SCOPE.LOBBY)
         unitMgrID = self.unitFunctional.getID()
         if unitMgrID > 0:
-            self._requestViewLoad(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_VIEW_UI, unitMgrID)
+            self.__loadRoomView()
         else:
-            self.__initIntroSortieView()
+            self.__initIntroView()
         self.unitFunctional.initEvents(self)
-        events_dispatcher.hideUnitProgressInCarousel(PREBATTLE_TYPE.SORTIE)
+        g_eventDispatcher.hideUnitProgressInCarousel(PREBATTLE_TYPE.SORTIE)
 
     def _dispose(self):
-        self.stopGlobalListening()
         self.removeListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(FortEvent.TEST_CHOICE_DIVISION, self.__onLoadStart, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(FortEvent.CHOICE_DIVISION, self.__onLoadStart, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__clearCache()
         super(FortBattleRoomWindow, self)._dispose()
 
     def __clearCache(self):
         if not self.__isMinimize and self.fortCtrl is not None:
             self.fortCtrl.removeSortiesCache()
+            self.fortCtrl.removeFortBattlesCache()
         return
 
-    def __initIntroSortieView(self):
+    def __initIntroView(self):
         isListShow = self.__modeFlags & UNIT_MODE_FLAGS.SHOW_LIST > 0
         navKey = self.getNavigationKey()
         if isListShow:
@@ -173,6 +187,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
             self._requestViewLoad(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_LIST_VIEW_UI, None)
         else:
             NavigationStack.exclude(navKey, FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_VIEW_UI)
+            NavigationStack.exclude(navKey, FORTIFICATION_ALIASES.FORT_CLAN_BATTLE_ROOM_VIEW_UI)
             if NavigationStack.hasHistory(navKey):
                 flashAlias, _, itemID = NavigationStack.current(navKey)
                 self._requestViewLoad(flashAlias, itemID)
@@ -181,23 +196,43 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
         return
 
     @process
-    def __requestToCreate(self, value):
+    def __requestToCreateSortie(self, value):
         yield self.fortProvider.sendRequest(CreateSortieCtx(value, 'fort/sortie/create'))
 
     @process
-    def __requestToReloginAndJoin(self, peripheryID, ctx):
-        result = yield DialogsInterface.showDialog(RallyConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
+    def __requestToReloginAndJoinSortie(self, peripheryID, ctx):
+        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
         if result:
             self.prbPeripheriesHandler.join(peripheryID, ctx)
 
     @process
-    def __requestToJoin(self, ctx):
+    def __requestToJoinSortie(self, ctx):
         yield self.prbDispatcher.join(ctx)
+
+    def __handleCreateOrJoinFortBattle(self, peripheryID, battleID, slotIndex = -1):
+        self.__clearCache()
+        if g_lobbyContext.isAnotherPeriphery(peripheryID):
+            if g_lobbyContext.isPeripheryAvailable(peripheryID):
+                self.__requestToReloginAndCreateOrJoinFortBattle(peripheryID, battleID, slotIndex)
+            else:
+                SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
+        else:
+            self.__requestToCreateOrJoinFortBattle(battleID, slotIndex)
+
+    @process
+    def __requestToCreateOrJoinFortBattle(self, battleID, slotIndex = -1):
+        yield self.fortProvider.sendRequest(CreateOrJoinFortBattleCtx(battleID, slotIndex, 'fort/fortBattle/createOrJoin'))
+
+    @process
+    def __requestToReloginAndCreateOrJoinFortBattle(self, peripheryID, battleID, slotIndex = -1):
+        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.FORT_BATTLE, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
+        if result:
+            self.prbPeripheriesHandler.join(peripheryID, CreateOrJoinFortBattleCtx(battleID, slotIndex, 'fort/fortBattle/createOrJoin'))
 
     def __onLoadStart(self, event):
         divisionLevel = event.ctx.get('data', None)
         if divisionLevel:
-            self.__requestToCreate(divisionLevel)
+            self.__requestToCreateSortie(divisionLevel)
         return
 
     def __handleUnitWindowHide(self, _):
@@ -227,3 +262,11 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, GlobalListener, AppRef, For
          'canInvokeAutoSearch': permissions.canInvokeAutoSearch(),
          'canInvokeBattleQueue': permissions.canStopBattleQueue()}
         return model
+
+    def __loadRoomView(self):
+        unit = self.unitFunctional
+        state = unit.getState()
+        if state.isFortBattle():
+            self._requestViewLoad(FORTIFICATION_ALIASES.FORT_CLAN_BATTLE_ROOM_VIEW_UI, self.unitFunctional.getID())
+        elif state.isSortie():
+            self._requestViewLoad(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_VIEW_UI, self.unitFunctional.getID())

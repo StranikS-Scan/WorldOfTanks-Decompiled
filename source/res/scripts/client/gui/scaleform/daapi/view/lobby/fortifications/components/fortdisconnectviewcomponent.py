@@ -5,15 +5,16 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper imp
 from gui.Scaleform.daapi.view.meta.FortDisconnectViewMeta import FortDisconnectViewMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+from gui.Scaleform.Waiting import Waiting
 from helpers import i18n
 
 class FortDisconnectViewComponent(FortDisconnectViewMeta, FortViewHelper):
 
     def __init__(self):
-        super(FortDisconnectViewMeta, self).__init__()
+        super(FortDisconnectViewComponent, self).__init__()
 
     def _populate(self):
-        super(FortDisconnectViewMeta, self)._populate()
+        super(FortDisconnectViewComponent, self)._populate()
         state = self.fortState
         warningIcon = i18n.makeString(fort_text.getIcon(fort_text.ALERT_ICON))
         warningText = warningIcon + i18n.makeString(FORTIFICATIONS.DISCONNECTED_WARNING)
@@ -26,6 +27,8 @@ class FortDisconnectViewComponent(FortDisconnectViewMeta, FortViewHelper):
             LOG_WARNING('Unknown fort state for disconnectView: %d' % state.getStateID())
         warningDescrText = i18n.makeString(warningDescrText)
         self.as_setWarningTextsS(warningText, warningDescrText)
+        Waiting.hide('loadPage')
+        Waiting.hide('Flash')
 
     def _dispose(self):
-        super(FortDisconnectViewMeta, self)._dispose()
+        super(FortDisconnectViewComponent, self)._dispose()

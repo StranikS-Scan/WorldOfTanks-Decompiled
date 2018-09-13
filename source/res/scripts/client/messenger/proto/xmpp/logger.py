@@ -27,6 +27,28 @@ class _IInternalLogger(object):
         pass
 
 
+class IStreamRedirect(object):
+
+    def redirect(self, level, source, message):
+        pass
+
+    def flush(self):
+        pass
+
+
+class _LogOutputRedirect(IStreamRedirect):
+
+    def __init__(self):
+        super(_LogOutputRedirect, self).__init__()
+        self.__log = ['XMPPClient::XML. Prints stream to log:']
+
+    def redirect(self, level, source, message):
+        self.__log.append(message)
+
+    def flush(self):
+        LOG_DEBUG('\n'.join(self.__log))
+
+
 class _XMPPStreamLogger(_IEventLogger):
 
     def __init__(self):
@@ -35,7 +57,7 @@ class _XMPPStreamLogger(_IEventLogger):
 
     def log(self, level, source, message):
         if source in LOG_SOURCE.XML_STREAM:
-            self.__stream.append((source, message))
+            self.__stream.append((level, source, message))
 
     def clear(self):
         self.__stream.clear()
@@ -43,13 +65,13 @@ class _XMPPStreamLogger(_IEventLogger):
     def tail(self):
         return self.__stream[-1]
 
-    def all(self, request = None):
-        result = ['XMPPClient::XML. Prints stream to log:']
-        for source, message in self.__stream:
-            if request is None or source == request:
-                result.append(message)
+    def all(self, output = None):
+        if output is None:
+            output = _LogOutputRedirect()
+        for level, source, message in self.__stream:
+            output.redirect(level, source, message)
 
-        LOG_DEBUG('\n'.join(result))
+        output.flush()
         return
 
     def flush(self):
@@ -164,12 +186,18 @@ class LogHandler(ClientEventsHandler):
     def event(self, key):
         if key in self.__eventsLoggers:
             return self.__eventsLoggers[key]
-        LOG_ERROR('XMPPClient::Log, events logger is not found. Available loggers are', self.__eventsLoggers.keys())
+        else:
+            LOG_ERROR('XMPPClient::Log, events logger is not found. Available loggers are', self.__eventsLoggers.keys())
+            return None
+            return None
 
     def internal(self, key):
         if key in self.__internalLoggers:
             return self.__internalLoggers[key]
-        LOG_ERROR('XMPPClient::Log, internal logger is not found. Available loggers are', self.__internalLoggers.keys())
+        else:
+            LOG_ERROR('XMPPClient::Log, internal logger is not found. Available loggers are', self.__internalLoggers.keys())
+            return None
+            return None
 
     def clear(self):
         for logger in self.__eventsLoggers.itervalues():

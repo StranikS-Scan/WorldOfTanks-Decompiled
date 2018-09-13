@@ -13,13 +13,16 @@ import math
 from ProjectileMover import collideDynamicAndStatic
 import constants
 import BattleReplay
+from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.BattleContext import g_battleContext
+from helpers import isPlayerAvatar
+from DetachedTurret import DetachedTurret
 
 class KeySensor:
 
     def __init__(self, keyMappings, sensitivity, sensitivityIncDecKeys = None, sensitivityAcceleration = None):
         self.keyMappings = keyMappings
-        self.sensitivity = sensitivity
+        self.sensitivity = self.defaultSensitivity = sensitivity
         self.__sensitivityKeys = {}
         if sensitivityIncDecKeys is not None:
             self.__sensitivityKeys[sensitivityIncDecKeys[0]] = sensitivityAcceleration
@@ -93,16 +96,19 @@ class _Inertia(object):
 class _AlignerToLand:
     MIN_HEIGHT = 0.5
     enabled = property(lambda self: self.__desiredHeightShift is not None)
+    ignoreTerrain = property(lambda self: self.__ignoreTerrain)
 
     def __init__(self):
         self.__desiredHeightShift = None
+        self.__ignoreTerrain = False
         return
 
-    def enable(self, position):
+    def enable(self, position, aboveSeaLevel = False):
+        self.__ignoreTerrain = aboveSeaLevel
         landPosition = self.__getLandAt(position)
         if landPosition is not None:
             self.__desiredHeightShift = position - landPosition
-            if self.__desiredHeightShift.y < _AlignerToLand.MIN_HEIGHT:
+            if self.__desiredHeightShift.y < _AlignerToLand.MIN_HEIGHT and not aboveSeaLevel:
                 self.__desiredHeightShift.y = _AlignerToLand.MIN_HEIGHT
         else:
             self.__desiredHeightShift = None
@@ -110,14 +116,20 @@ class _AlignerToLand:
 
     def disable(self):
         self.__desiredHeightShift = None
+        self.__ignoreTerrain = False
         return
 
     def __getLandAt(self, position):
+        if self.__ignoreTerrain:
+            return Vector3(position.x, 0, position.z)
+        spaceID = BigWorld.player().spaceID
+        if spaceID is None:
+            return
         upPoint = Math.Vector3(position)
         upPoint.y += 1000
         downPoint = Math.Vector3(position)
         downPoint.y = -1000
-        collideRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, upPoint, downPoint, 16, self.__isTerrain)
+        collideRes = BigWorld.wg_collideSegment(spaceID, upPoint, downPoint, 16, self.__isTerrain)
         if collideRes is None:
             return
         else:
@@ -142,6 +154,7 @@ class _VehicleBounder(object):
     SELECT_GUN = 2
     SELECT_LOOK_AT = 3
     __MAX_SELECT = 4
+    SELECT_DETACHED_TURRET = 4
 
     def __getLookAtPosition(self):
         if self.__lookAtProvider is None:
@@ -193,6 +206,29 @@ class _VehicleBounder(object):
 
     def selectNextPlacement(self):
         self.selectPlacement((self.__placement + 1) % _VehicleBounder.__MAX_SELECT)
+
+    def checkTurretDetachment(self, worldPos):
+        if self.__vehicle is None:
+            return
+        elif self.__vehicle.isTurretDetached and not self.__placement == _VehicleBounder.SELECT_DETACHED_TURRET:
+            turretFound = None
+            for turret in DetachedTurret.allTurrets:
+                if turret.vehicleID == self.__vehicle.id and turret.model.visible:
+                    turretFound = turret
+                    break
+
+            if turretFound is None:
+                return
+            turretToGoalShift = worldPos - turretFound.position
+            toTurretMat = Matrix(turretFound.matrix)
+            toTurretMat.invert()
+            turretToGoalShift = toTurretMat.applyVector(turretToGoalShift)
+            self.matrix = turretFound.matrix
+            self.__lookAtProvider = None
+            self.__placement = _VehicleBounder.SELECT_DETACHED_TURRET
+            return turretToGoalShift
+        else:
+            return
 
 
 class _VehiclePicker(object):
@@ -262,7 +298,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
     def enable(self, **args):
         self.measureDeltaTime()
         self.delayCallback(0.0, self.__update)
-        camMatrix = args.get('camMatrix')
+        camMatrix = args.get('camMatrix', BigWorld.camera().matrix)
         self.__cam.set(camMatrix)
         self.__cam.invViewProvider.a = camMatrix
         self.__cam.invViewProvider.b = mathUtils.createIdentityMatrix()
@@ -277,7 +313,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         self.__basisMProv.bind(None)
         self.__rotateAroundPointEnabled = False
         self.__alignerToLand.disable()
-        if g_battleContext.isPlayerObserver():
+        if isPlayerAvatar() and g_battleContext.isPlayerObserver():
             BigWorld.player().positionControl.moveTo(self.__position)
             BigWorld.player().positionControl.followCamera(True)
         return
@@ -287,7 +323,8 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         BigWorld.projection().fov = self.__defaultFov
         BigWorld.camera(None)
         self.__alignerToLand.disable()
-        BigWorld.player().positionControl.followCamera(False)
+        if isPlayerAvatar():
+            BigWorld.player().positionControl.followCamera(False)
         self.__showAim(False)
         return
 
@@ -306,7 +343,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
                     if self.__alignerToLand.enabled or self.__basisMProv.isBound:
                         self.__alignerToLand.disable()
                     else:
-                        self.__alignerToLand.enable(self.__position)
+                        self.__alignerToLand.enable(self.__position, BigWorld.isKeyDown(Keys.KEY_LALT) or BigWorld.isKeyDown(Keys.KEY_RALT))
                     return True
                 if self.__keySwitches['keySetDefaultFov'] == key:
                     BigWorld.projection().fov = self.__defaultFov
@@ -340,7 +377,8 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
             return self.__movementSensor.handleKeyEvent(key, isDown) or self.__rotationSensor.handleKeyEvent(key, isDown) or self.__zoomSensor.handleKeyEvent(key, isDown) or self.__targetRadiusSensor.handleKeyEvent(key, isDown)
 
     def handleMouseEvent(self, dx, dy, dz):
-        self.__rotationSensor.addVelocity(Math.Vector3(dx, dy, 0) * self.__mouseSensitivity)
+        relativeSenseGrowth = self.__rotationSensor.sensitivity / self.__rotationSensor.defaultSensitivity
+        self.__rotationSensor.addVelocity(Math.Vector3(dx, dy, 0) * self.__mouseSensitivity * relativeSenseGrowth)
         movementShift = Vector3(0, dz * self.__movementSensor.sensitivity * self.__scrollSensitivity, 0)
         self.__movementSensor.addVelocity(movementShift)
         GUI.mcursor().position = Math.Vector2(0, 0)
@@ -364,6 +402,10 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         return result
 
     def __update(self):
+        worldMatrix = Matrix(self.__cam.invViewMatrix)
+        desiredPosition = self.__basisMProv.checkTurretDetachment(worldMatrix.translation)
+        if desiredPosition is not None:
+            self.__position = desiredPosition
         prevPos = Math.Vector3(self.__position)
         delta = self.__calcCurrentDeltaAdjusted()
         self.__updateSenses(delta)
@@ -383,7 +425,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
             self.__position = self.__getAlignedToPointPosition(mathUtils.createRotationMatrix(self.__ypr))
         if self.__alignerToLand.enabled and not self.__basisMProv.isBound:
             if abs(self.__velocity.y) > 0.1:
-                self.__alignerToLand.enable(self.__position)
+                self.__alignerToLand.enable(self.__position, self.__alignerToLand.ignoreTerrain)
             self.__position = self.__alignerToLand.getAlignedPosition(self.__position)
         lookAtPosition = self.__basisMProv.lookAtPosition
         if lookAtPosition is not None:
@@ -461,7 +503,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         self.__keySwitches['keySwitchInertia'] = getattr(Keys, configDataSec.readString('keySwitchInertia', 'KEY_P'))
         self.__movementInertia = _Inertia(configDataSec.readFloat('linearFriction', 0.1))
         self.__rotationInertia = _Inertia(configDataSec.readFloat('rotationFriction', 0.1))
-        self.__keySwitches['keySwitchRotateAroundPoint'] = getattr(Keys, configDataSec.readString('keySwitchRotateAroundPoint', 'KEY_B'))
+        self.__keySwitches['keySwitchRotateAroundPoint'] = getattr(Keys, configDataSec.readString('keySwitchRotateAroundPoint', 'KEY_C'))
         aroundPointMappings = dict()
         aroundPointMappings[getattr(Keys, configDataSec.readString('keyTargetRadiusIncrement', 'KEY_NUMPAD7'))] = 1
         aroundPointMappings[getattr(Keys, configDataSec.readString('keyTargetRadiusDecrement', 'KEY_NUMPAD1'))] = -1
@@ -497,14 +539,17 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         return Vector3(yaw, pitch, self.__ypr.z)
 
     def __showAim(self, show):
-        if self.__aim is None:
-            self.__aim = createAim('postmortem')
-            self.__aim.create()
-        if show:
-            self.__aim.enable()
+        if not isPlayerAvatar():
+            return
         else:
-            self.__aim.disable()
-        return
+            if self.__aim is None:
+                self.__aim = createAim('postmortem')
+                self.__aim.create()
+            if show:
+                self.__aim.enable()
+            else:
+                self.__aim.disable()
+            return
 
     def __clampYPR(self, ypr):
         return Vector3(math.fmod(self.__ypr[0], 2 * math.pi), max(-0.9 * math.pi / 2, min(0.9 * math.pi / 2, self.__ypr[1])), math.fmod(self.__ypr[2], 2 * math.pi))
@@ -527,6 +572,8 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         self.__targetRadiusSensor.currentVelocity = 0.0
 
     def __checkSpaceBounds(self, startPos, endPos):
+        if not isPlayerAvatar():
+            return endPos
         moveDir = endPos - startPos
         moveDir.normalise()
         collisionPointWithBorders = BigWorld.player().arena.collideWithSpaceBB(startPos - moveDir, endPos + moveDir)

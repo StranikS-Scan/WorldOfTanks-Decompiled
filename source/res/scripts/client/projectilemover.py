@@ -20,6 +20,7 @@ from constants import DESTRUCTIBLE_MATKIND
 class ProjectileMover(object):
     __PROJECTILE_HIDING_TIME = 0.05
     __PROJECTILE_TIME_AFTER_DEATH = 2.0
+    __MOVEMENT_CALLBACK_TIMEOUT = 0.001
     __AUTO_SCALE_DISTANCE = 180.0
 
     def __init__(self):
@@ -43,49 +44,54 @@ class ProjectileMover(object):
         import BattleReplay
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        elif shotID in self.__projectiles:
-            return
         else:
-            proj = dict()
+            projectiles = self.__projectiles
+            if shotID in projectiles:
+                return
+            if -shotID in projectiles:
+                projectiles[-shotID]['startTime'] = BigWorld.time() - 1.0
             projModelName, projModelOwnShotName, projEffects = effectsDescr['projectile']
-            proj['model'] = BigWorld.Model(projModelOwnShotName if isOwnShoot else projModelName)
-            proj['startTime'] = BigWorld.time()
-            proj['effectsDescr'] = effectsDescr
-            proj['refStartPoint'] = refStartPoint
-            proj['refVelocity'] = refVelocity
-            proj['startPoint'] = startPoint
-            proj['stopPlane'] = None
-            proj['gravity'] = Math.Vector3(0.0, -gravity, 0.0)
-            proj['showExpolosion'] = False
-            proj['impactVelDir'] = None
-            proj['deathTime'] = None
-            proj['fireMissedTrigger'] = isOwnShoot
-            proj['autoScaleProjectile'] = isOwnShoot
-            trajectory = self.__calcTrajectory(refStartPoint, refVelocity, proj['gravity'], maxDistance, isOwnShoot, tracerCameraPos)
+            gravity = Math.Vector3(0.0, -gravity, 0.0)
+            trajectory = self.__calcTrajectory(refStartPoint, refVelocity, gravity, maxDistance, isOwnShoot, tracerCameraPos)
             trajectoryEnd = trajectory[len(trajectory) - 1]
             if (trajectoryEnd[0] - startPoint).length == 0.0 or trajectoryEnd[1] == 0.0:
                 LOG_CODEPOINT_WARNING()
                 return
-            proj['collisions'] = trajectory
-            proj['velocity'] = self.__calcStartVelocity(trajectoryEnd[0], startPoint, trajectoryEnd[1], proj['gravity'])
-            BigWorld.player().addModel(proj['model'])
-            proj['model'].position = startPoint
-            proj['model'].visible = False
-            proj['model'].visibleAttachments = True
-            proj['effectsData'] = {}
+            model = BigWorld.Model(projModelOwnShotName if isOwnShoot else projModelName)
+            proj = {'model': model,
+             'startTime': BigWorld.time(),
+             'effectsDescr': effectsDescr,
+             'refStartPoint': refStartPoint,
+             'refVelocity': refVelocity,
+             'startPoint': startPoint,
+             'stopPlane': None,
+             'gravity': gravity,
+             'showExplosion': False,
+             'impactVelDir': None,
+             'deathTime': None,
+             'fireMissedTrigger': isOwnShoot,
+             'autoScaleProjectile': isOwnShoot,
+             'collisions': trajectory,
+             'velocity': self.__calcStartVelocity(trajectoryEnd[0], startPoint, trajectoryEnd[1], gravity),
+             'effectsData': {}}
+            BigWorld.player().addModel(model)
+            model.position = startPoint
+            model.visible = False
+            model.visibleAttachments = True
             projEffects.attachTo(proj['model'], proj['effectsData'], 'flying')
             if self.__movementCallbackId is None:
-                self.__movementCallbackId = BigWorld.callback(0.001, self.__movementCallback)
-            self.__projectiles[shotID] = proj
+                self.__movementCallbackId = BigWorld.callback(self.__MOVEMENT_CALLBACK_TIMEOUT, self.__movementCallback)
+            projectiles[shotID] = proj
             return
 
     def hide(self, shotID, endPoint):
-        proj = self.__projectiles.get(shotID, None)
+        proj = self.__projectiles.pop(shotID, None)
         if proj is None:
             return
         else:
+            self.__projectiles[-shotID] = proj
             proj['fireMissedTrigger'] = False
-            proj['showExpolosion'] = False
+            proj['showExplosion'] = False
             proj['stopPlane'] = self.__getStopPlane(endPoint, proj['refStartPoint'], proj['refVelocity'], proj['gravity'])
             self.__notifyProjectileHit(endPoint, proj)
             return
@@ -103,7 +109,7 @@ class ProjectileMover(object):
                 pos = proj['model'].position
                 self.__addExplosionEffect(pos, effectsDescr, effectMaterial, proj['impactVelDir'])
             else:
-                proj['showExpolosion'] = True
+                proj['showExplosion'] = True
                 proj['effectMaterial'] = effectMaterial
                 proj['stopPlane'] = self.__getStopPlane(endPoint, proj['refStartPoint'], proj['refVelocity'], proj['gravity'])
                 nearestDist = None
@@ -117,6 +123,10 @@ class ProjectileMover(object):
                 proj['collisions'] = [nearestCollision]
             self.__notifyProjectileHit(endPoint, proj)
             return
+
+    def hold(self, shotID):
+        proj = self.__projectiles.get(shotID)
+        proj['holdTime'] = self.__PROJECTILE_HIDING_TIME
 
     def __notifyProjectileHit(self, hitPosition, proj):
         caliber = proj['effectsDescr']['caliber']
@@ -236,31 +246,35 @@ class ProjectileMover(object):
         gravity = proj['gravity']
         r0 = proj['startPoint']
         v0 = proj['velocity']
+        if 'holdTime' in proj:
+            time -= proj['holdTime']
         dt = time - proj['startTime']
-        if not model.visible and dt >= self.__PROJECTILE_HIDING_TIME:
-            model.visible = True
-        endPoint = None
-        endTime = None
-        for p, t, destrDesc in proj['collisions']:
-            if dt < t:
-                break
-            if destrDesc is not None:
-                areaDestr = AreaDestructibles.g_destructiblesManager.getController(destrDesc[0])
-                if areaDestr is not None:
-                    if areaDestr.isDestructibleBroken(destrDesc[1], destrDesc[2]):
-                        continue
-            endPoint = p
-            endTime = t
-            break
-
-        if endPoint is not None:
-            dir = endPoint - model.position
-            dir.normalise()
-            proj['impactVelDir'] = dir
-            model.visible = False
-            self.__setModelLocation(model, endPoint - dir.scale(0.01), v0, proj['autoScaleProjectile'])
-            return True
+        if dt < 0:
+            return False
         else:
+            if not model.visible and dt >= self.__PROJECTILE_HIDING_TIME:
+                model.visible = True
+            endPoint = None
+            endTime = None
+            for p, t, destrDesc in proj['collisions']:
+                if dt < t:
+                    break
+                if destrDesc is not None:
+                    areaDestr = AreaDestructibles.g_destructiblesManager.getController(destrDesc[0])
+                    if areaDestr is not None:
+                        if areaDestr.isDestructibleBroken(destrDesc[1], destrDesc[2]):
+                            continue
+                endPoint = p
+                endTime = t
+                break
+
+            if endPoint is not None:
+                dir = endPoint - model.position
+                dir.normalise()
+                proj['impactVelDir'] = dir
+                model.visible = False
+                self.__setModelLocation(model, endPoint - dir.scale(0.01), v0, proj['autoScaleProjectile'])
+                return True
             r = r0 + v0.scale(dt) + gravity.scale(dt * dt * 0.5)
             v = v0 + gravity.scale(dt)
             stopPlane = proj['stopPlane']
@@ -308,7 +322,7 @@ class ProjectileMover(object):
                 proj['deathTime'] = time
                 projEffects = effectsDescr['projectile'][2]
                 projEffects.detachFrom(proj['effectsData'], 'stopFlying')
-                if proj['showExpolosion']:
+                if proj['showExplosion']:
                     pos = proj['model'].position
                     dir = proj['impactVelDir']
                     self.__addExplosionEffect(pos, effectsDescr, proj['effectMaterial'], dir)
@@ -320,7 +334,7 @@ class ProjectileMover(object):
                 if proj['fireMissedTrigger']:
                     TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_MISSED)
 
-        self.__movementCallbackId = BigWorld.callback(0.001, self.__movementCallback)
+        self.__movementCallbackId = BigWorld.callback(self.__MOVEMENT_CALLBACK_TIMEOUT, self.__movementCallback)
         return
 
     def __calcStartVelocity(self, r, r0, dt, gravity):

@@ -21,8 +21,8 @@ class ProfileTabNavigator(ProfileTabNavigatorMeta):
                 component.invokeUpdate()
 
     def _populate(self):
-        self.as_setInitDataS(self.__navigatorOwnInitInfo)
         super(ProfileTabNavigator, self)._populate()
+        self.as_setInitDataS(self.__navigatorOwnInitInfo)
 
     def registerFlashComponent(self, component, alias, *args):
         super(ProfileTabNavigator, self).registerFlashComponent(component, alias, self.__userName, self.__userID, self.__databaseID, self.__selectedData)

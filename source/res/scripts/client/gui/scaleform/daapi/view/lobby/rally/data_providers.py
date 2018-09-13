@@ -1,15 +1,20 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/data_providers.py
 from abc import abstractmethod
 from debug_utils import LOG_ERROR
-from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
-__author__ = 'd_dichkovsky'
+from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider, SortableDAAPIDataProvider
+from gui.shared.utils import sortByFields
 
-class BaseRallyListDataProvider(DAAPIDataProvider):
+class BaseRallyListDataProvider(SortableDAAPIDataProvider):
 
     def __init__(self):
         super(BaseRallyListDataProvider, self).__init__()
         self.clear()
         self._selectedIdx = -1
+        self.__selectedRallyIndex = -1
+
+    @property
+    def selectedRallyIndex(self):
+        return self.__selectedRallyIndex
 
     @abstractmethod
     def getVO(self, unitIndex = None):
@@ -49,7 +54,9 @@ class BaseRallyListDataProvider(DAAPIDataProvider):
         if index >= 0:
             try:
                 cfdUnitID = self.__list[index]['cfdUnitID']
+                self.__selectedRallyIndex = index
             except IndexError:
+                self.__selectedRallyIndex = -1
                 LOG_ERROR('Item not found', index)
 
         if cfdUnitID:

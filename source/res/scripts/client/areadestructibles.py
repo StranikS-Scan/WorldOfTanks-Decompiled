@@ -257,9 +257,13 @@ class DestructiblesManager():
             _printErrDescNotAvailable(self.__spaceID, chunkID, destrIndex)
             return
         else:
-            self.__launchEffect(chunkID, destrIndex, desc, 'decayEffect', desc['filename'])
             if isNeedAnimation:
-                self.__launchEffect(chunkID, destrIndex, desc, 'effect', desc['filename'])
+                self.__launchEffect(chunkID, destrIndex, desc, 'decayEffect', desc['filename'])
+                if isShotDamage and desc.get('hitEffect'):
+                    coreEffectType = 'hitEffect'
+                else:
+                    coreEffectType = 'effect'
+                self.__launchEffect(chunkID, destrIndex, desc, coreEffectType, desc['filename'])
             return
 
     def __destroyModule(self, chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage):
@@ -493,15 +497,17 @@ class DestructiblesManager():
 
     def __dropDestructible(self, chunkID, destrIndex, fallDirYaw, pitchConstr, fallSpeed, isAnimate, obstacleCollisionFlags):
         self.__stopLifetimeEffect(chunkID, destrIndex, 0)
-        if isAnimate:
-            self.__launchFallEffect(chunkID, destrIndex, 'fractureEffect', fallDirYaw)
+        self.__launchFallEffect(chunkID, destrIndex, 'fractureEffect', fallDirYaw)
         useEffectsOnTouchDown = obstacleCollisionFlags & 8 or pitchConstr > _MAX_PITCH_TO_CHECK_TERRAIN
         desc = g_cache.getDestructibleDesc(self.__spaceID, chunkID, destrIndex)
         if desc is None:
             _printErrDescNotAvailable(self.__spaceID, chunkID, destrIndex)
             return
         else:
+            if 'preferredTiltDirections' in desc:
+                fallDirYaw = self.__pickPrefferedTiltAngle(chunkID, destrIndex, fallDirYaw, desc)
             fashion = _getOrCreateFashion(self.__spaceID, chunkID, destrIndex, False)
+            fashion.havokRemove()
             destrType = desc['type']
             if destrType == DESTR_TYPE_FALLING_ATOM:
                 if isAnimate:
@@ -520,6 +526,18 @@ class DestructiblesManager():
             initialMatrix = self.__getDestrInitialMatrix(chunkID, destrIndex)
             g_destructiblesAnimator.showFall(self.__spaceID, chunkID, destrIndex, fallDirYaw, pitchConstr, fallSpeed, isAnimate, initialMatrix, touchdownCallback)
             return
+
+    def __pickPrefferedTiltAngle(self, chunkID, destrIndex, hitDirYaw, desc):
+        transformation = BigWorld.wg_getDestructibleMatrix(self.__spaceID, chunkID, destrIndex)
+        dYaw = transformation.yaw
+        hitYaw_localFrame = hitDirYaw - dYaw
+        tiltYaw_localFrame = min(desc['preferredTiltDirections'] or [hitYaw_localFrame], key=lambda angle: abs(angle - hitYaw_localFrame))
+        if tiltYaw_localFrame > math.pi:
+            tiltYaw_localFrame -= 2 * math.pi
+        elif tiltYaw_localFrame < -math.pi:
+            tiltYaw_localFrame += 2 * math.pi
+        tiltYaw_worldFrame = tiltYaw_localFrame + dYaw
+        return tiltYaw_worldFrame
 
     def __touchDownWithEffect(self, chunkID, destrIndex, fallDirYaw, touchEffect, breakEffect, fashion):
         self.__launchFallEffect(chunkID, destrIndex, touchEffect, fallDirYaw)

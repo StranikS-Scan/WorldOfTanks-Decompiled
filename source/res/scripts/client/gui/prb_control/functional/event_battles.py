@@ -5,7 +5,8 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from PlayerEvents import g_playerEvents
 from gui import SystemMessages
 from gui.game_control import g_instance as g_gameCtrl
-from gui.prb_control import events_dispatcher, isParentControlActivated, isInEventBattlesQueue
+from gui.prb_control import isParentControlActivated, isInEventBattlesQueue
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.context import pre_queue_ctx
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.functional.decorators import vehicleAmmoCheck
@@ -28,7 +29,7 @@ class EventBattlesQueueFunctional(PreQueueFunctional):
         result = super(EventBattlesQueueFunctional, self).init(ctx)
         g_gameCtrl.captcha.onCaptchaInputCanceled += self.onCaptchaInputCanceled
         if self.isInQueue():
-            events_dispatcher.loadBattleQueue()
+            g_eventDispatcher.loadBattleQueue()
             result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_PAGE)
         return result
 
@@ -46,7 +47,7 @@ class EventBattlesQueueFunctional(PreQueueFunctional):
                 callback(False)
             return
         if isParentControlActivated():
-            events_dispatcher.showParentControlNotification()
+            g_eventDispatcher.showParentControlNotification()
             if callback:
                 callback(False)
             return
@@ -104,14 +105,14 @@ class EventBattlesQueueFunctional(PreQueueFunctional):
     def onEnqueued(self):
         super(EventBattlesQueueFunctional, self).onEnqueued()
         self.__requestCtx.stopProcessing(True)
-        events_dispatcher.loadBattleQueue()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.loadBattleQueue()
+        g_eventDispatcher.updateUI()
 
     def onDequeued(self):
         super(EventBattlesQueueFunctional, self).onDequeued()
         self.__requestCtx.stopProcessing(True)
         g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
-        events_dispatcher.loadHangar()
+        g_eventDispatcher.loadHangar()
 
     def onEnqueueError(self, errorCode, _):
         super(EventBattlesQueueFunctional, self).onEnqueueError(errorCode, _)
@@ -123,16 +124,16 @@ class EventBattlesQueueFunctional(PreQueueFunctional):
         super(EventBattlesQueueFunctional, self).onKickedFromQueue()
         self.__requestCtx.stopProcessing(True)
         g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
-        events_dispatcher.loadHangar()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.loadHangar()
+        g_eventDispatcher.updateUI()
         SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
 
     def onKickedFromArena(self, errorCode):
         super(EventBattlesQueueFunctional, self).onKickedFromArena(errorCode)
         self.__requestCtx.stopProcessing(True)
         g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
-        events_dispatcher.loadHangar()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.loadHangar()
+        g_eventDispatcher.updateUI()
         SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
 
     def onCaptchaInputCanceled(self):

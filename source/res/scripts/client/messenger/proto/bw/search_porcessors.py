@@ -3,7 +3,7 @@ import weakref
 import BigWorld
 import chat_shared
 from constants import USER_SEARCH_RESULTS_LIMIT, CHANNEL_SEARCH_RESULTS_LIMIT
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from external_strings_utils import isAccountNameValid
 from external_strings_utils import _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -68,32 +68,45 @@ class SearchProcessor(ISearchProcessor):
     def _makeRequestID(self):
         return BigWorld.player().acquireRequestID()
 
+    def _invokeHandlerMethod(self, methodName, *args):
+        for handlerRef in self._handlers.copy():
+            handler = handlerRef()
+            if handler:
+                method = getattr(handler, methodName, None)
+                if method and callable(method):
+                    method(*args)
+                else:
+                    LOG_ERROR('Method is not found', handler, methodName)
+
+        return
+
     def _onSearchTokenComplete(self, requestID, result):
         if self._lastRequestID != requestID:
             return
-        for handlerRef in self._handlers.copy():
-            handler = handlerRef()
-            if handler:
-                handler.onSearchComplete(result)
+        self._invokeHandlerMethod('onSearchComplete', result)
 
     def _onSearchFailed(self, reason):
-        for handlerRef in self._handlers.copy():
-            handler = handlerRef()
-            if handler:
-                handler.onSearchFailed(reason)
+        self._invokeHandlerMethod('onSearchFailed', reason)
+
+    def _onExcludeFromSearch(self, entity):
+        self._invokeHandlerMethod('onExcludeFromSearch', entity)
 
 
 class SearchChannelsProcessor(SearchProcessor):
 
     def init(self):
         super(SearchChannelsProcessor, self).init()
-        self.proto.channels.onRequestChannelsComplete += self.__cm_onSearchTokenComplete
-        self.proto.channels.onFindChannelsFailed += self.__cm_onSearchTokenFailed
+        channels = self.proto.channels
+        channels.onRequestChannelsComplete += self.__cm_onSearchTokenComplete
+        channels.onFindChannelsFailed += self.__cm_onSearchTokenFailed
+        channels.onChannelExcludeFromSearch += self.__cm_onChannelExcludeFromSearch
 
     def fini(self):
         super(SearchChannelsProcessor, self).fini()
-        self.proto.channels.onRequestChannelsComplete -= self.__cm_onSearchTokenComplete
-        self.proto.channels.onFindChannelsFailed -= self.__cm_onSearchTokenFailed
+        channels = self.proto.channels
+        channels.onRequestChannelsComplete -= self.__cm_onSearchTokenComplete
+        channels.onFindChannelsFailed -= self.__cm_onSearchTokenFailed
+        channels.onChannelExcludeFromSearch -= self.__cm_onChannelExcludeFromSearch
 
     def find(self, token, **kwargs):
         result, message = self.isInCooldown()
@@ -117,6 +130,9 @@ class SearchChannelsProcessor(SearchProcessor):
             if actionResponse == chat_shared.CHAT_RESPONSES.commandInCooldown:
                 reason = cooldown.getOperationInCooldownMsg(self.getChatCommand(), data.get('cooldownPeriod', -1))
                 self._onSearchFailed(reason)
+
+    def __cm_onChannelExcludeFromSearch(self, channel):
+        self._onExcludeFromSearch(channel)
 
 
 class SearchUsersProcessor(SearchProcessor):

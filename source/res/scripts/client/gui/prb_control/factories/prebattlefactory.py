@@ -2,40 +2,59 @@
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import prb_control
-from gui.prb_control.context.prb_ctx import LeavePrbCtx, OpenPrbListCtx
+from gui.prb_control.context import prb_ctx
 from gui.prb_control.factories.ControlFactory import ControlFactory
+from gui.prb_control.functional import isStatefulFunctional
 from gui.prb_control.functional.no_prebattle import NoPrbFunctional
 from gui.prb_control.functional.not_supported import PrbNotSupportedFunctional
 from gui.prb_control.functional.not_supported import NotSupportedEntry
-from gui.prb_control.functional.default import PrbInitFunctional
+from gui.prb_control.functional.default import PrbInitFunctional, PrbIntro, IntroPrbFunctional
 from gui.prb_control.functional.training import TrainingEntry, TrainingFunctional
+from gui.prb_control.functional.training import TrainingIntroFunctional
 from gui.prb_control.functional.squad import SquadEntry, SquadFunctional
 from gui.prb_control.functional.company import CompanyEntry, CompanyFunctional
+from gui.prb_control.functional.company import CompanyIntroFunctional
 from gui.prb_control.functional.battle_session import BattleSessionEntry
+from gui.prb_control.functional.battle_session import BattleSessionListEntry
 from gui.prb_control.functional.battle_session import BattleSessionFunctional
 from gui.prb_control.items import PlayerDecorator, FunctionalState
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
-_SUPPORTED_PREBATTLE = {PREBATTLE_TYPE.TRAINING: (TrainingEntry, TrainingFunctional),
- PREBATTLE_TYPE.SQUAD: (SquadEntry, SquadFunctional),
- PREBATTLE_TYPE.COMPANY: (CompanyEntry, CompanyFunctional),
- PREBATTLE_TYPE.TOURNAMENT: (BattleSessionEntry, BattleSessionFunctional),
- PREBATTLE_TYPE.CLAN: (BattleSessionEntry, BattleSessionFunctional)}
-_OPEN_PRB_LIST_BY_ACTION = {PREBATTLE_ACTION_NAME.TRAINING_LIST: PREBATTLE_TYPE.TRAINING,
- PREBATTLE_ACTION_NAME.LEAVE_TRAINING_LIST: PREBATTLE_TYPE.TRAINING,
- PREBATTLE_ACTION_NAME.COMPANY_LIST: PREBATTLE_TYPE.COMPANY,
- PREBATTLE_ACTION_NAME.SPEC_BATTLE_LIST: PREBATTLE_TYPE.CLAN}
-_CREATE_PRB_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: PREBATTLE_TYPE.SQUAD}
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT
+_PAN = PREBATTLE_ACTION_NAME
+_SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingEntry,
+ PREBATTLE_TYPE.SQUAD: SquadEntry,
+ PREBATTLE_TYPE.COMPANY: CompanyEntry,
+ PREBATTLE_TYPE.TOURNAMENT: BattleSessionEntry,
+ PREBATTLE_TYPE.CLAN: BattleSessionEntry}
+_SUPPORTED_ENTRY_BY_ACTION = {_PAN.SQUAD: (SquadEntry, None),
+ _PAN.TRAINING: (PrbIntro, (PREBATTLE_TYPE.TRAINING,)),
+ _PAN.COMPANY: (PrbIntro, (PREBATTLE_TYPE.COMPANY,)),
+ _PAN.SPEC_BATTLE: (BattleSessionListEntry, None)}
+_SUPPORTED_FUNCTIONAL = {PREBATTLE_TYPE.TRAINING: TrainingFunctional,
+ PREBATTLE_TYPE.SQUAD: SquadFunctional,
+ PREBATTLE_TYPE.COMPANY: CompanyFunctional,
+ PREBATTLE_TYPE.TOURNAMENT: BattleSessionFunctional,
+ PREBATTLE_TYPE.CLAN: BattleSessionFunctional}
+_SUPPORTED_INTRO = {PREBATTLE_TYPE.TRAINING: TrainingIntroFunctional,
+ PREBATTLE_TYPE.COMPANY: CompanyIntroFunctional}
 
 class PrebattleFactory(ControlFactory):
 
     def createEntry(self, ctx):
-        prbType = ctx.getPrbType()
-        if prbType in _SUPPORTED_PREBATTLE:
-            prbEntry = _SUPPORTED_PREBATTLE[prbType][0]()
+        if not ctx.getRequestType():
+            prbEntry = PrbIntro(ctx.getPrbType())
         else:
-            LOG_ERROR('Given type of prebattle is not supported', prbType)
-            prbEntry = NotSupportedEntry()
+            prbType = ctx.getPrbType()
+            clazz = None
+            if prbType in _SUPPORTED_ENTRY_BY_TYPE:
+                clazz = _SUPPORTED_ENTRY_BY_TYPE[prbType]
+            if clazz is None:
+                LOG_ERROR('Given type of prebattle is not supported', prbType)
+                clazz = NotSupportedEntry
+            prbEntry = clazz()
         return prbEntry
+
+    def createEntryByAction(self, action):
+        return self._createEntryByAction(action, _SUPPORTED_ENTRY_BY_ACTION)
 
     def createFunctional(self, dispatcher, ctx):
         clientPrb = prb_control.getClientPrebattle()
@@ -43,18 +62,32 @@ class PrebattleFactory(ControlFactory):
             if prb_control.isPrebattleSettingsReceived(prebattle=clientPrb):
                 prbSettings = prb_control.getPrebattleSettings(prebattle=clientPrb)
                 prbType = prb_control.getPrebattleType(settings=prbSettings)
-                if prbType in _SUPPORTED_PREBATTLE:
-                    prbFunctional = _SUPPORTED_PREBATTLE[prbType][1](prbSettings)
+                clazz = None
+                if prbType in _SUPPORTED_FUNCTIONAL:
+                    clazz = _SUPPORTED_FUNCTIONAL[prbType]
+                if clazz:
+                    prbFunctional = clazz(prbSettings)
                     for listener in dispatcher._globalListeners:
                         prbFunctional.addListener(listener())
 
+                    createParams = ctx.getCreateParams()
+                    if 'settings' in createParams and isStatefulFunctional(prbFunctional):
+                        guiSettings = createParams['settings']
+                        if guiSettings:
+                            prbFunctional.applyStates(guiSettings.get(CTRL_ENTITY_TYPE.PREBATTLE))
                 else:
                     LOG_ERROR('Prebattle with given type is not supported', prbType)
                     prbFunctional = PrbNotSupportedFunctional(prbSettings)
             else:
                 prbFunctional = PrbInitFunctional()
         else:
-            prbFunctional = NoPrbFunctional()
+            prbType = ctx.getPrbType()
+            clazz = None
+            if prbType in _SUPPORTED_INTRO:
+                clazz = _SUPPORTED_INTRO[prbType]
+            if clazz is None:
+                clazz = NoPrbFunctional
+            prbFunctional = clazz()
         return prbFunctional
 
     def createPlayerInfo(self, functional):
@@ -62,19 +95,7 @@ class PrebattleFactory(ControlFactory):
         return PlayerDecorator(info.isCreator, info.isReady())
 
     def createStateEntity(self, functional):
-        return FunctionalState(CTRL_ENTITY_TYPE.PREBATTLE, functional.getPrbType(), True)
+        return FunctionalState(CTRL_ENTITY_TYPE.PREBATTLE, functional.getPrbType(), True, functional.hasLockedState(), isinstance(functional, IntroPrbFunctional))
 
-    def createLeaveCtx(self):
-        return LeavePrbCtx(waitingID='prebattle/leave')
-
-    def getLeaveCtxByAction(self, action):
-        ctx = None
-        if action == PREBATTLE_ACTION_NAME.PREBATTLE_LEAVE:
-            ctx = self.createLeaveCtx()
-        return ctx
-
-    def getOpenListCtxByAction(self, action):
-        ctx = None
-        if action in _OPEN_PRB_LIST_BY_ACTION:
-            ctx = OpenPrbListCtx(_OPEN_PRB_LIST_BY_ACTION[action])
-        return ctx
+    def createLeaveCtx(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
+        return prb_ctx.LeavePrbCtx(waitingID='prebattle/leave', funcExit=funcExit)

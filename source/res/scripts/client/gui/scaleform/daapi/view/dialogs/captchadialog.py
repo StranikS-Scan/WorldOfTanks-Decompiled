@@ -121,6 +121,7 @@ class CaptchaDialog(View, CAPTCHAMeta, AbstractWindowView):
 
     def __afterImageCreate(self, challenge):
         Waiting.hide('requestCaptcha')
+        Waiting.suspend()
         if challenge is not None:
             self.__challenge = challenge
             self.__setCaptchaImageSource()

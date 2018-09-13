@@ -22,7 +22,6 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta, View, SmartPopOverView):
 
     def __init__(self, ctx):
         super(CrewOperationsPopOver, self).__init__()
-        self._setKeyPoint(ctx.get('inXcoordinate'), ctx.get('inYcoordinate'))
 
     def _populate(self):
         super(CrewOperationsPopOverMeta, self)._populate()

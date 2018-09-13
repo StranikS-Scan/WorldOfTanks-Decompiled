@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/__init__.py
+import weakref
 from constants import JD_CUTOUT
 from messenger.ext.ROPropertyMeta import ROPropertyMeta
 from messenger.m_constants import PROTO_TYPE, PROTO_TYPE_NAMES
@@ -7,20 +8,35 @@ from messenger.proto.bw.BWServerSettings import BWServerSettings
 from messenger.proto.interfaces import IProtoPlugin
 from messenger.proto.xmpp import XmppPlugin
 from messenger.proto.xmpp.XmppServerSettings import XmppServerSettings
-__all__ = ('BWProtoPlugin', 'XmppPlugin')
+__all__ = ('BWProtoPlugin', 'BWProtoPlugin_chat2', 'XmppPlugin')
 SUPPORTED_PROTO_PLUGINS = {PROTO_TYPE_NAMES[PROTO_TYPE.BW]: BWProtoPlugin(),
  PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]: XmppPlugin()}
 SUPPORTED_PROTO_SETTINGS = {PROTO_TYPE_NAMES[PROTO_TYPE.BW]: BWServerSettings(),
  PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]: XmppServerSettings()}
 
-class proto_getter(object):
+class proto_type_getter(object):
 
     def __init__(self, protoType):
-        super(proto_getter, self).__init__()
-        self.__attr = PROTO_TYPE_NAMES[protoType]
+        super(proto_type_getter, self).__init__()
+        self._attr = PROTO_TYPE_NAMES[protoType]
+
+    def get(self):
+        raise NotImplementedError
 
     def __call__(self, _):
-        return SUPPORTED_PROTO_PLUGINS[self.__attr]
+        return self.get()
+
+
+class proto_getter(proto_type_getter):
+
+    def get(self):
+        return SUPPORTED_PROTO_PLUGINS[self._attr]
+
+
+class settings_getter(proto_type_getter):
+
+    def get(self):
+        return SUPPORTED_PROTO_SETTINGS[self._attr]
 
 
 class ProtoPluginsDecorator(IProtoPlugin):
@@ -38,6 +54,9 @@ class ProtoPluginsDecorator(IProtoPlugin):
 
     def view(self, scope):
         self._invoke('view', scope)
+
+    def setFilters(self, msgFilterChain):
+        self._invoke('setFilters', weakref.proxy(msgFilterChain))
 
     def clear(self):
         self._invoke('clear')
@@ -84,3 +103,8 @@ class ServerSettings(object):
         elif protoType is PROTO_TYPE.XMPP:
             result = isXMPPEnabled and self.__jdCutout == JD_CUTOUT.ON
         return result
+
+
+def getBattleCommandFactory():
+    from messenger.proto.bw.battle_chat_cmd import BattleCommandFactory
+    return BattleCommandFactory()

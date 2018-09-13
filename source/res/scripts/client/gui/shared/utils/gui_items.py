@@ -88,7 +88,7 @@ class FittingItem(object):
         @return: True if vehicle has at least one not fake turret, False otherwise
         """
         if self.itemTypeName == ITEM_TYPE_NAMES[1]:
-            return len(self.descriptor.type.hull.get('fakeTurrets', {}).get('lobby', ())) != len(self.descriptor.type.turrets)
+            return len(self.descriptor.hull['fakeTurrets']['lobby']) != len(self.descriptor.type.turrets)
         return False
 
     @property
@@ -1621,7 +1621,7 @@ class InventoryTankman(InventoryItem):
             else:
                 if not hasattr(BigWorld.player(), 'inventory'):
                     raise AssertionError('Request from inventory is not possible')
-                    BigWorld.player().inventory.replacePassport(self.inventoryId, isFemale, firstNameID, lastNameID, iconID, replacePassportResponse)
+                    BigWorld.player().inventory.replacePassport(self.inventoryId, False, isFemale, 0, firstNameID, 0, lastNameID, 0, iconID, replacePassportResponse)
                     return
                 callback is not None and callback((False, message))
         return

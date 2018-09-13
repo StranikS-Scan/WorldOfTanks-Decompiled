@@ -233,7 +233,7 @@ class _EventInfo(object):
             if i18nKey is None:
                 i18nKey = '#quests:details/header/schedule'
             if len(weekDays):
-                days = ', '.join([ i18n.makeString('#menu:day/%d' % idx) for idx in self.event.getWeekDays() ])
+                days = ', '.join([ i18n.makeString('#menu:dateTime/weekDays/full/%d' % idx) for idx in self.event.getWeekDays() ])
                 i18nKey += 'Days'
                 args['days'] = days
             if len(intervals):
@@ -468,7 +468,10 @@ class _ActionInfo(_EventInfo):
 
 
 def getEventInfoData(event):
-    if event.getType() in (constants.EVENT_TYPE.BATTLE_QUEST, constants.EVENT_TYPE.TOKEN_QUEST):
+    if event.getType() in (constants.EVENT_TYPE.BATTLE_QUEST,
+     constants.EVENT_TYPE.TOKEN_QUEST,
+     constants.EVENT_TYPE.FORT_QUEST,
+     constants.EVENT_TYPE.PERSONAL_QUEST):
         return _QuestInfo(event)
     if event.getType() == constants.EVENT_TYPE.ACTION:
         return _ActionInfo(event)

@@ -97,6 +97,7 @@ ACHIEVEMENT_SECTIONS_ORDER = (_AS.BATTLE,
 ACHIEVEMENT_SECTIONS_INDICES = dict(((n, i) for i, n in enumerate(ACHIEVEMENT_SECTIONS_ORDER)))
 BATTLE_ACHIEVES_WITH_RIBBON = []
 BATTLE_ACHIEVES_RIGHT = []
+BATTLE_APPROACHABLE_ACHIEVES = []
 
 def getType(record):
     global ACHIEVEMENTS
@@ -128,8 +129,9 @@ def getWeight(record):
 
 
 def init(achievesMappingXmlPath):
-    global BATTLE_ACHIEVES_WITH_RIBBON
     global BATTLE_ACHIEVES_RIGHT
+    global BATTLE_APPROACHABLE_ACHIEVES
+    global BATTLE_ACHIEVES_WITH_RIBBON
     raise achievesMappingXmlPath or AssertionError('Invalid achievements mapping file')
     ctx, section = resource_helper.getRoot(achievesMappingXmlPath)
     for ctx, subSection in resource_helper.getIterator(ctx, section['achievements']):
@@ -154,3 +156,4 @@ def init(achievesMappingXmlPath):
 
     BATTLE_ACHIEVES_WITH_RIBBON = tuple(resource_helper.readList(ctx, section['battleAchievesWithRibbon']).value)
     BATTLE_ACHIEVES_RIGHT = tuple(resource_helper.readList(ctx, section['battleResultsRight']).value)
+    BATTLE_APPROACHABLE_ACHIEVES = tuple(resource_helper.readList(ctx, section['approachableAchieves']).value)

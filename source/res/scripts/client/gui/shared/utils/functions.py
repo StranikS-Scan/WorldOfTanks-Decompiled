@@ -3,6 +3,7 @@ import random
 import re
 import ArenaType
 from adisp import async, process
+from constants import CLAN_MEMBER_FLAGS
 from helpers import i18n
 from helpers.i18n import makeString
 from gui.shared.utils.gui_items import ShopItem, VehicleItem
@@ -30,6 +31,13 @@ def clamp(value, minRange, maxRange):
     if value > maxRange:
         return maxRange
     return value
+
+
+def roundToMinOrZero(value, minValue):
+    if value == 0:
+        return value
+    else:
+        return max(minValue, value)
 
 
 def getShortDescr(descr):
@@ -244,9 +252,6 @@ def getArenaFullName(arenaTypeID):
 
 
 def getBattleSubTypeWinText(arenaTypeID, teamID):
-    from gui.arena_info import isEventBattle
-    if isEventBattle():
-        return i18n.makeString('#arenas:type/football/description')
     key = 'type/%s/description' % ArenaType.g_cache[arenaTypeID].gameplayName
     winText = i18n.makeString('#arenas:%s' % key)
     if winText == key:
@@ -281,6 +286,10 @@ def isControlPointExists(arenaTypeID):
     if controlPoint:
         return True
     return False
+
+
+def getAbsoluteUrl(url):
+    return url.replace('../', 'img://gui/')
 
 
 def showInformationDialog(infDialog, callback, customMessage = '', ns = 'common'):
@@ -330,3 +339,21 @@ def showConfirmDialog(confirmDialog, callback, customMessage = '', ns = 'common'
      customMessage,
      'confirmDialog.onConfirm',
      'confirmDialog.onClose'])
+
+
+CLAN_MEMBERS = {CLAN_MEMBER_FLAGS.LEADER: 'leader',
+ CLAN_MEMBER_FLAGS.VICE_LEADER: 'vice_leader',
+ CLAN_MEMBER_FLAGS.RECRUITER: 'recruiter',
+ CLAN_MEMBER_FLAGS.TREASURER: 'treasurer',
+ CLAN_MEMBER_FLAGS.DIPLOMAT: 'diplomat',
+ CLAN_MEMBER_FLAGS.COMMANDER: 'commander',
+ CLAN_MEMBER_FLAGS.PRIVATE: 'private',
+ CLAN_MEMBER_FLAGS.RECRUIT: 'recruit',
+ CLAN_MEMBER_FLAGS.STAFF: 'staff',
+ CLAN_MEMBER_FLAGS.JUNIOR: 'junior',
+ CLAN_MEMBER_FLAGS.RESERVIST: 'reservist'}
+
+def getClanRoleString(position = CLAN_MEMBER_FLAGS.LEADER):
+    if position in CLAN_MEMBERS:
+        return i18n.makeString('#menu:profile/header/clan/position/%s' % CLAN_MEMBERS[position])
+    return ''

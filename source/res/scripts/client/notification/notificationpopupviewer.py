@@ -3,9 +3,9 @@ from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import Notificati
 from gui.shared.events import OpenLinkEvent
 from gui.shared.notifications import NotificationPriorityLevel
 from messenger import g_settings
+from messenger.formatters import TimeFormatter
 from notification.NotificationLayoutView import NotificationLayoutView
 from notification import NotificationMVC
-from notification.NotificationsTimeFormatter import NotificationsTimeFormatter
 from notification.settings import NOTIFICATION_STATE
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutView):
@@ -42,9 +42,10 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
                 self.__showAlertMessage(self.__pendingMessagesQueue.pop(0))
 
     def getMessageActualTime(self, msTime):
-        return NotificationsTimeFormatter.getActualTimeStr(msTime)
+        return TimeFormatter.getActualMsgTimeStr(msTime)
 
     def _populate(self):
+        super(NotificationPopUpViewer, self)._populate()
         self._model.onNotificationReceived += self.__onNotificationReceived
         self._model.onNotificationUpdated += self.__onNotificationUpdated
         self._model.onNotificationRemoved += self.__onNotificationRemoved

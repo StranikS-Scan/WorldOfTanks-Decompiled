@@ -1,12 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyView.py
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.BaseRallyViewMeta import BaseRallyViewMeta
+from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.prb_control.prb_cooldown import getPrbRequestCoolDown
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-__author__ = 'd_dichkovsky'
 
-class BaseRallyView(BaseRallyViewMeta):
+class BaseRallyView(BaseRallyViewMeta, WindowViewMeta):
 
     def __init__(self):
         super(BaseRallyView, self).__init__()

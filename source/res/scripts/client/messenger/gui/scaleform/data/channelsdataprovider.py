@@ -8,7 +8,10 @@ DEFAULT_FIELDS = {'clientID': 0,
  'isNotified': False,
  'icon': None,
  'order': 0,
- 'isInProgress': False}
+ 'isInProgress': False,
+ 'isWindowOpened': False,
+ 'readyData': None,
+ 'isWindowFocused': False}
 
 class ChannelsDataProvider(DAAPIDataProvider):
 
@@ -40,13 +43,17 @@ class ChannelsDataProvider(DAAPIDataProvider):
          'isNotified': data.get('isNotified', False),
          'icon': data.get('icon'),
          'order': data.get('order', (0, BigWorld.time())),
-         'isInProgress': data.get('isInProgress', False)}
+         'isInProgress': data.get('isInProgress', False),
+         'isWindowOpened': data.get('isWindowOpened', False),
+         'readyData': data.get('readyData', None),
+         'isWindowFocused': data.get('isWindowFocused', False)}
         if clientID in self.__data:
             self.__data[clientID].update(item)
         else:
             self.__data[clientID] = item
         self.buildList()
         self.refresh()
+        return
 
     def removeItem(self, clientID):
         if clientID in self.__data:

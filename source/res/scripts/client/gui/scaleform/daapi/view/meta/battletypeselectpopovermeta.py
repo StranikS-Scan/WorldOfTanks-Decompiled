@@ -6,6 +6,13 @@ class BattleTypeSelectPopoverMeta(DAAPIModule):
     def selectFight(self, actionName):
         self._printOverrideError('selectFight')
 
-    def as_updateS(self, items):
+    def demoClick(self):
+        self._printOverrideError('demoClick')
+
+    def as_updateS(self, items, isShowDemonstrator, demonstratorEnabled):
         if self._isDAAPIInited():
-            return self.flashObject.as_update(items)
+            return self.flashObject.as_update(items, isShowDemonstrator, demonstratorEnabled)
+
+    def as_setDemonstrationEnabledS(self, demonstratorEnabled):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setDemonstrationEnabled(demonstratorEnabled)

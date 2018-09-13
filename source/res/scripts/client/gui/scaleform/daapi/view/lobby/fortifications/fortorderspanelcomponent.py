@@ -1,13 +1,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrdersPanelComponent.py
 from constants import CLAN_MEMBER_FLAGS
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.meta.OrdersPanelMeta import OrdersPanelMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.SoundEffectsId import SoundEffectsId
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 
 class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
@@ -37,8 +39,7 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
                         isRecharged = True
 
             if isRecharged == True:
-                if self.app.soundManager is not None:
-                    self.app.soundManager.playEffectSound(SoundEffectsId.FORT_ORDER_ISREADY)
+                g_fortSoundController.playReadyOrder()
             result.append({'enabled': order.hasBuilding,
              'orderID': self.UI_ORDERS_BIND[orderID],
              'orderIcon': order.icon,
@@ -54,17 +55,23 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
 
         self.as_setOrdersS(result)
         self.__orders = result
-        return
 
     def getOrderTooltipBody(self, orderID):
+        header = i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(orderID))
+        note = None
         order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(orderID))
+        buildingDescr = self.fortCtrl.getFort().getBuilding(order.buildingID)
         if order.hasBuilding:
-            ordersListStr = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_CLANPERMISSIONS)
             description = ''
+            ordersListStr = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_CLANPERMISSIONS)
             if order.inCooldown:
                 description = self._getCooldownInfo(order)
             elif order.count > 0:
-                description = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_ORDERISREADY)
+                if self._isProductionInPause(buildingDescr):
+                    description = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERSPANEL_CANTUSEORDER)
+                    description += '\n' + i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INFO)
+                else:
+                    description = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_ORDERISREADY)
                 if not self._canGiveOrder():
                     description += '\n' + ordersListStr
             else:
@@ -74,11 +81,19 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
                     description = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_NOORDERS)
                     description += '\n' + ordersListStr
             if order.inProgress:
-                description = self._getProgressInfo(description, order)
+                if self._isProductionInPause(buildingDescr):
+                    pauseText = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INPAUSE)
+                    if len(description) > 0:
+                        description += '\n' + pauseText
+                    else:
+                        description = pauseText
+                    description += '\n' + i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INFO)
+                else:
+                    description = self._getProgressInfo(description, order)
         else:
             buildingStr = i18n.makeString(FORTIFICATIONS.buildings_buildingname(self.UI_BUILDINGS_BIND[order.buildingID]))
             description = i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_ORDERNOTREADY, building=buildingStr)
-        return description
+        return makeTooltip(header, description, note)
 
     def _canGiveOrder(self):
         return g_clanCache.clanRole in (CLAN_MEMBER_FLAGS.LEADER, CLAN_MEMBER_FLAGS.VICE_LEADER)

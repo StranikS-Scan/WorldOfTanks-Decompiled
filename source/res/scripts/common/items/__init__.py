@@ -1,6 +1,5 @@
 # Embedded file name: scripts/common/items/__init__.py
 import ResMgr
-from types import IntType
 from items import _xml
 from constants import IS_CLIENT, ITEM_DEFS_PATH
 if IS_CLIENT:
@@ -42,7 +41,7 @@ def getTypeInfoByIndex(typeIndex):
 
 
 def getTypeOfCompactDescr(compactDescr):
-    if type(compactDescr) is IntType:
+    if type(compactDescr) is int:
         typeID = compactDescr & 15
     else:
         typeID = ord(compactDescr[0]) & 15

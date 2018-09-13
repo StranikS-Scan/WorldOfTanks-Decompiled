@@ -267,7 +267,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
             LOG_CURRENT_EXCEPTION()
 
         try:
-            if self.gunRotator is not None:
+            if hasattr(self, 'gunRotator') and self.gunRotator is not None:
                 self.gunRotator.destroy()
                 self.gunRotator = None
         except Exception:
@@ -509,7 +509,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
                  CommandMapping.CMD_CHAT_SHORTCUT_HELPME,
                  CommandMapping.CMD_CHAT_SHORTCUT_RELOAD,
                  CommandMapping.CMD_RADIAL_MENU_SHOW), key) and self.__isVehicleAlive:
-                    g_windowsManager.battleWindow.radialMenu.handleKey(key, isDown, self.inputHandler.aim.offset())
+                    if self.inputHandler.aim is not None:
+                        g_windowsManager.battleWindow.radialMenu.handleKey(key, isDown, self.inputHandler.aim.offset())
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_VEHICLE_MARKERS_SHOW_INFO, key):
                     g_windowsManager.battleWindow.vMarkersManager.showExtendedInfo(isDown)
@@ -877,7 +878,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
         aimingInfo[4] = chassisShotDispersionFactorsMovement
         aimingInfo[5] = chassisShotDispersionFactorsRotation
         aimingInfo[6] = aimingTime
-        if self.gunRotator is not None:
+        if hasattr(self, 'gunRotator') and self.gunRotator is not None:
             self.gunRotator.update(turretYaw, gunPitch, maxTurretRotationSpeed, maxGunRotationSpeed)
         self.getOwnVehicleShotDispersionAngle(self.gunRotator.turretRotationSpeed)
         return
@@ -1046,13 +1047,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
             LOG_MX('showDevelopmentInfo', code, params)
         return
 
-    def showTracer(self, shooterID, shotID, effectsIndex, refStartPoint, velocity, gravity, maxShotDist):
+    def showTracer(self, shooterID, shotID, isRicochet, effectsIndex, refStartPoint, velocity, gravity, maxShotDist):
         if not self.userSeesWorld():
             return
         else:
             startPoint = refStartPoint
             shooter = BigWorld.entity(shooterID)
-            if shooter is not None and shooter.isStarted:
+            if not isRicochet and shooter is not None and shooter.isStarted:
                 gunMatrix = Math.Matrix(shooter.appearance.modelsDesc['gun']['model'].node('HP_gunFire'))
                 gunFirePos = gunMatrix.translation
                 if cameras.isPointOnScreen(gunFirePos):
@@ -1063,6 +1064,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
             effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
             isOwnShoot = self.playerVehicleID == shooterID
             self.__projectileMover.add(shotID, effectsDescr, gravity, refStartPoint, velocity, startPoint, maxShotDist, isOwnShoot, BigWorld.camera().position)
+            if isRicochet:
+                self.__projectileMover.hold(shotID)
             return
 
     def stopTracer(self, shotID, endPoint):
@@ -1633,6 +1636,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
         except:
             LOG_CURRENT_EXCEPTION()
 
+    def messenger_onActionByServer_chat2(self, actionID, reqID, args):
+        from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
+        LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
+
     def __onAction(self, action):
         self.onChatShortcut(action)
 
@@ -1792,10 +1799,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
         else:
             self.__isOnArena = onArena
             if not onArena:
-                if self.gunRotator is not None:
+                if hasattr(self, 'gunRotator') and self.gunRotator is not None:
                     self.gunRotator.stop()
             else:
-                if self.gunRotator is not None:
+                if hasattr(self, 'gunRotator') and self.gunRotator is not None:
                     self.gunRotator.start()
                 self.moveVehicle(self.makeVehicleMovementCommandByKeys(), False)
                 if self.__nextShellsIdx > 0 and self.__nextShellsIdx in self.__ammo:
@@ -1858,6 +1865,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
         if deviceState is not None:
             damagePanel.updateState(deviceName, deviceState)
             consumablesPanel.updateExpandedEquipmentSlot(deviceName, deviceState)
+            if deviceState == 'repaired':
+                deviceState = 'critical'
+            soundNotificationCheckFn = lambda : self.__deviceStates.get(deviceName, 'normal') == deviceState
         if soundType is not None and damageCode not in self.__damageInfoNoNotification:
             sound = extra.sounds.get(soundType)
             if sound is not None:
@@ -1917,7 +1927,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
             if g_windowsManager.battleWindow is not None:
                 g_windowsManager.battleWindow.hideVehicleTimer('ALL')
             try:
-                self.gunRotator.stop()
+                if hasattr(self, 'gunRotator') and self.gunRotator is not None:
+                    self.gunRotator.stop()
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
@@ -2292,6 +2303,34 @@ _shotResultSoundPriorities = {'enemy_hp_damaged_by_projectile_and_gun_damaged_by
  'enemy_no_hp_damage_at_no_attempt_by_player': 2,
  'enemy_no_hp_damage_by_near_explosion_by_player': 1,
  'enemy_ricochet_by_player': 0}
+
+class FilterLagEmulator(object):
+
+    def __init__(self, entityFilter = None, period = 5):
+        self.__period = period
+        self.__filter = BigWorld.player().getVehicleAttached().filter if entityFilter is None else entityFilter
+        self.__callback = None
+        return
+
+    def start(self):
+        if self.__callback is None:
+            self.__onCallback()
+        return
+
+    def __onCallback(self):
+        self.click()
+        self.__callback = BigWorld.callback(self.__period, self.__onCallback)
+
+    def click(self):
+        self.__filter.ignoreInputs = not self.__filter.ignoreInputs
+
+    def stop(self):
+        if self.__callback is not None:
+            BigWorld.cancelCallback(self.__callback)
+            self.__callback = None
+        return
+
+
 Avatar = PlayerAvatar
 
 def getVehicleShootingPositions(vehicle):

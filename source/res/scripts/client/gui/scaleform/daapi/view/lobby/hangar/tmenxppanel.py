@@ -12,9 +12,9 @@ class TmenXpPanel(TmenXpPanelMeta):
         super(TmenXpPanel, self).__init__()
 
     def _populate(self):
+        super(TmenXpPanel, self)._populate()
         g_currentVehicle.onChanged += self._onVehicleChange
         self._onVehicleChange()
-        super(TmenXpPanel, self)._populate()
 
     def _dispose(self):
         g_currentVehicle.onChanged -= self._onVehicleChange

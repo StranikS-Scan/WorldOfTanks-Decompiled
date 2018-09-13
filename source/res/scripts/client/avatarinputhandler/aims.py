@@ -17,7 +17,7 @@ import BattleReplay
 
 def createAim(type):
     if not GUI_SETTINGS.isGuiEnabled():
-        from gui.development.no_gui.Aim import Aim
+        from gui.development.no_gui.battle import Aim
         return Aim()
     if type == 'strategic':
         return StrategicAim((0, 0.0))

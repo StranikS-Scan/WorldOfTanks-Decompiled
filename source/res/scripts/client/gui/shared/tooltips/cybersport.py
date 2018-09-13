@@ -60,6 +60,19 @@ class CybersportSlotSelectedToolTipData(CybersportToolTipData):
             return
 
 
+class SquadSlotSelectedToolTipData(CybersportToolTipData):
+
+    def getDisplayableData(self, playerID):
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            functional = dispatcher.getPrbFunctional()
+            playerInfo = functional.getPlayerInfo(pID=playerID)
+            if playerInfo.isVehicleSpecified():
+                return makeVehicleVO(playerInfo.getVehicle())
+        super(SquadSlotSelectedToolTipData, self).getDisplayableData()
+        return
+
+
 class CybersportUnitToolTipData(CybersportToolTipData):
 
     def getDisplayableData(self, unitIdx = None):

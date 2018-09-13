@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortWelcomeViewComponent.py
+from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.FortWelcomeViewMeta import FortWelcomeViewMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
@@ -33,14 +34,28 @@ class FortWelcomeViewComponent(FortWelcomeViewMeta, FortViewHelper):
         super(FortWelcomeViewComponent, self)._populate()
         self.startFortListening()
         self.__updateData()
+        clanSearch = self.__makeHyperLink('clanSearch', FORTIFICATIONS.FORTWELCOMEVIEW_CLANSEARCH)
+        clanCreate = self.__makeHyperLink('clanCreate', FORTIFICATIONS.FORTWELCOMEVIEW_CLANCREATE)
+        detail = self.__makeHyperLink('fortDescription', FORTIFICATIONS.FORTWELCOMEVIEW_HYPERLINK_MORE)
+        self.as_setHyperLinksS(clanSearch, clanCreate, detail)
         Waiting.hide('loadPage')
+        Waiting.hide('Flash')
+
+    def __makeHyperLink(self, linkType, textId):
+        text = i18n.makeString(textId)
+        attrs = {'linkType': linkType,
+         'text': text}
+        linkHtml = makeHtmlString('html_templates:lobby/fortifications', 'link', attrs)
+        return linkHtml
 
     def _dispose(self):
         self.stopFortListening()
         super(FortWelcomeViewComponent, self)._dispose()
 
     def _getCustomData(self):
-        return {'isOnClan': g_clanCache.isInClan}
+        return {'isOnClan': g_clanCache.isInClan,
+         'canRoleCreateFortRest': self.fortCtrl.getPermissions().canCreate(),
+         'canCreateFortLim': self.fortCtrl.getLimits().isCreationValid()[0]}
 
     def __updateData(self):
         data = self.getData()

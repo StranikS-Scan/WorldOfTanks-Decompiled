@@ -17,7 +17,6 @@ class ControlFactoryDecorator(ControlFactory):
         setItem = dispatcher.getFunctionalCollection().setItem
         result = 0
         for ctrlType, factory in self.__factories.iteritems():
-            ctx.setEntityType(ctrlType)
             result |= setItem(ctrlType, factory.createFunctional(dispatcher, ctx))
 
         return result
@@ -36,16 +35,19 @@ class ControlFactoryDecorator(ControlFactory):
 
     def createEntry(self, ctx):
         item = None
-        ctrlType = ctx.getEntityType()
+        ctrlType = ctx.getCtrlType()
         if ctrlType in self.__factories:
             item = self.__factories[ctrlType].createEntry(ctx)
         else:
             LOG_ERROR('Entry factory is not found', ctx)
         return item
 
+    def createEntryByAction(self, action):
+        return self._search(action, 'createEntryByAction')
+
     def createFunctional(self, dispatcher, ctx):
         item = None
-        ctrlType = ctx.getEntityType()
+        ctrlType = ctx.getCtrlType()
         if ctrlType in self.__factories:
             item = self.__factories[ctrlType].createFunctional(dispatcher, ctx)
             dispatcher.getFunctionalCollection().setItem(ctrlType, item, ctx.getInitParams())
@@ -55,18 +57,10 @@ class ControlFactoryDecorator(ControlFactory):
         del ctx
         return item
 
-    def getLeaveCtxByAction(self, action):
+    def _search(self, action, method):
         for factory in self.__factories.itervalues():
-            ctx = factory.getLeaveCtxByAction(action)
-            if ctx:
-                return ctx
-
-        return None
-
-    def getOpenListCtxByAction(self, action):
-        for factory in self.__factories.itervalues():
-            ctx = factory.getEntryCtxByAction(action)
-            if ctx:
-                return ctx
+            result = getattr(factory, method)(action)
+            if result:
+                return result
 
         return None

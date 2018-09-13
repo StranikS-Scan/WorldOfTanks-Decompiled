@@ -1,8 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBuildingProcessWindow.py
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from FortifiedRegionBase import BuildingDescr
 from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_text import STANDARD_TEXT
 from gui.Scaleform.framework.entities.View import View
@@ -14,7 +16,6 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
-from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.fortifications.context import BuildingCtx
 from gui.shared.utils import CONST_CONTAINER
 from helpers import i18n
@@ -51,7 +52,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
             self.destroy()
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
-        if reason == self.fortCtrl.getFort().BUILDING_UPDATE_REASON.ADDED and ctx.get('dir') == self.__buildingDirection and ctx.get('pos') == self.__buildingPosition:
+        if reason == BUILDING_UPDATE_REASON.ADDED and ctx.get('dir') == self.__buildingDirection and ctx.get('pos') == self.__buildingPosition:
             self.destroy()
 
     def requestBuildingInfo(self, uid):
@@ -122,7 +123,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         self._orderID = self.fortCtrl.getFort().getBuildingOrder(self._buildingID)
         orderTitle = fort_text.getText(fort_text.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(self.UI_ORDERS_BIND[self._orderID])))
         descrMSG = i18n.makeString(FORTIFICATIONS.buildings_processorderinfo(uid))
-        descrMSG = fort_text.getText(fort_text.STANDARD_TEXT, descrMSG)
+        descrMSG = fort_text.getText(fort_text.MAIN_TEXT, descrMSG)
         result = {}
         result['title'] = orderTitle
         result['description'] = descrMSG
@@ -130,7 +131,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         buildingDescr = self.fortCtrl.getFort().getBuilding(self.UI_BUILDINGS_BIND.index(uid), BuildingDescr(typeID=buildingId))
         order = self.fortCtrl.getFort().getOrder(buildingDescr.typeRef.orderType)
         result['iconSource'] = order.icon
-        result['isPermanent'] = order.isPermanent
+        result['showAlertIcon'] = self._showOrderAlertIcon(order)
         result['iconLevel'] = None
         return result
 
@@ -142,12 +143,10 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         buildingTypeID = self.UI_BUILDINGS_BIND.index(uid)
         result = yield self.fortProvider.sendRequest(BuildingCtx(buildingTypeID, self.__buildingDirection, self.__buildingPosition, waitingID='fort/building/add'))
         if result:
-            if self.app.soundManager is not None:
-                self.app.soundManager.playEffectSound(SoundEffectsId.FORT_ENTERED_FOUNDATION_STATE)
+            g_fortSoundController.playCreateBuilding()
             building = self.fortCtrl.getFort().getBuilding(buildingTypeID)
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_BUILDINGPROCESS, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
             self.onWindowClose()
-        return
 
     def __makeData(self):
         result = {}

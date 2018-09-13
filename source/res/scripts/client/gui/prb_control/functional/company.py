@@ -7,17 +7,18 @@ from constants import PREBATTLE_COMPANY_DIVISION
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
-from gui.prb_control import events_dispatcher, getPrebattleType, prb_cooldown
+from gui.prb_control import getPrebattleType, prb_cooldown
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control import getPrebattleRosters, getClientPrebattle
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.functional.decorators import vehicleAmmoCheck
 from gui.prb_control.functional.interfaces import IPrbListRequester
 from gui.prb_control.items import prb_seqs, prb_items
 from gui.prb_control.restrictions.limits import CompanyLimits
-from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER
+from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER, FUNCTIONAL_EXIT, PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
-from gui.prb_control.functional.default import PrbEntry, PrbFunctional
+from gui.prb_control.functional.default import PrbEntry, PrbFunctional, IntroPrbFunctional, PrbRosterRequester
 from gui.prb_control.restrictions.permissions import CompanyPrbPermissions
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelCarouselEvent
@@ -25,16 +26,8 @@ from prebattle_shared import decodeRoster
 
 class CompanyEntry(PrbEntry):
 
-    def doAction(self, action, dispatcher = None):
-        events_dispatcher.loadCompaniesWindow()
-        return True
-
     def create(self, ctx, callback = None):
-        if not isinstance(ctx, prb_ctx.CompanySettingsCtx):
-            LOG_ERROR('Invalid context to create company', ctx)
-            if callback:
-                callback(False)
-        elif prb_cooldown.validatePrbCreationCooldown():
+        if prb_cooldown.validatePrbCreationCooldown():
             if callback:
                 callback(False)
         elif getClientPrebattle() is None or ctx.isForced():
@@ -48,10 +41,11 @@ class CompanyEntry(PrbEntry):
         return
 
 
-class CompanyListRequester(IPrbListRequester):
+class _CompanyListRequester(IPrbListRequester):
 
     def __init__(self):
         self.__callback = None
+        self.__ctx = None
         self.__cooldown = prb_cooldown.PrbCooldownManager()
         return
 
@@ -60,6 +54,9 @@ class CompanyListRequester(IPrbListRequester):
 
     def getCooldown(self):
         return self.__cooldown.getTime(REQUEST_TYPE.PREBATTLES_LIST)
+
+    def fireCooldownEvent(self):
+        self.__cooldown.fireEvent(REQUEST_TYPE.PREBATTLES_LIST, self.__cooldown.getTime(REQUEST_TYPE.PREBATTLES_LIST))
 
     def start(self, callback):
         if callback is not None and callable(callback):
@@ -73,13 +70,19 @@ class CompanyListRequester(IPrbListRequester):
     def stop(self):
         g_playerEvents.onPrebattlesListReceived -= self.__pe_onPrebattlesListReceived
         self.__callback = None
+        if self.__ctx:
+            self.__ctx.stopProcessing(False)
+            self.__ctx = None
         return
 
     def request(self, ctx = None):
         if self.__cooldown.validate(REQUEST_TYPE.PREBATTLES_LIST):
+            if ctx:
+                ctx.stopProcessing(False)
             return
         LOG_DEBUG('Request prebattle', ctx)
         self.__cooldown.process(REQUEST_TYPE.PREBATTLES_LIST)
+        self.__ctx = ctx
         if ctx.byDivision():
             BigWorld.player().requestPrebattlesByDivision(ctx.isNotInBattle, ctx.division)
         elif ctx.byName():
@@ -87,11 +90,67 @@ class CompanyListRequester(IPrbListRequester):
         else:
             BigWorld.player().requestPrebattles(PREBATTLE_TYPE.COMPANY, PREBATTLE_CACHE_KEY.CREATE_TIME, ctx.isNotInBattle, -50, 0)
 
-    def __pe_onPrebattlesListReceived(self, prbType, prbsCount, prebattles):
+    def __pe_onPrebattlesListReceived(self, prbType, _, prebattles):
         if prbType != PREBATTLE_TYPE.COMPANY:
             return
-        LOG_DEBUG('onPrebattlesListReceived', prbsCount)
-        self.__callback(prb_seqs.PrbListIterator(reversed(prebattles)))
+        else:
+            if self.__ctx:
+                self.__ctx.stopProcessing(True)
+                self.__ctx = None
+            self.__callback(prb_seqs.PrbListIterator(reversed(prebattles)))
+            return
+
+
+class CompanyIntroFunctional(IntroPrbFunctional):
+
+    def __init__(self):
+        handlers = {REQUEST_TYPE.PREBATTLES_LIST: self.requestList,
+         REQUEST_TYPE.GET_ROSTER: self.requestRoster}
+        super(CompanyIntroFunctional, self).__init__(PREBATTLE_TYPE.COMPANY, _CompanyListRequester(), handlers)
+        self._rosterReq = PrbRosterRequester()
+
+    def init(self, clientPrb = None, ctx = None):
+        result = super(CompanyIntroFunctional, self).init()
+        self._rosterReq.start(self._onPrbRosterReceived)
+        g_eventDispatcher.loadCompany()
+        result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_WINDOW)
+        g_eventDispatcher.updateUI()
+        return result
+
+    def fini(self, clientPrb = None, woEvents = False):
+        super(CompanyIntroFunctional, self).fini()
+        if self._exit != FUNCTIONAL_EXIT.PREBATTLE:
+            if woEvents:
+                g_eventDispatcher.unloadCompany()
+            else:
+                g_eventDispatcher.removeCompanyFromCarousel()
+            g_eventDispatcher.updateUI()
+
+    def canPlayerDoAction(self):
+        return (not self._hasEntity, '')
+
+    def doSelectAction(self, action):
+        result = False
+        if action.actionName == PREBATTLE_ACTION_NAME.COMPANY:
+            g_eventDispatcher.showCompanyWindow()
+            result = True
+        return result
+
+    def requestList(self, ctx, callback = None):
+        if self._listReq.isInCooldown():
+            self._listReq.fireCooldownEvent()
+            if callback:
+                callback(True)
+        else:
+            ctx.startProcessing(callback)
+            self._listReq.request(ctx)
+
+    def requestRoster(self, ctx, callback = None):
+        ctx.startProcessing(callback)
+        self._rosterReq.request(ctx)
+
+    def _onPrbRosterReceived(self, prbID, roster):
+        self._invokeListeners('onPrbRosterReceived', prbID, roster)
 
 
 class CompanyFunctional(PrbFunctional):
@@ -110,18 +169,16 @@ class CompanyFunctional(PrbFunctional):
 
     def init(self, clientPrb = None, ctx = None):
         result = super(CompanyFunctional, self).init(clientPrb=clientPrb)
-        isInvitesOpen = False
-        if ctx is not None:
-            isInvitesOpen = ctx.getRequestType() is REQUEST_TYPE.CREATE
         playerInfo = self.getPlayerInfo()
         if self.getTeamState(team=1).isInQueue() and playerInfo.isReady() and playerInfo.roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1:
-            events_dispatcher.loadBattleQueue()
+            g_eventDispatcher.loadBattleQueue()
         else:
-            events_dispatcher.loadHangar()
-        events_dispatcher.loadCompany(isInvitesOpen=isInvitesOpen)
+            g_eventDispatcher.loadHangar()
+        g_eventDispatcher.loadCompany()
         result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_WINDOW)
         result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_PAGE)
         g_eventBus.addListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventDispatcher.updateUI()
         return result
 
     def isGUIProcessed(self):
@@ -129,10 +186,12 @@ class CompanyFunctional(PrbFunctional):
 
     def fini(self, clientPrb = None, woEvents = False):
         super(CompanyFunctional, self).fini(clientPrb=clientPrb, woEvents=woEvents)
-        if not woEvents:
-            events_dispatcher.unloadCompany()
-        else:
-            events_dispatcher.removeCompanyFromCarousel()
+        if self._exit != FUNCTIONAL_EXIT.INTRO_PREBATTLE:
+            if not woEvents:
+                g_eventDispatcher.unloadCompany()
+            else:
+                g_eventDispatcher.removeCompanyFromCarousel()
+            g_eventDispatcher.updateUI()
         g_eventBus.removeListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
 
     @vehicleAmmoCheck
@@ -187,6 +246,13 @@ class CompanyFunctional(PrbFunctional):
             self.setPlayerState(prb_ctx.SetPlayerStateCtx(True, waitingID='prebattle/player_ready'))
         return True
 
+    def doSelectAction(self, action):
+        result = False
+        if action.actionName == PREBATTLE_ACTION_NAME.COMPANY:
+            g_eventDispatcher.loadCompany()
+            result = True
+        return result
+
     def exitFromQueue(self):
         if self.isCreator():
             self.setTeamState(prb_ctx.SetTeamStateCtx(1, False, waitingID='prebattle/team_not_ready'))
@@ -195,7 +261,7 @@ class CompanyFunctional(PrbFunctional):
         return True
 
     def showGUI(self):
-        events_dispatcher.loadCompany()
+        g_eventDispatcher.loadCompany()
 
     def changeOpened(self, ctx, callback = None):
         if ctx.getRequestType() != REQUEST_TYPE.CHANGE_OPENED:
@@ -282,40 +348,40 @@ class CompanyFunctional(PrbFunctional):
     def prb_onSettingUpdated(self, settingName):
         super(CompanyFunctional, self).prb_onSettingUpdated(settingName)
         if settingName == PREBATTLE_SETTING_NAME.LIMITS:
-            events_dispatcher.updateUI()
+            g_eventDispatcher.updateUI()
 
     def prb_onPlayerStateChanged(self, pID, roster):
         super(CompanyFunctional, self).prb_onPlayerStateChanged(pID, roster)
         if self.__doTeamReady:
             self.__doTeamReady = False
             self.__setTeamReady()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def prb_onRosterReceived(self):
         super(CompanyFunctional, self).prb_onRosterReceived()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def prb_onPlayerRosterChanged(self, pID, prevRoster, roster, actorID):
         super(CompanyFunctional, self).prb_onPlayerRosterChanged(pID, prevRoster, roster, actorID)
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def prb_onTeamStatesReceived(self):
         super(CompanyFunctional, self).prb_onTeamStatesReceived()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
         playerInfo = self.getPlayerInfo()
         if playerInfo.isReady() or self.isCreator():
             if self.getTeamState(team=1).isInQueue() and playerInfo.roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1:
-                events_dispatcher.loadBattleQueue()
+                g_eventDispatcher.loadBattleQueue()
             else:
-                events_dispatcher.loadHangar()
+                g_eventDispatcher.loadHangar()
 
     def prb_onPlayerAdded(self, pID, roster):
         super(CompanyFunctional, self).prb_onPlayerAdded(pID, roster)
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def prb_onPlayerRemoved(self, pID, roster, name):
         super(CompanyFunctional, self).prb_onPlayerRemoved(pID, roster, name)
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def __setCreatorReady(self, result):
         if not result:
@@ -333,4 +399,4 @@ class CompanyFunctional(PrbFunctional):
         self.__doTeamReady = result
 
     def __handleCarouselInited(self, _):
-        events_dispatcher.addCompanyToCarousel()
+        g_eventDispatcher.addCompanyToCarousel()

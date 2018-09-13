@@ -25,6 +25,7 @@ from gui import VERSION_FILE_PATH, DialogsInterface
 from messenger import MessengerEntry
 from messenger.proto.bw import battle_chat_cmd
 import Event
+from AvatarInputHandler.control_modes import VideoCameraControlMode
 g_replayCtrl = None
 REPLAY_FILE_EXTENSION = '.wotreplay'
 AUTO_RECORD_TEMP_FILENAME = 'temp'
@@ -48,6 +49,8 @@ class BattleReplay():
     playbackSpeed = property(lambda self: self.__replayCtrl.playbackSpeed)
     replayContainsGunReloads = property(lambda self: self.__replayCtrl.replayContainsGunReloads)
     scriptModalWindowsEnabled = property(lambda self: self.__replayCtrl.scriptModalWindowsEnabled)
+    currentTime = property(lambda self: self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME))
+    warpTime = property(lambda self: self.__warpTime)
 
     def __init__(self):
         userPrefs = Settings.g_instance.userPrefs
@@ -82,12 +85,15 @@ class BattleReplay():
         self.__playbackSpeedIdx = self.__playbackSpeedModifiers.index(1.0)
         self.__savedPlaybackSpeedIdx = self.__playbackSpeedIdx
         self.__gunWasLockedBeforePause = False
+        self.__wasVideoBeforeRewind = False
+        self.__videoCameraMatrix = Math.Matrix()
         self.__replayDir = './replays'
         self.__replayCtrl.clientVersion = BigWorld.wg_getProductVersion()
         self.__timeWarpCleanupCb = None
         self.__enableTimeWarp = False
         self.__disableSidePanelContextMenuCb = None
         self.__isChatPlaybackEnabled = True
+        self.__warpTime = -1.0
         self.__skipMessage = False
         self.enableAutoRecordingBattles(True)
         gui.Scaleform.CursorDelegator.g_cursorDelegator.detachCursor()
@@ -117,6 +123,8 @@ class BattleReplay():
         self.__replayCtrl.cruiseModeCallback = None
         self.__replayCtrl = None
         self.__settings = None
+        self.__videoCameraMatrix = None
+        self.__warpTime = -1.0
         if self.__timeWarpCleanupCb is not None:
             BigWorld.cancelCallback(self.__timeWarpCleanupCb)
             self.__timeWarpCleanupCb = None
@@ -168,8 +176,6 @@ class BattleReplay():
     def play(self, fileName = None):
         if self.isRecording:
             self.stop()
-        elif self.isPlaying:
-            return self.__fileName == fileName
         if fileName is not None and fileName.rfind('.wotreplaylist') != -1:
             self.__playList = []
             self.__isPlayingPlayList = True
@@ -242,7 +248,9 @@ class BattleReplay():
         cmdMap = CommandMapping.g_instance
         player = BigWorld.player()
         if not isPlayerAvatar():
-            return
+            return False
+        if player.isForcedGuiControlMode():
+            return False
         currReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
         finishReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_REPLAY_FINISHED)
         if currReplayTime > finishReplayTime:
@@ -293,7 +301,6 @@ class BattleReplay():
         if key == Keys.KEY_C and isDown:
             self.__isChatPlaybackEnabled = not self.__isChatPlaybackEnabled
         playerControlMode = player.inputHandler.ctrl
-        from AvatarInputHandler.control_modes import VideoCameraControlMode
         isVideoCamera = isinstance(playerControlMode, VideoCameraControlMode)
         suppressCommand = False
         if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
@@ -460,6 +467,8 @@ class BattleReplay():
         else:
             self.__replayCtrl.playerVehicleID = BigWorld.player().playerVehicleID
             self.__replayCtrl.onClientReady()
+            if self.isPlaying:
+                AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
             if self.isRecording:
                 player = BigWorld.player()
                 arena = player.arena
@@ -719,9 +728,15 @@ class BattleReplay():
             if self.__isFinished:
                 self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
             self.__isFinished = False
+            self.__warpTime = time
             self.__enableInGameEffects(False)
             rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
             AreaDestructibles.g_destructiblesManager.onBeforeReplayTimeWarp(rewind)
+            EffectsList.EffectsListPlayer.clear()
+            if rewind:
+                playerControlMode = BigWorld.player().inputHandler.ctrl
+                self.__wasVideoBeforeRewind = isinstance(playerControlMode, VideoCameraControlMode)
+                self.__videoCameraMatrix.set(BigWorld.camera().matrix)
             if not self.__replayCtrl.beginTimeWarp(time):
                 self.__cleanupAfterTimeWarp()
                 return
@@ -735,18 +750,20 @@ class BattleReplay():
             self.__enableInGameEffects(False)
             self.__timeWarpCleanupCb = BigWorld.callback(0, self.__cleanupAfterTimeWarp)
         else:
+            newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
+            self.__enableInGameEffects(0 < newSpeed < 8.0)
             if self.__timeWarpCleanupCb is not None:
                 BigWorld.cancelCallback(self.__timeWarpCleanupCb)
                 self.__timeWarpCleanupCb = None
-            AreaDestructibles.g_destructiblesManager.onAfterReplayTimeWarp()
-            newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
-            self.__enableInGameEffects(0 < newSpeed < 8.0)
+            self.__warpTime = -1.0
+            if self.__wasVideoBeforeRewind:
+                BigWorld.player().inputHandler.onControlModeChanged('video', prevModeName='arcade', camMatrix=self.__videoCameraMatrix)
+                self.__wasVideoBeforeRewind = False
         return
 
     def __enableInGameEffects(self, enable):
         SoundGroups.g_instance.enableReplaySounds(enable)
         AreaDestructibles.g_destructiblesManager.forceNoAnimation = not enable
-        EffectsList.g_disableEffects = not enable
 
     def __disableSidePanelContextMenu(self):
         self.__disableSidePanelContextMenuCb = None

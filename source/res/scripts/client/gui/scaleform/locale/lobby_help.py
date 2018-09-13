@@ -3,12 +3,12 @@
 
 class LOBBY_HELP(object):
     HEADER_SETTINGS_BUTTON = '#lobby_help:header/settings-button'
-    HEADER_FIGHT_BUTTON = '#lobby_help:header/fight-button'
-    HEADER_FIGHT_DROPDOWN = '#lobby_help:header/fight-dropDown'
+    HEADER_ACCOUNT_BUTTON = '#lobby_help:header/account-button'
     HEADER_PREMIUM_BUTTON = '#lobby_help:header/premium-button'
-    HEADER_BUY_GOLD_BUTTON = '#lobby_help:header/buy-gold-button'
-    HEADER_EXCHANGE_GOLD_BUTTON = '#lobby_help:header/exchange-gold-button'
-    HEADER_GATHERING_EXPERIENCE_BUTTON = '#lobby_help:header/gathering-experience-button'
+    HEADER_SQUAD_BUTTON = '#lobby_help:header/squad-button'
+    HEADER_BATTLETYPE_BUTTON = '#lobby_help:header/battleType-button'
+    HEADER_FINANCE_BLOCK = '#lobby_help:header/finance-block'
+    HEADER_FIGHT_BUTTON = '#lobby_help:header/fight-button'
     HEADER_MENU_INVENTORY = '#lobby_help:header/menu/inventory'
     HEADER_MENU_SHOP = '#lobby_help:header/menu/shop'
     HEADER_MENU_PROFILE = '#lobby_help:header/menu/profile'

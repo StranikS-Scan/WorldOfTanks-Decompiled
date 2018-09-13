@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/__init__.py
 from constants import IS_DEVELOPMENT
+from gui.prb_control.functional.interfaces import IStatefulFunctional
 
 def initDevFunctional():
     if IS_DEVELOPMENT:
@@ -19,3 +20,7 @@ def finiDevFunctional():
             fini = lambda : None
 
         fini()
+
+
+def isStatefulFunctional(functional):
+    return isinstance(functional, IStatefulFunctional)

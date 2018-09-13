@@ -2,6 +2,7 @@
 import BigWorld
 import AccountCommands
 from adisp import process
+from gui import makeHtmlString
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -88,7 +89,7 @@ class ModuleBuyer(ModuleTradeProcessor):
         conflictedEqs = conflictedEqs or tuple()
         conflictMsg = ''
         if conflictedEqs:
-            conflictMsg = makeString(DIALOGS.BUYINSTALLCONFIRMATION_CONFLICTEDMESSAGE, conflicted="', '".join([ eq.userName for eq in conflictedEqs ]))
+            self.__makeConflictMsg("', '".join([ eq.userName for eq in conflictedEqs ]))
         self.buyForCredits = buyForCredits
         self.addPlugins((plugins.MoneyValidator(self._getOpPrice()), plugins.MessageConfirmator('buyInstallConfirmation', ctx={'name': item.userName,
           'kind': self.item.userType,
@@ -124,6 +125,10 @@ class ModuleBuyer(ModuleTradeProcessor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to buy module', self.item, self.count, self._isItemBuyingForCredits())
         BigWorld.player().shop.buy(self.item.itemTypeID, self.item.nationID, self.item.intCD, self.count, int(self._isItemBuyingForCredits()), lambda code: self._response(code, callback))
+
+    def __makeConflictMsg(self, conflictedText):
+        attrs = {'conflicted': conflictedText}
+        return makeHtmlString('html_templates:lobby/shop/system_messages', 'conflicted', attrs)
 
 
 class ModuleSeller(ModuleTradeProcessor):

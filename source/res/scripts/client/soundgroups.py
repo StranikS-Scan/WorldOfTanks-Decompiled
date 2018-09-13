@@ -8,8 +8,9 @@ import constants
 from debug_utils import *
 from helpers import i18n
 import PlayerEvents
+import traceback
 g_instance = None
-DSP_LOWPASS_LOW = 4000
+DSP_LOWPASS_LOW = 2000
 DSP_LOWPASS_HI = 20000
 DSP_SEEKSPEED = 200000
 
@@ -292,16 +293,18 @@ class SoundGroups(object):
         self.__handleInside = None
         self.__handleOutside = None
         self.__ceilLess = None
+        self.__activeStinger = None
+        self.__activeTrack = None
+        self.__activeStingerPriority = None
         PlayerEvents.g_playerEvents.onAccountBecomePlayer += self.reviveSoundSystem
         PlayerEvents.g_playerEvents.onAvatarBecomePlayer += self.reviveSoundSystem
         PlayerEvents.g_playerEvents.onAvatarReady += self.onAvatarReady
-        self.__groups = {'arena': ('/vehicles/tanks', '/hits/hits', '/hits/explosions', '/hits/tank_death', '/weapons/large_fire', '/weapons/medium_fire', '/weapons/small_fire', '/weapons/tracer', '/GUI/notifications_FX', '/ingame_voice/notifications_VO', '/objects/wire_barricade', '/objects/tent', '/objects/dog_house', '/objects/structures', '/objects/treefall', '/objects/wood_box_mid', '/objects/telegraph_pole', '/objects/buildings', '/objects/fuel_tank', '/objects/fence', '/objects/fuel_barrel', '/objects/fire', '/objects/hay_stack', '/objects/metall_pole_huge')}
         self.__categories = {'voice': ('ingame_voice',),
-         'vehicles': ('vehicles',),
-         'effects': ('hits', 'weapons_outside/hits', 'weapons_outside/weapons', 'weapons_inside/weapons', 'weapons', 'environment', 'battle_gui'),
+         'vehicles': ('outside/vehicles', 'vehicles', 'inside/vehicles'),
+         'effects': ('hits', 'outside/hits', 'inside/hits', 'weapons', 'inside/weapons', 'outside/weapons', 'environment', 'inside/environment', 'outside/environment', 'battle_gui'),
          'gui': ('gui',),
          'music': ('music',),
-         'ambient': ('ambient', 'hangar_v2', 'ambientUR'),
+         'ambient': ('outside/ambient', 'hangar_v2', 'ambientUR'),
          'masterVivox': (),
          'micVivox': (),
          'masterFadeVivox': ()}
@@ -350,27 +353,24 @@ class SoundGroups(object):
             self.__soundModes.setNationalMappingByMode(soundModeName)
         self.applyPreferences()
         self.__muteCallbackID = BigWorld.callback(0.25, self.__muteByWindowVisibility)
+        self.defaultGroupList = []
+        settings = ResMgr.openSection('scripts/arena_defs/_default_.xml/preloadSoundGroups')
+        if settings is not None:
+            self.defaultGroupList = settings.readStrings('groupName')
+        for sg in self.defaultGroupList:
+            result = FMOD.WG_loadSoundGroup(sg)
+            if not result:
+                LOG_NOTE('Loading failed for default sound group ', sg)
+
+        FMOD.WG_unloadAll()
         return
 
     def __del__(self):
+        self.onVolumeChanged.clear()
         if self.__muteCallbackID is not None:
             BigWorld.cancelCallback(self.__muteCallbackID)
             self.__muteCallbackID = None
         return
-
-    def loadSounds(self, groupName):
-        for group in self.__groups[groupName]:
-            try:
-                FMOD.loadSoundGroup(group)
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
-    def unloadSounds(self, groupName):
-        for group in self.__groups[groupName]:
-            try:
-                FMOD.unloadSoundGroup(group)
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
 
     def enableLobbySounds(self, enable):
         for categoryName in ('ambient', 'gui'):
@@ -461,13 +461,36 @@ class SoundGroups(object):
         self.__muteCallbackID = BigWorld.callback(0.25, self.__muteByWindowVisibility)
 
     def onAvatarReady(self):
+        import ArenaType
         self.__ceilLess = BigWorld.player().vehicleTypeDescriptor.turret['ceilless']
+
+    def unloadAll(self):
+        FMOD.WG_unloadAll()
+        import MusicController
+        MusicController.g_musicController.destroy()
+        MusicController.g_musicController.init()
+
+    def preloadSoundGroups(self, arenaName):
+        self.groupList = []
+        settings = ResMgr.openSection('scripts/arena_defs/' + arenaName + '.xml/preloadSoundGroups')
+        if settings is not None:
+            self.groupList = settings.readStrings('groupName')
+        for sg in self.groupList:
+            result = FMOD.WG_loadSoundGroup(sg)
+            if not result:
+                LOG_NOTE('Loading failed for arena sound group ', sg)
+
+        return
 
     def reviveSoundSystem(self):
         FMOD.WG_init()
 
     def checkAndReplace(self, event):
-        if event in self.__replace:
+        if event == '':
+            print 'SoundGroups.py: asked to play event with empty name'
+            traceback.print_stack()
+            return ''
+        elif event in self.__replace:
             return self.__replace[event]
         else:
             return event
@@ -484,6 +507,9 @@ class SoundGroups(object):
     def FMODgetSound(self, event):
         return FMOD.getSound(self.checkAndReplace(event))
 
+    def FMODloadSound(self, event):
+        return FMOD.WG_loadSound(self.checkAndReplace(event))
+
     def loadRemapping(self, arenaDescr):
         self.__replace = {}
         if not hasattr(arenaDescr, 'soundRemapping'):
@@ -496,15 +522,33 @@ class SoundGroups(object):
     def changePlayMode(self, mode):
         FMOD.setEventsParam('viewPlayMode', mode)
         if self.__handleInside == None:
-            self.__handleInside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'weapons_inside')
+            self.__handleInside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'inside')
         if self.__handleOutside == None:
-            self.__handleOutside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'weapons_outside')
-        if mode == 1 and self.__ceilLess == False:
+            self.__handleOutside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'outside')
+        if self.__ceilLess == True:
+            FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
+            FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
+        elif mode == 1:
             FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
             FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_LOW, -DSP_SEEKSPEED)
         else:
             FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_LOW, -DSP_SEEKSPEED)
             FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
+        return
+
+    def playStinger(self, event, priority):
+        if self.__activeStinger is None or self.__activeStinger.isPlaying is False or priority > self.__activeStingerPriority:
+            if self.__activeStinger is not None:
+                self.__activeStinger.stop()
+            self.__activeStinger = self.FMODplaySound(event)
+            self.__activeStingerPriority = priority
+        return
+
+    def playTrack(self, event):
+        if self.__activeTrack is None or self.__activeTrack.isPlaying is False:
+            if self.__activeTrack is not None:
+                self.__activeTrack.stop()
+            self.__activeTrack = self.FMODplaySound(event)
         return
 
 

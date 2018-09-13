@@ -96,6 +96,25 @@ class EffectsList(object):
 
 class EffectsListPlayer:
     effectsList = property(lambda self: self.__effectsList)
+    activeEffects = []
+
+    @staticmethod
+    def clear():
+        import BattleReplay
+        replayCtrl = BattleReplay.g_replayCtrl
+        if not replayCtrl.isPlaying:
+            return
+        else:
+            warpDelta = replayCtrl.warpTime - replayCtrl.currentTime
+            for effect in EffectsListPlayer.activeEffects[:]:
+                if effect.__waitForKeyOff:
+                    continue
+                if warpDelta <= 0.0 or effect.__keyPoints[-1].time - effect.__curKeyPoint.time < warpDelta:
+                    if effect.__callbackFunc is not None:
+                        effect.__callbackFunc()
+                    effect.stop()
+
+            return
 
     def __init__(self, effectsList, keyPoints, **args):
         self.__keyPoints = keyPoints
@@ -103,23 +122,31 @@ class EffectsListPlayer:
         self.__args = args
         self.__args['keyPoints'] = self.__keyPoints
         self.__curKeyPoint = None
+        self.__callbackFunc = None
         self.__keyPointIdx = -1
         self.__isStarted = False
+        self.__waitForKeyOff = False
         return
 
     def play(self, model, startKeyPoint = None, callbackFunc = None, waitForKeyOff = False):
-        global g_disableEffects
-        if g_disableEffects:
-            return
-        elif self.__isStarted:
-            LOG_ERROR('player already started. To restart it you must before call stop().')
+        needPlay, newKey = self.__isNeedToPlay(waitForKeyOff)
+        if not needPlay:
             return
         else:
+            if newKey is not None:
+                startKeyPoint = newKey
+            if self.__isStarted:
+                LOG_ERROR('player already started. To restart it you must before call stop().')
+                return
+            import BattleReplay
+            if BattleReplay.g_replayCtrl.isPlaying:
+                EffectsListPlayer.activeEffects.append(self)
             self.__isStarted = True
             self.__callbackID = None
             self.__model = model
             self.__data = {}
             self.__callbackFunc = callbackFunc
+            self.__waitForKeyOff = waitForKeyOff
             self.__keyPointIdx = self.__getKeyPointIdx(startKeyPoint) if startKeyPoint is not None else 0
             self.__keyPointIdx -= 1
             self.__effectsList.attachTo(self.__model, self.__data, None, **self.__args)
@@ -138,10 +165,33 @@ class EffectsListPlayer:
             self.__effectsList.reattachTo(model, self.__data)
             self.__model = model
 
+    def __isNeedToPlay(self, waitForKeyOff):
+        global g_disableEffects
+        newKey = None
+        if g_disableEffects:
+            return (False, newKey)
+        else:
+            import BattleReplay
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                if not waitForKeyOff:
+                    warpDelta = replayCtrl.warpTime - replayCtrl.currentTime
+                    if self.__keyPoints[-1].time / 2 < warpDelta:
+                        return (False, newKey)
+                for key in self.__keyPoints:
+                    if key.name == SpecialKeyPointNames.STATIC:
+                        newKey = SpecialKeyPointNames.STATIC
+                        break
+
+            return (True, newKey)
+
     def stop(self, keepPosteffects = False):
         if not self.__isStarted:
             return
         else:
+            import BattleReplay
+            if BattleReplay.g_replayCtrl.isPlaying:
+                EffectsListPlayer.activeEffects.remove(self)
             self.__isStarted = False
             if self.__callbackID is not None:
                 BigWorld.cancelCallback(self.__callbackID)
@@ -211,9 +261,12 @@ class _PixieEffectDesc(_EffectDesc):
 
     def __init__(self, dataSection):
         _EffectDesc.__init__(self, dataSection)
-        self._files = dataSection.readStrings('file')
+        self._files = [ f for f in dataSection.readStrings('file') if f ]
         if len(self._files) == 0:
             _raiseWrongConfig('file', self.TYPE)
+        self._havokFiles = None
+        if dataSection.readBool('hasHavokVersion', False):
+            self._havokFiles = tuple([ self.__getHavokFileName(f) for f in self._files ])
         self._force = 0
         key = 'force'
         if dataSection.has_key(key):
@@ -269,7 +322,13 @@ class _PixieEffectDesc(_EffectDesc):
         elem['pixie'] = None
         elem['cancelLoadCallback'] = False
         elem['callbackID'] = None
-        file = random.choice(self._files)
+        if self._havokFiles is None:
+            file = random.choice(self._files)
+        else:
+            file, fileToClear = random.choice(zip(self._files, self._havokFiles))
+            if BigWorld.wg_isHavokActive():
+                file, fileToClear = fileToClear, file
+            self.__prototypePixies.pop(fileToClear, None)
         prototypePixie = self.__prototypePixies.get(file)
         if prototypePixie is not None:
             elem['pixie'] = prototypePixie.clone()
@@ -316,6 +375,12 @@ class _PixieEffectDesc(_EffectDesc):
                 elem['pixie'].force(self._force)
             elem['node'].attach(elem['pixie'])
             return
+
+    @staticmethod
+    def __getHavokFileName(fileName):
+        import os
+        fileName, fileExtension = os.path.splitext(fileName)
+        return fileName + '_havok' + fileExtension
 
 
 class _AnimationEffectDesc(_EffectDesc):
@@ -440,7 +505,7 @@ class _SoundEffectDesc(_EffectDesc):
         else:
             self._soundName = dataSection.readString('sound')
         if not self._soundName and not self._soundNames:
-            _raiseWrongConfig('sound or soundNPC/soundPC in', self.TYPE)
+            _raiseWrongConfig('sound or soundNPC/soundPC', self.TYPE)
         return
 
     def reattach(self, elem, model):
@@ -497,6 +562,13 @@ class _SoundEffectDesc(_EffectDesc):
             return True
             return
 
+    def prerequisites(self):
+        for soundName in [self._soundNames and self._soundNames[0] or '', self._soundNames and self._soundNames[1] or '', self._soundName or '']:
+            if soundName.find('/guns/') > -1:
+                SoundGroups.g_instance.FMODloadSound(soundName)
+
+        return []
+
 
 class _SoundParameterEffectDesc(_EffectDesc):
     TYPE = '_SoundParameterEffectDesc'
@@ -527,8 +599,8 @@ class _SoundParameterEffectDesc(_EffectDesc):
                 continue
             if elem.get('sound') is not None:
                 processedSoundNames.append(elem['sound'].name)
-                if elem['sound'].hasParam(self._paramName):
-                    param = elem['sound'].param(self._paramName)
+                param = elem['sound'].param(self._paramName)
+                if param is not None:
                     param.seekSpeed = 0
                     self.__params.append(param)
 

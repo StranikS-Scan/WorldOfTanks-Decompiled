@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/locale/INGAME_GUI.py
-
+from debug_utils import LOG_WARNING
 
 class INGAME_GUI(object):
     DEVICES_ENGINE = '#ingame_gui:devices/engine'
@@ -89,6 +89,23 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_NEGATIVE = '#ingame_gui:chat_shortcuts/negative'
     CHAT_SHORTCUTS_ATTENTION_TO_CELL = '#ingame_gui:chat_shortcuts/attention_to_cell'
     CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
+    CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE = '#ingame_gui:chat_example/support_me_with_fire'
+    CHAT_EXAMPLE_RELOADING_GUN = '#ingame_gui:chat_example/reloading_gun'
+    CHAT_EXAMPLE_RELOADING_CASSETTE = '#ingame_gui:chat_example/reloading_cassette'
+    CHAT_EXAMPLE_RELOADING_READY = '#ingame_gui:chat_example/reloading_ready'
+    CHAT_EXAMPLE_TURN_BACK = '#ingame_gui:chat_example/turn_back'
+    CHAT_EXAMPLE_RELOADING_READY_CASSETTE = '#ingame_gui:chat_example/reloading_ready_cassette'
+    CHAT_EXAMPLE_RELOADING_UNAVAILABLE = '#ingame_gui:chat_example/reloading_unavailable'
+    CHAT_EXAMPLE_STOP = '#ingame_gui:chat_example/stop'
+    CHAT_EXAMPLE_HELP_ME = '#ingame_gui:chat_example/help_me'
+    CHAT_EXAMPLE_HELP_ME_EX = '#ingame_gui:chat_example/help_me_ex'
+    CHAT_EXAMPLE_FOLLOW_ME = '#ingame_gui:chat_example/follow_me'
+    CHAT_EXAMPLE_ATTACK = '#ingame_gui:chat_example/attack'
+    CHAT_EXAMPLE_BACK_TO_BASE = '#ingame_gui:chat_example/back_to_base'
+    CHAT_EXAMPLE_POSITIVE = '#ingame_gui:chat_example/positive'
+    CHAT_EXAMPLE_NEGATIVE = '#ingame_gui:chat_example/negative'
+    CHAT_EXAMPLE_ATTENTION_TO_CELL = '#ingame_gui:chat_example/attention_to_cell'
+    CHAT_EXAMPLE_ATTACK_ENEMY = '#ingame_gui:chat_example/attack_enemy'
     STATISTICS_HEADER = '#ingame_gui:statistics/header'
     STATISTICS_TEAM1TITLE = '#ingame_gui:statistics/team1title'
     STATISTICS_TEAM2TITLE = '#ingame_gui:statistics/team2title'
@@ -326,3 +343,55 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_SELF = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_SELF'
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_ENEMY'
+    CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
+     CHAT_EXAMPLE_RELOADING_GUN,
+     CHAT_EXAMPLE_RELOADING_CASSETTE,
+     CHAT_EXAMPLE_RELOADING_READY,
+     CHAT_EXAMPLE_TURN_BACK,
+     CHAT_EXAMPLE_RELOADING_READY_CASSETTE,
+     CHAT_EXAMPLE_RELOADING_UNAVAILABLE,
+     CHAT_EXAMPLE_STOP,
+     CHAT_EXAMPLE_HELP_ME,
+     CHAT_EXAMPLE_HELP_ME_EX,
+     CHAT_EXAMPLE_FOLLOW_ME,
+     CHAT_EXAMPLE_ATTACK,
+     CHAT_EXAMPLE_BACK_TO_BASE,
+     CHAT_EXAMPLE_POSITIVE,
+     CHAT_EXAMPLE_NEGATIVE,
+     CHAT_EXAMPLE_ATTENTION_TO_CELL,
+     CHAT_EXAMPLE_ATTACK_ENEMY)
+    CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
+     CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
+     CHAT_SHORTCUTS_RELOADING_GUN,
+     CHAT_SHORTCUTS_RELOADING_CASSETTE,
+     CHAT_SHORTCUTS_RELOADING_READY,
+     CHAT_SHORTCUTS_RELOADING_READY_CASSETTE,
+     CHAT_SHORTCUTS_RELOADING_UNAVAILABLE,
+     CHAT_SHORTCUTS_STOP,
+     CHAT_SHORTCUTS_HELP_ME,
+     CHAT_SHORTCUTS_HELP_ME_EX,
+     CHAT_SHORTCUTS_FOLLOW_ME,
+     CHAT_SHORTCUTS_ATTACK,
+     CHAT_SHORTCUTS_BACK_TO_BASE,
+     CHAT_SHORTCUTS_POSITIVE,
+     CHAT_SHORTCUTS_NEGATIVE,
+     CHAT_SHORTCUTS_ATTENTION_TO_CELL,
+     CHAT_SHORTCUTS_ATTACK_ENEMY)
+
+    @staticmethod
+    def chat_example(key):
+        outcome = '#ingame_gui:chat_example/%s' % key
+        if outcome not in INGAME_GUI.CHAT_EXAMPLE_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def chat_shortcuts(key):
+        outcome = '#ingame_gui:chat_shortcuts/%s' % key
+        if outcome not in INGAME_GUI.CHAT_SHORTCUTS_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome

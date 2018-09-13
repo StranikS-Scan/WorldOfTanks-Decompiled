@@ -174,7 +174,7 @@ class ClientFortProvider(object):
             return
         self.__state = state
         LOG_DEBUG('Fort state has been changed', state)
-        controller = controls.createByState(state, self.__clan.isClanLeader, self.__controller.__class__)
+        controller = controls.createByState(state, self.__controller.getPermissions().canCreate(), self.__controller.__class__)
         if controller:
             self.__controller.fini()
             self.__controller = controller

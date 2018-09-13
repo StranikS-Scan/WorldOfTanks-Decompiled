@@ -1,28 +1,33 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
+from collections import namedtuple
+import types
 import BigWorld
-from constants import PREBATTLE_TYPE
+import constants
 import ArenaType
+import fortified_regions
+from gui.prb_control import getBattleID
+from predefined_hosts import g_preDefinedHosts
+from constants import PREBATTLE_TYPE
+from debug_utils import LOG_WARNING
+from helpers import i18n
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as FORT
 from CurrentVehicle import g_currentVehicle
 from UnitBase import SORTIE_DIVISION
-import constants
-import gui
-from gui import game_control, makeHtmlString
+from gui import g_htmlTemplates, makeHtmlString, game_control
 from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters, fort_text
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_text import getText, HIGH_TITLE, NEUTRAL_TEXT, STANDARD_TEXT, MAIN_TEXT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeBuildingIndicatorsVO
 from gui.prb_control.items.unit_items import SupportedRosterSettings
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils import findFirst
+from gui.shared.utils import findFirst, CONST_CONTAINER
 from gui.shared.ClanCache import g_clanCache
-from helpers import i18n
-from helpers.i18n import makeString
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE
 from gui.shared import g_eventsCache, g_itemsCache
-from gui.shared.fortifications.fort_helpers import fortProviderProperty, fortCtrlProperty
 
 class IgrTooltipData(ToolTipBaseData):
 
@@ -48,17 +53,17 @@ class IgrTooltipData(ToolTipBaseData):
                         progress = battlesCond.getProgressPerGroup()
                         if None in progress:
                             curBattles, totalBattles, _, _ = progress[None]
-                        qProgress.append([curBattles, totalBattles, makeString('#quests:igr/tooltip/winsLabel') if isWin else makeString('#quests:igr/tooltip/battlesLabel')])
+                        qProgress.append([curBattles, totalBattles, i18n.makeString('#quests:igr/tooltip/winsLabel') if isWin else i18n.makeString('#quests:igr/tooltip/battlesLabel')])
 
-        template = gui.g_htmlTemplates['html_templates:lobby/tooltips']['igr_quest']
+        template = g_htmlTemplates['html_templates:lobby/tooltips']['igr_quest']
         descriptionTemplate = 'igr_description' if len(qLabels) == 0 else 'igr_description_with_quests'
         igrPercent = (game_control.g_instance.igr.getXPFactor() - 1) * 100
         igrType = game_control.g_instance.igr.getRoomType()
         icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if igrType == constants.IGR_TYPE.PREMIUM else 'basic')
         return {'title': i18n.makeString(TOOLTIPS.IGR_TITLE, igrIcon=icon),
-         'description': gui.makeHtmlString('html_templates:lobby/tooltips', descriptionTemplate, {'igrValue': '{0}%'.format(BigWorld.wg_getIntegralFormat(igrPercent))}),
+         'description': makeHtmlString('html_templates:lobby/tooltips', descriptionTemplate, {'igrValue': '{0}%'.format(BigWorld.wg_getIntegralFormat(igrPercent))}),
          'quests': map(lambda i: i.format(**template.ctx), qLabels),
-         'progressHeader': gui.makeHtmlString('html_templates:lobby/tooltips', 'igr_progress_header', {}),
+         'progressHeader': makeHtmlString('html_templates:lobby/tooltips', 'igr_progress_header', {}),
          'progress': qProgress}
 
 
@@ -93,15 +98,13 @@ class SortieDivisionTooltipData(ToolTipBaseData):
         return (division.getMinSlots(), division.getMaxSlots())
 
     def __getPlayerLimitsStr(self, minCount, maxCount):
-        text = (fort_text.MAIN_TEXT, str(minCount) + ' - ' + str(maxCount))
-        icon = (fort_text.HUMANS,)
-        return fort_text.concatStyles((text, icon))
+        return fort_text.getText(fort_text.MAIN_TEXT, str(minCount) + ' - ' + str(maxCount))
 
     def __getLevelsStr(self, maxlvl):
         minLevel = 1
         minLevelStr = fort_formatters.getTextLevel(minLevel)
         maxLevelStr = fort_formatters.getTextLevel(maxlvl)
-        return getText(fort_text.MAIN_TEXT, minLevelStr + ' - ' + maxLevelStr)
+        return fort_text.getText(fort_text.MAIN_TEXT, minLevelStr + ' - ' + maxLevelStr)
 
     def __getBonusStr(self, bonus):
         text = (fort_text.PURPLE_TEXT, BigWorld.wg_getIntegralFormat(bonus) + ' ')
@@ -185,33 +188,213 @@ class SettingsControlTooltipData(ToolTipBaseData):
                     'text': warning}}
 
 
-class ClanInfoTooltipData(ToolTipBaseData):
+class SettingsButtonTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(SettingsButtonTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    def getDisplayableData(self):
+        from ConnectionManager import connectionManager
+        serverName = ''
+        if connectionManager.peripheryID == 0:
+            serverName = connectionManager.serverUserName
+        else:
+            hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
+            for key, name, csisStatus, peripheryID in hostsList:
+                if connectionManager.peripheryID == peripheryID:
+                    serverName = name
+                    break
+
+        stats = None
+        if constants.IS_SHOW_SERVER_STATS:
+            stats = dict(game_control.g_instance.serverStats.getStats())
+        return {'name': i18n.makeString(TOOLTIPS.HEADER_MENU_HEADER),
+         'description': i18n.makeString(TOOLTIPS.HEADER_MENU_DESCRIPTION),
+         'serverHeader': i18n.makeString(TOOLTIPS.HEADER_MENU_SERVER),
+         'serverName': serverName,
+         'playersOnServer': i18n.makeString(TOOLTIPS.HEADER_MENU_PLAYERSONSERVER),
+         'servers': stats}
+
+
+class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):
 
     def __init__(self, context):
         super(ClanInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
 
-    def getDisplayableData(self, *args, **kwargs):
+    def getDisplayableData(self, clanDBID):
+        fortCtrl = g_clanCache.fortProvider.getController()
+        isFortFrozen = False
+        if clanDBID is None:
+            fort = fortCtrl.getFort()
+            fortDossier = fort.getFortDossier()
+            battlesStats = fortDossier.getBattlesStats()
+            isFortFrozen = self._isFortFrozen()
+            clanName, clanMotto, clanTag = g_clanCache.clanName, '', g_clanCache.clanTag
+            clanLvl = fort.level if fort is not None else 0
+            homePeripheryID = fort.peripheryID
+            playersAtClan, buildingsNum = len(g_clanCache.clanMembers), len(fort.getBuildingsCompleted())
+            combatCount, winsEff, profitEff = battlesStats.getCombatCount(), battlesStats.getWinsEfficiency(), battlesStats.getProfitFactor()
+            creationTime = fortDossier.getGlobalStats().getCreationTime()
+            defence, vacation, offDay = fort.getDefencePeriod(), fort.getVacationDate(), fort.getOffDay()
+        elif type(clanDBID) in (types.IntType, types.LongType, types.FloatType):
+            clanInfo = fortCtrl.getPublicInfoCache().getItem(clanDBID)
+            if clanInfo is None:
+                LOG_WARNING('Requested clan info is empty', clanDBID)
+                return
+            clanName, clanMotto = clanInfo.getClanName(), ''
+            clanTag, clanLvl = '[%s]' % clanInfo.getClanAbbrev(), clanInfo.getLevel()
+            homePeripheryID = clanInfo.getHomePeripheryID()
+            playersAtClan, buildingsNum = (None, None)
+            combatCount, winsEff, profitEff = clanInfo.getBattleCount(), None, clanInfo.getProfitFactor()
+            creationTime = None
+            defence, offDay = clanInfo.getDefencePeriod(), clanInfo.getOffDay()
+            vacation = clanInfo.getVacationPeriod()
+        else:
+            LOG_WARNING('Invalid clanDBID identifier', clanDBID, type(clanDBID))
+            return
+        topStats = []
+        host = g_preDefinedHosts.periphery(homePeripheryID)
+        if host is not None:
+            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_HOMEPEREPHIRY), host.name))
+        if playersAtClan is not None:
+            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PLAYERSATCLAN), playersAtClan))
+        if buildingsNum is not None:
+            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_BUILDINGSATFORTIFICATION), buildingsNum))
+        if combatCount is not None:
+            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_FIGHTSFORFORTIFICATION), combatCount))
+        topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_WINPERCENTAGE), '--' if winsEff is None else BigWorld.wg_getNiceNumberFormat(winsEff)))
+        if profitEff is not None:
+            topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PROFITPERCENTAGE), BigWorld.wg_getNiceNumberFormat(profitEff)))
+        if creationTime is not None:
+            fortCreationData = fort_text.getText(fort_text.NEUTRAL_TEXT, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPCLANINFO_FORTCREATIONDATE, creationDate=BigWorld.wg_getLongDateFormat(creationTime)))
+        else:
+            fortCreationData = None
+
+        def _makeLabels(stats, itemIdx):
+            return '\n'.join((str(a[itemIdx]) for a in stats))
+
+        infoTexts, protectionHeader = [], ''
+        if defence[0]:
+            if isFortFrozen:
+                protectionHeader = fort_text.getText(fort_text.ERROR_TEXT, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSETIMESTOPPED))
+            else:
+                protectionHeader = fort_text.getText(fort_text.HIGH_TITLE, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSETIME))
+            statsValueColor = fort_text.DISABLE_TEXT if isFortFrozen else fort_text.STATS_TEXT
+            defencePeriodString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PERIOD, startTime=BigWorld.wg_getShortTimeFormat(defence[0]), finishTime=BigWorld.wg_getShortTimeFormat(defence[1]))
+            defencePeriodString = fort_text.getText(statsValueColor, defencePeriodString)
+            infoTexts.append(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSEHOUR, period=defencePeriodString))
+            if offDay > -1:
+                dayOffString = i18n.makeString('#menu:dateTime/weekDays/full/%d' % offDay)
+            else:
+                dayOffString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_NODAYOFF)
+            dayOffString = fort_text.getText(statsValueColor, dayOffString)
+            infoTexts.append(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DAYOFF, dayOff=dayOffString))
+            if vacation[0] and vacation[1]:
+                vacationString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PERIOD, startTime=BigWorld.wg_getShortDateFormat(vacation[0]), finishTime=BigWorld.wg_getShortDateFormat(vacation[1]))
+            else:
+                vacationString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_NOVACATION)
+            vacationString = fort_text.getText(statsValueColor, vacationString)
+            infoTexts.append(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_VACATION, period=vacationString))
+        return {'headerText': fort_text.getText(fort_text.HIGH_TITLE, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_HEADER, clanTag=clanTag, clanLevel=fort_formatters.getTextLevel(clanLvl))),
+         'fullClanName': fort_text.getText(fort_text.NEUTRAL_TEXT, clanName),
+         'sloganText': fort_text.getText(fort_text.STANDARD_TEXT, clanMotto),
+         'infoDescriptionTopText': fort_text.getText(fort_text.MAIN_TEXT, _makeLabels(topStats, 0)),
+         'infoTopText': fort_text.getText('statsText', _makeLabels(topStats, 1)),
+         'infoDescriptionBottomText': '',
+         'infoBottomText': '',
+         'protectionHeaderText': protectionHeader,
+         'infoText': makeHtmlString('html_templates:lobby/fortifications/tooltips/defense_description', 'main', {'text': '\n'.join(infoTexts)}),
+         'fortCreationDate': fortCreationData}
+
+
+_battleStatus = namedtuple('_battleStatus', ('level', 'msg', 'color', 'prefix'))
+
+class ToolTipFortBuildingData(ToolTipBaseData, FortViewHelper):
+
+    class BATTLE_STATUSES(CONST_CONTAINER):
+        NO_BATTLE = _battleStatus('warning', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_WASNOTBATTLE, fort_text.PURPLE_TEXT, '')
+        LOST = _battleStatus('critical', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_DEFEAT, fort_text.ERROR_TEXT, '-')
+        WON = _battleStatus('info', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_VICTORY, fort_text.SUCCESS_TEXT, '+')
+
+    def __init__(self, context):
+        super(ToolTipFortBuildingData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
+
+    def getDisplayableData(self, buildingUID, isMine):
+        ms = i18n.makeString
         fort = self.fortCtrl.getFort()
-        fortLevel = fort_formatters.getTextLevel(fort.level)
-        headerText = i18n.makeString(TOOLTIPS.TOOLTIPCLANINFO_FORTIFICATION_HEADER, clanTag=str(g_clanCache.clanTag), fortLevel=str(fortLevel))
-        headerText = getText(HIGH_TITLE, headerText)
-        fullClanName = getText(NEUTRAL_TEXT, str(g_clanCache.clanFullName))
-        creationTime = fort.getFortDossier().getGlobalStats().getCreationTime()
-        creationDate = i18n.makeString(TOOLTIPS.TOOLTIPCLANINFO_FORTIFICATION_FORTCREATIONDATE, creationDate=BigWorld.wg_getLongDateFormat(creationTime))
-        creationDate = getText(MAIN_TEXT, creationDate)
-        data = {'headerText': headerText,
-         'fullClanName': fullClanName,
-         'infoText': getText(STANDARD_TEXT, i18n.makeString(TOOLTIPS.TOOLTIPCLANINFO_FORTIFICATION_DESCRIPTION)),
-         'fortCreationDate': creationDate}
-        return data
-
-    @fortProviderProperty
-    def fortProvider(self):
-        return None
-
-    @fortCtrlProperty
-    def fortCtrl(self):
-        return None
+        battleID = getBattleID()
+        battle = fort.getBattle(battleID)
+        buildingTypeID = self.UI_BUILDINGS_BIND.index(buildingUID)
+        if battle.isDefence():
+            isAttack = not isMine
+        else:
+            isAttack = isMine
+        if isAttack:
+            buildingsList = battle.getAttackerBuildList()
+            buildingsFullList = battle.getAttackerFullBuildList()
+        else:
+            buildingsList = battle.getDefenderBuildList()
+            buildingsFullList = battle.getDefenderFullBuildList()
+        buildingFullData = findFirst(lambda x: x[0] == buildingTypeID, buildingsFullList)
+        _, status, buildingLevel, hpVal, defResVal = buildingFullData
+        isReadyForBattle = status == constants.FORT_BUILDING_STATUS.READY_FOR_BATTLE
+        buildingData = None
+        resCount, arenaTypeID = (None, None)
+        if isReadyForBattle:
+            buildingData = findFirst(lambda x: x[0] == buildingTypeID, buildingsList)
+            _, resCount, arenaTypeID = buildingData
+        _, status, buildingLevel, hpVal, defResVal = buildingFullData
+        progress = self._getProgress(buildingTypeID, buildingLevel)
+        buildingLevelData = fortified_regions.g_cache.buildings[buildingTypeID].levels[buildingLevel]
+        hpTotalVal = buildingLevelData.hp
+        maxDefResVal = buildingLevelData.storage
+        buildingName = fort_text.getText(fort_text.HIGH_TITLE, ms(FORT.buildings_buildingname(buildingUID)))
+        currentMapTxt = None
+        buildingLevelTxt = fort_text.getText(fort_text.MAIN_TEXT, ms(FORT.FORTMAINVIEW_HEADER_LEVELSLBL, buildLevel=str(fort_formatters.getTextLevel(buildingLevel))))
+        descrActionTxt = None
+        statusTxt = None
+        statusLevel = None
+        indicatorsModel = None
+        infoMessage = None
+        if status == constants.FORT_BUILDING_STATUS.LOW_LEVEL:
+            minBuildingLevel = fortified_regions.g_cache.defenceConditions.minRegionLevel
+            minLevel = fort_formatters.getTextLevel(1)
+            maxLevel = fort_formatters.getTextLevel(minBuildingLevel - 1)
+            infoMessage = ms(FORT.TOOLTIPBUILDINGINFO_LOWLEVELMESSAGE, minLevel=minLevel, maxLevel=maxLevel)
+        else:
+            indicatorsModel = makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResVal, maxDefResVal)
+            if isReadyForBattle:
+                lootedBuildings = battle.getLootedBuildList()
+                battleStatus = self.BATTLE_STATUSES.NO_BATTLE
+                if (buildingData, isAttack) in lootedBuildings:
+                    battleStatus = self.BATTLE_STATUSES.LOST
+                    if battle.isDefence() and isAttack or not battle.isDefence() and not isAttack:
+                        battleStatus = self.BATTLE_STATUSES.WON
+                arenaType = ArenaType.g_cache.get(arenaTypeID)
+                prefix = fort_text.getText(fort_text.STANDARD_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_MEP_MAPPREFIX))
+                mapName = fort_text.getText(fort_text.NEUTRAL_TEXT, arenaType.name)
+                currentMapTxt = prefix + mapName
+                statusLevel = battleStatus.level
+                statusTxt = ms(battleStatus.msg)
+                defResStatusTxt = fort_text.concatStyles(((battleStatus.color, '%s %s' % (battleStatus.prefix, BigWorld.wg_getIntegralFormat(resCount))), (fort_text.NUT_ICON,)))
+                descrActionTxt = fort_text.getText(fort_text.MAIN_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_DESCRACTION))
+                descrActionTxt = descrActionTxt % {'value': defResStatusTxt}
+            else:
+                minResCount = hpTotalVal * 0.2
+                minResStatusTxt = fort_text.concatStyles(((fort_text.NEUTRAL_TEXT, BigWorld.wg_getIntegralFormat(minResCount)), (fort_text.NUT_ICON,)))
+                infoMessage = fort_text.getText(fort_text.MAIN_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_DESTROYEDMESSAGE))
+                infoMessage = infoMessage % {'value': minResStatusTxt}
+        result = {'buildingUID': buildingUID,
+         'buildingName': buildingName,
+         'currentMap': currentMapTxt,
+         'buildingLevel': buildingLevelTxt,
+         'descrAction': descrActionTxt,
+         'statusMsg': statusTxt,
+         'statusLevel': statusLevel,
+         'indicatorModel': indicatorsModel,
+         'isAvailable': isReadyForBattle,
+         'infoMessage': infoMessage}
+        return result
 
 
 class ActionTooltipData(ToolTipBaseData):

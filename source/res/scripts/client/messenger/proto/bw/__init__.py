@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw/__init__.py
 from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from messenger.proto.bw import filters, errors
+from messenger.proto.bw import errors
 from messenger.proto.bw.ChannelsManager import ChannelsManager
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw.ClanListener import ClanListener
@@ -45,6 +45,9 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
 
     def view(self, scope):
         self.users.view(scope)
+
+    def setFilters(self, msgFilterChain):
+        self.channels.setFiltersChain(msgFilterChain)
 
     def onChatActionFailure(self, chatAction):
         actionResponse = CHAT_RESPONSES[chatAction['actionResponse']]

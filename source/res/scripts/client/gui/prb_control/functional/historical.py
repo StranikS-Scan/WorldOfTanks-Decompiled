@@ -7,17 +7,42 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from PlayerEvents import g_playerEvents
 from gui import SystemMessages
 from gui import DialogsInterface
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.game_control import g_instance as g_gameCtrl
 from gui.prb_control.context import PrbCtrlRequestCtx, pre_queue_ctx
+from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.shared import events, g_eventsCache, g_eventBus, EVENT_BUS_SCOPE
-from gui.prb_control import events_dispatcher, isParentControlActivated, isInHistoricalQueue
+from gui.prb_control import isParentControlActivated, isInHistoricalQueue
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.functional.default import PreQueueFunctional
+from gui.prb_control.functional.interfaces import IStatefulFunctional, IPrbEntry
 from gui.prb_control.formatters import messages
-from gui.prb_control.settings import QUEUE_EVENT_TYPE, PREQUEUE_SETTING_NAME
-from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT, FUNCTIONAL_EXIT
+from gui.prb_control.settings import QUEUE_EVENT_TYPE, PREQUEUE_SETTING_NAME, PREBATTLE_ACTION_NAME
+from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT
 
-class HistoricalQueueFunctional(PreQueueFunctional):
+class HistoricalEntry(IPrbEntry):
+
+    def makeDefCtx(self):
+        return pre_queue_ctx.JoinModeCtx(QUEUE_TYPE.HISTORICAL)
+
+    def create(self, ctx, callback = None):
+        raise Exception, 'HistoricalIntro is not create entity'
+
+    def join(self, ctx, callback = None):
+        result = True
+        if not isinstance(ctx, pre_queue_ctx.JoinModeCtx):
+            result = False
+            LOG_ERROR('Invalid context to join historical mode', ctx)
+        else:
+            g_prbCtrlEvents.onPreQueueFunctionalCreated(QUEUE_TYPE.HISTORICAL, False, None)
+        if callback:
+            callback(result)
+        return
+
+    def select(self, ctx, callback = None):
+        self.join(ctx, callback=callback)
+
+
+class HistoricalQueueFunctional(PreQueueFunctional, IStatefulFunctional):
 
     def __init__(self, settings = None):
         super(HistoricalQueueFunctional, self).__init__(QUEUE_TYPE.HISTORICAL, {QUEUE_EVENT_TYPE.ENQUEUED: g_playerEvents.onEnqueuedHistorical,
@@ -29,7 +54,7 @@ class HistoricalQueueFunctional(PreQueueFunctional):
 
     def init(self, ctx = None):
         result = super(HistoricalQueueFunctional, self).init(ctx=ctx)
-        events_dispatcher.loadHistoryBattles()
+        g_eventDispatcher.loadHistoryBattles()
         g_eventsCache.onSyncCompleted += self.onEventsCacheResync
         g_eventBus.addListener(events.ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
         g_gameCtrl.captcha.onCaptchaInputCanceled += self.onCaptchaInputCanceled
@@ -39,31 +64,25 @@ class HistoricalQueueFunctional(PreQueueFunctional):
     def fini(self, woEvents = False):
         self.__requestCtx = None
         if not woEvents:
-            events_dispatcher.unloadHistoryBattles()
+            g_eventDispatcher.unloadHistoryBattles()
         else:
-            events_dispatcher.removeHistoryBattlesFromCarousel()
+            g_eventDispatcher.removeHistoryBattlesFromCarousel()
         g_gameCtrl.captcha.onCaptchaInputCanceled -= self.onCaptchaInputCanceled
         g_eventBus.removeListener(events.ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
-        events_dispatcher.unloadHistoryBattles()
+        g_eventDispatcher.unloadHistoryBattles()
         g_eventsCache.onSyncCompleted -= self.onEventsCacheResync
         g_currentVehicle.setHistoricalBattle(None)
         super(HistoricalQueueFunctional, self).fini(woEvents=woEvents)
         return
 
-    def isConfirmToChange(self, exit = FUNCTIONAL_EXIT.NO_FUNC):
-        return True
-
     def getStates(self):
-        return (True, {'isInHistoricalQueue': True}, dict(self._settings))
+        return ({'isInHistoricalQueue': True}, dict(self._settings))
 
     def isInQueue(self):
         return isInHistoricalQueue()
 
     def showGUI(self):
-        events_dispatcher.loadHistoryBattles()
-
-    def getConfirmDialogMeta(self, forced = False):
-        return I18nConfirmDialogMeta('historicalBattle/closeConfirmation')
+        g_eventDispatcher.loadHistoryBattles()
 
     @process
     def doLeaveAction(self, dispatcher, ctx = None, showConfirmation = True):
@@ -83,7 +102,7 @@ class HistoricalQueueFunctional(PreQueueFunctional):
                 callback(False)
             return
         if isParentControlActivated():
-            events_dispatcher.showParentControlNotification()
+            g_eventDispatcher.showParentControlNotification()
             if callback:
                 callback(False)
             return
@@ -152,17 +171,24 @@ class HistoricalQueueFunctional(PreQueueFunctional):
             self.leave(pre_queue_ctx.LeavePreQueueCtx(waitingID='prebattle/leave'))
         return result
 
+    def doSelectAction(self, action):
+        result = False
+        if action.actionName == PREBATTLE_ACTION_NAME.HISTORICAL:
+            g_eventDispatcher.showHistoryBattlesWindow()
+            result = True
+        return result
+
     def onEnqueued(self, *args):
         super(HistoricalQueueFunctional, self).onEnqueued(*args)
         self.__requestCtx.stopProcessing(True)
-        events_dispatcher.loadBattleQueue()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.loadBattleQueue()
+        g_eventDispatcher.updateUI()
 
     def onDequeued(self, *args):
         super(HistoricalQueueFunctional, self).onDequeued(*args)
         self.__requestCtx.stopProcessing(True)
-        events_dispatcher.loadHangar()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.loadHangar()
+        g_eventDispatcher.updateUI()
         self.showGUI()
         self.__checkAvailability()
 
@@ -174,16 +200,16 @@ class HistoricalQueueFunctional(PreQueueFunctional):
     def onKickedFromQueue(self, *args):
         super(HistoricalQueueFunctional, self).onKickedFromQueue(*args)
         self.__requestCtx.stopProcessing(True)
-        events_dispatcher.loadHangar()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.loadHangar()
+        g_eventDispatcher.updateUI()
         SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
         self.__checkAvailability()
 
     def onKickedFromArena(self, *args):
         super(HistoricalQueueFunctional, self).onKickedFromQueue(*args)
         self.__requestCtx.stopProcessing(True)
-        events_dispatcher.loadHangar()
-        events_dispatcher.updateUI()
+        g_eventDispatcher.loadHangar()
+        g_eventDispatcher.updateUI()
         SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
         self.__checkAvailability()
 
@@ -204,7 +230,7 @@ class HistoricalQueueFunctional(PreQueueFunctional):
             g_currentVehicle.setHistoricalBattle(historicalBattle)
 
     def __handleCarouselInited(self, _):
-        events_dispatcher.addHistoryBattlesToCarousel()
+        g_eventDispatcher.addHistoryBattlesToCarousel()
 
     def __checkAvailability(self):
         if not g_eventsCache.getHistoricalBattles():

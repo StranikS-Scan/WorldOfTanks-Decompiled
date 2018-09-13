@@ -50,3 +50,7 @@ class PrbSendInvitesWindowMeta(DAAPIModule):
     def as_setWindowTitleS(self, value):
         if self._isDAAPIInited():
             return self.flashObject.as_setWindowTitle(value)
+
+    def as_setInvitesS(self, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setInvites(value)

@@ -8,9 +8,9 @@ from helpers import time_utils, i18n
 
 class FortBuilding(BuildingDescr, HasStrCD):
 
-    def __init__(self, buildingCompactDescr):
-        BuildingDescr.__init__(self, buildingCompactDescr)
-        HasStrCD.__init__(self, buildingCompactDescr)
+    def __init__(self, buildingCompactDescr = None, typeID = None):
+        BuildingDescr.__init__(self, buildingCompactDescr, typeID=typeID)
+        HasStrCD.__init__(self, buildingCompactDescr or self.makeCompactDescr())
 
     @property
     def userName(self):

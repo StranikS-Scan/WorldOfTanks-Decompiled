@@ -133,6 +133,22 @@ def findFirst(function_or_None, sequence, default = None):
         return default
 
 
+def sortByFields(fields, sequence, valueGetter = dict.get):
+
+    def comparator(x, y):
+        for field, order in fields:
+            fieldValueX = valueGetter(x, field)
+            fieldValueY = valueGetter(y, field)
+            if fieldValueX != fieldValueY:
+                if order:
+                    return cmp(fieldValueX, fieldValueY)
+                return cmp(fieldValueY, fieldValueX)
+
+        return 0
+
+    return sorted(sequence, cmp=comparator)
+
+
 def prettyPrint(dict, sort_keys = True, indent = 4):
     import json
     return json.dumps(dict, sort_keys=sort_keys, indent=indent)

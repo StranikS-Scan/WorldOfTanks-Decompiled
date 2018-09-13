@@ -10,9 +10,9 @@ import Vehicle
 import constants
 import BattleReplay
 import CommandMapping
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 import gui
-from gui.arena_info import isEventBattle
+from ConnectionManager import connectionManager
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.battle_control.ChatCommandsController import ChatCommandsController
 from gui.battle_control.battle_arena_ctrl import BattleArenaController
 from gui.Scaleform.PlayersPanel import PlayersPanel
@@ -29,13 +29,13 @@ from helpers.i18n import makeString
 from PlayerEvents import g_playerEvents
 from MemoryCriticalController import g_critMemHandler
 from items.vehicles import NUM_EQUIPMENT_SLOTS, VEHICLE_CLASS_TAGS
-from gui import DEPTH_OF_Battle, DEPTH_OF_VehicleMarker, TANKMEN_ROLES_ORDER_DICT, GUI_SETTINGS, g_tankActiveCamouflage, g_guiResetters, g_repeatKeyHandlers
+from gui import DEPTH_OF_Battle, DEPTH_OF_VehicleMarker, TANKMEN_ROLES_ORDER_DICT, GUI_SETTINGS, g_tankActiveCamouflage, g_guiResetters, g_repeatKeyHandlers, game_control
 from gui.BattleContext import g_battleContext, PLAYER_ENTITY_NAME
 from gui.Scaleform import VoiceChatInterface, ColorSchemeManager
 from gui.Scaleform.SoundManager import SoundManager
 from gui.shared.utils import toUpper
 from gui.shared.utils.sound import Sound
-from gui.shared.utils.functions import getBattleSubTypeBaseNumder, isControlPointExists
+from gui.shared.utils.functions import getBattleSubTypeBaseNumder, isControlPointExists, makeTooltip
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.windows import UIInterface
 from gui.Scaleform.MovingText import MovingText
@@ -100,7 +100,8 @@ class Battle(BattleWindow):
          'Battle.UsersRoster.Appeal': self.onDenunciationReceived,
          'Battle.playersPanelStateChange': self.onPlayersPanelStateChange,
          'Battle.selectPlayer': self.selectPlayer,
-         'battle.helpDialogOpenStatus': self.helpDialogOpenStatus})
+         'battle.helpDialogOpenStatus': self.helpDialogOpenStatus,
+         'battle.initLobbyDialog': self._initLobbyDialog})
         BigWorld.wg_setRedefineKeysMode(False)
         self.onPostmortemVehicleChanged(BigWorld.player().playerVehicleID)
         return
@@ -226,6 +227,7 @@ class Battle(BattleWindow):
         player = BigWorld.player()
         LOG_DEBUG('[Battle] afterCreate')
         setattr(self.movie, '_global.wg_isShowLanguageBar', GUI_SETTINGS.isShowLanguageBar)
+        setattr(self.movie, '_global.wg_isShowServerStats', constants.IS_SHOW_SERVER_STATS)
         setattr(self.movie, '_global.wg_isShowVoiceChat', GUI_SETTINGS.voiceChat)
         setattr(self.movie, '_global.wg_voiceChatProvider', VoiceChatInterface.g_instance.voiceChatProvider)
         setattr(self.movie, '_global.wg_isChina', constants.IS_CHINA)
@@ -376,11 +378,9 @@ class Battle(BattleWindow):
             self.call('VoiceChat.initFailed', [])
 
     def onShowPlayerMessage(self, code, postfix, targetID, attackerID):
-        targetInfo = self.__arena.vehicles.get(targetID)
-        attackerInfo = self.__arena.vehicles.get(attackerID)
         LOG_DEBUG('onShowPlayerMessage', code, postfix, targetID, attackerID)
-        self.pMsgsPanel.showMessage(code, {'target': g_battleContext.getFullPlayerName(targetInfo, showClan=False),
-         'attacker': g_battleContext.getFullPlayerName(attackerInfo, showClan=False)}, extra=(('target', targetID), ('attacker', attackerID)), postfix=postfix)
+        self.pMsgsPanel.showMessage(code, {'target': g_battleContext.getFullPlayerName(targetID, showClan=False),
+         'attacker': g_battleContext.getFullPlayerName(attackerID, showClan=False)}, extra=(('target', targetID), ('attacker', attackerID)), postfix=postfix)
 
     def onShowVehicleMessage(self, code, postfix, entityID, extra):
         LOG_DEBUG('onShowVehicleMessage', code, postfix, entityID, extra)
@@ -390,11 +390,7 @@ class Battle(BattleWindow):
         if extra is not None:
             names['device'] = extra.deviceUserString
         if entityID:
-            targetInfo = self.__arena.vehicles.get(entityID)
-            if targetInfo is None:
-                LOG_CODEPOINT_WARNING()
-                return
-            names['entity'] = g_battleContext.getFullPlayerName(targetInfo)
+            names['entity'] = g_battleContext.getFullPlayerName(entityID)
         self.vMsgsPanel.showMessage(code, names, postfix=postfix)
         return
 
@@ -453,17 +449,24 @@ class Battle(BattleWindow):
     def tryLeaveRequest(self, _):
         resStr = 'quitBattle'
         replayCtrl = BattleReplay.g_replayCtrl
-        if not replayCtrl.isPlaying and constants.IS_KOREA and gui.GUI_SETTINGS.igrEnabled and self.__arena is not None and self.__arena.guiType != constants.ARENA_GUI_TYPE.TRAINING:
-            player = BigWorld.player()
-            vehicleID = getattr(player, 'playerVehicleID', -1)
-            isVehicleAlive = getattr(player, 'isVehicleAlive', 0)
-            if vehicleID in self.__arena.vehicles:
-                vehicle = self.__arena.vehicles[vehicleID]
-                if isVehicleAlive and vehicle.get('igrType') != constants.IGR_TYPE.NONE:
-                    resStr = 'quitBattleIGR'
-            else:
-                LOG_ERROR("Player's vehicle not found", vehicleID)
-        self.__callEx('tryLeaveResponse', [resStr])
+        player = BigWorld.player()
+        isVehicleAlive = getattr(player, 'isVehicleAlive', False)
+        isNotTraining = self.__arena.guiType != constants.ARENA_GUI_TYPE.TRAINING
+        if not replayCtrl.isPlaying:
+            if constants.IS_KOREA and gui.GUI_SETTINGS.igrEnabled and self.__arena is not None and isNotTraining:
+                vehicleID = getattr(player, 'playerVehicleID', -1)
+                if vehicleID in self.__arena.vehicles:
+                    vehicle = self.__arena.vehicles[vehicleID]
+                    if isVehicleAlive and vehicle.get('igrType') != constants.IGR_TYPE.NONE:
+                        resStr = 'quitBattleIGR'
+                else:
+                    LOG_ERROR("Player's vehicle not found", vehicleID)
+            isDeserter = isVehicleAlive and isNotTraining
+            if isDeserter:
+                resStr += '/deserter'
+        else:
+            isDeserter = False
+        self.__callEx('tryLeaveResponse', [resStr, isDeserter])
         return
 
     def onExitBattle(self, arg):
@@ -479,18 +482,27 @@ class Battle(BattleWindow):
     def helpDialogOpenStatus(self, cid, isOpened):
         self.__isHelpWindowShown = isOpened
 
+    def _initLobbyDialog(self, cid):
+        if connectionManager.serverUserName:
+            tooltipBody = i18n.makeString('#tooltips:header/info/players_online_full/body')
+            tooltipFullData = makeTooltip('#tooltips:header/info/players_online_full/header', tooltipBody % {'servername': connectionManager.serverUserName})
+            self.__callEx('setServerStatsInfo', [tooltipFullData])
+            self.__callEx('setServerName', [connectionManager.serverUserName])
+            if constants.IS_SHOW_SERVER_STATS:
+                stats = dict(game_control.g_instance.serverStats.getStats())
+                if 'clusterCCU' in stats and 'regionCCU' in stats:
+                    self.__callEx('setServerStats', [stats['clusterCCU'], stats['regionCCU']])
+                else:
+                    self.__callEx('setServerStats', [None, None])
+        return
+
     def __setPlayerInfo(self, vID):
-        playerName, pName, clanAbbrev, regionCode, vTypeName = ('', '', '', '', '')
-        vInfo = self.__arena.vehicles.get(vID)
-        if vInfo is not None:
-            playerName, pName, clanAbbrev, regionCode, _ = g_battleContext.getFullPlayerNameWithParts(vInfo, showVehShortName=False)
-            vTypeName = vInfo['vehicleType'].type.userString
+        playerName, pName, clanAbbrev, regionCode, vTypeName = g_battleContext.getFullPlayerNameWithParts(vID=vID, showVehShortName=False)
         self.__callEx('setPlayerInfo', [playerName,
          pName,
          clanAbbrev,
          regionCode,
          vTypeName])
-        return
 
     def __populateData(self):
         from gui.shared.utils.functions import getBattleSubTypeWinText, getArenaSubTypeName, isBaseExists
@@ -525,11 +537,7 @@ class Battle(BattleWindow):
             teamHasBase = 1 if isBaseExists(BigWorld.player().arenaTypeID, myTeam) else 2
             winText = getBattleSubTypeWinText(BigWorld.player().arenaTypeID, teamHasBase)
             arenaData.append(winText)
-            if isEventBattle():
-                eventType = 'football'
-            else:
-                eventType = 'normal'
-            arenaData.append(eventType)
+            arenaData.append('normal')
         self.__callEx('arenaData', arenaData)
         return
 
@@ -982,16 +990,6 @@ class FragCorrelationPanel(object):
     def showVehiclesCounter(self, isShown):
         self.__callFlash('showVehiclesCounter', [isShown])
 
-    def playGoalSound(self):
-        playerTeam = BigWorld.player().team - 1
-        oppositeTeamsIndexes = (1, 0)[playerTeam]
-        if isEventBattle():
-            if self.__teamsFrags[playerTeam] > self.__fragsCache[playerTeam]:
-                SoundGroups.g_instance.FMODplaySound('/fwc/fans/fans_goal_of_the_enemy')
-            elif self.__teamsFrags[oppositeTeamsIndexes] > self.__fragsCache[oppositeTeamsIndexes]:
-                SoundGroups.g_instance.FMODplaySound('/fwc/fans/fans_ally_goal')
-            self.__fragsCache = list(self.__teamsFrags)
-
     def __callFlash(self, funcName, args):
         self.__ui.call('battle.fragCorrelationBar.' + funcName, args)
 
@@ -1136,6 +1134,8 @@ class ConsumablesPanel(object):
     def setItemQuantityInSlot(self, idx, quantity):
         if self.__equipmentTagsByIdx.has_key(idx):
             self.__equipmentTagsByIdx[idx][1] = quantity
+            if not quantity and self.__expandEquipmentIdx == idx:
+                self.collapseEquipmentSlot(idx)
         self.__callFlash('setItemQuantityInSlot', [idx, quantity])
 
     def setCoolDownTime(self, idx, timeRemaining):
@@ -1692,12 +1692,6 @@ class _TankIndicatorCtrl():
 
 class VehicleMarkersManager(Flash):
     __SWF_FILE_NAME = 'VehicleMarkersManager.swf'
-    ATTACK_REASONS = ['attack',
-     'fire',
-     'ramming',
-     'world_collision',
-     'death_zone',
-     'drowning']
 
     class DAMAGE_TYPE:
         FROM_UNKNOWN = 0
@@ -1763,28 +1757,25 @@ class VehicleMarkersManager(Flash):
         if g_battleContext.isObserver(vProxy.id):
             return -1
         isFriend = vInfo['team'] == BigWorld.player().team
-        vehicles = BigWorld.player().arena.vehicles
-        vInfoEx = vehicles.get(vProxy.id, {})
+        vInfoEx = g_battleContext.arenaDP.getVehicleInfo(vProxy.id)
         vTypeDescr = vProxy.typeDescriptor
         maxHealth = vTypeDescr.maxHealth
         mProv = vProxy.model.node('HP_gui')
         tags = set(vTypeDescr.type.tags & VEHICLE_CLASS_TAGS)
         vClass = tags.pop() if len(tags) > 0 else ''
-        vType = vTypeDescr.type
-        vIconSource = _CONTOUR_ICONS_MASK % {'unicName': vType.name.replace(':', '-')}
-        entityName = g_battleContext.getPlayerEntityName(vProxy.id, vInfoEx)
-        entityType = 'ally' if BigWorld.player().team == vInfoEx.get('team') else 'enemy'
+        entityName = g_battleContext.getPlayerEntityName(vProxy.id, vInfoEx.team)
+        entityType = 'ally' if BigWorld.player().team == vInfoEx.team else 'enemy'
         speaking = False
         if GUI_SETTINGS.voiceChat:
-            speaking = VoiceChatInterface.g_instance.isPlayerSpeaking(vInfoEx.get('accountDBID', 0))
-        hunting = VehicleActions.isHunting(vInfoEx.get('events', {}))
+            speaking = VoiceChatInterface.g_instance.isPlayerSpeaking(vInfoEx.player.accountDBID)
+        hunting = VehicleActions.isHunting(vInfoEx.events)
         handle = self.__ownUI.addMarker(mProv, 'VehicleMarkerAlly' if isFriend else 'VehicleMarkerEnemy')
         self.__markers[handle] = _VehicleMarker(vProxy, self.__ownUIProxy, handle)
-        fullName, pName, clanAbbrev, regionCode, vehShortName = g_battleContext.getFullPlayerNameWithParts(vInfoEx, showVehShortName=False)
+        fullName, pName, clanAbbrev, regionCode, vehShortName = g_battleContext.getFullPlayerNameWithParts(vProxy.id)
         self.invokeMarker(handle, 'init', [vClass,
-         vIconSource,
-         vType.shortUserString,
-         vType.level,
+         vInfoEx.vehicleType.iconPath,
+         vehShortName,
+         vInfoEx.vehicleType.level,
          fullName,
          pName,
          clanAbbrev,
@@ -1824,7 +1815,7 @@ class VehicleMarkersManager(Flash):
             return VehicleMarkersManager.DAMAGE_TYPE.FROM_UNKNOWN
         if attackerID == BigWorld.player().playerVehicleID:
             return VehicleMarkersManager.DAMAGE_TYPE.FROM_PLAYER
-        entityName = g_battleContext.getPlayerEntityName(attackerID, BigWorld.player().arena.vehicles.get(attackerID, dict()))
+        entityName = g_battleContext.getPlayerEntityName(attackerID, BigWorld.player().arena.vehicles.get(attackerID, dict()).get('team'))
         if entityName == PLAYER_ENTITY_NAME.squadman:
             return VehicleMarkersManager.DAMAGE_TYPE.FROM_SQUAD
         if entityName == PLAYER_ENTITY_NAME.ally:
@@ -1834,7 +1825,12 @@ class VehicleMarkersManager(Flash):
         return VehicleMarkersManager.DAMAGE_TYPE.FROM_UNKNOWN
 
     def onVehicleHealthChanged(self, handle, curHealth, attackerID = -1, attackReasonID = 0):
-        self.invokeMarker(handle, 'updateHealth', [curHealth, self.__getVehicleDamageType(attackerID), VehicleMarkersManager.ATTACK_REASONS[attackReasonID]])
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+            return
+        if curHealth < 0 and curHealth not in constants.SPECIAL_VEHICLE_HEALTH.AMMO_BAY_EXPLOSION:
+            curHealth = 0
+        self.invokeMarker(handle, 'updateHealth', [curHealth, self.__getVehicleDamageType(attackerID), constants.ATTACK_REASONS[attackReasonID]])
 
     def showDynamic(self, vID, flag):
         handle = getattr(BigWorld.entity(vID), 'marker', None)
@@ -2069,7 +2065,7 @@ class _TimeInterval():
 def vehicleHasTurretRotator(vTypeDesc):
     result = True
     tags = vTypeDesc.type.tags
-    if tags & set(['SPG', 'AT-SPG']) and vTypeDesc.gun['turretYawLimits'] is not None:
-        if len(vTypeDesc.hull.get('fakeTurrets', {}).get('battle', ())) > 0:
+    if tags & {'SPG', 'AT-SPG'} and vTypeDesc.gun['turretYawLimits'] is not None:
+        if len(vTypeDesc.hull['fakeTurrets']['battle']) > 0:
             result = False
     return result

@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportUnitsListView.py
+import BigWorld
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -12,7 +13,6 @@ from gui.shared import events, g_itemsCache, REQ_CRITERIA
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import CSVehicleSelectEvent
 from helpers import i18n
-__author__ = 'd_dichkovsky'
 
 class CyberSportUnitsListView(CyberSportUnitsListMeta):
 
@@ -44,6 +44,9 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
         g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesChanged})
         self.as_setSearchResultTextS(i18n.makeString(CYBERSPORT.WINDOW_UNITLISTVIEW_FOUNDTEAMS))
         self._updateVehiclesLabel('I', 'VIII')
+
+    def _onUserRosterChanged(self, _, user):
+        self.__updateView(user)
 
     def _dispose(self):
         super(CyberSportUnitsListView, self)._dispose()
@@ -124,7 +127,15 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
         listReq = unit_ext.getListReq()
         if listReq:
             listReq.setSelectedID(cfdUnitID)
-        return vo
+        self.as_setDetailsS(vo)
+
+    def __refreshDetails(self, idx):
+        _, vo = self._searchDP.getRally(idx)
+        self.as_setDetailsS(vo)
+
+    def __updateView(self, user):
+        self._searchDP.updateListItem(user.getID())
+        self.__refreshDetails(self._searchDP.selectedRallyIndex)
 
     def __onVehiclesChanged(self, *args):
         self._selectedVehicles = self.unitFunctional.getSelectedVehicles(self._section)

@@ -81,6 +81,8 @@ class AppEntry(App):
     def logoff(self, disconnectNow = False):
         if self.initialized:
             criteria = {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOGIN}
+            if not self._loaderMgr.isViewLoading(VIEW_ALIAS.LOGIN):
+                self._containerMgr.cancelLoadingForViewType(ViewTypes.VIEW)
             if not self.containerManager.isViewAvailable(ViewTypes.VIEW, criteria=criteria):
                 self.fireEvent(events.ShowViewEvent(events.ShowViewEvent.SHOW_LOGIN))
         else:

@@ -9,6 +9,8 @@ from gui.game_control.GameSessionController import GameSessionController
 from gui.game_control.IGR import IGRController
 from gui.game_control.wallet import WalletController
 from gui.game_control.NotifyController import NotifyController
+from gui.game_control.SoundEventChecker import SoundEventChecker
+from gui.game_control.ServerStats import ServerStats
 
 class _GameControllers(object):
 
@@ -23,6 +25,8 @@ class _GameControllers(object):
         self.__language = LanguageController()
         self.__notifier = NotifyController()
         self.__links = ExternalLinksHandler()
+        self.__soundChecker = SoundEventChecker()
+        self.__serverStats = ServerStats()
         self.__collectUiStats = False
         self.__logUXEvents = False
 
@@ -70,6 +74,14 @@ class _GameControllers(object):
     def links(self):
         return self.__links
 
+    @property
+    def soundChecker(self):
+        return self.__soundChecker
+
+    @property
+    def serverStats(self):
+        return self.__serverStats
+
     def init(self):
         self.__captcha.init()
         self.__aogas.init()
@@ -80,6 +92,8 @@ class _GameControllers(object):
         self.__language.init()
         self.__notifier.init()
         self.__links.init()
+        self.__soundChecker.init()
+        self.__serverStats.init()
 
     def fini(self):
         self.__igr.fini()
@@ -91,6 +105,8 @@ class _GameControllers(object):
         self.__language.fini()
         self.__notifier.fini()
         self.__links.fini()
+        self.__soundChecker.fini()
+        self.__serverStats.fini()
 
     def onAccountShowGUI(self, ctx):
         self.__language.start()
@@ -100,6 +116,8 @@ class _GameControllers(object):
         self.__igr.start(ctx)
         self.__wallet.start()
         self.__notifier.start()
+        self.__soundChecker.start()
+        self.__serverStats.start()
         self.__collectUiStats = ctx.get('collectUiStats', False)
         self.__logUXEvents = ctx.get('logUXEvents', False)
 
@@ -108,6 +126,8 @@ class _GameControllers(object):
         self.__gameSession.stop(True)
         self.__roaming.stop()
         self.__wallet.stop()
+        self.__soundChecker.stop()
+        self.__serverStats.stop()
 
     def onAccountBecomePlayer(self):
         self.__roaming.start(BigWorld.player().serverSettings)
@@ -121,6 +141,8 @@ class _GameControllers(object):
         self.__roaming.onDisconnected()
         self.__wallet.stop()
         self.__notifier.stop()
+        self.__soundChecker.stop()
+        self.__serverStats.stop()
 
 
 g_instance = _GameControllers()

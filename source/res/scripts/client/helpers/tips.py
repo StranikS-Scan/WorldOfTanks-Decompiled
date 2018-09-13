@@ -28,9 +28,6 @@ def getNextNumberOfTip():
 
 
 def getTip():
-    from gui.arena_info import isEventBattle
-    if isEventBattle():
-        return i18n.makeString('#tips:tip_football')
     return i18n.makeString('#tips:tip{0:d}'.format(getNextNumberOfTip()))
 
 

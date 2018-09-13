@@ -7,8 +7,8 @@ from account_helpers import isMoneyTransfer
 from gui import DialogsInterface, game_control
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.prb_control.context import unit_ctx, prb_ctx
-from gui.prb_control.prb_helpers import prbDispatcherProperty
+from gui.prb_control.context import unit_ctx, prb_ctx, SendInvitesCtx
+from gui.prb_control.prb_helpers import prbDispatcherProperty, unitFunctionalProperty
 from helpers import i18n
 from gui import SystemMessages
 from gui.shared import g_itemsCache
@@ -32,6 +32,10 @@ class ContextMenuManager(ContextMenuManagerMeta):
 
     @prbDispatcherProperty
     def prbDispatcher(self):
+        return None
+
+    @unitFunctionalProperty
+    def unitFunctional(self):
         return None
 
     @storage_getter('users')
@@ -104,9 +108,40 @@ class ContextMenuManager(ContextMenuManagerMeta):
     def _kickPlayerFromUnit(self, databaseID):
         yield self.prbDispatcher.sendUnitRequest(unit_ctx.KickPlayerCtx(databaseID, 'prebattle/kick'))
 
+    def giveLeadership(self, databaseID):
+        self._giveLeadership(databaseID)
+
+    @process
+    def _giveLeadership(self, databaseID):
+        yield self.prbDispatcher.sendUnitRequest(unit_ctx.GiveLeadershipCtx(databaseID, 'prebattle/giveLeadership'))
+
+    def canGiveLeadership(self, databaseID):
+        return not self.unitFunctional.getPlayerInfo(dbID=databaseID).isLegionary()
+
+    @process
+    def createSquad(self, databaseID):
+        user = self.proto.users.usersStorage.getUser(databaseID)
+        result = yield self.prbDispatcher.create(prb_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=[databaseID], isForced=True))
+        if result:
+            self.__showInviteMessage(user)
+
+    def canInvite(self, databaseID):
+        for func in self.prbDispatcher.getFunctionalCollection().getIterator():
+            if func.getPermissions().canSendInvite():
+                return True
+
+        return False
+
+    def invite(self, databaseID, data):
+        user = self.proto.users.usersStorage.getUser(databaseID)
+        for func in self.prbDispatcher.getFunctionalCollection().getIterator():
+            if func.getPermissions().canSendInvite():
+                func.request(SendInvitesCtx([databaseID], ''))
+                self.__showInviteMessage(user)
+                break
+
     def copyToClipboard(self, name):
-        name = unicode(name, 'utf-8', errors='ignore')
-        BigWorld.wg_copyToClipboard(name)
+        BigWorld.wg_copyToClipboard(unicode(name, 'utf-8', errors='ignore'))
 
     def _getUserInfo(self, uid, userName):
         user = self.usersStorage.getUser(uid)
@@ -116,12 +151,14 @@ class ContextMenuManager(ContextMenuManagerMeta):
          'canDoDenunciations': True,
          'canCreateChannel': not roamingCtrl.isInRoaming() and not roamingCtrl.isPlayerInRoaming(uid)}
         if user is not None:
-            result.update({'isFriend': user.isFriend(),
+            result.update({'dbID': uid,
+             'isFriend': user.isFriend(),
              'isIgnored': user.isIgnored(),
              'isMuted': user.isMuted(),
              'displayName': user.getFullName()})
         else:
-            result.update({'isFriend': False,
+            result.update({'dbID': uid,
+             'isFriend': False,
              'isIgnored': False,
              'isMuted': False,
              'displayName': userName})
@@ -158,3 +195,10 @@ class ContextMenuManager(ContextMenuManagerMeta):
         currentOrderID = FortViewHelper.fortCtrl.getFort().getBuildingOrder(FortViewHelper.UI_BUILDINGS_BIND.index(value))
         DialogsInterface.showDialog(BuyOrderDialogMeta(FortViewHelper.UI_ORDERS_BIND[currentOrderID]), None)
         return
+
+    @classmethod
+    def __showInviteMessage(cls, user):
+        if user:
+            SystemMessages.pushI18nMessage('#system_messages:prebattle/invites/sendInvite/name', type=SystemMessages.SM_TYPE.Information, name=user.getFullName())
+        else:
+            SystemMessages.pushI18nMessage('#system_messages:prebattle/invites/sendInvite', type=SystemMessages.SM_TYPE.Information)

@@ -609,7 +609,7 @@ class VOIPSupportSetting(ReadOnlySetting, AppRef):
     def __isVoiceChatReady(self):
         if g_battleContext.isInBattle:
             return VoiceChatInterface.g_instance.ready
-        return self.app.voiceChatManager.ready
+        return self.app and self.app.voiceChatManager.ready
 
     def __isSupported(self):
         return VOIP.getVOIPManager().vivoxDomain != '' and self.__isVoiceChatReady()

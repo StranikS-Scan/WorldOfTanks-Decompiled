@@ -27,8 +27,11 @@ class PlayerCtxStorage(object):
             role = self.clanInfo[3]
         return role
 
+    def isGameAdmin(self):
+        return self.accAttrs & ACCOUNT_ATTR.ADMIN != 0
+
     def isChatAdmin(self):
-        return self.accAttrs & ACCOUNT_ATTR.CHAT_ADMIN != 0 or self.accAttrs & ACCOUNT_ATTR.ADMIN != 0
+        return self.accAttrs & ACCOUNT_ATTR.CHAT_ADMIN != 0
 
     def clear(self):
         self.accAttrs = 0

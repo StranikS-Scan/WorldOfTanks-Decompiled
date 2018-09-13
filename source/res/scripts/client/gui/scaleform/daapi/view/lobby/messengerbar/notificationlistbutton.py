@@ -19,5 +19,7 @@ class NotificationListButton(NotificationListButtonMeta):
         NotificationMVC.g_instance.getModel().setListDisplayState()
 
     def _dispose(self):
-        NotificationMVC.g_instance.getModel().onNotifiedMessagesCountChanged -= self.__notifiedMessagesCountChangeHandler
+        model = NotificationMVC.g_instance.getModel()
+        if model:
+            model.onNotifiedMessagesCountChanged -= self.__notifiedMessagesCountChangeHandler
         super(NotificationListButton, self)._dispose()

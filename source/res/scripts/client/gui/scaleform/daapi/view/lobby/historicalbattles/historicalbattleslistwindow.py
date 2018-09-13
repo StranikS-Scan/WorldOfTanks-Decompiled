@@ -10,9 +10,11 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control import isInHistoricalQueue
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME, SELECTOR_BATTLE_TYPES
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.events import FocusEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.server_events.event_items import HistoricalBattle
 from gui.shared.utils.Notifier import Notifier
+from gui.shared.utils.functions import getAbsoluteUrl
 from helpers import i18n, time_utils
 from gui import makeHtmlString
 from gui.shared import events, g_itemsCache, REQ_CRITERIA, g_eventsCache
@@ -49,6 +51,9 @@ class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMet
 
     def getClientID(self):
         return channel_num_gen.getClientID4PreQueue(constants.QUEUE_TYPE.HISTORICAL)
+
+    def onFocusIn(self, alias):
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.getClientID()}))
 
     def startListening(self):
         super(HistoricalBattlesListWindow, self).startListening()
@@ -212,7 +217,7 @@ class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMet
             timeRemaining = battle.getFinishTimeLeft()
             ttHeader = i18n.makeString(TOOLTIPS.HISTORICALBATTLES_DATESTATUS_ENDDATE)
             ttBody = i18n.makeString(TOOLTIPS.HISTORICALBATTLES_DATESTATUS_ACTIVE, date=date)
-        dateString = makeHtmlString('html_templates:lobby/historicalBattles', 'dateLabel', {'icon': 'img://gui/maps/icons/library/calendar.png',
+        dateString = makeHtmlString('html_templates:lobby/historicalBattles', 'dateLabel', {'icon': getAbsoluteUrl(RES_ICONS.MAPS_ICONS_BUTTONS_CALENDAR),
          'text': date})
         self.as_setDateS(dateString, ttHeader, ttBody)
         self._clearCallbacks()
@@ -300,7 +305,7 @@ class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMet
         if self.selectedVehicleID == -1 or not battle.canParticipateWith(self.selectedVehicleID):
             params = {'value': 0,
              'color': self.app.colorManager.getColorScheme('textColorError').get('rgb'),
-             'icon': 'img://gui/maps/icons/library/CreditsIcon-2.png'}
+             'icon': getAbsoluteUrl(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2)}
             data = (makeHtmlString('html_templates:lobby/historicalBattles/ammoStatus', 'priceLabel', params),)
             selected = 0
         else:

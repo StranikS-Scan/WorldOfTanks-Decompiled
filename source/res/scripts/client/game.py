@@ -24,6 +24,8 @@ import Settings
 from MemoryCriticalController import g_critMemHandler
 import VOIP
 import WebBrowser
+import SoundGroups
+import FMOD
 loadingScreenClass = None
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
@@ -176,6 +178,14 @@ def start():
                 LOG_DEBUG('Game start FAILED with:')
                 LOG_CURRENT_EXCEPTION()
 
+        elif sys.argv[1] == 'replayTimeout':
+            try:
+                g_replayCtrl.replayTimeout = float(sys.argv[2])
+            except:
+                LOG_DEBUG('Game start FAILED with:')
+                LOG_CURRENT_EXCEPTION()
+
+            gui_personality.start()
     else:
         gui_personality.start()
     try:
@@ -288,7 +298,9 @@ def onConnected():
 
 
 def onGeometryMapped(spaceID, path):
+    SoundGroups.g_instance.unloadAll()
     sys.stderr.write('[SPACE] Loading space: ' + path + '\n')
+    SoundGroups.g_instance.preloadSoundGroups(path.split('/')[-1])
 
 
 def onDisconnected():

@@ -20,3 +20,18 @@ class UtilsManagerMeta(DAAPIModule):
 
     def getHtmlIconText(self, properties):
         self._printOverrideError('getHtmlIconText')
+
+    def getFirstDayOfWeek(self):
+        self._printOverrideError('getFirstDayOfWeek')
+
+    def getWeekDayNames(self, full, isUpper, isLower):
+        self._printOverrideError('getWeekDayNames')
+
+    def getMonthsNames(self, full, isUpper, isLower):
+        self._printOverrideError('getMonthsNames')
+
+    def intToStringWithPrefixPatern(self, value, count, fill):
+        self._printOverrideError('intToStringWithPrefixPatern')
+
+    def isTwelveHoursFormat(self):
+        self._printOverrideError('isTwelveHoursFormat')

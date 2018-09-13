@@ -57,6 +57,21 @@ class ContextMenuManagerMeta(DAAPIModule):
     def kickPlayerFromUnit(self, databaseID):
         self._printOverrideError('kickPlayerFromUnit')
 
+    def giveLeadership(self, databaseID):
+        self._printOverrideError('giveLeadership')
+
+    def canGiveLeadership(self, databaseID):
+        self._printOverrideError('canGiveLeadership')
+
+    def createSquad(self, databaseID):
+        self._printOverrideError('createSquad')
+
+    def invite(self, databaseID, data):
+        self._printOverrideError('invite')
+
+    def canInvite(self, databaseID):
+        self._printOverrideError('canInvite')
+
     def fortDirection(self):
         self._printOverrideError('fortDirection')
 

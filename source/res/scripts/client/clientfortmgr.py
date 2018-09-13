@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/ClientFortMgr.py
-from FortifiedRegionBase import FORT_CLIENT_METHOD
+from FortifiedRegionBase import FORT_CLIENT_METHOD, makeDirPosByte, SECONDS_PER_DAY, SECONDS_PER_HOUR
 from ClientFortifiedRegion import ClientFortifiedRegion
 import Event
-from debug_utils import *
+from debug_utils import LOG_DAN, LOG_DEBUG, LOG_ERROR
 from gui.shared.utils import CONST_CONTAINER
+import time
+import fortified_regions
 
 class ClientFortMgr(object):
 
@@ -19,6 +21,7 @@ class ClientFortMgr(object):
         self.onFortResponseReceived = Event.Event(self.__eManager)
         self.onFortUpdateReceived = Event.Event(self.__eManager)
         self.onFortStateChanged = Event.Event(self.__eManager)
+        self.onFortPublicInfoReceived = Event.Event(self.__eManager)
         self.__account = account
         self._fort = ClientFortifiedRegion()
         self.__requestID = 0
@@ -52,6 +55,7 @@ class ClientFortMgr(object):
             self._fort.unpack(packedUpdate)
         elif packedOps:
             self._fort.unpackOps(packedOps)
+        self._fort.refresh()
         self.onFortUpdateReceived()
         LOG_DAN('after onFortUpdate:', self._fort)
 
@@ -95,6 +99,21 @@ class ClientFortMgr(object):
         self.__callFortMethod(requestID, FORT_CLIENT_METHOD.CONTRIBUTE, resCount, 0, 0)
         return requestID
 
+    def dmgBuilding(self, buildingTypeID, damage):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.DMG_BUILDING, buildingTypeID, damage, 0)
+        return requestID
+
+    def deletePlannedBattles(self, timeStart, timeFinish):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.DELETE_PLANNED_BATTLES, timeStart, timeFinish, 0)
+        return requestID
+
+    def changeAttackResult(self, attackResult, attackResource, attackTime):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.CHANGE_ATTACK_RESULT, attackResult, attackResource, attackTime)
+        return requestID
+
     def upgrade(self, buildingTypeID):
         requestID = self.__getNextRequestID()
         self.__callFortMethod(requestID, FORT_CLIENT_METHOD.UPGRADE, buildingTypeID, 0, 0)
@@ -135,14 +154,44 @@ class ClientFortMgr(object):
         self.__callFortMethod(requestID, FORT_CLIENT_METHOD.CREATE_SORTIE, divisionLevel, 0, 0)
         return requestID
 
+    def createOrJoinFortBattle(self, battleID, slotIdx = -1):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.CREATE_JOIN_FORT_BATTLE, battleID, slotIdx, 0)
+        return requestID
+
+    def _scheduleBattle(self, battleID, direction, isDefence, attackTime):
+        requestID = self.__getNextRequestID()
+        if direction <= 0:
+            LOG_ERROR('_scheduleBattle: Bad direction (should be >0)')
+            return
+        if isDefence:
+            direction = -direction
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.SCHEDULE_FORT_BATTLE, battleID, direction, attackTime)
+        return requestID
+
     def getSortieData(self, unitMgrID, peripheryID):
         requestID = self.__getNextRequestID()
         self.__callFortMethod(requestID, FORT_CLIENT_METHOD.GET_SORTIE_DATA, unitMgrID, peripheryID, 0)
         return requestID
 
+    def getFortBattleData(self, battleID):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.GET_FORT_BATTLE_DATA, battleID, 0, 0)
+        return requestID
+
     def changeDefHour(self, defHour):
         requestID = self.__getNextRequestID()
         self.__callFortMethod(requestID, FORT_CLIENT_METHOD.CHANGE_DEF_HOUR, defHour, 0, 0)
+        return requestID
+
+    def shutdownDefHour(self):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.SHUTDOWN_DEF_HOUR, 0, 0, 0)
+        return requestID
+
+    def cancelDefHourShutdown(self):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.CANCEL_SHUTDOWN, 0, 0, 0)
         return requestID
 
     def changeOffDay(self, offDay):
@@ -174,3 +223,46 @@ class ClientFortMgr(object):
         requestID = self.__getNextRequestID()
         self.__callFortMethod(requestID, FORT_CLIENT_METHOD.KEEPALIVE, 0, 0, 0)
         return requestID
+
+    def onResponseFortPublicInfo(self, requestID, errorID, resultSet):
+        self.onFortPublicInfoReceived(requestID, errorID, resultSet)
+
+    def getEnemyClanCard(self, enemyClanDBID):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.GET_ENEMY_CLAN_CARD, enemyClanDBID, 0, 0)
+        return requestID
+
+    def addFavorite(self, clanDBID):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.ADD_FAVORITE, clanDBID, 0, 0)
+        return requestID
+
+    def removeFavorite(self, clanDBID):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.REMOVE_FAVORITE, clanDBID, 0, 0)
+        return requestID
+
+    def planAttack(self, enemyClanDBID, timeAttack, dirFrom, dirTo):
+        requestID = self.__getNextRequestID()
+        dirFromToByte = makeDirPosByte(dirFrom, dirTo)
+        if isinstance(timeAttack, basestring):
+            try:
+                fmt = '%d.%m.%Y %H:%M'
+                timeAttack = int(time.mktime(time.strptime(timeAttack, fmt)))
+            except:
+                LOG_DEBUG('timeAttack should be either int(unixtime) or "%d.%m.%Y %H:%M" format.')
+                return
+
+        elif timeAttack < 0:
+            defHour = -timeAttack
+            timeAttack = self.__getClosestAttackHour(defHour)
+            LOG_DEBUG('timeAttack<0: plan attack for earliest possible defHour(%s), timeAttack=%s' % (defHour, timeAttack))
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.PLAN_ATTACK, enemyClanDBID, timeAttack, dirFromToByte)
+        return requestID
+
+    def __getClosestAttackHour(self, defHour):
+        t = self._fort._getTime() + fortified_regions.g_cache.attackPreorderTime
+        nextDayDefHour = t - t % SECONDS_PER_DAY + defHour * SECONDS_PER_HOUR
+        if nextDayDefHour < t:
+            nextDayDefHour += SECONDS_PER_DAY
+        return nextDayDefHour

@@ -100,7 +100,11 @@ class _QuestsTabAbstract(QuestsCurrentTabMeta):
 
     @classmethod
     def _isQuest(cls, svrEvent):
-        return svrEvent.getType() in (constants.EVENT_TYPE.BATTLE_QUEST, constants.EVENT_TYPE.TOKEN_QUEST)
+        return svrEvent.getType() in (constants.EVENT_TYPE.BATTLE_QUEST, constants.EVENT_TYPE.TOKEN_QUEST, constants.EVENT_TYPE.FORT_QUEST)
+
+    @classmethod
+    def _isFortQuest(cls, svrEvent):
+        return svrEvent.getType() in (constants.EVENT_TYPE.FORT_QUEST,)
 
     @classmethod
     def _isAction(cls, svrEvent):
@@ -115,11 +119,14 @@ class _QuestsTabAbstract(QuestsCurrentTabMeta):
         events_helpers.updateEventsSettings(g_eventsCache.getEvents())
         self.__invalidateEventsData()
 
-    def __sortFunc(self, a, b):
-        if a.isCompleted():
-            return 1
-        if b.isCompleted():
-            return -1
+    @classmethod
+    def __sortFunc(cls, a, b):
+        res = cmp(a.isCompleted(), b.isCompleted())
+        if res:
+            return res
+        res = cmp(cls._isFortQuest(a), cls._isFortQuest(b))
+        if res:
+            return -res
         return cmp(a.getID(), b.getID())
 
     def __filterFunc(self, a):

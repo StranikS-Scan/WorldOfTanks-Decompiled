@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/DemountBuildingWindow.py
 import BigWorld
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from gui import SystemMessages
 from adisp import process
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.DemountBuildingWindowMeta import DemountBuildingWindowMeta
@@ -11,7 +13,6 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as ALIAS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.fortifications.context import BuildingCtx
 from helpers import i18n
 
@@ -50,8 +51,8 @@ class DemountBuildingWindow(AbstractWindowView, View, DemountBuildingWindowMeta,
         super(DemountBuildingWindow, self)._dispose()
         return
 
-    def onBuildingRemoved(self, buildingTypeID):
-        if self.__buildingIntID == buildingTypeID:
+    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+        if self.__buildingIntID == buildingTypeID and reason == BUILDING_UPDATE_REASON.DELETED:
             self.destroy()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -107,11 +108,9 @@ class DemountBuildingWindow(AbstractWindowView, View, DemountBuildingWindowMeta,
         building = self.fortCtrl.getFort().getBuilding(buildingTypeID)
         result = yield self.fortProvider.sendRequest(BuildingCtx(buildingTypeID, isAdd=False, waitingID='fort/building/delete'))
         if result:
-            if self.app.soundManager is not None:
-                self.app.soundManager.playEffectSound(SoundEffectsId.FORT_DEMOUNT_BUILDING)
+            g_fortSoundController.playDeleteBuilding()
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEMOUNTBUILDING, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
             self.onWindowClose()
-        return
 
     def __updateInputChecker(self):
         self.__inputChecker.questionBody = self.__makeInputCheckerBody()

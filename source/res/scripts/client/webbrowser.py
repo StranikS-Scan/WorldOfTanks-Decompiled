@@ -38,16 +38,83 @@ class WebBrowser(AppRef):
         if self.__browser is None:
             return
         else:
+            self.__keysDown = set()
+
+            def injectBrowserKeyEvent(me, e):
+                LOG_BROWSER('injectBrowserKeyEvent', (e.key,
+                 e.isKeyDown(),
+                 e.isAltDown(),
+                 e.isShiftDown(),
+                 e.isCtrlDown()))
+                me.__browser.injectKeyEvent(e)
+
+            def injectKeyDown(me, e):
+                if e.key not in me.__keysDown:
+                    me.__keysDown.add(e.key)
+                    injectBrowserKeyEvent(me, e)
+
+            def injectKeyUp(me, e):
+                if e.key in me.__keysDown:
+                    me.__keysDown.remove(e.key)
+                    injectBrowserKeyEvent(me, e)
+
+            def resetBit(value, bitMask):
+                return value & ~bitMask
+
             self.__browserKeyHandlers = ((Keys.KEY_LEFTARROW,
               True,
               True,
-              lambda me: me.__browser.goBack()), (Keys.KEY_RIGHTARROW,
+              None,
+              None,
+              lambda me, _: me.__browser.goBack()),
+             (Keys.KEY_RIGHTARROW,
               True,
-              True,
-              lambda me: me.__browser.goForward()), (Keys.KEY_F5,
               True,
               None,
-              lambda me: me.__browser.reload(False)))
+              None,
+              lambda me, _: me.__browser.goForward()),
+             (Keys.KEY_F5,
+              True,
+              None,
+              None,
+              None,
+              lambda me, _: me.__browser.reload(False)),
+             (Keys.KEY_LSHIFT,
+              False,
+              None,
+              True,
+              None,
+              lambda me, e: injectKeyUp(me, BigWorld.KeyEvent(e.key, e.repeatCount, resetBit(e.modifiers, 1), None, e.cursorPosition))),
+             (Keys.KEY_RSHIFT,
+              False,
+              None,
+              True,
+              None,
+              lambda me, e: injectKeyUp(me, BigWorld.KeyEvent(e.key, e.repeatCount, resetBit(e.modifiers, 1), None, e.cursorPosition))),
+             (Keys.KEY_LCONTROL,
+              False,
+              None,
+              None,
+              True,
+              lambda me, e: injectKeyUp(me, BigWorld.KeyEvent(e.key, e.repeatCount, resetBit(e.modifiers, 2), None, e.cursorPosition))),
+             (Keys.KEY_RCONTROL,
+              False,
+              None,
+              None,
+              True,
+              lambda me, e: injectKeyUp(me, BigWorld.KeyEvent(e.key, e.repeatCount, resetBit(e.modifiers, 2), None, e.cursorPosition))),
+             (None,
+              True,
+              None,
+              None,
+              None,
+              lambda me, e: injectKeyDown(me, e)),
+             (None,
+              False,
+              None,
+              None,
+              None,
+              lambda me, e: injectKeyUp(me, e)))
             self.__browser.script = EventListener()
             self.__browser.script.onLoadStart += self.onLoadStart
             self.__browser.script.onLoadEnd += self.onLoadEnd
@@ -133,28 +200,30 @@ class WebBrowser(AppRef):
             except:
                 LOG_CURRENT_EXCEPTION()
 
-    def __getBrowserKeyHandler(self, key, isKeyDown, isAltDown):
-        for _key, _isKeyDown, _isAltDown, _handler in self.__browserKeyHandlers:
-            matches = lambda a, b: a is None or a == b
-            if matches(_key, key) and matches(_isKeyDown, isKeyDown) and matches(_isAltDown, isAltDown):
-                return _handler
+    def __getBrowserKeyHandler(self, key, isKeyDown, isAltDown, isShiftDown, isCtrlDown):
+        from itertools import izip
+        params = (key,
+         isKeyDown,
+         isAltDown,
+         isShiftDown,
+         isCtrlDown)
+        matches = lambda t: t[0] is None or t[0] == t[1]
+        for values in self.__browserKeyHandlers:
+            if reduce(lambda a, b: a and matches(b), izip(values, params), True):
+                return values[-1]
 
         return None
 
     def handleKeyEvent(self, event):
         if not (self.hasBrowser and self.isFocused and self.enableUpdate):
             return False
-        else:
-            handler = self.__getBrowserKeyHandler(event.key, event.isKeyDown(), event.isAltDown())
-            if handler is not None:
-                handler(self)
-            else:
-                if event.key == Keys.KEY_LEFTMOUSE:
-                    if not event.isKeyDown():
-                        self.browserUp(0, 0, 0)
-                    return False
-                self.__browser.injectKeyEvent(event)
-            return True
+        if event.key == Keys.KEY_LEFTMOUSE:
+            if not event.isKeyDown():
+                self.browserUp(0, 0, 0)
+            return False
+        e = event
+        self.__getBrowserKeyHandler(e.key, e.isKeyDown(), e.isAltDown(), e.isShiftDown(), e.isCtrlDown())(self, event)
+        return True
 
     def browserMove(self, x, y, z):
         if not (self.hasBrowser and self.enableUpdate and self.isFocused):

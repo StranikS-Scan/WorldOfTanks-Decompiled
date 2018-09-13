@@ -1,5 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBuildingCardPopover.py
 import BigWorld
+import ArenaType
+import fortified_regions
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.lobby.fortifications.ConfirmOrderDialogMeta import BuyOrderDialogMeta
@@ -7,6 +10,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeBuildingIndicatorsVOByDescr
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortBuildingCardPopoverMeta import FortBuildingCardPopoverMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as ALIAS, FORTIFICATION_ALIASES
@@ -16,6 +20,7 @@ from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils import CONST_CONTAINER
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, time_utils
 
 class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildingCardPopoverMeta):
@@ -31,7 +36,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
          fort_text.MAIN_TEXT)
         HALFDESTROY = ('halfDestroy',
          '400000',
-         fort_text.MAIN_TEXT,
+         fort_text.ERROR_TEXT,
          fort_text.MAIN_TEXT)
         FREEZE = ('freeze',
          '400000',
@@ -51,7 +56,6 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
 
     def __init__(self, ctx):
         super(FortBuildingCardPopover, self).__init__()
-        self._setKeyPoint(ctx.get('inXcoordinate'), ctx.get('inYcoordinate'))
         data = ctx.get('data', None)
         self._buildingUID = data.uid
         self._orderCooldownCallback = None
@@ -60,6 +64,11 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
     def _populate(self):
         super(FortBuildingCardPopover, self)._populate()
         self.startFortListening()
+        self.__updateData()
+        if self.fortCtrl.getFort().isOnDefenceHour():
+            self.__disableModernizationAndDestroy()
+
+    def onUpdated(self):
         self.__updateData()
 
     def _dispose(self):
@@ -72,17 +81,18 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         self.__prepareData()
         self.__generateData()
         fort = self.fortCtrl.getFort()
-        order = fort.getOrder(self.__orderID)
-        delta = order.getProductionLeftTime()
-        if delta > time_utils.ONE_DAY:
-            period = time_utils.ONE_DAY
-        elif delta > time_utils.ONE_HOUR:
-            period = time_utils.ONE_HOUR
-        else:
-            period = time_utils.ONE_MINUTE
-        timer = delta % period or period
-        if timer > 0:
-            self._orderCooldownCallback = BigWorld.callback(timer, self.__updateData)
+        if self.__orderID:
+            order = fort.getOrder(self.__orderID)
+            delta = order.getProductionLeftTime()
+            if delta > time_utils.ONE_DAY:
+                period = time_utils.ONE_DAY
+            elif delta > time_utils.ONE_HOUR:
+                period = time_utils.ONE_HOUR
+            else:
+                period = time_utils.ONE_MINUTE
+            timer = delta % period or period
+            if timer > 0:
+                self._orderCooldownCallback = BigWorld.callback(timer, self.__updateData)
 
     def __clearOrderCooldownCallback(self):
         if self._orderCooldownCallback is not None:
@@ -101,7 +111,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
             self.__congratMessage = True
         self._isBaseBuilding = self._buildingUID == ALIAS.FORT_BASE_BUILDING
         self.__isViceCommander = g_clanCache.clanRole == CLAN_MEMBER_FLAGS.VICE_LEADER
-        self.__isCommander = g_clanCache.isClanLeader or self.__isViceCommander
+        self.__isCommander = self.fortCtrl.getPermissions().canUpgradeBuilding()
         self.__buildingDescr = self.fortCtrl.getFort().getBuilding(self._buildingID)
         self.__buildingLevel = self.__buildingDescr.level
         self.__hpVal = self.__buildingDescr.hp
@@ -147,34 +157,27 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         DialogsInterface.showDialog(BuyOrderDialogMeta(self.UI_ORDERS_BIND[currentOrderID]), None)
         return
 
-    def _populate(self):
-        super(FortBuildingCardPopover, self)._populate()
-        self.startFortListening()
-        self.__prepareData()
-        self.__generateData()
-
-    def _dispose(self):
-        self.stopFortListening()
-        super(FortBuildingCardPopover, self)._dispose()
-
-    def onUpdated(self):
-        self.__prepareData()
-        self.__generateData()
-
-    def onBuildingRemoved(self, buildingTypeID):
-        if self._buildingID == buildingTypeID:
-            self.destroy()
-
     def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed = False):
         if self._buildingID in buildingsTypeIDs:
             self.__updateData()
 
+    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+        if self._buildingID == buildingTypeID and reason == BUILDING_UPDATE_REASON.DELETED:
+            self.destroy()
+
+    def onDefenceHourStateChanged(self):
+        if self.fortCtrl.getFort().isOnDefenceHour():
+            self.__disableModernizationAndDestroy()
+        else:
+            self.__setDefaultEnabling()
+
     def __generateData(self):
-        data = {'buildingType': self._buildingUID,
-         'isCommander': self.__isCommander}
+        data = {'buildingType': self._buildingUID}
         assignedLbl = fort_text.getText(fort_text.MAIN_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_ASSIGNPLAYERS))
         data['isTutorial'] = self.__isTutorial
         data['assignLbl'] = assignedLbl
+        data['canUpgradeBuilding'] = self.fortCtrl.getPermissions().canUpgradeBuilding()
+        data['canAddOrder'] = self.fortCtrl.getPermissions().canAddOrder()
         data['playerCount'] = self.__assignedPlayerCount
         data['maxPlayerCount'] = self.__maxPlayerCount
         data['buildingHeader'] = self.__prepareHeaderData()
@@ -200,9 +203,13 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         if self._canModernization(self.__buildingDescr):
             upgradeBtnVisible = upgradeBtnEnable = True
             localTooltip = TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN
-        if upgradeBtnVisible and not self._isEnableModernizationBtn(self.__buildingDescr):
-            upgradeBtnEnable = False
-            localTooltip = TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED
+        if upgradeBtnVisible:
+            if not self._isEnableModernizationBtnByDamaged(self.__buildingDescr):
+                upgradeBtnEnable = False
+                localTooltip = TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYDESTROY
+            elif not self._isEnableModernizationBtnByProgress(self.__buildingDescr):
+                upgradeBtnEnable = False
+                localTooltip = TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED
         result['upgradeButtonToolTip'] = localTooltip
         result['showUpgradeButton'] = upgradeBtnVisible
         result['enableUpgradeBtn'] = upgradeBtnEnable
@@ -216,7 +223,53 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         result['bodyStatus'] = body
         result['glowColor'] = int(filterColor, 16)
         result['isModernization'] = self.__canUpgrade
+        result['canDeleteBuilding'] = self.fortCtrl.getPermissions().canDeleteBuilding()
+        isDefencePeriodActivated = self.fortCtrl.getFort().isDefenceHourEnabled()
+        if self.__progress is ALIAS.STATE_BUILDING and isDefencePeriodActivated:
+            nextMapTimestamp, nextMapID, curMapID = self.fortCtrl.getFort().getBuildingMaps(self._buildingID)
+            isMapsInfoEnabled = nextMapTimestamp > 0
+            if self.__buildingLevel < fortified_regions.g_cache.defenceConditions.minRegionLevel:
+                mapIcon = fort_text.getIcon(fort_text.ALERT_ICON)
+                mapMsg = fort_text.getText(fort_text.ALERT_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_MAPINFO_NOBATTLE))
+                header = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_HEADER)
+                body = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_BODY)
+            elif isMapsInfoEnabled:
+                currentMapUserName = self.__getMapUserName(curMapID)
+                mapIcon = fort_text.getIcon(fort_text.INFO_ICON)
+                mapMsg = fort_text.getText(fort_text.MAIN_TEXT, currentMapUserName)
+                header = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_HEADER, currentMap=currentMapUserName)
+                body = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_BODY, nextMap=self.__getMapUserName(nextMapID), changeDate=BigWorld.wg_getLongDateFormat(nextMapTimestamp), changeTime=BigWorld.wg_getShortTimeFormat(nextMapTimestamp))
+            else:
+                mapIcon = mapMsg = ''
+            mapInfo = i18n.makeString(mapIcon + ' ' + mapMsg)
+            result['mapTooltip'] = [header, body]
+            result['mapInfo'] = mapInfo
         return result
+
+    @classmethod
+    def __getMapUserName(cls, arenaTypeID):
+        if arenaTypeID in ArenaType.g_cache:
+            return ArenaType.g_cache[arenaTypeID].name
+        return ''
+
+    def __setDefaultEnabling(self):
+        demountEnabling = False
+        demountTooltip = ''
+        upgradeBtnEnable = False
+        upgradeTooltip = ''
+        if self._isVisibleDemountBtn(self.__buildingDescr):
+            demountEnabling = self._isEnableDemountBtn()
+            demountTooltip = TOOLTIPS.FORTIFICATION_POPOVER_DEMOUNTBTN
+        if self._isEnableModernizationBtnByDamaged(self.__buildingDescr):
+            upgradeBtnEnable = True
+            upgradeTooltip = TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN
+        if upgradeBtnEnable and not self._isEnableModernizationBtnByProgress(self.__buildingDescr):
+            upgradeBtnEnable = False
+            upgradeTooltip = TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED
+        self.as_setModernizationDestructionEnablingS(upgradeBtnEnable, demountEnabling, upgradeTooltip, demountTooltip)
+
+    def __disableModernizationAndDestroy(self):
+        self.as_setModernizationDestructionEnablingS(False, False, TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE, TOOLTIPS.FORTIFICATION_POPOVER_DEMOUNTBTNDISABLED)
 
     def __getBodyStatus(self, status, headerColor, bodyColor):
         bodyLbl = ''
@@ -234,14 +287,17 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         if self.__progress != ALIAS.STATE_BUILDING:
             status, filterColor, headerColor, bodyColor = self.STATUS_COLORS.FOUNDATION
             headerLbl, bodyLbl = self.__getBodyStatus(status, headerColor, bodyColor)
-        elif self.__hpVal < self.__hpTotalVal and self.__buildingLevel > 0:
-            if self._isBaseBuilding:
+        elif self._isBaseBuilding:
+            if self._isFortFrozen():
                 status, filterColor, headerColor, bodyColor = self.STATUS_COLORS.FREEZE
                 headerLbl, bodyLbl = self.__getBodyStatus(status, headerColor, bodyColor)
-            else:
+            elif self._isBaseBuildingDamaged():
                 status, filterColor, headerColor, bodyColor = self.STATUS_COLORS.HALFDESTROY
                 headerLbl, bodyLbl = self.__getBodyStatus(status, headerColor, bodyColor)
-        elif self.__canUpgrade:
+        elif self._isBuildingDamaged(self.__buildingDescr):
+            status, filterColor, headerColor, bodyColor = self.STATUS_COLORS.HALFDESTROY
+            headerLbl, bodyLbl = self.__getBodyStatus(status, headerColor, bodyColor)
+        elif self.__canUpgrade and self._isEnableModernizationBtnByDamaged(self.__buildingDescr):
             if self.__congratMessage:
                 status, filterColor, headerColor, bodyColor = self.STATUS_COLORS.CGR
                 headerLbl, bodyLbl = self.__getBodyStatus(status, headerColor, bodyColor)
@@ -251,50 +307,24 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         return (headerLbl, bodyLbl, filterColor)
 
     def __prepareIndicatorData(self):
-        textStyle = fort_text.PURPLE_TEXT
-        if self.__progress == ALIAS.STATE_FOUNDATION_DEF or self.__progress == ALIAS.STATE_FOUNDATION:
-            textStyle = fort_text.ALERT_TEXT
-        formattedHpValue = fort_text.getText(textStyle, str(BigWorld.wg_getIntegralFormat(self.__hpVal)))
-        hpTotalFormatted = str(BigWorld.wg_getIntegralFormat(self.__hpTotalVal)) + ' '
-        formattedHpTotal = fort_text.concatStyles(((fort_text.STANDARD_TEXT, hpTotalFormatted), (fort_text.NUT_ICON,)))
-        formattedDefResValue = fort_text.getText(fort_text.PURPLE_TEXT, str(BigWorld.wg_getIntegralFormat(self.__defResVal)))
-        maxDefDerFormatted = str(BigWorld.wg_getIntegralFormat(self.__maxDefResVal)) + ' '
-        formattedDefResTotal = fort_text.concatStyles(((fort_text.STANDARD_TEXT, maxDefDerFormatted), (fort_text.NUT_ICON,)))
-        result = {}
-        result['hpLabel'] = i18n.makeString(FORT.BUILDINGPOPOVER_INDICATORS_HPLBL)
-        result['defResLabel'] = i18n.makeString(FORT.BUILDINGPOPOVER_INDICATORS_DEFRESLBL)
-        result['hpCurrentValue'] = self.__hpVal
-        result['hpTotalValue'] = self.__hpTotalVal
-        result['defResCurrentValue'] = self.__defResVal
-        result['defResTotalValue'] = self.__maxDefResVal
-        hpProgressLabels = {}
-        hpProgressLabels['currentValue'] = formattedHpValue
-        hpProgressLabels['totalValue'] = formattedHpTotal
-        hpProgressLabels['separator'] = '/'
-        storeProgressLabels = {}
-        storeProgressLabels['currentValue'] = formattedDefResValue
-        storeProgressLabels['totalValue'] = formattedDefResTotal
-        storeProgressLabels['separator'] = '/'
-        result['hpProgressLabels'] = hpProgressLabels
-        result['defResProgressLabels'] = storeProgressLabels
-        return result
+        return makeBuildingIndicatorsVOByDescr(self.__buildingDescr)
 
     def __prepareDefResInfo(self):
         result = {}
         icon = None
         level = None
-        isPermanent = False
+        showAlertIcon = False
         if self._isBaseBuilding:
             defResTitle = fort_text.getText(fort_text.MIDDLE_TITLE, i18n.makeString(FORT.BUILDINGPOPOVER_DEFRESINFO_BASEBUILDINGTITLE))
-            defresDescr = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(FORT.buildings_defresinfo(self._buildingUID)))
+            defresDescr = fort_text.getText(fort_text.MAIN_TEXT, i18n.makeString(FORT.buildings_defresinfo(self._buildingUID)))
         else:
             order = self.fortCtrl.getFort().getOrder(self.__orderID)
             icon = order.icon
             level = order.level
             defResTitle = fort_text.getText(fort_text.MIDDLE_TITLE, i18n.makeString('#fortifications:General/orderType/%s' % self.UI_ORDERS_BIND[self.__orderID]))
             defresDescr = order.description
-            isPermanent = order.isPermanent
-        result['isPermanent'] = isPermanent
+            showAlertIcon = self._showOrderAlertIcon(order)
+        result['showAlertIcon'] = showAlertIcon
         result['title'] = defResTitle
         result['description'] = defresDescr
         result['iconSource'] = icon
@@ -318,12 +348,23 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
                 resultConcat = fort_text.concatStyles(textOne)
                 result['generalLabel'] = resultConcat
         elif self.__isCommander:
-            if self.__orderTime is not None:
+            if self.__buildingDescr.orderInProduction:
+                orderCount = self.__buildingDescr.orderInProduction.get('count', 0)
                 result['currentState'] = self.ACTION_STATES.NOT_BASE_COMMANDER_ORDERED
-                orderTimer = fort_text.concatStyles(((fort_text.MAIN_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_DEFRESACTIONS_PREPARINGDEFRES)), (fort_text.NEUTRAL_TEXT, self.__orderCount)))
-                overTime = i18n.makeString(FORT.BUILDINGPOPOVER_DEFRESACTIONS_PREPARETIMEOVER)
-                overTime = overTime + self.__orderTime
-                orderTime = fort_text.getText(fort_text.NEUTRAL_TEXT, overTime)
+                if self._isProductionInPause(self.__buildingDescr):
+                    result['productionInPause'] = True
+                    title = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INPAUSE_HEADER)
+                    body = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INPAUSE_BODY)
+                    result['pauseReasonTooltip'] = [title, body]
+                    overTime = i18n.makeString(FORT.BUILDINGPOPOVER_ORDERPROCESS_INPAUSE)
+                    orderTimeIcon = fort_text.getIcon(fort_text.ALERT_ICON)
+                    orderTimeMsg = fort_text.getText(fort_text.ALERT_TEXT, overTime)
+                    orderTime = i18n.makeString(orderTimeIcon + ' ' + orderTimeMsg)
+                else:
+                    overTime = i18n.makeString(FORT.BUILDINGPOPOVER_DEFRESACTIONS_PREPARETIMEOVER)
+                    overTime = overTime + self.__orderTime
+                    orderTime = fort_text.getText(fort_text.NEUTRAL_TEXT, overTime)
+                orderTimer = fort_text.concatStyles(((fort_text.MAIN_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_DEFRESACTIONS_PREPARINGDEFRES)), (fort_text.NEUTRAL_TEXT, orderCount)))
                 result['orderTimer'] = orderTimer
                 result['timeOver'] = orderTime
                 result['generalLabel'] = self.__makeGeneralActionLabel()
@@ -339,6 +380,11 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
                 if order.maxCount <= order.count:
                     enableActionBtn = False
                     result['toolTipData'] = TOOLTIPS.FORTIFICATION_POPOVER_PREPAREORDEROVERLOAD
+                if self._isBuildingDamaged(self.__buildingDescr) or self._isBaseBuildingDamaged() or self._isFortFrozen():
+                    enableActionBtn = False
+                    header = TOOLTIPS.FORTIFICATION_ORDERPROCESS_NOTAVAILABLE_HEADER
+                    body = TOOLTIPS.FORTIFICATION_ORDERPROCESS_NOTAVAILABLE_BODY
+                    result['toolTipData'] = makeTooltip(header, body)
                 if enableActionBtn:
                     orderName = i18n.makeString(FORT.orders_orderpopover_ordertype(self.UI_ORDERS_BIND[self.__orderID]))
                     result['toolTipData'] = i18n.makeString(TOOLTIPS.FORTIFICATION_POPOVER_PREPAREORDERENABLE, orderName=orderName)

@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LoginQueue.py
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.daapi.view.meta.LoginQueueWindowMeta import LoginQueueWindowMeta
 from gui.Scaleform.framework import AppRef
@@ -9,19 +10,21 @@ __author__ = 'd_trofimov'
 
 class LoginQueue(View, AbstractWindowView, LoginQueueWindowMeta, AppRef):
 
-    def __init__(self, title, message, cancelLabel):
+    def __init__(self, title, message, cancelLabel, showAutoLoginBtn):
         super(LoginQueue, self).__init__()
-        self.__updateData(title, message, cancelLabel)
+        self.__updateData(title, message, cancelLabel, showAutoLoginBtn)
 
-    def __updateData(self, title, message, cancelLabel):
+    def __updateData(self, title, message, cancelLabel, showAutoLoginBtn):
         self.__title = title
         self.__message = message
         self.__cancelLabel = cancelLabel
+        self.__showAutoLoginBtn = showAutoLoginBtn
 
     def __updateTexts(self):
         self.as_setTitleS(self.__title)
         self.as_setMessageS(self.__message)
         self.as_setCancelLabelS(self.__cancelLabel)
+        self.as_showAutoLoginBtnS(self.__showAutoLoginBtn)
 
     def _populate(self):
         super(LoginQueue, self)._populate()
@@ -40,8 +43,13 @@ class LoginQueue(View, AbstractWindowView, LoginQueueWindowMeta, AppRef):
     def onCancelClick(self):
         self.__windowClosing()
 
+    def onAutoLoginClick(self):
+        self.fireEvent(LoginEventEx(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, '', '', '', '', False), EVENT_BUS_SCOPE.LOBBY)
+        self.app.disconnect(True)
+        self.destroy()
+
     def __windowClosing(self):
-        self.fireEvent(LoginEventEx(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, '', '', '', ''), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LoginEventEx(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, '', '', '', '', False), EVENT_BUS_SCOPE.LOBBY)
         self.app.disconnect(True)
         self.destroy()
 

@@ -46,11 +46,13 @@ class ChannelsStorage(object):
             result = False
         return result
 
-    def removeChannel(self, channel):
+    def removeChannel(self, channel, clear = True):
         result = True
         if channel in self.__channels:
             index = self.__channels.index(channel)
-            self.__channels.pop(index).clear()
+            stored = self.__channels.pop(index)
+            if clear:
+                stored.clear()
         else:
             LOG_ERROR('Channel is not in storage', channel)
             result = False

@@ -6,7 +6,7 @@ import dossiers2
 from tutorial import doc_loader
 from tutorial.control import context
 from tutorial.control.battle.context import ExtendedBattleClientCtx
-from tutorial.control.context import GlobalStorage, GLOBAL_FLAG, GLOBAL_VAR
+from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
 from tutorial.control.lobby.context import LobbyBonusesRequester
 from tutorial.logger import LOG_ERROR
 from tutorial.settings import TUTORIAL_SETTINGS, PLAYER_XP_LEVEL
@@ -39,7 +39,6 @@ class OffbattleStartReqs(context.StartReqs):
     def __cb_onGetTutorialsCompleted(self, resultID, completed):
         ctx = self._ctx
         loader = self._loader
-        tutorial = loader.tutorial
         if resultID < RES_SUCCESS:
             LOG_ERROR('Server return error on request tutorialsCompleted', resultID, completed)
             loader._clear()
@@ -87,7 +86,6 @@ class OffbattleStartReqs(context.StartReqs):
             if battlesCount < threshold:
                 descriptor = tutorial._descriptor
                 chapter = descriptor.getChapter(descriptor.getInitialChapterID())
-                isShowGreeting = chapter is None or not chapter.isBonusReceived(ctx.bonusCompleted)
                 if chapter is None or not chapter.isBonusReceived(ctx.bonusCompleted):
                     loader._doRun(ctx)
                 else:

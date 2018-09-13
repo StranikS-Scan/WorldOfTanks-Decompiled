@@ -6,10 +6,8 @@ import dossiers2
 from constants import DOSSIER_TYPE
 from items import tankmen
 from helpers import i18n
-from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUIItem
 from gui.shared.gui_items.dossier import stats
-from gui.shared.gui_items.dossier.achievements import MARK_OF_MASTERY
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 
 def loadDossier(dumpData):

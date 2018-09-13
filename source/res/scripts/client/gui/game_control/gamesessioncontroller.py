@@ -1,16 +1,19 @@
 # Embedded file name: scripts/client/gui/game_control/GameSessionController.py
-import BigWorld, Event, account_shared, time, constants
+import time
+import BigWorld
+import Event
+import account_shared
+import constants
 from adisp import process
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared import g_itemsCache
 from helpers import time_utils
 from debug_utils import *
-from helpers.time_utils import makeLocalServerTime, getTimeDeltaFromNow
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.shared import g_itemsCache
 
 class GameSessionController(object):
     """ Game playing time and parent controlling class. """
     NOTIFY_PERIOD = time_utils.ONE_HOUR
-    PLAY_TIME_LEFT_NOTIFY = 15 * time_utils.ONE_MINUTE
+    PLAY_TIME_LEFT_NOTIFY = time_utils.QUARTER_HOUR
     MIDNIGHT_BLOCK_TIME = time_utils.ONE_DAY - PLAY_TIME_LEFT_NOTIFY
     onClientNotify = Event.Event()
     onTimeTillBan = Event.Event()
@@ -130,7 +133,8 @@ class GameSessionController(object):
         
         @return: <bool> is parent control active now
         """
-        parentControl = self.isParentControlEnabled and min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()]) <= self.PLAY_TIME_LEFT_NOTIFY
+        playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
+        parentControl = self.isParentControlEnabled and playTimeLeft <= self.PLAY_TIME_LEFT_NOTIFY
         curfewControl = not self.isAdult and time_utils.getServerRegionalTimeCurrentDay() >= self.MIDNIGHT_BLOCK_TIME
         return parentControl or curfewControl
 
@@ -178,8 +182,8 @@ class GameSessionController(object):
 
     def __startPremiumTimeNotifyCallback(self):
         self.__clearPremiumTimeNotifyCallback()
-        premiumTime = makeLocalServerTime(g_itemsCache.items.stats.premiumExpiryTime)
-        delta = getTimeDeltaFromNow(premiumTime)
+        premiumTime = time_utils.makeLocalServerTime(g_itemsCache.items.stats.premiumExpiryTime)
+        delta = time_utils.getTimeDeltaFromNow(premiumTime)
         if delta > time_utils.ONE_DAY:
             period = time_utils.ONE_DAY
         elif delta > time_utils.ONE_HOUR:

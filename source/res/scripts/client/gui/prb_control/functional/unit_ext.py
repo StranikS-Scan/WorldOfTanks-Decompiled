@@ -10,7 +10,6 @@ from gui import prb_control, SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.prb_control import getClientUnitMgr, getClientUnitBrowser
-from gui.prb_control import events_dispatcher
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.formatters import messages
 from gui.prb_control.functional import interfaces
@@ -20,6 +19,7 @@ from gui.prb_control.prb_cooldown import PrbCooldownManager
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import REQ_CRITERIA, g_itemsCache
 from helpers import time_utils
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 
 class UnitRequestProcessor(object):
     __slots__ = ('__requests', '__functional')
@@ -134,8 +134,24 @@ def _getUnitFromSortieCache(unitIdx):
         return (unitIdx, unit)
 
 
+def _getUnitFromFortBattleCache(unitIdx):
+    from gui.shared.ClanCache import g_clanCache
+    provider = g_clanCache.fortProvider
+    unit = None
+    if not provider:
+        return unit
+    else:
+        fortCtrl = provider.getController()
+        if fortCtrl:
+            cache = fortCtrl.getFortBattlesCache()
+            if cache:
+                unit = cache.getUnitByIndex(unitIdx)
+        return (unitIdx, unit)
+
+
 _UNIT_GETTER_BY_PRB_TYPE = {PREBATTLE_TYPE.UNIT: _getUnitFromBrowser,
- PREBATTLE_TYPE.SORTIE: _getUnitFromSortieCache}
+ PREBATTLE_TYPE.SORTIE: _getUnitFromSortieCache,
+ PREBATTLE_TYPE.FORT_BATTLE: _getUnitFromFortBattleCache}
 
 def getUnitFromStorage(prbType, unitIdx):
     if prbType in _UNIT_GETTER_BY_PRB_TYPE:
@@ -190,7 +206,7 @@ class UnitAutoSearchHandler(object):
                     LOG_DEBUG('onUnitAutoSearchSuccess', acceptDelta)
                     listener.onUnitAutoSearchSuccess(acceptDelta)
         elif self.__isInSearch:
-            events_dispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), True)
+            g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), True)
             listener.onUnitAutoSearchStarted(self.getTimeLeftInSearch())
 
     def isInSearch(self):
@@ -273,21 +289,21 @@ class UnitAutoSearchHandler(object):
     def pe_onEnqueuedUnitAssembler(self):
         self.__isInSearch = True
         self.__startSearchTime = BigWorld.time()
-        events_dispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), True)
+        g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), True)
         for listener in self.__functional.getListenersIterator():
             listener.onUnitAutoSearchStarted(0)
         else:
-            events_dispatcher.showUnitWindow(self.__functional.getPrbType())
+            g_eventDispatcher.showUnitWindow(self.__functional.getPrbType())
 
     def unitBrowser_onSearchSuccessReceived(self, unitMgrID, unitIdx, acceptDeadlineUTC):
         self.__hasResult = True
         acceptDelta = self.getAcceptDelta(acceptDeadlineUTC)
         LOG_DEBUG('onUnitAutoSearchSuccess', acceptDelta, acceptDeadlineUTC)
-        events_dispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), False)
+        g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), False)
         for listener in self.__functional.getListenersIterator():
             listener.onUnitAutoSearchSuccess(acceptDelta)
         else:
-            events_dispatcher.showUnitWindow(self.__functional.getPrbType())
+            g_eventDispatcher.showUnitWindow(self.__functional.getPrbType())
 
     def unitBrowser_onErrorReceived(self, errorCode, _):
         self.__isInSearch = False
@@ -302,11 +318,11 @@ class UnitAutoSearchHandler(object):
         self.__hasResult = False
         self.__startSearchTime = 0
         prbType = self.__functional.getPrbType()
-        events_dispatcher.setUnitProgressInCarousel(prbType, False)
+        g_eventDispatcher.setUnitProgressInCarousel(prbType, False)
         for listener in self.__functional.getListenersIterator():
             listener.onUnitAutoSearchFinished()
         else:
-            events_dispatcher.showUnitWindow(prbType)
+            g_eventDispatcher.showUnitWindow(prbType)
 
 
 class InventoryVehiclesWatcher(object):

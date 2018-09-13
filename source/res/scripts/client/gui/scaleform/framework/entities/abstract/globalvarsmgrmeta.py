@@ -12,6 +12,9 @@ class GlobalVarsMgrMeta(DAAPIModule):
     def isShowServerStats(self):
         self._printOverrideError('isShowServerStats')
 
+    def isShowServersList(self):
+        self._printOverrideError('isShowServersList')
+
     def isChina(self):
         self._printOverrideError('isChina')
 
@@ -44,3 +47,9 @@ class GlobalVarsMgrMeta(DAAPIModule):
 
     def isFortificationAvailable(self):
         self._printOverrideError('isFortificationAvailable')
+
+    def isFortificationBattleAvailable(self):
+        self._printOverrideError('isFortificationBattleAvailable')
+
+    def isShowTicker(self):
+        self._printOverrideError('isShowTicker')

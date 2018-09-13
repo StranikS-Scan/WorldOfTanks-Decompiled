@@ -130,5 +130,17 @@ class IChannelController(IEntityController):
     def addCommand(self, command):
         return ''
 
-    def isBattleChatEnabled(self):
+    def isEnabled(self):
         return True
+
+
+class IBattleChannelView(object):
+
+    def addController(self, ctrl):
+        pass
+
+    def removeController(self, ctrl):
+        pass
+
+    def addMessage(self, text, isCurrentPlayer = False):
+        pass

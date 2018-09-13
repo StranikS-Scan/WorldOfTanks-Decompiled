@@ -36,7 +36,7 @@ class FortChoiceDivisionWindow(AbstractWindowView, View, FortChoiceDivisionWindo
         return
 
     def selectedDivision(self, divisionID):
-        self.app.fireEvent(FortEvent(FortEvent.TEST_CHOICE_DIVISION, ctx={'data': divisionID}), EVENT_BUS_SCOPE.LOBBY)
+        self.app.fireEvent(FortEvent(FortEvent.CHOICE_DIVISION, ctx={'data': divisionID}), EVENT_BUS_SCOPE.LOBBY)
 
     def __makeData(self):
         data = {}

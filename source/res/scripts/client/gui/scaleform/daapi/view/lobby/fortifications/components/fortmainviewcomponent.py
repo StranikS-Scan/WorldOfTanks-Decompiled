@@ -1,14 +1,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortMainViewComponent.py
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
+from account_helpers.AccountSettings import AccountSettings, FORT_MEMBER_TUTORIAL
 from adisp import process
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, FORT_BUILDING_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 import fortified_regions
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.context.unit_ctx import JoinModeCtx
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.settings import UNIT_MODE_FLAGS
 from gui.shared import events
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.FortMainViewMeta import FortMainViewMeta
@@ -20,12 +25,26 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper imp
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.events import FortEvent
 from gui.shared.fortifications.context import DirectionCtx
-from helpers import i18n
+from gui.shared.utils import CONST_CONTAINER
+from helpers import i18n, time_utils, setHangarVisibility
 
 class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
+
+    class DIR_BATTLE_TYPE(CONST_CONTAINER):
+        ATTACK = 'attack'
+        DEFENSE = 'defense'
+        ATTACK_DEFENSE = 'atkAndDef'
+
+    TRANSPORTING_STEP_TO_MODE = {events.FortEvent.TRANSPORTATION_STEPS.NONE: None,
+     events.FortEvent.TRANSPORTATION_STEPS.FIRST_STEP: FORTIFICATION_ALIASES.MODE_TRANSPORTING_FIRST_STEP,
+     events.FortEvent.TRANSPORTATION_STEPS.NEXT_STEP: FORTIFICATION_ALIASES.MODE_TRANSPORTING_NEXT_STEP,
+     events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED: FORTIFICATION_ALIASES.MODE_TRANSPORTING_FIRST_STEP}
+    TUTORIAL_TRANSPORTING_STEP_TO_MODE = {events.FortEvent.TRANSPORTATION_STEPS.NONE: None,
+     events.FortEvent.TRANSPORTATION_STEPS.FIRST_STEP: FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL_FIRST_STEP,
+     events.FortEvent.TRANSPORTATION_STEPS.NEXT_STEP: FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL_NEXT_STEP,
+     events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED: FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL_FIRST_STEP}
 
     def __init__(self):
         super(FortMainViewComponent, self).__init__()
@@ -33,6 +52,11 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         self.__currentMode = FortificationEffects.NONE_STATE
         self.__currentModeIsDirty = True
         self.__commanderHelpShown = False
+        self.__transportingProgress = None
+        fortSettings = dict(AccountSettings.getSettings('fortSettings'))
+        self.__settingsClanDB = fortSettings.get('clanDBID', 0)
+        self.__clanDBID = g_clanCache.clanDBID
+        return
 
     @process
     def updateData(self):
@@ -40,19 +64,55 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         data = self.getData()
         data['clanIconId'] = yield g_clanCache.getClanEmblemID()
         if not self.isDisposed():
+            self.__updateHeaderMessage()
             self.as_setMainDataS(data)
+            self.as_setBattlesDirectionDataS({'directionsBattles': self._getDirectionsBattles()})
+            self.__checkDefHourConditions()
+
+    def _getDirectionsBattles(self):
+        battlesByDir = {}
+        fort = self.fortCtrl.getFort()
+        if fort is not None:
+            for attack in fort.getAttacks():
+                if not attack.isEnded() and attack.getStartTimeLeft() <= time_utils.ONE_DAY:
+                    battlesByDir[attack.getDirection()] = (self.DIR_BATTLE_TYPE.ATTACK, attack.isHot(), TOOLTIPS.FORTIFICATION_BATTLENOTIFIER_OFFENSE)
+
+            for defence in fort.getDefences():
+                if not defence.isEnded() and defence.getStartTimeLeft() <= time_utils.ONE_DAY:
+                    direction = defence.getDirection()
+                    if direction in battlesByDir:
+                        isHot = battlesByDir[direction][1]
+                        battlesByDir[direction] = (self.DIR_BATTLE_TYPE.ATTACK_DEFENSE, isHot or defence.isHot(), TOOLTIPS.FORTIFICATION_BATTLENOTIFIER_OFFANDDEF)
+                    else:
+                        battlesByDir[direction] = (self.DIR_BATTLE_TYPE.DEFENSE, defence.isHot(), TOOLTIPS.FORTIFICATION_BATTLENOTIFIER_DEFENSE)
+
+        result = []
+        for direction, (lbl, flashing, tooltip) in battlesByDir.iteritems():
+            result.append({'battleType': lbl,
+             'hasActiveBattles': flashing,
+             'tooltip': tooltip,
+             'direction': direction})
+
+        return result
 
     def _populate(self):
         super(FortMainViewComponent, self)._populate()
         self.addListener(FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.FortEvent.TRANSPORTATION_STEP, self.__onTransportingStep, scope=EVENT_BUS_SCOPE.FORT)
         self.startFortListening()
         self.updateData()
+        setHangarVisibility(isVisible=False)
         Waiting.hide('loadPage')
 
     def _dispose(self):
+        setHangarVisibility(isVisible=True)
         super(FortMainViewComponent, self)._dispose()
         self.stopFortListening()
         self.removeListener(FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.FortEvent.TRANSPORTATION_STEP, self.__onTransportingStep, scope=EVENT_BUS_SCOPE.FORT)
+        self.__settingsClanDB = None
+        self.__clanDBID = None
+        return
 
     def onWindowClose(self):
         self.destroy()
@@ -70,37 +130,44 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
     def __requestToCreate(self, dirId):
         result = yield self.fortProvider.sendRequest(DirectionCtx(dirId, waitingID='fort/direction/open'))
         if result:
+            g_fortSoundController.playCreateDirection()
             directionName = i18n.makeString('#fortifications:General/directionName%d' % dirId)
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DIRECTIONOPENED, direction=directionName, type=SystemMessages.SM_TYPE.Warning)
-            if self.app.soundManager is not None:
-                self.app.soundManager.playEffectSound(SoundEffectsId.FORT_DIRECTION_CREATE)
             self.__currentModeIsDirty = True
-        return
+
+    def __onTransportingStep(self, event):
+        step = event.ctx.get('step')
+        isInTutorial = event.ctx.get('isInTutorial')
+        if self.fortCtrl.getFort().isStartingScriptDone():
+            self.__transportingProgress = self.TRANSPORTING_STEP_TO_MODE.get(step)
+        else:
+            self.__transportingProgress = self.TUTORIAL_TRANSPORTING_STEP_TO_MODE.get(step)
+        if isInTutorial and step == events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED:
+            self.onFirstTransportingStep()
+        self.__refreshCurrentMode()
+        self.__checkDefHourConditions()
 
     def onFirstTransportingStep(self):
-        pass
+        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.FIRST_STEP}), scope=EVENT_BUS_SCOPE.FORT)
 
     def onNextTransportingStep(self):
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(SoundEffectsId.TRANSPORT_FIRST_STEP)
-        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.FIRST_STEP}), scope=EVENT_BUS_SCOPE.FORT)
-        return
+        g_fortSoundController.playFirstStepTransport()
+        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.NEXT_STEP}), scope=EVENT_BUS_SCOPE.FORT)
 
     def onEnterTransportingClick(self):
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(SoundEffectsId.TRANSPORT_ENTER)
-        self.__switchToMode(FORTIFICATION_ALIASES.MODE_TRANSPORTING)
-        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.INITIAL}), scope=EVENT_BUS_SCOPE.FORT)
-        return
+        g_fortSoundController.playEnterTransport()
+        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.FIRST_STEP}), scope=EVENT_BUS_SCOPE.FORT)
+
+    def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed = False):
+        if cooldownPassed:
+            self.__refreshCurrentMode()
 
     def onLeaveTransportingClick(self):
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(SoundEffectsId.TRANSPORT_EXIT)
-        self.__switchToMode(FORTIFICATION_ALIASES.MODE_COMMON)
-        return
+        g_fortSoundController.playExitTransport()
+        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.NONE}), scope=EVENT_BUS_SCOPE.FORT)
 
     def onLeaveBuildDirectionClick(self):
-        self.__switchToMode(FORTIFICATION_ALIASES.MODE_COMMON)
+        self.__refreshCurrentMode()
 
     def onIntelligenceClick(self):
         self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
@@ -114,20 +181,27 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
     def onStatsClick(self):
         self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
 
+    def onCalendarClick(self):
+        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CALENDAR_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+
+    def onSettingClick(self):
+        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+
     def onUpdated(self):
         self.updateData()
 
     def onClanMembersListChanged(self):
         self.updateData()
 
+    def onDefenceHourChanged(self, hour):
+        self.__updateHeaderMessage()
+
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
-        if reason in (self.fortCtrl.getFort().BUILDING_UPDATE_REASON.COMPLETED, self.fortCtrl.getFort().BUILDING_UPDATE_REASON.ADDED):
+        if reason in (BUILDING_UPDATE_REASON.COMPLETED, BUILDING_UPDATE_REASON.ADDED):
             self.__currentModeIsDirty = True
 
-    def onPlayerAttached(self, buildingTypeID):
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(SoundEffectsId.FORT_FIXED_IN_BUILDING)
-        return
+    def onViewReady(self):
+        Waiting.hide('Flash')
 
     def _getCustomData(self):
         fort = self.fortCtrl.getFort()
@@ -136,7 +210,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         defResQuantity = fort.getTotalDefRes()
         defResPrefix = fort_text.getText(fort_text.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT))
         disabledTransporting = False
-        if self.__currentMode == FORTIFICATION_ALIASES.MODE_TRANSPORTING:
+        if self.__currentMode in (FORTIFICATION_ALIASES.MODE_TRANSPORTING_FIRST_STEP, FORTIFICATION_ALIASES.MODE_TRANSPORTING_NEXT_STEP, FORTIFICATION_ALIASES.MODE_TRANSPORTING_NOT_AVAILABLE):
             if not self.fortCtrl.getFort().isTransportationAvailable():
                 disabledTransporting = True
         return {'clanName': g_clanCache.clanTag,
@@ -144,29 +218,58 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
          'defResText': defResPrefix + fort_formatters.getDefRes(defResQuantity, True),
          'disabledTransporting': disabledTransporting}
 
+    def __updateHeaderMessage(self):
+        message = ''
+        if self._isFortFrozen():
+            message = i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_HEADER_FORTFROZEN)
+            message = fort_text.getText(fort_text.ERROR_TEXT, message)
+        else:
+            periodStr = self.fortCtrl.getFort().getDefencePeriodStr()
+            if periodStr is not None and len(periodStr) > 0:
+                message = i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_HEADER_DEFENCEPERIOD, period=periodStr)
+                message = fort_text.getText(fort_text.STATS_TEXT, message)
+        self.as_setHeaderMessageS(message)
+        return
+
+    def __refreshCurrentMode(self):
+        self.__currentModeIsDirty = True
+        self.__updateCurrentMode()
+
     def __handleSwitchToMode(self, event):
         mode = event.ctx.get('mode')
         self.__switchToMode(mode)
+        self.__checkDefHourConditions()
 
     def __switchToMode(self, mode):
         if mode != self.__currentMode:
+            storedValue = AccountSettings.getFilter(FORT_MEMBER_TUTORIAL)
+            notCommanderHelpShown = storedValue['wasShown']
+            if self.fortCtrl.getPermissions().canViewNotCommanderHelp() and not notCommanderHelpShown:
+                self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_NOT_COMMANDER_FIRST_ENTER_WINDOW_EVENT), scope=EVENT_BUS_SCOPE.LOBBY)
+                AccountSettings.setFilter(FORT_MEMBER_TUTORIAL, {'wasShown': True})
             if self.fortCtrl.getFort().isStartingScriptNotStarted() and not self.__commanderHelpShown:
                 self.as_toggleCommanderHelpS(True)
                 self.__commanderHelpShown = True
             if mode == FORTIFICATION_ALIASES.MODE_COMMON_TUTORIAL:
                 self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CREATION_CONGRATULATIONS_WINDOW_EVENT), scope=EVENT_BUS_SCOPE.LOBBY)
                 self.__makeSystemMessages()
+            if mode in (FORTIFICATION_ALIASES.MODE_TRANSPORTING_FIRST_STEP,
+             FORTIFICATION_ALIASES.MODE_TRANSPORTING_NEXT_STEP,
+             FORTIFICATION_ALIASES.MODE_TRANSPORTING_NOT_AVAILABLE,
+             FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL,
+             FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL_FIRST_STEP,
+             FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL_NEXT_STEP):
+                g_fortSoundController.setTransportingMode(True)
+            else:
+                g_fortSoundController.setTransportingMode(False)
             LOG_DEBUG('%s -> %s' % (self.__currentMode, mode))
             state = FortificationEffects.STATES[self.__currentMode][mode].copy()
             STATE_TEXTS_KEY = 'stateTexts'
-            descrsMode = mode
             if not self.fortCtrl.getPermissions().canTransport():
                 state['transportToggle'] = FortificationEffects.INVISIBLE
-            if descrsMode == FORTIFICATION_ALIASES.MODE_TRANSPORTING:
-                if not self.fortCtrl.getFort().isTransportationAvailable():
-                    descrsMode = 'transportingDisabled'
-            state[STATE_TEXTS_KEY] = FortificationEffects.TEXTS[descrsMode]
-            state[STATE_TEXTS_KEY]['headerTitle'] = FORTIFICATIONS.fortmainview(mode + '/title')
+            if not self.fortCtrl.getPermissions().canChangeSettings():
+                state['settingBtn'] = FortificationEffects.INVISIBLE
+            state[STATE_TEXTS_KEY] = FortificationEffects.TEXTS[mode]
             state['mode'] = mode
             self.as_switchModeS(state)
             self.__currentModeIsDirty = False
@@ -179,13 +282,34 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
 
     def __updateCurrentMode(self):
         if self.__currentModeIsDirty:
-            self.__switchToMode(self.fortState.getUIMode(self.fortProvider))
+            self.__switchToMode(self.fortState.getUIMode(self.fortProvider, self.__transportingProgress))
 
     @process
     def __joinToSortie(self):
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            yield dispatcher.join(JoinModeCtx(PREBATTLE_TYPE.SORTIE))
+            yield dispatcher.join(JoinModeCtx(PREBATTLE_TYPE.SORTIE, modeFlags=UNIT_MODE_FLAGS.SHOW_LIST))
         else:
             LOG_ERROR('Prebattle dispatcher is not defined')
         return
+
+    def __checkDefHourConditions(self):
+        canChangeSettings = self.fortCtrl.getPermissions().canChangeSettings()
+        if not canChangeSettings or self.__currentMode != FORTIFICATION_ALIASES.MODE_COMMON:
+            return
+        if self.__settingsClanDB != self.__clanDBID and self.__isClanConditionsSuccess():
+            fortSettings = dict(AccountSettings.getSettings('fortSettings'))
+            fortSettings['clanDBID'] = self.__clanDBID
+            AccountSettings.setSettings('fortSettings', fortSettings)
+            self.__settingsClanDB = self.__clanDBID
+            if not self.fortCtrl.getFort().isDefenceHourEnabled():
+                self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_PERIOD_DEFENCE_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+
+    def __isClanConditionsSuccess(self):
+        currentCountOfClanMembers = len(g_clanCache.clanMembers)
+        minClanMembers = fortified_regions.g_cache.defenceConditions.minClanMembers
+        isClanMembersEnough = currentCountOfClanMembers >= minClanMembers
+        baseLevel = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE).level
+        minRegionLevel = fortified_regions.g_cache.defenceConditions.minRegionLevel
+        isBaseLevelEnough = baseLevel >= minRegionLevel
+        return isClanMembersEnough and isBaseLevelEnough

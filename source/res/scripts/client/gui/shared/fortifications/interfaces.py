@@ -23,10 +23,19 @@ class IFortController(object):
     def getLimits(self):
         return IFortLimits()
 
+    def getValidators(self):
+        return None
+
     def getSortiesCache(self):
         return None
 
+    def getPublicInfoCache(self):
+        return None
+
     def removeSortiesCache(self):
+        return None
+
+    def removeFortBattlesCache(self):
         return None
 
     def getFort(self):
@@ -59,6 +68,12 @@ class IFortListener(object):
     def onSortieUnitReceived(self, clientIdx):
         pass
 
+    def onFortBattleChanged(self, cache, item):
+        pass
+
+    def onFortBattleRemoved(self, cache, battleID):
+        pass
+
     def onUpgradeVisitedBuildingChanged(self, buildingID):
         pass
 
@@ -69,9 +84,6 @@ class IFortListener(object):
         pass
 
     def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed = False):
-        pass
-
-    def onBuildingRemoved(self, buildingTypeID):
         pass
 
     def onTransport(self):
@@ -93,6 +105,27 @@ class IFortListener(object):
         pass
 
     def onPlayerAttached(self, buildingTypeID):
+        pass
+
+    def onDefenceHourChanged(self, hour):
+        pass
+
+    def onDefenceHourStateChanged(self):
+        pass
+
+    def onFavoritesChanged(self, clanDBID):
+        pass
+
+    def onFortPublicInfoReceived(self, hasResults):
+        pass
+
+    def onFortPublicInfoValidationError(self, reason):
+        pass
+
+    def onEnemyClanCardReceived(self, card):
+        pass
+
+    def onShutdownDowngrade(self):
         pass
 
 
@@ -131,6 +164,51 @@ class IFortPermissions(object):
     def canAttach(self):
         return False
 
+    def canCreateSortie(self):
+        return False
+
+    def canCreateFortBattle(self):
+        return False
+
+    def canChangeDefHour(self):
+        return False
+
+    def canChangeOffDay(self):
+        return False
+
+    def canChangePeriphery(self):
+        return False
+
+    def canChangeVacation(self):
+        return False
+
+    def canChangeSettings(self):
+        return False
+
+    def canShutDownDefHour(self):
+        return False
+
+    def canRequestPublicInfo(self):
+        return False
+
+    def canRequestClanCard(self):
+        return False
+
+    def canAddToFavorite(self):
+        return False
+
+    def canRemoveFavorite(self):
+        return False
+
+    def canPlanAttack(self):
+        return False
+
+    def canViewContext(self):
+        return False
+
+    def canViewNotCommanderHelp(self):
+        return False
+
 
 class IFortLimits(object):
 
@@ -154,3 +232,17 @@ class IFortLimits(object):
 
     def isSortieCreationValid(self, level = None):
         return (False, FORT_RESTRICTION.UNKNOWN)
+
+
+class IFortValidators(object):
+
+    def __init__(self, validators):
+        self._validators = validators
+
+    def fini(self):
+        self._validators.clear()
+
+    def validate(self, requestType, *args):
+        if requestType in self._validators:
+            return self._validators[requestType](*args)
+        return (True, '')

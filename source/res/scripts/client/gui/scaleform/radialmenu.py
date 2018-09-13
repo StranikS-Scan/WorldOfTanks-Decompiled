@@ -95,6 +95,7 @@ class RadialMenu(UIInterface):
      'SUPPORTMEWITHFIRE',
      'ATTACKENEMY',
      'STOP']
+    RELOADING_GUN_ACTION = 'RELOADINGGUN'
 
     def __init__(self, parentUI):
         UIInterface.__init__(self)
@@ -231,11 +232,19 @@ class RadialMenu(UIInterface):
     def onAction(self, action):
         if action in self.TARGET_ACTIONS:
             self.uiHolder.chatCommands.sendTargetedCommand(action, self.__currentTarget.id)
+        elif action == self.RELOADING_GUN_ACTION:
+            self.uiHolder.chatCommands.sendReloadingCommand()
         else:
             self.uiHolder.chatCommands.sendCommand(action)
 
     def __onMenuShow(self, offset, mouseUsedForShow):
         if not self.__ingameMenuIsVisible():
+            screenWidth = BigWorld.screenWidth()
+            screenHeight = BigWorld.screenHeight()
+            guiScreenWidth, guiScreenHeight = GUI.screenResolution()
+            ratioWidth = float(guiScreenWidth / screenWidth)
+            ratioHeight = float(guiScreenHeight / screenHeight)
+            self.call('RadialMenu.setRatio', [ratioWidth, ratioHeight])
             crosshairType = self.__getCrosshairType()
             keys = self.__getKeysList(crosshairType)
             self.GUICtrl.setFireKeyCode(self.__getFireKeyCode())

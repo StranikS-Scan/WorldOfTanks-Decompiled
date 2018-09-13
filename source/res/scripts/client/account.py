@@ -12,6 +12,7 @@ from PlayerEvents import g_playerEvents as events
 from account_helpers.settings_core import IntUserSettings
 from constants import *
 from account_helpers.diff_utils import synchronizeDicts
+from messenger import MessengerEntry
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
 from debug_utils import *
 from ContactInfo import ContactInfo
@@ -299,6 +300,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         events.onPrebattleLeft()
         return
 
+    def setBattleID(self, *args):
+        self.unitMgr.setBattleID(*args)
+
     def onUnitUpdate(self, *args):
         self.unitMgr.onUnitUpdate(*args)
 
@@ -346,6 +350,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         LOG_DEBUG('onCenterIsLongDisconnected', isLongDisconnected)
         self.isLongDisconnectedFromCenter = isLongDisconnected
         events.onCenterIsLongDisconnected(isLongDisconnected)
+
+    def onSendPrebattleInvites(self, dbID, name, status):
+        LOG_DEBUG('onSendPrebattleInvites', dbID, name, status)
+        events.onPrebattleInvitesStatus(dbID, name, status)
 
     def handleKeyEvent(self, event):
         return False
@@ -429,6 +437,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if self.prebattle is not None:
             self.prebattle.update(updateType, argStr)
         return
+
+    def requestFortPublicInfo(self, requestID, filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, electedClanDBIDs):
+        self.base.requestFortPublicInfo(requestID, filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, electedClanDBIDs)
+
+    def responseFortPublicInfo(self, requestID, errorID, resultSet):
+        if errorID > 0:
+            LOG_DEBUG('fort public info error', requestID, errorID, resultSet)
+        self.fort.onResponseFortPublicInfo(requestID, errorID, cPickle.loads(resultSet))
 
     def update(self, diff):
         self._update(True, cPickle.loads(diff))
@@ -738,6 +754,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def __ebankBuyGold(self, shopRev, vcoin, callback):
         self._doCmdInt3(AccountCommands.CMD_EBANK_BUY_GOLD, shopRev, vcoin, 0, lambda requestID, error, errorStr, ebankProps = {}: callback(error, errorStr, ebankProps))
+
+    def messenger_onActionByServer_chat2(self, actionID, reqID, args):
+        from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
+        LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
 
     def _doCmdStr(self, cmd, str, callback):
         self.__doCmd('doCmdStr', cmd, callback, str)

@@ -23,7 +23,8 @@ def makeUserItem(user):
      'online': user.isOnline(),
      'himself': user.isCurrentPlayer(),
      'displayName': user.getFullName(),
-     'colors': g_settings.getColorScheme('rosters').getColors(user.getGuiType())}
+     'colors': g_settings.getColorScheme('rosters').getColors(user.getGuiType()),
+     'group': user.getGroup()}
 
 
 def getUsersCmp():
@@ -34,7 +35,7 @@ def getUsersCmp():
     return comparator
 
 
-class UsersDataProvider(DAAPIDataProvider):
+class UsersDataProvider(object):
 
     def __init__(self, criteria):
         super(UsersDataProvider, self).__init__()
@@ -58,17 +59,15 @@ class UsersDataProvider(DAAPIDataProvider):
     def buildList(self):
         self._list = map(self._makeUserItem, sorted(self._getRosterList(), cmp=getUsersCmp()))
 
-    def init(self, flashObject, onlineMode = None):
-        self.setFlashObject(flashObject)
+    def initialize(self, onlineMode = None):
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersRosterReceived += self._onUsersRosterReceived
         usersEvents.onUserRosterChanged += self._onUserRosterChanged
         self._criteria.setOnlineMode(onlineMode)
         self.buildList()
-        self.refresh()
+        self._refresh()
 
     def fini(self):
-        self._dispose()
         self._list = []
         self._criteria = None
         usersEvents = g_messengerEvents.users
@@ -82,31 +81,52 @@ class UsersDataProvider(DAAPIDataProvider):
     def setOnlineMode(self, onlineMode):
         if self._criteria.setOnlineMode(onlineMode):
             self.buildList()
-            self.refresh()
+            self._refresh()
+
+    def _refresh(self):
+        pass
 
     def _getRosterList(self):
         return self.usersStorage.getList(self._criteria)
 
     def _onUsersRosterReceived(self):
         self.buildList()
-        self.refresh()
+        self._refresh()
 
     def _onUserRosterChanged(self, action, user):
         self.buildList()
-        self.refresh()
+        self._refresh()
 
     def _makeUserItem(self, user):
         return makeUserItem(user)
 
 
-class FriendsDataProvider(UsersDataProvider):
+class DAAPIUsersDataProvider(UsersDataProvider, DAAPIDataProvider):
+
+    def __init__(self, criteria):
+        super(DAAPIUsersDataProvider, self).__init__(criteria)
+
+    def init(self, flashObject, onlineMode = None):
+        self.setFlashObject(flashObject)
+        self.initialize(onlineMode)
+
+    def fini(self):
+        self._dispose()
+        super(DAAPIUsersDataProvider, self).fini()
+
+    def _refresh(self):
+        self.refresh()
+        super(DAAPIUsersDataProvider, self)._refresh()
+
+
+class FriendsDataProvider(DAAPIUsersDataProvider):
 
     def __init__(self):
         super(FriendsDataProvider, self).__init__(find_criteria.BWFriendFindCriteria())
 
     def init(self, flashObject, onlineMode = None):
-        super(FriendsDataProvider, self).init(flashObject, onlineMode)
         g_messengerEvents.users.onUserRosterStatusUpdated += self._onUserRosterStatusUpdated
+        super(FriendsDataProvider, self).init(flashObject, onlineMode)
 
     def fini(self):
         super(FriendsDataProvider, self).fini()
@@ -114,22 +134,22 @@ class FriendsDataProvider(UsersDataProvider):
 
     def _onUserRosterStatusUpdated(self, _):
         self.buildList()
-        self.refresh()
+        self._refresh()
 
 
-class IgnoredDataProvider(UsersDataProvider):
+class IgnoredDataProvider(DAAPIUsersDataProvider):
 
     def __init__(self):
         super(IgnoredDataProvider, self).__init__(find_criteria.BWIgnoredFindCriteria())
 
 
-class MutedDataProvider(UsersDataProvider):
+class MutedDataProvider(DAAPIUsersDataProvider):
 
     def __init__(self):
         super(MutedDataProvider, self).__init__(find_criteria.BWMutedFindCriteria())
 
 
-class ClanMembersDataProvider(UsersDataProvider):
+class ClanMembersDataProvider(DAAPIUsersDataProvider):
 
     def __init__(self):
         super(ClanMembersDataProvider, self).__init__(find_criteria.BWOnlineFindCriteria())

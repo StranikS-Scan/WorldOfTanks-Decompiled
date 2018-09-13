@@ -18,6 +18,9 @@ class FortOrderPopoverMeta(DAAPIModule):
     def getLeftTimeTooltip(self):
         self._printOverrideError('getLeftTimeTooltip')
 
+    def openQuest(self, questID):
+        self._printOverrideError('openQuest')
+
     def as_setInitDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setInitData(data)

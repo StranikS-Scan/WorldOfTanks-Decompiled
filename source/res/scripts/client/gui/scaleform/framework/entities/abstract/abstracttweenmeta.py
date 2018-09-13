@@ -48,6 +48,9 @@ class AbstractTweenMeta(DAAPIModule):
     def getIsComplete(self):
         self._printOverrideError('getIsComplete')
 
+    def postponedCheckState(self):
+        self._printOverrideError('postponedCheckState')
+
     def getTargetDisplayObjectS(self):
         if self._isDAAPIInited():
             return self.flashObject.getTargetDisplayObject()

@@ -23,7 +23,7 @@ from helpers import i18n
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.DIALOGS import DIALOGS
-from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED
+from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, REQUEST_RATE, HOST_AVAILABILITY
 import BigWorld
 import MusicController
 import ResMgr
@@ -40,6 +40,8 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__onLoginQueue = False
         self.__capsLockState = None
         self.__lang = None
+        self.__autoSearchVisited = False
+        self.__lastSelectedServer = None
         self.__enableInputsCbId = None
         self.__showLoginWallpaperNode = 'showLoginWallpaper'
         return
@@ -86,6 +88,8 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__loginDispatcher = None
         self.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(LoginCreateEvent.CREATE_AN_ACCOUNT_REQUEST, self.onTryCreateAccount, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self.__onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)
+        self.__lastSelectedServer = None
         if self.__capsLockCallback is not None:
             BigWorld.cancelCallback(self.__capsLockCallback)
             self.__capsLockCallback = None
@@ -101,14 +105,21 @@ class LoginView(View, LoginPageMeta, AppRef):
     def onSetOptions(self, optionsList, host):
         options = []
         selectedId = 0
-        searchForHost = AUTO_LOGIN_QUERY_URL if AUTO_LOGIN_QUERY_ENABLED else host
-        for idx, (key, name) in enumerate(optionsList):
+        if self.__lastSelectedServer is None:
+            searchForHost = AUTO_LOGIN_QUERY_URL if AUTO_LOGIN_QUERY_ENABLED else host
+        else:
+            searchForHost = self.__lastSelectedServer
+        for idx, (key, name, csisStatus, peripheryID) in enumerate(optionsList):
             if key == searchForHost:
                 selectedId = idx
+                if csisStatus == HOST_AVAILABILITY.NOT_AVAILABLE and AUTO_LOGIN_QUERY_ENABLED:
+                    selectedId = 0
             options.append({'label': name,
-             'data': key})
+             'data': key,
+             'csisStatus': csisStatus})
 
         self.as_setServersListS(options, selectedId)
+        return
 
     def onAfterAutoLoginTimerClearing(self, host, clearInFlash):
         urls = g_preDefinedHosts.urlIterator(host)
@@ -139,12 +150,20 @@ class LoginView(View, LoginPageMeta, AppRef):
         Waiting.hide('login')
         if not self.__onLoginQueue:
             self.__setLoginQueue(True)
-            self.fireEvent(LoginEventEx(LoginEventEx.SET_AUTO_LOGIN, View.alias, waitingOpen, message, waitingClose), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoginEventEx(LoginEventEx.SET_AUTO_LOGIN, View.alias, waitingOpen, message, waitingClose, False), EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
 
     def __onLoginQueueClosed(self, evnet):
+        self.__closeLoginQueue()
+
+    def __onLoginQueueSwitched(self, evnet):
+        self.__closeLoginQueue()
+        self.as_switchToAutoAndSubmitS(AUTO_LOGIN_QUERY_URL)
+
+    def __closeLoginQueue(self):
         self.__loginDispatcher.onExitFromAutoLogin()
         self.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self.__onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)
         self.__setLoginQueue(False)
         self.__setStatus('', 0)
 
@@ -179,16 +198,23 @@ class LoginView(View, LoginPageMeta, AppRef):
     def onHandleKickWhileLogin(self, messageType, message):
         self.__setAutoLogin(WAITING.titles(messageType), message, WAITING.BUTTONS_CEASE)
 
-    def onHandleQueue(self, message):
+    def onHandleQueue(self, serverName, queueNumber):
+        showAutoSearchBtn = AUTO_LOGIN_QUERY_ENABLED and not self.__autoSearchVisited
+        cancelBtnLbl = WAITING.BUTTONS_CANCEL if showAutoSearchBtn else WAITING.BUTTONS_EXITQUEUE
+        message = i18n.makeString(WAITING.MESSAGE_QUEUE, serverName, queueNumber)
+        if showAutoSearchBtn:
+            message = i18n.makeString(WAITING.MESSAGE_USEAUTOSEARCH, serverName, queueNumber, serverName)
         if not self.__onLoginQueue:
             Waiting.close()
             self.__setLoginQueue(True)
-            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, View.alias, WAITING.TITLES_QUEUE, message, WAITING.BUTTONS_EXITQUEUE), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, View.alias, WAITING.TITLES_QUEUE, message, cancelBtnLbl, showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
+            self.addListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self.__onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)
         else:
             ctx = {'title': WAITING.TITLES_QUEUE,
              'message': message,
-             'cancelLabel': WAITING.BUTTONS_EXITQUEUE}
+             'cancelLabel': cancelBtnLbl,
+             'showAutoLoginBtn': showAutoSearchBtn}
             self.fireEvent(ArgsEvent(ArgsEvent.UPDATE_ARGS, VIEW_ALIAS.LOGIN_QUEUE, ctx), EVENT_BUS_SCOPE.LOBBY)
 
     def onConfigLoaded(self, user, password, rememberPwd, isRememberPwd):
@@ -196,6 +222,15 @@ class LoginView(View, LoginPageMeta, AppRef):
 
     def onHandleInvalidPasswordWithToken(self, user, rememberPwd):
         self.as_setDefaultValuesS(user, '', rememberPwd, GUI_SETTINGS.rememberPassVisible, GUI_SETTINGS.igrCredentialsReset, not GUI_SETTINGS.isEmpty('recoveryPswdURL'))
+
+    def startListenCsisUpdate(self, startListen):
+        self.__loginDispatcher.startListenCsisQuery(startListen)
+
+    def isCSISUpdateOnRequest(self):
+        return GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ON_REQUEST
+
+    def saveLastSelectedServer(self, server):
+        self.__lastSelectedServer = server
 
     def showLegal(self):
         self.fireEvent(events.ShowWindowEvent(ShowWindowEvent.SHOW_LEGAL_INFO_WINDOW))
@@ -216,6 +251,10 @@ class LoginView(View, LoginPageMeta, AppRef):
 
     def onLogin(self, user, password, host):
         self.as_enableS(False)
+        if host == AUTO_LOGIN_QUERY_URL:
+            self.__autoSearchVisited = True
+        else:
+            self.__autoSearchVisited = False
         self.__loginDispatcher.onLogin(user, password, host, self.__onEndLoginTrying)
         self.fireEvent(events.HideWindowEvent(HideWindowEvent.HIDE_LEGAL_INFO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 

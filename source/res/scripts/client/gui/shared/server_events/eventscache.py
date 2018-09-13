@@ -77,6 +77,8 @@ class _EventsCache(object):
 
     def getQuests(self, filterFunc = None):
         quests = self.__getQuestsData()
+        quests.update(self.__getFortQuestsData())
+        quests.update(self.__getPersonalQuestsData())
         filterFunc = filterFunc or (lambda a: True)
         result = {}
         for qID, qData in quests.iteritems():
@@ -339,6 +341,12 @@ class _EventsCache(object):
 
     def __getQuestsData(self):
         return self.__getEventsData('questsClientData')
+
+    def __getFortQuestsData(self):
+        return self.__getEventsData('fortQuestsClientData')
+
+    def __getPersonalQuestsData(self):
+        return self.__getEventsData('personalQuestsClientData')
 
     def __getActionsData(self):
         return self.__getEventsData('actionsClientData')

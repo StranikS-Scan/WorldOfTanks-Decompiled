@@ -77,6 +77,7 @@ def isTeamValid(accountsInfo, limits):
     minLevel, maxLevel = limits['level']
     count = 0
     totalLevel = 0
+    observerCount = 0
     vehs = {}
     for accInfo in accountsInfo.itervalues():
         if not accInfo['state'] & PREBATTLE_ACCOUNT_STATE.READY:
@@ -91,11 +92,14 @@ def isTeamValid(accountsInfo, limits):
         if not minLevel <= vehLevel <= maxLevel:
             return (False, 'limits/level')
         count += 1
+        observerCount += int('observer' in vehicles.getVehicleType(vehTypeCompDescr).tags)
         totalLevel += vehLevel
         vehs[vehTypeCompDescr] = vehs.get(vehTypeCompDescr, 0) + 1
 
     if count < limits['minCount']:
         return (False, 'limit/minCount')
+    elif observerCount > 0 and count == observerCount:
+        return (False, 'limit/observerVehicles')
     else:
         minTotalLevel, maxTotalLevel = limits['totalLevel']
         if not minTotalLevel <= totalLevel <= maxTotalLevel:
@@ -181,7 +185,8 @@ SETTING_DEFAULTS = {'ver': 1,
  'gameplaysMask': 0,
  'vehicleLockMode': 0,
  'vehicleLockTimeFactors': {},
- 'observeBothTeams': True}
+ 'observeBothTeams': True,
+ 'allowEventBattles': False}
 LIMIT_DEFAULTS = {'maxCountTotal': 256,
  'minCount': 1,
  'totalLevel': (0, 65535),

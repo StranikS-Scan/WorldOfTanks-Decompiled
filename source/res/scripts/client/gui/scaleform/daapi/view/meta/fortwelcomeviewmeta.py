@@ -13,6 +13,10 @@ class FortWelcomeViewMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setWarningText(text, disabledBtnTooltipHeader, disabledBtnTooltipBody)
 
+    def as_setHyperLinksS(self, searchClanLink, createClanLink, detailLink):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setHyperLinks(searchClanLink, createClanLink, detailLink)
+
     def as_setCommonDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setCommonData(data)

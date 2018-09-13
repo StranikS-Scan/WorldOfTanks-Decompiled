@@ -10,11 +10,10 @@ from messenger import g_settings
 from messenger.formatters.users_messages import getUserRosterChangedMessage
 from messenger.gui.Scaleform.data.BattleSharedHistory import BattleSharedHistory
 from messenger.gui.Scaleform.view.BattleChannelView import BattleChannelView
-from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE
+from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE, MESSENGER_COMMAND_TYPE
 from messenger.gui.interfaces import IGUIEntry
 from messenger.gui.Scaleform import BTMS_COMMANDS, channels
 from messenger.proto import proto_getter
-from messenger.proto.bw.entities import BWChannelLightEntity
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
@@ -25,7 +24,7 @@ class BattleEntry(IGUIEntry):
         self.__focused = False
         self.__initialized = 0
         self.__channelsCtrl = None
-        self.__views = []
+        self.__view = None
         self.__sharedHistory = BattleSharedHistory(g_settings.battle.numberOfMessagesInHistory)
         self.__enableRecord = True
         return
@@ -57,19 +56,23 @@ class BattleEntry(IGUIEntry):
          BTMS_COMMANDS.GetLatestHistory(): self.__getLatestHistory,
          BTMS_COMMANDS.GetLastMessages(): self.__getLatestMessages})
         self.__flashCall(BTMS_COMMANDS.RefreshUI())
-        for view in self.__views:
-            view.populateUI(parentUI)
+        self.__view = BattleChannelView(self.__sharedHistory)
+        self.__view.populateUI(parentUI)
+        if self.__channelsCtrl:
+            for controller in self.__channelsCtrl.getControllersIterator():
+                controller.setView(self.__view)
 
-        if self.__initialized is BATTLE_CHANNEL.INITIALIZED:
+            self.__updateHistoryControls()
+        if BATTLE_CHANNEL.isInitialized(self.__initialized):
             self.enable()
 
     def dispossessUI(self):
         self.__flashCall(BTMS_COMMANDS.ClearMessages())
         if self.__ui:
             self.__ui.removeExternalCallbacks(BTMS_COMMANDS.PopulateUI(), BTMS_COMMANDS.CheckCooldownPeriod(), BTMS_COMMANDS.SendMessage(), BTMS_COMMANDS.ChangeFocus(), BTMS_COMMANDS.AddToFriends(), BTMS_COMMANDS.RemoveFromFriends(), BTMS_COMMANDS.AddToIgnored(), BTMS_COMMANDS.RemoveFromIgnored(), BTMS_COMMANDS.AddMuted(), BTMS_COMMANDS.RemoveMuted(), BTMS_COMMANDS.upHistory(), BTMS_COMMANDS.downHistory(), BTMS_COMMANDS.GetLatestHistory())
-        while len(self.__views):
-            self.__views.pop().dispossessUI()
-
+        if self.__view:
+            self.__view.dispossessUI()
+            self.__view = None
         self.__ui = None
         return
 
@@ -147,7 +150,7 @@ class BattleEntry(IGUIEntry):
     def __me_onMessageReceived(self, message, channel):
         if channel is not None:
             controller = self.__channelsCtrl.getController(channel.getClientID())
-            if controller is None or not controller.isBattleChatEnabled():
+            if controller is None or not controller.isEnabled():
                 return
             import BattleReplay
             if BattleReplay.g_replayCtrl.isRecording and not self.__enableRecord:
@@ -157,60 +160,43 @@ class BattleEntry(IGUIEntry):
         return
 
     def __me_onCommandReceived(self, command):
-        channel = self.channelsStorage.getChannel(BWChannelLightEntity(command.getID()))
-        if channel is not None:
-            controller = self.__channelsCtrl.getController(channel.getClientID())
-            if controller:
-                import BattleReplay
-                if BattleReplay.g_replayCtrl.isRecording and not self.__enableRecord:
-                    BattleReplay.g_replayCtrl.skipMessage()
-                controller.addCommand(command)
-            else:
-                LOG_ERROR('Controller not found', command)
+        controller = self.__channelsCtrl.getController(command.getClientID())
+        if controller:
+            import BattleReplay
+            if BattleReplay.g_replayCtrl.isRecording and (not self.__enableRecord or command.getCommandType() == MESSENGER_COMMAND_TYPE.ADMIN):
+                BattleReplay.g_replayCtrl.skipMessage()
+            controller.addCommand(command)
         else:
-            LOG_ERROR('Channel not found', command)
-        return
+            LOG_ERROR('Controller not found', command)
 
     def __me_onServerErrorReceived(self, error):
         self.__showErrorMessage(error.getMessage())
 
     def __ms_onUserPreferencesUpdated(self):
         self.__flashCall(BTMS_COMMANDS.UserPreferencesUpdated(), [g_settings.userPrefs.storeReceiverInBattle, True, self.__getToolTipText()])
-        for view in self.__views:
-            view.updateView()
+        if self.__view:
+            self.__view.updateReceiversData()
 
     def __ms_onColorsSchemesUpdated(self):
-        args = []
-        for view in self.__views:
-            args.append(view._channelID)
-            args.append(view.getRecvConfig()[0])
-
-        if len(args):
-            self.__flashCall(BTMS_COMMANDS.UpdateReceivers(), args)
+        if self.__view:
+            self.__view.updateReceiversLabels()
 
     def __handleChannelControllerInited(self, event):
         ctx = event.ctx
-        settings = ctx.get('settings')
-        if settings is None:
-            LOG_ERROR('Settings is not defined', event.ctx)
+        controller = ctx.get('controller')
+        if controller is None:
+            LOG_ERROR('Controller is not defined', event.ctx)
+            return
+        elif not self.__channelsCtrl.hasController(controller):
             return
         else:
-            controller = ctx.get('controller')
-            if controller is None:
-                LOG_ERROR('Controller is not defined', event.ctx)
-                return
-            if not self.__channelsCtrl.hasController(controller):
-                return
-            flag = settings[0]
+            flag = controller.getSettings().initFlag
             if flag & self.__initialized > 0:
                 return
             self.__initialized |= flag
-            view = BattleChannelView(self.__sharedHistory, settings[1])
-            if self.__ui:
-                view.populateUI(self.__ui)
-            self.__views.append(view)
-            controller.setView(view)
-            if self.__ui and self.__initialized == BATTLE_CHANNEL.INITIALIZED:
+            if self.__view:
+                controller.setView(self.__view)
+            if self.__ui and BATTLE_CHANNEL.isInitialized(self.__initialized):
                 self.enable()
             return
 

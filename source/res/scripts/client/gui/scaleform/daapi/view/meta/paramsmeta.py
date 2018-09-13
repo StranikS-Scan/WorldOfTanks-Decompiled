@@ -3,9 +3,9 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class ParamsMeta(DAAPIModule):
 
-    def as_setValuesS(self, args):
+    def as_setValuesS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_setValues(args)
+            return self.flashObject.as_setValues(data)
 
     def as_highlightParamsS(self, type):
         if self._isDAAPIInited():

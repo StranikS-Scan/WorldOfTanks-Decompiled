@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeXPWindow.py
 import BigWorld
 from PlayerEvents import g_playerEvents
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from gui import SystemMessages, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getVehicleTypeAssetPath, getNationsAssetPath, NATION_ICON_PREFIX_131x31
@@ -14,6 +15,7 @@ from gui.shared.utils.gui_items import VEHICLE_ELITE_STATE, getVehicleEliteState
 class ExchangeXPWindow(BaseExchangeWindow, ExchangeXpWindowMeta):
 
     def _populate(self):
+        super(ExchangeXPWindow, self)._populate()
         self.as_setPrimaryCurrencyS(g_itemsCache.items.stats.actualGold)
         rate = g_itemsCache.items.shop.freeXPConversion
         defaultRate = g_itemsCache.items.shop.defaults.freeXPConversion
@@ -21,7 +23,6 @@ class ExchangeXPWindow(BaseExchangeWindow, ExchangeXpWindowMeta):
         self.as_totalExperienceChangedS(g_itemsCache.items.stats.actualFreeXP)
         self.as_setWalletStatusS(game_control.g_instance.wallet.status)
         self.__prepareAndPassVehiclesData()
-        super(ExchangeXPWindow, self)._populate()
 
     def _subscribe(self):
         g_clientUpdateManager.addCallbacks({'stats.gold': self._setGoldCallBack,
@@ -49,23 +50,19 @@ class ExchangeXPWindow(BaseExchangeWindow, ExchangeXpWindowMeta):
         self.as_setWalletStatusS(status)
 
     def __prepareAndPassVehiclesData(self):
-        eliteVcls = g_itemsCache.items.stats.eliteVehicles
-        xps = g_itemsCache.items.stats.vehiclesXPs
-        unlocks = g_itemsCache.items.stats.unlocks
         values = []
+        for vehicleCD in g_itemsCache.items.stats.eliteVehicles:
+            try:
+                vehicle = g_itemsCache.items.getItemByCD(vehicleCD)
+            except:
+                LOG_ERROR('Cannot get vehicle by intCD', vehicleCD)
+                LOG_CURRENT_EXCEPTION()
+                continue
 
-        def getSmallIcon(vehType):
-            return '../maps/icons/vehicle/small/%s.png' % vehType.name.replace(':', '-')
-
-        for vehicleCD in eliteVcls:
-            vehicle = g_itemsCache.items.getItemByCD(vehicleCD)
-            if vehicle.descriptor.type.compactDescr in eliteVcls:
-                xp = xps.get(vehicle.descriptor.type.compactDescr, 0)
-                if not xp:
-                    continue
-                isSelectCandidate = getVehicleEliteState(vehicle, eliteVcls, unlocks) == VEHICLE_ELITE_STATE.FULLY_ELITE
-                vehicleInfo = dict(id=vehicle.intCD, vehicleType=getVehicleTypeAssetPath(vehicle.type), vehicleName=vehicle.shortUserName, xp=xp, isSelectCandidate=isSelectCandidate, vehicleIco=getSmallIcon(vehicle.descriptor.type), nationIco=getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31))
-                values.append(vehicleInfo)
+            if not vehicle.xp:
+                continue
+            vehicleInfo = dict(id=vehicle.intCD, vehicleType=getVehicleTypeAssetPath(vehicle.type), vehicleName=vehicle.shortUserName, xp=vehicle.xp, isSelectCandidate=vehicle.isFullyElite, vehicleIco=vehicle.iconSmall, nationIco=getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31))
+            values.append(vehicleInfo)
 
         self.as_vehiclesDataChangedS(bool(values), values)
 

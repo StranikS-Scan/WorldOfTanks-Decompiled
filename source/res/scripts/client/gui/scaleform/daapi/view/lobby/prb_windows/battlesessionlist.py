@@ -9,7 +9,7 @@ from gui.prb_control.context import prb_ctx
 from gui.prb_control.functional.battle_session import AutoInvitesRequester
 from gui.Scaleform.daapi.view.meta.BattleSessionListMeta import BattleSessionListMeta
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.events import ShowWindowEvent
+from gui.shared.events import ShowWindowEvent, FocusEvent
 from messenger.ext import channel_num_gen
 from messenger.m_constants import LAZY_CHANNEL
 
@@ -30,6 +30,9 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
 
     def getClientID(self):
         return channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES)
+
+    def onFocusIn(self, alias):
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.getClientID()}))
 
     def _populate(self):
         super(BattleSessionList, self)._populate()

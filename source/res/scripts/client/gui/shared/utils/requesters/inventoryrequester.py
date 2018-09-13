@@ -24,7 +24,10 @@ class InventoryRequester(RequesterAbstract):
      'eqs',
      'eqsLayout']))
     ITEM_DATA = namedtuple('ITEM_DATA', ','.join(['compDescr', 'descriptor', 'count']))
-    TMAN_DATA = namedtuple('ITEM_DATA', ','.join(['compDescr', 'descriptor', 'vehicle']))
+    TMAN_DATA = namedtuple('TMAN_DATA', ','.join(['compDescr',
+     'descriptor',
+     'vehicle',
+     'invID']))
 
     def __init__(self):
         super(InventoryRequester, self).__init__()
@@ -128,7 +131,7 @@ class InventoryRequester(RequesterAbstract):
             compactDescr = value('compDescr')
             if compactDescr is None:
                 return
-            item = cache[tmanInvID] = self.TMAN_DATA(compactDescr, tankmen.TankmanDescr(compactDescr), value('vehicle', -1))
+            item = cache[tmanInvID] = self.TMAN_DATA(compactDescr, tankmen.TankmanDescr(compactDescr), value('vehicle', -1), tmanInvID)
             return item
 
     def __makeSimpleItem(self, typeCompDescr):

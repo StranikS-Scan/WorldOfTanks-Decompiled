@@ -21,11 +21,6 @@ def reload():
     print 'vehicle_extras reloaded'
 
 
-def _isAllowedToStart():
-    replayCtrl = BattleReplay.g_replayCtrl
-    return not (replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress)
-
-
 class NoneExtra(EntityExtra):
 
     def _start(self, data, args):
@@ -40,8 +35,6 @@ from helpers.EffectsList import EffectsListPlayer
 class ShowShooting(EntityExtra):
 
     def _start(self, data, burstCount):
-        if not _isAllowedToStart():
-            return
         vehicle = data['entity']
         gunDescr = vehicle.typeDescriptor.gun
         stages, effects, _ = gunDescr['effects']
@@ -179,24 +172,21 @@ class Fire(EntityExtra):
 
     def _start(self, data, args):
         data['_isStarted'] = False
-        if not _isAllowedToStart():
-            return
-        else:
-            vehicle = data['entity']
-            isUnderwater = vehicle.appearance.isUnderwater
-            data['wasUnderwater'] = isUnderwater
-            if not isUnderwater:
-                stages, effects, _ = random.choice(vehicle.typeDescriptor.type.effects['flaming'])
-                data['modelMap'] = {}
-                for i, j in vehicle.appearance.modelsDesc.iteritems():
-                    data['modelMap'][i] = vehicle.appearance.modelsDesc[i]['model']
+        vehicle = data['entity']
+        isUnderwater = vehicle.appearance.isUnderwater
+        data['wasUnderwater'] = isUnderwater
+        if not isUnderwater:
+            stages, effects, _ = random.choice(vehicle.typeDescriptor.type.effects['flaming'])
+            data['modelMap'] = {}
+            for i, j in vehicle.appearance.modelsDesc.iteritems():
+                data['modelMap'][i] = vehicle.appearance.modelsDesc[i]['model']
 
-                effectListPlayer = EffectsListPlayer(effects, stages, **data)
-                data['_effectsPlayer'] = effectListPlayer
-                effectListPlayer.play(vehicle.appearance.modelsDesc['hull']['model'], None, None, True)
-            data['_isStarted'] = True
-            vehicle.appearance.switchFireVibrations(True)
-            return
+            effectListPlayer = EffectsListPlayer(effects, stages, **data)
+            data['_effectsPlayer'] = effectListPlayer
+            effectListPlayer.play(vehicle.appearance.modelsDesc['hull']['model'], None, None, True)
+        data['_isStarted'] = True
+        vehicle.appearance.switchFireVibrations(True)
+        return
 
     def _cleanup(self, data):
         if not data['_isStarted']:

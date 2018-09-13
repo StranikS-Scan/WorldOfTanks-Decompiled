@@ -1,5 +1,7 @@
 # Embedded file name: scripts/client/messenger/formatters/__init__.py
 import BigWorld
+import time
+from time import gmtime
 from constants import NC_CONTEXT_ITEM_TYPE
 from debug_utils import LOG_WARNING
 from helpers import time_utils
@@ -35,6 +37,15 @@ class TimeFormatter(object):
     @classmethod
     def getShortDatetimeFormat(cls, time):
         return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(time), BigWorld.wg_getShortTimeFormat(time))
+
+    @classmethod
+    def getActualMsgTimeStr(cls, timestamp):
+        DAY_SECONDS = 86400
+        currentTime = time.time()
+        if currentTime - timestamp > DAY_SECONDS or gmtime().tm_mday != gmtime(timestamp).tm_mday:
+            return TimeFormatter.getShortDatetimeFormat(timestamp)
+        else:
+            return TimeFormatter.getShortTimeFormat(timestamp)
 
     @classmethod
     def getMessageEmptyFormatU(cls, _):
@@ -140,7 +151,8 @@ SCH_SERVER_FORMATTERS_DICT = {SYS_MESSAGE_TYPE.serverReboot.index(): sch_formatt
  SYS_MESSAGE_TYPE.historicalCostsReserved.index(): sch_formatters.HistoricalCostsReservedFormatter(),
  SYS_MESSAGE_TYPE.notificationsCenter.index(): sch_formatters.NCMessageFormatter(),
  SYS_MESSAGE_TYPE.clanEvent.index(): sch_formatters.ClanMessageFormatter(),
- SYS_MESSAGE_TYPE.fortEvent.index(): sch_formatters.FortMessageFormatter()}
+ SYS_MESSAGE_TYPE.fortEvent.index(): sch_formatters.FortMessageFormatter(),
+ SYS_MESSAGE_TYPE.fortBattleEnd.index(): sch_formatters.FortBattleResultsFormatter()}
 
 class SCH_CLIENT_MSG_TYPE(object):
     SYS_MSG_TYPE, PREMIUM_ACCOUNT_EXPIRY_MSG, AOGAS_NOTIFY_TYPE, ACTION_NOTIFY_TYPE, BATTLE_TUTORIAL_RESULTS_TYPE = range(5)

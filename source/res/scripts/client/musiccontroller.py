@@ -3,6 +3,7 @@ import account_helpers
 import BigWorld
 import ResMgr
 import FMOD
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from constants import ARENA_PERIOD
 from items import _xml
 from PlayerEvents import g_playerEvents
@@ -24,6 +25,26 @@ AMBIENT_EVENT_SHOP = 1002
 AMBIENT_EVENT_STATISTICS = 1003
 AMBIENT_EVENT_COMBAT = 1004
 AMBIENT_EVENT_LOBBY_FORT = 1005
+AMBIENT_EVENT_LOBBY_FORT_FINANCIAL_DEPT = 1006
+AMBIENT_EVENT_LOBBY_FORT_TANKODROME = 1007
+AMBIENT_EVENT_LOBBY_FORT_TRAINING_DEPT = 1008
+AMBIENT_EVENT_LOBBY_FORT_MILITARY_ACADEMY = 1009
+AMBIENT_EVENT_LOBBY_FORT_TRANSPORT_DEPT = 1010
+AMBIENT_EVENT_LOBBY_FORT_INTENDANT_SERVICE = 1011
+AMBIENT_EVENT_LOBBY_FORT_TROPHY_BRIGADE = 1012
+AMBIENT_EVENT_LOBBY_FORT_OFFICE = 1013
+AMBIENT_EVENT_LOBBY_FORT_MILITARY_SHOP = 1014
+FORT_MAPPING = {'fort': AMBIENT_EVENT_LOBBY_FORT,
+ 'fort_building_financial_dept': AMBIENT_EVENT_LOBBY_FORT_FINANCIAL_DEPT,
+ 'fort_building_tankodrome': AMBIENT_EVENT_LOBBY_FORT_TANKODROME,
+ 'fort_building_training_dept': AMBIENT_EVENT_LOBBY_FORT_TRAINING_DEPT,
+ 'fort_building_military_academy': AMBIENT_EVENT_LOBBY_FORT_MILITARY_ACADEMY,
+ 'fort_building_transport_dept': AMBIENT_EVENT_LOBBY_FORT_TRANSPORT_DEPT,
+ 'fort_building_intendant_service': AMBIENT_EVENT_LOBBY_FORT_INTENDANT_SERVICE,
+ 'fort_building_trophy_brigade': AMBIENT_EVENT_LOBBY_FORT_TROPHY_BRIGADE,
+ 'fort_building_office': AMBIENT_EVENT_LOBBY_FORT_OFFICE,
+ 'fort_building_military_shop': AMBIENT_EVENT_LOBBY_FORT_MILITARY_SHOP}
+_ARENA_EVENTS = (MUSIC_EVENT_COMBAT, AMBIENT_EVENT_COMBAT, MUSIC_EVENT_COMBAT_LOADING)
 _CMD_SERVER_CHANGE_HANGAR_AMBIENT = 'cmd_change_hangar_ambient'
 _CMD_SERVER_CHANGE_HANGAR_MUSIC = 'cmd_change_hangar_music'
 g_musicController = None
@@ -36,18 +57,22 @@ def init():
 class MusicController(object):
 
     def __init__(self):
+        self.__overriddenEvents = {}
         self.__sndEventMusic = None
         self.__sndEventAmbient = None
         self.__eventAmbientId = None
         self.__eventMusicId = None
+        self.__soundEvents = {MUSIC_EVENT_NONE: None,
+         AMBIENT_EVENT_NONE: None}
+        self.init()
+        return
+
+    def init(self):
         self.__lastBattleResultEventId = None
         self.__lastBattleResultEventName = ''
         self.__battleResultEventWaitCb = None
         self.__isOnArena = False
         self.__isPremiumAccount = False
-        self.__overriddenEvents = {}
-        self.__soundEvents = {MUSIC_EVENT_NONE: None,
-         AMBIENT_EVENT_NONE: None}
         self.__loadConfig()
         g_playerEvents.onEventNotificationsChanged += self.__onEventNotificationsChanged
         connectionManager.onDisconnected += self.__onDisconnected
@@ -68,7 +93,7 @@ class MusicController(object):
         if self.__sndEventAmbient:
             self.__sndEventAmbient.play()
 
-    def play(self, eventId):
+    def play(self, eventId, params = None, stopPrev = True):
         if eventId == MUSIC_EVENT_LOBBY:
             if self.__lastBattleResultEventId is not None:
                 eventId = self.__lastBattleResultEventId
@@ -77,25 +102,20 @@ class MusicController(object):
                     self.__battleResultEventWaitCb = BigWorld.callback(0.1, self.__waitBattleResultEventFinish)
         elif eventId < AMBIENT_EVENT_NONE:
             self.__cancelWaitBattleResultsEventFinish()
-        soundEvent = None
-        if eventId == MUSIC_EVENT_COMBAT or eventId == AMBIENT_EVENT_COMBAT or eventId == MUSIC_EVENT_COMBAT_LOADING or eventId in _BATTLE_RESULT_MUSIC_EVENTS:
-            soundEvent = self.__getArenaSoundEvent(eventId)
-        if soundEvent is None:
-            soundEvent = self.__soundEvents.get(eventId)
-            if soundEvent is not None:
-                if isinstance(soundEvent, list):
-                    isPremium = self.__isPremiumAccount
-                    idx = 1 if isPremium and len(soundEvent) > 1 else 0
-                    soundEvent = soundEvent[1 if isPremium and len(soundEvent) > 1 else 0]
+        soundEvent = self.__getEvent(eventId)
         isMusicTrack = eventId < AMBIENT_EVENT_NONE
         prevSoundEvent = self.__sndEventMusic if isMusicTrack else self.__sndEventAmbient
         if prevSoundEvent == soundEvent:
             return
         else:
-            if prevSoundEvent is not None:
+            if prevSoundEvent is not None and stopPrev:
                 prevSoundEvent.stop()
             if soundEvent is not None:
                 soundEvent.play()
+            if params is not None:
+                for paramName, paramValue in params.iteritems():
+                    self.setEventParam(eventId, paramName, paramValue)
+
             if isMusicTrack:
                 self.__sndEventMusic = soundEvent
                 self.__eventMusicId = eventId
@@ -124,6 +144,27 @@ class MusicController(object):
         self.stopAmbient()
         self.stopMusic()
 
+    def stopEvent(self, eventId):
+        e = self.__getEvent(eventId)
+        if e is not None:
+            e.stop()
+        return
+
+    def setEventParam(self, eventId, paramName, paramValue):
+        e = self.__getEvent(eventId)
+        if e is None:
+            return
+        else:
+            try:
+                soundEventParam = e.param(paramName)
+                if soundEventParam is not None and soundEventParam.value != paramValue:
+                    soundEventParam.value = paramValue
+            except Exception:
+                LOG_DEBUG('There is error while assigning parameter to the sound', e, paramName)
+                LOG_CURRENT_EXCEPTION()
+
+            return
+
     def onEnterArena(self):
         BigWorld.player().arena.onPeriodChange += self.__onArenaStateChanged
         self.__isOnArena = True
@@ -141,6 +182,19 @@ class MusicController(object):
         if restart and self.__isPremiumAccount != wasPremiumAccount and self.__eventMusicId == MUSIC_EVENT_LOBBY:
             self.play(self.__eventMusicId)
             self.play(self.__eventAmbientId)
+
+    def __getEvent(self, eventId):
+        soundEvent = None
+        if eventId in _ARENA_EVENTS or eventId in _BATTLE_RESULT_MUSIC_EVENTS:
+            soundEvent = self.__getArenaSoundEvent(eventId)
+        if soundEvent is None:
+            soundEvent = self.__soundEvents.get(eventId)
+            if soundEvent is not None:
+                if isinstance(soundEvent, list):
+                    isPremium = self.__isPremiumAccount
+                    idx = 1 if isPremium and len(soundEvent) > 1 else 0
+                    soundEvent = soundEvent[idx]
+        return soundEvent
 
     def __onArenaStateChanged(self, *args):
         arena = BigWorld.player().arena
@@ -207,7 +261,8 @@ class MusicController(object):
                 eventNames[AMBIENT_EVENT_LOBBY] = (s.readString('lobby'), s.readString('lobby_premium'))
                 eventNames[AMBIENT_EVENT_SHOP] = (s.readString('shop'), s.readString('shop_premium'))
                 eventNames[AMBIENT_EVENT_STATISTICS] = (s.readString('rating'), s.readString('rating_premium'))
-                eventNames[AMBIENT_EVENT_LOBBY_FORT] = (s.readString('fort'), s.readString('fort'))
+                for key, const in FORT_MAPPING.iteritems():
+                    eventNames[const] = (s.readString(key), s.readString(key))
 
         fallbackEventNames = eventNames.copy()
         for eventId, overriddenNames in self.__overriddenEvents.iteritems():
@@ -236,6 +291,10 @@ class MusicController(object):
 
             self.__soundEvents[eventId] = lstEvents
 
+        if self.__eventAmbientId is not None:
+            self.play(self.__eventAmbientId)
+        if self.__eventMusicId is not None:
+            self.play(self.__eventMusicId)
         return
 
     def __waitBattleResultEventFinish(self):

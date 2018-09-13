@@ -26,9 +26,23 @@ def isPlayerTeamKillSuspected():
     return bool(getattr(BigWorld.player(), 'tkillIsSuspected', 0))
 
 
-def isEventBattle():
+def getArenaGuiType():
     arena = getClientArena()
-    return arena is not None and arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES
+    if arena is not None:
+        return arena.guiType
+    else:
+        return constants.ARENA_GUI_TYPE.UNKNOWN
+
+
+def isLowLevelBattle():
+    arena, battleLevel = getClientArena(), None
+    if arena is not None:
+        battleLevel = arena.extraData.get('battleLevel')
+    return 0 < battleLevel < 4
+
+
+def isEventBattle():
+    return getArenaGuiType() == constants.ARENA_GUI_TYPE.EVENT_BATTLES
 
 
 class IArenaController(object):

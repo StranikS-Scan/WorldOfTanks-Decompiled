@@ -2,6 +2,7 @@
 import BigWorld
 import Math
 import math
+import material_kinds
 from math import pi
 from constants import IS_CLIENT
 from debug_utils import *
@@ -136,36 +137,96 @@ ALLOWED_PENETRATION = 0.01
 CONTACT_PENETRATION = 0.1
 TRACKS_PENETRATION = 0.01
 IMPROVE_ACCURACY_MASS_RATIO = 10.0
-
-class FOOTBALL():
-    FIELD_CENTER = Math.Vector3((16.28, 1.1, 52.84))
-    FIELD_SIZE = Math.Vector2((296.48, 209.73))
-    FIELD_CORNER_TRUNCATION = 12.0
-    GATE_SIZE = Math.Vector3((16.17, 12.5, 42.24))
-    BALL_RADIUS = 1.1
-    BALL_MASS = 5
-    BALL_INERTIA = 2.0 / 3.0 * BALL_MASS * BALL_RADIUS * BALL_RADIUS
-    BALL_GROUND_FRICTION = 1.0
-    BALL_GROUND_ROT_FRICTION = 0.1
-    BALL_GROUND_ROLL_FRICTION = 0.25
-    BALL_GROUND_STIFFNESS = 30.0
-    BALL_GROUND_DAMP = 3.0
-    BALL_VEHICLE_FRICTION = 0.4
-    BALL_VEHICLE_ROT_FRICTION = 0.0
-    BALL_VEHICLE_ROLL_FRICTION = 0.0
-    BALL_VEHICLE_STIFFNESS = 30.0
-    BALL_VEHICLE_DAMP = 3.0
-    BALL_SHOT_IMPULSE = 125.0
-    BALL_SHOT_FRICTION = 0.7
-
-
+CONTACT_ENERGY_POW = 3.0
+CONTACT_ENERGY_POW2 = 0.75
+ROLLER_RISE_STRONG_FRICTION = 4.0
+SLOPE_FRICTION_FUNC_DEF = tuple((math.pi * ang / 180.0 for ang in (34.0, 50.0, 70.0)))
+SLOPE_FRICTION_FUNC_VAL = (0.4, 2.0, 5.0)
+SLOPE_FRICTION_MODELS_FUNC_VAL = (0.4, 0.45, 0.5)
+CONTACT_FRICTION_TERRAIN = 1.0
+CONTACT_FRICTION_STATICS = 0.25
+CONTACT_FRICTION_STATICS_VERT = 3.0
+CONTACT_FRICTION_DESTRUCTIBLES = 1.0
+CONTACT_FRICTION_VEHICLES = 0.3
+OVERTURN_CONSTR_MIN = 0.5
+OVERTURN_CONSTR_MAX = 0.707
+OVERTURN_CONSTR_ACCURATE = 0.866
+OVERTURN_CONSTR_MARGIN = math.pi / 6.0
+SINGLE_TRACK_POWER_FACTOR = 0.1
+SINGLE_TRACK_Y = 0.866
+SPEED_TO_CHANGE_ROTATION_DIR = 5.0
+ARENA_BOUNDS_FRICTION_HOR = 0.2
+ARENA_BOUNDS_FRICTION_VERT = 1.0
+CLIMB_FRICTION_BOUND = 0.5
+CLIMB_FRICTION_BIAS = 0.012 * SUSP_CLIMB_FRICTION
+CLIMB_POWER_DECREASE = 0.4
+_TRACK_RESTITUTION = 0.4
+SUSP_USE_PSEUDO_SLIDER = True
+SUSP_SLIDER_EXTENSION = 0.0
+BOUNCE_Y = 0.707
+CLIMB_TANG = 1.0
+STAB_DAMP_MP = 5.0
+STAB_EPSILON_AMBIT = 2.0
+STAB_EPSILON_PERIOD = 4.0
 g_confUpdaters = []
+
+def init():
+    updateCommonConf()
+
+
+def updateCommonConf():
+    BigWorld.wg_setupPhysicsParam('CONTACT_ENERGY_POW', CONTACT_ENERGY_POW)
+    BigWorld.wg_setupPhysicsParam('CONTACT_ENERGY_POW2', CONTACT_ENERGY_POW2)
+    BigWorld.wg_setupPhysicsParam('ROLLER_RISE_STRONG_FRICTION', ROLLER_RISE_STRONG_FRICTION)
+    BigWorld.wg_setupPhysicsParam('SLOPE_FRICTION_FUNC_DEF', SLOPE_FRICTION_FUNC_DEF)
+    BigWorld.wg_setupPhysicsParam('SLOPE_FRICTION_FUNC_VAL', SLOPE_FRICTION_FUNC_VAL)
+    BigWorld.wg_setupPhysicsParam('SLOPE_FRICTION_MODELS_FUNC_VAL', SLOPE_FRICTION_MODELS_FUNC_VAL)
+    BigWorld.wg_setupPhysicsParam('CONTACT_FRICTION_TERRAIN', CONTACT_FRICTION_TERRAIN)
+    BigWorld.wg_setupPhysicsParam('CONTACT_FRICTION_STATICS', CONTACT_FRICTION_STATICS)
+    BigWorld.wg_setupPhysicsParam('CONTACT_FRICTION_STATICS_VERT', CONTACT_FRICTION_STATICS_VERT)
+    BigWorld.wg_setupPhysicsParam('CONTACT_FRICTION_DESTRUCTIBLES', CONTACT_FRICTION_DESTRUCTIBLES)
+    BigWorld.wg_setupPhysicsParam('CONTACT_FRICTION_VEHICLES', CONTACT_FRICTION_VEHICLES)
+    BigWorld.wg_setupPhysicsParam('OVERTURN_CONSTR_MIN', OVERTURN_CONSTR_MIN)
+    BigWorld.wg_setupPhysicsParam('OVERTURN_CONSTR_MAX', OVERTURN_CONSTR_MAX)
+    BigWorld.wg_setupPhysicsParam('OVERTURN_CONSTR_ACCURATE', OVERTURN_CONSTR_ACCURATE)
+    BigWorld.wg_setupPhysicsParam('OVERTURN_CONSTR_MARGIN', OVERTURN_CONSTR_MARGIN)
+    BigWorld.wg_setupPhysicsParam('SINGLE_TRACK_POWER_FACTOR', SINGLE_TRACK_POWER_FACTOR)
+    BigWorld.wg_setupPhysicsParam('SINGLE_TRACK_Y', SINGLE_TRACK_Y)
+    BigWorld.wg_setupPhysicsParam('SPEED_TO_CHANGE_ROTATION_DIR', SPEED_TO_CHANGE_ROTATION_DIR)
+    BigWorld.wg_setupPhysicsParam('ARENA_BOUNDS_FRICTION_HOR', ARENA_BOUNDS_FRICTION_HOR)
+    BigWorld.wg_setupPhysicsParam('ARENA_BOUNDS_FRICTION_VERT', ARENA_BOUNDS_FRICTION_VERT)
+    BigWorld.wg_setupPhysicsParam('CLIMB_FRICTION_BOUND', CLIMB_FRICTION_BOUND)
+    BigWorld.wg_setupPhysicsParam('CLIMB_FRICTION_BIAS', CLIMB_FRICTION_BIAS)
+    BigWorld.wg_setupPhysicsParam('CLIMB_POWER_DECREASE', CLIMB_POWER_DECREASE)
+    BigWorld.wg_setupPhysicsParam('TRACK_RESTITUTION', _TRACK_RESTITUTION)
+    BigWorld.wg_setupPhysicsParam('SUSP_USE_PSEUDO_SLIDER', SUSP_USE_PSEUDO_SLIDER)
+    BigWorld.wg_setupPhysicsParam('USE_PSEUDO_CONTACTS', USE_PSEUDO_CONTACTS)
+    BigWorld.wg_setupPhysicsParam('CONTACT_PENETRATION', CONTACT_PENETRATION)
+    BigWorld.wg_setupPhysicsParam('SUSP_SLIDER_EXTENSION', SUSP_SLIDER_EXTENSION)
+    BigWorld.wg_setupPhysicsParam('WARMSTARTING_VEHICLE_VEHICLE', WARMSTARTING_VEHICLE_VEHICLE)
+    BigWorld.wg_setupPhysicsParam('WARMSTARTING_VEHICLE_STATICS', WARMSTARTING_VEHICLE_STATICS)
+    BigWorld.wg_setupPhysicsParam('WARMSTARTING_THRESHOLD', WARMSTARTING_THRESHOLD)
+    BigWorld.wg_setupPhysicsParam('GRAVITY_COMPENSATION', (GRAVITY_FACTOR - 1.0) / GRAVITY_FACTOR)
+    BigWorld.wg_setupPhysicsParam('BOUNCE_Y', BOUNCE_Y)
+    BigWorld.wg_setupPhysicsParam('BROKEN_TRACK_Y', BROKEN_TRACK_Y)
+    BigWorld.wg_setupPhysicsParam('CLIMB_TANG', CLIMB_TANG)
+    BigWorld.wg_setupPhysicsParam('STAB_DAMP_MP', STAB_DAMP_MP)
+    BigWorld.wg_setupPhysicsParam('STAB_EPSILON_AMBIT', STAB_EPSILON_AMBIT)
+    BigWorld.wg_setupPhysicsParam('STAB_EPSILON_PERIOD', STAB_EPSILON_PERIOD)
+    BigWorld.wg_setupPhysicsParam('IMPROVE_ACCURACY_MASS_RATIO', IMPROVE_ACCURACY_MASS_RATIO)
+    strenghtMap = {'firm': 1,
+     'medium': 2,
+     'soft': 3}
+    strenghtsByMatkinds = tuple(((matKind, strenghtMap[strStrenght]) for matKind, strStrenght in material_kinds.GROUND_STRENGTHS_BY_IDS.iteritems()))
+    BigWorld.wg_setupGroundStrengths(strenghtsByMatkinds)
+
 
 def updateConf():
     for e in BigWorld.entities.values():
         if e.className == 'Vehicle':
             initVehiclePhysics(e.mover.physics, e.typeDescriptor)
 
+    updateCommonConf()
     for updater in g_confUpdaters:
         updater()
 
@@ -498,3 +559,34 @@ def _decodeTurretDescr(descr):
      turretPos,
      turretIdx,
      gunIdx)
+
+
+def initVehiclePhysicsFromParams(physics, params):
+
+    class _SimpleObject(object):
+        pass
+
+    typeDesc = _SimpleObject()
+    typeDesc.physics = {}
+    typeDesc.physics['weight'] = params['weight']
+    typeDesc.physics['enginePower'] = params['enginePower']
+    typeDesc.physics['speedLimits'] = params['speedLimits']
+    typeDesc.physics['rotationIsAroundCenter'] = params['rotationIsAroundCenter']
+    typeDesc.physics['rotationSpeedLimit'] = params['rotationSpeedLimit']
+    typeDesc.physics['terrainResistance'] = params['terrainResistance']
+    typeDesc.physics['trackCenterOffset'] = params['trackCenterOffset']
+    typeDesc.hull = {}
+    typeDesc.hull['hitTester'] = _SimpleObject()
+    typeDesc.hull['hitTester'].bbox = (params['hullHitTesterMin'], params['hullHitTesterMax'], None)
+    typeDesc.hull['turretPositions'] = (params['turretPosition'],)
+    typeDesc.chassis = {}
+    typeDesc.chassis['hullPosition'] = params['hullPosition']
+    typeDesc.chassis['hitTester'] = _SimpleObject()
+    typeDesc.chassis['hitTester'].bbox = (params['chassisHitTesterMin'], params['chassisHitTesterMax'], None)
+    typeDesc.turret = {}
+    typeDesc.turret['hitTester'] = _SimpleObject()
+    typeDesc.turret['hitTester'].bbox = (params['turretHitTesterMin'], params['turretHitTesterMax'], None)
+    typeDesc.turret['gunPosition'] = params['gunPosition']
+    initVehiclePhysics(physics, typeDesc)
+    physics.visibilityMask = 4294967295L
+    return

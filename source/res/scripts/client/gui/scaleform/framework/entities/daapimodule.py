@@ -3,7 +3,7 @@ import traceback
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 __author__ = 'd_trofimov'
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.shared.events import ComponentEvent
+from gui.shared.events import ComponentEvent, FocusEvent
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 
 class DAAPIModule(EventSystemEntity):
@@ -23,6 +23,8 @@ class DAAPIModule(EventSystemEntity):
         if not isInited:
             traceback.print_stack()
             LOG_ERROR('flash object can`t be None!', self.__class__)
+        else:
+            isInited = self.__flashObject.as_isDAAPIInited()
         return isInited
 
     @property
@@ -92,6 +94,9 @@ class DAAPIModule(EventSystemEntity):
         if res is not None:
             self.__unregisterPythonComponent(alias, res)
         return
+
+    def onFocusIn(self, alias):
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED))
 
     def _populate(self):
         super(DAAPIModule, self)._populate()

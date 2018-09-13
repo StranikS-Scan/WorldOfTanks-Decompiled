@@ -1,4 +1,6 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/XmppServerSettings.py
+import types
+from debug_utils import LOG_ERROR
 from messenger.proto.interfaces import IProtoSettings
 from messenger.proto.xmpp.jid import JID
 import random
@@ -13,8 +15,21 @@ def _makeSample(*args):
     return queue
 
 
+def _validateConnection(record):
+    result = True
+    if len(record) == 2:
+        host, port = record
+        if not host:
+            result = False
+        if type(port) is not types.IntType:
+            result = False
+    else:
+        result = False
+    return result
+
+
 class XmppServerSettings(IProtoSettings):
-    __slots__ = ('enabled', 'connections', 'domain', 'port', 'resource')
+    __slots__ = ('enabled', 'connections', 'domain', 'port', 'resource', 'altConnections', '__cQueue')
 
     def __init__(self):
         super(XmppServerSettings, self).__init__()
@@ -24,16 +39,12 @@ class XmppServerSettings(IProtoSettings):
         return 'XmppServerSettings(enabled = {0!r:s}, connections = {1!r:s}, domain = {2:>s}, port = {3:n}, resource = {4:>s})'.format(self.enabled, self.connections, self.domain, self.port, self.resource)
 
     def update(self, data):
-        if 'xmpp_enabled' in data:
-            self.enabled = data['xmpp_enabled']
-        else:
-            self.enabled = False
         if 'xmpp_connections' in data:
-            self.connections = data['xmpp_connections']
+            self.connections = filter(_validateConnection, data['xmpp_connections'])
         else:
             self.connections = []
         if 'xmpp_alt_connections' in data:
-            self.altConnections = data['xmpp_alt_connections']
+            self.altConnections = filter(_validateConnection, data['xmpp_alt_connections'])
         else:
             self.altConnections = []
         if 'xmpp_host' in data:
@@ -47,7 +58,14 @@ class XmppServerSettings(IProtoSettings):
         if 'xmpp_resource' in data:
             self.resource = data['xmpp_resource']
         else:
-            self.resource = -1
+            self.resource = ''
+        if 'xmpp_enabled' in data:
+            self.enabled = data['xmpp_enabled']
+            if self.enabled and not self.connections and not self.altConnections and not self.domain:
+                LOG_ERROR('Can not find host to connection. XMPP is disabled', self.connections, self.altConnections, self.domain)
+                self.enabled = False
+        else:
+            self.enabled = False
 
     def clear(self):
         self.enabled = False

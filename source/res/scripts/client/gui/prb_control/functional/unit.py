@@ -10,7 +10,7 @@ from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui import prb_control, DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
-from gui.prb_control import events_dispatcher, settings
+from gui.prb_control import settings
 from gui.prb_control import isParentControlActivated
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
@@ -20,23 +20,27 @@ from gui.prb_control.items import unit_items
 from gui.prb_control.prb_cooldown import PrbCooldownManager
 from gui.prb_control.restrictions.interfaces import IUnitPermissions
 from gui.prb_control.restrictions.permissions import UnitPermissions
-from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT, UNIT_MODE_FLAGS
+from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT, FUNCTIONAL_EXIT, CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils.ListenersCollection import ListenersCollection
 from helpers import time_utils
 from items import vehicles as core_vehicles
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 
 class UnitIntro(interfaces.IPrbEntry):
+
+    def __init__(self, prbType):
+        super(UnitIntro, self).__init__()
+        self._prbType = prbType
+
+    def makeDefCtx(self):
+        return unit_ctx.JoinModeCtx(self._prbType)
 
     def create(self, ctx, callback = None):
         raise Exception, 'UnitIntro is not create entity'
 
     def join(self, ctx, callback = None):
-        if not isinstance(ctx, unit_ctx.JoinModeCtx):
-            LOG_ERROR('Invalid context to join intro', ctx)
-            if callback:
-                callback(False)
-        elif not prb_control.hasModalEntity() or ctx.isForced():
+        if not prb_control.hasModalEntity() or ctx.isForced():
             g_prbCtrlEvents.onUnitIntroModeJoined(ctx.getPrbType(), ctx.getModeFlags())
             if callback:
                 callback(True)
@@ -45,6 +49,9 @@ class UnitIntro(interfaces.IPrbEntry):
             if callback:
                 callback(False)
 
+    def select(self, ctx, callback = None):
+        self.join(ctx, callback=callback)
+
 
 class UnitEntry(interfaces.IPrbEntry):
 
@@ -52,11 +59,7 @@ class UnitEntry(interfaces.IPrbEntry):
         super(UnitEntry, self).__init__()
 
     def create(self, ctx, callback = None):
-        if not isinstance(ctx, unit_ctx.CreateUnitCtx):
-            LOG_ERROR('Invalid context to create unit', ctx)
-            if callback:
-                callback(False)
-        elif not prb_control.hasModalEntity() or ctx.isForced():
+        if not prb_control.hasModalEntity() or ctx.isForced():
             unitMgr = prb_control.getClientUnitMgr()
             if unitMgr:
                 ctx.startProcessing(callback=callback)
@@ -69,11 +72,7 @@ class UnitEntry(interfaces.IPrbEntry):
                 callback(False)
 
     def join(self, ctx, callback = None):
-        if not isinstance(ctx, unit_ctx.JoinUnitCtx):
-            LOG_ERROR('Invalid context to join in unit', ctx)
-            if callback:
-                callback(False)
-        elif not prb_control.hasModalEntity() or ctx.isForced():
+        if not prb_control.hasModalEntity() or ctx.isForced():
             unitMgr = prb_control.getClientUnitMgr()
             if unitMgr:
                 ctx.startProcessing(callback=callback)
@@ -85,36 +84,12 @@ class UnitEntry(interfaces.IPrbEntry):
             if callback:
                 callback(False)
 
-    def doAction(self, action, dispatcher = None):
-        return False
+    def select(self, ctx, callback = None):
+        LOG_ERROR('Routine "select" can not be invoked for UnitEntry')
 
-
-_ACTON_NAME = settings.PREBATTLE_ACTION_NAME
-_UNIT_ACTIONS = {_ACTON_NAME.UNIT: PREBATTLE_TYPE.UNIT,
- _ACTON_NAME.SORTIE: PREBATTLE_TYPE.SORTIE}
 
 class NoUnitFunctional(interfaces.IUnitFunctional):
-
-    def __init__(self):
-        self._exit = settings.FUNCTIONAL_EXIT.NO_FUNC
-
-    def getExit(self):
-        return self._exit
-
-    def canPlayerDoAction(self):
-        return (True, '')
-
-    def doAction(self, action = None, dispatcher = None):
-        result = False
-        actionName = action.actionName
-        if action and actionName in _UNIT_ACTIONS:
-            if not prb_control.hasModalEntity():
-                self._exit = settings.FUNCTIONAL_EXIT.INTRO_UNIT
-                g_prbCtrlEvents.onUnitIntroModeJoined(_UNIT_ACTIONS[actionName], UNIT_MODE_FLAGS.UNDEFINED)
-                result = True
-            else:
-                LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
-        return result
+    pass
 
 
 class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
@@ -129,6 +104,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         self._searchHandler = None
         self._prbType = prbType
         self._hasEntity = False
+        self._showLeadershipNotification = False
         return
 
     def getExit(self):
@@ -138,17 +114,11 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         if exit in settings.FUNCTIONAL_EXIT.UNIT_RANGE:
             self._exit = exit
 
-    def isConfirmToChange(self, exit = settings.FUNCTIONAL_EXIT.NO_FUNC):
-        return exit != settings.FUNCTIONAL_EXIT.UNIT
-
-    def getConfirmDialogMeta(self, forced = False):
-        return rally_dialog_meta.RallyConfirmDialogMeta(self._prbType, 'closeConfirmation')
-
-    def canPlayerDoAction(self):
-        return (False, '')
-
     def showGUI(self):
-        events_dispatcher.showUnitWindow(self._prbType)
+        g_eventDispatcher.showUnitWindow(self._prbType)
+
+    def setPrbType(self, prbType):
+        self._prbType = prbType
 
     def getPrbType(self):
         return self._prbType
@@ -321,17 +291,6 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
             if callback:
                 callback(False)
 
-    def doAction(self, action = None, dispatcher = None):
-        result = False
-        if action:
-            actionName = action.actionName
-        else:
-            actionName = ''
-        if actionName in _UNIT_ACTIONS:
-            result = True
-            events_dispatcher.showUnitWindow(_UNIT_ACTIONS[actionName])
-        return result
-
     @process
     def doLeaveAction(self, dispatcher, ctx = None):
         meta = self.getConfirmDialogMeta()
@@ -363,6 +322,12 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         settings = dict(AccountSettings.getSettings('unitWindow'))
         settings[section] = vehicles
         AccountSettings.setSettings('unitWindow', settings)
+
+    def getShowLeadershipNotification(self):
+        return self._showLeadershipNotification
+
+    def doLeadershipNotificationShown(self):
+        self._showLeadershipNotification = False
 
     def _buildPlayerInfo(self, unitIdx, unit, dbID, slotIdx = -1, data = None):
         if data is None:
@@ -431,7 +396,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
     def _isParentControlActivated(self, callback = None):
         result = False
         if isParentControlActivated():
-            events_dispatcher.showParentControlNotification()
+            g_eventDispatcher.showParentControlNotification()
             if callback:
                 callback(False)
             result = True
@@ -452,10 +417,11 @@ class IntroFunctional(_UnitFunctional):
         self._hasEntity = True
         self._searchHandler = unit_ext.UnitAutoSearchHandler(self)
         self._searchHandler.init()
-        events_dispatcher.loadUnit(self._prbType, self._modeFlags)
+        g_eventDispatcher.loadUnit(self._prbType, self._modeFlags)
         for listener in self._listeners:
             listener.onIntroUnitFunctionalInited()
 
+        g_eventDispatcher.updateUI()
         return FUNCTIONAL_INIT_RESULT.INITED | FUNCTIONAL_INIT_RESULT.LOAD_WINDOW
 
     def fini(self, woEvents = False):
@@ -467,10 +433,14 @@ class IntroFunctional(_UnitFunctional):
         for listener in self._listeners:
             listener.onIntroUnitFunctionalFinished()
 
-        if self._exit == settings.FUNCTIONAL_EXIT.NO_FUNC:
-            events_dispatcher.unloadUnit(self._prbType)
+        if self._exit != settings.FUNCTIONAL_EXIT.UNIT:
+            g_eventDispatcher.unloadUnit(self._prbType)
+            g_eventDispatcher.updateUI()
         unit_ext.destroyListReq()
         return
+
+    def canPlayerDoAction(self):
+        return (not self._hasEntity, '')
 
     def getUnit(self, unitIdx = None, safe = False):
         if unitIdx is None and not safe:
@@ -478,6 +448,9 @@ class IntroFunctional(_UnitFunctional):
             return (None, None)
         else:
             return unit_ext.getUnitFromStorage(self._prbType, unitIdx)
+
+    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
+        return rally_dialog_meta.createUnitIntroLeaveMeta(funcExit, self._prbType)
 
     def isPlayerJoined(self, ctx):
         result = False
@@ -488,7 +461,7 @@ class IntroFunctional(_UnitFunctional):
         return result
 
     def showGUI(self):
-        events_dispatcher.showUnitWindow(self._prbType, self._modeFlags)
+        g_eventDispatcher.showUnitWindow(self._prbType, self._modeFlags)
 
     def initEvents(self, listener):
         if listener in self._listeners:
@@ -502,9 +475,17 @@ class IntroFunctional(_UnitFunctional):
             self._searchHandler.stop()
 
     def leave(self, ctx, callback = None):
+        self._exit = ctx.getFuncExit()
         g_prbCtrlEvents.onUnitIntroModeLeft()
         if callback:
             callback(True)
+
+    def doSelectAction(self, action):
+        result = False
+        if action.actionName == PREBATTLE_ACTION_NAME.FORT and self._prbType in [PREBATTLE_TYPE.SORTIE, PREBATTLE_TYPE.FORT_BATTLE]:
+            g_eventDispatcher.showUnitWindow(self._prbType)
+            result = True
+        return result
 
     def doAutoSearch(self, ctx, callback = None):
         if ctx.isRequestToStart():
@@ -529,7 +510,7 @@ class IntroFunctional(_UnitFunctional):
 
 class UnitFunctional(_UnitFunctional):
 
-    def __init__(self, guiType, rosterSettings):
+    def __init__(self, prbType, rosterSettings):
         RQ_TYPE = settings.REQUEST_TYPE
         handlers = {RQ_TYPE.ASSIGN: self.assign,
          RQ_TYPE.LOCK: self.lock,
@@ -542,8 +523,9 @@ class UnitFunctional(_UnitFunctional):
          RQ_TYPE.SEND_INVITE: self.invite,
          RQ_TYPE.KICK: self.kick,
          RQ_TYPE.AUTO_SEARCH: self.doAutoSearch,
-         RQ_TYPE.BATTLE_QUEUE: self.doBattleQueue}
-        super(UnitFunctional, self).__init__(handlers, interfaces.IUnitListener, guiType, rosterSettings)
+         RQ_TYPE.BATTLE_QUEUE: self.doBattleQueue,
+         RQ_TYPE.GIVE_LEADERSHIP: self.giveLeadership}
+        super(UnitFunctional, self).__init__(handlers, interfaces.IUnitListener, prbType, rosterSettings)
         self._requestsProcessor = None
         self._vehiclesWatcher = None
         self._lastErrorCode = UNIT_ERROR.OK
@@ -567,8 +549,8 @@ class UnitFunctional(_UnitFunctional):
     def init(self):
         self._hasEntity = True
         state = self.getState()
-        events_dispatcher.loadHangar()
-        events_dispatcher.loadUnit(self._prbType)
+        g_eventDispatcher.loadHangar()
+        g_eventDispatcher.loadUnit(self._prbType)
         self._requestsProcessor = unit_ext.UnitRequestProcessor(self)
         self._requestsProcessor.init()
         self._vehiclesWatcher = unit_ext.InventoryVehiclesWatcher(self)
@@ -582,10 +564,11 @@ class UnitFunctional(_UnitFunctional):
         for listener in self._listeners:
             listener.onUnitFunctionalInited()
             if idle:
-                events_dispatcher.setUnitProgressInCarousel(self._prbType, True)
+                g_eventDispatcher.setUnitProgressInCarousel(self._prbType, True)
                 listener.onUnitStateChanged(state, timeLeftInIdle)
 
         unit_ext.destroyListReq()
+        g_eventDispatcher.updateUI()
         return FUNCTIONAL_INIT_RESULT.INITED | FUNCTIONAL_INIT_RESULT.LOAD_WINDOW
 
     def fini(self, woEvents = False):
@@ -607,14 +590,15 @@ class UnitFunctional(_UnitFunctional):
             self._vehiclesWatcher = None
         self._removeClientUnitListeners()
         if self._exit == settings.FUNCTIONAL_EXIT.INTRO_UNIT:
-            events_dispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
+            g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
             return
         else:
             if not woEvents:
-                events_dispatcher.unloadUnit(self._prbType)
+                g_eventDispatcher.unloadUnit(self._prbType)
             else:
-                events_dispatcher.removeUnitFromCarousel(self._prbType)
-                events_dispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
+                g_eventDispatcher.removeUnitFromCarousel(self._prbType)
+                g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
+            g_eventDispatcher.updateUI()
             return
 
     def rejoin(self):
@@ -627,13 +611,13 @@ class UnitFunctional(_UnitFunctional):
         if listener in self._listeners:
             state = self.getState()
             if state.isInIdle():
-                events_dispatcher.setUnitProgressInCarousel(self._prbType, True)
+                g_eventDispatcher.setUnitProgressInCarousel(self._prbType, True)
                 listener.onUnitStateChanged(state, self._getTimeLeftInIdle())
         else:
             LOG_ERROR('Listener not found', listener)
 
     def isPlayerJoined(self, ctx):
-        result = ctx.getEntityType() is settings.CTRL_ENTITY_TYPE.UNIT and ctx.getID() == self.getID()
+        result = ctx.getCtrlType() is settings.CTRL_ENTITY_TYPE.UNIT and ctx.getID() == self.getID()
         if result and hasattr(ctx, 'getPrbType'):
             result = ctx.getPrbType() == self._prbType
         return result
@@ -642,12 +626,9 @@ class UnitFunctional(_UnitFunctional):
         self._lastErrorCode = errorCode
 
     def isKicked(self):
-        return self._lastErrorCode in [UNIT_ERROR.KICKED_CANDIDATE, UNIT_ERROR.KICKED_PLAYER]
+        return self._lastErrorCode in [UNIT_ERROR.KICKED_CANDIDATE, UNIT_ERROR.KICKED_PLAYER, UNIT_ERROR.CLAN_CHANGED]
 
-    def isConfirmToChange(self, exit = settings.FUNCTIONAL_EXIT.NO_FUNC):
-        return self.getID() and self.getUnitIdx()
-
-    def getConfirmDialogMeta(self, forced = False):
+    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
         try:
             _, unit = self.getUnit()
         except ValueError:
@@ -656,11 +637,9 @@ class UnitFunctional(_UnitFunctional):
         meta = None
         if unit:
             if not unit.isIdle():
-                meta = rally_dialog_meta.RallyScopeInfoDialogMeta(self._prbType, 'leaveUnitDisabled')
-            elif len(unit.getPlayers()) > 1:
-                meta = rally_dialog_meta.RallyScopeConfirmDialogMeta(self._prbType, 'leaveUnit')
-        if forced and meta is None:
-            meta = rally_dialog_meta.RallyScopeConfirmDialogMeta(self._prbType, 'leaveUnit')
+                meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.UNIT, self._prbType)
+            else:
+                meta = rally_dialog_meta.createUnitLeaveMeta(funcExit, self._prbType)
         return meta
 
     def getID(self):
@@ -668,6 +647,15 @@ class UnitFunctional(_UnitFunctional):
 
     def getUnitIdx(self):
         return prb_control.getUnitIdx()
+
+    def setExit(self, exit):
+        allowToStoreExit = True
+        if self.getState().isSortie():
+            pInfo = self.getPlayerInfo()
+            if pInfo.isLegionary():
+                allowToStoreExit = False
+        if allowToStoreExit:
+            super(UnitFunctional, self).setExit(exit)
 
     def getUnit(self, unitIdx = None, safe = False):
         if unitIdx is None:
@@ -683,7 +671,7 @@ class UnitFunctional(_UnitFunctional):
 
     def leave(self, ctx, callback = None):
         ctx.startProcessing(callback)
-        self._exit = ctx.getFuncExit()
+        self.setExit(ctx.getFuncExit())
         unitMgr = prb_control.getClientUnitMgr()
         unitMgr.leave()
 
@@ -703,6 +691,13 @@ class UnitFunctional(_UnitFunctional):
             return
         if slotIdx == UNIT_SLOT.REMOVE:
             self._unassign(ctx, callback=callback)
+        elif slotIdx == UNIT_SLOT.ANY:
+            if pInfo.isInSlot:
+                LOG_DEBUG('Player already assigned to slot', ctx)
+                if callback:
+                    callback(True)
+                return
+            self._assign(ctx, callback=callback)
         else:
             if slotIdx not in self._rosterSettings.getAllSlotsRange():
                 LOG_ERROR('Index of slot is invalid', ctx)
@@ -989,7 +984,14 @@ class UnitFunctional(_UnitFunctional):
             self._requestsProcessor.doRawRequest('stopAutoSearch')
         elif not state.isInIdle() and self.getPlayerInfo().isReady:
             self._requestsProcessor.doRawRequest('setReady', False)
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
+
+    def doSelectAction(self, action):
+        result = False
+        if action.actionName == PREBATTLE_ACTION_NAME.FORT and self._prbType in [PREBATTLE_TYPE.SORTIE, PREBATTLE_TYPE.FORT_BATTLE]:
+            g_eventDispatcher.showUnitWindow(self._prbType)
+            result = True
+        return result
 
     def doAction(self, action = None, dispatcher = None):
         if super(UnitFunctional, self).doAction(action, dispatcher):
@@ -1000,7 +1002,7 @@ class UnitFunctional(_UnitFunctional):
                 if self._isParentControlActivated():
                     return
                 if self.getState().isDevMode():
-                    DialogsInterface.showDialog(rally_dialog_meta.RallyConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'startBattle'), lambda result: (self.doBattleQueue(unit_ctx.BattleQueueUnitCtx('prebattle/battle_queue')) if result else None))
+                    DialogsInterface.showDialog(rally_dialog_meta.UnitConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'startBattle'), lambda result: (self.doBattleQueue(unit_ctx.BattleQueueUnitCtx('prebattle/battle_queue')) if result else None))
                 else:
                     ctx = unit_ctx.AutoSearchUnitCtx('prebattle/auto_search')
                     LOG_DEBUG('Unit request', ctx)
@@ -1020,21 +1022,36 @@ class UnitFunctional(_UnitFunctional):
             self.setPlayerReady(ctx)
         return True
 
+    def giveLeadership(self, ctx, callback = None):
+        pPermissions = self.getPermissions()
+        if not pPermissions.canGiveLeadership():
+            LOG_ERROR('Player can not give leadership to player players', pPermissions)
+            if callback:
+                callback(False)
+            return
+        otherPPermissions = self.getPermissions(ctx.getPlayerID())
+        if not otherPPermissions.canTakeLeadership():
+            LOG_ERROR('Player can not take leadership', pPermissions)
+            if callback:
+                callback(False)
+            return
+        self._requestsProcessor.doRequest(ctx, 'giveLeadership', ctx.getPlayerID())
+
     def unit_onUnitStateChanged(self, prevState, nextState):
         _, unit = self.getUnit()
         isReady = unit.arePlayersReady(ignored=[settings.CREATOR_SLOT_INDEX])
         state = unit_items.UnitState(nextState, prevState, isReady)
         if state.isInIdle():
             timeLeftInIdle = self._getTimeLeftInIdle()
-            events_dispatcher.setUnitProgressInCarousel(self._prbType, True)
+            g_eventDispatcher.setUnitProgressInCarousel(self._prbType, True)
         else:
             timeLeftInIdle = 0
-            events_dispatcher.setUnitProgressInCarousel(self._prbType, False)
+            g_eventDispatcher.setUnitProgressInCarousel(self._prbType, False)
         LOG_DEBUG('onUnitStateChanged', state, timeLeftInIdle)
         for listener in self._listeners:
             listener.onUnitStateChanged(state, timeLeftInIdle)
 
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def unit_onUnitVehicleChanged(self, dbID, vehInvID, vehTypeCD):
         if vehTypeCD:
@@ -1051,7 +1068,7 @@ class UnitFunctional(_UnitFunctional):
         for listener in self._listeners:
             listener.onUnitVehicleChanged(dbID, vInfo)
 
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
         return
 
     def unit_onUnitReadyMaskChanged(self, prevMask, nextMask):
@@ -1076,7 +1093,7 @@ class UnitFunctional(_UnitFunctional):
             for pInfo in diff:
                 listener.onUnitPlayerStateChanged(pInfo)
 
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def unit_onUnitPlayerRoleChanged(self, playerID, prevRoleFlags, nextRoleFlags):
         pInfo = self.getPlayerInfo(dbID=playerID)
@@ -1090,12 +1107,14 @@ class UnitFunctional(_UnitFunctional):
             if isOnlineChanged:
                 listener.onUnitPlayerOnlineStatusChanged(pInfo)
             if isCreatorChanged:
+                if pInfo.isCurrentPlayer():
+                    self._showLeadershipNotification = True
                 listener.onUnitPlayerBecomeCreator(pInfo)
             if inArenaChanged:
                 listener.onUnitPlayerEnterOrLeaveArena(pInfo)
             listener.onUnitPlayerRolesChanged(pInfo, pPermissions)
 
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def unit_onUnitPlayerAdded(self, playerID, playerData):
         unitIdx, unit = self.getUnit()
@@ -1121,7 +1140,7 @@ class UnitFunctional(_UnitFunctional):
 
     def unit_onUnitMembersListChanged(self):
         self._invokeListeners('onUnitMembersListChanged')
-        events_dispatcher.updateUI()
+        g_eventDispatcher.updateUI()
 
     def unit_onUnitPlayersListChanged(self):
         self._invokeListeners('onUnitPlayersListChanged')

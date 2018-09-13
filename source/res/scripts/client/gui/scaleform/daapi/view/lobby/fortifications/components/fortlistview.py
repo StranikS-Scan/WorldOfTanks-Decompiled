@@ -1,21 +1,23 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortListView.py
-from PlayerEvents import g_playerEvents
+from constants import PREBATTLE_TYPE
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortListMeta import FortListMeta
 from gui.Scaleform.framework import AppRef, ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.fortifications.fort_helpers import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import int2roman
 
-class FortListView(FortListMeta, FortListener, AppRef):
+class FortListView(FortListMeta, FortListener, UnitListener, AppRef):
 
     def __init__(self):
         super(FortListView, self).__init__()
         self._divisionsDP = None
         self._isBackButtonClicked = False
+        self.__clientIdx = None
         return
 
     def onClientStateChanged(self, state):
@@ -23,22 +25,33 @@ class FortListView(FortListMeta, FortListener, AppRef):
         self.__validateCreation()
         if state.getStateID() != CLIENT_FORT_STATE.HAS_FORT:
             self.as_selectByIndexS(-1)
+            self._searchDP.setSelectedID(None)
             self.as_setDetailsS(None)
+            cache = self.fortCtrl.getSortiesCache()
+            if cache:
+                cache.clearSelectedID()
         return
 
     def onSortieChanged(self, cache, item):
         prevIdx = self._searchDP.getSelectedIdx()
         nextIdx = self._searchDP.updateItem(cache, item)
-        if nextIdx is not None and nextIdx != prevIdx:
+        if nextIdx is not None and nextIdx != -1 and nextIdx != prevIdx:
             self.as_selectByIndexS(nextIdx)
+        elif nextIdx is None or nextIdx == -1:
+            self.as_selectByIndexS(-1)
+            self._searchDP.setSelectedID(None)
+            self.as_setDetailsS(None)
+            cache.clearSelectedID()
         self.__validateCreation()
         self._searchDP.refresh()
         return
 
     def onSortieRemoved(self, cache, sortieID):
-        selectedIdx = self._searchDP.removeItem(cache, sortieID)
-        if selectedIdx is not None:
-            self.as_selectByIndexS(selectedIdx)
+        dropSelection = self._searchDP.removeItem(cache, sortieID)
+        if dropSelection:
+            self.as_selectByIndexS(-1)
+            cache.clearSelectedID()
+            self.as_setDetailsS(None)
         self.__validateCreation()
         return
 
@@ -52,10 +65,13 @@ class FortListView(FortListMeta, FortListener, AppRef):
     def changeDivisionIndex(self, index):
         rosterTypeID = self._divisionsDP.getTypeIDByIndex(index)
         self.as_selectByIndexS(-1)
+        self._searchDP.setSelectedID(None)
         self.as_setDetailsS(None)
         cache = self.fortCtrl.getSortiesCache()
-        if cache and cache.setRosterTypeID(rosterTypeID):
-            self._searchDP.rebuildList(cache)
+        if cache:
+            cache.clearSelectedID()
+            if cache.setRosterTypeID(rosterTypeID):
+                self._searchDP.rebuildList(cache)
         return
 
     def canBeClosed(self, callback):
@@ -65,6 +81,7 @@ class FortListView(FortListMeta, FortListener, AppRef):
     def _populate(self):
         super(FortListView, self)._populate()
         self.startFortListening()
+        self.unitFunctional.setPrbType(PREBATTLE_TYPE.SORTIE)
         self._divisionsDP = sorties_dps.DivisionsDataProvider()
         self._divisionsDP.init(self.as_getDivisionsDPS())
         self.__updateSearchDP(self.fortProvider.getState())
@@ -72,6 +89,7 @@ class FortListView(FortListMeta, FortListener, AppRef):
 
     def _dispose(self):
         self.stopFortListening()
+        self.__clientIdx = None
         if self._divisionsDP:
             self._divisionsDP.fini()
             self._divisionsDP = None
@@ -92,13 +110,17 @@ class FortListView(FortListMeta, FortListener, AppRef):
         if vo is None:
             return
         else:
+            self.__clientIdx = index
             cache = self.fortCtrl.getSortiesCache()
             if cache and not cache.isRequestInProcess:
                 if not cache.setSelectedID(vo['sortieID']):
                     self.as_selectByIndexS(-1)
+                    self._searchDP.setSelectedID(None)
+                    cache.clearSelectedID()
                     self.as_setDetailsS(None)
                 else:
                     Waiting.show('fort/sortie/get')
+                    self._searchDP.setSelectedID(vo['sortieID'])
             return
 
     def __updateSearchDP(self, state):
@@ -107,14 +129,16 @@ class FortListView(FortListMeta, FortListener, AppRef):
             self._searchDP.clear()
             self._searchDP.refresh()
             return
-        else:
-            cache = self.fortCtrl.getSortiesCache()
-            if cache:
-                self.as_setSelectedDivisionS(self._divisionsDP.getIndexByTypeID(cache.getRosterTypeID()))
-                selectedIdx = self._searchDP.rebuildList(cache)
-                if selectedIdx is not None:
-                    self.as_selectByIndexS(selectedIdx)
-            return
+        cache = self.fortCtrl.getSortiesCache()
+        if cache:
+            self.as_setSelectedDivisionS(self._divisionsDP.getIndexByTypeID(cache.getRosterTypeID()))
+            self._searchDP.rebuildList(cache)
+            self.as_selectByIndexS(self._searchDP.getSelectedIdx())
+
+    def _onUserRosterChanged(self, _, user):
+        if self.__clientIdx is not None:
+            self.getRallyDetails(self.__clientIdx)
+        return
 
     def __validateCreation(self):
         isValid, _ = self.fortCtrl.getLimits().isSortieCreationValid()

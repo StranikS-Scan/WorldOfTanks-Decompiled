@@ -1,16 +1,20 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/controls.py
 import BigWorld
-from constants import REQUEST_COOLDOWN
+from functools import partial
+from operator import attrgetter
 from debug_utils import LOG_ERROR, LOG_DEBUG
+import fortified_regions
 from gui.shared.fortifications import getClientFort, getClientFortMgr
+from gui.shared.fortifications.FortFinder import FortFinder
 from gui.shared.fortifications.context import FortRequestCtx
 from gui.shared.fortifications.fort_ext import FortCooldownManager
 from gui.shared.fortifications.fort_ext import PlayerFortRequester
-from gui.shared.fortifications.fort_seqs import SortiesCache
+from gui.shared.fortifications.fort_seqs import SortiesCache, PublicInfoCache, FortBattlesCache
 from gui.shared.fortifications.interfaces import IFortController
-from gui.shared.fortifications.restrictions import FortPermissions, NoFortLimits, IntroFortLimits
+from gui.shared.fortifications.restrictions import FortPermissions, NoFortLimits, IntroFortLimits, NoFortValidators, FortValidators
 from gui.shared.fortifications.restrictions import FortLimits
 from gui.shared.fortifications.settings import FORT_REQUEST_TYPE, CLIENT_FORT_STATE
+from helpers import time_utils
 
 class _FortController(IFortController):
 
@@ -18,7 +22,10 @@ class _FortController(IFortController):
         super(_FortController, self).__init__()
         self._requester = None
         self._limits = None
+        self._validators = None
         self._sortiesCache = None
+        self._fortBattlesCache = None
+        self._publicInfoCache = None
         self._handlers = handlers
         self._cooldown = FortCooldownManager()
         self.clear()
@@ -33,6 +40,7 @@ class _FortController(IFortController):
         self._requester = PlayerFortRequester()
         self._requester.init()
         self._setLimits()
+        self._setValidators()
         self._clan = clan
         self._listeners = listeners
         self._addFortListeners()
@@ -44,6 +52,9 @@ class _FortController(IFortController):
             self._requester = None
         if self._limits:
             self._limits = None
+        if self._validators:
+            self._validators.fini()
+            self._validators = None
         self.clear()
         self._handlers.clear()
         return
@@ -61,11 +72,23 @@ class _FortController(IFortController):
     def getLimits(self):
         return self._limits
 
+    def getValidators(self):
+        return self._validators
+
     def getSortiesCache(self):
         return self._sortiesCache
 
+    def getFortBattlesCache(self):
+        return self._fortBattlesCache
+
+    def getPublicInfoCache(self):
+        return self._publicInfoCache
+
     def removeSortiesCache(self):
         SortiesCache._removeStoredData()
+
+    def removeFortBattlesCache(self):
+        FortBattlesCache._removeStoredData()
 
     def request(self, ctx, callback = None):
         if self._clan is None:
@@ -73,17 +96,14 @@ class _FortController(IFortController):
         else:
             requestType = ctx.getRequestType()
             if requestType in self._handlers:
-                if self._cooldown.validate(requestType):
+                cooldown = ctx.getCooldown()
+                if self._cooldown.validate(requestType, cooldown):
                     if callback:
                         callback(False)
                 else:
                     LOG_DEBUG('Fort request', ctx)
-                    if self._handlers[requestType](ctx, callback=callback):
-                        if requestType == FORT_REQUEST_TYPE.REQUEST_SORTIE_UNIT:
-                            coolDown = REQUEST_COOLDOWN.GET_FORT_SORTIE_DATA
-                        else:
-                            coolDown = REQUEST_COOLDOWN.CALL_FORT_METHOD
-                        self._cooldown.process(requestType, coolDown)
+                    if self._handlers[requestType](ctx, callback=partial(self._callbackWrapper, requestType, callback, cooldown)):
+                        self._cooldown.process(requestType, cooldown)
             else:
                 self._failChecking('Handler not found', ctx, callback)
             return
@@ -116,6 +136,13 @@ class _FortController(IFortController):
 
     def _setLimits(self):
         self._limits = NoFortLimits()
+
+    def _setValidators(self):
+        self._validators = NoFortValidators()
+
+    def _callbackWrapper(self, requestType, callback, cooldown, *args):
+        self._cooldown.adjust(requestType, cooldown)
+        callback(*args)
 
 
 class NoFortController(_FortController):
@@ -173,11 +200,26 @@ class FortController(_FortController):
          FORT_REQUEST_TYPE.ATTACH: self.attach,
          FORT_REQUEST_TYPE.UPGRADE: self.upgrade,
          FORT_REQUEST_TYPE.CREATE_SORTIE: self.createSortie,
-         FORT_REQUEST_TYPE.REQUEST_SORTIE_UNIT: self.requestSortieUnit})
+         FORT_REQUEST_TYPE.REQUEST_SORTIE_UNIT: self.requestSortieUnit,
+         FORT_REQUEST_TYPE.CHANGE_DEF_HOUR: self.changeDefHour,
+         FORT_REQUEST_TYPE.CHANGE_OFF_DAY: self.changeOffDay,
+         FORT_REQUEST_TYPE.CHANGE_PERIPHERY: self.changePeriphery,
+         FORT_REQUEST_TYPE.CHANGE_VACATION: self.changeVacation,
+         FORT_REQUEST_TYPE.CHANGE_SETTINGS: self.changeSettings,
+         FORT_REQUEST_TYPE.SHUTDOWN_DEF_HOUR: self.shutDownDefHour,
+         FORT_REQUEST_TYPE.CANCEL_SHUTDOWN_DEF_HOUR: self.cancelShutDownDefHour,
+         FORT_REQUEST_TYPE.REQUEST_PUBLIC_INFO: self.requestFortPublicInfo,
+         FORT_REQUEST_TYPE.REQUEST_CLAN_CARD: self.requestClanCard,
+         FORT_REQUEST_TYPE.ADD_FAVORITE: self.addFavorite,
+         FORT_REQUEST_TYPE.REMOVE_FAVORITE: self.removeFavorite,
+         FORT_REQUEST_TYPE.PLAN_ATTACK: self.planAttack,
+         FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE: self.createOrJoinFortBattle})
         self.__cooldownCallback = None
         self.__cooldownBuildings = []
         self.__cooldownPassed = False
         self._upgradeVisitedBuildings = set()
+        self._finder = None
+        self.__defencePeriodCallback = None
         return
 
     @classmethod
@@ -188,12 +230,23 @@ class FortController(_FortController):
         super(FortController, self).init(clan, listeners)
         self._sortiesCache = SortiesCache(self)
         self._sortiesCache.start()
+        self._fortBattlesCache = FortBattlesCache(self)
+        self._fortBattlesCache.start()
+        self._finder = FortFinder()
+        self._finder.init()
+        self._publicInfoCache = PublicInfoCache(self)
+        self._publicInfoCache.start()
 
     def fini(self):
         if self._sortiesCache:
             self._sortiesCache.stop()
             self._sortiesCache = None
-        self.cancelCooldownCallback()
+        if self._fortBattlesCache:
+            self._fortBattlesCache.stop()
+            self._fortBattlesCache = None
+        if self._publicInfoCache:
+            self._publicInfoCache.stop()
+            self._publicInfoCache = None
         super(FortController, self).fini()
         return
 
@@ -368,10 +421,206 @@ class FortController(_FortController):
             self._upgradeVisitedBuildings.remove(buildingID)
             self._listeners.notify('onUpgradeVisitedBuildingChanged', buildingID)
 
-    def refreshCooldowns(self, doNotify = True):
-        self.cancelCooldownCallback()
+    def changeDefHour(self, ctx, callback = None):
+        perm = self.getPermissions()
+        defHour = ctx.getDefenceHour()
+        if not perm.canChangeDefHour():
+            return self._failChecking('Player can not change defence hour', ctx, callback)
+        return self._requester.doRequestEx(ctx, callback, 'changeDefHour', defHour)
+
+    def changeOffDay(self, ctx, callback = None):
+        perm = self.getPermissions()
+        offDay = ctx.getOffDay()
+        if not perm.canChangeOffDay():
+            return self._failChecking('Player can not change off day', ctx, callback)
+        return self._requester.doRequestEx(ctx, callback, 'changeOffDay', offDay)
+
+    def changePeriphery(self, ctx, callback = None):
+        perm = self.getPermissions()
+        peripheryID = ctx.getPeripheryID()
+        if not perm.canChangePeriphery():
+            return self._failChecking('Player can not change periphery', ctx, callback)
+        return self._requester.doRequestEx(ctx, callback, 'changePeriphery', peripheryID)
+
+    def changeVacation(self, ctx, callback = None):
+        perm = self.getPermissions()
+        timeVacationStart = ctx.getTimeVacationStart()
+        timeVacationDuration = ctx.getTimeVacationDuration()
+        if not perm.canChangeVacation():
+            return self._failChecking('Player can not change vacation', ctx, callback)
+        return self._requester.doRequestEx(ctx, callback, 'changeVacation', timeVacationStart, timeVacationDuration)
+
+    def changeSettings(self, ctx, callback = None):
+        perm = self.getPermissions()
+        fort = self.getFort()
+        chain = []
+        defHour = ctx.getDefenceHour()
+        if defHour != fort.defenceHour:
+            if not perm.canChangeDefHour():
+                return self._failChecking('Player can not change defence hour', ctx, callback)
+            chain.append(('changeDefHour', (defHour,), {}))
+        offDay = ctx.getOffDay()
+        if offDay != fort.offDay:
+            if not perm.canChangeOffDay():
+                return self._failChecking('Player can not change off day', ctx, callback)
+            chain.append(('changeOffDay', (offDay,), {}))
+        peripheryID = ctx.getPeripheryID()
+        if peripheryID != fort.peripheryID:
+            if not perm.canChangePeriphery():
+                return self._failChecking('Player can not change periphery', ctx, callback)
+            chain.append(('changePeriphery', (peripheryID,), {}))
+        if not chain:
+            return self._failChecking('No requests to process', ctx, callback)
+        return self._requester.doRequestChainEx(ctx, callback, chain)
+
+    def shutDownDefHour(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canShutDownDefHour():
+            return self._failChecking('Player can not shut down def hour', ctx, callback)
+        return self._requester.doRequestEx(ctx, callback, 'shutdownDefHour')
+
+    def cancelShutDownDefHour(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canShutDownDefHour():
+            return self._failChecking('Player can not shut down def hour', ctx, callback)
+        return self._requester.doRequestEx(ctx, callback, 'cancelDefHourShutdown')
+
+    def requestFortPublicInfo(self, ctx, callback = None):
+        fort = self.getFort()
+        perm = self.getPermissions()
+        if not perm.canRequestPublicInfo():
+            return self._failChecking('Player can not request public info', ctx, callback)
+        filterType = ctx.getFilterType()
+        abbrevPattern = ctx.getAbbrevPattern()
+        homePeripheryID = fort.peripheryID
+        limit = ctx.getLimit()
+        lvlFrom = ctx.getLvlFrom()
+        lvlTo = ctx.getLvlTo()
+        ownStartDefHourFrom, ownStartDefHourTo = fort.defenceHour, fort.defenceHour + 1
+        extStartDefHourFrom = ctx.getStartDefHourFrom()
+        extStartDefHourTo = ctx.getStartDefHourTo()
+        attackDay = ctx.getAttackDay()
+        ownFortLvl = fort.level
+        battleStats = fort.getFortDossier().getBattlesStats()
+        ownProfitFactor10 = int(battleStats.getProfitFactor() * 10)
+        buildingLevels = map(attrgetter('level'), fort.getBuildings().itervalues())
+        minLevel = fortified_regions.g_cache.defenceConditions.minRegionLevel
+        validBuildingLevels = filter(lambda x: x >= minLevel, buildingLevels)
+        avgBuildingLevel10 = 0
+        if validBuildingLevels:
+            avgBuildingLevel10 = int(float(sum(validBuildingLevels)) / len(validBuildingLevels) * 10)
+        ownBattleCountForFort = battleStats.getBattlesCount()
+        electedClanDBIDs = tuple(fort.favorites)
+        val = self.getValidators()
+        validationResult, validationReason = val.validate(ctx.getRequestType(), filterType, abbrevPattern)
+        if not validationResult:
+            self._listeners.notify('onFortPublicInfoValidationError', validationReason)
+            return self._failChecking('Player input is invalid', ctx, callback)
+        return self._finder.request(filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, electedClanDBIDs, callback)
+
+    def requestClanCard(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canRequestClanCard():
+            return self._failChecking('Player can not request clan card', ctx, callback)
+        clanDBID = ctx.getClanDBID()
+        return self._requester.doRequestEx(ctx, callback, 'getEnemyClanCard', clanDBID)
+
+    def addFavorite(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canAddToFavorite():
+            return self._failChecking('Player can not add favorite', ctx, callback)
+        clanDBID = ctx.getClanDBID()
+        return self._requester.doRequestEx(ctx, callback, 'addFavorite', clanDBID)
+
+    def removeFavorite(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canRemoveFavorite():
+            return self._failChecking('Player can not remove favorite', ctx, callback)
+        clanDBID = ctx.getClanDBID()
+        return self._requester.doRequestEx(ctx, callback, 'removeFavorite', clanDBID)
+
+    def planAttack(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canPlanAttack():
+            return self._failChecking('Player can not plan attack', ctx, callback)
+        clanDBID = ctx.getClanDBID()
+        timeAttack = ctx.getTimeAttack()
+        dirFrom = ctx.getDirFrom()
+        dirTo = ctx.getDirTo()
+        return self._requester.doRequestEx(ctx, callback, 'planAttack', clanDBID, timeAttack, dirFrom, dirTo)
+
+    def createOrJoinFortBattle(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canCreateFortBattle():
+            return self._failChecking('Player can not plan attack', ctx, callback)
+        battleID = ctx.getBattleID()
+        slotIdx = ctx.getSlotIdx()
+        return self._requester.doRequestEx(ctx, callback, 'createOrJoinFortBattle', battleID, slotIdx)
+
+    def _setLimits(self):
+        self._limits = FortLimits()
+
+    def _setValidators(self):
+        self._validators = FortValidators()
+
+    def _addFortListeners(self):
+        super(FortController, self)._addFortListeners()
+        fort = self.getFort()
+        if not fort:
+            LOG_ERROR('No fort to subscribe')
+            return
+        fort.onBuildingChanged += self.__fort_onBuildingChanged
+        fort.onTransport += self.__fort_onTransport
+        fort.onDirectionOpened += self.__fort_onDirectionOpened
+        fort.onDirectionClosed += self.__fort_onDirectionClosed
+        fort.onStateChanged += self.__fort_onStateChanged
+        fort.onOrderReady += self.__fort_onOrderReady
+        fort.onDossierChanged += self.__fort_onDossierChanged
+        fort.onPlayerAttached += self.__fort_onPlayerAttached
+        fort.onDefenceHourChanged += self.__fort_onDefenceHourChanged
+        fort.onFavoritesChanged += self.__fort_onFavoritesChanged
+        fort.onEnemyClanCardReceived += self.__fort_onEnemyClanCardReceived
+        fort.onShutdownDowngrade += self.__fort_onShutdownDowngrade
+        fortMgr = getClientFortMgr()
+        if not fortMgr:
+            LOG_ERROR('No fort manager to subscribe')
+            return
+        fortMgr.onFortUpdateReceived += self.__fortMgr_onFortUpdateReceived
+        fortMgr.onFortPublicInfoReceived += self.__fortMgr_onFortPublicInfoReceived
+        self.__refreshCooldowns(False)
+        self.__processDefencePeriodCallback()
+
+    def _removeFortListeners(self):
+        self.__cancelCooldownCallback()
+        self.__cancelDefencePeriodCallback()
+        fort = self.getFort()
+        if not fort:
+            LOG_ERROR('No fort to unsubscribe')
+            return
+        fort.onBuildingChanged -= self.__fort_onBuildingChanged
+        fort.onTransport -= self.__fort_onTransport
+        fort.onDirectionOpened -= self.__fort_onDirectionOpened
+        fort.onDirectionClosed -= self.__fort_onDirectionClosed
+        fort.onStateChanged -= self.__fort_onStateChanged
+        fort.onOrderReady -= self.__fort_onOrderReady
+        fort.onDossierChanged -= self.__fort_onDossierChanged
+        fort.onPlayerAttached -= self.__fort_onPlayerAttached
+        fort.onDefenceHourChanged -= self.__fort_onDefenceHourChanged
+        fort.onFavoritesChanged -= self.__fort_onFavoritesChanged
+        fort.onEnemyClanCardReceived -= self.__fort_onEnemyClanCardReceived
+        fort.onShutdownDowngrade -= self.__fort_onShutdownDowngrade
+        fortMgr = getClientFortMgr()
+        if not fortMgr:
+            LOG_ERROR('No fort manager to unsubscribe')
+            return
+        fortMgr.onFortUpdateReceived -= self.__fortMgr_onFortUpdateReceived
+        fortMgr.onFortPublicInfoReceived -= self.__fortMgr_onFortPublicInfoReceived
+        super(FortController, self)._removeFortListeners()
+
+    def __refreshCooldowns(self, doNotify = True):
         if self.__cooldownBuildings and doNotify:
             self._listeners.notify('onBuildingsUpdated', self.__cooldownBuildings, self.__cooldownPassed)
+        self.__cancelCooldownCallback()
         fort = self.getFort()
         self.__cooldownBuildings = fort.getBuildingsOnCooldown()
         if self.__cooldownBuildings:
@@ -387,9 +636,9 @@ class FortController(_FortController):
                 if 0 < productionCooldown < time:
                     time = productionCooldown
 
-            self.__cooldownCallback = BigWorld.callback(time, self.refreshCooldowns)
+            self.__cooldownCallback = BigWorld.callback(time, self.__refreshCooldowns)
 
-    def cancelCooldownCallback(self):
+    def __cancelCooldownCallback(self):
         if self.__cooldownCallback is not None:
             BigWorld.cancelCallback(self.__cooldownCallback)
             self.__cooldownCallback = None
@@ -397,51 +646,23 @@ class FortController(_FortController):
             self.__cooldownPassed = False
         return
 
-    def _setLimits(self):
-        self._limits = FortLimits()
-
-    def _addFortListeners(self):
-        super(FortController, self)._addFortListeners()
+    def __processDefencePeriodCallback(self):
+        self.__cancelDefencePeriodCallback()
         fort = self.getFort()
-        if not fort:
-            LOG_ERROR('No fort to subscribe')
-            return
-        fort.onBuildingChanged += self.__fort_onBuildingChanged
-        fort.onBuildingRemoved += self.__fort_onBuildingRemoved
-        fort.onTransport += self.__fort_onTransport
-        fort.onDirectionOpened += self.__fort_onDirectionOpened
-        fort.onDirectionClosed += self.__fort_onDirectionClosed
-        fort.onStateChanged += self.__fort_onStateChanged
-        fort.onOrderReady += self.__fort_onOrderReady
-        fort.onDossierChanged += self.__fort_onDossierChanged
-        fort.onPlayerAttached += self.__fort_onPlayerAttached
-        fortMgr = getClientFortMgr()
-        if not fortMgr:
-            LOG_ERROR('No fort manager to subscribe')
-            return
-        fortMgr.onFortUpdateReceived += self.__fortMgr_onFortUpdateReceived
-        self.refreshCooldowns(False)
+        self._listeners.notify('onDefenceHourStateChanged')
+        start, finish = fort.getClosestDefencePeriod()
+        if fort.isOnDefenceHour():
+            timer = time_utils.getTimeDeltaFromNow(finish)
+        else:
+            timer = time_utils.getTimeDeltaFromNow(start)
+        if timer > 0:
+            self.__defencePeriodCallback = BigWorld.callback(timer, self.__processDefencePeriodCallback)
 
-    def _removeFortListeners(self):
-        fort = self.getFort()
-        if not fort:
-            LOG_ERROR('No fort to unsubscribe')
-            return
-        fort.onBuildingChanged -= self.__fort_onBuildingChanged
-        fort.onBuildingRemoved -= self.__fort_onBuildingRemoved
-        fort.onTransport -= self.__fort_onTransport
-        fort.onDirectionOpened -= self.__fort_onDirectionOpened
-        fort.onDirectionClosed -= self.__fort_onDirectionClosed
-        fort.onStateChanged -= self.__fort_onStateChanged
-        fort.onOrderReady -= self.__fort_onOrderReady
-        fort.onDossierChanged -= self.__fort_onDossierChanged
-        fort.onPlayerAttached -= self.__fort_onPlayerAttached
-        fortMgr = getClientFortMgr()
-        if not fort:
-            LOG_ERROR('No fort manager to unsubscribe')
-            return
-        fortMgr.onFortUpdateReceived -= self.__fortMgr_onFortUpdateReceived
-        super(FortController, self)._removeFortListeners()
+    def __cancelDefencePeriodCallback(self):
+        if self.__defencePeriodCallback is not None:
+            BigWorld.cancelCallback(self.__defencePeriodCallback)
+            self.__defencePeriodCallback = None
+        return
 
     def __fort_onBuildingChanged(self, buildingTypeID, reason, ctx = None):
         self._listeners.notify('onBuildingChanged', buildingTypeID, reason, ctx)
@@ -470,8 +691,25 @@ class FortController(_FortController):
     def __fort_onPlayerAttached(self, buildingTypeID):
         self._listeners.notify('onPlayerAttached', buildingTypeID)
 
+    def __fort_onDefenceHourChanged(self, hour):
+        self._listeners.notify('onDefenceHourChanged', hour)
+        self.__processDefencePeriodCallback()
+
+    def __fort_onFavoritesChanged(self, clanDBID):
+        self._listeners.notify('onFavoritesChanged', clanDBID)
+
+    def __fort_onEnemyClanCardReceived(self, card):
+        self._listeners.notify('onEnemyClanCardReceived', card)
+
+    def __fort_onShutdownDowngrade(self):
+        self._listeners.notify('onShutdownDowngrade')
+
     def __fortMgr_onFortUpdateReceived(self):
-        self.refreshCooldowns(False)
+        self.__refreshCooldowns(False)
+
+    def __fortMgr_onFortPublicInfoReceived(self, requestID, errorID, resultSet):
+        self._finder.response(requestID, errorID, resultSet)
+        self._listeners.notify('onFortPublicInfoReceived', bool(resultSet))
 
 
 def createInitial():

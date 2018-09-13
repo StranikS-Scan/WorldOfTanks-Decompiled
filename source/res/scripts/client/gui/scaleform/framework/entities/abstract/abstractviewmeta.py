@@ -9,6 +9,9 @@ class AbstractViewMeta(DAAPIModule):
     def unregisterFlashComponent(self, alias):
         self._printOverrideError('unregisterFlashComponent')
 
+    def onFocusIn(self, alias):
+        self._printOverrideError('onFocusIn')
+
     def as_populateS(self):
         if self._isDAAPIInited():
             return self.flashObject.as_populate()

@@ -22,9 +22,7 @@ def LOG_VOIP_INT(msg, *kargs):
     if g_useVivoxlog:
         _writeLog(msg, kargs)
     elif kargs:
-        LOG_VOIP(msg, kargs)
-    else:
-        LOG_VOIP(msg)
+        pass
     return
 
 
@@ -106,6 +104,8 @@ class VOIPManager:
         self.channelsMgr.onLeftChannel += self.onLeftChannel
         self.channelsMgr.onLogined += self.onLogined
         self.channelsMgr.onStateChanged += self.onStateChanged
+        self.oldMasterVolume = FMOD.getMasterVolume()
+        self.muffled = False
 
     def destroy(self):
         self.channelsMgr.onParticipantAdded -= self._onParticipantAdded
@@ -325,11 +325,14 @@ class VOIPManager:
         return
 
     def muffleMasterVolume(self):
-        masterVolume = SoundGroups.g_instance.getMasterVolume() * SoundGroups.g_instance.getVolume('masterFadeVivox')
-        FMOD.setMasterVolume(masterVolume)
+        if not self.muffled:
+            self.oldMasterVolume = FMOD.getMasterVolume()
+            FMOD.setMasterVolume(self.oldMasterVolume * SoundGroups.g_instance.getVolume('masterFadeVivox'))
+            self.muffled = True
 
     def restoreMasterVolume(self):
-        FMOD.setMasterVolume(SoundGroups.g_instance.getMasterVolume())
+        self.muffled = False
+        FMOD.setMasterVolume(self.oldMasterVolume)
 
     def isAnyoneTalking(self):
         for info in self.channelUsers.values():

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import GUI_NATIONS_ORDER_INDEX
-from gui.shared.fortifications import isFortificationEnabled
+from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
@@ -25,6 +25,8 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
         dropDownProvider = [PROFILE.PROFILE_DROPDOWN_LABELS_ALL, PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL, PROFILE.PROFILE_DROPDOWN_LABELS_TEAM]
         if isFortificationEnabled():
             dropDownProvider.append(PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES)
+        if isFortificationBattlesEnabled():
+            dropDownProvider.append(PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES)
         return {'dropDownProvider': dropDownProvider}
 
     def _sendAccountData(self, targetData, accountDossier):
@@ -89,7 +91,10 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
             raise ValueError('Profile Technique: Unknown battle type: ' + self._battlesType)
         if achievementsList is not None:
             achievementsList.insert(0, specialMarksStats)
-        self.as_responseVehicleDossierS({'detailedData': DetailedStatisticsUtils.getStatistics(stats),
+        preparedStatistics = DetailedStatisticsUtils.getStatistics(stats)
+        if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES:
+            preparedStatistics[0]['data'][0]['tooltip'] = PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FORT_BATTLESCOUNT
+        self.as_responseVehicleDossierS({'detailedData': preparedStatistics,
          'achievements': achievementsList})
         return
 

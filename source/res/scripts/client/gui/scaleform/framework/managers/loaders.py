@@ -66,6 +66,10 @@ class LoaderManager(LoaderManagerMeta):
                 self.__loadViewForToken(NO_IMPL_ALIAS, item.name, token)
         return
 
+    def cancelLoadingByToken(self, token):
+        if token in self.__tokens:
+            self.__tokens.pop(token)
+
     def viewInitializationError(self, token, config, alias):
         msg = "View '{0}' does not implement net.wg.infrastructure.interfaces.IView"
         msg = msg.format(alias)
@@ -92,6 +96,7 @@ class LoaderManager(LoaderManagerMeta):
             pyEntity, factoryIdx = g_entitiesFactories.factory(alias, *args, **kwargs)
             if pyEntity is not None:
                 self.__tokens[token] = _TokenItem(name, pyEntity, factoryIdx, args, kwargs)
+                pyEntity.setToken(token)
                 self.onViewLoadInit(pyEntity)
                 self.as_loadViewS(pyEntity.settings._asdict(), token, alias, name)
                 return pyEntity

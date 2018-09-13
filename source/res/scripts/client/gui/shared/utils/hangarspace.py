@@ -1,20 +1,88 @@
 # Embedded file name: scripts/client/gui/shared/utils/HangarSpace.py
 import BigWorld
 import Event
+import Keys
+import ResMgr
 from account_shared import getCustomizedVehCompDescr
 from gui.shared import g_itemsCache
 from items import vehicles
 import constants
-from gui import game_control
+from gui import game_control, g_mouseEventHandlers, g_keyEventHandlers, InputHandler
 from gui.ClientHangarSpace import ClientHangarSpace
 from gui.Scaleform.Waiting import Waiting
 from debug_utils import LOG_DEBUG
+
+class HangarVideoCameraController:
+    import AvatarInputHandler
+    from AvatarInputHandler.VideoCamera import VideoCamera
+
+    def __init__(self):
+        self.__videoCamera = None
+        self.__enabled = False
+        self.__overriddenCamera = None
+        self.__videoCamera = None
+        return
+
+    def init(self):
+        rootSection = ResMgr.openSection(HangarVideoCameraController.AvatarInputHandler._INPUT_HANDLER_CFG)
+        if rootSection is None:
+            return
+        else:
+            videoSection = rootSection['videoMode']
+            if videoSection is None:
+                return
+            if not videoSection.readBool('enableInHangar', False):
+                return
+            videoCameraSection = videoSection['camera']
+            self.__videoCamera = HangarVideoCameraController.VideoCamera(videoCameraSection)
+            self.__overriddenCamera = BigWorld.camera()
+            InputHandler.g_instance.onKeyDown += self.handleKeyEvent
+            InputHandler.g_instance.onKeyUp += self.handleKeyEvent
+            g_mouseEventHandlers.add(self.handleMouseEvent)
+            return
+
+    def destroy(self):
+        if self.__videoCamera is None:
+            return
+        else:
+            self.__videoCamera.destroy()
+            BigWorld.camera(self.__overriddenCamera)
+            InputHandler.g_instance.onKeyDown -= self.handleKeyEvent
+            InputHandler.g_instance.onKeyUp -= self.handleKeyEvent
+            g_mouseEventHandlers.discard(self.handleMouseEvent)
+            return
+
+    def handleKeyEvent(self, event):
+        if self.__videoCamera is None:
+            return
+        else:
+            if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and event.isKeyDown() and event.key == Keys.KEY_F3:
+                self.__enabled = not self.__enabled
+                if self.__enabled:
+                    self.__overriddenCamera = BigWorld.camera()
+                    self.__videoCamera.enable()
+                else:
+                    self.__videoCamera.disable()
+                    BigWorld.camera(self.__overriddenCamera)
+            if self.__enabled:
+                return self.__videoCamera.handleKeyEvent(event.key, event.isKeyDown())
+            return False
+
+    def handleMouseEvent(self, event):
+        if self.__videoCamera is None:
+            return
+        elif self.__enabled:
+            return self.__videoCamera.handleMouseEvent(event.dx, event.dy, event.dz)
+        else:
+            return False
+
 
 class _HangarSpace(object):
     isPremium = property(lambda self: (self.__isSpacePremium if self.__spaceInited else self.__delayedIsPremium))
 
     def __init__(self):
         self.__space = ClientHangarSpace()
+        self.__videoCameraController = HangarVideoCameraController()
         self.__inited = False
         self.__spaceInited = False
         self.__isSpacePremium = False
@@ -46,6 +114,7 @@ class _HangarSpace(object):
         return self.__space.spaceLoading()
 
     def init(self, isPremium):
+        self.__videoCameraController.init()
         if not self.__spaceInited:
             LOG_DEBUG('_HangarSpace::init')
             Waiting.show('loadHangarSpace')
@@ -59,7 +128,10 @@ class _HangarSpace(object):
         return
 
     def refreshSpace(self, isPremium, forceRefresh = False):
-        if not self.__spaceInited and self.__space.spaceLoading():
+        igrType = game_control.g_instance.igr.getRoomType()
+        if self.__isSpacePremium == isPremium and self.__igrSpaceType == igrType and not forceRefresh:
+            return
+        elif not self.__spaceInited and self.__space.spaceLoading():
             LOG_DEBUG('_HangarSpace::refreshSpace(isPremium={0!r:s}) - is delayed until space load is done'.format(isPremium))
             if self.__delayedRefreshCallback is None:
                 self.__delayedRefreshCallback = BigWorld.callback(0.1, self.__delayedRefresh)
@@ -68,15 +140,14 @@ class _HangarSpace(object):
             return
         else:
             LOG_DEBUG('_HangarSpace::refreshSpace(isPremium={0!r:s})'.format(isPremium))
-            igrType = game_control.g_instance.igr.getRoomType()
-            if self.__isSpacePremium != isPremium or self.__igrSpaceType != igrType or forceRefresh:
-                self.destroy()
-                self.init(isPremium)
+            self.destroy()
+            self.init(isPremium)
             self.__isSpacePremium = isPremium
             self.__igrSpaceType = igrType
             return
 
     def destroy(self):
+        self.__videoCameraController.destroy()
         if self.__spaceInited:
             LOG_DEBUG('_HangarSpace::destroy')
             self.__inited = False

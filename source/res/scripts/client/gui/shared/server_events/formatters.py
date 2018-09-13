@@ -28,6 +28,30 @@ class PROGRESS_BAR_TYPE(CONST_CONTAINER):
     NONE = ''
 
 
+class RELATIONS(CONST_CONTAINER):
+    GT = 'greater'
+    LS = 'less'
+    EQ = 'equal'
+    NEQ = 'notEqual'
+    LSQ = 'lessOrEqual'
+    GTQ = 'greaterOrEqual'
+    _OPPOSITE = {GT: LSQ,
+     LS: GTQ,
+     EQ: NEQ,
+     NEQ: EQ,
+     LSQ: GT,
+     GTQ: LS}
+
+    @classmethod
+    def getOppositeRelation(cls, relation):
+        return cls._OPPOSITE.get(relation)
+
+
+class RELATIONS_SCHEME(CONST_CONTAINER):
+    DEFAULT = 1
+    ALTERNATIVE = 2
+
+
 _g_sortedVehs = {}
 VehiclesListProps = namedtuple('VehiclesListProps', ['disableChecker',
  'nationIdx',
@@ -239,11 +263,11 @@ def _packProgress(current, total, label = ''):
          'description': label}
 
 
-def _formatRelation(value, relation):
+def _formatRelation(value, relation, relationI18nType = RELATIONS_SCHEME.DEFAULT):
     relation = relation or 'equal'
     if type(value) not in types.StringTypes:
         value = BigWorld.wg_getNiceNumberFormat(value)
-    return makeHtmlString('html_templates:lobby/quests', 'relation', {'relation': i18n.makeString('#quests:details/relations/%s' % relation),
+    return makeHtmlString('html_templates:lobby/quests', 'relation', {'relation': i18n.makeString('#quests:details/relations%d/%s' % (relationI18nType, relation)),
      'value': value})
 
 
@@ -402,9 +426,9 @@ def packVehiclesBlock(uniqueListID, header, vehs = None, showFilters = True, sho
      'tableID': uniqueListID})
 
 
-def packTextBlock(label, value = None, relation = None, questID = None, isAvailable = True, battlesLeft = 0, showDone = False):
+def packTextBlock(label, value = None, relation = None, questID = None, isAvailable = True, battlesLeft = 0, showDone = False, relationI18nType = RELATIONS_SCHEME.DEFAULT):
     if value is not None:
-        value = _formatRelation(value, relation)
+        value = _formatRelation(value, relation, relationI18nType)
     raise not (not isAvailable and showDone) or AssertionError
     blockData = {'linkage': 'CounterTextElement_UI',
      'label': label,

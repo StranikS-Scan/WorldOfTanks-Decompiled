@@ -176,7 +176,7 @@ class PresenceHandler(ClientEventsHandler):
         if not client or not client.isConnected():
             return
         presence = PRESENCE.UNAVAILABLE
-        if self.__scope is MESSENGER_SCOPE.BATTLE:
+        if self.__scope == MESSENGER_SCOPE.BATTLE:
             presence = PRESENCE.DND
         elif self.__scope == MESSENGER_SCOPE.LOBBY:
             presence = PRESENCE.AVAILABLE

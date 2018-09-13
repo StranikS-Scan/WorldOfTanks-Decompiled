@@ -55,9 +55,9 @@ class FunctionalCollection(object):
 
     def getState(self, factories):
         result = None
-        for entityType, item in self.__items.iteritems():
+        for ctrlType, item in self.__items.iteritems():
             if item and item.hasEntity():
-                factory = factories.get(entityType)
+                factory = factories.get(ctrlType)
                 if factory:
                     result = factory.createStateEntity(item)
                     break
@@ -68,9 +68,9 @@ class FunctionalCollection(object):
 
     def getPlayerInfo(self, factories):
         result = None
-        for entityType, item in self.__items.iteritems():
+        for ctrlType, item in self.__items.iteritems():
             if item and item.hasEntity():
-                factory = factories.get(entityType)
+                factory = factories.get(ctrlType)
                 if factory:
                     result = factory.createPlayerInfo(item)
                     break
@@ -93,8 +93,8 @@ class FunctionalCollection(object):
             order = FUNCTIONAL_ORDER.AFTER_GENERAL_CHECKING
         else:
             order = FUNCTIONAL_ORDER.BEFORE_GENERAL_CHECKING
-        for entityType in order:
-            item = self.getItem(entityType)
+        for ctrlType in order:
+            item = self.getItem(ctrlType)
             if not item:
                 continue
             canDo, restriction = item.canPlayerDoAction()
@@ -124,9 +124,18 @@ class FunctionalCollection(object):
 
         return result
 
+    def doSelectAction(self, action):
+        result = False
+        for item in self.__items.itervalues():
+            if item and item.hasEntity():
+                result = item.doSelectAction(action)
+                break
+
+        return result
+
     def getIterator(self):
-        for entityType in FUNCTIONAL_ORDER.ENTRY:
-            item = self.getItem(entityType)
+        for ctrlType in FUNCTIONAL_ORDER.ENTRY:
+            item = self.getItem(ctrlType)
             if item:
                 yield item
 

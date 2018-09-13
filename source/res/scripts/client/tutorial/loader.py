@@ -19,7 +19,9 @@ class RunCtx(object):
      'isInPrebattle',
      'isInTutorialQueue',
      'settings',
-     'bonusCompleted']
+     'bonusCompleted',
+     'isInHistoricalQueue',
+     'isInEventBattlesQueue']
 
     def __init__(self, **kwargs):
         super(RunCtx, self).__init__()
@@ -28,6 +30,8 @@ class RunCtx(object):
         self.isInRandomQueue = kwargs.get('isInRandomQueue', False)
         self.isInPrebattle = kwargs.get('prebattleID', 0L) > 0L
         self.isInTutorialQueue = GlobalStorage(GLOBAL_FLAG.IN_QUEUE, kwargs.get('isInTutorialQueue', False))
+        self.isInHistoricalQueue = kwargs.get('isInHistoricalQueue', False)
+        self.isInEventBattlesQueue = kwargs.get('isInEventBattles', False)
         self.settings = kwargs.get('settings', TUTORIAL_SETTINGS.DEFAULT_SETTINGS)
         self.bonusCompleted = kwargs.get('bonusCompleted', 0)
         return
@@ -107,6 +111,13 @@ class _TutorialLoader(object):
     def restart(self, afterBattle = False):
         self.__afterBattle = afterBattle
         self.tryingToRun(RunCtx(restart=True))
+
+    def reload(self, afterBattle = False):
+        if self.__tutorial:
+            result = self.__tutorial.reload(afterBattle=afterBattle)
+        else:
+            result = False
+        return result
 
     def _doRun(self, ctx):
         if ctx.isInPrebattle:

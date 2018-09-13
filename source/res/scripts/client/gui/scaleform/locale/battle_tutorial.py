@@ -51,8 +51,6 @@ class BATTLE_TUTORIAL(object):
     WINDOWS_RESULT_LABELS_BATTLE_HINTS_THIRD = '#battle_tutorial:windows/result/labels/battle-hints/third'
     WINDOWS_RESULT_LABELS_RESTART_HINT = '#battle_tutorial:windows/result/labels/restart-hint'
     WINDOWS_RESULT_BUTTONS_RESTART = '#battle_tutorial:windows/result/buttons/restart'
-    CHAPTERS_OFFBATTLE_TITLE = '#battle_tutorial:chapters/offbattle/title'
-    CHAPTERS_OFFBATTLE_DESCRIPTION = '#battle_tutorial:chapters/offbattle/description'
     CHAPTERS_GREETING_TITLE = '#battle_tutorial:chapters/greeting/title'
     CHAPTERS_GREETING_DESCRIPTION = '#battle_tutorial:chapters/greeting/description'
     CHAPTERS_VEHICLE_CONTROL_TITLE = '#battle_tutorial:chapters/vehicle-control/title'

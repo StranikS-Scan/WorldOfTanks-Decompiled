@@ -22,7 +22,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
             player = BigWorld.player()
             selectedAlias = VIEW_ALIAS.PROFILE_SUMMARY_PAGE
             if self.__ctx is not None:
-                selectedAlias = VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE
+                selectedAlias = self.__ctx.get('page', VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE)
             super(ProfilePage, self).registerFlashComponent(component, alias, player.name, None, player.databaseID, {'sectionsData': [self.__getSectionDataObject(PROFILE.SECTION_SUMMARY_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY, VIEW_ALIAS.PROFILE_SUMMARY_PAGE),
                               self.__getSectionDataObject(PROFILE.SECTION_AWARDS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_AWARDS, VIEW_ALIAS.PROFILE_AWARDS),
                               self.__getSectionDataObject(PROFILE.SECTION_STATISTICS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS, VIEW_ALIAS.PROFILE_STATISTICS),

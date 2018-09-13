@@ -1,13 +1,13 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/SimpleChannelWindow.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.entities.View import View
+from gui.shared.events import FocusEvent
 from messenger.gui.Scaleform.meta.BaseChannelWindowMeta import BaseChannelWindowMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
-from messenger.inject import InjectMessengerEntry, channelsCtrlProperty
+from messenger.inject import channelsCtrlProperty
 
 class SimpleChannelWindow(View, AbstractWindowView, BaseChannelWindowMeta):
-    __metaclass__ = InjectMessengerEntry
 
     def __init__(self, clientID):
         super(SimpleChannelWindow, self).__init__()
@@ -16,6 +16,9 @@ class SimpleChannelWindow(View, AbstractWindowView, BaseChannelWindowMeta):
         if self._controller is None:
             raise ValueError, 'Controller for lobby channel by clientID={0:1} is not found'.format(self._clientID)
         return
+
+    def onFocusIn(self, alias):
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self._clientID}))
 
     @channelsCtrlProperty
     def channelsCtrl(self):

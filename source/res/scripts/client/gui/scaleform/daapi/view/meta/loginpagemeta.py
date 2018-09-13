@@ -30,6 +30,9 @@ class LoginPageMeta(DAAPIModule):
     def onEscape(self):
         self._printOverrideError('onEscape')
 
+    def isCSISUpdateOnRequest(self):
+        self._printOverrideError('isCSISUpdateOnRequest')
+
     def isPwdInvalid(self, password):
         self._printOverrideError('isPwdInvalid')
 
@@ -38,6 +41,12 @@ class LoginPageMeta(DAAPIModule):
 
     def showLegal(self):
         self._printOverrideError('showLegal')
+
+    def startListenCsisUpdate(self, startListenCsis):
+        self._printOverrideError('startListenCsisUpdate')
+
+    def saveLastSelectedServer(self, server):
+        self._printOverrideError('saveLastSelectedServer')
 
     def as_setDefaultValuesS(self, loginName, pwd, rememberPwd, rememberPwdVisible, isIgrCredentialsReset, showRecoveryLink):
         if self._isDAAPIInited():
@@ -82,3 +91,7 @@ class LoginPageMeta(DAAPIModule):
     def as_enableS(self, enabled):
         if self._isDAAPIInited():
             return self.flashObject.as_enable(enabled)
+
+    def as_switchToAutoAndSubmitS(self, key):
+        if self._isDAAPIInited():
+            return self.flashObject.as_switchToAutoAndSubmit(key)

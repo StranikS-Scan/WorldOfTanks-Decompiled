@@ -1,13 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/managers/GuiItemsManager.py
 import weakref
 import cPickle as pickle
-from debug_utils import LOG_DEBUG, LOG_WARNING
+from debug_utils import LOG_WARNING
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
-from gui.shared.gui_items.dossier.achievements import RareAchievement
+from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.Scaleform.framework.entities.abstract.GuiItemsManagerMeta import GuiItemsManagerMeta
 from nations import NAMES
 
@@ -172,7 +172,7 @@ class _Dossier(ItemWrapper):
         return None
 
     def _packAchievement(self, achieve, dossierCompDescr):
-        isRare = isinstance(achieve, RareAchievement)
+        isRare = isRareAchievement(achieve)
         rareID = None
         name = achieve.name
         if isRare:

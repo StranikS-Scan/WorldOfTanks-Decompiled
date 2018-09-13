@@ -376,3 +376,22 @@ class TimerConfirmDialogMeta(I18nConfirmDialogMeta):
     def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None, timer = 0):
         super(TimerConfirmDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self._timer = timer
+
+
+class I18PunishmentDialogMeta(I18nInfoDialogMeta):
+
+    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, scope = ScopeTemplates.VIEW_SCOPE):
+        super(I18PunishmentDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, scope)
+        self.__penaltyType = messageCtx.get('penaltyType')
+
+    def getMessage(self):
+        msg = self._makeString('%s/message/%s' % (self._key, self.__penaltyType), self._messageCtx)
+        if self.__penaltyType == 'penalty':
+            msg = msg + makeHtmlString('html_templates:lobby/battle_results', 'penalty_extra_msg')
+        return msg
+
+    def getMsgTitle(self):
+        return self._makeString('%s/msgTitle/%s' % (self._key, self.__penaltyType), {})
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_PUNISHMENT_DIALOG

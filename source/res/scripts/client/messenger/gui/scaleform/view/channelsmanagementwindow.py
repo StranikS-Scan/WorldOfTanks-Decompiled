@@ -14,6 +14,7 @@ from messenger.m_constants import PROTO_TYPE, CHANNEL_NAME_MIN_LENGTH
 from messenger.m_constants import CHANNEL_NAME_MAX_LENGTH
 from messenger.m_constants import CHANNEL_PWD_MAX_LENGTH, CHANNEL_PWD_MIN_LENGTH
 from messenger.proto import proto_getter
+from messenger.proto.bw.ChannelsManager import CREATE_CHANNEL_RESULT
 from messenger.proto.interfaces import ISearchHandler
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHAT_MANAGEMENT)
@@ -79,7 +80,9 @@ class ChannelsManagementWindow(View, AbstractWindowView, ChannelsManagementWindo
                     return
             else:
                 password = None
-            self.proto.channels.createChannel(name, password)
+            result = self.proto.channels.createChannel(name, password)
+            if result == CREATE_CHANNEL_RESULT.activeChannelLimitReached:
+                SystemMessages.pushI18nMessage(MESSENGER.DIALOGS_CREATECHANNEL_ERRORS_ACTIVECHANNELLIMITREACHED_MESSAGE, type=SystemMessages.SM_TYPE.Error)
             self.destroy()
             return
 

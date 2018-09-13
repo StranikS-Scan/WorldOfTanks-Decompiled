@@ -29,7 +29,7 @@ class _ClientFortState(object):
     def update(self, provider):
         raise NotImplementedError
 
-    def getUIMode(self, provider):
+    def getUIMode(self, provider, transportingProgress = None):
         raise NotImplementedError
 
 
@@ -111,7 +111,7 @@ class NoFortState(_ClientFortState):
         if not fort.isEmpty():
             if isStartingScriptDone():
                 state = HasFortState()
-            elif cache.isClanLeader:
+            elif provider.getController().getPermissions().canCreate():
                 state = WizardState()
         if state:
             result = state.update(provider)
@@ -137,15 +137,21 @@ class WizardState(_ClientFortState):
                 provider.changeState(state)
         return result
 
-    def getUIMode(self, provider):
+    def getUIMode(self, provider, transportingProgress = None):
         fort = getClientFort()
         if fort.state & FORT_STATE.FIRST_DIR_OPEN == 0:
             return FORTIFICATION_ALIASES.MODE_DIRECTIONS_TUTORIAL
-        if fort.state & FORT_STATE.FIRST_BUILD_START == 0:
+        elif fort.state & FORT_STATE.FIRST_BUILD_START == 0:
             return FORTIFICATION_ALIASES.MODE_COMMON_TUTORIAL
-        if fort.state & FORT_STATE.FIRST_BUILD_DONE == 0:
-            return FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL
-        return FORTIFICATION_ALIASES.MODE_COMMON
+        else:
+            if transportingProgress is not None:
+                if fort.isTransportationAvailable():
+                    return transportingProgress
+                else:
+                    return FORTIFICATION_ALIASES.MODE_TRANSPORTING_NOT_AVAILABLE
+            elif fort.state & FORT_STATE.FIRST_BUILD_DONE == 0:
+                return FORTIFICATION_ALIASES.MODE_TRANSPORTING_TUTORIAL
+            return FORTIFICATION_ALIASES.MODE_COMMON
 
 
 class HasFortState(_ClientFortState):
@@ -156,12 +162,17 @@ class HasFortState(_ClientFortState):
     def update(self, provider):
         return False
 
-    def getUIMode(self, provider):
-        cache = provider.getClanCache()
+    def getUIMode(self, provider, transportingProgress = None):
         fort = getClientFort()
-        if not fort.getOpenedDirections() and cache.isClanLeader:
+        if not fort.getOpenedDirections() and provider.getController().getPermissions().canOpenDirection():
             return FORTIFICATION_ALIASES.MODE_DIRECTIONS
-        return FORTIFICATION_ALIASES.MODE_COMMON
+        else:
+            if transportingProgress is not None:
+                if fort.isTransportationAvailable():
+                    return transportingProgress
+                else:
+                    return FORTIFICATION_ALIASES.MODE_TRANSPORTING_NOT_AVAILABLE
+            return FORTIFICATION_ALIASES.MODE_COMMON
 
 
 def create(provider):

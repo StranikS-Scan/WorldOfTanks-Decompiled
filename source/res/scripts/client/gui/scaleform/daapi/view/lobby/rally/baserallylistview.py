@@ -2,7 +2,7 @@
 from abc import abstractmethod
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.BaseRallyListViewMeta import BaseRallyListViewMeta
-__author__ = 'd_dichkovsky'
+from messenger.proto.events import g_messengerEvents
 
 class BaseRallyListView(BaseRallyListViewMeta):
 
@@ -23,6 +23,7 @@ class BaseRallyListView(BaseRallyListViewMeta):
 
     def _populate(self):
         super(BaseRallyListView, self)._populate()
+        g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
         self._searchDP = self.getPyDataProvider()
         self._searchDP.setFlashObject(self.as_getSearchDPS())
 
@@ -30,6 +31,7 @@ class BaseRallyListView(BaseRallyListViewMeta):
         if self._searchDP is not None:
             self._searchDP.fini()
             self._searchDP = None
+        g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
         super(BaseRallyListView, self)._dispose()
         return
 
@@ -40,3 +42,6 @@ class BaseRallyListView(BaseRallyListViewMeta):
     def _updateVehiclesLabel(self, minVal, maxVal):
         self.as_setVehiclesTitleS(makeHtmlString('html_templates:lobby/rally/', 'vehiclesLabel', {'minValue': minVal,
          'maxValue': maxVal}))
+
+    def _onUserRosterChanged(self, _, user):
+        pass

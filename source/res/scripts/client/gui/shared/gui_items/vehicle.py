@@ -90,6 +90,7 @@ class Vehicle(FittingItem, HasStrCD):
         self.xp = 0
         self.dailyXPFactor = -1
         self.isElite = False
+        self.isFullyElite = False
         self.clanLock = 0
         self.isUnique = self.isHidden
         invData = dict()
@@ -101,6 +102,7 @@ class Vehicle(FittingItem, HasStrCD):
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles:
                 self.dailyXPFactor = proxy.shop.dailyXPFactor
             self.isElite = len(vehDescr.type.unlocksDescrs) == 0 or self.intCD in proxy.stats.eliteVehicles
+            self.isFullyElite = self.isElite and len([ data[1] not in proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs ]) == 0
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
             self.clanLock = clanDamageLock or clanNewbieLock
@@ -262,13 +264,13 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def hasTurrets(self):
-        vType = self.descriptor.type
-        return len(vType.hull.get('fakeTurrets', {}).get('lobby', ())) != len(vType.turrets)
+        vDescr = self.descriptor
+        return len(vDescr.hull['fakeTurrets']['lobby']) != len(vDescr.turrets)
 
     @property
     def hasBattleTurrets(self):
-        vType = self.descriptor.type
-        return len(vType.hull.get('fakeTurrets', {}).get('battle', ())) != len(vType.turrets)
+        vDescr = self.descriptor
+        return len(vDescr.hull['fakeTurrets']['battle']) != len(vDescr.turrets)
 
     @property
     def ammoMaxSize(self):

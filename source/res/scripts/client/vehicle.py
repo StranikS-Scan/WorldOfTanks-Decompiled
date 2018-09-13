@@ -32,8 +32,8 @@ from material_kinds import EFFECT_MATERIAL_INDEXES_BY_IDS, EFFECT_MATERIAL_INDEX
 class Vehicle(BigWorld.Entity):
     hornMode = property(lambda self: self.__hornMode)
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
-    isTurretDetached = property(lambda self: self.health == constants.VEHICLE_HEALTH.TURRET_DETACHED and self.__turretDetachmentConfirmed)
-    isTurretMarkedForDetachment = property(lambda self: self.health == constants.VEHICLE_HEALTH.TURRET_DETACHED)
+    isTurretDetached = property(lambda self: self.health == constants.SPECIAL_VEHICLE_HEALTH.TURRET_DETACHED and self.__turretDetachmentConfirmed)
+    isTurretMarkedForDetachment = property(lambda self: self.health == constants.SPECIAL_VEHICLE_HEALTH.TURRET_DETACHED)
     isTurretDetachmentConfirmationNeeded = property(lambda self: not self.__turretDetachmentConfirmed)
 
     def __init__(self):
@@ -368,6 +368,7 @@ class Vehicle(BigWorld.Entity):
         if not not self.isStarted:
             raise AssertionError
             avatar = BigWorld.player()
+            self.appearance.preStart(self.typeDescriptor)
             self.appearance.start(self, self.__prereqs)
             self.__prereqs = None
             self.appearance.changeEngineMode(self.engineMode)

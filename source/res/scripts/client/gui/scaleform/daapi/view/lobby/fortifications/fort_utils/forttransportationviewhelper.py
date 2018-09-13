@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_utils/FortTransportationViewHelper.py
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from helpers import i18n
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -7,8 +8,8 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class FortTransportationViewHelper(FortViewHelper):
 
-    def _makeBuildingData(self, buildingDescr, direction, position, onlyBaseData = True):
-        data = super(FortTransportationViewHelper, self)._makeBuildingData(buildingDescr, direction, position, onlyBaseData)
+    def _makeBuildingData(self, buildingDescr, direction, position, onlyBaseData = True, animation = FORTIFICATION_ALIASES.WITHOUT_ANIMATION):
+        data = super(FortTransportationViewHelper, self)._makeBuildingData(buildingDescr, direction, position, onlyBaseData, animation)
         data.update({'transportTooltipData': self.__getTransportingBuildTooltipData(buildingDescr)})
         return data
 

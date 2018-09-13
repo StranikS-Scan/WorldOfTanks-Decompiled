@@ -3,7 +3,10 @@ import operator
 import time
 from abc import ABCMeta
 from collections import namedtuple, OrderedDict
+from debug_utils import LOG_DEBUG
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.utils import CONST_CONTAINER
+from gui.shared.utils.functions import getAbsoluteUrl
 import nations
 import constants
 import ResMgr
@@ -19,60 +22,6 @@ from gui.shared.server_events.modifiers import getModifierObj, compareModifiers
 from gui.shared.server_events.parsers import AccountRequirements, VehicleRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.Scaleform.locale.QUESTS import QUESTS
-
-class _ActivityIntervalsIterator(object):
-    WEEK_START = 1
-    WEEK_END = 7
-    ONE_DAY = 86400
-    WHOLE_DAY_INTERVAL = (1, ONE_DAY)
-
-    def __init__(self, currentTime, currentDay, weekDays = None, timeIntervals = None):
-        self._currentTime = currentTime
-        self._currentDay = currentDay
-        self._timeIntervals = timeIntervals or [self.WHOLE_DAY_INTERVAL]
-        self._weekDays = weekDays or set(range(self.WEEK_START, self.WEEK_END + 1))
-        self._timeLeft = 0
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        interval = None
-        if self._currentDay in self._weekDays:
-            interval = self.__trySearchValidTimeInterval(self._currentTime)
-        if interval is not None:
-            self._timeLeft += interval[0] - self._currentTime
-            self._currentTime = interval[1]
-        else:
-            self._currentDay += 1
-            self._timeLeft += self.ONE_DAY - self._currentTime
-            while True:
-                if self._currentDay > self.WEEK_END:
-                    self._currentDay = self.WEEK_START
-                if self._currentDay in self._weekDays:
-                    break
-                self._currentDay += 1
-                self._timeLeft += self.ONE_DAY
-
-            interval = self.__trySearchValidTimeInterval(0)
-            if interval is not None:
-                self._timeLeft += interval[0]
-                self._currentTime = interval[1]
-            else:
-                self._currentTime = 0
-                interval = self.WHOLE_DAY_INTERVAL
-        timeLeft = self._timeLeft
-        self._timeLeft += interval[1] - interval[0]
-        return (timeLeft, interval)
-
-    def __trySearchValidTimeInterval(self, curTime):
-        for low, high in self._timeIntervals:
-            if curTime < high:
-                return (low, high)
-
-        return None
-
-
 EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'vehicles',
  'enabled',
@@ -158,11 +107,11 @@ class ServerEventAbstract(object):
     def getNearestActivityTimeLeft(self):
         timeLeft = None
         if self.getStartTimeLeft() > 0:
-            timeLeft = (self.getStartTimeLeft(), (0, _ActivityIntervalsIterator.ONE_DAY))
+            timeLeft = (self.getStartTimeLeft(), (0, time_utils.ONE_DAY))
         else:
             weekDays, timeIntervals = self.getWeekDays(), self.getActiveTimeIntervals()
             if len(weekDays) or len(timeIntervals):
-                timeLeft = next(_ActivityIntervalsIterator(time_utils.getServerRegionalTimeCurrentDay(), time_utils.getServerRegionalWeekDay(), weekDays, timeIntervals))
+                timeLeft = next(time_utils.ActivityIntervalsIterator(time_utils.getServerRegionalTimeCurrentDay(), time_utils.getServerRegionalWeekDay(), weekDays, timeIntervals))
         return timeLeft
 
     def isAvailable(self):
@@ -209,6 +158,8 @@ class Quest(ServerEventAbstract):
         self.postBattleCond = PostBattleConditions(conds['postBattle'], self.preBattleCond)
 
     def getUserType(self):
+        if self.getType() == constants.EVENT_TYPE.FORT_QUEST:
+            return i18n.makeString(QUESTS.ITEM_TYPE_SPECIALMISSION)
         return i18n.makeString(QUESTS.ITEM_TYPE_QUEST)
 
     def getProgressExpiryTime(self):
@@ -462,12 +413,12 @@ class HistoricalBattle(ServerEventAbstract):
             if g:
                 params = {'value': BigWorld.wg_getGoldFormat(g),
                  'color': goldColor if not checkMoney or userGold >= g else errorColor,
-                 'icon': 'img://gui/maps/icons/library/GoldIcon-2.png'}
+                 'icon': getAbsoluteUrl(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2)}
                 priceLabel += makeHtmlString('html_templates:lobby/historicalBattles/ammoStatus', 'priceLabel', params)
             if c:
                 params = {'value': BigWorld.wg_getIntegralFormat(c),
                  'color': creditsColor if not checkMoney or userCredits >= c else errorColor,
-                 'icon': 'img://gui/maps/icons/library/CreditsIcon-2.png'}
+                 'icon': getAbsoluteUrl(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2)}
                 priceLabel += makeHtmlString('html_templates:lobby/historicalBattles/ammoStatus', 'priceLabel', params)
             result.append(priceLabel)
 

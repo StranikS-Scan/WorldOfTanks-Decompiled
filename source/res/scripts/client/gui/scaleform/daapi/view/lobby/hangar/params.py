@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Params.py
 from constants import QUEUE_TYPE
+from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.ParamsMeta import ParamsMeta
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared import events, g_eventsCache
@@ -35,11 +37,14 @@ class Params(ParamsMeta, GlobalListener):
             params = ItemsParameters.g_instance.getParameters(vDescr)
             if params is not None:
                 for p in params:
-                    data.append({'text': p[0],
+                    attr = p[0]
+                    textHtml = makeHtmlString('html_templates:lobby/tank_params', attr)
+                    data.append({'text': textHtml,
                      'param': p[1],
                      'selected': False})
 
-        self.as_setValuesS(data)
+        outcome = {'params': data}
+        self.as_setValuesS(outcome)
         return
 
     def __onHighlightParams(self, event):

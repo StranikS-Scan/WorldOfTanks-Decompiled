@@ -150,7 +150,7 @@ class _SettingsCore(object):
          (OTHER.VIBRO_COLLISIONS, options.VibroSetting('collisions')),
          (OTHER.VIBRO_DAMAGE, options.VibroSetting('damage')),
          (OTHER.VIBRO_GUI, options.VibroSetting('gui'))))
-        self.options.init()
+        self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         LOG_DEBUG('SettingsCore is initialized')
 
@@ -176,13 +176,40 @@ class _SettingsCore(object):
     def serverSettings(self):
         return self.__serverSettings
 
-    def getSetting(self, name):
-        return self.options.getSetting(name).get()
+    def packSettings(self, names):
+        return self.__options.pack(names)
 
-    def applySetting(self, name, value):
+    def getSetting(self, name):
+        return self.__options.getSetting(name).get()
+
+    def getApplyMethod(self, diff):
+        return self.__options.getApplyMethod(diff)
+
+    def applySetting(self, key, value):
+        if self.isSettingChanged(key, value):
+            result = self.__options.getSetting(key).apply(value)
+            from account_helpers.settings_core import settings_constants
+            if key in settings_constants.GRAPHICS.ALL():
+                LOG_DEBUG('Apply graphic settings: ', {key: value})
+                self.onSettingsChanged({key: value})
+            return result
+        else:
+            return None
+
+    def previewSetting(self, name, value):
         if self.isSettingChanged(name, value):
-            return self.options.getSetting(name).apply(value)
-        return False
+            self.__options.getSetting(name).preview(value)
+
+    def applySettings(self, diff):
+        self.__options.apply(diff)
+        from account_helpers.settings_core import settings_constants
+        graphicsSettings = {k:v for k, v in diff.iteritems() if k in settings_constants.GRAPHICS.ALL()}
+        if graphicsSettings:
+            LOG_DEBUG('Apply graphic settings: ', graphicsSettings)
+            self.onSettingsChanged(graphicsSettings)
+
+    def revertSettings(self):
+        self.__options.revert()
 
     def isSettingChanged(self, name, value):
         return self.getSetting(name) != value

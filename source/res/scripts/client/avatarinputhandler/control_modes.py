@@ -14,7 +14,7 @@ import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 from post_processing import g_postProcessing
 from constants import AIMING_MODE
-from gui import DEPTH_OF_GunMarker
+from gui import DEPTH_OF_GunMarker, GUI_SETTINGS
 from gui.Scaleform.Flash import Flash
 from debug_utils import *
 from ProjectileMover import collideDynamicAndStatic, getCollidableEntities
@@ -127,7 +127,7 @@ class VideoCameraControlMode(IControlMode):
         self.__showGunMarker = False
         self.__videoCamera = VideoCamera.VideoCamera(cameraDataSection)
         self.__curVehicleID = None
-        self.__gunMarker = _SuperGunMarker()
+        self.__gunMarker = _createGunMarker()
         self.onRecreateDevice = self.__gunMarker.onRecreateDevice
         self.prerequisites = self.__gunMarker.prerequisites
         self.setReloading = self.__gunMarker.setReloading
@@ -368,7 +368,7 @@ class ArcadeControlMode(IControlMode):
 
     def __init__(self, dataSection, avatarInputHandler):
         self.__aih = weakref.proxy(avatarInputHandler)
-        self.__gunMarker = _SuperGunMarker(mode='arcade')
+        self.__gunMarker = _createGunMarker(mode='arcade')
         self.__aim = aims.createAim(dataSection.readString('aim'))
         self.__cam = ArcadeCamera.ArcadeCamera(dataSection['camera'], self.__aim)
         self.__mouseVehicleRotator = _MouseVehicleRotator()
@@ -585,7 +585,7 @@ class StrategicControlMode(IControlMode):
     def __init__(self, dataSection, avatarInputHandler):
         self.__aih = weakref.proxy(avatarInputHandler)
         self.__trajectoryDrawer = BigWorld.wg_trajectory_drawer()
-        self.__gunMarker = _SuperGunMarker(mode='strategic', isStrategic=True)
+        self.__gunMarker = _createGunMarker(mode='strategic', isStrategic=True)
         self.__aim = aims.createAim(dataSection.readString('aim'))
         self.__cam = StrategicCamera.StrategicCamera(dataSection['camera'], self.__aim)
         self.__canShoot = False
@@ -633,6 +633,7 @@ class StrategicControlMode(IControlMode):
         BigWorld.player().autoAim(None)
         self.__updateTrajectoryDrawer()
         g_postProcessing.enable('strategic')
+        BigWorld.setFloraEnabled(False)
         return
 
     def disable(self):
@@ -645,6 +646,7 @@ class StrategicControlMode(IControlMode):
             BigWorld.cancelCallback(self.__trajectoryDrawerClbk)
             self.__trajectoryDrawerClbk = None
         g_postProcessing.disable()
+        BigWorld.setFloraEnabled(True)
         return
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
@@ -807,7 +809,7 @@ class SniperControlMode(IControlMode):
 
     def __init__(self, dataSection, avatarInputHandler):
         self.__aih = weakref.proxy(avatarInputHandler)
-        self.__gunMarker = _SuperGunMarker('sniper')
+        self.__gunMarker = _createGunMarker('sniper')
         self.__aim = aims.createAim(dataSection.readString('aim'))
         self.__binoculars = BigWorld.wg_binoculars()
         self.__cam = SniperCamera.SniperCamera(dataSection['camera'], self.__aim, self.__binoculars)
@@ -1655,6 +1657,13 @@ class _SuperGunMarker():
 
     def getPosition2(self):
         return self.__gm2.getPosition()
+
+
+def _createGunMarker(mode = 'arcade', isStrategic = False):
+    if not GUI_SETTINGS.isGuiEnabled():
+        from gui.development.no_gui.battle import GunMarker
+        return GunMarker()
+    return _SuperGunMarker(mode, isStrategic)
 
 
 class _SPGFlashGunMarker(Flash):

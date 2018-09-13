@@ -1,10 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortFixedPlayersWindow.py
 import BigWorld
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from adisp import process
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.fortifications import FortifiedWindowScopes
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.framework.entities.View import View
@@ -15,9 +17,9 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.fortifications.context import AttachCtx
 from gui.shared.utils import findFirst
+from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
 
 class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMeta, FortViewHelper, AppRef):
@@ -69,6 +71,7 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
         if isOk:
             result = yield self.fortProvider.sendRequest(AttachCtx(self.__buildingId, waitingID='fort/building/attach'))
             if result:
+                g_fortSoundController.playAttachedToBuilding()
                 building = self.fortCtrl.getFort().getBuilding(self.__buildingId)
                 SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_FIXEDPLAYERTOBUILDING, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
 
@@ -99,9 +102,7 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
         result['generalTooltipData'] = generalToolTip
         result['btnTooltipData'] = btnTooltipData
         result['countLabel'] = self.__playersLabel()
-        result['isAssigned'] = self.__isAssigned
         result['rosters'] = self.__makeRosters()
-        result['currentPlayerName'] = self.__currentPlayerName
         self.as_setDataS(result)
 
     def __playersLabel(self):
@@ -119,7 +120,7 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
             player = findFirst(lambda m: m.getID() == dbID, g_clanCache.clanMembers)
             if player is not None:
                 intTotalMining, intWeekMining = self.fortCtrl.getFort().getPlayerContributions(dbID)
-                role = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(self.UI_ROLES_BIND[player.getClanRole()]))
+                role = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(getClanRoleString(player.getClanRole())))
                 vo = vo_converters.makeSimpleClanListRenderVO(player, intTotalMining, intWeekMining, role)
                 result.append(vo)
 
@@ -131,6 +132,6 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
     def onClanMembersListChanged(self):
         self.__makeData()
 
-    def onBuildingRemoved(self, buildingTypeID):
-        if self.__buildingId == buildingTypeID:
+    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+        if self.__buildingId == buildingTypeID and reason == BUILDING_UPDATE_REASON.DELETED:
             self.destroy()

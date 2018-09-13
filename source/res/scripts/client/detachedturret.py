@@ -11,6 +11,7 @@ from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPointNames
 from helpers.bound_effects import ModelBoundEffects
 from items import vehicles
+from constants import SERVER_TICK_LENGTH
 _MIN_COLLISION_SPEED = 3.5
 
 class DetachedTurret(BigWorld.Entity):
@@ -19,7 +20,6 @@ class DetachedTurret(BigWorld.Entity):
     def __init__(self):
         self.__vehDescr = vehicles.VehicleDescr(compactDescr=self.vehicleCompDescr)
         self.filter = BigWorld.WGTurretFilter()
-        self.filter.enableSphericalInterpolation = True
         self.__detachConfirmationTimer = SynchronousDetachment(self)
         self.__detachConfirmationTimer.onInit()
         self.__detachmentEffects = None
@@ -28,6 +28,7 @@ class DetachedTurret(BigWorld.Entity):
         self.__reactors = []
         self.targetFullBounds = True
         self.targetCaps = [1]
+        self.__isBeingPulledCallback = None
         return
 
     def reload(self):
@@ -59,17 +60,22 @@ class DetachedTurret(BigWorld.Entity):
         for desc in self.__componentsDesc:
             desc['hitTester'].loadBspModel()
 
+        from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+        self.__isBeingPulledCallback = CallbackDelayer()
+        self.__isBeingPulledCallback.delayCallback(self.__checkIsBeingPulled(), self.__checkIsBeingPulled)
         DetachedTurret.allTurrets.append(self)
         return
 
     def onLeaveWorld(self):
+        DetachedTurret.allTurrets.remove(self)
         self.__detachConfirmationTimer.cancel()
         self.__detachConfirmationTimer = None
-        DetachedTurret.allTurrets.remove(self)
         for reactor in self.__reactors:
             if reactor is not None:
                 reactor.destroy()
 
+        self.__isBeingPulledCallback.destroy()
+        self.__isBeingPulledCallback = None
         return
 
     def onStaticCollision(self, energy, point, normal):
@@ -130,6 +136,18 @@ class DetachedTurret(BigWorld.Entity):
         self.model.visible = isVisible
         self.model.visibleAttachments = isVisible
 
+    def __checkIsBeingPulled(self):
+        if self.__detachmentEffects is not None:
+            if self.isCollidingWithWorld and not self.isUnderWater and self.velocity.lengthSquared > 0.1:
+                extent = Math.Matrix(self.model.bounds).applyVector(Math.Vector3(0.5, 0.5, 0.5)).length
+                surfaceMaterial = calcSurfaceMaterialNearPoint(self.position, Math.Vector3(0, extent, 0), self.spaceID)
+                self.__detachmentEffects.notifyAboutBeingPulled(True, surfaceMaterial.effectIdx)
+                if surfaceMaterial.matKind == 0:
+                    LOG_ERROR('calcSurfaceMaterialNearPoint failed to find the collision point')
+            else:
+                self.__detachmentEffects.notifyAboutBeingPulled(False, None)
+        return SERVER_TICK_LENGTH
+
 
 class _TurretDetachmentEffects(object):
 
@@ -146,8 +164,9 @@ class _TurretDetachmentEffects(object):
 
     def __init__(self, turretModel, detachmentEffectsDesc, onGround):
         self.__turretModel = turretModel
-        self.__effectListPlayer = None
         self.__detachmentEffectsDesc = detachmentEffectsDesc
+        self.__stateEffectListPlayer = None
+        self.__pullEffectListPlayer = None
         startKeyPoint = SpecialKeyPointNames.START
         if onGround:
             self.__state = self.State.ON_GROUND
@@ -160,10 +179,21 @@ class _TurretDetachmentEffects(object):
     def destroy(self):
         self.stopEffects()
 
-    def stopEffects(self):
-        if self.__effectListPlayer is not None:
-            self.__effectListPlayer.stop()
+    def __stopStateEffects(self):
+        if self.__stateEffectListPlayer is not None:
+            self.__stateEffectListPlayer.stop()
+            self.__stateEffectListPlayer = None
         return
+
+    def __stopPullEffects(self):
+        if self.__pullEffectListPlayer is not None:
+            self.__pullEffectListPlayer.stop()
+            self.__pullEffectListPlayer = None
+        return
+
+    def stopEffects(self):
+        self.__stopStateEffects()
+        self.__stopPullEffects()
 
     def notifyAboutCollision(self, energy, collisionPoint, effectMaterialIdx, groundEffect, underWater):
         if groundEffect:
@@ -177,12 +207,27 @@ class _TurretDetachmentEffects(object):
                 self.__playStateEffect()
         return
 
+    def notifyAboutBeingPulled(self, isPulled, effectMaterialIdx):
+        if isPulled:
+            if self.__pullEffectListPlayer is None or self.__pullEffectListPlayer.effectMaterialIdx != effectMaterialIdx:
+                self.__playPullEffect(effectMaterialIdx)
+        else:
+            self.__stopPullEffects()
+        return
+
+    def __playPullEffect(self, effectMaterialIdx):
+        self.__stopPullEffects()
+        stages, effectsList, _ = self.__detachmentEffectsDesc['pull'][effectMaterialIdx]
+        self.__pullEffectListPlayer = EffectsListPlayer(effectsList, stages)
+        self.__pullEffectListPlayer.play(self.__turretModel, SpecialKeyPointNames.START)
+        self.__pullEffectListPlayer.effectMaterialIdx = effectMaterialIdx
+
     def __playStateEffect(self, startKeyPoint = SpecialKeyPointNames.START):
-        self.stopEffects()
+        self.__stopStateEffects()
         effectName = _TurretDetachmentEffects.__EFFECT_NAMES[self.__state]
         stages, effectsList, _ = self.__detachmentEffectsDesc[effectName]
-        self.__effectListPlayer = EffectsListPlayer(effectsList, stages)
-        self.__effectListPlayer.play(self.__turretModel, startKeyPoint)
+        self.__stateEffectListPlayer = EffectsListPlayer(effectsList, stages)
+        self.__stateEffectListPlayer.play(self.__turretModel, startKeyPoint)
 
     def __normalizeEnergy(self, energy):
         minBound, maxBound = _TurretDetachmentEffects._MIN_COLLISION_ENERGY, _TurretDetachmentEffects._MAX_COLLISION_ENERGY
@@ -207,7 +252,6 @@ class VehicleEnterTimer(object):
 
     def __init__(self, vehicleID):
         self.__vehicleID = vehicleID
-        from constants import SERVER_TICK_LENGTH
         self.__time = None
         self.__maxTime = 5 * SERVER_TICK_LENGTH
         self.__timeOut = SERVER_TICK_LENGTH

@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PersonalCase.py
-import cPickle as pickle
 import constants
 from adisp import async
 from CurrentVehicle import g_currentVehicle
@@ -138,9 +137,19 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
             return
 
     @decorators.process('updating')
-    def changeTankmanPassport(self, invengoryID, firstNameID, lastNameID, iconID):
+    def changeTankmanPassport(self, invengoryID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
+
+        def checkFlashInt(value):
+            if value == -1:
+                return None
+            else:
+                return value
+
+        firstNameID = checkFlashInt(firstNameID)
+        lastNameID = checkFlashInt(lastNameID)
+        iconID = checkFlashInt(iconID)
         tankman = g_itemsCache.items.getTankman(int(invengoryID))
-        processor = TankmanChangePassport(tankman, firstNameID, lastNameID, iconID)
+        processor = TankmanChangePassport(tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup)
         result = yield processor.request()
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
@@ -340,10 +349,12 @@ class PersonalCaseDataProvider(object):
     @staticmethod
     def __getDocNormalGroupValues(config, groupName):
         result = []
-        for group in config['normalGroups']:
-            for idx in group['%sList' % groupName]:
-                result.append({'id': idx,
-                 'value': config[groupName][idx]})
+        for gIdx, group in enumerate(config['normalGroups']):
+            if not group.get('notInShop'):
+                for idx in group['%sList' % groupName]:
+                    result.append({'id': idx,
+                     'group': gIdx,
+                     'value': config[groupName][idx]})
 
         if groupName != 'icons':
             result = sorted(result, key=lambda sortField: sortField['value'], cmp=lambda a, b: strcmp(unicode(a), unicode(b)))

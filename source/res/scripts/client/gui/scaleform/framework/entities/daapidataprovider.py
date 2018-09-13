@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/DAAPIDataProvider.py
 from abc import ABCMeta, abstractmethod, abstractproperty
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.shared.utils import sortByFields
 
 class DAAPIDataProvider(DAAPIModule):
     __metaclass__ = ABCMeta
@@ -55,3 +55,35 @@ class DAAPIDataProvider(DAAPIModule):
 
     def pyRequestItemRange(self, startIndex, endIndex):
         return map(self._itemWrapper, self.collection[int(startIndex):int(endIndex) + 1])
+
+
+class SortableDAAPIDataProvider(DAAPIDataProvider):
+
+    def __init__(self):
+        super(SortableDAAPIDataProvider, self).__init__()
+        self._sort = ()
+
+    @property
+    def sortedCollection(self):
+        return sortByFields(self._sort, self.collection)
+
+    def sortOnHandler(self, fieldName, options):
+        return self.pySortOn(fieldName, options)
+
+    def getSelectedIdxHandler(self):
+        return self.pyGetSelectedIdx()
+
+    def pyRequestItemAt(self, idx):
+        if -1 < idx < self.pyLength():
+            return self._itemWrapper(self.sortedCollection[int(idx)])
+        else:
+            return None
+
+    def pyRequestItemRange(self, startIndex, endIndex):
+        return map(self._itemWrapper, self.sortedCollection[int(startIndex):int(endIndex) + 1])
+
+    def pySortOn(self, fields, order):
+        self._sort = tuple(zip(fields, order))
+
+    def pyGetSelectedIdx(self):
+        return -1

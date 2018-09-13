@@ -19,7 +19,7 @@ class NotificationPriorityLevel(object):
 
 
 class NotificationGuiSettings(object):
-    __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt')
+    __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt', 'extraHandlerData')
 
     def __init__(self, isNotify = False, priorityLevel = NotificationPriorityLevel.MEDIUM, isAlert = False, auxData = None, showAt = 0):
         super(NotificationGuiSettings, self).__init__()
@@ -28,3 +28,5 @@ class NotificationGuiSettings(object):
         self.isAlert = isAlert
         self.auxData = auxData or []
         self.showAt = showAt
+        self.extraHandlerData = None
+        return

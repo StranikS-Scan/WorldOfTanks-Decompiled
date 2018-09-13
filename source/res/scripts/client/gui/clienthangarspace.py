@@ -2,7 +2,6 @@
 import BigWorld, Math, ResMgr
 import Keys
 import copy
-import weakref
 from debug_utils import *
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from functools import partial
@@ -14,13 +13,13 @@ import time
 import VehicleStickers
 import VehicleAppearance
 import constants
-import Account
 from PlayerEvents import g_playerEvents
 from ConnectionManager import connectionManager
 from post_processing import g_postProcessing
 from ModelHitTester import ModelHitTester
 from AvatarInputHandler import mathUtils
 import MapActivities
+from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
 _DEFAULT_HANGAR_SPACE_PATH_BASIC = 'spaces/hangar_v2'
 _DEFAULT_HANGAR_SPACE_PATH_PREM = 'spaces/hangar_premium_v2'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
@@ -126,7 +125,7 @@ class ClientHangarSpace():
             return
         else:
             self.__vAppearance.recreate(vDesc, vState, onVehicleLoadedCallback)
-            hitTester = vDesc.type.hull['hitTester']
+            hitTester = vDesc.hull['hitTester']
             hitTester.loadBspModel()
             self.__boundingRadius = (hitTester.bbox[2] + 1) * _CFG['v_scale']
             hitTester.releaseBspModel()
@@ -411,12 +410,17 @@ class _VehicleAppearance():
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         self.__showMarksOnGun = g_settingsCore.getSetting('showMarksOnGun')
         g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        g_itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
         return
 
     def recreate(self, vDesc, vState, onVehicleLoadedCallback = None):
         self.__onLoadedCallback = onVehicleLoadedCallback
         self.__isLoaded = False
         self.__startBuild(vDesc, vState)
+
+    def __onItemsCacheSyncCompleted(self, updateReason, invalidItems):
+        if updateReason == CACHE_SYNC_REASON.DOSSIER_RESYNC:
+            self.refresh()
 
     def refresh(self):
         if self.__isLoaded:
@@ -442,6 +446,7 @@ class _VehicleAppearance():
             self.__smRemoveCb = None
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        g_itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
         return
 
     def isLoaded(self):
@@ -523,7 +528,8 @@ class _VehicleAppearance():
          turret,
          gun)
         chassis.node(self.__ROOT_NODE_NAME).attach(hull)
-        hull.node('HP_turretJoint').attach(turret)
+        turretJointName = self.__vDesc.hull['turretHardPoints'][0]
+        hull.node(turretJointName).attach(turret)
         turret.node('HP_gunJoint').attach(gun)
         self.__setupEmblems(self.__vDesc)
         self.__vehicleStickers.show = False
@@ -589,7 +595,8 @@ class _VehicleAppearance():
         hull = self.__models[1]
         turret = self.__models[2]
         gun = self.__models[3]
-        modelsWithParents = ((hull, chassis.node(self.__ROOT_NODE_NAME)), (turret, hull.node('HP_turretJoint')), (gun, turret.node('HP_gunJoint')))
+        turretJointName = self.__vDesc.hull['turretHardPoints'][0]
+        modelsWithParents = ((hull, chassis.node(self.__ROOT_NODE_NAME)), (turret, hull.node(turretJointName)), (gun, turret.node('HP_gunJoint')))
         self.__vehicleStickers.attach(modelsWithParents, self.__isVehicleDestroyed, False)
         BigWorld.player().stats.get('clanDBID', self.__onClanDBIDRetrieved)
         return
@@ -894,7 +901,7 @@ class _ClientHangarSpacePathOverride():
                 if isPremium:
                     hasChanged = True
 
-        if hasChanged:
+        if hasChanged and g_hangarSpace.inited:
             g_hangarSpace.refreshSpace(isPremium, True)
 
 

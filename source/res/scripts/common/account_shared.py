@@ -2,7 +2,7 @@
 import time
 import collections
 from items import vehicles, ITEM_TYPES
-from constants import IGR_TYPE
+from constants import IGR_TYPE, FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
 from debug_utils import *
 import ArenaType
 _ITEM_TYPE_GUN = ITEM_TYPES['vehicleGun']
@@ -135,51 +135,44 @@ def getIGRCustomizedVehCompDescr(igrCustomizationsLayout, vehInvID, accountIGRTy
         return vehDescr.makeCompactDescr()
 
 
-def getHistoricalCustomization(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr, battleDef):
-
-    def log(*args):
-        pass
-
-    vehTypeCompDescr = vehicles.getVehicleTypeCompactDescr(vehCompDescr)
-    vehicleDef = battleDef['vehicles'].get(vehTypeCompDescr)
-    if not vehicleDef:
-        LOG_WARNING('No historical vehicle def for vehType=%s, battleID=%s' % (vehTypeCompDescr, battleDef['id']))
-        return
-    else:
-        vehDescr = vehicles.VehicleDescr(compactDescr=vehCompDescr)
-        vehDefModules = vehicleDef['modules'].copy()
-        gunCompDescr = vehDefModules.pop(_ITEM_TYPE_GUN)
-        turretCompDescr = vehDefModules.pop(_ITEM_TYPE_TURRET)
-        for itemType, itemCompDescr in vehDefModules.iteritems():
-            log('Changing component', vehTypeCompDescr, itemType, itemCompDescr)
-            vehDescr.installComponent(itemCompDescr)
-
-        log('Changing turret/gun', vehTypeCompDescr, turretCompDescr, gunCompDescr)
-        vehDescr.installTurret(turretCompDescr, gunCompDescr)
-        histCamouflageID = vehicleDef.get('camouflageID')
-        arenaGeometryID = battleDef['arenaTypeID']
-        camouflageSeasonKind = ArenaType.g_cache[arenaGeometryID].vehicleCamouflageKind
+def getHistoricalCustomization(igrLayout, vehInvID, accountIGRType, vehCompDescr, battleDef):
+    vehDescr = vehicles.VehicleDescr(vehCompDescr)
+    vehicleDef = battleDef['vehicles'][vehDescr.type.compactDescr]
+    histVehDescr = vehicles.VehicleDescr(vehicleDef['historicalVehCompDescr'])
+    histCamouflageID = vehicleDef.get('camouflageID')
+    arenaGeometryID = battleDef['arenaTypeID']
+    camouflageSeasonKind = ArenaType.g_cache[arenaGeometryID].vehicleCamouflageKind
+    currentCamouflageID = None
+    if accountIGRType != IGR_TYPE.NONE:
+        currentCamouflageID = getIGRCustomization(igrLayout, vehInvID, 'camouflage', accountIGRType, camouflageSeasonKind, 0)[0]
+    if currentCamouflageID is None:
         currentCamouflageID = vehDescr.camouflages[camouflageSeasonKind][0]
-        if currentCamouflageID is None:
-            igrCamoData = getIGRCustomization(igrCustomizationsLayout, vehInvID, 'camouflage', accountIGRType, camouflageSeasonKind, 0)
-            if igrCamoData[0] is not None:
-                currentCamouflageID = igrCamoData[0]
-                log('Igr camoID=%s [%s]' % (currentCamouflageID, camouflageSeasonKind))
-        if currentCamouflageID is not None:
-            log('Replacing camoID=%s [%s] with historical camoID=%s' % (currentCamouflageID, camouflageSeasonKind, histCamouflageID))
-            vehDescr.setCamouflage(camouflageSeasonKind, histCamouflageID, time.time(), 1)
-        else:
-            log('No current camoID=%s [%s]' % (currentCamouflageID, camouflageSeasonKind))
-        for position in xrange(0, 4):
-            vehDescr.setPlayerEmblem(position, None, 0, 0)
+    if currentCamouflageID is not None and histCamouflageID is not None:
+        histVehDescr.setCamouflage(camouflageSeasonKind, histCamouflageID, int(time.time()), 0)
+    optionalDevices = vehDescr.optionalDevices
+    for slotIdx in xrange(len(optionalDevices)):
+        optDevice = optionalDevices[slotIdx]
+        if optDevice is None:
+            continue
+        histVehDescr.installOptionalDevice(optDevice['compactDescr'], slotIdx)
 
-        return vehDescr
+    return histVehDescr
 
 
-def getCustomizedVehCompDescr(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr, historicalBattleDef = None):
-    if historicalBattleDef is not None:
-        vehDescr = getHistoricalCustomization(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr, historicalBattleDef)
-        return vehDescr.makeCompactDescr()
+def getCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr, battleDef):
+    if battleDef is not None:
+        histVehDescr = getHistoricalCustomization(igrLayout, vehInvID, accountIGRType, vehCompDescr, battleDef)
+        return histVehDescr.makeCompactDescr()
     else:
-        return getIGRCustomizedVehCompDescr(igrCustomizationsLayout, vehInvID, accountIGRType, vehCompDescr)
-        return
+        return getIGRCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr)
+
+
+def getFairPlayViolationName(violationsMask):
+    if violationsMask == 0:
+        return None
+    else:
+        for name in FAIRPLAY_VIOLATIONS_NAMES:
+            if violationsMask & FAIRPLAY_VIOLATIONS_MASKS[name] != 0:
+                return name
+
+        return None

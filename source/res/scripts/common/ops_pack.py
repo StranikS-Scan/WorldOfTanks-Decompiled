@@ -42,6 +42,14 @@ def initOpsFormatDef(opsFormatDefs):
                      elementFormat,
                      struct.calcsize(lenFormat),
                      struct.calcsize('<' + elementFormat))
+                elif formatSymbol == 'N':
+                    lenFormat, elementFormat = adds
+                    lenFormat = '<' + lenFormat
+                    elementFormat = '<' + elementFormat
+                    additionals[ofs] = (lenFormat,
+                     elementFormat,
+                     struct.calcsize(lenFormat),
+                     struct.calcsize(elementFormat))
                 elif formatSymbol == 'D':
                     lenFormat, keyFormat, valFormat = adds
                     lenFormat = '<' + lenFormat
@@ -78,6 +86,9 @@ class OpsPacker:
         self._packedOps = ''
 
     def storeOp(self, op, *args):
+        self._packedOps += self._getOpPack(op, *args)
+
+    def _getOpPack(self, op, *args):
         unpackFormat, methodName, specialFormat, additionals, sz, packFormat = self._opsFormatDefs[op]
         specialCount = len(specialFormat)
         fixedArgs = args[:-specialCount] if specialCount else args
@@ -92,10 +103,17 @@ class OpsPacker:
                 if formatSym == 'S':
                     pack += packPascalString(arg)
                 elif formatSym in ('T', 'L'):
-                    headerFormat, elemFormat = adds[:2]
+                    lenFormat, elemFormat = adds[:2]
                     lenElements = len(arg)
-                    format = headerFormat + str(lenElements) + elemFormat
+                    format = lenFormat + str(lenElements) + elemFormat
                     pack += struct.pack(format, lenElements, *arg)
+                elif formatSym == 'N':
+                    lenFormat, elemFormat = adds[:2]
+                    lenElements = len(arg)
+                    pack += struct.pack(lenFormat, lenElements)
+                    for elements in arg:
+                        pack += struct.pack(elemFormat, *elements)
+
                 elif formatSym == 'D':
                     lenFormat, keyFormat, valFormat = adds[:3]
                     keys = arg.keys()
@@ -118,7 +136,7 @@ class OpsPacker:
                 else:
                     raise 0 or AssertionError
 
-        self._packedOps += pack
+        return pack
 
     def _appendOp(self, op, packedArgs):
         pack = struct.pack('<B', op)
@@ -136,6 +154,9 @@ class OpsUnpacker:
         pass
 
     def _appendOp(self, op, packedArgs):
+        pass
+
+    def _onUnpackedOp(self, opCode):
         pass
 
     def unpackOps(self, packedOps = ''):
@@ -171,6 +192,16 @@ class OpsUnpacker:
                                 arg = set(elements)
                             elif formatSymbol == 'L':
                                 arg = list(elements)
+                        elif formatSymbol == 'N':
+                            headerFormat, elemFormat, headerSize, elemSize = adds
+                            lenElements = struct.unpack_from(headerFormat, packedOps, packOfs)[0]
+                            packOfs += headerSize
+                            arg = []
+                            for i in xrange(lenElements):
+                                elements = struct.unpack_from(elemFormat, packedOps, packOfs)
+                                arg.append(elements)
+                                packOfs += elemSize
+
                         elif formatSymbol == 'D':
                             lenFormat, keyFormat, valFormat, lenSize, keySize, valSize = adds
                             lenElements = struct.unpack_from(lenFormat, packedOps, packOfs)[0]

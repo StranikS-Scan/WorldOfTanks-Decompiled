@@ -12,6 +12,9 @@ class IProtoPlugin(object):
     def view(self, scope):
         pass
 
+    def setFilters(self, msgFilterChain):
+        pass
+
     def clear(self):
         pass
 
@@ -28,6 +31,33 @@ class IProtoSettings(object):
         return False
 
 
+class IProtoLimits(object):
+
+    def getMessageMaxLength(self):
+        raise NotImplementedError
+
+    def getBroadcastCoolDown(self):
+        raise NotImplementedError
+
+    def getHistoryMaxLength(self):
+        raise NotImplementedError
+
+
+class IBattleCommandFactory(object):
+
+    def createByName(self, name):
+        return None
+
+    def createByNameTarget(self, name, targetID):
+        return None
+
+    def createByCellIdx(self, cellIdx):
+        return None
+
+    def create4Reload(self, isCassetteClip, timeLeft, quantity):
+        return None
+
+
 class IEntityFindCriteria(object):
 
     def filter(self, entity):
@@ -40,6 +70,9 @@ class ISearchHandler(object):
         pass
 
     def onSearchFailed(self, reason):
+        pass
+
+    def onExcludeFromSearch(self, entity):
         pass
 
 
@@ -68,15 +101,3 @@ class IServerError(object):
 
     def isModal(self):
         return False
-
-
-class IIncomingMessageFilter(object):
-
-    def filter(self, message):
-        pass
-
-
-class IOutgoingMessageFilter(object):
-
-    def filter(self, message):
-        pass

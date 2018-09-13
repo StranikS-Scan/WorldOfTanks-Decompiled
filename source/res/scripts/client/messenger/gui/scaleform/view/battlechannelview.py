@@ -5,26 +5,22 @@ from gui.Scaleform.CommandArgsParser import CommandArgsParser
 from gui.Scaleform.windows import UIInterface
 from messenger import g_settings
 from messenger.gui.Scaleform import BTMS_COMMANDS
+from messenger.gui.interfaces import IBattleChannelView
 from messenger.m_constants import BATTLE_CHANNEL
 
-class BattleChannelView(UIInterface):
-    _lastReceiver = BATTLE_CHANNEL.TEAM[1]
+class BattleChannelView(UIInterface, IBattleChannelView):
+    _lastReceiver = BATTLE_CHANNEL.TEAM.name
 
-    def __init__(self, sharedHistory, receiver):
+    def __init__(self, sharedHistory):
         super(BattleChannelView, self).__init__()
-        self._receiver = receiver
-        self._channelID = 0
-        self._controller = lambda : None
-        self._sharedHistory = weakref.ref(sharedHistory)
+        self.__controllers = {}
+        self.__sharedHistory = weakref.ref(sharedHistory)
 
     def populateUI(self, proxy):
         super(BattleChannelView, self).populateUI(proxy)
         self.uiHolder.addExternalCallbacks({BTMS_COMMANDS.CheckCooldownPeriod(): self.__onCheckCooldownPeriod,
          BTMS_COMMANDS.SendMessage(): self.__onSendChannelMessage,
          BTMS_COMMANDS.ReceiverChanged(): self.__onReceiverChanged})
-        controller = self._controller()
-        if controller and controller.getChannel().isJoined():
-            self.setJoined()
 
     def dispossessUI(self):
         if self.uiHolder:
@@ -32,50 +28,61 @@ class BattleChannelView(UIInterface):
             self.uiHolder.removeExternalCallback(BTMS_COMMANDS.SendMessage(), self.__onSendChannelMessage)
             self.uiHolder.removeExternalCallback(BTMS_COMMANDS.ReceiverChanged(), self.__onReceiverChanged)
         super(BattleChannelView, self).dispossessUI()
-        self._sharedHistory = lambda : None
+        self.__controllers.clear()
+        self.__sharedHistory = lambda : None
 
     @classmethod
     def resetReceiver(cls):
         if not g_settings.userPrefs.storeReceiverInBattle:
             cls._lastReceiver = BATTLE_CHANNEL.TEAM[1]
 
-    def setController(self, controller):
+    def addController(self, controller):
         channel = controller.getChannel()
-        self._controller = weakref.ref(controller)
-        self._channelID = channel.getID()
+        clientID = channel.getClientID()
+        self.__controllers[clientID] = weakref.ref(controller)
         if channel.isJoined():
-            self.setJoined()
+            self.__setReceiverToView(clientID, controller)
 
-    def removeController(self):
-        self._controller = lambda : None
-        self._channelID = 0
+    def removeController(self, controller):
+        self.__controllers.pop(controller.getChannel().getClientID(), None)
+        return
 
-    def setJoined(self):
-        args = self.getRecvConfig()[:]
-        args.insert(0, self._channelID)
-        self.__flashCall(BTMS_COMMANDS.JoinToChannel(), args)
+    def updateReceiversData(self):
+        for clientID, ctrlRef in self.__controllers.iteritems():
+            controller = ctrlRef()
+            if controller and controller.getChannel().isJoined():
+                self.__setReceiverToView(clientID, controller)
 
-    def updateView(self):
-        self.setJoined()
+    def updateReceiversLabels(self):
+        result = []
+        for clientID, ctrlRef in self.__controllers.iteritems():
+            controller = ctrlRef()
+            if controller:
+                result.append(clientID)
+                result.append(self.__getRecvConfig(controller)[0])
+
+        if len(result):
+            self.__flashCall(BTMS_COMMANDS.UpdateReceivers(), result)
 
     def addMessage(self, message, isCurrentPlayer = False):
-        history = self._sharedHistory()
+        history = self.__sharedHistory()
         if history:
             history.addMessage(message, isCurrentPlayer)
-        self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [self._channelID, message, isCurrentPlayer])
+        self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [0, message, isCurrentPlayer])
 
-    def getRecvConfig(self):
+    def __getRecvConfig(self, controller):
         config = ['', 0, False]
         receivers = g_settings.battle.receivers
-        controller = self._controller()
-        isChatEnabled = controller.isBattleChatEnabled()
-        if self._receiver in receivers:
-            color = g_settings.getColorScheme('battle/receiver').getHexStr(self._receiver)
-            inputColor = g_settings.getColorScheme('battle/message').getHexStr(self._receiver)
-            receiver = receivers[self._receiver]._asdict()
+        isChatEnabled = controller.isEnabled()
+        receiverName = controller.getSettings().name
+        if receiverName in receivers:
+            getter = g_settings.getColorScheme
+            color = getter('battle/receiver').getHexStr(receiverName)
+            inputColor = getter('battle/message').getHexStr(receiverName)
+            receiver = receivers[receiverName]._asdict()
             byDefault = False
             if g_settings.userPrefs.storeReceiverInBattle:
-                byDefault = self._receiver == BattleChannelView._lastReceiver
+                byDefault = receiverName == BattleChannelView._lastReceiver
             if isChatEnabled:
                 recLabel = receiver['label'] % color
             else:
@@ -88,6 +95,19 @@ class BattleChannelView(UIInterface):
             config.extend(receiver['modifiers'])
         return config
 
+    def __setReceiverToView(self, clientID, controller):
+        result = self.__getRecvConfig(controller)
+        result.insert(0, clientID)
+        self.__flashCall(BTMS_COMMANDS.JoinToChannel(), result)
+
+    def __getController(self, clientID):
+        controller = None
+        if clientID in self.__controllers:
+            ctrlRef = self.__controllers[clientID]
+            if ctrlRef:
+                controller = ctrlRef()
+        return controller
+
     def __flashCall(self, funcName, args = None):
         if self.uiHolder:
             self.uiHolder.call(funcName, args)
@@ -97,36 +117,30 @@ class BattleChannelView(UIInterface):
 
     def __onReceiverChanged(self, *args):
         parser = CommandArgsParser(self.__onReceiverChanged.__name__, 1, [long])
-        channelID, = parser.parse(*args)
-        if self._channelID == channelID:
-            BattleChannelView._lastReceiver = self._receiver
+        clientID, = parser.parse(*args)
+        controller = self.__getController(clientID)
+        if controller:
+            BattleChannelView._lastReceiver = controller.getSettings().name
 
     def __onCheckCooldownPeriod(self, *args):
-        controller = self._controller()
-        if controller is None:
+        parser = CommandArgsParser(self.__onCheckCooldownPeriod.__name__, 1, [long])
+        clientID, = parser.parse(*args)
+        controller = self.__getController(clientID)
+        if not controller:
             return
-        else:
-            parser = CommandArgsParser(self.__onCheckCooldownPeriod.__name__, 1, [long])
-            channelID, = parser.parse(*args)
-            if channelID == self._channelID:
-                result, errorMsg = controller.canSendMessage()
-                parser.addArgs([channelID, result])
-                self.__flashRespond(parser.args())
-                if not result:
-                    message = g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': errorMsg})
-                    history = self._sharedHistory()
-                    if history:
-                        history.addMessage(message, False)
-                    self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [channelID, message, False])
-            return
+        result, errorMsg = controller.canSendMessage()
+        parser.addArgs([clientID, result])
+        self.__flashRespond(parser.args())
+        if not result:
+            message = g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': errorMsg})
+            history = self.__sharedHistory()
+            if history:
+                history.addMessage(message, False)
+            self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [clientID, message, False])
 
     def __onSendChannelMessage(self, *args):
-        controller = self._controller()
-        if controller is None:
-            return
-        else:
-            parser = CommandArgsParser(self.__onSendChannelMessage.__name__, 2, [long])
-            channelID, rawMsgText = parser.parse(*args)
-            if self._channelID == channelID:
-                controller.sendMessage(rawMsgText)
-            return
+        parser = CommandArgsParser(self.__onSendChannelMessage.__name__, 2, [long])
+        clientID, rawMsgText = parser.parse(*args)
+        controller = self.__getController(clientID)
+        if controller:
+            controller.sendMessage(rawMsgText)

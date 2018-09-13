@@ -39,7 +39,7 @@ class MessageTemplates(templates.XMLCollection):
         sourceID = source.name
         data = {'type': source.readString('type'),
          'timestamp': -1,
-         'savedID': 0,
+         'savedData': None,
          'bgIcon': source.readString('bgIcon'),
          'icon': source.readString('icon'),
          'defaultIcon': source.readString('defaultIcon'),

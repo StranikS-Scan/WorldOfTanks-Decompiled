@@ -65,6 +65,10 @@ class LoadEvent(HasCtxEvent):
     LOAD_TRAINING_ROOM = 'loadTrainingRoom'
 
 
+class FocusEvent(HasCtxEvent):
+    COMPONENT_FOCUSED = 'onComponentFocused'
+
+
 class ComponentEvent(SharedEvent):
     COMPONENT_REGISTERED = 'onComponentRegistered'
     COMPONENT_UNREGISTERED = 'onComponentUnRegistered'
@@ -91,11 +95,13 @@ class ShowDialogEvent(SharedEvent):
     SHOW_DEMOUNT_DEVICE_DIALOG = 'showDemountDeviceDialog'
     SHOW_DESTROY_DEVICE_DIALOG = 'showDestroyDeviceDialog'
     SHOW_CONFIRM_MODULE = 'showConfirmModule'
+    SHOW_HEADER_TUTORIAL_DIALOG = 'showHeaderTutorialDialog'
     SHOW_SYSTEM_MESSAGE_DIALOG = 'showSystemMessageDialog'
     SHOW_CAPTCHA_DIALOG = 'showCaptchaDialog'
     SHOW_DISMISS_TANKMAN_DIALOG = 'showDismissTankmanDialog'
     SHOW_CYBER_SPORT_DIALOG = 'showCyberSportDialog'
     SHOW_CONFIRM_ORDER_DIALOG = 'showConfirmOrderDialog'
+    SHOW_PUNISHMENT_DIALOG = 'showPunishmentDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -129,12 +135,14 @@ class LoginEventEx(LoginEvent):
     SET_AUTO_LOGIN = 'setAutoLogin'
     SET_LOGIN_QUEUE = 'setLoginQueue'
     ON_LOGIN_QUEUE_CLOSED = 'onLoginQueueClosed'
+    SWITCH_LOGIN_QUEUE_TO_AUTO = 'switchLoginQueueToAuto'
 
-    def __init__(self, eventType, alias, waitingOpen, msg, waitingClose):
+    def __init__(self, eventType, alias, waitingOpen, msg, waitingClose, showAutoLoginBtn):
         super(LoginEventEx, self).__init__(eventType=eventType, alias=alias)
         self.waitingOpen = waitingOpen
         self.msg = msg
         self.waitingClose = waitingClose
+        self.showAutoLoginBtn = showAutoLoginBtn
 
 
 class ShowWindowEvent(HasCtxEvent):
@@ -158,11 +166,11 @@ class ShowWindowEvent(HasCtxEvent):
     SHOW_TANKMAN_INFO = 'showTankmanInfo'
     SHOW_BATTLE_RESULTS = 'showBattleResults'
     SHOW_EVENTS_WINDOW = 'showEventsWindow'
+    SHOW_HEADER_TUTORIAL_WINDOW = 'showHeaderTutorialWindow'
     SHOW_TANKMAN_DROP_SKILLS_WINDOW = 'showTankmanDropSkillsWindow'
     SHOW_TRAINING_SETTINGS_WINDOW = 'showTrainingSettingsWindow'
     SHOW_SQUAD_WINDOW = 'showSquadWindow'
-    SHOW_COMPANY_WINDOW = 'showCompanyWindow'
-    SHOW_COMPANIES_WINDOW = 'showCompaniesWindow'
+    SHOW_COMPANY_MAIN_WINDOW = 'showCompanyWindow'
     SHOW_BATTLE_SESSION_WINDOW = 'showBattleSessionWindow'
     SHOW_BATTLE_SESSION_LIST = 'showBattleSessionList'
     SHOW_LAZY_CHANNEL_WINDOW = 'showLazyChannelWindow'
@@ -203,7 +211,15 @@ class ShowPopoverEvent(HasCtxEvent):
     SHOW_NOTIFICATIONS_LIST_POPOVER = 'showNotificationsListPopOver'
     SHOW_FORT_BUILDING_CARD_POPOVER_EVENT = 'showFortBuildingCardPopover'
     SHOW_FORT_ORDER_POPOVER_EVENT = 'showFortOrderPopover'
+    SHOW_FORT_BATTLE_DIRECTION_POPOVER_EVENT = 'showFortBattleDirectionPopover'
+    SHOW_FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_EVENT = 'showFortIntelligenceClanFilterPopover'
     SHOW_BATTLE_TYPE_SELECT_POPOVER_EVENT = 'battleTypeSelectPopover'
+    SHOW_ACCOUNT_POPOVER_EVENT = 'accountPopover'
+    SHOW_FORT_SETTINGS_PERIPHERY_POPOVER_EVENT = 'showFortSettingsPeripheryPopover'
+    SHOW_FORT_SETTINGS_DEFENCE_HOUR_POPOVER_EVENT = 'showFortSettingsDefenceHourPopover'
+    SHOW_FORT_SETTINGS_VACATION_POPOVER_EVENT = 'showFortSettingsVacationPopover'
+    SHOW_FORT_SETTINGS_DAYOFF_POPOVER_EVENT = 'showFortSettingsDayoffPopover'
+    SHOW_FORT_DATE_PICKER_POPOVER_EVENT = 'showFortDatePickerPopover'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -215,7 +231,6 @@ class StatsStorageEvent(HasCtxEvent):
     EXPERIENCE_RESPONSE = 'common.experienceResponse'
     TANKMAN_CHANGE_RESPONSE = 'common.tankmanChangeResponse'
     CREDITS_RESPONSE = 'common.creditsResponse'
-    GOLD_RESPONSE = 'common.goldResponse'
     PREMIUM_RESPONSE = 'common.premiumResponse'
     VEHICLE_CHANGE_RESPONSE = 'common.vehicleChangeResponse'
     SPEAKING_PLAYERS_RESPONSE = 'common.speakingPlayersResponse'
@@ -230,6 +245,8 @@ class LobbySimpleEvent(HasCtxEvent):
     SHOW_HELPLAYOUT = 'showHelplayout'
     CLOSE_HELPLAYOUT = 'closeHelplayout'
     EVENTS_UPDATED = 'questUpdated'
+    HIGHLIGHT_TUTORIAL_CONTROL = 'highLightTutorialControl'
+    RESET_HIGHLIGHT_TUTORIAL_CONTROL = 'resetHighLightTutorialControl'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -272,15 +289,9 @@ class CoolDownEvent(SharedEvent):
         self.requestID = requestID
 
 
-class TutorialEvent(SharedEvent):
-    UI_CONTROL_ADDED = 'tutorialUIControlAdded'
-    UI_CONTROL_REMOVED = 'tutorialUIControlRemoved'
+class TutorialEvent(HasCtxEvent):
     RESTART = 'restartTutorial'
     REFUSE = 'refuseTutorial'
-
-    def __init__(self, eventType = None, targetID = None):
-        super(TutorialEvent, self).__init__(eventType)
-        self.targetID = targetID
 
 
 class MessengerEvent(HasCtxEvent):
@@ -306,10 +317,20 @@ class ChannelManagementEvent(HasCtxEvent):
         self.clientID = clientID
 
 
+class PreBattleChannelEvent(ChannelManagementEvent):
+    REQUEST_TO_ADD_PRE_BATTLE_CHANNEL = 'loadSquad'
+    REQUEST_TO_REMOVE_PRE_BATTLE_CHANNEL = 'removeSquad'
+
+    def __init__(self, clientID, eventType = None, ctx = None):
+        super(PreBattleChannelEvent, self).__init__(clientID, eventType, ctx)
+
+
 class ChannelCarouselEvent(SharedEvent):
     CAROUSEL_INITED = 'carouselInited'
     CAROUSEL_DESTROYED = 'carouselDestroyed'
     OPEN_BUTTON_CLICK = 'openButtonClick'
+    MINIMIZE_ALL_CHANNELS = 'minimizeAllChannels'
+    CLOSE_ALL_EXCEPT_CURRENT = 'closeAllExceptCurrent'
     CLOSE_BUTTON_CLICK = 'closeButtonClick'
 
     def __init__(self, target, eventType = None, clientID = None):
@@ -347,12 +368,18 @@ class CSRosterSlotSettingsWindow(HasCtxEvent):
 
 class FortEvent(HasCtxEvent):
     SWITCH_TO_MODE = 'switchToMode'
-    TEST_CHOICE_DIVISION = 'testChoiceDivision'
+    ON_INTEL_FILTER_APPLY = 'onIntelFilterApplied'
+    ON_INTEL_FILTER_RESET = 'onIntelFilterReset'
+    ON_INTEL_FILTER_DO_REQUEST = 'onIntelFilterDoRequest'
     TRANSPORTATION_STEP = 'transportationStep'
+    CHOICE_DIVISION = 'testChoiceDivision'
+    ON_TOGGLE_BOOKMARK = 'onToggleBookMark'
 
     class TRANSPORTATION_STEPS(CONST_CONTAINER):
-        INITIAL = 0
+        NONE = 0
         FIRST_STEP = 1
+        NEXT_STEP = 2
+        CONFIRMED = 3
 
     def __init__(self, eventType = None, ctx = None):
         super(FortEvent, self).__init__(eventType, ctx)
@@ -381,3 +408,15 @@ class OpenLinkEvent(SharedEvent):
     def __init__(self, eventType, url = ''):
         super(OpenLinkEvent, self).__init__(eventType)
         self.url = url
+
+
+class CalendarEvent(SharedEvent):
+    MONTH_CHANGED = 'monthChanged'
+    DATE_SELECTED = 'dateSelected'
+
+    def __init__(self, eventType = None, timestamp = None):
+        super(CalendarEvent, self).__init__(eventType)
+        self.__timestamp = timestamp
+
+    def getTimestamp(self):
+        return self.__timestamp

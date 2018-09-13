@@ -7,6 +7,7 @@ import Settings
 from adisp import async, process
 from debug_utils import LOG_DEBUG
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils import graphics
 from gui.Scaleform.framework import AppRef, ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -52,6 +53,7 @@ class NotifyController(AppRef):
     def __handleUiUpdated(self, event):
         self._stopListening()
         yield lambda callback: callback(True)
+        self.__showHeaderTutorial()
         from gui.BattleContext import g_battleContext
         if g_battleContext.wasInBattle:
             return
@@ -75,6 +77,18 @@ class NotifyController(AppRef):
                 self.__updateLowFpsDialogVersion()
         graphicsStatus.markProcessed()
         self.__clearCurrentFpsInfo()
+
+    def __showHeaderTutorial(self):
+        from account_helpers.AccountSettings import AccountSettings, HEADER_TUTORIAL
+        storedValue = AccountSettings.getFilter(HEADER_TUTORIAL)
+        accDossier = g_itemsCache.items.getAccountDossier()
+        totalBattles = accDossier.getTotalStats().getBattlesCount()
+        if not storedValue['isFinished'] and not storedValue['isRefused']:
+            if totalBattles > 0:
+                g_eventBus.handleEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_HEADER_TUTORIAL_WINDOW, ctx={'currentStep': storedValue['step']}))
+            else:
+                storedValue['isFinished'] = True
+                AccountSettings.setFilter(HEADER_TUTORIAL, storedValue)
 
     @async
     def __showI18nDialog(self, key, callback):

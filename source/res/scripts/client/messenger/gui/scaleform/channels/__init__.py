@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/__init__.py
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
-from messenger.gui.Scaleform.channels import bw_factories
+from messenger import g_settings
+from messenger.gui.Scaleform.channels import bw
 from messenger.gui.interfaces import IControllersCollection
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto.events import g_messengerEvents
@@ -41,7 +42,7 @@ class ControllersCollection(IControllersCollection):
         if protoType in self._factories:
             controller = self._factories[protoType].factory(channel)
         else:
-            LOG_ERROR('Controllers factory not found', protoType)
+            LOG_DEBUG('Controllers factory not found', protoType)
         return controller
 
     def getController(self, clientID):
@@ -122,13 +123,13 @@ class ControllersCollection(IControllersCollection):
 class LobbyControllers(ControllersCollection):
 
     def __init__(self):
-        super(LobbyControllers, self).__init__({PROTO_TYPE.BW: bw_factories.LobbyControllersFactory()})
+        super(LobbyControllers, self).__init__({PROTO_TYPE.BW: bw.LobbyControllersFactory()})
 
 
 class BattleControllers(ControllersCollection):
 
     def __init__(self):
-        super(BattleControllers, self).__init__({PROTO_TYPE.BW: bw_factories.BattleControllersFactory()})
+        super(BattleControllers, self).__init__({PROTO_TYPE.BW: bw.BattleControllersFactory()})
 
     def _initController(self, controller):
         controller.activate()

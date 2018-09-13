@@ -65,7 +65,9 @@ class WindowsManager(object):
         return False
 
     def showLogin(self, callback = None):
-        self.window.fireEvent(ShowViewEvent(ShowViewEvent.SHOW_LOGIN, ctx={'callback': callback}))
+        if self.window is not None:
+            self.window.fireEvent(ShowViewEvent(ShowViewEvent.SHOW_LOGIN, ctx={'callback': callback}))
+        return
 
     def showLobby(self):
         if self.__window is None:

@@ -1,11 +1,12 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/restrictions.py
 from UnitBase import SORTIE_DIVISION
-from constants import CLAN_MEMBER_FLAGS, FORT_BUILDING_TYPE, MAX_FORTIFICATION_LEVEL, PREBATTLE_TYPE
-from debug_utils import LOG_DEBUG
+from constants import CLAN_MEMBER_FLAGS, FORT_BUILDING_TYPE, MAX_FORTIFICATION_LEVEL, PREBATTLE_TYPE, FORT_SCOUTING_DATA_FILTER
+from external_strings_utils import isClanAbbrevValid
 import fortified_regions
 from gui.prb_control.prb_helpers import prbDispatcherProperty
 from gui.shared.fortifications import interfaces, getClientFort
-from gui.shared.fortifications.settings import FORT_RESTRICTION
+from gui.shared.fortifications.interfaces import IFortValidators
+from gui.shared.fortifications.settings import FORT_RESTRICTION, FORT_REQUEST_TYPE, FORT_REQUEST_VALIDATION
 from messenger.storage import storage_getter
 
 class FortPermissions(interfaces.IFortPermissions):
@@ -52,6 +53,48 @@ class FortPermissions(interfaces.IFortPermissions):
 
     def canCreateSortie(self):
         return True
+
+    def canCreateFortBattle(self):
+        return True
+
+    def canChangeDefHour(self):
+        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+
+    def canChangeOffDay(self):
+        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+
+    def canChangePeriphery(self):
+        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+
+    def canChangeVacation(self):
+        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+
+    def canChangeSettings(self):
+        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+
+    def canShutDownDefHour(self):
+        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+
+    def canRequestPublicInfo(self):
+        return True
+
+    def canRequestClanCard(self):
+        return True
+
+    def canAddToFavorite(self):
+        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+
+    def canRemoveFavorite(self):
+        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+
+    def canPlanAttack(self):
+        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+
+    def canViewContext(self):
+        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+
+    def canViewNotCommanderHelp(self):
+        return not self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
 
 
 class NoFortLimits(interfaces.IFortLimits):
@@ -157,35 +200,38 @@ class FortLimits(IntroFortLimits):
             return (False, FORT_RESTRICTION.UNKNOWN)
         else:
             order = fort.getOrder(orderID)
-            hasBuilding = order.hasBuilding
-            inventoryCount = order.count
-            isBtnDisabled = True
-            if inventoryCount > 0 and hasBuilding and not fort.hasActivatedOrders():
-                isBtnDisabled = False
-            return (isBtnDisabled, '')
+            canActivate = False
+            if order.hasBuilding and order.count > 0:
+                if order.isPermanent:
+                    if fort.isDefenceHourEnabled() and not order.inCooldown:
+                        canActivate = True
+                elif not fort.hasActivatedContinualOrders():
+                    canActivate = True
+            return (canActivate, '')
 
     def canUpgrade(self, buildingTypeID):
         fort = getClientFort()
         restrict, restricType = True, ''
         if fort is None:
-            restrict, restricType = False, FORT_RESTRICTION.UNKNOWN
-        building = fort.getBuilding(buildingTypeID)
-        if building is None:
-            restrict, restricType = False, FORT_RESTRICTION.UNKNOWN
-        upgradeCost = building.levelRef.upgradeCost
-        if not upgradeCost:
-            restrict, restricType = False, FORT_RESTRICTION.BUILDING_CANT_UPGRADE
-        level = building.level
-        baseDescr = fort.getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
-        if buildingTypeID != FORT_BUILDING_TYPE.MILITARY_BASE and level >= baseDescr.level:
-            restrict, restricType = False, FORT_RESTRICTION.BUILDING_FORT_LEVEL_TOO_LOW
-        if buildingTypeID == FORT_BUILDING_TYPE.MILITARY_BASE and baseDescr.level >= MAX_FORTIFICATION_LEVEL:
-            restrict, restricType = False, FORT_RESTRICTION.BUILDING_CANT_UPGRADE
-        if building.storage < upgradeCost:
+            return (False, FORT_RESTRICTION.UNKNOWN)
+        else:
+            building = fort.getBuilding(buildingTypeID)
+            if building is None:
+                return (False, FORT_RESTRICTION.UNKNOWN)
+            upgradeCost = building.levelRef.upgradeCost
+            if not upgradeCost:
+                restrict, restricType = False, FORT_RESTRICTION.BUILDING_CANT_UPGRADE
+            level = building.level
+            baseDescr = fort.getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
             if buildingTypeID != FORT_BUILDING_TYPE.MILITARY_BASE and level >= baseDescr.level:
-                return (False, FORT_RESTRICTION.BUILDING_NOT_ENOUGH_RESOURCE_AND_LOW_LEVEL)
-            restrict, restricType = False, FORT_RESTRICTION.BUILDING_NOT_ENOUGH_RESOURCE
-        return (restrict, restricType)
+                restrict, restricType = False, FORT_RESTRICTION.BUILDING_FORT_LEVEL_TOO_LOW
+            if buildingTypeID == FORT_BUILDING_TYPE.MILITARY_BASE and baseDescr.level >= MAX_FORTIFICATION_LEVEL:
+                restrict, restricType = False, FORT_RESTRICTION.BUILDING_CANT_UPGRADE
+            if building.storage < upgradeCost:
+                if buildingTypeID != FORT_BUILDING_TYPE.MILITARY_BASE and level >= baseDescr.level:
+                    return (False, FORT_RESTRICTION.BUILDING_NOT_ENOUGH_RESOURCE_AND_LOW_LEVEL)
+                restrict, restricType = False, FORT_RESTRICTION.BUILDING_NOT_ENOUGH_RESOURCE
+            return (restrict, restricType)
 
     def isSortieCreationValid(self, level = None):
         fort = getClientFort()
@@ -202,3 +248,21 @@ class FortLimits(IntroFortLimits):
             return (False, FORT_RESTRICTION.SORTIE_HAS_MODAL_ENTITY)
         else:
             return (True, '')
+
+
+class NoFortValidators(IFortValidators):
+
+    def __init__(self):
+        super(NoFortValidators, self).__init__({})
+
+
+class FortValidators(IFortValidators):
+
+    def __init__(self):
+        super(FortValidators, self).__init__({FORT_REQUEST_TYPE.REQUEST_PUBLIC_INFO: self.__validateFortPublicInfo})
+
+    def __validateFortPublicInfo(self, filterType, abbrevPattern):
+        if filterType == FORT_SCOUTING_DATA_FILTER.FILTER:
+            if not isClanAbbrevValid(abbrevPattern):
+                return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID)
+        return (True, '')

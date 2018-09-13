@@ -33,7 +33,7 @@ class PersonalCaseMeta(DAAPIModule):
     def dropSkills(self):
         self._printOverrideError('dropSkills')
 
-    def changeTankmanPassport(self, inventoryID, firstNameID, lastNameID, iconID):
+    def changeTankmanPassport(self, invengoryID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
         self._printOverrideError('changeTankmanPassport')
 
     def openExchangeFreeToTankmanXpWindow(self):

@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechniquePage.py
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.profile.ProfileTechnique import ProfileTechnique
 from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechniquePageMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
@@ -20,6 +21,7 @@ class ProfileTechniquePage(ProfileTechnique, ProfileTechniquePageMeta):
         self.as_responseDossierS(self._battlesType, vehList)
 
     def _populate(self):
+        super(ProfileTechniquePage, self)._populate()
         if self._selectedData is not None:
             intVehCD = int(self._selectedData.get('itemCD'))
             accountDossier = g_itemsCache.items.getAccountDossier(None)
@@ -28,7 +30,6 @@ class ProfileTechniquePage(ProfileTechnique, ProfileTechniquePageMeta):
             elif intVehCD in accountDossier.getTeam7x7Stats().getVehicles():
                 self._battlesType = PROFILE.PROFILE_DROPDOWN_LABELS_TEAM
         self.as_setSelectedVehicleIntCDS(int(self._selectedData.get('itemCD')) if self._selectedData else -1)
-        super(ProfileTechniquePage, self)._populate()
         return
 
     def _getInitData(self):

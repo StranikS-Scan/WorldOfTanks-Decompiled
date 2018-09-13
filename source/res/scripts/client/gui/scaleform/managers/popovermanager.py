@@ -11,10 +11,8 @@ class PopoverManager(PopoverManagerMeta, AppRef):
         super(PopoverManager, self).__init__()
         self.addListener(HidePopoverEvent.POPOVER_DESTROYED, self.__handlerDestroyPopover)
 
-    def requestShowPopover(self, alias, inXcoordinate, inYcoordinate, data):
-        self.fireEvent(g_entitiesFactories.makeShowPopoverEvent(alias, {'inXcoordinate': inXcoordinate,
-         'inYcoordinate': inYcoordinate,
-         'data': data}))
+    def requestShowPopover(self, alias, data):
+        self.fireEvent(g_entitiesFactories.makeShowPopoverEvent(alias, {'data': data}))
 
     def requestHidePopover(self):
         self.fireEvent(HidePopoverEvent(HidePopoverEvent.HIDE_POPOVER))

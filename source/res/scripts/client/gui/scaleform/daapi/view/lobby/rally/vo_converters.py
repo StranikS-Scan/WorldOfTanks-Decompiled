@@ -1,11 +1,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
 import BigWorld
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
+from prebattle_shared import decodeRoster
+from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.MENU import MENU
@@ -20,26 +25,24 @@ from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
 
-def getPlayerStatus(slotState, pInfo):
+def getPlayerStatus(slotState, pInfo, autoReadyCreator = False):
     status = PLAYER_GUI_STATUS.NORMAL
     if slotState.isClosed:
         status = PLAYER_GUI_STATUS.LOCKED
     elif pInfo is not None:
-        if pInfo.isCreator():
-            status = PLAYER_GUI_STATUS.BATTLE if pInfo.isInArena() else PLAYER_GUI_STATUS.CREATOR
-        elif pInfo.isInArena():
+        if pInfo.isInArena():
             status = PLAYER_GUI_STATUS.BATTLE
         elif pInfo.isReady:
             status = PLAYER_GUI_STATUS.READY
     return status
 
 
-def makeSlotLabel(unitState, slotState, isCreator = False, vehCount = 0):
+def makeSlotLabel(unitState, slotState, isCreator = False, vehCount = 0, checkForVehicles = True):
     slotLabel = SLOT_LABEL.DEFAULT
     if slotState.isFree:
         if unitState.isLocked():
             template = SLOT_LABEL.LOCKED
-        elif not isCreator and vehCount == 0:
+        elif not isCreator and checkForVehicles and vehCount == 0:
             template = SLOT_LABEL.NOT_AVAILABLE
         else:
             template = SLOT_LABEL.EMPTY
@@ -55,7 +58,7 @@ def makeVehicleVO(vehicle, maxLevel = 10):
     else:
         vState, vStateLvl = vehicle.getState()
         isReadyToFight = vehicle.isReadyToFight
-        if vState == Vehicle.VEHICLE_STATE.UNDAMAGED or vState == Vehicle.VEHICLE_STATE.IN_PREBATTLE and vehicle.isInUnit:
+        if vState == Vehicle.VEHICLE_STATE.UNDAMAGED or vState == Vehicle.VEHICLE_STATE.IN_PREBATTLE:
             vState = ''
             isReadyToFight = True
         else:
@@ -108,6 +111,14 @@ def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
 
 def makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
     sortiePlayerVO = makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
+    sortiePlayerVO['isLegionaries'] = pInfo.isLegionary()
+    sortiePlayerVO['clanAbbrev'] = None
+    sortiePlayerVO['isRatingAvailable'] = pInfo.isLegionary()
+    return sortiePlayerVO
+
+
+def makeClanBattlePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
+    sortiePlayerVO = makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
     sortiePlayerVO['clanAbbrev'] = None
     sortiePlayerVO['isRatingAvailable'] = False
     return sortiePlayerVO
@@ -131,7 +142,7 @@ def makeUnitStateLabel(unitState):
     return makeHtmlString('html_templates:lobby/cyberSport', 'teamUnlocked' if unitState.isOpened() else 'teamLocked', {})
 
 
-def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, inSearch = False):
+def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, inSearch = False, checkForVehicles = True):
     isPlayerCreator = pInfo.isCreator()
     isPlayerInSlot = pInfo.isInSlot
     slots = []
@@ -142,7 +153,9 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, inSear
         isPlayerSpeaking = app.voiceChatManager.isPlayerSpeaking
     else:
         isPlayerSpeaking = lambda dbID: False
-    if unitState.isSortie():
+    if unitState.isFortBattle():
+        makeVO = makeClanBattlePlayerVO
+    elif unitState.isSortie():
         makeVO = makeSortiePlayerVO
     else:
         makeVO = makePlayerVO
@@ -164,9 +177,12 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, inSear
                     slotLevel = vehicle['vehLevel']
                 if 'vehTypeCompDescr' in vehicle:
                     vehicleVO = makeVehicleVO(vehicleGetter(vehicle['vehTypeCompDescr']))
-        slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount)
-        playerStatus = getPlayerStatus(slotState, player)
-        restrictions = makeUnitRosterVO(unit, pInfo, index=index)['conditions']
+        slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles)
+        playerStatus = getPlayerStatus(slotState, player, unitState.isFortBattle())
+        if unit is not None:
+            restrictions = makeUnitRosterVO(unit, pInfo, index=index, isSortie=unitState.isSortie())['conditions']
+        else:
+            restrictions = []
         slot = {'rallyIdx': unitIdx,
          'isCommanderState': isPlayerCreator,
          'isCurrentUserInSlot': isPlayerInSlot,
@@ -219,6 +235,21 @@ def makeUnitShortVO(unitFunctional, unitIdx = None, app = None):
 
 
 def makeSortieShortVO(unitFunctional, unitIdx = None, app = None):
+    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
+    if fullData is None:
+        return {}
+    else:
+        unit, unitState, unitStats, pInfo, slotsIter = fullData
+        division = getDivisionNameByType(unit.getRosterTypeID())
+        divisionTypeStr = i18n.makeString(FORTIFICATIONS.sortie_division_name(division))
+        unit, unitState, _, pInfo, slotsIter = fullData
+        return {'isFreezed': unitState.isLocked(),
+         'hasRestrictions': unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
+         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, True),
+         'description': divisionTypeStr if divisionTypeStr else unitFunctional.getCensoredComment(unitIdx=unitIdx)}
+
+
+def makeFortBattleShortVO(unitFunctional, unitIdx = None, app = None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
@@ -296,7 +327,27 @@ def makeSortieVO(unitFunctional, unitIdx = None, app = None):
          'divisionLbl': divisionLbl}
 
 
-def makeUnitRosterVO(unit, pInfo, index = None):
+def makeSquadVO(squadFunctional, app = None):
+    fullData = squadFunctional.getUnitFullData()
+    if fullData is None:
+        return {}
+    else:
+        unitState, unitStats, pInfo, slotsIter = fullData
+        sumLevelsError, sumLevelsStr = makeTotalLevelLabel(unitStats)
+        slotsData = _getSlotsData(-1, None, unitState, pInfo, slotsIter, app, checkForVehicles=False)
+        return {'isCommander': squadFunctional.isCreator(),
+         'isFreezed': unitState.isLocked(),
+         'hasRestrictions': False,
+         'statusLbl': makeUnitStateLabel(unitState),
+         'statusValue': unitState.isOpened(),
+         'sumLevelsInt': unitStats.curTotalLevel,
+         'sumLevels': sumLevelsStr,
+         'sumLevelsError': sumLevelsError,
+         'slots': slotsData,
+         'description': ''}
+
+
+def makeUnitRosterVO(unit, pInfo, index = None, isSortie = False):
     vehicleGetter = g_itemsCache.items.getItemByCD
     if index is None:
         vehiclesData = pInfo.getVehiclesToSlots().keys()
@@ -332,7 +383,7 @@ def makeUnitRosterVO(unit, pInfo, index = None):
                     params['vTypeRange'] = filter(lambda k: 1 << VEHICLE_CLASS_INDICES[k] & vehClassMask, VEHICLE_CLASSES)
                     isDefault = False
                 levels = rosterSlot.levels
-                if levels != (1, 8):
+                if levels != (1, 8) or isSortie:
                     params['vLevelRange'] = levels
                     isDefault = False
                 if isDefault:
@@ -356,7 +407,9 @@ def getUnitRosterData(unitFunctional, unitIdx = None, index = None):
     if unit is None:
         result = {}
     else:
-        result = makeUnitRosterVO(unit, unitFunctional.getPlayerInfo(unitIdx=unitIdx), index=index)
+        pInfo = unitFunctional.getPlayerInfo(unitIdx=unitIdx)
+        isSortie = unitFunctional.getState(unitIdx=unitIdx).isSortie()
+        result = makeUnitRosterVO(unit, pInfo, index=index, isSortie=isSortie)
     return result
 
 
@@ -373,6 +426,71 @@ def makeSortieActionButtonVO(functional):
         result = _makeSortieStartBattleButtonVO(functional)
     else:
         result = _makeSortieReadyButtonVO(functional)
+    return result
+
+
+def makeSortieClanBattleActionBtnVO(functional):
+    return _makeSortieReadyButtonVO(functional)
+
+
+def makeSquadActionButtonVO(functional):
+    stateString = ''
+    pInfo = functional.getPlayerInfo()
+    team, assigned = decodeRoster(functional.getRosterKey())
+    stats = functional.getPlayersStateStats()
+    isEnabled = g_currentVehicle.isReadyToPrebattle() and not (functional.getTeamState().isInQueue() and assigned)
+    if not g_currentVehicle.isPresent():
+        stateString = i18n.makeString(CYBERSPORT.WINDOW_UNIT_MESSAGE_NOVEHICLE)
+    elif not g_currentVehicle.isReadyToPrebattle():
+        stateString = i18n.makeString(CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY)
+    elif not pInfo.isReady():
+        stateString = i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_GETREADY)
+    elif pInfo.isReady():
+        stateString = i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_GETNOTREADY)
+    if pInfo.isReady():
+        label = CYBERSPORT.WINDOW_UNIT_NOTREADY
+    else:
+        label = CYBERSPORT.WINDOW_UNIT_READY
+    return {'stateString': stateString,
+     'label': label,
+     'isEnabled': isEnabled,
+     'isReady': pInfo.isReady()}
+
+
+def makeBuildingIndicatorsVOByDescr(buildingDescr):
+    buildingLevel = buildingDescr.level
+    progress = FORT_ALIAS.STATE_BUILDING if buildingLevel else FORT_ALIAS.STATE_FOUNDATION_DEF
+    hpVal = buildingDescr.hp
+    hpTotalVal = buildingDescr.levelRef.hp
+    defResVal = buildingDescr.storage
+    maxDefResVal = buildingDescr.levelRef.storage
+    return makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResVal, maxDefResVal)
+
+
+def makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResVal, maxDefResVal):
+    textStyle = fort_text.PURPLE_TEXT
+    if progress == FORT_ALIAS.STATE_FOUNDATION_DEF or progress == FORT_ALIAS.STATE_FOUNDATION:
+        textStyle = fort_text.ALERT_TEXT
+    formattedHpValue = fort_text.getText(textStyle, str(BigWorld.wg_getIntegralFormat(hpVal)))
+    hpTotalFormatted = str(BigWorld.wg_getIntegralFormat(hpTotalVal)) + ' '
+    formattedHpTotal = fort_text.concatStyles(((fort_text.STANDARD_TEXT, hpTotalFormatted), (fort_text.NUT_ICON,)))
+    formattedDefResValue = fort_text.getText(fort_text.PURPLE_TEXT, str(BigWorld.wg_getIntegralFormat(defResVal)))
+    maxDefDerFormatted = str(BigWorld.wg_getIntegralFormat(maxDefResVal)) + ' '
+    formattedDefResTotal = fort_text.concatStyles(((fort_text.STANDARD_TEXT, maxDefDerFormatted), (fort_text.NUT_ICON,)))
+    hpProgressLabels = {'currentValue': formattedHpValue,
+     'totalValue': formattedHpTotal,
+     'separator': '/'}
+    storeProgressLabels = {'currentValue': formattedDefResValue,
+     'totalValue': formattedDefResTotal,
+     'separator': '/'}
+    result = {'hpLabel': i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_INDICATORS_HPLBL),
+     'defResLabel': i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_INDICATORS_DEFRESLBL),
+     'hpCurrentValue': hpVal,
+     'hpTotalValue': hpTotalVal,
+     'defResCurrentValue': defResVal,
+     'defResTotalValue': maxDefResVal,
+     'hpProgressLabels': hpProgressLabels,
+     'defResProgressLabels': storeProgressLabels}
     return result
 
 
@@ -499,7 +617,17 @@ def _makeSortieReadyButtonVO(functional):
         label = FORTIFICATIONS.SORTIE_ROOM_NOTREADY
     else:
         label = FORTIFICATIONS.SORTIE_ROOM_READY
+    toolTipData = ''
+    if not pInfo.isInSlot:
+        toolTipData = TOOLTIPS.FORTIFICATION_FORTCLANBATTLEROOM_FIGHTBTN_NOTINSLOT
+    elif not vInfo.isEmpty() and not vInfo.isReadyToBattle():
+        toolTipData = TOOLTIPS.FORTIFICATION_FORTCLANBATTLEROOM_FIGHTBTN_VEHICLENOTVALID
+    elif isEnabled and not pInfo.isReady:
+        toolTipData = TOOLTIPS.FORTIFICATION_FORTCLANBATTLEROOM_FIGHTBTN_PRESSFORREADY
+    elif isEnabled and pInfo.isReady:
+        toolTipData = TOOLTIPS.FORTIFICATION_FORTCLANBATTLEROOM_FIGHTBTN_PRESSFORNOTREADY
     return {'stateString': stateString,
      'label': label,
      'isEnabled': isEnabled,
-     'isReady': pInfo.isReady}
+     'isReady': pInfo.isReady,
+     'toolTipData': toolTipData}

@@ -30,7 +30,18 @@ class SoundEffectsId(object):
     ACTIVATE_ADDITIONAL_BRIEFING = 'activate_additionalBriefing'
     ACTIVATE_TACTICAL_TRAINING = 'activate_tacticalTraining'
     ACTIVATE_BATTLE_PAYMENTS = 'activate_battlePayments'
+    ACTIVATE_SPECIALMISSION = 'activate_specialMission'
     END_BUILDING_PROCESS_POSTFIX = '_endPrcBld'
+    ACTIVATE_DEFENCE_PERIOD = 'activate_defencePeriod'
+    DEACTIVATE_DEFENCE_PERIOD = 'deactivate_defencePeriod'
+    ENEMY_DIRECTION_SELECTED = 'enemyDirection_selected'
+    ENEMY_DIRECTION_HOVER = 'enemyDirection_hover'
+    MY_DIRECTION_SELECTED = 'myDirection_selected'
+    FORT_CLAN_WAR_DECLARED = 'fortClanWar_declared'
+    BATTLE_ROOM_TIMER_ALERT = 'battleRoom_timerAlert'
+    FORT_CLAN_WAR_RESULT_WIN = 'fortClanWarResult_win'
+    FORT_CLAN_WAR_RESULT_LOSE = 'fortClanWarResult_lose'
+    FORT_CLAN_WAR_RESULT_DRAW = 'fortClanWarResult_draw'
 
     @classmethod
     def getEndBuildingProcess(cls, buildingID):

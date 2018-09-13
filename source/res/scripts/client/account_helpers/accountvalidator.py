@@ -2,7 +2,7 @@
 import BigWorld
 import constants
 from adisp import process, async
-from items import vehicles, ITEM_TYPE_NAMES
+from items import vehicles, tankmen, ITEM_TYPE_NAMES
 from debug_utils import *
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -37,25 +37,44 @@ class AccountValidator(object):
         return (ITEM_TYPE_NAMES[itemTypeID], itemData) + args
 
     @async
-    def __devSellInvalidVehicle(self, vehInvData, callback):
+    def __devSellInvalidVehicle(self, vehInvID, callback):
 
         def response(code):
-            LOG_DEBUG('Invalid vehicle selling result', vehInvData, code)
+            LOG_WARNING('Invalid vehicle selling result', vehInvID, code)
             callback(code >= 0)
 
-        BigWorld.player().inventory.sellVehicle(vehInvData.invID, True, [], [], response)
+        BigWorld.player().inventory.sellVehicle(vehInvID, True, [], [], response)
+
+    @async
+    def __devDismissInvalidTankmen(self, tmanInvID, callback):
+
+        def response(code):
+            LOG_WARNING('Invalid tankman dismissing result', tmanInvID, code)
+            callback(code >= 0)
+
+        BigWorld.player().inventory.dismissTankman(tmanInvID, response)
 
     def __validateInventoryVehicles(self):
-        for invID, vehInvData in g_itemsCache.items.inventory.getItemsData(GUI_ITEM_TYPE.VEHICLE).iteritems():
+        inventory = g_itemsCache.items.inventory
+        vehsInvData = g_itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {})
+        for invID, vehCompDescr in vehsInvData.get('compDescr', {}).iteritems():
             try:
-                vehDescr = vehicles.VehicleDescr(compactDescr=vehInvData.compDescr)
+                vehicles.VehicleDescr(vehCompDescr)
             except Exception as e:
-                raise ValidateException(e.message, self.CODES.INVENTORY_VEHICLE_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.VEHICLE, vehInvData))
+                raise ValidateException(e.message, self.CODES.INVENTORY_VEHICLE_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.VEHICLE, (invID, vehCompDescr)))
 
-            vehCrewRoles = vehDescr.type.crewRoles
+        for invID, vehInvData in inventory.getItemsData(GUI_ITEM_TYPE.VEHICLE).iteritems():
             for idx, tankmanID in enumerate(vehInvData.crew):
-                if idx >= len(vehCrewRoles):
+                if idx >= len(vehInvData.descriptor.type.crewRoles):
                     raise ValidateException('Exceeded tankmen in tank', self.CODES.INVENTORY_VEHICLE_CREW_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.VEHICLE, vehInvData, tankmanID))
+
+    def __validateInventoryTankmen(self):
+        tmenInvData = g_itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.TANKMAN, {})
+        for invID, tmanCompDescr in tmenInvData.get('compDescr', {}).iteritems():
+            try:
+                tankmen.TankmanDescr(tmanCompDescr)
+            except Exception as e:
+                raise ValidateException(e.message, self.CODES.INVENTORY_TANKMEN_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.TANKMAN, (invID, tmanCompDescr)))
 
     def __validateInvItem(self, itemTypeID, errorCode):
         for intCompactDescr, itemData in g_itemsCache.items.inventory.getItemsData(itemTypeID).iteritems():
@@ -77,6 +96,7 @@ class AccountValidator(object):
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.OPTIONALDEVICE, self.CODES.INVENTORY_OPT_DEV_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.SHELL, self.CODES.INVENTORY_SHELL_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.EQUIPMENT, self.CODES.INVENTORY_EQ_MISMATCH),
+         self.__validateInventoryTankmen,
          self.__validateInventoryVehicles]
         for handler in handlers:
             try:
@@ -85,12 +105,17 @@ class AccountValidator(object):
                 processed = False
                 if constants.IS_DEVELOPMENT:
                     itemData = e.itemData[1]
-                    if e.code == self.CODES.INVENTORY_VEHICLE_CREW_MISMATCH:
-                        processed = yield self.__devSellInvalidVehicle(itemData)
+                    if e.code == self.CODES.INVENTORY_TANKMEN_MISMATCH:
+                        tmanInvID, _ = itemData
+                        processed = yield self.__devDismissInvalidTankmen(tmanInvID)
+                    elif e.code == self.CODES.INVENTORY_VEHICLE_CREW_MISMATCH:
+                        processed = yield self.__devSellInvalidVehicle(itemData.invID)
+                    elif e.code == self.CODES.INVENTORY_VEHICLE_MISMATCH:
+                        venInvID, _ = itemData
+                        processed = yield self.__devSellInvalidVehicle(venInvID)
                 if not processed:
                     LOG_ERROR('There is exception while validating item', e.itemData)
                     LOG_ERROR(e.message)
-                    callback(e.code)
                     return
 
         callback(self.CODES.OK)

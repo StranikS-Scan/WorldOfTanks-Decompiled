@@ -15,6 +15,11 @@ class MessengerBar(MessengerBarMeta, AppRef):
         if not self.__manageWindow(eventType):
             self.fireEvent(events.ShowWindowEvent(eventType), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def _populate(self):
+        super(MessengerBar, self)._populate()
+        self.as_setInitDataS({'channelsHtmlIcon': "<img src='img://gui/maps/icons/messenger/iconChannels.png' width='32' height='32'/>",
+         'contactsHtmlIcon': "<img src='img://gui/maps/icons/messenger/iconContacts.png' width='16' height='32' vspace='-11'/>"})
+
     def contactsButtonClick(self):
         eventType = events.ShowWindowEvent.SHOW_CONTACTS_WINDOW
         if not self.__manageWindow(eventType):

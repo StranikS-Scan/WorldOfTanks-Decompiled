@@ -5,3 +5,11 @@ class FortRoomMeta(BaseRallyRoomView):
 
     def showChangeDivisionWindow(self):
         self._printOverrideError('showChangeDivisionWindow')
+
+    def as_showLegionariesCountS(self, isShow, msg):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showLegionariesCount(isShow, msg)
+
+    def as_showLegionariesToolTipS(self, isShow):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showLegionariesToolTip(isShow)

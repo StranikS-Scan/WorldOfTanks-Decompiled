@@ -35,7 +35,7 @@ class PlayerUnitInfo(object):
         return
 
     def __repr__(self):
-        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitIdx = {2:n} rating = {3:n}, isCreator = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}) igrType = {9:n}'.format(self.dbID, self.getFullName(), self.unitIdx, self.rating, self.isCreator(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
+        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitIdx = {2:n} rating = {3:n}, isCreator = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n})'.format(self.dbID, self.getFullName(), self.unitIdx, self.rating, self.isCreator(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
 
     def getFullName(self):
         return g_lobbyContext.getPlayerFullName(self.name, clanAbbrev=self.clanAbbrev, pDBID=self.dbID)
@@ -55,6 +55,9 @@ class PlayerUnitInfo(object):
     def isOffline(self):
         return self.role & UNIT_ROLE.OFFLINE > 0
 
+    def isLegionary(self):
+        return self.role & UNIT_ROLE.LEGIONARY > 0
+
     def isCurrentPlayer(self):
         return self.dbID == getPlayerDatabaseID()
 
@@ -66,13 +69,16 @@ class PlayerUnitInfo(object):
         return vehicles or []
 
     def getVehiclesToSlot(self, slotIdx):
-        checkVehicle = self.unit.getRoster().checkVehicle
-        validator = lambda vehCD: checkVehicle(vehCD, slotIdx)[0]
-        return filter(validator, self.getVehiclesCDs())
+        if self.unit is not None:
+            checkVehicle = self.unit.getRoster().checkVehicle
+            validator = lambda vehCD: checkVehicle(vehCD, slotIdx)[0]
+            return filter(validator, self.getVehiclesCDs())
+        else:
+            return []
 
     def canAssignToSlot(self, slotIdx):
         result = (False, [])
-        if not self.isCreator() and slotIdx != CREATOR_SLOT_INDEX:
+        if self.unit is not None and not self.isCreator() and slotIdx != CREATOR_SLOT_INDEX:
             slots = self.unit.getFreeSlots()
             if slotIdx in slots:
                 vehicles = self.getVehiclesToSlot(slotIdx)
@@ -81,19 +87,23 @@ class PlayerUnitInfo(object):
 
     def canAssignToSlots(self, allSlots = False):
         result = (True, UNIT_GUI_ERROR.UNKNOWN)
-        if not len(self.unit.getFreeSlots()):
-            result = (False, UNIT_GUI_ERROR.UNIT_IS_FULL)
-        elif not len(self.getAvailableSlots(allSlots=allSlots)):
-            result = (False, UNIT_GUI_ERROR.VEHICLES_NOT_FOUND)
-        elif UnitState(self.unit.getState()).isLocked():
-            result = (False, UNIT_GUI_ERROR.UNIT_IS_LOCKED)
+        if self.unit is not None:
+            if not len(self.unit.getFreeSlots()):
+                result = (False, UNIT_GUI_ERROR.UNIT_IS_FULL)
+            elif not len(self.getAvailableSlots(allSlots=allSlots)):
+                result = (False, UNIT_GUI_ERROR.VEHICLES_NOT_FOUND)
+            elif UnitState(self.unit.getState()).isLocked():
+                result = (False, UNIT_GUI_ERROR.UNIT_IS_LOCKED)
         return result
 
     def getVehiclesToSlots(self, allSlots = False):
-        slots = self.unit.getFreeSlots()
-        if allSlots:
-            slots = set(list(slots) + self.unit.getPlayerSlots().values())
-        return self.unit.getRoster().matchVehicleListToSlotList(self.getVehiclesCDs(), slots)
+        if self.unit is not None:
+            slots = self.unit.getFreeSlots()
+            if allSlots:
+                slots = set(list(slots) + self.unit.getPlayerSlots().values())
+            return self.unit.getRoster().matchVehicleListToSlotList(self.getVehiclesCDs(), slots)
+        else:
+            return {}
 
     def getAvailableSlots(self, allSlots = False):
         matches = self.getVehiclesToSlots(allSlots)
@@ -107,6 +117,17 @@ class PlayerUnitInfo(object):
             result[slot] = list(itertools.ifilter(lambda v: slot in matches[v], matches.iterkeys()))
 
         return result
+
+    @classmethod
+    def fromPrbInfo(cls, prbInfo, slotIdx = -1):
+        role = UNIT_ROLE.DEFAULT
+        if prbInfo.isCreator:
+            role |= UNIT_ROLE.COMMANDER_UPDATES | UNIT_ROLE.CHANGE_ROSTER
+        if prbInfo.isOffline():
+            role |= UNIT_ROLE.OFFLINE
+        if prbInfo.inBattle():
+            role |= UNIT_ROLE.IN_ARENA
+        return PlayerUnitInfo(prbInfo.dbID, -1, None, prbInfo.name, accountID=prbInfo.accID, role=role, isReady=prbInfo.isReady(), isInSlot=True, clanAbbrev=prbInfo.clanAbbrev, igrType=prbInfo.igrType, slotIdx=slotIdx)
 
 
 class VehicleInfo(object):
@@ -208,6 +229,9 @@ class UnitState(object):
     def isSortie(self):
         return self.__state & UNIT_STATE.SORTIE > 0
 
+    def isFortBattle(self):
+        return self.__state & UNIT_STATE.FORT_BATTLE > 0
+
 
 UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'maxTotalLevel'))
 
@@ -299,7 +323,8 @@ class PredefinedRosterSettings(UnitRosterSettings):
 
 
 _SUPPORTED_ROSTER_SETTINGS = {PREBATTLE_TYPE.UNIT: (ROSTER_TYPE.UNIT_ROSTER,),
- PREBATTLE_TYPE.SORTIE: (ROSTER_TYPE.SORTIE_ROSTER_6, ROSTER_TYPE.SORTIE_ROSTER_8, ROSTER_TYPE.SORTIE_ROSTER_10)}
+ PREBATTLE_TYPE.SORTIE: (ROSTER_TYPE.SORTIE_ROSTER_6, ROSTER_TYPE.SORTIE_ROSTER_8, ROSTER_TYPE.SORTIE_ROSTER_10),
+ PREBATTLE_TYPE.FORT_BATTLE: (ROSTER_TYPE.FORT_ROSTER_10,)}
 
 class SupportedRosterSettings(object):
 

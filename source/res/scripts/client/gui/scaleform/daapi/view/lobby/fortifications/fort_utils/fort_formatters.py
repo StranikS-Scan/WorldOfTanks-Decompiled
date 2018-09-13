@@ -15,7 +15,7 @@ def getDefRes(value, addIcon = True):
 
 
 def getBonusText(strValue, buildingID, textsStyle = None):
-    textsStyle = textsStyle or (fort_text.NEUTRAL_TEXT, fort_text.STANDARD_TEXT)
+    textsStyle = textsStyle or (fort_text.NEUTRAL_TEXT, fort_text.MAIN_TEXT)
     descrStr = i18n.makeString(FORTIFICATIONS.buildings_defresinfo(buildingID))
     resultDescr = fort_text.concatStyles(((textsStyle[0], strValue + ' '), (textsStyle[1], descrStr)))
     return resultDescr

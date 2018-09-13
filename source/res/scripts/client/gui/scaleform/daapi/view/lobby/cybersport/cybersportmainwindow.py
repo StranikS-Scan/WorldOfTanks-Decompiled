@@ -5,18 +5,18 @@ from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface, SystemMessages
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import RallyConfirmDialogMeta
+from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
 from gui.Scaleform.daapi.view.lobby.cyberSport.CyberSportIntroView import CyberSportIntroView
 from gui.Scaleform.daapi.view.meta.CyberSportMainWindowMeta import CyberSportMainWindowMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
-from gui.prb_control import events_dispatcher
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.formatters import messages
-from gui.prb_control.prb_helpers import GlobalListener, prbPeripheriesHandlerProperty
+from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty
 from gui.prb_control import settings
-from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, FUNCTIONAL_EXIT
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n
@@ -25,7 +25,7 @@ from gui.Scaleform.managers.windows_stored_data import stored_window
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 
-class CyberSportMainWindow(CyberSportMainWindowMeta, GlobalListener):
+class CyberSportMainWindow(CyberSportMainWindowMeta):
 
     def __init__(self):
         super(CyberSportMainWindow, self).__init__()
@@ -103,6 +103,13 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, GlobalListener):
         if not pInfo.isInvite():
             self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED, pInfo)
 
+    def onUnitPlayerBecomeCreator(self, pInfo):
+        if pInfo.isCurrentPlayer():
+            self._showLeadershipNotification()
+        chat = self.chat
+        if chat:
+            chat.as_addMessageS(messages.getUnitPlayerNotification(settings.UNIT_NOTIFICATION_KEY.GIVE_LEADERSHIP, pInfo))
+
     def onIntroUnitFunctionalFinished(self):
         if self.unitFunctional.getExit() != settings.FUNCTIONAL_EXIT.UNIT:
             NavigationStack.clear(self.getNavigationKey())
@@ -129,11 +136,11 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, GlobalListener):
             self.as_autoSearchEnableBtnS(True)
 
     def onWindowClose(self):
-        self.prbDispatcher.doLeaveAction(unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave'))
+        self.prbDispatcher.doLeaveAction(unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.NO_FUNC))
 
     def onWindowMinimize(self):
         self.destroy()
-        events_dispatcher.showUnitProgressInCarousel(PREBATTLE_TYPE.UNIT)
+        g_eventDispatcher.showUnitProgressInCarousel(PREBATTLE_TYPE.UNIT)
 
     def onAutoMatch(self, value, vehTypes):
         if value == CYBER_SPORT_ALIASES.INTRO_VIEW_UI:
@@ -174,7 +181,6 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, GlobalListener):
 
     def _populate(self):
         super(CyberSportMainWindow, self)._populate()
-        self.startGlobalListening()
         self.addListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         unitMgrID = self.unitFunctional.getID()
         if unitMgrID > 0:
@@ -182,12 +188,11 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, GlobalListener):
         else:
             self.__initIntroUnitView()
         self.unitFunctional.initEvents(self)
-        events_dispatcher.hideUnitProgressInCarousel(PREBATTLE_TYPE.UNIT)
+        g_eventDispatcher.hideUnitProgressInCarousel(PREBATTLE_TYPE.UNIT)
 
     def _dispose(self):
         self._itemIdMap = None
         super(CyberSportMainWindow, self)._dispose()
-        self.stopGlobalListening()
         self.removeListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
@@ -201,7 +206,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, GlobalListener):
 
     @process
     def __requestToReloginAndJoin(self, peripheryID, ctx):
-        result = yield DialogsInterface.showDialog(RallyConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
+        result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.UNIT, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
         if result:
             self.prbPeripheriesHandler.join(peripheryID, ctx)
 
@@ -209,9 +214,10 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, GlobalListener):
         self.destroy()
 
     def __initIntroUnitView(self):
-        NavigationStack.exclude(self.getNavigationKey(), CYBER_SPORT_ALIASES.UNIT_VIEW_UI)
-        if NavigationStack.hasHistory(self.getNavigationKey()):
-            flashAlias, _, itemID = NavigationStack.current(self.getNavigationKey())
+        navKey = self.getNavigationKey()
+        NavigationStack.exclude(navKey, CYBER_SPORT_ALIASES.UNIT_VIEW_UI)
+        if NavigationStack.hasHistory(navKey):
+            flashAlias, _, itemID = NavigationStack.current(navKey)
             self._requestViewLoad(flashAlias, itemID)
         else:
             self._requestViewLoad(CYBER_SPORT_ALIASES.INTRO_VIEW_UI, None)

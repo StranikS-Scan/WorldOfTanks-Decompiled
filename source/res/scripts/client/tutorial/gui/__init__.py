@@ -1,9 +1,7 @@
 # Embedded file name: scripts/client/tutorial/gui/__init__.py
 from ConnectionManager import connectionManager
-from PlayerEvents import g_playerEvents
 import Event
 from debug_utils import LOG_ERROR
-from gui.prb_control import getClientUnitMgr, ctrl_events
 
 class GUIEvent(object):
 
@@ -167,7 +165,7 @@ class GUIDispatcher(object):
             LOG_ERROR('TUTORIAL. Tutorial is not run.', self._mode)
         return result
 
-    def restartTraining(self, afterBattle = False):
+    def restartTraining(self, reloadIfRun = False, afterBattle = False):
         result = False
         if self._mode == GUIDispatcher.RESTART_MODE:
             if self._isDisabled:
@@ -176,6 +174,9 @@ class GUIDispatcher(object):
                 from tutorial.loader import g_loader
                 result = True
                 g_loader.restart(afterBattle=afterBattle)
+        elif reloadIfRun:
+            from tutorial.loader import g_loader
+            result = g_loader.reload(afterBattle=afterBattle)
         else:
             LOG_ERROR('TUTORIAL. Tutorial is not stopped.', self._mode)
         return result
@@ -202,91 +203,10 @@ class GUIDispatcher(object):
 class LobbyDispatcher(GUIDispatcher):
 
     def _subscribe(self):
-        g_playerEvents.onEnqueuedRandom += self.__pe_onEnqueued
-        g_playerEvents.onDequeuedRandom += self.__pe_onDequeued
-        g_playerEvents.onEnqueuedHistorical += self.__pe_onEnqueued
-        g_playerEvents.onDequeuedHistorical += self.__pe_onDequeued
-        g_playerEvents.onEnqueuedEventBattles += self.__pe_onEnqueued
-        g_playerEvents.onDequeuedEventBattles += self.__pe_onDequeued
-        g_playerEvents.onKickedFromRandomQueue += self.__pe_onKickedFromQueue
-        g_playerEvents.onPrebattleJoined += self.__pe_onPrebattleJoined
-        g_playerEvents.onPrebattleLeft += self.__pe_onPrebattleLeft
-        g_playerEvents.onKickedFromPrebattle += self.__pe_onKickedFromPrebattle
-        g_playerEvents.onEnqueuedUnitAssembler += self.__pe_onEnqueuedUnitAssembler
-        g_playerEvents.onDequeuedUnitAssembler += self.__pe_onDequeuedUnitAssembler
-        g_playerEvents.onKickedFromUnitAssembler += self.__pe_onKickedFromUnitAssembler
         connectionManager.onDisconnected += self.__cm_onDisconnected
-        ctrl_events.g_prbCtrlEvents.onPreQueueFunctionalCreated += self.__prb_onPreQueueFunctionalCreated
-        ctrl_events.g_prbCtrlEvents.onPreQueueFunctionalDestroyed += self.__prb_onPreQueueFunctionalDestroyed
-        unitMgr = getClientUnitMgr()
-        if unitMgr:
-            unitMgr.onUnitJoined += self.__cum_onUnitJoined
-            unitMgr.onUnitLeft += self.__cum_onUnitLeft
-        else:
-            LOG_ERROR('Unit manager is not defined')
 
     def _unsubscribe(self):
-        g_playerEvents.onEnqueuedRandom -= self.__pe_onEnqueued
-        g_playerEvents.onDequeuedRandom -= self.__pe_onDequeued
-        g_playerEvents.onEnqueuedHistorical -= self.__pe_onEnqueued
-        g_playerEvents.onDequeuedHistorical -= self.__pe_onDequeued
-        g_playerEvents.onEnqueuedEventBattles -= self.__pe_onEnqueued
-        g_playerEvents.onDequeuedEventBattles -= self.__pe_onDequeued
-        g_playerEvents.onKickedFromRandomQueue -= self.__pe_onKickedFromQueue
-        g_playerEvents.onPrebattleJoined -= self.__pe_onPrebattleJoined
-        g_playerEvents.onPrebattleLeft -= self.__pe_onPrebattleLeft
-        g_playerEvents.onKickedFromPrebattle -= self.__pe_onKickedFromPrebattle
-        g_playerEvents.onEnqueuedUnitAssembler -= self.__pe_onEnqueuedUnitAssembler
-        g_playerEvents.onDequeuedUnitAssembler -= self.__pe_onDequeuedUnitAssembler
-        g_playerEvents.onKickedFromUnitAssembler -= self.__pe_onKickedFromUnitAssembler
         connectionManager.onDisconnected -= self.__cm_onDisconnected
-        ctrl_events.g_prbCtrlEvents.onPreQueueFunctionalCreated -= self.__prb_onPreQueueFunctionalCreated
-        ctrl_events.g_prbCtrlEvents.onPreQueueFunctionalDestroyed -= self.__prb_onPreQueueFunctionalDestroyed
-        unitMgr = getClientUnitMgr()
-        if unitMgr:
-            unitMgr.onUnitJoined -= self.__cum_onUnitJoined
-            unitMgr.onUnitLeft -= self.__cum_onUnitLeft
-
-    def __pe_onEnqueued(self, *args):
-        self.setDisabled(True)
-
-    def __pe_onDequeued(self, *args):
-        self.setDisabled(False)
-
-    def __prb_onPreQueueFunctionalCreated(self, queueType, *args):
-        if queueType is not None:
-            self.setDisabled(True)
-        return
-
-    def __prb_onPreQueueFunctionalDestroyed(self, *args):
-        self.setDisabled(False)
-
-    def __pe_onKickedFromQueue(self, *args):
-        self.setDisabled(False)
-
-    def __pe_onPrebattleJoined(self, *args):
-        self.setDisabled(True)
-
-    def __pe_onPrebattleLeft(self, *args):
-        self.setDisabled(False)
-
-    def __pe_onKickedFromPrebattle(self, *args):
-        self.setDisabled(False)
 
     def __cm_onDisconnected(self):
         self.clearChapterInfo()
-
-    def __cum_onUnitJoined(self, unitMgrID, unitIdx):
-        self.setDisabled(True)
-
-    def __cum_onUnitLeft(self, unitMgrID, unitIdx):
-        self.setDisabled(False)
-
-    def __pe_onEnqueuedUnitAssembler(self):
-        self.setDisabled(True)
-
-    def __pe_onDequeuedUnitAssembler(self):
-        self.setDisabled(False)
-
-    def __pe_onKickedFromUnitAssembler(self):
-        self.setDisabled(False)

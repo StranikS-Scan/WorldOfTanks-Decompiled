@@ -14,10 +14,6 @@ class FortListMeta(BaseRallyListView):
         if self._isDAAPIInited():
             return self.flashObject.as_setSelectedDivision(index)
 
-    def as_setDetailsS(self, value):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setDetails(value)
-
     def as_setCreationEnabledS(self, value):
         if self._isDAAPIInited():
             return self.flashObject.as_setCreationEnabled(value)

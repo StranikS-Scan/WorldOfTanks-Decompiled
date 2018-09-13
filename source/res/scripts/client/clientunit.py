@@ -123,6 +123,9 @@ class ClientUnit(UnitBase):
     def isSortie(self):
         return self._state & UNIT_STATE.SORTIE > 0
 
+    def isFortBattle(self):
+        return self._state & UNIT_STATE.FORT_BATTLE > 0
+
     def getRosterTypeID(self):
         return self._rosterTypeID
 
@@ -211,3 +214,10 @@ class ClientUnit(UnitBase):
             LOG_ERROR(e)
 
         return nextOps
+
+    def _giveLeadership(self, memberDBID):
+        prevRoleFlags = self._players[memberDBID]['role']
+        UnitBase._giveLeadership(self, memberDBID)
+        newRoleFlags = self._players[memberDBID]['role']
+        self.onUnitMembersListChanged()
+        self.onUnitPlayerRoleChanged(memberDBID, prevRoleFlags, newRoleFlags)

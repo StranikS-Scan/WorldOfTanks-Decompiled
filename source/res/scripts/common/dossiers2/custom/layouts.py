@@ -11,6 +11,7 @@ from dossiers2.custom.dependencies import FORT_BATTLES_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_SORTIES_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_MISC_DEPENDENCIES
 from dossiers2.custom.dependencies import CLAN_STATS_DEPENDENCIES
+from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
  'battleLifeTime',
@@ -217,7 +218,21 @@ ACCOUNT_ACHIEVEMENTS_BLOCK_LAYOUT = ['fragsBeast',
  'medalCoolBlood',
  'medalStark',
  'maxWFC2014WinSeries',
- 'WFC2014WinSeries']
+ 'WFC2014WinSeries',
+ 'impenetrable',
+ 'reliableComradeSeries',
+ 'reliableComrade',
+ 'maxAimerSeries',
+ 'shootToKill',
+ 'fighter',
+ 'duelist',
+ 'demolition',
+ 'arsonist',
+ 'bonecrusher',
+ 'charmed',
+ 'even',
+ 'maxDeathTrackWinSeries',
+ 'deathTrackWinSeries']
 _accountAchievementsPopUps = ['warrior',
  'invader',
  'sniper',
@@ -306,7 +321,17 @@ _accountAchievementsPopUps = ['warrior',
  'medalAntiSpgFire',
  'medalGore',
  'medalCoolBlood',
- 'medalStark']
+ 'medalStark',
+ 'impenetrable',
+ 'reliableComrade',
+ 'shootToKill',
+ 'fighter',
+ 'duelist',
+ 'demolition',
+ 'arsonist',
+ 'bonecrusher',
+ 'charmed',
+ 'even']
 _accountAchievementsBlockBuilder = StaticSizeBlockBuilder('achievements', ACCOUNT_ACHIEVEMENTS_BLOCK_LAYOUT, ACHIEVEMENT_DEPENDENCIES, _accountAchievementsPopUps)
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'IIII', {})
@@ -438,7 +463,9 @@ ACCOUNT_SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'armorPiercer',
  'battleCitizen',
  'WFC2014',
- 'tacticalBreakthrough']
+ 'tacticalBreakthrough',
+ 'aimer',
+ 'deathTrack']
 _accountSingleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -446,7 +473,9 @@ _accountSingleAchievementsPopUps = ['titleSniper',
  'armorPiercer',
  'battleCitizen',
  'WFC2014',
- 'tacticalBreakthrough']
+ 'tacticalBreakthrough',
+ 'aimer',
+ 'deathTrack']
 _accountSingleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', ACCOUNT_SINGLE_ACHIEVEMENTS_VALUES, {}, _accountSingleAchievementsPopUps)
 FORT_BLOCK_LAYOUT = ['xp',
  'battlesCount',
@@ -495,15 +524,18 @@ FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
  'crusher',
  'counterblow',
+ 'kampfer',
  'soldierOfFortune',
- 'kampfer']
+ 'wins',
+ 'capturedBasesInAttack',
+ 'capturedBasesInDefence']
 _fortPersonalAchievementsPopUps = ['conqueror',
  'fireAndSword',
  'crusher',
  'counterblow',
- 'soldierOfFortune',
- 'kampfer']
-_fortPersonalAchievementsBlockBuilder = StaticSizeBlockBuilder('fortAchievements', FORT_ACHIEVEMENTS_BLOCK_LAYOUT, {}, _fortPersonalAchievementsPopUps)
+ 'kampfer',
+ 'soldierOfFortune']
+_fortPersonalAchievementsBlockBuilder = StaticSizeBlockBuilder('fortAchievements', FORT_ACHIEVEMENTS_BLOCK_LAYOUT, FORT_ACHIEVEMENTS_DEPENDENCIES, _fortPersonalAchievementsPopUps)
 CLAN_ACHIEVEMENTS_BLOCK_LAYOUT = ['medalRotmistrov']
 _clanAchievementsPopUps = ['medalRotmistrov']
 _accountClanAchievementsBlockBuilder = StaticSizeBlockBuilder('clanAchievements', CLAN_ACHIEVEMENTS_BLOCK_LAYOUT, {}, _clanAchievementsPopUps)
@@ -624,7 +656,17 @@ VEHICLE_ACHIEVEMENTS_BLOCK_LAYOUT = ['fragsBeast',
  'medalGore',
  'medalCoolBlood',
  'medalStark',
- 'damageRating']
+ 'damageRating',
+ 'impenetrable',
+ 'maxAimerSeries',
+ 'shootToKill',
+ 'fighter',
+ 'duelist',
+ 'demolition',
+ 'arsonist',
+ 'bonecrusher',
+ 'charmed',
+ 'even']
 _vehicleAchievementsPopUps = ['tankExpert',
  'tankExpert0',
  'tankExpert1',
@@ -642,7 +684,15 @@ _vehicleAchievementsPopUps = ['tankExpert',
  'tankExpert13',
  'tankExpert14',
  'markOfMastery',
- 'marksOnGun']
+ 'marksOnGun',
+ 'impenetrableshootToKill',
+ 'fighter',
+ 'duelist',
+ 'demolition',
+ 'arsonist',
+ 'bonecrusher',
+ 'charmed',
+ 'even']
 _vehicleAchievementsBlockBuilder = StaticSizeBlockBuilder('achievements', VEHICLE_ACHIEVEMENTS_BLOCK_LAYOUT, ACHIEVEMENT_DEPENDENCIES, _vehicleAchievementsPopUps)
 _playerInscriptionsBlockBuilder = ListBlockBuilder('playerInscriptions', 'H', {})
 _playerEmblemsBlockBuilder = ListBlockBuilder('playerEmblems', 'H', {})
@@ -658,13 +708,15 @@ VEHICLE_SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'diehard',
  'handOfDeath',
  'armorPiercer',
- 'tacticalBreakthrough']
+ 'tacticalBreakthrough',
+ 'aimer']
 _vehicleSingleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
  'handOfDeath',
  'armorPiercer',
- 'tacticalBreakthrough']
+ 'tacticalBreakthrough',
+ 'aimer']
 _vehicleSingleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', VEHICLE_SINGLE_ACHIEVEMENTS_VALUES, {}, _vehicleSingleAchievementsPopUps)
 _vehicleClanAchievementsBlockBuilder = StaticSizeBlockBuilder('clanAchievements', CLAN_ACHIEVEMENTS_BLOCK_LAYOUT, {}, [])
 vehicleDossierLayout = (_a15x15BlockBuilder,
@@ -728,7 +780,7 @@ TMAN_ACHIEVEMENTS_BLOCK_LAYOUT = ['warrior',
  'mainGun']
 _tankmanAchievementsBlockBuilder = StaticSizeBlockBuilder('achievements', TMAN_ACHIEVEMENTS_BLOCK_LAYOUT, {}, [])
 tmanDossierLayout = (_tmanTotalBlockBuilder, _tankmanAchievementsBlockBuilder)
-_fortTotalBlockLayout = ['creationTime', 'production']
+_fortTotalBlockLayout = ['creationTime', 'production', 'reservedInt32']
 _fortTotalBlockBuilder = StaticSizeBlockBuilder('total', _fortTotalBlockLayout, {}, [])
 _fortBattlesBlockLayout = ['battlesCount',
  'battlesHours',
@@ -736,8 +788,14 @@ _fortBattlesBlockLayout = ['battlesCount',
  'defenceCount',
  'enemyBaseCaptureCount',
  'ownBaseLossCount',
- 'ownBaseLossCountInDefence',
- 'enemyBaseCaptureCountInAttack']
+ 'combatCount',
+ 'combatWins',
+ 'successDefenceCount',
+ 'successAttackCount',
+ 'captureEnemyBuildingTotalCount',
+ 'lossOwnBuildingTotalCount',
+ 'resourceCaptureCount',
+ 'resourceLossCount']
 _fortBattlesBlockBuilder = StaticSizeBlockBuilder('fortBattles', _fortBattlesBlockLayout, {}, [])
 _fortSortiesBlockLayout = ['battlesCount',
  'wins',

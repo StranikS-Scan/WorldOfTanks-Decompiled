@@ -12,7 +12,7 @@ class HitController:
         if hitEffectCode in (HIT_EFFECT.ARMOR_NOT_PIERCED, HIT_EFFECT.ARMOR_PIERCED_NO_DAMAGE):
             OnceController('hit_nonpenetration_veff')
             return
-        if hitEffectCode == HIT_EFFECT.RICOCHET:
+        if hitEffectCode in HIT_EFFECT.RICOCHETS:
             OnceController('hit_ricochet_veff')
             return
         if hitEffectCode == HIT_EFFECT.MAX_CODE + 1:

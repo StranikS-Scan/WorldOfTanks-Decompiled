@@ -61,7 +61,8 @@ class _DefaultContainer(IViewContainer):
                 self.__manager.removeContainer(subContainerType)
             self.__view.onModuleDispose -= self.__handleModuleDispose
             self.__manager.as_hideS(self.__view.token)
-            self.__manager._loadingViews.discard(self.__view.alias)
+            if self.__manager._loadingViews.has_key(self.__view.alias):
+                self.__manager._loadingViews.pop(self.__view.alias)
             self.__view.destroy()
             self.__view = None
         return
@@ -78,7 +79,8 @@ class _DefaultContainer(IViewContainer):
         subContainerType = pyView.getSubContainerType()
         if subContainerType is not None:
             self.__manager.removeContainer(subContainerType)
-        self.__manager._loadingViews.discard(pyView.alias)
+        if self.__manager._loadingViews.has_key(pyView.alias):
+            self.__manager._loadingViews.pop(pyView.alias)
         self.remove(pyView)
         return
 
@@ -238,7 +240,7 @@ class ContainerManager(ContainerManagerMeta):
          ViewTypes.BROWSER: _PopUpContainer(proxy),
          ViewTypes.TOP_WINDOW: _PopUpContainer(proxy),
          ViewTypes.SERVICE_LAYOUT: _DefaultContainer(proxy)}
-        self._loadingViews = set()
+        self._loadingViews = dict()
         self.__loadingTokens = {}
         self.__loader = loader
         self.__loader.onViewLoaded += self.__loader_onViewLoaded
@@ -250,10 +252,32 @@ class ContainerManager(ContainerManagerMeta):
             name = alias
         isViewExists = self.as_getViewS(name)
         if not isViewExists and alias not in self._loadingViews:
-            self._loadingViews.add(alias)
             pyEntity = self.__loader.loadView(alias, name, *args, **kwargs)
             self.__scopeController.addLoadingView(pyEntity, False)
+            curType = pyEntity.settings.type
+            if self.canCancelPreviousLoading(curType) and len(self.__getViewOnLoadingForType(curType)) > 0:
+                self.cancelLoadingForViewType(curType)
+            self._loadingViews[alias] = pyEntity
         return
+
+    def cancelLoadingForViewType(self, viewType):
+        entities = self.__getViewOnLoadingForType(viewType)
+        self.__cancelLoadingForPyEntities(entities)
+        self.as_cancelLoadingsForContainerS(viewType)
+
+    def __cancelLoadingForPyEntities(self, pyEntitys):
+        for curEntity in pyEntitys:
+            self._loadingViews.pop(curEntity.settings.alias)
+            self.__loader.cancelLoadingByToken(curEntity.token)
+            curEntity.destroy()
+
+    def __getViewOnLoadingForType(self, viewType):
+        entities = []
+        for pyEntity in self._loadingViews.values():
+            if pyEntity.settings.type == viewType:
+                entities.append(pyEntity)
+
+        return entities
 
     def canCancelPreviousLoading(self, containerType):
         container = self.getContainer(containerType)
@@ -284,9 +308,10 @@ class ContainerManager(ContainerManagerMeta):
         self.__scopeController.removeSubScopeController(ScopeTemplates.VIEW_TYPES_TO_SCOPES[viewType].getScopeType())
         result = True
         if viewType in self.__containers:
-            container = self.__containers.pop(viewType)
+            container = self.__containers[viewType]
             container.destroy()
             self.as_unregisterContainerS(viewType)
+            del self.__containers[viewType]
         else:
             result = False
         return result
@@ -311,8 +336,7 @@ class ContainerManager(ContainerManagerMeta):
         if container is not None:
             view = container.getView(criteria=criteria)
         else:
-            LOG_WARNING('Container for %s view is None!' % viewType)
-            raise Exception('sdf')
+            raise Exception('Container for %s view is None!' % viewType)
         return view
 
     def isViewAvailable(self, viewType, criteria = None):
@@ -351,7 +375,8 @@ class ContainerManager(ContainerManagerMeta):
         viewType = pyView.settings.type
         if viewType is None:
             LOG_ERROR('Type of view is not defined', pyView.settings)
-        self._loadingViews.discard(pyView.alias)
+        if self._loadingViews.has_key(pyView.alias):
+            self._loadingViews.pop(pyView.alias)
         if viewType in self.__containers:
             if ViewTypes.DEFAULT == viewType:
                 self.closePopUps()

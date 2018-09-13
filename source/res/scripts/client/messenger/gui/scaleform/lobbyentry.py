@@ -63,6 +63,7 @@ class LobbyEntry(IGUIEntry):
         cEvents.onPlayerEnterChannelByAction += self.__me_onPlayerEnterChannelByAction
         cEvents.onConnectingToSecureChannel += self.__me_onConnectingToSecureChannel
         cEvents.onChannelInfoUpdated += self.__me_onChannelInfoUpdated
+        cEvents.onCommandReceived += self.__me_onCommandReceived
         g_messengerEvents.users.onUserRosterChanged += self.__me_onUsersRosterChanged
         g_messengerEvents.onServerErrorReceived += self.__me_onServerErrorReceived
 
@@ -83,6 +84,7 @@ class LobbyEntry(IGUIEntry):
         cEvents.onPlayerEnterChannelByAction -= self.__me_onPlayerEnterChannelByAction
         cEvents.onConnectingToSecureChannel -= self.__me_onConnectingToSecureChannel
         cEvents.onChannelInfoUpdated -= self.__me_onChannelInfoUpdated
+        cEvents.onCommandReceived -= self.__me_onCommandReceived
         g_messengerEvents.users.onUserRosterChanged -= self.__me_onUsersRosterChanged
         g_messengerEvents.onServerErrorReceived -= self.__me_onServerErrorReceived
 
@@ -95,6 +97,13 @@ class LobbyEntry(IGUIEntry):
             controller = self.__channelsCtrl.getController(clientID)
             if controller and not controller.addMessage(message):
                 self.__carouselHandler.notifyChannel(channel)
+
+    def __me_onCommandReceived(self, command):
+        controller = self.__channelsCtrl.getController(command.getClientID())
+        if controller:
+            controller.addCommand(command)
+        else:
+            LOG_ERROR('Controller not found', command)
 
     def __me_onPlayerEnterChannelByAction(self, channel):
         controller = self.channelsCtrl.getController(channel.getClientID())

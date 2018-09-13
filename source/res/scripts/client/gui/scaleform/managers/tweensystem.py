@@ -4,8 +4,10 @@ import BigWorld
 import time
 import math
 import Math
+from debug_utils import LOG_DEBUG
 
 class TweenManager(TweenManagerMeta):
+    THRESHOLD_VALUE_IN_CURRENT_FRAME = 15
 
     def __init__(self):
         super(TweenManager, self).__init__()
@@ -15,6 +17,7 @@ class TweenManager(TweenManagerMeta):
         self.__tweens = []
         self.__playStack = []
         self.__callBackTime = 0.02
+        self.__lastStartTime = 0
         return
 
     def __onTweenStarted(self, tween):
@@ -27,6 +30,9 @@ class TweenManager(TweenManagerMeta):
         if self.__animCallback is None:
             self.__animCallback = BigWorld.callback(self.__callBackTime, self.__updatePosition)
             self.__lastUpdateTime = time.time() * 1000
+        if int(time.time() * 1000) - self.__lastStartTime <= TweenManager.THRESHOLD_VALUE_IN_CURRENT_FRAME:
+            self.__lastUpdateTime = time.time() * 1000
+        self.__lastStartTime = int(time.time() * 1000)
         return
 
     def isTweenInStack(self, tween):
@@ -157,6 +163,9 @@ class TweenManager(TweenManagerMeta):
                 else:
                     self.__clearPlayStackElement(self.__playStack[tweenIdx])
                     del self.__playStack[tweenIdx]
+                    if len(self.__playStack) == 0:
+                        BigWorld.cancelCallback(self.__animCallback)
+                        self.__animCallback = None
                 tween.complete()
             elif tween.getPaused():
                 self.__clearPlayStackElement(self.__playStack[tweenIdx])
@@ -182,7 +191,7 @@ class TweenManager(TweenManagerMeta):
         return
 
 
-from debug_utils import LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_WARNING
 import Event
 from gui.Scaleform.framework.entities.abstract.AbstractTweenMeta import AbstractTweenMeta
 
@@ -224,6 +233,7 @@ class _AbstractTween(AbstractTweenMeta):
         self.__startTargetProps = {}
         self.__deltaTargetProps = {}
         self.__currentAngle = 0
+        self.__isPostponedStarted = False
         self.onTweenStart = Event.Event()
         return
 
@@ -232,6 +242,11 @@ class _AbstractTween(AbstractTweenMeta):
 
     def _populate(self):
         super(_AbstractTween, self)._populate()
+
+    def postponedCheckState(self):
+        self.__isPostponedStarted = True
+        if not self.__paused:
+            self.onTweenStart(self)
 
     def _dispose(self):
         self.__animTargetProps = None
@@ -335,7 +350,7 @@ class _AbstractTween(AbstractTweenMeta):
 
     def setPaused(self, paused):
         if not self.__paused == paused:
-            if not paused:
+            if not paused and self.__isPostponedStarted:
                 self.onTweenStart(self)
             self.__paused = paused
 

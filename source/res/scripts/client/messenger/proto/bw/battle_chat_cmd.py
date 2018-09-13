@@ -4,10 +4,13 @@ from debug_utils import LOG_ERROR
 from gui.arena_info import getPlayerVehicleID
 from helpers import i18n
 from messenger import g_settings
+from messenger.ext import getMinimapCellName
 from messenger.m_constants import PROTO_TYPE
+from messenger.proto.bw.find_criteria import BWBattleTeamChannelFindCriteria
 from messenger.proto.bw.wrappers import ChatActionWrapper
-from messenger.proto.entities import ReceivedChatCommand
-from messenger.proto.entities import SendChatCommand
+from messenger.proto.entities import ReceivedBattleChatCommand
+from messenger.proto.entities import OutChatCommand
+from messenger.proto.interfaces import IBattleCommandFactory
 from messenger.storage import storage_getter
 _PUBLIC_ADR_CMD_INDEXES = (CHAT_COMMANDS.ATTACKENEMY.index(),
  CHAT_COMMANDS.SUPPORTMEWITHFIRE.index(),
@@ -30,27 +33,19 @@ _VEHICLE_TARGET_CMD_INDEXES = (CHAT_COMMANDS.ATTACKENEMY.index(),
 _SHOW_MARKER_FOR_RECEIVER_CMD_INDEXES = (CHAT_COMMANDS.ATTACKENEMY.index(), CHAT_COMMANDS.SUPPORTMEWITHFIRE.index())
 
 def makeDecorator(commandData):
-    return ReceivedChatCommandDecorator(commandData, getPlayerVehicleID())
+    return _ReceivedCmdDecorator(commandData, getPlayerVehicleID())
 
 
-def getMinimapCellName(cellIdx):
-    from gui.WindowsManager import g_windowsManager
-    battleWindow = g_windowsManager.battleWindow
-    if battleWindow:
-        cellName = battleWindow.minimap.getCellName(cellIdx)
-    else:
-        cellName = 'N/A'
-    return cellName
-
-
-class SendChatCommandDecorator(SendChatCommand):
+class _SendCmdDecorator(OutChatCommand):
     __slots__ = ('_command', '_params')
 
     def __init__(self, command, first = 0, second = 0):
-        super(SendChatCommandDecorator, self).__init__()
+        super(_SendCmdDecorator, self).__init__({'int64Arg': first,
+         'int16Arg': second})
         self._command = command
-        self._params = {'int64Arg': first,
-         'int16Arg': second}
+
+    def getID(self):
+        return self._command.index()
 
     def getProtoType(self):
         return PROTO_TYPE.BW
@@ -58,39 +53,27 @@ class SendChatCommandDecorator(SendChatCommand):
     def getCommand(self):
         return self._command
 
-    def getParams(self):
-        return self._params
 
-    def setFirstParam(self, value):
-        self._params['int64Arg'] = value
-
-    def setSecondParam(self, value):
-        self._params['int16Arg'] = value
-
-
-class ReceivedChatCommandDecorator(ReceivedChatCommand):
+class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     __slots__ = ('_chatAction', '_playerVehID', '__publicArgumentCmdFormatters')
 
     def __init__(self, commandData, playerVehID):
-        super(ReceivedChatCommandDecorator, self).__init__()
-        self._chatAction = ChatActionWrapper(**dict(commandData))
+        super(_ReceivedCmdDecorator, self).__init__(ChatActionWrapper(**dict(commandData)))
+        self._protoData = ChatActionWrapper(**dict(commandData))
         self._playerVehID = playerVehID
         self.__publicArgumentCmdFormatters = (self._reloadingGunFormatter, self._reloadingCassetteFormatter, self._reloadingGunReadyFormatter)
 
     def getID(self):
-        return self._chatAction.channel
+        return self._protoData.channel
 
     def getProtoType(self):
         return PROTO_TYPE.BW
-
-    def getProtoData(self):
-        return self._chatAction
 
     def getCommandText(self):
         index = self.getCommandIndex()
         command = CHAT_COMMANDS[index]
         if command is None:
-            LOG_ERROR('Chat command not found', self._chatAction)
+            LOG_ERROR('Chat command not found', self._protoData)
             return ''
         else:
             if command.argsCnt > 0:
@@ -110,37 +93,37 @@ class ReceivedChatCommandDecorator(ReceivedChatCommand):
             return unicode(text, 'utf-8', errors='ignore')
 
     def getSenderID(self):
-        return self._chatAction.originator
+        return self._protoData.originator
 
     def getCommandIndex(self):
-        return self._chatAction.data[0]
+        return self._protoData.data[0]
 
     def getFirstTargetID(self):
-        data = self._chatAction.data
+        data = self._protoData.data
         if len(data) > 1:
             return data[1]
         return 0
 
+    def getSecondTargetID(self):
+        data = self._protoData.data
+        if len(data) > 2:
+            return data[2]
+        return 0
+
     def getReloadingTime(self):
-        data = self._chatAction.data
+        data = self._protoData.data
         if len(data) > 1:
             return data[1]
         return 0
 
     def getAmmoQuantityInCassete(self):
-        data = self._chatAction.data
+        data = self._protoData.data
         if len(data) > 1:
             return data[1]
         return 0
 
     def getAmmoQuantityLeft(self):
-        data = self._chatAction.data
-        if len(data) > 2:
-            return data[2]
-        return 0
-
-    def getSecondTargetID(self):
-        data = self._chatAction.data
+        data = self._protoData.data
         if len(data) > 2:
             return data[2]
         return 0
@@ -149,7 +132,7 @@ class ReceivedChatCommandDecorator(ReceivedChatCommand):
         command = CHAT_COMMANDS[self.getCommandIndex()]
         result = ''
         if command is None:
-            LOG_ERROR('Chat command not found', self._chatAction)
+            LOG_ERROR('Chat command not found', self._protoData)
         else:
             result = command.get('vehMarker', defval='')
         if vehicle:
@@ -158,20 +141,8 @@ class ReceivedChatCommandDecorator(ReceivedChatCommand):
             result = '{0:>s}{1:>s}'.format(result, mode)
         return result
 
-    def getVehMarkers(self, vehicle = None):
-        mode = ''
-        if vehicle:
-            mode = 'SPG' if 'SPG' in vehicle.vehicleType.tags else ''
-        return (self.getVehMarker(mode=mode), 'attackSender{0:>s}'.format(mode))
-
-    def getSoundEventName(self):
-        return 'chat_shortcut_common_fx'
-
-    def isIgnored(self):
-        user = storage_getter('users')().getUser(self.getSenderID())
-        if user:
-            return user.isIgnored()
-        return False
+    def isOnMinimap(self):
+        return self.getCommandIndex() == CHAT_COMMANDS.ATTENTIONTOCELL.index()
 
     def isPrivate(self):
         return self.getCommandIndex() in _PRIVATE_ADR_CMD_INDEXES
@@ -182,17 +153,11 @@ class ReceivedChatCommandDecorator(ReceivedChatCommand):
     def isReceiver(self):
         return self.getFirstTargetID() == self._playerVehID
 
-    def isSender(self):
-        user = storage_getter('users')().getUser(self.getSenderID())
-        if user:
-            return user.isCurrentPlayer()
-        return False
-
     def showMarkerForReceiver(self):
         return self.getCommandIndex() in _SHOW_MARKER_FOR_RECEIVER_CMD_INDEXES
 
     def _makeMinimapCommandMessage(self, command):
-        return i18n.makeString(command.msgText, getMinimapCellName(self.getSecondTargetID()))
+        return i18n.makeString(command.msgText, cellName=getMinimapCellName(self.getSecondTargetID()))
 
     def _makeTargetedCommandMessage(self, command):
         from gui.BattleContext import g_battleContext
@@ -200,20 +165,70 @@ class ReceivedChatCommandDecorator(ReceivedChatCommand):
         text = command.msgText
         if self.isReceiver():
             target = g_settings.battle.targetFormat % {'target': target}
-        return i18n.makeString(text, target)
+        return i18n.makeString(text, target=target)
 
     def _reloadingCassetteFormatter(self, command):
         reloadingTime = self.getReloadingTime()
         ammoQuantityLeft = self.getAmmoQuantityLeft()
         text = command.msgText
-        return i18n.makeString(text, rTime=reloadingTime, ammoQuantityLeft=ammoQuantityLeft)
+        return i18n.makeString(text, floatArg2=reloadingTime, int32Arg1=ammoQuantityLeft)
 
     def _reloadingGunFormatter(self, command):
         reloadingTime = self.getReloadingTime()
         text = command.msgText
-        return i18n.makeString(text, rTime=reloadingTime)
+        return i18n.makeString(text, floatArg2=reloadingTime)
 
     def _reloadingGunReadyFormatter(self, command):
         ammoInCassete = self.getAmmoQuantityInCassete()
         text = command.msgText
-        return i18n.makeString(text, ammoInCassete=ammoInCassete)
+        return i18n.makeString(text, int32Arg1=ammoInCassete)
+
+
+class BattleCommandFactory(IBattleCommandFactory):
+
+    @storage_getter('channels')
+    def channelsStorage(self):
+        return None
+
+    def createByName(self, name):
+        command = CHAT_COMMANDS.lookup(name)
+        if command is None:
+            return
+        else:
+            return self.__addClientID(_SendCmdDecorator(command))
+
+    def createByNameTarget(self, name, targetID):
+        if targetID is None:
+            return
+        else:
+            command = CHAT_COMMANDS.lookup(name)
+            if command is None:
+                return
+            return self.__addClientID(_SendCmdDecorator(command, first=targetID))
+
+    def createByCellIdx(self, cellIdx):
+        return self.__addClientID(_SendCmdDecorator(CHAT_COMMANDS.ATTENTIONTOCELL, second=cellIdx))
+
+    def create4Reload(self, isCassetteClip, timeLeft, quantity):
+        command = CHAT_COMMANDS.RELOADINGGUN
+        first, second = (0, 0)
+        if timeLeft > 0:
+            first = timeLeft
+            if isCassetteClip:
+                if quantity > 0:
+                    command = CHAT_COMMANDS.RELOADING_CASSETE
+                    second = quantity
+        elif quantity == 0:
+            command = CHAT_COMMANDS.RELOADING_UNAVAILABLE
+        elif isCassetteClip:
+            command = CHAT_COMMANDS.RELOADING_READY_CASSETE
+            first = quantity
+        else:
+            command = CHAT_COMMANDS.RELOADING_READY
+        return self.__addClientID(_SendCmdDecorator(command, first, second))
+
+    def __addClientID(self, decorator):
+        channel = self.channelsStorage.getChannelByCriteria(BWBattleTeamChannelFindCriteria())
+        if channel:
+            decorator.setClientID(channel.getClientID())
+        return decorator

@@ -3,12 +3,12 @@ from CurrentVehicle import g_currentVehicle
 from adisp import process
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.daapi.view.lobby.prb_windows.sf_settings import PRB_WINDOW_VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.PrebattleWindowMeta import PrebattleWindowMeta
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework import AppRef, ViewTypes
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.prb_control.context import prb_ctx
@@ -17,12 +17,12 @@ from gui.prb_control.items import prb_items
 from gui.prb_control.prb_helpers import PrbListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.events import FocusEvent
 from helpers import int2roman
 from messenger import g_settings, MessengerEntry
 from messenger.ext import channel_num_gen
 from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import USER_GUI_TYPE
-from messenger.proto.bw import find_criteria
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
@@ -36,11 +36,11 @@ class PrebattleWindow(View, AbstractWindowView, PrebattleWindowMeta, PrbListener
         self.__prbName = prbName
         self.__clientID = channel_num_gen.getClientID4Prebattle(self.prbFunctional.getPrbType())
 
+    def onFocusIn(self, alias):
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.__clientID}))
+
     def onWindowClose(self):
-        chat = self.chat
-        if chat:
-            chat.minimize()
-        self.destroy()
+        self.requestToLeave()
 
     def onWindowMinimize(self):
         chat = self.chat
@@ -66,9 +66,8 @@ class PrebattleWindow(View, AbstractWindowView, PrebattleWindowMeta, PrbListener
         if result:
             self.as_toggleReadyBtnS(not value)
 
-    @process
     def requestToLeave(self):
-        yield self.prbDispatcher.leave(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave'))
+        self.prbDispatcher.doLeaveAction(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave'))
 
     def showPrebattleSendInvitesWindow(self):
         if self.canSendInvite():
@@ -174,7 +173,7 @@ class PrebattleWindow(View, AbstractWindowView, PrebattleWindowMeta, PrbListener
     def _closeSendInvitesWindow(self):
         container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
         if container is not None:
-            window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: PRB_WINDOW_VIEW_ALIAS.SEND_INVITES_WINDOW})
+            window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY})
             if window is not None:
                 window.destroy()
         return
@@ -236,9 +235,7 @@ class PrebattleWindow(View, AbstractWindowView, PrebattleWindowMeta, PrbListener
             channels = MessengerEntry.g_instance.gui.channelsCtrl
             controller = None
             if channels:
-                prbType = self.prbFunctional.getPrbType()
-                if prbType:
-                    controller = channels.getControllerByCriteria(find_criteria.BWPrbChannelFindCriteria(prbType))
+                controller = channels.getController(self.__clientID)
             if controller is not None:
                 controller.setView(viewPy)
             else:

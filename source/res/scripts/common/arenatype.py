@@ -163,6 +163,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing):
         cfg['roundLength'] = __readInt('roundLength', section, defaultXml)
     if raiseIfMissing or __hasKey('winnerIfTimeout', section, defaultXml):
         cfg['winnerIfTimeout'] = __readInt('winnerIfTimeout', section, defaultXml)
+    if raiseIfMissing or __hasKey('artilleryPreparationChance', section, defaultXml):
+        cfg['artilleryPreparationChance'] = __readFloat('artilleryPreparationChance', section, defaultXml)
     if raiseIfMissing or section.has_key('mapActivities'):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
     if IS_CLIENT or IS_WEB:
@@ -192,6 +194,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing):
         cfg['controlPoints'] = __readControlPoints(section)
         cfg['teamBasePositions'] = __readTeamBasePositions(section)
         cfg['teamSpawnPoints'] = __readTeamSpawPoints(section)
+        cfg['teamLowLevelSpawnPoints'] = __readTeamSpawPoints(section, nodeNameTemplate='team%d_low', required=False)
     return cfg
 
 
@@ -216,6 +219,18 @@ def __readInt(key, xml, defaultXml, defaultValue = None):
         return xml.readInt(key)
     elif defaultXml.has_key(key):
         return defaultXml.readInt(key)
+    elif defaultValue is not None:
+        return defaultValue
+    else:
+        raise Exception, "missing key '%s'" % key
+        return
+
+
+def __readFloat(key, xml, defaultXml, defaultValue = None):
+    if xml.has_key(key):
+        return xml.readFloat(key)
+    elif defaultXml.has_key(key):
+        return defaultXml.readFloat(key)
     elif defaultValue is not None:
         return defaultValue
     else:
@@ -348,16 +363,19 @@ def __readTeamBasePositions(section):
         return teamBases
 
 
-def __readTeamSpawPoints(section):
+def __readTeamSpawPoints(section, nodeNameTemplate = 'team%d', required = True):
+    team1, team2 = map(lambda idx: nodeNameTemplate % idx, (1, 2))
     section = section['teamSpawnPoints']
     if section is None:
         return ([], [])
     else:
         teamSpawnPoints = ([], [])
-        for teamIdx, teamTag in ((0, 'team1'), (1, 'team2')):
+        for teamIdx, teamTag in ((0, team1), (1, team2)):
             s = section[teamTag]
             if s is None:
-                raise Exception, "missing 'teamSpawnPoints/%s'" % teamTag
-            teamSpawnPoints[teamIdx].extend(s.readVector2s('position'))
+                if required:
+                    raise Exception, "missing 'teamSpawnPoints/%s'" % teamTag
+            else:
+                teamSpawnPoints[teamIdx].extend(s.readVector2s('position'))
 
         return teamSpawnPoints

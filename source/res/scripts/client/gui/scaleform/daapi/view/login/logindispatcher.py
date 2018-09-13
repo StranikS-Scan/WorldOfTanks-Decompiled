@@ -23,7 +23,7 @@ from gui.shared.events import OpenLinkEvent
 from helpers import i18n
 from helpers.i18n import makeString
 from helpers.time_utils import makeLocalServerTime
-from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_TIMEOUT, getHostURL
+from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_TIMEOUT, getHostURL, REQUEST_RATE, HOST_AVAILABILITY
 import BigWorld
 import constants
 import Settings
@@ -87,6 +87,7 @@ class LoginDispatcher(DisposableEntity, AppRef):
         self.__kickedFromServer = False
         self.__kickPeripheryID = None
         self.__closeCallbackId = None
+        self.__foundedServers = []
         self.__onLoggingTryingEndHdlr = None
         self.__securityMsgType = None
         return
@@ -105,7 +106,14 @@ class LoginDispatcher(DisposableEntity, AppRef):
         g_playerEvents.onLoginQueueNumberReceived += self.handleQueue
         g_playerEvents.onAccountBecomePlayer += self.__pe_onAccountBecomePlayer
         g_playerEvents.onKickWhileLoginReceived += self.handleKickWhileLogin
-        self.onSetOptions(g_preDefinedHosts.shortList(), self.__loginDataLoader.host)
+        if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ALWAYS:
+            g_preDefinedHosts.startCSISUpdate()
+        g_preDefinedHosts.onCsisQueryStart += self.__onCsisUpdate
+        g_preDefinedHosts.onCsisQueryComplete += self.__onCsisUpdate
+        self.onSetOptions(self.__getFullServersList(), self.__loginDataLoader.host)
+
+    def __onCsisUpdate(self, responce = None):
+        self.onSetOptions(self.__getFullServersList(), self.__loginDataLoader.host)
 
     def _dispose(self):
         super(LoginDispatcher, self)._dispose()
@@ -117,8 +125,12 @@ class LoginDispatcher(DisposableEntity, AppRef):
         g_playerEvents.onLoginQueueNumberReceived -= self.handleQueue
         g_playerEvents.onAccountBecomePlayer -= self.__pe_onAccountBecomePlayer
         g_playerEvents.onKickWhileLoginReceived -= self.handleKickWhileLogin
+        g_preDefinedHosts.stopCSISUpdate()
+        g_preDefinedHosts.onCsisQueryStart -= self.__onCsisUpdate
+        g_preDefinedHosts.onCsisQueryComplete -= self.__onCsisUpdate
         self.__loginDataLoader.onConfigLoaded -= self.onConfigLoaded
         self.__loginDataLoader = None
+        self.__foundedServers = None
         self.__onLoggingTryingEndHdlr = None
         return
 
@@ -166,6 +178,13 @@ class LoginDispatcher(DisposableEntity, AppRef):
         self.__clearAutoLoginTimer(clearInFlash=False)
         self.__resetLgTimeout()
         g_preDefinedHosts.resetQueryResult()
+
+    def startListenCsisQuery(self, value):
+        if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.ON_REQUEST:
+            if value:
+                g_preDefinedHosts.startCSISUpdate()
+            else:
+                g_preDefinedHosts.stopCSISUpdate()
 
     def onTryCreateAnAccount(self, nickname):
         if len(nickname) < _ACCOUNT_NAME_MIN_LENGTH_REG:
@@ -228,7 +247,8 @@ class LoginDispatcher(DisposableEntity, AppRef):
                 if status != 'LOGIN_REJECTED_RATE_LIMITED':
                     self.__resetLgTimeout()
                 self.onCancelQueue(False, False)
-                g_preDefinedHosts.clearPeripheryTL()
+                if status in ('LOGIN_REJECTED_INVALID_PASSWORD',):
+                    g_preDefinedHosts.clearPeripheryTL()
             try:
                 getattr(self, handlerFunc)(status, serverMsg)
             except:
@@ -308,15 +328,22 @@ class LoginDispatcher(DisposableEntity, AppRef):
     def __onDisconnected():
         DialogsInterface.showDisconnect()
 
-    def __serversFind(self, servers = None):
-        list = g_preDefinedHosts.shortList()
+    def __getFullServersList(self):
+        serversList = g_preDefinedHosts.shortList()
+        servers = self.__foundedServers
         if servers is not None:
             for name, key in servers:
                 if not g_preDefinedHosts.predefined(key):
-                    list.append((key, name))
+                    serversList.append((key,
+                     name,
+                     HOST_AVAILABILITY.getDefault(),
+                     None))
 
-        self.onSetOptions(list, self.__loginDataLoader.host)
-        return
+        return serversList
+
+    def __serversFind(self, servers = None):
+        self.__foundedServers = servers
+        self.onSetOptions(self.__getFullServersList(), self.__loginDataLoader.host)
 
     def __getApplicationCloseDelay(self):
         prefs = Settings.g_instance.userPrefs
@@ -460,8 +487,7 @@ class LoginDispatcher(DisposableEntity, AppRef):
         if not self.__loginQueue:
             Waiting.hide('enter')
             self.__loginQueue = True
-        message = i18n.makeString(WAITING.MESSAGE_QUEUE, connectionManager.serverUserName, BigWorld.wg_getIntegralFormat(queueNumber))
-        self.onHandleQueue(message)
+        self.onHandleQueue(connectionManager.serverUserName, BigWorld.wg_getIntegralFormat(queueNumber))
 
     def handleInvalidPassword(self, status, message):
         errorMessage = i18n.makeString(MENU.login_status(status))

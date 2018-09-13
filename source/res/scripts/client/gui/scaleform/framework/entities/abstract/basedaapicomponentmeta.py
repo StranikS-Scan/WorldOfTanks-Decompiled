@@ -12,6 +12,10 @@ class BaseDAAPIComponentMeta(DAAPIModule):
     def unregisterFlashComponent(self, alias):
         self._printOverrideError('unregisterFlashComponent')
 
+    def as_isDAAPIInitedS(self):
+        if self._isDAAPIInited():
+            return self.flashObject.as_isDAAPIInited()
+
     def as_populateS(self):
         if self._isDAAPIInited():
             return self.flashObject.as_populate()

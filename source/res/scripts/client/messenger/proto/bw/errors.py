@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/messenger/proto/bw/errors.py
 import BigWorld
-from chat_shared import CHAT_RESPONSES, CHAT_COMMANDS
+from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_WARNING
 from helpers import i18n
 from helpers.time_utils import makeLocalServerTime
@@ -68,7 +68,7 @@ class ChatActionError(IServerError):
 
             else:
                 fullMessage = message
-            return ChatActionError(title, fullMessage, isModal=True)
+            return ChatActionError(title, fullMessage, isModal=False)
 
 
 class MemberBannedError(ChatActionError):

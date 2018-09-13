@@ -68,6 +68,11 @@ elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.VIETNAM:
     CLAN_MOTTO_MAX_LENGTH = 100
 else:
     raise False or AssertionError('Unknown credential restrictions set')
+
+def getClanAbbrevMaxLength():
+    return _CLAN_ABBREV_MAX_LENGTH
+
+
 CLAN_DESCR_MAX_BYTES = CLAN_DESCR_MAX_LENGTH * 4
 CLAN_MOTTO_MAX_BYTES = CLAN_MOTTO_MAX_LENGTH * 4
 

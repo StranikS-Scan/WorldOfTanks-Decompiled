@@ -224,6 +224,10 @@ def getUnitIdx():
     return getattr(getClientUnitMgr(), 'unitIdx', 0)
 
 
+def getBattleID():
+    return getattr(getClientUnitMgr(), 'battleID', 0)
+
+
 def getClientUnitBrowser():
     return getattr(BigWorld.player(), 'unitBrowser', None)
 

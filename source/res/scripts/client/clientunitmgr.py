@@ -19,11 +19,14 @@ class ClientUnitMgr(object):
         self.onUnitResponseReceived = Event.Event(self.__eManager)
         self.id = 0
         self.unitIdx = 0
+        self.battleID = None
         self.__account = account
         self.__requestID = 0
         self.units = {}
+        return
 
     def destroy(self):
+        self.battleID = None
         self.__account = None
         self.__eManager.clear()
         self._clearUnits()
@@ -57,6 +60,9 @@ class ClientUnitMgr(object):
             if unit:
                 unit.unpackOps(packedOps)
                 unit.onUnitUpdated()
+
+    def setBattleID(self, battleID):
+        self.battleID = battleID
 
     def onUnitError(self, requestID, unitMgrID, unitIdx, errorCode, errorString):
         LOG_DEBUG('onUnitError: unitMgr=%s, unitIdx=%s, errorCode=%s, errorString=%r' % (unitMgrID,
@@ -177,6 +183,9 @@ class ClientUnitMgr(object):
 
     def setComment(self, strComment, unitIdx = 0):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_COMMENT, self.id, unitIdx, 0, 0, strComment)
+
+    def giveLeadership(self, memberDBID, unitIdx = 0):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.GIVE_LEADERSHIP, self.id, unitIdx, memberDBID)
 
     def _clearUnits(self):
         while len(self.units):

@@ -204,6 +204,18 @@ class ACHIEVEMENTS(object):
     MEDALCOOLBLOOD = '#achievements:medalCoolBlood'
     MEDALCOOLBLOOD_DESCR = '#achievements:medalCoolBlood_descr'
     MEDALCOOLBLOOD_CONDITION = '#achievements:medalCoolBlood_condition'
+    IMPENETRABLE = '#achievements:impenetrable'
+    IMPENETRABLE_DESCR = '#achievements:impenetrable_descr'
+    IMPENETRABLE_CONDITION = '#achievements:impenetrable_condition'
+    SHOOTTOKILL = '#achievements:shootToKill'
+    SHOOTTOKILL_DESCR = '#achievements:shootToKill_descr'
+    SHOOTTOKILL_CONDITION = '#achievements:shootToKill_condition'
+    FIGHTER = '#achievements:fighter'
+    FIGHTER_DESCR = '#achievements:fighter_descr'
+    FIGHTER_CONDITION = '#achievements:fighter_condition'
+    DUELIST = '#achievements:duelist'
+    DUELIST_DESCR = '#achievements:duelist_descr'
+    DUELIST_CONDITION = '#achievements:duelist_condition'
     MOUSEBANE = '#achievements:mousebane'
     MOUSEBANE_DESCR = '#achievements:mousebane_descr'
     MOUSEBANE_CONDITION = '#achievements:mousebane_condition'
@@ -252,6 +264,12 @@ class ACHIEVEMENTS(object):
     INVINCIBLE = '#achievements:invincible'
     INVINCIBLE_DESCR = '#achievements:invincible_descr'
     INVINCIBLE_CONDITION = '#achievements:invincible_condition'
+    RELIABLECOMRADE = '#achievements:reliableComrade'
+    RELIABLECOMRADE_DESCR = '#achievements:reliableComrade_descr'
+    RELIABLECOMRADE_CONDITION = '#achievements:reliableComrade_condition'
+    MAXAIMERSERIES = '#achievements:maxAimerSeries'
+    MAXAIMERSERIES_DESCR = '#achievements:maxAimerSeries_descr'
+    MAXAIMERSERIES_CONDITION = '#achievements:maxAimerSeries_condition'
     DIEHARD = '#achievements:diehard'
     DIEHARD_DESCR = '#achievements:diehard_descr'
     DIEHARD_CONDITION = '#achievements:diehard_condition'
@@ -261,6 +279,9 @@ class ACHIEVEMENTS(object):
     HANDOFDEATH = '#achievements:handOfDeath'
     HANDOFDEATH_DESCR = '#achievements:handOfDeath_descr'
     HANDOFDEATH_CONDITION = '#achievements:handOfDeath_condition'
+    DEATHTRACK = '#achievements:deathTrack'
+    DEATHTRACK_DESCR = '#achievements:deathTrack_descr'
+    DEATHTRACK_CONDITION = '#achievements:deathTrack_condition'
     ARMORPIERCER = '#achievements:armorPiercer'
     ARMORPIERCER_DESCR = '#achievements:armorPiercer_descr'
     ARMORPIERCER_CONDITION = '#achievements:armorPiercer_condition'
@@ -273,6 +294,21 @@ class ACHIEVEMENTS(object):
     LUCKYDEVIL = '#achievements:luckyDevil'
     LUCKYDEVIL_DESCR = '#achievements:luckyDevil_descr'
     LUCKYDEVIL_CONDITION = '#achievements:luckyDevil_condition'
+    DEMOLITION = '#achievements:demolition'
+    DEMOLITION_DESCR = '#achievements:demolition_descr'
+    DEMOLITION_CONDITION = '#achievements:demolition_condition'
+    ARSONIST = '#achievements:arsonist'
+    ARSONIST_DESCR = '#achievements:arsonist_descr'
+    ARSONIST_CONDITION = '#achievements:arsonist_condition'
+    BONECRUSHER = '#achievements:bonecrusher'
+    BONECRUSHER_DESCR = '#achievements:bonecrusher_descr'
+    BONECRUSHER_CONDITION = '#achievements:bonecrusher_condition'
+    CHARMED = '#achievements:charmed'
+    CHARMED_DESCR = '#achievements:charmed_descr'
+    CHARMED_CONDITION = '#achievements:charmed_condition'
+    EVEN = '#achievements:even'
+    EVEN_DESCR = '#achievements:even_descr'
+    EVEN_CONDITION = '#achievements:even_condition'
     MEDALMONOLITH = '#achievements:medalMonolith'
     MEDALMONOLITH_DESCR = '#achievements:medalMonolith_descr'
     MEDALMONOLITH_CONDITION = '#achievements:medalMonolith_condition'
@@ -322,12 +358,24 @@ class ACHIEVEMENTS(object):
     BATTLETESTED = '#achievements:battleTested'
     BATTLETESTED_DESCR = '#achievements:battleTested_descr'
     BATTLETESTED_CONDITION = '#achievements:battleTested_condition'
-    CONQUEROR = '#achievements:conqueror'
-    CONQUEROR_DESCR = '#achievements:conqueror_descr'
-    CONQUEROR_CONDITION = '#achievements:conqueror_condition'
+    FIREANDSWORD = '#achievements:fireAndSword'
+    FIREANDSWORD_DESCR = '#achievements:fireAndSword_descr'
+    FIREANDSWORD_CONDITION = '#achievements:fireAndSword_condition'
     KAMPFER = '#achievements:kampfer'
     KAMPFER_DESCR = '#achievements:kampfer_descr'
     KAMPFER_CONDITION = '#achievements:kampfer_condition'
+    SOLDIEROFFORTUNE = '#achievements:soldierOfFortune'
+    SOLDIEROFFORTUNE_DESCR = '#achievements:soldierOfFortune_descr'
+    SOLDIEROFFORTUNE_CONDITION = '#achievements:soldierOfFortune_condition'
+    CONQUEROR = '#achievements:conqueror'
+    CONQUEROR_DESCR = '#achievements:conqueror_descr'
+    CONQUEROR_CONDITION = '#achievements:conqueror_condition'
+    CRUSHER = '#achievements:crusher'
+    CRUSHER_DESCR = '#achievements:crusher_descr'
+    CRUSHER_CONDITION = '#achievements:crusher_condition'
+    COUNTERBLOW = '#achievements:counterblow'
+    COUNTERBLOW_DESCR = '#achievements:counterblow_descr'
+    COUNTERBLOW_CONDITION = '#achievements:counterblow_condition'
     WILLTOWINSPIRIT = '#achievements:willToWinSpirit'
     WILLTOWINSPIRIT_DESCR = '#achievements:willToWinSpirit_descr'
     WILLTOWINSPIRIT_CONDITION = '#achievements:willToWinSpirit_condition'
@@ -616,6 +664,18 @@ class ACHIEVEMENTS(object):
      MEDALCOOLBLOOD,
      MEDALCOOLBLOOD_DESCR,
      MEDALCOOLBLOOD_CONDITION,
+     IMPENETRABLE,
+     IMPENETRABLE_DESCR,
+     IMPENETRABLE_CONDITION,
+     SHOOTTOKILL,
+     SHOOTTOKILL_DESCR,
+     SHOOTTOKILL_CONDITION,
+     FIGHTER,
+     FIGHTER_DESCR,
+     FIGHTER_CONDITION,
+     DUELIST,
+     DUELIST_DESCR,
+     DUELIST_CONDITION,
      MOUSEBANE,
      MOUSEBANE_DESCR,
      MOUSEBANE_CONDITION,
@@ -664,6 +724,12 @@ class ACHIEVEMENTS(object):
      INVINCIBLE,
      INVINCIBLE_DESCR,
      INVINCIBLE_CONDITION,
+     RELIABLECOMRADE,
+     RELIABLECOMRADE_DESCR,
+     RELIABLECOMRADE_CONDITION,
+     MAXAIMERSERIES,
+     MAXAIMERSERIES_DESCR,
+     MAXAIMERSERIES_CONDITION,
      DIEHARD,
      DIEHARD_DESCR,
      DIEHARD_CONDITION,
@@ -673,6 +739,9 @@ class ACHIEVEMENTS(object):
      HANDOFDEATH,
      HANDOFDEATH_DESCR,
      HANDOFDEATH_CONDITION,
+     DEATHTRACK,
+     DEATHTRACK_DESCR,
+     DEATHTRACK_CONDITION,
      ARMORPIERCER,
      ARMORPIERCER_DESCR,
      ARMORPIERCER_CONDITION,
@@ -685,6 +754,21 @@ class ACHIEVEMENTS(object):
      LUCKYDEVIL,
      LUCKYDEVIL_DESCR,
      LUCKYDEVIL_CONDITION,
+     DEMOLITION,
+     DEMOLITION_DESCR,
+     DEMOLITION_CONDITION,
+     ARSONIST,
+     ARSONIST_DESCR,
+     ARSONIST_CONDITION,
+     BONECRUSHER,
+     BONECRUSHER_DESCR,
+     BONECRUSHER_CONDITION,
+     CHARMED,
+     CHARMED_DESCR,
+     CHARMED_CONDITION,
+     EVEN,
+     EVEN_DESCR,
+     EVEN_CONDITION,
      MEDALMONOLITH,
      MEDALMONOLITH_DESCR,
      MEDALMONOLITH_CONDITION,
@@ -734,12 +818,24 @@ class ACHIEVEMENTS(object):
      BATTLETESTED,
      BATTLETESTED_DESCR,
      BATTLETESTED_CONDITION,
-     CONQUEROR,
-     CONQUEROR_DESCR,
-     CONQUEROR_CONDITION,
+     FIREANDSWORD,
+     FIREANDSWORD_DESCR,
+     FIREANDSWORD_CONDITION,
      KAMPFER,
      KAMPFER_DESCR,
      KAMPFER_CONDITION,
+     SOLDIEROFFORTUNE,
+     SOLDIEROFFORTUNE_DESCR,
+     SOLDIEROFFORTUNE_CONDITION,
+     CONQUEROR,
+     CONQUEROR_DESCR,
+     CONQUEROR_CONDITION,
+     CRUSHER,
+     CRUSHER_DESCR,
+     CRUSHER_CONDITION,
+     COUNTERBLOW,
+     COUNTERBLOW_DESCR,
+     COUNTERBLOW_CONDITION,
      WILLTOWINSPIRIT,
      WILLTOWINSPIRIT_DESCR,
      WILLTOWINSPIRIT_CONDITION,

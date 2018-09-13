@@ -126,7 +126,7 @@ class _ParametersCache(object):
                             for gun in turret['guns']:
                                 if gun['id'][1] == g['id'][1]:
                                     descriptors.append(gun)
-                                    if len(vDescr.type.hull.get('fakeTurrets', {}).get('lobby', ())) != len(vDescr.type.turrets):
+                                    if len(vDescr.hull['fakeTurrets']['lobby']) != len(vDescr.turrets):
                                         turretString = turret['userString']
                                         cacheParams['turrets'].append(turretString)
                                     if gun['clip'][0] > 1:

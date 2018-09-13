@@ -3,7 +3,6 @@ from debug_utils import LOG_ERROR
 from windows import UIInterface
 from weakref import proxy
 from external_strings_utils import normalized_unicode_trim, unicode_from_utf8
-from gui.arena_info import isEventBattle
 
 class PlayersPanel(UIInterface):
 
@@ -36,7 +35,7 @@ class PlayersPanel(UIInterface):
         if len(unicodeStr) > ctx.labelMaxLength:
             fullPlayerName = '{0}..'.format(normalized_unicode_trim(fullPlayerName, ctx.labelMaxLength - 2))
         fragsString = format % ' '
-        if not isEventBattle() and vStatsVO.frags:
+        if vStatsVO.frags:
             fragsString = format % str(vStatsVO.frags)
         return (format % fullPlayerName, fragsString, format % vInfoVO.vehicleType.shortName)
 

@@ -140,8 +140,3 @@ def unpackDossierCompDescr(recordsLayout, record_packing, compDescr, fmt = None,
         data[record], offset = packing[2](compDescr, offset)
 
     return data
-
-
-def vehicleTypeByCompactDescr(compDescr):
-    itemTypeID, nationID, vehicleID = vehicles.parseIntCompactDescr(compDescr)
-    return vehicles.g_list.getList(nationID)[vehicleID]

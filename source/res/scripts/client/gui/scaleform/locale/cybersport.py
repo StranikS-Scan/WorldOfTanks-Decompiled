@@ -80,6 +80,8 @@ class CYBERSPORT(object):
     WINDOW_UNIT_MESSAGE_NOTFULLUNIT = '#cyberSport:window/unit/message/notFullUnit'
     WINDOW_UNIT_MESSAGE_READY = '#cyberSport:window/unit/message/ready'
     WINDOW_UNIT_MESSAGE_LEVELERROR = '#cyberSport:window/unit/message/levelError'
+    WINDOW_UNIT_MESSAGE_WAITCOMMANDER = '#cyberSport:window/unit/message/waitCommander'
+    WINDOW_UNIT_MESSAGE_ALLREADY = '#cyberSport:window/unit/message/allReady'
     WINDOW_UNIT_READY = '#cyberSport:window/unit/ready'
     WINDOW_UNIT_NOTREADY = '#cyberSport:window/unit/notReady'
     WINDOW_UNIT_FIGHT = '#cyberSport:window/unit/fight'

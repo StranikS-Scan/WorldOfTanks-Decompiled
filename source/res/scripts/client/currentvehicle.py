@@ -7,7 +7,7 @@ from helpers import isPlayerAccount
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui import prb_control, game_control, g_tankActiveCamouflage
-from gui.shared import g_itemsCache, REQ_CRITERIA, g_eventsCache
+from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle

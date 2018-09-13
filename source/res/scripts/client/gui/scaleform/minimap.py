@@ -1,14 +1,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/Minimap.py
-import BigWorld, Math, ResMgr
-import Keys
-from gui.BattleContext import g_battleContext, PLAYER_ENTITY_NAME
-from gui.shared.utils.sound import Sound
-from gui import GUI_SETTINGS, g_repeatKeyHandlers
+import math
+import string
 from functools import partial
 from weakref import proxy
+import BigWorld
+import Math
+import Keys
+import CommandMapping
+from gui import GUI_SETTINGS, g_repeatKeyHandlers
+from gui.BattleContext import g_battleContext, PLAYER_ENTITY_NAME
+from gui.arena_info import isLowLevelBattle
+from gui.shared.utils.sound import Sound
 from helpers.gui_utils import *
 from debug_utils import *
-import string, CommandMapping
 from items.vehicles import VEHICLE_CLASS_TAGS
 from account_helpers.AccountSettings import AccountSettings
 CURSOR_NORMAL = 'cursorNormal'
@@ -42,7 +46,10 @@ class Minimap(object):
         arenaType = arena.arenaType
         self.__cfg['texture'] = arenaType.minimap
         self.__cfg['teamBasePositions'] = arenaType.teamBasePositions
-        self.__cfg['teamSpawnPoints'] = arenaType.teamSpawnPoints
+        if isLowLevelBattle() and len(arenaType.teamLowLevelSpawnPoints):
+            self.__cfg['teamSpawnPoints'] = arenaType.teamLowLevelSpawnPoints
+        else:
+            self.__cfg['teamSpawnPoints'] = arenaType.teamSpawnPoints
         self.__cfg['controlPoints'] = arenaType.controlPoints
         self.__points = {'base': {},
          'spawn': {}}
@@ -460,7 +467,7 @@ class Minimap(object):
             matrix = Math.Matrix()
             pos = BigWorld.player().arena.positions[id]
             matrix.setTranslate(pos)
-            m = Math.WGSmoothTranslationOnlyMP()
+            m = Math.WGReplayAwaredSmoothTranslationOnlyMP()
         m.source = matrix
         return m
 
@@ -503,7 +510,7 @@ class Minimap(object):
             entry['handle'] = self.__ownUI.addEntry(m, self.zIndexManager.getVehicleIndex(id))
             self.__entries[id] = entry
             entryVehicle = arena.vehicles[id]
-            entityName = g_battleContext.getPlayerEntityName(id, entryVehicle)
+            entityName = g_battleContext.getPlayerEntityName(id, entryVehicle.get('team'))
             markerType = entityName.base
             entryName = entityName.name()
             markMarker = ''

@@ -75,7 +75,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'eula': EULAProps(False, ''),
  'igrCredentialsReset': False,
  'igrEnabled': False,
- 'isPollEnabled': False}
+ 'isPollEnabled': False,
+ 'csisRequestRate': 0}
 
 class GuiSettings(object):
 

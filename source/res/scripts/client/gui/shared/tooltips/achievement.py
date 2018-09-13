@@ -3,8 +3,8 @@ import constants
 from debug_utils import LOG_ERROR
 from dossiers2.custom.config import RECORD_CONFIGS
 from gui.shared import g_itemsCache
-from gui.shared.gui_items.dossier.achievements import _HasVehiclesList, SeriesAchievement
 from gui.shared.tooltips import ToolTipParameterField, ToolTipDataField, ToolTipData, ToolTipMethodField, ToolTipBaseData, TOOLTIP_TYPE
+from gui.shared.gui_items.dossier.achievements.abstract import achievementHasVehiclesList, isSeriesAchievement
 from helpers.i18n import makeString
 _ACHIEVEMENT_VEHICLES_MAX = 5
 _ACHIEVEMENT_VEHICLES_SHOW = 5
@@ -21,11 +21,11 @@ class AchievementParamsField(ToolTipParameterField):
             label, lvlUpValue = achievement.getNextLevelInfo()
             if label and lvlUpValue and lvlUpValue > 0:
                 result[-1].append([label, lvlUpValue])
-            if isinstance(achievement, SeriesAchievement):
+            if isSeriesAchievement(achievement):
                 record, maxSeries = achievement.getMaxSeriesInfo()
                 if record is not None and maxSeries:
                     result[-1].append([record[1], maxSeries])
-            if isinstance(achievement, _HasVehiclesList):
+            if achievementHasVehiclesList(achievement):
                 vehiclesList = achievement.getVehiclesData()
                 fullVehListLen = len(vehiclesList)
                 if fullVehListLen >= _ACHIEVEMENT_VEHICLES_MAX:

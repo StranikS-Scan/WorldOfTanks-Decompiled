@@ -198,6 +198,7 @@ def overrideCameraMatrix(position, direction):
     rotationMatrix = Math.Matrix()
     rotationMatrix.setRotateYPR(direction)
     overridenCameraMatrix.preMultiply(rotationMatrix)
+    overridenCameraMatrix.invert()
     freeCamera = FreeCamera()
     freeCamera.enable(overridenCameraMatrix)
 

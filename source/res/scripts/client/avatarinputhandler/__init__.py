@@ -168,7 +168,8 @@ class AvatarInputHandler(CallbackDelayer):
                 getAim = getattr(self.__curCtrl, 'getAim')
                 if getAim is not None:
                     aim = getAim()
-                    aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
+                    if aim is not None:
+                        aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
                 return True
             if self.__showMarkersKey is not None and key == self.__showMarkersKey and not BigWorld.player().isGuiVisible:
                 from gui.WindowsManager import g_windowsManager
@@ -369,7 +370,8 @@ class AvatarInputHandler(CallbackDelayer):
                 getAim = getattr(self.__curCtrl, 'getAim')
                 if getAim is not None:
                     aim = getAim()
-                    aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
+                    if aim is not None:
+                        aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
             return
 
     def getTargeting(self):

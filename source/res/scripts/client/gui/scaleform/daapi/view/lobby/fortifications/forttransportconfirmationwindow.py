@@ -1,8 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortTransportConfirmationWindow.py
 import BigWorld
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from adisp import process
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.fortifications import TRANSPORTING_CONFIRMED_EVENT
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortTransportConfirmationWindowMeta import FortTransportConfirmationWindowMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
@@ -12,8 +13,8 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.shared.SoundEffectsId import SoundEffectsId
-from gui.shared.event_bus import SharedEvent, EVENT_BUS_SCOPE
+from gui.shared import events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.fortifications.context import TransportationCtx
 from helpers import i18n
 
@@ -23,18 +24,18 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
         super(FortTransportConfirmationWindow, self).__init__()
         self.__fromId = fromId
         self.__toId = toId
+        self.__isInTutorial = self._isTutorial()
 
     def _populate(self):
         super(FortTransportConfirmationWindow, self)._populate()
         self.startFortListening()
         self._update()
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(SoundEffectsId.TRANSPORT_NEXT_STEP)
-        return
+        g_fortSoundController.playNextStepTransport()
 
     def _dispose(self):
         self.stopFortListening()
-        self.fireEvent(SharedEvent(TRANSPORTING_CONFIRMED_EVENT), scope=EVENT_BUS_SCOPE.FORT)
+        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED,
+         'isInTutorial': self.__isInTutorial}), scope=EVENT_BUS_SCOPE.FORT)
         super(FortTransportConfirmationWindow, self)._dispose()
 
     def _update(self):
@@ -65,14 +66,12 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
     def onUpdated(self):
         self._update()
 
-    def onBuildingRemoved(self, buildingTypeID):
-        if buildingTypeID in (self.getServerBuildId(), self.getServerBuildId(False)):
+    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+        if buildingTypeID in (self.getServerBuildId(), self.getServerBuildId(False)) and reason == BUILDING_UPDATE_REASON.DELETED:
             self.destroy()
 
     def onTransportingLimit(self):
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(SoundEffectsId.TRANSPORT_CONSTRAIN)
-        return
+        g_fortSoundController.playLimitTransport()
 
     def onWindowClose(self):
         self.destroy()
@@ -81,25 +80,27 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
         self.destroy()
 
     def onTransporting(self, size):
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(SoundEffectsId.TRANSPORT_APPROVE)
+        g_fortSoundController.playStartTransport()
         self.transportRequest(size)
-        return
 
     @process
     def transportRequest(self, size):
-        result = yield self.fortProvider.sendRequest(TransportationCtx(self.getServerBuildId(), self.getServerBuildId(False), size, waitingID='fort/transport'))
-        if result:
-            fromBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId())
-            toBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId(False))
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_TRANSPORT, toBuilding=toBuild.userName, fromBuilding=fromBuild.userName, res=BigWorld.wg_getIntegralFormat(size), type=SystemMessages.SM_TYPE.Warning)
+        if not self.getBuildDescr(False).isInCooldown():
+            result = yield self.fortProvider.sendRequest(TransportationCtx(self.getServerBuildId(), self.getServerBuildId(False), size, waitingID='fort/transport'))
+            if result:
+                fromBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId())
+                toBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId(False))
+                SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_TRANSPORT, toBuilding=toBuild.userName, fromBuilding=fromBuild.userName, res=BigWorld.wg_getIntegralFormat(size), type=SystemMessages.SM_TYPE.Warning)
+                self.destroy()
+        else:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ERRORS_EVENT_COOLDOWN, type=SystemMessages.SM_TYPE.Error)
             self.destroy()
 
     def getTransportingSize(self):
         fromBuild = self.getBuildDescr()
         toBuild = self.getBuildDescr(False)
         storages = min(fromBuild.storage, toBuild.levelRef.storage - toBuild.storage)
-        if self._isTutorial():
+        if self.__isInTutorial:
             return storages
         else:
             restriction = self.fortCtrl.getFort().getTransportationLevel().maxResource

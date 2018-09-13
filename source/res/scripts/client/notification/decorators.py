@@ -40,8 +40,8 @@ class _NotificationDecorator(object):
     def getID(self):
         return self._entityID
 
-    def getSavedID(self):
-        return 0
+    def getSavedData(self):
+        return None
 
     def getType(self):
         return NOTIFICATION_TYPE.UNDEFINED
@@ -127,8 +127,8 @@ class MessageDecorator(_NotificationDecorator):
     def __init__(self, clientID, formatted, settings):
         super(MessageDecorator, self).__init__(clientID, formatted, settings)
 
-    def getSavedID(self):
-        return self._vo['message'].get('savedID')
+    def getSavedData(self):
+        return self._vo['message'].get('savedData')
 
     def getType(self):
         return NOTIFICATION_TYPE.MESSAGE
@@ -154,8 +154,7 @@ class MessageDecorator(_NotificationDecorator):
         self._vo = {'typeID': self.getType(),
          'entityID': self.getID(),
          'message': message,
-         'notify': self.isNotify(),
-         'auxData': self._settings.auxData}
+         'notify': self.isNotify()}
 
 
 class PrbInviteDecorator(_NotificationDecorator):
@@ -173,7 +172,7 @@ class PrbInviteDecorator(_NotificationDecorator):
         self._createdAt = 0
         super(PrbInviteDecorator, self).clear()
 
-    def getSavedID(self):
+    def getSavedData(self):
         return self.getID()
 
     def getType(self):

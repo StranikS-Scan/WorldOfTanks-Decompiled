@@ -271,7 +271,7 @@ class TankmanDescr(object):
         self.__initFromCompactDescr(compactDescr, battleOnly)
 
     def efficiencyOnVehicle(self, vehicleDescr):
-        nationID, vehicleTypeID = vehicleDescr.type.id
+        _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescr.type.historicalModelOf)
         if not nationID == self.nationID:
             raise AssertionError
             factor = 1.0
@@ -403,32 +403,58 @@ class TankmanDescr(object):
             self.roleLevel = newRoleLevel
             self.addXP(0)
 
-    def replacePassport(self, isFemale = None, firstNameID = None, lastNameID = None, iconID = None):
+    def validatePassport(self, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID):
         if isFemale is None:
             isFemale = self.isFemale
+        config = getNationConfig(self.nationID)
+        groups = config['premiumGroups' if isPremium else 'normalGroups']
+        if firstNameID is not None:
+            if fnGroupID >= len(groups):
+                return (False, 'Invalid fn group', None)
+            group = groups[fnGroupID]
+            if group['notInShop']:
+                return (False, 'Not in shop', None)
+            if bool(group['isFemales']) != bool(isFemale):
+                return (False, 'Invalid group sex', None)
+            if firstNameID not in group['firstNames']:
+                return (False, 'Invalid first name', None)
+        if lastNameID is not None:
+            if lnGroupID >= len(groups):
+                return (False, 'Invalid ln group', None)
+            group = groups[lnGroupID]
+            if group['notInShop']:
+                return (False, 'Not in shop', None)
+            if bool(group['isFemales']) != bool(isFemale):
+                return (False, 'Invalid group sex', None)
+            if lastNameID not in group['lastNames']:
+                return (False, 'Invalid last name', None)
+        if iconID is not None:
+            if iGroupID >= len(groups):
+                return (False, 'Invalid i group', None)
+            group = groups[iGroupID]
+            if group['notInShop']:
+                return (False, 'Not in shop', None)
+            if bool(group['isFemales']) != bool(isFemale):
+                return (False, 'Invalid group sex', None)
+            if iconID not in group['icons']:
+                return (False, 'Invalid icon id', None)
         if firstNameID is None:
             firstNameID = self.firstNameID
         if lastNameID is None:
             lastNameID = self.lastNameID
         if iconID is None:
             iconID = self.iconID
-        isOk = False
-        config = getNationConfig(self.nationID)
-        for group in config['normalGroups'] + config['premiumGroups']:
-            if bool(group['isFemales']) != bool(isFemale):
-                continue
-            if firstNameID not in group['firstNames']:
-                continue
-            if lastNameID in group['lastNames'] and iconID in group['icons']:
-                isOk = True
-            break
+        return (True, '', (isFemale,
+          firstNameID,
+          lastNameID,
+          iconID))
 
-        if isOk:
-            self.isFemale = isFemale
-            self.firstNameID = firstNameID
-            self.lastNameID = lastNameID
-            self.iconID = iconID
-        return isOk
+    def replacePassport(self, ctx):
+        isFemale, firstNameID, lastNameID, iconID = ctx
+        self.isFemale = isFemale
+        self.firstNameID = firstNameID
+        self.lastNameID = lastNameID
+        self.iconID = iconID
 
     def makeCompactDescr(self):
         pack = struct.pack
@@ -524,6 +550,78 @@ class TankmanDescr(object):
             self.__updateRankAtSkillLevelUp()
 
 
+def makeTmanDescrByTmanData(tmanData):
+    nationID = tmanData['nationID']
+    if nationID >= len(nations.AVAILABLE_NAMES):
+        raise Exception, 'Invalid nation'
+    vehicleTypeID = tmanData['vehicleTypeID']
+    if vehicleTypeID not in vehicles.g_list.getList(nationID):
+        raise Exception, 'Invalid nation'
+    role = tmanData['role']
+    if role not in SKILL_NAMES:
+        raise Exception, 'Invalid role'
+    roleLevel = tmanData.get('roleLevel', 50)
+    if not 50 <= roleLevel <= MAX_SKILL_LEVEL:
+        raise Exception, 'Wrong tankman level'
+    skills = tmanData.get('skills', [])
+    for skill in skills:
+        if skill not in SKILL_INDICES:
+            raise Exception, 'Wrong tankman skill'
+
+    isFemale = tmanData.get('isFemale', False)
+    isPremium = tmanData.get('isPremium', False)
+    fnGroupID = tmanData.get('fnGroupID', 0)
+    firstNameID = tmanData.get('firstNameID', None)
+    lnGroupID = tmanData.get('lnGroupID', 0)
+    lastNameID = tmanData.get('lastNameID', None)
+    iGroupID = tmanData.get('iGroupID', 0)
+    iconID = tmanData.get('iconID', None)
+    groups = getNationConfig(nationID)['normalGroups' if not isPremium else 'premiumGroups']
+    if fnGroupID >= len(groups):
+        raise Exception, 'Invalid group fn ID'
+    group = groups[fnGroupID]
+    if bool(group['isFemales']) != bool(isFemale):
+        raise Exception, 'Invalid group sex'
+    if firstNameID is not None:
+        if firstNameID not in group['firstNamesList']:
+            raise Exception, 'firstNameID is not in valid group'
+    else:
+        firstNameID = random.choice(group['firstNamesList'])
+    if lnGroupID >= len(groups):
+        raise Exception, 'Invalid group ln ID'
+    group = groups[lnGroupID]
+    if bool(group['isFemales']) != bool(isFemale):
+        raise Exception, 'Invalid group sex'
+    if lastNameID is not None:
+        if lastNameID not in group['lastNamesList']:
+            raise Exception, 'lastNameID is not in valid group'
+    else:
+        lastNameID = random.choice(group['lastNamesList'])
+    if iGroupID >= len(groups):
+        raise Exception, 'Invalid group ln ID'
+    group = groups[iGroupID]
+    if bool(group['isFemales']) != bool(isFemale):
+        raise Exception, 'Invalid group sex'
+    if iconID is not None:
+        if iconID not in group['iconsList']:
+            raise Exception, 'iconID is not in valid group'
+    else:
+        iconID = random.choice(group['iconsList'])
+    passport = (nationID,
+     isPremium,
+     isFemale,
+     firstNameID,
+     lastNameID,
+     iconID)
+    tankmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills)
+    freeXP = tmanData.get('freeXP', 0)
+    if freeXP != 0:
+        tankmanDescr = TankmanDescr(tankmanCompDescr)
+        tankmanDescr.addXP(freeXP)
+        tankmanCompDescr = tankmanDescr.makeCompactDescr()
+    return tankmanCompDescr
+
+
 def _readNationConfig(xmlPath):
     section = ResMgr.openSection(xmlPath)
     if section is None:
@@ -545,7 +643,8 @@ def _readNationConfigSection(xmlCtx, section):
         totalWeight = 0.0
         for sname, subsection in _xml.getChildren(xmlCtx, section, kindName):
             ctx = (xmlCtx, kindName + '/' + sname)
-            group = {'isFemales': 'female' == _xml.readNonEmptyString(ctx, subsection, 'sex'),
+            group = {'notInShop': subsection.readBool('notInShop', False),
+             'isFemales': 'female' == _xml.readNonEmptyString(ctx, subsection, 'sex'),
              'firstNames': _readIDs((ctx, 'firstNames'), _xml.getChildren(ctx, subsection, 'firstNames'), firstNames, _parseName),
              'lastNames': _readIDs((ctx, 'lastNames'), _xml.getChildren(ctx, subsection, 'lastNames'), lastNames, _parseName),
              'icons': _readIDs((ctx, 'icons'), _xml.getChildren(ctx, subsection, 'icons'), icons, _parseIcon)}

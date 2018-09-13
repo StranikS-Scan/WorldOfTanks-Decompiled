@@ -1,6 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_utils/FortViewHelper.py
-import time
+import calendar
 import BigWorld
+from FortifiedRegionBase import NOT_ACTIVATED
+import fortified_regions
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -9,13 +12,13 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
-from fortified_regions import g_cache as g_fortCache
 from gui.shared.fortifications.fort_helpers import FortListener
 from helpers import i18n
 
 class FortViewHelper(FortListener):
     FORT_UNKNOWN = FORTIFICATION_ALIASES.FORT_UNKNOWN
-    BUILDINGS = [FORT_BUILDING_TYPE.FINANCIAL_DEPT,
+    BUILDINGS = [FORT_BUILDING_TYPE.OFFICE,
+     FORT_BUILDING_TYPE.FINANCIAL_DEPT,
      FORT_BUILDING_TYPE.MILITARY_ACADEMY,
      FORT_BUILDING_TYPE.TANKODROME,
      FORT_BUILDING_TYPE.TRAINING_DEPT,
@@ -30,7 +33,8 @@ class FortViewHelper(FortListener):
      FORTIFICATION_ALIASES.FORT_WAR_SCHOOL_BUILDING,
      FORTIFICATION_ALIASES.FORT_CAR_BUILDING,
      FORTIFICATION_ALIASES.FORT_INTENDANCY_BUILDING,
-     FORTIFICATION_ALIASES.FORT_TROPHY_BUILDING]
+     FORTIFICATION_ALIASES.FORT_TROPHY_BUILDING,
+     FORTIFICATION_ALIASES.FORT_OFFICE_BUILDING]
     UI_ORDERS_BIND = [FORT_UNKNOWN,
      ORDER_TYPES.BATTLE_PAYMENTS,
      ORDER_TYPES.TACTICAL_TRAINING,
@@ -38,15 +42,11 @@ class FortViewHelper(FortListener):
      ORDER_TYPES.MILITARY_MANEUVERS,
      ORDER_TYPES.HEAVY_TRUCKS,
      ORDER_TYPES.EVACUATION,
-     ORDER_TYPES.REQUISITION]
-    UI_ROLES_BIND = {CLAN_MEMBER_FLAGS.LEADER: FORTIFICATIONS.FORTIFICATION_CLAN_POSITION_LEADER,
-     CLAN_MEMBER_FLAGS.VICE_LEADER: FORTIFICATIONS.FORTIFICATION_CLAN_POSITION_VICE_LEADER,
-     CLAN_MEMBER_FLAGS.RECRUITER: FORTIFICATIONS.FORTIFICATION_CLAN_POSITION_RECRUITER,
-     CLAN_MEMBER_FLAGS.TREASURER: FORTIFICATIONS.FORTIFICATION_CLAN_POSITION_TREASURER,
-     CLAN_MEMBER_FLAGS.DIPLOMAT: FORTIFICATIONS.FORTIFICATION_CLAN_POSITION_DIPLOMAT,
-     CLAN_MEMBER_FLAGS.COMMANDER: FORTIFICATIONS.FORTIFICATION_CLAN_POSITION_COMMANDER,
-     CLAN_MEMBER_FLAGS.PRIVATE: FORTIFICATIONS.FORTIFICATION_CLAN_POSITION_PRIVATE,
-     CLAN_MEMBER_FLAGS.RECRUIT: FORTIFICATIONS.FORTIFICATION_CLAN_POSITION_RECRUIT}
+     ORDER_TYPES.REQUISITION,
+     ORDER_TYPES.SPECIAL_MISSION]
+    BUILDING_ANIMATIONS = {BUILDING_UPDATE_REASON.ADDED: FORTIFICATION_ALIASES.BUILD_FOUNDATION_ANIMATION,
+     BUILDING_UPDATE_REASON.UPGRADED: FORTIFICATION_ALIASES.UPGRADE_BUILDING_ANIMATION,
+     BUILDING_UPDATE_REASON.DELETED: FORTIFICATION_ALIASES.DEMOUNT_BUILDING_ANIMATION}
 
     def getData(self):
         data = self._getBaseFortificationData()
@@ -59,9 +59,8 @@ class FortViewHelper(FortListener):
             fort = self.fortCtrl.getFort()
             if not fort.isEmpty():
                 level = fort.level
-        return {'isCommander': g_clanCache.isClanLeader,
-         'clanSize': len(g_clanCache.clanMembers),
-         'minClanSize': g_fortCache.clanMembersForStart,
+        return {'clanSize': len(g_clanCache.clanMembers),
+         'minClanSize': fortified_regions.g_cache.clanMembersForStart,
          'clanCommanderName': g_clanCache.clanCommanderName,
          'level': level}
 
@@ -80,42 +79,54 @@ class FortViewHelper(FortListener):
             defResVal = buildingDescr.storage
             maxDefResValue = buildingDescr.levelRef.storage
             if buildingDescr.orderInProduction:
-                order = self.fortCtrl.getFort().getOrder(self.fortCtrl.getFort().getBuildingOrder(buildingDescr.typeID))
-                orderTime = fort_text.getTimeDurationStr(order.getProductionLeftTime())
-                orderTooltipData = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_ORDER, order.productionCount, orderTime)
+                if self._isProductionInPause(buildingDescr):
+                    orderTooltipData = '\n' + i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INPAUSE)
+                else:
+                    order = self.fortCtrl.getFort().getOrder(self.fortCtrl.getFort().getBuildingOrder(buildingDescr.typeID))
+                    orderTime = fort_text.getTimeDurationStr(order.getProductionLeftTime())
+                    orderTooltipData = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_ORDER, order.productionCount, orderTime)
         toolTipData = self.getBuildingTooltipBody(hpVal, maxHpValue, defResVal, maxDefResValue)
         if orderTooltipData is not None:
             toolTipData += orderTooltipData
         return toolTipData
 
     def _isBaseBuildingDamaged(self):
+        baseBuilding = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
+        return self._isBuildingDamaged(baseBuilding)
+
+    def _isBuildingDamaged(self, building):
+        if building is None:
+            return False
+        else:
+            hpVal = building.hp
+            maxHpValue = building.levelRef.hp
+            return hpVal < maxHpValue and building.level > 0
+            return
+
+    def _isFortFrozen(self):
         baseBuildingDescr = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
         baseHpVal = baseBuildingDescr.hp
         baseMaxHpValue = baseBuildingDescr.levelRef.hp
-        return baseHpVal < baseMaxHpValue
+        return self._isBuildingFrozen(baseHpVal, baseMaxHpValue)
 
-    def _isBuildingDamaged(self, buildingDescr):
-        if buildingDescr is None:
-            return False
-        else:
-            hpVal = buildingDescr.hp
-            maxHpValue = buildingDescr.levelRef.hp
-            return hpVal < maxHpValue and buildingDescr.level > 0
-            return
+    def _isBuildingFrozen(self, baseHpVal, baseMaxHpValue):
+        baseHpValF = float(baseHpVal)
+        baseMaxHpValueF = float(baseMaxHpValue)
+        return baseHpValF / baseMaxHpValueF < 0.2
 
     def _isProductionInPause(self, buildingDescr):
-        return self._isBaseBuildingDamaged() or self._isBuildingDamaged(buildingDescr)
+        return self._isBaseBuildingDamaged() or self._isBuildingDamaged(buildingDescr) or self._isFortFrozen()
 
     def _getProgress(self, typeID, level):
         if level == 0:
             if typeID == 0:
                 return FORTIFICATION_ALIASES.STATE_TROWEL
             else:
-                return FORTIFICATION_ALIASES.STATE_FOUNDATION
+                return FORTIFICATION_ALIASES.STATE_FOUNDATION_DEF
         else:
             return FORTIFICATION_ALIASES.STATE_BUILDING
 
-    def _makeBuildingData(self, buildingDescr, direction, position, onlyBaseData = True):
+    def _makeBuildingData(self, buildingDescr, direction, position, onlyBaseData = True, animation = FORTIFICATION_ALIASES.WITHOUT_ANIMATION):
         uid = self.FORT_UNKNOWN
         hpVal = 0
         maxHpValue = 0
@@ -141,7 +152,7 @@ class FortViewHelper(FortListener):
                 buildingID = buildingDescr.typeID
                 limits = self.fortCtrl.getLimits()
                 canUpgrade, _ = limits.canUpgrade(buildingDescr.typeID)
-                isLevelUp = canUpgrade and self._isAvailableBlinking() and buildingID not in self.fortCtrl.getUpgradeVisitedBuildings()
+                isLevelUp = canUpgrade and self._isAvailableBlinking() and self._isEnableModernizationBtnByDamaged(buildingDescr) and buildingID not in self.fortCtrl.getUpgradeVisitedBuildings()
                 if buildingDescr.orderInProduction:
                     order = fort.getOrder(self.fortCtrl.getFort().getBuildingOrder(buildingID))
                     orderTime = order.getProductionLeftTimeStr()
@@ -157,7 +168,8 @@ class FortViewHelper(FortListener):
          'maxDefResValue': maxDefResValue,
          'hpVal': hpVal,
          'maxHpValue': maxHpValue,
-         'buildingLevel': level}
+         'buildingLevel': level,
+         'animationType': animation}
         if not onlyBaseData:
             data.update({'isAvailable': True,
              'isExportAvailable': isExportAvailable,
@@ -169,17 +181,21 @@ class FortViewHelper(FortListener):
              'toolTipData': [uid, self.getCommonBuildTooltipData(buildingDescr)],
              'orderTime': orderTime,
              'isLevelUp': isLevelUp,
-             'isOpenCtxMenu': self._isChiefRoles(),
-             'ctxMenuData': self.__makeContextMenuData(buildingDescr)})
+             'isOpenCtxMenu': self.fortCtrl.getPermissions().canViewContext(),
+             'ctxMenuData': self.__makeContextMenuData(buildingDescr),
+             'productionInPause': self._isProductionInPause(buildingDescr),
+             'animationType': animation,
+             'isBaseBuildingDamaged': self._isBaseBuildingDamaged(),
+             'isFortFrozen': self._isFortFrozen()})
         return data
 
     def __makeContextMenuData(self, buildingDescr):
-        if buildingDescr is None or not self._isChiefRoles():
+        if buildingDescr is None or not self.fortCtrl.getPermissions().canViewContext():
             return
         else:
             result = []
             canModernization = self._canModernization(buildingDescr)
-            enableModernizationBtn = self._isEnableModernizationBtn(buildingDescr)
+            enableModernizationBtn = self._isEnableModernizationBtnByProgress(buildingDescr) and self._isEnableModernizationBtnByDamaged(buildingDescr)
             if self._isMilitaryBase(buildingDescr.typeID):
                 cxtMaps = [(FORTIFICATION_ALIASES.CTX_ACTION_DIRECTION_CONTROL, MENU.FORTIFICATIONCTX_DIRECTIONCONTROL), (FORTIFICATION_ALIASES.CTX_ACTION_ASSIGN_PLAYERS,
                   MENU.FORTIFICATIONCTX_ASSIGNEDPLAYERS,
@@ -207,7 +223,10 @@ class FortViewHelper(FortListener):
     def _isEnableActionBtn(self, descr):
         order = self.__getOrderByBuildingID(descr.typeID)
         result = descr.storage >= order.productionCost and order.maxCount > order.count and not self._isTutorial()
-        return result
+        return result and not self._isBaseBuildingDamaged() and not self._isFortFrozen()
+
+    def _showOrderAlertIcon(self, order):
+        return order.isPermanent and not self.fortCtrl.getFort().isDefenceHourEnabled() or not order.isSupported
 
     def _isVisibleActionBtn(self, descr):
         return not self._isMilitaryBase(descr.typeID) and not self.__orderIsInProgress(descr.typeID)
@@ -224,7 +243,7 @@ class FortViewHelper(FortListener):
 
     def _isVisibleDirectionCtrlBtn(self, descr):
         isBase = self._isMilitaryBase(descr.typeID)
-        return isBase and self._isChiefRoles()
+        return isBase and self.fortCtrl.getPermissions().canOpenDirection()
 
     def _isEnableDirectionControl(self):
         return not self._isTutorial()
@@ -235,10 +254,17 @@ class FortViewHelper(FortListener):
     def _canModernization(self, descr):
         return descr.level < 10 and self._isAvailableBlinking()
 
-    def _isEnableModernizationBtn(self, descr):
+    def _isEnableModernizationBtnByProgress(self, descr):
         progressFoundation = descr.level == 0 and descr.hp < descr.levelRef.hp
         result = not progressFoundation and not self._isTutorial()
         return self.fortCtrl.getPermissions().canUpgradeBuilding() and result
+
+    def _isEnableModernizationBtnByDamaged(self, buildingDescr):
+        isBuildingDamaged = self._isBuildingDamaged(buildingDescr)
+        isBaseBuildingDamaged = self._isBaseBuildingDamaged()
+        isFortFrozen = self._isFortFrozen()
+        isDamaged = isBuildingDamaged or isBaseBuildingDamaged or isFortFrozen
+        return not isDamaged
 
     def _isMilitaryBase(self, typeID):
         return typeID == FORT_BUILDING_TYPE.MILITARY_BASE
@@ -250,10 +276,6 @@ class FortViewHelper(FortListener):
     def _isEnableDemountBtn(self):
         return not self._isTutorial()
 
-    def _isChiefRoles(self):
-        isViceCommander = g_clanCache.clanRole == CLAN_MEMBER_FLAGS.VICE_LEADER
-        return g_clanCache.isClanLeader or isViceCommander
-
     def getBuildingTooltipBody(self, hpVal, maxHpValue, defResVal, maxDefResValue):
         nutIcon = ' ' + fort_text.getIcon(fort_text.NUT_ICON)
         labelOne = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STRENGTH)
@@ -264,7 +286,7 @@ class FortViewHelper(FortListener):
         return toolTipData
 
     def _isAvailableBlinking(self):
-        return g_clanCache.isClanLeader or g_clanCache.clanRole == CLAN_MEMBER_FLAGS.VICE_LEADER
+        return self.fortCtrl.getPermissions().canUpgradeBuilding()
 
     def __toFormattedStr(self, value):
         return str(BigWorld.wg_getIntegralFormat(value))
@@ -273,3 +295,15 @@ class FortViewHelper(FortListener):
         return {'actionID': maps[0],
          'menuItem': maps[1],
          'isEnabled': isEnable}
+
+    def _getDayoffsList(self):
+        source = list(MENU.DATETIME_WEEKDAYS_FULL_ENUM)
+        result = []
+        result.append({'id': NOT_ACTIVATED,
+         'label': FORTIFICATIONS.PERIODDEFENCEWINDOW_DROPDOWNBTN_WHITHOUTHOLIDAY})
+        for day in calendar.Calendar().iterweekdays():
+            name = i18n.makeString(source[day])
+            result.append({'id': day,
+             'label': name})
+
+        return result

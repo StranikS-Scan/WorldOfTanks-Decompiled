@@ -238,6 +238,12 @@ class UnitPermissions(IUnitPermissions):
     def canChangeVehicle(self):
         return self._isCurrentPlayer and not self._isPlayerReady
 
+    def canGiveLeadership(self):
+        return self.isCreator(self._roles)
+
+    def canTakeLeadership(self):
+        return not self._roles & UNIT_ROLE.LEGIONARY > 0
+
     @classmethod
     def isCreator(cls, roles):
         return roles & UNIT_ROLE.COMMANDER_UPDATES > 0

@@ -7,18 +7,23 @@ from gui.prb_control.functional.no_prebattle import NoPreQueueFunctional
 from gui.prb_control.functional.not_supported import QueueNotSupportedFunctional
 from gui.prb_control.functional.random_queue import RandomQueueFunctional
 from gui.prb_control.functional.historical import HistoricalQueueFunctional
+from gui.prb_control.functional.historical import HistoricalEntry
 from gui.prb_control.functional.event_battles import EventBattlesQueueFunctional
 from gui.prb_control.items import FunctionalState
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT
 _SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: RandomQueueFunctional,
  QUEUE_TYPE.HISTORICAL: HistoricalQueueFunctional,
  QUEUE_TYPE.EVENT_BATTLES: EventBattlesQueueFunctional}
+_SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.HISTORICAL: (HistoricalEntry, None)}
 
 class PreQueueFactory(ControlFactory):
 
     def createEntry(self, ctx):
         LOG_ERROR('preQueue functional has not any entries')
         return None
+
+    def createEntryByAction(self, action):
+        return self._createEntryByAction(action, _SUPPORTED_ENTRY_BY_ACTION)
 
     def createFunctional(self, dispatcher, ctx):
         createParams = ctx.getCreateParams()
@@ -28,12 +33,14 @@ class PreQueueFactory(ControlFactory):
             queueType = None
         if queueType:
             queueType = createParams['queueType']
-            if 'settings' in createParams:
-                settings = createParams['settings']
-            else:
-                settings = None
-            if queueType in _SUPPORTED_QUEUES:
-                preQueueFunctional = _SUPPORTED_QUEUES[queueType](settings)
+            settings = 'settings' in createParams and createParams['settings'].get(CTRL_ENTITY_TYPE.PREQUEUE)
+        else:
+            settings = None
+        if queueType in _SUPPORTED_QUEUES:
+            clazz = _SUPPORTED_QUEUES[queueType]
+            if not clazz:
+                raise AssertionError('Class is not found, checks settings')
+                preQueueFunctional = clazz(settings)
                 for listener in dispatcher._globalListeners:
                     preQueueFunctional.addListener(listener())
 
@@ -45,19 +52,7 @@ class PreQueueFactory(ControlFactory):
         return preQueueFunctional
 
     def createStateEntity(self, functional):
-        return FunctionalState(CTRL_ENTITY_TYPE.PREQUEUE, functional.getQueueType(), True)
+        return FunctionalState(CTRL_ENTITY_TYPE.PREQUEUE, functional.getQueueType(), True, functional.isInQueue())
 
-    def createLeaveCtx(self):
+    def createLeaveCtx(self, state = None, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
         return LeavePreQueueCtx(waitingID='prebattle/leave')
-
-    def getLeaveCtxByAction(self, action):
-        ctx = None
-        if action in [PREBATTLE_ACTION_NAME.LEAVE_RANDOM_QUEUE,
-         PREBATTLE_ACTION_NAME.LEAVE_EVENT_BATTLES_QUEUE,
-         PREBATTLE_ACTION_NAME.LEAVE_HISTORICAL,
-         PREBATTLE_ACTION_NAME.PREQUEUE_LEAVE]:
-            ctx = self.createLeaveCtx()
-        return ctx
-
-    def getOpenListCtxByAction(self, action):
-        return None

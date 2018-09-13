@@ -323,8 +323,8 @@ class EmblemGroupsDataProvider(DAAPIDataProvider):
         if groups is not None:
             igrRoomType = gui.game_control.g_instance.igr.getRoomType()
             for name, group in groups.iteritems():
-                emblemIDs, groupUserString, igrType = group
-                if name not in hiddenEmblems and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE):
+                emblemIDs, groupUserString, igrType, nations = group
+                if name not in hiddenEmblems and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE) and (nations is None or g_currentVehicle.item.nationID in nations):
                     result.append({'name': name,
                      'userString': groupUserString,
                      'hasNew': False,
@@ -425,7 +425,7 @@ class EmblemsDataProvider(DAAPIModule):
         hiddens = g_itemsCache.items.shop.getEmblemsGroupHiddens()
         if emblem is not None:
             groupName, igrType, texture, bumpMap, emblemUserString, isMirrored = emblem
-            emblemIDs, groupUserString, igrType = groups.get(groupName)
+            emblemIDs, groupUserString, igrType, nations = groups.get(groupName)
             if withoutCheck or groupName not in hiddens:
                 price = self._makeCost(self._cost, self._vehPriceFactor, priceFactors.get(groupName)) if not isInHangar else 0
                 defaultPrice = self._makeCost(self._defCost, self._defVehPriceFactor, defPriceFactors.get(groupName, 1)) if not isInHangar else 0
@@ -500,7 +500,7 @@ class EmblemsDataProvider(DAAPIModule):
         result = []
         hiddenItems = g_itemsCache.items.shop.getEmblemsGroupHiddens()
         if group is not None:
-            emblemIDs, groupUserString, igrType = group
+            emblemIDs, groupUserString, igrType, nations = group
             self._isIGR = igrType != constants.IGR_TYPE.NONE
             if groupName not in hiddenItems:
                 for id in emblemIDs:
@@ -518,7 +518,7 @@ class EmblemsDataProvider(DAAPIModule):
         groups, emblems, names = vehicles.g_cache.playerEmblems()
         if itemID is not None:
             for groupName, group in groups.iteritems():
-                emblemIDs, groupUserString, igrType = group
+                emblemIDs, groupUserString, igrType, nations = group
                 if itemID in emblemIDs:
                     return igrType != constants.IGR_TYPE.NONE
 
@@ -735,13 +735,14 @@ class CamouflagesDataProvider(DAAPIModule):
         camouflageInfo['type'] = CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE
         return camouflageInfo
 
-    def _constructCamouflage(self, cID, groups, camouflages, armorColor, lifeCycle = None, isCurrent = False, isInHangar = False, withoutCheck = True, currentVehIntDescr = None):
+    def _constructCamouflage(self, cID, groups, camouflages, armorColor, lifeCycle = None, isCurrent = False, isInHangar = False, withoutCheck = True, currVehIntD = None):
         camouflageInfo = None
         camouflage = camouflages.get(cID, None)
         hiddenCamos = g_itemsCache.items.shop.getCamouflagesHiddens(self._nationID)
         if camouflage is not None and (withoutCheck or cID not in hiddenCamos or camouflage.get('igrType', 0) != constants.IGR_TYPE.NONE and cID not in hiddenCamos):
-            denyCompactDescriptor = camouflage.get('deny')
-            if currentVehIntDescr not in denyCompactDescriptor or currentVehIntDescr is None:
+            denyCD = camouflage.get('deny')
+            allowCD = camouflage.get('allow')
+            if currVehIntD not in denyCD and (len(allowCD) == 0 or currVehIntD in allowCD) or currVehIntD is None:
                 invisibilityFactor = camouflage.get('invisibilityFactor', 1)
                 invisibilityPercent = int(round((invisibilityFactor - 1) * 100))
                 invisibilityLbl = gui.makeHtmlString('html_templates:lobby/customization', 'camouflage-hint', {'percents': invisibilityPercent}, sourceKey=self.__getKindById(camouflage.get('kind', 0)))
@@ -759,7 +760,7 @@ class CamouflagesDataProvider(DAAPIModule):
                     elif self.__period == 30:
                         key = 'camouflagePacket30Cost'
                     action = {'type': ACTION_TOOLTIPS_TYPE.CAMOUFLAGE,
-                     'key': cPickle.dumps((currentVehIntDescr, key)),
+                     'key': cPickle.dumps((currVehIntD, key)),
                      'isBuying': True,
                      'state': state,
                      'newPrice': newPrice,
@@ -846,7 +847,7 @@ class CamouflagesDataProvider(DAAPIModule):
             ids = group.get('ids', [])
             currIntDescr = g_currentVehicle.item.intCD
             for id in ids:
-                camouflageInfo = self._constructCamouflage(id, groups, camouflages, armorColor, isCurrent=self.currentItemID == id, isInHangar=isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, id), withoutCheck=False, currentVehIntDescr=currIntDescr)
+                camouflageInfo = self._constructCamouflage(id, groups, camouflages, armorColor, isCurrent=self.currentItemID == id, isInHangar=isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, id), withoutCheck=False, currVehIntD=currIntDescr)
                 if camouflageInfo is not None:
                     if not self.__isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.NONE or self.__isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.PREMIUM:
                         result.append(camouflageInfo)
@@ -858,7 +859,7 @@ class CamouflagesDataProvider(DAAPIModule):
                         for cID in ids:
                             camouflage = camouflages.get(cID, None)
                             if camouflage.get('kind', 0) == CAMOUFLAGE_KINDS.get(groupName, 0):
-                                camouflageInfo = self._constructCamouflage(cID, groups, camouflages, armorColor, isCurrent=self.currentItemID == cID, isInHangar=isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, cID), withoutCheck=False, currentVehIntDescr=currIntDescr)
+                                camouflageInfo = self._constructCamouflage(cID, groups, camouflages, armorColor, isCurrent=self.currentItemID == cID, isInHangar=isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, cID), withoutCheck=False, currVehIntD=currIntDescr)
                                 if camouflageInfo is not None and camouflageInfo:
                                     if not self.__isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.NONE or self.__isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.PREMIUM:
                                         result.append(camouflageInfo)

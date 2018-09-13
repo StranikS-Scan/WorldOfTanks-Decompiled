@@ -1,9 +1,10 @@
 # Embedded file name: scripts/client/gui/arena_info/arena_vos.py
 from collections import defaultdict
-from constants import IGR_TYPE
+from constants import IGR_TYPE, ARENA_GUI_TYPE
 from gui import makeHtmlString
+from gui.arena_info import getArenaGuiType
 from gui.arena_info.settings import *
-from items.vehicles import VEHICLE_CLASS_TAGS
+from items.vehicles import VEHICLE_CLASS_TAGS, getVehicleType
 
 class PlayerInfoVO(object):
     __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType')
@@ -74,6 +75,8 @@ class VehicleTypeInfoVO(object):
     def __setVehicleData(self, vehicleDescr = None):
         if vehicleDescr is not None:
             vehicleType = vehicleDescr.type
+            if getArenaGuiType() == ARENA_GUI_TYPE.HISTORICAL and getattr(vehicleType, 'historicalModelOf', None):
+                vehicleType = getVehicleType(vehicleType.historicalModelOf)
             self.compactDescr = vehicleType.compactDescr
             self.shortName = vehicleType.shortUserString
             self.name = vehicleType.userString
@@ -122,7 +125,7 @@ class VehicleArenaInfoVO(object):
         self.squadIndex = 0
 
     def __repr__(self):
-        return 'VehicleArenaInfoVO(vehicleID = {0:n}, team = {1:n}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6:r:s})'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID)
+        return 'VehicleArenaInfoVO(vehicleID = {0:n}, team = {1:n}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6:!r:s})'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID)
 
     def __cmp__(self, other):
         result = cmp(other.isAlive(), self.isAlive())

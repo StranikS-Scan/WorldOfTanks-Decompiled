@@ -7,9 +7,9 @@ import constants
 from items import vehicles
 from dossiers2.ui import layouts
 from dossiers2.ui.achievements import ACHIEVEMENT_MODE, ACHIEVEMENT_SECTION, ACHIEVEMENT_SECTIONS_INDICES, makeAchievesStorageName, ACHIEVEMENT_SECTIONS_ORDER, getSection as getAchieveSection
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
-from gui.shared.gui_items.dossier.achievements import MARK_OF_MASTERY
+from gui.shared.gui_items.dossier.achievements import MarkOfMasteryAchievement
 _BATTLE_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.BATTLE]
 _EPIC_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.EPIC]
 _ACTION_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.ACTION]
@@ -98,7 +98,7 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
         return self._vehsList
 
     def getMarksOfMastery(self):
-        result = [0] * len(MARK_OF_MASTERY.ALL())
+        result = [0] * len(MarkOfMasteryAchievement.MARK_OF_MASTERY.ALL())
         for vehTypeCompDescr, vehCut in self.getVehicles().iteritems():
             if vehCut.markOfMastery != 0:
                 result[vehCut.markOfMastery - 1] += 1
@@ -910,6 +910,21 @@ class FortRegionBattlesStats(_CommonStatsBlock):
     def getDefenceCount(self):
         return self._getStat('defenceCount')
 
+    def getSuccessDefenceCount(self):
+        return self._getStat('successDefenceCount')
+
+    def getSuccessAttackCount(self):
+        return self._getStat('successAttackCount')
+
+    def getCombatCount(self):
+        return self._getStat('combatCount')
+
+    def getCombatWins(self):
+        return self._getStat('combatWins')
+
+    def getWinsEfficiency(self):
+        return self._getAvgValue(self.getCombatCount, self.getCombatWins)
+
     def getEnemyBaseCaptureCount(self):
         return self._getStat('enemyBaseCaptureCount')
 
@@ -921,6 +936,23 @@ class FortRegionBattlesStats(_CommonStatsBlock):
 
     def getEnemyBaseCaptureCountInAttack(self):
         return self._getStat('enemyBaseCaptureCountInAttack')
+
+    def getResourceCaptureCount(self):
+        return self._getStat('resourceCaptureCount')
+
+    def getResourceLossCount(self):
+        return self._getStat('resourceLossCount')
+
+    def getProfitFactor(self):
+        if self.getResourceLossCount():
+            return float(self.getResourceCaptureCount()) / self.getResourceLossCount()
+        return 0
+
+    def getCaptureEnemyBuildingTotalCount(self):
+        return self._getStat('captureEnemyBuildingTotalCount')
+
+    def getLossOwnBuildingTotalCount(self):
+        return self._getStat('lossOwnBuildingTotalCount')
 
     def _getStatsBlock(self, dossier):
         return dossier.getDossierDescr()['fortBattles']

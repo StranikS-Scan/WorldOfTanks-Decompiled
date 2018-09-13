@@ -24,24 +24,20 @@ class StaticSceneBoundEffects(object):
         return
 
     def addNew(self, position, effectsList, keyPoints, callbackOnStop, **args):
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-            return -1
-        else:
-            model = BigWorld.player().newFakeModel()
-            model.position = position
-            BigWorld.addModel(model)
-            dir = args.get('dir', None)
-            if dir is not None:
-                model.rotate(dir.yaw, (0.0, 1.0, 0.0))
-            self.__incrementalEffectID += 1
-            effectID = self.__incrementalEffectID
-            desc = dict()
-            desc['model'] = model
-            desc['effectsPlayer'] = EffectsListPlayer(effectsList, keyPoints, **args)
-            desc['effectsPlayer'].play(model, None, partial(self.__callbackBeforeDestroy, effectID, callbackOnStop))
-            self._models[effectID] = desc
-            return effectID
+        model = BigWorld.player().newFakeModel()
+        model.position = position
+        BigWorld.addModel(model)
+        dir = args.get('dir', None)
+        if dir is not None:
+            model.rotate(dir.yaw, (0.0, 1.0, 0.0))
+        self.__incrementalEffectID += 1
+        effectID = self.__incrementalEffectID
+        desc = dict()
+        desc['model'] = model
+        desc['effectsPlayer'] = EffectsListPlayer(effectsList, keyPoints, **args)
+        desc['effectsPlayer'].play(model, None, partial(self.__callbackBeforeDestroy, effectID, callbackOnStop))
+        self._models[effectID] = desc
+        return effectID
 
     def stop(self, effectID):
         if self._models.has_key(effectID):

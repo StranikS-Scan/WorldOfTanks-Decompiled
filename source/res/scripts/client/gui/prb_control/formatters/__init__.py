@@ -1,9 +1,7 @@
 # Embedded file name: scripts/client/gui/prb_control/formatters/__init__.py
-import types
 import time
 import BigWorld
 from datetime import datetime
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.prb_control import getPrebattleLocalizedData, getPrebattleTypeName
@@ -51,7 +49,7 @@ def getPrebattleFullDescription(extraData = None, escapeHtml = False):
     if led:
         eventName = getPrebattleLocalizedString('event_name', led, escapeHtml)
         sessionName = getPrebattleLocalizedString('session_name', led, escapeHtml)
-        description = '{0:>s}:\n{1:>s}'.format(eventName, sessionName)
+        description = '{0:>s}: {1:>s}'.format(eventName, sessionName)
     return description
 
 

@@ -2,7 +2,7 @@
 import constants
 from helpers import getClientOverride
 from gui import GUI_SETTINGS, game_control
-from gui.shared.fortifications import isFortificationEnabled
+from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
 from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
 
 class GlobalVarsManager(GlobalVarsMgrMeta):
@@ -20,6 +20,9 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
 
     def isShowServerStats(self):
         return constants.IS_SHOW_SERVER_STATS
+
+    def isShowServersList(self):
+        return constants.IS_SHOW_SERVERS_LIST
 
     def isChina(self):
         return constants.IS_CHINA
@@ -54,8 +57,14 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     def isFortificationAvailable(self):
         return isFortificationEnabled()
 
+    def isFortificationBattleAvailable(self):
+        return isFortificationBattlesEnabled()
+
     def isWalletAvailable(self):
         return game_control.g_instance.wallet.isAvailable
 
     def isShowLoginRssFeed(self):
         return GUI_SETTINGS.loginRssFeed.show
+
+    def isShowTicker(self):
+        return constants.IS_CHINA and GUI_SETTINGS.movingText.show

@@ -136,4 +136,3 @@ class TIPS(object):
     TIP131 = '#tips:tip131'
     TIP132 = '#tips:tip132'
     TIP133 = '#tips:tip133'
-    TIP_FOOTBALL = '#tips:tip_football'

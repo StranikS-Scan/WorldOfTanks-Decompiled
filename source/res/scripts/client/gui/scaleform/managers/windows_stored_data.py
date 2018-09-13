@@ -23,7 +23,7 @@ class TARGET_ID(object):
 
 DEF_TARGET_MASK = TARGET_ID.CHANNEL_CAROUSEL | TARGET_ID.CHAT_MANAGEMENT
 STORED_DATA_MAX_LENGTH = 64
-STORED_DATA_REV = 0
+STORED_DATA_REV = 1
 
 def _populateStoredData(targetID, window):
     storedData = g_windowsStoredData.getData(targetID, window)
@@ -63,8 +63,8 @@ class stored_window(object):
 
             @functools.wraps(func)
             def wrapper(window, *args, **kwargs):
-                _populateStoredData(self.__targetID, window)
                 func(window, *args, **kwargs)
+                _populateStoredData(self.__targetID, window)
 
             return wrapper
 
@@ -134,7 +134,9 @@ class UniqueWindowStoredData(WindowStoredData):
     def __init__(self, name, *args):
         super(UniqueWindowStoredData, self).__init__(*args)
         if type(name) not in types.StringTypes:
-            raise TypeError, 'Unique name must be string.'
+            LOG_WARNING('Unique name must be string. It is ignored', name)
+            name = ''
+            self._trusted = False
         self._uniqueName = name
 
     def __repr__(self):

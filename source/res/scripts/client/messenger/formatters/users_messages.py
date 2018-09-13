@@ -18,3 +18,7 @@ def getUserRosterChangedMessage(actionIndex, user):
         else:
             message = None
         return message
+
+
+def getBroadcastIsInCoolDownMessage(coolDown):
+    return i18n.makeString('#%s:client/error/broadcastInCooldown' % MESSENGER_I18N_FILE, coolDown)

@@ -2,6 +2,7 @@
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from messenger import g_settings
+from messenger.ext.filters import MessageFiltersChain
 from messenger.ext.player_helpers import CurrentPlayerHelper
 from messenger.gui.entry_decorator import GUIDecorator
 from messenger.m_constants import MESSENGER_SCOPE
@@ -15,6 +16,7 @@ class MessengerEntry(object):
         self.__storage = StorageDecorator()
         self.__gui = GUIDecorator()
         self.__playerHelper = CurrentPlayerHelper()
+        self.__msgFiltersChain = MessageFiltersChain()
 
     @property
     def protos(self):
@@ -31,6 +33,8 @@ class MessengerEntry(object):
     def init(self):
         g_settings.init()
         self.__gui.init()
+        self.__msgFiltersChain.init()
+        self.__protoPlugins.setFilters(self.__msgFiltersChain)
         g_playerEvents.onAccountShowGUI += self.__pe_onAccountShowGUI
         g_playerEvents.onAccountBecomePlayer += self.__pe_onAccountBecomePlayer
         g_playerEvents.onAvatarBecomePlayer += self.__pe_onAvatarBecomePlayer
@@ -39,6 +43,7 @@ class MessengerEntry(object):
         connectionManager.onDisconnected += self.__cm_onDisconnected
 
     def fini(self):
+        self.__msgFiltersChain.fini()
         self.__protoPlugins.clear()
         self.__gui.clear()
         self.__playerHelper.clear()

@@ -2,7 +2,7 @@
 from collections import defaultdict
 import weakref
 from CurrentVehicle import g_currentVehicle
-from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE
+from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE, ARENA_BONUS_TYPE
 from gui.prb_control import getClassLevelLimits, getTotalLevelLimits
 from gui.prb_control import getPrebattleRosters, getMaxSizeLimits
 from gui.prb_control.restrictions.interfaces import IVehicleLimit, ITeamLimit
@@ -14,25 +14,18 @@ from prebattle_shared import isTeamValid, isVehicleValid
 
 class VehicleIsValid(IVehicleLimit):
 
+    def __init__(self, allowEventBattles = False, onlyForEventBattles = False):
+        self.__allowEventBattles = allowEventBattles
+        self.__onlyForEventBattles = onlyForEventBattles
+
     def check(self, teamLimits):
         if not g_currentVehicle.isReadyToFight():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
         vehicle = g_currentVehicle.item
-        if vehicle.isOnlyForEventBattles:
+        if self.__onlyForEventBattles and not vehicle.isOnlyForEventBattles:
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_ONLY_EVENT_BATTLES)
+        if vehicle.isOnlyForEventBattles and not self.__allowEventBattles:
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
-        shellsList = []
-        for shell in vehicle.shells:
-            shellsList.extend([shell.intCD, shell.count])
-
-        return isVehicleValid(vehicle.descriptor, shellsList, teamLimits)
-
-
-class VehicleIsValidForSquad(IVehicleLimit):
-
-    def check(self, teamLimits):
-        if not g_currentVehicle.isReadyToFight():
-            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
-        vehicle = g_currentVehicle.item
         shellsList = []
         for shell in vehicle.shells:
             shellsList.extend([shell.intCD, shell.count])
@@ -71,8 +64,9 @@ class ObserverInTeamIsValid(AbstractTeamIsValid):
             return (False, 'observers')
         return (True, '')
 
-    def __isAllObservers(self, accountsInfo):
-        if len(accountsInfo) == 0:
+    @classmethod
+    def __isAllObservers(cls, accountsInfo):
+        if not len(accountsInfo):
             return False
         for accInfo in accountsInfo.itervalues():
             if not accInfo['state'] & PREBATTLE_ACCOUNT_STATE.READY:
@@ -260,7 +254,7 @@ class DefaultLimits(LimitsCollection):
 class SquadLimits(LimitsCollection):
 
     def __init__(self, functional):
-        super(SquadLimits, self).__init__(functional, (VehicleIsValidForSquad(),), (TeamIsValid(),))
+        super(SquadLimits, self).__init__(functional, (VehicleIsValid(allowEventBattles=True),), (TeamIsValid(),))
 
 
 class TrainingLimits(LimitsCollection):
@@ -277,5 +271,11 @@ class CompanyLimits(LimitsCollection):
 
 class BattleSessionLimits(LimitsCollection):
 
-    def __init__(self, functional):
-        super(BattleSessionLimits, self).__init__(functional, (VehicleIsValid(),), (VehiclesLevelLimit(), TeamIsValid()))
+    def __init__(self, functional, settings = None):
+        if settings is not None:
+            allowEventBattles = settings['allowEventBattles']
+            onlyForEventBattles = allowEventBattles and settings['bonusType'] == ARENA_BONUS_TYPE.EVENT_BATTLES
+        else:
+            allowEventBattles = onlyForEventBattles = False
+        super(BattleSessionLimits, self).__init__(functional, (VehicleIsValid(allowEventBattles=allowEventBattles, onlyForEventBattles=onlyForEventBattles),), (VehiclesLevelLimit(), TeamIsValid()))
+        return

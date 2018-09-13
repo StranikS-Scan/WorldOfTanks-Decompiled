@@ -162,13 +162,13 @@ class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
         self.as_setCaptureDevicesS(opt.get(), opt.getOptions())
 
     def altVoicesPreview(self):
-        setting = self.params.SETTINGS.getSetting(settings_constants.SOUND.ALT_VOICES)
+        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
         if setting is not None:
             setting.playPreviewSound()
         return
 
     def isSoundModeValid(self):
-        setting = self.params.SETTINGS.getSetting(settings_constants.SOUND.ALT_VOICES)
+        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
         if setting is not None:
             return setting.isSoundModeValid()
         else:

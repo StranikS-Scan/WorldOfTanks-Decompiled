@@ -11,6 +11,8 @@ VEHICLE_BUY_WINDOW_SETTINGS = 'vehicleBuyWindowSettings'
 CURRENT_VEHICLE = 'current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
+HEADER_TUTORIAL = 'HEADER_TUTORIAL'
+FORT_MEMBER_TUTORIAL = 'FORT_MEMBER_TUTORIAL'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
@@ -34,6 +36,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                                  'nationID': None},
                GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False},
                EULA_VERSION: {'version': 0},
+               HEADER_TUTORIAL: {'step': 0,
+                                 'isRefused': False,
+                                 'isFinished': False},
+               FORT_MEMBER_TUTORIAL: {'wasShown': False},
                'cs_intro_view_vehicle': {'nation': -1,
                                          'vehicleType': 'none',
                                          'isMain': False,
@@ -57,6 +63,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
  KEY_FAVORITES: {CURRENT_VEHICLE: 0},
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': [],
                                'selectedListVehicles': []},
+                'fortSettings': {'clanDBID': 0},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,

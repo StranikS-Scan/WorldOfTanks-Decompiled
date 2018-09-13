@@ -13,28 +13,10 @@ from gui import makeHtmlString
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils import CONST_CONTAINER
 from gui.shared.server_events import formatters
-
-class RELATIONS(CONST_CONTAINER):
-    GT = 'greater'
-    LS = 'less'
-    EQ = 'equal'
-    NEQ = 'notEqual'
-    LSQ = 'lessOrEqual'
-    GTQ = 'greaterOrEqual'
-    _OPPOSITE = {GT: LSQ,
-     LS: GTQ,
-     EQ: NEQ,
-     NEQ: EQ,
-     LSQ: GT,
-     GTQ: LS}
-
-    @classmethod
-    def getOppositeRelation(cls, relation):
-        return cls._OPPOSITE.get(relation)
-
-
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.COMPANY: 'company',
  constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
+_RELATIONS = formatters.RELATIONS
+_RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
 
 def _getArenaBonusType(preBattleCond):
     if preBattleCond is not None:
@@ -58,22 +40,22 @@ _SORT_ORDER = ('igrType', 'premiumAccount', 'token', 'inClan', 'GR', 'accountDos
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
-    if relation == RELATIONS.EQ:
+    if relation == _RELATIONS.EQ:
         return source == toCompare
-    if relation == RELATIONS.GT:
+    if relation == _RELATIONS.GT:
         return source > toCompare
-    if relation == RELATIONS.GTQ:
+    if relation == _RELATIONS.GTQ:
         return source >= toCompare
-    if relation == RELATIONS.LS:
+    if relation == _RELATIONS.LS:
         return source < toCompare
-    if relation == RELATIONS.LSQ:
+    if relation == _RELATIONS.LSQ:
         return source <= toCompare
     LOG_WARNING('Unknown kind of values relation', relation, source, toCompare)
     return False
 
 
 def _findRelation(condDataKeys):
-    res = set(RELATIONS.ALL()) & set(condDataKeys)
+    res = set(_RELATIONS.ALL()) & set(condDataKeys)
     if len(res):
         return res.pop()
     else:
@@ -309,7 +291,7 @@ class _VehsListCondition(_Condition, _VehsListParser):
 
     def negate(self):
         if self._relation is not None:
-            self._relation = RELATIONS.getOppositeRelation(self._relation)
+            self._relation = _RELATIONS.getOppositeRelation(self._relation)
         else:
             self._isNegative = not self._isNegative
         return
@@ -487,7 +469,7 @@ class GlobalRating(_Requirement):
         self._relationValue = float(_getNodeValue(self._data, self._relation))
 
     def negate(self):
-        self._relation = RELATIONS.getOppositeRelation(self._relation)
+        self._relation = _RELATIONS.getOppositeRelation(self._relation)
 
     def _isAvailable(self):
         if self._relationValue is None:
@@ -587,7 +569,7 @@ class Token(_Requirement):
         return self._id
 
     def negate(self):
-        self._relation = RELATIONS.getOppositeRelation(self._relation)
+        self._relation = _RELATIONS.getOppositeRelation(self._relation)
 
     def _isAvailable(self):
         return _handleRelation(self._relation, self.__getTokensCount(), self._relationValue)
@@ -595,7 +577,7 @@ class Token(_Requirement):
     def _format(self, svrEvents, event = None):
         result = []
         for eID, e in svrEvents.iteritems():
-            if e.getType() in (constants.EVENT_TYPE.BATTLE_QUEST, constants.EVENT_TYPE.TOKEN_QUEST):
+            if e.getType() in (constants.EVENT_TYPE.BATTLE_QUEST, constants.EVENT_TYPE.TOKEN_QUEST, constants.EVENT_TYPE.FORT_QUEST):
                 children = e.getChildren()
                 if self._id in children:
                     for qID in children[self._id]:
@@ -605,7 +587,7 @@ class Token(_Requirement):
                             if event is not None and not event.isCompleted():
                                 isAvailable = self.isAvailable()
                             tokensCountNeed = self._relationValue
-                            if self._relation == RELATIONS.GT:
+                            if self._relation == _RELATIONS.GT:
                                 tokensCountNeed += 1
                             battlesLeft = None
                             if tokensCountNeed > 1:
@@ -766,7 +748,7 @@ class _DossierValue(_Requirement):
         self._relationValue = float(_getNodeValue(self._data, self._relation, 0.0))
 
     def negate(self):
-        self._relation = RELATIONS.getOppositeRelation(self._relation)
+        self._relation = _RELATIONS.getOppositeRelation(self._relation)
 
     def _checkDossier(self, dossier):
         block, record = self._recordName
@@ -777,8 +759,9 @@ class _DossierValue(_Requirement):
             dossierValue /= float(battlesCount or 1)
         return _handleRelation(self._relation, dossierValue, self._relationValue)
 
-    def _getFmtLabel(self):
-        return i18n.makeString('#quests:details/requirements/%s' % ('dossierValue' if not self._average else 'dossierAvgValue'), label=self.__getLabelKey())
+    def _getFmtValues(self):
+        i18nLabel = i18n.makeString('#quests:details/requirements/%s' % ('dossierValue' if not self._average else 'dossierAvgValue'), label=self.__getLabelKey())
+        return (i18nLabel, self._relationValue, self._relation)
 
     def __getLabelKey(self):
         _, record = self._recordName
@@ -799,6 +782,8 @@ class _DossierValue(_Requirement):
             return 'team'
         if block in ('historical',):
             return 'historical'
+        if block in ('achievements',):
+            return 'achievements'
         return ''
 
     def __repr__(self):
@@ -819,7 +804,8 @@ class AccountDossierValue(_DossierValue):
 
     def _format(self, svrEvents, event = None):
         if event is None or not event.isGuiDisabled():
-            return [formatters.packTextBlock(self._getFmtLabel(), value=self._relationValue, relation=self._relation, isAvailable=self.isAvailable())]
+            label, value, relation = self._getFmtValues()
+            return [formatters.packTextBlock(label, value=value, relation=relation, isAvailable=self.isAvailable())]
         else:
             return []
 
@@ -834,7 +820,8 @@ class VehicleDossierValue(_DossierValue):
 
     def _format(self, svrEvents, event = None):
         if event is None or not event.isGuiDisabled():
-            return [formatters.packTextBlock(self._getFmtLabel(), value=self._relationValue, relation=self._relation)]
+            label, value, relation = self._getFmtValues()
+            return [formatters.packTextBlock(label, value=value, relation=relation)]
         else:
             return []
 
@@ -1225,7 +1212,7 @@ class BattleResults(_Condition, _Negatable, _Updatable):
         return False
 
     def negate(self):
-        self._relation = RELATIONS.getOppositeRelation(self._relation)
+        self._relation = _RELATIONS.getOppositeRelation(self._relation)
         self._isNegative = not self._isNegative
 
     def format(self, svrEvents, event = None):
@@ -1253,7 +1240,22 @@ class BattleResults(_Condition, _Negatable, _Updatable):
                 label = i18n.makeString('#quests:details/conditions/results/%s/avg' % self._localeKey, param=key)
             else:
                 label = i18n.makeString('#quests:details/conditions/results/%s/simple' % self._localeKey, param=key)
-            return [formatters.packTextBlock(label, value=self._relationValue, relation=self._relation)]
+            value, relation, relationI18nType = self._relationValue, self._relation, _RELATIONS_SCHEME.DEFAULT
+            if self._keyName == 'markOfMastery':
+                relationI18nType = _RELATIONS_SCHEME.ALTERNATIVE
+                if self._relationValue == 0:
+                    if self._relation in (_RELATIONS.EQ, _RELATIONS.LSQ):
+                        i18nLabelKey = '#quests:details/conditions/cumulative/markOfMastery0'
+                    else:
+                        if self._relation in (_RELATIONS.LS,):
+                            raise Exception('Mark of mastery 0 can be used with greater or equal relation types')
+                        i18nLabelKey = '#quests:details/conditions/cumulative/markOfMastery0/not'
+                    label, value, relation = i18n.makeString(i18nLabelKey), None, None
+                else:
+                    i18nValueKey = '#quests:details/conditions/cumulative/markOfMastery%d' % int(self._relationValue)
+                    i18nLabel = i18n.makeString('#quests:details/conditions/cumulative/markOfMastery')
+                    label, value, relation = i18nLabel, i18n.makeString(i18nValueKey), self._relation
+            return [formatters.packTextBlock(label, value=value, relation=relation, relationI18nType=relationI18nType)]
 
     def __repr__(self):
         return 'BattleResults<key=%s; %s=%r; max=%r; total=%r; avg=%r>' % (self._keyName,

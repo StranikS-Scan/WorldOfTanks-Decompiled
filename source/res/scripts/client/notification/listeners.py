@@ -2,6 +2,7 @@
 import weakref
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
+from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.prb_control.prb_helpers import GlobalListener, prbInvitesProperty
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -57,6 +58,13 @@ class ServiceChannelListener(_NotificationListener):
         model = self._model()
         if model:
             model.addNotification(MessageDecorator(clientID, formatted, settings))
+            if formatted.get('type') == 'battleResult' and settings.extraHandlerData is not None:
+                from gui.DialogsInterface import showDialog
+                showDialog(I18PunishmentDialogMeta('punishmentWindow', None, settings.extraHandlerData), self.__doneHandler())
+        return
+
+    def __doneHandler(self):
+        pass
 
 
 class PrbInvitesListener(_NotificationListener, GlobalListener):

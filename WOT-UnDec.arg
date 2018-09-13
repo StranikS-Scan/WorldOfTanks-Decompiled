@@ -1,0 +1,11 @@
+#-------------------- WOT-UnDec parameters --------------------
+
+exe  = "C:\Program Files (x86)\Borland\Delphi6\Projects\PjOrion\PjOrion.exe"
+path = "source\"
+unpack_xml = true
+decompile_pyc = true
+threads_min_count = 10
+files_in_group_min_count = 15
+
+decompiler_default = "uncompyle6"
+decompiler_extra = ["client\gui\Scaleform\locale\RES_ICONS.pyc":"fupy"]

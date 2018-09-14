@@ -23,7 +23,7 @@ def messageArgs(int32Arg1 = 0, int64Arg1 = 0, floatArg1 = 0, strArg1 = '', strAr
 
 EMPTY_ARGS = messageArgs()
 
-class MESSENGER_ERRORS:
+class MESSENGER_ERRORS():
     NO_ERROR = _makeID(start=0)
     GENERIC_ERROR = _makeID()
     NOT_READY = _makeID()
@@ -45,19 +45,21 @@ class MESSENGER_ERRORS:
             return 'ERROR_CODE_' + str(errorCode)
 
 
-class MESSENGER_LIMITS:
+class MESSENGER_LIMITS():
     FIND_USERS_BY_NAME_MAX_RESULT_SIZE = 50
     FIND_USERS_BY_NAME_REQUEST_COOLDOWN_SEC = 5.0 + _COOLDOWN_OFFSET
     BATTLE_CHANNEL_MESSAGE_MAX_SIZE = 140
     UNIT_CHANNEL_MESSAGE_MAX_SIZE = 512
+    CLUB_CHANNEL_MESSAGE_MAX_SIZE = 512
     BATTLE_CHAT_HISTORY_ON_SERVER_MAX_LEN = 10
     UNIT_CHAT_HISTORY_ON_SERVER_MAX_LEN = 20
+    CLUB_CHAT_HISTORY_ON_SERVER_MAX_LEN = 10
     BROADCASTS_FROM_CLIENT_COOLDOWN_SEC = (0.5 if not IS_CHINA else 3.0) + _COOLDOWN_OFFSET
     ADMIN_COMMANDS_FROM_CLIENT_COOLDOWN_SEC = 5.0 + _COOLDOWN_OFFSET
     VOIP_CREDENTIALS_REQUEST_COOLDOWN_SEC = 10.0 + _COOLDOWN_OFFSET
 
 
-class MESSENGER_ACTION_IDS:
+class MESSENGER_ACTION_IDS():
     RESPONSE_SUCCESS = _makeID(start=0)
     RESPONSE_FAILURE = _makeID()
     FIND_USERS_BY_NAME = _makeID()
@@ -79,6 +81,13 @@ class MESSENGER_ACTION_IDS:
     BROADCAST_UNIT_MESSAGE = _makeID()
     ON_UNIT_MESSAGE_BROADCAST = _makeID()
     _UNIT_ACTION_END_ID = _makeID()
+    _CLUB_ACTION_START_ID = _makeID()
+    INIT_CLUB_CHAT = _makeID()
+    DEINIT_CLUB_CHAT = _makeID()
+    UPDATE_CLUB_MEMBERLIST = _makeID()
+    BROADCAST_CLUB_MESSAGE = _makeID()
+    ON_CLUB_MESSAGE_BROADCAST = _makeID()
+    _CLUB_ACTION_END_ID = _makeID()
     CUSTOM_ACTION_ID = _makeID()
 
     @staticmethod
@@ -110,9 +119,14 @@ class MESSENGER_ACTION_IDS:
         return actions._UNIT_ACTION_START_ID <= actionID <= actions._UNIT_ACTION_END_ID
 
     @staticmethod
+    def isClubChatAction(actionID):
+        actions = MESSENGER_ACTION_IDS
+        return actions._CLUB_ACTION_START_ID <= actionID <= actions._CLUB_ACTION_END_ID
+
+    @staticmethod
     def isRateLimitedBroadcastFromClient(actionID):
         actions = MESSENGER_ACTION_IDS
-        if actionID == actions.BROADCAST_BATTLE_MESSAGE or actionID == actions.BROADCAST_UNIT_MESSAGE:
+        if actionID == actions.BROADCAST_BATTLE_MESSAGE or actionID == actions.BROADCAST_UNIT_MESSAGE or actionID == actions.BROADCAST_CLUB_MESSAGE:
             return True
         battleChatCmdStartID = actions._BATTLE_CHAT_COMMAND_START_ID
         if battleChatCmdStartID <= actionID < battleChatCmdStartID + len(BATTLE_CHAT_COMMANDS):
@@ -127,6 +141,8 @@ class MESSENGER_ACTION_IDS:
         elif actions.isBattleChatAction(actionID):
             return actions.battleChatCommandFromActionID(actionID) is None
         elif actions.isUnitChatAction(actionID):
+            return True
+        elif actions.isClubChatAction(actionID):
             return True
         else:
             return False
@@ -154,7 +170,12 @@ AdminChatCommand = namedtuple('AdminChatCommand', ('id', 'name', 'timeout'))
 ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID), name='USERBAN', timeout=30.0), AdminChatCommand(id=_makeID(), name='USERUNBAN', timeout=30.0))
 ADMIN_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in ADMIN_CHAT_COMMANDS}
 raise len(ADMIN_CHAT_COMMANDS) <= MESSENGER_ACTION_IDS._BATTLE_ACTION_START_ID - MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID or AssertionError
-BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'soundNotification'))
+BattleChatCommand = namedtuple('BattleChatCommand', ('id',
+ 'name',
+ 'cooldownPeriod',
+ 'msgText',
+ 'vehMarker',
+ 'soundNotification'))
 BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name='HELPME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me', vehMarker='help_me', soundNotification='help_me'),
  BattleChatCommand(id=_makeID(), name='FOLLOWME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='follow_me', vehMarker='follow_me', soundNotification='follow_me'),
  BattleChatCommand(id=_makeID(), name='ATTACK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack', vehMarker=None, soundNotification='attack'),

@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
 import BigWorld
-from debug_utils import LOG_DEBUG
 from helpers.i18n import makeString
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -70,6 +69,9 @@ class RoleChangeWindow(View, AbstractWindowView, RoleChangeMeta):
         self.__tankman = self.__items.getTankman(ctx.get('tankmanID', None))
         self.__nativeVehicleCD = self.__tankman.vehicleNativeDescr.type.compactDescr
         self.__selectedVehicleCD = self.__nativeVehicleCD
+        self.__currentVehicleCD = None
+        if self.__tankman.vehicleDescr is not None:
+            self.__currentVehicleCD = self.__tankman.vehicleDescr.type.compactDescr
         g_clientUpdateManager.addCallbacks({'stats.gold': self._onMoneyUpdate,
          'stats.unlock': self._onStatsUpdate,
          'stats.inventory': self._onStatsUpdate})
@@ -79,20 +81,23 @@ class RoleChangeWindow(View, AbstractWindowView, RoleChangeMeta):
         self.__selectedVehicleCD = int(vehTypeCompDescr)
         selectedVehicle = self.__items.getItemByCD(self.__selectedVehicleCD)
         data = []
-        for role in selectedVehicle.descriptor.type.crewRoles:
-            mainRole = role[0]
-            criteria = REQ_CRITERIA.TANKMAN.NATIVE_TANKS([self.__selectedVehicleCD]) | REQ_CRITERIA.TANKMAN.ROLES([mainRole])
-            roleTankmen = self.__items.getTankmen(criteria).values()
-            sameTankmen = len(roleTankmen)
-            roleSlotIsTaken = _isRoleSlotTaken(roleTankmen, selectedVehicle, mainRole)
-            roleStr = Tankman.getRoleUserName(mainRole)
-            isAvailable = self.__tankman.descriptor.role != mainRole
-            data.append({'id': mainRole,
-             'name': roleStr,
-             'icon': Tankman.getRoleMediumIconPath(mainRole),
-             'available': isAvailable,
-             'warningHeader': _getTooltipHeader(sameTankmen, isAvailable),
-             'warningBody': _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, roleStr, selectedVehicle)})
+        mainRoles = []
+        for slotIdx, tman in selectedVehicle.crew:
+            mainRole = selectedVehicle.descriptor.type.crewRoles[slotIdx][0]
+            if mainRole not in mainRoles:
+                mainRoles.append(mainRole)
+                criteria = REQ_CRITERIA.TANKMAN.NATIVE_TANKS([self.__selectedVehicleCD]) | REQ_CRITERIA.TANKMAN.ROLES([mainRole])
+                roleTankmen = self.__items.getTankmen(criteria).values()
+                sameTankmen = len(roleTankmen)
+                roleSlotIsTaken = _isRoleSlotTaken(roleTankmen, selectedVehicle, mainRole)
+                roleStr = Tankman.getRoleUserName(mainRole)
+                isAvailable = self.__tankman.descriptor.role != mainRole
+                data.append({'id': mainRole,
+                 'name': roleStr,
+                 'icon': Tankman.getRoleMediumIconPath(mainRole),
+                 'available': isAvailable,
+                 'warningHeader': _getTooltipHeader(sameTankmen, isAvailable),
+                 'warningBody': _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, roleStr, selectedVehicle)})
 
         self.as_setRolesS(data)
 
@@ -119,6 +124,7 @@ class RoleChangeWindow(View, AbstractWindowView, RoleChangeMeta):
         self.__items = None
         self.__tankman = None
         self.__selectedVehicleCD = None
+        self.__currentVehicleCD = None
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(RoleChangeWindow, self)._dispose()
         return
@@ -160,4 +166,5 @@ class RoleChangeWindow(View, AbstractWindowView, RoleChangeMeta):
              'name': vehicle.shortUserName})
 
         return {'items': items,
-         'assignedVehicleId': nativeVehicleCD}
+         'nativeVehicleId': nativeVehicleCD,
+         'currentVehicleId': self.__currentVehicleCD if self.__currentVehicleCD != None else -1}

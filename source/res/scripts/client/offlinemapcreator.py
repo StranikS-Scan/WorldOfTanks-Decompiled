@@ -67,7 +67,6 @@ class OfflineMapCreator:
             BigWorld.worldDrawEnabled(False)
             BigWorld.setWatcher('Visibility/GUI', False)
             self.__spaceId = BigWorld.createSpace()
-            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, 'spaces/' + mapName)
             self.__isActive = True
             self.__arenaTypeID = self._arenaTypeIDByArenaName.get(mapName)
             self.__accountID = BigWorld.createEntity('Account', self.__spaceId, 0, _V_START_POS, (_V_START_ANGLES[2], _V_START_ANGLES[1], _V_START_ANGLES[0]), dict())
@@ -165,7 +164,6 @@ class OfflineMapCreator:
         mat = Math.Matrix()
         mat.setTranslate(_CAM_START_TARGET_POS)
         self.__cam.target = mat
-        LOG_DEBUG('camera')
         BigWorld.camera(self.__cam)
 
     def __loadCfg(self, type, mapName):

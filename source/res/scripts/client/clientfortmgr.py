@@ -269,7 +269,7 @@ class ClientFortMgr(object):
 
     def returnConsumable(self, consumableTypeID):
         requestID = self.__getNextRequestID()
-        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.RETURN_CONSUMABLE, 0, consumableTypeID, 0)
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.DEACTIVATE_CONSUMABLE, 0, consumableTypeID, 0)
         return requestID
 
     def __getClosestAttackHour(self, defHour):

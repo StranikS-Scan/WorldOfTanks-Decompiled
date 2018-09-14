@@ -139,6 +139,12 @@ class SETTINGS(object):
     WINDOWSIZE_DESCRIPTION = '#settings:windowSize/description'
     ASPECTRATIO = '#settings:aspectRatio'
     ASPECTRATIO_DESCRIPTION = '#settings:aspectRatio/description'
+    INTERFACESCALE = '#settings:interfaceScale'
+    INTERFACESCALE_DESCRIPTION = '#settings:interfaceScale/description'
+    INTERFACESCALE_HEADER = '#settings:interfaceScale/header'
+    INTERFACESCALE_BODY = '#settings:interfaceScale/body'
+    INTERFACESCALE_ATTENTION = '#settings:interfaceScale/attention'
+    INTERFACESCALE_WARNING = '#settings:interfaceScale/warning'
     FULLSCREEN = '#settings:fullScreen'
     FULLSCREEN_DESCRIPTION = '#settings:fullScreen/description'
     GAMMA = '#settings:gamma'
@@ -203,6 +209,7 @@ class SETTINGS(object):
     CHAT_SHOWJOINLEAVEMESSAGES = '#settings:chat/showJoinLeaveMessages'
     CHAT_ENABLESTORECHANNELSWINDOWS = '#settings:chat/enableStoreChannelsWindows'
     CHAT_ENABLESTOREMANAGEMENTWINDOWS = '#settings:chat/enableStoreManagementWindows'
+    CHAT_RECEIVEFRIENDSHIPREQUEST = '#settings:chat/receiveFriendshipRequest'
     CHAT_INVITESFROMFRIENDSONLY = '#settings:chat/invitesFromFriendsOnly'
     CHAT_STORERECEIVERINBATTLE = '#settings:chat/storeReceiverInBattle'
     CHAT_DISABLEBATTLECHAT = '#settings:chat/disableBattleChat'
@@ -434,6 +441,7 @@ class SETTINGS(object):
     DEFAULTBTN = '#settings:defaultBtn'
     ALTERNATIVEVOICES_FIELDSET_HEADER = '#settings:alternativeVoices/fieldset/header'
     ALTERNATIVEVOICES_LABELS_VOICEBATTLE = '#settings:alternativeVoices/labels/voiceBattle'
+    DEFAULTNAMEPREFIX = '#settings:defaultNamePrefix'
     ARCADE_ENUM = (ARCADE_MIXING,
      ARCADE_MIXING_TYPE0,
      ARCADE_MIXING_TYPE1,

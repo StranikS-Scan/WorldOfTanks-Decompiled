@@ -3,16 +3,17 @@ import types
 import Event
 from constants import ACCOUNT_ATTR
 from debug_utils import LOG_WARNING
-from gui.LobbyContext import g_lobbyContext
 from messenger.storage import SimpleCachedStorage
 
 class PlayerCtxStorage(SimpleCachedStorage):
-    __slots__ = ('accAttrs', 'clanInfo', '__cachedItems', '__eManager', 'onAccountAttrsChanged', 'onClanInfoChanged')
+    __slots__ = ('__accAttrs', '__clanInfo', '__banInfo', '__cachedItems', '__eManager', '__clubName', 'onAccountAttrsChanged', 'onClanInfoChanged')
 
     def __init__(self):
         super(PlayerCtxStorage, self).__init__()
-        self.accAttrs = 0
-        self.clanInfo = None
+        self.__accAttrs = 0
+        self.__clanInfo = None
+        self.__banInfo = None
+        self.__clubName = ''
         self.__cachedItems = {'lastVoipUri': ''}
         self.__eManager = Event.EventManager()
         self.onAccountAttrsChanged = Event.Event(self.__eManager)
@@ -20,28 +21,50 @@ class PlayerCtxStorage(SimpleCachedStorage):
         return
 
     def __repr__(self):
-        return 'PlayerCtxStorage(id=0x{0:08X}, accAttrs={1:n}, clanInfo={2!r:s})'.format(id(self), self.accAttrs, self.clanInfo)
+        return 'PlayerCtxStorage(id=0x{0:08X}, accAttrs={1:n}, clanInfo={2!r:s})'.format(id(self), self.__accAttrs, self.__clanInfo)
 
     def clear(self):
-        self.accAttrs = 0
-        self.clanInfo = None
+        self.__accAttrs = 0
+        self.__clanInfo = None
+        self.__clubName = ''
         self.__eManager.clear()
         return
 
+    def getClanInfo(self):
+        return self.__clanInfo
+
     def getClanAbbrev(self):
-        return g_lobbyContext.getClanAbbrev(self.clanInfo)
+        if self.__clanInfo:
+            return self.__clanInfo.abbrev
+        return ''
 
     def getClanRole(self):
-        role = 0
-        if self.clanInfo and len(self.clanInfo) > 3:
-            role = self.clanInfo[3]
-        return role
+        if self.__clanInfo:
+            return self.__clanInfo.role
+        return 0
+
+    def setMyClubName(self, clubName):
+        self.__clubName = clubName
+
+    def getMyClubName(self):
+        return self.__clubName
 
     def isGameAdmin(self):
-        return self.accAttrs & ACCOUNT_ATTR.ADMIN != 0
+        return self.__accAttrs & ACCOUNT_ATTR.ADMIN != 0
 
     def isChatAdmin(self):
-        return self.accAttrs & ACCOUNT_ATTR.CHAT_ADMIN != 0
+        return self.__accAttrs & ACCOUNT_ATTR.CHAT_ADMIN != 0
+
+    def isChatBan(self):
+        if self.__banInfo:
+            return self.__banInfo.isChatBan()
+        return False
+
+    def getBanInfo(self):
+        return self.__banInfo
+
+    def setBanInfo(self, banInfo):
+        self.__banInfo = banInfo
 
     def setCachedItem(self, key, value):
         if type(key) != types.StringType:
@@ -75,10 +98,10 @@ class PlayerCtxStorage(SimpleCachedStorage):
             self.__cachedItems['lastVoipUri'] = lastVoipUri
 
     def _setAccountAttrs(self, accAttrs):
-        if self.accAttrs ^ accAttrs:
-            self.accAttrs = accAttrs
+        if self.__accAttrs ^ accAttrs:
+            self.__accAttrs = accAttrs
             self.onAccountAttrsChanged()
 
     def _setClanInfo(self, clanInfo):
-        self.clanInfo = clanInfo
+        self.__clanInfo = clanInfo
         self.onClanInfoChanged()

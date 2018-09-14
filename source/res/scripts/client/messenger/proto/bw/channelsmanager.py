@@ -9,7 +9,7 @@ from messenger import g_settings
 from messenger.ext.player_helpers import getPlayerDatabaseID
 from messenger.m_constants import LAZY_CHANNEL, MESSENGER_SCOPE, USER_TAG
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
-from messenger.proto.bw import entities, battle_chat_cmd
+from messenger.proto.bw import entities
 from messenger.proto.bw.errors import ChannelNotFound
 from messenger.proto.bw import find_criteria, limits
 from messenger.proto.bw.wrappers import ChatActionWrapper
@@ -58,7 +58,6 @@ class ChannelsManager(ChatActionsListener):
         self.addListener(self.__onMemberStatusUpdate, CHAT_ACTIONS.memberStatusUpdate)
         self.addListener(self.__onChannelInfoUpdated, CHAT_ACTIONS.channelInfoUpdated)
         self.addListener(self.__onChatChannelCreated, CHAT_ACTIONS.createChannel)
-        self.addListener(self.__onUserChatCommand, CHAT_ACTIONS.userChatCommand)
         g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
 
@@ -303,21 +302,6 @@ class ChannelsManager(ChatActionsListener):
                 password = self.__creationInfo.pop(name)
             self.joinToChannel(created.getID(), password=password)
         return
-
-    def __onUserChatCommand(self, chatAction):
-        cmd = battle_chat_cmd.makeDecorator(chatAction)
-        if cmd.isIgnored():
-            LOG_DEBUG('Chat command is ignored', cmd)
-            return
-        if cmd.isPrivate() and not (cmd.isReceiver() or cmd.isSender()):
-            return
-        import BattleReplay
-        if BattleReplay.g_replayCtrl.isRecording:
-            BattleReplay.g_replayCtrl.saveCurrMessage()
-        channel = self.channelsStorage.getChannel(entities.BWChannelLightEntity(cmd.getID()))
-        if channel:
-            cmd.setClientID(channel.getClientID())
-            g_messengerEvents.channels.onCommandReceived(cmd)
 
     def __onChannelNotExists(self, _, chatAction):
         channelID = chatAction['channel']

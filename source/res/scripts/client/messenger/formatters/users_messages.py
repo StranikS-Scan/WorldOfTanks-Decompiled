@@ -27,10 +27,10 @@ def getBroadcastIsInCoolDownMessage(coolDown):
 
 def makeFriendshipRequestText(user, error):
     result = []
-    text = makeHtmlString('html_templates:lobby/friendshipRequest', 'title', ctx={'name': user.getName()})
+    text = makeHtmlString('html_templates:lobby/friendshipRequest', 'title', ctx={'name': user.getFullName()})
     result.append(text)
     if error:
-        text = makeHtmlString('html_templates:lobby/friendshipRequest/note', error.getErrorName(), ctx={'name': user.getName(),
+        text = makeHtmlString('html_templates:lobby/friendshipRequest/note', error.getErrorName(), ctx={'name': user.getFullName(),
          'rosterMaxCount': CONTACT_LIMIT.ROSTER_MAX_COUNT})
         result.append(text)
     return ''.join(result)

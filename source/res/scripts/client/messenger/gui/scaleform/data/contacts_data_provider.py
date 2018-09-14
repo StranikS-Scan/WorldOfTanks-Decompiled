@@ -9,6 +9,7 @@ from messenger.m_constants import USER_ACTION_ID as _ACTION_ID
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import UserTagsFindCriteria
 from messenger.storage import storage_getter
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 
 class _Category(object):
     __slots__ = ('_converter', '_visible', '_avoid', '_forced')
@@ -84,6 +85,8 @@ class _Category(object):
         else:
             data = None
             self._avoid = True
+        if data and len(data) == 1 and self.isEmpty():
+            data = []
         return data
 
     def getContactsDict(self):
@@ -97,12 +100,14 @@ class _Category(object):
 
 
 class _FriendsCategory(_Category):
-    __slots__ = ('_woGroup', '_groups')
+    __slots__ = ('_woGroup', '_groups', '__currentParent', '__showEmptyItems')
 
     def __init__(self):
         super(_FriendsCategory, self).__init__(CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID)
-        self._woGroup = _vo_converter.FriendsWoGroupConverter(self._converter.makeBaseVO())
-        self._groups = _vo_converter.FriendsGroupsConverter(self._converter.makeBaseVO())
+        self.__currentParent = self._converter.makeBaseVO()
+        self._woGroup = _vo_converter.FriendsWoGroupConverter(self.__currentParent)
+        self._groups = _vo_converter.FriendsGroupsConverter(self.__currentParent)
+        self.__showEmptyItems = False
 
     def clear(self, full = False):
         self._woGroup.clear(full)
@@ -137,6 +142,7 @@ class _FriendsCategory(_Category):
         self._woGroup.setConditionClass(clazz)
 
     def showEmptyItem(self, value):
+        self.__showEmptyItems = value
         self._groups.showEmptyItem(value)
         self._woGroup.showEmptyItem(value)
 
@@ -176,13 +182,24 @@ class _FriendsCategory(_Category):
 
     def getGroups(self, pattern = None):
         data = self._groups.makeVO(pattern)
-        woContactsCount = self._woGroup.hasContacts()
-        if pattern or data or woContactsCount:
+        hasWoContacts = self._woGroup.hasContacts()
+        if pattern is None and not data and not hasWoContacts:
+            if self.__showEmptyItems:
+                data.append(self._woGroup.makeEmptyRow(self.__currentParent))
+                data.append(self._woGroup.makeEmptyRow(self.__currentParent, False, False))
+        else:
             woList = self._woGroup.makeVO(pattern)
-            if woContactsCount == 0:
-                for voContact in woList:
-                    voContact['parentItemData']['data']['hasChildren'] = len(data) > 0
-
+            if len(woList) > 0:
+                if not hasWoContacts:
+                    lastElement = woList[0]
+                    if lastElement['gui']['id'] is None:
+                        lastElement['data']['isVisible'] = False
+                else:
+                    woList.append(self._woGroup.makeEmptyRow(self.__currentParent, False, False))
+            elif data:
+                woList.append(self._woGroup.makeEmptyRow(self.__currentParent, False, True))
+            elif pattern is None:
+                woList.append(self._woGroup.makeEmptyRow(self.__currentParent, False, False))
             data.extend(woList)
         return data
 
@@ -193,8 +210,12 @@ class _FriendsCategory(_Category):
 
     def setAction(self, actionID, contact):
         result = False
-        if actionID in (_ACTION_ID.FRIEND_REMOVED, _ACTION_ID.IGNORED_ADDED):
+        checkIsEmptyNeeded = False
+        if actionID == _ACTION_ID.FRIEND_REMOVED:
             result = self.removeContact(contact)
+        elif actionID == _ACTION_ID.IGNORED_ADDED:
+            result = self.removeContact(contact)
+            checkIsEmptyNeeded = True
         elif actionID == _ACTION_ID.FRIEND_ADDED:
             result = self.addContact(contact)
         elif actionID == _ACTION_ID.GROUPS_CHANGED:
@@ -205,43 +226,54 @@ class _FriendsCategory(_Category):
             result = self.updateContact(contact)
             if not result:
                 result = self.addContact(contact)
+                checkIsEmptyNeeded = True
         elif actionID == _ACTION_ID.NOTE_CHANGED:
             result = self.updateContact(contact)
+        if checkIsEmptyNeeded:
+            if not result and self.__showEmptyItems:
+                if self.isEmpty() or not self.hasContacts():
+                    result = True
         return result
 
 
 class _FormationCategory(_Category):
-    __slots__ = ('_clan',)
+    __slots__ = ('_clan', '_club', '__parentItemData')
 
     def __init__(self):
         super(_FormationCategory, self).__init__(CONTACTS_ALIASES.GROUP_FORMATIONS_CATEGORY_ID)
-        self._clan = _vo_converter.ClanConverter(self._converter.makeBaseVO(), self.playerCtx.getClanAbbrev())
+        self.__parentItemData = self._converter.makeBaseVO()
+        self._clan = _vo_converter.ClanConverter(self.__parentItemData, self.playerCtx.getClanAbbrev())
+        self._club = _vo_converter.ClubConverter(self.__parentItemData, self.playerCtx.getMyClubName())
 
     @storage_getter('playerCtx')
     def playerCtx(self):
         return None
 
     def clear(self, full = False):
-        if self._clan:
-            self._clan.clear(full)
+        self._clan.clear(full)
+        self._club.clear(full)
         super(_FormationCategory, self).clear(full)
 
     def getContactsDict(self):
         return self._clan.getContacts()
 
     def getTags(self):
-        return {_TAG.CLAN_MEMBER}
+        return {_TAG.CLAN_MEMBER, _TAG.CLUB_MEMBER}
 
     def isEmpty(self):
-        return self._clan.isEmpty()
+        return self._clan.isEmpty() and self._club.isEmpty()
 
     def hasContacts(self):
-        return self._clan.hasContacts()
+        return self._clan.hasContacts() or self._club.hasContacts()
 
     def toggleGroup(self, name):
-        result = name == self._clan.getName()
-        if result:
+        result = False
+        if name == self._clan.getName():
             self._clan.toggle()
+            result = True
+        elif name == self._club.getName():
+            self._club.toggle()
+            result = True
         return result
 
     def setOnlineMode(self, value):
@@ -250,36 +282,56 @@ class _FormationCategory(_Category):
         else:
             clazz = _vo_converter.OnlineTotalCondition
         self._clan.setConditionClass(clazz)
+        self._club.setConditionClass(clazz)
 
     def updateClanAbbrev(self):
         self._clan.setClanAbbrev(self.playerCtx.getClanAbbrev())
 
+    def updateClubName(self):
+        self._club.setClubName(self.playerCtx.getMyClubName())
+
     def addContact(self, contact):
         result = False
-        if _TAG.CLAN_MEMBER not in contact.getTags():
-            return result
-        return self._clan.setContact(contact)
+        tags = contact.getTags()
+        if _TAG.CLAN_MEMBER in tags:
+            result = self._clan.setContact(contact)
+        if _TAG.CLUB_MEMBER in tags:
+            result |= self._club.setContact(contact)
+        return result
 
     def updateContact(self, contact):
+        dbID = contact.getID()
         result = False
-        if self._clan.hasContact(contact.getID()):
-            result = self._clan.setContact(contact)
+        for converter in self._getIterator():
+            if converter.hasContact(dbID):
+                result |= converter.setContact(contact)
+
         return result
 
     def removeContact(self, contact):
         dbID = contact.getID()
         result = False
-        if self._clan.hasContact(dbID):
-            result = self._clan.removeContact(dbID)
+        for converter in self._getIterator():
+            if converter.hasContact(dbID):
+                result |= converter.removeContact(dbID)
+
         return result
 
     def getGroups(self, pattern = None):
         data = []
-        if not self._clan.isEmpty():
-            vos = self._clan.makeVO(pattern)
-            if vos:
-                data.append(vos)
+        for converter in self._getIterator():
+            if not converter.isEmpty():
+                vos = converter.makeVO(pattern)
+                if vos:
+                    data.append(vos)
+
+        if data:
+            data.append(self._club.makeEmptyRow(self.__parentItemData, False, False))
         return data
+
+    def _getIterator(self):
+        for converter in (self._clan, self._club):
+            yield converter
 
 
 class _OthersCategory(_Category):
@@ -380,6 +432,8 @@ class _OthersCategory(_Category):
             result = self._referrers.setContact(contact)
         if _TAG.REFERRAL in tags:
             result = self._referrals.setContact(contact)
+        if actionID == _ACTION_ID.NOTE_CHANGED:
+            result = self.updateContact(contact)
         return result
 
     def _iterGroups(self):
@@ -471,7 +525,10 @@ class _ContactsCategories(object):
                 self._cache[idx] = category.getData(self._pattern)
                 result = True
 
-        return (result, filter(lambda item: bool(item), self._cache))
+        data = filter(lambda item: bool(item), self._cache)
+        if len(data) == 1 and self.isEmpty():
+            data = []
+        return (result, data)
 
     def getCriteria(self, full = False):
         tags = set()
@@ -490,14 +547,16 @@ class _ContactsCategories(object):
 
     def getData(self):
         self._cache = []
-        result = []
+        data = []
         for category in self._iterCategories():
-            data = category.getData(self._pattern)
-            self._cache.append(data)
-            if data:
-                result.append(data)
+            categoryData = category.getData(self._pattern)
+            self._cache.append(categoryData)
+            if categoryData:
+                data.append(categoryData)
 
-        return result
+        if len(data) == 1 and self.isEmpty():
+            data = []
+        return data
 
     def applySearchFilter(self, searchCriteria):
         if searchCriteria:
@@ -518,7 +577,10 @@ class _ContactsCategories(object):
                 result = True
                 break
 
-        return (result, filter(lambda item: bool(item), self._cache))
+        data = filter(lambda item: bool(item), self._cache)
+        if len(data) == 1 and self.isEmpty():
+            data = []
+        return (result, data)
 
     def changeGroups(self, categoryID, include = None, exclude = None, isOpened = False):
         result = False
@@ -532,7 +594,10 @@ class _ContactsCategories(object):
                 result = True
                 break
 
-        return (result, filter(lambda item: bool(item), self._cache))
+        data = filter(lambda item: bool(item), self._cache)
+        if len(data) == 1 and self.isEmpty():
+            data = []
+        return (result, data)
 
     def findCategory(self, categoryID):
         idx = 0
@@ -602,10 +667,14 @@ class ContactsDataProvider(DAAPIDataProvider):
         self.__isEmpty = True
         self.__list = []
         self.onTotalStatusChanged = Event.Event()
+        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     @storage_getter('users')
     def usersStorage(self):
         return None
+
+    def refresh(self):
+        super(ContactsDataProvider, self).refresh()
 
     @property
     def collection(self):
@@ -652,6 +721,9 @@ class ContactsDataProvider(DAAPIDataProvider):
 
     def setShowEmptyGroups(self, value):
         self.__showEmptyGroups = value
+        _, friendsCategory = self.__categories.findCategory(CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID)
+        if friendsCategory:
+            friendsCategory.showEmptyItem(self.__showEmptyGroups)
 
     def setOnlineMode(self, value):
         self.__categories.setOnlineMode(value)
@@ -696,6 +768,7 @@ class ContactsDataProvider(DAAPIDataProvider):
         events.onClanMembersListChanged += self.__me_onClanMembersListChanged
         events.onFriendshipRequestReceived += self.__me_onFriendshipRequestReceived
         events.onEmptyGroupsChanged += self.__me_onEmptyGroupsChanged
+        events.onNotesListReceived += self.__me_onNotesListReceived
 
     def removeContactsListeners(self):
         events = g_messengerEvents.users
@@ -705,9 +778,11 @@ class ContactsDataProvider(DAAPIDataProvider):
         events.onClanMembersListChanged -= self.__me_onClanMembersListChanged
         events.onFriendshipRequestReceived -= self.__me_onFriendshipRequestReceived
         events.onEmptyGroupsChanged -= self.__me_onEmptyGroupsChanged
+        events.onNotesListReceived -= self.__me_onNotesListReceived
 
     def _dispose(self):
         self.__categories.clear(True)
+        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(ContactsDataProvider, self)._dispose()
 
     def __setEmpty(self):
@@ -725,8 +800,17 @@ class ContactsDataProvider(DAAPIDataProvider):
     def __updateCollection(self, targetList):
         self.__list = _OpenedTreeCreator().build(targetList)
 
+    def __onSettingsChanged(self, diff):
+        if 'isColorBlind' in diff:
+            self.buildList()
+            self.refresh()
+
     def __me_onUsersListReceived(self, tags):
         if _TAG.CACHED not in tags:
+            if _TAG.CLUB_MEMBER in tags:
+                _, category = self.__categories.findCategory(CONTACTS_ALIASES.GROUP_FORMATIONS_CATEGORY_ID)
+                if category:
+                    category.updateClubName()
             self.buildList()
             self.refresh()
             self.onTotalStatusChanged()
@@ -736,8 +820,8 @@ class ContactsDataProvider(DAAPIDataProvider):
         if result:
             self.__updateCollection(data)
             self.refresh()
-        if self.__setEmpty():
-            self.onTotalStatusChanged()
+        self.__setEmpty()
+        self.onTotalStatusChanged()
 
     def __me_onUserStatusUpdated(self, contact):
         isEmpty = len(self.__list) > 0
@@ -770,3 +854,7 @@ class ContactsDataProvider(DAAPIDataProvider):
             if isEmpty != (len(self.__list) > 0):
                 self.__setEmpty()
                 self.onTotalStatusChanged()
+
+    def __me_onNotesListReceived(self):
+        self.buildList()
+        self.refresh()

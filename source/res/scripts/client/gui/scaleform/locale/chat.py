@@ -14,6 +14,7 @@ class CHAT(object):
     CHANNELS_TOURNAMENT = '#chat:channels/tournament'
     CHANNELS_CLAN = '#chat:channels/clan'
     CHANNELS_NUBS = '#chat:channels/nubs'
+    CHANNELS_CLUB = '#chat:channels/club'
     CHANNELS_BATTLE_COMMON = '#chat:channels/battle/common'
     CHANNELS_BATTLE_TEAM = '#chat:channels/battle/team'
     CHANNELS_TRAINING = '#chat:channels/training'

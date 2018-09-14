@@ -102,8 +102,7 @@ class Shop(Store, ShopMeta):
                     statusMessage = MENU.SHOP_ERRORS_INHANGAR
                     disabled = True
                     if module.isRentable:
-                        canBuyOrRent, _ = module.mayRentOrBuy(money)
-                        disabled = not canBuyOrRent
+                        disabled = not self._isPurchaseEnabled(module, money)
                 elif not module.isUnlocked:
                     statusMessage = MENU.SHOP_ERRORS_UNLOCKNEEDED
                     disabled = True
@@ -131,10 +130,15 @@ class Shop(Store, ShopMeta):
         return
 
     def _isPurchaseEnabled(self, item, money):
-        canBuy, reason = item.mayPurchase(money)
-        if not canBuy and reason == 'credit_error':
-            return item.mayPurchaseWithExchange(money, g_itemsCache.items.shop.exchangeRate)
-        return canBuy
+        canBuy, buyReason = item.mayPurchase(money)
+        canRentOrBuy, rentReason = item.mayRentOrBuy(money)
+        canBuyWithExchange = item.mayPurchaseWithExchange(money, g_itemsCache.items.shop.exchangeRate)
+        if not canRentOrBuy:
+            if not canBuy and buyReason == 'credit_error':
+                if item.itemTypeID in (GUI_ITEM_TYPE.VEHICLE, GUI_ITEM_TYPE.OPTIONALDEVICE):
+                    return canBuyWithExchange
+            return canBuy
+        return canRentOrBuy
 
     def requestFilterData(self, filterType):
         self._updateFilterOptions(filterType)

@@ -20,7 +20,8 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
      'paddings': 64,
      'groupPadding': 18,
      'ySlotPosition': 5,
-     'offsetSlot': -7}
+     'offsetSlot': -7,
+     'useOnlyLeftBtn': True}
 
     def _populate(self):
         super(FortOrdersPanelComponent, self)._populate()
@@ -151,3 +152,6 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
         if data is not None:
             self.as_updateOrderS(data)
         return
+
+    def onConsumablesChanged(self, unitMgrID):
+        self._buildList()

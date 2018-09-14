@@ -9,6 +9,7 @@ from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.settings import CREATOR_SLOT_INDEX, UNIT_RESTRICTION
 from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared.utils.decorators import ReprInjector
 
 class PlayerUnitInfo(object):
     __slots__ = ('dbID', 'unitIdx', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
@@ -44,7 +45,7 @@ class PlayerUnitInfo(object):
         return g_lobbyContext.getRegionCode(self.dbID)
 
     def isCreator(self):
-        return self.role & UNIT_ROLE.COMMANDER_UPDATES > 0
+        return self.role & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self.slotIdx == CREATOR_SLOT_INDEX
 
     def isInvite(self):
         return self.role & UNIT_ROLE.INVITED > 0
@@ -67,6 +68,12 @@ class PlayerUnitInfo(object):
         else:
             return False
 
+    def isInPreArena(self):
+        if self.unit is not None:
+            return self.unit.getState() & UNIT_STATE.IN_PRE_ARENA > 0
+        else:
+            return False
+
     def isLegionary(self):
         return self.role & UNIT_ROLE.LEGIONARY > 0
 
@@ -77,6 +84,7 @@ class PlayerUnitInfo(object):
         requestCriteria = REQ_CRITERIA.INVENTORY
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_VEHICLE
         if self.isCurrentPlayer():
             vehicles = g_itemsCache.items.getVehicles(requestCriteria).keys()
         else:
@@ -92,13 +100,12 @@ class PlayerUnitInfo(object):
             return []
 
     def canAssignToSlot(self, slotIdx):
-        result = (False, [])
         if self.unit is not None and not self.isCreator() and slotIdx != CREATOR_SLOT_INDEX:
             slots = self.unit.getFreeSlots()
             if slotIdx in slots:
                 vehicles = self.getVehiclesToSlot(slotIdx)
-                result = (len(vehicles) > 0, vehicles)
-        return result
+                return (len(vehicles) > 0, vehicles)
+        return (False, [])
 
     def canAssignToSlots(self, allSlots = False):
         result = (True, UNIT_RESTRICTION.UNDEFINED)
@@ -137,7 +144,7 @@ class PlayerUnitInfo(object):
     def fromPrbInfo(cls, prbInfo, slotIdx = -1):
         role = UNIT_ROLE.DEFAULT
         if prbInfo.isCreator:
-            role |= UNIT_ROLE.COMMANDER_UPDATES | UNIT_ROLE.CHANGE_ROSTER
+            role |= UNIT_ROLE.CREATOR
         if prbInfo.isOffline():
             role |= UNIT_ROLE.OFFLINE
         if prbInfo.inBattle():
@@ -241,11 +248,11 @@ class UnitState(object):
     def isInArena(self):
         return self.__state & UNIT_STATE.IN_ARENA > 0
 
-    def isSortie(self):
-        return self.__state & UNIT_STATE.SORTIE > 0
+    def isInPreArena(self):
+        return self.__state & UNIT_STATE.IN_PRE_ARENA > 0
 
-    def isFortBattle(self):
-        return self.__state & UNIT_STATE.FORT_BATTLE > 0
+    def isFreezed(self):
+        return self.isLocked() or self.isInSearch() or self.isInQueue() or self.isInArena() or self.isInPreArena()
 
     def isChanged(self):
         return self.__stateDiff & UNIT_STATE.CHANGED_STATE_ASQ > 0
@@ -253,11 +260,13 @@ class UnitState(object):
 
 UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'levelsSeq', 'minTotalLevel', 'maxTotalLevel'))
 
+@ReprInjector.simple(('_minLevel', 'minLevel'), ('_maxLevel', 'maxLevel'), ('_maxSlots', 'maxSlots'), ('_maxClosedSlots', 'maxClosedSlots'), ('_maxEmptySlots', 'maxEmptySlots'), ('_minTotalLevel', 'minTotalLevel'), ('_maxTotalLevel', 'maxTotalLevel'), ('_maxLegionariesCount', 'maxLegionariesCount'))
+
 class UnitRosterSettings(object):
     TOTAL_SLOTS = 15
-    __slots__ = ('_minLevel', '_maxLevel', '_maxSlots', '_maxClosedSlots', '_maxEmptySlots', '_minTotalLevel', '_maxTotalLevel')
+    __slots__ = ('_minLevel', '_maxLevel', '_maxSlots', '_maxClosedSlots', '_maxEmptySlots', '_minTotalLevel', '_maxTotalLevel', '_maxLegionariesCount')
 
-    def __init__(self, minLevel = 1, maxLevel = 10, maxSlots = TOTAL_SLOTS, maxClosedSlots = 0, maxEmptySlots = 0, minTotalLevel = 1, maxTotalLevel = 150):
+    def __init__(self, minLevel = 1, maxLevel = 10, maxSlots = TOTAL_SLOTS, maxClosedSlots = 0, maxEmptySlots = 0, minTotalLevel = 1, maxTotalLevel = 150, maxLegionariesCount = 0):
         super(UnitRosterSettings, self).__init__()
         self._minLevel = minLevel
         self._maxLevel = maxLevel
@@ -266,9 +275,7 @@ class UnitRosterSettings(object):
         self._maxEmptySlots = maxEmptySlots
         self._minTotalLevel = minTotalLevel
         self._maxTotalLevel = maxTotalLevel
-
-    def __repr__(self):
-        return '{0:>s}(minLevel = {1:n}, maxLevel = {2:n}, maxSlots = {3:n}, maxClosedSlots = {4:n}, maxEmptySlots = {5:n}, minTotalLevel = {6:n}, maxTotalLevel = {7:n})'.format(self.__class__.__name__, self._minLevel, self._maxLevel, self._maxSlots, self._maxClosedSlots, self._maxEmptySlots, self._minTotalLevel, self._maxTotalLevel)
+        self._maxLegionariesCount = maxLegionariesCount
 
     def getMinLevel(self):
         return self._minLevel
@@ -306,21 +313,25 @@ class UnitRosterSettings(object):
     def getDisabledSlotsRange(self):
         return tuple()
 
+    def getLegionariesMaxCount(self):
+        return self._maxLegionariesCount
+
 
 class DynamicRosterSettings(UnitRosterSettings):
 
     def __init__(self, unit):
         kwargs = {}
         roster = None
-        if unit:
+        if unit is not None:
             roster = unit.getRoster()
-        if roster:
+        if roster is not None:
             kwargs['minLevel'], kwargs['maxLevel'] = roster.SLOT_TYPE.DEFAULT_LEVELS
             kwargs['maxSlots'] = roster.MAX_SLOTS
             kwargs['maxClosedSlots'] = roster.MAX_CLOSED_SLOTS
             kwargs['maxEmptySlots'] = roster.MAX_EMPTY_SLOTS
             kwargs['minTotalLevel'] = roster.MIN_UNIT_POINTS_SUM
             kwargs['maxTotalLevel'] = roster.MAX_UNIT_POINTS_SUM
+            kwargs['maxLegionariesCount'] = unit.getLegionaryMaxCount()
         else:
             LOG_ERROR('Unit roster is not defined')
         super(DynamicRosterSettings, self).__init__(**kwargs)
@@ -338,7 +349,8 @@ class PredefinedRosterSettings(UnitRosterSettings):
         maxEmptySlots = clazz.MAX_EMPTY_SLOTS
         minTotalLevel = clazz.MIN_UNIT_POINTS_SUM
         maxTotalLevel = clazz.MAX_UNIT_POINTS_SUM
-        super(PredefinedRosterSettings, self).__init__(minLevel, maxLevel, maxSlots, maxClosedSlots, maxEmptySlots, minTotalLevel, maxTotalLevel)
+        maxLegionariesCount = clazz.MAX_LEGIONARIES_COUNT
+        super(PredefinedRosterSettings, self).__init__(minLevel, maxLevel, maxSlots, maxClosedSlots, maxEmptySlots, minTotalLevel, maxTotalLevel, maxLegionariesCount)
 
     def getDisabledSlotsRange(self):
         if self._rosterTypeID in _SUPPORTED_ROSTER_SETTINGS[PREBATTLE_TYPE.SORTIE]:
@@ -348,7 +360,8 @@ class PredefinedRosterSettings(UnitRosterSettings):
 
 _SUPPORTED_ROSTER_SETTINGS = {PREBATTLE_TYPE.UNIT: (ROSTER_TYPE.UNIT_ROSTER,),
  PREBATTLE_TYPE.SORTIE: (ROSTER_TYPE.SORTIE_ROSTER_6, ROSTER_TYPE.SORTIE_ROSTER_8, ROSTER_TYPE.SORTIE_ROSTER_10),
- PREBATTLE_TYPE.FORT_BATTLE: (ROSTER_TYPE.FORT_ROSTER_10,)}
+ PREBATTLE_TYPE.FORT_BATTLE: (ROSTER_TYPE.FORT_ROSTER_10,),
+ PREBATTLE_TYPE.CLUBS: (ROSTER_TYPE.CLUB_ROSTER_10,)}
 
 class SupportedRosterSettings(object):
 

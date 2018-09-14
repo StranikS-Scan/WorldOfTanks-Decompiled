@@ -14,7 +14,7 @@ from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
 from helpers import int2roman
 
-class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
+class CyberSportUnitView(CyberSportUnitMeta):
 
     def __init__(self):
         super(CyberSportUnitView, self).__init__()
@@ -89,6 +89,16 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
             self._candidatesDP.rebuild(functional.getCandidates())
         self._updateMembersData()
         self._setActionButtonState()
+        unitStats = functional.getStats()
+        canDoAction, restriction = functional.validateLevels(stats=unitStats)
+        self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
+
+    def onUnitRejoin(self):
+        super(CyberSportUnitView, self).onUnitRejoin()
+        functional = self.unitFunctional
+        if self._candidatesDP:
+            self._candidatesDP.rebuild(functional.getCandidates())
+        self._updateMembersData()
         unitStats = functional.getStats()
         canDoAction, restriction = functional.validateLevels(stats=unitStats)
         self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)

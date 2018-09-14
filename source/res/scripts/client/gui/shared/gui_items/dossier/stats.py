@@ -7,7 +7,7 @@ import constants
 from items import vehicles
 from dossiers2.ui import layouts
 from dossiers2.ui.achievements import ACHIEVEMENT_MODE, ACHIEVEMENT_SECTION, ACHIEVEMENT_SECTIONS_INDICES, makeAchievesStorageName, ACHIEVEMENT_SECTIONS_ORDER, getSection as getAchieveSection
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
 from gui.shared.gui_items.dossier.achievements import MarkOfMasteryAchievement
 _BATTLE_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.BATTLE]
@@ -122,6 +122,33 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
 
     @abstractmethod
     def _getVehDossiersCut(self, dossier):
+        raise NotImplemented
+
+
+class _MapStatsBlock(_StatsBlockAbstract):
+
+    class MapDossiersCut(namedtuple('MapDossiersCut', ['battlesCount', 'wins'])):
+
+        def __mul__(self, other):
+            self.battlesCount += other.battlesCount
+            self.wins += other.wins
+
+        def __imul__(self, other):
+            return self + other
+
+    def __init__(self, dossier):
+        self._mapsList = {}
+        for intCD, cut in self._getMapDossiersCut(dossier).iteritems():
+            self._mapsList[intCD] = self._packMap(*cut)
+
+    def getMaps(self):
+        return self._mapsList
+
+    def _packMap(self, *args, **kwargs):
+        raise NotImplemented
+
+    @abstractmethod
+    def _getMapDossiersCut(self, dossier):
         raise NotImplemented
 
 
@@ -470,6 +497,21 @@ class FortGlobalStatsBlock(_StatsBlock):
 
     def getProduction(self):
         return self._getStat('production')
+
+    def _getStatsBlock(self, dossier):
+        return dossier.getDossierDescr()['total']
+
+
+class ClubGlobalStatsBlock(_StatsBlock):
+
+    def __init__(self, dossier):
+        _StatsBlock.__init__(self, dossier)
+
+    def getCreationTime(self):
+        return self._getStat('creationTime')
+
+    def getLastBattleTime(self):
+        return self._getStat('lastBattleTime')
 
     def _getStatsBlock(self, dossier):
         return dossier.getDossierDescr()['total']
@@ -997,6 +1039,102 @@ class FortRegionSortiesStats(_CommonBattleStatsBlock):
         return dossier.getDossierDescr()['fortSorties']
 
 
+class Rated7x7Stats(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _AchievementsBlock):
+
+    def __init__(self, dossier):
+        _BattleStatsBlock.__init__(self, dossier)
+        _Battle2StatsBlock.__init__(self, dossier)
+        _MaxStatsBlock.__init__(self, dossier)
+        _AchievementsBlock.__init__(self, dossier)
+
+    def getBattlesCountVer2(self):
+        return self.getBattlesCount()
+
+    def getBattlesCountVer3(self):
+        return self.getBattlesCount()
+
+    def _getStatsBlock(self, dossier):
+        return dossier.getDossierDescr()['rated7x7']
+
+    def _getStats2Block(self, dossier):
+        return dossier.getDossierDescr()['rated7x7']
+
+    def _getStatsMaxBlock(self, dossier):
+        return dossier.getDossierDescr()['maxRated7x7']
+
+    def _getAcceptableAchieves(self):
+        return layouts.getAchievementsByMode(ACHIEVEMENT_MODE.RATED_7X7)
+
+
+class ClubTotalStats(_CommonBattleStatsBlock, _MapStatsBlock, _VehiclesStatsBlock, _AchievementsBlock):
+
+    def __init__(self, dossier):
+        _CommonBattleStatsBlock.__init__(self, dossier)
+        _MapStatsBlock.__init__(self, dossier)
+        _VehiclesStatsBlock.__init__(self, dossier)
+        _AchievementsBlock.__init__(self, dossier)
+
+    def getKilledVehiclesCount(self):
+        return self._getStat('killedVehicles')
+
+    def getLostVehiclesCount(self):
+        return self._getStat('lostVehicles')
+
+    def getKilledLostVehiclesRatio(self):
+        return self._getAvgValue(self.getLostVehiclesCount, self.getKilledVehiclesCount)
+
+    def getCapturePoints(self):
+        return self._getStat('capturePoints')
+
+    def getDroppedCapturePoints(self):
+        return self._getStat('droppedCapturePoints')
+
+    def getDamageDealt(self):
+        return self._getStat('damageDealt')
+
+    def getDamageReceived(self):
+        return self._getStat('damageReceived')
+
+    def getDamageEfficiency(self):
+        return self._getAvgValue(self.getDamageReceived, self.getDamageDealt)
+
+    def getBattlesCountInAttack(self):
+        return self._getStat('battlesCountInAttack')
+
+    def getBattlesCountInDefence(self):
+        return self.getBattlesCount() - self.getBattlesCountInAttack()
+
+    def getDamageDealtInAttack(self):
+        return self._getStat('damageDealtInAttack')
+
+    def getDamageDealtInDefence(self):
+        return self._getStat('damageDealtInDefence')
+
+    def getAttackDamageEfficiency(self):
+        return self._getAvgValue(self.getBattlesCountInAttack, self.getDamageDealtInAttack)
+
+    def getDefenceDamageEfficiency(self):
+        return self._getAvgValue(self.getBattlesCountInDefence, self.getDamageDealtInDefence)
+
+    def _getStatsBlock(self, dossier):
+        return dossier.getDossierDescr()['clubBattles']
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['vehicles']
+
+    def _packVehicle(self, battlesCount = 0, xp = 0):
+        return self.VehiclesDossiersCut(battlesCount, -1, -1, xp)
+
+    def _getMapDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['maps']
+
+    def _packMap(self, battlesCount = 0, wins = 0):
+        return self.MapDossiersCut(battlesCount, wins)
+
+    def _getAcceptableAchieves(self):
+        return layouts.getAchievementsByMode(ACHIEVEMENT_MODE.ALL)
+
+
 class _DossierStats(object):
     __metaclass__ = ABCMeta
 
@@ -1020,7 +1158,8 @@ class AccountDossierStats(_DossierStats):
          self.getTeam7x7Stats(),
          self.getHistoricalStats(),
          self.getFortBattlesStats(),
-         self.getFortSortiesStats()))
+         self.getFortSortiesStats(),
+         self.getRated7x7Stats()))
 
     def getRandomStats(self):
         return AccountRandomStatsBlock(self._getDossierItem())
@@ -1055,6 +1194,12 @@ class AccountDossierStats(_DossierStats):
     def getFortMiscStats(self):
         return FortMiscStats(self._getDossierItem())
 
+    def getRated7x7Stats(self):
+        return AccountRated7x7StatsBlock(self._getDossierItem())
+
+    def getSeasonRated7x7Stats(self):
+        return AccountRated7x7StatsBlock(self._getDossierItem())
+
 
 class VehicleDossierStats(_DossierStats):
 
@@ -1082,6 +1227,9 @@ class VehicleDossierStats(_DossierStats):
     def getTeam7x7Stats(self):
         return Team7x7StatsBlock(self._getDossierItem())
 
+    def getRated7x7Stats(self):
+        return Rated7x7Stats(self._getDossierItem())
+
     def getHistoricalStats(self):
         return HistoricalStatsBlock(self._getDossierItem())
 
@@ -1108,3 +1256,41 @@ class FortDossierStats(_DossierStats):
 
     def getSortiesStats(self):
         return FortRegionSortiesStats(self._getDossierItem())
+
+
+class ClubDossierStats(_DossierStats):
+
+    def getGlobalStats(self):
+        return ClubGlobalStatsBlock(self._getDossierItem())
+
+    def getTotalStats(self):
+        return ClubTotalStats(self._getDossierItem())
+
+
+class ClubMemberDossierStats(_DossierStats):
+
+    def getRated7x7Stats(self):
+        return Rated7x7Stats(self._getDossierItem())
+
+
+class AccountRated7x7StatsBlock(Rated7x7Stats, _MaxVehicleStatsBlock, _VehiclesStatsBlock):
+
+    def __init__(self, dossier):
+        Rated7x7Stats.__init__(self, dossier)
+        _VehiclesStatsBlock.__init__(self, dossier)
+        _MaxVehicleStatsBlock.__init__(self, dossier)
+
+    def getMarksOfMastery(self):
+        return (-1, -1, -1, -1)
+
+    def getBattlesStats(self):
+        battlesTypesData = _VehiclesStatsBlock.getBattlesStats(self)
+        battlesByLevels = battlesTypesData[2]
+        battlesByLevels[9], battlesByLevels[10] = (None, None)
+        return battlesTypesData
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['rated7x7Cut']
+
+    def _packVehicle(self, battlesCount = 0, wins = 0, xp = 0, originalXP = 0, damage = 0, damageAssistedRadio = 0, damageAssistedTrack = 0):
+        return self.VehiclesDossiersCut(battlesCount, wins, -1, xp)

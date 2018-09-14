@@ -80,21 +80,20 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         building = self.fortCtrl.getFort().getBuilding(order.buildingID)
         canActivateOrder, _ = self.fortCtrl.getLimits().canActivateOrder(orderID)
         isBtnDisabled = not canActivateOrder or self._isProductionInPause(building)
-        orderTypeID = self.getOrderIDbyUID(self._orderID)
-        isCombatOrder = orderTypeID in [constants.FORT_ORDER_TYPE.BOMBER, constants.FORT_ORDER_TYPE.ARTILLERY]
+        showAlertIcon, alertIconTooltip = self._showOrderAlertIcon(order)
         data = {'title': self._getTitle(),
          'levelStr': self._getLevelStr(order.level),
          'description': self._getOrderDescription(order),
          'effectTimeStr': self._getEffectTimeStr(order),
-         'leftTimeStr': '' if isCombatOrder else self._getFormattedLeftTime(order),
+         'leftTimeStr': '' if order.isConsumable else self._getFormattedLeftTime(order),
          'productionTime': self._getFormattedTimeStr(order.productionTotalTime),
          'buildingStr': self._getBuildingStr(order),
          'productionCost': fort_formatters.getDefRes(order.productionCost, True),
          'producedAmount': self._getCountStr(order),
          'icon': order.bigIcon,
-         'canUseOrder': False if isCombatOrder else self._canGiveOrder(),
+         'canUseOrder': False if order.isConsumable else self._canGiveOrder(),
          'canCreateOrder': self._canCreateOrder(order),
-         'inCooldown': False if isCombatOrder else order.inCooldown,
+         'inCooldown': False if order.isConsumable else order.inCooldown,
          'effectTime': order.effectTime,
          'leftTime': order.getUsageLeftTime(),
          'useBtnTooltip': self._getUseBtnTooltip(order, building, isBtnDisabled),
@@ -102,8 +101,9 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
          'isPermanent': order.isPermanent,
          'questID': self._getQuestID(order),
          'showLinkBtn': self._showLinkBtn(order),
-         'showAlertIcon': self._showOrderAlertIcon(order),
-         'showDetailsBtn': isCombatOrder}
+         'showAlertIcon': showAlertIcon,
+         'alertIconTooltip': alertIconTooltip,
+         'showDetailsBtn': order.isConsumable}
         self.as_setInitDataS(data)
         self.as_disableOrderS(isBtnDisabled)
 
@@ -133,10 +133,12 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
             return order.description
 
     def _getEffectTimeStr(self, order):
-        if not order.isPermanent:
-            return self._getFormattedTimeStr(order.effectTime)
-        else:
+        if order.isPermanent:
             return i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_INDEFENSIVE)
+        elif order.isConsumable:
+            return i18n.makeString('#fortifications:Orders/orderPopover/battleConsumable')
+        else:
+            return self._getFormattedTimeStr(order.effectTime)
 
     def _populate(self):
         super(FortOrderPopover, self)._populate()

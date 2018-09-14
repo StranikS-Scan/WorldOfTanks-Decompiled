@@ -163,6 +163,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing):
         cfg['roundLength'] = __readInt('roundLength', section, defaultXml)
     if raiseIfMissing or __hasKey('winnerIfTimeout', section, defaultXml):
         cfg['winnerIfTimeout'] = __readInt('winnerIfTimeout', section, defaultXml)
+    if raiseIfMissing or __hasKey('winnerIfExtermination', section, defaultXml):
+        cfg['winnerIfExtermination'] = __readInt('winnerIfExtermination', section, defaultXml)
     if raiseIfMissing or __hasKey('artilleryPreparationChance', section, defaultXml):
         cfg['artilleryPreparationChance'] = __readFloat('artilleryPreparationChance', section, defaultXml)
     if raiseIfMissing or section.has_key('mapActivities'):

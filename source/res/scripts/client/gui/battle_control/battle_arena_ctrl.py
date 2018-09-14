@@ -50,7 +50,7 @@ class EnemyTeamCtx(object):
         return VehicleActions.getBitMask(vo.events)
 
     def isPostmortemView(self, vo):
-        return False
+        return vo.vehicleID == self.cameraVehicleID
 
 
 class PlayerTeamCtx(EnemyTeamCtx):
@@ -84,7 +84,7 @@ class PostmortemTeamCtx(PlayerTeamCtx):
 
 def makeTeamCtx(team, isEnemy, arenaDP, labelMaxLength, cameraVehicleID = -1):
     if isEnemy:
-        ctx = EnemyTeamCtx(team, labelMaxLength)
+        ctx = EnemyTeamCtx(team, labelMaxLength, cameraVehicleID=cameraVehicleID)
     elif cameraVehicleID > 0:
         ctx = PostmortemTeamCtx(team, labelMaxLength, avatar_getter.getPlayerVehicleID(), arena_info.isPlayerTeamKillSuspected(), cameraVehicleID, arenaDP.getVehicleInfo().prebattleID)
     else:

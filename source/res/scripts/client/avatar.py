@@ -4,7 +4,8 @@ import zlib
 from functools import partial
 import math
 import Account
-import BigWorld, FMOD
+import BigWorld
+import FMOD
 import Keys
 import Math
 import Vehicle
@@ -31,6 +32,7 @@ from constants import SERVER_TICK_LENGTH, VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS
 from constants import SCOUT_EVENT_TYPE, DROWN_WARNING_LEVEL
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, VEHICLE_VIEW_STATE
+from gui.wgnc import g_wgncProvider
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles
 from messenger import MessengerEntry
 from messenger.storage import storage_getter
@@ -88,6 +90,15 @@ class ClientVisibilityFlags():
     OBSERVER_OBJECTS = 2147483648L
 
 
+class _INIT_STEPS():
+    SPACE_LOADED = 1
+    ENTERED_WORLD = 2
+    SET_PLAYER_ID = 4
+    VEHICLE_ENTERED = 8
+    ALL_STEPS_PASSED = 15
+    INIT_COMPLETED = 16
+
+
 class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
     __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULS: 'receiveBattleResults'}
     isOnArena = property(lambda self: self.__isOnArena)
@@ -106,6 +117,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
             self.syncData = AvatarSyncData.AvatarSyncData()
             self.syncData.setAvatar(self)
             self.intUserSettings.setProxy(self, self.syncData)
+        else:
+            self.intUserSettings = None
         self.__rangeStreamIDCallbacks = RangeStreamIDCallbacks()
         self.__rangeStreamIDCallbacks.addRangeCallback((STREAM_ID_CHAT_MIN, STREAM_ID_CHAT_MAX), '_ClientChat__receiveStreamedData')
         self.__onCmdResponse = {}
@@ -116,26 +129,29 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         self.__bckwdSpeedometerLimit = None
         self.isTeleport = False
         self.__fireNonFatalDamageTriggerID = None
+        self.__initProgress = 0
         return
 
     def onBecomePlayer(self):
-        LOG_DEBUG('Avatar.onBecomePlayer()')
+        LOG_NOTE('[INIT_STEPS] Avatar.onBecomePlayer')
+        CombatEquipmentManager.onBecomePlayer(self)
+        BigWorld.cameraSpaceID(0)
         BigWorld.camera(BigWorld.CursorCamera())
         from gui.shared.utils.HangarSpace import g_hangarSpace
         if g_hangarSpace is not None:
             g_hangarSpace.destroy()
         chatManager.switchPlayerProxy(self)
         g_playerEvents.isPlayerEntityChanging = False
+        BigWorld.enableLoadingTimer(True)
         self.arena = ClientArena.ClientArena(self.arenaUniqueID, self.arenaTypeID, self.arenaBonusType, self.arenaGuiType, self.arenaExtraData, self.weatherPresetID)
         self.vehicleTypeDescriptor = None
-        self.terrainEffects = None
+        self.terrainEffects = bound_effects.StaticSceneBoundEffects()
         self.hitTesters = set()
         self.filter = BigWorld.AvatarFilter()
         self.onVehicleEnterWorld = Event.Event()
         self.onVehicleLeaveWorld = Event.Event()
         self.onGunShotChanged = Event.Event()
         self.invRotationOnBackMovement = False
-        self.__stepsTillInit = 4
         self.__isSpaceInitialized = False
         self.__isOnArena = False
         self.__isVehicleAlive = True
@@ -173,7 +189,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         cdWnd = vehicles.HORN_COOLDOWN.WINDOW + vehicles.HORN_COOLDOWN.CLIENT_WINDOW_EXPANSION
         self.__hornCooldown = HornCooldown.HornCooldown(cdWnd, vehicles.HORN_COOLDOWN.MAX_SIGNALS)
         BigWorld.wg_setBatchingEnabled(self.arena.arenaType.batchingEnabled)
-        if not BattleReplay.isPlaying():
+        if self.intUserSettings is not None:
             self.intUserSettings.onProxyBecomePlayer()
             self.syncData.onAvatarBecomePlayer()
         g_playerEvents.onAvatarBecomePlayer()
@@ -186,68 +202,48 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         return
 
     def onBecomeNonPlayer(self):
-        LOG_DEBUG('Avatar.onBecomeNonPlayer()')
-        chatManager.switchPlayerProxy(None)
-        g_playerEvents.onAvatarBecomeNonPlayer()
-        self.onVehicleEnterWorld.clear()
-        self.onVehicleEnterWorld = None
-        self.onVehicleLeaveWorld.clear()
-        self.onVehicleLeaveWorld = None
-        self.__vehicleToVehicleCollisions = None
-        BigWorld.wg_clearDecals()
-        if not BattleReplay.isPlaying():
-            self.intUserSettings.onProxyBecomeNonPlayer()
-            self.syncData.onAvatarBecomeNonPlayer()
-            self.intUserSettings.setProxy(None, None)
-        return
-
-    def onEnterWorld(self, prereqs):
-        LOG_DEBUG('Avatar.onEnterWorld()')
-        CombatEquipmentManager.onEnterWorld(self, prereqs)
-        list = []
-        for p in set(self.__prereqs):
+        LOG_NOTE('[INIT_STEPS] Avatar.onBecomeNonPlayer')
+        if self.__initProgress & _INIT_STEPS.ENTERED_WORLD:
+            from helpers import statistics
+            statistics.g_statistics.stop()
+            BigWorld.worldDrawEnabled(False)
+            BigWorld.wg_setAmbientReverb('')
+            BigWorld.target.clear()
+            MusicController.g_musicController.onLeaveArena()
+            if TriggersManager.g_manager is not None:
+                TriggersManager.g_manager.enable(False)
             try:
-                list.append(prereqs[p])
-            except Exception as e:
-                LOG_WARNING('Resource is not found', p)
+                if hasattr(self, 'gunRotator') and self.gunRotator is not None:
+                    self.gunRotator.destroy()
+                    self.gunRotator = None
+            except Exception:
+                LOG_CURRENT_EXCEPTION()
 
-        self.__prereqs = list
-        self.gunRotator = VehicleGunRotator.VehicleGunRotator(self)
-        self.positionControl = AvatarPositionControl.AvatarPositionControl(self)
-        BigWorld.target.caps(1)
-        self.__onInitStepCompleted()
-        if self.playerVehicleID != 0:
-            self.set_playerVehicleID(0)
-        keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
-        if not BigWorld.isKeyDown(keyCode):
-            VOIP.getVOIPManager().setMicMute(True)
-        from helpers import EdgeDetectColorController
-        EdgeDetectColorController.g_instance.updateColors()
-        from helpers import statistics
-        statistics.g_statistics.start()
+            for v in BigWorld.entities.values():
+                if isinstance(v, Vehicle.Vehicle) and v.isStarted:
+                    self.onVehicleLeaveWorld(v)
+                    v.stopVisual()
 
-    def onLeaveWorld(self):
-        LOG_DEBUG('Avatar.onLeaveWorld()')
-        CombatEquipmentManager.onLeaveWorld(self)
+            if self.__initProgress & _INIT_STEPS.INIT_COMPLETED:
+                try:
+                    self.__destroyGUI()
+                    SoundGroups.g_instance.enableArenaSounds(False)
+                except Exception:
+                    LOG_CURRENT_EXCEPTION()
+
+            try:
+                self.positionControl.destroy()
+                self.positionControl = None
+            except:
+                LOG_CURRENT_EXCEPTION()
+
+        CombatEquipmentManager.onBecomeNonPlayer(self)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.stop()
         if self.__tryShootCallbackId:
             BigWorld.cancelCallback(self.__tryShootCallbackId)
             self.__tryShootCallbackId = None
-        MusicController.g_musicController.onLeaveArena()
-        TriggersManager.g_manager.enable(False)
-        BigWorld.wg_setEntityUnloadable(self.playerVehicleID, False)
-        BigWorld.worldDrawEnabled(False)
-        BigWorld.wg_setAmbientReverb('')
-        BigWorld.target.clear()
-        from helpers import statistics
-        statistics.g_statistics.stop()
-        for v in BigWorld.entities.values():
-            if isinstance(v, Vehicle.Vehicle) and v.isStarted:
-                self.onVehicleLeaveWorld(v)
-                v.stopVisual()
-
         if self.__setOwnVehicleMatrixTimerID is not None:
             BigWorld.cancelCallback(self.__setOwnVehicleMatrixTimerID)
             self.__setOwnVehicleMatrixTimerID = None
@@ -258,32 +254,19 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
             BigWorld.cancelCallback(self.__fireNonFatalDamageTriggerID)
             self.__fireNonFatalDamageTriggerID = None
         try:
+            if self.__projectileMover is not None:
+                self.__projectileMover.destroy()
+                self.__projectileMover = None
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+        try:
             self.__stippleMgr.destroy()
             self.__stippleMgr = None
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-        try:
-            if hasattr(self, 'gunRotator') and self.gunRotator is not None:
-                self.gunRotator.destroy()
-                self.gunRotator = None
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        if self.__stepsTillInit == 0:
-            try:
-                self.__destroyGUI()
-                SoundGroups.g_instance.enableArenaSounds(False)
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
-        self.__stepsTillInit = None
-        try:
-            self.__projectileMover.destroy()
-            self.__projectileMover = None
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
+        BigWorld.wg_clearDecals()
         try:
             self.terrainEffects.destroy()
             self.terrainEffects = None
@@ -294,12 +277,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
             self.arena.destroy()
             self.arena = None
         except Exception:
-            LOG_CURRENT_EXCEPTION()
-
-        try:
-            self.positionControl.destroy()
-            self.positionControl = None
-        except:
             LOG_CURRENT_EXCEPTION()
 
         try:
@@ -320,11 +297,58 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         if not BigWorld.isKeyDown(keyCode):
             VOIP.getVOIPManager().setMicMute(True)
         SoundGroups.g_instance.soundModes.setMode(SoundGroups.SoundModes.DEFAULT_MODE_NAME)
+        chatManager.switchPlayerProxy(None)
+        g_playerEvents.onAvatarBecomeNonPlayer()
+        self.onVehicleEnterWorld.clear()
+        self.onVehicleEnterWorld = None
+        self.onVehicleLeaveWorld.clear()
+        self.onVehicleLeaveWorld = None
+        self.__vehicleToVehicleCollisions = None
+        if self.intUserSettings is not None:
+            self.intUserSettings.onProxyBecomeNonPlayer()
+            self.syncData.onAvatarBecomeNonPlayer()
+            self.intUserSettings.setProxy(None, None)
+        self.__initProgress = 0
         return
 
+    def onEnterWorld(self, prereqs):
+        LOG_NOTE('[INIT_STEPS] Avatar.onEnterWorld')
+        if self.__initProgress & _INIT_STEPS.ENTERED_WORLD > 0:
+            return
+        CombatEquipmentManager.onEnterWorld(self, prereqs)
+        self.__initProgress |= _INIT_STEPS.ENTERED_WORLD
+        list = []
+        for p in set(self.__prereqs):
+            try:
+                list.append(prereqs[p])
+            except Exception as e:
+                LOG_WARNING('Resource is not found', p)
+
+        self.__prereqs = list
+        self.gunRotator = VehicleGunRotator.VehicleGunRotator(self)
+        self.positionControl = AvatarPositionControl.AvatarPositionControl(self)
+        BigWorld.target.caps(1)
+        self.__onInitStepCompleted()
+        if self.playerVehicleID != 0:
+            if not BattleReplay.isPlaying():
+                self.set_playerVehicleID(0)
+            else:
+                BigWorld.callback(0, partial(self.set_playerVehicleID, 0))
+        keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
+        if not BigWorld.isKeyDown(keyCode):
+            VOIP.getVOIPManager().setMicMute(True)
+        from helpers import EdgeDetectColorController
+        EdgeDetectColorController.g_instance.updateColors()
+        from helpers import statistics
+        statistics.g_statistics.start()
+
+    def onLeaveWorld(self):
+        LOG_NOTE('[INIT_STEPS] Avatar.onLeaveWorld')
+
     def onSpaceLoaded(self):
-        LOG_DEBUG('onSpaceLoaded()')
+        LOG_NOTE('[INIT_STEPS] Avatar.onSpaceLoaded')
         self.__applyTimeAndWeatherSettings()
+        self.__initProgress |= _INIT_STEPS.SPACE_LOADED
         self.__onInitStepCompleted()
 
     def onStreamComplete(self, id, desc, data):
@@ -523,7 +547,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
                     self.__reportLag()
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_VOICECHAT_MUTE, key):
-                    LOG_DEBUG('onVoiceChatPTT', isDown)
                     if VOIP.getVOIPManager().getCurrentChannel():
                         VOIP.getVOIPManager().setMicMute(not isDown)
                     return True
@@ -534,7 +557,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
                     self.useHorn(False)
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_LOGITECH_SWITCH_VIEW, key) and isDown:
-                    LOG_DEBUG('LOGITECH SWICH VIEW', isDown)
                     from gui.Scaleform.LogitechMonitor import LogitechMonitor
                     LogitechMonitor.onChangeView()
                 if not self.__isForcedGuiControlMode and g_sessionProvider.getDrrScaleCtrl().handleKey(key, isDown):
@@ -554,14 +576,15 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
             return False
 
     def set_playerVehicleID(self, prev):
-        LOG_DEBUG('Avatar.set_playerVehicleID()', self.playerVehicleID)
-        BigWorld.wg_setEntityUnloadable(self.playerVehicleID, True)
+        LOG_NOTE('[INIT_STEPS] Avatar.set_playerVehicleID')
+        self.__initProgress |= _INIT_STEPS.SET_PLAYER_ID
         self.__onInitStepCompleted()
         ownVehicle = BigWorld.entity(self.playerVehicleID)
         if ownVehicle is not None and ownVehicle.inWorld and not ownVehicle.isPlayer:
             ownVehicle.isPlayer = True
             self.vehicleTypeDescriptor = ownVehicle.typeDescriptor
             g_sessionProvider.setPlayerVehicle(self.vehicleTypeDescriptor)
+            self.__initProgress |= _INIT_STEPS.VEHICLE_ENTERED
             self.__onInitStepCompleted()
         return
 
@@ -610,13 +633,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         self.inputHandler.setReloading(0.0)
 
     def vehicle_onEnterWorld(self, vehicle):
+        LOG_NOTE('[INIT_STEPS] Avatar.vehicle_onEnterWorld')
         self.__stippleMgr.hideIfExistFor(vehicle)
         if vehicle.id != self.playerVehicleID:
             vehicle.targetCaps = [1]
         else:
-            LOG_DEBUG('Avatar.vehicle_onEnterWorld(): own vehicle', vehicle.id)
             vehicle.isPlayer = True
-            if self.__stepsTillInit != 0:
+            if not self.__initProgress & _INIT_STEPS.INIT_COMPLETED:
                 self.vehicleTypeDescriptor = vehicle.typeDescriptor
                 g_sessionProvider.setPlayerVehicle(self.vehicleTypeDescriptor)
                 if vehicle.typeDescriptor.turret['ceilless'] is not None:
@@ -628,17 +651,19 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
                 else:
                     m = vehicle.matrix
                 self.__ownVehicleMProv.setStaticTransform(Math.Matrix(m))
+                self.__initProgress |= _INIT_STEPS.VEHICLE_ENTERED
                 self.__onInitStepCompleted()
             else:
                 vehicle.typeDescriptor.activeGunShotIndex = self.vehicleTypeDescriptor.activeGunShotIndex
                 if self.inputHandler.aim:
                     self.inputHandler.aim.resetVehicleMatrix()
-        if self.__stepsTillInit == 0 and not vehicle.isStarted:
+        if self.__initProgress & _INIT_STEPS.INIT_COMPLETED and not vehicle.isStarted:
             vehicle.startVisual()
             self.onVehicleEnterWorld(vehicle)
         return
 
     def vehicle_onLeaveWorld(self, vehicle):
+        LOG_NOTE('[INIT_STEPS] Avatar.vehicle_onLeaveWorld')
         if not vehicle.isStarted:
             return
         else:
@@ -654,12 +679,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
             return ()
         SoundGroups.g_instance.enableArenaSounds(False)
         self.__prereqs = []
-        self.__fakeModelName = Settings.g_instance.scriptConfig.readString(Settings.KEY_FAKE_MODEL)
-        if self.__fakeModelName:
-            self.__prereqs.append(self.__fakeModelName)
-        else:
-            LOG_ERROR("The '%s' is missing or empty in '%s'" % (Settings.KEY_FAKE_MODEL, Settings.g_instance.scriptConfig.name))
-        self.terrainEffects = bound_effects.StaticSceneBoundEffects()
         self.__projectileMover = ProjectileMover.ProjectileMover()
         self.__prereqs += self.__initGUI()
         self.__prereqs += g_postProcessing.prerequisites()
@@ -670,10 +689,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
             self.__isSpaceInitialized = True
 
     def userSeesWorld(self):
-        return self.__stepsTillInit == 0
-
-    def newFakeModel(self):
-        return BigWorld.Model(self.__fakeModelName)
+        return self.__initProgress & _INIT_STEPS.INIT_COMPLETED
 
     def requestToken(self, requestID, tokenType):
         self.base.requestToken(requestID, tokenType)
@@ -687,7 +703,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         LOG_MX('onKickedFromServer', reason, isBan, expiryTime)
         from helpers import statistics
         statistics.g_statistics.reset()
-        import BattleReplay
         if not BattleReplay.isPlaying():
             from gui import DialogsInterface
             DialogsInterface.showDisconnect(reason, isBan, expiryTime)
@@ -855,7 +870,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         m.translation = position
         self.__ownVehicleMProv.setStaticTransform(m)
         self.__lastVehicleSpeeds = (speed, rspeed)
-        BigWorld.wg_setOutAoIEntityParams(self.playerVehicleID, position, direction)
         self.__ownVehicleMProv.target = None
         self.__setOwnVehicleMatrixTimerID = BigWorld.callback(SERVER_TICK_LENGTH / 10, self.__setOwnVehicleMatrixCallback)
         return
@@ -1004,7 +1018,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         elif code == DEVELOPMENT_INFO.VEHICLE_ATTRS:
             if constants.IS_DEVELOPMENT:
                 attrs = cPickle.loads(arg)
-                LOG_DEBUG('circularVisionRadius: %s' % attrs['circularVisionRadius'])
         else:
             LOG_MX('showDevelopmentInfo', code, params)
         return
@@ -1061,6 +1074,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         g_playerEvents.onKickedFromArena(reasonCode)
 
     def onScoutEvent(self, eventType, reportedID):
+        return
         LOG_DEBUG('onScoutEvent, eventType = %s, reportedID = %s' % (eventType, reportedID))
         msgType = ''
         if eventType == SCOUT_EVENT_TYPE.SPOTTED:
@@ -1085,7 +1099,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         self.arena.update(updateType, argStr)
 
     def updatePositions(self, indices, positions):
-        self.arena.updatePositions(indices, positions)
+        try:
+            self.arena.updatePositions(indices, positions)
+        except:
+            pass
 
     def receiveHorn(self, vehicleID, hornID, start):
         vInfo = self.arena.vehicles.get(vehicleID, {})
@@ -1340,6 +1357,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording or replayCtrl.isPlaying:
             replayCtrl.stop()
+        try:
+            self.__projectileMover.destroy()
+            self.__projectileMover = None
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+        BigWorld.PyGroundEffectManager().stopAll()
         g_playerEvents.isPlayerEntityChanging = True
         g_playerEvents.onPlayerEntityChanging()
         self.__setIsOnArena(False)
@@ -1359,7 +1383,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         BigWorld.callback(1.0, partial(self.__controlAnotherVehicleAfteraction, vehicleID, callback))
 
     def setForcedGuiControlMode(self, value, stopVehicle = True, enableAiming = True):
-        if self.__stepsTillInit == 0:
+        if self.__initProgress & _INIT_STEPS.INIT_COMPLETED:
             if self.__isForcedGuiControlMode ^ value:
                 self.__doSetForcedGuiControlMode(value, enableAiming)
                 if not value:
@@ -1499,6 +1523,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
 
     def receiveNotification(self, notification):
         LOG_DEBUG('receiveNotification', notification)
+        g_wgncProvider.fromXmlString(notification)
 
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
@@ -1520,15 +1545,15 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
      'gun_locked': 'cantShootGunLocked'}
 
     def __onInitStepCompleted(self):
-        LOG_DEBUG('Avatar.__onInitStepCompleted()', self.__stepsTillInit)
+        LOG_DEBUG('Avatar.__onInitStepCompleted()', self.__initProgress)
         if constants.IS_CAT_LOADED:
-            if self.__stepsTillInit == 0:
+            if self.__initProgress & _INIT_STEPS.INIT_COMPLETED:
                 return
-        if not self.__stepsTillInit > 0:
-            raise AssertionError
-            self.__stepsTillInit -= 1
-            return self.__stepsTillInit != 0 and None
+        if self.__initProgress < _INIT_STEPS.ALL_STEPS_PASSED or self.__initProgress & _INIT_STEPS.INIT_COMPLETED:
+            return
         else:
+            LOG_NOTE('[INIT_STEPS] Avatar.__onInitStepCompleted')
+            self.__initProgress |= _INIT_STEPS.INIT_COMPLETED
             self.initSpace()
             self.gunRotator.init_sound()
             self.__startGUI()
@@ -1566,6 +1591,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
                 clientVisibilityFlags |= ClientVisibilityFlags.OBSERVER_OBJECTS
             ClientVisibilityFlags.updateSpaceVisibility(self.spaceID, clientVisibilityFlags)
             g_playerEvents.onAvatarReady()
+            BigWorld.enableLoadingTimer(False)
             return
 
     def __initGUIConfig(self):
@@ -1783,7 +1809,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
                 self.__ownVehicleMProv.target = vehicle.matrix
             return
         else:
-            self.__setOwnVehicleMatrixTimerID = BigWorld.callback(SERVER_TICK_LENGTH, self.__setOwnVehicleMatrixCallback)
+            period = SERVER_TICK_LENGTH
+            if BattleReplay.isPlaying():
+                period = 0
+            self.__setOwnVehicleMatrixTimerID = BigWorld.callback(period, self.__setOwnVehicleMatrixCallback)
             return
 
     def __onArenaVehicleKilled(self, targetID, attackerID, reason):
@@ -1977,13 +2006,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         g_sessionProvider.getEquipmentsCtrl().setEquipment(compactDescr, quantity, stage, timeRemaining)
 
     def __isOwnBarrelUnderWater(self):
-        if self.vehicle is None:
+        ownVehicle = BigWorld.entity(self.playerVehicleID)
+        if ownVehicle is None or not ownVehicle.isStarted:
             return
         else:
             turretYaw = Math.Matrix(self.gunRotator.turretMatrix).yaw
             gunPitch = Math.Matrix(self.gunRotator.gunMatrix).pitch
-            lp = computeBarrelLocalPoint(self.vehicleTypeDescriptor, turretYaw, gunPitch)
-            wp = Math.Matrix(self.vehicle.matrix).applyPoint(lp)
+            lp = computeBarrelLocalPoint(ownVehicle.typeDescriptor, turretYaw, gunPitch)
+            wp = Math.Matrix(ownVehicle.matrix).applyPoint(lp)
             up = Math.Vector3((0.0, 0.1, 0.0))
             return BigWorld.wg_collideWater(wp, wp + up, False) != -1.0
 
@@ -2035,16 +2065,17 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
         self._update(cPickle.loads(pickledDiff))
 
     def _update(self, diff):
-        LOG_DEBUG('_update', diff)
-        if not BattleReplay.isPlaying():
+        if self.intUserSettings is not None:
             self.intUserSettings.synchronize(False, diff)
             g_playerEvents.onClientUpdated(diff)
+        return
 
     def isSynchronized(self):
-        if BattleReplay.isPlaying():
+        if self.intUserSettings is None:
             return True
         else:
             return self.intUserSettings.isSynchronized()
+            return
 
     def __isShootPositionInsideOtherVehicle(self):
         vehicle = BigWorld.entity(self.playerVehicleID)

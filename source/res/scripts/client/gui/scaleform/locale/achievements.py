@@ -78,6 +78,9 @@ class ACHIEVEMENTS(object):
     MEDALROTMISTROV = '#achievements:medalRotmistrov'
     MEDALROTMISTROV_DESCR = '#achievements:medalRotmistrov_descr'
     MEDALROTMISTROV_HEROINFO = '#achievements:medalRotmistrov_heroInfo'
+    STRATEGICOPERATIONS = '#achievements:strategicOperations'
+    STRATEGICOPERATIONS_DESCR = '#achievements:strategicOperations_descr'
+    STRATEGICOPERATIONS_CONDITION = '#achievements:strategicOperations_condition'
     MEDALCRUCIALCONTRIBUTION = '#achievements:medalCrucialContribution'
     MEDALCRUCIALCONTRIBUTION_DESCR = '#achievements:medalCrucialContribution_descr'
     MEDALCRUCIALCONTRIBUTION_CONDITION = '#achievements:medalCrucialContribution_condition'
@@ -261,6 +264,9 @@ class ACHIEVEMENTS(object):
     TITLESNIPER = '#achievements:titleSniper'
     TITLESNIPER_DESCR = '#achievements:titleSniper_descr'
     TITLESNIPER_CONDITION = '#achievements:titleSniper_condition'
+    VICTORYMARCH = '#achievements:victoryMarch'
+    VICTORYMARCH_DESCR = '#achievements:victoryMarch_descr'
+    VICTORYMARCH_CONDITION = '#achievements:victoryMarch_condition'
     INVINCIBLE = '#achievements:invincible'
     INVINCIBLE_DESCR = '#achievements:invincible_descr'
     INVINCIBLE_CONDITION = '#achievements:invincible_condition'
@@ -312,6 +318,9 @@ class ACHIEVEMENTS(object):
     AIMER = '#achievements:aimer'
     AIMER_DESCR = '#achievements:aimer_descr'
     AIMER_CONDITION = '#achievements:aimer_condition'
+    TACTICALADVANTAGE = '#achievements:tacticalAdvantage'
+    TACTICALADVANTAGE_DESCR = '#achievements:tacticalAdvantage_descr'
+    TACTICALADVANTAGE_CONDITION = '#achievements:tacticalAdvantage_condition'
     DIEHARD = '#achievements:diehard'
     DIEHARD_DESCR = '#achievements:diehard_descr'
     DIEHARD_CONDITION = '#achievements:diehard_condition'
@@ -370,6 +379,12 @@ class ACHIEVEMENTS(object):
     ARMOREDFIST = '#achievements:armoredFist'
     ARMOREDFIST_DESCR = '#achievements:armoredFist_descr'
     ARMOREDFIST_CONDITION = '#achievements:armoredFist_condition'
+    TACTICALSKILL = '#achievements:tacticalSkill'
+    TACTICALSKILL_DESCR = '#achievements:tacticalSkill_descr'
+    TACTICALSKILL_CONDITION = '#achievements:tacticalSkill_condition'
+    SECRETOPERATIONS = '#achievements:secretOperations'
+    SECRETOPERATIONS_DESCR = '#achievements:secretOperations_descr'
+    SECRETOPERATIONS_CONDITION = '#achievements:secretOperations_condition'
     GENIUSFORWARMEDAL = '#achievements:geniusForWarMedal'
     GENIUSFORWARMEDAL_DESCR = '#achievements:geniusForWarMedal_descr'
     GENIUSFORWARMEDAL_CONDITION = '#achievements:geniusForWarMedal_condition'
@@ -460,6 +475,9 @@ class ACHIEVEMENTS(object):
     OPERATIONWINTER = '#achievements:operationWinter'
     OPERATIONWINTER_DESCR = '#achievements:operationWinter_descr'
     OPERATIONWINTER_CONDITION = '#achievements:operationWinter_condition'
+    TESTARTILLERYMAN = '#achievements:testartilleryman'
+    TESTARTILLERYMAN_DESCR = '#achievements:testartilleryman_descr'
+    TESTARTILLERYMAN_CONDITION = '#achievements:testartilleryman_condition'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -591,6 +609,9 @@ class ACHIEVEMENTS(object):
      MEDALROTMISTROV,
      MEDALROTMISTROV_DESCR,
      MEDALROTMISTROV_HEROINFO,
+     STRATEGICOPERATIONS,
+     STRATEGICOPERATIONS_DESCR,
+     STRATEGICOPERATIONS_CONDITION,
      MEDALCRUCIALCONTRIBUTION,
      MEDALCRUCIALCONTRIBUTION_DESCR,
      MEDALCRUCIALCONTRIBUTION_CONDITION,
@@ -774,6 +795,9 @@ class ACHIEVEMENTS(object):
      TITLESNIPER,
      TITLESNIPER_DESCR,
      TITLESNIPER_CONDITION,
+     VICTORYMARCH,
+     VICTORYMARCH_DESCR,
+     VICTORYMARCH_CONDITION,
      INVINCIBLE,
      INVINCIBLE_DESCR,
      INVINCIBLE_CONDITION,
@@ -825,6 +849,9 @@ class ACHIEVEMENTS(object):
      AIMER,
      AIMER_DESCR,
      AIMER_CONDITION,
+     TACTICALADVANTAGE,
+     TACTICALADVANTAGE_DESCR,
+     TACTICALADVANTAGE_CONDITION,
      DIEHARD,
      DIEHARD_DESCR,
      DIEHARD_CONDITION,
@@ -883,6 +910,12 @@ class ACHIEVEMENTS(object):
      ARMOREDFIST,
      ARMOREDFIST_DESCR,
      ARMOREDFIST_CONDITION,
+     TACTICALSKILL,
+     TACTICALSKILL_DESCR,
+     TACTICALSKILL_CONDITION,
+     SECRETOPERATIONS,
+     SECRETOPERATIONS_DESCR,
+     SECRETOPERATIONS_CONDITION,
      GENIUSFORWARMEDAL,
      GENIUSFORWARMEDAL_DESCR,
      GENIUSFORWARMEDAL_CONDITION,
@@ -973,6 +1006,9 @@ class ACHIEVEMENTS(object):
      OPERATIONWINTER,
      OPERATIONWINTER_DESCR,
      OPERATIONWINTER_CONDITION,
+     TESTARTILLERYMAN,
+     TESTARTILLERYMAN_DESCR,
+     TESTARTILLERYMAN_CONDITION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,

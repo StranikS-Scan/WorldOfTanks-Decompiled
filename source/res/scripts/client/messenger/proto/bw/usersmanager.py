@@ -8,7 +8,6 @@ from messenger.m_constants import MESSENGER_SCOPE, PROTO_TYPE
 from messenger.proto import notations
 from messenger.proto.bw import entities
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
-from messenger.proto.entities import SharedUserEntity
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import ProtoFindCriteria
 from messenger.storage import storage_getter
@@ -52,8 +51,6 @@ class UsersManager(ChatActionsListener):
         return None
 
     def addListeners(self):
-        CHAT_ACTIONS = chat_shared.CHAT_ACTIONS
-        self.addListener(self.__onFindUsers, CHAT_ACTIONS.findUsers)
         self.__addContactsListeners()
         g_messengerEvents.channels.onConnectStateChanged += self.__ce_onConnectStateChanged
 
@@ -70,12 +67,10 @@ class UsersManager(ChatActionsListener):
             self.requestFriendStatus()
             self.requestUsersRoster()
 
+    @notations.contacts(PROTO_TYPE.BW, log=False)
     def view(self, scope):
         if scope is MESSENGER_SCOPE.BATTLE and not self.__isRosterReceivedOnce:
-            self.requestUsersRoster()
-
-    def findUsers(self, token, onlineMode = None, requestID = None):
-        BigWorld.player().findUsers(token, onlineMode=onlineMode, requestID=requestID)
+            g_messengerEvents.users.onUsersListReceived({_TAG.FRIEND, _TAG.IGNORED, _TAG.MUTED})
 
     @notations.contacts(PROTO_TYPE.BW)
     def addFriend(self, friendID, friendName):
@@ -124,27 +119,6 @@ class UsersManager(ChatActionsListener):
         self.addListener(self.__onRemoveIgnored, _ACTIONS.removeIgnored)
         self.addListener(self.__onSetMuted, _ACTIONS.setMuted)
         self.addListener(self.__onUnsetMuted, _ACTIONS.unsetMuted)
-
-    def __onFindUsers(self, chatAction):
-        chatActionDict = dict(chatAction)
-        result = chatActionDict.get('data', [])
-        requestID = chatActionDict.get('requestID', [])
-        users = []
-        for userData in result:
-            name, dbID, clanAbbrev = userData[:3]
-            dbID = long(dbID)
-            if not len(name):
-                continue
-            received = SharedUserEntity(dbID, name=name, clanAbbrev=clanAbbrev)
-            user = self.usersStorage.getUser(dbID)
-            if user:
-                if user.isCurrentPlayer():
-                    received = user
-                else:
-                    received.update(tags=user.getTags())
-            users.append(received)
-
-        g_messengerEvents.users.onFindUsersComplete(requestID, users)
 
     def __onUserRosterChange(self, chatAction, actionID, include, exclude = None):
         userData = [-1, 'Unknown', 0]

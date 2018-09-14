@@ -116,6 +116,7 @@ class ConnectionManager(Singleton):
         if token2:
             loginParams['token2'] = token2
             loginParams['auth_method'] = AUTH_METHODS.TOKEN2
+        LOG_NOTE('User authentication method: {0}'.format(loginParams['auth_method']))
 
         class LoginInfo:
             pass

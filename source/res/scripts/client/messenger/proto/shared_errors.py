@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/shared_errors.py
+import BigWorld
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from helpers import i18n
 from messenger.m_constants import CLIENT_ERROR_NAMES, CLIENT_ACTION_NAMES, CLIENT_ERROR_ID
@@ -118,3 +119,26 @@ class ChatCoolDownError(ClientActionError):
         else:
             msg = i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_ACTION_IN_COOLDOWN_WO_PERIOD, actionName=actionName)
         return msg
+
+
+class ChatBanError(IChatError):
+    __slots__ = ('_endTime', '_reason')
+
+    def __init__(self, endTime, reason):
+        super(ChatBanError, self).__init__()
+        self._endTime = endTime
+        self._reason = reason
+
+    def getTitle(self):
+        return i18n.makeString(I18N_MESSENGER.SERVER_ERRORS_CHATBANNED_TITLE)
+
+    def getMessage(self):
+        if self._endTime:
+            banEndTime = BigWorld.wg_getLongDateFormat(self._endTime) + ' ' + BigWorld.wg_getShortTimeFormat(self._endTime)
+            msg = i18n.makeString('#chat:errors/chatbanned', banEndTime=banEndTime, banReason=self._reason)
+        else:
+            msg = i18n.makeString('#chat:errors/chatbannedpermanent', banReason=self._reason)
+        return msg
+
+    def isModal(self):
+        return True

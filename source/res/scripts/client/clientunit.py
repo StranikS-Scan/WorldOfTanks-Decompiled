@@ -1,11 +1,55 @@
 # Embedded file name: scripts/client/ClientUnit.py
-from debug_utils import LOG_ERROR, LOG_DEBUG_DEV
 import struct
+from collections import namedtuple
+from constants import PREBATTLE_TYPE
+from debug_utils import LOG_ERROR, LOG_DEBUG_DEV, LOG_CURRENT_EXCEPTION
 import Event
-from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, UNIT_STATE
+import fortified_regions
+from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, UNIT_STATE, LEADER_SLOT
+from gui.shared.utils import makeTupleByDict
 PLAYER_ID_CHR = '<q'
 VEH_LEN_CHR = '<H'
 VEH_LEN_SIZE = struct.calcsize(VEH_LEN_CHR)
+
+class _ClubExtra(namedtuple('_ClubExtra', ('mapID', 'clubDBID', 'clubName', 'clubEmblemIDs', 'divisionID', 'isBaseDefence', 'accDBIDtoRole', 'isRatedBattle', 'isEnemyReady', 'startTime'))):
+
+    def getClubDbID(self):
+        return self.clubDBID
+
+    def getEmblem64x64(self):
+        try:
+            return self.clubEmblemIDs[2]
+        except:
+            pass
+
+        return None
+
+
+class _SortieExtra(namedtuple('_SortieExtra', ('clanEquipments', 'lastEquipRev'))):
+
+    def getConsumables(self):
+        result = {}
+        if self.clanEquipments:
+            for eqIntCD, slotIdx in self.clanEquipments[1]:
+                result[slotIdx] = fortified_regions.g_cache.equipmentToOrder[eqIntCD]
+
+        return result
+
+
+class _FortBattleExtra(namedtuple('_FortBattleExtra', ('clanEquipments', 'lastEquipRev'))):
+
+    def getConsumables(self):
+        result = {}
+        if self.clanEquipments:
+            for eqIntCD, slotIdx in self.clanEquipments[1]:
+                result[slotIdx] = fortified_regions.g_cache.equipmentToOrder[eqIntCD]
+
+        return result
+
+
+_EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.CLUBS: _ClubExtra,
+ PREBATTLE_TYPE.SORTIE: _SortieExtra,
+ PREBATTLE_TYPE.FORT_BATTLE: _FortBattleExtra}
 
 class ClientUnit(UnitBase):
 
@@ -23,6 +67,7 @@ class ClientUnit(UnitBase):
         self.onUnitPlayersListChanged = Event.Event(self.__eManager)
         self.onUnitPlayerVehDictChanged = Event.Event(self.__eManager)
         self.onUnitPlayerInfoChanged = Event.Event(self.__eManager)
+        self.onUnitExtraChanged = Event.Event(self.__eManager)
         self.onUnitUpdated = Event.Event(self.__eManager)
         self._creatorDBID = 0L
         UnitBase.__init__(self, slotDefs, slotCount, packedRoster, extras, packedUnit)
@@ -64,6 +109,16 @@ class ClientUnit(UnitBase):
     def getPlayerSlots(self):
         return self._playerSlots
 
+    def getLegionarySlots(self):
+        result = {}
+        for playerID, slotIdx in self._playerSlots.iteritems():
+            playerData = self._players[playerID]
+            role = playerData.get('role', 0)
+            if role & UNIT_ROLE.LEGIONARY:
+                result[playerID] = slotIdx
+
+        return result
+
     def getPlayerSlotIdx(self, dbID):
         slotIdx = -1
         if dbID in self._playerSlots:
@@ -75,6 +130,9 @@ class ClientUnit(UnitBase):
 
     def getComment(self):
         return self._strComment
+
+    def getPrebattleType(self):
+        return self._prebattleTypeID
 
     def getModalTimestamp(self):
         return self._modalTimestamp
@@ -121,13 +179,27 @@ class ClientUnit(UnitBase):
         return result
 
     def isSortie(self):
-        return self._state & UNIT_STATE.SORTIE > 0
+        return self._prebattleTypeID == PREBATTLE_TYPE.SORTIE
 
     def isFortBattle(self):
-        return self._state & UNIT_STATE.FORT_BATTLE > 0
+        return self._prebattleTypeID == PREBATTLE_TYPE.FORT_BATTLE
+
+    def isClub(self):
+        return self._prebattleTypeID == PREBATTLE_TYPE.CLUBS
+
+    def isRated(self):
+        return self.isClub() and self.getExtra().isRatedBattle
 
     def getRosterTypeID(self):
         return self._rosterTypeID
+
+    def getExtra(self):
+        if self._extras is None:
+            return
+        elif self._prebattleTypeID in _EXTRA_BY_PRB_TYPE:
+            return makeTupleByDict(_EXTRA_BY_PRB_TYPE[self._prebattleTypeID], self._extras)
+        else:
+            return
 
     def unpackOps(self, packedOps = ''):
         invokedOps = UnitBase.unpackOps(self, packedOps)
@@ -137,6 +209,12 @@ class ClientUnit(UnitBase):
             self.onUnitMembersListChanged()
         if UNIT_OP.SET_SLOT in invokedOps:
             self.onUnitRosterChanged()
+        if {UNIT_OP.EXTRAS_UPDATE, UNIT_OP.EXTRAS_RESET} & invokedOps:
+            self.onUnitExtraChanged(self._extras)
+
+    def onUnitExtrasUpdate(self, updateStr):
+        UnitBase.onUnitExtrasUpdate(self, updateStr)
+        self.onUnitExtraChanged(self._extras)
 
     def _setUnitState(self, state):
         prevState = self._state
@@ -174,7 +252,7 @@ class ClientUnit(UnitBase):
         return nextOps
 
     def _addPlayer(self, playerID, **kwargs):
-        if 'role' in kwargs and kwargs['role'] & UNIT_ROLE.COMMANDER_UPDATES > 0:
+        if 'role' in kwargs and kwargs['role'] & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self._playerSlots.get(playerID) == LEADER_SLOT:
             self._creatorDBID = playerID
         UnitBase._addPlayer(self, playerID, **kwargs)
 
@@ -189,7 +267,7 @@ class ClientUnit(UnitBase):
         if playerID in self._players:
             prevRoleFlags = self._players[playerID]['role']
         UnitBase._changePlayerRole(self, playerID, roleFlags)
-        if roleFlags & UNIT_ROLE.COMMANDER_UPDATES > 0:
+        if roleFlags & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self._playerSlots.get(playerID) == LEADER_SLOT:
             self._creatorDBID = playerID
         self.onUnitPlayerRoleChanged(playerID, prevRoleFlags, roleFlags)
 
@@ -219,6 +297,7 @@ class ClientUnit(UnitBase):
         prevRoleFlags = self._players[memberDBID]['role']
         UnitBase._giveLeadership(self, memberDBID)
         newRoleFlags = self._players[memberDBID]['role']
+        self._creatorDBID = memberDBID
         self.onUnitMembersListChanged()
         self.onUnitPlayerRoleChanged(memberDBID, prevRoleFlags, newRoleFlags)
 

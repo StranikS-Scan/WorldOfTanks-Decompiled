@@ -38,9 +38,7 @@ class ContactsSettingsView(ContactsSettingsViewMeta):
         self.__startData['showOfflineUsers'] = bool(self.__startData['showOfflineUsers'])
         self.__startData['showOthersCategory'] = bool(self.__startData['showOthersCategory'])
         self.__currentData = self.__startData.copy()
-        baseData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_BTNCANCEL_LABEL)
-        baseData['btOkTooltip'] = MESSENGER.CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY
-        baseData['btnCancelTooltip'] = MESSENGER.CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE
+        baseData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_BTNCANCEL_LABEL, MESSENGER.CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY, MESSENGER.CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE)
         baseData['mainData'] = self.__startData
         return baseData
 

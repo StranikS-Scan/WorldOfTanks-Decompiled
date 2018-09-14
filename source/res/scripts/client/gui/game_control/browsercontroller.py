@@ -44,7 +44,7 @@ class BrowserController(Controller, AppRef):
 
     @async
     @process
-    def load(self, url = None, title = None, showActionBtn = True, showWaiting = True, browserID = None, isAsync = False, browserSize = None, background = None, isDefault = True, callback = None):
+    def load(self, url = None, title = None, showActionBtn = True, showWaiting = True, browserID = None, isAsync = False, browserSize = None, background = None, isDefault = True, callback = None, showCloseBtn = False):
         url = url or GUI_SETTINGS.browser.url
         suffix = yield self.__urlMacros.parse(GUI_SETTINGS.browser.params)
         concatenator = '&' if '?' in url else '?'
@@ -64,7 +64,8 @@ class BrowserController(Controller, AppRef):
          'browserID': browserID,
          'size': size,
          'isDefault': isDefault,
-         'isAsync': isAsync}
+         'isAsync': isAsync,
+         'showCloseBtn': showCloseBtn}
 
         def browserCallback(*args):
             self.__clearCallback(browserID)

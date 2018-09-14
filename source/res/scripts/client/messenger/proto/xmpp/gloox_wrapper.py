@@ -2,27 +2,25 @@
 from collections import defaultdict
 import weakref
 import BigWorld
-from constants import IGR_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from external_strings_utils import unicode_from_utf8
 from messenger.proto.xmpp.gloox_constants import PRESENCE, CONNECTION_STATE, DISCONNECT_REASON, GLOOX_EVENT
 from messenger.proto.xmpp.jid import ContactJID, ContactBareJID
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
-from messenger.proto.xmpp.resources import Resource, ResourceWithIGR
+from messenger.proto.xmpp.resources import Resource
+from messenger.proto.xmpp.wrappers import makeWGInfoFromPresence, makeClanInfo
 _GLOOX_EVENTS_LISTENERS = (('onConnect', 'onConnected'),
  ('onReady', 'onLogin'),
  ('onDisconnect', 'onDisconnected'),
  ('onRosterResultReceived', 'onRosterResultReceived'),
  ('onNewRosterItem', 'onRosterItemSet'),
  ('onRosterItemRemove', 'onRosterItemRemoved'),
- ('onNewRosterResource', 'onRosterResourceAdded'),
- ('onRosterResourceRemove', 'onRosterResourceRemoved'),
  ('onSubscribe', 'onSubscriptionRequest'),
  ('onLog', 'onLog'),
  ('onHandleIq', 'onHandleIq'),
  ('onRosterQuerySend', 'onRosterQuerySend'),
  ('onHandleMsg', 'onHandleMsg'),
- ('onHandlePresenceWithIGR', 'onHandlePresenceWithIGR'))
+ ('onHandlePresence', 'onHandlePresence'))
 
 class ClientDecorator(object):
 
@@ -177,29 +175,26 @@ class ClientDecorator(object):
     def onRosterResultReceived(self, roster):
 
         def generator():
-            for jid, name, groups, to, from_ in roster:
+            for jid, name, groups, to, from_, clanInfo in roster:
                 yield (ContactJID(jid),
                  name,
                  groups,
-                 to,
-                 from_)
+                 (to, from_),
+                 makeClanInfo(*clanInfo))
 
         self.__handleEvent(GLOOX_EVENT.ROSTER_RESULT, generator)
 
-    def onRosterItemSet(self, jid, name, groups, to, from_):
-        self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_SET, ContactJID(jid), name, groups, to, from_)
+    def onRosterItemSet(self, jid, name, groups, to, from_, clanInfo):
+        self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_SET, ContactJID(jid), name, groups, (to, from_), makeClanInfo(*clanInfo))
 
     def onRosterItemRemoved(self, jid):
         self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_REMOVED, ContactJID(jid))
 
-    def onRosterResourceAdded(self, jid, priority, status, presence):
-        self.__handleEvent(GLOOX_EVENT.ROSTER_RESOURCE_ADDED, ContactJID(jid), Resource(priority, status, presence))
+    def onHandlePresence(self, jid, priority, status, presence, wgexts):
+        self.__handleEvent(GLOOX_EVENT.PRESENCE, ContactJID(jid), Resource(priority, status, presence, makeWGInfoFromPresence(wgexts)))
 
-    def onRosterResourceRemoved(self, jid):
-        self.__handleEvent(GLOOX_EVENT.ROSTER_RESOURCE_REMOVED, ContactJID(jid))
-
-    def onSubscriptionRequest(self, jid, message, nickname):
-        self.__handleEvent(GLOOX_EVENT.SUBSCRIPTION_REQUEST, ContactJID(jid), nickname, message)
+    def onSubscriptionRequest(self, jid, message, nickname, wgexts):
+        self.__handleEvent(GLOOX_EVENT.SUBSCRIPTION_REQUEST, ContactJID(jid), nickname, message, makeWGInfoFromPresence(wgexts))
 
     def onLog(self, level, source, message):
         self.__handleEvent(GLOOX_EVENT.LOG, level, source, message)
@@ -211,17 +206,6 @@ class ClientDecorator(object):
             LOG_CURRENT_EXCEPTION()
 
         self.__handleEvent(GLOOX_EVENT.MESSAGE, msgID, msgType, body, ContactBareJID(jidFrom), pyGlooxTag)
-
-    def onHandlePresenceWithIGR(self, jidFrom, igrID, igrRoomID):
-        if igrID and igrID.isdigit():
-            igrID = int(igrID)
-        else:
-            igrID = IGR_TYPE.NONE
-        if igrRoomID and igrRoomID.isdigit():
-            igrRoomID = int(igrRoomID)
-        else:
-            igrRoomID = 0
-        self.__handleEvent(GLOOX_EVENT.IGR, ContactJID(jidFrom), ResourceWithIGR(igrID=igrID, igrRoomID=igrRoomID))
 
     def onHandleIq(self, iqID, iqType, pyGlooxTag):
         self.__handleEvent(GLOOX_EVENT.IQ, iqID, iqType, pyGlooxTag)

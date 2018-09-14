@@ -2,7 +2,8 @@
 import types
 from FortifiedRegionBase import FORT_ATTACK_RESULT, NOT_ACTIVATED
 from adisp import async, process
-from chat_shared import decompressSysMessage
+from chat_shared import decompressSysMessage, SYS_MESSAGE_TYPE
+from club_shared import ladderRating
 import constants
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 import account_helpers
@@ -11,6 +12,8 @@ import BigWorld
 import potapov_quests
 from gui import GUI_SETTINGS
 from gui.LobbyContext import g_lobbyContext
+from gui.clubs.formatters import getLeagueString, getDivisionString
+from gui.clubs.settings import getLeagueByDivision
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.shared.utils import BoundMethodWeakref
@@ -33,6 +36,7 @@ from items import vehicles as vehicles_core
 from account_helpers import rare_achievements
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
+from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
 from messenger import g_settings
 from predefined_hosts import g_preDefinedHosts
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, PREBATTLE_INVITE_STATE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT, SYS_MESSAGE_FORT_EVENT_NAMES, FORT_BUILDING_TYPE, FORT_ORDER_TYPE, FORT_BUILDING_TYPE_NAMES, ARENA_GUI_TYPE
@@ -143,6 +147,7 @@ class BattleResultsFormatter(ServiceChannelFormatter):
                      'clanAbbrev': ''})
                 if battleResKey == 0:
                     battleResKey = 1 if buildTeam == team else -1
+            ctx['club'] = self.__makeClubString(battleResult)
             templateName = self.__battleResultKeys[battleResKey]
             bgIconSource = None
             if battleResult.get('guiType', 0) == ARENA_GUI_TYPE.FORT_BATTLE:
@@ -160,7 +165,8 @@ class BattleResultsFormatter(ServiceChannelFormatter):
         if fortResource is None:
             return ''
         else:
-            return g_settings.htmlTemplates.format('battleResultFortResource', ctx={'fortResource': BigWorld.wg_getIntegralFormat(fortResource)})
+            fortResourceStr = BigWorld.wg_getIntegralFormat(fortResource) if not battleResult['isLegionary'] else '-'
+            return g_settings.htmlTemplates.format('battleResultFortResource', ctx={'fortResource': fortResourceStr})
 
     def __makeQuestsAchieve(self, message):
         fmtMsg = TokenQuestsFormatter(asBattleFormatter=True)._formatQuestAchieves(message)
@@ -168,6 +174,25 @@ class BattleResultsFormatter(ServiceChannelFormatter):
             return g_settings.htmlTemplates.format('battleQuests', {'achieves': fmtMsg})
         else:
             return ''
+
+    def __makeClubString(self, battleResult):
+        result = []
+        club = battleResult.get('club')
+        if club:
+            curDiv, prevDiv = club.get('divisions', (0, 0))
+            curLeague, prevLeague = getLeagueByDivision(curDiv), getLeagueByDivision(prevDiv)
+            curRating, prevRating = map(ladderRating, club.get('ratings', ((0, 0), (0, 0))))
+            if curRating != prevRating:
+                if curRating > prevRating:
+                    tplKey = 'battleResultClubRatingUp'
+                else:
+                    tplKey = 'battleResultClubRatingDown'
+                result.append(g_settings.htmlTemplates.format(tplKey, ctx={'rating': abs(curRating - prevRating)}))
+            if curDiv != prevDiv:
+                result.append(g_settings.htmlTemplates.format('battleResultClubNewDivision', ctx={'division': getDivisionString(curDiv)}))
+            if curLeague != prevLeague:
+                result.append(g_settings.htmlTemplates.format('battleResultClubNewLeague', ctx={'league': getLeagueString(curLeague)}))
+        return ''.join(result)
 
     def __makeVehicleLockString(self, vehicle, battleResult):
         expireTime = battleResult.get('vehTypeUnlockTime', 0)
@@ -215,7 +240,7 @@ class BattleResultsFormatter(ServiceChannelFormatter):
         result = []
         for recordIdx, value in battleResult.get('popUpRecords', []):
             recordName = DB_ID_TO_RECORD[recordIdx]
-            if recordName[1] in ('maxXP', 'maxFrags', 'maxDamage', 'markOfMastery'):
+            if recordName in IGNORED_BY_BATTLE_RESULTS:
                 continue
             achieve = getAchievementFactory(recordName).create(value=value)
             if achieve is not None and not achieve.isApproachable():
@@ -671,8 +696,6 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
         if items is not None and len(items) > 0:
             operations.append(self.__getItemsString(items))
         tmen = dataEx.get('tankmen', [])
-        if tmen is not None and len(tmen) > 0:
-            operations.append(self._getTankmenString(tmen))
         vehicles = dataEx.get('vehicles', {})
         if vehicles is not None and len(vehicles) > 0:
             result = self._getVehiclesString(vehicles)
@@ -681,6 +704,11 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
             comptnStr = self._getComptnString(vehicles)
             if len(comptnStr):
                 operations.append(comptnStr)
+            for v in vehicles.itervalues():
+                tmen.extend(v.get('tankmen', []))
+
+        if tmen is not None and len(tmen) > 0:
+            operations.append(self._getTankmenString(tmen))
         slots = dataEx.get('slots')
         if slots:
             operations.append(self.__getSlotsString(slots))
@@ -1144,6 +1172,17 @@ class AOGASNotifyFormatter(ClientSysMessageFormatter):
     def format(self, data, *args):
         formatted = g_settings.msgTemplates.format('AOGASNotify', {'text': i18n.makeString('#AOGAS:{0:>s}'.format(data.name()))})
         return (formatted, self._getGuiSettings(args, 'AOGASNotify'))
+
+
+class BattleCanceledFormatter(ClientSysMessageFormatter):
+
+    def isNotify(self):
+        return True
+
+    def format(self, data, *args):
+        eventName = 'battleCanceled'
+        formatted = g_settings.msgTemplates.format(eventName, {'text': i18n.makeString('#messenger:serviceChannelMessages/battleResults/' + eventName)})
+        return (formatted, self._getGuiSettings(args, eventName))
 
 
 class VehicleTypeLockExpired(ServiceChannelFormatter):
@@ -1676,7 +1715,7 @@ class FortBattleResultsFormatter(ServiceChannelFormatter):
         result = []
         for recordIdx, value in battleResult.get('popUpRecords', []):
             recordName = DB_ID_TO_RECORD[recordIdx]
-            if recordName[1] in ('maxXP', 'maxFrags', 'maxDamage', 'markOfMastery'):
+            if recordName in IGNORED_BY_BATTLE_RESULTS:
                 continue
             achieve = getAchievementFactory(recordName).create(value=value)
             if achieve is not None and not achieve.isApproachable():
@@ -1735,7 +1774,11 @@ class FortBattleInviteFormatter(ServiceChannelFormatter):
         if battleData:
             inviteWrapper = self.__toFakeInvite(battleData)
             formatter = PrbFortBattleInviteHtmlTextFormatter()
-            formatted = g_settings.msgTemplates.format('fortBattleInvite', ctx={'text': formatter.getText(inviteWrapper)}, data={'timestamp': _getTimeStamp(message),
+            if message.createdAt is not None:
+                timestamp = time_utils.getTimestampFromUTC(message.createdAt.timetuple())
+            else:
+                timestamp = time_utils.getCurrentTimestamp()
+            formatted = g_settings.msgTemplates.format('fortBattleInvite', ctx={'text': formatter.getText(inviteWrapper)}, data={'timestamp': timestamp,
              'savedData': (battleData.get('battleID'), battleData.get('peripheryID')),
              'icon': formatter.getIconName(inviteWrapper)})
             return (formatted, self._getGuiSettings(message, 'fortBattleInvite'))

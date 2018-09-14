@@ -71,6 +71,7 @@ from gui.Scaleform.daapi.view.lobby.exchange.ExchangeVcoinWindow import Exchange
 from gui.Scaleform.daapi.view.lobby.SkillDropWindow import SkillDropWindow
 from gui.Scaleform.daapi.view.lobby.VehicleBuyWindow import VehicleBuyWindow
 from gui.Scaleform.daapi.view.lobby.hangar import TechnicalMaintenance, TankCarousel, ResearchPanel, AmmunitionPanel, Crew, Params, Hangar
+from gui.Scaleform.daapi.view.lobby.hangar.CrewAboutDogWindow import CrewAboutDogWindow
 from gui.Scaleform.daapi.view.lobby.store.StoreTable import StoreTable
 from gui.Scaleform.daapi.view.lobby.store.Inventory import Inventory
 from gui.Scaleform.daapi.view.lobby.store.Shop import Shop
@@ -90,7 +91,7 @@ VIEWS_SETTINGS = (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTyp
  ViewSettings(VIEW_ALIAS.INTRO_VIDEO, IntroPage, 'introPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.CURSOR, Cursor, 'cursor.swf', ViewTypes.CURSOR, None, ScopeTemplates.GLOBAL_SCOPE),
  ViewSettings(VIEW_ALIAS.WAITING, WaitingView, 'waiting.swf', ViewTypes.WAITING, None, ScopeTemplates.GLOBAL_SCOPE),
- ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobby.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
+ ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.LOBBY_HANGAR, Hangar, 'hangar.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
  ViewSettings(VIEW_ALIAS.LOBBY_SHOP, Shop, 'shop.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_SHOP, ScopeTemplates.LOBBY_SUB_SCOPE),
  ViewSettings(VIEW_ALIAS.LOBBY_INVENTORY, Inventory, 'inventory.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_INVENTORY, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -115,6 +116,7 @@ VIEWS_SETTINGS = (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTyp
  GroupedViewSettings(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, ConfirmModuleDialog, 'confirmModuleWindow.swf', ViewTypes.TOP_WINDOW, 'confirmModuleDialog', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.SYSTEM_MESSAGE_DIALOG, SystemMessageDialog, 'systemMessageDialog.swf', ViewTypes.WINDOW, 'systemMessageDialog', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.RETRAIN_CREW, RetrainCrewWindow, 'retrainCrewWindow.swf', ViewTypes.TOP_WINDOW, 'retrainCrewWindow', None, ScopeTemplates.DEFAULT_SCOPE),
+ GroupedViewSettings(VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW, CrewAboutDogWindow, 'simpleWindow.swf', ViewTypes.WINDOW, 'aboutDogWindow', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.NOTIFICATIONS_LIST, NotificationListView, 'notificationsList.swf', ViewTypes.WINDOW, 'notificationsList', VIEW_ALIAS.NOTIFICATIONS_LIST, ScopeTemplates.WINDOW_VIEWED_MULTISCOPE),
  GroupedViewSettings(VIEW_ALIAS.CREW_OPERATIONS_POPOVER, CrewOperationsPopOver, 'crewOperationsPopOver.swf', ViewTypes.WINDOW, 'crewOperationsPopOver', VIEW_ALIAS.CREW_OPERATIONS_POPOVER, ScopeTemplates.WINDOW_VIEWED_MULTISCOPE),
  GroupedViewSettings(CONTACTS_ALIASES.CONTACTS_POPOVER, ContactsListPopover, 'contactsListPopover.swf', ViewTypes.WINDOW, 'contactsListPopover', CONTACTS_ALIASES.CONTACTS_POPOVER, ScopeTemplates.WINDOW_VIEWED_MULTISCOPE),
@@ -199,7 +201,8 @@ RELEASE_PACKAGES = ['gui.Scaleform.daapi.view.lobby.prb_windows',
  'gui.Scaleform.daapi.view.lobby.historicalBattles',
  'gui.Scaleform.daapi.view.lobby.fortifications',
  'gui.Scaleform.daapi.view.lobby.inputChecker',
- 'gui.Scaleform.daapi.view.lobby.exchange']
+ 'gui.Scaleform.daapi.view.lobby.exchange',
+ 'gui.Scaleform.daapi.view.lobby.wgnc']
 DEBUG_PACKAGES = ['gui.development.ui.GUIEditor', 'gui.development.ui.messenger']
 if IS_DEVELOPMENT:
     VIEWS_PACKAGES = tuple(RELEASE_PACKAGES + DEBUG_PACKAGES)

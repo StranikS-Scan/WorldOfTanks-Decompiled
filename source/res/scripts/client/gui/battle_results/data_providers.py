@@ -3,8 +3,8 @@ from collections import namedtuple
 import BigWorld
 from adisp import async, process
 from gui.LobbyContext import g_lobbyContext
-from gui.shared.utils.requesters import abstract
-from gui.battle_results import formatters as results_fmts
+from gui.shared.utils.requesters.abstract import AbstractRequester
+from gui.battle_results import formatters as results_fmts, results
 from messenger.proto.xmpp.spa_requesters import NicknameResolver
 
 class _PlayerData(namedtuple('_PlayerData', 'dbID team name prebattleID igrType clanAbbrev clanDBID')):
@@ -70,23 +70,36 @@ class _PlayersInfoFromXmppGetter(_PlayersInfoGetter):
         self._spaResolver.resolve(results['players'].keys(), _cbWrapper)
 
 
-class _AsyncPostBattleResultsDataProvider(abstract.AbstractRequester):
+class _AsyncPostBattleResultsDataProvider(AbstractRequester):
 
     def __init__(self, arenaUniqueID, playerInfoGetter = None):
         super(_AsyncPostBattleResultsDataProvider, self).__init__()
         self._arenaUniqueID = arenaUniqueID
         self._playerInfoGetter = playerInfoGetter or _PlayersInfoFromDataGetter()
+        self.__results = None
         self.__players = {}
+        return
 
     def destroy(self):
         self.__players.clear()
+        self.__results.clear()
         del self._playerInfoGetter
+
+    @property
+    def results(self):
+        return self.__results
 
     def getResults(self):
         return self._data
 
     def getArenaUniqueID(self):
         return self._arenaUniqueID
+
+    def getArenaGuiType(self):
+        return self.__results.common.guiType
+
+    def getArenaBonusType(self):
+        return self.__results.common.bonusType
 
     def getPlayers(self):
         return self.__players
@@ -105,12 +118,14 @@ class _AsyncPostBattleResultsDataProvider(abstract.AbstractRequester):
 
     def _invalidateCaches(self):
         self.__players.clear()
+        self.__results = None
         if self._data is not None:
             for playerDbID, pData in self._data['players'].iteritems():
                 info = dict(pData)
                 info.update(self._playerInfoGetter.getInfo(playerDbID)._asdict())
                 self.__players[playerDbID] = _PlayerData(playerDbID, **info)
 
+            self.__results = results.createResults(self._data, self)
         return
 
     def __repr__(self):

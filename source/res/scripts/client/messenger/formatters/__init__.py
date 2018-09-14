@@ -4,7 +4,7 @@ import BigWorld
 import time
 from time import gmtime
 from constants import NC_CONTEXT_ITEM_TYPE
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_WARNING
 from helpers import time_utils, i18n
 from messenger import g_settings
 
@@ -176,7 +176,8 @@ SCH_SERVER_FORMATTERS_DICT = {SYS_MESSAGE_TYPE.serverReboot.index(): sch_formatt
  SYS_MESSAGE_TYPE.refSystemQuests.index(): sch_formatters.RefSystemQuestsFormatter(),
  SYS_MESSAGE_TYPE.refSystemReferralBoughtVehicle.index(): sch_formatters.RefSystemReferralBoughtVehicleFormatter(),
  SYS_MESSAGE_TYPE.refSystemReferralContributedXP.index(): sch_formatters.RefSystemReferralContributedXPFormatter(),
- SYS_MESSAGE_TYPE.potapovQuestBonus.index(): sch_formatters.PotapovQuestsFormatter()}
+ SYS_MESSAGE_TYPE.potapovQuestBonus.index(): sch_formatters.PotapovQuestsFormatter(),
+ SYS_MESSAGE_TYPE.battleCanceled.index(): sch_formatters.BattleCanceledFormatter()}
 
 class SCH_CLIENT_MSG_TYPE(object):
     SYS_MSG_TYPE, PREMIUM_ACCOUNT_EXPIRY_MSG, AOGAS_NOTIFY_TYPE, ACTION_NOTIFY_TYPE, BATTLE_TUTORIAL_RESULTS_TYPE = range(5)

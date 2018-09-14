@@ -31,6 +31,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     REF_SYSTEM = 'refSystem'
     PRIVATE_QUESTS = 'privateQuests'
     CONTACT = 'contact'
+    QUESTS = 'quests'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

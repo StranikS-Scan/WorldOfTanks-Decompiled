@@ -155,7 +155,7 @@ class IFortListener(object):
     def onEnemyStateChanged(self, battleID, isReady):
         pass
 
-    def onConsumablesChanged(self, battleID, consumableOrderTypeID):
+    def onConsumablesChanged(self, unitMgrID):
         pass
 
 

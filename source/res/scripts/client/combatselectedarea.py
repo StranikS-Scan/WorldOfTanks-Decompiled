@@ -16,11 +16,10 @@ class CombatSelectedArea(object):
     def __init__(self):
         self.__terrainSelectedArea = None
         self.__fakeModel = None
-        self.__marker = None
         return
 
     def setup(self, position, direction, size, visualPath, color, marker):
-        self.__fakeModel = model = BigWorld.player().newFakeModel()
+        self.__fakeModel = model = BigWorld.Model('objects/fake_model.model')
         model.position = position
         model.yaw = direction.yaw
         BigWorld.addModel(model)
@@ -28,7 +27,6 @@ class CombatSelectedArea(object):
         self.__terrainSelectedArea = area = BigWorld.PyTerrainSelectedArea()
         area.setup(visualPath, size, OVER_TERRAIN_HEIGHT, color)
         rootNode.attach(area)
-        markerTranslation = mathUtils.MatrixProviders.product(rootNode, mathUtils.createTranslationMatrix(Math.Vector3(0.0, MARKER_HEIGHT, 0.0)))
         self.__nextPosition = position
         self.__speed = Math.Vector3(0.0, 0.0, 0.0)
         self.__time = 0.0
@@ -37,6 +35,9 @@ class CombatSelectedArea(object):
         self.__fakeModel.position = position
         self.__fakeModel.yaw = direction.yaw
         self.__terrainSelectedArea.updateHeights()
+
+    def setGUIVisible(self, isVisible):
+        self.__fakeModel.visible = isVisible
 
     def setNextPosition(self, nextPosition, direction):
         self.relocate(self.__nextPosition, direction)
@@ -58,5 +59,4 @@ class CombatSelectedArea(object):
         BigWorld.delModel(self.__fakeModel)
         self.__terrainSelectedArea = None
         self.__fakeModel = None
-        self.__marker = None
         return

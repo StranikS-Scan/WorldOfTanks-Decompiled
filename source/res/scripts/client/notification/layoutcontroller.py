@@ -4,6 +4,7 @@ from gui.Scaleform.framework import AppRef, ViewTypes
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
+from gui.shared.events import LobbySimpleEvent
 from notification.BaseMessagesController import BaseMessagesController
 from notification.settings import LAYOUT_PADDING
 
@@ -34,11 +35,16 @@ class LayoutController(BaseMessagesController, EventSystemEntity, AppRef):
         self.addListener(VIEW_ALIAS.TUTORIAL_LOADING, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(LobbySimpleEvent.HIDE_HANGAR, self.__onHideHangarHandler)
+
+    def __onHideHangarHandler(self, evt):
+        if not evt.ctx:
+            self.__onHangarViewSelected()
 
     def __onSomeViewSelected(self, _):
         self._model.setLayoutSettings(*LAYOUT_PADDING.OTHER)
 
-    def __onHangarViewSelected(self, _):
+    def __onHangarViewSelected(self, _ = None):
         self._model.setLayoutSettings(*LAYOUT_PADDING.HANGAR)
 
     def cleanUp(self):
@@ -55,4 +61,5 @@ class LayoutController(BaseMessagesController, EventSystemEntity, AppRef):
         self.removeListener(VIEW_ALIAS.TUTORIAL_LOADING, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self.__onHideHangarHandler)
         BaseMessagesController.cleanUp(self)

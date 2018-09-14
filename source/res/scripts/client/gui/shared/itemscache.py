@@ -55,7 +55,10 @@ class _ItemsCache(object):
     def __invalidateData(self, updateReason, diff = None, callback = lambda *args: None):
         self.__waitForSync = True
         self.onSyncStarted()
-        invalidItems = self.__items.invalidateCache(diff)
+        if updateReason != CACHE_SYNC_REASON.DOSSIER_RESYNC:
+            invalidItems = self.__items.invalidateCache(diff)
+        else:
+            invalidItems = {}
 
         def cbWrapper(*args):
             self.__waitForSync = False

@@ -32,9 +32,9 @@ class BrowserMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_loadingStop()
 
-    def as_configureS(self, isDefaultBrowser, title, showActionBtn):
+    def as_configureS(self, isDefaultBrowser, title, showActionBtn, showCloseBtn):
         if self._isDAAPIInited():
-            return self.flashObject.as_configure(isDefaultBrowser, title, showActionBtn)
+            return self.flashObject.as_configure(isDefaultBrowser, title, showActionBtn, showCloseBtn)
 
     def as_setBrowserSizeS(self, width, height):
         if self._isDAAPIInited():

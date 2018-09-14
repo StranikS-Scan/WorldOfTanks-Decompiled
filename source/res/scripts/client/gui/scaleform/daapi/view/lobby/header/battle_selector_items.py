@@ -164,7 +164,7 @@ class _CommandItem(_SelectorItem):
         return False
 
     def _update(self, state):
-        self._isSelected = state.isInUnit(PREBATTLE_TYPE.UNIT)
+        self._isSelected = state.isInUnit(PREBATTLE_TYPE.UNIT) or state.isInUnit(PREBATTLE_TYPE.CLUBS)
         self._isDisabled = state.hasLockedState
 
 

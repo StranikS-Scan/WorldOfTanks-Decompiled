@@ -115,6 +115,7 @@ PERKS = frozenset(('brotherhood',
  'loader_desperado',
  'loader_intuition',
  'radioman_lastEffort'))
+MAX_FREE_SKILLS_SIZE = 16
 MAX_SKILL_LEVEL = 100
 MIN_ROLE_LEVEL = 50
 SKILL_LEVELS_PER_RANK = 50
@@ -196,21 +197,24 @@ def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, addTan
     return tankmenList
 
 
-def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills = [], lastSkillLevel = MAX_SKILL_LEVEL, dossierCompactDescr = ''):
+def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills = [], lastSkillLevel = MAX_SKILL_LEVEL, dossierCompactDescr = '', freeSkills = []):
     pack = struct.pack
     raise MIN_ROLE_LEVEL <= roleLevel <= MAX_SKILL_LEVEL or AssertionError
     nationID, isPremium, isFemale, firstNameID, lastNameID, iconID = passport
     header = ITEM_TYPES.tankman + (nationID << 4)
     cd = pack('4B', header, vehicleTypeID, SKILL_INDICES[role], roleLevel)
-    numSkills = len(skills)
-    skills = [ SKILL_INDICES[s] for s in skills ]
-    cd += pack((str(1 + numSkills) + 'B'), numSkills, *skills)
+    numSkills = len(skills) + len(freeSkills)
+    allSkills = [ SKILL_INDICES[s] for s in freeSkills ]
+    for s in skills:
+        allSkills.append(SKILL_INDICES[s])
+
+    cd += pack((str(1 + numSkills) + 'B'), numSkills, *allSkills)
     cd += chr(lastSkillLevel if numSkills else 0)
     rank, levelsToNextRank = divmod(roleLevel - MIN_ROLE_LEVEL, SKILL_LEVELS_PER_RANK)
     levelsToNextRank = SKILL_LEVELS_PER_RANK - levelsToNextRank
     isFemale = 1 if isFemale else 0
     isPremium = 1 if isPremium else 0
-    flags = isFemale | isPremium << 1
+    flags = isFemale | isPremium << 1 | len(freeSkills) << 2
     cd += pack('<B4Hi', flags, firstNameID, lastNameID, iconID, rank | levelsToNextRank << 5, 0)
     cd += dossierCompactDescr
     return cd
@@ -299,14 +303,11 @@ class TankmanDescr(object):
 
     @property
     def skills(self):
-        skillsCopy = list(self.__skills)
-        if self.isFemale:
-            skillsCopy.insert(0, 'brotherhood')
-        return skillsCopy
+        return list(self.__skills)
 
     @property
     def lastSkillLevel(self):
-        if not self.isFemale or self.__skills:
+        if self.freeSkillsNumber < len(self.__skills):
             return self.__lastSkillLevel
         return MAX_SKILL_LEVEL
 
@@ -316,12 +317,8 @@ class TankmanDescr(object):
 
     @property
     def skillLevels(self):
-        isFemale = self.isFemale
-        for skillName in self.skills:
-            if isFemale and skillName == 'brotherhood':
-                level = MAX_SKILL_LEVEL
-            else:
-                level = MAX_SKILL_LEVEL if skillName != self.__skills[-1] else self.__lastSkillLevel
+        for skillName in self.__skills:
+            level = MAX_SKILL_LEVEL if skillName != self.__skills[-1] else self.__lastSkillLevel
             yield (skillName, level)
 
     def efficiencyOnVehicle(self, vehicleDescr):
@@ -361,8 +358,6 @@ class TankmanDescr(object):
     def skillLevel(self, skillName):
         if skillName not in self.skills:
             return None
-        elif self.isFemale and skillName == 'brotherhood':
-            return MAX_SKILL_LEVEL
         elif skillName != self.__skills[-1]:
             return MAX_SKILL_LEVEL
         else:
@@ -371,7 +366,7 @@ class TankmanDescr(object):
     def totalXP(self):
         levelCosts = _g_levelXpCosts
         xp = self.freeXP + levelCosts[self.roleLevel]
-        numSkills = self.lastSkillNumber
+        numSkills = self.lastSkillNumber - self.freeSkillsNumber
         if numSkills:
             xp += levelCosts[self.__lastSkillLevel] * 2 ** numSkills
             for idx in xrange(1, numSkills):
@@ -406,7 +401,7 @@ class TankmanDescr(object):
         self.__levelUpLastSkill()
 
     def isFreeDropSkills(self):
-        return self.lastSkillNumber <= 1 and self.__lastSkillLevel == 0
+        return self.lastSkillNumber <= 1 + self.freeSkillsNumber and self.__lastSkillLevel == 0
 
     def dropSkills(self, xpReuseFraction = 0.0):
         if not 0.0 <= xpReuseFraction <= 1.0:
@@ -414,11 +409,14 @@ class TankmanDescr(object):
             prevTotalXP = self.totalXP()
             if self.numLevelsToNextRank != 0:
                 self.numLevelsToNextRank += self.__lastSkillLevel
-                numSkills = self.lastSkillNumber
+                numSkills = self.lastSkillNumber - self.freeSkillsNumber
                 if numSkills > 1:
                     self.numLevelsToNextRank += MAX_SKILL_LEVEL * (numSkills - 1)
-            del self.__skills[:]
-            self.__lastSkillLevel = 0
+            del self.__skills[self.freeSkillsNumber:]
+            if self.freeSkillsNumber < len(self.__skills):
+                self.__lastSkillLevel = 0
+            else:
+                self.__lastSkillLevel = MAX_SKILL_LEVEL
             xpReuseFraction != 0.0 and self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())))
 
     def dropSkill(self, skillName, xpReuseFraction = 0.0):
@@ -426,7 +424,7 @@ class TankmanDescr(object):
             raise AssertionError
             idx = self.__skills.index(skillName)
             prevTotalXP = self.totalXP()
-            numSkills = self.lastSkillNumber
+            numSkills = self.lastSkillNumber - self.freeSkillsNumber
             levelsDropped = MAX_SKILL_LEVEL
             if numSkills == 1:
                 levelsDropped = self.__lastSkillLevel
@@ -525,7 +523,7 @@ class TankmanDescr(object):
         cd += chr(self.__lastSkillLevel if numSkills else 0)
         isFemale = 1 if self.isFemale else 0
         isPremium = 1 if self.isPremium else 0
-        flags = isFemale | isPremium << 1
+        flags = isFemale | isPremium << 1 | self.freeSkillsNumber << 2
         cd += pack('<B4Hi', flags, self.firstNameID, self.lastNameID, self.iconID, self.__rankIdx & 31 | (self.numLevelsToNextRank & 2047) << 5, self.freeXP)
         cd += self.dossierCompactDescr
         return cd
@@ -564,6 +562,9 @@ class TankmanDescr(object):
                 flags = unpack('<B', cd[:1])[0]
                 self.isFemale = bool(flags & 1)
                 self.isPremium = bool(flags & 2)
+                self.freeSkillsNumber = flags >> 2
+                if self.freeSkillsNumber == len(self.__skills) and self.freeSkillsNumber:
+                    self.__lastSkillLevel = MAX_SKILL_LEVEL
                 cd = cd[1:]
                 if battleOnly:
                     return
@@ -601,7 +602,7 @@ class TankmanDescr(object):
             self.numLevelsToNextRank = SKILL_LEVELS_PER_RANK if self.__rankIdx < maxRankIdx else 0
 
     def __levelUpLastSkill(self):
-        numSkills = self.lastSkillNumber
+        numSkills = self.lastSkillNumber - self.freeSkillsNumber
         while self.__lastSkillLevel < MAX_SKILL_LEVEL:
             xpCost = self.levelUpXpCost(self.__lastSkillLevel, numSkills)
             if xpCost > self.freeXP:
@@ -625,10 +626,13 @@ def makeTmanDescrByTmanData(tmanData):
     if not 50 <= roleLevel <= MAX_SKILL_LEVEL:
         raise Exception, 'Wrong tankman level'
     skills = tmanData.get('skills', [])
-    for skill in skills:
-        if skill not in SKILL_INDICES:
-            raise Exception, 'Wrong tankman skill'
-
+    freeSkills = tmanData.get('freeSkills', [])
+    __validateSkills(skills)
+    __validateSkills(freeSkills)
+    if not set(skills).isdisjoint(set(freeSkills)):
+        raise Exception, 'Free skills and skills must be disjoint.'
+    if len(freeSkills) > MAX_FREE_SKILLS_SIZE:
+        raise Exception, 'Free skills count is too big.'
     isFemale = tmanData.get('isFemale', False)
     isPremium = tmanData.get('isPremium', False)
     fnGroupID = tmanData.get('fnGroupID', 0)
@@ -674,13 +678,21 @@ def makeTmanDescrByTmanData(tmanData):
      firstNameID,
      lastNameID,
      iconID)
-    tankmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills)
+    tankmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills, freeSkills=freeSkills)
     freeXP = tmanData.get('freeXP', 0)
     if freeXP != 0:
         tankmanDescr = TankmanDescr(tankmanCompDescr)
         tankmanDescr.addXP(freeXP)
         tankmanCompDescr = tankmanDescr.makeCompactDescr()
     return tankmanCompDescr
+
+
+def __validateSkills(skills):
+    if len(set(skills)) != len(skills):
+        raise Exception, 'Duplicate tankman skills'
+    for skill in skills:
+        if skill not in SKILL_INDICES:
+            raise Exception, 'Wrong tankman skill'
 
 
 def _readNationConfig(xmlPath):

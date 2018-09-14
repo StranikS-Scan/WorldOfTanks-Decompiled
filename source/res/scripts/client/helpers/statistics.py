@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/helpers/statistics.py
 import math
 import BigWorld
-from collections import namedtuple
 from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
 from account_helpers.settings_core import SettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
@@ -18,13 +17,6 @@ class _HARDWARE_SCORE_PARAMS:
     PARAM_GPU_SCORE = 1
     PARAM_CPU_SCORE = 4
 
-
-_SettingsFromStart = namedtuple('_SettingsFromStart', ['graphicsPreset',
- 'graphicsEngine',
- 'screenResWidth',
- 'screenResHeight',
- 'drrScale',
- 'windowMode'])
 
 class StatisticsCollector:
     avrPing = property(lambda self: (0 if self.__framesTotal is 0 else self.__avrPing / self.__framesTotal))

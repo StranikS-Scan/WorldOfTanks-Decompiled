@@ -6,6 +6,7 @@ import BigWorld
 import Settings
 import Event
 import cPickle as pickle
+from constants import FORT_BUILDING_TYPE as _FBT
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
 KEY_FILTERS = 'filters'
@@ -79,7 +80,17 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': [],
                                'selectedListVehicles': []},
                 'fortSettings': {'clanDBID': 0,
-                                 'battleConsumesIntroShown': False},
+                                 'battleConsumesIntroShown': False,
+                                 'visitedBuildings': {_FBT.MILITARY_BASE,
+                                                      _FBT.FINANCIAL_DEPT,
+                                                      _FBT.TANKODROME,
+                                                      _FBT.TRAINING_DEPT,
+                                                      _FBT.MILITARY_ACADEMY,
+                                                      _FBT.TRANSPORT_DEPT,
+                                                      _FBT.INTENDANT_SERVICE,
+                                                      _FBT.TROPHY_BRIGADE,
+                                                      _FBT.OFFICE,
+                                                      _FBT.MILITARY_SHOP}},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,
@@ -186,7 +197,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                                        'tilesVisited': set(),
                                        'headerAlert': False}},
                 'customization': {},
-                'showVehModelsOnMap': 0}}
+                'showVehModelsOnMap': 0,
+                'interfaceScale': 0}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:

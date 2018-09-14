@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/bw/ServiceChannelManager.py
 from collections import deque
-import BigWorld
 from chat_shared import CHAT_ACTIONS
 from debug_utils import *
 from ids_generators import SequenceIDGenerator
@@ -43,10 +42,10 @@ class ServiceChannelManager(ChatActionsListener):
         self.__addServerMessage(message)
 
     def pushClientSysMessage(self, message, msgType, isAlert = False):
-        self.__addClientMessage(message, formatters.SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name()])
+        return self.__addClientMessage(message, formatters.SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name()])
 
     def pushClientMessage(self, message, msgType, isAlert = False, auxData = None):
-        self.__addClientMessage(message, msgType, isAlert=isAlert, auxData=auxData)
+        return self.__addClientMessage(message, msgType, isAlert=isAlert, auxData=auxData)
 
     def getReadMessages(self):
         if self.__unreadMessagesCount > 0:
@@ -85,7 +84,7 @@ class ServiceChannelManager(ChatActionsListener):
         yield lambda callback: callback(True)
         formatter = formatters.SCH_SERVER_FORMATTERS_DICT.get(message.type)
         g_messengerEvents.serviceChannel.onChatMessageReceived(self.__idGenerator.next(), message)
-        LOG_DEBUG('Server message received', message, formatter)
+        LOG_NOTE('Server message received', message, formatter)
         if formatter:
             try:
                 if formatter.isAsync():
@@ -109,6 +108,7 @@ class ServiceChannelManager(ChatActionsListener):
     def __addClientMessage(self, message, msgType, isAlert = False, auxData = None):
         if auxData is None:
             auxData = []
+        clientID = 0
         formatter = formatters.SCH_CLIENT_FORMATTERS_DICT.get(msgType)
         if formatter:
             try:
@@ -128,4 +128,4 @@ class ServiceChannelManager(ChatActionsListener):
                 LOG_WARNING('Not enough data to format. Action data : ', message)
         elif IS_DEVELOPMENT:
             LOG_WARNING('Formatter not found:', msgType, message)
-        return
+        return clientID

@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/contact_note.py
 import types
+from helpers import html
 from messenger.proto.xmpp.extensions import PyExtension, PyQuery, IQHandler
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
@@ -52,7 +53,7 @@ class NoteText(PyExtension):
         return pyGlooxTag.getCData()
 
     def _makeChildrenString(self):
-        return self._text
+        return html.escape(self._text)
 
 
 class NoteItem(PyExtension):

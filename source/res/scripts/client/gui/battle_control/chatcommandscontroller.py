@@ -5,9 +5,9 @@ import BigWorld
 from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter
 from messenger import MessengerEntry
-from messenger.m_constants import MESSENGER_COMMAND_TYPE
+from messenger.m_constants import MESSENGER_COMMAND_TYPE, PROTO_TYPE
+from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
-from messenger.proto.migration import getBattleCommandFactory
 
 class ChatCommandsController(object):
 
@@ -15,13 +15,15 @@ class ChatCommandsController(object):
         super(ChatCommandsController, self).__init__()
         self.__battleUI = None
         self.__arenaDP = None
-        self.__cmdFactories = None
         return
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def proto(self):
+        return None
 
     def start(self, battleUI, arenaDP):
         self.__battleUI = weakref.proxy(battleUI)
         self.__arenaDP = arenaDP
-        self.__cmdFactories = getBattleCommandFactory()
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived += self.__me_onCommandReceived
@@ -29,7 +31,6 @@ class ChatCommandsController(object):
     def stop(self):
         self.__battleUI = None
         self.__arenaDP = None
-        self.__cmdFactories = None
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived -= self.__me_onCommandReceived
@@ -37,10 +38,7 @@ class ChatCommandsController(object):
 
     def sendAttentionToCell(self, cellIdx):
         if avatar_getter.isForcedGuiControlMode():
-            if not self.__cmdFactories:
-                LOG_ERROR('Commands factory is not defined')
-                return
-            command = self.__cmdFactories.createByCellIdx(cellIdx)
+            command = self.proto.battleCmd.createByCellIdx(cellIdx)
             if command:
                 self.__sendChatCommand(command)
             else:
@@ -49,10 +47,7 @@ class ChatCommandsController(object):
     def sendCommand(self, cmdName):
         if not avatar_getter.isVehicleAlive():
             return
-        if not self.__cmdFactories:
-            LOG_ERROR('Commands factory is not defined')
-            return
-        command = self.__cmdFactories.createByName(cmdName)
+        command = self.proto.battleCmd.createByName(cmdName)
         if command:
             self.__sendChatCommand(command)
         else:
@@ -61,10 +56,7 @@ class ChatCommandsController(object):
     def sendTargetedCommand(self, cmdName, targetID):
         if not avatar_getter.isVehicleAlive():
             return
-        if not self.__cmdFactories:
-            LOG_ERROR('Commands factory is not defined')
-            return
-        command = self.__cmdFactories.createByNameTarget(cmdName, targetID)
+        command = self.proto.battleCmd.createByNameTarget(cmdName, targetID)
         if command:
             self.__sendChatCommand(command)
         else:
@@ -79,7 +71,7 @@ class ChatCommandsController(object):
         aim = inputHandler.aim
         if not aim:
             return
-        command = self.__cmdFactories.create4Reload(aim.isCasseteClip(), math.ceil(aim.getReloadingTimeLeft()), aim.getAmmoQuantityLeft())
+        command = self.proto.battleCmd.create4Reload(aim.isCasseteClip(), math.ceil(aim.getReloadingTimeLeft()), aim.getAmmoQuantityLeft())
         if command:
             self.__sendChatCommand(command)
         else:

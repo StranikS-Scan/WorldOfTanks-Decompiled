@@ -112,7 +112,7 @@ ACHIEVEMENTRATED7X7_DEPENDENCIES = {}
 
 def _set_ACHIEVEMENTRATED7X7_DEPENDENCIES():
     global ACHIEVEMENTRATED7X7_DEPENDENCIES
-    ACHIEVEMENTRATED7X7_DEPENDENCIES.update({})
+    ACHIEVEMENTRATED7X7_DEPENDENCIES.update({'victoryMarchSeries': [_updateMaxVictoryMarchSeries, _updateVictoryMarch]})
 
 
 HISTORICAL_ACHIEVEMENTS_DEPENDENCIES = {}
@@ -197,6 +197,20 @@ CLAN_STATS_DEPENDENCIES = {}
 def _set_CLAN_STATS_DEPENDENCIES():
     global CLAN_STATS_DEPENDENCIES
     CLAN_STATS_DEPENDENCIES.update({'battlesCount': [_updateMedalRotmistrov]})
+
+
+CLUB_BATTLES_STAT_DEPENDENCIES = {}
+
+def _set_CLUB_BATTLES_STAT_DEPENDENCIES():
+    global CLUB_BATTLES_STAT_DEPENDENCIES
+    CLUB_BATTLES_STAT_DEPENDENCIES.update({'wins': [_updateStrategicOperations]})
+
+
+CLUB_ACHIEVEMENTS_DEPENDENCIES = {}
+
+def _set_CLUB_ACHIEVEMENTS_DEPENDENCIES():
+    global CLUB_ACHIEVEMENTS_DEPENDENCIES
+    CLUB_ACHIEVEMENTS_DEPENDENCIES.update({'victoryMarchSeries': [_updateMaxVictoryMarchSeries, _updateClubVictoryMarch]})
 
 
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -737,6 +751,32 @@ def _updateCounterblow(dossierDescr, dossierBlockDescr, key, value, prevValue):
         dossierDescr['fortAchievements'][medalName] = newValue
 
 
+def _updateStrategicOperations(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'strategicOperations'
+    medalClass = dossierDescr['achievementsRated7x7'][medalName]
+    newMedalClass = __getNewMedalClass(medalName, value, medalClass)
+    if newMedalClass is not None:
+        dossierDescr['achievementsRated7x7'][medalName] = newMedalClass
+    return
+
+
+def _updateMaxVictoryMarchSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > dossierBlockDescr['maxVictoryMarchSeries']:
+        dossierBlockDescr['maxVictoryMarchSeries'] = value
+
+
+def _updateVictoryMarch(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= RECORD_CONFIGS['victoryMarch']:
+        dossierDescr['singleAchievements']['victoryMarch'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'victoryMarch', 1)
+
+
+def _updateClubVictoryMarch(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= RECORD_CONFIGS['victoryMarch']:
+        dossierDescr['singleAchievementsRated7x7']['victoryMarch'] = 1
+        dossierDescr.addPopUp('singleAchievementsRated7x7', 'victoryMarch', 1)
+
+
 def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):
     medalCfg = RECORD_CONFIGS[medalConfigName]
     maxMedalClass = len(medalCfg)
@@ -763,3 +803,5 @@ def init():
     _set_FORT_MISC_DEPENDENCIES()
     _set_FORT_ACHIEVEMENTS_DEPENDENCIES()
     _set_CLAN_STATS_DEPENDENCIES()
+    _set_CLUB_BATTLES_STAT_DEPENDENCIES()
+    _set_CLUB_ACHIEVEMENTS_DEPENDENCIES()

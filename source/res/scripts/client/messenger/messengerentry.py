@@ -105,6 +105,7 @@ class MessengerEntry(object):
         self.__gui.switch(MESSENGER_SCOPE.LOGIN)
         self.__playerHelper.onDisconnected()
         self.__storage.clear()
+        g_settings.resetUserPreferences()
 
 
 g_instance = MessengerEntry()

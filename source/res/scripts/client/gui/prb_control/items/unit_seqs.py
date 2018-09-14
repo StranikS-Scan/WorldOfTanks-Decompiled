@@ -25,7 +25,7 @@ def UnitsUpdateIterator(requester, data):
 
 
 class UnitsListItem(object):
-    __slots__ = ('cfdUnitID', 'unitMgrID', 'creator', 'rating', 'playersCount', 'commandSize', 'vehicles', 'state', 'isRosterSet', 'peripheryID', 'description')
+    __slots__ = ('cfdUnitID', 'unitMgrID', 'creator', 'rating', 'playersCount', 'commandSize', 'vehicles', 'state', 'isRosterSet', 'peripheryID', 'description', 'isClub', 'extra')
 
     def __init__(self, cfdUnitID, unitMgrID = 0, cmdrRating = 0, peripheryID = 0, unit = None, **kwargs):
         super(UnitsListItem, self).__init__()
@@ -35,6 +35,8 @@ class UnitsListItem(object):
         isRosterSet = False
         creator = None
         description = None
+        isClub = False
+        extra = None
         if unit:
             creator = unit.getCreator()
             if creator is not None:
@@ -46,6 +48,8 @@ class UnitsListItem(object):
             commandSize = len(playersSlots) + len(freeSlots)
             isRosterSet = unit.isRosterSet(ignored=CREATOR_ROSTER_SLOT_INDEXES)
             description = passCensor(unit.getComment())
+            isClub = unit.isClub()
+            extra = unit.getExtra()
         self.cfdUnitID = cfdUnitID
         self.unitMgrID = unitMgrID
         self.creator = creator
@@ -56,6 +60,8 @@ class UnitsListItem(object):
         self.state = UnitState(state)
         self.isRosterSet = isRosterSet
         self.description = description
+        self.isClub = isClub
+        self.extra = extra
         return
 
     def __repr__(self):

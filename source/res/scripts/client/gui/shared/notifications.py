@@ -2,7 +2,7 @@
 from constants import NC_MESSAGE_PRIORITY
 
 class NotificationPriorityLevel(object):
-    HIGH = 'hight'
+    HIGH = 'high'
     MEDIUM = 'medium'
     LOW = 'low'
     RANGE = (HIGH, MEDIUM, LOW)

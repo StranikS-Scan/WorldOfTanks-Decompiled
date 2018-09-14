@@ -43,7 +43,7 @@ class Tutorial(object):
         return
 
     def __del__(self):
-        LOG_MEMORY('Tutorial deleted')
+        pass
 
     def run(self, ctx):
         self._cache = ctx.cache

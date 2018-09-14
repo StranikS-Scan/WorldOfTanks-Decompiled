@@ -3,7 +3,7 @@ import types
 import BigWorld
 import constants
 from chat_shared import CHAT_MEMBER_GROUP
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_DEBUG
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.formatters.invites import AutoInviteTextFormatter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -86,39 +86,6 @@ class _ChannelController(_LobbyLayout):
 
     def _onMembersListChanged(self):
         self._refreshMembersDP()
-
-
-class PrebattleChannelController(_ChannelController):
-
-    def __init__(self, prbType, channel):
-        super(PrebattleChannelController, self).__init__(channel)
-        self.__prbType = prbType
-        self.fireInitEvent()
-
-    def _addListeners(self):
-        super(PrebattleChannelController, self)._addListeners()
-        g_eventBus.addListener(MessengerEvent.PRB_CHANNEL_CTRL_REQUEST_DESTROY, self.__handleRequestToDestroy, scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _removeListeners(self):
-        super(PrebattleChannelController, self)._removeListeners()
-        g_eventBus.removeListener(MessengerEvent.PRB_CHANNEL_CTRL_REQUEST_DESTROY, self.__handleRequestToDestroy, scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _fireInitEvent(self):
-        g_eventBus.handleEvent(MessengerEvent(MessengerEvent.PRB_CHANNEL_CTRL_INITED, {'prbType': self.__prbType,
-         'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _fireDestroyEvent(self):
-        g_eventBus.handleEvent(MessengerEvent(MessengerEvent.PRB_CHANNEL_CTRL_DESTROYED, {'prbType': self.__prbType,
-         'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def __handleRequestToDestroy(self, event):
-        ctx = event.ctx
-        prbType = ctx.get('prbType')
-        if not prbType:
-            LOG_ERROR('Type of prebattle is not defined', ctx)
-            return
-        if prbType is self.__prbType and self._channel:
-            self.proto.channels.removeChannelFromClient(self._channel)
 
 
 class LazyChannelController(_ChannelController):
@@ -249,23 +216,3 @@ class LobbyChannelController(_ChannelController):
     def __me_onUserActionReceived(self, _, user):
         if self._channel.hasMember(user.getID()):
             self._refreshMembersDP()
-
-
-class TrainingChannelController(LobbyChannelController):
-
-    def _addListeners(self):
-        super(TrainingChannelController, self)._addListeners()
-        g_eventBus.addListener(MessengerEvent.PRB_CHANNEL_CTRL_REQUEST_DESTROY, self.__handleRequestToDestroy, scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _removeListeners(self):
-        super(TrainingChannelController, self)._removeListeners()
-        g_eventBus.removeListener(MessengerEvent.PRB_CHANNEL_CTRL_REQUEST_DESTROY, self.__handleRequestToDestroy, scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def __handleRequestToDestroy(self, event):
-        ctx = event.ctx
-        prbType = ctx.get('prbType')
-        if not prbType:
-            LOG_ERROR('Type of prebattle is not defined', ctx)
-            return
-        if prbType is constants.PREBATTLE_TYPE.TRAINING and self._channel:
-            self.proto.channels.removeChannelFromClient(self._channel)

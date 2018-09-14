@@ -8,7 +8,7 @@ import AccountCommands
 from adisp import async
 from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
-from gui.shared.utils.requesters import abstract
+from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
 class RequestProcessor(object):
 
@@ -185,7 +185,7 @@ class UserDossier(object):
         return not self.isHidden and self.isAvailable
 
 
-class DossierRequester(abstract.AbstractSyncDataRequester):
+class DossierRequester(AbstractSyncDataRequester):
 
     def __init__(self):
         super(DossierRequester, self).__init__()

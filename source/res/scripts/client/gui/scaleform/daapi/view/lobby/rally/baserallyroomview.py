@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyRoomView.py
+import constants
+import account_helpers
 from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT
-import account_helpers
 from adisp import process
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString, DialogsInterface
@@ -20,6 +21,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 from messenger.proto.events import g_messengerEvents
+import nations
 
 class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
 
@@ -74,13 +76,16 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         yield self.prbDispatcher.sendUnitRequest(request)
 
     def onUnitPlayersListChanged(self):
-        self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+        if self._candidatesDP is not None:
+            self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+        return
 
     def onUnitPlayerInfoChanged(self, pInfo):
         if pInfo.isInSlot:
             self._updateMembersData()
-        else:
+        elif self._candidatesDP is not None:
             self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+        return
 
     def onUnitPlayerStateChanged(self, pInfo):
         self.__setMemberStatus(pInfo)
@@ -95,8 +100,9 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
     def onUnitPlayerOnlineStatusChanged(self, pInfo):
         if pInfo.isInSlot:
             self.as_setMemberOfflineS(pInfo.slotIdx, pInfo.isOffline())
-        elif self._candidatesDP:
+        elif self._candidatesDP is not None:
             self._candidatesDP.setOnline(pInfo)
+        return
 
     def onUnitPlayerEnterOrLeaveArena(self, pInfo):
         self.__setMemberStatus(pInfo)
@@ -144,8 +150,8 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
 
     def _populate(self):
         super(BaseRallyRoomView, self)._populate()
-        self.startListening()
         self.initCandidatesDP()
+        self.startListening()
         self.addListener(events.CSVehicleSelectEvent.VEHICLE_SELECTED, self._onVehicleSelect)
         self._updateRallyData()
         self._setActionButtonState()
@@ -234,8 +240,9 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
 
     def _onUserActionReceived(self, _, user):
         self._updateRallyData()
-        if self._candidatesDP and self._candidatesDP.hasCandidate(user.getID()):
+        if self._candidatesDP is not None and self._candidatesDP.hasCandidate(user.getID()):
             self.rebuildCandidatesDP()
+        return
 
     def _onUsersReceived(self, _):
         self._updateRallyData()

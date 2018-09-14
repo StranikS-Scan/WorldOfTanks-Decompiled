@@ -2,6 +2,7 @@
 import BigWorld
 import constants
 from constants import PREBATTLE_TYPE
+from debug_utils import LOG_DEBUG
 from helpers import i18n
 from adisp import process
 from gui import game_control, GUI_SETTINGS
@@ -173,21 +174,27 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
         options.append(self._makeItem(USER.COPY_TO_CLIPBOARD, MENU.contextmenu(USER.COPY_TO_CLIPBOARD)))
         options = self._addSquadInfo(options, userCMInfo.isIgnored)
         options = self._addPrebattleInfo(options, userCMInfo)
+        options = self._addClubInfo(options, userCMInfo)
         options = self._addContactsNoteInfo(options, userCMInfo)
         options = self._addAppealInfo(options)
-        options.append(self._makeItem(ignoring, MENU.contextmenu(ignoring)))
+        options = self._addIgnoreInfo(options, userCMInfo)
         options = self._addMutedInfo(options, userCMInfo)
         options = self._addRejectFriendshipInfo(options, userCMInfo)
         options = self._addRemoveFromGroupInfo(options, userCMInfo)
         options = self._addRemoveFriendInfo(options, userCMInfo)
         return options
 
+    def _addIgnoreInfo(self, options, userCMInfo):
+        ignoring = USER.REMOVE_FROM_IGNORED if userCMInfo.isIgnored else USER.ADD_TO_IGNORED
+        options.append(self._makeItem(ignoring, MENU.contextmenu(ignoring), optInitData={'enabled': userCMInfo.isSameRealm}))
+        return options
+
     def _addFriendshipInfo(self, options, userCMInfo):
         if not userCMInfo.isFriend:
-            options.append(self._makeItem(USER.ADD_TO_FRIENDS, MENU.contextmenu(USER.ADD_TO_FRIENDS), optInitData={'enabled': userCMInfo.canAddToFriend}))
+            options.append(self._makeItem(USER.ADD_TO_FRIENDS, MENU.contextmenu(USER.ADD_TO_FRIENDS), optInitData={'enabled': userCMInfo.isSameRealm}))
         elif self.proto.contacts.isBidiFriendshipSupported():
             if USER_TAG.SUB_NONE in userCMInfo.getTags():
-                options.append(self._makeItem(USER.REQUEST_FRIENDSHIP, MENU.contextmenu(USER.ADD_TO_FRIENDS_AGAIN), optInitData={'enabled': userCMInfo.canAddToFriend}))
+                options.append(self._makeItem(USER.REQUEST_FRIENDSHIP, MENU.contextmenu(USER.ADD_TO_FRIENDS_AGAIN), optInitData={'enabled': userCMInfo.isSameRealm}))
         return options
 
     def _addChannelInfo(self, options, userCMInfo):
@@ -207,7 +214,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
 
     def _addRemoveFriendInfo(self, options, userCMInfo):
         if userCMInfo.isFriend:
-            options.append(self._makeItem(USER.REMOVE_FROM_FRIENDS, MENU.contextmenu(USER.REMOVE_FROM_FRIENDS), optInitData={'enabled': userCMInfo.canAddToFriend}))
+            options.append(self._makeItem(USER.REMOVE_FROM_FRIENDS, MENU.contextmenu(USER.REMOVE_FROM_FRIENDS), optInitData={'enabled': userCMInfo.isSameRealm}))
         return options
 
     def _addContactsNoteInfo(self, options, userCMInfo):
@@ -223,6 +230,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
         return options
 
     def _addRejectFriendshipInfo(self, options, userCMInfo):
+        return options
+
+    def _addClubInfo(self, options, userCMInfo):
         return options
 
     @classmethod
@@ -326,7 +336,7 @@ class UserContextMenuInfo(object):
         return None
 
     @property
-    def canAddToFriend(self):
+    def isSameRealm(self):
         roamingCtrl = game_control.g_instance.roaming
         return roamingCtrl.isSameRealm(self.databaseID)
 

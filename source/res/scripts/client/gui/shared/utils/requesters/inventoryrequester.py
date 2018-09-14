@@ -6,9 +6,9 @@ from adisp import async
 from items import vehicles, tankmen, getTypeOfCompactDescr
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.requesters import abstract
+from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
-class InventoryRequester(abstract.AbstractSyncDataRequester):
+class InventoryRequester(AbstractSyncDataRequester):
     VEH_DATA = namedtuple('VEH_DATA', ','.join(['compDescr',
      'descriptor',
      'invID',

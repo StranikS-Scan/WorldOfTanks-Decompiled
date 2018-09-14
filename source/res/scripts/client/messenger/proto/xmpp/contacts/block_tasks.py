@@ -9,26 +9,26 @@ from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.proto.xmpp.xmpp_items import BlockItem
 
-def _syncBlockItem(storage, jid, name = '', dbID = 0):
+def _syncBlockItem(storage, jid, name = '', dbID = 0, clanInfo = None):
     dbID = jid.getDatabaseID()
     user = storage.getUser(dbID, PROTO_TYPE.XMPP)
     if user:
         if user.isCurrentPlayer():
             return None
         if user.getItemType() == XMPP_ITEM_TYPE.BLOCKING_LIST:
-            user.update(name=name, trusted=True)
+            user.update(name=name, clanInfo=clanInfo, trusted=True)
         else:
-            user.update(name=name, item=BlockItem(jid))
+            user.update(name=name, clanInfo=clanInfo, item=BlockItem(jid))
         user.addTags({USER_TAG.MUTED})
     else:
-        user = entities.XMPPUserEntity(dbID, name=name, item=BlockItem(jid), tags={USER_TAG.MUTED})
+        user = entities.XMPPUserEntity(dbID, name=name, clanInfo=clanInfo, item=BlockItem(jid), tags={USER_TAG.MUTED})
         storage.setUser(user)
     return user
 
 
 class _BlockItemTask(ContactTask):
 
-    def sync(self, name, groups, to, from_):
+    def sync(self, name, groups, sub = None, clanInfo = None):
         return self._result
 
 
@@ -51,13 +51,13 @@ class AddBlockItemTask(_BlockItemTask):
 
     def set(self, pyGlooxTag):
         result = blocking_cmd.BlockItemHandler().handleTag(pyGlooxTag)
-        jid, _ = findFirst(None, result, ('', {}))
+        jid, info = findFirst(None, result, ('', {}))
         if jid != self._jid:
             return
         else:
-            user = _syncBlockItem(self.usersStorage, self._jid, name=self._name)
+            user = _syncBlockItem(self.usersStorage, self._jid, **info)
             if user:
-                g_logOutput.debug(CLIENT_LOG_AREA.BLOCK_LIST, 'Block item is added', user)
+                g_logOutput.debug(CLIENT_LOG_AREA.BLOCK_LIST, 'Block item is added', jid, info)
                 self._doNotify(USER_ACTION_ID.IGNORED_ADDED, user)
                 self._doNotify(USER_ACTION_ID.MUTE_SET, user, False)
             self._result = TASK_RESULT.REMOVE
@@ -74,7 +74,7 @@ class RemoveBlockItemTask(_BlockItemTask):
 
     def set(self, pyGlooxTag):
         result = blocking_cmd.UnblockItemHandler().handleTag(pyGlooxTag)
-        jid, _ = findFirst(None, result, ('', {}))
+        jid, info = findFirst(None, result, ('', {}))
         if jid != self._jid:
             return
         else:
@@ -82,7 +82,7 @@ class RemoveBlockItemTask(_BlockItemTask):
             if user and user.getItemType() in XMPP_ITEM_TYPE.BLOCKING_LIST:
                 user.update(item=None)
                 user.removeTags({USER_TAG.MUTED})
-                g_logOutput.debug(CLIENT_LOG_AREA.BLOCK_LIST, 'Block item is removed', user)
+                g_logOutput.debug(CLIENT_LOG_AREA.BLOCK_LIST, 'Block item is removed', jid, info)
                 self._doNotify(USER_ACTION_ID.IGNORED_REMOVED, user)
                 self._doNotify(USER_ACTION_ID.MUTE_UNSET, user, False)
                 if user.isFriend():

@@ -45,11 +45,12 @@ class CallbackDelayer:
 
 class TimeDeltaMeter(object):
 
-    def __init__(self):
-        self.__prevTime = BigWorld.time()
+    def __init__(self, timeFunc = BigWorld.time):
+        self.__timeFunc = timeFunc
+        self.__prevTime = timeFunc()
 
     def measureDeltaTime(self):
-        time = BigWorld.time()
+        time = self.__timeFunc()
         deltaTime = time - self.__prevTime
         self.__prevTime = time
         return deltaTime

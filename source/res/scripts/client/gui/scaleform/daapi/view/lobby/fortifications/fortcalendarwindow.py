@@ -108,7 +108,7 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
                 if dayStartTimestamp == targetDayStartTimestamp:
                     for battle in sorted(battles):
                         startTimestamp = battle.getStartTime()
-                        isInPast = time_utils.isPast(startTimestamp)
+                        isInPast = battle.isEnded()
                         opponentsClanInfo = battle.getOpponentClanInfo()
                         if battle.getType() == BATTLE_ITEM_TYPE.ATTACK:
                             if isInPast:

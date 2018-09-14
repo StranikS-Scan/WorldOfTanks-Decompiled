@@ -14,7 +14,6 @@ class AvatarSyncData(object):
         self.__avatar = avatar
 
     def onAvatarBecomePlayer(self):
-        LOG_DEBUG('AvatarSyncData.onAvatarBecomePlayer')
         self.__isSynchronized = self.__avatar.isSynchronized()
         if not self.__isSynchronized:
             self.__avatar._doCmdStr(AccountCommands.CMD_GET_AVATAR_SYNC, '', self.__onSyncResponse)
@@ -30,7 +29,6 @@ class AvatarSyncData(object):
         return
 
     def __onSyncResponse(self, syncID, resultID, ext = {}):
-        LOG_DEBUG('AvatarSyncData.__onSyncResponse')
         self.__isSynchronized = True
         subscribers = self.__subscribers
         self.__subscribers = []

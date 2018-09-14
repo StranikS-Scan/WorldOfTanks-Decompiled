@@ -1,4 +1,5 @@
 # Embedded file name: scripts/common/items/vehicles.py
+import types
 from collections import namedtuple
 from math import radians, cos, atan, pi
 from functools import partial
@@ -90,7 +91,8 @@ EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'size',
  'hideIfDamaged',
  'type',
- 'isMirrored'])
+ 'isMirrored',
+ 'emblemId'])
 
 def init(preloadEverything, pricesToCollect):
     global g_list
@@ -1587,7 +1589,8 @@ _dictDescrGetters = {'shell': lambda nationID, compTypeID: g_cache.shells(nation
  'vehicleFuelTank': lambda nationID, compTypeID: g_cache.fuelTanks(nationID)[compTypeID]}
 
 def getVehicleType(compactDescr):
-    if isinstance(compactDescr, (long, int)):
+    cdType = type(compactDescr)
+    if cdType is types.IntType or cdType is types.LongType:
         nationID = compactDescr >> 4 & 15
         vehicleTypeID = compactDescr >> 8 & 65535
     else:
@@ -2271,6 +2274,7 @@ def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
     _readPriceForItem(xmlCtx, section, compactDescr)
     if IS_CLIENT or IS_WEB:
         _readUserText(res, section)
+    if IS_CLIENT or IS_WEB or IS_CELLAPP:
         res['primaryArmor'] = _readPrimaryArmor(xmlCtx, section, 'primaryArmor', res['materials'])
     if IS_CLIENT:
         res['ceilless'] = section.readBool('ceilless', False)
@@ -2970,14 +2974,20 @@ _itemTypeNameMap = {'vehicle': 'vehicle',
  'engine': 'vehicleEngine',
  'fuelTank': 'vehicleFuelTank',
  'radio': 'vehicleRadio'}
+_ALLOWED_EMBLEM_SLOTS = ('player',
+ 'clan',
+ 'inscription',
+ 'insigniaOnGun',
+ 'fixedEmblem',
+ 'fixedInscription')
 
 def _readEmblemSlots(xmlCtx, section, subsectionName):
     slots = []
     for sname, subsection in _xml.getChildren(xmlCtx, section, subsectionName):
-        if sname not in ('player', 'clan', 'inscription', 'insigniaOnGun'):
-            _xml.raiseWrongXml(xmlCtx, 'emblemSlots/' + sname, "expected 'player', 'clan', 'inscription' or 'insigniaOnGun'")
+        if sname not in _ALLOWED_EMBLEM_SLOTS:
+            _xml.raiseWrongXml(xmlCtx, 'emblemSlots/' + sname, 'expected ' + str(_ALLOWED_EMBLEM_SLOTS))
         ctx = (xmlCtx, 'emblemSlots/' + sname)
-        descr = EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), intern(sname), subsection.readBool('isMirrored', False))
+        descr = EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), intern(sname), subsection.readBool('isMirrored', False), _xml.readIntOrNone(ctx, subsection, 'emblemId'))
         slots.append(descr)
 
     return slots
@@ -3220,11 +3230,17 @@ def _readDamageStickerTextureParams(xmlCtx, section, raiseError):
     if not section.has_key('texName'):
         if raiseError:
             _xml.raiseWrongXml(xmlCtx, section.name, 'texName for damage sticker is not specified')
-        return None
+        return
     else:
         texParams = {}
         texParams['texName'] = _xml.readNonEmptyString(xmlCtx, section, 'texName')
         texParams['bumpTexName'] = _xml.readNonEmptyString(xmlCtx, section, 'bumpTexName') if section.has_key('bumpTexName') else ''
+        subsection = section['randomYaw']
+        if subsection is not None:
+            texParams['randomYaw'] = subsection.asBool
+        else:
+            texParams['randomYaw'] = True
+        texParams['variation'] = section.readFloat('variation', 0.0)
         v = _xml.readPositiveVector2(xmlCtx, section, 'modelSizes')
         texParams['modelSizes'] = v.tuple()
         return texParams

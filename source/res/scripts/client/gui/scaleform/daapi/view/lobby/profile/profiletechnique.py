@@ -12,6 +12,7 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES
 from nations import NAMES
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
+from gui.shared.gui_items.dossier import dumpDossier
 
 class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
 
@@ -24,7 +25,10 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
         self.as_setInitDataS(self._getInitData())
 
     def _getInitData(self):
-        dropDownProvider = [PROFILE.PROFILE_DROPDOWN_LABELS_ALL, PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL, PROFILE.PROFILE_DROPDOWN_LABELS_TEAM]
+        dropDownProvider = [PROFILE.PROFILE_DROPDOWN_LABELS_ALL,
+         PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL,
+         PROFILE.PROFILE_DROPDOWN_LABELS_TEAM,
+         PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM]
         if isFortificationEnabled():
             dropDownProvider.append(PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES)
         if isFortificationBattlesEnabled():
@@ -78,9 +82,12 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
             stats = vehDossier.getRandomStats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
             if g_itemsCache.items.getItemByCD(int(vehicleIntCD)).level > 4:
-                specialMarksStats.append(AchievementsUtils.packAchievement(stats.getAchievement(MARK_ON_GUN_RECORD), vehDossier, self._userID is None))
+                specialMarksStats.append(AchievementsUtils.packAchievement(stats.getAchievement(MARK_ON_GUN_RECORD), vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None))
         elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_TEAM:
             stats = vehDossier.getTeam7x7Stats()
+            achievementsList = self.__getAchievementsList(stats, vehDossier)
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM:
+            stats = vehDossier.getRated7x7Stats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
         elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL:
             stats = vehDossier.getHistoricalStats()
@@ -104,6 +111,6 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
         packedList = []
         achievements = targetData.getAchievements(True)
         for achievementBlockList in achievements:
-            packedList.append(AchievementsUtils.packAchievementList(achievementBlockList, vehDossier, self._userID is None, True, ACHIEVEMENTS_ALIASES.GREY_COUNTER))
+            packedList.append(AchievementsUtils.packAchievementList(achievementBlockList, vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None, True, ACHIEVEMENTS_ALIASES.GREY_COUNTER))
 
         return packedList

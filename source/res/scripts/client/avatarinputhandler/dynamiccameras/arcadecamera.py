@@ -17,7 +17,7 @@ from AvatarInputHandler.cameras import ICamera, readFloat, readVec2, readBool, r
 import BattleReplay
 import Settings
 import constants
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_WARNING, LOG_ERROR
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return ArcadeCamera(settingsDataSec, None)
@@ -375,16 +375,18 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def __cameraUpdate(self):
         if not (self.__autoUpdateDxDyDz.x == 0.0 and self.__autoUpdateDxDyDz.y == 0.0 and self.__autoUpdateDxDyDz.z == 0.0):
             self.__update(self.__autoUpdateDxDyDz.x, self.__autoUpdateDxDyDz.y, self.__autoUpdateDxDyDz.z)
-        deltaTime = self.measureDeltaTime()
+        inertDt = deltaTime = self.measureDeltaTime()
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             repSpeed = replayCtrl.playbackSpeed
-            if repSpeed == 0:
-                repSpeed = 1e-08
-            deltaTime = deltaTime / repSpeed
+            if repSpeed == 0.0:
+                inertDt = 0.01
+                deltaTime = 0.0
+            else:
+                inertDt = deltaTime = deltaTime / repSpeed
         self.__aimingSystem.update(deltaTime)
         virginShotPoint = self.__aimingSystem.getThirdPersonShotPoint()
-        self.__inputInertia.update(deltaTime)
+        self.__inputInertia.update(inertDt)
         FovExtended.instance().setFovByMultiplier(self.__inputInertia.fovZoomMultiplier)
         unshakenPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.matrix)
         vehMatrix = Math.Matrix(self.__aimingSystem.vehicleMProv)

@@ -49,7 +49,10 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
     def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
         self.__makeMainVO()
 
-    def onConsumablesChanged(self, battleID, consumableOrderTypeID):
+    def onConsumablesChanged(self, unitMgrID):
+        self.__makeMainVO()
+
+    def onUnitExtraChanged(self, extra):
         self.__makeMainVO()
 
     def onFortBattleChanged(self, cache, item, battleItem):
@@ -101,6 +104,15 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
             self.__makeData()
         elif self.fortState.getStateID() == CLIENT_FORT_STATE.CENTER_UNAVAILABLE:
             self.__leaveOnError()
+
+    def onUnitRejoin(self):
+        super(FortClanBattleRoom, self).onUnitRejoin()
+        functional = self.unitFunctional
+        if self._candidatesDP:
+            self._candidatesDP.rebuild(functional.getCandidates())
+        self._updateMembersData()
+        self.__setTimerDelta()
+        self.__updateHeaderTeamSection()
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.SortieCandidatesDP()
@@ -165,11 +177,11 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
     def __makeMainVO(self):
         result = {}
+        extra = self.unitFunctional.getExtra()
         (_, _, arenaTypeID), _ = self.__currentBuilding
         _getText = self.app.utilsManager.textManager.getText
-        fortPermissions = self.fortCtrl.getPermissions()
         unitPermissions = self.unitFunctional.getPermissions()
-        activeConsumes = self.__battle.getActiveConsumables()
+        activeConsumes = extra.getConsumables()
         result['mapID'] = arenaTypeID
         arenaType = ArenaType.g_cache.get(arenaTypeID)
         if arenaType is not None:

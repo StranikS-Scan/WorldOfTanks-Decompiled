@@ -4,7 +4,7 @@ from debug_utils import LOG_ERROR
 from gui import prb_control
 from gui.prb_control.context.unit_ctx import LeaveUnitCtx
 from gui.prb_control.factories.ControlFactory import ControlFactory
-from gui.prb_control.functional.unit import NoUnitFunctional, UnitEntry, UnitIntro, FortBattleEntry
+from gui.prb_control.functional.unit import NoUnitFunctional, UnitEntry, UnitIntro, FortBattleEntry, ClubBattleEntry
 from gui.prb_control.functional.unit import IntroFunctional, UnitFunctional
 from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.items.unit_items import SupportedRosterSettings, DynamicRosterSettings
@@ -14,7 +14,8 @@ _SUPPORTED_ENTRY_BY_ACTION = {_PAN.UNIT: (UnitIntro, (PREBATTLE_TYPE.UNIT,)),
  _PAN.FORT: (UnitIntro, (PREBATTLE_TYPE.SORTIE,))}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.UNIT: UnitEntry,
  PREBATTLE_TYPE.SORTIE: UnitEntry,
- PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntry}
+ PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntry,
+ PREBATTLE_TYPE.CLUBS: ClubBattleEntry}
 
 class UnitFactory(ControlFactory):
 
@@ -37,13 +38,8 @@ class UnitFactory(ControlFactory):
         unitMrg = prb_control.getClientUnitMgr()
         if unitMrg.id and unitMrg.unitIdx:
             unit = prb_control.getUnit(unitMrg.unitIdx, safe=True)
-            prbType = PREBATTLE_TYPE.UNIT
-            if unit.isSortie():
-                prbType = PREBATTLE_TYPE.SORTIE
-            elif unit.isFortBattle():
-                prbType = PREBATTLE_TYPE.FORT_BATTLE
             if unit:
-                unitFunctional = UnitFunctional(prbType, DynamicRosterSettings(unit))
+                unitFunctional = UnitFunctional(unit.getPrebattleType(), DynamicRosterSettings(unit))
                 for listener in dispatcher._globalListeners:
                     unitFunctional.addListener(listener())
 
@@ -67,7 +63,7 @@ class UnitFactory(ControlFactory):
         return PlayerDecorator(info.isCreator(), info.isReady)
 
     def createStateEntity(self, functional):
-        return FunctionalState(CTRL_ENTITY_TYPE.UNIT, functional.getPrbType(), True, functional.hasLockedState(), isinstance(functional, IntroFunctional))
+        return FunctionalState(CTRL_ENTITY_TYPE.UNIT, functional.getPrbType(), True, functional.hasLockedState(), isinstance(functional, IntroFunctional), functional.getState())
 
     def createLeaveCtx(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
         return LeaveUnitCtx(waitingID='prebattle/leave', funcExit=funcExit)

@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/AvatarInputHandler/MapCaseMode.py
-import functools
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler.ArtyHitMarker import ArtyHitMarker
 from AvatarInputHandler.CallbackDelayer import CallbackDelayer
@@ -12,24 +11,26 @@ import Keys
 import Math
 from Math import Matrix, Vector2, Vector3
 import weakref
-from AvatarInputHandler.control_modes import IControlMode, dumpStateEmpty, _createGunMarker, _SuperGunMarker
-from ProjectileMover import getCollidableEntities
+from AvatarInputHandler.control_modes import IControlMode, dumpStateEmpty
 import SoundGroups
 from constants import SERVER_TICK_LENGTH
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from post_processing import g_postProcessing
 from items import vehicles, artefacts
-import Flock
 from constants import AIMING_MODE
-import BattleReplay
 
 class _DefaultStrikeSelector(object):
-    marker = None
 
     def __init__(self, position, equipment):
         self.equipment = equipment
 
     def destroy(self):
+        pass
+
+    def setGUIVisible(self, isVisible):
+        pass
+
+    def onRecreateDevice(self):
         pass
 
     def processSelection(self, position, reset = False):
@@ -43,7 +44,6 @@ class _DefaultStrikeSelector(object):
 
 
 class _ArtilleryStrikeSelector(_DefaultStrikeSelector):
-    maker = property(lambda self: self.__marker)
 
     def __init__(self, position, equipment):
         _DefaultStrikeSelector.__init__(self, position, equipment)
@@ -70,6 +70,14 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector):
         self.__marker.destroy()
         self.__marker = None
         return
+
+    def setGUIVisible(self, isVisible):
+        if self.__marker:
+            self.__marker.setGUIVisible(isVisible)
+
+    def onRecreateDevice(self):
+        if self.__marker:
+            self.__marker.onRecreateDevice()
 
     def __updateMarkerComponent(self, component):
         component.setupFlatRadialDispersion(self.equipment.areaRadius)
@@ -120,11 +128,13 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector):
         return
 
 
+_DEFAULT_STRIKE_DIRECTION = Vector3(1, 0, 0)
+
 class _AreaStrikeSelector(_DefaultStrikeSelector):
 
-    def __init__(self, position, equipment, direction = Vector3(0, 0, 1)):
+    def __init__(self, position, equipment, direction = _DEFAULT_STRIKE_DIRECTION):
         _DefaultStrikeSelector.__init__(self, position, equipment)
-        self.area = BigWorld.player().createEquipmentSelectedArea(position, Vector3(0, 0, 1), equipment)
+        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment)
         self.direction = direction
         self.__sightUpdateActivity = None
         replayCtrl = BattleReplay.g_replayCtrl
@@ -141,6 +151,11 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
         if self.__sightUpdateActivity is not None:
             BigWorld.cancelCallback(self.__sightUpdateActivity)
             self.__sightUpdateActivity = None
+        return
+
+    def setGUIVisible(self, isVisible):
+        if self.area is not None:
+            self.area.setGUIVisible(isVisible)
         return
 
     def processSelection(self, position, reset = False):
@@ -181,7 +196,7 @@ class _BomberStrikeSelector(_AreaStrikeSelector):
     def processSelection(self, position, reset = False):
         if reset:
             self.selectingPosition = True
-            self.direction = Vector3(0, 0, 1)
+            self.direction = _DEFAULT_STRIKE_DIRECTION
             _AreaStrikeSelector.processHover(self, position)
             return False
         else:
@@ -250,11 +265,11 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         return dumpStateEmpty()
 
     def enable(self, **args):
+        ctrlState = args.get('ctrlState')
         SoundGroups.g_instance.changePlayMode(2)
         targetPos = args.get('preferredPos', Vector3(0, 0, 0))
         self.__cam.enable(targetPos, args.get('saveDist', True))
         self.__aimingMode = args.get('aimingMode', self.__aimingMode)
-        self.setGUIVisible(BigWorld.player().isGuiVisible)
         self.__isEnabled = True
         g_postProcessing.enable('strategic')
         BigWorld.setFloraEnabled(False)
@@ -263,6 +278,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
         else:
             self.activateEquipment(equipmentID)
+        self.setGUIVisible(BigWorld.player().isGuiVisible)
         return
 
     def disable(self):
@@ -284,57 +300,61 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
                 if replayCtrl.isPlaying:
                     return True
                 shouldClose = self.__activeSelector.processSelection(self.__getDesiredShotPoint())
-                if shouldClose:
-                    self.turnOff()
+                shouldClose and self.turnOff()
+            return True
+        elif key == Keys.KEY_RIGHTMOUSE and isDown:
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying:
                 return True
-            if key == Keys.KEY_RIGHTMOUSE and isDown:
-                replayCtrl = BattleReplay.g_replayCtrl
-                if replayCtrl.isPlaying:
-                    return True
-                self.__activeSelector.processSelection(self.__getDesiredShotPoint(), True)
+            self.__activeSelector.processSelection(self.__getDesiredShotPoint(), True)
+            return True
+        elif cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying:
+                self.__aih.onControlModeChanged('arcade')
+                arcadeMode = BigWorld.player().inputHandler.ctrls.get('arcade', None)
+                arcadeMode.showGunMarker(False)
                 return True
-            if cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
-                replayCtrl = BattleReplay.g_replayCtrl
-                if replayCtrl.isPlaying:
-                    return True
-                self.turnOff()
+            self.turnOff()
+            return True
+        elif cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
+         CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
+         CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
+         CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
+         CommandMapping.CMD_CM_INCREASE_ZOOM,
+         CommandMapping.CMD_CM_DECREASE_ZOOM), key):
+            dx = dy = dz = 0.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
+                dx = -1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
+                dx = 1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
+                dy = -1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
+                dy = 1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
+                dz = 1.0
+            if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
+                dz = -1.0
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
                 return True
-            if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
-             CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
-             CommandMapping.CMD_CM_CAMERA_ROTATE_UP,
-             CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
-             CommandMapping.CMD_CM_INCREASE_ZOOM,
-             CommandMapping.CMD_CM_DECREASE_ZOOM), key):
-                dx = dy = dz = 0.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
-                    dx = -1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT):
-                    dx = 1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_UP):
-                    dy = -1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN):
-                    dy = 1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_INCREASE_ZOOM):
-                    dz = 1.0
-                if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
-                    dz = -1.0
-                replayCtrl = BattleReplay.g_replayCtrl
-                if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
-                    return True
-                self.__cam.update(dx, dy, dz, False if dx == dy == dz == 0.0 else True)
-                if dx == dy == dz == 0.0:
-                    self.stopCallback(self.__tick)
-                else:
-                    self.delayCallback(0.0, self.__tick)
-                return True
+            self.__cam.update(dx, dy, dz, False if dx == dy == dz == 0.0 else True)
+            if dx == dy == dz == 0.0:
+                self.stopCallback(self.__tick)
+            else:
+                self.delayCallback(0.0, self.__tick)
+            return True
+        else:
             if cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key):
                 replayCtrl = BattleReplay.g_replayCtrl
                 if replayCtrl.isPlaying:
                     return True
-                isDown or MapCaseControlMode.prevCtlMode[MapCaseControlMode.__AIM_MODE] &= -1 - AIMING_MODE.USER_DISABLED
-            else:
-                MapCaseControlMode.prevCtlMode[MapCaseControlMode.__AIM_MODE] |= AIMING_MODE.USER_DISABLED
-        return False
+                if not isDown:
+                    MapCaseControlMode.prevCtlMode[MapCaseControlMode.__AIM_MODE] &= -1 - AIMING_MODE.USER_DISABLED
+                else:
+                    MapCaseControlMode.prevCtlMode[MapCaseControlMode.__AIM_MODE] |= AIMING_MODE.USER_DISABLED
+            return False
 
     def handleMouseEvent(self, dx, dy, dz):
         if not self.__isEnabled:
@@ -377,26 +397,14 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             return hitPosition
         return defaultPoint
 
-    def setReloading(self, duration, startTime):
-        pass
-
-    def setReloadingInPercent(self, percent):
-        pass
-
     def onRecreateDevice(self):
-        marker = self.__activeSelector.marker
-        if marker is not None:
-            marker.onRecreateDevice()
-        return
+        self.__activeSelector.onRecreateDevice()
 
     def getAim(self):
         return None
 
     def setGUIVisible(self, isVisible):
-        marker = self.__activeSelector.marker
-        if marker is not None:
-            marker.setGUIVisible(isVisible)
-        return
+        self.__activeSelector.setGUIVisible(isVisible)
 
     def isManualBind(self):
         return True
@@ -415,6 +423,9 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         self.__aih.onControlModeChanged(prevMode[MapCaseControlMode.__MODE_NAME], preferredPos=prevMode[MapCaseControlMode.__PREFERED_POSITION], aimingMode=prevMode[MapCaseControlMode.__AIM_MODE], saveDist=True, saveZoom=True)
         self.stopCallback(self.__tick)
         self.__cam.update(0.0, 0.0, 0.0, False)
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isRecording:
+            replayCtrl.setEquipmentID(-1)
         return
 
     def activateEquipment(self, equipmentID):
@@ -430,6 +441,8 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setEquipmentID(equipmentID)
+            if not isinstance(BigWorld.player().inputHandler.ctrl, MapCaseControlMode):
+                self.setGUIVisible(False)
             return
 
     def __tick(self):
@@ -452,8 +465,6 @@ def activateMapCase(equipmentID, deactivateCallback):
             if pos is None:
                 pos = Vector3(0.0, 0.0, 0.0)
         MapCaseControlMode.prevCtlMode = [pos, inputHandler.ctrlModeName, inputHandler.ctrl.aimingMode]
-        MapCaseControlMode.setReloading = inputHandler.ctrl.setReloading
-        MapCaseControlMode.setReloadingInPercent = inputHandler.ctrl.setReloadingInPercent
         MapCaseControlMode.getAim = inputHandler.ctrl.getAim
         inputHandler.onControlModeChanged('mapcase', preferredPos=pos, aimingMode=AIMING_MODE.USER_DISABLED, equipmentID=equipmentID)
     return

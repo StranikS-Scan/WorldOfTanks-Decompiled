@@ -50,7 +50,6 @@ class FortIntelFilter(FortIntelFilterMeta, FortViewHelper, AppRef):
         if cache is not None:
             rqIsInCooldown, _ = cache.getRequestCacheCooldownInfo()
             if not rqIsInCooldown:
-                cache.setFirstDefaultQuery(True)
                 self.__resetFilter(True)
         self.__updateFilterStatuses()
         self.as_setDataS(self.__getData())

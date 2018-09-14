@@ -2,7 +2,7 @@
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler, USER
+from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler
 from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.m_constants import USER_TAG
@@ -45,8 +45,12 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
     def __init__(self, cmProxy, ctx = None):
         super(PlayerContactsCMHandler, self).__init__(cmProxy, ctx)
 
-    def setContactNote(self):
+    def createContactNote(self):
         self.fireEvent(events.ContactsEvent(events.ContactsEvent.CREATE_CONTACT_NOTE, ctx={'databaseID': self.databaseID,
+         'userName': self.userName}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def editContactNote(self):
+        self.fireEvent(events.ContactsEvent(events.ContactsEvent.EDIT_CONTACT_NOTE, ctx={'databaseID': self.databaseID,
          'userName': self.userName}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def removeContactNote(self):
@@ -62,8 +66,8 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
 
     def _getHandlers(self):
         handlers = super(PlayerContactsCMHandler, self)._getHandlers()
-        handlers.update({CONTACTS_ACTION_ID.CREATE_CONTACT_NOTE: 'setContactNote',
-         CONTACTS_ACTION_ID.EDIT_CONTACT_NOTE: 'setContactNote',
+        handlers.update({CONTACTS_ACTION_ID.CREATE_CONTACT_NOTE: 'createContactNote',
+         CONTACTS_ACTION_ID.EDIT_CONTACT_NOTE: 'editContactNote',
          CONTACTS_ACTION_ID.REMOVE_CONTACT_NOTE: 'removeContactNote',
          CONTACTS_ACTION_ID.REMOVE_FROM_GROUP: 'removeFromGroup',
          CONTACTS_ACTION_ID.REJECT_FRIENDSHIP: 'rejectFriendship'})

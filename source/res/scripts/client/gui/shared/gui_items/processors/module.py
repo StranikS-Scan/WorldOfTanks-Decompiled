@@ -1,18 +1,15 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/module.py
 import BigWorld
 import AccountCommands
-from adisp import process
 from gui import makeHtmlString
-from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
-from helpers.i18n import makeString
 from debug_utils import LOG_DEBUG
 from gui.SystemMessages import SM_TYPE
-from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess
 from gui.shared.utils.gui_items import formatPrice, VehicleItem
+from helpers import i18n
 
 class ModuleProcessor(ItemProcessor):
     """
@@ -76,25 +73,17 @@ class ModuleBuyer(ModuleTradeProcessor):
     Module buyer
     """
 
-    def __init__(self, item, count, buyForCredits, conflictedEqs = None, install = False):
+    def __init__(self, item, count, buyForCredits):
         """
         Ctor.
         
         @param item: module to install
         @param count: buying count
         @param buyForCredits: buy gold item for credits
-        @param conflictedEqs: conflicted items
         """
         super(ModuleBuyer, self).__init__(item, count, 'buy')
-        conflictedEqs = conflictedEqs or tuple()
-        conflictMsg = ''
-        if conflictedEqs:
-            self.__makeConflictMsg("', '".join([ eq.userName for eq in conflictedEqs ]))
         self.buyForCredits = buyForCredits
-        self.addPlugins((plugins.MoneyValidator(self._getOpPrice()), plugins.ModuleBuyerConfirmator('confirmBuyAndInstall', ctx={'userString': item.userName,
-          'typeString': self.item.userType,
-          'conflictedEqs': conflictMsg,
-          'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice()[0])}, isEnabled=install)))
+        self.addPlugins((plugins.MoneyValidator(self._getOpPrice()),))
 
     def _isItemBuyingForCredits(self):
         if self.buyForCredits:
@@ -125,10 +114,6 @@ class ModuleBuyer(ModuleTradeProcessor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to buy module', self.item, self.count, self._isItemBuyingForCredits())
         BigWorld.player().shop.buy(self.item.itemTypeID, self.item.nationID, self.item.intCD, self.count, int(self._isItemBuyingForCredits()), lambda code: self._response(code, callback))
-
-    def __makeConflictMsg(self, conflictedText):
-        attrs = {'conflicted': conflictedText}
-        return makeHtmlString('html_templates:lobby/shop/system_messages', 'conflicted', attrs)
 
 
 class ModuleSeller(ModuleTradeProcessor):
@@ -401,6 +386,93 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
     def _request(self, callback):
         LOG_DEBUG('Request to equip module', self.vehicle, self.item)
         BigWorld.player().inventory.equip(self.vehicle.invID, self.item.intCD, lambda code, ext: self._response(code, callback, ctx=ext))
+
+
+class BuyAndInstallItemProcessor(ModuleBuyer):
+
+    def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs = None):
+        self.__vehInvID = vehicle.inventoryID
+        self.__slotIdx = int(slotIdx)
+        self.__gunCompDescr = gunCompDescr
+        self.__vehicle = vehicle
+        conflictedEqs = conflictedEqs or tuple()
+        conflictMsg = ''
+        if conflictedEqs:
+            self.__makeConflictMsg("', '".join([ eq.userName for eq in conflictedEqs ]))
+        self.__mayInstall, installReason = item.mayInstall(vehicle, slotIdx)
+        super(BuyAndInstallItemProcessor, self).__init__(item, 1, True)
+        self.addPlugins([plugins.ModuleValidator(item)])
+        if self.__mayInstall:
+            self.addPlugins([plugins.VehicleValidator(vehicle, True, prop={'isBroken': True,
+              'isLocked': True}), plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.ModuleBuyerConfirmator('confirmBuyAndInstall', ctx={'userString': item.userName,
+              'typeString': self.item.userType,
+              'conflictedEqs': conflictMsg,
+              'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice()[0])})])
+            if item.itemTypeID == GUI_ITEM_TYPE.TURRET:
+                self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.__gunCompDescr))
+            elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable))
+            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs)))
+        else:
+            self.addPlugins([plugins.ModuleBuyerConfirmator('confirmBuyNotInstall', ctx={'userString': item.userName,
+              'typeString': self.item.userType,
+              'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice()[0]),
+              'reason': self.__makeInstallReasonMsg(installReason)})])
+
+    def __makeConflictMsg(self, conflictedText):
+        attrs = {'conflicted': conflictedText}
+        return makeHtmlString('html_templates:lobby/shop/system_messages', 'conflicted', attrs)
+
+    def __makeInstallReasonMsg(self, installReason):
+        reasonTxt = ''
+        if installReason is not None:
+            reasonTxt = '#menu:moduleFits/' + installReason.replace(' ', '_')
+        return i18n.makeString(reasonTxt)
+
+    def _successHandler(self, code, ctx = None):
+        if self.__mayInstall:
+            LOG_DEBUG('code, ctx', code, ctx)
+            if self.item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
+                auxData = [makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())]
+            elif self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                auxData = [makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())]
+            elif self.item.itemTypeID == GUI_ITEM_TYPE.TURRET:
+                if self.__gunCompDescr:
+                    gun = g_itemsCache.items.getItemByCD(self.__gunCompDescr)
+                    auxData = [makeI18nSuccess(self._formApplyMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())]
+                else:
+                    auxData = self.__getAdditionalMessages(ctx)
+            else:
+                auxData = self.__getAdditionalMessages(ctx)
+            sysMsgType = SM_TYPE.PurchaseForCredits if self.buyForCredits else SM_TYPE.PurchaseForGold
+            return makeI18nSuccess(self._formMessage('success'), auxData=auxData, type=sysMsgType, **self._getMsgCtx())
+        else:
+            return super(BuyAndInstallItemProcessor, self)._successHandler(code, ctx)
+
+    def __getAdditionalMessages(self, ctx):
+        additionalMessages = []
+        removedItems = []
+        if ctx:
+            for eqKd in ctx.get('incompatibleEqs', []):
+                item = VehicleItem(compactDescr=eqKd)
+                removedItems.append(item.name)
+
+        if removedItems:
+            additionalMessages.append(makeI18nSuccess(self._formApplyMessage('incompatibleEqs'), items="', '".join(removedItems), type=SM_TYPE.Information))
+        additionalMessages.append(makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages, **self._getMsgCtx()))
+        return additionalMessages
+
+    def _formApplyMessage(self, msg):
+        return '%(itemType)s_%(opType)s/%(msg)s' % {'itemType': self.ITEMS_MSG_PREFIXES.get(self.item.itemTypeID, self.DEFAULT_PREFIX),
+         'opType': 'apply',
+         'msg': msg}
+
+    def _request(self, callback):
+        if self.__mayInstall:
+            LOG_DEBUG('Make server request to buyAndInstallModule module', self.__vehInvID, self.item.intCD, self.__slotIdx, self.__gunCompDescr)
+            BigWorld.player().shop.buyAndEquipItem(self.__vehInvID, self.item.intCD, self.__slotIdx, False, self.__gunCompDescr, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
+        else:
+            super(BuyAndInstallItemProcessor, self)._request(callback)
 
 
 def getInstallerProcessor(vehicle, newComponentItem, slotIdx = 0, install = True, isUseGold = False, conflictedEqs = None):

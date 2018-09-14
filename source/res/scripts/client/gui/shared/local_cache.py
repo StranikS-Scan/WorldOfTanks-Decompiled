@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/shared/local_cache.py
 import base64
+import shelve
 from collections import defaultdict
 from contextlib import contextmanager
 import os
@@ -28,6 +29,11 @@ class RedirectIO(CacheIO):
     def __init__(self, redirect = None):
         super(CacheIO, self).__init__()
         self._redirect = redirect or CacheIO()
+
+    def clear(self):
+        if self._redirect is not None:
+            self._redirect.clear()
+        return
 
     def read(self, src):
         result = self._doRead(src)
@@ -103,6 +109,47 @@ class _FileIO(RedirectIO):
             return fd
 
 
+class _ShelveIO(RedirectIO):
+
+    def __init__(self, filePath):
+        super(_ShelveIO, self).__init__()
+        self._filePath = filePath
+        self._db = None
+        return
+
+    def clear(self):
+        if self._db is not None:
+            self._db.close()
+            self._db = None
+        return
+
+    def write(self, dst):
+        self._doWrite(dst)
+
+    def _doRead(self, src):
+        if not self._filePath:
+            return
+        else:
+            try:
+                self._db = src = shelve.open(self._filePath, flag='c', writeback=True)
+            except Exception as error:
+                LOG_WARNING('Can not read cache', self._filePath, error)
+                src = None
+
+            return src
+
+    def _doWrite(self, _):
+        if not self._filePath:
+            return None
+        else:
+            try:
+                self._db.sync()
+            except Exception as error:
+                LOG_WARNING('Can not write cache', self._filePath, error)
+
+            return None
+
+
 _ioMutexes = defaultdict(Lock)
 
 def _readWorker(uniqueID, io, callback):
@@ -125,6 +172,7 @@ class _AsyncIO(RedirectIO):
 
     def clear(self):
         self.onRead.clear()
+        super(_AsyncIO, self).clear()
 
     def read(self, src):
         t = Thread(target=_readWorker, args=(self._uniqueID, self._redirect, self.onRead))
@@ -188,7 +236,7 @@ class CryptIO(RedirectIO):
         return BigWorld.wg_cpdata(dst)
 
 
-def makeFileLocalCachePath(space, tags):
+def makeFileLocalCachePath(space, tags, fileFormat = '.dat'):
     p = os.path
     prefsFilePath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
     dirPath = p.join(p.dirname(prefsFilePath), space)
@@ -207,7 +255,11 @@ def makeFileLocalCachePath(space, tags):
     else:
         LOG_ERROR('Type of tags can be string, unicode or tuple', tagsType, tags)
         return ''
-    return p.join(dirPath, '{0:>s}.dat'.format(base64.b32encode(fileName)))
+    if fileFormat:
+        fileFormat = '.{0:>s}'.format(fileFormat)
+    else:
+        fileFormat = ''
+    return p.join(dirPath, '{0:>s}{1:>s}'.format(base64.b32encode(fileName), fileFormat))
 
 
 class FileLocalCache(object):
@@ -247,3 +299,57 @@ class FileLocalCache(object):
 
     def _setCache(self, data):
         raise NotImplemented
+
+
+class ShelfLocalCache(object):
+    __slots__ = ('_io', '_cache', '_autoflush', 'onRead', '__flushCbID')
+
+    def __init__(self, space, tags, autoflush = 0):
+        super(ShelfLocalCache, self).__init__()
+        filePath = makeFileLocalCachePath(space, tags, fileFormat='')
+        self._io = _AsyncIO(filePath, redirect=_ShelveIO(filePath))
+        self._io.onRead += self._onRead
+        self._cache = None
+        self._autoflush = autoflush
+        self.__flushCbID = None
+        if autoflush > 0:
+            self.__loadFlushCb()
+        self.onRead = Event.Event()
+        return
+
+    def clear(self):
+        self.__clearFlushCb()
+        self._cache = None
+        self._io.clear()
+        self.onRead.clear()
+        return
+
+    def read(self):
+        self._io.read(None)
+        return
+
+    def write(self):
+        self._io.write(None)
+        return
+
+    def _onRead(self, src):
+        if src is not None:
+            self._cache = src
+            BigWorld.callback(0, self.onRead)
+        return
+
+    def __doFlush(self):
+        self.write()
+        self.__loadFlushCb()
+
+    def __loadFlushCb(self):
+        self.__clearFlushCb()
+        if self.__flushCbID is None:
+            self.__flushCbID = BigWorld.callback(self._autoflush, self.__doFlush)
+        return
+
+    def __clearFlushCb(self):
+        if self.__flushCbID is not None:
+            BigWorld.cancelCallback(self.__flushCbID)
+            self.__flushCbID = None
+        return

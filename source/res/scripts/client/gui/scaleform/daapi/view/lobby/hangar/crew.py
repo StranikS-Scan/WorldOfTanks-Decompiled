@@ -1,8 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Crew.py
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.framework import AppRef
+from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
 from gui import SystemMessages
+from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils.functions import getViewName
 from items.tankmen import getSkillsConfig, compareMastery, ACTIVE_SKILLS
 from helpers.i18n import convert
@@ -10,14 +14,16 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import events, g_itemsCache
 from gui.shared.events import LoadViewEvent
 from gui.Scaleform.Waiting import Waiting
-from gui.shared.utils import decorators
+from gui.shared.utils import decorators, sound
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanEquip
 
-class Crew(CrewMeta):
+class Crew(CrewMeta, AppRef):
 
     def __init__(self):
         super(Crew, self).__init__()
+        self.dogSound = None
+        return
 
     def _populate(self):
         super(Crew, self)._populate()
@@ -53,7 +59,7 @@ class Crew(CrewMeta):
                  'slot': slotIdx,
                  'vehicleType': vehicle.shortUserName,
                  'tankType': vehicle.type,
-                 'vehicleElite': vehicle.isPremium,
+                 'vehicleElite': vehicle.isPremium or vehicle.isPremiumIGR,
                  'roles': list(vehicle.descriptor.type.crewRoles[slotIdx])})
 
             tankmenData = []
@@ -104,6 +110,10 @@ class Crew(CrewMeta):
                 tankmenData.append(tankmanData)
 
             self.as_tankmenResponseS(roles, tankmenData)
+            dogName = ''
+            if 'dog' in g_itemsCache.items.getItemByCD(g_currentVehicle.item.intCD).tags:
+                dogName = MENU.HANGAR_CREW_RODY_DOG_NAME
+            self.as_dogResponseS(dogName)
         Waiting.hide('updateTankmen')
         return
 
@@ -111,6 +121,22 @@ class Crew(CrewMeta):
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData,
          'menuEnabled': menuEnabled,
          'currentVehicleId': g_currentVehicle.invID}))
+
+    def onCrewDogMoreInfoClick(self):
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+
+    def onCrewDogItemClick(self):
+        self.__playSound(SoundEffectsId.RUDY_DOG)
+
+    def afterPlayingDogSound(self, *args):
+        self.dogSound = None
+        return
+
+    def __playSound(self, soundID):
+        if self.dogSound is None:
+            self.dogSound = sound.SoundSequence([self.app.soundManager.sounds.getEffectSound(soundID)], afterPlayCB=self.afterPlayingDogSound)
+            self.dogSound.play()
+        return
 
     @decorators.process('equipping')
     def equipTankman(self, tmanInvID, slot):

@@ -7,6 +7,7 @@ from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERROR
 from items import vehicles
+import BattleReplay
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 
 class _GunSettings(namedtuple('_GunSettings', 'clip burst shots')):
@@ -231,7 +232,6 @@ class AmmoReplayRecorder(AmmoController):
 
     def __init__(self):
         super(AmmoReplayRecorder, self).__init__()
-        import BattleReplay
         replayCtrl = BattleReplay.g_replayCtrl
         self.__changeRecord = replayCtrl.setAmmoSetting
         self.__timeRecord = replayCtrl.setGunReloadTime
@@ -252,7 +252,7 @@ class AmmoReplayRecorder(AmmoController):
 
 
 class AmmoReplayPlayer(AmmoController):
-    __slots__ = ('__callbackID', '__isActivated', '__timeGetter', '__percent', '__isContainGunReloads')
+    __slots__ = ('__callbackID', '__isActivated', '__timeGetter', '__percent')
 
     def __init__(self):
         super(AmmoReplayPlayer, self).__init__()
@@ -260,9 +260,7 @@ class AmmoReplayPlayer(AmmoController):
         self.__isActivated = False
         self.__timeGetter = lambda : 0
         self.__percent = None
-        import BattleReplay
         replayCtrl = BattleReplay.g_replayCtrl
-        self.__isContainGunReloads = replayCtrl.replayContainsGunReloads
         replayCtrl.onAmmoSettingChanged += self.__onAmmoSettingChanged
         return
 
@@ -271,7 +269,6 @@ class AmmoReplayPlayer(AmmoController):
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
         self.__timeGetter = lambda : 0
-        import BattleReplay
         BattleReplay.g_replayCtrl.onAmmoSettingChanged -= self.__onAmmoSettingChanged
         super(AmmoReplayPlayer, self).clear()
         return
@@ -280,12 +277,8 @@ class AmmoReplayPlayer(AmmoController):
         self.__percent = None
         if not self.__isActivated:
             self.__isActivated = True
-            if self.__isContainGunReloads:
-                import BattleReplay
-                self.__timeGetter = BattleReplay.g_replayCtrl.getGunReloadAmountLeft
-                self.__timeLoop()
-        if not self.__isContainGunReloads:
-            super(AmmoReplayPlayer, self).setGunReloadTime(timeLeft, baseTime)
+            self.__timeGetter = BattleReplay.g_replayCtrl.getGunReloadAmountLeft
+            self.__timeLoop()
         return
 
     def changeSetting(self, intCD, avatar = None):
@@ -298,7 +291,7 @@ class AmmoReplayPlayer(AmmoController):
         return self.getGunReloadTime() > 0
 
     def isGunReloadTimeInPercent(self):
-        return self.__isContainGunReloads
+        return True
 
     def __timeLoop(self):
         self.__callbackID = None

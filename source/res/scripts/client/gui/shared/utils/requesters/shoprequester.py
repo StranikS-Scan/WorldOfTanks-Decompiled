@@ -5,7 +5,7 @@ from constants import WIN_XP_FACTOR_MODE
 import weakref
 from adisp import async
 from debug_utils import LOG_DEBUG
-from gui.shared.utils.requesters import abstract
+from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
 class ShopCommonStats(object):
     __metaclass__ = ABCMeta
@@ -270,7 +270,7 @@ class ShopCommonStats(object):
         return self.getValue('refSystem', {})
 
 
-class ShopRequester(abstract.AbstractSyncDataRequester, ShopCommonStats):
+class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
 
     def __init__(self):
         super(ShopRequester, self).__init__()

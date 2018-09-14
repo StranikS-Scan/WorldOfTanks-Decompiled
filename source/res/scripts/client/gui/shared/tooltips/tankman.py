@@ -94,7 +94,7 @@ class TankmanStatusField(ToolTipDataField):
                         inactiveRoles.append(role)
 
         if vehicle is not None and nativeVehicle.innationID != vehicle.innationID:
-            if vehicle.isPremium and vehicle.type in nativeVehicle.tags:
+            if (vehicle.isPremium or vehicle.isPremiumIGR) and vehicle.type in nativeVehicle.tags:
                 header = makeString(statusTemplate % 'wrongPremiumVehicle/header')
                 text = makeString(statusTemplate % 'wrongPremiumVehicle/text') % {'vehicle': vehicle.shortUserName}
             else:

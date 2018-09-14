@@ -3,6 +3,7 @@ from collections import namedtuple
 import BigWorld
 import Math
 from constants import EVENT_TYPE as _ET
+from gui.shared.formatters import text_styles
 from items import vehicles, tankmen
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.framework.managers.TextManager import TextManager
@@ -11,6 +12,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import makeHtmlString
 from gui.shared import g_itemsCache
+from gui.shared.utils import makeTupleByDict
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -204,9 +206,9 @@ class VehiclesBonus(SimpleBonus):
                 crewLvl = i18n.makeString('#quests:bonuses/vehicles/crewLvl', tmanRoleLevel)
                 vInfoLabels.append(crewLvl)
             if len(vInfoLabels):
-                result.append(i18n.makeString('#quests:bonuses/vehicles/name', name=item.userName, vehInfo='; '.join(vInfoLabels)))
+                result.append(text_styles.standard(i18n.makeString('#quests:bonuses/vehicles/name', name=text_styles.main(item.userName), vehInfo='; '.join(vInfoLabels))))
             else:
-                result.append(item.userName)
+                result.append(text_styles.main(item.userName))
 
         return result
 
@@ -278,7 +280,8 @@ class TankmenBonus(SimpleBonus):
      'roleLevel',
      'freeXP',
      'skills',
-     'isFemale'])
+     'isFemale',
+     'freeSkills'])
 
     def formatValue(self):
         groups = {}
@@ -291,7 +294,7 @@ class TankmenBonus(SimpleBonus):
                  'roleLevel': roleLevel}
             else:
                 group = groups[tmanInfo.vehicleTypeID]
-                group['skills'] = min(group['skills'], len(tmanInfo.skills))
+                group['skills'] += len(tmanInfo.skills)
                 group['roleLevel'] = min(group['roleLevel'], roleLevel)
 
         result = []
@@ -311,7 +314,7 @@ class TankmenBonus(SimpleBonus):
                 if type(tankmanData) is str:
                     result.append(self._makeTmanInfoByDescr(tankmen.TankmanDescr(compactDescr=tankmanData)))
                 else:
-                    result.append(self._TankmanInfoRecord(**tankmanData))
+                    result.append(makeTupleByDict(self._TankmanInfoRecord, tankmanData))
 
         return result
 
@@ -323,7 +326,7 @@ class TankmenBonus(SimpleBonus):
 
     @classmethod
     def _makeTmanInfoByDescr(cls, td):
-        return cls._TankmanInfoRecord(td.nationID, td.role, td.vehicleTypeID, td.firstNameID, -1, td.lastNameID, -1, td.iconID, -1, td.isPremium, td.roleLevel, td.freeXP, td.skills, td.isFemale)
+        return cls._TankmanInfoRecord(td.nationID, td.role, td.vehicleTypeID, td.firstNameID, -1, td.lastNameID, -1, td.iconID, -1, td.isPremium, td.roleLevel, td.freeXP, td.skills, td.isFemale, [])
 
 
 class PotapovTankmenBonus(TankmenBonus):

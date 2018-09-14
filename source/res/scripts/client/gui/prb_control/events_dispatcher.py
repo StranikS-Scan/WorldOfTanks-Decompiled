@@ -9,7 +9,7 @@ from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, utils
 from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
 from messenger.ext import channel_num_gen
 from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
@@ -89,6 +89,20 @@ class EventDispatcher(AppRef):
         self.addUnitToCarousel(prbType)
         self.showUnitWindow(prbType, modeFlags)
 
+    def loadPreArenaUnit(self, prbType, modeFlags = 0):
+        utils.showInvitationInWindowsBar()
+        self.app.containerManager.clear()
+        self.showUnitPreArenaWindow(prbType, modeFlags)
+
+    def loadPreArenaUnitFromUnit(self, prbType, modeFlags = 0):
+        self._closeUnitWindow()
+        self.removeUnitFromCarousel(prbType)
+        self.loadPreArenaUnit(prbType, modeFlags)
+
+    def loadUnitFromPreArenaUnit(self, prbType, modeFlags = 0):
+        self.loadHangar()
+        self.loadUnit(prbType, modeFlags)
+
     def loadHistoryBattles(self):
         self.addHistoryBattlesToCarousel()
         self.showHistoryBattlesWindow()
@@ -109,6 +123,10 @@ class EventDispatcher(AppRef):
     def unloadUnit(self, prbType):
         self._closeUnitWindow()
         self.removeUnitFromCarousel(prbType)
+        self.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
+
+    def unloadPreArenaUnit(self, prbType):
+        self.loadHangar()
         self.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
 
     def unloadSquad(self):
@@ -247,6 +265,9 @@ class EventDispatcher(AppRef):
             self._fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS, ctx={'modeFlags': modeFlags}))
         else:
             self._fireShowEvent(CYBER_SPORT_ALIASES.CYBER_SPORT_WINDOW_PY)
+
+    def showUnitPreArenaWindow(self, prbType, modeFlags = 0):
+        self._fireShowEvent(CYBER_SPORT_ALIASES.CS_RESPAWN_PY)
 
     def removeUnitFromCarousel(self, prbType):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

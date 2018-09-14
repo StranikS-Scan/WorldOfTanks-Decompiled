@@ -2,6 +2,7 @@
 from messenger import g_settings
 from messenger.m_constants import MESSENGER_SCOPE, PROTO_TYPE
 from messenger.proto.bw_chat2 import chat_handlers
+from messenger.proto.bw_chat2.ClubListener import ClubListener
 from messenger.proto.bw_chat2.VOIPChatProvider import VOIPChatProvider
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IProtoPlugin
@@ -9,7 +10,7 @@ from messenger.proto.bw_chat2.provider import BWChatProvider
 from messenger.proto.bw_chat2.UsersHandler import UsersHandler
 
 class BWProtoPlugin(IProtoPlugin):
-    __slots__ = ('__provider', '__adminChat', '__users', '__arenaChat', '__battleCmd', '__unitChat', '__voipProvider', '__isConnected')
+    __slots__ = ('__provider', '__adminChat', '__users', '__arenaChat', '__battleCmd', '__unitChat', '__clubChat', '__voipProvider', '__isConnected', '__clubListener')
 
     def __init__(self):
         super(BWProtoPlugin, self).__init__()
@@ -24,9 +25,13 @@ class BWProtoPlugin(IProtoPlugin):
         self.__battleCmd.registerHandlers()
         self.__unitChat = chat_handlers.UnitChatHandler(self.__provider, self.__adminChat)
         self.__unitChat.registerHandlers()
+        self.__clubChat = chat_handlers.ClubChatHandler(self.__provider, self.__adminChat)
+        self.__clubChat.registerHandlers()
+        self.__clubListener = None
         self.__voipProvider = VOIPChatProvider(self.__provider)
         self.__voipProvider.registerHandlers()
         self.__isConnected = False
+        return
 
     @property
     def arenaChat(self):
@@ -39,6 +44,10 @@ class BWProtoPlugin(IProtoPlugin):
     @property
     def unitChat(self):
         return self.__unitChat
+
+    @property
+    def clubChat(self):
+        return self.__clubChat
 
     @property
     def adminChat(self):
@@ -67,17 +76,31 @@ class BWProtoPlugin(IProtoPlugin):
             g_messengerEvents.onPluginConnected(PROTO_TYPE.BW_CHAT2)
 
     def view(self, scope):
+        self.__provider.setEnable(True)
         self.__battleCmd.switch(scope)
-        self.__voipProvider.switch(scope)
+        if scope == MESSENGER_SCOPE.LOBBY:
+            self.__clubListener = ClubListener()
+            self.__clubListener.start()
+        elif self.__clubListener:
+            self.__clubListener.stop()
+            self.__clubListener = None
+        return
 
     def disconnect(self):
         if not self.__isConnected:
             return
-        self.__isConnected = False
-        self.__arenaChat.disconnect()
-        self.__unitChat.disconnect()
-        self.__voipProvider.leave()
-        g_messengerEvents.onPluginDisconnected(PROTO_TYPE.BW_CHAT2)
+        else:
+            self.__isConnected = False
+            self.__arenaChat.disconnect()
+            self.__unitChat.disconnect()
+            self.__clubChat.disconnect()
+            self.__voipProvider.leave()
+            self.__provider.setEnable(False)
+            if self.__clubListener:
+                self.__clubListener.stop()
+                self.__clubListener = None
+            g_messengerEvents.onPluginDisconnected(PROTO_TYPE.BW_CHAT2)
+            return
 
     def setFilters(self, msgFilterChain):
         self.__provider.setFilters(msgFilterChain)
@@ -95,6 +118,10 @@ class BWProtoPlugin(IProtoPlugin):
             self.__unitChat.unregisterHandlers()
             self.__unitChat.clear()
             self.__unitChat = None
+        if self.__clubChat:
+            self.__clubChat.unregisterHandlers()
+            self.__clubChat.clear()
+            self.__clubChat = None
         if self.__adminChat:
             self.__adminChat.unregisterHandlers()
             self.__adminChat.clear()
@@ -109,6 +136,9 @@ class BWProtoPlugin(IProtoPlugin):
         if self.__users:
             self.__users.clear()
             self.__users = None
+        if self.__clubListener:
+            self.__clubListener.stop()
+            self.__clubListener = None
         return
 
     def onActionReceived(self, actionID, reqID, args):

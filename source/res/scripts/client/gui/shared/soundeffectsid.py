@@ -8,7 +8,6 @@ class SoundEffectsId(object):
     EARN_CREDITS_GOLD = 'earn_credits_and_gold'
     EARN_CREDITS = 'earn_credits'
     EARN_GOLD = 'earn_gold'
-    TRANSPORT_CONSTRAIN = 'transport_constrain'
     TRANSPORT_ENTER = 'transport_enter'
     TRANSPORT_EXIT = 'transport_exit'
     TRANSPORT_FIRST_STEP = 'transport_first_step'
@@ -47,6 +46,7 @@ class SoundEffectsId(object):
     CS_ANIMATION_DIVISION_UP = 'cs_animation_division_up'
     CS_ANIMATION_DIVISION_UP_ALT = 'cs_animation_division_up_alt'
     CS_ANIMATION_DIVISION_DOWN = 'cs_animation_division_down'
+    RUDY_DOG = 'rody_dog'
 
     @classmethod
     def getEndBuildingProcess(cls, buildingID):

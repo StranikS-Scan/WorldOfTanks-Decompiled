@@ -147,7 +147,8 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
 
 class BattleCommandFactory(IBattleCommandFactory):
 
-    def createByAction(self, actionID, args):
+    @staticmethod
+    def createByAction(actionID, args):
         return _ReceivedCmdDecorator(actionID, args)
 
     def createByName(self, name):

@@ -2,6 +2,8 @@
 import BattleReplay
 import BigWorld
 import constants
+from gui.Scaleform import getNecessaryArenaFrameName
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info import IArenaController, getClientArena, getArenaTypeID
 from gui.battle_control.arena_info.arena_vos import VehicleActions
@@ -161,10 +163,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
                 self.as_setBattleTypeFrameNumS(arena.guiType + 1)
             elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING]:
                 self.as_setBattleTypeNameS('#arenas:type/%s/name' % arenaSubType)
-                astStr = arenaSubType
-                if arenaSubType == 'assault':
-                    astStr = '{0}{1}'.format(arenaSubType, '1' if hasBase else '2')
-                self.as_setBattleTypeFrameNameS(astStr)
+                self.as_setBattleTypeFrameNameS(getNecessaryArenaFrameName(arenaSubType, hasBase))
                 if arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and self.__logArenaUniID == False:
                     self.__logArenaUniID = True
                     from time import strftime, localtime

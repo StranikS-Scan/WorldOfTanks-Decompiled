@@ -189,7 +189,7 @@ class ItemProcessor(Processor):
         super(ItemProcessor, self).__init__(plugins)
         self.item = item
 
-    def _response(self, code, callback, ctx = None):
+    def _response(self, code, callback, ctx = None, errStr = ''):
         """
         Common server response handler. Call corresponded
         method for error or success cases.
@@ -199,7 +199,7 @@ class ItemProcessor(Processor):
         """
         if code < 0:
             LOG_ERROR("Server responses an error [%s] while process %s '%s'" % (code2str(code), self.item.itemTypeName, str(self.item)))
-            return callback(self._errorHandler(code, ctx=ctx))
+            return callback(self._errorHandler(code, ctx=ctx, errStr=errStr))
         return callback(self._successHandler(code, ctx=ctx))
 
 

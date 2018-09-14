@@ -14,13 +14,15 @@ class REQUEST_SCOPE(object):
     FORTIFICATION = 2
     BW_CHAT2 = 3
     XMPP = 4
+    CLUB = 5
 
 
 _REQUEST_SCOPE_TO_EVENT = {REQUEST_SCOPE.GLOBAL: events.CoolDownEvent.GLOBAL,
  REQUEST_SCOPE.PRB_CONTROL: events.CoolDownEvent.PREBATTLE,
  REQUEST_SCOPE.FORTIFICATION: events.CoolDownEvent.FORTIFICATION,
  REQUEST_SCOPE.BW_CHAT2: events.CoolDownEvent.BW_CHAT2,
- REQUEST_SCOPE.XMPP: events.CoolDownEvent.XMPP}
+ REQUEST_SCOPE.XMPP: events.CoolDownEvent.XMPP,
+ REQUEST_SCOPE.CLUB: events.CoolDownEvent.CLUB}
 _g_coolDowns = {}
 
 def isRequestInCoolDown(scopeID, rqTypeID):
@@ -33,10 +35,10 @@ def isRequestInCoolDown(scopeID, rqTypeID):
 
 
 def getRequestCoolDown(scopeID, rqTypeID):
-    result = 0
+    result = 0.0
     uniqueID = (scopeID, rqTypeID)
     if uniqueID in _g_coolDowns:
-        result = max(0, math.ceil(_g_coolDowns[uniqueID] - BigWorld.time()))
+        result = max(0.0, math.ceil(_g_coolDowns[uniqueID] - BigWorld.time()))
     return result
 
 
@@ -62,9 +64,11 @@ def fireCoolDownEvent(scopeID, rqTypeID, coolDown = DEFAULT_COOLDOWN_TO_REQUEST)
 
 class RequestCooldownManager(object):
 
-    def __init__(self, scopeID):
+    def __init__(self, scopeID, commonCooldown = 0.0):
         super(RequestCooldownManager, self).__init__()
         self._scopeID = scopeID
+        self._commonCooldown = commonCooldown
+        self._lastRqTime = -1
 
     def lookupName(self, rqTypeID):
         raise NotImplementedError
@@ -73,10 +77,13 @@ class RequestCooldownManager(object):
         raise NotImplementedError
 
     def isInProcess(self, rqTypeID):
+        commonCooldownLeft = self._getCommonCooldownTimeLeft()
+        if commonCooldownLeft:
+            return True
         return isRequestInCoolDown(self._scopeID, rqTypeID)
 
     def getTime(self, rqTypeID):
-        return getRequestCoolDown(self._scopeID, rqTypeID)
+        return max(getRequestCoolDown(self._scopeID, rqTypeID), self._getCommonCooldownTimeLeft())
 
     def getCoolDownMessage(self, rqTypeID, coolDown = None):
         requestName = self.lookupName(rqTypeID)
@@ -87,12 +94,14 @@ class RequestCooldownManager(object):
     def process(self, rqTypeID, coolDown = None):
         if coolDown is None:
             coolDown = self.getDefaultCoolDown()
+        self._lastRqTime = BigWorld.time()
         setRequestCoolDown(self._scopeID, rqTypeID, coolDown)
         return
 
     def adjust(self, rqTypeID, coolDown = None):
         if coolDown is None:
             coolDown = self.getDefaultCoolDown()
+        self._lastRqTime = BigWorld.time()
         adjustRequestCoolDown(self._scopeID, rqTypeID, coolDown)
         return
 
@@ -111,3 +120,9 @@ class RequestCooldownManager(object):
             coolDown = self.getDefaultCoolDown()
         fireCoolDownEvent(self._scopeID, rqTypeID, coolDown)
         return
+
+    def _getCommonCooldownTimeLeft(self):
+        if not self._commonCooldown:
+            return 0.0
+        cooldownTime = self._lastRqTime + self._commonCooldown
+        return max(0.0, math.ceil(cooldownTime - BigWorld.time()))

@@ -12,6 +12,7 @@ from PlayerEvents import g_playerEvents
 from gui.shared import g_itemsCache
 from helpers.i18n import makeString
 from gui.Scaleform.locale.MENU import MENU
+from gui.shared.gui_items.dossier import dumpDossier
 
 class ProfileSummary(ProfileAchievementSection, ProfileSummaryMeta):
 
@@ -27,8 +28,8 @@ class ProfileSummary(ProfileAchievementSection, ProfileSummaryMeta):
         outcome['maxDestroyedByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
         outcome['globalRating'] = self.getGlobalRating(self._databaseID)
         totalStats = accountDossier.getTotalStats()
-        outcome['significantAchievements'] = AchievementsUtils.packAchievementList(totalStats.getSignificantAchievements(), accountDossier, self._userID is None, False)
-        outcome['nearestAchievements'] = AchievementsUtils.packAchievementList(totalStats.getNearestAchievements(), accountDossier, self._userID is None, True)
+        outcome['significantAchievements'] = AchievementsUtils.packAchievementList(totalStats.getSignificantAchievements(), accountDossier.getDossierType(), dumpDossier(accountDossier), self._userID is None, False)
+        outcome['nearestAchievements'] = AchievementsUtils.packAchievementList(totalStats.getNearestAchievements(), accountDossier.getDossierType(), dumpDossier(accountDossier), self._userID is None, True)
         self.as_responseDossierS(self._battlesType, outcome)
         return
 

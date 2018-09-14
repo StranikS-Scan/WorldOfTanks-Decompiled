@@ -482,6 +482,9 @@ class IUnitListener(IIntroUnitListener):
     def onUnitErrorReceived(self, errorCode):
         pass
 
+    def onUnitExtraChanged(self, extra):
+        pass
+
 
 class IGlobalListener(IPrbListener, IUnitListener, IPreQueueListener):
     pass

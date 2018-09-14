@@ -46,6 +46,9 @@ class PlayersPanel(UIInterface):
             fragsString = format % str(vStatsVO.frags)
         return (format % fullPlayerName, fragsString, format % vInfoVO.vehicleType.shortName)
 
+    def getVehicleNameLength(self):
+        return self.GUICtrl.getVehicleNameLength()
+
     def getPlayerNameLength(self):
         return self.GUICtrl.getPlayerNameLength()
 

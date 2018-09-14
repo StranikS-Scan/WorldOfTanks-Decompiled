@@ -2,7 +2,7 @@
 from collections import deque, defaultdict
 import types
 from debug_utils import LOG_ERROR
-from messenger.m_constants import USER_GUI_TYPE, BREAKERS_MAX_LENGTH
+from messenger.m_constants import USER_GUI_TYPE, BREAKERS_MAX_LENGTH, USER_TAG
 from messenger.storage.local_cache import RevCachedStorage
 
 class UsersStorage(RevCachedStorage):
@@ -150,21 +150,27 @@ class UsersStorage(RevCachedStorage):
 
     def _setClanMembersList(self, members):
         membersIDs = set()
+        tags = {USER_TAG.CLAN_MEMBER}
         for member in members:
             dbID = member.getID()
             if dbID not in self.__contacts:
                 self.__contacts[dbID] = member
             else:
-                self.__contacts[dbID].update(clanMember=member)
+                contact = self.__contacts[dbID]
+                contact.update(name=member.getName(), clanInfo=member.getClanInfo())
+                contact.addTags(tags)
             membersIDs.add(dbID)
 
         removed = self.__clanMembersIDs.difference(membersIDs)
         if len(removed):
             for dbID in removed:
                 if dbID in self.__contacts:
-                    self.__contacts[dbID].update(noClan=True)
+                    contact = self.__contacts[dbID]
+                    contact.removeTags(tags)
+                    contact.update(clanInfo=None)
 
         self.__clanMembersIDs = membersIDs
+        return
 
     def _markAsBreaker(self, dbID, flag):
         if flag:

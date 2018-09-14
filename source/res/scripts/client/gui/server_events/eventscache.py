@@ -78,7 +78,7 @@ class _EventsCache(object):
 
         if diff is not None:
             isQPUpdated = 'quests' in diff
-            isEventsDataUpdated = ('eventsData', '_r') in diff or 'eventsData' in diff
+            isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
             isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
             hasVehicleUnlocks = False
             for intCD in diff.get('stats', {}).get('unlocks', set()):

@@ -58,7 +58,7 @@ class TutorialCache(object):
                 else:
                     self.__cache.setdefault(self.__space, {})
                     self.__cache.update(cache)
-            except (IOError, cPickle.PickleError):
+            except (IOError, EOFError, cPickle.PickleError):
                 LOG_CURRENT_EXCEPTION()
                 if TutorialCache.__internal is not None:
                     self.__cache.update(TutorialCache.__internal)

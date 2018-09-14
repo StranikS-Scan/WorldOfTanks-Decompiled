@@ -37,6 +37,7 @@ _maxFortSortiesInClanBlockBuilder = StaticSizeBlockBuilder('maxFortSortiesInClan
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'IIII', {})
 _a7x7CutBlockBuilder = DictBlockBuilder('a7x7Cut', 'I', 'IIIIIII', {})
+_rated7x7CutBlockBuilder = DictBlockBuilder('rated7x7Cut', 'I', 'IIIIIII', {})
 _historicalCutBlockBuilder = DictBlockBuilder('historicalCut', 'I', 'III', {})
 _fortBattlesCutBlockBuilder = DictBlockBuilder('fortBattlesCut', 'I', 'III', {})
 _fortSortiesCutBlockBuilder = DictBlockBuilder('fortSortiesCut', 'I', 'III', {})
@@ -135,7 +136,8 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'readyForBattleSPG',
  'readyForBattleATSPG',
  'readyForBattleALL',
- 'tankwomenProgress']
+ 'tankwomenProgress',
+ 'testartilleryman']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -240,7 +242,8 @@ _achievements15x15PopUps = ['warrior',
  'readyForBattleHT',
  'readyForBattleSPG',
  'readyForBattleATSPG',
- 'readyForBattleALL']
+ 'readyForBattleALL',
+ 'testartilleryman']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 ACHIEVEMENTS7X7_BLOCK_LAYOUT = ['wolfAmongSheep',
  'wolfAmongSheepMedal',
@@ -302,8 +305,13 @@ _achievement7x7PopUps = ['wolfAmongSheepMedal',
  'bruteForceMedal',
  'battleTested']
 _achievements7x7BlockBuilder = StaticSizeBlockBuilder('achievements7x7', ACHIEVEMENTS7X7_BLOCK_LAYOUT, ACHIEVEMENT7X7_DEPENDENCIES, _achievement7x7PopUps)
-ACHIEVEMENTSRATED7X7_BLOCK_LAYOUT = ['tacticalAdvantage']
-_achievementRated7x7PopUps = ['tacticalAdvantage']
+ACHIEVEMENTSRATED7X7_BLOCK_LAYOUT = ['tacticalAdvantage',
+ 'tacticalSkill',
+ 'secretOperations',
+ 'victoryMarchClubDBID',
+ 'victoryMarchSeries',
+ 'maxVictoryMarchSeries']
+_achievementRated7x7PopUps = ['tacticalAdvantage', 'tacticalSkill', 'secretOperations']
 _achievementsRated7x7BlockBuilder = StaticSizeBlockBuilder('achievementsRated7x7', ACHIEVEMENTSRATED7X7_BLOCK_LAYOUT, ACHIEVEMENTRATED7X7_DEPENDENCIES, _achievementRated7x7PopUps)
 HISTORICAL_ACHIEVEMENTS_BLOCK_LAYOUT = ['guardsman',
  'makerOfHistory',
@@ -323,7 +331,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'deathTrack',
  'firstMerit',
  'tankwomen',
- 'operationWinter']
+ 'operationWinter',
+ 'victoryMarch']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -336,7 +345,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'deathTrack',
  'firstMerit',
  'tankwomen',
- 'operationWinter']
+ 'operationWinter',
+ 'victoryMarch']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -432,4 +442,5 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _clanAchievementsBlockBuilder,
  _rated7x7BlockBuilder,
  _maxRated7x7BlockBuilder,
- _achievementsRated7x7BlockBuilder)
+ _achievementsRated7x7BlockBuilder,
+ _rated7x7CutBlockBuilder)

@@ -42,8 +42,8 @@ class FortIntelligenceClanFilterPopover(View, FortIntelligenceClanFilterPopoverM
         cache = self.fortCtrl.getPublicInfoCache()
         if cache:
             minClanLevel, maxClanLevel, startDefenseHour, availability = cache.getDefaultFilterData()
-            selectedDate = time.localtime(time_utils.getTimeForUTC(time_utils.getCurrentTimestamp(), startDefenseHour))
-            startDefenseHour, startDefenseMin = selectedDate.tm_hour, selectedDate.tm_min
+            selectedDate = time.localtime(time_utils.getTimeForLocal(time_utils.getCurrentTimestamp(), max(0, startDefenseHour)))
+            startDefenseMin = selectedDate.tm_min
         data = {'minClanLevel': minClanLevel,
          'maxClanLevel': maxClanLevel,
          'startDefenseHour': startDefenseHour,

@@ -22,7 +22,6 @@ from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from gui import DialogsInterface
 from messenger import MessengerEntry
-from messenger.proto.bw import battle_chat_cmd
 import Event
 from AvatarInputHandler.control_modes import VideoCameraControlMode
 from AvatarInputHandler.control_modes import CatControlMode
@@ -48,7 +47,6 @@ class BattleReplay():
     ping = property(lambda self: self.__replayCtrl.ping)
     isLaggingNow = property(lambda self: self.__replayCtrl.isLaggingNow)
     playbackSpeed = property(lambda self: self.__replayCtrl.playbackSpeed)
-    replayContainsGunReloads = property(lambda self: self.__replayCtrl.replayContainsGunReloads)
     scriptModalWindowsEnabled = property(lambda self: self.__replayCtrl.scriptModalWindowsEnabled)
     currentTime = property(lambda self: self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME))
     warpTime = property(lambda self: self.__warpTime)
@@ -105,6 +103,7 @@ class BattleReplay():
         self.__warpTime = -1.0
         self.__skipMessage = False
         self.__equipmentId = None
+        self.__rewind = False
         self.replayTimeout = 0
         self.enableAutoRecordingBattles(True)
         gui.Scaleform.CursorDelegator.g_cursorDelegator.detachCursor()
@@ -395,6 +394,12 @@ class BattleReplay():
             dir = defaultDir
         return (diameter, pos, dir)
 
+    def getGunMarkerPos(self):
+        return self.__replayCtrl.gunMarkerPosition
+
+    def getEquipmentId(self):
+        return self.__equipmentId
+
     def setArcadeGunMarkerSize(self, size):
         self.__replayCtrl.setArcadeGunMarkerSize(size)
 
@@ -431,13 +436,6 @@ class BattleReplay():
     def setGunReloadTime(self, startTime, duration):
         self.__replayCtrl.setGunReloadTime(startTime, duration)
 
-    def getConsumableSlotCooldownAmount(self, idx):
-        return self.__replayCtrl.getConsumableSlotCooldownAmount(idx)
-
-    def setActiveConsumableSlot(self, idx):
-        if idx <= 2:
-            self.__replayCtrl.setActiveConsumableSlot(idx)
-
     def setArenaPeriod(self, period, length):
         if not self.isRecording:
             raise AssertionError
@@ -464,16 +462,16 @@ class BattleReplay():
             vehicleID = BigWorld.player().playerVehicleID
         self.__replayCtrl.playerVehicleID = vehicleID
 
-    def setPlaybackSpeedIdx(self, value):
+    def setPlaybackSpeedIdx(self, value, forceEffectSop = False):
         if self.isTimeWarpInProgress:
             return
         self.__savedPlaybackSpeedIdx = self.__playbackSpeedIdx
         self.__playbackSpeedIdx = value
         newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
-        self.__enableInGameEffects(0 < newSpeed < 8.0)
+        self.__enableInGameEffects(0.0 < newSpeed < 8.0 and not forceEffectSop)
         player = BigWorld.player()
         if newSpeed != self.__replayCtrl.playbackSpeed:
-            if newSpeed == 0.0:
+            if newSpeed == 0:
                 self.__gunWasLockedBeforePause = player.gunRotator._VehicleGunRotator__isLocked
                 player.gunRotator.lock(True)
                 self.__showInfoMessage('replayPaused')
@@ -657,8 +655,7 @@ class BattleReplay():
 
     def onChatAction(self, chatAction):
         if self.isPlaying:
-            cmd = battle_chat_cmd.makeDecorator(chatAction)
-            self.onCommandReceived(cmd)
+            pass
 
     def setFpsPingLag(self, fps, ping, isLaggingNow):
         if self.isPlaying:
@@ -787,15 +784,17 @@ class BattleReplay():
                 self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
             self.__isFinished = False
             self.__warpTime = time
-            self.__enableInGameEffects(False)
-            rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
-            AreaDestructibles.g_destructiblesManager.onBeforeReplayTimeWarp(rewind)
+            self.__rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
+            AreaDestructibles.g_destructiblesManager.onBeforeReplayTimeWarp(self.__rewind)
             self.__updateGunOnTimeWarp = True
             EffectsList.EffectsListPlayer.clear()
-            if rewind:
+            if self.__rewind:
                 playerControlMode = BigWorld.player().inputHandler.ctrl
                 self.__wasVideoBeforeRewind = isinstance(playerControlMode, VideoCameraControlMode)
                 self.__videoCameraMatrix.set(BigWorld.camera().matrix)
+                self.setPlaybackSpeedIdx(self.__playbackSpeedModifiers.index(1.0), True)
+                BigWorld.PyGroundEffectManager().stopAll()
+            self.__enableInGameEffects(False)
             if not self.__replayCtrl.beginTimeWarp(time):
                 self.__cleanupAfterTimeWarp()
                 return
@@ -809,13 +808,13 @@ class BattleReplay():
             self.__enableInGameEffects(False)
             self.__timeWarpCleanupCb = BigWorld.callback(0, self.__cleanupAfterTimeWarp)
         else:
-            BigWorld.wg_enableGUIBackground(False, False)
-            newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
-            self.__enableInGameEffects(0 < newSpeed < 8.0)
             if self.__timeWarpCleanupCb is not None:
                 BigWorld.cancelCallback(self.__timeWarpCleanupCb)
                 self.__timeWarpCleanupCb = None
             self.__warpTime = -1.0
+            if not self.__rewind:
+                BigWorld.wg_enableGUIBackground(False, False)
+                self.__enableInGameEffects(0 < self.__playbackSpeedModifiers[self.__playbackSpeedIdx] < 8.0)
             if self.__wasVideoBeforeRewind:
                 BigWorld.player().inputHandler.onControlModeChanged('video', prevModeName='arcade', camMatrix=self.__videoCameraMatrix)
                 self.__wasVideoBeforeRewind = False
@@ -848,6 +847,10 @@ class BattleReplay():
         else:
             return False
 
+    def onArenaLoaded(self):
+        self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
+        BigWorld.wg_enableGUIBackground(False, False)
+
     def onSetCruiseMode(self, mode):
         if self.isRecording:
             self.__replayCtrl.onSetCruiseMode(mode)
@@ -870,10 +873,15 @@ class BattleReplay():
         self.__replayCtrl.onSetEquipmentID(value)
 
     def onSetEquipmentId(self, equipmentId):
-        self.__equipmentId = equipmentId
-        mapCaseMode = BigWorld.player().inputHandler.ctrls.get('mapcase', None)
-        if mapCaseMode is not None:
-            mapCaseMode.activateEquipment(equipmentId)
+        arcadeMode = BigWorld.player().inputHandler.ctrls.get('arcade', None)
+        if equipmentId != -1:
+            self.__equipmentId = equipmentId
+            arcadeMode.showGunMarker(False)
+            mapCaseMode = BigWorld.player().inputHandler.ctrls.get('mapcase', None)
+            if mapCaseMode is not None:
+                mapCaseMode.activateEquipment(equipmentId)
+        else:
+            arcadeMode.showGunMarker(True)
         return
 
 

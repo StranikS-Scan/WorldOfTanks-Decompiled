@@ -103,6 +103,7 @@ class TextIcons:
     XP = 'xp'
     FREE_XP = 'freeXP'
     ARROW_BUTTON = 'arrowButton'
+    NO_SEASON = 'noSeason'
     ICONS = (NUT_ICON,
      PERCENT_ICON,
      ALERT_ICON,
@@ -121,4 +122,5 @@ class TextIcons:
      GOLD,
      XP,
      FREE_XP,
-     ARROW_BUTTON)
+     ARROW_BUTTON,
+     NO_SEASON)

@@ -213,6 +213,7 @@ class CoolDownEvent(SharedEvent):
     FORTIFICATION = 'fortificationCoolDown'
     BW_CHAT2 = 'bwChat2CoolDown'
     XMPP = 'xmppCoolDown'
+    CLUB = 'club'
 
     def __init__(self, eventType = None, requestID = 0, coolDown = 5.0):
         super(CoolDownEvent, self).__init__(eventType)
@@ -336,11 +337,14 @@ class OpenLinkEvent(SharedEvent):
     FORT_DESC = 'fortDescription'
     CLAN_SEARCH = 'clanSearch'
     CLAN_CREATE = 'clanCreate'
+    CLUB_SETTINGS = 'clubSettings'
+    CLUB_HELP = 'clubHelp'
     INVIETES_MANAGEMENT = 'invitesManagementURL'
 
-    def __init__(self, eventType, url = ''):
+    def __init__(self, eventType, url = '', title = ''):
         super(OpenLinkEvent, self).__init__(eventType)
         self.url = url
+        self.title = title
 
 
 class CalendarEvent(SharedEvent):
@@ -368,3 +372,20 @@ class BubbleTooltipEvent(LobbySimpleEvent):
 
     def getDuration(self):
         return self.__duration
+
+
+class WGNCShowItemEvent(SharedEvent):
+    SHOW_BASIC_WINDOW = 'wgnc/basicWindow/show'
+    SHOW_POLL_WINDOW = 'wgnc/pollWindow/show'
+    CLOSE_POLL_WINDOW = 'wgnc/pollWindow/close'
+
+    def __init__(self, notID, target, eventType = None):
+        super(WGNCShowItemEvent, self).__init__(eventType)
+        self.__notID = notID
+        self.__target = target
+
+    def getNotID(self):
+        return self.__notID
+
+    def getTarget(self):
+        return self.__target

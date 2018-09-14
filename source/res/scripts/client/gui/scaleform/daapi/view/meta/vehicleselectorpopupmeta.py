@@ -21,6 +21,6 @@ class VehicleSelectorPopupMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setListMode(isMultipleSelect)
 
-    def as_setInfoTextS(self, text):
+    def as_setInfoTextS(self, text, componentsOffset):
         if self._isDAAPIInited():
-            return self.flashObject.as_setInfoText(text)
+            return self.flashObject.as_setInfoText(text, componentsOffset)

@@ -183,6 +183,15 @@ class PotapovQuestsTileContext(ToolTipContext):
         return g_eventsCache.potapov.getTiles().get(tileID)
 
 
+class QuestContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude = None):
+        super(QuestContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+
+    def buildItem(self, eventID):
+        return g_eventsCache.getEvents().get(eventID, None)
+
+
 class HangarContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude = None):

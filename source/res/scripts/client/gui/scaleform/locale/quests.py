@@ -83,6 +83,7 @@ class QUESTS(object):
     QUESTS_LIST_CLICKCHECKBOX = '#quests:quests/list/clickCheckbox'
     QUESTS_TABS_NOSELECTED_TEXT = '#quests:quests/tabs/noselected/text'
     QUESTS_TABS_AWARD_TEXT = '#quests:quests/tabs/award/text'
+    QUESTS_TABS_ADDAWARD_TEXT = '#quests:quests/tabs/addAward/text'
     ITEM_TYPE_ACTION = '#quests:item/type/action'
     ITEM_TYPE_QUEST = '#quests:item/type/quest'
     ITEM_TYPE_QUESTDAILY = '#quests:item/type/questDaily'
@@ -682,17 +683,17 @@ class QUESTS(object):
     QUESTTASKDETAILSVIEW_TASKDESCRIPTION_DOPREVTASKS = '#quests:QuestTaskDetailsView/taskDescription/doPrevTasks'
     QUESTTASKDETAILSVIEW_TASKDESCRIPTION_ONLYONETASK = '#quests:QuestTaskDetailsView/taskDescription/onlyOneTask'
     QUESTTASKDETAILSVIEW_FORADDITIONALAWARD = '#quests:QuestTaskDetailsView/forAdditionalAward'
-    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK3)
-    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3)
     QUESTSCONTROL_ADDITIONALTITLE_ENUM = (QUESTSCONTROL_ADDITIONALTITLE_NEEDRECEIVEDAWARD,
      QUESTSCONTROL_ADDITIONALTITLE_FREESLOTSANDFREEQUESTS,
      QUESTSCONTROL_ADDITIONALTITLE_FIRSTRUN,
      QUESTSCONTROL_ADDITIONALTITLE_EMPTY)
+    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3)
+    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK3)
 
     @staticmethod
-    def questspersonalwelcomeview_textblock_header(key):
-        outcome = '#quests:QuestsPersonalWelcomeView/textBlock/header/%s' % key
-        if outcome not in QUESTS.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:
+    def questscontrol_additionaltitle(key):
+        outcome = '#quests:questsControl/additionalTitle/%s' % key
+        if outcome not in QUESTS.QUESTSCONTROL_ADDITIONALTITLE_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 
@@ -704,8 +705,8 @@ class QUESTS(object):
         return outcome
 
     @staticmethod
-    def questscontrol_additionaltitle(key):
-        outcome = '#quests:questsControl/additionalTitle/%s' % key
-        if outcome not in QUESTS.QUESTSCONTROL_ADDITIONALTITLE_ENUM:
+    def questspersonalwelcomeview_textblock_header(key):
+        outcome = '#quests:QuestsPersonalWelcomeView/textBlock/header/%s' % key
+        if outcome not in QUESTS.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome

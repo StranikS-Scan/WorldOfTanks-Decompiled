@@ -3,7 +3,7 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class StaticFormationProfileWindowMeta(DAAPIModule):
 
-    def actionBtnClickHandler(self):
+    def actionBtnClickHandler(self, action):
         self._printOverrideError('actionBtnClickHandler')
 
     def hyperLinkHandler(self, value):
@@ -21,6 +21,10 @@ class StaticFormationProfileWindowMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_updateFormationInfo(data)
 
-    def as_updateActionButtonS(self, lbl, enabled):
+    def as_updateActionButtonS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_updateActionButton(lbl, enabled)
+            return self.flashObject.as_updateActionButton(data)
+
+    def as_showViewS(self, idx):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showView(idx)

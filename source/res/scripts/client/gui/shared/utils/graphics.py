@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/gui/shared/utils/graphics.py
-from collections import namedtuple
 import BigWorld
+import math
+from collections import namedtuple
 from debug_utils import LOG_WARNING
 from gui.doc_loaders.GraphicsPresetsLoader import GraphicsPresetsLoader
 from gui.shared.utils import CONST_CONTAINER
+import GUI
 MIN_SCREEN_WIDTH = 1024
 MIN_SCREEN_HEIGHT = 768
 MIN_COLOR_DEPTH = 23
@@ -12,6 +14,7 @@ _g_graphPresets = None
 GraphicSetting = namedtuple('GraphicSetting', 'label value options hint advanced needRestart delayed')
 VideoMode = namedtuple('VideoMode', 'index width height colorDepth label refreshRate')
 WindowSize = namedtuple('WindowSize', 'width height refreshRate')
+SCALE_PREFIX = ('auto', 'x%d')
 
 class GRAPHICS_SETTINGS(CONST_CONTAINER):
     RENDER_PIPELINE = 'RENDER_PIPELINE'
@@ -146,6 +149,52 @@ def getGraphicSettingImages(settingName):
     return result
 
 
+def getResolution():
+    currWindowSize = g_monitorSettings.currentWindowSize
+    width = currWindowSize.width if currWindowSize.width > 0 else MIN_SCREEN_WIDTH
+    height = currWindowSize.height if currWindowSize.height > 0 else MIN_SCREEN_HEIGHT
+    return WindowSize(min(width, MIN_SCREEN_WIDTH), min(height, MIN_SCREEN_HEIGHT), currWindowSize.refreshRate)
+
+
+def getInterfaceScalesList(size, powerOfTwo = True):
+    result = [SCALE_PREFIX[0]]
+    if powerOfTwo:
+        scale = max(min(int(math.log(max(size[0] / getResolution().width, 1.0), 2)), int(math.log(max(size[1] / getResolution().height, 1.0), 2))), 0)
+        for size in xrange(scale + 1):
+            result.append(SCALE_PREFIX[1] % 2 ** size)
+
+    else:
+        scale = min(int(size[0] / MIN_SCREEN_WIDTH), int(size[1] / MIN_SCREEN_HEIGHT))
+        for i in xrange(1, scale):
+            result.append(SCALE_PREFIX[1] % i)
+
+    return result
+
+
+def getScaleByIndex(ind, powerOfTwo = True):
+    scaleLength = getScaleLength()
+    if powerOfTwo:
+        if ind == 0:
+            return 2.0 ** (scaleLength - 2)
+        else:
+            return 2.0 ** (ind - 1)
+    else:
+        if ind == 0:
+            return scaleLength - 1
+        return ind
+
+
+def getScaleLength():
+    from account_helpers.settings_core.SettingsCore import g_settingsCore
+    from account_helpers.settings_core import settings_constants
+    options = g_settingsCore.options.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)._getOptions()
+    if g_settingsCore.getSetting(settings_constants.GRAPHICS.FULLSCREEN):
+        scaleLength = len(options[1][g_monitorSettings.activeMonitor][g_settingsCore.getSetting(settings_constants.GRAPHICS.RESOLUTION)])
+    else:
+        scaleLength = len(options[0][g_monitorSettings.activeMonitor][g_settingsCore.getSetting(settings_constants.GRAPHICS.WINDOW_SIZE)])
+    return scaleLength
+
+
 class MonitorSettings(object):
 
     def __init__(self):
@@ -198,6 +247,11 @@ class MonitorSettings(object):
         curWindowSize = self.currentWindowSize
         if curWindowSize.width != width or curWindowSize.height != height:
             BigWorld.resizeWindow(width, height)
+
+    def setGlyphCache(self, scale = 1):
+        textureSize = 1024 * math.ceil(scale)
+        raise hasattr(GUI, 'wg_setGlyphCacheParams') or AssertionError('GUI.wg_setGlyphCacheParams() is not defined')
+        GUI.wg_setGlyphCacheParams(1, textureSize, textureSize)
 
     @property
     def activeMonitor(self):

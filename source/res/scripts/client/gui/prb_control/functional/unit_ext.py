@@ -3,7 +3,7 @@ import time
 import BigWorld
 import weakref
 from PlayerEvents import g_playerEvents
-from UnitBase import UNIT_ERROR, UNIT_SLOT, INV_ID_CLEAR_VEHICLE
+from UnitBase import UNIT_ERROR, UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_BROWSER_TYPE
 from account_helpers import getPlayerDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
@@ -154,6 +154,7 @@ def _getUnitFromFortBattleCache(unitIdx):
 
 
 _UNIT_GETTER_BY_PRB_TYPE = {PREBATTLE_TYPE.UNIT: _getUnitFromBrowser,
+ PREBATTLE_TYPE.CLUBS: _getUnitFromBrowser,
  PREBATTLE_TYPE.SORTIE: _getUnitFromSortieCache,
  PREBATTLE_TYPE.FORT_BATTLE: _getUnitFromFortBattleCache}
 
@@ -398,7 +399,7 @@ class UnitsListRequester(interfaces.IPrbListRequester):
     def __del__(self):
         LOG_DEBUG('Units list requester deleted:', self)
 
-    def subscribe(self, vehTypes):
+    def subscribe(self, unitTypeFlags):
         if self.__isSubscribed:
             return
         self.__isSubscribed = True
@@ -409,7 +410,7 @@ class UnitsListRequester(interfaces.IPrbListRequester):
              REQUEST_TYPE.UNITS_REFRESH: self.__refresh,
              REQUEST_TYPE.UNITS_NAV_LEFT: self.__navLeft,
              REQUEST_TYPE.UNITS_NAV_RIGHT: self.__navRight}
-            browser.subscribe(vehTypes=vehTypes)
+            browser.subscribe(unitTypeFlags=unitTypeFlags)
             browser.onResultsReceived += self.__unitBrowser_onUnitsListReceived
             browser.onResultsUpdated += self.__unitBrowser_onUnitsListUpdated
         else:
@@ -497,11 +498,11 @@ class UnitsListRequester(interfaces.IPrbListRequester):
 
     def __recenter(self, browser, **kwargs):
         result = False
-        if 'vehTypes' in kwargs:
-            browser.recenter(g_itemsCache.items.stats.globalRating, vehTypes=kwargs['vehTypes'])
+        if 'unitTypeFlags' in kwargs:
+            browser.recenter(g_itemsCache.items.stats.globalRating, unitTypeFlags=kwargs['unitTypeFlags'])
             result = True
         else:
-            LOG_ERROR('Types of vehicles are not defined', kwargs)
+            LOG_ERROR('Types of units are not defined', kwargs)
         return result
 
     def __refresh(self, browser, **kwargs):
@@ -520,11 +521,11 @@ class UnitsListRequester(interfaces.IPrbListRequester):
 
 _g_listReq = None
 
-def initListReq(vehTypes):
+def initListReq(unitTypeFlags):
     global _g_listReq
     if _g_listReq is None:
         _g_listReq = UnitsListRequester()
-        _g_listReq.subscribe(vehTypes)
+        _g_listReq.subscribe(unitTypeFlags)
     return _g_listReq
 
 

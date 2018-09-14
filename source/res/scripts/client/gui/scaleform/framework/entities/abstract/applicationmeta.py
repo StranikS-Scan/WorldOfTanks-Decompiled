@@ -33,9 +33,6 @@ class ApplicationMeta(DAAPIModule):
     def setStatsStorage(self, mgr):
         self._printOverrideError('setStatsStorage')
 
-    def setGuiItemsMgr(self, mgr):
-        self._printOverrideError('setGuiItemsMgr')
-
     def setVoiceChatMgr(self, mgr):
         self._printOverrideError('setVoiceChatMgr')
 
@@ -73,6 +70,6 @@ class ApplicationMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_registerManagers()
 
-    def as_updateStageS(self, w, h):
+    def as_updateStageS(self, w, h, scale):
         if self._isDAAPIInited():
-            return self.flashObject.as_updateStage(w, h)
+            return self.flashObject.as_updateStage(w, h, scale)

@@ -799,6 +799,9 @@ class PotapovQuest(Quest):
     def isCompleted(self, progress = None, isRewardReceived = None):
         return self.isMainCompleted(isRewardReceived) or self.isFullCompleted(isRewardReceived)
 
+    def canBeSelected(self):
+        return self.isUnlocked() and not self.isFullCompleted() and not self.isInProgress()
+
     def isDone(self):
         return self.__checkForStates(_PQS.ALL_REWARDS_GOTTEN)
 

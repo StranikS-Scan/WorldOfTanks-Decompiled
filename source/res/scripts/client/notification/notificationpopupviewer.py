@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
-from gui.shared.events import OpenLinkEvent
 from gui.shared.notifications import NotificationPriorityLevel
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
@@ -26,9 +25,6 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
 
     def onClickAction(self, typeID, entityID, action):
         NotificationMVC.g_instance.handleAction(typeID, entityID, action)
-
-    def onSecuritySettingsLinkClick(self):
-        self.fireEvent(OpenLinkEvent(OpenLinkEvent.SECURITY_SETTINGS))
 
     def onMessageHided(self, byTimeout, wasNotified):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:

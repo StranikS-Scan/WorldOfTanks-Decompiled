@@ -169,6 +169,8 @@ class FORT_ERROR():
     BATTLE_ROUND_IN_PROGRESS = 102
     NOT_ATTACHED_TO_BATTLE = 103
     NOT_SCHEDULED = 104
+    TOO_MANY_FAVORITES = 105
+    ATTACK_TOO_LATE = 106
 
 
 OK = FORT_ERROR.OK
@@ -230,11 +232,13 @@ class FORT_OP():
     SET_ENEMY_READY_FOR_BATTLE = 52
     EMERGENCY_ON_RESTORE = 53
     ADD_EVENT = 54
-    ACTIVATE_CONSUMABLE = 55
-    RETURN_CONSUMABLE = 56
+    CHANGE_ORDER_COUNT = 55
+    REPLACE_CONSUMABLES = 56
     SET_FORT_BATTLE_RESULTS = 57
     DELETE_BATTLE_BY_ID = 58
     ADD_INFLUENCE_POINTS = 59
+    SET_UNIT_MGR_IS_DEAD = 60
+    DELETE_CONSUMABLES = 61
     SET_RESOURCE = 101
     SET_DEF_HOUR = 102
     SET_OFF_DAY = 103
@@ -347,7 +351,7 @@ class FORT_CLIENT_METHOD():
     ADD_FAVORITE = 34
     REMOVE_FAVORITE = 35
     ACTIVATE_CONSUMABLE = 36
-    RETURN_CONSUMABLE = 37
+    DEACTIVATE_CONSUMABLE = 37
 
 
 CLAN_LEADER = CLAN_MEMBER_FLAGS.LEADER
@@ -379,7 +383,7 @@ _FORT_CLIENT_METHOD_ROLES = {FORT_CLIENT_METHOD.CREATE: CLAN_LEADER,
  FORT_CLIENT_METHOD.CREATE_SORTIE: CLAN_ANY_MEMBERS,
  FORT_CLIENT_METHOD.GET_SORTIE_DATA: CLAN_ANY_MEMBERS,
  FORT_CLIENT_METHOD.ACTIVATE_CONSUMABLE: CLAN_ANY_MEMBERS,
- FORT_CLIENT_METHOD.RETURN_CONSUMABLE: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.DEACTIVATE_CONSUMABLE: CLAN_ANY_MEMBERS,
  FORT_CLIENT_METHOD.SET_DEV_MODE: CLAN_OFFICERS,
  FORT_CLIENT_METHOD.ADD_TIME_SHIFT: CLAN_OFFICERS,
  FORT_CLIENT_METHOD.SCHEDULE_FORT_BATTLE: CLAN_OFFICERS,
@@ -544,8 +548,13 @@ class FortifiedRegionBase(OpsUnpacker):
      FORT_OP.DEL_BUILDING: ('B', '_delBuilding'),
      FORT_OP.CONTRIBUTE: ('qBii', '_contribute'),
      FORT_OP.ACTIVATE_ORDER: ('Biiiiq', '_activateOrder'),
-     FORT_OP.ACTIVATE_CONSUMABLE: ('qBBii', '_activateConsumable'),
-     FORT_OP.RETURN_CONSUMABLE: ('iBi', '_returnConsumable'),
+     FORT_OP.REPLACE_CONSUMABLES: ('qHqiii',
+                                   '_replaceConsumables',
+                                   'N',
+                                   [('H', 'Bii')]),
+     FORT_OP.CHANGE_ORDER_COUNT: ('Bii', '_changeOrderCount'),
+     FORT_OP.SET_UNIT_MGR_IS_DEAD: ('qH', '_setUnitMgrIsDead'),
+     FORT_OP.DELETE_CONSUMABLES: ('qH', '_deleteConsumables'),
      FORT_OP.CHANGE_DEF_HOUR: ('Biiq', '_changeDefHour'),
      FORT_OP.CHANGE_PERIPHERY: ('Hi', '_changePeriphery'),
      FORT_OP.CHANGE_OFF_DAY: ('biiq', '_changeOffDay'),
@@ -628,7 +637,7 @@ class FortifiedRegionBase(OpsUnpacker):
      FORT_OP.SET_VACATION: ('ii', '_setVacation'),
      FORT_OP.SET_PERIPHERY: ('H', '_setPeriphery'),
      FORT_OP.SET_INFLUENCE_POINTS: ('i', '_setInfluencePoints')})
-    FORMAT_HEADER = '<qiiiiiHBbbBBBBBBBBBHHHHHq'
+    FORMAT_HEADER = '<qiiiiiHBbbBBBBBBBBBBBHHHHHq'
     SIZE_HEADER = struct.calcsize(FORMAT_HEADER)
     FORMAT_EVENT = '<BIqq'
     SIZE_EVENT = struct.calcsize(FORMAT_EVENT)
@@ -642,6 +651,10 @@ class FortifiedRegionBase(OpsUnpacker):
     SIZE_CONTRIBUTION_ITEM = struct.calcsize(FORMAT_CONTRIBUTION_ITEM)
     FORMAT_ADD_SORTIE_HEADER = '<qqBHHBBii'
     SIZE_ADD_SORTIE_HEADER = struct.calcsize(FORMAT_ADD_SORTIE_HEADER)
+    FORMAT_ADD_CONSUMABLE_HEADER = '<qH'
+    SIZE_ADD_CONSUMABLE_HEADER = struct.calcsize(FORMAT_ADD_CONSUMABLE_HEADER)
+    FORMAT_ADD_CONSUMABLE_META_HEADER = '<qqqBBH'
+    SIZE_ADD_CONSUMABLE_META_HEADER = struct.calcsize(FORMAT_ADD_CONSUMABLE_META_HEADER)
     FORMAT_SORTIE_UNIT_HEADER = '<qH'
     SIZE_SORTIE_UNIT_HEADER = struct.calcsize(FORMAT_SORTIE_UNIT_HEADER)
     FORMAT_ADD_BATTLE_HEADER = '<qBBibbqqBiB'
@@ -717,6 +730,11 @@ class FortifiedRegionBase(OpsUnpacker):
             for key, args in self.sorties.iteritems():
                 s += '\n  [%s] %s' % (key, args)
 
+        if self.consumables:
+            s += '\n consumables(%s)' % len(self.consumables)
+            for key, args in self.consumables.iteritems():
+                s += '\n  [%s] %s' % (key, args)
+
         if self.battles:
             s += '\n battles(%s)' % len(self.battles)
             for key, args in self.battles.iteritems():
@@ -744,7 +762,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self._dirty = False
         if self.dbID:
             statistics = self.statistics.makeCompDescr()
-            packed = struct.pack(self.FORMAT_HEADER, self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.influencePoints, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, len(self.events), len(self.buildings), len(self.orders), len(self.battles), len(self.battleUnits), len(self.sorties), len(self.playerContributions), len(statistics), len(self.attacks), len(self.defences), len(self.favorites), self.creatorDBID)
+            packed = struct.pack(self.FORMAT_HEADER, self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.influencePoints, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, len(self.events), len(self.buildings), len(self.orders), len(self.battles), len(self.battleUnits), len(self.sorties), len(self.consumables), len(self.consumablesMeta), len(self.playerContributions), len(statistics), len(self.attacks), len(self.defences), len(self.favorites), self.creatorDBID)
             for eventType, (unixtime, eventValue, initiatorDBID) in self.events.iteritems():
                 packed += struct.pack(self.FORMAT_EVENT, eventType, unixtime, eventValue, initiatorDBID)
 
@@ -773,6 +791,16 @@ class FortifiedRegionBase(OpsUnpacker):
                 packed += packPascalString(cmdrName)
                 packed += packPascalString(strComment)
 
+            fmt = self.FORMAT_ADD_CONSUMABLE_HEADER
+            for (unitMgrID, peripheryID), rec in self.consumables.iteritems():
+                packed += struct.pack(fmt, unitMgrID, peripheryID)
+                packed += packPascalString(cPickle.dumps(rec, -1))
+
+            fmt = self.FORMAT_ADD_CONSUMABLE_META_HEADER
+            for (unitMgrID, peripheryID), rec in self.consumablesMeta.iteritems():
+                expireTime, prebattleType, isAlive, rev = rec
+                packed += struct.pack(fmt, unitMgrID, expireTime, rev, prebattleType, isAlive, peripheryID)
+
             fmt = self.FORMAT_ADD_BATTLE_HEADER
             for battleID, data in self.battles.iteritems():
                 direction = data['direction']
@@ -785,18 +813,16 @@ class FortifiedRegionBase(OpsUnpacker):
                 isEnemyReadyForBattle = data['isEnemyReadyForBattle']
                 roundStart = data.get('roundStart', 0)
                 isBattleRound = data.get('isBattleRound', False)
-                attackerBuildList = packPascalString(cPickle.dumps(data['attackerBuildList']))
-                defenderBuildList = packPascalString(cPickle.dumps(data['defenderBuildList']))
-                attackerFullBuildList = packPascalString(cPickle.dumps(data['attackerFullBuildList']))
-                defenderFullBuildList = packPascalString(cPickle.dumps(data['defenderFullBuildList']))
-                consumableList = packPascalString(cPickle.dumps(data['consumableList']))
-                battleResultList = packPascalString(cPickle.dumps(data['battleResultList']))
+                attackerBuildList = packPascalString(cPickle.dumps(data['attackerBuildList'], -1))
+                defenderBuildList = packPascalString(cPickle.dumps(data['defenderBuildList'], -1))
+                attackerFullBuildList = packPascalString(cPickle.dumps(data['attackerFullBuildList'], -1))
+                defenderFullBuildList = packPascalString(cPickle.dumps(data['defenderFullBuildList'], -1))
+                battleResultList = packPascalString(cPickle.dumps(data['battleResultList'], -1))
                 packed += struct.pack(fmt, battleID, direction, isDefence, attackTime, prevBuildNum, currentBuildNum, attackerClanDBID, defenderClanDBID, isEnemyReadyForBattle, roundStart, isBattleRound)
                 packed += attackerBuildList
                 packed += defenderBuildList
                 packed += attackerFullBuildList
                 packed += defenderFullBuildList
-                packed += consumableList
                 packed += battleResultList
 
             fmt = self.FORMAT_ADD_BATTLEUNIT_HEADER
@@ -828,7 +854,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self._dirPosToBuildType = {}
         self._playerAttachments = {}
         packed = packedData
-        self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.influencePoints, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, lenEvents, lenBuildings, lenOrders, lenBattles, lenBattleUnits, lenSorties, lenPlayerContributions, lenStatistics, lenPlannedAttacks, lenPlannedDefences, lenFavorites, self.creatorDBID = struct.unpack_from(self.FORMAT_HEADER, packed)
+        self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.influencePoints, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, lenEvents, lenBuildings, lenOrders, lenBattles, lenBattleUnits, lenSorties, lenConsumables, lenConsumablesMeta, lenPlayerContributions, lenStatistics, lenPlannedAttacks, lenPlannedDefences, lenFavorites, self.creatorDBID = struct.unpack_from(self.FORMAT_HEADER, packed)
         offset = self.SIZE_HEADER
         sz = self.SIZE_EVENT
         fmt = self.FORMAT_EVENT
@@ -910,6 +936,27 @@ class FortifiedRegionBase(OpsUnpacker):
              strComment)
             offset += sz + lenCmdrName + lenComment
 
+        sz = self.SIZE_ADD_CONSUMABLE_HEADER
+        fmt = self.FORMAT_ADD_CONSUMABLE_HEADER
+        self.consumables = {}
+        for i in xrange(lenConsumables):
+            unitMgrID, peripheryID = struct.unpack_from(fmt, packed, offset)
+            strConsumablesList, lenConsumablesList = unpackPascalString(packed, offset + sz)
+            rec = cPickle.loads(strConsumablesList)
+            self.consumables[unitMgrID, peripheryID] = rec
+            offset += sz + lenConsumablesList
+
+        sz = self.SIZE_ADD_CONSUMABLE_META_HEADER
+        fmt = self.FORMAT_ADD_CONSUMABLE_META_HEADER
+        self.consumablesMeta = {}
+        for i in xrange(lenConsumablesMeta):
+            unitMgrID, expireTime, rev, prebattleType, isAlive, peripheryID = struct.unpack_from(fmt, packed, offset)
+            self.consumablesMeta[unitMgrID, peripheryID] = (expireTime,
+             prebattleType,
+             isAlive,
+             rev)
+            offset += sz
+
         sz = self.SIZE_ADD_BATTLE_HEADER
         fmt = self.FORMAT_ADD_BATTLE_HEADER
         self.battles = {}
@@ -923,11 +970,9 @@ class FortifiedRegionBase(OpsUnpacker):
             attackerFullBuildList = cPickle.loads(attackerFullBuildListStr)
             defenderFullBuildListStr, defenderFullListLen = unpackPascalString(packed, offset + sz + attackerListLen + defenderListLen + attackerFullListLen)
             defenderFullBuildList = cPickle.loads(defenderFullBuildListStr)
-            consumableListStr, consumableListLen = unpackPascalString(packed, offset + sz + attackerListLen + defenderListLen + attackerFullListLen + defenderFullListLen)
-            consumableList = cPickle.loads(consumableListStr)
-            battleResultListStr, battleResultListLen = unpackPascalString(packed, offset + sz + attackerListLen + defenderListLen + attackerFullListLen + defenderFullListLen + consumableListLen)
+            battleResultListStr, battleResultListLen = unpackPascalString(packed, offset + sz + attackerListLen + defenderListLen + attackerFullListLen + defenderFullListLen)
             battleResultList = cPickle.loads(battleResultListStr)
-            offset += sz + attackerListLen + defenderListLen + attackerFullListLen + defenderFullListLen + consumableListLen + battleResultListLen
+            offset += sz + attackerListLen + defenderListLen + attackerFullListLen + defenderFullListLen + battleResultListLen
             self.battles[battleID] = {'direction': direction,
              'isDefence': bool(isDefence),
              'attackTime': attackTime,
@@ -937,7 +982,6 @@ class FortifiedRegionBase(OpsUnpacker):
              'defenderBuildList': defenderBuildList,
              'attackerFullBuildList': attackerFullBuildList,
              'defenderFullBuildList': defenderFullBuildList,
-             'consumableList': consumableList,
              'battleResultList': battleResultList,
              'prevBuildNum': prevBuildNum,
              'currentBuildNum': currentBuildNum,
@@ -1002,7 +1046,7 @@ class FortifiedRegionBase(OpsUnpacker):
          self._debugTimeShift,
          self.influencePoints,
          self.creatorDBID,
-         self.lockedDirMask), buildings=self.buildings, orders=self.orders, events=self.events, playerContributions=self.playerContributions, battles=self.battles, statistics=self.statistics.makeCompDescr(), favorites=self.favorites)
+         self.lockedDirMask), buildings=self.buildings, orders=self.orders, events=self.events, playerContributions=self.playerContributions, battles=self.battles, statistics=self.statistics.makeCompDescr(), favorites=self.favorites, consumables=self.consumables, consumablesMeta=self.consumablesMeta)
         return pdata
 
     def deserialize(self, pdata):
@@ -1020,6 +1064,8 @@ class FortifiedRegionBase(OpsUnpacker):
             self.playerContributions = pdata['playerContributions']
             self.favorites = pdata['favorites']
             self.sorties = {}
+            self.consumables = pdata['consumables']
+            self.consumablesMeta = pdata['consumablesMeta']
             self._sortieUnits = {}
             self.battles = pdata['battles']
             self.battleUnits = {}
@@ -1244,6 +1290,8 @@ class FortifiedRegionBase(OpsUnpacker):
         self.battles = {}
         self.battleUnits = {}
         self.sorties = {}
+        self.consumables = {}
+        self.consumablesMeta = {}
         self._sortieUnits = {}
         self.statistics = dossiers2.getFortifiedRegionsDossierDescr()
         self.favorites = set()
@@ -1319,7 +1367,7 @@ class FortifiedRegionBase(OpsUnpacker):
         return leftResCount
 
     def _addInfluencePoints(self, influencePoints):
-        LOG_OGNICK_DEV('_addInfluencePoints', influencePoints)
+        LOG_OGNICK('_addInfluencePoints', influencePoints)
         self.storeOp(FORT_OP.ADD_INFLUENCE_POINTS, influencePoints)
         self.influencePoints += influencePoints
 
@@ -1356,6 +1404,8 @@ class FortifiedRegionBase(OpsUnpacker):
         self.battleUnits = {}
         self.sorties = {}
         self._sortieUnits = {}
+        self.consumables = {}
+        self.consumablesMeta = {}
         self.statistics = dossiers2.getFortifiedRegionsDossierDescr()
         self.favorites = set()
         self.storeOp(FORT_OP.CREATE_NEW, clanDBID, creatorDBID, peripheryID, clanMemberDBIDs)
@@ -1379,34 +1429,55 @@ class FortifiedRegionBase(OpsUnpacker):
         self.storeOp(FORT_OP.ACTIVATE_ORDER, orderTypeID, timeExpiration, effectValue, count, level, initiatorDBID)
         return
 
-    def _activateConsumable(self, battleID, consumableTypeID, slotIndex, count, level):
-        LOG_OGNICK(self.dbID, '_activateConsumable', battleID, consumableTypeID, slotIndex, count, level)
-        if count:
-            self.orders[consumableTypeID] = (count, level)
+    def _changeOrderCount(self, consumableTypeID, level, delta):
+        LOG_OGNICK('Fort(id=%d)._changeOrderCount' % self.dbID, consumableTypeID, level, delta)
+        count = self.orders.get(consumableTypeID, (0, 0))[0] + delta
+        if not count >= 0:
+            raise AssertionError
+            self.orders[consumableTypeID] = count and (count, level)
         else:
             self.orders.pop(consumableTypeID, None)
-        if battleID in self.battles:
-            battle = self.battles[battleID]
-            consumableList = battle['consumableList']
-            consumableList.append((consumableTypeID, level, slotIndex))
-            LOG_OGNICK_DEV('_activateConsumable inOrder=%s consumables=%s' % (self.orders.get(consumableTypeID, (0, 0))[0], battle['consumableList']))
-        self.storeOp(FORT_OP.ACTIVATE_CONSUMABLE, battleID, consumableTypeID, slotIndex, count, level)
+        self.storeOp(FORT_OP.CHANGE_ORDER_COUNT, consumableTypeID, level, delta)
         return
 
-    def _returnConsumable(self, battleID, consumableTypeID, level):
-        LOG_OGNICK(self.dbID, '_returnConsumable', battleID, consumableTypeID, level)
-        if level:
-            prevCount, prevLevel = self.orders.get(consumableTypeID, (0, 0))
-            if not prevLevel:
-                prevLevel = level
-            self.orders[consumableTypeID] = (prevCount + 1, prevLevel)
-        LOG_OGNICK('_returnConsumable orders=%s' % self.orders.get(consumableTypeID, (0, 0))[0])
-        if battleID in self.battles:
-            battle = self.battles[battleID]
-            consumableList = battle['consumableList']
-            battle['consumableList'] = [ cons for cons in consumableList if cons[0] != consumableTypeID ]
-            LOG_OGNICK_DEV('_returnConsumable consumables=%s' % battle['consumableList'])
-        self.storeOp(FORT_OP.RETURN_CONSUMABLE, battleID, consumableTypeID, level)
+    def _replaceConsumables(self, unitMgrID, peripheryID, timeExpire, prebattleType, oldRev, newRev, consumables):
+        key = (unitMgrID, peripheryID)
+        LOG_OGNICK('Fort(id=%d)._replaceConsumables oldRev=%d newRev=%d' % (self.dbID, oldRev, newRev), key, timeExpire, prebattleType, consumables)
+        consumablesByRev = self.consumables.setdefault(key, {})
+        consumablesByRev.pop(oldRev, None)
+        if consumables:
+            consumablesByRev[newRev] = consumables
+        _, prebattleType, _, _ = self.consumablesMeta.get(key, (0,
+         prebattleType,
+         True,
+         0))
+        self.consumablesMeta[key] = (timeExpire,
+         prebattleType,
+         True,
+         newRev)
+        self.storeOp(FORT_OP.REPLACE_CONSUMABLES, unitMgrID, peripheryID, timeExpire, prebattleType, oldRev, newRev, consumables)
+        return
+
+    def _setUnitMgrIsDead(self, unitMgrID, peripheryID):
+        key = (unitMgrID, peripheryID)
+        LOG_OGNICK('Fort(id=%d)._setUnitMgrIsDead' % self.dbID, key)
+        timeExpire, prebattleType, _, rev = self.consumablesMeta.get(key, (0,
+         0,
+         True,
+         0))
+        self.consumablesMeta[key] = (timeExpire,
+         prebattleType,
+         False,
+         rev)
+        self.storeOp(FORT_OP.SET_UNIT_MGR_IS_DEAD, unitMgrID, peripheryID)
+
+    def _deleteConsumables(self, unitMgrID, peripheryID):
+        key = (unitMgrID, peripheryID)
+        LOG_OGNICK('Fort(id=%d)._deleteConsumables' % self.dbID, key)
+        self.consumables.pop(key, None)
+        self.consumablesMeta.pop(key, None)
+        self.storeOp(FORT_OP.DELETE_CONSUMABLES, unitMgrID, peripheryID)
+        return
 
     def _changeDefHour(self, newValue, timeActivation, timeCooldown, initiatorDBID):
         LOG_DEBUG_DEV('_changeDefHour', newValue, timeActivation, timeCooldown, initiatorDBID)
@@ -1610,7 +1681,6 @@ class FortifiedRegionBase(OpsUnpacker):
          'defenderBuildList': None,
          'attackerFullBuildList': None,
          'defenderFullBuildList': None,
-         'consumableList': [],
          'battleResultList': [],
          'prevBuildNum': 0,
          'currentBuildNum': 0,
@@ -1932,6 +2002,6 @@ class FortifiedRegionBase(OpsUnpacker):
         self.storeOp(FORT_OP.SET_PERIPHERY, peripheryID)
 
     def _setInfluencePoints(self, influencePoints):
-        LOG_OGNICK_DEV('_setInfluencePoints', influencePoints)
+        LOG_OGNICK('_setInfluencePoints', influencePoints)
         self.influencePoints = influencePoints
         self.storeOp(FORT_OP.SET_INFLUENCE_POINTS, influencePoints)

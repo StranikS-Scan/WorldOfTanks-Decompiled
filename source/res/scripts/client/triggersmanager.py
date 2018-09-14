@@ -19,6 +19,7 @@ class TRIGGER_TYPE():
     PLAYER_SHOT_NOT_PIERCED = 10
     PLAYER_SHOT_MADE_NONFATAL_DAMAGE = 11
     SNIPER_MODE = 12
+    EXOTIC_FLOCK = 13
 
 
 class ITriggerListener():
@@ -44,6 +45,8 @@ class TriggersManager():
         self.__cbID = BigWorld.callback(self.UPDATE_PERIOD, self.update)
         self.__isOnArena = False
         self.__isEnabled = False
+        self.__shotPoints = []
+        self.__explodePoints = []
         PlayerEvents.g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
 
     def isEnabled(self):
@@ -74,7 +77,7 @@ class TriggersManager():
         else:
             for k, v in self.__autoTriggers.iteritems():
                 type = v['type']
-                if type != TRIGGER_TYPE.AIM and type != TRIGGER_TYPE.AREA:
+                if type != TRIGGER_TYPE.AIM and type != TRIGGER_TYPE.AREA and type != TRIGGER_TYPE.EXOTIC_FLOCK:
                     del self.__autoTriggers[k]
                     self.__activeAutoTriggers.discard(k)
 
@@ -174,6 +177,19 @@ class TriggersManager():
                             if dp > 0.0:
                                 sinAngle = math.sqrt(1.0 - dp * dp)
                                 isActive = sinAngle * distance < params['radius']
+                    if type == TRIGGER_TYPE.EXOTIC_FLOCK:
+                        for explodePoint in self.__explodePoints:
+                            offset = explodePoint - params['position']
+                            offset.y = 0.0
+                            distance = offset.length
+                            isActive = params['radius'][0] < distance < params['radius'][1]
+
+                        for shotPoint in self.__shotPoints:
+                            offset = shotPoint - params['position']
+                            offset.y = 0.0
+                            distance = offset.length
+                            isActive = distance < params['radius'][1]
+
                     params['distance'] = distance
                     if wasActive != isActive:
                         if isActive:
@@ -186,6 +202,8 @@ class TriggersManager():
                             for listener in self.__listeners:
                                 listener.onTriggerDeactivated(params)
 
+                self.__explodePoints = []
+                self.__shotPoints = []
             except:
                 LOG_CURRENT_EXCEPTION()
 
@@ -217,6 +235,12 @@ class TriggersManager():
         if not isOnArena and self.__isOnArena:
             self.clearTriggers(False)
         self.__isOnArena = isOnArena
+
+    def onAddProjectile(self, shotPoint):
+        self.__shotPoints.append(shotPoint)
+
+    def onExplodeProjectile(self, exploePoint):
+        self.__explodePoints.append(exploePoint)
 
 
 g_manager = None

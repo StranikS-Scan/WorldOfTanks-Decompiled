@@ -1,12 +1,14 @@
 # Embedded file name: scripts/client/gui/shared/utils/__init__.py
+import imghdr
 import weakref
 import types
 import itertools
 import sys
 import inspect
+import uuid
 import BigWorld
 import AccountCommands
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from helpers import getLanguageCode, i18n
 from items import vehicles as vehs_core
 from account_helpers.AccountSettings import AccountSettings
@@ -36,11 +38,8 @@ CLIP_ICON_PATH = '../maps/icons/modules/magazineGunIcon.png'
 EXTRA_MODULE_INFO = 'extraModuleInfo'
 _FLASH_OBJECT_SYS_ATTRS = ('isPrototypeOf', 'propertyIsEnumerable', 'hasOwnProperty')
 
-class CONST_CONTAINER:
+class CONST_CONTAINER(object):
     __keyByValue = None
-
-    def __init__(self):
-        pass
 
     @classmethod
     def getIterator(cls):
@@ -50,13 +49,27 @@ class CONST_CONTAINER:
 
     @classmethod
     def getKeyByValue(cls, value):
-        if cls.__keyByValue is None:
-            cls.__keyByValue = dict(((v, k) for k, v in cls.getIterator()))
+        cls.__doInit()
         return cls.__keyByValue.get(value)
+
+    @classmethod
+    def hasKey(cls, key):
+        return key in cls.__dict__
+
+    @classmethod
+    def hasValue(cls, value):
+        cls.__doInit()
+        return value in cls.__keyByValue
 
     @classmethod
     def ALL(cls):
         return tuple([ v for k, v in cls.getIterator() ])
+
+    @classmethod
+    def __doInit(cls):
+        if cls.__keyByValue is None:
+            cls.__keyByValue = dict(((v, k) for k, v in cls.getIterator()))
+        return
 
 
 class BitmaskHelper(object):
@@ -141,6 +154,10 @@ def findFirst(function_or_None, sequence, default = None):
         return next(itertools.ifilter(function_or_None, sequence))
     except StopIteration:
         return default
+
+
+def first(sequence, default = None):
+    return findFirst(None, sequence, default)
 
 
 def class_for_name(module_name, class_name):
@@ -297,3 +314,37 @@ class SettingRootRecord(SettingRecord):
     @classmethod
     def _getSettingName(cls):
         raise NotImplemented
+
+
+def makeTupleByDict(ntClass, data):
+    unsupportedFields = set(data) - set(ntClass._fields)
+    supported = {}
+    for k, v in data.iteritems():
+        if k not in unsupportedFields:
+            supported[k] = v
+
+    return ntClass(**supported)
+
+
+def mapTextureToTheMemory(textureData, uniqueID = None):
+    if textureData and imghdr.what(None, textureData) is not None:
+        uniqueID = str(uniqueID or uuid.uuid4())
+        BigWorld.wg_addTempScaleformTexture(uniqueID, textureData)
+        return uniqueID
+    else:
+        LOG_WARNING('There is invalid data for the memory mapping', textureData, uniqueID)
+        return
+
+
+def showInvitationInWindowsBar():
+    try:
+        BigWorld.WGWindowsNotifier.onInvitation()
+    except AttributeError:
+        LOG_CURRENT_EXCEPTION()
+
+
+def safeCancelCallback(callbackID):
+    try:
+        BigWorld.cancelCallback(callbackID)
+    except ValueError:
+        LOG_ERROR('Cannot cancel BigWorld callback: incorrect callback ID.')

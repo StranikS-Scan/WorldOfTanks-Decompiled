@@ -1,6 +1,8 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/abstract.py
 import BigWorld
+from AccountCommands import isCodeValid, RES_FAILURE, RES_SUCCESS
 from helpers import isPlayerAccount
+from ids_generators import Int32IDGenerator
 from gui.shared.utils import code2str
 from adisp import async, process
 from debug_utils import LOG_ERROR
@@ -132,9 +134,10 @@ class DataRequestCtx(RequestCtx):
 
 class RequestsByIDProcessor(object):
 
-    def __init__(self):
+    def __init__(self, idsGenerator = None):
         super(RequestsByIDProcessor, self).__init__()
         self._requests = {}
+        self._idsGenerator = idsGenerator
 
     def init(self):
         pass
@@ -142,36 +145,40 @@ class RequestsByIDProcessor(object):
     def fini(self):
         self.stopProcessing()
 
-    def stopProcessing(self):
+    def stopProcessing(self, resCode = RES_SUCCESS):
         while len(self._requests):
-            _, data = self._requests.popitem()
-            data[0].stopProcessing(False)
+            ctx, data = self._requests.popitem()
+            data[0].stopProcessing(self._makeResponse(resCode, 'stop processing', ctx=ctx))
 
     def getSender(self):
         raise NotImplementedError
 
     def doRequest(self, ctx, methodName, *args, **kwargs):
-        result, _ = self._sendRequest(ctx, methodName, [], *args, **kwargs)
+        result, requestID = self._sendRequest(ctx, methodName, [], *args, **kwargs)
         if result:
-            ctx.startProcessing()
+            self._startProcessing(requestID, ctx)
         return result
 
     def doRequestChain(self, ctx, chain):
-        result, _ = self._sendNextRequest(ctx, chain)
+        result, requestID = self._sendNextRequest(ctx, chain)
         if result:
-            ctx.startProcessing()
+            self._startProcessing(requestID, ctx)
         return result
 
     def doRequestEx(self, ctx, callback, methodName, *args, **kwargs):
-        result, _ = self._sendRequest(ctx, methodName, [], *args, **kwargs)
+        result, requestID = self._sendRequest(ctx, methodName, [], *args, **kwargs)
         if result:
-            ctx.startProcessing(callback)
+            self._startProcessing(requestID, ctx, callback)
+        else:
+            self._stopProcessing(ctx, 'request failure', callback)
         return result
 
     def doRequestChainEx(self, ctx, callback, chain):
-        result, _ = self._sendNextRequest(ctx, chain)
+        result, requestID = self._sendNextRequest(ctx, chain)
         if result:
-            ctx.startProcessing(callback)
+            self._startProcessing(requestID, ctx, callback)
+        else:
+            self._stopProcessing(ctx, 'request failure', callback)
         return result
 
     def doRawRequest(self, methodName, *args, **kwargs):
@@ -185,6 +192,14 @@ class RequestsByIDProcessor(object):
             LOG_ERROR('Name of method is invalid', methodName)
         return result
 
+    def _startProcessing(self, requestID, ctx, callback = None):
+        ctx.startProcessing(callback)
+
+    def _stopProcessing(self, ctx, reason, callback = None):
+        if callback is not None:
+            callback(self._makeResponse(RES_FAILURE, reason, ctx=ctx))
+        return
+
     def _onResponseReceived(self, requestID, result):
         if requestID > 0:
             ctx, chain = self._requests.pop(requestID, (None, None))
@@ -197,6 +212,14 @@ class RequestsByIDProcessor(object):
             self.stopProcessing()
         return
 
+    def _doCall(self, method, *args, **kwargs):
+        result = method(*args, **kwargs)
+        if self._idsGenerator is not None:
+            return self._idsGenerator.next()
+        else:
+            return result
+            return
+
     def _sendRequest(self, ctx, methodName, chain, *args, **kwargs):
         result, requestID = False, 0
         requester = self.getSender()
@@ -205,7 +228,7 @@ class RequestsByIDProcessor(object):
         else:
             method = getattr(requester, methodName, None)
             if callable(method):
-                requestID = method(*args, **kwargs)
+                requestID = self._doCall(method, *args, **kwargs)
                 if requestID > 0:
                     self._requests[requestID] = (ctx, chain)
                     result = True
@@ -219,31 +242,14 @@ class RequestsByIDProcessor(object):
         methodName, args, kwargs = chain[0]
         return self._sendRequest(ctx, methodName, chain[1:], *args, **kwargs)
 
+    def _makeResponse(self, code = 0, errMsg = '', data = None, ctx = None):
+        return isCodeValid(code)
+
 
 class DataRequestsByIDProcessor(RequestsByIDProcessor):
 
     def __init__(self):
-        super(DataRequestsByIDProcessor, self).__init__()
-        self._requestID = 0
-
-    def _sendRequest(self, ctx, methodName, chain, *args, **kwargs):
-        result, requestID = False, 0
-        requester = self.getSender()
-        if not requester:
-            return (result, requestID)
-        else:
-            method = getattr(requester, methodName, None)
-            if callable(method):
-                requestID = self.__getNextRequestID()
-                if requestID > 0:
-                    method(requestID, *args, **kwargs)
-                    self._requests[requestID] = (ctx, chain)
-                    result = True
-                else:
-                    LOG_ERROR('Request ID can not be nil')
-            else:
-                LOG_ERROR('Name of method is invalid', methodName)
-            return (result, requestID)
+        super(DataRequestsByIDProcessor, self).__init__(Int32IDGenerator())
 
     def _onResponseReceived(self, requestID, result, data):
         if requestID > 0:
@@ -257,6 +263,7 @@ class DataRequestsByIDProcessor(RequestsByIDProcessor):
             self.stopProcessing()
         return
 
-    def __getNextRequestID(self):
-        self._requestID += 1
-        return self._requestID
+    def _doCall(self, method, *args, **kwargs):
+        requestID = self._idsGenerator.next()
+        method(requestID, *args, **kwargs)
+        return requestID

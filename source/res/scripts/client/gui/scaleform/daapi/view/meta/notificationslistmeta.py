@@ -6,9 +6,6 @@ class NotificationsListMeta(DAAPIModule):
     def onClickAction(self, typeID, entityID, action):
         self._printOverrideError('onClickAction')
 
-    def onSecuritySettingsLinkClick(self):
-        self._printOverrideError('onSecuritySettingsLinkClick')
-
     def getMessageActualTime(self, msTime):
         self._printOverrideError('getMessageActualTime')
 

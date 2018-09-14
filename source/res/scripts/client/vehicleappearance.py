@@ -8,7 +8,8 @@ from VehicleEffects import VehicleTrailEffects, VehicleExhaustEffects
 from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE
 import constants
 import vehicle_extras
-from helpers import bound_effects, DecalMap, isPlayerAvatar
+import helpers
+from helpers import bound_effects, DecalMap, isPlayerAvatar, newFakeModel
 from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 import items.vehicles
@@ -26,6 +27,7 @@ from Vibroeffects.ControllersManager import ControllersManager as VibrationContr
 from LightFx.LightControllersManager import LightControllersManager as LightFxControllersManager
 import LightFx.LightManager
 import SoundGroups
+import BattleReplay
 from AvatarInputHandler.mathUtils import clamp
 _ENABLE_VEHICLE_VALIDATION = False
 _VEHICLE_DISAPPEAR_TIME = 0.2
@@ -152,8 +154,6 @@ class VehicleAppearance(object):
         for desc in self.modelsDesc.itervalues():
             part = desc['_stateFunc'](vehicle, self.__currentDamageState.model)
             out.append(part)
-            if isPlayerVehicle:
-                BigWorld.wg_setModelQuality(part, 1)
 
         vDesc = vehicle.typeDescriptor
         out.append(vDesc.type.camouflageExclusionMask)
@@ -224,10 +224,6 @@ class VehicleAppearance(object):
                     arcadeCamera = player.inputHandler.ctrls['arcade'].camera
                     if arcadeCamera is not None:
                         arcadeCamera.removeVehicleToCollideWith(self)
-                for desc in self.modelsDesc.itervalues():
-                    part = desc['_stateFunc'](vehicle, 'undamaged')
-                    BigWorld.wg_setModelQuality(part, 0)
-
             vehicle.model.delMotor(vehicle.model.motors[0])
             vehicle.filter.vehicleCollisionCallback = None
             self.__vehicleStickers = None
@@ -302,6 +298,7 @@ class VehicleAppearance(object):
                     LOG_ERROR("can't load model <%s> - prerequisites were empty, direct load of the model has been failed" % modelName)
 
             desc['model'].outsideOnly = 1
+            desc['model'].wg_isPlayer = vehicle.isPlayer
             if desc.has_key('boundEffects'):
                 desc['boundEffects'] = bound_effects.ModelBoundEffects(desc['model'])
 
@@ -316,7 +313,7 @@ class VehicleAppearance(object):
             self.__invalidateLoading = False
             self.__fetchModels(self.__currentDamageState.model)
         if vehicle.isAlive():
-            fakeModel = BigWorld.player().newFakeModel()
+            fakeModel = helpers.newFakeModel()
             modelsDesc['hull']['model'].node('HP_Fire_1').attach(fakeModel)
             if self.__vehicle.isPlayer:
                 if self.__typeDesc.engine['soundPC'] != '':
@@ -352,7 +349,12 @@ class VehicleAppearance(object):
             if AuxiliaryFx.g_instance is not None:
                 self.__auxiliaryFxCtrl = AuxiliaryFx.g_instance.createFxController(self.__vehicle)
         vehicle.model.stipple = True
-        self.__stippleCallbackID = BigWorld.callback(_VEHICLE_APPEAR_TIME, self.__disableStipple)
+        period = _VEHICLE_APPEAR_TIME
+        if BattleReplay.isPlaying():
+            vehicle.model.stipple = False
+            if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+                period = 0
+        self.__stippleCallbackID = BigWorld.callback(period, self.__disableStipple)
         self.__setupTrailParticles()
         self.__setupTrackDamageSounds()
         self.__periodicTimerID = BigWorld.callback(_PERIODIC_TIME, self.__onPeriodicTimer)
@@ -438,10 +440,10 @@ class VehicleAppearance(object):
 
     def changeEngineMode(self, mode, forceSwinging = False):
         self.__engineMode = mode
-        powerMode = mode[0]
-        dirFlags = mode[1]
         self.__updateExhaust()
         self.__updateBlockedMovement()
+        if BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            return
         if forceSwinging:
             flags = mode[1]
             prevFlags = self.__swingMoveFlags
@@ -475,6 +477,8 @@ class VehicleAppearance(object):
         self.__vehicleStickers.addDamageSticker(code, componentName, stickerID, segStart, segEnd)
 
     def receiveShotImpulse(self, dir, impulse):
+        if BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            return
         if not VehicleDamageState.isDamagedModel(self.modelsDesc['chassis']['state']):
             self.__fashion.receiveShotImpulse(dir, impulse)
             self.__crashedTracksCtrl.receiveShotImpulse(dir, impulse)
@@ -749,7 +753,7 @@ class VehicleAppearance(object):
         return turretHeight < self.__waterHeight
 
     def __updateWaterStatus(self):
-        self.__waterHeight = BigWorld.wg_collideWater(self.__vehicle.position, self.__vehicle.position + Math.Vector3(0, 1, 0))
+        self.__waterHeight = BigWorld.wg_collideWater(self.__vehicle.position, self.__vehicle.position + Math.Vector3(0, 1, 0), False)
         self.__isInWater = self.__waterHeight != -1
         self.__isUnderWater = self.__calcIsUnderwater()
         wasSplashed = self.__splashedWater
@@ -1074,7 +1078,7 @@ class VehicleAppearance(object):
     def __setupTrackDamageSounds(self):
         for i in xrange(2):
             try:
-                fakeModel = BigWorld.player().newFakeModel()
+                fakeModel = helpers.newFakeModel()
                 self.__trailEffects.getTrackCenterNode(i).attach(fakeModel)
                 self.__trackSounds[i] = (fakeModel, SoundGroups.g_instance.getSound(fakeModel, '/tanks/tank_breakdown/hit_treads'))
             except:
@@ -1301,8 +1305,6 @@ class VehicleAppearance(object):
             self.__leftFrontLight.multiplier = 5
             self.__leftFrontLight.source = node1
             self.__leftFrontLight.colour = (255, 255, 255, 0)
-            self.__leftFrontLight.specular = 1
-            self.__leftFrontLight.diffuse = 1
             self.__leftFrontLight.visible = True
             self.__rightFrontLight = BigWorld.PyChunkSpotLight()
             self.__rightFrontLight.innerRadius = 5
@@ -1312,8 +1314,6 @@ class VehicleAppearance(object):
             self.__rightFrontLight.multiplier = 5
             self.__rightFrontLight.source = node2
             self.__rightFrontLight.colour = (255, 255, 255, 0)
-            self.__rightFrontLight.specular = 1
-            self.__rightFrontLight.diffuse = 1
             self.__rightFrontLight.visible = True
         except Exception:
             LOG_ERROR('Can not attach lamp lights to tank model for %s.' % self.__vehicle.typeDescriptor.name)

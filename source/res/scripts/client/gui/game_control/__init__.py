@@ -1,5 +1,7 @@
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 import constants
+from gui.game_control.ExternalLinksHandler import ExternalLinksHandler
+from gui.game_control.InternalLinksHandler import InternalLinksHandler
 from gui.shared import g_eventBus, events
 from gui.game_control.BrowserController import BrowserController
 from gui.game_control.LanguageController import LanguageController
@@ -9,7 +11,6 @@ from gui.game_control.RentalsController import RentalsController
 from gui.game_control.controllers import ControllersCollection
 from gui.game_control.events_notifications import EventsNotificationsController
 from gui.game_control.gc_constants import CONTROLLER
-from gui.game_control.links import ExternalLinksHandler
 from gui.game_control.roaming import RoamingController
 from gui.game_control.AOGAS import AOGASController
 from gui.game_control.captcha_control import CaptchaController
@@ -35,6 +36,7 @@ class _GameControllers(ControllersCollection):
          CONTROLLER.LANGUAGE: LanguageController,
          CONTROLLER.NOTIFIER: NotifyController,
          CONTROLLER.LINKS: ExternalLinksHandler,
+         CONTROLLER.INTERNAL_LINKS: InternalLinksHandler,
          CONTROLLER.SOUND_CHECKER: SoundEventChecker,
          CONTROLLER.SERVER_STATS: ServerStats,
          CONTROLLER.REF_SYSTEM: RefSystem,
@@ -92,6 +94,10 @@ def getChinaCtrl():
 
 def getIGRCtrl():
     return _getController(CONTROLLER.IGR)
+
+
+def getRefSysCtrl():
+    return _getController(CONTROLLER.REF_SYSTEM)
 
 
 def _getController(controller):

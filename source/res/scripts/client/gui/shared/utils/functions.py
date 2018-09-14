@@ -234,6 +234,10 @@ def getArenaSubTypeName(arenaTypeID):
     return ArenaType.g_cache[arenaTypeID].gameplayName
 
 
+def getArenaGeomentryName(arenaTypeID):
+    return ArenaType.g_cache[arenaTypeID].geometryName
+
+
 def getArenaShortName(arenaTypeID):
     return ArenaType.g_cache[arenaTypeID].name
 

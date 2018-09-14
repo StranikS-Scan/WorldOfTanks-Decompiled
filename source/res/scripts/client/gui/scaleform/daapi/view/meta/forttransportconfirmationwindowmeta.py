@@ -9,9 +9,6 @@ class FortTransportConfirmationWindowMeta(DAAPIModule):
     def onTransporting(self, size):
         self._printOverrideError('onTransporting')
 
-    def onTransportingLimit(self):
-        self._printOverrideError('onTransportingLimit')
-
     def as_setMaxTransportingSizeS(self, maxSizeStr):
         if self._isDAAPIInited():
             return self.flashObject.as_setMaxTransportingSize(maxSizeStr)

@@ -14,7 +14,6 @@ from debug_utils import *
 from gui import g_guiResetters
 from gui.Scaleform.CursorDelegator import g_cursorDelegator
 from gui.battle_control import g_sessionProvider
-from gui.battle_control.consumables.ammo_ctrl import SHELL_SET_RESULT
 from post_processing.post_effect_controllers import g_postProcessingEvents
 import control_modes
 import MapCaseMode
@@ -139,6 +138,8 @@ class AvatarInputHandler(CallbackDelayer):
         sec = self._readCfg()
         self.onCameraChanged = Event()
         self.onPostmortemVehicleChanged = Event()
+        self.onSetReloading = Event()
+        self.onSetReloadingPercents = Event()
         self.__isArenaStarted = False
         self.__isStarted = False
         self.__targeting = _Targeting()
@@ -402,16 +403,10 @@ class AvatarInputHandler(CallbackDelayer):
         self.__curCtrl.onMinimapClicked(worldPos)
 
     def setReloading(self, duration, startTime = None, baseTime = None):
-        self.__curCtrl.setReloading(duration, startTime)
-        if self.aim is not None:
-            self.aim.setReloading(duration, startTime, baseTime)
-        return
+        self.onSetReloading(duration, startTime, baseTime)
 
     def setReloadingInPercent(self, percent):
-        self.__curCtrl.setReloadingInPercent(percent)
-        if self.aim is not None:
-            self.aim.setReloadingInPercent(percent)
-        return
+        self.onSetReloadingPercents(percent)
 
     def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shakeReason):
         if shakeReason == ShakeReason.OWN_SHOT_DELAYED:
@@ -589,16 +584,22 @@ class AvatarInputHandler(CallbackDelayer):
         ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
         ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
         ammoCtrl.onGunReloadTimeSetInPercent += self.__onGunReloadTimeSetInPercent
-        ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
-        ammoCtrl.onShellsUpdated += self.__onShellsUpdated
+        import aims
+        self.onSetReloading += aims.getReloadingHandler().setReloading
+        self.onSetReloadingPercents += aims.getReloadingHandler().setReloadingInPercent
+        ammoCtrl.onShellsUpdated += aims.getReloadingHandler().setAmmoStock
+        ammoCtrl.onCurrentShellChanged += aims.getReloadingHandler().setShellChanged
 
     def __removeBattleCtrlListeners(self):
+        import aims
+        self.onSetReloading -= aims.getReloadingHandler().setReloading
+        self.onSetReloadingPercents -= aims.getReloadingHandler().setReloadingInPercent
         ammoCtrl = g_sessionProvider.getAmmoCtrl()
+        ammoCtrl.onShellsUpdated -= aims.getReloadingHandler().setAmmoStock
+        ammoCtrl.onCurrentShellChanged += aims.getReloadingHandler().setShellChanged
         ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
         ammoCtrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
         ammoCtrl.onGunReloadTimeSetInPercent -= self.__onGunReloadTimeSetInPercent
-        ammoCtrl.onCurrentShellChanged -= self.__onCurrentShellChanged
-        ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
 
     def __onGunSettingsSet(self, gunSettings):
         aim = self.__curCtrl.getAim()
@@ -611,18 +612,6 @@ class AvatarInputHandler(CallbackDelayer):
 
     def __onGunReloadTimeSetInPercent(self, _, percent):
         self.setReloadingInPercent(percent)
-
-    def __onCurrentShellChanged(self, _):
-        aim = self.__curCtrl.getAim()
-        if aim:
-            aim.setAmmoStock(*g_sessionProvider.getAmmoCtrl().getCurrentShells())
-
-    def __onShellsUpdated(self, _, quantity, quantityInClip, result):
-        if not result & SHELL_SET_RESULT.CURRENT:
-            return
-        aim = self.__curCtrl.getAim()
-        if aim:
-            aim.setAmmoStock(quantity, quantityInClip, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
 
 
 class _Targeting():

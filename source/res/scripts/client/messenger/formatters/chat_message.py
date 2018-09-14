@@ -129,8 +129,8 @@ class LobbyMessageBuilder(object):
         self.__templateKey = self.usersStorage.getUserGuiType(dbID)
         return self
 
-    def setName(self, dbID, nickName):
-        self.__name = g_lobbyContext.getPlayerFullName(nickName, pDBID=dbID)
+    def setName(self, dbID, nickName, clanAbbrev = None):
+        self.__name = g_lobbyContext.getPlayerFullName(nickName, pDBID=dbID, clanAbbrev=clanAbbrev)
         return self
 
     def setText(self, text):

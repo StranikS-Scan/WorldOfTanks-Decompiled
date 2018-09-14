@@ -7,6 +7,7 @@ from debug_utils import *
 from gui.Scaleform.framework import AppRef
 from debug_utils import _doLog
 _BROWSER_LOGGING = True
+_BROWSER_KEY_LOGGING = False
 
 def LOG_BROWSER(msg, *kargs):
     if _BROWSER_LOGGING and IS_DEVELOPMENT:
@@ -30,6 +31,7 @@ class WebBrowser(AppRef):
         self.__backgroundUrl = backgroundUrl
         self.onLoadStart = Event()
         self.onLoadEnd = Event()
+        self.onReadyToShowContent = Event()
         self.onNavigate = Event()
         LOG_BROWSER('__init__', self.__baseUrl, texName, size)
         self.__browser = uiObj.movie.createBrowser(texName, backgroundUrl, size[0], size[1])
@@ -116,6 +118,7 @@ class WebBrowser(AppRef):
             self.__browser.script = EventListener()
             self.__browser.script.onLoadStart += self.__onLoadStart
             self.__browser.script.onLoadEnd += self.__onLoadEnd
+            self.__browser.script.onDOMReady += self.__onReadyToShowContent
             self.__browser.script.onCursorUpdated += self.__onCursorUpdated
             self.enableUpdate = True
             self.__isMouseDown = False
@@ -140,6 +143,7 @@ class WebBrowser(AppRef):
         if self.__browser is not None:
             self.__browser.script.onLoadStart -= self.__onLoadStart
             self.__browser.script.onLoadEnd -= self.__onLoadEnd
+            self.__browser.script.onDOMReady -= self.__onReadyToShowContent
             self.__browser.script.onCursorUpdated -= self.__onCursorUpdated
             self.__browser.script = None
             browserCleanupRoutine(self.__browser)
@@ -165,6 +169,9 @@ class WebBrowser(AppRef):
         return
 
     def refresh(self, ignoreCache = True):
+        if BigWorld.time() - self.__loadStartTime < 0.5:
+            LOG_BROWSER('refresh - called too soon')
+            return
         if self.hasBrowser:
             self.__browser.reload(ignoreCache)
             self.onNavigate(self.__browser.url)
@@ -188,6 +195,9 @@ class WebBrowser(AppRef):
             self.__browser.goForward(self.url)
 
     def navigateStop(self):
+        if BigWorld.time() - self.__loadStartTime < 0.5:
+            LOG_BROWSER('navigateStop - called too soon')
+            return
         if self.hasBrowser:
             self.__browser.stop()
             self.__onLoadEnd()
@@ -217,6 +227,12 @@ class WebBrowser(AppRef):
     def handleKeyEvent(self, event):
         if not (self.hasBrowser and self.isFocused and self.enableUpdate):
             return False
+        if _BROWSER_KEY_LOGGING:
+            LOG_BROWSER('handleKeyEvent', (event.key,
+             event.isKeyDown(),
+             event.isAltDown(),
+             event.isShiftDown(),
+             event.isCtrlDown()))
         if event.key == Keys.KEY_LEFTMOUSE:
             if not event.isKeyDown():
                 self.browserUp(0, 0, 0)
@@ -224,6 +240,8 @@ class WebBrowser(AppRef):
         if event.key == Keys.KEY_ESCAPE:
             return False
         if event.key == Keys.KEY_RETURN and event.isAltDown():
+            return False
+        if event.key == Keys.KEY_SYSRQ:
             return False
         e = event
         self.__getBrowserKeyHandler(e.key, e.isKeyDown(), e.isAltDown(), e.isShiftDown(), e.isCtrlDown())(self, event)
@@ -289,6 +307,7 @@ class WebBrowser(AppRef):
 
     def __onLoadStart(self):
         self.__isNavigationComplete = False
+        self.__loadStartTime = BigWorld.time()
         if self.__browser.url != self.__backgroundUrl:
             LOG_BROWSER('onLoadStart', self.__browser.url)
             self.onLoadStart(self.__browser.url)
@@ -302,6 +321,11 @@ class WebBrowser(AppRef):
             else:
                 LOG_BROWSER('onLoadEnd', self.__browser.url)
                 self.onLoadEnd(self.__browser.url, isLoaded)
+
+    def __onReadyToShowContent(self):
+        if self.__browser.url != self.__backgroundUrl:
+            LOG_BROWSER('onReadyToShowContent', self.__browser.url)
+            self.onReadyToShowContent(self.__browser.url)
 
     def __onCursorUpdated(self):
         if self.hasBrowser and self.isFocused:
@@ -341,16 +365,16 @@ class EventListener():
         self.onCursorUpdated()
 
     def onChangeTitle(self, title):
-        LOG_BROWSER('Title is', title)
+        LOG_BROWSER('onChangeTitle', title)
 
     def onBeginLoadingFrame(self, frameId, isMainFrame, url):
         if isMainFrame:
             LOG_BROWSER('onBeginLoadingFrame(isMainFrame)', url)
             self.onLoadStart()
 
-    def onFailLoadingFrame(self, frameId, isMainFrame, errorCode, url):
+    def onFailLoadingFrame(self, frameId, isMainFrame, errorCode, errorDesc, url):
         if isMainFrame:
-            LOG_BROWSER('onFailLoadingFrame(isMainFrame)', url)
+            LOG_BROWSER('onFailLoadingFrame(isMainFrame)', url, errorDesc)
             self.onLoadEnd(False)
 
     def onFinishLoadingFrame(self, frameId, isMainFrame, url):
@@ -364,6 +388,9 @@ class EventListener():
 
     def onAddConsoleMessage(self, message, lineNumber, source):
         pass
+
+    def onShowCreatedWebView(self, url, isPopup):
+        LOG_BROWSER('onShowCreatedWebView', url, isPopup)
 
 
 class WebBrowserManager():

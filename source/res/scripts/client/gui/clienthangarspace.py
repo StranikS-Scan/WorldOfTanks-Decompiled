@@ -22,6 +22,8 @@ from ModelHitTester import ModelHitTester
 from AvatarInputHandler import mathUtils
 import MapActivities
 from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
+import TankHangarShadowProxy
+import weakref
 _DEFAULT_HANGAR_SPACE_PATH_BASIC = 'spaces/hangar_v2'
 _DEFAULT_HANGAR_SPACE_PATH_PREM = 'spaces/hangar_premium_v2'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
@@ -42,6 +44,10 @@ class HangarCameraYawFilter():
         self.__reversed = self.__start > self.__end
         self.__cycled = int(math.degrees(math.fabs(self.__end - self.__start))) >= 359.0
         self.__prevDirection = 0.0
+        if int(math.fabs(math.degrees(self.__start)) + 0.5) >= 180:
+            self.__start *= 179 / 180.0
+        if int(math.fabs(math.degrees(self.__end)) + 0.5) >= 180:
+            self.__end *= 179 / 180.0
 
     def toLimit(self, inAngle):
         inAngle = mathUtils.reduceToPI(inAngle)
@@ -110,7 +116,12 @@ class ClientHangarSpace():
         self.__igrHangarPathKey = 'igrPremHangarPath' + ('CN' if constants.IS_CHINA else '')
         self.__selectedEmblemInfo = None
         self.__showMarksOnGun = False
+        self.__fakeShadowId = None
+        self.__fakeShadowAsset = None
+        self.__fakeShadowScale = 1.0
         self.__prevDirection = 0.0
+        self.__camDistConstr = ((0.0, 0.0), (0.0, 0.0))
+        self.__locatedOnEmbelem = False
         hangarsXml = ResMgr.openSection('gui/hangars.xml')
         for isPremium in (False, True):
             spacePath = _DEFAULT_HANGAR_SPACE_PATH_PREM if isPremium else _DEFAULT_HANGAR_SPACE_PATH_BASIC
@@ -173,12 +184,20 @@ class ClientHangarSpace():
         if _HANGAR_CFGS.has_key(spacePathLC):
             self.__loadConfig(_CFG, _HANGAR_CFGS[spacePathLC], _CFG)
         self.__vEntityId = BigWorld.createEntity('OfflineEntity', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
-        self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId)
+        self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
         self.__setupCamera()
+        distConstrs = _CFG['cam_dist_constr']
+        previewConstr = _CFG.get('preview_cam_dist_constr', distConstrs)
+        if distConstrs is not None:
+            if previewConstr is not None:
+                self.__camDistConstr = (distConstrs, previewConstr)
+            else:
+                self.__camDistConstr = (distConstrs, distConstrs)
+        else:
+            self.__camDistConstr = ((0.0, 0.0), (0.0, 0.0))
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
-        MusicController.g_musicController.loadCustomSounds(spacePath)
         g_keyEventHandlers.add(self.handleKeyEvent)
         g_mouseEventHandlers.add(self.handleMouseEventGlobal)
         g_postProcessing.enable('hangar')
@@ -199,8 +218,12 @@ class ClientHangarSpace():
     def removeVehicle(self):
         self.__boundingRadius = None
         self.__vAppearance.destroy()
-        self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId)
-        BigWorld.entity(self.__vEntityId).model = None
+        self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
+        try:
+            BigWorld.entities[self.__vEntityId].model = None
+        except KeyError:
+            pass
+
         self.__selectedEmblemInfo = None
         return
 
@@ -267,7 +290,10 @@ class ClientHangarSpace():
         if not ignoreConstraints:
             yaw = self.__yawCameraFilter.toLimit(yaw)
             pitch = mathUtils.clamp(math.radians(_CFG['cam_pitch_constr'][0]), math.radians(_CFG['cam_pitch_constr'][1]), pitch)
-            dist = mathUtils.clamp(_CFG['cam_dist_constr'][0], _CFG['cam_dist_constr'][1], dist)
+            if self.__selectedEmblemInfo is not None:
+                dist = mathUtils.clamp(self.__camDistConstr[1][0], self.__camDistConstr[1][1], dist)
+            else:
+                dist = mathUtils.clamp(self.__camDistConstr[0][0], self.__camDistConstr[0][1], dist)
             if self.__boundingRadius is not None:
                 dist = dist if dist > self.__boundingRadius else self.__boundingRadius
         mat = Math.Matrix()
@@ -298,6 +324,7 @@ class ClientHangarSpace():
             halfF = emblemSize / (2 * relativeSize)
             dist = halfF / math.tan(BigWorld.projection().fov / 2)
             self.setCameraLocation(targetPos, Math.Vector3(0, 0, 0), dir.yaw, -dir.pitch, dist, True)
+            self.__locatedOnEmbelem = True
             return True
 
     def clearSelectedEmblemInfo(self):
@@ -308,6 +335,10 @@ class ClientHangarSpace():
         if self.__selectedEmblemInfo is not None:
             self.__cam.target.setTranslate(_CFG['preview_cam_start_target_pos'])
             self.__cam.pivotPosition = _CFG['preview_cam_pivot_pos']
+            if self.__locatedOnEmbelem:
+                self.__cam.maxDistHalfLife = 0.0
+            else:
+                self.__cam.maxDistHalfLife = _CFG['cam_fluency']
         sourceMat = Math.Matrix(self.__cam.source)
         yaw = sourceMat.yaw
         pitch = sourceMat.pitch
@@ -319,13 +350,16 @@ class ClientHangarSpace():
         dist -= dz * _CFG['cam_sens']
         pitch = mathUtils.clamp(math.radians(_CFG['cam_pitch_constr'][0]), math.radians(_CFG['cam_pitch_constr'][1]), pitch)
         prevDist = dist
-        dist = mathUtils.clamp(_CFG['cam_dist_constr'][0], _CFG['cam_dist_constr'][1], dist)
+        distConstr = self.__camDistConstr[1] if self.__selectedEmblemInfo is not None else self.__camDistConstr[0]
+        dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
         if self.__boundingRadius is not None:
-            dist = dist if dist > self.__boundingRadius else self.__boundingRadius
+            boundingRadius = self.__boundingRadius if self.__boundingRadius < distConstr[1] else distConstr[1]
+            dist = dist if dist > boundingRadius else boundingRadius
         if dist > prevDist and dz > 0:
             if self.__selectedEmblemInfo is not None:
                 self.locateCameraOnEmblem(*self.__selectedEmblemInfo)
                 return
+        self.__locatedOnEmbelem = False
         mat = Math.Matrix()
         mat.setRotateYPR((yaw, pitch, 0.0))
         self.__cam.source = mat
@@ -359,7 +393,6 @@ class ClientHangarSpace():
         self.__boundingRadius = None
         g_keyEventHandlers.remove(self.handleKeyEvent)
         g_mouseEventHandlers.remove(self.handleMouseEventGlobal)
-        entity = None if self.__vEntityId is None else BigWorld.entity(self.__vEntityId)
         BigWorld.SetDrawInflux(False)
         MapActivities.g_mapActivities.stop()
         if self.__spaceId is not None and BigWorld.isClientSpace(self.__spaceId):
@@ -369,14 +402,10 @@ class ClientHangarSpace():
             BigWorld.releaseSpace(self.__spaceId)
         self.__spaceMappingId = None
         self.__spaceId = None
-        if entity is None or not entity.inWorld:
-            return
-        else:
-            BigWorld.destroyEntity(self.__vEntityId)
-            self.__vEntityId = None
-            BigWorld.wg_disableSpecialFPSMode()
-            g_postProcessing.disable()
-            return
+        self.__vEntityId = None
+        BigWorld.wg_disableSpecialFPSMode()
+        g_postProcessing.disable()
+        return
 
     def __setupCamera(self):
         self.__cam = BigWorld.CursorCamera()
@@ -403,7 +432,8 @@ class ClientHangarSpace():
             self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         else:
             BigWorld.worldDrawEnabled(True)
-            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_multiplyChunkModelScale(spaceID, ix, iz, _CFG['shadow_model_name'], Math.Vector3(_CFG['v_scale'], 1.0, _CFG['v_scale'])))
+            self.__requestFakeShadowModel()
+            self.modifyFakeShadowScale(_CFG['v_scale'])
             if self.__onLoadedCallback is not None:
                 self.__onLoadedCallback()
                 self.__onLoadedCallback = None
@@ -424,6 +454,7 @@ class ClientHangarSpace():
         self.__loadConfigValue('cam_dist_constr', xml, xml.readVector2, cfg, defaultCfg)
         self.__loadConfigValue('cam_pitch_constr', xml, xml.readVector2, cfg, defaultCfg)
         self.__loadConfigValue('cam_yaw_constr', xml, xml.readVector2, cfg, defaultCfg)
+        self.__loadConfigValue('preview_cam_dist_constr', xml, xml.readVector2, cfg, defaultCfg)
         self.__loadConfigValue('cam_sens', xml, xml.readFloat, cfg, defaultCfg)
         self.__loadConfigValue('cam_pivot_pos', xml, xml.readVector3, cfg, defaultCfg)
         self.__loadConfigValue('cam_fluency', xml, xml.readFloat, cfg, defaultCfg)
@@ -449,11 +480,60 @@ class ClientHangarSpace():
             cfg[name] = defaultCfg.get(name) if defaultCfg is not None else None
         return
 
+    def __requestFakeShadowModel(self):
+        resources = [_CFG['shadow_model_name']]
+        BigWorld.loadResourceListBG(tuple(resources), partial(self.__onFakeShadowLoaded))
+
+    def __onFakeShadowLoaded(self, resourceRefs):
+        fakeShadowModel = resourceRefs[_CFG['shadow_model_name']]
+        shadowProxyNodes = [ udo for udo in BigWorld.userDataObjects.values() if isinstance(udo, TankHangarShadowProxy.TankHangarShadowProxy) ]
+        if len(shadowProxyNodes) == 1:
+            shadowProxy = shadowProxyNodes[0]
+            shadowXFormPosition = shadowProxy.position
+            shadowXFormOrientation = (shadowProxy.roll, shadowProxy.pitch, shadowProxy.yaw)
+        else:
+            LOG_DEBUG('Too many TankHangarShadowProxies? Or not enough.')
+            return
+        self.__fakeShadowId = BigWorld.createEntity('OfflineEntity', self.__spaceId, 0, shadowXFormPosition, shadowXFormOrientation, dict())
+        entity = BigWorld.entity(self.__fakeShadowId)
+        entity.model = fakeShadowModel
+        self.modifyFakeShadowScale(self.__fakeShadowScale)
+        self.modifyFakeShadowAsset(self.__fakeShadowAsset)
+
+    def __getFakeShadowModel(self):
+        fakeShadowId = self.__fakeShadowId
+        if fakeShadowId is None:
+            return
+        else:
+            entity = BigWorld.entity(fakeShadowId)
+            if entity is None:
+                return
+            fakeShadowModel = entity.model
+            return fakeShadowModel
+
+    def modifyFakeShadowScale(self, scale):
+        self.__fakeShadowScale = scale
+        fakeShadowModel = self.__getFakeShadowModel()
+        if fakeShadowModel is None:
+            return
+        else:
+            fakeShadowModel.scale = Math.Vector3(scale, 1.0, scale)
+            return
+
+    def modifyFakeShadowAsset(self, asset):
+        self.__fakeShadowAsset = asset
+        fakeShadowModel = self.__getFakeShadowModel()
+        if fakeShadowModel is None:
+            return
+        else:
+            BigWorld.wg_setPyModelTexture(fakeShadowModel, 'diffuseMap', asset)
+            return
+
 
 class _VehicleAppearance():
     __ROOT_NODE_NAME = 'V'
 
-    def __init__(self, spaceId, vEntityId):
+    def __init__(self, spaceId, vEntityId, hangarSpace):
         self.__isLoaded = False
         self.__curBuildInd = 0
         self.__vDesc = None
@@ -468,6 +548,7 @@ class _VehicleAppearance():
         self.__isVehicleDestroyed = False
         self.__smCb = None
         self.__smRemoveCb = None
+        self.__hangarSpace = weakref.proxy(hangarSpace)
         self.__removeHangarShadowMap()
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         self.__showMarksOnGun = g_settingsCore.getSetting('showMarksOnGun')
@@ -488,7 +569,6 @@ class _VehicleAppearance():
         return
 
     def destroy(self):
-        self.setModelsQuality(0)
         self.__onLoadedCallback = None
         self.__vDesc = None
         self.__vState = None
@@ -511,7 +591,6 @@ class _VehicleAppearance():
         return self.__isLoaded
 
     def __startBuild(self, vDesc, vState):
-        self.setModelsQuality(0)
         self.__curBuildInd += 1
         self.__vDesc = vDesc
         self.__vState = vState
@@ -522,7 +601,6 @@ class _VehicleAppearance():
          'turret': vDesc.turret['models'][vState],
          'gun': vDesc.gun['models'][vState],
          'camouflageExclusionMask': vDesc.type.camouflageExclusionMask}
-        self.setModelsQuality(1)
         customization = items.vehicles.g_cache.customization(vDesc.type.customizationNationID)
         if customization is not None and vDesc.camouflages is not None:
             activeCamo = g_tankActiveCamouflage['historical'].get(vDesc.type.compactDescr)
@@ -544,14 +622,6 @@ class _VehicleAppearance():
             resources.extend(splineDesc.values())
         BigWorld.loadResourceListBG(tuple(resources), partial(self.__onResourcesLoaded, self.__curBuildInd))
         return
-
-    def setModelsQuality(self, quality):
-        if len(self.__componentIDs) is 0:
-            return
-        BigWorld.wg_setModelQuality(self.__componentIDs['chassis'], quality)
-        BigWorld.wg_setModelQuality(self.__componentIDs['hull'], quality)
-        BigWorld.wg_setModelQuality(self.__componentIDs['turret'], quality)
-        BigWorld.wg_setModelQuality(self.__componentIDs['gun'], quality)
 
     def __onResourcesLoaded(self, buildInd, resourceRefs):
         if buildInd != self.__curBuildInd:
@@ -617,7 +687,7 @@ class _VehicleAppearance():
             return
         else:
             self.__smRemoveCb = None
-            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_setChunkModelTexture(spaceID, ix, iz, _CFG['shadow_model_name'], 'diffuseMap', _CFG['shadow_empty_texture_name']))
+            self.__hangarSpace.modifyFakeShadowAsset(_CFG['shadow_empty_texture_name'])
             return
 
     VehicleProxy = namedtuple('VehicleProxy', 'typeDescriptor')
@@ -648,7 +718,7 @@ class _VehicleAppearance():
                     if fileName.lower().find('_hangarshadowmap.dds') != -1:
                         shadowMapTexFileName = vehiclePath + '/' + fileName
 
-            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_setChunkModelTexture(spaceID, ix, iz, _CFG['shadow_model_name'], 'diffuseMap', shadowMapTexFileName))
+            self.__hangarSpace.modifyFakeShadowAsset(shadowMapTexFileName)
             return
 
     def __onItemsCacheSyncCompleted(self, updateReason, invalidItems):
@@ -724,7 +794,8 @@ class _VehicleAppearance():
                     self.__onLoadedCallback()
                     self.__onLoadedCallback = None
                 self.updateCamouflage()
-                self.__setupHangarShadow()
+                if self.__smCb is None:
+                    self.__setupHangarShadowMap()
             if self.__vDesc is not None and 'observer' in self.__vDesc.type.tags:
                 model.visible = False
                 model.visibleAttachments = False
@@ -985,9 +1056,3 @@ def _createMatrix(scale, angles, pos):
     mat.preMultiply(mat3)
     mat.postMultiply(mat2)
     return mat
-
-
-def _modifyHangarChunkModel(modifyFn):
-    for ix in range(-10, 10):
-        for iz in range(-10, 10):
-            modifyFn(BigWorld.camera().spaceID, ix, iz)

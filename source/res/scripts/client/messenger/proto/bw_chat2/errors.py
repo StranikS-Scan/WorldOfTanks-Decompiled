@@ -1,11 +1,10 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/errors.py
-import BigWorld
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from helpers import i18n, html
 from helpers.time_utils import makeLocalServerTime
 from messenger.proto.interfaces import IChatError
-from messenger.proto.shared_errors import ChatCoolDownError, ClientActionError, I18nActionID, I18nErrorID
+from messenger.proto.shared_errors import ChatCoolDownError, ClientActionError, I18nActionID, I18nErrorID, ChatBanError
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_ERRORS as _ERRORS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
@@ -126,29 +125,6 @@ class _AdminCommandCoolDownError(_AdminCommandError):
         super(_AdminCommandCoolDownError, self).__init__(i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_COMMAND_IN_COOLDOWN_WO_NAME, floatArg1=_LIMITS.ADMIN_COMMANDS_FROM_CLIENT_COOLDOWN_SEC))
 
 
-class _ChatBanError(IChatError):
-    __slots__ = ('_endTime', '_reason')
-
-    def __init__(self, endTime, reason):
-        super(_ChatBanError, self).__init__()
-        self._endTime = makeLocalServerTime(endTime)
-        self._reason = reason
-
-    def getTitle(self):
-        return i18n.makeString(I18N_MESSENGER.SERVER_ERRORS_CHATBANNED_TITLE)
-
-    def getMessage(self):
-        if self._endTime:
-            banEndTime = BigWorld.wg_getLongDateFormat(self._endTime) + ' ' + BigWorld.wg_getShortTimeFormat(self._endTime)
-            msg = i18n.makeString('#chat:errors/chatbanned', banEndTime=banEndTime, banReason=self._reason)
-        else:
-            msg = i18n.makeString('#chat:errors/chatbannedpermanent', banReason=self._reason)
-        return msg
-
-    def isModal(self):
-        return True
-
-
 def createCoolDownError(actionID):
     command = _ACTIONS.adminChatCommandFromActionID(actionID)
     if command:
@@ -172,7 +148,7 @@ def createBroadcastError(args, broadcastID):
     errorID = args['int32Arg1']
     if not _ACTIONS.isRateLimitedBroadcastFromClient(broadcastID):
         raise AssertionError
-        error = errorID == _ERRORS.IN_CHAT_BAN and _ChatBanError(args['floatArg1'], args['strArg1'])
+        error = errorID == _ERRORS.IN_CHAT_BAN and ChatBanError(makeLocalServerTime(args['floatArg1']), args['strArg1'])
     elif errorID == _ERRORS.IN_COOLDOWN:
         error = _ActionCoolDownError(broadcastID, _LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC)
     else:
@@ -199,12 +175,16 @@ def createBattleCommandError(args, command):
     return error
 
 
-def createVOIPError(args):
+def createVOIPError(args, actionID):
     errorID = args['int32Arg1']
-    error = None
-    if errorID == _ERRORS.IN_COOLDOWN:
-        error = _ActionCoolDownError(_ACTIONS.GET_VOIP_CREDENTIALS, _LIMITS.VOIP_CREDENTIALS_REQUEST_COOLDOWN_SEC)
-    return error
+    error, logOnly = None, False
+    if actionID == _ACTIONS.GET_VOIP_CREDENTIALS:
+        if errorID == _ERRORS.IN_COOLDOWN:
+            error = _ActionCoolDownError(_ACTIONS.GET_VOIP_CREDENTIALS, _LIMITS.VOIP_CREDENTIALS_REQUEST_COOLDOWN_SEC)
+        elif errorID == _ERRORS.GENERIC_ERROR:
+            logOnly = True
+            error = 'The player has received the error to the request for getting of voip credential. Perhaps voip connection to the server is lost, the server is reconnecting to voip.'
+    return (error, logOnly)
 
 
 def createSearchUserError(args):

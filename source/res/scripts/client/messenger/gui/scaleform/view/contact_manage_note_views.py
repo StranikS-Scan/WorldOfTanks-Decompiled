@@ -15,6 +15,7 @@ class ContactManageNoteView(ContactNoteManageViewMeta):
     def __init__(self):
         super(ContactManageNoteView, self).__init__()
         self._dbID = 0L
+        self._note = ''
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
@@ -33,6 +34,9 @@ class ContactManageNoteView(ContactNoteManageViewMeta):
             userProps = ContactConverter.makeBaseUserProps(userEntity)
         scheme = g_settings.getColorScheme('contacts')
         userProps['rgb'] = scheme.getColors('clanMember')[0]
+        self._note = userEntity.getNote() if userEntity else ''
+        if self._note:
+            self.as_setInputTextS(self._note)
         self.as_setUserPropsS(userProps)
         return
 
@@ -40,7 +44,7 @@ class ContactManageNoteView(ContactNoteManageViewMeta):
         self.as_setOkBtnEnabledS(self._isTextValid(text))
 
     def onOk(self, text):
-        success = self.proto.contacts.setNote(self._dbID, text)
+        success = self.proto.contacts.setNote(self._dbID, text.currValue)
         if success:
             self.as_closeViewS()
 
@@ -48,26 +52,27 @@ class ContactManageNoteView(ContactNoteManageViewMeta):
         _, error = validateContactNote(text)
         return error is None
 
+    def _extendInitData(self, defData):
+        defData['inputPrompt'] = i18n.makeString(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGENOTE_INPUT_PROMPT, symbols=CONTACT_LIMIT.NOTE_MAX_CHARS_COUNT)
+        defData['groupMaxChars'] = CONTACT_LIMIT.NOTE_MAX_CHARS_COUNT
+        defData['inputTooltip'] = i18n.makeString(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGENOTE_INPUT_TOOLTIP, maxChars=CONTACT_LIMIT.NOTE_MAX_CHARS_COUNT)
+
 
 class ContactEditNoteView(ContactManageNoteView):
 
     def __init__(self):
         super(ContactEditNoteView, self).__init__()
-        self.__defaultText = None
-        return
 
     def sendData(self, data):
         super(ContactEditNoteView, self).sendData(data)
-        self.__defaultText = 'Some note of particular contact'
-        self.as_setInputTextS(self.__defaultText)
+        self.as_setOkBtnEnabledS(False)
 
     def _isTextValid(self, text):
-        return super(ContactEditNoteView, self)._isTextValid(text) and self.__defaultText != text
+        return super(ContactEditNoteView, self)._isTextValid(text) and self._note != text
 
     def _getInitDataObject(self):
-        defData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_EDITNOTE_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_EDITNOTE_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_EDITNOTE_BTNCANCEL_LABEL)
-        defData['inputPrompt'] = i18n.makeString(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_SEARCHINPUTPROMPT, symbols=CONTACT_LIMIT.NOTE_MAX_CHARS_COUNT)
-        defData['groupMaxChars'] = CONTACT_LIMIT.NOTE_MAX_CHARS_COUNT
+        defData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_EDITNOTE_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_EDITNOTE_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_EDITNOTE_BTNCANCEL_LABEL, MESSENGER.MESSENGER_CONTACTS_EDITNOTE_TOOLTIPS_BTNS_OK, MESSENGER.MESSENGER_CONTACTS_EDITNOTE_TOOLTIPS_BTNS_CLOSE)
+        self._extendInitData(defData)
         return defData
 
 
@@ -76,8 +81,11 @@ class ContactCreateNoteView(ContactManageNoteView):
     def __init__(self):
         super(ContactCreateNoteView, self).__init__()
 
+    def _populate(self):
+        super(ContactCreateNoteView, self)._populate()
+        self.as_setOkBtnEnabledS(False)
+
     def _getInitDataObject(self):
-        defData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATENOTE_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATENOTE_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATENOTE_BTNCANCEL_LABEL)
-        defData['inputPrompt'] = i18n.makeString(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_SEARCHINPUTPROMPT, symbols=CONTACT_LIMIT.NOTE_MAX_CHARS_COUNT)
-        defData['groupMaxChars'] = CONTACT_LIMIT.NOTE_MAX_CHARS_COUNT
+        defData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_CREATENOTE_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_CREATENOTE_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_CREATENOTE_BTNCANCEL_LABEL, MESSENGER.MESSENGER_CONTACTS_CREATENOTE_TOOLTIPS_BTNS_OK, MESSENGER.MESSENGER_CONTACTS_CREATENOTE_TOOLTIPS_BTNS_CLOSE)
+        self._extendInitData(defData)
         return defData

@@ -77,9 +77,10 @@ class ShowShooting(EntityExtra):
                 if data['entity'].isPlayer:
                     avatar = BigWorld.player()
                     avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, 2)
-            groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
-            if groundWaveEff is not None:
-                self.__doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
+            if not vehicle.appearance.isInWater:
+                groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
+                if groundWaveEff is not None:
+                    self.__doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
             self.__doRecoil(vehicle, gunModel)
             if vehicle.isPlayer:
                 appearance = vehicle.appearance
@@ -104,7 +105,6 @@ class ShowShooting(EntityExtra):
         BigWorld.player().inputHandler.onVehicleShaken(vehicle, gunPos, impulseDir, vehicle.typeDescriptor.shot['shell']['caliber'], ShakeReason.OWN_SHOT_DELAYED)
 
     def __doGroundWaveEffect(self, vehicle, groundWaveEff, gunModel):
-        gunDescr = vehicle.typeDescriptor.gun
         node = gunModel.node('HP_gunFire')
         gunMatr = Math.Matrix(node)
         gunPos = gunMatr.translation

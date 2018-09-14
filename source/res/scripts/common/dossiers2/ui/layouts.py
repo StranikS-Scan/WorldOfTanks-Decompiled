@@ -3,7 +3,7 @@ from collections import defaultdict
 import nations
 from constants import DOSSIER_TYPE
 from dossiers2.ui import achievements
-from dossiers2.custom import layouts as com_layouts
+from dossiers2.custom import layouts as com_layouts, records
 _AB = achievements.ACHIEVEMENT_BLOCK
 
 def _7x7(achieveName):
@@ -16,6 +16,10 @@ def _total(achieveName):
 
 def _single(achieveName):
     return (_AB.SINGLE, achieveName)
+
+
+def _single7x7(achieveName):
+    return (_AB.SINGLE_7X7, achieveName)
 
 
 _TANK_EXPERT_PREFIX = 'tankExpert'
@@ -35,6 +39,11 @@ POTAPOV_QUESTS_GROUP = [_single('firstMerit'),
  _total('readyForBattleATSPG'),
  _total('readyForBattleALL'),
  _total('tankwomenProgress')]
+IGNORED_BY_BATTLE_RESULTS = [achievements.MARK_OF_MASTERY_RECORD, _single7x7('victoryMarch')]
+for record in records.RECORD_DB_IDS:
+    if record[1] in ('maxXP', 'maxFrags', 'maxDamage'):
+        IGNORED_BY_BATTLE_RESULTS.append(record)
+
 _COMMON_DOSSIERS_TYPE = 0
 _EXCLUDED_ACHIEVES = defaultdict(tuple, {})
 _CUSTOM_ACHIEVES = defaultdict(tuple, {DOSSIER_TYPE.ACCOUNT: (achievements.WHITE_TIGER_RECORD, achievements.RARE_STORAGE_RECORD)})
@@ -66,6 +75,9 @@ def _buildComLayoutSet(dossierType, comLayout):
 ACCOUNT_ACHIEVEMENT_LAYOUT = []
 VEHICLE_ACHIEVEMENT_LAYOUT = []
 TANKMAN_ACHIEVEMENT_LAYOUT = []
+FORT_ACHIEVEMENT_LAYOUT = []
+RATED7x7_ACHIEVEMENT_LAYOUT = []
+CLUB_ACHIEVEMENT_LAYOUT = []
 _layoutsMap = {}
 
 def getAchievementsLayout(dossierType):
@@ -130,7 +142,10 @@ def init():
 
     _layoutsMap = {DOSSIER_TYPE.ACCOUNT: (ACCOUNT_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.ACCOUNT, com_layouts.accountDossierLayout)),
      DOSSIER_TYPE.VEHICLE: (VEHICLE_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.VEHICLE, com_layouts.vehicleDossierLayout)),
-     DOSSIER_TYPE.TANKMAN: (TANKMAN_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.TANKMAN, com_layouts.tmanDossierLayout))}
+     DOSSIER_TYPE.TANKMAN: (TANKMAN_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.TANKMAN, com_layouts.tmanDossierLayout)),
+     DOSSIER_TYPE.FORTIFIED_REGIONS: (FORT_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.FORTIFIED_REGIONS, com_layouts.fortDossierLayout)),
+     DOSSIER_TYPE.RATED7X7: (RATED7x7_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.RATED7X7, com_layouts.rated7x7DossierLayout)),
+     DOSSIER_TYPE.CLUB: (CLUB_ACHIEVEMENT_LAYOUT, _buildComLayoutSet(DOSSIER_TYPE.CLUB, com_layouts.clubDossierLayout))}
     for record, values in achievements.ACHIEVEMENTS.iteritems():
         _MODE_ACHIEVEMENTS[values['mode']].add(record)
         for uiLayout, comLayout in _layoutsMap.itervalues():

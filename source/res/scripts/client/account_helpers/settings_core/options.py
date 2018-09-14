@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/options.py
 import base64
 import cPickle
+import GUI
 from operator import itemgetter
 import sys
 import fractions
@@ -40,6 +41,7 @@ from gui.Scaleform import VoiceChatInterface
 from gui.Scaleform.daapi import AppRef
 from gui.Scaleform.LogitechMonitor import LogitechMonitor
 from gui.battle_control import g_sessionProvider
+from ConnectionManager import connectionManager
 
 class APPLY_METHOD:
     NORMAL = 'normal'
@@ -1916,3 +1918,57 @@ class ReplaySetting(StorageAccountSetting):
 
     def setSystemValue(self, value):
         BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
+
+
+class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
+
+    def __init__(self, sectionName = None, isPreview = False):
+        super(InterfaceScaleSetting, self).__init__(sectionName, isPreview)
+        self.__interfaceScale = 0
+        connectionManager.onDisconnected += self.onDisconnected
+        connectionManager.onConnected += self.onConnected
+
+    def get(self):
+        self.__checkAndCorrectScaleValue(self.__interfaceScale)
+        return self.__interfaceScale
+
+    def getDefaultValue(self):
+        return AccountSettings.getSettingsDefault(self.sectionName)
+
+    def setSystemValue(self, value):
+        self.__interfaceScale = value
+        if self.app is not None:
+            params = list(GUI.screenResolution()[:2])
+            params.append(graphics.getScaleByIndex(value))
+            self.app.as_updateStageS(*params)
+        g_monitorSettings.setGlyphCache(graphics.getScaleByIndex(value))
+        return
+
+    def onConnected(self):
+        self.setSystemValue(super(InterfaceScaleSetting, self).get())
+
+    def onDisconnected(self):
+        self.setSystemValue(0)
+
+    def _getOptions(self):
+        return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.wg_getCurrentResolution(True)), self.__getScales(graphics.getSuitableVideoModes())]
+
+    def _set(self, value):
+        super(InterfaceScaleSetting, self)._save(value)
+        self.setSystemValue(value)
+
+    def __getScales(self, modesVariety, additionalSize = None):
+        result = []
+        for i in xrange(len(modesVariety)):
+            modes = sorted(set([ (mode.width, mode.height) for mode in modesVariety[i] ]))
+            if additionalSize is not None:
+                modes.append(additionalSize[0:2])
+            result.append(map(graphics.getInterfaceScalesList, modes))
+
+        return result
+
+    def __checkAndCorrectScaleValue(self, value):
+        scaleLength = graphics.getScaleLength()
+        if value >= scaleLength:
+            self.__interfaceScale = scaleLength - 1
+            self._set(self.__interfaceScale)

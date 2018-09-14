@@ -1,9 +1,7 @@
 # Embedded file name: scripts/client/gui/shared/personality.py
-import time
 import SoundGroups
 import BigWorld
 import MusicController
-from gui.shared.ClanCache import g_clanCache
 from predefined_hosts import g_preDefinedHosts
 from account_helpers.settings_core.SettingsCache import g_settingsCache
 from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -11,8 +9,7 @@ from account_helpers.AccountValidator import AccountValidator
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.LogitechMonitor import LogitechMonitor
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
-from helpers import isPlayerAccount
+from helpers import isPlayerAccount, time_utils
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from PlayerEvents import g_playerEvents
@@ -20,17 +17,22 @@ from account_helpers import isPremiumAccount
 from CurrentVehicle import g_currentVehicle
 from ConnectionManager import connectionManager
 from gui import SystemMessages, g_guiResetters, game_control
+from gui.clubs.ClubsController import g_clubsCtrl
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.WindowsManager import g_windowsManager
 from gui.Scaleform.Waiting import Waiting
-from gui.shared import g_eventBus, g_itemsCache, events
 from gui.server_events import g_eventsCache
+from gui.shared import g_eventBus, g_itemsCache, events
+from gui.shared.ClanCache import g_clanCache
+from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shared.utils import ParametersCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
+from gui.wgnc import g_wgncProvider
 
 @process
 def onAccountShowGUI(ctx):
@@ -66,6 +68,7 @@ def onAccountShowGUI(ctx):
     g_windowsManager.onAccountShowGUI(g_lobbyContext.getGuiCtx())
     g_prbLoader.onAccountShowGUI(g_lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()
+    g_clubsCtrl.start()
     SoundGroups.g_instance.enableLobbySounds(True)
     onCenterIsLongDisconnected(True)
     Waiting.hide('enter')
@@ -75,12 +78,14 @@ def onAccountBecomeNonPlayer():
     g_itemsCache.clear()
     g_currentVehicle.destroy()
     g_hangarSpace.destroy()
+    UsersInfoHelper.clear()
 
 
 @process
 def onAvatarBecomePlayer():
     yield g_settingsCache.update()
     g_settingsCore.serverSettings.applySettings()
+    g_clubsCtrl.stop()
     g_prbLoader.onAvatarBecomePlayer()
     game_control.g_instance.onAvatarBecomePlayer()
     g_clanCache.onAvatarBecomePlayer()
@@ -114,7 +119,7 @@ def onShopResync():
         return
     yield g_eventsCache.update()
     Waiting.hide('sinhronize')
-    now = time.time()
+    now = time_utils.getCurrentTimestamp()
     SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.SHOP_RESYNC, date=BigWorld.wg_getLongDateFormat(now), time=BigWorld.wg_getShortTimeFormat(now), type=SystemMessages.SM_TYPE.Information)
 
 
@@ -169,6 +174,7 @@ def init(loadingScreenGUI = None):
     g_settingsCore.init()
     g_eventsCache.init()
     g_clanCache.init()
+    g_clubsCtrl.init()
     from constants import IS_DEVELOPMENT
     if IS_DEVELOPMENT:
         try:
@@ -193,12 +199,14 @@ def fini():
     SystemMessages.g_instance.destroy()
     g_eventBus.clear()
     g_prbLoader.fini()
+    g_clubsCtrl.fini()
     g_clanCache.fini()
     game_control.g_instance.fini()
     g_settingsCore.fini()
     g_settingsCache.fini()
     g_eventsCache.fini()
     g_itemsCache.fini()
+    UsersInfoHelper.fini()
     g_playerEvents.onIGRTypeChanged -= onIGRTypeChanged
     g_playerEvents.onAccountShowGUI -= onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer -= onAccountBecomeNonPlayer
@@ -229,9 +237,12 @@ def onDisconnected():
     g_prbLoader.onDisconnected()
     g_clanCache.onDisconnected()
     game_control.g_instance.onDisconnected()
+    g_clubsCtrl.stop(isDisconnected=True)
+    g_wgncProvider.clear()
     g_itemsCache.clear()
     g_eventsCache.clear()
     g_lobbyContext.clear()
+    UsersInfoHelper.clear()
     Waiting.rollback()
     Waiting.cancelCallback()
 

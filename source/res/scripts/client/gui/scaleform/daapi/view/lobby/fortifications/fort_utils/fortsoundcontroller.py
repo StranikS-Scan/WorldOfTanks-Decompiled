@@ -100,9 +100,6 @@ class _FortSoundController(FortViewHelper, AppRef):
     def playNextStepTransport(self):
         self.__playSound(SoundEffectsId.TRANSPORT_NEXT_STEP)
 
-    def playLimitTransport(self):
-        self.__playSound(SoundEffectsId.TRANSPORT_CONSTRAIN)
-
     def playStartTransport(self):
         self.__playSound(SoundEffectsId.TRANSPORT_APPROVE)
 

@@ -21,7 +21,7 @@ from gui.shared import g_itemsCache, events, g_eventBus, event_dispatcher as sha
 from gui.shared.utils import findFirst
 from gui.server_events import g_eventsCache
 from messenger.m_constants import USER_TAG
-from messenger.proto.entities import SharedUserEntity
+from messenger.proto.entities import SharedUserEntity, ClanInfo
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
@@ -283,7 +283,7 @@ class RefSystem(Controller):
             if user:
                 user.addTags(tags)
             else:
-                userSetter(SharedUserEntity(dbID, name=item.getNickName(), tags=tags, clanAbbrev=item.getClanAbbrev()))
+                userSetter(SharedUserEntity(dbID, name=item.getNickName(), tags=tags, clanInfo=ClanInfo(abbrev=item.getClanAbbrev())))
 
         for referrer in self.__buildReferrers(data):
             self.__referrers.append(referrer)
@@ -414,8 +414,9 @@ class _RefItem(object):
             delta = time_utils.getTimeDeltaTilNow(self.__firstBattleTime)
             try:
                 maxXPPool = _getMaxReferralXPPool()
+                periodTime = 0
                 for period, bonus in _getRefSystemPeriods():
-                    periodTime = period * time_utils.ONE_HOUR
+                    periodTime += period * time_utils.ONE_HOUR
                     if delta <= periodTime and self.__xpPool < maxXPPool:
                         timeLeft = 0
                         if periodTime <= time_utils.ONE_YEAR:

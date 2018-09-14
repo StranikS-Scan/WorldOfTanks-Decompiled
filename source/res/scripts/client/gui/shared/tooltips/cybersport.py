@@ -18,16 +18,15 @@ class CybersportToolTipData(ToolTipBaseData):
         super(CybersportToolTipData, self).__init__(context, TOOLTIP_TYPE.CYBER_SPORT)
 
 
-class CybersportAutosearchToolTipData(CybersportToolTipData):
+class CybersportSelectedVehicleToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, descr = None):
-        if descr is not None:
-            selected = [ vo_converters.makeVehicleVO(g_itemsCache.items.getItemByCD(int(item))) for item in descr ]
+    def getDisplayableData(self, intCD):
+        if intCD is not None:
+            vehicle = g_itemsCache.items.getItemByCD(int(intCD))
+            return vo_converters.makeVehicleVO(vehicle)
         else:
-            selected = None
-        data = vo_converters.getUnitRosterModel(selected, tuple(), False)
-        data.update({'toolTipType': 'cyberSportAutoSearchVehicles'})
-        return data
+            super(CybersportSelectedVehicleToolTipData, self).getDisplayableData(intCD)
+            return
 
 
 class CybersportSlotToolTipData(CybersportToolTipData):
@@ -81,32 +80,13 @@ class SquadSlotSelectedToolTipData(CybersportToolTipData):
 
 class CybersportUnitToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, unitIdx = None):
-        if unitIdx is not None:
-            unitIdx = int(unitIdx)
-        dispatcher = g_prbLoader.getDispatcher()
-        if dispatcher is not None:
-            functional = dispatcher.getUnitFunctional()
-            data = vo_converters.getUnitRosterData(functional, unitIdx=unitIdx)
-            players = functional.getPlayers(unitIdx)
-            unitComment = functional.getCensoredComment(unitIdx=unitIdx)
-            commander = None
-            for dbId, playerInfo in players.iteritems():
-                if playerInfo.isCreator():
-                    commander = playerInfo
-                    break
-
-            data['unitComment'] = unitComment
-            if commander is not None:
-                data['commanderName'] = commander.getFullName()
-                data['commanderRating'] = BigWorld.wg_getIntegralFormat(commander.rating)
-            else:
-                data['commanderName'] = ''
-                data['commanderRating'] = '0'
-            return data
+    def getDisplayableData(self, data = None):
+        if data is not None:
+            return {'unitComment': data.description,
+             'commanderName': data.creatorName,
+             'commanderRating': data.rating}
         else:
-            super(CybersportUnitToolTipData, self).getDisplayableData(unitIdx)
-            return
+            return super(CybersportUnitToolTipData, self).getDisplayableData(data)
 
 
 class CybersportUnitLevelToolTipData(CybersportToolTipData):

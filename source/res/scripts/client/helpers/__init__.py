@@ -111,6 +111,10 @@ def isShowStartupVideo():
         return p is None or p.readInt(Settings.KEY_SHOW_STARTUP_MOVIE, 1) == 1
 
 
+def newFakeModel():
+    return BigWorld.Model('')
+
+
 _g_alphabetOrderExcept = {1105: 1077.5,
  1025: 1045.5}
 

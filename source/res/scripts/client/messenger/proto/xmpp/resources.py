@@ -3,55 +3,48 @@ from constants import IGR_TYPE
 from gui.shared.utils.decorators import ReprInjector
 from messenger.m_constants import USER_TAG
 from messenger.proto.xmpp.gloox_constants import PRESENCES_ORDER, PRESENCE
+from messenger.proto.xmpp.wrappers import WGExtsInfo
 
-@ReprInjector.simple('priority', 'message', 'presence')
+@ReprInjector.simple('priority', 'message', 'presence', ('__wgExts', 'exts'))
 
 class Resource(object):
-    __slots__ = ('priority', 'message', 'presence')
+    __slots__ = ('priority', 'message', 'presence', '__wgExts', '__order')
 
-    def __init__(self, priority = 0, message = 0, presence = PRESENCE.UNAVAILABLE):
+    def __init__(self, priority = 0, message = 0, presence = PRESENCE.UNAVAILABLE, wgExts = None):
         super(Resource, self).__init__()
         self.priority = priority
         self.message = message
         self.presence = presence
+        self.__wgExts = wgExts or WGExtsInfo(None, None, None)
+        self.__order = PRESENCES_ORDER.index(self.presence)
+        return
 
     def getTags(self):
         tags = set()
         if self.presence == PRESENCE.DND:
             tags.add(USER_TAG.PRESENCE_DND)
+        info = self.__wgExts.IGR
+        if info:
+            if info.igrID == IGR_TYPE.BASE:
+                tags.add(USER_TAG.IGR_BASE)
+            elif info.igrID == IGR_TYPE.PREMIUM:
+                tags.add(USER_TAG.IGR_PREMIUM)
+        info = self.__wgExts.ban
+        if info and info.isChatBan():
+            tags.add(USER_TAG.BAN_CHAT)
         return tags
+
+    def getClanInfo(self):
+        return self.__wgExts.clan
+
+    def getBanInfo(self):
+        return self.__wgExts.ban
+
+    def getOrder(self):
+        return self.__order
 
     def replace(self, other):
         return other
-
-
-@ReprInjector.withParent('igrID', 'igrRoomID')
-
-class ResourceWithIGR(Resource):
-    __slots__ = ('igrID', 'igrRoomID')
-
-    def __init__(self, igrID = IGR_TYPE.NONE, igrRoomID = 0):
-        super(ResourceWithIGR, self).__init__()
-        self.igrID = igrID
-        self.igrRoomID = igrRoomID
-
-    def getTags(self):
-        tags = super(ResourceWithIGR, self).getTags()
-        if self.igrID == IGR_TYPE.BASE:
-            tags.add(USER_TAG.IGR_BASE)
-        elif self.igrID == IGR_TYPE.PREMIUM:
-            tags.add(USER_TAG.IGR_PREMIUM)
-        return tags
-
-    def replace(self, other):
-        if isinstance(other, ResourceWithIGR):
-            self.igrID = other.igrID
-            self.igrRoomID = other.igrRoomID
-        else:
-            self.priority = other.priority
-            self.message = other.message
-            self.presence = other.presence
-        return self
 
 
 def priorityComparator(resource, other):

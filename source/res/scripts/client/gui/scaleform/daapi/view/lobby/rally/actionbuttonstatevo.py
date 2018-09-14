@@ -12,20 +12,24 @@ class ActionButtonStateVO(dict):
         self.__unitIsValid, self.__restrictionType = unitFunctional.canPlayerDoAction()
         self.__stats = unitFunctional.getStats()
         self.__settings = unitFunctional.getRosterSettings()
+        _, unit = unitFunctional.getUnit()
+        self.__canTakeSlot = not (self.__playerInfo.isLegionary() and unit.isClub())
         self.__INVALID_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_IS_FULL: FORTIFICATIONS.SORTIE_ROOM_MESSAGE_CANDIDATE_UNITISFULL,
          UNIT_RESTRICTION.VEHICLE_NOT_FOUND: FORTIFICATIONS.SORTIE_ROOM_MESSAGE_CANDIDATE_INVALIDVEHICLES,
          UNIT_RESTRICTION.UNIT_IS_LOCKED: FORTIFICATIONS.SORTIE_ROOM_MESSAGE_CANDIDATE_LOCKEDUNITS,
-         UNIT_RESTRICTION.VEHICLE_NOT_SELECTED: self.__vehNotSelectedMessage(),
+         UNIT_RESTRICTION.VEHICLE_NOT_SELECTED: FORTIFICATIONS.SORTIE_ROOM_MESSAGE_NOVEHICLE,
          UNIT_RESTRICTION.VEHICLE_NOT_VALID: FORTIFICATIONS.SORTIE_ROOM_MESSAGE_VEHICLEINNOTREADY,
-         UNIT_RESTRICTION.MIN_SLOTS: self.__minSlotsMessage(),
+         UNIT_RESTRICTION.MIN_SLOTS: FORTIFICATIONS.SORTIE_ROOM_MESSAGE_NOTFULLUNIT,
          UNIT_RESTRICTION.NOT_READY_IN_SLOTS: FORTIFICATIONS.SORTIE_ROOM_MESSAGE_WAITING,
-         UNIT_RESTRICTION.MIN_TOTAL_LEVEL: self.__minTotalLevelMessage(),
+         UNIT_RESTRICTION.MIN_TOTAL_LEVEL: CYBERSPORT.WINDOW_UNIT_MESSAGE_MINLEVELERROR,
          UNIT_RESTRICTION.MAX_TOTAL_LEVEL: CYBERSPORT.WINDOW_UNIT_MESSAGE_MAXLEVELERROR,
          UNIT_RESTRICTION.INVALID_TOTAL_LEVEL: ActionButtonStateVO.getInvalidVehicleLevelsMessage(unitFunctional),
          UNIT_RESTRICTION.IS_IN_IDLE: FORTIFICATIONS.SORTIE_ROOM_MESSAGE_READY,
          UNIT_RESTRICTION.IS_IN_ARENA: '',
          UNIT_RESTRICTION.NEED_PLAYERS_SEARCH: '',
-         UNIT_RESTRICTION.ZERO_TOTAL_LEVEL: ''}
+         UNIT_RESTRICTION.ZERO_TOTAL_LEVEL: '',
+         UNIT_RESTRICTION.IS_IN_PRE_ARENA: '',
+         UNIT_RESTRICTION.NOT_IN_SLOT: self.__notInSlotMessage()}
         self['stateString'] = self.__stateString
         self['label'] = self.__label
         self['isEnabled'] = self.__unitIsValid
@@ -43,8 +47,11 @@ class ActionButtonStateVO(dict):
                     return FORTIFICATIONS.SORTIE_ROOM_MESSAGE_WAITING
                 else:
                     return FORTIFICATIONS.SORTIE_ROOM_MESSAGE_GETREADY
+            elif self.__canTakeSlot:
+                return CYBERSPORT.WINDOW_UNIT_MESSAGE_CANDIDATE
             else:
-                return FORTIFICATIONS.SORTIE_ROOM_MESSAGE_CANDIDATE
+                return CYBERSPORT.WINDOW_UNIT_MESSAGE_CANDIDATE_UNITISFULL
+
         else:
             return self.__INVALID_UNIT_MESSAGES[self.__restrictionType]
 
@@ -70,23 +77,11 @@ class ActionButtonStateVO(dict):
             label = FORTIFICATIONS.SORTIE_ROOM_NOTREADY
         return label
 
-    def __minTotalLevelMessage(self):
-        if self.__playerInfo.isInSlot:
-            return CYBERSPORT.WINDOW_UNIT_MESSAGE_MINLEVELERROR
+    def __notInSlotMessage(self):
+        if self.__canTakeSlot:
+            return CYBERSPORT.WINDOW_UNIT_MESSAGE_CANDIDATE
         else:
-            return FORTIFICATIONS.SORTIE_ROOM_MESSAGE_CANDIDATE
-
-    def __minSlotsMessage(self):
-        if self.__playerInfo.isInSlot:
-            return FORTIFICATIONS.SORTIE_ROOM_MESSAGE_NOTFULLUNIT
-        else:
-            return FORTIFICATIONS.SORTIE_ROOM_MESSAGE_CANDIDATE
-
-    def __vehNotSelectedMessage(self):
-        if self.__playerInfo.isInSlot:
-            return FORTIFICATIONS.SORTIE_ROOM_MESSAGE_NOVEHICLE
-        else:
-            return FORTIFICATIONS.SORTIE_ROOM_MESSAGE_CANDIDATE
+            return CYBERSPORT.WINDOW_UNIT_MESSAGE_CANDIDATE_UNITISFULL
 
     @staticmethod
     def getInvalidVehicleLevelsMessage(unitFunctional):

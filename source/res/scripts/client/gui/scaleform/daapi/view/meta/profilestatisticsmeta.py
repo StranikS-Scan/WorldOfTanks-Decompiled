@@ -5,3 +5,6 @@ class ProfileStatisticsMeta(DAAPIModule):
 
     def getData(self, data):
         self._printOverrideError('getData')
+
+    def setSeason(self, seasonId):
+        self._printOverrideError('setSeason')

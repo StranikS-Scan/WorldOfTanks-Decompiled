@@ -5,10 +5,11 @@ import operator
 import BigWorld
 import time
 from ClientUnit import ClientUnit
+from ConnectionManager import connectionManager
 from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE
 import Event
 from FortifiedRegionBase import FortifiedRegionBase, FORT_STATE, FORT_EVENT_TYPE, NOT_ACTIVATED
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 import fortified_regions
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications import getDirectionFromDirPos
@@ -17,6 +18,7 @@ from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.fort_seqs import ClanCardItem, AttackItem, DefenceItem, BattleItem
 from gui.shared.gui_items.dossier import FortDossier
 from gui.shared.utils import CONST_CONTAINER, findFirst
+from gui.prb_control import getUnitMgrID
 from helpers import time_utils, i18n
 from items import vehicles
 UNIT_MGR_ID_CHR = '<qH'
@@ -33,6 +35,7 @@ class ORDER_UPDATE_REASON(CONST_CONTAINER):
     ADDED = 1
     UPDATED = 2
     EXPIRED = 3
+    DELETED = 4
 
 
 class ATTACK_PLAN_RESULT(CONST_CONTAINER):
@@ -336,6 +339,16 @@ class ClientFortifiedRegion(FortifiedRegionBase):
             start, finish = self.getVacationDate()
             return '%s - %s' % (BigWorld.wg_getShortDateFormat(start), BigWorld.wg_getShortDateFormat(finish))
 
+    def getVacationDateTimeStr(self):
+        if not self.isVacationEnabled():
+            return None
+        else:
+            start, finish = self.getVacationDate()
+            return '%s (%s) - %s (%s)' % (BigWorld.wg_getShortDateFormat(start),
+             BigWorld.wg_getShortTimeFormat(start),
+             BigWorld.wg_getShortDateFormat(finish),
+             BigWorld.wg_getShortTimeFormat(finish))
+
     def getDaysAfterVacation(self):
         if not self.isVacationEnabled():
             return 0
@@ -551,6 +564,16 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         else:
             return self.__buildBattle(battleID, itemData)
 
+    def getActiveConsumables(self):
+        key = (getUnitMgrID(), connectionManager.peripheryID)
+        if key in self.consumables:
+            consumablesByRev = self.consumables[key]
+            revs = consumablesByRev.keys()
+            if revs:
+                consumables = consumablesByRev[max(revs)]
+                return dict(((slotIdx, (orderTypeID, level)) for orderTypeID, level, slotIdx in consumables))
+        return {}
+
     def __buildBattle(self, battleID, itemData):
         try:
             additionalData = self.__battlesMapping[battleID]
@@ -639,6 +662,10 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def _activateOrder(self, orderTypeID, timeExpiration, effectValue, count, level, initiatorDBID):
         FortifiedRegionBase._activateOrder(self, orderTypeID, timeExpiration, effectValue, count, level, initiatorDBID)
         self.onOrderChanged(orderTypeID, ORDER_UPDATE_REASON.UPDATED)
+
+    def _delOrders(self, orderTypeID):
+        FortifiedRegionBase._delOrders(self, orderTypeID)
+        self.onOrderChanged(orderTypeID, ORDER_UPDATE_REASON.DELETED)
 
     def _transport(self, fromBuildTypeID, toBuildTypeID, resCount, timeCooldown):
         reason = BUILDING_UPDATE_REASON.UPDATED
@@ -784,10 +811,10 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onEmergencyRestore()
         return FortifiedRegionBase._onEmergencyRestore(self, unpacking)
 
-    def _activateConsumable(self, battleID, consumableTypeID, slotIndex, count, level):
-        FortifiedRegionBase._activateConsumable(self, battleID, consumableTypeID, slotIndex, count, level)
-        self.onConsumablesChanged(battleID, consumableTypeID)
+    def _replaceConsumables(self, unitMgrID, peripheryID, timeExpire, prebattleType, oldRev, newRev, consumables):
+        FortifiedRegionBase._replaceConsumables(self, unitMgrID, peripheryID, timeExpire, prebattleType, oldRev, newRev, consumables)
+        self.onConsumablesChanged(unitMgrID)
 
-    def _returnConsumable(self, battleID, consumableTypeID, level):
-        FortifiedRegionBase._returnConsumable(self, battleID, consumableTypeID, level)
-        self.onConsumablesChanged(battleID, consumableTypeID)
+    def _deleteConsumables(self, unitMgrID, peripheryID):
+        FortifiedRegionBase._deleteConsumables(self, unitMgrID, peripheryID)
+        self.onConsumablesChanged(unitMgrID)

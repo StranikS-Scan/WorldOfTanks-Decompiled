@@ -127,12 +127,12 @@ class BWMemberEntity(MemberEntity):
 class BWUserEntity(UserEntity):
     __slots__ = ('_isOnline',)
 
-    def __init__(self, databaseID, name = 'Unknown', tags = None, isOnline = False, clanAbbrev = None, clanRole = 0):
-        super(BWUserEntity, self).__init__(databaseID, name, tags, clanAbbrev, clanRole)
+    def __init__(self, databaseID, name = None, tags = None, isOnline = False, clanInfo = None):
+        super(BWUserEntity, self).__init__(databaseID, name, tags, clanInfo)
         self._isOnline = isOnline
 
     def __repr__(self):
-        return 'BWUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, isOnline={3!r:s}, clanRole={4:n})'.format(self._databaseID, self.getFullName(), self.getTags(), self.isOnline(), self._clanRole)
+        return 'BWUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, isOnline={3!r:s}, clanInfo={4!r:s})'.format(self._databaseID, self.getFullName(), self.getTags(), self.isOnline(), self._clanInfo)
 
     def getProtoType(self):
         return PROTO_TYPE.BW

@@ -240,6 +240,16 @@ def getLocalDelta():
     return abs(getCurrentLocalServerTimestamp() - getCurrentTimestamp())
 
 
+def getTimeLeftFormat(timeLeft, useMinutes = True, useHours = False):
+    templateParts = ['%S']
+    if useMinutes:
+        templateParts.insert(0, '%M')
+    if useHours:
+        templateParts.insert(0, '%H')
+    template = ':'.join(templateParts)
+    return time.strftime(template, time.gmtime(timeLeft))
+
+
 class ActivityIntervalsIterator(object):
 
     def __init__(self, currentTime, currentDay, weekDays = None, timeIntervals = None):

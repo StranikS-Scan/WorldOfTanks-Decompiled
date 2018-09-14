@@ -118,9 +118,10 @@ class DefenceConditions:
 
 
 class Division:
-    __slots__ = ('minPoints', 'maxPoints', 'resourceBonus', 'influencePoints', 'maps')
+    __slots__ = ('isConsumables', 'minPoints', 'maxPoints', 'resourceBonus', 'influencePoints', 'maps')
 
     def __init__(self, subsection):
+        self.isConsumables = subsection['is_consumables'].asBool
         self.minPoints = subsection['min_points'].asInt
         self.maxPoints = subsection['max_points'].asInt
         self.resourceBonus = subsection['resource_bonus'].asInt
@@ -129,7 +130,7 @@ class Division:
 
 
 class FortifiedRegionCache:
-    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'buildings', 'orders', 'transportLevels', 'defenceConditions', 'divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'bonusFactors', 'equipmentToOrder')
+    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'buildings', 'orders', 'transportLevels', 'defenceConditions', 'divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'attackMaxTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'bonusFactors', 'equipmentToOrder')
 
     def __init__(self):
         self.isSupported = False
@@ -141,6 +142,7 @@ class FortifiedRegionCache:
         self.openDirAttacksTime = 0
         self.attackCooldownTime = 0
         self.attackPreorderTime = 0
+        self.attackMaxTime = 0
         self.defenseHourPreorderTime = 0
         self.defenseHourCooldownTime = 0
         self.defenseHourShutdownTime = 0
@@ -187,6 +189,7 @@ def init():
     g_cache.openDirAttacksTime = section['open_dir_attacks_time'].asInt
     g_cache.attackCooldownTime = section['attack_cooldown_time'].asInt
     g_cache.attackPreorderTime = section['attack_preorder_time'].asInt
+    g_cache.attackMaxTime = section['attack_max_time'].asInt
     g_cache.defenseHourPreorderTime = section['defense_hour_preorder_time'].asInt
     g_cache.defenseHourCooldownTime = section['defense_hour_cooldown_time'].asInt
     g_cache.defenseHourShutdownTime = section['defense_hour_shutdown_time'].asInt
@@ -203,6 +206,7 @@ def init():
     g_cache.allowSortieLegionaries = section['allow_sortie_legionaries'].asBool
     g_cache.maxLegionariesCount = section['max_legionaries_count'].asInt
     g_cache.consumablesSlotCount = section['consumables_slot_count'].asInt
+    g_cache.maxLifetimeConsumable = section['max_lifetime_consumable'].asInt
     invalidPeripheryIDs = _getString(section, 'invalid_periphery_ids').split()
     if invalidPeripheryIDs:
         for id in invalidPeripheryIDs:
@@ -257,8 +261,11 @@ def init():
     g_cache.equipmentToOrder = equipmentToOrder = {}
     for orderTypeID, orderType in orders.items():
         for level, order in orderType.levels.items():
-            if order.equipment:
-                equipmentToOrder[order.equipment] = (orderTypeID, level)
+            equipment = order.equipment
+            if equipment:
+                if equipmentToOrder.get(equipment) is not None:
+                    raise Exception, 'Duplicate order equipment (%s)' % (equipment,)
+                equipmentToOrder[equipment] = (orderTypeID, level)
 
     g_cache.bonusFactors = factors = {}
     for name, subsection in section['fort_bonus_factors'].items():

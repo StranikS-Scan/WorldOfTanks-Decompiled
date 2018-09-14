@@ -28,14 +28,6 @@ class MigrationPlugin(IProtoPlugin):
     def contacts(self):
         return self.__contacts
 
-    @property
-    def voipProvider(self):
-        if g_settings.server.BW_CHAT2.isEnabled():
-            proto = self.__bw2Proto
-        else:
-            proto = self.__bwProto
-        return proto.voipProvider
-
     def clear(self):
         if self.__contacts:
             self.__contacts.clear()
@@ -68,22 +60,3 @@ class MigrationPlugin(IProtoPlugin):
             return
         if g_settings.server.useToShowContacts(protoType):
             g_messengerEvents.onPluginDisconnected(PROTO_TYPE.MIGRATION)
-
-
-def getSearchUserProcessor():
-    if g_settings.server.BW_CHAT2.isEnabled():
-        from messenger.proto.bw_chat2.search_processor import SearchUsersProcessor
-        return SearchUsersProcessor()
-    else:
-        from messenger.proto.bw.search_processors import SearchUsersProcessor
-        return SearchUsersProcessor()
-
-
-def getBattleCommandFactory():
-    if g_settings.server.BW_CHAT2.isEnabled():
-        from messenger.proto import proto_getter
-        factory = proto_getter(PROTO_TYPE.BW_CHAT2).get().battleCmd.factory
-    else:
-        from messenger.proto.bw.battle_chat_cmd import BattleCommandFactory
-        factory = BattleCommandFactory()
-    return factory

@@ -211,7 +211,7 @@ class FortDossier(_Dossier, stats.FortDossierStats):
         super(FortDossier, self).__init__(dossier, DOSSIER_TYPE.FORTIFIED_REGIONS, playerDBID)
 
     def pack(self):
-        return (FortDossier, self._dossier.makeCompactDescr(), self._playerDBID)
+        return (FortDossier, self._dossier.makeCompDescr(), self._playerDBID)
 
     @staticmethod
     def unpack(dossierCD, playerDBID):
@@ -222,3 +222,46 @@ class FortDossier(_Dossier, stats.FortDossierStats):
 
     def __repr__(self):
         return 'FortDossier<playerDBID=%r; roaming=%r>' % (self._playerDBID, self.isInRoaming())
+
+
+class ClubDossier(_Dossier, stats.ClubDossierStats):
+
+    def __init__(self, dossier, clubDbID):
+        super(ClubDossier, self).__init__(dossier, DOSSIER_TYPE.CLUB)
+        self._clubDbID = clubDbID
+
+    def pack(self):
+        return (ClubDossier, self._dossier.makeCompDescr(), self._clubDbID)
+
+    @staticmethod
+    def unpack(dossierCD, clubDbID):
+        return ClubDossier(dossiers2.getClubDossierDescr(dossierCD), clubDbID)
+
+    def getClubDbID(self):
+        return self._clubDbID
+
+    def _getDossierItem(self):
+        return self
+
+
+class ClubMemberDossier(_Dossier, stats.ClubMemberDossierStats):
+
+    def __init__(self, dossier, clubDbID, memberDbID):
+        super(ClubMemberDossier, self).__init__(dossier, DOSSIER_TYPE.RATED7X7, memberDbID)
+        self._clubDbID = clubDbID
+
+    def pack(self):
+        return (ClubMemberDossier,
+         self._dossier.makeCompactDescr(),
+         self._clubDbID,
+         self._playerDBID)
+
+    @staticmethod
+    def unpack(dossierCD, clubDbID, memberDbID):
+        return ClubMemberDossier(dossiers2.getRated7x7DossierDescr(dossierCD), clubDbID, memberDbID)
+
+    def getClubDbID(self):
+        return self._clubDbID
+
+    def _getDossierItem(self):
+        return self

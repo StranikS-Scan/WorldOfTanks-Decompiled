@@ -63,7 +63,7 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
     def __updateData(self):
         if self.fortCtrl.getFort().isDefenceHourEnabled():
             return self.destroy()
-        self.as_setTextsS(self.__createTexts())
+        self.as_setTextDataS(self.__createTexts())
         self.as_setDataS(self.__createData())
 
     def __createTexts(self):

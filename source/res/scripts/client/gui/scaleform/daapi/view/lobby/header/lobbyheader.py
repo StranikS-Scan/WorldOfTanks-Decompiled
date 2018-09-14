@@ -3,9 +3,9 @@ import math
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 import account_helpers
-from adisp import process
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE
@@ -21,9 +21,9 @@ from gui.shared import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils import CONST_CONTAINER
 from gui.shared.ClanCache import g_clanCache
+from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from gui.server_events import g_eventsCache
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyHeaderMeta import LobbyHeaderMeta
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes, AppRef
@@ -31,7 +31,7 @@ from ConnectionManager import connectionManager
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
 
-class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
+class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
 
     class BUTTONS(CONST_CONTAINER):
         SETTINGS = 'settings'
@@ -65,6 +65,10 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         self.startGlobalListening()
         self.__updateServerName()
         Waiting.hide('enter')
+
+    def onClanEmblem32x32Received(self, clanDbID, emblem):
+        if not self.isDisposed() and emblem:
+            self.as_setClanEmblemS(self.getMemoryTexturePath(emblem))
 
     def __updateServerName(self):
         serverShortName = connectionManager.serverUserNameShort.split()[-1].strip()
@@ -151,18 +155,15 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
             LOG_ERROR('Prebattle dispatcher is not defined')
         return
 
-    @process
     def __setClanInfo(self, clanInfo):
-        yield lambda callback: callback(True)
         name = BigWorld.player().name
         if clanInfo and len(clanInfo) > 1:
             clanAbbrev = clanInfo[1]
         else:
             clanAbbrev = None
-        self.as_nameResponseS(g_lobbyContext.getPlayerFullName(name, clanInfo=clanInfo), name, clanAbbrev, g_itemsCache.items.stats.isTeamKiller, clanInfo is not None)
-        clanEmblem = yield g_clanCache.getClanEmblemID()
-        if clanEmblem is not None:
-            self.as_setClanEmblemS(clanEmblem)
+        self.as_nameResponseS(g_lobbyContext.getPlayerFullName(name, clanInfo=clanInfo), name, clanAbbrev, g_itemsCache.items.stats.isTeamKiller, g_clanCache.isInClan)
+        if g_clanCache.clanDBID:
+            self.requestClanEmblem32x32(g_clanCache.clanDBID)
         return
 
     def __onPremiumExpireTimeChanged(self, timestamp):
@@ -227,7 +228,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
     def __onViewAddedToContainer(self, _, pyEntity):
         settings = pyEntity.settings
         if settings.type is ViewTypes.LOBBY_SUB:
-            if settings.alias == VIEW_ALIAS.BATTLE_QUEUE:
+            if settings.alias in (VIEW_ALIAS.BATTLE_QUEUE, CYBER_SPORT_ALIASES.CS_RESPAWN_PY):
                 self.as_doDisableNavigationS()
             else:
                 self.as_setScreenS(settings.alias)

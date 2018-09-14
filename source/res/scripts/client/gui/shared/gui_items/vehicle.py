@@ -547,7 +547,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isInPrebattle(self):
-        return self.lock in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT)
+        return self.lock in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB)
 
     @property
     def isAwaitingBattle(self):
@@ -555,7 +555,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isInUnit(self):
-        return self.lock == LOCK_REASON.UNIT
+        return self.lock in (LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB)
 
     @property
     def isBroken(self):
@@ -649,7 +649,7 @@ class Vehicle(FittingItem, HasStrCD):
                 currency = 'credit'
                 if self.minRentPrice[0] <= money[0]:
                     return (True, '')
-            return (False, '%s_error' % currency)
+            return (False, '%s_rent_error' % currency)
         return self.mayPurchase(money)
 
     def getRentPackage(self, days = None):

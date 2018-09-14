@@ -39,7 +39,7 @@ from items import vehicles
 from items.vehicles import VEHICLE_CLASS_TAGS
 from gui import DEPTH_OF_Battle, DEPTH_OF_VehicleMarker, TANKMEN_ROLES_ORDER_DICT, GUI_SETTINGS, g_tankActiveCamouflage, g_guiResetters, g_repeatKeyHandlers, game_control
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform import VoiceChatInterface, ColorSchemeManager
+from gui.Scaleform import VoiceChatInterface, ColorSchemeManager, getNecessaryArenaFrameName
 from gui.Scaleform.SoundManager import SoundManager
 from gui.shared.utils import toUpper
 from gui.shared.utils.sound import Sound
@@ -52,6 +52,8 @@ from gui.Scaleform.CursorDelegator import g_cursorDelegator
 from gui.Scaleform.ingame_help import IngameHelp
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from gui.Scaleform import SCALEFORM_SWF_PATH
+from gui.shared.utils.graphics import getScaleByIndex
+from account_helpers.settings_core import settings_constants
 _CONTOUR_ICONS_MASK = '../maps/icons/vehicle/contour/%(unicName)s.png'
 _BASE_CAPTURE_SOUND_NAME_ENEMY = '/GUI/notifications_FX/base_capture_2'
 _BASE_CAPTURE_SOUND_NAME_ALLY = '/GUI/notifications_FX/base_capture_1'
@@ -169,7 +171,7 @@ class Battle(BattleWindow):
         else:
             self.__cameraVehicleID = id
             self.__setPlayerInfo(id)
-            self.__arenaCtrl.invalidateGUI(True)
+            self.__arenaCtrl.invalidateGUI(not g_sessionProvider.getCtx().isPlayerObserver())
             self.__damagePanel.switchToVehicle(id)
             self.hideVehicleTimer('ALL')
             self.vErrorsPanel.clear()
@@ -541,9 +543,7 @@ class Battle(BattleWindow):
                 arenaData.extend([arena.guiType + 1, descExtra])
             elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING]:
                 arenaTypeName = '#arenas:type/%s/name' % arenaSubType
-                if arenaSubType == 'assault':
-                    arenaSubType += '1' if isBaseExists(BigWorld.player().arenaTypeID, BigWorld.player().team) else '2'
-                arenaData.extend([arenaSubType, arenaTypeName])
+                arenaData.extend([getNecessaryArenaFrameName(arenaSubType, isBaseExists(BigWorld.player().arenaTypeID, BigWorld.player().team)), arenaTypeName])
             elif arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
                 arenaData.extend(['neutral', '#menu:loading/battleTypes/%d' % arena.guiType])
             elif arena.guiType in constants.ARENA_GUI_TYPE.RANGE:
@@ -683,7 +683,11 @@ class Battle(BattleWindow):
             return
 
     def __onRecreateDevice(self):
-        self.call('Stage.Update', list(GUI.screenResolution()))
+        params = list(GUI.screenResolution())
+        index = g_settingsCore.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
+        params.append(getScaleByIndex(index))
+        self.call('Stage.Update', params)
+        self.__vMarkersManager.updateMarkersScale()
 
     def __callEx(self, funcName, args = None):
         self.call('battle.' + funcName, args)
@@ -721,6 +725,8 @@ class Battle(BattleWindow):
         if 'showVehiclesCounter' in diff:
             self.isVehicleCountersVisible = diff['showVehiclesCounter']
             self.__fragCorrelation.showVehiclesCounter(self.isVehicleCountersVisible)
+        if 'interfaceScale' in diff:
+            self.__onRecreateDevice()
         self.__arenaCtrl.invalidateGUI()
         self.__arenaCtrl.invalidateArenaInfo()
 
@@ -1386,6 +1392,7 @@ class VehicleMarkersManager(Flash):
         self.__ownUI = None
         self.__parentUI = parentUI
         self.__markers = dict()
+        self.__equipmentsMarkers = {}
         return
 
     def showExtendedInfo(self, value):
@@ -1414,6 +1421,7 @@ class VehicleMarkersManager(Flash):
         self.__ownUI.scaleProperties = GUI_SETTINGS.markerScaleSettings
         self.__ownUI.alphaProperties = GUI_SETTINGS.markerBgSettings
         self.__ownUIProxy = weakref.proxy(self.__ownUI)
+        self.__ownUIProxy.markerSetScale(getScaleByIndex(g_settingsCore.getSetting('interfaceScale')))
         self.__parentUI.component.addChild(self.__ownUI, 'vehicleMarkersManager')
         self.__markersCanvasUI = self.getMember('vehicleMarkersCanvas')
         g_sessionProvider.getEquipmentsCtrl().onEquipmentMarkerShown += self.__onEquipmentMarkerShown
@@ -1422,6 +1430,11 @@ class VehicleMarkersManager(Flash):
         g_sessionProvider.getEquipmentsCtrl().onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
         if self.__parentUI is not None:
             setattr(self.__parentUI.component, 'vehicleMarkersManager', None)
+        for equipmentsMarker in self.__equipmentsMarkers.items():
+            self.__ownUI.delMarker(equipmentsMarker[0])
+            BigWorld.cancelCallback(equipmentsMarker[1])
+
+        self.__equipmentsMarkers = None
         self.__parentUI = None
         self.__ownUI = None
         self.__markersCanvasUI = None
@@ -1515,6 +1528,9 @@ class VehicleMarkersManager(Flash):
             self.invokeMarker(handle, 'setSpeaking', [flag])
         return
 
+    def updateMarkersScale(self):
+        self.__ownUIProxy.markerSetScale(getScaleByIndex(g_settingsCore.getSetting('interfaceScale')))
+
     def setTeamKiller(self, vID):
         ctx = g_sessionProvider.getCtx()
         if not ctx.isTeamKiller(vID=vID) or ctx.isSquadMan(vID=vID):
@@ -1557,7 +1573,7 @@ class VehicleMarkersManager(Flash):
             self.invokeMarker(handle, 'updateMarkerSettings', [])
 
     def __onEquipmentMarkerShown(self, item, pos, dir, time):
-        mPov, handle = self.createStaticMarker(pos + Vector3(0, 7, 0), 'FortConsumablesMarker')
+        mPov, handle = self.createStaticMarker(pos + Vector3(0, 12, 0), 'FortConsumablesMarker')
         defaultPostfix = i18n.makeString(INGAME_GUI.FORTCONSUMABLES_TIMER_POSTFIX)
         self.invokeMarker(handle, 'init', [item.getMarker(), str(int(time)), defaultPostfix])
         self.__initTimer(int(time), handle)
@@ -1566,9 +1582,12 @@ class VehicleMarkersManager(Flash):
         timer = timer - 1
         if timer < 0:
             self.destroyStaticMarker(handle)
+            if handle in self.__equipmentsMarkers:
+                del self.__equipmentsMarkers[handle]
             return
         self.invokeMarker(handle, 'updateTimer', [str(timer)])
-        BigWorld.callback(1, partial(self.__initTimer, timer, handle))
+        callbackId = BigWorld.callback(1, partial(self.__initTimer, timer, handle))
+        self.__equipmentsMarkers[handle] = callbackId
 
 
 class _VehicleMarker():
@@ -1577,6 +1596,7 @@ class _VehicleMarker():
         self.vProxy = vProxy
         self.uiProxy = uiProxy
         self.handle = handle
+        self.uiProxy.markerSetScale(getScaleByIndex(g_settingsCore.getSetting('interfaceScale')))
         self.vProxy.appearance.onModelChanged += self.__onModelChanged
 
     def destroy(self):

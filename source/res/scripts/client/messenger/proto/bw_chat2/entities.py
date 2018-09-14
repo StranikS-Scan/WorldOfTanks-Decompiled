@@ -2,12 +2,13 @@
 from constants import PREBATTLE_TYPE_NAMES
 from messenger.ext import channel_num_gen
 from messenger.m_constants import PROTO_TYPE
+from messenger.proto.bw_chat2.wrappers import ChannelProtoData, CHAT_TYPE
 from messenger.proto.entities import ChannelEntity, MemberEntity
 
 class _BWChannelEntity(ChannelEntity):
 
-    def __init__(self, data):
-        super(_BWChannelEntity, self).__init__(data)
+    def __init__(self, chatType, settings):
+        super(_BWChannelEntity, self).__init__(ChannelProtoData(chatType, settings))
         self._isJoined = True
 
     def getProtoType(self):
@@ -19,11 +20,14 @@ class _BWChannelEntity(ChannelEntity):
 
 class BWBattleChannelEntity(_BWChannelEntity):
 
+    def __init__(self, settings):
+        super(BWBattleChannelEntity, self).__init__(CHAT_TYPE.ARENA, settings)
+
     def getID(self):
         return channel_num_gen.getClientID4BattleChannel(self.getName())
 
     def getName(self):
-        return self.getProtoData().name
+        return self.getProtoData().settings.name
 
     def getFullName(self):
         return self.getName()
@@ -34,8 +38,8 @@ class BWBattleChannelEntity(_BWChannelEntity):
 
 class BWUnitChannelEntity(_BWChannelEntity):
 
-    def __init__(self, data, prbType):
-        super(BWUnitChannelEntity, self).__init__(data)
+    def __init__(self, settings, prbType):
+        super(BWUnitChannelEntity, self).__init__(CHAT_TYPE.UNIT, settings)
         self._prbType = prbType
 
     def getID(self):
@@ -52,6 +56,22 @@ class BWUnitChannelEntity(_BWChannelEntity):
 
     def getPrebattleType(self):
         return self._prbType
+
+
+class BWClubChannelEntity(_BWChannelEntity):
+
+    def __init__(self):
+        super(BWClubChannelEntity, self).__init__(CHAT_TYPE.CLUB, None)
+        return
+
+    def getID(self):
+        return channel_num_gen.getClientID4SpecialWindow(channel_num_gen.SPECIAL_CLIENT_WINDOWS.CLUB_CHAT)
+
+    def getName(self):
+        return '#chat:channels/club'
+
+    def getFullName(self):
+        return self.getName()
 
 
 class BWMemberEntity(MemberEntity):

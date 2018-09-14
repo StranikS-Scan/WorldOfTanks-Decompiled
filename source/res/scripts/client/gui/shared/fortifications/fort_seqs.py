@@ -6,6 +6,7 @@ import calendar
 import BigWorld
 from collections import namedtuple
 import dossiers2
+from helpers import html
 from FortifiedRegionBase import NOT_ACTIVATED, FORT_ATTACK_RESULT
 from messenger.ext import passCensor
 from constants import FORT_SCOUTING_DATA_FILTER, FORT_MAX_ELECTED_CLANS, FORT_SCOUTING_DATA_ERROR
@@ -109,7 +110,7 @@ class SortieItem(object):
 
 
 class SortiesCache(object):
-    __selectedID = 0
+    __selectedID = (0, 0)
     __rosterTypeID = 0
 
     def __init__(self, controller):
@@ -224,17 +225,23 @@ class SortiesCache(object):
 
     def _requestSortieUnit(self, selectedID):
         Waiting.show('fort/sortie/get')
+        if self.__cooldownRequest is not None:
+            Waiting.hide('fort/sortie/get')
+            BigWorld.cancelCallback(self.__cooldownRequest)
+            self.__cooldownRequest = None
+        ctx = RequestSortieUnitCtx(waitingID='', *selectedID)
 
         def requester():
             self.__cooldownRequest = None
             self.__isRequestInProcess = True
-            self.__controller.request(RequestSortieUnitCtx(waitingID='', *selectedID), self.__requestCallback)
+            self.__controller.request(ctx, self.__requestCallback)
             return
 
-        if self.__controller._cooldown.isInProcess(FORT_REQUEST_TYPE.REQUEST_SORTIE_UNIT):
-            self.__cooldownRequest = BigWorld.callback(self.__controller._cooldown.getTime(FORT_REQUEST_TYPE.REQUEST_SORTIE_UNIT), requester)
+        if self.__controller._cooldown.isInProcess(ctx.getRequestType()):
+            self.__cooldownRequest = BigWorld.callback(self.__controller._cooldown.getTime(ctx.getRequestType()), requester)
         else:
             requester()
+        return
 
     @classmethod
     def _setSelectedID(cls, selectedID):
@@ -366,7 +373,6 @@ _FortBattleItemData = namedtuple('_FortBattleItemData', ('defenderClanDBID',
  'defenderBuildList',
  'attackerFullBuildList',
  'defenderFullBuildList',
- 'consumableList',
  'battleResultList',
  'prevBuildNum',
  'currentBuildNum',
@@ -436,9 +442,6 @@ class BattleItem(object):
 
     def getDefenderFullBuildList(self):
         return self.itemData.defenderFullBuildList or ()
-
-    def getActiveConsumables(self):
-        return dict(((slotIdx, (orderTypeID, level)) for orderTypeID, level, slotIdx in self.itemData.consumableList or ()))
 
     def getAllBuildList(self):
         result = []
@@ -511,7 +514,6 @@ class FortBattlesCache(object):
         self.__indexToID = {}
         self.__selectedUnit = None
         self.__isRequestInProcess = False
-        self.__cooldownRequest = None
         return
 
     def __del__(self):
@@ -523,9 +525,6 @@ class FortBattlesCache(object):
         self.__idToIndex.clear()
         self.__indexToID.clear()
         self.__selectedUnit = None
-        if self.__cooldownRequest is not None:
-            BigWorld.cancelCallback(self.__cooldownRequest)
-            self.__cooldownRequest = None
         return
 
     def start(self):
@@ -708,26 +707,6 @@ class FortBattlesCache(object):
         return
 
 
-_PublicInfoItemData = namedtuple('_PublicInfoItemData', ('clanDBID',
- 'clanName',
- 'clanAbbrev',
- 'clanMotto',
- 'clanDescr',
- 'vacationStart',
- 'vacationFinish',
- 'startDefHour',
- 'finishDefHour',
- 'offDay',
- 'homePeripheryID',
- 'fortLevel',
- 'avgBuildingLevel10',
- 'profitFactor10',
- 'battleCountForFort'))
-
-def makePublicInfoItemData():
-    return _PublicInfoItemData(-1, '', '', '', '', None, None, -1, -1, -1, -1, -1, -1, -1, -1)
-
-
 class IClanFortInfo(object):
 
     def getClanDBID(self):
@@ -755,21 +734,62 @@ class IClanFortInfo(object):
     def getVacationPeriod(self):
         return (None, None)
 
+    def getTimeNewDefHour(self):
+        return None
+
+    def getTimeNewOffDay(self):
+        return None
+
+    def getNewDefHour(self):
+        return NOT_ACTIVATED
+
+    def getNewOffDay(self):
+        return NOT_ACTIVATED
+
     def getLocalOffDay(self):
         from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
         return adjustOffDayToLocal(self.getOffDay(), self.getLocalDefHour()[0])
 
     def getDefHourFor(self, timestamp):
+        if self.getTimeNewDefHour() and timestamp >= self.getTimeNewDefHour():
+            from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
+            return adjustDefenceHourToLocal(self.getNewDefHour(), timestamp)
         from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
         return adjustDefenceHourToLocal(self.getStartDefHour(), timestamp)
 
     def getLocalOffDayFor(self, timestamp):
+        if self.getTimeNewOffDay() and timestamp >= self.getTimeNewOffDay():
+            from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
+            return adjustOffDayToLocal(self.getNewOffDay(), self.getDefHourFor(timestamp))
         from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
         return adjustOffDayToLocal(self.getOffDay(), self.getDefHourFor(timestamp)[0])
 
     def isAvailableForAttack(self, timestamp):
         return (False, True)
 
+
+_PublicInfoItemData = namedtuple('_PublicInfoItemData', ('clanDBID',
+ 'clanName',
+ 'clanAbbrev',
+ 'clanMotto',
+ 'clanDescr',
+ 'vacationStart',
+ 'vacationFinish',
+ 'startDefHour',
+ 'finishDefHour',
+ 'offDay',
+ 'homePeripheryID',
+ 'fortLevel',
+ 'avgBuildingLevel10',
+ 'profitFactor10',
+ 'battleCountForFort',
+ 'nextVacationStart',
+ 'nextVacationFinish',
+ 'nextStartDefHour',
+ 'nextFinishDefHour',
+ 'nextOffDay',
+ 'defHourChangeDay',
+ 'offDayChangeDay'))
 
 @ReprInjector.simple(('__isFavorite', 'isFavorite'), ('itemData', 'data'))
 
@@ -792,15 +812,18 @@ class PublicInfoItem(IClanFortInfo):
         return self.itemData.clanDBID
 
     def getClanName(self):
-        return self.itemData.clanName
+        return passCensor(html.escape(self.itemData.clanName))
 
     def getClanAbbrev(self):
         return self.itemData.clanAbbrev
 
+    def getClanMotto(self):
+        return passCensor(html.escape(self.itemData.clanMotto))
+
     def getVacationPeriod(self):
         if self.itemData.vacationStart is not None and self.itemData.vacationFinish is not None:
-            start = calendar.timegm(self.itemData.vacationStart.timetuple())
-            finish = calendar.timegm(self.itemData.vacationFinish.timetuple())
+            start = time_utils.getTimestampFromUTC(self.itemData.vacationStart.timetuple())
+            finish = time_utils.getTimestampFromUTC(self.itemData.vacationFinish.timetuple())
             return (start, finish)
         else:
             return (None, None)
@@ -816,6 +839,24 @@ class PublicInfoItem(IClanFortInfo):
             mysqlDayOfWeekConvertor = (2, 3, 4, 5, 6, 7, 1)
             return mysqlDayOfWeekConvertor.index(self.itemData.offDay)
         return NOT_ACTIVATED
+
+    def getTimeNewDefHour(self):
+        if self.itemData.defHourChangeDay is not None:
+            return time_utils.getTimestampFromUTC(self.itemData.defHourChangeDay.timetuple())
+        else:
+            return
+
+    def getTimeNewOffDay(self):
+        if self.itemData.defHourChangeDay is not None:
+            return time_utils.getTimestampFromUTC(self.itemData.defHourChangeDay.timetuple())
+        else:
+            return
+
+    def getNewDefHour(self):
+        return self.itemData.nextStartDefHour
+
+    def getNewOffDay(self):
+        return self.itemData.nextOffDay
 
     def getHomePeripheryID(self):
         return self.itemData.homePeripheryID
@@ -836,13 +877,12 @@ class PublicInfoItem(IClanFortInfo):
         return DaysAvailabilityIterator(time_utils.getTimeTodayForLocal(*self.getLocalDefHour()), (self.getLocalOffDay(),), (self.getVacationPeriod(),), fortified_regions.g_cache.attackPreorderTime).next()
 
     def _makeItemData(self, itemData):
-        try:
-            data = _PublicInfoItemData(*itemData)
-        except TypeError:
-            data = makePublicInfoItemData()
-            LOG_ERROR('Client can not unpack item data of public info', itemData)
-
-        return data
+        supportedLen = len(_PublicInfoItemData._fields)
+        unsupportedData = itemData[supportedLen:]
+        itemData = itemData[:supportedLen]
+        if unsupportedData:
+            LOG_ERROR('Client got unsupported data from server: ', unsupportedData)
+        return _PublicInfoItemData(*itemData)
 
 
 class PublicInfoCache(object):
@@ -992,9 +1032,6 @@ class PublicInfoCache(object):
 
     def getFavorites(self):
         return self.__controller.getFort().favorites
-
-    def setFirstDefaultQuery(self, isFirst = False):
-        self.__firstDefaultQuery = isFirst
 
     def ifDefaultQueryResult(self):
         return self.__ifDefaultQueryResult
@@ -1185,16 +1222,16 @@ class ClanCardItem(IClanFortInfo):
         return self.itemData.newOffDay
 
     def getClanName(self):
-        return self.itemData.clanName
+        return passCensor(html.escape(self.itemData.clanName))
 
     def getClanAbbrev(self):
         return self.itemData.clanAbbrev
 
     def getClanDescr(self):
-        return self.itemData.clanDescr
+        return passCensor(html.escape(self.itemData.clanDescr))
 
     def getClanMotto(self):
-        return self.itemData.clanMotto
+        return passCensor(html.escape(self.itemData.clanMotto))
 
     def getStatisticsCompDescr(self):
         return self.itemData.statisticsCompDescr
@@ -1236,18 +1273,6 @@ class ClanCardItem(IClanFortInfo):
         currentDayStart, _ = time_utils.getDayTimeBoundsForLocal()
         availableDayStart, _ = time_utils.getDayTimeBoundsForLocal(availableTimestamp)
         return availableTimestamp
-
-    def getDefHourFor(self, timestamp):
-        if self.getTimeNewDefHour() and timestamp >= self.getTimeNewDefHour():
-            from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
-            return adjustDefenceHourToLocal(self.getNewDefHour(), timestamp)
-        return super(ClanCardItem, self).getDefHourFor(timestamp)
-
-    def getLocalOffDayFor(self, timestamp):
-        if self.getTimeNewOffDay() and timestamp >= self.getTimeNewOffDay():
-            from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
-            return adjustOffDayToLocal(self.getNewOffDay(), self.getDefHourFor(timestamp))
-        return super(ClanCardItem, self).getLocalOffDayFor(timestamp)
 
     def isAvailableForAttack(self, timestamp):
         hasFreeDirections = False

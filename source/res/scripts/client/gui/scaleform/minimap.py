@@ -4,7 +4,6 @@ from weakref import proxy
 import string
 from messenger import MessengerEntry
 import BigWorld
-import Math
 import Keys
 import Math
 from AvatarInputHandler import mathUtils
@@ -14,7 +13,7 @@ from gui.battle_control.arena_info import isLowLevelBattle
 import math
 from Math import Matrix, Vector3
 from gui.shared.utils.sound import Sound
-from gui import GUI_SETTINGS, g_repeatKeyHandlers, makeHtmlString
+from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from helpers.gui_utils import *
 from debug_utils import *
 import CommandMapping
@@ -951,15 +950,15 @@ class EntryInfo(object):
 
 
 class MinimapZIndexManager(object):
-    _BACK_ICONS_RANGE = (25, 49)
-    _DEAD_VEHICLE_RANGE = (50, 99)
-    _VEHICLE_RANGE = (101, 150)
-    _MARKER_RANGE = (161, 180)
-    _FIXED_INDEXES = {CAMERA_NORMAL: 100,
-     'self': 151,
-     CAMERA_STRATEGIC: 152,
-     'cell': 153,
-     CAMERA_VIDEO: 160}
+    _MARKER_RANGE = (100, 124)
+    _BACK_ICONS_RANGE = (125, 149)
+    _DEAD_VEHICLE_RANGE = (150, 199)
+    _VEHICLE_RANGE = (201, 250)
+    _FIXED_INDEXES = {CAMERA_NORMAL: 200,
+     'self': 251,
+     CAMERA_STRATEGIC: 252,
+     'cell': 253,
+     CAMERA_VIDEO: 260}
 
     def __init__(self):
         self.__indexes = {}

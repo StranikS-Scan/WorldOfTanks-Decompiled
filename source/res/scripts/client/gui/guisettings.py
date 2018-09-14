@@ -4,7 +4,7 @@ import nations
 import constants
 import resource_helper
 from debug_utils import *
-from helpers import getClientLanguage
+from helpers import getClientLanguage, time_utils
 GUI_SETTINGS_FILE_PATH = 'gui/gui_settings.xml'
 VIDEO_SETTINGS_FILE_PATH = 'gui/video_settings.xml'
 MovingTextProps = namedtuple('MovingTextProps', 'show internalBrowser')
@@ -84,7 +84,9 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'useXmppToCreatePrivate': False,
  'cache': [],
  'postBattleExchange': PostBattleExchangeProps(False, ''),
- 'isXmppNotesEnabled': False}
+ 'isXmppNotesEnabled': False,
+ 'actionComeToEnd': time_utils.QUARTER_HOUR,
+ 'guiScale': []}
 
 class GuiSettings(object):
 

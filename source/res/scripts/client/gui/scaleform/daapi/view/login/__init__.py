@@ -281,7 +281,7 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.as_setErrorMessageS(self.__socialNetworkLogin.getLogoutWarning(self.__lastLoginType), 0)
         self.__lastLoginType = 'basic'
         self.__rememberMe = False
-        self.as_setDefaultValuesS('', '', False, True, False, False)
+        self.as_setDefaultValuesS('', '', False, GUI_SETTINGS.rememberPassVisible, GUI_SETTINGS.igrCredentialsReset, not GUI_SETTINGS.isEmpty('recoveryPswdURL'))
         self.__loginPreferences.writeString('login', '')
         self.__loginPreferences.writeBool('rememberPwd', False)
         self.__loginPreferences.writeString('lastLoginType', self.__lastLoginType)
@@ -334,7 +334,8 @@ class LoginView(View, LoginPageMeta, AppRef):
     def onLoginBySocial(self, socialNetworkName, host):
         self.__loginHost = host
         self.__lastLoginType = socialNetworkName
-        self.__socialNetworkLogin.initializeLogin(socialNetworkName, self.__rememberMe)
+        if not self.__socialNetworkLogin.initializeLogin(socialNetworkName, self.__rememberMe):
+            self.__setStatus(i18n.makeString('#menu:login/social/status/SYSTEM_ERROR'), 0)
 
     def __onServerReceivedData(self, token, spaID, tokenDecrypter):
         if self.__processingLoginBySocial:
@@ -347,6 +348,7 @@ class LoginView(View, LoginPageMeta, AppRef):
             connectionManager.onConnected += self.__onSocialLoginConnected
             connectionManager.onRejected += self.__onSocialLoginRejected
             connectionManager.onDisconnected += self.__onSocialLoginDisconnected
+            Waiting.show('login')
             if AUTO_LOGIN_QUERY_URL == self.__loginHost:
                 g_preDefinedHosts.autoLoginQuery(self.__connectToHost)
             else:

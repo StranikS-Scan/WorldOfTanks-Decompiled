@@ -14,6 +14,7 @@ import CombatSelectedArea
 from gui.battle_control import g_sessionProvider
 from items import vehicles
 import items
+import BattleReplay
 _ENABLE_DEBUG_DRAW = False
 _ENABLE_DEBUG_LOG = False
 
@@ -70,12 +71,21 @@ class CombatEquipmentManager(object):
         pass
 
     def onLeaveWorld(self):
-        self.__callbackDelayer.destroy()
+        pass
+
+    def onBecomePlayer(self):
+        pass
+
+    def onBecomeNonPlayer(self):
         for area in self.__selectedAreas.itervalues():
             area.destroy()
 
         for wing in self.__wings.itervalues():
             wing.destroy()
+
+        self.__callbackDelayer.destroy()
+        self.__selectedAreas = {}
+        self.__wings = {}
 
     def updateBomberTrajectory(self, equipmentID, team, curTime, curPos, curDir, nextTime, nextPos, nextDir, isDroppingPoint):
         if _ENABLE_DEBUG_LOG:
@@ -119,14 +129,26 @@ class CombatEquipmentManager(object):
         if areaUID in self.__selectedAreas:
             return
         eq = vehicles.g_cache.equipments()[equipmentID]
+        if BattleReplay.isPlaying():
+            BigWorld.callback(0.0, functools.partial(self.__showMarkerCallback, eq, pos, dir, time, areaUID))
+        else:
+            self.__showMarkerCallback(eq, pos, dir, time, areaUID)
+
+    def __delayedAreaDestroy(self, areaUID):
+        area = self.__selectedAreas.pop(areaUID, None)
+        if area is not None:
+            area.destroy()
+        return
+
+    def __showMarkerCallback(self, eq, pos, dir, time, areaUID):
         timer = round(time - BigWorld.serverTime())
+        area = self.__selectedAreas.pop(areaUID, None)
+        if area is not None:
+            area.destroy()
         self.__selectedAreas[areaUID] = self.createEquipmentSelectedArea(pos, dir, eq)
         self.__callbackDelayer.delayCallback(timer, functools.partial(self.__delayedAreaDestroy, areaUID))
         g_sessionProvider.getEquipmentsCtrl().showMarker(eq, pos, dir, timer)
-
-    def __delayedAreaDestroy(self, areaUID):
-        area = self.__selectedAreas.pop(areaUID)
-        area.destroy()
+        return
 
     @staticmethod
     def __calcBombsDistribution(bombsCnt, areaWidth, areaLength):
@@ -165,7 +187,7 @@ class CombatEquipmentManager(object):
             else:
                 endExplosionPos = endExplosionPos[0]
             areaLength = beginExplosionPos.flatDistTo(endExplosionPos)
-            averageBombCount = (bombEquipment.bombsNumberRange[0] + bombEquipment.bombsNumberRange[-1]) / 2
+            averageBombCount = bombEquipment.bombsNumber
             bombsPerWidth, bombsPerLength = CombatEquipmentManager.__calcBombsDistribution(averageBombCount, areaWidth, areaLength)
             delay = time - BigWorld.serverTime()
             explosionVelocity = flatDir * bombEquipment.speed
@@ -185,7 +207,14 @@ class CombatEquipmentManager(object):
             return
 
     def setEquipmentApplicationPoint(self, equipmentID, point, direction):
+        myTeam = BigWorld.player().team
+        wingID = (myTeam, equipmentID)
+        wing = self.__wings.get(wingID)
+        if wing is not None:
+            wing.destroy()
+            del self.__wings[wingID]
         self.base.vehicle_setEquipmentApplicationPoint(equipmentID, point, direction)
+        return
 
     @staticmethod
     def createEquipmentSelectedArea(pos, dir, equipment):
@@ -200,6 +229,5 @@ class CombatEquipmentManager(object):
             color = CombatSelectedArea.COLOR_WHITE
         if marker is None:
             pass
-        dir = Math.Vector3(dir[0], 0.0, dir[1])
         area.setup(pos, dir, size, visual, color, marker)
         return area

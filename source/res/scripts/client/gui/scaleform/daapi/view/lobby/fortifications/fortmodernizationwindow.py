@@ -247,7 +247,8 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         else:
             currentHpLabel = str(BigWorld.wg_getIntegralFormat(hpVal))
             currentHpValue = hpVal
-        formattedHpValue = self.app.utilsManager.textManager.getText(textStyle, currentHpLabel)
+        FORMAT_PATTERN = '###'
+        formattedHpValue = self.app.utilsManager.textManager.getText(textStyle, FORMAT_PATTERN)
         hpTextColor = TextType.STANDARD_TEXT
         if increment:
             hpTextColor = TextType.NEUTRAL_TEXT
@@ -259,7 +260,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         else:
             currentDefResLabel = str(BigWorld.wg_getIntegralFormat(defResVal))
             currentDefResValue = defResVal
-        formattedDefResValue = self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, currentDefResLabel)
+        defResValueFormatter = self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, FORMAT_PATTERN)
         formattedDefResTotal = self.app.utilsManager.textManager.getText(hpTextColor, str(BigWorld.wg_getIntegralFormat(maxDerResVal)))
         formattedDefResTotal += ' ' + self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
         result = {}
@@ -270,11 +271,13 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         result['defResCurrentValue'] = currentDefResValue
         result['defResTotalValue'] = maxDerResVal
         hpProgressLabels = {}
-        hpProgressLabels['currentValue'] = formattedHpValue
+        hpProgressLabels['currentValue'] = currentHpLabel
+        hpProgressLabels['currentValueFormatter'] = formattedHpValue
         hpProgressLabels['totalValue'] = formattedHpTotal
         hpProgressLabels['separator'] = '/'
         storeProgressLabels = {}
-        storeProgressLabels['currentValue'] = formattedDefResValue
+        storeProgressLabels['currentValue'] = currentDefResLabel
+        storeProgressLabels['currentValueFormatter'] = defResValueFormatter
         storeProgressLabels['totalValue'] = formattedDefResTotal
         storeProgressLabels['separator'] = '/'
         result['hpProgressLabels'] = hpProgressLabels
@@ -308,8 +311,9 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
                 bonusDescr = i18n.makeString(FORTIFICATIONS.orders_specialmission_possibleaward_description_level(foundedLevel))
                 defresDescr = self.app.utilsManager.textManager.concatStyles(((bonusTextColor, awardText), (bodyTextColor, bonusDescr)))
             elif orderTypeID in FORT_ORDER_TYPE.CONSUMABLES:
+                colorStyle = (bonusTextColor, bodyTextColor)
                 battleOrder = FortOrder(orderTypeID, level=orderLevel)
-                defresDescr = fort_formatters.getBonusText(textPadding, self.__uid, ctx=dict(battleOrder.getParams()))
+                defresDescr = fort_formatters.getBonusText(textPadding, self.__uid, ctx=dict(battleOrder.getParams()), textsStyle=colorStyle)
             else:
                 colorStyle = (bonusTextColor, bodyTextColor)
                 bonus = str(abs(orderData.effectValue))

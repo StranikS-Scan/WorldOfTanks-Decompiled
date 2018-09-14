@@ -52,29 +52,30 @@ class NicknameResolver(ClientEventsHandler):
         self.__callback = callback
         if not self.__isRegistered:
             self.__doCallback(error=ClientError(CLIENT_ERROR_ID.GENERIC))
-            return
+            return False
         if self.__iqID:
             self.__doCallback(error=ClientError(CLIENT_ERROR_ID.LOCKED))
-            return
+            return False
         getter = self.usersStorage.getUser
         result, required = {}, []
         for dbID in dbIDs:
             user = getter(dbID)
-            if user:
+            if user and user.hasValidName():
                 result[dbID] = user.getName()
             else:
                 required.append(dbID)
 
         if not required:
             self.__doCallback(result=result)
-            return
+            return False
         client = self.client()
         if not client or not client.isConnected():
             self.__doCallback(error=ClientError(CLIENT_ERROR_ID.NOT_CONNECTED))
-            return
+            return False
         self.__cached = result
         self.__callback = callback
         self.__iqID = client.sendIQ(spa_resolver.SpaResolverByIDsQuery(required))
+        return True
 
     def __doCallback(self, result = None, error = None):
         if self.__callback:
@@ -102,6 +103,8 @@ class NicknameResolver(ClientEventsHandler):
                     if not user:
                         user = SharedUserEntity(dbID, name)
                         setter(user)
+                    else:
+                        user.update(name=name)
                     result[dbID] = name
 
             elif iqType == IQ_TYPE.ERROR:

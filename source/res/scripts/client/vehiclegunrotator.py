@@ -132,6 +132,8 @@ class VehicleGunRotator(object):
                 lockEnabled = BigWorld.player().inputHandler.getAimingMode(AIMING_MODE.TARGET_LOCK)
                 if lockEnabled:
                     predictedTargetPos = self.predictLockedTargetShotPoint()
+                    if predictedTargetPos is None:
+                        return
                     dirToTarget = predictedTargetPos - shotPos
                     dirToTarget.normalise()
                     shotDir = Math.Vector3(shotVec)

@@ -98,7 +98,7 @@ class LoginDataLoader(object):
                     LOG_CURRENT_EXCEPTION()
 
             if self.TOKEN2_TAG in ds.keys():
-                token2 = ds.readString(self.TOKEN2_TAG)
+                token2 = BigWorld.wg_ucpdata(ds.readString(self.TOKEN2_TAG))
                 if len(token2):
                     separatorPos = token2.find(':')
                     if separatorPos > 0:
@@ -134,8 +134,7 @@ class LoginDataLoader(object):
             li.deleteSection(self.PWD_SECTION)
         if GUI_SETTINGS.igrCredentialsReset and not rememberPwd:
             li.writeString(self.LOGIN_TAG, '')
-        li.writeString(self.TOKEN2_TAG, token2 if rememberPwd else '')
-        Settings.g_instance.save()
+        li.writeString(self.TOKEN2_TAG, BigWorld.wg_cpdata(token2) if rememberPwd else '')
 
     def __getUserLoginName(self, loginInfoSection):
         userLogin = ''

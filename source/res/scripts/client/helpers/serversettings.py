@@ -96,6 +96,9 @@ class ServerSettings(object):
     def isFortBattlesEnabled(self):
         return not self.__getGlobalSetting('isFortBattlesDisabled', True)
 
+    def isClubsEnabled(self):
+        return self.__getGlobalSetting('isClubsEnabled', False)
+
     def isPromoAutoViewsEnabled(self):
         return True
 

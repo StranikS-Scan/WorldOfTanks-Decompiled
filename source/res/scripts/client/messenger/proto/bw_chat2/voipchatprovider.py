@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/VOIPChatProvider.py
-from debug_utils import LOG_WARNING
-from messenger.m_constants import MESSENGER_SCOPE
+from debug_utils import LOG_WARNING, LOG_NOTE
 from messenger.proto.bw_chat2 import errors, provider
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IVOIPChatProvider
@@ -21,18 +20,14 @@ class VOIPChatProvider(provider.ResponseDictHandler, IVOIPChatProvider):
     def leave(self):
         self.__channelParams = _EMPTY_CHANNELS_PARAMS
 
-    def switch(self, scope):
-        actionID = _ACTIONS.GET_VOIP_CREDENTIALS
-        if scope == MESSENGER_SCOPE.BATTLE and self.excludeRqsByValue(actionID):
-            self.provider().clearActionCoolDown(actionID)
-            self.requestCredentials()
-
     def getChannelParams(self):
         return self.__channelParams
 
     def requestCredentials(self, reset = 0):
         provider = self.provider()
         actionID = _ACTIONS.GET_VOIP_CREDENTIALS
+        if reset:
+            provider.clearActionCoolDown(actionID)
         success, reqID = provider.doAction(actionID, messageArgs(int32Arg1=reset), True)
         if reqID:
             self.pushRq(reqID, actionID)
@@ -60,12 +55,19 @@ class VOIPChatProvider(provider.ResponseDictHandler, IVOIPChatProvider):
             g_messengerEvents.voip.onCredentialReceived(args['strArg1'], args['strArg2'])
 
     def _onResponseFailure(self, ids, args):
-        if super(VOIPChatProvider, self)._onResponseFailure(ids, args):
-            error = errors.createVOIPError(args)
+        actionID = super(VOIPChatProvider, self)._onResponseFailure(ids, args)
+        if actionID is None:
+            return
+        else:
+            error, logOnly = errors.createVOIPError(args, actionID)
             if error:
-                g_messengerEvents.onErrorReceived(error)
+                if logOnly:
+                    LOG_NOTE(error)
+                else:
+                    g_messengerEvents.onErrorReceived(error)
             else:
-                LOG_WARNING('Error is not resolved on the client', ids, args)
+                LOG_WARNING('Error is not resolved on the client to display in GUI', actionID, ids, args)
+            return
 
     def __onChannelEntered(self, _, args):
         url = args['strArg1']

@@ -2,8 +2,7 @@
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from FortifiedRegionBase import BuildingDescr
 from adisp import process
-from constants import FORT_BUILDING_TYPE
-from debug_utils import LOG_DEBUG
+from account_helpers.AccountSettings import AccountSettings, DEFAULT_VALUES
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -59,6 +58,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
     def requestBuildingInfo(self, uid):
         infoData = {}
         id = self.getBuildingIDbyUID(uid)
+        self.__markAsVisited(id)
         buildingStatus = self.__getBuildingStatus(id)
         infoData['buildingName'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(FORTIFICATIONS.buildings_buildingname(uid)))
         infoData['buildingID'] = uid
@@ -132,10 +132,9 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         buildingDescr = self.fortCtrl.getFort().getBuilding(self.getBuildingIDbyUID(uid), BuildingDescr(typeID=buildingId))
         order = self.fortCtrl.getFort().getOrder(buildingDescr.typeRef.orderType)
         result['iconSource'] = order.icon
-        isCombatOrderBuilding = self._isCombatOrderBuilding(buildingId)
-        result['showAlertIcon'] = True if isCombatOrderBuilding else self._showOrderAlertIcon(order)
-        if isCombatOrderBuilding:
-            result['alertIconTooltip'] = TOOLTIPS.FORTIFICATION_BUILDINGPROCESS_ALERT_ONLYUSEDINCOMBAT
+        showAlertIcon, alertIconTooltip = self._showOrderAlertIcon(order)
+        result['showAlertIcon'] = showAlertIcon
+        result['alertIconTooltip'] = alertIconTooltip
         result['iconLevel'] = None
         return result
 
@@ -160,16 +159,12 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         result['textInfo'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_TEXTINFO))
         self.as_setDataS(result)
 
-    def _isCombatOrderBuilding(self, id):
-        return id in [FORT_BUILDING_TYPE.BOMBER_SHOP, FORT_BUILDING_TYPE.ARTILLERY_SHOP]
-
     def __makeListData(self):
         result = []
-        for id in self.BUILDINGS:
-            uid = self.getBuildingUIDbyID(id)
-            isNewItem = self._isCombatOrderBuilding(id)
-            id, name, shortDescr, statusMsg, status = self.__getStrings(uid, self.__getBuildingStatus(id))
-            result.append(self.__listFields(id, name, shortDescr, statusMsg, status, isNewItem))
+        for buildTypeID in self.BUILDINGS:
+            uid = self.getBuildingUIDbyID(buildTypeID)
+            wtfID, name, shortDescr, statusMsg, status = self.__getStrings(uid, self.__getBuildingStatus(buildTypeID))
+            result.append(self.__listFields(wtfID, name, shortDescr, statusMsg, status, self.__isNewBuilding(buildTypeID)))
 
         return result
 
@@ -223,3 +218,18 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
             return self.BUILDING_STATUS.AVAILABLE
         else:
             return self.BUILDING_STATUS.NOT_AVAILABLE
+
+    @classmethod
+    def __isNewBuilding(cls, buildTypeID):
+        fortSettings = dict(AccountSettings.getSettings('fortSettings'))
+        if 'visitedBuildings' not in fortSettings:
+            fortSettings['visitedBuildings'] = DEFAULT_VALUES['settings']['fortSettings']['visitedBuildings']
+        return buildTypeID not in fortSettings['visitedBuildings']
+
+    @classmethod
+    def __markAsVisited(cls, buildTypeID):
+        fortSettings = dict(AccountSettings.getSettings('fortSettings'))
+        if 'visitedBuildings' not in fortSettings:
+            fortSettings['visitedBuildings'] = DEFAULT_VALUES['settings']['fortSettings']['visitedBuildings']
+        fortSettings['visitedBuildings'].add(buildTypeID)
+        AccountSettings.setSettings('fortSettings', fortSettings)

@@ -6,10 +6,19 @@ import constants
 import potapov_quests
 from helpers import i18n
 from gui.shared.utils import findFirst
+from gui.server_events import g_eventsCache
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, packRibbonInfo
 from gui.Scaleform.framework.managers.TextManager import TextType
+
+def _canSeeQuest(questID):
+    if potapov_quests.g_cache.hasPotapovQuest(questID):
+        tileID = g_eventsCache.potapov.getQuests()[questID].getTileID()
+        if g_eventsCache.potapov.getTiles()[tileID].isUnlocked():
+            return True
+    return False
+
 
 class AchievementsAward(AwardAbstract):
 
@@ -74,7 +83,7 @@ class TokenAward(AwardAbstract):
     def handleBodyButton(self):
         from gui.server_events import events_dispatcher as quests_events
         nextQuestID = int(self.__potapovQuest.getID()) + 1
-        if potapov_quests.g_cache.hasPotapovQuest(nextQuestID):
+        if _canSeeQuest(nextQuestID):
             quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
 
     def getBodyButtonText(self):
@@ -85,7 +94,7 @@ class TokenAward(AwardAbstract):
             return super(TokenAward, self).getButtonStates()
         else:
             nextQuestID = int(self.__potapovQuest.getID()) + 1
-            return (False, True, potapov_quests.g_cache.hasPotapovQuest(nextQuestID))
+            return (False, True, _canSeeQuest(nextQuestID))
 
 
 class VehicleAward(AwardAbstract):
@@ -154,10 +163,15 @@ class RegularAward(AwardAbstract):
     class _SimpleFormatter(_BonusFormatter):
 
         def __init__(self, icon):
-            self.__icon = icon
+            self._icon = icon
 
         def __call__(self, bonus):
-            return [self._BonusFmt(self.__icon, BigWorld.wg_getIntegralFormat(bonus.getValue()))]
+            return [self._BonusFmt(self._icon, BigWorld.wg_getIntegralFormat(bonus.getValue()))]
+
+    class _SimpleNoValueFormatter(_SimpleFormatter):
+
+        def __call__(self, bonus):
+            return [self._BonusFmt(self._icon, '')]
 
     class _ItemsFormatter(_BonusFormatter):
 
@@ -177,6 +191,7 @@ class RegularAward(AwardAbstract):
         self.__formatters = {'gold': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG),
          'credits': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG_1),
          'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_FREEXPICONBIG),
+         'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG),
          'items': self._ItemsFormatter()}
 
     def getWindowTitle(self):
@@ -212,7 +227,7 @@ class RegularAward(AwardAbstract):
 
     def getButtonStates(self):
         nextQuestID = int(self.__potapovQuest.getID()) + 1
-        return (False, True, potapov_quests.g_cache.hasPotapovQuest(nextQuestID))
+        return (False, True, _canSeeQuest(nextQuestID))
 
     def getBodyButtonText(self):
         return i18n.makeString(MENU.AWARDWINDOW_TAKENEXTBUTTON)
@@ -226,7 +241,7 @@ class RegularAward(AwardAbstract):
     def handleBodyButton(self):
         from gui.server_events import events_dispatcher as quests_events
         nextQuestID = int(self.__potapovQuest.getID()) + 1
-        if potapov_quests.g_cache.hasPotapovQuest(nextQuestID):
+        if _canSeeQuest(nextQuestID):
             quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
 
     def __getMainRewards(self):

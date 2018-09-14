@@ -82,9 +82,6 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
         if buildingTypeID in (self.getServerBuildId(), self.getServerBuildId(False)) and reason == BUILDING_UPDATE_REASON.DELETED:
             self.destroy()
 
-    def onTransportingLimit(self):
-        g_fortSoundController.playLimitTransport()
-
     def onWindowClose(self):
         self.destroy()
 

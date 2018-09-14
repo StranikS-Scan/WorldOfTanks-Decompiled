@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/Flock.py
 from AvatarInputHandler import mathUtils
 import BigWorld
+import helpers
 import Math
 import ResMgr
 import math
@@ -14,9 +15,9 @@ ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
 class DebugGizmo:
 
-    def __init__(self):
+    def __init__(self, spaceID):
         self.model = BigWorld.Model('helpers/models/position_gizmo.model')
-        BigWorld.addModel(self.model)
+        BigWorld.addModel(self.model, spaceID)
         self.motor = BigWorld.Servo(Math.Matrix())
         self.model.addMotor(self.motor)
 
@@ -77,11 +78,10 @@ class DebugPolyLine(object):
 
 class _FlockSound:
 
-    def __init__(self, soundName, parent):
-        fakeModelName = Settings.g_instance.scriptConfig.readString(Settings.KEY_FAKE_MODEL)
-        self.soundModel = BigWorld.Model(fakeModelName)
+    def __init__(self, soundName, parent, spaceID):
+        self.soundModel = helpers.newFakeModel()
         self.soundModel.addMotor(BigWorld.Servo(parent.root))
-        BigWorld.addModel(self.soundModel)
+        BigWorld.addModel(self.soundModel, spaceID)
         self.sound = SoundGroups.g_instance.playSound(self.soundModel, soundName)
         self.parent = parent
 
@@ -172,7 +172,7 @@ class FlockLike:
                 return
             flockSound = None
             try:
-                flockSound = _FlockSound(soundName, model)
+                flockSound = _FlockSound(soundName, model, self.spaceID)
             except Exception:
                 LOG_CURRENT_EXCEPTION()
                 return

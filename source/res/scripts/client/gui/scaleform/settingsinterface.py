@@ -246,6 +246,8 @@ class SettingsInterface(UIInterface):
          'options': g_settingsCore.options.getSetting('resolution').getOptions()}
         settings['refreshRate'] = {'current': g_settingsCore.getSetting('refreshRate'),
          'options': g_settingsCore.options.getSetting('refreshRate').getOptions()}
+        settings['interfaceScale'] = {'current': g_settingsCore.getSetting('interfaceScale'),
+         'options': g_settingsCore.options.getSetting('interfaceScale').getOptions()}
         return settings
 
     def __getSettings(self):
@@ -287,8 +289,7 @@ class SettingsInterface(UIInterface):
          'datetimeIdx': datetimeIdx,
          'enableOlFilter': g_settingsCore.getSetting('enableOlFilter'),
          'enableSpamFilter': g_settingsCore.getSetting('enableSpamFilter'),
-         'enableStoreChatMws': g_settingsCore.getSetting('enableStoreMws'),
-         'enableStoreChatCws': g_settingsCore.getSetting('enableStoreCws'),
+         'receiveFriendshipRequest': g_settingsCore.getSetting('receiveFriendshipRequest'),
          'invitesFromFriendsOnly': g_settingsCore.getSetting('invitesFromFriendsOnly'),
          'storeReceiverInBattle': g_settingsCore.getSetting('storeReceiverInBattle'),
          'disableBattleChat': g_settingsCore.getSetting('disableBattleChat'),
@@ -475,10 +476,13 @@ class SettingsInterface(UIInterface):
 
     def apply(self, restartApproved, callbackId, settings):
         restartClient = False
+        interfaceScaled = False
         g_settingsCore.isDeviseRecreated = False
         import VOIP
         if (not self.resolutions.isVideoWindowed or settings['fullScreen']) and (settings['monitor'] != self.resolutions.realMonitorIndex or self.resolutions.monitorChanged):
             restartClient = True
+        if g_settingsCore.getSetting('interfaceScale') != settings['interfaceScale']:
+            interfaceScaled = True
         g_settingsCore.applySetting('ppShowTypes', settings['ppShowTypes'])
         g_settingsCore.applySetting('ppShowLevels', settings['ppShowLevels'])
         g_settingsCore.applySetting('replayEnabled', settings['replayEnabled'])
@@ -504,6 +508,7 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('enemy', settings['markers']['enemy'])
         g_settingsCore.applySetting('dead', settings['markers']['dead'])
         g_settingsCore.applySetting('ally', settings['markers']['ally'])
+        g_settingsCore.applySetting('interfaceScale', settings['interfaceScale'])
         g_settingsCore.applySetting('dynamicCamera', settings['dynamicCamera'])
         g_settingsCore.applySetting('horStabilizationSnp', settings['horStabilizationSnp'])
         if self.__altVoiceSetting.isOptionEnabled():
@@ -600,8 +605,7 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('enableOlFilter', settings['enableOlFilter'])
         g_settingsCore.applySetting('enableSpamFilter', settings['enableSpamFilter'])
         g_windowsStoredData.start()
-        g_settingsCore.applySetting('enableStoreMws', settings['enableStoreChatMws'])
-        g_settingsCore.applySetting('enableStoreCws', settings['enableStoreChatCws'])
+        g_settingsCore.applySetting('receiveFriendshipRequest', settings['receiveFriendshipRequest'])
         g_windowsStoredData.stop()
         g_settingsCore.applySetting('invitesFromFriendsOnly', settings['invitesFromFriendsOnly'])
         g_settingsCore.applySetting('storeReceiverInBattle', settings['storeReceiverInBattle'])
@@ -646,6 +650,8 @@ class SettingsInterface(UIInterface):
                 g_settingsCore.isDeviseRecreated = False
             else:
                 BigWorld.callback(0.0, partial(BigWorld.changeVideoMode, -1, BigWorld.isVideoWindowed()))
+        if interfaceScaled:
+            self.__settingsUI.buildGraphicsData(self.__getVideoSettings())
         return
 
     def __restartGame(self):

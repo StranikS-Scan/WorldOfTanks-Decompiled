@@ -116,6 +116,18 @@ class LoginDispatcher(DisposableEntity, AppRef):
     def __onCsisUpdate(self, responce = None):
         self.onSetOptions(self.__getFullServersList(), self.__loginDataLoader.host)
 
+    def __validateCredentials(self, user, password):
+        if len(user) < _LOGIN_NAME_MIN_LENGTH:
+            self.onSetStatus(i18n.makeString(MENU.LOGIN_STATUS_INVALID_LOGIN_LENGTH) % {'count': _LOGIN_NAME_MIN_LENGTH}, self.LOGIN_INVALID)
+            return False
+        if not isAccountLoginValid(user) and not constants.IS_DEVELOPMENT:
+            self.onSetStatus(i18n.makeString(MENU.LOGIN_STATUS_INVALID_LOGIN), self.LOGIN_INVALID)
+            return False
+        if not isPasswordValid(password) and not constants.IS_DEVELOPMENT and not len(self.__loginDataLoader.token2):
+            self.onSetStatus(i18n.makeString(MENU.LOGIN_STATUS_INVALID_PASSWORD), self.LOGIN_PWD_INVALID)
+            return False
+        return True
+
     def _dispose(self):
         super(LoginDispatcher, self)._dispose()
         connectionManager.connectionStatusCallbacks -= self.__handleConnectionStatus
@@ -145,16 +157,8 @@ class LoginDispatcher(DisposableEntity, AppRef):
         if g_steamAccount.isValid:
             user, password = g_steamAccount.getCredentials()
         elif not isSocialToken2Login:
-            user = user.lower().strip()
-            if len(user) < _LOGIN_NAME_MIN_LENGTH:
-                self.onSetStatus(i18n.makeString(MENU.LOGIN_STATUS_INVALID_LOGIN_LENGTH) % {'count': _LOGIN_NAME_MIN_LENGTH}, self.LOGIN_INVALID)
-                return
-            if not isAccountLoginValid(user) and not constants.IS_DEVELOPMENT:
-                self.onSetStatus(i18n.makeString(MENU.LOGIN_STATUS_INVALID_LOGIN), self.LOGIN_INVALID)
-                return
-            password = password.strip()
-            if not isPasswordValid(password) and not constants.IS_DEVELOPMENT and not len(self.__loginDataLoader.token2):
-                self.onSetStatus(i18n.makeString(MENU.LOGIN_STATUS_INVALID_PASSWORD), self.LOGIN_PWD_INVALID)
+            if not self.__validateCredentials(user.lower().strip(), password.strip()):
+                self.__onLoggingTryingEndHdlr()
                 return
         Waiting.show('login')
         self.__loginDataLoader.host = host
@@ -277,9 +281,9 @@ class LoginDispatcher(DisposableEntity, AppRef):
                 self.onHandleUpdateClientSoftwareNeeded()
             localizedMessage = i18n.convert(i18n.makeString(msg))
             lastLoginType = Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('lastLoginType', 'basic')
-            if lastLoginType not in ('basic', 'wgni') and not Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readBool('rememberPwd', False):
+            if lastLoginType != 'basic' and not Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readBool('rememberPwd', False):
                 from gui.social_network_login import Bridge as socialNetworkLogin
-                localizedMessage = socialNetworkLogin.getLogoutWarning(lastLoginType, False)
+                localizedMessage = socialNetworkLogin.getLogoutWarning(lastLoginType)
             self.onSetStatus(localizedMessage, self.ALL_VALID)
             connectionManager.disconnect()
         return
@@ -505,7 +509,11 @@ class LoginDispatcher(DisposableEntity, AppRef):
         if len(self.__loginDataLoader.token2):
             self.resetToken()
             self.onHandleInvalidPasswordWithToken(self.__loginDataLoader.user, self.__loginDataLoader.rememberPwd)
-            errorMessage = i18n.makeString(MENU.LOGIN_STATUS_SESSION_END)
+            lastLoginType = Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('lastLoginType', 'basic')
+            if lastLoginType != 'basic':
+                errorMessage = i18n.makeString('#menu:login/status/SOCIAL_SESSION_END')
+            else:
+                errorMessage = i18n.makeString(MENU.LOGIN_STATUS_SESSION_END)
             errCode = self.ALL_VALID
         self.onSetStatus(errorMessage, errCode)
 

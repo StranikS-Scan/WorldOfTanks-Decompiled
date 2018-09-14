@@ -41,6 +41,10 @@ class ProfileSection(ProfileSectionMeta):
             data = self._getTotalStatsBlock(accountDossier)
         elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_TEAM:
             data = accountDossier.getTeam7x7Stats()
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM:
+            data = accountDossier.getRated7x7Stats()
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM_SEASON:
+            data = accountDossier.getSeasonRated7x7Stats()
         elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL:
             data = accountDossier.getHistoricalStats()
         elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS:

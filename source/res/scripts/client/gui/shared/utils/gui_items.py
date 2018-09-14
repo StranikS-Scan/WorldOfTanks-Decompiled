@@ -1092,7 +1092,7 @@ class InventoryVehicle(InventoryItem):
     def getState(self):
         if self.lock == LOCK_REASON.ON_ARENA:
             return 'battle'
-        if self.lock in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT):
+        if self.lock in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB):
             return 'inPrebattle'
         if self.lock:
             return 'locked'

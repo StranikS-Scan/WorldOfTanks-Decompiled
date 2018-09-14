@@ -21,7 +21,7 @@ class ArcadeAimingSystem(IAimingSystem):
         triBase = camPos - posOnVehicle
         pivotToTarget = shotPoint - posOnVehicle
         camPosToTarget = shotPoint - camPos
-        if triBase.dot(camPosToTarget) * triBase.dot(pivotToTarget) > 0:
+        if triBase.dot(camPosToTarget) * triBase.dot(pivotToTarget) > 0.0:
             if self.__shotPointCalculator is not None:
                 self.__adjustFocus()
             else:
@@ -98,9 +98,9 @@ class ArcadeAimingSystem(IAimingSystem):
 
     def focusOnPos(self, preferredPos):
         vehPos = Matrix(self.__vehicleMProv).translation
-        posOnVehicle = vehPos + Vector3(0, self.__cursor.heightAboveBase, 0)
+        posOnVehicle = vehPos + Vector3(0.0, self.__cursor.heightAboveBase, 0.0)
         self.yaw = (preferredPos - vehPos).yaw
-        xzDir = Vector3(self.__cursor.focusRadius * math.sin(self.__cursor.yaw), 0, self.__cursor.focusRadius * math.cos(self.__cursor.yaw))
+        xzDir = Vector3(self.__cursor.focusRadius * math.sin(self.__cursor.yaw), 0.0, self.__cursor.focusRadius * math.cos(self.__cursor.yaw))
         pivotPos = posOnVehicle + xzDir
         self.pitch = self.__calcPitchAngle(self.__cursor.distanceFromFocus, preferredPos - pivotPos)
         self.__cursor.update(True)
@@ -161,7 +161,7 @@ class ArcadeAimingSystem(IAimingSystem):
         return 0.0
 
     def __getScanRay(self):
-        scanDir = self.matrix.applyVector(Vector3(0, 0, 1))
+        scanDir = self.matrix.applyVector(Vector3(0.0, 0.0, 1.0))
         scanStart = self.matrix.translation + scanDir * 0.3
         return (scanStart, scanDir)
 
@@ -174,18 +174,18 @@ class _AimPlane(object):
 
     def __init__(self):
         self.__plane = Math.Plane()
-        self.init(Vector3(0, 0, 0), Vector3(0, 0, 0))
+        self.init(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.0))
 
     def init(self, aimPos, targetPos):
         lookDir = targetPos - aimPos
         self.__lookLength = lookDir.length
         lookDir.normalise()
-        self.__plane.init(targetPos, targetPos + Vector3(0, 0, 1), targetPos + Vector3(1, 0, 0))
-        self.__initialProjection = Vector3(0, 1, 0).dot(lookDir)
+        self.__plane.init(targetPos, targetPos + Vector3(0.0, 0.0, 1.0), targetPos + Vector3(1.0, 0.0, 0.0))
+        self.__initialProjection = Vector3(0.0, 1.0, 0.0).dot(lookDir)
 
     def intersectRay(self, startPos, dir, checkCloseness = True, checkSign = True):
         collisionPoint = self.__plane.intersectRay(startPos, dir)
-        projection = Vector3(0, 1, 0).dot(dir)
+        projection = Vector3(0.0, 1.0, 0.0).dot(dir)
         tooClose = collisionPoint.distTo(startPos) - self.__lookLength < -0.0001 and checkCloseness
         parallelToPlane = abs(projection) <= _AimPlane.__EPS_COLLIDE_ARENA
         projectionSignDiffers = projection * self.__initialProjection < 0.0 and checkSign
@@ -236,14 +236,14 @@ class ShotPointCalculatorPlanar(object):
             return scanPos
         turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, self.__vehicleMat, planePos, True)
         gunMat = AimingSystems.getGunJointMat(self.__vehicleDesc, self.__getTurretMat(turretYaw), gunPitch)
-        aimDir = gunMat.applyVector(Vector3(0, 0, 1))
+        aimDir = gunMat.applyVector(Vector3(0.0, 0.0, 1.0))
         return AimingSystems.getDesiredShotPoint(gunMat.translation, aimDir)
 
     def __calculateClosestPoint(self, start, dir):
         dir.normalise()
         end = start + dir.scale(10000.0)
         testResTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128, lambda matKind, collFlags, itemId, chunkId: collFlags & 8)
-        terrainSuitsForCheck = testResTerrain and testResTerrain[1].dot(Math.Vector3(0, 1, 0)) <= math.cos(ShotPointCalculatorPlanar.TERRAIN_MIN_ANGLE)
+        terrainSuitsForCheck = testResTerrain and testResTerrain[1].dot(Math.Vector3(0.0, 1.0, 0.0)) <= math.cos(ShotPointCalculatorPlanar.TERRAIN_MIN_ANGLE)
         testResNonTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 136)
         testResDynamic = collideDynamic(start, end, (BigWorld.player().playerVehicleID,), False)
         closestPoint = None
@@ -290,8 +290,8 @@ class ShotPointCalculatorPlanar(object):
         dirFromTurretPos = targetPoint - turretPos
         dirFromSniperPos = targetPoint - gunPos
         viewDir = Math.Vector3(viewDir)
-        viewDir.y = 0
+        viewDir.y = 0.0
         viewDir.normalise()
-        dirFromSniperPos.y = 0
-        dirFromTurretPos.y = 0
-        return viewDir.dot(dirFromSniperPos) < 0 or viewDir.dot(dirFromTurretPos) < 0
+        dirFromSniperPos.y = 0.0
+        dirFromTurretPos.y = 0.0
+        return viewDir.dot(dirFromSniperPos) < 0.0 or viewDir.dot(dirFromTurretPos) < 0.0

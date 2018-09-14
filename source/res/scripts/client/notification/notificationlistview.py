@@ -3,7 +3,6 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.NotificationsListMeta import NotificationsListMeta
 from gui.Scaleform.framework.entities.View import View
-from gui.shared.events import OpenLinkEvent
 from messenger.formatters import TimeFormatter
 from notification.NotificationLayoutView import NotificationLayoutView
 from notification import NotificationMVC
@@ -17,9 +16,6 @@ class NotificationListView(NotificationsListMeta, View, NotificationLayoutView, 
 
     def onClickAction(self, typeID, entityID, action):
         NotificationMVC.g_instance.handleAction(typeID, entityID, action)
-
-    def onSecuritySettingsLinkClick(self):
-        self.fireEvent(OpenLinkEvent(OpenLinkEvent.SECURITY_SETTINGS))
 
     def destroy(self):
         if self._model.getDisplayState() == NOTIFICATION_STATE.LIST:

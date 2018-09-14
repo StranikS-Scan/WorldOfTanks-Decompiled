@@ -289,12 +289,11 @@ class Afterburning(Equipment):
 class Artillery(Equipment):
 
     def _readConfig(self, xmlCtx, section):
-        self.delayRange = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'delayRange', 2)
-        self.durationRange = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'durationRange', 2)
-        self.shotsNumberRange = _xml.readTupleOfNonNegativeInts(xmlCtx, section, 'shotsNumberRange', 2)
+        self.delay = _xml.readPositiveFloat(xmlCtx, section, 'delay')
+        self.duration = _xml.readPositiveFloat(xmlCtx, section, 'duration')
+        self.shotsNumber = _xml.readNonNegativeInt(xmlCtx, section, 'shotsNumber')
         self.areaRadius = _xml.readPositiveFloat(xmlCtx, section, 'areaRadius')
         self.shellCompactDescr = _xml.readInt(xmlCtx, section, 'shellCompactDescr')
-        self.tracerKind = _xml.readInt(xmlCtx, section, 'tracerKind')
         self.piercingPower = _xml.readTupleOfPositiveInts(xmlCtx, section, 'piercingPower', 2)
         self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
         self.areaColor = _xml.readIntOrNone(xmlCtx, section, 'areaColor')
@@ -308,7 +307,7 @@ class Artillery(Equipment):
 class Bomber(Equipment):
 
     def _readConfig(self, xmlCtx, section):
-        self.delayRange = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'delayRange', 2)
+        self.delay = _xml.readPositiveFloat(xmlCtx, section, 'delay')
         self.modelName = _xml.readString(xmlCtx, section, 'modelName')
         self.soundEvent = _xml.readString(xmlCtx, section, 'soundEvent')
         self.speed = _xml.readInt(xmlCtx, section, 'speed')
@@ -321,7 +320,7 @@ class Bomber(Equipment):
         if not len(self.antepositions) == len(self.lateropositions) == len(self.bombingMask):
             _xml.raiseWrongSection(xmlCtx, 'bombers number mismatch')
         self.waveFraction = _xml.readPositiveFloat(xmlCtx, section, 'waveFraction')
-        self.bombsNumberRange = _xml.readTupleOfNonNegativeInts(xmlCtx, section, 'bombsNumberRange', 2)
+        self.bombsNumber = _xml.readNonNegativeInt(xmlCtx, section, 'bombsNumber')
         self.shellCompactDescr = _xml.readInt(xmlCtx, section, 'shellCompactDescr')
         self.tracerKind = _xml.readInt(xmlCtx, section, 'tracerKind')
         self.piercingPower = _xml.readTupleOfPositiveInts(xmlCtx, section, 'piercingPower', 2)

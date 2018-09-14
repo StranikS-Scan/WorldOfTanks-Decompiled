@@ -40,7 +40,8 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
         vehicle = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
         if vehicle is None:
             LOG_ERROR("Vehicle Item mustn't be None!", 'NationID:', self.nationID, 'InNationID:', self.inNationID)
-            return
+        elif vehicle.isInInventory and not vehicle.isRented:
+            self.onWindowClose()
         else:
             shop = g_itemsCache.items.shop
             shopDefaults = shop.defaults
@@ -119,7 +120,7 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
              'isNoAmmo': not vehicle.hasShells,
              'rentDataDD': self._getRentData(vehicle, vehiclePricesActionData)}
             self.as_setInitDataS(initData)
-            return
+        return
 
     def storeSettings(self, expanded):
         AccountSettings.setSettings(VEHICLE_BUY_WINDOW_SETTINGS, expanded)

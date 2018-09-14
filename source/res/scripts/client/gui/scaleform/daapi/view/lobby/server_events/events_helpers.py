@@ -5,6 +5,7 @@ import operator
 from collections import defaultdict
 import BigWorld
 import constants
+from gui import GUI_SETTINGS
 from gui.Scaleform.framework import AppRef
 from helpers import i18n, int2roman, time_utils
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -261,9 +262,13 @@ class _QuestInfo(_EventInfo):
 
     def _getBonuses(self, svrEvents, bonuses = None):
         bonuses = bonuses or self.event.getBonuses()
-        result, simpleBonusesList, customizationsList = [], [], []
+        result, simpleBonusesList, customizationsList, vehiclesList = ([],
+         [],
+         [],
+         [])
         for b in bonuses:
             if b.isShowInGUI():
+                flist = []
                 if b.getName() == 'dossier':
                     for record in b.getRecords():
                         if record[0] != ACHIEVEMENT_BLOCK.RARE:
@@ -271,6 +276,10 @@ class _QuestInfo(_EventInfo):
 
                 elif b.getName() == 'customizations':
                     customizationsList.extend(b.getList())
+                elif b.getName() == 'vehicles':
+                    flist = b.formattedList()
+                    if flist:
+                        vehiclesList.extend(flist)
                 else:
                     flist = b.formattedList()
                     if flist:
@@ -282,6 +291,10 @@ class _QuestInfo(_EventInfo):
             label = ', '.join(simpleBonusesList[:self.SIMPLE_BONUSES_MAX_ITEMS]) + '..'
             fullLabel = ', '.join(simpleBonusesList)
         result.append(formatters.packTextBlock(label, fullLabel=fullLabel))
+        vehiclesLbl = ', '.join(vehiclesList)
+        if len(vehiclesList) > self.SIMPLE_BONUSES_MAX_ITEMS:
+            vehiclesLbl = ', '.join(vehiclesList[:self.SIMPLE_BONUSES_MAX_ITEMS]) + '..'
+        result.append(formatters.packVehiclesBonusBlock(vehiclesLbl, str(self.event.getID())))
         if len(customizationsList):
             result.append(formatters.packCustomizations(customizationsList))
         parents = [ qID for _, qIDs in self.event.getParents().iteritems() for qID in qIDs ]
@@ -491,12 +504,12 @@ class _ActionInfo(_EventInfo):
         return formatters.todict(result)
 
     def _getActiveDateTimeString(self):
-        if self.event.getFinishTimeLeft() <= time_utils.QUARTER_HOUR:
+        if self.event.getFinishTimeLeft() <= GUI_SETTINGS.actionComeToEnd:
             return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOEND)
         return super(_ActionInfo, self)._getActiveDateTimeString()
 
     def _getTimerMsg(self):
-        if self.event.getFinishTimeLeft() <= time_utils.QUARTER_HOUR:
+        if self.event.getFinishTimeLeft() <= GUI_SETTINGS.actionComeToEnd:
             return makeHtmlString('html_templates:lobby/quests', 'comeToEnd')
         return super(_ActionInfo, self)._getTimerMsg()
 
@@ -504,14 +517,9 @@ class _ActionInfo(_EventInfo):
 class _PotapovQuestInfo(_QuestInfo):
 
     def _getBonuses(self, svrEvents, _ = None):
-        from gui.server_events.bonuses import FakeTextBonus
         mainBonuses = self.event.getBonuses(isMain=True)
         addBonuses = self.event.getBonuses(isMain=False)
-
-        def _getBonuses(bonuses):
-            return _QuestInfo._getBonuses(self, None, bonuses=bonuses)
-
-        return _getBonuses(mainBonuses) + _getBonuses([FakeTextBonus(i18n.makeString('#quests:bonuses/item/additionBonus'))]) + _getBonuses(addBonuses)
+        return (_QuestInfo._getBonuses(self, None, bonuses=mainBonuses), _QuestInfo._getBonuses(self, None, bonuses=addBonuses))
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
         _getText = self.app.utilsManager.textManager.getText

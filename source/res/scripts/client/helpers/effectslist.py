@@ -7,6 +7,7 @@ from collections import namedtuple
 import random
 import DecalMap
 import material_kinds
+import helpers
 from debug_utils import *
 from functools import partial
 import string
@@ -110,7 +111,7 @@ class EffectsListPlayer:
         else:
             warpDelta = replayCtrl.warpTime - replayCtrl.currentTime
             for effect in EffectsListPlayer.activeEffects[:]:
-                if effect.__waitForKeyOff:
+                if effect.__waitForKeyOff and warpDelta > 0.0:
                     continue
                 if warpDelta <= 0.0 or effect.__keyPoints[-1].time - effect.__curKeyPoint.time < warpDelta:
                     if effect.__callbackFunc is not None:
@@ -360,6 +361,7 @@ class _PixieEffectDesc(_EffectDesc):
             elem['cancelLoadCallback'] = True
         else:
             elem['node'].detach(elem['pixie'])
+            elem['pixie'].clear()
         elem['pixie'] = None
         return True
 
@@ -539,7 +541,7 @@ class _SoundEffectDesc(_EffectDesc):
         sound = None
         try:
             if self._node is not None:
-                self._fakeModel = BigWorld.player().newFakeModel()
+                self._fakeModel = helpers.newFakeModel()
                 self._node.attach(self._fakeModel)
                 sound = SoundGroups.g_instance.getSound(self._fakeModel, soundName)
             else:
@@ -719,9 +721,13 @@ class _FlashBangEffectDesc(_EffectDesc):
         _EffectDesc.__init__(self, dataSection)
         self._duration = 0.0
         self._keyframes = list()
+        self.__fba = None
+        self.__clbackId = None
         for stage in dataSection['stages'].values():
             self._keyframes += [(self._duration, stage.readVector4('color', Math.Vector4(0, 0, 0, 0)))]
             self._duration += stage.asFloat
+
+        return
 
     def prerequisites(self):
         return []
@@ -729,14 +735,30 @@ class _FlashBangEffectDesc(_EffectDesc):
     def create(self, model, list, args):
         inputHandler = getattr(BigWorld.player(), 'inputHandler')
         if args.get('showFlashBang', True) and (inputHandler is None or inputHandler.isFlashBangAllowed):
-            fba = Math.Vector4Animation()
-            fba.keyframes = self._keyframes
-            fba.duration = self._duration
-            BigWorld.flashBangAnimation(fba)
-            BigWorld.callback(self._duration - 0.05, partial(BigWorld.removeFlashBangAnimation, fba))
+            if self.__fba is not None:
+                BigWorld.removeFlashBangAnimation(self.__fba)
+                BigWorld.cancelCallback(self.__clbackId)
+            self.__fba = Math.Vector4Animation()
+            self.__fba.keyframes = self._keyframes
+            self.__fba.duration = self._duration
+            BigWorld.flashBangAnimation(self.__fba)
+            self.__clbackId = BigWorld.callback(self._duration - 0.05, self.__removeMe)
+        elem = {}
+        elem['typeDesc'] = self
+        list.append(elem)
+        return
+
+    def __removeMe(self):
+        if self.__fba is not None:
+            BigWorld.removeFlashBangAnimation(self.__fba)
+            self.__clbackId = None
+            self.__fba = None
         return
 
     def delete(self, elem, reason):
+        if self.__clbackId is not None:
+            BigWorld.cancelCallback(self.__clbackId)
+        self.__removeMe()
         return True
 
 
@@ -827,8 +849,6 @@ class _LightEffectDesc(_EffectDesc):
         light.source = elem['node']
         light.colorAnimator = colorAnimator
         light.multiplierAnimator = multiplierAnimator
-        light.specular = 1
-        light.diffuse = 1
         light.visible = True
         elem['light'] = light
         elem['callback'] = None

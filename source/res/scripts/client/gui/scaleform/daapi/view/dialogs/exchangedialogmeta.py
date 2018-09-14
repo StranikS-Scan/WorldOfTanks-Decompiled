@@ -4,6 +4,7 @@ import Event
 import operator
 import BigWorld
 from adisp import async
+from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import i18n
 from gui import game_control
@@ -33,6 +34,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
     def __init__(self, key, typeCompactDescr):
         self.__typeCompactDescr = typeCompactDescr
         self.onInvalidate = Event.Event()
+        self.onCloseDialog = Event.Event()
         self._items = g_itemsCache.items
         super(_ExchangeDialogMeta, self).__init__(key, scope=ScopeTemplates.LOBBY_SUB_SCOPE)
         game_control.g_instance.wallet.onWalletStatusChanged += self._onStatsChanged
@@ -41,6 +43,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
         self._items = None
         game_control.g_instance.wallet.onWalletStatusChanged -= self._onStatsChanged
         self.onInvalidate.clear()
+        self.onCloseDialog.clear()
         return
 
     def getEventType(self):
@@ -137,8 +140,8 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
          'defaultGoldValue': self.__getGoldToExchange(resToExchange),
          'goldStepSize': self._getStepSize(),
          'maxGoldValue': self._getMaxExchangeValue(),
-         'goldTextColor': self.__getStepperColor('textColorGold'),
-         'itemsTextColor': self.__getStepperColor(self._getColorScheme())}
+         'goldTextColorId': 'textColorGold',
+         'itemsTextColorId': self._getColorScheme()}
 
     def __getState(self, resToExchange):
         if resToExchange <= 0:
@@ -191,21 +194,31 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
             return str(item.level)
         return item.icon
 
-    def __getStepperColor(self, scheme):
-        return self.app.colorManager.getColorScheme(scheme).get('rgb')
-
 
 class ExchangeCreditsMeta(_ExchangeDialogMeta):
 
-    def __init__(self, itemCD):
+    def __init__(self, itemCD, installVehicle = None):
         super(ExchangeCreditsMeta, self).__init__('confirmExchangeDialog/exchangeCredits', itemCD)
+        item = self._items.getItemByCD(self.getTypeCompDescr())
+        self.__installVehicleCD = installVehicle
+        self.__isInstalled = False
+        if item and item.itemTypeID != GUI_ITEM_TYPE.VEHICLE and self.__installVehicleCD:
+            vehicle = self._items.getItemByCD(self.__installVehicleCD)
+            self.__isInstalled = item.isInstalled(vehicle)
+        self.__inventoryCount = 0
+        if item:
+            self.__inventoryCount = item.inventoryCount
         g_clientUpdateManager.addCallbacks({'stats.credits': self._onStatsChanged,
          'stats.gold': self._onStatsChanged,
-         'shop.exchangeRate': self._onStatsChanged})
+         'shop.exchangeRate': self._onStatsChanged,
+         'inventory.1': self._checkInventory})
 
     def destroy(self):
+        self.__inventoryCount = None
+        self.__installVehicleCD = None
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(ExchangeCreditsMeta, self).destroy()
+        return
 
     @async
     @decorators.process('transferMoney')
@@ -226,6 +239,18 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
 
     def _getCurrencyIconStr(self):
         return TextManager.getIcon(TextIcons.CREDITS)
+
+    def _checkInventory(self, *args):
+        item = self._items.getItemByCD(self.getTypeCompDescr())
+        if item:
+            if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE and item.isInInventory:
+                self.onCloseDialog()
+            elif item.inventoryCount > self.__inventoryCount:
+                self.onCloseDialog()
+            elif self.__installVehicleCD:
+                vehicle = self._items.getItemByCD(self.__installVehicleCD)
+                if not self.__isInstalled and item.isInstalled(vehicle):
+                    self.onCloseDialog()
 
     def _getCurrencyFormat(self):
         return TextType.CREDITS_TEXT
@@ -259,7 +284,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
          'inventory.1': self._onStatsChanged,
          'stats.vehTypeXP': self._onStatsChanged,
          'stats.freeXP': self._onStatsChanged,
-         'stats.unlocks': self._onStatsChanged})
+         'stats.unlocks': self._checkUnlcoks})
 
     def destroy(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -285,6 +310,11 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
 
     def _getDefaultExchangeRate(self):
         return self._items.shop.defaults.freeXPConversion[0]
+
+    def _checkUnlcoks(self, *args):
+        item = self._items.getItemByCD(self.getTypeCompDescr())
+        if item and item.isUnlocked:
+            self.onCloseDialog()
 
     def _getResourceToExchange(self):
         item = self._items.getItemByCD(self.getTypeCompDescr())

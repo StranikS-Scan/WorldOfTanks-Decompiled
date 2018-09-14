@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/messenger/doc_loaders/html_templates.py
 import types
-from debug_utils import LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_WARNING
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers.html import translation as html_translation, templates
 
@@ -18,7 +18,12 @@ class _MessageTemplate(templates.Template):
                 if key in vo:
                     vo[key] = value
 
-            vo['buttonsStates'] = data.get('buttonsStates', {})
+            if 'buttonsStates' in data:
+                vo['buttonsStates'] = data['buttonsStates']
+            else:
+                vo['buttonsStates'] = {}
+            if 'bgIconHeight' in data:
+                vo['bgIconHeight'] = data['bgIconHeight']
         vo['message'] = super(_MessageTemplate, self).format(ctx=ctx, sourceKey='message')
         return vo
 

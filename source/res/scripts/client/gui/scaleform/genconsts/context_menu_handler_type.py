@@ -15,4 +15,4 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     TECHNICAL_MAINTENANCE = 'technicalMaintenance'
     CONTACTS_GROUP = 'contactsGroup'
     PLAYER_CONTACTS = 'playerContacts'
-    STATIC_FORMATION_STAFF = 'staticFormationStaff'
+    CLUB_STAFF = 'clubStaff'

@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/messenger/proto/search_processor.py
-import chat_shared
 import weakref
 import BigWorld
 from interfaces import ISearchHandler, ISearchProcessor
@@ -37,9 +36,6 @@ class SearchProcessor(ISearchProcessor):
 
     def find(self, token, **kwargs):
         raise NotImplementedError, 'Routine SearchProcessor.find must be implemented'
-
-    def getChatCommand(self):
-        return chat_shared.CHAT_COMMANDS.findUser.name()
 
     def getSearchResultLimit(self):
         raise NotImplementedError, 'Routine SearchProcessor.getSearchResultLimit must be implemented'

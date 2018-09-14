@@ -225,7 +225,15 @@ class FortViewHelper(FortListener):
         return result and not self._isBaseBuildingDamaged() and not self._isFortFrozen()
 
     def _showOrderAlertIcon(self, order):
-        return order.isPermanent and not self.fortCtrl.getFort().isDefenceHourEnabled() or not order.isSupported
+        showAlert = False
+        alertTooltip = ''
+        if order.isPermanent and not self.fortCtrl.getFort().isDefenceHourEnabled() or not order.isSupported:
+            showAlert = True
+            alertTooltip = TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_DEFENCEHOURDISABLED
+        elif order.isConsumable and not self.fortCtrl.getFort().isDefenceHourEnabled() or not order.isSupported:
+            showAlert = True
+            alertTooltip = TOOLTIPS.FORTIFICATION_BUILDINGPROCESS_ALERT_ONLYUSEDINCOMBAT
+        return (showAlert, alertTooltip)
 
     def _isVisibleActionBtn(self, descr):
         return not self._isMilitaryBase(descr.typeID) and not self.__orderIsInProgress(descr.typeID)

@@ -28,10 +28,11 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared import g_itemsCache, EVENT_BUS_SCOPE, REQ_CRITERIA, g_eventBus, events
 from gui.shared.utils.transport import z_loads
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.prb_control.prb_helpers import GlobalListener
 from PlayerEvents import g_playerEvents
 from FortifiedRegionBase import FORT_ATTACK_RESULT
 
-class AwardController(Controller):
+class AwardController(Controller, GlobalListener):
 
     def __init__(self, proxy):
         super(AwardController, self).__init__(proxy)
@@ -57,21 +58,42 @@ class AwardController(Controller):
         for handler in self.__handlers:
             handler.fini()
 
+    def postponeOrCall(self, handler, ctx):
+        if self.canShow():
+            handler(ctx)
+        else:
+            self.__delayedHandlers.append((handler, ctx))
+
+    def handlePostponed(self, *args):
+        if self.canShow:
+            for handler, ctx in self.__delayedHandlers:
+                handler(ctx)
+
+            self.__delayedHandlers = []
+
+    def canShow(self):
+        prbDispatcher = self.prbDispatcher
+        if prbDispatcher is None:
+            return self.__isLobbyLoaded
+        else:
+            return self.__isLobbyLoaded and not (prbDispatcher.getFunctionalState().hasLockedState or prbDispatcher.getPlayerInfo().isReady)
+
     def onBattleStarted(self):
         self.__isLobbyLoaded = False
 
     def onLobbyInited(self, *args):
+        self.startGlobalListening()
         self.__isLobbyLoaded = True
-        for handler, ctx in self.__delayedHandlers:
-            handler(ctx)
+        self.handlePostponed()
 
-        self.__delayedHandlers = []
+    def onPlayerStateChanged(self, functional, roster, accountInfo):
+        self.handlePostponed()
 
-    def postponeOrCall(self, handler, ctx):
-        if not self.__isLobbyLoaded:
-            self.__delayedHandlers.append((handler, ctx))
-        else:
-            handler(ctx)
+    def onUnitStateChanged(self, state, timeLeft):
+        self.handlePostponed()
+
+    def onDequeued(self):
+        self.handlePostponed()
 
 
 class AwardHandler(object):

@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/TokenRequester.py
 import cPickle
+from functools import partial
 import Account
 import BigWorld
 from adisp import async
@@ -22,7 +23,11 @@ class TokenRequester(object):
         self.__lastResponse = None
         self.__requestID = 0
         self.__cache = cache
+        self.__timeoutCbID = None
         return
+
+    def isInProcess(self):
+        return self.__callback is not None
 
     def clear(self):
         self.__callback = None
@@ -31,13 +36,14 @@ class TokenRequester(object):
             repository.onTokenReceived -= self.__onTokenReceived
         self.__lastResponse = None
         self.__requestID = 0
+        self.__clearTimeoutCb()
         return
 
     def getReqCoolDown(self):
         return getattr(REQUEST_COOLDOWN, TOKEN_TYPE.COOLDOWNS[self.__tokenType], 10.0)
 
     @async
-    def request(self, callback = None):
+    def request(self, timeout = None, callback = None):
         requester = getattr(BigWorld.player(), 'requestToken', None)
         if not requester or not callable(requester):
             if callback:
@@ -50,6 +56,8 @@ class TokenRequester(object):
         else:
             self.__callback = callback
             self.__requestID = self.__idsGen.next()
+            if timeout:
+                self.__loadTimeout(self.__requestID, self.__tokenType, max(timeout, 0.0))
             repository = Account.g_accountRepository
             if repository:
                 repository.onTokenReceived += self.__onTokenReceived
@@ -73,3 +81,17 @@ class TokenRequester(object):
                 self.__callback(self.__lastResponse)
                 self.__callback = None
             return
+
+    def __clearTimeoutCb(self):
+        if self.__timeoutCbID is not None:
+            BigWorld.cancelCallback(self.__timeoutCbID)
+            self.__timeoutCbID = None
+        return
+
+    def __loadTimeout(self, requestID, tokenType, timeout):
+        self.__clearTimeoutCb()
+        self.__timeoutCbID = BigWorld.callback(timeout, partial(self.__onTimeout, requestID, tokenType))
+
+    def __onTimeout(self, requestID, tokenType):
+        self.__clearTimeoutCb()
+        self.__onTokenReceived(requestID, tokenType, cPickle.dumps({'error': 'TIMEOUT'}, -1))

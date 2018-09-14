@@ -3,6 +3,7 @@ import math
 import weakref
 import GUI
 import Math
+import BattleReplay
 from debug_utils import *
 from gui.battle_control import g_sessionProvider
 from helpers import i18n
@@ -10,30 +11,88 @@ from helpers.func_utils import *
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.ColorSchemeManager import _ColorSchemeManager
-import BattleReplay
+from gui.shared.utils.graphics import getScaleByIndex
+from gui.battle_control.consumables.ammo_ctrl import SHELL_SET_RESULT
+
+class AimVisibleRadius():
+    ARCADE = 120
+    STARTEGIC = 260
+    SNIPER = 200
+    POSTMORTEM = 230
+
 
 def createAim(type):
     if not GUI_SETTINGS.isGuiEnabled():
         from gui.development.no_gui.battle import Aim
         return Aim()
     if type == 'strategic':
-        return StrategicAim((0, 0.0))
+        return StrategicAim((0, 0.0), AimVisibleRadius.STARTEGIC)
     if type == 'arcade':
-        return ArcadeAim((0, 0.15), False)
+        return ArcadeAim((0, 0.15), AimVisibleRadius.ARCADE, False)
     if type == 'sniper':
-        return ArcadeAim((0, 0.0), True)
+        return ArcadeAim((0, 0.0), AimVisibleRadius.SNIPER, True)
     if type == 'postmortem':
-        return PostMortemAim((0, 0.0))
+        return PostMortemAim((0, 0.0), AimVisibleRadius.POSTMORTEM)
     LOG_ERROR('Undefined aim type. <%s>' % type)
+
+
+g_reloadingHandler = None
+
+def getReloadingHandler():
+    global g_reloadingHandler
+    if g_reloadingHandler is None:
+        g_reloadingHandler = ReloadingStateHandler()
+    return g_reloadingHandler
+
+
+class ReloadingStateHandler(object):
+
+    def __init__(self):
+        self.state = {}
+        self.ammoStock = (0, 0)
+        self.__currentAim = None
+        return
+
+    def setReloading(self, duration, startTime = None, baseTime = None):
+        if self.__currentAim is not None:
+            self.__currentAim.setReloading(duration, startTime, baseTime)
+        return
+
+    def setReloadingInPercent(self, percent, isReloading = True):
+        if self.__currentAim is not None:
+            self.__currentAim.setReloadingInPercent(percent, isReloading)
+        return
+
+    def setShellChanged(self, _):
+        shell = g_sessionProvider.getAmmoCtrl().getCurrentShells()
+        self.ammoStock = shell
+        if self.__currentAim is not None:
+            self.__currentAim._setAmmoStock(shell[0], shell[1])
+        return
+
+    def setAmmoStock(self, _, quantity, quantityInClip, clipReloaded):
+        if not clipReloaded & SHELL_SET_RESULT.CURRENT:
+            return
+        else:
+            self.ammoStock = (quantity, quantityInClip)
+            if self.__currentAim is not None:
+                self.__currentAim._setAmmoStock(quantity, quantityInClip, clipReloaded & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
+            return
+
+    def onAimChanged(self, aim):
+        self.__currentAim = aim
 
 
 class Aim(Flash):
     _UPDATE_INTERVAL = 0.03
     __FLASH_CLASS = 'WGAimFlash'
     _AIM_TYPES = ('arcade', 'sniper')
+    _posX = 0
+    _posY = 0
 
-    def __init__(self, mode, offset):
+    def __init__(self, mode, offset, visibleR):
         Flash.__init__(self, 'crosshair_panel_{0:>s}.swf'.format(mode), self.__FLASH_CLASS)
+        from account_helpers.settings_core.SettingsCore import g_settingsCore
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_Aim
         self.component.focus = False
@@ -41,15 +100,26 @@ class Aim(Flash):
         self.component.heightMode = 'PIXEL'
         self.component.widthMode = 'PIXEL'
         self.movie.backgroundAlpha = 0
-        self.flashSize = GUI.screenResolution()
+        self.__scale = None
+        self.__applyScale()
+        self.__scale = getScaleByIndex(g_settingsCore.getSetting('interfaceScale'))
+        self.movie._root._xscale = 100 * self.__scale
+        self.movie._root._yscale = 100 * self.__scale
         self._offset = offset
         self._isLoaded = False
         self.mode = mode
+        self._visibleR = visibleR
         self.__timeInterval = _TimeInterval(Aim._UPDATE_INTERVAL, '_update', weakref.proxy(self))
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         self.__aimSettings = None
         self.__isColorBlind = g_settingsCore.getSetting('isColorBlind')
+        self._reloadingHndl = getReloadingHandler()
         return
+
+    def getVisibleBounds(self):
+        return (self._posX - self._visibleR,
+         self._posY - self._visibleR,
+         self._posX + self._visibleR,
+         self._posY + self._visibleR)
 
     def prerequisites(self):
         return []
@@ -61,7 +131,7 @@ class Aim(Flash):
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged += self.onSettingsChanged
         replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.replayContainsGunReloads:
+        if replayCtrl.isPlaying:
             self._flashCall('setupReloadingCounter', [False])
 
     def destroy(self):
@@ -81,6 +151,8 @@ class Aim(Flash):
         if diff is not None:
             if 'isColorBlind' in diff:
                 self.__isColorBlind = diff['isColorBlind']
+            if 'interfaceScale' in diff:
+                self.__applyScale()
         return
 
     def applySettings(self):
@@ -102,12 +174,14 @@ class Aim(Flash):
     def enable(self):
         global _g_aimState
         self.active(True)
+        self._reloadingHndl.onAimChanged(self)
         if self.__aimSettings is None:
             self.onSettingsChanged()
         self.__timeInterval.start()
         _g_aimState['target']['id'] = None
         self._enable(_g_aimState, _g_aimState['isFirstInit'])
         _g_aimState['isFirstInit'] = False
+        self.onOffsetUpdate()
         self.onRecreateDevice()
         return
 
@@ -121,18 +195,23 @@ class Aim(Flash):
     def updateMarkerPos(self, pos, relaxTime):
         self.component.updateMarkerPos(pos, relaxTime)
 
-    def onRecreateDevice(self):
+    def onOffsetUpdate(self):
         screen = GUI.screenResolution()
-        self.component.size = screen
         width = screen[0]
         height = screen[1]
         offsetX = self._offset[0]
         offsetY = self._offset[1]
-        posX = 0.5 * width * (1.0 + offsetX)
-        posX = round(posX) if width % 2 == 0 else int(posX)
-        posY = 0.5 * height * (1.0 - offsetY)
-        posY = round(posY) if height % 2 == 0 else int(posY)
-        self._flashCall('onRecreateDevice', [posX, posY])
+        self._posX = 0.5 * width * (1.0 + offsetX) / self.__scale
+        self._posX = round(self._posX) if width % 2 == 0 else int(self._posX)
+        self._posY = 0.5 * height * (1.0 - offsetY) / self.__scale
+        self._posY = round(self._posY) if height % 2 == 0 else int(self._posY)
+        self._flashCall('onRecreateDevice', [self._posX, self._posY])
+
+    def onRecreateDevice(self):
+        screen = GUI.screenResolution()
+        self.component.size = screen
+        self.__applyScale()
+        self.onOffsetUpdate()
 
     def setVisible(self, isVisible):
         self.component.visible = isVisible
@@ -140,7 +219,7 @@ class Aim(Flash):
     def offset(self, value = None):
         if value is not None:
             self._offset = value
-            self.onRecreateDevice()
+            self.onOffsetUpdate()
         else:
             return self._offset
         return
@@ -169,10 +248,9 @@ class Aim(Flash):
         return _ColorSchemeManager._makeRGB(colorScheme)
 
     def getReloadingTimeLeft(self):
-        state = _g_aimState['reload']
-        correction = state.get('correction')
-        startTime = state.get('startTime', 0)
-        duration = state.get('duration', 0)
+        correction = self._reloadingHndl.state.get('correction')
+        startTime = self._reloadingHndl.state.get('startTime', 0)
+        duration = self._reloadingHndl.state.get('duration', 0)
         if correction is not None:
             startTime = correction.get('startTime', 0)
             duration = correction.get('timeRemaining', 0)
@@ -183,7 +261,7 @@ class Aim(Flash):
             return 0
 
     def getAmmoQuantityLeft(self):
-        ammo = _g_aimState['ammo']
+        ammo = self._reloadingHndl.ammoStock
         if self.isCasseteClip():
             return ammo[1]
         else:
@@ -194,24 +272,23 @@ class Aim(Flash):
         return clip[0] != 1 or clip[1] != 1
 
     def setReloading(self, duration, startTime = None, baseTime = None):
-        state = _g_aimState['reload']
-        _isReloading = state.get('isReloading', False)
-        _startTime = state.get('startTime', 0)
-        _duration = state.get('duration', 0)
+        _isReloading = self._reloadingHndl.state.get('isReloading', False)
+        _startTime = self._reloadingHndl.state.get('startTime', 0)
+        _duration = self._reloadingHndl.state.get('duration', 0)
         isReloading = duration != 0
-        state['isReloading'] = isReloading
-        state['correction'] = None
-        state['baseTime'] = baseTime
+        self._reloadingHndl.state['isReloading'] = isReloading
+        self._reloadingHndl.state['correction'] = None
+        self._reloadingHndl.state['baseTime'] = baseTime
         if _isReloading and duration > 0 and _duration > 0 and _startTime > 0:
             current = BigWorld.time()
-            state['correction'] = {'timeRemaining': duration,
+            self._reloadingHndl.state['correction'] = {'timeRemaining': duration,
              'startTime': current,
              'startPosition': (current - _startTime) / _duration}
             self._flashCall('updateReloadingBaseTime', [baseTime, False])
             self._correctReloadingTime(duration)
         else:
-            state['duration'] = duration
-            state['startTime'] = BigWorld.time() if isReloading else None
+            self._reloadingHndl.state['duration'] = duration
+            self._reloadingHndl.state['startTime'] = BigWorld.time() if isReloading else None
             self._setReloading(duration, 0, isReloading, None, baseTime)
         return
 
@@ -222,10 +299,6 @@ class Aim(Flash):
             state['max'] = float(BigWorld.player().vehicleTypeDescriptor.maxHealth)
         self._setHealth(state['cur'], state['max'])
         return
-
-    def setAmmoStock(self, quantity, quantityInClip, clipReloaded = False):
-        _g_aimState['ammo'] = (quantity, quantityInClip)
-        self._setAmmoStock(quantity, quantityInClip, clipReloaded=clipReloaded)
 
     def updateAmmoState(self, hasAmmo):
         self._flashCall('updateAmmoState', [hasAmmo])
@@ -251,13 +324,14 @@ class Aim(Flash):
         self._showHit(_g_aimState['hitIndicators'][-1:][0])
 
     def isGunReload(self):
-        return _g_aimState['reload']['isReloading']
+        return self._reloadingHndl.state.get('isReloading', False)
 
     def onCameraChange(self):
+        self._reloadingHndl.onAimChanged(self)
         if not self.isGunReload():
-            baseTime = _g_aimState['reload'].get('baseTime', -1)
+            baseTime = self._reloadingHndl.state.get('baseTime', -1)
             self._flashCall('updateReloadingBaseTime', [baseTime, True])
-        elif not _g_aimState['reload']['correction']:
+        elif not self._reloadingHndl.state['correction']:
             self._flashCall('clearPreviousCorrection', [])
 
     def resetVehicleMatrix(self):
@@ -359,11 +433,19 @@ class Aim(Flash):
     def _flashCall(self, funcName, args = None):
         self.call('Aim.' + funcName, args)
 
+    def __applyScale(self):
+        from account_helpers.settings_core.SettingsCore import g_settingsCore
+        scale = getScaleByIndex(g_settingsCore.getSetting('interfaceScale'))
+        if self.__scale != scale:
+            self.__scale = scale
+            self.movie._root._xscale = 100 * self.__scale
+            self.movie._root._yscale = 100 * self.__scale
+
 
 class StrategicAim(Aim):
 
-    def __init__(self, offset, isPostMortem = False):
-        Aim.__init__(self, 'strategic', offset)
+    def __init__(self, offset, visibleR, isPostMortem = False):
+        Aim.__init__(self, 'strategic', offset, visibleR)
 
     def create(self):
         Aim.create(self)
@@ -390,16 +472,14 @@ class StrategicAim(Aim):
             ammoCtrl = g_sessionProvider.getAmmoCtrl()
             if ammoCtrl.isGunReloadTimeInPercent():
                 self.setReloadingInPercent(ammoCtrl.getGunReloadTime(), False)
+            elif self._reloadingHndl.state['startTime'] is not None:
+                self._setReloading(self._reloadingHndl.state['duration'], startTime=BigWorld.time() - self._reloadingHndl.state['startTime'], correction=self._reloadingHndl.state['correction'])
             else:
-                rs = state['reload']
-                if rs['startTime'] is not None:
-                    self._setReloading(rs['duration'], startTime=BigWorld.time() - rs['startTime'], correction=rs['correction'])
-                else:
-                    self._setReloading(rs['duration'], 0, False)
+                self._setReloading(self._reloadingHndl.state['duration'], 0, False)
             capacity, burst = state['clip']
             if capacity > 1:
                 self._setClipParams(capacity, burst)
-            self._setAmmoStock(*state['ammo'])
+            self._setAmmoStock(*self._reloadingHndl.ammoStock)
             return
 
     def _disable(self):
@@ -423,8 +503,8 @@ class StrategicAim(Aim):
 
 class PostMortemAim(Aim):
 
-    def __init__(self, offset):
-        Aim.__init__(self, 'postmortem', offset)
+    def __init__(self, offset, visibleR):
+        Aim.__init__(self, 'postmortem', offset, visibleR)
         self.__msgCaption = i18n.makeString('#ingame_gui:player_messages/postmortem_caption')
 
     def create(self):
@@ -474,8 +554,8 @@ class PostMortemAim(Aim):
 
 class ArcadeAim(Aim):
 
-    def __init__(self, offset, isSniper):
-        Aim.__init__(self, 'sniper' if isSniper else 'arcade', offset)
+    def __init__(self, offset, visibleR, isSniper):
+        Aim.__init__(self, 'sniper' if isSniper else 'arcade', offset, visibleR)
         self.__isSniper = isSniper
 
     def create(self):
@@ -503,16 +583,14 @@ class ArcadeAim(Aim):
             ammoCtrl = g_sessionProvider.getAmmoCtrl()
             if ammoCtrl.isGunReloadTimeInPercent():
                 self.setReloadingInPercent(ammoCtrl.getGunReloadTime(), False)
+            elif self._reloadingHndl.state['startTime'] is not None:
+                self._setReloading(self._reloadingHndl.state['duration'], startTime=BigWorld.time() - self._reloadingHndl.state['startTime'], correction=self._reloadingHndl.state['correction'])
             else:
-                rs = state['reload']
-                if rs['startTime'] is not None:
-                    self._setReloading(rs['duration'], startTime=BigWorld.time() - rs['startTime'], correction=rs['correction'])
-                else:
-                    self._setReloading(rs['duration'], 0, False)
+                self._setReloading(self._reloadingHndl.state['duration'], 0, False)
             capacity, burst = state['clip']
             if capacity > 1:
                 self._setClipParams(capacity, burst)
-            self._setAmmoStock(*state['ammo'])
+            self._setAmmoStock(*self._reloadingHndl.ammoStock)
             return
 
     def _disable(self):
@@ -622,7 +700,6 @@ class _DamageIndicator(Flash):
         self.component.moveFocus = False
         self.component.heightMode = 'PIXEL'
         self.component.widthMode = 'PIXEL'
-        self.flashSize = self.__FLASH_SIZE
 
     def setup(self, gYaw, offset):
         self.component.position.x = offset[0]
@@ -676,9 +753,7 @@ def clearState():
                 'name': None,
                 'vType': None,
                 'isFriend': None},
-     'reload': {},
      'hitIndicators': [],
-     'ammo': (0, 0),
      'clip': (1, 1),
      'health': {'cur': None,
                 'max': None}}

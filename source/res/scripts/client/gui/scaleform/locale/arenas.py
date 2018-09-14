@@ -111,3 +111,5 @@ class ARENAS(object):
     C_100_THEPIT_DESCRIPTION = '#arenas:100_thepit/description'
     C_95_LOST_CITY_NAME = '#arenas:95_lost_city/name'
     C_95_LOST_CITY_DESCRIPTION = '#arenas:95_lost_city/description'
+    C_101_DDAY_NAME = '#arenas:101_dday/name'
+    C_101_DDAY_DESCRIPTION = '#arenas:101_dday/description'

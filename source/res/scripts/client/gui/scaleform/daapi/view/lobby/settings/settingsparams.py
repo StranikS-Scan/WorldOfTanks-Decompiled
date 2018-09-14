@@ -49,7 +49,8 @@ class SettingsParams(AppRef):
          settings_constants.GRAPHICS.WINDOW_SIZE,
          settings_constants.GRAPHICS.RESOLUTION,
          settings_constants.GRAPHICS.REFRESH_RATE,
-         settings_constants.GRAPHICS.DYNAMIC_RENDERER))
+         settings_constants.GRAPHICS.DYNAMIC_RENDERER,
+         settings_constants.GRAPHICS.INTERFACE_SCALE))
 
     def preview(self, settingName, value):
         g_settingsCore.previewSetting(settingName, value)

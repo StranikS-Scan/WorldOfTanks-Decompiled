@@ -94,3 +94,7 @@ class DeltaNotifier(_Notifier):
         if delta >= self.__delta:
             return delta - self.__delta
         return 0
+
+
+class SimpleNotifier(_Notifier):
+    pass

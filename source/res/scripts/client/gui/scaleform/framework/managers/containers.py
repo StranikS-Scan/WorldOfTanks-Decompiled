@@ -231,6 +231,7 @@ class ContainerManager(ContainerManagerMeta):
      ViewTypes.WAITING,
      ViewTypes.CURSOR,
      ViewTypes.SERVICE_LAYOUT)
+    __CONTAINERS_TO_CLEAR = (ViewTypes.WINDOW, ViewTypes.BROWSER, ViewTypes.TOP_WINDOW)
 
     def __init__(self, loader):
         super(ContainerManager, self).__init__()
@@ -343,6 +344,10 @@ class ContainerManager(ContainerManagerMeta):
 
     def closePopUps(self):
         self.as_closePopUpsS()
+
+    def clear(self):
+        for c in self.__CONTAINERS_TO_CLEAR:
+            self.getContainer(c).clear()
 
     def _dispose(self):
         if self.__loader is not None:

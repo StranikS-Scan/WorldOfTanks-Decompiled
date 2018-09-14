@@ -8,10 +8,10 @@ from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT
 from messenger.proto.xmpp.xmpp_string_utils import validateRosterItemGroup
 from messenger.storage import storage_getter
 
-class group_manage_views(BaseManageContactViewMeta):
+class GroupManageView(BaseManageContactViewMeta):
 
     def __init__(self):
-        super(group_manage_views, self).__init__()
+        super(GroupManageView, self).__init__()
         self._currentName = None
         return
 
@@ -24,6 +24,7 @@ class group_manage_views(BaseManageContactViewMeta):
         return None
 
     def checkText(self, name):
+        name = name.strip()
         if self._currentName != name:
             self._currentName = name
             isAllowedResult, errorMsg = False, ''
@@ -42,47 +43,44 @@ class group_manage_views(BaseManageContactViewMeta):
             self.as_setOkBtnEnabledS(isAllowedResult)
 
     def _dispose(self):
-        super(group_manage_views, self)._dispose()
+        super(GroupManageView, self)._dispose()
 
     def _populate(self):
-        super(group_manage_views, self)._populate()
+        super(GroupManageView, self)._populate()
 
-    def _getDefaultInitData(self, mainLbl, btOkLbl, btnCancelLbl):
-        defData = super(group_manage_views, self)._getDefaultInitData(mainLbl, btOkLbl, btnCancelLbl)
+    def _getDefaultInitData(self, mainLbl, btOkLbl, btnCancelLbl, btOkTooltip, btnCancelTooltip):
+        defData = super(GroupManageView, self)._getDefaultInitData(mainLbl, btOkLbl, btnCancelLbl, btOkTooltip, btnCancelTooltip)
         defData['inputPrompt'] = i18n.makeString(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_SEARCHINPUTPROMPT, symbols=CONTACT_LIMIT.GROUP_MAX_LENGTH)
         defData['groupMaxChars'] = CONTACT_LIMIT.GROUP_MAX_LENGTH
+        defData['inputTooltip'] = i18n.makeString(MESSENGER.CONTACTS_MANAGEGROUPVIEW_TOOLTIPS_INPUT, maxChars=CONTACT_LIMIT.GROUP_MAX_LENGTH)
         return defData
 
 
-class GroupCreateView(group_manage_views):
+class GroupCreateView(GroupManageView):
 
     def onOk(self, data):
-        resultSuccess = self.proto.contacts.addGroup(data.currValue)
+        resultSuccess = self.proto.contacts.addGroup(data.currValue.strip())
         if resultSuccess:
             self.as_closeViewS()
 
     def _getInitDataObject(self):
-        defData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_BTNCANCEL_LABEL)
-        defData['btOkTooltip'] = MESSENGER.CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY
-        defData['btnCancelTooltip'] = MESSENGER.CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE
+        defData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_BTNCANCEL_LABEL, MESSENGER.CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY, MESSENGER.CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE)
         return defData
 
 
-class GroupRenameView(group_manage_views):
+class GroupRenameView(GroupManageView):
 
     def __init__(self):
         super(GroupRenameView, self).__init__()
         self.__isInited = False
 
     def onOk(self, data):
-        successResult = self.proto.contacts.renameGroup(data.defValue, data.currValue)
+        successResult = self.proto.contacts.renameGroup(data.defValue, data.currValue.strip())
         if successResult:
             self.as_closeViewS()
 
     def _getInitDataObject(self):
-        defData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_BTNCANCEL_LABEL)
-        defData['btOkTooltip'] = MESSENGER.CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY
-        defData['btnCancelTooltip'] = MESSENGER.CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE
+        defData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_BTNCANCEL_LABEL, MESSENGER.CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY, MESSENGER.CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE)
         return defData
 
     def as_setLabelS(self, msg):

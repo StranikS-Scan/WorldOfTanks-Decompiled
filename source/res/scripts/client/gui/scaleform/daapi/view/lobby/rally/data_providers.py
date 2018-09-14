@@ -16,6 +16,10 @@ class BaseRallyListDataProvider(SortableDAAPIDataProvider):
     def selectedRallyIndex(self):
         return self.__selectedRallyIndex
 
+    @selectedRallyIndex.setter
+    def selectedRallyIndex(self, index):
+        self.__selectedRallyIndex = index
+
     @abstractmethod
     def getVO(self, unitIndex = None):
         return None
@@ -48,6 +52,12 @@ class BaseRallyListDataProvider(SortableDAAPIDataProvider):
 
     def emptyItem(self):
         return None
+
+    def getItem(self, index):
+        if 0 <= index < len(self.__list):
+            return self.__list[index]
+        else:
+            return None
 
     def getRally(self, index):
         cfdUnitID = 0

@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/AvatarInputHandler/VideoCamera.py
 import math
+import time
 import Math
 from Math import Vector3, Matrix
 import BigWorld
@@ -248,7 +249,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
 
     def __init__(self, configDataSec):
         CallbackDelayer.__init__(self)
-        TimeDeltaMeter.__init__(self)
+        TimeDeltaMeter.__init__(self, time.clock)
         self.__cam = BigWorld.FreeCamera()
         self.__cam.invViewProvider = Math.MatrixProduct()
         self.__ypr = Math.Vector3()
@@ -381,6 +382,9 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
 
     def __calcCurrentDeltaAdjusted(self):
         delta = self.measureDeltaTime()
+        if delta > 1.0:
+            delta = 0.0
+        return delta
         replaySpeed = BattleReplay.g_replayCtrl.playbackSpeed
         if replaySpeed == 0:
             replaySpeed = 1e-08

@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_vo_converter.py
-from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
@@ -9,6 +8,7 @@ from helpers.html import escape
 from messenger import g_settings
 from messenger.m_constants import USER_TAG
 from messenger.storage import storage_getter
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 _CATEGORY_I18N_KEY = {CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_FRIENDS,
  CONTACTS_ALIASES.GROUP_FORMATIONS_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_FORMATIONS,
  CONTACTS_ALIASES.GROUP_OTHER_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER}
@@ -17,8 +17,18 @@ _MUTABLE_RULE = CONTACTS_ALIASES.GROUP_CAN_BE_MANAGED
 _FRIENDS_RULES = CONTACTS_ALIASES.GROUP_IS_DROP_ALLOWED | CONTACTS_ALIASES.GROUP_IS_RESIZABLE
 _IGNORED_RULES = CONTACTS_ALIASES.GROUP_IS_DROP_ALLOWED | CONTACTS_ALIASES.GROUP_IS_RESIZABLE
 
-def _makeClanFullName(clanAbbrev):
-    return '{0} [{1}]'.format(i18n.makeString(I18N_MESSENGER.DIALOGS_CONTACTS_TREE_CLAN), clanAbbrev)
+def makeClanFullName(clanAbbrev):
+    formatted = ''
+    if clanAbbrev:
+        formatted = '{0} [{1}]'.format(i18n.makeString(I18N_MESSENGER.DIALOGS_CONTACTS_TREE_CLAN), clanAbbrev)
+    return formatted
+
+
+def makeClubFullName(clubName):
+    formatted = ''
+    if clubName:
+        formatted = '{0} {1}'.format(i18n.makeString(I18N_MESSENGER.DIALOGS_CONTACTS_TREE_CLUB), clubName)
+    return formatted
 
 
 def _setMutableRule(rules, flag):
@@ -82,6 +92,8 @@ class ContactConverter(object):
             colors = self._getColors('friend')
         elif USER_TAG.CLAN_MEMBER in tags:
             colors = self._getColors('clanMember')
+        elif USER_TAG.CLUB_MEMBER in tags:
+            colors = self._getColors('clanMember')
         else:
             colors = self._getColors('others')
         if isOnline:
@@ -90,25 +102,18 @@ class ContactConverter(object):
             color = colors[1]
         return color
 
-    def getClanFullName(self, clanAbbrev):
-        return _makeClanFullName(clanAbbrev)
-
     def makeVO(self, contact, includeIcons = True):
         dbID = contact.getID()
         tags = contact.getTags()
         note = contact.getNote()
         isOnline = contact.isOnline()
-        if includeIcons:
-            icons = ''.join(self.getIcons(tags, note))
-        else:
-            icons = ''
         baseUserProps = self.makeBaseUserProps(contact)
         baseUserProps['rgb'] = self.getColor(tags, isOnline)
-        baseUserProps['suffix'] = ' %s' % icons
         return {'userProps': baseUserProps,
          'dbID': dbID,
-         'note': note,
-         'isOnline': isOnline}
+         'note': escape(note),
+         'isOnline': isOnline,
+         'isColorBlind': g_settingsCore.getSetting('isColorBlind')}
 
     @classmethod
     def makeBaseUserProps(cls, contact):
@@ -148,6 +153,9 @@ class _GroupCondition(object):
         super(_GroupCondition, self).__init__()
         self._htmlString = ''
         self._allIDs = set()
+
+    def clear(self):
+        self._allIDs.clear()
 
     def set(self, contact):
         self._allIDs.add(contact.getID())
@@ -194,6 +202,10 @@ class OnlineTotalCondition(TotalCondition):
     def __init__(self):
         super(OnlineTotalCondition, self).__init__()
         self._online = {}
+
+    def clear(self):
+        self._online.clear()
+        super(OnlineTotalCondition, self).clear()
 
     def set(self, contact):
         self._online[contact.getID()] = 1 if contact.isOnline() else 0
@@ -268,10 +280,11 @@ class _ContactsConverter(IContactsConverter):
         return self._contacts.copy()
 
     def hasContacts(self):
-        return len(self._contacts)
+        return len(self._contacts) > 0
 
     def clear(self, full = False):
         self._contacts.clear()
+        self._condition.clear()
         if full:
             self._parent = None
         return
@@ -307,7 +320,7 @@ class _ContactsConverter(IContactsConverter):
             contacts = self._matchPattern(pattern, self._contacts.itervalues())
         else:
             if not self._contacts and self._showEmptyItem:
-                return [self._makeEmptyContact(self._parent)]
+                return [self.makeEmptyRow(self._parent)]
             contacts = self._contacts.itervalues()
         return sorted(contacts, key=lambda item: item['criteria'])
 
@@ -318,9 +331,12 @@ class _ContactsConverter(IContactsConverter):
          'gui': {'id': dbID},
          'parentItemData': self._parent}
 
-    def _makeEmptyContact(self, parent):
+    @classmethod
+    def makeEmptyRow(cls, parent, isVisible = True, isActive = True):
         return {'gui': {'id': None},
-         'parentItemData': parent}
+         'parentItemData': parent,
+         'data': {'isActive': isActive,
+                  'isVisible': isVisible}}
 
     def _matchPattern(self, pattern, contacts):
         return filter(lambda vo: pattern.match(vo['criteria'][1]), contacts)
@@ -387,23 +403,31 @@ class GroupConverter(_ContactsConverter):
 class ClanConverter(GroupConverter):
 
     def __init__(self, parentCategory, clanAbbrev = '', condition = None):
-        if clanAbbrev:
-            name = _makeClanFullName(clanAbbrev)
-        else:
-            name = ''
-        super(ClanConverter, self).__init__(name, parentCategory, condition)
+        super(ClanConverter, self).__init__(makeClanFullName(clanAbbrev), parentCategory, condition)
 
     def isEmpty(self):
         return not self._name or self._condition.empty()
-
-    def hasContacts(self):
-        return super(ClanConverter, self).hasContacts()
 
     def getGuiID(self):
         return CONTACTS_ALIASES.CLAN_GROUP_RESERVED_ID
 
     def setClanAbbrev(self, clanAbbrev):
-        self._name = _makeClanFullName(clanAbbrev)
+        self._name = makeClanFullName(clanAbbrev)
+
+
+class ClubConverter(GroupConverter):
+
+    def __init__(self, parentCategory, clubName = '', condition = None):
+        super(ClubConverter, self).__init__(makeClubFullName(clubName), parentCategory, condition)
+
+    def isEmpty(self):
+        return not self._name or self._condition.empty()
+
+    def getGuiID(self):
+        return CONTACTS_ALIASES.CLUB_GROUP_RESERVED_ID
+
+    def setClubName(self, clubName):
+        self._name = makeClubFullName(clubName)
 
 
 class IgnoredConverter(GroupConverter):
@@ -455,9 +479,8 @@ class FriendsGroupsConverter(IContactsConverter):
         self._groups = {}
         self._rules = _FRIENDS_RULES
         self._showEmptyItem = False
-        self._conditionClass = None
+        self._conditionClass = OnlineTotalCondition
         self.__parentCategory = parent
-        return
 
     @storage_getter('users')
     def userStorage(self):

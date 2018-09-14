@@ -5,9 +5,9 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
 from messenger.proto.bw.search_processors import SearchChannelsProcessor
+from messenger.proto.bw_chat2.search_processor import SearchUsersProcessor
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import ISearchHandler
-from messenger.proto.migration import getSearchUserProcessor
 
 class SearchDataProvider(DAAPIDataProvider, ISearchHandler):
 
@@ -85,7 +85,7 @@ class SearchChannelsDataProvider(SearchDataProvider):
 class SearchUsersDataProvider(SearchDataProvider):
 
     def __init__(self, exclude = None):
-        super(SearchUsersDataProvider, self).__init__(getSearchUserProcessor())
+        super(SearchUsersDataProvider, self).__init__(SearchUsersProcessor())
         self._converter = ContactConverter()
         if exclude is not None:
             self.__exclude = exclude

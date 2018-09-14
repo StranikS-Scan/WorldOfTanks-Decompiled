@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/sub_tasks.py
+from messenger import g_settings
 from messenger.m_constants import USER_TAG, USER_ACTION_ID, CLIENT_ACTION_ID
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp import entities, errors
@@ -11,10 +12,10 @@ from messenger.proto.xmpp.xmpp_items import SubPendingItem
 
 class AskSubscriptionTask(SyncSubscriptionTask):
 
-    def sync(self, name, groups, to, from_):
-        if to != _SUB.OFF:
+    def sync(self, name, groups, sub = None, clanInfo = None):
+        if sub[0] != _SUB.OFF:
             self._result = TASK_RESULT.REMOVE
-        self._doSync(name, groups, to, from_)
+        self._doSync(name, groups, sub, clanInfo)
         return self._result
 
     def _doRun(self, client):
@@ -42,17 +43,17 @@ class ApproveSubscriptionTask(_ChangeSubscriptionTask):
     def clone(self):
         return self._tasks
 
-    def sync(self, name, groups, to, from_):
-        if from_ == _SUB.ON:
+    def sync(self, name, groups, sub = None, clanInfo = None):
+        if sub[1] == _SUB.ON:
             user = self._getUser()
             self._result = TASK_RESULT.REMOVE
             if user and not self._auto:
                 user.removeTags({USER_TAG.SUB_IN_PROCESS})
                 user.addTags({USER_TAG.SUB_APPROVED})
-            if self._auto and to == _SUB.PENDING:
+            if self._auto and sub[0] == _SUB.PENDING:
                 self._tasks.append(AskSubscriptionTask(self._jid))
                 self._result |= TASK_RESULT.CLONE
-        self._doSync(name, groups, to, from_)
+        self._doSync(name, groups, sub, clanInfo)
         return self._result
 
     def _doRun(self, client):
@@ -85,16 +86,19 @@ class CancelSubscriptionTask(_ChangeSubscriptionTask):
 class InboundSubscriptionTask(ContactTask):
     __slots__ = ('_tasks',)
 
-    def __init__(self, jid, name = ''):
+    def __init__(self, jid, name = '', clanInfo = None):
         super(InboundSubscriptionTask, self).__init__(jid, name)
         self._tasks = []
+        self._clanInfo = clanInfo
 
     def isInstantaneous(self):
         return True
 
     def clear(self):
         self._tasks = []
+        self._clanInfo = None
         super(InboundSubscriptionTask, self).clear()
+        return
 
     def clone(self):
         return self._tasks
@@ -102,34 +106,40 @@ class InboundSubscriptionTask(ContactTask):
     def run(self):
         self._result = TASK_RESULT.REMOVE
         contact = self._getUser()
+        ignoreSubRq = not g_settings.userPrefs.receiveFriendshipRequest
         if not contact:
-            contact = entities.XMPPUserEntity(self._jid.getDatabaseID(), name=self._name, item=SubPendingItem(self._jid))
+            contact = entities.XMPPUserEntity(self._jid.getDatabaseID(), name=self._name, clanInfo=self._clanInfo, item=SubPendingItem(self._jid))
             self.usersStorage.setUser(contact)
+            if ignoreSubRq:
+                return self._cancel(contact)
         else:
             contact.removeTags({USER_TAG.SUB_IN_PROCESS, USER_TAG.SUB_CANCELED, USER_TAG.SUB_APPROVED})
+            contact.update(clanInfo=self._clanInfo)
             if contact.isCurrentPlayer():
                 return self._result
             itemType = contact.getItemType()
-            if itemType in XMPP_ITEM_TYPE.BLOCKING_LIST:
-                return self._cancel(contact)
             if itemType == XMPP_ITEM_TYPE.ROSTER_ITEM:
                 return self._approve(contact)
+            if ignoreSubRq:
+                return self._cancel(contact)
+            if itemType in XMPP_ITEM_TYPE.BLOCKING_LIST:
+                return self._cancel(contact)
             if itemType == XMPP_ITEM_TYPE.SUB_PENDING:
                 return self._ignore(contact)
             contact.update(item=SubPendingItem(self._jid))
-        g_logOutput.debug(CLIENT_LOG_AREA.SUBSCRIPTION, 'Inbound subscription received', contact)
+        g_logOutput.debug(CLIENT_LOG_AREA.SUBSCRIPTION, 'Inbound subscription is received', contact)
         contact.removeTags({USER_TAG.WO_NOTIFICATION})
         g_messengerEvents.users.onFriendshipRequestReceived(contact)
         return self._result
 
     def _cancel(self, contact):
-        g_logOutput.debug(CLIENT_LOG_AREA.SUBSCRIPTION, 'Cancels subscription automatically, contact is in the block list', contact)
+        g_logOutput.debug(CLIENT_LOG_AREA.SUBSCRIPTION, 'Inbound subscription is canceled automatically, there is contact in the block list or setting "receiveFriendshipRequest" is unchecked', contact)
         self._tasks.append(CancelSubscriptionTask(self._jid, auto=True))
         self._result |= TASK_RESULT.CLONE
         return self._result
 
     def _approve(self, contact):
-        g_logOutput.debug(CLIENT_LOG_AREA.SUBSCRIPTION, 'Approves subscription automatically, contact is in the roster', contact)
+        g_logOutput.debug(CLIENT_LOG_AREA.SUBSCRIPTION, 'Inbound subscription is approved automatically, there is contact in the roster', contact)
         self._tasks.append(ApproveSubscriptionTask(self._jid, auto=True))
         if contact.getSubscription()[0] == _SUB.OFF:
             self._tasks.append(AskSubscriptionTask(self._jid))
@@ -139,6 +149,6 @@ class InboundSubscriptionTask(ContactTask):
     def _ignore(self, contact):
         contact.update(trusted=True)
         contact.addTags({USER_TAG.WO_NOTIFICATION})
-        g_logOutput.debug(CLIENT_LOG_AREA.SUBSCRIPTION, 'Ignores inbound subscription', contact)
+        g_logOutput.debug(CLIENT_LOG_AREA.SUBSCRIPTION, 'Inbound subscription is ignored', contact)
         g_messengerEvents.users.onUserActionReceived(USER_ACTION_ID.SUBSCRIPTION_CHANGED, contact)
         return self._result

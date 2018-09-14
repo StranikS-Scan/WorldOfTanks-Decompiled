@@ -652,7 +652,8 @@ class Source:
              'isPremium': subsection.readBool('isPremium', False),
              'nationID': subsection.readInt('nationID', -1),
              'vehicleTypeID': subsection.readInt('vehicleTypeID', -1),
-             'skills': subsection.readString('skills', '').split()}
+             'skills': subsection.readString('skills', '').split(),
+             'freeSkills': subsection.readString('freeSkills', '').split()}
             for record in ('firstNameID', 'lastNameID', 'iconID'):
                 if tmanData[record] == -1:
                     tmanData[record] = None

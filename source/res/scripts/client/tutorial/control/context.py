@@ -123,8 +123,9 @@ class NoSound(SoundPlayer):
 
 class GLOBAL_VAR(object):
     LAST_HISTORY_ID = '_TutorialLastHistoryID'
+    SERVICE_MESSAGES_IDS = '_TutorialServiceMessagesIDs'
     PLAYER_VEHICLE_NAME = '_TutorialPlayerVehicleName'
-    ALL = [LAST_HISTORY_ID, PLAYER_VEHICLE_NAME]
+    ALL = [LAST_HISTORY_ID, SERVICE_MESSAGES_IDS, PLAYER_VEHICLE_NAME]
 
 
 class GLOBAL_FLAG(object):

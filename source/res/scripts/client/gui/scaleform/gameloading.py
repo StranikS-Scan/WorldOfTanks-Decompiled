@@ -1,8 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/GameLoading.py
 import GUI
+import BigWorld
+import constants
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
+from gui.Scaleform.locale.MENU import MENU
+from gui.shared.utils import graphics
 from helpers import getFullClientVersion, getClientOverride
 
 class GameLoading(Flash):
@@ -14,8 +18,11 @@ class GameLoading(Flash):
             self._displayRoot.resync()
             self._displayRoot.setLocale(getClientOverride())
             self._displayRoot.setVersion(getFullClientVersion())
+            if constants.IS_KOREA:
+                self._displayRoot.setInfo(MENU.LOADING_GAMEINFO)
             width, height = GUI.screenResolution()
-            self._displayRoot.updateStage(width, height)
+            scaleLength = len(graphics.getInterfaceScalesList(BigWorld.wg_getCurrentResolution(True)))
+            self._displayRoot.updateStage(width, height, scaleLength - 1)
         return
 
     def onLoad(self, dataSection):

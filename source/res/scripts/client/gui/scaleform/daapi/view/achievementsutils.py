@@ -2,7 +2,6 @@
 from dossiers2.ui.achievements import ACHIEVEMENT_SECTION, ACHIEVEMENT_TYPE
 from dossiers2.custom.config import RECORD_CONFIGS
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
-from gui.shared.gui_items.dossier import dumpDossier
 from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
 
 class AchievementsUtils(object):
@@ -11,11 +10,11 @@ class AchievementsUtils(object):
         super(AchievementsUtils, self).__init__()
 
     @staticmethod
-    def packAchievementList(target, dossier, isDossierForCurrentUser, defaultShowProgress = True, defaultSeriesCounter = None):
-        return [ AchievementsUtils.packAchievement(a, dossier, isDossierForCurrentUser, defaultShowProgress, defaultSeriesCounter) for a in target ]
+    def packAchievementList(target, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress = True, defaultSeriesCounter = None):
+        return [ AchievementsUtils.packAchievement(a, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress, defaultSeriesCounter) for a in target ]
 
     @staticmethod
-    def packAchievement(achievement, dossier, isDossierForCurrentUser, defaultShowProgress = True, defaultSeriesCounter = None):
+    def packAchievement(achievement, dossierType, dossierCompDescr, isDossierForCurrentUser, defaultShowProgress = True, defaultSeriesCounter = None):
         atype = achievement.getType()
         total = achievement.getLevelUpTotalValue() or 0
         lvlUpValue = achievement.getLevelUpValue() or 0
@@ -56,7 +55,7 @@ class AchievementsUtils(object):
             rareIconID = None
         if not defaultShowProgress or not isDossierForCurrentUser:
             progress = None
-        commonData = AchievementsUtils.getCommonAchievementData(achievement, dossier.getDossierType(), dumpDossier(dossier), 1 if achievement.isInDossier() else 0.2)
+        commonData = AchievementsUtils.getCommonAchievementData(achievement, dossierType, dossierCompDescr, 1 if achievement.isInDossier() else 0.2)
         commonData.update({'isRare': isRare,
          'rareIconId': rareIconID,
          'counterType': AchievementsUtils.getCounterType(achievement, defaultSeriesCounter),

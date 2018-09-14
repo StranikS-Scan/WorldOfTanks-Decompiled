@@ -23,16 +23,19 @@ class UnitChannelController(_LobbyLayout):
 
     def setView(self, view):
         super(UnitChannelController, self).setView(view)
-        self.proto.unitChat.addHistory()
+        self._getChat().addHistory()
 
     def canSendMessage(self):
         result, errorMsg = True, ''
-        if self.proto.unitChat.isBroadcastInCooldown():
+        if self._getChat().isBroadcastInCooldown():
             result, errorMsg = False, getBroadcastIsInCoolDownMessage(MESSENGER_LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC)
         return (result, errorMsg)
 
+    def _getChat(self):
+        return self.proto.unitChat
+
     def _broadcast(self, message):
-        self.proto.unitChat.broadcast(message)
+        self._getChat().broadcast(message)
 
     def _format(self, message, doFormatting = True):
         if not doFormatting:
@@ -49,7 +52,35 @@ class UnitChannelController(_LobbyLayout):
          'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-class TrainingChannelController(UnitChannelController, PrbListener):
+class LobbyChannelController(UnitChannelController):
+
+    def _addListeners(self):
+        super(LobbyChannelController, self)._addListeners()
+        uEvents = g_messengerEvents.users
+        uEvents.onUsersListReceived += self.__me_onUsersListReceived
+        uEvents.onUserActionReceived += self.__me_onUserActionReceived
+
+    def _removeListeners(self):
+        super(LobbyChannelController, self)._removeListeners()
+        uEvents = g_messengerEvents.users
+        uEvents.onUsersListReceived -= self.__me_onUsersListReceived
+        uEvents.onUserActionReceived -= self.__me_onUserActionReceived
+
+    def _fireInitEvent(self):
+        g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LOBBY_CHANNEL_CTRL_INITED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _fireDestroyEvent(self):
+        g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LOBBY_CHANNEL_CTRL_DESTROYED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __me_onUsersListReceived(self, _):
+        self._refreshMembersDP()
+
+    def __me_onUserActionReceived(self, _, user):
+        if self._channel.hasMember(user.getID()):
+            self._refreshMembersDP()
+
+
+class TrainingChannelController(LobbyChannelController, PrbListener):
 
     def __init__(self, channel, mBuilder = None):
         super(TrainingChannelController, self).__init__(channel, mBuilder)
@@ -78,26 +109,11 @@ class TrainingChannelController(UnitChannelController, PrbListener):
             self._channel.addMembers([BWMemberEntity(pInfo.dbID, pInfo.name)])
             self._refreshMembersDP()
 
-    def _addListeners(self):
-        super(UnitChannelController, self)._addListeners()
-        uEvents = g_messengerEvents.users
-        uEvents.onUsersListReceived += self.__me_onUsersListReceived
-        uEvents.onUserActionReceived += self.__me_onUserActionReceived
-
     def _removeListeners(self):
-        super(UnitChannelController, self)._removeListeners()
-        uEvents = g_messengerEvents.users
-        uEvents.onUsersListReceived -= self.__me_onUsersListReceived
-        uEvents.onUserActionReceived -= self.__me_onUserActionReceived
+        super(TrainingChannelController, self)._removeListeners()
         if self.__isListening:
             self.__isListening = False
             self.stopPrbListening()
-
-    def _fireInitEvent(self):
-        g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LOBBY_CHANNEL_CTRL_INITED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _fireDestroyEvent(self):
-        g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LOBBY_CHANNEL_CTRL_DESTROYED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _buildMembersList(self):
         if not self.prbFunctional:
@@ -113,9 +129,19 @@ class TrainingChannelController(UnitChannelController, PrbListener):
         self._channel.addMembers(members)
         self._refreshMembersDP()
 
-    def __me_onUsersListReceived(self, _):
-        self._refreshMembersDP()
 
-    def __me_onUserActionReceived(self, _, user):
-        if self._channel.hasMember(user.getID()):
-            self._refreshMembersDP()
+class ClubChannelController(LobbyChannelController):
+
+    def _getChat(self):
+        return self.proto.clubChat
+
+    def _addListeners(self):
+        super(ClubChannelController, self)._addListeners()
+        self._channel.onMembersListChanged += self._onMembersListChanged
+
+    def _removeListeners(self):
+        super(ClubChannelController, self)._removeListeners()
+        self._channel.onMembersListChanged -= self._onMembersListChanged
+
+    def _onMembersListChanged(self):
+        self._refreshMembersDP()

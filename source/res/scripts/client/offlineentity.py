@@ -30,8 +30,5 @@ class PlayerOfflineEntity(BigWorld.Entity):
     def onLeaveWorld(self):
         pass
 
-    def newFakeModel(self):
-        return BigWorld.Model('objects/fake_model.model')
-
     def handleKeyEvent(self, event):
         return False

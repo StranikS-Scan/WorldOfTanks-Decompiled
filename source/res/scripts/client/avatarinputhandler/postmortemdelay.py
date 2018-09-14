@@ -57,7 +57,11 @@ class PostmortemDelay:
             self.__showChoiceWindow(False)
             self.__fadeScreen(bFade=False)
             self.__bKillerVisionActive = False
-            self.__moveCameraTo(BigWorld.player().playerVehicleID)
+            try:
+                self.__moveCameraTo(BigWorld.player().playerVehicleID)
+            except:
+                pass
+
             self.__killerVehicleID = None
             self.__savedPivotSettings = None
             self.__savedCameraDistance = None

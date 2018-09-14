@@ -13,12 +13,14 @@ def createPermissions(functional, pID = None):
     return clazz()
 
 
-def createUnitActionValidator(prbType, rosterSettings):
+def createUnitActionValidator(prbType, rosterSettings, proxy):
     from gui.prb_control.restrictions import limits
     if prbType == PREBATTLE_TYPE.SORTIE:
         validator = limits.SortieActionValidator(rosterSettings)
     elif prbType == PREBATTLE_TYPE.FORT_BATTLE:
         validator = limits.FortBattleActionValidator(rosterSettings)
+    elif prbType == PREBATTLE_TYPE.CLUBS:
+        validator = limits.ClubsActionValidator(rosterSettings, proxy)
     else:
         validator = limits.UnitActionValidator(rosterSettings)
     return validator

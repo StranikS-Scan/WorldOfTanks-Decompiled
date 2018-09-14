@@ -12,6 +12,7 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.fortifications.context import VacationCtx
+SHOW_MAX_MONTH = 4
 
 class FortSettingsVacationPopover(View, FortSettingsVacationPopoverMeta, SmartPopOverView, FortViewHelper, AppRef):
 
@@ -51,4 +52,5 @@ class FortSettingsVacationPopover(View, FortSettingsVacationPopoverMeta, SmartPo
         vacationStart = dayStartUTC + time_utils.ONE_DAY + fortified_regions.g_cache.minVacationPreorderTime
         self.as_setDataS({'startVacation': vacationStart,
          'vacationDuration': -1,
-         'isAmericanStyle': False})
+         'isAmericanStyle': False,
+         'showMonth': SHOW_MAX_MONTH})

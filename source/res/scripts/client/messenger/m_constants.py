@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/messenger/m_constants.py
 from collections import namedtuple
+from helpers import i18n
 MESSENGER_XML_FILE = 'messenger'
 MESSENGER_I18N_FILE = 'messenger'
 MESSENGER_XML_FILE_PATH = 'gui/{0:>s}.xml'.format(MESSENGER_XML_FILE)
@@ -62,6 +63,8 @@ class BATTLE_CHANNEL(object):
         return True
 
 
+USER_DEFAULT_NAME_PREFIX = i18n.makeString('#settings:defaultNamePrefix')
+
 class USER_TAG(object):
     CACHED = 'cached'
     WO_NOTIFICATION = 'woNotification'
@@ -70,10 +73,13 @@ class USER_TAG(object):
     MUTED = 'muted'
     CURRENT = 'himself'
     CLAN_MEMBER = 'clanMember'
+    CLUB_MEMBER = 'clubMember'
     REFERRER = 'referrer'
     REFERRAL = 'referral'
     IGR_BASE = 'igr/base'
     IGR_PREMIUM = 'igr/premium'
+    INVALID_NAME = 'invalid/name'
+    INVALID_RATING = 'invalid/rating'
     SUB_NONE = 'sub/none'
     SUB_PENDING_IN = 'sub/pendingIn'
     SUB_PENDING_OUT = 'sub/pendingOut'
@@ -83,7 +89,11 @@ class USER_TAG(object):
     SUB_TO = 'sub/to'
     SUB_FROM = 'sub/from'
     PRESENCE_DND = 'presence/dnd'
-    _SHARED_TAGS = {CLAN_MEMBER, REFERRER, REFERRAL}
+    BAN_CHAT = 'ban/chat'
+    _SHARED_TAGS = {CLAN_MEMBER,
+     CLUB_MEMBER,
+     REFERRER,
+     REFERRAL}
     _CONTACT_LIST = {FRIEND, IGNORED, MUTED}
     _STORED_TO_CACHE = {MUTED}
 
@@ -101,7 +111,7 @@ class USER_TAG(object):
 
 
 class USER_ACTION_ID(object):
-    UNDEFINED, FRIEND_ADDED, FRIEND_REMOVED, IGNORED_ADDED, IGNORED_REMOVED, MUTE_SET, MUTE_UNSET, GROUPS_CHANGED, SUBSCRIPTION_CHANGED, NOTE_CHANGED, IGR_CHANGED = range(11)
+    UNDEFINED, FRIEND_ADDED, FRIEND_REMOVED, IGNORED_ADDED, IGNORED_REMOVED, MUTE_SET, MUTE_UNSET, GROUPS_CHANGED, SUBSCRIPTION_CHANGED, NOTE_CHANGED = range(10)
 
 
 USER_ACTION_ID_NAMES = {v:k for k, v in USER_ACTION_ID.__dict__.iteritems() if not k.startswith('_')}
@@ -130,3 +140,30 @@ class CLIENT_ACTION_ID(object):
 
 
 CLIENT_ACTION_NAMES = {v:k for k, v in CLIENT_ACTION_ID.__dict__.iteritems() if not k.startswith('_')}
+
+class GAME_ONLINE_STATUS(object):
+    UNDEFINED = 0
+    IN_CLAN_CHAT = 1
+    IN_CLUB_CHAT = 2
+    IN_SEARCH = 4
+    ONLINE = IN_CLAN_CHAT | IN_CLUB_CHAT
+
+    @classmethod
+    def addBit(cls, status, bit):
+        if not status & bit:
+            status |= bit
+        return status
+
+    @classmethod
+    def removeBit(cls, status, bit):
+        if status & bit > 0:
+            status ^= bit
+        return status
+
+    @classmethod
+    def update(cls, status, bit):
+        if bit > 0:
+            status = cls.addBit(status, bit)
+        else:
+            status = cls.removeBit(status, abs(bit))
+        return status

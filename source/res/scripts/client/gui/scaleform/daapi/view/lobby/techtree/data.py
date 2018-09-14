@@ -232,11 +232,15 @@ class _ItemsData(object):
 
     def _canRentOrBuy(self, nodeCD):
         item = self.getItem(nodeCD)
-        canRentOrBuy, reason = item.mayRentOrBuy(self._stats.money)
-        if not canRentOrBuy and reason == 'credit_error':
-            return item.mayPurchaseWithExchange(self._stats.money, self._items.shop.exchangeRate)
-        else:
-            return canRentOrBuy
+        money = self._stats.money
+        canBuy, buyReason = item.mayPurchase(money)
+        canRentOrBuy, rentReason = item.mayRentOrBuy(money)
+        canBuyWithExchange = item.mayPurchaseWithExchange(money, g_itemsCache.items.shop.exchangeRate)
+        if not canRentOrBuy:
+            if not canBuy and buyReason == 'credit_error':
+                return canBuyWithExchange
+            return canBuy
+        return canRentOrBuy
 
     def _canSell(self, nodeCD):
         raise NotImplementedError
@@ -327,7 +331,7 @@ class ResearchItemsData(_ItemsData):
             lockReason = item.lock
             if lockReason == LOCK_REASON.ON_ARENA:
                 status = 'battle'
-            elif lockReason == LOCK_REASON.PREBATTLE or lockReason == LOCK_REASON.UNIT:
+            elif lockReason in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB):
                 status = 'inPrebattle'
             elif item.repairCost > 0:
                 status = 'destroyed'

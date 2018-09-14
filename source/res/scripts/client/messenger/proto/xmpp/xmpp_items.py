@@ -109,10 +109,10 @@ _SUB_TO_TAGS = {(_SUB.OFF, _SUB.OFF): {_TAG.SUB_NONE},
 class RosterItem(ContactItem):
     __slots__ = ('_groups', '_sub')
 
-    def __init__(self, jid, groups = None, to = _SUB.OFF, from_ = _SUB.OFF, resources = None, trusted = True):
+    def __init__(self, jid, groups = None, sub = None, resources = None, trusted = True):
         super(RosterItem, self).__init__(jid, trusted=trusted, tags={_TAG.FRIEND}, resources=resources)
         self._groups = groups or set()
-        self._sub = (to, from_)
+        self._sub = sub or (_SUB.OFF, _SUB.OFF)
         self._updateSubTags()
 
     def __repr__(self):
@@ -126,18 +126,13 @@ class RosterItem(ContactItem):
         super(RosterItem, self).update(**kwargs)
         if 'groups' in kwargs:
             self._groups = kwargs['groups']
-        if 'to' in kwargs or 'from_' in kwargs:
-            subTo, subFrom = self._sub
-            if 'to' in kwargs:
-                subTo = kwargs['to']
-            if 'from_' in kwargs:
-                subFrom = kwargs['from_']
-            self._sub = (subTo, subFrom)
+        if 'sub' in kwargs:
+            self._sub = kwargs['sub']
             self._updateSubTags()
 
     def replace(self, newItem):
         if newItem and newItem.getItemType() == XMPP_ITEM_TYPE.BLOCK_ITEM:
-            return RosterBlockItem(self._jid, RosterItem(self._jid, to=self._sub[0], from_=self._sub[1], groups=self._groups))
+            return RosterBlockItem(self._jid, RosterItem(self._jid, sub=self._sub, groups=self._groups))
         else:
             return super(RosterItem, self).replace(newItem)
 

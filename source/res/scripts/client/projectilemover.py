@@ -87,6 +87,7 @@ class ProjectileMover(object):
             if self.__movementCallbackId is None:
                 self.__movementCallbackId = BigWorld.callback(self.__MOVEMENT_CALLBACK_TIMEOUT, self.__movementCallback)
             projectiles[shotID] = proj
+            TriggersManager.g_manager.onAddProjectile(startPoint)
             return
 
     def hide(self, shotID, endPoint):
@@ -133,12 +134,15 @@ class ProjectileMover(object):
 
     def hold(self, shotID):
         proj = self.__projectiles.get(shotID)
-        proj['holdTime'] = self.__PROJECTILE_HIDING_TIME
+        if proj is not None:
+            proj['holdTime'] = self.__PROJECTILE_HIDING_TIME
+        return
 
     def __notifyProjectileHit(self, hitPosition, proj):
         caliber = proj['effectsDescr']['caliber']
         isOwnShot = proj['autoScaleProjectile']
         BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, isOwnShot)
+        TriggersManager.g_manager.onExplodeProjectile(hitPosition)
 
     def __addExplosionEffect(self, position, effectsDescr, effectMaterial, velocityDir):
         effectTypeStr = effectMaterial + 'Hit'

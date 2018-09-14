@@ -89,7 +89,6 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
             SystemMessages.pushI18nMessage('#system_messages:fortification/errors/CENTER_NOT_AVAILABLE', type=SystemMessages.SM_TYPE.Error)
 
     def onJoinRally(self, rallyId, slotIndex, peripheryID):
-        self.__clearCache()
         ctx = JoinUnitCtx(rallyId, PREBATTLE_TYPE.SORTIE, slotIndex, waitingID='prebattle/join')
         if g_lobbyContext.isAnotherPeriphery(peripheryID):
             if g_lobbyContext.isPeripheryAvailable(peripheryID):
@@ -109,6 +108,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
             self.unitFunctional.request(unit_ctx.BattleQueueUnitCtx(action=0))
 
     def onUnitFunctionalInited(self):
+        self.__clearCache()
         self.__loadRoomView()
 
     def onUnitFunctionalFinished(self):
@@ -164,8 +164,8 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
         return
 
     def onUnitRejoin(self):
-        super(FortBattleRoomWindow, self).onUnitRejoin()
         self.__clearState()
+        self.__clearCache()
 
     def onIntroUnitFunctionalFinished(self):
         if self.unitFunctional.getExit() != settings.FUNCTIONAL_EXIT.UNIT:
@@ -228,7 +228,6 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
         yield self.prbDispatcher.join(ctx)
 
     def __handleCreateOrJoinFortBattle(self, peripheryID, battleID, slotIndex = -1):
-        self.__clearCache()
         if g_lobbyContext.isAnotherPeriphery(peripheryID):
             if g_lobbyContext.isPeripheryAvailable(peripheryID):
                 self.__requestToReloginAndCreateOrJoinFortBattle(peripheryID, battleID, slotIndex)
@@ -283,9 +282,8 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
         return model
 
     def __loadRoomView(self):
-        unit = self.unitFunctional
-        state = unit.getState()
-        if state.isFortBattle():
+        _, unit = self.unitFunctional.getUnit()
+        if unit.isFortBattle():
             self._requestViewLoad(FORTIFICATION_ALIASES.FORT_CLAN_BATTLE_ROOM_VIEW_UI, self.unitFunctional.getID())
-        elif state.isSortie():
+        elif unit.isSortie():
             self._requestViewLoad(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_VIEW_UI, self.unitFunctional.getID())

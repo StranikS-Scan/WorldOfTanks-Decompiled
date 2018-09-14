@@ -5,9 +5,11 @@ from account_helpers import getPlayerDatabaseID
 from adisp import async, process
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_ERROR
+from helpers import html
 from gui.shared.utils.functions import getClanRoleString
 from gui.shared.fortifications.fort_provider import ClientFortProvider
 from gui.shared.utils import code2str
+from messenger.ext import passCensor
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 CLAN_MEMBERS = {CLAN_MEMBER_FLAGS.LEADER: 'leader',
@@ -28,6 +30,8 @@ class _ClanCache(object):
         self.__waitForSync = False
         self.__fortProvider = ClientFortProvider()
         self.__clanMembersLen = None
+        self.__clanMotto = ''
+        self.__clanDescription = ''
         self.onSyncStarted = Event()
         self.onSyncCompleted = Event()
         return
@@ -97,11 +101,19 @@ class _ClanCache(object):
 
     @property
     def clanName(self):
-        return self.clanInfo[0]
+        return passCensor(html.escape(self.clanInfo[0]))
 
     @property
     def clanAbbrev(self):
         return self.clanInfo[1]
+
+    @property
+    def clanMotto(self):
+        return self.__clanMotto
+
+    @property
+    def clanDescription(self):
+        return self.__clanDescription
 
     @property
     def clanTag(self):
@@ -168,6 +180,10 @@ class _ClanCache(object):
     def getClanRoleUserString(self):
         position = self.clanInfo[3]
         return getClanRoleString(position)
+
+    def onClanInfoReceived(self, clanDBID, clanName, clanAbbrev, clanMotto, clanDescription):
+        self.__clanMotto = passCensor(html.escape(clanMotto))
+        self.__clanDescription = passCensor(html.escape(clanDescription))
 
     def _valueResponse(self, resID, value, callback):
         if resID < 0:

@@ -118,6 +118,9 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
         enemyClanAbbrev = self.__data['enemyClanName']
         clanResourceDataKey = 'fortResourceLostByClan'
         resourceHeaderLabel = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_HEADER)
+        byPlayerText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_BYPLAYER)
+        playerResText = BigWorld.wg_getNiceNumberFormat(self.__data.get('fortResource', 0))
+        showByPlayerInfo = True
         if self.BATTLE_RESULT.isWin(winStatus):
             g_fortSoundController.playFortClanWarResult('win')
             resultText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_WIN_HEADER)
@@ -130,6 +133,9 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
             descriptionStartText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFEAT_DESCRIPTION_START)
             descriptionEndText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFEAT_DESCRIPTION_END, clanTag='[%s]' % enemyClanAbbrev, numBuildings=enemyBuildingCapture)
             resourceHeaderLabel = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESLOST_HEADER)
+            byPlayerText = ''
+            playerResText = ''
+            showByPlayerInfo = False
         else:
             g_fortSoundController.playFortClanWarResult('draw')
             resultText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TIE_HEADER)
@@ -162,10 +168,11 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
          'journalText': _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_JOURNAL),
          'defResReceivedText': resourceHeaderLabel,
          'byClanText': _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_BYCLAN),
-         'byPlayerText': _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_BYPLAYER),
+         'byPlayerText': byPlayerText,
          'battleResult': self.BATTLE_RESULT.getResultByWinStatus(winStatus),
          'clanResText': BigWorld.wg_getNiceNumberFormat(self.__data.get(clanResourceDataKey, 0)),
-         'playerResText': BigWorld.wg_getNiceNumberFormat(self.__data.get('fortResource', 0)),
+         'playerResText': playerResText,
+         'showByPlayerInfo': showByPlayerInfo,
          'battles': battles,
          'achievementsLeft': achievementsLeft,
          'achievementsRight': achievementsRight})

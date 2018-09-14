@@ -29,6 +29,12 @@ class INVITES(object):
     INVITES_TEXT_FORT_OFFENCE = '#invites:invites/text/fort/offence'
     INVITES_TEXT_FORT_DEFENCE = '#invites:invites/text/fort/defence'
     INVITES_TEXT_FORT_DIRECTION = '#invites:invites/text/fort/direction'
+    INVITES_TEXT_CLUB = '#invites:invites/text/club'
+    INVITES_COMMENT_CLUB = '#invites:invites/comment/club'
+    INVITES_COMMENT_CLUB_DETAILS = '#invites:invites/comment/club/details'
+    CLUB_APPLICATIONS_TITLE = '#invites:club/applications/title'
+    CLUB_APPLICATIONS_COMMENT = '#invites:club/applications/comment'
+    CLUB_APPLICATIONS_BUTTONS_DETAILS = '#invites:club/applications/buttons/details'
     INVITES_COMMENT = '#invites:invites/comment'
     INVITES_STATE_ACTIVE = '#invites:invites/state/ACTIVE'
     INVITES_STATE_ACCEPTED = '#invites:invites/state/ACCEPTED'
@@ -70,6 +76,10 @@ class INVITES(object):
     FRIENDSHIP_NOTE_PROCESS = '#invites:friendship/note/process'
     FRIENDSHIP_NOTE_MAXROSTER = '#invites:friendship/note/maxRoster'
     FRIENDSHIP_NOTE_NOTCONNECTED = '#invites:friendship/note/notConnected'
+    CLUBS_STATE_ACTIVE = '#invites:clubs/state/ACTIVE'
+    CLUBS_STATE_ACCEPTED = '#invites:clubs/state/ACCEPTED'
+    CLUBS_STATE_DECLINED = '#invites:clubs/state/DECLINED'
+    CLUBS_STATE_CANCELLED = '#invites:clubs/state/CANCELLED'
     INVITES_STATE_ENUM = (INVITES_STATE_ACTIVE,
      INVITES_STATE_ACCEPTED,
      INVITES_STATE_DECLINED,
@@ -91,7 +101,8 @@ class INVITES(object):
      INVITES_TEXT_FORT_BATTLE,
      INVITES_TEXT_FORT_OFFENCE,
      INVITES_TEXT_FORT_DEFENCE,
-     INVITES_TEXT_FORT_DIRECTION)
+     INVITES_TEXT_FORT_DIRECTION,
+     INVITES_TEXT_CLUB)
     INVITES_NOTE_CHANGE_AND_LEAVE_ENUM = (INVITES_NOTE_CHANGE_AND_LEAVE_COMPANY,
      INVITES_NOTE_CHANGE_AND_LEAVE_SQUAD,
      INVITES_NOTE_CHANGE_AND_LEAVE_TRAINING,

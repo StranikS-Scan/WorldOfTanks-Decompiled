@@ -69,14 +69,12 @@ class MusicController(object):
         def replace(self, event, eventId, playNew, stopPrev):
             if self.__event == event:
                 return
-            else:
-                if self.__event is not None and stopPrev is True:
-                    self.__event.stop()
-                self.__event = event
-                self.__eventID = eventId
-                if playNew is True:
-                    self.play()
-                return
+            if stopPrev is True:
+                self.stop()
+            self.__event = event
+            self.__eventID = eventId
+            if playNew is True:
+                self.play()
 
         def play(self):
             if self.__event is not None and self.__muted is False:
@@ -131,10 +129,12 @@ class MusicController(object):
         self.init()
         return
 
-    def init(self):
+    def init(self, path = None):
         self.__battleResultEventWaitCb = None
         self.__isOnArena = False
         self.__isPremiumAccount = False
+        if path is not None:
+            self.__loadCustomSounds(path)
         self.__loadConfig()
         g_playerEvents.onEventNotificationsChanged += self.__onEventNotificationsChanged
         connectionManager.onDisconnected += self.__onDisconnected
@@ -143,12 +143,16 @@ class MusicController(object):
         self.__musicEvents[MusicController._MUSIC_EVENT].mute(muteMusic)
         self.__musicEvents[MusicController._AMBIENT_EVENT].mute(muteAmbient)
         SoundGroups.SoundGroups.onMusicVolumeChanged += self.__onVolumeChanged
+        for musicEvent in self.__musicEvents:
+            self.play(musicEvent.getEventId())
+
         return
 
     def destroy(self):
         g_playerEvents.onEventNotificationsChanged -= self.__onEventNotificationsChanged
         connectionManager.onDisconnected -= self.__onDisconnected
         SoundGroups.SoundGroups.onMusicVolumeChanged -= self.__onVolumeChanged
+        self.__eraseOverridden(_CLIENT_OVERRIDDEN)
         self.__cancelWaitBattleResultsEventFinish()
 
     def __del__(self):
@@ -343,10 +347,13 @@ class MusicController(object):
                 if sound is not None:
                     sound.stop()
 
-            self.__soundEvents[eventId] = lstEvents
+            prevList = self.__soundEvents.get(eventId, None)
+            if prevList is not None:
+                for event in prevList:
+                    if event is not None:
+                        event.stop()
 
-        for musicEvent in self.__musicEvents:
-            self.play(musicEvent.getEventId())
+            self.__soundEvents[eventId] = lstEvents
 
         return
 
@@ -379,6 +386,8 @@ class MusicController(object):
 
     def __reloadSounds(self):
         self.__loadConfig()
+        for musicEvent in self.__musicEvents:
+            self.play(musicEvent.getEventId())
 
     def __onEventNotificationsChanged(self, notificationsDiff):
         hasChanges = False
@@ -424,25 +433,29 @@ class MusicController(object):
     def changeHangarSound(self, notificationsDiff):
         self.__onEventNotificationsChanged(notificationsDiff)
 
-    def loadCustomSounds(self, spacePath):
+    def __loadCustomSounds(self, spacePath):
         xmlName = spacePath.split('/')[-1]
         settings = ResMgr.openSection('scripts/arena_defs/' + xmlName + '.xml')
         if settings is None:
             return
         else:
-            hasChanges = False
-            music_name = settings.readString('music')
-            ambient_name = settings.readString('ambientSound')
-            if music_name:
-                self.__updateOverridden(MUSIC_EVENT_LOBBY, _CLIENT_OVERRIDDEN, (music_name, music_name))
-                hasChanges = True
-            if ambient_name:
-                self.__updateOverridden(AMBIENT_EVENT_LOBBY, _CLIENT_OVERRIDDEN, (ambient_name, ambient_name))
-                self.__updateOverridden(AMBIENT_EVENT_SHOP, _CLIENT_OVERRIDDEN, (ambient_name, ambient_name))
-                self.__updateOverridden(AMBIENT_EVENT_STATISTICS, _CLIENT_OVERRIDDEN, (ambient_name, ambient_name))
-                hasChanges = True
-            if hasChanges:
-                self.__reloadSounds()
+            musicName = settings.readString('music')
+            ambientName = settings.readString('ambientSound')
+            combatVictory = settings.readString('combatVictory')
+            combatLose = settings.readString('combatLose')
+            combatDraw = settings.readString('combatDraw')
+            if musicName:
+                self.__updateOverridden(MUSIC_EVENT_LOBBY, _CLIENT_OVERRIDDEN, (musicName, musicName))
+            if combatVictory:
+                self.__updateOverridden(MUSIC_EVENT_COMBAT_VICTORY, _CLIENT_OVERRIDDEN, combatVictory)
+            if combatLose:
+                self.__updateOverridden(MUSIC_EVENT_COMBAT_LOSE, _CLIENT_OVERRIDDEN, combatLose)
+            if combatDraw:
+                self.__updateOverridden(MUSIC_EVENT_COMBAT_DRAW, _CLIENT_OVERRIDDEN, combatDraw)
+            if ambientName:
+                self.__updateOverridden(AMBIENT_EVENT_LOBBY, _CLIENT_OVERRIDDEN, (ambientName, ambientName))
+                self.__updateOverridden(AMBIENT_EVENT_SHOP, _CLIENT_OVERRIDDEN, (ambientName, ambientName))
+                self.__updateOverridden(AMBIENT_EVENT_STATISTICS, _CLIENT_OVERRIDDEN, (ambientName, ambientName))
             return
 
     def __updateOverridden(self, eventID, typeId, value):

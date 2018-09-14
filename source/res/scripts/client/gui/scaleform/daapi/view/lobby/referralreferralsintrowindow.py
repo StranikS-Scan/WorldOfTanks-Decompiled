@@ -28,6 +28,6 @@ class ReferralReferralsIntroWindow(View, AbstractWindowView, ReferralReferralsIn
         contentKey = 'referrals' if self.__isNewbie else 'phenix'
         referrerNameFmt = self.app.utilsManager.textManager.getText(TextType.STATUS_WARNING_TEXT, self.__referrerName)
         handIcon = self.app._utilsMgr.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALSMALLHAND, 16, 16, -4, 0))
-        self.as_setDataS({'titleTF': self.app.utilsManager.textManager.getText(TextType.PROMO_TITLE, i18n.makeString(MENU.REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_TITLE, userName=BigWorld.player().name)),
+        self.as_setDataS({'titleTF': self.app.utilsManager.textManager.getText(TextType.PROMO_TITLE, i18n.makeString(MENU.REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_TITLE, userName=getattr(BigWorld.player(), 'name', 'Unknown'))),
          'bodyTF': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(MENU.referralreferralsintrowindow_text_block_body(contentKey), referrerName=referrerNameFmt, handIcon=handIcon)),
          'squadTF': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(MENU.REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_SQUAD_TEXT))})

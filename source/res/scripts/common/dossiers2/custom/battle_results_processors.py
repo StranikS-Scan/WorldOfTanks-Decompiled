@@ -99,10 +99,14 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehTypeCompDesc
 
 
 def updateRated7x7Dossier(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, vehDossierDescr):
-    __updateDossierCommonPart(dossierDescr, battleResults, dossierXP)
+    bonusCaps = BONUS_CAPS.get(battleResults['bonusType'])
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_RATED7X7):
+        __updateAggregatedValues(dossierDescr.expand('rated7x7'), dossierDescr.expand('rated7x7'), battleResults, dossierXP, frags8p=0)
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXRATED7X7):
+        __updateMaxValues(dossierDescr.expand('maxRated7x7'), battleResults, dossierXP)
 
 
-def updateClubDossier(dossierDescr, battleResults, geometryID):
+def updateClubDossier(dossierDescr, battleResults, geometryID, teamInDefence):
     bonusCaps = BONUS_CAPS.get(battleResults['bonusType'])
     if not bool(bonusCaps & BONUS_CAPS.DOSSIER_CLUB):
         return
@@ -121,7 +125,7 @@ def updateClubDossier(dossierDescr, battleResults, geometryID):
     for record in ('killedVehicles', 'lostVehicles', 'damageDealt', 'damageReceived', 'capturePoints', 'droppedCapturePoints'):
         block[record] += battleResults['club'][record]
 
-    isInAttack = True
+    isInAttack = team != teamInDefence
     if isInAttack:
         block['battlesCountInAttack'] += 1
         block['damageDealtInAttack'] += battleResults['club']['damageDealt']
@@ -138,6 +142,8 @@ def updateClubDossier(dossierDescr, battleResults, geometryID):
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS_RATED7X7):
         for recordDBID in battleResults['club']['achievements']:
             __processArenaAchievement(dossierDescr, recordDBID)
+
+        _updatePerBattleSeries(dossierDescr['achievementsRated7x7'], 'victoryMarchSeries', team == winnerTeam)
 
 
 def updateTankmanDossier(dossierDescr, battleResults):
@@ -416,6 +422,20 @@ def __updateAccountDossierImpl(dossierDescr, results, dossierXP, vehTypeCompDesc
             __updateAggregatedValues(dossierDescr.expand('fortSortiesInClan'), dossierDescr.expand('fortSortiesInClan'), results, dossierXP, frags8p)
         if bool(bonusCaps & BONUS_CAPS.DOSSIER_FORT_BATTLE):
             __updateAggregatedValues(dossierDescr.expand('fortBattlesInClan'), dossierDescr.expand('fortBattlesInClan'), results, dossierXP, frags8p)
+        if bool(bonusCaps & BONUS_CAPS.DOSSIER_RATED7X7):
+            rated7x7Cut = dossierDescr['rated7x7Cut']
+            vehRated7x7 = vehDossierDescr['rated7x7']
+            rated7x7Cut[vehTypeCompDescr] = (vehRated7x7['battlesCount'],
+             vehRated7x7['wins'],
+             vehRated7x7['xp'],
+             vehRated7x7['originalXP'],
+             vehRated7x7['damageDealt'],
+             vehRated7x7['damageAssistedRadio'],
+             vehRated7x7['damageAssistedTrack'])
+            if results['club']['clubDBID'] != dossierDescr['achievementsRated7x7']['victoryMarchClubDBID']:
+                dossierDescr['achievementsRated7x7']['victoryMarchClubDBID'] = results['club']['clubDBID']
+                dossierDescr['achievementsRated7x7']['victoryMarchSeries'] = 0
+            _updatePerBattleSeries(dossierDescr['achievementsRated7x7'], 'victoryMarchSeries', results['winnerTeam'] == results['team'])
         bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS) and __updateAccountRecords(bonusCaps, dossierDescr, vehDossierDescr)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAX15X15):
         for record in maxValuesChanged:
@@ -424,6 +444,10 @@ def __updateAccountDossierImpl(dossierDescr, results, dossierXP, vehTypeCompDesc
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAX7X7):
         for record in maxValuesChanged:
             dossierDescr['max7x7'][record] = vehTypeCompDescr
+
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXRATED7X7):
+        for record in maxValuesChanged:
+            dossierDescr['maxRated7x7'][record] = vehTypeCompDescr
 
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXHISTORICAL):
         for record in maxValuesChanged:

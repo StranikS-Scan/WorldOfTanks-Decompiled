@@ -26,10 +26,28 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
 
     def _populate(self):
         super(ProfileStatistics, self)._populate()
-        dropDownProvider = [PROFILE.PROFILE_DROPDOWN_LABELS_ALL, PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL, PROFILE.PROFILE_DROPDOWN_LABELS_TEAM]
+        self._setInitData(PROFILE.PROFILE_DROPDOWN_LABELS_ALL, False)
+
+    def _setInitData(self, battlesType, showCurrentSeason):
+        dropDownProvider = [PROFILE.PROFILE_DROPDOWN_LABELS_ALL,
+         PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL,
+         PROFILE.PROFILE_DROPDOWN_LABELS_TEAM,
+         PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM]
         if isFortificationEnabled():
             dropDownProvider.append(PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS)
-        self.as_setInitDataS({'dropDownProvider': dropDownProvider})
+        seasonItems = [{'key': PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM,
+          'label': PROFILE.PROFILE_SEASONSDROPDOWN_ALL}]
+        if showCurrentSeason:
+            seasonItems.append({'key': PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM_SEASON,
+             'label': PROFILE.PROFILE_SEASONSDROPDOWN_CURRENT})
+        seasonIndex = 0
+        for idx, season in enumerate(seasonItems):
+            if season['key'] == battlesType:
+                seasonIndex = idx
+
+        self.as_setInitDataS({'dropDownProvider': dropDownProvider,
+         'seasonItems': seasonItems,
+         'seasonIndex': seasonIndex})
 
     def _sendAccountData(self, targetData, accountDossier):
         formattedWinsEfficiency = ProfileUtils.getFormattedWinsEfficiency(targetData)
@@ -50,8 +68,12 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
         vehiclesLen = len(vehicles)
         headerParams = []
         dataList = []
-        if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_TEAM:
+        if self._battlesType in (PROFILE.PROFILE_DROPDOWN_LABELS_TEAM, PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM, PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM_SEASON):
             headerText = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_TEAM)
+            if self._battlesType in (PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM, PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM_SEASON):
+                headerText = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_STATICTEAM)
+                self._setInitData(self._battlesType, targetData.getBattlesCount() > 0)
+                self._battlesType = PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM
             headerParams.append(ProfileUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT))
             headerParams.append(ProfileUtils.packLditItemData(damageEfficiency, PROFILE.SECTION_STATISTICS_DETAILED_DAMAGECOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DAMAGECOEFF, 'dmgRatio40x32.png', {'tooltipData': ProfileUtils.createToolTipData((BigWorld.wg_getIntegralFormat(dmgDealt), BigWorld.wg_getIntegralFormat(dmgReceived)))}, HeaderItemsTypes.VALUES))
             headerParams.append(self.__packAvgDmgLditItemData(avgDmg))
@@ -136,7 +158,9 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
             dataList.append(self.__getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData))
             dataList.append(self.__getChartsData(targetData))
         bodyParams = {'dataList': dataList}
+        showSeasonDropdown = self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM
         self.as_responseDossierS(self._battlesType, {'headerText': headerText,
+         'showSeasonDropdown': showSeasonDropdown,
          'headerParams': headerParams,
          'bodyParams': bodyParams})
 
@@ -167,6 +191,9 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
 
     def __packAvgXPLditItemData(self, avgExp):
         return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgExp), PROFILE.SECTION_STATISTICS_SCORES_AVGEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGEXP, 'avgExp40x32.png')
+
+    def setSeason(self, seasonId):
+        self.requestDossier(seasonId)
 
     def _dispose(self):
         super(ProfileStatistics, self)._dispose()

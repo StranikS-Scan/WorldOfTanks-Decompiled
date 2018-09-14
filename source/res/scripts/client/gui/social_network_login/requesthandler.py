@@ -43,3 +43,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_header('Location', kwargs['next'])
         self.end_headers()
         self.server.keepData(token, kwargs['account_id'])
+
+    def log_message(self, request, *args):
+        LOG_DEBUG('%s (http://localhost:%s) finished processing %s' % (self.server.name, self.server.server_port, request % args))

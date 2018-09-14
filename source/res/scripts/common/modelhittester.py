@@ -75,11 +75,11 @@ class ModelHitTester(object):
         return self.__bspModel.collidesWithTriangle(triangle, hitDir)
 
 
-def segmentMayHitVehicle(vehicleDescr, segmentStart, segmentEnd, vehicleCenter):
-    radiusSquared = vehicleDescr.boundingRadius
+def segmentMayHitVolume(boundingRadius, center, segmentStart, segmentEnd):
+    radiusSquared = boundingRadius
     radiusSquared *= radiusSquared
-    segmentStart = segmentStart - vehicleCenter
-    segmentEnd = segmentEnd - vehicleCenter
+    segmentStart = segmentStart - center
+    segmentEnd = segmentEnd - center
     ao = Vector2(-segmentStart.x, -segmentStart.z)
     bo = Vector2(-segmentEnd.x, -segmentEnd.z)
     ab = ao - bo
@@ -89,6 +89,10 @@ def segmentMayHitVehicle(vehicleDescr, segmentStart, segmentEnd, vehicleCenter):
     if e >= ab.lengthSquared:
         return bo.lengthSquared <= radiusSquared
     return ao.lengthSquared - e * e / ab.lengthSquared <= radiusSquared
+
+
+def segmentMayHitVehicle(vehicleDescr, segmentStart, segmentEnd, vehicleCenter):
+    return segmentMayHitVolume(vehicleDescr.boundingRadius, vehicleCenter, segmentStart, segmentEnd)
 
 
 SegmentCollisionResult = namedtuple('SegmentCollisionResult', ('dist', 'hitAngleCos', 'armor'))

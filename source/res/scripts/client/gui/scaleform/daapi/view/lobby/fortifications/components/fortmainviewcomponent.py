@@ -31,11 +31,11 @@ from gui.shared.fortifications.context import DirectionCtx
 from gui.shared.utils import CONST_CONTAINER
 from helpers import i18n, time_utils, setHangarVisibility
 
-def _checkBattleConsumesIntro():
+def _checkBattleConsumesIntro(fort):
     settings = dict(AccountSettings.getSettings('fortSettings'))
-    if not settings.get('battleConsumesIntroShown'):
+    if not settings.get('battleConsumesIntroShown') and not fort.isStartingScriptNotStarted():
         fort_events.showBattleConsumesIntro()
-        settings['battleConsumesIntroShown'] = True
+    settings['battleConsumesIntroShown'] = True
     AccountSettings.setSettings('fortSettings', settings)
 
 
@@ -69,7 +69,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
 
     @process
     def updateData(self):
-        _checkBattleConsumesIntro()
+        _checkBattleConsumesIntro(self.fortCtrl.getFort())
         self.__updateCurrentMode()
         self.__updateHeaderMessage()
         self.as_setMainDataS(self.getData())

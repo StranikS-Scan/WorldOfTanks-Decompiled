@@ -26,3 +26,13 @@ class BWPrebattleChannelFindCriteria(IEntityFindCriteria):
 
     def filter(self, channel):
         return channel.getProtoType() is PROTO_TYPE.BW_CHAT2 and channel.getPrebattleType()
+
+
+class BWChatTypeFindCriteria(IEntityFindCriteria):
+
+    def __init__(self, chatType):
+        super(BWChatTypeFindCriteria, self).__init__()
+        self.__chatType = chatType
+
+    def filter(self, channel):
+        return channel.getProtoType() is PROTO_TYPE.BW_CHAT2 and channel.getProtoData().chatType == self.__chatType

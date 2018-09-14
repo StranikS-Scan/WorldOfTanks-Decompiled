@@ -287,14 +287,15 @@ class _UnitActionValidator(object):
         state = functional.getState()
         stats = functional.getStats()
         vInfo = functional.getVehicleInfo()
-        if functional.isCreator():
-            valid, restriction = self.canCreatorDoAction(stats, state, vInfo)
+        pInfo = functional.getPlayerInfo()
+        if pInfo.isCreator():
+            valid, restriction = self.canCreatorDoAction(pInfo, stats, state, vInfo)
         else:
-            valid, restriction = self.canPlayerDoAction(state, vInfo)
+            valid, restriction = self.canPlayerDoAction(pInfo, state, vInfo)
         return (valid, restriction)
 
-    def canCreatorDoAction(self, stats, state, vInfo):
-        valid, restriction = self.canPlayerDoAction(state, vInfo)
+    def canCreatorDoAction(self, pInfo, stats, state, vInfo):
+        valid, restriction = self.canPlayerDoAction(pInfo, state, vInfo)
         if not valid:
             return (valid, restriction)
         valid, restriction = self._validateLevels(stats, state)
@@ -302,15 +303,18 @@ class _UnitActionValidator(object):
             return (valid, restriction)
         return self._validateSlots(stats, state)
 
-    def canPlayerDoAction(self, state, vInfo):
+    def canPlayerDoAction(self, pInfo, state, vInfo):
         if state.isInIdle():
             return (False, UNIT_RESTRICTION.IS_IN_IDLE)
-        if state.isInArena():
-            return (False, UNIT_RESTRICTION.IS_IN_ARENA)
-        if vInfo.isEmpty():
-            return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
-        if not vInfo.isReadyToBattle():
-            return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
+        if not pInfo.isCreator() and state.isInPreArena():
+            return (False, UNIT_RESTRICTION.IS_IN_PRE_ARENA)
+        if pInfo.isInSlot:
+            if vInfo.isEmpty():
+                return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
+            if not vInfo.isReadyToBattle():
+                return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
+        else:
+            return (False, UNIT_RESTRICTION.NOT_IN_SLOT)
         return (True, UNIT_RESTRICTION.UNDEFINED)
 
     def getRestrictionByLevel(self, stats, state):
@@ -323,7 +327,7 @@ class _UnitActionValidator(object):
         return not stats.freeSlotsCount and len(stats.levelsSeq) == stats.occupiedSlotsCount
 
     def _validateSlots(self, stats, state):
-        if stats.readyCount != stats.occupiedSlotsCount > 1:
+        if stats.readyCount != stats.occupiedSlotsCount:
             return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
         return (True, UNIT_RESTRICTION.UNDEFINED)
 
@@ -399,3 +403,31 @@ class FortBattleActionValidator(_UnitActionValidator):
 
     def __init__(self, rosterSettings):
         super(FortBattleActionValidator, self).__init__(rosterSettings, False)
+
+
+class ClubsActionValidator(_UnitActionValidator):
+
+    def __init__(self, rosterSettings, proxy):
+        super(ClubsActionValidator, self).__init__(rosterSettings)
+        self.__proxy = weakref.proxy(proxy)
+
+    def _validateSlots(self, stats, state):
+        if state.isDevMode():
+            return (True, UNIT_RESTRICTION.UNDEFINED)
+        _, unit = self.__proxy.getUnit()
+        if unit.isRated() and self._rosterSettings.getMinSlots() > stats.occupiedSlotsCount:
+            return (False, UNIT_RESTRICTION.MIN_SLOTS)
+        if not state.isInPreArena() and stats.readyCount != stats.occupiedSlotsCount:
+            return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
+        return (True, UNIT_RESTRICTION.UNDEFINED)
+
+    def _validateLevels(self, stats, state):
+        if not stats.curTotalLevel:
+            return (False, UNIT_RESTRICTION.ZERO_TOTAL_LEVEL)
+        _, unit = self.__proxy.getUnit()
+        if unit.isRated() or self._areVehiclesSelected(stats):
+            if not state.isDevMode() and stats.curTotalLevel < stats.minTotalLevel:
+                return (False, UNIT_RESTRICTION.MIN_TOTAL_LEVEL)
+            if stats.curTotalLevel > stats.maxTotalLevel:
+                return (False, UNIT_RESTRICTION.MAX_TOTAL_LEVEL)
+        return (True, UNIT_RESTRICTION.UNDEFINED)

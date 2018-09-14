@@ -39,10 +39,10 @@ class _EquipmentItem(object):
         raise ValueError, 'Invokes getGuiIterator, than it is not required'
 
     def canActivate(self, entityName = None, avatar = None):
-        if self._timeRemaining > 0:
+        if self._timeRemaining > 0 and self._stage and self._stage not in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.COOLDOWN):
             result = False
             error = _ActivationError('equipmentAlreadyActivated', {'name': self._descriptor.userString})
-        elif self._stage and self._stage != EQUIPMENT_STAGES.READY:
+        elif self._stage and self._stage not in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING):
             result = False
             error = None
             if self._stage == EQUIPMENT_STAGES.ACTIVE:

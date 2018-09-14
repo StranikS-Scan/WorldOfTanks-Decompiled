@@ -7,7 +7,6 @@ from gui.shared.utils.functions import getViewName
 class MESSENGER_VIEW_ALIAS(object):
     FAQ_WINDOW = 'messenger/faqWindow'
     CHANNEL_MANAGEMENT_WINDOW = 'messenger/channelsManagementWindow'
-    CONTACTS_WINDOW = 'messenger/contactsWindow'
     LAZY_CHANNEL_WINDOW = 'messenger/lazyChannelWindow'
     LOBBY_CHANNEL_WINDOW = 'messenger/lobbyChannelWindow'
     CONNECT_TO_SECURE_CHANNEL_WINDOW = 'messenger/connectToSecureChannelWindow'
@@ -21,10 +20,8 @@ def getViewSettings():
     from messenger.gui.Scaleform.view import FAQWindow
     from messenger.gui.Scaleform.view import LazyChannelWindow
     from messenger.gui.Scaleform.view import LobbyChannelWindow
-    from messenger.gui.Scaleform.view import ContactsWindow
     return [GroupedViewSettings(MESSENGER_VIEW_ALIAS.FAQ_WINDOW, FAQWindow, 'FAQWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, ChannelsManagementWindow, 'channelsManagementWindow.swf', ViewTypes.WINDOW, '', MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(MESSENGER_VIEW_ALIAS.CONTACTS_WINDOW, ContactsWindow, 'contactsWindow.swf', ViewTypes.WINDOW, '', MESSENGER_VIEW_ALIAS.CONTACTS_WINDOW, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW, LazyChannelWindow, 'lazyChannelWindow.swf', ViewTypes.WINDOW, '', MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, LobbyChannelWindow, 'lobbyChannelWindow.swf', ViewTypes.WINDOW, '', MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, ConnectToSecureChannelWindow, 'connectToSecureChannelWindow.swf', ViewTypes.WINDOW, '', MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, ScopeTemplates.DEFAULT_SCOPE),
@@ -40,7 +37,6 @@ class MessengerPackageBusinessHandler(PackageBusinessHandler):
     def __init__(self):
         listeners = [(MESSENGER_VIEW_ALIAS.FAQ_WINDOW, self.__showSimpleWindow),
          (MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, self.__showSimpleWindow),
-         (MESSENGER_VIEW_ALIAS.CONTACTS_WINDOW, self.__showSimpleWindow),
          (MESSENGER_VIEW_ALIAS.LAZY_CHANNEL_WINDOW, self.__showLazyChannelWindow),
          (MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, self.__showLobbyChannelWindow),
          (MESSENGER_VIEW_ALIAS.CONNECT_TO_SECURE_CHANNEL_WINDOW, self.__showSimpleWindow)]

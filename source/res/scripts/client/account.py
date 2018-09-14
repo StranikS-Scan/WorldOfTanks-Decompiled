@@ -1,10 +1,9 @@
 # Embedded file name: scripts/client/Account.py
-import BigWorld
-import Event
 import cPickle
 import zlib
 import copy
-from functools import partial
+from collections import namedtuple
+import Event
 import AccountCommands
 import ClientPrebattle
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, Trader, CustomFilesCache, BattleResultsCache, ClientClubs
@@ -12,7 +11,6 @@ from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents as events
 from account_helpers.settings_core import IntUserSettings
 from constants import *
-from account_helpers.diff_utils import synchronizeDicts
 from messenger import MessengerEntry
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
 from debug_utils import *
@@ -23,8 +21,9 @@ from account_shared import NotificationItem
 from OfflineMapCreator import g_offlineMapCreator
 from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ClientFortMgr import ClientFortMgr
-from collections import namedtuple
 from gui import game_control
+from gui.wgnc import g_wgncProvider
+from gui.shared.ClanCache import g_clanCache
 StreamData = namedtuple('StreamData', ['data',
  'isCorrupted',
  'origPacketLen',
@@ -76,7 +75,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattle = None
         self.unitBrowser = ClientUnitBrowser(self)
         self.unitMgr = ClientUnitMgr(self)
+        self.clubs.onUnitMgrCreated(self.unitMgr)
         self.prebattleAutoInvites = g_accountRepository.prebattleAutoInvites
+        self.globalRating = 0
         self.prebattleInvites = g_accountRepository.prebattleInvites
         self.eventNotifications = g_accountRepository.eventNotifications
         self.clanMembers = g_accountRepository.clanMembers
@@ -97,7 +98,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isPlayer = True
         self.databaseID = None
         self.inputHandler = AccountInputHandler()
-        BigWorld.resetEntityManager(True, False)
         BigWorld.clearAllSpaces()
         self.syncData.onAccountBecomePlayer()
         self.inventory.onAccountBecomePlayer()
@@ -358,11 +358,19 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if status != PREBATTLE_INVITE_STATUS.OK:
             events.onPrebattleInvitesStatus(dbID, name, status)
 
-    def receiveClubUpdate(self, clubDBID, clubData):
-        self.clubs.onClubUpdated(clubDBID, clubData)
+    def onClanInfoReceived(self, clanDBID, clanName, clanAbbrev, clanMotto, clanDescription):
+        LOG_DEBUG('onClanInfoReceived', clanDBID, clanName, clanAbbrev, clanMotto, clanDescription)
+        g_clanCache.onClanInfoReceived(clanDBID, clanName, clanAbbrev, clanMotto, clanDescription)
+
+    def receiveClubUpdate(self, clubDBID, clubData, unitData):
+        self.clubs.onClubUpdated(clubDBID, clubData, unitData)
+
+    def receiveClubNotification(self, notification):
+        self.clubs.onClubNotification(notification)
 
     def receiveNotification(self, notification):
         LOG_DEBUG('receiveNotification', notification)
+        g_wgncProvider.fromXmlString(notification)
 
     def sendNotificationReply(self, notificationID, purge, actionName):
         self.base.doCmdInt2Str(0, AccountCommands.CMD_NOTIFICATION_REPLY, notificationID, purge, actionName)
@@ -525,6 +533,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             return
         proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, errorStr, ext.get('globalRating', 0))
         self._doCmdInt3(AccountCommands.CMD_REQ_PLAYER_GLOBAL_RATING, accountID, 0, 0, proxy)
+
+    def requestPlayersGlobalRating(self, accountIDs, callback):
+        proxy = lambda requestID, resultID, errorStr, ext = None: callback(resultID, errorStr, ext)
+        self._doCmdIntArrStrArr(AccountCommands.CMD_REQ_PLAYERS_GLOBAL_RATING, accountIDs, [], proxy)
+        return
 
     def enqueueRandom(self, vehInvID, gameplaysMask = 65535, arenaTypeID = 0):
         if events.isPlayerEntityChanging:
@@ -844,6 +857,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.__synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
             self.__synchronizeCacheDict(self.clanMembers, diff.get('cache', None), 'clanMembers', 'replace', events.onClanMembersListChanged)
             self.__synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', lambda : events.onEventsDataChanged())
+            self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
             cacheDiff = diff.get('cache', {})
             clanFortState = cacheDiff.get('clanFortState', None)
             if clanFortState is not None:
@@ -930,6 +944,20 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
                 event()
             return
 
+    def __synchronizeCacheSimpleValue(self, accountPropName, diffDict, key, event):
+        if diffDict is None:
+            return
+        else:
+            for k in (key, (key, '_r')):
+                if k in diffDict:
+                    value = diffDict[k]
+                    prevValue = getattr(self, accountPropName, None)
+                    if value != prevValue:
+                        setattr(self, accountPropName, diffDict[k])
+                        return event(value)
+
+            return
+
     def __synchronizeEventNotifications(self, diff):
         diffDict = {'added': [],
          'removed': []}
@@ -949,7 +977,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             if updated is not None:
                 updated = cPickle.loads(zlib.decompress(updated))
                 eventNotifications = self.eventNotifications
-                self.eventNotifications = updated
+                self.eventNotifications = g_accountRepository.eventNotifications = updated
                 new = set([ NotificationItem(n) for n in updated ])
                 prev = set([ NotificationItem(n) for n in eventNotifications ])
                 added = new - prev

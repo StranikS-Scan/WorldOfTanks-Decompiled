@@ -22,6 +22,7 @@ class _ChatCooldownManager(RequestCooldownManager):
 
 
 class BWChatProvider(object):
+    __slots__ = ('__weakref__', '__handlers', '__msgFilters', '__coolDown', '__idGen', '__isEnabled', '__queue')
 
     def __init__(self):
         super(BWChatProvider, self).__init__()
@@ -29,25 +30,34 @@ class BWChatProvider(object):
         self.__msgFilters = None
         self.__coolDown = _ChatCooldownManager()
         self.__idGen = SequenceIDGenerator()
+        self.__isEnabled = False
+        self.__queue = []
         return
 
     def clear(self):
         self.__handlers.clear()
 
-    def doAction(self, actionID, args = None, response = False, skipCoolDown = False):
-        player = BigWorld.player()
-        success, reqID = False, 0
-        if player:
-            if self.__coolDown.isInProcess(actionID):
-                if not skipCoolDown:
-                    g_messengerEvents.onErrorReceived(createCoolDownError(actionID))
-            else:
-                if response:
-                    reqID = self.__idGen.next()
-                player.base.messenger_onActionByClient_chat2(actionID, reqID, args or messageArgs())
-                success = True
+    def setEnable(self, value):
+        if self.__isEnabled == value:
+            return
+        self.__isEnabled = value
+        if self.__isEnabled:
+            self.__sendActionsFromQueue()
         else:
-            LOG_ERROR('Player is not defined')
+            self.__queue = []
+
+    def doAction(self, actionID, args = None, response = False, skipCoolDown = False):
+        success, reqID = False, 0
+        if self.__coolDown.isInProcess(actionID):
+            if not skipCoolDown:
+                g_messengerEvents.onErrorReceived(createCoolDownError(actionID))
+        else:
+            if response:
+                reqID = self.__idGen.next()
+            if self.__isEnabled:
+                success = self.__sendAction(actionID, reqID, args)
+            else:
+                success = self.__addActionToQueue(actionID, reqID, args)
         return (success, reqID)
 
     def onActionReceived(self, actionID, reqID, args):
@@ -104,6 +114,29 @@ class BWChatProvider(object):
         if handler in handlers:
             handlers.remove(handler)
 
+    def __sendAction(self, actionID, reqID, args = None):
+        player = BigWorld.player()
+        if player:
+            player.base.messenger_onActionByClient_chat2(actionID, reqID, args or messageArgs())
+            return True
+        else:
+            LOG_ERROR('Player is not defined')
+            return False
+
+    def __addActionToQueue(self, actionID, reqID, args = None):
+        self.__queue.append((actionID, reqID, args))
+        return True
+
+    def __sendActionsFromQueue(self):
+        invokedIDs = set()
+        while self.__queue:
+            actionID, reqID, args = self.__queue.pop()
+            if actionID in invokedIDs:
+                LOG_WARNING('Action is ignored, your must send action after event "showGUI" is invoked', actionID, reqID, args)
+                continue
+            self.__sendAction(actionID, reqID, args)
+            invokedIDs.add(actionID)
+
 
 class ActionsHandler(object):
 
@@ -112,7 +145,7 @@ class ActionsHandler(object):
         self.__provider = weakref.ref(provider)
 
     def clear(self):
-        self._provider = lambda : None
+        self.__provider = lambda : None
 
     def provider(self):
         return self.__provider()

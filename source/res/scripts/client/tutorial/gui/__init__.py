@@ -72,7 +72,7 @@ class GUIProxy(object):
         pass
 
     def showServiceMessage(self, data, msgTypeName):
-        pass
+        return 0
 
     def setItemProps(self, itemRef, props, revert = False):
         pass

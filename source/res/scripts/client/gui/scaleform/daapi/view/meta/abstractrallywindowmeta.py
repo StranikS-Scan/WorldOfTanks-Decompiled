@@ -9,6 +9,9 @@ class AbstractRallyWindowMeta(DAAPIModule):
     def onBrowseRallies(self):
         self._printOverrideError('onBrowseRallies')
 
+    def onBrowseStaticsRallies(self):
+        self._printOverrideError('onBrowseStaticsRallies')
+
     def onCreateRally(self):
         self._printOverrideError('onCreateRally')
 

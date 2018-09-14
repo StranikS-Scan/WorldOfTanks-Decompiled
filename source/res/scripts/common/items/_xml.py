@@ -68,6 +68,14 @@ def readInt(xmlCtx, section, subsectionName, minVal = None, maxVal = None):
     return v
 
 
+def readPositiveInt(xmlCtx, section, subsectionName):
+    return readInt(xmlCtx, section, subsectionName, minVal=1)
+
+
+def readNonNegativeInt(xmlCtx, section, subsectionName):
+    return readInt(xmlCtx, section, subsectionName, minVal=0)
+
+
 def readIntOrNone(xmlCtx, section, subsectionName):
     subsection = section[subsectionName]
     if subsection is None:

@@ -18,6 +18,16 @@ class CrewMeta(DAAPIModule):
     def openPersonalCase(self, value, tabNumber):
         self._printOverrideError('openPersonalCase')
 
+    def onCrewDogMoreInfoClick(self):
+        self._printOverrideError('onCrewDogMoreInfoClick')
+
+    def onCrewDogItemClick(self):
+        self._printOverrideError('onCrewDogItemClick')
+
     def as_tankmenResponseS(self, roles, tankmen):
         if self._isDAAPIInited():
             return self.flashObject.as_tankmenResponse(roles, tankmen)
+
+    def as_dogResponseS(self, dogName):
+        if self._isDAAPIInited():
+            return self.flashObject.as_dogResponse(dogName)

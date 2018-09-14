@@ -4,6 +4,7 @@ import nations
 import constants
 from items import vehicles
 from constants import VEHICLE_CLASS_INDICES
+import fortified_regions, clubs_settings
 _BAD_CLASS_INDEX = 16
 
 class BaseUnitRoster:
@@ -15,6 +16,7 @@ class BaseUnitRoster:
     DEFAULT_SLOT_PACK = None
     MIN_UNIT_POINTS_SUM = 1
     MAX_UNIT_POINTS_SUM = 150
+    MAX_LEGIONARIES_COUNT = 0
 
     def __init__(self, slotDefs = {}, slotCount = None, packedRoster = ''):
         if self.SLOT_TYPE is None:
@@ -106,6 +108,14 @@ class BaseUnitRoster:
 
         return matchDict
 
+    def matchVehicleListByLevel(self, vehTypeCompDescrList):
+        matchList = []
+        for vehTypeCompDescr in vehTypeCompDescrList:
+            if self.checkVehicleLevel(vehTypeCompDescr):
+                matchList.append(vehTypeCompDescr)
+
+        return matchList
+
     def checkVehicle(self, vehTypeCompDescr, unitSlotIdx = None):
         itemTypeIdx, nationIdx, inNationIdx = vehicles.parseIntCompactDescr(vehTypeCompDescr)
         if unitSlotIdx is None:
@@ -139,6 +149,9 @@ class BaseUnitRoster:
         if level < self.SLOT_TYPE.DEFAULT_LEVELS[0] or level > self.SLOT_TYPE.DEFAULT_LEVELS[1]:
             return False
         return True
+
+    def getLegionariesMaxCount(self):
+        return self.MAX_LEGIONARIES_COUNT
 
 
 _DFLT_MASK = 255
@@ -246,38 +259,40 @@ class BaseUnitRosterSlot(object):
             return 'RosterSlot( vehTypeCompDescr=%s ) -- packed:%r' % (self.vehTypeCompDescr, self.pack())
             return
 
+    _VEHICLE_MASKS = '<BHB'
+    _VEHICLE_MASKS_SIZE = struct.calcsize(_VEHICLE_MASKS)
+    _VEHICLE_TYPE = '<BH'
+    _VEHICLE_TYPE_SIZE = struct.calcsize(_VEHICLE_TYPE)
+
     def pack(self):
         if self.vehTypeCompDescr is None:
             level0, level1 = self.levels
             levelMask = level0 - 1 & 15 | (level1 - 1 & 15) << 4
-            return struct.pack('<BHB', self.vehClassMask, self.nationMask, levelMask)
+            return struct.pack(self._VEHICLE_MASKS, self.vehClassMask, self.nationMask, levelMask)
         else:
             return BaseUnitRosterSlot.__EXACT_TYPE_PREFIX + struct.pack('<H', self.vehTypeCompDescr)
             return
 
-    __BHB_SIZE = struct.calcsize('<BHB')
-    __BH_SIZE = struct.calcsize('<BH')
-
     def unpack(self, packed):
         if packed[0] != BaseUnitRosterSlot.__EXACT_TYPE_PREFIX:
             self.vehTypeCompDescr = None
-            self.vehClassMask, self.nationMask, levelMask = struct.unpack_from('<BHB', packed)
+            self.vehClassMask, self.nationMask, levelMask = struct.unpack_from(self._VEHICLE_MASKS, packed)
             level0 = (levelMask & 15) + 1
             level1 = (levelMask >> 4 & 15) + 1
             self.levels = (level0, level1)
-            return packed[self.__BHB_SIZE:]
+            return packed[self._VEHICLE_MASKS_SIZE:]
         else:
             self.__dict__.clear()
             self.vehTypeCompDescr = struct.unpack_from('<H', packed, 1)[0]
-            return packed[self.__BH_SIZE:]
+            return packed[self._VEHICLE_TYPE_SIZE:]
             return
 
     @staticmethod
     def getPackSize(firstByte):
         if firstByte != BaseUnitRosterSlot.__EXACT_TYPE_PREFIX:
-            return BaseUnitRosterSlot.__BHB_SIZE
+            return BaseUnitRosterSlot._VEHICLE_MASKS_SIZE
         else:
-            return BaseUnitRosterSlot.__BH_SIZE
+            return BaseUnitRosterSlot._VEHICLE_TYPE_SIZE
 
     def checkVehicle(self, nationIdx, inNationIdx, vehTypeCompDescr):
         if self.vehTypeCompDescr is not None:
@@ -324,7 +339,13 @@ class RosterSlot10(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (1, 10)
 
 
-class SortieRoster6(BaseUnitRoster):
+class BaseSortieRoster(BaseUnitRoster):
+
+    def getLegionariesMaxCount(self):
+        return fortified_regions.g_cache.maxLegionariesCount
+
+
+class SortieRoster6(BaseSortieRoster):
     MAX_SLOTS = 7
     MAX_EMPTY_SLOTS = 1
     SLOT_TYPE = RosterSlot6
@@ -332,7 +353,7 @@ class SortieRoster6(BaseUnitRoster):
     MAX_UNIT_POINTS_SUM = 42
 
 
-class SortieRoster8(BaseUnitRoster):
+class SortieRoster8(BaseSortieRoster):
     MAX_SLOTS = 10
     MAX_EMPTY_SLOTS = 2
     SLOT_TYPE = RosterSlot8
@@ -340,7 +361,7 @@ class SortieRoster8(BaseUnitRoster):
     MAX_UNIT_POINTS_SUM = 80
 
 
-class SortieRoster10(BaseUnitRoster):
+class SortieRoster10(BaseSortieRoster):
     MAX_SLOTS = 15
     MAX_EMPTY_SLOTS = 3
     SLOT_TYPE = RosterSlot10
@@ -356,9 +377,7 @@ class FortRoster10(BaseUnitRoster):
     MAX_UNIT_POINTS_SUM = 150
 
 
-class ClubRoster10(BaseUnitRoster):
-    MAX_SLOTS = 7
-    MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
-    MAX_UNIT_POINTS_SUM = 70
+class ClubRoster(UnitRoster):
+
+    def getLegionariesMaxCount(self):
+        return clubs_settings.g_cache.maxLegionariesCount

@@ -2,6 +2,7 @@
 import BigWorld
 import Math
 import BattleReplay
+import helpers
 from debug_utils import *
 from functools import partial
 from helpers.EffectsList import EffectsListPlayer
@@ -24,7 +25,7 @@ class StaticSceneBoundEffects(object):
         return
 
     def addNew(self, position, effectsList, keyPoints, callbackOnStop, **args):
-        model = BigWorld.player().newFakeModel()
+        model = helpers.newFakeModel()
         model.position = position
         BigWorld.addModel(model)
         dir = args.get('dir', None)

@@ -4,7 +4,7 @@ import BigWorld
 import GUI
 from adisp import async
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from gui import SystemMessages, g_guiResetters, g_repeatKeyHandlers
+from gui import SystemMessages, g_guiResetters, g_repeatKeyHandlers, GUI_SETTINGS
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -19,12 +19,14 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import GUIEditorEvent, LoadViewEvent
 from gui.shared.utils.key_mapping import getScaleformKey, voidSymbol
 from helpers.i18n import convert, makeString
+from account_helpers.settings_core.SettingsCore import g_settingsCore
+from account_helpers.settings_core import settings_constants
 
 class AppBase(Flash):
 
     def __init__(self):
         self.proxy = weakref.proxy(self)
-        Flash.__init__(self, 'Application.swf', path=SCALEFORM_SWF_PATH_V3)
+        Flash.__init__(self, 'lobby.swf', path=SCALEFORM_SWF_PATH_V3)
 
     def beforeDelete(self):
         super(AppBase, self).beforeDelete()
@@ -330,11 +332,12 @@ class App(ApplicationMeta, AppBase):
         self.__firingsAfterInit.clear()
 
     def onUpdateStage(self):
-        self.as_updateStageS(*GUI.screenResolution()[:2])
+        index = g_settingsCore.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
+        g_settingsCore.options.getSetting('interfaceScale').setSystemValue(index)
 
     def toggleEditor(self):
         if not self.__geShowed:
-            self.as_updateStageS(1024, 768)
+            self.as_updateStageS(1024, 768, 1)
             self.component.movie.x = 320
             self.component.movie.y = 100
             self.fireEvent(LoadViewEvent(VIEW_ALIAS.G_E_INSPECT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)

@@ -2,7 +2,7 @@
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from helpers import i18n
 from messenger.proto.interfaces import IChatError
-from messenger.proto.shared_errors import ClientError, I18nActionID, I18nErrorID
+from messenger.proto.shared_errors import ClientError, I18nActionID, I18nErrorID, ChatBanError
 from messenger.proto.xmpp.extensions import IQHandler
 from messenger.proto.xmpp.extensions.error import StanzaErrorExtension
 from messenger.proto.xmpp.xmpp_constants import CONTACT_ERROR_NAMES, LIMIT_ERROR_NAMES
@@ -85,3 +85,11 @@ def createServerError(pyGlooxTag):
 
 def createServerActionError(actionID, pyGlooxTag):
     return ServerActionError(actionID, IQHandler(StanzaErrorExtension()).handleTag(pyGlooxTag)[1])
+
+
+def createChatBanError(banInfo):
+    error = None
+    item = banInfo.getFirstActiveItem()
+    if item:
+        error = ChatBanError(item.expiresAt, item.reason)
+    return error

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/ViewTypes.py
 __author__ = 'd_trofimov'
 VIEW = 'view'
-LOBBY_SUB = 'lobbySubView'
+LOBBY_SUB = 'subView'
 CURSOR = 'cursor'
 WAITING = 'waiting'
 WINDOW = 'window'

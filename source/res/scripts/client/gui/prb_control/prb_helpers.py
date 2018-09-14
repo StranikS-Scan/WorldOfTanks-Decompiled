@@ -1,35 +1,39 @@
 # Embedded file name: scripts/client/gui/prb_control/prb_helpers.py
-from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.functional.interfaces import IPrbListener, IUnitListener, IPreQueueListener
 from gui.prb_control.functional.interfaces import IGlobalListener
 
 class prbDispatcherProperty(property):
 
     def __get__(self, obj, objType = None):
+        from gui.prb_control.dispatcher import g_prbLoader
         return g_prbLoader.getDispatcher()
 
 
 class prbPeripheriesHandlerProperty(property):
 
     def __get__(self, obj, objType = None):
+        from gui.prb_control.dispatcher import g_prbLoader
         return g_prbLoader.getPeripheriesHandler()
 
 
 class prbInvitesProperty(property):
 
     def __get__(self, obj, objType = None):
+        from gui.prb_control.dispatcher import g_prbLoader
         return g_prbLoader.getInvitesManager()
 
 
 class prbAutoInvitesProperty(property):
 
     def __get__(self, obj, objType = None):
+        from gui.prb_control.dispatcher import g_prbLoader
         return g_prbLoader.getAutoInvitesNotifier()
 
 
 class prbFunctionalProperty(property):
 
     def __get__(self, obj, objType = None):
+        from gui.prb_control.dispatcher import g_prbLoader
         dispatcher = g_prbLoader.getDispatcher()
         functional = None
         if dispatcher is not None:
@@ -40,6 +44,7 @@ class prbFunctionalProperty(property):
 class preQueueFunctionalProperty(property):
 
     def __get__(self, obj, objType = None):
+        from gui.prb_control.dispatcher import g_prbLoader
         dispatcher = g_prbLoader.getDispatcher()
         functional = None
         if dispatcher is not None:
@@ -50,6 +55,7 @@ class preQueueFunctionalProperty(property):
 class unitFunctionalProperty(property):
 
     def __get__(self, obj, objType = None):
+        from gui.prb_control.dispatcher import g_prbLoader
         dispatcher = g_prbLoader.getDispatcher()
         functional = None
         if dispatcher is not None:

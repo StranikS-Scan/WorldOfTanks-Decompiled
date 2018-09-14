@@ -2,7 +2,7 @@
 import BigWorld
 from collections import defaultdict
 from functools import partial
-import gui
+from gui.server_events import g_eventsCache
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from adisp import process
@@ -68,6 +68,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
         game_control.g_instance.igr.onIgrTypeChanged += self.__onIGRTypeChanged
         g_currentVehicle.onChanged += self.__cv_onChanged
         g_hangarSpace.onSpaceCreate += self.__hs_onSpaceCreate
+        g_eventsCache.onSyncCompleted += self.__onEventsCacheSyncCompleted
         vehDescr = None
         vehType = None
         if g_currentVehicle.isPresent():
@@ -112,6 +113,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
         game_control.g_instance.igr.onIgrTypeChanged -= self.__onIGRTypeChanged
         g_currentVehicle.onChanged -= self.__cv_onChanged
         g_hangarSpace.onSpaceCreate -= self.__hs_onSpaceCreate
+        g_eventsCache.onSyncCompleted -= self.__onEventsCacheSyncCompleted
         g_playerEvents.onDossiersResync -= self.__pe_onDossiersResync
         g_clientUpdateManager.removeObjectCallbacks(self)
         CustomizationHelper.clearStoredCustomizationData()
@@ -228,6 +230,9 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
                 self.getCurrentItem(self.__currentSection)
             else:
                 space.locateCameraToPreview()
+
+    def __onEventsCacheSyncCompleted(self):
+        self.__refreshData()
 
     def onGoldUpdate(self, value):
         value = g_itemsCache.items.stats.gold

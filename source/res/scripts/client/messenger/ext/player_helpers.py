@@ -4,6 +4,8 @@ import account_helpers
 from adisp import process
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
+from messenger.m_constants import USER_TAG
+from messenger.proto.entities import ClanInfo
 from messenger.storage import storage_getter
 
 def _getInfo4AccountPlayer():
@@ -74,7 +76,9 @@ class CurrentPlayerHelper(object):
         if dbID:
             if self.usersStorage.getUser(dbID) is None:
                 from messenger.proto.entities import CurrentUserEntity
-                self.usersStorage.addUser(CurrentUserEntity(dbID, name, clanAbbrev))
+                user = CurrentUserEntity(dbID, name, ClanInfo(abbrev=clanAbbrev))
+                user.addTags({USER_TAG.CLAN_MEMBER})
+                self.usersStorage.addUser(user)
         else:
             LOG_ERROR('Current player is not found')
         accountAttrs = yield DeprecatedStatsRequester().getAccountAttrs()
@@ -91,7 +95,7 @@ class CurrentPlayerHelper(object):
         if dbID:
             if user is None:
                 from messenger.proto.entities import CurrentUserEntity
-                self.usersStorage.addUser(CurrentUserEntity(dbID, name, clanAbbrev))
+                self.usersStorage.addUser(CurrentUserEntity(dbID, name, clanInfo=ClanInfo(abbrev=clanAbbrev)))
         else:
             LOG_ERROR('Current player is not found')
         return
@@ -105,8 +109,22 @@ class CurrentPlayerHelper(object):
     def __setAccountAttrs(self, accountAttrs):
         self.playerCtx._setAccountAttrs(accountAttrs)
 
-    def __setClanInfo(self, clanInfo):
+    def __setClanInfo(self, info):
+        if info:
+            length = len(info)
+        else:
+            length = 0
+        if length > 1:
+            abbrev = info[1]
+        else:
+            abbrev = ''
+        if length > 3:
+            role = info[3]
+        else:
+            role = 0
+        clanInfo = ClanInfo(abbrev=abbrev, role=role)
         self.playerCtx._setClanInfo(clanInfo)
         user = self.usersStorage.getUser(getPlayerDatabaseID())
         if user:
-            user.update(clanAbbrev=self.playerCtx.getClanAbbrev())
+            user.update(clanInfo=clanInfo)
+            user.addTags({USER_TAG.CLAN_MEMBER})

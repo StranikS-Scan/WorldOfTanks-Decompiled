@@ -27,7 +27,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
 
 
 class ServerSettingsManager(object):
-    __version = 12
+    __version = 13
     GAME = settings_constants.GAME
     GRAPHICS = settings_constants.GRAPHICS
     SOUND = settings_constants.SOUND
@@ -47,6 +47,7 @@ class ServerSettingsManager(object):
                               GAME.SHOW_VEHICLES_COUNTER: 9,
                               GAME.SHOW_VECTOR_ON_MAP: 10,
                               GAME.SHOW_SECTOR_ON_MAP: 11,
+                              GAME.RECEIVE_FRIENDSHIP_REQUEST: 12,
                               GAME.SNIPER_MODE_STABILIZATION: 13,
                               GAME.DISABLE_BATTLE_CHAT: 28}, offsets={GAME.REPLAY_ENABLED: Offset(14, 49152),
                               GAME.DATE_TIME_MESSAGE_INDEX: Offset(16, 983040),

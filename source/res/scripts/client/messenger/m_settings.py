@@ -101,10 +101,14 @@ class _BattleSettings(object):
         self.lifeTimeRecoveredMessages = 1
 
 
-_UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat'))
+_UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat', 'chatContactsListOnly', 'receiveFriendshipRequest'))
+
+def _makeDefUserPrefs():
+    return _UserPrefs(1, 2, True, False, False, False, False, False, True)
+
 
 class MessengerSettings(object):
-    __slots__ = ('__colorsSchemes', '__messageFormatters', '__eManager', 'lobby', 'battle', 'userPrefs', 'htmlTemplates', 'msgTemplates', 'server', 'onUserPreferencesUpdated', 'onColorsSchemesUpdated')
+    __slots__ = ('__colorsSchemes', '__messageFormatters', '__eManager', '__isUserPrefsInited', 'lobby', 'battle', 'userPrefs', 'htmlTemplates', 'msgTemplates', 'server', 'onUserPreferencesUpdated', 'onColorsSchemesUpdated')
 
     def __init__(self):
         self.__colorsSchemes = {'groups': _ColorScheme(['default']),
@@ -115,7 +119,8 @@ class MessengerSettings(object):
          'battle/receiver': _ColorScheme(['default', 'colorBlind'])}
         self.lobby = _LobbySettings()
         self.battle = _BattleSettings()
-        self.userPrefs = _UserPrefs(1, 2, True, False, False, False, False)
+        self.userPrefs = _makeDefUserPrefs()
+        self.__isUserPrefsInited = False
         self.htmlTemplates = XMLCollection('', '')
         self.msgTemplates = MessageTemplates('', '')
         self.__messageFormatters = {}
@@ -163,8 +168,13 @@ class MessengerSettings(object):
 
         return None
 
+    def resetUserPreferences(self):
+        self.userPrefs = _makeDefUserPrefs()
+        self.__isUserPrefsInited = False
+
     def saveUserPreferences(self, data):
-        if doc_loaders.user_prefs.flush(self, data):
+        if doc_loaders.user_prefs.flush(self, data) or not self.__isUserPrefsInited:
+            self.__isUserPrefsInited = True
             self.onUserPreferencesUpdated()
 
     def __accs_onSettingsChanged(self, diff):

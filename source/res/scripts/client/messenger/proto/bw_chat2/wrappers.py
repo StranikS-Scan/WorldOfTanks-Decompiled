@@ -1,9 +1,10 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/wrappers.py
+from collections import namedtuple
 import types
 import cPickle
 from gui.shared.utils import transport
 from helpers.time_utils import makeLocalServerTime
-from messenger.proto.entities import SharedUserEntity
+from messenger.proto.entities import SharedUserEntity, ClanInfo
 from messenger_common_chat2 import messageArgs
 
 class _MessageVO(object):
@@ -72,7 +73,7 @@ def SearchResultIterator(value):
     for name, dbID, clanAbbrev in result:
         if not name:
             continue
-        yield SharedUserEntity(long(dbID), name=name, clanAbbrev=clanAbbrev)
+        yield SharedUserEntity(long(dbID), name=name, clanInfo=ClanInfo(abbrev=clanAbbrev))
 
 
 class IDataFactory(object):
@@ -109,3 +110,39 @@ class UnitDataFactory(IDataFactory):
 
     def messageVO(self, args):
         return UnitMessageVO(**args)
+
+
+class CHAT_TYPE(object):
+    UNIT = 1
+    ARENA = 2
+    CLUB = 3
+
+
+ChannelProtoData = namedtuple('ChannelProtoData', ('chatType', 'settings'))
+
+def _SetMembersListIterator(members):
+    from messenger.proto.bw_chat2.entities import BWMemberEntity
+    for dbID, nickName in members:
+        yield BWMemberEntity(dbID, nickName)
+
+
+def _RemoveMembersListIterator(members):
+    for dbID, _ in members:
+        yield dbID
+
+
+def getMembersListDelta(value):
+    value = dict(value)
+    if 'int32Arg1' in value:
+        flag = value['int32Arg1']
+    else:
+        flag = 0
+    if 'strArg1' in value:
+        members = cPickle.loads(value['strArg1'])
+    else:
+        members = []
+    if flag in (0, 1):
+        iterator = _SetMembersListIterator(members)
+    else:
+        iterator = _RemoveMembersListIterator(members)
+    return (flag, iterator)

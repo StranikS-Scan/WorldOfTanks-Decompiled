@@ -3,9 +3,9 @@ from collections import namedtuple
 import BigWorld
 import potapov_quests
 from adisp import async
-from gui.shared.utils.requesters import abstract
+from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
-class QuestsProgressRequester(abstract.AbstractSyncDataRequester):
+class QuestsProgressRequester(AbstractSyncDataRequester):
     PotapovQuestProgress = namedtuple('PotapovQuestProgress', ['state',
      'selected',
      'rewards',

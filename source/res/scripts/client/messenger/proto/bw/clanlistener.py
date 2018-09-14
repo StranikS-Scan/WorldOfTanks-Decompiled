@@ -3,9 +3,9 @@ import BigWorld
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from messenger.ext.player_helpers import getPlayerDatabaseID
-from messenger.m_constants import USER_TAG
+from messenger.m_constants import USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.bw.find_criteria import BWClanChannelFindCriteria
-from messenger.proto.entities import CurrentUserEntity, SharedUserEntity
+from messenger.proto.entities import CurrentUserEntity, SharedUserEntity, ClanInfo
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
@@ -69,7 +69,7 @@ class ClanListener(object):
             self.__clanChannel.onMembersListChanged -= self.__ce_onMembersListChanged
             self.__clanChannel = None
             for user in self.usersStorage.getClanMembersIterator():
-                user.update(isOnline=False)
+                user.update(gosBit=-GAME_ONLINE_STATUS.IN_CLAN_CHAT)
 
             g_messengerEvents.users.onClanMembersListChanged()
         return
@@ -80,15 +80,15 @@ class ClanListener(object):
         changed = False
         for user in self.usersStorage.getClanMembersIterator():
             dbID = user.getID()
-            isOnline = user.isOnline()
+            isOnline = user.getGOS() & GAME_ONLINE_STATUS.IN_CLAN_CHAT > 0
             member = getter(dbID)
             if member is not None:
                 if not isOnline:
-                    user.update(isOnline=True)
+                    user.update(gosBit=GAME_ONLINE_STATUS.IN_CLAN_CHAT)
                     events.onUserStatusUpdated(user)
                     changed = True
             elif isOnline:
-                user.update(isOnline=False)
+                user.update(gosBit=-GAME_ONLINE_STATUS.IN_CLAN_CHAT)
                 events.onUserStatusUpdated(user)
                 changed = True
 
@@ -109,11 +109,14 @@ class ClanListener(object):
             getter = lambda dbID: None
         playerID = getPlayerDatabaseID()
         for dbID, (name, roleFlags) in clanMembers.iteritems():
-            isOnline = False if getter(dbID) is None else True
-            if playerID == dbID:
-                user = CurrentUserEntity(dbID, name=name, clanAbbrev=clanAbbrev, clanRole=roleFlags)
+            if getter(dbID) is None:
+                gos = GAME_ONLINE_STATUS.UNDEFINED
             else:
-                user = SharedUserEntity(dbID, name=name, clanAbbrev=clanAbbrev, clanRole=roleFlags, isOnline=isOnline, tags={USER_TAG.CLAN_MEMBER})
+                gos = GAME_ONLINE_STATUS.ONLINE
+            if playerID == dbID:
+                user = CurrentUserEntity(dbID, name=name, clanInfo=ClanInfo(0L, clanAbbrev, roleFlags))
+            else:
+                user = SharedUserEntity(dbID, name=name, clanInfo=ClanInfo(0L, clanAbbrev, roleFlags), gos=gos, tags={USER_TAG.CLAN_MEMBER})
             members.append(user)
 
         self.usersStorage._setClanMembersList(members)
@@ -122,20 +125,20 @@ class ClanListener(object):
         return
 
     def __pc_onClanInfoChanged(self):
-        clanInfo = self.playerCtx.clanInfo
-        hasClanInfo = clanInfo is not None and len(clanInfo) > 0
-        if not self.__initSteps & _INIT_STEPS.CLAN_INFO_RECEIVED and hasClanInfo:
+        clanInfo = self.playerCtx.getClanInfo()
+        if clanInfo:
+            isInClan = clanInfo.isInClan()
+            clanAbbrev = clanInfo.abbrev
+        else:
+            isInClan = False
+            clanAbbrev = ''
+        if not self.__initSteps & _INIT_STEPS.CLAN_INFO_RECEIVED and isInClan:
             self.__initSteps |= _INIT_STEPS.CLAN_INFO_RECEIVED
-        user = self.usersStorage.getUser(getPlayerDatabaseID())
-        if user:
-            user.update(clanRole=self.playerCtx.getClanRole())
-        clanAbbrev = self.playerCtx.getClanAbbrev()
         for user in self.usersStorage.getClanMembersIterator():
-            user.update(clanAbbrev=clanAbbrev)
+            user.update(clanInfo=ClanInfo(abbrev=clanAbbrev))
 
         if self.__initSteps & _INIT_STEPS.LIST_INITED != 0:
             g_messengerEvents.users.onClanMembersListChanged()
-        return
 
     def __ce_onChannelInited(self, channel):
         if self.__channelCriteria.filter(channel):

@@ -345,4 +345,19 @@ class GiveLeadershipCtx(_UnitRequestCtx):
         return _REQUEST_TYPE.GIVE_LEADERSHIP
 
 
-__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx')
+@ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__isRated', 'isRated'), ('getWaitingID', 'waitingID'))
+
+class ChangeRatedUnitCtx(_UnitRequestCtx):
+
+    def __init__(self, isRated, waitingID = ''):
+        super(ChangeRatedUnitCtx, self).__init__(waitingID=waitingID)
+        self.__isRated = isRated
+
+    def getRequestType(self):
+        return prb_settings.REQUEST_TYPE.CHANGE_RATED
+
+    def isRated(self):
+        return self.__isRated
+
+
+__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx')

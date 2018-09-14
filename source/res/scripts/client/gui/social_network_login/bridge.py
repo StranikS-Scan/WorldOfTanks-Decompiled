@@ -1,12 +1,13 @@
 # Embedded file name: scripts/client/gui/social_network_login/Bridge.py
 import base64
-from helpers import i18n
+import socket
 from urllib import urlencode
 import BigWorld
-from ConnectionManager import AUTH_METHODS
-from DataServer import DataServer
 import Settings
 import constants
+from helpers.i18n import makeString as _ms
+from ConnectionManager import AUTH_METHODS
+from DataServer import DataServer
 from gui import GUI_SETTINGS, makeHtmlString
 
 class _SOCIAL_NETWORKS:
@@ -31,28 +32,34 @@ _SOCIAL_NETWORK_TO_DOMAIN_MAPPING = {_SOCIAL_NETWORKS.FACEBOOK: ('Facebook', 'fb
 
 class Bridge(object):
 
+    class __STATUS:
+        OK = 0
+        HTTP_SERVER_ERROR = 1
+        WEB_BROWSER_ERROR = 2
+
     def __init__(self):
         self.__encryptToken = False
         self.__server = None
         self.__userName = None
         self.__token2 = None
+        self.__currentStatus = self.__STATUS.OK
         return
 
     def init(self, serverReceivedDataCallback, encryptToken):
         self.__readToken2FromPreferences()
         self.__readUserFromPreferences()
         self.__encryptToken = encryptToken
-        self.__server = DataServer('SocialNetworkLoginServer', serverReceivedDataCallback, self.__encryptToken)
-        self.__server.start()
+        self.__startDataServer(serverReceivedDataCallback)
 
     def fini(self):
+        self.__token2 = None
+        self.__userName = None
         if self.__server is None:
             return
         else:
             self.__server.stop()
+            self.__server.server_close()
             self.__server = None
-            self.__token2 = None
-            self.__userName = None
             return
 
     @staticmethod
@@ -62,9 +69,12 @@ class Bridge(object):
          'ip': '127.0.0.1'}
 
     def initializeLogin(self, socialNetworkName, rememberMe):
-        baseUrl = self.__getInitialLoginBaseURL(constants.IS_DEVELOPMENT)
-        params = self.__getInitialLoginParams(socialNetworkName, rememberMe)
-        BigWorld.wg_openWebBrowser(baseUrl + '?' + urlencode(params))
+        if self.__currentStatus == self.__STATUS.OK:
+            baseUrl = self.__getInitialLoginBaseURL(constants.IS_DEVELOPMENT)
+            params = self.__getInitialLoginParams(socialNetworkName, rememberMe)
+            if not BigWorld.wg_openWebBrowser(baseUrl + '?' + urlencode(params)):
+                self.__currentStatus = self.__STATUS.WEB_BROWSER_ERROR
+        return self.__currentStatus == self.__STATUS.OK
 
     @staticmethod
     def getAvailableSocialNetworks():
@@ -84,16 +94,16 @@ class Bridge(object):
         return socialNetworks
 
     @staticmethod
-    def getLogoutWarning(socialNetworkName, logoutBoth = True):
+    def getLogoutWarning(socialNetworkName):
         localizationString = '#menu:login/social/warning/SOCIAL_NETWORK_LOGOUT'
         formatter = {'userName': Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('user'),
          'socialNetworkLink': makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': socialNetworkName,
                                'socialNetworkOfficialName': _SOCIAL_NETWORK_TO_DOMAIN_MAPPING[socialNetworkName][0]})}
-        if logoutBoth and socialNetworkName != _SOCIAL_NETWORKS.WGNI:
+        if socialNetworkName != _SOCIAL_NETWORKS.WGNI:
             localizationString += '_BOTH'
             formatter['wargamingNetLink'] = makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': _SOCIAL_NETWORKS.WGNI,
              'socialNetworkOfficialName': _SOCIAL_NETWORK_TO_DOMAIN_MAPPING[_SOCIAL_NETWORKS.WGNI][0]})
-        return makeHtmlString('html_templates:socialNetworkLogin', 'logoutWarning', {'warningMessage': i18n.makeString(localizationString) % formatter})
+        return makeHtmlString('html_templates:socialNetworkLogin', 'logoutWarning', {'warningMessage': _ms(localizationString) % formatter})
 
     @staticmethod
     def getSocialNetworkURL(socialNetworkName):
@@ -122,6 +132,18 @@ class Bridge(object):
             if 'requested_for' in previousLoginParams:
                 del previousLoginParams['requested_for']
             return
+
+    def __startDataServer(self, serverReceivedDataCallback):
+        try:
+            self.__server = DataServer('SocialNetworkLoginServer', serverReceivedDataCallback, self.__encryptToken)
+            self.__server.start()
+        except socket.error:
+            self.__currentStatus = self.__STATUS.HTTP_SERVER_ERROR
+            if self.__server is not None:
+                self.__server.stop()
+                self.__server = None
+
+        return
 
     def __getInitialLoginParams(self, socialNetworkName, rememberMe):
         params = {'game': 'wot',

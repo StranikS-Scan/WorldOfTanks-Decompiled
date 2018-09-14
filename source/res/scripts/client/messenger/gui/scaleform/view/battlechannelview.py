@@ -4,6 +4,7 @@ from gui import makeHtmlString
 from gui.Scaleform.CommandArgsParser import CommandArgsParser
 from gui.Scaleform.windows import UIInterface
 from messenger import g_settings
+from messenger.ext import isBattleChatEnabled
 from messenger.gui.Scaleform import BTMS_COMMANDS
 from messenger.gui.interfaces import IBattleChannelView
 from messenger.m_constants import BATTLE_CHANNEL
@@ -40,18 +41,30 @@ class BattleChannelView(UIInterface, IBattleChannelView):
         channel = controller.getChannel()
         clientID = channel.getClientID()
         self.__controllers[clientID] = weakref.ref(controller)
-        if channel.isJoined():
-            self.__setReceiverToView(clientID, controller)
+        self.updateReceiversData()
 
     def removeController(self, controller):
         self.__controllers.pop(controller.getChannel().getClientID(), None)
         return
 
     def updateReceiversData(self):
+        canBeSetControllers = []
+        canBeSetSquadController = None
         for clientID, ctrlRef in self.__controllers.iteritems():
             controller = ctrlRef()
             if controller and controller.getChannel().isJoined():
-                self.__setReceiverToView(clientID, controller)
+                if controller.getSettings() == BATTLE_CHANNEL.SQUAD and not isBattleChatEnabled():
+                    canBeSetSquadController = (clientID, controller)
+                else:
+                    canBeSetControllers.append((clientID, controller))
+
+        if canBeSetSquadController:
+            self.__setReceiverToView(*canBeSetSquadController)
+        else:
+            for cData in canBeSetControllers:
+                self.__setReceiverToView(*cData)
+
+        return
 
     def updateReceiversLabels(self):
         result = []

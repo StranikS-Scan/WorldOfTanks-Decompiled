@@ -9,6 +9,7 @@ from gui.prb_control.context import prb_ctx
 from gui.prb_control.functional.decorators import vehicleAmmoCheck
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelCarouselEvent
+from gui.shared.utils import showInvitationInWindowsBar
 from helpers import i18n
 from gui import SystemMessages
 from gui.prb_control import getPrebattleRosters, getPrebattleSettings, getPrebattleAutoInvites
@@ -170,6 +171,7 @@ class AutoInvitesNotifier(object):
             if not len(invite.description):
                 continue
             g_eventDispatcher.fireAutoInviteReceived(invite)
+            showInvitationInWindowsBar()
             self.__notified.add(prbID)
 
         if not haveInvites:

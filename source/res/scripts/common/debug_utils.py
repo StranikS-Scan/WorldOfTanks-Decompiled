@@ -4,14 +4,60 @@ import sys
 from functools import wraps
 from warnings import warn_explicit
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_CELLAPP, IS_BASEAPP
+import BigWorld
 _src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
+_g_logMapping = {}
 
 class CriticalError(BaseException):
     pass
 
 
+def init():
+    global _g_logMapping
+    if not IS_CLIENT:
+
+        def splitMessageIntoChunks(prefix, msg, func):
+            if prefix not in ('EXCEPTION', 'CRITICAL'):
+                msg = msg[:8960]
+            blockSize = 1792
+            for m in msg.splitlines(False)[:100]:
+                idx = 0
+                while idx < len(m):
+                    func(prefix, m[idx:idx + blockSize], None)
+                    idx += blockSize
+
+            return
+
+        bwLogTrace = BigWorld.logTrace
+        BigWorld.logTrace = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogTrace)
+        bwLogDebug = BigWorld.logDebug
+        BigWorld.logDebug = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogDebug)
+        bwLogInfo = BigWorld.logInfo
+        BigWorld.logInfo = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogInfo)
+        bwLogNotice = BigWorld.logNotice
+        BigWorld.logNotice = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogNotice)
+        bwLogWarning = BigWorld.logWarning
+        BigWorld.logWarning = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogWarning)
+        bwLogError = BigWorld.logError
+        BigWorld.logError = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogError)
+        bwLogCritical = BigWorld.logCritical
+        BigWorld.logCritical = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogCritical)
+        bwLogHack = BigWorld.logHack
+        BigWorld.logHack = lambda prefix, msg, *args: splitMessageIntoChunks(prefix, msg, bwLogHack)
+    _g_logMapping = {'TRACE': BigWorld.logTrace,
+     'DEBUG': BigWorld.logDebug,
+     'INFO': BigWorld.logInfo,
+     'NOTE': BigWorld.logNotice,
+     'NOTICE': BigWorld.logNotice,
+     'WARNING': BigWorld.logWarning,
+     'ERROR': BigWorld.logError,
+     'CRITICAL': BigWorld.logCritical,
+     'HACK': BigWorld.logHack}
+
+
 def CRITICAL_ERROR(msg, *kargs):
-    print _makeMsgHeader('CRITICAL ERROR', sys._getframe(1)), msg, kargs
+    msg = '{0}:{1}:{2}'.format(_makeMsgHeader(sys._getframe(1)), msg, kargs)
+    BigWorld.logCritical('CRITICAL', msg, None)
     if IS_CLIENT:
         import BigWorld
         BigWorld.quit()
@@ -21,16 +67,18 @@ def CRITICAL_ERROR(msg, *kargs):
         raise CriticalError, msg
     else:
         sys.exit()
+    return
 
 
 def LOG_CURRENT_EXCEPTION():
-    print _makeMsgHeader('EXCEPTION', sys._getframe(1))
-    from traceback import print_exc
-    print_exc()
+    from traceback import format_exc
+    msg = _makeMsgHeader(sys._getframe(1)) + '\n' + format_exc()
+    BigWorld.logError('EXCEPTION', msg, None)
+    return
 
 
 def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
-    print '[%s] (%s, %d):' % ('EXCEPTION', orgSource, orgLineno)
+    sys.stderr.write('[%s] (%s, %d):' % ('EXCEPTION', orgSource, orgLineno))
     from sys import exc_info
     from traceback import format_tb, format_exception_only
     etype, value, tb = exc_info()
@@ -199,30 +247,32 @@ def LOG_UNEXPECTED(msg, *kargs):
 def LOG_WRONG_CLIENT(entity, *kargs):
     if hasattr(entity, 'id'):
         entity = entity.id
-    print _makeMsgHeader('WRONG_CLIENT', sys._getframe(1)), entity, kargs
+    BigWorld.logError('WRONG_CLIENT', ' '.join(map(str, [_makeMsgHeader(sys._getframe(1)), entity, kargs])), None)
+    return
 
 
-def _doLog(s, msg, args):
-    header = _makeMsgHeader(s, sys._getframe(2))
+def _doLog(category, msg, args = None):
+    header = _makeMsgHeader(sys._getframe(2))
+    logFunc = _g_logMapping.get(category, None)
+    if not logFunc:
+        logFunc = BigWorld.logInfo
     if args:
-        print header, msg, args
+        output = ' '.join(map(str, [header, msg, args]))
     else:
-        print header, msg
+        output = ' '.join(map(str, [header, msg]))
+    logFunc(category, output, None)
+    return
+
+
+def _makeMsgHeader(frame):
+    return '(%s, %d):' % (frame.f_code.co_filename, frame.f_lineno)
 
 
 def _doLogFmt(prefix, fmt, *args):
-    msg = _makeMsgHeader(prefix, sys._getframe(2))
+    msg = _makeMsgHeader(sys._getframe(2))
     msg += fmt.format(*args) if args else fmt
-    print msg
-
-
-def _makeMsgHeader(s, frame):
-    filename = frame.f_code.co_filename
-    trim_to, trim_to_len = _src_file_trim_to
-    idx = filename.find(trim_to)
-    if idx != -1:
-        filename = filename[idx + trim_to_len:]
-    return '[%s] (%s, %d):' % (s, filename, frame.f_lineno)
+    BigWorld.logInfo(prefix, msg, None)
+    return
 
 
 def trace(func):
@@ -232,15 +282,9 @@ def trace(func):
 
     @wraps(func)
     def wrapper(*args, **kwds):
-        print '[%s] (%s, %d) call %s:' % ('DEBUG',
-         frame.f_code.co_filename,
-         frame.f_lineno,
-         fname), ':', ', '.join(('%s=%r' % entry for entry in zip(argnames, args) + kwds.items()))
+        BigWorld.logDebug(' '.join('(%s, %d) call %s:' % (frame.f_code.co_filename, frame.f_lineno, fname), ':', ', '.join(('%s=%r' % entry for entry in zip(argnames, args) + kwds.items()))))
         ret = func(*args, **kwds)
-        print '[%s] (%s, %d) return from %s:' % ('DEBUG',
-         frame.f_code.co_filename,
-         frame.f_lineno,
-         fname), ':', repr(ret)
+        BigWorld.logDebug(' '.join('(%s, %d) return from %s:' % (frame.f_code.co_filename, frame.f_lineno, fname), ':', repr(ret)))
         return ret
 
     return wrapper
@@ -351,3 +395,6 @@ def verify(expression):
         raise expression or AssertionError
     except AssertionError:
         LOG_CURRENT_EXCEPTION()
+
+
+init()

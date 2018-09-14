@@ -271,14 +271,15 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.as_setVehicleIGRS(vehicleIgrTimeLeft)
 
     def __updateState(self):
-        enabledInRent = False
+        maintenanceEnabledInRent = True
+        customizationEnabledInRent = False
         if g_currentVehicle.isPresent():
-            enabledInRent = not g_currentVehicle.isDisabledInRent()
+            customizationEnabledInRent = not g_currentVehicle.isDisabledInRent()
             if g_currentVehicle.isPremiumIGR():
                 vehDoss = g_itemsCache.items.getVehicleDossier(g_currentVehicle.item.intCD)
                 battlesCount = 0 if vehDoss is None else vehDoss.getTotalStats().getBattlesCount()
                 if battlesCount == 0:
-                    enabledInRent = not g_currentVehicle.isDisabledInPremIGR() and not g_currentVehicle.isDisabledInRent()
+                    customizationEnabledInRent = maintenanceEnabledInRent = not g_currentVehicle.isDisabledInPremIGR() and not g_currentVehicle.isDisabledInRent()
         isVehicleDisabled = False
         if self.prbDispatcher is not None:
             permission = self.prbDispatcher.getGUIPermissions()
@@ -286,8 +287,8 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
                 isVehicleDisabled = not permission.canChangeVehicle()
         crewEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar()
         carouselEnabled = not isVehicleDisabled
-        maintenanceEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar() and enabledInRent
-        customizationEnabled = g_currentVehicle.isInHangar() and not isVehicleDisabled and not g_currentVehicle.isBroken() and enabledInRent
+        maintenanceEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar() and maintenanceEnabledInRent
+        customizationEnabled = g_currentVehicle.isInHangar() and not isVehicleDisabled and not g_currentVehicle.isBroken() and customizationEnabledInRent
         self.as_setCrewEnabledS(crewEnabled)
         self.as_setCarouselEnabledS(carouselEnabled)
         self.as_setupAmmunitionPanelS(maintenanceEnabled, customizationEnabled)

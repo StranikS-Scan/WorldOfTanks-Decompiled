@@ -1,9 +1,19 @@
 # Embedded file name: scripts/client/messenger/proto/entities.py
 from collections import deque
+from ids_generators import SequenceIDGenerator
 from gui.LobbyContext import g_lobbyContext
-from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG
+from gui.shared.utils.decorators import ReprInjector
+from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG, USER_DEFAULT_NAME_PREFIX, GAME_ONLINE_STATUS
 from messenger.proto.events import ChannelEvents, MemberEvents
 from messenger.storage import storage_getter
+_g_namesGenerator = None
+
+def _generateUserName():
+    global _g_namesGenerator
+    if _g_namesGenerator is None:
+        _g_namesGenerator = SequenceIDGenerator()
+    return '%s %d' % (USER_DEFAULT_NAME_PREFIX, _g_namesGenerator.next())
+
 
 class ChatEntity(object):
     __slots__ = ()
@@ -302,20 +312,58 @@ class MemberEntity(ChatEntity, MemberEvents):
         return g_lobbyContext.getPlayerFullName(self._nickName, pDBID=pDBID, regionCode=g_lobbyContext.getRegionCode(pDBID))
 
 
-class UserEntity(ChatEntity):
-    __slots__ = ('_databaseID', '_name', '_note', '_tags', '_clanAbbrev', '_clanRole')
+@ReprInjector.simple('dbID', 'abbrev', 'role')
 
-    def __init__(self, databaseID, name = 'Unknown', tags = None, clanAbbrev = None, clanRole = 0):
+class ClanInfo(object):
+    __slots__ = ('dbID', 'abbrev', 'role')
+
+    def __init__(self, dbID = 0L, abbrev = '', role = 0):
+        super(ClanInfo, self).__init__()
+        self.dbID = dbID
+        self.abbrev = abbrev
+        self.role = role
+
+    def clear(self):
+        self.dbID = 0L
+        self.abbrev = ''
+        self.role = 0
+
+    def update(self, other):
+        if other.dbID:
+            self.dbID = other.dbID
+        if other.abbrev:
+            self.abbrev = other.abbrev
+        if other.role:
+            self.role = other.role
+
+    def isInClan(self):
+        return self.abbrev and len(self.abbrev) > 0
+
+
+class UserEntity(ChatEntity):
+    __slots__ = ('_databaseID', '_name', '_note', '_tags', '_clanInfo', '_globalRating')
+
+    def __init__(self, databaseID, name = None, tags = None, clanInfo = None, globalRating = -1, note = ''):
         super(UserEntity, self).__init__()
         self._databaseID = databaseID
-        self._name = name
-        self._note = ''
+        self._note = note
         self._tags = tags or set()
-        self._clanAbbrev = clanAbbrev
-        self._clanRole = clanRole
+        self._clanInfo = clanInfo or ClanInfo()
+        self._globalRating = globalRating
+        if globalRating == -1:
+            self._globalRating = 0
+            self._tags.add(USER_TAG.INVALID_RATING)
+        else:
+            self._globalRating = globalRating
+        if name is None:
+            self._name = _generateUserName()
+            self._tags.add(USER_TAG.INVALID_NAME)
+        else:
+            self._name = name
+        return
 
     def __repr__(self):
-        return 'UserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, clanRole={3:n})'.format(self._databaseID, self.getFullName(), self._tags, self._clanRole)
+        return 'UserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, clanInfo={3!r:s}, rating={4:n})'.format(self._databaseID, self.getFullName(), self.getTags(), self._clanInfo, self._globalRating)
 
     def __eq__(self, other):
         return self.getID() == other.getID()
@@ -331,7 +379,7 @@ class UserEntity(ChatEntity):
 
     def getFullName(self, isClan = True, isRegion = True):
         if isClan:
-            clanAbbrev = self._clanAbbrev
+            clanAbbrev = self.getClanAbbrev()
         else:
             clanAbbrev = None
         if isRegion:
@@ -339,6 +387,9 @@ class UserEntity(ChatEntity):
         else:
             pDBID = None
         return g_lobbyContext.getPlayerFullName(self.getName(), clanAbbrev=clanAbbrev, pDBID=pDBID)
+
+    def getGlobalRating(self):
+        return self._globalRating
 
     def getGroups(self):
         return set()
@@ -365,11 +416,17 @@ class UserEntity(ChatEntity):
     def isOnline(self):
         return False
 
+    def getGOS(self):
+        return GAME_ONLINE_STATUS.UNDEFINED
+
+    def getClanInfo(self):
+        return self._clanInfo
+
     def getClanAbbrev(self):
-        return self._clanAbbrev
+        return self._clanInfo.abbrev
 
     def getClanRole(self):
-        return self._clanRole
+        return self._clanInfo.role
 
     def getNote(self):
         return self._note
@@ -386,9 +443,14 @@ class UserEntity(ChatEntity):
     def isMuted(self):
         return USER_TAG.MUTED in self.getTags()
 
+    def hasValidName(self):
+        return USER_TAG.INVALID_NAME not in self._tags
+
+    def hasValidRating(self):
+        return USER_TAG.INVALID_RATING not in self._tags
+
     def setSharedProps(self, other):
-        self._clanAbbrev = other.getClanAbbrev()
-        self._clanRole = other.getClanRole()
+        self.update(clanInfo=other.getClanInfo(), globalRating=other.getGlobalRating(), note=other.getNote())
         tags = USER_TAG.filterSharedTags(other.getTags())
         if tags:
             self.addTags(tags)
@@ -396,67 +458,66 @@ class UserEntity(ChatEntity):
 
     def update(self, **kwargs):
         if 'name' in kwargs:
+            if kwargs['name']:
+                self._tags.discard(USER_TAG.INVALID_NAME)
             self._name = kwargs['name']
         if 'note' in kwargs:
             self._note = kwargs['note']
         if 'tags' in kwargs:
             self._tags = kwargs['tags']
-        if 'clanAbbrev' in kwargs:
-            self._clanAbbrev = kwargs['clanAbbrev']
-        if 'clanRole' in kwargs:
-            self._clanRole = kwargs['clanRole']
-        if 'clanMember' in kwargs:
-            member = kwargs['clanMember']
-            self._name = member.getName()
-            self._clanAbbrev = member.getClanAbbrev()
-            self._clanRole = member.getClanRole()
-            self._tags.add(USER_TAG.CLAN_MEMBER)
-        if 'noClan' in kwargs and kwargs['noClan']:
-            self._clanAbbrev = None
-            self._clanRole = 0
-            self._tags.discard(USER_TAG.CLAN_MEMBER)
-        return
+        if 'globalRating' in kwargs:
+            if kwargs['globalRating'] >= 0:
+                self._tags.discard(USER_TAG.INVALID_RATING)
+            self._globalRating = kwargs['globalRating']
+        if 'clanInfo' in kwargs:
+            clanInfo = kwargs['clanInfo']
+            if clanInfo:
+                self._clanInfo.update(clanInfo)
+            elif USER_TAG.CLAN_MEMBER not in self._tags:
+                self._clanInfo = ClanInfo()
 
     def clear(self):
         self._databaseID = 0
-        self._name = 'Unknown'
+        self._name = None
         self._tags = set()
-        self._clanAbbrev = None
-        self._clanRole = 0
+        self._clanInfo.clear()
+        self._globalRating = -1
         return
 
 
 class SharedUserEntity(UserEntity):
-    __slots__ = ('_isOnline',)
+    __slots__ = ('_gos',)
 
-    def __init__(self, databaseID, name = 'Unknown', tags = None, isOnline = False, clanAbbrev = None, clanRole = 0):
-        super(SharedUserEntity, self).__init__(databaseID, name, tags, clanAbbrev, clanRole)
-        self._tags = tags or set()
-        self._isOnline = isOnline
+    def __init__(self, databaseID, name = None, tags = None, gos = GAME_ONLINE_STATUS.UNDEFINED, clanInfo = None, globalRating = -1, note = ''):
+        super(SharedUserEntity, self).__init__(databaseID, name, tags, clanInfo, globalRating, note)
+        self._gos = gos
 
     def __repr__(self):
-        return 'SharedUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, isOnline={3!r:s}, clanRole={4:n})'.format(self._databaseID, self.getFullName(), self._tags, self._isOnline, self._clanRole)
+        return 'SharedUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, gos={3!r:s}, clanInfo={4!r:s} rating={5:n})'.format(self._databaseID, self.getFullName(), self.getTags(), self._gos, self._clanInfo, self._globalRating)
 
     def isOnline(self):
-        return self._isOnline
+        return self._gos & GAME_ONLINE_STATUS.ONLINE > 0
+
+    def getGOS(self):
+        return self._gos
 
     def update(self, **kwargs):
-        if 'isOnline' in kwargs:
-            self._isOnline = kwargs['isOnline']
+        if 'gosBit' in kwargs:
+            self._gos = GAME_ONLINE_STATUS.update(self._gos, kwargs['gosBit'])
         super(SharedUserEntity, self).update(**kwargs)
 
     def clear(self):
         super(SharedUserEntity, self).clear()
-        self._isOnline = False
+        self._gos = GAME_ONLINE_STATUS.UNDEFINED
 
 
 class CurrentUserEntity(UserEntity):
 
-    def __init__(self, databaseID, name = 'Unknown', clanAbbrev = None, clanRole = 0):
-        super(CurrentUserEntity, self).__init__(databaseID, name=name, clanAbbrev=clanAbbrev, clanRole=clanRole, tags={USER_TAG.CURRENT})
+    def __init__(self, databaseID, name = None, clanInfo = None):
+        super(CurrentUserEntity, self).__init__(databaseID, name=name, clanInfo=clanInfo, tags={USER_TAG.CURRENT})
 
     def __repr__(self):
-        return 'CurrentUserEntity(dbID={0!r:s}, fullName={1:>s}, clanRole={2:n})'.format(self._databaseID, self.getFullName(), self._clanRole)
+        return 'CurrentUserEntity(dbID={0!r:s}, fullName={1:>s}, clanInfo={2!r:s})'.format(self._databaseID, self.getFullName(), self._clanInfo)
 
     def getTags(self):
         tags = super(CurrentUserEntity, self).getTags()

@@ -139,11 +139,7 @@ class LobbyControllers(ControllersCollection):
 class BattleControllers(ControllersCollection):
 
     def __init__(self):
-        if g_settings.server.BW_CHAT2.isEnabled():
-            factories = {PROTO_TYPE.BW_CHAT2: bw_chat2.BattleControllersFactory()}
-        else:
-            factories = {PROTO_TYPE.BW: bw.BattleControllersFactory()}
-        super(BattleControllers, self).__init__(factories)
+        super(BattleControllers, self).__init__({PROTO_TYPE.BW_CHAT2: bw_chat2.BattleControllersFactory()})
 
     def _initController(self, controller):
         controller.activate()

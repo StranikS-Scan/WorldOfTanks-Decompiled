@@ -298,6 +298,7 @@ class SoundGroups(object):
         self.__activeTrack = None
         self.__activeStingerPriority = None
         self.__muffled = False
+        self.__muffledByReplay = False
         PlayerEvents.g_playerEvents.onAccountBecomePlayer += self.reviveSoundSystem
         PlayerEvents.g_playerEvents.onAvatarBecomePlayer += self.reviveSoundSystem
         PlayerEvents.g_playerEvents.onAvatarReady += self.onAvatarReady
@@ -380,12 +381,17 @@ class SoundGroups(object):
             self.setVolume(categoryName, volume, False)
 
     def enableArenaSounds(self, enable):
-        for categoryName in ('voice', 'vehicles', 'effects', 'ambient'):
+        for categoryName in ('vehicles', 'effects', 'ambient'):
+            enable = enable and not self.__muffledByReplay
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
+        volume = 0.0 if not enable else self.__volumeByCategory['voice']
+        self.setVolume('voice', volume, False)
+
     def enableAmbientAndMusic(self, enable):
         for categoryName in ('ambient', 'music'):
+            enable = enable and not self.__muffledByReplay
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
@@ -395,6 +401,7 @@ class SoundGroups(object):
             self.setVolume(categoryName, volume, False)
 
     def enableReplaySounds(self, enable):
+        self.__muffledByReplay = not enable
         for categoryName in ('vehicles', 'effects', 'ambient'):
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
@@ -458,7 +465,10 @@ class SoundGroups(object):
             return
         self.setMasterVolume(self.__masterVolume)
         for categoryName in self.__volumeByCategory.keys():
-            self.setVolume(categoryName, self.__volumeByCategory[categoryName], updatePrefs=False)
+            newVolume = self.__volumeByCategory[categoryName]
+            if self.__muffledByReplay and categoryName in ('vehicles', 'effects', 'ambient'):
+                newVolume = 0.0
+            self.setVolume(categoryName, newVolume, updatePrefs=False)
 
     def muffleFMODVolume(self):
         if not self.__muffled:
@@ -477,14 +487,13 @@ class SoundGroups(object):
         self.__muteCallbackID = BigWorld.callback(0.25, self.__muteByWindowVisibility)
 
     def onAvatarReady(self):
-        import ArenaType
         self.__ceilLess = BigWorld.player().vehicleTypeDescriptor.turret['ceilless']
 
-    def unloadAll(self):
+    def unloadAll(self, path = None):
         FMOD.WG_unloadAll()
         import MusicController
         MusicController.g_musicController.destroy()
-        MusicController.g_musicController.init()
+        MusicController.g_musicController.init(path)
 
     def preloadSoundGroups(self, arenaName):
         self.groupList = []

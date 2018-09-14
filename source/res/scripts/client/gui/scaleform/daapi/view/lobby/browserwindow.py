@@ -21,6 +21,7 @@ class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
         self.__showActionBtn = ctx.get('showActionBtn', True)
         self.__showWaiting = ctx.get('showWaiting', False)
         self.__browserID = ctx.get('browserID')
+        self.__showCloseBtn = ctx.get('showCloseBtn', False)
         self.__browser = game_control.g_instance.browser.getBrowser(self.__browserID)
         raise self.__browser is not None or AssertionError('Cannot find browser for browser window')
         self.__size = ctx.get('size', BROWSER.SIZE)
@@ -56,7 +57,7 @@ class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
     def _populate(self):
         super(BrowserWindow, self)._populate()
         self.as_setBrowserSizeS(*self.__size)
-        self.as_configureS(self.__isDefault, self.__customTitle, self.__showActionBtn)
+        self.as_configureS(self.__isDefault, self.__customTitle, self.__showActionBtn, self.__showCloseBtn)
         self.__browser.onLoadStart += self.__onLoadStart
         self.__browser.onLoadEnd += self.__onLoadEnd
         self.__browser.onNavigate += self.__onNavigate
@@ -105,7 +106,7 @@ class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
             self.__url = event.ctx.get('url')
             self.__customTitle = event.ctx.get('title', self.__customTitle)
             self.__showActionBtn = event.ctx.get('showActionBtn', self.__showActionBtn)
-            self.as_configureS(self.__isDefault, self.__customTitle, self.__showActionBtn)
+            self.as_configureS(self.__isDefault, self.__customTitle, self.__showActionBtn, self.__showCloseBtn)
             if self.__url is not None and self.__url != self.__browser.url:
                 self.__browser.navigate(self.__url)
             else:

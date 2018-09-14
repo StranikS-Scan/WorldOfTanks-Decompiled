@@ -227,26 +227,29 @@ class UnitPermissions(IUnitPermissions):
         return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0 and not self._state.isInIdle()
 
     def canInvokeAutoSearch(self):
-        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0
+        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0 and not self._state.isInArena()
 
     def canStartBattleQueue(self):
         return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0
 
     def canStopBattleQueue(self):
-        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0
+        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0 and not self._state.isInArena()
 
     def canChangeVehicle(self):
-        return self._isCurrentPlayer and not self._isPlayerReady and not self._state.isInQueue()
-
-    def canTakeLeadership(self):
-        return not self._roles & UNIT_ROLE.LEGIONARY > 0
+        return self._isCurrentPlayer and not self._isPlayerReady
 
     def canChangeLeadership(self):
         return self._roles & UNIT_ROLE.CHANGE_LEADERSHIP > 0
 
     def canChangeConsumables(self):
-        return self._roles & UNIT_ROLE.COMMANDER_UPDATES > 0
+        return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0
+
+    def canLead(self):
+        return self._roles & UNIT_ROLE.CAN_LEAD > 0
+
+    def canChangeRated(self):
+        return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0
 
     @classmethod
     def isCreator(cls, roles):
-        return roles & UNIT_ROLE.COMMANDER_UPDATES > 0
+        return roles & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR

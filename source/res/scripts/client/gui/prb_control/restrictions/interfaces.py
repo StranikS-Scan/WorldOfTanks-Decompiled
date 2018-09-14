@@ -103,6 +103,15 @@ class IUnitPermissions(IGUIPermissions):
     def canChangeLeadership(self):
         return False
 
+    def canChangeConsumables(self):
+        return False
+
+    def canLead(self):
+        return False
+
+    def canChangeRated(self):
+        return False
+
     @classmethod
     def isCreator(cls, roles):
         return False

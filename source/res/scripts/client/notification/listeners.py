@@ -1,14 +1,19 @@
 # Embedded file name: scripts/client/notification/listeners.py
+import collections
 import weakref
-import BigWorld
-from debug_utils import LOG_CURRENT_EXCEPTION
+import operator
+from gui.clubs.settings import CLIENT_CLUB_STATE
+from gui.clubs.club_helpers import ClubListener
 from gui.prb_control.prb_helpers import GlobalListener, prbInvitesProperty
+from gui.shared.utils import showInvitationInWindowsBar
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator
-from notification.settings import NOTIFICATION_TYPE
+from notification import tutorial_helper
+from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClubInviteDecorator, ClubAppsDecorator
+from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 
 class _NotificationListener(object):
 
@@ -123,11 +128,11 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
 
     def __onInviteListInited(self):
         if self.prbInvites.getUnreadCount() > 0:
-            self.__notifyClient()
+            showInvitationInWindowsBar()
         self.__addInvites()
 
     def __onInviteListModified(self, added, changed, deleted):
-        self.__notifyClient()
+        showInvitationInWindowsBar()
         model = self._model()
         if model is None:
             return
@@ -146,12 +151,6 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
                     model.updateNotification(NOTIFICATION_TYPE.INVITE, inviteID, invite, True)
 
             return
-
-    def __notifyClient(self):
-        try:
-            BigWorld.WGWindowsNotifier.onInvitation()
-        except AttributeError:
-            LOG_CURRENT_EXCEPTION()
 
     def __addInvites(self):
         model = self._model()
@@ -212,25 +211,21 @@ class FriendshipRqsListener(_NotificationListener):
             else:
                 model.addNotification(FriendshipRequestDecorator(contact))
 
-    def __updateRequest(self, contact, silence = False):
+    def __updateRequest(self, contact):
         model = self._model()
         if model:
             if contact.getProtoType() != PROTO_TYPE.XMPP:
                 return
-            if silence:
-                isStateChanged = False
-            else:
-                isStateChanged, _ = self.proto.contacts.canApproveFriendship(contact)
-            model.updateNotification(NOTIFICATION_TYPE.FRIENDSHIP_RQ, contact.getID(), contact, isStateChanged)
+            model.updateNotification(NOTIFICATION_TYPE.FRIENDSHIP_RQ, contact.getID(), contact, False)
 
-    def __updateRequests(self, silence = False):
+    def __updateRequests(self):
         contacts = self.proto.contacts.getFriendshipRqs()
         for contact in contacts:
-            self.__updateRequest(contact, silence)
+            self.__updateRequest(contact)
 
     def __me_onPluginDisconnected(self, protoType):
         if protoType == PROTO_TYPE.XMPP:
-            self.__updateRequests(True)
+            self.__updateRequests()
 
     def __me_onFriendshipRequestReceived(self, contact):
         self.__setRequest(contact)
@@ -244,6 +239,181 @@ class FriendshipRqsListener(_NotificationListener):
             self.__updateRequests()
 
 
+class ClubsInvitesListener(_NotificationListener, ClubListener):
+
+    def start(self, model):
+        result = super(ClubsInvitesListener, self).start(model)
+        self.startClubListening()
+        self.__addClubInvites()
+        self.__requestMyClub()
+        return result
+
+    def stop(self):
+        self.stopClubListening()
+        super(ClubsInvitesListener, self).stop()
+
+    def onAccountClubStateChanged(self, state):
+        model = self._model()
+        if model and self.clubsState.getStateID() == CLIENT_CLUB_STATE.UNKNOWN:
+            model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_INVITE)
+            model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_APPS)
+        else:
+            self.__requestMyClub()
+
+    def onAccountClubInvitesInited(self, invites):
+        self.__addClubInvites()
+
+    def onAccountClubInvitesChanged(self, added, removed, changed):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            if len(added):
+                showInvitationInWindowsBar()
+            for invite in removed:
+                model.removeNotification(NOTIFICATION_TYPE.CLUB_INVITE, invite.getID())
+
+            for invite in added:
+                model.addNotification(ClubInviteDecorator(invite))
+
+            for invite in changed:
+                model.updateNotification(NOTIFICATION_TYPE.CLUB_INVITE, invite.getID(), invite, True)
+
+            return
+
+    def __requestMyClub(self):
+        self.clubsCtrl.getProfile().requestMyClub(self.__onMyClubReceived)
+
+    def __onMyClubReceived(self, club):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_APPS)
+            if club:
+                limits = self.clubsCtrl.getLimits()
+                if limits.canAcceptApplication(self.clubsCtrl.getProfile(), club).success:
+                    activeApps = club.getApplicants(onlyActive=True)
+                    if not self.clubsCtrl.isAppsNotificationShown() and len(activeApps):
+                        model.addNotification(ClubAppsDecorator(club.getClubDbID(), activeApps))
+                        self.clubsCtrl.markAppsNotificationShown()
+            return
+
+    def __addClubInvites(self):
+        model = self._model()
+        if model is None:
+            return
+        else:
+            model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_INVITE)
+            invites = self.clubsCtrl.getProfile().getInvites().values()
+            invites = sorted(invites, cmp=lambda invite, other: cmp(invite.getTimestamp(), other.getTimestamp()))
+            activeInvites = filter(operator.methodcaller('isActive'), invites)
+            if len(activeInvites):
+                showInvitationInWindowsBar()
+            for invite in invites:
+                model.addNotification(ClubInviteDecorator(invite))
+
+            return
+
+    def __updateClubInvites(self):
+        model = self._model()
+        if model:
+            invites = self.clubsCtrl.getProfile().getInvites().values()
+            for invite in invites:
+                model.updateNotification(NOTIFICATION_TYPE.CLUB_INVITE, invite.getID(), invite, False)
+
+
+class WGNCListener(_NotificationListener):
+
+    def __init__(self):
+        super(WGNCListener, self).__init__()
+        self.__offset = 0
+
+    def start(self, model):
+        result = super(WGNCListener, self).start(model)
+        g_wgncEvents.onItemShowByDefault += self.__onItemShowByDefault
+        g_wgncEvents.onItemShowByAction += self.__onItemShowByAction
+        g_wgncEvents.onItemUpdatedByAction += self.__onItemUpdatedByAction
+        addNotification = model.collection.addItem
+        for notification in g_wgncProvider.getMarkedNots():
+            popUp = notification.getItemByType(wgnc_settings.WGNC_GUI_TYPE.POP_UP)
+            if popUp is None:
+                continue
+            addNotification(WGNCPopUpDecorator(notification.notID, popUp))
+
+        self.__offset = 0.1
+        g_wgncProvider.showNoMarkedNots()
+        g_wgncProvider.setEnabled(True)
+        self.__offset = 0
+        return result
+
+    def stop(self):
+        g_wgncEvents.onItemShowByDefault -= self.__onItemShowByDefault
+        g_wgncEvents.onItemShowByAction -= self.__onItemShowByAction
+        g_wgncEvents.onItemUpdatedByAction -= self.__onItemUpdatedByAction
+        g_wgncProvider.setNotsAsMarked()
+        super(WGNCListener, self).stop()
+
+    def __onItemShowByDefault(self, notID, item):
+        model = self._model()
+        if model and item.getType() == wgnc_settings.WGNC_GUI_TYPE.POP_UP:
+            model.addNotification(WGNCPopUpDecorator(notID, item, self.__offset))
+
+    def __onItemShowByAction(self, notID, target):
+        g_wgncProvider.showNotItemByName(notID, target)
+
+    def __onItemUpdatedByAction(self, notID, item):
+        model = self._model()
+        if model and item.getType() == wgnc_settings.WGNC_GUI_TYPE.POP_UP:
+            model.updateNotification(NOTIFICATION_TYPE.WGNC_POP_UP, notID, item, False)
+
+
+class BattleTutorialListener(_NotificationListener, GlobalListener):
+    _messagesIDs = tutorial_helper.TutorialGlobalStorage(tutorial_helper.TUTORIAL_GLOBAL_VAR.SERVICE_MESSAGES_IDS, [])
+
+    @proto_getter(PROTO_TYPE.BW)
+    def proto(self):
+        return None
+
+    def start(self, model):
+        self.startGlobalListening()
+        return super(BattleTutorialListener, self).start(model)
+
+    def stop(self):
+        super(BattleTutorialListener, self).stop()
+        self.stopGlobalListening()
+
+    def onEnqueued(self):
+        self.__updateBattleResultMessage(True)
+
+    def onDequeued(self):
+        self.__updateBattleResultMessage(False)
+
+    def __updateBattleResultMessage(self, locked):
+        model = self._model()
+        if not model:
+            return
+        else:
+            ids = self._messagesIDs
+            if not isinstance(ids, collections.Iterable):
+                return
+            for messageID in ids:
+                _, formatted, settings = self.proto.serviceChannel.getMessage(messageID)
+                if formatted and settings:
+                    if 'buttonsStates' not in formatted:
+                        return
+                    submit = formatted['buttonsStates'].get('submit')
+                    if submit is None or submit != NOTIFICATION_BUTTON_STATE.HIDDEN:
+                        if locked:
+                            submit = NOTIFICATION_BUTTON_STATE.VISIBLE
+                        else:
+                            submit = NOTIFICATION_BUTTON_STATE.VISIBLE | NOTIFICATION_BUTTON_STATE.ENABLED
+                        formatted['buttonsStates']['submit'] = submit
+                    model.updateNotification(NOTIFICATION_TYPE.MESSAGE, messageID, formatted, False)
+
+            return
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -251,13 +421,22 @@ class NotificationsListeners(_NotificationListener):
         self.__serviceListener = ServiceChannelListener()
         self.__invitesListener = PrbInvitesListener()
         self.__friendshipRqs = FriendshipRqsListener()
+        self.__wgnc = WGNCListener()
+        self.__clubsInvitesListener = ClubsInvitesListener()
+        self.__tutorialListener = BattleTutorialListener()
 
     def start(self, model):
         self.__serviceListener.start(model)
         self.__invitesListener.start(model)
         self.__friendshipRqs.start(model)
+        self.__wgnc.start(model)
+        self.__clubsInvitesListener.start(model)
+        self.__tutorialListener.start(model)
 
     def stop(self):
         self.__serviceListener.stop()
         self.__invitesListener.stop()
         self.__friendshipRqs.stop()
+        self.__wgnc.stop()
+        self.__clubsInvitesListener.stop()
+        self.__tutorialListener.stop()

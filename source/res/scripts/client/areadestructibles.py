@@ -652,7 +652,6 @@ class DestructiblesManager():
                 touchdownCallback = partial(self.__launchFallEffect, chunkID, destrIndex, 'touchdownEffect', fallDirYaw)
             else:
                 touchdownCallback = None
-            fashion.enableModelCompound = False
             initialMatrix = self.__getDestrInitialMatrix(chunkID, destrIndex)
             g_destructiblesAnimator.showFall(self.__spaceID, chunkID, destrIndex, fallDirYaw, pitchConstr, fallSpeed, isAnimate, initialMatrix, touchdownCallback)
             return

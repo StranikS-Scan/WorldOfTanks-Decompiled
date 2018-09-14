@@ -283,6 +283,8 @@ class _WindowsStoredDataManager(object):
         self.__isStarted = True
         self.__loader = WindowsStoredDataLoader(STORED_DATA_REV, STORED_DATA_MAX_LENGTH, DEF_TARGET_MASK)
         mask, records = self.__loader.load()
+        mask |= TARGET_ID.CHAT_MANAGEMENT
+        mask |= TARGET_ID.CHANNEL_CAROUSEL
         self.__targetMask = mask & TARGET_ID.ALL
         for record in records:
             if len(record) < 2:

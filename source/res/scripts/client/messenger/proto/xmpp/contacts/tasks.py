@@ -3,7 +3,7 @@ from collections import defaultdict
 import Event
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto.events import g_messengerEvents
-from messenger.proto.xmpp.gloox_constants import SUBSCRIPTION as _SUB, IQ_TYPE
+from messenger.proto.xmpp.gloox_constants import IQ_TYPE
 from messenger.proto.xmpp.gloox_wrapper import ClientHolder
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA as _LOG_AREA, g_logOutput
 from messenger.storage import storage_getter
@@ -14,6 +14,7 @@ class TASK_RESULT(object):
     CLONE = 2
     REMOVE = 4
     CLEAR = 8
+    CREATE_SEQ = 16
 
 
 class _Task(object):
@@ -110,13 +111,15 @@ class SeqTask(IQTask):
 
 
 class SeqTaskQueue(object):
-    __slots__ = ('__queue', '__wait', '__others', 'onInited')
+    __slots__ = ('__queue', '__wait', '__others', '__multi', '__isSuspend', 'onInited')
 
     def __init__(self):
         super(SeqTaskQueue, self).__init__()
         self.__queue = []
         self.__wait = []
         self.__others = []
+        self.__multi = []
+        self.__isSuspend = False
         self.onInited = Event.Event()
 
     def isInited(self):
@@ -139,9 +142,27 @@ class SeqTaskQueue(object):
         while self.__queue:
             self.__queue.pop().clear()
 
+        while self.__multi:
+            self.__multi.pop().clear()
+
         self.__wait = []
         self.__others = []
         self.onInited.clear()
+
+    def suspend(self):
+        self.__isSuspend = True
+
+    def release(self):
+        if not self.__isSuspend:
+            return
+        self.__isSuspend = False
+        if not self.__isSuspend and not self.__wait:
+            self.onInited()
+
+    def addMultiRq(self, task):
+        raise isinstance(task, SeqTask) or AssertionError('Task must be SeqTask')
+        self.__multi.append(task)
+        task.run()
 
     def sync(self, index, seq):
         if index < len(self.__queue):
@@ -158,6 +179,13 @@ class SeqTaskQueue(object):
                 if not self.__onInited(index) and self.__others:
                     self.__queue[self.__others.pop()].run()
                 break
+        else:
+            for index, task in enumerate(self.__multi[:]):
+                if task.getID() == iqID:
+                    task.handleIQ(iqID, iqType, pyGlooxTag)
+                    result = True
+                    self.__multi.pop(index)
+                    break
 
         return result
 
@@ -167,7 +195,8 @@ class SeqTaskQueue(object):
             return result
         self.__wait.remove(index)
         if not self.__wait:
-            self.onInited()
+            if not self.__isSuspend:
+                self.onInited()
         else:
             self.__queue[self.__wait[0]].run()
             result = True
@@ -191,18 +220,21 @@ class ContactTask(IQTask):
     def clone(self):
         return []
 
+    def createSeqTask(self):
+        return None
+
     def clear(self):
         self._jid = None
         self._name = ''
         super(ContactTask, self).clear()
         return
 
-    def sync(self, name, groups, to, from_):
-        self._doSync(name, groups, to, from_)
+    def sync(self, name, groups, sub = None, clanInfo = None):
+        self._doSync(name, groups, sub, clanInfo)
         self._result = TASK_RESULT.REMOVE
         return self._result
 
-    def _doSync(self, name, groups = None, to = _SUB.OFF, from_ = _SUB.OFF):
+    def _doSync(self, name, groups = None, sub = None, clanInfo = None):
         raise NotImplementedError
 
     def _getUser(self, protoType = PROTO_TYPE.XMPP):
@@ -215,17 +247,19 @@ class ContactTask(IQTask):
 
 
 class ContactTaskQueue(object):
-    __slots__ = ('__queue', '__isSuspend', '__pending')
+    __slots__ = ('__queue', '__isSuspend', '__pending', 'onSeqTaskRequested')
 
     def __init__(self):
         super(ContactTaskQueue, self).__init__()
         self.__queue = defaultdict(list)
         self.__isSuspend = False
         self.__pending = []
+        self.onSeqTaskRequested = Event.Event()
 
     def clear(self):
         self.__isSuspend = True
         self.__pending = []
+        self.onSeqTaskRequested.clear()
         while self.__queue:
             _, tasks = self.__queue.popitem()
             while tasks:
@@ -261,14 +295,14 @@ class ContactTaskQueue(object):
         else:
             self._doRunFirstTask(jid)
 
-    def sync(self, jid, name = '', groups = None, to = _SUB.OFF, from_ = _SUB.OFF, defaultTask = None):
+    def sync(self, jid, name = '', groups = None, sub = None, clanInfo = None, defaultTask = None):
         if not jid.getDatabaseID():
             g_logOutput.error(_LOG_AREA.SYNC, 'JID "{0}" is invalid'.format(jid))
             return
-        generator = self._getSyncGenerator(jid, name, groups, to, from_)
+        generator = self._getSyncGenerator(jid, name, groups, sub, clanInfo)
         if not self._handleTasksResult(jid, generator) and defaultTask:
             task = defaultTask(jid)
-            task.sync(name, groups, to, from_)
+            task.sync(name, groups, sub, clanInfo)
             task.clear()
 
     def setIQ(self, iqID, jid, context):
@@ -290,9 +324,9 @@ class ContactTaskQueue(object):
         for task in self.__queue[jid][:]:
             yield (task.handleIQ(iqID, iqType, pyGlooxTag), task)
 
-    def _getSyncGenerator(self, jid, name, groups, to, from_):
+    def _getSyncGenerator(self, jid, name, groups, sub, clanInfo):
         for task in self.__queue[jid][:]:
-            yield (task.sync(name, groups, to, from_), task)
+            yield (task.sync(name, groups, sub, clanInfo), task)
 
     def _doRunFirstTask(self, jid):
         tasks = self.__queue[jid]
@@ -333,6 +367,10 @@ class ContactTaskQueue(object):
                 if not task.isRunning():
                     toRun.add(task.getJID())
                 continue
+            if result & TASK_RESULT.CREATE_SEQ > 0:
+                seqTask = task.createSeqTask()
+                if seqTask:
+                    self.onSeqTaskRequested(seqTask)
             if result & TASK_RESULT.CLONE > 0:
                 for newTask in task.clone():
                     nextJID = newTask.getJID()

@@ -51,6 +51,7 @@ _QUERY_SIGN_VALIDATORS = {QUERY_SIGN.DATABASE_ID: _validateDatabaseID,
  QUERY_SIGN.GROUP_NAME: _validateGroupName,
  QUERY_SIGN.OPT_GROUP_NAME: _validateOptionalGroupName,
  QUERY_SIGN.NOTE_TEXT: _validateNoteText}
+_QUERY_OPT_SIGNS = (QUERY_SIGN.OPT_GROUP_NAME,)
 
 class local_query(object):
     __slots__ = ('_sign',)
@@ -77,8 +78,15 @@ class local_query(object):
         else:
             data = args[1:]
             if len(self._sign) > len(data):
-                return ClientError(CLIENT_ERROR_ID.WRONG_ARGS)
-            for index, sign in enumerate(self._sign):
+                seq = list(self._sign)
+                while len(seq) > len(data):
+                    sign = seq.pop()
+                    if sign not in _QUERY_OPT_SIGNS:
+                        return ClientError(CLIENT_ERROR_ID.WRONG_ARGS)
+
+            else:
+                seq = self._sign[:]
+            for index, sign in enumerate(seq):
                 if sign in _QUERY_SIGN_VALIDATORS:
                     validator = _QUERY_SIGN_VALIDATORS[sign]
                     if validator and callable(validator):

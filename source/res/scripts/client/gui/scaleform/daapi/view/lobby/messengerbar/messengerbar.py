@@ -21,8 +21,7 @@ class MessengerBar(MessengerBarMeta, AppRef):
          'contactsHtmlIcon': "<img src='img://gui/maps/icons/messenger/iconContacts.png' width='16' height='32' vspace='-11'/>"})
 
     def contactsButtonClick(self):
-        if not self.__manageWindow(MESSENGER_VIEW_ALIAS.CONTACTS_WINDOW):
-            self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.CONTACTS_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        pass
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager

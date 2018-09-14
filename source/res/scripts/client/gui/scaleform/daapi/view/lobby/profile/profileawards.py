@@ -5,6 +5,7 @@ from gui.Scaleform.locale.PROFILE import PROFILE
 from web_stubs import i18n
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.shared.utils.RareAchievementsCache import IMAGE_TYPE
+from gui.shared.gui_items.dossier import dumpDossier
 
 class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
 
@@ -30,7 +31,7 @@ class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
             achievements = targetData.getAchievements(isInDossier=False)
         packedList = []
         for achievementBlockList in achievements:
-            packedList.append(AchievementsUtils.packAchievementList(achievementBlockList, accountDossier, self._userID is None))
+            packedList.append(AchievementsUtils.packAchievementList(achievementBlockList, accountDossier.getDossierType(), dumpDossier(accountDossier), self._userID is None))
 
         self.as_responseDossierS(self._battlesType, {'achievementsList': packedList,
          'totalItemsList': totalItemsList,

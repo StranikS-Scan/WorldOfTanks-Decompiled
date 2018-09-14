@@ -26,3 +26,9 @@ def getVehicleTypeAssetPath(vehicleType, extension = '.png'):
 
 def getNationsAssetPath(nation, namePrefix = '', extension = 'png'):
     return NATIONS_ICON_FILENAME % (NAMES[nation], namePrefix, extension)
+
+
+def getNecessaryArenaFrameName(arenaSubType, hasBase = None):
+    if arenaSubType.startswith('assault'):
+        return '{0}{1}'.format('assault', '1' if hasBase else '2')
+    return arenaSubType

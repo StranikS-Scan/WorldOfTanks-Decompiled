@@ -98,7 +98,7 @@ class FortPermissions(interfaces.IFortPermissions):
         return self._checkPermission(FORT_CLIENT_METHOD.ACTIVATE_CONSUMABLE)
 
     def canReturnConsumable(self):
-        return self._checkPermission(FORT_CLIENT_METHOD.RETURN_CONSUMABLE)
+        return self._checkPermission(FORT_CLIENT_METHOD.DEACTIVATE_CONSUMABLE)
 
     def canViewContext(self):
         return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0

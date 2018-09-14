@@ -203,6 +203,7 @@ class SortiesDataProvider(SortableDAAPIDataProvider, AppRef):
          'creatorName': item.getCommanderFullName(),
          'divisionName': I18N_FORTIFICATIONS.sortie_division_name(item.getDivisionName()),
          'description': self.txtMgr.getText(TextType.STANDARD_TEXT, item.getDescription()),
+         'descriptionForTT': item.getDescription(),
          'isInBattle': isInBattle,
          'division': item.getDivision(),
          'playersCount': item.itemData.count,
@@ -294,25 +295,22 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
         self.__mapping = dict(map(lambda item: (item[1]['clanID'], item[0]), enumerate(self.sortedCollection)))
 
     def _makeVO(self, index, item, favorites):
-        isWarDeclared = False
         timestamp = item.getAvailability()
-        defenceStart, defenceFinish = item.getDefencePeriod()
-        if defenceStart and defenceFinish:
-            defenceTime = '%s - %s' % (BigWorld.wg_getShortTimeFormat(defenceStart), BigWorld.wg_getShortTimeFormat(defenceFinish))
-        else:
-            defenceTime = ''
+        defHour, defMin = item.getDefHourFor(timestamp)
+        defenceStart = time_utils.getTimeForLocal(timestamp, defHour, defMin)
+        defenceFinish = defenceStart + time_utils.ONE_HOUR
+        defenceTime = '%s - %s' % (BigWorld.wg_getShortTimeFormat(defenceStart), BigWorld.wg_getShortTimeFormat(defenceFinish))
         return {'clanID': item.getClanDBID(),
          'levelIcon': '../maps/icons/filters/levels/level_%s.png' % item.getLevel(),
          'clanTag': '[%s]' % item.getClanAbbrev(),
          'defenceTime': defenceTime,
-         'defenceStartTime': item.getLocalDefHour()[0],
+         'defenceStartTime': int('%02d%02d' % (defHour, defMin)),
          'avgBuildingLvl': round(item.getAvgBuildingLevel(), 1),
-         'availabilityDays': timestamp,
          'isFavorite': item.getClanDBID() in favorites,
          'clanLvl': item.getLevel()}
 
 
-class ClanBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
+class FortBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
 
     class DAY_OF_BATTLE(CONST_CONTAINER):
         TODAY = 0
@@ -320,7 +318,7 @@ class ClanBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
         OTHER = 2
 
     def __init__(self):
-        super(ClanBattlesDataProvider, self).__init__()
+        super(FortBattlesDataProvider, self).__init__()
         self._list = []
         self._listMapping = {}
         self._mapping = {}
@@ -413,7 +411,7 @@ class ClanBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
         return self.getSelectedIdx()
 
     def pySortOn(self, fields, order):
-        super(ClanBattlesDataProvider, self).pySortOn(fields, order)
+        super(FortBattlesDataProvider, self).pySortOn(fields, order)
         self._rebuildMapping()
         self.refresh()
 

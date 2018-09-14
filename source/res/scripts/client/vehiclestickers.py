@@ -28,6 +28,8 @@ class SlotTypes():
     PLAYER = 'player'
     INSCRIPTION = 'inscription'
     INSIGNIA_ON_GUN = 'insigniaOnGun'
+    FIXED_EMBLEM = 'fixedEmblem'
+    FIXED_INSCRIPTION = 'fixedInscription'
 
 
 class ModelStickers():
@@ -66,16 +68,24 @@ class ModelStickers():
                 continue
             emblemsDesc = None
             emblemsCache = None
+            emblemID = None
             if slotType == SlotTypes.PLAYER:
                 emblemsDesc = vDesc.playerEmblems[0:2] if onHull else vDesc.playerEmblems[2:]
                 emblemsCache = playerEmblemsCache
             elif slotType == SlotTypes.INSCRIPTION:
                 emblemsDesc = vDesc.playerInscriptions[0:2] if onHull else vDesc.playerInscriptions[2:]
                 emblemsCache = inscriptionsCache
-            if emblemsDesc is None:
+            elif slotType == SlotTypes.FIXED_EMBLEM:
+                emblemsCache = playerEmblemsCache
+                emblemID = slot.emblemId
+            elif slotType == SlotTypes.FIXED_INSCRIPTION:
+                emblemsCache = inscriptionsCache
+                emblemID = slot.emblemId
+            if emblemsDesc is None and emblemID is None:
                 continue
-            descIdx = len(self.__slotsByType[slotType]) - 1
-            emblemID = emblemsDesc[descIdx][0]
+            if emblemID is None:
+                descIdx = len(self.__slotsByType[slotType]) - 1
+                emblemID = emblemsDesc[descIdx][0]
             if emblemID is None:
                 self.__texParamsBySlotType[slotType].append(None)
                 continue
@@ -177,22 +187,22 @@ class ModelStickers():
             return
         else:
             slots = self.__slotsByType[slotType]
-            for idx, (rayStart, rayEnd, rayUp, size, hideIfDamaged, _, isMirrored) in enumerate(slots):
-                if hideIfDamaged and self.__isDamaged or self.__texParamsBySlotType[slotType][idx] is None:
+            for idx, slot in enumerate(slots):
+                if slot.hideIfDamaged and self.__isDamaged or self.__texParamsBySlotType[slotType][idx] is None:
                     continue
                 texName, bumpTexName, isStickerMirrored = self.__texParamsBySlotType[slotType][idx]
                 if texName == '' and slotType != SlotTypes.CLAN:
                     continue
-                sizes = Math.Vector2(size, size)
+                sizes = Math.Vector2(slot.size, slot.size)
                 stickerAttributes = 0
-                if slotType == SlotTypes.INSCRIPTION:
+                if slotType == SlotTypes.INSCRIPTION or slotType == SlotTypes.FIXED_INSCRIPTION:
                     sizes.y *= 0.5
                     stickerAttributes |= StickerAttributes.IS_INSCRIPTION
                 elif slotType == SlotTypes.INSIGNIA_ON_GUN:
                     stickerAttributes |= StickerAttributes.DOUBLESIDED
-                if isMirrored and isStickerMirrored:
+                if slot.isMirrored and isStickerMirrored:
                     stickerAttributes |= StickerAttributes.IS_MIRRORED
-                self.__stickerModel.addSticker(texName, bumpTexName, self.__model, rayStart, rayEnd, sizes, rayUp, stickerAttributes)
+                self.__stickerModel.addSticker(texName, bumpTexName, self.__model, slot.rayStart, slot.rayEnd, sizes, slot.rayUp, stickerAttributes)
 
             return
 
@@ -322,11 +332,18 @@ class VehicleStickers(object):
         textureName = texParams['texName']
         bumpTexName = texParams['bumpTexName']
         sizes = texParams['modelSizes']
+        randomYaw = texParams['randomYaw']
+        sizeVariation = texParams['variation']
+        if sizeVariation > 0.0:
+            randomVariation = random.random() * sizeVariation + 1.0
+            sizes = (sizes[0] * randomVariation, sizes[1] * randomVariation)
         segment = segEnd - segStart
         segLen = segment.lengthSquared
         if segLen != 0:
             segStart -= 0.25 * segment / math.sqrt(segLen)
-        angle = random.random() * math.pi * 2.0
+        angle = 0.0
+        if randomYaw:
+            angle = random.random() * math.pi * 2.0
         rotAxis = 0
         for i in xrange(1, 3):
             if abs(segment[i]) > abs(segment[rotAxis]):

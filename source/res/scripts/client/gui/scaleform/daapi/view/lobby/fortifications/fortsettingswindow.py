@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper imp
 from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.RES_COMMON import RES_COMMON
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.shared import events
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
@@ -166,23 +167,32 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
     def __makeVacationData(self):
         alertMessage = ''
         blockBtnEnabled = True
-        dayAfterVacation = 0
+        daysBeforeVacation = -1
         fort = self.fortCtrl.getFort()
         isVacationEnabled = fort.isVacationEnabled()
         inProcess, inCooldown = fort.getVacationProcessing()
+        _, vacationEnd = fort.getVacationDate()
         blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED
         descriptionTooltip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION
         conditionPostfix = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSWINDOW_BLOCKCONDITION_VACATIONNOTPLANNED))
-        if inProcess:
+        if inProcess or inCooldown:
             blockBtnEnabled = False
-            blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED
-        elif inCooldown:
-            blockBtnEnabled = False
-            dayAfterVacation = fort.getDaysAfterVacation()
-            blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED
+            cooldownEnd = vacationEnd + g_fortCache.vacationCooldownTime
+            if fort.isOnVacation():
+                blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED
+                daysBeforeVacation = time_utils.getTimeDeltaFromNow(cooldownEnd) / time_utils.ONE_DAY
+            elif time_utils.getTimeDeltaFromNow(vacationEnd) != 0:
+                blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLED
+            else:
+                daysBeforeVacation = time_utils.getTimeDeltaFromNow(cooldownEnd) / time_utils.ONE_DAY
+                if daysBeforeVacation == 0:
+                    blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDSBLDLESSADAY
+                    daysBeforeVacation = -1
+                else:
+                    blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNDISABLEDNOTPLANNED
         if isVacationEnabled:
             textColor = TextType.NEUTRAL_TEXT if not fort.isOnVacation() else TextType.SUCCESS_TEXT
-            conditionPostfix = self.app.utilsManager.textManager.getText(textColor, fort.getVacationDateStr())
+            conditionPostfix = self.app.utilsManager.textManager.getText(textColor, fort.getVacationDateTimeStr())
         conditionPrefix = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.settingswindow_blockcondition('vacation')))
         blockDescr = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.settingswindow_blockdescr('vacation')))
         if alertMessage:
@@ -192,7 +202,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
          'blockCondition': conditionPrefix + ' ' + conditionPostfix,
          'alertMessage': alertMessage,
          'blockBtnToolTip': blockBtnToolTip,
-         'dayAfterVacation': dayAfterVacation,
+         'daysBeforeVacation': daysBeforeVacation,
          'descriptionTooltip': descriptionTooltip}
 
     def __updateNotActivatedView(self):

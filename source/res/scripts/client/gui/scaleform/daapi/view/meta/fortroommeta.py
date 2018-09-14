@@ -13,3 +13,7 @@ class FortRoomMeta(BaseRallyRoomView):
     def as_showLegionariesToolTipS(self, isShow):
         if self._isDAAPIInited():
             return self.flashObject.as_showLegionariesToolTip(isShow)
+
+    def as_showOrdersBgS(self, isShow):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showOrdersBg(isShow)

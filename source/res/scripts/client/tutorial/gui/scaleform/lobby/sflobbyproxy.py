@@ -131,14 +131,14 @@ class SfLobbyProxy(GUIProxy, AppRef):
         return
 
     def showServiceMessage(self, data, msgTypeName):
-        msgType = None
+        msgType, messageID = (None, 0)
         if msgTypeName is not None:
             msgType = getattr(SCH_CLIENT_MSG_TYPE, msgTypeName, None)
         if msgType is None:
             LOG_ERROR('Message type not found', msgType)
         if self.proto:
-            self.proto.serviceChannel.pushClientMessage(data, msgType)
-        return
+            messageID = self.proto.serviceChannel.pushClientMessage(data, msgType)
+        return messageID
 
     def isGuiDialogDisplayed(self):
         container = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)

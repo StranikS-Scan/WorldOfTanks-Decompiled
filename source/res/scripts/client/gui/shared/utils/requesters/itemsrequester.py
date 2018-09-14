@@ -119,6 +119,7 @@ class REQ_CRITERIA(object):
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
         IN_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
+        EVENT_VEHICLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
 
     class TANKMAN:
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))

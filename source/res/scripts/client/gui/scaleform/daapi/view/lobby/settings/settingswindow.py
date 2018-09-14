@@ -46,6 +46,8 @@ class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
         g_settingsCore.isDeviseRecreated = False
         g_settingsCore.isChangesConfirmed = True
         isRestart = self.params.apply(settings, restartApproved)
+        if settings_constants.GRAPHICS.INTERFACE_SCALE in settings:
+            self.__updateInterfaceScale()
         if g_settingsCore.isChangesConfirmed and isCloseWnd:
             self.onWindowClose()
         if isRestart:
@@ -183,3 +185,7 @@ class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
                 self.onWindowClose()
 
         DialogsInterface.showI18nConfirmDialog(dialogID, callback)
+
+    def __updateInterfaceScale(self):
+        self.as_setDataS(self.__getSettings())
+        self.as_updateVideoSettingsS(self.params.getMonitorSettings())

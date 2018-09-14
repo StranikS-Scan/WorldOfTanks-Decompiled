@@ -105,14 +105,14 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractW
                 needXp += self.__calcLevelUpCost(tankman, level, tankman.descriptor.lastSkillNumber)
 
             rate = items.shop.freeXPToTManXPRate
-            needXp = self.__roundByModulo(needXp, rate)
-            needXp /= rate
-            self.__selectedXpForConvert = max(1, needXp)
+            roundedNeedXp = self.__roundByModulo(needXp, rate)
+            xpWithDiscount = roundedNeedXp / rate
+            self.__selectedXpForConvert = max(1, xpWithDiscount)
             defaultRate = items.shop.defaults.freeXPToTManXPRate
-            if defaultRate:
-                defaultNeedXp = self.__roundByModulo(needXp, defaultRate)
-                defaultNeedXp /= defaultRate
-                defaultXpForConvert = max(1, defaultNeedXp)
+            if defaultRate and defaultRate != 0:
+                defaultRoundedNeedXp = self.__roundByModulo(needXp, defaultRate)
+                defaultXpWithDiscount = defaultRoundedNeedXp / defaultRate
+                defaultXpForConvert = max(1, defaultXpWithDiscount)
             else:
                 defaultXpForConvert = self.__selectedXpForConvert
             actionPriceData = None

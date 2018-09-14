@@ -5,7 +5,7 @@ from collections import namedtuple
 from adisp import async
 from helpers import int2roman
 from helpers.i18n import makeString as _ms
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages, makeHtmlString
 from gui.server_events import g_eventsCache, formatters, caches, events_dispatcher as quests_events
@@ -323,10 +323,12 @@ class QuestsTileChainsView(QuestsTileChainsViewMeta, AppRef):
             btnInfo = _makeSelectBtn(QUESTS.QUESTTASKDETAILSVIEW_BTNLABEL_REPEAT, TOOLTIPS.PRIVATEQUESTS_ACTIONPANNEL_REPEAT, enabled=isEnabled, descr=descr or _makeSuccess(doneIcon + _ms(QUESTS.QUESTTASKDETAILSVIEW_TASKDESCRIPTION_DONE)))
         else:
             btnInfo = _makeSelectBtn(QUESTS.QUESTTASKDETAILSVIEW_BTNLABEL_BEGIN, TOOLTIPS.PRIVATEQUESTS_ACTIONPANNEL_PERFORM, enabled=isEnabled, descr=descr)
+        mainAwards, addAwards = questInfoData._getBonuses(g_eventsCache.potapov.getQuests().values())
         result = {'taskID': questID,
          'headerText': _getText(TextType.HIGH_TITLE, quest.getUserName()),
          'conditionsText': condition,
-         'awards': questInfoData._getBonuses(g_eventsCache.potapov.getQuests().values())}
+         'mainAwards': mainAwards,
+         'addAwards': addAwards}
         result.update(btnInfo._asdict())
         return result
 

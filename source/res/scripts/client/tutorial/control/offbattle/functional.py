@@ -1,11 +1,14 @@
 # Embedded file name: scripts/client/tutorial/control/offbattle/functional.py
+import collections
 import BigWorld
 import MusicController
 from adisp import process
 from gui import game_control
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.settings import FUNCTIONAL_EXIT
+from tutorial import GlobalStorage
 from tutorial.control import TutorialProxyHolder
+from tutorial.control.context import GLOBAL_VAR
 from tutorial.control.functional import FunctionalEffect
 from tutorial.control.offbattle.context import OffbattleBonusesRequester
 from tutorial.control.offbattle.context import OffBattleClientCtx
@@ -131,6 +134,7 @@ class FunctionalPlayMusicEffect(FunctionalEffect):
 
 
 class FunctionalShowMessage4QueryEffect(FunctionalEffect):
+    _messagesIDs = GlobalStorage(GLOBAL_VAR.SERVICE_MESSAGES_IDS, [])
 
     def triggerEffect(self):
         target = self.getTarget()
@@ -138,7 +142,11 @@ class FunctionalShowMessage4QueryEffect(FunctionalEffect):
             content = {}
             query = self._tutorial._ctrlFactory.createContentQuery(target.getType())
             query.invoke(content, target.getVarRef())
-            self._gui.showServiceMessage(content, target.getExtra())
+            messageID = self._gui.showServiceMessage(content, target.getExtra())
+            if messageID:
+                ids = self._messagesIDs
+                if isinstance(ids, collections.Iterable):
+                    ids.append(messageID)
         else:
             LOG_ERROR('Target not found', self._effect.getTargetID())
         return

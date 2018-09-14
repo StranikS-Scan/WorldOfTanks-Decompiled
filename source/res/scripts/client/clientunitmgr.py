@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/ClientUnitMgr.py
 import cPickle
 from ClientUnit import ClientUnit
-from UnitBase import UnitBase
 import Event
 import constants
 from debug_utils import LOG_DEBUG, LOG_DAN, LOG_CURRENT_EXCEPTION
@@ -168,6 +167,9 @@ class ClientUnitMgr(object):
         if constants.IS_DEVELOPMENT:
             return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, self.id, unitIdx, int(isDevMode))
 
+    def setRatedBattle(self, isRatedBattle = True, unitIdx = 0):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_RATED_BATTLE, self.id, unitIdx, int(isRatedBattle))
+
     def invite(self, accountsToInvite, comment):
         requestID = self.__getNextRequestID()
         LOG_DAN('unit.sendUnitInvites', requestID, accountsToInvite, comment)
@@ -221,20 +223,20 @@ class ClientUnitBrowser(object):
         self.results.clear()
         return
 
-    def subscribe(self, unitTypeFlags = UNIT_BROWSER_TYPE.NOT_RATED_UNITS, vehTypes = [], showOtherLocations = False):
+    def subscribe(self, unitTypeFlags = UNIT_BROWSER_TYPE.NOT_RATED_UNITS, showOtherLocations = False):
         self.results = {}
-        LOG_DAN('unitBrowser.subscribeUnitBrowser', unitTypeFlags, vehTypes, showOtherLocations)
-        self.__account.base.subscribeUnitBrowser(unitTypeFlags, vehTypes, showOtherLocations)
+        LOG_DAN('unitBrowser.subscribeUnitBrowser', unitTypeFlags, showOtherLocations)
+        self.__account.base.subscribeUnitBrowser(unitTypeFlags, showOtherLocations)
 
     def unsubscribe(self):
         self.results = {}
         self.__account.base.unsubscribeUnitBrowser()
         LOG_DAN('unitBrowser.unsubscribeUnitBrowser')
 
-    def recenter(self, targetRating, unitTypeFlags = UNIT_BROWSER_TYPE.NOT_RATED_UNITS, vehTypes = [], showOtherLocations = False):
+    def recenter(self, targetRating, unitTypeFlags = UNIT_BROWSER_TYPE.NOT_RATED_UNITS, showOtherLocations = False):
         self.results = {}
-        LOG_DAN('unitBrowser.recenterUnitBrowser', targetRating, unitTypeFlags, vehTypes, showOtherLocations)
-        self.__account.base.recenterUnitBrowser(targetRating, unitTypeFlags, vehTypes, showOtherLocations)
+        LOG_DAN('unitBrowser.recenterUnitBrowser', targetRating, unitTypeFlags, showOtherLocations)
+        self.__account.base.recenterUnitBrowser(targetRating, unitTypeFlags, showOtherLocations)
 
     def left(self):
         LOG_DAN('unitBrowser.doUnitBrowserCmd', UNIT_BROWSER_CMD.LEFT)

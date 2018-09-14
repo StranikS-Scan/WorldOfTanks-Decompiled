@@ -49,10 +49,12 @@ class PQController(object):
             selectedQuestsIDs = self.__eventsCache.questsProgress.getSelectedPotapovQuestsIDs()
             for qID, quest in self.__quests.iteritems():
                 quest.updateProgress(self.__eventsCache)
-                if freeSlotsCount and quest.isUnlocked() and quest.getID() not in selectedQuestsIDs:
+                if not self.__hasQuestsForSelect and freeSlotsCount and quest.canBeSelected():
                     self.__hasQuestsForSelect = True
-                if quest.needToGetReward():
+                if not self.__hasQuestsForReward and quest.needToGetReward():
                     self.__hasQuestsForReward = True
+                if self.__hasQuestsForSelect and self.__hasQuestsForReward:
+                    break
 
             for tile in self.__tiles.itervalues():
                 tile.updateProgress(self.__eventsCache)

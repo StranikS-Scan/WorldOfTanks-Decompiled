@@ -45,7 +45,7 @@ class VOIPManager(VOIPHandler):
         self.onLeftChannel = Event.Event()
         self.__fsm.onStateChanged += self.__onStateChanged
 
-    @proto_getter(PROTO_TYPE.MIGRATION)
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
         return None
 
@@ -136,13 +136,12 @@ class VOIPManager(VOIPHandler):
     def __enable(self):
         LOG_VOIP_INT('VOIPManager.Enable')
         self.__enabled = True
-        if self.__channel[0] != '':
+        if self.__channel[0] != '' and not self.__user[0]:
             self.__requestCredentials()
 
     def __disable(self):
         LOG_VOIP_INT('VOIPManager.Disable')
         self.__enabled = False
-        self.__clearUser()
 
     def initialize(self, domain):
         LOG_VOIP_INT('VOIPManager.Initialize')
@@ -334,8 +333,6 @@ class VOIPManager(VOIPHandler):
         if self.__needLogginAfterInit:
             self.__fsm.update(self)
             self.__needLogginAfterInit = False
-        else:
-            self.__clearUser()
 
     def __onStateChanged(self, _, newState):
         if newState == STATE.INITIALIZED:

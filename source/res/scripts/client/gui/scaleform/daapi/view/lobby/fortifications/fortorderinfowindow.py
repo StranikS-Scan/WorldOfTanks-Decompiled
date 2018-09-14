@@ -31,7 +31,7 @@ class FortOrderInfoWindow(View, AbstractWindowView, FortOrderInfoWindowMeta, App
         self.as_setWindowDataS({'windowTitle': self.__order.userName,
          'panelTitle': text_styles.middleTitle('#fortifications:fortConsumableOrder/battleParams'),
          'orderDescrTitle': text_styles.middleTitle('#fortifications:fortConsumableOrder/titleDescr'),
-         'btnLbl': _ms('#fortifications:FortDirectionsWindow/button/closeDirection'),
+         'btnLbl': _ms('#fortifications:Orders/orderPopover/closeButton'),
          'orderDescrBody': text_styles.main(self.__order.getOperationDescription())})
         fmtLvl = text_styles.main(_ms('#fortifications:fortConsumableOrder/params/level_lbl', level=fort_formatters.getTextLevel(self.__order.level)))
         self.as_setDynPropertiesS({'orderIcon': self.__order.icon,

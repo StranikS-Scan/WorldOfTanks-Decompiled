@@ -121,14 +121,18 @@ class _FortController(IFortController):
             return
 
     def subscribe(self, callback = None):
+
+        def _doRequest():
+            LOG_DEBUG('Fort request to subscribe')
+            result = self._requester.doRequestEx(FortRequestCtx(), callback, 'subscribe')
+            if result:
+                self._waiters[FORT_REQUEST_TYPE.SUBSCRIBE] = BigWorld.callback(self._TIME_OUT, self._onTimeout)
+                self._cooldown.process(FORT_REQUEST_TYPE.SUBSCRIBE)
+
         if self._cooldown.validate(FORT_REQUEST_TYPE.SUBSCRIBE):
-            if callback:
-                callback(False)
-        LOG_DEBUG('Fort request to subscribe')
-        result = self._requester.doRequestEx(FortRequestCtx(), callback, 'subscribe')
-        if result:
-            self._waiters[FORT_REQUEST_TYPE.SUBSCRIBE] = BigWorld.callback(self._TIME_OUT, self._onTimeout)
-            self._cooldown.process(FORT_REQUEST_TYPE.SUBSCRIBE)
+            BigWorld.callback(self._cooldown.getTime(FORT_REQUEST_TYPE.SUBSCRIBE), _doRequest)
+        else:
+            _doRequest()
 
     def unsubscribe(self, callback = None):
         LOG_DEBUG('Fort request to unsubscribe')
@@ -839,8 +843,8 @@ class FortController(_FortController):
     def __fort_onEmergencyRestore(self):
         self.stopProcessing()
 
-    def __fort_onConsumablesChanged(self, battleID, consumableOrderTypeID):
-        self._listeners.notify('onConsumablesChanged', battleID, consumableOrderTypeID)
+    def __fort_onConsumablesChanged(self, unitMgrID):
+        self._listeners.notify('onConsumablesChanged', unitMgrID)
 
 
 def createInitial():

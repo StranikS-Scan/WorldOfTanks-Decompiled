@@ -15,11 +15,11 @@ class StaticFormationStaffViewMeta(DAAPIModule):
     def removeMember(self, id, userName):
         self._printOverrideError('removeMember')
 
-    def promoteMember(self, id, userName):
-        self._printOverrideError('promoteMember')
+    def assignOfficer(self, id, userName):
+        self._printOverrideError('assignOfficer')
 
-    def demoteMember(self, id, userName):
-        self._printOverrideError('demoteMember')
+    def assignPrivate(self, id, userName):
+        self._printOverrideError('assignPrivate')
 
     def as_setStaticHeaderDataS(self, data):
         if self._isDAAPIInited():

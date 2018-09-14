@@ -19,9 +19,11 @@ class BaseContactView(BaseContactViewMeta):
 
     def _getInitDataObject(self):
         LOG_ERROR('this method have to be overridden!')
-        return self._getDefaultInitData('', '', '')
+        return self._getDefaultInitData('', '', '', '', '')
 
-    def _getDefaultInitData(self, mainLbl, btOkLbl, btnCancelLbl):
+    def _getDefaultInitData(self, mainLbl, btOkLbl, btnCancelLbl, btOkTooltip, btnCancelTooltip):
         return {'btOkLbl': btOkLbl,
          'btnCancelLbl': btnCancelLbl,
-         'mainLbl': mainLbl}
+         'mainLbl': mainLbl,
+         'btOkTooltip': btOkTooltip,
+         'btnCancelTooltip': btnCancelTooltip}

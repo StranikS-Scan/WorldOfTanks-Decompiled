@@ -96,4 +96,5 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6},
  'duelist': {'minKills': 2},
  'bonecrusher': {'minCrits': 5},
  'charmed': {'minVehs': 4},
- 'tacticalAdvantage': {'maxLevel': 7}}
+ 'tacticalAdvantage': {'maxLevel': 7},
+ 'secretOperations': {'minGroupLen': 2}}

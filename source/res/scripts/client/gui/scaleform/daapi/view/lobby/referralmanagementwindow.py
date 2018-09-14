@@ -123,7 +123,13 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
                 xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
                 icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(xpIcon, 16, 16, -3, 0))
                 bonus, timeLeft = item.getBonus()
-                multiplier = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
+                if bonus == 1:
+                    multiplier = '-'
+                    multiplierTooltip = TOOLTIPS.REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1
+                    icon = ''
+                else:
+                    multiplier = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
+                    multiplierTooltip = ''
                 if timeLeft:
                     multiplierTime = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(item.getBonusTimeLeftStr()))
                     expMultiplierText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
@@ -147,6 +153,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
              'referralVO': referralData,
              'exp': BigWorld.wg_getNiceNumberFormat(item.getXPPool()),
              'multiplier': multiplierStr,
+             'multiplierTooltip': multiplierTooltip,
              'btnEnabled': btnEnabled,
              'btnTooltip': btnTooltip})
 

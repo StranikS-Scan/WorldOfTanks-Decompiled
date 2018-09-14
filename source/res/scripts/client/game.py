@@ -3,6 +3,7 @@ import cPickle
 import zlib
 import sys
 import asyncore
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
 import AreaDestructibles
 import BigWorld
 import constants
@@ -10,7 +11,6 @@ import CommandMapping
 import ResMgr
 from post_processing import g_postProcessing
 from ConnectionManager import connectionManager
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 import GUI
 from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
 from gui.Scaleform.GameLoading import GameLoading
@@ -59,7 +59,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
     try:
         if constants.IS_DEVELOPMENT:
             autoFlushPythonLog()
-        LOG_DEBUG('init')
         BigWorld.wg_initCustomSettings()
         Settings.g_instance = Settings.Settings(scriptConfig, engineConfig, userPreferences)
         CommandMapping.g_instance = CommandMapping.CommandMapping()
@@ -92,6 +91,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
         dossiers2.init()
         import fortified_regions
         fortified_regions.init()
+        import clubs_settings
+        clubs_settings.init()
         import potapov_quests
         potapov_quests.init()
         BigWorld.worldDrawEnabled(False)
@@ -229,6 +230,7 @@ def fini():
             MusicController.g_musicController.destroy()
         if TriggersManager.g_manager is not None:
             TriggersManager.g_manager.destroy()
+            TriggersManager.g_manager = None
         if RSSDownloader.g_downloader is not None:
             RSSDownloader.g_downloader.destroy()
         connectionManager.onConnected -= onConnected
@@ -272,11 +274,10 @@ def fini():
 
 
 def onChangeEnvironments(inside):
-    LOG_DEBUG('onChangeEnvironments')
+    pass
 
 
 def onRecreateDevice():
-    LOG_DEBUG('onRecreateDevice')
     gui_personality.onRecreateDevice()
 
 
@@ -308,8 +309,8 @@ def onConnected():
 
 
 def onGeometryMapped(spaceID, path):
-    SoundGroups.g_instance.unloadAll()
-    sys.stderr.write('[SPACE] Loading space: ' + path + '\n')
+    SoundGroups.g_instance.unloadAll(path)
+    LOG_NOTE('[SPACE] Loading space: ' + path)
     SoundGroups.g_instance.preloadSoundGroups(path.split('/')[-1])
 
 
@@ -318,6 +319,11 @@ def onDisconnected():
     VOIP.getVOIPManager().logout()
     VOIP.getVOIPManager().onDisconnected()
     VoiceChatInterface.g_instance.reset()
+
+
+def onCameraChange(oldCamera):
+    BigWorld.clearTextureStreamingViewpoints()
+    BigWorld.registerTextureStreamingViewpoint(BigWorld.camera(), BigWorld.projection())
 
 
 def handleCharEvent(char, key, mods):
@@ -332,10 +338,12 @@ def handleAxisEvent(event):
 
 
 def handleKeyEvent(event):
-    isDown, key, mods, isRepeat = convertKeyEvent(event)
-    if WebBrowser.g_mgr.handleKeyEvent(event):
+    if OfflineMode.handleKeyEvent(event):
         return True
     else:
+        isDown, key, mods, isRepeat = convertKeyEvent(event)
+        if WebBrowser.g_mgr.handleKeyEvent(event):
+            return True
         if g_replayCtrl.isPlaying:
             if g_replayCtrl.handleKeyEvent(isDown, key, mods, isRepeat, event):
                 return True
@@ -372,17 +380,19 @@ def handleKeyEvent(event):
 
 
 def handleMouseEvent(event):
-    dx, dy, dz, cursorPos = convertMouseEvent(event)
-    if constants.IS_CAT_LOADED:
-        import Cat
-        if Cat.handleMouseEvent(dx, dy, dz):
-            return True
-    if g_replayCtrl.isPlaying:
-        if g_replayCtrl.handleMouseEvent(dx, dy, dz):
-            return True
-    if GUI.handleMouseEvent(event):
+    if OfflineMode.handleMouseEvent(event):
         return True
     else:
+        dx, dy, dz, cursorPos = convertMouseEvent(event)
+        if constants.IS_CAT_LOADED:
+            import Cat
+            if Cat.handleMouseEvent(dx, dy, dz):
+                return True
+        if g_replayCtrl.isPlaying:
+            if g_replayCtrl.handleMouseEvent(dx, dy, dz):
+                return True
+        if GUI.handleMouseEvent(event):
+            return True
         inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
         if inputHandler is not None:
             if inputHandler.handleMouseEvent(dx, dy, dz):

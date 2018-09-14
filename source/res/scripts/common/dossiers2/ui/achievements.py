@@ -19,7 +19,9 @@ class ACHIEVEMENT_BLOCK:
     RARE = 'rareAchievements'
     FORT = 'fortAchievements'
     SINGLE = 'singleAchievements'
+    SINGLE_7X7 = 'singleAchievementsRated7x7'
     CLAN = 'clanAchievements'
+    RATED_7X7 = 'achievementsRated7x7'
     ALL = (CLIENT,
      TOTAL,
      TEAM_7X7,
@@ -28,14 +30,17 @@ class ACHIEVEMENT_BLOCK:
      RARE,
      FORT,
      SINGLE,
-     CLAN)
+     CLAN,
+     RATED_7X7,
+     SINGLE_7X7)
 
 
 class ACHIEVEMENT_MODE:
     RANDOM = 1
     TEAM_7X7 = 2
     HISTORICAL = 4
-    ALL = RANDOM | TEAM_7X7 | HISTORICAL
+    RATED_7X7 = 8
+    ALL = RANDOM | TEAM_7X7 | HISTORICAL | RATED_7X7
 
 
 class ACHIEVEMENT_TYPE:
@@ -85,6 +90,7 @@ MARK_ON_GUN_RECORD = (_AB.TOTAL, 'marksOnGun')
 _MODE_CONVERTER = {'random': ACHIEVEMENT_MODE.RANDOM,
  '7x7': ACHIEVEMENT_MODE.TEAM_7X7,
  'historical': ACHIEVEMENT_MODE.HISTORICAL,
+ 'rated7x7': ACHIEVEMENT_MODE.RATED_7X7,
  'all': ACHIEVEMENT_MODE.ALL}
 ACHIEVEMENTS = {}
 ACHIEVEMENT_SECTIONS_ORDER = (_AS.BATTLE,

@@ -5,9 +5,10 @@ from messenger.proto.interfaces import IProtoPlugin
 from messenger.proto.xmpp.logger import LogHandler
 from messenger.proto.xmpp.connection import ConnectionHandler
 from messenger.proto.xmpp.gloox_wrapper import ClientDecorator
+from messenger.proto.xmpp.spa_requesters import NicknameResolver
 
 class XmppPlugin(IProtoPlugin):
-    __slots__ = ('__client', '__contacts', '__connection', '__logger', '__messages', '__isClientInited')
+    __slots__ = ('__client', '__contacts', '__connection', '__logger', '__messages', '__isClientInited', '__nicknameResolver')
 
     def __init__(self):
         self.__client = ClientDecorator()
@@ -15,6 +16,7 @@ class XmppPlugin(IProtoPlugin):
         self.__connection = ConnectionHandler()
         self.__messages = MessagesManager()
         self.__logger = LogHandler()
+        self.__nicknameResolver = NicknameResolver()
         self.__isClientInited = False
 
     def __repr__(self):
@@ -39,6 +41,10 @@ class XmppPlugin(IProtoPlugin):
     def messages(self):
         return self.__messages
 
+    @property
+    def nicknames(self):
+        return self.__nicknameResolver
+
     def isConnected(self):
         return self.__client.isConnected()
 
@@ -50,6 +56,7 @@ class XmppPlugin(IProtoPlugin):
         self.__contacts.clear()
         self.__messages.clear()
         self.__logger.clear()
+        self.__nicknameResolver.clear()
 
     def connect(self, scope):
         self.__contacts.switch(scope)
@@ -69,6 +76,7 @@ class XmppPlugin(IProtoPlugin):
             self.__finiClientEnv()
             self.__connection.clear()
             self.__logger.clear()
+            self.__nicknameResolver.clear()
 
     def setFilters(self, msgFilterChain):
         if self.__messages:
@@ -80,10 +88,12 @@ class XmppPlugin(IProtoPlugin):
         self.__contacts.registerHandlers()
         self.__messages.registerHandlers()
         self.__logger.registerHandlers()
+        self.__nicknameResolver.registerHandlers()
 
     def __finiClientEnv(self):
         self.__connection.unregisterHandlers()
         self.__contacts.unregisterHandlers()
         self.__messages.unregisterHandlers()
         self.__logger.unregisterHandlers()
+        self.__nicknameResolver.unregisterHandlers()
         self.__client.fini()

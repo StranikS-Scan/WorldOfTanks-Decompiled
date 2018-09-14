@@ -8,7 +8,6 @@ from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SequenceIDLoader, PackageBusinessHandler
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowDialogEvent, LoginEventEx, LoginCreateEvent
@@ -56,6 +55,7 @@ class BusinessHandler(SequenceIDLoader):
          VIEW_ALIAS.VEHICLE_BUY_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.NOTIFICATIONS_LIST: (self.__showViewSimple,),
          VIEW_ALIAS.CREW_OPERATIONS_POPOVER: (self.__showViewSimple,),
+         VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          FORTIFICATION_ALIASES.FORT_BUILDING_CARD_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_ORDER_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS: (self.__showViewSimple,),
@@ -69,7 +69,6 @@ class BusinessHandler(SequenceIDLoader):
          FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_ALIAS: (self.__showViewSimple,),
-         CYBER_SPORT_ALIASES.LEGIONARIES_FILTER_POPOVER_PY: (self.__showViewSimple,),
          VIEW_ALIAS.AWARD_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.RETRAIN_CREW: (self.__showViewSimple,),
@@ -94,7 +93,6 @@ class BusinessHandler(SequenceIDLoader):
          ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_DESTROY_DEVICE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_CONFIRM_MODULE: (self.__dlgsHdlr,),
-         ShowDialogEvent.SHOW_EXCHANGE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_CAPTCHA_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: (self.__dlgsHdlr,),

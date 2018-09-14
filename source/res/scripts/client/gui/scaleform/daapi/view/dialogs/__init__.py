@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/__init__.py
 import BigWorld
 import Event
-from debug_utils import LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import i18n, time_utils
 from gui import makeHtmlString
@@ -13,6 +12,10 @@ I18N_TITLE_KEY = '{0:>s}/title'
 I18N_MESSAGE_KEY = '{0:>s}/message'
 I18N_CANCEL_KEY = '{0:>s}/cancel'
 I18N_SUBMIT_KEY = '{0:>s}/submit'
+
+def _getDialogStr(i18nKey):
+    return '#dialogs:%s' % i18nKey
+
 
 class DIALOG_BUTTON_ID(object):
     SUBMIT = 'submit'
@@ -83,7 +86,7 @@ class I18nInfoDialogButtons(ISimpleDialogButtonsMeta):
 
     def getLabels(self):
         return [{'id': DIALOG_BUTTON_ID.CLOSE,
-          'label': DIALOGS.all(I18N_CANCEL_KEY.format(self._i18nKey)),
+          'label': _getDialogStr(I18N_CANCEL_KEY.format(self._i18nKey)),
           'focused': True}]
 
 
@@ -95,7 +98,7 @@ class I18nConfirmDialogButtons(I18nInfoDialogButtons):
         self._focusedIndex = focusedIndex
 
     def getLabels(self):
-        return [self.__getButtonInfoObject(DIALOG_BUTTON_ID.SUBMIT, DIALOGS.all(I18N_SUBMIT_KEY.format(self._i18nKey)), self._focusedIndex == DIALOG_BUTTON_ID.SUBMIT if self._focusedIndex is not None else True), self.__getButtonInfoObject(DIALOG_BUTTON_ID.CLOSE, DIALOGS.all(I18N_CANCEL_KEY.format(self._i18nKey)), self._focusedIndex == DIALOG_BUTTON_ID.CLOSE if self._focusedIndex is not None else False)]
+        return [self.__getButtonInfoObject(DIALOG_BUTTON_ID.SUBMIT, _getDialogStr(I18N_SUBMIT_KEY.format(self._i18nKey)), self._focusedIndex == DIALOG_BUTTON_ID.SUBMIT if self._focusedIndex is not None else True), self.__getButtonInfoObject(DIALOG_BUTTON_ID.CLOSE, _getDialogStr(I18N_CANCEL_KEY.format(self._i18nKey)), self._focusedIndex == DIALOG_BUTTON_ID.CLOSE if self._focusedIndex is not None else False)]
 
     def __getButtonInfoObject(self, id, label, focused):
         return {'id': id,
@@ -180,7 +183,7 @@ class I18nDialogMeta(SimpleDialogMeta):
         return result
 
     def _makeString(self, key, ctx):
-        return i18n.makeString(DIALOGS.all(key), **ctx)
+        return i18n.makeString(_getDialogStr(key), **ctx)
 
     def getViewScopeType(self):
         if self._meta is not None:

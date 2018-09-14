@@ -55,6 +55,7 @@ class ConfirmExchangeDialog(AbstractWindowView, View, ConfirmExchangeDialogMeta,
     def __removeMeta(self):
         if self.meta is not None:
             self.meta.onInvalidate -= self.__prepareAndSendData
+            self.meta.onCloseDialog -= self.onWindowClose
             self.meta.destroy()
             self.meta = None
         return
@@ -62,6 +63,7 @@ class ConfirmExchangeDialog(AbstractWindowView, View, ConfirmExchangeDialogMeta,
     def __setMeta(self, meta):
         self.meta = meta
         self.meta.onInvalidate += self.__prepareAndSendData
+        self.meta.onCloseDialog += self.onWindowClose
 
     def __prepareAndSendData(self, *args):
         self.as_updateS(self.meta.makeVO())

@@ -1,24 +1,24 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/entities.py
 from collections import deque
-from messenger.m_constants import PROTO_TYPE, USER_TAG, MESSAGES_HISTORY_MAX_LEN
+from messenger.m_constants import PROTO_TYPE, USER_TAG, MESSAGES_HISTORY_MAX_LEN, GAME_ONLINE_STATUS
 from messenger.proto.entities import UserEntity, ChannelEntity, MemberEntity
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE
 from messenger.proto.xmpp.wrappers import XMPPChannelData
 from messenger.proto.xmpp.xmpp_items import createItem
 
 class XMPPUserEntity(UserEntity):
-    __slots__ = ('_item', '_isOnlineInBW')
+    __slots__ = ('_item', '_gos')
 
-    def __init__(self, databaseID, name = 'Unknown', tags = None, clanAbbrev = None, clanRole = 0, item = None):
-        super(XMPPUserEntity, self).__init__(databaseID, name, tags, clanAbbrev, clanRole)
+    def __init__(self, databaseID, name = None, tags = None, clanInfo = None, item = None):
+        super(XMPPUserEntity, self).__init__(databaseID, name, tags, clanInfo)
         self._item = item or createItem(databaseID)
-        self._isOnlineInBW = False
+        self._gos = GAME_ONLINE_STATUS.UNDEFINED
 
     def __repr__(self):
-        return 'XMPPUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, item={3!r:s}, isOnline={4!r:s}, clanRole={5:n})'.format(self._databaseID, self.getFullName(), self.getTags(), self._item, self.isOnline(), self._clanRole)
+        return 'XMPPUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, item={3!r:s}, isOnline={4!r:s}, clanInfo={5!r:s})'.format(self._databaseID, self.getFullName(), self.getTags(), self._item, self.isOnline(), self._clanInfo)
 
     def clear(self):
-        self._isOnlineInBW = False
+        self._gos = GAME_ONLINE_STATUS.UNDEFINED
         super(XMPPUserEntity, self).clear()
 
     def getPersistentState(self):
@@ -48,8 +48,8 @@ class XMPPUserEntity(UserEntity):
                 self.update(name=other.getName(), item=other.getItem())
             elif USER_TAG.CACHED in other.getTags() and other.isMuted():
                 self.addTags({USER_TAG.MUTED})
-        if USER_TAG.CLAN_MEMBER in self._tags:
-            self._isOnlineInBW = other.isOnline()
+        if USER_TAG.filterSharedTags(self._tags):
+            self._gos = other.getGOS()
         return result
 
     def getTags(self):
@@ -65,16 +65,17 @@ class XMPPUserEntity(UserEntity):
     def getGroups(self):
         return self._item.getGroups()
 
+    def getGOS(self):
+        return self._gos
+
     def isOnline(self):
-        return self._item.isOnline(self._isOnlineInBW)
+        return self._item.isOnline(self._gos & GAME_ONLINE_STATUS.ONLINE > 0)
 
     def update(self, **kwargs):
         if 'item' in kwargs:
             self._item = self._item.replace(kwargs['item'])
-        if 'isOnline' in kwargs and USER_TAG.CLAN_MEMBER in self._tags:
-            self._isOnlineInBW = kwargs['isOnline']
-        if 'noClan' in kwargs and kwargs['noClan']:
-            self._isOnlineInBW = False
+        if 'gosBit' in kwargs and USER_TAG.filterSharedTags(self._tags):
+            self._gos = GAME_ONLINE_STATUS.update(self._gos, kwargs['gosBit'])
         self._item.update(**kwargs)
         super(XMPPUserEntity, self).update(**kwargs)
 

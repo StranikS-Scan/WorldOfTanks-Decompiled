@@ -432,6 +432,20 @@ class SYSTEM_MESSAGES(object):
     MODULE_BUY_WALLET_NOT_AVAILABLE = '#system_messages:module_buy/wallet_not_available'
     MODULE_BUY_SERVER_ERROR = '#system_messages:module_buy/server_error'
     MODULE_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:module_buy/server_error_centerDown'
+    MODULE_BUY_VEHICLE_NEED_REPAIR = '#system_messages:module_buy/vehicle_need_repair'
+    MODULE_BUY_VEHICLE_LOCKED = '#system_messages:module_buy/vehicle_locked'
+    MODULE_BUY_INVALID_VEHICLE = '#system_messages:module_buy/invalid_vehicle'
+    MODULE_BUY_ERROR_WRONG_NATION = '#system_messages:module_buy/error_wrong_nation'
+    MODULE_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:module_buy/error_not_for_this_vehicle_type'
+    MODULE_BUY_ERROR_NOT_FOR_CURRENT_VEHICLE = '#system_messages:module_buy/error_not_for_current_vehicle'
+    MODULE_BUY_ERROR_NO_GUN = '#system_messages:module_buy/error_no_gun'
+    MODULE_BUY_ERROR_WRONG_ITEM_TYPE = '#system_messages:module_buy/error_wrong_item_type'
+    MODULE_BUY_ERROR_TOO_HEAVY = '#system_messages:module_buy/error_too_heavy'
+    MODULE_BUY_ERROR_TOO_HEAVY_CHASSIS = '#system_messages:module_buy/error_too_heavy_chassis'
+    MODULE_BUY_ERROR_NEED_TURRET = '#system_messages:module_buy/error_need_turret'
+    MODULE_BUY_ERROR_NEED_GUN = '#system_messages:module_buy/error_need_gun'
+    MODULE_BUY_ERROR_IS_CURRENT = '#system_messages:module_buy/error_is_current'
+    MODULE_BUY_ERROR_NOT_WITH_INSTALLED_EQUIPMENT = '#system_messages:module_buy/error_not_with_installed_equipment'
     ARTEFACT_BUY_SUCCESS = '#system_messages:artefact_buy/success'
     ARTEFACT_BUY_INVALID_MODULE = '#system_messages:artefact_buy/invalid_module'
     ARTEFACT_BUY_NOT_ENOUGH_CREDITS = '#system_messages:artefact_buy/not_enough_credits'
@@ -439,6 +453,11 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_WALLET_NOT_AVAILABLE = '#system_messages:artefact_buy/wallet_not_available'
     ARTEFACT_BUY_SERVER_ERROR = '#system_messages:artefact_buy/server_error'
     ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:artefact_buy/server_error_centerDown'
+    ARTEFACT_BUY_ERROR_TOO_HEAVY = '#system_messages:artefact_buy/error_too_heavy'
+    ARTEFACT_BUY_VEHICLE_NEED_REPAIR = '#system_messages:artefact_buy/vehicle_need_repair'
+    ARTEFACT_BUY_VEHICLE_LOCKED = '#system_messages:artefact_buy/vehicle_locked'
+    ARTEFACT_BUY_INVALID_VEHICLE = '#system_messages:artefact_buy/invalid_vehicle'
+    ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_buy/error_not_for_this_vehicle_type'
     SHELL_SELL_SUCCESS = '#system_messages:shell_sell/success'
     SHELL_SELL_INVALID_MODULE = '#system_messages:shell_sell/invalid_module'
     SHELL_SELL_SERVER_ERROR = '#system_messages:shell_sell/server_error'
@@ -524,6 +543,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_REQUEST_NAME_CHANGE_UNIT_STATE = '#system_messages:prebattle/request/name/CHANGE_UNIT_STATE'
     PREBATTLE_REQUEST_NAME_UNITS_LIST = '#system_messages:prebattle/request/name/UNITS_LIST'
     PREBATTLE_REQUEST_NAME_CLOSE_SLOT = '#system_messages:prebattle/request/name/CLOSE_SLOT'
+    PREBATTLE_REQUEST_NAME_CHANGE_RATED = '#system_messages:prebattle/request/name/CHANGE_RATED'
     FORTIFICATION_REQUEST_NAME_CREATE_FORT = '#system_messages:fortification/request/name/CREATE_FORT'
     FORTIFICATION_REQUEST_NAME_DELETE_FORT = '#system_messages:fortification/request/name/DELETE_FORT'
     FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION = '#system_messages:fortification/request/name/OPEN_DIRECTION'
@@ -549,6 +569,130 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_REQUEST_NAME_ADD_FAVORITE = '#system_messages:fortification/request/name/ADD_FAVORITE'
     FORTIFICATION_REQUEST_NAME_REMOVE_FAVORITE = '#system_messages:fortification/request/name/REMOVE_FAVORITE'
     FORTIFICATION_REQUEST_NAME_PLAN_ATTACK = '#system_messages:fortification/request/name/PLAN_ATTACK'
+    CLUB_REQUEST_NAME_SUBSCRIBE = '#system_messages:club/request/name/SUBSCRIBE'
+    CLUB_REQUEST_NAME_UNSUBSCRIBE = '#system_messages:club/request/name/UNSUBSCRIBE'
+    CLUB_REQUEST_NAME_CREATE_CLUB = '#system_messages:club/request/name/CREATE_CLUB'
+    CLUB_REQUEST_NAME_GET_MY_CLUBS = '#system_messages:club/request/name/GET_MY_CLUBS'
+    CLUB_REQUEST_NAME_GET_MY_CLUBS_HISTORY = '#system_messages:club/request/name/GET_MY_CLUBS_HISTORY'
+    CLUB_REQUEST_NAME_DESTROY_CLUB = '#system_messages:club/request/name/DESTROY_CLUB'
+    CLUB_REQUEST_NAME_LEAVE_CLUB = '#system_messages:club/request/name/LEAVE_CLUB'
+    CLUB_REQUEST_NAME_GET_CLUB = '#system_messages:club/request/name/GET_CLUB'
+    CLUB_REQUEST_NAME_OPEN_CLUB = '#system_messages:club/request/name/OPEN_CLUB'
+    CLUB_REQUEST_NAME_CLOSE_CLUB = '#system_messages:club/request/name/CLOSE_CLUB'
+    CLUB_REQUEST_NAME_GET_CLUBS = '#system_messages:club/request/name/GET_CLUBS'
+    CLUB_REQUEST_NAME_CHANGE_CLUB_NAME = '#system_messages:club/request/name/CHANGE_CLUB_NAME'
+    CLUB_REQUEST_NAME_CHANGE_CLUB_EMBLEM = '#system_messages:club/request/name/CHANGE_CLUB_EMBLEM'
+    CLUB_REQUEST_NAME_SEND_INVITE = '#system_messages:club/request/name/SEND_INVITE'
+    CLUB_REQUEST_NAME_REVOKE_INVITE = '#system_messages:club/request/name/REVOKE_INVITE'
+    CLUB_REQUEST_NAME_ACCEPT_INVITE = '#system_messages:club/request/name/ACCEPT_INVITE'
+    CLUB_REQUEST_NAME_DECLINE_INVITE = '#system_messages:club/request/name/DECLINE_INVITE'
+    CLUB_REQUEST_NAME_SEND_APPLICATION = '#system_messages:club/request/name/SEND_APPLICATION'
+    CLUB_REQUEST_NAME_REVOKE_APPLICATION = '#system_messages:club/request/name/REVOKE_APPLICATION'
+    CLUB_REQUEST_NAME_ACCEPT_APPLICATION = '#system_messages:club/request/name/ACCEPT_APPLICATION'
+    CLUB_REQUEST_NAME_DECLINE_APPLICATION = '#system_messages:club/request/name/DECLINE_APPLICATION'
+    CLUB_REQUEST_NAME_JOIN_UNIT = '#system_messages:club/request/name/JOIN_UNIT'
+    CLUB_REQUEST_NAME_GET_APPLICATIONS = '#system_messages:club/request/name/GET_APPLICATIONS'
+    CLUB_REQUEST_NAME_GET_CLUB_APPLICANTS = '#system_messages:club/request/name/GET_CLUB_APPLICANTS'
+    CLUB_REQUEST_NAME_GET_INVITES = '#system_messages:club/request/name/GET_INVITES'
+    CLUB_REQUEST_NAME_TRANSFER_OWNERSHIP = '#system_messages:club/request/name/TRANSFER_OWNERSHIP'
+    CLUB_REQUEST_NAME_ASSIGN_OFFICER = '#system_messages:club/request/name/ASSIGN_OFFICER'
+    CLUB_REQUEST_NAME_ASSIGN_PRIVATE = '#system_messages:club/request/name/ASSIGN_PRIVATE'
+    CLUB_REQUEST_NAME_KICK_MEMBER = '#system_messages:club/request/name/KICK_MEMBER'
+    CLUB_REQUEST_NAME_SET_APPLICANT_REQUIREMENTS = '#system_messages:club/request/name/SET_APPLICANT_REQUIREMENTS'
+    CLUBS_REQUEST_SUCCESS_APPLICATION_SENT = '#system_messages:clubs/request/success/application/sent'
+    CLUBS_REQUEST_SUCCESS_APPLICATION_REVOKE = '#system_messages:clubs/request/success/application/revoke'
+    CLUBS_REQUEST_SUCCESS_APPLICATION_ACCEPT = '#system_messages:clubs/request/success/application/accept'
+    CLUBS_REQUEST_SUCCESS_APPLICATION_DECLINE = '#system_messages:clubs/request/success/application/decline'
+    CLUBS_REQUEST_SUCCESS_INVITE_SENT = '#system_messages:clubs/request/success/invite/sent'
+    CLUBS_REQUEST_SUCCESS_INVITES_SENT = '#system_messages:clubs/request/success/invites/sent'
+    CLUBS_REQUEST_SUCCESS_INVITES_SENT_NAMES_SUCCESS = '#system_messages:clubs/request/success/invites/sent/names/success'
+    CLUBS_REQUEST_SUCCESS_INVITES_SENT_NAMES_ERROR = '#system_messages:clubs/request/success/invites/sent/names/error'
+    CLUBS_REQUEST_SUCCESS_INVITE_REVOKE = '#system_messages:clubs/request/success/invite/revoke'
+    CLUBS_REQUEST_SUCCESS_CREATECLUB = '#system_messages:clubs/request/success/createClub'
+    CLUBS_REQUEST_SUCCESS_LEAVECLUB = '#system_messages:clubs/request/success/leaveClub'
+    CLUBS_REQUEST_SUCCESS_DESTROYCLUB = '#system_messages:clubs/request/success/destroyClub'
+    CLUBS_REQUEST_SUCCESS_OPENCLUB = '#system_messages:clubs/request/success/openClub'
+    CLUBS_REQUEST_SUCCESS_CLOSECLUB = '#system_messages:clubs/request/success/closeClub'
+    CLUBS_REQUEST_SUCCESS_USERS_ASSIGNPRIVATE = '#system_messages:clubs/request/success/users/assignPrivate'
+    CLUBS_REQUEST_SUCCESS_USERS_ASSIGNOFFICER = '#system_messages:clubs/request/success/users/assignOfficer'
+    CLUBS_REQUEST_SUCCESS_USERS_TRANSFEROWNERSHIP = '#system_messages:clubs/request/success/users/transferOwnership'
+    CLUBS_REQUEST_SUCCESS_USERS_KICK = '#system_messages:clubs/request/success/users/kick'
+    CLUBS_REQUEST_ERRORS_DEFAULT = '#system_messages:clubs/request/errors/default'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_OWNS_THE_CLUB_ = '#system_messages:clubs/request/errors/Account already owns the club.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_A_CLUB_MEMBER_ = '#system_messages:clubs/request/errors/Account already a club member.'
+    CLUBS_REQUEST_ERRORS_NO_CLUB_FOUND_ = '#system_messages:clubs/request/errors/No club found.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_MEMBER_ = '#system_messages:clubs/request/errors/Account not a club member.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_OWNER_ = '#system_messages:clubs/request/errors/Account not a club owner.'
+    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_NON_EMPTY_CLUB_ = '#system_messages:clubs/request/errors/Forbidden operation for non-empty club.'
+    CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_FORBIDDEN_FOR_CLUB_OWNER_ = '#system_messages:clubs/request/errors/This operation is forbidden for club owner.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_IS_ALREADY_IN_LIST_OF_APPLICANTS_ = '#system_messages:clubs/request/errors/Account is already in list of applicants.'
+    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_APPLICANTS_LIMIT_REACHED_ = '#system_messages:clubs/request/errors/Forbidden operation because applicants limit reached.'
+    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_MEMBERS_LIMIT_REACHED_ = '#system_messages:clubs/request/errors/Forbidden operation because members limit reached.'
+    CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_ALREADY_SENT_TO_THIS_PLAYER_ = '#system_messages:clubs/request/errors/Invite to the club already sent to this player.'
+    CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_NOT_FOUND_FOR_THIS_PLAYER_ = '#system_messages:clubs/request/errors/Invite to the club not found for this player.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_APPLICANT_ = '#system_messages:clubs/request/errors/Account not a club applicant.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_CAN_T_ASSIGN__OFFICER__ROLE_ = "#system_messages:clubs/request/errors/Account can't assign 'Officer' role."
+    CLUBS_REQUEST_ERRORS_ACCOUNT_CAN_T_ASSIGN__PRIVATE__ROLE_ = "#system_messages:clubs/request/errors/Account can't assign 'Private' role."
+    CLUBS_REQUEST_ERRORS_ACCOUNT_CAN_T_KICK_CLUB_MEMBER_ = "#system_messages:clubs/request/errors/Account can't kick club member."
+    CLUBS_REQUEST_ERRORS_IMPOSSIBLE_TO_KICK_CLUB_OWNER_ = '#system_messages:clubs/request/errors/Impossible to kick club owner.'
+    CLUBS_REQUEST_ERRORS_INCORRECT_PARAMS_PASSED_TO_THE_HANDLER_ = '#system_messages:clubs/request/errors/Incorrect params passed to the handler.'
+    CLUBS_REQUEST_ERRORS_HANDLER_RESPONSE_NOT_REGISTERED_ = '#system_messages:clubs/request/errors/Handler response not registered.'
+    CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_ALLOWED_ONLY_FOR_CLUB_OFFICER_ = '#system_messages:clubs/request/errors/This operation is allowed only for club officer.'
+    CLUBS_REQUEST_ERRORS_APPLICATIONS_TO_THE_CLOSED_CLUB_ARE_FORBIDDEN_ = '#system_messages:clubs/request/errors/Applications to the closed club are forbidden.'
+    CLUBS_REQUEST_ERRORS_NONE_OF_THE_SUB_REQUESTS_WAS_NOT_COMPLETED_SUCCESSFULLY_ = '#system_messages:clubs/request/errors/None of the sub-requests was not completed successfully.'
+    CLUBS_REQUEST_ERRORS_THIS_EMBLEM_NOT_REGISTERED_IN_EMULATOR_ = '#system_messages:clubs/request/errors/This emblem not registered in emulator.'
+    CLUBS_REQUEST_ERRORS_COMMAND_FAILED_BY_TIMEOUT_ = '#system_messages:clubs/request/errors/Command failed by timeout.'
+    CLUBS_REQUEST_ERRORS_UNKNOWN_OR_UNEXPECTED_ERROR_ = '#system_messages:clubs/request/errors/Unknown or unexpected error.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_FOUND_FOR_GIVEN_ID_ = '#system_messages:clubs/request/errors/Account not found for given ID.'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_FOR_GIVEN_ID_IS_BANNED_ = '#system_messages:clubs/request/errors/Account for given ID is banned.'
+    CLUBS_REQUEST_ERRORS_INTERNAL_ERROR_IN_SPA__ = '#system_messages:clubs/request/errors/Internal error in SPA .'
+    CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_THIS_ACCOUNT_ = '#system_messages:clubs/request/errors/Forbidden operation for this account.'
+    CLUBS_REQUEST_ERRORS_INACTIVE_CLUB_ = '#system_messages:clubs/request/errors/Inactive club.'
+    CLUBS_REQUEST_ERRORS_INACTIVE_APPLICATION_ = '#system_messages:clubs/request/errors/Inactive application.'
+    CLUBS_REQUEST_ERRORS_INACTIVE_INVITE_ = '#system_messages:clubs/request/errors/Inactive invite.'
+    CLUBS_REQUEST_ERRORS_TOO_MANY_REQUESTS_ARE_IN_THE_PENDING_STATE_ = '#system_messages:clubs/request/errors/Too many requests are in the pending state.'
+    CLUBS_REQUEST_ERRORS_THIS_CLUB_NAME_IS_ALREADY_TAKEN_ = '#system_messages:clubs/request/errors/This club name is already taken.'
+    CLUBS_REQUEST_ERRORS_INCORRECT_CHECKOUT_TOKEN_ = '#system_messages:clubs/request/errors/Incorrect checkout token.'
+    CLUBS_REQUEST_ERRORS_CLUB_IS_LOCKED_ = '#system_messages:clubs/request/errors/Club is locked.'
+    CLUBS_REQUEST_ERRORS_WRONG_ACCOUNT_ = '#system_messages:clubs/request/errors/Wrong account.'
+    CLUBS_REQUEST_ERRORS_ATTEMPT_TO_ACCESS_TO_THE_INCORRECT_URL_ = '#system_messages:clubs/request/errors/Attempt to access to the incorrect url.'
+    CLUBS_REQUEST_ERRORS_APPLICATION_FROM_THIS_ACCOUNT_ALREADY_EXISTS_ = '#system_messages:clubs/request/errors/Application from this account already exists.'
+    CLUBS_REQUEST_ERRORS_WRONG_OBTAINED_WEB_DATA_FORMAT__PLEASE_SEE_SERVER_LOGS_ = '#system_messages:clubs/request/errors/Wrong obtained web data format. Please see server logs.'
+    CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_RESTRICTED_ON_WEB_SIDE_ = '#system_messages:clubs/request/errors/This operation is restricted on web side.'
+    CLUBS_REQUEST_ERRORS_WEB_API_IS_NOT_AVAILABLE_AT_THIS_MOMENT_ = '#system_messages:clubs/request/errors/Web API is not available at this moment.'
+    CLUBS_REQUEST_ERRORS_THIS_CLUB_IS_NOT_IN_THE_LADDER_ = '#system_messages:clubs/request/errors/This club is not in the ladder.'
+    CLUBS_REQUEST_ERRORS_TEAM_DOES_NOT_EXIST = '#system_messages:clubs/request/errors/TEAM_DOES_NOT_EXIST'
+    CLUBS_REQUEST_ERRORS_TEAM_IS_FULL = '#system_messages:clubs/request/errors/TEAM_IS_FULL'
+    CLUBS_REQUEST_ERRORS_TEAM_IS_NOT_ACTIVE = '#system_messages:clubs/request/errors/TEAM_IS_NOT_ACTIVE'
+    CLUBS_REQUEST_ERRORS_TEAM_ALREADY_EXIST = '#system_messages:clubs/request/errors/TEAM_ALREADY_EXIST'
+    CLUBS_REQUEST_ERRORS_TEAM_MEMBERS_COUNT_ERROR = '#system_messages:clubs/request/errors/TEAM_MEMBERS_COUNT_ERROR'
+    CLUBS_REQUEST_ERRORS_TEAM_DOES_NOT_HAVE_OWNER = '#system_messages:clubs/request/errors/TEAM_DOES_NOT_HAVE_OWNER'
+    CLUBS_REQUEST_ERRORS_TEAM_DOSSIER_WAS_LOCKED = '#system_messages:clubs/request/errors/TEAM_DOSSIER_WAS_LOCKED'
+    CLUBS_REQUEST_ERRORS_TEAM_ALREADY_UNLOCKED = '#system_messages:clubs/request/errors/TEAM_ALREADY_UNLOCKED'
+    CLUBS_REQUEST_ERRORS_TEAM_LOCK_TOKEN_ERROR = '#system_messages:clubs/request/errors/TEAM_LOCK_TOKEN_ERROR'
+    CLUBS_REQUEST_ERRORS_EMBLEM_DOES_NOT_EXIST = '#system_messages:clubs/request/errors/EMBLEM_DOES_NOT_EXIST'
+    CLUBS_REQUEST_ERRORS_WGESTB_COOLDOWN = '#system_messages:clubs/request/errors/WGESTB_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_CHANGE_TEAM_NAME_COOLDOWN = '#system_messages:clubs/request/errors/CHANGE_TEAM_NAME_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_CHANGE_TEAM_TAG_COOLDOWN = '#system_messages:clubs/request/errors/CHANGE_TEAM_TAG_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_TEAM_LEAVE_COOLDOWN = '#system_messages:clubs/request/errors/TEAM_LEAVE_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_CANCEL_APPLICATION_COOLDOWN = '#system_messages:clubs/request/errors/CANCEL_APPLICATION_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_CREATE_TEAM_AFTER_LEAVE_COOLDOWN = '#system_messages:clubs/request/errors/CREATE_TEAM_AFTER_LEAVE_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_CREATE_TEAM_AFTER_DEACTIVATION_COOLDOWN = '#system_messages:clubs/request/errors/CREATE_TEAM_AFTER_DEACTIVATION_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_JOIN_TEAM_AFTER_DEACTIVATION_COOLDOWN = '#system_messages:clubs/request/errors/JOIN_TEAM_AFTER_DEACTIVATION_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_SAME_TEAM_APPLICATION_COOLDOWN = '#system_messages:clubs/request/errors/SAME_TEAM_APPLICATION_COOLDOWN'
+    CLUBS_REQUEST_ERRORS_MEMBERSHIP_APPLICATION_NOT_NEEDED = '#system_messages:clubs/request/errors/MEMBERSHIP_APPLICATION_NOT_NEEDED'
+    CLUBS_REQUEST_ERRORS_APPLICATION_FOR_USER_EXCEEDED = '#system_messages:clubs/request/errors/APPLICATION_FOR_USER_EXCEEDED'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_BANNED = '#system_messages:clubs/request/errors/ACCOUNT_BANNED'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_IN_TEAM = '#system_messages:clubs/request/errors/ACCOUNT_NOT_IN_TEAM'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_IN_TEAM = '#system_messages:clubs/request/errors/ACCOUNT_ALREADY_IN_TEAM'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_TEAMS_LIMIT_EXCEEDED = '#system_messages:clubs/request/errors/ACCOUNT_TEAMS_LIMIT_EXCEEDED'
+    CLUBS_REQUEST_ERRORS_ACCOUNT_IS_TEAM_OWNER = '#system_messages:clubs/request/errors/ACCOUNT_IS_TEAM_OWNER'
+    CLUBS_REQUEST_ERRORS_OWNER_TEAMS_LIMIT_EXCEEDED = '#system_messages:clubs/request/errors/OWNER_TEAMS_LIMIT_EXCEEDED'
+    CLUBS_REQUEST_ERRORS_INVITE_DOES_NOT_EXIST = '#system_messages:clubs/request/errors/INVITE_DOES_NOT_EXIST'
+    CLUBS_REQUEST_ERRORS_INVITE_IS_NOT_ACTIVE = '#system_messages:clubs/request/errors/INVITE_IS_NOT_ACTIVE'
+    CLUBS_REQUEST_ERRORS_HAS_NO_CLUB = '#system_messages:clubs/request/errors/HAS_NO_CLUB'
+    CLUBS_REQUEST_ERRORS_HAVE_NO_RIGHTS = '#system_messages:clubs/request/errors/HAVE_NO_RIGHTS'
+    CLUBS_REQUEST_ERRORS_COOLDOWN = '#system_messages:clubs/request/errors/cooldown'
     EXCHANGE_SUCCESS = '#system_messages:exchange/success'
     EXCHANGE_NOT_ENOUGH_GOLD = '#system_messages:exchange/not_enough_gold'
     EXCHANGE_WALLET_NOT_AVAILABLE = '#system_messages:exchange/wallet_not_available'
@@ -658,6 +802,8 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_OFFLINE_PLAYER = '#system_messages:unit/errors/OFFLINE_PLAYER'
     UNIT_ERRORS_TIMEOUT = '#system_messages:unit/errors/TIMEOUT'
     UNIT_ERRORS_BAD_ROSTER_PACK = '#system_messages:unit/errors/BAD_ROSTER_PACK'
+    UNIT_ERRORS_CLUB_CHECKOUT_FAIL = '#system_messages:unit/errors/CLUB_CHECKOUT_FAIL'
+    UNIT_ERRORS_PREV_RATED_BATTLE_IN_PROGRESS = '#system_messages:unit/errors/PREV_RATED_BATTLE_IN_PROGRESS'
     IGR_CUSTOMIZATION_BEGIN = '#system_messages:igr/customization/begin'
     IGR_CUSTOMIZATION_END = '#system_messages:igr/customization/end'
     INFO_NOAVAILABLE = '#system_messages:info/noAvailable'
@@ -796,7 +942,8 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_PREBATTLES_LIST,
      PREBATTLE_REQUEST_NAME_CHANGE_UNIT_STATE,
      PREBATTLE_REQUEST_NAME_UNITS_LIST,
-     PREBATTLE_REQUEST_NAME_CLOSE_SLOT)
+     PREBATTLE_REQUEST_NAME_CLOSE_SLOT,
+     PREBATTLE_REQUEST_NAME_CHANGE_RATED)
     FORTIFICATION_REQUEST_NAME_ENUM = (FORTIFICATION_REQUEST_NAME_CREATE_FORT,
      FORTIFICATION_REQUEST_NAME_DELETE_FORT,
      FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION,
@@ -868,7 +1015,9 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_UNIT_RESTORED,
      UNIT_ERRORS_OFFLINE_PLAYER,
      UNIT_ERRORS_TIMEOUT,
-     UNIT_ERRORS_BAD_ROSTER_PACK)
+     UNIT_ERRORS_BAD_ROSTER_PACK,
+     UNIT_ERRORS_CLUB_CHECKOUT_FAIL,
+     UNIT_ERRORS_PREV_RATED_BATTLE_IN_PROGRESS)
     FORTIFICATION_ERRORS_ENUM = (FORTIFICATION_ERRORS_UNKNOWN,
      FORTIFICATION_ERRORS_NOT_SUPPORTED,
      FORTIFICATION_ERRORS_BAD_METHOD,
@@ -1417,6 +1566,20 @@ class SYSTEM_MESSAGES(object):
      MODULE_BUY_WALLET_NOT_AVAILABLE,
      MODULE_BUY_SERVER_ERROR,
      MODULE_BUY_SERVER_ERROR_CENTERDOWN,
+     MODULE_BUY_VEHICLE_NEED_REPAIR,
+     MODULE_BUY_VEHICLE_LOCKED,
+     MODULE_BUY_INVALID_VEHICLE,
+     MODULE_BUY_ERROR_WRONG_NATION,
+     MODULE_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
+     MODULE_BUY_ERROR_NOT_FOR_CURRENT_VEHICLE,
+     MODULE_BUY_ERROR_NO_GUN,
+     MODULE_BUY_ERROR_WRONG_ITEM_TYPE,
+     MODULE_BUY_ERROR_TOO_HEAVY,
+     MODULE_BUY_ERROR_TOO_HEAVY_CHASSIS,
+     MODULE_BUY_ERROR_NEED_TURRET,
+     MODULE_BUY_ERROR_NEED_GUN,
+     MODULE_BUY_ERROR_IS_CURRENT,
+     MODULE_BUY_ERROR_NOT_WITH_INSTALLED_EQUIPMENT,
      ARTEFACT_BUY_SUCCESS,
      ARTEFACT_BUY_INVALID_MODULE,
      ARTEFACT_BUY_NOT_ENOUGH_CREDITS,
@@ -1424,6 +1587,11 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_WALLET_NOT_AVAILABLE,
      ARTEFACT_BUY_SERVER_ERROR,
      ARTEFACT_BUY_SERVER_ERROR_CENTERDOWN,
+     ARTEFACT_BUY_ERROR_TOO_HEAVY,
+     ARTEFACT_BUY_VEHICLE_NEED_REPAIR,
+     ARTEFACT_BUY_VEHICLE_LOCKED,
+     ARTEFACT_BUY_INVALID_VEHICLE,
+     ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
      SHELL_SELL_SUCCESS,
      SHELL_SELL_INVALID_MODULE,
      SHELL_SELL_SERVER_ERROR,
@@ -1509,6 +1677,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_CHANGE_UNIT_STATE,
      PREBATTLE_REQUEST_NAME_UNITS_LIST,
      PREBATTLE_REQUEST_NAME_CLOSE_SLOT,
+     PREBATTLE_REQUEST_NAME_CHANGE_RATED,
      FORTIFICATION_REQUEST_NAME_CREATE_FORT,
      FORTIFICATION_REQUEST_NAME_DELETE_FORT,
      FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION,
@@ -1534,6 +1703,130 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_REQUEST_NAME_ADD_FAVORITE,
      FORTIFICATION_REQUEST_NAME_REMOVE_FAVORITE,
      FORTIFICATION_REQUEST_NAME_PLAN_ATTACK,
+     CLUB_REQUEST_NAME_SUBSCRIBE,
+     CLUB_REQUEST_NAME_UNSUBSCRIBE,
+     CLUB_REQUEST_NAME_CREATE_CLUB,
+     CLUB_REQUEST_NAME_GET_MY_CLUBS,
+     CLUB_REQUEST_NAME_GET_MY_CLUBS_HISTORY,
+     CLUB_REQUEST_NAME_DESTROY_CLUB,
+     CLUB_REQUEST_NAME_LEAVE_CLUB,
+     CLUB_REQUEST_NAME_GET_CLUB,
+     CLUB_REQUEST_NAME_OPEN_CLUB,
+     CLUB_REQUEST_NAME_CLOSE_CLUB,
+     CLUB_REQUEST_NAME_GET_CLUBS,
+     CLUB_REQUEST_NAME_CHANGE_CLUB_NAME,
+     CLUB_REQUEST_NAME_CHANGE_CLUB_EMBLEM,
+     CLUB_REQUEST_NAME_SEND_INVITE,
+     CLUB_REQUEST_NAME_REVOKE_INVITE,
+     CLUB_REQUEST_NAME_ACCEPT_INVITE,
+     CLUB_REQUEST_NAME_DECLINE_INVITE,
+     CLUB_REQUEST_NAME_SEND_APPLICATION,
+     CLUB_REQUEST_NAME_REVOKE_APPLICATION,
+     CLUB_REQUEST_NAME_ACCEPT_APPLICATION,
+     CLUB_REQUEST_NAME_DECLINE_APPLICATION,
+     CLUB_REQUEST_NAME_JOIN_UNIT,
+     CLUB_REQUEST_NAME_GET_APPLICATIONS,
+     CLUB_REQUEST_NAME_GET_CLUB_APPLICANTS,
+     CLUB_REQUEST_NAME_GET_INVITES,
+     CLUB_REQUEST_NAME_TRANSFER_OWNERSHIP,
+     CLUB_REQUEST_NAME_ASSIGN_OFFICER,
+     CLUB_REQUEST_NAME_ASSIGN_PRIVATE,
+     CLUB_REQUEST_NAME_KICK_MEMBER,
+     CLUB_REQUEST_NAME_SET_APPLICANT_REQUIREMENTS,
+     CLUBS_REQUEST_SUCCESS_APPLICATION_SENT,
+     CLUBS_REQUEST_SUCCESS_APPLICATION_REVOKE,
+     CLUBS_REQUEST_SUCCESS_APPLICATION_ACCEPT,
+     CLUBS_REQUEST_SUCCESS_APPLICATION_DECLINE,
+     CLUBS_REQUEST_SUCCESS_INVITE_SENT,
+     CLUBS_REQUEST_SUCCESS_INVITES_SENT,
+     CLUBS_REQUEST_SUCCESS_INVITES_SENT_NAMES_SUCCESS,
+     CLUBS_REQUEST_SUCCESS_INVITES_SENT_NAMES_ERROR,
+     CLUBS_REQUEST_SUCCESS_INVITE_REVOKE,
+     CLUBS_REQUEST_SUCCESS_CREATECLUB,
+     CLUBS_REQUEST_SUCCESS_LEAVECLUB,
+     CLUBS_REQUEST_SUCCESS_DESTROYCLUB,
+     CLUBS_REQUEST_SUCCESS_OPENCLUB,
+     CLUBS_REQUEST_SUCCESS_CLOSECLUB,
+     CLUBS_REQUEST_SUCCESS_USERS_ASSIGNPRIVATE,
+     CLUBS_REQUEST_SUCCESS_USERS_ASSIGNOFFICER,
+     CLUBS_REQUEST_SUCCESS_USERS_TRANSFEROWNERSHIP,
+     CLUBS_REQUEST_SUCCESS_USERS_KICK,
+     CLUBS_REQUEST_ERRORS_DEFAULT,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_OWNS_THE_CLUB_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_A_CLUB_MEMBER_,
+     CLUBS_REQUEST_ERRORS_NO_CLUB_FOUND_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_MEMBER_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_OWNER_,
+     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_NON_EMPTY_CLUB_,
+     CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_FORBIDDEN_FOR_CLUB_OWNER_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_IS_ALREADY_IN_LIST_OF_APPLICANTS_,
+     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_APPLICANTS_LIMIT_REACHED_,
+     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_BECAUSE_MEMBERS_LIMIT_REACHED_,
+     CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_ALREADY_SENT_TO_THIS_PLAYER_,
+     CLUBS_REQUEST_ERRORS_INVITE_TO_THE_CLUB_NOT_FOUND_FOR_THIS_PLAYER_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_A_CLUB_APPLICANT_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_CAN_T_ASSIGN__OFFICER__ROLE_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_CAN_T_ASSIGN__PRIVATE__ROLE_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_CAN_T_KICK_CLUB_MEMBER_,
+     CLUBS_REQUEST_ERRORS_IMPOSSIBLE_TO_KICK_CLUB_OWNER_,
+     CLUBS_REQUEST_ERRORS_INCORRECT_PARAMS_PASSED_TO_THE_HANDLER_,
+     CLUBS_REQUEST_ERRORS_HANDLER_RESPONSE_NOT_REGISTERED_,
+     CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_ALLOWED_ONLY_FOR_CLUB_OFFICER_,
+     CLUBS_REQUEST_ERRORS_APPLICATIONS_TO_THE_CLOSED_CLUB_ARE_FORBIDDEN_,
+     CLUBS_REQUEST_ERRORS_NONE_OF_THE_SUB_REQUESTS_WAS_NOT_COMPLETED_SUCCESSFULLY_,
+     CLUBS_REQUEST_ERRORS_THIS_EMBLEM_NOT_REGISTERED_IN_EMULATOR_,
+     CLUBS_REQUEST_ERRORS_COMMAND_FAILED_BY_TIMEOUT_,
+     CLUBS_REQUEST_ERRORS_UNKNOWN_OR_UNEXPECTED_ERROR_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_FOUND_FOR_GIVEN_ID_,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_FOR_GIVEN_ID_IS_BANNED_,
+     CLUBS_REQUEST_ERRORS_INTERNAL_ERROR_IN_SPA__,
+     CLUBS_REQUEST_ERRORS_FORBIDDEN_OPERATION_FOR_THIS_ACCOUNT_,
+     CLUBS_REQUEST_ERRORS_INACTIVE_CLUB_,
+     CLUBS_REQUEST_ERRORS_INACTIVE_APPLICATION_,
+     CLUBS_REQUEST_ERRORS_INACTIVE_INVITE_,
+     CLUBS_REQUEST_ERRORS_TOO_MANY_REQUESTS_ARE_IN_THE_PENDING_STATE_,
+     CLUBS_REQUEST_ERRORS_THIS_CLUB_NAME_IS_ALREADY_TAKEN_,
+     CLUBS_REQUEST_ERRORS_INCORRECT_CHECKOUT_TOKEN_,
+     CLUBS_REQUEST_ERRORS_CLUB_IS_LOCKED_,
+     CLUBS_REQUEST_ERRORS_WRONG_ACCOUNT_,
+     CLUBS_REQUEST_ERRORS_ATTEMPT_TO_ACCESS_TO_THE_INCORRECT_URL_,
+     CLUBS_REQUEST_ERRORS_APPLICATION_FROM_THIS_ACCOUNT_ALREADY_EXISTS_,
+     CLUBS_REQUEST_ERRORS_WRONG_OBTAINED_WEB_DATA_FORMAT__PLEASE_SEE_SERVER_LOGS_,
+     CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_RESTRICTED_ON_WEB_SIDE_,
+     CLUBS_REQUEST_ERRORS_WEB_API_IS_NOT_AVAILABLE_AT_THIS_MOMENT_,
+     CLUBS_REQUEST_ERRORS_THIS_CLUB_IS_NOT_IN_THE_LADDER_,
+     CLUBS_REQUEST_ERRORS_TEAM_DOES_NOT_EXIST,
+     CLUBS_REQUEST_ERRORS_TEAM_IS_FULL,
+     CLUBS_REQUEST_ERRORS_TEAM_IS_NOT_ACTIVE,
+     CLUBS_REQUEST_ERRORS_TEAM_ALREADY_EXIST,
+     CLUBS_REQUEST_ERRORS_TEAM_MEMBERS_COUNT_ERROR,
+     CLUBS_REQUEST_ERRORS_TEAM_DOES_NOT_HAVE_OWNER,
+     CLUBS_REQUEST_ERRORS_TEAM_DOSSIER_WAS_LOCKED,
+     CLUBS_REQUEST_ERRORS_TEAM_ALREADY_UNLOCKED,
+     CLUBS_REQUEST_ERRORS_TEAM_LOCK_TOKEN_ERROR,
+     CLUBS_REQUEST_ERRORS_EMBLEM_DOES_NOT_EXIST,
+     CLUBS_REQUEST_ERRORS_WGESTB_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_CHANGE_TEAM_NAME_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_CHANGE_TEAM_TAG_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_TEAM_LEAVE_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_CANCEL_APPLICATION_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_CREATE_TEAM_AFTER_LEAVE_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_CREATE_TEAM_AFTER_DEACTIVATION_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_JOIN_TEAM_AFTER_DEACTIVATION_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_SAME_TEAM_APPLICATION_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_MEMBERSHIP_APPLICATION_NOT_NEEDED,
+     CLUBS_REQUEST_ERRORS_APPLICATION_FOR_USER_EXCEEDED,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_BANNED,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_NOT_IN_TEAM,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_IN_TEAM,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_TEAMS_LIMIT_EXCEEDED,
+     CLUBS_REQUEST_ERRORS_ACCOUNT_IS_TEAM_OWNER,
+     CLUBS_REQUEST_ERRORS_OWNER_TEAMS_LIMIT_EXCEEDED,
+     CLUBS_REQUEST_ERRORS_INVITE_DOES_NOT_EXIST,
+     CLUBS_REQUEST_ERRORS_INVITE_IS_NOT_ACTIVE,
+     CLUBS_REQUEST_ERRORS_HAS_NO_CLUB,
+     CLUBS_REQUEST_ERRORS_HAVE_NO_RIGHTS,
+     CLUBS_REQUEST_ERRORS_COOLDOWN,
      EXCHANGE_SUCCESS,
      EXCHANGE_NOT_ENOUGH_GOLD,
      EXCHANGE_WALLET_NOT_AVAILABLE,
@@ -1643,6 +1936,8 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_OFFLINE_PLAYER,
      UNIT_ERRORS_TIMEOUT,
      UNIT_ERRORS_BAD_ROSTER_PACK,
+     UNIT_ERRORS_CLUB_CHECKOUT_FAIL,
+     UNIT_ERRORS_PREV_RATED_BATTLE_IN_PROGRESS,
      IGR_CUSTOMIZATION_BEGIN,
      IGR_CUSTOMIZATION_END,
      INFO_NOAVAILABLE,

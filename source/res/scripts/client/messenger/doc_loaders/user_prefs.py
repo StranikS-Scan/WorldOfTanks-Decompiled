@@ -6,7 +6,8 @@ _userProps = {'datetimeIdx': ('readInt', 'writeInt', lambda value: value in xran
  'enableSpamFilter': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
  'invitesFromFriendsOnly': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
  'storeReceiverInBattle': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
- 'disableBattleChat': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType)}
+ 'disableBattleChat': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
+ 'receiveFriendshipRequest': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType)}
 
 def loadDefault(xmlCtx, section, messengerSettings):
     data = {}

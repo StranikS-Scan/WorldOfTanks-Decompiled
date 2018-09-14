@@ -2,6 +2,7 @@
 import BigWorld
 import ArenaType
 import fortified_regions
+import constants
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS, FORT_ORDER_TYPE
 from gui import DialogsInterface
@@ -275,12 +276,13 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
 
     def __setDefaultEnabling(self):
         demountEnabling = False
-        demountTooltip = ''
+        demountTooltip = None
         upgradeBtnEnable = False
         upgradeTooltip = ''
         if self._isVisibleDemountBtn(self.__buildingDescr):
             demountEnabling = self._isEnableDemountBtn(self.__buildingDescr)
-            demountTooltip = TOOLTIPS.FORTIFICATION_POPOVER_DEMOUNTBTN
+            if not self._isTutorial():
+                demountTooltip = TOOLTIPS.FORTIFICATION_POPOVER_DEMOUNTBTN
         if self._isEnableModernizationBtnByDamaged(self.__buildingDescr):
             upgradeBtnEnable = True
             upgradeTooltip = TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN
@@ -288,6 +290,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
             upgradeBtnEnable = False
             upgradeTooltip = TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEFOUNDATIONBTN_DISABLED
         self.as_setModernizationDestructionEnablingS(upgradeBtnEnable, demountEnabling, upgradeTooltip, demountTooltip)
+        return
 
     def __disableModernizationAndDestroy(self):
         self.as_setModernizationDestructionEnablingS(False, False, TOOLTIPS.FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYBATTLE, TOOLTIPS.FORTIFICATION_POPOVER_DEMOUNTBTNDISABLED)
@@ -335,6 +338,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         icon = None
         level = None
         showAlertIcon = False
+        alertIconTooltip = ''
         if self._isBaseBuilding:
             defResTitle = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORT.BUILDINGPOPOVER_DEFRESINFO_BASEBUILDINGTITLE))
             defresDescr = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORT.buildings_defresinfo(self._buildingUID)))
@@ -344,12 +348,15 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
             level = order.level
             defResTitle = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString('#fortifications:General/orderType/%s' % self.getOrderUIDbyID(self.__orderID)))
             defresDescr = order.description
-            showAlertIcon = self._showOrderAlertIcon(order)
+            showAlertIcon, alertIconTooltip = self._showOrderAlertIcon(order)
         result['showAlertIcon'] = showAlertIcon
+        result['alertIconTooltip'] = alertIconTooltip
         result['title'] = defResTitle
         result['description'] = defresDescr
         result['iconSource'] = icon
         result['iconLevel'] = level
+        if self.__orderID in constants.FORT_ORDER_TYPE.CONSUMABLES:
+            result['orderID'] = self.__orderID
         return result
 
     def __prepareActionData(self):

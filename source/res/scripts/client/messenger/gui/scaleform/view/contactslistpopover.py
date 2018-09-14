@@ -41,11 +41,7 @@ class ContactsListPopover(View, SmartPopOverView, ContactsListPopoverMeta, Conta
         excludeGroup = groupData.excludeGroup
         targetParentGroup = groupData.targetParentGroup
         if targetGroup == CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID or targetParentGroup == CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID:
-            if excludeGroup in (CONTACTS_ALIASES.CLAN_GROUP_RESERVED_ID,
-             CONTACTS_ALIASES.PENDING_FRIENDS_GROUP_RESERVED_ID,
-             CONTACTS_ALIASES.IGNORED_GROUP_RESERVED_ID,
-             CONTACTS_ALIASES.REFERRERS_GROUP_RESERVED_ID,
-             CONTACTS_ALIASES.REFERRALS_GROUP_RESERVED_ID):
+            if excludeGroup in CONTACTS_ALIASES.CAN_MOVE_TO_FRIENDS_GROUPS_IDS:
                 self.__moveToFriendProcess(contactDbID, contactName, targetGroup)
             elif targetGroup != excludeGroup:
                 self.__moveToGroupProcess(contactDbID, targetGroup, excludeGroup)

@@ -96,16 +96,16 @@ class _ParametersCache(object):
                 params.update({'damage': (shellDescr['damage'][0], shellDescr['damage'][0]),
                  'piercingPower': eqpDescr.piercingPower,
                  'caliber': shellParams['caliber'],
-                 'shotsNumberRange': eqpDescr.shotsNumberRange,
+                 'shotsNumberRange': eqpDescr.shotsNumber,
                  'areaRadius': eqpDescr.areaRadius,
-                 'artDelayRange': eqpDescr.delayRange})
+                 'artDelayRange': eqpDescr.delay})
             elif eqDescrType is artefacts.Bomber:
                 shellDescr = vehicles.getDictDescr(eqpDescr.shellCompactDescr)
                 params.update({'bombDamage': (shellDescr['damage'][0], shellDescr['damage'][0]),
                  'piercingPower': eqpDescr.piercingPower,
-                 'bombsNumberRange': eqpDescr.bombsNumberRange,
+                 'bombsNumberRange': eqpDescr.bombsNumber,
                  'areaSquare': eqpDescr.areaLength * eqpDescr.areaWidth,
-                 'flyDelayRange': eqpDescr.delayRange})
+                 'flyDelayRange': eqpDescr.delay})
             self.__cache[nations.NONE_INDEX][vehicles._EQUIPMENT][eqpDescr.compactDescr] = {'nations': equipmentNations,
              'avgParams': params}
 

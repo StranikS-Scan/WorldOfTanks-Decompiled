@@ -1,11 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/UnitUserCMHandler.py
+from account_helpers import getPlayerDatabaseID
 from adisp import process
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler, USER
 from gui.prb_control.context import unit_ctx
-from gui.prb_control.prb_helpers import unitFunctionalProperty, UnitListener
+from gui.prb_control.prb_helpers import UnitListener
 KICK_FROM_UNIT = 'kickPlayerFromUnit'
 GIVE_LEADERSHIP = 'giveLeadership'
+TAKE_LEADERSHIP = 'takeLeadership'
 
 class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
 
@@ -26,6 +28,9 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
     def giveLeadership(self):
         self._giveLeadership(self.databaseID)
 
+    def takeLeadership(self):
+        self._takeLeadership()
+
     def kickPlayerFromUnit(self):
         self._kickPlayerFromUnit(self.databaseID)
 
@@ -40,16 +45,27 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
             options.append(self._makeItem(KICK_FROM_UNIT, MENU.contextmenu(KICK_FROM_UNIT)))
         if self._canGiveLeadership():
             options.append(self._makeItem(GIVE_LEADERSHIP, MENU.contextmenu(GIVE_LEADERSHIP)))
+        if self._canTakeLeadership():
+            options.append(self._makeItem(TAKE_LEADERSHIP, MENU.contextmenu(TAKE_LEADERSHIP)))
         return options
 
     def _canGiveLeadership(self):
+        myPermissions = self.unitFunctional.getPermissions()
+        myPInfo = self.unitFunctional.getPlayerInfo()
+        permissions = self.unitFunctional.getPermissions(dbID=self.databaseID)
         pInfo = self.unitFunctional.getPlayerInfo(dbID=self.databaseID)
-        return not pInfo.isLegionary() and not pInfo.isCreator() and pInfo.isInSlot and self.unitFunctional.getPermissions().canChangeLeadership()
+        return myPInfo.isCreator() and pInfo.isInSlot and myPermissions.canChangeLeadership() and permissions.canLead()
+
+    def _canTakeLeadership(self):
+        permissions = self.unitFunctional.getPermissions()
+        pInfo = self.unitFunctional.getPlayerInfo(dbID=self.databaseID)
+        return pInfo.isCreator() and permissions.canChangeLeadership() and permissions.canLead()
 
     def _getHandlers(self):
         handlers = super(UnitUserCMHandler, self)._getHandlers()
         handlers.update({KICK_FROM_UNIT: 'kickPlayerFromUnit',
-         GIVE_LEADERSHIP: 'giveLeadership'})
+         GIVE_LEADERSHIP: 'giveLeadership',
+         TAKE_LEADERSHIP: 'takeLeadership'})
         return handlers
 
     @process
@@ -59,3 +75,7 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
     @process
     def _giveLeadership(self, databaseID):
         yield self.prbDispatcher.sendUnitRequest(unit_ctx.GiveLeadershipCtx(databaseID, 'prebattle/giveLeadership'))
+
+    @process
+    def _takeLeadership(self):
+        yield self.prbDispatcher.sendUnitRequest(unit_ctx.GiveLeadershipCtx(getPlayerDatabaseID(), 'prebattle/takeLeadership'))

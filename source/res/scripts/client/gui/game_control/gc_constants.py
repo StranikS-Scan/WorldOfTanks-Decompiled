@@ -12,6 +12,7 @@ class CONTROLLER(CONST_CONTAINER):
     LANGUAGE = 'language'
     NOTIFIER = 'notifier'
     LINKS = 'links'
+    INTERNAL_LINKS = 'internalLinks'
     SOUND_CHECKER = 'soundChecker'
     SERVER_STATS = 'serverStats'
     REF_SYSTEM = 'refSystem'
@@ -27,6 +28,7 @@ class BROWSER(CONST_CONTAINER):
     SIZE = (990, 550)
     BACKGROUND = 'file:///gui/maps/bg.png'
     PROMO_SIZE = (780, 470)
+    CLUB_SIZE = (780, 470)
     PROMO_BACKGROUND = 'file:///gui/maps/promo_bg.png'
 
 

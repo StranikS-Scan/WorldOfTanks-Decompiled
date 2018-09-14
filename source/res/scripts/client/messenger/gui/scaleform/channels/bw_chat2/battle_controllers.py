@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
+from messenger.ext import isBattleChatEnabled
 from messenger.formatters import chat_message
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.gui.Scaleform.channels._layout import _BattleLayout
@@ -20,7 +21,7 @@ class _ChannelController(_BattleLayout):
         return None
 
     def getSettings(self):
-        return self._channel.getProtoData()
+        return self._channel.getProtoData().settings
 
     def clear(self):
         if not self._isSecondaryChannelCtrl:
@@ -71,6 +72,9 @@ class CommonChannelController(_ChannelController):
 
     def __init__(self, channel):
         super(CommonChannelController, self).__init__(channel, chat_message.CommonMessageBuilder())
+
+    def isEnabled(self):
+        return isBattleChatEnabled(True)
 
     def _broadcast(self, message):
         self.proto.arenaChat.broadcast(message, 1)

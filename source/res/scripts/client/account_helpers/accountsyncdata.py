@@ -65,7 +65,6 @@ class AccountSyncData(object):
 
     def updatePersistentCache(self, ext, isFullSync):
         if ext.pop('__cache', None) is not None:
-            LOG_DEBUG_DEV('Using local account cache')
             if not self.__persistentCache.data:
                 desc, cacheData = self.__persistentCache.data = self.__persistentCache.get()
                 if accountDataPersistentHash(cacheData) != desc:
@@ -84,7 +83,6 @@ class AccountSyncData(object):
             if synchronizeDicts(accountDataGetDiffForPersistent(ext), self.__persistentCache.data)[1]:
                 self.__persistentCache.isDirty = True
         else:
-            LOG_DEBUG_DEV('Account cache: update')
             if self.__persistentCache.data is None:
                 self.__persistentCache.data = {}
             synchronizeDicts(accountDataGetDiffForPersistent(ext), self.__persistentCache.data)

@@ -202,12 +202,11 @@ class FortLimits(IntroFortLimits):
         else:
             order = fort.getOrder(orderID)
             canActivate = False
-            if order.hasBuilding and order.count > 0:
+            if order.hasBuilding and order.count > 0 and not order.inCooldown:
                 if order.isPermanent:
-                    if fort.isDefenceHourEnabled() and not order.inCooldown:
-                        canActivate = True
-                elif not fort.hasActivatedContinualOrders():
-                    canActivate = True
+                    canActivate = fort.isDefenceHourEnabled()
+                else:
+                    canActivate = order.isCompatible or not fort.hasActivatedContinualOrders()
             return (canActivate, '')
 
     def canUpgrade(self, buildingTypeID):
@@ -265,8 +264,10 @@ class FortValidators(IFortValidators):
     def __validateFortPublicInfo(self, filterType, abbrevPattern):
         if filterType == FORT_SCOUTING_DATA_FILTER.FILTER:
             if not isClanAbbrevValid(abbrevPattern):
-                if not constants.IS_KOREA and not constants.IS_CHINA:
-                    return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID)
+                if constants.IS_KOREA:
+                    return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID_KR)
+                elif constants.IS_CHINA:
+                    return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID_CN)
                 else:
-                    return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID_KR_CN)
+                    return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID)
         return (True, '')

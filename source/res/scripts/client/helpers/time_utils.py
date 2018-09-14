@@ -2,7 +2,6 @@
 import time
 import datetime
 import calendar
-import math
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import i18n
@@ -60,6 +59,20 @@ def makeLocalServerTime(serverTime):
 def makeLocalServerDatetime(serverDatetime):
     if isinstance(serverDatetime, datetime.datetime):
         return serverDatetime - datetime.timedelta(seconds=_g_instance.timeCorrection)
+    else:
+        return None
+
+
+def makeServerTimeFromLocal(localTime):
+    if localTime:
+        return max(0, localTime + _g_instance.timeCorrection)
+    else:
+        return None
+
+
+def makeServerDatetimeFromLocal(localDatetime):
+    if isinstance(localDatetime, datetime.datetime):
+        return localDatetime + datetime.timedelta(seconds=_g_instance.timeCorrection)
     else:
         return None
 
@@ -123,6 +136,10 @@ def getTillTimeString(timeValue, keyNamespace):
 
 def getCurrentTimestamp():
     return time.time()
+
+
+def getCurrentLocalServerTimestamp():
+    return makeServerTimeFromLocal(getCurrentTimestamp())
 
 
 def getTimeStructInUTC(timestamp):
@@ -215,6 +232,10 @@ def getTimeForLocal(timestamp, hour = 0, minute = 0, second = 0, microsecond = 0
 
 def getDateTimeFormat(timeValue):
     return '{0:>s} {1:>s}'.format(BigWorld.wg_getLongDateFormat(timeValue), BigWorld.wg_getShortTimeFormat(timeValue))
+
+
+def getLocalDelta():
+    return abs(getCurrentLocalServerTimestamp() - getCurrentTimestamp())
 
 
 class ActivityIntervalsIterator(object):

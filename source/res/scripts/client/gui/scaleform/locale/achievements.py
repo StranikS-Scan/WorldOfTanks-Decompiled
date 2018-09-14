@@ -267,6 +267,48 @@ class ACHIEVEMENTS(object):
     RELIABLECOMRADE = '#achievements:reliableComrade'
     RELIABLECOMRADE_DESCR = '#achievements:reliableComrade_descr'
     RELIABLECOMRADE_CONDITION = '#achievements:reliableComrade_condition'
+    READYFORBATTLELT = '#achievements:readyForBattleLT'
+    READYFORBATTLELT_DESCR = '#achievements:readyForBattleLT_descr'
+    READYFORBATTLELT_CONDITION = '#achievements:readyForBattleLT_condition'
+    READYFORBATTLELT_NOTIFICATION4 = '#achievements:readyForBattleLT_notification4'
+    READYFORBATTLELT_NOTIFICATION3 = '#achievements:readyForBattleLT_notification3'
+    READYFORBATTLELT_NOTIFICATION2 = '#achievements:readyForBattleLT_notification2'
+    READYFORBATTLELT_NOTIFICATION1 = '#achievements:readyForBattleLT_notification1'
+    READYFORBATTLEMT = '#achievements:readyForBattleMT'
+    READYFORBATTLEMT_DESCR = '#achievements:readyForBattleMT_descr'
+    READYFORBATTLEMT_CONDITION = '#achievements:readyForBattleMT_condition'
+    READYFORBATTLEMT_NOTIFICATION4 = '#achievements:readyForBattleMT_notification4'
+    READYFORBATTLEMT_NOTIFICATION3 = '#achievements:readyForBattleMT_notification3'
+    READYFORBATTLEMT_NOTIFICATION2 = '#achievements:readyForBattleMT_notification2'
+    READYFORBATTLEMT_NOTIFICATION1 = '#achievements:readyForBattleMT_notification1'
+    READYFORBATTLEHT = '#achievements:readyForBattleHT'
+    READYFORBATTLEHT_DESCR = '#achievements:readyForBattleHT_descr'
+    READYFORBATTLEHT_CONDITION = '#achievements:readyForBattleHT_condition'
+    READYFORBATTLEHT_NOTIFICATION4 = '#achievements:readyForBattleHT_notification4'
+    READYFORBATTLEHT_NOTIFICATION3 = '#achievements:readyForBattleHT_notification3'
+    READYFORBATTLEHT_NOTIFICATION2 = '#achievements:readyForBattleHT_notification2'
+    READYFORBATTLEHT_NOTIFICATION1 = '#achievements:readyForBattleHT_notification1'
+    READYFORBATTLESPG = '#achievements:readyForBattleSPG'
+    READYFORBATTLESPG_DESCR = '#achievements:readyForBattleSPG_descr'
+    READYFORBATTLESPG_CONDITION = '#achievements:readyForBattleSPG_condition'
+    READYFORBATTLESPG_NOTIFICATION4 = '#achievements:readyForBattleSPG_notification4'
+    READYFORBATTLESPG_NOTIFICATION3 = '#achievements:readyForBattleSPG_notification3'
+    READYFORBATTLESPG_NOTIFICATION2 = '#achievements:readyForBattleSPG_notification2'
+    READYFORBATTLESPG_NOTIFICATION1 = '#achievements:readyForBattleSPG_notification1'
+    READYFORBATTLEATSPG = '#achievements:readyForBattleATSPG'
+    READYFORBATTLEATSPG_DESCR = '#achievements:readyForBattleATSPG_descr'
+    READYFORBATTLEATSPG_CONDITION = '#achievements:readyForBattleATSPG_condition'
+    READYFORBATTLEATSPG_NOTIFICATION4 = '#achievements:readyForBattleATSPG_notification4'
+    READYFORBATTLEATSPG_NOTIFICATION3 = '#achievements:readyForBattleATSPG_notification3'
+    READYFORBATTLEATSPG_NOTIFICATION2 = '#achievements:readyForBattleATSPG_notification2'
+    READYFORBATTLEATSPG_NOTIFICATION1 = '#achievements:readyForBattleATSPG_notification1'
+    READYFORBATTLEALL = '#achievements:readyForBattleALL'
+    READYFORBATTLEALL_DESCR = '#achievements:readyForBattleALL_descr'
+    READYFORBATTLEALL_CONDITION = '#achievements:readyForBattleALL_condition'
+    READYFORBATTLEALL_NOTIFICATION4 = '#achievements:readyForBattleALL_notification4'
+    READYFORBATTLEALL_NOTIFICATION3 = '#achievements:readyForBattleALL_notification3'
+    READYFORBATTLEALL_NOTIFICATION2 = '#achievements:readyForBattleALL_notification2'
+    READYFORBATTLEALL_NOTIFICATION1 = '#achievements:readyForBattleALL_notification1'
     AIMER = '#achievements:aimer'
     AIMER_DESCR = '#achievements:aimer_descr'
     AIMER_CONDITION = '#achievements:aimer_condition'
@@ -279,18 +321,12 @@ class ACHIEVEMENTS(object):
     HANDOFDEATH = '#achievements:handOfDeath'
     HANDOFDEATH_DESCR = '#achievements:handOfDeath_descr'
     HANDOFDEATH_CONDITION = '#achievements:handOfDeath_condition'
-    DEATHTRACK = '#achievements:deathTrack'
-    DEATHTRACK_DESCR = '#achievements:deathTrack_descr'
-    DEATHTRACK_CONDITION = '#achievements:deathTrack_condition'
     ARMORPIERCER = '#achievements:armorPiercer'
     ARMORPIERCER_DESCR = '#achievements:armorPiercer_descr'
     ARMORPIERCER_CONDITION = '#achievements:armorPiercer_condition'
     KAMIKAZE = '#achievements:kamikaze'
     KAMIKAZE_DESCR = '#achievements:kamikaze_descr'
     KAMIKAZE_CONDITION = '#achievements:kamikaze_condition'
-    WHITETIGER = '#achievements:whiteTiger'
-    WHITETIGER_DESCR = '#achievements:whiteTiger_descr'
-    WHITETIGER_CONDITION = '#achievements:whiteTiger_condition'
     LUCKYDEVIL = '#achievements:luckyDevil'
     LUCKYDEVIL_DESCR = '#achievements:luckyDevil_descr'
     LUCKYDEVIL_CONDITION = '#achievements:luckyDevil_condition'
@@ -409,12 +445,21 @@ class ACHIEVEMENTS(object):
     PYROMANIACMEDAL = '#achievements:pyromaniacMedal'
     PYROMANIACMEDAL_DESCR = '#achievements:pyromaniacMedal_descr'
     PYROMANIACMEDAL_CONDITION = '#achievements:pyromaniacMedal_condition'
+    WHITETIGER = '#achievements:whiteTiger'
+    WHITETIGER_DESCR = '#achievements:whiteTiger_descr'
+    WHITETIGER_CONDITION = '#achievements:whiteTiger_condition'
     BATTLECITIZEN = '#achievements:battleCitizen'
     BATTLECITIZEN_DESCR = '#achievements:battleCitizen_descr'
     BATTLECITIZEN_CONDITION = '#achievements:battleCitizen_condition'
     WFC2014 = '#achievements:WFC2014'
     WFC2014_DESCR = '#achievements:WFC2014_descr'
     WFC2014_CONDITION = '#achievements:WFC2014_condition'
+    DEATHTRACK = '#achievements:deathTrack'
+    DEATHTRACK_DESCR = '#achievements:deathTrack_descr'
+    DEATHTRACK_CONDITION = '#achievements:deathTrack_condition'
+    OPERATIONWINTER = '#achievements:operationWinter'
+    OPERATIONWINTER_DESCR = '#achievements:operationWinter_descr'
+    OPERATIONWINTER_CONDITION = '#achievements:operationWinter_condition'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -433,6 +478,14 @@ class ACHIEVEMENTS(object):
     HISTBATTLE6_HISTORYLESSONS = '#achievements:histBattle6_historyLessons'
     HISTBATTLE6_HISTORYLESSONS_DESCR = '#achievements:histBattle6_historyLessons_descr'
     HISTBATTLE6_HISTORYLESSONS_CONDITION = '#achievements:histBattle6_historyLessons_condition'
+    TANKWOMEN = '#achievements:tankwomen'
+    TANKWOMEN_DESCR = '#achievements:tankwomen_descr'
+    TANKWOMEN_CONDITION = '#achievements:tankwomen_condition'
+    TANKWOMEN_NOTIFICATION = '#achievements:tankwomen_notification'
+    FIRSTMERIT = '#achievements:firstMerit'
+    FIRSTMERIT_DESCR = '#achievements:firstMerit_descr'
+    FIRSTMERIT_CONDITION = '#achievements:firstMerit_condition'
+    FIRSTMERIT_NOTIFICATION = '#achievements:firstMerit_notification'
     RARE100003 = '#achievements:rare100003'
     RARE100003_DESCR = '#achievements:rare100003_descr'
     RARE100003_CONDITION = '#achievements:rare100003_condition'
@@ -727,6 +780,48 @@ class ACHIEVEMENTS(object):
      RELIABLECOMRADE,
      RELIABLECOMRADE_DESCR,
      RELIABLECOMRADE_CONDITION,
+     READYFORBATTLELT,
+     READYFORBATTLELT_DESCR,
+     READYFORBATTLELT_CONDITION,
+     READYFORBATTLELT_NOTIFICATION4,
+     READYFORBATTLELT_NOTIFICATION3,
+     READYFORBATTLELT_NOTIFICATION2,
+     READYFORBATTLELT_NOTIFICATION1,
+     READYFORBATTLEMT,
+     READYFORBATTLEMT_DESCR,
+     READYFORBATTLEMT_CONDITION,
+     READYFORBATTLEMT_NOTIFICATION4,
+     READYFORBATTLEMT_NOTIFICATION3,
+     READYFORBATTLEMT_NOTIFICATION2,
+     READYFORBATTLEMT_NOTIFICATION1,
+     READYFORBATTLEHT,
+     READYFORBATTLEHT_DESCR,
+     READYFORBATTLEHT_CONDITION,
+     READYFORBATTLEHT_NOTIFICATION4,
+     READYFORBATTLEHT_NOTIFICATION3,
+     READYFORBATTLEHT_NOTIFICATION2,
+     READYFORBATTLEHT_NOTIFICATION1,
+     READYFORBATTLESPG,
+     READYFORBATTLESPG_DESCR,
+     READYFORBATTLESPG_CONDITION,
+     READYFORBATTLESPG_NOTIFICATION4,
+     READYFORBATTLESPG_NOTIFICATION3,
+     READYFORBATTLESPG_NOTIFICATION2,
+     READYFORBATTLESPG_NOTIFICATION1,
+     READYFORBATTLEATSPG,
+     READYFORBATTLEATSPG_DESCR,
+     READYFORBATTLEATSPG_CONDITION,
+     READYFORBATTLEATSPG_NOTIFICATION4,
+     READYFORBATTLEATSPG_NOTIFICATION3,
+     READYFORBATTLEATSPG_NOTIFICATION2,
+     READYFORBATTLEATSPG_NOTIFICATION1,
+     READYFORBATTLEALL,
+     READYFORBATTLEALL_DESCR,
+     READYFORBATTLEALL_CONDITION,
+     READYFORBATTLEALL_NOTIFICATION4,
+     READYFORBATTLEALL_NOTIFICATION3,
+     READYFORBATTLEALL_NOTIFICATION2,
+     READYFORBATTLEALL_NOTIFICATION1,
      AIMER,
      AIMER_DESCR,
      AIMER_CONDITION,
@@ -739,18 +834,12 @@ class ACHIEVEMENTS(object):
      HANDOFDEATH,
      HANDOFDEATH_DESCR,
      HANDOFDEATH_CONDITION,
-     DEATHTRACK,
-     DEATHTRACK_DESCR,
-     DEATHTRACK_CONDITION,
      ARMORPIERCER,
      ARMORPIERCER_DESCR,
      ARMORPIERCER_CONDITION,
      KAMIKAZE,
      KAMIKAZE_DESCR,
      KAMIKAZE_CONDITION,
-     WHITETIGER,
-     WHITETIGER_DESCR,
-     WHITETIGER_CONDITION,
      LUCKYDEVIL,
      LUCKYDEVIL_DESCR,
      LUCKYDEVIL_CONDITION,
@@ -869,12 +958,21 @@ class ACHIEVEMENTS(object):
      PYROMANIACMEDAL,
      PYROMANIACMEDAL_DESCR,
      PYROMANIACMEDAL_CONDITION,
+     WHITETIGER,
+     WHITETIGER_DESCR,
+     WHITETIGER_CONDITION,
      BATTLECITIZEN,
      BATTLECITIZEN_DESCR,
      BATTLECITIZEN_CONDITION,
      WFC2014,
      WFC2014_DESCR,
      WFC2014_CONDITION,
+     DEATHTRACK,
+     DEATHTRACK_DESCR,
+     DEATHTRACK_CONDITION,
+     OPERATIONWINTER,
+     OPERATIONWINTER_DESCR,
+     OPERATIONWINTER_CONDITION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,
@@ -893,6 +991,14 @@ class ACHIEVEMENTS(object):
      HISTBATTLE6_HISTORYLESSONS,
      HISTBATTLE6_HISTORYLESSONS_DESCR,
      HISTBATTLE6_HISTORYLESSONS_CONDITION,
+     TANKWOMEN,
+     TANKWOMEN_DESCR,
+     TANKWOMEN_CONDITION,
+     TANKWOMEN_NOTIFICATION,
+     FIRSTMERIT,
+     FIRSTMERIT_DESCR,
+     FIRSTMERIT_CONDITION,
+     FIRSTMERIT_NOTIFICATION,
      RARE100003,
      RARE100003_DESCR,
      RARE100003_CONDITION,

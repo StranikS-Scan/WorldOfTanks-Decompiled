@@ -34,3 +34,7 @@ class BattleSessionWindowMeta(DAAPIModule):
     def as_setCommonLimitsS(self, teamLevel, minTotalLevel, maxTotalLevel, maxPlayers):
         if self._isDAAPIInited():
             return self.flashObject.as_setCommonLimits(teamLevel, minTotalLevel, maxTotalLevel, maxPlayers)
+
+    def as_setPlayersCountTextS(self, playersCountText):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setPlayersCountText(playersCountText)

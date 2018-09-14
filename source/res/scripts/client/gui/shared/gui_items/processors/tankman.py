@@ -196,12 +196,12 @@ class TankmanUnload(Processor):
         return
 
 
-class TankmanReturn(TankmanUnload):
+class TankmanReturn(Processor):
 
     def __init__(self, vehicle):
         self.__prefix = 'return_crew'
-        super(TankmanReturn, self).__init__(vehicle, -1)
-        self.addPlugins([plugins.VehicleValidator(vehicle, False, prop={'isLocked': True})])
+        self.__vehicle = vehicle
+        super(TankmanReturn, self).__init__([plugins.VehicleValidator(self.__vehicle, False, prop={'isLocked': True})])
 
     def _successHandler(self, code, ctx = None):
         return makeI18nSuccess('%s/success' % self.__prefix, type=SM_TYPE.Information)
@@ -212,8 +212,8 @@ class TankmanReturn(TankmanUnload):
         return makeI18nError('%s/server_error' % self.__prefix)
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to return crew:', self.vehicle, self.slot)
-        BigWorld.player().inventory.returnCrew(self.vehicle.invID, lambda code: self._response(code, callback))
+        LOG_DEBUG('Make server request to return crew. VehicleItem :', self.__vehicle)
+        BigWorld.player().inventory.returnCrew(self.__vehicle.invID, lambda code: self._response(code, callback))
 
 
 class TankmanRetraining(ItemProcessor):
@@ -373,7 +373,7 @@ class TankmanDropSkills(ItemProcessor):
 
 class TankmanChangePassport(ItemProcessor):
 
-    def __init__(self, tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup, isFemale = False):
+    def __init__(self, tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
         hasUniqueData = self.__hasUniqueData(tankman, firstNameID, lastNameID, iconID)
         super(TankmanChangePassport, self).__init__(tankman, (plugins.MessageConfirmator('replacePassport/unique' if hasUniqueData else 'replacePassportConfirmation'),))
         self.firstNameID = firstNameID
@@ -382,14 +382,17 @@ class TankmanChangePassport(ItemProcessor):
         self.lastNameGroup = lastNameGroup
         self.iconID = iconID
         self.iconGroup = iconGroup
-        self.isFemale = isFemale
-        self.isPremium = False
+        self.isFemale = tankman.descriptor.isFemale
+        self.isPremium = tankman.descriptor.isPremium
 
     def _errorHandler(self, code, errStr = '', ctx = None):
         return makeI18nError('replace_tankman/server_error')
 
     def _successHandler(self, code, ctx = None):
-        goldPrice = g_itemsCache.items.shop.passportChangeCost
+        if self.isFemale:
+            goldPrice = g_itemsCache.items.shop.passportFemaleChangeCost
+        else:
+            goldPrice = g_itemsCache.items.shop.passportChangeCost
         return makeI18nSuccess('replace_tankman/success', money=formatPrice((0, goldPrice)), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):

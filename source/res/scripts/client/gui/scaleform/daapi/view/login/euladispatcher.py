@@ -2,10 +2,11 @@
 import ResMgr
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.doc_loaders.EULAVersionLoader import EULAVersionLoader
 from helpers import getClientLanguage
 from gui import makeHtmlString, GUI_SETTINGS
-from gui.shared.events import ShowWindowEvent, CloseWindowEvent
+from gui.shared.events import CloseWindowEvent, LoadViewEvent
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from Event import Event
 from adisp import async
@@ -37,8 +38,7 @@ class EULADispatcher(EventSystemEntity):
             self.__eulaText = self.__readEULAShort()
         if len(self.__eulaText):
             self.addListener(CloseWindowEvent.EULA_CLOSED, self.__onEulaClosed)
-            self.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_EULA, ctx={'isFull': isShowFullEULA,
-             'text': self.__eulaText}))
+            self.fireEvent(LoadViewEvent(VIEW_ALIAS.EULA_FULL if isShowFullEULA else VIEW_ALIAS.EULA, ctx={'text': self.__eulaText}))
 
     def __onEulaClosed(self, event):
         self.onEULAClosed()

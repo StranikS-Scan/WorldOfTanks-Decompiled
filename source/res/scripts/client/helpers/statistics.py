@@ -19,6 +19,13 @@ class _HARDWARE_SCORE_PARAMS:
     PARAM_CPU_SCORE = 4
 
 
+_SettingsFromStart = namedtuple('_SettingsFromStart', ['graphicsPreset',
+ 'graphicsEngine',
+ 'screenResWidth',
+ 'screenResHeight',
+ 'drrScale',
+ 'windowMode'])
+
 class StatisticsCollector:
     avrPing = property(lambda self: (0 if self.__framesTotal is 0 else self.__avrPing / self.__framesTotal))
     lagPercentage = property(lambda self: (0 if self.__framesTotal is 0 else self.__framesWithLags * 100 / self.__framesTotal))
@@ -87,10 +94,10 @@ class StatisticsCollector:
                 ret['gpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(_HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE)
                 ret['ping'] = int(math.ceil(self.avrPing))
                 ret['lag'] = self.lagPercentage
+                ret['graphicsEngine'] = SettingsCore.g_settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
                 if not self.__hangarLoaded:
                     self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_STRAIGHT_INTO_BATTLE
                 ret['graphicsPreset'] = SettingsCore.g_settingsCore.getSetting(GRAPHICS.PRESETS)
-                ret['graphicsEngine'] = SettingsCore.g_settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
                 windowMode = SettingsCore.g_settingsCore.getSetting(GRAPHICS.FULLSCREEN)
                 ret['windowMode'] = 1 if windowMode else 0
                 resolutionContainer = graphics.g_monitorSettings.currentVideoMode if windowMode else graphics.g_monitorSettings.currentWindowSize

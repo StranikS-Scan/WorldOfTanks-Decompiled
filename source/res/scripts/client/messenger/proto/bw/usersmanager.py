@@ -41,6 +41,9 @@ class UsersManager(ChatActionsListener):
         super(UsersManager, self).removeAllListeners()
         g_messengerEvents.channels.onConnectStateChanged -= self.__ce_onConnectStateChanged
 
+    def clear(self):
+        self.__isRosterReceivedOnce = False
+
     def switch(self, scope):
         self.__isPrivateOpen = False
         if scope is MESSENGER_SCOPE.LOBBY:

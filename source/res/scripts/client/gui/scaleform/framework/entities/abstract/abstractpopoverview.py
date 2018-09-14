@@ -6,7 +6,7 @@ from gui.shared.events import HidePopoverEvent
 
 class AbstractPopOverView(WrapperViewMeta, PopOverViewMeta):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(AbstractPopOverView, self).__init__()
 
     def _populate(self):

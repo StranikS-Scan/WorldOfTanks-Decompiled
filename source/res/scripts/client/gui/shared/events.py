@@ -4,7 +4,7 @@ from gui.shared.utils import CONST_CONTAINER
 __all__ = ['ArgsEvent',
  'LoadEvent',
  'ComponentEvent',
- 'ShowViewEvent',
+ 'LoadViewEvent',
  'ShowDialogEvent',
  'LoginEvent',
  'LoginCreateEvent',
@@ -47,23 +47,7 @@ class ArgsEvent(HasCtxEvent):
 
 
 class LoadEvent(HasCtxEvent):
-    LOAD_PREBATTLE = 'loadPrebattle'
-    LOAD_HANGAR = 'loadHangar'
-    LOAD_SHOP = 'loadShop'
-    LOAD_INVENTORY = 'loadInventory'
-    LOAD_PROFILE = 'loadProfile'
-    LOAD_TECHTREE = 'loadTechTree'
-    LOAD_RESEARCH = 'loadResearch'
     EXIT_FROM_RESEARCH = 'exitFromResearch'
-    LOAD_BARRACKS = 'loadBarracks'
-    LOAD_FORTIFICATIONS = 'loadFortifications'
-    LOAD_CUSTOMIZATION = 'loadCustomization'
-    LOAD_EULA = 'loadEULA'
-    LOAD_BATTLE_LOADING = 'loadBattleLoading'
-    LOAD_TUTORIAL_LOADING = 'loadTutorialLoading'
-    LOAD_BATTLE_QUEUE = 'loadBattleQueue'
-    LOAD_TRAININGS = 'loadTrainings'
-    LOAD_TRAINING_ROOM = 'loadTrainingRoom'
 
 
 class FocusEvent(HasCtxEvent):
@@ -81,12 +65,12 @@ class ComponentEvent(SharedEvent):
         self.alias = alias
 
 
-class ShowViewEvent(HasCtxEvent):
-    SHOW_LOGIN = 'showLogin'
-    SHOW_INTRO_VIDEO = 'showIntroVideo'
-    SHOW_LOBBY = 'showLobby'
-    SHOW_LOBBY_MENU = 'showLobbyMenu'
-    ClOSE_LOBBY_MENU = 'closeLobbyMenu'
+class LoadViewEvent(HasCtxEvent):
+
+    def __init__(self, alias = None, name = None, ctx = None):
+        super(LoadViewEvent, self).__init__(alias, ctx)
+        self.name = name if name is not None else alias
+        return
 
 
 class ShowDialogEvent(SharedEvent):
@@ -145,62 +129,9 @@ class LoginEventEx(LoginEvent):
         self.showAutoLoginBtn = showAutoLoginBtn
 
 
-class ShowWindowEvent(HasCtxEvent):
-    SHOW_TEST_WINDOW = 'showTestWindow'
-    SHOW_LEGAL_INFO_WINDOW = 'showLegalInfoWindow'
-    SHOW_RECRUIT_WINDOW = 'showRecruitWindow'
-    SHOW_EXCHANGE_WINDOW = 'showExchangeWindow'
-    SHOW_PROFILE_WINDOW = 'showProfileWindow'
-    SHOW_EXCHANGE_VCOIN_WINDOW = 'showExchangeVcoinWindow'
-    SHOW_EXCHANGE_XP_WINDOW = 'showExchangeXPWindow'
-    SHOW_EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW = 'showExchangeFreeToTankmanXpWindow'
-    SHOW_VEHICLE_BUY_WINDOW = 'showVehicleBuyWindow'
-    SHOW_RETRAIN_CREW_WINDOW = 'showRetrainCrew'
-    SHOW_EULA = 'showEULA'
-    SHOW_SETTINGS_WINDOW = 'settingsWindow'
-    SHOW_VEHICLE_INFO_WINDOW = 'vehicleInfo'
-    SHOW_MODULE_INFO_WINDOW = 'moduleInfo'
-    SHOW_VEHICLE_SELL_DIALOG = 'vehicleSellWindow'
-    SHOW_PREMIUM_DIALOG = 'loadPremiumDialog'
-    SHOW_TECHNICAL_MAINTENANCE = 'showTechnicalMaintenance'
-    SHOW_TANKMAN_INFO = 'showTankmanInfo'
-    SHOW_BATTLE_RESULTS = 'showBattleResults'
-    SHOW_EVENTS_WINDOW = 'showEventsWindow'
-    SHOW_TANKMAN_DROP_SKILLS_WINDOW = 'showTankmanDropSkillsWindow'
-    SHOW_TRAINING_SETTINGS_WINDOW = 'showTrainingSettingsWindow'
-    SHOW_SQUAD_WINDOW = 'showSquadWindow'
-    SHOW_COMPANY_MAIN_WINDOW = 'showCompanyWindow'
-    SHOW_BATTLE_SESSION_WINDOW = 'showBattleSessionWindow'
-    SHOW_BATTLE_SESSION_LIST = 'showBattleSessionList'
-    SHOW_LAZY_CHANNEL_WINDOW = 'showLazyChannelWindow'
-    SHOW_LOBBY_CHANNEL_WINDOW = 'showLobbyChannelWindow'
-    SHOW_SEND_INVITES_WINDOW = 'showSendInvitesWindow'
-    SHOW_TUTORIAL_BATTLE_HISTORY = 'Tutorial.Dispatcher.BattleHistory'
-    SHOW_AUTO_INVITE_WINDOW = 'showAutoInviteWindow'
-    SHOW_BROWSER_WINDOW = 'showBrowserWindow'
-    SHOW_DEMONSTRATOR_WINDOW = 'showDemonstratorWindow'
-    SHOW_FAQ_WINDOW = 'showFAQWindow'
-    SHOW_CHANNEL_MANAGEMENT_WINDOW = 'showChannelsManagementWindow'
-    SHOW_CONNECT_TO_SECURE_CHANNEL_WINDOW = 'showConnectToSecureChannelWindow'
-    SHOW_ELITE_VEHICLE_WINDOW = 'showEliteVehicleWindow'
-    SHOW_CONTACTS_WINDOW = 'showWindowEvent'
-    SHOW_UNIT_WINDOW = 'showUnitWindow'
-    SHOW_ROSTER_SLOT_SETTINGS_WINDOW = 'showRosterSlotSettingsWindow'
-    SHOW_VEHICLE_SELECTOR_WINDOW = 'showVehicleSelectorWindow'
-    SHOW_G_E_INSPECT_WINDOW = 'showGEInspectWindow'
-    SHOW_G_E_DESIGNER_WINDOW = 'showGEDesignerWindow'
-    SHOW_FREE_X_P_INFO_WINDOW = 'showFreeXPInfoWindow'
-    SHOW_HISTORICAL_BATTLES_WINDOW = 'showHistoricalBattlesListWindow'
-    SHOW_FORT_ORDER_CONFIRM_WINDOW = 'showOrderConfirmWindow'
-    SHOW_AWARD_WINDOW = 'showAwardWindow'
-    SHOW_REFERRAL_MANAGEMENT_WINDOW = 'showReferralManagementWindow'
-    SHOW_REFERRAL_REFERRER_INTRO_WINDOW = 'showReferralReferrerIntroWindow'
-    SHOW_REFERRAL_REFERRALS_INTRO_WINDOW = 'showReferralReferralsIntroWindow'
-    SHOW_PROMO_PREMIUM_IGR_WINDOW = 'showPromoPremiumIgrWindow'
-
-
 class HideWindowEvent(HasCtxEvent):
     HIDE_SQUAD_WINDOW = 'hideSquadWindow'
+    HIDE_EVENT_SQUAD_WINDOW = 'hideEventSquadWindow'
     HIDE_COMPANY_WINDOW = 'hideCompanyWindow'
     HIDE_BATTLE_SESSION_WINDOW = 'hideBattleSessionWindow'
     HIDE_UNIT_WINDOW = 'hideUnitWindow'
@@ -208,22 +139,6 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_VEHICLE_SELECTOR_WINDOW = 'showVehicleSelectorWindow'
     HIDE_ROSTER_SLOT_SETTINGS_WINDOW = 'showRosterSlotSettingsWindow'
     HIDE_LEGAL_INFO_WINDOW = 'showLegalInfoWindow'
-
-
-class ShowPopoverEvent(HasCtxEvent):
-    SHOW_CREW_OPERATIONS_POPOVER = 'showCrewOperationsPopOver'
-    SHOW_NOTIFICATIONS_LIST_POPOVER = 'showNotificationsListPopOver'
-    SHOW_FORT_BUILDING_CARD_POPOVER_EVENT = 'showFortBuildingCardPopover'
-    SHOW_FORT_ORDER_POPOVER_EVENT = 'showFortOrderPopover'
-    SHOW_FORT_BATTLE_DIRECTION_POPOVER_EVENT = 'showFortBattleDirectionPopover'
-    SHOW_FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_EVENT = 'showFortIntelligenceClanFilterPopover'
-    SHOW_BATTLE_TYPE_SELECT_POPOVER_EVENT = 'battleTypeSelectPopover'
-    SHOW_ACCOUNT_POPOVER_EVENT = 'accountPopover'
-    SHOW_FORT_SETTINGS_PERIPHERY_POPOVER_EVENT = 'showFortSettingsPeripheryPopover'
-    SHOW_FORT_SETTINGS_DEFENCE_HOUR_POPOVER_EVENT = 'showFortSettingsDefenceHourPopover'
-    SHOW_FORT_SETTINGS_VACATION_POPOVER_EVENT = 'showFortSettingsVacationPopover'
-    SHOW_FORT_SETTINGS_DAYOFF_POPOVER_EVENT = 'showFortSettingsDayoffPopover'
-    SHOW_FORT_DATE_PICKER_POPOVER_EVENT = 'showFortDatePickerPopover'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -295,6 +210,7 @@ class CoolDownEvent(SharedEvent):
 class TutorialEvent(HasCtxEvent):
     RESTART = 'restartTutorial'
     REFUSE = 'refuseTutorial'
+    SHOW_TUTORIAL_BATTLE_HISTORY = 'Tutorial.Dispatcher.BattleHistory'
 
 
 class MessengerEvent(HasCtxEvent):
@@ -345,11 +261,6 @@ class ChannelCarouselEvent(SharedEvent):
         self.clientID = clientID
 
 
-class BrowserEvent(SharedEvent):
-    BROWSER_LOAD_START = 'browserLoadStart'
-    BROWSER_LOAD_END = 'browserLoadEnd'
-
-
 class AutoInviteEvent(SharedEvent):
     INVITE_RECEIVED = 'inviteReceived'
 
@@ -373,12 +284,15 @@ class CSRosterSlotSettingsWindow(HasCtxEvent):
 
 
 class FortEvent(HasCtxEvent):
+    REQUEST_TIMEOUT = 'requestTimeout'
+    VIEW_LOADED = 'viewLoaded'
     SWITCH_TO_MODE = 'switchToMode'
     ON_INTEL_FILTER_APPLY = 'onIntelFilterApplied'
     ON_INTEL_FILTER_RESET = 'onIntelFilterReset'
     ON_INTEL_FILTER_DO_REQUEST = 'onIntelFilterDoRequest'
     TRANSPORTATION_STEP = 'transportationStep'
     CHOICE_DIVISION = 'testChoiceDivision'
+    CLOSE_TRANSPORT_CONFIRM_WINDOW = 'closeTransportConfirmWindow'
 
     class TRANSPORTATION_STEPS(CONST_CONTAINER):
         NONE = 0
@@ -426,3 +340,18 @@ class CalendarEvent(SharedEvent):
 
     def getTimestamp(self):
         return self.__timestamp
+
+
+class BubbleTooltipEvent(LobbySimpleEvent):
+    SHOW = 'showBubble'
+
+    def __init__(self, eventType, message = None, duration = 5000):
+        super(BubbleTooltipEvent, self).__init__(eventType)
+        self.__message = message
+        self.__duration = duration
+
+    def getMessage(self):
+        return self.__message
+
+    def getDuration(self):
+        return self.__duration

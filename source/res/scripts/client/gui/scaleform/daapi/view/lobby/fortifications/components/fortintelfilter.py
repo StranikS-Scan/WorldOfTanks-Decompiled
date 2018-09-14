@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortIntelFilter.py
+import constants
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.managers.TextManager import TextType
 from helpers import i18n
-from debug_utils import LOG_DEBUG, LOG_ERROR
 from constants import FORT_SCOUTING_DATA_FILTER
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortIntelFilterMeta import FortIntelFilterMeta
@@ -120,9 +120,14 @@ class FortIntelFilter(FortIntelFilterMeta, FortViewHelper, AppRef):
                 self.__doCacheRequest(cache)
 
     def __getData(self):
-        outcome = {'clanTypes': FORTIFICATIONS.FORTINTELLIGENCE_CLANTYPES_ENUM,
-         'selectedFilterType': self.__getSelectedFilterType()}
-        return outcome
+        tooltipI18nKeyPrefix = '#tooltips:fortification/intelligenceWindow/tagSearchTextInput'
+        if constants.IS_CHINA:
+            tooltipI18nKeyPrefix += '/CN'
+        elif constants.IS_KOREA:
+            tooltipI18nKeyPrefix += '/KR'
+        return {'clanTypes': FORTIFICATIONS.FORTINTELLIGENCE_CLANTYPES_ENUM,
+         'selectedFilterType': self.__getSelectedFilterType(),
+         'tagTooltip': tooltipI18nKeyPrefix}
 
     def __setFilterButtonStatus(self, isMax):
         if isMax:

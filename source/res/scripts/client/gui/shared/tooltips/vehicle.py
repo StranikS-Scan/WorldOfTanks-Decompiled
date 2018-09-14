@@ -157,12 +157,17 @@ class VehicleStatsField(ToolTipDataField):
                 result.append(('def_sell_price', vehicle.defaultSellPrice))
                 result.append(('action_prc', vehicle.sellActionPrc))
             if minRentPrice and not vehicle.isPremiumIGR:
-                minRentPriceValue = vehicle.minRentPrice
-                if minRentPriceValue:
+                minRentPricePackage = vehicle.getRentPackage()
+                if minRentPricePackage:
+                    minRentPriceValue = minRentPricePackage['rentPrice']
+                    minDefaultRentPriceValue = minRentPricePackage['defaultRentPrice']
+                    rentActionPrc = vehicle.getRentPackageActionPrc(minRentPricePackage['days'])
                     credits, gold = g_itemsCache.items.stats.money
                     enoughGoldForRent = gold - minRentPriceValue[1] >= 0
                     enoughCreditsForRent = credits - minRentPriceValue[0] >= 0
                     result.append(('minRentalsPrice', (minRentPriceValue, (enoughCreditsForRent, enoughGoldForRent))))
+                    result.append(('defRentPrice', minDefaultRentPriceValue))
+                    result.append(('rentActionPrc', rentActionPrc))
             if rentals and not vehicle.isPremiumIGR:
                 rentLeftTime = vehicle.rentLeftTime
                 if rentLeftTime > 0:

@@ -18,7 +18,8 @@ class URLMarcos(object):
          'AREA_ID': 'getAreaID',
          'ENCODED_LOGIN': 'getEncodedLogin',
          'QUOTED_LOGIN': 'getQuotedLogin',
-         'TARGET_URL': 'getTargetURL'}
+         'TARGET_URL': 'getTargetURL',
+         'DB_ID': 'getDatabaseID'}
         filter = '\\$(' + reduce(lambda x, y: x + '|' + y, self.__macros.iterkeys()) + ')'
         self.__filter = re.compile(filter)
         self.__targetURL = ''
@@ -60,6 +61,14 @@ class URLMarcos(object):
             result = quote_plus(login)
         else:
             result = ''
+        return result
+
+    def getDatabaseID(self):
+        dbID = connectionManager.databaseID
+        if dbID:
+            result = str(dbID)
+        else:
+            result = 'errorID'
         return result
 
     def getTargetURL(self):

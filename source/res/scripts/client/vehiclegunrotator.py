@@ -139,6 +139,9 @@ class VehicleGunRotator(object):
                     if shotDir.dot(dirToTarget) > 0.0:
                         return
             markerPos, markerDir, markerSize, collData = self.__getGunMarkerPosition(shotPos, shotVec, dispersionAngle)
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isRecording:
+                replayCtrl.setGunMarkerParams(markerSize, markerPos, markerDir)
             if self.__clientMode and self.__showServerMarker:
                 self.__avatar.inputHandler.updateGunMarker2(markerPos, markerDir, markerSize, SERVER_TICK_LENGTH, collData)
             if not self.__clientMode:
@@ -266,7 +269,7 @@ class VehicleGunRotator(object):
             self.__rotate(shotPoint, timeDiff)
             self.__updateGunMarker()
             if replayCtrl.isPlaying:
-                replayCtrl.resetUpdateGunOnRewind()
+                replayCtrl.resetUpdateGunOnTimeWarp()
             return
 
     def __getTimeDiff(self):
@@ -312,9 +315,9 @@ class VehicleGunRotator(object):
             else:
                 self.estimatedTurretRotationTime = 0
             gunPitchLimits = calcPitchLimitsFromDesc(turretYaw, descr.gun['pitchLimits'])
-            self.__gunPitch = self.__getNextGunPitch(self.__gunPitch, shotGunPitch, self.__maxGunRotationSpeed * timeDiff, gunPitchLimits)
+            self.__gunPitch = self.__getNextGunPitch(self.__gunPitch, shotGunPitch, timeDiff, gunPitchLimits)
             replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnRewind:
+            if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnTimeWarp:
                 self.__updateTurretMatrix(turretYaw, 0.001)
                 self.__updateGunMatrix(self.__gunPitch, 0.001)
             else:
@@ -331,12 +334,12 @@ class VehicleGunRotator(object):
         shotPos, shotVec = self.__getCurShotPosition()
         markerPos, markerDir, markerSize, collData = self.__getGunMarkerPosition(shotPos, shotVec, self.__dispersionAngle)
         replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isRecording:
+        if replayCtrl.isRecording and not replayCtrl.isServerAim:
             replayCtrl.setGunMarkerParams(markerSize, markerPos, markerDir)
         if not self.__targetLastShotPoint:
             self.__lastShotPoint = markerPos
         replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnRewind:
+        if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnTimeWarp:
             self.__avatar.inputHandler.updateGunMarker(markerPos, markerDir, markerSize, 0.001, collData)
         else:
             self.__avatar.inputHandler.updateGunMarker(markerPos, markerDir, markerSize, self.__ROTATION_TICK_LENGTH, collData)
@@ -415,23 +418,30 @@ class VehicleGunRotator(object):
         else:
             return fmod(-pi + angle + max(diff, -limit), dpi) + pi
 
-    def __getNextGunPitch(self, curAngle, shotAngle, speedLimit, angleLimits):
+    def __getNextGunPitch(self, curAngle, shotAngle, timeDiff, angleLimits):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             gunPitch = replayCtrl.getGunPitch()
             if gunPitch > -100000:
                 return gunPitch
-        if curAngle == shotAngle:
-            return curAngle
+        if self.__maxGunRotationSpeed == 0.0:
+            shotAngle = curAngle
+            shotDiff = 0.0
+            descr = self.__avatar.vehicleTypeDescriptor
+            speedLimit = descr.gun['rotationSpeed'] * timeDiff
         else:
+            if curAngle == shotAngle:
+                return curAngle
             shotDiff = shotAngle - curAngle
-            if angleLimits is not None:
-                if shotAngle < angleLimits[0]:
-                    shotDiff = angleLimits[0] - curAngle
-                elif shotAngle > angleLimits[1]:
-                    shotDiff = angleLimits[1] - curAngle
-            if shotDiff > 0:
-                return curAngle + min(shotDiff, speedLimit)
+            speedLimit = self.__maxGunRotationSpeed * timeDiff
+        if angleLimits is not None:
+            if shotAngle < angleLimits[0]:
+                shotDiff = angleLimits[0] - curAngle
+            elif shotAngle > angleLimits[1]:
+                shotDiff = angleLimits[1] - curAngle
+        if shotDiff > 0:
+            return curAngle + min(shotDiff, speedLimit)
+        else:
             return curAngle + max(shotDiff, -speedLimit)
             return
 
@@ -573,6 +583,7 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
         CallbackDelayer.__init__(self)
         self.__updatePeriod = updatePeriod
         self.__currentSpeedState = self.__SPEED_IDLE
+        self.__keyOffCalled = False
         self.__stateTable = ((None,
           self.__startManualSound,
           self.__initHighSpeed,
@@ -679,15 +690,13 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
             return
 
     def __stopGearByKeyOff(self):
-        self.__stopByKeyOff(self.__gearSound)
-
-    def __stopByKeyOff(self, sound):
-        if sound is not None and sound.isPlaying:
-            param = sound.param(_PlayerTurretRotationSoundEffect.__GEAR_KEYOFF_PARAM)
+        if self.__gearSound is not None and self.__gearSound.isPlaying:
+            param = self.__gearSound.param(_PlayerTurretRotationSoundEffect.__GEAR_KEYOFF_PARAM)
             if param is not None:
+                self.__keyOffCalled = True
                 param.keyOff()
             else:
-                sound.stop()
+                self.__gearSound.stop()
         return
 
     def __startManualSound(self):
@@ -722,6 +731,9 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
         self.__currentSpeed = self.__SPEED_FAST
         if self.__manualSound.isPlaying:
             self.__manualSound.stop()
+        if self.__keyOffCalled:
+            self.__gearSound.stop()
+            self.__keyOffCalled = False
         self.__gearSound.play()
 
     def __stopManualSoundCallback(self):

@@ -1,16 +1,21 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
 import BigWorld
+import nations
 from debug_utils import *
-from gui.shared.economics import getActionPrc
 from helpers import i18n
 from items import ITEM_TYPE_NAMES, vehicles, getTypeInfoByName, ITEM_TYPE_INDICES
 from gui import nationCompareByIndex, GUI_SETTINGS
+from gui.shared.economics import getActionPrc
 from gui.shared.utils import ItemsParameters, CONST_CONTAINER
 from gui.shared.utils.functions import getShortDescr, stripShortDescrTags
 CLAN_LOCK = 1
 _ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount',
+ 'dossierVehicle',
+ 'dossierTankman',
+ 'achievement',
+ 'tankmanSkill')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -187,6 +192,10 @@ class HasIntCD(object):
     def itemTypeName(self):
         return ITEM_TYPE_NAMES[self.itemTypeID]
 
+    @property
+    def nationName(self):
+        return nations.NAMES[self.nationID]
+
     def __cmp__(self, other):
         if self is other:
             return 1
@@ -350,6 +359,9 @@ class FittingItem(GUIItem, HasIntCD):
     def getParams(self, vehicle = None):
         return dict(ItemsParameters.g_instance.get(self.descriptor, vehicle.descriptor if vehicle is not None else None))
 
+    def getRentPackage(self, days = None):
+        return None
+
     @property
     def icon(self):
         return _ICONS_MASK % {'type': self.itemTypeName,
@@ -357,21 +369,9 @@ class FittingItem(GUIItem, HasIntCD):
          'unicName': self.name.replace(':', '-')}
 
     @property
-    def iconContour(self):
-        return _ICONS_MASK % {'type': self.itemTypeName,
-         'subtype': 'contour/',
-         'unicName': self.name.replace(':', '-')}
-
-    @property
     def iconSmall(self):
         return _ICONS_MASK % {'type': self.itemTypeName,
          'subtype': 'small/',
-         'unicName': self.name.replace(':', '-')}
-
-    @property
-    def iconUnique(self):
-        return _ICONS_MASK % {'type': self.itemTypeName,
-         'subtype': 'unique/',
          'unicName': self.name.replace(':', '-')}
 
     def getBuyPriceCurrency(self):
@@ -400,6 +400,8 @@ class FittingItem(GUIItem, HasIntCD):
         return False
 
     def mayPurchase(self, money):
+        if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
+            return (False, 'center_unavailable')
         if self.itemTypeID not in (GUI_ITEM_TYPE.EQUIPMENT, GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.SHELL) and not self.isUnlocked:
             return (False, 'unlock_error')
         if self.isHidden:
@@ -466,3 +468,7 @@ class FittingItem(GUIItem, HasIntCD):
          self.intCD,
          self.itemTypeName,
          self.nationID)
+
+
+def getItemIconName(itemName):
+    return '%s.png' % itemName.replace(':', '-')

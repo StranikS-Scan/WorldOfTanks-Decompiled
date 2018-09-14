@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileWindow.py
 from adisp import process
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.daapi.settings import VIEW_ALIAS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.ProfileWindowMeta import ProfileWindowMeta
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import getProfileCommonInfo
 from gui.Scaleform.framework import AppRef
@@ -17,7 +17,7 @@ from gui import game_control
 
 class ProfileWindow(ProfileWindowMeta, AbstractWindowView, View, AppRef):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(ProfileWindow, self).__init__()
         self.__userName = ctx.get('userName')
         self.__databaseID = ctx.get('databaseID')

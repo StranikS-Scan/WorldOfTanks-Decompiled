@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/SquadView.py
 from adisp import process
-from debug_utils import LOG_DEBUG
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import SquadActionButtonStateVO
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from prebattle_shared import decodeRoster
 from gui.prb_control.context import prb_ctx
 from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
@@ -14,7 +15,7 @@ class SquadView(SquadViewMeta, PrbListener):
 
     def inviteFriendRequest(self):
         if self.canSendInvite():
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_SEND_INVITES_WINDOW, {'prbName': 'squad',
+            self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'squad',
              'ctrlType': CTRL_ENTITY_TYPE.PREBATTLE}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def canSendInvite(self):
@@ -72,7 +73,7 @@ class SquadView(SquadViewMeta, PrbListener):
 
     def _setActionButtonState(self):
         self.as_updateInviteBtnStateS(self._isInviteBtnEnabled())
-        self.as_setActionButtonStateS(vo_converters.makeSquadActionButtonVO(self.prbFunctional))
+        self.as_setActionButtonStateS(SquadActionButtonStateVO(self.prbFunctional))
 
     def _updateRallyData(self):
         self.as_updateRallyS(vo_converters.makeSquadVO(self.prbFunctional, app=self.app))

@@ -171,10 +171,7 @@ class ChannelEntity(ChatEntity, ChannelEvents):
         self._isJoined = isJoined
         self.clearHistory()
         if not isJoined:
-            while len(self._members):
-                _, member = self._members.popitem()
-                member.clear()
-
+            self.clearMembers()
         self.onConnectStateChanged(self)
 
     def addMessage(self, message):
@@ -185,6 +182,11 @@ class ChannelEntity(ChatEntity, ChannelEvents):
 
     def clearHistory(self):
         self._history.clear()
+
+    def clearMembers(self):
+        while len(self._members):
+            _, member = self._members.popitem()
+            member.clear()
 
     def haveMembers(self):
         return True
@@ -238,10 +240,7 @@ class ChannelEntity(ChatEntity, ChannelEvents):
         self._isJoined = False
         self._data = None
         self._history.clear()
-        while self._members:
-            _, member = self._members.popitem()
-            member.clear()
-
+        self.clearMembers()
         return
 
     def _onMemberStatusChanged(self, member):
@@ -335,7 +334,7 @@ class UserEntity(ChatEntity):
         return g_lobbyContext.getPlayerFullName(self._name, clanAbbrev=clanAbbrev, pDBID=pDBID)
 
     def getGroup(self):
-        return 'group_{0}'.format(1 if self._databaseID % 2 else 2)
+        return None
 
     def getRoster(self):
         return self._roster

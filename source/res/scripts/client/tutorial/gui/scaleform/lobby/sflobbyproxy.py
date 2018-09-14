@@ -93,7 +93,7 @@ class SfLobbyProxy(GUIProxy, AppRef):
     def goToScene(self, sceneID):
         method = self.config.getGoToSceneMethod(sceneID)
         if method:
-            g_eventBus.handleEvent(events.LoadEvent(method), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(method), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def playEffect(self, effectName, args, itemRef = None, containerRef = None):
         return self.effects.play(effectName, args)
@@ -228,7 +228,7 @@ class SfLobbyProxy(GUIProxy, AppRef):
                 self.onPageChanging(sceneID)
         return
 
-    def __onViewLoadError(self, token, msg, item):
+    def __onViewLoadError(self, name, msg, item):
         if item is not None:
             effectID = item.name
             for effectName in [GUI_EFFECT_NAME.SHOW_DIALOG, GUI_EFFECT_NAME.SHOW_WINDOW]:

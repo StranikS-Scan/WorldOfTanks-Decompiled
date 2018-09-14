@@ -6,7 +6,7 @@ from gui.Scaleform.framework.entities.View import View
 
 class BaseExchangeWindow(View, BaseExchangeWindowMeta, AbstractWindowView):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         View.__init__(self)
 
     def _populate(self):

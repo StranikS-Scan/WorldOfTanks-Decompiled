@@ -112,17 +112,17 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
                             else:
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEFUTURE
                             titleTpl = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_ITEM_TITLE_DEFENCE)
-                        background, resultLabel = (None, None)
-                        if battle.isResultsPresent():
-                            if battle.isWin():
-                                background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTVICTORY
-                                resultLabel = 'win'
-                            elif battle.isLose():
-                                background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTDEFEAT
-                                resultLabel = 'lose'
-                            elif battle.isDraw():
-                                background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTDRAW
-                                resultLabel = 'tie'
+                        if battle.isWin():
+                            background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTVICTORY
+                            resultLabel = 'win'
+                        elif battle.isLose():
+                            background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTDEFEAT
+                            resultLabel = 'lose'
+                        elif battle.isDraw():
+                            background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTDRAW
+                            resultLabel = 'tie'
+                        else:
+                            background, resultLabel = (None, None)
                         eventItem = {'icon': icon,
                          'title': titleTpl % {'clanName': '[%s]' % opponentsClanInfo[1]},
                          'clanID': opponentsClanInfo[0],
@@ -170,8 +170,8 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
     def _update(self):
         calendar = self.getCalendar()
         if calendar is not None:
-            lowerTimeBound = time_utils.getCurrentTimestamp() - self.TIME_LIMITS.LOW
-            higherTimeBound = time_utils.getCurrentTimestamp() + self.TIME_LIMITS.HIGH
+            lowerTimeBound = time_utils.getCurrentLocalServerTimestamp() - self.TIME_LIMITS.LOW
+            higherTimeBound = time_utils.getCurrentLocalServerTimestamp() + self.TIME_LIMITS.HIGH
             calendar.as_setMinAvailableDateS(lowerTimeBound)
             calendar.as_setMaxAvailableDateS(higherTimeBound)
             calendar.as_openMonthS(self.__selectedDate)

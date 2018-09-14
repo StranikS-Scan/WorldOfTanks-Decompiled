@@ -145,6 +145,11 @@ def _migrateTo11(core, data, initialized):
     data['marksOnGun'][GAME.SHOW_MARKS_ON_GUN] = False
 
 
+def _migrateTo12(core, data, initialized):
+    data['gameData'][GAME.SHOW_VECTOR_ON_MAP] = True
+    data['gameData'][GAME.SHOW_SECTOR_ON_MAP] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -184,6 +189,10 @@ _versions = ((1,
  (11,
   _migrateTo11,
   True,
+  False),
+ (12,
+  _migrateTo12,
+  False,
   False))
 
 @async

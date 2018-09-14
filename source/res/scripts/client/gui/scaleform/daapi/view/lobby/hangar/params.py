@@ -6,7 +6,8 @@ from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
-from gui.shared import events, g_eventsCache
+from gui.shared import events
+from gui.server_events import g_eventsCache
 from gui.shared.utils import ItemsParameters
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 

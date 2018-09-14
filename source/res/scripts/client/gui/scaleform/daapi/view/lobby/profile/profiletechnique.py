@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
+from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
@@ -10,6 +11,7 @@ from gui.shared import g_itemsCache
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES
 from nations import NAMES
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
+from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 
 class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
 
@@ -76,7 +78,7 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
             stats = vehDossier.getRandomStats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
             if g_itemsCache.items.getItemByCD(int(vehicleIntCD)).level > 4:
-                specialMarksStats.append(ProfileUtils.packAchievement(stats.getAchievement(MARK_ON_GUN_RECORD), vehDossier, self._userID is None))
+                specialMarksStats.append(AchievementsUtils.packAchievement(stats.getAchievement(MARK_ON_GUN_RECORD), vehDossier, self._userID is None))
         elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_TEAM:
             stats = vehDossier.getTeam7x7Stats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
@@ -102,6 +104,6 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
         packedList = []
         achievements = targetData.getAchievements(True)
         for achievementBlockList in achievements:
-            packedList.append(ProfileUtils.packAchievementList(achievementBlockList, vehDossier, self._userID is None))
+            packedList.append(AchievementsUtils.packAchievementList(achievementBlockList, vehDossier, self._userID is None, True, ACHIEVEMENTS_ALIASES.GREY_COUNTER))
 
         return packedList

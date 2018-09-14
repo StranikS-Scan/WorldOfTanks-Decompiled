@@ -250,7 +250,7 @@ def validateCustomizationItem(custData):
                     return (False, 'Camouflage and vehTypeCompDescr mismatch')
 
             elif custType == 'inscriptions':
-                if nationID != vehNationID:
+                if nationID != vehDescr.type.customizationNationID:
                     return (False, 'Inscription and vehTypeCompDescr mismatch')
                 try:
                     vehDescr.setPlayerInscription(0, innationID, time.time(), 0, 0)
@@ -286,3 +286,31 @@ def validateCustomizationItem(custData):
             if igrType != IGR_TYPE.NONE:
                 return (False, 'Unexpected IGR emblem')
         return (True, '')
+
+
+class NotificationItem(object):
+
+    def __init__(self, item):
+        self.item = item
+        text = item['text']
+        s = item['type'] + '\n'
+        for k in sorted(text.keys()):
+            s += k + '\n' + text[k] + '\n'
+
+        s += item['data']
+        self.asString = s
+
+    def __cmp__(self, other):
+        if other is None:
+            return 1
+        left = self.asString
+        right = other.asString
+        if left == right:
+            return 0
+        elif left < right:
+            return -1
+        else:
+            return 1
+
+    def __hash__(self):
+        return hash(self.asString)

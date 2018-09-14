@@ -1,9 +1,10 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/shell.py
 from debug_utils import LOG_ERROR
-from gui.shared import g_itemsCache, g_eventsCache
+from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipDataField, getComplexStatus, ToolTipParameterField, ToolTipData, ToolTipAttrField, TOOLTIP_TYPE
 from gui.shared.utils import ItemsParameters, findFirst
 from gui.shared.utils.gui_items import InventoryVehicle, VehicleItem
+from gui.server_events import g_eventsCache
 
 class ShellStatusField(ToolTipDataField):
 

@@ -1,6 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/sorties_dps.py
+import random
 import BigWorld
-from debug_utils import LOG_ERROR
+from UnitBase import UNIT_STATE
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getUnitMaxLevel, makeFortBattleShortVO
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeSortieShortVO
 from gui.Scaleform.framework import AppRef
@@ -15,6 +17,9 @@ from gui.prb_control.prb_helpers import unitFunctionalProperty
 from gui.shared.fortifications.fort_seqs import getDivisionSettings, BATTLE_ITEM_TYPE
 from gui.shared.utils import CONST_CONTAINER
 from helpers import i18n, time_utils
+from messenger import g_settings
+from messenger.m_constants import USER_GUI_TYPE
+from messenger.storage import storage_getter
 
 def makeDivisionData(nameGenerator):
     result = []
@@ -78,7 +83,7 @@ class DivisionsDataProvider(DAAPIDataProvider):
         return found
 
 
-class SortiesDataProvider(SortableDAAPIDataProvider):
+class SortiesDataProvider(SortableDAAPIDataProvider, AppRef):
 
     def __init__(self):
         super(SortiesDataProvider, self).__init__()
@@ -86,6 +91,7 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
         self._listMapping = {}
         self._mapping = {}
         self._selectedID = None
+        self.txtMgr = self.app.utilsManager.textManager
         return
 
     @unitFunctionalProperty
@@ -136,10 +142,9 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
 
     def buildList(self, cache):
         self.clear()
-        if not BigWorld.player().isLongDisconnectedFromCenter:
-            for index, item in enumerate(cache.getIterator()):
-                self._list.append(self._makeVO(index, item))
-                self._listMapping[item.getID()] = index
+        for index, item in enumerate(cache.getIterator()):
+            self._list.append(self._makeVO(index, item))
+            self._listMapping[item.getID()] = index
 
         self._rebuildMapping()
 
@@ -178,18 +183,33 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
         self._rebuildMapping()
         self.refresh()
 
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
+
     def _rebuildMapping(self):
         self._mapping = dict(map(lambda item: (item[1]['sortieID'], item[0]), enumerate(self.sortedCollection)))
 
     def _makeVO(self, index, item):
+        isInBattle = item.getState() & UNIT_STATE.IN_ARENA > 0 or item.getState() & UNIT_STATE.IN_QUEUE > 0 or item.getState() & UNIT_STATE.IN_SEARCH > 0
+        user = self.usersStorage.getUser(item.getCommanderDatabaseID())
+        if user:
+            colors = g_settings.getColorScheme('rosters').getColors(user.getGuiType())
+            color = colors[0] if user.isOnline() else colors[1]
+        else:
+            colors = g_settings.getColorScheme(USER_GUI_TYPE.OTHER)
+            color = colors[1]
         return {'sortieID': item.getID(),
          'creatorName': item.getCommanderFullName(),
          'divisionName': I18N_FORTIFICATIONS.sortie_division_name(item.getDivisionName()),
+         'description': self.txtMgr.getText(TextType.STANDARD_TEXT, item.getDescription()),
+         'isInBattle': isInBattle,
          'division': item.getDivision(),
          'playersCount': item.itemData.count,
          'commandSize': item.itemData.maxCount,
          'rallyIndex': index,
-         'igrType': item.getIgrType()}
+         'igrType': item.getIgrType(),
+         'color': color}
 
 
 class IntelligenceDataProvider(SortableDAAPIDataProvider):
@@ -466,6 +486,7 @@ class ClanBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
             formattedText = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_ISBATTLE))
             result['text'] = icon + ' ' + formattedText
         elif currentState == FORTIFICATION_ALIASES.CLAN_BATTLE_BEGINS:
+            battleID = item.getBattleID()
             timer = {}
             htmlFormatter = self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, '###')
             locale = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE)
@@ -475,6 +496,8 @@ class ClanBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
                 startTimeLeft = battleItem.getRoundStartTimeLeft()
             else:
                 startTimeLeft = item.getStartTimeLeft()
+            timer['useUniqueIdentifier'] = True
+            timer['uniqueIdentifier'] = battleID
             timer['deltaTime'] = startTimeLeft
             timer['htmlFormatter'] = htmlFormatter
             timer['timerDefaultValue'] = '00'

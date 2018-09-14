@@ -1,17 +1,25 @@
 # Embedded file name: scripts/client/gui/game_control/RefSystem.py
+import BigWorld
 from collections import defaultdict
 from operator import methodcaller, itemgetter
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from constants import REF_SYSTEM_FLAG, EVENT_TYPE
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
 from gui.Scaleform.genConsts.REFERRAL_SYSTEM import REFERRAL_SYSTEM
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
+from gui.Scaleform.framework.managers.TextManager import TextType
 from helpers import time_utils
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from helpers.i18n import makeString as _ms
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_itemsCache, g_eventsCache, events, g_eventBus
+from gui.shared import g_itemsCache, events, g_eventBus, event_dispatcher as shared_events
 from gui.shared.utils import findFirst
+from gui.server_events import g_eventsCache
 
 def _getRefSysCfg():
     return g_itemsCache.items.shop.refSystem or {}
@@ -27,6 +35,99 @@ def _getMaxReferralXPPool():
 
 def _getMaxNumberOfReferrals():
     return _getRefSysCfg()['maxNumberOfReferrals']
+
+
+class CreditsAward(AwardAbstract):
+
+    def __init__(self, creditsValue):
+        self.__creditsValue = long(creditsValue)
+
+    def getWindowTitle(self):
+        return _ms(MENU.AWARDWINDOW_TITLE_CREDITS)
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
+
+    def getAwardImage(self):
+        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARD_CREDITS_GLOW
+
+    def getHeader(self):
+        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_HEADER))
+
+    def getDescription(self):
+        creditsCount = '%s<nobr>%s' % (self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, BigWorld.wg_getIntegralFormat(self.__creditsValue)), self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, 16, 16, -4, 0)))
+        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, _ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_DESCRIPTION, credits=creditsCount))
+
+
+class VehicleAward(AwardAbstract):
+
+    def __init__(self, vehicle, boughtVehicle, achievedXp):
+        self.__vehicle = vehicle
+        self.__boughtVehicle = boughtVehicle
+        self.__achievedXp = achievedXp
+
+    def getWindowTitle(self):
+        return _ms(MENU.AWARDWINDOW_TITLE_NEWVEHICLE)
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
+
+    def getAwardImage(self):
+        return self.__vehicle.iconUniqueLight
+
+    def getHeader(self):
+        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
+
+    def getDescription(self):
+        if self.__boughtVehicle:
+            descriptionText = _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_BOUGHT, vehicleName=self.__vehicle.userName)
+        elif self.__achievedXp is not None:
+            descriptionText = _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NORMAL, expCount=BigWorld.wg_getIntegralFormat(self.__achievedXp), vehicleName=self.__vehicle.userName)
+        else:
+            descriptionText = _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NOXP, vehicleName=self.__vehicle.userName)
+        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, descriptionText)
+
+    def getAdditionalText(self):
+        result = []
+        for _, xpFactor in _getRefSystemPeriods():
+            result.append('%s<nobr>x%s' % (self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -8, 0)), BigWorld.wg_getNiceNumberFormat(xpFactor)))
+
+        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, _ms(MENU.AWARDWINDOW_REFERRAL_COMPLETE, modifiers=', '.join(result)))
+
+
+class TankmanAward(AwardAbstract):
+
+    def __init__(self, tankman, achievedXp, nextXp):
+        self.__tankman = tankman
+        self.__achievedXp = achievedXp
+        self.__nextXp = nextXp
+
+    def getWindowTitle(self):
+        return _ms(MENU.AWARDWINDOW_TITLE_NEWTANKMAN)
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
+
+    def getAwardImage(self):
+        return RES_ICONS.MAPS_ICONS_REFERRAL_TANKMANMALE
+
+    def getHeader(self):
+        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_HEADER))
+
+    def getDescription(self):
+        if self.__achievedXp is not None:
+            description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NORMAL, expCount=BigWorld.wg_getIntegralFormat(self.__achievedXp), tankman=self.__tankman.roleUserName)
+        else:
+            description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NOXP, tankman=self.__tankman.roleUserName)
+        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, description)
+
+    def getAdditionalText(self):
+        if self.__nextXp is not None:
+            expCount = '%s<nobr>%s' % (BigWorld.wg_getIntegralFormat(self.__nextXp), self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -8, 0)))
+            additionalText = _ms(MENU.AWARDWINDOW_REFERRAL_NEXTTANKMAN, expCount=self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, expCount))
+        else:
+            additionalText = ''
+        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, additionalText)
 
 
 class RefSystem(object):
@@ -45,6 +146,13 @@ class RefSystem(object):
         self.onPlayerBecomeReferrer = Event(self.__eventMgr)
         self.onPlayerBecomeReferral = Event(self.__eventMgr)
 
+    def fini(self):
+        self.__referrers = None
+        self.__referrals = None
+        self.__eventMgr.clear()
+        self.__clearQuestsData()
+        return
+
     def start(self):
         g_clientUpdateManager.addCallbacks({'stats.refSystem': self.__onRefStatsUpdated})
         g_eventsCache.onSyncCompleted += self.__onEventsUpdated
@@ -56,13 +164,6 @@ class RefSystem(object):
         g_playerEvents.onShopResync -= self.__onShopUpdated
         g_eventsCache.onSyncCompleted -= self.__onEventsUpdated
         g_clientUpdateManager.removeObjectCallbacks(self)
-
-    def fini(self):
-        self.__referrers = None
-        self.__referrals = None
-        self.__eventMgr.clear()
-        self.__clearQuestsData()
-        return
 
     def getReferrers(self):
         return self.__referrers
@@ -93,10 +194,19 @@ class RefSystem(object):
         return _getMaxNumberOfReferrals() - len(self.__referrals)
 
     def showTankmanAwardWindow(self, tankman, completedQuestIDs):
-        self.__showAwardWindow(tankman, completedQuestIDs)
+        LOG_DEBUG('Referrer has been get tankman award', tankman, completedQuestIDs)
+        curXp, nextXp, _ = self.__getAwardParams(completedQuestIDs)
+        shared_events.showAwardWindow(TankmanAward(tankman, curXp, nextXp))
 
     def showVehicleAwardWindow(self, vehicle, completedQuestIDs):
-        self.__showAwardWindow(vehicle, completedQuestIDs)
+        LOG_DEBUG('Referrer has been get vehicle award', vehicle, completedQuestIDs)
+        curXp, nextXp, isBoughtVehicle = self.__getAwardParams(completedQuestIDs)
+        shared_events.showAwardWindow(VehicleAward(vehicle, isBoughtVehicle, curXp))
+
+    def showCreditsAwardWindow(self, creditsValue, completedQuestIDs):
+        if creditsValue > 0:
+            LOG_DEBUG('Referrer has been get credits award', creditsValue, completedQuestIDs)
+            shared_events.showAwardWindow(CreditsAward(creditsValue))
 
     @classmethod
     def getRefPeriods(cls):
@@ -117,17 +227,16 @@ class RefSystem(object):
             return REFERRAL_SYSTEM.TYPE_REFERRER
         return REFERRAL_SYSTEM.TYPE_NO_REFERRAL
 
-    def showReferrerIntroWindow(self):
-        g_eventBus.handleEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_REFERRAL_REFERRER_INTRO_WINDOW))
+    def showReferrerIntroWindow(self, invitesCount):
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW, ctx={'invitesCount': invitesCount}))
         self.onPlayerBecomeReferrer()
 
     def showReferralIntroWindow(self, nickname, isNewbie = False):
-        g_eventBus.handleEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_REFERRAL_REFERRALS_INTRO_WINDOW, ctx={'referrerName': nickname,
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, ctx={'referrerName': nickname,
          'newbie': isNewbie}))
         self.onPlayerBecomeReferral()
 
-    def __showAwardWindow(self, item, completedQuestIDs):
-        LOG_DEBUG('Referrer has been get award', item, completedQuestIDs)
+    def __getAwardParams(self, completedQuestIDs):
         completedQuestID = completedQuestIDs.pop() if len(completedQuestIDs) else -1
         currentXP = nextXP = None
         for xp, quests in reversed(self.getQuests()):
@@ -137,11 +246,7 @@ class RefSystem(object):
             else:
                 nextXP = xp
 
-        g_eventBus.handleEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_AWARD_WINDOW, {'item': item,
-         'xp': currentXP,
-         'nextXp': nextXP,
-         'boughtVehicle': self.getReferralsXPPool() < self.getTotalXP()}))
-        return
+        return (currentXP, nextXP, self.getReferralsXPPool() < self.getTotalXP())
 
     def __clearQuestsData(self):
         self.__quests = []
@@ -186,7 +291,7 @@ class RefSystem(object):
 
     def __updateQuests(self):
         self.__clearQuestsData()
-        refSystemQuests = g_eventsCache.getSystemQuests(lambda x: x.getType() == EVENT_TYPE.REF_SYSTEM_QUEST)
+        refSystemQuests = g_eventsCache.getHiddenQuests(lambda x: x.getType() == EVENT_TYPE.REF_SYSTEM_QUEST)
         if refSystemQuests:
             self.__quests = self.__mapQuests(refSystemQuests.values())
             self.__totalXP, _ = self.__quests[-1]
@@ -244,7 +349,7 @@ class _RefItem(object):
         return self.__clanDBID
 
     def getFullName(self):
-        g_lobbyContext.getPlayerFullName(self.__nickName, clanAbbrev=self.__clanAbbrev, pDBID=self.__accountDBID)
+        return g_lobbyContext.getPlayerFullName(self.__nickName, clanAbbrev=self.__clanAbbrev, pDBID=self.__accountDBID)
 
     def getFirstBattleTime(self):
         return self.__firstBattleTime

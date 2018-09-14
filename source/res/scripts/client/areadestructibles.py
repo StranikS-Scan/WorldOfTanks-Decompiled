@@ -16,7 +16,8 @@ import FMOD
 g_cache = None
 g_destructiblesManager = None
 g_destructiblesAnimator = None
-MODULE_DEPENDENCY_HIDING_DELAY = 0.25
+MODULE_DEPENDENCY_HIDING_DELAY_CONSTANT = 0.25
+MODULE_DEPENDENCY_HIDING_DELAY = MODULE_DEPENDENCY_HIDING_DELAY_CONSTANT
 DESTRUCTIBLE_HIDING_DELAY_CONSTANT = 0.2
 DESTRUCTIBLE_HIDING_DELAY = DESTRUCTIBLE_HIDING_DELAY_CONSTANT
 _TREE_EFFECTS_SCALE_RATIO = 0.7
@@ -136,7 +137,6 @@ class DestructiblesManager():
         return self.__loadedChunkIDs.has_key(chunkID)
 
     def onProjectileExploded(self, hitParams, damagedDestructibles):
-        global DESTRUCTIBLE_HIDING_DELAY
         self.__reduceExplosionCacheByTimeout()
         explosionInfo = [hitParams, True]
         explDestrs = self.__explodedDestructibles
@@ -328,6 +328,7 @@ class DestructiblesManager():
 
     def __destroyFragile(self, chunkID, destrIndex, isNeedAnimation, isShotDamage, explosionInfo = None):
         self.__stopLifetimeEffect(chunkID, destrIndex, 0)
+        isHavokVisible = self.__havokWillSetDestructibleState(self.__spaceID, chunkID, destrIndex, True, explosionInfo)
         if isNeedAnimation:
             functor = partial(self.__setDestructibleState, self.__spaceID, chunkID, destrIndex, True, explosionInfo)
             callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY, functor)
@@ -340,12 +341,12 @@ class DestructiblesManager():
             return
         else:
             if isNeedAnimation:
-                self.__launchEffect(chunkID, destrIndex, desc, 'decayEffect', desc['filename'])
+                self.__launchEffect(chunkID, destrIndex, desc, 'decayEffect', desc['filename'], isHavokVisible)
                 if isShotDamage and desc.get('hitEffect'):
                     coreEffectType = 'hitEffect'
                 else:
                     coreEffectType = 'effect'
-                self.__launchEffect(chunkID, destrIndex, desc, coreEffectType, desc['filename'])
+                self.__launchEffect(chunkID, destrIndex, desc, coreEffectType, desc['filename'], isHavokVisible)
             return
 
     def __destroyModule(self, chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage, explosionInfo = None):
@@ -365,19 +366,20 @@ class DestructiblesManager():
                 dependModuleDesc = desc['modules'][kind]
                 dependKinds.append(dependModuleDesc['destroyedMat'])
 
+            isHavokVisible = self.__havokWillSetDestructibleMaterialsVisible(self.__spaceID, chunkID, destrIndex, [destroyedMat], [matKind] + dependKinds, explosionInfo)
+            moduleDependencyHidingDelay = MODULE_DEPENDENCY_HIDING_DELAY if isHavokVisible else 0.0
             if isNeedAnimation:
                 functor = partial(self.__setDestructibleMaterialsVisible, self.__spaceID, chunkID, destrIndex, [destroyedMat], [matKind], explosionInfo)
                 callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY, functor)
                 self.__destroyCallbacks[functor] = callbackID
                 functor = partial(self.__setDestructibleMaterialsVisible, self.__spaceID, chunkID, destrIndex, [], dependKinds, explosionInfo)
-                callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY + MODULE_DEPENDENCY_HIDING_DELAY, functor)
+                callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY + moduleDependencyHidingDelay, functor)
                 self.__destroyCallbacks[functor] = callbackID
             else:
-                kindsToHide = [matKind] + dependKinds
-                self.__setDestructibleMaterialsVisible(self.__spaceID, chunkID, destrIndex, [destroyedMat], kindsToHide, explosionInfo, False)
+                self.__setDestructibleMaterialsVisible(self.__spaceID, chunkID, destrIndex, [destroyedMat], [matKind] + dependKinds, explosionInfo, False)
             if isShotDamage:
                 unregisterCallback = partial(self.__unregisterModuleEffect, self.__spaceID, chunkID, destrIndex, matKind)
-                decayEffectID = self.__launchEffect(chunkID, destrIndex, moduleDesc, 'decayEffect', desc['filename'], unregisterCallback)
+                decayEffectID = self.__launchEffect(chunkID, destrIndex, moduleDesc, 'decayEffect', desc['filename'], isHavokVisible, unregisterCallback)
                 if decayEffectID is not None:
                     self.__registerModuleEffect(chunkID, destrIndex, matKind, decayEffectID)
             damagedDepands = []
@@ -401,9 +403,9 @@ class DestructiblesManager():
                     coreEffectType = 'hitEffect'
                 else:
                     coreEffectType = 'ramEffect'
-                self.__launchEffect(chunkID, destrIndex, moduleDesc, coreEffectType, desc['filename'])
+                self.__launchEffect(chunkID, destrIndex, moduleDesc, coreEffectType, desc['filename'], isHavokVisible)
                 for kind in undamagedDepands:
-                    self.__launchEffect(chunkID, destrIndex, desc['modules'][kind], 'ramEffect', desc['filename'])
+                    self.__launchEffect(chunkID, destrIndex, desc['modules'][kind], 'ramEffect', desc['filename'], isHavokVisible)
 
             damagedKinds = [matKind]
             damagedKinds += destroyDepends
@@ -415,7 +417,7 @@ class DestructiblesManager():
                     depends = desc['destroyDepends'].get(kind, [])
                     for dependKind in depends:
                         if dependKind in allUndamagedKinds:
-                            BigWorld.callback(MODULE_DEPENDENCY_HIDING_DELAY, partial(self.__destroyModule, chunkID, destrIndex, dependKind, isNeedAnimation, False, explosionInfo))
+                            BigWorld.callback(moduleDependencyHidingDelay, partial(self.__destroyModule, chunkID, destrIndex, dependKind, isNeedAnimation, False, explosionInfo))
                             return
 
             if len(allUndamagedKinds) == 1 and len(allDamagedKinds) >= 7:
@@ -435,7 +437,7 @@ class DestructiblesManager():
 
                 if isNeedAnimation:
                     functor = partial(self.__setDestructibleMaterialsVisible, self.__spaceID, chunkID, destrIndex, [], kindsToHide)
-                    callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY + MODULE_DEPENDENCY_HIDING_DELAY, functor)
+                    callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY + moduleDependencyHidingDelay, functor)
                     self.__destroyCallbacks[functor] = callbackID
                 else:
                     self.__setDestructibleMaterialsVisible(self.__spaceID, chunkID, destrIndex, [], kindsToHide, False)
@@ -467,7 +469,7 @@ class DestructiblesManager():
 
             return undamagedKinds
 
-    def __launchEffect(self, chunkID, destrIndex, desc, effectType, modelFile, callbackOnStop = None):
+    def __launchEffect(self, chunkID, destrIndex, desc, effectType, modelFile, isHavokVisible, callbackOnStop = None):
         effectVars = desc.get(effectType)
         if effectVars is None:
             return
@@ -495,7 +497,7 @@ class DestructiblesManager():
             if player is None or isPlayerAccount():
                 return
             effectStuff = random.choice(effectVars)
-            effectID = player.terrainEffects.addNew(pos, effectStuff.effectsList, effectStuff.keyPoints, callbackOnStop, dir=dir, scale=scale)
+            effectID = player.terrainEffects.addNew(pos, effectStuff.effectsList, effectStuff.keyPoints, callbackOnStop, dir=dir, scale=scale, havokEnabled=isHavokVisible)
             return effectID
 
     def __startLifetimeEffect(self, chunkID, destrIndex, moduleKind, desc, modelFile):
@@ -503,7 +505,7 @@ class DestructiblesManager():
         if chance is None or random.random() > chance:
             return
         else:
-            lifetimeEffectID = self.__launchEffect(chunkID, destrIndex, desc, 'lifetimeEffect', modelFile)
+            lifetimeEffectID = self.__launchEffect(chunkID, destrIndex, desc, 'lifetimeEffect', modelFile, False)
             if lifetimeEffectID is not None:
                 code = _encodeModule(chunkID, destrIndex, moduleKind)
                 self.__lifetimeEffects[code] = lifetimeEffectID
@@ -545,6 +547,14 @@ class DestructiblesManager():
         if self.__structuresEffects.has_key(code):
             del self.__structuresEffects[code]
 
+    def __havokWillSetDestructibleMaterialsVisible(self, spaceID, chunkID, destrIndex, kindsToShow, kindsToHide, explosionInfo = None, delCallback = True):
+        fashion = _getOrCreateFashion(spaceID, chunkID, destrIndex, True)
+        for kind in kindsToHide:
+            if fashion.havokDestructionVisible(kind):
+                return True
+
+        return False
+
     def __setDestructibleMaterialsVisible(self, spaceID, chunkID, destrIndex, kindsToShow, kindsToHide, explosionInfo = None, delCallback = True):
         if spaceID != self.__spaceID:
             return
@@ -582,6 +592,13 @@ class DestructiblesManager():
                         break
 
             return
+
+    def __havokWillSetDestructibleState(self, spaceID, chunkID, destrIndex, isDestroyed, explosionInfo = None):
+        fashion = _getOrCreateFashion(spaceID, chunkID, destrIndex, True)
+        if isDestroyed and explosionInfo is not None:
+            if fashion.havokDestructionVisible(0):
+                return True
+        return False
 
     def __setDestructibleState(self, spaceID, chunkID, destrIndex, isDestroyed, explosionInfo = None, delCallback = True):
         if spaceID != self.__spaceID:
@@ -1037,11 +1054,3 @@ def _printErrDescNotAvailable(spaceID, chunkID, destrIndex):
     if not objName:
         objName = 'unknown'
     LOG_ERROR('Destructible descriptor is not available, space: %s, object: %s' % (spaceName, objName))
-
-
-def enableHidingDelay(enable):
-    global DESTRUCTIBLE_HIDING_DELAY
-    if enable:
-        DESTRUCTIBLE_HIDING_DELAY = DESTRUCTIBLE_HIDING_DELAY_CONSTANT
-    else:
-        DESTRUCTIBLE_HIDING_DELAY = 0

@@ -55,9 +55,6 @@ class AvatarPositionControl(CallbackDelayer):
 
     def __doBind(self, vehicleID):
         self.__avatar.cell.bindToVehicle(vehicleID)
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isRecording:
-            replayCtrl.setPlayerVehicleID(vehicleID)
 
     def __doUnbind(self):
         self.__avatar.cell.bindToVehicle(0)

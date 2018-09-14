@@ -2,10 +2,13 @@
 import constants
 from adisp import async
 from CurrentVehicle import g_currentVehicle
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
+from debug_utils import LOG_ERROR
 from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+from gui.shared.utils.functions import getViewName
 from helpers import i18n, strcmp
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
@@ -17,7 +20,7 @@ from gui import TANKMEN_ROLES_ORDER_DICT, SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
-from gui.shared.events import ShowWindowEvent
+from gui.shared.events import LoadViewEvent
 from gui.shared.utils import decorators, isVehicleObserver
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmanSkill
@@ -28,7 +31,7 @@ from gui.shared import EVENT_BUS_SCOPE, events, g_itemsCache, REQ_CRITERIA
 
 class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, AppRef):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(PersonalCase, self).__init__()
         self.tmanInvID = ctx.get('tankmanID')
         self.tabIndex = ctx.get('page', -1)
@@ -41,11 +44,13 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
         isTankmanChanged = False
         isTankmanVehicleChanged = False
         if GUI_ITEM_TYPE.TANKMAN in inventory:
-            isTankmanChanged = True
             tankmanData = inventory[GUI_ITEM_TYPE.TANKMAN].get('compDescr')
             if tankmanData is not None and self.tmanInvID in tankmanData:
+                isTankmanChanged = True
                 if tankmanData[self.tmanInvID] is None:
                     return self.destroy()
+            if self.tmanInvID in inventory[GUI_ITEM_TYPE.TANKMAN].get('vehicle', {}):
+                isTankmanChanged = True
         isMoneyChanged = 'credits' in stats or 'gold' in stats or 'mayConsumeWalletResources' in cache
         isVehicleChanged = 'unlocks' in stats or 'vehsLock' in cache or GUI_ITEM_TYPE.VEHICLE in inventory
         if isVehicleChanged:
@@ -60,7 +65,7 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
             self.__setCommonData()
             self.__setSkillsData()
             self.__setDossierData()
-        if isTankmanChanged or isMoneyChanged or isVehicleChanged:
+        if isTankmanChanged or isMoneyChanged or isTankmanVehicleChanged:
             self.__setRetrainingData()
         if isTankmanChanged or isMoneyChanged:
             self.__setDocumentsData()
@@ -151,8 +156,7 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
         lastNameID = checkFlashInt(lastNameID)
         iconID = checkFlashInt(iconID)
         tankman = g_itemsCache.items.getTankman(int(invengoryID))
-        processor = TankmanChangePassport(tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup)
-        result = yield processor.request()
+        result = yield TankmanChangePassport(tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup).request()
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
@@ -165,10 +169,10 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def openExchangeFreeToTankmanXpWindow(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, {'tankManId': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, getViewName(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, self.tmanInvID), {'tankManId': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
 
     def dropSkills(self):
-        self.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_TANKMAN_DROP_SKILLS_WINDOW, {'tankmanID': self.tmanInvID}))
+        self.fireEvent(LoadViewEvent(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, getViewName(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.tmanInvID), {'tankmanID': self.tmanInvID}))
 
     def _populate(self):
         super(PersonalCase, self)._populate()
@@ -336,9 +340,14 @@ class PersonalCaseDataProvider(AppRef):
     @async
     def getDocumentsData(self, callback):
         items = g_itemsCache.items
-        config = tankmen.getNationConfig(items.getTankman(self.tmanInvID).nationID)
-        shopPrice = items.shop.passportChangeCost
-        defaultPrice = items.shop.defaults.passportChangeCost
+        tankman = items.getTankman(self.tmanInvID)
+        config = tankmen.getNationConfig(tankman.nationID)
+        if tankman.descriptor.isFemale:
+            shopPrice = items.shop.passportFemaleChangeCost
+            defaultPrice = items.shop.defaults.passportFemaleChangeCost
+        else:
+            shopPrice = items.shop.passportChangeCost
+            defaultPrice = items.shop.defaults.passportChangeCost
         action = None
         if shopPrice != defaultPrice:
             action = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
@@ -350,22 +359,24 @@ class PersonalCaseDataProvider(AppRef):
         callback({'money': (items.stats.credits, items.stats.gold),
          'passportChangeCost': shopPrice,
          'action': action,
-         'firstnames': self.__getDocNormalGroupValues(config, 'firstNames'),
-         'lastnames': self.__getDocNormalGroupValues(config, 'lastNames'),
-         'icons': self.__getDocNormalGroupValues(config, 'icons')})
+         'firstnames': self.__getDocGroupValues(tankman, config, 'firstNames'),
+         'lastnames': self.__getDocGroupValues(tankman, config, 'lastNames'),
+         'icons': self.__getDocGroupValues(tankman, config, 'icons', sortNeeded=False)})
         return
 
     @staticmethod
-    def __getDocNormalGroupValues(config, groupName):
+    def __getDocGroupValues(tankman, config, subGroupName, sortNeeded = True):
         result = []
-        for gIdx, group in enumerate(config['normalGroups']):
-            if not group.get('notInShop'):
-                for idx in group['%sList' % groupName]:
+        isPremium, isFemale = tankman.descriptor.isPremium, tankman.descriptor.isFemale
+        groupName = 'premiumGroups' if isPremium else 'normalGroups'
+        for gIdx, group in enumerate(config[groupName]):
+            if not group['notInShop'] and group['isFemales'] == isFemale:
+                for idx in group['%sList' % subGroupName]:
                     result.append({'id': idx,
                      'group': gIdx,
-                     'value': config[groupName][idx]})
+                     'value': config[subGroupName][idx]})
 
-        if groupName != 'icons':
+        if sortNeeded:
             result = sorted(result, key=lambda sortField: sortField['value'], cmp=lambda a, b: strcmp(unicode(a), unicode(b)))
         return result
 
@@ -397,19 +408,6 @@ class PersonalCaseDataProvider(AppRef):
 
     @staticmethod
     def __packAchievement(achieve, dossierCompDescr):
-        icons = achieve.getIcons()
-        return {'name': achieve.getName(),
-         'block': achieve.getBlock(),
-         'userName': achieve.getUserName(),
-         'description': achieve.getUserDescription(),
-         'type': achieve.getType(),
-         'section': achieve.getSection(),
-         'value': achieve.getValue(),
-         'localizedValue': achieve.getI18nValue(),
-         'levelUpValue': achieve.getLevelUpValue(),
-         'isDone': achieve.isDone(),
-         'isInDossier': achieve.isInDossier(),
-         'icon': {'big': icons['180x180'],
-                  'small': icons['67x71']},
-         'dossierType': constants.DOSSIER_TYPE.TANKMAN,
-         'dossierCompDescr': dossierCompDescr}
+        commonData = AchievementsUtils.getCommonAchievementData(achieve, constants.DOSSIER_TYPE.TANKMAN, dossierCompDescr)
+        commonData['counterType'] = AchievementsUtils.getCounterType(achieve)
+        return commonData

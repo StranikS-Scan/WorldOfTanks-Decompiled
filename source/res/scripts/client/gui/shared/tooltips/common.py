@@ -1,20 +1,21 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
 from collections import namedtuple
-from operator import methodcaller
+from operator import methodcaller, itemgetter
 import pickle
 import types
+import math
 import BigWorld
 import constants
 import ArenaType
 import fortified_regions
-import math
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
 from gui.prb_control import getBattleID
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from predefined_hosts import g_preDefinedHosts
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING, LOG_DEBUG
@@ -36,11 +37,11 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils import findFirst, CONST_CONTAINER
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE
-from gui.shared import g_eventsCache, g_itemsCache
+from gui.shared import g_itemsCache
+from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.lobby.customization import CAMOUFLAGES_KIND_TEXTS, CAMOUFLAGES_NATIONS_TEXTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
-from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 from items import vehicles
 
 class IgrTooltipData(ToolTipBaseData):
@@ -205,11 +206,14 @@ class SettingsControlTooltipData(ToolTipBaseData):
         super(SettingsControlTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
     def getDisplayableData(self, controlID):
-        warningKey = '%s/warning' % controlID
-        warning = i18n.makeString('#settings:%s' % warningKey)
-        if warningKey == warning:
-            warning = ''
-        return {'name': i18n.makeString('#settings:%s' % controlID),
+        if i18n.doesTextExist('#settings:%s/name'):
+            name = i18n.makeString('#settings:%s/name' % controlID)
+        else:
+            name = i18n.makeString('#settings:%s' % controlID)
+        warning = ''
+        if i18n.doesTextExist('#settings:%s/warning'):
+            warning = i18n.makeString('#settings:%s/warning' % controlID)
+        return {'name': name,
          'descr': i18n.makeString('#settings:%s/description' % controlID),
          'recommended': '',
          'status': {'level': 'warning',
@@ -233,15 +237,15 @@ class SettingsButtonTooltipData(ToolTipBaseData):
                     serverName = name
                     break
 
-        stats = None
+        serversStats = None
         if constants.IS_SHOW_SERVER_STATS:
-            stats = dict(game_control.g_instance.serverStats.getStats())
+            serversStats, _ = game_control.g_instance.serverStats.getFormattedStats()
         return {'name': i18n.makeString(TOOLTIPS.HEADER_MENU_HEADER),
          'description': i18n.makeString(TOOLTIPS.HEADER_MENU_DESCRIPTION),
          'serverHeader': i18n.makeString(TOOLTIPS.HEADER_MENU_SERVER),
          'serverName': serverName,
          'playersOnServer': i18n.makeString(TOOLTIPS.HEADER_MENU_PLAYERSONSERVER),
-         'servers': stats}
+         'serversStats': serversStats}
 
 
 class CustomizationItemTooltipData(ToolTipBaseData):
@@ -249,49 +253,81 @@ class CustomizationItemTooltipData(ToolTipBaseData):
     def __init__(self, context):
         super(CustomizationItemTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
-    def getDisplayableData(self, type, id, nationId, timeLeft = None):
+    def _processVehiclesList(self, vehIntCDs):
+        vehStrList = []
+        for intCD in vehIntCDs:
+            vehicle = vehicles.getVehicleType(int(intCD))
+            if vehicle and VEHICLE_TAGS.SECRET not in vehicle.tags:
+                vehStrList.append(vehicle.shortUserString)
+
+        return vehStrList
+
+    def getDisplayableData(self, type, id, nationId, timeLeft, isPermanent = None, value = None, isUsed = False, boundVehicle = None, boundToCurrentVehicle = False):
         ms = i18n.makeString
         item = self._context.buildItem(nationId, id, type)
         headerText = ''
         typeText = ''
         descriptionText = ''
-        timeLeftText = ''
-        bottomText = ''
-        if timeLeft is not None:
-            isUsed = False
-        else:
-            timeLeft, isUsed = CustomizationHelper.getTimeLeft(id, type, nationId)
+        allow = None
+        deny = None
+        usageStr = None
+        allowStr = None
+        denyStr = None
+        footerStr = ''
+        footerList = []
         if timeLeft >= 0:
             timeLeftText = self.__getTimeLeftText(timeLeft, isUsed)
             timeLeftText = self.__getText(TextType.MAIN_TEXT, timeLeftText)
         else:
             timeLeftText = ''
+        if isPermanent and value > 1:
+            footerList.append(ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_STORED, quantity=value))
         if type == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE:
             headerText = item['description'] + '/label'
+            allow = item['allow']
+            deny = item['deny']
             typeText = ms(VEHICLE_CUSTOMIZATION.CAMOUFLAGE) + ' ' + ms(CAMOUFLAGES_KIND_TEXTS[item['kind']])
             descriptionText = self.__getText(TextType.STANDARD_TEXT, ms(item['description'] + '/description'))
-            bottomText = self.__getText(TextType.STATS_TEXT, ms(CAMOUFLAGES_NATIONS_TEXTS[nationId]))
         elif type == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
-            groupName, _, _, _, emblemName, _ = item
+            groupName, _, _, _, emblemName, _, _, allow, deny = item
             groups, _, _ = vehicles.g_cache.playerEmblems()
-            _, group, _, _ = groups.get(groupName)
+            _, group, _, _, _, _ = groups.get(groupName)
             headerText = emblemName
             typeText = ms(VEHICLE_CUSTOMIZATION.EMBLEM) + ' ' + ms(group)
             descriptionText = ''
-            bottomText = ''
         elif type == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION:
-            groupName, _, _, _, inscriptionName, _ = item
+            groupName, _, _, _, inscriptionName, _, _, allow, deny = item
             groups = vehicles.g_cache.customization(nationId).get('inscriptionGroups', {})
-            _, group, _ = groups.get(groupName)
+            _, group, _, _, _ = groups.get(groupName)
             headerText = inscriptionName
             typeText = ms(VEHICLE_CUSTOMIZATION.INSCRIPTION) + ' ' + ms(group)
             descriptionText = ''
-            bottomText = self.__getText(TextType.STATS_TEXT, ms(CAMOUFLAGES_NATIONS_TEXTS[nationId]))
+        allow = self._processVehiclesList(allow)
+        deny = self._processVehiclesList(deny)
+        if boundVehicle is None and allow and len(allow) > 0:
+            allowStr = ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_EXACTVEHICLE, vehicle=', '.join(allow))
+        if boundVehicle is None and deny and len(deny) > 0:
+            denyStr = ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_DENYVEHICLE, vehicle=', '.join(deny))
+        if boundToCurrentVehicle:
+            usageStr = self.__getText(TextType.STATS_TEXT, ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_CURRENTVEHICLE))
+        elif boundVehicle:
+            vehicle = vehicles.getVehicleType(int(boundVehicle))
+            usageStr = self.__getText(TextType.STATS_TEXT, ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_EXACTVEHICLE, vehicle=vehicle.shortUserString))
+        elif type != CUSTOMIZATION_ITEM_TYPE.EMBLEM and not allowStr:
+            usageStr = self.__getText(TextType.STATS_TEXT, ms(CAMOUFLAGES_NATIONS_TEXTS[nationId]))
+        if usageStr:
+            footerList.append(usageStr)
+        if allowStr:
+            footerList.append(allowStr)
+        if denyStr:
+            footerList.append(denyStr)
+        if len(footerList):
+            footerStr = self.__getText(TextType.STATS_TEXT, '\n'.join(footerList))
         return {'header': self.__getText(TextType.HIGH_TITLE, ms(headerText)),
          'kind': self.__getText(TextType.MAIN_TEXT, typeText),
          'description': descriptionText,
          'timeLeft': timeLeftText,
-         'vehicleType': bottomText}
+         'vehicleType': footerStr}
 
     def __getText(self, type, text):
         return self.app.utilsManager.textManager.getText(type, text)
@@ -313,7 +349,7 @@ class CustomizationItemTooltipData(ToolTipBaseData):
                 timeLeft = int(math.ceil(timeLeft / secondsInMinute))
                 dimension = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL_MINUTES)
             result = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL_USED if isUsed else VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL, time=timeLeft, dimension=dimension)
-        elif timeLeft == 0:
+        elif not timeLeft:
             result = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_INFINITY)
         return result
 
@@ -336,7 +372,7 @@ class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):
             homePeripheryID = fort.peripheryID
             playersAtClan, buildingsNum = len(g_clanCache.clanMembers), len(fort.getBuildingsCompleted())
             wEfficiencyVal = ProfileUtils.getFormattedWinsEfficiency(battlesStats)
-            combatCount, winsEff, profitEff = battlesStats.getCombatCount(), ProfileUtils.UNAVAILABLE_SYMBOL if wEfficiencyVal == str(ProfileUtils.UNAVAILABLE_VALUE) else wEfficiencyVal, battlesStats.getProfitFactor()
+            combatCount, winsEff, profitEff = battlesStats.getBattlesCount(), ProfileUtils.UNAVAILABLE_SYMBOL if wEfficiencyVal == str(ProfileUtils.UNAVAILABLE_VALUE) else wEfficiencyVal, battlesStats.getProfitFactor()
             creationTime = fortDossier.getGlobalStats().getCreationTime()
             defence, vacation, offDay = fort.getDefencePeriod(), fort.getVacationDate(), fort.getLocalOffDay()
         elif type(clanDBID) in (types.IntType, types.LongType, types.FloatType):
@@ -473,7 +509,7 @@ class ToolTipRefSysAwards(ToolTipBaseData):
         def filterFunc(q):
             return q.getID() in questIDs
 
-        quests = g_eventsCache.getSystemQuests(filterFunc)
+        quests = g_eventsCache.getHiddenQuests(filterFunc)
         icon = ''
         awardDescrPars = []
         isCompleted = True
@@ -665,7 +701,7 @@ class ActionTooltipData(ToolTipBaseData):
     def __init__(self, context):
         super(ActionTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
-    def getDisplayableData(self, type, key, newPrice, oldPrice, isBuying, forCredits = False):
+    def getDisplayableData(self, type, key, newPrice, oldPrice, isBuying, forCredits = False, rentPackage = None):
         actionNames = None
         body = ''
         descr = ''
@@ -686,6 +722,14 @@ class ActionTooltipData(ToolTipBaseData):
                 newPriceCurrency = oldPriceCurrency = 'credits' if forCredits else 'gold'
                 if key == 'freeXPToTManXPRate':
                     newPriceCurrency = oldPriceCurrency = 'freeXp'
+        if type == ACTION_TOOLTIPS_TYPE.RENT:
+            item = g_itemsCache.items.getItemByCD(int(key))
+            actions = g_eventsCache.getRentAction(item, rentPackage)
+            if actions:
+                actionNames = map(itemgetter(1), actions)
+                newPriceValue = newCredits if forCredits else newGold
+                oldPriceValue = oldCredits if forCredits else oldGold
+                newPriceCurrency = oldPriceCurrency = 'credits' if forCredits else 'gold'
         elif type == ACTION_TOOLTIPS_TYPE.ITEM:
             item = g_itemsCache.items.getItemByCD(int(key))
             useGold = item.isPremium and not forCredits and isBuying
@@ -749,21 +793,42 @@ class ActionTooltipData(ToolTipBaseData):
         if actionNames or hasRentCompensation:
             formatedNewPrice = makeHtmlString('html_templates:lobby/quests/actions', newPriceCurrency, {'value': BigWorld.wg_getGoldFormat(newPriceValue)})
             formatedOldPrice = makeHtmlString('html_templates:lobby/quests/actions', oldPriceCurrency, {'value': BigWorld.wg_getGoldFormat(oldPriceValue)})
-            body = i18n.makeString('#tooltips:actionPrice/body', oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
+            body = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
 
             def mapName(item):
                 action = g_eventsCache.getActions().get(item)
-                return i18n.makeString('#tooltips:actionPrice/actionName', actionName=action.getUserName())
+                return i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
 
             descr = ''
             if actionNames:
                 actionUserNames = ', '.join(map(mapName, actionNames))
                 if len(actionNames) > 1:
-                    descr = i18n.makeString('#tooltips:actionPrice/forActions', actions=actionUserNames)
+                    descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTIONS, actions=actionUserNames)
                 else:
-                    descr = i18n.makeString('#tooltips:actionPrice/forAction', action=actionUserNames)
+                    descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, action=actionUserNames)
             if hasRentCompensation:
                 formattedRentCompensation = makeHtmlString('html_templates:lobby/quests/actions', 'gold', {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
-                descr += '\n' + i18n.makeString('#tooltips:actionPrice/rentCompensation', rentCompensation=formattedRentCompensation)
-        return {'name': i18n.makeString('#tooltips:actionPrice/header'),
+                descr += '\n' + i18n.makeString(TOOLTIPS.ACTIONPRICE_RENTCOMPENSATION, rentCompensation=formattedRentCompensation)
+        return {'name': i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER),
          'descr': '%s\n%s' % (body, descr)}
+
+
+class ToolTipFortWrongTime(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(ToolTipFortWrongTime, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
+
+    def getDisplayableData(self):
+        return {'name': i18n.makeString(TOOLTIPS.FORTWRONGTIME_HEADER),
+         'descr': i18n.makeString(TOOLTIPS.FORTWRONGTIME_BODY, local=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentTimestamp()), server=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentLocalServerTimestamp()))}
+
+
+class MapSmallTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(MapSmallTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
+
+    def getDisplayableData(self, data):
+        return {'mapName': data.mapName,
+         'description': data.description,
+         'imageURL': data.imageURL}

@@ -17,6 +17,7 @@ from gui.prb_control import settings
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.context.unit_ctx import JoinUnitCtx, LeaveUnitCtx
+from gui.prb_control.formatters import messages
 from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, UNIT_MODE_FLAGS, FUNCTIONAL_EXIT
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -29,7 +30,7 @@ from gui.shared.fortifications.fort_helpers import fortProviderProperty, FortLis
 
 class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         self.__isMinimize = False
         super(FortBattleRoomWindow, self).__init__()
         self.__modeFlags = ctx.get('modeFlags', UNIT_MODE_FLAGS.UNDEFINED)
@@ -83,7 +84,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
     def onCreateRally(self):
         if not BigWorld.player().isLongDisconnectedFromCenter:
             self.__clearCache()
-            self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CHOICE_DIVISION_WINDOW_EVENT), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CHOICE_DIVISION_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             SystemMessages.pushI18nMessage('#system_messages:fortification/errors/CENTER_NOT_AVAILABLE', type=SystemMessages.SM_TYPE.Error)
 
@@ -117,8 +118,21 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
         else:
             NavigationStack.clear(self.getNavigationKey())
 
+    def onUnitPlayerAdded(self, pInfo):
+        if not pInfo.isInvite():
+            self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_ADDED, pInfo)
+
+    def onUnitPlayerRemoved(self, pInfo):
+        if not pInfo.isInvite():
+            self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED, pInfo)
+
+    def __addPlayerNotification(self, key, pInfo):
+        chat = self.chat
+        if chat and not pInfo.isCurrentPlayer():
+            chat.as_addMessageS(messages.getUnitPlayerNotification(key, pInfo))
+
     def onUnitStateChanged(self, state, timeLeft):
-        if state.isInIdle():
+        if self.unitFunctional.hasLockedState():
             if state.isInQueue():
                 self.as_enableWndCloseBtnS(False)
                 self.currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE
@@ -244,10 +258,11 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
 
     def __initState(self, timeLeft = 0, acceptDelta = 0):
         model = None
-        if self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE:
-            model = self.__createAutoUpdateModel(self.currentState, timeLeft, '', [])
-        elif self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ERROR_STATE:
-            model = self.__createAutoUpdateModel(self.currentState, 0, '', [])
+        if self.isPlayerInSlot():
+            if self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE:
+                model = self.__createAutoUpdateModel(self.currentState, timeLeft, '', [])
+            elif self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ERROR_STATE:
+                model = self.__createAutoUpdateModel(self.currentState, 0, '', [])
         if model is not None:
             self.as_changeAutoSearchStateS(model)
         return

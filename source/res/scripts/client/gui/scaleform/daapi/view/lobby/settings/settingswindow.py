@@ -20,7 +20,7 @@ from account_helpers.settings_core.options import APPLY_METHOD
 
 class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(SettingsWindow, self).__init__()
         self.__redefinedKeyModeEnabled = ctx.get('redefinedKeyMode', True)
         self.__initialTabIdx = ctx.get('tabIndex', -1)

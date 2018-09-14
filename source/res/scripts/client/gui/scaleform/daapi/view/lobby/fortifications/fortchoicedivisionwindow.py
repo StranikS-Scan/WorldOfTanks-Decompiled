@@ -16,7 +16,7 @@ from helpers import i18n
 
 class FortChoiceDivisionWindow(AbstractWindowView, View, FortChoiceDivisionWindowMeta, AppRef):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(FortChoiceDivisionWindow, self).__init__()
 
     def _populate(self):

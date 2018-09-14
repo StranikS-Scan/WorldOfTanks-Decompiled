@@ -137,7 +137,7 @@ class ProjectileMover(object):
         effectTypeStr = effectMaterial + 'Hit'
         p0 = Math.Vector3(position.x, 1000, position.z)
         p1 = Math.Vector3(position.x, -1000, position.z)
-        waterDist = BigWorld.wg_collideWater(p0, p1)
+        waterDist = BigWorld.wg_collideWater(p0, p1, False)
         if waterDist > 0:
             waterY = p0.y - waterDist
             testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, p0, p1, 128)
@@ -196,15 +196,15 @@ class ProjectileMover(object):
                                 if (hitPoint - gunPos).length > 30.0:
                                     useTracerCameraPos = True
                         if not useTracerCameraPos:
-                            distWater = BigWorld.wg_collideWater(prevCheckPoint, curCheckPoint)
+                            distWater = BigWorld.wg_collideWater(prevCheckPoint, curCheckPoint, False)
                         else:
                             rayEnd = hitPoint + rayDir * 1.5
                             testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, tracerCameraPos, rayEnd, 128)
                             if testRes is not None:
                                 distStatic = (testRes[0] - tracerCameraPos).length
-                                distWater = BigWorld.wg_collideWater(tracerCameraPos, rayEnd)
+                                distWater = BigWorld.wg_collideWater(tracerCameraPos, rayEnd, False)
                     else:
-                        distWater = BigWorld.wg_collideWater(prevCheckPoint, curCheckPoint)
+                        distWater = BigWorld.wg_collideWater(prevCheckPoint, curCheckPoint, False)
                     if distWater < 0 or distWater > distStatic:
                         ret.append((hitPoint, self.__getCollisionTime(r0, hitPoint, v0), destructibleDesc))
                         if destructibleDesc is None:

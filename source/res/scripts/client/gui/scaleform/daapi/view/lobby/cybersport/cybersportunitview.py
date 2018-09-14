@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportUnitView.py
 from UnitBase import UNIT_OP
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
+from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters, rally_dps
 from gui.Scaleform.daapi.view.meta.CyberSportUnitMeta import CyberSportUnitMeta
 from gui.Scaleform.framework import ViewTypes
@@ -103,7 +104,7 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
             window.updateSlots(slots)
         else:
             levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
-            self.fireEvent(events.ShowViewEvent(events.ShowWindowEvent.SHOW_ROSTER_SLOT_SETTINGS_WINDOW, ctx={'settings': slots,
+            self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY, ctx={'settings': slots,
              'section': 'cs_unit_view_settings',
              'levelsRange': levelsRange}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
@@ -124,7 +125,7 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
         self.as_updateRallyS(data)
 
     def _setActionButtonState(self):
-        self.as_setActionButtonStateS(vo_converters.makeUnitActionButtonVO(self.unitFunctional))
+        self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
 
     def _getVehicleSelectorDescription(self):
         return CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_UNIT

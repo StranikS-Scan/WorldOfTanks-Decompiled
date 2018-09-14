@@ -54,15 +54,17 @@ class ExchangeXPWindow(BaseExchangeWindow, ExchangeXpWindowMeta):
         for vehicleCD in g_itemsCache.items.stats.eliteVehicles:
             try:
                 vehicle = g_itemsCache.items.getItemByCD(vehicleCD)
+                if not vehicle.xp:
+                    continue
+                values.append({'id': vehicle.intCD,
+                 'vehicleType': getVehicleTypeAssetPath(vehicle.type),
+                 'vehicleName': vehicle.shortUserName,
+                 'xp': vehicle.xp,
+                 'isSelectCandidate': vehicle.isFullyElite,
+                 'vehicleIco': vehicle.iconSmall,
+                 'nationIco': getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31)})
             except:
-                LOG_ERROR('Cannot get vehicle by intCD', vehicleCD)
-                LOG_CURRENT_EXCEPTION()
                 continue
-
-            if not vehicle.xp:
-                continue
-            vehicleInfo = dict(id=vehicle.intCD, vehicleType=getVehicleTypeAssetPath(vehicle.type), vehicleName=vehicle.shortUserName, xp=vehicle.xp, isSelectCandidate=vehicle.isFullyElite, vehicleIco=vehicle.iconSmall, nationIco=getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31))
-            values.append(vehicleInfo)
 
         self.as_vehiclesDataChangedS(bool(values), values)
 

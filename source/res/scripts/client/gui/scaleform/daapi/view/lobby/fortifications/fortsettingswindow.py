@@ -25,6 +25,7 @@ from gui.shared.fortifications.context import DefencePeriodCtx
 from helpers import i18n, time_utils
 from predefined_hosts import g_preDefinedHosts
 from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
+from gui.shared.utils.functions import makeTooltip
 
 class VIEW_ALIASES:
     DEFENCE_ACTIVATED = FORTIFICATION_ALIASES.FORT_SETTINGS_ACTIVATED_VIEW
@@ -33,7 +34,7 @@ class VIEW_ALIASES:
 
 class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRef, FortViewHelper):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(FortSettingsWindow, self).__init__()
         self.__defencePeriod = False
         self.__isActivatedDisableProcess = False
@@ -55,10 +56,10 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         self.__cancelDefenceHour()
 
     def disableDefencePeriod(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_EVENT), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_ALIAS), EVENT_BUS_SCOPE.LOBBY)
 
     def activateDefencePeriod(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_PERIOD_DEFENCE_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_PERIOD_DEFENCE_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
 
     def __updateActivatedView(self):
         result = {'canDisableDefencePeriod': not self.__isActivatedDisableProcess,
@@ -76,8 +77,24 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
 
         if servername is None:
             servername = connectionManager.serverUserName
+        _, inCooldown = fort.getPeripheryProcessing()
+        timestamp, _, _ = fort.events.get(FORT_EVENT_TYPE.PERIPHERY_COOLDOWN, (0, 0, 0))
+        buttonEnabled = not inCooldown
+        buttonToolTip = self.__makePeripheryBtnToolTip(buttonEnabled, time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(timestamp)))
+        descriptionTooltip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PERIPHERYDESCRIPTION
         return {'peripheryTitle': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSWINDOW_PEREPHERYTITLE)),
-         'peripheryName': self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, str(servername))}
+         'peripheryName': self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, str(servername)),
+         'buttonEnabled': buttonEnabled,
+         'buttonToolTip': buttonToolTip,
+         'descriptionTooltip': descriptionTooltip}
+
+    def __makePeripheryBtnToolTip(self, btnEnabled, timeLeft):
+        ttHeader = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_HEADER
+        if btnEnabled:
+            ttBody = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_ENABLED_BODY
+        else:
+            ttBody = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_DISABLED_BODY, period=time_utils.getTillTimeString(timeLeft, TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_DISABLED_BODY))
+        return makeTooltip(ttHeader, ttBody)
 
     def __makeDefencePeriodData(self):
         alertMessage = ''
@@ -86,6 +103,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         inProcess, inCooldown = fort.getDefenceHourProcessing()
         conditionPostfix = self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, fort.getDefencePeriodStr())
         blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEBTNENABLED
+        descriptionTooltip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_DEFENCEPERIODDESCRIPTION
         if inProcess:
             defenceHourChangeDay, nextDefenceHour, _ = fort.events[FORT_EVENT_TYPE.DEFENCE_HOUR_CHANGE]
             timestampStart = time_utils.getTimeTodayForUTC(nextDefenceHour)
@@ -107,7 +125,8 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
          'blockDescr': blockDescr,
          'blockCondition': conditionPrefix + ' ' + conditionPostfix,
          'alertMessage': alertMessage,
-         'blockBtnToolTip': blockBtnToolTip}
+         'blockBtnToolTip': blockBtnToolTip,
+         'descriptionTooltip': descriptionTooltip}
 
     def __makeOffDayData(self):
         alertMessage = ''
@@ -116,6 +135,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         inProcess, inCooldown = fort.getOffDayProcessing()
         conditionPostfix = self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, fort.getOffDayStr())
         blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_WEEKENDBTNENABLED
+        descriptionTooltip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_DAYOFFDESCRIPTION
         if inProcess:
             offDayChangeDate, nextOffDayUTC, _ = fort.events[FORT_EVENT_TYPE.OFF_DAY_CHANGE]
             nextOffDayLocal = adjustOffDayToLocal(nextOffDayUTC, self.fortCtrl.getFort().getLocalDefenceHour())
@@ -140,7 +160,8 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
          'blockDescr': blockDescr,
          'blockCondition': conditionPrefix + ' ' + conditionPostfix,
          'alertMessage': alertMessage,
-         'blockBtnToolTip': blockBtnToolTip}
+         'blockBtnToolTip': blockBtnToolTip,
+         'descriptionTooltip': descriptionTooltip}
 
     def __makeVacationData(self):
         alertMessage = ''
@@ -150,6 +171,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         isVacationEnabled = fort.isVacationEnabled()
         inProcess, inCooldown = fort.getVacationProcessing()
         blockBtnToolTip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONBTNENABLED
+        descriptionTooltip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_VACATIONDESCRIPTION
         conditionPostfix = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSWINDOW_BLOCKCONDITION_VACATIONNOTPLANNED))
         if inProcess:
             blockBtnEnabled = False
@@ -170,7 +192,8 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
          'blockCondition': conditionPrefix + ' ' + conditionPostfix,
          'alertMessage': alertMessage,
          'blockBtnToolTip': blockBtnToolTip,
-         'dayAfterVacation': dayAfterVacation}
+         'dayAfterVacation': dayAfterVacation,
+         'descriptionTooltip': descriptionTooltip}
 
     def __updateNotActivatedView(self):
         description = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSWINDOW_NOTACTIVATED_DESCRIPTION))
@@ -214,6 +237,9 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         self.updateData()
 
     def onVacationChanged(self, vacationStart, vacationEnd):
+        self.updateData()
+
+    def onSettingCooldown(self, eventTypeID):
         self.updateData()
 
     def _populate(self):

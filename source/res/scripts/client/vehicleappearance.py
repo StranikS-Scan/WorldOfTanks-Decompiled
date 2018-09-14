@@ -62,6 +62,7 @@ _EFFECT_MATERIALS_HARDNESS = {'ground': 0.1,
  'water': 0.2}
 _ALLOW_LAMP_LIGHTS = False
 frameTimeStamp = 0
+_ENABLE_NEW_ENGINE_SOUND = False
 
 class VehicleAppearance(object):
     gunRecoil = property(lambda self: self.__gunRecoil)
@@ -140,6 +141,7 @@ class VehicleAppearance(object):
         self.__rightFrontLight = None
         self.__prevVelocity = None
         self.__prevTime = None
+        self.__maxClimbAngle = math.radians(20.0)
         self.__chassisOcclusionDecal = OcclusionDecal()
         self.__vehicleStickers = None
         self.onModelChanged = Event()
@@ -256,6 +258,7 @@ class VehicleAppearance(object):
         self.__filter.vehicleWidth = typeDesc.chassis['topRightCarryingPoint'][0] * 2
         self.__filter.maxMove = typeDesc.physics['speedLimits'][0] * 2.0
         self.__filter.vehicleMinNormalY = typeDesc.physics['minPlaneNormalY']
+        self.__maxClimbAngle = math.acos(typeDesc.physics['minPlaneNormalY'])
         for p1, p2, p3 in typeDesc.physics['carryingTriangles']:
             self.__filter.addTriangle((p1[0], 0, p1[1]), (p2[0], 0, p2[1]), (p3[0], 0, p3[1]))
 
@@ -381,6 +384,17 @@ class VehicleAppearance(object):
             self.__crashedTracksCtrl.setVisible(modelVisible)
         return
 
+    def changeDrawPassVisibility(self, modelName, drawFlags, modelVisible, attachmentsVisible):
+        desc = self.modelsDesc.get(modelName, None)
+        if desc is None:
+            LOG_ERROR("invalid model's description name <%s>." % modelName)
+        desc['model'].visibleDrawPass = drawFlags
+        desc['model'].visibleAttachments = attachmentsVisible
+        desc['_visibility'] = (modelVisible, attachmentsVisible)
+        if modelName == 'chassis':
+            self.__crashedTracksCtrl.setVisible(modelVisible)
+        return
+
     def onVehicleHealthChanged(self):
         vehicle = self.__vehicle
         if not vehicle.isAlive():
@@ -400,8 +414,6 @@ class VehicleAppearance(object):
             if self.__loadingProgress == len(self.modelsDesc):
                 if currentState.effect is not None:
                     self.__playEffect(currentState.effect)
-                else:
-                    self.__stopEffects()
                 if vehicle.health <= 0:
                     BigWorld.player().inputHandler.onVehicleDeath(vehicle, currentState.state == 'ammoBayExplosion')
                 if currentState.model != self.modelsDesc['chassis']['state']:
@@ -578,8 +590,9 @@ class VehicleAppearance(object):
         return
 
     def __playEffect(self, kind, *modifs):
-        if self.__effectsPlayer is not None:
-            self.__effectsPlayer.stop()
+        self.__stopEffects()
+        if kind == 'empty':
+            return
         enableDecal = True
         if kind in ('explosion', 'destruction'):
             filter = self.__vehicle.filter
@@ -593,15 +606,13 @@ class VehicleAppearance(object):
         effects = vehicle.typeDescriptor.type.effects[kind]
         if not effects:
             return
-        else:
-            effects = random.choice(effects)
-            modelMap = {}
-            for i, j in self.modelsDesc.iteritems():
-                modelMap[i] = j['model']
+        effects = random.choice(effects)
+        modelMap = {}
+        for i, j in self.modelsDesc.iteritems():
+            modelMap[i] = j['model']
 
-            self.__effectsPlayer = EffectsListPlayer(effects[1], effects[0], showShockWave=vehicle.isPlayer, showFlashBang=vehicle.isPlayer, isPlayer=vehicle.isPlayer, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, -1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), modelMap=modelMap, entity_id=vehicle.id)
-            self.__effectsPlayer.play(self.modelsDesc['hull']['model'], *modifs)
-            return
+        self.__effectsPlayer = EffectsListPlayer(effects[1], effects[0], showShockWave=vehicle.isPlayer, showFlashBang=vehicle.isPlayer, isPlayer=vehicle.isPlayer, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, -1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), modelMap=modelMap, entity_id=vehicle.id)
+        self.__effectsPlayer.play(self.modelsDesc['hull']['model'], *modifs)
 
     def __updateCamouflage(self):
         texture = ''
@@ -609,7 +620,6 @@ class VehicleAppearance(object):
          0,
          0,
          0]
-        gloss = 0
         weights = Math.Vector4(1, 0, 0, 0)
         camouflagePresent = False
         vDesc = self.__vehicle.typeDescriptor
@@ -622,14 +632,7 @@ class VehicleAppearance(object):
                 camouflagePresent = True
                 texture = camouflage['texture']
                 colors = camouflage['colors']
-                gloss = camouflage['gloss'].get(vDesc.type.compactDescr)
-                if gloss is None:
-                    gloss = 0
-                metallic = camouflage['metallic'].get(vDesc.type.compactDescr)
-                if metallic is None:
-                    metallic = 0
                 weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in colors ])
-                colors = [ colors[i] & 16777215 | metallic << (3 - i) * 8 & 4278190080L for i in range(0, 4) ]
                 defaultTiling = camouflage['tiling'].get(vDesc.type.compactDescr)
         if VehicleDamageState.isDamagedModel(self.modelsDesc['chassis']['state']):
             weights *= 0.1
@@ -681,7 +684,7 @@ class VehicleAppearance(object):
                 delattr(model, 'wg_baseFashion')
             if fashion is not None:
                 if useCamouflage:
-                    fashion.setCamouflage(texture, exclusionMap, tiling, colors[0], colors[1], colors[2], colors[3], gloss, weights)
+                    fashion.setCamouflage(texture, exclusionMap, tiling, colors[0], colors[1], colors[2], colors[3], weights)
                 else:
                     fashion.removeCamouflage()
 
@@ -848,89 +851,91 @@ class VehicleAppearance(object):
         if sound is None:
             return
         else:
-            s = self.__vehicle.filter.speedInfo.value[0]
-            m = self.__vehicle.typeDescriptor.physics['weight']
-            if self.__vt is not None:
-                self.__vt.addValue2('mass', m)
-            p = self.__vehicle.typeDescriptor.physics['enginePower']
-            if self.__vt is not None:
-                self.__vt.addValue2('power', p)
-            if s > 0:
-                v = s / self.__vehicle.typeDescriptor.physics['speedLimits'][0]
-            else:
-                v = s / self.__vehicle.typeDescriptor.physics['speedLimits'][1]
-            if self.__vt is not None:
-                self.__vt.addValue2('speed_rel', v)
-            param = sound.param('speed_rel')
-            if param is not None:
-                param.value = clamp(-1.0, 1.0, v)
-            rots = self.__vehicle.filter.speedInfo.value[1]
-            if self.__vt is not None:
-                self.__vt.addValue2('rot_speed_abs', rots)
-            param = sound.param('rot_speed_abs')
-            if param is not None:
-                param.value = clamp(-1.0, 1.0, rots)
-            rotrel = rots / self.__vehicle.typeDescriptor.physics['rotationSpeedLimit']
-            if self.__vt is not None:
-                self.__vt.addValue2('rot_speed_rel', rotrel)
-            param = sound.param('rot_speed_rel')
-            if param is not None:
-                param.value = clamp(-1.0, 1.0, rotrel)
-            if self.__vt is not None:
-                self.__vt.addValue2('speed_abs', s)
-            param = sound.param('speed_abs')
-            if param is not None:
-                param.value = clamp(-10, 30, s)
-            sr = self.__vehicle.typeDescriptor.physics['speedLimits'][0] + self.__vehicle.typeDescriptor.physics['speedLimits'][1]
-            if self.__vt is not None:
-                self.__vt.addValue2('speed range', sr)
-            srg = sr / 3
-            if self.__vt is not None:
-                self.__vt.addValue2('speed range for one gear', srg)
-            gear_num = math.ceil(math.floor(math.fabs(s) * 50) / 50 / srg)
-            if self.__vt is not None:
-                self.__vt.addValue2('gear', gear_num)
-            param = sound.param('gear_num')
-            if param is not None:
-                param.value = clamp(0.0, 4.0, gear_num)
-            rpm = math.fabs(1 + (s - gear_num * srg) / srg)
-            if gear_num == 0:
+            speed = self.__vehicle.filter.speedInfo.value[0]
+            speedRange = self.__vehicle.typeDescriptor.physics['speedLimits'][0] + self.__vehicle.typeDescriptor.physics['speedLimits'][1]
+            speedRangeGear = speedRange / 3
+            gearNum = math.ceil(math.floor(math.fabs(speed) * 50) / 50 / speedRangeGear)
+            rpm = math.fabs(1 + (speed - gearNum * speedRangeGear) / speedRangeGear)
+            if gearNum == 0:
                 rpm = 0
             param = sound.param('RPM')
             if param is not None:
                 param.value = clamp(0.0, 1.0, rpm)
-            if self.__vt is not None:
-                self.__vt.addValue2('RPM', rpm)
-            a = 0
-            if self.__prevVelocity is not None and self.__prevTime is not None:
-                a = (s - self.__prevVelocity) / (BigWorld.time() - self.__prevTime)
-                if a > 1.5:
-                    a = 1.5
-                if a < -1.5:
-                    a = -1.5
-                if self.__vt is not None:
-                    self.__vt.addValue2('acc_abs', a)
-            self.__prevVelocity = s
-            self.__prevTime = BigWorld.time()
-            param = sound.param('acc_abs')
-            if param is not None:
-                param.value = a
+            engineLoad = self.__engineMode[0]
             if self.__engineMode[0] == 3:
-                l = 2
+                engineLoad = 2
             elif self.__engineMode[0] == 2:
-                l = 3
-            else:
-                l = self.__engineMode[0]
-            if self.__vt is not None:
-                self.__vt.addValue2('engine_load', l)
+                engineLoad = 3
             param = sound.param('engine_load')
             if param is not None:
-                param.value = l
+                param.value = engineLoad
             param = sound.param('submersion')
             if param is not None:
                 param.value = 1 if self.__isUnderWater else 0
             if self.__vt is not None:
+                self.__vt.addValue2('speed range', speedRange)
+                self.__vt.addValue2('speed range for one gear', speedRangeGear)
+                self.__vt.addValue2('RPM', rpm)
+                self.__vt.addValue2('engine_load', engineLoad)
                 self.__vt.addValue2('submersion', self.__isUnderWater)
+            if _ENABLE_NEW_ENGINE_SOUND:
+                param = sound.param('speed_abs')
+                if param is not None:
+                    param.value = clamp(-10, 30, speed)
+                if speed > 0:
+                    relativeSpeed = speed / self.__vehicle.typeDescriptor.physics['speedLimits'][0]
+                else:
+                    relativeSpeed = speed / self.__vehicle.typeDescriptor.physics['speedLimits'][1]
+                param = sound.param('speed_rel')
+                if param is not None:
+                    param.value = clamp(-1.0, 1.0, relativeSpeed)
+                rotationSpeed = self.__vehicle.filter.speedInfo.value[1]
+                param = sound.param('rot_speed_abs')
+                if param is not None:
+                    param.value = clamp(-1.0, 1.0, rotationSpeed)
+                roatationRelSpeed = rotationSpeed / self.__vehicle.typeDescriptor.physics['rotationSpeedLimit']
+                param = sound.param('rot_speed_rel')
+                if param is not None:
+                    param.value = clamp(-1.0, 1.0, roatationRelSpeed)
+                param = sound.param('gear_num')
+                if param is not None:
+                    param.value = clamp(0.0, 4.0, gearNum)
+                accelerationAbs = 0.0
+                if self.__prevVelocity is not None and self.__prevTime is not None:
+                    accelerationAbs = (speed - self.__prevVelocity) / (BigWorld.time() - self.__prevTime)
+                    accelerationAbs = clamp(-1.5, 1.5, accelerationAbs)
+                self.__prevVelocity = speed
+                self.__prevTime = BigWorld.time()
+                param = sound.param('acc_abs')
+                if param is not None:
+                    param.value = accelerationAbs
+                if self.__engineMode[0] >= 2:
+                    absRelSpeed = abs(relativeSpeed)
+                    if absRelSpeed > 0.01:
+                        k_mg = -abs(self.__vehicle.pitch) / self.__maxClimbAngle if relativeSpeed * self.__vehicle.pitch > 0.0 else abs(self.__vehicle.pitch) / self.__maxClimbAngle
+                        physicLoad = (1.0 + k_mg) * 0.5
+                        if relativeSpeed > 0.0:
+                            speedImpactK = 1.0 / 0.33
+                        else:
+                            speedImpactK = 1.0 / 0.9
+                        speedImpact = clamp(0.01, 1.0, absRelSpeed * speedImpactK)
+                        speedImpact = clamp(0.0, 2.0, 1.0 / speedImpact)
+                        physicLoad = clamp(0.0, 1.0, physicLoad * speedImpact)
+                    else:
+                        physicLoad = 1.0
+                else:
+                    physicLoad = self.__engineMode[0] - 1
+                param = sound.param('physic_load')
+                if param is not None:
+                    param.value = physicLoad
+                if self.__vt is not None:
+                    self.__vt.addValue2('speed_abs', speed)
+                    self.__vt.addValue2('speed_rel', relativeSpeed)
+                    self.__vt.addValue2('rot_speed_abs', rotationSpeed)
+                    self.__vt.addValue2('rot_speed_rel', roatationRelSpeed)
+                    self.__vt.addValue2('gear', gearNum)
+                    self.__vt.addValue2('acc_abs', accelerationAbs)
+                    self.__vt.addValue2('physic_load', physicLoad)
             return
 
     def __updateMovementSounds(self):
@@ -949,6 +954,14 @@ class VehicleAppearance(object):
                 if self.__movementSound is not None:
                     self.__movementSound.play()
                 self.changeEngineMode(self.__engineMode)
+        elif constants.IS_DEVELOPMENT:
+            if not isTooFar:
+                if self.__engineSound is not None:
+                    if not self.__engineSound.isPlaying:
+                        self.__engineSound.play()
+                if self.__movementSound is not None:
+                    if not self.__movementSound.isPlaying:
+                        self.__movementSound.play()
         time = BigWorld.time()
         self.__updateTrackSounds()
         return
@@ -1722,19 +1735,15 @@ def setupTracksFashion(fashion, vDesc, isCrashedTrack = False):
                 retValue = not fashion.addSuspensionArmWheels(suspensionArm[0], suspensionArm[1], suspensionArm[2], suspensionArm[5], suspensionArm[6])
 
         if trackParams is not None:
-            fashion.setTrackParams(trackParams['thickness'], trackParams['elasticity'], trackParams['damping'], trackParams['gravity'], trackParams['maxAmplitude'], trackParams['maxOffset'])
-        for trackGroup in trackNodesCfg['groups']:
-            nodes = _createWheelsListByTemplate(trackGroup[2], trackGroup[0], trackGroup[1])
-            fashion.addTrackNodeGroup(nodes, trackGroup[3])
-
+            fashion.setTrackParams(trackParams['thickness'], trackParams['gravity'], trackParams['maxAmplitude'], trackParams['maxOffset'])
         for trackNode in trackNodesCfg['nodes']:
-            leftSibling = trackNode[3]
+            leftSibling = trackNode[5]
             if leftSibling is None:
                 leftSibling = ''
-            rightSibling = trackNode[4]
+            rightSibling = trackNode[6]
             if rightSibling is None:
                 rightSibling = ''
-            fashion.addTrackNode(trackNode[0], trackNode[1], trackNode[2], leftSibling, rightSibling, trackNode[5], trackNode[6])
+            fashion.addTrackNode(trackNode[0], trackNode[1], trackNode[2], trackNode[3], trackNode[4], leftSibling, rightSibling, trackNode[7], trackNode[8])
 
         fashion.initialUpdateTracks(1.0, 10.0)
         return retValue
@@ -1841,14 +1850,14 @@ class VehicleDamageState(object):
         else:
             return VehicleDamageState.__healthToStateMap[health]
 
-    __stateToModelEffectsMap = {'ammoBayExplosion': ('exploded', 'ammoBayExplosion'),
-     'ammoBayBurnOff': ('destroyed', 'ammoBayExplosion'),
+    __stateToModelEffectsMap = {'ammoBayExplosion': ('exploded', None),
+     'ammoBayBurnOff': ('destroyed', None),
      'fuelExplosion': ('destroyed', 'fuelExplosion'),
      'destruction': ('destroyed', 'destruction'),
      'crewDeath': ('undamaged', 'crewDeath'),
      'rammingDestruction': ('destroyed', 'rammingDestruction'),
      'submersionDeath': ('undamaged', 'submersionDeath'),
-     'alive': ('undamaged', None)}
+     'alive': ('undamaged', 'empty')}
 
     @staticmethod
     def getStateParams(state):

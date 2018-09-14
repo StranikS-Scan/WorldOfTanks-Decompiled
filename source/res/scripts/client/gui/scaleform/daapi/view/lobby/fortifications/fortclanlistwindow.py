@@ -16,7 +16,7 @@ from helpers import i18n
 
 class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRef, FortViewHelper):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(FortClanListWindow, self).__init__()
 
     def _populate(self):

@@ -6,10 +6,10 @@ class QuestsControlMeta(DAAPIModule):
     def showQuestsWindow(self):
         self._printOverrideError('showQuestsWindow')
 
-    def as_highlightControlS(self):
+    def as_isShowAlertIconS(self, value, highlight):
         if self._isDAAPIInited():
-            return self.flashObject.as_highlightControl()
+            return self.flashObject.as_isShowAlertIcon(value, highlight)
 
-    def as_resetControlS(self):
+    def as_setDataS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_resetControl()
+            return self.flashObject.as_setData(data)

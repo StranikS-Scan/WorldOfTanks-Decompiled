@@ -9,7 +9,6 @@ from gui.Scaleform.framework.managers.TextManager import TextType
 from helpers import i18n
 from gui import SystemMessages
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.fortifications import formatters as fort_fmts
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.utils import CONST_CONTAINER
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController

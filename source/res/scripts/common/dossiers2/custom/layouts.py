@@ -480,7 +480,8 @@ ACCOUNT_SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'aimer',
  'deathTrack',
  'firstMerit',
- 'tankwomen']
+ 'tankwomen',
+ 'operationWinter']
 _accountSingleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -492,7 +493,8 @@ _accountSingleAchievementsPopUps = ['titleSniper',
  'aimer',
  'deathTrack',
  'firstMerit',
- 'tankwomen']
+ 'tankwomen',
+ 'operationWinter']
 _accountSingleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', ACCOUNT_SINGLE_ACHIEVEMENTS_VALUES, {}, _accountSingleAchievementsPopUps)
 FORT_BLOCK_LAYOUT = ['xp',
  'battlesCount',
@@ -800,7 +802,7 @@ tmanDossierLayout = (_tmanTotalBlockBuilder, _tankmanAchievementsBlockBuilder)
 _fortTotalBlockLayout = ['creationTime', 'production', 'reservedInt32']
 _fortTotalBlockBuilder = StaticSizeBlockBuilder('total', _fortTotalBlockLayout, {}, [])
 _fortBattlesBlockLayout = ['battlesCount',
- 'battlesHours',
+ 'reservedInt32',
  'attackCount',
  'defenceCount',
  'enemyBaseCaptureCount',

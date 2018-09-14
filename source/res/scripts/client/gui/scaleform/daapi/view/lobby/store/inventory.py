@@ -4,6 +4,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import getNationIndex, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
@@ -12,7 +13,7 @@ from gui.Scaleform.daapi.view.meta.InventoryMeta import InventoryMeta
 from gui.Scaleform.daapi.view.lobby.store import Store
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.events import ShowWindowEvent
+from gui.shared.events import LoadViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO
 from gui.shared import g_itemsCache, REQ_CRITERIA
@@ -24,8 +25,8 @@ from items import vehicles
 
 class Inventory(Store, InventoryMeta):
 
-    def __init__(self):
-        super(Inventory, self).__init__()
+    def __init__(self, ctx = None):
+        super(Inventory, self).__init__(ctx)
         self.__tableType = None
         return
 
@@ -54,7 +55,7 @@ class Inventory(Store, InventoryMeta):
         dataCompactId = int(data.id)
         item = g_itemsCache.items.getItemByCD(dataCompactId)
         if ITEM_TYPE_INDICES[item.itemTypeName] == vehicles._VEHICLE:
-            self.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_VEHICLE_SELL_DIALOG, {'vehInvID': int(item.invID)}))
+            self.fireEvent(LoadViewEvent(VIEW_ALIAS.VEHICLE_SELL_DIALOG, ctx={'vehInvID': int(item.invID)}))
         else:
             self.__sellItem(item.intCD)
 

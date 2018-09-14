@@ -18,7 +18,7 @@ from ConnectionManager import connectionManager
 
 class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowMeta, FortViewHelper, AppRef):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(FortPeriodDefenceWindow, self).__init__()
         self.__textsCreated = False
         self.__peripheriesList = None
@@ -89,6 +89,7 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
          'holidayData': self._getDayoffsList(),
          'holidaySelectedID': fort.getLocalOffDay(),
          'hour': fort.getLocalDefenceHour(),
+         'isWrongLocalTime': self._isWrongLocalTime(),
          'skipValues': skipValues,
          'isTwelveHoursFormat': False}
 

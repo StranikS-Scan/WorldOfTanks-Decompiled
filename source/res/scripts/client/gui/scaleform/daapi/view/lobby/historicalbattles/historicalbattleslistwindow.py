@@ -12,13 +12,14 @@ from gui.prb_control.settings import PREQUEUE_SETTING_NAME, SELECTOR_BATTLE_TYPE
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.events import FocusEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.server_events.event_items import HistoricalBattle
+from gui.server_events.event_items import HistoricalBattle
 from gui.shared.utils.Notifier import Notifier
 from gui.shared.utils.functions import getAbsoluteUrl
 from helpers import i18n, time_utils
-from gui import makeHtmlString
-from gui.shared import events, g_itemsCache, REQ_CRITERIA, g_eventsCache
+from gui import makeHtmlString, game_control
+from gui.shared import events, g_itemsCache, REQ_CRITERIA
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.meta.HistoricalBattlesListWindowMeta import HistoricalBattlesListWindowMeta
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrequeueWindow import PrequeueWindow
 from gui.Scaleform.locale.HISTORICAL_BATTLES import HISTORICAL_BATTLES
@@ -30,7 +31,7 @@ class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMet
     COOLDOWN_TRESHOLD = 172800
     COOLDOWN_TICK = 60
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(HistoricalBattlesListWindow, self).__init__()
         self.selectedBattleID = self.preQueueFunctional.getSetting(PREQUEUE_SETTING_NAME.BATTLE_ID, -1)
         defaultVehicleID = -1
@@ -132,9 +133,7 @@ class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMet
 
     def showFullDescription(self):
         battle = g_eventsCache.getHistoricalBattles().get(self.selectedBattleID)
-        self.app.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_BROWSER_WINDOW, {'url': battle.getDescriptionUrl(),
-         'title': battle.getUserName(),
-         'showActionBtn': False}), EVENT_BUS_SCOPE.LOBBY)
+        game_control.g_instance.browser.load(battle.getDescriptionUrl(), battle.getUserName(), False)
 
     def onBattleSelected(self, battleID):
         self.selectedBattleID = int(battleID)

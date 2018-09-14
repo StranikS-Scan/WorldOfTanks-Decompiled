@@ -1,28 +1,28 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/serializers.py
 import cPickle
 from items import tankmen
-from gui.shared.gui_items import _ICONS_MASK
-from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items import _ICONS_MASK, Tankman
 
 def packTankmanSkill(skill):
-    roleIcon = 'noImage.png'
     if skill.roleType in tankmen.getSkillsConfig():
-        roleIcon = tankmen.getSkillsConfig()[skill.roleType]['icon']
+        roleIconPath = Tankman.getRoleSmallIconPath(skill.roleType)
+    else:
+        roleIconPath = ''
     return {'name': skill.name,
      'level': skill.level,
      'userName': skill.userName,
      'description': skill.description,
      'shortDescription': skill.shortDescription,
-     'icon': {'big': '%s/%s' % (skill.ICON_PATH_BIG, skill.icon),
-              'small': '%s/%s' % (skill.ICON_PATH_SMALL, skill.icon),
-              'role': '%s/%s' % (Tankman.ROLE_ICON_PATH_SMALL, roleIcon)},
+     'icon': {'big': Tankman.getSkillBigIconPath(skill.name),
+              'small': Tankman.getSkillSmallIconPath(skill.name),
+              'role': roleIconPath},
      'isActive': skill.isActive,
      'isEnable': skill.isEnable,
      'roleType': skill.roleType,
      'isPerk': skill.isPerk}
 
 
-def packTankman(tankman):
+def packTankman(tankman, isCountPermanentSkills = True):
 
     def vehicleIcon(vDescr, subtype = ''):
         return _ICONS_MASK % {'type': 'vehicle',
@@ -40,6 +40,11 @@ def packTankman(tankman):
          'userName': tankman.vehicleDescr.type.shortUserString,
          'icon': vehicleIcon(tankman.vehicleDescr),
          'iconContour': vehicleIcon(tankman.vehicleDescr, 'contour/')}
+    skills = []
+    for skill in tankman.skills:
+        if not (skill.name == 'brotherhood' and tankman.descriptor.isFemale and not isCountPermanentSkills):
+            skills.append(packTankmanSkill(skill))
+
     return {'strCD': cPickle.dumps(tankman.strCD),
      'inventoryID': tankman.invID,
      'nationID': tankman.nationID,
@@ -48,17 +53,17 @@ def packTankman(tankman):
      'roleName': tankman.descriptor.role,
      'rankUserName': tankman.rankUserName,
      'roleUserName': tankman.roleUserName,
-     'skills': [ packTankmanSkill(skill) for skill in tankman.skills ],
+     'skills': skills,
      'efficiencyRoleLevel': tankman.efficiencyRoleLevel,
      'realRoleLevel': tankman.realRoleLevel,
      'roleLevel': tankman.roleLevel,
-     'icon': {'big': '%s/%s' % (tankman.PORTRAIT_ICON_PATH_BIG, tankman.icon),
-              'small': '%s/%s' % (tankman.PORTRAIT_ICON_PATH_SMALL, tankman.icon),
-              'barracks': '%s/%s' % (tankman.PORTRAIT_ICON_PATH_BARRACKS, tankman.icon)},
-     'iconRole': {'big': '%s/%s' % (tankman.ROLE_ICON_PATH_BIG, tankman.iconRole),
-                  'small': '%s/%s' % (tankman.ROLE_ICON_PATH_SMALL, tankman.iconRole)},
-     'iconRank': {'big': '%s/%s' % (tankman.RANK_ICON_PATH_BIG, tankman.iconRank),
-                  'small': '%s/%s' % (tankman.RANK_ICON_PATH_SMALL, tankman.iconRank)},
+     'icon': {'big': Tankman.getBigIconPath(tankman.nationID, tankman.descriptor.iconID),
+              'small': Tankman.getSmallIconPath(tankman.nationID, tankman.descriptor.iconID),
+              'barracks': Tankman.getBarracksIconPath(tankman.nationID, tankman.descriptor.iconID)},
+     'iconRole': {'big': Tankman.getRoleBigIconPath(tankman.descriptor.role),
+                  'small': Tankman.getRoleSmallIconPath(tankman.descriptor.role)},
+     'iconRank': {'big': Tankman.getRankBigIconPath(tankman.nationID, tankman.descriptor.rankID),
+                  'small': Tankman.getRankSmallIconPath(tankman.nationID, tankman.descriptor.rankID)},
      'isInTank': tankman.isInTank,
      'newSkillsCount': tankman.newSkillCount,
      'nativeVehicle': nativeVehicleData,

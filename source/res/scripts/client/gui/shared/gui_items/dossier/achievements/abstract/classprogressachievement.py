@@ -37,6 +37,12 @@ class ClassProgressAchievement(SimpleProgressAchievement):
     def isInNear(self):
         return self.getProgressValue() >= 0.95 or self._lvlUpValue == 1
 
+    def getNotificationInfo(self):
+        notificationKey = '#achievements:%s_notification%d' % (self._getActualName(), self._value)
+        if i18n.doesTextExist(notificationKey):
+            return i18n.makeString(notificationKey)
+        return ''
+
     def _readLevelUpTotalValue(self, dossier):
         if self._name not in RECORD_CONFIGS:
             return 0

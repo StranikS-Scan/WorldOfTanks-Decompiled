@@ -7,10 +7,10 @@ class IFortController(object):
     def __del__(self):
         LOG_DEBUG('Fort controller deleted:', self)
 
-    def init(self, clan, listeners):
+    def init(self, clan, listeners, prevController = None):
         pass
 
-    def fini(self):
+    def fini(self, clearCache = True):
         pass
 
     @classmethod
@@ -111,6 +111,9 @@ class IFortListener(object):
         pass
 
     def onPlayerAttached(self, buildingTypeID):
+        pass
+
+    def onSettingCooldown(self, eventTypeID):
         pass
 
     def onPeripheryChanged(self, peripheryID):

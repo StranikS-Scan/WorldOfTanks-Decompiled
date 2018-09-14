@@ -10,7 +10,8 @@ from gui import DialogsInterface
 from gui.game_control import g_instance as g_gameCtrl
 from gui.prb_control.context import PrbCtrlRequestCtx, pre_queue_ctx
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.shared import events, g_eventsCache, g_eventBus, EVENT_BUS_SCOPE
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from gui.server_events import g_eventsCache
 from gui.prb_control import isParentControlActivated, isInHistoricalQueue
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.functional.default import PreQueueFunctional

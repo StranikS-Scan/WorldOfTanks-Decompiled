@@ -7,7 +7,7 @@ from gui.shared import g_itemsCache
 
 class EliteWindow(View, EliteWindowMeta, AbstractWindowView):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(EliteWindow, self).__init__()
         self.vehInvID = ctx['vehTypeCompDescr']
 

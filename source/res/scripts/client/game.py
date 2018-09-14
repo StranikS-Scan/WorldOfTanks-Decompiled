@@ -19,7 +19,7 @@ from gui.shared import personality as gui_personality
 from messenger import MessengerEntry
 import MusicController
 import TriggersManager
-from helpers import RSSDownloader
+from helpers import RSSDownloader, OfflineMode
 import Settings
 from MemoryCriticalController import g_critMemHandler
 import VOIP
@@ -124,96 +124,102 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
 
 def start():
     LOG_DEBUG('start')
-    connectionManager.onConnected += onConnected
-    connectionManager.onDisconnected += onDisconnected
-    if len(sys.argv) > 2:
-        if sys.argv[1] == 'scriptedTest':
-            try:
-                scriptName = sys.argv[2]
-                if scriptName[-3:] == '.py':
-                    scriptName = scriptName[:-3]
-                try:
-                    __import__(scriptName)
-                except ImportError:
-                    try:
-                        __import__('tests.' + scriptName)
-                    except ImportError:
-                        __import__('cat.' + scriptName)
-
-            except:
-                LOG_CURRENT_EXCEPTION()
-                BigWorld.wg_writeToStdOut('Failed to run scripted test, Python exception was thrown, see python.log')
-                BigWorld.quit()
-
-        elif sys.argv[1] == 'offlineTest':
-            try:
-                from cat.tasks.TestArena2 import TestArena2Object
-                LOG_DEBUG(sys.argv)
-                LOG_DEBUG('starting offline test: %s', sys.argv[2])
-                if len(sys.argv) > 3:
-                    TestArena2Object.startOffline(sys.argv[2], sys.argv[3])
-                else:
-                    TestArena2Object.startOffline(sys.argv[2])
-            except:
-                LOG_DEBUG('Game start FAILED with:')
-                LOG_CURRENT_EXCEPTION()
-
-        elif sys.argv[1] == 'validationTest':
-            try:
-                gui_personality.start()
-                LOG_DEBUG('starting validationTest')
-                import Cat
-                Cat.Tasks.Validation.ParamsObject.setResultFileName(sys.argv[2])
-                BigWorld.callback(10, Cat.Tasks.Validation.startAllValidationTests)
-            except:
-                LOG_DEBUG('Game start FAILED with:')
-                LOG_CURRENT_EXCEPTION()
-
-        elif sys.argv[1] == 'resourcesValidationTest':
-            try:
-                gui_personality.start()
-                LOG_DEBUG('starting resourcesValidationTest')
-                import Cat
-                Cat.Tasks.Validation.ParamsObject.setResultFileName(sys.argv[2])
-                BigWorld.callback(10, Cat.Tasks.Validation.startResourcesValidationTest)
-            except:
-                LOG_DEBUG('Game start FAILED with:')
-                LOG_CURRENT_EXCEPTION()
-
-        elif sys.argv[1] == 'replayTimeout':
-            try:
-                g_replayCtrl.replayTimeout = float(sys.argv[2])
-            except:
-                LOG_DEBUG('Game start FAILED with:')
-                LOG_CURRENT_EXCEPTION()
-
-            gui_personality.start()
+    if OfflineMode.onStartup():
+        LOG_DEBUG('OfflineMode')
+        return
     else:
-        gui_personality.start()
-    try:
-        import Vibroeffects
-        Vibroeffects.VibroManager.g_instance.start()
-    except:
-        LOG_CURRENT_EXCEPTION()
+        connectionManager.onConnected += onConnected
+        connectionManager.onDisconnected += onDisconnected
+        if len(sys.argv) > 2:
+            if sys.argv[1] == 'scriptedTest':
+                try:
+                    scriptName = sys.argv[2]
+                    if scriptName[-3:] == '.py':
+                        scriptName = scriptName[:-3]
+                    try:
+                        __import__(scriptName)
+                    except ImportError:
+                        try:
+                            __import__('tests.' + scriptName)
+                        except ImportError:
+                            __import__('cat.' + scriptName)
 
-    try:
-        import LightFx
-        if LightFx.LightManager.g_instance is not None:
-            LightFx.LightManager.g_instance.start()
-        import AuxiliaryFx
-        AuxiliaryFx.g_instance.start()
-    except:
-        LOG_CURRENT_EXCEPTION()
+                except:
+                    LOG_CURRENT_EXCEPTION()
+                    BigWorld.wg_writeToStdOut('Failed to run scripted test, Python exception was thrown, see python.log')
+                    BigWorld.quit()
 
-    return
+            elif sys.argv[1] == 'offlineTest':
+                try:
+                    from cat.tasks.TestArena2 import TestArena2Object
+                    LOG_DEBUG(sys.argv)
+                    LOG_DEBUG('starting offline test: %s', sys.argv[2])
+                    if len(sys.argv) > 3:
+                        TestArena2Object.startOffline(sys.argv[2], sys.argv[3])
+                    else:
+                        TestArena2Object.startOffline(sys.argv[2])
+                except:
+                    LOG_DEBUG('Game start FAILED with:')
+                    LOG_CURRENT_EXCEPTION()
+
+            elif sys.argv[1] == 'validationTest':
+                try:
+                    gui_personality.start()
+                    LOG_DEBUG('starting validationTest')
+                    import Cat
+                    Cat.Tasks.Validation.ParamsObject.setResultFileName(sys.argv[2])
+                    BigWorld.callback(10, Cat.Tasks.Validation.startAllValidationTests)
+                except:
+                    LOG_DEBUG('Game start FAILED with:')
+                    LOG_CURRENT_EXCEPTION()
+
+            elif sys.argv[1] == 'resourcesValidationTest':
+                try:
+                    gui_personality.start()
+                    LOG_DEBUG('starting resourcesValidationTest')
+                    import Cat
+                    Cat.Tasks.Validation.ParamsObject.setResultFileName(sys.argv[2])
+                    BigWorld.callback(10, Cat.Tasks.Validation.startResourcesValidationTest)
+                except:
+                    LOG_DEBUG('Game start FAILED with:')
+                    LOG_CURRENT_EXCEPTION()
+
+            elif sys.argv[1] == 'replayTimeout':
+                try:
+                    g_replayCtrl.replayTimeout = float(sys.argv[2])
+                except:
+                    LOG_DEBUG('Game start FAILED with:')
+                    LOG_CURRENT_EXCEPTION()
+
+                gui_personality.start()
+        else:
+            gui_personality.start()
+        try:
+            import Vibroeffects
+            Vibroeffects.VibroManager.g_instance.start()
+        except:
+            LOG_CURRENT_EXCEPTION()
+
+        try:
+            import LightFx
+            if LightFx.LightManager.g_instance is not None:
+                LightFx.LightManager.g_instance.start()
+            import AuxiliaryFx
+            AuxiliaryFx.g_instance.start()
+        except:
+            LOG_CURRENT_EXCEPTION()
+
+        return
 
 
 def fini():
     LOG_DEBUG('fini')
-    BigWorld.wg_setScreenshotNotifyCallback(None)
-    if g_postProcessing is None:
+    if OfflineMode.enabled():
         return
     else:
+        BigWorld.wg_setScreenshotNotifyCallback(None)
+        if g_postProcessing is None:
+            return
         g_critMemHandler.restore()
         g_critMemHandler.destroy()
         if constants.IS_CAT_LOADED:
@@ -424,7 +430,7 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'hangar': 'from gui.ClientHangarSpace import g_clientHangarSpaceOverride; g_clientHangarSpaceOverride',
  'cvi': 'from CurrentVehicle import g_currentVehicle; cvi = g_currentVehicle.item; cvi',
  'sc': 'from account_helpers.settings_core.SettingsCore import g_settingsCore; sc = g_settingsCore; sc',
- 'quests': 'from gui.shared import g_eventsCache; events = g_eventsCache; events',
+ 'quests': 'from gui.server_events import g_eventsCache; quests = g_eventsCache; quests',
  'wc': 'from gui.Scaleform.Waiting import Waiting; Waiting.close()',
  'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache'}
 

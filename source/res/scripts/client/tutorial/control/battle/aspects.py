@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/tutorial/control/battle/aspects.py
 import weakref
 from helpers import aop
-from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr
 
 class AmmoQuantityAspect(aop.Aspect):
 

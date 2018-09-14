@@ -30,6 +30,21 @@ class VehicleIsValid(IVehicleLimit):
         return isVehicleValid(vehicle.descriptor, shellsList, teamLimits)
 
 
+class EventVehicleIsValid(IVehicleLimit):
+
+    def check(self, teamLimits):
+        if not g_currentVehicle.isReadyToFight():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
+        vehicle = g_currentVehicle.item
+        if not vehicle.isOnlyForEventBattles:
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
+        shellsList = []
+        for shell in vehicle.shells:
+            shellsList.extend([shell.intCD, shell.count])
+
+        return isVehicleValid(vehicle.descriptor, shellsList, teamLimits)
+
+
 class AbstractTeamIsValid(ITeamLimit):
 
     def _getAccountsInfo(self, rosters, team):
@@ -251,7 +266,13 @@ class DefaultLimits(LimitsCollection):
 class SquadLimits(LimitsCollection):
 
     def __init__(self, functional):
-        super(SquadLimits, self).__init__(functional, (VehicleIsValid(checkForEventBattles=False),), (TeamIsValid(),))
+        super(SquadLimits, self).__init__(functional, (VehicleIsValid(),), (TeamIsValid(),))
+
+
+class EventSquadLimits(LimitsCollection):
+
+    def __init__(self, functional):
+        super(EventSquadLimits, self).__init__(functional, (EventVehicleIsValid(),), (TeamIsValid(),))
 
 
 class TrainingLimits(LimitsCollection):
@@ -325,7 +346,7 @@ class _UnitActionValidator(object):
         return not stats.freeSlotsCount and len(stats.levelsSeq) == stats.occupiedSlotsCount
 
     def _validateSlots(self, stats, state):
-        if stats.occupiedSlotsCount > 1 and stats.readyCount != stats.occupiedSlotsCount:
+        if stats.readyCount != stats.occupiedSlotsCount > 1:
             return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
         return (True, UNIT_RESTRICTION.UNDEFINED)
 

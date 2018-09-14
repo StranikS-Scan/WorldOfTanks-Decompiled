@@ -3,8 +3,14 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class ContextMenuManagerMeta(DAAPIModule):
 
-    def getOptions(self, type, playerName, uid, context):
-        self._printOverrideError('getOptions')
+    def requestOptions(self, itemId, type, ctx):
+        self._printOverrideError('requestOptions')
+
+    def onOptionSelect(self, optionId):
+        self._printOverrideError('onOptionSelect')
+
+    def onHide(self):
+        self._printOverrideError('onHide')
 
     def _getUserInfo(self, uid, userName):
         self._printOverrideError('_getUserInfo')
@@ -84,23 +90,6 @@ class ContextMenuManagerMeta(DAAPIModule):
     def fortPrepareOrder(self, uid):
         self._printOverrideError('fortPrepareOrder')
 
-    def getContextMenuVehicleData(self, inventoryId):
-        self._printOverrideError('getContextMenuVehicleData')
-
-    def showVehicleInfo(self, inventoryId):
-        self._printOverrideError('showVehicleInfo')
-
-    def toResearch(self, compactDescr):
-        self._printOverrideError('toResearch')
-
-    def vehicleSell(self, inventoryId):
-        self._printOverrideError('vehicleSell')
-
-    def favoriteVehicle(self, inventoryId, isFavorite):
-        self._printOverrideError('favoriteVehicle')
-
-    def showVehicleStats(self, compactDescr):
-        self._printOverrideError('showVehicleStats')
-
-    def vehicleBuy(self, inventoryId):
-        self._printOverrideError('vehicleBuy')
+    def as_setOptionsS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setOptions(data)

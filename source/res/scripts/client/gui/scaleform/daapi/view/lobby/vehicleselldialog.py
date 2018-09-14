@@ -18,10 +18,10 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 
 class VehicleSellDialog(View, VehicleSellDialogMeta, AbstractWindowView):
 
-    def __init__(self, vehInvID):
+    def __init__(self, ctx = None):
         """ Ctor """
         super(VehicleSellDialog, self).__init__()
-        self.vehInvID = vehInvID
+        self.vehInvID = ctx.get('vehInvID', {})
         self.controlNumber = None
         return
 
@@ -239,6 +239,7 @@ class VehicleSellDialog(View, VehicleSellDialogMeta, AbstractWindowView):
         self.as_setCtrlQuestionS(str(question))
 
     def __shopResyncHandler(self, reason, diff):
-        if reason != CACHE_SYNC_REASON.SHOP_RESYNC:
-            return
-        self.onWindowClose()
+        vehicle = g_itemsCache.items.getVehicle(self.vehInvID)
+        if reason == CACHE_SYNC_REASON.SHOP_RESYNC or vehicle is not None and not vehicle.rentalIsOver:
+            self.onWindowClose()
+        return

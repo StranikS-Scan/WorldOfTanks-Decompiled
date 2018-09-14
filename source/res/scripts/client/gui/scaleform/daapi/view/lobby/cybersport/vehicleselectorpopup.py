@@ -10,7 +10,7 @@ from gui.shared.events import CSVehicleSelectEvent, HideWindowEvent
 
 class VehicleSelectorPopup(View, VehicleSelectorPopupMeta, AbstractWindowView, VehicleSelectorBase):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(VehicleSelectorPopup, self).__init__()
         raise 'section' in ctx or AssertionError('Section is required to show selector popup')
         self.__isMultiSelect = ctx.get('isMultiSelect', False)

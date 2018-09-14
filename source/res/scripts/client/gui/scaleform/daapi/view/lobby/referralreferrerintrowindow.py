@@ -14,6 +14,10 @@ from helpers import i18n
 
 class ReferralReferrerIntroWindow(View, AbstractWindowView, ReferralReferrerIntroWindowMeta, AppRef):
 
+    def __init__(self, ctx = None):
+        super(ReferralReferrerIntroWindow, self).__init__(ctx)
+        self.__invitesCount = ctx.get('invitesCount', 0)
+
     def onWindowClose(self):
         self.destroy()
 
@@ -25,7 +29,7 @@ class ReferralReferrerIntroWindow(View, AbstractWindowView, ReferralReferrerIntr
 
     def _populate(self):
         super(ReferralReferrerIntroWindow, self)._populate()
-        blocks = [self.__packContentBlock('invite_block', RES_ICONS.MAPS_ICONS_LIBRARY_REFERRALINVITEICON_1, ctx={'inviteCount': self.__getAvailableReferralsCount(),
+        blocks = [self.__packContentBlock('invite_block', RES_ICONS.MAPS_ICONS_LIBRARY_REFERRALINVITEICON_1, ctx={'inviteCount': self.__invitesCount,
           'link': self.__makeHyperLink(OpenLinkEvent.INVIETES_MANAGEMENT, MENU.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_LINK)}, showLinkBtn=True), self.__packContentBlock('squad_block', RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_SQUAD), self.__packContentBlock('referrals_block', RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALHAND, ctx={'icon': self.app._utilsMgr.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALSMALLHAND, 16, 16, -4, 0))})]
         self.as_setDataS({'titleMsg': self.app.utilsManager.textManager.getText(TextType.PROMO_TITLE, i18n.makeString(MENU.REFERRALREFERRERINTROWINDOW_TITLEMESSAGE)),
          'blocksVOs': blocks})
@@ -40,7 +44,3 @@ class ReferralReferrerIntroWindow(View, AbstractWindowView, ReferralReferrerIntr
     def __makeHyperLink(cls, linkType, textId):
         return makeHtmlString('html_templates:lobby/fortifications', 'link', {'linkType': linkType,
          'text': i18n.makeString(textId)})
-
-    @classmethod
-    def __getAvailableReferralsCount(cls):
-        return game_control.g_instance.refSystem.getAvailableReferralsCount()

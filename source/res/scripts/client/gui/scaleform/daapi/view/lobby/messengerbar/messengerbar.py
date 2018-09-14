@@ -4,6 +4,7 @@ from gui.Scaleform.framework import AppRef, ViewTypes, g_entitiesFactories
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 
 class MessengerBar(MessengerBarMeta, AppRef):
 
@@ -11,9 +12,8 @@ class MessengerBar(MessengerBarMeta, AppRef):
         super(MessengerBar, self).__init__()
 
     def channelButtonClick(self):
-        eventType = events.ShowWindowEvent.SHOW_CHANNEL_MANAGEMENT_WINDOW
-        if not self.__manageWindow(eventType):
-            self.fireEvent(events.ShowWindowEvent(eventType), scope=EVENT_BUS_SCOPE.LOBBY)
+        if not self.__manageWindow(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW):
+            self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(MessengerBar, self)._populate()
@@ -21,9 +21,8 @@ class MessengerBar(MessengerBarMeta, AppRef):
          'contactsHtmlIcon': "<img src='img://gui/maps/icons/messenger/iconContacts.png' width='16' height='32' vspace='-11'/>"})
 
     def contactsButtonClick(self):
-        eventType = events.ShowWindowEvent.SHOW_CONTACTS_WINDOW
-        if not self.__manageWindow(eventType):
-            self.fireEvent(events.ShowWindowEvent(eventType), scope=EVENT_BUS_SCOPE.LOBBY)
+        if not self.__manageWindow(MESSENGER_VIEW_ALIAS.CONTACTS_WINDOW):
+            self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.CONTACTS_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __manageWindow(self, eventType):
         manager = self.app.containerManager

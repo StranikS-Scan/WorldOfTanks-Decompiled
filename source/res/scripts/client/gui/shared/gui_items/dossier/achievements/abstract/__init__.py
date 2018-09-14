@@ -30,6 +30,19 @@ def achievementHasVehiclesList(achievement):
     return isinstance(achievement, _HasVehiclesList)
 
 
+def getCompletedPotapovQuestsCount(seasonID, vehClasses):
+    from gui.server_events import g_eventsCache
+
+    def _filter(quest):
+        return quest.isFullCompleted() and len(vehClasses & quest.getVehicleClasses())
+
+    result = 0
+    for tile in g_eventsCache.potapov.getSeasons()[seasonID].getTiles().itervalues():
+        result += len(tile.getQuestsByFilter(_filter))
+
+    return result
+
+
 __all__ = ['ClassProgressAchievement',
  'HistoricalAchievement',
  'NationSpecificAchievement',

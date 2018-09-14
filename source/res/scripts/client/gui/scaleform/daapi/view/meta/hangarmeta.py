@@ -46,9 +46,9 @@ class HangarMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setIsIGR(value, text)
 
-    def as_setServerStatsS(self, serverStats):
+    def as_setServerStatsS(self, stats, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_setServerStats(serverStats)
+            return self.flashObject.as_setServerStats(stats, tooltipType)
 
     def as_setServerStatsInfoS(self, tooltipFullData):
         if self._isDAAPIInited():

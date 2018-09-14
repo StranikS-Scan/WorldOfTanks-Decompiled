@@ -24,6 +24,7 @@ OPT_DEVICE_RANGE = xrange(OPT_DEVICE_START_IDX, OPT_DEVICE_END_IDX + 1)
 OPT_DEVICE_FULL_MASK = sum([ 1 << idx for idx in OPT_DEVICE_RANGE ])
 EMPTY_EQUIPMENTS_SLICE = [0] * (EQUIPMENT_END_IDX - EQUIPMENT_START_IDX + 1)
 EMPTY_EQUIPMENT_TOOLTIP = i18n.makeString('#ingame_gui:consumables_panel/equipment/tooltip/empty')
+TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 
 class ConsumablesPanel(object):
 
@@ -138,9 +139,16 @@ class ConsumablesPanel(object):
             sfKey = bwKey is not None and bwKey != 0 and getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
-    def __makeShellTooltip(self, descriptor, piercingPower):
+    def __makeShellTooltip(self, intCD, descriptor, piercingPower):
+        healMult = {22346: 0.2,
+         29994: 0.4,
+         34826: 1}
+        if intCD in healMult:
+            return i18n.makeString('#ingame_gui:shells_kinds/EVENT', caliber=BigWorld.wg_getNiceNumberFormat(descriptor['caliber']), userString=descriptor['userString'], damage=str(int(descriptor['damage'][0])), heal=str(int(descriptor['damage'][0] * healMult[intCD])), piercingPower=str(piercingPower))
         kind = descriptor['kind']
-        return i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=BigWorld.wg_getNiceNumberFormat(descriptor['caliber']), userString=descriptor['userString'], damage=str(int(descriptor['damage'][0])), piercingPower=str(piercingPower))
+        header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=BigWorld.wg_getNiceNumberFormat(descriptor['caliber']), userString=descriptor['userString'])
+        body = i18n.makeString('#ingame_gui:shells_kinds/params', damage=str(int(descriptor['damage'][0])), piercingPower=str(piercingPower))
+        return TOOLTIP_FORMAT.format(header, body)
 
     def __getKeysGenerator(self):
         getEquipment = g_sessionProvider.getEquipmentsCtrl().getEquipment
@@ -157,7 +165,7 @@ class ConsumablesPanel(object):
                     handler = partial(self.__handleAmmoPressed, intCD)
                 elif idx in EQUIPMENT_RANGE:
                     item = getEquipment(intCD)
-                    if item and item.getTag():
+                    if item and item.getTag() and item.getQuantity() > 0:
                         if item.isEntityRequired():
                             handler = partial(self.__handleEquipmentExpanded, intCD)
                         else:
@@ -203,8 +211,9 @@ class ConsumablesPanel(object):
         g_sessionProvider.onVehicleStateUpdated += self.__onVehicleStateUpdated
 
     def __onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
-        toolTip = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)))
-        icon = descriptor['icon'][0]
+        toolTip = self.__makeShellTooltip(intCD, descriptor, int(gunSettings.getPiercingPower(intCD)))
+        unicName = descriptor['icon'][0]
+        icon = unicName if intCD not in (22346, 29994, 34826) else 'EVENT_' + unicName
         shellIconPath = AMMO_ICON_PATH % icon
         noShellIconPath = NO_AMMO_ICON_PATH % icon
         idx = self.__genNextIdx(AMMO_FULL_MASK, AMMO_START_IDX)
@@ -247,7 +256,7 @@ class ConsumablesPanel(object):
         if item:
             descriptor = item.getDescriptor()
             iconPath = descriptor.icon[0]
-            toolTip = '{0:>s}\n{1:>s}'.format(descriptor.userString, descriptor.description)
+            toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
             tag = item.getTag()
             if tag:
                 bwKey, sfKey = self.__genKey(idx)
@@ -268,6 +277,7 @@ class ConsumablesPanel(object):
     def __onEquipmentUpdated(self, intCD, quantity, timeRemaining):
         if intCD in self.__cds:
             self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), quantity, timeRemaining)
+            self.onPopUpClosed()
         else:
             LOG_ERROR('Equipment is not found in panel', intCD, self.__cds)
 
@@ -275,7 +285,7 @@ class ConsumablesPanel(object):
         idx = self.__genNextIdx(OPT_DEVICE_FULL_MASK, OPT_DEVICE_START_IDX)
         self.__cds[idx] = intCD
         iconPath = descriptor.icon[0]
-        toolTip = '{0:>s}\n{1:>s}'.format(descriptor.userString, descriptor.description)
+        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
         self.__flashObject.addOptionalDeviceSlot(idx, -1 if isOn else 0, iconPath, toolTip)
 
     def __onOptionalDeviceUpdated(self, intCD, isOn):

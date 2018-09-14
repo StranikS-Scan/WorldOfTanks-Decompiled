@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/unit.py
+import cgi
 import time
 from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE, UNIT_ERROR
@@ -347,12 +348,16 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         vehicles = accSettings.get(section, [])
         if vehicles or not useAll:
             selectedVehicles = []
-            for v in vehicles:
-                if g_itemsCache.items.getItemByCD(int(v)).isInInventory:
-                    selectedVehicles.append(v)
+            for vehCD in vehicles:
+                vehicle = g_itemsCache.items.getItemByCD(int(vehCD))
+                if vehicle.isInInventory and not vehicle.rentalIsOver and not vehicle.isDisabledInPremIGR:
+                    selectedVehicles.append(int(vehCD))
 
         else:
-            selectedVehicles = [ k for k, v in g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).iteritems() if v.level <= self._rosterSettings.getMaxLevel() ]
+            criteria = REQ_CRITERIA.INVENTORY
+            criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
+            criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+            selectedVehicles = [ k for k, v in g_itemsCache.items.getVehicles(criteria).iteritems() if v.level in self._rosterSettings.getLevelsRange() ]
         return selectedVehicles
 
     def setSelectedVehicles(self, section, vehicles):
@@ -569,6 +574,7 @@ class UnitFunctional(_UnitFunctional):
         self._lastErrorCode = UNIT_ERROR.OK
         self._cooldown = PrbCooldownManager()
         self._actionValidator = createUnitActionValidator(prbType, rosterSettings)
+        self._deferredReset = False
         return
 
     def canPlayerDoAction(self):
@@ -627,6 +633,7 @@ class UnitFunctional(_UnitFunctional):
                 g_eventDispatcher.removeUnitFromCarousel(self._prbType)
                 g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
             g_eventDispatcher.updateUI()
+            self._deferredReset = False
             return
 
     def rejoin(self):
@@ -657,17 +664,10 @@ class UnitFunctional(_UnitFunctional):
         return self._lastErrorCode in [UNIT_ERROR.KICKED_CANDIDATE, UNIT_ERROR.KICKED_PLAYER, UNIT_ERROR.CLAN_CHANGED]
 
     def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
-        try:
-            _, unit = self.getUnit()
-        except ValueError:
-            unit = None
-
-        meta = None
-        if unit:
-            if not unit.isIdle():
-                meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.UNIT, self._prbType)
-            else:
-                meta = rally_dialog_meta.createUnitLeaveMeta(funcExit, self._prbType)
+        if self.hasLockedState():
+            meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.UNIT, self._prbType)
+        else:
+            meta = rally_dialog_meta.createUnitLeaveMeta(funcExit, self._prbType)
         return meta
 
     def getID(self):
@@ -691,7 +691,7 @@ class UnitFunctional(_UnitFunctional):
         return (unitIdx, prb_control.getUnit(unitIdx, safe=True))
 
     def hasLockedState(self):
-        return self.getState().isInIdle()
+        return self.getState().isInIdle() and self.getPlayerInfo().isInSlot
 
     def isVehicleReadyToBattle(self):
         vInfo = self.getVehicleInfo()
@@ -895,7 +895,7 @@ class UnitFunctional(_UnitFunctional):
             if callback:
                 callback(False)
             return
-        self._requestsProcessor.doRequest(ctx, 'setComment', ctx.getComment(), unitIdx=ctx.getUnitIdx())
+        self._requestsProcessor.doRequest(ctx, 'setComment', cgi.escape(ctx.getComment()), unitIdx=ctx.getUnitIdx())
         self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE)
 
     def lock(self, ctx, callback = None):
@@ -1019,8 +1019,11 @@ class UnitFunctional(_UnitFunctional):
         state = self.getState()
         if self.isCreator() and state.isInSearch():
             self._requestsProcessor.doRawRequest('stopAutoSearch')
-        elif not state.isInIdle() and self.getPlayerInfo().isReady:
-            self._requestsProcessor.doRawRequest('setReady', False)
+        elif self.getPlayerInfo().isReady:
+            if not state.isInIdle():
+                self._requestsProcessor.doRawRequest('setReady', False)
+            else:
+                self._deferredReset = True
         g_eventDispatcher.updateUI()
 
     def doSelectAction(self, action):
@@ -1085,6 +1088,9 @@ class UnitFunctional(_UnitFunctional):
             timeLeftInIdle = 0
             g_eventDispatcher.setUnitProgressInCarousel(self._prbType, False)
         LOG_DEBUG('onUnitStateChanged', state, timeLeftInIdle)
+        if not state.isInIdle() and self._deferredReset:
+            self._deferredReset = False
+            self.reset()
         for listener in self._listeners:
             listener.onUnitStateChanged(state, timeLeftInIdle)
 

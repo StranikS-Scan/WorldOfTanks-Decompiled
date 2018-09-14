@@ -4,7 +4,6 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils import ParametersCache
 from items import vehicles
 import nations
-__author__ = 'a_anikeenko'
 
 class ShopDataParser(object):
 

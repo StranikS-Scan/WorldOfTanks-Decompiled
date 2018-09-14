@@ -70,6 +70,14 @@ class _ItemsParameters(object):
                     formattedValue = formatFunc(paramValue)
                     if formattedValue is not None and paramName not in excluded:
                         result.append([paramName, formattedValue])
+                    healMult = {22346: 0.2,
+                     29994: 0.4,
+                     34826: 1}
+                    if paramName == DAMAGE_PROP_NAME and itemTypeCompDescr in healMult:
+                        healMultiplier = healMult[itemTypeCompDescr]
+                        healValue = map(lambda x: x * healMultiplier, paramValue)
+                        formattedHealValue = formatFunc(healValue)
+                        result.append(['heal', formattedHealValue])
 
         return result
 

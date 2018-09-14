@@ -7,7 +7,7 @@ from ClientUnit import ClientUnit
 from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE
 import Event
 from FortifiedRegionBase import FortifiedRegionBase, FORT_STATE, FORT_EVENT_TYPE, NOT_ACTIVATED
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 import fortified_regions
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications import getDirectionFromDirPos
@@ -65,6 +65,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onOrderReady = Event.Event(self.__eManager)
         self.onDossierChanged = Event.Event(self.__eManager)
         self.onPlayerAttached = Event.Event(self.__eManager)
+        self.onSettingCooldown = Event.Event(self.__eManager)
         self.onPeripheryChanged = Event.Event(self.__eManager)
         self.onDefenceHourChanged = Event.Event(self.__eManager)
         self.onOffDayChanged = Event.Event(self.__eManager)
@@ -185,14 +186,12 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         return FortOrder(orderID, self)
 
     def hasActivatedContinualOrders(self):
-        hasActivatedOrders = False
-        for simpleOrder in FORT_ORDER_TYPE.ALL:
+        for simpleOrder in [ o for o in FORT_ORDER_TYPE.ACTIVATED if o not in FORT_ORDER_TYPE.COMPATIBLES ]:
             checkingOrder = self.getOrder(simpleOrder)
-            if checkingOrder.inCooldown and not checkingOrder.isPermanent:
-                hasActivatedOrders = True
-                break
+            if checkingOrder.inCooldown:
+                return True
 
-        return hasActivatedOrders
+        return False
 
     def getBuildingOrder(self, buildingID):
         return fortified_regions.g_cache.buildings[buildingID].orderType
@@ -291,6 +290,9 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def recalculateOrder(self, orderTypeID, prevCount, prevLevel, newLevel):
         newCount, resLeft = self._recalcOrders(orderTypeID, prevCount, prevLevel, newLevel)
         return (newCount, resLeft)
+
+    def getPeripheryProcessing(self):
+        return (False, FORT_EVENT_TYPE.PERIPHERY_COOLDOWN in self.events)
 
     def isVacationEnabled(self):
         return self.vacationStart > 0 and self.vacationFinish > 0
@@ -486,17 +488,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         attacksInFight = self.getAttacks(clanFortInfo.getClanDBID(), filterInFight)
         if attacksInFight:
             return ATTACK_PLAN_RESULT.WAR_DECLARED
-
-        def filterInCooldown(item):
-            if 0 < enemyDefHourTimestamp - item.getStartTime() < fortified_regions.g_cache.attackCooldownTime:
-                return True
-            return False
-
-        attacksLastWeek = self.getAttacks(clanFortInfo.getClanDBID(), filterInCooldown)
-        defencesLastWeek = self.getDefences(clanFortInfo.getClanDBID(), filterInCooldown)
-        attackLastWeek = attacksLastWeek[-1] if attacksLastWeek else None
-        defenceLastWeek = defencesLastWeek[-1] if defencesLastWeek else None
-        if attackLastWeek is not None and (defenceLastWeek is None or defenceLastWeek.getStartTime() > attackLastWeek.getStartTime()):
+        elif clanFortInfo.closestAttackInCooldown is not None and dayTimestamp < clanFortInfo.closestAttackInCooldown.getStartTime() + time_utils.ONE_DAY * 7 and not clanFortInfo.counterAttacked:
             return ATTACK_PLAN_RESULT.IN_COOLDOWN
         hasAvailableDirections, hasFreeDirections = False, False
         for direction in self.getOpenedDirections():
@@ -551,8 +543,8 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         for item in self.getDefences():
             self.__battlesMapping[item.getBattleID()] = item
 
-    def _setSortie(self, unitMgrID, cmdrDBID, rosterTypeID, state, peripheryID, count, maxCount, timestamp, igrType, cmdrName):
-        result = FortifiedRegionBase._setSortie(self, unitMgrID, cmdrDBID, rosterTypeID, state, peripheryID, count, maxCount, timestamp, igrType, cmdrName)
+    def _setSortie(self, unitMgrID, cmdrDBID, rosterTypeID, state, peripheryID, *args):
+        result = FortifiedRegionBase._setSortie(self, unitMgrID, cmdrDBID, rosterTypeID, state, peripheryID, *args)
         self.onSortieChanged(unitMgrID, peripheryID)
         return result
 
@@ -670,6 +662,11 @@ class ClientFortifiedRegion(FortifiedRegionBase):
             self.onDefenceHourChanged(value)
         elif eventTypeID == FORT_EVENT_TYPE.OFF_DAY_CHANGE:
             self.onOffDayChanged(value)
+        elif eventTypeID in (FORT_EVENT_TYPE.PERIPHERY_COOLDOWN,
+         FORT_EVENT_TYPE.DEFENCE_HOUR_COOLDOWN,
+         FORT_EVENT_TYPE.OFF_DAY_COOLDOWN,
+         FORT_EVENT_TYPE.VACATION_COOLDOWN):
+            self.onSettingCooldown(eventTypeID)
 
     def _syncFortDossier(self, compDossierDescr):
         FortifiedRegionBase._syncFortDossier(self, compDossierDescr)
@@ -744,8 +741,13 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.__updateBattlesMapping()
         self.onFortBattleChanged(battleID)
 
+    def _onDeleteBattle(self, key, args, reason, isDefence):
+        battleID = args[3]
+        FortifiedRegionBase._onDeleteBattle(self, key, args, reason, isDefence)
+        self.onFortBattleRemoved(battleID)
+
     def _onEnemyClanCard(self, *args):
-        self.onEnemyClanCardReceived(ClanCardItem(args))
+        self.onEnemyClanCardReceived(ClanCardItem(args, fort=self))
 
     def _onEmergencyRestore(self, unpacking):
         self.onEmergencyRestore()

@@ -5,8 +5,8 @@ from gui.Scaleform.daapi.view.meta.FortDisconnectViewMeta import FortDisconnectV
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
-from gui.Scaleform.Waiting import Waiting
 from helpers import i18n
 
 class FortDisconnectViewComponent(FortDisconnectViewMeta, FortViewHelper, AppRef):
@@ -19,17 +19,13 @@ class FortDisconnectViewComponent(FortDisconnectViewMeta, FortViewHelper, AppRef
         state = self.fortState
         warningIcon = i18n.makeString(self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON))
         warningText = warningIcon + i18n.makeString(FORTIFICATIONS.DISCONNECTED_WARNING)
-        warningDescrText = ''
         if state.getStateID() == CLIENT_FORT_STATE.ROAMING:
             warningDescrText = FORTIFICATIONS.DISCONNECTED_WARNINGDESCRIPTIONROAMING
-        elif state.getStateID() == CLIENT_FORT_STATE.CENTER_UNAVAILABLE:
-            warningDescrText = FORTIFICATIONS.DISCONNECTED_WARNINGDESCRIPTIONCENTERUNAVAILABLE
         else:
-            LOG_WARNING('Unknown fort state for disconnectView: %d' % state.getStateID())
+            warningDescrText = FORTIFICATIONS.DISCONNECTED_WARNINGDESCRIPTIONCENTERUNAVAILABLE
         warningDescrText = i18n.makeString(warningDescrText)
         self.as_setWarningTextsS(warningText, warningDescrText)
-        Waiting.hide('loadPage')
-        Waiting.hide('Flash')
+        g_eventBus.handleEvent(events.FortEvent(events.FortEvent.VIEW_LOADED), scope=EVENT_BUS_SCOPE.FORT)
 
     def _dispose(self):
         super(FortDisconnectViewComponent, self)._dispose()

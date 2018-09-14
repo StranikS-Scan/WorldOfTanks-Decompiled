@@ -14,7 +14,7 @@ from items.tankmen import MAX_SKILL_LEVEL
 
 class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractWindowView, View):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(ExchangeFreeToTankmanXpWindow, self).__init__()
         self.__tankManId = ctx.get('tankManId')
         self.__selectedXpForConvert = 0
@@ -66,7 +66,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractW
         if freeXp - needMaxXp >= 0:
             nextSkillLevel += 1
             while nextSkillLevel < MAX_SKILL_LEVEL:
-                needMaxXp += self.__calcLevelUpCost(tankman, nextSkillLevel, len(tankman.skills)) / rate
+                needMaxXp += self.__calcLevelUpCost(tankman, nextSkillLevel, tankman.descriptor.lastSkillNumber) / rate
                 if freeXp - needMaxXp < 0:
                     break
                 nextSkillLevel += 1
@@ -102,7 +102,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractW
                 toLevel = MAX_SKILL_LEVEL
             needXp = self.__getCurrentTankmanLevelCost(tankman)
             for level in range(int(tankman.descriptor.lastSkillLevel + 1), toLevel, 1):
-                needXp += self.__calcLevelUpCost(tankman, level, len(tankman.skills))
+                needXp += self.__calcLevelUpCost(tankman, level, tankman.descriptor.lastSkillNumber)
 
             defaultRate = items.shop.defaults.freeXPToTManXPRate
             rate = items.shop.freeXPToTManXPRate

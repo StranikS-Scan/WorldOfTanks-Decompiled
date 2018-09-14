@@ -6,6 +6,7 @@ import BigWorld
 import Settings
 from adisp import async, process
 from debug_utils import LOG_DEBUG
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils import graphics
 from gui.Scaleform.framework import AppRef, ViewTypes
@@ -83,7 +84,7 @@ class NotifyController(AppRef):
 
     @classmethod
     def __showSettingsWindow(cls, tabIdx = 0):
-        g_eventBus.handleEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_SETTINGS_WINDOW, {'redefinedKeyMode': False,
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': False,
          'tabIndex': tabIdx}))
 
     def __getSettingsWindow(self):

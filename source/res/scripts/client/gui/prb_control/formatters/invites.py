@@ -11,7 +11,7 @@ from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.prb_control.prb_helpers import prbDispatcherProperty
 from gui.prb_control.prb_helpers import prbAutoInvitesProperty
 from gui.shared.fortifications import formatters as fort_fmt
-from helpers import i18n
+from helpers import i18n, html
 from messenger.ext import passCensor
 
 def getPrbName(prbType, lowercase = False):
@@ -133,7 +133,7 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         comment = passCensor(invite.comment)
         if not comment:
             return ''
-        return makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': i18n.makeString(I18N_INVITES.INVITES_COMMENT, comment=comment)})
+        return makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': i18n.makeString(I18N_INVITES.INVITES_COMMENT, comment=html.escape(comment))})
 
     def getNote(self, invite):
         if self.prbInvites.canAcceptInvite(invite):

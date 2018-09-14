@@ -11,12 +11,12 @@ __author__ = 'd_savitski'
 
 class RosterSlotSettingsWindow(View, RosterSlotSettingsWindowMeta, AbstractWindowView, VehicleSelectorBase):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(RosterSlotSettingsWindow, self).__init__()
         raise 'section' in ctx or AssertionError('Section is required to show selector popup')
         self.__section = ctx.get('section')
         self.__levelsRange = ctx.get('levelsRange', (1, 10))
-        self.currentSlot = self.__makeCurrentSlotData(ctx.get('settings'))
+        self.currentSlot = self.__makeInitialSlotData(ctx.get('settings'))
 
     def _populate(self):
         super(RosterSlotSettingsWindow, self)._populate()
@@ -45,6 +45,16 @@ class RosterSlotSettingsWindow(View, RosterSlotSettingsWindowMeta, AbstractWindo
         self.currentSlot = self.__makeCurrentSlotData(value)
         self.fireEvent(CSRosterSlotSettingsWindow(CSRosterSlotSettingsWindow.APPLY_SLOT_SETTINGS, self.currentSlot))
         self.onWindowClose()
+
+    def __makeInitialSlotData(self, slotSettings):
+        if slotSettings[2] is None:
+            levels = list(self.__levelsRange)
+            slotSettings[2] = {'nationIDRange': [],
+             'vTypeRange': [],
+             'vLevelRange': levels[::len(levels) - 1]}
+            return slotSettings
+        else:
+            return self.__makeCurrentSlotData(slotSettings)
 
     def __makeCurrentSlotData(self, value):
         currentSlot = [value[0], value[1]]

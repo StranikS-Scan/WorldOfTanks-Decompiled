@@ -17,3 +17,10 @@ class LobbyMenuMeta(DAAPIModule):
 
     def quitClick(self):
         self._printOverrideError('quitClick')
+
+    def versionInfoClick(self):
+        self._printOverrideError('versionInfoClick')
+
+    def as_setVersionMessageS(self, message, showLinkButton):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setVersionMessage(message, showLinkButton)

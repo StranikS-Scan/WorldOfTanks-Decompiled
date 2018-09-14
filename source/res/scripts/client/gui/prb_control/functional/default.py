@@ -74,6 +74,7 @@ class _PrbFunctional(ListenersCollection, interfaces.IPrbFunctional):
         self._setListenerClass(listenerClass)
         self._requestHandlers = requestHandlers or {}
         self._exit = FUNCTIONAL_EXIT.NO_FUNC
+        self._deferredReset = False
 
     def getExit(self):
         return self._exit
@@ -85,6 +86,7 @@ class _PrbFunctional(ListenersCollection, interfaces.IPrbFunctional):
     def fini(self, clientPrb = None, woEvents = False):
         self._setListenerClass(None)
         self._requestHandlers.clear()
+        self._deferredReset = False
         return
 
     def request(self, ctx, callback = None):
@@ -347,7 +349,7 @@ class PrbDispatcher(_PrbFunctional):
             return None
         else:
             prbType = self.getPrbType()
-            if self.getTeamState().isInQueue():
+            if self.hasLockedState():
                 meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.PREBATTLE, prbType)
             else:
                 meta = rally_dialog_meta.createPrbLeaveMeta(funcExit, prbType)
@@ -363,6 +365,9 @@ class PrbDispatcher(_PrbFunctional):
         team1State = self.getTeamState(team=1)
         team2State = self.getTeamState(team=2)
         LOG_DEBUG('prb_onTeamStatesReceived', team1State, team2State)
+        if self._deferredReset and not self.getTeamState().isInQueue():
+            self._deferredReset = False
+            self.reset()
         for listener in self._listeners:
             listener.onTeamStatesReceived(self, team1State, team2State)
 
@@ -516,7 +521,10 @@ class PrbFunctional(PrbDispatcher):
         if self.isCreator() and self.getTeamState().isInQueue():
             BigWorld.player().prb_teamNotReady(self.getPlayerTeam(), setNotReady)
         elif self.getPlayerInfo().isReady():
-            setNotReady(0)
+            if self.getTeamState().isInQueue():
+                self._deferredReset = True
+            else:
+                setNotReady(0)
 
     def assign(self, ctx, callback = None):
         prevTeam, _ = decodeRoster(self.getRosterKey(pID=ctx.getPlayerID()))
@@ -716,7 +724,7 @@ class PrbFunctional(PrbDispatcher):
             limitMaxCount = teamLimits['maxCount'][not assigned]
             for _, accInfo in players.iteritems():
                 state = accInfo.get('state', PREBATTLE_ACCOUNT_STATE.UNKNOWN)
-                if not state & PREBATTLE_ACCOUNT_STATE.READY or state & PREBATTLE_ACCOUNT_STATE.OFFLINE:
+                if not state & PREBATTLE_ACCOUNT_STATE.READY:
                     notReadyCount += 1
                     if not haveInBattle and state & PREBATTLE_ACCOUNT_STATE.IN_BATTLE:
                         haveInBattle = True

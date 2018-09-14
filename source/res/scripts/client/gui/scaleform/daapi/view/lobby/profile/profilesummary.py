@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummary.py
 import BigWorld
 from adisp import process
-from debug_utils import LOG_DEBUG
+from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileAchievementSection import ProfileAchievementSection
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileSummaryMeta import ProfileSummaryMeta
@@ -27,8 +27,8 @@ class ProfileSummary(ProfileAchievementSection, ProfileSummaryMeta):
         outcome['maxDestroyedByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
         outcome['globalRating'] = self.getGlobalRating(self._databaseID)
         totalStats = accountDossier.getTotalStats()
-        outcome['significantAchievements'] = ProfileUtils.packAchievementList(totalStats.getSignificantAchievements(), accountDossier, self._userID is None)
-        outcome['nearestAchievements'] = ProfileUtils.packAchievementList(totalStats.getNearestAchievements(), accountDossier, self._userID is None)
+        outcome['significantAchievements'] = AchievementsUtils.packAchievementList(totalStats.getSignificantAchievements(), accountDossier, self._userID is None, False)
+        outcome['nearestAchievements'] = AchievementsUtils.packAchievementList(totalStats.getNearestAchievements(), accountDossier, self._userID is None, True)
         self.as_responseDossierS(self._battlesType, outcome)
         return
 

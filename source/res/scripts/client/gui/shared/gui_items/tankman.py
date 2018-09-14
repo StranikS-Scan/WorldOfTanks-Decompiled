@@ -1,25 +1,13 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
-from helpers.i18n import convert
+from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES
 from gui import nationCompareByIndex
 from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import HasStrCD, GUIItem, ItemsCollection
 
 class TankmenCollection(ItemsCollection):
-    """
-    Tankmen collection class.
-    """
 
     def _filterItem(self, item, nation = None, role = None, isInTank = None):
-        """
-        Overriden method to filter collection items.
-        
-        @param item: item to check fo filtering
-        @param nation: nation id to filter
-        @param role: tankman role to filter
-        @param isInTank: only tankmen in vehicles
-        @return: is item match given conditions <bool>
-        """
         if role is not None and item.descriptor.role != role:
             return False
         elif isInTank is not None and item.isInTank != isInTank:
@@ -61,16 +49,8 @@ class TankmenComparator(object):
 
 
 class Tankman(GUIItem, HasStrCD):
-    ROLE_ICON_PATH_BIG = '../maps/icons/tankmen/roles/big'
-    ROLE_ICON_PATH_SMALL = '../maps/icons/tankmen/roles/small'
-    RANK_ICON_PATH_BIG = '../maps/icons/tankmen/ranks/big'
-    RANK_ICON_PATH_SMALL = '../maps/icons/tankmen/ranks/small'
-    PORTRAIT_ICON_PATH_BIG = '../maps/icons/tankmen/icons/big'
-    PORTRAIT_ICON_PATH_SMALL = '../maps/icons/tankmen/icons/small'
-    PORTRAIT_ICON_PATH_BARRACKS = '../maps/icons/tankmen/icons/barracks'
 
     class ROLES:
-        """ Tankmen vehicle roles constants. """
         COMMANDER = 'commander'
         RADIOMAN = 'radioman'
         DRIVER = 'driver'
@@ -84,14 +64,6 @@ class Tankman(GUIItem, HasStrCD):
      ROLES.LOADER: 4}
 
     def __init__(self, strCompactDescr, inventoryID = -1, vehicle = None, proxy = None):
-        """
-        Ctor.
-        
-        @param strCompactDescr: string compact descriptor
-        @param inventoryID: tankman's inventory id
-        @param vehicle: tankman's vehicle where it has been seat
-        @param proxy: instance of ItemsRequester
-        """
         GUIItem.__init__(self, proxy)
         HasStrCD.__init__(self, strCompactDescr)
         self.__descriptor = None
@@ -121,36 +93,13 @@ class Tankman(GUIItem, HasStrCD):
         return
 
     def _buildSkills(self, proxy):
-        """
-        Returns list of `TankmanSkill` objects build
-        according to the tankman's skills.
-        """
         return [ TankmanSkill(skill, self, proxy) for skill in self.descriptor.skills ]
 
     def _buildSkillsMap(self):
-        """
-        Returns dict of skillName: TankmanSkill objects build
-        according to the tankman's skills.
-        """
         return dict([ (skill.name, skill) for skill in self.skills ])
 
     @property
     def realRoleLevel(self):
-        """
-        Returns real tankman role level calculated with
-        bonuses and penalties.
-        
-        @return: (
-                real role level,
-                (
-                        commander bonus,
-                        brotherhood bonus,
-                        equipments bonus,
-                        optional devices bonus,
-                        not native vehicle penalty,
-                )
-        )
-        """
         effRoleLevel = self.efficiencyRoleLevel
         penalty = effRoleLevel - self.roleLevel
         commBonus = self.vehicleBonuses.get('commander', 0)
@@ -174,53 +123,43 @@ class Tankman(GUIItem, HasStrCD):
 
     @property
     def isInTank(self):
-        """ Is tankman in vehicle. """
         return self.vehicleDescr is not None
 
     @property
     def roleLevel(self):
-        """ Tankman's role level. """
         return self.descriptor.roleLevel
 
     @property
     def icon(self):
-        """ Tankman's portrait icon filename. """
-        return tankmen.getNationConfig(self.nationID)['icons'][self.descriptor.iconID]
+        return getIconName(self.nationID, self.descriptor.iconID)
 
     @property
     def iconRank(self):
-        """ Tankman's rank icon filepath. """
-        return tankmen.getNationConfig(self.nationID)['ranks'][self.descriptor.rankID]['icon']
+        return getRankIconName(self.nationID, self.descriptor.rankID)
 
     @property
     def iconRole(self):
-        """ Tankman's role icon filename. """
-        return tankmen.getSkillsConfig()[self.descriptor.role]['icon']
+        return getRoleIconName(self.descriptor.role)
 
     @property
     def firstUserName(self):
-        """ Tankman's firstname represented as user-friendly string. """
-        return convert(tankmen.getNationConfig(self.nationID)['firstNames'][self.descriptor.firstNameID])
+        return getFirstUserName(self.nationID, self.descriptor.firstNameID)
 
     @property
     def lastUserName(self):
-        """ Tankman's lastname represented as user-friendly string. """
-        return convert(tankmen.getNationConfig(self.nationID)['lastNames'][self.descriptor.lastNameID])
+        return getLastUserName(self.nationID, self.descriptor.lastNameID)
 
     @property
     def fullUserName(self):
-        """ Tankman's full represented as user-friendly string. """
-        return '%s %s' % (self.firstUserName, self.lastUserName)
+        return getFullUserName(self.nationID, self.descriptor.firstNameID, self.descriptor.lastNameID)
 
     @property
     def rankUserName(self):
-        """ Tankman's rank represented as user-friendly string. """
-        return convert(tankmen.getNationConfig(self.nationID)['ranks'][self.descriptor.rankID]['userString'])
+        return getRankUserName(self.nationID, self.descriptor.rankID)
 
     @property
     def roleUserName(self):
-        """ Tankman's role represented as user-friendly string. """
-        return convert(tankmen.getSkillsConfig()[self.descriptor.role]['userString'])
+        return getRoleUserName(self.descriptor.role)
 
     @property
     def hasNewSkill(self):
@@ -228,11 +167,6 @@ class Tankman(GUIItem, HasStrCD):
 
     @property
     def newSkillCount(self):
-        """
-        Returns number of skills to study and last new skill level.
-        
-        @return: ( number of new skills, last new skill level )
-        """
         if self.hasNewSkill:
             tmanDescr = tankmen.TankmanDescr(self.strCD)
             i = 0
@@ -248,9 +182,6 @@ class Tankman(GUIItem, HasStrCD):
 
     @property
     def efficiencyRoleLevel(self):
-        """
-        Returns tankman's role level on current vehicle.
-        """
         factor, addition = (1, 0)
         if self.isInTank:
             factor, addition = self.descriptor.efficiencyOnVehicle(self.vehicleDescr)
@@ -295,11 +226,6 @@ class Tankman(GUIItem, HasStrCD):
 
 
 class TankmanSkill(GUIItem):
-    """
-    Tankman's skill class.
-    """
-    ICON_PATH_BIG = '../maps/icons/tankmen/skills/big'
-    ICON_PATH_SMALL = '../maps/icons/tankmen/skills/small'
 
     def __init__(self, skillName, tankman = None, proxy = None):
         super(TankmanSkill, self).__init__(proxy)
@@ -310,8 +236,10 @@ class TankmanSkill(GUIItem):
         self.roleType = None
         self.isActive = False
         self.isEnable = False
+        self.isFemale = False
         if tankman is not None:
             tdescr = tankman.descriptor
+            self.isFemale = tdescr.isFemale
             self.level = tdescr.lastSkillLevel if tdescr.skills.index(self.name) == len(tdescr.skills) - 1 else tankmen.MAX_SKILL_LEVEL
             self.roleType = self.__getSkillRoleType(skillName)
             self.isActive = self.__getSkillActivity(tankman)
@@ -326,7 +254,8 @@ class TankmanSkill(GUIItem):
 
         return False
 
-    def __getSkillRoleType(self, skillName):
+    @classmethod
+    def __getSkillRoleType(cls, skillName):
         if skillName in tankmen.COMMON_SKILLS:
             return 'common'
         else:
@@ -337,12 +266,6 @@ class TankmanSkill(GUIItem):
             return None
 
     def __getSkillActivity(self, tankman):
-        """
-        Returns skill activity. Skill is active in following cases:
-         1. skill is not perk;
-         2. skill is `brotherhood` skill and it is active on tankman's vehicle;
-         3. skill is onot `brotherhood` and it is researched to max.
-        """
         if tankman is None:
             return True
         else:
@@ -359,23 +282,118 @@ class TankmanSkill(GUIItem):
 
     @property
     def userName(self):
-        """ Returns skill name represented as user-friendly string. """
-        return tankmen.getSkillsConfig()[self.name]['userString']
+        if self.name == 'brotherhood' and self.isFemale:
+            return i18n.makeString('#item_types:tankman/skills/brotherhood_female')
+        return getSkillUserName(self.name)
 
     @property
     def description(self):
-        """ Returns skill description represented as user-friendly string. """
-        return convert(tankmen.getSkillsConfig()[self.name]['description'])
+        if self.name == 'brotherhood' and self.isFemale:
+            return i18n.makeString('#item_types:tankman/skills/brotherhood_female_descr')
+        return getSkillUserDescription(self.name)
 
     @property
     def shortDescription(self):
-        """ Returns skill short description represented as user-friendly string. """
         return getShortDescr(self.description)
 
     @property
     def icon(self):
-        """ Returns skill icon filename. """
-        return convert(tankmen.getSkillsConfig()[self.name]['icon'])
+        return getSkillIconName(self.name)
 
     def __repr__(self):
         return 'TankmanSkill<name:%s, level:%d, isActive:%s>' % (self.name, self.level, str(self.isActive))
+
+
+def getFirstUserName(nationID, firstNameID):
+    return i18n.convert(tankmen.getNationConfig(nationID)['firstNames'][firstNameID])
+
+
+def getLastUserName(nationID, lastNameID):
+    return i18n.convert(tankmen.getNationConfig(nationID)['lastNames'][lastNameID])
+
+
+def getFullUserName(nationID, firstNameID, lastNameID):
+    return '%s %s' % (getFirstUserName(nationID, firstNameID), getLastUserName(nationID, lastNameID))
+
+
+def getRoleUserName(role):
+    return i18n.convert(tankmen.getSkillsConfig()[role]['userString'])
+
+
+def getRoleIconName(role):
+    return tankmen.getSkillsConfig()[role]['icon']
+
+
+def getRoleBigIconPath(role):
+    return '../maps/icons/tankmen/roles/big/%s' % getRoleIconName(role)
+
+
+def getRoleSmallIconPath(role):
+    return '../maps/icons/tankmen/roles/small/%s' % getRoleIconName(role)
+
+
+def getRankUserName(nationID, rankID):
+    return i18n.convert(tankmen.getNationConfig(nationID)['ranks'][rankID]['userString'])
+
+
+def getIconName(nationID, iconID):
+    return tankmen.getNationConfig(nationID)['icons'][iconID]
+
+
+def getBarracksIconPath(nationID, iconID):
+    return '../maps/icons/tankmen/icons/barracks/%s' % getIconName(nationID, iconID)
+
+
+def getBigIconPath(nationID, iconID):
+    return '../maps/icons/tankmen/icons/big/%s' % getIconName(nationID, iconID)
+
+
+def getSmallIconPath(nationID, iconID):
+    return '../maps/icons/tankmen/icons/small/%s' % getIconName(nationID, iconID)
+
+
+def getRankIconName(nationID, rankID):
+    return tankmen.getNationConfig(nationID)['ranks'][rankID]['icon']
+
+
+def getRankBigIconPath(nationID, rankID):
+    return '../maps/icons/tankmen/ranks/big/%s' % getRankIconName(nationID, rankID)
+
+
+def getRankSmallIconPath(nationID, rankID):
+    return '../maps/icons/tankmen/ranks/small/%s' % getRankIconName(nationID, rankID)
+
+
+def getSkillIconName(skillName):
+    return i18n.convert(tankmen.getSkillsConfig()[skillName]['icon'])
+
+
+def getSkillBigIconPath(skillName):
+    return '../maps/icons/tankmen/skills/big/%s' % getSkillIconName(skillName)
+
+
+def getSkillSmallIconPath(skillName):
+    return '../maps/icons/tankmen/skills/small/%s' % getSkillIconName(skillName)
+
+
+def getSkillUserName(skillName):
+    return tankmen.getSkillsConfig()[skillName]['userString']
+
+
+def getSkillUserDescription(skillName):
+    return tankmen.getSkillsConfig()[skillName]['description']
+
+
+def calculateRoleLevel(startRoleLevel, freeXpValue = 0, typeID = (0, 0)):
+    return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).roleLevel
+
+
+def calculateRankID(startRoleLevel, freeXpValue = 0, typeID = (0, 0)):
+    return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).rankID
+
+
+def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID):
+    vehType = vehicles.VehicleDescr(typeID=typeID).type
+    tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0], False), vehType.id[1], vehType.crewRoles[0][0], startRoleLevel))
+    tmanDescr.addXP(freeXpValue)
+    return tmanDescr

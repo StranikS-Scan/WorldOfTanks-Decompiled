@@ -2,31 +2,31 @@
 import BigWorld
 from account_helpers import isDemonstrator
 from adisp import process
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_TUTORIAL_ENABLED
+from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_TUTORIAL_ENABLED, IS_CHINA
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui import game_control
 from gui.prb_control import areSpecBattlesHidden
 from gui.prb_control.context import PrebattleAction
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES, FUNCTIONAL_EXIT
-from gui.shared import g_eventsCache, g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.server_events import g_eventsCache
 from gui.shared.fortifications import isFortificationEnabled, isSortieEnabled
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
 
 class _SelectorItem(object):
-    __slots__ = ('_label', '_data', '_tooltip', '_order', '_isSelected', '_isNew', '_isDisabled', '_isLocked', '_isVisible', '_selectorType')
+    __slots__ = ('_label', '_description', '_data', '_order', '_isSelected', '_isNew', '_isDisabled', '_isLocked', '_isVisible', '_selectorType')
 
-    def __init__(self, label, data, tooltip, order, selectorType = None, _isVisible = True):
+    def __init__(self, label, data, order, selectorType = None, _isVisible = True, description = None):
         super(_SelectorItem, self).__init__()
         self._label = label
+        self._description = description
         self._data = data
-        self._tooltip = tooltip
         self._order = order
         self._isSelected = False
         self._isNew = False
@@ -40,6 +40,9 @@ class _SelectorItem(object):
 
     def getLabel(self):
         return self._label
+
+    def getDescription(self):
+        return self._description
 
     def getData(self):
         return self._data
@@ -78,7 +81,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInPrebattle(PREBATTLE_TYPE.SQUAD)
+        return state.isInPrebattle(PREBATTLE_TYPE.SQUAD) or state.isInPrebattle(PREBATTLE_TYPE.EVENT_SQUAD)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -88,9 +91,9 @@ class _SelectorItem(object):
 
     def getVO(self):
         return {'label': self._label,
+         'description': self._description,
          'data': self._data,
          'disabled': self._isDisabled,
-         'tooltip': self._tooltip,
          'icon': self.getLargerIcon(),
          'active': self._isSelected,
          'isNew': self._isNew}
@@ -136,7 +139,7 @@ class _RandomQueueItem(_SelectorItem):
 
     def _update(self, state):
         self._isDisabled = state.hasLockedState
-        self._isSelected = not state.hasModalEntity or state.isInPrebattle(PREBATTLE_TYPE.SQUAD)
+        self._isSelected = not state.hasModalEntity or state.isInPrebattle(PREBATTLE_TYPE.SQUAD) or state.isInPrebattle(PREBATTLE_TYPE.EVENT_SQUAD)
 
 
 class _HistoricalItem(_SelectorItem):
@@ -225,6 +228,26 @@ class _TrainingItem(_SelectorItem):
         self._isDisabled = state.hasLockedState
 
 
+class _SquadItem(_SelectorItem):
+
+    def isRandomBattle(self):
+        return True
+
+    def _update(self, state):
+        self._isDisabled = state.hasLockedState
+
+
+class _EventSquadItem(_SelectorItem):
+
+    def isRandomBattle(self):
+        return True
+
+    def _update(self, state):
+        self._isDisabled = state.hasLockedState
+        self._isVisible = g_eventsCache.getEventBattles() is not None and g_eventsCache.getEventBattles().enabled
+        return
+
+
 class _BattleTutorialItem(_SelectorItem):
 
     def select(self):
@@ -247,9 +270,10 @@ class _BattleTutorialItem(_SelectorItem):
 
 class _BattleSelectorItems(object):
 
-    def __init__(self, items):
+    def __init__(self, items, squadItems):
         super(_BattleSelectorItems, self).__init__()
         self.__items = dict(map(lambda item: (item._data, item), items))
+        self.__squadItems = dict(map(lambda item: (item._data, item), squadItems))
         self.__isDemonstrator = False
         self.__isDemoButtonEnabled = False
 
@@ -258,12 +282,18 @@ class _BattleSelectorItems(object):
 
     def fini(self):
         self.__items.clear()
+        self.__squadItems.clear()
         self.__isDemonstrator = False
         self.__isDemoButtonEnabled = False
 
     def update(self, state):
         selected = self.__items[_DEFAULT_PAN]
         for item in self.__items.itervalues():
+            item.update(state)
+            if item.isSelected():
+                selected = item
+
+        for item in self.__squadItems.itervalues():
             item.update(state)
             if item.isSelected():
                 selected = item
@@ -288,21 +318,24 @@ class _BattleSelectorItems(object):
     def getVOs(self):
         return (map(lambda item: item.getVO(), filter(lambda item: item.isVisible(), sorted(self.__items.itervalues()))), self.__isDemonstrator, self.__isDemoButtonEnabled)
 
+    def getSquadVOs(self):
+        return map(lambda item: item.getVO(), filter(lambda item: item.isVisible(), sorted(self.__squadItems.itervalues())))
+
 
 _g_items = None
-_PAN = PREBATTLE_ACTION_NAME
 _DEFAULT_PAN = PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE
 
 def _createItems():
     isInRoaming = game_control.g_instance.roaming.isInRoaming()
-    items = [_RandomQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_STANDART, _PAN.JOIN_RANDOM_QUEUE, TOOLTIPS.BATTLETYPES_STANDART, 0),
-     (_DisabledSelectorItem if isInRoaming else _HistoricalItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLES, PREBATTLE_ACTION_NAME.HISTORICAL, TOOLTIPS.BATTLETYPES_HISTORICAL, 1, SELECTOR_BATTLE_TYPES.HISTORICAL, False),
-     _CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.UNIT, TOOLTIPS.BATTLETYPES_UNIT, 2, SELECTOR_BATTLE_TYPES.UNIT),
-     _CompanyItem(MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, TOOLTIPS.BATTLETYPES_COMPANY, 3),
-     (_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, TOOLTIPS.BATTLETYPES_FORTIFICATION, 4, SELECTOR_BATTLE_TYPES.SORTIE),
-     _TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAINING, TOOLTIPS.BATTLETYPES_TRAINING, 6)]
+    items = [_RandomQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_STANDART, PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE, 0),
+     (_DisabledSelectorItem if isInRoaming else _HistoricalItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLES, PREBATTLE_ACTION_NAME.HISTORICAL, 1, SELECTOR_BATTLE_TYPES.HISTORICAL, False),
+     _CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.UNIT, 2, SELECTOR_BATTLE_TYPES.UNIT),
+     (_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, 4, SELECTOR_BATTLE_TYPES.SORTIE),
+     _TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAINING, 6)]
     if GUI_SETTINGS.specPrebatlesVisible:
-        items.append(_SpecBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLE, TOOLTIPS.BATTLETYPES_SPEC, 5))
+        items.append(_SpecBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLE, 5))
+    if not IS_CHINA:
+        items.append(_CompanyItem(MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, 3))
     isTutorialEnabled = IS_TUTORIAL_ENABLED
     player = BigWorld.player()
     if player is not None:
@@ -310,8 +343,9 @@ def _createItems():
         if 'isTutorialEnabled' in serverSettings:
             isTutorialEnabled = serverSettings['isTutorialEnabled']
     if isTutorialEnabled:
-        items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, TOOLTIPS.BATTLETYPES_BATTLETUTORIAL, 7))
-    return _BattleSelectorItems(items)
+        items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 7))
+    squadItems = [_EventSquadItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD, PREBATTLE_ACTION_NAME.EVENT_SQUAD, 0, description=MENU.HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD_DESCR), _SquadItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD, PREBATTLE_ACTION_NAME.SQUAD, 1, description=MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCR)]
+    return _BattleSelectorItems(items, squadItems)
 
 
 def create():

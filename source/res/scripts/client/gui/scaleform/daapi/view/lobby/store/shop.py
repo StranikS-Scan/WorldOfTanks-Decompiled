@@ -2,7 +2,7 @@
 from PlayerEvents import g_playerEvents
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.shared.tooltips import getItemActionTooltipData
+from gui.shared.tooltips import getItemActionTooltipData, getItemRentActionTooltipData
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.MENU import MENU
@@ -18,7 +18,7 @@ from gui import getNationIndex, DialogsInterface
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.ShopMeta import ShopMeta
 from gui.Scaleform.daapi.view.lobby.store import Store
-from gui.shared.events import ShowWindowEvent
+from gui.shared.events import LoadViewEvent
 from gui.shared.utils.gui_items import InventoryVehicle
 from gui.shared.utils.requesters import StatsRequester
 import BigWorld
@@ -26,8 +26,8 @@ from items import ITEM_TYPE_INDICES
 
 class Shop(Store, ShopMeta):
 
-    def __init__(self):
-        super(Shop, self).__init__()
+    def __init__(self, ctx = None):
+        super(Shop, self).__init__(ctx)
         self.__tableType = None
         return
 
@@ -56,7 +56,7 @@ class Shop(Store, ShopMeta):
         dataCompactId = int(data.id)
         item = g_itemsCache.items.getItemByCD(dataCompactId)
         if ITEM_TYPE_INDICES[item.itemTypeName] == vehicles._VEHICLE:
-            self.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW, {'nationID': item.nationID,
+            self.fireEvent(LoadViewEvent(VIEW_ALIAS.VEHICLE_BUY_WINDOW, ctx={'nationID': item.nationID,
              'itemID': item.innationID}))
         else:
             self.__buyItem(item.intCD)
@@ -238,10 +238,14 @@ class Shop(Store, ShopMeta):
         defaultPrice = module.defaultAltPrice or module.defaultPrice
         localization = '#menu:vehicle/rentLeft/%s'
         rentLeftTimeStr = getRentLeftTimeStr(localization, module.rentLeftTime)
+        minRentPricePackage = module.getRentPackage()
         action = None
-        if price != defaultPrice and not module.isRentable:
+        if price != defaultPrice and not minRentPricePackage:
             action = getItemActionTooltipData(module)
-        price = module.minRentPrice or price
+        elif minRentPricePackage:
+            price = minRentPricePackage['rentPrice']
+            if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
+                action = getItemRentActionTooltipData(module, minRentPricePackage)
         return {'id': str(module.intCD),
          'name': name,
          'desc': module.getShortInfo(),

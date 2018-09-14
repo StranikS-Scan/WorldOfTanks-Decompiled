@@ -216,8 +216,35 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills = [], 
     return cd
 
 
+def getNextUniqueIDs(databaseID, lastFirstNameID, lastLastNameID, lastIconID, nationID, isPremium, fnGroupID, lnGroupID, iGroupID):
+    return (getNextUniqueID(databaseID, lastFirstNameID, nationID, isPremium, fnGroupID, 'firstNamesList'), getNextUniqueID(databaseID, lastLastNameID, nationID, isPremium, lnGroupID, 'lastNamesList'), getNextUniqueID(databaseID, lastIconID, nationID, isPremium, iGroupID, 'iconsList'))
+
+
+def getNextUniqueID(databaseID, lastID, nationID, isPremium, groupID, name):
+    ids = getNationConfig(nationID)['premiumGroups' if isPremium else 'normalGroups'][groupID][name]
+    groupSize = len(ids)
+    if groupSize == 0:
+        return (-1, None)
+    else:
+        for n in (5, 7, 11, 13, 17, 19, 23, 29, 31):
+            if groupSize % n != 0:
+                step = n
+                break
+        else:
+            step = 37
+
+        nextID = lastID
+        if lastID == -1:
+            nextID = databaseID % min(7, groupSize)
+        else:
+            nextID += step
+        if nextID >= groupSize:
+            nextID -= max(groupSize, step)
+        return (nextID, ids[nextID])
+
+
 def stripNonBattle(compactDescr):
-    return compactDescr[:6 + ord(compactDescr[4])]
+    return compactDescr[:6 + ord(compactDescr[4]) + 1]
 
 
 def parseNationSpecAndRole(compactDescr):
@@ -270,6 +297,33 @@ class TankmanDescr(object):
     def __init__(self, compactDescr, battleOnly = False):
         self.__initFromCompactDescr(compactDescr, battleOnly)
 
+    @property
+    def skills(self):
+        skillsCopy = list(self.__skills)
+        if self.isFemale:
+            skillsCopy.insert(0, 'brotherhood')
+        return skillsCopy
+
+    @property
+    def lastSkillLevel(self):
+        if not self.isFemale or self.__skills:
+            return self.__lastSkillLevel
+        return MAX_SKILL_LEVEL
+
+    @property
+    def lastSkillNumber(self):
+        return len(self.__skills)
+
+    @property
+    def skillLevels(self):
+        isFemale = self.isFemale
+        for skillName in self.skills:
+            if isFemale and skillName == 'brotherhood':
+                level = MAX_SKILL_LEVEL
+            else:
+                level = MAX_SKILL_LEVEL if skillName != self.__skills[-1] else self.__lastSkillLevel
+            yield (skillName, level)
+
     def efficiencyOnVehicle(self, vehicleDescr):
         _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescr.type.historicalModelOf)
         if not nationID == self.nationID:
@@ -307,17 +361,19 @@ class TankmanDescr(object):
     def skillLevel(self, skillName):
         if skillName not in self.skills:
             return None
-        elif skillName != self.skills[-1]:
+        elif self.isFemale and skillName == 'brotherhood':
+            return MAX_SKILL_LEVEL
+        elif skillName != self.__skills[-1]:
             return MAX_SKILL_LEVEL
         else:
-            return self.lastSkillLevel
+            return self.__lastSkillLevel
 
     def totalXP(self):
         levelCosts = _g_levelXpCosts
         xp = self.freeXP + levelCosts[self.roleLevel]
-        numSkills = len(self.skills)
+        numSkills = self.lastSkillNumber
         if numSkills:
-            xp += levelCosts[self.lastSkillLevel] * 2 ** numSkills
+            xp += levelCosts[self.__lastSkillLevel] * 2 ** numSkills
             for idx in xrange(1, numSkills):
                 xp += levelCosts[MAX_SKILL_LEVEL] * 2 ** idx
 
@@ -333,7 +389,7 @@ class TankmanDescr(object):
             self.roleLevel += 1
             self.__updateRankAtSkillLevelUp()
 
-        if self.roleLevel == MAX_SKILL_LEVEL and self.skills:
+        if self.roleLevel == MAX_SKILL_LEVEL and self.__skills:
             self.__levelUpLastSkill()
 
     def addSkill(self, skillName):
@@ -343,39 +399,42 @@ class TankmanDescr(object):
             raise ValueError, skillName
         if self.roleLevel != MAX_SKILL_LEVEL:
             raise ValueError, self.roleLevel
-        if self.skills and self.lastSkillLevel != MAX_SKILL_LEVEL:
-            raise ValueError, self.lastSkillLevel
-        self.skills.append(skillName)
-        self.lastSkillLevel = 0
+        if self.__skills and self.__lastSkillLevel != MAX_SKILL_LEVEL:
+            raise ValueError, self.__lastSkillLevel
+        self.__skills.append(skillName)
+        self.__lastSkillLevel = 0
         self.__levelUpLastSkill()
+
+    def isFreeDropSkills(self):
+        return self.lastSkillNumber <= 1 and self.__lastSkillLevel == 0
 
     def dropSkills(self, xpReuseFraction = 0.0):
         if not 0.0 <= xpReuseFraction <= 1.0:
             raise AssertionError
             prevTotalXP = self.totalXP()
             if self.numLevelsToNextRank != 0:
-                self.numLevelsToNextRank += self.lastSkillLevel
-                numSkills = len(self.skills)
+                self.numLevelsToNextRank += self.__lastSkillLevel
+                numSkills = self.lastSkillNumber
                 if numSkills > 1:
                     self.numLevelsToNextRank += MAX_SKILL_LEVEL * (numSkills - 1)
-            del self.skills[:]
-            self.lastSkillLevel = 0
+            del self.__skills[:]
+            self.__lastSkillLevel = 0
             xpReuseFraction != 0.0 and self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())))
 
     def dropSkill(self, skillName, xpReuseFraction = 0.0):
         if not 0.0 <= xpReuseFraction <= 1.0:
             raise AssertionError
-            idx = self.skills.index(skillName)
+            idx = self.__skills.index(skillName)
             prevTotalXP = self.totalXP()
-            numSkills = len(self.skills)
+            numSkills = self.lastSkillNumber
             levelsDropped = MAX_SKILL_LEVEL
             if numSkills == 1:
-                levelsDropped = self.lastSkillLevel
-                self.lastSkillLevel = 0
+                levelsDropped = self.__lastSkillLevel
+                self.__lastSkillLevel = 0
             elif idx + 1 == numSkills:
-                levelsDropped = self.lastSkillLevel
-                self.lastSkillLevel = MAX_SKILL_LEVEL
-            del self.skills[idx]
+                levelsDropped = self.__lastSkillLevel
+                self.__lastSkillLevel = MAX_SKILL_LEVEL
+            del self.__skills[idx]
             if self.numLevelsToNextRank != 0:
                 self.numLevelsToNextRank += levelsDropped
             xpReuseFraction != 0.0 and self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())))
@@ -460,10 +519,10 @@ class TankmanDescr(object):
         pack = struct.pack
         header = ITEM_TYPES.tankman + (self.nationID << 4)
         cd = pack('4B', header, self.vehicleTypeID, SKILL_INDICES[self.role], self.roleLevel)
-        numSkills = len(self.skills)
-        skills = [ SKILL_INDICES[s] for s in self.skills ]
+        numSkills = self.lastSkillNumber
+        skills = [ SKILL_INDICES[s] for s in self.__skills ]
         cd += pack((str(1 + numSkills) + 'B'), numSkills, *skills)
-        cd += chr(self.lastSkillLevel if numSkills else 0)
+        cd += chr(self.__lastSkillLevel if numSkills else 0)
         isFemale = 1 if self.isFemale else 0
         isPremium = 1 if self.isPremium else 0
         flags = isFemale | isPremium << 1
@@ -488,28 +547,30 @@ class TankmanDescr(object):
                     raise KeyError, self.role
                 if self.roleLevel > MAX_SKILL_LEVEL:
                     raise ValueError, self.roleLevel
-                self.skills = []
+                self.__skills = []
                 if numSkills == 0:
-                    self.lastSkillLevel = 0
+                    self.__lastSkillLevel = 0
                 else:
                     for skillID in unpack(str(numSkills) + 'B', cd[:numSkills]):
                         skillName = SKILL_NAMES[skillID]
                         if skillName not in ACTIVE_SKILLS:
                             raise KeyError, (skillName, self.role)
-                        self.skills.append(skillName)
+                        self.__skills.append(skillName)
 
-                    self.lastSkillLevel = ord(cd[numSkills])
-                    if self.lastSkillLevel > MAX_SKILL_LEVEL:
-                        raise ValueError, self.lastSkillLevel
+                    self.__lastSkillLevel = ord(cd[numSkills])
+                    if self.__lastSkillLevel > MAX_SKILL_LEVEL:
+                        raise ValueError, self.__lastSkillLevel
                 cd = cd[numSkills + 1:]
+                flags = unpack('<B', cd[:1])[0]
+                self.isFemale = bool(flags & 1)
+                self.isPremium = bool(flags & 2)
+                cd = cd[1:]
                 if battleOnly:
                     return
                 nationConfig = getNationConfig(nationID)
-                flags, self.firstNameID, self.lastNameID, self.iconID, rank, self.freeXP = unpack('<B4Hi', cd[:13])
-                cd = cd[13:]
+                self.firstNameID, self.lastNameID, self.iconID, rank, self.freeXP = unpack('<4Hi', cd[:12])
+                cd = cd[12:]
                 self.dossierCompactDescr = cd
-                self.isFemale = bool(flags & 1)
-                self.isPremium = bool(flags & 2)
                 self.__rankIdx = rank & 31
                 self.numLevelsToNextRank = rank >> 5
                 self.rankID = nationConfig['roleRanks'][self.role][self.__rankIdx]
@@ -540,25 +601,25 @@ class TankmanDescr(object):
             self.numLevelsToNextRank = SKILL_LEVELS_PER_RANK if self.__rankIdx < maxRankIdx else 0
 
     def __levelUpLastSkill(self):
-        numSkills = len(self.skills)
-        while self.lastSkillLevel < MAX_SKILL_LEVEL:
-            xpCost = self.levelUpXpCost(self.lastSkillLevel, numSkills)
+        numSkills = self.lastSkillNumber
+        while self.__lastSkillLevel < MAX_SKILL_LEVEL:
+            xpCost = self.levelUpXpCost(self.__lastSkillLevel, numSkills)
             if xpCost > self.freeXP:
                 break
             self.freeXP -= xpCost
-            self.lastSkillLevel += 1
+            self.__lastSkillLevel += 1
             self.__updateRankAtSkillLevelUp()
 
 
 def makeTmanDescrByTmanData(tmanData):
     nationID = tmanData['nationID']
-    if nationID >= len(nations.AVAILABLE_NAMES):
+    if not 0 <= nationID < len(nations.AVAILABLE_NAMES):
         raise Exception, 'Invalid nation'
     vehicleTypeID = tmanData['vehicleTypeID']
     if vehicleTypeID not in vehicles.g_list.getList(nationID):
-        raise Exception, 'Invalid nation'
+        raise Exception, 'Invalid vehicle'
     role = tmanData['role']
-    if role not in SKILL_NAMES:
+    if role not in ROLES:
         raise Exception, 'Invalid role'
     roleLevel = tmanData.get('roleLevel', 50)
     if not 50 <= roleLevel <= MAX_SKILL_LEVEL:

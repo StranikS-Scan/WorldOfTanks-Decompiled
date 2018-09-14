@@ -1,7 +1,12 @@
 # Embedded file name: scripts/client/account_helpers/AccountSettings.py
-import BigWorld, Settings, Event, base64
+import base64
+import constants
+import BigWorld
+import Settings
+import Event
 import cPickle as pickle
 from account_helpers import gameplay_ctx
+from debug_utils import LOG_CURRENT_EXCEPTION
 KEY_FILTERS = 'filters'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
@@ -13,6 +18,7 @@ GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
 FORT_MEMBER_TUTORIAL = 'FORT_MEMBER_TUTORIAL'
 IGR_PROMO = 'IGR_PROMO'
+PROMO = 'PROMO'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
@@ -57,7 +63,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                                          'vehicleType': 'none',
                                          'isMain': False,
                                          'level': -1,
-                                         'compatibleOnly': True}},
+                                         'compatibleOnly': True},
+               PROMO: {}},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0},
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': [],
                                'selectedListVehicles': []},
@@ -163,8 +170,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                 'backDraftInvert': False,
                 'quests': {'lastVisitTime': -1,
                            'visited': [],
-                           'naVisited': []},
-                'customization': {}}}
+                           'naVisited': [],
+                           'potapov': {'introShown': False,
+                                       'tilesVisited': set(),
+                                       'headerAlert': False}},
+                'customization': {},
+                'showVehModelsOnMap': 0}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -413,7 +424,8 @@ class AccountSettings(object):
                 if fds.has_key(name):
                     return pickle.loads(base64.b64decode(fds.readString(name)))
             except:
-                pass
+                if constants.IS_DEVELOPMENT:
+                    LOG_CURRENT_EXCEPTION()
 
             return DEFAULT_VALUES[type][name]
         else:

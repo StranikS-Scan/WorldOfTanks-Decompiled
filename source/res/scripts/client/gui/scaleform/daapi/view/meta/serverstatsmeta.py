@@ -27,9 +27,9 @@ class ServerStatsMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_disableRoamingDD(disable)
 
-    def as_setServerStatsS(self, data):
+    def as_setServerStatsS(self, stats, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_setServerStats(data)
+            return self.flashObject.as_setServerStats(stats, tooltipType)
 
     def as_setServerStatsInfoS(self, tooltipFullData):
         if self._isDAAPIInited():

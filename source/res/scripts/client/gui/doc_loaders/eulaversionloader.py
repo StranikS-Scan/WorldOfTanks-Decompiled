@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/doc_loaders/EULAVersionLoader.py
 import ResMgr
-from gui import VERSION_FILE_PATH
+from helpers import VERSION_FILE_PATH
 __author__ = 'd_savitski'
 VERSION_TAG = 'showLicense'
 

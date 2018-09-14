@@ -17,7 +17,7 @@ from gui import game_control
 
 class ContactsWindow(View, AbstractWindowView, ContactsWindowMeta, ISearchHandler):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(ContactsWindow, self).__init__()
         self._friendsDP = None
         self._clanDP = None

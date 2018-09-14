@@ -4,7 +4,7 @@ import helpers
 import BigWorld
 import feedparser
 from debug_utils import *
-_CLIENT_VERSION = helpers.getClientVersion()
+_CLIENT_VERSION = helpers.getFullClientVersion()
 feedparser.PARSE_MICROFORMATS = 0
 feedparser.SANITIZE_HTML = 0
 

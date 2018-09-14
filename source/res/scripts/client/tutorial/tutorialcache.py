@@ -3,6 +3,7 @@ import BigWorld
 import base64, cPickle, os
 from tutorial.logger import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from tutorial.settings import TUTORIAL_VERSION, PLAYER_XP_LEVEL
+import constants
 
 class TutorialCache(object):
     __internal = None
@@ -11,7 +12,7 @@ class TutorialCache(object):
         p = os.path
         prefsFilePath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
         self.__cacheDir = p.join(p.dirname(prefsFilePath), 'tutorial_cache')
-        self.__cacheFileName = p.join(self.__cacheDir, '{0:>s}.dat'.format(base64.b32encode('{0:>s};{1:>s}'.format(str(BigWorld.server()), accountName))))
+        self.__cacheFileName = p.join(self.__cacheDir, '{0:>s}.dat'.format(base64.b32encode('{0:>s};{1:>s}'.format(constants.AUTH_REALM, accountName))))
         self.__space = space
         self.__version = TUTORIAL_VERSION
         self.__wasReset = False

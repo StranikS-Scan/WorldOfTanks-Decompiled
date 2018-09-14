@@ -27,7 +27,7 @@ from gui.Scaleform.managers.windows_stored_data import stored_window
 
 class CyberSportMainWindow(CyberSportMainWindowMeta):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(CyberSportMainWindow, self).__init__()
         self.currentState = ''
         selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.UNIT)

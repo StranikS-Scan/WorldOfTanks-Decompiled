@@ -149,7 +149,7 @@ class _EntityChatHandler(provider.ResponseSeqHandler):
     def _onMessageBroadcast(self, _, args):
         message = self.__factory.messageVO(args)
         if self.__isEnabled:
-            self._addMessage(self.__factory.messageVO(args))
+            self._addMessage(message)
         else:
             self.__messagesQueue.append(message)
 
@@ -259,7 +259,7 @@ class UnitChatHandler(_EntityChatHandler):
             return
         else:
             settings = None
-            if prbType == PREBATTLE_TYPE.SQUAD:
+            if prbType in PREBATTLE_TYPE.LIKE_SQUAD:
                 settings = BATTLE_CHANNEL.SQUAD
             self.__channel = self._addChannel(entities.BWUnitChannelEntity(settings, prbType))
             return

@@ -6,8 +6,7 @@ from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.Waiting import Waiting
-from gui.shared import g_eventBus
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.events import OpenLinkEvent
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE, FORT_RESTRICTION
@@ -39,8 +38,6 @@ class FortWelcomeViewComponent(FortWelcomeViewMeta, FortViewHelper, AppRef):
         clanCreate = self.__makeHyperLink('clanCreate', FORTIFICATIONS.FORTWELCOMEVIEW_CLANCREATE)
         detail = self.__makeHyperLink('fortDescription', FORTIFICATIONS.FORTWELCOMEVIEW_HYPERLINK_MORE)
         self.as_setHyperLinksS(clanSearch, clanCreate, detail)
-        Waiting.hide('loadPage')
-        Waiting.hide('Flash')
 
     def __makeHyperLink(self, linkType, textId):
         text = i18n.makeString(textId)
@@ -62,6 +59,9 @@ class FortWelcomeViewComponent(FortWelcomeViewMeta, FortViewHelper, AppRef):
         data = self.getData()
         self.as_setCommonDataS(data)
         self.__updateViewState(data)
+
+    def onViewReady(self):
+        g_eventBus.handleEvent(events.FortEvent(events.FortEvent.VIEW_LOADED), scope=EVENT_BUS_SCOPE.FORT)
 
     def __updateViewState(self, data):
         state = self.fortState

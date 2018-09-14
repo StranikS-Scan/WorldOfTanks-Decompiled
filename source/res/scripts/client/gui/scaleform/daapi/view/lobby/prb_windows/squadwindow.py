@@ -13,7 +13,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 
 class SquadWindow(SquadWindowMeta):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(SquadWindow, self).__init__()
         self._isInvitesOpen = ctx.get('isInvitesOpen', False)
 

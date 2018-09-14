@@ -16,6 +16,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import time_utils, i18n
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
+from items import vehicles
 
 class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
     __metaclass__ = ABCMeta
@@ -117,7 +118,7 @@ class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
                 daysToWear = 0
                 cost = 0
             elif CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, self._newItemID, self._nationID, self._itemsDP.position):
-                hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, self._newItemID)
+                hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, self._newItemID, self._nationID, self._itemsDP.position)
                 daysToWear = 0 if hangarItem.get('isPermanent') else 7
             else:
                 daysToWear = self._rentalPackageDP.selectedPackage.get('periodDays')
@@ -203,11 +204,17 @@ class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
                 if emblem[0] is not None:
                     newID = emblem[0]
                     newLifeCycle = (emblem[1], emblem[2])
+            hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, self._currentItemID, self._nationID)
+            if hangarItem:
+                intCD = g_currentVehicle.item.intCD
+                vehicle = vehicles.getVehicleType(int(intCD))
+                message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_EMBLEM_STORED_SUCCESS, vehicle=vehicle.userString)
+            else:
+                message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_EMBLEM_DROP_SUCCESS)
             self._currentItemID = newID
             self._currentLifeCycle = newLifeCycle
             self._itemsDP.currentItemID = newID
             self.updateVehicleCustomization(newID)
-            message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_EMBLEM_DROP_SUCCESS)
             self.onCustomizationDropSuccess(message)
             self.onCurrentItemChange(self._name)
             return

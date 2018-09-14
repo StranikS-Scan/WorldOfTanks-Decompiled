@@ -2,9 +2,11 @@
 import BigWorld
 from AccountCommands import LOCK_REASON
 from adisp import process
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+from gui.shared.utils.functions import getViewName
 from helpers.i18n import convert
 from items.tankmen import getSkillsConfig, ROLES
 from account_helpers.AccountSettings import AccountSettings, BARRACKS_FILTER
@@ -17,16 +19,17 @@ from gui.shared import events, g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
+from gui.shared.gui_items import Tankman
+from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters.deprecated import Requester
 from gui.shared.utils.requesters import DeprecatedStatsRequester
-from gui.shared.gui_items.Tankman import Tankman, TankmenComparator
 
 class Barracks(BarracksMeta, LobbySubView, GlobalListener):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(Barracks, self).__init__(0.6)
         self.filter = dict(AccountSettings.getFilter(BARRACKS_FILTER))
 
@@ -46,11 +49,11 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         super(LobbySubView, self)._dispose()
 
     def openPersonalCase(self, value, tabNumber):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_TANKMAN_INFO, ctx={'tankmanID': int(value),
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, getViewName(VIEW_ALIAS.PERSONAL_CASE, value), ctx={'tankmanID': int(value),
          'page': int(tabNumber)}))
 
     def closeBarracks(self):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def invalidateTanksList(self):
         self.__updateTanksList()
@@ -59,7 +62,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         self.__updateTankmen()
 
     def onShowRecruitWindowClick(self, rendererData, menuEnabled):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_RECRUIT_WINDOW, {'data': rendererData,
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData,
          'menuEnabled': menuEnabled}))
 
     @decorators.process('buyBerths')
@@ -154,7 +157,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
              'vehicleType': tankmanVehicle.shortUserName,
              'iconFile': tankman.icon,
              'rankIconFile': tankman.iconRank,
-             'roleIconFile': '%s/%s' % (Tankman.ROLE_ICON_PATH_BIG, tankman.iconRole),
+             'roleIconFile': Tankman.getRoleBigIconPath(tankman.descriptor.role),
              'contourIconFile': tankmanVehicle.iconContour,
              'tankmanID': tankman.invID,
              'nationID': tankman.nationID,

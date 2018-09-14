@@ -7,10 +7,10 @@ __author__ = 'd_savitski'
 
 class FreeXPInfoWindow(View, FreeXPInfoWindowMeta, AppRef, AbstractWindowView):
 
-    def __init__(self, meta, handler):
+    def __init__(self, ctx = None):
         super(FreeXPInfoWindow, self).__init__()
-        self.meta = meta
-        self.handler = handler
+        self.meta = ctx.get('meta')
+        self.handler = ctx.get('handler')
 
     def _populate(self):
         super(FreeXPInfoWindow, self)._populate()

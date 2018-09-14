@@ -3,7 +3,7 @@ import GUI
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
-from helpers import getClientVersion, getClientOverride
+from helpers import getFullClientVersion, getClientOverride
 
 class GameLoading(Flash):
 
@@ -13,7 +13,7 @@ class GameLoading(Flash):
         if self._displayRoot is not None:
             self._displayRoot.resync()
             self._displayRoot.setLocale(getClientOverride())
-            self._displayRoot.setVersion(getClientVersion())
+            self._displayRoot.setVersion(getFullClientVersion())
             width, height = GUI.screenResolution()
             self._displayRoot.updateStage(width, height)
         return

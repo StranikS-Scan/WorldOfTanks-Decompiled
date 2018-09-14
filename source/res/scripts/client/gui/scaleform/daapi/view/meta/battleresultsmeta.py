@@ -6,7 +6,7 @@ class BattleResultsMeta(DAAPIModule):
     def saveSorting(self, iconType, sortDirection, bonusType):
         self._printOverrideError('saveSorting')
 
-    def showEventsWindow(self, questID):
+    def showEventsWindow(self, questID, eventType):
         self._printOverrideError('showEventsWindow')
 
     def getClanEmblem(self, uid, clanID):

@@ -5,6 +5,7 @@ class PREBATTLE(object):
     LABELS_PLAYER = '#prebattle:labels/player'
     LABELS_VEHICLE = '#prebattle:labels/vehicle'
     LABELS_LEVEL = '#prebattle:labels/level'
+    LABELS_MEMBERS = '#prebattle:labels/members'
     LABELS_STATS_MAXPLAYERS = '#prebattle:labels/stats/maxPlayers'
     LABELS_STATS_TOTALLEVEL = '#prebattle:labels/stats/totalLevel'
     LABELS_STATS_SUMLEVEL = '#prebattle:labels/stats/sumLevel'

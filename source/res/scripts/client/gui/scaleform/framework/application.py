@@ -7,6 +7,7 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui import SystemMessages, g_guiResetters, g_repeatKeyHandlers
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.Flash import Flash
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import AppRef, ViewTypes
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
 from gui.Scaleform.framework.managers import ContainerManager
@@ -14,7 +15,7 @@ from gui.Scaleform.framework.managers import LoaderManager
 from gui.Scaleform.framework.ToolTip import ToolTip
 from gui.Scaleform.framework.managers.StatsStorage import StatsStorage
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.events import ShowWindowEvent, GUIEditorEvent
+from gui.shared.events import GUIEditorEvent, LoadViewEvent
 from gui.shared.utils.key_mapping import getScaleformKey, voidSymbol
 from helpers.i18n import convert, makeString
 
@@ -328,7 +329,7 @@ class App(ApplicationMeta, AppBase):
             self.as_updateStageS(1024, 768)
             self.component.movie.x = 320
             self.component.movie.y = 100
-            self.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_G_E_INSPECT_WINDOW, {}), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoadViewEvent(VIEW_ALIAS.G_E_INSPECT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self.component.movie.x = 0
             self.component.movie.y = 0

@@ -55,7 +55,7 @@ class _TutorialLoader(object):
         return
 
     def init(self):
-        g_playerEvents.onAccountShowGUI += self.__pe_onAccountShowGUI
+        g_playerEvents.onGuiCacheSyncCompleted += self.__pe_onGuiCacheSyncCompleted
         g_playerEvents.onAvatarBecomePlayer += self.__pe_onAvatarBecomePlayer
         connectionManager.onDisconnected += self.__cm_onDisconnected
         windowsManager = GUIProxy.windowsManager()
@@ -63,7 +63,7 @@ class _TutorialLoader(object):
         windowsManager.onDestroyBattleGUI += self.__wm_onDestroyBattleGUI
 
     def fini(self):
-        g_playerEvents.onAccountShowGUI -= self.__pe_onAccountShowGUI
+        g_playerEvents.onGuiCacheSyncCompleted -= self.__pe_onGuiCacheSyncCompleted
         g_playerEvents.onAvatarBecomePlayer -= self.__pe_onAvatarBecomePlayer
         connectionManager.onDisconnected -= self.__cm_onDisconnected
         windowsManager = GUIProxy.windowsManager()
@@ -138,7 +138,7 @@ class _TutorialLoader(object):
             self.__dispatcher.stop()
         return
 
-    def __pe_onAccountShowGUI(self, ctx):
+    def __pe_onGuiCacheSyncCompleted(self, ctx):
         ctx = RunCtx(**ctx)
         ctx.isFirstStart = ctx.databaseID not in self.__loggedDBIDs
         self.__loggedDBIDs.add(ctx.databaseID)

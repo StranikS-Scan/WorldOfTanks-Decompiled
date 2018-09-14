@@ -9,9 +9,9 @@ from messenger.inject import channelsCtrlProperty
 
 class SimpleChannelWindow(View, AbstractWindowView, BaseChannelWindowMeta):
 
-    def __init__(self, clientID):
+    def __init__(self, ctx):
         super(SimpleChannelWindow, self).__init__()
-        self._clientID = clientID
+        self._clientID = ctx.get('clientID')
         self._controller = self.channelsCtrl.getController(self._clientID)
         if self._controller is None:
             raise ValueError, 'Controller for lobby channel by clientID={0:1} is not found'.format(self._clientID)
@@ -37,7 +37,7 @@ class SimpleChannelWindow(View, AbstractWindowView, BaseChannelWindowMeta):
         self.destroy()
 
     def showFAQWindow(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def getClientID(self):
         return self._clientID

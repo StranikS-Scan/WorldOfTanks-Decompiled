@@ -5,10 +5,10 @@ from adisp import process
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG
 from external_strings_utils import _ACCOUNT_NAME_MIN_LENGTH_REG
-from gui import GUI_SETTINGS, VERSION_FILE_PATH, DialogsInterface
+from gui import GUI_SETTINGS, DialogsInterface
 from gui.battle_control import g_sessionProvider
 from gui.Scaleform import SCALEFORM_WALLPAPER_PATH
-from gui.Scaleform.daapi.settings import VIEW_ALIAS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
@@ -18,9 +18,9 @@ from gui.Scaleform.daapi.view.login.LoginDispatcher import LoginDispatcher
 from gui.Scaleform.Waiting import Waiting
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events
-from gui.shared.events import LoginEvent, LoginEventEx, LoginCreateEvent, ShowWindowEvent, HideWindowEvent
+from gui.shared.events import LoginEvent, LoginEventEx, LoginCreateEvent, HideWindowEvent
 from gui.shared.events import ArgsEvent, OpenLinkEvent
-from helpers import i18n
+from helpers import i18n, getFullClientVersion
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.DIALOGS import DIALOGS
@@ -34,9 +34,9 @@ __author__ = 'd_trofimov'
 
 class LoginView(View, LoginPageMeta, AppRef):
 
-    def __init__(self, event):
-        super(LoginView, self).__init__()
-        self.__onLoadCallback = event.get('callback', None)
+    def __init__(self, ctx = None):
+        super(LoginView, self).__init__(ctx=None)
+        self.__onLoadCallback = ctx.get('callback')
         self.__loginDispatcher = LoginDispatcher()
         self.__onLoginQueue = False
         self.__capsLockState = None
@@ -234,7 +234,7 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__lastSelectedServer = server
 
     def showLegal(self):
-        self.fireEvent(events.ShowWindowEvent(ShowWindowEvent.SHOW_LEGAL_INFO_WINDOW))
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LEGAL_INFO_WINDOW))
 
     def isPwdInvalid(self, password):
         isInvalid = False
@@ -323,9 +323,7 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.as_setKeyboardLangS(lang)
 
     def __loadVersion(self):
-        sec = ResMgr.openSection(VERSION_FILE_PATH)
-        version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
-        self.as_setVersionS(version)
+        self.as_setVersionS(getFullClientVersion())
 
     def __setCopyright(self):
         copyStr = i18n.makeString(MENU.COPY)

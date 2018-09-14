@@ -411,17 +411,6 @@ class AttackCtx(FortRequestCtx):
         return FORT_REQUEST_TYPE.PLAN_ATTACK
 
 
-@ReprInjector.withParent('getClanDBID', 'getTimeAttack', 'getDirFrom', 'getDirTo', 'getRequestType')
-
-class AttackClanAndRequestItsCardCtx(AttackCtx):
-
-    def __init__(self, clanDBID, timeAttack, dirFrom, dirTo, waitingID = ''):
-        super(AttackClanAndRequestItsCardCtx, self).__init__(clanDBID, timeAttack, dirFrom, dirTo, waitingID)
-
-    def getRequestType(self):
-        return FORT_REQUEST_TYPE.ATTACK_AND_REQUEST_CARD
-
-
 @ReprInjector.withParent(('__battleID', 'battleID'), ('__slotIdx', 'slotIdx'))
 
 class CreateOrJoinFortBattleCtx(PrbCtrlRequestCtx):

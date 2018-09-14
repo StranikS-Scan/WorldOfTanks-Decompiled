@@ -59,9 +59,9 @@ class LobbyHeaderMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setClanEmblem(tID)
 
-    def as_setPremiumParamsS(self, isPremiumAccount, btnLabel, doLabel, isYear):
+    def as_setPremiumParamsS(self, isPremiumAccount, btnLabel, doLabel, isYear, disableTTHeader, disableTTBody):
         if self._isDAAPIInited():
-            return self.flashObject.as_setPremiumParams(isPremiumAccount, btnLabel, doLabel, isYear)
+            return self.flashObject.as_setPremiumParams(isPremiumAccount, btnLabel, doLabel, isYear, disableTTHeader, disableTTBody)
 
     def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled):
         if self._isDAAPIInited():
@@ -90,3 +90,11 @@ class LobbyHeaderMeta(DAAPIModule):
     def as_setCoolDownForReadyS(self, value):
         if self._isDAAPIInited():
             return self.flashObject.as_setCoolDownForReady(value)
+
+    def as_showBubbleTooltipS(self, message, duration):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showBubbleTooltip(message, duration)
+
+    def as_isEventSquadS(self, isEventSquad):
+        if self._isDAAPIInited():
+            return self.flashObject.as_isEventSquad(isEventSquad)

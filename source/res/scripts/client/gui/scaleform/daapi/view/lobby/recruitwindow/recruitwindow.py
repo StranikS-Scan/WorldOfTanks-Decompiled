@@ -20,7 +20,7 @@ from gui.shared.gui_items.processors.tankman import TankmanRecruit, TankmanEquip
 
 class RecruitWindow(View, AbstractWindowView, RecruitWindowMeta):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         View.__init__(self)
         self._initData = ctx.get('data', None)
         self._menuEnabled = ctx.get('menuEnabled', False)

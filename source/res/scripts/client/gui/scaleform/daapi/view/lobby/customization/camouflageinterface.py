@@ -18,6 +18,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared import g_itemsCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import i18n, time_utils
+from items import vehicles
 from items.vehicles import CAMOUFLAGE_KINDS
 
 class CamouflageInterface(BaseTimedCustomizationInterface):
@@ -233,7 +234,7 @@ class CamouflageInterface(BaseTimedCustomizationInterface):
                     return
                 localKind = kind
                 if CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, newItemID, self._nationID):
-                    hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE, newItemID)
+                    hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE, newItemID, self._nationID)
                     daysToWear = 0 if hangarItem.get('isPermanent') else 7
                 else:
                     daysToWear = self._rentalPackageDP.pyRequestItemAt(item.get('packageIdx')).get('periodDays')
@@ -328,6 +329,13 @@ class CamouflageInterface(BaseTimedCustomizationInterface):
             return
         else:
             item = self.currentItemsByKind.get(kind)
+            hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE, item.get('id'), self._nationID)
+            if hangarItem:
+                intCD = g_currentVehicle.item.intCD
+                vehicle = vehicles.getVehicleType(int(intCD))
+                message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_CAMOUFLAGE_STORED_SUCCESS, vehicle=vehicle.userString)
+            else:
+                message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_CAMOUFLAGE_DROP_SUCCESS)
             if g_tankActiveCamouflage.has_key(g_currentVehicle.item.intCD):
                 del g_tankActiveCamouflage[g_currentVehicle.item.intCD]
             newID = None
@@ -342,6 +350,5 @@ class CamouflageInterface(BaseTimedCustomizationInterface):
             item['lifeCycle'] = newLifeCycle
             if CAMOUFLAGE_KINDS.get(self._itemsDP.currentGroup) == kind:
                 self._itemsDP.currentItemID = newID
-            message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_CAMOUFLAGE_DROP_SUCCESS)
             self.onCustomizationDropSuccess(message)
             return

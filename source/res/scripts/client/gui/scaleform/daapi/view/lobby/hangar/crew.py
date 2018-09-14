@@ -1,16 +1,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Crew.py
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
 from gui import SystemMessages
+from gui.shared.utils.functions import getViewName
 from items.tankmen import getSkillsConfig, compareMastery, ACTIVE_SKILLS
 from helpers.i18n import convert
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import events, g_itemsCache
-from gui.shared.events import ShowWindowEvent
+from gui.shared.events import LoadViewEvent
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils import decorators
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanEquip
 
 class Crew(CrewMeta):
@@ -46,7 +47,7 @@ class Crew(CrewMeta):
                 roles.append({'tankmanID': tman.invID if tman is not None else None,
                  'roleType': role,
                  'role': convert(getSkillsConfig()[role]['userString']),
-                 'roleIcon': '%s/%s' % (Tankman.ROLE_ICON_PATH_BIG, getSkillsConfig()[role]['icon']),
+                 'roleIcon': Tankman.getRoleBigIconPath(role),
                  'nationID': vehicle.nationID,
                  'typeID': vehicle.innationID,
                  'slot': slotIdx,
@@ -85,7 +86,7 @@ class Crew(CrewMeta):
                  'vehicleType': tankmanVehicle.shortUserName,
                  'iconFile': tankman.icon,
                  'rankIconFile': tankman.iconRank,
-                 'roleIconFile': '%s/%s' % (Tankman.ROLE_ICON_PATH_BIG, tankman.iconRole),
+                 'roleIconFile': Tankman.getRoleBigIconPath(tankman.descriptor.role),
                  'contourIconFile': tankmanVehicle.iconContour,
                  'tankmanID': tankman.invID,
                  'nationID': tankman.nationID,
@@ -107,7 +108,7 @@ class Crew(CrewMeta):
         return
 
     def onShowRecruitWindowClick(self, rendererData, menuEnabled):
-        self.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_RECRUIT_WINDOW, {'data': rendererData,
+        self.fireEvent(LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData,
          'menuEnabled': menuEnabled,
          'currentVehicleId': g_currentVehicle.invID}))
 
@@ -115,13 +116,6 @@ class Crew(CrewMeta):
     def equipTankman(self, tmanInvID, slot):
         tankman = g_itemsCache.items.getTankman(int(tmanInvID))
         result = yield TankmanEquip(tankman, g_currentVehicle.item, int(slot)).request()
-        if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-
-    @decorators.process('unloading')
-    def unloadTankman(self, tmanInvID):
-        tankman = g_itemsCache.items.getTankman(int(tmanInvID))
-        result = yield TankmanUnload(g_currentVehicle.item, tankman.vehicleSlotIdx).request()
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
@@ -136,5 +130,5 @@ class Crew(CrewMeta):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def openPersonalCase(self, value, tabNumber):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_TANKMAN_INFO, ctx={'tankmanID': int(value),
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, getViewName(VIEW_ALIAS.PERSONAL_CASE, value), {'tankmanID': int(value),
          'page': int(tabNumber)}))

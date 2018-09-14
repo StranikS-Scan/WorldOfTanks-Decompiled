@@ -38,11 +38,11 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
         self.destroy()
 
     def onTransportingRequest(self, exportFrom, importTo):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_TRANSPORT_CONFIRMATION_WINDOW_EVENT, {'fromId': exportFrom,
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_TRANSPORT_CONFIRMATION_WINDOW_ALIAS, ctx={'fromId': exportFrom,
          'toId': importTo}), EVENT_BUS_SCOPE.LOBBY)
 
     def requestBuildingProcess(self, direction, position):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_BUILDING_PROCESS_WINDOW_EVENT, ctx={'buildingDirection': direction,
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BUILDING_PROCESS_WINDOW_ALIAS, ctx={'buildingDirection': direction,
          'buildingPosition': position}), EVENT_BUS_SCOPE.LOBBY)
 
     def upgradeVisitedBuilding(self, uid):

@@ -5,6 +5,7 @@ from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
@@ -16,9 +17,11 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES, GUI_ITEM_
 from gui.shared.gui_items.processors.module import ModuleBuyer, getInstallerProcessor
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
 from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH
+from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import events, g_itemsCache, g_eventsCache
-from gui.shared.events import ShowWindowEvent, LoadEvent, LobbySimpleEvent
+from gui.shared import events, g_itemsCache
+from gui.server_events import g_eventsCache
+from gui.shared.events import LobbySimpleEvent, LoadViewEvent
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from items import ITEM_TYPE_NAMES
@@ -145,10 +148,11 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
                 shellsData = map(lambda shell: (shell, shell.count), vehicle.shells)
             shells = ammo.get('shells')
             for shell, count in shellsData:
+                unicName = shell.descriptor['icon'][0]
                 shells.append({'id': str(shell.intCD),
                  'type': shell.type,
                  'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
-                 'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
+                 'icon': '../maps/icons/ammopanel/ammo/%s' % (unicName if not shell.isEvent else 'EVENT_' + unicName),
                  'count': count,
                  'historicalBattleID': historicalBattleID})
 
@@ -156,10 +160,10 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
         return
 
     def showTechnicalMaintenance(self):
-        self.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_TECHNICAL_MAINTENANCE))
+        self.fireEvent(LoadViewEvent(VIEW_ALIAS.TECHNICAL_MAINTENANCE), EVENT_BUS_SCOPE.LOBBY)
 
     def showCustomization(self):
-        self.fireEvent(LoadEvent(LoadEvent.LOAD_CUSTOMIZATION), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), EVENT_BUS_SCOPE.LOBBY)
 
     def highlightParams(self, type):
         self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.HIGHLIGHT_TANK_PARAMS, {'type': type}), EVENT_BUS_SCOPE.LOBBY)
@@ -169,7 +173,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
             vehicle = g_currentVehicle.item
             canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
             if vehicle.isRentable and vehicle.rentalIsOver and canBuyOrRent:
-                self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW, {'nationID': vehicle.nationID,
+                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_BUY_WINDOW, ctx={'nationID': vehicle.nationID,
                  'itemID': vehicle.innationID}))
 
     def showModuleInfo(self, moduleId):
@@ -182,7 +186,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
             battle = g_eventsCache.getHistoricalBattles().get(battleID)
             if battle is not None and battle.canParticipateWith(vehicle.intCD):
                 vDescr = battle.getVehicleModifiedDescr(vehicle)
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_MODULE_INFO_WINDOW, {'moduleCompactDescr': str(moduleId),
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, moduleId), {'moduleCompactDescr': str(moduleId),
              'vehicleDescr': vDescr}))
             return
 

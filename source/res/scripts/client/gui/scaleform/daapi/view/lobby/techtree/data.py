@@ -387,7 +387,7 @@ class ResearchItemsData(_ItemsData):
             nodeCD = node['id']
             state = node['state']
             itemTypeID, _, _ = vehicles.parseIntCompactDescr(nodeCD)
-            if itemTypeID == GUI_ITEM_TYPE.VEHICLE and nodeCD in topLevelCDs:
+            if itemTypeID == GUI_ITEM_TYPE.VEHICLE and (nodeCD in topLevelCDs or nodeCD == self.getRootCD()):
                 available, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, **unlockKwargs)
                 xp = unlockStats.getVehTotalXP(unlockProps.parentID)
             else:

@@ -9,9 +9,10 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.prb_control.prb_helpers import preQueueFunctionalProperty
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
-from gui.shared import events, g_eventsCache
+from gui.shared import events
+from gui.server_events import g_eventsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.server_events.event_items import HistoricalBattle
+from gui.server_events.event_items import HistoricalBattle
 from helpers.i18n import makeString
 from PlayerEvents import g_playerEvents
 from gui.prb_control.dispatcher import g_prbLoader
@@ -29,7 +30,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
      constants.PREBATTLE_COMPANY_DIVISION.CHAMPION,
      constants.PREBATTLE_COMPANY_DIVISION.ABSOLUTE)
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(BattleQueue, self).__init__()
         self.createTime = 0
         self.__timerCallback = None
@@ -71,7 +72,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
-            self.fireEvent(events.ShowViewEvent(events.ShowViewEvent.SHOW_LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def startClick(self):
         currPlayer = BigWorld.player()

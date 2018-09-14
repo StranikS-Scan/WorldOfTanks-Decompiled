@@ -30,9 +30,6 @@ class UtilsManagerMeta(DAAPIModule):
     def getMonthsNames(self, full, isUpper, isLower):
         self._printOverrideError('getMonthsNames')
 
-    def getDateParams(self, timestamp):
-        self._printOverrideError('getDateParams')
-
     def intToStringWithPrefixPatern(self, value, count, fill):
         self._printOverrideError('intToStringWithPrefixPatern')
 

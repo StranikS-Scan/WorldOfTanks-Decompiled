@@ -1,15 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
 import BigWorld
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
-from dossiers2.custom.config import RECORD_CONFIGS
-from dossiers2.ui.achievements import ACHIEVEMENT_SECTION, ACHIEVEMENT_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.ClanCache import g_clanCache
-from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.stats import _MaxVehicleStatsBlock
-from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.MENU import MENU
 from helpers.i18n import makeString
@@ -49,44 +44,6 @@ class ProfileUtils(object):
         outcome['maxXP'] = targetData.getMaxXp()
         outcome['avgXP'] = ProfileUtils.getValueOrUnavailable(targetData.getAvgXP())
         return outcome
-
-    @staticmethod
-    def packAchievementList(target, dossier, isDossierForCurrentUser):
-        return [ ProfileUtils.packAchievement(a, dossier, isDossierForCurrentUser) for a in target ]
-
-    @staticmethod
-    def packAchievement(achievement, dossier, isDossierForCurrentUser):
-        isRare = isRareAchievement(achievement)
-        rareIconID = None
-        if isRare:
-            rareIconID = achievement.requestImageID()
-        atype = achievement.getType()
-        section = achievement.getSection()
-        icons = achievement.getIcons()
-        minRecordValue = -1
-        if atype == ACHIEVEMENT_TYPE.SERIES and section == ACHIEVEMENT_SECTION.SPECIAL:
-            minRecordValue = RECORD_CONFIGS.get(achievement.getName())
-        return {'name': str(achievement.getName()),
-         'block': achievement.getBlock(),
-         'value': achievement.getValue(),
-         'localizedValue': achievement.getI18nValue(),
-         'section': section,
-         'type': atype,
-         'dossierCompDescr': dumpDossier(dossier),
-         'rareIconId': rareIconID,
-         'isRare': isRare,
-         'isDone': achievement.isDone(),
-         'lvlUpTotalValue': achievement.getLevelUpTotalValue(),
-         'lvlUpValue': achievement.getLevelUpValue(),
-         'isDossierForCurrentUser': isDossierForCurrentUser,
-         'description': achievement.getUserDescription(),
-         'userName': achievement.getUserName(),
-         'icon': {'big': icons['180x180'],
-                  'small': icons['67x71']},
-         'dossierType': dossier.getDossierType(),
-         'isInDossier': achievement.isInDossier(),
-         'minValueForRecord': minRecordValue,
-         'hasCounter': achievement.hasCounter()}
 
     @staticmethod
     def getIconPath(icon):

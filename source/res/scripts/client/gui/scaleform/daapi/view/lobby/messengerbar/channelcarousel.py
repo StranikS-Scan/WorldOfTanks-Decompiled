@@ -24,12 +24,5 @@ class ChannelCarousel(ChannelCarouselMeta, AppRef):
     def channelOpenClick(self, itemID):
         self.fireEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.OPEN_BUTTON_CLICK, itemID), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def minimizeAllChannels(self):
-        self.fireEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.MINIMIZE_ALL_CHANNELS, None), scope=EVENT_BUS_SCOPE.LOBBY)
-        return
-
-    def closeAllExceptCurrent(self, itemID):
-        self.fireEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.CLOSE_ALL_EXCEPT_CURRENT, itemID), scope=EVENT_BUS_SCOPE.LOBBY)
-
     def channelCloseClick(self, itemID):
         self.fireEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.CLOSE_BUTTON_CLICK, itemID), scope=EVENT_BUS_SCOPE.LOBBY)

@@ -136,7 +136,7 @@ class _UserBanArgsParser(_UserBanUnBanArgsParser):
                     litter = banPeriod[-1]
                     if amountStr.isdigit():
                         amount = long(amountStr)
-                if amount is None or amount == 0 and litter is not None:
+                if amount is None:
                     return _ParsingError(_ERRORS.WRONG_ARGS, {'int64Arg1': banPeriod}, I18N_MESSENGER.CLIENT_ERROR_COMMAND_WRONG_BAN_PERIOD)
                 if litter is not None:
                     if litter in _TIME_LETTER_TO_MULTIPLIER:

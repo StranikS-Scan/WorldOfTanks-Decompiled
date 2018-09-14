@@ -5,15 +5,17 @@ from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 import enumerations
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
 from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE
 from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
-from gui.shared import events, g_itemsCache
+from gui.shared import events, g_itemsCache, event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils import gui_items
 from gui.shared.utils.decorators import process
+from gui.shared.utils.functions import getViewName
 from helpers import i18n
 
 class ResearchView(LobbySubView, ResearchViewMeta):
@@ -31,11 +33,11 @@ class ResearchView(LobbySubView, ResearchViewMeta):
     def showModuleInfo(self, itemCD):
         itemCD = int(itemCD)
         vehicleDescr = self._data.getRootItem().descriptor
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_MODULE_INFO_WINDOW, {'moduleCompactDescr': itemCD,
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, itemCD), {'moduleCompactDescr': itemCD,
          'vehicleDescr': vehicleDescr}))
 
     def showVehicleInfo(self, itemCD):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_INFO_WINDOW, {'vehicleCompactDescr': int(itemCD)}))
+        shared_events.showVehicleInfo(itemCD)
 
     def selectVehicleInHangar(self, itemCD):
         veh = self._data.getItem(int(itemCD))
@@ -43,7 +45,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         g_currentVehicle.selectVehicle(veh.invID)
 
     def showVehicleStatistics(self, itemCD):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_PROFILE, {'itemCD': itemCD}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PROFILE, ctx={'itemCD': itemCD}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def redraw(self):
         raise NotImplementedError, 'Must be overridden in subclass'
@@ -80,7 +82,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             return
 
     def _showVehicleBuyWindow(self, item):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW, {'nationID': item.nationID,
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_BUY_WINDOW, ctx={'nationID': item.nationID,
          'itemID': item.innationID}))
 
     def _sendMoneyValidationMsg(self, price, item, errorID):
@@ -94,7 +96,7 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             LOG_ERROR('Value of int-type descriptor is not refer to vehicle', vehCD)
             return
         if item.isInInventory:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_SELL_DIALOG, {'vehInvID': item.inventoryID}))
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_SELL_DIALOG, ctx={'vehInvID': item.inventoryID}))
         else:
             self._showMessage(self.MSG_SCOPE.Inventory, 'not_found', item)
 

@@ -32,11 +32,13 @@ class FortOrder(AppRef):
         self.productionCount = 0
         self.productionCost = 0
         self.isPermanent = False
+        self.isCompatible = False
         self.hasBuilding = False
         self.isSupported = True
         if proxy is not None:
             self.buildingID, self.count, self.level, orderData = proxy.getOrderData(orderID)
             self.isPermanent = FORT_ORDER_TYPE.isOrderPermanent(orderID)
+            self.isCompatible = FORT_ORDER_TYPE.isOrderCompatible(orderID)
             orderEvent = proxy.events.get(FORT_EVENT_TYPE.ACTIVE_ORDERS_BASE + orderID)
             if self.isPermanent and orderEvent is None:
                 expireTypeName = FORT_ORDER_TYPE_NAMES[orderID] + '_EXPIRE'

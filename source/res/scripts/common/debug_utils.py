@@ -4,7 +4,7 @@ import sys
 from functools import wraps
 from warnings import warn_explicit
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_CELLAPP, IS_BASEAPP
-_src_file_trim_to = ('tankfield/res/scripts/', len('tankfield/res/scripts/'))
+_src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
 
 class CriticalError(BaseException):
     pass

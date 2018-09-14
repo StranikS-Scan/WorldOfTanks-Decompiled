@@ -55,7 +55,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         NOT_BASE_COMMANDER_ORDERED = 4
         NOT_BASE_COMMANDER_NOT_ORDERED = 5
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(FortBuildingCardPopover, self).__init__()
         data = ctx.get('data', None)
         self._buildingUID = data.uid
@@ -67,12 +67,6 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         self.startFortListening()
         self.__updateData()
         self.__setButtonsStates()
-
-    def onUpdated(self, isFullUpdate):
-        self.__updateData()
-
-    def onDefenceHourStateChanged(self):
-        self.__updateData()
 
     def _dispose(self):
         self.__clearOrderCooldownCallback()
@@ -145,16 +139,16 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         return
 
     def openDirectionControlWindow(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_EVENT), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def openUpgradeWindow(self, value):
-        self.fireEvent(events.ShowViewEvent(ALIAS.FORT_MODERNIZATION_WINDOW_EVENT, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(ALIAS.FORT_MODERNIZATION_WINDOW_ALIAS, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def openAssignedPlayersWindow(self, value):
-        self.fireEvent(events.ShowViewEvent(ALIAS.FORT_FIXED_PLAYERS_WINDOW_EVENT, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(ALIAS.FORT_FIXED_PLAYERS_WINDOW_ALIAS, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def openDemountBuildingWindow(self, value):
-        self.fireEvent(events.ShowWindowEvent(ALIAS.FORT_DEMOUNT_BUILDING_WINDOW_EVENT, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(ALIAS.FORT_DEMOUNT_BUILDING_WINDOW, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def openBuyOrderWindow(self):
         currentOrderID = self.fortCtrl.getFort().getBuildingOrder(self._buildingID)
@@ -166,8 +160,11 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
             self.__updateData()
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
-        if self._buildingID == buildingTypeID and reason == BUILDING_UPDATE_REASON.DELETED:
-            self.destroy()
+        if self._buildingID == buildingTypeID:
+            if reason == BUILDING_UPDATE_REASON.DELETED:
+                self.destroy()
+            else:
+                self.__updateData()
 
     def onDefenceHourStateChanged(self):
         self.__setButtonsStates()
@@ -180,9 +177,14 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
 
     def __generateData(self):
         data = {'buildingType': self._buildingUID}
-        assignedLbl = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_ASSIGNPLAYERS))
+        assignedLbl = i18n.makeString(FORT.BUILDINGPOPOVER_ASSIGNPLAYERS)
+        garrisonLabel = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_GARRISONLABEL))
+        oldBuilding = self.UI_BUILDINGS_BIND[self.fortCtrl.getFort().getAssignedBuildingID(BigWorld.player().databaseID)]
+        isAssigned = self._buildingUID == oldBuilding
         data['isTutorial'] = self.__isTutorial
         data['assignLbl'] = assignedLbl
+        data['garrisonLbl'] = garrisonLabel
+        data['isAssigned'] = isAssigned
         data['canUpgradeBuilding'] = self.fortCtrl.getPermissions().canUpgradeBuilding()
         data['canAddOrder'] = self.fortCtrl.getPermissions().canAddOrder()
         data['playerCount'] = self.__assignedPlayerCount
@@ -240,23 +242,35 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
                 mapMsg = self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_MAPINFO_NOBATTLE))
                 header = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_HEADER)
                 body = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_BODY)
+                isToolTipSpecial = False
             elif isMapsInfoEnabled:
                 currentMapUserName = self.__getMapUserName(curMapID)
                 mapIcon = self.app.utilsManager.textManager.getIcon(TextIcons.INFO_ICON)
                 mapMsg = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, currentMapUserName)
                 header = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_HEADER, currentMap=currentMapUserName)
                 body = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_BODY, nextMap=self.__getMapUserName(nextMapID), changeDate=BigWorld.wg_getLongDateFormat(nextMapTimestamp), changeTime=BigWorld.wg_getShortTimeFormat(nextMapTimestamp))
+                isToolTipSpecial = True
             else:
                 mapIcon = mapMsg = ''
+                isToolTipSpecial = False
             mapInfo = i18n.makeString(mapIcon + ' ' + mapMsg)
-            result['mapTooltip'] = [header, body]
             result['mapInfo'] = mapInfo
+            result['isToolTipSpecial'] = isToolTipSpecial
+            result['tooltipData'] = {'mapName': header,
+             'description': body,
+             'imageURL': self.__getMapImage(curMapID)}
         return result
 
     @classmethod
     def __getMapUserName(cls, arenaTypeID):
         if arenaTypeID in ArenaType.g_cache:
             return ArenaType.g_cache[arenaTypeID].name
+        return ''
+
+    @classmethod
+    def __getMapImage(cls, arenaTypeID):
+        if arenaTypeID in ArenaType.g_cache:
+            return '../maps/icons/map/small/%s.png' % ArenaType.g_cache[arenaTypeID].geometryName
         return ''
 
     def __setDefaultEnabling(self):
@@ -407,6 +421,6 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         if self.__buildingCurrentCapacity > 0:
             capacityTextColor = TextType.NEUTRAL_TEXT
         currCapacityColor = self.app.utilsManager.textManager.getText(capacityTextColor, str(self.__buildingCurrentCapacity))
-        generalLabel = i18n.makeString(FORT.BUILDINGPOPOVER_DEFRESACTIONS_PREPAREDDEFRES, currentValue=currCapacityColor, totalValue=str(self.__buildingTotalCapacity))
+        generalLabel = i18n.makeString(FORT.BUILDINGPOPOVER_DEFRESACTIONS_PREPAREDDEFRES, currentValue=currCapacityColor)
         resultGeneralLabel = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, generalLabel)
         return resultGeneralLabel

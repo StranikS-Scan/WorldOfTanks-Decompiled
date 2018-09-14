@@ -81,6 +81,9 @@ class SquadChannelController(_ChannelController):
     def __init__(self, channel):
         super(SquadChannelController, self).__init__(channel, chat_message.SquadMessageBuilder(), True)
 
+    def isEnabled(self):
+        return True
+
     def setView(self, view):
         super(SquadChannelController, self).setView(view)
         self.proto.unitChat.addHistory()

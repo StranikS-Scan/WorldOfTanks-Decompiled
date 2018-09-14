@@ -14,10 +14,11 @@ from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.utils.HangarSpace import g_hangarSpace
-from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared import EVENT_BUS_SCOPE, events, event_dispatcher as shared_events
 from gui.Scaleform.framework import ViewTypes, AppRef
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.shared.utils.functions import getViewName
 from helpers import i18n
 
 class LobbyView(View, LobbyPageMeta, AppRef):
@@ -38,7 +39,7 @@ class LobbyView(View, LobbyPageMeta, AppRef):
     class COMPONENTS:
         HEADER = 'lobbyHeader'
 
-    def __init__(self, isInQueue):
+    def __init__(self, ctx = None):
         View.__init__(self)
         self.__currIgrType = constants.IGR_TYPE.NONE
 
@@ -58,12 +59,9 @@ class LobbyView(View, LobbyPageMeta, AppRef):
         game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrTypeChanged
         self.__showBattleResults()
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
-        if constants.IS_CHINA and self.app.browser is not None:
-            self.app.browser.checkBattlesCounter()
         keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
         if not BigWorld.isKeyDown(keyCode):
             VOIP.getVOIPManager().setMicMute(True)
-        return
 
     def _dispose(self):
         game_control.g_instance.igr.onIgrTypeChanged -= self.__onIgrTypeChanged
@@ -82,7 +80,7 @@ class LobbyView(View, LobbyPageMeta, AppRef):
         self.as_closeHelpLayoutS()
 
     def __onVehicleBecomeElite(self, vehTypeCompDescr):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_ELITE_VEHICLE_WINDOW, {'vehTypeCompDescr': vehTypeCompDescr}))
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr), {'vehTypeCompDescr': vehTypeCompDescr}))
 
     def moveSpace(self, dx, dy, dz):
         if g_hangarSpace.space:
@@ -98,7 +96,7 @@ class LobbyView(View, LobbyPageMeta, AppRef):
             self.__subViewTransferStop(view.settings.alias)
         return
 
-    def __onViewLoadError(self, token, msg, item):
+    def __onViewLoadError(self, name, msg, item):
         if item is not None and item.pyEntity is not None:
             self.__subViewTransferStop(item.pyEntity.settings.alias)
         return
@@ -122,6 +120,6 @@ class LobbyView(View, LobbyPageMeta, AppRef):
     def __showBattleResults(self):
         battleCtx = g_sessionProvider.getCtx()
         if GUI_SETTINGS.battleStatsInHangar and battleCtx.lastArenaUniqueID:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_BATTLE_RESULTS, {'data': battleCtx.lastArenaUniqueID}))
+            shared_events.showBattleResults(arenaUniqueID=battleCtx.lastArenaUniqueID)
             battleCtx.lastArenaUniqueID = None
         return

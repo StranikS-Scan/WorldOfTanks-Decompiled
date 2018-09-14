@@ -13,11 +13,11 @@ from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 
 class ModuleInfoWindow(View, ModuleInfoMeta, AbstractWindowView):
 
-    def __init__(self, moduleCompactDescr, vehicleDescr = None, isAdditionalInfoShow = None):
+    def __init__(self, ctx = None):
         super(ModuleInfoWindow, self).__init__()
-        self.moduleCompactDescr = int(moduleCompactDescr)
-        self.__vehicleDescr = vehicleDescr
-        self.__isAdditionalInfoShow = isAdditionalInfoShow
+        self.moduleCompactDescr = int(ctx.get('moduleCompactDescr'))
+        self.__vehicleDescr = ctx.get('vehicleDescr')
+        self.__isAdditionalInfoShow = ctx.get('isAdditionalInfoShow')
 
     def onCancelClick(self):
         self.destroy()

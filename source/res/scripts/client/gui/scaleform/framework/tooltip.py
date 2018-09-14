@@ -1,16 +1,22 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/ToolTip.py
+from gui import makeHtmlString
 from gui.Scaleform.framework import AppRef
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 from helpers import i18n, isPlayerAccount
 
 class ToolTip(ToolTipMgrMeta, AppRef):
-    TOOLTIP_KIND = ['header', 'body', 'note']
-    BLOCK_TAGS_MAP = {'HEADER': {'INFO': ["<font color='#FFCB65'><b>", '</b></font>'],
-                'WARNING': ["<font color='#9b0202'><b>", '</b></font>']},
-     'BODY': {},
-     'NOTE': {'INFO': ["<font color='#777777'>", '</font>'],
-              'WARNING': ["<font color='#777777'>", '</font>']}}
+    TOOLTIP_KIND = ['header',
+     'body',
+     'note',
+     'attention']
+    BLOCK_TAGS_MAP = {'HEADER': {'INFO': [makeHtmlString('html_templates:lobby/tooltips_complex', 'header_info_start'), makeHtmlString('html_templates:lobby/tooltips_complex', 'header_info_end')],
+                'WARNING': [makeHtmlString('html_templates:lobby/tooltips_complex', 'header_warning_start'), makeHtmlString('html_templates:lobby/tooltips_complex', 'header_warning_end')]},
+     'BODY': {'INFO': [makeHtmlString('html_templates:lobby/tooltips_complex', 'body_info_start'), makeHtmlString('html_templates:lobby/tooltips_complex', 'body_info_end')],
+              'WARNING': [makeHtmlString('html_templates:lobby/tooltips_complex', 'body_warning_start'), makeHtmlString('html_templates:lobby/tooltips_complex', 'body_warning_end')]},
+     'NOTE': {'INFO': [makeHtmlString('html_templates:lobby/tooltips_complex', 'note_info_start'), makeHtmlString('html_templates:lobby/tooltips_complex', 'note_info_end')],
+              'WARNING': [makeHtmlString('html_templates:lobby/tooltips_complex', 'note_warning_start'), makeHtmlString('html_templates:lobby/tooltips_complex', 'note_warning_end')]},
+     'ATTENTION': {'INFO': [makeHtmlString('html_templates:lobby/tooltips_complex', 'attention_info_start'), makeHtmlString('html_templates:lobby/tooltips_complex', 'attention_info_end')],
+                   'WARNING': [makeHtmlString('html_templates:lobby/tooltips_complex', 'attention_warning_start'), makeHtmlString('html_templates:lobby/tooltips_complex', 'attention_warning_end')]}}
 
     def __init__(self):
         super(ToolTip, self).__init__()

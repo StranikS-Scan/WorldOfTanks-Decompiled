@@ -176,9 +176,9 @@ class ClientFortProvider(object):
         LOG_DEBUG('Fort state has been changed', state)
         controller = controls.createByState(state, self.__controller.getPermissions().canCreate(), self.__controller.__class__)
         if controller:
-            self.__controller.fini()
+            controller.init(self.__clan, self.__listeners, self.__controller)
+            self.__controller.fini(self.__state.getStateID() != CLIENT_FORT_STATE.CENTER_UNAVAILABLE)
             self.__controller = controller
-            self.__controller.init(self.__clan, self.__listeners)
             LOG_DEBUG('Fort controller has been changed', controller)
         self.__listeners.notify('onClientStateChanged', state)
         self.__resolveSubscription()

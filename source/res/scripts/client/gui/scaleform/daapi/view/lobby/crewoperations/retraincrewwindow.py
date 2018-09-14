@@ -13,7 +13,7 @@ from items import tankmen
 class RetrainCrewWindow(RetrainCrewWindowMeta, View, AbstractWindowView):
     AVAILABLE_OPERATIONS = range(3)
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(RetrainCrewWindow, self).__init__()
 
     def _populate(self):

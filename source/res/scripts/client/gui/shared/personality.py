@@ -23,10 +23,11 @@ from gui import SystemMessages, g_guiResetters, game_control
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import g_eventBus, g_itemsCache, g_eventsCache, events
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.WindowsManager import g_windowsManager
 from gui.Scaleform.Waiting import Waiting
+from gui.shared import g_eventBus, g_itemsCache, events
+from gui.server_events import g_eventsCache
 from gui.shared.utils import ParametersCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
@@ -40,36 +41,34 @@ def onAccountShowGUI(ctx):
     yield g_settingsCache.update()
     if not g_itemsCache.isSynced():
         return
-    else:
-        code = yield AccountValidator().validate()
-        if code > 0:
-            from gui import DialogsInterface
-            DialogsInterface.showDisconnect('#menu:disconnect/codes/%d' % code)
-            return
-        g_settingsCore.serverSettings.applySettings()
-        game_control.g_instance.onAccountShowGUI(g_lobbyContext.getGuiCtx())
-        accDossier = g_itemsCache.items.getAccountDossier()
-        g_rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
-        eula = EULADispatcher()
-        yield eula.processLicense()
-        eula.fini()
-        eula = None
-        MusicController.g_musicController.setAccountAttrs(g_itemsCache.items.stats.attributes)
-        MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
-        MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
-        premium = isPremiumAccount(g_itemsCache.items.stats.attributes)
-        if g_hangarSpace.inited:
-            g_hangarSpace.refreshSpace(premium)
-        else:
-            g_hangarSpace.init(premium)
-        g_currentVehicle.init()
-        g_windowsManager.onAccountShowGUI(g_lobbyContext.getGuiCtx())
-        g_prbLoader.onAccountShowGUI(g_lobbyContext.getGuiCtx())
-        g_clanCache.onAccountShowGUI()
-        SoundGroups.g_instance.enableLobbySounds(True)
-        onCenterIsLongDisconnected(True)
-        Waiting.hide('enter')
+    eula = EULADispatcher()
+    yield eula.processLicense()
+    eula.fini()
+    g_playerEvents.onGuiCacheSyncCompleted(ctx)
+    code = yield AccountValidator().validate()
+    if code > 0:
+        from gui import DialogsInterface
+        DialogsInterface.showDisconnect('#menu:disconnect/codes/%d' % code)
         return
+    g_settingsCore.serverSettings.applySettings()
+    game_control.g_instance.onAccountShowGUI(g_lobbyContext.getGuiCtx())
+    accDossier = g_itemsCache.items.getAccountDossier()
+    g_rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
+    MusicController.g_musicController.setAccountAttrs(g_itemsCache.items.stats.attributes)
+    MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
+    MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
+    premium = isPremiumAccount(g_itemsCache.items.stats.attributes)
+    if g_hangarSpace.inited:
+        g_hangarSpace.refreshSpace(premium)
+    else:
+        g_hangarSpace.init(premium)
+    g_currentVehicle.init()
+    g_windowsManager.onAccountShowGUI(g_lobbyContext.getGuiCtx())
+    g_prbLoader.onAccountShowGUI(g_lobbyContext.getGuiCtx())
+    g_clanCache.onAccountShowGUI()
+    SoundGroups.g_instance.enableLobbySounds(True)
+    onCenterIsLongDisconnected(True)
+    Waiting.hide('enter')
 
 
 def onAccountBecomeNonPlayer():
@@ -230,6 +229,7 @@ def onDisconnected():
     g_clanCache.onDisconnected()
     game_control.g_instance.onDisconnected()
     g_itemsCache.clear()
+    g_eventsCache.clear()
     g_lobbyContext.clear()
     Waiting.rollback()
     Waiting.cancelCallback()

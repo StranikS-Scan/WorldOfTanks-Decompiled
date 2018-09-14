@@ -139,6 +139,7 @@ class FortifiedRegionCache:
         self.vacationCooldownTime = 0
         self.allowSortieLegionaries = False
         self.maxLegionariesCount = 0
+        self.battleConsumablesCount = 0
         self.mapCooldownTime = 0
         self.changePeripheryCooldownTime = 0
         self.buildings = {}
@@ -186,6 +187,7 @@ def init():
     g_cache.maxSorties = section['max_sorties'].asInt
     g_cache.allowSortieLegionaries = section['allow_sortie_legionaries'].asBool
     g_cache.maxLegionariesCount = section['max_legionaries_count'].asInt
+    g_cache.consumablesSlotCount = section['consumables_slot_count'].asInt
     invalidPeripheryIDs = _getString(section, 'invalid_periphery_ids').split()
     if invalidPeripheryIDs:
         for id in invalidPeripheryIDs:

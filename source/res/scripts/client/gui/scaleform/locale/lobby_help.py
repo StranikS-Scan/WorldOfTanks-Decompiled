@@ -10,6 +10,7 @@ class LOBBY_HELP(object):
     HEADER_FINANCE_BLOCK = '#lobby_help:header/finance-block'
     CHAT_SERVICE_CHANNEL = '#lobby_help:chat/service-channel'
     CHAT_CONTACTS_CHANNEL = '#lobby_help:chat/contacts-channel'
+    CHANNELCAROUSEL_CHANNELS = '#lobby_help:channelCarousel/channels'
     HANGAR_MODULES = '#lobby_help:hangar/modules'
     HANGAR_OPTIONAL_DEVICES = '#lobby_help:hangar/optional-devices'
     HANGAR_SHELLS = '#lobby_help:hangar/shells'

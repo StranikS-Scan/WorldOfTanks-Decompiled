@@ -5,6 +5,7 @@ class WAITING(object):
     FLASH = '#waiting:Flash'
     DISCONNECT = '#waiting:disconnect'
     LOADPAGE = '#waiting:loadPage'
+    LOADCONTENT = '#waiting:loadContent'
     LOGIN = '#waiting:login'
     ENTER = '#waiting:enter'
     LOADHANGARSPACE = '#waiting:loadHangarSpace'
@@ -138,6 +139,7 @@ class WAITING(object):
     FORT_ATTACK = '#waiting:fort/attack'
     FORT_FAVORITE_ADD = '#waiting:fort/favorite/add'
     FORT_FAVORITE_REMOVE = '#waiting:fort/favorite/remove'
+    FORT_SERVERCONNECTION = '#waiting:fort/serverConnection'
     MESSAGE_ENUM = (MESSAGE_QUEUE,
      MESSAGE_USEAUTOSEARCH,
      MESSAGE_AUTOLOGIN,

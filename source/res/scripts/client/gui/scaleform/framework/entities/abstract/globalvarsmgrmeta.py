@@ -53,3 +53,6 @@ class GlobalVarsMgrMeta(DAAPIModule):
 
     def isRentalsEnabled(self):
         self._printOverrideError('isRentalsEnabled')
+
+    def isPotapovQuestEnabled(self):
+        self._printOverrideError('isPotapovQuestEnabled')

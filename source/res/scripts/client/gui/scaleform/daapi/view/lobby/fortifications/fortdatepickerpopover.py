@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortDatePickerPopover.py
-import BigWorld
 import fortified_regions
 from helpers import i18n, time_utils
 from ClientFortifiedRegion import ATTACK_PLAN_RESULT
@@ -20,12 +19,11 @@ class FortDatePickerPopover(View, FortDatePickerPopoverMeta, SmartPopOverView, F
         LOW = FORTIFICATION_ALIASES.ACTIVE_EVENTS_PAST_LIMIT * time_utils.ONE_DAY
         HIGH = FORTIFICATION_ALIASES.ACTIVE_EVENTS_FUTURE_LIMIT * time_utils.ONE_DAY
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx):
         super(FortDatePickerPopover, self).__init__()
-        data = ctx.get('data', None)
-        self.__selectedDate = data.timestamp if data else None
-        self.__lowerTimeBound, self.__higherTimeBound = (0, 0)
-        return
+        self.__selectedDate = ctx['data'].timestamp
+        self.__lowerTimeBound = time_utils.getCurrentLocalServerTimestamp() + fortified_regions.g_cache.attackPreorderTime
+        self.__higherTimeBound = self.__lowerTimeBound + (FORTIFICATION_ALIASES.ACTIVE_EVENTS_FUTURE_LIMIT - 1) * time_utils.ONE_DAY
 
     def getCalendar(self):
         return self.components.get(VIEW_ALIAS.CALENDAR)
@@ -53,6 +51,12 @@ class FortDatePickerPopover(View, FortDatePickerPopoverMeta, SmartPopOverView, F
     def onDateSelected(self, timestamp):
         self.fireEvent(events.CalendarEvent(events.CalendarEvent.DATE_SELECTED, timestamp), scope=EVENT_BUS_SCOPE.LOBBY)
         self.onWindowClose()
+
+    def onFortBattleChanged(self, cache, item, battleItem):
+        self._populateDays()
+
+    def onFortBattleRemoved(self, cache, battleID):
+        self._populateDays()
 
     def _populateDays(self):
         calendar = self.getCalendar()
@@ -98,18 +102,17 @@ class FortDatePickerPopover(View, FortDatePickerPopoverMeta, SmartPopOverView, F
     def _populate(self):
         super(FortDatePickerPopover, self)._populate()
         self.startCalendarListening()
-        self.__lowerTimeBound = time_utils.getCurrentTimestamp() + fortified_regions.g_cache.attackPreorderTime
-        self.__higherTimeBound = self.__lowerTimeBound + (FORTIFICATION_ALIASES.ACTIVE_EVENTS_FUTURE_LIMIT - 1) * time_utils.ONE_DAY
+        self.startFortListening()
         calendar = self.getCalendar()
         if calendar is not None:
             calendar.as_setMinAvailableDateS(self.__lowerTimeBound)
             calendar.as_setMaxAvailableDateS(self.__higherTimeBound)
-            calendar.as_openMonthS(self.__lowerTimeBound)
-            if self.__selectedDate is not None:
-                calendar.as_selectDateS(self.__selectedDate)
+            calendar.as_openMonthS(self.__selectedDate)
+            calendar.as_selectDateS(self.__selectedDate)
         self._populateDays()
         return
 
     def _dispose(self):
+        self.stopFortListening()
         self.stopCalendarListening()
         super(FortDatePickerPopover, self)._dispose()

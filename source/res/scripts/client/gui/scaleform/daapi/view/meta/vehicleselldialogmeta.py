@@ -44,3 +44,7 @@ class VehicleSellDialogMeta(DAAPIModule):
     def as_setControlNumberS(self, isGold, value):
         if self._isDAAPIInited():
             return self.flashObject.as_setControlNumber(isGold, value)
+
+    def as_cleanInputSummS(self):
+        if self._isDAAPIInited():
+            return self.flashObject.as_cleanInputSumm()

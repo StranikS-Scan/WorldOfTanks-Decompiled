@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportIntroView.py
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control.prb_helpers import unitFunctionalProperty
 from gui.shared.events import CSVehicleSelectEvent
@@ -8,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.CyberSportIntroMeta import CyberSportIntroMet
 from gui.shared import events
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui import makeHtmlString
+from gui import makeHtmlString, game_control
 __author__ = 'd_dichkovsky'
 
 class CyberSportIntroView(CyberSportIntroMeta):
@@ -22,6 +23,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
     def _populate(self):
         super(CyberSportIntroView, self)._populate()
         self.addListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__updateSelectedVehicles)
+        game_control.g_instance.igr.onIgrTypeChanged += self.__onVehiclesChanged
         g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesChanged})
 
     @unitFunctionalProperty
@@ -40,7 +42,9 @@ class CyberSportIntroView(CyberSportIntroMeta):
         else:
             levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
             item = g_currentVehicle.item
-            isAllowed = g_itemsCache.items.getItemByCD(int(item.intCD)).level in levelsRange
+            isAllowed = False
+            if item and not item.isDisabledInPremIGR and item.level in levelsRange:
+                isAllowed = True
             vehicles = [item.intCD] if isAllowed else []
         self._selectedVehicles = vehicles
         hasReadyVehicles = False
@@ -63,11 +67,12 @@ class CyberSportIntroView(CyberSportIntroMeta):
     def _dispose(self):
         super(CyberSportIntroView, self)._dispose()
         self.removeListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__updateSelectedVehicles)
+        game_control.g_instance.igr.onIgrTypeChanged -= self.__onVehiclesChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def showSelectorPopup(self):
         rosterSettings = self.unitFunctional.getRosterSettings()
-        self.fireEvent(events.ShowViewEvent(events.ShowWindowEvent.SHOW_VEHICLE_SELECTOR_WINDOW, {'isMultiSelect': True,
+        self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': True,
          'infoText': CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_INTRO,
          'selectedVehicles': self._selectedVehicles,
          'section': 'cs_intro_view_vehicle',

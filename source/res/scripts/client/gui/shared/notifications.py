@@ -28,5 +28,4 @@ class NotificationGuiSettings(object):
         self.isAlert = isAlert
         self.auxData = auxData or []
         self.showAt = showAt
-        self.extraHandlerData = None
-        return
+        self.extraHandlerData = []

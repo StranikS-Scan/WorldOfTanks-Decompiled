@@ -5,6 +5,7 @@ import constants
 from debug_utils import LOG_DEBUG
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.game_control import g_instance as g_gameCtrl
@@ -83,7 +84,7 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
         shopFilter = list(AccountSettings.getFilter('shop_current'))
         shopFilter[1] = 'vehicle'
         AccountSettings.setFilter('shop_current', tuple(shopFilter))
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_SHOP), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_SHOP), EVENT_BUS_SCOPE.LOBBY)
 
     def getVehicleTypeProvider(self):
         all = self.__getProviderObject('none')

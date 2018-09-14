@@ -24,7 +24,7 @@ from helpers import i18n
 
 class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMeta, FortViewHelper, AppRef):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(FortFixedPlayersWindow, self).__init__()
         self.__buildingUId = ctx.get('data', None)
         self.__buildingId = self.UI_BUILDINGS_BIND.index(self.__buildingUId)

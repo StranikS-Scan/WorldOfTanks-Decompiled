@@ -139,6 +139,7 @@ class UNIT_ROLE:
     ADD_REMOVE_MEMBERS = CHANGE_ROSTER
     INVITE_KICK_PLAYERS = CHANGE_ROSTER
     CREATOR = COMMANDER_UPDATES | CHANGE_ROSTER
+    CHANGE_LEADERSHIP = CREATOR | CLAN_OFFICER
     SELF_ONLY = 65536
     SELF_UNLOCKED = 131072
     NON_IDLE = 262144
@@ -742,3 +743,6 @@ class UnitBase(OpsUnpacker):
         self._players[memberDBID]['role'] |= UNIT_ROLE.CREATOR
         self.storeOp(UNIT_OP.GIVE_LEADERSHIP, memberDBID)
         return
+
+    def _getLeaderDBID(self):
+        return self._members.get(LEADER_SLOT, {}).get('playerID', 0)

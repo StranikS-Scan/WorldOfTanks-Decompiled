@@ -2,19 +2,21 @@
 from collections import defaultdict
 from constants import IGR_TYPE, ARENA_GUI_TYPE
 from gui import makeHtmlString
+from gui.server_events import g_eventsCache
 from gui.battle_control.arena_info import getArenaGuiType
 from gui.battle_control.arena_info.settings import *
 from items.vehicles import VEHICLE_CLASS_TAGS, getVehicleType, PREMIUM_IGR_TAGS
 
 class PlayerInfoVO(object):
-    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType')
+    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'potapovQuestIDs')
 
-    def __init__(self, accountDBID = 0L, name = None, clanAbbrev = '', igrType = IGR_TYPE.NONE, **kwargs):
+    def __init__(self, accountDBID = 0L, name = None, clanAbbrev = '', igrType = IGR_TYPE.NONE, potapovQuestIDs = None, **kwargs):
         super(PlayerInfoVO, self).__init__()
         self.accountDBID = accountDBID
         self.name = name
         self.clanAbbrev = clanAbbrev
         self.igrType = igrType
+        self.potapovQuestIDs = potapovQuestIDs or []
 
     def __repr__(self):
         return 'PlayerInfoVO(accountDBID = {0:n}, name = {1:>s})'.format(self.accountDBID, self.name)
@@ -45,6 +47,10 @@ class PlayerInfoVO(object):
         else:
             igrLabel = ''
         return igrLabel
+
+    def getPotapovQuests(self):
+        pQuests = g_eventsCache.potapov.getQuests()
+        return map(lambda qID: pQuests[qID], self.potapovQuestIDs)
 
 
 class VehicleTypeInfoVO(object):

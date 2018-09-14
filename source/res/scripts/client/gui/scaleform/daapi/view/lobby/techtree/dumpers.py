@@ -5,13 +5,13 @@ import gui
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
-from gui.shared import g_eventsCache
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.tooltips import getItemActionTooltipData
+from gui.shared.tooltips import getItemActionTooltipData, getItemRentActionTooltipData
 from gui.shared.utils import CLIP_ICON_PATH
 from gui.shared.utils.gui_items import InventoryVehicle
-from helpers import i18n, html, time_utils
+from gui.server_events import g_eventsCache
+from helpers import i18n, html
 from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp, VehicleClassInfo, SelectedNation
 import nations
 __all__ = ['_BaseDumper',
@@ -137,9 +137,11 @@ class ResearchItemsObjDumper(_BaseDumper):
          'name': ''}
         extraInfo = None
         status = statusLevel = ''
+        minRentPricePackage = None
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             vClass = self._vClassInfo.getInfoByTags(item.tags)
             status, statusLevel = self._getRentStatus(item)
+            minRentPricePackage = item.getRentPackage()
         else:
             if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun(rootItem.descriptor):
                 extraInfo = CLIP_ICON_PATH
@@ -147,8 +149,11 @@ class ResearchItemsObjDumper(_BaseDumper):
              'userString': item.userType})
         credits, gold = item.minRentPrice or item.buyPrice
         action = None
-        if item.buyPrice != item.defaultPrice:
+        if item.buyPrice != item.defaultPrice and not minRentPricePackage:
             action = getItemActionTooltipData(item)
+        elif minRentPricePackage:
+            if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
+                action = getItemRentActionTooltipData(item, minRentPricePackage)
         return {'id': nodeCD,
          'nameString': item.shortUserName,
          'primaryClass': vClass,
@@ -164,7 +169,8 @@ class ResearchItemsObjDumper(_BaseDumper):
          'extraInfo': extraInfo,
          'status': status,
          'statusLevel': statusLevel,
-         'isRemovable': item.isRented}
+         'isRemovable': item.isRented,
+         'isPremiumIGR': item.isPremiumIGR}
 
 
 class ResearchItemsXMLDumper(ResearchItemsObjDumper):
@@ -244,8 +250,12 @@ class NationObjDumper(_BaseDumper):
         credits, gold = item.minRentPrice or item.buyPrice
         status, statusLevel = self._getRentStatus(item)
         action = None
-        if item.buyPrice != item.defaultPrice:
+        minRentPricePackage = item.getRentPackage()
+        if item.buyPrice != item.defaultPrice and not minRentPricePackage:
             action = getItemActionTooltipData(item)
+        elif minRentPricePackage:
+            if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
+                action = getItemRentActionTooltipData(item, minRentPricePackage)
         return {'id': nodeCD,
          'state': node['state'],
          'type': item.itemTypeName,
@@ -261,7 +271,8 @@ class NationObjDumper(_BaseDumper):
          'unlockProps': node['unlockProps']._makeTuple(),
          'status': status,
          'statusLevel': statusLevel,
-         'isRemovable': item.isRented}
+         'isRemovable': item.isRented,
+         'isPremiumIGR': item.isPremiumIGR}
 
 
 class NationXMLDumper(NationObjDumper):

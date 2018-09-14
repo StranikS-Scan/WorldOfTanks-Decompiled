@@ -8,12 +8,12 @@ def getRentLeftTimeStr(localization, rentLeftTime, timeStyle = None, ctx = None)
         ctx = {}
     if rentLeftTime > 0:
         if rentLeftTime > time_utils.ONE_DAY:
-            timeLeft = str(int(math.ceil(rentLeftTime / time_utils.ONE_DAY)))
+            timeLeft = str(int(math.ceil(float(rentLeftTime) / time_utils.ONE_DAY)))
             if timeStyle:
                 timeLeft = TextManager.getText(timeStyle, timeLeft)
             return i18n.makeString((localization % 'days'), days=timeLeft, **ctx)
         else:
-            timeLeft = str(int(math.ceil(rentLeftTime / time_utils.ONE_HOUR)))
+            timeLeft = str(int(math.ceil(float(rentLeftTime) / time_utils.ONE_HOUR)))
             if timeStyle:
                 timeLeft = TextManager.getText(timeStyle, timeLeft)
             return i18n.makeString((localization % 'hours'), hours=timeLeft, **ctx)

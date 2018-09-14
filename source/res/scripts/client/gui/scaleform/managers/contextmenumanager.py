@@ -1,17 +1,27 @@
 # Embedded file name: scripts/client/gui/Scaleform/managers/ContextMenuManager.py
+import weakref
 import BigWorld
-from adisp import process
 import constants
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from adisp import process
+from abc import ABCMeta, abstractmethod
+from CurrentVehicle import g_currentVehicle
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
 from account_helpers import isMoneyTransfer
-from gui import DialogsInterface, game_control
+from gui import DialogsInterface, game_control, SystemMessages
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
+from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control.context import unit_ctx, prb_ctx, SendInvitesCtx
 from gui.prb_control.prb_helpers import prbDispatcherProperty, unitFunctionalProperty
+from gui.shared.events import ChannelCarouselEvent
+from gui.shared.gui_items.processors.tankman import TankmanUnload
+from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
+from gui.shared.utils import CONST_CONTAINER, functions, decorators
+from gui.shared.utils.functions import getViewName
 from helpers import i18n
-from gui import SystemMessages
-from gui.shared import g_itemsCache
+from gui.shared import g_itemsCache, events, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher as shared_events
 from gui.Scaleform.framework.entities.abstract.ContextMenuManagerMeta import ContextMenuManagerMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -19,10 +29,269 @@ from gui.Scaleform.daapi.view.lobby.fortifications.ConfirmOrderDialogMeta import
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
+_SEPARATOR_ID = 'separate'
+
+class AbstractContextMenuHandler(object):
+    __metaclass__ = ABCMeta
+
+    def __init__(self, cmProxy, itemId, ctx, handlers = None):
+        super(AbstractContextMenuHandler, self).__init__()
+        self._itemId = itemId
+        self._ctx = ctx
+        self.__cmProxy = weakref.proxy(cmProxy)
+        self.__handlers = handlers or {}
+
+    def fini(self):
+        self.__handlers = None
+        self.__cmProxy = None
+        return
+
+    @abstractmethod
+    def getOptions(self):
+        raise NotImplementedError
+
+    def onOptionSelect(self, optionId):
+        if optionId in self.__handlers:
+            return getattr(self, self.__handlers[optionId])()
+        LOG_WARNING('Unknown context menu option', self, self.__cmProxy, optionId)
+
+    def _dispatchChanges(self, options):
+        if self.__cmProxy is not None:
+            self.__cmProxy._onOptionsChanged(options)
+        return
+
+    @classmethod
+    def _constructOptionVO(cls, optId, optLabel = None, optInitData = None, optSubMenu = None):
+        return {'id': optId,
+         'label': optLabel,
+         'initData': optInitData,
+         'submenu': optSubMenu}
+
+
+class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
+
+    class OPTIONS(CONST_CONTAINER):
+        PERSONAL_CASE = 'personalCase'
+        UNLOAD = 'tankmanUnload'
+
+    def __init__(self, cmProxy, itemId, ctx):
+        super(CrewContextMenuHandler, self).__init__(cmProxy, int(itemId), ctx, {self.OPTIONS.PERSONAL_CASE: 'showPersonalCase',
+         self.OPTIONS.UNLOAD: 'unloadTankman'})
+
+    def getOptions(self):
+        return self.generateOptions()
+
+    def generateOptions(self):
+        options = [self._constructOptionVO(self.OPTIONS.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._constructOptionVO(_SEPARATOR_ID), self._constructOptionVO(self.OPTIONS.UNLOAD, MENU.contextmenu('tankmanUnload'))]
+        return options
+
+    def showPersonalCase(self):
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, functions.getViewName(VIEW_ALIAS.PERSONAL_CASE, self._itemId), {'tankmanID': int(self._itemId),
+         'page': 0}))
+
+    @decorators.process('unloading')
+    def unloadTankman(self):
+        tankman = g_itemsCache.items.getTankman(self._itemId)
+        result = yield TankmanUnload(g_currentVehicle.item, tankman.vehicleSlotIdx).request()
+        if len(result.userMsg):
+            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class ChannelListContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
+
+    class OPTIONS(CONST_CONTAINER):
+        CLOSE_CURRENT = 'clC'
+        MINIMIZE_ALL = 'mA'
+        CLOSE_ALL_EXCEPT_CURRENT = 'clAdE'
+
+    def __init__(self, cmProxy, itemId, ctx):
+        super(ChannelListContextMenuHandler, self).__init__(cmProxy, int(itemId), ctx, {self.OPTIONS.MINIMIZE_ALL: 'minimizeAll',
+         self.OPTIONS.CLOSE_CURRENT: 'closeCurrent',
+         self.OPTIONS.CLOSE_ALL_EXCEPT_CURRENT: 'closeAllExceptCurrent'})
+
+    def closeCurrent(self):
+        self.fireEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.CLOSE_BUTTON_CLICK, self._itemId), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def minimizeAll(self):
+        self.fireEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.MINIMIZE_ALL_CHANNELS, None), scope=EVENT_BUS_SCOPE.LOBBY)
+        return
+
+    def closeAllExceptCurrent(self):
+        self.fireEvent(ChannelCarouselEvent(self, ChannelCarouselEvent.CLOSE_ALL_EXCEPT_CURRENT, self._itemId), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def getOptions(self):
+        self.currentOptions = self.generateOptions()
+        return self.currentOptions
+
+    def generateOptions(self):
+        options = [self._constructOptionVO(self.OPTIONS.MINIMIZE_ALL, MENU.contextmenu('messenger/minimizeAll')),
+         self._constructOptionVO(_SEPARATOR_ID),
+         self._constructOptionVO(self.OPTIONS.CLOSE_CURRENT, MENU.contextmenu('messenger/closeCurrent'), {'enabled': self._ctx.canCloseCurrent}),
+         self._constructOptionVO(_SEPARATOR_ID),
+         self._constructOptionVO(self.OPTIONS.CLOSE_ALL_EXCEPT_CURRENT, MENU.contextmenu('messenger/closeAllExceptCurrent'))]
+        return options
+
+
+class VehicleContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
+
+    class VEHICLE(CONST_CONTAINER):
+        INFO = 'vehicleInfo'
+        SELL = 'vehicleSell'
+        RESEARCH = 'vehicleResearch'
+        CHECK = 'vehicleCheck'
+        UNCHECK = 'vehicleUncheck'
+        STATISTIC = 'showVehicleStatistics'
+        BUY = 'vehicleBuy'
+        REMOVE = 'vehicleRemove'
+
+    def __init__(self, cmProxy, invID, ctx):
+        super(VehicleContextMenuHandler, self).__init__(cmProxy, int(invID), ctx, {self.VEHICLE.INFO: 'showVehicleInfo',
+         self.VEHICLE.SELL: 'vehicleSell',
+         self.VEHICLE.RESEARCH: 'toResearch',
+         self.VEHICLE.CHECK: 'checkFavoriteVehicle',
+         self.VEHICLE.UNCHECK: 'uncheckFavoriteVehicle',
+         self.VEHICLE.STATISTIC: 'showVehicleStats',
+         self.VEHICLE.BUY: 'vehicleBuy',
+         self.VEHICLE.REMOVE: 'vehicleSell'})
+
+    def showVehicleInfo(self):
+        vehicle = g_itemsCache.items.getVehicle(self._itemId)
+        if vehicle is not None:
+            shared_events.showVehicleInfo(vehicle.intCD)
+        else:
+            LOG_WARNING('Truing to show unknown vehicle info window', self._itemId)
+        return
+
+    def vehicleSell(self):
+        if self._itemId is not None:
+            shared_events.showVehicleSellDialog(self._itemId)
+        return
+
+    def vehicleBuy(self):
+        item = g_itemsCache.items.getVehicle(self._itemId)
+        if item is not None:
+            shared_events.showVehicleBuyDialog(item)
+        return
+
+    def showVehicleStats(self):
+        vehicle = g_itemsCache.items.getVehicle(self._itemId)
+        if vehicle is not None:
+            shared_events.showVehicleStats(vehicle.intCD)
+        return
+
+    def toResearch(self):
+        vehicle = g_itemsCache.items.getVehicle(self._itemId)
+        if vehicle is not None:
+            shared_events.showResearchView(vehicle.intCD)
+        else:
+            LOG_ERROR("Can't go to Research because id for current vehicle is None")
+        return
+
+    def checkFavoriteVehicle(self):
+        self.__favoriteVehicle(True)
+
+    def uncheckFavoriteVehicle(self):
+        self.__favoriteVehicle(False)
+
+    @process
+    def __favoriteVehicle(self, isFavorite):
+        vehicle = g_itemsCache.items.getVehicle(self._itemId)
+        if vehicle is not None:
+            result = yield VehicleFavoriteProcessor(vehicle, bool(isFavorite)).request()
+            if not result.success:
+                LOG_ERROR('Cannot set selected vehicle as favorite due to following error: ', result.userMsg)
+        return
+
+    def getOptions(self):
+        self.currentOptions = self.generateOptions()
+        return self.currentOptions
+
+    def generateOptions(self):
+        options = []
+        vehicle = g_itemsCache.items.getVehicle(self._itemId)
+        vehicleWasInBattle = False
+        accDossier = g_itemsCache.items.getAccountDossier(None)
+        if accDossier:
+            wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
+            if vehicle.intCD in wasInBattleSet:
+                vehicleWasInBattle = True
+        if vehicle is not None:
+            options.append(self._constructOptionVO(self.VEHICLE.INFO, MENU.contextmenu(self.VEHICLE.INFO)))
+            options.append(self._constructOptionVO(self.VEHICLE.STATISTIC, MENU.contextmenu(self.VEHICLE.STATISTIC), {'enabled': vehicleWasInBattle}))
+            options.append(self._constructOptionVO(_SEPARATOR_ID))
+            if vehicle.isRented:
+                if not vehicle.isPremiumIGR:
+                    money = g_itemsCache.items.stats.money
+                    canBuyOrRent, _ = vehicle.mayRentOrBuy(money)
+                    options.append(self._constructOptionVO(self.VEHICLE.BUY, MENU.contextmenu(self.VEHICLE.BUY), {'enabled': canBuyOrRent}))
+                options.append(self._constructOptionVO(self.VEHICLE.REMOVE, MENU.contextmenu(self.VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
+            else:
+                options.append(self._constructOptionVO(self.VEHICLE.SELL, MENU.contextmenu(self.VEHICLE.SELL), {'enabled': vehicle.canSell}))
+            options.append(self._constructOptionVO(_SEPARATOR_ID))
+            options.append(self._constructOptionVO(self.VEHICLE.RESEARCH, MENU.contextmenu(self.VEHICLE.RESEARCH)))
+            if vehicle.isFavorite:
+                options.append(self._constructOptionVO(self.VEHICLE.UNCHECK, MENU.contextmenu(self.VEHICLE.UNCHECK)))
+            else:
+                options.append(self._constructOptionVO(self.VEHICLE.CHECK, MENU.contextmenu(self.VEHICLE.CHECK)))
+        return options
+
+
+class CONTEXT_MENU_HANDLER_TYPE(object):
+    CREW = 'crew'
+    CHANNEL_LIST = 'channelList'
+    VEHICLE = 'vehicle'
+
 
 class ContextMenuManager(ContextMenuManagerMeta):
+    _HANDLERS_MAP = {CONTEXT_MENU_HANDLER_TYPE.CREW: CrewContextMenuHandler,
+     CONTEXT_MENU_HANDLER_TYPE.CHANNEL_LIST: ChannelListContextMenuHandler,
+     CONTEXT_MENU_HANDLER_TYPE.VEHICLE: VehicleContextMenuHandler}
+
+    def __init__(self):
+        super(ContextMenuManager, self).__init__()
+        self.__currentHandler = None
+        return
+
+    def getCurrentHandler(self):
+        return self.__currentHandler
+
+    def requestOptions(self, itemId, handlerType, ctx):
+        self.__currentHandler = self._getHandler(itemId, handlerType, ctx)
+        if self.__currentHandler is not None:
+            self._sendOptionsToFlash(self.__currentHandler.getOptions())
+        return
+
+    def onOptionSelect(self, optionId):
+        if self.__currentHandler is not None:
+            self.__currentHandler.onOptionSelect(optionId)
+        return
+
+    def onHide(self):
+        self.__disposeHandler()
+
+    def _dispose(self):
+        self.__disposeHandler()
+        super(ContextMenuManager, self)._dispose()
+
+    def _getHandler(self, itemId, handlerType, ctx):
+        if handlerType in self._HANDLERS_MAP:
+            return self._HANDLERS_MAP[handlerType](self, itemId, ctx)
+        else:
+            LOG_WARNING('Unknown context menu handler type', itemId, handlerType, ctx)
+            return None
+
+    def _sendOptionsToFlash(self, options):
+        self.as_setOptionsS({'options': options})
+
+    def _onOptionsChanged(self, options):
+        self._sendOptionsToFlash(options)
+
+    def __disposeHandler(self):
+        if self.__currentHandler is not None:
+            self.__currentHandler.fini()
+            self.__currentHandler = None
+        return
+
     DENUNCIATIONS = {'bot': constants.DENUNCIATION.BOT,
      'flood': constants.DENUNCIATION.FLOOD,
      'offend': constants.DENUNCIATION.OFFEND,
@@ -57,73 +326,8 @@ class ContextMenuManager(ContextMenuManagerMeta):
                 key = 'messenger/userInfoNotAvailable'
             DialogsInterface.showI18nInfoDialog(key, lambda result: None, I18nInfoDialogMeta(key, messageCtx={'userName': userName}))
         else:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_PROFILE_WINDOW, {'userName': userName,
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PROFILE_WINDOW, getViewName(VIEW_ALIAS.PROFILE_WINDOW, uid), {'userName': userName,
              'databaseID': int(uid)}), EVENT_BUS_SCOPE.LOBBY)
-        return
-
-    def getContextMenuVehicleData(self, vehInvID):
-        vehicle = g_itemsCache.items.getVehicle(int(vehInvID))
-        if vehicle is not None:
-            canBuyOrRent = False
-            if vehicle.isRented:
-                money = g_itemsCache.items.stats.money
-                canRentResult, rentErrorStr = vehicle.mayRent(money)
-                canBuyResult, buyErrorStr = vehicle.mayPurchase(money)
-                canBuyOrRent = canRentResult or canBuyResult
-            vehicleWasInBattle = False
-            accDossier = g_itemsCache.items.getAccountDossier(None)
-            if accDossier:
-                wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
-                if vehicle.intCD in wasInBattleSet:
-                    vehicleWasInBattle = True
-            return {'inventoryId': vehicle.invID,
-             'compactDescr': vehicle.intCD,
-             'favorite': vehicle.isFavorite,
-             'canSell': vehicle.canSell,
-             'wasInBattle': vehicleWasInBattle,
-             'isRented': vehicle.isRented,
-             'rentalIsOver': vehicle.rentalIsOver,
-             'canBuyOrRent': canBuyOrRent}
-        else:
-            return
-
-    def vehicleBuy(self, vehInvID):
-        item = g_itemsCache.items.getVehicle(int(vehInvID))
-        if item is not None:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW, {'nationID': item.nationID,
-             'itemID': item.innationID}))
-        return
-
-    def showVehicleInfo(self, vehInvID):
-        vehicle = g_itemsCache.items.getVehicle(int(vehInvID))
-        if vehicle is not None:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_INFO_WINDOW, {'vehicleCompactDescr': vehicle.intCD}))
-        return
-
-    def toResearch(self, intCD):
-        if intCD is not None:
-            Event = events.LoadEvent
-            exitEvent = Event(Event.LOAD_HANGAR)
-            loadEvent = Event(Event.LOAD_RESEARCH, ctx={'rootCD': intCD,
-             'exit': exitEvent})
-            self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
-        else:
-            LOG_ERROR("Can't go to Research because id for current vehicle is None")
-        return
-
-    def vehicleSell(self, vehInvID):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_SELL_DIALOG, {'vehInvID': int(vehInvID)}))
-
-    def showVehicleStats(self, intCD):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_PROFILE, {'itemCD': intCD}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    @process
-    def favoriteVehicle(self, vehInvID, isFavorite):
-        vehicle = g_itemsCache.items.getVehicle(int(vehInvID))
-        if vehicle is not None:
-            result = yield VehicleFavoriteProcessor(vehicle, bool(isFavorite)).request()
-            if not result.success:
-                LOG_ERROR('Cannot set selected vehicle as favorite due to following error: ', result.userMsg)
         return
 
     def showMoneyTransfer(self, uid, userName):
@@ -233,16 +437,16 @@ class ContextMenuManager(ContextMenuManagerMeta):
         return isMoneyTransfer(g_itemsCache.items.stats.attributes)
 
     def fortDirection(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
 
     def fortAssignPlayers(self, value):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_FIXED_PLAYERS_WINDOW_EVENT, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_FIXED_PLAYERS_WINDOW_ALIAS, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def fortModernization(self, value):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_MODERNIZATION_WINDOW_EVENT, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_MODERNIZATION_WINDOW_ALIAS, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def fortDestroy(self, value):
-        self.fireEvent(events.ShowWindowEvent(FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW_EVENT, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW, ctx={'data': value}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def fortPrepareOrder(self, value):
         from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper

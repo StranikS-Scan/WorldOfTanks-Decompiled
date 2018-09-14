@@ -18,7 +18,7 @@ from helpers import i18n
 
 class DemountBuildingWindow(AbstractWindowView, View, DemountBuildingWindowMeta, FortViewHelper, AppRef):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(DemountBuildingWindow, self).__init__()
         self.__buildingID = ctx.get('data', None)
         self.__formattedBuildingName = i18n.makeString(ALIAS.buildings_buildingname(self.__buildingID))

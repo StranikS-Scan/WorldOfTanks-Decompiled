@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/business_layer.py
 import BigWorld
 from debug_utils import *
-from gui.Scaleform.daapi.settings import VIEWS_SETTINGS, VIEWS_PACKAGES
+from gui.Scaleform.daapi.settings.config import VIEWS_SETTINGS, VIEWS_PACKAGES
 from gui.Scaleform.framework import ViewTypes, g_entitiesFactories
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -9,7 +9,7 @@ from gui.Scaleform.framework.managers.loaders import SequenceIDLoader, PackageBu
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.events import ShowDialogEvent, ShowViewEvent, LoadEvent, ShowWindowEvent, LoginEventEx, LoginCreateEvent, ShowPopoverEvent
+from gui.shared.events import ShowDialogEvent, LoginEventEx, LoginCreateEvent
 
 class BusinessHandler(SequenceIDLoader):
 
@@ -23,63 +23,66 @@ class BusinessHandler(SequenceIDLoader):
         self._LISTENERS = {LoginEventEx.SET_LOGIN_QUEUE: (self.__showLoginQueue, EVENT_BUS_SCOPE.LOBBY),
          LoginEventEx.SET_AUTO_LOGIN: (self.__showLoginQueue, EVENT_BUS_SCOPE.LOBBY),
          LoginCreateEvent.CREATE_ACC: (self.__createAcc, EVENT_BUS_SCOPE.LOBBY),
-         ShowViewEvent.SHOW_LOGIN: (self.__showLogin,),
-         ShowViewEvent.SHOW_INTRO_VIDEO: (self.__showIntroVideo,),
-         ShowViewEvent.SHOW_LOBBY: (self.__showLobby,),
-         ShowViewEvent.SHOW_LOBBY_MENU: (self.__lobbyHdlr.showLobbyMenu, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_HANGAR: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_INVENTORY: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_SHOP: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_PROFILE: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_BARRACKS: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_FORTIFICATIONS: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_CUSTOMIZATION: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_BATTLE_QUEUE: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_BATTLE_LOADING: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         LoadEvent.LOAD_TUTORIAL_LOADING: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
-         ShowWindowEvent.SHOW_REFERRAL_REFERRALS_INTRO_WINDOW: (self.__showReferralReferralsIntroWindow,),
-         ShowWindowEvent.SHOW_REFERRAL_REFERRER_INTRO_WINDOW: (self.__showReferralReferrerIntroWindow,),
-         ShowWindowEvent.SHOW_FREE_X_P_INFO_WINDOW: (self.__showFreeXPInfoWindow,),
-         ShowWindowEvent.SHOW_TEST_WINDOW: (self.__showTestWindow,),
-         ShowWindowEvent.SHOW_EULA: (self.__showEULA,),
-         ShowWindowEvent.SHOW_LEGAL_INFO_WINDOW: (self.__showLegalInfoWindow,),
-         ShowWindowEvent.SHOW_ELITE_VEHICLE_WINDOW: (self.__showEliteWindow,),
-         ShowWindowEvent.SHOW_RECRUIT_WINDOW: (self.__showRecruitWindow,),
-         ShowWindowEvent.SHOW_EXCHANGE_WINDOW: (self.__showExchangeWindow, EVENT_BUS_SCOPE.LOBBY),
-         ShowWindowEvent.SHOW_PROFILE_WINDOW: (self.__showProfileWindow, EVENT_BUS_SCOPE.LOBBY),
-         ShowWindowEvent.SHOW_EXCHANGE_VCOIN_WINDOW: (self.__showExchangeVcoinWindow, EVENT_BUS_SCOPE.LOBBY),
-         ShowWindowEvent.SHOW_EXCHANGE_XP_WINDOW: (self.__showExchangeXPWindow, EVENT_BUS_SCOPE.LOBBY),
-         ShowWindowEvent.SHOW_EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW: (self.__showExchangeFreeToTankmanXpWindow, EVENT_BUS_SCOPE.LOBBY),
-         ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW: (self.__showVehicleBuyWindow,),
-         ShowPopoverEvent.SHOW_NOTIFICATIONS_LIST_POPOVER: (self.__showNotificationsList,),
-         ShowPopoverEvent.SHOW_CREW_OPERATIONS_POPOVER: (self.__showCrewOperationsPopOver,),
-         ShowPopoverEvent.SHOW_FORT_BUILDING_CARD_POPOVER_EVENT: (self.__showFortBuildingsPopOver,),
-         ShowPopoverEvent.SHOW_FORT_ORDER_POPOVER_EVENT: (self.__showFortOrderPopover,),
-         ShowPopoverEvent.SHOW_FORT_BATTLE_DIRECTION_POPOVER_EVENT: (self.__showFortBattleDirectionPopover,),
-         ShowPopoverEvent.SHOW_FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_EVENT: (self.__showFortIntelligenceClanFilterPopover,),
-         ShowPopoverEvent.SHOW_BATTLE_TYPE_SELECT_POPOVER_EVENT: (self.__showBattleTypeSelectPopover,),
-         ShowPopoverEvent.SHOW_ACCOUNT_POPOVER_EVENT: (self.__showAccountPopover,),
-         ShowPopoverEvent.SHOW_FORT_SETTINGS_PERIPHERY_POPOVER_EVENT: (self.__showFortSettingsPeripheryPopover,),
-         ShowPopoverEvent.SHOW_FORT_SETTINGS_DEFENCE_HOUR_POPOVER_EVENT: (self.__showFortSettingsDefenceHourPopover,),
-         ShowPopoverEvent.SHOW_FORT_SETTINGS_VACATION_POPOVER_EVENT: (self.__showFortSettingsVacationPopover,),
-         ShowPopoverEvent.SHOW_FORT_SETTINGS_DAYOFF_POPOVER_EVENT: (self.__showFortSettingsDayoffPopover,),
-         ShowPopoverEvent.SHOW_FORT_DATE_PICKER_POPOVER_EVENT: (self.__showFortDatePickerPopover,),
-         ShowWindowEvent.SHOW_RETRAIN_CREW_WINDOW: (self.__showRetrainCrewWindow,),
-         ShowWindowEvent.SHOW_SETTINGS_WINDOW: (self.__showSettingsWindow,),
-         ShowWindowEvent.SHOW_DEMONSTRATOR_WINDOW: (self.__showDemonstratorWindow,),
-         ShowWindowEvent.SHOW_VEHICLE_INFO_WINDOW: (self.__showVehicleInfoWindow,),
-         ShowWindowEvent.SHOW_MODULE_INFO_WINDOW: (self.__showModuleInfoWindow,),
-         ShowWindowEvent.SHOW_TECHNICAL_MAINTENANCE: (self.__showTechnicalMaintenance,),
-         ShowWindowEvent.SHOW_VEHICLE_SELL_DIALOG: (self.__showVehicleSellDialog,),
-         ShowWindowEvent.SHOW_PREMIUM_DIALOG: (self.__lobbyHdlr.showPremiumDialog,),
-         ShowWindowEvent.SHOW_TANKMAN_INFO: (self.__lobbyHdlr.showCrewTankmanInfo,),
-         ShowWindowEvent.SHOW_BATTLE_RESULTS: (self.__lobbyHdlr.showBattleResults,),
-         ShowWindowEvent.SHOW_EVENTS_WINDOW: (self.__lobbyHdlr.showEventsWindow,),
-         ShowWindowEvent.SHOW_TANKMAN_DROP_SKILLS_WINDOW: (self.__lobbyHdlr.showTankmanDropSkillsWindow,),
-         ShowWindowEvent.SHOW_AWARD_WINDOW: (self.__showAwardWindow,),
-         ShowWindowEvent.SHOW_REFERRAL_MANAGEMENT_WINDOW: (self.__showReferralManagementWindow,),
-         ShowWindowEvent.SHOW_PROMO_PREMIUM_IGR_WINDOW: (self.__showPromoPremiumIgrWindow,),
-         ShowWindowEvent.SHOW_BROWSER_WINDOW: (self.__lobbyHdlr.showBrowserWindow, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.LOGIN: (self.__showViewSimple,),
+         VIEW_ALIAS.INTRO_VIDEO: (self.__showViewSimple,),
+         VIEW_ALIAS.LOBBY: (self.__showViewSimple,),
+         VIEW_ALIAS.LOBBY_MENU: (self.__lobbyHdlr.showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.LOBBY_HANGAR: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.LOBBY_SHOP: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.LOBBY_INVENTORY: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.LOBBY_PROFILE: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.LOBBY_BARRACKS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.LOBBY_CUSTOMIZATION: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.BATTLE_QUEUE: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.BATTLE_LOADING: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.TUTORIAL_LOADING: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.FREE_X_P_INFO_WINDOW: (self.__showFreeXPInfoWindow,),
+         VIEW_ALIAS.EULA: (self.__showViewSimple,),
+         VIEW_ALIAS.EULA_FULL: (self.__showViewSimple,),
+         VIEW_ALIAS.LEGAL_INFO_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.ELITE_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.RECRUIT_WINDOW: (self.__showRecruitWindow,),
+         VIEW_ALIAS.QUESTS_RECRUIT_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.EXCHANGE_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.PROFILE_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.EXCHANGE_VCOIN_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.EXCHANGE_XP_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.VEHICLE_BUY_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.NOTIFICATIONS_LIST: (self.__showViewSimple,),
+         VIEW_ALIAS.CREW_OPERATIONS_POPOVER: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_BUILDING_CARD_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_ORDER_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS: (self.__showViewSimple,),
+         VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER: (self.__showViewSimple,),
+         VIEW_ALIAS.SQUAD_TYPE_SELECT_POPOVER: (self.__showViewSimple,),
+         VIEW_ALIAS.ACCOUNT_POPOVER: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS: (self.__showViewSimple,),
+         VIEW_ALIAS.AWARD_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.RETRAIN_CREW: (self.__showViewSimple,),
+         VIEW_ALIAS.SETTINGS_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.DEMONSTRATOR_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.VEHICLE_INFO_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.MODULE_INFO_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.TECHNICAL_MAINTENANCE: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.VEHICLE_SELL_DIALOG: (self.__showViewSimple,),
+         VIEW_ALIAS.PREMIUM_DIALOG: (self.__showViewSimple,),
+         VIEW_ALIAS.PERSONAL_CASE: (self.__showViewSimple,),
+         VIEW_ALIAS.BATTLE_RESULTS: (self.__showViewSimple,),
+         VIEW_ALIAS.EVENTS_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.BROWSER_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          ShowDialogEvent.SHOW_SIMPLE_DLG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_ICON_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_ICON_PRICE_DIALOG: (self.__dlgsHdlr,),
@@ -137,14 +140,9 @@ class BusinessHandler(SequenceIDLoader):
 
         return
 
-    def __showReferralReferralsIntroWindow(self, event):
-        self._loadView(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, event.ctx)
-
-    def __showReferralReferrerIntroWindow(self, event):
-        self._loadView(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW)
-
     def __showFreeXPInfoWindow(self, event):
-        self._loadView(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, event.meta, event.handler)
+        self.app.loadView(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, VIEW_ALIAS.FREE_X_P_INFO_WINDOW, {'meta': event.meta,
+         'handler': event.handler})
 
     def __showLoginQueue(self, event):
         self._loadView(VIEW_ALIAS.LOGIN_QUEUE, event.waitingOpen, event.msg, event.waitingClose, event.showAutoLoginBtn)
@@ -152,31 +150,8 @@ class BusinessHandler(SequenceIDLoader):
     def __createAcc(self, event):
         self._loadView(VIEW_ALIAS.LOGIN_CREATE_AN_ACC, event.title, event.message, event.submit)
 
-    def __showLogin(self, event):
-        self._loadView(VIEW_ALIAS.LOGIN, event.ctx)
-
-    def __showIntroVideo(self, event):
-        self._loadView(VIEW_ALIAS.INTRO_VIDEO, event.ctx)
-
-    def __showLobby(self, event):
-        self._loadView(VIEW_ALIAS.LOBBY, event.ctx.get('isInQueue', False))
-
-    def __showTestWindow(self, event, arg1):
-        self._loadView(VIEW_ALIAS.TEST_WINDOW, arg1)
-
-    def __showLegalInfoWindow(self, event):
-        eulaType = VIEW_ALIAS.EULA
-        self.app.loadView(VIEW_ALIAS.LEGAL_INFO_WINDOW, VIEW_ALIAS.LEGAL_INFO_WINDOW)
-
-    def __showEULA(self, event):
-        eulaType = VIEW_ALIAS.EULA
-        if event.ctx.get('isFull', False):
-            eulaType = VIEW_ALIAS.EULA_FULL
-        self._loadView(eulaType, {'text': event.ctx.get('text', '')})
-
-    def __showEliteWindow(self, event):
-        name = 'EliteWindow' + str(event.ctx.get('vehTypeCompDescr'))
-        self.app.loadView(VIEW_ALIAS.ELITE_WINDOW, name, event.ctx)
+    def __showViewSimple(self, event):
+        self.app.loadView(event.eventType, event.name, event.ctx)
 
     def __showRecruitWindow(self, event):
         windowContainer = self.app.containerManager.getContainer(ViewTypes.WINDOW)
@@ -186,132 +161,17 @@ class BusinessHandler(SequenceIDLoader):
         self.app.loadView(VIEW_ALIAS.RECRUIT_WINDOW, None, event.ctx)
         return
 
-    def __showExchangeWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.EXCHANGE_WINDOW, VIEW_ALIAS.EXCHANGE_WINDOW)
-
-    def __showProfileWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.PROFILE_WINDOW, 'window_%s' % event.ctx.get('databaseID'), event.ctx)
-
-    def __showExchangeVcoinWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.EXCHANGE_VCOIN_WINDOW, VIEW_ALIAS.EXCHANGE_VCOIN_WINDOW)
-
-    def __showExchangeXPWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.EXCHANGE_XP_WINDOW, VIEW_ALIAS.EXCHANGE_XP_WINDOW)
-
-    def __showExchangeFreeToTankmanXpWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW + '_' + str(event.ctx.get('tankManId')), event.ctx)
-
-    def __showVehicleBuyWindow(self, event):
-        self._loadView(VIEW_ALIAS.VEHICLE_BUY_WINDOW, event.ctx)
-
-    def __showNotificationsList(self, event):
-        self.app.loadView(VIEW_ALIAS.NOTIFICATIONS_LIST, VIEW_ALIAS.NOTIFICATIONS_LIST, event.ctx)
-
-    def __showFortBuildingsPopOver(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_BUILDING_CARD_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_BUILDING_CARD_POPOVER_ALIAS, event.ctx)
-
-    def __showFortOrderPopover(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_ORDER_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_ORDER_POPOVER_ALIAS, event.ctx)
-
-    def __showFortBattleDirectionPopover(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS, event.ctx)
-
-    def __showFortIntelligenceClanFilterPopover(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS, event.ctx)
-
-    def __showFortSettingsPeripheryPopover(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS, event.ctx)
-
-    def __showFortSettingsDefenceHourPopover(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS, event.ctx)
-
-    def __showFortSettingsVacationPopover(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS, event.ctx)
-
-    def __showFortSettingsDayoffPopover(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS, event.ctx)
-
-    def __showFortDatePickerPopover(self, event):
-        self.app.loadView(FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS, event.ctx)
-
-    def __showBattleTypeSelectPopover(self, event):
-        self.app.loadView(VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER, VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER, event.ctx)
-
-    def __showAccountPopover(self, event):
-        self.app.loadView(VIEW_ALIAS.ACCOUNT_POPOVER, VIEW_ALIAS.ACCOUNT_POPOVER, event.ctx)
-
-    def __showRetrainCrewWindow(self, event):
-        self._loadView(VIEW_ALIAS.RETRAIN_CREW, event.ctx)
-
-    def __showCrewOperationsPopOver(self, event):
-        self.app.loadView(VIEW_ALIAS.CREW_OPERATIONS_POPOVER, VIEW_ALIAS.CREW_OPERATIONS_POPOVER, event.ctx)
-
-    def __showVehicleInfoWindow(self, event):
-        vCompactDescr = 0
-        if 'vehicleCompactDescr' in event.ctx:
-            vCompactDescr = event.ctx['vehicleCompactDescr']
-        self.app.loadView(VIEW_ALIAS.VEHICLE_INFO_WINDOW, '{0:>s}{1:n}'.format(VIEW_ALIAS.VEHICLE_INFO_WINDOW, vCompactDescr), **event.ctx)
-
-    def __showModuleInfoWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.MODULE_INFO_WINDOW, ''.join([VIEW_ALIAS.MODULE_INFO_WINDOW, str(event.ctx.get('moduleCompactDescr', 0))]), **event.ctx)
-
-    def __showTechnicalMaintenance(self, event):
-        self.app.loadView(VIEW_ALIAS.TECHNICAL_MAINTENANCE, VIEW_ALIAS.TECHNICAL_MAINTENANCE, **event.ctx)
-
-    def __showVehicleSellDialog(self, event):
-        self._loadView(VIEW_ALIAS.VEHICLE_SELL_DIALOG, **event.ctx)
-
-    def __showSettingsWindow(self, event):
-        self._loadView(VIEW_ALIAS.SETTINGS_WINDOW, event.ctx)
-
-    def __showDemonstratorWindow(self, event):
-        self._loadView(VIEW_ALIAS.DEMONSTRATOR_WINDOW)
-
-    def __showAwardWindow(self, event):
-        self._loadView(VIEW_ALIAS.AWARD_WINDOW, event.ctx)
-
-    def __showReferralManagementWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW, VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW)
-
-    def __showPromoPremiumIgrWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW)
-
 
 class BusinessLobbyHandler(SequenceIDLoader):
 
-    def showLobbyMenu(self, event):
-        self.app.loadView(VIEW_ALIAS.LOBBY_MENU)
-
-    def showPremiumDialog(self, event):
-        self.app.loadView(VIEW_ALIAS.PREMIUM_DIALOG)
-
-    def showCrewTankmanInfo(self, event):
-        name = 'personalCase' + str(event.ctx['tankmanID'])
-        self.app.loadView(VIEW_ALIAS.PERSONAL_CASE, name, event.ctx)
-
-    def showBattleResults(self, event):
-        self.app.loadView(VIEW_ALIAS.BATTLE_RESULTS, 'battleResults' + str(event.ctx.get('data')), event.ctx)
-
-    def showEventsWindow(self, event):
-        windowContainer = self.app.containerManager.getContainer(ViewTypes.WINDOW)
-        window = windowContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.EVENTS_WINDOW})
-        if window is not None:
-            window.selectCurrentEvent(event.ctx.get('eventID'))
-        self.app.loadView(VIEW_ALIAS.EVENTS_WINDOW, VIEW_ALIAS.EVENTS_WINDOW, event.ctx)
-        return
-
-    def showTankmanDropSkillsWindow(self, event):
-        name = 'skillDrop_' + str(event.ctx['tankmanID'])
-        self.app.loadView(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, name, event.ctx)
-
-    def showBrowserWindow(self, event):
-        self.app.loadView(VIEW_ALIAS.BROWSER_WINDOW, VIEW_ALIAS.BROWSER_WINDOW, event.ctx)
+    def showViewSimple(self, event):
+        self.app.loadView(event.eventType, event.eventType, event.ctx)
 
     def showLobbyView(self, event):
         alias = g_entitiesFactories.getAliasByEvent(event.eventType)
         if alias is not None:
             if event.ctx is not None and len(event.ctx):
-                self.app.loadView(alias, ctx=event.ctx)
+                self.app.loadView(alias, alias, event.ctx)
             else:
                 self.app.loadView(alias)
         else:

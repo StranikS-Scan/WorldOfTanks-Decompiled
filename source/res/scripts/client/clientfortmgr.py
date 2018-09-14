@@ -262,6 +262,16 @@ class ClientFortMgr(object):
         self.__callFortMethod(requestID, FORT_CLIENT_METHOD.PLAN_ATTACK, enemyClanDBID, timeAttack, dirFromToByte)
         return requestID
 
+    def activateConsumable(self, consumableTypeID, slotIndex = -1):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.ACTIVATE_CONSUMABLE, 0, consumableTypeID, slotIndex)
+        return requestID
+
+    def returnConsumable(self, consumableTypeID):
+        requestID = self.__getNextRequestID()
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.RETURN_CONSUMABLE, 0, consumableTypeID, 0)
+        return requestID
+
     def __getClosestAttackHour(self, defHour):
         t = self._fort._getTime() + fortified_regions.g_cache.attackPreorderTime
         nextDayDefHour = t - t % SECONDS_PER_DAY + defHour * SECONDS_PER_HOUR

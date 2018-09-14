@@ -10,7 +10,7 @@ import threading
 import BigWorld
 from debug_utils import *
 from functools import partial
-from helpers import getClientVersion
+from helpers import getFullClientVersion
 from Queue import Queue
 import shelve as provider
 import random
@@ -18,7 +18,7 @@ _MIN_LIFE_TIME = 15 * 60
 _MAX_LIFE_TIME = 24 * 60 * 60
 _LIFE_TIME_IN_MEMORY = 20 * 60
 _CACHE_VERSION = 2
-_CLIENT_VERSION = getClientVersion()
+_CLIENT_VERSION = getFullClientVersion()
 
 def _LOG_EXECUTING_TIME(startTime, methodName, deltaTime = 0.1):
     finishTime = time.time()

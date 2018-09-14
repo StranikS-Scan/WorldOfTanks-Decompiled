@@ -50,7 +50,7 @@ class _DefaultContainer(IViewContainer):
     def remove(self, pyView):
         if self.__view == pyView:
             self.__view.onModuleDispose -= self.__handleModuleDispose
-            self.__manager.as_hideS(self.__view.token)
+            self.__manager.as_hideS(self.__view.uniqueName)
             self.__view = None
         return
 
@@ -60,7 +60,7 @@ class _DefaultContainer(IViewContainer):
             if subContainerType is not None:
                 self.__manager.removeContainer(subContainerType)
             self.__view.onModuleDispose -= self.__handleModuleDispose
-            self.__manager.as_hideS(self.__view.token)
+            self.__manager.as_hideS(self.__view.uniqueName)
             viewKey = (self.__view.alias, self.__view.uniqueName)
             if viewKey in self.__manager._loadingViews:
                 self.__manager._loadingViews.pop(viewKey)
@@ -142,7 +142,7 @@ class _PopUpContainer(IViewContainer):
         if uniqueName in self.__popUps:
             popUp = self.__popUps.pop(uniqueName)
             popUp.onModuleDispose -= self.__handleModuleDispose
-            self.__manager.as_hideS(popUp.token)
+            self.__manager.as_hideS(popUp.uniqueName)
             LOG_DEBUG('PopUp has been successfully removed', pyView, uniqueName)
         else:
             LOG_WARNING('PopUp not found', pyView, uniqueName)
@@ -157,7 +157,7 @@ class _PopUpContainer(IViewContainer):
             if subContainerType is not None:
                 self.__manager.removeContainer(subContainerType)
             popUp.onModuleDispose -= self.__handleModuleDispose
-            self.__manager.as_hideS(popUp.token)
+            self.__manager.as_hideS(popUp.uniqueName)
             popUp.destroy()
 
         return
@@ -243,7 +243,6 @@ class ContainerManager(ContainerManagerMeta):
          ViewTypes.TOP_WINDOW: _PopUpContainer(proxy),
          ViewTypes.SERVICE_LAYOUT: _DefaultContainer(proxy)}
         self._loadingViews = dict()
-        self.__loadingTokens = {}
         self.__loader = loader
         self.__loader.onViewLoaded += self.__loader_onViewLoaded
         self.__scopeController = GlobalScopeController()
@@ -257,29 +256,22 @@ class ContainerManager(ContainerManagerMeta):
             pyEntity = self.__loader.loadView(alias, name, *args, **kwargs)
             self.__scopeController.addLoadingView(pyEntity, False)
             curType = pyEntity.settings.type
-            if self.canCancelPreviousLoading(curType) and len(self.__getViewOnLoadingForType(curType)) > 0:
-                self.cancelLoadingForViewType(curType)
+            if self.canCancelPreviousLoading(curType):
+                result = []
+                for kev, val in self._loadingViews.iteritems():
+                    if val.settings.type == pyEntity.settings.type:
+                        result.append(val)
+
+                if len(result) > 0:
+                    self.__cancelLoadingForPyEntities(result)
             self._loadingViews[alias, name] = pyEntity
         return
 
-    def cancelLoadingForViewType(self, viewType):
-        entities = self.__getViewOnLoadingForType(viewType)
-        self.__cancelLoadingForPyEntities(entities)
-        self.as_cancelLoadingsForContainerS(viewType)
-
-    def __cancelLoadingForPyEntities(self, pyEntitys):
-        for curEntity in pyEntitys:
+    def __cancelLoadingForPyEntities(self, pyEntities):
+        for curEntity in pyEntities:
             self._loadingViews.pop((curEntity.settings.alias, curEntity.uniqueName))
-            self.__loader.cancelLoadingByToken(curEntity.token)
+            self.__loader.cancelLoadingByName(curEntity.uniqueName)
             curEntity.destroy()
-
-    def __getViewOnLoadingForType(self, viewType):
-        entities = []
-        for pyEntity in self._loadingViews.values():
-            if pyEntity.settings.type == viewType:
-                entities.append(pyEntity)
-
-        return entities
 
     def canCancelPreviousLoading(self, containerType):
         container = self.getContainer(containerType)
@@ -289,15 +281,15 @@ class ContainerManager(ContainerManagerMeta):
             return False
             return
 
-    def addContainer(self, containerType, token, container = None):
+    def addContainer(self, containerType, name, container = None):
         result = True
         if containerType not in self.__containers:
             if container is None:
                 self.__containers[containerType] = _DefaultContainer(weakref.proxy(self))
-                self.as_registerContainerS(containerType, token)
+                self.as_registerContainerS(containerType, name)
             elif isinstance(container, IViewContainer):
                 self.__containers[containerType] = container
-                self.as_registerContainerS(containerType, token)
+                self.as_registerContainerS(containerType, name)
             else:
                 LOG_ERROR('Container must be implemented IViewContainer', container)
                 result = False
@@ -387,11 +379,11 @@ class ContainerManager(ContainerManagerMeta):
                 container = self.__containers[viewType]
                 if container.add(pyView):
                     self.__scopeController.addView(pyView, False)
-                    self.as_showS(pyView.token, 0, 0)
+                    self.as_showS(pyView.uniqueName, 0, 0)
                     pyView.create()
                     subContainerType = pyView.getSubContainerType()
                     if subContainerType is not None:
-                        self.addContainer(subContainerType, pyView.token)
+                        self.addContainer(subContainerType, pyView.uniqueName)
                     LOG_DEBUG('View added to container', pyView)
                     self.onViewAddedToContainer(container, pyView)
             else:

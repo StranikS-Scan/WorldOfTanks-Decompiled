@@ -11,7 +11,7 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
 from gui import SystemMessages
 from gui.shared import g_itemsCache
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE, getItemActionTooltipData
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE, getItemActionTooltipData, getItemRentActionTooltipData
 from gui.shared.utils import decorators
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import i18n, time_utils
@@ -19,7 +19,7 @@ from gui.game_control import g_instance as g_gameCtrl
 
 class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(VehicleBuyWindow, self).__init__()
         self.nationID = ctx.get('nationID')
         self.inNationID = ctx.get('itemID')
@@ -134,10 +134,14 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
         rentPackages = vehicle.rentPackages
         for rentPackage in rentPackages:
             days = rentPackage['days']
+            actionRentPrice = None
+            if rentPackage['rentPrice'] != rentPackage['defaultRentPrice']:
+                actionRentPrice = getItemRentActionTooltipData(vehicle, rentPackage)
             result.append({'itemId': days,
              'label': i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_DAYS, days=days),
              'price': rentPackage['rentPrice'],
-             'enabled': vehicle.maxRentDuration - vehicle.rentLeftTime >= days * time_utils.ONE_DAY})
+             'enabled': vehicle.maxRentDuration - vehicle.rentLeftTime >= days * time_utils.ONE_DAY,
+             'actionPrice': actionRentPrice})
 
         result.append({'itemId': -1,
          'label': i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_FOREVER),

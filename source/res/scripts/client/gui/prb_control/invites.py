@@ -80,6 +80,12 @@ class PrbInviteWrapper(_PrbInviteData):
 
     def _merge(self, other):
         data = {}
+        if other.creator:
+            data['creator'] = other.creator
+        if other.creatorDBID > 0L:
+            data['creatorDBID'] = other.creatorDBID
+        if other.creatorClanAbbrev:
+            data['creatorClanAbbrev'] = other.creatorClanAbbrev
         if other.createTime is not None:
             data['createTime'] = time_utils.makeLocalServerTime(other.createTime)
         if other.state > 0:
@@ -323,7 +329,7 @@ class InvitesManager(object):
             self.__inited |= PRB_INVITES_INIT_STEP.DATA_BUILD
         self.__receivedInvites.clear()
         self.__unreadInvitesCount = 0
-        receiver = BigWorld.player().name
+        receiver = getattr(BigWorld.player(), 'name', '')
         receiverDBID = getPlayerDatabaseID()
         receiverClanAbbrev = g_lobbyContext.getClanAbbrev(self.__clanInfo)
         userGetter = self.users.getUser

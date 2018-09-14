@@ -8,7 +8,7 @@ from gui.shared import events
 
 class LegalInfoWindow(View, LegalInfoWindowMeta, AbstractWindowView):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(LegalInfoWindow, self).__init__()
 
     def startListening(self):

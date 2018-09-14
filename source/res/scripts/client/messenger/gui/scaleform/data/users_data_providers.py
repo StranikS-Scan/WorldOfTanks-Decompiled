@@ -16,6 +16,8 @@ def makeEmptyUserItem():
      'himself': False,
      'displayName': '',
      'colors': [0, 0],
+     'group': None,
+     'clanName': None,
      'referralType': REFERRAL_SYSTEM.TYPE_NO_REFERRAL}
 
 
@@ -28,6 +30,7 @@ def makeUserItem(user):
      'displayName': user.getFullName(),
      'colors': g_settings.getColorScheme('rosters').getColors(user.getGuiType()),
      'group': user.getGroup(),
+     'clanName': user.getClanAbbrev(),
      'referralType': game_control.g_instance.refSystem.getUserType(user.getID())}
 
 

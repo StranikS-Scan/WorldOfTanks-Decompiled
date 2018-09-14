@@ -1,26 +1,27 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
+import random
 import time
 import operator
 from collections import defaultdict
 import BigWorld
 import constants
-from account_helpers.AccountSettings import AccountSettings
+from gui.Scaleform.framework import AppRef
 from helpers import i18n, int2roman, time_utils
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import makeHtmlString
-from gui.shared import events, g_eventBus, g_itemsCache
-from gui.shared.utils import CONST_CONTAINER
-from gui.shared.server_events import formatters, conditions
-from gui.shared.server_events.modifiers import ACTION_MODIFIER_TYPE
+from gui.shared import g_itemsCache, utils
+from gui.server_events import formatters, conditions, settings as quest_settings
+from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.framework.managers.TextManager import TextType
 from quest_xml_source import MAX_BONUS_LIMIT
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 
-class _EventInfo(object):
+class _EventInfo(AppRef):
 
-    class EVENT_STATUS(CONST_CONTAINER):
+    class EVENT_STATUS(utils.CONST_CONTAINER):
         COMPLETED = 'done'
         NOT_AVAILABLE = 'notAvailable'
         NONE = ''
@@ -42,8 +43,8 @@ class _EventInfo(object):
             bonusCount = self._getBonusCount(pCur)
             status, statusMsg = self._getStatus(pCur)
             qProgCur, qProgTot, qProgbarType, tooltip = self._getProgressValues(svrEvents, pCur, pPrev)
-        return {'questID': self.event.getID(),
-         'isNew': isNewEvent(self.event, AccountSettings.getSettings('quests')),
+        return {'questID': str(self.event.getID()),
+         'isNew': quest_settings.isNewCommonEvent(self.event),
          'eventType': self.event.getType(),
          'status': status,
          'IGR': self.event.isIGR(),
@@ -117,7 +118,9 @@ class _EventInfo(object):
          'awards': awards,
          'progressList': progresses,
          'alertMsg': alertMsg,
-         'questInfo': self.getInfo(svrEvents, pCur, pPrev)}
+         'questInfo': self.getInfo(svrEvents, pCur, pPrev),
+         'personalInfo': [],
+         'questType': self.event.getType()}
 
     @classmethod
     def _getTillTimeString(cls, timeValue):
@@ -168,9 +171,10 @@ class _EventInfo(object):
          formatters.PROGRESS_BAR_TYPE.NONE,
          None)
 
-    def _getBonuses(self, svrEvents):
+    def _getBonuses(self, svrEvents, bonuses = None):
+        bonuses = bonuses or self.event.getBonuses()
         result = []
-        for b in self.event.getBonuses():
+        for b in bonuses:
             if b.isShowInGUI():
                 result.append(b.format())
 
@@ -251,9 +255,10 @@ class _QuestInfo(_EventInfo):
     PROGRESS_TOOLTIP_MAX_ITEMS = 4
     SIMPLE_BONUSES_MAX_ITEMS = 5
 
-    def _getBonuses(self, svrEvents):
+    def _getBonuses(self, svrEvents, bonuses = None):
+        bonuses = bonuses or self.event.getBonuses()
         result, simpleBonusesList, customizationsList = [], [], []
-        for b in self.event.getBonuses():
+        for b in bonuses:
             if b.isShowInGUI():
                 if b.getName() == 'dossier':
                     for record in b.getRecords():
@@ -263,12 +268,14 @@ class _QuestInfo(_EventInfo):
                 elif b.getName() == 'customizations':
                     customizationsList.extend(b.getList())
                 else:
-                    simpleBonusesList.extend(b.formattedList())
+                    flist = b.formattedList()
+                    if flist:
+                        simpleBonusesList.extend(flist)
 
         label = ', '.join(simpleBonusesList)
         fullLabel = None
         if len(simpleBonusesList) > self.SIMPLE_BONUSES_MAX_ITEMS:
-            label = ', '.join(simpleBonusesList[0:self.SIMPLE_BONUSES_MAX_ITEMS]) + '..'
+            label = ', '.join(simpleBonusesList[:self.SIMPLE_BONUSES_MAX_ITEMS]) + '..'
             fullLabel = ', '.join(simpleBonusesList)
         result.append(formatters.packTextBlock(label, fullLabel=fullLabel))
         if len(customizationsList):
@@ -472,17 +479,52 @@ class _ActionInfo(_EventInfo):
         result = []
         if len(modifiers[ACTION_MODIFIER_TYPE.DISCOUNT]):
             result.append(formatters.packTopLevelContainer(i18n.makeString(QUESTS.DETAILS_MODIFIERS_TITLE_DISCOUNT), subBlocks=modifiers[ACTION_MODIFIER_TYPE.DISCOUNT]))
+        if len(modifiers[ACTION_MODIFIER_TYPE.RENT]):
+            result.append(formatters.packTopLevelContainer(i18n.makeString(QUESTS.DETAILS_MODIFIERS_TITLE_DISCOUNT), subBlocks=modifiers[ACTION_MODIFIER_TYPE.RENT]))
         for fmtData in modifiers[ACTION_MODIFIER_TYPE.SELLING]:
             result.append(fmtData)
 
         return formatters.todict(result)
 
 
+class _PotapovQuestInfo(_QuestInfo):
+
+    def _getBonuses(self, svrEvents, _ = None):
+        from gui.server_events.bonuses import FakeTextBonus
+        mainBonuses = self.event.getBonuses(isMain=True)
+        addBonuses = self.event.getBonuses(isMain=False)
+
+        def _getBonuses(bonuses):
+            return _QuestInfo._getBonuses(self, None, bonuses=bonuses)
+
+        return _getBonuses(mainBonuses) + _getBonuses([FakeTextBonus(i18n.makeString('#quests:bonuses/item/additionBonus'))]) + _getBonuses(addBonuses)
+
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
+        _getText = self.app.utilsManager.textManager.getText
+
+        def _packCondition(titleKey, text):
+            return '%s\n%s' % (_getText(TextType.MIDDLE_TITLE, i18n.makeString(titleKey)), _getText(TextType.MAIN_TEXT, text))
+
+        def _packStatus(completed):
+            if completed:
+                return 'done'
+            return 'notDone'
+
+        return {'title': self.event.getUserName(),
+         'questInfo': self.getInfo(svrEvents),
+         'awards': None,
+         'progressList': [],
+         'alertMsg': '',
+         'personalInfo': [{'statusStr': _packStatus(isCompleted[0]),
+                           'text': _packCondition(QUESTS.QUESTTASKDETAILSVIEW_MAINCONDITIONS, self.event.getUserMainCondition())}, {'statusStr': _packStatus(isCompleted[1]),
+                           'text': _packCondition(QUESTS.QUESTTASKDETAILSVIEW_ADDITIONALCONDITIONS, self.event.getUserAddCondition())}],
+         'questType': self.event.getType()}
+
+
 def getEventInfoData(event):
-    if event.getType() in (constants.EVENT_TYPE.BATTLE_QUEST,
-     constants.EVENT_TYPE.TOKEN_QUEST,
-     constants.EVENT_TYPE.FORT_QUEST,
-     constants.EVENT_TYPE.PERSONAL_QUEST):
+    if event.getType() == constants.EVENT_TYPE.POTAPOV_QUEST:
+        return _PotapovQuestInfo(event)
+    if event.getType() in constants.EVENT_TYPE.QUEST_RANGE:
         return _QuestInfo(event)
     if event.getType() == constants.EVENT_TYPE.ACTION:
         return _ActionInfo(event)
@@ -499,46 +541,3 @@ def getEventDetails(event, svrEvents = None):
 
 def getEventPostBattleInfo(event, svrEvents = None, pCur = None, pPrev = None, isProgressReset = False, isCompleted = False):
     return getEventInfoData(event).getPostBattleInfo(svrEvents, pCur or {}, pPrev or {}, isProgressReset, isCompleted)
-
-
-def isNewEvent(svrEvent, storedSettings):
-    if svrEvent.isAvailable()[0]:
-        setting = 'visited'
-    else:
-        setting = 'naVisited'
-    return svrEvent.getID() not in storedSettings[setting] and not svrEvent.isCompleted() and not svrEvent.isOutOfDate()
-
-
-def getNewEvents(svrEvents):
-    storedSettings = AccountSettings.getSettings('quests')
-    return filter(lambda e: isNewEvent(e, storedSettings), svrEvents.itervalues())
-
-
-def visitEventGUI(event):
-    if event is None:
-        return
-    else:
-        s = dict(AccountSettings.getSettings('quests'))
-        settings = ['naVisited']
-        if event.isAvailable()[0]:
-            settings.append('visited')
-        isSettingsChanged = False
-        for setting in settings:
-            if event.getID() not in set(s[setting]):
-                s[setting] = tuple(set(s[setting]) | {event.getID()})
-                isSettingsChanged = True
-
-        if not isSettingsChanged:
-            return
-        s['lastVisitTime'] = time.time()
-        AccountSettings.setSettings('quests', s)
-        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.EVENTS_UPDATED))
-        return
-
-
-def updateEventsSettings(svrEvents):
-    s = dict(AccountSettings.getSettings('quests'))
-    completed = set((e.getID() for e in svrEvents.itervalues() if e.isCompleted()))
-    s['visited'] = tuple(set(s.get('visited', [])).difference(completed))
-    s['naVisited'] = tuple(set(s.get('naVisited', [])).difference(completed))
-    AccountSettings.setSettings('quests', s)

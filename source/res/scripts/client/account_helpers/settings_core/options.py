@@ -548,9 +548,6 @@ class VOIPSetting(UserPrefsBoolSetting):
             prevVoIP = self._get()
             if prevVoIP != isEnable:
                 VOIP.getVOIPManager().enable(isEnable)
-                from gui.WindowsManager import g_windowsManager
-                if g_windowsManager.battleWindow is not None and not isEnable:
-                    g_windowsManager.battleWindow.speakingPlayersReset()
                 LOG_NOTE('Change state of voip:', isEnable)
             return
 
@@ -565,18 +562,18 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
         currentDeviceName = super(VOIPCaptureDevicesSetting, self)._get()
         deviceIdx = self.__getDeviceIdxByName(currentDeviceName)
         if deviceIdx == -1:
-            deviceIdx = self.__getDeviceIdxByName(vm.currentCaptureDevice)
+            deviceIdx = self.__getDeviceIdxByName(vm.getCurrentCaptureDevice())
         return deviceIdx
 
     def _getOptions(self):
         return [ i18n.encodeUtf8(device.decode(sys.getfilesystemencoding())) for device in self._getRawOptions() ]
 
     def _getRawOptions(self):
-        return VOIP.getVOIPManager().captureDevices
+        return VOIP.getVOIPManager().getCaptureDevices()
 
     def _set(self, value):
         vm = VOIP.getVOIPManager()
-        if len(vm.captureDevices):
+        if len(vm.getCaptureDevices()):
             device = self.__getDeviceNameByIdx(value)
             vm.setCaptureDevice(device)
             LOG_DEBUG('Selecting new capture device', device)
@@ -588,9 +585,9 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
     @classmethod
     def __getDeviceNameByIdx(cls, idx):
         vm = VOIP.getVOIPManager()
-        device = vm.captureDevices[0]
-        if len(vm.captureDevices) > idx:
-            device = vm.captureDevices[int(idx)]
+        device = vm.getCaptureDevices()[0]
+        if len(vm.getCaptureDevices()) > idx:
+            device = vm.getCaptureDevices()[int(idx)]
         return device
 
     def __getDeviceIdxByName(self, deviceName):
@@ -615,7 +612,7 @@ class VOIPSupportSetting(ReadOnlySetting, AppRef):
             return
 
     def __isSupported(self):
-        return VOIP.getVOIPManager().vivoxDomain != '' and self.__isVoiceChatReady()
+        return VOIP.getVOIPManager().getVOIPDomain() != '' and self.__isVoiceChatReady()
 
 
 class MessengerSetting(StorageDumpSetting):
@@ -1351,6 +1348,35 @@ class AimSetting(StorageAccountSetting):
                         result[k] = value['type']
 
         return result
+
+
+class MinimapSetting(StorageDumpSetting):
+
+    def _get(self):
+        return super(MinimapSetting, self)._get()
+
+    def _set(self, value):
+        return super(MinimapSetting, self)._set(value)
+
+    def getDefaultValue(self):
+        return True
+
+
+class MinimapVehModelsSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        NEVER = 'never'
+        ALT = 'alt'
+        ALWAYS = 'always'
+
+    VEHICLE_MODELS_TYPES = [OPTIONS.NEVER, OPTIONS.ALT, OPTIONS.ALWAYS]
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, type) for type in self.VEHICLE_MODELS_TYPES ]
+
+    def getDefaultValue(self):
+        return 0
 
 
 class ShowMarksOnGunSetting(StorageAccountSetting):

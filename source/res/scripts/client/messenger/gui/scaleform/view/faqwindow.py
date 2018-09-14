@@ -9,7 +9,7 @@ FAQ_BATCH_SIZE = 5
 
 class FAQWindow(View, AbstractWindowView, FAQWindowMeta):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(FAQWindow, self).__init__()
         self.__list = None
         return

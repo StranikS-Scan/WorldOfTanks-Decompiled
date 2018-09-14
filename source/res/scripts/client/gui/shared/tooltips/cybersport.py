@@ -3,6 +3,7 @@ import BigWorld
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
+from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.dispatcher import g_prbLoader
@@ -116,7 +117,6 @@ class CybersportUnitLevelToolTipData(CybersportToolTipData):
         statusLevel = 'warning'
         description = ms(TOOLTIPS.CYBERSPORT_UNITLEVEL_DESCRIPTION)
         statusMsg = ms(TOOLTIPS.CYBERSPORT_UNITLEVEL_BODY_TOTALLEVEL, sumLevels=level)
-        note = ''
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
             functional = dispatcher.getUnitFunctional()
@@ -130,7 +130,7 @@ class CybersportUnitLevelToolTipData(CybersportToolTipData):
                     statusLevel = 'critical'
                     statusMsg = ms(TOOLTIPS.CYBERSPORT_UNITLEVEL_BODY_MAXTOTALLEVELERROR, sumLevels=level)
                 elif restriction == UNIT_RESTRICTION.INVALID_TOTAL_LEVEL:
-                    reason = vo_converters.makeInvalidTotalLevelMsg(functional)
+                    reason = i18n.makeString(ActionButtonStateVO.getInvalidVehicleLevelsMessage(functional))
                     description = makeHtmlString('html_templates:lobby/cyberSport/unit', 'invalidLevelDescription', {'description': description,
                      'reason': reason})
                 elif canDoAction and not restriction:

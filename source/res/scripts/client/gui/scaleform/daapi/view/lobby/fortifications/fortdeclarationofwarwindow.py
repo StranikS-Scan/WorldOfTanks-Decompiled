@@ -12,16 +12,17 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import getDirectionFromDirPos, getPositionFromDirPos
 from fortified_regions import g_cache as g_fortCache
-from gui.shared.fortifications.context import AttackClanAndRequestItsCardCtx
-from helpers import i18n
-from helpers.i18n import makeString
+from gui.shared.fortifications.context import AttackCtx
+from helpers import time_utils
+from helpers.i18n import makeString as _ms
 
 class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(FortDeclarationOfWarWindow, self).__init__()
         self.__direction = ctx.get('direction')
         self.__selectedDayStart, self.__selectedDayFinish = ctx.get('dateSelected', (None, None))
+        self.__defHourStart = ctx.get('defHourStart')
         self.__item = ctx.get('item')
         return None
 
@@ -35,8 +36,8 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
         super(FortDeclarationOfWarWindow, self)._dispose()
 
     def _updateHeader(self):
-        title = makeString(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_HEADER, date=BigWorld.wg_getShortDateFormat(self.__selectedDayStart), startTime=BigWorld.wg_getShortTimeFormat(self.__selectedDayStart), endTime=BigWorld.wg_getShortTimeFormat(self.__selectedDayFinish), clanName='[%s]' % self.__item.getClanAbbrev())
-        description = makeString(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_DESCRIPTION)
+        title = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_HEADER, date=BigWorld.wg_getShortDateFormat(self.__selectedDayStart), startTime=BigWorld.wg_getShortTimeFormat(self.__defHourStart), endTime=BigWorld.wg_getShortTimeFormat(self.__defHourStart + time_utils.ONE_HOUR), clanName='[%s]' % self.__item.getClanAbbrev())
+        description = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_DESCRIPTION)
         self.as_setupHeaderS(title, description)
 
     @process
@@ -56,7 +57,6 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
     def _updateDirections(self):
         directions = []
         selectedDirection = -1
-        ms = makeString
         enemyBuildings = [None, None]
         for buildignID, buildingData in self.__item.getDictBuildingsBrief().iteritems():
             dir = getDirectionFromDirPos(buildingData['dirPosByte'])
@@ -67,7 +67,7 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
                  'progress': self._getProgress(buildignID, level),
                  'buildingLevel': level}
 
-        enemyDirection = {'name': i18n.makeString('#fortifications:General/directionName%d' % self.__direction),
+        enemyDirection = {'name': _ms('#fortifications:General/directionName%d' % self.__direction),
          'isMine': False,
          'buildings': enemyBuildings}
         fort = self.fortCtrl.getFort()
@@ -75,9 +75,9 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
             isOpened = fort.isDirectionOpened(direction)
             isBusy = False
             availableTime = None
-            name = i18n.makeString('#fortifications:General/directionName%d' % direction)
-            ttHeader = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTOPENED_TOOLTIP_HEADER)
-            ttBody = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTOPENED_TOOLTIP_BODY)
+            name = _ms('#fortifications:General/directionName%d' % direction)
+            ttHeader = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTOPENED_TOOLTIP_HEADER)
+            ttBody = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTOPENED_TOOLTIP_BODY)
             infoMessage = ''
             dirBuildings = []
             if isOpened:
@@ -95,29 +95,25 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
                     availableTime = None
                 if availableTime is None:
                     attackerClanName = None
-
-                    def filterAttacks(item):
-                        if self.__selectedDayStart <= item.getStartTime() <= self.__selectedDayFinish and not item.isEnded():
-                            return True
-                        return False
-
-                    for item in fort.getAttacks(filterFunc=filterAttacks):
-                        if direction == item.getDirection():
+                    todayAttacks = fort.getAttacks(filterFunc=lambda a: self.__selectedDayStart <= a.getStartTime() <= self.__selectedDayFinish and a.isPlanned())
+                    roamingDateAttacks = fort.getAttacks(filterFunc=lambda a: a.getStartTime() - time_utils.ONE_DAY < self.__defHourStart < a.getStartTime() + time_utils.ONE_DAY and a.isPlanned())
+                    for attack in todayAttacks + roamingDateAttacks:
+                        if direction == attack.getDirection():
                             isBusy = True
-                            _, defClanAbbrev, _ = item.getOpponentClanInfo()
+                            _, defClanAbbrev, _ = attack.getOpponentClanInfo()
                             attackerClanName = '[%s]' % defClanAbbrev
 
                     if isBusy:
-                        ttHeader = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_BUSY_TOOLTIP_HEADER)
-                        ttBody = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_BUSY_TOOLTIP_BODY, clanName=attackerClanName)
+                        ttHeader = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_BUSY_TOOLTIP_HEADER)
+                        ttBody = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_BUSY_TOOLTIP_BODY, clanName=attackerClanName)
                     else:
                         clanForAttackTag = '[%s]' % self.__item.getClanAbbrev()
-                        ttHeader = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_ATTACK_TOOLTIP_HEADER, direction=name)
-                        ttBody = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_ATTACK_TOOLTIP_BODY, direction=name, clanName=clanForAttackTag)
+                        ttHeader = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_ATTACK_TOOLTIP_HEADER, direction=name)
+                        ttBody = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_ATTACK_TOOLTIP_BODY, direction=name, clanName=clanForAttackTag)
                 else:
-                    infoMessage = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_DIRECTION_NOTAVAILABLE, date=BigWorld.wg_getShortDateFormat(availableTime))
-                    ttHeader = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTAVAILABLE_TOOLTIP_HEADER)
-                    ttBody = ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTAVAILABLE_TOOLTIP_BODY, date=BigWorld.wg_getShortDateFormat(availableTime))
+                    infoMessage = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_DIRECTION_NOTAVAILABLE, date=BigWorld.wg_getShortDateFormat(availableTime))
+                    ttHeader = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTAVAILABLE_TOOLTIP_HEADER)
+                    ttBody = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTAVAILABLE_TOOLTIP_BODY, date=BigWorld.wg_getShortDateFormat(availableTime))
                 if not isBusy and selectedDirection == -1:
                     selectedDirection = direction
             directions.append({'leftDirection': {'name': name,
@@ -147,7 +143,7 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
     @process
     def __planAttack(self, direction):
         if self.__item is not None:
-            result = yield self.fortProvider.sendRequest(AttackClanAndRequestItsCardCtx(self.__item.getClanDBID(), self.__selectedDayStart, direction, self.__direction, waitingID='fort/attack'))
+            result = yield self.fortProvider.sendRequest(AttackCtx(self.__item.getClanDBID(), self.__defHourStart, direction, self.__direction, waitingID='fort/attack'))
             if result:
                 g_fortSoundController.playFortClanWarDeclared()
             self.destroy()

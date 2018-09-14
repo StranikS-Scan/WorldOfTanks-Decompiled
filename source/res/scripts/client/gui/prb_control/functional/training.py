@@ -6,6 +6,8 @@ from PlayerEvents import g_playerEvents
 from adisp import process
 from constants import PREBATTLE_TYPE, PREBATTLE_CACHE_KEY
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control import getClientPrebattle
 from gui.prb_control import getPrebattleType, getPrebattleRosters, prb_cooldown
 from gui.prb_control.context import prb_ctx
@@ -19,7 +21,6 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import LoadEvent
 from gui.shared.utils.functions import checkAmmoLevel
 from prebattle_shared import decodeRoster
 
@@ -135,13 +136,13 @@ class TrainingIntroFunctional(IntroPrbFunctional):
 
 
 class TrainingFunctional(PrbFunctional, IStatefulFunctional):
-    __loadEvents = (LoadEvent.LOAD_HANGAR,
-     LoadEvent.LOAD_INVENTORY,
-     LoadEvent.LOAD_SHOP,
-     LoadEvent.LOAD_TECHTREE,
-     LoadEvent.LOAD_BARRACKS,
-     LoadEvent.LOAD_PROFILE,
-     LoadEvent.LOAD_FORTIFICATIONS)
+    __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
+     VIEW_ALIAS.LOBBY_INVENTORY,
+     VIEW_ALIAS.LOBBY_SHOP,
+     VIEW_ALIAS.LOBBY_TECHTREE,
+     VIEW_ALIAS.LOBBY_BARRACKS,
+     VIEW_ALIAS.LOBBY_PROFILE,
+     FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS)
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,

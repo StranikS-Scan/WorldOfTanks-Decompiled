@@ -1,11 +1,12 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
 import constants
 from debug_utils import LOG_ERROR
+from helpers.i18n import makeString
 from dossiers2.custom.config import RECORD_CONFIGS
+from dossiers2.ui.achievements import MARK_OF_MASTERY_RECORD
 from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipParameterField, ToolTipDataField, ToolTipData, ToolTipMethodField, ToolTipBaseData, TOOLTIP_TYPE
 from gui.shared.gui_items.dossier.achievements.abstract import achievementHasVehiclesList, isSeriesAchievement
-from helpers.i18n import makeString
 _ACHIEVEMENT_VEHICLES_MAX = 5
 _ACHIEVEMENT_VEHICLES_SHOW = 5
 
@@ -65,7 +66,12 @@ class AchievementRecordsField(ToolTipDataField):
         dossier = configuration.dossier
         dossierType = configuration.dossierType
         isCurrentUserDossier = configuration.isCurrentUserDossier
-        if dossier is not None and dossierType == constants.DOSSIER_TYPE.ACCOUNT and isCurrentUserDossier:
+        if achievement.getRecordName() == MARK_OF_MASTERY_RECORD:
+            if achievement.getCompDescr() is not None:
+                if achievement.getPrevMarkOfMastery() < achievement.getMarkOfMastery():
+                    records['current'] = makeString('#tooltips:achievement/newRecord')
+                records['nearest'] = [[makeString('#tooltips:achievement/recordOnVehicle', vehicleName=g_itemsCache.items.getItemByCD(int(achievement.getCompDescr())).shortUserName), max(achievement.getMarkOfMastery(), achievement.getPrevMarkOfMastery()) or achievement.MIN_LVL]]
+        elif dossier is not None and dossierType == constants.DOSSIER_TYPE.ACCOUNT and isCurrentUserDossier:
             if achievement.getType() == 'series':
                 vehicleRecords = set()
                 vehsWereInBattle = set(dossier.getTotalStats().getVehicles().keys())

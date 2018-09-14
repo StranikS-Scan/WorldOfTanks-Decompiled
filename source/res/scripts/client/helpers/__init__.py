@@ -6,6 +6,7 @@ import Settings
 import i18n
 import constants
 from debug_utils import LOG_CURRENT_EXCEPTION
+VERSION_FILE_PATH = '../version.xml'
 
 def isPlayerAccount():
     return hasattr(BigWorld.player(), 'databaseID')
@@ -92,7 +93,12 @@ def int2roman(number):
 
 
 def getClientVersion():
-    sec = ResMgr.openSection('../version.xml')
+    sec = ResMgr.openSection(VERSION_FILE_PATH)
+    return sec.readString('version')
+
+
+def getFullClientVersion():
+    sec = ResMgr.openSection(VERSION_FILE_PATH)
     version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
     return version
 

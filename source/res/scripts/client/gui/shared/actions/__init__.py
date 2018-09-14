@@ -90,7 +90,7 @@ class DisconnectFromPeriphery(Action, AppRef):
         self.app.logoff()
 
     def isRunning(self):
-        from gui.Scaleform.daapi.settings import VIEW_ALIAS
+        from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
         view = self.app.containerManager.getView(ViewTypes.DEFAULT)
         if view and view.settings.alias == VIEW_ALIAS.LOGIN and view._isCreated() and connectionManager.isDisconnected():
             LOG_DEBUG('Disconnect action. Player came to login')

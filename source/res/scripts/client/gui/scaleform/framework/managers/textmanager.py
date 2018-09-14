@@ -2,8 +2,7 @@
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.Scaleform.locale.MENU import MENU
-from helpers import time_utils
-from web_stubs import i18n
+from helpers import time_utils, i18n
 
 class TextManager:
     __reference = None

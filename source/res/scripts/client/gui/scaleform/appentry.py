@@ -6,7 +6,7 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils import decorators
 from gui.Scaleform.managers.PopoverManager import PopoverManager
 from gui.Scaleform.daapi.business_layer import BusinessHandler
-from gui.Scaleform.daapi.settings import VIEW_ALIAS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.application import App
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
@@ -26,8 +26,6 @@ class AppEntry(App):
         businessHandler = BusinessHandler()
         businessHandler.create()
         super(AppEntry, self).__init__(businessHandler)
-        self._browser = None
-        return
 
     def _createManagers(self):
         super(AppEntry, self)._createManagers()
@@ -55,24 +53,11 @@ class AppEntry(App):
         self.addListener(events.GUICommonEvent.APP_LOGOFF, self.__logoffHandler, EVENT_BUS_SCOPE.GLOBAL)
 
     def beforeDelete(self):
-        self.__cleanUpBrowser()
         self.removeListener(events.GUICommonEvent.APP_LOGOFF, self.__logoffHandler, EVENT_BUS_SCOPE.GLOBAL)
         super(AppEntry, self).beforeDelete()
 
     def logOffAfterFrameworkInit(self):
         self.fireEventAfterInitialization(events.GUICommonEvent(events.GUICommonEvent.APP_LOGOFF), EVENT_BUS_SCOPE.GLOBAL)
-
-    @property
-    def browser(self):
-        if self._browser is None:
-            self._browser = WebBrowser.ChinaWebBrowser(self, 'BrowserBg', (990, 550))
-        return self._browser
-
-    def __cleanUpBrowser(self):
-        if self._browser is not None:
-            self._browser.destroy()
-            self._browser = None
-        return
 
     def __logoffHandler(self, event):
         self.logoff(True)
@@ -81,11 +66,8 @@ class AppEntry(App):
     def logoff(self, disconnectNow = False):
         if self.initialized:
             criteria = {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOGIN}
-            if not self._loaderMgr.isViewLoading(VIEW_ALIAS.LOGIN):
-                self._containerMgr.cancelLoadingForViewType(ViewTypes.VIEW)
             if not self.containerManager.isViewAvailable(ViewTypes.VIEW, criteria=criteria):
-                self.fireEvent(events.ShowViewEvent(events.ShowViewEvent.SHOW_LOGIN))
+                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOGIN))
         else:
             self.logOffAfterFrameworkInit()
         yield super(AppEntry, self).logoff(disconnectNow)
-        self.__cleanUpBrowser()

@@ -11,7 +11,7 @@ class HistoricalAchievement(Quest, HasVehiclesList, RegularAchievement):
     def _getVehiclesDescrsList(self):
         vehsList = []
         try:
-            from gui.shared import g_eventsCache
+            from gui.server_events import g_eventsCache
             for qIDs in self.__getQuestByDossierRecord(self._name).getChildren().itervalues():
                 for qID in qIDs:
                     counterQuest = g_eventsCache.getQuests().get(qID)
@@ -32,7 +32,7 @@ class HistoricalAchievement(Quest, HasVehiclesList, RegularAchievement):
 
     @classmethod
     def __getQuestByDossierRecord(cls, name):
-        from gui.shared import g_eventsCache
+        from gui.server_events import g_eventsCache
         for qID, records in g_eventsCache.getQuestsDossierBonuses().iteritems():
             if (_AB.UNIQUE, name) in records:
                 return g_eventsCache.getQuests().get(qID)

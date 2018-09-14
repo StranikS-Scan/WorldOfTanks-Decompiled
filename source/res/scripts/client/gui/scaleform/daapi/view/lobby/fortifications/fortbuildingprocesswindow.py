@@ -26,7 +26,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         NOT_AVAILABLE = 2
         AVAILABLE = 3
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(FortBuildingProcessWindow, self).__init__()
         self.__buildingDirection = ctx.get('buildingDirection')
         self.__buildingPosition = ctx.get('buildingPosition')

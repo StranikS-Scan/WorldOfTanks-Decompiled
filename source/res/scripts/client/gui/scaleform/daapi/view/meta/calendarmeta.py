@@ -9,6 +9,9 @@ class CalendarMeta(DAAPIModule):
     def onDateSelected(self, rawDate):
         self._printOverrideError('onDateSelected')
 
+    def formatYMHeader(self, rawDate):
+        self._printOverrideError('formatYMHeader')
+
     def as_openMonthS(self, rawDate):
         if self._isDAAPIInited():
             return self.flashObject.as_openMonth(rawDate)

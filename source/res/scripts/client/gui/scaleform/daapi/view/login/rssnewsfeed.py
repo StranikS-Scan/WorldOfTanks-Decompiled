@@ -33,14 +33,13 @@ class RssNewsFeed(RssNewsFeedMeta, AppRef):
         if linkToOpen:
             openBrowser = game_control.g_instance.links.open
             if GUI_SETTINGS.loginRssFeed.internalBrowser:
-                browser = self.app.browser
+                browser = game_control.g_instance.browser
                 if browser is not None:
-                    openBrowser = browser.openBrowser
+                    openBrowser = browser.load
                 else:
                     LOG_ERROR('Attempting to open internal browser, but browseris not exist. External browser will be opened', str(linkToOpen))
             LOG_DEBUG('Open browser', linkToOpen)
             openBrowser(linkToOpen)
-            del openBrowser
         return
 
     def _populate(self):

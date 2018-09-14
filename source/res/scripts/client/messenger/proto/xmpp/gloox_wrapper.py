@@ -88,6 +88,14 @@ class LOG_SOURCE(object):
     XML_STREAM = (XML_INCOMING, XML_OUTGOING)
 
 
+class IQ_TYPE(object):
+    GET = XmppClient.IQ_TYPE_GET
+    SET = XmppClient.IQ_TYPE_SET
+    RESULT = XmppClient.IQ_TYPE_RESULT
+    ERROR = XmppClient.IQ_TYPE_ERROR
+    INVALID = XmppClient.IQ_TYPE_INVALID
+
+
 class GLOOX_EVENT(object):
     CONNECTED, LOGIN, DISCONNECTED, ROSTER_ITEM_SET, ROSTER_ITEM_REMOVED, ROSTER_RESOURCE_ADDED, ROSTER_RESOURCE_REMOVED, SUBSCRIPTION_REQUEST, LOG = ALL = range(0, 9)
 
@@ -180,6 +188,9 @@ class ClientDecorator(object):
             g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Value of presence is invalid', presence)
             return
         self.__client.presence = presence
+
+    def sendIQ(self, iqType, body):
+        return self.__client.sendCustomQuery(iqType, body)
 
     def setContactToRoster(self, jid, name = '', groups = None):
         if groups is None:

@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/gui/ClientHangarSpace.py
+from collections import namedtuple
 import BigWorld, Math, ResMgr
 import Keys
 import copy
+import MusicController
 from debug_utils import *
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from functools import partial
@@ -57,9 +59,9 @@ class ClientHangarSpace():
             settingsXml = ResMgr.openSection(spacePath + '/space.settings/hangarSettings')
             cfg = {'path': spacePath}
             self.__loadConfig(cfg, settingsXml)
-            self.__loadConfigValue('fakeShadowMapModelName', hangarsXml, hangarsXml.readString, cfg)
-            self.__loadConfigValue('fakeShadowMapDefaultTexName', hangarsXml, hangarsXml.readString, cfg)
-            self.__loadConfigValue('fakeShadowMapEmptyTexName', hangarsXml, hangarsXml.readString, cfg)
+            self.__loadConfigValue('shadow_model_name', hangarsXml, hangarsXml.readString, cfg)
+            self.__loadConfigValue('shadow_default_texture_name', hangarsXml, hangarsXml.readString, cfg)
+            self.__loadConfigValue('shadow_empty_texture_name', hangarsXml, hangarsXml.readString, cfg)
             self.__loadConfigValue(self.__igrHangarPathKey, hangarsXml, hangarsXml.readString, cfg)
             _DEFAULT_CFG[self.getSpaceType(isPremium)] = cfg
             _HANGAR_CFGS[spacePath.lower()] = settingsXml
@@ -114,6 +116,7 @@ class ClientHangarSpace():
         self.__setupCamera()
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
+        MusicController.g_musicController.loadCustomSounds(spacePath)
         g_keyEventHandlers.add(self.handleKeyEvent)
         g_mouseEventHandlers.add(self.handleMouseEventGlobal)
         g_postProcessing.enable('hangar')
@@ -289,6 +292,7 @@ class ClientHangarSpace():
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
+        MusicController.g_musicController.unloadCustomSounds()
         if self.__cam == BigWorld.camera():
             self.__cam.spaceID = 0
             BigWorld.camera(None)
@@ -324,7 +328,7 @@ class ClientHangarSpace():
     def __setupCamera(self):
         self.__cam = BigWorld.CursorCamera()
         self.__cam.spaceID = self.__spaceId
-        self.__cam.pivotMaxDist = _CFG['cam_start_dist']
+        self.__cam.pivotMaxDist = mathUtils.clamp(_CFG['cam_dist_constr'][0], _CFG['cam_dist_constr'][1], _CFG['cam_start_dist'])
         self.__cam.pivotMinDist = 0.0
         self.__cam.maxDistHalfLife = _CFG['cam_fluency']
         self.__cam.turningHalfLife = _CFG['cam_fluency']
@@ -345,7 +349,7 @@ class ClientHangarSpace():
             self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         else:
             BigWorld.worldDrawEnabled(True)
-            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_multiplyChunkModelScale(spaceID, ix, iz, _CFG['fakeShadowMapModelName'], Math.Vector3(_CFG['v_scale'], 1.0, _CFG['v_scale'])))
+            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_multiplyChunkModelScale(spaceID, ix, iz, _CFG['shadow_model_name'], Math.Vector3(_CFG['v_scale'], 1.0, _CFG['v_scale'])))
             if self.__onLoadedCallback is not None:
                 self.__onLoadedCallback()
                 self.__onLoadedCallback = None
@@ -375,6 +379,9 @@ class ClientHangarSpace():
         self.__loadConfigValue('preview_cam_start_angles', xml, xml.readVector2, cfg, defaultCfg)
         self.__loadConfigValue('preview_cam_pivot_pos', xml, xml.readVector3, cfg, defaultCfg)
         self.__loadConfigValue('preview_cam_start_target_pos', xml, xml.readVector3, cfg, defaultCfg)
+        self.__loadConfigValue('shadow_model_name', xml, xml.readString, cfg, defaultCfg)
+        self.__loadConfigValue('shadow_default_texture_name', xml, xml.readString, cfg, defaultCfg)
+        self.__loadConfigValue('shadow_empty_texture_name', xml, xml.readString, cfg, defaultCfg)
         for i in range(0, 3):
             cfg['v_start_angles'][i] = math.radians(cfg['v_start_angles'][i])
 
@@ -550,8 +557,10 @@ class _VehicleAppearance():
             return
         else:
             self.__smRemoveCb = None
-            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_setChunkModelTexture(spaceID, ix, iz, _CFG['fakeShadowMapModelName'], 'diffuseMap', _CFG['fakeShadowMapEmptyTexName']))
+            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_setChunkModelTexture(spaceID, ix, iz, _CFG['shadow_model_name'], 'diffuseMap', _CFG['shadow_empty_texture_name']))
             return
+
+    VehicleProxy = namedtuple('VehicleProxy', 'typeDescriptor')
 
     def __setupHangarShadowMap(self):
         if self.__smRemoveCb is not None:
@@ -568,18 +577,19 @@ class _VehicleAppearance():
             vehiclePath = self.__vDesc.chassis['models']['undamaged']
             vehiclePath = vehiclePath[:vehiclePath.rfind('/normal')]
             dsVehicle = ResMgr.openSection(vehiclePath)
-            shadowMapTexFileName = _CFG['fakeShadowMapDefaultTexName']
+            shadowMapTexFileName = _CFG['shadow_default_texture_name']
             if dsVehicle is not None:
                 for fileName, _ in dsVehicle.items():
                     if fileName.lower().find('_hangarshadowmap.dds') != -1:
                         shadowMapTexFileName = vehiclePath + '/' + fileName
 
-            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_setChunkModelTexture(spaceID, ix, iz, _CFG['fakeShadowMapModelName'], 'diffuseMap', shadowMapTexFileName))
+            _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_setChunkModelTexture(spaceID, ix, iz, _CFG['shadow_model_name'], 'diffuseMap', shadowMapTexFileName))
             return
 
     def __onItemsCacheSyncCompleted(self, updateReason, invalidItems):
-        if updateReason == CACHE_SYNC_REASON.DOSSIER_RESYNC and self.__getThisVehicleDossierInsigniaRank() != self.__vehicleStickers.getCurrentInsigniaRank():
+        if updateReason == CACHE_SYNC_REASON.DOSSIER_RESYNC and self.__vehicleStickers is not None and self.__getThisVehicleDossierInsigniaRank() != self.__vehicleStickers.getCurrentInsigniaRank():
             self.refresh()
+        return
 
     def __getThisVehicleDossierInsigniaRank(self):
         vehicleDossier = g_itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
@@ -753,7 +763,6 @@ class _VehicleAppearance():
          0,
          0,
          0]
-        gloss = 0
         weights = Math.Vector4(1, 0, 0, 0)
         camouflagePresent = True
         vDesc = self.__vDesc
@@ -779,14 +788,7 @@ class _VehicleAppearance():
                     camouflagePresent = True
                     texture = camouflage['texture']
                     colors = camouflage['colors']
-                    gloss = camouflage['gloss'].get(vDesc.type.compactDescr)
-                    if gloss is None:
-                        gloss = 0
-                    metallic = camouflage['metallic'].get(vDesc.type.compactDescr)
-                    if metallic is None:
-                        metallic = 0
                     weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in colors ])
-                    colors = [ colors[i] & 16777215 | metallic << (3 - i) * 8 & 4278190080L for i in range(0, 4) ]
                     defaultTiling = camouflage['tiling'].get(vDesc.type.compactDescr)
             if self.__isVehicleDestroyed:
                 weights *= 0.1
@@ -837,7 +839,7 @@ class _VehicleAppearance():
                     delattr(model, 'wg_baseFashion')
                 if fashion is not None:
                     if useCamouflage:
-                        fashion.setCamouflage(texture, exclusionMap, tiling, colors[0], colors[1], colors[2], colors[3], gloss, weights)
+                        fashion.setCamouflage(texture, exclusionMap, tiling, colors[0], colors[1], colors[2], colors[3], weights)
                     else:
                         fashion.removeCamouflage()
 

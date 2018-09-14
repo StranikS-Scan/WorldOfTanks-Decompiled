@@ -5,6 +5,7 @@ import CommandMapping
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.Flash import Flash
 from adisp import process
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_control import g_sessionProvider
 from items.vehicles import getVehicleType
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -68,19 +69,19 @@ class _LogitechFlash(Flash, EventSystemEntity):
         Flash.__init__(self, swf)
         EventSystemEntity.__init__(self)
         self.movie.wg_outputToLogitechLcd = True
-        self.addListener(events.ShowViewEvent.SHOW_LOGIN, self.__showLogoScreen, EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.ShowViewEvent.SHOW_LOBBY, self.__showStatsScreen, EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.LoadEvent.LOAD_BATTLE_LOADING, self.__showBattleLoadingScreen, EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.LoadEvent.LOAD_TUTORIAL_LOADING, self.__showBattleLoadingScreen, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(VIEW_ALIAS.LOGIN, self.__showLogoScreen, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(VIEW_ALIAS.LOBBY, self.__showStatsScreen, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(VIEW_ALIAS.BATTLE_LOADING, self.__showBattleLoadingScreen, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(VIEW_ALIAS.TUTORIAL_LOADING, self.__showBattleLoadingScreen, EVENT_BUS_SCOPE.LOBBY)
         connectionManager.onDisconnected += self.__onDisconnect
 
     def beforeDelete(self):
         if self.movie:
             self.movie.wg_outputToLogitechLcd = False
-        self.removeListener(events.ShowViewEvent.SHOW_LOGIN, self.__showLogoScreen, EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.ShowViewEvent.SHOW_LOBBY, self.__showStatsScreen, EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.LoadEvent.LOAD_BATTLE_LOADING, self.__showBattleLoadingScreen, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.LoadEvent.LOAD_TUTORIAL_LOADING, self.__showBattleLoadingScreen, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(VIEW_ALIAS.LOGIN, self.__showLogoScreen, EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(VIEW_ALIAS.LOBBY, self.__showStatsScreen, EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(VIEW_ALIAS.BATTLE_LOADING, self.__showBattleLoadingScreen, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(VIEW_ALIAS.TUTORIAL_LOADING, self.__showBattleLoadingScreen, EVENT_BUS_SCOPE.LOBBY)
         connectionManager.onDisconnected -= self.__onDisconnect
         super(_LogitechFlash, self).beforeDelete()
 

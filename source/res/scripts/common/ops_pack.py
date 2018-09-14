@@ -1,22 +1,23 @@
 # Embedded file name: scripts/common/ops_pack.py
 import struct
 from external_strings_utils import truncate_utf8
+MAX_PASCAL_STRING_LEN = 65535
 
 def packPascalString(s):
     if isinstance(s, unicode):
         s = s.encode('utf8')
-    s = truncate_utf8(s, 255)
-    buffer = struct.pack('<B', len(s))
+    s = truncate_utf8(s, MAX_PASCAL_STRING_LEN)
+    buffer = struct.pack('<H', len(s))
     buffer += s
     return buffer
 
 
 def unpackPascalString(bufferString, offset = 0):
-    lenString = struct.unpack_from('<B', bufferString, offset)[0]
-    start = offset + 1
+    lenString = struct.unpack_from('<H', bufferString, offset)[0]
+    start = offset + 2
     fin = start + lenString
     retString = bufferString[start:fin]
-    return (retString, lenString + 1)
+    return (retString, lenString + 2)
 
 
 def initOpsFormatDef(opsFormatDefs):

@@ -17,10 +17,11 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 
 class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMeta, FortViewHelper, AppRef):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(FortIntelligenceWindow, self).__init__()
         self._searchDP = None
         self.__cooldownCB = None
+        self._wasDefaultStatusShown = False
         return
 
     def onWindowClose(self):
@@ -32,8 +33,8 @@ class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMet
             cache = self.fortCtrl.getPublicInfoCache()
             if cache is not None and not cache.isRequestInProcess:
                 if not cache.setSelectedID(vo['clanID']):
-                    self._searchDP.setSelectedID(None)
                     cache.clearSelectedID()
+                    self._searchDP.refresh()
                 else:
                     Waiting.show('fort/card/get')
                     self._searchDP.setSelectedID(vo['clanID'])
@@ -42,35 +43,38 @@ class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMet
     def onFortPublicInfoReceived(self, hasResults):
         cache = self.fortCtrl.getPublicInfoCache()
         if cache is not None:
-            self.as_selectByIndexS(-1)
-            self._searchDP.setSelectedID(None)
             cache.clearSelectedID()
             self._searchDP.rebuildList(cache)
             self.__setStatus(hasResults)
+            self._wasDefaultStatusShown = True
+        self.__updateCooldowns()
         return
 
     def onFortPublicInfoValidationError(self, reason):
         cache = self.fortCtrl.getPublicInfoCache()
         if cache is not None:
-            self.as_selectByIndexS(-1)
-            self._searchDP.setSelectedID(None)
             cache.clearSelectedID()
             cache.clear()
             self._searchDP.rebuildList(cache)
         self.as_setStatusTextS(i18n.makeString('#menu:validation/%s' % reason))
+        self.__updateCooldowns()
         return
 
     def onEnemyClanCardReceived(self, card):
         Waiting.hide('fort/card/get')
         self._searchDP.refresh()
 
+    def onEnemyClanCardRemoved(self):
+        Waiting.hide('fort/card/get')
+        self.as_selectByIndexS(-1)
+        self._searchDP.setSelectedID(None)
+        return
+
     def onFavoritesChanged(self, clanDBID):
         cache = self.fortCtrl.getPublicInfoCache()
         if cache is not None:
             dropSelection = self._searchDP.refreshItem(cache, clanDBID)
             if dropSelection:
-                self.as_selectByIndexS(-1)
-                self._searchDP.setSelectedID(None)
                 cache.clearSelectedID()
             self._searchDP.refresh()
             self.__setStatus(cache.hasResults())
@@ -93,8 +97,6 @@ class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMet
         if cache is not None:
             rqIsInCooldown, _ = cache.getRequestCacheCooldownInfo()
             if rqIsInCooldown:
-                self.as_selectByIndexS(-1)
-                self._searchDP.setSelectedID(None)
                 cache.clearSelectedID()
                 self._searchDP.rebuildList(cache)
             self.__setStatus(cache.hasResults())
@@ -156,5 +158,7 @@ class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMet
                     status = FORTIFICATIONS.FORTINTELLIGENCE_STATUS_EMPTYFAVORITE
                 elif cache.getFilterType() == FORT_SCOUTING_DATA_FILTER.FILTER:
                     status = FORTIFICATIONS.FORTINTELLIGENCE_STATUS_EMPTYABBREV
+            if not self._wasDefaultStatusShown and status == FORTIFICATIONS.FORTINTELLIGENCE_STATUS_EMPTY:
+                status = FORTIFICATIONS.FORTINTELLIGENCE_STATUS_DEFAULTREQUEST_EMPTY
             self.as_setStatusTextS(status)
         return

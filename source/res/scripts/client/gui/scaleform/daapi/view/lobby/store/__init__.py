@@ -5,16 +5,17 @@ from account_helpers.AccountSettings import AccountSettings
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import GUI_NATIONS, GUI_NATIONS_ORDER_INDEX
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.StoreMeta import StoreMeta
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.locale.MENU import MENU
 from gui.game_control import g_instance
-from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
+from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache, event_dispatcher as shared_events
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n
 import nations
-__author__ = 'd_trofimov'
 
 class Store(LobbySubView, StoreMeta):
     _SHELL = 'shell'
@@ -24,7 +25,7 @@ class Store(LobbySubView, StoreMeta):
     _EQUIPMENT = 'equipment'
     _DATA_PROVIDER = 'dataProvider'
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(Store, self).__init__(0.6)
         self.__nations = []
         self.__filterHash = {}
@@ -131,7 +132,7 @@ class Store(LobbySubView, StoreMeta):
         self.requestTableData(params[0], params[1], filter)
 
     def onCloseButtonClick(self):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onShowInfo(self, data):
         dataCompactId = int(data.id)
@@ -140,9 +141,9 @@ class Store(LobbySubView, StoreMeta):
             return LOG_ERROR('There is error while attempting to show vehicle info window: ', str(dataCompactId))
         else:
             if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-                self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_INFO_WINDOW, {'vehicleCompactDescr': item.intCD}))
+                shared_events.showVehicleInfo(item.intCD)
             else:
-                self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_MODULE_INFO_WINDOW, {'moduleCompactDescr': str(item.intCD),
+                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, item.intCD), {'moduleCompactDescr': str(item.intCD),
                  'isAdditionalInfoShow': i18n.makeString(MENU.MODULEINFO_ADDITIONALINFO)}))
             return
 

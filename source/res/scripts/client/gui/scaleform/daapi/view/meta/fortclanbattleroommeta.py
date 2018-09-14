@@ -25,3 +25,11 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
     def as_updateDirectionsS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_updateDirections(data)
+
+    def as_setMineClanIconS(self, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setMineClanIcon(value)
+
+    def as_setEnemyClanIconS(self, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setEnemyClanIcon(value)

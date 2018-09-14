@@ -58,8 +58,9 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
     def getOrderTooltipBody(self, orderID):
         header = i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(orderID))
         note = None
-        order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(orderID))
-        buildingDescr = self.fortCtrl.getFort().getBuilding(order.buildingID)
+        fort = self.fortCtrl.getFort()
+        order = fort.getOrder(self.UI_ORDERS_BIND.index(orderID))
+        buildingDescr = fort.getBuilding(order.buildingID)
         if order.hasBuilding:
             description = ''
             ordersListStr = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_CLANPERMISSIONS)
@@ -69,6 +70,8 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
                 if self._isProductionInPause(buildingDescr):
                     description = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERSPANEL_CANTUSEORDER)
                     description += '\n' + i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INFO)
+                elif not order.isPermanent and not order.isCompatible and fort.hasActivatedContinualOrders():
+                    description = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERSPANEL_CANTUSEORDER)
                 else:
                     description = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_ORDERISREADY)
                 if not self._canGiveOrder():

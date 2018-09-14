@@ -41,7 +41,7 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
     def requestToJoin(self, battleID):
         currentBattleID = getBattleID()
         if currentBattleID == battleID:
-            g_eventBus.handleEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
         else:
             battle = self.fortCtrl.getFort().getBattle(battleID)
             if battle is not None:

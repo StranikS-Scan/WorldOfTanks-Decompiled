@@ -10,6 +10,7 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
+from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 
@@ -33,7 +34,7 @@ class PrequeueWindow(View, AbstractWindowView, PrequeueWindowMeta, QueueListener
         yield self.prbDispatcher.leave(pre_queue_ctx.LeavePreQueueCtx(waitingID='prebattle/leave'))
 
     def showFAQWindow(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def isEnqueueBtnEnabled(self):
         return g_currentVehicle.isReadyToPrebattle() and not self.preQueueFunctional.isInQueue()

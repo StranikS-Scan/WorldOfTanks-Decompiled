@@ -13,17 +13,17 @@ class ContainerManagerMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_getView(name)
 
-    def as_showS(self, token, x, y):
+    def as_showS(self, name, x, y):
         if self._isDAAPIInited():
-            return self.flashObject.as_show(token, x, y)
+            return self.flashObject.as_show(name, x, y)
 
-    def as_hideS(self, token):
+    def as_hideS(self, name):
         if self._isDAAPIInited():
-            return self.flashObject.as_hide(token)
+            return self.flashObject.as_hide(name)
 
-    def as_registerContainerS(self, type, token):
+    def as_registerContainerS(self, type, name):
         if self._isDAAPIInited():
-            return self.flashObject.as_registerContainer(type, token)
+            return self.flashObject.as_registerContainer(type, name)
 
     def as_unregisterContainerS(self, type):
         if self._isDAAPIInited():
@@ -40,15 +40,3 @@ class ContainerManagerMeta(DAAPIModule):
     def as_bringToFrontS(self, cType, vName):
         if self._isDAAPIInited():
             return self.flashObject.as_bringToFront(cType, vName)
-
-    def as_getNameByTokenS(self, token):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getNameByToken(token)
-
-    def as_getViewTypeByTokenS(self, token):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getViewTypeByToken(token)
-
-    def as_cancelLoadingsForContainerS(self, containerType):
-        if self._isDAAPIInited():
-            return self.flashObject.as_cancelLoadingsForContainer(containerType)

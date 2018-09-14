@@ -121,6 +121,7 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_DAMAGEASSISTEDSELF = '#battle_results:team/stats/labels_damageAssistedSelf'
     TEAM_STATS_LABELS_CAPTUREPOINTSVAL = '#battle_results:team/stats/labels_capturePointsVal'
     TEAM_STATS_LABELS_MILEAGE = '#battle_results:team/stats/labels_mileage'
+    TEAM_STATS_LABELS_HEALEDHP = '#battle_results:team/stats/labels_healedHP'
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
     TEAM_STATS_CLOSE = '#battle_results:team/stats/close'
     DETAILS_STATS = '#battle_results:details/stats'

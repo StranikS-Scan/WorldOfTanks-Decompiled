@@ -7,7 +7,7 @@ import BigWorld
 from collections import namedtuple
 import dossiers2
 from FortifiedRegionBase import NOT_ACTIVATED, FORT_ATTACK_RESULT
-from UnitBase import UNIT_STATE
+from messenger.ext import passCensor
 from constants import FORT_SCOUTING_DATA_FILTER, FORT_MAX_ELECTED_CLANS, FORT_SCOUTING_DATA_ERROR
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 import fortified_regions
@@ -47,11 +47,8 @@ _SortieItemData = namedtuple('_SortieItemData', ('cmdrDBID',
  'maxCount',
  'timestamp',
  'igrType',
- 'cmdrName'))
-
-def makeDefSortieItemData():
-    return _SortieItemData(0, 0, 0, 0, 0, 0, 0, '')
-
+ 'cmdrName',
+ 'strComment'))
 
 class SortieItem(object):
 
@@ -70,7 +67,7 @@ class SortieItem(object):
         return
 
     def filter(self, rosterTypeID):
-        return (rosterTypeID == 0 or self.itemData.rosterTypeID == rosterTypeID) and not self.itemData.unitState & (UNIT_STATE.IN_ARENA | UNIT_STATE.IN_QUEUE | UNIT_STATE.IN_SEARCH)
+        return rosterTypeID == 0 or self.itemData.rosterTypeID == rosterTypeID
 
     def getIgrType(self):
         return self.itemData.igrType
@@ -87,17 +84,22 @@ class SortieItem(object):
     def getCommanderFullName(self):
         return self.itemData.cmdrName
 
+    def getCommanderDatabaseID(self):
+        return self.itemData.cmdrDBID
+
     def getState(self):
         return self.itemData.unitState
 
-    def _makeItemData(self, itemData):
-        try:
-            data = _SortieItemData(*itemData)
-        except TypeError:
-            data = makeDefSortieItemData()
-            LOG_ERROR('Client can not unpack item data of sortie', itemData)
+    def getDescription(self):
+        return passCensor(self.itemData.strComment)
 
-        return data
+    def _makeItemData(self, itemData):
+        supportedLen = len(_SortieItemData._fields)
+        unsupportedData = itemData[supportedLen:]
+        itemData = itemData[:supportedLen]
+        if unsupportedData:
+            LOG_ERROR('Client got unsupported data from server: ', unsupportedData)
+        return _SortieItemData(*itemData)
 
     def _updateItemData(self, itemData):
         newData = self._makeItemData(itemData)
@@ -153,6 +155,9 @@ class SortiesCache(object):
             fort.onSortieUnitReceived -= self.__fort_onSortieUnitReceived
         self.clear()
 
+    def setController(self, controller):
+        self.__controller = weakref.proxy(controller)
+
     @property
     def isRequestInProcess(self):
         return self.__isRequestInProcess
@@ -173,6 +178,9 @@ class SortiesCache(object):
         else:
             self.__selectedUnit = None
             self._setSelectedID(selectedID)
+            if BigWorld.player().isLongDisconnectedFromCenter:
+                self.__controller._listeners.notify('onSortieUnitReceived', self.__getClientIdx(selectedID))
+                return True
             unit = self.getSelectedUnit()
             if unit and not self.__cache[selectedID]._isDirty:
                 self.__controller._listeners.notify('onSortieUnitReceived', self.__getClientIdx(selectedID))
@@ -215,6 +223,7 @@ class SortiesCache(object):
                 yield item
 
     def _requestSortieUnit(self, selectedID):
+        Waiting.show('fort/sortie/get')
 
         def requester():
             self.__cooldownRequest = None
@@ -285,6 +294,7 @@ class SortiesCache(object):
             return item
 
     def __requestCallback(self, _):
+        Waiting.hide('fort/sortie/get')
         self.__isRequestInProcess = False
 
     def __removeItem(self, sortieID):
@@ -356,14 +366,12 @@ _FortBattleItemData = namedtuple('_FortBattleItemData', ('defenderClanDBID',
  'defenderBuildList',
  'attackerFullBuildList',
  'defenderFullBuildList',
+ 'consumableList',
+ 'battleResultList',
  'prevBuildNum',
  'currentBuildNum',
  'isEnemyReadyForBattle',
  'isBattleRound'))
-
-def makeDefFortBattleItemData():
-    return _FortBattleItemData(0, 0, 0, False, 0, 0, (), (), (), (), 0, 0, False, False)
-
 
 @ReprInjector.simple(('_battleID', 'battleID'), ('_peripheryID', 'peripheryID'), ('itemData', 'data'), ('additionalData', 'additional'))
 
@@ -473,13 +481,14 @@ class BattleItem(object):
         return self.itemData.isBattleRound
 
     def _makeItemData(self, itemData):
-        try:
-            data = _FortBattleItemData(**itemData)
-        except TypeError:
-            data = makeDefFortBattleItemData()
-            LOG_ERROR('Client can not unpack item data of fort battle', itemData)
+        unsupportedFields = set(itemData) - set(_FortBattleItemData._fields)
+        unsupportedData = {}
+        if unsupportedFields:
+            for f in unsupportedFields:
+                unsupportedData[f] = itemData.pop(f)
 
-        return data
+            LOG_ERROR('Client got unsupported data from server: ', unsupportedData)
+        return _FortBattleItemData(**itemData)
 
     def _updateItemData(self, itemData):
         newData = self._makeItemData(itemData)
@@ -1016,7 +1025,7 @@ class PublicInfoCache(object):
     def __requestClanCardCallback(self, result):
         self.__requestCallback(result)
         if not result:
-            Waiting.hide('fort/card/get')
+            self.clearSelectedID()
 
     def __requestCacheCallback(self, result, data = None):
         self.__requestCallback(result)
@@ -1080,9 +1089,11 @@ def makeClanCardItemData():
 
 class ClanCardItem(IClanFortInfo):
 
-    def __init__(self, itemData):
+    def __init__(self, itemData, fort = None):
         super(ClanCardItem, self).__init__()
+        self.__fort = fort
         self.itemData = self._makeItemData(itemData)
+        self.__setAttacksAndDefenses()
 
     def __repr__(self):
         return 'ClanCardItem(data = {0!r:s})'.format(self.itemData)
@@ -1093,6 +1104,42 @@ class ClanCardItem(IClanFortInfo):
 
     def filter(self):
         return True
+
+    def __setAttacksAndDefenses(self):
+        clanID = self.itemData.clanDBID
+        currentUserTime = time_utils.getCurrentLocalServerTimestamp()
+        self.__upcomingAttacks = self.__fort.getAttacks(clanID, lambda item: item.isPlanned())
+        self.__attacksInCooldown = self.__fort.getAttacks(clanID, lambda item: currentUserTime < item.getStartTime() + fortified_regions.g_cache.attackCooldownTime and item.isEnded())
+        self.__defencesInCooldown = self.__fort.getDefences(clanID, lambda item: currentUserTime > item.getStartTime() and item.isEnded())
+
+    @property
+    def weAreAtWar(self):
+        return self.__upcomingAttacks or self.__attacksInCooldown and not self.counterAttacked
+
+    @property
+    def upcomingAttack(self):
+        if self.__upcomingAttacks:
+            return self.__upcomingAttacks[0]
+        else:
+            return None
+
+    @property
+    def closestAttackInCooldown(self):
+        if self.__attacksInCooldown:
+            return self.__attacksInCooldown[-1]
+        else:
+            return None
+
+    @property
+    def closestDefenseInCooldown(self):
+        if self.__defencesInCooldown:
+            return self.__defencesInCooldown[-1]
+        else:
+            return None
+
+    @property
+    def counterAttacked(self):
+        return self.closestAttackInCooldown is not None and self.closestDefenseInCooldown is not None and self.closestAttackInCooldown.getStartTime() < self.closestDefenseInCooldown.getStartTime() < self.closestAttackInCooldown.getStartTime() + time_utils.ONE_DAY * 7
 
     def getClanDBID(self):
         return self.itemData.clanDBID
@@ -1166,12 +1213,12 @@ class ClanCardItem(IClanFortInfo):
     def getDictDirOpenAttacks(self):
         return self.itemData.dictDirOpenAttacks
 
-    def getAvailability(self, fort):
+    def getAvailability(self):
         from ClientFortifiedRegion import ATTACK_PLAN_RESULT
         maxPreorderLimit = FORTIFICATION_ALIASES.ACTIVE_EVENTS_FUTURE_LIMIT * time_utils.ONE_DAY
         initialTime = time_utils.getTimeTodayForLocal(self.getLocalDefHour())
         availableTimestamp = initialTime
-        while not fort.canPlanAttackOn(availableTimestamp, self) == ATTACK_PLAN_RESULT.OK:
+        while not self.__fort.canPlanAttackOn(availableTimestamp, self) == ATTACK_PLAN_RESULT.OK:
             if time_utils.getTimeDeltaFromNow(availableTimestamp) <= maxPreorderLimit:
                 availableTimestamp += time_utils.ONE_DAY
             else:
@@ -1282,10 +1329,10 @@ class _BattleItemAbstract(object):
         return self.isResultsPresent() and self._attackResult > 0
 
     def isLose(self):
-        return self.isResultsPresent() and self._attackResult < 0
+        return self.isResultsPresent() and self._attackResult < 0 or self._attackResult == FORT_ATTACK_RESULT.TECHNICAL_DRAW
 
     def isDraw(self):
-        return self.isResultsPresent() and self._attackResult == 0
+        return self._attackResult == 0
 
     def isHot(self):
         return self.isPlanned() and self.getStartTimeLeft() <= time_utils.QUARTER_HOUR or self.isInProgress()
@@ -1315,4 +1362,4 @@ class DefenceItem(_BattleItemAbstract):
         return self.isResultsPresent() and self._attackResult < 0
 
     def isLose(self):
-        return self.isResultsPresent() and self._attackResult > 0
+        return self.isResultsPresent() and self._attackResult > 0 or self._attackResult == FORT_ATTACK_RESULT.TECHNICAL_DRAW

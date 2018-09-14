@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/VoiceChatInterface.py
 import BigWorld, Settings, Event
 import BattleReplay
-from adisp import async
+from VOIP import getVOIPManager
+from VOIP.voip_constants import VOIP_SUPPORTED_API
+from adisp import async, process
 from enumerations import Enumeration
 from windows import UIInterface
 from debug_utils import *
@@ -12,6 +14,7 @@ class _VoiceChatInterface(UIInterface):
     onVoiceChatInitFailed = Event.Event()
     onVoiceChatInitSucceded = Event.Event()
     onPlayerSpeaking = Event.Event()
+    onStateToggled = Event.Event()
 
     def __init__(self):
         UIInterface.__init__(self)
@@ -25,18 +28,24 @@ class _VoiceChatInterface(UIInterface):
 
     def populateUI(self, proxy):
         UIInterface.populateUI(self, proxy)
-        import VOIP
-        VOIP.getVOIPManager().channelsMgr.onFailedToConnect += self.processFailedMessage
-        VOIP.getVOIPManager().channelsMgr.onInitialized += self.__initResponse
-        VOIP.getVOIPManager().OnCaptureDevicesUpdated += self.__captureDevicesResponse
+        voipMgr = getVOIPManager()
+        voipMgr.onFailedToConnect += self.processFailedMessage
+        voipMgr.onInitialized += self.__initResponse
+        voipMgr.OnCaptureDevicesUpdated += self.__captureDevicesResponse
+        voipMgr.onPlayerSpeaking += self.__onPlayerSpeaking
+        voipMgr.onStateToggled += self.__onStateToggled
+        if not voipMgr.isInitialized():
+            self.__doInitialize()
 
     def dispossessUI(self, proxy):
         if self.uiHolder != proxy:
             return
-        import VOIP
-        VOIP.getVOIPManager().channelsMgr.onInitialized -= self.__initResponse
-        VOIP.getVOIPManager().OnCaptureDevicesUpdated -= self.__captureDevicesResponse
-        VOIP.getVOIPManager().channelsMgr.onFailedToConnect -= self.processFailedMessage
+        voipMgr = getVOIPManager()
+        voipMgr.onInitialized -= self.__initResponse
+        voipMgr.OnCaptureDevicesUpdated -= self.__captureDevicesResponse
+        voipMgr.onFailedToConnect -= self.processFailedMessage
+        voipMgr.onPlayerSpeaking -= self.__onPlayerSpeaking
+        voipMgr.onStateToggled -= self.__onStateToggled
         UIInterface.dispossessUI(self)
 
     def processFailedMessage(self, *args):
@@ -60,8 +69,7 @@ class _VoiceChatInterface(UIInterface):
 
     def isPlayerSpeaking(self, accountDBID):
         if GUI_SETTINGS.voiceChat:
-            import VOIP
-            return VOIP.getVOIPManager().isParticipantTalking(accountDBID)
+            return getVOIPManager().isParticipantTalking(accountDBID)
         return False
 
     @property
@@ -70,8 +78,7 @@ class _VoiceChatInterface(UIInterface):
 
     @property
     def ready(self):
-        import VOIP
-        return VOIP.getVOIPManager().channelsMgr.initialized
+        return getVOIPManager().isInitialized()
 
     def __initResponse(self, data):
         if self.__callback is not None:
@@ -85,8 +92,7 @@ class _VoiceChatInterface(UIInterface):
 
     @async
     def initialize(self, domain, callback):
-        import VOIP
-        rh = VOIP.getVOIPManager()
+        rh = getVOIPManager()
         if domain == '':
             LOG_ERROR('Initialize. Vivox is not supported')
             self.__state = VC_STATES.Failed
@@ -101,14 +107,12 @@ class _VoiceChatInterface(UIInterface):
 
     def __captureDevicesResponse(self):
         if self.__callback is not None:
-            import VOIP
-            self.__callback(VOIP.getVOIPManager().captureDevices)
+            self.__callback(getVOIPManager().getCaptureDevices())
         return
 
     @async
     def requestCaptureDevices(self, callback):
-        import VOIP
-        if VOIP.getVOIPManager().vivoxDomain == '':
+        if getVOIPManager().getVOIPDomain() == '':
             LOG_ERROR('RequestCaptureDevices. Vivox is not supported')
             callback([])
             return
@@ -117,25 +121,13 @@ class _VoiceChatInterface(UIInterface):
             callback([])
             return
         self.__callback = callback
-        VOIP.getVOIPManager().requestCaptureDevices()
+        getVOIPManager().requestCaptureDevices()
 
     def isVivox(self):
-        try:
-            from VOIP import getVOIPManager
-            from VOIP.Vivox.VivoxManager import VivoxManager
-            return isinstance(getVOIPManager(), VivoxManager)
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-            return False
+        return getVOIPManager().getAPI() == VOIP_SUPPORTED_API.VIVOX
 
     def isYY(self):
-        try:
-            from VOIP import getVOIPManager
-            from VOIP.YY.YYManager import YYManager
-            return isinstance(getVOIPManager(), YYManager)
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-            return False
+        return getVOIPManager().getAPI() == VOIP_SUPPORTED_API.YY
 
     @property
     def voiceChatProvider(self):
@@ -144,6 +136,30 @@ class _VoiceChatInterface(UIInterface):
         if self.isYY():
             return 'YY'
         return 'unknown'
+
+    @process
+    def __doInitialize(self):
+        serverSettings = getattr(BigWorld.player(), 'serverSettings', None)
+        if serverSettings and 'voipDomain' in serverSettings:
+            domain = serverSettings['voipDomain']
+        else:
+            domain = ''
+        yield self.initialize(domain)
+        yield self.requestCaptureDevices()
+        return
+
+    def __onPlayerSpeaking(self, accountDBID, isSpeak):
+        if not GUI_SETTINGS.voiceChat:
+            return
+        self.onPlayerSpeaking(accountDBID, isSpeak)
+
+    def __onStateToggled(self, isEnabled, toReset):
+        if not GUI_SETTINGS.voiceChat:
+            return
+        for dbID in toReset:
+            self.__onPlayerSpeaking(dbID, False)
+
+        self.onStateToggled(isEnabled)
 
 
 g_instance = _VoiceChatInterface()

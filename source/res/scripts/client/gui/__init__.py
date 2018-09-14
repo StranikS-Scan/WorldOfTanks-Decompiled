@@ -23,7 +23,6 @@ DEPTH_OF_Binoculars = 0.55
 DEPTH_OF_GunMarker = 0.56
 DEPTH_OF_VehicleMarker = 0.9
 CLIENT_ENCODING = '1251'
-VERSION_FILE_PATH = '../version.xml'
 TANKMEN_ROLES_ORDER_DICT = {'plain': ('commander', 'gunner', 'driver', 'radioman', 'loader'),
  'enum': ('commander', 'gunner1', 'gunner2', 'driver', 'radioman1', 'radioman2', 'loader1', 'loader2')}
 

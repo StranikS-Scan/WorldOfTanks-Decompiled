@@ -15,7 +15,7 @@ class GameInputMgr(GameInputManagerMeta):
 
     def handleGlobalKeyEvent(self, keyCode, eventType):
         LOG_DEBUG('GameInputMgr.handleGlobalKeyEvent', keyCode, eventType)
-        if keyCode == self.__voiceChatKey and VOIP.getVOIPManager().channelsMgr.currentChannel:
+        if keyCode == self.__voiceChatKey and VOIP.getVOIPManager().getCurrentChannel():
             VOIP.getVOIPManager().setMicMute(True if eventType == 'keyUp' else False)
 
     def updateChatKeyHandlers(self, value = None):

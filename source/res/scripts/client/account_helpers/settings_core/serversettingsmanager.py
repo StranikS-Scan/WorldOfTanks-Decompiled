@@ -26,7 +26,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
 
 
 class ServerSettingsManager(object):
-    __version = 11
+    __version = 12
     GAME = settings_constants.GAME
     GRAPHICS = settings_constants.GRAPHICS
     SOUND = settings_constants.SOUND
@@ -43,10 +43,13 @@ class ServerSettingsManager(object):
                               GAME.ENABLE_POSTMORTEM_DELAY: 7,
                               GAME.ENABLE_SERVER_AIM: 8,
                               GAME.SHOW_VEHICLES_COUNTER: 9,
+                              GAME.SHOW_VECTOR_ON_MAP: 10,
+                              GAME.SHOW_SECTOR_ON_MAP: 11,
                               GAME.SNIPER_MODE_STABILIZATION: 13,
                               GAME.DISABLE_BATTLE_CHAT: 28}, offsets={GAME.REPLAY_ENABLED: Offset(14, 49152),
                               GAME.DATE_TIME_MESSAGE_INDEX: Offset(16, 983040),
-                              GAME.MINIMAP_ALPHA: Offset(20, 267386880)}),
+                              GAME.MINIMAP_ALPHA: Offset(20, 267386880),
+                              GAME.SHOW_VEH_MODELS_ON_MAP: Offset(29, 1610612736)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GRAPHICS.FPS_PERFOMANCER: 0,
                                   GAME.LENS_EFFECT: 1}, offsets={}),

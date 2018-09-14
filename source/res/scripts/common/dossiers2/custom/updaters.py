@@ -2485,7 +2485,7 @@ def __updateFromFortDossier1(compDescr):
      'fortBattles',
      'fortSorties',
      'achievements']
-    fortBattlesPacking = {'battlesHours': (4, 'I'),
+    fortBattlesPacking = {'reservedInt32': (4, 'I'),
      'ownBaseLossCount': (24, 'I'),
      'enemyBaseCaptureCountInAttack': (28, 'I')}
     updateCtx = {'dossierCompDescr': compDescr,

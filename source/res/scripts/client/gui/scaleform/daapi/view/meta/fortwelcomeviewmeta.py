@@ -3,6 +3,9 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class FortWelcomeViewMeta(DAAPIModule):
 
+    def onViewReady(self):
+        self._printOverrideError('onViewReady')
+
     def onCreateBtnClick(self):
         self._printOverrideError('onCreateBtnClick')
 

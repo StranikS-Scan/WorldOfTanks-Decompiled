@@ -4,6 +4,7 @@ from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.TechnicalMaintenanceMeta import TechnicalMaintenanceMeta
 from gui.Scaleform.framework import AppRef
@@ -17,14 +18,16 @@ from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor, VehicleAutoRepairProcessor, VehicleAutoLoadProcessor, VehicleAutoEquipProcessor, VehicleRepairer
 from gui.shared.utils import decorators
+from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import events, g_itemsCache, g_eventsCache
+from gui.shared import events, g_itemsCache
+from gui.server_events import g_eventsCache
 from helpers import i18n
 from helpers.i18n import makeString
 
 class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, GlobalListener, AppRef):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(TechnicalMaintenance, self).__init__()
         self.__currentVehicleId = None
         self.__isConfirmDialogShown = False
@@ -101,7 +104,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
         if moduleId is None:
             return LOG_ERROR('There is error while attempting to show module info window: ', str(moduleId))
         else:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_MODULE_INFO_WINDOW, {'moduleCompactDescr': str(moduleId),
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, moduleId), {'moduleCompactDescr': str(moduleId),
              'vehicleDescr': g_currentVehicle.item.descriptor}))
             return
 
@@ -132,10 +135,11 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
                 action = None
                 if price != defaultPrice:
                     action = getItemActionTooltipData(shell)
+                unicName = shell.descriptor['icon'][0]
                 shells.append({'id': str(shell.intCD),
                  'compactDescr': shell.intCD,
                  'type': shell.type,
-                 'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
+                 'icon': '../maps/icons/ammopanel/ammo/%s' % (unicName if not shell.isEvent else 'EVENT_' + unicName),
                  'count': shell.count,
                  'userCount': shell.defaultCount,
                  'step': casseteCount,

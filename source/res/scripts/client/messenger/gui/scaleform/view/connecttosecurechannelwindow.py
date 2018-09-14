@@ -11,9 +11,9 @@ from messenger.proto import proto_getter
 
 class ConnectToSecureChannelWindow(View, AbstractWindowView, ConnectToSecureChannelWindowMeta):
 
-    def __init__(self, channel):
+    def __init__(self, ctx = None):
         super(ConnectToSecureChannelWindow, self).__init__()
-        self._channel = channel
+        self._channel = ctx.get('channel')
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):

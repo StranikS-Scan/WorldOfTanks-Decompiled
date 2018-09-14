@@ -16,7 +16,7 @@ from messenger.proto.interfaces import ISearchHandler
 
 class PrbSendInvitesWindow(View, PrbSendInvitesWindowMeta, AbstractWindowView, ISearchHandler):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(PrbSendInvitesWindow, self).__init__()
         self._searchDP = None
         self._friendsDP = None

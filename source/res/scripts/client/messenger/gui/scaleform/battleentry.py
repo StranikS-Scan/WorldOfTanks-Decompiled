@@ -275,7 +275,7 @@ class BattleEntry(IGUIEntry):
         self.__updateHistoryControls()
         if focused:
             responseHandler = VOIP.getVOIPManager()
-            if responseHandler is not None and responseHandler.channelsMgr.currentChannel:
+            if responseHandler is not None and responseHandler.getCurrentChannel():
                 responseHandler.setMicMute(muted=True)
         self.__focused = focused
         return

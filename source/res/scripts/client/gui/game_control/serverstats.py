@@ -3,10 +3,16 @@ import BigWorld
 import constants
 import Event
 from PlayerEvents import g_playerEvents
-from debug_utils import LOG_DEBUG
+from gui import makeHtmlString
 
 class ServerStats(object):
     STATS_REQUEST_TIMEOUT = 5.0
+
+    class TOOLTIP_TYPE:
+        TYPE_UNAVAILABLE = ('unavailable',)
+        TYPE_CLUSTER = ('clusterCCU',)
+        TYPE_FULL = 'regionCCU/clusterCCU'
+
     onStatsReceived = Event.Event()
 
     def init(self):
@@ -28,9 +34,25 @@ class ServerStats(object):
     def getStats(self):
         return self.__stats
 
+    def getFormattedStats(self):
+        clusterCCU = self.__stats.get('clusterCCU', 0)
+        regionCCU = self.__stats.get('regionCCU', 0)
+        if regionCCU:
+            clusterUsers = makeHtmlString('html_templates:lobby/serverStats', 'clusterName', {'count': BigWorld.wg_getIntegralFormat(clusterCCU)})
+            if clusterCCU == regionCCU:
+                tooltipType = self.TOOLTIP_TYPE.TYPE_CLUSTER
+                statsStr = clusterUsers
+            else:
+                tooltipType = self.TOOLTIP_TYPE.TYPE_FULL
+                statsStr = '%s / %s' % (clusterUsers, BigWorld.wg_getIntegralFormat(regionCCU))
+        else:
+            tooltipType = self.TOOLTIP_TYPE.TYPE_UNAVAILABLE
+            statsStr = '- / -'
+        return (statsStr, tooltipType)
+
     def __onStatsReceived(self, stats):
-        self.__stats = stats
-        self.onStatsReceived(stats)
+        self.__stats = dict(stats)
+        self.onStatsReceived(self.__stats)
         self.__loadStatsCallback()
 
     def __requestServerStats(self):

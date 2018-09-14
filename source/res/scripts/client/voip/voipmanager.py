@@ -1,398 +1,506 @@
 # Embedded file name: scripts/client/VOIP/VOIPManager.py
 import BigWorld
-import FMOD
-import SoundGroups
 import Event
+import SoundGroups
 import Settings
-import constants
-from gui.Scaleform import VoiceChatInterface
-from debug_utils import LOG_VOIP, LOG_CURRENT_EXCEPTION, verify
-from chat_shared import CHAT_ACTIONS, CHAT_RESPONSES, USERS_ROSTER_VOICE_MUTED
-from ChatManager import chatManager
-import sys
-from datetime import datetime
+from VOIP.voip_constants import VOIP_SUPPORTED_API
+from VOIPCommon import *
+from VOIPFsm import VOIPFsm, VOIP_FSM_STATE as STATE
+from VOIPHandler import VOIPHandler
+from VOIPLog import LOG_VOIP_INT, closeLog
+from debug_utils import LOG_WARNING
+from messenger.m_constants import USER_ROSTER_ACTION
 from messenger.proto import bw_proto_getter
 from messenger.proto.events import g_messengerEvents
-g_useVivoxlog = None
-g_vivoxLogFile = None
+from messenger.storage import storage_getter
 
-def LOG_VOIP_INT(msg, *kargs):
-    global g_useVivoxlog
-    if g_useVivoxlog is None:
-        checkUseVivoxLog()
-    verify(g_useVivoxlog is not None)
-    if g_useVivoxlog:
-        _writeLog(msg, kargs)
-    elif kargs:
-        pass
-    return
+class VOIPManager(VOIPHandler):
 
-
-def checkUseVivoxLog():
-    global g_useVivoxlog
-    g_useVivoxlog = False
-    section = Settings.g_instance.userPrefs
-    if section.has_key('development'):
-        section = section['development']
-        if section.has_key('enableVivoxLog'):
-            g_useVivoxlog = section['enableVivoxLog'].asBool
-            if g_useVivoxlog:
-                _createLog()
-
-
-def _createLog():
-    global g_vivoxLogFile
-    if g_vivoxLogFile is None:
-        try:
-            g_vivoxLogFile = open('vivox.log', 'a')
-            g_vivoxLogFile.write('----------------------------\n')
-        except:
-            LOG_CURRENT_EXCEPTION()
-
-    return
-
-
-def _closeLog():
-    global g_useVivoxlog
-    global g_vivoxLogFile
-    g_useVivoxlog = None
-    if g_vivoxLogFile is not None:
-        try:
-            g_vivoxLogFile.close()
-            g_vivoxLogFile = None
-        except:
-            LOG_CURRENT_EXCEPTION()
-
-    return
-
-
-def _writeLog(msg, args):
-    try:
-        frame = sys._getframe(2)
-        dt = datetime.time(datetime.now())
-        g_vivoxLogFile.write('%s: (%s, %d):' % (dt, frame.f_code.co_filename, frame.f_lineno))
-        g_vivoxLogFile.write(msg)
-        if args:
-            g_vivoxLogFile.write(args)
-        g_vivoxLogFile.write('\n')
-        g_vivoxLogFile.flush()
-    except:
-        LOG_CURRENT_EXCEPTION()
-
-
-class VOIPManager:
-
-    def __init__(self, channelsMgr):
-        self.channelsMgr = channelsMgr
-        self.vivoxDomain = ''
-        self.testChannel = ''
-        self.inTesting = False
+    def __init__(self):
+        LOG_VOIP_INT('VOIPManager.Create')
+        VOIPHandler.__init__(self)
+        self.__initialized = False
+        self.__enabled = False
+        self.__voipDomain = ''
+        self.__testDomain = ''
+        self.__user = ['', '']
+        self.__channel = ['', '']
+        self.__currentChannel = ''
+        self.__inTesting = False
+        self.__loggedIn = False
+        self.__needLogginAfterInit = False
+        self.__loginAttemptsRemained = 2
+        self.__fsm = VOIPFsm()
         self.__activateMicByVoice = False
-        self.__enableVoiceNormalization = False
-        self.usersRoster = {}
-        self.channelUsers = {}
-        self.captureDevices = []
-        self.currentCaptureDevice = ''
+        self.__captureDevices = []
+        self.__currentCaptureDevice = ''
+        self.__channelUsers = {}
         self.OnCaptureDevicesUpdated = Event.Event()
-        self.onParticipantMute = Event.Event()
         self.onPlayerSpeaking = Event.Event()
-        self.channelsMgr.onCaptureDevicesArrived += self._onCaptureDevicesArrived
-        self.channelsMgr.onParticipantAdded += self._onParticipantAdded
-        self.channelsMgr.onParticipantRemoved += self._onParticipantRemoved
-        self.channelsMgr.onParticipantUpdated += self._onParticipantUpdated
-        self.channelsMgr.onJoinedChannel += self._onJoinedChannel
-        self.channelsMgr.onLeftChannel += self.onLeftChannel
-        self.channelsMgr.onLogined += self.onLogined
-        self.channelsMgr.onStateChanged += self.onStateChanged
-        self.oldMasterVolume = FMOD.getMasterVolume()
+        self.onInitialized = Event.Event()
+        self.onStateToggled = Event.Event()
+        self.onFailedToConnect = Event.Event()
+        self.onJoinedChannel = Event.Event()
+        self.onLeftChannel = Event.Event()
+        self.__fsm.onStateChanged += self.__onStateChanged
 
     @bw_proto_getter()
     def bwProto(self):
         return None
 
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
+
     def destroy(self):
-        self.channelsMgr.onParticipantAdded -= self._onParticipantAdded
-        self.channelsMgr.onParticipantRemoved -= self._onParticipantRemoved
-        self.channelsMgr.onParticipantUpdated -= self._onParticipantUpdated
-        self.channelsMgr.onJoinedChannel -= self._onJoinedChannel
-        self.channelsMgr.onLeftChannel -= self.onLeftChannel
-        self.channelsMgr.onLogined -= self.onLogined
-        self.channelsMgr.onStateChanged -= self.onStateChanged
-        self.channelsMgr.onCaptureDevicesArrived -= self._onCaptureDevicesArrived
+        self.__fsm.onStateChanged -= self.__onStateChanged
         BigWorld.VOIP.finalise()
-        _closeLog()
+        LOG_VOIP_INT('VOIPManager.Destroy')
+        closeLog()
+
+    def isEnabled(self):
+        return self.__enabled
+
+    def isInitialized(self):
+        return self.__initialized
+
+    def isNotInitialized(self):
+        return not self.__initialized and self.getState() == STATE.NONE
+
+    def getVOIPDomain(self):
+        return self.__voipDomain
+
+    def getCurrentChannel(self):
+        return self.__currentChannel
+
+    def hasDesiredChannel(self):
+        return self.__channel[0] != ''
+
+    def getUser(self):
+        return self.__user[0]
+
+    def isInDesiredChannel(self):
+        return self.__channel[0] == self.__currentChannel
+
+    def getCaptureDevices(self):
+        return self.__captureDevices
+
+    def getCurrentCaptureDevice(self):
+        return self.__currentCaptureDevice
+
+    def getState(self):
+        return self.__fsm.getState()
+
+    def getAPI(self):
+        return BigWorld.VOIP.getAPI()
+
+    def isLoggedIn(self):
+        return self.__loggedIn
 
     def onConnected(self):
-        LOG_VOIP_INT('VOIPManager.subscribe')
+        LOG_VOIP_INT('VOIPManager.Subscribe')
+        self.__loginAttemptsRemained = 2
         voipEvents = g_messengerEvents.voip
-        voipEvents.onChannelEntered += self.__onChatChannelEntered
-        voipEvents.onChannelLeft += self.__onChatChannelLeft
-        voipEvents.onCredentialReceived += self.__onCredentialReceived
+        voipEvents.onChannelEntered += self.__me_onChannelEntered
+        voipEvents.onChannelLeft += self.__me_onChannelLeft
+        voipEvents.onCredentialReceived += self.__me_onCredentialReceived
         params = self.bwProto.voipProvider.getChannelParams()
         if params[0]:
-            self.__onChatChannelEntered(*params)
-        chatManager.subscribeChatAction(self.__onRequestUsersRoster, CHAT_ACTIONS.requestUsersRoster)
-        chatManager.subscribeChatAction(self.__onChatActionSetMuted, CHAT_ACTIONS.setMuted)
-        chatManager.subscribeChatAction(self.__onChatActionUnsetMuted, CHAT_ACTIONS.unsetMuted)
-        chatManager.subscribeChatAction(self.__onChatResponseMutedError, CHAT_RESPONSES.setMutedError)
-        chatManager.subscribeChatAction(self.__onChatResponseMutedError, CHAT_RESPONSES.unsetMutedError)
-        self.channelsMgr.onConnected()
+            self.__me_onChannelEntered(*params)
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUsersRosterReceived += self.__me_onUsersRosterReceived
+        usersEvents.onUserRosterChanged += self.__me_onUserRosterChanged
 
     def onDisconnected(self):
-        LOG_VOIP_INT('VOIPManager.unsubscribe')
+        LOG_VOIP_INT('VOIPManager.Unsubscribe')
         voipEvents = g_messengerEvents.voip
-        voipEvents.onChannelEntered -= self.__onChatChannelEntered
-        voipEvents.onChannelLeft -= self.__onChatChannelLeft
-        voipEvents.onCredentialReceived -= self.__onCredentialReceived
-        chatManager.unsubscribeChatAction(self.__onRequestUsersRoster, CHAT_ACTIONS.requestUsersRoster)
-        chatManager.unsubscribeChatAction(self.__onChatActionSetMuted, CHAT_ACTIONS.setMuted)
-        chatManager.unsubscribeChatAction(self.__onChatActionUnsetMuted, CHAT_ACTIONS.unsetMuted)
-        chatManager.unsubscribeChatAction(self.__onChatResponseMutedError, CHAT_RESPONSES.setMutedError)
-        chatManager.unsubscribeChatAction(self.__onChatResponseMutedError, CHAT_RESPONSES.unsetMutedError)
+        voipEvents.onChannelEntered -= self.__me_onChannelEntered
+        voipEvents.onChannelLeft -= self.__me_onChannelLeft
+        voipEvents.onCredentialReceived -= self.__me_onCredentialReceived
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUsersRosterReceived -= self.__me_onUsersRosterReceived
+        usersEvents.onUserRosterChanged -= self.__me_onUserRosterChanged
 
     def enable(self, enabled):
-        LOG_VOIP_INT('VOIPManager.enable: %s' % str(enabled))
-        self.channelsMgr.enable(enabled)
+        if enabled:
+            self.__enable()
+            self.onStateToggled(True, set())
+        else:
+            dbIDs = set()
+            for dbID, data in self.__channelUsers.iteritems():
+                if data['talking']:
+                    dbIDs.add(dbID)
+
+            self.__disable()
+            self.onStateToggled(False, dbIDs)
+        self.__fsm.update(self)
+
+    def __enable(self):
+        LOG_VOIP_INT('VOIPManager.Enable')
+        self.__enabled = True
+        if self.__channel[0] != '':
+            self.__requestCredentials()
+
+    def __disable(self):
+        LOG_VOIP_INT('VOIPManager.Disable')
+        self.__enabled = False
+        self.__clearUser()
 
     def initialize(self, domain):
-        if not domain:
-            return
-        if self.vivoxDomain:
-            verify(domain == self.vivoxDomain)
-            return
         LOG_VOIP_INT('VOIPManager.Initialize')
-        self.vivoxDomain = domain
-        self.testChannel = 'sip:confctl-2@' + domain.partition('www.')[2]
-        LOG_VOIP_INT("domain_vivox: '%s'" % self.vivoxDomain)
-        LOG_VOIP_INT("domain_test : '%s'" % self.testChannel)
-        self.channelsMgr.initialize(domain)
+        if self.__fsm.inValidState():
+            LOG_WARNING('VOIPManager already is initialized(ing).')
+            return
+        if not self.__initialized is False:
+            raise AssertionError
+            self.__voipDomain = domain
+            self.__testDomain = 'sip:confctl-2@' + self.__voipDomain.partition('www.')[2]
+            LOG_VOIP_INT("voip_domain: '%s'" % self.__voipDomain)
+            LOG_VOIP_INT("test_domain: '%s'" % self.__testDomain)
+            self.__fsm.update(self)
+            logLevel = 0
+            section = Settings.g_instance.userPrefs
+            if section.has_key('development'):
+                section = section['development']
+                logLevel = section.has_key('vivoxLogLevel') and section['vivoxLogLevel'].asInt
+        vinit = {KEY_SERVER: 'http://%s/api2' % self.__voipDomain,
+         KEY_MIN_PORT: '0',
+         KEY_MAX_PORT: '0',
+         KEY_LOG_PREFIX: 'voip',
+         KEY_LOG_SUFFIX: '.txt',
+         KEY_LOG_FOLDER: '.',
+         KEY_LOG_LEVEL: str(logLevel)}
+        BigWorld.VOIP.initialise(vinit)
 
-    def __enterChannel(self, name, password):
-        if not self.channelsMgr.user[0] and self.channelsMgr.enabled:
-            self.requestVOIPCredentials()
-        self.channelsMgr.enterChannel(name, password)
+    def __login(self, name, password):
+        if not self.__initialized:
+            self.__needLogginAfterInit = True
+        self.__user = [name, password]
+        self.__fsm.update(self)
+
+    def __loginUser(self, username, password):
+        LOG_VOIP_INT("Login Request: '%s', '%s'" % (username, password))
+        cmd = {KEY_PARTICIPANT_PROPERTY_FREQUENCY: '100'}
+        BigWorld.VOIP.login(username, password, cmd)
+
+    def __reloginUser(self):
+        self.__loginAttemptsRemained -= 1
+        LOG_VOIP_INT('VOIPHandler.ReloginUser. Attempts remained: %d' % self.__loginAttemptsRemained)
+        if self.__enabled:
+            self.__requestCredentials(1)
+
+    def logout(self):
+        LOG_VOIP_INT('VOIPManager.Logout')
+        self.__clearUser()
+        self.__clearDesiredChannel()
+        self.__fsm.update(self)
+
+    def __enterChannel(self, channel, password):
+        if not self.__user[0] and self.isEnabled():
+            self.__requestCredentials()
+        LOG_VOIP_INT("VOIPManager.EnterChannel: '%s' '%s'" % (channel, password))
+        self.__channel = [channel, password]
+        self.__fsm.update(self)
+
+    def __joinChannel(self, channel, password):
+        LOG_VOIP_INT("Joining channel '%s'" % channel)
+        BigWorld.VOIP.joinChannel(channel, password)
 
     def __leaveChannel(self):
-        self.channelsMgr.leaveChannel()
-
-    def __onChatChannelEntered(self, uri, pwd):
-        LOG_VOIP_INT('VOIPManager.onChatChannelEntered')
-        if not self.inTesting:
-            self.__enterChannel(uri, pwd)
-
-    def __onChatChannelLeft(self):
-        LOG_VOIP_INT('VOIPManager.onChatChannelLeft')
-        if not self.inTesting:
-            self.__leaveChannel()
-
-    def __onCredentialReceived(self, name, pwd):
-        LOG_VOIP_INT("VOIPManager.onUserCredentials: '%s' '%s'" % (name, pwd))
-        self.channelsMgr.login(name, pwd)
-        BigWorld.player().requestUsersRoster(USERS_ROSTER_VOICE_MUTED)
+        if not self.__initialized:
+            return
+        LOG_VOIP_INT('VOIPManager.LeaveChannel')
+        self.__clearDesiredChannel()
+        self.__fsm.update(self)
 
     def enterTestChannel(self):
-        if self.inTesting:
+        if self.__inTesting:
             return
-        LOG_VOIP_INT("VOIPManager.enterTestChannel: '%s'" % self.testChannel)
-        self.inTesting = True
-        self.__enterChannel(self.testChannel, '')
+        LOG_VOIP_INT("VOIPManager.EnterTestChannel: '%s'" % self.__testDomain)
+        self.__inTesting = True
+        self.__enterChannel(self.__testDomain, '')
 
     def leaveTestChannel(self):
-        if not self.inTesting:
+        if not self.__inTesting:
             return
-        LOG_VOIP_INT('VOIPManager.leaveTestChannel')
-        self.inTesting = False
+        LOG_VOIP_INT('VOIPManager.LeaveTestChannel')
+        self.__inTesting = False
         params = self.bwProto.voipProvider.getChannelParams()
         if params[0]:
             self.__enterChannel(*params)
         else:
             self.__leaveChannel()
 
-    def requestVOIPCredentials(self):
-        LOG_VOIP_INT('VOIPManager.requestVOIPCredentials')
-        self.bwProto.voipProvider.requestCredentials()
+    def setMasterVolume(self, attenuation):
+        BigWorld.VOIP.setMasterVolume(attenuation)
 
-    def logout(self):
-        LOG_VOIP_INT('VOIPManager.logout')
-        self.usersRoster.clear()
-        self.channelsMgr.logout()
+    def setMicrophoneVolume(self, attenuation):
+        BigWorld.VOIP.setMicrophoneVolume(attenuation)
 
-    def setMicMute(self, muted = True):
-        if not self.channelsMgr.initialized:
-            return
-        if muted and self.__activateMicByVoice:
-            return
-        self._setMicMute(muted)
+    def __setVolume(self):
+        self.setMasterVolume(int(round(SoundGroups.g_instance.getVolume(KEY_VOIP_MASTER) * 100)))
+        self.setMicrophoneVolume(int(round(SoundGroups.g_instance.getVolume(KEY_VOIP_MIC) * 100)))
 
-    def _setMicMute(self, muted):
-        pass
+    def __muffleMasterVolume(self):
+        SoundGroups.g_instance.muffleFMODVolume()
+
+    def __restoreMasterVolume(self):
+        SoundGroups.g_instance.restoreFMODVolume()
 
     def setVoiceActivation(self, enabled):
-        LOG_VOIP_INT('VOIPManager.setVoiceActivation: ', enabled)
+        LOG_VOIP_INT('VOIPManager.SetVoiceActivation: %s' % str(enabled))
         self.__activateMicByVoice = enabled
         self.setMicMute(not enabled)
 
-    def setMasterVolume(self, attenuation):
-        BigWorld.VOIP.setMasterVolume(attenuation, {})
+    def setMicMute(self, muted = True):
+        if not self.__initialized:
+            return
+        if muted and self.__activateMicByVoice:
+            return
+        self.__setMicMute(muted)
 
-    def setMicrophoneVolume(self, attenuation):
-        BigWorld.VOIP.setMicrophoneVolume(attenuation, {})
-
-    def setVolume(self):
-        self.setMasterVolume(int(round(SoundGroups.g_instance.getVolume('masterVivox') * 100)))
-        self.setMicrophoneVolume(int(round(SoundGroups.g_instance.getVolume('micVivox') * 100)))
-
-    def getVADProperties(self):
-        LOG_VOIP_INT('VOIPManager.getVADProperties is not implemented!')
-
-    def setVADProperties(self, hangover, sensitivity):
-        LOG_VOIP_INT('VOIPManager.setVADProperties is not implemented!')
-
-    def muteParticipantForMe(self, dbid, mute, name = ''):
-        LOG_VOIP_INT('VOIPManager.muteParticipantForMe')
-        if dbid not in self.channelUsers:
-            LOG_VOIP_INT("mute_for_me: User not found in participant's list")
-            return False
-        p = BigWorld.player()
-        p.setMuted(dbid, name) if mute else p.unsetMuted(dbid)
-        self._muteParticipantForMe(dbid, mute)
-
-    def _muteParticipantForMe(self, dbid, mute):
-        LOG_VOIP_INT('VOIPManager._muteParticipantForMe is not implemented!')
-        return False
-
-    def __onChatActionSetMuted(self, data):
-        LOG_VOIP_INT('VOIPManager.__onChatActionSetMuted')
-        self.__onChatActionMute(data['data'][0], True)
-
-    def __onChatActionUnsetMuted(self, data):
-        LOG_VOIP_INT('VOIPManager.__onChatActionUnsetMuted')
-        self.__onChatActionMute(data['data'], False)
-
-    def __onChatActionMute(self, dbid, muted):
-        LOG_VOIP_INT('VOIPManager.__onChatActionMute', dbid, muted)
-        self.usersRoster[dbid] = muted
-        if dbid in self.channelUsers and self.channelUsers[dbid]['muted'] != muted:
-            self._muteParticipantForMe(dbid, muted)
-
-    def __onChatResponseMutedError(self, data):
-        LOG_VOIP_INT('VOIPManager.__onChatResponseMutedError', data.items())
-        verify(False and data)
-
-    def __onRequestUsersRoster(self, data):
-        for dbid, name, flags in data['data']:
-            muted = bool(flags & USERS_ROSTER_VOICE_MUTED)
-            self.usersRoster[dbid] = muted
-            if muted and dbid in self.channelUsers:
-                self._muteParticipantForMe(dbid, True)
+    def __setMicMute(self, muted):
+        LOG_VOIP_INT('VOIPManager.SetMicMute: %s' % str(muted))
+        if muted:
+            BigWorld.VOIP.disableMicrophone()
+        else:
+            BigWorld.VOIP.enableMicrophone()
 
     def requestCaptureDevices(self):
-        LOG_VOIP_INT('VOIPManager.requestCaptureDevices')
-        BigWorld.VOIP.wg_getCaptureDevices()
+        LOG_VOIP_INT('VOIPManager.RequestCaptureDevices')
+        BigWorld.VOIP.getCaptureDevices()
 
     def setCaptureDevice(self, deviceName):
-        LOG_VOIP_INT("VOIPManager.setCaptureDevice: '%s'" % deviceName)
-        BigWorld.VOIP.wg_setCaptureDevice(deviceName)
+        LOG_VOIP_INT("VOIPManager.SetCaptureDevice: '%s'" % deviceName)
+        BigWorld.VOIP.setCaptureDevice(deviceName)
         self.requestCaptureDevices()
 
-    def _onCaptureDevicesArrived(self, data):
-        LOG_VOIP_INT('VOIPManager.onCaptureDevicesArrived')
-        captureDevicesCount = int(data[constants.KEY_COUNT])
-        self.captureDevices = []
-        for i in xrange(captureDevicesCount):
-            self.captureDevices.append(str(data[constants.KEY_CAPTURE_DEVICES + '_' + str(i)]))
-
-        self.currentCaptureDevice = str(data[constants.KEY_CURRENT_CAPTURE_DEVICE])
-        self.OnCaptureDevicesUpdated()
-
-    def setParticipantVolume(self, uri, volume):
-        LOG_VOIP_INT('VOIPManager.setParticipantVolume is not implemented')
-
     def isParticipantTalking(self, dbid):
-        outcome = self.channelUsers.get(dbid, {}).get('talking', False)
+        outcome = self.__channelUsers.get(dbid, {}).get('talking', False)
         return outcome
 
-    def setPlayerTalking(self, dbid, talking):
-        self.onPlayerSpeaking(dbid, talking)
-        VoiceChatInterface.g_instance.setPlayerSpeaking(dbid, talking)
-        from gui.WindowsManager import g_windowsManager
-        if g_windowsManager.battleWindow is not None:
-            g_windowsManager.battleWindow.setPlayerSpeaking(dbid, talking)
-        return
+    def __requestCredentials(self, reset = 0):
+        LOG_VOIP_INT('VOIPManager.RequestUserCredentials')
+        self.bwProto.voipProvider.requestCredentials(reset)
 
-    def muffleMasterVolume(self):
-        SoundGroups.g_instance.muffleFMODVolume()
+    def __clearDesiredChannel(self):
+        self.__channel = ['', '']
 
-    def restoreMasterVolume(self):
-        SoundGroups.g_instance.restoreFMODVolume()
+    def __clearUser(self):
+        self.__user = ['', '']
 
-    def isAnyoneTalking(self):
-        for info in self.channelUsers.values():
+    def __onChatActionMute(self, dbid, muted):
+        LOG_VOIP_INT('VOIPManager.OnChatActionMute', dbid, muted)
+        if dbid in self.__channelUsers and self.__channelUsers[dbid]['muted'] != muted:
+            self.__muteParticipantForMe(dbid, muted)
+
+    def __muteParticipantForMe(self, dbid, mute):
+        LOG_VOIP_INT('VOIPManager.MuteParticipantForMe: %d, %s' % (dbid, str(mute)))
+        raise dbid in self.__channelUsers or AssertionError
+        self.__channelUsers[dbid]['muted'] = mute
+        uri = self.__channelUsers[dbid]['uri']
+        cmd = {KEY_COMMAND: CMD_SET_PARTICIPANT_MUTE,
+         KEY_PARTICIPANT_URI: uri,
+         KEY_STATE: str(mute)}
+        BigWorld.VOIP.command(cmd)
+        return True
+
+    def __isAnyoneTalking(self):
+        for info in self.__channelUsers.values():
             if info['talking']:
                 return True
 
         return False
 
-    def _onParticipantAdded(self, data):
-        uri = data[constants.KEY_PARTICIPANT_URI]
-        dbid, _ = self.extractDBIDFromURI(uri)
-        if dbid == -1:
-            return
-        self.channelUsers[dbid] = {'talking': False,
-         'uri': uri,
-         'muted': False,
-         'lastVolumeUpdateTime': BigWorld.time(),
-         'energy': 0,
-         'volume': 0}
-        if self.usersRoster.get(dbid, False):
-            self._muteParticipantForMe(dbid, True)
-
-    def _onParticipantUpdated(self, data):
-        uri = data[constants.KEY_PARTICIPANT_URI]
-        dbid, participantLogin = self.extractDBIDFromURI(uri)
-        if dbid == -1:
-            return
-        talking = int(data[constants.KEY_IS_SPEAKING])
-        channelUser = self.channelUsers[dbid]
-        if dbid in self.channelUsers:
-            if channelUser['talking'] != talking:
-                channelUser['talking'] = talking
-                self.muffleMasterVolume() if self.isAnyoneTalking() else self.restoreMasterVolume()
-        self.setPlayerTalking(dbid, talking)
-        channelUser['energy'] = data[constants.KEY_ENERGY]
-        channelUser['volume'] = data[constants.KEY_VOLUME]
-
-    def _onParticipantRemoved(self, data):
-        uri = data[constants.KEY_PARTICIPANT_URI]
-        dbid, _ = self.extractDBIDFromURI(uri)
-        if dbid in self.channelUsers:
-            del self.channelUsers[dbid]
-        self.setPlayerTalking(dbid, False)
-
-    def _onJoinedChannel(self, data):
-        self.setVolume()
-        verify(not self.channelUsers)
-
-    def onLeftChannel(self, data):
-        for dbid in self.channelUsers.keys():
-            self.setPlayerTalking(dbid, False)
-
-        self.channelUsers.clear()
-        self.restoreMasterVolume()
-
-    def onLogined(self):
-        self.bwProto.voipProvider.logVivoxLogin()
-
-    def onStateChanged(self, old, new):
-        if new == self.channelsMgr.STATE_JOINING_CHANNEL:
-            muteMic = self.channelsMgr.channel[0] != self.testChannel and not self.__activateMicByVoice
-            self.setMicMute(muteMic)
-
-    def extractDBIDFromURI(self, uri):
+    def __extractDBIDFromURI(self, uri):
         try:
-            domain = self.vivoxDomain.partition('www.')[2]
+            domain = self.__voipDomain.partition('www.')[2]
             login = uri.partition('sip:')[2].rpartition('@' + domain)[0]
             s = login[login.find('.') + 1:]
             return (int(s), login)
         except:
             return -1
+
+    def __sendLeaveChannelCommand(self, channel):
+        LOG_VOIP_INT("Leaving channel '%s'" % channel)
+        if channel:
+            BigWorld.VOIP.leaveChannel(channel)
+        self.__fsm.update(self)
+
+    def __resetToInitializedState(self):
+        if self.__currentChannel != '':
+            for dbid in self.__channelUsers.keys():
+                self.onPlayerSpeaking(dbid, False)
+
+            self.__channelUsers.clear()
+            self.__restoreMasterVolume()
+            self.__currentChannel = ''
+        if self.__needLogginAfterInit:
+            self.__fsm.update(self)
+            self.__needLogginAfterInit = False
+        else:
+            self.__clearUser()
+
+    def __onStateChanged(self, _, newState):
+        if newState == STATE.INITIALIZED:
+            self.__resetToInitializedState()
+        elif newState == STATE.LOGGING_IN:
+            self.__loginUser(self.__user[0], self.__user[1])
+        elif newState == STATE.LOGGED_IN:
+            self.__fsm.update(self)
+        elif newState == STATE.JOINING_CHANNEL:
+            muteMic = self.__channel[0] != self.__testDomain and not self.__activateMicByVoice
+            self.setMicMute(muteMic)
+            self.__joinChannel(self.__channel[0], self.__channel[1])
+        elif newState == STATE.JOINED_CHANNEL:
+            LOG_VOIP_INT("Joined to channel: '%s'" % self.__currentChannel)
+            self.__fsm.update(self)
+        elif newState == STATE.LEAVING_CHANNEL:
+            self.__sendLeaveChannelCommand(self.getCurrentChannel())
+        elif newState == STATE.LOGGING_OUT:
+            BigWorld.VOIP.logout()
+
+    def onVoipInited(self, data):
+        returnCode = int(data[KEY_RETURN_CODE])
+        if returnCode == CODE_SUCCESS:
+            self.__initialized = True
+            self.__fsm.update(self)
+            self.onInitialized(data)
+        else:
+            self.__initialized = False
+            LOG_VOIP_INT('---------------------------')
+            LOG_VOIP_INT("ERROR: '%d' - '%s'" % (int(data[KEY_STATUS_CODE]), data[KEY_STATUS_STRING]))
+            LOG_VOIP_INT('---------------------------')
+
+    def onVoipDestroyed(self, data):
+        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+
+    def onCaptureDevicesArrived(self, data):
+        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        captureDevicesCount = int(data[KEY_COUNT])
+        self.__captureDevices = []
+        for i in xrange(captureDevicesCount):
+            self.__captureDevices.append(str(data[KEY_CAPTURE_DEVICES + '_' + str(i)]))
+
+        self.__currentCaptureDevice = str(data[KEY_CURRENT_CAPTURE_DEVICE])
+        self.OnCaptureDevicesUpdated()
+
+    def onSetCaptureDevice(self, data):
+        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+
+    def onSetLocalSpeakerVolume(self, data):
+        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+
+    def onSetLocalMicVolume(self, data):
+        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+
+    def onMuteLocalMic(self, data):
+        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+
+    def onLoginStateChange(self, data):
+        returnCode = int(data[KEY_RETURN_CODE])
+        if returnCode == CODE_SUCCESS:
+            state = int(data[KEY_STATE])
+            if state == STATE_LOGGED_IN:
+                if self.getAPI() == VOIP_SUPPORTED_API.VIVOX:
+                    self.bwProto.voipProvider.logVivoxLogin()
+                self.__loggedIn = True
+                self.__fsm.update(self)
+            elif state == STATE_LOGGED_OUT:
+                self.__loggedIn = False
+                self.__fsm.update(self)
+        else:
+            LOG_VOIP_INT('---------------------------')
+            LOG_VOIP_INT("ERROR: '%d' - '%s'" % (int(data[KEY_STATUS_CODE]), data[KEY_STATUS_STRING]))
+            LOG_VOIP_INT('---------------------------')
+            code = int(data[KEY_STATUS_CODE])
+            if (code == STATUS_WRONG_CREDENTIALS or code == STATUS_UNKNOWN_ACCOUNT) and self.__loginAttemptsRemained > 0:
+                self.__reloginUser()
+            else:
+                self.onFailedToConnect()
+
+    def onSessionAdded(self, data):
+        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        raise not self.__channelUsers or AssertionError
+        self.__currentChannel = data[KEY_URI]
+        self.__setVolume()
+        self.__fsm.update(self)
+        self.onJoinedChannel(data)
+
+    def onSessionRemoved(self, data):
+        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        for dbid in self.__channelUsers.keys():
+            self.onPlayerSpeaking(dbid, False)
+
+        self.__channelUsers.clear()
+        self.__restoreMasterVolume()
+        self.__currentChannel = ''
+        self.__fsm.update(self)
+        self.onLeftChannel(data)
+
+    def onNetworkTest(self, data):
+        returnCode = int(data[KEY_RETURN_CODE])
+        if returnCode == CODE_ERROR:
+            LOG_VOIP_INT('---------------------------')
+            LOG_VOIP_INT("ERROR: '%d' - '%s'" % (int(data[KEY_STATUS_CODE]), data[KEY_STATUS_STRING]))
+            LOG_VOIP_INT('---------------------------')
+            self.onFailedToConnect()
+            self.__clearDesiredChannel()
+            self.__clearUser()
+
+    def onParticipantAdded(self, data):
+        if not int(data[KEY_RETURN_CODE]) == CODE_SUCCESS:
+            raise AssertionError
+            uri = data[KEY_PARTICIPANT_URI]
+            dbid, _ = self.__extractDBIDFromURI(uri)
+            if dbid == -1:
+                return
+            self.__channelUsers[dbid] = {'talking': False,
+             'uri': uri,
+             'muted': False}
+            user = self.usersStorage.getUser(dbid)
+            user and user.isMuted() and self.__muteParticipantForMe(dbid, True)
+
+    def onParticipantRemoved(self, data):
+        if not int(data[KEY_RETURN_CODE]) == CODE_SUCCESS:
+            raise AssertionError
+            uri = data[KEY_PARTICIPANT_URI]
+            dbid, _ = self.__extractDBIDFromURI(uri)
+            del dbid in self.__channelUsers and self.__channelUsers[dbid]
+        self.onPlayerSpeaking(dbid, False)
+
+    def onParticipantUpdated(self, data):
+        if not int(data[KEY_RETURN_CODE]) == CODE_SUCCESS:
+            raise AssertionError
+            uri = data[KEY_PARTICIPANT_URI]
+            dbid, participantLogin = self.__extractDBIDFromURI(uri)
+            if dbid == -1:
+                return
+            talking = int(data[KEY_IS_SPEAKING])
+            channelUser = self.__channelUsers[dbid]
+            if dbid in self.__channelUsers:
+                channelUser['talking'] = channelUser['talking'] != talking and talking
+                self.__muffleMasterVolume() if self.__isAnyoneTalking() else self.__restoreMasterVolume()
+        self.onPlayerSpeaking(dbid, talking)
+
+    def __me_onChannelEntered(self, uri, pwd):
+        if not self.__inTesting:
+            self.__enterChannel(uri, pwd)
+
+    def __me_onChannelLeft(self):
+        if not self.__inTesting:
+            self.__leaveChannel()
+
+    def __me_onCredentialReceived(self, name, pwd):
+        LOG_VOIP_INT("VOIPManager.OnUserCredentials: '%s' '%s'" % (name, pwd))
+        self.__login(name, pwd)
+
+    def __me_onUsersRosterReceived(self):
+        for user in self.usersStorage.all():
+            dbID = user.getID()
+            if user.isMuted() and dbID in self.__channelUsers:
+                self.__muteParticipantForMe(dbID, True)
+
+    def __me_onUserRosterChanged(self, actionIdx, user):
+        if actionIdx in [USER_ROSTER_ACTION.SetMuted, USER_ROSTER_ACTION.UnsetMuted]:
+            self.__onChatActionMute(user.getID(), user.isMuted())

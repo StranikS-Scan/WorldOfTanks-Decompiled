@@ -12,6 +12,7 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FocusEvent
+from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 
 class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
 
@@ -65,7 +66,7 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
 
     def showPrebattleSendInvitesWindow(self):
         if self.canSendInvite():
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_SEND_INVITES_WINDOW, {'prbName': 'company',
+            self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'company',
              'ctrlType': CTRL_ENTITY_TYPE.PREBATTLE}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onWindowClose(self):
@@ -79,7 +80,7 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
         return formatters.getCompanyName()
 
     def showFAQWindow(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def canSendInvite(self):
         return self.prbFunctional.getPermissions().canSendInvite()

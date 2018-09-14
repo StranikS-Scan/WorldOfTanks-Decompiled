@@ -11,13 +11,14 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.CompaniesWindowMeta import CompaniesWindowMeta
 from gui.shared.events import FocusEvent
 from messenger.ext import channel_num_gen
+from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import LAZY_CHANNEL
 
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 
 class CompaniesWindow(PrebattlesListWindow, CompaniesWindowMeta):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(CompaniesWindow, self).__init__(LAZY_CHANNEL.COMPANIES)
         self.__rosterRequester = PrbRosterRequester()
         self.__listDP = None
@@ -41,7 +42,7 @@ class CompaniesWindow(PrebattlesListWindow, CompaniesWindowMeta):
         self.__rosterRequester.request(prbID)
 
     def showFAQWindow(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def getClientID(self):
         return channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.COMPANIES)

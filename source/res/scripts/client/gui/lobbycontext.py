@@ -64,13 +64,13 @@ class _LobbyContext(object):
     def isPeripheryAvailable(self, peripheryID):
         result = True
         if g_preDefinedHosts.periphery(peripheryID) is None:
-            LOG_ERROR('Periphery not found')
+            LOG_ERROR('Periphery not found', peripheryID)
             result = False
         elif self.__credentials is None:
-            LOG_ERROR('Login info not found')
+            LOG_ERROR('Login info not found', peripheryID)
             result = False
         elif g_preDefinedHosts.isRoamingPeriphery(peripheryID) and not isRoamingEnabled(g_itemsCache.items.stats.attributes):
-            LOG_ERROR('Roaming is not supported')
+            LOG_ERROR('Roaming is not supported', peripheryID)
             result = False
         return result
 

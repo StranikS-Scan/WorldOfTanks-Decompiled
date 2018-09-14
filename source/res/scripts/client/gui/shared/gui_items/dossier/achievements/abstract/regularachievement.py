@@ -22,7 +22,7 @@ class RegularAchievement(GUIItem):
         super(RegularAchievement, self).__init__()
         self._name = str(name)
         self._block = str(block)
-        self._value = value or 0
+        self._value = int(value or 0)
         self._lvlUpValue = 0
         self._lvlUpTotalValue = 0
         self._isDone = False
@@ -122,6 +122,12 @@ class RegularAchievement(GUIItem):
         heroInfoKey = '#achievements:%s_heroInfo' % self._getActualName()
         if i18n.doesTextExist(heroInfoKey):
             return i18n.makeString(heroInfoKey)
+        return ''
+
+    def getNotificationInfo(self):
+        notificationKey = '#achievements:%s_notification' % self._getActualName()
+        if i18n.doesTextExist(notificationKey):
+            return i18n.makeString(notificationKey)
         return ''
 
     def getUserCondition(self):

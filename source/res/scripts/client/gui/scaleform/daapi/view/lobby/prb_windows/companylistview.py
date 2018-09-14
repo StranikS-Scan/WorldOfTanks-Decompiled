@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.meta.CompanyListMeta import CompanyListMeta
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.settings import REQUEST_TYPE
 from messenger.ext import channel_num_gen
+from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import LAZY_CHANNEL
 __author__ = 'a_ushyutsau'
 
@@ -35,7 +36,7 @@ class CompanyListView(CompanyListMeta, PrbListener):
         self.__requestRoster(prbID)
 
     def showFAQWindow(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def getClientID(self):
         return channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.COMPANIES)

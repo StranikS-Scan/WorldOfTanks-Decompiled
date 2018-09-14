@@ -5,7 +5,6 @@ import datetime
 import json
 import copy
 import BigWorld
-import ResMgr
 import Math
 import cPickle as pickle
 import ArenaType
@@ -17,15 +16,16 @@ import AreaDestructibles
 import gui.SystemMessages
 import gui.Scaleform.CursorDelegator
 import Keys
-from helpers import EffectsList, i18n, isPlayerAvatar, isPlayerAccount
+from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from debug_utils import *
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
-from gui import VERSION_FILE_PATH, DialogsInterface
+from gui import DialogsInterface
 from messenger import MessengerEntry
 from messenger.proto.bw import battle_chat_cmd
 import Event
 from AvatarInputHandler.control_modes import VideoCameraControlMode
+from AvatarInputHandler.control_modes import CatControlMode
 g_replayCtrl = None
 REPLAY_FILE_EXTENSION = '.wotreplay'
 AUTO_RECORD_TEMP_FILENAME = 'temp'
@@ -53,10 +53,10 @@ class BattleReplay():
     currentTime = property(lambda self: self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME))
     warpTime = property(lambda self: self.__warpTime)
 
-    def resetUpdateGunOnRewind(self):
-        self.__updateGunOnRewind = False
+    def resetUpdateGunOnTimeWarp(self):
+        self.__updateGunOnTimeWarp = False
 
-    isUpdateGunOnRewind = property(lambda self: self.__updateGunOnRewind)
+    isUpdateGunOnTimeWarp = property(lambda self: self.__updateGunOnTimeWarp)
 
     def __init__(self):
         userPrefs = Settings.g_instance.userPrefs
@@ -79,7 +79,7 @@ class BattleReplay():
         self.__playList = []
         self.__isFinished = False
         self.__isMenuShowed = False
-        self.__updateGunOnRewind = False
+        self.__updateGunOnTimeWarp = False
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
         from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -189,6 +189,10 @@ class BattleReplay():
     def play(self, fileName = None):
         if self.isRecording:
             self.stop()
+        import SafeUnpickler
+        import cPickle
+        unpickler = SafeUnpickler.SafeUnpickler()
+        cPickle.loads = unpickler.loads
         if fileName is not None and fileName.rfind('.wotreplaylist') != -1:
             self.__playList = []
             self.__isPlayingPlayList = True
@@ -320,7 +324,7 @@ class BattleReplay():
         if key == Keys.KEY_C and isDown:
             self.__isChatPlaybackEnabled = not self.__isChatPlaybackEnabled
         playerControlMode = player.inputHandler.ctrl
-        isVideoCamera = isinstance(playerControlMode, VideoCameraControlMode)
+        isVideoCamera = isinstance(playerControlMode, VideoCameraControlMode) or isinstance(playerControlMode, CatControlMode)
         suppressCommand = False
         if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
             suppressCommand = True
@@ -512,8 +516,7 @@ class BattleReplay():
                 vehicleName = vehicleName.replace(':', '-')
                 vehicles = self.__getArenaVehiclesInfo()
                 gameplayID = player.arenaTypeID >> 16
-                sec = ResMgr.openSection(VERSION_FILE_PATH)
-                clientVersionFromXml = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
+                clientVersionFromXml = getFullClientVersion()
                 clientVersionFromExe = BigWorld.wg_getProductVersion()
                 arenaInfo = {'dateTime': now,
                  'playerName': player.name,
@@ -602,8 +605,7 @@ class BattleReplay():
     def onPlayerVehicleIDChanged(self):
         player = BigWorld.player()
         if self.isPlaying and hasattr(player, 'positionControl'):
-            player.positionControl.bindToVehicle(True, self.__replayCtrl.playerVehicleID)
-            self.onControlModeChanged()
+            player.inputHandler.ctrl.selectPlayer(self.__replayCtrl.playerVehicleID)
 
     def setAmmoSetting(self, idx):
         if not isPlayerAvatar():
@@ -774,7 +776,7 @@ class BattleReplay():
             self.__enableInGameEffects(False)
             rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
             AreaDestructibles.g_destructiblesManager.onBeforeReplayTimeWarp(rewind)
-            self.__updateGunOnRewind = not rewind
+            self.__updateGunOnTimeWarp = True
             EffectsList.EffectsListPlayer.clear()
             if rewind:
                 playerControlMode = BigWorld.player().inputHandler.ctrl

@@ -38,10 +38,7 @@ class ScopeController(DisposableEntity):
 
     def __handleViewDispose(self, pyView):
         pyView.onModuleDispose -= self.__handleViewDispose
-        if pyView in self.__views:
-            self.__views.remove(pyView)
-        if pyView in self.__loadingViews:
-            self.__loadingViews.remove(pyView)
+        self.__views.remove(pyView)
         if len(self.__views) == 0 and len(self.__loadingViews) == 0:
             self.destroy()
 
@@ -76,6 +73,7 @@ class ScopeController(DisposableEntity):
         if addAsGlobal:
             if pyView in self.__loadingViews:
                 self.__loadingViews.remove(pyView)
+            pyView.onModuleDispose += self.__handleViewDispose
             self.__views.append(pyView)
         else:
             scope = self.__extractScopeFromView(pyView)
@@ -87,7 +85,6 @@ class ScopeController(DisposableEntity):
             raise Exception('pyView can not be None!')
         if addAsGlobal:
             self.__loadingViews.append(pyView)
-            pyView.onModuleDispose += self.__handleViewDispose
         else:
             scope = self.__extractScopeFromView(pyView)
             controller = self._getScopeControllerForScope(scope)

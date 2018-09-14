@@ -11,7 +11,7 @@ from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_T
 from gui.game_control import g_instance
 from helpers import i18n
 from items import vehicles
-from debug_utils import LOG_WARNING
+from debug_utils import LOG_WARNING, LOG_DEBUG
 
 def getTimeLeft(itemId, customizationType, nationId):
     item = checkItemOnVehicle(itemId, customizationType)
@@ -31,7 +31,7 @@ def getTimeLeft(itemId, customizationType, nationId):
             result = 0
     elif isInHangar:
         isUsed = False
-        hangarItem = getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CI_TYPES[customizationType], itemId)
+        hangarItem = getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CI_TYPES[customizationType], itemId, nationId)
         countDays = 0 if hangarItem.get('isPermanent') else hangarItem.get('quantity', 0)
         result = countSecondsInDay * countDays
     return (result, isUsed)
@@ -69,7 +69,8 @@ def checkItemOnVehicle(id, customizationType):
 
 
 def getItemsOnVehicle(customizationType):
-    items = [__getDescriptorOfCurrentVehicle().camouflages, __getDescriptorOfCurrentVehicle().playerEmblems, __getDescriptorOfCurrentVehicle().playerInscriptions]
+    curVehDescr = __getDescriptorOfCurrentVehicle()
+    items = [curVehDescr.camouflages, curVehDescr.playerEmblems, curVehDescr.playerInscriptions]
     return items[customizationType]
 
 
@@ -83,12 +84,37 @@ def __getDescriptorOfCurrentVehicle():
     return igrDescr
 
 
+def clearStoredCustomizationData():
+    storedItems = dict(AccountSettings.getSettings('customization'))
+    clearStoredItems = {}
+    for key, storedTypedItems in storedItems.iteritems():
+        typedNewStoredItems = []
+        inventoryItems = getInventoryItemsFor(key)
+        for item in inventoryItems:
+            for storedItem in storedTypedItems:
+                if key == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE and storedItem[1] == item.get('id') or key != CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE and storedItem[1] == item.get('nationId') and storedItem[2] == item.get('id'):
+                    typedNewStoredItems.append(storedItem)
+
+        clearStoredItems[key] = typedNewStoredItems
+
+    AccountSettings.setSettings('customization', clearStoredItems)
+
+
 def updateVisitedItems(customizationName, visitedIds):
+    if not g_currentVehicle.isPresent():
+        return
+    storedItems = dict(AccountSettings.getSettings('customization'))
     if not isinstance(visitedIds, set):
         LOG_WARNING('visitedIds will be in an list')
-    visitedItems = dict(AccountSettings.getSettings('customization'))
-    curItems = {customizationName: visitedIds}
-    curTypeItems = __integrateDicts(curItems, visitedItems)
+    updatedVisitedIds = []
+    for item in visitedIds:
+        if isinstance(item, int):
+            updatedVisitedIds.append((g_currentVehicle.item.intCD, item))
+        else:
+            updatedVisitedIds.append((g_currentVehicle.item.intCD,) + item)
+
+    curItems = {customizationName: updatedVisitedIds}
+    curTypeItems = __integrateDicts(curItems, storedItems)
     AccountSettings.setSettings('customization', curTypeItems)
 
 
@@ -105,10 +131,11 @@ def __integrateDicts(fromDict, toDict):
         if key in toDict:
             if isinstance(value, dict) and isinstance(toDict[key], dict):
                 toDict[key] = __integrateDicts(toDict[key], value)
-            elif isinstance(value, set) and (isinstance(toDict[key], set) or isinstance(toDict[key], tuple)):
-                data = value
-                data.update(toDict[key])
-                toDict[key] = tuple(data)
+            elif isinstance(value, list) and isinstance(toDict[key], list):
+                if value != toDict[key]:
+                    data = set(value)
+                    data.update(set(toDict[key]))
+                    toDict[key] = list(data)
             else:
                 LOG_WARNING('incorrect type of data in data with key: ' + key)
         else:
@@ -158,16 +185,23 @@ def checkIsNewItem(type, itemID, nationId = None):
 
 def getNewIdsByType(type, nationId = None):
     visitedItems = getVisitedIDs(type)
-    items = getInventoryItemsFor(type)
-    filtered = filter(lambda item: item['vehTypeCompDesr'] is None or item['vehTypeCompDesr'] == g_currentVehicle.item.intCD, items)
+    filteredVisitedItems = []
+    filteredItems = []
+    if g_currentVehicle.isPresent():
+        for item in visitedItems:
+            if item[0] == g_currentVehicle.item.intCD:
+                filteredVisitedItems.append(item[1:] if len(item) > 2 else item[1])
+
+        items = getInventoryItemsFor(type)
+        filteredItems = filter(lambda item: item['vehTypeCompDesr'] is None or item['vehTypeCompDesr'] == g_currentVehicle.item.intCD, items)
     if type != CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
-        filtered = filter(lambda item: item['nationId'] == nationId, filtered)
+        filteredItems = filter(lambda item: item['nationId'] == nationId, filteredItems)
     result = []
-    for item in filtered:
+    for item in filteredItems:
         result.append(item.get('id') if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE else (nationId, item.get('id')))
 
     result = set(result)
-    return result.difference(visitedItems)
+    return result.difference(set(filteredVisitedItems))
 
 
 def isIdInDefaultSetup(type, itemID, position = None):
@@ -181,19 +215,47 @@ def isIdInDefaultSetup(type, itemID, position = None):
     return res
 
 
-def getItemFromHangar(type, itemID):
+def getItemFromHangar(type, itemID, nationId, position = None):
     if itemID is None:
         return
     else:
-        dossier = g_itemsCache.items.getVehicleDossier(g_currentVehicle.item.intCD)
-        dosierElements = dossier.getBlock(type)
+        igrRoomType = g_instance.igr.getRoomType()
+        defaultElements, igrElements, dosierElements = getCustomizationElements(CUSTOMIZATION_ITEM_TYPE.CI_TYPES.index(type), igrRoomType)
         inventoryElements = getInventoryItemsFor(type)
-        if itemID in dosierElements:
-            return __createCiItem(itemID if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE else [None, itemID], 0, type, True, g_currentVehicle.item.intCD)
+        inventoryCount = 0
+        temporalInventoryItem = None
+        permanentInventoryItem = None
+        inventoryVehTypeCompDesr = None
         for item in inventoryElements:
+            vehTypeCompDesr = item.get('vehTypeCompDesr')
             if item.get('id') == itemID and (item['vehTypeCompDesr'] is None or item['vehTypeCompDesr'] == g_currentVehicle.item.intCD):
-                return item
+                if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE or item.get('nationId') == nationId:
+                    if item.get('isPermanent'):
+                        permanentInventoryItem = item
+                        inventoryCount += item.get('quantity')
+                        if inventoryVehTypeCompDesr is None:
+                            inventoryVehTypeCompDesr = vehTypeCompDesr
+                    else:
+                        temporalInventoryItem = item
 
+        if itemID in dosierElements:
+            return __createCiItem(itemID if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE else [None, itemID], inventoryCount + 1, type, True, g_currentVehicle.item.intCD)
+        if temporalInventoryItem:
+            return temporalInventoryItem
+        if permanentInventoryItem:
+            return permanentInventoryItem
+        isDefault = False
+        for item in igrElements:
+            if item[0] == itemID and (item[2] == 0 or igrRoomType != 0 and (position is None or position is not None and igrElements[position] == item)):
+                isDefault = True
+
+        for item in defaultElements:
+            if item[0] == itemID and (item[2] == 0 or igrRoomType != 0 and (position is None or position is not None and defaultElements[position] == item)):
+                isDefault = True
+
+        if isDefault:
+            return __createCiItem(itemID if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE else (nationId, itemID), inventoryCount, type, True, inventoryVehTypeCompDesr)
+        return
         return
 
 
@@ -207,12 +269,14 @@ def areItemsInHangar(type, itemIDs, nationId):
         for itemID in itemIDs:
             if itemID in dosierElements:
                 return True
+            isInInventory = False
             for item in inventoryElements:
                 if item.get('id') == itemID and (item['vehTypeCompDesr'] is None or item['vehTypeCompDesr'] == g_currentVehicle.item.intCD):
-                    if elementType == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
-                        return True
-                    else:
-                        return item.get('nationId') == nationId
+                    if elementType == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE or item.get('nationId') == nationId:
+                        isInInventory = True
+                        break
+
+            return isInInventory
 
         return
 
@@ -227,13 +291,15 @@ def isItemInHangar(type, itemID, nationId, position = None):
         inventoryElements = getInventoryItemsFor(elementType)
         if itemID in dosierElements:
             return True
+        isInInventory = False
         for item in inventoryElements:
             if item.get('id') == itemID and (item['vehTypeCompDesr'] is None or item['vehTypeCompDesr'] == g_currentVehicle.item.intCD):
-                if elementType == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
-                    return True
-                else:
-                    return item.get('nationId') == nationId
+                if elementType == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE or item.get('nationId') == nationId:
+                    isInInventory = True
+                    break
 
+        if isInInventory:
+            return True
         for item in igrElements:
             if item[0] == itemID and (item[2] == 0 or igrRoomType != 0 and (position is None or position is not None and igrElements[position] == item)):
                 return True

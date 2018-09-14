@@ -77,18 +77,6 @@ class UtilsManager(UtilsManagerMeta):
 
         return result
 
-    def getDateParams(self, timestamp):
-        from helpers import time_utils
-        date = time_utils.getDateTimeInLocal(int(timestamp))
-        result = {'year': date.year,
-         'month': date.month - 1,
-         'date': date.day,
-         'hour': date.hour,
-         'minute': date.minute,
-         'second': date.second,
-         'millisecond': date.microsecond * 1000}
-        return result
-
     def _dispose(self):
         if self._textMgr is not None:
             TextManager.clearReference()

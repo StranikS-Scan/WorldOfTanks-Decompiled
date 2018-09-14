@@ -1,16 +1,15 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
 import cPickle as pickle
 import constants
-import dossiers2
 import gui
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from CurrentVehicle import g_currentVehicle
-from debug_utils import LOG_ERROR, LOG_DEBUG
 from collections import namedtuple
+from gui.server_events import g_eventsCache
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmanSkill
-from gui.shared.gui_items.dossier import AccountDossier, VehicleDossier, TankmanDossier, factories, loadDossier
+from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils import findFirst
 from helpers.i18n import makeString
@@ -163,6 +162,24 @@ class CarouselContext(InventoryContext):
 
     def buildItem(self, invID):
         return g_itemsCache.items.getVehicle(int(invID))
+
+
+class PotapovQuestsChainContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude = None):
+        super(PotapovQuestsChainContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+
+    def buildItem(self, tileID, chainID):
+        return (tileID, chainID)
+
+
+class PotapovQuestsTileContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude = None):
+        super(PotapovQuestsTileContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+
+    def buildItem(self, tileID):
+        return g_eventsCache.potapov.getTiles().get(tileID)
 
 
 class HangarContext(ToolTipContext):
@@ -358,6 +375,17 @@ class BattleResultMarksOnGunContext(BattleResultContext):
             return
 
 
+class BattleResultMarkOfMasteryContext(BattleResultContext):
+
+    def buildItem(self, block, name, value = 0, customData = None):
+        item = super(BattleResultMarkOfMasteryContext, self).buildItem(block, name, value, customData)
+        if item is not None and customData is not None:
+            prevMarkOfMastery, compDescr = customData
+            item.setPrevMarkOfMastery(prevMarkOfMastery)
+            item.setCompDescr(compDescr)
+        return item
+
+
 class FinalStatisticContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude = None):
@@ -385,10 +413,18 @@ class CustomizationContext(ToolTipContext):
         if customizationType == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE:
             result = vehicles.g_cache.customization(nationId)['camouflages'][itemId]
         elif customizationType == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
-            _, result, _ = vehicles.g_cache.playerEmblems()
-            result = result[itemId]
+            emblemGroups, emblems, _ = vehicles.g_cache.playerEmblems()
+            emblem = emblems[itemId]
+            allow, deny = emblemGroups.get(emblem[0])[4:]
+            result = list(emblem)
+            result.extend([allow, deny])
         elif customizationType == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION:
-            result = vehicles.g_cache.customization(nationId)['inscriptions'][itemId]
+            customizationData = vehicles.g_cache.customization(nationId)
+            inscriptionGroups = customizationData.get('inscriptionGroups', {})
+            inscription = customizationData.get('inscriptions', {}).get(itemId)
+            allow, deny = inscriptionGroups.get(inscription[0])[3:]
+            result = list(inscription)
+            result.extend([allow, deny])
         else:
             result = None
         return result

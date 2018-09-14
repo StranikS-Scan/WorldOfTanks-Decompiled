@@ -1,10 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ServerStats.py
+import BigWorld
 import constants
 from adisp import process
+from debug_utils import LOG_DEBUG
 from helpers import i18n
 from ConnectionManager import connectionManager
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, REQUEST_RATE
-from gui import GUI_SETTINGS, game_control, DialogsInterface
+from gui import GUI_SETTINGS, game_control, DialogsInterface, makeHtmlString
 from gui.prb_control.prb_helpers import PrbListener
 from gui.shared import events
 from gui.shared.utils.functions import makeTooltip
@@ -78,13 +80,13 @@ class ServerStats(ServerStatsMeta, PrbListener):
         self.__serversList = []
         hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         for key, name, csisStatus, peripheryID in hostsList:
-            self.__serversList.append({'label': name,
+            self.__serversList.append({'label': self.__wrapServerName(name),
              'id': peripheryID,
              'csisStatus': csisStatus,
              'selected': connectionManager.peripheryID == peripheryID})
 
         if connectionManager.peripheryID == 0:
-            self.__serversList.insert(0, {'label': connectionManager.serverUserName,
+            self.__serversList.insert(0, {'label': self.__wrapServerName(connectionManager.serverUserName),
              'id': 0,
              'csisStatus': HOST_AVAILABILITY.IGNORED,
              'selected': True})
@@ -103,7 +105,7 @@ class ServerStats(ServerStatsMeta, PrbListener):
 
     def __onStatsReceived(self, stats):
         if constants.IS_SHOW_SERVER_STATS:
-            self.as_setServerStatsS(dict(stats))
+            self.as_setServerStatsS(*game_control.g_instance.serverStats.getFormattedStats())
 
     def __onCsisUpdate(self, response = None):
         self._updateServersList()
@@ -111,3 +113,8 @@ class ServerStats(ServerStatsMeta, PrbListener):
     def __clearServersList(self):
         while len(self.__serversList):
             self.__serversList.pop().clear()
+
+    def __wrapServerName(self, name):
+        if constants.IS_CHINA:
+            return makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': name})
+        return name

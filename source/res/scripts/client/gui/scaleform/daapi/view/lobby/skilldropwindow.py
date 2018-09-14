@@ -12,10 +12,14 @@ from gui.shared.gui_items.processors.tankman import TankmanDropSkills
 from gui.Scaleform.daapi.view.meta.SkillDropMeta import SkillDropMeta
 from gui.shared import events, g_itemsCache
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.locale.MENU import MENU
+from helpers import i18n
+from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.framework import AppRef
 
-class SkillDropWindow(View, SkillDropMeta, AbstractWindowView):
+class SkillDropWindow(View, SkillDropMeta, AbstractWindowView, AppRef):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(SkillDropWindow, self).__init__()
         self.tmanInvID = ctx.get('tankmanID')
 
@@ -52,12 +56,20 @@ class SkillDropWindow(View, SkillDropMeta, AbstractWindowView):
             availableSkillsCount = len(skills_count) - len(tankman.skills)
             hasNewSkills = tankman.roleLevel == tankmen.MAX_SKILL_LEVEL and availableSkillsCount and (tankman.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not len(tankman.skills))
             self.as_setDataS({'money': items.stats.money,
-             'tankman': packTankman(tankman),
+             'tankman': packTankman(tankman, isCountPermanentSkills=False),
              'dropSkillsCost': dropSkillsCost,
              'hasNewSkills': hasNewSkills,
              'newSkills': tankman.newSkillCount,
-             'defaultSavingMode': 0})
+             'defaultSavingMode': 0,
+             'texts': self.__getTexts()})
             return
+
+    def __getTexts(self):
+        ms = i18n.makeString
+        getTxt = self.app.utilsManager.textManager.getText
+        percentText = getTxt(TextType.NEUTRAL_TEXT, ms(MENU.SKILLDROPWINDOW_FREEDROPPERCENT))
+        freeDropText = getTxt(TextType.MAIN_TEXT, ms(MENU.SKILLDROPWINDOW_FREEDROPLABEL, percent=percentText))
+        return {'freeDrop': freeDropText}
 
     def _populate(self):
         super(SkillDropWindow, self)._populate()

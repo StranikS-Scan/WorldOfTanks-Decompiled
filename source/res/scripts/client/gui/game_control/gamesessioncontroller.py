@@ -34,6 +34,7 @@ class GameSessionController(object):
         self.__midnightBlockTime = None
         self.__playTimeBlockTime = None
         self.__doNotifyInStart = False
+        self.__battles = 0
         LOG_DEBUG('GameSessionController::init')
         return
 
@@ -148,6 +149,13 @@ class GameSessionController(object):
     @property
     def lastBanMsg(self):
         return self.__lastBanMsg
+
+    @property
+    def battlesCount(self):
+        return self.__battles
+
+    def incBattlesCounter(self):
+        self.__battles += 1
 
     def _getDailyPlayHours(self):
         """

@@ -19,7 +19,8 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from gui.Scaleform.daapi import LobbySubView
-from gui.shared import events, g_itemsCache, g_eventsCache
+from gui.shared import events, g_itemsCache
+from gui.server_events import g_eventsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -36,7 +37,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         RESEARCH_PANEL = 'researchPanel'
         TMEN_XP_PANEL = 'tmenXpPanel'
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         LobbySubView.__init__(self, 0)
 
     def _populate(self):
@@ -63,7 +64,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
-            self.fireEvent(events.ShowViewEvent(events.ShowViewEvent.SHOW_LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showHelpLayout(self):
         containerManager = self.app.containerManager
@@ -277,7 +278,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
             permission = self.prbDispatcher.getGUIPermissions()
             if permission is not None:
                 isVehicleDisabled = not permission.canChangeVehicle()
-        crewEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar() and enabledInRent
+        crewEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar()
         carouselEnabled = not isVehicleDisabled
         maintenanceEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar() and enabledInRent
         customizationEnabled = g_currentVehicle.isInHangar() and not isVehicleDisabled and not g_currentVehicle.isBroken() and enabledInRent
@@ -289,4 +290,4 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     def __onStatsReceived(self, stats):
         if IS_SHOW_SERVER_STATS:
-            self.as_setServerStatsS(dict(stats))
+            self.as_setServerStatsS(*game_control.g_instance.serverStats.getFormattedStats())

@@ -42,7 +42,7 @@ class ArenasCache(object):
 
 class TrainingSettingsWindow(View, AbstractWindowView, TrainingWindowMeta):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(TrainingSettingsWindow, self).__init__()
         self.__isCreateRequest = ctx.get('isCreateRequest', False)
         self.__arenasCache = ArenasCache()

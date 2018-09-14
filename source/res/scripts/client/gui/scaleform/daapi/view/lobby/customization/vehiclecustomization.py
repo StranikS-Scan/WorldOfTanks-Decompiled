@@ -10,6 +10,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
 from gui.Scaleform.daapi.view.lobby.customization import _VEHICLE_CUSTOMIZATIONS
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
@@ -30,7 +31,7 @@ from items.vehicles import VehicleDescr
 
 class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(VehicleCustomization, self).__init__()
         self.__interfaces = {}
         self.__prevCameraLocation = None
@@ -110,6 +111,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
         g_hangarSpace.onSpaceCreate -= self.__hs_onSpaceCreate
         g_playerEvents.onDossiersResync -= self.__pe_onDossiersResync
         g_clientUpdateManager.removeObjectCallbacks(self)
+        CustomizationHelper.clearStoredCustomizationData()
         View._dispose(self)
 
     def __onServerResponsesReceived(self):
@@ -178,7 +180,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
         return
 
     def closeWindow(self):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __ci_onDataInited(self, _):
         self.__steps -= 1

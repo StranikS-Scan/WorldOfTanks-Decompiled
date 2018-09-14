@@ -3,7 +3,7 @@ import ArenaType
 import BigWorld
 from adisp import process
 from gui import SystemMessages, GUI_SETTINGS
-from gui.Scaleform.daapi.settings import VIEW_ALIAS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.framework import AppRef, ViewTypes, g_entitiesFactories
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
@@ -28,6 +28,9 @@ from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 
 class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, PrbListener):
+
+    def __init__(self, ctx = None):
+        super(TrainingRoom, self).__init__()
 
     @storage_getter('users')
     def usersStorage(self):
@@ -55,16 +58,16 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self.__updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         g_messengerEvents.users.onUserRosterChanged -= self.__me_onUserRosterChanged
-        self._closeWindow(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)
+        self.__closeWindows()
         super(TrainingRoom, self)._dispose()
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
-            self.fireEvent(events.ShowViewEvent(events.ShowViewEvent.SHOW_LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showTrainingSettings(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_TRAINING_SETTINGS_WINDOW, ctx={'isCreateRequest': False}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY, ctx={'isCreateRequest': False}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onWindowMinimize(self):
         g_eventDispatcher.loadHangar()
@@ -97,7 +100,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
         return self.prbFunctional.getPlayerTeam(accID)
 
     def showPrebattleInvitationsForm(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_SEND_INVITES_WINDOW, {'prbName': 'training',
+        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'training',
          'ctrlType': CTRL_ENTITY_TYPE.PREBATTLE}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def startTraining(self):
@@ -224,11 +227,9 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
             self.components[VIEW_ALIAS.MINIMAP_LOBBY].swapTeams(team)
 
     def _closeWindow(self, windowAlias):
-        container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
-        if container is not None:
-            window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: windowAlias})
-            if window is not None:
-                window.destroy()
+        window = self.app.containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: windowAlias})
+        if window is not None:
+            window.destroy()
         return
 
     def __closeWindows(self):

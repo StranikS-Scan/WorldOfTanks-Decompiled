@@ -235,9 +235,16 @@ class VehicleDescr(object):
             groups, emblems, names = g_cache.playerEmblems()
             emblem = emblems[emblemID]
             groupName = emblem[0]
-            nations = groups[groupName][3]
+            group = groups[groupName]
+            nations = group[3]
             if nations is not None and self.type.customizationNationID not in nations:
                 raise Exception, 'emblem nation mismatch'
+            allow, deny = group[4:6]
+            cd = self.type.compactDescr
+            if cd in deny:
+                raise Exception, 'emblem is incompatible with vehicle'
+            if allow and cd not in allow:
+                raise Exception, 'emblem is incompatible with vehicle'
             startTime = int(startTime / 60) * 60
             if startTime < _CUSTOMIZATION_EPOCH:
                 raise Exception, 'wrong emblem start time'
@@ -255,10 +262,15 @@ class VehicleDescr(object):
             durationDays = 0
             color = 0
         else:
-            if inscriptionID is not None:
-                customization = g_cache.customization(self.type.customizationNationID)
-                customization['inscriptions'][inscriptionID]
-                customization['inscriptionColors'][color]
+            customization = g_cache.customization(self.type.customizationNationID)
+            groupName = customization['inscriptions'][inscriptionID][0]
+            customization['inscriptionColors'][color]
+            allow, deny = customization['inscriptionGroups'][groupName][3:5]
+            cd = self.type.compactDescr
+            if cd in deny:
+                raise Exception, 'inscription is incompatible with vehicle'
+            if allow and cd not in allow:
+                raise Exception, 'inscription is incompatible with vehicle'
             startTime = int(startTime / 60) * 60
             if startTime < _CUSTOMIZATION_EPOCH:
                 raise Exception, 'wrong inscription start time'
@@ -1019,8 +1031,8 @@ class VehicleType(object):
         self.premiumVehicleXPFactor = max(self.premiumVehicleXPFactor, 0.0)
         if not IS_CLIENT or IS_DEVELOPMENT:
             self.xpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'xpFactor')
-            self.freeXpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'freeXpFactor')
             self.creditsFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'creditsFactor')
+            self.freeXpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'freeXpFactor')
             self.healthBurnPerSec = _xml.readNonNegativeFloat(xmlCtx, section, 'healthBurnPerSec')
             self.healthBurnPerSecLossFraction = _DEFAULT_HEALTH_BURN_PER_SEC_LOSS_FRACTION
             self.invisibility = (_xml.readFraction(xmlCtx, section, 'invisibility/moving'), _xml.readFraction(xmlCtx, section, 'invisibility/still'))
@@ -1849,7 +1861,7 @@ def _readHull(xmlCtx, section):
         res['AODecals'] = _readAODecals(xmlCtx, section, 'AODecals')
         if section.has_key('camouflage'):
             res['camouflageTiling'], res['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
-    if IS_CLIENT or IS_WEB:
+    if IS_CLIENT or IS_WEB or IS_CELLAPP:
         res['primaryArmor'] = _readPrimaryArmor(xmlCtx, section, 'primaryArmor', res['materials'])
     return res
 
@@ -1921,6 +1933,14 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
             if name == 'turretHardPoints':
                 if IS_CLIENT:
                     variant['turretHardPoints'] = __readTurretHardPoints(section, numTurrets)
+                continue
+            if name == 'emblemSlots':
+                if IS_CLIENT:
+                    variant['emblemSlots'] = _readEmblemSlots(xmlCtx, section, 'emblemSlots')
+                continue
+            if name == 'camouflage':
+                if IS_CLIENT:
+                    variant['camouflageTiling'], variant['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
                 continue
             if name == 'chassis':
                 if variantMatch[0] is not None:
@@ -2079,25 +2099,20 @@ def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem
             trackParams = {'thickness': _xml.readFloat(ctx, section, 'trackThickness'),
              'maxAmplitude': _xml.readFloat(ctx, section, 'trackNodes/maxAmplitude'),
              'maxOffset': _xml.readFloat(ctx, section, 'trackNodes/maxOffset'),
-             'elasticity': section.readFloat('trackNodes/elasticity', 1500.0),
-             'damping': _xml.readFloat(ctx, section, 'trackNodes/damping'),
              'gravity': _xml.readFloat(ctx, section, 'trackNodes/gravity')}
+            defElasticity = section.readFloat('trackNodes/elasticity', 1500.0)
+            defDamping = section.readFloat('trackNodes/damping', 1.0)
             defForwardElastK = section.readFloat('trackNodes/forwardElastK', 1.0)
             defBackwardElastK = section.readFloat('trackNodes/backwardElastK', 1.0)
             defOffset = section.readFloat('trackNodes/offset')
             for sname, subsection in _xml.getChildren(xmlCtx, section, 'trackNodes'):
-                if sname == 'group':
-                    ctx = (xmlCtx, 'trackNodes/group')
-                    v = (_xml.readNonEmptyString(ctx, subsection, 'template'),
-                     _xml.readInt(ctx, subsection, 'count', 1),
-                     subsection.readInt('startIndex', 0),
-                     _xml.readFloat(ctx, subsection, 'maxAmplitude'))
-                    trackGroups.append(v)
-                elif sname == 'node':
+                if sname == 'node':
                     ctx = (xmlCtx, 'trackNodes/node')
                     v = (_xml.readNonEmptyString(ctx, subsection, 'name'),
                      _xml.readBool(ctx, subsection, 'isLeft'),
                      subsection.readFloat('offset', defOffset),
+                     subsection.readFloat('elasticity', defElasticity),
+                     subsection.readFloat('damping', defDamping),
                      _xml.readStringOrNone(ctx, subsection, 'leftSibling'),
                      _xml.readStringOrNone(ctx, subsection, 'rightSibling'),
                      subsection.readFloat('forwardElastK', defForwardElastK),
@@ -3477,12 +3492,12 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
         descr['description'] = section.readString('description')
         descr['texture'] = _xml.readNonEmptyString(xmlCtx, section, 'texture')
         descr['colors'] = _readColors(xmlCtx, section, 'colors', 4)
-        descr['gloss'] = _readGloss(xmlCtx, section, nationID)
-        descr['metallic'] = _readMetallic(xmlCtx, section, nationID)
         descr['tiling'] = _readCamouflageTilings(xmlCtx, section, 'tiling', nationID)
     groupDescr['ids'].append(id)
     if isNew:
         groupDescr['hasNew'] = True
+    tags = _xml.readStringOrNone(xmlCtx, section, 'tags')
+    descr['tags'] = frozenset() if tags is None else frozenset(tags.split())
     return (id, descr)
 
 
@@ -3536,7 +3551,10 @@ def _readNationVehiclesByNames(xmlCtx, section, sectionName, defNationID):
         names = section.asString.split()
         if not names:
             return frozenset()
-        defNationNameTempl = nations.NAMES[defNationID] + ':'
+        if defNationID is not None:
+            defNationNameTempl = nations.NAMES[defNationID] + ':'
+        else:
+            defNationNameTempl = ''
         res = set()
         for vehName in names:
             if vehName.find(':') == -1:
@@ -3582,22 +3600,6 @@ def _readCamouflageTilings(xmlCtx, section, sectionName, defNationID):
         if tiling[0] <= 0 or tiling[1] <= 0:
             _xml.raiseWrongSection(v.ctx, v.vehicle_name)
         res[v.compact_descriptor] = tiling
-
-    return res
-
-
-def _readGloss(xmlCtx, section, defNationID):
-    res = {}
-    for v in _vehicleValues(xmlCtx, section, 'gloss', defNationID):
-        res[v.compact_descriptor] = _readColor(v.ctx, v.subsection, '')
-
-    return res
-
-
-def _readMetallic(xmlCtx, section, defNationID):
-    res = {}
-    for v in _vehicleValues(xmlCtx, section, 'metallic', defNationID):
-        res[v.compact_descriptor] = _readColor(v.ctx, v.subsection, '')
 
     return res
 
@@ -3655,6 +3657,8 @@ def _readPlayerEmblems(xmlPath):
         groupName = intern(sname)
         igrType = _readIGRType(groupCtx, subsection)
         nations = _readNations(groupCtx, subsection)
+        allow = _readNationVehiclesByNames(groupCtx, subsection, 'allow', None)
+        deny = _readNationVehiclesByNames(groupCtx, subsection, 'deny', None)
         if pricesDest is not None:
             pricesDest['playerEmblemGroupPriceFactors'][groupName] = _xml.readNonNegativeFloat(groupCtx, subsection, 'priceFactor')
             if subsection.readBool('notInShop', False):
@@ -3685,20 +3689,25 @@ def _readPlayerEmblems(xmlPath):
                 texName = ''
                 bumpTexName = ''
                 isMirrored = False
+            tags = _xml.readStringOrNone(ctx, subsection, 'tags')
+            tags = frozenset() if tags is None else frozenset(tags.split())
             emblemIDs.append(emblemID)
             emblems[emblemID] = (groupName,
              igrType,
              texName,
              bumpTexName,
              emblemUserString,
-             isMirrored)
+             isMirrored,
+             tags)
             if sname != 'emblem':
                 names[intern(sname)] = emblemID
 
         groups[groupName] = (emblemIDs,
          groupUserString,
          igrType,
-         nations)
+         nations,
+         allow,
+         deny)
 
     return (groups, emblems, names)
 
@@ -3714,6 +3723,8 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
             _xml.raiseWrongXml(groupCtx, '', 'inscription group name is not unique')
         groupName = intern(sname)
         igrType = _readIGRType(_xml, subsection)
+        allow = _readNationVehiclesByNames(_xml, subsection, 'allow', None)
+        deny = _readNationVehiclesByNames(_xml, subsection, 'deny', None)
         if priceFactors is not None:
             priceFactors[groupName] = _xml.readNonNegativeFloat(groupCtx, subsection, 'priceFactor')
             if subsection.readBool('notInShop', False):
@@ -3730,6 +3741,8 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
             inscrID = _xml.readInt(ctx, subsection, 'id', *idsRange)
             if inscrs.has_key(inscrID):
                 _xml.raiseWrongXml(ctx, '', 'inscription ID is not unique')
+            tags = _xml.readStringOrNone(ctx, subsection, 'tags')
+            tags = frozenset() if tags is None else frozenset(tags.split())
             if IS_CLIENT:
                 texName = _xml.readNonEmptyString(ctx, subsection, 'texName')
                 bumpTexName = subsection.readString('bumpTexName', '')
@@ -3740,12 +3753,17 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
                  texName,
                  bumpTexName,
                  inscrUserString,
-                 isFeatured)
+                 isFeatured,
+                 tags)
             else:
-                inscrs[inscrID] = (groupName, igrType)
+                inscrs[inscrID] = (groupName, igrType, tags)
             inscrIDs.append(inscrID)
 
-        groups[groupName] = (inscrIDs, groupUserString, igrType)
+        groups[groupName] = (inscrIDs,
+         groupUserString,
+         igrType,
+         allow,
+         deny)
 
     return (groups, inscrs)
 

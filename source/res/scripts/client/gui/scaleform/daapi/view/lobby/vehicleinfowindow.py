@@ -9,8 +9,9 @@ from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 
 class VehicleInfoWindow(View, VehicleInfoMeta, AbstractWindowView):
 
-    def __init__(self, vehicleCompactDescr):
+    def __init__(self, ctx = None):
         super(VehicleInfoWindow, self).__init__()
+        vehicleCompactDescr = ctx.get('vehicleCompactDescr', 0)
         self.vehicleCompactDescr = vehicleCompactDescr
 
     def onCancelClick(self):

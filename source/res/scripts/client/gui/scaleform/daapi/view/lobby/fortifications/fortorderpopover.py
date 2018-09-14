@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderPopover.py
 import constants
 from adisp import process
-from debug_utils import LOG_DEBUG
 from gui import DialogsInterface
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.fortifications.ConfirmOrderDialogMeta import BuyOrderDialogMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
@@ -14,7 +14,8 @@ from gui.Scaleform.daapi.view.meta.FortOrderPopoverMeta import FortOrderPopoverM
 from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared import events, g_eventsCache
+from gui.shared import events
+from gui.server_events import g_eventsCache, events_dispatcher as quests_events
 from gui.shared.fortifications.context import OrderCtx
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
@@ -58,9 +59,8 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
 
     def _getCountStr(self, order):
         count = order.count
-        total = ' / %d' % order.maxCount
-        countColor = TextType.NEUTRAL_TEXT if count != 0 else TextType.STANDARD_TEXT
-        return self.app.utilsManager.textManager.concatStyles(((countColor, count), (TextType.STANDARD_TEXT, total)))
+        countColor = TextType.NEUTRAL_TEXT if count > 0 else TextType.STANDARD_TEXT
+        return self.app.utilsManager.textManager.getText(countColor, count)
 
     def _canGiveOrder(self):
         return self.fortCtrl.getPermissions().canActivateOrder()
@@ -156,15 +156,16 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
             body = TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_DESCRIPTION
         else:
             header = TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_CANTUSE_HEADER
+            fort = self.fortCtrl.getFort()
             if not order.isSupported:
                 body = TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_NOTAVAILABLE
             elif not hasBuilding:
                 body = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_NOBUILDING, building=buildingStr)
-            elif not order.isPermanent and self.fortCtrl.getFort().hasActivatedContinualOrders():
+            elif order.inCooldown:
                 body = TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_WASUSED
-            elif order.isPermanent and order.inCooldown:
-                body = TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_WASUSED
-            elif order.isPermanent and not self.fortCtrl.getFort().isDefenceHourEnabled():
+            elif not order.isCompatible and fort.hasActivatedContinualOrders():
+                body = TOOLTIPS.FORTIFICATION_ORDERSPANEL_CANTUSEORDER
+            elif order.isPermanent and not fort.isDefenceHourEnabled():
                 body = TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_DEFENCEHOURDISABLED
             elif order.count < 1:
                 body = TOOLTIPS.FORTIFICATION_ORDERPOPOVER_USEORDERBTN_NOORDERS
@@ -218,7 +219,7 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         self._prepareAndSetData()
 
     def openQuest(self, questID):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_EVENTS_WINDOW, {'eventID': questID}))
+        return quests_events.showEventsWindow(questID, constants.EVENT_TYPE.FORT_QUEST)
 
     @classmethod
     def __getFortQuest(cls):
@@ -234,7 +235,8 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         quest = cls.__getFortQuest()
         if quest is not None:
             for b in quest.getBonuses():
-                if b.isShowInGUI():
-                    result.append(b.format())
+                formattedValue = b.format()
+                if b.isShowInGUI() and formattedValue:
+                    result.append(formattedValue)
 
         return ', '.join(result)

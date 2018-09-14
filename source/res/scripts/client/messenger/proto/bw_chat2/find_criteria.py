@@ -17,6 +17,9 @@ class BWBattleChannelFindCriteria(IEntityFindCriteria):
         clientID = channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.SQUAD)
         if clientID:
             self.__ids.append(clientID)
+        clientID = channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.EVENT_SQUAD)
+        if clientID:
+            self.__ids.append(clientID)
 
     def filter(self, channel):
         return channel.getProtoType() is PROTO_TYPE.BW_CHAT2 and channel.getClientID() in self.__ids

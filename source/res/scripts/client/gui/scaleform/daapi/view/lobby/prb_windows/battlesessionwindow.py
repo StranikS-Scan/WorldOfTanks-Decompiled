@@ -18,7 +18,7 @@ class BattleSessionWindow(PrebattleWindow, BattleSessionWindowMeta):
     START_TIME_SYNC_PERIOD = 10
     NATION_ICON_PATH = '../maps/icons/filters/nations/%(nation)s.png'
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(BattleSessionWindow, self).__init__(prbName='battleSession')
         self.__setStaticData()
         self.__startTimeSyncCallbackID = None
@@ -147,13 +147,18 @@ class BattleSessionWindow(PrebattleWindow, BattleSessionWindowMeta):
         minTotalLvl, maxTotalLvl = prb_control.getTotalLevelLimits(teamLimits)
         playersMaxCount = prb_control.getMaxSizeLimits(teamLimits)[0]
         totalLvl = 0
+        playersCount = 0
         for roster, players in rosters.iteritems():
             if roster ^ self.__team == PREBATTLE_ROSTER.ASSIGNED:
                 for player in players:
+                    if player.isReady():
+                        playersCount += 1
                     if player.isVehicleSpecified():
                         totalLvl += player.getVehicle().level
 
         self.as_setCommonLimitsS(totalLvl, minTotalLvl, maxTotalLvl, playersMaxCount)
+        self.as_setPlayersCountTextS(makeHtmlString('html_templates:lobby/prebattle', 'specBattlePlayersCount', {'membersCount': playersCount,
+         'maxMembersCount': playersMaxCount}))
 
     def __updateLimits(self, teamLimits, rosters):
         levelLimits = {}

@@ -5,6 +5,7 @@ from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface, game_control
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
 from gui.Scaleform.daapi.view.lobby.techtree.ResearchView import ResearchView
@@ -87,7 +88,7 @@ class Research(ResearchView, ResearchMeta):
 
     def request4SelectInHangar(self, itemCD):
         self.selectVehicleInHangar(itemCD)
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def request4ShowVehicleStatistics(self, itemCD):
         self.showVehicleStatistics(itemCD)
@@ -105,7 +106,7 @@ class Research(ResearchView, ResearchMeta):
         self.showVehicleInfo(pickleDump)
 
     def goToTechTree(self, nation):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_TECHTREE, ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def exitFromResearch(self):
         if self._canBeClosed:

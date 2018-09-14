@@ -76,6 +76,7 @@ class _PlayerEvents(object):
         self.onBattleResultsReceived = Event.Event()
         self.onLoginQueueNumberReceived = Event.Event()
         self.onKickWhileLoginReceived = Event.Event()
+        self.onGuiCacheSyncCompleted = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

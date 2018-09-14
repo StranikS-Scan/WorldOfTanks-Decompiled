@@ -14,6 +14,10 @@ def _total(achieveName):
     return (_AB.TOTAL, achieveName)
 
 
+def _single(achieveName):
+    return (_AB.SINGLE, achieveName)
+
+
 _TANK_EXPERT_PREFIX = 'tankExpert'
 _MECH_ENGINEER_PREFIX = 'mechanicEngineer'
 _HIST_BATTLEFIELD_POSTFIX = 'battlefield'
@@ -24,6 +28,13 @@ for _nID, _ in enumerate(nations.AVAILABLE_NAMES):
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))
 
 HISTORY_BATTLEFIELD_GROUP = []
+POTAPOV_QUESTS_GROUP = [_single('firstMerit'),
+ _total('readyForBattleLT'),
+ _total('readyForBattleMT'),
+ _total('readyForBattleSPG'),
+ _total('readyForBattleATSPG'),
+ _total('readyForBattleALL'),
+ _total('tankwomenProgress')]
 _COMMON_DOSSIERS_TYPE = 0
 _EXCLUDED_ACHIEVES = defaultdict(tuple, {})
 _CUSTOM_ACHIEVES = defaultdict(tuple, {DOSSIER_TYPE.ACCOUNT: (achievements.WHITE_TIGER_RECORD, achievements.RARE_STORAGE_RECORD)})

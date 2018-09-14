@@ -11,6 +11,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
+from FortifiedRegionBase import NOT_ACTIVATED
 
 class FortIntelligenceClanFilterPopover(View, FortIntelligenceClanFilterPopoverMeta, SmartPopOverView, FortViewHelper, AppRef):
 
@@ -40,7 +41,11 @@ class FortIntelligenceClanFilterPopover(View, FortIntelligenceClanFilterPopoverM
             minClanLevel, maxClanLevel, startDefenseHour, availability = cache.getDefaultFilterData()
         data = {'minClanLevel': minClanLevel,
          'maxClanLevel': maxClanLevel,
-         'startDefenseHour': startDefenseHour}
+         'startDefenseHour': startDefenseHour,
+         'isWrongLocalTime': self._isWrongLocalTime()}
+        defenceStart = self.fortCtrl.getFort().getLocalDefenceHour()
+        if defenceStart != NOT_ACTIVATED:
+            data['yourOwnClanStartDefenseHour'] = defenceStart
         self.as_setDataS(data)
 
     def getAvailabilityProvider(self):

@@ -1,27 +1,27 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/LobbyHeader.py
 import math
 import BigWorld
-import constants
 from CurrentVehicle import g_currentVehicle
 import account_helpers
 from adisp import process
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE
 from helpers import i18n, time_utils
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui import makeHtmlString, game_control
 from gui.LobbyContext import g_lobbyContext
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.context import PrebattleAction
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared import events, g_eventsCache
+from gui.shared import events
 from gui.shared import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import ShowWindowEvent, OpenLinkEvent
 from gui.shared.utils import CONST_CONTAINER
 from gui.shared.ClanCache import g_clanCache
+from gui.server_events import g_eventsCache
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -53,6 +53,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         g_eventsCache.onSyncCompleted += self.__onEventsCacheResync
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCredits,
          'stats.gold': self.__setGold,
          'stats.freeXP': self.__setFreeXP,
@@ -60,10 +61,12 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
          'account.premiumExpiryTime': self.__onPremiumExpireTimeChanged})
         self.as_setFightButtonS(i18n.makeString('#menu:headerButtons/battle'))
         self.as_setWalletStatusS(game_control.g_instance.wallet.componentsStatuses)
+        self.as_isEventSquadS(g_eventsCache.getEventBattles() is not None and g_eventsCache.getEventBattles().enabled)
         self.updateAccountInfo()
         self.startGlobalListening()
         self.__updateServerName()
         Waiting.hide('enter')
+        return
 
     def __updateServerName(self):
         serverShortName = connectionManager.serverUserNameShort.split()[-1].strip()
@@ -76,6 +79,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         game_control.g_instance.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
         game_control.g_instance.wallet.onWalletStatusChanged -= self.__onWalletChanged
         g_currentVehicle.onChanged -= self.__onVehicleChanged
@@ -116,22 +120,22 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         self.__setAccountsAttrs(isPremium, premiumExpiryTime=premiumExpiryTime)
 
     def onPayment(self):
-        self.fireEvent(OpenLinkEvent(OpenLinkEvent.PAYMENT))
+        self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PAYMENT))
 
     def showLobbyMenu(self):
-        self.fireEvent(events.ShowViewEvent(events.ShowViewEvent.SHOW_LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def menuItemClick(self, alias):
         self.__triggerViewLoad(alias)
 
     def showExchangeWindow(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_EXCHANGE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def showExchangeXPWindow(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_EXCHANGE_XP_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_XP_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def showPremiumDialog(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_PREMIUM_DIALOG))
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_DIALOG))
 
     def fightClick(self, mapID, actionName):
         dispatcher = g_prbLoader.getDispatcher()
@@ -148,9 +152,6 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         else:
             LOG_ERROR('Prebattle dispatcher is not defined')
         return
-
-    def _enableHeaderButton(self, btnID, isEnabled):
-        self.as_doDisableHeaderButtonS(btnID, isEnabled)
 
     @process
     def __setClanInfo(self, clanInfo):
@@ -179,37 +180,42 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         self.as_setFreeXPS(BigWorld.wg_getIntegralFormat(freeXP), game_control.g_instance.wallet.useFreeXP)
 
     def __setAccountsAttrs(self, isPremiumAccount, premiumExpiryTime = 0):
-        if not (isPremiumAccount and premiumExpiryTime > 0):
-            raise AssertionError
-            deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))
-            if deltaInSeconds > time_utils.ONE_DAY:
-                timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_DAY)
-                timeMetric = i18n.makeString('#menu:header/account/premium/days')
+        disableTTHeader = ''
+        disableTTBody = ''
+        if isPremiumAccount:
+            if not premiumExpiryTime > 0:
+                raise AssertionError
+                deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))
+                if deltaInSeconds > time_utils.ONE_DAY:
+                    timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_DAY)
+                    timeMetric = i18n.makeString('#menu:header/account/premium/days')
+                else:
+                    timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_HOUR)
+                    timeMetric = i18n.makeString('#menu:header/account/premium/hours')
+                buyPremiumLabel = i18n.makeString('#menu:headerButtons/doLabel/premium')
+                premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'premium-account-label', {'timeMetric': timeMetric,
+                 'timeLeft': timeLeft})
+                canUpdatePremium = deltaInSeconds < time_utils.ONE_YEAR
             else:
-                timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_HOUR)
-                timeMetric = i18n.makeString('#menu:header/account/premium/hours')
-            buyPremiumLabel = i18n.makeString('#menu:headerButtons/doLabel/premium')
-            premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'premium-account-label', {'timeMetric': timeMetric,
-             'timeLeft': timeLeft})
-            canUpdatePremium = deltaInSeconds < time_utils.ONE_YEAR
-        else:
-            canUpdatePremium = True
-            premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'base-account-label')
-            buyPremiumLabel = i18n.makeString('#menu:common/premiumBuy')
-        self._enableHeaderButton(self.BUTTONS.PREM, canUpdatePremium)
-        self.as_setPremiumParamsS(isPremiumAccount, premiumBtnLbl, buyPremiumLabel, canUpdatePremium)
+                canUpdatePremium = True
+                premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'base-account-label')
+                buyPremiumLabel = i18n.makeString('#menu:common/premiumBuy')
+            disableTTHeader = canUpdatePremium or i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER)
+            disableTTBody = i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY, number=time_utils.ONE_YEAR / time_utils.ONE_DAY)
+        self.as_doDisableHeaderButtonS(self.BUTTONS.PREM, canUpdatePremium)
+        self.as_setPremiumParamsS(isPremiumAccount, premiumBtnLbl, buyPremiumLabel, canUpdatePremium, disableTTHeader, disableTTBody)
 
     def __triggerViewLoad(self, alias):
         if alias == 'browser':
-            event = ShowWindowEvent(ShowWindowEvent.SHOW_BROWSER_WINDOW, {'title': MENU.BROWSER_WINDOW_TITLE,
-             'showActionBtn': True})
+            game_control.g_instance.china.showBrowser()
         else:
             event = g_entitiesFactories.makeLoadEvent(alias)
-        if event is not None:
-            self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
-            self.as_setScreenS(alias)
-        else:
-            LOG_ERROR('Invalid subview alias', alias)
+            if event is not None:
+                self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+            else:
+                LOG_ERROR('Invalid subview alias', alias)
+                return
+        self.as_setScreenS(alias)
         return
 
     def __onWalletChanged(self, status):
@@ -228,7 +234,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
             else:
                 self.as_setScreenS(settings.alias)
 
-    def __getBattleTypeSelectPopover(self):
+    def __getBattleTypeSelectPopover(self, alias):
         container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
         view = None
         if container:
@@ -236,36 +242,46 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         return view
 
     def __closeBattleTypeSelectPopover(self):
-        view = self.__getBattleTypeSelectPopover()
+        view = self.__getBattleTypeSelectPopover(VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER)
         if view:
             view.destroy()
 
     def __updateBattleTypeSelectPopover(self):
-        view = self.__getBattleTypeSelectPopover()
+        view = self.__getBattleTypeSelectPopover(VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER)
         if view:
             view.update()
+
+    def __closeSquadTypeSelectPopover(self):
+        view = self.__getBattleTypeSelectPopover(VIEW_ALIAS.SQUAD_TYPE_SELECT_POPOVER)
+        if view:
+            view.destroy()
 
     def __updatePrebattleControls(self):
         prbDispatcher = g_prbLoader.getDispatcher()
         if not prbDispatcher:
             return
-        items = battle_selector_items.getItems()
-        state = prbDispatcher.getFunctionalState()
-        selected = items.update(state)
-        canDo, _ = prbDispatcher.canPlayerDoAction()
-        playerInfo = prbDispatcher.getPlayerInfo()
-        if selected.isInSquad(state):
-            self.as_updateSquadS(True)
         else:
-            self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, not state.hasLockedState)
-            self.as_updateSquadS(False)
-        self.as_disableFightButtonS(not canDo or selected.isFightButtonForcedDisabled(), '')
-        self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
-        self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), not selected.isDisabled())
-        if selected.isDisabled():
-            self.__closeBattleTypeSelectPopover()
-        else:
-            self.__updateBattleTypeSelectPopover()
+            items = battle_selector_items.getItems()
+            state = prbDispatcher.getFunctionalState()
+            selected = items.update(state)
+            canDo, _ = prbDispatcher.canPlayerDoAction()
+            playerInfo = prbDispatcher.getPlayerInfo()
+            self.as_isEventSquadS(g_eventsCache.getEventBattles() is not None and g_eventsCache.getEventBattles().enabled)
+            if selected.isInSquad(state):
+                self.as_updateSquadS(True)
+            else:
+                self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, not state.hasLockedState)
+                self.as_updateSquadS(False)
+            self.as_disableFightButtonS(not canDo or selected.isFightButtonForcedDisabled(), '')
+            self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
+            self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), not selected.isDisabled())
+            if selected.isDisabled():
+                self.__closeBattleTypeSelectPopover()
+                self.__closeSquadTypeSelectPopover()
+            else:
+                self.__updateBattleTypeSelectPopover()
+                self.__closeSquadTypeSelectPopover()
+            return
 
     def __handleFightButtonUpdated(self, _):
         self.__updatePrebattleControls()
@@ -278,6 +294,9 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         isCreator = playerInfo.isCreator
         if event.requestID is REQUEST_TYPE.SET_PLAYER_STATE and not isCreator:
             self.as_setCoolDownForReadyS(event.coolDown)
+
+    def __showBubbleTooltip(self, event):
+        self.as_showBubbleTooltipS(event.getMessage(), event.getDuration())
 
     def __onVehicleChanged(self):
         self.__updatePrebattleControls()

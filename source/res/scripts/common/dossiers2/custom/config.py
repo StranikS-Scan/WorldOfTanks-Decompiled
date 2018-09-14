@@ -47,4 +47,10 @@ RECORD_CONFIGS = {'medalKay': (1, 10, 100, 1000),
  'reliableComrade': 50,
  'crusher': 1,
  'counterblow': 1,
- 'tankwomenCount': 5}
+ 'readyForBattleLT': (15, 30, 45, 60),
+ 'readyForBattleMT': (15, 30, 45, 60),
+ 'readyForBattleHT': (15, 30, 45, 60),
+ 'readyForBattleSPG': (15, 30, 45, 60),
+ 'readyForBattleATSPG': (15, 30, 45, 60),
+ 'readyForBattleALL': (4, 3, 2, 1),
+ 'tankwomen': 5}

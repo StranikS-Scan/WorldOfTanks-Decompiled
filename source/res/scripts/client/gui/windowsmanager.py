@@ -3,16 +3,17 @@ import BigWorld
 import Event
 import constants
 import BattleReplay
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from helpers import isShowStartupVideo
 from gui.Scaleform.managers.Cursor import Cursor
 from predefined_hosts import g_preDefinedHosts
 from ConnectionManager import connectionManager
 from constants import ARENA_GUI_TYPE
-from debug_utils import LOG_ERROR, LOG_WARNING
-from gui import GUI_SETTINGS
+from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
+from gui import GUI_SETTINGS, game_control
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
-from gui.shared.events import ShowViewEvent, LoadEvent
+from gui.shared.events import LoadViewEvent
 from gui.Scaleform.LogitechMonitor import LogitechMonitor
 from gui.Scaleform.AppEntry import AppEntry
 from gui.Scaleform.Battle import Battle
@@ -53,20 +54,20 @@ class WindowsManager(object):
         else:
             Cursor.setAutoShow(True)
         if connectionManager.isConnected():
-            self.window.fireEvent(ShowViewEvent(ShowViewEvent.SHOW_LOBBY, ctx))
+            self.window.fireEvent(LoadViewEvent(VIEW_ALIAS.LOBBY, ctx=ctx))
         else:
             LOG_WARNING('onAccountShowGUI: show lobby has been skipped, because client is not connected to server.')
         return
 
     def showStartGameVideo(self):
         if isShowStartupVideo():
-            self.window.fireEvent(ShowViewEvent(ShowViewEvent.SHOW_INTRO_VIDEO, {'resultCallback': lambda *args: self.showLogin()}))
+            self.window.fireEvent(LoadViewEvent(VIEW_ALIAS.INTRO_VIDEO, ctx={'resultCallback': lambda *args: self.showLogin()}))
             return True
         return False
 
     def showLogin(self, callback = None):
         if self.window is not None:
-            self.window.fireEvent(ShowViewEvent(ShowViewEvent.SHOW_LOGIN, ctx={'callback': callback}))
+            self.window.fireEvent(LoadViewEvent(VIEW_ALIAS.LOGIN, ctx={'callback': callback}))
         return
 
     def showLobby(self):
@@ -127,12 +128,10 @@ class WindowsManager(object):
         g_preDefinedHosts.savePeripheryTL(connectionManager.peripheryID)
         arena = getattr(BigWorld.player(), 'arena', None)
         if arena is not None and arena.guiType is ARENA_GUI_TYPE.TUTORIAL:
-            eventType = LoadEvent.LOAD_TUTORIAL_LOADING
+            eventType = VIEW_ALIAS.TUTORIAL_LOADING
         else:
-            eventType = LoadEvent.LOAD_BATTLE_LOADING
-        self.window.fireEvent(LoadEvent(eventType), scope=EVENT_BUS_SCOPE.LOBBY)
-        if constants.IS_CHINA and self.window is not None and self.window.browser is not None:
-            self.window.browser.onBattleEnter()
+            eventType = VIEW_ALIAS.BATTLE_LOADING
+        self.window.fireEvent(LoadViewEvent(eventType), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def showPostMortem(self):

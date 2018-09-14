@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/components/CalendarComponent.py
 from debug_utils import LOG_DEBUG
+import BigWorld
 from Event import Event, EventManager
 from gui.Scaleform.daapi.view.meta.CalendarMeta import CalendarMeta
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
@@ -17,6 +18,9 @@ class CalendarComponent(CalendarMeta, DAAPIModule):
 
     def onDateSelected(self, timestamp):
         self.onDateSelectedEvent(timestamp)
+
+    def formatYMHeader(self, rawDate):
+        return BigWorld.wg_getYMDateFormat(rawDate)
 
     def _dispose(self):
         self.__em.clear()

@@ -61,6 +61,8 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_CAMOUFLAGE_DESCR = '#item_types:tankman/skills/camouflage_descr'
     TANKMAN_SKILLS_BROTHERHOOD = '#item_types:tankman/skills/brotherhood'
     TANKMAN_SKILLS_BROTHERHOOD_DESCR = '#item_types:tankman/skills/brotherhood_descr'
+    TANKMAN_SKILLS_BROTHERHOOD_FEMALE = '#item_types:tankman/skills/brotherhood_female'
+    TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR = '#item_types:tankman/skills/brotherhood_female_descr'
     TANKMAN_SKILLS_COMMANDER_TUTOR = '#item_types:tankman/skills/commander_tutor'
     TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR = '#item_types:tankman/skills/commander_tutor_descr'
     TANKMAN_SKILLS_COMMANDER_EXPERT = '#item_types:tankman/skills/commander_expert'
@@ -114,11 +116,13 @@ class ITEM_TYPES(object):
     SHELL_KINDS_ARMOR_PIERCING_HE = '#item_types:shell/kinds/ARMOR_PIERCING_HE'
     SHELL_KINDS_HOLLOW_CHARGE = '#item_types:shell/kinds/HOLLOW_CHARGE'
     SHELL_KINDS_HIGH_EXPLOSIVE = '#item_types:shell/kinds/HIGH_EXPLOSIVE'
+    SHELL_KINDS_EVENT = '#item_types:shell/kinds/EVENT'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_CR = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING_CR'
     SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE = '#item_types:shell/kindsAbbreviation/ARMOR_PIERCING_HE'
     SHELL_KINDSABBREVIATION_HOLLOW_CHARGE = '#item_types:shell/kindsAbbreviation/HOLLOW_CHARGE'
     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE = '#item_types:shell/kindsAbbreviation/HIGH_EXPLOSIVE'
+    SHELL_KINDSABBREVIATION_EVENT = '#item_types:shell/kindsAbbreviation/EVENT'
     SHELL_DIMENSION_SM = '#item_types:shell/dimension/sm'
     SHELL_DIMENSION_INCH = '#item_types:shell/dimension/inch'
     SHELL_DIMENSION_MM = '#item_types:shell/dimension/mm'
@@ -127,12 +131,14 @@ class ITEM_TYPES(object):
      SHELL_KINDS_ARMOR_PIERCING_CR,
      SHELL_KINDS_ARMOR_PIERCING_HE,
      SHELL_KINDS_HOLLOW_CHARGE,
-     SHELL_KINDS_HIGH_EXPLOSIVE)
+     SHELL_KINDS_HIGH_EXPLOSIVE,
+     SHELL_KINDS_EVENT)
     SHELL_KINDSABBREVIATION_ENUM = (SHELL_KINDSABBREVIATION_ARMOR_PIERCING,
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_CR,
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE,
      SHELL_KINDSABBREVIATION_HOLLOW_CHARGE,
-     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE)
+     SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE,
+     SHELL_KINDSABBREVIATION_EVENT)
 
     @staticmethod
     def tankman_skills_type(key):

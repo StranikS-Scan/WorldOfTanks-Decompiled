@@ -17,7 +17,7 @@ from items.vehicles import VEHICLE_CLASS_TAGS
 
 class CompanyWindow(PrebattleWindow, CompanyWindowMeta):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(CompanyWindow, self).__init__(prbName='company')
         self._isInvitesOpen = ctx.get('isInvitesOpen', False)
 

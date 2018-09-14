@@ -15,6 +15,7 @@ from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_T
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import time_utils, i18n
+from items import vehicles
 
 class InscriptionInterface(BaseTimedCustomizationInterface, AppRef):
     __metaclass__ = ABCMeta
@@ -108,7 +109,7 @@ class InscriptionInterface(BaseTimedCustomizationInterface, AppRef):
                 daysToWear = 0
                 cost = 0
             elif CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, self._newItemID, self._nationID, self._itemsDP.position):
-                hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, self._newItemID)
+                hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, self._newItemID, self._nationID, self._itemsDP.position)
                 daysToWear = 0 if hangarItem.get('isPermanent') else 7
             else:
                 daysToWear = self._rentalPackageDP.selectedPackage.get('periodDays')
@@ -194,11 +195,17 @@ class InscriptionInterface(BaseTimedCustomizationInterface, AppRef):
                 if inscr[0] is not None:
                     newID = inscr[0]
                     newLifeCycle = (inscr[1], inscr[2])
+            hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, self._currentItemID, self._nationID)
+            if hangarItem:
+                intCD = g_currentVehicle.item.intCD
+                vehicle = vehicles.getVehicleType(int(intCD))
+                message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_INSCRIPTION_STORED_SUCCESS, vehicle=vehicle.userString)
+            else:
+                message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_INSCRIPTION_DROP_SUCCESS)
             self._currentItemID = newID
             self._currentLifeCycle = newLifeCycle
             self._itemsDP.currentItemID = newID
             self.updateVehicleCustomization(newID)
-            message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_INSCRIPTION_DROP_SUCCESS)
             self.onCustomizationDropSuccess(message)
             return
 

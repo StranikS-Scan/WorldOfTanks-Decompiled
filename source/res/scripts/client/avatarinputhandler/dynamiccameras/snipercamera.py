@@ -178,13 +178,17 @@ class SniperCamera(ICamera, CallbackDelayer):
         return (dx * self.__curSense * (-1 if self.__cfg['horzInvert'] else 1), dy * self.__curSense * (-1 if self.__cfg['vertInvert'] else 1))
 
     def __showVehicle(self, show):
+        if show:
+            drawFlags = BigWorld.DrawAll
+        else:
+            drawFlags = BigWorld.ShadowPassBit
         vehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
         if vehicle is not None and vehicle.isStarted:
             va = vehicle.appearance
-            va.changeVisibility('chassis', show, show)
-            va.changeVisibility('hull', show, True)
-            va.changeVisibility('turret', show, True)
-            va.changeVisibility('gun', show, True)
+            va.changeDrawPassVisibility('chassis', drawFlags, show, show)
+            va.changeDrawPassVisibility('hull', drawFlags, show, True)
+            va.changeDrawPassVisibility('turret', drawFlags, show, True)
+            va.changeDrawPassVisibility('gun', drawFlags, show, True)
             va.showStickers(show)
         return
 

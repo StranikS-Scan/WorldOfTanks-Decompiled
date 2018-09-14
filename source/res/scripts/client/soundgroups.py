@@ -284,6 +284,7 @@ class SoundModes():
 class SoundGroups(object):
     soundModes = property(lambda self: self.__soundModes)
     onVolumeChanged = Event.Event()
+    onMusicVolumeChanged = Event.Event()
 
     def __init__(self):
         self.__volumeByCategory = {}
@@ -403,6 +404,8 @@ class SoundGroups(object):
         self.__muffledVolume = self.__masterVolume * self.getVolume('masterFadeVivox')
         FMOD.setMasterVolume(self.__muffledVolume if self.__muffled else self.__masterVolume)
         self.savePreferences()
+        self.onMusicVolumeChanged('music', self.__masterVolume, self.getVolume('music'))
+        self.onMusicVolumeChanged('ambient', self.__masterVolume, self.getVolume('ambient'))
 
     def getMasterVolume(self):
         return self.__masterVolume
@@ -417,6 +420,8 @@ class SoundGroups(object):
         if updatePrefs:
             self.__volumeByCategory[categoryName] = volume
             self.savePreferences()
+        if categoryName == 'music' or categoryName == 'ambient':
+            self.onMusicVolumeChanged(categoryName, self.__masterVolume, self.getVolume(categoryName))
         self.onVolumeChanged(categoryName, volume)
 
     def getVolume(self, categoryName):

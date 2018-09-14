@@ -13,7 +13,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.fort_helpers import FortListener
-from helpers import i18n
+from helpers import i18n, time_utils
 
 class FortViewHelper(FortListener):
     FORT_UNKNOWN = FORTIFICATION_ALIASES.FORT_UNKNOWN
@@ -315,3 +315,6 @@ class FortViewHelper(FortListener):
              'label': name})
 
         return result
+
+    def _isWrongLocalTime(self):
+        return time_utils.getLocalDelta() >= 5 * time_utils.ONE_MINUTE

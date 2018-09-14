@@ -188,9 +188,14 @@ def sendEventToServer(eventType, host, port, errorCode = 0, errorDescr = '', tri
         return
     else:
         address = '{0}:{1}'.format(host, port)
+        currentTime = time.time()
+        g_logOutput.debug(CLIENT_LOG_AREA.GENERIC, 'Sends log to server', [eventType,
+         currentTime,
+         errorCode,
+         tries], [address, errorDescr])
         try:
             sender([eventType,
-             time.time(),
+             currentTime,
              errorCode,
              tries], [address, errorDescr])
         except:

@@ -2,7 +2,7 @@
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 from gui.Scaleform.framework.entities.View import View
-from gui.shared.events import LoadEvent, ShowPopoverEvent
+from gui.shared.events import LoadViewEvent
 
 class EntityFactory(object):
 
@@ -75,8 +75,6 @@ class ViewFactory(DAAPIModuleFactory):
     def initialize(self, pyEntity, gfxEntity, extra = None):
         pyEntity = super(ViewFactory, self).initialize(pyEntity, gfxEntity)
         if extra is not None:
-            if 'token' in extra:
-                pyEntity.setToken(extra['token'])
             if 'name' in extra:
                 pyEntity.setUniqueName(extra['name'])
         return pyEntity
@@ -140,13 +138,13 @@ class EntitiesFactories(object):
     def makeLoadEvent(self, alias, ctx = None):
         event = None
         if alias in self.__aliasToEvent:
-            event = LoadEvent(self.__aliasToEvent[alias], ctx=ctx)
+            event = LoadViewEvent(alias, ctx=ctx)
         return event
 
     def makeShowPopoverEvent(self, alias, ctx = None):
         event = None
         if alias in self.__aliasToEvent:
-            event = ShowPopoverEvent(self.__aliasToEvent[alias], ctx=ctx)
+            event = LoadViewEvent(alias, ctx=ctx)
         return event
 
     def factory(self, alias, *args, **kwargs):

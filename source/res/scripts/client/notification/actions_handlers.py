@@ -2,11 +2,12 @@
 import BigWorld
 from adisp import process
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui import DialogsInterface, makeHtmlString, SystemMessages
+from gui import DialogsInterface, makeHtmlString, SystemMessages, game_control
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control.prb_helpers import prbInvitesProperty, prbDispatcherProperty
-from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE
+from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.utils.requesters import DeprecatedStatsRequester
 from gui.shared.fortifications import fort_helpers
 from messenger.m_constants import PROTO_TYPE
@@ -48,10 +49,6 @@ class _ActionHandler(object):
 
 class _ShowArenaResultHandler(_ActionHandler):
 
-    def __init__(self, eventType):
-        super(_ShowArenaResultHandler, self).__init__()
-        self.__eventType = eventType
-
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
         return None
@@ -79,7 +76,7 @@ class _ShowArenaResultHandler(_ActionHandler):
             notification.update(formatted)
 
     def _showWindow(self, notification, arenaUniqueID):
-        g_eventBus.handleEvent(events.ShowWindowEvent(self.__eventType, {'data': arenaUniqueID}))
+        pass
 
     def _showI18nMessage(self, key, msgType):
 
@@ -91,28 +88,23 @@ class _ShowArenaResultHandler(_ActionHandler):
 
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
 
-    def __init__(self):
-        super(ShowBattleResultsHandler, self).__init__(events.ShowWindowEvent.SHOW_BATTLE_RESULTS)
-
     def _updateNotification(self, notification):
         super(ShowBattleResultsHandler, self)._updateNotification(notification)
         self._showI18nMessage('#battle_results:noData', SystemMessages.SM_TYPE.Warning)
 
     @process
     def _showWindow(self, notification, arenaUniqueID):
+        arenaUniqueID = long(arenaUniqueID)
         Waiting.show('loadStats')
         results = yield DeprecatedStatsRequester().getBattleResults(long(arenaUniqueID))
         Waiting.hide('loadStats')
         if results:
-            super(ShowBattleResultsHandler, self)._showWindow(notification, arenaUniqueID)
+            shared_events.showBattleResults(arenaUniqueID, data=results)
         else:
             self._updateNotification(notification)
 
 
 class ShowFortBattleResultsHandler(_ShowArenaResultHandler):
-
-    def __init__(self):
-        super(ShowFortBattleResultsHandler, self).__init__(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_EVENT)
 
     def _updateNotification(self, notification):
         super(ShowFortBattleResultsHandler, self)._updateNotification(notification)
@@ -120,7 +112,7 @@ class ShowFortBattleResultsHandler(_ShowArenaResultHandler):
 
     def _showWindow(self, notification, data):
         if data:
-            g_eventBus.handleEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_EVENT, {'data': data}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': data}), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self._updateNotification(notification)
 
@@ -128,8 +120,8 @@ class ShowFortBattleResultsHandler(_ShowArenaResultHandler):
 class ShowTutorialBattleHistoryHandler(_ShowArenaResultHandler):
     _lastHistoryID = GlobalStorage(GLOBAL_VAR.LAST_HISTORY_ID, 0)
 
-    def __init__(self):
-        super(ShowTutorialBattleHistoryHandler, self).__init__(events.ShowWindowEvent.SHOW_TUTORIAL_BATTLE_HISTORY)
+    def _triggerEvent(self, notification, arenaUniqueID):
+        g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.SHOW_TUTORIAL_BATTLE_HISTORY, {'data': arenaUniqueID}))
 
     def _updateNotification(self, notification):
         super(ShowTutorialBattleHistoryHandler, self)._updateNotification(notification)
@@ -137,7 +129,7 @@ class ShowTutorialBattleHistoryHandler(_ShowArenaResultHandler):
 
     def _showWindow(self, notification, arenaUniqueID):
         if arenaUniqueID == self._lastHistoryID:
-            super(ShowTutorialBattleHistoryHandler, self)._showWindow(notification, arenaUniqueID)
+            self._triggerEvent(notification, arenaUniqueID)
         else:
             self._updateNotification(notification)
 
@@ -156,9 +148,7 @@ class OpenPollHandler(_ActionHandler):
         if not link:
             LOG_ERROR('Poll link is not found', notification)
             return
-        g_eventBus.handleEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_BROWSER_WINDOW, {'url': link,
-         'title': title,
-         'showActionBtn': False}), EVENT_BUS_SCOPE.LOBBY)
+        game_control.g_instance.browser.load(link, title, showActionBtn=False)
 
 
 class AcceptPrbInviteHandler(_ActionHandler):

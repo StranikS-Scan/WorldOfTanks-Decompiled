@@ -2,4 +2,14 @@
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class QuestsWindowMeta(DAAPIModule):
-    pass
+
+    def onTabSelected(self, tabID):
+        self._printOverrideError('onTabSelected')
+
+    def as_loadViewS(self, flashAlias, pyAlias):
+        if self._isDAAPIInited():
+            return self.flashObject.as_loadView(flashAlias, pyAlias)
+
+    def as_selectTabS(self, tabID):
+        if self._isDAAPIInited():
+            return self.flashObject.as_selectTab(tabID)

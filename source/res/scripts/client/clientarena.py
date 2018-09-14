@@ -200,7 +200,8 @@ class ClientArena(object):
          'prebattleID': info[10],
          'isPrebattleCreator': bool(info[11]),
          'events': info[12],
-         'igrType': info[13]}
+         'igrType': info[13],
+         'potapovQuestIDs': info[14]}
         return (info[0], infoAsDict)
 
     def __vehicleStatisticsAsDict(self, stats):

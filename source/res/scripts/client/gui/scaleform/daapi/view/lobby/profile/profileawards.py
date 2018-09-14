@@ -4,6 +4,7 @@ from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.daapi.view.meta.ProfileAwardsMeta import ProfileAwardsMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from web_stubs import i18n
+from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 
 class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
 
@@ -29,7 +30,7 @@ class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
             achievements = targetData.getAchievements(isInDossier=False)
         packedList = []
         for achievementBlockList in achievements:
-            packedList.append(ProfileUtils.packAchievementList(achievementBlockList, accountDossier, self._userID is None))
+            packedList.append(AchievementsUtils.packAchievementList(achievementBlockList, accountDossier, self._userID is None))
 
         self.as_responseDossierS(self._battlesType, {'achievementsList': packedList,
          'totalItemsList': totalItemsList,

@@ -23,7 +23,7 @@ class FortListView(FortListMeta, FortListener, UnitListener, AppRef):
     def onClientStateChanged(self, state):
         self.__updateSearchDP(state)
         self.__validateCreation()
-        if state.getStateID() != CLIENT_FORT_STATE.HAS_FORT:
+        if state.getStateID() not in (CLIENT_FORT_STATE.HAS_FORT, CLIENT_FORT_STATE.CENTER_UNAVAILABLE):
             self.as_selectByIndexS(-1)
             self._searchDP.setSelectedID(None)
             self.as_setDetailsS(None)
@@ -59,7 +59,6 @@ class FortListView(FortListMeta, FortListener, UnitListener, AppRef):
         return
 
     def onSortieUnitReceived(self, clientIdx):
-        Waiting.hide('fort/sortie/get')
         result = self._searchDP.getUnitVO(clientIdx)
         self._searchDP.refresh()
         self.as_setDetailsS(result)
@@ -123,13 +122,12 @@ class FortListView(FortListMeta, FortListener, UnitListener, AppRef):
                     cache.clearSelectedID()
                     self.as_setDetailsS(None)
                 else:
-                    Waiting.show('fort/sortie/get')
                     self._searchDP.setSelectedID(vo['sortieID'])
             return
 
     def __updateSearchDP(self, state):
         self.as_setSelectedDivisionS(0)
-        if state.getStateID() != CLIENT_FORT_STATE.HAS_FORT:
+        if state.getStateID() not in (CLIENT_FORT_STATE.HAS_FORT, CLIENT_FORT_STATE.CENTER_UNAVAILABLE):
             self._searchDP.clear()
             self._searchDP.refresh()
             return

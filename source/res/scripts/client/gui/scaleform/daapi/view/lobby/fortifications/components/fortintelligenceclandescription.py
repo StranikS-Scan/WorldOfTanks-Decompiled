@@ -14,9 +14,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.fortifications import getDirectionFromDirPos, getPositionFromDirPos
-from gui.shared.fortifications.context import FavoriteCtx
+from gui.shared.fortifications.context import FavoriteCtx, RequestClanCardCtx
 from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
-from helpers import i18n
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.shared.ClanCache import g_clanCache
 from adisp import process
@@ -38,7 +37,8 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
         self.__item = None
         self.__upcomingAttack = None
         self.__attackInCooldown = None
-        self.__defenceInCooldown = None
+        self.__defenseInCooldown = None
+        self.__hasBeenCounterAttacked = False
         self.__selectedDayStart, self.__selectedDayEnd = (0, 0)
         self.__selectedDefencePeriodStart, self.__selectedDefencePeriodEnd = (0, 0)
         self.__clanEmblem = None
@@ -63,17 +63,25 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
         return
 
     def onEnemyClanCardReceived(self, card):
-        self.__upcomingAttack = None
-        self.__attackInCooldown = None
-        self.__defenceInCooldown = None
-        self.__weAreAtWar = False
+        self.__upcomingAttack = card.upcomingAttack
+        self.__attackInCooldown = card.closestAttackInCooldown
+        self.__weAreAtWar = card.weAreAtWar
+        self.__defenseInCooldown = card.closestDefenseInCooldown
+        self.__hasBeenCounterAttacked = card.counterAttacked
         self.__clanEmblem = None
         self.__item = card
-        self.__getAttacksAndDeffences()
         self.__setSelectedDate()
         self.__calculateDefencePeriod()
         self.__makeData()
         self.__requestClanEmblem()
+        return
+
+    @process
+    def onFortBattleChanged(self, cache, attackItem, battleItem):
+        if self.__item is not None:
+            currentEnemyClanDBID = self.__item.getClanDBID()
+            if currentEnemyClanDBID == attackItem.getOpponentClanDBID():
+                yield self.fortProvider.sendRequest(RequestClanCardCtx(currentEnemyClanDBID, waitingID='fort/attack'))
         return
 
     def onEnemyClanCardRemoved(self):
@@ -88,7 +96,7 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
         return
 
     def onOpenCalendar(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CALENDAR_WINDOW_EVENT, ctx={'dateSelected': self.__selectedDayStart}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CALENDAR_WINDOW_ALIAS, ctx={'dateSelected': self.__selectedDayStart}), EVENT_BUS_SCOPE.LOBBY)
 
     def onFavoritesChanged(self, clanDBID):
         if self.__item is not None and self.__item.getClanDBID() == clanDBID:
@@ -100,10 +108,10 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
         self.__toggleFavorite(isAdd)
 
     def onOpenClanList(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_LIST_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_LIST_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
 
     def onOpenClanStatistics(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
 
     def onOpenClanCard(self):
         LOG_DEBUG('onOpenClanCard')
@@ -113,9 +121,10 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
 
     def onAttackDirection(self, direction):
         g_fortSoundController.playEnemyDirectionSelected()
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_DECLARATION_OF_WAR_WINDOW_EVENT, ctx={'direction': direction,
-         'dateSelected': (self.__selectedDefencePeriodStart, self.__selectedDefencePeriodEnd),
-         'item': self.__item}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_DECLARATION_OF_WAR_WINDOW_ALIAS, ctx={'direction': direction,
+         'dateSelected': (self.__selectedDayStart, self.__selectedDayEnd),
+         'item': self.__item,
+         'defHourStart': self.__selectedDefencePeriodStart}), EVENT_BUS_SCOPE.LOBBY)
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
         if reason == BUILDING_UPDATE_REASON.UPDATED and buildingTypeID == FORT_BUILDING_TYPE.MILITARY_BASE:
@@ -145,19 +154,19 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
          'haveResults': self.__hasResults}
         if self.__item is not None:
             clanID = self.__item.getClanDBID()
-            if self.__item.getLocalDefHour() != time_utils.getDateTimeInLocal(self.__selectedDefencePeriodStart).hour:
+            selectedDefenceHour = time_utils.getDateTimeInLocal(self.__selectedDefencePeriodStart).hour
+            if self.__item.getLocalDefHour() != selectedDefenceHour and not self.__weAreAtWar:
                 warTime = '%s - %s' % (BigWorld.wg_getShortTimeFormat(self.__selectedDefencePeriodStart), BigWorld.wg_getShortTimeFormat(self.__selectedDefencePeriodEnd))
                 warPlannedIcon = makeHtmlString('html_templates:lobby/iconText', 'alert', {})
                 warPlannedMsg = makeHtmlString('html_templates:lobby/textStyle', 'alertText', {'message': warTime})
-                warPlannedTime = i18n.makeString(warPlannedIcon + ' ' + warPlannedMsg)
+                warPlannedTime = _ms(warPlannedIcon + ' ' + warPlannedMsg)
                 data.update({'warPlannedTime': warPlannedTime,
-                 'warPlannedTimeTT': i18n.makeString(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_WARTIME, warTime=warTime)})
+                 'warPlannedTimeTT': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_WARTIME, warTime=warTime)})
             if self.__weAreAtWar:
-                closestAttack = self.__attackInCooldown or self.__upcomingAttack
+                closestAttack = self.__upcomingAttack or self.__attackInCooldown
                 closestAttackTime = closestAttack.getStartTime()
-                isAlreadyFought = self.__attackInCooldown is not None and (self.__defenceInCooldown is None or self.__defenceInCooldown.getStartTime() > self.__attackInCooldown.getStartTime())
                 data.update({'isWarDeclared': self.__upcomingAttack is not None,
-                 'isAlreadyFought': isAlreadyFought,
+                 'isAlreadyFought': self.__attackInCooldown is not None and not self.__hasBeenCounterAttacked,
                  'warPlannedDate': BigWorld.wg_getLongDateFormat(closestAttackTime),
                  'warNextAvailableDate': BigWorld.wg_getLongDateFormat(closestAttackTime + time_utils.ONE_WEEK)})
             isFrozen = fort.isFrozen()
@@ -178,16 +187,16 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
              'selectedDateText': self.__getSelectedDateText(),
              'clanBattles': {'value': BigWorld.wg_getNiceNumberFormat(battlesCount) if battlesCount else '--',
                              'icon': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_BATTLES40X32,
-                             'ttHeader': i18n.makeString(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_BATTLES_HEADER),
-                             'ttBody': i18n.makeString(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_BATTLES_BODY, wins=BigWorld.wg_getNiceNumberFormat(clanFortBattlesStats.getWinsCount()), defeats=BigWorld.wg_getNiceNumberFormat(clanFortBattlesStats.getLossesCount()))},
+                             'ttHeader': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_BATTLES_HEADER),
+                             'ttBody': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_BATTLES_BODY, wins=BigWorld.wg_getNiceNumberFormat(clanFortBattlesStats.getWinsCount()), defeats=BigWorld.wg_getNiceNumberFormat(clanFortBattlesStats.getLossesCount()))},
              'clanWins': {'value': '%s%%' % BigWorld.wg_getNiceNumberFormat(functions.roundToMinOrZero(battlesWinsEff, MIN_VALUE) * 100) if battlesWinsEff is not None else '--',
                           'icon': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_WINS40X32,
-                          'ttHeader': i18n.makeString(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_WINS_HEADER),
-                          'ttBody': i18n.makeString(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_WINS_BODY)},
+                          'ttHeader': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_WINS_HEADER),
+                          'ttBody': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_WINS_BODY)},
              'clanAvgDefres': {'value': BigWorld.wg_getNiceNumberFormat(clanAvgDefresValue) if clanAvgDefresValue else '--',
                                'icon': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_DEFRESRATIO40X32,
-                               'ttHeader': i18n.makeString(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_HEADER),
-                               'ttBody': i18n.makeString(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_BODY)},
+                               'ttHeader': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_HEADER),
+                               'ttBody': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_BODY)},
              'directions': self.__getDirectionsData()})
         self.as_setDataS(data)
         return
@@ -216,12 +225,12 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
         hasFreeDirsLeft = len(attacksThisDayByUTC) < len(fort.getOpenedDirections())
         for direction in xrange(1, fortified_regions.g_cache.maxDirections + 1):
             isOpened = bool(self.__item.getDirMask() & 1 << direction)
-            name = i18n.makeString('#fortifications:General/directionName%d' % direction)
+            name = _ms('#fortifications:General/directionName%d' % direction)
             data = {'name': name,
              'uid': direction,
              'isOpened': isOpened,
-             'ttHeader': i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTAVAILABLE_HEADER, direction=name),
-             'ttBody': i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTOPENED)}
+             'ttHeader': _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTAVAILABLE_HEADER, direction=name),
+             'ttBody': _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTOPENED)}
             if isOpened:
                 attackTime, attackerClanDBID, attackerClanName, byMyClan = self.__getDirectionAttackerInfo(direction)
                 availableTime = self.__item.getDictDirOpenAttacks().get(direction, 0)
@@ -288,7 +297,6 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
     def __getDirectionTooltipData(self, dirName, buildings, attackerClanDBID, attackerClanName, attackTime, availableTime):
         infoMessage = ''
         bodyParts = []
-        ms = i18n.makeString
         if self.fortCtrl.getFort().isFrozen() or self.__weAreAtWar:
             return (None, None, None)
         else:
@@ -297,28 +305,28 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
                 if building is not None:
                     extraInfo = ''
                     if building['buildingLevel'] < FORTIFICATION_ALIASES.CLAN_BATTLE_BUILDING_MIN_LEVEL:
-                        extraInfo = ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUILDINGLOWLEVEL, minLevel=fort_formatters.getTextLevel(FORTIFICATION_ALIASES.CLAN_BATTLE_BUILDING_MIN_LEVEL))
-                    buildingsMsgs.insert(0, ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUILDINGITEM, name=ms(FORTIFICATIONS.buildings_buildingname(building['uid'])), level=ms(FORTIFICATIONS.FORTMAINVIEW_HEADER_LEVELSLBL, buildLevel=str(fort_formatters.getTextLevel(building['buildingLevel']))), extraInfo=extraInfo))
+                        extraInfo = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUILDINGLOWLEVEL, minLevel=fort_formatters.getTextLevel(FORTIFICATION_ALIASES.CLAN_BATTLE_BUILDING_MIN_LEVEL))
+                    buildingsMsgs.insert(0, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUILDINGITEM, name=_ms(FORTIFICATIONS.buildings_buildingname(building['uid'])), level=_ms(FORTIFICATIONS.FORTMAINVIEW_HEADER_LEVELSLBL, buildLevel=str(fort_formatters.getTextLevel(building['buildingLevel']))), extraInfo=extraInfo))
 
             buildingsNames = '\n'.join(buildingsMsgs)
             if availableTime is not None:
-                infoMessage = ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_NOTAVAILABLE, date=BigWorld.wg_getShortDateFormat(availableTime))
-                bodyParts.append(ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTAVAILABLE_INFO, date=BigWorld.wg_getShortDateFormat(availableTime)))
-                header = ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTAVAILABLE_HEADER, direction=dirName)
+                infoMessage = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_NOTAVAILABLE, date=BigWorld.wg_getShortDateFormat(availableTime))
+                bodyParts.append(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTAVAILABLE_INFO, date=BigWorld.wg_getShortDateFormat(availableTime)))
+                header = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTAVAILABLE_HEADER, direction=dirName)
             elif attackerClanDBID is None:
                 if buildingsNames:
-                    bodyParts.append(ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUILDINGS, buildings=buildingsNames))
+                    bodyParts.append(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUILDINGS, buildings=buildingsNames))
                 if self.fortCtrl.getPermissions().canPlanAttack():
-                    bodyParts.append(ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_ATTACKINFO))
-                    header = ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_ATTACK, direction=dirName)
+                    bodyParts.append(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_ATTACKINFO))
+                    header = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_ATTACK, direction=dirName)
                 else:
-                    bodyParts.append(ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTCOMMANDERINFO))
-                    header = ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTCOMMANDER, direction=dirName)
+                    bodyParts.append(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTCOMMANDERINFO))
+                    header = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_NOTCOMMANDER, direction=dirName)
             else:
-                bodyParts.append(ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUSY_INFO, date=BigWorld.wg_getShortDateFormat(attackTime), clanName=attackerClanName))
+                bodyParts.append(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUSY_INFO, date=BigWorld.wg_getShortDateFormat(attackTime), clanName=attackerClanName))
                 if buildingsNames:
-                    bodyParts.append(ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUILDINGS, buildings=buildingsNames))
-                header = ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUSY_HEADER, direction=dirName)
+                    bodyParts.append(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUILDINGS, buildings=buildingsNames))
+                header = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_BUSY_HEADER, direction=dirName)
             return (header, '\n'.join(bodyParts), infoMessage)
 
     def __calculateDefencePeriod(self):
@@ -339,40 +347,21 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
     def __setSelectedDate(self):
         if self.__upcomingAttack is not None:
             self.__selectedDayStart, self.__selectedDayEnd = time_utils.getDayTimeBoundsForLocal(self.__upcomingAttack.getStartTime())
+        elif self.__hasBeenCounterAttacked:
+            currentUserTime = time.time()
+            timestampToUseForDateSelection = self.__defenseInCooldown.getStartTime() + time_utils.ONE_DAY
+            if time.localtime(timestampToUseForDateSelection).tm_hour > self.__item.getStartDefHour():
+                timestampToUseForDateSelection += time_utils.ONE_DAY
+            if timestampToUseForDateSelection < currentUserTime:
+                timestampToUseForDateSelection = currentUserTime
+            self.__selectedDayStart, self.__selectedDayEnd = time_utils.getDayTimeBoundsForLocal(timestampToUseForDateSelection)
         elif self.__attackInCooldown is not None:
             self.__selectedDayStart, self.__selectedDayEnd = time_utils.getDayTimeBoundsForLocal(self.__attackInCooldown.getStartTime())
         else:
-            timestamp = self.__item.getAvailability(self.fortCtrl.getFort())
+            timestamp = self.__item.getAvailability()
             self.__selectedDayStart, self.__selectedDayEnd = time_utils.getDayTimeBoundsForLocal(timestamp)
         self.__selectedDefencePeriodStart, self.__selectedDefencePeriodEnd = self.__selectedDayStart, self.__selectedDayEnd
         return
-
-    def __getAttacksAndDeffences(self):
-        clanID = self.__item.getClanDBID()
-        fort = self.fortCtrl.getFort()
-        currentUserTime = time.time()
-
-        def filterInCooldown(item):
-            if currentUserTime < item.getStartTime() + fortified_regions.g_cache.attackCooldownTime and item.isEnded():
-                return True
-            return False
-
-        def filterUpcoming(item):
-            if currentUserTime <= item.getStartTime() and not item.isEnded():
-                return True
-            return False
-
-        upcomingAttacks = fort.getAttacks(clanID, filterUpcoming)
-        attacksInCooldown = fort.getAttacks(clanID, filterInCooldown)
-        defencesInCooldown = fort.getDefences(clanID, filterInCooldown)
-        if upcomingAttacks:
-            self.__upcomingAttack = upcomingAttacks[0]
-            self.__weAreAtWar = True
-        elif attacksInCooldown:
-            self.__attackInCooldown = attacksInCooldown[-1]
-            self.__weAreAtWar = True
-        if defencesInCooldown:
-            self.__defenceInCooldown = defencesInCooldown[-1]
 
     @process
     def __requestClanEmblem(self):

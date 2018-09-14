@@ -55,6 +55,18 @@ class PlayerUnitInfo(object):
     def isOffline(self):
         return self.role & UNIT_ROLE.OFFLINE > 0
 
+    def isInSearch(self):
+        if self.unit is not None:
+            return self.unit.getState() & UNIT_STATE.IN_SEARCH > 0
+        else:
+            return False
+
+    def isInQueue(self):
+        if self.unit is not None:
+            return self.unit.getState() & UNIT_STATE.IN_QUEUE > 0
+        else:
+            return False
+
     def isLegionary(self):
         return self.role & UNIT_ROLE.LEGIONARY > 0
 

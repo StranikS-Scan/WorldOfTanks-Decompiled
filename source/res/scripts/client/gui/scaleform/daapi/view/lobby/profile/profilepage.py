@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfilePage.py
 import BigWorld
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.settings import VIEW_ALIAS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.ProfileMeta import ProfileMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.shared import events
@@ -20,9 +20,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
     def registerFlashComponent(self, component, alias, *args):
         if alias == VIEW_ALIAS.PROFILE_TAB_NAVIGATOR:
             player = BigWorld.player()
-            selectedAlias = VIEW_ALIAS.PROFILE_SUMMARY_PAGE
-            if self.__ctx is not None:
-                selectedAlias = self.__ctx.get('page', VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE)
+            selectedAlias = VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE if self.__ctx.get('itemCD') else VIEW_ALIAS.PROFILE_SUMMARY_PAGE
             super(ProfilePage, self).registerFlashComponent(component, alias, player.name, None, player.databaseID, {'sectionsData': [self.__getSectionDataObject(PROFILE.SECTION_SUMMARY_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_SUMMARY, VIEW_ALIAS.PROFILE_SUMMARY_PAGE),
                               self.__getSectionDataObject(PROFILE.SECTION_AWARDS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_AWARDS, VIEW_ALIAS.PROFILE_AWARDS),
                               self.__getSectionDataObject(PROFILE.SECTION_STATISTICS_TITLE, PROFILE.PROFILE_TABS_TOOLTIP_STATISTICS, VIEW_ALIAS.PROFILE_STATISTICS),
@@ -47,7 +45,7 @@ class ProfilePage(LobbySubView, ProfileMeta):
          'tooltip': tooltip}
 
     def onCloseProfile(self):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)

@@ -2,8 +2,8 @@
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from adisp import process
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages
+from gui.Scaleform.daapi.view.lobby.fortifications import FortifiedWindowScopes
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortTransportConfirmationWindowMeta import FortTransportConfirmationWindowMeta
@@ -21,10 +21,11 @@ from helpers import i18n
 
 class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportConfirmationWindowMeta, FortViewHelper, AppRef):
 
-    def __init__(self, fromId, toId):
+    def __init__(self, ctx = None):
         super(FortTransportConfirmationWindow, self).__init__()
-        self.__fromId = fromId
-        self.__toId = toId
+        self.addListener(events.FortEvent.CLOSE_TRANSPORT_CONFIRM_WINDOW, self.__forcedCloseWindow, scope=FortifiedWindowScopes.FORT_MAIN_SCOPE)
+        self.__fromId = ctx.get('fromId')
+        self.__toId = ctx.get('toId')
         self.__isInTutorial = self._isTutorial()
 
     def _populate(self):
@@ -33,7 +34,14 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
         self._update()
         g_fortSoundController.playNextStepTransport()
 
+    def __forcedCloseWindow(self, _):
+        BigWorld.callback(0.2, self.__destoryCallback)
+
+    def __destoryCallback(self):
+        self.destroy()
+
     def _dispose(self):
+        self.removeListener(events.FortEvent.CLOSE_TRANSPORT_CONFIRM_WINDOW, self.__forcedCloseWindow, scope=FortifiedWindowScopes.FORT_MAIN_SCOPE)
         self.stopFortListening()
         ctrl = self.fortCtrl
         if ctrl is not None and ctrl.getFort() is not None:

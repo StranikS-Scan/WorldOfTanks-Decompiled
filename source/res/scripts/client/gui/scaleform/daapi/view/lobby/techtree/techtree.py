@@ -2,6 +2,7 @@
 import Keys
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.ResearchView import ResearchView
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers, SelectedNation, USE_XML_DUMPING
@@ -62,15 +63,14 @@ class TechTree(ResearchView, TechTreeMeta):
         self.showVehicleInfo(pickleDump)
 
     def goToNextVehicle(self, vehCD):
-        Event = events.LoadEvent
-        exitEvent = Event(Event.LOAD_TECHTREE, ctx={'nation': SelectedNation.getName()})
-        loadEvent = Event(Event.LOAD_RESEARCH, ctx={'rootCD': vehCD,
+        exitEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': SelectedNation.getName()})
+        loadEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={'rootCD': vehCD,
          'exit': exitEvent})
         self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onCloseTechTree(self):
         if self._canBeClosed:
-            self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def invalidateVehLocks(self, locks):
         if self._data.invalidateLocks(locks):

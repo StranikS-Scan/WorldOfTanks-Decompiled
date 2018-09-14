@@ -2,7 +2,7 @@
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import AppRef
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import TutorialEvent, ShowWindowEvent
+from gui.shared.events import TutorialEvent
 from tutorial import GlobalStorage, LOG_MEMORY, LOG_ERROR
 from tutorial.control.context import GLOBAL_FLAG, GLOBAL_VAR
 from tutorial.gui import LobbyDispatcher, GUIDispatcher
@@ -32,7 +32,7 @@ class SfLobbyDispatcher(LobbyDispatcher, AppRef):
         addListener = g_eventBus.addListener
         addListener(TutorialEvent.REFUSE, self.__handleRefuseTraining, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(TutorialEvent.RESTART, self.__handleRestartTraining, scope=EVENT_BUS_SCOPE.GLOBAL)
-        addListener(ShowWindowEvent.SHOW_TUTORIAL_BATTLE_HISTORY, self.__handleHistoryShow, scope=EVENT_BUS_SCOPE.DEFAULT)
+        addListener(TutorialEvent.SHOW_TUTORIAL_BATTLE_HISTORY, self.__handleHistoryShow, scope=EVENT_BUS_SCOPE.DEFAULT)
         self._subscribe()
 
     def stop(self):
@@ -41,7 +41,7 @@ class SfLobbyDispatcher(LobbyDispatcher, AppRef):
         removeListener = g_eventBus.removeListener
         removeListener(TutorialEvent.REFUSE, self.__handleRefuseTraining, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(TutorialEvent.RESTART, self.__handleRestartTraining, scope=EVENT_BUS_SCOPE.GLOBAL)
-        removeListener(ShowWindowEvent.SHOW_TUTORIAL_BATTLE_HISTORY, self.__handleHistoryShow, scope=EVENT_BUS_SCOPE.DEFAULT)
+        removeListener(TutorialEvent.SHOW_TUTORIAL_BATTLE_HISTORY, self.__handleHistoryShow, scope=EVENT_BUS_SCOPE.DEFAULT)
         self._unsubscribe()
         self.clearGUI()
         self.__isStarted = False

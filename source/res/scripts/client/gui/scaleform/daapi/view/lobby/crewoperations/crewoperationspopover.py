@@ -1,14 +1,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/crewOperations/CrewOperationsPopOver.py
 from CurrentVehicle import g_currentVehicle
+from debug_utils import LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.Crew import Crew
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.CrewOperationsPopOverMeta import CrewOperationsPopOverMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
 from gui.shared import g_itemsCache
-from gui.shared.events import ShowWindowEvent
+from gui.shared.events import LoadViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.tankman import TankmanReturn
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import i18n
@@ -20,7 +23,7 @@ OPERATION_DROP_IN_BARRACK = 'dropInBarrack'
 
 class CrewOperationsPopOver(CrewOperationsPopOverMeta, View, SmartPopOverView):
 
-    def __init__(self, ctx):
+    def __init__(self, ctx = None):
         super(CrewOperationsPopOver, self).__init__()
 
     def _populate(self):
@@ -48,6 +51,19 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta, View, SmartPopOverView):
     def __getReturnOperationData(self, vehicle):
         crew = vehicle.crew
         lastCrewIDs = vehicle.lastCrew
+        tankmen = g_itemsCache.items.getTankmen().values()
+        berths = g_itemsCache.items.stats.tankmenBerthsCount
+        tankmenInBarracks = 0
+        for tankman in sorted(tankmen, TankmenComparator(g_itemsCache.items.getVehicle)):
+            if not tankman.isInTank:
+                tankmenInBarracks += 1
+
+        freeBerths = berths - tankmenInBarracks
+        tankmenToBarracksCount = 0
+        for i in xrange(len(crew)):
+            if crew[i][1] is not None:
+                tankmenToBarracksCount += 1
+
         demobilizedMembersCounter = 0
         isCrewAlreadyInCurrentVehicle = True
         if lastCrewIDs is not None:
@@ -62,19 +78,21 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta, View, SmartPopOverView):
                                 return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP)
                             if lastTankmanVehicle.invID != vehicle.invID:
                                 isCrewAlreadyInCurrentVehicle = False
+                            elif lastTankmanVehicle.invID == vehicle.invID:
+                                tankmenToBarracksCount -= 1
                     else:
                         isCrewAlreadyInCurrentVehicle = False
                 else:
                     demobilizedMembersCounter += 1
 
+            if tankmenToBarracksCount > freeBerths:
+                return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_NOSPACE_TOOLTIP)
         else:
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'noPrevious')
         if demobilizedMembersCounter > 0 and demobilizedMembersCounter == len(lastCrewIDs):
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'allDemobilized')
         elif isCrewAlreadyInCurrentVehicle:
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'alreadyOnPlaces')
-        elif self.__isNotEnoughSpaceInBarrack(crew):
-            return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_NOSPACE_TOOLTIP)
         elif demobilizedMembersCounter > 0 and demobilizedMembersCounter < len(lastCrewIDs):
             return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP, True)
         else:
@@ -116,7 +134,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta, View, SmartPopOverView):
 
     def invokeOperation(self, operationName):
         if operationName == OPERATION_RETRAIN:
-            self.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_RETRAIN_CREW_WINDOW, {}))
+            self.fireEvent(LoadViewEvent(VIEW_ALIAS.RETRAIN_CREW))
         elif operationName == OPERATION_RETURN:
             self.__processReturnCrew()
         else:

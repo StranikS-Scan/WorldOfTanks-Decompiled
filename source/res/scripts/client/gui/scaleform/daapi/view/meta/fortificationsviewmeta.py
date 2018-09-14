@@ -19,3 +19,7 @@ class FortificationsViewMeta(DAAPIModule):
     def as_setCommonDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setCommonData(data)
+
+    def as_waitingDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_waitingData(data)

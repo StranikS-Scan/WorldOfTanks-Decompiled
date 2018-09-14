@@ -4,7 +4,7 @@ from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
 class AbstractWindowView(WrapperViewMeta, WindowViewMeta):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(AbstractWindowView, self).__init__()
 
     def onTryClosing(self):

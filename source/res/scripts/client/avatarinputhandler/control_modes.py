@@ -1194,7 +1194,6 @@ class PostMortemControlMode(IControlMode):
         if self.__postmortemDelay is not None:
             return
         else:
-            prevVehicleID = self.__selfVehicleID if self.__curVehicleID is None else self.__curVehicleID
             player = BigWorld.player()
             replayCtrl = BattleReplay.g_replayCtrl
             self.__waitForCameraTargetCancel()
@@ -1246,9 +1245,7 @@ class PostMortemControlMode(IControlMode):
             if self.__curVehicleID != player.playerVehicleID and BigWorld.entity(self.__curVehicleID) is None and not replayCtrl.isPlaying and not self.__isObserverMode and player.arena.positions.get(self.__curVehicleID) is None:
                 self.__switchToVehicle(-1, toPrevious)
                 return
-            self.__cbIDWaitForCameraTarget = BigWorld.callback(0.001, self.__waitForCameraTarget)
-            if replayCtrl.isRecording:
-                replayCtrl.setPlayerVehicleID(prevVehicleID)
+            self.__cbIDWaitForCameraTarget = BigWorld.callback(0.0, self.__waitForCameraTarget)
             if not replayCtrl.isPlaying:
                 self.__cam.vehicleMProv = Math.Matrix(self.__cam.vehicleMProv)
             return
@@ -1265,8 +1262,9 @@ class PostMortemControlMode(IControlMode):
         player = BigWorld.player()
         vDesc = player.arena.vehicles[victimID]
         isPlayerObserver = player.vehicleTypeDescriptor is not None and 'observer' in player.vehicleTypeDescriptor.type.tags
-        if (vDesc['team'] == player.team or isPlayerObserver) and not vDesc['isAlive']:
-            self.__delAndAdjustIDs(victimID)
+        if not isPlayerObserver:
+            if vDesc['team'] == player.team and not vDesc['isAlive']:
+                self.__delAndAdjustIDs(victimID)
         return
 
     def __onPeriodChange(self, period, *args):
@@ -1398,12 +1396,12 @@ class PostMortemControlMode(IControlMode):
                 self.__cam.vehicleMProv = targetMProv
                 self.__cbIDWaitForCameraTarget = BigWorld.callback(0.1, self.__waitForCameraTarget)
                 return
-            self.__cam.vehicleMProv = vehicle.matrix
-            self.__cam.addVehicleToCollideWith(vehicle.appearance)
-            self.__aih.onCameraChanged('postmortem', self.__curVehicleID)
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setPlayerVehicleID(self.__curVehicleID)
+            self.__cam.vehicleMProv = vehicle.matrix
+            self.__cam.addVehicleToCollideWith(vehicle.appearance)
+            self.__aih.onCameraChanged('postmortem', self.__curVehicleID)
             return
 
     def __waitForCameraTargetCancel(self):
@@ -1604,6 +1602,8 @@ class _SuperGunMarker():
             self.__show2 = state.get('show2', False)
         self.__gm1.enable(state)
         self.__gm2.enable(state)
+        if state:
+            self.__gm2.setPosition(state['pos2'])
         self.show(self.__show1)
         self.show2(self.__show2)
         self.onRecreateDevice()

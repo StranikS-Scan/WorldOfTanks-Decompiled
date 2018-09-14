@@ -54,6 +54,15 @@ class AccountValidator(object):
 
         BigWorld.player().inventory.dismissTankman(tmanInvID, response)
 
+    def __validateEliteVehicleCDs(self):
+        for vehicleCD in g_itemsCache.items.stats.eliteVehicles:
+            try:
+                g_itemsCache.items.getItemByCD(vehicleCD)
+            except Exception as e:
+                LOG_ERROR("Couldn't get vehicle using compact descriptor: ", vehicleCD)
+                LOG_ERROR('Exact exception message: ', e.message)
+                LOG_CURRENT_EXCEPTION()
+
     def __validateInventoryVehicles(self):
         inventory = g_itemsCache.items.inventory
         vehsInvData = g_itemsCache.items.inventory.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {})
@@ -96,6 +105,7 @@ class AccountValidator(object):
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.OPTIONALDEVICE, self.CODES.INVENTORY_OPT_DEV_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.SHELL, self.CODES.INVENTORY_SHELL_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.EQUIPMENT, self.CODES.INVENTORY_EQ_MISMATCH),
+         self.__validateEliteVehicleCDs,
          self.__validateInventoryTankmen,
          self.__validateInventoryVehicles]
         for handler in handlers:
@@ -116,6 +126,7 @@ class AccountValidator(object):
                 if not processed:
                     LOG_ERROR('There is exception while validating item', e.itemData)
                     LOG_ERROR(e.message)
+                    callback(e.code)
                     return
 
         callback(self.CODES.OK)

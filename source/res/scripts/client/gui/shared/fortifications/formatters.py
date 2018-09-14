@@ -27,15 +27,3 @@ def getBuildingUserString(buildTypeID):
 
 def getDayOffString(offDay):
     return i18n.makeString('#menu:dateTime/weekDays/full/%d' % (offDay + 1))
-
-
-def getClanAbbrevString(clanAbbrev):
-    return '[{0:>s}]'.format(clanAbbrev)
-
-
-def parseClanInfoByFullName(clanFullName):
-    try:
-        result = re.search('\\[(.+)\\]\\ *(.*)', clanFullName)
-        return (result.group(1), result.group(2))
-    except:
-        return ('', '')

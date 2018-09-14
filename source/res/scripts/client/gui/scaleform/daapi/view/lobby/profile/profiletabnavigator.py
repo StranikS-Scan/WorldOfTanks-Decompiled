@@ -11,7 +11,7 @@ class ProfileTabNavigator(ProfileTabNavigatorMeta):
         self.__databaseID = args[2]
         self.__navigatorOwnInitInfo = args[3]
         self.__selectedData = None
-        if len(args) > 4:
+        if len(args) > 4 and args[4]:
             self.__selectedData = args[4]
         return
 

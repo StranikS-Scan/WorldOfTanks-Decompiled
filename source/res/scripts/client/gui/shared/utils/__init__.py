@@ -4,13 +4,15 @@ import types
 import itertools
 import BigWorld
 import AccountCommands
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from helpers import getLanguageCode, i18n
 from items import vehicles as vehs_core
+from account_helpers.AccountSettings import AccountSettings
 ScalarTypes = (types.IntType,
  types.LongType,
  types.FloatType,
  types.BooleanType) + types.StringTypes
+IntegralTypes = (types.IntType, types.LongType)
 SHELLS_COUNT_PROP_NAME = 'shellsCount'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
 RELOAD_MAGAZINE_TIME_PROP_NAME = 'reloadMagazineTime'
@@ -34,6 +36,9 @@ _FLASH_OBJECT_SYS_ATTRS = ('isPrototypeOf', 'propertyIsEnumerable', 'hasOwnPrope
 
 class CONST_CONTAINER:
     __keyByValue = None
+
+    def __init__(self):
+        pass
 
     @classmethod
     def getIterator(cls):
@@ -216,3 +221,46 @@ class AlwaysValidObject(object):
     @classmethod
     def _makeName(cls, parentName, nodeName):
         return '%s/%s' % (parentName, nodeName)
+
+
+class SettingRecord(dict):
+
+    def __init__(self, *args, **kwargs):
+        super(SettingRecord, self).__init__(*args, **kwargs)
+
+    def __setattr__(self, name, value):
+        if len(self):
+            raise AttributeError("can't set attribute")
+        self.__setitem__(name, value)
+
+    def __getattr__(self, item):
+        if item in self:
+            return self.__getitem__(item)
+        return dict.__getattribute__(self, item)
+
+    def _asdict(self):
+        return dict(self)
+
+    def __repr__(self):
+        return '%s(%s)' % (self.__class__.__name__, super(SettingRecord, self).__repr__())
+
+
+class SettingRootRecord(SettingRecord):
+
+    @classmethod
+    def load(cls):
+        try:
+            return cls(**AccountSettings.getSettings(cls._getSettingName()))
+        except:
+            LOG_ERROR('There is error while unpacking quests settings', AccountSettings.getSettings('quests'))
+            LOG_CURRENT_EXCEPTION()
+            return None
+
+        return None
+
+    def save(self):
+        return AccountSettings.setSettings(self._getSettingName(), self._asdict())
+
+    @classmethod
+    def _getSettingName(cls):
+        raise NotImplemented

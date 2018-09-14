@@ -10,6 +10,7 @@ VIDEO_SETTINGS_FILE_PATH = 'gui/video_settings.xml'
 MovingTextProps = namedtuple('MovingTextProps', 'show internalBrowser')
 LoginRssFeedProps = namedtuple('LoginRssFeedProps', 'show url internalBrowser')
 EULAProps = namedtuple('EULAProps', 'full url')
+BrowserProps = namedtuple('BrowserProps', 'url params')
 
 def _convertMovingTextSetting(settings, item):
     return settings._replace(**item.value)
@@ -28,6 +29,10 @@ def _convertEULASetting(settings, item):
     return settings._replace(**item.value)
 
 
+def _convertBrowser(settings, item):
+    return settings._replace(**item.value)
+
+
 def _convertVector4ToTuple(_, item):
     return item.value.tuple()
 
@@ -36,7 +41,8 @@ _SETTING_CONVERTERS = {'loginRssFeed': _convertLoginRssFeed,
  'movingText': _convertMovingTextSetting,
  'eula': _convertEULASetting,
  'markerScaleSettings': _convertVector4ToTuple,
- 'markerBgSettings': _convertVector4ToTuple}
+ 'markerBgSettings': _convertVector4ToTuple,
+ 'browser': _convertBrowser}
 _DEFAULT_SETTINGS = {'registrationURL': '',
  'recoveryPswdURL': '',
  'paymentURL': '',
@@ -79,7 +85,9 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'csisRequestRate': 0,
  'showSectorLines': False,
  'showDirectionLine': False,
- 'isBattleCmdCoolDownVisible': False}
+ 'isBattleCmdCoolDownVisible': False,
+ 'browser': BrowserProps('about:blank', ''),
+ 'reportBugLinks': []}
 
 class GuiSettings(object):
 

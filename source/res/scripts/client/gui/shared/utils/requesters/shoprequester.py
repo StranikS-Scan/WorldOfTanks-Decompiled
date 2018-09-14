@@ -175,6 +175,13 @@ class ShopCommonStats(object):
         return self.getValue('passportChangeCost', 50)
 
     @property
+    def passportFemaleChangeCost(self):
+        """
+        @return: tankman passport replace cost in gold
+        """
+        return self.getValue('femalePassportChangeCost', 500)
+
+    @property
     def ebankVCoinExchangeRate(self):
         return self.getValue('ebank/vcoinExchangeRate', 20)
 
@@ -500,6 +507,13 @@ class DefaultShopRequester(ShopCommonStats):
         @return: tankman passport replace cost in gold
         """
         return self.getValue('passportChangeCost', self.__proxy.passportChangeCost)
+
+    @property
+    def passportFemaleChangeCost(self):
+        """
+        @return: tankman passport replace cost in gold
+        """
+        return self.getValue('passportFemaleChangeCost', self.__proxy.passportFemaleChangeCost)
 
     @property
     def ebankVCoinExchangeRate(self):

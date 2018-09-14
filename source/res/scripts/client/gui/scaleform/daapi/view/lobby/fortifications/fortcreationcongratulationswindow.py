@@ -11,7 +11,7 @@ from helpers import i18n
 
 class FortCreationCongratulationsWindow(AbstractWindowView, View, FortCreationCongratulationsWindowMeta, AppRef):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(FortCreationCongratulationsWindow, self).__init__()
 
     def _populate(self):

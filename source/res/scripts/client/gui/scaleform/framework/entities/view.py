@@ -5,9 +5,8 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class View(DAAPIModule):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(View, self).__init__()
-        self.__token = None
         self.__settings = None
         self.__uniqueName = None
         from gui.Scaleform.framework import ScopeTemplates
@@ -42,17 +41,6 @@ class View(DAAPIModule):
 
     def getCurrentScope(self):
         return self.__scope
-
-    @property
-    def token(self):
-        return self.__token
-
-    def setToken(self, token):
-        if token is not None:
-            self.__token = token
-        else:
-            LOG_DEBUG('token can`t be None!')
-        return
 
     @property
     def settings(self):

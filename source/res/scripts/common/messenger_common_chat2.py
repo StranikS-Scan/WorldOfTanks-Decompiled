@@ -124,7 +124,9 @@ class MESSENGER_ACTION_IDS:
         actions = MESSENGER_ACTION_IDS
         if actions.adminChatCommandFromActionID(actionID) is not None:
             return True
-        elif actions.isBattleChatAction(actionID) or actions.isUnitChatAction(actionID):
+        elif actions.isBattleChatAction(actionID):
+            return actions.battleChatCommandFromActionID(actionID) is None
+        elif actions.isUnitChatAction(actionID):
             return True
         else:
             return False

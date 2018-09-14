@@ -1,9 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/managers/PopoverManager.py
-from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.framework import ViewTypes, g_entitiesFactories, AppRef
 from gui.Scaleform.framework.entities.abstract.PopoverManagerMeta import PopoverManagerMeta
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.shared.events import ShowWindowEvent, HidePopoverEvent
+from gui.shared.events import HidePopoverEvent
 
 class PopoverManager(PopoverManagerMeta, AppRef):
 

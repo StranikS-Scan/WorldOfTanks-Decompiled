@@ -3,11 +3,10 @@ from gui.Scaleform.framework.managers.loaders import PackageBusinessHandler
 from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.events import ShowWindowEvent
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.historicalBattles.HistoricalBattlesListWindow import HistoricalBattlesListWindow
-    return [GroupedViewSettings(PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY, HistoricalBattlesListWindow, 'historicalBattlesListWindow.swf', ViewTypes.WINDOW, '', ShowWindowEvent.SHOW_HISTORICAL_BATTLES_WINDOW, ScopeTemplates.DEFAULT_SCOPE)]
+    return [GroupedViewSettings(PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY, HistoricalBattlesListWindow, 'historicalBattlesListWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE)]
 
 
 def getBusinessHandlers():
@@ -17,7 +16,7 @@ def getBusinessHandlers():
 class HistoricalBattlesBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = [(ShowWindowEvent.SHOW_HISTORICAL_BATTLES_WINDOW, self.__showHBListWindow)]
+        listeners = [(PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY, self.__showHBListWindow)]
         super(HistoricalBattlesBusinessHandler, self).__init__(listeners, EVENT_BUS_SCOPE.LOBBY)
 
     def __showHBListWindow(self, _):

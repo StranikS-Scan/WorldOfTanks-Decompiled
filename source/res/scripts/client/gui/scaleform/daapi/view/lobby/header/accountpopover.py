@@ -12,6 +12,7 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.AccountPopoverMeta import AccountPopoverMeta
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import g_itemsCache, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
@@ -28,11 +29,11 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
         self.destroy()
 
     def openClanStatistic(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
     def openReferralManagement(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_REFERRAL_MANAGEMENT_WINDOW, {}))
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW))
         self.destroy()
 
     def _populate(self):
@@ -60,7 +61,7 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
         return
 
     def __showProfileWindow(self, ctx = None):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_PROFILE, ctx or {}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PROFILE, ctx=ctx or {}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __setUserInfo(self):
         self.__setUserData()

@@ -17,7 +17,8 @@ from messenger.proto import proto_getter
 KOREA_TIME_TILL_MIDNIGHT = 7200
 
 class SystemMessagesInterface(BaseSystemMessages):
-    __BLOCK_PREFIX = 'cmd_'
+    __CMD_BLOCK_PREFIX = 'cmd_'
+    __PROMO_BLOCK_PREFIX = 'promo_'
 
     def init(self):
         connectionManager.onConnected += self.__onConnected
@@ -114,7 +115,7 @@ class SystemMessagesInterface(BaseSystemMessages):
         for notification in notifications:
             text = getLocalizedData(notification, 'text')
             msgType = notification.get('type', None)
-            if msgType is not None and msgType[:len(self.__BLOCK_PREFIX)] != self.__BLOCK_PREFIX and len(text) > 0:
+            if msgType is not None and not msgType.startswith(self.__CMD_BLOCK_PREFIX) and not msgType.startswith(self.__PROMO_BLOCK_PREFIX) and text:
                 message = {'data': text,
                  'type': msgType,
                  'state': state}

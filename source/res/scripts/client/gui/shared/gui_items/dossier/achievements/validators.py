@@ -2,7 +2,7 @@
 from gui.shared.fortifications import isFortificationEnabled
 
 def questHasThisAchievementAsBonus(name, block):
-    from gui.shared import g_eventsCache
+    from gui.server_events import g_eventsCache
     for records in g_eventsCache.getQuestsDossierBonuses().itervalues():
         if (block, name) in records:
             return True

@@ -4,7 +4,7 @@ import BigWorld, ResMgr
 import CommandMapping
 import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui import VERSION_FILE_PATH
+from helpers import VERSION_FILE_PATH
 from gui.Scaleform.windows import UIInterface
 
 class IngameHelp(object):

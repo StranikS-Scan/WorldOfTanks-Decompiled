@@ -8,6 +8,7 @@ import Event
 from abc import abstractmethod, ABCMeta
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.customization.CustomizationHelper import getInventoryItemsFor
+from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.MENU import MENU
@@ -349,13 +350,15 @@ class InscriptionGroupsDataProvider(BaseGroupsDataProvider):
             igrRoomType = gui.game_control.g_instance.igr.getRoomType()
             groups = customization.get('inscriptionGroups', {})
             for name, group in groups.iteritems():
-                inscriptionIDs, groupUserString, igrType = group
+                inscriptionIDs, groupUserString, igrType, allow, deny = group
                 isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, inscriptionIDs)
                 isHiddenGroup = name in hiddenInscriptions
+                currVehIntD = g_currentVehicle.item.intCD
+                canBeUsedOnVehicle = currVehIntD not in deny and (len(allow) == 0 or currVehIntD in allow)
                 hasItemsInHangar = False
                 if isHiddenGroup:
                     hasItemsInHangar = CustomizationHelper.areItemsInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, inscriptionIDs, self._nationID)
-                if (isHasNew or hasItemsInHangar or not isHiddenGroup) and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE):
+                if canBeUsedOnVehicle and (isHasNew or hasItemsInHangar or not isHiddenGroup) and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE):
                     result.append({'name': name,
                      'userString': groupUserString,
                      'hasNew': isHasNew,
@@ -394,13 +397,15 @@ class EmblemGroupsDataProvider(BaseGroupsDataProvider):
         if groups is not None:
             igrRoomType = gui.game_control.g_instance.igr.getRoomType()
             for name, group in groups.iteritems():
-                emblemIDs, groupUserString, igrType, nations = group
+                emblemIDs, groupUserString, igrType, nations, allow, deny = group
                 isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, emblemIDs)
                 isHiddenGroup = name in hiddenEmblems
                 hasItemsInHangar = False
+                currVehIntD = g_currentVehicle.item.intCD
+                canBeUsedOnVehicle = currVehIntD not in deny and (len(allow) == 0 or currVehIntD in allow)
                 if isHiddenGroup:
                     hasItemsInHangar = CustomizationHelper.areItemsInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, emblemIDs, self._nationID)
-                if (isHasNew or hasItemsInHangar or not isHiddenGroup) and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE) and (nations is None or g_currentVehicle.item.nationID in nations):
+                if canBeUsedOnVehicle and (isHasNew or hasItemsInHangar or not isHiddenGroup) and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE) and (nations is None or g_currentVehicle.item.nationID in nations):
                     result.append({'name': name,
                      'userString': groupUserString,
                      'hasNew': isHasNew,
@@ -484,8 +489,8 @@ class EmblemsDataProvider(BaseCustomizationDataProvider):
         defPriceFactors = g_itemsCache.items.shop.defaults.getEmblemsGroupPriceFactors()
         hiddens = g_itemsCache.items.shop.getEmblemsGroupHiddens()
         if emblem is not None:
-            groupName, igrType, texture, bumpMap, emblemUserString, isMirrored = emblem
-            emblemIDs, groupUserString, igrType, nations = groups.get(groupName)
+            groupName, igrType, texture, bumpMap, emblemUserString, isMirrored = emblem[0:6]
+            emblemIDs, groupUserString, igrType, nations, allow, deny = groups.get(groupName)
             isNewItem = self.isNewID(itemID)
             if withoutCheck or isNewItem or isInHangar or groupName not in hiddens:
                 price = self._makeCost(self._cost, self._vehPriceFactor, priceFactors.get(groupName)) if not isInHangar else 0
@@ -509,18 +514,29 @@ class EmblemsDataProvider(BaseCustomizationDataProvider):
                      'oldPrice': oldPrice}
                 timeLeftStr = ''
                 days = 0
+                timeLeft = 0 if self._isGold else self._period * 86400
+                isPermanent = False
+                value = None
+                canUse = True
+                if isInHangar:
+                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, itemID, self.nationID, self.position)
+                    if item:
+                        isPermanent = item.get('isPermanent')
+                        value = item.get('quantity')
+                        timeLeft = value * 86400 if not item.get('isPermanent') else 0
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
+                        if not isPermanent:
+                            selectedEmblems, _ = VehicleCustomizationModel.getVehicleModel()
+                            for selectedEmblem in selectedEmblems:
+                                if selectedEmblems.index(selectedEmblem) != self.position and selectedEmblem[0] == itemID:
+                                    canUse = False
+
                 if isCurrent:
                     updatedDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
                     emblem = updatedDescr.playerEmblems[self.position]
                     _, startTime, days = emblem
                     if days:
                         timeLeft = startTime + days * 86400 - time.time()
-                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
-                    else:
-                        timeLeftStr = CustomizationHelper.getTimeLeftText(0)
-                elif isInHangar:
-                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, itemID)
-                    timeLeft = item.get('quantity') * 86400 if not item.get('isPermanent') else 0
                     timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
                 itemInfo = {'id': itemID,
                  'texturePath': self._makeSmallTextureUrl(texture, None, None),
@@ -536,7 +552,11 @@ class EmblemsDataProvider(BaseCustomizationDataProvider):
                  'isNew': isNewItem,
                  'timeLeftStr': timeLeftStr,
                  'type': CUSTOMIZATION_ITEM_TYPE.EMBLEM,
-                 'isSpecialTooltip': True}
+                 'isSpecialTooltip': True,
+                 'timeLeftValue': timeLeft,
+                 'isPermanent': isPermanent,
+                 'value': value,
+                 'canUse': canUse}
         return itemInfo
 
     def _getPriceFactor(self, itemID):
@@ -544,7 +564,7 @@ class EmblemsDataProvider(BaseCustomizationDataProvider):
         groups, emblems, names = vehicles.g_cache.playerEmblems()
         emblem = emblems.get(itemID)
         if emblem is not None:
-            groupName, igrType, texture, bumpFile, emblemUserString, isMirrored = emblem
+            groupName, igrType, texture, bumpFile, emblemUserString, isMirrored = emblem[0:6]
             if not CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, itemID, self.nationID, self.position):
                 priceFactor = g_itemsCache.items.shop.getEmblemsGroupPriceFactors().get(groupName)
         return priceFactor
@@ -580,7 +600,7 @@ class EmblemsDataProvider(BaseCustomizationDataProvider):
         result = []
         hiddenItems = g_itemsCache.items.shop.getEmblemsGroupHiddens()
         if group is not None:
-            emblemIDs, groupUserString, igrType, nations = group
+            emblemIDs, groupUserString, igrType, nations, allow, deny = group
             self._isIGR = igrType != constants.IGR_TYPE.NONE
             isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, emblemIDs)
             isHiddenGroup = groupName in hiddenItems
@@ -600,7 +620,7 @@ class EmblemsDataProvider(BaseCustomizationDataProvider):
         groups, emblems, names = vehicles.g_cache.playerEmblems()
         if itemID is not None:
             for groupName, group in groups.iteritems():
-                emblemIDs, groupUserString, igrType, nations = group
+                emblemIDs, groupUserString, igrType, nations, allow, deny = group
                 if itemID in emblemIDs:
                     return igrType != constants.IGR_TYPE.NONE
 
@@ -647,8 +667,8 @@ class InscriptionDataProvider(EmblemsDataProvider):
         defPriceFactors = g_itemsCache.items.shop.defaults.getInscriptionsGroupPriceFactors(self.nationID)
         hiddens = g_itemsCache.items.shop.getInscriptionsGroupHiddens(self.nationID)
         if inscription is not None:
-            groupName, igrType, texture, bumpMap, inscriptionUserString, isFeatured = inscription
-            inscriptionIDs, groupUserString, igrType = groups.get(groupName)
+            groupName, igrType, texture, bumpMap, inscriptionUserString, isFeatured = inscription[0:6]
+            inscriptionIDs, groupUserString, igrType, allow, deny = groups.get(groupName)
             isNewItem = self.isNewID(itemID)
             if withoutCheck or isNewItem or isInHangar or groupName not in hiddens:
                 price = self._makeCost(self._cost, self._vehPriceFactor, priceFactors.get(groupName)) if not isInHangar else 0
@@ -672,18 +692,29 @@ class InscriptionDataProvider(EmblemsDataProvider):
                      'oldPrice': oldPrice}
                 timeLeftStr = ''
                 days = 0
+                isPermanent = False
+                value = 0
+                timeLeft = 0 if self._isGold else self._period * 86400
+                canUse = True
+                if isInHangar:
+                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, itemID, self.nationID, self.position)
+                    if item:
+                        isPermanent = item.get('isPermanent')
+                        value = item.get('quantity')
+                        timeLeft = value * 86400 if not item.get('isPermanent') else 0
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
+                        if not isPermanent:
+                            _, selectedInscriptions = VehicleCustomizationModel.getVehicleModel()
+                            for selectedInscription in selectedInscriptions:
+                                if selectedInscriptions.index(selectedInscription) != self.position and selectedInscription[0] == itemID:
+                                    canUse = False
+
                 if isCurrent:
                     updatedDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
                     item = updatedDescr.playerInscriptions[self.position]
                     _, startTime, days, _ = item
                     if days:
                         timeLeft = startTime + days * 86400 - time.time()
-                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
-                    else:
-                        timeLeftStr = CustomizationHelper.getTimeLeftText(0)
-                elif isInHangar:
-                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, itemID)
-                    timeLeft = item.get('quantity') * 86400 if not item.get('isPermanent') else 0
                     timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
                 itemInfo = {'id': itemID,
                  'texturePath': self._makeSmallTextureUrl(texture, None, None),
@@ -700,7 +731,11 @@ class InscriptionDataProvider(EmblemsDataProvider):
                  'timeLeftStr': timeLeftStr,
                  'type': CUSTOMIZATION_ITEM_TYPE.INSCRIPTION,
                  'nationId': self.nationID,
-                 'isSpecialTooltip': True}
+                 'isSpecialTooltip': True,
+                 'timeLeftValue': timeLeft,
+                 'isPermanent': isPermanent,
+                 'value': value,
+                 'canUse': canUse}
         return itemInfo
 
     def _getPriceFactor(self, itemID):
@@ -710,7 +745,7 @@ class InscriptionDataProvider(EmblemsDataProvider):
             inscriptions = customization.get('inscriptions', {})
             inscription = inscriptions.get(itemID)
             if inscription is not None:
-                groupName, igrType, texture, bumpMap, inscriptionUserString, isFeatured = inscription
+                groupName, igrType, texture, bumpMap, inscriptionUserString, isFeatured = inscription[0:6]
                 if not CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, itemID, self.nationID, self.position):
                     priceFactor = g_itemsCache.items.shop.getInscriptionsGroupPriceFactors(self.nationID).get(groupName)
         return priceFactor
@@ -730,7 +765,7 @@ class InscriptionDataProvider(EmblemsDataProvider):
                 group = groups.get(groupName, {})
                 inscriptions = customization.get('inscriptions', {})
                 if group is not None:
-                    inscriptionIDs, groupUserString, igrType = group
+                    inscriptionIDs, groupUserString, igrType, allow, deny = group
                     isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, inscriptionIDs)
                     isHiddenGroup = groupName in hiddenItems
                     hasItemsInHangar = False
@@ -751,7 +786,7 @@ class InscriptionDataProvider(EmblemsDataProvider):
         groups = customization.get('inscriptionGroups', {})
         if itemID is not None:
             for groupName, group in groups.iteritems():
-                emblemIDs, groupUserString, igrType = group
+                emblemIDs, groupUserString, igrType, allow, deny = group
                 if itemID in emblemIDs:
                     return igrType != constants.IGR_TYPE.NONE
 
@@ -866,18 +901,22 @@ class CamouflagesDataProvider(BaseCustomizationDataProvider):
                      'oldPrice': oldPrice}
                 timeLeftStr = ''
                 days = 0
+                isPermanent = False
+                value = 0
+                timeLeft = 0 if self._isGold else self._period * 86400
+                if isInHangar:
+                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE, cID, self.nationID)
+                    if item:
+                        isPermanent = item.get('isPermanent')
+                        value = item.get('quantity')
+                        timeLeft = value * 86400 if not item.get('isPermanent') else 0
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
                 if isCurrent:
                     updatedDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
                     item = updatedDescr.camouflages[camouflage.get('kind', 0)]
                     _, startTime, days = item
                     if days:
                         timeLeft = startTime + days * 86400 - time.time()
-                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
-                    else:
-                        timeLeftStr = CustomizationHelper.getTimeLeftText(0)
-                elif isInHangar:
-                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE, cID)
-                    timeLeft = item.get('quantity') * 86400 if not item.get('isPermanent') else 0
                     timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
                 camouflageInfo = {'id': cID,
                  'texturePath': self._makeSmallTextureUrl(camouflage.get('texture'), camouflage.get('colors', (0, 0, 0, 0)), armorColor, lifeCycle),
@@ -893,7 +932,10 @@ class CamouflagesDataProvider(BaseCustomizationDataProvider):
                  'timeLeftStr': timeLeftStr,
                  'type': CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE,
                  'nationId': self.nationID,
-                 'isSpecialTooltip': True}
+                 'isSpecialTooltip': True,
+                 'timeLeftValue': timeLeft,
+                 'isPermanent': isPermanent,
+                 'value': value}
         return camouflageInfo
 
     def getCostForPackagePrice(self, camouflageID, packagePrice, isGold):

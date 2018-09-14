@@ -76,6 +76,7 @@ class ClanListener(object):
 
     def __refreshClanMembers(self):
         getter = self.__clanChannel.getMember
+        events = g_messengerEvents.users
         changed = False
         for user in self.usersStorage.getClanMembersIterator():
             dbID = user.getID()
@@ -84,13 +85,15 @@ class ClanListener(object):
             if member is not None:
                 if not isOnline:
                     user.update(isOnline=True)
+                    events.onUserRosterStatusUpdated(user)
                     changed = True
             elif isOnline:
                 user.update(isOnline=False)
+                events.onUserRosterStatusUpdated(user)
                 changed = True
 
         if changed:
-            g_messengerEvents.users.onClanMembersListChanged()
+            events.onClanMembersListChanged()
         return
 
     def __pe_onClanMembersListChanged(self):

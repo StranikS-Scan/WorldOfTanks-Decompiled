@@ -26,6 +26,7 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
         self.__isConnected = False
         self._removeChatActionsListeners()
         self.channels.clear()
+        self.users.clear()
         self.serviceChannel.clear()
         self.clanListener.stop()
 

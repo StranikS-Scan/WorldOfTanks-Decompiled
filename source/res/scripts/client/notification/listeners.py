@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/notification/listeners.py
 import weakref
 import BigWorld
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
+from constants import EVENT_TYPE
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR
+from gui.server_events import events_dispatcher as quests_events
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.prb_control.prb_helpers import GlobalListener, prbInvitesProperty
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -32,7 +34,10 @@ class _NotificationListener(object):
 class ServiceChannelListener(_NotificationListener):
     _handlers = {SYS_MSG_EXTRA_HANDLER_TYPE.PUNISHMENT: ('handlePunishWindow', True),
      SYS_MSG_EXTRA_HANDLER_TYPE.REF_QUEST_AWARD: ('handleRefQuestsWindow', True),
-     SYS_MSG_EXTRA_HANDLER_TYPE.FORT_RESULTS: ('handleFortResultsWindow', True)}
+     SYS_MSG_EXTRA_HANDLER_TYPE.REF_SYS_STATUS: ('handleRefSysStatusWindow', True),
+     SYS_MSG_EXTRA_HANDLER_TYPE.FORT_RESULTS: ('handleFortResultsWindow', True),
+     SYS_MSG_EXTRA_HANDLER_TYPE.POTAPOV_QUEST_AWARD: ('handlePotapovQuestsWindow', True),
+     SYS_MSG_EXTRA_HANDLER_TYPE.POTAPOV_QUEST_AUTO_REWARD: ('handlePotapovQuestsAutoWindow', True)}
 
     def __init__(self):
         super(ServiceChannelListener, self).__init__()
@@ -81,10 +86,50 @@ class ServiceChannelListener(_NotificationListener):
         for vehicle in data['vehicles']:
             g_gameCtrl.refSystem.showVehicleAwardWindow(vehicle, completedQuestIDs)
 
+        if 'credits' in data:
+            g_gameCtrl.refSystem.showCreditsAwardWindow(data['credits'], completedQuestIDs)
+
+    def handleRefSysStatusWindow(self, data):
+        windowID, ctx = data['window'], data['ctx']
+        if windowID == 1:
+            self.__showRefSystemNotification('showReferrerIntroWindow', invitesCount=ctx.get('invites_count', 0))
+        elif windowID == 2:
+            self.__showRefSystemNotification('showReferralIntroWindow', nickname=ctx['nickname'], isNewbie=True)
+        elif windowID == 3:
+            self.__showRefSystemNotification('showReferralIntroWindow', nickname=ctx['nickname'], isNewbie=False)
+        else:
+            LOG_WARNING('Unknown referral system user status window', data)
+
+    def handlePotapovQuestsWindow(self, data):
+        from gui.server_events import g_eventsCache
+        allQuests = g_eventsCache.getAllQuests(includePotapovQuests=True)
+        if 'tokens' in data and len(data['tokens']):
+            quests_events.showTokensAward(data['tokens'])
+        if 'achievements' in data and len(data['achievements']):
+            quests_events.showAchievementsAward(data['achievements'])
+        needToShowVehAwardWindow = False
+        for qID in data.get('completedQuestIDs', set()):
+            if qID in allQuests:
+                for tokenID, children in allQuests[qID].getChildren().iteritems():
+                    for chID in children:
+                        chQuest = allQuests[chID]
+                        if chQuest.getType() == EVENT_TYPE.POTAPOV_QUEST:
+                            needToShowVehAwardWindow = True
+                            break
+
+        if needToShowVehAwardWindow:
+            for vehicle in data.get('vehicles', []):
+                quests_events.showVehicleAward(vehicle)
+
+    def handlePotapovQuestsAutoWindow(self, data):
+        from gui.server_events import g_eventsCache
+        for potapovQuestID, (isMain, isAdd) in data.iteritems():
+            quests_events.showRegularAward(g_eventsCache.potapov.getQuests()[potapovQuestID], isMain, isAdd)
+
     def handleFortResultsWindow(self, data):
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
         if data:
-            g_eventBus.handleEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_EVENT, {'data': data}), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': data}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __handleLobbyLoaded(self, _):
         self.__isLobbyLoaded = True
@@ -105,9 +150,17 @@ class ServiceChannelListener(_NotificationListener):
         model = self._model()
         if model:
             model.addNotification(MessageDecorator(clientID, formatted, settings))
-            if settings.extraHandlerData is not None:
-                self.__handleExtraData(settings.extraHandlerData.type, settings.extraHandlerData.data)
-        return
+            for eHandler in settings.extraHandlerData:
+                self.__handleExtraData(eHandler.type, eHandler.data)
+
+    @classmethod
+    def __showRefSystemNotification(cls, methodName, **ctx):
+        try:
+            from gui import game_control
+            getattr(game_control.g_instance.refSystem, methodName)(**ctx)
+        except:
+            LOG_ERROR('There is exception while processing notification center window', methodName, ctx)
+            LOG_CURRENT_EXCEPTION()
 
 
 class PrbInvitesListener(_NotificationListener, GlobalListener):

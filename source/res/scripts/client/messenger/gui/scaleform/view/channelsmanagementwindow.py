@@ -21,7 +21,7 @@ from messenger.proto.interfaces import ISearchHandler
 
 class ChannelsManagementWindow(View, AbstractWindowView, ChannelsManagementWindowMeta, ISearchHandler):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(ChannelsManagementWindow, self).__init__()
         self._searchDP = SearchChannelsDataProvider()
 

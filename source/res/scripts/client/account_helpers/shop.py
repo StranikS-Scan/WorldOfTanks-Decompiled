@@ -226,6 +226,9 @@ class Shop(object):
     def getPassportChangeCost(self, callback):
         self.__getValue('passportChangeCost', callback)
 
+    def getFemalePassportChangeCost(self, callback):
+        self.__getValue('femalePassportChangeCost', callback)
+
     def getPaidRemovalCost(self, callback):
         self.__getValue('paidRemovalCost', callback)
 

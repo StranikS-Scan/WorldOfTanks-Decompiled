@@ -8,6 +8,7 @@ from messenger.gui.Scaleform.channels._layout import _LobbyLayout
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.bw_chat2.entities import BWMemberEntity
+from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import MESSENGER_LIMITS
 
 class UnitChannelController(_LobbyLayout):
@@ -66,8 +67,8 @@ class TrainingChannelController(UnitChannelController, PrbListener):
         self._refreshMembersDP()
 
     def onPlayerRemoved(self, functional, pInfo):
-        self._channel.removeMembers([pInfo.dbID])
-        self._refreshMembersDP()
+        self._channel.clearMembers()
+        self._buildMembersList()
 
     def onPlayerStateChanged(self, functional, roster, pInfo):
         if pInfo.isOffline():
@@ -77,8 +78,17 @@ class TrainingChannelController(UnitChannelController, PrbListener):
             self._channel.addMembers([BWMemberEntity(pInfo.dbID, pInfo.name)])
             self._refreshMembersDP()
 
+    def _addListeners(self):
+        super(UnitChannelController, self)._addListeners()
+        uEvents = g_messengerEvents.users
+        uEvents.onUsersRosterReceived += self.__me_onUsersRosterReceived
+        uEvents.onUserRosterChanged += self.__me_onUserRosterChanged
+
     def _removeListeners(self):
         super(UnitChannelController, self)._removeListeners()
+        uEvents = g_messengerEvents.users
+        uEvents.onUsersRosterReceived -= self.__me_onUsersRosterReceived
+        uEvents.onUserRosterChanged -= self.__me_onUserRosterChanged
         if self.__isListening:
             self.__isListening = False
             self.stopPrbListening()
@@ -102,3 +112,10 @@ class TrainingChannelController(UnitChannelController, PrbListener):
         members.extend(map(__convert, rosters[PREBATTLE_ROSTER.UNASSIGNED]))
         self._channel.addMembers(members)
         self._refreshMembersDP()
+
+    def __me_onUsersRosterReceived(self):
+        self._refreshMembersDP()
+
+    def __me_onUserRosterChanged(self, _, user):
+        if self._channel.hasMember(user.getID()):
+            self._refreshMembersDP()

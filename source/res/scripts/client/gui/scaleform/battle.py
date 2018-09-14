@@ -15,8 +15,11 @@ from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.Scaleform.daapi.view.battle.RadialMenu import RadialMenu
 from gui.Scaleform.daapi.view.battle.PlayersPanel import PlayersPanel
 from gui.Scaleform.daapi.view.battle.ConsumablesPanel import ConsumablesPanel
+from gui.Scaleform.daapi.view.lobby.ReportBug import makeHyperLink, reportBugOpenConfirm
+from gui.Scaleform.locale.MENU import MENU
 import gui
 from gui.battle_control import g_sessionProvider, vehicle_getter
+from gui.battle_control.arena_info import isEventBattle
 from gui.battle_control.battle_arena_ctrl import BattleArenaController
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, PLAYER_ENTITY_NAME
@@ -52,6 +55,7 @@ _BATTLE_START_NOTIFICATION_TIME = 5.0
 _I18N_WAITING_PLAYER = makeString('#ingame_gui:timer/waiting')
 _I18N_ARENA_STARTING = makeString('#ingame_gui:timer/starting')
 _I18N_ARENA_STARTED = makeString('#ingame_gui:timer/started')
+IS_POTAPOV_QUEST_ENABLED = True
 
 class Battle(BattleWindow):
     teamBasesPanel = property(lambda self: self.__teamBasesPanel)
@@ -78,7 +82,6 @@ class Battle(BattleWindow):
      'forbiddenNick': constants.DENUNCIATION.FORBIDDEN_NICK,
      'swindle': constants.DENUNCIATION.SWINDLE,
      'blackmail': constants.DENUNCIATION.BLACKMAIL}
-    _speakPlayers = {}
     __cameraVehicleID = -1
 
     def __init__(self):
@@ -103,7 +106,8 @@ class Battle(BattleWindow):
          'Battle.playersPanelStateChange': self.onPlayersPanelStateChange,
          'Battle.selectPlayer': self.selectPlayer,
          'battle.helpDialogOpenStatus': self.helpDialogOpenStatus,
-         'battle.initLobbyDialog': self._initLobbyDialog})
+         'battle.initLobbyDialog': self._initLobbyDialog,
+         'battle.reportBug': self.reportBug})
         BigWorld.wg_setRedefineKeysMode(False)
         self.onPostmortemVehicleChanged(BigWorld.player().playerVehicleID)
         return
@@ -215,23 +219,18 @@ class Battle(BattleWindow):
     def showSixthSenseIndicator(self, isShow):
         self.call('sixthSenseIndicator.show', [isShow])
 
-    def speakingPlayersReset(self):
-        for id in self._speakPlayers.keys():
-            self.setPlayerSpeaking(id, False)
-
-        self._speakPlayers.clear()
-
     def setVisible(self, bool):
         LOG_DEBUG('[Battle] visible', bool)
         self.component.visible = bool
 
     def afterCreate(self):
         player = BigWorld.player()
+        voice = VoiceChatInterface.g_instance
         LOG_DEBUG('[Battle] afterCreate')
         setattr(self.movie, '_global.wg_isShowLanguageBar', GUI_SETTINGS.isShowLanguageBar)
         setattr(self.movie, '_global.wg_isShowServerStats', constants.IS_SHOW_SERVER_STATS)
         setattr(self.movie, '_global.wg_isShowVoiceChat', GUI_SETTINGS.voiceChat)
-        setattr(self.movie, '_global.wg_voiceChatProvider', VoiceChatInterface.g_instance.voiceChatProvider)
+        setattr(self.movie, '_global.wg_voiceChatProvider', voice.voiceChatProvider)
         setattr(self.movie, '_global.wg_isChina', constants.IS_CHINA)
         setattr(self.movie, '_global.wg_isKorea', constants.IS_KOREA)
         setattr(self.movie, '_global.wg_isReplayPlaying', BattleReplay.g_replayCtrl.isPlaying)
@@ -244,8 +243,9 @@ class Battle(BattleWindow):
         if self.__arena:
             self.__arena.onPeriodChange += self.__onSetArenaTime
         self.proxy = weakref.proxy(self)
-        self._speakPlayers.clear()
-        VoiceChatInterface.g_instance.populateUI(self.proxy)
+        voice.populateUI(self.proxy)
+        voice.onPlayerSpeaking += self.setPlayerSpeaking
+        voice.onVoiceChatInitFailed += self.onVoiceChatInitFailed
         self.colorManager = ColorSchemeManager._ColorSchemeManager()
         self.colorManager.populateUI(self.proxy)
         self.movingText = MovingText()
@@ -303,7 +303,6 @@ class Battle(BattleWindow):
         g_sessionProvider.addArenaCtrl(self.__arenaCtrl)
         BigWorld.callback(1, self.__setArenaTime)
         self.updateFlagsColor()
-        VoiceChatInterface.g_instance.onVoiceChatInitFailed += self.onVoiceChatInitFailed
         self.movie.setFocussed(SCALEFORM_SWF_PATH)
         if self.__arena.period == constants.ARENA_PERIOD.BATTLE:
             self.call('players_panel.setState', [g_settingsCore.getSetting('ppState')])
@@ -326,8 +325,11 @@ class Battle(BattleWindow):
             game_control.g_instance.notifier.updateBattleFpsInfo(BigWorld.getBattleFPS()[2], self.__inBattlePlayingTime)
         if self.colorManager:
             self.colorManager.dispossessUI()
-        if VoiceChatInterface.g_instance:
-            VoiceChatInterface.g_instance.dispossessUI(self.proxy)
+        voice = VoiceChatInterface.g_instance
+        if voice:
+            voice.dispossessUI(self.proxy)
+            voice.onPlayerSpeaking -= self.setPlayerSpeaking
+            voice.onVoiceChatInitFailed -= self.onVoiceChatInitFailed
         self.__destroyMemoryCriticalHandlers()
         if self.movingText is not None:
             self.movingText.dispossessUI()
@@ -419,19 +421,13 @@ class Battle(BattleWindow):
         BigWorld.wg_setFlagEmblem(2, 'system/maps/wg_emblem.dds', Math.Vector4(0.0, 0.1, 0.5, 0.9))
 
     def setPlayerSpeaking(self, accountDBID, flag):
-        if not GUI_SETTINGS.voiceChat:
-            return
-        self._speakPlayers[accountDBID] = flag
         self.__callEx('setPlayerSpeaking', [accountDBID, flag])
         vID = g_sessionProvider.getCtx().getVehIDByAccDBID(accountDBID)
         if vID > 0:
             self.__vMarkersManager.showDynamic(vID, flag)
 
     def isPlayerSpeaking(self, accountDBID):
-        if GUI_SETTINGS.voiceChat:
-            return self._speakPlayers.get(accountDBID, False)
-        else:
-            return False
+        return VoiceChatInterface.g_instance.isPlayerSpeaking(accountDBID)
 
     def showPostmortemTips(self):
         if self.radialMenu is not None:
@@ -492,14 +488,24 @@ class Battle(BattleWindow):
             self.__callEx('setServerStatsInfo', [tooltipFullData])
             self.__callEx('setServerName', [connectionManager.serverUserName])
             if constants.IS_SHOW_SERVER_STATS:
-                stats = dict(game_control.g_instance.serverStats.getStats())
+                stats = game_control.g_instance.serverStats.getStats()
                 if 'clusterCCU' in stats and 'regionCCU' in stats:
                     self.__callEx('setServerStats', [stats['clusterCCU'], stats['regionCCU']])
                 else:
                     self.__callEx('setServerStats', [None, None])
         else:
             self.__callEx('setServerName', ['\xe2\x80\x93'])
+        links = GUI_SETTINGS.reportBugLinks
+        if len(links):
+            reportBugButton = makeHyperLink('ingameMenu', MENU.INGAME_MENU_LINKS_REPORT_BUG)
+            self.__callEx('setReportBugLink', [reportBugButton])
         return
+
+    def reportBug(self, _):
+        from gui.battle_control import g_sessionProvider
+        adp = g_sessionProvider.getArenaDP()
+        accountId = adp.getVehicleInfo().player.accountDBID
+        reportBugOpenConfirm(accountId)
 
     def __setPlayerInfo(self, vID):
         playerName, pName, clanAbbrev, regionCode, vTypeName = g_sessionProvider.getCtx().getFullPlayerNameWithParts(vID=vID, showVehShortName=False)
@@ -523,13 +529,11 @@ class Battle(BattleWindow):
             arenaSubType = getArenaSubTypeName(BigWorld.player().arenaTypeID)
             if descExtra:
                 arenaData.extend([arena.guiType + 1, descExtra])
-            elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING]:
+            elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING, constants.ARENA_GUI_TYPE.EVENT_BATTLES]:
                 arenaTypeName = '#arenas:type/%s/name' % arenaSubType
                 if arenaSubType == 'assault':
                     arenaSubType += '1' if isBaseExists(BigWorld.player().arenaTypeID, BigWorld.player().team) else '2'
                 arenaData.extend([arenaSubType, arenaTypeName])
-            elif arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
-                arenaData.extend(['neutral', '#menu:loading/battleTypes/%d' % arena.guiType])
             elif arena.guiType in constants.ARENA_GUI_TYPE.RANGE:
                 arenaData.extend([constants.ARENA_GUI_TYPE_LABEL.LABELS[arena.guiType], '#menu:loading/battleTypes/%d' % arena.guiType])
             else:
@@ -543,6 +547,18 @@ class Battle(BattleWindow):
             winText = getBattleSubTypeWinText(BigWorld.player().arenaTypeID, teamHasBase)
             arenaData.append(winText)
             arenaData.append('normal')
+            arenaDP = g_sessionProvider.getArenaDP()
+            vehInfo = arenaDP.getVehicleInfo(arenaDP.getPlayerVehicleID())
+            pQuests = vehInfo.player.getPotapovQuests()
+            if arena.guiType == constants.ARENA_GUI_TYPE.RANDOM or arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and constants.IS_DEVELOPMENT:
+                if len(pQuests):
+                    quest = pQuests[0]
+                    pqTipData = [quest.getUserName(), quest.getUserMainCondition(), quest.getUserAddCondition()]
+                else:
+                    pqTipData = [i18n.makeString('#ingame_gui:potapovQuests/tip'), None, None]
+            else:
+                pqTipData = [None] * 3
+            arenaData.extend(pqTipData)
         self.__callEx('arenaData', arenaData)
         return
 
@@ -1421,7 +1437,6 @@ class VehicleMarkersManager(Flash):
          speaking,
          hunting,
          entityType])
-        self.__parentUI.call('minimap.entryInited', [])
         return handle
 
     def destroyMarker(self, handle):
@@ -1567,6 +1582,8 @@ class FadingMessagesPanel(object):
     def showMessage(self, key, args = None, extra = None, postfix = ''):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+            return
+        elif key == 'ALLY_HIT' and isEventBattle():
             return
         else:
             extKey = '%s_%s' % (key, postfix)

@@ -25,7 +25,7 @@ class FortIntelligenceNotAvailableWindow(AbstractWindowView, View, FortIntellige
 
     def onDefenceHourChanged(self, hour):
         if self.fortCtrl.getFort().isDefenceHourEnabled():
-            self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_EVENT, {'isDefenceHourEnabled': True}), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW, ctx={'isDefenceHourEnabled': True}), EVENT_BUS_SCOPE.LOBBY)
             self.destroy()
 
     def _populate(self):

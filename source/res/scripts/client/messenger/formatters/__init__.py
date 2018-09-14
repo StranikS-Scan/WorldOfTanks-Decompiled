@@ -103,62 +103,37 @@ class NCContextItemFormatter(object):
 
     @classmethod
     def getShortTimeFormat(cls, value):
-        return BigWorld.wg_getShortTimeFormat(time_utils.makeLocalServerTime(value))
+        return cls._makeLocalTimeString(value, BigWorld.wg_getShortTimeFormat)
 
     @classmethod
     def getLongTimeFormat(cls, value):
-        return BigWorld.wg_getLongTimeFormat(time_utils.makeLocalServerTime(value))
+        return cls._makeLocalTimeString(value, BigWorld.wg_getLongTimeFormat)
 
     @classmethod
     def getShortDateFormat(cls, value):
-        return BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(value))
+        return cls._makeLocalTimeString(value, BigWorld.wg_getShortDateFormat)
 
     @classmethod
     def getLongDateFormat(cls, value):
-        return BigWorld.wg_getLongDateFormat(time_utils.makeLocalServerTime(value))
+        return cls._makeLocalTimeString(value, BigWorld.wg_getLongDateFormat)
 
     @classmethod
     def getDateTimeFormat(cls, value):
-        value = time_utils.makeLocalServerTime(value)
-        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(value), BigWorld.wg_getLongTimeFormat(value))
+        return cls._makeLocalTimeString(value, lambda localTime: '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(value), BigWorld.wg_getLongTimeFormat(value)))
 
     @classmethod
     def getStringFormat(cls, value):
         return i18n.encodeUtf8(value)
 
-
-class NCWindowHandler(object):
-    _handlers = {1: '_handleBecomeReferrer',
-     2: '_handleBecomeReferral',
-     3: '_handleBecomePhoenix'}
-
     @classmethod
-    def handle(cls, windowID, **ctx):
-        if windowID not in cls._handlers:
-            LOG_WARNING('Type of window is not found', windowID)
-            return
-        return getattr(cls, cls._handlers[windowID])(**ctx)
-
-    @classmethod
-    def _handleBecomeReferrer(cls, **ctx):
-        cls.__showRefSystemNotification('showReferrerIntroWindow')
-
-    @classmethod
-    def _handleBecomeReferral(cls, **ctx):
-        cls.__showRefSystemNotification('showReferralIntroWindow', nickname=ctx['nickname'], isNewbie=True)
-
-    @classmethod
-    def _handleBecomePhoenix(cls, **ctx):
-        cls.__showRefSystemNotification('showReferralIntroWindow', nickname=ctx['nickname'], isNewbie=False)
-
-    @classmethod
-    def __showRefSystemNotification(cls, methodName, **ctx):
-        try:
-            from gui import game_control
-            getattr(game_control.g_instance.refSystem, methodName)(**ctx)
-        except:
-            LOG_ERROR('There is exception while processing notification center window', methodName, ctx)
-            LOG_CURRENT_EXCEPTION()
+    def _makeLocalTimeString(cls, value, formatter):
+        result = time_utils.makeLocalServerTime(value)
+        if result:
+            result = formatter(value)
+        else:
+            LOG_WARNING('Timestamp is not defined', value)
+            result = ''
+        return result
 
 
 SysMsgExtraData = namedtuple('SysMsgExtraData', 'type data')
@@ -167,6 +142,9 @@ class SYS_MSG_EXTRA_HANDLER_TYPE(object):
     PUNISHMENT = 1
     REF_QUEST_AWARD = 2
     FORT_RESULTS = 3
+    POTAPOV_QUEST_AWARD = 4
+    REF_SYS_STATUS = 5
+    POTAPOV_QUEST_AUTO_REWARD = 6
 
 
 from chat_shared import SYS_MESSAGE_TYPE
@@ -208,7 +186,8 @@ SCH_SERVER_FORMATTERS_DICT = {SYS_MESSAGE_TYPE.serverReboot.index(): sch_formatt
  SYS_MESSAGE_TYPE.rentCompensation.index(): sch_formatters.RentCompensationFormatter(),
  SYS_MESSAGE_TYPE.refSystemQuests.index(): sch_formatters.RefSystemQuestsFormatter(),
  SYS_MESSAGE_TYPE.refSystemReferralBoughtVehicle.index(): sch_formatters.RefSystemReferralBoughtVehicleFormatter(),
- SYS_MESSAGE_TYPE.refSystemReferralContributedXP.index(): sch_formatters.RefSystemReferralContributedXPFormatter()}
+ SYS_MESSAGE_TYPE.refSystemReferralContributedXP.index(): sch_formatters.RefSystemReferralContributedXPFormatter(),
+ SYS_MESSAGE_TYPE.potapovQuestBonus.index(): sch_formatters.PotapovQuestsFormatter()}
 
 class SCH_CLIENT_MSG_TYPE(object):
     SYS_MSG_TYPE, PREMIUM_ACCOUNT_EXPIRY_MSG, AOGAS_NOTIFY_TYPE, ACTION_NOTIFY_TYPE, BATTLE_TUTORIAL_RESULTS_TYPE = range(5)

@@ -5,8 +5,10 @@ from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import rally_dps
+from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
 from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.context.unit_ctx import LeaveUnitCtx
@@ -38,8 +40,6 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.__allBuildings = None
         self.__prevBuilding = ((0, -1, 0), None)
         self.__currentBuilding = ((0, -1, 0), None)
-        self.__mineClanEmblem = None
-        self.__enemyClanEmblem = None
         return
 
     def onEnemyStateChanged(self, battleID, isReady):
@@ -107,7 +107,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.unitFunctional.doAction()
 
     def inviteFriendRequest(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_SEND_INVITES_WINDOW, {'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.FORT_BATTLE],
+        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.FORT_BATTLE],
          'ctrlType': CTRL_ENTITY_TYPE.UNIT,
          'showClanOnly': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -140,7 +140,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         return FORTIFICATIONS.SORTIE_VEHICLESELECTOR_DESCRIPTION
 
     def _setActionButtonState(self):
-        self.as_setActionButtonStateS(vo_converters.makeSortieClanBattleActionBtnVO(self.unitFunctional))
+        self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
 
     def __initData(self):
         fort = self.fortCtrl.getFort()
@@ -157,7 +157,8 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.__setTimerDelta()
         self.__updateDirections()
         self.__updateHeaderTeamSection()
-        self.__requestClanEmblems()
+        self.__requestMineClanEmblem()
+        self.__requestEnemyClanEmblem()
 
     def __makeMainVO(self):
         result = {}
@@ -171,8 +172,6 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         result['mineClanName'] = g_clanCache.clanTag
         _, enemyClanAbbev, _ = self.__battle.getOpponentClanInfo()
         result['enemyClanName'] = '[%s]' % enemyClanAbbev
-        result['mineClanIcon'] = self.__mineClanEmblem
-        result['enemyClanIcon'] = self.__enemyClanEmblem
         self.as_setBattleRoomDataS(result)
         return
 
@@ -291,18 +290,23 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
          'isAvailable': isAvailable}
 
     def __leaveOnError(self):
-        SystemMessages.pushI18nMessage('#system_messages:fortification/errors/PERIPHERY_NOT_CONNECTED', type=SystemMessages.SM_TYPE.Error)
+        SystemMessages.pushI18nMessage('#system_messages:fortification/fortBattleFinished', type=SystemMessages.SM_TYPE.Error)
         self.unitFunctional.leave(LeaveUnitCtx(funcExit=FUNCTIONAL_EXIT.NO_FUNC))
 
     @process
-    def __requestClanEmblems(self):
+    def __requestMineClanEmblem(self):
+        mineClanEmblem = yield g_clanCache.getClanEmblemID()
+        if self._isDAAPIInited():
+            self.as_setMineClanIconS(mineClanEmblem)
+
+    @process
+    def __requestEnemyClanEmblem(self):
         if self.__battle is not None:
             enemyClanDBID, _, _ = self.__battle.getOpponentClanInfo()
             enemyClanEmblemID = 'clanInfo%d' % enemyClanDBID
-            self.__mineClanEmblem = yield g_clanCache.getClanEmblemID()
-            self.__enemyClanEmblem = yield g_clanCache.getClanEmblemTextureID(enemyClanDBID, False, enemyClanEmblemID)
+            enemyClanEmblem = yield g_clanCache.getClanEmblemTextureID(enemyClanDBID, False, enemyClanEmblemID)
             if self._isDAAPIInited():
-                self.__makeMainVO()
+                self.as_setEnemyClanIconS(enemyClanEmblem)
         return
 
     def onTimerAlert(self):

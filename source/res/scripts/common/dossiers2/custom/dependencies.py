@@ -62,11 +62,6 @@ def _set_ACHIEVEMENT_DEPENDENCIES():
      'WFC2014WinSeries': [_updateMaxWFC2014WinSeries],
      'reliableComradeSeries': [_updateReliableComrade],
      'deathTrackWinSeries': [_updateMaxDeathTrackWinSeries],
-     'readyForBattleLT': [_updateReadyFotBattleAll],
-     'readyForBattleMT': [_updateReadyFotBattleAll],
-     'readyForBattleHT': [_updateReadyFotBattleAll],
-     'readyForBattleSPG': [_updateReadyFotBattleAll],
-     'readyForBattleATSPG': [_updateReadyFotBattleAll],
      'tankwomenProgress': [_updateTankwomen]})
 
 
@@ -297,32 +292,8 @@ def _updateBattleHeroes(dossierDescr, dossierBlockDescr, key, value, prevValue):
     dossierBlockDescr['battleHeroes'] += value - prevValue
 
 
-def _updateReadyFotBattleAll(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    records = ('readyForBattleLT', 'readyForBattleMT', 'readyForBattleHT', 'readyForBattleSPG', 'readyForBattleATSPG')
-    results = [0,
-     0,
-     0,
-     0]
-    for record in records:
-        v = dossierBlockDescr[record]
-        if v == 0:
-            continue
-        for i in xrange(4 - v + 1):
-            results[i] += 1
-
-    medalClass = 0
-    recordsCount = len(records)
-    for i, v in enumerate(results):
-        if v != recordsCount:
-            continue
-        medalClass = 4 - i
-
-    if dossierBlockDescr['readyForBattleALL'] != medalClass:
-        dossierBlockDescr['readyForBattleALL'] = medalClass
-
-
 def _updateTankwomen(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    if value >= RECORD_CONFIGS['tankwomenCount']:
+    if value >= RECORD_CONFIGS['tankwomen']:
         dossierDescr['singleAchievements']['tankwomen'] = 1
         dossierDescr.addPopUp('singleAchievements', 'tankwomen', 1)
 

@@ -14,7 +14,7 @@ from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
     LEADERSHIP_NOTIFICATION_TIME = 2.5
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(BaseRallyMainWindow, self).__init__()
         self._currentView = None
         self._isBackClicked = False
@@ -26,6 +26,14 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
 
     def onFocusIn(self, alias):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.getClientID()}))
+
+    def onSourceLoaded(self):
+        if self.unitFunctional and not self.unitFunctional.hasEntity():
+            self.destroy()
+
+    def isPlayerInSlot(self, databaseID = None):
+        pInfo = self.unitFunctional.getPlayerInfo(dbID=databaseID)
+        return pInfo.isInSlot
 
     def getIntroViewAlias(self):
         return ''

@@ -75,6 +75,9 @@ class GAME(CONST_CONTAINER):
     GAMEPLAY_DOMINATION = 'gameplay_domination'
     GAMEPLAY_ASSAULT = 'gameplay_assault'
     GAMEPLAY_NATIONS = 'gameplay_nations'
+    SHOW_VECTOR_ON_MAP = 'showVectorOnMap'
+    SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
+    SHOW_VEH_MODELS_ON_MAP = 'showVehModelsOnMap'
     SNIPER_MODE_SWINGING_ENABLED = 'SNIPER_MODE_SWINGING_ENABLED'
 
 

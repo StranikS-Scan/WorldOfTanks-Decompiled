@@ -156,7 +156,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         lastSkillLevel = self.tmanDescr.lastSkillLevel
         if not skillsCount or self.tmanDescr.roleLevel != tankmen.MAX_SKILL_LEVEL:
             lastSkillLevel = self.tmanDescr.roleLevel
-        return self.tmanDescr.levelUpXpCost(lastSkillLevel, skillsCount if self.tmanDescr.roleLevel == tankmen.MAX_SKILL_LEVEL else 0) - self.tmanDescr.freeXP
+        return self.tmanDescr.levelUpXpCost(lastSkillLevel, self.tmanDescr.lastSkillNumber if self.tmanDescr.roleLevel == tankmen.MAX_SKILL_LEVEL else 0) - self.tmanDescr.freeXP
 
     def __getCurrentSkillIcon(self):
         if self.__isNewSkillReady():

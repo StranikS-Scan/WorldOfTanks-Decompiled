@@ -10,7 +10,6 @@ from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from account_helpers.settings_core.options import APPLY_METHOD
 from account_helpers.settings_core.settings_constants import SOUND
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui import GUI_SETTINGS, g_guiResetters
 from gui.GraphicsPresets import GraphicsPresets
 from gui.GraphicsResolutions import g_graficsResolutions
@@ -26,6 +25,7 @@ from gui.Scaleform.Waiting import Waiting
 from Vibroeffects import VibroManager
 from LogitechMonitor import LogitechMonitor
 from helpers import getClientOverride
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 
 class SettingsInterface(UIInterface):
     KEYBOARD_MAPPING_COMMANDS = {'movement': {'forward': 'CMD_MOVE_FORWARD',
@@ -214,9 +214,6 @@ class SettingsInterface(UIInterface):
             if preveVoIP != isEnable:
                 VOIP.getVOIPManager().enable(isEnable)
                 Settings.g_instance.userPrefs.writeBool(Settings.KEY_ENABLE_VOIP, bool(isEnable))
-                from gui.WindowsManager import g_windowsManager
-                if g_windowsManager.battleWindow is not None and not isEnable:
-                    g_windowsManager.battleWindow.speakingPlayersReset()
                 LOG_NOTE('Change state of voip: %s' % str(isEnable))
             return
 
@@ -297,7 +294,7 @@ class SettingsInterface(UIInterface):
          'disableBattleChat': g_settingsCore.getSetting('disableBattleChat'),
          'dynamicCamera': g_settingsCore.getSetting('dynamicCamera'),
          'horStabilizationSnp': g_settingsCore.getSetting('horStabilizationSnp'),
-         'enableVoIP': VOIP.getVOIPManager().channelsMgr.enabled,
+         'enableVoIP': VOIP.getVOIPManager().isEnabled(),
          'enablePostMortemEffect': g_settingsCore.getSetting('enablePostMortemEffect'),
          'enablePostMortemDelay': g_settingsCore.getSetting('enablePostMortemDelay'),
          'nationalVoices': g_settingsCore.getSetting('nationalVoices'),
@@ -306,6 +303,9 @@ class SettingsInterface(UIInterface):
          'showVehiclesCounter': g_settingsCore.getSetting('showVehiclesCounter'),
          'showMarksOnGun': g_settingsCore.getSetting('showMarksOnGun'),
          'minimapAlpha': g_settingsCore.getSetting('minimapAlpha'),
+         'showVectorOnMap': g_settingsCore.getSetting('showVectorOnMap'),
+         'showSectorOnMap': g_settingsCore.getSetting('showSectorOnMap'),
+         'showVehModelsOnMap': g_settingsCore.options.getSetting('showVehModelsOnMap').pack(),
          'vibroIsConnected': vManager.connect(),
          'vibroGain': vManager.getGain() * 100,
          'vibroEngine': vEffGroups.get('engine', vEffDefGroup).gain * 100,
@@ -494,6 +494,9 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('showVehiclesCounter', settings['showVehiclesCounter'])
         g_settingsCore.applySetting('showMarksOnGun', settings['showMarksOnGun'])
         g_settingsCore.applySetting('minimapAlpha', settings['minimapAlpha'])
+        g_settingsCore.applySetting('showVectorOnMap', settings['showVectorOnMap'])
+        g_settingsCore.applySetting('showSectorOnMap', settings['showSectorOnMap'])
+        g_settingsCore.applySetting('showVehModelsOnMap', settings['showVehModelsOnMap'])
         arcade = g_settingsCore.options.getSetting('arcade').fromAccountSettings(settings['arcade'])
         sniper = g_settingsCore.options.getSetting('sniper').fromAccountSettings(settings['sniper'])
         g_settingsCore.applySetting('arcade', arcade)

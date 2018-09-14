@@ -1,16 +1,17 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Vehicle.py
 from itertools import izip
 import BigWorld
+from operator import itemgetter
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from constants import WIN_XP_FACTOR_MODE
 from gui import prb_control
-from gui.shared.economics import calcRentPackages
+from gui.shared.economics import calcRentPackages, getActionPrc
 from helpers import i18n, time_utils
 from items import vehicles, tankmen, getTypeInfoByName
 from account_shared import LayoutIterator
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
-from gui.shared.gui_items import CLAN_LOCK, HasStrCD, FittingItem, GUI_ITEM_TYPE
+from gui.shared.gui_items import CLAN_LOCK, HasStrCD, FittingItem, GUI_ITEM_TYPE, getItemIconName
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleChassis, VehicleEngine, VehicleRadio, VehicleFuelTank, VehicleTurret, VehicleGun
 from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
 from gui.shared.gui_items.Tankman import Tankman
@@ -31,6 +32,11 @@ VEHICLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.LIGHT_TANK,
  VEHICLE_CLASS_NAME.AT_SPG,
  VEHICLE_CLASS_NAME.SPG)
 VEHICLE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(VEHICLE_TYPES_ORDER)))
+
+def compareByVehTypeName(vehTypeA, vehTypeB):
+    return VEHICLE_TYPES_ORDER_INDICES[vehTypeA] - VEHICLE_TYPES_ORDER_INDICES[vehTypeB]
+
+
 VEHICLE_TABLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.HEAVY_TANK,
  VEHICLE_CLASS_NAME.MEDIUM_TANK,
  VEHICLE_CLASS_NAME.LIGHT_TANK,
@@ -116,7 +122,7 @@ class Vehicle(FittingItem, HasStrCD):
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
             self.clanLock = clanDamageLock or clanNewbieLock
             self.isDisabledForBuy = self.intCD in proxy.shop.getNotToBuyVehicles()
-            self.hasRentPackages = len(proxy.shop.getVehicleRentPrices().get(self.intCD, {})) > 0
+            self.hasRentPackages = bool(proxy.shop.getVehicleRentPrices().get(self.intCD, {}))
         self.inventoryCount = 1 if len(invData.keys()) else 0
         self.rentInfo = invData.get('rent', None)
         self.settings = invData.get('settings', 0)
@@ -270,6 +276,18 @@ class Vehicle(FittingItem, HasStrCD):
         return result
 
     @property
+    def iconContour(self):
+        return getContourIconPath(self.name)
+
+    @property
+    def iconUnique(self):
+        return getUniqueIconPath(self.name, withLightning=False)
+
+    @property
+    def iconUniqueLight(self):
+        return getUniqueIconPath(self.name, withLightning=True)
+
+    @property
     def shellsLayoutIdx(self):
         return (self.turret.descriptor['compactDescr'], self.gun.descriptor['compactDescr'])
 
@@ -305,7 +323,11 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def minRentPrice(self):
-        return findFirst(None, self.rentPackages, {}).get('rentPrice', None)
+        minRentPackage = self.getRentPackage()
+        if minRentPackage is not None:
+            return minRentPackage.get('rentPrice', None)
+        else:
+            return
 
     @property
     def isRented(self):
@@ -338,6 +360,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def type(self):
         return set(vehicles.VEHICLE_CLASS_TAGS & self.tags).pop()
+
+    @property
+    def typeUserName(self):
+        return getTypeUserName(self.type, self.isElite)
 
     @property
     def hasTurrets(self):
@@ -382,7 +408,7 @@ class Vehicle(FittingItem, HasStrCD):
             ms = Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER
             if self.isPremiumIGR:
                 ms = Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER
-        elif self.isRented and self.isPremiumIGR and g_instance.igr.getRoomType() != constants.IGR_TYPE.PREMIUM:
+        elif self.isPremiumIGR and g_instance.igr.getRoomType() != constants.IGR_TYPE.PREMIUM:
             ms = Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY
         elif self.isInPrebattle:
             ms = Vehicle.VEHICLE_STATE.IN_PREBATTLE
@@ -530,7 +556,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isOnlyForEventBattles(self):
-        from gui.shared import g_eventsCache
+        from gui.server_events import g_eventsCache
         eventBattles = g_eventsCache.getEventBattles()
         if eventBattles is not None:
             return self._checkForTags(eventBattles.vehicleTags)
@@ -584,8 +610,6 @@ class Vehicle(FittingItem, HasStrCD):
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.GROUP_0)
 
     def mayPurchase(self, money):
-        if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, 'center_unavailable')
         if self.isDisabledForBuy:
             return (False, 'isDisabledForBuy')
         if self.isPremiumIGR:
@@ -621,6 +645,22 @@ class Vehicle(FittingItem, HasStrCD):
         if not canRent and not canBuy:
             reason = rentReason if len(rentReason) > 0 else buyReason
         return (canRent or canBuy, reason)
+
+    def getRentPackage(self, days = None):
+        if days is not None:
+            for package in self.rentPackages:
+                if package.get('days', None) == days:
+                    return package
+
+        elif len(self.rentPackages) > 0:
+            return min(self.rentPackages, key=itemgetter('rentPrice'))
+        return
+
+    def getRentPackageActionPrc(self, days = None):
+        package = self.getRentPackage(days)
+        if package:
+            return getActionPrc(package['rentPrice'], package['defaultRentPrice'])
+        return 0
 
     def getAutoUnlockedItems(self):
         return self.descriptor.type.autounlockedItems[:]
@@ -670,3 +710,53 @@ class Vehicle(FittingItem, HasStrCD):
 
     def _sortByType(self, other):
         return VEHICLE_TYPES_ORDER_INDICES[self.type] - VEHICLE_TYPES_ORDER_INDICES[other.type]
+
+
+def getTypeUserName(vehType, isElite):
+    if isElite:
+        return i18n.makeString('#menu:header/vehicleType/elite/%s' % vehType)
+    else:
+        return i18n.makeString('#menu:header/vehicleType/%s' % vehType)
+
+
+def _getLevelIconName(vehLevel, postfix = ''):
+    return 'tank_level_%s%d.png' % (postfix, int(vehLevel))
+
+
+def getLevelBigIconPath(vehLevel):
+    return '../maps/icons/levels/%s' % _getLevelIconName(vehLevel, 'big_')
+
+
+def getLevelSmallIconPath(vehLevel):
+    return '../maps/icons/levels/%s' % _getLevelIconName(vehLevel, 'small_')
+
+
+def getLevelIconPath(vehLevel):
+    return '../maps/icons/levels/%s' % _getLevelIconName(vehLevel)
+
+
+def getIconPath(vehicleName):
+    return '../maps/icons/vehicle/%s' % getItemIconName(vehicleName)
+
+
+def getContourIconPath(vehicleName):
+    return '../maps/icons/vehicle/contour/%s' % getItemIconName(vehicleName)
+
+
+def getSmallIconPath(vehicleName):
+    return '../maps/icons/vehicle/small/%s' % getItemIconName(vehicleName)
+
+
+def getUniqueIconPath(vehicleName, withLightning = False):
+    if withLightning:
+        return '../maps/icons/vehicle/unique/%s' % getItemIconName(vehicleName)
+    else:
+        return '../maps/icons/vehicle/unique/normal_%s' % getItemIconName(vehicleName)
+
+
+def getTypeIconName(vehicleType):
+    return '%s.png' % vehicleType
+
+
+def getTypeSmallIconPath(vehicleType):
+    return '../maps/icons/vehicleTypes/%s' % getTypeIconName(vehicleType)

@@ -5,6 +5,7 @@ import account_helpers
 from debug_utils import LOG_DEBUG
 from fortified_regions import g_cache as g_fortCache
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
+from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters, rally_dps
 from gui.Scaleform.daapi.view.meta.FortRoomMeta import FortRoomMeta
@@ -32,19 +33,13 @@ class FortRoomView(FortRoomMeta):
         minLevel, maxLvl = self._getDivisionLvls()
         self._updateVehiclesLabel(minLevel, maxLvl)
 
-    def isInSlot(self):
-        pInfo = self.unitFunctional.getPlayerInfo(dbID=self.currentDBID)
-        return pInfo.isInSlot
-
-    def _dispose(self):
-        super(FortRoomView, self)._dispose()
-
     def onUnitPlayersListChanged(self):
         super(FortRoomView, self).onUnitPlayersListChanged()
         self.__updateLabels(self.__getSlots())
 
     def onUnitStateChanged(self, unitState, timeLeft):
         self._setActionButtonState()
+        self._updateRallyData()
 
     def onUnitSettingChanged(self, opCode, value):
         if opCode == UNIT_OP.SET_COMMENT:
@@ -109,7 +104,7 @@ class FortRoomView(FortRoomMeta):
 
     def _updateData(self, slots):
         self.__updateLabels(slots)
-        if self.isInSlot():
+        if self.isPlayerInSlot():
             return
         if self.__isLegionaries:
             for value in slots:
@@ -162,7 +157,7 @@ class FortRoomView(FortRoomMeta):
             return availableSlots
 
     def _setActionButtonState(self):
-        self.as_setActionButtonStateS(vo_converters.makeSortieActionButtonVO(self.unitFunctional))
+        self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
 
     def __updateLabels(self, slots):
         countLegionariesInSlots = 0
@@ -171,7 +166,7 @@ class FortRoomView(FortRoomMeta):
             if player and player['isLegionaries']:
                 countLegionariesInSlots += 1
 
-        if not self.isInSlot() and self.__isLegionaries:
+        if not self.isPlayerInSlot() and self.__isLegionaries:
             self.as_showLegionariesToolTipS(True)
         else:
             self.as_showLegionariesToolTipS(False)

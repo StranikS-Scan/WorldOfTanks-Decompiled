@@ -28,7 +28,6 @@ def updateFortSortieDossier(dossierDescr, divisionName, winner, fortResource, is
 def updateFortBattleDossier(dossierDescr, isDefence, isWinner, enemyBaseCaptured, ownBaseLost, combatCount, combatWins, enemyBuildingCapture, ownBuildingLost, resourceCapture, resourceLost, **kwargs):
     block = dossierDescr['fortBattles']
     block['battlesCount'] += 1
-    block['battlesHours'] += 1
     if isDefence:
         block['defenceCount'] += 1
     else:
@@ -103,7 +102,44 @@ def updateTankmanDossier(dossierDescr, battleResults):
 
 
 def updatePotapovQuestAchievements(accDossierDescr, vehClass, progress, curQuest, bonusCount):
-    pass
+    if not bonusCount:
+        return
+    elif vehClass not in curQuest.vehClasses:
+        return
+    else:
+        if curQuest.isInitial and not accDossierDescr['singleAchievements']['firstMerit']:
+            accDossierDescr['singleAchievements']['firstMerit'] = 1
+        tileID, chainID = curQuest.tileID, curQuest.chainID
+        import potapov_quests
+        tileInfo = potapov_quests.g_tileCache.getTileInfo(tileID)
+        if tileInfo['seasonID'] != 1:
+            return
+        pqAchievements = tileInfo['achievements']
+        if not pqAchievements:
+            return
+        chainAchievement = pqAchievements.get(chainID, None)
+        if chainAchievement is None:
+            return
+        chainSize = 15
+        tilesCount = 1
+        completedQuestsCount = 0
+        for tileID, tileInfo in potapov_quests.g_tileCache:
+            if tileInfo['seasonID'] != 1:
+                continue
+            tilesCount += 1
+            questList = potapov_quests.g_cache.questListByTileIDChainID(tileID, chainID)
+            raise len(questList) == chainSize or AssertionError
+            for potapovQuestID in questList:
+                flags, state = progress.get(potapovQuestID)
+                if state is None:
+                    continue
+                if state >= potapov_quests.PQ_STATE.NEED_GET_ADD_REWARD:
+                    completedQuestsCount += 1
+
+        res = max(tilesCount - completedQuestsCount / chainSize, 1)
+        if res <= 4:
+            accDossierDescr['achievements'][chainAchievement] = res
+        return
 
 
 def __updateDossierCommonPart(dossierDescr, results, dossierXP):
@@ -166,8 +202,7 @@ def __processKillList(dossierDescr, killList):
     frags8p = 0
     killsByTag = {}
     vehTypeFrags = dossierDescr['vehTypeFrags']
-    for kill in killList:
-        vehTypeCompDescr = kill[1]
+    for _, vehTypeCompDescr, _ in killList:
         vehTypeFrags[vehTypeCompDescr] = min(vehTypeFrags.get(vehTypeCompDescr, 0) + 1, 60001)
         if vehTypeCompDescr in vehicles8p:
             frags8p += 1

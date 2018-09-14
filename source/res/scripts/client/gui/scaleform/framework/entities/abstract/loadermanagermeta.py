@@ -3,15 +3,15 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class LoaderManagerMeta(DAAPIModule):
 
-    def viewLoaded(self, token, view):
+    def viewLoaded(self, name, view):
         self._printOverrideError('viewLoaded')
 
-    def viewLoadError(self, token, alias, text):
+    def viewLoadError(self, alias, name, text):
         self._printOverrideError('viewLoadError')
 
-    def viewInitializationError(self, token, config, alias):
+    def viewInitializationError(self, config, alias, name):
         self._printOverrideError('viewInitializationError')
 
-    def as_loadViewS(self, config, token, alias, name):
+    def as_loadViewS(self, config, alias, name):
         if self._isDAAPIInited():
-            return self.flashObject.as_loadView(config, token, alias, name)
+            return self.flashObject.as_loadView(config, alias, name)

@@ -4,6 +4,7 @@ from functools import partial
 from operator import attrgetter
 from debug_utils import LOG_ERROR, LOG_DEBUG
 import fortified_regions
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.fortifications import getClientFort, getClientFortMgr
 from gui.shared.fortifications.FortFinder import FortFinder
 from gui.shared.fortifications.context import FortRequestCtx
@@ -17,6 +18,7 @@ from gui.shared.fortifications.settings import FORT_REQUEST_TYPE, CLIENT_FORT_ST
 from helpers import time_utils
 
 class _FortController(IFortController):
+    _TIME_OUT = 45
 
     def __init__(self, handlers):
         super(_FortController, self).__init__()
@@ -34,9 +36,10 @@ class _FortController(IFortController):
     def clear(self):
         self._clan = None
         self._listeners = None
+        self._waiters = None
         return
 
-    def init(self, clan, listeners):
+    def init(self, clan, listeners, prevController = None):
         self._requester = PlayerFortRequester()
         self._requester.init()
         self._setLimits()
@@ -44,8 +47,9 @@ class _FortController(IFortController):
         self._clan = clan
         self._listeners = listeners
         self._addFortListeners()
+        self._waiters = {}
 
-    def fini(self):
+    def fini(self, clearCache = True):
         self._removeFortListeners()
         self.stopProcessing()
         if self._requester:
@@ -61,6 +65,7 @@ class _FortController(IFortController):
         return
 
     def stopProcessing(self):
+        self._clearWaiters()
         if self._requester is not None:
             self._requester.stopProcessing()
         return
@@ -109,6 +114,7 @@ class _FortController(IFortController):
                 else:
                     LOG_DEBUG('Fort request', ctx)
                     if self._handlers[requestType](ctx, callback=partial(self._callbackWrapper, requestType, callback, cooldown)):
+                        self._waiters[requestType] = BigWorld.callback(self._TIME_OUT, self._onTimeout)
                         self._cooldown.process(requestType, cooldown)
             else:
                 self._failChecking('Handler not found', ctx, callback)
@@ -119,13 +125,14 @@ class _FortController(IFortController):
             if callback:
                 callback(False)
         LOG_DEBUG('Fort request to subscribe')
-        result = self._requester.doRequestEx(FortRequestCtx('fort/subscribe'), callback, 'subscribe')
+        result = self._requester.doRequestEx(FortRequestCtx(), callback, 'subscribe')
         if result:
+            self._waiters[FORT_REQUEST_TYPE.SUBSCRIBE] = BigWorld.callback(self._TIME_OUT, self._onTimeout)
             self._cooldown.process(FORT_REQUEST_TYPE.SUBSCRIBE)
 
     def unsubscribe(self, callback = None):
         LOG_DEBUG('Fort request to unsubscribe')
-        self._requester.doRequestEx(FortRequestCtx('fort/unsubscribe'), callback, 'unsubscribe')
+        self._requester.doRequestEx(FortRequestCtx(), callback, 'unsubscribe')
         return False
 
     def _failChecking(self, ctx, msg, callback = None):
@@ -147,8 +154,25 @@ class _FortController(IFortController):
         self._validators = NoFortValidators()
 
     def _callbackWrapper(self, requestType, callback, cooldown, *args):
+        callbackID = self._waiters.pop(requestType, None)
+        if callbackID is not None:
+            BigWorld.cancelCallback(callbackID)
         self._cooldown.adjust(requestType, cooldown)
         callback(*args)
+        return
+
+    def _clearWaiters(self):
+        if self._waiters is not None:
+            while len(self._waiters):
+                _, callbackID = self._waiters.popitem()
+                BigWorld.cancelCallback(callbackID)
+
+        return
+
+    def _onTimeout(self):
+        LOG_ERROR('Fort request time out!')
+        self.stopProcessing()
+        g_eventBus.handleEvent(events.FortEvent(events.FortEvent.REQUEST_TIMEOUT), scope=EVENT_BUS_SCOPE.FORT)
 
 
 class NoFortController(_FortController):
@@ -158,13 +182,44 @@ class NoFortController(_FortController):
 
     @classmethod
     def isNext(cls, stateID, isLeader):
-        if stateID in [CLIENT_FORT_STATE.NO_CLAN, CLIENT_FORT_STATE.UNSUBSCRIBED, CLIENT_FORT_STATE.CENTER_UNAVAILABLE]:
+        if stateID in [CLIENT_FORT_STATE.NO_CLAN, CLIENT_FORT_STATE.UNSUBSCRIBED]:
             return True
         if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT:
             return True
 
     def request(self, ctx, callback = None):
         self._failChecking('Has been invoked NoFortController.request', ctx, callback)
+
+
+class CenterUnavailableController(_FortController):
+
+    def __init__(self):
+        super(CenterUnavailableController, self).__init__({})
+
+    @classmethod
+    def isNext(cls, stateID, isLeader):
+        if stateID in [CLIENT_FORT_STATE.CENTER_UNAVAILABLE]:
+            return True
+        if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT:
+            return True
+
+    def init(self, clan, listeners, prevController = None):
+        super(CenterUnavailableController, self).init(clan, listeners, prevController)
+        if prevController is not None:
+            self._sortiesCache = prevController.getSortiesCache()
+            if self._sortiesCache is not None:
+                self._sortiesCache.setController(self)
+        return
+
+    def fini(self, clearCache = True):
+        if self._sortiesCache and clearCache:
+            self._sortiesCache.stop()
+            self._sortiesCache = None
+        super(CenterUnavailableController, self).fini()
+        return
+
+    def request(self, ctx, callback = None):
+        self._failChecking('Has been invoked CenterUnavailableController.request', ctx, callback)
 
 
 class IntroController(_FortController):
@@ -219,8 +274,7 @@ class FortController(_FortController):
          FORT_REQUEST_TYPE.ADD_FAVORITE: self.addFavorite,
          FORT_REQUEST_TYPE.REMOVE_FAVORITE: self.removeFavorite,
          FORT_REQUEST_TYPE.PLAN_ATTACK: self.planAttack,
-         FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE: self.createOrJoinFortBattle,
-         FORT_REQUEST_TYPE.ATTACK_AND_REQUEST_CARD: self.attackClanAndRequestItsCard})
+         FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE: self.createOrJoinFortBattle})
         self.__cooldownCallback = None
         self.__cooldownBuildings = []
         self.__cooldownPassed = False
@@ -233,8 +287,8 @@ class FortController(_FortController):
     def isNext(cls, stateID, _):
         return stateID in [CLIENT_FORT_STATE.WIZARD, CLIENT_FORT_STATE.HAS_FORT]
 
-    def init(self, clan, listeners):
-        super(FortController, self).init(clan, listeners)
+    def init(self, clan, listeners, prevController = None):
+        super(FortController, self).init(clan, listeners, prevController)
         self._sortiesCache = SortiesCache(self)
         self._sortiesCache.start()
         self._fortBattlesCache = FortBattlesCache(self)
@@ -244,8 +298,8 @@ class FortController(_FortController):
         self._publicInfoCache = PublicInfoCache(self)
         self._publicInfoCache.start()
 
-    def fini(self):
-        if self._sortiesCache:
+    def fini(self, clearCache = True):
+        if self._sortiesCache and clearCache:
             self._sortiesCache.stop()
             self._sortiesCache = None
         if self._fortBattlesCache:
@@ -540,24 +594,6 @@ class FortController(_FortController):
         clanDBID = ctx.getClanDBID()
         return self._requester.doRequestEx(ctx, callback, 'getEnemyClanCard', clanDBID)
 
-    def attackClanAndRequestItsCard(self, ctx, callback = None):
-        requestsChain = []
-        perm = self.getPermissions()
-        if not perm.canRequestClanCard():
-            return self._failChecking('Player can not request clan card', ctx, callback)
-        if not perm.canPlanAttack():
-            return self._failChecking('Player can not plan attack', ctx, callback)
-        clanDBID = ctx.getClanDBID()
-        timeAttack = ctx.getTimeAttack()
-        dirFrom = ctx.getDirFrom()
-        dirTo = ctx.getDirTo()
-        requestsChain.append(('planAttack', (clanDBID,
-          timeAttack,
-          dirFrom,
-          dirTo), {}))
-        requestsChain.append(('getEnemyClanCard', (clanDBID,), {}))
-        return self._requester.doRequestChainEx(ctx, callback, requestsChain)
-
     def addFavorite(self, ctx, callback = None):
         perm = self.getPermissions()
         if not perm.canAddToFavorite():
@@ -611,6 +647,7 @@ class FortController(_FortController):
         fort.onOrderReady += self.__fort_onOrderReady
         fort.onDossierChanged += self.__fort_onDossierChanged
         fort.onPlayerAttached += self.__fort_onPlayerAttached
+        fort.onSettingCooldown += self.__fort_onSettingCooldown
         fort.onPeripheryChanged += self.__fort_onPeripheryChanged
         fort.onDefenceHourChanged += self.__fort_onDefenceHourChanged
         fort.onOffDayChanged += self.__fort_onOffDayChanged
@@ -645,6 +682,7 @@ class FortController(_FortController):
         fort.onOrderReady -= self.__fort_onOrderReady
         fort.onDossierChanged -= self.__fort_onDossierChanged
         fort.onPlayerAttached -= self.__fort_onPlayerAttached
+        fort.onSettingCooldown -= self.__fort_onSettingCooldown
         fort.onPeripheryChanged -= self.__fort_onPeripheryChanged
         fort.onDefenceHourChanged -= self.__fort_onDefenceHourChanged
         fort.onOffDayChanged -= self.__fort_onOffDayChanged
@@ -739,6 +777,9 @@ class FortController(_FortController):
     def __fort_onPlayerAttached(self, buildingTypeID):
         self._listeners.notify('onPlayerAttached', buildingTypeID)
 
+    def __fort_onSettingCooldown(self, eventTypeID):
+        self._listeners.notify('onSettingCooldown', eventTypeID)
+
     def __fort_onPeripheryChanged(self, peripheryID):
         self._listeners.notify('onPeripheryChanged', peripheryID)
 
@@ -785,7 +826,10 @@ def createInitial():
 
 
 def createByState(state, isLeader = False, exclude = None):
-    all = [NoFortController, IntroController, FortController]
+    all = [NoFortController,
+     IntroController,
+     FortController,
+     CenterUnavailableController]
     if exclude:
         if exclude in all:
             all.remove(exclude)

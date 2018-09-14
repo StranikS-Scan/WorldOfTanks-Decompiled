@@ -54,18 +54,13 @@ from LightFx import LightManager
 import AuxiliaryFx
 from account_helpers import BattleResultsCache
 from avatar_helpers import AvatarSyncData
-import physics_shared
 import BattleReplay
 import HornCooldown
-import MapActivities
 from physics_shared import computeBarrelLocalPoint
 from AvatarInputHandler.control_modes import ArcadeControlMode, VideoCameraControlMode
 from AvatarInputHandler import cameras
-import Account
 from gun_rotation_shared import decodeGunAngles, isShootPositionInsideOtherVehicle
 import VOIP
-import material_kinds
-import functools
 
 class _CRUISE_CONTROL_MODE():
     NONE = 0
@@ -232,8 +227,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
         LOG_DEBUG('Avatar.onLeaveWorld()')
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
-            if self.arenaUniqueID is not None:
-                replayCtrl.setArenaStatisticsStr('arenaUniqueID:{0}'.format(self.arenaUniqueID))
             replayCtrl.stop()
         if self.__tryShootCallbackId:
             BigWorld.cancelCallback(self.__tryShootCallbackId)
@@ -514,6 +507,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_VEHICLE_MARKERS_SHOW_INFO, key):
                     g_windowsManager.battleWindow.vMarkersManager.showExtendedInfo(isDown)
+                    g_windowsManager.battleWindow.minimap.onAltPress(isDown)
                     return True
                 if key == Keys.KEY_F1 and isDown and mods == 0:
                     g_windowsManager.battleWindow.toggleHelpWindow()
@@ -526,7 +520,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_VOICECHAT_MUTE, key):
                     LOG_DEBUG('onVoiceChatPTT', isDown)
-                    if VOIP.getVOIPManager().channelsMgr.currentChannel:
+                    if VOIP.getVOIPManager().getCurrentChannel():
                         VOIP.getVOIPManager().setMicMute(not isDown)
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_USE_HORN, key) and isDown:

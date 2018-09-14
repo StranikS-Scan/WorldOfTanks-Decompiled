@@ -5,14 +5,8 @@ from gui.Scaleform.CursorDelegator import CursorDelegator
 from Event import Event
 from debug_utils import *
 from gui.Scaleform.framework import AppRef
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import ShowWindowEvent, BrowserEvent
-CHINA_BROWSER_COUNT = 999
-CHINA_DEFAULT_URL = 'http://wot.kongzhong.com/embedpage/adv/'
-CHINA_BROWSER_PARAMS = '?useraccount=%(userEncoded)s&gameareaid=%(areaID)s&spa_id=%(databaseID)s'
-g_battlesCounter = 0
 from debug_utils import _doLog
-_BROWSER_LOGGING = False
+_BROWSER_LOGGING = True
 
 def LOG_BROWSER(msg, *kargs):
     if _BROWSER_LOGGING and IS_DEVELOPMENT:
@@ -27,14 +21,18 @@ class WebBrowser(AppRef):
     height = property(lambda self: (0 if self.__browser is None else self.__browser.height))
     isNavigationComplete = property(lambda self: self.__isNavigationComplete)
     isFocused = property(lambda self: self.__isFocused)
-    enableUpdate = True
     updateInterval = 0.01
 
-    def __init__(self, uiObj, texName, size, url = 'about:blank', isFocused = False):
+    def __init__(self, browserID, uiObj, texName, size, url = 'about:blank', isFocused = False, backgroundUrl = 'file:///gui/maps/bg.png'):
+        self.__browserID = browserID
         self.__cbID = None
         self.__baseUrl = url
-        LOG_BROWSER('__init__', self.__baseUrl)
-        self.__browser = uiObj.movie.createBrowser(texName, url, size[0], size[1])
+        self.__backgroundUrl = backgroundUrl
+        self.onLoadStart = Event()
+        self.onLoadEnd = Event()
+        self.onNavigate = Event()
+        LOG_BROWSER('__init__', self.__baseUrl, texName, size)
+        self.__browser = uiObj.movie.createBrowser(texName, backgroundUrl, size[0], size[1])
         if self.__browser is None:
             return
         else:
@@ -116,9 +114,9 @@ class WebBrowser(AppRef):
               None,
               lambda me, e: injectKeyUp(me, e)))
             self.__browser.script = EventListener()
-            self.__browser.script.onLoadStart += self.onLoadStart
-            self.__browser.script.onLoadEnd += self.onLoadEnd
-            self.__browser.script.onCursorUpdated += self.onCursorUpdated
+            self.__browser.script.onLoadStart += self.__onLoadStart
+            self.__browser.script.onLoadEnd += self.__onLoadEnd
+            self.__browser.script.onCursorUpdated += self.__onCursorUpdated
             self.enableUpdate = True
             self.__isMouseDown = False
             self.__isNavigationComplete = False
@@ -129,17 +127,20 @@ class WebBrowser(AppRef):
                 self.focus()
             g_mgr.addBrowser(self)
             self.update()
+            self.navigate(url)
             return
 
     def __processDelayedNavigation(self):
         if self.__isNavigationComplete and self.__delayedUrls:
             self.doNavigate(self.__delayedUrls.pop(0))
+            return True
+        return False
 
     def destroy(self):
         if self.__browser is not None:
-            self.__browser.script.onLoadStart -= self.onLoadStart
-            self.__browser.script.onLoadEnd -= self.onLoadEnd
-            self.__browser.script.onCursorUpdated -= self.onCursorUpdated
+            self.__browser.script.onLoadStart -= self.__onLoadStart
+            self.__browser.script.onLoadEnd -= self.__onLoadEnd
+            self.__browser.script.onCursorUpdated -= self.__onCursorUpdated
             self.__browser.script = None
             self.__browser = None
         if self.__cbID is not None:
@@ -164,8 +165,8 @@ class WebBrowser(AppRef):
 
     def refresh(self, ignoreCache = True):
         if self.hasBrowser:
-            self.onLoadStart()
             self.__browser.reload(ignoreCache)
+            self.onNavigate(self.__browser.url)
 
     def navigate(self, url):
         self.__delayedUrls.append(url)
@@ -174,23 +175,21 @@ class WebBrowser(AppRef):
     def doNavigate(self, url):
         LOG_BROWSER('doNavigate', url)
         if self.hasBrowser:
-            self.onLoadStart()
             self.__browser.loadURL(url)
+            self.onNavigate(url)
 
     def navigateBack(self):
         if self.hasBrowser:
-            self.onLoadStart()
             self.__browser.goBack(self.url)
 
     def navigateForward(self):
         if self.hasBrowser:
-            self.onLoadStart()
             self.__browser.goForward(self.url)
 
     def navigateStop(self):
         if self.hasBrowser:
             self.__browser.stop()
-            self.onLoadEnd()
+            self.__onLoadEnd()
 
     def update(self):
         self.__cbID = BigWorld.callback(self.updateInterval, self.update)
@@ -220,6 +219,10 @@ class WebBrowser(AppRef):
         if event.key == Keys.KEY_LEFTMOUSE:
             if not event.isKeyDown():
                 self.browserUp(0, 0, 0)
+            return False
+        if event.key == Keys.KEY_ESCAPE:
+            return False
+        if event.key == Keys.KEY_RETURN and event.isAltDown():
             return False
         e = event
         self.__getBrowserKeyHandler(e.key, e.isKeyDown(), e.isAltDown(), e.isShiftDown(), e.isCtrlDown())(self, event)
@@ -274,8 +277,8 @@ class WebBrowser(AppRef):
 
     def onBrowserShow(self, needRefresh):
         self.enableUpdate = True
-        if needRefresh or self.baseUrl != self.url:
-            self.navigate(self.baseUrl)
+        if needRefresh and self.baseUrl != self.url:
+            self.navigate(self.url)
         self.focus()
 
     def onBrowserHide(self):
@@ -283,21 +286,23 @@ class WebBrowser(AppRef):
         self.enableUpdate = False
         self.unfocus()
 
-    def onLoadStart(self):
-        LOG_BROWSER('onLoadStart', self.__browser.url)
+    def __onLoadStart(self):
         self.__isNavigationComplete = False
-        self.app.fireEvent(BrowserEvent(BrowserEvent.BROWSER_LOAD_START), EVENT_BUS_SCOPE.LOBBY)
+        if self.__browser.url != self.__backgroundUrl:
+            LOG_BROWSER('onLoadStart', self.__browser.url)
+            self.onLoadStart(self.__browser.url)
 
-    def onLoadEnd(self):
-        LOG_BROWSER('onLoadEnd', self.__browser.url)
+    def __onLoadEnd(self, isLoaded = True):
         self.__isNavigationComplete = True
-        self.app.fireEvent(BrowserEvent(BrowserEvent.BROWSER_LOAD_END), EVENT_BUS_SCOPE.LOBBY)
-        self.__processDelayedNavigation()
-        if self.__isNavigationComplete and self.__browser.url == self.__baseUrl:
-            LOG_BROWSER('onLoadEnd: prevent navigating to baseurl')
-            self.__browser.goForward()
+        if not self.__processDelayedNavigation():
+            if self.__browser.url == self.__backgroundUrl:
+                LOG_BROWSER('onLoadEnd: prevent navigating to baseurl')
+                self.__browser.goForward()
+            else:
+                LOG_BROWSER('onLoadEnd', self.__browser.url)
+                self.onLoadEnd(self.__browser.url, isLoaded)
 
-    def onCursorUpdated(self):
+    def __onCursorUpdated(self):
         if self.hasBrowser and self.isFocused:
             self.app.cursorMgr.setCursorForced(self.__browser.script.cursorType)
 
@@ -306,80 +311,7 @@ class WebBrowser(AppRef):
             self.__browser.executeJavascript(script, frame)
 
 
-class ChinaWebBrowser(WebBrowser):
-    battlesCounter = 0
-
-    def __init__(self, uiObj, texName, size):
-        WebBrowser.__init__(self, uiObj, texName, size, 'file:///gui/maps/bg.png')
-        self.resetToDefaultUrl()
-
-    def resetToDefaultUrl(self):
-        self.__customUrl = CHINA_DEFAULT_URL
-
-    def setUrlToOpen(self, url):
-        self.__customUrl = url
-
-    def openBrowser(self, url):
-        self.__customUrl = url
-        self.app.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_BROWSER_WINDOW, {'url': url}), EVENT_BUS_SCOPE.LOBBY)
-
-    def checkBattlesCounter(self):
-        global g_battlesCounter
-        if g_battlesCounter == CHINA_BROWSER_COUNT:
-            g_battlesCounter = 0
-        if not g_battlesCounter:
-            self.app.fireEvent(ShowWindowEvent(ShowWindowEvent.SHOW_BROWSER_WINDOW, {'url': CHINA_DEFAULT_URL}), EVENT_BUS_SCOPE.LOBBY)
-
-    def onBattleEnter(self):
-        global g_battlesCounter
-        g_battlesCounter += 1
-
-    def onBrowserShow(self, needRefresh):
-        self.enableUpdate = True
-        if self.__customUrl is not None:
-            url = self.__customUrl
-            suffix = self.getRequestParams()
-            if suffix not in url:
-                url = ''.join([url, suffix])
-        else:
-            url = self.url
-        if needRefresh or url != self.url:
-            self.navigate(url)
-        self.focus()
-        self.__customUrl = None
-        return
-
-    def onBrowserHide(self):
-        self.__customUrl = CHINA_DEFAULT_URL
-        super(ChinaWebBrowser, self).onBrowserHide()
-
-    def handleKeyEvent(self, event):
-        if not (self.hasBrowser and self.isFocused and self.enableUpdate):
-            return False
-        superRes = super(ChinaWebBrowser, self).handleKeyEvent(event)
-        if superRes and event.key == Keys.KEY_ESCAPE:
-            return False
-        return True
-
-    def getRequestParams(self):
-        urlParams = CHINA_BROWSER_PARAMS
-        import base64
-        from ConnectionManager import connectionManager
-        areaID = connectionManager.areaID or 'errorArea'
-        loginName = connectionManager.loginName or 'errorLogin'
-        userEncoded = base64.b64encode(loginName)
-        databaseID = connectionManager.databaseID or 'errorID'
-        urlParams = urlParams % {'userEncoded': userEncoded,
-         'areaID': areaID,
-         'databaseID': databaseID}
-        return urlParams
-
-
 class EventListener():
-    onLoadStart = Event()
-    onLoadEnd = Event()
-    onCursorUpdated = Event()
-    onDOMReady = Event()
     cursorType = property(lambda self: self.__cursorType)
 
     def __init__(self):
@@ -391,6 +323,10 @@ class EventListener():
          CURSOR_TYPES.Grabbing: CursorDelegator.DRAG_CLOSE,
          CURSOR_TYPES.ColumnResize: CursorDelegator.HAND_RIGHT_LEFT}
         self.__cursorType = None
+        self.onLoadStart = Event()
+        self.onLoadEnd = Event()
+        self.onCursorUpdated = Event()
+        self.onDOMReady = Event()
         return
 
     def onChangeCursor(self, cursorType):
@@ -405,7 +341,7 @@ class EventListener():
     def onFailLoadingFrame(self, frameId, isMainFrame, errorCode, url):
         if isMainFrame:
             LOG_BROWSER('onFailLoadingFrame(isMainFrame)', url)
-            self.onLoadEnd()
+            self.onLoadEnd(False)
 
     def onFinishLoadingFrame(self, frameId, isMainFrame, url):
         if isMainFrame:

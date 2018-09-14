@@ -2,13 +2,13 @@
 import BigWorld
 import Event
 import BattleReplay
+from VOIP.voip_constants import VOIP_SUPPORTED_API
 from adisp import async, process
-from debug_utils import LOG_WARNING, LOG_DEBUG
-from gui.Scaleform.daapi.settings import VIEW_ALIAS
+from debug_utils import LOG_WARNING
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import AppRef, ViewTypes
 from helpers import isPlayerAccount, isPlayerAvatar
 from VOIP import getVOIPManager
-from VOIP.ChannelsMgr import ChannelsMgr
 from PlayerEvents import g_playerEvents
 from gui import GUI_SETTINGS, DialogsInterface
 from gui.shared.utils import CONST_CONTAINER
@@ -24,6 +24,7 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
         YY = 'YY'
 
     onPlayerSpeaking = Event.Event()
+    onStateToggled = Event.Event()
 
     def __init__(self):
         super(VoiceChatManager, self).__init__()
@@ -40,7 +41,7 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
             self.__callbacks.pop(0)(self.ready)
 
     def __captureDevicesResponse(self):
-        devices = getVOIPManager().captureDevices
+        devices = getVOIPManager().getCaptureDevices()
         while len(self.__captureDevicesCallbacks):
             self.__captureDevicesCallbacks.pop(0)(devices)
 
@@ -70,10 +71,11 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
         g_playerEvents.onAccountBecomePlayer += self.onAccountBecomePlayer
         self.app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
         voipMgr = getVOIPManager()
-        voipMgr.channelsMgr.onInitialized += self.__initResponse
-        voipMgr.channelsMgr.onFailedToConnect += self.checkForInitialization
+        voipMgr.onInitialized += self.__initResponse
+        voipMgr.onFailedToConnect += self.checkForInitialization
         voipMgr.OnCaptureDevicesUpdated += self.__captureDevicesResponse
         voipMgr.onPlayerSpeaking += self.__onPlayerSpeaking
+        voipMgr.onStateToggled += self.__onStateToggled
 
     def _dispose(self):
         self.__callbacks = None
@@ -82,10 +84,11 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
         if containerMgr:
             containerMgr.onViewAddedToContainer -= self.__onViewAddedToContainer
         voipMgr = getVOIPManager()
-        voipMgr.channelsMgr.onFailedToConnect -= self.checkForInitialization
+        voipMgr.onFailedToConnect -= self.checkForInitialization
         voipMgr.onPlayerSpeaking -= self.__onPlayerSpeaking
-        voipMgr.channelsMgr.onInitialized -= self.__initResponse
+        voipMgr.onInitialized -= self.__initResponse
         voipMgr.OnCaptureDevicesUpdated -= self.__captureDevicesResponse
+        voipMgr.onStateToggled -= self.__onStateToggled
         g_playerEvents.onAccountBecomePlayer -= self.onAccountBecomePlayer
         super(VoiceChatManager, self)._dispose()
         return
@@ -95,11 +98,11 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
 
     @property
     def state(self):
-        return getVOIPManager().channelsMgr.state
+        return getVOIPManager().getState()
 
     @property
     def ready(self):
-        return getVOIPManager().channelsMgr.initialized
+        return getVOIPManager().isInitialized()
 
     @process
     def onAccountBecomePlayer(self):
@@ -115,15 +118,15 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
             LOG_WARNING('Initialize. Vivox is not supported')
             return
         self.__callbacks.append(callback)
-        if self.state == ChannelsMgr.STATE_INITIALIZING:
-            return
         voipMgr = getVOIPManager()
+        if not voipMgr.isNotInitialized():
+            return
         voipMgr.initialize(domain)
         voipMgr.enable(g_settingsCore.getSetting(SOUND.VOIP_ENABLE))
 
     @async
     def requestCaptureDevices(self, callback):
-        if getVOIPManager().vivoxDomain == '':
+        if getVOIPManager().getVOIPDomain() == '':
             LOG_WARNING('RequestCaptureDevices. Vivox is not supported')
             callback([])
             return
@@ -149,24 +152,21 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
         self.onPlayerSpeaking(accountDBID, bool(isSpeak))
         self.as_onPlayerSpeakS(accountDBID, isSpeak, accountDBID == self.getPlayerDBID())
 
+    def __onStateToggled(self, isEnabled, _):
+        if not GUI_SETTINGS.voiceChat:
+            return
+        self.onStateToggled(isEnabled)
+
     def isPlayerSpeaking(self, accountDBID):
         if GUI_SETTINGS.voiceChat:
             return bool(getVOIPManager().isParticipantTalking(accountDBID))
         return False
 
     def isVivox(self):
-        try:
-            from VOIP.Vivox.VivoxManager import VivoxManager
-            return isinstance(getVOIPManager(), VivoxManager)
-        except Exception:
-            return False
+        return getVOIPManager().getAPI() == VOIP_SUPPORTED_API.VIVOX
 
     def isYY(self):
-        try:
-            from VOIP.YY.YYManager import YYManager
-            return isinstance(getVOIPManager(), YYManager)
-        except Exception:
-            return False
+        return getVOIPManager().getAPI() == VOIP_SUPPORTED_API.YY
 
     @property
     def provider(self):

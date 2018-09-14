@@ -51,7 +51,6 @@ class FORT_REQUEST_TYPE(CONST_CONTAINER):
     REMOVE_FAVORITE = 25
     PLAN_ATTACK = 26
     CREATE_OR_JOIN_FORT_BATTLE = 27
-    ATTACK_AND_REQUEST_CARD = 28
 
 
 FORT_REQUEST_TYPE_NAMES = dict([ (v, k) for k, v in FORT_REQUEST_TYPE.__dict__.iteritems() ])
@@ -78,5 +77,6 @@ class FORT_REQUEST_VALIDATION(CONST_CONTAINER):
 
     class REQUEST_PUBLIC_INFO(CONST_CONTAINER):
         ABBREV_IS_INVALID = 'publicInfo/abbrev/invalid'
-        ABBREV_IS_INVALID_KR_CN = 'publicInfo/abbrev/invalid/KR_CN'
+        ABBREV_IS_INVALID_KR = 'publicInfo/abbrev/invalid/KR'
+        ABBREV_IS_INVALID_CN = 'publicInfo/abbrev/invalid/CN'
         ABBREV_IS_OURS = 'publicInfo/abbrev/ours'

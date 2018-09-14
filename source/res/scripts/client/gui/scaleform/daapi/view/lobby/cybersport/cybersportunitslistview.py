@@ -5,6 +5,7 @@ from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.rally.rally_dps import ManualSearchDataProvider
 from gui.Scaleform.daapi.view.meta.CyberSportUnitsListMeta import CyberSportUnitsListMeta
+from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control.functional import unit_ext
 from gui.prb_control.prb_helpers import unitFunctionalProperty
@@ -77,7 +78,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
             selectedVehicles = self._selectedVehicles
         else:
             selectedVehicles = [ k for k, v in g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).items() if v.level in levelsRange ]
-        self.fireEvent(events.ShowViewEvent(events.ShowWindowEvent.SHOW_VEHICLE_SELECTOR_WINDOW, {'isMultiSelect': True,
+        self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': True,
          'infoText': CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_SEARCH,
          'selectedVehicles': selectedVehicles,
          'section': 'cs_list_view_vehicle',

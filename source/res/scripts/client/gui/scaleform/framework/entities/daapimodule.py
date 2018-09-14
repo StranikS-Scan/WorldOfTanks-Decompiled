@@ -100,7 +100,7 @@ class DAAPIModule(EventSystemEntity):
         super(DAAPIModule, self)._dispose()
         while self.__components:
             alias, viewPy = self.__components.popitem()
-            self._onUnregisterFlashComponent(viewPy.flashObject, alias)
+            self._onUnregisterFlashComponent(viewPy, alias)
             self.__fireRegisteringEvent(ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
             viewPy.destroy()
 
@@ -125,7 +125,7 @@ class DAAPIModule(EventSystemEntity):
     def __unregisterPythonComponent(self, alias, viewPy):
         if viewPy not in self.__components.values():
             return LOG_WARNING('There is no flash object registered in %s: %s' % (str(self), str(viewPy)))
-        self._onUnregisterFlashComponent(viewPy.flashObject, alias)
+        self._onUnregisterFlashComponent(viewPy, alias)
         del self.__components[alias]
         self.__fireRegisteringEvent(ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
         viewPy.destroy()

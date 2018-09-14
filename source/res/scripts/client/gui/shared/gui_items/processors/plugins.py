@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
 from collections import namedtuple
+from constants import MAX_VEHICLE_LEVEL
 from adisp import process, async
 from gui import DialogsInterface
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
+from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, DismissTankmanDialogMeta, HtmlMessageDialogMeta
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
 
@@ -450,3 +452,71 @@ class VehicleFreeLimitConfirmator(MessageInformator):
 
     def _activeHandler(self):
         return self.vehicle.buyPrice == (0, 0) and self.crewType < 1 and not g_itemsCache.items.stats.freeVehiclesLeft
+
+
+class PotapovQuestValidator(SyncValidator):
+
+    def __init__(self, quests):
+        super(PotapovQuestValidator, self).__init__()
+        self.quests = quests
+
+    def _validate(self):
+        for quest in self.quests:
+            if quest is None:
+                return makeError('WRONG_ARGS_TYPE')
+            if not quest.isUnlocked():
+                return makeError('NOT_UNLOCKED_QUEST')
+
+        return makeSuccess()
+
+
+class PotapovQuestsLockedByVehicle(SyncValidator):
+
+    def __init__(self, quests):
+        super(PotapovQuestsLockedByVehicle, self).__init__()
+        self.quests = quests
+
+    def _validate(self):
+        for quest in self.quests:
+            if len(self.__findLockedVehicles(quest)):
+                return makeError('LOCKED_BY_VEHICLE_QUEST')
+
+        return makeSuccess()
+
+    @classmethod
+    def __findLockedVehicles(cls, potapovQuest):
+        return g_itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.CLASSES(potapovQuest.getVehicleClasses()) | REQ_CRITERIA.VEHICLE.LEVELS(range(potapovQuest.getVehMinLevel(), MAX_VEHICLE_LEVEL + 1)) | REQ_CRITERIA.VEHICLE.LOCKED).values()
+
+
+class PotapovQuestSlotsValidator(SyncValidator):
+
+    def _validate(self):
+        if not g_eventsCache.questsProgress.getPotapovQuestsFreeSlots():
+            return makeError('NOT_ENOUGH_SLOTS')
+        return makeSuccess()
+
+
+class PotapovQuestChainsValidator(SyncValidator):
+
+    def __init__(self, quest):
+        super(PotapovQuestChainsValidator, self).__init__()
+        self.quest = quest
+
+    def _validate(self):
+        for quest in g_eventsCache.potapov.getSelectedQuests().itervalues():
+            if quest.getChainID() == self.quest.getChainID():
+                return makeError('TOO_MANY_QUESTS_IN_CHAIN')
+
+        return makeSuccess()
+
+
+class PotapovQuestRewardValidator(SyncValidator):
+
+    def __init__(self, quest):
+        super(PotapovQuestRewardValidator, self).__init__()
+        self.quest = quest
+
+    def _validate(self):
+        if not self.quest.needToGetReward():
+            return makeError('NO_REWARD')
+        return makeSuccess()

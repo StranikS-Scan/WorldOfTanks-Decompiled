@@ -4,6 +4,8 @@ from InventoryRequester import InventoryRequester
 from StatsRequester import StatsRequester
 from DossierRequester import DossierRequester
 from ItemsRequester import ItemsRequester, REQ_CRITERIA
+from TokenRequester import TokenRequester
+from TokenResponse import TokenResponse
 from deprecated.VehicleItemsRequester import VehicleItemsRequester
 from deprecated.StatsRequester import StatsRequester as DeprecatedStatsRequester
 from abstract import RequestCtx
@@ -15,6 +17,8 @@ __all__ = ['ShopRequester',
  'StatsRequester',
  'DossierRequester',
  'ItemsRequester',
+ 'TokenRequester',
+ 'TokenResponse',
  'REQ_CRITERIA',
  'DeprecatedStatsRequester',
  'VehicleItemsRequester',

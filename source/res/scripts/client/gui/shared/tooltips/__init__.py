@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/__init__.py
 import weakref
 import sys
-from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
@@ -28,6 +28,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     HISTORICAL_MODULES = 'historicalModules'
     CONTROL = 'control'
     REF_SYSTEM = 'refSystem'
+    PRIVATE_QUESTS = 'privateQuests'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -53,6 +54,7 @@ class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):
     CAMOUFLAGE = 'camouflage'
     EMBLEMS = 'emblems'
     AMMO = 'ammo'
+    RENT = 'rent'
 
 
 class ACTION_TOOLTIPS_STATE(CONST_CONTAINER):
@@ -265,3 +267,15 @@ def getItemActionTooltipData(item, isBuying = True):
      'state': (creditsState, goldState),
      'newPrice': price,
      'oldPrice': defaultPrice}
+
+
+def getItemRentActionTooltipData(item, rentPackage):
+    goldState = creditsState = ACTION_TOOLTIPS_STATE.DISCOUNT
+    defaultPrice = rentPackage['defaultRentPrice']
+    price = rentPackage['rentPrice']
+    return {'type': ACTION_TOOLTIPS_TYPE.RENT,
+     'key': str(item.intCD),
+     'state': (creditsState, goldState),
+     'newPrice': price,
+     'oldPrice': defaultPrice,
+     'rentPackage': rentPackage['days']}

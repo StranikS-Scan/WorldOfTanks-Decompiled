@@ -39,7 +39,10 @@ class EffectsList(object):
         self.relatedEffects = {}
         for s in section.items():
             effDesc = _createEffectDesc(s[0], s[1])
-            self.__effectDescList.append(effDesc)
+            if effDesc is not None:
+                self.__effectDescList.append(effDesc)
+
+        return
 
     def prerequisites(self):
         out = []
@@ -335,7 +338,7 @@ class _PixieEffectDesc(_EffectDesc):
             file = random.choice(self._files)
         else:
             file, fileToClear = random.choice(zip(self._files, self._havokFiles))
-            if BigWorld.wg_isHavokActive():
+            if args.get('havokEnabled', False):
                 file, fileToClear = fileToClear, file
             self.__prototypePixies.pop(fileToClear, None)
         prototypePixie = self.__prototypePixies.get(file)
@@ -572,9 +575,13 @@ class _SoundEffectDesc(_EffectDesc):
             return
 
     def prerequisites(self):
-        for soundName in [self._soundNames and self._soundNames[0] or '', self._soundNames and self._soundNames[1] or '', self._soundName or '']:
-            if soundName.find('/guns/') > -1:
-                SoundGroups.g_instance.FMODloadSound(soundName)
+        try:
+            for soundName in [self._soundNames and self._soundNames[0] or '', self._soundNames and self._soundNames[1] or '', self._soundName or '']:
+                if soundName.find('/guns/') > -1:
+                    SoundGroups.g_instance.FMODloadSound(soundName)
+
+        except Exception as e:
+            LOG_ERROR(e.message)
 
         return []
 
@@ -842,31 +849,35 @@ class _LightEffectDesc(_EffectDesc):
 
 
 def _createEffectDesc(type, dataSection):
-    if type == 'pixie':
+    if len(dataSection.values()) == 0:
+        return None
+    elif type == 'pixie':
         return _PixieEffectDesc(dataSection)
-    if type == 'animation':
+    elif type == 'animation':
         return _AnimationEffectDesc(dataSection)
-    if type == 'sound':
+    elif type == 'sound':
         return _SoundEffectDesc(dataSection)
-    if type == 'soundParam':
+    elif type == 'soundParam':
         return _SoundParameterEffectDesc(dataSection)
-    if type == 'visibility':
+    elif type == 'visibility':
         return _VisibilityEffectDesc(dataSection)
-    if type == 'model':
+    elif type == 'model':
         return _ModelEffectDesc(dataSection)
-    if type == 'decal':
+    elif type == 'decal':
         return _DecalEffectDesc(dataSection)
-    if type == 'shockWave':
+    elif type == 'shockWave':
         return _ShockWaveEffectDesc(dataSection)
-    if type == 'flashBang':
+    elif type == 'flashBang':
         return _FlashBangEffectDesc(dataSection)
-    if type == 'stopEmission':
+    elif type == 'stopEmission':
         return _StopEmissionEffectDesc(dataSection)
-    if type == 'posteffect':
+    elif type == 'posteffect':
         return _PostProcessEffectDesc(dataSection)
-    if type == 'light':
+    elif type == 'light':
         return _LightEffectDesc(dataSection)
-    raise Exception, 'EffectsList factory has no class associated with type %s.' % type
+    else:
+        raise Exception, 'EffectsList factory has no class associated with type %s.' % type
+        return None
 
 
 def _raiseWrongConfig(paramName, effectType):

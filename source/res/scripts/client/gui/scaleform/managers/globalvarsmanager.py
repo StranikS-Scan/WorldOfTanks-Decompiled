@@ -1,8 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/managers/GlobalVarsManager.py
 import constants
-from gui.shared.ItemsCache import g_itemsCache
 from helpers import getClientOverride
-from gui import GUI_SETTINGS, game_control
+from gui import GUI_SETTINGS, game_control, server_events
 from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
 from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
 
@@ -69,3 +68,6 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
 
     def isRentalsEnabled(self):
         return constants.IS_RENTALS_ENABLED
+
+    def isPotapovQuestEnabled(self):
+        return server_events.isPotapovQuestEnabled()

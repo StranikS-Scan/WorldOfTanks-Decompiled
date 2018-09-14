@@ -18,8 +18,7 @@ from debug_utils import *
 from ContactInfo import ContactInfo
 from ClientChat import ClientChat
 from ChatManager import chatManager
-from gui.Scaleform import VoiceChatInterface
-from adisp import process
+from account_shared import NotificationItem
 from OfflineMapCreator import g_offlineMapCreator
 from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ClientFortMgr import ClientFortMgr
@@ -90,7 +89,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         connectionManager.checkClientServerVersions(propertyValue, getattr(self, propertyName, None))
         return
 
-    @process
     def onBecomePlayer(self):
         LOG_DEBUG('Account.onBecomePlayer()')
         self.isPlayer = True
@@ -109,8 +107,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.intUserSettings.onProxyBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
-        yield VoiceChatInterface.g_instance.initialize(self.serverSettings['voipDomain'])
-        yield VoiceChatInterface.g_instance.requestCaptureDevices()
         return
 
     def onBecomeNonPlayer(self):
@@ -569,6 +565,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             return
         self.base.createSquad()
 
+    def prb_createEventSquad(self):
+        if events.isPlayerEntityChanging:
+            return
+        self.base.createEventSquad()
+
     def prb_createCompany(self, isOpened, comment, division = PREBATTLE_COMPANY_DIVISION.ABSOLUTE):
         if events.isPlayerEntityChanging:
             return
@@ -692,8 +693,21 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdStr(AccountCommands.CMD_SET_LANGUAGE, language, None)
         return
 
-    def selectPotapovQuest(self, potapovQuestID, callback):
-        self._doCmdInt3(AccountCommands.CMD_SELECT_POTAPOV_QUEST, potapovQuestID, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+    def selectPotapovQuests(self, potapovQuestIDs, callback):
+        self._doCmdIntArr(AccountCommands.CMD_SELECT_POTAPOV_QUESTS, potapovQuestIDs, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
+    def getPotapovQuestReward(self, potapovQuestID, needTamkman = False, tmanNation = 0, tmanInnation = 0, roleID = 1, callback = None):
+        arr = [potapovQuestID,
+         needTamkman,
+         tmanNation,
+         tmanInnation,
+         roleID]
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_GET_POTAPOV_QUEST_REWARD, arr, proxy)
+        return
 
     def makeDenunciation(self, violatorID, topicID, violatorKind):
         self._doCmdInt3(AccountCommands.CMD_MAKE_DENUNCIATION, violatorID, topicID, violatorKind, None)
@@ -912,14 +926,23 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         else:
             repl = diff.get(('eventNotifications', '_r'), None)
             if repl is not None:
-                self.eventNotifications = repl
+                self.eventNotifications = g_accountRepository.eventNotifications = repl
                 diffDict['added'].extend(repl)
             diff = diff.get('eventNotifications', None)
             if diff is not None:
                 diffDict.update(diff)
+                eventNotifications = self.eventNotifications
+                removed = [ NotificationItem(item) for item in diffDict['removed'] ]
+                for removedItem in removed:
+                    for i in xrange(len(eventNotifications)):
+                        if removedItem == NotificationItem(eventNotifications[i]):
+                            eventNotifications.pop(i)
+                            break
+
+                eventNotifications.extend(diffDict['added'])
             if repl is not None or diff is not None:
                 events.onEventNotificationsChanged(diffDict)
-                LOG_DZ('Account.__synchronizeEventNotifications, diff=%s' % diffDict)
+                LOG_DZ('Account.__synchronizeEventNotifications, diff=%s' % (diffDict,))
             return
 
 

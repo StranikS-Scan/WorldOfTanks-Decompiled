@@ -3,7 +3,7 @@ import ArenaType
 import MusicController
 from adisp import process
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.daapi.settings import VIEW_ALIAS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
@@ -21,7 +21,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 
 class Trainings(LobbySubView, AbstractWindowView, TrainingFormMeta, PrbListener):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(Trainings, self).__init__()
         self.app.component.wg_inputKeyMode = 1
         self.__requester = None
@@ -56,7 +56,7 @@ class Trainings(LobbySubView, AbstractWindowView, TrainingFormMeta, PrbListener)
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
-            self.fireEvent(events.ShowViewEvent(events.ShowViewEvent.SHOW_LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onPrbListReceived(self, prebattles):
         result = []
@@ -84,7 +84,7 @@ class Trainings(LobbySubView, AbstractWindowView, TrainingFormMeta, PrbListener)
         yield self.prbDispatcher.join(JoinTrainingCtx(prbID, waitingID='prebattle/join'))
 
     def createTrainingRequest(self):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_TRAINING_SETTINGS_WINDOW, ctx={'isCreateRequest': True}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY, ctx={'isCreateRequest': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @process
     def __createTrainingRoom(self, event):

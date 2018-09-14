@@ -5,17 +5,11 @@ import ArenaType
 from adisp import async, process
 from constants import CLAN_MEMBER_FLAGS
 from helpers import i18n
+from ids_generators import SequenceIDGenerator
 from helpers.i18n import makeString
 from gui.shared.utils.gui_items import ShopItem, VehicleItem
-from items import ITEM_TYPE_NAMES, ITEM_TYPE_INDICES, tankmen, vehicles
+from items import ITEM_TYPE_NAMES, ITEM_TYPE_INDICES, vehicles
 from debug_utils import LOG_DEBUG
-
-def getTankmanRoleLevel(startRoleLevel, freeXpValue = 0, vehTypeName = 'ussr:T-34'):
-    vehType = vehicles.VehicleDescr(typeName=vehTypeName).type
-    tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0], False), vehType.id[1], vehType.crewRoles[0][0], startRoleLevel))
-    tmanDescr.addXP(freeXpValue)
-    return tmanDescr.roleLevel
-
 
 def rnd_choice(*args):
     args = list(args)
@@ -339,6 +333,21 @@ def showConfirmDialog(confirmDialog, callback, customMessage = '', ns = 'common'
      customMessage,
      'confirmDialog.onConfirm',
      'confirmDialog.onClose'])
+
+
+_viewIdsGen = None
+
+def getViewName(viewAlias, *args):
+    l = list(args)
+    l.insert(0, viewAlias)
+    return '_'.join(map(str, l))
+
+
+def getUniqueViewName(viewAlias):
+    global _viewIdsGen
+    if _viewIdsGen is None:
+        _viewIdsGen = SequenceIDGenerator()
+    return getViewName(viewAlias, _viewIdsGen.nextSequenceID)
 
 
 CLAN_MEMBERS = {CLAN_MEMBER_FLAGS.LEADER: 'leader',

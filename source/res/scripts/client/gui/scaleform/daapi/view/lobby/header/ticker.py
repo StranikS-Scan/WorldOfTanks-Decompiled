@@ -4,7 +4,7 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi.view.meta.TickerMeta import TickerMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
-from gui import GUI_SETTINGS
+from gui import GUI_SETTINGS, game_control
 
 class Ticker(TickerMeta, DAAPIModule, AppRef):
     UPDATE_INTERVAL = 600
@@ -37,15 +37,14 @@ class Ticker(TickerMeta, DAAPIModule, AppRef):
             link = entry.get('link', '')
             openBrowser = BigWorld.wg_openWebBrowser
             if GUI_SETTINGS.movingText.internalBrowser:
-                browser = self.app.browser
+                browser = game_control.g_instance.browser
                 if browser is not None:
-                    openBrowser = browser.openBrowser
+                    openBrowser = browser.load
                 else:
                     LOG_ERROR('Attempting to open internal browser with page: `%s`,but browser is not exist. External browser will be opened.' % str(link))
             if len(link):
                 LOG_DEBUG('Open browser at page: ', link)
                 openBrowser(link)
-            del openBrowser
         return
 
     def __clearCallback(self):

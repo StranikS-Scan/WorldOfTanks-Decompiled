@@ -7,7 +7,7 @@ import constants
 import Account
 from gui.prb_control.prb_helpers import preQueueFunctionalProperty
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
-from gui.shared import g_eventsCache
+from gui.server_events import g_eventsCache
 import items
 from items import vehicles
 import Math

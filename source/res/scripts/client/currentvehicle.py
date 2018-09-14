@@ -197,7 +197,10 @@ class _CurrentVehicle():
                 localization = '#menu:vehicle/igrRentLeft/%s'
                 rentLeftStr = getRentLeftTimeStr(localization, self.item.rentLeftTime)
                 icon = TextManager.getIcon(TextIcons.PREMIUM_IGR_BIG)
-                message = i18n.makeString('#menu:currentVehicleStatus/' + state, icon=icon, time=rentLeftStr)
+                if self.item.isRented:
+                    message = i18n.makeString('#menu:currentVehicleStatus/' + state, icon=icon, time=rentLeftStr)
+                else:
+                    message = i18n.makeString('#menu:tankCarousel/vehicleStates/inPremiumIgrOnly', icon=icon)
                 return (state, message, stateLvl)
             return (state, '#menu:currentVehicleStatus/' + state, stateLvl)
         return ('notpresent', MENU.CURRENTVEHICLESTATUS_NOTPRESENT, Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)

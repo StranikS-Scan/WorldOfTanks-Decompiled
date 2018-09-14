@@ -120,6 +120,7 @@ class MENU(object):
     INGAME_MENU_BUTTONS_LOGOFF = '#menu:ingame_menu/buttons/logoff'
     INGAME_MENU_BUTTONS_HELP = '#menu:ingame_menu/buttons/help'
     INGAME_MENU_BUTTONS_BACK = '#menu:ingame_menu/buttons/back'
+    INGAME_MENU_LINKS_REPORT_BUG = '#menu:ingame_menu/links/report_bug'
     TANKMEN_LIGHTTANK = '#menu:tankmen/lightTank'
     TANKMEN_MEDIUMTANK = '#menu:tankmen/mediumTank'
     TANKMEN_HEAVYTANK = '#menu:tankmen/heavyTank'
@@ -392,6 +393,12 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCR = '#menu:headerButtons/battle/types/squad/descr'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVE_DESCR = '#menu:headerButtons/battle/types/squadLeave/descr'
     HEADERBUTTONS_BATTLE_TYPES_SQUADBATTLE = '#menu:headerButtons/battle/types/squadBattle'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUADLEAVEOWNER = '#menu:headerButtons/battle/types/eventSquadLeaveOwner'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUADLEAVE = '#menu:headerButtons/battle/types/eventSquadLeave'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD_DESCR = '#menu:headerButtons/battle/types/eventSquad/descr'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUADLEAVE_DESCR = '#menu:headerButtons/battle/types/eventSquadLeave/descr'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUADBATTLE = '#menu:headerButtons/battle/types/eventSquadBattle'
     HEADERBUTTONS_BATTLE_TYPES_TRAINING = '#menu:headerButtons/battle/types/training'
     HEADERBUTTONS_BATTLE_TYPES_TRAINING_DESCR = '#menu:headerButtons/battle/types/training/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVETRAINING_DESCR = '#menu:headerButtons/battle/types/leaveTraining/descr'
@@ -636,6 +643,7 @@ class MENU(object):
     MODULEINFO_PARAMS_PIERCINGPOWER = '#menu:moduleInfo/params/piercingPower'
     MODULEINFO_ADDITIONALINFO = '#menu:moduleInfo/additionalInfo'
     MODULEINFO_PARAMS_DAMAGE = '#menu:moduleInfo/params/damage'
+    MODULEINFO_PARAMS_HEAL = '#menu:moduleInfo/params/heal'
     MODULEINFO_PARAMS_AVGPIERCINGPOWER = '#menu:moduleInfo/params/avgPiercingPower'
     MODULEINFO_PARAMS_AVGDAMAGE = '#menu:moduleInfo/params/avgDamage'
     MODULEINFO_PARAMS_ARMOR = '#menu:moduleInfo/params/armor'
@@ -1054,6 +1062,8 @@ class MENU(object):
     CONTEXTMENU_MESSENGER_MINIMIZEALL = '#menu:contextMenu/messenger/minimizeAll'
     CONTEXTMENU_MESSENGER_CLOSECURRENT = '#menu:contextMenu/messenger/closeCurrent'
     CONTEXTMENU_MESSENGER_CLOSEALLEXCEPTCURRENT = '#menu:contextMenu/messenger/closeAllExceptCurrent'
+    CONTEXTMENU_CREATECONTACTNOTE = '#menu:contextMenu/createContactNote'
+    CONTEXTMENU_EDITCONTACTNOTE = '#menu:contextMenu/editContactNote'
     DENUNCIATION_0 = '#menu:denunciation/0'
     DENUNCIATION_1 = '#menu:denunciation/1'
     DENUNCIATION_2 = '#menu:denunciation/2'
@@ -1075,6 +1085,8 @@ class MENU(object):
     SKILLDROPWINDOW_STUDY_FREELABEL = '#menu:skillDropWindow/study/freeLabel'
     SKILLDROPWINDOW_APPLYBTN = '#menu:skillDropWindow/applyBtn'
     SKILLDROPWINDOW_CANCELBTN = '#menu:skillDropWindow/cancelBtn'
+    SKILLDROPWINDOW_FREEDROPLABEL = '#menu:skillDropWindow/freeDropLabel'
+    SKILLDROPWINDOW_FREEDROPPERCENT = '#menu:skillDropWindow/freeDropPercent'
     CENTERISAVAILABLE = '#menu:centerIsAvailable'
     CENTERISUNAVAILABLE = '#menu:centerIsUnAvailable'
     ACCOUNT_PROFILE_EMPTYBATTLELIST = '#menu:account/profile/emptyBattleList'
@@ -1087,6 +1099,8 @@ class MENU(object):
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE = '#menu:finalStatistic/commonStats/resultlabel/tie'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TECHWIN = '#menu:finalStatistic/commonStats/resultlabel/techWin'
     BROWSER_WINDOW_TITLE = '#menu:browser/window/title'
+    BROWSER_DATAUNAVAILABLE_HEADER = '#menu:browser/dataUnavailable/header'
+    BROWSER_DATAUNAVAILABLE_DESCRIPTION = '#menu:browser/dataUnavailable/description'
     CLASSES_LIGHTTANK = '#menu:classes/lightTank'
     CLASSES_MEDIUMTANK = '#menu:classes/mediumTank'
     CLASSES_HEAVYTANK = '#menu:classes/heavyTank'
@@ -1161,11 +1175,32 @@ class MENU(object):
     DATETIME_MONTHS_SHORT_12 = '#menu:dateTime/months/short/12'
     DATETIME_SHORTDATEFORMATWITHOUTYEAR = '#menu:dateTime/shortDateFormatWithoutYear'
     VALIDATION_PUBLICINFO_ABBREV_INVALID = '#menu:validation/publicInfo/abbrev/invalid'
-    VALIDATION_PUBLICINFO_ABBREV_INVALID_KR_CN = '#menu:validation/publicInfo/abbrev/invalid/KR_CN'
+    VALIDATION_PUBLICINFO_ABBREV_INVALID_CN = '#menu:validation/publicInfo/abbrev/invalid/CN'
+    VALIDATION_PUBLICINFO_ABBREV_INVALID_KR = '#menu:validation/publicInfo/abbrev/invalid/KR'
     VALIDATION_PUBLICINFO_ABBREV_OURS = '#menu:validation/publicInfo/abbrev/ours'
     AWARDWINDOW_TITLE_NEWTANKMAN = '#menu:awardWindow/title/newTankman'
     AWARDWINDOW_TITLE_NEWVEHICLE = '#menu:awardWindow/title/newVehicle'
+    AWARDWINDOW_TITLE_NEWMEDALS = '#menu:awardWindow/title/newMedals'
+    AWARDWINDOW_TITLE_CREDITS = '#menu:awardWindow/title/credits'
+    AWARDWINDOW_TITLE_TOKENS = '#menu:awardWindow/title/tokens'
+    AWARDWINDOW_TITLE_TASKCOMPLETE = '#menu:awardWindow/title/taskComplete'
     AWARDWINDOW_OKBUTTON = '#menu:awardWindow/okButton'
+    AWARDWINDOW_TAKENEXTBUTTON = '#menu:awardWindow/takeNextButton'
+    AWARDWINDOW_CLOSEBUTTON = '#menu:awardWindow/closeButton'
+    AWARDWINDOW_RECRUITBUTTON = '#menu:awardWindow/recruitButton'
+    AWARDWINDOW_QUESTS_TASKCOMPLETE_HEADER = '#menu:awardWindow/quests/taskComplete/header'
+    AWARDWINDOW_QUESTS_TASKCOMPLETE_DESCRIPTION = '#menu:awardWindow/quests/taskComplete/description'
+    AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONAL = '#menu:awardWindow/quests/taskComplete/additional'
+    AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONALNOTCOMPLETE = '#menu:awardWindow/quests/taskComplete/additionalNotComplete'
+    AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDFORCOMLETE = '#menu:awardWindow/quests/taskComplete/awardForComlete'
+    AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDRECIEVED = '#menu:awardWindow/quests/taskComplete/awardRecieved'
+    AWARDWINDOW_QUESTS_TOKENS_HEADER = '#menu:awardWindow/quests/tokens/header'
+    AWARDWINDOW_QUESTS_TOKENS_DESCRIPTION = '#menu:awardWindow/quests/tokens/description'
+    AWARDWINDOW_QUESTS_MEDALS_HEADER = '#menu:awardWindow/quests/medals/header'
+    AWARDWINDOW_QUESTS_TANKMANFEMALE_HEADER = '#menu:awardWindow/quests/tankmanFemale/header'
+    AWARDWINDOW_QUESTS_TANKMANFEMALE_DESCRIPTION = '#menu:awardWindow/quests/tankmanFemale/description'
+    AWARDWINDOW_QUESTS_VEHICLE_HEADER = '#menu:awardWindow/quests/vehicle/header'
+    AWARDWINDOW_QUESTS_VEHICLE_DESCRIPTION = '#menu:awardWindow/quests/vehicle/description'
     AWARDWINDOW_REFERRAL_TANKMAN_HEADER = '#menu:awardWindow/referral/tankman/header'
     AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NORMAL = '#menu:awardWindow/referral/tankman/description/normal'
     AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NOXP = '#menu:awardWindow/referral/tankman/description/noXp'
@@ -1175,6 +1210,8 @@ class MENU(object):
     AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_BOUGHT = '#menu:awardWindow/referral/vehicle/description/bought'
     AWARDWINDOW_REFERRAL_NEXTTANKMAN = '#menu:awardWindow/referral/nextTankman'
     AWARDWINDOW_REFERRAL_COMPLETE = '#menu:awardWindow/referral/complete'
+    AWARDWINDOW_REFERRAL_CREDITS_HEADER = '#menu:awardWindow/referral/credits/header'
+    AWARDWINDOW_REFERRAL_CREDITS_DESCRIPTION = '#menu:awardWindow/referral/credits/description'
     REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
@@ -1213,6 +1250,8 @@ class MENU(object):
     TIME_TIMEVALUE_HOURS = TIME_TIMEVALUE + '/hours'
     TIME_TIMEVALUE_MIN = TIME_TIMEVALUE + '/min'
     TIME_TIMEVALUE_LESSMIN = TIME_TIMEVALUE + '/lessMin'
+    PROMO_PATCH_TITLE = '#menu:promo/patch/title'
+    PROMO_PATCH_MESSAGE = '#menu:promo/patch/message'
     PROMOPREMIUMIGRWINDOW_WINDOWTITLE = '#menu:PromoPremiumIgrWindow/windowTitle'
     PROMOPREMIUMIGRWINDOW_TITLE = '#menu:PromoPremiumIgrWindow/title'
     PROMOPREMIUMIGRWINDOW_TEXT = '#menu:PromoPremiumIgrWindow/text'
@@ -1271,6 +1310,7 @@ class MENU(object):
      MODULEINFO_PARAMS_RELOADTIME,
      MODULEINFO_PARAMS_PIERCINGPOWER,
      MODULEINFO_PARAMS_DAMAGE,
+     MODULEINFO_PARAMS_HEAL,
      MODULEINFO_PARAMS_AVGPIERCINGPOWER,
      MODULEINFO_PARAMS_AVGDAMAGE,
      MODULEINFO_PARAMS_ARMOR,
@@ -1552,6 +1592,10 @@ class MENU(object):
      TANKMEN_LOCKREASON_INBATTLE,
      TANKMEN_LOCKREASON_PREBATTLE,
      TANKMEN_LOCKREASON_BROKEN)
+    PROFILE_STATS_BLOCKS_ENUM = (PROFILE_STATS_BLOCKS_COMMON,
+     PROFILE_STATS_BLOCKS_BATTLEEFFECT,
+     PROFILE_STATS_BLOCKS_CREDITS,
+     PROFILE_STATS_BLOCKS_STUDYING)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,
      LOADING_BATTLETYPES_DESC_2,
@@ -1562,10 +1606,6 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_7,
      LOADING_BATTLETYPES_DESC_8,
      LOADING_BATTLETYPES_DESC_9)
-    PROFILE_STATS_BLOCKS_ENUM = (PROFILE_STATS_BLOCKS_COMMON,
-     PROFILE_STATS_BLOCKS_BATTLEEFFECT,
-     PROFILE_STATS_BLOCKS_CREDITS,
-     PROFILE_STATS_BLOCKS_STUDYING)
     VEHICLEINFO_PARAMS_ENUM = (VEHICLEINFO_PARAMS_MAXHEALTH,
      VEHICLEINFO_PARAMS_WEIGHT,
      VEHICLEINFO_PARAMS_ENGINEPOWER,
@@ -1689,7 +1729,9 @@ class MENU(object):
      CONTEXTMENU_UNLOCKSLOT,
      CONTEXTMENU_MESSENGER_MINIMIZEALL,
      CONTEXTMENU_MESSENGER_CLOSECURRENT,
-     CONTEXTMENU_MESSENGER_CLOSEALLEXCEPTCURRENT)
+     CONTEXTMENU_MESSENGER_CLOSEALLEXCEPTCURRENT,
+     CONTEXTMENU_CREATECONTACTNOTE,
+     CONTEXTMENU_EDITCONTACTNOTE)
     MODULEINFO_COMPATIBLE_ENUM = (MODULEINFO_COMPATIBLE_TURRETS,
      MODULEINFO_COMPATIBLE_SHELLS,
      MODULEINFO_COMPATIBLE_GUNS,
@@ -1877,16 +1919,16 @@ class MENU(object):
         return outcome
 
     @staticmethod
-    def loading_battletypes_desc(key):
-        outcome = '#menu:loading/battleTypes/desc/%s' % key
-        if outcome not in MENU.LOADING_BATTLETYPES_DESC_ENUM:
+    def profile_stats_blocks(key):
+        outcome = '#menu:profile/stats/blocks/%s' % key
+        if outcome not in MENU.PROFILE_STATS_BLOCKS_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 
     @staticmethod
-    def profile_stats_blocks(key):
-        outcome = '#menu:profile/stats/blocks/%s' % key
-        if outcome not in MENU.PROFILE_STATS_BLOCKS_ENUM:
+    def loading_battletypes_desc(key):
+        outcome = '#menu:loading/battleTypes/desc/%s' % key
+        if outcome not in MENU.LOADING_BATTLETYPES_DESC_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

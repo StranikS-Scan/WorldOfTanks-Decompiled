@@ -1,6 +1,8 @@
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 import BigWorld
+from gui.game_control.BrowserController import BrowserController
 from gui.game_control.LanguageController import LanguageController
+from gui.game_control.PromoController import PromoController
 from gui.game_control.RefSystem import RefSystem
 from gui.game_control.RentalsController import RentalsController
 from gui.game_control.links import ExternalLinksHandler
@@ -13,6 +15,7 @@ from gui.game_control.wallet import WalletController
 from gui.game_control.NotifyController import NotifyController
 from gui.game_control.SoundEventChecker import SoundEventChecker
 from gui.game_control.ServerStats import ServerStats
+from gui.game_control.ChinaController import ChinaController
 
 class _GameControllers(object):
 
@@ -31,6 +34,9 @@ class _GameControllers(object):
         self.__soundChecker = SoundEventChecker()
         self.__serverStats = ServerStats()
         self.__refSystem = RefSystem()
+        self.__browser = BrowserController(self)
+        self.__promo = PromoController(self)
+        self.__china = ChinaController(self)
         self.__collectUiStats = False
         self.__logUXEvents = False
 
@@ -94,6 +100,18 @@ class _GameControllers(object):
     def refSystem(self):
         return self.__refSystem
 
+    @property
+    def browser(self):
+        return self.__browser
+
+    @property
+    def promo(self):
+        return self.__promo
+
+    @property
+    def china(self):
+        return self.__china
+
     def init(self):
         self.__captcha.init()
         self.__aogas.init()
@@ -108,6 +126,8 @@ class _GameControllers(object):
         self.__serverStats.init()
         self.__refSystem.init()
         self.__rentals.init()
+        self.__browser.init()
+        self.__promo.init()
 
     def fini(self):
         self.__igr.fini()
@@ -123,6 +143,8 @@ class _GameControllers(object):
         self.__serverStats.fini()
         self.__refSystem.fini()
         self.__rentals.fini()
+        self.__browser.fini()
+        self.__promo.fini()
 
     def onAccountShowGUI(self, ctx):
         self.__language.start()
@@ -136,6 +158,9 @@ class _GameControllers(object):
         self.__soundChecker.start()
         self.__serverStats.start()
         self.__refSystem.start()
+        self.__browser.start()
+        self.__promo.start()
+        self.__china.start()
         self.__collectUiStats = ctx.get('collectUiStats', False)
         self.__logUXEvents = ctx.get('logUXEvents', False)
 
@@ -148,6 +173,9 @@ class _GameControllers(object):
         self.__soundChecker.stop()
         self.__serverStats.stop()
         self.__refSystem.stop()
+        self.__browser.stop()
+        self.__promo.stop()
+        self.__china.stop()
 
     def onAccountBecomePlayer(self):
         self.__roaming.start(BigWorld.player().serverSettings)
@@ -165,6 +193,9 @@ class _GameControllers(object):
         self.__soundChecker.stop()
         self.__serverStats.stop()
         self.__refSystem.stop()
+        self.__browser.stop()
+        self.__promo.stop()
+        self.__china.stop()
 
 
 g_instance = _GameControllers()

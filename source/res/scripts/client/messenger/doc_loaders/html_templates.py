@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/messenger/doc_loaders/html_templates.py
 import types
-from debug_utils import LOG_WARNING
+from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers.html import translation as html_translation, templates
 
@@ -28,6 +28,16 @@ class _MessageTemplate(templates.Template):
 
 class MessageTemplates(templates.XMLCollection):
 
+    def format(self, key, ctx = None, **kwargs):
+        bgIconSource = kwargs.pop('bgIconSource', None)
+        formatted = super(MessageTemplates, self).format(key, ctx, **kwargs)
+        source = formatted['bgIcon']
+        if bgIconSource in source:
+            formatted['bgIcon'] = source[bgIconSource]
+        else:
+            formatted['bgIcon'] = source.get(None, '')
+        return formatted
+
     def priority(self, key):
         return self[key].priority
 
@@ -40,7 +50,7 @@ class MessageTemplates(templates.XMLCollection):
         data = {'type': source.readString('type'),
          'timestamp': -1,
          'savedData': None,
-         'bgIcon': source.readString('bgIcon'),
+         'bgIcon': self._makeBgIconsData(source['bgIcon']),
          'icon': source.readString('icon'),
          'defaultIcon': source.readString('defaultIcon'),
          'filters': [],
@@ -95,6 +105,16 @@ class MessageTemplates(templates.XMLCollection):
             if width > 0:
                 result['width'] = width
             return result
+
+    def _makeBgIconsData(self, section):
+        result = {}
+        if section is not None:
+            result[None] = section.readString('')
+            if len(section.items()):
+                for secName, subSec in section.items():
+                    result[secName] = subSec.readString('')
+
+        return result
 
 
 def loadForMessage(_, section, settings):

@@ -158,6 +158,9 @@ class _CurrentVehicle():
     def isOnlyForEventBattles(self):
         return self.item.isOnlyForEventBattles
 
+    def isEvent(self):
+        return self.item.isEvent
+
     def isAlive(self):
         return self.isPresent() and self.item.isAlive
 
@@ -180,8 +183,14 @@ class _CurrentVehicle():
         vehicle = g_itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
             invVehs = g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.INVENTORY)
+
+            def notEvent(x, y):
+                if x.isOnlyForEventBattles and not y.isOnlyForEventBattles:
+                    return 1
+                return -1 if not x.isOnlyForEventBattles and y.isOnlyForEventBattles else cmp(x, y)
+
             if len(invVehs):
-                vehInvID = sorted(invVehs.itervalues())[0].invID
+                vehInvID = sorted(invVehs.itervalues(), cmp=notEvent)[0].invID
             else:
                 vehInvID = 0
         self.__selectVehicle(vehInvID)

@@ -163,6 +163,10 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
             filterCriteria |= ~REQ_CRITERIA.VEHICLE.ONLY_FOR_FALLOUT
         items = g_itemsCache.items
         filteredVehs = items.getVehicles(filterCriteria)
+        eventsVehicles = items.getVehicles(REQ_CRITERIA.VEHICLE.EVENT)
+        for cd in eventsVehicles:
+            if cd in filteredVehs:
+                del filteredVehs[cd]
 
         def sorting(v1, v2):
             if v1.isFavorite and not v2.isFavorite:
@@ -170,6 +174,8 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
             return 1 if not v1.isFavorite and v2.isFavorite else v1.__cmp__(v2)
 
         vehsCDs = map(attrgetter('intCD'), sorted(filteredVehs.values(), sorting))
+        eventVehsCDs = map(attrgetter('intCD'), sorted(eventsVehicles.values(), sorting))
+        vehsCDs = eventVehsCDs + vehsCDs
         LOG_DEBUG('Showing carousel vehicles: ', vehsCDs)
         self.as_showVehiclesS(vehsCDs)
 
@@ -180,6 +186,8 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
             filterCriteria |= REQ_CRITERIA.IN_CD_LIST(vehicles)
         items = g_itemsCache.items
         filteredVehs = items.getVehicles(filterCriteria)
+        eventsVehicles = items.getVehicles(REQ_CRITERIA.VEHICLE.EVENT)
+        filteredVehs.update(eventsVehicles)
         if vehicles is None:
             vehicles = filteredVehs.keys()
         isSuitablePredicate = lambda vehIntCD: True

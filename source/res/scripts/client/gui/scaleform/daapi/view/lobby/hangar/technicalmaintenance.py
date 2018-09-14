@@ -112,6 +112,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             vehicle = g_currentVehicle.item
             casseteCount = vehicle.descriptor.gun['clip'][0]
             casseteText = makeString('#menu:technicalMaintenance/ammoTitleEx') % casseteCount
+            data.update({'isMoonEvent': vehicle.isOnlyForEventBattles})
             data.update({'vehicleId': str(vehicle.intCD),
              'repairCost': vehicle.repairCost,
              'maxRepairCost': vehicle.descriptor.getMaxRepairCost(),

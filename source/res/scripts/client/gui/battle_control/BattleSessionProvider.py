@@ -27,11 +27,12 @@ from gui.battle_control.dyn_squad_functional import DynSquadFunctional
 from gui.battle_control.gas_attack_controller import GasAttackController
 from gui.battle_control.hit_direction_ctrl import HitDirectionController
 from gui.battle_control.requests import AvatarRequestsController
+from gui.battle_control.first_of_april_controller import FirstOfAprilController
 BattleSessionProviderStartCtx = namedtuple('BattleSessionProviderStartCtx', ('avatar', 'replayCtrl', 'gasAttackMgr'))
 BattleSessionProviderStartCtx.__new__.__defaults__ = (None, None, None)
 
 class BattleSessionProvider(object):
-    __slots__ = ('__ammoCtrl', '__equipmentsCtrl', '__optDevicesCtrl', '__vehicleStateCtrl', '__chatCommands', '__drrScaleCtrl', '__feedback', '__ctx', '__arenaDP', '__arenaListeners', '__arenaLoadCtrl', '__respawnsCtrl', '__notificationsCtrl', '__isBattleUILoaded', '__arenaTeamsBasesCtrl', '__periodCtrl', '__messagesCtrl', '__repairCtrl', '__hitDirectionCtrl', '__requestsCtrl', '__avatarStatsCtrl', '__dynSquadFunctional', '__weakref__', '__gasAttackCtrl')
+    __slots__ = ('__ammoCtrl', '__equipmentsCtrl', '__optDevicesCtrl', '__vehicleStateCtrl', '__chatCommands', '__drrScaleCtrl', '__feedback', '__ctx', '__arenaDP', '__arenaListeners', '__arenaLoadCtrl', '__respawnsCtrl', '__notificationsCtrl', '__isBattleUILoaded', '__arenaTeamsBasesCtrl', '__periodCtrl', '__messagesCtrl', '__repairCtrl', '__hitDirectionCtrl', '__requestsCtrl', '__avatarStatsCtrl', '__dynSquadFunctional', '__weakref__', '__gasAttackCtrl', '__firstOfAprilCtrl')
 
     def __init__(self):
         super(BattleSessionProvider, self).__init__()
@@ -56,6 +57,7 @@ class BattleSessionProvider(object):
         self.__dynSquadFunctional = None
         self.__avatarStatsCtrl = None
         self.__arenaListeners = None
+        self.__firstOfAprilCtrl = None
         self.__isBattleUILoaded = False
         self.__gasAttackCtrl = None
         return
@@ -114,6 +116,9 @@ class BattleSessionProvider(object):
     def getGasAttackCtrl(self):
         return self.__gasAttackCtrl
 
+    def getFirstOfAprilCtrl(self):
+        return self.__firstOfAprilCtrl
+
     @async
     def sendRequest(self, ctx, callback, allowDelay=None):
         self.__requestsCtrl.request(ctx, callback=callback, allowDelay=allowDelay)
@@ -164,12 +169,14 @@ class BattleSessionProvider(object):
         self.__dynSquadFunctional = DynSquadFunctional(isReplayPlaying)
         self.__notificationsCtrl = NotificationsController(self.__arenaDP)
         self.__gasAttackCtrl = GasAttackController(startCtx)
+        self.__firstOfAprilCtrl = FirstOfAprilController()
         ctx = weakref.proxy(self.__ctx)
         self.__arenaListeners = ListenersCollection()
         self.__arenaListeners.addController(ctx, self.__arenaLoadCtrl)
         self.__arenaListeners.addController(ctx, self.__arenaTeamsBasesCtrl)
         self.__arenaListeners.addController(ctx, self.__periodCtrl)
         self.__arenaListeners.addController(ctx, self.__respawnsCtrl)
+        self.__arenaListeners.addController(ctx, self.__firstOfAprilCtrl)
         self.__arenaListeners.start(startCtx.avatar.arena, arenaDP=self.__arenaDP)
         self.__feedback = createFeedbackAdaptor(isReplayPlaying)
         self.__feedback.start(self.__arenaDP)
@@ -226,6 +233,7 @@ class BattleSessionProvider(object):
         self.__notificationsCtrl = None
         self.__repairCtrl = None
         self.__gasAttackCtrl = None
+        self.__firstOfAprilCtrl = None
         self.__dynSquadFunctional = None
         if self.__avatarStatsCtrl is not None:
             self.__avatarStatsCtrl.stop()

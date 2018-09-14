@@ -95,6 +95,7 @@
     <MS-1_bot>	211	</MS-1_bot>
     <T-26_bot>	213	</T-26_bot>
     <V-12-5_shortened>	212	</V-12-5_shortened>
+    <R00_Sfera_Engine>	214	</R00_Sfera_Engine>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -1845,6 +1846,25 @@
       <rpm_min>	323	</rpm_min>
       <rpm_max>	2228	</rpm_max>
     </V-7>
+    <R00_Sfera_Engine>
+      <userString>	#ussr_vehicles:R00_Sfera_Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	firstApril_engine_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	firstApril_engine_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	1200	</rpm_min>
+      <rpm_max>	2700	</rpm_max>
+    </R00_Sfera_Engine>
     <Observer>
       <userString>	#ussr_vehicles:MS-1	</userString>
       <tags>	gasoline	</tags>

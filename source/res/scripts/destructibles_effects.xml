@@ -1334,6 +1334,35 @@
     </inf_env414_Pole_Touchdown>
   </fallingAtoms>
   <fragiles>
+    <inf_env801_TrackBoomTank01>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env801_TrackBoomTank01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	inf_env801_TrackBoomTank01	</wwsound>
+            <sound>	/explosive_objects/expls_obj/fuel_mid/inf_env801_TrackBoomTank01	</sound>
+          </sound>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	explosive_objects	</wwsound>
+            <sound>	/burn/expls_obj_burn/expls_obj_burn_mid/burn_mid_10sec	</sound>
+          </sound>
+          <sound>
+            <startKey>	base	</startKey>
+            <wwsound>	explosive_objects	</wwsound>
+            <sound>	/explosive_objects/expls_obj/fuel_mid/inf_env801_TrackBoomTank01_debris	</sound>
+          </sound>
+        </effects>
+      </variant1>
+    </inf_env801_TrackBoomTank01>
     <inf_env_114_09_VentilationSys_outdoor_01>
       <variant1>
         <stages>

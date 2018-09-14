@@ -368,6 +368,8 @@ class _VehicleFilter(object):
                 self.__exclude.append(_readVehicleFilterPattern((xmlCtx, 'exclude'), subsection))
             _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <include> or <exclude>')
 
+        self.__exclude.append({'vehicle': {'tags': frozenset(['event_battles'])}})
+
     def checkCompatibility(self, vehicleDescr):
         if self.__exclude:
             isVehicleTypeMatched, isVehicleMatched = _matchSubfilter(vehicleDescr, self.__exclude)

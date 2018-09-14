@@ -5,7 +5,7 @@ import Math
 import math
 import material_kinds
 from math import pi
-from constants import IS_CLIENT, IS_CELLAPP, VEHICLE_PHYSICS_MODE, VEHICLE_DAMAGE_VERSION
+from constants import IS_CLIENT, IS_CELLAPP, VEHICLE_PHYSICS_MODE, VEHICLE_DAMAGE_VERSION, ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from debug_utils import *
 import copy
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES
@@ -179,6 +179,19 @@ CLIMB_TANG = 1.0
 STAB_DAMP_MP = 5.0
 STAB_EPSILON_AMBIT = 2.0
 STAB_EPSILON_PERIOD = 4.0
+APPLY_RAMMING_IMPULSE_TO_COM = False
+RAMMING_IMPULSE_MULTIPLIER = 0.07
+RAMMING_MAX_IMPULSE = 1000000000.0
+TANK_SPHERE_RADIUS = 1.5
+TANK_SPHERE_OFFSET = (0.0, TANK_SPHERE_RADIUS, 0.0)
+TANK_STATIC_BOX_SIZE = (2.6, 1.9, 2.1)
+TANK_STATIX_CUBE_OFFSET_Z = 0.0
+TANK_STATIX_TURRET_HEIGHT = 0.7
+APRIL_EVENT_GRAVITY_FACTOR = 1.1
+APRIL_EVENT_SHELL_IMPULSE_VELOCITY = 41.0
+APRIL_EVENT_COMPULSE_Y_LIMIT = 120.0
+APRIL_EVENT_COMPULSE_RADIUS = 45.0
+APRIL_EVENT_COMPULSE_CENTER_VEL_LIMIT = 41.0
 g_vehiclePhysicsMode = VEHICLE_PHYSICS_MODE.DETAILED
 g_vehicleDamageVersion = VEHICLE_DAMAGE_VERSION.VER0
 g_confUpdaters = []
@@ -281,7 +294,12 @@ g_defaultXPhysicsCfg = {'gravity': 9.81,
            'tankBoardAngle': 0.0,
            'auxClearance': 0.8},
  'damage': {'vehicleByChassisDamageFactor': 0.5,
-            'chsDmgMultiplier': 0.5}}
+            'chsDmgMultiplier': 0.5},
+ 'aeApplyRammingImpulseToCom': APPLY_RAMMING_IMPULSE_TO_COM,
+ 'aeRammingImpulseMultiplier': RAMMING_IMPULSE_MULTIPLIER,
+ 'aeMaxRammingImpulse': RAMMING_MAX_IMPULSE,
+ 'aeTankSphereRadius': TANK_SPHERE_RADIUS,
+ 'aeTankSphereEvent': TANK_SPHERE_OFFSET}
 if IS_CELLAPP:
 
     def _booleanFromString(stringValue):
@@ -389,7 +407,7 @@ def updateCommonConf():
 def updateConf():
     for e in BigWorld.entities.values():
         if e.className == 'Vehicle':
-            initVehiclePhysics(e.mover.physics, e.typeDescriptor, None, True)
+            initVehiclePhysics(e.mover.physics, e.typeDescriptor, None, True, aprilEvent=bool(BONUS_CAPS.get(e.arenaBonusType) & BONUS_CAPS.FIRST_APRIL))
 
     updateCommonConf()
     for updater in g_confUpdaters:
@@ -404,7 +422,7 @@ def computeRotationalCohesion(rotSpeedLimit, mass, length, width, enginePower):
     return (rotSpeedLimit * inertia / ANG_ACCELERATION_TIME + enginePower / rotSpeedLimit) / mg
 
 
-def configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityFactor):
+def configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityFactor, aprilEvent=False):
     global IS_CLIENT
     cfg = copy.copy(g_defaultXPhysicsCfg)
     cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
@@ -429,14 +447,22 @@ def configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityF
             cfg['fakegearbox'] = fakeGearBox
     cfg.update(g_xphysicsOverrides)
     cfg['fullMass'] = typeDesc.physics['weight'] * WEIGHT_SCALE
-    bmin, bmax, _ = typeDesc.chassis['hitTester'].bbox
-    sizeX = bmax[0] - bmin[0]
-    sizeZ = bmax[2] - bmin[2]
-    hullCenter = (bmin + bmax) * 0.5
-    cfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
+    if aprilEvent:
+        sizeX = TANK_STATIC_BOX_SIZE[0]
+        sizeZ = TANK_STATIC_BOX_SIZE[2]
+        cfg['hullCOMShiftY'] -= (TANK_STATIC_BOX_SIZE[1] - cfg['bodyHeight']) * 0.5
+        cfg['bodyHeight'] = TANK_STATIC_BOX_SIZE[1]
+        cfg['hullSize'] = Math.Vector3(TANK_STATIC_BOX_SIZE)
+        offsZ = TANK_STATIX_CUBE_OFFSET_Z
+    else:
+        bmin, bmax, _ = typeDesc.chassis['hitTester'].bbox
+        sizeX = bmax[0] - bmin[0]
+        sizeZ = bmax[2] - bmin[2]
+        hullCenter = (bmin + bmax) * 0.5
+        offsZ = hullCenter[2]
+        cfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
     cfg['gravity'] = cfg['gravity'] * gravityFactor
     cfg['engineTorque'] = tuple(((arg, val * gravityFactor) for arg, val in cfg['engineTorque']))
-    offsZ = hullCenter[2]
     cfg['hullBoxOffsetZ'] = offsZ
     turretMin, turretMax, _ = typeDesc.turret['hitTester'].bbox
     hullPos = typeDesc.chassis['hullPosition']
@@ -445,9 +471,13 @@ def configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityF
     topPos.y += turretMax[1] - cfg['clearance'] - cfg['bodyHeight']
     topPos.y = max(0.1, topPos.y * 0.8)
     topPos.y += cfg['bodyHeight'] * 0.5
+    if aprilEvent:
+        topPos.y = cfg['bodyHeight'] * 0.5 + TANK_STATIX_TURRET_HEIGHT
     cfg['turretTopPos'] = topPos
     turretBoxSizeX = turretMax[0] - turretMin[0]
     cfg['turretTopWidth'] = max(sizeX * 0.25, turretBoxSizeX * 0.7)
+    if aprilEvent:
+        cfg['turretTopWidth'] = turretBoxSizeX * 0.01
     cfg['swingStabilisationCenter'] = Math.Vector3((0.0, hullPos[1] + turretPos[1], 0.0))
     cfg['pushHB'] = cfg.get('gimletPushOnSpotFinal', 0.0)
     cfg['smplEngJoinRatio'] = 0.020000000000000004 / cfg['wheelRadius']
@@ -470,6 +500,11 @@ def configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityF
     cfg['gearIncreaseFactor'] = 0.85
     cfg['gearDecreaseFactor'] = 0.85
     cfg['gearVelocities'] = (0.0, 15.0, 15.0, 9.0, 15.0, 24.0, 42.0, 60.0, 0.0, 0.0, 0.0)
+    cfg['aeApplyRammingImpulseToCom'] = APPLY_RAMMING_IMPULSE_TO_COM
+    cfg['aeRammingImpulseMultiplier'] = RAMMING_IMPULSE_MULTIPLIER
+    cfg['aeMaxRammingImpulse'] = RAMMING_MAX_IMPULSE
+    cfg['aeTankSphereRadius'] = TANK_SPHERE_RADIUS
+    cfg['aeTankSphereOffset'] = TANK_SPHERE_OFFSET
     if not physics.configure(cfg):
         LOG_ERROR('configureXPhysics: configure failed')
     comz = 0.0 if IS_CLIENT else physics.hullCOMZ
@@ -491,7 +526,7 @@ def applyRotationAndPowerFactors(cfg):
         LOG_CURRENT_EXCEPTION()
 
 
-def initVehiclePhysics(physics, typeDesc, forcedCfg, saveTransform):
+def initVehiclePhysics(physics, typeDesc, forcedCfg, saveTransform, aprilEvent=False):
     physDescr = typeDesc.physics
     useDetailedPhysics = g_vehiclePhysicsMode == VEHICLE_PHYSICS_MODE.DETAILED
     if IS_CELLAPP:
@@ -508,7 +543,9 @@ def initVehiclePhysics(physics, typeDesc, forcedCfg, saveTransform):
                 baseCfg = None
                 useSimplifiedGearbox = True
                 gravityFactor = 1.0
-            cfg = configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityFactor)
+            if aprilEvent:
+                gravityFactor = APRIL_EVENT_GRAVITY_FACTOR
+            cfg = configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityFactor, aprilEvent)
         if physics.detailedPhysicsEnabled != useDetailedPhysics:
             if saveTransform:
                 m = Math.Matrix(physics.matrix)

@@ -250,7 +250,7 @@ class SortiesCurfewController(BattleAvailabilityController):
             LOG_DEBUG('Sorties settings changed:', diff)
 
     def _getTimeStamp(self):
-        return time_utils.getServerRegionalTime()
+        return time_utils.getCurrentLocalServerTimestamp()
 
     def _calcStatus(self, hours=None):
         super(SortiesCurfewController, self)._calcStatus(hours)

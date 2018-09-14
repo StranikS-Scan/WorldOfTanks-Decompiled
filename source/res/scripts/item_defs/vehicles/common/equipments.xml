@@ -6,6 +6,7 @@
     <icon>	handExtinguishers 0 0	</icon>
     <price>	3000	</price>
     <tags>	extinguisher	</tags>
+    <vehicleFilter></vehicleFilter>
     <script>	Extinguisher	</script>
   </handExtinguishers>
   <autoExtinguishers>
@@ -16,6 +17,7 @@
     <price>	50	  <gold></gold>
     </price>
     <tags>	extinguisher	</tags>
+    <vehicleFilter></vehicleFilter>
     <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
       <autoactivate>	true	</autoactivate>
     </script>
@@ -27,6 +29,7 @@
     <icon>	smallMedkit 0 0	</icon>
     <price>	3000	</price>
     <tags>	medkit	</tags>
+    <vehicleFilter></vehicleFilter>
     <script>	Repairkit	  <repairAll>	false	</repairAll>
       <bonusValue>	0	</bonusValue>
     </script>
@@ -39,6 +42,7 @@
     <price>	50	  <gold></gold>
     </price>
     <tags>	medkit	</tags>
+    <vehicleFilter></vehicleFilter>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.30	</bonusValue>
     </script>
@@ -50,6 +54,7 @@
     <icon>	smallRepairkit 0 0	</icon>
     <price>	3000	</price>
     <tags>	repairkit	</tags>
+    <vehicleFilter></vehicleFilter>
     <script>	Repairkit	  <repairAll>	false	</repairAll>
       <bonusValue>	0	</bonusValue>
     </script>
@@ -62,6 +67,7 @@
     <price>	50	  <gold></gold>
     </price>
     <tags>	repairkit	</tags>
+    <vehicleFilter></vehicleFilter>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.1	</bonusValue>
     </script>
@@ -1259,4 +1265,33 @@
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
     </script>
   </bomber_fallout>
+  <artillery_moon>
+    <id>	103	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery 0 0	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+    <tags>	avatar trigger	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	Artillery	  <delay>	1.5	</delay>
+      <duration>	0.01	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <areaRadius>	40	</areaRadius>
+      <shellCompactDescr>	41226	</shellCompactDescr>
+      <piercingPower>	100 100	</piercingPower>
+      <reusable>	true	</reusable>
+      <cooldownTime>	60.0	</cooldownTime>
+      <deployTime>	60.0	</deployTime>
+      <areaVisual>	content/Interface/TargetPoint/TargetPoint_red.visual	</areaVisual>
+    </script>
+  </artillery_moon>
 </equipments.xml>

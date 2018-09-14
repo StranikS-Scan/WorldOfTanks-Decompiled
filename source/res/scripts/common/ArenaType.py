@@ -499,6 +499,8 @@ def __readGameplayPoints(section):
     aps = []
     rps = []
     rsps = []
+    artps = []
+    comps = []
     for name, value in section.items():
         if name == 'flagSpawnPoint':
             sps.append({'position': value.readVector3('position'),
@@ -527,11 +529,17 @@ def __readGameplayPoints(section):
              'reuseCount': value.readInt('reuseCount'),
              'team': value.readInt('team'),
              'guid': value.readString('guid')})
+        if name == 'artilleryStrikePoint':
+            artps.append({'position': value.readVector3('position')})
+        if name == 'compulsePoint':
+            comps.append({'position': value.readVector3('position')})
 
     cfg = {'flagSpawnPoints': sps,
      'flagAbsorptionPoints': aps,
      'repairPoints': rps,
-     'resourcePoints': rsps}
+     'resourcePoints': rsps,
+     'artilleryStrikePoints': artps,
+     'compulsePoints': comps}
     return cfg
 
 

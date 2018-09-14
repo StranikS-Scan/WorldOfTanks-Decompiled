@@ -80,7 +80,9 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         self.colorManager = ColorSchemeManager._ColorSchemeManager()
         self.colorManager.populateUI(weakref.proxy(self))
         self.__plugins = PluginsCollection(self)
-        plugins = {'equipments': _EquipmentsMarkerPlugin}
+        plugins = {}
+        if not arena_info.isEventBattle():
+            plugins['equipments'] = _EquipmentsMarkerPlugin
         if arena_info.hasFlags():
             plugins['flags'] = _FlagsMarkerPlugin
         if arena_info.hasRepairPoints():

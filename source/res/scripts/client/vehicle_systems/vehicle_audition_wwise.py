@@ -204,6 +204,8 @@ class EngineAuditionWWISE(EngineAudition):
             soundTrack.setRTPC('RTPC_ext_speed_abs', clamp(-10, 30, speed))
             soundEngine.setRTPC('RTPC_ext_speed_rel', clamp(-1.0, 1.0, self.detailedEngineState.relativeSpeed))
             soundTrack.setRTPC('RTPC_ext_speed_rel', clamp(-1.0, 1.0, self.detailedEngineState.relativeSpeed))
+            soundEngine.setRTPC('RTPC_ext_CelEv_speed_rel', clamp(-1.0, 1.0, self.detailedEngineState.relativeSpeed))
+            soundTrack.setRTPC('RTPC_ext_CelEv_speed_rel', clamp(-1.0, 1.0, self.detailedEngineState.relativeSpeed))
             soundEngine.setRTPC('RTPC_ext_speed_rel2', self.detailedEngineState.relativeSpeed)
             soundTrack.setRTPC('RTPC_ext_speed_rel2', self.detailedEngineState.relativeSpeed)
             soundEngine.setRTPC('RTPC_ext_rot_speed_abs', clamp(-1.0, 1.0, self.detailedEngineState.rotationSpeed))
@@ -316,6 +318,8 @@ class EngineAuditionWWISE(EngineAudition):
                 self.__commonTrackScroll += (trackScroll - self.__commonTrackScroll) * _PERIODIC_TIME / 0.2
                 soundTrack.setRTPC('RTPC_ext_speed_scroll', self.__commonTrackScroll)
                 soundEngine.setRTPC('RTPC_ext_speed_scroll', self.__commonTrackScroll)
+                soundTrack.setRTPC('RTPC_ext_CelEv_speed_scroll', self.__commonTrackScroll)
+                soundEngine.setRTPC('RTPC_ext_CelEv_speed_scroll', self.__commonTrackScroll)
             if self.__vt is not None:
                 if self.__physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
                     self.__vt.addValue2('RTPC_ext_gear_2', self.detailedEngineState.gear2)

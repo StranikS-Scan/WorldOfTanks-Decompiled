@@ -624,9 +624,9 @@ class _SoundEffectDescWWISE(_EffectDesc, object):
                     damage_size = 'SWITCH_ext_damage_size_medium'
                     if args.has_key('damageFactor'):
                         factor = args.get('damageFactor', 0.0)
-                        if factor < 3825.0 / 100.0:
+                        if factor < 4335.0 / 100.0:
                             damage_size = 'SWITCH_ext_damage_size_small'
-                        elif factor > 10200.0 / 100.0:
+                        elif factor > 8925.0 / 100.0:
                             damage_size = 'SWITCH_ext_damage_size_large'
                     sound.setSwitch('SWITCH_ext_damage_size', damage_size)
                     sound.play()

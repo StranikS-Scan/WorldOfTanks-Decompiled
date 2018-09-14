@@ -417,6 +417,12 @@ class INGAME_GUI(object):
     TABSTATSHINT = '#ingame_gui:tabStatsHint'
     REPAIRPOINT_TITLE = '#ingame_gui:repairPoint/title'
     REPAIRPOINT_UNAVAILABLE = '#ingame_gui:repairPoint/unavailable'
+    EVENT_RANDOM = '#ingame_gui:event/random'
+    EVENT_BOUNCE = '#ingame_gui:event/bounce'
+    EVENT_ARTILLERY = '#ingame_gui:event/artillery'
+    EVENT_IMPULSE = '#ingame_gui:event/impulse'
+    EVENT_SLIDE = '#ingame_gui:event/slide'
+    EVENT_NOTHING = '#ingame_gui:event/nothing'
     CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
      CHAT_EXAMPLE_RELOADING_GUN,
      CHAT_EXAMPLE_RELOADING_CASSETTE,

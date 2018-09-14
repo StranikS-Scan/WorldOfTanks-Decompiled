@@ -42,6 +42,13 @@
         <value>	large_gas	</value>
       </constant>
     </constantsGroup>
+    <constantsGroup>
+      <name>	gas_april	</name>
+      <constant>
+        <name>	_fileDescriptor	</name>
+        <value>	gas_april	</value>
+      </constant>
+    </constantsGroup>
   </constants>
   <templates>
     <template>
@@ -246,5 +253,12 @@
         <constantsGroup>	gas_large	</constantsGroup>
       </selector>
     </gas_large>
+    <gas_april>
+      <selector>
+        <type>	template	</type>
+        <name>	Exhaust1	</name>
+        <constantsGroup>	gas_april	</constantsGroup>
+      </selector>
+    </gas_april>
   </effects>
 </exhaust_effects_np.xml>

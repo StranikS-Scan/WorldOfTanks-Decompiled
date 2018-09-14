@@ -162,6 +162,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_a
  (_AB.SINGLE, 'battleCitizen'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'WFC2014'): _CustomAchieveFactory.get(_as.WFC2014Achievement),
  (_AB.SINGLE, 'deathTrack'): _CustomAchieveFactory.get(_as.DeathTrackAchievement),
+ (_AB.SINGLE, 'moonSphere'): _CustomAchieveFactory.get(_as.MoonSphereAchievement),
  (_AB.SINGLE, 'aimer'): _CustomAchieveFactory.get(_as.AimerAchievement),
  (_AB.SINGLE, 'tankwomen'): _CustomAchieveFactory.get(_as.TankwomenAchievement),
  (_AB.SINGLE, 'operationWinter'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),

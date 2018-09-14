@@ -27,7 +27,7 @@
     <requiredVersion_91400>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	eu_0.9.14_1	</Default>
+      <Default>	ru_0.9.14_3	</Default>
     </requiredVersion_91400>
     <name>
       <Type>	STRING	</Type>
@@ -484,6 +484,11 @@
       <Arg>	INT32	</Arg>
       <Exposed></Exposed>
     </createSquadUnitMgr>
+    <createEventUnitMgr>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Exposed></Exposed>
+    </createEventUnitMgr>
     <joinSquadUnit>
       <Arg>	INT32	</Arg>
       <Arg>	MAILBOX	</Arg>

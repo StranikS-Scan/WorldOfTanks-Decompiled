@@ -125,6 +125,8 @@ class CombatEquipmentManager(object):
         if areaUID in self.__selectedAreas:
             return
         eq = vehicles.g_cache.equipments()[equipmentID]
+        if eq.name == 'artillery_moon':
+            time += 2.0
         if BattleReplay.isPlaying():
             BigWorld.callback(0.0, functools.partial(self.__showMarkerCallback, eq, pos, dir, time, areaUID))
         else:

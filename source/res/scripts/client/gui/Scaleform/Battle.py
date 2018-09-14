@@ -20,6 +20,7 @@ from gui.Scaleform.daapi.view.battle.respawn_view import RespawnViewPlugin
 from gui.Scaleform.daapi.view.battle.PlayersPanelsSwitcher import PlayersPanelsSwitcher
 from gui.Scaleform.daapi.view.battle.RadialMenu import RadialMenu
 from gui.Scaleform.daapi.view.battle.flag_notification import FlagNotificationPlugin
+from gui.Scaleform.daapi.view.battle.event_notification_panel import EventNotificationPlugin
 from gui.Scaleform.daapi.view.battle.players_panel import playersPanelFactory
 from gui.Scaleform.daapi.view.battle.score_panel import scorePanelFactory
 from gui.Scaleform.daapi.view.battle.ConsumablesPanel import ConsumablesPanel
@@ -63,7 +64,7 @@ from gui.Scaleform.Minimap import Minimap
 from gui.Scaleform.CursorDelegator import g_cursorDelegator
 from gui.Scaleform.ingame_help import IngameHelp
 from gui.Scaleform import SCALEFORM_SWF_PATH
-from gui.battle_control.arena_info import getArenaIcon, hasFlags, hasRespawns, hasResourcePoints, isFalloutMultiTeam, hasRepairPoints, isFalloutBattle, hasGasAttack, isRandomBattle
+from gui.battle_control.arena_info import getArenaIcon, hasFlags, hasRespawns, hasResourcePoints, isFalloutMultiTeam, hasRepairPoints, isFalloutBattle, hasGasAttack, isRandomBattle, isEventBattle
 from gui.battle_control import avatar_getter
 
 def _isVehicleEntity(entity):
@@ -75,14 +76,14 @@ def _getQuestsTipData(arena, arenaDP):
     pqTipData = [None] * 3
     serverSettings = g_lobbyContext.getServerSettings()
     isPQEnabled = serverSettings is not None and serverSettings.isPotapovQuestEnabled()
-    if isPQEnabled and (arena.guiType == constants.ARENA_GUI_TYPE.RANDOM or arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and constants.IS_DEVELOPMENT or isFalloutBattle()):
-        vehInfo = arenaDP.getVehicleInfo(arenaDP.getPlayerVehicleID(forceUpdate=True))
-        if isFalloutBattle():
-            pQuests = vehInfo.player.getFalloutPotapovQuests()
-        else:
-            pQuests = vehInfo.player.getRandomPotapovQuests()
-        if len(pQuests):
-            quest = pQuests[0]
+    if isPQEnabled:
+        if arena.guiType == constants.ARENA_GUI_TYPE.RANDOM or arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and constants.IS_DEVELOPMENT or isFalloutBattle():
+            vehInfo = arenaDP.getVehicleInfo(arenaDP.getPlayerVehicleID(forceUpdate=True))
+            if isFalloutBattle():
+                pQuests = vehInfo.player.getFalloutPotapovQuests()
+            else:
+                pQuests = vehInfo.player.getRandomPotapovQuests()
+            quest = len(pQuests) and pQuests[0]
             pqTipData = [quest.getUserName(), _getQuestConditionsMessage(INGAME_GUI.POTAPOVQUESTS_TIP_MAINHEADER, quest.getUserMainCondition()), _getQuestConditionsMessage(INGAME_GUI.POTAPOVQUESTS_TIP_ADDITIONALHEADER, quest.getUserAddCondition())]
         else:
             pqTipData = [i18n.makeString(INGAME_GUI.POTAPOVQUESTS_TIP_NOQUESTS_BATTLETYPE if isFalloutBattle() else INGAME_GUI.POTAPOVQUESTS_TIP_NOQUESTS_VEHICLETYPE), None, None]
@@ -139,6 +140,8 @@ class Battle(BattleWindow):
         self.__arena = BigWorld.player().arena
         self.__plugins = PluginsCollection(self)
         plugins = {}
+        if isEventBattle(self.__arena):
+            plugins['eventNotificationPanel'] = EventNotificationPlugin
         if hasFlags():
             plugins['flagNotification'] = FlagNotificationPlugin
         if hasRepairPoints():
@@ -579,6 +582,7 @@ class Battle(BattleWindow):
             isVehicleAlive = getattr(player, 'isVehicleAlive', False)
         isVehicleOverturned = getattr(player, 'isVehicleOverturned', False)
         isNotTraining = self.__arena.guiType != constants.ARENA_GUI_TYPE.TRAINING
+        isNotEvent = self.__arena.guiType != constants.ARENA_GUI_TYPE.EVENT_BATTLES
         if not replayCtrl.isPlaying:
             if constants.IS_KOREA and gui.GUI_SETTINGS.igrEnabled and self.__arena is not None and isNotTraining:
                 vehicleID = getattr(player, 'playerVehicleID', -1)
@@ -589,9 +593,9 @@ class Battle(BattleWindow):
                 else:
                     LOG_ERROR("Player's vehicle not found", vehicleID)
             if canRespawn:
-                isDeserter = isVehicleAlive and isNotTraining
+                isDeserter = isVehicleAlive and isNotTraining and isNotEvent
             else:
-                isDeserter = isVehicleAlive and isNotTraining and not isVehicleOverturned
+                isDeserter = isVehicleAlive and isNotTraining and isNotEvent and not isVehicleOverturned
             if isDeserter:
                 resStr += '/deserter'
         else:
@@ -669,7 +673,10 @@ class Battle(BattleWindow):
             teamHasBase = 1 if isBaseExists(BigWorld.player().arenaTypeID, myTeamNumber) else 2
             if not isFalloutBattle():
                 typeEvent = 'normal'
-                winText = getBattleSubTypeWinText(BigWorld.player().arenaTypeID, teamHasBase)
+                if isEventBattle():
+                    winText = i18n.makeString('#arenas:type/event/description')
+                else:
+                    winText = getBattleSubTypeWinText(BigWorld.player().arenaTypeID, teamHasBase)
             else:
                 typeEvent = 'fallout'
                 if isFalloutMultiTeam():

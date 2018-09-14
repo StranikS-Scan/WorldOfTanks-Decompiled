@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/BattleRibbonsPanel.py
 from account_helpers.settings_core.settings_constants import GAME
 from gui.battle_control import g_sessionProvider, avatar_getter
+from gui.battle_control.arena_info import isEventBattle
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import i18n
 from debug_utils import LOG_ERROR
@@ -33,7 +34,7 @@ class BattleRibbonsPanel(object):
 
     def start(self):
         self.__flashObject = self.__ui.getMember('_level0.ribbonsPanel')
-        self.__enabled = bool(g_settingsCore.getSetting(GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS))
+        self.__enabled = bool(g_settingsCore.getSetting(GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS)) and not isEventBattle()
         if self.__flashObject:
             self.__flashObject.resync()
             self.__flashObject.script = self
@@ -108,5 +109,5 @@ class BattleRibbonsPanel(object):
     def __onSettingsChanged(self, diff):
         key = GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS
         if key in diff and self.__flashObject:
-            self.__enabled = bool(diff[key])
+            self.__enabled = bool(diff[key]) and not isEventBattle()
             self.__flashObject.setup(self.__enabled, _RIBBON_SOUNDS_ENABLED, *_POS_COEFF)

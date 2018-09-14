@@ -276,7 +276,7 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
         else:
             isRequired = falloutBattleType == QUEUE_TYPE.FALLOUT_MULTITEAM
             slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isRequired=isRequired)
-        if unit.isSquad() or unit.isFalloutSquad():
+        if unit.isSquad() or unit.isFalloutSquad() or unit.isEvent():
             playerStatus = getSquadPlayerStatus(slotState, player)
         else:
             playerStatus = getPlayerStatus(slotState, player)

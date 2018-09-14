@@ -25,7 +25,7 @@ from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.serializers import packTankman, packVehicle
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport
-from gui.shared import EVENT_BUS_SCOPE, events, g_itemsCache, REQ_CRITERIA
+from gui.shared import EVENT_BUS_SCOPE, events, g_itemsCache, REQ_CRITERIA as _RQ
 from account_helpers.settings_core.settings_constants import TUTORIAL
 
 class PersonalCase(PersonalCaseMeta, GlobalListener):
@@ -295,7 +295,7 @@ class PersonalCaseDataProvider(object):
         items = g_itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         nativeVehicleCD = tankman.vehicleNativeDescr.type.compactDescr
-        criteria = REQ_CRITERIA.NATIONS([tankman.nationID]) | REQ_CRITERIA.UNLOCKED
+        criteria = _RQ.NATIONS([tankman.nationID]) | _RQ.UNLOCKED | ~_RQ.VEHICLE.EVENT_BATTLE
         vData = items.getVehicles(criteria)
         tDescr = tankman.descriptor
         vehiclesData = vData.values()

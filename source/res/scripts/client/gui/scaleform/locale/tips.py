@@ -191,3 +191,6 @@ class TIPS(object):
     TIP178_FOLLOWTHERULES_RULES_100_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip178/followTheRules/rules/100_infinity/all/all/all/all'
     TIP179_BECAREFUL_SECURITY_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip179/beCareful/security/0_infinity/all/all/all/all'
     SANDBOX01 = '#tips:sandbox01'
+    SANDBOX02 = '#tips:sandbox02'
+    EVENTTITLE = '#tips:eventTitle'
+    EVENTMESSAGE = '#tips:eventMessage'

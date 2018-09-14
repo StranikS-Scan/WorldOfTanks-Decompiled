@@ -10,7 +10,7 @@ from gui.prb_control.functional import prequeue
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.prb_control.storage import prequeue_storage_getter
 
-class _EventBattlesEventsSubscriber(prequeue.PlayersEventsSubscriber):
+class EventBattlesEventsSubscriber(prequeue.PlayersEventsSubscriber):
 
     def subscribe(self, functional):
         g_playerEvents.onEnqueuedEventBattles += functional.onEnqueued
@@ -30,11 +30,7 @@ class _EventBattlesEventsSubscriber(prequeue.PlayersEventsSubscriber):
 class EventBattlesQueueFunctional(prequeue.AccountQueueFunctional):
 
     def __init__(self, flags=FUNCTIONAL_FLAG.EVENT_BATTLES):
-        super(EventBattlesQueueFunctional, self).__init__(QUEUE_TYPE.EVENT_BATTLES, _EventBattlesEventsSubscriber(), flags)
-
-    @prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)
-    def storage(self):
-        return None
+        super(EventBattlesQueueFunctional, self).__init__(QUEUE_TYPE.EVENT_BATTLES, EventBattlesEventsSubscriber(), flags)
 
     def isInQueue(self):
         return isInEventBattlesQueue()

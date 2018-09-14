@@ -542,6 +542,20 @@
 				</inscription>
 			</inscriptions>
 		</G92_VK7201>
+		<grandFinal>
+			<userString> #vehicle_customization:inscription/grandFinal </userString>
+			<notInShop> true </notInShop>
+			<priceFactor> 0.0 </priceFactor>
+			<allow> germany:G120_M41_90_GrandFinal </allow>
+				<inscriptions>
+					<inscription>
+						<id> 823 </id>
+						<texName> gui/maps/vehicles/decals/inscriptions/special/inscription_23.dds </texName>
+						<userString> #vehicle_customization:inscription/special/special_22 </userString>
+						<qualifier> main_skill_all_crew </qualifier>
+					</inscription>
+				</inscriptions>
+		</grandFinal>
 	</inscriptions>
 	<insigniaOnGun>
 		<!-- Properties for each insignia:
@@ -618,7 +632,7 @@
 			<id> 3 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 100 54 31 214 </c0>
 				<c1> 21 26 30 0 </c1>
@@ -742,6 +756,7 @@
 				<G118_VK4503> 1.5 1.5 0.000000 0.000000 </G118_VK4503>
 				<PzIII_AusfJ> 4.8 4.8 0.000000 0.04 </PzIII_AusfJ>
 				<G120_M41_90> 1.5 1.5 0.000000 0.19 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.5 1.5 0.000000 0.19 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 5.9 5.9 0.21 0.2 </G121_Grille_15_L63>
 			</tiling>
 		</Feldgrau>
@@ -753,7 +768,7 @@
 			<id> 4 </id>
 			<kind> winter </kind>
 			<group> winter </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 7 38 54 0 </c0>
 				<c1> 21 26 30 187 </c1>
@@ -877,6 +892,7 @@
 				<G118_VK4503> 1 1 0.06 0.18 </G118_VK4503>
 				<PzIII_AusfJ> 4 4 0.46 0.41 </PzIII_AusfJ>
 				<G120_M41_90> 1.9 1.9 0.2 0.13 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.9 1.9 0.2 0.13 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 9.5 9.5 0.41 0.57 </G121_Grille_15_L63>
 			</tiling>
 		</WhiteDiagonal>
@@ -888,7 +904,7 @@
 			<id> 5 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 198 108 66 0 </c0>
 				<c1> 161 148 69 204 </c1>
@@ -1010,6 +1026,7 @@
 				<G118_VK4503> 1 1 0.000000 0.16 </G118_VK4503>
 				<PzIII_AusfJ> 4.2 4.2 0.16 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 1.7 1.7 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.7 1.7 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 5.9 5.9 0.2 0.2 </G121_Grille_15_L63>
 			</tiling>
 		</YellowBacillus>
@@ -1021,7 +1038,7 @@
 			<id> 6 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 51 26 19 220 </c0>
 				<c1> 44 59 38 216 </c1>
@@ -1144,6 +1161,7 @@
 				<G116_Turan_III_prot> 1.4 1.4 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 4.8 4.8 0.000000 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 1.8 1.8 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.8 1.8 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 6.3 6.3 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
 		</SnowOnSpots>
@@ -1155,7 +1173,7 @@
 			<id> 7 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 51 26 19 193 </c0>
 				<c1> 44 59 38 217 </c1>
@@ -1278,6 +1296,7 @@
 				<G116_Turan_III_prot> 1.5 1.5 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 4.3 4.3 0.32 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 2 2 0.61 0.76 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2 2 0.61 0.76 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 7.3 7.3 0.05 0.39 </G121_Grille_15_L63>
 			</tiling>
 		</SnowOnBands>
@@ -1289,7 +1308,7 @@
 			<id> 8 </id>
 			<kind> desert </kind>
 			<group> desert </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 193 228 247 0 </c0>
 				<c1> 85 21 22 187 </c1>
@@ -1411,6 +1430,7 @@
 				<G116_Turan_III_prot> 1.3 1.3 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 5 5 0.000000 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 2.1 2.1 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.1 2.1 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 9.7 9.7 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
 		</RedClouds>
@@ -1422,7 +1442,7 @@
 			<id> 9 </id>
 			<kind> desert </kind>
 			<group> desert </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 21 26 30 220 </c0>
 				<c1> 207 175 128 190 </c1>
@@ -1545,6 +1565,7 @@
 				<G119_Panzer58> 2.8 2.8 0.000000 0.000000 </G119_Panzer58>
 				<G121_Grille_15_L63> 6.7 6.7 0.2 0.2 </G121_Grille_15_L63>
 				<G120_M41_90> 1.5 1.5 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.5 1.5 0.000000 0.000000 </G120_M41_90_GrandFinal>
 			</tiling>
 		</GrayZigzag>
 		<Honeycomb>
@@ -1555,7 +1576,7 @@
 			<id> 10 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 161 148 69 199 </c0>
 				<c1> 51 26 19 225 </c1>
@@ -1678,6 +1699,7 @@
 				<G116_Turan_III_prot> 1.3 1.3 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 3.8 3.8 0.000000 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 1.5 1.5 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.5 1.5 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 6.1 6.1 0.000000 0.4 </G121_Grille_15_L63>
 			</tiling>
 		</Honeycomb>
@@ -1689,7 +1711,7 @@
 			<id> 25 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 0 0 0 201 </c0>
 				<c1> 32 32 32 176 </c1>
@@ -1809,6 +1831,7 @@
 				<PzIII_AusfJ> 3 3 0.14 0.000000 </PzIII_AusfJ>
 				<G119_Panzer58> 3 3 0.000000 0.000000 </G119_Panzer58>
 				<G120_M41_90> 2.1 2.1 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.1 2.1 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 5.4 5.4 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
 			<notInShop> true </notInShop>
@@ -1821,7 +1844,7 @@
 			<id> 26 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 238 218 72 157 </c0>
 				<c1> 218 188 16 123 </c1>
@@ -1942,6 +1965,7 @@
 				<PzIII_AusfJ> 3 3 0.14 0.000000 </PzIII_AusfJ>
 				<G119_Panzer58> 2.8 2.8 0.000000 0.000000 </G119_Panzer58>
 				<G120_M41_90> 1.9 1.9 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.9 1.9 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 5.4 5.4 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
 			<notInShop> true </notInShop>
@@ -1954,7 +1978,7 @@
 			<id> 27 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 91 0 0 218 </c0>
 				<c1> 115 13 13 142 </c1>
@@ -2075,6 +2099,7 @@
 				<PzIII_AusfJ> 3 3 0.12 0.000000 </PzIII_AusfJ>
 				<G119_Panzer58> 2.6 2.6 0.000000 0.000000 </G119_Panzer58>
 				<G120_M41_90> 2 2 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2 2 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 5.4 5.4 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
 			<notInShop> true </notInShop>
@@ -2087,7 +2112,7 @@
 			<id> 28 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 58 58 58 235 </c0>
 				<c1> 144 144 144 179 </c1>
@@ -2208,6 +2233,7 @@
 				<PzIII_AusfJ> 3 3 0.12 0.000000 </PzIII_AusfJ>
 				<G119_Panzer58> 2.1 2.1 0.000000 0.000000 </G119_Panzer58>
 				<G120_M41_90> 2.2 2.2 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.2 2.2 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 5.4 5.4 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
 			<notInShop> true </notInShop>
@@ -2220,7 +2246,7 @@
 			<id> 29 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 44 59 38 232 </c0>
 				<c1> 85 21 22 177 </c1>
@@ -2343,6 +2369,7 @@
 				<G116_Turan_III_prot> 2.4 2.4 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 6.4 6.4 0.000000 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 2.2 2.2 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.2 2.2 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 11 11 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
 		</Branch>
@@ -2354,7 +2381,7 @@
 			<id> 40 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 161 148 69 149 </c0>
 				<c1> 85 21 22 219 </c1>
@@ -2478,6 +2505,7 @@
 				<G116_Turan_III_prot> 1.2 1.2 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 5 5 0.06 0.46 </PzIII_AusfJ>
 				<G120_M41_90> 2.2 2.2 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.2 2.2 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 7.4 7.4 0.23 0.79 </G121_Grille_15_L63>
 			</tiling>
 		</Ragged_Patches>
@@ -2489,7 +2517,7 @@
 			<id> 43 </id>
 			<kind> desert </kind>
 			<group> desert </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 44 59 38 236 </c0>
 				<c1> 51 26 19 243 </c1>
@@ -2623,7 +2651,7 @@
 			<id> 44 </id>
 			<kind> winter </kind>
 			<group> winter </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 255 255 255 199 </c0>
 				<c1> 72 72 72 85 </c1>
@@ -2749,7 +2777,7 @@
 			<id> 59 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 55 63 67 144 </c0>
 				<c1> 21 26 30 188 </c1>
@@ -2873,6 +2901,7 @@
 				<G116_Turan_III_prot> 1.5 1.5 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 5.2 5.2 0.52 0.14 </PzIII_AusfJ>
 				<G120_M41_90> 1.5 1.5 0.36 0.18 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.5 1.5 0.36 0.18 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 9.8 9.8 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
 		</Dark_Spots>
@@ -2884,7 +2913,7 @@
 			<id> 58 </id>
 			<kind> desert </kind>
 			<group> desert </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 207 175 128 187 </c0>
 				<c1> 102 55 48 223 </c1>
@@ -3008,6 +3037,7 @@
 				<G116_Turan_III_prot> 2.3 2.3 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 4.8 4.8 0.000000 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 2.8 2.8 0.000000 0.11 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.8 2.8 0.000000 0.11 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 11 11 0.2 0.000000 </G121_Grille_15_L63>
 			</tiling>
 		</Diagonal_Stripes>
@@ -3019,7 +3049,7 @@
 			<id> 60 </id>
 			<kind> summer </kind>
 			<group> summer </group>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 44 59 38 162 </c0>
 				<c1> 161 148 69 157 </c1>
@@ -3142,6 +3172,7 @@
 				<PzIII_AusfJ> 3.2 3.2 0.000000 0.000000 </PzIII_AusfJ>
 				<G121_Grille_15_L63> 6.7 6.7 0.11 0.000000 </G121_Grille_15_L63>
 				<G120_M41_90> 1.6 1.6 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.6 1.6 0.000000 0.000000 </G120_M41_90_GrandFinal>
 			</tiling>
 		</Polylines>
 		<!--//BLOCK_BEGIN:KR_IGR_CAMOUFLAGES//-->
@@ -3277,9 +3308,10 @@
 				<G116_Turan_III_prot> 1.1 1.1 0.3 0.34 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 3 3 0.000000 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 1.1 1.1 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.1 1.1 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 6.5 6.5 0.33 0.13 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<notInShop> false </notInShop>
 		</IGR_Winter>
 		<IGR_Summer>
@@ -3411,9 +3443,10 @@
 				<G116_Turan_III_prot> 1.2 1.2 0.000000 0.000000 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 4.4 4.4 0.3 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 1 1 0.35 0.23 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1 1 0.35 0.23 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 9 9 0.38 0.22 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<notInShop> false </notInShop>
 		</IGR_Summer>
 		<IGR_Desert>
@@ -3544,8 +3577,9 @@
 				<G119_Panzer58> 1.9 1.9 0.000000 0.000000 </G119_Panzer58>
 				<G121_Grille_15_L63> 6.1 6.1 0.11 0.15 </G121_Grille_15_L63>
 				<G120_M41_90> 1.7 1.7 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.7 1.7 0.000000 0.000000 </G120_M41_90_GrandFinal>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<notInShop> false </notInShop>
 		</IGR_Desert>
 		<IGR_K_Winter>
@@ -3679,9 +3713,10 @@
 				<G116_Turan_III_prot> 1.1 1.1 0.05 0.22 </G116_Turan_III_prot>
 				<PzIII_AusfJ> 5 5 0.000000 0.000000 </PzIII_AusfJ>
 				<G120_M41_90> 1.7 1.7 0.21 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.7 1.7 0.21 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 8.7 8.7 0.27 0.2 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<notInShop> false </notInShop>
 		</IGR_K_Winter>
 		<IGR_K_Desert>
@@ -3810,9 +3845,10 @@
 				<PzIII_AusfJ> 3.8 3.8 0.000000 0.000000 </PzIII_AusfJ>
 				<G119_Panzer58> 3.1 3.1 0.000000 0.000000 </G119_Panzer58>
 				<G120_M41_90> 1.8 1.8 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.8 1.8 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 10.1 10.1 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<notInShop> false </notInShop>
 		</IGR_K_Desert>
 		<!-- -->
@@ -3949,7 +3985,7 @@
 				<G119_Panzer58> 1.9 1.9 0.000000 0.000000 </G119_Panzer58>
 				<G121_Grille_15_L63> 5.2 5.2 0.06 0.000000 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<notInShop> false </notInShop>
 		</IGR_Ch_Winter>
 		<IGR_Ch_Summer>
@@ -4081,8 +4117,9 @@
 				<G119_Panzer58> 2.2 2.2 0.000000 0.000000 </G119_Panzer58>
 				<G121_Grille_15_L63> 5.7 5.7 0.75 0.29 </G121_Grille_15_L63>
 				<G120_M41_90> 1.6 1.6 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.6 1.6 0.000000 0.000000 </G120_M41_90_GrandFinal>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<notInShop> false </notInShop>
 		</IGR_Ch_Summer>
 		<IGR_Ch_Desert>
@@ -4213,9 +4250,10 @@
 				<PzIII_AusfJ> 3.2 3.2 0.000000 0.000000 </PzIII_AusfJ>
 				<G119_Panzer58> 2.3 2.3 0.000000 0.000000 </G119_Panzer58>
 				<G120_M41_90> 1.7 1.7 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.7 1.7 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 10 10 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<notInShop> false </notInShop>
 		</IGR_Ch_Desert>
 		<!-- -->
@@ -4229,7 +4267,7 @@
 			<kind> desert </kind>
 			<group> desert </group>
 			<allow> PzVI </allow>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 0 0 0 9 </c0>
 				<c1> 159 132 60 179 </c1>
@@ -4292,7 +4330,7 @@
 			<id> 99 </id>
 			<group> summer </group>
 			<kind> summer </kind>
-			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz </deny>
+			<deny> G04_PzVI_Tiger_IA G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 			<colors>
 				<c0> 100 13 0 174 </c0>
 				<c1> 201 136 48 113 </c1>
@@ -4416,6 +4454,7 @@
 				<Ferdinand_IGR> 4 4 0.000000 0.000000 </Ferdinand_IGR>
 				<G121_Grille_15_L63> 6.7 6.7 0.000000 0.000000 </G121_Grille_15_L63>
 				<G120_M41_90> 2.2 2.2 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.2 2.2 0.000000 0.000000 </G120_M41_90_GrandFinal>
 			</tiling>
 		</Clan_camuflage_01>
 		<Clan_camuflage_02>
@@ -4545,9 +4584,10 @@
 				<G118_VK4503> 1.3 1.3 0.000000 0.000000 </G118_VK4503>
 				<PzIII_AusfJ> 3 3 0.000000 0.16 </PzIII_AusfJ>
 				<G120_M41_90> 1.6 1.6 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.6 1.6 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 4 4 0.64 0.61 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 		</Clan_camuflage_02>
 		<Clan_camuflage_03>
 			<texture> vehicles/french/Camouflage/Clan_camuflage_03.DDS </texture>
@@ -4676,8 +4716,9 @@
 				<PzIII_AusfJ> 2.6 2.6 0.000000 0.000000 </PzIII_AusfJ>
 				<G121_Grille_15_L63> 6.2 6.2 0.48 0.64 </G121_Grille_15_L63>
 				<G120_M41_90> 1.4 1.4 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 1.4 1.4 0.000000 0.000000 </G120_M41_90_GrandFinal>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 		</Clan_camuflage_03>
 		<Clan_camuflage_04>
 			<texture> vehicles/french/Camouflage/Clan_camuflage_04.DDS </texture>
@@ -4809,8 +4850,9 @@
 				<PzIII_AusfJ> 2.8 2.8 0.000000 0.000000 </PzIII_AusfJ>
 				<G121_Grille_15_L63> 6 6 0.38 0.16 </G121_Grille_15_L63>
 				<G120_M41_90> 2.2 2.2 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.2 2.2 0.000000 0.000000 </G120_M41_90_GrandFinal>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 		</Clan_camuflage_04>
 		<Cracked_ice>
 			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
@@ -4942,9 +4984,10 @@
 				<G119_Panzer58> 2.4 2.4 0.000000 0.000000 </G119_Panzer58>
 				<G92_VK7201> 3.1 3.1 0.000000 0.000000 </G92_VK7201>
 				<G120_M41_90> 2.2 2.2 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 2.2 2.2 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 7.6 7.6 0.52 0.55 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 		</Cracked_ice>
 		<Desert_camou>
 			<texture> vehicles/german/Camouflage/Desert_camo-05-3.dds </texture>
@@ -5079,9 +5122,10 @@
 				<G116_Turan_III_prot> 1.6 1.6 0.000000 0.000000 </G116_Turan_III_prot>
 				<G117_Toldi_III> 1.8 1.8 0.000000 0.000000 </G117_Toldi_III>
 				<G120_M41_90> 3.4 3.4 0.000000 0.000000 </G120_M41_90>
+				<G120_M41_90_GrandFinal> 3.4 3.4 0.000000 0.000000 </G120_M41_90_GrandFinal>
 				<G121_Grille_15_L63> 10.1 10.1 0.000000 0.000000 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 		</Desert_camou>
 		<summer_camo>
 			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
@@ -5212,7 +5256,7 @@
 				<G119_Panzer58> 2.5 2.5 0.000000 0.000000 </G119_Panzer58>
 				<G121_Grille_15_L63> 5.2 5.2 0.41 0.27 </G121_Grille_15_L63>
 			</tiling>
-			<deny> G119_Pz58_Mutz </deny>
+			<deny> G119_Pz58_Mutz G120_M41_90_GrandFinal </deny>
 		</summer_camo>
 		<Clan_damaged_G92_VK7201>
 			<texture> vehicles/german/Camouflage/Clan_damaged.dds </texture>
@@ -5238,6 +5282,7 @@
 				<G121_Grille_15_L63> 2.8 2.8 0.19 0.16 </G121_Grille_15_L63>
 				<G48_E-25> 1 1 0.4 0.000000 </G48_E-25>
 			</tiling>
+			<deny> G120_M41_90_GrandFinal </deny>
 		</Clan_damaged_G92_VK7201>
 		<Clan_damaged_G92_VK7201>
 			<texture> vehicles/german/Camouflage/Clan_damaged.dds </texture>
@@ -5258,6 +5303,7 @@
 			<tiling>
 				<G92_VK7201> 5 5 0.28 0.38 </G92_VK7201>
 			</tiling>
+			<deny> G120_M41_90_GrandFinal </deny>
 		</Clan_damaged_G92_VK7201>
 		<Clan_damaged_G92_VK7201>
 			<texture> vehicles/german/Camouflage/Clan_damaged.dds </texture>
@@ -5278,6 +5324,7 @@
 			<tiling>
 				<G92_VK7201> 5 5 0.28 0.38 </G92_VK7201>
 			</tiling>
+			<deny> G120_M41_90_GrandFinal </deny>
 		</Clan_damaged_G92_VK7201>
 	</camouflages>
 </root>

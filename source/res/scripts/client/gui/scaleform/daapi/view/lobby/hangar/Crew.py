@@ -80,7 +80,7 @@ class Crew(CrewMeta):
                      'active': skill.isEnable and skill.isActive})
 
                 newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
-                if newSkillsCount > 0:
+                if newSkillsCount > 0 and not vehicle.isOnlyForEventBattles:
                     skillsList.append({'buy': True,
                      'tankmanID': tankman.invID,
                      'level': lastNewSkillLvl})

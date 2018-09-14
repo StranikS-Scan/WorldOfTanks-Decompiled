@@ -261,7 +261,7 @@ class _EventsCache(object):
             return None
 
     def isEventEnabled(self):
-        return len(self.__getEventBattles()) > 0
+        return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0
 
     def isGasAttackEnabled(self):
         return len(self.__getGasAttack()) > 0

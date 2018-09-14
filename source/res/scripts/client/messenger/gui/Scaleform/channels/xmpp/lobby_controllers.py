@@ -7,6 +7,7 @@ from messenger.gui.Scaleform.channels._layout import _LobbyLayout
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
+from messenger.proto.xmpp.jid import makeContactJID
 from messenger.proto.xmpp.xmpp_constants import MESSAGE_LIMIT
 
 class _ChannelController(_LobbyLayout):
@@ -105,12 +106,15 @@ class ChatChannelController(_ChannelController):
         self.proto.messages.sendChatMessage(self._channel.getID(), message)
 
     def __onUserStatusUpdated(self, user):
-        member = None
         if not user.isCurrentPlayer():
-            member = self._channel.getMember(user.getJID())
-        if member is not None:
-            presence = user.getItem().getPresence()
-            member.update(status=presence)
+            if user.getProtoType() == PROTO_TYPE.XMPP:
+                uid = user.getJID()
+            else:
+                uid = makeContactJID(user.getID())
+            member = self._channel.getMember(uid)
+            if member is not None:
+                presence = user.getItem().getPresence()
+                member.update(status=presence)
         return
 
 

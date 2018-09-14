@@ -53,6 +53,9 @@ class RandomQueueFunctional(prequeue.AccountQueueFunctional):
         if name == PREBATTLE_ACTION_NAME.SQUAD:
             newEntry = unit.SquadEntry(accountsToInvite=action.accountsToInvite)
             isProcessed = True
+        elif name == PREBATTLE_ACTION_NAME.EVENT_SQUAD:
+            newEntry = unit.EventSquadEntry(accountsToInvite=action.accountsToInvite)
+            isProcessed = True
         elif name == PREBATTLE_ACTION_NAME.RANDOM_QUEUE:
             isProcessed = True
         return SelectResult(isProcessed, newEntry)

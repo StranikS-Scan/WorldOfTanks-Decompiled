@@ -127,3 +127,12 @@ class IArenaRespawnController(IArenaController):
 
     def updateRespawnRessurectedInfo(self, respawnInfo):
         pass
+
+
+class IArenaFirstOfAprilController(IArenaController):
+
+    def getCtrlScope(self):
+        return _SCOPE.FIRST_OF_APRIL
+
+    def processAction(self, actionID, actionTime):
+        pass

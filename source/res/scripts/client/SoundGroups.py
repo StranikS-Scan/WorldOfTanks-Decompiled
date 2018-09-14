@@ -532,12 +532,16 @@ class SoundGroups(object):
         banks = ''
         if settings is not None:
             banks = settings.asString
+        settings = ResMgr.openSection('scripts/arena_defs/' + arenaName + '.xml/unloadSoundBanks')
+        unloadBanks = ''
+        if settings is not None:
+            unloadBanks = settings.asString
         from Account import PlayerAccount
         isHangar = isinstance(BigWorld.player(), PlayerAccount)
         if isHangar:
-            WWISE.WG_loadBanks(self.defaultGroupList + ';' + banks, True)
+            WWISE.WG_loadBanks(self.defaultGroupList + ';' + banks, unloadBanks, True)
         else:
-            WWISE.WG_loadBanks(banks, False)
+            WWISE.WG_loadBanks(banks, unloadBanks, False)
         import MusicController
         MusicController.g_musicController.init(arenaName)
         return

@@ -8,6 +8,7 @@ from BruteForceAchievement import BruteForceAchievement
 from ConquerorAchievement import ConquerorAchievement
 from CrucialShotAchievement import CrucialShotAchievement
 from DeathTrackAchievement import DeathTrackAchievement
+from MoonSphereAchievement import MoonSphereAchievement
 from DiehardAchievement import DiehardAchievement
 from FightingReconnaissanceAchievement import FightingReconnaissanceAchievement
 from FireAndSteelAchievement import FireAndSteelAchievement

@@ -23,6 +23,7 @@ class MINICLIENT(object):
     BUY_VEHICLE_TITLE = '#miniclient:buy_vehicle/title'
     BUY_VEHICLE_MESSAGE = '#miniclient:buy_vehicle/message'
     INVITATION_NOTE_SQUAD = '#miniclient:invitation/note/SQUAD'
+    INVITATION_NOTE_EVENT = '#miniclient:invitation/note/EVENT'
     INVITATION_NOTE_FALLOUT = '#miniclient:invitation/note/FALLOUT'
     INVITATION_NOTE_TRAINING = '#miniclient:invitation/note/TRAINING'
     INVITATION_NOTE_COMPANY = '#miniclient:invitation/note/COMPANY'

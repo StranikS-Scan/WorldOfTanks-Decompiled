@@ -126,6 +126,7 @@
     <_130mm_S-70_fallout>	205	</_130mm_S-70_fallout>
     <_37mm_Gochkins_bot>	209	</_37mm_Gochkins_bot>
     <_37mm_B-3_bot>	210	</_37mm_B-3_bot>
+    <R00_Sfera_Gun>	211	</R00_Sfera_Gun>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
     <_100mm_LB-1_IGR>	60002	</_100mm_LB-1_IGR>
     <_122mm_BL-9_IGR>	60003	</_122mm_BL-9_IGR>
@@ -7066,6 +7067,49 @@
         </_45mm_UOF-240A>
       </shots>
     </Gun_T-50-2>
+    <R00_Sfera_Gun>
+      <userString>	#ussr_vehicles:R00_Sfera_Gun	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.32	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	shot_april	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	3.0	</reloadTime>
+      <maxAmmo>	84	</maxAmmo>
+      <aimingTime>	1.2	</aimingTime>
+      <weight>	250	</weight>
+      <maxHealth>	680	</maxHealth>
+      <maxRegenHealth>	340	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <shotDispersionRadius>	0.3	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <R00_Sfera_AP>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	757	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	51 38	</piercingPower>
+        </R00_Sfera_AP>
+      </shots>
+    </R00_Sfera_Gun>
     <Observer>
       <userString>	#ussr_vehicles:_37mm_Gochkins	</userString>
       <tags></tags>

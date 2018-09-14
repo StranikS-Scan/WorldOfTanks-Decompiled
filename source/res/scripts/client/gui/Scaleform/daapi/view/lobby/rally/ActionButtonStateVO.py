@@ -108,6 +108,8 @@ class ActionButtonStateVO(dict):
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_NOTINSLOT
         elif self.__restrictionType == UNIT_RESTRICTION.VEHICLE_NOT_VALID:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_VEHICLENOTVALID
+        elif self.__restrictionType == UNIT_RESTRICTION.VEHICLE_WRONG_MODE:
+            return '#tooltips:cyberSport/unit/fightBtn/vehicleWrongMode'
         elif self.__isEnabled and not self._playerInfo.isReady:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_PRESSFORREADY
         elif self.__isEnabled and self._playerInfo.isReady:

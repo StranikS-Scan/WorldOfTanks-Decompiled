@@ -37,6 +37,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
 
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
+        self.__isMoonVehicle = False
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
         self.__falloutCtrl = getFalloutCtrl()
         self.__falloutCtrl.onSettingsChanged += self._updateFalloutSettings
@@ -62,6 +63,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
             money = g_itemsCache.items.stats.money
             exchangeRate = g_itemsCache.items.shop.exchangeRate
             vehicle = g_currentVehicle.item
+            self.__isMoonVehicle = vehicle.isEvent
             self.as_setVehicleHasTurretS(vehicle.hasTurrets)
             devices = []
             for slotType in AmmunitionPanel.__FITTING_SLOTS:
@@ -159,6 +161,8 @@ class AmmunitionPanel(AmmunitionPanelMeta):
          'availableDevices': dp,
          'tooltip': '',
          'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_MODULE}
+        if self.__isMoonVehicle:
+            device.update({'isMoonEvent': slotType in (FITTING_TYPES.OPTIONAL_DEVICE, FITTING_TYPES.EQUIPMENT)})
         self.updateDeviceTooltip(device, slotType)
         seq.append(device)
 
@@ -166,10 +170,10 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         if device['selectedIndex'] == -1:
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
                 device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY
+                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY if not self.__isMoonVehicle else TOOLTIPS.HANGAR_AMMUNITION_MOONEVENT_DEVICE
             elif slotType == FITTING_TYPES.EQUIPMENT:
                 device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
+                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY if not self.__isMoonVehicle else TOOLTIPS.HANGAR_AMMUNITION_MOONEVENT_EQUIPMENT
             else:
                 LOG_ERROR('Wrong device state! Module cannot be unselected!')
         else:

@@ -46,8 +46,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setGoldFishEnabledS(self, isEnabled, playAnimation, tooltip, tooltipType):
         return self.flashObject.as_setGoldFishEnabled(isEnabled, playAnimation, tooltip, tooltipType) if self._isDAAPIInited() else None
 
-    def as_updateSquadS(self, isInSquad, tooltip, tooltipType):
-        return self.flashObject.as_updateSquad(isInSquad, tooltip, tooltipType) if self._isDAAPIInited() else None
+    def as_updateSquadS(self, isInSquad, tooltip, tooltipType, isEvent, icon):
+        return self.flashObject.as_updateSquad(isInSquad, tooltip, tooltipType, isEvent, icon) if self._isDAAPIInited() else None
 
     def as_nameResponseS(self, fullName, name, clan, isTeamKiller, isClan, hasNew, hasActiveBooster, tooltip, tooltipType):
         return self.flashObject.as_nameResponse(fullName, name, clan, isTeamKiller, isClan, hasNew, hasActiveBooster, tooltip, tooltipType) if self._isDAAPIInited() else None

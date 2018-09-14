@@ -80,7 +80,6 @@ UNKNOWN_VEHICLE_NAME_VALUE = '#ingame_gui:players_panel/unknown_vehicle'
 ARENA_TYPE = '#arenas:type/{0}/name'
 ARENA_SPECIAL_TYPE = '#menu:loading/battleTypes/{0}'
 VEHICLE_ICON_FILE = '../maps/icons/vehicle/{0}.png'
-VEHICLE_ICON_FALLOUT_FILE = '../maps/icons/vehicle/falloutBattleResults/{0}.png'
 VEHICLE_ICON_SMALL_FILE = '../maps/icons/vehicle/small/{0}.png'
 VEHICLE_NO_IMAGE_FILE_NAME = 'noImage'
 ARENA_SCREEN_FILE = '../maps/icons/map/stats/%s.png'
@@ -376,11 +375,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             vehicle = g_itemsCache.items.getItemByCD(vehicleCompDesc)
             vehicleName = vehicle.userName
             vehicleShortName = vehicle.shortUserName
-            nameReplaced = vehicle.name.replace(':', '-')
-            if vehicle.isEvent:
-                vehicleIcon = VEHICLE_ICON_FALLOUT_FILE.format(nameReplaced)
-            else:
-                vehicleIcon = vehicle.icon
+            vehicleIcon = vehicle.icon
             vehicleIconSmall = vehicle.iconSmall
             nation = vehicle.nationID
             vehicleBalanceWeight = vehicle.descriptor.balanceWeight
@@ -1348,7 +1343,10 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         isInfluencePointsAvailable = True
         teamResource = 0
         teamInfluence = 0
-        processSquads = bonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.FALLOUT_MULTITEAM, ARENA_BONUS_TYPE.FALLOUT_CLASSIC)
+        processSquads = bonusType in (ARENA_BONUS_TYPE.REGULAR,
+         ARENA_BONUS_TYPE.FALLOUT_MULTITEAM,
+         ARENA_BONUS_TYPE.FALLOUT_CLASSIC,
+         ARENA_BONUS_TYPE.EVENT_BATTLES)
         for pId, pInfo in playersData.iteritems():
             rawVehsData = self.dataProvider.getVehiclesData(pId)
 

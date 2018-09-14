@@ -147,7 +147,7 @@ class Vehicle(FittingItem, HasStrCD):
             if invDataTmp is not None:
                 invData = invDataTmp
             self.xp = proxy.stats.vehiclesXPs.get(self.intCD, self.xp)
-            if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles:
+            if not self.isOnlyForEventBattles and (proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles):
                 self.dailyXPFactor = proxy.shop.dailyXPFactor
             self.isElite = len(vehDescr.type.unlocksDescrs) == 0 or self.intCD in proxy.stats.eliteVehicles
             self.isFullyElite = self.isElite and len([ data for data in vehDescr.type.unlocksDescrs if data[1] not in proxy.stats.unlocks ]) == 0

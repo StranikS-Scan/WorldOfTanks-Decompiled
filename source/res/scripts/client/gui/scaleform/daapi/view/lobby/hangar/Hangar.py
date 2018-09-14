@@ -304,7 +304,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     def __updateState(self):
         state = g_currentVehicle.getViewState()
-        self.as_setCrewEnabledS(state.isCrewOpsEnabled())
+        self.as_setCrewEnabledS(state.isCrewOpsEnabled() and not g_currentVehicle.isOnlyForEventBattles())
         self.as_setCarouselEnabledS(not state.isLocked())
         if state.isOnlyForEventBattles():
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY))

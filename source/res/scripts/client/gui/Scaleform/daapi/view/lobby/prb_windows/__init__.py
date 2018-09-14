@@ -21,19 +21,21 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.prb_windows.CompanyRoomView import CompanyRoomView
     from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
     from gui.Scaleform.daapi.view.lobby.prb_windows.SquadPromoWindow import SquadPromoWindow
-    from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import SquadView, FalloutSquadView
-    from gui.Scaleform.daapi.view.lobby.prb_windows.squad_window import SquadWindow, FalloutSquadWindow
+    from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import SquadView, FalloutSquadView, EventSquadView
+    from gui.Scaleform.daapi.view.lobby.prb_windows.squad_window import SquadWindow, FalloutSquadWindow, EventSquadWindow
     from gui.Scaleform.daapi.view.lobby.prb_windows.SwitchPeripheryWindow import SwitchPeripheryWindow
     return (GroupedViewSettings(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, SendInvitesWindow, 'sendInvitesWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.AUTO_INVITE_WINDOW_PY, invite_windows.AutoInviteWindow, 'receivedInviteWindow.swf', ViewTypes.WINDOW, 'receivedInviteWindow', None, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.SQUAD_WINDOW_PY, SquadWindow, 'squadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.FALLOUT_SQUAD_WINDOW_PY, FalloutSquadWindow, 'squadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.FALLOUT_SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
+     GroupedViewSettings(PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY, EventSquadWindow, 'squadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.COMPANY_WINDOW_PY, CompanyMainWindow, 'companyMainWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.COMPANY_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, BattleSessionWindow, 'battleSessionWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY, BattleSessionList, 'battleSessionList.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(VIEW_ALIAS.SQUAD_PROMO_WINDOW, SquadPromoWindow, 'squadPromoWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW, SwitchPeripheryWindow, 'switchPeripheryWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(PREBATTLE_ALIASES.SQUAD_VIEW_PY, SquadView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY, EventSquadView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(PREBATTLE_ALIASES.FALLOUT_SQUAD_VIEW_PY, FalloutSquadView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(PREBATTLE_ALIASES.COMPANY_LIST_VIEW_PY, CompanyListView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(PREBATTLE_ALIASES.COMPANY_ROOM_VIEW_PY, CompanyRoomView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
@@ -47,6 +49,7 @@ class _PrbPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((PREBATTLE_ALIASES.SQUAD_WINDOW_PY, self.__showPrebattleWindow),
+         (PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY, self.__showPrebattleWindow),
          (PREBATTLE_ALIASES.FALLOUT_SQUAD_WINDOW_PY, self.__showPrebattleWindow),
          (PREBATTLE_ALIASES.COMPANY_WINDOW_PY, self.__showCompanyMainWindow),
          (PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, self.__showPrebattleWindow),

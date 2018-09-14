@@ -199,7 +199,7 @@ def getUnitPlayerNotification(key, pInfo):
 
 def makeEntityI18nKey(ctrlType, entityType, prefix):
     if ctrlType in (CTRL_ENTITY_TYPE.PREBATTLE, CTRL_ENTITY_TYPE.UNIT):
-        if entityType in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT):
+        if entityType in PREBATTLE_TYPE.SQUAD_PREBATTLES:
             name = 'squad'
         else:
             name = 'rally'

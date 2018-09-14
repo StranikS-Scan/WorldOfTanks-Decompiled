@@ -71,6 +71,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     RETRAIN_CREW = 'retrainCrewWindow'
     CREW_OPERATIONS_POPOVER = 'crewOperationsPopOver'
     BATTLE_TYPE_SELECT_POPOVER = 'battleTypeSelectPopover'
+    SQUAD_TYPE_SELECT_POPOVER = 'squadTypeSelectPopover'
     ACCOUNT_POPOVER = 'accountPopover'
     CAPTCHA_DIALOG = 'captchaDialog'
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'

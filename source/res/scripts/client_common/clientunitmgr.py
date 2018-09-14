@@ -97,6 +97,12 @@ class ClientUnitMgr(object):
         self.__account.base.createFalloutUnitMgr(requestID, queueType)
         return requestID
 
+    def createEventSquad(self):
+        requestID = self.__getNextRequestID()
+        LOG_DEBUG('unit.createEventUnitMgr', requestID)
+        self.__account.base.createEventUnitMgr(requestID, None)
+        return requestID
+
     def join(self, unitMgrID, unitIdx=1, vehInvID=0, slotIdx=UNIT_SLOT.REMOVE):
         requestID = self.__getNextRequestID()
         LOG_DEBUG('unit.joinUnit', requestID, unitMgrID, unitIdx, slotIdx)

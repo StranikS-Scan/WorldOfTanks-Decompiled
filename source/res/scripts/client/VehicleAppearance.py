@@ -724,7 +724,8 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
         return
 
     __SPORT_ACTIONS_CAMOUFLAGES = {'ussr:T62A_sport': (95, 94),
-     'usa:M24_Chaffee_GT': (82, 83)}
+     'usa:M24_Chaffee_GT': (82, 83),
+     'ussr:R00_Sfera': (None, 133)}
 
     def __getCamouflageParams(self, vehicle):
         vDesc = vehicle.typeDescriptor
@@ -732,8 +733,9 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
         if vehicleInfo is not None:
             camouflageIdPerTeam = VehicleAppearance.__SPORT_ACTIONS_CAMOUFLAGES.get(vDesc.name)
             if camouflageIdPerTeam is not None:
-                camouflageId = camouflageIdPerTeam[0] if vehicleInfo['team'] == 1 else camouflageIdPerTeam[1]
-                return (camouflageId, time.time(), 100.0)
+                camouflageId = camouflageIdPerTeam[0] if vehicleInfo['team'] == BigWorld.player().team else camouflageIdPerTeam[1]
+                if camouflageId is not None:
+                    return (camouflageId, time.time(), 100.0)
             camouflagePseudoname = vehicleInfo['events'].get('hunting', None)
             if camouflagePseudoname is not None:
                 camouflIdsByNation = {0: {'black': 29,

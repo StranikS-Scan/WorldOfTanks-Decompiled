@@ -2,6 +2,7 @@
   <Implements>
     <Interface>	VehicleAI	</Interface>
     <Interface>	TeamBase_Vehicle	</Interface>
+    <Interface>	FirstAprilVehicle	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -135,7 +136,7 @@
     </arenaTypeID>
     <arenaBonusType>
       <Type>	UINT8	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
+      <Flags>	CELL_PUBLIC	</Flags>
     </arenaBonusType>
     <tkillRating>
       <Type>	FLOAT	</Type>
@@ -322,6 +323,7 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	TUPLE	  <of>	FLOAT32	</of>
       </Arg>
+      <Arg>	VECTOR3	</Arg>
     </receiveShot>
     <receiveExplosion>
       <Arg>	ATTACKER_INFO	</Arg>

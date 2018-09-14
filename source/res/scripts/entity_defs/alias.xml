@@ -192,12 +192,13 @@
   </FALLOUT_QUEUE_INFO>
   <EVENT_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
-      <falloutClassic>
-        <Type>	FALLOUT_QUEUE_INFO	</Type>
-      </falloutClassic>
-      <falloutMultiTeam>
-        <Type>	FALLOUT_QUEUE_INFO	</Type>
-      </falloutMultiTeam>
+      <classes>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </classes>
+      <players>
+        <Type>	UINT32	</Type>
+      </players>
     </Properties>
   </EVENT_QUEUE_INFO>
   <PUBLIC_ARENA_INFO>	FIXED_DICT	  <Properties>

@@ -89,9 +89,17 @@ class SandboxTipsCriteria(_TipsCriteria):
         return _FoundTip(i18n.makeString('#tips:howToPlay'), i18n.makeString('#tips:%s' % sandbox), TIPS_IMAGE_SOURCE % sandbox)
 
 
+class EventTipsCriteria(_TipsCriteria):
+
+    def find(self):
+        return _FoundTip(i18n.makeString('#tips:eventTitle'), i18n.makeString('#tips:eventMessage'), TIPS_IMAGE_SOURCE % 'event')
+
+
 def getTipsCriteria(arena):
     if arena_info.isInSandboxBattle(arena):
         return SandboxTipsCriteria()
+    elif arena_info.isEventBattle(arena):
+        return EventTipsCriteria()
     else:
         return RandomTipsCriteria()
 

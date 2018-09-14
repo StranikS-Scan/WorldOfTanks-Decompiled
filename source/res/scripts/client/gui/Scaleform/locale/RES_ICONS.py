@@ -84,6 +84,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLELOADING_GROUPS_TECHPROBLEMS = MAPS_ICONS_BATTLELOADING_GROUPS + '/techProblems.png'
     MAPS_ICONS_BATTLELOADING_SELFTABLEBACKGROUND = '../maps/icons/battleLoading/selfTableBackground.png'
     MAPS_ICONS_BATTLELOADING_SELFTIPSBACKGROUND = '../maps/icons/battleLoading/selfTipsBackground.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_EVENT = MAPS_ICONS_BATTLELOADING_TIPS + '/event.png'
     MAPS_ICONS_BATTLELOADING_TIPS_SANDBOX01 = MAPS_ICONS_BATTLELOADING_TIPS + '/sandbox01.png'
     MAPS_ICONS_BATTLELOADING_TIPS_SANDBOX02 = MAPS_ICONS_BATTLELOADING_TIPS + '/sandbox02.png'
     MAPS_ICONS_BATTLELOADING_TIPS_TIP106 = MAPS_ICONS_BATTLELOADING_TIPS + '/tip106.png'
@@ -148,6 +149,8 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_4 = '../maps/icons/battleTypes/4.png'
     MAPS_ICONS_BATTLETYPES_40X40_BATTLETEACHING = '../maps/icons/battleTypes/40x40/battleTeaching.png'
     MAPS_ICONS_BATTLETYPES_40X40_COMPANYLIST = '../maps/icons/battleTypes/40x40/companyList.png'
+    MAPS_ICONS_BATTLETYPES_40X40_EVENT = '../maps/icons/battleTypes/40x40/event.png'
+    MAPS_ICONS_BATTLETYPES_40X40_EVENTSQUAD = '../maps/icons/battleTypes/40x40/eventSquad.png'
     MAPS_ICONS_BATTLETYPES_40X40_FALLOUT = '../maps/icons/battleTypes/40x40/fallout.png'
     MAPS_ICONS_BATTLETYPES_40X40_FALLOUT_CLASSIC = '../maps/icons/battleTypes/40x40/fallout_classic.png'
     MAPS_ICONS_BATTLETYPES_40X40_FALLOUT_MULTITEAM = '../maps/icons/battleTypes/40x40/fallout_multiteam.png'
@@ -163,6 +166,8 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_6 = '../maps/icons/battleTypes/6.png'
     MAPS_ICONS_BATTLETYPES_64X64_BATTLETEACHING = '../maps/icons/battleTypes/64x64/battleTeaching.png'
     MAPS_ICONS_BATTLETYPES_64X64_COMPANYLIST = '../maps/icons/battleTypes/64x64/companyList.png'
+    MAPS_ICONS_BATTLETYPES_64X64_EVENT = '../maps/icons/battleTypes/64x64/event.png'
+    MAPS_ICONS_BATTLETYPES_64X64_EVENTSQUAD = '../maps/icons/battleTypes/64x64/eventSquad.png'
     MAPS_ICONS_BATTLETYPES_64X64_FALLOUT = '../maps/icons/battleTypes/64x64/fallout.png'
     MAPS_ICONS_BATTLETYPES_64X64_FALLOUT_CLASSIC = '../maps/icons/battleTypes/64x64/fallout_classic.png'
     MAPS_ICONS_BATTLETYPES_64X64_FALLOUT_MULTITEAM = '../maps/icons/battleTypes/64x64/fallout_multiteam.png'
@@ -767,6 +772,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_DOSSIER_WINSBYCAPTURE40X32 = '../maps/icons/library/dossier/winsByCapture40x32.png'
     MAPS_ICONS_LIBRARY_DOT = '../maps/icons/library/dot.png'
     MAPS_ICONS_LIBRARY_ERRORICON = '../maps/icons/library/errorIcon.png'
+    MAPS_ICONS_LIBRARY_EVENT_VEH_CONTOUR = '../maps/icons/library/event_veh_contour.png'
     MAPS_ICONS_LIBRARY_FALLOUTVEHICLESALL = '../maps/icons/library/falloutVehiclesAll.png'
     MAPS_ICONS_LIBRARY_FLAKE = '../maps/icons/library/flake.png'
     MAPS_ICONS_LIBRARY_FORTBATTLEDEFENCEINVITEICON_1 = '../maps/icons/library/fortBattleDefenceInviteIcon-1.png'
@@ -881,6 +887,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_USERSTATUS_WOWP = '../maps/icons/library/userStatus/wowp.png'
     MAPS_ICONS_LIBRARY_USERSTATUS_WOWS = '../maps/icons/library/userStatus/wows.png'
     MAPS_ICONS_LIBRARY_USSR_OBSERVER = '../maps/icons/library/ussr-Observer.png'
+    MAPS_ICONS_LOBBY_EVENTPOPOVERBTNBG = '../maps/icons/lobby/eventPopoverBtnBG.png'
     MAPS_ICONS_LOBBY_FALLOUTBATTLESELECTORBG = '../maps/icons/lobby/falloutBattleSelectorBG.png'
     MAPS_ICONS_LOBBY_REPORT_BUG_BACKGROUND = '../maps/icons/lobby/report-bug-background.png'
     MAPS_ICONS_MESSENGER_CONTACTCONFIRMNEEDED = '../maps/icons/messenger/contactConfirmNeeded.png'
@@ -1099,7 +1106,8 @@ class RES_ICONS(object):
      MAPS_ICONS_ORDERS_SMALL_REQUISITION,
      MAPS_ICONS_ORDERS_SMALL_RESERVEROULETTE,
      MAPS_ICONS_ORDERS_SMALL_TACTICALTRAINING)
-    MAPS_ICONS_BATTLELOADING_TIPS_ENUM = (MAPS_ICONS_BATTLELOADING_TIPS_SANDBOX01,
+    MAPS_ICONS_BATTLELOADING_TIPS_ENUM = (MAPS_ICONS_BATTLELOADING_TIPS_EVENT,
+     MAPS_ICONS_BATTLELOADING_TIPS_SANDBOX01,
      MAPS_ICONS_BATTLELOADING_TIPS_SANDBOX02,
      MAPS_ICONS_BATTLELOADING_TIPS_TIP106,
      MAPS_ICONS_BATTLELOADING_TIPS_TIP107,

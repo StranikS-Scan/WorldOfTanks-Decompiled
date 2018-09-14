@@ -12,7 +12,7 @@ from gui import GUI_NATIONS, SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.RecruitWindowMeta import RecruitWindowMeta
 from gui.Scaleform.framework.entities.View import View
-from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared import g_itemsCache, REQ_CRITERIA as _RQ
 from gui.shared.utils import decorators
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.tankman import TankmanRecruit, TankmanEquip, TankmanRecruitAndEquip
@@ -119,7 +119,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getNationsCriteria(self):
-        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
+        return _RQ.UNLOCKED | ~_RQ.VEHICLE.OBSERVER
 
     def updateNationDropdown(self):
         vehsItems = g_itemsCache.items.getVehicles(self.__getNationsCriteria())
@@ -127,7 +127,7 @@ class RecruitWindow(RecruitWindowMeta):
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
         for name in GUI_NATIONS:
             nationIdx = nations.INDICES[name]
-            vehiclesAvailable = len(vehsItems.filter(REQ_CRITERIA.NATIONS([nationIdx]))) > 0
+            vehiclesAvailable = len(vehsItems.filter(_RQ.NATIONS([nationIdx]))) > 0
             if name in nations.AVAILABLE_NAMES and vehiclesAvailable:
                 data.append({'id': nationIdx,
                  'label': MENU.nations(name)})
@@ -136,7 +136,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getClassesCriteria(self, nationID):
-        return self.__getNationsCriteria() | REQ_CRITERIA.NATIONS([nationID])
+        return self.__getNationsCriteria() | _RQ.NATIONS([nationID])
 
     def updateVehicleClassDropdown(self, nationID):
         Waiting.show('updating')
@@ -157,7 +157,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getVehicleTypeCriteria(self, nationID, vclass):
-        return self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])
+        return self.__getClassesCriteria(nationID) | _RQ.VEHICLE.CLASSES([vclass]) | ~_RQ.VEHICLE.EVENT_BATTLE
 
     def updateVehicleTypeDropdown(self, nationID, vclass):
         Waiting.show('updating')
@@ -174,7 +174,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getRoleCriteria(self, nationID, vclass, typeID):
-        return self.__getVehicleTypeCriteria(nationID, vclass) | REQ_CRITERIA.INNATION_IDS([typeID])
+        return self.__getVehicleTypeCriteria(nationID, vclass) | _RQ.INNATION_IDS([typeID])
 
     def updateRoleDropdown(self, nationID, vclass, typeID):
         Waiting.show('updating')

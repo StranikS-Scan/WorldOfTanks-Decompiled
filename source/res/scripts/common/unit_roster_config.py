@@ -135,3 +135,11 @@ class SpecRoster(BaseUnitRoster):
     DEFAULT_SLOT_PACK = RosterSlot10().pack()
     MAX_UNIT_POINTS_SUM = 150
     LIMITS_TYPE = BaseUnitRosterLimits
+
+
+class EventRoster(BaseUnitRoster):
+    MAX_SLOTS = 3
+    MAX_EMPTY_SLOTS = 2
+    SLOT_TYPE = RosterSlot10
+    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits

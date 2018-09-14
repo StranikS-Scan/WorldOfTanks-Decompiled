@@ -476,6 +476,7 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_VEHICLE_LOCKED = '#system_messages:artefact_buy/vehicle_locked'
     ARTEFACT_BUY_INVALID_VEHICLE = '#system_messages:artefact_buy/invalid_vehicle'
     ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_buy/error_not_for_this_vehicle_type'
+    ARTEFACT_BUY_NOT_FOR_CURRENT_VEHICLE = '#system_messages:artefact_buy/not for current vehicle'
     SHELL_SELL_SUCCESS = '#system_messages:shell_sell/success'
     SHELL_SELL_INVALID_MODULE = '#system_messages:shell_sell/invalid_module'
     SHELL_SELL_SERVER_ERROR = '#system_messages:shell_sell/server_error'
@@ -739,6 +740,8 @@ class SYSTEM_MESSAGES(object):
     CLANS_REQUEST_ERRORS_CLAN_IS_FULL_ = '#system_messages:clans/request/errors/Clan is full'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY = '#system_messages:clans/request/errors/Account is in clan already'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN = '#system_messages:clans/request/errors/Account is not in clan'
+    CLANS_REQUEST_ERRORS_ACCOUNT_ALREADY_INVITED = '#system_messages:clans/request/errors/Account already invited'
+    CLANS_REQUEST_ERRORS_ACCOUNT_IN_COOLDOWN = '#system_messages:clans/request/errors/Account in cooldown'
     CLANS_REQUEST_ERRORS_RECRUITING_POLICY_MISMATCH = '#system_messages:clans/request/errors/Recruiting policy mismatch'
     CLANS_REQUEST_ERRORS_ACCOUNT_DOES_NOT_MEET_REQUIREMENTS = '#system_messages:clans/request/errors/Account does not meet requirements'
     CLANS_REQUEST_ERRORS_TOO_MANY_INVITES = '#system_messages:clans/request/errors/Too many invites'
@@ -1728,6 +1731,7 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_VEHICLE_LOCKED,
      ARTEFACT_BUY_INVALID_VEHICLE,
      ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
+     ARTEFACT_BUY_NOT_FOR_CURRENT_VEHICLE,
      SHELL_SELL_SUCCESS,
      SHELL_SELL_INVALID_MODULE,
      SHELL_SELL_SERVER_ERROR,
@@ -1991,6 +1995,8 @@ class SYSTEM_MESSAGES(object):
      CLANS_REQUEST_ERRORS_CLAN_IS_FULL_,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN,
+     CLANS_REQUEST_ERRORS_ACCOUNT_ALREADY_INVITED,
+     CLANS_REQUEST_ERRORS_ACCOUNT_IN_COOLDOWN,
      CLANS_REQUEST_ERRORS_RECRUITING_POLICY_MISMATCH,
      CLANS_REQUEST_ERRORS_ACCOUNT_DOES_NOT_MEET_REQUIREMENTS,
      CLANS_REQUEST_ERRORS_TOO_MANY_INVITES,

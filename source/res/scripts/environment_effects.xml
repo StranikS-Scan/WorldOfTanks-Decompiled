@@ -3086,6 +3086,374 @@
     </crow>
   </birds>
   <mapActivities>
+    <moon_trace_asteroid_01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/119_moon_kometa_trail.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	564.199707 332.139313 56.611534	</position>
+        <speed0>	300.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	306.153015 199.120789 185.156876	</position>
+        <speed0>	300.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-15.156000 48.209999 287.545990	</position>
+        <speed0>	300.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-37.229546 37.723843 291.440399	</position>
+        <speed0>	0.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </moon_trace_asteroid_01>
+    <moon_trace_asteroid_02>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/119_moon_kometa_trail.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	740.116882 190.686813 190.275528	</position>
+        <speed0>	300.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	196.252441 104.798637 259.239929	</position>
+        <speed0>	300.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-15.156000 48.209999 287.545990	</position>
+        <speed0>	300.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-37.337662 42.984612 290.942474	</position>
+        <speed0>	0.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </moon_trace_asteroid_02>
+    <moon_trace_asteroid_03>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/119_moon_kometa_trail.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	519.019897 511.535034 68.658020	</position>
+        <speed0>	300.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-15.156000 48.209999 287.545990	</position>
+        <speed0>	300.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	-33.738602 33.264969 292.684235	</position>
+        <speed0>	0.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </moon_trace_asteroid_03>
+    <moon_asteroid_explosion_01>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/119_moon_kometa_explosion.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	-32.219685 42.950287 295.810547	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-39.581902 43.071995 295.595795	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </moon_asteroid_explosion_01>
+    <moon_asteroid_explosion_sound_1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <effectName></effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName>	/hits/hits_fau2/hit_fau2	</soundName>
+        <wwsoundName>	sauron_expl	</wwsoundName>
+        <waveImpulse>
+          <start>	1.3	</start>
+          <end>	0.8	</end>
+          <count>	4	</count>
+          <time>	0.4	</time>
+        </waveImpulse>
+      </channel0>
+      <point>
+        <position>	-32.219685 42.950287 295.810547	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-39.581902 43.071995 295.595795	</position>
+        <speed0>	1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </moon_asteroid_explosion_sound_1>
+    <moon_orbita_steroid_01>
+      <channel0>
+        <modelName>	content/Environment/env_119_05_Stones/normal/lod0/env_119_05_Stones_vfx_01.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
+        <effectName></effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	718.450989 193.813995 243.916000	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	rotate	</animAction>
+      </point>
+      <point>
+        <position>	73.494003 277.799988 464.096008	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	rotate	</animAction>
+      </point>
+      <point>
+        <position>	-409.162994 283.209015 216.686005	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	rotate	</animAction>
+      </point>
+      <point>
+        <position>	-466.234985 -175.774994 -518.926025	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	rotate	</animAction>
+      </point>
+    </moon_orbita_steroid_01>
+    <moon_orbita_steroid_02>
+      <channel0>
+        <modelName>	content/Environment/env_119_05_Stones/normal/lod0/env_119_05_Stones_vfx_01.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	20.000000 0.000000	</alphaFadeDistances>
+        <effectName></effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <soundName></soundName>
+        <wwsoundName></wwsoundName>
+      </channel0>
+      <point>
+        <position>	-279.149109 74.579155 490.435150	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	rotate	</animAction>
+      </point>
+      <point>
+        <position>	54.699131 202.645569 -7.792677	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	rotate	</animAction>
+      </point>
+      <point>
+        <position>	437.281555 99.558395 -480.543335	</position>
+        <speed0>	80.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	rotate	</animAction>
+      </point>
+    </moon_orbita_steroid_02>
+    <moon_sc1_b1>
+      <channel0>
+        <modelName>	particles/mesh_particles/119_moon_pool/vfx_m_ship_b.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 200.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/119_moon_sc_laser_green_fast.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <wwsoundName>	firstApril_spaceship	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	596.920044 58.361404 -58.039932	</position>
+        <speed0>	200	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-9.047911 123.387276 -14.899741	</position>
+        <speed0>	150	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-606.055542 61.477558 36.917236	</position>
+        <speed0>	200	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </moon_sc1_b1>
+    <moon_sc1_r1>
+      <channel0>
+        <modelName>	particles/mesh_particles/119_moon_pool/vfx_m_ship_r.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 200.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/119_moon_sc_laser_red_fast.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <wwsoundName>	firstApril_spaceship	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-261.789948 79.565804 -492.133209	</position>
+        <speed0>	200	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-223.711227 134.810638 48.961002	</position>
+        <speed0>	150	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	242.158478 72.012199 487.768921	</position>
+        <speed0>	200	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </moon_sc1_r1>
+    <moon_sc2_b1>
+      <channel0>
+        <modelName>	particles/mesh_particles/119_moon_pool/vfx_m_ship_b.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 200.000000	</alphaFadeDistances>
+        <effectName></effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <wwsoundName>	firstApril_spaceship_no_weapon	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-284.360138 77.276611 514.923950	</position>
+        <speed0>	250	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	57.679001 139.733994 193.886993	</position>
+        <speed0>	250	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	rotate	</animAction>
+      </point>
+      <point>
+        <position>	195.614365 118.505646 -88.169899	</position>
+        <speed0>	250	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	317.449005 68.551971 -512.284302	</position>
+        <speed0>	250	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </moon_sc2_b1>
+    <moon_sc2_r1>
+      <channel0>
+        <modelName>	particles/mesh_particles/119_moon_pool/vfx_m_ship_r.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	100.000000 200.000000	</alphaFadeDistances>
+        <effectName>	particles/Environment/scenarios/119_moon_sc_laser_red_fast.xml	</effectName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <wwsoundName>	firstApril_spaceship	</wwsoundName>
+      </channel0>
+      <point>
+        <position>	-293.343750 77.276604 530.008667	</position>
+        <speed0>	250	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	22.069868 139.733978 172.740234	</position>
+        <speed0>	250	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	163.924683 118.505638 -106.516052	</position>
+        <speed0>	250	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	335.666199 68.551964 -578.491028	</position>
+        <speed0>	250	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </moon_sc2_r1>
     <airfield_curve>
       <channel0>
         <modelName>	content/Environment/env712_BF109G/normal/lod0/BF109G.model	</modelName>

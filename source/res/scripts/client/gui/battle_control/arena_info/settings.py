@@ -20,6 +20,7 @@ class ARENA_LISTENER_SCOPE(object):
     TEAMS_BASES = 4
     PERIOD = 8
     RESPAWN = 16
+    FIRST_OF_APRIL = 32
 
 
 class VEHICLE_STATUS(BitmaskHelper):

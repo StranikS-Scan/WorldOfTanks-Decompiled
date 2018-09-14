@@ -224,6 +224,8 @@ class BattleLoading(LobbySubView, BaseBattleLoadingMeta, IArenaVehiclesControlle
             allyTeamName, enemyTeamName = self._battleCtx.getTeamName(team), self._battleCtx.getTeamName(enemy)
             if self.__isFallout:
                 winText = i18n.makeString('#arenas:type/%s/description' % arenaSubType)
+            elif arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
+                winText = i18n.makeString('#arenas:type/event/description')
             else:
                 winText = getBattleSubTypeWinText(arenaTypeID, 1 if hasBase else 2)
             if descExtra:
@@ -258,7 +260,7 @@ class BattleLoading(LobbySubView, BaseBattleLoadingMeta, IArenaVehiclesControlle
 
     def __makeVisualTipVO(self, arenaDP, arena, tip=None):
         setting = g_settingsCore.options.getSetting(settings_constants.GAME.BATTLE_LOADING_INFO)
-        settingID = setting.getSettingID(isInSandbox=arena_info.isInSandboxBattle(arena), isFallout=arena_info.isFalloutBattle())
+        settingID = setting.getSettingID(isInSandbox=arena_info.isInSandboxBattle(arena), isFallout=arena_info.isFalloutBattle(arena), isEvent=arena_info.isEventBattle(arena))
         return {'settingID': settingID,
          'tipIcon': tip.icon if settingID == BattleLoadingTipSetting.OPTIONS.VISUAL else None,
          'arenaTypeID': arena_info.getArenaTypeID(),

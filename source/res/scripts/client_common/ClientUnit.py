@@ -195,6 +195,9 @@ class ClientUnit(UnitBase):
     def isClub(self):
         return self._prebattleTypeID == PREBATTLE_TYPE.CLUBS
 
+    def isEvent(self):
+        return self._prebattleTypeID == PREBATTLE_TYPE.EVENT
+
     def isRated(self):
         return self.isClub() and self.getExtra().isRatedBattle
 

@@ -5238,5 +5238,22 @@
 			</tiling>
 			<allow> R127_T44_100_P </allow>
 		</Custom_R127_T44_100_P_desert>
+		<sphere_enemy>
+			<texture> vehicles/russian/Camouflage/sphere_enemy.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<description/>
+			<notInShop> true </notInShop>
+			<isNew> true </isNew>
+			<invisibilityFactor> 1 </invisibilityFactor>
+			<id> 133 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 128 0 0 255 </c0>
+				<c1> 35 41 20 0 </c1>
+				<c2> 204 165 136 0 </c2>
+				<c3> 204 165 136 0 </c3>
+			</colors>
+		</sphere_enemy>
 	</camouflages>
 </root>

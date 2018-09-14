@@ -7,6 +7,7 @@ import contacts as _contacts
 import dynamic_squads as _dynamic_squads
 import promo_controller as _promo_controller
 import fallout_controller as _fallout_controller
+import event as _event
 from gui.miniclient.notifications import configure_pointcuts as _notifications_configure_pointcuts
 from lobby import configure_pointcuts as _configure_lobby_pointcuts
 from tech_tree import configure_pointcuts as _configure_tech_tree_pointcuts
@@ -37,6 +38,7 @@ def configure_state():
         _dynamic_squads.InviteReceivedMessagePointcut()
         _promo_controller.ShowPromoBrowserPointcut()
         _fallout_controller.InitFalloutPointcut()
+        _event.InitEventPointcut()
 
 
 def _get_config(content_type):

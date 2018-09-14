@@ -437,6 +437,17 @@
         <value>	6	</value>
       </constant>
     </constantsGroup>
+    <constantsGroup>
+      <name>	moon	</name>
+      <constant>
+        <name>	_fileDescriptor	</name>
+        <value>	large	</value>
+      </constant>
+      <constant>
+        <name>	_moonSlipMinStart	</name>
+        <value>	0.5	</value>
+      </constant>
+    </constantsGroup>
   </constants>
   <templates>
     <template>
@@ -2354,6 +2365,165 @@
       </selector>
     </template>
     <template>
+      <name>	Slip_moon	</name>
+      <selector>
+        <type>	discrete	</type>
+        <variable>	_isUnderWater	</variable>
+        <selector>
+          <key>	0	</key>
+          <type>	matkind	</type>
+          <variable>	_matkind	</variable>
+          <selector>
+            <key>	ground	</key>
+            <type>	discrete	</type>
+            <variable>	_direction	</variable>
+            <selector>
+              <key>	_const1	</key>
+              <type>	range	</type>
+              <variable>	_delta	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	range	</type>
+                <variable>	_speed	</variable>
+                <selector>
+                  <key>	-500	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                </selector>
+                <selector>
+                  <key>	-2	</key>
+                  <type>	union	</type>
+                </selector>
+                <selector>
+                  <key>	2	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_moonSlipMinStart	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/moon_dust/slip_trackrear.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+          <selector>
+            <key>	stone	</key>
+            <type>	discrete	</type>
+            <variable>	_direction	</variable>
+            <selector>
+              <key>	_const1	</key>
+              <type>	range	</type>
+              <variable>	_delta	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	range	</type>
+                <variable>	_speed	</variable>
+                <selector>
+                  <key>	-500	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                </selector>
+                <selector>
+                  <key>	-2	</key>
+                  <type>	union	</type>
+                </selector>
+                <selector>
+                  <key>	2	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_moonSlipMinStart	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/moon_dust/slip_trackrear.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+          <selector>
+            <key>	sand	</key>
+            <type>	discrete	</type>
+            <variable>	_direction	</variable>
+            <selector>
+              <key>	_const1	</key>
+              <type>	range	</type>
+              <variable>	_delta	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	range	</type>
+                <variable>	_speed	</variable>
+                <selector>
+                  <key>	-500	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                </selector>
+                <selector>
+                  <key>	-2	</key>
+                  <type>	union	</type>
+                </selector>
+                <selector>
+                  <key>	2	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+              <selector>
+                <key>	_moonSlipMinStart	</key>
+                <type>	union	</type>
+                <selector>
+                  <type>	effect	</type>
+                  <name>	particles/Tank/movement/moon_dust/slip_trackrear.xml	</name>
+                  <effectHP>	_TrackRear	</effectHP>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	1	</key>
+          <type>	union	</type>
+          <selector>
+            <type>	effect	</type>
+            <name>	particles/Tank/destruction/april_lava_fall.xml	</name>
+            <effectHP>	_TrackRear	</effectHP>
+          </selector>
+        </selector>
+      </selector>
+    </template>
+    <template>
       <name>	TrackEffect1	</name>
       <selector>
         <type>	union	</type>
@@ -2515,6 +2685,56 @@
         </selector>
       </selector>
     </template>
+    <template>
+      <name>	TrackEffect1_moon	</name>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	Slip_moon	</name>
+          <parameters>	_matkind:matkindR;
+				_direction:directionR;
+				_const1:1;
+				_delta:deltaR;
+				_speed:speed;
+				_isUnderWater:isUnderWater;
+				_TrackRear:HP_Track_RRear	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Slip_moon	</name>
+          <parameters>	_matkind:matkindL;
+				_direction:directionL;
+				_const1:1;
+				_delta:deltaL;
+				_speed:speed;
+				_isUnderWater:isUnderWater;
+				_TrackRear:HP_Track_LRear	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Slip_moon	</name>
+          <parameters>	_matkind:matkindR;
+				_direction:directionR;
+				_const1:-1;
+				_delta:deltaR;
+				_speed:speed;
+				_isUnderWater:isUnderWater;
+				_TrackRear:HP_Track_RFront	</parameters>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	Slip_moon	</name>
+          <parameters>	_matkind:matkindL;
+				_direction:directionL;
+				_const1:-1;
+				_delta:deltaL;
+				_speed:speed;
+				_isUnderWater:isUnderWater;
+				_TrackRear:HP_Track_LFront	</parameters>
+        </selector>
+      </selector>
+    </template>
   </templates>
   <effects>
     <default>
@@ -2545,5 +2765,12 @@
         <constantsGroup>	large	</constantsGroup>
       </selector>
     </largeTankMud>
+    <moonTankMud>
+      <selector>
+        <type>	template	</type>
+        <name>	TrackEffect1_moon	</name>
+        <constantsGroup>	moon	</constantsGroup>
+      </selector>
+    </moonTankMud>
   </effects>
 </trackslip_effects.xml>

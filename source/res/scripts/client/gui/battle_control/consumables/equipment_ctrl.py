@@ -12,7 +12,24 @@ from gui.shared.utils.decorators import ReprInjector
 from helpers import i18n
 from items import vehicles
 from shared_utils import findFirst, forEach
+import SoundGroups
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
+
+class EquipmentSound:
+    _soundMap = {251: 'battle_equipment_251',
+     507: 'battle_equipment_507',
+     1019: 'battle_equipment_1019',
+     763: 'battle_equipment_763',
+     1531: 'battle_equipment_1531',
+     1275: 'battle_equipment_1275'}
+
+    @staticmethod
+    def playSound(ID):
+        soundName = EquipmentSound._soundMap.get(ID, None)
+        if soundName is not None:
+            SoundGroups.g_instance.playSound2D(soundName)
+        return
+
 
 @ReprInjector.simple(('_tag', 'tag'), ('_quantity', 'quantity'), ('_stage', 'stage'), ('_prevStage', 'prevStage'), ('_timeRemaining', 'timeRemaining'))
 class _EquipmentItem(object):
@@ -69,6 +86,8 @@ class _EquipmentItem(object):
         return
 
     def update(self, quantity, stage, timeRemaining):
+        if quantity == 0 and self._quantity != quantity:
+            EquipmentSound.playSound(self._descriptor.compactDescr)
         self._quantity = quantity
         self._prevStage = self._stage
         self._stage = stage

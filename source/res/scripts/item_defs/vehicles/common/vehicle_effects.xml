@@ -2335,6 +2335,454 @@
       </effects>
     </variant1>
   </dominationLargeSubmersionDeath>
+  <aprilDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/april_1_Destruction.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_s	</sound>
+          <wwsound>	expl_fuel	</wwsound>
+          <wwsoundPC>	expl_fuel_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_fuel_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </aprilDestruction>
+  <aprilFlaming>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/smoke_dead_white_small.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_small	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_small	</soundNPC>
+          <wwsoundPC>	flaming_engine_small_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_small_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/smoke_dead_white_small.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_medium	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_medium	</soundNPC>
+          <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant2>
+  </aprilFlaming>
+  <aprilAmmoBayExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/april_1_Destruction.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_m	</sound>
+          <wwsound>	expl_ammo	</wwsound>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </aprilAmmoBayExplosion>
+  <aprilAmmoBayBurnOff>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/april_1_Destruction.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/burnup_ammo/burnup_ammo_s	</sound>
+          <wwsound>	expl_burnup_ammo	</wwsound>
+          <wwsoundPC>	expl_burnup_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_burnup_ammo_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </aprilAmmoBayBurnOff>
+  <aprilFuelExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/april_1_Destruction.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_s	</sound>
+          <wwsound>	expl_fuel	</wwsound>
+          <wwsoundPC>	expl_fuel_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_fuel_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </aprilFuelExplosion>
+  <aprilCrewDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/april_1_Destruction.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/crew_death/crew_death_s	</sound>
+          <wwsound>	expl_crew_death_s	</wwsound>
+          <wwsoundPC>	expl_crew_death_s_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_crew_death_s_NPC	</wwsoundNPC>
+        </sound>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_white_small.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+      </effects>
+    </variant1>
+  </aprilCrewDeath>
+  <aprilRammingDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/april_1_Destruction.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/ram_destr/ram_destr_s	</sound>
+          <wwsound>	expl_ram_death	</wwsound>
+          <wwsoundPC>	expl_ram_death_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ram_death_NPC	</wwsoundNPC>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </aprilRammingDestruction>
+  <aprilSubmersionDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/april_lava_death.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/submersion_death/tank_submersion_death	</sound>
+          <wwsound>	expl_submersion_death	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </aprilSubmersionDeath>
   <explosionCandle1>
     <variant1>
       <timeline>

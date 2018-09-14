@@ -46,7 +46,7 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
         return option
 
     def _addSquadInfo(self, options, isIgnored):
-        return super(UnitUserCMHandler, self)._addSquadInfo(options, isIgnored) if self.unitFunctional.getEntityType() not in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT) else options
+        return super(UnitUserCMHandler, self)._addSquadInfo(options, isIgnored) if self.unitFunctional.getEntityType() not in PREBATTLE_TYPE.SQUAD_PREBATTLES else options
 
     def _addPrebattleInfo(self, options, userCMInfo):
         if self.unitFunctional.getPermissions().canKick():

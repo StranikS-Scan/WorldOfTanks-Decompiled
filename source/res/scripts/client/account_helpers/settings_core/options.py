@@ -1435,8 +1435,8 @@ class BattleLoadingTipSetting(AccountDumpSetting):
         MINIMAP = 'minimap'
         TIPS_TYPES = (TEXT, VISUAL, MINIMAP)
 
-    def getSettingID(self, isInSandbox=False, isFallout=False):
-        if isInSandbox:
+    def getSettingID(self, isInSandbox=False, isFallout=False, isEvent=False):
+        if isInSandbox or isEvent:
             return self.OPTIONS.VISUAL
         settingID = self.OPTIONS.TIPS_TYPES[self._get()]
         if isFallout and settingID == BattleLoadingTipSetting.OPTIONS.VISUAL:

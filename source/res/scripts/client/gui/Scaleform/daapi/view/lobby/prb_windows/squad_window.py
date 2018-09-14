@@ -14,10 +14,6 @@ from gui.prb_control import settings
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 class SquadWindow(SquadWindowMeta):
 
-    def __init__(self, ctx=None):
-        super(SquadWindow, self).__init__()
-        self._isInvitesOpen = ctx.get('isInvitesOpen', False)
-
     def getPrbType(self):
         return PREBATTLE_TYPE.SQUAD
 
@@ -87,3 +83,16 @@ class FalloutSquadWindow(SquadWindow):
 
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.FALLOUT_SQUAD_VIEW_PY
+
+
+class EventSquadWindow(SquadWindow):
+
+    def _populate(self):
+        super(EventSquadWindow, self)._populate()
+        self.as_updateEventTitleS()
+
+    def getPrbType(self):
+        return PREBATTLE_TYPE.EVENT
+
+    def _getSquadViewAlias(self):
+        return PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY

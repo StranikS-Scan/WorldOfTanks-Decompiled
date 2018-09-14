@@ -322,7 +322,10 @@ class ArenaDataProvider(object):
         return
 
     def __findSquads(self, arenaGuiType):
-        if arenaGuiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.FALLOUT_CLASSIC, ARENA_GUI_TYPE.FALLOUT_MULTITEAM):
+        if arenaGuiType not in (ARENA_GUI_TYPE.RANDOM,
+         ARENA_GUI_TYPE.FALLOUT_CLASSIC,
+         ARENA_GUI_TYPE.FALLOUT_MULTITEAM,
+         ARENA_GUI_TYPE.EVENT_BATTLES):
             return
         for teamID in self.__prbStats:
             team = self.__prbStats[teamID]

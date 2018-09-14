@@ -20,7 +20,7 @@ from AvatarInputHandler import mathUtils
 from shared_utils import findFirst
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, FEEDBACK_EVENT_ID, NEUTRAL_TEAM
-from gui.battle_control.arena_info import isLowLevelBattle, hasFlags, hasRepairPoints, hasResourcePoints, isFalloutMultiTeam, hasGasAttack
+from gui.battle_control.arena_info import isLowLevelBattle, hasFlags, hasRepairPoints, hasResourcePoints, isFalloutMultiTeam, hasGasAttack, isEventBattle
 import SoundGroups
 from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from helpers.gui_utils import *
@@ -178,9 +178,10 @@ class Minimap(IDynSquadEntityClient):
         arena.onVehicleKilled += self.__onVehicleKilled
         arena.onVehicleAdded += self.__onVehicleAdded
         arena.onTeamKiller += self.__onTeamKiller
-        ctrl = g_sessionProvider.getEquipmentsCtrl()
-        if ctrl:
-            ctrl.onEquipmentMarkerShown += self.__onEquipmentMarkerShown
+        if not isEventBattle():
+            ctrl = g_sessionProvider.getEquipmentsCtrl()
+            if ctrl:
+                ctrl.onEquipmentMarkerShown += self.__onEquipmentMarkerShown
         ctrl = g_sessionProvider.getFeedback()
         if ctrl:
             ctrl.onMinimapVehicleAdded += self.__onMinimapVehicleAdded
@@ -498,9 +499,10 @@ class Minimap(IDynSquadEntityClient):
             self.__entrieMarkers = {}
             self.__cameraHandle = None
             self.__cameraMatrix = None
-            ctrl = g_sessionProvider.getEquipmentsCtrl()
-            if ctrl:
-                ctrl.onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
+            if not isEventBattle():
+                ctrl = g_sessionProvider.getEquipmentsCtrl()
+                if ctrl:
+                    ctrl.onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
             ctrl = g_sessionProvider.getFeedback()
             if ctrl:
                 ctrl.onMinimapVehicleAdded -= self.__onMinimapVehicleAdded

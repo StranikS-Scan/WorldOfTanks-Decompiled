@@ -17,7 +17,6 @@ from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getScaleformKey
 from gui.shared.utils.plugins import PluginsCollection, IPlugin
 from helpers import i18n
-import SoundGroups
 PANEL_MAX_LENGTH = 12
 AMMO_START_IDX = 0
 AMMO_END_IDX = 2
@@ -344,8 +343,6 @@ class ConsumablesPanel(object):
                 self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), quantity, currentTime, maxTime)
                 self.__updateOrderSlot(idx, item)
             else:
-                if quantity == 0:
-                    SoundGroups.g_instance.playSound2D('battle_equipment_%d' % intCD)
                 self.__flashObject.setItemTimeQuantityInSlot(idx, quantity, currentTime, maxTime)
                 self.onPopUpClosed()
         else:

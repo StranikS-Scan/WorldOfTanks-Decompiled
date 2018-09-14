@@ -14,6 +14,7 @@ _P_TYPE = PREBATTLE_TYPE
 _Q_TYPE = QUEUE_TYPE
 _C_TYPE = CTRL_ENTITY_TYPE
 _VIEW_SCOPES = {(_C_TYPE.UNIT, _P_TYPE.SQUAD): SimpleScope(PREBATTLE_ALIASES.SQUAD_VIEW_PY, VIEW_SCOPE),
+ (_C_TYPE.UNIT, _P_TYPE.EVENT): SimpleScope(PREBATTLE_ALIASES.SQUAD_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.UNIT, _P_TYPE.FALLOUT): SimpleScope(PREBATTLE_ALIASES.FALLOUT_SQUAD_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.PREBATTLE, _P_TYPE.COMPANY): SimpleScope(PREBATTLE_ALIASES.COMPANY_ROOM_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.UNIT, _P_TYPE.UNIT): SimpleScope(CYBER_SPORT_ALIASES.UNIT_VIEW_PY, VIEW_SCOPE),
@@ -91,7 +92,8 @@ _ENTITY_TO_ANOTHER_PREFIX = {(_C_TYPE.PREQUEUE, _Q_TYPE.RANDOMS): ('', 'goToAnot
  (_C_TYPE.UNIT, _P_TYPE.CLUBS): ('goToIntro', 'goToAnother'),
  (_C_TYPE.UNIT, _P_TYPE.SORTIE): ('goToIntro', 'goToAnother'),
  (_C_TYPE.UNIT, _P_TYPE.FORT_BATTLE): ('goToIntro', 'goToAnother'),
- (_C_TYPE.UNIT, _P_TYPE.SQUAD): ('goToSquad', 'goToSquad')}
+ (_C_TYPE.UNIT, _P_TYPE.SQUAD): ('goToSquad', 'goToSquad'),
+ (_C_TYPE.UNIT, _P_TYPE.EVENT): ('goToSquad', 'goToSquad')}
 _DEFAULT_CONFIRM = 'leave'
 
 def _createLeaveRallyMeta(unlockCtx, leftCtrlType, leftEntityType):
@@ -107,7 +109,8 @@ def _createLeaveRallyMeta(unlockCtx, leftCtrlType, leftEntityType):
     return RallyScopeConfirmDialogMeta(leftCtrlType, leftEntityType, prefix)
 
 
-_INTRO_TO_ANOTHER_PREFIX = {(_C_TYPE.UNIT, _P_TYPE.SQUAD): 'goToSquad'}
+_INTRO_TO_ANOTHER_PREFIX = {(_C_TYPE.UNIT, _P_TYPE.SQUAD): 'goToSquad',
+ (_C_TYPE.UNIT, _P_TYPE.EVENT): 'goToSquad'}
 
 def _createLeaveIntroMeta(unlockCtx, leftCtrlType, leftEntityType):
     key = (unlockCtx.getCtrlType(), unlockCtx.getEntityType())

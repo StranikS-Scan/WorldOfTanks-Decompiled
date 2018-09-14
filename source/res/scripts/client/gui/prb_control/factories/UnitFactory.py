@@ -13,9 +13,11 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG
 __all__ = ('UnitFactory',)
 _PAN = PREBATTLE_ACTION_NAME
 _SUPPORTED_ENTRY_BY_ACTION = {_PAN.SQUAD: (unit.SquadEntry, None),
+ _PAN.EVENT_SQUAD: (unit.EventSquadEntry, None),
  _PAN.UNIT: (unit.UnitIntro, (PREBATTLE_TYPE.UNIT,)),
  _PAN.FORT: (unit.UnitIntro, (PREBATTLE_TYPE.SORTIE,))}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: unit.SquadEntry,
+ PREBATTLE_TYPE.EVENT: unit.EventSquadEntry,
  PREBATTLE_TYPE.FALLOUT: unit.FalloutSquadEntry,
  PREBATTLE_TYPE.UNIT: unit.UnitEntry,
  PREBATTLE_TYPE.SORTIE: unit.UnitEntry,
@@ -69,6 +71,8 @@ class UnitFactory(ControlFactory):
                         flags |= FUNCTIONAL_FLAG.SWITCH
                     if entity.isSquad():
                         flags |= FUNCTIONAL_FLAG.SQUAD
+                    if entity.isEvent():
+                        flags |= FUNCTIONAL_FLAG.EVENT_BATTLES
                     if entity.isFalloutSquad():
                         flags |= FUNCTIONAL_FLAG.FALLOUT_SQUAD
                     ctx.removeFlags(FUNCTIONAL_FLAG.UNIT_BITMASK | FUNCTIONAL_FLAG.ACTIONS_BITMASK)

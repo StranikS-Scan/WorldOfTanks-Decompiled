@@ -32,7 +32,7 @@
     <requiredVersion_91910>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.19.1_1	</Default>
+      <Default>	ru_0.9.19.1_3	</Default>
     </requiredVersion_91910>
     <name>
       <Type>	STRING	</Type>
@@ -480,5 +480,6 @@
       <Exposed></Exposed>
     </cancelEntityCheckOut>
     <onBootcampAccountDestroyed></onBootcampAccountDestroyed>
+    <onGameSessionFinish></onGameSessionFinish>
   </BaseMethods>
 </Account.def>

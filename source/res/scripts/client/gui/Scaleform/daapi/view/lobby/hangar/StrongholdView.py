@@ -53,7 +53,8 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
             self.__browserId = yield self.browserCtrl.load(url=strongholdsTabUrl, useBrowserWindow=False, browserSize=(width, height), showBrowserCallback=self.__showBrowser)
             self.__browser = self.browserCtrl.getBrowser(self.__browserId)
             if self.__browser:
-                self.__browser.ignoreKeyEvents = True
+                self.__browser.allowRightClick = True
+                self.__browser.useSpecialKeys = False
             self.__updateSkipEscape()
         else:
             LOG_ERROR('Setting "StrongholdsTabUrl" missing!')
@@ -73,6 +74,7 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
     def __updateSkipEscape(self):
         if self.__browser is not None:
             self.__browser.skipEscape = not self.__hasFocus
+            self.__browser.ignoreKeyEvents = not self.__hasFocus
         return
 
     def __onError(self):

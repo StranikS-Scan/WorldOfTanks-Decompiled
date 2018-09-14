@@ -217,18 +217,17 @@ class Bootcamp(EventSystemEntity):
         isRelogin = ctx['relogin']
         LOG_DEBUG_DEV_BOOTCAMP('IsRelogin', isRelogin)
         if not BattleReplay.isPlaying():
-            if ctx['isNewbie'] and not ctx['completed'] and ctx['runCount'] == 1:
-                if not isRelogin:
-                    self.showActionWaitWindow()
-                    yield self.settingsCore.serverSettings.settingsCache.update()
-                    self.settingsCore.serverSettings.applySettings()
-                    self.hideActionWaitWindow()
-                self.__preferences = BootcampPreferences()
-                self.__preferences.setup()
-        if not BattleReplay.g_replayCtrl.isPlaying and not isRelogin:
-            eula = EULADispatcher()
-            yield eula.processLicense()
-            eula.fini()
+            if not isRelogin:
+                self.showActionWaitWindow()
+                yield self.settingsCore.serverSettings.settingsCache.update()
+                self.settingsCore.serverSettings.applySettings()
+                if ctx['isNewbie'] and not ctx['completed'] and ctx['runCount'] == 1:
+                    self.__preferences = BootcampPreferences()
+                    self.__preferences.setup()
+                self.hideActionWaitWindow()
+                eula = EULADispatcher()
+                yield eula.processLicense()
+                eula.fini()
         self.__running = True
         self.__lessonId = lessonNum
         self.__lessonType = BOOTCAMP_LESSON.BATTLE if isBattleLesson else BOOTCAMP_LESSON.GARAGE

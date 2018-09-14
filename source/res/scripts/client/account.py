@@ -1178,7 +1178,7 @@ class _AccountRepository(object):
         self.stats = Stats.Stats(self.syncData)
         self.questProgress = QuestProgress.QuestProgress(self.syncData)
         self.shop = Shop.Shop()
-        self.dossierCache = DossierCache.DossierCache(name)
+        self.dossierCache = DossierCache.DossierCache(name, className)
         self.battleResultsCache = BattleResultsCache.BattleResultsCache()
         self.prebattleAutoInvites = {}
         self.prebattleInvites = {}

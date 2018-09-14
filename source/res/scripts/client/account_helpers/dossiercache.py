@@ -12,13 +12,13 @@ from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 class DossierCache(object):
 
-    def __init__(self, accountName):
+    def __init__(self, accountName, accountClassName):
         self.__account = None
         self.__syncController = None
         p = os.path
         prefsFilePath = unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')
         self.__cacheDir = p.join(p.dirname(prefsFilePath), 'dossier_cache')
-        self.__cacheFileName = p.join(self.__cacheDir, '%s.dat' % base64.b32encode('%s;%s' % (str(BigWorld.server()), accountName)))
+        self.__cacheFileName = p.join(self.__cacheDir, '%s.dat' % base64.b32encode('%s;%s;%s' % (str(BigWorld.server()), accountName, accountClassName)))
         self.__cache = {}
         self.__maxChangeTime = 0
         self.__version = 0

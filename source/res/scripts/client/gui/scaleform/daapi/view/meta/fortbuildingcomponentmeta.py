@@ -12,8 +12,8 @@ class FortBuildingComponentMeta(DAAPIModule):
     def upgradeVisitedBuilding(self, uid):
         self._printOverrideError('upgradeVisitedBuilding')
 
-    def getBuildingTooltipData(self, uid):
-        self._printOverrideError('getBuildingTooltipData')
+    def requestBuildingToolTipData(self, uid, type):
+        self._printOverrideError('requestBuildingToolTipData')
 
     def as_setDataS(self, data):
         if self._isDAAPIInited():
@@ -22,6 +22,10 @@ class FortBuildingComponentMeta(DAAPIModule):
     def as_setBuildingDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setBuildingData(data)
+
+    def as_setBuildingToolTipDataS(self, uid, type, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setBuildingToolTipData(uid, type, value)
 
     def as_refreshTransportingS(self):
         if self._isDAAPIInited():

@@ -29,6 +29,9 @@ class IFortController(object):
     def getSortiesCache(self):
         return None
 
+    def getSortiesCurfewCtrl(self):
+        return None
+
     def getPublicInfoCache(self):
         return None
 

@@ -30,3 +30,7 @@ class TechTreeMeta(DAAPIModule):
     def as_setUnlockPropsS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setUnlockProps(data)
+
+    def as_showMiniClientInfoS(self, description, hyperlink):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showMiniClientInfo(description, hyperlink)

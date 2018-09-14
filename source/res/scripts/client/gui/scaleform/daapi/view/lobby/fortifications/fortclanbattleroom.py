@@ -5,6 +5,7 @@ from helpers import i18n, int2roman
 from UnitBase import UNIT_OP
 from adisp import process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE, FORT_BUILDING_TYPE, FORT_BUILDING_STATUS
+from shared_utils import findFirst, CONST_CONTAINER
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import rally_dps
@@ -12,7 +13,7 @@ from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButto
 from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
-from gui.Scaleform.framework.managers.TextManager import TextIcons, TextManager
+from gui.Scaleform.framework.managers.TextManager import TextManager
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -27,7 +28,7 @@ from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
-from gui.shared.utils import CONST_CONTAINER, findFirst
+from gui.shared.formatters import icons
 
 class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
@@ -79,7 +80,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if not vInfo.isEmpty():
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange())
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange(), isCreator=pInfo.isCreator(), isCurrentPlayer=pInfo.isCurrentPlayer())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = functional.getSlotState(slotIdx)
@@ -189,14 +190,14 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
             mapName = _getText(TEXT_MANAGER_STYLES.MAIN_TEXT, arenaType.name)
         else:
             mapName = ''
-        infoIcon = self.app.utilsManager.textManager.getIcon(TextIcons.INFO_ICON)
+        infoIcon = icons.info()
         result['headerDescr'] = _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_MAPTITLE, mapName=mapName) + ' ' + infoIcon)
         result['isOrdersBgVisible'] = bool(not unitPermissions.canChangeConsumables() and len(activeConsumes) and not canUseEquipments)
         result['mineClanName'] = g_clanCache.clanTag
         _, enemyClanAbbev, _ = self.__battle.getOpponentClanInfo()
         result['enemyClanName'] = '[%s]' % enemyClanAbbev
         if not canUseEquipments and unitPermissions.canChangeConsumables():
-            result['ordersDisabledMessage'] = TextManager.getIcon(TextIcons.ALERT_ICON) + ' ' + TextManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_ORDERSDISABLED))
+            result['ordersDisabledMessage'] = icons.alert() + ' ' + TextManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_ORDERSDISABLED))
             result['ordersDisabledTooltip'] = TOOLTIPS.FORTIFICATION_FORTCLANBATTLEROOM_ORDERSDISABLED_DIVISIONMISMATCH
         self.as_setBattleRoomDataS(result)
         return
@@ -308,12 +309,17 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
     def __makeBuildingData(self, buildingID, isAttack, level, isLooted, isAvailable):
         (curBuildingId, _, _), curBuildingIsAttack = self.__currentBuilding
-        return {'uid': self.getBuildingUIDbyID(buildingID),
+        fort = self.fortCtrl.getFort()
+        inProcess, _ = fort.getDefenceHourProcessing()
+        isDefenceOn = fort.isDefenceHourEnabled() or inProcess
+        uid = self.getBuildingUIDbyID(buildingID)
+        return {'uid': uid,
          'progress': self._getProgress(buildingID, level),
          'buildingLevel': level,
          'underAttack': curBuildingId == buildingID and curBuildingIsAttack == isAttack,
          'looted': isLooted,
-         'isAvailable': isAvailable}
+         'isAvailable': isAvailable,
+         'iconSource': FortViewHelper.getSmallIconSource(uid, level, isDefenceOn)}
 
     def __leaveOnError(self):
         SystemMessages.pushI18nMessage('#system_messages:fortification/fortBattleFinished', type=SystemMessages.SM_TYPE.Error)

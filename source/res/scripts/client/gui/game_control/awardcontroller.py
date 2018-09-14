@@ -3,20 +3,21 @@ import types
 import weakref
 from abc import ABCMeta, abstractmethod
 import ArenaType
+from ConnectionManager import connectionManager
 from goodies.goodie_constants import GOODIE_TARGET_TYPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.shared.economics import getPremiumCostActionPrc
-from gui.shared.utils import findFirst
 import potapov_quests
+from shared_utils import findFirst
 import gui.awards.event_dispatcher as shared_events
 from constants import EVENT_TYPE
 from helpers import i18n
 from chat_shared import SYS_MESSAGE_TYPE
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr
 from messenger.proto.events import g_messengerEvents
 from messenger.formatters import NCContextItemFormatter, TimeFormatter
@@ -91,6 +92,9 @@ class AwardController(Controller, GlobalListener):
     def onAvatarBecomePlayer(self):
         self.__isLobbyLoaded = False
 
+    def onDisconnected(self):
+        self.__isLobbyLoaded = False
+
     def onLobbyInited(self, *args):
         self.startGlobalListening()
         self.__isLobbyLoaded = True
@@ -157,7 +161,10 @@ class PunishWindowHandler(ServiceChannelHandler):
         _, message = ctx
         for dataForVehicle in message.data.values():
             arenaTypeID = dataForVehicle.get('arenaTypeID', 0)
-            arenaType = ArenaType.g_cache[arenaTypeID] if arenaTypeID > 0 else None
+            if arenaTypeID > 0 and arenaTypeID in ArenaType.g_cache:
+                arenaType = ArenaType.g_cache[arenaTypeID]
+            else:
+                arenaType = None
             arenaCreateTime = dataForVehicle.get('arenaCreateTime', None)
             fairplayViolations = dataForVehicle.get('fairplayViolations', None)
             if arenaCreateTime and arenaType and fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
@@ -556,6 +563,11 @@ class GoldFishHandler(AwardHandler):
 
     def init(self):
         self.handle()
+        connectionManager.onConnected += self.__onLogin
+
+    def fini(self):
+        super(GoldFishHandler, self).fini()
+        connectionManager.onConnected -= self.__onLogin
 
     def _needToShowAward(self, ctx):
         return True
@@ -563,3 +575,6 @@ class GoldFishHandler(AwardHandler):
     def _showAward(self, ctx):
         if isGoldFishActionActive() and isTimeToShowGoldFishPromo():
             g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GOLD_FISH_WINDOW))
+
+    def __onLogin(self):
+        self.handle()

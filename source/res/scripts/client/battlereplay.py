@@ -4,28 +4,34 @@ import os
 import datetime
 import json
 import copy
-import Math
 import cPickle as pickle
+import Math
+import BigWorld
 import ArenaType
 import Settings
 import CommandMapping
 import SoundGroups
 import constants
+import Keys
+import Event
 import AreaDestructibles
 import gui.SystemMessages
 import gui.Scaleform.CursorDelegator
-import Keys
-from gui.battle_control import g_sessionProvider
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from debug_utils import *
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
-from gui import DialogsInterface
-from messenger import MessengerEntry
-import Event
-from AvatarInputHandler.control_modes import VideoCameraControlMode
-from AvatarInputHandler.control_modes import CatControlMode
+
+def _isVideoCameraCtrl(mode):
+    from AvatarInputHandler.control_modes import VideoCameraControlMode
+    return isinstance(mode, VideoCameraControlMode)
+
+
+def _isCatCtrl(mode):
+    from AvatarInputHandler.control_modes import CatControlMode
+    return isinstance(mode, CatControlMode)
+
+
 g_replayCtrl = None
 REPLAY_FILE_EXTENSION = '.wotreplay'
 AUTO_RECORD_TEMP_FILENAME = 'temp'
@@ -110,6 +116,7 @@ class BattleReplay():
         gui.Scaleform.CursorDelegator.g_cursorDelegator.detachCursor()
         self.onCommandReceived = Event.Event()
         self.onAmmoSettingChanged = Event.Event()
+        self.onStopped = Event.Event()
         return
 
     @property
@@ -228,6 +235,7 @@ class BattleReplay():
         if not self.isPlaying and not self.isRecording:
             return False
         else:
+            self.onStopped()
             wasPlaying = self.isPlaying
             isOffline = self.__replayCtrl.isOfflinePlaybackMode
             self.__replayCtrl.stop(delete)
@@ -327,7 +335,7 @@ class BattleReplay():
         if key == Keys.KEY_C and isDown:
             self.__isChatPlaybackEnabled = not self.__isChatPlaybackEnabled
         playerControlMode = player.inputHandler.ctrl
-        isVideoCamera = isinstance(playerControlMode, VideoCameraControlMode) or isinstance(playerControlMode, CatControlMode)
+        isVideoCamera = _isVideoCameraCtrl(playerControlMode) or _isCatCtrl(playerControlMode)
         suppressCommand = False
         if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
             suppressCommand = True
@@ -574,8 +582,8 @@ class BattleReplay():
             self.__serverSettings = dict()
             try:
                 self.__serverSettings = json.loads(self.__replayCtrl.getArenaInfoStr()).get('serverSettings')
-                from gui.game_control import g_instance
-                g_instance.roaming.start({'roaming': self.__serverSettings['roaming']})
+                from gui.LobbyContext import g_lobbyContext
+                g_lobbyContext.setServerSettings(self.__serverSettings)
             except:
                 pass
 
@@ -594,7 +602,8 @@ class BattleReplay():
             BigWorld.callback(1.0, self.play)
             return
         self.__isMenuShowed = False
-        DialogsInterface.showI18nInfoDialog('replayStopped', self.stop)
+        from gui import DialogsInterface
+        DialogsInterface.showI18nInfoDialog('replayStopped', self.__setStopDelay)
         self.__isFinished = True
         self.setPlaybackSpeedIdx(0)
 
@@ -641,6 +650,7 @@ class BattleReplay():
             self.__replayCtrl.onLockTarget(lock)
 
     def onBattleChatMessage(self, messageText, isCurrentPlayer):
+        from messenger import MessengerEntry
         if self.isRecording:
             if not self.__skipMessage:
                 self.__replayCtrl.onBattleChatMessage(messageText, isCurrentPlayer)
@@ -674,6 +684,7 @@ class BattleReplay():
         self.guiWindowManager.showLogin(self.__loginOnLoadCallback)
 
     def __loginOnLoadCallback(self):
+        from gui import DialogsInterface
         DialogsInterface.showI18nConfirmDialog('replayNotification', self.__onClientVersionConfirmDlgClosed)
 
     def __onClientVersionConfirmDlgClosed(self, result):
@@ -713,8 +724,11 @@ class BattleReplay():
         self.__replayCtrl.saveCurrMessage(True)
 
     def __showInfoMessage(self, msg, args = None):
+        from gui.battle_control import g_sessionProvider
         if not self.isTimeWarpInProgress:
-            self.guiWindowManager.battleWindow.vMsgsPanel.showMessage(msg, args)
+            ctrl = g_sessionProvider.getBattleMessagesCtrl()
+            if ctrl:
+                ctrl.onShowVehicleMessageByKey(msg, args)
 
     def __startAutoRecord(self):
         if not self.__isAutoRecordingEnabled:
@@ -767,16 +781,16 @@ class BattleReplay():
         return
 
     def __onAccountBecomePlayer(self):
+        player = BigWorld.player()
+        self.__serverSettings['roaming'] = player.serverSettings['roaming']
+        self.__serverSettings['isPotapovQuestEnabled'] = player.serverSettings.get('isPotapovQuestEnabled', False)
         if not isPlayerAccount():
             return
         else:
-            player = BigWorld.player()
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:
                 self.__playerDatabaseID = player.databaseID
-                self.__serverSettings['roaming'] = player.serverSettings['roaming']
-                self.__serverSettings['isPotapovQuestEnabled'] = player.serverSettings.get('isPotapovQuestEnabled', False)
             return
 
     def __onSettingsChanging(self, diff):
@@ -799,7 +813,7 @@ class BattleReplay():
             EffectsList.EffectsListPlayer.clear()
             if self.__rewind:
                 playerControlMode = BigWorld.player().inputHandler.ctrl
-                self.__wasVideoBeforeRewind = isinstance(playerControlMode, VideoCameraControlMode)
+                self.__wasVideoBeforeRewind = _isVideoCameraCtrl(playerControlMode)
                 self.__videoCameraMatrix.set(BigWorld.camera().matrix)
                 self.setPlaybackSpeedIdx(self.__playbackSpeedModifiers.index(1.0), True)
                 BigWorld.PyGroundEffectManager().stopAll()
@@ -808,7 +822,7 @@ class BattleReplay():
                 self.__cleanupAfterTimeWarp()
                 return
             if self.__timeWarpCleanupCb is None:
-                self.__timeWarpCleanupCb = BigWorld.callback(0, self.__cleanupAfterTimeWarp)
+                self.__timeWarpCleanupCb = BigWorld.callback(0.0, self.__cleanupAfterTimeWarp)
             return
 
     def __cleanupAfterTimeWarp(self):
@@ -858,9 +872,10 @@ class BattleReplay():
 
     def onArenaLoaded(self):
         self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
-        BigWorld.wg_enableGUIBackground(False, False)
 
     def onSetCruiseMode(self, mode):
+        from gui.battle_control import g_sessionProvider
+        from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
         if self.isRecording:
             self.__replayCtrl.onSetCruiseMode(mode)
         elif self.isPlaying:
@@ -892,6 +907,9 @@ class BattleReplay():
         else:
             arcadeMode.showGunMarker(True)
         return
+
+    def __setStopDelay(self):
+        BigWorld.callback(0.0, self.stop)
 
 
 def isPlaying():

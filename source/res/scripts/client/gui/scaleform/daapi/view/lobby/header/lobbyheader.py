@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/LobbyHeader.py
 import math
-import operator
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 import account_helpers
@@ -17,6 +16,7 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE, UNIT_R
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import i18n, time_utils
 from debug_utils import LOG_ERROR
+from shared_utils import CONST_CONTAINER
 from gui import makeHtmlString, game_control
 from gui.LobbyContext import g_lobbyContext
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -25,7 +25,6 @@ from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import events
 from gui.shared import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.utils import CONST_CONTAINER
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from gui.server_events import g_eventsCache
@@ -34,8 +33,9 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyHeaderMeta import LobbyHeaderMeta
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes, AppRef
 from ConnectionManager import connectionManager
-from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS_CONSTANTS
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getEventVehiclesNamesStr
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
 
@@ -95,7 +95,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
         serverShortName = connectionManager.serverUserNameShort.split()[-1].strip()
         if len(serverShortName) > _MAX_HEADER_SERVER_NAME_LEN:
             serverShortName = _SERVER_NAME_PREFIX % serverShortName[:_MAX_HEADER_SERVER_NAME_LEN]
-        self.as_setServerS(serverShortName, 'settingsButton', TOOLTIP_TYPES.SPECIAL)
+        self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
 
     def _dispose(self):
         battle_selector_items.clear()
@@ -248,8 +248,8 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
         return
 
     def __onWalletChanged(self, status):
-        self.as_goldResponseS(BigWorld.wg_getGoldFormat(g_itemsCache.items.stats.actualGold))
-        self.as_setFreeXPS(BigWorld.wg_getIntegralFormat(g_itemsCache.items.stats.actualFreeXP))
+        self.as_goldResponseS(BigWorld.wg_getGoldFormat(g_itemsCache.items.stats.actualGold), MENU.HEADERBUTTONS_BTNLABEL_BUY_GOLD, TOOLTIPS.HEADER_REFILL, TOOLTIP_TYPES.COMPLEX)
+        self.as_setFreeXPS(BigWorld.wg_getIntegralFormat(g_itemsCache.items.stats.actualFreeXP), MENU.HEADERBUTTONS_BTNLABEL_GATHERING_EXPERIENCE, TOOLTIPS.HEADER_XP_GATHERING, TOOLTIP_TYPES.COMPLEX)
         self.as_setWalletStatusS(status)
 
     def __onPremiumTimeChanged(self, isPremium, _, premiumExpiryTime):
@@ -281,19 +281,18 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
             view.update()
 
     def __getFightBtnTooltipData(self, state):
-        eventVehicles = g_eventsCache.getEventVehicles()
-        vehicleNames = ', '.join(map(operator.attrgetter('userName'), eventVehicles))
+        vehicleNames = getEventVehiclesNamesStr()
         if state == UNIT_RESTRICTION.VEHICLE_NOT_VALID:
             header = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_HEADER)
             body = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_BODY)
-            note = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_NOTE, vehicles=vehicleNames)
+            note = vehicleNames
         else:
             header = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_HEADER)
             body = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_BODY)
-            note = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_NOTE, vehicles=vehicleNames)
+            note = vehicleNames
         return {'header': header,
          'body': body,
-         'note': text_styles.alert(note)}
+         'note': note}
 
     def __updatePrebattleControls(self):
         prbDispatcher = g_prbLoader.getDispatcher()
@@ -317,7 +316,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
                 tooltip = TOOLTIPS.HEADER_DOMINATIONSQUAD if isFallout else TOOLTIPS.HEADER_SQUAD
             self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX)
             isFightBtnDisabled = not canDo or selected.isFightButtonForcedDisabled()
-            isEventVehicle = g_currentVehicle.isPresent() and g_currentVehicle.item.isOnlyForEventBattles
+            isEventVehicle = g_currentVehicle.isPresent() and g_currentVehicle.item.isEvent
             isInCompany = state.isInPrebattle(PREBATTLE_TYPE.COMPANY)
             if isFightBtnDisabled and isEventVehicle and not state.hasLockedState and not isInCompany:
                 self.as_setFightBtnTooltipDataS(self.__getFightBtnTooltipData(canDoMsg))

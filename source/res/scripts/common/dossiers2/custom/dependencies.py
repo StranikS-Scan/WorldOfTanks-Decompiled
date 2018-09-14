@@ -213,11 +213,27 @@ def _set_CLUB_ACHIEVEMENTS_DEPENDENCIES():
     CLUB_ACHIEVEMENTS_DEPENDENCIES.update({'victoryMarchSeries': [_updateMaxVictoryMarchSeries, _updateClubVictoryMarch]})
 
 
+GLOBAL_MAP_STATS_DEPENDENCIES = {}
+
+def _set_GLOBAL_MAP_STATS_DEPENDENCIES():
+    global GLOBAL_MAP_STATS_DEPENDENCIES
+    GLOBAL_MAP_STATS_DEPENDENCIES.update({'battlesCount': [_updateMedalRotmistrov],
+     'winAndSurvived': [_updateMedalAbrams],
+     'frags': [_updateMedalCarius],
+     'frags8p': [_updateMedalEkins],
+     'damageDealt': [_updateMedalKnispel],
+     'damageReceived': [_updateMedalKnispel],
+     'spotted': [_updateMedalPoppel],
+     'capturePoints': [_updateMedalLeClerc],
+     'droppedCapturePoints': [_updateMedalLavrinenko]})
+
+
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
-        if block in dossierDescr:
-            frags += dossierDescr[block]['frags']
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+        if dossierDescr.isBlockInLayout(block):
+            if block in dossierDescr:
+                frags += dossierDescr[block]['frags']
 
     medalCariusCfg = RECORD_CONFIGS['medalCarius']
     maxMedalClass = len(medalCariusCfg)
@@ -234,10 +250,11 @@ def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
     damage = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
-        if block in dossierDescr:
-            damage += dossierDescr[block]['damageDealt']
-            damage += dossierDescr[block]['damageReceived']
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+        if dossierDescr.isBlockInLayout(block):
+            if block in dossierDescr:
+                damage += dossierDescr[block]['damageDealt']
+                damage += dossierDescr[block]['damageReceived']
 
     medalKnispelCfg = RECORD_CONFIGS['medalKnispel']
     maxMedalClass = len(medalKnispelCfg)
@@ -254,9 +271,10 @@ def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalPoppel(dossierDescr, dossierBlockDescr, key, value, prevValue):
     spotted = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
-        if block in dossierDescr:
-            spotted += dossierDescr[block]['spotted']
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+        if dossierDescr.isBlockInLayout(block):
+            if block in dossierDescr:
+                spotted += dossierDescr[block]['spotted']
 
     medalPoppelCfg = RECORD_CONFIGS['medalPoppel']
     maxMedalClass = len(medalPoppelCfg)
@@ -273,9 +291,10 @@ def _updateMedalPoppel(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalLeClerc(dossierDescr, dossierBlockDescr, key, value, prevValue):
     capturePoints = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
-        if block in dossierDescr:
-            capturePoints += dossierDescr[block]['capturePoints']
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+        if dossierDescr.isBlockInLayout(block):
+            if block in dossierDescr:
+                capturePoints += dossierDescr[block]['capturePoints']
 
     medalLeClercCfg = RECORD_CONFIGS['medalLeClerc']
     maxMedalClass = len(medalLeClercCfg)
@@ -292,9 +311,10 @@ def _updateMedalLeClerc(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalLavrinenko(dossierDescr, dossierBlockDescr, key, value, prevValue):
     droppedCapturePoints = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
-        if block in dossierDescr:
-            droppedCapturePoints += dossierDescr[block]['droppedCapturePoints']
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+        if dossierDescr.isBlockInLayout(block):
+            if block in dossierDescr:
+                droppedCapturePoints += dossierDescr[block]['droppedCapturePoints']
 
     medalLavrinenkoCfg = RECORD_CONFIGS['medalLavrinenko']
     maxMedalClass = len(medalLavrinenkoCfg)
@@ -340,9 +360,10 @@ def _updateMedalKay(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalAbrams(dossierDescr, dossierBlockDescr, key, value, prevValue):
     winAndSurvived = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
-        if block in dossierDescr:
-            winAndSurvived += dossierDescr[block]['winAndSurvived']
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+        if dossierDescr.isBlockInLayout(block):
+            if block in dossierDescr:
+                winAndSurvived += dossierDescr[block]['winAndSurvived']
 
     medalAbramsCfg = RECORD_CONFIGS['medalAbrams']
     maxMedalClass = len(medalAbramsCfg)
@@ -359,9 +380,10 @@ def _updateMedalAbrams(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalEkins(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags8p = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties'):
-        if block in dossierDescr:
-            frags8p += dossierDescr[block]['frags8p']
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+        if dossierDescr.isBlockInLayout(block):
+            if block in dossierDescr:
+                frags8p += dossierDescr[block]['frags8p']
 
     medalEkinsCfg = RECORD_CONFIGS['medalEkins']
     maxMedalClass = len(medalEkinsCfg)
@@ -809,3 +831,4 @@ def init():
     _set_CLAN_STATS_DEPENDENCIES()
     _set_CLUB_BATTLES_STAT_DEPENDENCIES()
     _set_CLUB_ACHIEVEMENTS_DEPENDENCIES()
+    _set_GLOBAL_MAP_STATS_DEPENDENCIES()

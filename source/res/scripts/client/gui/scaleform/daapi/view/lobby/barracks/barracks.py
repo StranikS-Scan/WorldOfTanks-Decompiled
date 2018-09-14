@@ -132,6 +132,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         defaultBerthPrice = g_itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
         tankmenList = list()
         tankmenInBarracks = 0
+        tankmenInSlots = 0
         action = None
         if berthPrice[0] != defaultBerthPrice[0]:
             action = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
@@ -187,10 +188,11 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
              'isInSelfVehicleClass': vehicle.type == tankmanVehicle.type if tankman.isInTank else True,
              'isInSelfVehicleType': vehicle.shortUserName == tankmanVehicle.shortUserName if tankman.isInTank else True})
 
+        tankmenInSlots = len(tankmenList) - 1
         if tankmenInBarracks < slots:
             tankmenList.insert(1, {'empty': True,
              'freePlaces': slots - tankmenInBarracks})
-        self.as_setTankmenS(len(tankmen), slots, tankmenInBarracks, tankmenList)
+        self.as_setTankmenS(len(tankmen), tankmenInSlots, slots, tankmenInBarracks, tankmenList)
         return
 
     @staticmethod

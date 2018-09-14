@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/battle_chat_cmd.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
-from gui.battle_control import avatar_getter
 from helpers import i18n
+from gui.shared.utils import getPlayerDatabaseID
 from messenger import g_settings
 from messenger.ext import getMinimapCellName
 from messenger.ext.channel_num_gen import getClientID4BattleChannel
@@ -123,7 +123,7 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         return self._commandID in _SHOW_MARKER_CMD_IDS
 
     def isReceiver(self):
-        return self.getFirstTargetID() == avatar_getter.getPlayerVehicleID()
+        return self.getFirstTargetID() == getPlayerDatabaseID()
 
     def _getTarget(self):
         from gui.battle_control import g_sessionProvider

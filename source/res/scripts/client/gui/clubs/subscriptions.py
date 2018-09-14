@@ -4,7 +4,7 @@ from debug_utils import LOG_WARNING
 from AccountCommands import RES_FAILURE
 from helpers.time_utils import getCurrentTimestamp
 from club_shared import SUBSCRIPTION_EXPIRY_TIME as _SET
-from gui.shared.utils import forEach
+from shared_utils import forEach
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.ListenersCollection import ListenersCollection
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable

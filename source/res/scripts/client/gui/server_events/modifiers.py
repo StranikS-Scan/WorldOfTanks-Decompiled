@@ -10,10 +10,10 @@ import nations
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from items import vehicles, ITEM_TYPE_NAMES
 from helpers import i18n
+from shared_utils import BoundMethodWeakref as bwr, CONST_CONTAINER
 from gui import nationCompareByName, makeHtmlString
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils import CONST_CONTAINER, BoundMethodWeakref as bwr
 from gui.server_events import formatters
 from gui.Scaleform.locale.QUESTS import QUESTS
 _VEH_TYPE_IDX = 1

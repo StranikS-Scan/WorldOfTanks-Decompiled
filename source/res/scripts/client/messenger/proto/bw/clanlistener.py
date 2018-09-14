@@ -2,7 +2,7 @@
 import BigWorld
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from messenger.ext.player_helpers import getPlayerDatabaseID
+from gui.shared.utils import getPlayerDatabaseID
 from messenger.m_constants import USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.bw.find_criteria import BWClanChannelFindCriteria
 from messenger.proto.entities import CurrentUserEntity, SharedUserEntity, ClanInfo

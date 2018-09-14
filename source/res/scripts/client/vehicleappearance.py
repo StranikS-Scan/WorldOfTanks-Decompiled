@@ -67,6 +67,7 @@ _EFFECT_MATERIALS_HARDNESS = {'ground': 0.1,
 _ALLOW_LAMP_LIGHTS = False
 frameTimeStamp = 0
 MAX_DISTANCE = 500
+_ENABLE_SOUND_DEBUG = False
 _ENABLE_NEW_ENGINE_SOUND = False
 
 class VehicleAppearance(object):
@@ -80,6 +81,9 @@ class VehicleAppearance(object):
 
     def __init__(self):
         self.__vt = None
+        if _ENABLE_SOUND_DEBUG:
+            from helpers.ValueTracker import ValueTracker
+            self.__vt = ValueTracker.instance()
         self.modelsDesc = {'chassis': {'model': None,
                      'state': None,
                      'boundEffects': None,
@@ -353,12 +357,12 @@ class VehicleAppearance(object):
                     eventC = self.__typeDesc.chassis['soundNPC']
                 else:
                     eventC = self.__typeDesc.chassis['sound']
-            self.__engineSound = SoundGroups.g_instance.getSound(fakeModel, event)
+            self.__engineSound = SoundGroups.g_instance.getSound3D(fakeModel, event)
             if self.__engineSound is None:
-                self.__engineSound = SoundGroups.g_instance.getSound(modelsDesc['hull']['model'], event)
+                self.__engineSound = SoundGroups.g_instance.getSound3D(modelsDesc['hull']['model'], event)
             if self.__engineSound:
                 self.__engineSound.play()
-            self.__movementSound = SoundGroups.g_instance.getSound(modelsDesc['turret']['model'], eventC)
+            self.__movementSound = SoundGroups.g_instance.getSound3D(modelsDesc['turret']['model'], eventC)
             if self.__movementSound:
                 self.__movementSound.play()
             self.__isEngineSoundMutedByLOD = False
@@ -599,6 +603,7 @@ class VehicleAppearance(object):
             self.__attachStickers(items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha'], True)
         self.__updateCamouflage()
         self.__chassisShadowForwardDecal.attach(vehicle, self.modelsDesc)
+        self.__chassisShadowForwardDecal.attach(vehicle, self.modelsDesc)
         self.__applyVisibility()
         self.__vehicle.model.height = self.__computeVehicleHeight()
         self.onModelChanged()
@@ -700,7 +705,7 @@ class VehicleAppearance(object):
                         tiling = coeff
                 if compDesc.get('camouflageExclusionMask'):
                     exclusionMap = compDesc['camouflageExclusionMask']
-            useCamouflage = camouflagePresent and exclusionMap and texture
+            useCamouflage = camouflagePresent and texture
             fashion = None
             if hasattr(model, 'wg_fashion'):
                 fashion = model.wg_fashion
@@ -1084,6 +1089,11 @@ class VehicleAppearance(object):
                     surfaceCurvature = fashion.suspCompressionRate
                 roughness = (surfaceCurvature * 2 * speedFraction - subs) * decFactor
                 roughnessParam.value = 0 if roughness <= 0.0 else (roughness if roughness <= 1.0 else 1.0)
+            if self.__vt is not None and _ENABLE_TRACKS_SOUND_DEBUG:
+                self.__vt.addValue2('flying', isFlyingParam.value if isFlyingParam is not None else -1)
+                self.__vt.addValue2('hardness', hardnessParam.value if hardnessParam is not None else -1)
+                self.__vt.addValue2('friction', strafeParam.value if strafeParam is not None else -1)
+                self.__vt.addValue2('roughness', roughnessParam.value if roughnessParam is not None else -1)
             return
 
     def __updateBlockedMovement(self):
@@ -1111,7 +1121,7 @@ class VehicleAppearance(object):
             try:
                 fakeModel = helpers.newFakeModel()
                 self.__trailEffects.getTrackCenterNode(i).attach(fakeModel)
-                self.__trackSounds[i] = (fakeModel, SoundGroups.g_instance.getSound(fakeModel, '/tanks/tank_breakdown/hit_treads'))
+                self.__trackSounds[i] = (fakeModel, SoundGroups.g_instance.getSound3D(fakeModel, '/tanks/tank_breakdown/hit_treads'))
             except:
                 self.__trackSounds[i] = None
                 LOG_CURRENT_EXCEPTION()
@@ -1717,15 +1727,12 @@ def _setupVehicleFashion(self, fashion, vehicle, isCrashedTrack = False):
             fashion.movementInfo = vehicle.filter.movementInfo
             vehicle.filter.placingOnGround = vehicle.filter.placingOnGround if isTrackFashionSet else False
         textures = {}
-        bumpTexId = -1
         for matKindName, texId in DecalMap.g_instance.getTextureSet(tracesCfg['textureSet']).iteritems():
-            if matKindName == 'bump':
-                bumpTexId = texId
-            else:
+            if matKindName != 'bump':
                 for matKind in material_kinds.EFFECT_MATERIAL_IDS_BY_NAMES[matKindName]:
                     textures[matKind] = texId
 
-        fashion.setTrackTraces(tracesCfg['bufferPrefs'], textures, tracesCfg['centerOffset'], tracesCfg['size'], bumpTexId)
+        fashion.setTrackTraces(tracesCfg['bufferPrefs'], textures, tracesCfg['centerOffset'], tracesCfg['size'])
     except:
         LOG_CURRENT_EXCEPTION()
 
@@ -1860,7 +1867,8 @@ def _validateCfgPos(srcModelDesc, dstModelDesc, cfgPos, paramName, vehicle, stat
     realOffset = invMat.applyToOrigin()
     length = (realOffset - cfgPos).length
     if length > 0.01 and not _almostZero(realOffset.length):
-        modelState = srcModelDesc['_stateFunc'](self.__vehicle, state)
+        modelState = srcModelDesc['_stateFunc'](vehicle, state)
+        from debug_utils import LOG_WARNING
         LOG_WARNING('%s parameter is incorrect. \n Note: it must be <%s>.\nPlayer: %s; Model: %s' % (paramName,
          realOffset,
          vehicle.publicInfo['name'],

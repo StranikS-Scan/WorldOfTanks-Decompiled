@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/battle_results/settings.py
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 
 class EMBLEM_TYPE(CONST_CONTAINER):
     SIZE_16X16 = 1

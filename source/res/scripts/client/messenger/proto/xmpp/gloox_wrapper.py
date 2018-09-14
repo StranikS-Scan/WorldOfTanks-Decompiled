@@ -6,7 +6,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from external_strings_utils import unicode_from_utf8
 from messenger.proto.xmpp.extensions.wg_items import makeWGInfoFromPresence
 from messenger.proto.xmpp.gloox_constants import PRESENCE, CONNECTION_STATE, DISCONNECT_REASON, GLOOX_EVENT, INBOUND_SUB_BATCH_SIZE, INBOUND_SUB_INTERVAL
-from messenger.proto.xmpp.jid import ContactJID, ContactBareJID
+from messenger.proto.xmpp.jid import ContactBareJID, JID
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.resources import Resource
 from messenger.proto.xmpp.wrappers import makeClanInfo
@@ -178,7 +178,7 @@ class ClientDecorator(object):
 
         def generator():
             for jid, name, groups, to, from_, clanInfo in roster:
-                yield (ContactJID(jid),
+                yield (ContactBareJID(jid),
                  name,
                  groups,
                  (to, from_),
@@ -187,17 +187,17 @@ class ClientDecorator(object):
         self.__handleEvent(GLOOX_EVENT.ROSTER_RESULT, generator)
 
     def onRosterItemSet(self, jid, name, groups, to, from_, clanInfo):
-        self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_SET, ContactJID(jid), name, groups, (to, from_), makeClanInfo(*clanInfo))
+        self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_SET, ContactBareJID(jid), name, groups, (to, from_), makeClanInfo(*clanInfo))
 
     def onRosterItemRemoved(self, jid):
-        self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_REMOVED, ContactJID(jid))
+        self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_REMOVED, ContactBareJID(jid))
 
     def onHandlePresence(self, jid, priority, status, presence, wgexts):
-        self.__handleEvent(GLOOX_EVENT.PRESENCE, ContactJID(jid), Resource(priority, status, presence, makeWGInfoFromPresence(wgexts)))
+        self.__handleEvent(GLOOX_EVENT.PRESENCE, JID(jid), Resource(priority, status, presence, makeWGInfoFromPresence(wgexts)))
 
     def onSubscriptionRequest(self, jid, message, nickname, wgexts):
         self.__cancelInboundSubsCallback()
-        self.__inboundSubs.append((ContactJID(jid),
+        self.__inboundSubs.append((ContactBareJID(jid),
          nickname,
          message,
          makeWGInfoFromPresence(wgexts)))
@@ -221,7 +221,7 @@ class ClientDecorator(object):
         self.__handleEvent(GLOOX_EVENT.IQ, iqID, iqType, pyGlooxTag)
 
     def onRosterQuerySend(self, iqID, jid, context):
-        self.__handleEvent(GLOOX_EVENT.ROSTER_QUERY, iqID, ContactJID(jid), context)
+        self.__handleEvent(GLOOX_EVENT.ROSTER_QUERY, iqID, ContactBareJID(jid), context)
 
     def __handleEvent(self, eventName, *args, **kwargs):
         handlers = self.__handlers[eventName]

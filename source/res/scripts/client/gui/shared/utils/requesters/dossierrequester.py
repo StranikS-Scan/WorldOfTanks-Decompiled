@@ -45,7 +45,8 @@ class UserDossier(object):
          'clan': None,
          'hidden': False,
          'available': True,
-         'rating': None}
+         'rating': None,
+         'rated7x7Seasons': {}}
         return
 
     def __setLastResponseTime(self):
@@ -74,13 +75,18 @@ class UserDossier(object):
                 self.__cache['account'] = dossiers2.getAccountDossierDescr(value[1])
                 self.__cache['clan'] = value[2]
                 self.__cache['rating'] = value[3]
+                self.__cache['rated7x7Seasons'] = seasons = {}
+                for sID, d in (value[4] or {}).iteritems():
+                    seasons[sID] = dossiers2.getRated7x7DossierDescr(d)
+
             callback(self.__cache['account'])
             return
 
-        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating: self.__processValueResponse(c, code, (databaseID,
+        self.__queue.append(lambda : BigWorld.player().requestPlayerInfo(self.__cache['databaseID'], partial(lambda c, code, databaseID, dossier, clanID, clanInfo, gRating, eSportSeasons: self.__processValueResponse(c, code, (databaseID,
          dossier,
          (clanID, clanInfo),
-         gRating)), proxyCallback)))
+         gRating,
+         eSportSeasons)), proxyCallback)))
         self.__processQueue()
 
     def __requestAccountDossier(self, callback):
@@ -130,10 +136,7 @@ class UserDossier(object):
         if not self.isValid:
             callback(None)
         if self.__cache.get('account') is None:
-            if self.__cache.get('clan') is None:
-                self.__requestPlayerInfo(callback)
-            else:
-                self.__requestAccountDossier(callback)
+            self.__requestPlayerInfo(callback)
             return
         else:
             callback(self.__cache['account'])
@@ -148,6 +151,17 @@ class UserDossier(object):
             return
         else:
             callback(self.__cache['clan'])
+            return
+
+    @async
+    def getRated7x7Seasons(self, callback):
+        if not self.isValid:
+            callback({})
+        if self.__cache.get('rated7x7Seasons') is None:
+            self.__requestPlayerInfo(lambda accDossier: callback(self.__cache['rated7x7Seasons']))
+            return
+        else:
+            callback(self.__cache['rated7x7Seasons'])
             return
 
     @async

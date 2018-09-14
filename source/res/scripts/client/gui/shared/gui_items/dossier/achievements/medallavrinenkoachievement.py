@@ -14,4 +14,4 @@ class MedalLavrinenkoAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'medalLavrinenko')
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRandomStats().getDroppedCapturePoints() + dossier.getTeam7x7Stats().getDroppedCapturePoints() + dossier.getFortBattlesStats().getDroppedCapturePoints() + dossier.getFortSortiesStats().getDroppedCapturePoints()
+        return dossier.getRandomStats().getDroppedCapturePoints() - dossier.getClanStats().getDroppedCapturePoints() + dossier.getTeam7x7Stats().getDroppedCapturePoints() + dossier.getFortBattlesStats().getDroppedCapturePoints() + dossier.getFortSortiesStats().getDroppedCapturePoints() + dossier.getGlobalMapStats().getDroppedCapturePoints()

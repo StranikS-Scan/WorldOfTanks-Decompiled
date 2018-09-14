@@ -11,17 +11,17 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.ReferralManagementWindowMeta import ReferralManagementWindowMeta
-from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.prb_control.context import unit_ctx, SendInvitesCtx
 from gui.prb_control.prb_helpers import GlobalListener
-from gui.shared.utils import findFirst
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import i18n, time_utils
+from shared_utils import findFirst
 from gui.shared.events import OpenLinkEvent
+from gui.shared.formatters import icons
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
@@ -93,7 +93,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         ms = i18n.makeString
         refSystem = game_control.g_instance.refSystem
         invitedPlayers = len(refSystem.getReferrals())
-        infoIcon = self.app.utilsManager.textManager.getIcon(TextIcons.INFO_ICON)
+        infoIcon = icons.info()
         multiplyExpText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXPMULTIPLIER))
         tableExpText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXP))
         data = {'windowTitle': ms(MENU.REFERRALMANAGEMENTWINDOW_TITLE),
@@ -225,7 +225,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
                     progress = totalProgress + totalStepProgress
             else:
                 LOG_WARNING('Referral quests is in invalid state: ', quests)
-                progressAlertIcon = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON)
+                progressAlertIcon = icons.alert()
                 progressAlertText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSNOTAVAILABLE))
                 progressAlertText = i18n.makeString(progressAlertIcon + ' ' + progressAlertText)
             progresData.update({'steps': stepsData,

@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/states.py
 import BigWorld
 from FortifiedRegionBase import FORT_STATE
-from gui import game_control
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.shared.fortifications import getClientFort, isStartingScriptDone
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
@@ -39,6 +38,7 @@ class RoamingState(_ClientFortState):
         super(RoamingState, self).__init__(CLIENT_FORT_STATE.ROAMING, isDisabled=True)
 
     def update(self, provider):
+        from gui import game_control
         result = False
         if not game_control.g_instance.roaming.isInRoaming():
             state = NoClanState()

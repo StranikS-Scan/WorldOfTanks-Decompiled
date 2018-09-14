@@ -1,12 +1,16 @@
 # Embedded file name: scripts/client/helpers/tips.py
 import re
 import sys
+import random
 from collections import defaultdict
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.utils.functions import rnd_choice_loop
 from helpers import i18n
 from debug_utils import LOG_CURRENT_EXCEPTION
 ALL = 'all'
 INFINITY_STR_VALUE = 'infinity'
+TIPS_IMAGE_SOURCE = '../maps/icons/battleLoading/tips/%s.png'
+TIPS_GROUPS_SOURCE = '../maps/icons/battleLoading/groups/%s.png'
 TIPS_PATTERN_PARTS_COUNT = 7
 BATTLE_CONDITIONS_PARTS_COUNT = 2
 
@@ -40,9 +44,16 @@ def _readTips():
                         maxBattlesCount = _getIntValue(battlesCountConditions[1])
                         if minBattlesCount is not None and maxBattlesCount is not None:
                             battleCondition = (minBattlesCount, maxBattlesCount)
-                            result[battleCondition][vehicleTypeCondition][nation][vehLevel].append((i18n.makeString('#tips:%s' % status), i18n.makeString('#tips:%s' % key)))
+                            result[battleCondition][vehicleTypeCondition][nation][vehLevel].append((i18n.makeString('#tips:%s' % status), i18n.makeString('#tips:%s' % key), _getTipIcon(tipID, group)))
 
     return result
+
+
+def _getTipIcon(tipID, group):
+    currentTipImage = TIPS_IMAGE_SOURCE % tipID
+    if currentTipImage in RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_ENUM:
+        return currentTipImage
+    return TIPS_GROUPS_SOURCE % group
 
 
 def _getIntValue(strCondition):

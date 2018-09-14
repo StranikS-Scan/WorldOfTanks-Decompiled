@@ -2,7 +2,7 @@
 from helpers import i18n
 from abstract import ClassProgressAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 
 class MarkOfMasteryAchievement(ClassProgressAchievement):
 

@@ -4,7 +4,8 @@ import math
 from collections import namedtuple
 from debug_utils import LOG_WARNING
 from gui.doc_loaders.GraphicsPresetsLoader import GraphicsPresetsLoader
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
+from account_helpers.settings_core.settings_constants import GRAPHICS
 import GUI
 MIN_SCREEN_WIDTH = 1024
 MIN_SCREEN_HEIGHT = 768
@@ -38,6 +39,7 @@ class GRAPHICS_SETTINGS(CONST_CONTAINER):
     SNIPER_MODE_SWINGING_ENABLED = 'SNIPER_MODE_SWINGING_ENABLED'
     COLOR_GRADING_TECHNIQUE = 'COLOR_GRADING_TECHNIQUE'
     SEMITRANSPARENT_LEAVES_ENABLED = 'SEMITRANSPARENT_LEAVES_ENABLED'
+    DRR_AUTOSCALER_ENABLED = GRAPHICS.DRR_AUTOSCALER_ENABLED
 
 
 def __initPresetsData():

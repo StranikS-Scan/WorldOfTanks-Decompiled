@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/shared/ClanCache.py
+from collections import namedtuple
 import BigWorld
 from Event import Event
-from account_helpers import getPlayerDatabaseID
+from account_helpers import getAccountDatabaseID
 from adisp import async, process
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_ERROR
@@ -23,6 +24,25 @@ CLAN_MEMBERS = {CLAN_MEMBER_FLAGS.LEADER: 'leader',
  CLAN_MEMBER_FLAGS.STAFF: 'staff',
  CLAN_MEMBER_FLAGS.JUNIOR: 'junior',
  CLAN_MEMBER_FLAGS.RESERVIST: 'reservist'}
+
+class ClanInfo(namedtuple('ClanInfo', ['clanName',
+ 'clanAbbrev',
+ 'chatChannelDBID',
+ 'memberFlags',
+ 'enteringTime'])):
+
+    def getClanName(self):
+        return self.clanName
+
+    def getClanAbbrev(self):
+        return self.clanAbbrev
+
+    def getMembersFlags(self):
+        return self.memberFlags
+
+    def getJoiningTime(self):
+        return self.enteringTime
+
 
 class _ClanCache(object):
 
@@ -132,7 +152,7 @@ class _ClanCache(object):
 
     @property
     def clanRole(self):
-        user = self.usersStorage.getUser(getPlayerDatabaseID())
+        user = self.usersStorage.getUser(getAccountDatabaseID())
         if user:
             role = user.getClanRole()
         else:

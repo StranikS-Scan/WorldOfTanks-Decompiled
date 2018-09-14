@@ -42,7 +42,7 @@ class PotapovQuestSelect(_PotapovQuestsSelect):
     def __init__(self, quest):
         quests, oldQuest = self._removeFromSameChain(g_eventsCache.potapov.getSelectedQuests().values(), quest)
         super(PotapovQuestSelect, self).__init__(quests)
-        self.addPlugins([plugins.PotapovQuestSlotsValidator(), plugins.PotapovQuestSelectConfirmator(quest, oldQuest, isEnabled=oldQuest is not None)])
+        self.addPlugins([plugins.PotapovQuestSlotsValidator(removedCount=int(oldQuest is not None)), plugins.PotapovQuestSelectConfirmator(quest, oldQuest, isEnabled=oldQuest is not None)])
         return
 
     def _getMessagePrefix(self):
@@ -52,7 +52,7 @@ class PotapovQuestSelect(_PotapovQuestsSelect):
         result = [newQuest]
         removedQuest = None
         for quest in quests:
-            if quest.getChainID() != newQuest.getChainID() or quest.getTileID() != newQuest.getTileID():
+            if quest.getChainID() != newQuest.getChainID():
                 result.append(quest)
             else:
                 removedQuest = quest

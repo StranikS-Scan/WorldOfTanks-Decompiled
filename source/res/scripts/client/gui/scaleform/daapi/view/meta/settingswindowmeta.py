@@ -61,3 +61,7 @@ class SettingsWindowMeta(DAAPIModule):
     def as_setGraphicsPresetS(self, presetNum):
         if self._isDAAPIInited():
             return self.flashObject.as_setGraphicsPreset(presetNum)
+
+    def as_isPresetAppliedS(self):
+        if self._isDAAPIInited():
+            return self.flashObject.as_isPresetApplied()

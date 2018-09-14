@@ -3,10 +3,12 @@ import types
 import BigWorld
 import constants
 import ArenaType
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.shared.formatters import text_styles
 from helpers import i18n, int2roman
 from dossiers2.custom.records import DB_ID_TO_RECORD
+from shared_utils import CONST_CONTAINER
 from gui import makeHtmlString, GUI_NATIONS
-from gui.shared.utils import CONST_CONTAINER
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.server_events import caches
 from gui.Scaleform.locale.MENU import MENU
@@ -510,3 +512,9 @@ def getShortSeasonUserName(season):
 
 def getFullTileUserName(season, tile):
     return '%s, %s' % (getShortSeasonUserName(season), tile.getUserName())
+
+
+def packGroupBlock(groupName):
+    return {'isSelectable': False,
+     'rendererType': QUESTS_ALIASES.RENDERER_TYPE_BLOCK_TITLE,
+     'description': text_styles.highTitle(groupName)}

@@ -5,6 +5,8 @@ import Keys
 from gui import g_repeatKeyHandlers
 from helpers import drr_scale
 from Event import Event
+from account_helpers.settings_core.SettingsCore import g_settingsCore
+from account_helpers.settings_core.settings_constants import GRAPHICS
 
 class DRRScaleController(object):
 
@@ -24,13 +26,13 @@ class DRRScaleController(object):
         return
 
     def handleKey(self, key, isDown):
-        if key in [Keys.KEY_MINUS, Keys.KEY_NUMPADMINUS] and BigWorld.isKeyDown(Keys.KEY_RSHIFT) and isDown:
+        if key in [Keys.KEY_MINUS, Keys.KEY_NUMPADMINUS] and BigWorld.isKeyDown(Keys.KEY_RSHIFT) and isDown and not g_settingsCore.getSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED):
             result = drr_scale.stepDown()
             if result is not None and self.__ui:
                 self.__ui.vMsgsPanel.showMessage('DRR_SCALE_STEP_DOWN', {'scale': drr_scale.getPercent(result)})
                 self.onDRRChanged()
             return True
-        elif key in [Keys.KEY_EQUALS, Keys.KEY_ADD] and BigWorld.isKeyDown(Keys.KEY_RSHIFT) and isDown:
+        elif key in [Keys.KEY_EQUALS, Keys.KEY_ADD] and BigWorld.isKeyDown(Keys.KEY_RSHIFT) and isDown and not g_settingsCore.getSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED):
             result = drr_scale.stepUp()
             if result is not None and self.__ui:
                 self.__ui.vMsgsPanel.showMessage('DRR_SCALE_STEP_UP', {'scale': drr_scale.getPercent(result)})

@@ -49,19 +49,13 @@ class _IntroViewVO(object):
          'isCanCreateBattle': False,
          'isCanJoinBattle': False,
          'isNeedAddPlayers': False,
-         'isHaveTeamToShow': False,
-         'battleRoomVO': None}
-        return
+         'isHaveTeamToShow': False}
 
     def getData(self):
         return self.__data
 
     def acceptNavigationByChevron(self, isAccepted):
         self.__data['isLadderBtnEnabled'] = isAccepted
-
-    def setUnitInfo(self, unitInfo):
-        self.__data['battleRoomVO'] = {'unitMgrID': unitInfo.unitMgrID,
-         'peripheryID': unitInfo.peripheryID}
 
     def setClubLadderChevron(self, club):
         ladderInfo = club.getLadderInfo()
@@ -226,7 +220,6 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
             resultVO.openClubProfileByChevronClick()
             if club.hasActiveUnit():
                 unitInfo = club.getUnitInfo()
-                resultVO.setUnitInfo(unitInfo)
                 resultVO.showCreateButton(_ms(CYBERSPORT.WINDOW_INTRO_CREATE_BTN_JOINTEAM), TOOLTIPS.CYBERSPORT_INTRO_CREATEBTN_JOINTEAM)
                 if unitInfo.isInBattle():
                     isInBattleIcon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_SWORDSICON, 16, 16, -3, 0))

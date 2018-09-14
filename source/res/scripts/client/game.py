@@ -19,13 +19,13 @@ from gui.shared import personality as gui_personality
 from messenger import MessengerEntry
 import MusicController
 import TriggersManager
-from helpers import RSSDownloader, OfflineMode
+from helpers import RSSDownloader
 import Settings
 from MemoryCriticalController import g_critMemHandler
 import VOIP
 import WebBrowser
 import SoundGroups
-import FMOD
+import OfflineMode
 loadingScreenClass = None
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
@@ -83,6 +83,10 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
         MessengerEntry.g_instance.init()
         import items
         items.init(True, None if not constants.IS_DEVELOPMENT else {})
+        import win_points
+        win_points.init()
+        import rage
+        rage.init()
         import ArenaType
         ArenaType.init()
         import dossiers2
@@ -114,6 +118,7 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
         from AvatarInputHandler.cameras import FovExtended
         FovExtended.instance().resetFov()
         SoundGroups.loadPluginDB()
+        BigWorld.pauseDRRAutoscaling(True)
     except Exception:
         LOG_CURRENT_EXCEPTION()
         BigWorld.quit()
@@ -191,6 +196,19 @@ def start():
                     LOG_CURRENT_EXCEPTION()
 
                 gui_personality.start()
+            elif sys.argv[1] == 'bot':
+                gui_personality.start()
+                try:
+                    LOG_DEBUG('BOTNET: Playing scenario "%s" with bot "%s"...' % (sys.argv[2], sys.argv[3]))
+                    sys.path.append('scripts/bot')
+                    from client.ScenarioPlayer import ScenarioPlayerObject
+                    ScenarioPlayerObject.play(sys.argv[2], sys.argv[3])
+                except:
+                    LOG_DEBUG('BOTNET: Failed to start the client with:')
+                    LOG_CURRENT_EXCEPTION()
+
+            else:
+                gui_personality.start()
         else:
             gui_personality.start()
         try:
@@ -218,6 +236,9 @@ def abort():
 def fini():
     LOG_DEBUG('fini')
     if OfflineMode.enabled():
+        OfflineMode.onShutdown()
+        return
+    elif OfflineMode.enabled():
         return
     else:
         BigWorld.wg_setScreenshotNotifyCallback(None)

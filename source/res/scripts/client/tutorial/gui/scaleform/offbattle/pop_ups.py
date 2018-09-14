@@ -1,27 +1,8 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/offbattle/pop_ups.py
-import BigWorld, MusicController, SoundGroups
+import BigWorld
 from tutorial.gui.Scaleform.meta.TutorialBattleNoResultsMeta import TutorialBattleNoResultsMeta
 from tutorial.gui.Scaleform.meta.TutorialBattleStatisticMeta import TutorialBattleStatisticMeta
 from tutorial.gui.Scaleform.pop_ups import TutorialDialog, TutorialWindow
-
-class TutorialVideoDialog(TutorialDialog):
-
-    def _populate(self):
-        self.__setSoundMuted(False)
-        super(TutorialVideoDialog, self)._populate()
-
-    def _dispose(self):
-        super(TutorialVideoDialog, self)._dispose()
-        self.__setSoundMuted(True)
-
-    def __setSoundMuted(self, isMuted):
-        BigWorld.wg_setMovieSoundMuted(isMuted)
-        SoundGroups.g_instance.enableAmbientAndMusic(isMuted)
-        if isMuted:
-            MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
-        else:
-            MusicController.g_musicController.stop()
-
 
 class TutorialConfirmRefuseDialog(TutorialDialog):
 

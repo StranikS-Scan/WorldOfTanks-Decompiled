@@ -3,6 +3,8 @@ import datetime
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
 import constants
+from shared_utils.account_helpers import BattleResultsCache, ClientClubs
+from shared_utils.account_helpers import ClientInvitations
 from gui import GUI_SETTINGS
 from helpers.time_utils import getCurrentTimestamp
 
@@ -40,5 +42,5 @@ def getPlayerID():
     return getattr(BigWorld.player(), 'id', 0L)
 
 
-def getPlayerDatabaseID():
+def getAccountDatabaseID():
     return getattr(BigWorld.player(), 'databaseID', 0L)

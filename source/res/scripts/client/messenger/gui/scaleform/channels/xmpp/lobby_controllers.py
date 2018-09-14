@@ -18,6 +18,11 @@ class ChatChannelController(_LobbyLayout):
     def proto(self):
         return None
 
+    def activate(self):
+        if not self._channel.isJoined():
+            self.proto.messages.requestChatHistory(self._channel.getID())
+        super(ChatChannelController, self).activate()
+
     def exit(self):
         self.proto.messages.stopChatSession(self._channel.getID())
 
@@ -45,7 +50,7 @@ class ChatChannelController(_LobbyLayout):
         if not doFormatting:
             return message.text
         dbID = message.accountDBID
-        return self._mBuilder.setGuiType(dbID).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.text).build()
+        return self._mBuilder.setGuiType(dbID).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.body).build()
 
     def _onConnectStateChanged(self, channel):
         if self._view:

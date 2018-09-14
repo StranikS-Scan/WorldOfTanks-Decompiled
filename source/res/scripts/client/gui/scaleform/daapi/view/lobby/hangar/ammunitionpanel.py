@@ -1,10 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.gui_items.Vehicle import Vehicle
-from gui.shared.gui_items.artefacts import Equipment
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.Scaleform.framework import AppRef

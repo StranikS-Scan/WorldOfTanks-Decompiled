@@ -3,13 +3,13 @@ from gui.Scaleform.daapi.view.meta.SimpleWindowMeta import SimpleWindowMeta
 
 class PremiumWindowMeta(SimpleWindowMeta):
 
-    def onTariffClick(self, tariffId):
-        self._printOverrideError('onTariffClick')
+    def onRateClick(self, rateId):
+        self._printOverrideError('onRateClick')
 
     def as_setHeaderS(self, prc, bonus1, bonus2):
         if self._isDAAPIInited():
             return self.flashObject.as_setHeader(prc, bonus1, bonus2)
 
-    def as_setTariffsS(self, header, tarifs, selectedTariffId):
+    def as_setRatesS(self, header, rates, selectedRateId):
         if self._isDAAPIInited():
-            return self.flashObject.as_setTariffs(header, tarifs, selectedTariffId)
+            return self.flashObject.as_setRates(header, rates, selectedRateId)

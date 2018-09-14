@@ -16,8 +16,9 @@ from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.prb_control.items.sortie_items import getDivisionsOrderData
 from gui.prb_control.prb_helpers import unitFunctionalProperty
 from gui.shared.fortifications.fort_seqs import getDivisionSettings, BATTLE_ITEM_TYPE
-from gui.shared.utils import CONST_CONTAINER, sortByFields
+from gui.shared.utils import sortByFields
 from helpers import i18n, time_utils
+from shared_utils import CONST_CONTAINER
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
@@ -194,11 +195,12 @@ class SortiesDataProvider(SortableDAAPIDataProvider, AppRef):
     def _makeVO(self, index, item):
         isInBattle = item.getFlags() & UNIT_FLAGS.IN_ARENA > 0 or item.getFlags() & UNIT_FLAGS.IN_QUEUE > 0 or item.getFlags() & UNIT_FLAGS.IN_SEARCH > 0
         user = self.usersStorage.getUser(item.getCommanderDatabaseID())
+        scheme = g_settings.getColorScheme('rosters')
         if user:
-            colors = g_settings.getColorScheme('rosters').getColors(user.getGuiType())
+            colors = scheme.getColors(user.getGuiType())
             color = colors[0] if user.isOnline() else colors[1]
         else:
-            colors = g_settings.getColorScheme(USER_GUI_TYPE.OTHER)
+            colors = scheme.getColors(USER_GUI_TYPE.OTHER)
             color = colors[1]
         return {'sortieID': item.getID(),
          'creatorName': item.getCommanderFullName(),

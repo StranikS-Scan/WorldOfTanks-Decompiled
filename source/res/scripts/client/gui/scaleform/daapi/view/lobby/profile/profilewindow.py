@@ -73,8 +73,9 @@ class ProfileWindow(ProfileWindowMeta, AbstractWindowView, View, AppRef):
     def __updateUserInfo(self):
         dossier = g_itemsCache.items.getAccountDossier(self.__databaseID)
         clanDBID, clanInfo = g_itemsCache.items.getClanInfo(self.__databaseID)
-        info = getProfileCommonInfo(self.__userName, dossier.getDossierDescr(), clanInfo, None)
-        self.as_setInitDataS({'fullName': g_lobbyContext.getPlayerFullName(info['name'], clanAbbrev=info['clanName'], regionCode=g_lobbyContext.getRegionCode(self.__databaseID))})
+        info = getProfileCommonInfo(self.__userName, dossier.getDossierDescr())
+        clanAbbrev = clanInfo[1] if clanInfo is not None else None
+        self.as_setInitDataS({'fullName': g_lobbyContext.getPlayerFullName(info['name'], clanAbbrev=clanAbbrev, regionCode=g_lobbyContext.getRegionCode(self.__databaseID))})
         return
 
     def registerFlashComponent(self, component, alias, *args):

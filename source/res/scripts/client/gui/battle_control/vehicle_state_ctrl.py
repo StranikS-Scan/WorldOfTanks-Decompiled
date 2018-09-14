@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/gui/battle_control/vehicle_state_ctrl.py
-import BattleReplay
 import BigWorld
 import Event
 import SoundGroups
@@ -145,6 +144,7 @@ class VehicleStateController(object):
         if self.__vehicleID == vehicleID or vehicleID is None:
             return
         else:
+            self.onVehicleStateUpdated(VEHICLE_VIEW_STATE.SWITCHING, self.__vehicleID)
             if self.__updater:
                 self.__updater.clear()
             self.__waitingTI.stop()
@@ -154,6 +154,10 @@ class VehicleStateController(object):
             self.onVehicleStateUpdated(VEHICLE_VIEW_STATE.PLAYER_INFO, self.__vehicleID)
             self.__waitingTI.start()
             return
+
+    def movingToRespawn(self):
+        self.onVehicleStateUpdated(VEHICLE_VIEW_STATE.SWITCHING, 0)
+        self.onRespawnBaseMoving()
 
     def _waiting(self):
         vehicle = BigWorld.entity(self.__vehicleID)
@@ -190,6 +194,7 @@ class VehicleStateReplayRecorder(VehicleStateController):
 
     def invalidate(self, state, value):
         if state == VEHICLE_VIEW_STATE.CRUISE_MODE:
+            import BattleReplay
             BattleReplay.g_replayCtrl.onSetCruiseMode(value)
         super(VehicleStateReplayRecorder, self).invalidate(state, value)
 

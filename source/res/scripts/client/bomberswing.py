@@ -70,7 +70,7 @@ class Bomber(object):
     def __playSound(self):
         if self.__desc and self.__desc.soundEvent:
             try:
-                self.__sound = SoundGroups.g_instance.playSound(self.__model, self.__desc.soundEvent)
+                self.__sound = SoundGroups.g_instance.playSoundModel(self.__model, self.__desc.soundEvent)
             except:
                 self.__sound = None
                 LOG_CURRENT_EXCEPTION()

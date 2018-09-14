@@ -11,6 +11,8 @@ class XML_NAME_SPACE(object):
     WG_CLIENT = 'http://wargaming.net/xmpp#client'
     WG_SPA_RESOLVER = 'http://wargaming.net/xmpp#spa-resolver'
     WG_STORAGE = 'http://wargaming.net/xmpp#storage'
+    WG_PRIVATE_HISTORY = 'http://wargaming.net/xmpp#private-message-history'
+    WG_MESSAGE_ID = 'http://wargaming.net/xmpp#message-id'
 
 
 class XML_TAG_NAME(object):
@@ -26,3 +28,5 @@ class XML_TAG_NAME(object):
     SET = 'set'
     WG_EXTENSION = 'wgexts'
     WG_CLIENT = 'wgexts-client'
+    WG_PRIVATE_HISTORY = 'private-history'
+    WG_MESSAGE_ID = 'message-id'

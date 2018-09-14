@@ -4,6 +4,7 @@ from battle_statistics_layouts import *
 from dossiers2.custom.dependencies import ACHIEVEMENT15X15_DEPENDENCIES
 from dossiers2.custom.dependencies import ACHIEVEMENT7X7_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
+from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
  'battleLifeTime',
@@ -19,10 +20,9 @@ _company2BlockBuilder = StaticSizeBlockBuilder('company2', COMPANY2_BLOCK_LAYOUT
 _a7x7BlockBuilder = StaticSizeBlockBuilder('a7x7', A7X7_BLOCK_LAYOUT, A7X7_STATS_DEPENDENCIES, [])
 _rated7x7BlockBuilder = StaticSizeBlockBuilder('rated7x7', RATED_7X7_BLOCK_LAYOUT, {}, [])
 _historicalBlockBuilder = StaticSizeBlockBuilder('historical', HISTORICAL_BLOCK_LAYOUT, HISTORICAL_STATS_DEPENDENCIES, [])
-_fortBattlesInClanBlockBuilder = StaticSizeBlockBuilder('fortBattlesInClan', FORT_BLOCK_LAYOUT, {}, [])
-_fortSortiesInClanBlockBuilder = StaticSizeBlockBuilder('fortSortiesInClan', FORT_BLOCK_LAYOUT, {}, [])
 _fortBattlesBlockBuilder = StaticSizeBlockBuilder('fortBattles', FORT_BLOCK_LAYOUT, FORT_BATTLES_STATS_DEPENDENCIES, [])
 _fortSortiesBlockBuilder = StaticSizeBlockBuilder('fortSorties', FORT_BLOCK_LAYOUT, FORT_SORTIES_STATS_DEPENDENCIES, [])
+_globalMapCommonBlockBuilder = StaticSizeBlockBuilder('globalMapCommon', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
 _maxPopUps = ['maxXP', 'maxFrags', 'maxDamage']
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
@@ -30,6 +30,7 @@ _maxHistoricalBlockBuilder = StaticSizeBlockBuilder('maxHistorical', MAX_BLOCK_L
 _maxFortBattlesBlockBuilder = StaticSizeBlockBuilder('maxFortBattles', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _maxFortSortiesBlockBuilder = StaticSizeBlockBuilder('maxFortSorties', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_BLOCK_LAYOUT, {}, [])
+_maxGlobalMapCommonBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapCommon', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
@@ -252,4 +253,6 @@ vehicleDossierLayout = (_a15x15BlockBuilder,
  _singleAchievementsBlockBuilder,
  _clanAchievementsBlockBuilder,
  _rated7x7BlockBuilder,
- _maxRated7x7BlockBuilder)
+ _maxRated7x7BlockBuilder,
+ _globalMapCommonBlockBuilder,
+ _maxGlobalMapCommonBlockBuilder)

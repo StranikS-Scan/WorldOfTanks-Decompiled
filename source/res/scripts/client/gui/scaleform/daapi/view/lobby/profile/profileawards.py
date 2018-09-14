@@ -35,7 +35,7 @@ class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
 
         self.as_responseDossierS(self._battlesType, {'achievementsList': packedList,
          'totalItemsList': totalItemsList,
-         'battlesCount': targetData.getBattlesCount()})
+         'battlesCount': targetData.getBattlesCount()}, '', '')
         return
 
     def _populate(self):

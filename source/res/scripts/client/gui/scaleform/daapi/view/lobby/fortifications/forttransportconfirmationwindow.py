@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundControlle
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortTransportConfirmationWindowMeta import FortTransportConfirmationWindowMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
-from gui.Scaleform.framework.managers.TextManager import TextIcons
+from gui.shared.formatters import icons
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.framework import AppRef
@@ -56,7 +56,7 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
         stdText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, prefix)
         defResText = fort_formatters.getDefRes(self.getTransportingSize(), True)
         self.as_setMaxTransportingSizeS(stdText + defResText)
-        clockIcon = self.app.utilsManager.textManager.getIcon(TextIcons.CLOCK_ICON)
+        clockIcon = icons.clock()
         time = self.app.utilsManager.textManager.getTimeDurationStr(self.fortCtrl.getFort().getTransportationLevel().cooldownTime)
         ctx = {'estimatedTime': time}
         estimatedTextString = i18n.makeString(FORTIFICATIONS.FORTTRANSPORTCONFIRMATIONWINDOW_TRANSPORTINGFOOTERTEXT, **ctx)

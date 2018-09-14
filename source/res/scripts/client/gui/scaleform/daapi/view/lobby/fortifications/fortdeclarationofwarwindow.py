@@ -59,6 +59,9 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
     def _updateDirections(self):
         directions = []
         selectedDirection = -1
+        fort = self.fortCtrl.getFort()
+        inProcess, _ = fort.getDefenceHourProcessing()
+        isDefenceOn = fort.isDefenceHourEnabled() or inProcess
         enemyBuildings = [None, None]
         for buildingID, buildingData in self.__item.getDictBuildingsBrief().iteritems():
             dirId = getDirectionFromDirPos(buildingData['dirPosByte'])
@@ -69,15 +72,16 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
                     isAvailable = False
                 else:
                     isAvailable = self.__isBuildingAvailableForAttack(buildingData['hp'], g_fortCache.buildings[buildingID].levels[level].hp)
-                enemyBuildings[pos] = {'uid': self.getBuildingUIDbyID(buildingID),
+                uid = self.getBuildingUIDbyID(buildingID)
+                enemyBuildings[pos] = {'uid': uid,
                  'progress': self._getProgress(buildingID, level),
                  'buildingLevel': level,
-                 'isAvailable': isAvailable}
+                 'isAvailable': isAvailable,
+                 'iconSource': FortViewHelper.getSmallIconSource(uid, level, isDefenceOn)}
 
         enemyDirection = {'name': _ms('#fortifications:General/directionName%d' % self.__direction),
          'isMine': False,
          'buildings': enemyBuildings}
-        fort = self.fortCtrl.getFort()
         for direction in range(1, g_fortCache.maxDirections + 1):
             isOpened = fort.isDirectionOpened(direction)
             isBusy = False
@@ -92,10 +96,13 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
                     data = None
                     if building is not None:
                         buildingTypeId = building.typeID
-                        data = {'uid': self.getBuildingUIDbyID(buildingTypeId),
-                         'progress': self._getProgress(buildingTypeId, building.level),
-                         'buildingLevel': building.level,
-                         'isAvailable': self.__isBuildingAvailableForAttack(building.hp, building.levelRef.hp)}
+                        uid = self.getBuildingUIDbyID(buildingTypeId)
+                        level = building.level
+                        data = {'uid': uid,
+                         'progress': self._getProgress(buildingTypeId, level),
+                         'buildingLevel': level,
+                         'isAvailable': self.__isBuildingAvailableForAttack(building.hp, building.levelRef.hp),
+                         'iconSource': FortViewHelper.getSmallIconSource(uid, level, isDefenceOn)}
                     allieBuildings.append(data)
 
                 eventTypeID = FORT_EVENT_TYPE.DIR_OPEN_ATTACKS_BASE + direction

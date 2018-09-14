@@ -208,7 +208,7 @@ class CombatEquipmentManager(object):
         if wing is not None:
             wing.destroy()
             del self.__wings[wingID]
-        self.base.vehicle_setEquipmentApplicationPoint(equipmentID, point, direction)
+        self.cell.setEquipmentApplicationPoint(equipmentID, point, direction)
         return
 
     @staticmethod

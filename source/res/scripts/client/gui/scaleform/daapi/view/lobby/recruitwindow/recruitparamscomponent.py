@@ -77,7 +77,7 @@ class RecruitParamsComponent(RecruitParametersMeta):
         selectedIndex = 0
         for i, module in enumerate(modulesAll):
             data.append({'id': module.innationID,
-             'label': module.descriptor.type.shortUserString})
+             'label': module.shortUserName})
             if module.innationID == self.__selectedVehicle:
                 selectedIndex = i
 

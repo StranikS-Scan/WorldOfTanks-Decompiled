@@ -14,4 +14,4 @@ class MedalCariusAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'medalCarius')
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRandomStats().getFragsCount() + dossier.getTeam7x7Stats().getFragsCount() + dossier.getFortBattlesStats().getFragsCount() + dossier.getFortSortiesStats().getFragsCount()
+        return dossier.getRandomStats().getFragsCount() - dossier.getClanStats().getFragsCount() + dossier.getTeam7x7Stats().getFragsCount() + dossier.getFortBattlesStats().getFragsCount() + dossier.getFortSortiesStats().getFragsCount() + dossier.getGlobalMapStats().getFragsCount()

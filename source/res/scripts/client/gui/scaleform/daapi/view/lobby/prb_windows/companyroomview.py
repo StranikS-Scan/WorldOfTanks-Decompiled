@@ -7,14 +7,12 @@ from gui.Scaleform.daapi.view.meta.CompanyRoomMeta import CompanyRoomMeta
 from gui.Scaleform.genConsts.COMPANY_ALIASES import COMPANY_ALIASES
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control import getMaxSizeLimits, getTotalLevelLimits
 from gui.prb_control import formatters, getClassLevelLimits
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
-from gui.server_events.EventsCache import g_eventsCache
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles
@@ -28,12 +26,10 @@ class CompanyRoomView(CompanyRoomMeta):
         super(CompanyRoomView, self).__init__(prbName='company')
         self.textMgr = self.app.utilsManager.textManager
         self.__selectedDivision = None
-        self.__eventVehicles = g_eventsCache.getEventVehicles()
         return
 
     def startListening(self):
         super(CompanyRoomView, self).startListening()
-        g_eventsCache.onSyncCompleted += self.__onEventsCacheChanged
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived += self.__onUsersReceived
@@ -41,7 +37,6 @@ class CompanyRoomView(CompanyRoomMeta):
 
     def stopListening(self):
         super(CompanyRoomView, self).stopListening()
-        g_eventsCache.onSyncCompleted -= self.__onEventsCacheChanged
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived -= self.__onUsersReceived
@@ -149,7 +144,6 @@ class CompanyRoomView(CompanyRoomMeta):
     def _dispose(self):
         super(CompanyRoomView, self)._dispose()
         self.textMgr = None
-        self.__eventVehicles = None
         return
 
     def _setRosterList(self, rosters):
@@ -198,35 +192,11 @@ class CompanyRoomView(CompanyRoomMeta):
         self.as_setInvalidVehiclesS(invalidVehs)
 
     def __makeHeaderData(self, limits, minMax, maxPlayerCount):
-        if self.__selectedDivision in PREBATTLE_COMPANY_DIVISION.EVENT_ONLY:
-            viewType, viewLinkage, vehTypeAlias = COMPANY_ALIASES.FALLOUT_MAP
-            reqsTxt = text_styles.middleTitle(i18n.makeString(PREBATTLE.COMPANY_HEADER_FALLOUT_REQUIREMENTSTITLE))
-            reqVehsCount = text_styles.standard(i18n.makeString(PREBATTLE.COMPANY_HEADER_FALLOUT_REQUIREDVEHICLESCOUNT, vehiclesCount=str(maxPlayerCount)))
-            data = {'viewLinkage': viewLinkage,
-             'vehicleTypeAlias': vehTypeAlias,
-             'requirementsTitle': reqsTxt,
-             'vehiclesType': self.__makeRequiredVehicles(),
-             'vehiclesCount': reqVehsCount,
-             'x_position': 229,
-             'y_position': 29,
-             'h_spacing': 15}
-        else:
-            viewType, viewLinkage = COMPANY_ALIASES.STANDARD_MAP
-            data = {'viewLinkage': viewLinkage,
-             'vehiclesType': limits,
-             'minMax': minMax}
+        viewType, viewLinkage = COMPANY_ALIASES.STANDARD_MAP
+        data = {'viewLinkage': viewLinkage,
+         'vehiclesType': limits,
+         'minMax': minMax}
         self.as_setHeaderDataS(viewType, data)
-
-    def __makeRequiredVehicles(self):
-        strResult = []
-        for vehicle in self.__eventVehicles:
-            icon = RES_ICONS.maps_icons_vehicletypes_elite(vehicle.type + '.png')
-            userName = self.textMgr.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, vehicle.userName)
-            voData = {'resIcon': icon,
-             'vehicleName': userName}
-            strResult.append(voData)
-
-        return strResult
 
     def __makeRequiredVehiclesCount(self, maxPlayerCount):
         txt = i18n.makeString(PREBATTLE.COMPANY_HEADER_FALLOUT_REQUIREDVEHICLESCOUNT, vehiclesCount=str(maxPlayerCount))
@@ -289,10 +259,3 @@ class CompanyRoomView(CompanyRoomMeta):
             self.as_setChangeSettingCoolDownS(event.coolDown)
         elif event.requestID is REQUEST_TYPE.SET_PLAYER_STATE:
             self.as_setCoolDownForReadyButtonS(event.coolDown)
-
-    def __onEventsCacheChanged(self):
-        self.__eventVehicles = g_eventsCache.getEventVehicles()
-        self.__setSettings()
-        rosters = self.prbFunctional.getRosters()
-        self._setRosterList(rosters)
-        self.__setLimits(rosters, self.prbFunctional.getSettings().getTeamLimits(1))

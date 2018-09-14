@@ -11,9 +11,9 @@ from gui.Scaleform.framework.managers.TextManager import TextManager
 from helpers import getLocalizedData, i18n
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
+from shared_utils import makeTupleByDict
 from gui import makeHtmlString
 from gui.shared import g_itemsCache
-from gui.shared.utils import makeTupleByDict
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS

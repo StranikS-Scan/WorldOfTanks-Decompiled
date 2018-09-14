@@ -50,3 +50,6 @@ class DamagePanelMeta(BattleComponentMeta):
 
     def as_destroyS(self):
         self._flashObject.as_destroy()
+
+    def as_resetS(self):
+        self._flashObject.as_reset()

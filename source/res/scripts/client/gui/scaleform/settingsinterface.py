@@ -9,7 +9,7 @@ import nations
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from account_helpers.settings_core.options import APPLY_METHOD
-from account_helpers.settings_core.settings_constants import SOUND
+from account_helpers.settings_core.settings_constants import SOUND, GRAPHICS
 from gui import GUI_SETTINGS, g_guiResetters
 from gui.GraphicsPresets import GraphicsPresets
 from gui.GraphicsResolutions import g_graficsResolutions
@@ -518,7 +518,6 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('ppShowLevels', settings['ppShowLevels'])
         g_settingsCore.applySetting('replayEnabled', settings['replayEnabled'])
         g_settingsCore.applySetting('fpsPerfomancer', settings['fpsPerfomancer'])
-        g_settingsCore.applySetting('dynamicRenderer', settings['dynamicRenderer'])
         g_settingsCore.applySetting('colorFilterIntensity', settings['colorFilterIntensity'])
         g_settingsCore.applySetting('fov', settings['fov'])
         g_settingsCore.applySetting('dynamicFov', settings['dynamicFov'])
@@ -601,6 +600,7 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('mouseHorzInvert', bool(mouse['horInvert']['value']))
         g_settingsCore.applySetting('mouseVertInvert', bool(mouse['vertInvert']['value']))
         g_settingsCore.applySetting('backDraftInvert', bool(mouse['backDraftInvert']['value']))
+        g_settingsCore.applySetting('monitor', settings['monitor'])
         isFullScreen = bool(settings['fullScreen'])
         if isFullScreen:
             g_settingsCore.applySetting('refreshRate', settings['refreshRate'])
@@ -612,7 +612,6 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('fullScreen', isFullScreen)
         g_settingsCore.applySetting('multisampling', settings['multisampling'])
         g_settingsCore.applySetting('customAA', settings['customAA'])
-        g_settingsCore.applySetting('monitor', settings['monitor'])
         g_settingsCore.applySetting('vertSync', settings['vertSync'])
         g_settingsCore.applySetting('tripleBuffered', settings['tripleBuffered'])
         if round(SoundGroups.g_instance.getVolume('masterVivox') * 100) != settings['masterVivoxVolume']:
@@ -639,7 +638,7 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('enableSpamFilter', settings['enableSpamFilter'])
         g_windowsStoredData.start()
         g_settingsCore.applySetting('receiveFriendshipRequest', settings['receiveFriendshipRequest'])
-        g_settingsCore.applySetting('receiveInvitesInBattle', settings['receiveInvitesInBattle'])
+        g_settingsCore.applySetting('receiveInvitesInBattle', settings.get('receiveInvitesInBattle'))
         g_windowsStoredData.stop()
         g_settingsCore.applySetting('invitesFromFriendsOnly', settings['invitesFromFriendsOnly'])
         g_settingsCore.applySetting('storeReceiverInBattle', settings['storeReceiverInBattle'])
@@ -656,6 +655,7 @@ class SettingsInterface(UIInterface):
             if value is not None:
                 g_settingsCore.applySetting(key, value)
 
+        g_settingsCore.applySetting('dynamicRenderer', settings['dynamicRenderer'])
         if applyMethod == APPLY_METHOD.RESTART:
             BigWorld.commitPendingGraphicsSettings()
             restartClient = True

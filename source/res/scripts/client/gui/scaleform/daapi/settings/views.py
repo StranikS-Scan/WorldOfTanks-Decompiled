@@ -46,6 +46,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_BUY_WINDOW = 'vehicleBuyWindow'
     BATTLE_QUEUE = 'battleQueue'
     BATTLE_LOADING = 'battleLoading'
+    FALLOUT_MULTI_TEAM_BATTLE_LOADING = 'falloutMultiTeamBattleLoading'
     TUTORIAL_LOADING = 'tutorialLoading'
     TECHNICAL_MAINTENANCE = 'technicalMaintenance'
     VEHICLE_INFO_WINDOW = 'vehicleInfoWindow'
@@ -98,3 +99,5 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     REPORT_BUG = 'reportBug'
     SQUAD_PROMO_WINDOW = 'squadPromoWindow'
     BOOSTERS_PANEL = 'boostersPanel'
+    MINI_CLIENT_LINKED = 'linkedMiniClientComponent'
+    SWITCH_PERIPHERY_WINDOW = 'switchPeripheryWindow'

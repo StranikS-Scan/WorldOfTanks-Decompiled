@@ -121,7 +121,8 @@ class ModelStickers():
         replayCtrl = BattleReplay.g_replayCtrl
         for slotType, slots in self.__slotsByType.iteritems():
             if slotType != SlotTypes.CLAN or self.__clanID == 0 or replayCtrl.isPlaying and replayCtrl.isOffline:
-                self.__doAttachStickers(slotType)
+                if slotType != SlotTypes.CLAN:
+                    self.__doAttachStickers(slotType)
             elif slotType == SlotTypes.CLAN:
                 arenaBonusType = None
                 if hasattr(BigWorld.player(), 'arena'):

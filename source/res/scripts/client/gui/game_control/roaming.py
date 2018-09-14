@@ -1,30 +1,8 @@
 # Embedded file name: scripts/client/gui/game_control/roaming.py
-import BigWorld
-from collections import namedtuple
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
+from gui.LobbyContext import g_lobbyContext
 from gui.game_control.controllers import Controller
-
-class _CenterInfo(object):
-    __slots__ = ('centerID', 'dbidMin', 'dbidMax', 'regionCode')
-
-    def __init__(self, centerID, dbidMin, dbidMax, regionCode):
-        self.centerID = centerID
-        self.dbidMin = dbidMin
-        self.dbidMax = dbidMax
-        self.regionCode = regionCode
-
-    def isPlayerHome(self, playerDBID):
-        return self.dbidMin <= playerDBID <= self.dbidMax
-
-    def __repr__(self):
-        return 'CenterInfo(centerID=%d, dbidMin=%d, dbidMax=%d, regionCode=%s)' % (self.centerID,
-         self.dbidMin,
-         self.dbidMax,
-         self.regionCode)
-
-
-_RoamingSettings = namedtuple('_RoamingSettings', 'homeCenterID curCenterID servers')
 
 class RoamingController(Controller):
 
@@ -42,12 +20,7 @@ class RoamingController(Controller):
         return
 
     def onAccountBecomePlayer(self):
-        roamingSettings = BigWorld.player().serverSettings
-        self.start(roamingSettings)
-
-    def start(self, serverSettings):
-        roamingSettings = serverSettings['roaming']
-        self.__roamingSettings = _RoamingSettings(roamingSettings[0], roamingSettings[1], [ _CenterInfo(*s) for s in roamingSettings[2] ])
+        self.__roamingSettings = g_lobbyContext.getServerSettings().roaming
 
     def isEnabled(self):
         return GUI_SETTINGS.roaming

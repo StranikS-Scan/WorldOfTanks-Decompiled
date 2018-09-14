@@ -25,12 +25,12 @@ class OffbattleControlsFactory(ControlsFactory):
          Effect.REQUEST_ALL_BONUSES: functional.FunctionalRequestAllBonusesEffect,
          Effect.ENTER_QUEUE: functional.FunctionalEnterQueueEffect,
          Effect.EXIT_QUEUE: functional.FunctionalExitQueueEffect,
-         Effect.PLAY_MUSIC: functional.FunctionalPlayMusicEffect}
+         Effect.PLAY_MUSIC: functional.FunctionalPlayMusicEffect,
+         Effect.OPEN_INTERNAL_BROWSER: functional.FunctionalOpenInternalBrowser}
         _queries = {'greeting': queries.GreetingContent,
          'queue': queries.TutorialQueueText,
          'final': queries.BattleFinalStatistic,
-         'resultMessage': queries.BattleResultMessage,
-         'video': queries.VideoContent}
+         'resultMessage': queries.BattleResultMessage}
         ControlsFactory.__init__(self, effects, _queries)
 
     def createBonuses(self, completed):

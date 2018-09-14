@@ -3,7 +3,6 @@ import math
 import BigWorld
 import GUI, Math
 from debug_utils import LOG_DEBUG
-from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.Scaleform.daapi.view.battle import DAMAGE_PANEL_PATH, TANK_INDICATOR_PANEL_PATH
 from gui.Scaleform.daapi.view.battle.meta.DamagePanelMeta import DamagePanelMeta
 from gui.battle_control import g_sessionProvider, vehicle_getter
@@ -38,19 +37,6 @@ class _TankIndicatorCtrl(object):
         tankIndicator.wg_turretMatProv = turretMat
 
 
-def _getCrewLayout(crewRoles):
-    crewLayout = [ elem[0] for elem in crewRoles ]
-    order = TANKMEN_ROLES_ORDER_DICT['plain']
-    lastIdx = len(order)
-
-    def comparator(item, other):
-        itemIdx = order.index(item) if item in order else lastIdx
-        otherIdx = order.index(other) if other in order else lastIdx
-        return cmp(itemIdx, otherIdx)
-
-    return sorted(crewLayout, cmp=comparator)
-
-
 class DamagePanel(DamagePanelMeta):
     __stateHandlers = {VEHICLE_VIEW_STATE.HEALTH: 'as_updateHealthS',
      VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
@@ -61,7 +47,8 @@ class DamagePanel(DamagePanelMeta):
      VEHICLE_VIEW_STATE.CREW_DEACTIVATED: 'as_setCrewDeactivatedS',
      VEHICLE_VIEW_STATE.PLAYER_INFO: '_updatePlayerInfo',
      VEHICLE_VIEW_STATE.DEVICES: '_updateDeviceState',
-     VEHICLE_VIEW_STATE.REPAIRING: '_updateRepairingDevice'}
+     VEHICLE_VIEW_STATE.REPAIRING: '_updateRepairingDevice',
+     VEHICLE_VIEW_STATE.SWITCHING: '_switching'}
 
     def __init__(self, parentUI):
         super(DamagePanel, self).__init__()
@@ -124,10 +111,15 @@ class DamagePanel(DamagePanelMeta):
     def _updateRepairingDevice(self, value):
         self.as_updateRepairingDeviceS(*value)
 
+    def _switching(self, _):
+        self.as_resetS()
+
     def __changeVehicleSetting(self, tag, entityName):
         result, error = g_sessionProvider.getEquipmentsCtrl().changeSettingByTag(tag, entityName=entityName, avatar=BigWorld.player())
         if not result and error:
-            self.__ui.vErrorsPanel.showMessage(error.key, error.ctx)
+            ctrl = g_sessionProvider.getBattleMessagesCtrl()
+            if ctrl:
+                ctrl.onShowVehicleErrorByKey(error.key, error.ctx)
 
     def __onVehicleControlling(self, vehicle):
         vTypeDesc = vehicle.typeDescriptor
@@ -141,7 +133,7 @@ class DamagePanel(DamagePanelMeta):
             isAutoRotationOn = vehicle_getter.isAutoRotationOn(vTypeDesc)
         else:
             isAutoRotationOn = None
-        self.as_setupS((vTypeDesc.maxHealth, vehicle.health), vehicle_getter.getVehicleIndicatorType(vTypeDesc), _getCrewLayout(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), isAutoRotationOn)
+        self.as_setupS((vTypeDesc.maxHealth, vehicle.health), vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWoIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), isAutoRotationOn)
         if self.__tankIndicator:
             self.__tankIndicator.setup(self.__ui, vehicle, yawLimits)
         return

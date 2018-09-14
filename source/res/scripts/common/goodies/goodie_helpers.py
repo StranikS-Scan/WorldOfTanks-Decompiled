@@ -6,7 +6,7 @@ from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExper
 from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle
 from GoodieValue import GoodieValue
 from goodie_constants import GOODIE_TARGET_TYPE, GOODIE_CONDITION_TYPE, GOODIE_RESOURCE_TYPE
-GoodieData = namedtuple('GoodieData', 'variety target enabled lifetime useby limit autostart condition resources')
+GoodieData = namedtuple('GoodieData', 'variety target enabled lifetime useby limit autostart condition resource')
 _CONDITIONS = {GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL: MaxVehicleLevel}
 _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
  GOODIE_TARGET_TYPE.ON_BUY_SLOT: BuySlot,
@@ -33,28 +33,18 @@ class NamedGoodieData(GoodieData):
 def loadDefinitions(d):
     goodies = {}
     for uid, d in d.iteritems():
-        v_variety = d[0]
-        v_target = d[1]
-        v_enabled = d[2]
-        v_lifetime = d[3]
-        v_useby = d[4]
-        v_limit = d[5]
-        v_autostart = d[6]
-        v_condition = d[7]
-        v_resources = d[8]
+        v_variety, v_target, v_enabled, v_lifetime, v_useby, v_limit, v_autostart, v_condition, v_resource = d
         if v_condition is not None:
             condition = _CONDITIONS.get(v_condition[0])(v_condition[1])
         else:
             condition = None
         target = _TARGETS[v_target[0]](v_target[1])
-        resources = {}
-        for r in v_resources:
-            if r[2]:
-                resources[_RESOURCES[r[0]]] = GoodieValue.percent(r[1])
-            else:
-                resources[_RESOURCES[r[0]]] = GoodieValue.absolute(r[1])
-
-        goodies[uid] = GoodieDefinition(uid=uid, variety=v_variety, target=target, enabled=v_enabled, lifetime=v_lifetime, useby=v_useby, counter=v_limit, autostart=v_autostart, resources=resources, condition=condition)
+        resource = _RESOURCES[v_resource[0]]
+        if v_resource[2]:
+            value = GoodieValue.percent(v_resource[1])
+        else:
+            value = GoodieValue.absolute(v_resource[1])
+        goodies[uid] = GoodieDefinition(uid=uid, variety=v_variety, target=target, enabled=v_enabled, lifetime=v_lifetime, useby=v_useby, counter=v_limit, autostart=v_autostart, resource=resource, value=value, condition=condition)
 
     return goodies
 
@@ -64,7 +54,7 @@ def getPremiumCost(premiumCosts, goodie):
         price = premiumCosts.get(goodie.getTargetValue(), None)
         if price is None:
             return
-        value = goodie.resources[0]
+        value = goodie.resource
         if value[2]:
             result = int(price - price * (value[1] / float(100)))
             if result < 0:

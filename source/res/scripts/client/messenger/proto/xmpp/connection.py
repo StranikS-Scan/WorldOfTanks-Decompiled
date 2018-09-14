@@ -4,10 +4,9 @@ import BigWorld
 from constants import TOKEN_TYPE
 from ConnectionManager import connectionManager
 from adisp import process
-from gui.shared.utils import backoff
+from gui.shared.utils import backoff, getPlayerDatabaseID
 from gui.shared.utils.requesters import TokenRequester, TokenResponse
 from messenger import g_settings
-from messenger.ext.player_helpers import getPlayerDatabaseID
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.gloox_constants import DISCONNECT_REASON, CONNECTION_IMPL_TYPE, GLOOX_EVENT

@@ -78,3 +78,7 @@ def counter(text):
 
 def titleFont(text):
     return _formatText('titleFont', text)
+
+
+def gold(text):
+    return _formatText('goldText', text)

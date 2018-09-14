@@ -15,6 +15,9 @@ class OfflineEntity(BigWorld.Entity):
     def onLeaveWorld(self):
         pass
 
+    def collideSegment(self, startPoint, endPoint, skipGun = False):
+        pass
+
 
 class PlayerOfflineEntity(BigWorld.Entity):
 

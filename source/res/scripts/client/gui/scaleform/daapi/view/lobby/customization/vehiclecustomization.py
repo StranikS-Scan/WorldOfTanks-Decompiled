@@ -10,7 +10,6 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
 from gui.Scaleform.daapi.view.lobby.customization import _VEHICLE_CUSTOMIZATIONS
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
@@ -20,13 +19,12 @@ from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDial
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.shared import events, g_itemsCache
+from gui.shared import g_itemsCache
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
-from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
-from gui.shared.utils import findFirst
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import i18n
+from shared_utils import findFirst
 from items import vehicles
 from items.vehicles import VehicleDescr
 
@@ -270,7 +268,6 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
             return
         self.__steps = len(_VEHICLE_CUSTOMIZATIONS)
         vehType = vehicles.g_cache.vehicle(*g_currentVehicle.item.descriptor.type.id)
-        self.as_onResetNewItemS()
         for interface in self.__interfaces.itervalues():
             interface.invalidateViewData(vehType, refresh=True)
 

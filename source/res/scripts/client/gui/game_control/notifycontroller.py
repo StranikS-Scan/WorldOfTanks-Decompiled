@@ -5,7 +5,7 @@ from collections import namedtuple
 import BigWorld
 import Settings
 from adisp import async, process
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.game_control.controllers import Controller
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
@@ -28,10 +28,12 @@ class NotifyController(Controller, AppRef):
 
     def init(self):
         self.__readSettings()
-        self._startListening()
+        self._startUIListening()
+        self._startPlayingTimeListening()
 
     def fini(self):
-        self._stopListening()
+        self._stopUIListening()
+        self._stopPlayingTimeListening()
         self.__writeSettings()
         super(NotifyController, self).fini()
 
@@ -40,15 +42,21 @@ class NotifyController(Controller, AppRef):
         if battlePlayingTime >= self.MIN_BATTLE_LENGHT:
             self.__settings = self.__settings._replace(lastBattleAvgFps=avgBattleFps)
 
-    def _startListening(self):
+    def _startUIListening(self):
         g_eventBus.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleUiUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def _stopListening(self):
+    def _startPlayingTimeListening(self):
+        g_eventBus.addListener(events.GameEvent.PLAYING_TIME_ON_ARENA, self.__handlePlayingTimeOnArena, scope=EVENT_BUS_SCOPE.BATTLE)
+
+    def _stopUIListening(self):
         g_eventBus.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleUiUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def _stopPlayingTimeListening(self):
+        g_eventBus.removeListener(events.GameEvent.PLAYING_TIME_ON_ARENA, self.__handlePlayingTimeOnArena, scope=EVENT_BUS_SCOPE.BATTLE)
+
     @process
-    def __handleUiUpdated(self, event):
-        self._stopListening()
+    def __handleUiUpdated(self, _):
+        self._stopUIListening()
         yield lambda callback: callback(True)
         from gui.battle_control import g_sessionProvider
         if g_sessionProvider.getCtx().wasInBattle:
@@ -73,6 +81,18 @@ class NotifyController(Controller, AppRef):
                 self.__updateLowFpsDialogVersion()
         graphicsStatus.markProcessed()
         self.__clearCurrentFpsInfo()
+
+    def __handlePlayingTimeOnArena(self, event):
+        ctx = event.ctx
+        if 'time' in ctx:
+            playingTime = ctx['time']
+        else:
+            LOG_ERROR('Playing time is not found', event.ctx)
+            return
+        avgBattleFps = BigWorld.getBattleFPS()[2]
+        LOG_DEBUG('Updating battle fps info', avgBattleFps, playingTime)
+        if playingTime >= self.MIN_BATTLE_LENGHT:
+            self.__settings = self.__settings._replace(lastBattleAvgFps=avgBattleFps)
 
     @async
     def __showI18nDialog(self, key, callback):

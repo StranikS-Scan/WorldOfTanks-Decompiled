@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/goodies/GoodiesCache.py
-from collections import defaultdict
 import weakref
+from collections import defaultdict
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE
 from gui.goodies.Booster import Booster
 from gui.shared.ItemsCache import g_itemsCache
@@ -32,12 +32,12 @@ class _GoodiesCache(object):
         return self._items.shop.boosters
 
     def getActiveBoostersTypes(self):
-        activeBoosterTypes = set()
+        activeBoosterTypes = []
         for boosterID, boosterValues in self.personalGoodies.iteritems():
             if boosterValues.state == GOODIE_STATE.ACTIVE:
                 boosterDescription = self.shopBoosters.get(boosterID, None)
                 if boosterDescription:
-                    activeBoosterTypes.add(boosterDescription.resources[0][0])
+                    activeBoosterTypes.append(boosterDescription.resource)
 
         return activeBoosterTypes
 

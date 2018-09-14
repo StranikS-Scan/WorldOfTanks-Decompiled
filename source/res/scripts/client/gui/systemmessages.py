@@ -40,9 +40,9 @@ class BaseSystemMessages(object):
 
 g_instance = None
 
-def pushMessage(text, type = SM_TYPE.Information):
+def pushMessage(text, type = SM_TYPE.Information, priority = None):
     if g_instance:
-        g_instance.pushMessage(text, type)
+        g_instance.pushMessage(text, type, priority)
 
 
 def pushI18nMessage(key, *args, **kwargs):

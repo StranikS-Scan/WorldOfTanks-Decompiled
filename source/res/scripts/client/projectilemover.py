@@ -16,6 +16,7 @@ from ClientArena import Plane
 from debug_utils import *
 from projectile_trajectory import computeProjectileTrajectory
 from constants import DESTRUCTIBLE_MATKIND
+import FlockManager
 
 class ProjectileMover(object):
     __PROJECTILE_HIDING_TIME = 0.05
@@ -33,11 +34,8 @@ class ProjectileMover(object):
         if self.__movementCallbackId is not None:
             BigWorld.cancelCallback(self.__movementCallbackId)
             self.__movementCallbackId = None
-        for shotID, proj in self.__projectiles.items():
-            projEffects = proj['effectsDescr']['projectile'][2]
-            projEffects.detachAllFrom(proj['effectsData'])
-            BigWorld.player().delModel(proj['model'])
-            del self.__projectiles[shotID]
+        for shotID in self.__projectiles.keys():
+            self.__delProjectile(shotID)
 
         return
 
@@ -87,6 +85,7 @@ class ProjectileMover(object):
             if self.__movementCallbackId is None:
                 self.__movementCallbackId = BigWorld.callback(self.__MOVEMENT_CALLBACK_TIMEOUT, self.__movementCallback)
             projectiles[shotID] = proj
+            FlockManager.getManager().onProjectile(startPoint)
             return
 
     def hide(self, shotID, endPoint):
@@ -94,6 +93,8 @@ class ProjectileMover(object):
         if proj is None:
             return
         else:
+            if -shotID in self.__projectiles:
+                self.__delProjectile(-shotID)
             self.__projectiles[-shotID] = proj
             proj['fireMissedTrigger'] = False
             proj['showExplosion'] = False
@@ -141,6 +142,7 @@ class ProjectileMover(object):
         caliber = proj['effectsDescr']['caliber']
         isOwnShot = proj['autoScaleProjectile']
         BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, isOwnShot)
+        FlockManager.getManager().onProjectile(hitPosition)
 
     def __addExplosionEffect(self, position, effectsDescr, effectMaterial, velocityDir):
         effectTypeStr = effectMaterial + 'Hit'
@@ -296,7 +298,7 @@ class ProjectileMover(object):
             r = r0 + v0.scale(dt) + gravity.scale(dt * dt * 0.5)
             v = v0 + gravity.scale(dt)
             stopPlane = proj['stopPlane']
-            if stopPlane is not None and stopPlane.testPoint(r):
+            if stopPlane and stopPlane.testPoint(r):
                 testRes = stopPlane.intersectSegment(model.position, r)
                 if testRes is None:
                     testRes = stopPlane.intersectSegment(proj['refStartPoint'], r0)
@@ -344,11 +346,8 @@ class ProjectileMover(object):
                     pos = proj['model'].position
                     dir = proj['impactVelDir']
                     self.__addExplosionEffect(pos, effectsDescr, proj['effectMaterial'], dir)
-            if deathTime is not None and time - deathTime >= self.__PROJECTILE_TIME_AFTER_DEATH:
-                projEffects = effectsDescr['projectile'][2]
-                projEffects.detachAllFrom(proj['effectsData'])
-                player.delModel(proj['model'])
-                del self.__projectiles[shotID]
+            if deathTime and time - deathTime >= self.__PROJECTILE_TIME_AFTER_DEATH:
+                self.__delProjectile(shotID)
                 if proj['fireMissedTrigger']:
                     TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_MISSED)
 
@@ -363,6 +362,13 @@ class ProjectileMover(object):
         BigWorld.wg_addWaterRipples(position, rippleDiameter)
         if ripplesLeft > 0:
             BigWorld.callback(0, lambda : self.__addWaterRipples(position, rippleDiameter, ripplesLeft - 1))
+
+    def __delProjectile(self, shotID):
+        proj = self.__projectiles[shotID]
+        projEffects = proj['effectsDescr']['projectile'][2]
+        projEffects.detachAllFrom(proj['effectsData'])
+        BigWorld.player().delModel(proj['model'])
+        del self.__projectiles[shotID]
 
 
 class EntityCollisionData(namedtuple('collisionData', ('entity', 'hitAngleCos', 'armor'))):
@@ -411,7 +417,7 @@ def collideVehiclesAndStaticScene(startPoint, endPoint, vehicles, collisionFlags
 
 def segmentMayHitEntity(entity, startPoint, endPoint):
     method = getattr(entity.filter, 'segmentMayHitEntity', lambda a, b: True)
-    return method(startPoint, endPoint)
+    return method(startPoint, endPoint, 1)
 
 
 def getCollidableEntities(exceptIDs, startPoint = None, endPoint = None):

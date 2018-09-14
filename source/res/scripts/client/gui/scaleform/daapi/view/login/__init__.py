@@ -23,7 +23,7 @@ from gui.Scaleform.daapi.view.login.LoginDispatcher import LoginDispatcher
 from gui.Scaleform.Waiting import Waiting
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events
-from gui.shared.events import LoginEvent, LoginEventEx, LoginCreateEvent, HideWindowEvent
+from gui.shared.events import LoginEvent, LoginEventEx, HideWindowEvent
 from gui.shared.events import ArgsEvent, OpenLinkEvent
 from helpers import i18n, getFullClientVersion
 from gui.Scaleform.locale.WAITING import WAITING
@@ -319,7 +319,7 @@ class LoginView(View, LoginPageMeta, AppRef):
     def onLoginBySocial(self, socialNetworkName, host):
         self.__loginHost = host
         self.__lastLoginType = socialNetworkName
-        if not self.__socialNetworkLogin.initializeLogin(socialNetworkName, self.__rememberMe):
+        if not self.__socialNetworkLogin.initiateLogin(socialNetworkName, self.__rememberMe):
             self.__setStatus(i18n.makeString('#menu:login/social/status/SYSTEM_ERROR'), 0)
 
     def __onServerReceivedData(self, token, spaID, tokenDecrypter):

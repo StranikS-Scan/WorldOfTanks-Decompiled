@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
-import BigWorld, constants
+from gui.battle_control import g_sessionProvider
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
+from gui.battle_control.arena_info import isArenaInWaiting
 from messenger.ext import isBattleChatEnabled
 from messenger.formatters import chat_message
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
@@ -13,6 +14,17 @@ from messenger_common_chat2 import MESSENGER_LIMITS
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_errors import ClientError
 from messenger.m_constants import CLIENT_ERROR_ID
+
+def _checkArenaInWaiting(func):
+
+    def wrapper(*args, **kwargs):
+        if not isArenaInWaiting():
+            func(*args, **kwargs)
+        else:
+            g_messengerEvents.onErrorReceived(ClientError(CLIENT_ERROR_ID.WAITING_BEFORE_START))
+
+    return wrapper
+
 
 class _ChannelController(_BattleLayout):
 
@@ -49,34 +61,24 @@ class _ChannelController(_BattleLayout):
             return (isCurrent, message.text)
         return (isCurrent, self._mBuilder.setColors(dbID).setName(dbID, message.accountName).setText(message.text).build())
 
-    @property
-    def _arenaIsInWaiting(self):
-        arena = getattr(BigWorld.player(), 'arena', None)
-        result = True
-        if arena is not None:
-            result = arena.period == constants.ARENA_PERIOD.WAITING
-        return result
-
-    def _showErrorArenaInWaiting(self):
-        g_messengerEvents.onErrorReceived(ClientError(CLIENT_ERROR_ID.WAITING_BEFORE_START))
-
 
 class TeamChannelController(_ChannelController):
 
     def __init__(self, channel):
         super(TeamChannelController, self).__init__(channel, chat_message.TeamMessageBuilder())
 
+    @_checkArenaInWaiting
     def sendCommand(self, command):
-        if self._arenaIsInWaiting:
-            self._showErrorArenaInWaiting()
-        else:
-            self.proto.battleCmd.send(command)
+        self.proto.battleCmd.send(command)
 
+    @_checkArenaInWaiting
     def _broadcast(self, message):
-        if self._arenaIsInWaiting:
-            self._showErrorArenaInWaiting()
-        else:
-            self.proto.arenaChat.broadcast(message, 0)
+        self.proto.arenaChat.broadcast(message, 0)
+
+    def isEnabled(self):
+        result = super(TeamChannelController, self).isEnabled()
+        hasAnyTeammates = len(list(g_sessionProvider.getArenaDP().getVehiclesIterator())) > 1
+        return result and hasAnyTeammates
 
     def _formatCommand(self, command):
         isCurrent = False
@@ -97,11 +99,9 @@ class CommonChannelController(_ChannelController):
     def isEnabled(self):
         return isBattleChatEnabled(True)
 
+    @_checkArenaInWaiting
     def _broadcast(self, message):
-        if self._arenaIsInWaiting:
-            self._showErrorArenaInWaiting()
-        else:
-            self.proto.arenaChat.broadcast(message, 1)
+        self.proto.arenaChat.broadcast(message, 1)
 
 
 class SquadChannelController(_ChannelController):

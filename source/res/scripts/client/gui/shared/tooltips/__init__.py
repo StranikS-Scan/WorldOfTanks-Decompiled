@@ -1,13 +1,13 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/__init__.py
 import weakref
 import sys
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from shared_utils import CONST_CONTAINER
+from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import g_itemsCache
-from gui.shared.utils import CONST_CONTAINER
+from gui.shared.formatters import icons
 from helpers.i18n import makeString
 from items import vehicles
 
@@ -195,7 +195,7 @@ def getComplexStatus(statusKey):
         header = makeString(headerKey)
         text = makeString(textKey)
         if headerKey == TOOLTIPS.VEHICLESTATUS_INPREMIUMIGRONLY_HEADER:
-            icon = TextManager.getIcon(TextIcons.PREMIUM_IGR_SMALL)
+            icon = icons.premiumIgrSmall()
             header = makeString(headerKey, icon=icon)
         if header == headerKey.split(':', 1)[1]:
             header = None

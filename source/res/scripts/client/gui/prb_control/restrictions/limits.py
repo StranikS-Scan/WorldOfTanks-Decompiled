@@ -7,6 +7,7 @@ from gui.prb_control import getClassLevelLimits, getTotalLevelLimits
 from gui.prb_control import getPrebattleRosters, getMaxSizeLimits
 from gui.prb_control.restrictions.interfaces import IVehicleLimit, ITeamLimit
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_RESTRICTION, UNIT_RESTRICTION
+from gui.prb_control.items import unit_items
 from gui.shared.ItemsCache import g_itemsCache
 from items import vehicles
 from items.vehicles import VehicleDescr, VEHICLE_CLASS_TAGS
@@ -338,7 +339,17 @@ class _UnitActionValidator(object):
     def validateVehicles(self, vInfo, flags):
         if vInfo.isEmpty():
             return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
-        if not vInfo.isReadyToBattle(flags):
+        vehicle = vInfo.getVehicle()
+        isReadyToBattle = vehicle.isReadyToPrebattle(checkForRent=not flags.isInPreArena())
+        if vehicle and not isReadyToBattle:
+            if vehicle.isBroken:
+                return (False, UNIT_RESTRICTION.VEHICLE_BROKEN)
+            if not vehicle.isCrewFull:
+                return (False, UNIT_RESTRICTION.VEHICLE_CREW_NOT_FULL)
+            if not flags.isInPreArena() and vehicle.rentalIsOver:
+                return (False, UNIT_RESTRICTION.VEHICLE_RENT_IS_OVER)
+            if vehicle.isInBattle:
+                return (False, UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE)
             return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
         return (True, UNIT_RESTRICTION.UNDEFINED)
 
@@ -413,6 +424,19 @@ class SortieActionValidator(_UnitActionValidator):
     def __init__(self, rosterSettings):
         super(SortieActionValidator, self).__init__(rosterSettings, False)
 
+    def canPlayerDoAction(self, pInfo, flags, vInfo):
+        from gui.shared.ClanCache import g_clanCache
+        provider = g_clanCache.fortProvider
+        if provider:
+            controller = provider.getController()
+            if controller:
+                sortiesHoursCtrl = controller.getSortiesCurfewCtrl()
+                if sortiesHoursCtrl:
+                    availableAtThisTime, availableAtCurrServer = sortiesHoursCtrl.getStatus()
+                    if not availableAtThisTime or not availableAtCurrServer:
+                        return (False, UNIT_RESTRICTION.CURFEW)
+        return super(SortieActionValidator, self).canPlayerDoAction(pInfo, flags, vInfo)
+
     def _validateSlots(self, stats, flags, slots):
         if flags.isDevMode():
             return (True, UNIT_RESTRICTION.UNDEFINED)
@@ -463,9 +487,12 @@ class SquadActionValidator(_UnitActionValidator):
         super(SquadActionValidator, self).__init__(rosterSettings, hasPlayersSearch)
 
     def validateVehicles(self, vInfo, flags):
-        if not g_currentVehicle.isReadyToPrebattle():
-            return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
-        return (True, UNIT_RESTRICTION.UNDEFINED)
+        if g_currentVehicle.isPresent():
+            vehicle = g_currentVehicle.item
+            vInfo = unit_items.VehicleInfo(vehicle.invID, vehicle.intCD, vehicle.level)
+        elif vInfo is None:
+            vInfo = unit_items.VehicleInfo()
+        return super(SquadActionValidator, self).validateVehicles(vInfo, flags)
 
     def validateStateToStartBattle(self, flags):
         return (True, UNIT_RESTRICTION.UNDEFINED)
@@ -474,19 +501,18 @@ class SquadActionValidator(_UnitActionValidator):
         return (True, UNIT_RESTRICTION.UNDEFINED)
 
     def _validateSlots(self, stats, flags, slots):
-        hasEventVehicles = None
+        slotsVehicles = []
         for slotInfo in slots:
             vehicle = slotInfo.vehicle
             if vehicle is not None:
-                isEvent = g_itemsCache.items.getItemByCD(vehicle['vehTypeCompDescr']).isEvent
-                if hasEventVehicles is None:
-                    hasEventVehicles = isEvent
-                elif hasEventVehicles != isEvent:
-                    return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
-            elif hasEventVehicles:
-                return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
+                slotsVehicles.append(g_itemsCache.items.getItemByCD(vehicle['vehTypeCompDescr']).isEvent)
+            elif slotInfo.player is None or not slotInfo.player.isCreator():
+                slotsVehicles.append(None)
 
-        if g_currentVehicle.isPresent() and g_currentVehicle.item.isOnlyForEventBattles and not hasEventVehicles:
-            return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
+        hasEmptyOrNotEventSlots = False in slotsVehicles or None in slotsVehicles
+        if True in slotsVehicles and hasEmptyOrNotEventSlots:
+            return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT)
+        elif g_currentVehicle.isPresent() and g_currentVehicle.item.isEvent and hasEmptyOrNotEventSlots:
+            return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT)
         else:
             return (True, UNIT_RESTRICTION.UNDEFINED)

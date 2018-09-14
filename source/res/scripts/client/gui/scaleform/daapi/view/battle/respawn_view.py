@@ -1,21 +1,25 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/respawn_view.py
 import BigWorld
-from gui.battle_control.arena_info import getClientArena
+import constants
+from gui.battle_control.arena_info import getClientArena, hasResourcePoints, hasFlags
+from gui.battle_control.avatar_getter import getPlayerVehicleID
 from gui.shared.utils.plugins import IPlugin
 import nations
 from helpers import i18n, time_utils
 from items.vehicles import VEHICLE_CLASS_TAGS
+from shared_utils import findFirst
 from gui.Scaleform.daapi.view.battle.meta.BattleRespawnViewMeta import BattleRespawnViewMeta
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import g_sessionProvider
 from gui.shared.formatters.text_styles import standard, main, statInfo
 from gui.shared.gui_items.Vehicle import getIconPath
-from gui.shared.utils import findFirst
-from gui.shared.view_helpers.FalloutInfoPanelHelper import getHelpText
+from gui.Scaleform.daapi.view.fallout_info_panel_helper import getHelpText
+_FLAG_ICON_TEMPLATE = '../maps/icons/battle/respawn/optimize_flags_160x100/%s.png'
+_VEHICLE_TYPE_TEMPLATE = '../maps/icons/battle/respawn/vehicleType/%s.png'
+_CALLBACK_NAME = 'battle.onLoadRespawnView'
+_MUST_TOP_ELEMENTS = ('fragCorrelationBar', 'battleTimer', 'debugPanel')
 
 class _BattleRespawnView(BattleRespawnViewMeta):
-    __FLAG_ICON_TEMPLATE = '../maps/icons/battle/respawn/optimize_flags_160x100/%s.png'
-    __VEHICLE_TYPE_TEMPLATE = '../maps/icons/battle/respawn/vehicleType/%s.png'
 
     def __init__(self, proxy):
         super(_BattleRespawnView, self).__init__()
@@ -25,14 +29,13 @@ class _BattleRespawnView(BattleRespawnViewMeta):
 
     def start(self, vehsList):
         self._populate(self.__proxy.getMember('_level0.battleRespawnView').getInstance())
-        generalData = self.__getGeneralData()
         slotsData = self.__getSlotsData(vehsList)
-        arena = getClientArena()
-        helpText = [''] * 4
-        if arena is not None:
-            helpText = getHelpText(arena.arenaType)
+        generalData = self.__getGeneralData()
+        arenaDP = g_sessionProvider.getArenaDP()
+        playerVehID = getPlayerVehicleID()
+        isSquadPlayer = arenaDP.isSquadMan(playerVehID)
+        helpText = getHelpText(isSolo=not isSquadPlayer)
         self.as_initializeS(generalData, slotsData, helpText)
-        return
 
     def destroy(self):
         self.__proxy = None
@@ -80,23 +83,33 @@ class _BattleRespawnView(BattleRespawnViewMeta):
             classTag = tuple(VEHICLE_CLASS_TAGS & v.type.tags)[0]
             result.append({'vehicleID': v.intCD,
              'vehicleName': v.type.userString,
-             'flagIcon': self.__FLAG_ICON_TEMPLATE % nations.NAMES[nationID],
+             'flagIcon': _FLAG_ICON_TEMPLATE % nations.NAMES[nationID],
              'vehicleIcon': getIconPath(v.type.name),
-             'vehicleType': self.__VEHICLE_TYPE_TEMPLATE % classTag})
+             'vehicleType': _VEHICLE_TYPE_TEMPLATE % classTag})
 
         return result
 
     def __getGeneralData(self):
-        return {'titleMsg': "<font face='$FieldFont' size='32' color='#F4EFE8'>%s</font><font size='4'><br><br></font>%s" % (i18n.makeString(INGAME_GUI.RESPAWNVIEW_TITLE), standard(i18n.makeString(INGAME_GUI.RESPAWNVIEW_ADDITIONALTIP)))}
+        if hasResourcePoints():
+            helpPanelMode = 'points'
+        else:
+            helpPanelMode = 'flags'
+        return {'titleMsg': "<font face='$FieldFont' size='32' color='#F4EFE8'>%s</font><font size='4'><br><br></font>%s" % (i18n.makeString(INGAME_GUI.RESPAWNVIEW_TITLE), standard(i18n.makeString(INGAME_GUI.RESPAWNVIEW_ADDITIONALTIP))),
+         'helpPanelMode': helpPanelMode}
 
     def __getSlotsStatesData(self, vehsList, cooldowns):
         result = []
         for v in vehsList:
             compactDescr = v.intCD
             cooldownTime = cooldowns.get(compactDescr, 0)
+            cooldownStr = None
             cooldown = cooldownTime - BigWorld.serverTime()
             enabled = cooldown <= 0
-            cooldownStr = i18n.makeString(INGAME_GUI.RESPAWNVIEW_COOLDOWNLBL) + time_utils.getTimeLeftFormat(cooldown) if not enabled else None
+            if not enabled:
+                if cooldownTime > g_sessionProvider.getPeriodCtrl().getEndTime():
+                    cooldownStr = i18n.makeString('#ingame_gui:respawnView/destroyedLbl')
+                else:
+                    cooldownStr = i18n.makeString('#ingame_gui:respawnView/cooldownLbl', time=time_utils.getTimeLeftFormat(cooldown))
             result.append({'vehicleID': compactDescr,
              'selected': compactDescr == self.__selectedVehicleID,
              'enabled': enabled,
@@ -110,8 +123,6 @@ class _BattleRespawnView(BattleRespawnViewMeta):
 
 
 class RespawnViewPlugin(IPlugin):
-    __CALLBACK_NAME = 'battle.onLoadRespawnView'
-    __MUST_TOP_ELEMENTS = ['fragCorrelationBar', 'battleTimer', 'debugPanel']
 
     def __init__(self, parentObj):
         super(RespawnViewPlugin, self).__init__(parentObj)
@@ -120,17 +131,15 @@ class RespawnViewPlugin(IPlugin):
 
     def init(self):
         super(RespawnViewPlugin, self).init()
-        self._parentObj.addExternalCallback(self.__CALLBACK_NAME, self.__onLoad)
+        self._parentObj.addExternalCallback(_CALLBACK_NAME, self.__onLoad)
 
     def fini(self):
-        self._parentObj.removeExternalCallback(self.__CALLBACK_NAME)
-        self.__MUST_TOP_ELEMENTS = None
+        self._parentObj.removeExternalCallback(_CALLBACK_NAME)
         super(RespawnViewPlugin, self).fini()
-        return
 
     def start(self):
         super(RespawnViewPlugin, self).start()
-        self._parentObj.movie.preinitializeRespawnView(self.__MUST_TOP_ELEMENTS)
+        self._parentObj.movie.preinitializeRespawnView(_MUST_TOP_ELEMENTS)
 
     def stop(self):
         g_sessionProvider.getRespawnsCtrl().stop()

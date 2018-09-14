@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/players_panel.py
 from weakref import proxy
 from gui.Scaleform.windows import UIInterface
-from gui.battle_control.arena_info import isEventBattle
 
 class _EmptyPlayersPanel(UIInterface):
 
@@ -24,8 +23,8 @@ class _GeneralPlayersPanel(_EmptyPlayersPanel):
         self.defineColorFlags(isColorBlind=isColorBlind)
         return
 
-    def populateUI(self, proxy):
-        super(_GeneralPlayersPanel, self).populateUI(proxy)
+    def populateUI(self, uiProxy):
+        super(_GeneralPlayersPanel, self).populateUI(uiProxy)
         if self.__isLeft:
             self.GUICtrl = self.uiHolder.getMember('_level0.leftPanel')
         else:
@@ -46,7 +45,21 @@ class _GeneralPlayersPanel(_EmptyPlayersPanel):
         return self.GUICtrl.getPlayerNameLength()
 
 
-def playersPanelFactory(parentUI, isLeft, isColorBlind = False):
-    if isEventBattle():
-        return _EmptyPlayersPanel()
+class _FalloutPlayersPanel(_EmptyPlayersPanel):
+
+    def getPlayerNameLength(self):
+        return 9
+
+
+class _MultiTeamsPlayersPanel(_EmptyPlayersPanel):
+
+    def getPlayerNameLength(self):
+        return 16
+
+
+def playersPanelFactory(parentUI, isLeft, isColorBlind = False, isEvent = False, isMutlipleTeams = False):
+    if isEvent:
+        if isMutlipleTeams:
+            return _MultiTeamsPlayersPanel()
+        return _FalloutPlayersPanel()
     return _GeneralPlayersPanel(parentUI, isLeft, isColorBlind)

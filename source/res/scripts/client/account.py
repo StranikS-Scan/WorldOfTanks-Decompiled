@@ -7,7 +7,7 @@ import Event
 import AccountCommands
 import ClientPrebattle
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, Trader, CustomFilesCache, BattleResultsCache, ClientClubs, ClientGoodies
-from account_helpers.ClientInvitations import ClientInvitations
+from account_helpers import ClientInvitations
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents as events
 from account_helpers.settings_core import IntUserSettings
@@ -25,6 +25,7 @@ from ClientFortMgr import ClientFortMgr
 from gui import game_control
 from gui.wgnc import g_wgncProvider
 from gui.shared.ClanCache import g_clanCache
+from ClientSelectableObject import ClientSelectableObject
 StreamData = namedtuple('StreamData', ['data',
  'isCorrupted',
  'origPacketLen',
@@ -47,9 +48,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if g_offlineMapCreator.Active():
             self.name = 'offline_account'
         if g_accountRepository is None:
-            g_accountRepository = _AccountRepository(self.name, copy.copy(self.serverSettings))
+            g_accountRepository = _AccountRepository(self.name, self.initialServerSettings)
         self.contactInfo = g_accountRepository.contactInfo
         self.syncData = g_accountRepository.syncData
+        self.serverSettings = g_accountRepository.serverSettings
         self.inventory = g_accountRepository.inventory
         self.stats = g_accountRepository.stats
         self.questProgress = g_accountRepository.questProgress
@@ -74,7 +76,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.intUserSettings.setProxy(self, self.syncData)
         self.prebattleInvitations.setProxy(self)
         self.fort._setAccount(self)
-        self.fort._setServerSettings(g_accountRepository.serverSettings)
         self.clubs.setAccount(self)
         self.goodies.setAccount(self)
         self.isLongDisconnectedFromCenter = False
@@ -119,6 +120,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.goodies.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
+        BigWorld.target.source = BigWorld.MouseTargetingMatrix()
+        BigWorld.target.maxDistance = 700
+        BigWorld.target.skeletonCheckEnabled = True
+        BigWorld.target.caps()
         return
 
     def onBecomeNonPlayer(self):
@@ -176,6 +181,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def reloadShop(self):
         self.shop.synchronize(None)
         return
+
+    def getServerSettings(self):
+        return g_accountRepository.serverSettings
 
     def requestToken(self, requestID, tokenType):
         self.base.requestToken(requestID, tokenType)
@@ -267,6 +275,56 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         LOG_DEBUG('onTutorialEnqueued', number, queueLen, avgWaitingTime)
         self.isInTutorialQueue = True
         events.onTutorialEnqueued(number, queueLen, avgWaitingTime)
+
+    def debugSelectEntity(self, selectionId):
+        for key in BigWorld.entities.keys():
+            e = BigWorld.entities[key]
+            if isinstance(e, ClientSelectableObject) and e.selectionId == selectionId:
+                self.targetFocus(e)
+                break
+        else:
+            LOG_DEBUG('No ClientSelectableObject with selectionID', selectionId)
+
+    def debugUnselectEntity(self, selectionId):
+        for key in BigWorld.entities.keys():
+            e = BigWorld.entities[key]
+            if isinstance(e, ClientSelectableObject) and e.selectionId == selectionId:
+                self.targetBlur(e)
+                break
+        else:
+            LOG_DEBUG('No ClientSelectableObject with selectionID', selectionId)
+
+    def debugSelectAllEntities(self):
+        count = 0
+        for key in BigWorld.entities.keys():
+            e = BigWorld.entities[key]
+            if isinstance(e, ClientSelectableObject):
+                self.targetFocus(e)
+                count += 1
+
+        if count == 0:
+            LOG_DEBUG('No any ClientSelectableObject to select')
+
+    def debugUnselectAllEntites(self):
+        count = 0
+        for key in BigWorld.entities.keys():
+            e = BigWorld.entities[key]
+            if isinstance(e, ClientSelectableObject):
+                self.targetBlur(e)
+                count += 1
+
+        if count == 0:
+            LOG_DEBUG('No any ClientSelectableObject to unselect')
+
+    def targetFocus(self, entity):
+        if isinstance(entity, ClientSelectableObject):
+            from gui.shared.utils.HangarSpace import g_hangarSpace
+            g_hangarSpace.onObjectSelected(entity)
+
+    def targetBlur(self, prevEntity):
+        if isinstance(prevEntity, ClientSelectableObject):
+            from gui.shared.utils.HangarSpace import g_hangarSpace
+            g_hangarSpace.onObjectUnselected(prevEntity)
 
     def onKickedFromQueue(self, queueType):
         LOG_DEBUG('onKickedFromQueue', queueType)
@@ -515,7 +573,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def requestPlayerInfo(self, databaseID, callback):
         if events.isPlayerEntityChanging:
             return
-        proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, ext.get('databaseID', 0L), ext.get('dossier', ''), ext.get('clanDBID', 0), ext.get('clanInfo', None), ext.get('globalRating', 0))
+        proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, ext.get('databaseID', 0L), ext.get('dossier', ''), ext.get('clanDBID', 0), ext.get('clanInfo', None), ext.get('globalRating', 0), ext.get('eSportSeasons', {}))
         self._doCmdInt3(AccountCommands.CMD_REQ_PLAYER_INFO, databaseID, 0, 0, proxy)
 
     def requestAccountDossier(self, accountID, callback):
@@ -829,22 +887,22 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattleInvitations.processInvitations(invitations)
 
     def _doCmdStr(self, cmd, str, callback):
-        self.__doCmd('doCmdStr', cmd, callback, str)
+        return self.__doCmd('doCmdStr', cmd, callback, str)
 
     def _doCmdInt3(self, cmd, int1, int2, int3, callback):
-        self.__doCmd('doCmdInt3', cmd, callback, int1, int2, int3)
+        return self.__doCmd('doCmdInt3', cmd, callback, int1, int2, int3)
 
     def _doCmdInt4(self, cmd, int1, int2, int3, int4, callback):
-        self.__doCmd('doCmdInt4', cmd, callback, int1, int2, int3, int4)
+        return self.__doCmd('doCmdInt4', cmd, callback, int1, int2, int3, int4)
 
     def _doCmdInt2Str(self, cmd, int1, int2, str, callback):
-        self.__doCmd('doCmdInt2Str', cmd, callback, int1, int2, str)
+        return self.__doCmd('doCmdInt2Str', cmd, callback, int1, int2, str)
 
     def _doCmdIntArr(self, cmd, arr, callback):
-        self.__doCmd('doCmdIntArr', cmd, callback, arr)
+        return self.__doCmd('doCmdIntArr', cmd, callback, arr)
 
     def _doCmdIntArrStrArr(self, cmd, intArr, strArr, callback):
-        self.__doCmd('doCmdIntArrStrArr', cmd, callback, intArr, strArr)
+        return self.__doCmd('doCmdIntArrStrArr', cmd, callback, intArr, strArr)
 
     def _makeTradeOffer(self, passwd, flags, dstDBID, validSec, price, srcWares, srcItemCount, callback):
         if g_accountRepository is None:
@@ -872,6 +930,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.intUserSettings.synchronize(isFullSync, diff)
             self.clubs.synchronize(isFullSync, diff)
             self.goodies.synchronize(isFullSync, diff)
+            self.__synchronizeServerSettings(diff)
             self.__synchronizeEventNotifications(diff)
             self.__synchronizeCacheDict(self.prebattleAutoInvites, diff.get('account', None), 'prebattleAutoInvites', 'replace', events.onPrebattleAutoInvitesChanged)
             self.__synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
@@ -916,8 +975,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
                 return
             if callback is not None:
                 self.__onCmdResponse[requestID] = callback
+                callbackID = requestID
+            else:
+                callbackID = None
             getattr(self.base, doCmdMethod)(requestID, cmd, *args)
-            return
+            return callbackID
 
     def __cancelCommands(self):
         for requestID, callback in self.__onCmdResponse.iteritems():
@@ -1009,6 +1071,32 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
                 LOG_DZ('Account.__synchronizeEventNotifications, diff=%s' % (diffDict,))
             return
 
+    def __synchronizeServerSettings(self, diffDict):
+        if diffDict is None:
+            return
+        else:
+            serverSettings = self.serverSettings
+            fullServerSettings = diffDict.get(('serverSettings', '_r'), None)
+            if fullServerSettings is not None:
+                serverSettings.clear()
+                serverSettings.update(fullServerSettings)
+            serverSettingsDiff = diffDict.get('serverSettings', None)
+            if serverSettingsDiff is not None:
+                if isinstance(serverSettingsDiff, dict):
+                    for key, value in serverSettingsDiff.iteritems():
+                        if value is None:
+                            serverSettings.pop(key, None)
+                            continue
+                        if isinstance(value, dict):
+                            serverSettings.setdefault(key, {})
+                            serverSettings[key].update(value)
+                        else:
+                            serverSettings[key] = value
+
+                else:
+                    LOG_WARNING('__synchronizeCacheDict: bad diff=%r for key=%r' % (serverSettingsDiff, key))
+            return
+
 
 Account = PlayerAccount
 
@@ -1023,10 +1111,9 @@ class AccountInputHandler():
 
 class _AccountRepository(object):
 
-    def __init__(self, name, serverSettings):
+    def __init__(self, name, initialServerSettings):
         self.contactInfo = ContactInfo()
-        self.serverSettings = serverSettings
-        self.fileServerSettings = serverSettings['file_server']
+        self.serverSettings = copy.copy(initialServerSettings)
         self.syncData = AccountSyncData.AccountSyncData()
         self.inventory = Inventory.Inventory(self.syncData)
         self.stats = Stats.Stats(self.syncData)
@@ -1042,12 +1129,16 @@ class _AccountRepository(object):
         self.customFilesCache = CustomFilesCache.CustomFilesCache()
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()
-        self.prebattleInvitations = ClientInvitations()
+        self.prebattleInvitations = ClientInvitations.ClientInvitations(events)
         self.clubs = ClientClubs.ClientClubs(self.syncData)
         self.goodies = ClientGoodies.ClientGoodies(self.syncData)
-        self.fort = ClientFortMgr(serverSettings=serverSettings)
+        self.fort = ClientFortMgr()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN
+
+    @property
+    def fileServerSettings(self):
+        return self.serverSettings['file_server']
 
 
 def _delAccountRepository():

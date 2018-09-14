@@ -1,13 +1,89 @@
 # Embedded file name: scripts/common/goodies/Goodies.py
 from WeakMethod import WeakMethod
 from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES
-from debug_utils import LOG_AQ
+import collections
+
+class ActualGoodiesDict(collections.MutableMapping, dict):
+
+    def __init__(self, definedGoodiesDict, resourceIndexDict):
+        self._definedGoodiesDict = definedGoodiesDict
+        self._resourceIndexDict = resourceIndexDict
+        super(ActualGoodiesDict, self).__init__()
+
+    def __getitem__(self, key):
+        return dict.__getitem__(self, key)
+
+    def __setitem__(self, key, value):
+        resource = self._definedGoodiesDict[key].resource
+        if value.isActive():
+            self._resourceIndexDict[resource] = key
+        else:
+            goodieID = self._resourceIndexDict.get(resource, None)
+            if goodieID == key:
+                self._resourceIndexDict.pop(resource, None)
+        dict.__setitem__(self, key, value)
+        return
+
+    def __delitem__(self, key):
+        resource = self._definedGoodiesDict[key].resource
+        goodieID = self._resourceIndexDict.get(resource, None)
+        if goodieID == key:
+            self._resourceIndexDict.pop(resource, None)
+        dict.__delitem__(self, key)
+        return
+
+    def __iter__(self):
+        return dict.__iter__(self)
+
+    def __len__(self):
+        return dict.__len__(self)
+
+    def __contains__(self, x):
+        return dict.__contains__(self, x)
+
+    def getResource(self, goodieID):
+        goodie = dict.__getitem__(self, goodieID)
+        if goodie is None:
+            return
+        else:
+            defined = self._definedGoodiesDict.get(goodieID, None)
+            if defined is None:
+                return
+            return (defined.resource, defined.value)
+
+    def checkResource(self, goodieID):
+        resourceTuple = self.getResource(goodieID)
+        if resourceTuple is None:
+            return
+        resource, value = resourceTuple
+        anotherGoodieID = self._resourceIndexDict.get(resource)
+        if anotherGoodieID is not None:
+            return anotherGoodieID
+        else:
+            return
+
+    def compareByResource(self, goodieID, anotherGoodieID):
+        resourceTuple = self.getResource(goodieID)
+        anotherResourceTuple = self.getResource(anotherGoodieID)
+        if resourceTuple is None or anotherResourceTuple is None:
+            return False
+        else:
+            resource, value = resourceTuple
+            anotherResource, anotherValue = anotherResourceTuple
+            if anotherResource != resource:
+                return False
+            if anotherValue > value:
+                return True
+            return False
+            return
+
 
 class Goodies(object):
 
     def __init__(self, definedGoodies, updateCallback = None, removeCallback = None):
         self.definedGoodies = definedGoodies
-        self.actualGoodies = {}
+        self.resourceIndex = {}
+        self.actualGoodies = ActualGoodiesDict(self.definedGoodies, self.resourceIndex)
         if updateCallback:
             self._updateCallback = WeakMethod(updateCallback)
         else:
@@ -18,18 +94,18 @@ class Goodies(object):
             self._removeCallback = None
         return
 
-    def __updateCallback(self, goodie):
+    def __updateCallback(self, goodie, showRemoveNotification = False):
         if self._updateCallback is not None:
             callbackRef = self._updateCallback()
             if callbackRef:
-                callbackRef(goodie)
+                callbackRef(goodie, showRemoveNotification)
         return
 
-    def __removeCallback(self, goodieId):
+    def __removeCallback(self, goodieID):
         if self._removeCallback is not None:
             callbackRef = self._removeCallback()
             if callbackRef:
-                callbackRef(goodieId)
+                callbackRef(goodieID)
         return
 
     def __append(self, goodieDefinition, state = None, expiration = None, counter = None):
@@ -41,13 +117,13 @@ class Goodies(object):
             self.__updateCallback(goodie)
             return
 
-    def __remove(self, goodieId):
-        goodie = self.actualGoodies.get(goodieId, None)
+    def __erase(self, goodieID):
+        goodie = self.actualGoodies.get(goodieID, None)
         if goodie is None:
             return
         else:
-            del self.actualGoodies[goodieId]
-            self.__removeCallback(goodieId)
+            del self.actualGoodies[goodieID]
+            self.__removeCallback(goodieID)
             return
 
     def __updateCounter(self, goodieDefinition, counter):
@@ -56,52 +132,44 @@ class Goodies(object):
             return
         else:
             self.actualGoodies[goodieDefinition.uid] = goodie
-            self.__updateCallback(goodie)
+            self.__updateCallback(goodie, True)
             return
 
-    def __update(self, goodieId):
-        goodieDefinition = self.definedGoodies.get(goodieId, None)
+    def __update(self, goodieID):
+        goodieDefinition = self.definedGoodies.get(goodieID, None)
         if goodieDefinition is None:
             return
         else:
-            goodie = self.actualGoodies.get(goodieId, None)
+            goodie = self.actualGoodies.get(goodieID, None)
             if goodie is None:
                 return
             if goodieDefinition.isActivatable() and goodie.isActive() and not goodie.isExpired():
                 return
-            counter = self.actualGoodies[goodieId].counter - 1
-            if counter <= 0:
-                self.__remove(goodieId)
-            else:
-                self.__updateCounter(goodieDefinition, counter)
+            self.remove(goodieID, goodie, goodieDefinition)
             return
 
-    def __checkDuplicateResources(self, allResourcesByType, affectedResources):
-        for r in affectedResources:
-            if r.__class__ in allResourcesByType:
-                return True
-            allResourcesByType.add(r.__class__)
-
+    def __checkDuplicateResources(self, allResourcesByType, affectedResource):
+        if affectedResource.__class__ in allResourcesByType:
+            return True
+        allResourcesByType.add(affectedResource.__class__)
         return False
 
     def __show(self, target, resources, returnDeltas):
-        toUpdate = []
-        result = set()
         allResourcesByType = set()
+        toUpdate = {}
         for goodie in self.actualGoodies.itervalues():
             goodieDefinition = self.definedGoodies[goodie.uid]
             if goodieDefinition.isActivatable() and not goodie.isActive():
                 continue
             if goodieDefinition.target == target:
                 if returnDeltas:
-                    affectedResources = goodieDefinition.apply_delta(resources)
+                    affectedResource = goodieDefinition.apply_delta(resources)
                 else:
-                    affectedResources = goodieDefinition.apply(resources)
-                if not self.__checkDuplicateResources(allResourcesByType, affectedResources):
-                    result.update(affectedResources)
-                    toUpdate.append(goodie.uid)
+                    affectedResource = goodieDefinition.apply(resources)
+                if affectedResource is not None and not self.__checkDuplicateResources(allResourcesByType, affectedResource):
+                    toUpdate[goodie.uid] = affectedResource
 
-        return (result, toUpdate)
+        return toUpdate
 
     def actual(self):
         return self.actualGoodies.itervalues()
@@ -109,13 +177,13 @@ class Goodies(object):
     def actualIds(self):
         return set(self.actualGoodies.iterkeys())
 
-    def load(self, goodieId, state, expiration, counter):
-        goodieDefinition = self.definedGoodies[goodieId]
+    def load(self, goodieID, state, expiration, counter):
+        goodieDefinition = self.definedGoodies[goodieID]
         self.__append(goodieDefinition, state, expiration, counter)
 
-    def extend(self, goodieId, state, expiration, counter):
-        goodieDefinition = self.definedGoodies[goodieId]
-        goodie = self.actualGoodies.get(goodieId, None)
+    def extend(self, goodieID, state, expiration, counter):
+        goodieDefinition = self.definedGoodies[goodieID]
+        goodie = self.actualGoodies.get(goodieID, None)
         if goodie is not None:
             counter += goodie.counter
             if goodie.state == GOODIE_STATE.ACTIVE:
@@ -125,14 +193,14 @@ class Goodies(object):
         return
 
     def test(self, target, resource, returnDeltas = False):
-        return self.__show(target, resource, returnDeltas)[0]
+        return self.__show(target, resource, returnDeltas)
 
     def apply(self, target, resources, returnDeltas = False):
-        affectedResources, toUpdate = self.__show(target, resources, returnDeltas)
-        for goodieId in toUpdate:
-            self.__update(goodieId)
+        toUpdate = self.__show(target, resources, returnDeltas)
+        for goodieID in toUpdate:
+            self.__update(goodieID)
 
-        return affectedResources
+        return toUpdate
 
     def evaluate(self, condition):
         result = []
@@ -148,19 +216,19 @@ class Goodies(object):
     def expire(self):
         toUpdate = []
         toRemove = []
-        for goodieId, goodie in self.actualGoodies.iteritems():
-            defined = self.definedGoodies[goodieId]
+        for goodieID, goodie in self.actualGoodies.iteritems():
+            defined = self.definedGoodies[goodieID]
             if defined.isTimeLimited():
                 if defined.isExpired():
-                    toRemove.append(goodieId)
+                    toRemove.append(goodieID)
                 elif goodie.isExpired():
-                    toUpdate.append(goodieId)
+                    toUpdate.append(goodieID)
 
-        for goodieId in toUpdate:
-            self.__update(goodieId)
+        for goodieID in toUpdate:
+            self.__update(goodieID)
 
-        for goodieId in toRemove:
-            self.__remove(goodieId)
+        for goodieID in toRemove:
+            self.__erase(goodieID)
 
         return len(toRemove) != 0 or len(toUpdate) != 0
 
@@ -172,27 +240,52 @@ class Goodies(object):
 
         return result
 
-    def activate(self, goodieId):
-        if self.activeGoodiesCount() > MAX_ACTIVE_GOODIES:
+    def activate(self, goodieID):
+        goodie = self.actualGoodies.get(goodieID, None)
+        if goodie is None:
+            return
+        elif goodie.isActive():
             return
         else:
-            goodie = self.actualGoodies.get(goodieId, None)
-            if goodie is None:
-                return
-            if goodie.isActive():
-                return
-            defined = self.definedGoodies[goodieId]
+            defined = self.definedGoodies[goodieID]
             if not defined.isTimeLimited():
                 return
+            oldGoodieID = self.actualGoodies.checkResource(goodieID)
+            if oldGoodieID is not None:
+                if self.actualGoodies.compareByResource(oldGoodieID, goodieID):
+                    self.remove(oldGoodieID)
+                else:
+                    return
+            if self.activeGoodiesCount() >= MAX_ACTIVE_GOODIES:
+                return
             goodie = defined.createGoodie(state=GOODIE_STATE.ACTIVE, counter=goodie.counter)
-            self.actualGoodies[goodieId] = goodie
+            self.actualGoodies[goodieID] = goodie
             self.__updateCallback(goodie)
             return goodie
 
-    def remove(self, goodieId):
-        goodie = self.actualGoodies.get(goodieId, None)
+    def activeIds(self):
+        return set(self.resourceIndex.itervalues())
+
+    def erase(self, goodieID):
+        goodie = self.actualGoodies.get(goodieID, None)
         if goodie is None:
             return
         else:
-            self.__remove(goodieId)
+            self.__erase(goodieID)
             return
+
+    def remove(self, goodieID, goodie = None, goodieDefinition = None, count = 1):
+        if goodie is None:
+            goodie = self.actualGoodies.get(goodieID, None)
+            if goodie is None:
+                return
+        if goodieDefinition is None:
+            goodieDefinition = self.definedGoodies.get(goodieID, None)
+            if goodieDefinition is None:
+                return
+        counter = goodie.counter - count
+        if counter <= 0:
+            self.__erase(goodieID)
+        else:
+            self.__updateCounter(goodieDefinition, counter)
+        return

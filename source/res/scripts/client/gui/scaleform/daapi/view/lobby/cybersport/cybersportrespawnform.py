@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportRespawnForm.py
 import BigWorld
 import functools
+from shared_utils import CONST_CONTAINER, safeCancelCallback
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.clubs.club_helpers import MyClubListener
-from gui.shared.utils import CONST_CONTAINER, safeCancelCallback
 from gui.Scaleform.daapi.view.meta.CyberSportRespawnFormMeta import CyberSportRespawnFormMeta
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.prb_control import settings

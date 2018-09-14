@@ -12,6 +12,9 @@ class StaticFormationStaffViewMeta(DAAPIModule):
     def setRecruitmentOpened(self, opened):
         self._printOverrideError('setRecruitmentOpened')
 
+    def removeMe(self):
+        self._printOverrideError('removeMe')
+
     def removeMember(self, id, userName):
         self._printOverrideError('removeMember')
 

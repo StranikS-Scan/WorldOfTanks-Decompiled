@@ -109,6 +109,17 @@ class GetMyClubsHistoryCtx(CommonRequestCtx):
         return CLUB_REQUEST_TYPE.GET_MY_CLUBS_HISTORY
 
 
+@ReprInjector.withParent()
+
+class GetCompletedSeasonsCtx(CommonRequestCtx):
+
+    def __init__(self, waitingID = '', confirmID = ''):
+        super(GetCompletedSeasonsCtx, self).__init__(waitingID=waitingID, confirmID=confirmID)
+
+    def getRequestType(self):
+        return CLUB_REQUEST_TYPE.GET_COMPLETED_SEASONS
+
+
 @ReprInjector.withParent(('getOffset', 'offset'), ('getCount', 'count'), ('isOnlyOpened', 'onlyOpened'))
 
 class GetClubsCtx(CommonRequestCtx):
@@ -130,6 +141,29 @@ class GetClubsCtx(CommonRequestCtx):
 
     def getRequestType(self):
         return CLUB_REQUEST_TYPE.GET_CLUBS
+
+
+@ReprInjector.withParent(('getPattern', 'pattern'), ('getOffset', 'offset'), ('getCount', 'count'))
+
+class FindClubsCtx(CommonRequestCtx):
+
+    def __init__(self, pattern, offset, count, waitingID = '', confirmID = ''):
+        super(FindClubsCtx, self).__init__(waitingID=waitingID, confirmID=confirmID)
+        self.__pattern = pattern
+        self.__offset = offset
+        self.__count = count
+
+    def getPattern(self):
+        return self.__pattern
+
+    def getOffset(self):
+        return self.__offset
+
+    def getCount(self):
+        return self.__count
+
+    def getRequestType(self):
+        return CLUB_REQUEST_TYPE.FIND_CLUBS
 
 
 @ReprInjector.withParent()
@@ -154,6 +188,14 @@ class GetClubCtx(ClubRequestCtx):
 
     def getRequestType(self):
         return CLUB_REQUEST_TYPE.GET_CLUB
+
+
+@ReprInjector.withParent()
+
+class GetClubSeasonsCtx(ClubRequestCtx):
+
+    def getRequestType(self):
+        return CLUB_REQUEST_TYPE.GET_SEASONS
 
 
 @ReprInjector.withParent()
@@ -415,6 +457,9 @@ class JoinClubBattleCtx(PrbCtrlRequestCtx):
         self.__isUpdateExpected = isUpdateExpected
         self.__allowDelay = allowDelay
 
+    def getID(self):
+        return self.__clubDbID
+
     def isUpdateExpected(self):
         return self.__isUpdateExpected
 
@@ -441,3 +486,21 @@ class JoinClubBattleCtx(PrbCtrlRequestCtx):
 
     def _setUpdateExpected(self, value):
         self.__isUpdateExpected = value
+
+
+@ReprInjector.withParent(('getUserDbID', 'userDbID'))
+
+class GetPlayerInfoCtx(CommonRequestCtx):
+
+    def __init__(self, userDbID, waitingID = '', confirmID = ''):
+        super(GetPlayerInfoCtx, self).__init__(waitingID=waitingID, confirmID=confirmID)
+        self.__userDbID = userDbID
+
+    def getRequestType(self):
+        return CLUB_REQUEST_TYPE.GET_PLAYER_INFO
+
+    def getUserDbID(self):
+        return self.__userDbID
+
+    def getCooldown(self):
+        return DEFAULT_COOLDOWN

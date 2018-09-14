@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/shared/ItemsCache.py
 from Event import Event
 from adisp import async
+from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
 from gui.shared.utils.requesters import ItemsRequester, REQ_CRITERIA
 
@@ -40,19 +41,24 @@ class _ItemsCache(object):
 
     @async
     def update(self, updateReason, diff = None, callback = None):
-        self.__invalidateData(updateReason, diff, callback)
+        if diff is None:
+            self.__invalidateFullData(updateReason, callback)
+        else:
+            self.__invalidateData(updateReason, diff, callback)
+        return
 
     def clear(self):
+        LOG_DEBUG('Clearing items cache.')
         return self.items.clear()
 
     def _onResync(self, reason):
         if not self.__waitForSync:
-            self.__invalidateData(reason)
+            self.__invalidateFullData(reason)
 
     def _onCenterIsLongDisconnected(self, isLongDisconnected):
         self.items.dossiers.onCenterIsLongDisconnected(isLongDisconnected)
 
-    def __invalidateData(self, updateReason, diff = None, callback = lambda *args: None):
+    def __invalidateData(self, updateReason, diff, callback = lambda *args: None):
         self.__waitForSync = True
         self.onSyncStarted()
         if updateReason != CACHE_SYNC_REASON.DOSSIER_RESYNC:
@@ -62,6 +68,21 @@ class _ItemsCache(object):
 
         def cbWrapper(*args):
             self.__waitForSync = False
+            self.onSyncCompleted(updateReason, invalidItems)
+            callback(*args)
+
+        self.__items.request()(cbWrapper)
+
+    def __invalidateFullData(self, updateReason, callback = lambda *args: None):
+        self.__waitForSync = True
+        self.onSyncStarted()
+
+        def cbWrapper(*args):
+            self.__waitForSync = False
+            if updateReason != CACHE_SYNC_REASON.DOSSIER_RESYNC:
+                invalidItems = self.__items.invalidateCache()
+            else:
+                invalidItems = {}
             self.onSyncCompleted(updateReason, invalidItems)
             callback(*args)
 

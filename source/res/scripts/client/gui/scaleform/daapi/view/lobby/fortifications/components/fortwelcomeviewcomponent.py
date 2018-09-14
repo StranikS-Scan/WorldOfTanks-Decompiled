@@ -72,8 +72,6 @@ class FortWelcomeViewComponent(FortWelcomeViewMeta, FortViewHelper, AppRef):
             if not result:
                 if reason == FORT_RESTRICTION.CREATION_MIN_COUNT:
                     self.as_setWarningTextS(*self.__getNotEnoughMembersText(data))
-                else:
-                    LOG_ERROR('Text is not found by reason', reason)
         else:
             self.as_setRequirementTextS(self.__getClanMemberWelcomeText(data))
 

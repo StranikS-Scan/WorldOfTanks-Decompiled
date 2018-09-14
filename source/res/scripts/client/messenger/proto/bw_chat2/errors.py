@@ -110,7 +110,7 @@ class _AdminCommandError(IChatError):
 class _SimpleAdminCommandError(_AdminCommandError):
 
     def __init__(self, errorID, kwargs = None):
-        super(_SimpleAdminCommandError, self).__init__(getChatErrorMessage(errorID, kwargs or {}))
+        super(_SimpleAdminCommandError, self).__init__(getChatErrorMessage(errorID, kwargs or {'actionName': i18n.makeString(I18N_MESSENGER.CUSTOM_CLIENT_ACTION_ADMIN_CHAT_COMMAND)}))
 
 
 class _AdminCommandI18nError(_AdminCommandError):

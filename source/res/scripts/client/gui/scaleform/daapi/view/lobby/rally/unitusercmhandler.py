@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/UnitUserCMHandler.py
-from account_helpers import getPlayerDatabaseID
+from account_helpers import getAccountDatabaseID
 from adisp import process
 from constants import PREBATTLE_TYPE
 from gui.Scaleform.locale.MENU import MENU
@@ -56,16 +56,18 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
         return options
 
     def _canGiveLeadership(self):
-        myPermissions = self.unitFunctional.getPermissions()
-        myPInfo = self.unitFunctional.getPlayerInfo()
-        permissions = self.unitFunctional.getPermissions(dbID=self.databaseID)
-        pInfo = self.unitFunctional.getPlayerInfo(dbID=self.databaseID)
+        unitFunctional = self.unitFunctional
+        myPermissions = unitFunctional.getPermissions()
+        myPInfo = unitFunctional.getPlayerInfo()
+        permissions = unitFunctional.getPermissions(dbID=self.databaseID)
+        pInfo = unitFunctional.getPlayerInfo(dbID=self.databaseID)
         return myPInfo.isCreator() and pInfo.isInSlot and myPermissions.canChangeLeadership() and permissions.canLead()
 
     def _canTakeLeadership(self):
-        permissions = self.unitFunctional.getPermissions()
-        pInfo = self.unitFunctional.getPlayerInfo(dbID=self.databaseID)
-        return pInfo.isCreator() and permissions.canChangeLeadership() and permissions.canLead()
+        unitFunctional = self.unitFunctional
+        myPermissions = unitFunctional.getPermissions()
+        pInfo = unitFunctional.getPlayerInfo(dbID=self.databaseID)
+        return pInfo.isCreator() and myPermissions.canStealLeadership() and myPermissions.canLead()
 
     def _getHandlers(self):
         handlers = super(UnitUserCMHandler, self)._getHandlers()
@@ -84,4 +86,4 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
 
     @process
     def _takeLeadership(self):
-        yield self.prbDispatcher.sendUnitRequest(unit_ctx.GiveLeadershipCtx(getPlayerDatabaseID(), 'prebattle/takeLeadership'))
+        yield self.prbDispatcher.sendUnitRequest(unit_ctx.GiveLeadershipCtx(getAccountDatabaseID(), 'prebattle/takeLeadership'))

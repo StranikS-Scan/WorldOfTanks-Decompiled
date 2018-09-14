@@ -27,6 +27,7 @@ AWARDS = 'awards'
 CONTACTS = 'CONTACTS'
 BOOSTERS = 'BOOSTERS'
 FALLOUT = 'FALLOUT'
+SHOW_FALLOUT_VEHICLES = 'SHOW_FALLOUT_VEHICLES_9_9'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
@@ -58,6 +59,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                CONTACTS: {'showOfflineUsers': True,
                           'showOthersCategory': True},
                FALLOUT: {'wasShown': False},
+               SHOW_FALLOUT_VEHICLES: True,
                GOLD_FISH_LAST_SHOW_TIME: 0,
                'cs_intro_view_vehicle': {'nation': -1,
                                          'vehicleType': 'none',

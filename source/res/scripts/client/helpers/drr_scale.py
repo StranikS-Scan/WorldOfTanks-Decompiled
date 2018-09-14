@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/helpers/drr_scale.py
 import BigWorld
-DRR_MIN_SCALE_VALUE = 0.5
+DRR_MIN_SCALE_VALUE = 0.6
 DRR_MAX_SCALE_VALUE = 1.0
 DRR_MAX_STEP_VALUE = 0.05
 PERCENT_MODIFIER = 100.0

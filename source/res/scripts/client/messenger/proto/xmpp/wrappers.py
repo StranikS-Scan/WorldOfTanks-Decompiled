@@ -5,10 +5,31 @@ from constants import IGR_TYPE, ARENA_GUI_TYPE_LABEL
 from gui.shared.utils.decorators import ReprInjector
 from helpers import time_utils
 from messenger.proto.entities import ClanInfo
+from messenger.proto.xmpp.gloox_constants import CHAT_STATE
+from messenger.proto.xmpp.xmpp_constants import XMPP_BAN_COMPONENT
+from messenger.proto.xmpp.xmpp_constants import ANY_ITEM_LITERAL
 XMPPChannelData = namedtuple('XMPPChannelData', ('name', 'msgType'))
-XMPPMessageData = namedtuple('XMPPChannelData', ('accountDBID', 'accountName', 'text', 'sentAt'))
+
+class ChatMessage(object):
+    __slots__ = ('uuid', 'accountDBID', 'accountName', 'body', 'state', 'sentAt', 'requestID', 'isFinalInHistory')
+
+    def __init__(self, dbID = 0L, name = '', body = '', sentAt = 0):
+        super(ChatMessage, self).__init__()
+        self.uuid = ''
+        self.accountDBID = dbID
+        self.accountName = name
+        self.body = body
+        self.state = CHAT_STATE.UNDEFINED
+        self.sentAt = sentAt
+        self.requestID = ''
+        self.isFinalInHistory = False
+
+    def isHistory(self):
+        return len(self.requestID)
+
+
 ClientInfo = namedtuple('ClientInfo', ('igrID', 'igrRoomID', 'gameHost', 'arenaLabel'))
-_BanInfoItem = namedtuple('_BanInfoItem', ('source', 'setter', 'expiresAt', 'reason'))
+_BanInfoItem = namedtuple('_BanInfoItem', ('source', 'setter', 'expiresAt', 'reason', 'components', 'game'))
 
 @ReprInjector.simple(('_items', 'items'))
 
@@ -19,21 +40,20 @@ class BanInfo(object):
         super(BanInfo, self).__init__()
         self._items = items
 
-    def isChatBan(self):
+    def getFirstActiveItem(self, game = None, components = None):
         now = time.time()
-        for item in self._items:
-            if not item.expiresAt or item.expiresAt > now:
-                return True
-
-        return False
-
-    def getFirstActiveItem(self):
-        now = time.time()
-        for item in self._items:
+        for item in sorted(self._items, key=lambda item: item.expiresAt):
+            if game is not None and item.game not in (game, ANY_ITEM_LITERAL):
+                continue
+            if components is not None and components & item.components == 0:
+                continue
             if not item.expiresAt or item.expiresAt > now:
                 return item
 
-        return None
+        return
+
+    def isBanned(self, game = None, components = None):
+        return self.getFirstActiveItem(game=game, components=components) is not None
 
 
 WGExtsInfo = namedtuple('WGExtsInfo', ('client', 'clan', 'ban'))
@@ -74,9 +94,9 @@ def makeClanInfo(*args):
 def makeBanInfo(*args):
     items = []
     for item in args:
-        if len(item) < 4:
+        if len(item) < 6:
             continue
-        source, setter, expiresAt, reason = item[:4]
+        source, setter, expiresAt, reason, components, game = item[:6]
         if source.isdigit():
             source = int(source)
         else:
@@ -85,7 +105,7 @@ def makeBanInfo(*args):
             expiresAt = time_utils.getTimestampFromUTC(time_utils.getTimeStructInUTC(float(expiresAt)))
         else:
             expiresAt = 0
-        items.append(_BanInfoItem(source, setter, expiresAt, reason))
+        items.append(_BanInfoItem(source, setter, expiresAt, reason, XMPP_BAN_COMPONENT.fromString(components), game))
 
     if items:
         info = BanInfo(items)

@@ -5,8 +5,8 @@ from chat_shared import CHAT_ACTIONS, CHAT_RESPONSES
 from constants import USER_ACTIVE_CHANNELS_LIMIT
 from debug_utils import LOG_DEBUG
 from helpers import i18n
+from gui.shared.utils import getPlayerDatabaseID
 from messenger import g_settings
-from messenger.ext.player_helpers import getPlayerDatabaseID
 from messenger.m_constants import LAZY_CHANNEL, MESSENGER_SCOPE, USER_TAG
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw import entities

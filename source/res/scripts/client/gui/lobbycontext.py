@@ -29,7 +29,7 @@ class _LobbyContext(object):
         return
 
     def onAccountBecomePlayer(self):
-        self.__serverSettings = ServerSettings(BigWorld.player().serverSettings)
+        self.setServerSettings(BigWorld.player().serverSettings)
 
     def onAccountShowGUI(self, ctx):
         self.__guiCtx = ctx or {}
@@ -54,6 +54,9 @@ class _LobbyContext(object):
 
     def getServerSettings(self):
         return self.__serverSettings
+
+    def setServerSettings(self, serverSettings):
+        self.__serverSettings = ServerSettings(serverSettings)
 
     def getPlayerFullName(self, pName, clanInfo = None, clanAbbrev = None, regionCode = None, pDBID = None):
         fullName = pName

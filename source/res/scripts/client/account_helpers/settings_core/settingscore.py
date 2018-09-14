@@ -98,6 +98,7 @@ class _SettingsCore(object):
          (GRAPHICS.CUSTOM_AA, options.CustomAASetting()),
          (GRAPHICS.ASPECT_RATIO, options.AspectRatioSetting()),
          (GRAPHICS.FPS_PERFOMANCER, options.FPSPerfomancerSetting(GRAPHICS.FPS_PERFOMANCER, storage=GRAPHICS_SETTINGS_STORAGE)),
+         (GRAPHICS.DRR_AUTOSCALER_ENABLED, options.GraphicSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED)),
          (GRAPHICS.DYNAMIC_RENDERER, options.DynamicRendererSetting()),
          (GRAPHICS.COLOR_FILTER_INTENSITY, options.ColorFilterIntensitySetting()),
          (GRAPHICS.COLOR_FILTER_IMAGES, options.ReadOnlySetting(lambda : graphics.getGraphicSettingImages(GRAPHICS.COLOR_GRADING_TECHNIQUE))),

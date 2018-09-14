@@ -17,6 +17,7 @@ class UNIT_FLAGS:
     IN_SEARCH = 8
     DEV_MODE = 16
     IN_ARENA = 32
+    SORTIES_FORBIDDEN = 64
     IN_PRE_ARENA = 256
     IN_ROSTER_WAIT = 512
     DEFAULT = 0
@@ -112,6 +113,7 @@ class UNIT_ERROR:
     OFF_SEASON = 71
     BAD_PARAMS = 72
     PLAYER_READY = 73
+    SORTIES_FORBIDDEN = 74
 
 
 OK = UNIT_ERROR.OK
@@ -207,6 +209,7 @@ class UNIT_NOTIFY_CMD:
     KICK_ALL = 6
     EXTRAS_UPDATED = 7
     ROSTER_CONFIRM = 8
+    SORTIE_DIVISION_CHANGE = 9
 
 
 class CLIENT_UNIT_CMD:
@@ -610,22 +613,28 @@ class UnitBase(OpsUnpacker):
         return bool(self._readyMask)
 
     def isLocked(self):
-        return self._flags & UNIT_FLAGS.LOCKED
+        return bool(self._flags & UNIT_FLAGS.LOCKED)
 
     def isInviteOnly(self):
-        return self._flags & UNIT_FLAGS.INVITE_ONLY
+        return bool(self._flags & UNIT_FLAGS.INVITE_ONLY)
 
     def isIdle(self):
         return self._flags & UNIT_FLAGS.MODAL_STATES == 0
 
     def isDevMode(self):
-        return self._flags & UNIT_FLAGS.DEV_MODE
+        return bool(self._flags & UNIT_FLAGS.DEV_MODE)
 
     def isInArena(self):
-        return self._flags & UNIT_FLAGS.IN_ARENA
+        return bool(self._flags & UNIT_FLAGS.IN_ARENA)
 
     def isInPreArena(self):
-        return self._flags & UNIT_FLAGS.IN_PRE_ARENA
+        return bool(self._flags & UNIT_FLAGS.IN_PRE_ARENA)
+
+    def isSortiesForbidden(self):
+        return bool(self._flags & UNIT_FLAGS.SORTIES_FORBIDDEN)
+
+    def shouldPublish(self):
+        return not self.isInviteOnly() and not self.isSortiesForbidden()
 
     def __repr__(self):
         repr = 'Unit(\n  _members len=%s {' % len(self._members)
@@ -878,6 +887,7 @@ class UnitBase(OpsUnpacker):
     def _giveLeadership(self, newLeaderDBID):
         swapSlotIdx = self._playerSlots.get(newLeaderDBID)
         prevLeaderDBID = self._members[LEADER_SLOT]['playerID']
+        self.setMemberReady(prevLeaderDBID, False)
         self.setMemberReady(newLeaderDBID, False)
         if swapSlotIdx is not None:
             self._members[swapSlotIdx] = dict(playerID=prevLeaderDBID, slotIdx=swapSlotIdx)
@@ -891,21 +901,45 @@ class UnitBase(OpsUnpacker):
         self.storeOp(UNIT_OP.GIVE_LEADERSHIP, newLeaderDBID)
         return prevLeaderDBID
 
+    def _refreshFreeSlots(self, prevMax, newMax):
+        if prevMax > newMax:
+            for indx in xrange(newMax, prevMax):
+                self._freeSlots.discard(indx)
+
+        elif prevMax < newMax:
+            for indx in xrange(prevMax, newMax):
+                self._freeSlots.add(indx)
+
+    def _getSortieRosterType(self, division):
+        prevRosterTypeID = self._rosterTypeID
+        newRosterTypeID = SORTIE_DIVISION_LEVEL_TO_FLAGS.get(division, None)
+        if newRosterTypeID is None:
+            LOG_SVAN_DEV('Wrong division={}.', division)
+            return
+        elif newRosterTypeID == prevRosterTypeID:
+            LOG_SVAN_DEV('Division has not changed.')
+            return
+        RosterType = ROSTER_TYPE_TO_CLASS.get(newRosterTypeID, None)
+        if RosterType is None:
+            LOG_SVAN_DEV('Wrong RosterTypeID={}', newRosterTypeID)
+            return
+        else:
+            return (newRosterTypeID, RosterType)
+
     def _changeSortieDivision(self, division):
         prevRosterTypeID = self._rosterTypeID
         prevRoster = self._roster
         LOG_SVAN_DEV('Previous roster type: {0} : {1}', prevRosterTypeID, prevRoster.__class__)
-        newRosterTypeID = SORTIE_DIVISION_LEVEL_TO_FLAGS.get(division)
-        if newRosterTypeID == prevRosterTypeID:
-            LOG_SVAN_DEV('New division is an active. No changes are required.')
+        res = self._getSortieRosterType(division)
+        if res is None:
             return False
-        self._rosterTypeID = newRosterTypeID
-        RosterType = ROSTER_TYPE_TO_CLASS.get(newRosterTypeID)
-        newRoster = RosterType()
-        self._roster = newRoster
-        LOG_SVAN_DEV('New roster type: {0} : {1}', self._rosterTypeID, self._roster.__class__)
-        self.storeOp(UNIT_OP.CHANGE_DIVISION, division)
-        return True
+        else:
+            self._rosterTypeID, RosterType = res
+            self._roster = RosterType()
+            LOG_SVAN_DEV('New roster type: {0} : {1}', self._rosterTypeID, self._roster.__class__)
+            self._refreshFreeSlots(prevRoster.MAX_SLOTS, self._roster.MAX_SLOTS)
+            self.storeOp(UNIT_OP.CHANGE_DIVISION, division)
+            return True
 
     def _getLeaderDBID(self):
         return self._members.get(LEADER_SLOT, {}).get('playerID', 0)

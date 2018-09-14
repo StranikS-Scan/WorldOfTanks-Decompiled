@@ -286,6 +286,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_VICTORY = '#messenger:serviceChannelMessages/battleResults/victory'
     SERVICECHANNELMESSAGES_BATTLERESULTS_TECHVICTORY = '#messenger:serviceChannelMessages/battleResults/techVictory'
     SERVICECHANNELMESSAGES_BATTLERESULTS_DRAWGAME = '#messenger:serviceChannelMessages/battleResults/drawGame'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_ENDED = '#messenger:serviceChannelMessages/battleResults/ended'
     SERVICECHANNELMESSAGES_BATTLERESULTS_DEFEAT = '#messenger:serviceChannelMessages/battleResults/defeat'
     SERVICECHANNELMESSAGES_BATTLERESULTS_TECHDEFEAT = '#messenger:serviceChannelMessages/battleResults/techDefeat'
     SERVICECHANNELMESSAGES_BATTLERESULTS_BATTLE = '#messenger:serviceChannelMessages/battleResults/battle'
@@ -378,6 +379,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PREMIUMRECEIVEDASGIFT = '#messenger:serviceChannelMessages/premiumReceivedAsGift'
     SERVICECHANNELMESSAGES_ITEMRECEIVEDASGIFT = '#messenger:serviceChannelMessages/itemReceivedAsGift'
     SERVICECHANNELMESSAGES_VEHICLERECEIVEDASGIFT = '#messenger:serviceChannelMessages/vehicleReceivedAsGift'
+    SERVICECHANNELMESSAGES_FORTIFICATIONSTARTUP_TITLE = '#messenger:serviceChannelMessages/fortificationStartUp/title'
     SERVICECHANNELMESSAGES_FORTIFICATIONSTARTUP = '#messenger:serviceChannelMessages/fortificationStartUp'
     SERVICECHANNELMESSAGES_WARESBOUGHTASGOLD = '#messenger:serviceChannelMessages/waresBoughtAsGold'
     SERVICECHANNELMESSAGES_WARESSOLDASGOLD = '#messenger:serviceChannelMessages/waresSoldAsGold'
@@ -565,6 +567,8 @@ class MESSENGER(object):
     CLIENT_ACTION_SEND_MESSAGE = '#messenger:client_action/SEND_MESSAGE'
     CLIENT_ACTION_SET_NOTE = '#messenger:client_action/SET_NOTE'
     CLIENT_ACTION_REMOVE_NOTE = '#messenger:client_action/REMOVE_NOTE'
+    CLIENT_ACTION_RQ_HISTORY = '#messenger:client_action/RQ_HISTORY'
+    CUSTOM_CLIENT_ACTION_ADMIN_CHAT_COMMAND = '#messenger:custom_client_action/ADMIN_CHAT_COMMAND'
     SERVICECHANNELMESSAGES_VEHICLERENTED = '#messenger:serviceChannelMessages/vehicleRented'
     SERVICECHANNELMESSAGES_RENTALSEXPIRED = '#messenger:serviceChannelMessages/rentalsExpired'
     SERVICECHANNELMESSAGES_RENTCOMPENSATION_COMPENSATION = '#messenger:serviceChannelMessages/rentCompensation/compensation'
@@ -722,7 +726,8 @@ class MESSENGER(object):
      CLIENT_ACTION_CANCEL_FRIENDSHIP,
      CLIENT_ACTION_SEND_MESSAGE,
      CLIENT_ACTION_SET_NOTE,
-     CLIENT_ACTION_REMOVE_NOTE)
+     CLIENT_ACTION_REMOVE_NOTE,
+     CLIENT_ACTION_RQ_HISTORY)
     CHAT_ACTION_ENUM = (CHAT_ACTION_BROADCAST_UNIT_MESSAGE,
      CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
      CHAT_ACTION_BROADCAST_CLUB_MESSAGE,

@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/battle_results/abstract.py
 import weakref
-from gui.shared.utils import makeTupleByDict
+from shared_utils import makeTupleByDict
 from gui.battle_results import stats, items
 
 class BattleResults(object):
@@ -8,7 +8,7 @@ class BattleResults(object):
     def __init__(self, results, dp):
         self._dp = weakref.proxy(dp)
         self._common = makeTupleByDict(stats.CommonInfo, results['common'])
-        self._personal = makeTupleByDict(stats.PersonalInfo, results['personal'])
+        self._personal = makeTupleByDict(stats.PersonalInfo, results['personal'].values()[0])
 
     def clear(self):
         pass

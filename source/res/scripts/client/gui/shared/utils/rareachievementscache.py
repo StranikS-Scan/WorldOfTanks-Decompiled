@@ -45,6 +45,7 @@ class _RaresCache(object):
                 achieveData['image'][IMAGE_TYPE.IT_67X71] = rareIcons67x71[icon].asBinary
             except:
                 LOG_WARNING('Cannot load rare achievement local file', icon)
+                LOG_CURRENT_EXCEPTION()
 
             try:
                 achieveData['image'][IMAGE_TYPE.IT_180X180] = rareIcons180x180[icon].asBinary

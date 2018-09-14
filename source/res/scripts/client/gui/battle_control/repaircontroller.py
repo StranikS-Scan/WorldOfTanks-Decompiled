@@ -44,9 +44,12 @@ class RepairController(object):
                  self.__REPAIR_STATE.COOLDOWN,
                  INGAME_GUI.REPAIRPOINT_TITLE,
                  INGAME_GUI.REPAIRPOINT_UNAVAILABLE])
-                SoundGroups.g_instance.FMODplaySound(self.__REPAIR_SOUND_NAME)
+                SoundGroups.g_instance.playSound2D(self.__REPAIR_SOUND_NAME)
             elif action == REPAIR_POINT_ACTION.ENTER_WHILE_CD:
-                self.__ui.call('repairTimer.show', [timeLeft, self.__REPAIR_STATE.COOLDOWN, ''])
+                self.__ui.call('repairTimer.show', [timeLeft,
+                 self.__REPAIR_STATE.COOLDOWN,
+                 INGAME_GUI.REPAIRPOINT_TITLE,
+                 INGAME_GUI.REPAIRPOINT_UNAVAILABLE])
             elif action in (REPAIR_POINT_ACTION.LEAVE_WHILE_CD, REPAIR_POINT_ACTION.CANCEL_REPAIR):
                 self.__ui.call('repairTimer.hide')
             self.onRepairPointStateChanged(repairPointIndex, action, timeLeft)

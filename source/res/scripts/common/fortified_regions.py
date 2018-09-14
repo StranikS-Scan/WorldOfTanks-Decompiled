@@ -167,8 +167,6 @@ class FortifiedRegionCache:
         self.fort_divisions = {}
         self.fortBattleMaps = set()
         self.bonusFactors = {}
-        self.invalidPeripheryIDs = set()
-        self.replacementPeripheryIDs = set()
         self.equipmentToOrder = {}
         return
 
@@ -208,18 +206,6 @@ def init():
     g_cache.maxLegionariesCount = section['max_legionaries_count'].asInt
     g_cache.consumablesSlotCount = section['consumables_slot_count'].asInt
     g_cache.maxLifetimeConsumable = section['max_lifetime_consumable'].asInt
-    invalidPeripheryIDs = _getString(section, 'invalid_periphery_ids').split()
-    if invalidPeripheryIDs:
-        for id in invalidPeripheryIDs:
-            g_cache.invalidPeripheryIDs.add(int(id))
-
-    replacementPeripheryIDs = _getString(section, 'replacement_periphery_ids').split()
-    if replacementPeripheryIDs:
-        for id in replacementPeripheryIDs:
-            g_cache.replacementPeripheryIDs.add(int(id))
-
-    if len(invalidPeripheryIDs) and not len(replacementPeripheryIDs):
-        raise Exception, 'Non-empty <invalid_periphery_ids>, but no <replacement_periphery_ids> declared!'
     g_cache.transportLevels = transportLevels = {}
     transportLevelsSection = section['transport_levels'] or {}
     for name, subsection in transportLevelsSection.items():

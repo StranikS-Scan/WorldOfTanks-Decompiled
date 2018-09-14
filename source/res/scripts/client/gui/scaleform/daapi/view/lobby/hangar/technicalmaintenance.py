@@ -151,7 +151,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
                  'goldShellsForCredits': goldShellsForCredits,
                  'prices': shell.altPrice,
                  'currency': shell.getBuyPriceCurrency(),
-                 'ammoName': shell.longUserName,
+                 'ammoName': shell.longUserNameAbbr,
                  'tableName': shell.getShortInfo(vehicle, True),
                  'maxAmmo': vehicle.gun.maxAmmo,
                  'userCredits': {'credits': credits,
@@ -297,7 +297,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
 
     @classmethod
     def _getInfoTextAfterShellBlock(cls):
-        if g_currentVehicle.item.isOnlyForEventBattles and not g_currentVehicle.item.isAmmoFull:
+        if g_currentVehicle.item.isEvent and not g_currentVehicle.item.isAmmoFull:
             return text_styles.alert(MENU.HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_AMMO_NOT_READY)
         else:
             return ''

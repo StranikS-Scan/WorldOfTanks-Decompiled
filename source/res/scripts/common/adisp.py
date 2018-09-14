@@ -108,7 +108,6 @@ class CallbackDispatcher(object):
             self.call(self.g.next())
         except StopIteration:
             from debug_utils import LOG_DEBUG
-            LOG_DEBUG('Process method has calling no async methods', generator.gi_code)
             self.stepCallback(True)
 
     def call(self, callers):

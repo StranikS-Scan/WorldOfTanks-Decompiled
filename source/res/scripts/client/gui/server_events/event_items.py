@@ -1,8 +1,10 @@
 # Embedded file name: scripts/client/gui/server_events/event_items.py
 import operator
+import random
 import time
 from abc import ABCMeta
 from collections import namedtuple, OrderedDict
+import math
 import nations
 import constants
 import ResMgr
@@ -12,9 +14,9 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from potapov_quests import PQ_STATE as _PQS
 from account_shared import AmmoIterator, getHistoricalCustomizedVehCompDescr
 from helpers import getLocalizedData, i18n, time_utils, getClientLanguage
+from shared_utils import findFirst, CONST_CONTAINER
 from gui import makeHtmlString
 from gui.shared import g_itemsCache
-from gui.shared.utils import CONST_CONTAINER, findFirst
 from gui.shared.utils.functions import getAbsoluteUrl
 from gui.server_events.bonuses import getBonusObj
 from gui.server_events.modifiers import getModifierObj, compareModifiers
@@ -27,12 +29,19 @@ EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'enabled',
  'arenaTypeID'])
 
+class DEFAULTS_GROUPS(object):
+    UNGROUPED_ACTIONS = 'ungroupedActions'
+    UNGROUPED_QUESTS = 'ungroupedQuests'
+
+
 class ServerEventAbstract(object):
     __metaclass__ = ABCMeta
 
     def __init__(self, eID, data):
         self._id = eID
         self._data = dict(data)
+        self._groupID = None
+        return
 
     def isGuiDisabled(self):
         return self._data.get('disableGui', False)
@@ -50,6 +59,18 @@ class ServerEventAbstract(object):
 
     def getID(self):
         return self._id
+
+    def getIconID(self):
+        return self._data.get('uiDecoration', None)
+
+    def setGroupID(self, groupID):
+        self._groupID = groupID
+
+    def getGroupID(self):
+        return self._groupID
+
+    def getPriority(self):
+        return self._data.get('priority', 0)
 
     def getData(self):
         return self._data
@@ -147,6 +168,12 @@ class ServerEventAbstract(object):
         return True
 
 
+class Group(ServerEventAbstract):
+
+    def getGroupEvents(self):
+        return self._data.get('groupContent', [])
+
+
 class Quest(ServerEventAbstract):
 
     def __init__(self, qID, data, progress = None):
@@ -162,6 +189,7 @@ class Quest(ServerEventAbstract):
         self.preBattleCond = PreBattleConditions(preBattle['battle'])
         self.bonusCond = BonusConditions(conds['bonus'], self.getProgressData(), self.preBattleCond)
         self.postBattleCond = PostBattleConditions(conds['postBattle'], self.preBattleCond)
+        self._groupID = DEFAULTS_GROUPS.UNGROUPED_QUESTS
 
     def getUserType(self):
         if self.getType() == constants.EVENT_TYPE.FORT_QUEST:
@@ -275,6 +303,10 @@ class PersonalQuest(Quest):
 
 
 class Action(ServerEventAbstract):
+
+    def __init__(self, qID, data):
+        super(Action, self).__init__(qID, data)
+        self._groupID = DEFAULTS_GROUPS.UNGROUPED_ACTIONS
 
     def getUserType(self):
         return i18n.makeString(QUESTS.ITEM_TYPE_ACTION)
@@ -839,7 +871,7 @@ class PotapovQuest(Quest):
                 if b is not None:
                     result.append(b)
 
-        return result
+        return sorted(result)
 
     def getTankmanBonus(self):
         for isMainBonus in (True, False):
@@ -883,4 +915,12 @@ def getTileAnimationPath(tileIconID):
 def createQuest(questType, qID, data, progress = None, expiryTime = None):
     if questType == constants.EVENT_TYPE.PERSONAL_QUEST:
         return PersonalQuest(qID, data, progress, expiryTime)
+    if questType == constants.EVENT_TYPE.GROUP:
+        return Group(qID, data)
     return Quest(qID, data, progress)
+
+
+def createAction(eventType, aID, data):
+    if eventType == constants.EVENT_TYPE.GROUP:
+        return Group(aID, data)
+    return Action(aID, data)

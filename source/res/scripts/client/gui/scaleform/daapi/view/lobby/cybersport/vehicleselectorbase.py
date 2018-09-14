@@ -23,6 +23,9 @@ class VehicleSelectorBase(object):
          'level': level,
          'compatibleOnly': compatibleOnly}
 
+    def _getLevelsRange(self):
+        return range(11)
+
     def _updateData(self, allVehicles, levelsRange, vehicleTypes):
         criteria = REQ_CRITERIA.EMPTY
         criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_IGR_RENT
@@ -63,7 +66,7 @@ class VehicleSelectorBase(object):
 
     def getLevelsDP(self):
         result = []
-        for index in range(11):
+        for index in self._getLevelsRange():
             itemIcon = 'level_' + ('all' if index == 0 else str(index)) + '.png'
             itemLabel = CYBERSPORT.WINDOW_VEHICLESELECTOR_FILTERS_ALLLEVELS if index == 0 else i18n.makeString(CYBERSPORT.WINDOW_VEHICLESELECTOR_FILTERS_LEVEL) % {'levelNum': index}
             result.append({'label': itemLabel,

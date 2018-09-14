@@ -7,9 +7,12 @@ from debug_utils import LOG_DEBUG
 class Sound(object):
 
     def __init__(self, soundPath):
-        self.__sndTick = SoundGroups.g_instance.FMODplaySound(soundPath)
+        self.__sndTick = None
+        if FMOD.enabled:
+            self.__sndTick = SoundGroups.g_instance.playSound2D(soundPath)
         self.__isPlaying = True
         self.stop()
+        return
 
     @property
     def isPlaying(self):
@@ -20,10 +23,11 @@ class Sound(object):
         return self.__sndTick
 
     def play(self):
-        self.stop()
-        if self.__sndTick:
-            self.__sndTick.play()
-        self.__isPlaying = True
+        if FMOD.enabled:
+            self.stop()
+            if self.__sndTick:
+                self.__sndTick.play()
+            self.__isPlaying = True
 
     def stop(self):
         if self.__sndTick:

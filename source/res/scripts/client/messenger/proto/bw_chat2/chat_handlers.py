@@ -4,7 +4,6 @@ import weakref
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
-from gui.battle_control.arena_info import getClientArena
 from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE, USER_TAG
 from messenger.proto.bw_chat2 import admin_chat_cmd
 from messenger.proto.bw_chat2 import entities, limits, wrappers, errors
@@ -359,6 +358,7 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
         self.__targetIDs = []
         if scope != MESSENGER_SCOPE.BATTLE:
             return
+        from gui.battle_control.arena_info import getClientArena
         arena = getClientArena()
         if arena:
             arena.onVehicleKilled += self.__onVehicleKilled

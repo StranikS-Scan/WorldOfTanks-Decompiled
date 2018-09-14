@@ -4,7 +4,7 @@ import VOIP
 import constants
 import CommandMapping
 from PlayerEvents import g_playerEvents
-from gui import GUI_SETTINGS, game_control, SystemMessages
+from gui import game_control, SystemMessages
 import gui
 from gui.LobbyContext import g_lobbyContext
 from gui.battle_control import g_sessionProvider
@@ -54,6 +54,7 @@ class LobbyView(View, LobbyPageMeta, AppRef):
         g_prbLoader.setEnabled(True)
         self.addListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
         self.app.loaderManager.onViewLoadInit += self.__onViewLoadInit
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
@@ -75,13 +76,19 @@ class LobbyView(View, LobbyPageMeta, AppRef):
         g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
         self.removeListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         View._dispose(self)
 
-    def __showHelpLayout(self, event):
+    def __showHelpLayout(self, _):
         self.as_showHelpLayoutS()
 
-    def __closeHelpLayout(self, event):
+    def __closeHelpLayout(self, _):
         self.as_closeHelpLayoutS()
+
+    def __handleScreenShotMade(self, event):
+        if 'path' not in event.ctx:
+            return
+        SystemMessages.pushMessage(i18n.makeString('#menu:screenshot/save') % {'path': event.ctx['path']}, SystemMessages.SM_TYPE.Information)
 
     def __onVehicleBecomeElite(self, vehTypeCompDescr):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.ELITE_WINDOW, getViewName(VIEW_ALIAS.ELITE_WINDOW, vehTypeCompDescr), {'vehTypeCompDescr': vehTypeCompDescr}))
@@ -89,6 +96,9 @@ class LobbyView(View, LobbyPageMeta, AppRef):
     def moveSpace(self, dx, dy, dz):
         if g_hangarSpace.space:
             g_hangarSpace.space.handleMouseEvent(int(dx), int(dy), int(dz))
+
+    def notifyCursorOver3dScene(self, isOver3dScene):
+        self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': isOver3dScene}))
 
     def __onViewLoadInit(self, view):
         if view is not None and view.settings is not None:

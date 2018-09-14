@@ -14,4 +14,4 @@ class MedalAbramsAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'medalAbrams')
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRandomStats().getWinAndSurvived() + dossier.getTeam7x7Stats().getWinAndSurvived() + dossier.getFortBattlesStats().getWinAndSurvived() + dossier.getFortSortiesStats().getWinAndSurvived()
+        return dossier.getRandomStats().getWinAndSurvived() + dossier.getTeam7x7Stats().getWinAndSurvived() + dossier.getFortBattlesStats().getWinAndSurvived() + dossier.getFortSortiesStats().getWinAndSurvived() + dossier.getGlobalMapStats().getWinAndSurvived()

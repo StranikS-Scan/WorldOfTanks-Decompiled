@@ -1,20 +1,15 @@
 # Embedded file name: scripts/client/messenger/ext/player_helpers.py
 import BigWorld
-import account_helpers
 from adisp import process
-from avatar_helpers import getAvatarDatabaseID
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from messenger.m_constants import USER_TAG
 from messenger.proto.entities import ClanInfo
 from messenger.storage import storage_getter
 
 def _getInfo4AccountPlayer():
-    return (account_helpers.getPlayerDatabaseID(), getPlayerName(), None)
-
-
-def _getAccountDatabaseID():
-    return account_helpers.getPlayerDatabaseID()
+    return (getPlayerDatabaseID(), getPlayerName(), None)
 
 
 def _getInfo4AvatarPlayer():
@@ -29,14 +24,6 @@ def _getInfo4AvatarPlayer():
             name = vehData['name']
             clanAbbrev = vehData['clanAbbrev']
     return (dbID, name, clanAbbrev)
-
-
-def getPlayerDatabaseID():
-    return _getAccountDatabaseID() or getAvatarDatabaseID()
-
-
-def getPlayerName():
-    return getattr(BigWorld.player(), 'name', '')
 
 
 def isCurrentPlayer(dbID):

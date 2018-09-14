@@ -2,7 +2,6 @@
 import random
 import BigWorld
 from Event import Event
-from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from items import vehicles
 from helpers import isPlayerAccount, i18n
@@ -10,11 +9,16 @@ from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui import prb_control, game_control, g_tankActiveCamouflage
 from gui.shared import g_itemsCache, REQ_CRITERIA
-from gui.shared.utils.HangarSpace import g_hangarSpace
+from gui.shared.formatters import icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
+
+def _getHangarSpace():
+    from gui.shared.utils.HangarSpace import g_hangarSpace
+    return g_hangarSpace
+
 
 class _CurrentVehicle():
 
@@ -43,7 +47,7 @@ class _CurrentVehicle():
         g_clientUpdateManager.removeObjectCallbacks(self)
         game_control.g_instance.igr.onIgrTypeChanged -= self.onIgrTypeChanged
         game_control.g_instance.rentals.onRentChangeNotify -= self.onRentChange
-        g_hangarSpace.removeVehicle()
+        _getHangarSpace().removeVehicle()
         self.selectNoVehicle()
 
     def onIgrTypeChanged(self, *args):
@@ -96,9 +100,9 @@ class _CurrentVehicle():
 
                 if len(availableKinds) > 0:
                     g_tankActiveCamouflage[self.item.intCD] = random.choice(availableKinds)
-            g_hangarSpace.updateVehicle(self.item, self.__historicalBattle)
+            _getHangarSpace().updateVehicle(self.item, self.__historicalBattle)
         else:
-            g_hangarSpace.removeVehicle()
+            _getHangarSpace().removeVehicle()
         return
 
     @property
@@ -204,14 +208,14 @@ class _CurrentVehicle():
             if state == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
                 localization = '#menu:vehicle/igrRentLeft/%s'
                 rentLeftStr = getRentLeftTimeStr(localization, self.item.rentLeftTime)
-                icon = TextManager.getIcon(TextIcons.PREMIUM_IGR_BIG)
+                icon = icons.premiumIgrBig()
                 if self.item.isRented:
                     message = i18n.makeString('#menu:currentVehicleStatus/' + state, icon=icon, time=rentLeftStr)
                 else:
                     message = i18n.makeString('#menu:tankCarousel/vehicleStates/inPremiumIgrOnly', icon=icon)
                 return (state, message, stateLvl)
             return (state, '#menu:currentVehicleStatus/' + state, stateLvl)
-        return ('notpresent', MENU.CURRENTVEHICLESTATUS_NOTPRESENT, Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
+        return (Vehicle.VEHICLE_STATE.NOT_PRESENT, MENU.CURRENTVEHICLESTATUS_NOTPRESENT, Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
 
     def setHistoricalBattle(self, historicalBattle):
         g_tankActiveCamouflage['historical'] = {}

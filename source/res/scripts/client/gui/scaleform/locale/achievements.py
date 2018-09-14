@@ -481,6 +481,18 @@ class ACHIEVEMENTS(object):
     FALLOUT = '#achievements:fallout'
     FALLOUT_DESCR = '#achievements:fallout_descr'
     FALLOUT_CONDITION = '#achievements:fallout_condition'
+    FALLOUT2 = '#achievements:fallout2'
+    FALLOUT2_DESCR = '#achievements:fallout2_descr'
+    FALLOUT2_CONDITION = '#achievements:fallout2_condition'
+    FALLOUTSINGLEWOLF = '#achievements:falloutSingleWolf'
+    FALLOUTSINGLEWOLF_DESCR = '#achievements:falloutSingleWolf_descr'
+    FALLOUTSINGLEWOLF_CONDITION = '#achievements:falloutSingleWolf_condition'
+    FALLOUTPACKOFWOLFS = '#achievements:falloutPackOfWolfs'
+    FALLOUTPACKOFWOLFS_DESCR = '#achievements:falloutPackOfWolfs_descr'
+    FALLOUTPACKOFWOLFS_CONDITION = '#achievements:falloutPackOfWolfs_condition'
+    FALLOUTSTEELHUNTER = '#achievements:falloutSteelHunter'
+    FALLOUTSTEELHUNTER_DESCR = '#achievements:falloutSteelHunter_descr'
+    FALLOUTSTEELHUNTER_CONDITION = '#achievements:falloutSteelHunter_condition'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -1015,6 +1027,18 @@ class ACHIEVEMENTS(object):
      FALLOUT,
      FALLOUT_DESCR,
      FALLOUT_CONDITION,
+     FALLOUT2,
+     FALLOUT2_DESCR,
+     FALLOUT2_CONDITION,
+     FALLOUTSINGLEWOLF,
+     FALLOUTSINGLEWOLF_DESCR,
+     FALLOUTSINGLEWOLF_CONDITION,
+     FALLOUTPACKOFWOLFS,
+     FALLOUTPACKOFWOLFS_DESCR,
+     FALLOUTPACKOFWOLFS_CONDITION,
+     FALLOUTSTEELHUNTER,
+     FALLOUTSTEELHUNTER_DESCR,
+     FALLOUTSTEELHUNTER_CONDITION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,

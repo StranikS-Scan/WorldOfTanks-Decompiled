@@ -15,12 +15,15 @@ class TankCarouselMeta(DAAPIModule):
     def setVehiclesFilter(self, nation, tankType, ready):
         self._printOverrideError('setVehiclesFilter')
 
+    def setFalloutFilter(self, falloutVehVisible):
+        self._printOverrideError('setFalloutFilter')
+
     def getVehicleTypeProvider(self):
         self._printOverrideError('getVehicleTypeProvider')
 
-    def as_setCarouselFilterS(self, filter):
+    def as_setCarouselFilterS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_setCarouselFilter(filter)
+            return self.flashObject.as_setCarouselFilter(data)
 
     def as_setParamsS(self, params):
         if self._isDAAPIInited():
@@ -33,3 +36,7 @@ class TankCarouselMeta(DAAPIModule):
     def as_showVehiclesS(self, compactDescrList):
         if self._isDAAPIInited():
             return self.flashObject.as_showVehicles(compactDescrList)
+
+    def as_setIsEventS(self, isEvent):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setIsEvent(isEvent)

@@ -28,10 +28,9 @@ class RepairPoint(BigWorld.UserDataObject, _CTFCheckPoint, _CTFPointFlag):
         if hasattr(arenaType, 'repairPoints'):
             repairPoints = arenaType.repairPoints
             for pt in repairPoints:
-                if 'position' not in pt:
+                if 'guid' not in pt:
                     continue
-                distSq = (Vector3(pt['position']) - self.position).lengthSquared
-                if distSq < 100:
+                if pt['guid'] == self.guid:
                     return True
 
         return False

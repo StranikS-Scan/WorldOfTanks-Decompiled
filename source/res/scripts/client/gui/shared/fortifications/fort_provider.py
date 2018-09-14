@@ -186,21 +186,23 @@ class ClientFortProvider(object):
     @process
     def __resolveSubscription(self):
         if not self.isStarted() or self.__lock:
-            yield lambda callback = None: callback
             return
         else:
             isSubscribed = self.isSubscribed()
             if self.__listeners.isEmpty():
                 if isSubscribed:
-                    self.__lock = True
-                    result = yield self.__requestUnsubscribe()
-                    self.__lock = False
-                    if result:
+                    if self.__state is not None and self.__state.getStateID() != CLIENT_FORT_STATE.NO_CLAN:
+                        self.__lock = True
+                        unsubscribed = yield self.__requestUnsubscribe()
+                        self.__lock = False
+                    else:
+                        unsubscribed = True
+                        yield lambda callback: callback(True)
+                    if unsubscribed:
                         self.__initial ^= FORT_PROVIDER_INITIAL_FLAGS.SUBSCRIBED
-                        self.__keeper.stop()
+                        if self.__keeper:
+                            self.__keeper.stop()
                         self.resetState()
-                else:
-                    yield lambda callback = None: callback
             else:
                 if self.__state:
                     stateID = self.__state.getStateID()
@@ -215,7 +217,6 @@ class ClientFortProvider(object):
                         self.__initial |= FORT_PROVIDER_INITIAL_FLAGS.SUBSCRIBED
                 else:
                     self.__keeper.update(stateID)
-                    yield lambda callback = None: callback
             return
 
     @async

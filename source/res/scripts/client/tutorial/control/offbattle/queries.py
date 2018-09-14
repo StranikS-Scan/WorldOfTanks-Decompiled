@@ -146,12 +146,3 @@ class BattleResultMessage(ContentQuery):
             content['chapters'] = _getChaptersResults(descriptor, localCtx, received)
             content['areAllBonusesReceived'] = descriptor.areAllBonusesReceived(self._bonuses.getCompleted())
             return
-
-
-class VideoContent(ContentQuery):
-
-    def invoke(self, content, varID):
-        volume = SoundGroups.g_instance.getMasterVolume()
-        content['soundValue'] = volume * 100
-        content['subtitleTrack'] = GUI_SETTINGS.video.subtitleTrack
-        content['audioTrack'] = GUI_SETTINGS.video.audioTrack

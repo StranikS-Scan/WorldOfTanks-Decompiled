@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/entities.py
-from collections import deque
-from messenger.m_constants import PROTO_TYPE, USER_TAG, MESSAGES_HISTORY_MAX_LEN, GAME_ONLINE_STATUS
+from messenger.m_constants import PROTO_TYPE, USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.entities import UserEntity, ChannelEntity, MemberEntity
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE
 from messenger.proto.xmpp.wrappers import XMPPChannelData
@@ -113,24 +112,25 @@ class _XMPPChannelEntity(ChannelEntity):
 
 
 class XMPPChatChannelEntity(_XMPPChannelEntity):
+    __slots__ = ('_isStored',)
 
     def __init__(self, jid, name = ''):
         super(XMPPChatChannelEntity, self).__init__(str(jid), XMPPChannelData(name, MESSAGE_TYPE.CHAT))
+        self._isStored = False
 
     def getPersistentState(self):
         state = None
-        if self._history:
-            state = (tuple(self._data), list(self._history)[-10:])
+        if self._isStored:
+            state = tuple(self._data)
         return state
 
     def setPersistentState(self, state):
-        result = False
         if len(state) == 2:
-            data, history = state
-            self._data = XMPPChannelData(*data)
-            self._history = deque(history, MESSAGES_HISTORY_MAX_LEN)
-            result = True
-        return result
+            self._data = XMPPChannelData(*state)
+            self._isStored = True
+        else:
+            self._isStored = False
+        return self._isStored
 
     def isPrivate(self):
         return True
@@ -141,9 +141,16 @@ class XMPPChatChannelEntity(_XMPPChannelEntity):
     def getFullName(self):
         return self.getName()
 
+    def setStored(self, flag):
+        self._isStored = flag
+
     def setJoined(self, isJoined):
         self._isJoined = isJoined
         self.onConnectStateChanged(self)
+
+    def clear(self):
+        self._isStored = False
+        super(XMPPChatChannelEntity, self).clear()
 
 
 class XMPPMemberEntity(MemberEntity):

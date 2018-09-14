@@ -65,14 +65,14 @@ class CommonMessageBuilder(_BattleMessageBuilder):
             pColor = pColorScheme.getHexStr('himself')
         else:
             ctx = g_sessionProvider.getCtx()
-            if ctx.isInTeam(accID=dbID):
+            if ctx.isAlly(accID=dbID):
                 if ctx.isTeamKiller(accID=dbID):
                     pColor = pColorScheme.getHexStr('teamkiller')
                 elif ctx.isSquadMan(accID=dbID):
                     pColor = pColorScheme.getHexStr('squadman')
                 else:
                     pColor = pColorScheme.getHexStr('teammate')
-            elif ctx.isInTeam(accID=dbID, enemy=True):
+            elif ctx.isEnemy(accID=dbID):
                 pColor = pColorScheme.getHexStr('enemy')
         self._ctx['playerColor'] = pColor
         self._ctx['messageColor'] = g_settings.getColorScheme('battle/message').getHexStr('common')
@@ -82,7 +82,7 @@ class CommonMessageBuilder(_BattleMessageBuilder):
         ctx = g_sessionProvider.getCtx()
         fullName = ctx.getFullPlayerName(accID=dbID, pName=pName)
         if not len(fullName):
-            if ctx.isInTeam(accID=dbID):
+            if ctx.isAlly(accID=dbID):
                 fullName = _I18_ALLY
             else:
                 fullName = _I18_ENEMY

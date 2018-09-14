@@ -1,18 +1,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyRoomView.py
-import constants
 import account_helpers
 from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT
 from adisp import process
 from debug_utils import LOG_DEBUG
-from gui import makeHtmlString, DialogsInterface
+from gui import DialogsInterface
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BaseRallyRoomViewMeta import BaseRallyRoomViewMeta
 from gui.Scaleform.framework import ViewTypes, AppRef
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT, REQUEST_TYPE
@@ -22,16 +20,15 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 from messenger.proto.events import g_messengerEvents
-from helpers import int2roman, i18n
+from helpers import i18n
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
-import nations
+from gui.shared.formatters import text_styles
 
 class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
 
     def __init__(self):
         super(BaseRallyRoomView, self).__init__()
         self._candidatesDP = None
-        self.textMgr = self.app.utilsManager.textManager
         return
 
     def requestToAssign(self, pID, slotIdx):
@@ -126,6 +123,10 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
     def onUnitRosterChanged(self):
         self._updateMembersData()
 
+    def onUnitCurfewChanged(self):
+        LOG_DEBUG('%s : onUnitCurfewChanged' % self)
+        self._setActionButtonState()
+
     def _updateRallyData(self):
         pass
 
@@ -183,7 +184,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
             if self.unitFunctional.getPlayerInfo().isCreator():
                 LOG_DEBUG('Request to assign is ignored. Creator can not move to another slots')
                 return
-            playerId = account_helpers.getPlayerDatabaseID()
+            playerId = account_helpers.getAccountDatabaseID()
         elif not self.isPlayerInUnit(playerId):
             return
         self.requestToAssign(playerId, slotIndex)
@@ -254,8 +255,8 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         self._updateRallyData()
 
     def _updateVehiclesLabel(self, minVal, maxVal):
-        vehicleLvl = self.textMgr.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(CYBERSPORT.WINDOW_UNIT_RANGEVALUE, minVal=minVal, maxVal=maxVal))
-        vehicleLbl = self.textMgr.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMVEHICLESLBL, levelsRange=vehicleLvl))
+        vehicleLvl = text_styles.main(i18n.makeString(CYBERSPORT.WINDOW_UNIT_RANGEVALUE, minVal=minVal, maxVal=maxVal))
+        vehicleLbl = text_styles.standard(i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMVEHICLESLBL, levelsRange=vehicleLvl))
         self.as_setVehiclesTitleS(vehicleLbl)
 
     def _closeSendInvitesWindow(self):

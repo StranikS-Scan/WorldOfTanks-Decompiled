@@ -276,13 +276,10 @@ class EventDispatcher(AppRef):
     def fireAutoInviteReceived(self, invite):
         self._fireEvent(events.AutoInviteEvent(invite, events.AutoInviteEvent.INVITE_RECEIVED))
 
-    def showParentControlNotification(self):
+    @classmethod
+    def showParentControlNotification(cls):
         from gui import game_control, DialogsInterface
-        if game_control.g_instance.gameSession.isPlayTimeBlock:
-            key = 'koreaPlayTimeNotification'
-        else:
-            key = 'koreaParentNotification'
-        DialogsInterface.showI18nInfoDialog(key, lambda *args: None)
+        DialogsInterface.showDialog(game_control.g_instance.gameSession.getParentControlNotificationMeta(), lambda *args: None)
 
     def __showSquadWindow(self, showInvitesWindow = False):
         self._fireShowEvent(PREBATTLE_ALIASES.SQUAD_WINDOW_PY)

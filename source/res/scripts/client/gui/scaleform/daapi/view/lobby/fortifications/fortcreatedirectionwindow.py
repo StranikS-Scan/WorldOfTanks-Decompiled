@@ -15,8 +15,8 @@ from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from gui.shared.fortifications.context import DirectionCtx
-from gui.shared.utils import findFirst
 from helpers import i18n
+from shared_utils import findFirst
 from gui import makeHtmlString, DialogsInterface, SystemMessages
 from adisp import process
 
@@ -55,7 +55,8 @@ class FortCreateDirectionWindow(AbstractWindowView, View, FortCreateDirectionWin
                         uid = self.getBuildingUIDbyID(building.typeID)
                         data = {'uid': uid,
                          'progress': self._getProgress(building.typeID, building.level),
-                         'toolTipData': [i18n.makeString('#fortifications:Buildings/buildingName/%s' % uid), self.getCommonBuildTooltipData(building)]}
+                         'toolTipData': [i18n.makeString('#fortifications:Buildings/buildingName/%s' % uid), self.getCommonBuildTooltipData(building)],
+                         'iconSource': FortViewHelper.getSmallIconSource(uid, building.level)}
                     buildingsData.append(data)
 
             directions.append({'uid': direction,

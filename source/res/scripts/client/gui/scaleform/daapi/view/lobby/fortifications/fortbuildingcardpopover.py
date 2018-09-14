@@ -14,7 +14,6 @@ from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeBuildingIndic
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortBuildingCardPopoverMeta import FortBuildingCardPopoverMeta
-from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as ALIAS, FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as FORT
@@ -22,9 +21,10 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.utils import CONST_CONTAINER
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.formatters import icons
 from helpers import i18n, time_utils
+from shared_utils import CONST_CONTAINER
 
 class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildingCardPopoverMeta, AppRef):
 
@@ -204,8 +204,13 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         return str(fort_formatters.getTextLevel(level))
 
     def __prepareHeaderData(self):
+        fort = self.fortCtrl.getFort()
+        isDefencePeriodActivated = fort.isDefenceHourEnabled()
+        inProcess, _ = fort.getDefenceHourProcessing()
+        isDefenceOn = isDefencePeriodActivated or inProcess
+        buildingIcon = FortViewHelper.getPopoverIconSource(self._buildingUID, self.__buildingLevel, isDefenceOn=isDefenceOn)
         result = {'buildingName': i18n.makeString(FORT.buildings_buildingname(self._buildingUID)),
-         'buildingIcon': self._buildingUID}
+         'buildingIcon': buildingIcon}
         buildLevel = self.__convertBuildLevel(self.__buildingLevel)
         result['buildLevel'] = i18n.makeString(FORT.BUILDINGPOPOVER_HEADER_LEVELSLBL, buildLevel=buildLevel)
         upgradeBtnVisible = False
@@ -235,19 +240,18 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         result['glowColor'] = int(filterColor, 16)
         result['isModernization'] = self.__canUpgrade
         result['canDeleteBuilding'] = self.fortCtrl.getPermissions().canDeleteBuilding()
-        isDefencePeriodActivated = self.fortCtrl.getFort().isDefenceHourEnabled()
         if self.__progress is ALIAS.STATE_BUILDING and isDefencePeriodActivated:
             nextMapTimestamp, nextMapID, curMapID = self.fortCtrl.getFort().getBuildingMaps(self._buildingID)
             isMapsInfoEnabled = nextMapTimestamp > 0
             if self.__buildingLevel < fortified_regions.g_cache.defenceConditions.minRegionLevel:
-                mapIcon = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON)
+                mapIcon = icons.alert()
                 mapMsg = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_MAPINFO_NOBATTLE))
                 header = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_HEADER)
                 body = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_BODY)
                 isToolTipSpecial = False
             elif isMapsInfoEnabled:
                 currentMapUserName = self.__getMapUserName(curMapID)
-                mapIcon = self.app.utilsManager.textManager.getIcon(TextIcons.INFO_ICON)
+                mapIcon = icons.info()
                 mapMsg = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, currentMapUserName)
                 header = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_HEADER, currentMap=currentMapUserName)
                 body = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_BODY, nextMap=self.__getMapUserName(nextMapID), changeDate=BigWorld.wg_getLongDateFormat(nextMapTimestamp), changeTime=BigWorld.wg_getShortTimeFormat(nextMapTimestamp))
@@ -386,7 +390,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
                     body = i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INPAUSE_BODY)
                     result['pauseReasonTooltip'] = [title, body]
                     overTime = i18n.makeString(FORT.BUILDINGPOPOVER_ORDERPROCESS_INPAUSE)
-                    orderTimeIcon = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON)
+                    orderTimeIcon = icons.alert()
                     orderTimeMsg = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, overTime)
                     orderTime = i18n.makeString(orderTimeIcon + ' ' + orderTimeMsg)
                 else:

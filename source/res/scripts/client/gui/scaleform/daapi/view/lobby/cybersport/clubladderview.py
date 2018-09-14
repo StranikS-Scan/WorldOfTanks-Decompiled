@@ -36,7 +36,7 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
     def showFormationProfile(self, clubDbID):
         showClubProfile(long(clubDbID))
 
-    def onClubsSeasonStateChanged(self, isSeasonInProgress):
+    def onClubsSeasonStateChanged(self, seasonState):
         club = self.clubsCtrl.getClub(self._clubDbID)
         if club is not None:
             self.as_updateHeaderDataS(self.__packHeaderData(club))
@@ -52,8 +52,8 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
 
     def onClubEmblem32x32Received(self, clubDbID, emblem):
         self._clubEmblems[clubDbID] = emblem
-        if str(clubDbID) in self._requestedIconIDs:
-            self.as_onUpdateClubIconS(str(clubDbID), self.getMemoryTexturePath(emblem))
+        if clubDbID in self._requestedIconIDs:
+            self.as_onUpdateClubIconS(clubDbID, self.getMemoryTexturePath(emblem))
 
     def updateClubIcons(self, ids):
         self._requestedIconIDs = ids
@@ -63,7 +63,7 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
         iconsMap = {}
         if self._clubEmblems:
             for clubDbID, emblem in self._clubEmblems.iteritems():
-                if str(clubDbID) in self._requestedIconIDs:
+                if clubDbID in self._requestedIconIDs:
                     iconsMap[clubDbID] = self.getMemoryTexturePath(emblem)
 
         self.as_onUpdateClubIconsS({'iconsMap': iconsMap})
@@ -127,7 +127,7 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
          'divisionPositionText': self.__getPositionText(ladderInfo),
          'formationIconPath': getLadderChevron64x64(ladderInfo.division) if ladderInfo.isInLadder() else '',
          'tableHeaders': self.__packTableHeaders(),
-         'clubDBID': str(self._clubDbID)}
+         'clubDBID': self._clubDbID}
 
     def __getDivisionText(self, ladderInfo):
         if ladderInfo.isInLadder():
@@ -173,7 +173,7 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
                 ladderPoints = clubInfo.getRatingPoints(ladderInfo.getDivision())
                 emblem = self._clubEmblems.get(clubInfo.clubDBID, None)
                 texturePath = self.getMemoryTexturePath(emblem) if emblem else ''
-                formations.append({'formationId': str(clubInfo.clubDBID),
+                formations.append({'formationId': clubInfo.clubDBID,
                  'showProfileBtnText': _ms(CYBERSPORT.STATICFORMATION_LADDERVIEW_SHOWFORMATIONPROFILEBTN_TEXT),
                  'showProfileBtnTooltip': TOOLTIPS.STATICFORMATIONLADDERVIEW_SHOWFORMATIONPROFILEBTN,
                  'emblemIconPath': texturePath,

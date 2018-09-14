@@ -5,7 +5,6 @@ from gui.game_control.ExternalLinksHandler import ExternalLinksHandler
 from gui.game_control.InternalLinksHandler import InternalLinksHandler
 from gui.shared import g_eventBus, events
 from gui.game_control.BrowserController import BrowserController
-from gui.game_control.LanguageController import LanguageController
 from gui.game_control.PromoController import PromoController
 from gui.game_control.RefSystem import RefSystem
 from gui.game_control.RentalsController import RentalsController
@@ -34,7 +33,6 @@ class _GameControllers(ControllersCollection):
          CONTROLLER.RENTALS: RentalsController,
          CONTROLLER.IGR: IGRController,
          CONTROLLER.WALLET: WalletController,
-         CONTROLLER.LANGUAGE: LanguageController,
          CONTROLLER.NOTIFIER: NotifyController,
          CONTROLLER.LINKS: ExternalLinksHandler,
          CONTROLLER.INTERNAL_LINKS: InternalLinksHandler,

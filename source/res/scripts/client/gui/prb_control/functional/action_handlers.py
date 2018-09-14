@@ -9,10 +9,13 @@ from gui.prb_control.context import unit_ctx, SendInvitesCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_INIT_RESULT
 
-class AbstractActionsHandler:
+class AbstractActionsHandler(object):
 
     def __init__(self, functional):
         self._functional = weakref.proxy(functional)
+
+    def setPlayerInfoChanged(self, data = None):
+        pass
 
     def setUsersChanged(self, data = None):
         pass
@@ -56,10 +59,13 @@ class CommonUnitActionsHandler(AbstractActionsHandler):
     def executeInit(self, ctx):
         prb_type = self._functional.getPrbType()
         pInfo = self._functional.getPlayerInfo()
-        if self._functional.getFlags().isInPreArena() and pInfo.isInSlot:
+        flags = self._functional.getFlags()
+        if flags.isInPreArena() and pInfo.isInSlot:
             g_eventDispatcher.loadPreArenaUnit(prb_type)
             return FUNCTIONAL_INIT_RESULT.LOAD_PAGE
         g_eventDispatcher.loadUnit(prb_type)
+        if flags.isInIdle():
+            g_eventDispatcher.setUnitProgressInCarousel(prb_type, True)
         return FUNCTIONAL_INIT_RESULT.LOAD_WINDOW
 
     def execute(self, customData):
@@ -89,6 +95,9 @@ class SquadActionsHandler(AbstractActionsHandler):
             g_eventDispatcher.loadBattleQueue()
         else:
             g_eventDispatcher.loadHangar()
+
+    def setPlayerInfoChanged(self, data = None):
+        g_eventDispatcher.updateUI()
 
     def setUsersChanged(self, data = None):
         g_eventDispatcher.setSquadTeamReadyInCarousel(self._functional.getPrbType(), isTeamReady=self.__getTeamReady())

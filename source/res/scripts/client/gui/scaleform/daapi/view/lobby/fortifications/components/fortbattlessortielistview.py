@@ -1,16 +1,37 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesSortieListView.py
+from ConnectionManager import connectionManager
 from constants import PREBATTLE_TYPE
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortListMeta import FortListMeta
 from gui.Scaleform.framework import AppRef, ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.shared.fortifications.fort_hours_ctrlr import getForbiddenPeriods
 from gui.prb_control.prb_helpers import UnitListener
-from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.fortifications.fort_helpers import FortListener, adjustDefenceHourToLocal
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import int2roman
 from messenger.proto.events import g_messengerEvents
 from messenger.m_constants import USER_ACTION_ID
+from predefined_hosts import g_preDefinedHosts
+
+def formatGuiTimeLimitStr(startHour, endHour, useLocalTime = True):
+
+    def _formatHour(hour):
+        locHours = adjustDefenceHourToLocal(hour)[0] if useLocalTime else hour
+        if locHours >= 10:
+            return str(locHours)
+        return '0%d' % locHours
+
+    if endHour > 23:
+        endHour = 0
+    return {'startHour': _formatHour(startHour),
+     'startMin': '00',
+     'endHour': _formatHour(endHour),
+     'endMin': '00'}
+
 
 class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef):
 
@@ -19,6 +40,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
         self._divisionsDP = None
         self._isBackButtonClicked = False
         self.__clientIdx = None
+        self.__sortiesCurfewCtrl = None
         return
 
     def onContactsUpdated(self, type, contacts):
@@ -34,6 +56,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
     def onClientStateChanged(self, state):
         self.__updateSearchDP(state)
         self.__validateCreation()
+        self.__registerSortiesCurfewController()
         if state.getStateID() not in (CLIENT_FORT_STATE.HAS_FORT, CLIENT_FORT_STATE.CENTER_UNAVAILABLE):
             self.as_selectByIndexS(-1)
             self._searchDP.setSelectedID(None)
@@ -101,6 +124,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
         self.__updateSearchDP(self.fortProvider.getState())
         self.__validateCreation()
         g_messengerEvents.users.onUserActionReceived += self.onContactsUpdated
+        self.__registerSortiesCurfewController()
 
     def _dispose(self):
         self.stopFortListening()
@@ -112,6 +136,9 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
             self.fortCtrl.removeSortiesCache()
             self._isBackButtonClicked = False
         g_messengerEvents.users.onUserActionReceived -= self.onContactsUpdated
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        if self.__sortiesCurfewCtrl:
+            self.__sortiesCurfewCtrl.onStatusChanged -= self.__onSortieStatusChanged
         super(FortBattlesSortieListView, self)._dispose()
         return
 
@@ -157,7 +184,9 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
 
     def __validateCreation(self):
         isValid, reason = self.fortCtrl.getLimits().isSortieCreationValid()
-        if isValid:
+        self.as_tryShowTextMessageS()
+        sortiesAvailable, _ = self.__getSortieCurfewStatus()
+        if isValid and sortiesAvailable:
             self.as_setCreationEnabledS(True)
         else:
             self.as_setCreationEnabledS(False)
@@ -165,3 +194,39 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
             if view is not None:
                 view.destroy()
         return
+
+    def __updateForbiddenSortiesData(self):
+        sortiesAvailable, servAvailable = self.__getSortieCurfewStatus()
+        settings = g_lobbyContext.getServerSettings()
+        guiData = {'timeLimits': getForbiddenPeriods(settings.getForbiddenSortieHours(), formatGuiTimeLimitStr)}
+        pIds = settings.getForbiddenSortiePeripheryIDs()
+        if pIds:
+            namesList = []
+            for pId in pIds:
+                periphery = g_preDefinedHosts.periphery(pId)
+                if periphery:
+                    namesList.append(periphery.name)
+
+            guiData['serverName'] = ', '.join(namesList)
+        self.as_setRegulationInfoS(guiData)
+        self.as_setCurfewEnabledS(not sortiesAvailable or not servAvailable)
+
+    def __onSortieStatusChanged(self):
+        self.__updateForbiddenSortiesData()
+        self.__validateCreation()
+
+    def __registerSortiesCurfewController(self):
+        if not self.__sortiesCurfewCtrl:
+            self.__sortiesCurfewCtrl = self.fortProvider.getController().getSortiesCurfewCtrl()
+            if self.__sortiesCurfewCtrl:
+                self.__sortiesCurfewCtrl.onStatusChanged += self.__onSortieStatusChanged
+                self.__validateCreation()
+                self.__updateForbiddenSortiesData()
+        return self.__sortiesCurfewCtrl
+
+    def __getSortieCurfewStatus(self):
+        controller = self.__registerSortiesCurfewController()
+        if controller is None:
+            return (True, True)
+        else:
+            return controller.getStatus()

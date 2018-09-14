@@ -5,10 +5,10 @@ from account_shared import LayoutIterator
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from AccountCommands import VEHICLE_SETTINGS_FLAG
+from shared_utils import findFirst
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.utils import findFirst
 from gui.shared.utils.gui_items import formatPrice
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
 

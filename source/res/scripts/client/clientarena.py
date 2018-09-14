@@ -6,7 +6,7 @@ from items import vehicles
 import constants
 import cPickle, zlib
 import Event
-from constants import ARENA_PERIOD, ARENA_UPDATE
+from constants import ARENA_PERIOD, ARENA_UPDATE, FLAG_STATE
 from PlayerEvents import g_playerEvents
 from debug_utils import *
 from CTFManager import g_ctfManager
@@ -29,9 +29,13 @@ class ClientArena(object):
      ARENA_UPDATE.RESPAWN_COOLDOWNS: '_ClientArena__onRespawnCooldowns',
      ARENA_UPDATE.RESPAWN_RANDOM_VEHICLE: '_ClientArena__onRespawnRandomVehicle',
      ARENA_UPDATE.RESPAWN_RESURRECTED: '_ClientArena__onRespawnResurrected',
+     ARENA_UPDATE.FLAG_TEAMS: '_ClientArena__onFlagTeamsReceived',
      ARENA_UPDATE.FLAG_STATE_CHANGED: '_ClientArena__onFlagStateChanged',
      ARENA_UPDATE.INTERACTIVE_STATS: '_ClientArena__onInteractiveStats',
-     ARENA_UPDATE.DISAPPEAR_BEFORE_RESPAWN: '_ClientArena__onDisappearVehicleBeforeRespawn'}
+     ARENA_UPDATE.DISAPPEAR_BEFORE_RESPAWN: '_ClientArena__onDisappearVehicleBeforeRespawn',
+     ARENA_UPDATE.RESOURCE_POINT_STATE_CHANGED: '_ClientArena__onResourcePointStateChanged',
+     ARENA_UPDATE.OWN_VEHICLE_INSIDE_RP: '_ClientArena__onOwnVehicleInsideRP',
+     ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -224,14 +228,35 @@ class ClientArena(object):
         vehID = cPickle.loads(argStr)
         FalloutDestroyEffect.play(vehID)
 
+    def __onFlagTeamsReceived(self, argStr):
+        data = cPickle.loads(argStr)
+        LOG_DEBUG('[FLAGS] flag teams', data)
+        g_ctfManager.onFlagTeamsReceived(data)
+
     def __onFlagStateChanged(self, argStr):
         data = cPickle.loads(argStr)
         LOG_DEBUG('[FLAGS] flag state changed', data)
         g_ctfManager.onFlagStateChanged(data)
 
+    def __onResourcePointStateChanged(self, argStr):
+        data = cPickle.loads(argStr)
+        LOG_DEBUG('[RESOURCE POINTS] state changed', data)
+        g_ctfManager.onResourcePointStateChanged(data)
+
+    def __onOwnVehicleInsideRP(self, argStr):
+        pointInfo = cPickle.loads(argStr)
+        LOG_DEBUG('[RESOURCE POINTS] own vehicle inside point', pointInfo)
+        g_ctfManager.onOwnVehicleInsideRP(pointInfo)
+
+    def __onOwnVehicleLockedForRP(self, argStr):
+        unlockTime = cPickle.loads(argStr)
+        LOG_DEBUG('[RESOURCE POINTS] own vehicle is locked', unlockTime)
+        g_ctfManager.onOwnVehicleLockedForRP(unlockTime)
+
     def __onInteractiveStats(self, argStr):
         stats = cPickle.loads(zlib.decompress(argStr))
         self.onInteractiveStats(stats)
+        LOG_TU('[RESPAWN] onInteractiveStats', stats)
 
     def __rebuildIndexToId(self):
         vehicles = self.__vehicles

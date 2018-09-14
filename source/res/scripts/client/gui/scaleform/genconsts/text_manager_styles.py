@@ -24,3 +24,4 @@ class TEXT_MANAGER_STYLES(object):
     PLAYER_ONLINE = 'playerOnline'
     PLAYER_OFFLINE = 'playerOffline'
     COUNTER_TEXT = 'counterText'
+    TUTORIAL_TEXT = 'tutorialText'

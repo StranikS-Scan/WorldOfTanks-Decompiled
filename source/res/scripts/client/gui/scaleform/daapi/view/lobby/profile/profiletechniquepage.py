@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechni
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.shared.ItemsCache import g_itemsCache
 from helpers.i18n import makeString
+from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 
 class ProfileTechniquePage(ProfileTechnique, ProfileTechniquePageMeta):
 
@@ -18,7 +19,7 @@ class ProfileTechniquePage(ProfileTechnique, ProfileTechniquePageMeta):
             vehList = self._getTechniqueListVehicles(targetData, True)
         else:
             vehList = self._getTechniqueListVehicles(targetData, False)
-        self.as_responseDossierS(self._battlesType, vehList)
+        self.as_responseDossierS(self._battlesType, vehList, '', self.getEmptyScreenLabel())
 
     def _populate(self):
         super(ProfileTechniquePage, self)._populate()
@@ -26,9 +27,9 @@ class ProfileTechniquePage(ProfileTechnique, ProfileTechniquePageMeta):
             intVehCD = int(self._selectedData.get('itemCD'))
             accountDossier = g_itemsCache.items.getAccountDossier(None)
             if intVehCD in accountDossier.getRandomStats().getVehicles():
-                self._battlesType = PROFILE.PROFILE_DROPDOWN_LABELS_ALL
+                self._battlesType = PROFILE_DROPDOWN_KEYS.ALL
             elif intVehCD in accountDossier.getTeam7x7Stats().getVehicles():
-                self._battlesType = PROFILE.PROFILE_DROPDOWN_LABELS_TEAM
+                self._battlesType = PROFILE_DROPDOWN_KEYS.TEAM
         self.as_setSelectedVehicleIntCDS(int(self._selectedData.get('itemCD')) if self._selectedData else -1)
         return
 

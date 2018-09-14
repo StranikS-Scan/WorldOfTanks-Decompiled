@@ -54,9 +54,9 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
         if isLevelUp:
             self.fortCtrl.addUpgradeVisitedBuildings(buildingID)
 
-    def getBuildingTooltipData(self, uid):
+    def requestBuildingToolTipData(self, uid, type):
         buildingDescr = self.fortCtrl.getFort().getBuilding(self.getBuildingIDbyUID(uid))
-        return [uid, self.getCommonBuildTooltipData(buildingDescr)]
+        self.as_setBuildingToolTipDataS(uid, type, self.getCommonBuildTooltipData(buildingDescr))
 
     def onUpdated(self, isFullUpdate):
         if self._animation is not None or isFullUpdate:

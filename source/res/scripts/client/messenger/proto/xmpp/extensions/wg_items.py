@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/wg_items.py
-from gui.shared.utils import findFirst
+from shared_utils import findFirst
 from messenger.proto.xmpp.extensions import PyExtension, SimpleExtension, PyHandler
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG

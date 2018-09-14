@@ -149,10 +149,12 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
     def _initFlashValues(self, ctx):
         self.databaseID = long(ctx.dbID)
         self.userName = ctx.userName
+        self.wasInBattle = getattr(ctx, 'wasInBattle', True)
 
     def _clearFlashValues(self):
         self.databaseID = None
         self.userName = None
+        self.wasInBattle = None
         return
 
     def _getUseCmInfo(self):
@@ -277,7 +279,8 @@ class AppealCMHandler(BaseUserCMHandler):
         return handlers
 
     def _addAppealInfo(self, options):
-        options.append(self._createSubMenuItem())
+        if self.wasInBattle:
+            options.append(self._createSubMenuItem())
         return options
 
     def _getSubmenuData(self):

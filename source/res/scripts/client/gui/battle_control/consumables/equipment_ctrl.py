@@ -6,13 +6,13 @@ from constants import VEHICLE_SETTING, EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS
-from gui.shared.utils import findFirst, forEach
 from helpers import i18n
 from items import vehicles
+from shared_utils import findFirst, forEach
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 
 class _EquipmentItem(object):
-    __slots__ = ('_tag', '_descriptor', '_quantity', '_stage', '_timeRemaining')
+    __slots__ = ('_tag', '_descriptor', '_quantity', '_stage', '_prevStage', '_timeRemaining')
 
     def __init__(self, descriptor, quantity, stage, timeRemaining, tag = None):
         super(_EquipmentItem, self).__init__()
@@ -20,6 +20,7 @@ class _EquipmentItem(object):
         self._descriptor = descriptor
         self._quantity = 0
         self._stage = 0
+        self._prevStage = 0
         self._timeRemaining = 0
         self.update(quantity, stage, timeRemaining)
 
@@ -62,19 +63,27 @@ class _EquipmentItem(object):
         self._descriptor = None
         self._quantity = 0
         self._stage = 0
+        self._prevStage = 0
         self._timeRemaining = 0
         return
 
     def update(self, quantity, stage, timeRemaining):
         self._quantity = quantity
+        self._prevStage = self._stage
         self._stage = stage
         self._timeRemaining = timeRemaining
 
     def activate(self, entityName = None, avatar = None):
-        avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getActivationCode(entityName, avatar), avatar=avatar)
+        if 'avatar' in self._descriptor.tags:
+            avatar_getter.activateAvatarEquipment(self.getEquipmentID(), avatar)
+        else:
+            avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getActivationCode(entityName, avatar), avatar=avatar)
 
     def deactivate(self):
-        avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getEquipmentID())
+        if 'avatar' in self._descriptor.tags:
+            avatar_getter.activateAvatarEquipment(self.getEquipmentID())
+        else:
+            avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getEquipmentID())
 
     def getDescriptor(self):
         return self._descriptor
@@ -88,8 +97,14 @@ class _EquipmentItem(object):
     def getStage(self):
         return self._stage
 
+    def getPrevStage(self):
+        return self._prevStage
+
     def getTimeRemaining(self):
         return self._timeRemaining
+
+    def getTotalTime(self):
+        return -1
 
     def getMarker(self):
         return self._descriptor.name.split('_')[0]
@@ -97,6 +112,9 @@ class _EquipmentItem(object):
     def getEquipmentID(self):
         nationID, innationID = self._descriptor.id
         return innationID
+
+    def isAvatar(self):
+        return 'avatar' in self._descriptor.tags
 
 
 class _AutoItem(_EquipmentItem):
@@ -228,6 +246,13 @@ class _OrderItem(_TriggerItem):
             MapCaseMode.turnOffMapCase(self.getEquipmentID())
         super(_OrderItem, self).update(quantity, stage, timeRemaining)
 
+    def getTotalTime(self):
+        if self._stage == EQUIPMENT_STAGES.DEPLOYING:
+            return self._descriptor.deployTime
+        if self._stage == EQUIPMENT_STAGES.COOLDOWN:
+            return self._descriptor.cooldownTime
+        return super(_OrderItem, self).getTotalTime()
+
 
 class _ArtilleryItem(_OrderItem):
 
@@ -316,19 +341,18 @@ class EquipmentsController(object):
 
     def setEquipment(self, intCD, quantity, stage, timeRemaining):
         if not intCD:
-            self.onEquipmentAdded(intCD, None, False)
+            self.onEquipmentAdded(intCD, None)
             return
         else:
             if intCD in self.__equipments:
                 item = self.__equipments[intCD]
-                isDeployed = item.getStage() == EQUIPMENT_STAGES.DEPLOYING and stage == EQUIPMENT_STAGES.READY
                 item.update(quantity, stage, timeRemaining)
-                self.onEquipmentUpdated(intCD, item, isinstance(item, _OrderItem), isDeployed)
+                self.onEquipmentUpdated(intCD, item)
             else:
                 descriptor = vehicles.getDictDescr(intCD)
                 item = self.createItem(descriptor, quantity, stage, timeRemaining)
                 self.__equipments[intCD] = item
-                self.onEquipmentAdded(intCD, item, isinstance(item, _OrderItem))
+                self.onEquipmentAdded(intCD, item)
             return
 
     def getActivationCode(self, intCD, entityName = None, avatar = None):

@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/GoldFishWindow.py
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
+from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.meta.GoldFishWindowMeta import GoldFishWindowMeta
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.genConsts.BUTTON_LINKAGES import BUTTON_LINKAGES
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS

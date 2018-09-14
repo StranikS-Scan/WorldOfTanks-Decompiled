@@ -1,11 +1,10 @@
 # Embedded file name: scripts/client/account_helpers/rare_achievements.py
+import functools
 import ResMgr
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from helpers import i18n, getClientLanguage
-import functools, Event
-import Account
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 def __makeAchievementFileRequest(urlName, params, achievementId, callback):
+    import Account
     fileServerSettings = Account.g_accountRepository.fileServerSettings
     url = ''
     try:

@@ -11,13 +11,13 @@ import Event
 from FortifiedRegionBase import FortifiedRegionBase, FORT_STATE, FORT_EVENT_TYPE, NOT_ACTIVATED
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 import fortified_regions
+from shared_utils import CONST_CONTAINER, findFirst
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications import getDirectionFromDirPos
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.fort_seqs import ClanCardItem, AttackItem, DefenceItem, BattleItem
 from gui.shared.gui_items.dossier import FortDossier
-from gui.shared.utils import CONST_CONTAINER, findFirst
 from gui.prb_control import getUnitMgrID
 from helpers import time_utils, i18n
 from items import vehicles
@@ -70,7 +70,8 @@ def getBattleEquipmentByOrderID(orderID, level):
 class ClientFortifiedRegion(FortifiedRegionBase):
     DEF_RES_STEP = 1
 
-    def __init__(self, serverSettings):
+    def __init__(self, account = None):
+        self.__account = account
         self.__eManager = Event.EventManager()
         self.onSortieChanged = Event.Event(self.__eManager)
         self.onSortieRemoved = Event.Event(self.__eManager)
@@ -102,7 +103,6 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onEnemyStateChanged = Event.Event(self.__eManager)
         self.onConsumablesChanged = Event.Event(self.__eManager)
         self.__battlesMapping = {}
-        self.__serverSettings = serverSettings
         FortifiedRegionBase.__init__(self)
 
     def refresh(self):
@@ -112,6 +112,9 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def clear(self):
         self.__eManager.clear()
         self.__battlesMapping.clear()
+
+    def setAccount(self, account = None):
+        self.__account = account
 
     def getBuildings(self):
         result = {}
@@ -762,7 +765,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onPeripheryChanged(peripheryID)
 
     def _activateDefHour(self, value, initiatorDBID = 0):
-        FortifiedRegionBase._activateDefHour(self, value)
+        FortifiedRegionBase._activateDefHour(self, value, initiatorDBID)
         self.onDefenceHourActivated(value, initiatorDBID)
 
     def _changeDefHour(self, newValue, timeActivation, timeCooldown, initiatorDBID):
@@ -825,11 +828,11 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         FortifiedRegionBase._deleteConsumables(self, unitMgrID, peripheryID)
         self.onConsumablesChanged(unitMgrID)
 
-    def setServerSettings(self, serverSettings):
-        self.__serverSettings = serverSettings
-
-    def getServerSettings(self):
-        return self.__serverSettings
-
     def getForbiddenDefenseHours(self):
-        return self.getServerSettings()['forbiddenFortDefenseHours']
+        return self.__account.getServerSettings()['forbiddenFortDefenseHours']
+
+    def getForbiddenSortieHours(self):
+        return self.__account.getServerSettings()['forbiddenSortieHours']
+
+    def getForbiddenSortiePeripheryIDs(self):
+        return self.__account.getServerSettings()['forbiddenSortiePeripheryIDs']

@@ -1,11 +1,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsCurrentTab.py
+from collections import defaultdict
 import constants
+from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.server_events.event_items import DEFAULTS_GROUPS
 from items import getTypeOfCompactDescr
+from shared_utils import CONST_CONTAINER
 from gui import SystemMessages, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import events
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils import CONST_CONTAINER
 from gui.server_events import g_eventsCache, formatters, settings as quest_settings, caches as quest_caches
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.daapi.view.meta.QuestsCurrentTabMeta import QuestsCurrentTabMeta
@@ -73,6 +76,10 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         return g_eventsCache.getEvents()
 
     @classmethod
+    def _getGroups(cls):
+        return g_eventsCache.getGroups()
+
+    @classmethod
     def _isQuest(cls, svrEvent):
         return svrEvent.getType() in (constants.EVENT_TYPE.BATTLE_QUEST, constants.EVENT_TYPE.TOKEN_QUEST, constants.EVENT_TYPE.FORT_QUEST)
 
@@ -101,7 +108,10 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         res = cmp(cls._isFortQuest(a), cls._isFortQuest(b))
         if res:
             return -res
-        return cmp(a.getID(), b.getID())
+        res = cmp(a.getPriority(), b.getPriority())
+        if res:
+            return res
+        return cmp(a.getUserName(), b.getUserName())
 
     def __filterFunc(self, a):
         if self.__filterType == self.FILTER_TYPE.ACTIONS and not self._isAction(a):
@@ -121,11 +131,31 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
 
     def __invalidateEventsData(self):
         svrEvents = self._getEvents()
+        svrGroups = self._getGroups()
         result = []
+        groups = defaultdict(list)
         for e in self.__applyFilters(svrEvents.values()):
-            result.append(events_helpers.getEventInfo(e, svrEvents))
+            groupID = e.getGroupID()
+            groups[groupID].append(events_helpers.getEventInfo(e, svrEvents))
 
+        for groupID, group in self.__getSortedEvents(svrGroups):
+            groupItems = groups[groupID]
+            if len(groupItems) > 0:
+                result.append(formatters.packGroupBlock(group.getUserName()))
+                result.extend(groupItems)
+
+        ungroupedQuests = groups[DEFAULTS_GROUPS.UNGROUPED_QUESTS]
+        if len(ungroupedQuests) > 0:
+            result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_UNGOUPEDQUESTS))
+            result.extend(ungroupedQuests)
+        ungroupedActions = groups[DEFAULTS_GROUPS.UNGROUPED_ACTIONS]
+        if len(ungroupedActions) > 0:
+            result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_UNGOUPEDACTIONS))
+            result.extend(ungroupedActions)
         self.as_setQuestsDataS(result, len(svrEvents))
+
+    def __getSortedEvents(self, events):
+        return sorted(events.items(), key=lambda (eID, event): (event.getPriority(), event.getUserName()))
 
     def __onInvalidateCallback(self):
         self.__invalidateEventsData()

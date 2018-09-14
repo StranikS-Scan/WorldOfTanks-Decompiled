@@ -82,7 +82,7 @@ class _FlockSound:
         self.soundModel = helpers.newFakeModel()
         self.soundModel.addMotor(BigWorld.Servo(parent.root))
         BigWorld.addModel(self.soundModel, spaceID)
-        self.sound = SoundGroups.g_instance.playSound(self.soundModel, soundName)
+        self.sound = SoundGroups.g_instance.playSoundModel(self.soundModel, soundName)
         self.parent = parent
 
     def attachTo(self, model):

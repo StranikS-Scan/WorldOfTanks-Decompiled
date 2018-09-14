@@ -8,7 +8,7 @@ from gui import game_control, GUI_SETTINGS
 from helpers import i18n
 from gui.SystemMessages import SM_TYPE, BaseSystemMessages
 from gui.shared.utils.requesters import DeprecatedStatsRequester
-from messenger.formatters import SCH_CLIENT_MSG_TYPE
+from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from PlayerEvents import g_playerEvents
 from MemoryCriticalController import g_critMemHandler
 from adisp import process
@@ -44,16 +44,18 @@ class SystemMessagesInterface(BaseSystemMessages):
     def proto(self):
         return None
 
-    def pushMessage(self, text, type = SM_TYPE.Information):
+    def pushMessage(self, text, type = SM_TYPE.Information, priority = None):
         if GUI_SETTINGS.isGuiEnabled():
-            self.proto.serviceChannel.pushClientSysMessage(text, type)
+            self.proto.serviceChannel.pushClientSysMessage(text, type, priority=priority)
         else:
             LOG_DEBUG('[SYSTEM MESSAGE]', text, type)
 
     def pushI18nMessage(self, key, *args, **kwargs):
         text = i18n.makeString(key, *args, **kwargs)
         msgType = kwargs.get('type', SM_TYPE.Information)
-        self.pushMessage(text, msgType)
+        msgPriority = kwargs.get('priority', None)
+        self.pushMessage(text, msgType, msgPriority)
+        return
 
     def __onAccountShowGUI(self, ctx):
         self.__checkPremiumAccountExpiry()

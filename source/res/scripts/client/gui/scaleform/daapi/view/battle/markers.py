@@ -5,11 +5,12 @@ import weakref
 from Math import Vector3, Matrix
 import BattleReplay
 from CTFManager import g_ctfManager
-import SoundGroups
 from account_helpers.settings_core import g_settingsCore
 import constants
 import GUI
 import BigWorld
+from gui.battle_control.arena_info import hasFlags, hasRepairPoints, hasResourcePoints
+from gui.battle_control.avatar_getter import getPlayerVehicleID, getArena
 from gui.battle_control.dyn_squad_arena_controllers import IDynSquadEntityClient
 from gui.shared.utils.plugins import PluginsCollection, IPlugin
 from helpers import i18n, time_utils
@@ -19,24 +20,55 @@ from gui.Scaleform import VoiceChatInterface, ColorSchemeManager
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import g_sessionProvider
-from gui.battle_control.arena_info import isEventBattle
 from gui.battle_control.arena_info.arena_vos import VehicleActions
-from gui.battle_control.battle_constants import PLAYER_ENTITY_NAME
+from gui.battle_control.battle_constants import PLAYER_ENTITY_NAME, FEEDBACK_EVENT_ID, NEUTRAL_TEAM
 from items.vehicles import VEHICLE_CLASS_TAGS
+_MARKER_POSITION_ADJUSTMENT = Vector3(0.0, 12.0, 0.0)
+_MARKERS_MANAGER_SWF = 'VehicleMarkersManager.swf'
+
+class _DAMAGE_TYPE():
+    FROM_UNKNOWN = 0
+    FROM_ALLY = 1
+    FROM_ENEMY = 2
+    FROM_SQUAD = 3
+    FROM_PLAYER = 4
+
+
+_EQUIPMENT_MARKER_TYPE = 'FortConsumablesMarker'
+_FLAG_MARKER_TYPE = 'FlagIndicatorUI'
+_FLAG_CAPTURE_MARKER_TYPE = 'CaptureIndicatorUI'
+
+class _FLAG_TYPE():
+    ALLY = 'ally'
+    ENEMY = 'enemy'
+    NEUTRAL = 'neutral'
+    REPAIR = 'repair'
+    COOLDOWN = 'cooldown'
+
+
+_REPAIR_MARKER_TYPE = 'RepairPointIndicatorUI'
+_RESOURCE_MARKER_TYPE = 'ResourcePointMarkerUI'
+
+class _RESOURCE_STATE():
+    FREEZE = 'freeze'
+    COOLDOWN = 'cooldown'
+    READY = 'ready'
+    OWN_MINING = 'ownMining'
+    ENEMY_MINING = 'enemyMining'
+    OWN_MINING_FROZEN = 'ownMiningFrozen'
+    ENEMY_MINING_FROZEN = 'enemyMiningFrozen'
+    CONFLICT = 'conflict'
+
+
+_CAPTURE_STATE_BY_TEAMS = {True: _RESOURCE_STATE.OWN_MINING,
+ False: _RESOURCE_STATE.ENEMY_MINING}
+_CAPTURE_FROZEN_STATE_BY_TEAMS = {True: _RESOURCE_STATE.OWN_MINING_FROZEN,
+ False: _RESOURCE_STATE.ENEMY_MINING_FROZEN}
 
 class MarkersManager(Flash, IDynSquadEntityClient):
-    __SWF_FILE_NAME = 'VehicleMarkersManager.swf'
-    MARKER_POSITION_ADJUSTMENT = Vector3(0.0, 12.0, 0.0)
-
-    class DAMAGE_TYPE:
-        FROM_UNKNOWN = 0
-        FROM_ALLY = 1
-        FROM_ENEMY = 2
-        FROM_SQUAD = 3
-        FROM_PLAYER = 4
 
     def __init__(self, parentUI):
-        Flash.__init__(self, self.__SWF_FILE_NAME)
+        Flash.__init__(self, _MARKERS_MANAGER_SWF)
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_VehicleMarker
         self.component.drawWithRestrictedViewPort = False
@@ -45,9 +77,12 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         self.colorManager.populateUI(weakref.proxy(self))
         self.__plugins = PluginsCollection(self)
         plugins = {'equipments': _EquipmentsMarkerPlugin}
-        if isEventBattle():
-            plugins.update({'flags': _FlagsMarkerPlugin,
-             'repairs': _RepairsMarkerPlugin})
+        if hasFlags():
+            plugins['flags'] = _FlagsMarkerPlugin
+        if hasRepairPoints():
+            plugins['repairs'] = _RepairsMarkerPlugin
+        if hasResourcePoints():
+            plugins['resources'] = _ResourceMarkerPlugin
         self.__plugins.addPlugins(plugins)
         self.__ownUI = None
         self.__parentUI = parentUI
@@ -91,11 +126,17 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         self.__parentUI.component.addChild(self.__ownUI, 'vehicleMarkersManager')
         self.__markersCanvasUI = self.getMember('vehicleMarkersCanvas')
         self.__plugins.init()
+        ctrl = g_sessionProvider.getFeedback()
+        if ctrl:
+            ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         self.__plugins.start()
 
     def destroy(self):
         self.__plugins.stop()
         g_settingsCore.interfaceScale.onScaleChanged -= self.updateMarkersScale
+        ctrl = g_sessionProvider.getFeedback()
+        if ctrl:
+            ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         if self.__parentUI is not None:
             setattr(self.__parentUI.component, 'vehicleMarkersManager', None)
         self.__plugins.fini()
@@ -142,7 +183,7 @@ class MarkersManager(Flash, IDynSquadEntityClient):
          speaking,
          hunting,
          entityType,
-         self.isVehicleFlagbearer(vehID)])
+         g_ctfManager.isFlagBearer(vehID)])
         return handle
 
     def destroyMarker(self, handle):
@@ -174,7 +215,7 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
             return
-        if curHealth < 0 and curHealth not in constants.SPECIAL_VEHICLE_HEALTH.AMMO_BAY_EXPLOSION:
+        if curHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(curHealth):
             curHealth = 0
         self.invokeMarker(handle, 'updateHealth', [curHealth, self.__getVehicleDamageType(attackerID), constants.ATTACK_REASONS[attackReasonID]])
 
@@ -223,17 +264,11 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         for handle in self.__markers.iterkeys():
             self.invokeMarker(handle, 'update', [])
 
+        self.__plugins.update()
+
     def updateMarkerSettings(self):
         for handle in self.__markers.iterkeys():
             self.invokeMarker(handle, 'updateMarkerSettings', [])
-
-    def isVehicleFlagbearer(self, vehicleID):
-        for flagID in g_ctfManager.getFlags():
-            flagInfo = g_ctfManager.getFlagInfo(flagID)
-            if flagInfo['vehicle'] == vehicleID:
-                return True
-
-        return False
 
     def __invokeCanvas(self, function, args = None):
         if args is None:
@@ -243,17 +278,31 @@ class MarkersManager(Flash, IDynSquadEntityClient):
 
     def __getVehicleDamageType(self, attackerID):
         if not attackerID:
-            return MarkersManager.DAMAGE_TYPE.FROM_UNKNOWN
+            return _DAMAGE_TYPE.FROM_UNKNOWN
         if attackerID == BigWorld.player().playerVehicleID:
-            return MarkersManager.DAMAGE_TYPE.FROM_PLAYER
+            return _DAMAGE_TYPE.FROM_PLAYER
         entityName = g_sessionProvider.getCtx().getPlayerEntityName(attackerID, BigWorld.player().arena.vehicles.get(attackerID, dict()).get('team'))
         if entityName == PLAYER_ENTITY_NAME.squadman:
-            return MarkersManager.DAMAGE_TYPE.FROM_SQUAD
+            return _DAMAGE_TYPE.FROM_SQUAD
         if entityName == PLAYER_ENTITY_NAME.ally:
-            return MarkersManager.DAMAGE_TYPE.FROM_ALLY
+            return _DAMAGE_TYPE.FROM_ALLY
         if entityName == PLAYER_ENTITY_NAME.enemy:
-            return MarkersManager.DAMAGE_TYPE.FROM_ENEMY
-        return MarkersManager.DAMAGE_TYPE.FROM_UNKNOWN
+            return _DAMAGE_TYPE.FROM_ENEMY
+        return _DAMAGE_TYPE.FROM_UNKNOWN
+
+    def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
+        entity = BigWorld.entity(vehicleID)
+        if entity is None or not entity.isStarted:
+            return
+        else:
+            try:
+                handle = entity.marker
+            except AttributeError:
+                return
+
+            if eventID == FEEDBACK_EVENT_ID.VEHICLE_SHOW_MARKER:
+                self.showActionMarker(handle, value)
+            return
 
 
 class _VehicleMarker():
@@ -286,7 +335,6 @@ class _VehicleMarker():
 
 
 class _EquipmentsMarkerPlugin(IPlugin):
-    __MARKER_TYPE = 'FortConsumablesMarker'
 
     def __init__(self, parentObj):
         super(_EquipmentsMarkerPlugin, self).__init__(parentObj)
@@ -318,7 +366,7 @@ class _EquipmentsMarkerPlugin(IPlugin):
         return
 
     def __onShown(self, item, pos, dir, time):
-        _, handle = self._parentObj.createStaticMarker(pos + self._parentObj.MARKER_POSITION_ADJUSTMENT, self.__MARKER_TYPE)
+        _, handle = self._parentObj.createStaticMarker(pos + _MARKER_POSITION_ADJUSTMENT, _EQUIPMENT_MARKER_TYPE)
         defaultPostfix = i18n.makeString(INGAME_GUI.FORTCONSUMABLES_TIMER_POSTFIX)
         self._parentObj.invokeMarker(handle, 'init', [item.getMarker(), str(int(time)), defaultPostfix])
         self.__initTimer(int(math.ceil(time)), handle)
@@ -336,17 +384,6 @@ class _EquipmentsMarkerPlugin(IPlugin):
 
 
 class _FlagsMarkerPlugin(IPlugin):
-    __MARKER_TYPE = 'FlagIndicatorUI'
-    __CAPTURE_MARKER_TYPE = 'CaptureIndicatorUI'
-
-    class __FLAG_TYPE:
-        ALLY = 'ally'
-        ENEMY = 'enemy'
-        NEUTRAL = 'neutral'
-        REPAIR = 'repair'
-
-    __FLAG_CAPTURE_SOUND_NAME = '/GUI/fallout/capture_flag'
-    __FLAG_DELIVERY_SOUND_NAME = '/GUI/fallout/delivery flag'
 
     def __init__(self, parentObj):
         super(_FlagsMarkerPlugin, self).__init__(parentObj)
@@ -357,12 +394,14 @@ class _FlagsMarkerPlugin(IPlugin):
 
     def init(self):
         super(_FlagsMarkerPlugin, self).init()
+        g_ctfManager.onFlagSpawning += self.__onFlagSpawning
         g_ctfManager.onFlagSpawnedAtBase += self.__onSpawnedAtBase
         g_ctfManager.onFlagCapturedByVehicle += self.__onCapturedByVehicle
         g_ctfManager.onFlagDroppedToGround += self.__onDroppedToGround
         g_ctfManager.onFlagAbsorbed += self.__onAbsorbed
 
     def fini(self):
+        g_ctfManager.onFlagSpawning -= self.__onFlagSpawning
         g_ctfManager.onFlagSpawnedAtBase -= self.__onSpawnedAtBase
         g_ctfManager.onFlagCapturedByVehicle -= self.__onCapturedByVehicle
         g_ctfManager.onFlagDroppedToGround -= self.__onDroppedToGround
@@ -377,11 +416,13 @@ class _FlagsMarkerPlugin(IPlugin):
         self.__capturePoints = arenaType.flagAbsorptionPoints
         self.__spawnPoints = arenaType.flagSpawnPoints
         isFlagBearer = False
-        for flagID in g_ctfManager.getFlags():
-            flagInfo = g_ctfManager.getFlagInfo(flagID)
+        for flagID, flagInfo in g_ctfManager.getFlags():
             vehicleID = flagInfo['vehicle']
             if vehicleID is None:
-                self.__onSpawnedAtBase(flagID, flagInfo['minimapPos'])
+                if flagInfo['state'] == constants.FLAG_STATE.WAITING_FIRST_SPAWN:
+                    self.__onFlagSpawning(flagID, flagInfo['respawnTime'])
+                else:
+                    self.__onSpawnedAtBase(flagID, flagInfo['team'], flagInfo['minimapPos'])
             elif vehicleID == playerVehicleID:
                 isFlagBearer = True
 
@@ -404,7 +445,7 @@ class _FlagsMarkerPlugin(IPlugin):
         return
 
     def __addFlagMarker(self, flagID, flagPos, marker):
-        _, handle = self._parentObj.createStaticMarker(flagPos + self._parentObj.MARKER_POSITION_ADJUSTMENT, self.__MARKER_TYPE)
+        _, handle = self._parentObj.createStaticMarker(flagPos + _MARKER_POSITION_ADJUSTMENT, _FLAG_MARKER_TYPE)
         self._parentObj.invokeMarker(handle, 'setIcon', [marker])
         self.__markers[flagID] = (handle, None)
         return
@@ -438,10 +479,12 @@ class _FlagsMarkerPlugin(IPlugin):
     def __addCaptureMarkers(self):
         player = BigWorld.player()
         currentTeam = player.team
+        playerVehID = getPlayerVehicleID()
+        isSquadMan = g_sessionProvider.getArenaDP().isSquadMan(playerVehID)
         for point in self.__capturePoints:
-            if point['team'] == currentTeam:
+            if isSquadMan and point['team'] in (NEUTRAL_TEAM, currentTeam):
                 position = point['position']
-                _, handle = self._parentObj.createStaticMarker(position + self._parentObj.MARKER_POSITION_ADJUSTMENT, self.__CAPTURE_MARKER_TYPE)
+                _, handle = self._parentObj.createStaticMarker(position + _MARKER_POSITION_ADJUSTMENT, _FLAG_CAPTURE_MARKER_TYPE)
                 self.__captureMarkers.append((handle, None))
 
         return
@@ -455,20 +498,26 @@ class _FlagsMarkerPlugin(IPlugin):
         self.__captureMarkers = []
         return
 
-    def __onSpawnedAtBase(self, flagID, flagPos):
-        flagType = self.__getFlagMarkerType(flagID)
+    def __onFlagSpawning(self, flagID, respawnTime):
+        flagType = _FLAG_TYPE.COOLDOWN
+        flagPos = self.__spawnPoints[flagID]['position']
+        self.__addFlagMarker(flagID, flagPos, flagType)
+        timer = respawnTime - BigWorld.serverTime()
+        self.__initTimer(int(math.ceil(timer)), flagID)
+
+    def __onSpawnedAtBase(self, flagID, flagTeam, flagPos):
+        flagType = self.__getFlagMarkerType(flagID, flagTeam)
         self.__delFlagMarker(flagID)
         self.__addFlagMarker(flagID, flagPos, flagType)
 
-    def __onCapturedByVehicle(self, flagID, vehicleID):
+    def __onCapturedByVehicle(self, flagID, flagTeam, vehicleID):
         self.__updateFlagbearerMarker(vehicleID, True)
         self.__delFlagMarker(flagID)
         if vehicleID == BigWorld.player().playerVehicleID:
             self.__addCaptureMarkers()
-            SoundGroups.g_instance.FMODplaySound(self.__FLAG_CAPTURE_SOUND_NAME)
 
-    def __onDroppedToGround(self, flagID, loserVehicleID, flagPos, respawnTime):
-        flagType = self.__getFlagMarkerType(flagID)
+    def __onDroppedToGround(self, flagID, flagTeam, loserVehicleID, flagPos, respawnTime):
+        flagType = self.__getFlagMarkerType(flagID, flagTeam)
         self.__updateFlagbearerMarker(loserVehicleID)
         self.__addFlagMarker(flagID, flagPos, flagType)
         timer = respawnTime - BigWorld.serverTime()
@@ -476,28 +525,23 @@ class _FlagsMarkerPlugin(IPlugin):
         if loserVehicleID == BigWorld.player().playerVehicleID:
             self.__delCaptureMarkers()
 
-    def __onAbsorbed(self, flagID, vehicleID, respawnTime):
+    def __onAbsorbed(self, flagID, flagTeam, vehicleID, respawnTime):
         self.__updateFlagbearerMarker(vehicleID)
         self.__delFlagMarker(flagID)
         if vehicleID == BigWorld.player().playerVehicleID:
             self.__delCaptureMarkers()
-            SoundGroups.g_instance.FMODplaySound(self.__FLAG_DELIVERY_SOUND_NAME)
 
-    def __getFlagMarkerType(self, flagID):
+    def __getFlagMarkerType(self, flagID, flagTeam = 0):
         player = BigWorld.player()
         currentTeam = player.team
-        spawnID = flagID
-        spawn = self.__spawnPoints[spawnID]
-        flagTeam = spawn['team']
         if flagTeam > 0:
-            if spawn['team'] == currentTeam:
-                return self.__FLAG_TYPE.ALLY
-            return self.__FLAG_TYPE.ENEMY
-        return self.__FLAG_TYPE.NEUTRAL
+            if flagTeam == currentTeam:
+                return _FLAG_TYPE.ALLY
+            return _FLAG_TYPE.ENEMY
+        return _FLAG_TYPE.NEUTRAL
 
 
 class _RepairsMarkerPlugin(IPlugin):
-    __MARKER_TYPE = 'RepairPointIndicatorUI'
 
     def __init__(self, parentObj):
         super(_RepairsMarkerPlugin, self).__init__(parentObj)
@@ -516,10 +560,18 @@ class _RepairsMarkerPlugin(IPlugin):
         arena = player.arena
         arenaType = arena.arenaType
         for pointID, point in enumerate(arenaType.repairPoints):
-            repairPos, radius = point['position'], point['radius']
-            self.__addRepairMarker(pointID, repairPos)
+            repairPos = point['position']
+            isActive = True
+            callbackID = None
+            _, handle = self._parentObj.createStaticMarker(repairPos + _MARKER_POSITION_ADJUSTMENT, _REPAIR_MARKER_TYPE)
+            self._parentObj.invokeMarker(handle, 'setIcon', ['active' if isActive else 'cooldown'])
+            self.__markers[pointID] = (handle,
+             callbackID,
+             repairPos,
+             isActive)
 
         super(_RepairsMarkerPlugin, self).start()
+        return
 
     def stop(self):
         for handle, callbackID, _, _ in self.__markers.values():
@@ -529,23 +581,6 @@ class _RepairsMarkerPlugin(IPlugin):
 
         self.__markers = None
         super(_RepairsMarkerPlugin, self).stop()
-        return
-
-    def __addRepairMarker(self, repairID, repairPos, isActive = True):
-        _, handle = self._parentObj.createStaticMarker(repairPos + self._parentObj.MARKER_POSITION_ADJUSTMENT, self.__MARKER_TYPE)
-        self._parentObj.invokeMarker(handle, 'setIcon', ['active' if isActive else 'cooldown'])
-        self.__markers[repairID] = (handle,
-         None,
-         repairPos,
-         isActive)
-        return
-
-    def __delRepairMarker(self, repairID):
-        handle, callbackID, _, _ = self.__markers.pop(repairID, (None, None, None, None))
-        if handle is not None:
-            self._parentObj.destroyStaticMarker(handle)
-        if callbackID is not None:
-            BigWorld.cancelCallback(callbackID)
         return
 
     def __initTimer(self, timer, repairID):
@@ -588,3 +623,100 @@ class _RepairsMarkerPlugin(IPlugin):
                 if not isActive:
                     self.__initTimer(int(math.ceil(timeLeft)), repairPointID)
             return
+
+
+class _ResourceMarkerPlugin(IPlugin):
+
+    def __init__(self, parentObj):
+        super(_ResourceMarkerPlugin, self).__init__(parentObj)
+        self.__markers = {}
+
+    def init(self):
+        super(_ResourceMarkerPlugin, self).init()
+        g_ctfManager.onResPointIsFree += self.__onIsFree
+        g_ctfManager.onResPointCooldown += self.__onCooldown
+        g_ctfManager.onResPointCaptured += self.__onCaptured
+        g_ctfManager.onResPointCapturedLocked += self.__onCapturedLocked
+        g_ctfManager.onResPointBlocked += self.__onBlocked
+        g_ctfManager.onResPointAmountChanged += self.__onAmountChanged
+
+    def fini(self):
+        g_ctfManager.onResPointIsFree -= self.__onIsFree
+        g_ctfManager.onResPointCooldown -= self.__onCooldown
+        g_ctfManager.onResPointCaptured -= self.__onCaptured
+        g_ctfManager.onResPointCapturedLocked -= self.__onCapturedLocked
+        g_ctfManager.onResPointBlocked -= self.__onBlocked
+        g_ctfManager.onResPointAmountChanged -= self.__onAmountChanged
+        super(_ResourceMarkerPlugin, self).fini()
+
+    def start(self):
+        super(_ResourceMarkerPlugin, self).start()
+        arenaDP = g_sessionProvider.getArenaDP()
+        for pointID, point in g_ctfManager.getResourcePoints():
+            resourcePos = point['minimapPos']
+            amount = point['amount']
+            pointState = point['state']
+            progress = float(amount) / point['totalAmount'] * 100
+            if pointState == constants.RESOURCE_POINT_STATE.FREE:
+                state = _RESOURCE_STATE.READY
+            elif pointState == constants.RESOURCE_POINT_STATE.COOLDOWN:
+                state = _RESOURCE_STATE.COOLDOWN
+            elif pointState == constants.RESOURCE_POINT_STATE.CAPTURED:
+                state = _CAPTURE_STATE_BY_TEAMS[arenaDP.isAllyTeam(point['team'])]
+            elif pointState == constants.RESOURCE_POINT_STATE.CAPTURED_LOCKED:
+                state = _CAPTURE_FROZEN_STATE_BY_TEAMS[arenaDP.isAllyTeam(point['team'])]
+            elif pointState == constants.RESOURCE_POINT_STATE.BLOCKED:
+                state = _RESOURCE_STATE.CONFLICT
+            else:
+                state = _RESOURCE_STATE.FREEZE
+            _, handle = self._parentObj.createStaticMarker(resourcePos + _MARKER_POSITION_ADJUSTMENT, _RESOURCE_MARKER_TYPE)
+            self._parentObj.invokeMarker(handle, 'as_init', [pointID, state, progress])
+            self.__markers[pointID] = (handle,
+             None,
+             resourcePos,
+             state)
+
+        return
+
+    def stop(self):
+        for handle, callbackID, _, _ in self.__markers.values():
+            self._parentObj.destroyStaticMarker(handle)
+            if callbackID is not None:
+                BigWorld.cancelCallback(callbackID)
+
+        self.__markers = None
+        super(_ResourceMarkerPlugin, self).stop()
+        return
+
+    def update(self):
+        super(_ResourceMarkerPlugin, self).update()
+        for point in self.__markers.itervalues():
+            handle = point[0]
+            self._parentObj.invokeMarker(handle, 'as_onSettingsChanged', [])
+
+    def __onIsFree(self, pointID):
+        handle, _, _, _ = self.__markers[pointID]
+        self._parentObj.invokeMarker(handle, 'as_setState', [_RESOURCE_STATE.READY])
+
+    def __onCooldown(self, pointID, serverTime):
+        handle, _, _, _ = self.__markers[pointID]
+        self._parentObj.invokeMarker(handle, 'as_setState', [_RESOURCE_STATE.COOLDOWN])
+
+    def __onCaptured(self, pointID, team):
+        handle, _, _, _ = self.__markers[pointID]
+        state = _CAPTURE_STATE_BY_TEAMS[g_sessionProvider.getArenaDP().isAllyTeam(team)]
+        self._parentObj.invokeMarker(handle, 'as_setState', [state])
+
+    def __onCapturedLocked(self, pointID, team):
+        handle, _, _, _ = self.__markers[pointID]
+        state = _CAPTURE_FROZEN_STATE_BY_TEAMS[g_sessionProvider.getArenaDP().isAllyTeam(team)]
+        self._parentObj.invokeMarker(handle, 'as_setState', [state])
+
+    def __onBlocked(self, pointID):
+        handle, _, _, _ = self.__markers[pointID]
+        self._parentObj.invokeMarker(handle, 'as_setState', [_RESOURCE_STATE.CONFLICT])
+
+    def __onAmountChanged(self, pointID, amount, totalAmount):
+        progress = float(amount) / totalAmount * 100
+        handle, _, _, _ = self.__markers[pointID]
+        self._parentObj.invokeMarker(handle, 'as_setProgress', [progress])

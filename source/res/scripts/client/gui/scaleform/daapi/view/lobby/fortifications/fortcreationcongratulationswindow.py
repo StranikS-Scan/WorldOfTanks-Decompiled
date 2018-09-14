@@ -7,6 +7,7 @@ from gui.Scaleform.framework.entities.abstract.AbstractWindowView import Abstrac
 from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.shared.formatters import icons
 from helpers import i18n
 
 class FortCreationCongratulationsWindow(AbstractWindowView, View, FortCreationCongratulationsWindowMeta, AppRef):
@@ -20,7 +21,7 @@ class FortCreationCongratulationsWindow(AbstractWindowView, View, FortCreationCo
 
     def __makeData(self):
         sourceCount = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, str(fortified_regions.g_cache.startResource))
-        sourceCount += ' ' + self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
+        sourceCount += ' ' + icons.nut()
         sourceCount = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.CONGRATULATIONWINDOW_TEXTBODY, sourceCount=sourceCount))
         self.as_setTextS(sourceCount)
         self.as_setTitleS(i18n.makeString(FORTIFICATIONS.CONGRATULATIONWINDOW_TEXTTITLE))

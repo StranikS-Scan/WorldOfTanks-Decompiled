@@ -98,7 +98,7 @@ class PremiumDiscountAward(AwardAbstract):
         return i18n.makeString(MENU.PREMIUMCONGRATULATION_BTNLABEL)
 
     def getCloseButtonText(self):
-        return i18n.makeString(MENU.PREMIUM_CANCEL)
+        return i18n.makeString(MENU.PREMIUMCONGRATULATION_CLOSEBTN)
 
     def getPercentDiscount(self):
         return '%d%%' % self.discount
@@ -131,7 +131,11 @@ class BoosterAward(AwardAbstract):
         return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_BOOSTERAWARD_HEADER, boosterName=i18n.makeString(_BOOSTER_DESCRIPTION_LOCALE % self._booster.boosterGuiType, effectValue=self._booster.effectValue)))
 
     def getDescription(self):
-        timeValue = text_styles.stats(i18n.makeString(MENU.AWARDWINDOW_BOOSTERAWARD_DESCRIPTION_TIMEVALUE, effectTime=self._booster.getEffectTimeStr(), tillTime=self._booster.getExpiryDate()))
+        localKey = '#menu:awardWindow/boosterAward/description/timeValue/%s'
+        if self._booster.expiryTime:
+            timeValue = text_styles.stats(i18n.makeString(localKey % 'defined', effectTime=self._booster.getEffectTimeStr(), tillTime=self._booster.getExpiryDate()))
+        else:
+            timeValue = text_styles.stats(i18n.makeString(localKey % 'undefined', effectTime=self._booster.getEffectTimeStr()))
         description = text_styles.main(MENU.AWARDWINDOW_BOOSTERAWARD_DESCRIPTION_TILLTIME)
         return description + timeValue
 

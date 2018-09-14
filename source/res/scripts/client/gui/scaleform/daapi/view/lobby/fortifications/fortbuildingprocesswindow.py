@@ -18,7 +18,8 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.shared.fortifications.context import BuildingCtx
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
+from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from helpers import i18n
 
 class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWindowMeta, FortViewHelper, AppRef):
@@ -97,6 +98,8 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         infoData['statusMsg'] = statusMsg
         infoData['statusIconTooltip'] = statusIconTooltip
         infoData['buttonTooltip'] = buttonTooltip
+        buildingIcon = FortViewHelper.getPopoverIconSource(uid, FORT_BATTLE_DIVISIONS.ABSOLUTE.maxFortLevel)
+        infoData['buildingIcon'] = buildingIcon
         self.as_responseBuildingInfoS(infoData)
         return
 
@@ -200,7 +203,8 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
          'shortDescr': shortDescr,
          'statusLbl': status,
          'buildingStatus': buildingStatus,
-         'isNewItem': isNewItem}
+         'isNewItem': isNewItem,
+         'buildingIcon': FortViewHelper.getSmallIconSource(id, FORT_BATTLE_DIVISIONS.ABSOLUTE.maxFortLevel)}
 
     def __makeMainLabel(self):
         buildingCount = len(self.fortCtrl.getFort().buildings) - 1

@@ -1,23 +1,28 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/ArenaDataProvider.py
 from collections import defaultdict
-from constants import ARENA_GUI_TYPE
+import operator
+from constants import ARENA_GUI_TYPE, TEAMS_IN_ARENA
 from debug_utils import LOG_NOTE, LOG_WARNING, LOG_DEBUG
+from shared_utils import first
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO, VehicleArenaStatsDict, VehicleArenaStatsVO, VehicleArenaInteractiveStatsDict
-from gui.battle_control.arena_info.settings import SQUAD_RANGE_TO_SHOW, TEAM_RANGE, invertTeam, INVALIDATE_OP
+from gui.battle_control.battle_constants import MULTIPLE_TEAMS_TYPE
+from gui.battle_control.arena_info.settings import SQUAD_RANGE_TO_SHOW, INVALIDATE_OP
 
 class ArenaDataProvider(object):
-    __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__viStatsVOs', '__prbStats', '__playersVIDs', '__weakref__')
+    __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__viStatsVOs', '__prbStats', '__playersVIDs', '__weakref__', '__teamsOnArena', '__teamsVIStats')
 
-    def __init__(self):
+    def __init__(self, avatar = None):
         super(ArenaDataProvider, self).__init__()
-        self.__playerTeam = avatar_getter.getPlayerTeam()
-        self.__playerVehicleID = avatar_getter.getPlayerVehicleID()
+        self.__playerTeam = avatar_getter.getPlayerTeam(avatar)
+        self.__teamsOnArena = range(1, avatar_getter.getMaxTeamsOnArena(avatar) + 1)
+        self.__playerVehicleID = avatar_getter.getPlayerVehicleID(avatar)
         self.__vInfoVOs = {}
         self.__vStatsVOs = VehicleArenaStatsDict()
         self.__prbStats = {}
         self.__playersVIDs = {}
         self.__viStatsVOs = VehicleArenaInteractiveStatsDict()
+        self.__teamsVIStats = {}
 
     def __del__(self):
         LOG_DEBUG('Deleted:', self)
@@ -30,6 +35,7 @@ class ArenaDataProvider(object):
     def clearStats(self):
         self.__vStatsVOs.clear()
         self.__viStatsVOs.clear()
+        self.__teamsVIStats.clear()
 
     def clear(self):
         self.clearInfo()
@@ -37,7 +43,7 @@ class ArenaDataProvider(object):
 
     def defaultInfo(self):
         self.clearInfo()
-        for team in TEAM_RANGE:
+        for team in self.getTeamsOnArena():
             self.__prbStats[team] = defaultdict(list)
 
     def buildVehiclesData(self, vehicles, arenaGuiType):
@@ -91,17 +97,78 @@ class ArenaDataProvider(object):
 
     def updateVehicleInteractiveStats(self, iStats):
         self.__viStatsVOs.clear()
+        self.__teamsVIStats.clear()
         for (vID, _), iStat in iStats.iteritems():
             vStatsVO = self.__viStatsVOs[vID]
             vStatsVO.update(*iStat)
+            vInfo = self.__vInfoVOs[vID]
+            team = vInfo.team
+            if team in self.__teamsVIStats:
+                self.__teamsVIStats[team][vID] = vStatsVO
+            else:
+                self.__teamsVIStats[team] = {vID: vStatsVO}
 
     def isRequiredDataExists(self):
         return self.__checkRequiredData()
 
+    def getTeamsOnArena(self):
+        return self.__teamsOnArena
+
+    def getAllyTeams(self):
+        return (self.__playerTeam,)
+
+    def getEnemyTeams(self):
+        allyTeams = self.getAllyTeams()
+        return filter(lambda t: t not in allyTeams, self.__teamsOnArena)
+
+    def isEnemyTeam(self, team):
+        return team not in self.getAllyTeams()
+
+    def isAllyTeam(self, team):
+        return team in self.getAllyTeams()
+
+    def isMultipleTeams(self):
+        return len(self.__teamsOnArena) > TEAMS_IN_ARENA.MIN_TEAMS
+
+    def getMultiTeamsType(self):
+        if self.isMultipleTeams():
+            squadTeamNumber = 0
+            for team in self.__prbStats.itervalues():
+                squads = filter(lambda item: len(item[1]) in SQUAD_RANGE_TO_SHOW, team.iteritems())
+                if len(squads):
+                    squadTeamNumber += 1
+
+            if squadTeamNumber == 0:
+                return MULTIPLE_TEAMS_TYPE.FFA
+            if squadTeamNumber == len(self.__teamsOnArena):
+                return MULTIPLE_TEAMS_TYPE.TDM
+            return MULTIPLE_TEAMS_TYPE.MIXED
+        else:
+            return None
+
+    def getMultiTeamsIndexes(self):
+        lastTeamIdx = 0
+        result = {}
+        for team in self.__teamsOnArena:
+            teamIdx = 0
+            vInfoVO, _, _ = next(self._getVehiclesIterator(lambda v: v.team == team), (None, None, None))
+            if vInfoVO is not None and vInfoVO.prebattleID > 0:
+                lastTeamIdx += 1
+                teamIdx = lastTeamIdx
+            result[team] = teamIdx
+
+        return result
+
+    def getTeamIDsIterator(self):
+        allyTeams = self.getAllyTeams()
+        for teamIdx in self.__teamsOnArena:
+            yield (teamIdx not in allyTeams, teamIdx)
+
     def getNumberOfTeam(self, enemy = False):
         if enemy:
-            return invertTeam(self.__playerTeam)
-        return self.__playerTeam
+            return first(self.getEnemyTeams())
+        else:
+            return self.__playerTeam
 
     def getPlayerVehicleID(self):
         return self.__playerVehicleID
@@ -121,10 +188,15 @@ class ArenaDataProvider(object):
             vID = self.getPlayerVehicleID()
         return self.__vStatsVOs[vID]
 
+    def getTeamStats(self, team = None):
+        if team is None:
+            team = self.__playerTeam
+        return self.__teamsVIStats.get(team, {})
+
     def getVehIDsByPrebattleID(self, team, prebattleID):
         vehIDs = None
         if team in self.__prbStats and prebattleID in self.__prbStats[team]:
-            vehIDs = self.__prbStats[team][prebattleID]
+            vehIDs = list(self.__prbStats[team][prebattleID])
         return vehIDs
 
     def getPrbVehCount(self, team, prebattleID):
@@ -160,34 +232,66 @@ class ArenaDataProvider(object):
 
         return vID
 
-    def getTeamIterator(self, enemy = False):
-        team = self.getNumberOfTeam(enemy)
-        if not team:
-            LOG_NOTE('Team not found')
-            data = []
+    def getTeamIterator(self, teamIdx):
+        return self._getVehiclesIterator(lambda v: v.team == teamIdx)
+
+    def getVehiclesIterator(self, enemy = False):
+        if enemy:
+            teams = self.getEnemyTeams()
         else:
-            data = sorted(filter(lambda vInfoVO: vInfoVO.team == team, self.__vInfoVOs.itervalues()))
-        for vInfoVO in data:
-            yield (vInfoVO, self.__vStatsVOs[vInfoVO.vehicleID], self.__viStatsVOs[vInfoVO.vehicleID])
+            teams = self.getAllyTeams()
+        return self._getVehiclesIterator(lambda v: v.team in teams)
+
+    def getAllVehiclesIterator(self):
+        return self._getVehiclesIterator()
+
+    def getAllVehiclesIteratorByTeamScore(self):
+
+        def sortByScore(vInfoVOX, vInfoVOY):
+            teamStatsX = self.getTeamStats(vInfoVOX.team)
+            teamStatsY = self.getTeamStats(vInfoVOY.team)
+            teamScoreX = sum(map(operator.attrgetter('winPoints'), teamStatsX.itervalues()))
+            teamScoreY = sum(map(operator.attrgetter('winPoints'), teamStatsY.itervalues()))
+            res = cmp(teamScoreY, teamScoreX)
+            if res:
+                return res
+            return cmp(vInfoVOX, vInfoVOY)
+
+        return self._getVehiclesIterator(sortFunction=sortByScore)
+
+    def getAllVehiclesIDsIterator(self):
+        for vInfoVO, _, _ in self.getAllVehiclesIterator():
+            yield vInfoVO.vehicleID
+
+    def getAllVehiclesIDs(self):
+        return list(self.getAllVehiclesIDsIterator())
 
     def getVehiclesIDsIterator(self, enemy = False):
-        team = self.getNumberOfTeam(enemy)
-        if not team:
-            LOG_NOTE('Team not found')
-            data = []
-        else:
-            data = sorted(filter(lambda vInfoVO: vInfoVO.team == team, self.__vInfoVOs.itervalues()))
-        for vInfoVO in data:
+        for vInfoVO, _, _ in self.getVehiclesIterator(enemy):
             yield vInfoVO.vehicleID
 
     def getVehiclesIDs(self, enemy = False):
         return list(self.getVehiclesIDsIterator(enemy))
 
+    def _getVehiclesIterator(self, filterPredicate = None, sortFunction = None):
+        if filterPredicate is None:
+            data = self.__vInfoVOs.itervalues()
+        else:
+            data = filter(filterPredicate, self.__vInfoVOs.itervalues())
+        if sortFunction is None:
+            sortedData = sorted(data)
+        else:
+            sortedData = sorted(data, cmp=sortFunction)
+        for vInfoVO in sortedData:
+            yield (vInfoVO, self.__vStatsVOs[vInfoVO.vehicleID], self.__viStatsVOs[vInfoVO.vehicleID])
+
+        return
+
     def __findSquads(self, arenaGuiType):
         if arenaGuiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EVENT_BATTLES):
             return
-        for team in self.__prbStats.iterkeys():
-            squads = filter(lambda item: len(item[1]) in SQUAD_RANGE_TO_SHOW, self.__prbStats[team].iteritems())
+        for team in self.__prbStats.itervalues():
+            squads = filter(lambda item: len(item[1]) in SQUAD_RANGE_TO_SHOW, team.iteritems())
             if len(squads):
                 squads = sorted(squads, key=lambda item: item[0])
                 for index, (prbID, vIDs) in enumerate(squads):
@@ -212,7 +316,7 @@ class ArenaDataProvider(object):
     def __getStateFlag(self, vID, flagName, **kwargs):
         result = False
         if vID in self.__vInfoVOs:
-            result = getattr(self.__vInfoVOs[vID], flagName)(**kwargs)
+            result = operator.methodcaller(flagName, **kwargs)(self.__vInfoVOs[vID])
         return result
 
     def __checkRequiredData(self):

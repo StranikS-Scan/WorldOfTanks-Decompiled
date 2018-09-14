@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw/UsersManager.py
 import BigWorld
 import chat_shared
-from messenger.ext.player_helpers import getPlayerDatabaseID
+from gui.shared.utils import getPlayerDatabaseID
 from messenger.m_constants import USER_ACTION_ID as _ACTION_ID
 from messenger.m_constants import USER_TAG as _TAG
 from messenger.m_constants import MESSENGER_SCOPE, PROTO_TYPE

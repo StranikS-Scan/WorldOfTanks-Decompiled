@@ -280,9 +280,11 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
             if direction == dir:
                 pos = getPositionFromDirPos(buildingData['dirPosByte'])
                 level = buildingData['level']
-                buildings[pos] = {'uid': self.getBuildingUIDbyID(buildingID),
+                uid = self.getBuildingUIDbyID(buildingID)
+                buildings[pos] = {'uid': uid,
                  'progress': self._getProgress(buildingID, level),
-                 'buildingLevel': level}
+                 'buildingLevel': level,
+                 'iconSource': FortViewHelper.getSmallIconSource(uid, level)}
 
         return buildings
 

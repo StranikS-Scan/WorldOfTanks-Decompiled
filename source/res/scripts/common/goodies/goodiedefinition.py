@@ -12,11 +12,11 @@ class GoodieDefinition(object):
      'useby',
      'counter',
      'autostart',
+     'resource',
      'value',
-     'resources',
      'condition']
 
-    def __init__(self, uid, variety, target, enabled, lifetime, useby, counter, autostart, resources, condition):
+    def __init__(self, uid, variety, target, enabled, lifetime, useby, counter, autostart, resource, value, condition):
         self.uid = uid
         self.variety = variety
         self.target = target
@@ -25,7 +25,8 @@ class GoodieDefinition(object):
         self.useby = useby
         self.counter = counter
         self.autostart = autostart
-        self.resources = resources
+        self.resource = resource
+        self.value = value
         self.condition = condition
 
     def isActivatable(self):
@@ -47,29 +48,24 @@ class GoodieDefinition(object):
     def apply(self, resources):
         if not isinstance(resources, set):
             resources = {resources}
-        result = set()
         for resource in resources:
-            value = self.resources.get(resource.__class__, None)
-            if value is not None:
+            if resource.__class__ == self.resource:
                 if self.variety == GOODIE_VARIETY.DISCOUNT:
-                    result.add(resource.__class__(value.reduce(resource.value)))
-                elif self.variety == GOODIE_VARIETY.BOOSTER:
-                    result.add(resource.__class__(value.increase(resource.value)))
-                else:
-                    raise Exception, 'Programming error, Goodie is not a discount or booster' % self.variety
+                    return resource.__class__(self.value.reduce(resource.value))
+                if self.variety == GOODIE_VARIETY.BOOSTER:
+                    return resource.__class__(self.value.increase(resource.value))
+                raise Exception, 'Programming error, Goodie is not a discount or booster' % self.variety
 
-        return result
+        return None
 
     def apply_delta(self, resources):
         if not isinstance(resources, set):
             resources = {resources}
-        result = set()
         for resource in resources:
-            value = self.resources.get(resource.__class__, None)
-            if value is not None:
-                result.add(resource.__class__(value.delta(resource.value)))
+            if resource.__class__ == self.resource:
+                return resource.__class__(self.value.delta(resource.value))
 
-        return result
+        return None
 
     def createGoodie(self, state = None, expiration = None, counter = None):
         if not self.enabled:
@@ -83,7 +79,10 @@ class GoodieDefinition(object):
             if self.isTimeLimited():
                 if expiration is None:
                     if state == GOODIE_STATE.ACTIVE:
-                        expiration = min(time.time() + self.lifetime, self.useby)
+                        if self.useby is None:
+                            expiration = time.time() + self.lifetime
+                        else:
+                            expiration = min(time.time() + self.lifetime, self.useby)
                     else:
                         expiration = 0
             else:

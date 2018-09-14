@@ -108,7 +108,7 @@ class RecruitWindow(View, AbstractWindowView, RecruitWindowMeta):
         modulesAll.sort()
         for module in modulesAll:
             typesDP.append({'id': module.innationID,
-             'label': module.descriptor.type.shortUserString})
+             'label': module.shortUserName})
             for role in module.descriptor.type.crewRoles:
                 if role[0] == roleType:
                     rolesDP.append({'id': role[0],
@@ -168,7 +168,7 @@ class RecruitWindow(View, AbstractWindowView, RecruitWindowMeta):
         modulesAll.sort()
         for module in modulesAll:
             data.append({'id': module.innationID,
-             'label': module.descriptor.type.shortUserString})
+             'label': module.shortUserName})
 
         self.flashObject.as_setVehicleTypeDropdown(data)
         Waiting.hide('updating')

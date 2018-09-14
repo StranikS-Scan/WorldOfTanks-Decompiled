@@ -26,6 +26,7 @@ from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.context import UpgradeCtx
 from gui.shared.fortifications.settings import FORT_RESTRICTION, FORT_BATTLE_DIVISIONS
 from gui.shared import events
+from gui.shared.formatters import icons
 from helpers import i18n
 from gui import DialogsInterface
 
@@ -146,7 +147,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         LOG_DEBUG(upgradeRestriction)
         cndPostfix = ''
         isCanModernization = canUpgrade
-        conditionIcon = self.app.utilsManager.textManager.getIcon(TextIcons.CHECKMARK_ICON)
+        conditionIcon = icons.checkmark()
         canUpgradeByDefPeriod = True
         isBaseBuilding = self.__uid == FORTIFICATION_ALIASES.FORT_BASE_BUILDING
         if self.__uid != FORTIFICATION_ALIASES.FORT_BASE_BUILDING:
@@ -188,7 +189,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
             conditionIcon = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, '-')
         if self._buildingDescr.storage < self.__cost:
             costMsg = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, BigWorld.wg_getIntegralFormat(self.__cost))
-            constIcon = self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
+            constIcon = icons.nut()
             costMsg = costMsg + ' ' + constIcon
         else:
             costMsg = fort_formatters.getDefRes(self.__cost, True)
@@ -221,9 +222,12 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
             order = fort.getOrder(self._buildingDescr.typeRef.orderType)
             orderCount = order.count
             newCount, resLeft = fort.recalculateOrder(order.orderID, order.count, order.level, order.level + 1)
+        inProcess, _ = fort.getDefenceHourProcessing()
+        isDefenceOn = fort.isDefenceHourEnabled() or inProcess
         before = {}
         before['buildingType'] = self.__uid
         before['buildingLevel'] = self.__buildingLevel
+        before['buildingIcon'] = FortViewHelper.getMapIconSource(self.__uid, self.__buildingLevel, isDefenceOn=isDefenceOn)
         before['buildingIndicators'] = self.__prepareIndicatorData(isCanModernization, False)
         before['defResInfo'] = self.__prepareOrderInfo(False, orderCount, self.__buildingLevel)
         before['titleText'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_BEFORELABEL))
@@ -231,6 +235,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         after = {}
         after['buildingType'] = self.__uid
         after['buildingLevel'] = self.__buildingLevel + 1
+        after['buildingIcon'] = FortViewHelper.getMapIconSource(self.__uid, self.__buildingLevel + 1)
         after['buildingIndicators'] = self.__prepareIndicatorData(isCanModernization, True, resLeft)
         after['defResInfo'] = self.__prepareOrderInfo(True, newCount, self.__buildingLevel + 1)
         after['titleText'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_AFTERLABEL))
@@ -263,7 +268,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         if increment:
             hpTextColor = TEXT_MANAGER_STYLES.NEUTRAL_TEXT
         formattedHpTotal = self.app.utilsManager.textManager.getText(hpTextColor, str(BigWorld.wg_getIntegralFormat(hpTotalVal)))
-        formattedHpTotal += ' ' + self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
+        formattedHpTotal += ' ' + icons.nut()
         if not isCanModernization and increment:
             currentDefResLabel = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, '--')
             currentDefResValue = 0
@@ -272,7 +277,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
             currentDefResValue = defResVal
         defResValueFormatter = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, FORMAT_PATTERN)
         formattedDefResTotal = self.app.utilsManager.textManager.getText(hpTextColor, str(BigWorld.wg_getIntegralFormat(maxDerResVal)))
-        formattedDefResTotal += ' ' + self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
+        formattedDefResTotal += ' ' + icons.nut()
         result = {}
         result['hpLabel'] = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_INDICATORS_HPLBL)
         result['defResLabel'] = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_INDICATORS_DEFRESLBL)

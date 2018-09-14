@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/gui/clubs/formatters.py
+import BigWorld
 from helpers.i18n import makeString, doesTextExist
-from club_shared import ClubRolesHelper
+from club_shared import ClubRolesHelper, WEB_CMD_RESULT as _WCR
 from gui import makeHtmlString
-from gui.clubs.settings import CLUB_REQUEST_TYPE, getDivisionWithinLeague, getInviteStatusString
+from gui.clubs.settings import CLUB_REQUEST_TYPE as _CRT, getDivisionWithinLeague, getInviteStatusString
 from messenger.storage import storage_getter
+ERROR_SYS_MSG_TPL = '#system_messages:clubs/request/errors/%s'
 
 def getDivisionString(division):
     return chr(ord('A') + getDivisionWithinLeague(division))
@@ -14,7 +16,15 @@ def getLeagueString(league):
 
 
 def getRequestUserName(rqTypeID):
-    return _sysMsg('club/request/name/%s' % CLUB_REQUEST_TYPE.getKeyByValue(rqTypeID))
+    return _sysMsg('club/request/name/%s' % _CRT.getKeyByValue(rqTypeID))
+
+
+def getSeasonUserName(seasonInfo):
+    return makeString('#cybersport:clubs/seasons/name', startTime=BigWorld.wg_getShortDateFormat(seasonInfo.start), finishTime=BigWorld.wg_getShortDateFormat(seasonInfo.finish))
+
+
+def getSeasonStateUserString(seasonState):
+    return makeString('#cybersport:clubs/seasons/state/%s' % seasonState.getStateString())
 
 
 def getRoleUserName(clubRole):
@@ -98,8 +108,16 @@ class ClubAppsHtmlTextFormatter(object):
         return ''.join(result)
 
 
-def getRequestErrorMsg(errorMsg):
-    key = '#system_messages:clubs/request/errors/%s' % errorMsg
+_CUSTOM_ERR_MESSAGES = {(_CRT.SEND_INVITE, _WCR.FORBIDDEN_FOR_ACCOUNT): 'sendInvite/ignored',
+ (_CRT.SEND_APPLICATION, _WCR.FORBIDDEN_FOR_ACCOUNT): 'sendApp/ignored'}
+
+def getRequestErrorMsg(result, ctx):
+    msgKey = (ctx.getRequestType(), result.code)
+    if msgKey in _CUSTOM_ERR_MESSAGES:
+        errorMsg = _CUSTOM_ERR_MESSAGES[msgKey]
+    else:
+        errorMsg = result.errStr
+    key = ERROR_SYS_MSG_TPL % errorMsg
     if doesTextExist(key):
         return makeString(key)
     return ''

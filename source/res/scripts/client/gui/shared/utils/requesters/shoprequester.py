@@ -303,8 +303,8 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
         self._goodies = weakref.proxy(goodies)
 
     def clear(self):
-        super(ShopRequester, self).clear()
         self.defaults.clear()
+        super(ShopRequester, self).clear()
 
     def getValue(self, key, defaultValue = None):
         return self.getCacheValue(key, defaultValue)

@@ -225,6 +225,8 @@ class LoginDispatcher(DisposableEntity, AppRef):
 
             if connectionManager.isUpdateClientSoftwareNeeded():
                 self.onHandleUpdateClientSoftwareNeeded()
+                if connectionManager.isConnected():
+                    connectionManager.disconnect()
             elif status != STATUS_LOGGED_ON:
                 connectionManager.disconnect()
         elif stage == 6:

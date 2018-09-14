@@ -4,6 +4,8 @@ import BigWorld
 import AccountCommands
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from ids_generators import Int32IDGenerator
+from helpers import i18n
+from messenger import MessengerEntry, g_settings
 from gui.shared.utils.requesters.abstract import RequestsByIDProcessor
 from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
@@ -15,10 +17,14 @@ class _AvatarCooldownManager(RequestCooldownManager):
         super(_AvatarCooldownManager, self).__init__(REQUEST_SCOPE.CLUB)
 
     def lookupName(self, rqTypeID):
-        return str(AVATAR_REQUEST_TYPE.getKeyByValue(rqTypeID))
+        rqName = AVATAR_REQUEST_TYPE.getKeyByValue(rqTypeID)
+        return i18n.makeString('#system_messages:battle/request/%s' % str(rqName))
 
     def getDefaultCoolDown(self):
         return DEFAULT_COOLDOWN
+
+    def _showSysMessage(self, msg):
+        MessengerEntry.g_instance.gui.addClientMessage(g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': msg}))
 
 
 class _AvatarRequester(RequestsByIDProcessor):

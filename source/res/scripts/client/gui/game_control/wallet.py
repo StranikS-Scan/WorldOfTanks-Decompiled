@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.dialogs.FreeXPInfoDialogMeta import FreeXPInfoMeta
 from gui.SystemMessages import SM_TYPE
 from gui.game_control.controllers import Controller
 from gui.shared import g_itemsCache
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 from helpers.aop import Aspect, Pointcut, Weaver
 
 class WalletController(Controller):

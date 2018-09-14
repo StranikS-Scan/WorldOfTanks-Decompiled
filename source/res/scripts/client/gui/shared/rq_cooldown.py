@@ -111,7 +111,7 @@ class RequestCooldownManager(object):
     def validate(self, rqTypeID, coolDown = None):
         result = False
         if self.isInProcess(rqTypeID):
-            SystemMessages.pushMessage(self.getCoolDownMessage(rqTypeID, coolDown), type=SystemMessages.SM_TYPE.Error)
+            self._showSysMessage(self.getCoolDownMessage(rqTypeID, coolDown))
             result = True
         return result
 
@@ -120,6 +120,9 @@ class RequestCooldownManager(object):
             coolDown = self.getDefaultCoolDown()
         fireCoolDownEvent(self._scopeID, rqTypeID, coolDown)
         return
+
+    def _showSysMessage(self, msg):
+        SystemMessages.pushMessage(msg, type=SystemMessages.SM_TYPE.Error)
 
     def _getCommonCooldownTimeLeft(self):
         if not self._commonCooldown:

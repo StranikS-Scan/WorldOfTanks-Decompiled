@@ -111,7 +111,11 @@ class _DatabaseIDGetter(object):
     def getDatabaseID(self):
         value = getattr(self, '_node')
         if value:
-            result = long(value)
+            try:
+                result = long(value)
+            except ValueError:
+                result = 0L
+
         else:
             result = 0L
         return result

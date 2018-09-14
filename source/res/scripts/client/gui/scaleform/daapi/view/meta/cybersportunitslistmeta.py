@@ -24,6 +24,13 @@ class CyberSportUnitsListMeta(BaseRallyListView):
     def showRallyProfile(self, id):
         self._printOverrideError('showRallyProfile')
 
+    def searchTeams(self, name):
+        self._printOverrideError('searchTeams')
+
+    def as_noSearchResultsS(self, mesage, cleanBtnVisible):
+        if self._isDAAPIInited():
+            return self.flashObject.as_noSearchResults(mesage, cleanBtnVisible)
+
     def as_setSearchResultTextS(self, text, descrText, filterData):
         if self._isDAAPIInited():
             return self.flashObject.as_setSearchResultText(text, descrText, filterData)

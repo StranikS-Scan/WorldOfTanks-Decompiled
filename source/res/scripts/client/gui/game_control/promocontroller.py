@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/game_control/PromoController.py
-from account_helpers import getPlayerDatabaseID
+from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings, PROMO
 from debug_utils import LOG_DEBUG
 from adisp import async, process
@@ -134,4 +134,4 @@ class PromoController(Controller):
 
     @classmethod
     def isPromoAutoViewsEnabled(cls):
-        return getPlayerDatabaseID() % cls.PROMO_AUTO_VIEWS_TEST_VALUE != 0 and g_lobbyContext.getServerSettings().isPromoAutoViewsEnabled()
+        return getAccountDatabaseID() % cls.PROMO_AUTO_VIEWS_TEST_VALUE != 0 and g_lobbyContext.getServerSettings().isPromoAutoViewsEnabled()

@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/__init__.py
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 from gui.Scaleform.framework.ScopeTemplates import SimpleScope, VIEW_SCOPE, LOBBY_SUB_SCOPE, MultipleScope, WINDOW_SCOPE
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -123,7 +123,7 @@ class FortificationEffects(object):
                                                                                  'descrTextMove': MOVE_DOWN,
                                                                                  'statsBtn': VISIBLE,
                                                                                  'clanListBtn': VISIBLE,
-                                                                                 'settingBtn': VISIBLE,
+                                                                                 'settingBtn': INVISIBLE,
                                                                                  'calendarBtn': VISIBLE,
                                                                                  'transportToggle': INVISIBLE,
                                                                                  'clanInfo': FADE_OUT,

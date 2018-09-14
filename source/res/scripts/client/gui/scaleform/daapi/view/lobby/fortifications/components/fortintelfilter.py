@@ -10,7 +10,7 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
-from gui.shared.utils import findFirst
+from shared_utils import findFirst
 
 class FortIntelFilter(FortIntelFilterMeta, FortViewHelper, AppRef):
     FILTER_TYPE_MAPPING = {None: FORT_SCOUTING_DATA_FILTER.DEFAULT,

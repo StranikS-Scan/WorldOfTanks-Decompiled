@@ -4,6 +4,7 @@ import Math
 from Math import Matrix, Vector3
 import math
 from debug_utils import LOG_CURRENT_EXCEPTION
+import SoundGroups
 
 class CircularFlyer(BigWorld.UserDataObject):
 
@@ -58,7 +59,7 @@ class CircularFlyer(BigWorld.UserDataObject):
                     pixieNode = self.__model.node(self.pixieHardPoint)
                     pixieNode.attach(resourceRefs[self.pixieName])
                 if self.soundName != '':
-                    self.__sound = self.__model.playSound(self.soundName)
+                    self.__sound = SoundGroups.g_instance.playSoundModel(self.__model, self.soundName)
             except:
                 LOG_CURRENT_EXCEPTION()
                 self.__model = None

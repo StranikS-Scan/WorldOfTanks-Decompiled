@@ -485,6 +485,9 @@ class IUnitListener(IIntroUnitListener):
     def onUnitExtraChanged(self, extra):
         pass
 
+    def onUnitCurfewChanged(self):
+        pass
+
 
 class IGlobalListener(IPrbListener, IUnitListener, IPreQueueListener):
     pass

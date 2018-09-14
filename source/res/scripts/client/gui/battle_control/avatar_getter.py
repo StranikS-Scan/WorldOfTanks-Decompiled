@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/battle_control/avatar_getter.py
 import BigWorld
+import constants
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 
 def isForcedGuiControlMode(avatar = None):
@@ -155,6 +156,15 @@ def getArenaUniqueID(avatar = None):
     return None
 
 
+def getMaxTeamsOnArena(avatar = None):
+    try:
+        return getArena(avatar).arenaType.maxTeamsInArena
+    except AttributeError:
+        LOG_WARNING('Attribute "arenaType" or "maxTeamsInArena" is not found')
+
+    return constants.TEAMS_IN_ARENA.MIN_TEAMS
+
+
 def updateVehicleSetting(code, value, avatar = None):
     if avatar is None:
         avatar = BigWorld.player()
@@ -174,5 +184,38 @@ def changeVehicleSetting(code, value, avatar = None):
         avatar.base.vehicle_changeSetting(code, value)
     except AttributeError:
         LOG_WARNING('Attribute "base.vehicle_changeSetting" is not found')
+
+    return
+
+
+def activateAvatarEquipment(equipmentID, avatar = None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        avatar.cell.activateEquipment(equipmentID)
+    except AttributeError:
+        LOG_WARNING('Attribute "cell.activateEquipment" is not found')
+
+    return
+
+
+def leaveArena(avatar = None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        avatar.leaveArena()
+    except AttributeError:
+        LOG_WARNING('Attribute "leaveArena" is not found', avatar)
+
+    return
+
+
+def refreshShotDispersionAngle(avatar = None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, 1)
+    except AttributeError:
+        LOG_WARNING('Attribute "getOwnVehicleShotDispersionAngle" is not found')
 
     return

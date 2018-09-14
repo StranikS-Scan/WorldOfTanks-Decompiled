@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/messenger/proto/notations.py
-import BattleReplay
 from debug_utils import LOG_NOTE
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE_NAMES
@@ -41,6 +40,7 @@ class contacts(_profile):
 def cancel_replay_record(func):
 
     def wrapper(*args, **kwargs):
+        import BattleReplay
         ctrl = BattleReplay.g_replayCtrl
         if ctrl.isRecording:
             ctrl.cancelSaveCurrMessage()

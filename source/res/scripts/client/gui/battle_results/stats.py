@@ -9,7 +9,7 @@ _CommonInfo = namedtuple('_CommonInfo', ['finishReason',
  'winnerTeam',
  'vehLockMode',
  'bonusType',
- 'sortieDivision'])
+ 'division'])
 _CommonInfo.__new__.__defaults__ = (FINISH_REASON.UNKNOWN,
  ARENA_GUI_TYPE.UNKNOWN,
  0,

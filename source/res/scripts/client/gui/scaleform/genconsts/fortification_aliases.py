@@ -193,6 +193,9 @@ class FORTIFICATION_ALIASES(object):
      FORT_OFFICE_BUILDING,
      FORT_ARTILLERY_SHOP_BUILDING,
      FORT_BOMBER_SHOP_BUILDING]
+    FORT_ICONS_MAP = '../maps/fort/buildings/large/'
+    FORT_ICONS_POPOVERS = '../maps/fort/buildings/popover/'
+    FORT_ICONS_SMALL = '../maps/fort/buildings/small/'
     FORT_DIRECTION_1 = 1
     FORT_DIRECTION_2 = 2
     FORT_DIRECTION_3 = 3

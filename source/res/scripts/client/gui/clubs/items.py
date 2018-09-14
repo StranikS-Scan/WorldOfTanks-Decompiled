@@ -2,15 +2,16 @@
 from collections import namedtuple
 import BigWorld
 from ids_generators import SequenceIDGenerator
-from account_helpers import getPlayerDatabaseID
 from helpers import i18n
 from ClubDescr import ClubDescr
-from club_shared import ClubStateHelper, ClubRolesHelper, ladderRating, CLUB_LIMITS, CLUB_INVITE_STATE as _CIS, EMBLEM_TYPE, ladderRatingLocal
-from dossiers2.custom.builders import getClubDossierDescr
+from club_shared import ClubStateHelper, ClubRolesHelper, ladderRating, CLUB_LIMITS, CLUB_INVITE_STATE as _CIS, EMBLEM_TYPE, ladderRatingLocal, CLUBS_SEASON_STATE
+from dossiers2.custom.builders import getClubDossierDescr, getRated7x7DossierDescr
+from gui.shared.utils import getPlayerDatabaseID
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.gui_items.dossier import ClubDossier, ClubMemberDossier
 from gui.clubs import formatters as club_fmts
 from gui.clubs.settings import MIN_MEMBERS_COUNT, getLeagueByDivision, TOP_DIVISION
+from gui.clubs.settings import getLadderChevron16x16
 from gui.clubs.restrictions import MemberPermissions, DefaultMemberPermissions, RestrictionsCollection
 from messenger.storage import storage_getter
 
@@ -43,6 +44,41 @@ _g_invitesIDs = _InvitesIDsManager()
 
 def clearInvitesIDs():
     _g_invitesIDs.clear()
+
+
+class OtherPlayerClubInfo(namedtuple('OtherPlayerClubInfo', ['clubDBID',
+ 'joined_at',
+ 'clubName',
+ 'role',
+ 'emblemIDs',
+ 'division'])):
+
+    def getClubDbID(self):
+        return self.clubDBID
+
+    def getClubUserName(self):
+        return self.clubName
+
+    def getDisivision(self):
+        return self.division
+
+    def getDivisionString(self):
+        return club_fmts.getDivisionString(self.division)
+
+    def getLadderChevron(self):
+        return getLadderChevron16x16(self.division)
+
+    def getLeagueString(self):
+        return club_fmts.getLeagueString(getLeagueByDivision(self.division))
+
+    def getRoleString(self):
+        return club_fmts.getRoleUserName(self.role)
+
+    def isInLadder(self):
+        return self.division is not None
+
+    def getEmblem32x32(self):
+        return self.emblemIDs.get(EMBLEM_TYPE.SIZE_32x32)
 
 
 class _ClubState(object):
@@ -304,6 +340,9 @@ class Club(object):
     def hasMember(self, dbID):
         return dbID in self.__clubDescr.members
 
+    def isStaffed(self):
+        return len(self.__clubDescr.members) >= CLUB_LIMITS.MAX_MEMBERS
+
     def wasInRatedBattleThisSeason(self):
         return self.getSeasonDossier().getTotalStats().getBattlesCount() > 0
 
@@ -476,3 +515,42 @@ class ClubContenderItem(namedtuple('ClubContender', ['clubDBID',
 
     def getRatingPoints(self, division):
         return ladderRatingLocal(self.ladderPoints, division)
+
+
+class SeasonState(object):
+
+    def __init__(self, state):
+        self.__state = state
+
+    def isFinished(self):
+        return self.__state == CLUBS_SEASON_STATE.INACTIVE
+
+    def isSuspended(self):
+        return self.__state == CLUBS_SEASON_STATE.SUSPENDED
+
+    def isActive(self):
+        return self.__state == CLUBS_SEASON_STATE.ACTIVE
+
+    def getValue(self):
+        return self.__state
+
+    def getStateString(self):
+        return CLUBS_SEASON_STATE.TO_TEXT.get(self.__state, 'UNKNOWN')
+
+
+class SeasonInfo(namedtuple('SeasonInfo', ['seasonID',
+ 'start',
+ 'finish',
+ 'dossierDescr'])):
+
+    def getSeasonID(self):
+        return self.seasonID
+
+    def getDossierDescr(self):
+        return getRated7x7DossierDescr(self.dossierDescr)
+
+    def getUserName(self):
+        return club_fmts.getSeasonUserName(self)
+
+    def __cmp__(self, other):
+        return other.start - self.start

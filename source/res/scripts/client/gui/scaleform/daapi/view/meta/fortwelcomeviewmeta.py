@@ -27,3 +27,7 @@ class FortWelcomeViewMeta(DAAPIModule):
     def as_setRequirementTextS(self, text):
         if self._isDAAPIInited():
             return self.flashObject.as_setRequirementText(text)
+
+    def as_showMiniClientInfoS(self, description, hyperlink):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showMiniClientInfo(description, hyperlink)

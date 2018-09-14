@@ -31,6 +31,8 @@ from gui.Scaleform.daapi.view.lobby.hangar.TmenXpPanel import TmenXpPanel
 from gui.Scaleform.daapi.view.lobby.header.BattleTypeSelectPopover import BattleTypeSelectPopover
 from gui.Scaleform.daapi.view.lobby.header.QuestsControl import QuestsControl
 from gui.Scaleform.daapi.view.lobby.messengerBar.ContactsListButton import ContactsListButton
+from gui.Scaleform.daapi.view.lobby.prb_windows.SquadPromoWindow import SquadPromoWindow
+from gui.Scaleform.daapi.view.lobby.prb_windows.SwitchPeripheryWindow import SwitchPeripheryWindow
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSummaryPage import ProfileSummaryPage
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSummaryWindow import ProfileSummaryWindow
 from gui.Scaleform.daapi.view.lobby.crewOperations.CrewOperationsPopOver import CrewOperationsPopOver
@@ -41,8 +43,10 @@ from gui.Scaleform.daapi.view.lobby.server_events import QuestsCurrentTab, Event
 from gui.Scaleform.daapi.view.lobby.server_events.QuestsSeasonAwardsWindow import QuestsSeasonAwardsWindow
 from gui.Scaleform.daapi.view.login.EULA import EULADlg
 from gui.Scaleform.daapi.view.login.LegalInfoWindow import LegalInfoWindow
+from gui.Scaleform.daapi.view.meta.MiniClientComponentMeta import MiniClientComponentMeta
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
-from gui.Scaleform.daapi.view.BattleLoading import BattleLoading
+from gui.Scaleform.daapi.view.battle_loading import BattleLoading
+from gui.Scaleform.daapi.view.battle_loading import FalloutMultiTeamBattleLoading
 from gui.Scaleform.daapi.view.login.RssNewsFeed import RssNewsFeed
 from gui.Scaleform.framework.WaitingView import WaitingView
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
@@ -104,6 +108,7 @@ VIEWS_SETTINGS = (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTyp
  ViewSettings(VIEW_ALIAS.LOBBY_CUSTOMIZATION, VehicleCustomization, 'vehicleCustomization.swf', ViewTypes.WINDOW, VIEW_ALIAS.LOBBY_CUSTOMIZATION, ScopeTemplates.LOBBY_SUB_SCOPE),
  ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.BATTLE_LOADING, BattleLoading, 'battleLoading.swf', ViewTypes.DEFAULT, VIEW_ALIAS.BATTLE_LOADING, ScopeTemplates.DEFAULT_SCOPE),
+ ViewSettings(VIEW_ALIAS.FALLOUT_MULTI_TEAM_BATTLE_LOADING, FalloutMultiTeamBattleLoading, 'falloutMultiTeamBattleLoading.swf', ViewTypes.DEFAULT, VIEW_ALIAS.FALLOUT_MULTI_TEAM_BATTLE_LOADING, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.TUTORIAL_LOADING, BattleLoading, 'tutorialLoading.swf', ViewTypes.DEFAULT, VIEW_ALIAS.TUTORIAL_LOADING, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, ReferralReferralsIntroWindow, 'referralReferralsIntroWindow.swf', ViewTypes.WINDOW, 'referralReferralsIntroWindow', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW, ReferralReferrerIntroWindow, 'referralReferrerIntroWindow.swf', ViewTypes.WINDOW, 'referralReferrerIntroWindow', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -160,6 +165,8 @@ VIEWS_SETTINGS = (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTyp
  GroupedViewSettings(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, PromoPremiumIgrWindow, 'promoPremiumIgrWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, QuestsSeasonAwardsWindow, 'questsSeasonAwardsWindow.swf', ViewTypes.WINDOW, 'pqSeasonAwards', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.CHECK_BOX_DIALOG, CheckBoxDialog, 'confirmDialog.swf', ViewTypes.TOP_WINDOW, 'confirmDialog', None, ScopeTemplates.DYNAMIC_SCOPE),
+ GroupedViewSettings(VIEW_ALIAS.SQUAD_PROMO_WINDOW, SquadPromoWindow, 'squadPromoWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
+ GroupedViewSettings(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW, SwitchPeripheryWindow, 'switchPeripheryWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.SHOP_TABLE, StoreTable, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.LOBBY_HEADER, LobbyHeader, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.PROFILE_TAB_NAVIGATOR, ProfileTabNavigator, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -200,7 +207,8 @@ VIEWS_SETTINGS = (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTyp
  ViewSettings(QUESTS_ALIASES.TILE_CHAINS_VIEW_ALIAS, QuestsTileChainsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.SERVERS_STATS, ServerStats, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.REPORT_BUG, ReportBugPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
- ViewSettings(VIEW_ALIAS.BOOSTERS_PANEL, BoostersPanelComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+ ViewSettings(VIEW_ALIAS.BOOSTERS_PANEL, BoostersPanelComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+ ViewSettings(VIEW_ALIAS.MINI_CLIENT_LINKED, MiniClientComponentMeta, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 RELEASE_PACKAGES = ['gui.Scaleform.daapi.view.lobby.prb_windows',
  'gui.Scaleform.daapi.view.lobby.trainings',
  'gui.Scaleform.daapi.view.lobby.techtree',

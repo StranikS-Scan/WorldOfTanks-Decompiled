@@ -12,6 +12,7 @@ from debug_utils import *
 from functools import partial
 import string
 import SoundGroups
+import FMOD
 _ALLOW_DYNAMIC_LIGHTS = True
 g_disableEffects = False
 KeyPoint = namedtuple('KeyPoint', ('name', 'time'))
@@ -544,9 +545,9 @@ class _SoundEffectDesc(_EffectDesc):
             if self._node is not None:
                 self._fakeModel = helpers.newFakeModel()
                 self._node.attach(self._fakeModel)
-                sound = SoundGroups.g_instance.getSound(self._fakeModel, soundName)
+                sound = SoundGroups.g_instance.getSound3D(self._fakeModel, soundName)
             else:
-                sound = SoundGroups.g_instance.getSound(model, soundName)
+                sound = SoundGroups.g_instance.getSound3D(model, soundName)
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
@@ -578,14 +579,6 @@ class _SoundEffectDesc(_EffectDesc):
             return
 
     def prerequisites(self):
-        try:
-            for soundName in [self._soundNames and self._soundNames[0] or '', self._soundNames and self._soundNames[1] or '', self._soundName or '']:
-                if soundName.find('/guns/') > -1:
-                    SoundGroups.g_instance.FMODloadSound(soundName)
-
-        except Exception as e:
-            LOG_ERROR(e.message)
-
         return []
 
 
@@ -670,6 +663,11 @@ class _DecalEffectDesc(_EffectDesc):
             self._bumpTexName = ''
         else:
             self._bumpTexName = bumpSubsection.asString
+        smSubsection = dataSection['smTexName']
+        if smSubsection is None:
+            self._smTexName = ''
+        else:
+            self._smTexName = smSubsection.asString
         self._groupName = dataSection.readString('groupName')
         self._size = dataSection.readVector2('size')
         self._randomYaw = dataSection.readBool('randomYaw')
@@ -686,7 +684,7 @@ class _DecalEffectDesc(_EffectDesc):
         extent = rayEnd - rayStart
         extent.normalise()
         extent *= size.length * 0.707
-        BigWorld.wg_addDecal(self._groupName, center - extent, center + extent, size, args['yaw'] if not self._randomYaw else random.uniform(0.0, 3.14), DecalMap.g_instance.getIndex(self._texName), DecalMap.g_instance.getIndex(self._bumpTexName))
+        BigWorld.wg_addDecal(self._groupName, center - extent, center + extent, size, args['yaw'] if not self._randomYaw else random.uniform(0.0, 3.14), DecalMap.g_instance.getIndex(self._texName), DecalMap.g_instance.getIndex(self._bumpTexName), DecalMap.g_instance.getIndex(self._smTexName))
 
     def delete(self, elem, reason):
         return True
@@ -947,12 +945,11 @@ def _getSurfaceAlignedTransform(model, nodeName, localTransform, precalculatedNo
 def _findTargetNode(model, nodes, localTransform = None, orientByClosestSurfaceNormal = False, precalculatedNormal = None):
     targetNode = model
     length = len(nodes)
-    find = False
     if length == 0:
         if orientByClosestSurfaceNormal:
             localTransform = _getSurfaceAlignedTransform(model, 'Scene Root', localTransform, precalculatedNormal)
         return model.node('Scene Root', localTransform)
-    for iter in range(0, length - 1):
+    for iter in xrange(0, length - 1):
         find = False
         for elem in targetNode.node(nodes[iter]).attachments:
             if isinstance(elem, BigWorld.Model):
@@ -970,8 +967,7 @@ def _findTargetNode(model, nodes, localTransform = None, orientByClosestSurfaceN
 
 def _findTargetModel(model, nodes):
     targetNode = model
-    find = False
-    for iter in range(0, len(nodes)):
+    for iter in xrange(0, len(nodes)):
         find = False
         for elem in targetNode.node(nodes[iter]).attachments:
             if isinstance(elem, BigWorld.Model):

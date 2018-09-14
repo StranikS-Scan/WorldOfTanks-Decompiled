@@ -494,7 +494,7 @@ class PrbFunctional(PrbDispatcher):
             return result
         else:
             if pDatabaseID is None:
-                pDatabaseID = account_helpers.getPlayerDatabaseID()
+                pDatabaseID = account_helpers.getAccountDatabaseID()
             roles = self._settings['roles']
             if pDatabaseID in roles:
                 result = roles[pDatabaseID]

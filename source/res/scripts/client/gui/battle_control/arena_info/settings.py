@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/settings.py
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
-from gui.shared.utils import BitmaskHelper
 from helpers import i18n
+from shared_utils import BitmaskHelper
 CONTOUR_ICON_PATH = '../maps/icons/vehicle/contour/{0}.png'
 UNKNOWN_CONTOUR_ICON_PATH = CONTOUR_ICON_PATH.format('unknown')
 UNKNOWN_VEHICLE_NAME = i18n.makeString('#ingame_gui:players_panel/unknown_vehicle')
@@ -10,7 +10,14 @@ UNKNOWN_PLAYER_NAME = i18n.makeString('#ingame_gui:players_panel/unknown_name')
 UNKNOWN_VEHICLE_LEVEL = -1
 UNKNOWN_VEHICLE_CLASS_ORDER = 100
 SQUAD_RANGE_TO_SHOW = xrange(2, 4)
-TEAM_RANGE = xrange(1, 3)
+
+class ARENA_LISTENER_SCOPE(object):
+    LOAD = 1
+    VEHICLES = 2
+    TEAMS_BASES = 4
+    PERIOD = 8
+    RESPAWN = 16
+
 
 class VEHICLE_STATUS(BitmaskHelper):
     IS_ALIVE = 1
@@ -47,10 +54,4 @@ def getOrderByVehicleClass(className = None):
     return result
 
 
-def invertTeam(team):
-    if team:
-        return team ^ 3
-    return team
-
-
-__all__ = ('CONTOUR_ICON_PATH', 'UNKNOWN_CONTOUR_ICON_PATH', 'UNKNOWN_VEHICLE_NAME', 'UNKNOWN_VEHICLE_CLASS_NAME', 'UNKNOWN_PLAYER_NAME', 'UNKNOWN_VEHICLE_LEVEL', 'UNKNOWN_VEHICLE_CLASS_ORDER', 'SQUAD_RANGE_TO_SHOW', 'TEAM_RANGE', 'VEHICLE_STATUS', 'PLAYER_STATUS', 'INVALIDATE_OP', 'makeContourIconPath', 'getOrderByVehicleClass', 'invertTeam')
+__all__ = ('CONTOUR_ICON_PATH', 'UNKNOWN_CONTOUR_ICON_PATH', 'UNKNOWN_VEHICLE_NAME', 'UNKNOWN_VEHICLE_CLASS_NAME', 'UNKNOWN_PLAYER_NAME', 'UNKNOWN_VEHICLE_LEVEL', 'UNKNOWN_VEHICLE_CLASS_ORDER', 'SQUAD_RANGE_TO_SHOW', 'VEHICLE_STATUS', 'PLAYER_STATUS', 'INVALIDATE_OP', 'makeContourIconPath', 'getOrderByVehicleClass')

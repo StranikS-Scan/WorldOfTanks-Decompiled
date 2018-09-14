@@ -1,27 +1,40 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/flag_notification.py
 import weakref
-from gui import makeHtmlString
-from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+import SoundGroups
 from debug_utils import LOG_ERROR
 from gui.battle_control import g_sessionProvider
 from gui.shared.utils.plugins import IPlugin
 from helpers import i18n
 
-class _FlagNotification:
+class _NOTIFICATION_TYPE:
+    FLAG_CAPTURED = 0
+    FLAG_DROPPED = 1
+    FLAG_DELIVERED = 2
+    FLAG_ABSORBED = 3
 
-    class __NOTIFICATION_TYPE:
-        FLAG_CAPTURED = 'flagCaptured'
-        FLAG_DROPPED = 'flagDropped'
-        FLAG_DELIVERED = 'flagDelivered'
+
+_CALLBACK_NAME = 'battle.onLoadFlagNotification'
+
+class _FlagNotification(object):
 
     def __init__(self, battleUI):
         self.__flashObject = weakref.proxy(battleUI.movie.flagNotification.instance)
-        self.__notificationsByType = {self.__NOTIFICATION_TYPE.FLAG_CAPTURED: {'title': i18n.makeString(INGAME_GUI.FLAGNOTIFICATION_FLAGCAPTURED),
-                                                  'message': i18n.makeString(INGAME_GUI.FLAGNOTIFICATION_FLAGINBASE)},
-         self.__NOTIFICATION_TYPE.FLAG_DELIVERED: {'title': '',
-                                                   'message': i18n.makeString(INGAME_GUI.FLAGNOTIFICATION_FLAGDELIVERED)},
-         self.__NOTIFICATION_TYPE.FLAG_DROPPED: {'title': None,
-                                                 'message': None}}
+        self.__notificationsByType = {_NOTIFICATION_TYPE.FLAG_CAPTURED: {'type': 'flagCaptured',
+                                            'title': i18n.makeString('#ingame_gui:flagNotification/flagCaptured'),
+                                            'message': i18n.makeString('#ingame_gui:flagNotification/flagInbase'),
+                                            'sound': '/GUI/fallout/capture_flag'},
+         _NOTIFICATION_TYPE.FLAG_DELIVERED: {'type': 'flagDelivered',
+                                             'title': i18n.makeString('#ingame_gui:flagNotification/flagDelivered'),
+                                             'message': '',
+                                             'sound': '/GUI/fallout/delivery flag'},
+         _NOTIFICATION_TYPE.FLAG_ABSORBED: {'type': 'flagDelivered',
+                                            'title': i18n.makeString('#ingame_gui:flagNotification/flagAbsorbed'),
+                                            'message': '',
+                                            'sound': '/GUI/fallout/delivery flag'},
+         _NOTIFICATION_TYPE.FLAG_DROPPED: {'type': 'flagDropped',
+                                           'title': None,
+                                           'message': None,
+                                           'sound': None}}
         return
 
     def destroy(self):
@@ -34,20 +47,27 @@ class _FlagNotification:
         return self.__flashObject
 
     def showFlagCaptured(self):
-        self.__showMsgByType(self.__NOTIFICATION_TYPE.FLAG_CAPTURED)
+        self.__showMsgByType(_NOTIFICATION_TYPE.FLAG_CAPTURED)
 
     def showFlagDelivered(self):
-        self.__showMsgByType(self.__NOTIFICATION_TYPE.FLAG_DELIVERED)
+        self.__showMsgByType(_NOTIFICATION_TYPE.FLAG_DELIVERED)
+
+    def showFlagAbsorbed(self):
+        self.__showMsgByType(_NOTIFICATION_TYPE.FLAG_ABSORBED)
 
     def showFlagDropped(self):
-        self.__showMsgByType(self.__NOTIFICATION_TYPE.FLAG_DROPPED)
+        self.__showMsgByType(_NOTIFICATION_TYPE.FLAG_DROPPED)
 
     def __showMsgByType(self, typeID):
         if typeID in self.__notificationsByType:
             notifications = self.__notificationsByType[typeID]
-            self.__showMsg(typeID, notifications['title'], notifications['message'])
+            self.__showMsg(notifications['type'], notifications['title'], notifications['message'])
+            sound = notifications['sound']
+            if sound is not None:
+                SoundGroups.g_instance.playSound2D(sound)
         else:
             LOG_ERROR('No such msgType: ', typeID)
+        return
 
     def __showMsg(self, type, title, msg):
         if self.__flashObject is not None:
@@ -56,7 +76,6 @@ class _FlagNotification:
 
 
 class FlagNotificationPlugin(IPlugin):
-    __CALLBACK_NAME = 'battle.onLoadFlagNotification'
 
     def __init__(self, parentObj):
         super(FlagNotificationPlugin, self).__init__(parentObj)
@@ -65,10 +84,10 @@ class FlagNotificationPlugin(IPlugin):
 
     def init(self):
         super(FlagNotificationPlugin, self).init()
-        self._parentObj.addExternalCallback(self.__CALLBACK_NAME, self.__onLoad)
+        self._parentObj.addExternalCallback(_CALLBACK_NAME, self.__onLoad)
 
     def fini(self):
-        self._parentObj.removeExternalCallback(self.__CALLBACK_NAME)
+        self._parentObj.removeExternalCallback(_CALLBACK_NAME)
         super(FlagNotificationPlugin, self).fini()
 
     def start(self):

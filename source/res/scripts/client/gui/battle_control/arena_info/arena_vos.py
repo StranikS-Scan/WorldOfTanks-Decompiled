@@ -1,19 +1,38 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_vos.py
 import operator
-from gui.shared.gui_items.Vehicle import getShortUserName, getUserName
+from gui.shared.gui_items.Vehicle import getShortUserName
 import nations
 from collections import defaultdict
 from constants import IGR_TYPE, ARENA_GUI_TYPE, FLAG_ACTION
 from gui import makeHtmlString
 from gui.server_events import g_eventsCache
-from gui.battle_control.arena_info import getArenaGuiType
-from gui.battle_control.arena_info.settings import *
-from items.vehicles import VEHICLE_CLASS_TAGS, getVehicleType, PREMIUM_IGR_TAGS, parseIntCompactDescr
+from gui.battle_control.arena_info import getArenaGuiType, settings
+from items.vehicles import VEHICLE_CLASS_TAGS, getVehicleType, PREMIUM_IGR_TAGS
+from gui.shared.gui_items import Vehicle
+_INVALIDATE_OP = settings.INVALIDATE_OP
+_VEHICLE_STATUS = settings.VEHICLE_STATUS
+_PLAYER_STATUS = settings.PLAYER_STATUS
+
+def _getClassTag(tags):
+    subSet = VEHICLE_CLASS_TAGS & tags
+    result = None
+    if len(subSet):
+        result = list(subSet).pop()
+    return result
+
+
+def _isObserver(tags):
+    if len(tags):
+        result = bool(tags & frozenset(('observer',)))
+    else:
+        result = False
+    return result
+
 
 class PlayerInfoVO(object):
-    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'potapovQuestIDs', 'isPrebattleCreator', 'forbidInBattleInvitations')
+    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'potapovQuestIDs', 'isPrebattleCreator', 'forbidInBattleInvitations', 'tags')
 
-    def __init__(self, accountDBID = 0L, name = None, clanAbbrev = '', igrType = IGR_TYPE.NONE, potapovQuestIDs = None, isPrebattleCreator = False, forbidInBattleInvitations = False, **kwargs):
+    def __init__(self, accountDBID = 0L, name = None, clanAbbrev = '', igrType = IGR_TYPE.NONE, potapovQuestIDs = None, isPrebattleCreator = False, forbidInBattleInvitations = False, vehicleType = None, **kwargs):
         super(PlayerInfoVO, self).__init__()
         self.accountDBID = accountDBID
         self.name = name
@@ -22,6 +41,13 @@ class PlayerInfoVO(object):
         self.potapovQuestIDs = potapovQuestIDs or []
         self.isPrebattleCreator = isPrebattleCreator
         self.forbidInBattleInvitations = forbidInBattleInvitations
+        self.tags = frozenset()
+        if vehicleType is not None:
+            vehicleType = vehicleType.type
+            if getArenaGuiType() == ARENA_GUI_TYPE.HISTORICAL and getattr(vehicleType, 'historicalModelOf', None):
+                vehicleType = getVehicleType(vehicleType.historicalModelOf)
+            self.tags = vehicleType.tags.copy()
+        return
 
     def __repr__(self):
         return 'PlayerInfoVO(accountDBID = {0:n}, name = {1:>s})'.format(self.accountDBID, self.name)
@@ -29,10 +55,10 @@ class PlayerInfoVO(object):
     def __cmp__(self, other):
         return cmp(self.name, other.name)
 
-    def update(self, invalidate = INVALIDATE_OP.NONE, name = None, accountDBID = 0L, clanAbbrev = '', isPrebattleCreator = False, igrType = IGR_TYPE.NONE, forbidInBattleInvitations = False, **kwargs):
+    def update(self, invalidate = _INVALIDATE_OP.NONE, name = None, accountDBID = 0L, clanAbbrev = '', isPrebattleCreator = False, igrType = IGR_TYPE.NONE, forbidInBattleInvitations = False, **kwargs):
         if self.name != name:
             self.name = name
-            invalidate = INVALIDATE_OP.addIfNot(invalidate, INVALIDATE_OP.SORTING)
+            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
         self.accountDBID = accountDBID
         self.clanAbbrev = clanAbbrev
         self.igrType = igrType
@@ -43,10 +69,10 @@ class PlayerInfoVO(object):
     def getPlayerLabel(self):
         if self.name:
             return self.name
-        return UNKNOWN_PLAYER_NAME
+        return settings.UNKNOWN_PLAYER_NAME
 
     def isIGR(self):
-        return self.igrType != IGR_TYPE.NONE
+        return bool(self.tags & PREMIUM_IGR_TAGS)
 
     def getIGRLabel(self):
         if self.isIGR():
@@ -61,7 +87,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconPath', 'tags', 'guiName')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconPath', 'isObserver', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID')
 
     def __init__(self, vehicleType = None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -79,10 +105,10 @@ class VehicleTypeInfoVO(object):
             return result
         return cmp(self.shortName, other.shortName)
 
-    def update(self, invalidate = INVALIDATE_OP.NONE, vehicleType = None, **kwargs):
+    def update(self, invalidate = _INVALIDATE_OP.NONE, vehicleType = None, **kwargs):
         if vehicleType is not None and self.compactDescr != vehicleType.type.compactDescr:
             self.__setVehicleData(vehicleType)
-            invalidate = INVALIDATE_OP.addIfNot(invalidate, INVALIDATE_OP.SORTING)
+            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
         return invalidate
 
     def __setVehicleData(self, vehicleDescr = None):
@@ -91,39 +117,39 @@ class VehicleTypeInfoVO(object):
             if getArenaGuiType() == ARENA_GUI_TYPE.HISTORICAL and getattr(vehicleType, 'historicalModelOf', None):
                 vehicleType = getVehicleType(vehicleType.historicalModelOf)
             self.compactDescr = vehicleType.compactDescr
-            self.tags = vehicleType.tags.copy()
+            tags = vehicleType.tags
+            self.classTag = _getClassTag(tags)
+            self.isObserver = _isObserver(tags)
             self.shortName = vehicleType.shortUserString
-            self.name = vehicleType.shortUserString if self.isPremiumIGR() else vehicleType.userString
+            self.name = Vehicle.getUserName(vehicleType=vehicleType, textPrefix=True)
+            self.shortNameWithPrefix = Vehicle.getShortUserName(vehicleType=vehicleType, textPrefix=True)
             self.guiName = getShortUserName(vehicleType)
+            self.nationID = vehicleType.id[0]
             self.level = vehicleType.level
-            self.iconPath = makeContourIconPath(vehicleType.name)
+            self.iconPath = settings.makeContourIconPath(vehicleType.name)
         else:
             self.compactDescr = 0
-            self.tags = frozenset()
-            self.shortName = UNKNOWN_VEHICLE_NAME
-            self.name = UNKNOWN_VEHICLE_NAME
-            self.level = UNKNOWN_VEHICLE_LEVEL
-            self.iconPath = UNKNOWN_CONTOUR_ICON_PATH
+            self.classTag = None
+            self.isObserver = False
+            self.shortName = settings.UNKNOWN_VEHICLE_NAME
+            self.name = settings.UNKNOWN_VEHICLE_NAME
+            self.guiName = settings.UNKNOWN_VEHICLE_NAME
+            self.shortNameWithPrefix = settings.UNKNOWN_VEHICLE_NAME
+            self.nationID = nations.NONE_INDEX
+            self.level = settings.UNKNOWN_VEHICLE_LEVEL
+            self.iconPath = settings.UNKNOWN_CONTOUR_ICON_PATH
+            self.shortNameWithPrefix = settings.UNKNOWN_VEHICLE_NAME
         return
 
-    def getClassTag(self):
-        tags = VEHICLE_CLASS_TAGS & self.tags
-        result = None
-        if len(tags):
-            result = list(tags).pop()
-        return result
-
-    def isPremiumIGR(self):
-        return bool(self.tags & PREMIUM_IGR_TAGS)
-
     def getClassName(self):
-        result = self.getClassTag()
-        if result:
-            return result
-        return UNKNOWN_VEHICLE_CLASS_NAME
+        if self.classTag is not None:
+            return self.classTag
+        else:
+            return settings.UNKNOWN_VEHICLE_CLASS_NAME
+            return
 
     def getOrderByClass(self):
-        return getOrderByVehicleClass(self.getClassTag())
+        return settings.getOrderByVehicleClass(self.classTag)
 
 
 class VehicleArenaInfoVO(object):
@@ -145,6 +171,9 @@ class VehicleArenaInfoVO(object):
         return 'VehicleArenaInfoVO(vehicleID = {0!r:s}, team = {1!r:s}, player = {2!r:s}, playerStatus = {3:n}, vehicleType = {4!r:s}, vehicleStatus = {5:n}, prebattleID = {6!r:s})'.format(self.vehicleID, self.team, self.player, self.playerStatus, self.vehicleType, self.vehicleStatus, self.prebattleID)
 
     def __cmp__(self, other):
+        result = cmp(self.team, other.team)
+        if result:
+            return result
         result = cmp(other.isAlive(), self.isAlive())
         if result:
             return result
@@ -153,34 +182,34 @@ class VehicleArenaInfoVO(object):
             return result
         return cmp(self.player, other.player)
 
-    def updateVehicleStatus(self, invalidate = INVALIDATE_OP.NONE, isAlive = None, isAvatarReady = None, **kwargs):
+    def updateVehicleStatus(self, invalidate = _INVALIDATE_OP.NONE, isAlive = None, isAvatarReady = None, **kwargs):
         prev, self.vehicleStatus = self.vehicleStatus, self.__getVehicleStatus(isAlive, isAvatarReady)
         diff = self.vehicleStatus ^ prev
         if diff:
-            invalidate = INVALIDATE_OP.addIfNot(invalidate, INVALIDATE_OP.VEHICLE_STATUS)
-            if diff & VEHICLE_STATUS.IS_ALIVE > 0:
-                invalidate = INVALIDATE_OP.addIfNot(invalidate, INVALIDATE_OP.SORTING)
+            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_STATUS)
+            if diff & _VEHICLE_STATUS.IS_ALIVE > 0:
+                invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.SORTING)
         return invalidate
 
-    def updatePlayerStatus(self, invalidate = INVALIDATE_OP.NONE, isTeamKiller = None, isSquadMan = None, **kwargs):
+    def updatePlayerStatus(self, invalidate = _INVALIDATE_OP.NONE, isTeamKiller = None, isSquadMan = None, **kwargs):
         if isTeamKiller:
-            status = PLAYER_STATUS.addIfNot(self.playerStatus, PLAYER_STATUS.IS_TEAM_KILLER)
+            status = _PLAYER_STATUS.addIfNot(self.playerStatus, _PLAYER_STATUS.IS_TEAM_KILLER)
             if self.playerStatus ^ status:
                 self.playerStatus = status
-                invalidate = INVALIDATE_OP.addIfNot(invalidate, INVALIDATE_OP.PLAYER_STATUS)
+                invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
         if isSquadMan:
-            status = PLAYER_STATUS.addIfNot(self.playerStatus, PLAYER_STATUS.IS_SQUAD_MAN)
+            status = _PLAYER_STATUS.addIfNot(self.playerStatus, _PLAYER_STATUS.IS_SQUAD_MAN)
             if self.playerStatus ^ status:
                 self.playerStatus = status
-                invalidate = INVALIDATE_OP.addIfNot(invalidate, INVALIDATE_OP.PLAYER_STATUS)
+                invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
         return invalidate
 
     def update(self, **kwargs):
-        invalidate = INVALIDATE_OP.VEHICLE_INFO
+        invalidate = _INVALIDATE_OP.VEHICLE_INFO
         newPrbID = kwargs.get('prebattleID', 0)
         if self.prebattleID != newPrbID:
             self.prebattleID = newPrbID
-            invalidate = INVALIDATE_OP.addIfNot(invalidate, INVALIDATE_OP.PREBATTLE_CHANGED)
+            invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PREBATTLE_CHANGED)
         invalidate = self.player.update(invalidate=invalidate, **kwargs)
         invalidate = self.vehicleType.update(invalidate=invalidate, **kwargs)
         invalidate = self.updateVehicleStatus(invalidate=invalidate, **kwargs)
@@ -198,54 +227,49 @@ class VehicleArenaInfoVO(object):
         elif prebattleID is not None and self.prebattleID != prebattleID:
             return False
         else:
-            return self.playerStatus & PLAYER_STATUS.IS_SQUAD_MAN > 0
+            return self.playerStatus & _PLAYER_STATUS.IS_SQUAD_MAN > 0
             return
 
     def isTeamKiller(self, playerTeam = None):
         if playerTeam and self.team != playerTeam:
             return False
         else:
-            return self.playerStatus & PLAYER_STATUS.IS_TEAM_KILLER > 0
+            return self.playerStatus & _PLAYER_STATUS.IS_TEAM_KILLER > 0
 
     def getPlayerStatusInTeam(self, playerTeam = None):
         playerStatus = 0
         if self.isSquadMan():
-            playerStatus |= PLAYER_STATUS.IS_SQUAD_MAN
+            playerStatus |= _PLAYER_STATUS.IS_SQUAD_MAN
         if self.isTeamKiller(playerTeam=playerTeam):
-            playerStatus |= PLAYER_STATUS.IS_TEAM_KILLER
+            playerStatus |= _PLAYER_STATUS.IS_TEAM_KILLER
         return playerStatus
 
     def isAlive(self):
-        return self.vehicleStatus & VEHICLE_STATUS.IS_ALIVE > 0
+        return self.vehicleStatus & _VEHICLE_STATUS.IS_ALIVE > 0
 
     def isReady(self):
-        return self.vehicleStatus & VEHICLE_STATUS.IS_READY > 0
+        return self.vehicleStatus & _VEHICLE_STATUS.IS_READY > 0
 
     def isObserver(self):
-        tags = self.vehicleType.tags
-        if len(tags):
-            return bool(tags & frozenset(('observer',)))
-        result = False
-        return result
+        return self.vehicleType.isObserver
 
     def getTypeInfo(self):
-        _, nationID, _ = parseIntCompactDescr(self.vehicleType.compactDescr)
-        return (self.vehicleType.getClassTag(), self.vehicleType.level, nations.NAMES[nationID])
+        return (self.vehicleType.classTag, self.vehicleType.level, nations.NAMES[self.vehicleType.nationID])
 
     def __getVehicleStatus(self, isAlive = None, isAvatarReady = None):
         vehicleStatus = 0
         if isAlive:
-            vehicleStatus |= VEHICLE_STATUS.IS_ALIVE
+            vehicleStatus |= _VEHICLE_STATUS.IS_ALIVE
         if isAvatarReady:
-            vehicleStatus |= VEHICLE_STATUS.IS_READY
+            vehicleStatus |= _VEHICLE_STATUS.IS_READY
         if isAlive is None or isAvatarReady is None:
-            vehicleStatus = VEHICLE_STATUS.NOT_AVAILABLE
+            vehicleStatus = _VEHICLE_STATUS.NOT_AVAILABLE
         return vehicleStatus
 
     def __getPlayerStatus(self, isTeamKiller = None):
         playerStatus = 0
         if isTeamKiller:
-            playerStatus |= PLAYER_STATUS.IS_TEAM_KILLER
+            playerStatus |= _PLAYER_STATUS.IS_TEAM_KILLER
         return playerStatus
 
 
@@ -262,7 +286,7 @@ class VehicleArenaStatsVO(object):
 
     def update(self, frags = None, **kwargs):
         self.frags = frags
-        return INVALIDATE_OP.VEHICLE_STATS
+        return _INVALIDATE_OP.VEHICLE_STATS
 
 
 class VehicleArenaStatsDict(defaultdict):
@@ -273,9 +297,9 @@ class VehicleArenaStatsDict(defaultdict):
 
 
 class VehicleArenaInteractiveStatsVO(object):
-    __slots__ = ('vehicleID', 'xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount')
+    __slots__ = ('vehicleID', 'xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount', 'resourceAbsorbed', 'stopRespawn')
 
-    def __init__(self, vehicleID, xp = 0, damageDealt = 0, capturePts = 0, flagActions = None, winPoints = 0, deathCount = 0, *args):
+    def __init__(self, vehicleID, xp = 0, damageDealt = 0, capturePts = 0, flagActions = None, winPoints = 0, deathCount = 0, resourceAbsorbed = 0, stopRespawn = False, *args):
         super(VehicleArenaInteractiveStatsVO, self).__init__()
         self.vehicleID = vehicleID
         self.xp = xp
@@ -284,8 +308,10 @@ class VehicleArenaInteractiveStatsVO(object):
         self.flagActions = flagActions or [0] * len(FLAG_ACTION.RANGE)
         self.winPoints = winPoints
         self.deathCount = deathCount
+        self.resourceAbsorbed = resourceAbsorbed
+        self.stopRespawn = stopRespawn
 
-    def update(self, xp = 0, damageDealt = 0, capturePts = 0, flagActions = None, winPoints = 0, deathCount = 0, *args):
+    def update(self, xp = 0, damageDealt = 0, capturePts = 0, flagActions = None, winPoints = 0, deathCount = 0, resourceAbsorbed = 0, stopRespawn = False, *args):
         self.xp += xp
         self.damageDealt += damageDealt
         self.capturePts += capturePts
@@ -293,7 +319,9 @@ class VehicleArenaInteractiveStatsVO(object):
             self.flagActions = map(operator.add, self.flagActions, flagActions)
         self.winPoints += winPoints
         self.deathCount += deathCount
-        return INVALIDATE_OP.VEHICLE_STATS
+        self.resourceAbsorbed += resourceAbsorbed
+        self.stopRespawn = self.stopRespawn or stopRespawn
+        return _INVALIDATE_OP.VEHICLE_STATS
 
 
 class VehicleArenaInteractiveStatsDict(defaultdict):

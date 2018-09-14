@@ -3,5 +3,8 @@ from gui.Scaleform.daapi.view.battle.meta.BattleComponentMeta import BattleCompo
 
 class FalloutScorePanelMeta(BattleComponentMeta):
 
-    def as_setDataS(self, maxValue, allyValue, enemyValue, playerScore):
-        self._flashObject.as_setData(maxValue, allyValue, enemyValue, playerScore)
+    def as_initWarningValue(self, warningValue):
+        self._flashObject.as_initWarningValue(warningValue)
+
+    def as_setDataS(self, contextType, maxValue, playerScore, allyValue, enemyValue, playerName, enemyName, props):
+        self._flashObject.as_setData(contextType, maxValue, playerScore, allyValue, enemyValue, playerName, enemyName, props)

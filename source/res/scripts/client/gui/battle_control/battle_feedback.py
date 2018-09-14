@@ -5,6 +5,7 @@ import BigWorld
 import Event
 from constants import VEHICLE_HIT_FLAGS as _VHF, BATTLE_EVENT_TYPE as _SET, ATTACK_REASONS as _AR, IS_DEVELOPMENT
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_DEBUG
+from shared_utils import findFirst
 from gui import GUI_SETTINGS
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
@@ -15,7 +16,7 @@ _CELL_BLINKING_DURATION = 3.0
 _RAMMING_COOLDOWN = 1
 
 class BattleFeedbackAdaptor(object):
-    __slots__ = ('onPlayerFeedbackReceived', 'onAimPositionUpdated', '__isEnabled', '__arenaDP', '__series', '__rammingCallbackID', '__queue', '__callbackID', '__aimProps')
+    __slots__ = ('onPlayerFeedbackReceived', 'onVehicleFeedbackReceived', 'onMinimapFeedbackReceived', 'onAimPositionUpdated', '__isEnabled', '__arenaDP', '__series', '__rammingCallbackID', '__queue', '__callbackID', '__aimProps', '__weakref__')
 
     def __init__(self):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -27,6 +28,8 @@ class BattleFeedbackAdaptor(object):
         self.__rammingCallbackID = None
         self.__aimProps = None
         self.onPlayerFeedbackReceived = Event.Event()
+        self.onVehicleFeedbackReceived = Event.Event()
+        self.onMinimapFeedbackReceived = Event.Event()
         self.onAimPositionUpdated = Event.Event()
         return
 
@@ -73,14 +76,7 @@ class BattleFeedbackAdaptor(object):
         if _VHF.DEVICE_DAMAGED_BY_PROJECTILE & vehHitFlags > 0 or _VHF.DEVICE_DAMAGED_BY_EXPLOSION & vehHitFlags > 0:
             self.__pushPlayerEvent(_EVENT_ID.PLAYER_DAMAGED_DEVICE_ENEMY)
 
-    def setHitReceivedResult(self, isDamaged):
-        if not self.__isEnabled:
-            return
-        if not isDamaged:
-            eventID = _EVENT_ID.PLAYER_USED_ARMOR
-            self.__pushPlayerEvent(eventID)
-
-    def setPlayerAssistResult(self, assistType, vehiclesIDs):
+    def setPlayerAssistResult(self, assistType, details):
         if not self.__isEnabled:
             return
         else:
@@ -88,13 +84,18 @@ class BattleFeedbackAdaptor(object):
             series = 1
             if assistType == _SET.SPOTTED:
                 eventID = _EVENT_ID.PLAYER_SPOTTED_ENEMY
-                series = len(vehiclesIDs) if hasattr(vehiclesIDs, '__len__') else 1
+                series = self.__getSeries(details)
             elif assistType in (_SET.RADIO_HIT_ASSIST, _SET.RADIO_KILL_ASSIST, _SET.TRACK_ASSIST):
+                if assistType == _SET.TRACK_ASSIST:
+                    series = self.__getSeries(details)
                 eventID = _EVENT_ID.PLAYER_ASSIST_TO_KILL_ENEMY
             elif assistType == _SET.BASE_CAPTURE_POINTS:
                 eventID = _EVENT_ID.PLAYER_CAPTURED_BASE
             elif assistType == _SET.BASE_CAPTURE_DROPPED:
                 eventID = _EVENT_ID.PLAYER_DROPPED_CAPTURE
+            elif assistType == _SET.TANKING:
+                eventID = _EVENT_ID.PLAYER_USED_ARMOR
+                series = findFirst(None, details, default=1)
             else:
                 LOG_CODEPOINT_WARNING(assistType)
             if eventID:
@@ -105,8 +106,14 @@ class BattleFeedbackAdaptor(object):
         if not self.__isEnabled:
             return
         vo = self.__arenaDP.getVehicleInfo(targetID)
-        if vo.team == self.__arenaDP.getNumberOfTeam(enemy=True):
+        if self.__arenaDP.isEnemyTeam(vo.team):
             self.__pushPlayerEvent(_EVENT_ID.PLAYER_KILLED_ENEMY)
+
+    def showActionMarker(self, vehicleID, vMarker = '', mMarker = ''):
+        if vMarker and vehicleID != avatar_getter.getPlayerVehicleID():
+            self.onVehicleFeedbackReceived(_EVENT_ID.VEHICLE_SHOW_MARKER, vehicleID, vMarker)
+        if mMarker:
+            self.onMinimapFeedbackReceived(_EVENT_ID.MINIMAP_SHOW_MARKER, vehicleID, mMarker)
 
     def setVehicleNewHealth(self, vehicleID, newHealth, attackerID = 0, attackReasonID = -1):
         if not self.__isEnabled:
@@ -117,7 +124,7 @@ class BattleFeedbackAdaptor(object):
             return
         else:
             vo = self.__arenaDP.getVehicleInfo(vehicleID)
-            if vo.team != self.__arenaDP.getNumberOfTeam(enemy=True):
+            if self.__arenaDP.isAllyTeam(vo.team):
                 return
             elif attackReasonID >= len(_AR):
                 return
@@ -130,6 +137,9 @@ class BattleFeedbackAdaptor(object):
                     BigWorld.cancelCallback(self.__rammingCallbackID)
                     self.__setRammingCooldown()
             return
+
+    def markCellOnMinimap(self, cell):
+        self.onMinimapFeedbackReceived(_EVENT_ID.MINIMAP_MARK_CELL, 0, (cell, _CELL_BLINKING_DURATION))
 
     def __setRammingCooldown(self):
         self.__rammingCallbackID = BigWorld.callback(_RAMMING_COOLDOWN, self.__clearRammingCooldown)
@@ -149,6 +159,11 @@ class BattleFeedbackAdaptor(object):
         self.__callbackID = None
         self.__firePlayerEvents()
         return
+
+    def __getSeries(self, vehiclesIDs):
+        if hasattr(vehiclesIDs, '__len__'):
+            return len(vehiclesIDs)
+        return 1
 
     def __firePlayerEvents(self):
         LOG_DEBUG('Fires events to show ribbons', self.__queue, self.__series)
@@ -174,9 +189,6 @@ class BattleFeedbackPlayer(BattleFeedbackAdaptor):
         pass
 
     def setVehicleNewHealth(self, vehicleID, newHealth, attackerID = 0, attackReasonID = -1):
-        pass
-
-    def setHitReceivedResult(self, isDamaged):
         pass
 
 

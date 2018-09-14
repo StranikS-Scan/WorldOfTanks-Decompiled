@@ -16,7 +16,7 @@ from gui.shared import events
 from gui.server_events import caches as quests_caches
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
 from gui.server_events.PQController import PQController
-from gui.server_events.event_items import Action, EventBattles, HistoricalBattle, createQuest
+from gui.server_events.event_items import EventBattles, HistoricalBattle, createQuest, createAction
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -104,6 +104,11 @@ class _EventsCache(object):
 
         return self._getQuests(userFilterFunc)
 
+    def getGroups(self, filterFunc = None):
+        svrGroups = self._getQuestsGroups(filterFunc)
+        svrGroups.update(self._getActionsGroups(filterFunc))
+        return svrGroups
+
     def getHiddenQuests(self, filterFunc = None):
         filterFunc = filterFunc or (lambda a: True)
 
@@ -116,17 +121,12 @@ class _EventsCache(object):
         return self._getQuests(filterFunc, includePotapovQuests)
 
     def getActions(self, filterFunc = None):
-        actions = self.__getActionsData()
         filterFunc = filterFunc or (lambda a: True)
-        result = {}
-        for aData in actions:
-            if 'id' in aData:
-                a = self._makeAction(aData['id'], aData)
-                if not filterFunc(a):
-                    continue
-                result[a.getID()] = a
 
-        return result
+        def userFilterFunc(q):
+            return filterFunc(q) and q.getType() != EVENT_TYPE.GROUP
+
+        return self._getActions(userFilterFunc)
 
     def getEventBattles(self):
         battles = self.__getEventBattles()
@@ -237,13 +237,15 @@ class _EventsCache(object):
         return result
 
     def _getQuests(self, filterFunc = None, includePotapovQuests = False):
-        quests = self.__getQuestsData()
-        quests.update(self.__getFortQuestsData())
-        quests.update(self.__getPersonalQuestsData())
+        quests = self.__getCommonQuestsData()
         filterFunc = filterFunc or (lambda a: True)
         result = {}
+        groups = {}
         for qID, qData in quests.iteritems():
             q = self._makeQuest(qID, qData)
+            if q.getType() == EVENT_TYPE.GROUP:
+                groups[qID] = q
+                continue
             if q.getDestroyingTimeLeft() <= 0:
                 continue
             if not filterFunc(q):
@@ -255,12 +257,69 @@ class _EventsCache(object):
                 if filterFunc(q):
                     result[qID] = q
 
+        for gID, group in groups.iteritems():
+            for qID in group.getGroupEvents():
+                if qID in result:
+                    result[qID].setGroupID(gID)
+
         children, parents = self._makeQuestsRelations(result)
         for qID, q in result.iteritems():
             if qID in children:
                 q.setChildren(children[qID])
             if qID in parents:
                 q.setParents(parents[qID])
+
+        return result
+
+    def _getQuestsGroups(self, filterFunc = None):
+        quests = self.__getCommonQuestsData()
+        filterFunc = filterFunc or (lambda a: True)
+        result = {}
+        for qID, qData in quests.iteritems():
+            q = self._makeQuest(qID, qData)
+            if q.getType() != EVENT_TYPE.GROUP:
+                continue
+            if not filterFunc(q):
+                continue
+            result[qID] = q
+
+        return result
+
+    def _getActions(self, filterFunc = None):
+        filterFunc = filterFunc or (lambda a: True)
+        actions = self.__getActionsData()
+        result = {}
+        groups = {}
+        for aData in actions:
+            if 'id' in aData:
+                a = self._makeAction(aData['id'], aData)
+                actionID = a.getID()
+                if a.getType() == EVENT_TYPE.GROUP:
+                    groups[actionID] = a
+                    continue
+                if not filterFunc(a):
+                    continue
+                result[actionID] = a
+
+        for gID, group in groups.iteritems():
+            for aID in group.getGroupEvents():
+                if aID in result:
+                    result[aID].setGroupID(gID)
+
+        return result
+
+    def _getActionsGroups(self, filterFunc = None):
+        actions = self.__getActionsData()
+        filterFunc = filterFunc or (lambda a: True)
+        result = {}
+        for aData in actions:
+            if 'id' in aData:
+                a = self._makeAction(aData['id'], aData)
+                if a.getType() != EVENT_TYPE.GROUP:
+                    continue
+                if not filterFunc(a):
+                    continue
+                result[a.getID()] = a
 
         return result
 
@@ -278,7 +337,7 @@ class _EventsCache(object):
         storage = self.__cache['actions']
         if aID in storage:
             return storage[aID]
-        a = storage[aID] = Action(aID, aData)
+        a = storage[aID] = createAction(aData.get('type', 0), aID, aData)
         return a
 
     def _makeHistoricalBattle(self, bID, bData):
@@ -293,13 +352,14 @@ class _EventsCache(object):
         makeTokens = defaultdict(list)
         needTokens = defaultdict(list)
         for qID, q in quests.iteritems():
-            tokens = q.getBonuses('tokens')
-            if len(tokens):
-                for t in tokens[0].getTokens():
-                    makeTokens[t].append(qID)
+            if q.getType() != EVENT_TYPE.GROUP:
+                tokens = q.getBonuses('tokens')
+                if len(tokens):
+                    for t in tokens[0].getTokens():
+                        makeTokens[t].append(qID)
 
-            for t in q.accountReqs.getTokens():
-                needTokens[qID].append(t.getID())
+                for t in q.accountReqs.getTokens():
+                    needTokens[qID].append(t.getID())
 
         children = defaultdict(dict)
         for parentID, tokensIDs in needTokens.iteritems():
@@ -424,6 +484,12 @@ class _EventsCache(object):
 
     def __getHistoricalBattlesData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.HISTORICAL_BATTLES)
+
+    def __getCommonQuestsData(self):
+        quests = self.__getQuestsData()
+        quests.update(self.__getFortQuestsData())
+        quests.update(self.__getPersonalQuestsData())
+        return quests
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

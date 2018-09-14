@@ -2,7 +2,6 @@
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from constants import IS_IGR_ENABLED
-from gui.battle_control.arena_info import getArenaGuiTypeLabel
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID, CLIENT_ERROR_ID, USER_TAG, CLIENT_ACTION_ID, MESSENGER_SCOPE
 from messenger.proto import notations
@@ -19,7 +18,7 @@ from messenger.proto.xmpp.extensions.shared_queries import PresenceQuery
 from messenger.proto.xmpp.find_criteria import ItemsFindCriteria, GroupFindCriteria, RqFriendshipCriteria, MutedOnlyFindCriteria
 from messenger.proto.xmpp.gloox_constants import SUBSCRIPTION as _SUB, GLOOX_EVENT as _EVENT, PRESENCE, DISCONNECT_REASON
 from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler, ClientHolder
-from messenger.proto.xmpp.jid import makeContactJID
+from messenger.proto.xmpp.jid import makeContactJID, ContactJID
 from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA as _LOG
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE, CONTACT_LIMIT, CONTACT_ERROR_ID, LIMIT_ERROR_ID
 from messenger.storage import storage_getter
@@ -75,6 +74,7 @@ class _UserPresence(ClientHolder):
         g_playerEvents.onIGRTypeChanged -= self.__onIGRTypeChanged
 
     def __createQuery(self, presence):
+        from gui.battle_control.arena_info import getArenaGuiTypeLabel
         query = PresenceQuery(presence)
         item = g_preDefinedHosts.byName(connectionManager.serverUserName)
         if item.url:
@@ -581,24 +581,28 @@ class ContactsManager(ClientEventsHandler):
         self.__tasks.sync(jid, defaultTask=roster_tasks.RemoveRosterItemTask)
 
     def __handlePresence(self, jid, resource):
+        jid = ContactJID(jid)
         dbID = jid.getDatabaseID()
-        user = self.usersStorage.getUser(dbID, PROTO_TYPE.XMPP)
-        if resource.presence == PRESENCE.UNAVAILABLE:
-            if user and not user.isCurrentPlayer():
-                user.update(jid=jid, resource=None, clanInfo=resource.getClanInfo())
-                g_logOutput.debug(_LOG.RESOURCE, 'Resource is removed', user.getName(), jid.getResource(), resource)
-        elif resource.presence != PRESENCE.UNKNOWN:
-            if not user:
-                user = entities.XMPPUserEntity(dbID)
-                self.usersStorage.setUser(user)
-            if user.isCurrentPlayer():
-                self.playerCtx.setBanInfo(resource.getBanInfo())
-            else:
-                user.update(jid=jid, resource=resource, clanInfo=resource.getClanInfo())
-                g_logOutput.debug(_LOG.RESOURCE, 'Resource is set', user.getName(), jid.getResource(), resource)
-        if user:
-            g_messengerEvents.users.onUserStatusUpdated(user)
-        return
+        if not dbID:
+            return
+        else:
+            user = self.usersStorage.getUser(dbID, PROTO_TYPE.XMPP)
+            if resource.presence == PRESENCE.UNAVAILABLE:
+                if user and not user.isCurrentPlayer():
+                    user.update(jid=jid, resource=None, clanInfo=resource.getClanInfo())
+                    g_logOutput.debug(_LOG.RESOURCE, 'Resource is removed', user.getName(), jid.getResource(), resource)
+            elif resource.presence != PRESENCE.UNKNOWN:
+                if not user:
+                    user = entities.XMPPUserEntity(dbID)
+                    self.usersStorage.setUser(user)
+                if user.isCurrentPlayer():
+                    self.playerCtx.setBanInfo(resource.getBanInfo())
+                else:
+                    user.update(jid=jid, resource=resource, clanInfo=resource.getClanInfo())
+                    g_logOutput.debug(_LOG.RESOURCE, 'Resource is set', user.getName(), jid.getResource(), resource)
+            if user:
+                g_messengerEvents.users.onUserStatusUpdated(user)
+            return
 
     def __handleSubscriptionRequest(self, subs):
         self.__subsBatch.addSubs(subs)

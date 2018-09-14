@@ -13,6 +13,21 @@ class GoodieValue(object):
                 raise Exception, 'Bad goodie value <%s>' % value
             self.value = float(value) / 100
 
+    def __lt__(self, other):
+        if self.isAbsolute == other.isAbsolute:
+            return self.value < other.value
+        raise Exception, 'Comparison of absolute and percent values'
+
+    def __gt__(self, other):
+        if self.isAbsolute == other.isAbsolute:
+            return self.value > other.value
+        raise Exception, 'Comparison of absolute and percent values'
+
+    def __eq__(self, other):
+        if self.isAbsolute == other.isAbsolute:
+            return self.value == other.value
+        raise Exception, 'Comparison of absolute and percent values'
+
     @staticmethod
     def percent(value):
         return GoodieValue(value, False)

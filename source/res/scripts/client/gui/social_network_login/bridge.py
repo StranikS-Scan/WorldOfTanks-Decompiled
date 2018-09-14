@@ -42,25 +42,22 @@ class Bridge(object):
         self.__server = None
         self.__userName = None
         self.__token2 = None
-        self.__currentStatus = self.__STATUS.OK
         return
 
     def init(self, serverReceivedDataCallback, encryptToken):
         self.__readToken2FromPreferences()
         self.__readUserFromPreferences()
         self.__encryptToken = encryptToken
-        self.__startDataServer(serverReceivedDataCallback)
+        self.__serverReceivedDataCallback = serverReceivedDataCallback
 
     def fini(self):
         self.__token2 = None
         self.__userName = None
-        if self.__server is None:
-            return
-        else:
+        if self.__server is not None:
             self.__server.stop()
             self.__server.server_close()
             self.__server = None
-            return
+        return
 
     @staticmethod
     def getLoginParams():
@@ -68,13 +65,24 @@ class Bridge(object):
          'requested_for': 'wot',
          'ip': '127.0.0.1'}
 
-    def initializeLogin(self, socialNetworkName, rememberMe):
-        if self.__currentStatus == self.__STATUS.OK:
+    def initiateLogin(self, socialNetworkName, rememberMe):
+        serverStatus = self.__STATUS.OK
+        try:
+            if self.__server is None:
+                self.__server = DataServer('SocialNetworkLoginServer', self.__serverReceivedDataCallback, self.__encryptToken)
+                self.__server.start()
+        except socket.error:
+            if self.__server is not None:
+                self.__server.stop()
+                self.__server = None
+            serverStatus = self.__STATUS.HTTP_SERVER_ERROR
+
+        if serverStatus == self.__STATUS.OK:
             baseUrl = self.__getInitialLoginBaseURL(constants.IS_DEVELOPMENT)
             params = self.__getInitialLoginParams(socialNetworkName, rememberMe)
             if not BigWorld.wg_openWebBrowser(baseUrl + '?' + urlencode(params)):
-                self.__currentStatus = self.__STATUS.WEB_BROWSER_ERROR
-        return self.__currentStatus == self.__STATUS.OK
+                serverStatus = self.__STATUS.WEB_BROWSER_ERROR
+        return serverStatus == self.__STATUS.OK
 
     @staticmethod
     def getAvailableSocialNetworks():
@@ -146,18 +154,6 @@ class Bridge(object):
             if 'requested_for' in previousLoginParams:
                 del previousLoginParams['requested_for']
             return
-
-    def __startDataServer(self, serverReceivedDataCallback):
-        try:
-            self.__server = DataServer('SocialNetworkLoginServer', serverReceivedDataCallback, self.__encryptToken)
-            self.__server.start()
-        except socket.error:
-            self.__currentStatus = self.__STATUS.HTTP_SERVER_ERROR
-            if self.__server is not None:
-                self.__server.stop()
-                self.__server = None
-
-        return
 
     def __getInitialLoginParams(self, socialNetworkName, rememberMe):
         params = {'game': 'wot',

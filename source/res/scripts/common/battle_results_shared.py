@@ -15,7 +15,7 @@ VEH_INTERACTION_DETAILS = (('spotted', 'B', 1, 0),
  ('crits', 'I', 4294967295L, 0),
  ('fire', 'H', 65535, 0),
  ('damageBlockedByArmor', 'I', 4294967295L, 0),
- ('damageTaken', 'H', 65535, 0),
+ ('damageReceived', 'H', 65535, 0),
  ('rickochetsReceived', 'H', 65535, 0),
  ('noDamageDirectHitsReceived', 'H', 65535, 0),
  ('targetKills', 'B', 255, 0))
@@ -111,7 +111,7 @@ _VEH_CELL_RESULTS_PUBLIC = Meta(('health',
  None), ('capturePoints',
  int,
  0,
- None), ('droppedCapturePoints',
+ None), ('capturingBase', None, None, None), ('droppedCapturePoints',
  int,
  0,
  None), ('mileage',
@@ -147,6 +147,12 @@ _VEH_CELL_RESULTS_PUBLIC = Meta(('health',
  None), ('winPoints',
  int,
  0,
+ None), ('resourceAbsorbed',
+ int,
+ 0,
+ None), ('stopRespawn',
+ bool,
+ False,
  None))
 _VEH_CELL_RESULTS_PRIVATE = Meta(('repair',
  int,
@@ -365,6 +371,12 @@ _VEH_BASE_RESULTS_SERVER = Meta(('eventIndices',
  [],
  None))
 VEH_BASE_RESULTS = _VEH_CELL_RESULTS_PUBLIC + _VEH_BASE_RESULTS_PUBLIC + _VEH_CELL_RESULTS_PRIVATE + _VEH_BASE_RESULTS_PRIVATE + _VEH_CELL_RESULTS_SERVER + _VEH_BASE_RESULTS_SERVER
+_AVATAR_CELL_RESULTS_SERVER = Meta(('ammo',
+ list,
+ [],
+ None))
+AVATAR_CELL_RESULTS = _AVATAR_CELL_RESULTS_SERVER
+AVATAR_BASE_RESULTS = AVATAR_CELL_RESULTS
 VEH_PUBLIC_RESULTS = _VEH_CELL_RESULTS_PUBLIC + _VEH_BASE_RESULTS_PUBLIC
 VEH_FULL_RESULTS_UPDATE = Meta(('tmenXP',
  int,
@@ -539,10 +551,12 @@ COMMON_RESULTS = Meta(('arenaTypeID',
  None), ('vehLockMode',
  int,
  0,
- None), ('sortieDivision', None, None, None))
+ None), ('division', None, None, None))
 raise not set(VEH_FULL_RESULTS.names()) & set(COMMON_RESULTS.names()) or AssertionError
-INTERACTIVE_STATS = ('xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount')
-INTERACTIVE_STATS_INDICES = dict(((x[1], x[0]) for x in enumerate(INTERACTIVE_STATS)))
+VEH_INTERACTIVE_STATS = ('xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount', 'resourceAbsorbed', 'stopRespawn')
+VEH_INTERACTIVE_STATS_INDICES = dict(((x[1], x[0]) for x in enumerate(VEH_INTERACTIVE_STATS)))
+AVATAR_PRIVATE_STATS = ('ragePoints',)
+AVATAR_PRIVATE_STATS_INDICES = dict(((x[1], x[0]) for x in enumerate(AVATAR_PRIVATE_STATS)))
 
 class UNIT_CLAN_MEMBERSHIP:
     NONE = 0

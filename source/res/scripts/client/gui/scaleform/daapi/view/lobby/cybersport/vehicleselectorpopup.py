@@ -26,6 +26,9 @@ class VehicleSelectorPopup(View, VehicleSelectorPopupMeta, AbstractWindowView, V
         self.__vehicleTypes = ctx.get('vehicleTypes', VEHICLE_CLASSES)
         self.showNotReadyVehicles = ctx.get('showNotReady', True)
 
+    def _getLevelsRange(self):
+        return [0] + self.__levelsRange
+
     def _populate(self):
         super(VehicleSelectorPopup, self)._populate()
         self.addListener(HideWindowEvent.HIDE_VEHICLE_SELECTOR_WINDOW, self.onWindowForceClose)
@@ -83,6 +86,7 @@ class VehicleSelectorPopup(View, VehicleSelectorPopupMeta, AbstractWindowView, V
                 vehicleVO['enabled'] = False
                 vehicleVO['showAlert'] = True
                 vehicleVO['alertSource'] = RES_ICONS.MAPS_ICONS_LIBRARY_GEAR
+                vehicleVO['isReadyToFight'] = True
 
         self.as_setListDataS(vehicleVOs, selected)
         return

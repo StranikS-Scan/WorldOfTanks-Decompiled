@@ -14,6 +14,7 @@ from gui.shared.utils import decorators, CLIP_ICON_PATH
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.gui_items.processors.common import FreeXPExchanger, GoldToCreditsExchanger
+from gui.shared.formatters import icons
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
@@ -238,7 +239,7 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
         return self._items.shop.defaults.exchangeRate
 
     def _getCurrencyIconStr(self):
-        return TextManager.getIcon(TextIcons.CREDITS)
+        return icons.credits()
 
     def _checkInventory(self, *args):
         item = self._items.getItemByCD(self.getTypeCompDescr())
@@ -327,7 +328,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
             return self._xpCost - unlockStats.getVehTotalXP(self._parentCD)
 
     def _getCurrencyIconStr(self):
-        return TextManager.getIcon(TextIcons.FREE_XP)
+        return icons.freeXP()
 
     def _getCurrencyIconPath(self):
         return RES_ICONS.MAPS_ICONS_LIBRARY_ELITEXPICON_2

@@ -4,7 +4,6 @@ import constants
 from adisp import async, process
 from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
-import BattleReplay
 
 class IntSettingsRequester(object):
     """
@@ -130,5 +129,6 @@ class IntSettingsRequester(object):
 
     @async
     def _addIntSettings(self, settings, callback = None):
+        import BattleReplay
         if not BattleReplay.g_replayCtrl.isPlaying:
             BigWorld.player().intUserSettings.addIntSettings(settings, callback)

@@ -22,6 +22,12 @@ def getDivisionLevel(name):
     return level
 
 
+def getDivisionLevelByUnit(unit):
+    divisionName = getDivisionNameByType(unit.getRosterTypeID())
+    if divisionName:
+        return getattr(SORTIE_DIVISION, getDivisionNameByType(unit.getRosterTypeID()))
+
+
 def getDivisionNameByType(rosterTypeID):
     divisionName = ''
     for name, flags in SORTIE_DIVISION_NAME_TO_FLAGS.iteritems():

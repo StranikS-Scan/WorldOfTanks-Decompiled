@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/prb_control/items/prb_items.py
 from collections import namedtuple
-from account_helpers import getPlayerDatabaseID, getPlayerID
+from account_helpers import getAccountDatabaseID, getPlayerID
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -47,7 +47,7 @@ class PlayerPrbInfo(object):
 
     def isCurrentPlayer(self):
         if self.dbID > 0:
-            result = self.dbID == getPlayerDatabaseID()
+            result = self.dbID == getAccountDatabaseID()
         else:
             result = self.accID == getPlayerID()
         return result

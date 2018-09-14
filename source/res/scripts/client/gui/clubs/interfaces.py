@@ -3,7 +3,10 @@ from gui.clubs.settings import CLIENT_CLUB_RESTRICTIONS, error
 
 class IClubListener(object):
 
-    def onClubsSeasonStateChanged(self, isSeasonInProgress):
+    def onClubsSeasonStateChanged(self, seasonState):
+        pass
+
+    def onCompletedSeasonsInfoChanged(self):
         pass
 
     def onAccountClubRelationChanged(self, isRelatedToClubs):
@@ -105,6 +108,12 @@ class IAccountClubLimits(object):
     def canSeeContenders(self, profile, club = None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
+    def canSeeOtherPlayerInfo(self, profile, club = None, userDbID = None):
+        return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
+
+    def canGetClubSeasons(self, profile, club = None):
+        return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
+
     def canDestroyClub(self, profile, club = None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
@@ -147,7 +156,7 @@ class IAccountClubLimits(object):
     def canAssignPrivate(self, profile, club = None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
-    def canKickMember(self, profile, club = None):
+    def canKickMember(self, profile, club = None, memberDbID = None):
         return error(CLIENT_CLUB_RESTRICTIONS.DEFAULT)
 
     def canChangeClubRequirements(self, profile, club = None):

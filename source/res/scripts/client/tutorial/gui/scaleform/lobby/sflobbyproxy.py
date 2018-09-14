@@ -4,8 +4,7 @@ from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import AppRef, g_entitiesFactories, ViewTypes
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from messenger.formatters import SCH_CLIENT_MSG_TYPE
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
 from tutorial import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from tutorial.gui import GUIProxy, GUI_EFFECT_NAME

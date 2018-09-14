@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/battle_control/DynSquadViewListener.py
 import BigWorld
-from constants import PREBATTLE_TYPE
+from constants import INVITATION_TYPE
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.requests.context import SendInvitesCtx
 from gui.prb_control.prb_helpers import prbInvitesProperty
@@ -65,7 +65,7 @@ class DynSquadViewListener(object):
         else:
             idGetter = lambda i: i.receiverDBID
         for invite in invites:
-            if invite.type == PREBATTLE_TYPE.SQUAD and idGetter(invite) == userId:
+            if invite.type == INVITATION_TYPE.SQUAD and idGetter(invite) == userId:
                 return invite.clientID
 
         return None

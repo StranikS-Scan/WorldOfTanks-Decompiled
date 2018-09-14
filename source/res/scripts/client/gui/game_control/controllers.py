@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/game_control/controllers.py
 import weakref
 import operator
-from gui.shared.utils import forEach
+from shared_utils import forEach
 
 class _IController(object):
 

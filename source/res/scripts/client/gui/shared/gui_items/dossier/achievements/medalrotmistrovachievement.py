@@ -14,4 +14,4 @@ class MedalRotmistrovAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.CLAN, 'medalRotmistrov')
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getClanStats().getBattlesCount()
+        return dossier.getGlobalMapStats().getBattlesCount()

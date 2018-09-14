@@ -79,6 +79,7 @@ class PROFILE(object):
     SECTION_FORMATIONS_TOOLTIP_TEAM_SEASONWINRATE = '#profile:section/formations/tooltip/team/seasonWinRate'
     SECTION_FORMATIONS_TOOLTIP_TEAM_LINK = '#profile:section/formations/tooltip/team/link'
     SECTION_TECHNIQUE_CHECKBOXHANGARVEHICLES_TOOLTIP = '#profile:section/technique/checkBoxHangarVehicles/tooltip'
+    PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT = '#profile:profile/params/tooltip/clan/summaryDamageCoefficient'
     PROFILE_TITLE = '#profile:profile/title'
     PROFILE_TABS_TOOLTIP_SUMMARY_HEADER = PROFILE_TABS_TOOLTIP_SUMMARY + '/header'
     PROFILE_TABS_TOOLTIP_SUMMARY_BODY = PROFILE_TABS_TOOLTIP_SUMMARY + '/body'
@@ -106,9 +107,16 @@ class PROFILE(object):
     SECTION_SUMMARY_LABELS_NEXTAWARDS = '#profile:section/summary/labels/nextAwards'
     PROFILE_SUMMARY_NEXTAWARDS_TOOLTIP_HEADER = PROFILE_SUMMARY_NEXTAWARDS_TOOLTIP + '/header'
     PROFILE_SUMMARY_NEXTAWARDS_TOOLTIP_BODY = PROFILE_SUMMARY_NEXTAWARDS_TOOLTIP + '/body'
+    PROFILE_SUMMARY_NOGROUPS = '#profile:profile/summary/noGroups'
+    PROFILE_SUMMARY_CLAN_JOINDATE = '#profile:profile/summary/clan/joinDate'
+    PROFILE_SUMMARY_CLAN_POST = '#profile:profile/summary/clan/post'
+    PROFILE_SUMMARY_CLAN_BTNLABEL = '#profile:profile/summary/clan/btnLabel'
+    PROFILE_SUMMARY_CLUB_LADDERINFO = '#profile:profile/summary/club/ladderInfo'
+    PROFILE_SUMMARY_CLUB_POST = '#profile:profile/summary/club/post'
+    PROFILE_SUMMARY_CLUB_LADDER = '#profile:profile/summary/club/ladder'
+    PROFILE_SUMMARY_CLUB_BTNLABEL = '#profile:profile/summary/club/btnLabel'
     SECTION_SUMMARY_ERRORTEXT_SIGNIFICANTAWARDS = '#profile:section/summary/errorText/significantAwards'
     SECTION_SUMMARY_ERRORTEXT_NEXTAWARDS = '#profile:section/summary/errorText/nextAwards'
-    SECTION_SUMMARY_BOTTOMBAR_CLANSROLELBL = '#profile:section/summary/bottomBar/clansRoleLbl'
     SECTION_SUMMARY_WARNING_PERSONALSCORE = '#profile:section/summary/warning/personalScore'
     SECTION_AWARDS_TITLE = '#profile:section/awards/title'
     SECTION_AWARDS_LABELS_MARKSONGUN = '#profile:section/awards/labels/marksOnGun'
@@ -132,6 +140,7 @@ class PROFILE(object):
     SECTION_STATISTICS_HEADERTEXT_STATICTEAM = '#profile:section/statistics/headerText/staticTeam'
     SECTION_STATISTICS_HEADERTEXT_HISTORICAL = '#profile:section/statistics/headerText/historical'
     SECTION_STATISTICS_HEADERTEXT_FORTIFICATIONS = '#profile:section/statistics/headerText/fortifications'
+    SECTION_STATISTICS_HEADERTEXT_CLAN = '#profile:section/statistics/headerText/clan'
     SECTION_STATISTICS_CHARTS_BYTYPELABEL = '#profile:section/statistics/charts/byTypeLabel'
     SECTION_STATISTICS_CHARTS_BYNATIONLABEL = '#profile:section/statistics/charts/byNationLabel'
     SECTION_STATISTICS_CHARTS_BYLEVELLABEL = '#profile:section/statistics/charts/byLevelLabel'
@@ -170,6 +179,7 @@ class PROFILE(object):
     SECTION_STATISTICS_SCORES_FORT_SORTIE = '#profile:section/statistics/scores/fort/sortie'
     SECTION_STATISTICS_SCORES_FORT_SORTIEWINSEFFICIENCY = '#profile:section/statistics/scores/fort/sortieWinsEfficiency'
     SECTION_STATISTICS_SCORES_FORT_RESOURCE = '#profile:section/statistics/scores/fort/resource'
+    SECTION_STATISTICS_SCORES_CLAN_SUMMARYDAMAGECOEFFICIENT = '#profile:section/statistics/scores/clan/summaryDamageCoefficient'
     SECTION_STATISTICS_DETAILED_KILLED = '#profile:section/statistics/detailed/killed'
     SECTION_STATISTICS_DETAILED_DESTROYED = '#profile:section/statistics/detailed/destroyed'
     SECTION_STATISTICS_DETAILED_DESTRUCTIONCOEFFICIENT = '#profile:section/statistics/detailed/destructionCoefficient'
@@ -194,6 +204,9 @@ class PROFILE(object):
     SECTION_STATISTICS_BODYBAR_LABEL_FORTBATTLES = '#profile:section/statistics/bodyBar/label/fortBattles'
     SECTION_STATISTICS_BODYBAR_LABEL_FORTSORTIE = '#profile:section/statistics/bodyBar/label/fortSortie'
     SECTION_STATISTICS_BODYBAR_LABEL_SPECIFIC = '#profile:section/statistics/bodyBar/label/specific'
+    SECTION_STATISTICS_BODYBAR_LABEL_CLAN6 = '#profile:section/statistics/bodyBar/label/clan6'
+    SECTION_STATISTICS_BODYBAR_LABEL_CLAN8 = '#profile:section/statistics/bodyBar/label/clan8'
+    SECTION_STATISTICS_BODYBAR_LABEL_CLAN10 = '#profile:section/statistics/bodyBar/label/clan10'
     SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON = '#profile:section/statistics/bodyParams/label/common'
     SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE = '#profile:section/statistics/bodyParams/label/average'
     SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD = '#profile:section/statistics/bodyParams/label/record'
@@ -204,6 +217,7 @@ class PROFILE(object):
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_STATICTEAM = '#profile:section/technique/emptyScreenLabel/battleType/staticTeam'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_ALL = '#profile:section/technique/emptyScreenLabel/battleType/all'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_HISTORICAL = '#profile:section/technique/emptyScreenLabel/battleType/historical'
+    SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_GLOBALMAP = '#profile:section/technique/emptyScreenLabel/battleType/globalMap'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES = '#profile:section/technique/emptyScreenLabel/battleType/fortSorties'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTBATTLES = '#profile:section/technique/emptyScreenLabel/battleType/fortBattles'
     SECTION_TECHNIQUE_TITLE = '#profile:section/technique/title'
@@ -408,3 +422,23 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_FORT_SORTIEWINSEFFICIENCY_BODY = PROFILE_PARAMS_TOOLTIP_FORT_SORTIE + 'WinsEfficiency/body'
     PROFILE_PARAMS_TOOLTIP_FORT_RESOURCE_HEADER = PROFILE_PARAMS_TOOLTIP_FORT_RESOURCE + '/header'
     PROFILE_PARAMS_TOOLTIP_FORT_RESOURCE_BODY = PROFILE_PARAMS_TOOLTIP_FORT_RESOURCE + '/body'
+    PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT_HEADER = PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT + '/header'
+    PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT_BODY = PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT + '/body'
+    PROFILE_DROPDOWN_LABELS_ENUM = (PROFILE_DROPDOWN_LABELS_ALL,
+     PROFILE_DROPDOWN_LABELS_RANDOM,
+     PROFILE_DROPDOWN_LABELS_COMPANY,
+     PROFILE_DROPDOWN_LABELS_CLAN,
+     PROFILE_DROPDOWN_LABELS_TEAM,
+     PROFILE_DROPDOWN_LABELS_STATICTEAM,
+     PROFILE_DROPDOWN_LABELS_STATICTEAM_SEASON,
+     PROFILE_DROPDOWN_LABELS_HISTORICAL,
+     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS,
+     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES,
+     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES)
+
+    @staticmethod
+    def profile_dropdown_labels(key):
+        outcome = '#profile:profile/dropdown/labels/%s' % key
+        if outcome not in PROFILE.PROFILE_DROPDOWN_LABELS_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome

@@ -19,6 +19,9 @@ class _AccountClubsState(object):
     def update(self, clubsCtrl, privateData):
         pass
 
+    def isAvailable(self):
+        return True
+
 
 @ReprInjector.withParent()
 
@@ -34,6 +37,9 @@ class UnavailableClubsState(_AccountClubsState):
             clubsCtrl._changeState(SentAppState(profile.getApplication(), profile.getInvites(), profile.getRestrictions()))
         elif profile.isSynced():
             clubsCtrl._changeState(NoClubState(profile.getInvites(), profile.getRestrictions()))
+
+    def isAvailable(self):
+        return False
 
 
 @ReprInjector.withParent(('getInvites', 'invites'))

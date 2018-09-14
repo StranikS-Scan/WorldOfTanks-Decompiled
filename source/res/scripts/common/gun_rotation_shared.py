@@ -2,32 +2,15 @@
 import BigWorld
 import Math
 from math import pi
-from constants import DEFAULT_GUN_PITCH_LIMITS_TRANSITION, IS_CLIENT, IS_CELLAPP
+from constants import IS_CLIENT, IS_CELLAPP
+from debug_utils import *
 if IS_CELLAPP:
     from server_constants import MAX_VEHICLE_RADIUS
 
 def calcPitchLimitsFromDesc(turretYaw, pitchLimitsDesc):
-    basicLimits = pitchLimitsDesc['basic']
-    frontLimits = pitchLimitsDesc.get('front')
-    backLimits = pitchLimitsDesc.get('back')
-    if frontLimits is None and backLimits is None:
-        return basicLimits
-    else:
-        if frontLimits is None:
-            frontLimits = (basicLimits[0], basicLimits[1], 0.0)
-        if backLimits is None:
-            backLimits = (basicLimits[0], basicLimits[1], 0.0)
-        transition = pitchLimitsDesc.get('transition')
-        if transition is None:
-            transition = DEFAULT_GUN_PITCH_LIMITS_TRANSITION
-        return BigWorld.wg_calcGunPitchLimits(turretYaw, basicLimits, frontLimits, backLimits, transition)
-
-
-def calcPitchLimits(turretYaw, basicLimits, frontLimits, backLimits, transition):
-    return calcPitchLimitsFromDesc(turretYaw, {'basic': basicLimits,
-     'front': frontLimits,
-     'back': backLimits,
-     'transition': transition})
+    minPitch = pitchLimitsDesc['minPitch']
+    maxPitch = pitchLimitsDesc['maxPitch']
+    return BigWorld.wg_calcGunPitchLimits(turretYaw, minPitch, maxPitch)
 
 
 def encodeAngleToUint(angle, bits):

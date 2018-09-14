@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortificationsView.py
 from adisp import process
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
@@ -14,6 +13,7 @@ from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.fortifications.context import CreateFortCtx
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.ClientUpdateManager import g_clientUpdateManager
 
 class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
 
@@ -25,7 +25,7 @@ class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
         return
 
     def onEscapePress(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__close()
 
     def onFortCreateClick(self):
         g_fortSoundController.playCreateFort()
@@ -52,10 +52,11 @@ class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
         else:
             loadingView = FORTIFICATION_ALIASES.MAIN_VIEW_LINKAGE
         if loadingView != self.__currentView:
-            LOG_DEBUG(loadingView)
             self.__makeWaitingData(True)
             self.__currentView = loadingView
             self.as_loadViewS(loadingView, '')
+        else:
+            self.__makeWaitingData(showWaiting=False)
 
     def onClientStateChanged(self, state):
         self.loadView()
@@ -65,6 +66,7 @@ class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
         super(FortificationsView, self)._populate()
         self.addListener(events.FortEvent.VIEW_LOADED, self.__onViewLoaded, scope=EVENT_BUS_SCOPE.FORT)
         self.addListener(events.FortEvent.REQUEST_TIMEOUT, self.__loadDisconnectedView, scope=EVENT_BUS_SCOPE.FORT)
+        g_clientUpdateManager.addCallbacks({'stats.clanInfo': self.__onClanInfoChanged})
         self.startFortListening()
         Waiting.hide('loadPage')
         self.loadView()
@@ -74,6 +76,7 @@ class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
         self.stopFortListening()
         self.removeListener(events.FortEvent.REQUEST_TIMEOUT, self.__loadDisconnectedView, scope=EVENT_BUS_SCOPE.FORT)
         self.removeListener(events.FortEvent.VIEW_LOADED, self.__onViewLoaded, scope=EVENT_BUS_SCOPE.FORT)
+        g_clientUpdateManager.removeCallback('stats.clanInfo', self.__onClanInfoChanged)
         super(FortificationsView, self)._dispose()
 
     def __makeWaitingData(self, showWaiting = False):
@@ -88,3 +91,10 @@ class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
         loadingView = FORTIFICATION_ALIASES.DISCONNECT_VIEW_LINCKAGE
         self.__currentView = loadingView
         self.as_loadViewS(loadingView, '')
+
+    def __close(self):
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __onClanInfoChanged(self, clanInfo):
+        if not clanInfo:
+            self.__close()

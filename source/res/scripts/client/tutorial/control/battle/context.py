@@ -244,7 +244,7 @@ class BattleSoundPlayer(context.SoundPlayer):
         if event is context.SOUND_EVENT.NEXT_CHAPTER:
             self.__ignoreNext = True
         sndID = self.__guiSounds[event]
-        sound = SoundGroups.g_instance.FMODgetSound(sndID)
+        sound = SoundGroups.g_instance.getSound2D(sndID)
         if sound:
             sound.play()
         else:
@@ -268,7 +268,7 @@ class BattleSoundPlayer(context.SoundPlayer):
             self.__nextSndID = sndID
             return
         else:
-            sound = SoundGroups.g_instance.FMODgetSound(sndID)
+            sound = SoundGroups.g_instance.getSound2D(sndID)
             if not sound:
                 LOG_ERROR('Sound not found', sndID)
                 return

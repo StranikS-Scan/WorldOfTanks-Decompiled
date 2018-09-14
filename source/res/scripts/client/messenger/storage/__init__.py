@@ -69,7 +69,7 @@ class StorageDecorator(object):
     def restoreFromCache(self):
         if self.__storageCache:
             return
-        from messenger.ext.player_helpers import getPlayerDatabaseID, getPlayerName
+        from gui.shared.utils import getPlayerDatabaseID, getPlayerName
         self.__storageCache = StorageLocalCache((getPlayerDatabaseID(), getPlayerName(), 'storage'))
         self.__storageCache.onRead += self.__onRead
         self.__storageCache.read()

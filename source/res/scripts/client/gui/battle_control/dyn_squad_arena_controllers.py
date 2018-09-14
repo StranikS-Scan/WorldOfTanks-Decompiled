@@ -3,19 +3,20 @@ import BigWorld
 from constants import ARENA_GUI_TYPE, IS_CHINA
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.battle_control import arena_info, avatar_getter
+from gui.battle_control import avatar_getter
+from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.shared.SoundEffectsId import SoundEffectsId
 from helpers.i18n import makeString
 
-class IDynSquadEntityClient:
+class IDynSquadEntityClient(object):
 
     def updateSquadmanVeh(self, vehID):
         raise NotImplementedError, 'This method invokes by DynSquadEntityController it must be implemented %s' % self
 
 
-class DynSquadEntityController(arena_info.IArenaController):
+class DynSquadEntityController(IArenaVehiclesController):
     __slots__ = ('__clients',)
 
     def __init__(self, clients):
@@ -48,7 +49,7 @@ class DynSquadEntityController(arena_info.IArenaController):
         return
 
 
-class DynSquadArenaController(arena_info.IArenaController):
+class DynSquadArenaController(IArenaVehiclesController):
 
     def __init__(self):
         super(DynSquadArenaController, self).__init__()
@@ -138,9 +139,10 @@ class DynSquadArenaController(arena_info.IArenaController):
 
     def __handleModifiedInvitesList(self, added, changed, deleted, inviteDataReceiver, callback):
         allChangedInvites = set(added) | set(changed) | set(deleted)
+        arenaUniqueID = avatar_getter.getArenaUniqueID()
         if len(allChangedInvites) > 0:
             for invite in inviteDataReceiver(allChangedInvites):
-                if invite.getExtraData('arenaUniqueID') == avatar_getter.getArenaUniqueID() and invite.isActive():
+                if invite.isSameBattle(arenaUniqueID) and invite.isActive():
                     callback(invite)
 
 

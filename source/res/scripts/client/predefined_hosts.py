@@ -1,18 +1,21 @@
 # Embedded file name: scripts/client/predefined_hosts.py
 import operator
-import BigWorld, ResMgr
-import base64, random, time, threading
 import cPickle as pickle
-from collections import namedtuple
-from Event import Event, EventManager
-import constants
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING, LOG_ERROR
-import Settings
-from gui import GUI_SETTINGS
-from gui.shared.utils import BitmaskHelper
-from helpers import i18n
-from urllib import urlencode
+import base64
+import random
+import time
+import threading
 import urllib2
+from urllib import urlencode
+from collections import namedtuple
+import BigWorld
+import ResMgr
+import Settings
+import constants
+from Event import Event, EventManager
+from shared_utils import BitmaskHelper
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING, LOG_ERROR
+from helpers import i18n
 AUTO_LOGIN_QUERY_ENABLED = not (constants.IS_DEVELOPMENT or constants.IS_CHINA)
 AUTO_LOGIN_QUERY_URL = 'auto.login.app:0000'
 AUTO_LOGIN_QUERY_TIMEOUT = 5
@@ -29,6 +32,7 @@ class HOST_AVAILABILITY(object):
 
     @classmethod
     def getDefault(cls):
+        from gui import GUI_SETTINGS
         defAvail = HOST_AVAILABILITY.IGNORED
         if len(g_preDefinedHosts.hosts()) > 1:
             defAvail = HOST_AVAILABILITY.UNKNOWN

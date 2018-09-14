@@ -3,7 +3,6 @@ import math
 import weakref
 import GUI
 import Math
-import BattleReplay
 from debug_utils import *
 from gui.battle_control import g_sessionProvider
 from helpers import i18n
@@ -12,6 +11,7 @@ from gui import DEPTH_OF_Aim, GUI_SETTINGS
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.ColorSchemeManager import _ColorSchemeManager
 from gui.battle_control.consumables.ammo_ctrl import SHELL_SET_RESULT
+from gui.shared.gui_items import Vehicle
 
 def _getScreenSize():
     return GUI.screenResolution()[:2]
@@ -107,6 +107,7 @@ class Aim(Flash):
         self.__aimSettings = None
         self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
         self.settingsCore.interfaceScale.onScaleChanged += self.__refreshScale
+        self.settingsCore.interfaceScale.onScaleChanged += self.onRecreateDevice
         self.__refreshScale(self.settingsCore.interfaceScale.get())
         self._reloadingHndl = getReloadingHandler()
         return
@@ -119,6 +120,7 @@ class Aim(Flash):
 
     def create(self):
         self.settingsCore.onSettingsChanged += self.onSettingsChanged
+        import BattleReplay
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             self._flashCall('setupReloadingCounter', [False])
@@ -126,6 +128,7 @@ class Aim(Flash):
     def destroy(self):
         self.settingsCore.onSettingsChanged -= self.onSettingsChanged
         self.settingsCore.interfaceScale.onScaleChanged -= self.__refreshScale
+        self.settingsCore.interfaceScale.onScaleChanged -= self.onRecreateDevice
         self.close()
         self.__timeInterval.stop()
         self.__timeInterval = None
@@ -165,6 +168,7 @@ class Aim(Flash):
             self.onSettingsChanged()
         self.__timeInterval.start()
         _g_aimState['target']['id'] = None
+        g_sessionProvider.setAimOffset(self._offset)
         self._enable(_g_aimState, _g_aimState['isFirstInit'])
         _g_aimState['isFirstInit'] = False
         self.onRecreateDevice()
@@ -194,7 +198,7 @@ class Aim(Flash):
             self._flashCall('onRecreateDevice', [self._posX, self._posY])
             g_sessionProvider.setAimPositionUpdated(self.mode, self._posX, self._posY)
 
-    def onRecreateDevice(self):
+    def onRecreateDevice(self, scale = None):
         screen = _getScreenSize()
         self.component.size = screen
         self.onOffsetUpdate(screen, True)
@@ -439,22 +443,7 @@ class StrategicAim(Aim):
         Aim.__init__(self, 'strategic', offset)
         self._distance = 0
 
-    def create(self):
-        Aim.create(self)
-        self.__damageCtrl = _DamageIndicatorCtrl(self._offset)
-
-    def onRecreateDevice(self):
-        Aim.onRecreateDevice(self)
-        self.__damageCtrl.onRecreateDevice()
-
-    def destroy(self):
-        Aim.destroy(self)
-        self.__damageCtrl.disable()
-        self.__damageCtrl = None
-        return
-
     def _enable(self, state, isFirstInit):
-        self.__damageCtrl.enable()
         if isFirstInit:
             return
         else:
@@ -473,12 +462,6 @@ class StrategicAim(Aim):
             self._setClipParams(capacity, burst)
             self._setAmmoStock(*self._reloadingHndl.ammoStock)
             return
-
-    def _disable(self):
-        self.__damageCtrl.disable()
-
-    def _showHit(self, hitDesc):
-        self.__damageCtrl.add(hitDesc)
 
     def _update(self):
         newDistance = self._getAimDistance()
@@ -532,7 +515,7 @@ class PostMortemAim(Aim):
             vehicle = BigWorld.entity(self.__vID)
             if vehicle is not None:
                 playerName = g_sessionProvider.getCtx().getFullPlayerName(vID=self.__vID, showVehShortName=False)
-                type = vehicle.typeDescriptor.type.userString
+                type = Vehicle.getUserName(vehicleType=vehicle.typeDescriptor.type, textPrefix=True)
                 healthPercent = math.ceil(100.0 * max(0, vehicle.health) / vehicle.typeDescriptor.maxHealth)
                 self.__setText(playerName, type, healthPercent)
         return
@@ -550,18 +533,7 @@ class ArcadeAim(Aim):
         Aim.__init__(self, 'sniper' if isSniper else 'arcade', offset)
         self.__isSniper = isSniper
 
-    def create(self):
-        Aim.create(self)
-        self.__damageCtrl = _DamageIndicatorCtrl(self._offset)
-
-    def destroy(self):
-        Aim.destroy(self)
-        self.__damageCtrl.disable()
-        self.__damageCtrl = None
-        return
-
     def _enable(self, state, isFirstInit):
-        self.__damageCtrl.enable()
         if isFirstInit:
             return
         else:
@@ -584,95 +556,10 @@ class ArcadeAim(Aim):
             self._setAmmoStock(*self._reloadingHndl.ammoStock)
             return
 
-    def _disable(self):
-        self.__damageCtrl.disable()
-
-    def setVisible(self, isVisible):
-        Aim.setVisible(self, isVisible)
-        self.__damageCtrl.setVisible(isVisible)
-
-    def onRecreateDevice(self):
-        Aim.onRecreateDevice(self)
-        self.__damageCtrl.onRecreateDevice()
-
-    def _showHit(self, hitDesc):
-        self.__damageCtrl.add(hitDesc)
-
     def _update(self):
         distance = Aim._update(self)
         if distance is not None:
             Aim._flashCall(self, 'updateTarget', [distance])
-        return
-
-
-class _DamageIndicatorCtrl():
-    _HIT_INDICATOR_MAX_ON_SCREEN = 5
-
-    def __init__(self, offset):
-        self.proxy = weakref.proxy(self)
-        self.__worldToClip = None
-        self.__isVisible = True
-        self.__offset = offset
-        self.__hits = list()
-        return
-
-    def enable(self):
-        for hitDesc in _g_aimState['hitIndicators'][:]:
-            self.add(hitDesc)
-
-    def disable(self):
-        for hitDesc in _g_aimState['hitIndicators']:
-            if hitDesc.get('comp', None) is not None:
-                hitDesc['comp'].close()
-                BigWorld.cancelCallback(hitDesc['callbackID'])
-                hitDesc['comp'] = None
-                hitDesc['callbackID'] = None
-
-        return
-
-    def setVisible(self, isVisible):
-        self.__isVisible = isVisible
-        for hitDesc in _g_aimState['hitIndicators']:
-            if hitDesc.get('comp', None) is not None:
-                hitDesc['comp'].component.visible = isVisible
-
-        return
-
-    def add(self, hitDesc):
-        duration = _DamageIndicator.TOTAL_FRAMES / float(_DamageIndicator.FRAME_RATE)
-        globalYaw = hitDesc['gYaw']
-        startTime = hitDesc['startTime']
-        isDamage = hitDesc['isDamage']
-        timePass = BigWorld.time() - startTime
-        if timePass >= duration:
-            self._remove(startTime)
-            return
-        if len(_g_aimState['hitIndicators']) >= self._HIT_INDICATOR_MAX_ON_SCREEN:
-            self._remove(min((desc['startTime'] for desc in _g_aimState['hitIndicators'])))
-        hitInd = _DamageIndicator()
-        hitInd.setup(globalYaw, self.__offset)
-        hitInd.active(True)
-        hitInd.component.visible = self.__isVisible
-        hitInd.call('DamageIndicator.setDamageFlagAndAnimFrame', [isDamage, timePass * _DamageIndicator.FRAME_RATE])
-        callbackID = BigWorld.callback(duration, partial(callMethod, self.proxy, '_remove', startTime))
-        hitDesc['comp'] = hitInd
-        hitDesc['callbackID'] = callbackID
-
-    def onRecreateDevice(self):
-        for desc in _g_aimState['hitIndicators']:
-            desc['comp'].setup(desc['gYaw'], self.__offset)
-
-    def _remove(self, startTime):
-        removedDesc = None
-        for desc in _g_aimState['hitIndicators']:
-            if desc['startTime'] == startTime:
-                removedDesc = desc
-                break
-
-        if removedDesc is not None:
-            if removedDesc.get('comp', None) is not None:
-                removedDesc['comp'].close()
-            _g_aimState['hitIndicators'].remove(removedDesc)
         return
 
 
@@ -690,34 +577,6 @@ class FalloutDeathAim(Aim):
 
     def onSettingsChanged(self, diff = None):
         super(FalloutDeathAim, self).onSettingsChanged(diff)
-
-
-class _DamageIndicator(Flash):
-    __SWF_FILE_NAME = 'DamageIndicator.swf'
-    __FLASH_CLASS = 'WGHitIndicatorFlash'
-    __FLASH_MC_NAME = ('damageMC',)
-    __FLASH_SIZE = (680, 680)
-    TOTAL_FRAMES = 90
-    FRAME_RATE = 24
-
-    def __init__(self):
-        Flash.__init__(self, self.__SWF_FILE_NAME, self.__FLASH_CLASS, [self.__FLASH_MC_NAME])
-        self.component.wg_inputKeyMode = 2
-        self.component.position.z = DEPTH_OF_Aim
-        self.movie.backgroundAlpha = 0.0
-        self.component.focus = False
-        self.component.moveFocus = False
-        self.component.heightMode = 'PIXEL'
-        self.component.widthMode = 'PIXEL'
-
-    def setup(self, gYaw, offset):
-        self.component.position.x = offset[0]
-        self.component.position.y = offset[1]
-        for mcName in _DamageIndicator.__FLASH_MC_NAME:
-            self.component.setGlobalYaw(mcName, gYaw)
-
-    def __del__(self):
-        pass
 
 
 class _TimeInterval():

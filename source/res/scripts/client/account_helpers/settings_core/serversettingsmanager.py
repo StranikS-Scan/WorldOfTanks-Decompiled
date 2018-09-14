@@ -1,13 +1,12 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/ServerSettingsManager.py
 import weakref
-import BattleReplay
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.SettingsCache import g_settingsCache
 from account_helpers.settings_core.migrations import migrateToVersion
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 
 class SETTINGS_SECTIONS(CONST_CONTAINER):
     GAME = 'GAME'
@@ -120,6 +119,7 @@ class ServerSettingsManager(object):
 
     @process
     def applySettings(self):
+        import BattleReplay
         if not BattleReplay.isPlaying():
             yield self._updateToVersion()
         self._core.options.refresh()
@@ -342,6 +342,7 @@ class ServerSettingsManager(object):
     def _updateToVersion(self, callback = None):
         currentVersion = g_settingsCache.getVersion()
         data = {'gameData': {},
+         'gameExtData': {},
          'gameplayData': {},
          'controlsData': {},
          'aimData': {},
@@ -354,11 +355,14 @@ class ServerSettingsManager(object):
         self._setSettingsSections(**data)
         callback(self)
 
-    def _setSettingsSections(self, gameData, gameplayData, controlsData, aimData, markersData, keyboardData, graphicsData, marksOnGun, clear):
+    def _setSettingsSections(self, gameData, gameExtData, gameplayData, controlsData, aimData, markersData, keyboardData, graphicsData, marksOnGun, clear):
         settings = {}
         clearGame = clear.get(SETTINGS_SECTIONS.GAME, 0)
         if gameData or clearGame:
             settings[SETTINGS_SECTIONS.GAME] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME, gameData) ^ clearGame
+        clearGameExt = clear.get(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
+        if gameExtData or clearGameExt:
+            settings[SETTINGS_SECTIONS.GAME_EXTENDED] = self._buildSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, gameExtData) ^ clearGameExt
         clearGameplay = clear.get(SETTINGS_SECTIONS.GAMEPLAY, 0)
         if gameplayData or clearGameplay:
             settings[SETTINGS_SECTIONS.GAMEPLAY] = self._buildSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, gameplayData) ^ clearGameplay

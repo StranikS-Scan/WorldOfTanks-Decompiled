@@ -367,6 +367,8 @@ class TOOLTIPS(object):
     RECEIVEINVITESINBATTLE = '#tooltips:receiveInvitesInBattle'
     STORERECEIVERINBATTLE = '#tooltips:storeReceiverInBattle'
     CHATCONTACTSLISTONLY = '#tooltips:chatContactsListOnly'
+    STATICFORMATIONSTAFFVIEW_LBLSTAFFED = '#tooltips:StaticFormationStaffView/lblStaffed'
+    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS = STATICFORMATIONSTAFFVIEW_INVITEBTN + 'Dis'
     PREMIUM_DAYS_HEADER = '#tooltips:premium/days/header'
     PREMIUM_DAYS_PARAMS_BUY = '#tooltips:premium/days/params/buy'
     PREMIUM_DAYS_PARAMS_OLDPRICE = '#tooltips:premium/days/params/oldPrice'
@@ -384,8 +386,11 @@ class TOOLTIPS(object):
     LADDER_PLACE = '#tooltips:ladder/place'
     LADDER_STATE = '#tooltips:ladder/state'
     LADDER_POINTS = '#tooltips:ladder/points'
-    LADDER_DESCR = '#tooltips:ladder/descr'
     LADDER_LEVELUP = '#tooltips:ladder/levelUp'
+    LADDER_SEASON_ACTIVE = '#tooltips:ladder/season/ACTIVE'
+    LADDER_SEASON_SUSPENDED = '#tooltips:ladder/season/SUSPENDED'
+    LADDER_SEASON_INACTIVE = '#tooltips:ladder/season/INACTIVE'
+    LADDER_SEASON_UNKNOWN = '#tooltips:ladder/season/UNKNOWN'
     PRIVATEQUESTS_AWARDSBUTTON_HEADER = PRIVATEQUESTS_AWARDSBUTTON + '/header'
     PRIVATEQUESTS_AWARDSBUTTON_BODY = PRIVATEQUESTS_AWARDSBUTTON + '/body'
     PRIVATEQUESTS_SLOT_EMPTY_HEADER = PRIVATEQUESTS_SLOT_EMPTY + '/header'
@@ -504,8 +509,6 @@ class TOOLTIPS(object):
     PREBATTLE_INVITATIONS_TOOLTIP_ISONLINE_BODY = PREBATTLE_INVITATIONS_TOOLTIP_ISONLINE + '/body'
     SETTINGSCONTROL_RECOMMENDED = '#tooltips:settingsControl/recommended'
     LOBBYMENU_VERSIONINFOBUTTON_BODY = LOBBYMENU_VERSIONINFOBUTTON + '/body'
-    WINDOWHELP_HEADER = '#tooltips:windowHelp/header'
-    WINDOWHELP_BODY = '#tooltips:windowHelp/body'
     ACTIONPRICE_HEADER = '#tooltips:actionPrice/header'
     ACTIONPRICE_BODY = '#tooltips:actionPrice/body'
     ACTIONPRICE_ACTIONNAME = '#tooltips:actionPrice/actionName'
@@ -595,6 +598,8 @@ class TOOLTIPS(object):
     BATTLETYPES_LEAVETRAINING_BODY = BATTLETYPES_LEAVETRAINING + '/body'
     BATTLETYPES_COMPANY_HEADER = BATTLETYPES_COMPANY + '/header'
     BATTLETYPES_COMPANY_BODY = BATTLETYPES_COMPANY + '/body'
+    COMPANY_FALLOUT_RESTRICTION_HEADER = '#tooltips:company/fallout/restriction/header'
+    COMPANY_FALLOUT_RESTRICTION_BODY = '#tooltips:company/fallout/restriction/body'
     BATTLETYPES_LEAVECOMPANY_HEADER = BATTLETYPES_LEAVECOMPANY + '/header'
     BATTLETYPES_LEAVECOMPANY_BODY = BATTLETYPES_LEAVECOMPANY + '/body'
     BATTLETYPES_SPEC_HEADER = BATTLETYPES_SPEC + '/header'
@@ -1399,6 +1404,14 @@ class TOOLTIPS(object):
     FORTIFICATION_SORTIEDIVISIONTOOLTIP_VEHLEVEL = '#tooltips:fortification/sortieDivisionToolTip/vehLevel'
     FORTIFICATION_SORTIEDIVISIONTOOLTIP_PLAYERSLIMIT = '#tooltips:fortification/sortieDivisionToolTip/playersLimit'
     FORTIFICATION_SORTIEDIVISIONTOOLTIP_BONUS = '#tooltips:fortification/sortieDivisionToolTip/bonus'
+    FORTIFICATION_SORTIE_LISTROOM_REGULATION_HEADER_INFO = '#tooltips:fortification/sortie/listRoom/regulation/header/info'
+    FORTIFICATION_SORTIE_LISTROOM_REGULATION_HEADER_CURFEW = '#tooltips:fortification/sortie/listRoom/regulation/header/curfew'
+    FORTIFICATION_SORTIE_LISTROOM_REGULATION_TIMEDESCR = '#tooltips:fortification/sortie/listRoom/regulation/timeDescr'
+    FORTIFICATION_SORTIE_LISTROOM_REGULATION_NONE = '#tooltips:fortification/sortie/listRoom/regulation/none'
+    FORTIFICATION_SORTIE_LISTROOM_REGULATION_SERVERLIMIT = '#tooltips:fortification/sortie/listRoom/regulation/serverLimit'
+    FORTIFICATION_SORTIE_LISTROOM_REGULATION_TIMELIMITFORMAT = '#tooltips:fortification/sortie/listRoom/regulation/timeLimitFormat'
+    FORTIFICATION_SORTIE_LISTROOM_REGULATION_SERVERLIMITTIMEDESCR = '#tooltips:fortification/sortie/listRoom/regulation/serverLimitTimeDescr'
+    FORTIFICATION_SORTIE_LISTROOM_REGULATION_FOOTER = '#tooltips:fortification/sortie/listRoom/regulation/footer'
     FORTIFICATION_SORTIE_LISTROOM_BACK_HEADER = FORTIFICATION_SORTIE_LISTROOM_BACK + '/header'
     FORTIFICATION_SORTIE_LISTROOM_BACK_BODY = FORTIFICATION_SORTIE_LISTROOM_BACK + '/body'
     FORTIFICATION_SORTIE_LISTROOM_CREATEBTN_HEADER = FORTIFICATION_SORTIE_LISTROOM_CREATEBTN + '/header'
@@ -1436,6 +1449,8 @@ class TOOLTIPS(object):
     FORTIFICATION_CLAN_LISTROOM_BACK_BODY = FORTIFICATION_CLAN_LISTROOM_BACK + '/body'
     FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN_HEADER = FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN + '/header'
     FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN_BODY = FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN + '/body'
+    FORTIFICATION_SORTIE_BATTLEROOM_LEGIONARIESCOUNT_HEADER = '#tooltips:fortification/sortie/battleRoom/legionariesCount/header'
+    FORTIFICATION_SORTIE_BATTLEROOM_LEGIONARIESCOUNT_BODY = '#tooltips:fortification/sortie/battleRoom/legionariesCount/body'
     FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION_HEADER = FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION + '/header'
     FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION_BODY = FORTIFICATION_SORTIE_BATTLEROOM_CHANGEDIVISION + '/body'
     FORTIFICATION_SORTIE_BATTLEROOM_INVITEBTN_HEADER = FORTIFICATION_SORTIE_BATTLEROOM_INVITEBTN + '/header'
@@ -1731,6 +1746,10 @@ class TOOLTIPS(object):
     STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN_BODY = STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN + '/body'
     STATICFORMATIONSTAFFVIEW_INVITEBTN_HEADER = STATICFORMATIONSTAFFVIEW_INVITEBTN + '/header'
     STATICFORMATIONSTAFFVIEW_INVITEBTN_BODY = STATICFORMATIONSTAFFVIEW_INVITEBTN + '/body'
+    STATICFORMATIONSTAFFVIEW_LBLSTAFFED_HEADER = STATICFORMATIONSTAFFVIEW_LBLSTAFFED + '/header'
+    STATICFORMATIONSTAFFVIEW_LBLSTAFFED_BODY = STATICFORMATIONSTAFFVIEW_LBLSTAFFED + '/body'
+    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS_HEADER = STATICFORMATIONSTAFFVIEW_INVITEBTN + 'Dis/header'
+    STATICFORMATIONSTAFFVIEW_INVITEBTNDIS_BODY = STATICFORMATIONSTAFFVIEW_INVITEBTN + 'Dis/body'
     STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN_HEADER = STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN + '/header'
     STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN_BODY = STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN + '/body'
     STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE_HEADER = STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE + '/header'
@@ -1814,117 +1833,74 @@ class TOOLTIPS(object):
     STATICFORMATIONPROFILEWINDOW_ACTIONBTN_CLUBISCLOSED_BODY = '#tooltips:StaticFormationProfileWindow/actionBtn/clubIsClosed/body'
     STATICFORMATIONPROFILEWINDOW_ACTIONBTN_INOTHERCLUB_HEADER = '#tooltips:StaticFormationProfileWindow/actionBtn/inOtherClub/header'
     STATICFORMATIONPROFILEWINDOW_ACTIONBTN_INOTHERCLUB_BODY = '#tooltips:StaticFormationProfileWindow/actionBtn/inOtherClub/body'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_TITLE = '#tooltips:hangarTutorial/research/vehicleInfo/title'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_HEADERDESCRIPTION = '#tooltips:hangarTutorial/research/vehicleInfo/headerDescription'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_EXPTITLE = '#tooltips:hangarTutorial/research/vehicleInfo/expTitle'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_EXPDESCRIPTION = '#tooltips:hangarTutorial/research/vehicleInfo/expDescription'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_BATTLEEXPTITLE = '#tooltips:hangarTutorial/research/vehicleInfo/battleExpTitle'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_BATTLEEXPDESCRIPTION = '#tooltips:hangarTutorial/research/vehicleInfo/battleExpDescription'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_FREEEXPTITLE = '#tooltips:hangarTutorial/research/vehicleInfo/freeExpTitle'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_FREEEXPDESCRIPTION = '#tooltips:hangarTutorial/research/vehicleInfo/freeExpDescription'
-    HANGARTUTORIAL_RESEARCH_VEHICLEINFO_TOTALEXPTITLE = '#tooltips:hangarTutorial/research/vehicleInfo/totalExpTitle'
-    HANGARTUTORIAL_RESEARCH_MODULES_TITLE = '#tooltips:hangarTutorial/research/modules/title'
-    HANGARTUTORIAL_RESEARCH_MODULES_HEADERDESCRIPTION = '#tooltips:hangarTutorial/research/modules/headerDescription'
-    HANGARTUTORIAL_RESEARCH_MODULES_TYPESTITLE = '#tooltips:hangarTutorial/research/modules/typesTitle'
-    HANGARTUTORIAL_RESEARCH_MODULES_GUNTITLE = '#tooltips:hangarTutorial/research/modules/gunTitle'
-    HANGARTUTORIAL_RESEARCH_MODULES_GUNDESCRIPTION = '#tooltips:hangarTutorial/research/modules/gunDescription'
-    HANGARTUTORIAL_RESEARCH_MODULES_TURRETTITLE = '#tooltips:hangarTutorial/research/modules/turretTitle'
-    HANGARTUTORIAL_RESEARCH_MODULES_TURRETDESCRIPTION = '#tooltips:hangarTutorial/research/modules/turretDescription'
-    HANGARTUTORIAL_RESEARCH_MODULES_ENGINETITLE = '#tooltips:hangarTutorial/research/modules/engineTitle'
-    HANGARTUTORIAL_RESEARCH_MODULES_ENGINEDESCRIPTION = '#tooltips:hangarTutorial/research/modules/engineDescription'
-    HANGARTUTORIAL_RESEARCH_MODULES_CHASSISTITLE = '#tooltips:hangarTutorial/research/modules/chassisTitle'
-    HANGARTUTORIAL_RESEARCH_MODULES_CHASSISDESCRIPTION = '#tooltips:hangarTutorial/research/modules/chassisDescription'
-    HANGARTUTORIAL_RESEARCH_MODULES_RADIOSETTITLE = '#tooltips:hangarTutorial/research/modules/radiosetTitle'
-    HANGARTUTORIAL_RESEARCH_MODULES_RADIOSETDESCRIPTION = '#tooltips:hangarTutorial/research/modules/radiosetDescription'
-    HANGARTUTORIAL_RESEARCH_MODULES_ACTIONBUTTONSTITLE = '#tooltips:hangarTutorial/research/modules/actionButtonsTitle'
-    HANGARTUTORIAL_RESEARCH_MODULES_RESEARCHBUTTONDESCRIPTION = '#tooltips:hangarTutorial/research/modules/researchButtonDescription'
-    HANGARTUTORIAL_RESEARCH_MODULES_BUYBUTTONDESCRIPTION = '#tooltips:hangarTutorial/research/modules/buyButtonDescription'
-    HANGARTUTORIAL_RESEARCH_MODULES_INHANGARDESCRIPTION = '#tooltips:hangarTutorial/research/modules/inHangarDescription'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_TITLE = '#tooltips:hangarTutorial/customization/types/title'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_CAMOUFLAGEBLOCKTITLE = '#tooltips:hangarTutorial/customization/types/camouflageBlockTitle'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_CAMOUFLAGEBLOCKDESCRIPTION = '#tooltips:hangarTutorial/customization/types/camouflageBlockDescription'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_WINTERCAMOUFLAGETITLE = '#tooltips:hangarTutorial/customization/types/winterCamouflageTitle'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_WINTERCAMOUFLAGEDESCRIPTION = '#tooltips:hangarTutorial/customization/types/winterCamouflageDescription'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_SUMMERCAMOUFLAGETITLE = '#tooltips:hangarTutorial/customization/types/summerCamouflageTitle'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_SUMMERCAMOUFLAGEDESCRIPTION = '#tooltips:hangarTutorial/customization/types/summerCamouflageDescription'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_DESERTCAMOUFLAGETITLE = '#tooltips:hangarTutorial/customization/types/desertCamouflageTitle'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_DESERTCAMOUFLAGEDESCRIPTION = '#tooltips:hangarTutorial/customization/types/desertCamouflageDescription'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_EMBLEMBLOCKTITLE = '#tooltips:hangarTutorial/customization/types/emblemBlockTitle'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_EMBLEMBLOCKDESCRIPTION = '#tooltips:hangarTutorial/customization/types/emblemBlockDescription'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_LABELSBLOCKTITLE = '#tooltips:hangarTutorial/customization/types/labelsBlockTitle'
-    HANGARTUTORIAL_CUSTOMIZATION_TYPES_LABELSBLOCKDESCRIPTION = '#tooltips:hangarTutorial/customization/types/labelsBlockDescription'
-    HANGARTUTORIAL_NEXTTECHMODELS_HEADER = '#tooltips:hangarTutorial/nextTechModels/header'
-    HANGARTUTORIAL_NEXTTECHMODELS_BODY = '#tooltips:hangarTutorial/nextTechModels/body'
-    HANGARTUTORIAL_TECHREPAIR_HEADER = '#tooltips:hangarTutorial/techRepair/header'
-    HANGARTUTORIAL_TECHREPAIR_BODY = '#tooltips:hangarTutorial/techRepair/body'
-    HANGARTUTORIAL_CUSTOMIZATIONDURATION_HEADER = '#tooltips:hangarTutorial/customizationDuration/header'
-    HANGARTUTORIAL_CUSTOMIZATIONDURATION_BODY = '#tooltips:hangarTutorial/customizationDuration/body'
-    HANGARTUTORIAL_CUSTOMIZATIONOPTIONS_HEADER = '#tooltips:hangarTutorial/customizationOptions/header'
-    HANGARTUTORIAL_CUSTOMIZATIONOPTIONS_BODY = '#tooltips:hangarTutorial/customizationOptions/body'
-    HANGARTUTORIAL_CUSTOMIZATIONCOST_HEADER = '#tooltips:hangarTutorial/customizationCost/header'
-    HANGARTUTORIAL_CUSTOMIZATIONCOST_BODY = '#tooltips:hangarTutorial/customizationCost/body'
-    HANGARTUTORIAL_NATIONS_TITLE = '#tooltips:hangarTutorial/nations/title'
-    HANGARTUTORIAL_NATIONS_USSR = '#tooltips:hangarTutorial/nations/ussr'
-    HANGARTUTORIAL_NATIONS_GERMANY = '#tooltips:hangarTutorial/nations/germany'
-    HANGARTUTORIAL_NATIONS_USA = '#tooltips:hangarTutorial/nations/usa'
-    HANGARTUTORIAL_NATIONS_FRANCE = '#tooltips:hangarTutorial/nations/france'
-    HANGARTUTORIAL_NATIONS_UK = '#tooltips:hangarTutorial/nations/uk'
-    HANGARTUTORIAL_NATIONS_CHINA = '#tooltips:hangarTutorial/nations/china'
-    HANGARTUTORIAL_NATIONS_JAPAN = '#tooltips:hangarTutorial/nations/japan'
-    HANGARTUTORIAL_RESEARCHTREE_TITLE = '#tooltips:hangarTutorial/researchTree/title'
-    HANGARTUTORIAL_RESEARCHTREE_DESCRIPTION = '#tooltips:hangarTutorial/researchTree/description'
-    HANGARTUTORIAL_RESEARCHTREE_TECHBLOCK_COMMONTECH_TITLE = '#tooltips:hangarTutorial/researchTree/techBlock/commonTech/title'
-    HANGARTUTORIAL_RESEARCHTREE_TECHBLOCK_COMMONTECH_DESCRIPTION = '#tooltips:hangarTutorial/researchTree/techBlock/commonTech/description'
-    HANGARTUTORIAL_RESEARCHTREE_TECHBLOCK_PREMIUMTECH_TITLE = '#tooltips:hangarTutorial/researchTree/techBlock/premiumTech/title'
-    HANGARTUTORIAL_RESEARCHTREE_TECHBLOCK_PREMIUMTECH_DESCRIPTION = '#tooltips:hangarTutorial/researchTree/techBlock/premiumTech/description'
-    HANGARTUTORIAL_RESEARCHTREE_TYPESBLOCK_TITLE = '#tooltips:hangarTutorial/researchTree/typesBlock/title'
-    HANGARTUTORIAL_RESEARCHTREE_TYPESBLOCK_LIGHTTANK = '#tooltips:hangarTutorial/researchTree/typesBlock/lightTank'
-    HANGARTUTORIAL_RESEARCHTREE_TYPESBLOCK_MEDIUMTANK = '#tooltips:hangarTutorial/researchTree/typesBlock/mediumTank'
-    HANGARTUTORIAL_RESEARCHTREE_TYPESBLOCK_HEAVYTANK = '#tooltips:hangarTutorial/researchTree/typesBlock/heavyTank'
-    HANGARTUTORIAL_RESEARCHTREE_TYPESBLOCK_AT_SPG = '#tooltips:hangarTutorial/researchTree/typesBlock/AT-SPG'
-    HANGARTUTORIAL_RESEARCHTREE_TYPESBLOCK_SPG = '#tooltips:hangarTutorial/researchTree/typesBlock/SPG'
-    HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_TITLE = '#tooltips:hangarTutorial/researchTree/buttonsBlock/title'
-    HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_RESEARCH = '#tooltips:hangarTutorial/researchTree/buttonsBlock/research'
-    HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_BUY = '#tooltips:hangarTutorial/researchTree/buttonsBlock/buy'
-    HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_INHANGAR = '#tooltips:hangarTutorial/researchTree/buttonsBlock/inHangar'
-    HANGARTUTORIAL_PERSONALCASE_SKILLS_TITLE = '#tooltips:hangarTutorial/personalCase/skills/title'
-    HANGARTUTORIAL_PERSONALCASE_SKILLS_HEADERDESCRIPTION = '#tooltips:hangarTutorial/personalCase/skills/headerDescription'
-    HANGARTUTORIAL_PERSONALCASE_SKILLS_SPECIALTYTITLE = '#tooltips:hangarTutorial/personalCase/skills/specialtyTitle'
-    HANGARTUTORIAL_PERSONALCASE_SKILLS_SPECIALTYDESCRIPTION = '#tooltips:hangarTutorial/personalCase/skills/specialtyDescription'
-    HANGARTUTORIAL_PERSONALCASE_SKILLS_SPECIALTYWARNING = '#tooltips:hangarTutorial/personalCase/skills/specialtyWarning'
-    HANGARTUTORIAL_PERSONALCASE_PERKS_TITLE = '#tooltips:hangarTutorial/personalCase/perks/title'
-    HANGARTUTORIAL_PERSONALCASE_PERKS_HEADERDESCRIPTION = '#tooltips:hangarTutorial/personalCase/perks/headerDescription'
-    HANGARTUTORIAL_PERSONALCASE_PERKS_NEWPERKTITLE = '#tooltips:hangarTutorial/personalCase/perks/newPerkTitle'
-    HANGARTUTORIAL_PERSONALCASE_PERKS_NEWPERKDESCRIPTION = '#tooltips:hangarTutorial/personalCase/perks/newPerkDescription'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_TITLE = '#tooltips:hangarTutorial/personalCase/additional/title'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_RECORDTITLE = '#tooltips:hangarTutorial/personalCase/additional/recordTitle'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_RECORDDESCRIPTION = '#tooltips:hangarTutorial/personalCase/additional/recordDescription'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_TRAININGTITLE = '#tooltips:hangarTutorial/personalCase/additional/trainingTitle'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_TRAININGDESCRIPTION = '#tooltips:hangarTutorial/personalCase/additional/trainingDescription'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_PERKSTITLE = '#tooltips:hangarTutorial/personalCase/additional/perksTitle'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_PERKSDESCRIPTION = '#tooltips:hangarTutorial/personalCase/additional/perksDescription'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_DOCUMENTSTITLE = '#tooltips:hangarTutorial/personalCase/additional/documentsTitle'
-    HANGARTUTORIAL_PERSONALCASE_ADDITIONAL_DOCUMENTSDESCRIPTION = '#tooltips:hangarTutorial/personalCase/additional/documentsDescription'
-    HANGARTUTORIAL_AMMUNITION_TITLE = '#tooltips:hangarTutorial/ammunition/title'
-    HANGARTUTORIAL_AMMUNITION_DESCRIPTION = '#tooltips:hangarTutorial/ammunition/description'
-    HANGARTUTORIAL_AMMUNITION_TYPE_TITLE = '#tooltips:hangarTutorial/ammunition/type/title'
-    HANGARTUTORIAL_AMMUNITION_TYPE_PIERCING_TITLE = '#tooltips:hangarTutorial/ammunition/type/piercing/title'
-    HANGARTUTORIAL_AMMUNITION_TYPE_PIERCING_DESCRIPTION = '#tooltips:hangarTutorial/ammunition/type/piercing/description'
-    HANGARTUTORIAL_AMMUNITION_TYPE_HIGH_EXPLOSIVE_TITLE = '#tooltips:hangarTutorial/ammunition/type/high-explosive/title'
-    HANGARTUTORIAL_AMMUNITION_TYPE_HIGH_EXPLOSIVE_DESCRIPTION = '#tooltips:hangarTutorial/ammunition/type/high-explosive/description'
-    HANGARTUTORIAL_AMMUNITION_TYPE_SUBCALIBER_TITLE = '#tooltips:hangarTutorial/ammunition/type/subcaliber/title'
-    HANGARTUTORIAL_AMMUNITION_TYPE_SUBCALIBER_DESCRIPTION = '#tooltips:hangarTutorial/ammunition/type/subcaliber/description'
-    HANGARTUTORIAL_AMMUNITION_TYPE_CUMULATIVE_TITLE = '#tooltips:hangarTutorial/ammunition/type/cumulative/title'
-    HANGARTUTORIAL_AMMUNITION_TYPE_CUMULATIVE_DESCRIPTION = '#tooltips:hangarTutorial/ammunition/type/cumulative/description'
-    HANGARTUTORIAL_AMMUNITION_AMMOSET_TITLE = '#tooltips:hangarTutorial/ammunition/ammoSet/title'
-    HANGARTUTORIAL_AMMUNITION_AMMOSET_DESCRIPTION = '#tooltips:hangarTutorial/ammunition/ammoSet/description'
-    HANGARTUTORIAL_EQUIPMENT_TITLE = '#tooltips:hangarTutorial/equipment/title'
-    HANGARTUTORIAL_EQUIPMENT_DESCRIPTION = '#tooltips:hangarTutorial/equipment/description'
-    HANGARTUTORIAL_EQUIPMENT_PREM_TITLE = '#tooltips:hangarTutorial/equipment/prem/title'
-    HANGARTUTORIAL_EQUIPMENT_PREM_DESCRIPTION = '#tooltips:hangarTutorial/equipment/prem/description'
     BOOSTER_QUESTLINKBTN_BODY = '#tooltips:booster/questLinkBtn/body'
+    BOOSTER_ACTIVEBTN_DISABLED_BODY = '#tooltips:booster/activeBtn/disabled/body'
     BOOSTERSPANEL_OPENBOOSTERSWINDOW_BODY = '#tooltips:boostersPanel/openBoostersWindow/body'
     BOOSTERSPANEL_BOOSTERDESCRIPTION_NOTE = '#tooltips:boostersPanel/boosterDescription/note'
+    HANGAR3DSCENE_5THANNIVERSARY_KRI2010_TITLE = '#tooltips:hangar3dScene/5thAnniversary/KRI2010/title'
+    HANGAR3DSCENE_5THANNIVERSARY_KRI2010_DESC = '#tooltips:hangar3dScene/5thAnniversary/KRI2010/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_GUINNESSRECORD_TITLE = '#tooltips:hangar3dScene/5thAnniversary/GuinnessRecord/title'
+    HANGAR3DSCENE_5THANNIVERSARY_GUINNESSRECORD_DESC = '#tooltips:hangar3dScene/5thAnniversary/GuinnessRecord/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_EGA2011_TITLE = '#tooltips:hangar3dScene/5thAnniversary/EGA2011/title'
+    HANGAR3DSCENE_5THANNIVERSARY_EGA2011_DESC = '#tooltips:hangar3dScene/5thAnniversary/EGA2011/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_KRI2011_TITLE = '#tooltips:hangar3dScene/5thAnniversary/KRI2011/title'
+    HANGAR3DSCENE_5THANNIVERSARY_KRI2011_DESC = '#tooltips:hangar3dScene/5thAnniversary/KRI2011/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_NATIONALLEADER_TITLE = '#tooltips:hangar3dScene/5thAnniversary/NationalLeader/title'
+    HANGAR3DSCENE_5THANNIVERSARY_NATIONALLEADER_DESC = '#tooltips:hangar3dScene/5thAnniversary/NationalLeader/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_GOLDENJOYSTICK2012_TITLE = '#tooltips:hangar3dScene/5thAnniversary/GoldenJoystick2012/title'
+    HANGAR3DSCENE_5THANNIVERSARY_GOLDENJOYSTICK2012_DESC = '#tooltips:hangar3dScene/5thAnniversary/GoldenJoystick2012/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_GOLDENJOYSTICK2013_TITLE = '#tooltips:hangar3dScene/5thAnniversary/GoldenJoystick2013/title'
+    HANGAR3DSCENE_5THANNIVERSARY_GOLDENJOYSTICK2013_DESC = '#tooltips:hangar3dScene/5thAnniversary/GoldenJoystick2013/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_DICEAWARDS2014_TITLE = '#tooltips:hangar3dScene/5thAnniversary/DICEAwards2014/title'
+    HANGAR3DSCENE_5THANNIVERSARY_DICEAWARDS2014_DESC = '#tooltips:hangar3dScene/5thAnniversary/DICEAwards2014/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_WINTERBATTLE_TITLE = '#tooltips:hangar3dScene/5thAnniversary/WinterBattle/title'
+    HANGAR3DSCENE_5THANNIVERSARY_WINTERBATTLE_DESC = '#tooltips:hangar3dScene/5thAnniversary/WinterBattle/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_WHITETIGER_TITLE = '#tooltips:hangar3dScene/5thAnniversary/WhiteTiger/title'
+    HANGAR3DSCENE_5THANNIVERSARY_WHITETIGER_DESC = '#tooltips:hangar3dScene/5thAnniversary/WhiteTiger/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_8BITSKARL_TITLE = '#tooltips:hangar3dScene/5thAnniversary/8bitsKarl/title'
+    HANGAR3DSCENE_5THANNIVERSARY_8BITSKARL_DESC = '#tooltips:hangar3dScene/5thAnniversary/8bitsKarl/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_TANKRACE_TITLE = '#tooltips:hangar3dScene/5thAnniversary/TankRace/title'
+    HANGAR3DSCENE_5THANNIVERSARY_TANKRACE_DESC = '#tooltips:hangar3dScene/5thAnniversary/TankRace/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_TANKFOOTBALL_TITLE = '#tooltips:hangar3dScene/5thAnniversary/TankFootball/title'
+    HANGAR3DSCENE_5THANNIVERSARY_TANKFOOTBALL_DESC = '#tooltips:hangar3dScene/5thAnniversary/TankFootball/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_FIRSTAPRIL2015_TITLE = '#tooltips:hangar3dScene/5thAnniversary/FirstApril2015/title'
+    HANGAR3DSCENE_5THANNIVERSARY_FIRSTAPRIL2015_DESC = '#tooltips:hangar3dScene/5thAnniversary/FirstApril2015/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_STURMTIGER_TITLE = '#tooltips:hangar3dScene/5thAnniversary/Sturmtiger/title'
+    HANGAR3DSCENE_5THANNIVERSARY_STURMTIGER_DESC = '#tooltips:hangar3dScene/5thAnniversary/Sturmtiger/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_FALLOUT_TITLE = '#tooltips:hangar3dScene/5thAnniversary/Fallout/title'
+    HANGAR3DSCENE_5THANNIVERSARY_FALLOUT_DESC = '#tooltips:hangar3dScene/5thAnniversary/Fallout/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_GLOBE_TITLE = '#tooltips:hangar3dScene/5thAnniversary/Globe/title'
+    HANGAR3DSCENE_5THANNIVERSARY_GLOBE_DESC = '#tooltips:hangar3dScene/5thAnniversary/Globe/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_DOGHOUSE_TITLE = '#tooltips:hangar3dScene/5thAnniversary/DogHouse/title'
+    HANGAR3DSCENE_5THANNIVERSARY_DOGHOUSE_DESC = '#tooltips:hangar3dScene/5thAnniversary/DogHouse/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_WGFACES_TITLE = '#tooltips:hangar3dScene/5thAnniversary/WGFaces/title'
+    HANGAR3DSCENE_5THANNIVERSARY_WGFACES_DESC = '#tooltips:hangar3dScene/5thAnniversary/WGFaces/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_PORTMAP_TITLE = '#tooltips:hangar3dScene/5thAnniversary/PortMap/title'
+    HANGAR3DSCENE_5THANNIVERSARY_PORTMAP_DESC = '#tooltips:hangar3dScene/5thAnniversary/PortMap/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_DRAGONRIDGEMAP_TITLE = '#tooltips:hangar3dScene/5thAnniversary/DragonRidgeMap/title'
+    HANGAR3DSCENE_5THANNIVERSARY_DRAGONRIDGEMAP_DESC = '#tooltips:hangar3dScene/5thAnniversary/DragonRidgeMap/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_SEVEROGORSKMAP_TITLE = '#tooltips:hangar3dScene/5thAnniversary/SeverogorskMap/title'
+    HANGAR3DSCENE_5THANNIVERSARY_SEVEROGORSKMAP_DESC = '#tooltips:hangar3dScene/5thAnniversary/SeverogorskMap/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_RUINBERGINFIREMAP_TITLE = '#tooltips:hangar3dScene/5thAnniversary/RuinbergInFireMap/title'
+    HANGAR3DSCENE_5THANNIVERSARY_RUINBERGINFIREMAP_DESC = '#tooltips:hangar3dScene/5thAnniversary/RuinbergInFireMap/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_T502_TITLE = '#tooltips:hangar3dScene/5thAnniversary/T502/title'
+    HANGAR3DSCENE_5THANNIVERSARY_T502_DESC = '#tooltips:hangar3dScene/5thAnniversary/T502/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_T23_TITLE = '#tooltips:hangar3dScene/5thAnniversary/T23/title'
+    HANGAR3DSCENE_5THANNIVERSARY_T23_DESC = '#tooltips:hangar3dScene/5thAnniversary/T23/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_KV_TITLE = '#tooltips:hangar3dScene/5thAnniversary/KV/title'
+    HANGAR3DSCENE_5THANNIVERSARY_KV_DESC = '#tooltips:hangar3dScene/5thAnniversary/KV/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_KV5_TITLE = '#tooltips:hangar3dScene/5thAnniversary/KV5/title'
+    HANGAR3DSCENE_5THANNIVERSARY_KV5_DESC = '#tooltips:hangar3dScene/5thAnniversary/KV5/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_PZKPTWB2740_TITLE = '#tooltips:hangar3dScene/5thAnniversary/PzKptwB2740/title'
+    HANGAR3DSCENE_5THANNIVERSARY_PZKPTWB2740_DESC = '#tooltips:hangar3dScene/5thAnniversary/PzKptwB2740/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_TYPE59_TITLE = '#tooltips:hangar3dScene/5thAnniversary/Type59/title'
+    HANGAR3DSCENE_5THANNIVERSARY_TYPE59_DESC = '#tooltips:hangar3dScene/5thAnniversary/Type59/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_E25_TITLE = '#tooltips:hangar3dScene/5thAnniversary/E25/title'
+    HANGAR3DSCENE_5THANNIVERSARY_E25_DESC = '#tooltips:hangar3dScene/5thAnniversary/E25/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_PZKPFW38H735_TITLE = '#tooltips:hangar3dScene/5thAnniversary/PzKpfw38H735/title'
+    HANGAR3DSCENE_5THANNIVERSARY_PZKPFW38H735_DESC = '#tooltips:hangar3dScene/5thAnniversary/PzKpfw38H735/desc'
+    HANGAR3DSCENE_5THANNIVERSARY_NAPILNIK_TITLE = '#tooltips:hangar3dScene/5thAnniversary/Napilnik/title'
+    HANGAR3DSCENE_5THANNIVERSARY_NAPILNIK_DESC = '#tooltips:hangar3dScene/5thAnniversary/Napilnik/desc'
     CONTACT_STATUS_INBATTLE_ENUM = (CONTACT_STATUS_INBATTLE_UNKNOWN,
      CONTACT_STATUS_INBATTLE_RANDOM,
      CONTACT_STATUS_INBATTLE_TRAINING,
@@ -1934,6 +1910,70 @@ class TOOLTIPS(object):
      CONTACT_STATUS_INBATTLE_HISTORICAL,
      CONTACT_STATUS_INBATTLE_FORTIFICATIONS,
      CONTACT_STATUS_INBATTLE_SPECIAL)
+    HANGAR3DSCENE_5THANNIVERSARY_ENUM = (HANGAR3DSCENE_5THANNIVERSARY_KRI2010_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_KRI2010_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_GUINNESSRECORD_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_GUINNESSRECORD_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_EGA2011_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_EGA2011_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_KRI2011_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_KRI2011_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_NATIONALLEADER_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_NATIONALLEADER_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_GOLDENJOYSTICK2012_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_GOLDENJOYSTICK2012_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_GOLDENJOYSTICK2013_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_GOLDENJOYSTICK2013_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_DICEAWARDS2014_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_DICEAWARDS2014_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_WINTERBATTLE_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_WINTERBATTLE_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_WHITETIGER_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_WHITETIGER_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_8BITSKARL_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_8BITSKARL_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_TANKRACE_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_TANKRACE_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_TANKFOOTBALL_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_TANKFOOTBALL_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_FIRSTAPRIL2015_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_FIRSTAPRIL2015_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_STURMTIGER_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_STURMTIGER_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_FALLOUT_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_FALLOUT_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_GLOBE_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_GLOBE_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_DOGHOUSE_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_DOGHOUSE_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_WGFACES_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_WGFACES_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_PORTMAP_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_PORTMAP_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_DRAGONRIDGEMAP_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_DRAGONRIDGEMAP_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_SEVEROGORSKMAP_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_SEVEROGORSKMAP_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_RUINBERGINFIREMAP_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_RUINBERGINFIREMAP_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_T502_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_T502_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_T23_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_T23_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_KV_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_KV_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_KV5_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_KV5_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_PZKPTWB2740_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_PZKPTWB2740_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_TYPE59_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_TYPE59_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_E25_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_E25_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_PZKPFW38H735_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_PZKPFW38H735_DESC,
+     HANGAR3DSCENE_5THANNIVERSARY_NAPILNIK_TITLE,
+     HANGAR3DSCENE_5THANNIVERSARY_NAPILNIK_DESC)
     TECHTREEPAGE_NATIONS_ENUM = (TECHTREEPAGE_NATIONS_USSR,
      TECHTREEPAGE_NATIONS_GERMANY,
      TECHTREEPAGE_NATIONS_USA,
@@ -2093,6 +2133,15 @@ class TOOLTIPS(object):
     def contact_status_inbattle(key):
         outcome = '#tooltips:Contact/status/inBattle/%s' % key
         if outcome not in TOOLTIPS.CONTACT_STATUS_INBATTLE_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def hangar3dscene_5thanniversary(key):
+        outcome = '#tooltips:hangar3dScene/5thAnniversary/%s' % key
+        if outcome not in TOOLTIPS.HANGAR3DSCENE_5THANNIVERSARY_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
             return None
         else:

@@ -1275,7 +1275,6 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'rentalsExpired',
  'rentCompensation',
  'potapovQuestBonus',
- 'battleCanceled',
  'premiumPersonalDiscount',
  'goodieRemoved'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])

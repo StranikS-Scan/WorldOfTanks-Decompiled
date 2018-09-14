@@ -1,17 +1,16 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
-from ClientFortifiedRegion import ClientFortifiedRegion
 import constants
 import gui
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from CurrentVehicle import g_currentVehicle
 from collections import namedtuple
+from shared_utils import findFirst
 from gui.server_events import g_eventsCache
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.tooltips import TOOLTIP_COMPONENT
-from gui.shared.utils import findFirst
 from gui.shared.fortifications.FortOrder import FortOrder
 from helpers.i18n import makeString
 from items import vehicles
@@ -450,3 +449,7 @@ class FortOrderContext(FortificationContext):
 
     def buildItem(self, fortOrderTypeID, level):
         return FortOrder(int(fortOrderTypeID), level=int(level))
+
+
+class FortSortieLimitContext(FortificationContext):
+    pass

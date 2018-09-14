@@ -72,11 +72,22 @@ class DecalMap:
 
             for dsTexSet in dataSec['textureSets'].values():
                 ts = {}
-                for dsTex in dsTexSet.values():
-                    texName = dsTexSet.readString(dsTex.name)
-                    texIndex = BigWorld.wg_traceTextureIndex(texName)
-                    ts[dsTex.name] = texIndex
-                    self.__texMap[texName] = texIndex
+                _DIF_TEXT = 0
+                _BUMP_TEXT = 1
+                _HMAP_TEXT = 2
+                for dsMaterial in dsTexSet.values():
+                    tsMaterial = [None, None, None]
+                    ts[dsMaterial.name] = tsMaterial
+                    for dsTexture in dsMaterial.values():
+                        texName = dsMaterial.readString(dsTexture.name)
+                        texIndex = BigWorld.wg_traceTextureIndex(texName)
+                        self.__texMap[texName] = texIndex
+                        textListIndex = _DIF_TEXT
+                        if dsTexture.name == 'ANM':
+                            textListIndex = _BUMP_TEXT
+                        elif dsTexture.name == 'GMM':
+                            textListIndex = _HMAP_TEXT
+                        tsMaterial[textListIndex] = texIndex
 
                 self.__textureSets[dsTexSet.name] = ts
 

@@ -16,7 +16,6 @@ import items.vehicles
 import math
 import time
 import VehicleStickers
-import VehicleAppearance
 import constants
 from PlayerEvents import g_playerEvents
 from ConnectionManager import connectionManager
@@ -27,6 +26,9 @@ import MapActivities
 from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
 import TankHangarShadowProxy
 import weakref
+import FMOD
+if FMOD.enabled:
+    import VehicleAppearance
 _DEFAULT_HANGAR_SPACE_PATH_BASIC = 'spaces/hangar_v2'
 _DEFAULT_HANGAR_SPACE_PATH_PREM = 'spaces/hangar_premium_v2'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
@@ -128,7 +130,8 @@ class ClientHangarSpace():
         hangarsXml = ResMgr.openSection('gui/hangars.xml')
         for isPremium in (False, True):
             spacePath = _DEFAULT_HANGAR_SPACE_PATH_PREM if isPremium else _DEFAULT_HANGAR_SPACE_PATH_BASIC
-            settingsXml = ResMgr.openSection(spacePath + '/space.settings/hangarSettings')
+            settingsXml = ResMgr.openSection(spacePath + '/space.settings')
+            settingsXml = settingsXml['hangarSettings']
             cfg = {'path': spacePath,
              'cam_yaw_constr': Math.Vector2(-180, 180),
              'cam_pitch_constr': Math.Vector2(-70, -5)}
@@ -205,6 +208,7 @@ class ClientHangarSpace():
         g_keyEventHandlers.add(self.handleKeyEvent)
         g_mouseEventHandlers.add(self.handleMouseEventGlobal)
         g_postProcessing.enable('hangar')
+        BigWorld.pauseDRRAutoscaling(True)
         return
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback = None):
@@ -663,7 +667,7 @@ class _VehicleAppearance():
         if 'showMarksOnGun' in diff:
             self.__showMarksOnGun = not diff['showMarksOnGun']
             self.refresh()
-        elif 'dynamicFov' in diff:
+        elif 'dynamicFov' in diff or 'fov' in diff:
             self.__hangarSpace.updateCameraByMouseMove(0, 0, 0)
 
     def __assembleModel(self):
@@ -685,10 +689,15 @@ class _VehicleAppearance():
         self.__vehicleStickers.show = False
         if not self.__isVehicleDestroyed:
             fashion = BigWorld.WGVehicleFashion(False, _CFG['v_scale'])
-            VehicleAppearance.setupTracksFashion(fashion, self.__vDesc, self.__isVehicleDestroyed)
+            import FMOD
+            if FMOD.enabled:
+                import VehicleAppearance
+                VehicleAppearance.setupTracksFashion(fashion, self.__vDesc, self.__isVehicleDestroyed)
             chassis.wg_fashion = fashion
             fashion.initialUpdateTracks(1.0, 10.0)
-            VehicleAppearance.setupSplineTracks(fashion, self.__vDesc, chassis, self.__resources)
+            if FMOD.enabled:
+                import VehicleAppearance
+                VehicleAppearance.setupSplineTracks(fashion, self.__vDesc, chassis, self.__resources)
         for model in self.__models:
             model.visible = False
             model.visibleAttachments = False
@@ -983,7 +992,7 @@ class _VehicleAppearance():
                             tiling = coeff
                     if compDesc.get('camouflageExclusionMask'):
                         exclusionMap = compDesc['camouflageExclusionMask']
-                useCamouflage = camouflagePresent and exclusionMap and texture
+                useCamouflage = camouflagePresent and texture
                 fashion = None
                 if hasattr(model, 'wg_fashion'):
                     fashion = model.wg_fashion

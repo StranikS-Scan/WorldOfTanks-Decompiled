@@ -17,3 +17,5 @@ class QUESTS_ALIASES(object):
     FREE_SLOTS_AND_FREE_QUESTS = 'freeSlotsAndFreeQuests'
     FIRST_RUN = 'firstRun'
     EMPTY = 'empty'
+    RENDERER_TYPE_BLOCK_TITLE = 1
+    RENDERER_TYPE_QUEST = 2

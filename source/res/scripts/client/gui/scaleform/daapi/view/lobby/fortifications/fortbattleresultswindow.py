@@ -7,10 +7,10 @@ from constants import FORT_COMBAT_RESULT
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers import i18n
+from shared_utils import CONST_CONTAINER
 from gui import SystemMessages
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.FortBuilding import FortBuilding
-from gui.shared.utils import CONST_CONTAINER
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView

@@ -87,10 +87,9 @@ class AppBase(Flash):
     def _setup(self):
         self.movie.setFocussed(SCALEFORM_SWF_PATH_V3)
         BigWorld.wg_setRedefineKeysMode(True)
-        BigWorld.wg_setScreenshotNotifyCallback(self.__screenshotNotifyCallback)
 
-    def __screenshotNotifyCallback(self, path):
-        SystemMessages.pushMessage(convert(makeString('#menu:screenshot/save')) % {'path': path}, SystemMessages.SM_TYPE.Information)
+    def prepareLibrariesList(self):
+        return None
 
 
 class App(ApplicationMeta, AppBase):
@@ -119,6 +118,7 @@ class App(ApplicationMeta, AppBase):
         self.__initialized = False
         self.__firingsAfterInit = {}
         AppRef.setReference(self.proxy)
+        self.__geShowed = False
         self.__aliasToLoad = []
         self.addExternalCallback('registerApplication', self.onFlashAppInit)
         return
@@ -198,6 +198,7 @@ class App(ApplicationMeta, AppBase):
         self._createManagers()
         self.__validateManagers()
         self.as_registerManagersS()
+        self.as_setLibrariesListS(self.prepareLibrariesList())
         g_guiResetters.add(self.onUpdateStage)
         self.onUpdateStage()
         g_repeatKeyHandlers.add(self.component.handleKeyEvent)
@@ -340,16 +341,21 @@ class App(ApplicationMeta, AppBase):
 
     def toggleEditor(self):
         if not self.__geShowed:
-            self.as_updateStageS(1024, 768, 1)
+            self.updateStage(1024, 768, 1)
+            self.__geShowed = True
             self.component.movie.x = 320
             self.component.movie.y = 100
             self.fireEvent(LoadViewEvent(VIEW_ALIAS.G_E_INSPECT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self.component.movie.x = 0
             self.component.movie.y = 0
+            self.__geShowed = False
             self.onUpdateStage()
             self.fireEvent(GUIEditorEvent(GUIEditorEvent.HIDE_GUIEditor), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.__geShowed = not self.__geShowed
+
+    def updateStage(self, w, h, scale):
+        if not self.__geShowed:
+            self.as_updateStageS(w, h, scale)
 
     def fireEventAfterInitialization(self, event, scope = EVENT_BUS_SCOPE.DEFAULT):
         if self.__initialized:
@@ -403,3 +409,6 @@ class App(ApplicationMeta, AppBase):
         if self._cacheMgr is None:
             raise Exception, 'Cache manager is not defined'
         return
+
+    def prepareLibrariesList(self):
+        return ['windows.swf', 'animations.swf', 'common_i18n.swf']

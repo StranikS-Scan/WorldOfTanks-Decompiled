@@ -4,9 +4,10 @@ from itertools import chain
 from collections import namedtuple, defaultdict
 from debug_utils import LOG_WARNING
 from helpers.time_utils import getCurrentTimestamp
+from account_helpers import getAccountDatabaseID
 from club_shared import ClubRolesHelper, RESTRICTION_REASONS_NAMES, RESTRICTION_OBJECT, CLUB_LIMITS
+from shared_utils import first
 from gui import GUI_SETTINGS
-from gui.shared.utils import first
 from gui.clubs import interfaces
 from gui.clubs.settings import CLUB_REQUEST_TYPE as _CRT, CLIENT_CLUB_RESTRICTIONS as _CCR, CLIENT_CLUB_STATE as _CCB, error, success, THE_SAME_CLUB_SEND_APP_COOLDOWN, MAX_CLUB_ACTIVE_INVITES
 
@@ -45,6 +46,12 @@ class MemberPermissions(object):
     def canSeeContenders(self):
         return True
 
+    def canSeeOtherPlayerInfo(self):
+        return True
+
+    def canGetClubSeasons(self):
+        return True
+
     def canRevokeInvite(self):
         return self.isOwner()
 
@@ -61,7 +68,7 @@ class MemberPermissions(object):
         return self.isOwner() or self.isOfficer()
 
     def canSeeApplicants(self):
-        return self.isOwner()
+        return self.isOwner() or self.isOfficer()
 
     def canTransferOwnership(self):
         return self.isOwner()
@@ -79,9 +86,6 @@ class MemberPermissions(object):
         return self.isOwner()
 
     def canChangeWebSettings(self):
-        return self.isOwner()
-
-    def canKickFromClub(self):
         return self.isOwner()
 
     def canSetRanked(self):
@@ -227,6 +231,12 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
             return error(_CCR.CLUB_IS_NOT_IN_LADDER)
         return self._isClubRequestValid(_CRT.GET_CLUBS_CONTENDERS, club, 'canSeeContenders')
 
+    def canSeeOtherPlayerInfo(self, profile, club = None, userDbID = None):
+        return self._isAccountRequestValid(_CRT.GET_PLAYER_INFO)
+
+    def canGetClubSeasons(self, profile, club = None):
+        return self._isAccountRequestValid(_CRT.GET_SEASONS)
+
     def canDestroyClub(self, profile, club = None):
         stateID = profile.getState().getStateID()
         if stateID != _CCB.HAS_CLUB:
@@ -237,7 +247,11 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
         stateID = profile.getState().getStateID()
         if stateID != _CCB.HAS_CLUB:
             return error(_CCR.HAS_NO_CLUB)
-        return self._isClubRequestValid(_CRT.LEAVE_CLUB, club, 'canLeaveClub')
+        else:
+            if club is not None:
+                if not club.hasMember(getAccountDatabaseID()):
+                    return error(_CCR.NOT_A_CLUB_MEMBER)
+            return self._isClubRequestValid(_CRT.LEAVE_CLUB, club, 'canLeaveClub')
 
     def canOpenClub(self, profile, club = None):
         stateID = profile.getState().getStateID()
@@ -309,7 +323,11 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
     def canAssignPrivate(self, profile, club = None):
         return self._isClubRequestValid(_CRT.ASSIGN_PRIVATE, club, 'canAssignPrivate')
 
-    def canKickMember(self, profile, club = None):
+    def canKickMember(self, profile, club = None, memberDbID = None):
+        if club is not None:
+            if memberDbID is not None:
+                if not club.hasMember(memberDbID):
+                    return error(_CCR.NOT_A_CLUB_MEMBER)
         return self._isClubRequestValid(_CRT.KICK_MEMBER, club, 'canKickMember')
 
     def canChangeClubRequirements(self, profile, club = None):
@@ -319,13 +337,14 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
         url = GUI_SETTINGS.lookup('clubSettings')
         if not url:
             return error(_CCR.DEFAULT)
+        elif club is not None:
+            for rID in {_CRT.CHANGE_CLUB_NAME, _CRT.CHANGE_CLUB_EMBLEM}:
+                result = self._isClubRequestValid(rID, club, 'canChangeWebSettings')
+                if result.success:
+                    return result
+
+            return error(_CCR.NOT_ENOUGH_RATED_BATTLES)
         else:
-            if club is not None:
-                permissions = club.getPermissions()
-                if not permissions.canChangeWebSettings():
-                    return error(_CCR.DEFAULT)
-                if club.getTotalDossier().getTotalStats().getBattlesCount() < CLUB_LIMITS.MIN_BATTLES_COUNT_TO_CHANGE_NAME:
-                    return error(_CCR.NOT_ENOUGH_RATED_BATTLES)
             return success()
 
     def _isAccountRequestValid(self, requestTypeID):

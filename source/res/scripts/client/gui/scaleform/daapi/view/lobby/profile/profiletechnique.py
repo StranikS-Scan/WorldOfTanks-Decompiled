@@ -13,6 +13,8 @@ from nations import NAMES
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.shared.gui_items.dossier import dumpDossier
+from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
+from helpers import i18n
 
 class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
 
@@ -25,18 +27,29 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
         self.as_setInitDataS(self._getInitData())
 
     def _getInitData(self):
-        dropDownProvider = [PROFILE.PROFILE_DROPDOWN_LABELS_ALL,
-         PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL,
-         PROFILE.PROFILE_DROPDOWN_LABELS_TEAM,
-         PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM]
+        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)]
         if isFortificationEnabled():
-            dropDownProvider.append(PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES)
+            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES))
         if isFortificationBattlesEnabled():
-            dropDownProvider.append(PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES)
+            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES))
         return {'dropDownProvider': dropDownProvider}
 
+    def getEmptyScreenLabel(self):
+        emptyScreenLabelsDictionary = {PROFILE_DROPDOWN_KEYS.ALL: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_ALL,
+         PROFILE_DROPDOWN_KEYS.TEAM: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_TEAM,
+         PROFILE_DROPDOWN_KEYS.STATICTEAM: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_STATICTEAM,
+         PROFILE_DROPDOWN_KEYS.HISTORICAL: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_HISTORICAL,
+         PROFILE_DROPDOWN_KEYS.CLAN: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_GLOBALMAP,
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTBATTLES,
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES}
+        return i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
+
     def _sendAccountData(self, targetData, accountDossier):
-        self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(targetData))
+        self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(targetData), '', self.getEmptyScreenLabel())
 
     def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly = False):
         result = []
@@ -70,7 +83,7 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
         pass
 
     def __getMarkOfMasteryVal(self, markOfMastery):
-        if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_ALL:
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
             return markOfMastery
         return ProfileUtils.UNAVAILABLE_VALUE
 
@@ -78,30 +91,32 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
         vehDossier = g_itemsCache.items.getVehicleDossier(vehicleIntCD, databaseId)
         achievementsList = None
         specialMarksStats = []
-        if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_ALL:
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
             stats = vehDossier.getRandomStats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
             if g_itemsCache.items.getItemByCD(int(vehicleIntCD)).level > 4:
                 specialMarksStats.append(AchievementsUtils.packAchievement(stats.getAchievement(MARK_ON_GUN_RECORD), vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None))
-        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_TEAM:
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
             stats = vehDossier.getTeam7x7Stats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
-        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_STATICTEAM:
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.STATICTEAM:
             stats = vehDossier.getRated7x7Stats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
-        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL:
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.HISTORICAL:
             stats = vehDossier.getHistoricalStats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
-        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES:
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES:
             stats = vehDossier.getFortSortiesStats()
-        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES:
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES:
             stats = vehDossier.getFortBattlesStats()
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.CLAN:
+            stats = vehDossier.getGlobalMapStats()
         else:
             raise ValueError('Profile Technique: Unknown battle type: ' + self._battlesType)
         if achievementsList is not None:
             achievementsList.insert(0, specialMarksStats)
         preparedStatistics = DetailedStatisticsUtils.getStatistics(stats, self._userID is None)
-        if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES:
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES:
             preparedStatistics[0]['data'][0]['tooltip'] = PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FORT_BATTLESCOUNT
         self.as_responseVehicleDossierS({'detailedData': preparedStatistics,
          'achievements': achievementsList})

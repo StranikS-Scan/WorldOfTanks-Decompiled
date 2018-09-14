@@ -84,6 +84,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'postBattleExchange': PostBattleExchangeProps(False, ''),
  'actionComeToEnd': time_utils.QUARTER_HOUR,
  'goldFishActionShowCooldown': 86400,
+ 'isBattlePanelsUpdatableInCtrl': True,
  'guiScale': [],
  'playerFeedbackDelay': 0.75,
  'allowedNotSupportedGraphicSettings': {}}
@@ -112,8 +113,6 @@ class GuiSettings(object):
             if len(diff):
                 LOG_NOTE('Settings are not in {0}:'.format(GUI_SETTINGS_FILE_PATH), diff)
         self.__settings.update(settings)
-        for key, reader in externalReaders.iteritems():
-            self.__settings[key] = reader()
 
     def __getattr__(self, name):
         if name in self.__settings:
@@ -154,73 +153,3 @@ class GuiSettings(object):
         if name in self.__settings:
             settings = self.__settings[name]
         return settings
-
-
-class VideoSettings(object):
-
-    def __init__(self):
-        """
-        Initialization.
-        """
-        super(VideoSettings, self).__init__()
-        self.__setting = {'audio': {},
-         'subtitles': {}}
-
-    def read(self, path):
-        """
-        Reads video setting from file.
-        @param path: path to file with video setting.
-        """
-        ctx, section = resource_helper.getRoot(path, safe=True)
-        if section is None:
-            LOG_WARNING('File with video settings not found. Uses default values', path)
-            return
-        else:
-            subCtx, subSection = resource_helper.getSubSection(ctx, section, 'audio', safe=True)
-            if subSection:
-                self.__setting['audio'] = self.__readTracks(subCtx, subSection)
-            subCtx, subSection = resource_helper.getSubSection(ctx, section, 'subtitles', safe=True)
-            if subSection:
-                self.__setting['subtitles'] = self.__readTracks(subCtx, subSection, offset=1)
-            return self
-
-    @property
-    def audioTrack(self):
-        """
-        Returns number of audio track by language code. If track not found than
-        returns 0.
-        @return: number of audio track.
-        """
-        audio = self.__setting['audio']
-        code = getClientLanguage()
-        if code in audio:
-            return audio[code]
-        return 0
-
-    @property
-    def subtitleTrack(self):
-        """
-        Returns number of subtitle by language code. If track not found than
-        returns 0.
-        Note: subtitle track 0 turns subtitles off.
-        @return: number of subtitle track.
-        """
-        subtitles = self.__setting['subtitles']
-        code = getClientLanguage()
-        if code in subtitles:
-            return subtitles[code]
-        return 0
-
-    def __readTracks(self, ctx, section, offset = 0):
-        result = {}
-        iterator = resource_helper.getIterator(ctx, section)
-        for idx, (subCtx, subSec) in enumerate(iterator):
-            for langCtx, langSec in resource_helper.getIterator(subCtx, subSec):
-                lang = resource_helper.readStringItem(langCtx, langSec).value
-                if len(lang) > 0:
-                    result[lang] = idx + offset
-
-        return result
-
-
-externalReaders = {'video': lambda : VideoSettings().read(VIDEO_SETTINGS_FILE_PATH)}

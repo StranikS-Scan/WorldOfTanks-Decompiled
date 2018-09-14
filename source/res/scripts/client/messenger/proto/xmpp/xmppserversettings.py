@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/XmppServerSettings.py
 import types
 from debug_utils import LOG_ERROR
-from messenger.ext.player_helpers import getPlayerDatabaseID
+from gui.shared.utils import getPlayerDatabaseID
 from messenger.proto.interfaces import IProtoSettings
 from messenger.proto.xmpp.gloox_constants import CONNECTION_IMPL_TYPE
 from messenger.proto.xmpp.jid import ContactJID

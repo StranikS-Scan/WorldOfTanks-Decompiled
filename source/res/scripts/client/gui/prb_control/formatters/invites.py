@@ -135,8 +135,10 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         return makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': i18n.makeString(I18N_INVITES.INVITES_COMMENT, comment=html.escape(comment))})
 
     def getNote(self, invite):
+        note = ''
         if self.prbInvites.canAcceptInvite(invite):
-            note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.type, invite.peripheryID)
+            if self.prbDispatcher:
+                note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.type, invite.peripheryID)
         else:
             note = getAcceptNotAllowedText(invite.type, invite.peripheryID, invite.isActive(), invite.alreadyJoined)
         if len(note):
@@ -212,8 +214,10 @@ class AutoInviteTextFormatter(InviteFormatter):
         return None
 
     def getNote(self, invite):
+        note = ''
         if self.prbAutoInvites.canAcceptInvite(invite):
-            note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.prbType, invite.peripheryID)
+            if self.prbAutoInvites:
+                note = getLeaveOrChangeText(self.prbDispatcher.getFunctionalState(), invite.prbType, invite.peripheryID)
         else:
             note = getAcceptNotAllowedText(invite.prbType, invite.peripheryID)
         return note

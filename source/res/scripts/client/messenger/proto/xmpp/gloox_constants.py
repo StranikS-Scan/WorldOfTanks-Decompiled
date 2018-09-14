@@ -95,6 +95,16 @@ class MESSAGE_TYPE(object):
     INVALID = 32
 
 
+class MESSAGE_TYPE_ATTR(object):
+    CHAT = 'chat'
+    GROUPCHAT = 'groupchat'
+    NORMAL = 'normal'
+
+
+MESSAGE_TYPE_TO_ATTR = {MESSAGE_TYPE.CHAT: MESSAGE_TYPE_ATTR.CHAT,
+ MESSAGE_TYPE.GROUPCHAT: MESSAGE_TYPE_ATTR.GROUPCHAT,
+ MESSAGE_TYPE.NORMAL: MESSAGE_TYPE_ATTR.NORMAL}
+
 class ERROR_TYPE(object):
     MODIFY = 'modify'
     CANCEL = 'cancel'
@@ -120,3 +130,16 @@ class GLOOX_EVENT(object):
 GLOOX_EVENTS_NAMES = dict([ (v, k) for k, v in GLOOX_EVENT.__dict__.iteritems() if v in GLOOX_EVENT.ALL ])
 INBOUND_SUB_BATCH_SIZE = 100
 INBOUND_SUB_INTERVAL = 2
+
+class CHAT_STATE(object):
+    UNDEFINED = ''
+    ACTIVE = 'active'
+    INACTIVE = 'inactive'
+    GONE = 'gone'
+    COMPOSING = 'composing'
+    PAUSED = 'paused'
+    RANGE = (ACTIVE,
+     INACTIVE,
+     GONE,
+     COMPOSING,
+     PAUSED)

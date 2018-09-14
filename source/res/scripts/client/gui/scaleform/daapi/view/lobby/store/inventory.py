@@ -240,7 +240,6 @@ class Inventory(Store, InventoryMeta):
         credits, gold = g_itemsCache.items.stats.money
         statusLevel = InventoryVehicle.STATE_LEVEL.INFO
         inventoryId = None
-        name = module.longUserName
         isRented = False
         rentLeftTimeStr = ''
         if module.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
@@ -252,8 +251,7 @@ class Inventory(Store, InventoryMeta):
                     rentLeftTimeStr = getRentLeftTimeStr(localization, module.rentLeftTime)
             if module.isInInventory:
                 inventoryId = module.invID
-        if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
-            name = module.userName
+        name = module.userName if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS else module.longUserName
         action = None
         if module.sellPrice != module.defaultSellPrice and not isRented:
             action = getItemActionTooltipData(module, False)

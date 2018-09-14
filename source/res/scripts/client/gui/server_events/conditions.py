@@ -6,18 +6,19 @@ import BigWorld
 import constants
 import nations
 import account_helpers
-from debug_utils import LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_WARNING
 from helpers import i18n, int2roman
 from items import vehicles
 from gui import makeHtmlString
 from gui.shared import g_itemsCache, REQ_CRITERIA
-from gui.shared.utils import CONST_CONTAINER
 from gui.server_events import formatters
+from shared_utils import CONST_CONTAINER
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.COMPANY: 'company',
  constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
 _ET = constants.EVENT_TYPE
+_TOKEN_REQUIREMENT_QUESTS = set(_ET.LIKE_BATTLE_QUESTS + _ET.LIKE_TOKEN_QUESTS)
 
 def _getArenaBonusType(preBattleCond):
     if preBattleCond is not None:
@@ -586,35 +587,55 @@ class Token(_Requirement):
     def _format(self, svrEvents, event = None):
         result = []
         for eID, e in svrEvents.iteritems():
-            if e.getType() in set(_ET.LIKE_BATTLE_QUESTS + _ET.LIKE_TOKEN_QUESTS):
-                children = e.getChildren()
-                if self._id in children:
-                    for qID in children[self._id]:
-                        quest = svrEvents.get(qID)
-                        if quest is not None:
-                            isAvailable = True
-                            if event is not None and not event.isCompleted():
-                                isAvailable = self.isAvailable()
-                            tokensCountNeed = self.getNeededCount()
-                            battlesLeft = None
-                            if tokensCountNeed > 1:
-                                label = i18n.makeString('#quests:details/requirements/token/N', count=BigWorld.wg_getIntegralFormat(tokensCountNeed), questName=quest.getUserName())
-                                if not isAvailable:
-                                    battlesLeft = tokensCountNeed - self.__getTokensCount()
-                            else:
-                                label = i18n.makeString('#quests:details/requirements/token', questName=quest.getUserName())
-                            counterDescr = None
-                            if e.getType() != _ET.TOKEN_QUEST:
-                                counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
-                            result.append(formatters.packTextBlock(label, questID=qID, isAvailable=isAvailable, counterValue=battlesLeft, counterDescr=counterDescr))
-                        else:
-                            LOG_WARNING('Unknown quest id in token conditions', qID)
+            if e.getType() not in _TOKEN_REQUIREMENT_QUESTS:
+                continue
+            children = e.getChildren()
+            if self._id not in children:
+                continue
+            ungroupedResult = []
+            groupedResult = {}
+            for qID in children[self._id]:
+                quest = svrEvents.get(qID)
+                if quest is not None:
+                    tokensCountNeed = self.getNeededCount()
+                    isAvailable = True
+                    if event is not None and not event.isCompleted():
+                        isAvailable = self.isAvailable()
+                    battlesLeft = None
+                    if tokensCountNeed > 1:
+                        label = i18n.makeString('#quests:details/requirements/token/N', count=BigWorld.wg_getIntegralFormat(tokensCountNeed), questName=quest.getUserName())
+                        if not isAvailable:
+                            battlesLeft = tokensCountNeed - self.__getTokensCount()
+                    else:
+                        label = i18n.makeString('#quests:details/requirements/token', questName=quest.getUserName())
+                    counterDescr = None
+                    if e.getType() != _ET.TOKEN_QUEST:
+                        counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
+                    groupID = quest.getGroupID()
+                    group = self.__getGroup(groupID)
+                    if group is not None and tokensCountNeed > 1:
+                        groupName = group.getUserName()
+                        label = i18n.makeString('#quests:details/requirements/group/token/N', groupName=groupName, count=BigWorld.wg_getIntegralFormat(tokensCountNeed))
+                        groupedResult[groupID, group.getPriority()] = formatters.packTextBlock(label, isAvailable=isAvailable, counterValue=battlesLeft, counterDescr=counterDescr)
+                    else:
+                        ungroupedResult.append(formatters.packTextBlock(label, questID=qID, isAvailable=isAvailable, counterValue=battlesLeft, counterDescr=counterDescr))
+                else:
+                    LOG_WARNING('Unknown quest id in token conditions', qID)
+
+            for key, info in sorted(groupedResult.items(), key=lambda ((gID, priority), block): priority):
+                result.append(info)
+
+            result.extend(ungroupedResult)
 
         return result
 
     def __getTokensCount(self):
         from gui.server_events import g_eventsCache
         return g_eventsCache.questsProgress.getTokenCount(self._id)
+
+    def __getGroup(self, groupID):
+        from gui.server_events import g_eventsCache
+        return g_eventsCache.getGroups().get(groupID, None)
 
     def __repr__(self):
         return 'Token<id=%s; %s=%d; consumable=%r>' % (self._id,

@@ -2,6 +2,7 @@
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.formatters import icons
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortIntelligenceNotAvailableWindowMeta import FortIntelligenceNotAvailableWindowMeta
 from gui.Scaleform.framework.entities.View import View
@@ -59,7 +60,7 @@ class FortIntelligenceNotAvailableWindow(AbstractWindowView, View, FortIntellige
             headerText = TEXT_MANAGER_STYLES.PROMO_TITLE
             if not self.__isDefenceHourEnabled:
                 bodyText = TEXT_MANAGER_STYLES.ALERT_TEXT
-                alertIcon = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON) + ' '
+                alertIcon = icons.alert() + ' '
         valueHeader = self.app.utilsManager.textManager.getText(headerText, self.__getText(value + '/header'))
         valueBody = self.app.utilsManager.textManager.getText(bodyText, alertIcon + self.__getText(value + '/body'))
         return (valueHeader, valueBody)

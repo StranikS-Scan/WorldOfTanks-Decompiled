@@ -19,3 +19,7 @@ class BattleTypeSelectPopoverMeta(DAAPIModule):
     def as_setDemonstrationEnabledS(self, demonstratorEnabled):
         if self._isDAAPIInited():
             return self.flashObject.as_setDemonstrationEnabled(demonstratorEnabled)
+
+    def as_showMiniClientInfoS(self, description, hyperlink):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showMiniClientInfo(description, hyperlink)

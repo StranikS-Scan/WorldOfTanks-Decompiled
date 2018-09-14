@@ -37,6 +37,8 @@ class ARENAS(object):
     C_05_PROHOROVKA_DESCRIPTION = '#arenas:05_prohorovka/description'
     C_96_PROHOROVKA_DEFENSE_NAME = '#arenas:96_prohorovka_defense/name'
     C_96_PROHOROVKA_DEFENSE_DESCRIPTION = '#arenas:96_prohorovka_defense/description'
+    C_96_PROHOROVKA_DEFENSE_TEST_NAME = '#arenas:96_prohorovka_defense_test/name'
+    C_96_PROHOROVKA_DEFENSE_TEST_DESCRIPTION = '#arenas:96_prohorovka_defense_test/description'
     C_06_ENSK_NAME = '#arenas:06_ensk/name'
     C_06_ENSK_DESCRIPTION = '#arenas:06_ensk/description'
     C_07_LAKEVILLE_NAME = '#arenas:07_lakeville/name'

@@ -12,9 +12,9 @@ from messenger.ext import passCensor
 from constants import FORT_SCOUTING_DATA_FILTER, FORT_MAX_ELECTED_CLANS, FORT_SCOUTING_DATA_ERROR
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 import fortified_regions
+from shared_utils import CONST_CONTAINER, isEmpty
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.shared.utils import CONST_CONTAINER, isEmpty
 from gui.prb_control.items.sortie_items import getDivisionNameByType
 from gui.shared.fortifications.context import RequestSortieUnitCtx, FortPublicInfoCtx, RequestClanCardCtx
 from gui.shared.fortifications.settings import FORT_REQUEST_TYPE
@@ -1395,10 +1395,7 @@ class _BattleItemAbstract(object):
         return self.isResultsPresent() and self._attackResult > 0
 
     def isLose(self):
-        return self.isResultsPresent() and self._attackResult < 0 or self._attackResult == FORT_ATTACK_RESULT.TECHNICAL_DRAW
-
-    def isDraw(self):
-        return self._attackResult == 0
+        return self.isResultsPresent() and self._attackResult <= 0 or self._attackResult == FORT_ATTACK_RESULT.TECHNICAL_DRAW
 
     def isHot(self):
         return self.isPlanned() and self.getStartTimeLeft() <= time_utils.QUARTER_HOUR or self.isInProgress()
@@ -1425,7 +1422,7 @@ class DefenceItem(_BattleItemAbstract):
         return BATTLE_ITEM_TYPE.DEFENCE
 
     def isWin(self):
-        return self.isResultsPresent() and self._attackResult < 0
+        return self.isResultsPresent() and self._attackResult <= 0
 
     def isLose(self):
         return self.isResultsPresent() and self._attackResult > 0 or self._attackResult == FORT_ATTACK_RESULT.TECHNICAL_DRAW

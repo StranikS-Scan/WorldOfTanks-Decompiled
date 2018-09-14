@@ -10,6 +10,7 @@ from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.formatters import icons
 from helpers import i18n
 
 class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
@@ -79,8 +80,7 @@ class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
         return
 
     def __showDataUnavailableView(self):
-        warningIcon = i18n.makeString(self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON))
-        header = warningIcon + i18n.makeString(MENU.BROWSER_DATAUNAVAILABLE_HEADER)
+        header = icons.alert() + i18n.makeString(MENU.BROWSER_DATAUNAVAILABLE_HEADER)
         description = i18n.makeString(MENU.BROWSER_DATAUNAVAILABLE_DESCRIPTION)
         self.as_showServiceViewS(header, description)
 
@@ -107,11 +107,13 @@ class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
             self.__customTitle = event.ctx.get('title', self.__customTitle)
             self.__showActionBtn = event.ctx.get('showActionBtn', self.__showActionBtn)
             self.as_configureS(self.__isDefault, self.__customTitle, self.__showActionBtn, self.__showCloseBtn)
-            if self.__url is not None and self.__url != self.__browser.url:
+            browserUrl = self.__browser.url
+            if browserUrl[-1] == '/':
+                browserUrl = browserUrl[:-1]
+            if self.__url and self.__url != browserUrl:
                 self.__browser.navigate(self.__url)
             else:
                 self.__browser.onBrowserShow(False)
-        return
 
     def __onBrowserDeleted(self, browserID):
         if self.__browserID == browserID:

@@ -18,9 +18,9 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.context import AttachCtx
-from gui.shared.utils import findFirst
 from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
+from shared_utils import findFirst
 
 class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMeta, FortViewHelper, AppRef):
 

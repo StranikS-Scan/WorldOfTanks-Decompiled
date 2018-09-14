@@ -10,6 +10,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
 from gui.shared.utils import functions
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.formatters import icons
 from helpers import html
 from messenger import g_settings
 from messenger.ext import g_olDictionary, g_dnDictionary
@@ -148,7 +149,7 @@ class PostBattleLinksFilter(IIncomingMessageFilter):
              'arena': functions.getArenaShortName(arenaTypeID),
              'vehicle': Vehicle(typeCompDescr=vehTypeCompDescr).shortUserName,
              'xp': BigWorld.wg_getIntegralFormat(xp),
-             'arrowButton': TextManager.getIcon(TextIcons.ARROW_BUTTON)})
+             'arrowButton': icons.arrow()})
         except:
             LOG_DEBUG('Invalid post battle results in message', match)
             LOG_CURRENT_EXCEPTION()

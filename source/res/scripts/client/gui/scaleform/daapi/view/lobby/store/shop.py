@@ -18,6 +18,7 @@ from gui.Scaleform.daapi.view.lobby.store import Store
 from gui.shared.utils.gui_items import InventoryVehicle
 from items import ITEM_TYPE_INDICES
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared.gui_items.Vehicle import Vehicle
 
 class Shop(Store, ShopMeta):
 
@@ -86,7 +87,7 @@ class Shop(Store, ShopMeta):
                     if inventoryCount > 0 and not module.isRented:
                         continue
                 if type == self._VEHICLE and 'rentals' not in extra:
-                    if module.isRented and not module.rentalIsOver:
+                    if module.isRented:
                         continue
                 if 'onVehicle' not in extra:
                     if vehicleCount > 0:
@@ -95,7 +96,10 @@ class Shop(Store, ShopMeta):
             statusMessage = ''
             money = g_itemsCache.items.stats.money
             if type == self._VEHICLE:
-                if BigWorld.player().isLongDisconnectedFromCenter:
+                if module.getState()[0] == Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER:
+                    statusMessage = '#menu:store/vehicleStates/%s' % module.getState()[0]
+                    disabled = not self._isPurchaseEnabled(module, money)
+                elif BigWorld.player().isLongDisconnectedFromCenter:
                     statusMessage = MENU.SHOP_ERRORS_CENTERISDOWN
                     disabled = True
                 elif inventoryCount > 0:
@@ -201,7 +205,6 @@ class Shop(Store, ShopMeta):
 
                 requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         elif type == self._VEHICLE:
-            requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
             requestCriteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
             typeSize = int(filter.pop(0))
             requestType = filter[0:typeSize]

@@ -3,8 +3,7 @@ from collections import namedtuple, defaultdict
 import BigWorld
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
-from account_helpers import getPlayerDatabaseID, isRoamingEnabled
-from avatar_helpers import getAvatarDatabaseID
+from account_helpers import isRoamingEnabled
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES, PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import SystemMessages
@@ -12,16 +11,22 @@ from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.settings import PRB_INVITE_STATE
 from gui.battle_control import g_sessionProvider as g_battleCtrl
 from gui.shared import g_itemsCache
+from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from gui.shared.actions import ActionsChain
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from ids_generators import SequenceIDGenerator
 from helpers import time_utils
 import Event
+from messenger import g_settings
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
-from messenger.ext import isSenderIgnored
+from messenger.ext import isSenderIgnored, isNotFriendSenderIgnored
 from predefined_hosts import g_preDefinedHosts
+
+def isInviteSenderIgnoredInBattle(user, areFriendsOnly, isInBattle):
+    return isNotFriendSenderIgnored(user, not isInBattle and areFriendsOnly)
+
 
 class _INVITE_VERSION(object):
     OLD = 1
@@ -121,6 +126,12 @@ class PrbInviteWrapper(_PrbInviteData):
     def getVersion(cls):
         return _INVITE_VERSION.OLD
 
+    def isFromHangar(self):
+        return True
+
+    def isSameBattle(self, arenaUniqueID):
+        return False
+
     def _isCurrentPrebattle(self, functional):
         return functional is not None and self.prebattleID == functional.getID()
 
@@ -140,6 +151,8 @@ class PrbInviteWrapper(_PrbInviteData):
             data['ownerDBID'] = other.ownerDBID
         if other.id:
             data['id'] = other.id
+        if other.extraData:
+            data['extraData'] = other.extraData
         data['state'] = other.state
         if other.count > 0:
             data['count'] = other.count
@@ -172,8 +185,15 @@ class PrbInvitationWrapper(PrbInviteWrapper):
     def getVersion(cls):
         return _INVITE_VERSION.NEW
 
+    def isFromHangar(self):
+        return self.extraData.get('arenaUniqueID') is None
+
+    def isSameBattle(self, arenaUniqueID):
+        invArenaUniqueID = self.extraData.get('arenaUniqueID')
+        return invArenaUniqueID is not None and invArenaUniqueID == arenaUniqueID
+
     def isIncoming(self):
-        return self.ownerDBID != (getPlayerDatabaseID() or getAvatarDatabaseID())
+        return self.ownerDBID != getPlayerDatabaseID()
 
     def isExpired(self):
         return self.expiryTime is not None and self.expiryTime < time_utils.getCurrentTimestamp()
@@ -236,6 +256,7 @@ class InvitesManager(UsersInfoHelper):
         self.onInvitesListInited = Event.Event(self.__eventManager)
         self.onReceivedInviteListModified = Event.Event(self.__eventManager)
         self.onSentInviteListModified = Event.Event(self.__eventManager)
+        self.__isInBattle = False
         return
 
     def __del__(self):
@@ -261,6 +282,7 @@ class InvitesManager(UsersInfoHelper):
         return
 
     def start(self):
+        self.__isInBattle = False
         if self.__inited & PRB_INVITES_INIT_STEP.STARTED == 0:
             self.__inited |= PRB_INVITES_INIT_STEP.STARTED
             if self.__inited == PRB_INVITES_INIT_STEP.INITED:
@@ -273,7 +295,7 @@ class InvitesManager(UsersInfoHelper):
         self.__eventManager.clear()
 
     def onAvatarBecomePlayer(self):
-        self.__clearInvites()
+        self.__isInBattle = True
         self.__clearAcceptChain()
 
     @storage_getter('users')
@@ -433,7 +455,7 @@ class InvitesManager(UsersInfoHelper):
         return inviteID
 
     def _addInvite(self, invite, userGetter):
-        if isSenderIgnored(userGetter(invite.creatorDBID)):
+        if self.__isInviteSenderIgnoredInBattle(userGetter(invite.creatorDBID)):
             return False
         self.__invites[invite.clientID] = invite
         if invite.isActive():
@@ -443,7 +465,7 @@ class InvitesManager(UsersInfoHelper):
     def _updateInvite(self, other, userGetter):
         inviteID = other.clientID
         invite = self.__invites[inviteID]
-        if invite == other or isSenderIgnored(userGetter(invite.creatorDBID)):
+        if invite == other or self.__isInviteSenderIgnoredInBattle(userGetter(invite.creatorDBID)):
             return False
         prevCount = invite.count
         invite = invite._merge(other)
@@ -477,7 +499,7 @@ class InvitesManager(UsersInfoHelper):
         self._buildReceivedInvitesList([(_getOldInvites().items(), self._getOldInviteMaker(rosterGetter)), (_getNewInvites().values(), self._getNewInviteMaker(rosterGetter))])
 
     def _getOldInviteMaker(self, rosterGetter):
-        receiver = BigWorld.player().name
+        receiver = getPlayerName()
         receiverDBID = getPlayerDatabaseID()
         receiverClanAbbrev = g_lobbyContext.getClanAbbrev(self.__clanInfo)
 
@@ -634,20 +656,6 @@ class InvitesManager(UsersInfoHelper):
                 event(added[isIncoming], changed[isIncoming], deleted[isIncoming])
 
         self.syncUsersInfo()
-        receiver = BigWorld.player().name
-        receiverDBID = getPlayerDatabaseID()
-        receiverClanAbbrev = g_lobbyContext.getClanAbbrev(self.__clanInfo)
-
-        def _inviteMaker(item):
-            (prebattleID, peripheryID), data = item
-            inviteID = self._makeInviteID(prebattleID, peripheryID, data.get('creatorDBID', 0), receiverDBID)
-            if data is not None:
-                invite = PrbInviteWrapper(clientID=inviteID, receiver=receiver, receiverDBID=receiverDBID, receiverClanAbbrev=receiverClanAbbrev, peripheryID=peripheryID, prebattleID=prebattleID, **data)
-            else:
-                invite = None
-            return (inviteID, invite)
-
-        return _inviteMaker
 
     def __accept_onPostActionsStopped(self, isCompleted):
         if not isCompleted:
@@ -660,3 +668,6 @@ class InvitesManager(UsersInfoHelper):
     def __clearInvites(self):
         self.__invites.clear()
         self.__unreadInvitesCount = 0
+
+    def __isInviteSenderIgnoredInBattle(self, user):
+        return isInviteSenderIgnoredInBattle(user, g_settings.userPrefs.invitesFromFriendsOnly, self.__isInBattle)

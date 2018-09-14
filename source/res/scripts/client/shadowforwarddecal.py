@@ -98,9 +98,10 @@ class ShadowForwardDecal:
 
     @staticmethod
     def __createDecal(transform, parent, applyToAll):
-        diffuseTexture = 'maps/spots/TankOcclusion/TankOcclusionMap.dds'
+        diffuseTexture = ''
         bumpTexture = ''
         hmTexture = ''
+        addTex = 'maps/spots/TankOcclusion/TankOcclusionMap.dds'
         priority = 0
         materialType = 6
         visibilityMask = 4294967295L
@@ -109,7 +110,7 @@ class ShadowForwardDecal:
         if applyToAll:
             influence = 62
         decal = BigWorld.WGShadowForwardDecal()
-        decal.setup(diffuseTexture, bumpTexture, hmTexture, priority, materialType, influence, visibilityMask, accuracy)
+        decal.setup(diffuseTexture, bumpTexture, hmTexture, addTex, priority, materialType, influence, visibilityMask, accuracy)
         decal.setLocalTransform(transform)
         parent.root.attach(decal)
         return decal

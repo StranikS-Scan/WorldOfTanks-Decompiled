@@ -1,12 +1,12 @@
 # Embedded file name: scripts/common/dossiers2/custom/updaters.py
 import struct
+import constants
 from dossiers2.common.updater_utils import getNewStaticSizeBlockValues, getStaticSizeBlockRecordValues
 from dossiers2.common.updater_utils import getNewBinarySetBlockValues, setStaticSizeBlockRecordValues
-from dossiers2.common.updater_utils import addBlock, addRecords, removeRecords, setVersion, getHeader
-import constants
+from dossiers2.common.updater_utils import addBlock, removeBlock, addRecords, removeRecords, setVersion, getHeader
 import dossiers2.custom.tankmen_dossier1_updater
-ACCOUNT_DOSSIER_VERSION = 93
-VEHICLE_DOSSIER_VERSION = 89
+ACCOUNT_DOSSIER_VERSION = 98
+VEHICLE_DOSSIER_VERSION = 92
 TANKMAN_DOSSIER_VERSION = 66
 FORT_DOSSIER_VERSION = 2
 RATED7X7_DOSSIER_VERSION = 1
@@ -1405,6 +1405,292 @@ def __updateFromAccountDossier92(compDescr):
     return (93, updateCtx['dossierCompDescr'])
 
 
+def __updateFromAccountDossier93(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'globalMapCommon')
+    addBlock(updateCtx, 'globalMapMiddle')
+    addBlock(updateCtx, 'globalMapChampion')
+    addBlock(updateCtx, 'globalMapAbsolute')
+    setVersion(updateCtx, 94)
+    return (94, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier94(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapCommon',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    removeBlock(updateCtx, 'globalMapCommon')
+    recordFormats = [('xpBefore8_9', 'I'), ('battlesCountBefore8_9', 'I'), ('battlesCountBefore9_0', 'I')]
+    addRecords(updateCtx, 'globalMapMiddle', recordFormats, {})
+    addRecords(updateCtx, 'globalMapChampion', recordFormats, {})
+    addRecords(updateCtx, 'globalMapAbsolute', recordFormats, {})
+    setVersion(updateCtx, 95)
+    return (95, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier95(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addRecords(updateCtx, 'fortSortiesInClan', [('middleBattlesCount', 'I'),
+     ('championBattlesCount', 'I'),
+     ('absoluteBattlesCount', 'I'),
+     ('middleWins', 'I'),
+     ('championWins', 'I'),
+     ('absoluteWins', 'I'),
+     ('fortResource', 'I')], {})
+    setVersion(updateCtx, 96)
+    return (96, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier96(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'maxGlobalMapMiddle')
+    addBlock(updateCtx, 'maxGlobalMapChampion')
+    addBlock(updateCtx, 'maxGlobalMapAbsolute')
+    setVersion(updateCtx, 97)
+    return (97, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier97(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute',
+     'maxGlobalMapMiddle',
+     'maxGlobalMapChampion',
+     'maxGlobalMapAbsolute']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'globalMapCommonCut')
+    setVersion(updateCtx, 98)
+    return (98, updateCtx['dossierCompDescr'])
+
+
 def __updateFromVehicleDossier1(compDescr):
     if not constants.IS_DEVELOPMENT:
         raise Exception, 'unexpected compact descriptor v1.0'
@@ -2419,6 +2705,187 @@ def __updateFromVehicleDossier88(compDescr):
     return (89, updateCtx['dossierCompDescr'])
 
 
+def __updateFromVehicleDossier89(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    gmDefaults = {}
+    clanPacking = {'spotted': (32, 'I'),
+     'damageDealt': (36, 'I'),
+     'wins': (8, 'I'),
+     'capturePoints': (44, 'I'),
+     'losses': (12, 'I'),
+     'survivedBattles': (16, 'I'),
+     'droppedCapturePoints': (48, 'I'),
+     'battlesCount': (4, 'I'),
+     'damageReceived': (40, 'I'),
+     'shots': (24, 'I'),
+     'frags': (20, 'I'),
+     'xp': (0, 'I'),
+     'directHits': (28, 'I')}
+    gmDefaults.update(getStaticSizeBlockRecordValues(updateCtx, 'clan', clanPacking))
+    clan2Packing = {'directHitsReceived': (12, 'I'),
+     'damageAssistedTrack': (4, 'I'),
+     'explosionHitsReceived': (24, 'I'),
+     'potentialDamageReceived': (36, 'I'),
+     'piercingsReceived': (20, 'I'),
+     'originalXP': (0, 'I'),
+     'damageAssistedRadio': (8, 'I'),
+     'piercings': (32, 'I'),
+     'explosionHits': (28, 'I'),
+     'damageBlockedByArmor': (40, 'I'),
+     'noDamageDirectHitsReceived': (16, 'I')}
+    gmDefaults.update(getStaticSizeBlockRecordValues(updateCtx, 'clan2', clan2Packing))
+    gmLayout = [('xp', 'I'),
+     ('battlesCount', 'I'),
+     ('wins', 'I'),
+     ('losses', 'I'),
+     ('survivedBattles', 'I'),
+     ('frags', 'I'),
+     ('shots', 'I'),
+     ('directHits', 'I'),
+     ('spotted', 'I'),
+     ('damageDealt', 'I'),
+     ('damageReceived', 'I'),
+     ('capturePoints', 'I'),
+     ('droppedCapturePoints', 'I'),
+     ('originalXP', 'I'),
+     ('damageAssistedTrack', 'I'),
+     ('damageAssistedRadio', 'I'),
+     ('directHitsReceived', 'I'),
+     ('noDamageDirectHitsReceived', 'I'),
+     ('piercingsReceived', 'I'),
+     ('explosionHitsReceived', 'I'),
+     ('explosionHits', 'I'),
+     ('piercings', 'I'),
+     ('winAndSurvived', 'I'),
+     ('frags8p', 'I'),
+     ('potentialDamageReceived', 'I'),
+     ('damageBlockedByArmor', 'I')]
+    blockFormat, blockValues = getNewStaticSizeBlockValues(gmLayout, gmDefaults)
+    addBlock(updateCtx, 'globalMapCommon', blockFormat, blockValues)
+    setVersion(updateCtx, 90)
+    return (90, updateCtx['dossierCompDescr'])
+
+
+def __updateFromVehicleDossier90(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'globalMapCommon']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    clanPacking = {'xpBefore8_9': (52, 'I'),
+     'battlesCountBefore9_0': (60, 'I'),
+     'battlesCountBefore8_9': (56, 'I')}
+    clanValues = getStaticSizeBlockRecordValues(updateCtx, 'clan', clanPacking)
+    recordFormats = [('xpBefore8_9', 'I'), ('battlesCountBefore8_9', 'I'), ('battlesCountBefore9_0', 'I')]
+    addRecords(updateCtx, 'globalMapCommon', recordFormats, clanValues)
+    setVersion(updateCtx, 91)
+    return (91, updateCtx['dossierCompDescr'])
+
+
+def __updateFromVehicleDossier91(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'globalMapCommon']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'maxGlobalMapCommon')
+    setVersion(updateCtx, 92)
+    return (92, updateCtx['dossierCompDescr'])
+
+
 def __updateFromTankmanDossier1(compDescr):
     return (dossiers2.TANKMAN_DOSSIER_VERSION, dossiers2.custom.tankmen_dossier1_updater.updateDossierCompDescr(compDescr))
 
@@ -2532,7 +2999,12 @@ accountVersionUpdaters = {19: __updateFromAccountDossier1,
  89: __updateFromAccountDossier89,
  90: __updateFromAccountDossier90,
  91: __updateFromAccountDossier91,
- 92: __updateFromAccountDossier92}
+ 92: __updateFromAccountDossier92,
+ 93: __updateFromAccountDossier93,
+ 94: __updateFromAccountDossier94,
+ 95: __updateFromAccountDossier95,
+ 96: __updateFromAccountDossier96,
+ 97: __updateFromAccountDossier97}
 vehicleVersionUpdaters = {17: __updateFromVehicleDossier1,
  18: __updateFromVehicleDossier1,
  19: __updateFromVehicleDossier1,
@@ -2570,7 +3042,10 @@ vehicleVersionUpdaters = {17: __updateFromVehicleDossier1,
  85: __updateFromVehicleDossier85,
  86: __updateFromVehicleDossier86,
  87: __updateFromVehicleDossier87,
- 88: __updateFromVehicleDossier88}
+ 88: __updateFromVehicleDossier88,
+ 89: __updateFromVehicleDossier89,
+ 90: __updateFromVehicleDossier90,
+ 91: __updateFromVehicleDossier91}
 tankmanVersionUpdaters = {10: __updateFromTankmanDossier1,
  11: __updateFromTankmanDossier1,
  12: __updateFromTankmanDossier1,

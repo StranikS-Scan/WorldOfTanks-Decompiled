@@ -144,6 +144,8 @@ class LOCK_REASON:
     UNIT_CLUB = UNIT | 16
 
 
+LOCK_REASON_NAMES = dict([ (v, k) for k, v in LOCK_REASON.__dict__.items() if not k.startswith('__') ])
+
 class BUY_VEHICLE_FLAG:
     NONE = 0
     CREW = 1

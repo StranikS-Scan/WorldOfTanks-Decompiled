@@ -6,8 +6,8 @@ import constants
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 import potapov_quests
 from helpers import i18n
+from shared_utils import findFirst
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui.shared.utils import findFirst
 from gui.server_events import g_eventsCache
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS

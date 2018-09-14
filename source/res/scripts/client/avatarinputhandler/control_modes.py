@@ -1666,6 +1666,7 @@ class _SPGFlashGunMarker(Flash):
         self.component.wg_usePyCollDetect = False
         self.component.wg_setRelaxTime(0.1)
         self.component.wg_setPointsBaseScale(g_settingsCore.interfaceScale.get())
+        g_settingsCore.interfaceScale.onScaleChanged += self.onScaleChanged
         self.active(True)
         self.__reload = {'start_time': 0,
          'duration': 0,
@@ -1675,8 +1676,10 @@ class _SPGFlashGunMarker(Flash):
             self.call('Crosshair.setFilter')
 
     def destroy(self):
+        from account_helpers.settings_core.SettingsCore import g_settingsCore
         self.active(False)
         self.__curShotInfoFunc = None
+        g_settingsCore.interfaceScale.onScaleChanged -= self.onScaleChanged
         return
 
     def enable(self, state):
@@ -1729,6 +1732,9 @@ class _SPGFlashGunMarker(Flash):
 
     def onRecreateDevice(self):
         self.component.size = GUI.screenResolution()
+
+    def onScaleChanged(self, scale):
+        self.component.wg_setPointsBaseScale(scale)
 
     def setPosition(self, pos):
         m = Math.Matrix()

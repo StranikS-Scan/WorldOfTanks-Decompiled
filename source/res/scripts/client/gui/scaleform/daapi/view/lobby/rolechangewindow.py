@@ -15,6 +15,7 @@ from gui.shared.gui_items.processors.tankman import TankmanChangeRole
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils import decorators, isVehicleObserver
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.formatters import icons
 from nations import NAMES
 
 def _getTankmanVO(tankman):
@@ -143,7 +144,7 @@ class RoleChangeWindow(View, AbstractWindowView, RoleChangeMeta):
         enoughGold = actualGold - changeRoleCost >= 0
         textType = TEXT_MANAGER_STYLES.GOLD_TEXT if enoughGold else TEXT_MANAGER_STYLES.ERROR_TEXT
         priceString = TextManager.getText(textType, formattedPrice)
-        priceString += TextManager.getIcon(TextIcons.GOLD)
+        priceString += icons.gold()
         self.as_setPriceS(priceString, enoughGold)
 
     def __setCommonData(self):

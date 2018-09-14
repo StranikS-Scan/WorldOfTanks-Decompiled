@@ -4,13 +4,35 @@ import ResMgr
 from operator import itemgetter
 from MemoryCriticalController import g_critMemHandler
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui import SystemMessages
+from gui import SystemMessages, GUI_SETTINGS
 from helpers import i18n
+from account_helpers.settings_core.settings_constants import GRAPHICS
 graphicsPresetsResource = 'system/data/graphics_settings_presets.xml'
 
 class GraphicsPresets:
     CUSTOM_PRESET_KEY = 'CUSTOM'
-    GRAPHICS_QUALITY_SETTINGS = ('RENDER_PIPELINE', 'TEXTURE_QUALITY', 'DECALS_QUALITY', 'OBJECT_LOD', 'FAR_PLANE', 'TERRAIN_QUALITY', 'SHADOWS_QUALITY', 'LIGHTING_QUALITY', 'SPEEDTREE_QUALITY', 'FLORA_QUALITY', 'WATER_QUALITY', 'EFFECTS_QUALITY', 'POST_PROCESSING_QUALITY', 'MOTION_BLUR_QUALITY', 'SNIPER_MODE_EFFECTS_QUALITY', 'VEHICLE_DUST_ENABLED', 'SNIPER_MODE_GRASS_ENABLED', 'VEHICLE_TRACES_ENABLED', 'SNIPER_MODE_SWINGING_ENABLED', 'COLOR_GRADING_TECHNIQUE', 'SEMITRANSPARENT_LEAVES_ENABLED')
+    GRAPHICS_QUALITY_SETTINGS = ('RENDER_PIPELINE',
+     'TEXTURE_QUALITY',
+     'DECALS_QUALITY',
+     'OBJECT_LOD',
+     'FAR_PLANE',
+     'TERRAIN_QUALITY',
+     'SHADOWS_QUALITY',
+     'LIGHTING_QUALITY',
+     'SPEEDTREE_QUALITY',
+     'FLORA_QUALITY',
+     'WATER_QUALITY',
+     'EFFECTS_QUALITY',
+     'POST_PROCESSING_QUALITY',
+     'MOTION_BLUR_QUALITY',
+     'SNIPER_MODE_EFFECTS_QUALITY',
+     'VEHICLE_DUST_ENABLED',
+     'SNIPER_MODE_GRASS_ENABLED',
+     'VEHICLE_TRACES_ENABLED',
+     'SNIPER_MODE_SWINGING_ENABLED',
+     'COLOR_GRADING_TECHNIQUE',
+     'SEMITRANSPARENT_LEAVES_ENABLED',
+     GRAPHICS.DRR_AUTOSCALER_ENABLED)
     GRAPHICS_QUALITY_SETTINGS_PRESETS_EXCLUDE = ('SNIPER_MODE_SWINGING_ENABLED', 'COLOR_GRADING_TECHNIQUE')
 
     def __init__(self):
@@ -81,8 +103,8 @@ class GraphicsPresets:
         qualitySettings = {'quality': {},
          'presets': None,
          'qualityOrder': GraphicsPresets.GRAPHICS_QUALITY_SETTINGS}
-        for label, index, values, _, advanced, _, _ in graphQualitySettings:
-            if label in GraphicsPresets.GRAPHICS_QUALITY_SETTINGS:
+        for settingName, index, values, _, advanced, _, _ in graphQualitySettings:
+            if settingName in GraphicsPresets.GRAPHICS_QUALITY_SETTINGS:
                 options = []
                 for i, val in enumerate(values):
                     valueLabel, supportFlag, advanced, _ = val
@@ -92,7 +114,7 @@ class GraphicsPresets:
                      'supported': supportFlag})
 
                 options = sorted(options, key=itemgetter('data'), reverse=True)
-                qualitySettings['quality'][label] = {'value': index,
+                qualitySettings['quality'][settingName] = {'value': index,
                  'options': options}
 
         presets = {'current': self.__presetsKeys.index(self.selectedPresetKey),
@@ -103,12 +125,14 @@ class GraphicsPresets:
              'settings': {}}
             settings = self.__presets.get(presetKey, {})
             isSupported = True
-            for label, value in settings.items():
-                if not self.settingIsSupported(label, value):
-                    isSupported = False
-                    break
-                if label in GraphicsPresets.GRAPHICS_QUALITY_SETTINGS:
-                    preset['settings'][label] = value
+            for settingName, value in settings.items():
+                if not self.settingIsSupported(settingName, value):
+                    allowedPresetSettings = GUI_SETTINGS.allowedNotSupportedGraphicSettings.get(preset['key'], [])
+                    if settingName not in allowedPresetSettings:
+                        isSupported = False
+                        break
+                if settingName in GraphicsPresets.GRAPHICS_QUALITY_SETTINGS:
+                    preset['settings'][settingName] = value
 
             if isSupported:
                 presets['values'].append(preset)

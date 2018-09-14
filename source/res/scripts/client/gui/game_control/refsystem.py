@@ -1,24 +1,24 @@
 # Embedded file name: scripts/client/gui/game_control/RefSystem.py
-import BigWorld
 from collections import defaultdict
 from operator import methodcaller, itemgetter
+import BigWorld
 from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from constants import REF_SYSTEM_FLAG, EVENT_TYPE
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from helpers import time_utils
+from helpers.i18n import makeString as _ms
+from shared_utils import findFirst
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.game_control.controllers import Controller
-from helpers import time_utils
-from helpers.i18n import makeString as _ms
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_itemsCache, events, g_eventBus, event_dispatcher as shared_events
-from gui.shared.utils import findFirst
 from gui.server_events import g_eventsCache
 from messenger.m_constants import USER_TAG
 from messenger.proto.entities import SharedUserEntity, ClanInfo

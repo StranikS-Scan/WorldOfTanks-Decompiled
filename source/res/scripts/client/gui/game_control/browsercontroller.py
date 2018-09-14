@@ -52,8 +52,9 @@ class BrowserController(Controller, AppRef):
             url = concatenator.join([url, suffix])
         size = browserSize or BROWSER.SIZE
         background = background or BROWSER.BACKGROUND
-        if browserID not in self.__browsers:
+        if browserID is None:
             browserID = self.__browserIDGenerator.next()
+        if browserID not in self.__browsers:
             texture = self._BROWSER_TEXTURE if isDefault else self._ALT_BROWSER_TEXTURE
             self.__browsers[browserID] = WebBrowser(browserID, self.app, texture, size, url, backgroundUrl=background)
             self.onBrowserAdded(browserID)

@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/MedalKnispelAchievement.py
 from abstract import ClassProgressAchievement
+from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 
 class MedalKnispelAchievement(ClassProgressAchievement):
@@ -14,4 +15,9 @@ class MedalKnispelAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'medalKnispel')
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRandomStats().getDamageDealt() + dossier.getRandomStats().getDamageReceived() + dossier.getTeam7x7Stats().getDamageDealt() + dossier.getTeam7x7Stats().getDamageReceived() + dossier.getFortBattlesStats().getDamageDealt() + dossier.getFortBattlesStats().getDamageReceived() + dossier.getFortSortiesStats().getDamageDealt() + dossier.getFortSortiesStats().getDamageReceived()
+        random = dossier.getRandomStats()
+        clans = dossier.getClanStats()
+        fortBattles = dossier.getFortBattlesStats()
+        fortSorties = dossier.getFortSortiesStats()
+        globalMap = dossier.getGlobalMapStats()
+        return random.getDamageDealt() + random.getDamageReceived() - (clans.getDamageDealt() + clans.getDamageReceived()) + dossier.getTeam7x7Stats().getDamageDealt() + dossier.getTeam7x7Stats().getDamageReceived() + fortBattles.getDamageDealt() + fortBattles.getDamageReceived() + fortSorties.getDamageDealt() + fortSorties.getDamageReceived() + globalMap.getDamageDealt() + globalMap.getDamageReceived()

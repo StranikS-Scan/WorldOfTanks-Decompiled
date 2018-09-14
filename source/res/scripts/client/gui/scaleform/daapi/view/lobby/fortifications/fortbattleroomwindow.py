@@ -4,7 +4,9 @@ from UnitBase import UNIT_BROWSER_ERROR
 from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
-from gui import DialogsInterface, SystemMessages
+from gui import DialogsInterface, SystemMessages, game_control
+from UnitBase import UNIT_OP
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
@@ -84,7 +86,13 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
     def onCreateRally(self):
         if not BigWorld.player().isLongDisconnectedFromCenter:
             self.__clearCache()
-            self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CHOICE_DIVISION_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+            sortiesAvailable, severAvailable = self.fortProvider.getController().getSortiesCurfewCtrl().getStatus()
+            if not severAvailable:
+                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW))
+            elif sortiesAvailable:
+                self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CHOICE_DIVISION_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+            else:
+                LOG_ERROR('Sorties is not Available at this moment')
         else:
             SystemMessages.pushI18nMessage('#system_messages:fortification/errors/CENTER_NOT_AVAILABLE', type=SystemMessages.SM_TYPE.Error)
 
@@ -170,6 +178,12 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
     def onIntroUnitFunctionalFinished(self):
         if self.unitFunctional.getExit() != settings.FUNCTIONAL_EXIT.UNIT:
             NavigationStack.clear(self.getNavigationKey())
+
+    def onUnitSettingChanged(self, opCode, value):
+        if opCode == UNIT_OP.CHANGE_DIVISION:
+            unitMgrID = self.unitFunctional.getID()
+            if unitMgrID > 0:
+                self.__loadRoomView()
 
     def _populate(self):
         super(FortBattleRoomWindow, self)._populate()

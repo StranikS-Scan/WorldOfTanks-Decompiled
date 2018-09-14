@@ -2,8 +2,11 @@
 import collections
 import BigWorld
 import MusicController
+import ResMgr
 from adisp import process
 from gui import game_control
+from helpers.i18n import makeString as _ms
+from gui.game_control import getBrowserCtrl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.settings import FUNCTIONAL_EXIT
 from tutorial import GlobalStorage
@@ -119,6 +122,15 @@ class FunctionalRequestAllBonusesEffect(FunctionalEffect):
                 requester.request()
 
             return
+
+
+class FunctionalOpenInternalBrowser(FunctionalEffect):
+
+    def triggerEffect(self):
+        browserID = self._effect.getTargetID()
+        if getBrowserCtrl().getBrowser(browserID) is None:
+            getBrowserCtrl().load(url='file:///{0}'.format(ResMgr.resolveToAbsolutePath('gui/html/video_tutorial/index_{0}.html'.format(_ms('#settings:LANGUAGE_CODE')))), title=_ms('#miniclient:tutorial/video/title'), showCloseBtn=True, showActionBtn=False, browserSize=(780, 470), browserID=browserID)(lambda success: True)
+        return
 
 
 class FunctionalPlayMusicEffect(FunctionalEffect):

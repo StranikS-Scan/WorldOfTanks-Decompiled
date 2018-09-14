@@ -1,9 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/StaticFormationUnitView.py
 import BigWorld
 from UnitBase import UNIT_OP
-from gui.Scaleform.framework.managers.TextManager import TextManager
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
-from helpers import int2roman
+from gui import makeHtmlString
+from gui.shared.formatters import text_styles
+from gui.shared.utils.functions import makeTooltip
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
@@ -20,6 +20,7 @@ from gui.prb_control.context import unit_ctx
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper
+from helpers import int2roman
 
 class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblemsHelper):
     ABSENT_VALUES = '--'
@@ -57,12 +58,20 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
     def onClubLadderInfoChanged(self, ladderInfo):
         self.__updateHeader()
 
+    def onClubsSeasonStateChanged(self, seasonState):
+        self.__updateHeader()
+
+    def __makeLegionnairesCountString(self, unit):
+        legionnairesString = makeHtmlString('html_templates:lobby/cyberSport/staticFormationUnitView', 'legionnairesCount', {'cur': unit.getLegionaryCount(),
+         'max': unit.getLegionaryMaxCount()})
+        return legionnairesString
+
     def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
         functional = self.unitFunctional
         _, unit = functional.getUnit()
         if self._candidatesDP is not None:
             self._candidatesDP.rebuild(functional.getCandidates())
-        self.as_setLegionnairesCountS(False, _ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self.__updateHeader()
         self._updateMembersData()
         self.__updateTotalData()
@@ -125,7 +134,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         _, unit = functional.getUnit()
         if self._candidatesDP is not None:
             self._candidatesDP.rebuild(functional.getCandidates())
-        self.as_setLegionnairesCountS(False, _ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self.__updateHeader()
         self._updateMembersData()
         self.__updateTotalData()
@@ -143,7 +152,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         _, unit = functional.getUnit()
         if self._candidatesDP is not None:
             self._candidatesDP.rebuild(functional.getCandidates())
-        self.as_setLegionnairesCountS(False, _ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self.__updateHeader()
         self._updateMembersData()
         self.__updateTotalData()
@@ -199,7 +208,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
         self.__updateHeader()
         _, unit = self.unitFunctional.getUnit()
-        self.as_setLegionnairesCountS(False, _ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
     def _dispose(self):
@@ -210,30 +219,32 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         return
 
     def __updateHeader(self):
-        isCreator = self.unitFunctional.getPlayerInfo().isCreator() if self.unitFunctional is not None else False
         club = self.clubsCtrl.getClub(self.__clubDBID)
-        hasRankForModeChange = club is not None and club.getPermissions().canSetRanked()
-        seasonActive = isSeasonInProgress()
+        canSetRanked = club is not None and club.getPermissions().canSetRanked()
+        seasonState = self.clubsCtrl.getSeasonState()
         modeLabel = ''
         modeTooltip = ''
-        modeTextStyle = TEXT_MANAGER_STYLES.STANDARD_TEXT
-        if not seasonActive:
-            modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_NOSEASON
-            modeTooltip = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_NOSEASONTOOLTIP
-        elif isCreator:
-            if not hasRankForModeChange:
-                modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_LOWRANK
-                modeTooltip = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_LOWRANKTOOLTIP
-            elif self.__extra.isRatedBattle:
+        isFixedMode = True
+        if self.__extra.isRatedBattle:
+            isFixedMode = not canSetRanked
+            if canSetRanked:
                 modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_SETUNRANKEDMODE
             else:
-                modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_SETRANKEDMODE
-        elif self.__extra.isRatedBattle:
-            modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_RANKEDMODE
-            modeTextStyle = TEXT_MANAGER_STYLES.NEUTRAL_TEXT
-        else:
-            modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_WRONGROLE
-            modeTooltip = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_WRONGROLETOOLTIP
+                modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_RANKEDMODE
+        elif seasonState.isSuspended():
+            modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONPAUSED
+            modeTooltip = makeTooltip(CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONPAUSEDTOOLTIP_HEADER, CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONPAUSEDTOOLTIP_BODY)
+        elif seasonState.isFinished():
+            modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONFINISHED
+            modeTooltip = makeTooltip(CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONFINISHEDTOOLTIP_HEADER, CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONFINISHEDTOOLTIP_BODY)
+        elif canSetRanked:
+            isFixedMode = False
+            modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_SETRANKEDMODE
+        if len(modeLabel):
+            if canSetRanked and seasonState.isActive() or self.__extra.isRatedBattle:
+                modeLabel = text_styles.neutral(modeLabel)
+            else:
+                modeLabel = text_styles.standard(modeLabel)
         bgSource = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_UNRANKED
         battles = self.ABSENT_VALUES
         winRate = self.ABSENT_VALUES
@@ -253,14 +264,15 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
             if self.__extra.isRatedBattle:
                 bgSource = getLadderBackground(division)
             self.requestClubEmblem64x64(club.getClubDbID(), club.getEmblem64x64())
-        self.as_setHeaderDataS({'teamName': self.__extra.clubName,
+        self.as_setHeaderDataS({'clubId': self.__extra.clubDBID,
+         'teamName': self.__extra.clubName,
          'isRankedMode': bool(self.__extra.isRatedBattle),
          'battles': battles,
          'winRate': winRate,
          'enableWinRateTF': enableWinRateTF,
          'leagueIcon': leagueIcon,
-         'isFixedMode': not seasonActive or not isCreator,
-         'modeLabel': TextManager.getText(modeTextStyle, _ms(modeLabel)),
+         'isFixedMode': isFixedMode,
+         'modeLabel': modeLabel,
          'modeTooltip': modeTooltip,
          'bgSource': bgSource})
         return

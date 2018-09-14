@@ -5,6 +5,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.battle_results import data_providers
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 
 def _showBattleResults(arenaUniqueID, dataProvider):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID)), ctx={'dataProvider': dataProvider}))
@@ -93,3 +94,8 @@ def showPremiumWindow():
 
 def showBoostersWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW))
+
+
+def showChangeDivisionWindow(division):
+    g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CHOICE_DIVISION_WINDOW, ctx={'isInChangeDivisionMode': True,
+     'division': division}), scope=EVENT_BUS_SCOPE.LOBBY)

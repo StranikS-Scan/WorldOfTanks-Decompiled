@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/settings.py
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 
 class FORT_BATTLE_DIVISIONS:
 
@@ -9,7 +9,7 @@ class FORT_BATTLE_DIVISIONS:
         maxFortLevel = 7
         maxCombatants = 10
         iconLevel = 8
-        iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_USA_A12_T32
+        iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_USA_A12_T32
         divisionID = 0
         maxVehicleLevel = 8
 
@@ -104,3 +104,8 @@ class FORT_REQUEST_VALIDATION(CONST_CONTAINER):
         ABBREV_IS_INVALID_KR = 'publicInfo/abbrev/invalid/KR'
         ABBREV_IS_INVALID_CN = 'publicInfo/abbrev/invalid/CN'
         ABBREV_IS_OURS = 'publicInfo/abbrev/ours'
+
+
+ROSTER_INTRO_WINDOW = 'rosterIntroWindow'
+MUST_SHOW_FORT_UPGRADE = 'mustShowFortUpgrade'
+MUST_SHOW_DEFENCE_START = 'mustShowDefenceStart'

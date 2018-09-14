@@ -10,6 +10,7 @@ from gui.shared.fortifications.FortFinder import FortFinder
 from gui.shared.fortifications.context import FortRequestCtx
 from gui.shared.fortifications.fort_ext import FortCooldownManager
 from gui.shared.fortifications.fort_ext import PlayerFortRequester
+from gui.shared.fortifications.fort_hours_ctrlr import SortiesCurfewController
 from gui.shared.fortifications.fort_seqs import SortiesCache, PublicInfoCache, FortBattlesCache
 from gui.shared.fortifications.interfaces import IFortController
 from gui.shared.fortifications.restrictions import FortPermissions, NoFortLimits, IntroFortLimits, NoFortValidators, FortValidators
@@ -26,6 +27,7 @@ class _FortController(IFortController):
         self._limits = None
         self._validators = None
         self._sortiesCache = None
+        self._sortiesCurfewCtrl = None
         self._fortBattlesCache = None
         self._publicInfoCache = None
         self._handlers = handlers
@@ -91,6 +93,9 @@ class _FortController(IFortController):
 
     def getFortBattlesCache(self):
         return self._fortBattlesCache
+
+    def getSortiesCurfewCtrl(self):
+        return self._sortiesCurfewCtrl
 
     def getPublicInfoCache(self):
         return self._publicInfoCache
@@ -297,6 +302,8 @@ class FortController(_FortController):
         super(FortController, self).init(clan, listeners, prevController)
         self._sortiesCache = SortiesCache(self)
         self._sortiesCache.start()
+        self._sortiesCurfewCtrl = SortiesCurfewController()
+        self._sortiesCurfewCtrl.start()
         self._fortBattlesCache = FortBattlesCache(self)
         self._fortBattlesCache.start()
         self._finder = FortFinder()
@@ -308,6 +315,9 @@ class FortController(_FortController):
         if self._sortiesCache and clearCache:
             self._sortiesCache.stop()
             self._sortiesCache = None
+        if self._sortiesCurfewCtrl:
+            self._sortiesCurfewCtrl.stop()
+            self._sortiesCurfewCtrl = None
         if self._fortBattlesCache:
             self._fortBattlesCache.stop()
             self._fortBattlesCache = None
@@ -693,36 +703,32 @@ class FortController(_FortController):
         self.__cancelCooldownCallback()
         self.__cancelDefencePeriodCallback()
         fort = self.getFort()
-        if not fort:
-            LOG_ERROR('No fort to unsubscribe')
-            return
-        fort.onBuildingChanged -= self.__fort_onBuildingChanged
-        fort.onTransport -= self.__fort_onTransport
-        fort.onDirectionOpened -= self.__fort_onDirectionOpened
-        fort.onDirectionClosed -= self.__fort_onDirectionClosed
-        fort.onDirectionLockChanged -= self.__fort_onDirectionLockChanged
-        fort.onStateChanged -= self.__fort_onStateChanged
-        fort.onOrderChanged -= self.__fort_onOrderChanged
-        fort.onDossierChanged -= self.__fort_onDossierChanged
-        fort.onPlayerAttached -= self.__fort_onPlayerAttached
-        fort.onSettingCooldown -= self.__fort_onSettingCooldown
-        fort.onPeripheryChanged -= self.__fort_onPeripheryChanged
-        fort.onDefenceHourChanged -= self.__fort_onDefenceHourChanged
-        fort.onOffDayChanged -= self.__fort_onOffDayChanged
-        fort.onVacationChanged -= self.__fort_onVacationChanged
-        fort.onFavoritesChanged -= self.__fort_onFavoritesChanged
-        fort.onEnemyClanCardReceived -= self.__fort_onEnemyClanCardReceived
-        fort.onShutdownDowngrade -= self.__fort_onShutdownDowngrade
-        fort.onDefenceHourShutdown -= self.__fort_onDefenceHourShutdown
-        fort.onEmergencyRestore -= self.__fort_onEmergencyRestore
-        fort.onConsumablesChanged -= self.__fort_onConsumablesChanged
-        fort.onDefenceHourActivated -= self.__fort_onDefenceHourActivated
+        if fort:
+            fort.onBuildingChanged -= self.__fort_onBuildingChanged
+            fort.onTransport -= self.__fort_onTransport
+            fort.onDirectionOpened -= self.__fort_onDirectionOpened
+            fort.onDirectionClosed -= self.__fort_onDirectionClosed
+            fort.onDirectionLockChanged -= self.__fort_onDirectionLockChanged
+            fort.onStateChanged -= self.__fort_onStateChanged
+            fort.onOrderChanged -= self.__fort_onOrderChanged
+            fort.onDossierChanged -= self.__fort_onDossierChanged
+            fort.onPlayerAttached -= self.__fort_onPlayerAttached
+            fort.onSettingCooldown -= self.__fort_onSettingCooldown
+            fort.onPeripheryChanged -= self.__fort_onPeripheryChanged
+            fort.onDefenceHourChanged -= self.__fort_onDefenceHourChanged
+            fort.onOffDayChanged -= self.__fort_onOffDayChanged
+            fort.onVacationChanged -= self.__fort_onVacationChanged
+            fort.onFavoritesChanged -= self.__fort_onFavoritesChanged
+            fort.onEnemyClanCardReceived -= self.__fort_onEnemyClanCardReceived
+            fort.onShutdownDowngrade -= self.__fort_onShutdownDowngrade
+            fort.onDefenceHourShutdown -= self.__fort_onDefenceHourShutdown
+            fort.onEmergencyRestore -= self.__fort_onEmergencyRestore
+            fort.onConsumablesChanged -= self.__fort_onConsumablesChanged
+            fort.onDefenceHourActivated -= self.__fort_onDefenceHourActivated
         fortMgr = getClientFortMgr()
-        if not fortMgr:
-            LOG_ERROR('No fort manager to unsubscribe')
-            return
-        fortMgr.onFortUpdateReceived -= self.__fortMgr_onFortUpdateReceived
-        fortMgr.onFortPublicInfoReceived -= self.__fortMgr_onFortPublicInfoReceived
+        if fortMgr:
+            fortMgr.onFortUpdateReceived -= self.__fortMgr_onFortUpdateReceived
+            fortMgr.onFortPublicInfoReceived -= self.__fortMgr_onFortPublicInfoReceived
         super(FortController, self)._removeFortListeners()
 
     def __refreshCooldowns(self, doNotify = True):

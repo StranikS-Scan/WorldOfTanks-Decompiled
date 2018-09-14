@@ -20,6 +20,6 @@ class ProfileSectionMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setInitData(data)
 
-    def as_responseDossierS(self, type, data):
+    def as_responseDossierS(self, type, data, frameLabel, emptyScreenLabel):
         if self._isDAAPIInited():
-            return self.flashObject.as_responseDossier(type, data)
+            return self.flashObject.as_responseDossier(type, data, frameLabel, emptyScreenLabel)

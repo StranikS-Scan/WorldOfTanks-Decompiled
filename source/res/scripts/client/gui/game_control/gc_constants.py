@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/game_control/gc_constants.py
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 
 class CONTROLLER(CONST_CONTAINER):
     ROAMING = 'roaming'

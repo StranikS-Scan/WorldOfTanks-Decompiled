@@ -7,6 +7,7 @@ from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from gui.shared.utils.requesters.abstract import RequestsByIDProcessor
 from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.clubs import formatters as club_fmts
+from gui.clubs.items import OtherPlayerClubInfo
 from gui.clubs.settings import CLUB_REQUEST_TYPE as _CRT, DEFAULT_COOLDOWN, REQUEST_TIMEOUT
 from gui.clubs.club_helpers import getClientClubsMgr
 
@@ -66,6 +67,7 @@ class ClubRequestsController(RequestsController):
          _CRT.GET_PRIVATE_PROFILE: self.getPrivateProfile,
          _CRT.GET_MY_CLUBS_HISTORY: self.getMyClubsHistory,
          _CRT.GET_CLUBS: self.getClubs,
+         _CRT.FIND_CLUBS: self.findClubs,
          _CRT.SUBSCRIBE: self.subscribe,
          _CRT.UNSUBSCRIBE: self.unsubscribe,
          _CRT.CREATE_CLUB: self.createClub,
@@ -91,7 +93,10 @@ class ClubRequestsController(RequestsController):
          _CRT.ASSIGN_PRIVATE: self.assignPrivate,
          _CRT.KICK_MEMBER: self.kickMember,
          _CRT.GET_CLUBS_CONTENDERS: self.getClubsContenders,
-         _CRT.SET_APPLICANT_REQUIREMENTS: self.setApplicantsRequirements}
+         _CRT.SET_APPLICANT_REQUIREMENTS: self.setApplicantsRequirements,
+         _CRT.GET_PLAYER_INFO: self.getPlayerInfo,
+         _CRT.GET_SEASONS: self.getClubSeasons,
+         _CRT.GET_COMPLETED_SEASONS: self.getCompletedSeasons}
 
     def fini(self):
         self.__handlers.clear()
@@ -118,6 +123,9 @@ class ClubRequestsController(RequestsController):
         else:
             requestMethod = 'getClubs'
         return self._requester.doRequestEx(ctx, callback, requestMethod, ctx.getOffset(), ctx.getCount())
+
+    def findClubs(self, ctx, callback = None):
+        return self._requester.doRequestEx(ctx, callback, 'findOpenClubs', ctx.getPattern(), ctx.getOffset(), ctx.getCount())
 
     def subscribe(self, ctx, callback = None):
         return self._requester.doRequestEx(ctx, callback, 'subscribe', ctx.getClubDbID(), ctx.getSubscriptionType(), updater=ctx.getUpdater())
@@ -282,7 +290,8 @@ class ClubRequestsController(RequestsController):
     def kickMember(self, ctx, callback = None):
         limits = self.__clubsCtrl.getLimits()
         clubDBID = ctx.getClubDbID()
-        isValid, reason = limits.canKickMember(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
+        userDbID = ctx.getUserDbID()
+        isValid, reason = limits.canKickMember(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID), userDbID)
         if not isValid:
             return self.__doFail(ctx, reason, callback)
         return self._requester.doRequestEx(ctx, callback, 'expelMember', ctx.getClubDbID(), ctx.getUserDbID())
@@ -302,6 +311,34 @@ class ClubRequestsController(RequestsController):
         if not isValid:
             return self.__doFail(ctx, reason, callback)
         return self._requester.doRequestEx(ctx, callback, 'getClubsContenders', ctx.getClubDbID())
+
+    def getPlayerInfo(self, ctx, callback = None):
+        limits = self.__clubsCtrl.getLimits()
+        userDBID = ctx.getUserDbID()
+        isValid, reason = limits.canSeeOtherPlayerInfo(self.__clubsCtrl.getProfile(), userDbID=userDBID)
+        if not isValid:
+            return self.__doFail(ctx, reason, callback)
+
+        def _cbWrapper(result):
+            if result.isSuccess() and result.data:
+                data = OtherPlayerClubInfo(*result.data[0])
+            else:
+                data = None
+            callback(result._replace(data=data))
+            return
+
+        return self._requester.doRequestEx(ctx, _cbWrapper, 'getPlayerClubs', userDBID)
+
+    def getClubSeasons(self, ctx, callback = None):
+        limits = self.__clubsCtrl.getLimits()
+        clubDBID = ctx.getClubDbID()
+        isValid, reason = limits.canGetClubSeasons(self.__clubsCtrl.getProfile(), self.__clubsCtrl.getClub(clubDBID))
+        if not isValid:
+            return self.__doFail(ctx, reason, callback)
+        return self._requester.doRequestEx(ctx, callback, 'getClubBattleStatsHistory', clubDBID)
+
+    def getCompletedSeasons(self, ctx, callback = None):
+        return self._requester.doRequestEx(ctx, callback, 'getCompletedSeasons')
 
     def _getHandlerByRequestType(self, requestTypeID):
         return self.__handlers.get(requestTypeID)

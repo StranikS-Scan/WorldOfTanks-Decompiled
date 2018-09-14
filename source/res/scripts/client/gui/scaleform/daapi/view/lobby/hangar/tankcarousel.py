@@ -4,10 +4,9 @@ import BigWorld
 import constants
 from debug_utils import LOG_DEBUG
 from CurrentVehicle import g_currentVehicle
-from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER
+from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER, SHOW_FALLOUT_VEHICLES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.game_control import g_instance as g_gameCtrl
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from gui.shared.tooltips import ACTION_TOOLTIPS_STATE, ACTION_TOOLTIPS_TYPE
@@ -21,6 +20,7 @@ from gui.shared.utils import decorators
 from gui.shared.gui_items import CLAN_LOCK
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, Vehicle
+from gui.shared.formatters import icons
 from gui.Scaleform import getVehicleTypeAssetPath
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 
@@ -50,6 +50,9 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
         del filters['nationIsNegative']
         if nationIsNegative:
             filters['nation'] = -filters['nation']
+        filters['ready'] = bool(filters['ready'])
+        showFallout = AccountSettings.getFilter(SHOW_FALLOUT_VEHICLES)
+        filters['isFalloutVehicle'] = bool(showFallout)
         self.vehiclesFilter = filters
         return
 
@@ -61,6 +64,7 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
         g_gameCtrl.rentals.onRentChangeNotify += self._updateRent
         g_gameCtrl.igr.onIgrTypeChanged += self._updateIgrType
         self.as_setCarouselFilterS(self.vehiclesFilter)
+        self.as_setIsEventS(g_eventsCache.isEventEnabled())
         return
 
     def _dispose(self):
@@ -122,7 +126,7 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
 
     def setVehiclesFilter(self, nation, tankType, ready):
         self.vehiclesFilter['nation'] = nation
-        self.vehiclesFilter['ready'] = ready
+        self.vehiclesFilter['ready'] = bool(ready)
         self.vehiclesFilter['tankType'] = tankType
         filters = {'nation': abs(nation),
          'nationIsNegative': nation < 0,
@@ -139,6 +143,11 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
         g_settingsCore.serverSettings.setSection(CAROUSEL_FILTER, filters)
         self.showVehicles()
 
+    def setFalloutFilter(self, falloutVehVisible):
+        self.vehiclesFilter['isFalloutVehicle'] = bool(falloutVehVisible)
+        AccountSettings.setFilter(SHOW_FALLOUT_VEHICLES, falloutVehVisible)
+        self.showVehicles()
+
     def showVehicles(self):
         filterCriteria = REQ_CRITERIA.INVENTORY
         if self.vehiclesFilter['nation'] != -1:
@@ -150,13 +159,15 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
             filterCriteria |= REQ_CRITERIA.VEHICLE.CLASSES([self.vehiclesFilter['tankType']])
         if self.vehiclesFilter['ready']:
             filterCriteria |= REQ_CRITERIA.VEHICLE.FAVORITE
+        if not self.vehiclesFilter['isFalloutVehicle']:
+            filterCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         items = g_itemsCache.items
         filteredVehs = items.getVehicles(filterCriteria)
 
         def sorting(v1, v2):
-            if v1.isOnlyForEventBattles and not v2.isOnlyForEventBattles:
+            if v1.isEvent and not v2.isEvent:
                 return -1
-            if not v1.isOnlyForEventBattles and v2.isOnlyForEventBattles:
+            if not v1.isEvent and v2.isEvent:
                 return 1
             if v1.isFavorite and not v2.isFavorite:
                 return -1
@@ -164,7 +175,7 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
                 return 1
             return v1.__cmp__(v2)
 
-        vehsCDs = map(attrgetter('intCD'), sorted(set(g_eventsCache.getEventVehicles() + filteredVehs.values()), sorting))
+        vehsCDs = map(attrgetter('intCD'), sorted(filteredVehs.values(), sorting))
         LOG_DEBUG('Showing carousel vehicles: ', vehsCDs)
         self.as_showVehiclesS(vehsCDs)
 
@@ -260,7 +271,7 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
 
     def getStringStatus(self, vState):
         if vState == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
-            icon = self.app.utilsManager.textManager.getIcon(TextIcons.PREMIUM_IGR_SMALL)
+            icon = icons.premiumIgrSmall()
             return i18n.makeString('#menu:tankCarousel/vehicleStates/%s' % vState, icon=icon)
         return i18n.makeString('#menu:tankCarousel/vehicleStates/%s' % vState)
 

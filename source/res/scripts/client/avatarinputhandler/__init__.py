@@ -13,7 +13,6 @@ from Event import Event
 from debug_utils import *
 from gui import g_guiResetters
 from gui.Scaleform.CursorDelegator import g_cursorDelegator
-from gui.battle_control import g_sessionProvider
 from post_processing.post_effect_controllers import g_postProcessingEvents
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
@@ -26,6 +25,12 @@ import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
 import BattleReplay
 import FalloutDeathMode
+
+def _getAmmoGuiCtrl():
+    from gui.battle_control import g_sessionProvider
+    return g_sessionProvider.getAmmoCtrl()
+
+
 _INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _CTRLS_FIRST = 'arcade'
 
@@ -342,7 +347,8 @@ class AvatarInputHandler(CallbackDelayer):
 
     def stop(self):
         self.__isStarted = False
-        FMOD.setEventsParam('viewPlayMode', 0)
+        import SoundGroups
+        SoundGroups.g_instance.changePlayMode(1)
         self.__removeBattleCtrlListeners()
         for control in self.__ctrls.itervalues():
             control.destroy()
@@ -599,7 +605,7 @@ class AvatarInputHandler(CallbackDelayer):
             self.enableDynamicCamera(dynamicCamera, horStabilizationSnp)
 
     def __addBattleCtrlListeners(self):
-        ammoCtrl = g_sessionProvider.getAmmoCtrl()
+        ammoCtrl = _getAmmoGuiCtrl()
         self.__onGunSettingsSet(ammoCtrl.getGunSettings())
         ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
         ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
@@ -614,7 +620,7 @@ class AvatarInputHandler(CallbackDelayer):
         import aims
         self.onSetReloading -= aims.getReloadingHandler().setReloading
         self.onSetReloadingPercents -= aims.getReloadingHandler().setReloadingInPercent
-        ammoCtrl = g_sessionProvider.getAmmoCtrl()
+        ammoCtrl = _getAmmoGuiCtrl()
         ammoCtrl.onShellsUpdated -= aims.getReloadingHandler().setAmmoStock
         ammoCtrl.onCurrentShellChanged += aims.getReloadingHandler().setShellChanged
         ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
@@ -671,7 +677,7 @@ class _VertScreenshotCamera(object):
 
     def __init__(self):
         self.__isEnabled = False
-        self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Render/Shadows/dynamicEnabled', 'Render/Shadows/dynamicViewDistanceTo', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Client Settings/std fog/enabled', 'Client Settings/Script tick')
+        self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Render/Shadows/qualityPreset', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Client Settings/std fog/enabled', 'Client Settings/Script tick')
 
     def destroy(self):
         self.enable(False)
@@ -679,6 +685,7 @@ class _VertScreenshotCamera(object):
     def enable(self, doEnable):
         if self.__isEnabled == doEnable:
             return
+        from cameras import FovExtended
         if not doEnable:
             self.__isEnabled = False
             BigWorld.camera(self.__savedCamera)
@@ -686,10 +693,12 @@ class _VertScreenshotCamera(object):
             for k, v in self.__savedWatchers.iteritems():
                 BigWorld.setWatcher(k, v)
 
+            FovExtended.instance().enabled = True
             LOG_DEBUG('Vertical screenshot camera is disabled')
             return
         self.__isEnabled = True
         self.__savedCamera = BigWorld.camera()
+        FovExtended.instance().enabled = False
         arenaBB = BigWorld.wg_getSpaceBounds()
         centerXZ = Math.Vector2(0.5 * (arenaBB[0] + arenaBB[2]), 0.5 * (arenaBB[1] + arenaBB[3]))
         halfSizesXZ = Math.Vector2(0.5 * (arenaBB[2] - arenaBB[0]), 0.5 * (arenaBB[3] - arenaBB[1]))
@@ -711,16 +720,19 @@ class _VertScreenshotCamera(object):
         BigWorld.wg_enableSuperShot(True, False)
         self.__savedWatchers = {}
         for name in self.__watcherNames:
-            self.__savedWatchers[name] = BigWorld.getWatcher(name)
-            if name.startswith('Visibility'):
-                BigWorld.setWatcher(name, False)
+            try:
+                self.__savedWatchers[name] = BigWorld.getWatcher(name)
+                if name.startswith('Visibility'):
+                    BigWorld.setWatcher(name, False)
+            except TypeError:
+                LOG_WARNING('Failed to get/set watcher', name)
 
         BigWorld.setWatcher('Client Settings/std fog/enabled', False)
+        BigWorld.projection().fov = camFov
         BigWorld.setWatcher('Render/Fov', camFov)
         BigWorld.setWatcher('Render/Near Plane', max(0.1, camPos.y - 1000.0))
         BigWorld.setWatcher('Render/Far Plane', camPos.y + 1000.0)
         BigWorld.setWatcher('Render/Objects Far Plane/Enabled', False)
-        BigWorld.setWatcher('Render/Shadows/dynamicEnabled', False)
-        BigWorld.setWatcher('Render/Shadows/dynamicViewDistanceTo', 1000000)
+        BigWorld.setWatcher('Render/Shadows/qualityPreset', 7)
         BigWorld.setWatcher('Client Settings/Script tick', False)
         LOG_DEBUG('Vertical screenshot camera is enabled')

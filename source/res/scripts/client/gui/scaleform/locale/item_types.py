@@ -124,6 +124,7 @@ class ITEM_TYPES(object):
     SHELL_DIMENSION_SM = '#item_types:shell/dimension/sm'
     SHELL_DIMENSION_INCH = '#item_types:shell/dimension/inch'
     SHELL_DIMENSION_MM = '#item_types:shell/dimension/mm'
+    MARKER_IGR = '#item_types:marker/igr'
     TANKMAN_SKILLS_TYPE_ENUM = (TANKMAN_SKILLS_TYPE_SKILL, TANKMAN_SKILLS_TYPE_PERK, TANKMAN_SKILLS_TYPE_PERK_COMMON)
     SHELL_KINDS_ENUM = (SHELL_KINDS_ARMOR_PIERCING,
      SHELL_KINDS_ARMOR_PIERCING_CR,

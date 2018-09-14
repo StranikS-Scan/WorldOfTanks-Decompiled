@@ -93,7 +93,8 @@ class QuestsTileChainsView(QuestsTileChainsViewMeta, AppRef):
             completedQuestsCount = len(self.__tile.getQuestsInChainByFilter(chainID, lambda q: q.isCompleted()))
             chain = {'name': _getText(TEXT_MANAGER_STYLES.HIGH_TITLE, self.__getChainUserName(chainID)),
              'progressText': _getText(TEXT_MANAGER_STYLES.MAIN_TEXT, '%d/%d' % (completedQuestsCount, self.__tile.getChainSize())),
-             'tasks': []}
+             'tasks': [],
+             'enabled': True}
             for quest in sorted(quests, key=operator.methodcaller('getID')):
                 stateName, stateIcon = self.__getQuestStatusData(quest)
                 chain['tasks'].append({'name': _getText(TEXT_MANAGER_STYLES.MAIN_TEXT, quest.getUserName()),
@@ -101,7 +102,8 @@ class QuestsTileChainsView(QuestsTileChainsViewMeta, AppRef):
                  'stateIconPath': stateIcon,
                  'arrowIconPath': RES_ICONS.MAPS_ICONS_LIBRARY_ARROWORANGERIGHTICON8X8,
                  'tooltip': TOOLTIPS.PRIVATEQUESTS_TASKLISTITEM_BODY,
-                 'id': quest.getID()})
+                 'id': quest.getID(),
+                 'enabled': True})
 
             chains.append(chain)
 

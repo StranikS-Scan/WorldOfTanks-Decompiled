@@ -116,24 +116,20 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_OFFENCEPAST
                             else:
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_OFFENCEFUTURE
-                            tankIconVO = getDivisionIcon(battle.defenderFortLevel, battle.attackerFortLevel)
                             titleTpl = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_ITEM_TITLE_OFFENCE)
                         else:
                             if battleHasEnded:
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEPAST
                             else:
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEFUTURE
-                            tankIconVO = getDivisionIcon(battle.defenderFortLevel, battle.attackerFortLevel, determineAlert=False)
                             titleTpl = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_ITEM_TITLE_DEFENCE)
+                        tankIconVO = getDivisionIcon(battle.defenderFortLevel, battle.attackerFortLevel, determineAlert=battle.getType() == BATTLE_ITEM_TYPE.ATTACK)
                         if battle.isWin():
                             background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTVICTORY
                             resultLabel = 'win'
                         elif battle.isLose():
                             background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTDEFEAT
                             resultLabel = 'lose'
-                        elif battle.isDraw():
-                            background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTDRAW
-                            resultLabel = 'tie'
                         else:
                             background, resultLabel = (None, None)
                         eventItem = {'icon': icon,

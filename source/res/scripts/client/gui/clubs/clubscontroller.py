@@ -5,25 +5,26 @@ from collections import namedtuple
 import BigWorld
 from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_NOTE
-from account_helpers import getPlayerDatabaseID
 from PlayerEvents import g_playerEvents
 from messenger.storage import storage_getter
 from messenger.ext import isSenderIgnored
 from messenger.proto.events import g_messengerEvents
 from messenger.m_constants import USER_TAG
-from club_shared import ACCOUNT_NOTIFICATION_TYPE, WEB_CMD_RESULT
+from club_shared import ACCOUNT_NOTIFICATION_TYPE, WEB_CMD_RESULT, CLUBS_SEASON_STATE
+from shared_utils import safeCancelCallback
 from gui import SystemMessages, DialogsInterface
 from gui.game_control import g_instance as g_gameCtrl
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.utils import safeCancelCallback
+from gui.shared.utils import getPlayerDatabaseID
 from gui.clubs import subscriptions, contexts as club_ctx, states, formatters as club_fmts
 from gui.clubs.items import Club, ClubInvite, ClubApplication, clearInvitesIDs, _UnitInfo
+from gui.clubs.items import SeasonState, SeasonInfo
 from gui.clubs.settings import BROKEN_WEB_CHECK_PERIOD, CLIENT_CLUB_STATE
-from gui.clubs.club_helpers import getClientClubsMgr, isClubsEnabled
+from gui.clubs.club_helpers import getClientClubsMgr, isClubsEnabled, ClubsSeasonsCache
 from gui.clubs.requests import ClubRequestsController
 
-def _showError(result):
-    i18nMsg = club_fmts.getRequestErrorMsg(result.errStr)
+def _showError(result, ctx):
+    i18nMsg = club_fmts.getRequestErrorMsg(result, ctx)
     if i18nMsg:
         SystemMessages.pushMessage(i18nMsg, type=SystemMessages.SM_TYPE.Error)
 
@@ -41,6 +42,27 @@ class _CONTACTS_LIST(object):
     CONTACTS = {USER_TAG.FRIEND, USER_TAG.IGNORED}
     ALL = CONTACTS | INVITES
     EMPTY = set()
+
+
+class _SeasonState(object):
+
+    def __init__(self, state):
+        self.__state = state
+
+    def isFinished(self):
+        return self.__state == CLUBS_SEASON_STATE.INACTIVE
+
+    def isSuspended(self):
+        return self.__state == CLUBS_SEASON_STATE.SUSPENDED
+
+    def isActive(self):
+        return self.__state == CLUBS_SEASON_STATE.ACTIVE
+
+    def getValue(self):
+        return self.__state
+
+    def getStateString(self):
+        return CLUBS_SEASON_STATE.TO_TEXT.get(self.__state, 'UNKNOWN')
 
 
 class _AccountClubProfile(object):
@@ -311,11 +333,14 @@ class ClubsController(subscriptions.ClubsListeners):
         self.__isAppsNotifyShown = False
         self._requestsCtrl = ClubRequestsController(self)
         self._accountProfile = _AccountClubProfile(self)
+        self._seasonsCache = ClubsSeasonsCache(self)
 
     def init(self):
         g_messengerEvents.users.onUsersListReceived += self.__onUsersListReceived
+        self._seasonsCache.init()
 
     def fini(self):
+        self._seasonsCache.fini()
         g_messengerEvents.users.onUsersListReceived -= self.__onUsersListReceived
         self.stop()
         self._requestsCtrl.fini()
@@ -329,11 +354,13 @@ class ClubsController(subscriptions.ClubsListeners):
             clubsMgr.onClientClubsUnitInfoChanged += self.__onClientClubsUnitInfoChanged
         g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
         g_clientUpdateManager.addCallbacks({'cache.relatedToClubs': self.__onSpaAttrChanged,
-         'cache.cybersportSeasonInProgress': self.__onSeasonStateChanged})
+         'cache.eSportSeasonState': self.__onSeasonStateChanged})
         self._accountProfile.resync(firstInit=True)
+        self._seasonsCache.start()
         return
 
     def stop(self, isDisconnected = False):
+        self._seasonsCache.stop()
         if isDisconnected:
             self.__isAppsNotifyShown = False
             clearInvitesIDs()
@@ -381,11 +408,52 @@ class ClubsController(subscriptions.ClubsListeners):
         else:
             return None
 
+    @async
+    def requestClubSeasons(self, clubDbID, callback):
+        seasons = self._seasonsCache.getSeasons(clubDbID)
+        if len(seasons):
+            callback(seasons)
+            return
+
+        def _cbWrapper(result):
+            if result.isSuccess():
+                data = self._seasonsCache.putClubSeasons(clubDbID, result.data)
+            else:
+                data = {}
+            callback(data)
+
+        self._requestsCtrl.request(club_ctx.GetClubSeasonsCtx(clubDbID), callback=_cbWrapper, allowDelay=True)
+
     def getProfile(self):
         return self._accountProfile
 
     def isSubscribed(self, clubDbID):
         return clubDbID in self.__subscriptions and self.__subscriptions[clubDbID].isSubscribed()
+
+    @classmethod
+    def getSeasonState(cls):
+        clubsMgr = getClientClubsMgr()
+        if clubsMgr is not None:
+            return SeasonState(clubsMgr.getESportSeasonState())
+        else:
+            return SeasonState(CLUBS_SEASON_STATE.INACTIVE)
+
+    @classmethod
+    def getSeasons(cls):
+        clubsMgr = getClientClubsMgr()
+        if clubsMgr is not None:
+            return sorted(map(lambda (sID, d): SeasonInfo(sID, 0, 0, d), clubsMgr.getESportSeasons().iteritems()))
+        else:
+            return []
+
+    @classmethod
+    def getSeasonInfo(cls, seasonID):
+        clubsMgr = getClientClubsMgr()
+        if clubsMgr is not None:
+            dossier = clubsMgr.getESportSeasons().get(seasonID)
+            if dossier is not None:
+                return SeasonInfo(seasonID, 0, 0, dossier)
+        return
 
     @async
     @process
@@ -400,7 +468,7 @@ class ClubsController(subscriptions.ClubsListeners):
             isNeedToChangeState = False
             if not result.isSuccess():
                 isNeedToChangeState = result.code in WEB_CMD_RESULT.WEB_UNAVAILABLE_ERRORS
-                _showError(result)
+                _showError(result, ctx)
             callback(result)
             if isNeedToChangeState:
                 self._accountProfile._changeState(states.UnavailableClubsState())
@@ -415,6 +483,15 @@ class ClubsController(subscriptions.ClubsListeners):
 
     def getLimits(self):
         return self._accountProfile.getState().getLimits()
+
+    def getSeasonUserName(self, seasonID):
+        season = self._seasonsCache.getSeasonCommonInfo(seasonID)
+        if season:
+            return season.getSeasonUserName()
+        return ''
+
+    def getCompletedSeasons(self):
+        return self._seasonsCache.getCompletedSeasons()
 
     def _removeSubscription(self, clubDbID):
         if clubDbID in self.__subscriptions:
@@ -438,9 +515,12 @@ class ClubsController(subscriptions.ClubsListeners):
         self.notify('onAccountClubRelationChanged', isRelatedToClubs)
         self._accountProfile.resync()
 
-    def __onSeasonStateChanged(self, isSeasonInProgress):
-        self.notify('onClubsSeasonStateChanged', isSeasonInProgress)
+    def __onSeasonStateChanged(self, state):
+        seasonState = SeasonState(state)
+        self.notify('onClubsSeasonStateChanged', seasonState)
         self._accountProfile.resync()
+        if seasonState.isFinished():
+            self._seasonsCache.updateCompletedSeasons(force=True)
 
     def __onClientClubsUnitInfoChanged(self, clubDbID, unit):
         if clubDbID in self.__subscriptions:

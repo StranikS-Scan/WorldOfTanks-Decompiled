@@ -3,7 +3,6 @@ from Event import Event
 from adisp import async
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.requesters.IntSettingsRequester import IntSettingsRequester
-import BattleReplay
 
 class _SettingsCache(object):
 
@@ -63,6 +62,7 @@ class _SettingsCache(object):
 
         self.__waitForSync = True
         self.onSyncStarted()
+        import BattleReplay
         if BattleReplay.g_replayCtrl.isPlaying:
             cbWrapper(dict())
             return

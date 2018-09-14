@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_constants.py
-
+from debug_utils import LOG_WARNING
 
 class MESSAGE_LIMIT(object):
     COOLDOWN = 0.5
@@ -40,7 +40,39 @@ class XMPP_ITEM_TYPE:
     BLOCKING_LIST = (BLOCK_ITEM, ROSTER_BLOCK_ITEM)
 
 
-class BAN_SOURCE(object):
-    GAME = 1
-    CHAT = 2
-    RANGE = (GAME, CHAT)
+ANY_ITEM_LITERAL = 'all'
+
+class XMPP_BAN_COMPONENT(object):
+    BATTLE = 1
+    PREBATTLE = 2
+    PRIVATE = 4
+    STANDARD = 8
+    USER = 16
+    CLAN = 32
+    ALL = BATTLE | PREBATTLE | PRIVATE | STANDARD | USER | CLAN
+    _STRING_TO_BITMASK = {'battle': BATTLE,
+     'prebattle': PREBATTLE,
+     'private': PRIVATE,
+     'standard': STANDARD,
+     'user': USER,
+     'clan': CLAN,
+     ANY_ITEM_LITERAL: ALL}
+
+    @classmethod
+    def fromString(cls, value):
+        if not value:
+            return cls.ALL
+        bitmask = 0
+        components = value.split(',')
+        for component in components:
+            component = component.strip()
+            if component in cls._STRING_TO_BITMASK:
+                bit = cls._STRING_TO_BITMASK[component]
+                if bit == cls.ALL:
+                    return cls.ALL
+                if bitmask & bit == 0:
+                    bitmask |= bit
+            else:
+                LOG_WARNING('Component is not supported', component)
+
+        return bitmask

@@ -235,7 +235,7 @@ class Pointcut(list):
     def __del__(self):
         LOG_DEBUG('Pointcut deleted: {0:>s}'.format(self))
 
-    def __init__(self, path, name, filterString, match = True):
+    def __init__(self, path, name, filterString, match = True, aspects = ()):
         super(Pointcut, self).__init__()
         self.__nsPath = path
         self.__nsName = name
@@ -247,6 +247,9 @@ class Pointcut(list):
                 wrapped = wrap(getattr(ns, item))
                 setattr(ns, item, wrapped)
                 self.append(wrapped)
+
+            for aspect in aspects:
+                self.addAspect(aspect)
 
             return
 

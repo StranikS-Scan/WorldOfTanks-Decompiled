@@ -134,62 +134,47 @@ class StatsRequester(AbstractSyncDataRequester):
 
     @property
     def isTeamKiller(self):
-        """
-        @return: is team killer
-        """
         return self.getCacheValue('tkillIsSuspected', 0)
 
     @property
     def restrictions(self):
-        """
-        @return: account restrictions. Set of values
-                                constants.RESTRICTION_TYPE.*
-        """
         return self.getCacheValue('restrictions', set())
 
     @property
     def unlocks(self):
-        """
-        @return: unlocked items. Format:
-                                [int compact descriptor, ...]
-        """
         return self.getCacheValue('unlocks', list())
 
     @property
     def vehicleSlots(self):
-        """
-        @return: vehicles carousel slots count
-        """
         return self.getCacheValue('slots', 0)
 
     @property
     def dailyPlayHours(self):
-        """
-        @return: played hours per each day in current month. List of
-                                hours values. Current day played hours value is
-                                cache['dailyPlayHours'][0].
-        """
         return self.getCacheValue('dailyPlayHours', [0])
 
     @property
+    def todayPlayHours(self):
+        return self.dailyPlayHours[0]
+
+    @property
     def playLimits(self):
-        """
-        @return: playing time limits, (hours per day, hours per week)
-        """
         return self.getCacheValue('playLimits', ((0, ''), (0, '')))
+
+    def getDailyTimeLimits(self):
+        return self.playLimits[0][0]
+
+    def getWeeklyTimeLimits(self):
+        return self.playLimits[1][0]
+
+    def getPlayTimeLimits(self):
+        return (self.getDailyTimeLimits(), self.getWeeklyTimeLimits())
 
     @property
     def tankmenBerthsCount(self):
-        """
-        @return: tankmen berths count in barracks.
-        """
         return self.getCacheValue('berths', 0)
 
     @property
     def vehicleSellsLeft(self):
-        """
-        @return: value of vehicle sells left this day.
-        """
         return self.getCacheValue('vehicleSellsLeft', 0)
 
     @property

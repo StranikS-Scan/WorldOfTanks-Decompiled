@@ -2,39 +2,39 @@
 import SoundGroups
 import BigWorld
 import MusicController
-from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
-from gui.goodies.GoodiesCache import g_goodiesCache
-from predefined_hosts import g_preDefinedHosts
-from account_helpers.settings_core.SettingsCache import g_settingsCache
-from account_helpers.settings_core.SettingsCore import g_settingsCore
-from account_helpers.AccountValidator import AccountValidator
-from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.LogitechMonitor import LogitechMonitor
-from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
-from helpers import isPlayerAccount, time_utils
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from PlayerEvents import g_playerEvents
 from account_helpers import isPremiumAccount
 from CurrentVehicle import g_currentVehicle
 from ConnectionManager import connectionManager
-from gui import SystemMessages, g_guiResetters, game_control
+from helpers import isPlayerAccount, time_utils
+from predefined_hosts import g_preDefinedHosts
+from gui import SystemMessages, g_guiResetters, game_control, miniclient
+from gui.wgnc import g_wgncProvider
+from gui.server_events import g_eventsCache
+from gui.LobbyContext import g_lobbyContext
+from gui.WindowsManager import g_windowsManager
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
+from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.clubs.ClubsController import g_clubsCtrl
+from gui.prb_control.dispatcher import g_prbLoader
+from account_helpers.settings_core.SettingsCache import g_settingsCache
+from account_helpers.settings_core.SettingsCore import g_settingsCore
+from account_helpers.AccountValidator import AccountValidator
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.WindowsManager import g_windowsManager
+from gui.Scaleform.LogitechMonitor import LogitechMonitor
+from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.Waiting import Waiting
-from gui.server_events import g_eventsCache
-from gui.shared import g_eventBus, g_itemsCache, events
+from gui.shared import g_eventBus, g_itemsCache, events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shared.utils import ParametersCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
-from gui.wgnc import g_wgncProvider
 
 @process
 def onAccountShowGUI(ctx):
@@ -147,13 +147,15 @@ def onAppStarted(args):
 
 
 def init(loadingScreenGUI = None):
-    global onIGRTypeChanged
     global onShopResyncStarted
+    global onAccountShowGUI
+    global onScreenShotMade
+    global onIGRTypeChanged
+    global onAccountBecomeNonPlayer
     global onAvatarBecomePlayer
     global onAccountBecomePlayer
-    global onAccountBecomeNonPlayer
-    global onAccountShowGUI
     global onShopResync
+    miniclient.configure_state()
     g_playerEvents.onAccountShowGUI += onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer += onAccountBecomeNonPlayer
     g_playerEvents.onAccountBecomePlayer += onAccountBecomePlayer
@@ -180,6 +182,7 @@ def init(loadingScreenGUI = None):
     g_clubsCtrl.init()
     g_vehicleProgressCache.init()
     g_goodiesCache.init()
+    BigWorld.wg_setScreenshotNotifyCallback(onScreenShotMade)
     from constants import IS_DEVELOPMENT
     if IS_DEVELOPMENT:
         try:
@@ -223,6 +226,7 @@ def fini():
     g_playerEvents.onShopResyncStarted -= onShopResyncStarted
     g_playerEvents.onShopResync -= onShopResync
     g_playerEvents.onCenterIsLongDisconnected -= onCenterIsLongDisconnected
+    BigWorld.wg_setScreenshotNotifyCallback(None)
     from constants import IS_DEVELOPMENT
     if IS_DEVELOPMENT:
         try:
@@ -232,6 +236,7 @@ def fini():
             fini = lambda : None
 
         fini()
+    return
 
 
 def onConnected():
@@ -254,6 +259,10 @@ def onDisconnected():
     UsersInfoHelper.clear()
     Waiting.rollback()
     Waiting.cancelCallback()
+
+
+def onScreenShotMade(path):
+    g_eventBus.handleEvent(events.GameEvent(events.GameEvent.SCREEN_SHOT_MADE, {'path': path}), scope=EVENT_BUS_SCOPE.GLOBAL)
 
 
 def onRecreateDevice():

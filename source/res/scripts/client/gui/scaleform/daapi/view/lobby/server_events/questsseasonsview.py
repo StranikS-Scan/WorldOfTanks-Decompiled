@@ -109,7 +109,7 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
              'title': quests_fmts.getFullSeasonUserName(season),
              'tiles': tiles})
 
-        self.as_setSeasonsDataS(seasons)
+        self.as_setSeasonsDataS({'seasons': seasons})
         return
 
     def __populateSlotsData(self):
@@ -125,7 +125,9 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
         for slotIdx in xrange(nextSlotIdx, nextSlotIdx + freeSlotsCount):
             slots.append(self.__packQuestSlot())
 
-        self.as_setSlotsDataS(slots)
+        self.as_setSlotsDataS({'questSlots': slots,
+         'hasActiveQuests': len(selectedQuests) > 0,
+         'noActiveQuestsText': self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_NOACTIVESLOTS_HEADER) + '\n'), (TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_NOACTIVESLOTS_BODY))))})
 
     def __packQuestSlot(self, quest = None):
         _getText = self.app.utilsManager.textManager.getText

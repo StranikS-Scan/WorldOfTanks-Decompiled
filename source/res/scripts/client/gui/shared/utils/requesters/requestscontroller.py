@@ -2,8 +2,8 @@
 from functools import partial
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from shared_utils import safeCancelCallback
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
-from gui.shared.utils import safeCancelCallback
 
 class _NoCooldownsManager(RequestCooldownManager):
 

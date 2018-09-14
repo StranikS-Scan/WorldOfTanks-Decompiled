@@ -1,31 +1,25 @@
 # Embedded file name: scripts/client/FlockExotic.py
 import BigWorld
 import math
-from Vehicle import Vehicle
 import random
 import Math
-from debug_utils import LOG_CURRENT_EXCEPTION
 from Flock import FlockLike
 from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+import FlockManager
 
 class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
-    __TRIGGER_CHECK_PERIOD = 1
 
     def __init__(self):
         BigWorld.Entity.__init__(self)
         FlockLike.__init__(self)
         CallbackDelayer.__init__(self)
-        self.__checkTriggerCallbackId = None
-        self.__respawnCallbackId = None
         self.flightAngleMin = math.radians(self.flightAngleMin)
         self.flightAngleMax = math.radians(self.flightAngleMax)
         if self.flightAngleMin < 0:
             self.flightAngleMin += math.ceil(abs(self.flightAngleMin) / (math.pi * 2)) * math.pi * 2
         elif self.flightAngleMin > math.pi * 2:
             self.flightAngleMin -= math.floor(self.flightAngleMin / (math.pi * 2)) * math.pi * 2
-        self.__active = False
         self.__isTriggered = False
-        return
 
     def prerequisites(self):
         return self._getModelsToLoad()
@@ -46,46 +40,16 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         for model in self.models:
             model.visible = False
 
-        self.__respawnCallbackId = BigWorld.callback(self.respawnTime, self.__respawnTrigger)
         self._switchSounds(False)
+        FlockManager.getManager().addFlock(self.position, self.triggerRadius, self.explosionRadius, self.respawnTime, self)
 
     def onLeaveWorld(self):
         self.models = []
-        if self.__checkTriggerCallbackId is not None:
-            BigWorld.cancelCallback(self.__checkTriggerCallbackId)
-            self.__checkTriggerCallbackId = None
-        if self.__respawnCallbackId is not None:
-            BigWorld.cancelCallback(self.__respawnCallbackId)
-            self.__respawnCallbackId = None
         FlockLike.destroy(self)
         CallbackDelayer.destroy(self)
-        return
 
     def name(self):
         return 'FlockExotic'
-
-    def __checkTrigger(self):
-        self.__checkTriggerCallbackId = None
-        for id, entity in BigWorld.entities.items():
-            if isinstance(entity, Vehicle):
-                distanceVec = self.position - entity.position
-                distanceVec.y = 0
-                if distanceVec.lengthSquared <= self.triggerRadius * self.triggerRadius:
-                    if not self.__isTriggered:
-                        self.__onTrigger()
-                        self.__isTriggered = True
-                        return
-                else:
-                    self.__isTriggered = False
-
-        self.__checkTriggerCallbackId = BigWorld.callback(FlockExotic.__TRIGGER_CHECK_PERIOD, self.__checkTrigger)
-        return
-
-    def __respawnTrigger(self):
-        self.__respawnCallbackId = None
-        self.__checkTriggerCallbackId = BigWorld.callback(FlockExotic.__TRIGGER_CHECK_PERIOD, self.__checkTrigger)
-        self.__active = True
-        return
 
     def __getRandomSpawnPos(self):
         randHeight = random.uniform(0, self.spawnHeight)
@@ -105,31 +69,27 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         dir *= self.speed * self.lifeTime
         return startPos + dir
 
-    def __onTrigger(self):
-        if not self.__active:
-            return
-        else:
-            flightTime = None
-            for model in self.models:
-                model.visible = True
-                model.position = self.__getRandomSpawnPos()
-                targetPos = self.__getRandomTargetPos(model.position)
-                dir = targetPos - model.position
-                dirLength = dir.length
-                speed = self.speed * random.uniform(self.speedRandom[0], self.speedRandom[1])
-                if dirLength > 0:
-                    velocity = dir * speed / dirLength
-                else:
-                    velocity = Math.Vector3(0, speed, 0)
-                flightTime = dirLength / velocity.length
-                motor = self.__createMotor(model.position, targetPos, velocity, flightTime)
-                model.addMotor(motor)
+    def onTrigger(self):
+        flightTime = None
+        for model in self.models:
+            model.visible = True
+            model.position = self.__getRandomSpawnPos()
+            targetPos = self.__getRandomTargetPos(model.position)
+            dir = targetPos - model.position
+            dirLength = dir.length
+            speed = self.speed * random.uniform(self.speedRandom[0], self.speedRandom[1])
+            if dirLength > 0:
+                velocity = dir * speed / dirLength
+            else:
+                velocity = Math.Vector3(0, speed, 0)
+            flightTime = dirLength / velocity.length
+            motor = self.__createMotor(model.position, targetPos, velocity, flightTime)
+            model.addMotor(motor)
 
-            if flightTime is not None:
-                self.delayCallback(flightTime, self.__onFlightEnd)
-                self._switchSounds(True)
-                self.__active = False
-            return
+        if flightTime is not None:
+            self.delayCallback(flightTime, self.__onFlightEnd)
+            self._switchSounds(True)
+        return
 
     def __onFlightEnd(self):
         self._switchSounds(False)
@@ -137,5 +97,3 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
             model.motors = ()
             model.position = self.position
             model.visible = False
-
-        self.__respawnCallbackId = BigWorld.callback(self.respawnTime, self.__respawnTrigger)

@@ -27,9 +27,9 @@ class QuestsProgressRequester(AbstractSyncDataRequester):
     def getPotapovQuestsStorage(self):
         return self.__pqStorage
 
-    def getPotapovQuestsFreeSlots(self):
+    def getPotapovQuestsFreeSlots(self, removedCount = 0):
         pqProgress = self.__getPotapovQuestsData()
-        return pqProgress['slots'] - len(pqProgress['selected'])
+        return pqProgress['slots'] - len(pqProgress['selected']) + removedCount
 
     def getSelectedPotapovQuestsIDs(self):
         return self.__getPotapovQuestsData()['selected']

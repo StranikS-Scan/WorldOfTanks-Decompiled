@@ -103,6 +103,9 @@ class IUnitPermissions(IGUIPermissions):
     def canChangeLeadership(self):
         return False
 
+    def canStealLeadership(self):
+        return False
+
     def canChangeConsumables(self):
         return False
 

@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/battle_results/data_providers.py
 import BigWorld
+import ArenaType
 from adisp import async, process
 from collections import namedtuple, defaultdict
 from gui.LobbyContext import g_lobbyContext
@@ -102,6 +103,12 @@ class _AsyncPostBattleResultsDataProvider(AbstractRequester):
     def getArenaUniqueID(self):
         return self._arenaUniqueID
 
+    def getArenaTypeID(self):
+        return self.__results.common.arenaTypeID
+
+    def getArenaType(self):
+        return ArenaType.g_cache[self.getArenaTypeID()]
+
     def getArenaGuiType(self):
         return self.__results.common.guiType
 
@@ -110,6 +117,9 @@ class _AsyncPostBattleResultsDataProvider(AbstractRequester):
 
     def getPlayers(self):
         return self.__players
+
+    def wasInBattle(self, playerDBID):
+        return playerDBID in self.__players
 
     def getPlayerData(self, playerDbID):
         return self.__players.get(playerDbID, _PlayerData(playerDbID))

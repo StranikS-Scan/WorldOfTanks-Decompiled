@@ -12,7 +12,6 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control import settings
 from gui.prb_control.items.sortie_items import getDivisionNameByType, getDivisionLevel
@@ -26,6 +25,7 @@ from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
 from gui.server_events import g_eventsCache
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.formatters.text_styles import alert
 
 def getPlayerStatus(slotState, pInfo):
     if slotState.isClosed:
@@ -85,12 +85,11 @@ def makeStaticSlotLabel(unitState, slotState, isCreator = False, vehCount = 0, c
     return slotLabel
 
 
-def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None, isFallout = None, isCreator = False):
+def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None, isFallout = None, isCreator = False, isCurrentPlayer = True):
     if vehicle is None:
         return
     else:
-        vState, vStateLvl = vehicle.getState()
-        isReadyToFight = vehicle.isReadyToFight
+        vState, vStateLvl = vehicle.getState(isCurrentPlayer)
         isNotValidFallout = isFallout is not None and isFallout != vehicle.isEvent
         if vState == Vehicle.VEHICLE_STATE.UNDAMAGED or vState == Vehicle.VEHICLE_STATE.IN_PREBATTLE:
             if isNotValidFallout:
@@ -99,10 +98,12 @@ def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None, isFallout = 
             else:
                 vState = ''
                 isReadyToFight = True
-        elif vState == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
-            vState = makeHtmlString('html_templates:lobby', 'inPremiumIgrOnly')
         else:
-            vState = i18n.makeString(MENU.tankcarousel_vehiclestates(vState))
+            isReadyToFight = vehicle.isReadyToFight
+            if vState == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
+                vState = makeHtmlString('html_templates:lobby', 'inPremiumIgrOnly')
+            else:
+                vState = i18n.makeString(MENU.tankcarousel_vehiclestates(vState))
         enabled, tooltip = True, None
         if levelsRange is not None and vehicle.level not in levelsRange:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_OVERFLOWLEVEL
@@ -110,10 +111,11 @@ def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None, isFallout = 
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_INCOMPATIBLETYPE
         elif isNotValidFallout:
             enabled = False
+            eventVehiclesStr = getEventVehiclesNamesStr() if not vehicle.isEvent else None
             if isCreator:
-                tooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_HEADER, TOOLTIPS.SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_BODY)
+                tooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_HEADER, TOOLTIPS.SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_BODY, eventVehiclesStr)
             else:
-                tooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_HEADER, TOOLTIPS.SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_BODY)
+                tooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_HEADER, TOOLTIPS.SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_BODY, eventVehiclesStr)
         return {'intCD': vehicle.intCD,
          'nationID': vehicle.nationID,
          'name': vehicle.name,
@@ -132,7 +134,17 @@ def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None, isFallout = 
 
 def getEventVehiclesNamesStr():
     eventVehicles = g_eventsCache.getEventVehicles()
-    return ', '.join(map(operator.attrgetter('userName'), eventVehicles))
+    htmlPrebattleTag = 'html_templates:lobby/prebattle/'
+    vehicleNames = makeHtmlString(htmlPrebattleTag, 'falloutVehiclesTooltipTextSmall', {'text': '\n'})
+    for vehicleId in range(len(eventVehicles)):
+        vehicle = eventVehicles[vehicleId]
+        imgPath = RES_ICONS.maps_icons_vehicletypes_elite(vehicle.type + '.png')
+        imgTag = makeHtmlString(htmlPrebattleTag, 'falloutVehiclesTooltipImg') % imgPath
+        vehicleNames += imgTag + vehicle.userName
+        if vehicleId < len(eventVehicles) - 1:
+            vehicleNames += '\n'
+
+    return alert(vehicleNames)
 
 
 def makeUserVO(user, colorGetter, isPlayerSpeaking = False):
@@ -261,11 +273,12 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
         if player is not None:
             dbID = player.dbID
             slotPlayerUI = makeVO(player, userGetter(dbID), colorGetter, isPlayerSpeaking(dbID))
+            isCurrentPlayer = player.isCurrentPlayer()
             if vehicle:
                 if 'vehLevel' in vehicle:
                     slotLevel = vehicle['vehLevel']
                 if 'vehTypeCompDescr' in vehicle:
-                    vehicleVO = makeVehicleVO(vehicleGetter(vehicle['vehTypeCompDescr']), levelsRange, isFallout=isFallout, isCreator=isPlayerCreator)
+                    vehicleVO = makeVehicleVO(vehicleGetter(vehicle['vehTypeCompDescr']), levelsRange, isFallout=isFallout, isCreator=isPlayerCreator, isCurrentPlayer=isCurrentPlayer)
         if unit is not None and unit.isClub():
             slotLabel = makeStaticSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, pInfo.isLegionary(), unit.isRated())
         else:

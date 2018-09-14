@@ -21,7 +21,7 @@ _WEEKDAYS = {'Mon': 1,
 MAX_BONUS_LIMIT = 1000000
 
 class XMLNode:
-    __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus')
+    __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'groupContent')
 
     def __init__(self, name = ''):
         self.name = name
@@ -30,6 +30,8 @@ class XMLNode:
         self.relatedGroup = ''
         self.info = {}
         self.bonus = {}
+        self.groupContent = None
+        return
 
     def getChildNode(self, name, relatedGroup = None):
         childNode = None
@@ -97,10 +99,12 @@ class Source:
             if not enabled:
                 continue
             eventType = EVENT_TYPE.NAME_TO_TYPE[typeName]
-            conditionReaders = self.__getConditionReaders(eventType)
-            bonusReaders = self.__getBonusReaders(eventType)
             mainNode = XMLNode('main')
             mainNode.info = info = self.__readHeader(eventType, questSection, gStartTime, gFinishTime, curTime)
+            if eventType == EVENT_TYPE.GROUP:
+                mainNode.groupContent = tuple(self.__readGroupContent(questSection))
+            conditionReaders = self.__getConditionReaders(eventType)
+            bonusReaders = self.__getBonusReaders(eventType)
             bonusNode = XMLNode('bonus')
             prebattleNode = XMLNode('preBattle')
             prebattleNode.addChild(bonusNode, False)
@@ -116,7 +120,7 @@ class Source:
             postbattleNode.addChild(bonusNode, False)
             mainNode.addChild(bonusNode)
             conditions = questSection['conditions']
-            if conditions.has_key('preBattle'):
+            if conditions and conditions.has_key('preBattle'):
                 condition = conditions['preBattle']
                 if condition.has_key('account'):
                     self.__readBattleResultsConditionList(conditionReaders, condition['account'], accountNode)
@@ -125,10 +129,10 @@ class Source:
                         self.__readBattleResultsConditionList(conditionReaders, condition['vehicle'], vehicleNode)
                     if condition.has_key('battle'):
                         self.__readBattleResultsConditionList(conditionReaders, condition['battle'], battleNode)
-            if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS and conditions.has_key('postBattle'):
+            if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS and conditions and conditions.has_key('postBattle'):
                 condition = conditions['postBattle']
                 self.__readBattleResultsConditionList(conditionReaders, condition, postbattleNode)
-            if conditions.has_key('bonus'):
+            if conditions and conditions.has_key('bonus'):
                 condition = conditions['bonus']
                 self.__readBattleResultsConditionList(conditionReaders, condition, bonusNode)
             daily = bonusNode.getChildNode('daily')
@@ -164,6 +168,8 @@ class Source:
             questClientData.pop('serverOnly', None)
             questClientData['bonus'] = mainNode.bonus
             questClientData['conditions'] = mainNode.questClientConditions
+            if mainNode.groupContent:
+                questClientData['groupContent'] = mainNode.groupContent
             mainNode.info['questClientData'] = questClientData
             nodes.setdefault(eventType, []).append(mainNode)
 
@@ -221,8 +227,15 @@ class Source:
          'gFinishTime': gFinishTime,
          'disableGui': questSection.readBool('disableGui', False),
          'requiredToken': requiredToken,
-         'Toption': None if not tOption else startTime}
+         'Toption': None if not tOption else startTime,
+         'priority': questSection.readInt('priority', 0),
+         'uiDecoration': questSection.readInt('uiDecoration', 0)}
         return info
+
+    def __readGroupContent(self, questSection):
+        if not questSection.has_key('groupContent'):
+            raise Exception("'groupContent' section is compulsory")
+        return questSection.readString('groupContent').split()
 
     def __getConditionReaders(self, eventType):
         condition_readers = {'greater': self.__readCondition_int,
@@ -734,8 +747,6 @@ class Source:
     def __readBonus_goodies(self, bonus, _name, section, gFinishTime):
         id = section['id'].asInt
         goodie = bonus.setdefault('goodies', {})[id] = {}
-        expires = goodie.setdefault('expires', {})
-        self.__readBonus_expires(id, expires, section, gFinishTime)
         if section.has_key('limit'):
             goodie['limit'] = section['limit'].asInt
         if section.has_key('count'):

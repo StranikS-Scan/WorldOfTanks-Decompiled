@@ -1,10 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
+import BigWorld
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
+import SoundGroups
 from constants import IGR_TYPE, QUEUE_TYPE, IS_SHOW_SERVER_STATS
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import i18n
 from gui.shared.utils.functions import makeTooltip
 from gui import game_control, makeHtmlString
@@ -26,6 +29,8 @@ from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from ConnectionManager import connectionManager
+from helpers.i18n import makeString as _ms
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 
 class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
@@ -39,6 +44,9 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     def __init__(self, ctx = None):
         LobbySubView.__init__(self, 0)
+        self.__isCursorOver3dScene = False
+        self.__selected3DEntity = None
+        return
 
     def _populate(self):
         LobbySubView._populate(self)
@@ -48,18 +56,21 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrTypeChanged
         game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
         g_prbCtrlEvents.onPreQueueFunctionalChanged += self.onPreQueueFunctionalChanged
-        self.startGlobalListening()
         g_itemsCache.onSyncCompleted += self.onCacheResync
         g_eventsCache.onSyncCompleted += self.onEventsCacheResync
+        g_hangarSpace.onObjectSelected += self.__on3DObjectSelected
+        g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
         g_clientUpdateManager.addCallbacks({'stats.credits': self.onMoneyUpdate,
          'stats.gold': self.onMoneyUpdate,
          'stats.vehicleSellsLeft': self.onFittingUpdate,
          'stats.slots': self.onFittingUpdate})
+        self.startGlobalListening()
         self.__onIgrTypeChanged()
         if IS_SHOW_SERVER_STATS:
             self._updateCurrentServerInfo()
         self.__updateAll()
         self.addListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
+        self.addListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
 
     def _onCustomizationShow(self, event):
         self.as_setVisibleS(not event.ctx)
@@ -99,6 +110,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     def _dispose(self):
         self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
+        self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         g_eventsCache.onSyncCompleted -= self.onEventsCacheResync
         g_itemsCache.onSyncCompleted -= self.onCacheResync
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -108,9 +120,15 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         game_control.g_instance.igr.onIgrTypeChanged -= self.__onIgrTypeChanged
         game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
+        g_hangarSpace.onObjectSelected -= self.__on3DObjectSelected
+        g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
+        if self.__selected3DEntity is not None:
+            BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
+            self.__selected3DEntity = None
         self.closeHelpLayout()
         self.stopGlobalListening()
         LobbySubView._dispose(self)
+        return
 
     def __updateAmmoPanel(self):
         if self.ammoPanel:
@@ -147,6 +165,37 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def __updateCrew(self):
         if self.crewPanel is not None:
             self.crewPanel.updateTankmen()
+        return
+
+    def __highlight3DEntityAndShowTT(self, entity):
+        BigWorld.wgAddEdgeDetectEntity(entity, 0, 0)
+        itemId = entity.selectionId
+        self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.HANGAR_3DSCENE_5THANNIVERSARY, [itemId])
+
+    def __fade3DEntityAndHideTT(self, entity):
+        BigWorld.wgDelEdgeDetectEntity(entity)
+        self.as_hide3DSceneTooltipS()
+
+    def __onNotifyCursorOver3dScene(self, event):
+        self.__isCursorOver3dScene = event.ctx.get('isOver3dScene', False)
+        if self.__selected3DEntity is not None:
+            if self.__isCursorOver3dScene:
+                self.__highlight3DEntityAndShowTT(self.__selected3DEntity)
+            else:
+                self.__fade3DEntityAndHideTT(self.__selected3DEntity)
+        return
+
+    def __on3DObjectSelected(self, entity):
+        self.__selected3DEntity = entity
+        if self.__isCursorOver3dScene:
+            self.__highlight3DEntityAndShowTT(entity)
+            if entity.mouseOverSoundName:
+                SoundGroups.g_instance.playSoundModel(entity.model, entity.mouseOverSoundName)
+
+    def __on3DObjectUnSelected(self, entity):
+        self.__selected3DEntity = None
+        if self.__isCursorOver3dScene:
+            self.__fade3DEntityAndHideTT(entity)
         return
 
     @property
@@ -296,11 +345,11 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         customizationEnabled = g_currentVehicle.isInHangar() and not isVehicleDisabled and not g_currentVehicle.isBroken() and customizationEnabledInRent
         self.as_setCrewEnabledS(crewEnabled)
         self.as_setCarouselEnabledS(carouselEnabled)
-        customizationTooltip = TOOLTIPS.HANGAR_TUNING
+        customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
         if g_currentVehicle.isPresent() and g_currentVehicle.item.isOnlyForEventBattles:
             customizationEnabled = False
-            customizationTooltip = TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE
-        self.as_setupAmmunitionPanelS(maintenanceEnabled, customizationEnabled, customizationTooltip)
+            customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY))
+        self.as_setupAmmunitionPanelS(maintenanceEnabled, makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), customizationEnabled, customizationTooltip)
         self.as_setControlsVisibleS(g_currentVehicle.isPresent())
         return
 

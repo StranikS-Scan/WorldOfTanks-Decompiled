@@ -6,8 +6,7 @@ import Pixie
 from Math import Vector3, Matrix
 import math
 from constants import VEHICLE_HIT_EFFECT
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_CODEPOINT_WARNING
-import helpers
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_CODEPOINT_WARNING, LOG_WARNING, LOG_ERROR
 from items import _xml
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 import material_kinds
@@ -197,7 +196,10 @@ class VehicleTrailEffects():
             return
 
     def _callbackTrailParticleLoaded(self, elemDesc, pixie):
-        if pixie is None:
+        if self.__vehicle is None:
+            LOG_WARNING("The vehicle object is 'None', can't attach pixie '%'" % elemDesc[self._TRAIL_E_PIXIE_FILE])
+            return
+        elif pixie is None:
             LOG_ERROR("Can't create pixie '%s'." % elemDesc[self._TRAIL_E_PIXIE_FILE])
             return
         else:
@@ -478,7 +480,6 @@ class DamageFromShotDecoder(object):
     def decodeHitPoints(encodedPoints, vehicleDescr):
         resultPoints = []
         maxHitEffectCode = None
-        pointsCount = len(encodedPoints)
         for encodedPoint in encodedPoints:
             compName, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, vehicleDescr)
             if startPoint == endPoint:
@@ -487,7 +488,7 @@ class DamageFromShotDecoder(object):
             hitTester = getattr(vehicleDescr, compName)['hitTester']
             hitTestRes = hitTester.localHitTest(startPoint, endPoint)
             if not hitTestRes:
-                width, height, depth = (hitTester.bbox[1] - hitTester.bbox[0]) / 256
+                width, height, depth = (hitTester.bbox[1] - hitTester.bbox[0]) / 256.0
                 directions = [Math.Vector3(0.0, -height, 0.0),
                  Math.Vector3(0.0, height, 0.0),
                  Math.Vector3(-width, 0.0, 0.0),
@@ -501,9 +502,9 @@ class DamageFromShotDecoder(object):
 
                 if hitTestRes is None:
                     continue
-            minDist = hitTestRes[0]
-            for hitTestRes in hitTestRes:
-                dist = hitTestRes[0]
+            minDist = hitTestRes[0][0]
+            for i in xrange(1, len(hitTestRes)):
+                dist = hitTestRes[i][0]
                 if dist < minDist:
                     minDist = dist
 
@@ -536,14 +537,16 @@ class DamageFromShotDecoder(object):
             bbox = vehicleDescr.gun['hitTester'].bbox
         else:
             LOG_CODEPOINT_WARNING(compIdx)
+            return ('',
+             int(segment & 255),
+             None,
+             None)
         min = Math.Vector3(bbox[0])
-        delta = bbox[1] - min
-        segStart = min + Math.Vector3(*(k * (segment >> shift & 255) / 255.0 for k, shift in zip(delta, (16, 24, 32))))
-        segEnd = min + Math.Vector3(*(k * (segment >> shift & 255) / 255.0 for k, shift in zip(delta, (40, 48, 56))))
+        delta = (bbox[1] - min).scale(1.0 / 255.0)
+        segStart = min + Math.Vector3(delta[0] * (segment >> 16 & 255), delta[1] * (segment >> 24 & 255), delta[2] * (segment >> 32 & 255))
+        segEnd = min + Math.Vector3(delta[0] * (segment >> 40 & 255), delta[1] * (segment >> 48 & 255), delta[2] * (segment >> 56 & 255))
         offset = (segEnd - segStart) * 0.01
-        segStart -= offset
-        segEnd += offset
         return (componentName,
          int(segment & 255),
-         segStart,
-         segEnd)
+         segStart - offset,
+         segEnd + offset)

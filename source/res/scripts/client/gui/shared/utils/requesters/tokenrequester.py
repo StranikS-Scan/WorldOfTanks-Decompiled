@@ -1,13 +1,17 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/TokenRequester.py
 import cPickle
 from functools import partial
-import Account
 import BigWorld
 from adisp import async
 from constants import REQUEST_COOLDOWN, TOKEN_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from TokenResponse import TokenResponse
 from ids_generators import SequenceIDGenerator
+
+def _getAccountRepository():
+    import Account
+    return Account.g_accountRepository
+
 
 class TokenRequester(object):
     __idsGen = SequenceIDGenerator()
@@ -31,7 +35,7 @@ class TokenRequester(object):
 
     def clear(self):
         self.__callback = None
-        repository = Account.g_accountRepository
+        repository = _getAccountRepository()
         if repository:
             repository.onTokenReceived -= self.__onTokenReceived
         self.__lastResponse = None
@@ -58,7 +62,7 @@ class TokenRequester(object):
             self.__requestID = self.__idsGen.next()
             if timeout:
                 self.__loadTimeout(self.__requestID, self.__tokenType, max(timeout, 0.0))
-            repository = Account.g_accountRepository
+            repository = _getAccountRepository()
             if repository:
                 repository.onTokenReceived += self.__onTokenReceived
             requester(self.__requestID, self.__tokenType)
@@ -68,7 +72,7 @@ class TokenRequester(object):
         if self.__requestID != requestID or tokenType != self.__tokenType:
             return
         else:
-            repository = Account.g_accountRepository
+            repository = _getAccountRepository()
             if repository:
                 repository.onTokenReceived -= self.__onTokenReceived
             try:

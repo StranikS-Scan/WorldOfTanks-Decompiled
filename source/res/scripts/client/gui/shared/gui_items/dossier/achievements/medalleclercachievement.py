@@ -14,4 +14,4 @@ class MedalLeClercAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'medalLeClerc')
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRandomStats().getCapturePoints() + dossier.getTeam7x7Stats().getCapturePoints() + dossier.getFortBattlesStats().getCapturePoints() + dossier.getFortSortiesStats().getCapturePoints()
+        return dossier.getRandomStats().getCapturePoints() - dossier.getClanStats().getCapturePoints() + dossier.getTeam7x7Stats().getCapturePoints() + dossier.getFortBattlesStats().getCapturePoints() + dossier.getFortSortiesStats().getCapturePoints() + dossier.getGlobalMapStats().getCapturePoints()

@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
 import BigWorld
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
@@ -71,18 +71,17 @@ class ProfileUtils(object):
             return ProfileUtils.UNAVAILABLE_VALUE
 
     @staticmethod
-    def packLditItemData(text, description, tooltip, icon, additionalData = None, viewType = HeaderItemsTypes.COMMON):
+    def packLditItemData(text, description, tooltip, icon, tooltipData = None):
         finalText = text
         enabled = True
         if text == -1 or text == '-1':
             enabled = False
             finalText = ProfileUtils.UNAVAILABLE_SYMBOL
-        return {'type': viewType,
-         'text': finalText,
+        return {'text': finalText,
          'description': i18n.makeString(description),
          'iconPath': ProfileUtils.getIconPath(icon),
          'tooltip': tooltip,
-         'additionalData': additionalData,
+         'tooltipData': tooltipData,
          'enabled': enabled}
 
     @staticmethod
@@ -133,7 +132,7 @@ class ProfileUtils(object):
         drawsCount = ProfileUtils.getDrawCount(battlesCount, lossesCount, winsCount)
         drawsStr = BigWorld.wg_getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
         battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr]
-        return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(battlesCount), description, tooltip, 'battles40x32.png', {'tooltipData': ProfileUtils.createToolTipData(battlesToolTipData)}, HeaderItemsTypes.VALUES)
+        return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(battlesCount), description, tooltip, 'battles40x32.png', ProfileUtils.createToolTipData(battlesToolTipData))
 
     @staticmethod
     def getVehicleRecordTooltipData(getValueMethod):
@@ -222,32 +221,11 @@ class DetailedStatisticsUtils(object):
           DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgFrags())), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDESTROYEDVEHICLES)]), ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, maxXP_formattedStr, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, maxExpToolTipData), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, maxDmg_formattedStr, maxDamageTooltip, maxDamageToolTipData), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, BigWorld.wg_getIntegralFormat(targetData.getMaxFrags()), PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDESTROYED, maxDestroyedToolTipData)]))
 
 
-def getProfileCommonInfo(userName, dossier, clanInfo, clanEmblemId):
-    clanNameProp = 'clanName'
-    clanNameDescrProp = 'clanNameDescr'
-    clanJoinTimeProp = 'clanJoinTime'
-    clanPositionProp = 'clanPosition'
-    clanEmblemProp = 'clanEmblem'
-    import cgi
+def getProfileCommonInfo(userName, dossier):
     lastBattleTimeUserString = None
     if dossier['total']['lastBattleTime']:
         lbt = dossier['total']['lastBattleTime']
         lastBattleTimeUserString = '%s %s' % (BigWorld.wg_getLongDateFormat(lbt), BigWorld.wg_getShortTimeFormat(lbt))
-    value = {'name': userName,
+    return {'name': userName,
      'registrationDate': '%s' % BigWorld.wg_getLongDateFormat(dossier['total']['creationTime']),
-     'lastBattleDate': lastBattleTimeUserString,
-     clanNameProp: '',
-     clanNameDescrProp: '',
-     clanJoinTimeProp: '',
-     clanPositionProp: '',
-     clanEmblemProp: 'img://' + clanEmblemId if clanEmblemId is not None else None}
-
-    def getGoldFmt(str):
-        return str
-
-    if clanInfo is not None:
-        value[clanNameProp] = cgi.escape(clanInfo[1])
-        value[clanNameDescrProp] = cgi.escape(clanInfo[0])
-        value[clanJoinTimeProp] = makeString(MENU.PROFILE_HEADER_CLAN_JOINDATE) % getGoldFmt(BigWorld.wg_getLongDateFormat(clanInfo[4]))
-        value[clanPositionProp] = getGoldFmt(getClanRoleString(clanInfo[3]))
-    return value
+     'lastBattleDate': lastBattleTimeUserString}

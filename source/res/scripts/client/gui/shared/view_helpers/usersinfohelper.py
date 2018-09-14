@@ -2,6 +2,7 @@
 from collections import defaultdict
 from debug_utils import LOG_DEBUG
 from gui.LobbyContext import g_lobbyContext
+from gui.shared import formatters as shared_fmts
 from gui.shared.view_helpers.UsersInfoController import UsersInfoController
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
@@ -58,6 +59,8 @@ class UsersInfoHelper(object):
         user = self.getContact(userDbID)
         if not user.hasValidName():
             self._invalid['names'].add(userDbID)
+            if self.proto.isConnected():
+                return ''
         return user.getName()
 
     def getUserClanAbbrev(self, userDbID):
@@ -70,6 +73,8 @@ class UsersInfoHelper(object):
         user = self.getContact(userDbID)
         if not user.hasValidName():
             self._invalid['names'].add(userDbID)
+            if self.proto.isConnected():
+                return ''
         return user.getFullName(isClan=isClan, isRegion=isRegion)
 
     def getUserRating(self, userDbID):
@@ -79,14 +84,32 @@ class UsersInfoHelper(object):
         return user.getGlobalRating()
 
     def getGuiUserData(self, userDbID):
-        user = self.users.getUser(userDbID)
+        user = self.getContact(userDbID)
         colorGetter = g_settings.getColorScheme('rosters').getColors
-        return {'userName': self.getUserName(userDbID),
+        return {'userName': self.getGuiUserName(userDbID),
          'clanAbbrev': self.getUserClanAbbrev(userDbID),
          'region': self.getUserRegionCode(userDbID),
          'tags': user.getTags() if user else [],
          'dbID': userDbID,
          'colors': colorGetter(user.getGuiType() if user else USER_GUI_TYPE.OTHER)}
+
+    def getGuiUserName(self, userDbID, formatter = lambda v: v):
+        userName = self.getUserName(userDbID)
+        if userName:
+            return formatter(userName)
+        return ''
+
+    def getGuiUserFullName(self, userDbID, isClan = True, isRegion = True, formatter = lambda v: v):
+        userFullName = self.getUserFullName(userDbID, isClan=isClan, isRegion=isRegion)
+        if userFullName:
+            return formatter(userFullName)
+        return ''
+
+    def getGuiUserRating(self, userDbID, formatter = lambda v: v):
+        userRating = self.getUserRating(userDbID)
+        if userRating != '0':
+            return formatter(shared_fmts.getGlobalRatingFmt(userRating))
+        return '0'
 
     def syncUsersInfo(self):
         if len(self._invalid['names']):

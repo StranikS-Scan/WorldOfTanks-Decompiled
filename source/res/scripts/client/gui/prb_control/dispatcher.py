@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/prb_control/dispatcher.py
-from functools import partial
 import types
 import weakref
+import time
+from functools import partial
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import async, process
@@ -508,7 +509,10 @@ class _PrebattleDispatcher(object):
             if isPlayTimeBan:
                 SystemMessages.g_instance.pushI18nMessage(key.format('playTimeNotification'), timeTillBlock, type=SystemMessages.SM_TYPE.Warning)
             else:
-                SystemMessages.g_instance.pushI18nMessage(key.format('midnightNotification'), type=SystemMessages.SM_TYPE.Warning)
+                gameSession = game_control.g_instance.gameSession
+                notifyStartTime, blockTime = gameSession.getCurfewBlockTime()
+                formatter = lambda t: time.strftime('%H:%M', time.localtime(t))
+                SystemMessages.g_instance.pushI18nMessage(key.format('midnightNotification'), type=SystemMessages.SM_TYPE.Warning, preBlockTime=formatter(notifyStartTime), blockTime=formatter(blockTime))
 
     def rc_onRentChange(self, vehicles):
         if g_currentVehicle.isPresent() and g_currentVehicle.item.intCD in vehicles and g_currentVehicle.isDisabledInRent() and g_currentVehicle.isInPrebattle():

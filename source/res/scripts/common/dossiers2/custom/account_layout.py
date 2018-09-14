@@ -5,6 +5,7 @@ from dossiers2.custom.dependencies import ACHIEVEMENT7X7_DEPENDENCIES
 from dossiers2.custom.dependencies import ACHIEVEMENTRATED7X7_DEPENDENCIES
 from dossiers2.custom.dependencies import HISTORICAL_ACHIEVEMENTS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
+from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_MISC_DEPENDENCIES
 from battle_statistics_layouts import *
 TOTAL_BLOCK_LAYOUT = ['creationTime',
@@ -13,6 +14,13 @@ TOTAL_BLOCK_LAYOUT = ['creationTime',
  'treesCut',
  'mileage']
 _totalBlockBuilder = StaticSizeBlockBuilder('total', TOTAL_BLOCK_LAYOUT, {}, [])
+FORT_SORTIE_BLOCK_LAYOUT = FORT_BLOCK_LAYOUT + ['middleBattlesCount',
+ 'championBattlesCount',
+ 'absoluteBattlesCount',
+ 'middleWins',
+ 'championWins',
+ 'absoluteWins',
+ 'fortResource']
 _a15x15BlockBuilder = StaticSizeBlockBuilder('a15x15', A15X15_BLOCK_LAYOUT, A15X15_STATS_DEPENDENCIES, [])
 _a15x15_2BlockBuilder = StaticSizeBlockBuilder('a15x15_2', A15X15_2_BLOCK_LAYOUT, {}, [])
 _clanBlockBuilder = StaticSizeBlockBuilder('clan', CLAN_BLOCK_LAYOUT, CLAN_STATS_DEPENDENCIES, [])
@@ -23,9 +31,12 @@ _a7x7BlockBuilder = StaticSizeBlockBuilder('a7x7', A7X7_BLOCK_LAYOUT, A7X7_STATS
 _rated7x7BlockBuilder = StaticSizeBlockBuilder('rated7x7', RATED_7X7_BLOCK_LAYOUT, {}, [])
 _historicalBlockBuilder = StaticSizeBlockBuilder('historical', HISTORICAL_BLOCK_LAYOUT, HISTORICAL_STATS_DEPENDENCIES, [])
 _fortBattlesInClanBlockBuilder = StaticSizeBlockBuilder('fortBattlesInClan', FORT_BLOCK_LAYOUT, {}, [])
-_fortSortiesInClanBlockBuilder = StaticSizeBlockBuilder('fortSortiesInClan', FORT_BLOCK_LAYOUT, {}, [])
+_fortSortiesInClanBlockBuilder = StaticSizeBlockBuilder('fortSortiesInClan', FORT_SORTIE_BLOCK_LAYOUT, {}, [])
 _fortBattlesBlockBuilder = StaticSizeBlockBuilder('fortBattles', FORT_BLOCK_LAYOUT, FORT_BATTLES_STATS_DEPENDENCIES, [])
 _fortSortiesBlockBuilder = StaticSizeBlockBuilder('fortSorties', FORT_BLOCK_LAYOUT, FORT_SORTIES_STATS_DEPENDENCIES, [])
+_globalMapMiddleBlockBuilder = StaticSizeBlockBuilder('globalMapMiddle', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
+_globalMapChampionBlockBuilder = StaticSizeBlockBuilder('globalMapChampion', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
+_globalMapAbsoluteBlockBuilder = StaticSizeBlockBuilder('globalMapAbsolute', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -34,6 +45,9 @@ _maxFortBattlesBlockBuilder = StaticSizeBlockBuilder('maxFortBattles', MAX_AND_B
 _maxFortSortiesBlockBuilder = StaticSizeBlockBuilder('maxFortSorties', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxFortBattlesInClanBlockBuilder = StaticSizeBlockBuilder('maxFortBattlesInClan', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxFortSortiesInClanBlockBuilder = StaticSizeBlockBuilder('maxFortSortiesInClan', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxGlobalMapMiddleBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapMiddle', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxGlobalMapChampionBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapChampion', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxGlobalMapAbsoluteBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapAbsolute', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'IIII', {})
 _a7x7CutBlockBuilder = DictBlockBuilder('a7x7Cut', 'I', 'IIIIIII', {})
@@ -41,6 +55,7 @@ _rated7x7CutBlockBuilder = DictBlockBuilder('rated7x7Cut', 'I', 'IIIIIII', {})
 _historicalCutBlockBuilder = DictBlockBuilder('historicalCut', 'I', 'III', {})
 _fortBattlesCutBlockBuilder = DictBlockBuilder('fortBattlesCut', 'I', 'III', {})
 _fortSortiesCutBlockBuilder = DictBlockBuilder('fortSortiesCut', 'I', 'III', {})
+_globalMapCommonCutBlockBuilder = DictBlockBuilder('globalMapCommonCut', 'I', 'III', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -333,7 +348,11 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'tankwomen',
  'operationWinter',
  'victoryMarch',
- 'fallout']
+ 'fallout',
+ 'fallout2',
+ 'falloutSingleWolf',
+ 'falloutPackOfWolfs',
+ 'falloutSteelHunter']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -348,7 +367,11 @@ _singleAchievementsPopUps = ['titleSniper',
  'tankwomen',
  'operationWinter',
  'victoryMarch',
- 'fallout']
+ 'fallout',
+ 'fallout2',
+ 'falloutSingleWolf',
+ 'falloutPackOfWolfs',
+ 'falloutSteelHunter']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -445,4 +468,11 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _rated7x7BlockBuilder,
  _maxRated7x7BlockBuilder,
  _achievementsRated7x7BlockBuilder,
- _rated7x7CutBlockBuilder)
+ _rated7x7CutBlockBuilder,
+ _globalMapMiddleBlockBuilder,
+ _globalMapChampionBlockBuilder,
+ _globalMapAbsoluteBlockBuilder,
+ _maxGlobalMapMiddleBlockBuilder,
+ _maxGlobalMapChampionBlockBuilder,
+ _maxGlobalMapAbsoluteBlockBuilder,
+ _globalMapCommonCutBlockBuilder)

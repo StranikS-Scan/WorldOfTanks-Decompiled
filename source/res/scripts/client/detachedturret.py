@@ -106,7 +106,7 @@ class DetachedTurret(BigWorld.Entity):
     def collideSegment(self, startPoint, endPoint, skipGun = False):
         res = None
         filterMethod = getattr(self.filter, 'segmentMayHitEntity', lambda : True)
-        if not filterMethod(startPoint, endPoint):
+        if not filterMethod(startPoint, endPoint, 0):
             return res
         else:
             modelsToCheck = (self.model,) if skipGun else (self.model, self.__gunModel)

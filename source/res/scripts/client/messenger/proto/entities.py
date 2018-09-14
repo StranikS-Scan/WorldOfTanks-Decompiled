@@ -88,7 +88,7 @@ class ReceivedBattleChatCommand(_ChatCommand):
     def getVehMarker(self, mode = None, vehicle = None):
         result = self._getCommandVehMarker()
         if vehicle:
-            mode = 'SPG' if 'SPG' in vehicle.vehicleType.tags else ''
+            mode = 'SPG' if vehicle.vehicleType.classTag == 'SPG' else ''
         if mode:
             result = '{0:>s}{1:>s}'.format(result, mode)
         return result
@@ -96,7 +96,7 @@ class ReceivedBattleChatCommand(_ChatCommand):
     def getVehMarkers(self, vehicle = None):
         mode = ''
         if vehicle:
-            mode = 'SPG' if 'SPG' in vehicle.vehicleType.tags else ''
+            mode = 'SPG' if vehicle.vehicleType.classTag == 'SPG' else ''
         return (self.getVehMarker(mode=mode), 'attackSender{0:>s}'.format(mode))
 
     def getSoundEventName(self):

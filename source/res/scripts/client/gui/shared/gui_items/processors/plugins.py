@@ -6,7 +6,6 @@ from account_helpers.AccountSettings import AccountSettings
 from gui import DialogsInterface
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, DismissTankmanDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
@@ -534,8 +533,12 @@ class PotapovQuestsLockedByVehicle(SyncValidator):
 
 class PotapovQuestSlotsValidator(SyncValidator):
 
+    def __init__(self, isEnabled = True, removedCount = 0):
+        super(PotapovQuestSlotsValidator, self).__init__(isEnabled)
+        self.__removedCount = removedCount
+
     def _validate(self):
-        if not g_eventsCache.questsProgress.getPotapovQuestsFreeSlots():
+        if not g_eventsCache.questsProgress.getPotapovQuestsFreeSlots(self.__removedCount):
             return makeError('NOT_ENOUGH_SLOTS')
         return makeSuccess()
 

@@ -14,7 +14,7 @@ from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.events import FocusEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.server_events.event_items import HistoricalBattle
-from gui.shared.utils.Notifier import Notifier
+from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.functions import getAbsoluteUrl
 from helpers import i18n, time_utils
 from gui import makeHtmlString, game_control
@@ -28,7 +28,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from messenger.ext import channel_num_gen
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 
-class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMeta, Notifier):
+class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMeta, MethodsRules):
     COOLDOWN_TRESHOLD = 172800
     COOLDOWN_TICK = 60
 
@@ -394,7 +394,7 @@ class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMet
          'warnTTBody': warnTTBody}
         return item
 
-    @Notifier.skipable
+    @MethodsRules.skipable
     def _handleCurrentVehicleChanged(self):
         if g_currentVehicle.isPresent():
             self.as_selectVehicleS(g_currentVehicle.item.intCD)

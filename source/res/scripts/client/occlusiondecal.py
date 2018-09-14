@@ -5,7 +5,7 @@ class OcclusionDecal:
 
     @staticmethod
     def isEnabled():
-        return BigWorld.isForwardPipeline() is False and BigWorld.isSSAOEnabled()
+        return BigWorld.isForwardPipeline() is False and BigWorld.isSSAOEnabled() and BigWorld.isShadowsEnabled()
 
     def __init__(self):
         self.__attached = False
@@ -29,10 +29,13 @@ class OcclusionDecal:
         self.detach()
         return
 
-    def attach(self, vehicle, desc):
+    def attach(self, vehicle, desc, isSettingChanged = False):
         self.__vehicle = vehicle
         self.__desc = desc
-        if not OcclusionDecal.isEnabled() or self.__attached:
+        if not isSettingChanged:
+            if not OcclusionDecal.isEnabled() or self.__attached:
+                return
+        elif self.__attached:
             return
         self.__attached = True
         self.__chassisParent = desc['chassis']['model']
@@ -78,20 +81,26 @@ class OcclusionDecal:
         elif self.__vehicle is None or self.__desc is None:
             return
         else:
-            self.attach(self.__vehicle, self.__desc)
+            self.attach(self.__vehicle, self.__desc, True)
             return
 
     def onSettingsChanged(self, diff = None):
-        if OcclusionDecal.isEnabled():
-            self.__reattach()
-        else:
-            self.detach()
+        enabled = False
+        if 'SHADOWS_QUALITY' in diff:
+            value = diff['SHADOWS_QUALITY']
+            if value < 4 and OcclusionDecal.isEnabled():
+                enabled = True
+            if enabled:
+                self.__reattach()
+            else:
+                self.detach()
 
     @staticmethod
     def __createDecal(transform, parent, applyToAll):
-        diffuseTexture = 'maps/spots/TankOcclusion/TankOcclusionMap.dds'
+        diffuseTexture = ''
         bumpTexture = ''
         hmTexture = ''
+        addTexture = 'maps/spots/TankOcclusion/TankOcclusionMap.dds'
         priority = 0
         materialType = 4
         visibilityMask = 4294967295L
@@ -100,7 +109,7 @@ class OcclusionDecal:
         if applyToAll:
             influence = 62
         decal = BigWorld.WGOcclusionDecal()
-        decal.setup(diffuseTexture, bumpTexture, hmTexture, priority, materialType, influence, visibilityMask, accuracy)
+        decal.create(diffuseTexture, bumpTexture, hmTexture, addTexture, priority, materialType, influence, visibilityMask, accuracy)
         decal.setLocalTransform(transform)
         parent.root.attach(decal)
         return decal

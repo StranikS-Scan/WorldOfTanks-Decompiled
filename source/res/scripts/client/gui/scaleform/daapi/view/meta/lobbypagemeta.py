@@ -9,6 +9,9 @@ class LobbyPageMeta(DAAPIModule):
     def getSubContainerType(self):
         self._printOverrideError('getSubContainerType')
 
+    def notifyCursorOver3dScene(self, isOver3dScene):
+        self._printOverrideError('notifyCursorOver3dScene')
+
     def as_showHelpLayoutS(self):
         if self._isDAAPIInited():
             return self.flashObject.as_showHelpLayout()

@@ -2,13 +2,15 @@
 import time
 import operator
 from collections import defaultdict
+import types
 import BigWorld
 import constants
-import types
 from gui import GUI_SETTINGS
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import i18n, int2roman, time_utils
+from shared_utils import CONST_CONTAINER
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import makeHtmlString
@@ -16,13 +18,19 @@ from gui.shared import g_itemsCache, utils
 from gui.server_events import formatters, conditions, settings as quest_settings
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from quest_xml_source import MAX_BONUS_LIMIT
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
+RENDER_BACKS = {1: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_EXP,
+ 2: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_ITEMS,
+ 3: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_PREMDAYS,
+ 4: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_VEHICLES}
 
 class _EventInfo(AppRef):
 
-    class EVENT_STATUS(utils.CONST_CONTAINER):
+    class EVENT_STATUS(CONST_CONTAINER):
         COMPLETED = 'done'
         NOT_AVAILABLE = 'notAvailable'
         NONE = ''
@@ -44,6 +52,8 @@ class _EventInfo(AppRef):
             bonusCount = self._getBonusCount(pCur)
             status, statusMsg = self._getStatus(pCur)
             qProgCur, qProgTot, qProgbarType, tooltip = self._getProgressValues(svrEvents, pCur, pPrev)
+        bgImage = RENDER_BACKS.get(self.event.getIconID(), '')
+        showBgImage = len(bgImage) > 0
         return {'questID': str(self.event.getID()),
          'isNew': quest_settings.isNewCommonEvent(self.event),
          'eventType': self.event.getType(),
@@ -58,7 +68,12 @@ class _EventInfo(AppRef):
          'maxProgrVal': qProgTot,
          'currentProgrVal': qProgCur,
          'isLock': False,
-         'isLocked': False}
+         'isLocked': False,
+         'isSelectable': True,
+         'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
+         'showBckgrImage': showBgImage,
+         'bckgrImage': bgImage,
+         'tooltip': TOOLTIPS.QUESTS_RENDERER_LABEL}
 
     def getDetails(self, svrEvents):
         eProgCur, eProgTot, eProgbarType, tooltip = self._getProgressValues(svrEvents)

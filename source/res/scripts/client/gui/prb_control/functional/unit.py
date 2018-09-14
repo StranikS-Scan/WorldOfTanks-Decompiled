@@ -2,8 +2,9 @@
 import cgi
 import time
 import BigWorld
+import weakref
 from CurrentVehicle import g_currentVehicle
-from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE, UNIT_ERROR
+from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE, UNIT_ERROR, SORTIE_DIVISION
 import account_helpers
 from gui.prb_control.functional import action_handlers
 from gui.prb_control.restrictions import createUnitActionValidator
@@ -27,12 +28,14 @@ from gui.prb_control.items import unit_items
 from gui.prb_control.prb_cooldown import PrbCooldownManager
 from gui.prb_control.restrictions.interfaces import IUnitPermissions
 from gui.prb_control.restrictions.permissions import UnitPermissions, SquadPermissions
-from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT, FUNCTIONAL_EXIT, CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME
+from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT, FUNCTIONAL_EXIT, CTRL_ENTITY_TYPE
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils.ListenersCollection import ListenersCollection
 from helpers import time_utils
 from items import vehicles as core_vehicles
 from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control.items.unit_items import DynamicRosterSettings
 
 class UnitIntro(interfaces.IPrbEntry):
 
@@ -222,7 +225,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
 
     def getPlayerInfo(self, dbID = None, unitIdx = None):
         if dbID is None:
-            dbID = account_helpers.getPlayerDatabaseID()
+            dbID = account_helpers.getAccountDatabaseID()
         unitIdx, unit = self.getUnit(unitIdx=unitIdx)
         if unit:
             pInfo = self._buildPlayerInfo(unitIdx, unit, dbID, unit.getPlayerSlotIdx(dbID), unit.getPlayer(dbID))
@@ -243,7 +246,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         return result
 
     def getPermissions(self, dbID = None, unitIdx = None):
-        pDbID = account_helpers.getPlayerDatabaseID()
+        pDbID = account_helpers.getAccountDatabaseID()
         if dbID is None:
             dbID = pDbID
         _, unit = self.getUnit(unitIdx=unitIdx, safe=True)
@@ -266,7 +269,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
 
     def isCreator(self, dbID = None, unitIdx = None):
         if dbID is None:
-            dbID = account_helpers.getPlayerDatabaseID()
+            dbID = account_helpers.getAccountDatabaseID()
         _, unit = self.getUnit(unitIdx=unitIdx)
         if unit:
             result = UnitPermissions.isCreator(unit.getPlayers().get(dbID, {}).get('role', 0))
@@ -320,7 +323,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
 
     def getVehicleInfo(self, dbID = None, unitIdx = None):
         if dbID is None:
-            dbID = account_helpers.getPlayerDatabaseID()
+            dbID = account_helpers.getAccountDatabaseID()
         _, unit = self.getUnit(unitIdx=unitIdx)
         if unit:
             vehicles = unit.getVehicles()
@@ -337,7 +340,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         if not unit:
             return None
         else:
-            dbID = account_helpers.getPlayerDatabaseID()
+            dbID = account_helpers.getAccountDatabaseID()
             pInfo = self._buildPlayerInfo(unitIdx, unit, dbID, unit.getPlayerSlotIdx(dbID), unit.getPlayer(dbID))
             unitState = self._buildFlags(unit)
             unitStats = self._buildStats(unitIdx, unit)
@@ -522,6 +525,9 @@ class IntroFunctional(_UnitFunctional):
          RQ_TYPE.DECLINE_SEARCH: self.declineSearch}
         super(IntroFunctional, self).__init__(handlers, interfaces.IIntroUnitListener, prbType, rosterSettings)
         self._modeFlags = modeFlags
+        self._clubsPaginator = None
+        self._clubsFinder = None
+        return
 
     def init(self, ctx = None):
         self._hasEntity = True
@@ -533,9 +539,11 @@ class IntroFunctional(_UnitFunctional):
             selectedVehs = []
         self.setSelectedVehicles('selectedIntroVehicles', selectedVehs)
         from gui.clubs.ClubsController import g_clubsCtrl
-        from gui.clubs.club_helpers import ClubListPaginator
+        from gui.clubs.club_helpers import ClubListPaginator, ClubFinder
         self._clubsPaginator = ClubListPaginator(g_clubsCtrl)
         self._clubsPaginator.init()
+        self._clubsFinder = ClubFinder(g_clubsCtrl)
+        self._clubsFinder.init()
         g_eventDispatcher.loadUnit(self._prbType, self._modeFlags)
         for listener in self._listeners:
             listener.onIntroUnitFunctionalInited()
@@ -550,6 +558,9 @@ class IntroFunctional(_UnitFunctional):
         if self._clubsPaginator is not None:
             self._clubsPaginator.fini()
             self._clubsPaginator = None
+        if self._clubsFinder is not None:
+            self._clubsFinder.fini()
+            self._clubsFinder = None
         self._requestHandlers.clear()
         self._hasEntity = False
         for listener in self._listeners:
@@ -634,6 +645,11 @@ class IntroFunctional(_UnitFunctional):
     def getClubsPaginator(self):
         return self._clubsPaginator
 
+    def getClubsFinder(self, pattern = ''):
+        if self._clubsFinder is not None:
+            self._clubsFinder.setPattern(pattern)
+        return self._clubsFinder
+
 
 class UnitFunctional(_UnitFunctional):
 
@@ -652,7 +668,8 @@ class UnitFunctional(_UnitFunctional):
          RQ_TYPE.AUTO_SEARCH: self.doAutoSearch,
          RQ_TYPE.BATTLE_QUEUE: self.doBattleQueue,
          RQ_TYPE.GIVE_LEADERSHIP: self.giveLeadership,
-         RQ_TYPE.CHANGE_RATED: self.changeRated}
+         RQ_TYPE.CHANGE_RATED: self.changeRated,
+         RQ_TYPE.CHANGE_DIVISION: self.changeDivision}
         if prbType == PREBATTLE_TYPE.SQUAD:
             self._actionHandler = action_handlers.SquadActionsHandler(self)
         else:
@@ -687,7 +704,6 @@ class UnitFunctional(_UnitFunctional):
         for listener in self._listeners:
             listener.onUnitFunctionalInited()
             if idle:
-                g_eventDispatcher.setUnitProgressInCarousel(self._prbType, True)
                 listener.onUnitFlagsChanged(flags, timeLeftInIdle)
 
         unit_ext.destroyListReq()
@@ -753,10 +769,12 @@ class UnitFunctional(_UnitFunctional):
             listener.onUnitRejoin()
 
     def initEvents(self, listener):
+        flags = self.getFlags()
+        idle = flags.isInIdle()
+        if idle:
+            g_eventDispatcher.setUnitProgressInCarousel(self._prbType, True)
         if listener in self._listeners:
-            flags = self.getFlags()
-            if flags.isInIdle():
-                g_eventDispatcher.setUnitProgressInCarousel(self._prbType, True)
+            if idle:
                 listener.onUnitFlagsChanged(flags, self._getTimeLeftInIdle())
         else:
             LOG_ERROR('Listener not found', listener)
@@ -1131,7 +1149,9 @@ class UnitFunctional(_UnitFunctional):
             self._requestsProcessor.doRawRequest('stopAutoSearch')
         elif pInfo.isReady:
             if not flags.isInIdle():
-                self._requestsProcessor.doRawRequest('setReady', False)
+                ctx = unit_ctx.SetReadyUnitCtx(False)
+                ctx.resetVehicle = True
+                self.setPlayerReady(ctx)
             else:
                 self._deferredReset = True
         g_eventDispatcher.updateUI()
@@ -1188,6 +1208,9 @@ class UnitFunctional(_UnitFunctional):
             return
         self._requestsProcessor.doRequest(ctx, 'giveLeadership', ctx.getPlayerID())
 
+    def getCooldownTime(self, rqTypeID):
+        return self._cooldown.getTime(rqTypeID)
+
     def changeRated(self, ctx, callback = None):
         extra = self.getExtra()
         if extra is None or not hasattr(extra, 'isRatedBattle'):
@@ -1214,6 +1237,23 @@ class UnitFunctional(_UnitFunctional):
             self._cooldown.process(settings.REQUEST_TYPE.CHANGE_RATED)
             return
 
+    def changeDivision(self, ctx, callback = None):
+        if ctx.getDivisionID() not in SORTIE_DIVISION._ORDER:
+            LOG_ERROR('Incorrect value of division', ctx.getDivisionID())
+            if callback:
+                callback(False)
+            return
+        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_DIVISION):
+            return
+        pPermissions = self.getPermissions()
+        if not pPermissions.canChangeRosters():
+            LOG_ERROR('Player can not change division', pPermissions)
+            if callback:
+                callback(False)
+            return
+        self._requestsProcessor.doRequest(ctx, 'changeSortieDivision', division=ctx.getDivisionID(), unitIdx=ctx.getUnitIdx())
+        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_DIVISION)
+
     def exitFromQueue(self):
         self._actionHandler.exitFromQueue()
 
@@ -1234,7 +1274,8 @@ class UnitFunctional(_UnitFunctional):
         for listener in self._listeners:
             listener.onUnitFlagsChanged(flags, timeLeftInIdle)
 
-        self._actionHandler.setUnitChanged()
+        if not flags.isOnlyRosterWaitChanged():
+            self._actionHandler.setUnitChanged()
         members = unit.getMembers()
         diff = []
         for slotIdx in self._rosterSettings.getAllSlotsRange():
@@ -1259,7 +1300,7 @@ class UnitFunctional(_UnitFunctional):
             vehLevel = 0
         vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel)
         LOG_DEBUG('onUnitVehicleChanged', dbID, vInfo)
-        if dbID == account_helpers.getPlayerDatabaseID() and not vInfo.isEmpty():
+        if dbID == account_helpers.getAccountDatabaseID() and not vInfo.isEmpty():
             vehicle = g_itemsCache.items.getItemByCD(vInfo.vehTypeCD)
             if vehicle is not None:
                 g_currentVehicle.selectVehicle(vehicle.invID)
@@ -1324,6 +1365,7 @@ class UnitFunctional(_UnitFunctional):
         unitIdx, unit = self.getUnit()
         pInfo = self._buildPlayerInfo(unitIdx, unit, playerID, unit.getPlayerSlotIdx(playerID), playerData)
         self._invokeListeners('onUnitPlayerInfoChanged', pInfo)
+        self._actionHandler.setPlayerInfoChanged()
 
     def unit_onUnitPlayerRemoved(self, playerID, playerData):
         unitIdx, unit = self.getUnit()
@@ -1334,6 +1376,9 @@ class UnitFunctional(_UnitFunctional):
         self._invokeListeners('onUnitSettingChanged', opCode, value)
 
     def unit_onUnitRosterChanged(self):
+        unitIdx, unit = self.getUnit()
+        self._rosterSettings = DynamicRosterSettings(unit)
+        self._actionValidator = createUnitActionValidator(self._prbType, self._rosterSettings, self)
         self._vehiclesWatcher.validate()
         self._invokeListeners('onUnitRosterChanged')
 

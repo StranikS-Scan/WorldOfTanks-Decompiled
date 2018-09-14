@@ -340,7 +340,7 @@ class WarplaneActivity(IMapActivity):
         soundName = ds.asString if ds is not None else ''
         if soundName != '':
             try:
-                self.__sound = SoundGroups.g_instance.playSound(self.__model, soundName)
+                self.__sound = SoundGroups.g_instance.playSoundModel(self.__model, soundName)
                 self.__sound.volume = 0.0
             except:
                 self.__sound = None

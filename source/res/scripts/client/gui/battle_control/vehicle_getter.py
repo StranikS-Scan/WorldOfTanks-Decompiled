@@ -51,6 +51,26 @@ def isAutoRotationOn(vDesc):
     return isOn
 
 
+def getCrewMainRolesWoIndexes(crewRoles):
+    order = TANKMEN_ROLES_ORDER_DICT['plain']
+    default = len(order)
+    return sorted(map(lambda roles: roles[0], crewRoles), key=lambda item: (order.index(item) if item in order else default))
+
+
+def getCrewMainRolesWithIndexes(crewRoles):
+    indexes = defaultdict(lambda : 1)
+
+    def _mapping(item):
+        role = item[0]
+        if role not in ('commander', 'driver'):
+            ind = indexes[role]
+            indexes[role] += 1
+            role += str(ind)
+        return role
+
+    return map(_mapping, crewRoles)
+
+
 class TankmenStatesIterator(object):
 
     def __init__(self, states = None, vDesc = None):
@@ -59,18 +79,8 @@ class TankmenStatesIterator(object):
             crewRoles = []
         else:
             crewRoles = vDesc.type.crewRoles
-        indexes = defaultdict(lambda : 1)
-
-        def _mapping(item):
-            role = item[0]
-            if role not in ('commander', 'driver'):
-                ind = indexes[role]
-                indexes[role] += 1
-                role += str(ind)
-            return role
-
         self._rolesEnum = list(TANKMEN_ROLES_ORDER_DICT['enum'])
-        self._mainRoles = map(_mapping, crewRoles)
+        self._mainRoles = getCrewMainRolesWithIndexes(crewRoles)
         self._states = defaultdict(lambda : 'normal', states or {})
         return
 

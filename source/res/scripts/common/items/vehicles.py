@@ -11,8 +11,9 @@ import nations, items
 from items import _xml
 from debug_utils import *
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT, IS_CELLAPP, IS_BASEAPP, IS_WEB, ITEM_DEFS_PATH
-from constants import DEFAULT_GUN_PITCH_LIMITS_TRANSITION, IGR_TYPE, IS_RENTALS_ENABLED
+from constants import IGR_TYPE, IS_RENTALS_ENABLED
 import BigWorld
+import copy
 if IS_CELLAPP or IS_CLIENT or IS_BOT:
     from ModelHitTester import ModelHitTester
 if IS_CELLAPP or IS_CLIENT or IS_WEB:
@@ -22,6 +23,7 @@ if IS_CLIENT:
     from helpers import i18n
     from helpers import EffectsList
     from VehicleEffects import ExhaustEffectsDescriptor, VehicleExhaustDescriptor
+    import FMOD
 elif IS_WEB:
     from web_stubs import *
 VEHICLE_CLASS_TAGS = frozenset(('lightTank',
@@ -2178,7 +2180,10 @@ def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem
         res['sound'] = section.readString('sound', '')
         res['soundPC'] = section.readString('soundPC', '')
         res['soundNPC'] = section.readString('soundNPC', '')
-        if res['sound'] == '' and (res['soundPC'] == '' or res['soundNPC'] == ''):
+        res['wwsound'] = section.readString('wwsound', '')
+        res['wwsoundPC'] = section.readString('wwsoundPC', '')
+        res['wwsoundNPC'] = section.readString('wwsoundNPC', '')
+        if res['sound'] == '' and (res['soundPC'] == '' or res['soundNPC'] == '') and res['wwsound'] == '' and (res['wwsoundPC'] == '' or res['wwsoundNPC'] == ''):
             raise Exception, 'chassis sound tags are wrong for vehicle ' + res['userString']
         res['wheels']['groups'] = wheelGroups
         res['wheels']['wheels'] = wheels
@@ -2223,8 +2228,10 @@ def _readEngine(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
         res['sound'] = section.readString('sound', '')
         res['soundPC'] = section.readString('soundPC', '')
         res['soundNPC'] = section.readString('soundNPC', '')
-        if res['sound'] == '' and (res['soundPC'] == '' or res['soundNPC'] == ''):
-            LOG_DEBUG('sound, soundPC, soundNPC', res['sound'], res['soundPC'], res['soundNPC'])
+        res['wwsound'] = section.readString('wwsound', '')
+        res['wwsoundPC'] = section.readString('wwsoundPC', '')
+        res['wwsoundNPC'] = section.readString('wwsoundNPC', '')
+        if res['sound'] == '' and (res['soundPC'] == '' or res['soundNPC'] == '') and res['wwsound'] == '' and (res['wwsoundPC'] == '' or res['wwsoundNPC'] == ''):
             _xml.raiseWrongXml(xmlCtx, '', 'chassis sound tags are wrong')
     res.update(_readDeviceHealthParams(xmlCtx, section))
     res['unlocks'] = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, compactDescr)
@@ -2286,8 +2293,9 @@ def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
         res['showEmblemsOnGun'] = section.readBool('showEmblemsOnGun', False)
         if section.has_key('camouflage'):
             res['camouflageTiling'], res['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
-        res['turretRotatorSoundManual'] = section.readString('turretRotatorSoundManual')
-        res['turretRotatorSoundGear'] = section.readString('turretRotatorSoundGear')
+        if FMOD.enabled:
+            res['turretRotatorSoundManual'] = section.readString('turretRotatorSoundManual')
+            res['turretRotatorSoundGear'] = section.readString('turretRotatorSoundGear')
         res['AODecals'] = _readAODecals(xmlCtx, section, 'AODecals')
         commonConfig = g_cache.commonConfig
         res['turretDetachmentEffects'] = _readTurretDetachmentEffects(xmlCtx, section, 'turretDetachmentEffects', commonConfig['defaultTurretDetachmentEffects'])
@@ -2387,15 +2395,8 @@ def _readGun(xmlCtx, section, compactDescr, unlocksDescrs = None, turretCompactD
     if not section.has_key('pitchLimits'):
         _xml.raiseWrongSection(xmlCtx, 'pitchLimits')
     else:
-        v = _xml.readVector2(xmlCtx, section, 'pitchLimits')
-        if v[0] > v[1]:
-            _xml.raiseWrongSection(xmlCtx, 'pitchLimits')
-        basicLimits = (radians(v[0]), radians(v[1]))
-        pitchLimits = {'basic': basicLimits,
-         'absolute': basicLimits}
-        if section.has_key('extraPitchLimits'):
-            _readGunPitchExtraLimits((xmlCtx, 'extraPitchLimits'), section['extraPitchLimits'], pitchLimits)
-        res['pitchLimits'] = pitchLimits
+        res['pitchLimits'] = _readGunPitchLimits(xmlCtx, section['pitchLimits'], False)
+        _validatePitchLimits(xmlCtx, 'pitchLimits', res['pitchLimits'])
     res.update(_readDeviceHealthParams(xmlCtx, section))
     res['shotDispersionAngle'] = atan(_xml.readNonNegativeFloat(xmlCtx, section, 'shotDispersionRadius') / 100.0)
     res['shotDispersionFactors'] = _readGunShotDispersionFactors(xmlCtx, section, 'shotDispersionFactors')
@@ -2440,17 +2441,9 @@ def _readGunLocals(xmlCtx, section, sharedDescr, unlocksDescrs, turretCompactDes
         turretYawLimits = (radians(v[0]), radians(v[1])) if v[0] > -179.0 or v[1] < 179.0 else None
     if section.has_key('pitchLimits'):
         hasOverride = True
-        v = _xml.readVector2(xmlCtx, section, 'pitchLimits')
-        if v[0] > v[1]:
-            _xml.raiseWrongSection(xmlCtx, 'pitchLimits')
-        basicLimits = (radians(v[0]), radians(v[1]))
-        pitchLimits = {'basic': basicLimits,
-         'absolute': basicLimits}
+        pitchLimits = _readGunPitchLimits(xmlCtx, section['pitchLimits'], True)
     else:
-        pitchLimits = dict(sharedDescr['pitchLimits'])
-    if section.has_key('extraPitchLimits'):
-        hasOverride = True
-        _readGunPitchExtraLimits((xmlCtx, 'extraPitchLimits'), section['extraPitchLimits'], pitchLimits)
+        pitchLimits = sharedDescr['pitchLimits']
     if not section.has_key('rotationSpeed'):
         rotationSpeed = sharedDescr['rotationSpeed']
     else:
@@ -2565,7 +2558,6 @@ def _readGunLocals(xmlCtx, section, sharedDescr, unlocksDescrs, turretCompactDes
     else:
         descr = sharedDescr.copy()
         descr['turretYawLimits'] = turretYawLimits
-        descr['pitchLimits'] = pitchLimits
         descr['rotationSpeed'] = rotationSpeed
         descr['reloadTime'] = reloadTime
         descr['aimingTime'] = aimingTime
@@ -2576,6 +2568,9 @@ def _readGunLocals(xmlCtx, section, sharedDescr, unlocksDescrs, turretCompactDes
         descr['unlocks'] = unlocks
         descr['hitTester'] = hitTester
         descr['materials'] = materials
+        descr['pitchLimits'] = copy.deepcopy(sharedDescr['pitchLimits'])
+        descr['pitchLimits'].update(pitchLimits)
+        _validatePitchLimits(xmlCtx, 'pitchLimits', descr['pitchLimits'])
         if clip is not sharedDescr['clip']:
             descr['clip'] = clip
             tags = descr['tags']
@@ -2597,41 +2592,70 @@ def _readGunLocals(xmlCtx, section, sharedDescr, unlocksDescrs, turretCompactDes
         return descr
 
 
+def _readGunPitchLimits(xmlCtx, section, isLocal):
+    res = {}
+    if section.has_key('minPitch'):
+        res['minPitch'] = _readGunPitchConstraints(xmlCtx, section, 'minPitch')
+    elif not isLocal:
+        _xml.raiseWrongSection(xmlCtx, 'minPitch')
+    if section.has_key('maxPitch'):
+        res['maxPitch'] = _readGunPitchConstraints(xmlCtx, section, 'maxPitch')
+    elif not isLocal:
+        _xml.raiseWrongSection(xmlCtx, 'maxPitch')
+    return res
+
+
+def _validatePitchLimits(xmlCtx, subsectionName, pitchLimits):
+    minPitch = pitchLimits['minPitch']
+    maxPitch = pitchLimits['maxPitch']
+    pitchLimits['absolute'] = (min([ key for _, key in minPitch ]), max([ key for _, key in maxPitch ]))
+    ok = _validateMinMaxPitchLimits(minPitch, maxPitch, False) and _validateMinMaxPitchLimits(maxPitch, minPitch, True)
+    if not ok:
+        _xml.raiseWrongSection(xmlCtx, subsectionName)
+
+
+def _validateMinMaxPitchLimits(firstLimit, secondLimit, isGreater):
+    ok = True
+    f = 0
+    s = 1
+    while f < len(firstLimit):
+        firstYaw = firstLimit[f][0]
+        firstPitch = firstLimit[f][1]
+        f += 1
+        while secondLimit[s][0] < firstYaw:
+            s += 1
+
+        t = (firstYaw - secondLimit[s - 1][0]) / (secondLimit[s][0] - secondLimit[s - 1][0])
+        secondPitch = secondLimit[s - 1][1] * (1 - t) + secondLimit[s][1] * t
+        if firstPitch == secondPitch:
+            continue
+        if not (firstPitch < secondPitch) ^ isGreater:
+            ok = False
+            break
+
+    return ok
+
+
+def _readGunPitchConstraints(xmlCtx, section, type):
+    v = _xml.readTupleOfFloats(xmlCtx, section, type)
+    if len(v) & 1 != 0:
+        _xml.raiseWrongSection(xmlCtx, type)
+    points = [ (2 * pi * v[2 * index], radians(v[2 * index + 1])) for index in xrange(len(v) / 2) ]
+    if points[0][0] != 0 or points[-1][0] != 2 * pi or points[0][1] != points[-1][1]:
+        _xml.raiseWrongSection(xmlCtx, type)
+    if len(points) <= 1:
+        _xml.raiseWrongSection(xmlCtx, type)
+    for index in xrange(len(points) - 1):
+        if points[index][0] >= points[index + 1][0]:
+            _xml.raiseWrongSection(xmlCtx, type)
+
+    return tuple(points)
+
+
 def _readGunClipBurst(xmlCtx, section, type):
     count = _xml.readInt(xmlCtx, section, type + '/count', 1)
     interval = 60.0 / _xml.readPositiveFloat(xmlCtx, section, type + '/rate')
     return (count, interval if count > 1 else 0.0)
-
-
-def _readGunPitchExtraLimits(xmlCtx, section, descToUpdate):
-    readSomething = False
-    extraAngle = 0.0
-    if section.has_key('front'):
-        v = _xml.readVector3(xmlCtx, section, 'front')
-        if v[0] > v[1]:
-            _xml.raiseWrongSection(xmlCtx, 'front')
-        descToUpdate['front'] = tuple((radians(ang) for ang in v))
-        descToUpdate['absolute'] = (min(descToUpdate['absolute'][0], descToUpdate['front'][0]), max(descToUpdate['absolute'][1], descToUpdate['front'][1]))
-        extraAngle += descToUpdate['front'][2]
-        readSomething = True
-    if section.has_key('back'):
-        v = _xml.readVector3(xmlCtx, section, 'back')
-        if v[0] > v[1]:
-            _xml.raiseWrongSection(xmlCtx, 'back')
-        descToUpdate['back'] = tuple((radians(ang) for ang in v))
-        descToUpdate['absolute'] = (min(descToUpdate['absolute'][0], descToUpdate['back'][0]), max(descToUpdate['absolute'][1], descToUpdate['back'][1]))
-        extraAngle += descToUpdate['back'][2]
-        readSomething = True
-    if section.has_key('transition'):
-        v = _xml.readFloat(xmlCtx, section, 'transition')
-        descToUpdate['transition'] = radians(v)
-        extraAngle += descToUpdate['transition'] * 4.0
-        readSomething = True
-    else:
-        extraAngle += DEFAULT_GUN_PITCH_LIMITS_TRANSITION * 4.0
-    if extraAngle > pi * 2.0:
-        _xml.raiseWrongXml(xmlCtx[0], xmlCtx[1], 'overlapping sectors')
-    return readSomething
 
 
 def _readShells(xmlPath, nationID):
@@ -3050,9 +3074,10 @@ def _readExhaustEffectsGroups(xmlPath):
 
 def _readChassisEffectGroups(xmlPath):
     res = {}
-    section = ResMgr.openSection(xmlPath + '/particles')
-    if section is None:
+    section = ResMgr.openSection(xmlPath)
+    if not section or section['particles'] is None:
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
+    section = section['particles']
     xmlCtx = (None, xmlPath)
     for sname, subsection in section.items():
         sname = intern(sname)

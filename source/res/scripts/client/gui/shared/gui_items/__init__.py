@@ -1,12 +1,12 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
-import BigWorld
 import nations
 from debug_utils import *
 from helpers import i18n
 from items import ITEM_TYPE_NAMES, vehicles, getTypeInfoByName, ITEM_TYPE_INDICES
+from shared_utils import CONST_CONTAINER
 from gui import nationCompareByIndex, GUI_SETTINGS
 from gui.shared.economics import getActionPrc
-from gui.shared.utils import ItemsParameters, CONST_CONTAINER
+from gui.shared.utils import ItemsParameters
 from gui.shared.utils.functions import getShortDescr, stripShortDescrTags
 CLAN_LOCK = 1
 _ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
@@ -237,7 +237,7 @@ class FittingItem(GUIItem, HasIntCD):
         self.sellForGold = False
         self.isUnlocked = False
         self.isBoughtForCredits = isBoughtForCredits
-        if proxy is not None:
+        if proxy is not None and proxy.isSynced():
             self.defaultPrice = proxy.shop.defaults.getItemPrice(self.intCompactDescr)
             if self.defaultPrice is None:
                 self.defaultPrice = (0, 0)

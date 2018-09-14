@@ -11,6 +11,7 @@ from gui.Scaleform.daapi.view.dialogs import TimerConfirmDialogMeta
 from gui.shared.utils.graphics import g_monitorSettings
 from helpers import isPlayerAccount
 from messenger import g_settings as messenger_settings
+from account_helpers.settings_core import g_settingsCore
 
 class ISettingsStorage(object):
 
@@ -342,10 +343,11 @@ class FOVSettingsStorage(ISettingsStorage):
             staticFOV, dynamicFOVLow, dynamicFOVTop = self.FOV
             dynamicFOVEnabled = self.dynamicFOVEnabled
 
-            def setFov(value, multiplier):
+            def setFov(value, multiplier, dynamicFOVEnabled):
                 if self.__multiplier is not None:
                     self.__multiplier.setSystemValue(multiplier)
-                FovExtended.instance().resetFov()
+                if not dynamicFOVEnabled:
+                    FovExtended.instance().resetFov()
                 FovExtended.instance().defaultHorizontalFov = value
                 return
 
@@ -355,5 +357,5 @@ class FOVSettingsStorage(ISettingsStorage):
             else:
                 multiplier = 1.0
                 defaultHorizontalFov = math.radians(staticFOV)
-            BigWorld.callback(0.0, functools.partial(setFov, defaultHorizontalFov, multiplier))
+            BigWorld.callback(0.0, functools.partial(setFov, defaultHorizontalFov, multiplier, dynamicFOVEnabled))
         return super(FOVSettingsStorage, self).apply(restartApproved)

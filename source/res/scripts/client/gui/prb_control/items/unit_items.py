@@ -3,7 +3,7 @@ from collections import namedtuple
 import itertools
 import weakref
 from UnitBase import UNIT_ROLE, UNIT_FLAGS, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE
-from account_helpers import getPlayerDatabaseID
+from account_helpers import getAccountDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
@@ -78,7 +78,7 @@ class PlayerUnitInfo(object):
         return self.role & UNIT_ROLE.LEGIONARY > 0
 
     def isCurrentPlayer(self):
-        return self.dbID == getPlayerDatabaseID()
+        return self.dbID == getAccountDatabaseID()
 
     def getVehiclesCDs(self):
         requestCriteria = REQ_CRITERIA.INVENTORY
@@ -164,6 +164,12 @@ class VehicleInfo(object):
                 result = vehicle.isReadyToPrebattle(checkForRent=not state.isInPreArena())
         return result
 
+    def getVehicle(self):
+        if self.vehInvID:
+            return g_itemsCache.items.getVehicle(self.vehInvID)
+        else:
+            return None
+
 
 class SlotState(object):
     __slots__ = ('isClosed', 'isFree')
@@ -219,6 +225,9 @@ class UnitFlags(object):
     def isOpenedStateChanged(self):
         return self.__flagsDiff & UNIT_FLAGS.INVITE_ONLY > 0
 
+    def isOnlyRosterWaitChanged(self):
+        return self.__flagsDiff == UNIT_FLAGS.IN_ROSTER_WAIT
+
     def isInSearch(self):
         return self.__flags & UNIT_FLAGS.IN_SEARCH > 0 or self.__flags & UNIT_FLAGS.PRE_SEARCH > 0
 
@@ -256,7 +265,7 @@ UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'opened
 
 class UnitRosterSettings(object):
     TOTAL_SLOTS = 15
-    __slots__ = ('_minLevel', '_maxLevel', '_maxSlots', '_maxClosedSlots', '_maxEmptySlots', '_minTotalLevel', '_maxTotalLevel', '_maxLegionariesCount')
+    __slots__ = ('_minLevel', '_maxLevel', '_maxSlots', '_maxClosedSlots', '_maxEmptySlots', '_minTotalLevel', '_maxTotalLevel', '_maxLegionariesCount', '__weakref__')
 
     def __init__(self, minLevel = 1, maxLevel = 10, maxSlots = TOTAL_SLOTS, maxClosedSlots = 0, maxEmptySlots = 0, minTotalLevel = 1, maxTotalLevel = 150, maxLegionariesCount = 0):
         super(UnitRosterSettings, self).__init__()
@@ -282,7 +291,7 @@ class UnitRosterSettings(object):
         return self._maxTotalLevel
 
     def getLevelsRange(self):
-        return xrange(self._minLevel, self._maxLevel + 1)
+        return range(self._minLevel, self._maxLevel + 1)
 
     def getAllSlotsRange(self):
         return xrange(CREATOR_SLOT_INDEX, self._maxSlots)

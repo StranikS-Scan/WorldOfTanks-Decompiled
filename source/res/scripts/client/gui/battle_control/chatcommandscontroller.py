@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/battle_control/ChatCommandsController.py
 import weakref
 import math
-import BigWorld
 from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter
 from messenger import MessengerEntry
@@ -10,27 +9,28 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 
 class ChatCommandsController(object):
+    __slots__ = ('__arenaDP', '__feedback')
 
     def __init__(self):
         super(ChatCommandsController, self).__init__()
-        self.__battleUI = None
         self.__arenaDP = None
+        self.__feedback = None
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def proto(self):
         return None
 
-    def start(self, battleUI, arenaDP):
-        self.__battleUI = weakref.proxy(battleUI)
-        self.__arenaDP = arenaDP
+    def start(self, arenaDP, feedback):
+        self.__arenaDP = weakref.proxy(arenaDP)
+        self.__feedback = weakref.proxy(feedback)
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived += self.__me_onCommandReceived
 
     def stop(self):
-        self.__battleUI = None
         self.__arenaDP = None
+        self.__feedback = None
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
         import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived -= self.__me_onCommandReceived
@@ -102,15 +102,6 @@ class ChatCommandsController(object):
                 result = vehicleInfo
             return result
 
-    def __showVehicleMarker(self, vehicleID, markerName):
-        if vehicleID == avatar_getter.getPlayerVehicleID():
-            return
-        else:
-            entity = BigWorld.entity(vehicleID)
-            if entity is not None and entity.isStarted:
-                self.__battleUI.markersManager.showActionMarker(entity.marker, markerName)
-            return
-
     def __sendChatCommand(self, command):
         controller = MessengerEntry.g_instance.gui.channelsCtrl.getController(command.getClientID())
         if controller:
@@ -122,8 +113,7 @@ class ChatCommandsController(object):
             vehicleInfo = self.__findVehicleInfoByDatabaseID(cmd.getSenderID())
             vehicleID = vehicleInfo.vehicleID if vehicleInfo else 0
             if vehicleID:
-                self.__showVehicleMarker(vehicleID, vMarker)
-                self.__battleUI.minimap.showActionMarker(vehicleID, vMarker)
+                self.__feedback.showActionMarker(vehicleID, vMarker, vMarker)
 
     def __handlePrivateCommand(self, cmd):
         vehicleInfo = self.__findVehicleInfoByDatabaseID(cmd.getSenderID())
@@ -132,10 +122,9 @@ class ChatCommandsController(object):
             if vehicleInfo is None:
                 vehicleInfo = self.__findVehicleInfoByVehicleID(avatar_getter.getPlayerVehicleID())
             vehicleID = vehicleInfo.vehicleID if vehicleInfo else 0
-            vehMarker = cmd.getVehMarker(vehicle=vehicleInfo)
-            if vehMarker and vehicleID:
-                self.__showVehicleMarker(vehicleID, vehMarker)
-                self.__battleUI.minimap.showActionMarker(vehicleID, cmd.getVehMarker())
+            vMarker = cmd.getVehMarker(vehicle=vehicleInfo)
+            if vMarker and vehicleID:
+                self.__feedback.showActionMarker(vehicleID, vMarker, cmd.getVehMarker())
         return
 
     def __handlePublicCommand(self, cmd):
@@ -146,24 +135,20 @@ class ChatCommandsController(object):
         recvMarker, senderMarker = cmd.getVehMarkers(vehicle=senderInfo)
         receiverID = cmd.getFirstTargetID()
         senderID = senderInfo.vehicleID if senderInfo else 0
-        minimap = self.__battleUI.minimap
         if showReceiver:
             if receiverID:
-                minimap.showActionMarker(receiverID, recvMarker)
-                self.__showVehicleMarker(receiverID, recvMarker)
+                self.__feedback.showActionMarker(receiverID, recvMarker, recvMarker)
             if senderID:
-                minimap.showActionMarker(senderID, senderMarker)
-                self.__showVehicleMarker(senderID, senderMarker)
+                self.__feedback.showActionMarker(senderID, senderMarker, senderMarker)
         elif senderID:
-            minimap.showActionMarker(senderID, recvMarker)
-            self.__showVehicleMarker(senderID, recvMarker)
+            self.__feedback.showActionMarker(senderID, recvMarker, recvMarker)
         return
 
     def __me_onCommandReceived(self, cmd):
         if cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
             return
         if cmd.isOnMinimap():
-            self.__battleUI.minimap.markCell(cmd.getCellIndex(), 3.0)
+            self.__feedback.markCellOnMinimap(cmd.getCellIndex())
         elif cmd.isPrivate():
             self.__handlePrivateCommand(cmd)
         else:

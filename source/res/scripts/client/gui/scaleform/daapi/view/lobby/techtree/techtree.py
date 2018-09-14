@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/TechTree.py
+import GUI
 import Keys
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui import g_guiResetters
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.ResearchView import ResearchView
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
@@ -11,6 +13,8 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 import nations
+_HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 768
+_HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_768'
 
 class TechTree(ResearchView, TechTreeMeta):
 
@@ -41,7 +45,7 @@ class TechTree(ResearchView, TechTreeMeta):
             return {}
         nationIdx = nations.INDICES[nationName]
         SelectedNation.select(nationIdx)
-        self._data.load(nationIdx)
+        self._data.load(nationIdx, override=self._getOverride())
         return self._data.dump()
 
     def request4Unlock(self, unlockCD, vehCD, unlockIdx, xpCost):
@@ -86,17 +90,30 @@ class TechTree(ResearchView, TechTreeMeta):
             SelectedNation.byDefault()
         return
 
+    def _getOverride(self):
+        _, height = GUI.screenResolution()
+        override = ''
+        if height < _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE:
+            override = _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG
+        return override
+
     def _populate(self):
         super(TechTree, self)._populate()
+        g_guiResetters.add(self.__onUpdateStage)
         if IS_DEVELOPMENT:
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp += self.__handleReloadData
 
     def _dispose(self):
+        g_guiResetters.discard(self.__onUpdateStage)
         if IS_DEVELOPMENT:
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp -= self.__handleReloadData
         super(TechTree, self)._dispose()
+
+    def __onUpdateStage(self):
+        if g_techTreeDP.load(override=self._getOverride()):
+            self.as_refreshNationTreeDataS(SelectedNation.getName())
 
     def __handleReloadData(self, event):
         if event.key is Keys.KEY_R:

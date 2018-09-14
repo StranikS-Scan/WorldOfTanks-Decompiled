@@ -291,11 +291,13 @@ class DestructiblesManager():
             destrIndex, fallDirYaw, pitchConstr, fallSpeed = decodeFallenTree(destData)
             _, collisionFlags = BigWorld.wg_getDestructibleFallPitchConstr(self.__spaceID, chunkID, destrIndex, fallDirYaw)
             self.__dropDestructible(chunkID, destrIndex, fallDirYaw, pitchConstr, fallSpeed, isNeedAnimation, collisionFlags)
-            FMOD.lightSoundRemove(self.__spaceID, chunkID, destrIndex)
+            if FMOD.enabled:
+                FMOD.lightSoundRemove(self.__spaceID, chunkID, destrIndex)
         elif dmgType == DESTR_TYPE_FRAGILE:
             destrIndex, isShotDamage = decodeFragile(destData)
             self.__destroyFragile(chunkID, destrIndex, isNeedAnimation, isShotDamage, explosionInfo)
-            FMOD.lightSoundRemove(self.__spaceID, chunkID, destrIndex)
+            if FMOD.enabled:
+                FMOD.lightSoundRemove(self.__spaceID, chunkID, destrIndex)
         elif dmgType == DESTR_TYPE_STRUCTURE:
             destrIndex, matKind, isShotDamage = decodeDestructibleModule(destData)
             self.__destroyModule(chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage, explosionInfo)

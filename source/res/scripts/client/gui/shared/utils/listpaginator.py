@@ -2,17 +2,17 @@
 import weakref
 import Event
 
-def _getInitialOffset(count):
-    return -count / 2
-
-
 class ListPaginator(object):
 
-    def __init__(self, requester, offset = 0, count = 20):
+    def __init__(self, requester, offset = None, count = 20):
         super(ListPaginator, self).__init__()
         self._eManager = Event.EventManager()
         self.onListUpdated = Event.Event(self._eManager)
-        self._offset = offset or _getInitialOffset(count)
+        if offset is not None:
+            self.__initialOffset = offset
+        else:
+            self.__initialOffset = -count / 2
+        self._offset = self.__initialOffset
         self._prevOffset = self._offset
         self._count = count
         self._selectedID = None
@@ -24,6 +24,12 @@ class ListPaginator(object):
 
     def fini(self):
         self._eManager.clear()
+
+    def canMoveLeft(self):
+        return True
+
+    def canMoveRight(self):
+        return True
 
     def right(self):
         self._selectedID = None
@@ -41,9 +47,9 @@ class ListPaginator(object):
 
     def reset(self):
         self._selectedID = None
-        self._offset = _getInitialOffset(self._count)
+        self._offset = self.__initialOffset
         self._prevOffset = self._offset
-        self._request()
+        self._request(isReset=True)
         return
 
     def revertOffset(self):
@@ -58,5 +64,5 @@ class ListPaginator(object):
     def getSelectedID(self):
         return self._selectedID
 
-    def _request(self):
+    def _request(self, isReset = False):
         raise NotImplementedError

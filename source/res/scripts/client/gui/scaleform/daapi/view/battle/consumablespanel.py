@@ -1,14 +1,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/ConsumablesPanel.py
+from collections import namedtuple
 from functools import partial
 import math
 import BigWorld
 import CommandMapping
+import rage
 from constants import EQUIPMENT_STAGES
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view.battle import COMMAND_AMMO_CHOICE_MASK, AMMO_ICON_PATH, NO_AMMO_ICON_PATH
 from gui.battle_control import g_sessionProvider
+from gui.battle_control.arena_info import isEventBattle, hasRage
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.shared.utils.key_mapping import getScaleformKey
+from gui.shared.utils.plugins import PluginsCollection, IPlugin
 from helpers import i18n
 PANEL_MAX_LENGTH = 12
 AMMO_START_IDX = 0
@@ -32,14 +36,45 @@ EMPTY_ORDERS_SLICE = [0] * (ORDERS_START_IDX - ORDERS_END_IDX + 1)
 EMPTY_EQUIPMENT_TOOLTIP = i18n.makeString('#ingame_gui:consumables_panel/equipment/tooltip/empty')
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 
+class _FalloutSlotViewProps(namedtuple('_FalloutSlotViewProps', ('useStandardLayout',
+ 'drawHitArea',
+ 'hitAreaAlpha',
+ 'hitAreaWidth',
+ 'hitAreaHeight',
+ 'hitAreaXOffset',
+ 'hitAreaYOffset',
+ 'slot_Y_Offset',
+ 'actualSlotWidth',
+ 'slotType_h_margin',
+ 'slot_h_margin'))):
+
+    def __new__(cls, useStandardLayout = True, drawHitArea = True, hitAreaAlpha = 0.5, hitAreaWidth = 47, hitAreaHeight = 47, hitAreaXOffset = 5, hitAreaYOffset = 5, slot_Y_Offset = -11, actualSlotWidth = 47, slotType_h_margin = 8, slot_h_margin = 1):
+        return super(_FalloutSlotViewProps, cls).__new__(cls, useStandardLayout, drawHitArea, hitAreaAlpha, hitAreaWidth, hitAreaHeight, hitAreaXOffset, hitAreaYOffset, slot_Y_Offset, actualSlotWidth, slotType_h_margin, slot_h_margin)
+
+
+class _RageBarViewProps(namedtuple('_RageBarViewProps', ('maxValue',
+ 'curValue',
+ 'rageBar_y_offset',
+ 'rageBar_x_offset'))):
+
+    def __new__(cls, maxValue = 0, curValue = 0, rageBar_y_offset = 54, rageBar_x_offset = 7):
+        return super(_RageBarViewProps, cls).__new__(cls, maxValue, curValue, rageBar_y_offset, rageBar_x_offset)
+
+
 class ConsumablesPanel(object):
 
     def __init__(self, parentUI):
         self.__ui = parentUI
+        self.__flashObject = None
         self.__cds = [None] * PANEL_MAX_LENGTH
         self.__mask = 0
         self.__keys = {}
         self.__currentOrderIdx = -1
+        self.__plugins = PluginsCollection(self)
+        plugins = {}
+        if hasRage():
+            plugins['rageBar'] = _RageBarPlugin
+        self.__plugins.addPlugins(plugins)
         return
 
     def start(self):
@@ -47,11 +82,17 @@ class ConsumablesPanel(object):
         if self.__flashObject:
             self.__flashObject.resync()
             self.__flashObject.script = self
+            self.__plugins.init()
+            self.__plugins.start()
+            props = _FalloutSlotViewProps(useStandardLayout=not hasRage())
+            self.__flashObject.setProperties(isEventBattle(), props._asdict())
             self.__addListeners()
         else:
             LOG_ERROR('Display object is not found in the swf file.')
 
     def destroy(self):
+        self.__plugins.stop()
+        self.__plugins.fini()
         self.__removeListeners()
         self.__keys.clear()
         self.__ui = None
@@ -91,6 +132,10 @@ class ConsumablesPanel(object):
         self.__keys = keys
         ctrl = g_sessionProvider.getVehicleStateCtrl()
         ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+
+    @property
+    def flashObject(self):
+        return self.__flashObject
 
     def __callFlash(self, funcName, args = None):
         self.__ui.call('battle.consumablesPanel.%s' % funcName, args)
@@ -263,9 +308,9 @@ class ConsumablesPanel(object):
         if currShellCD in self.__cds:
             self.__flashObject.setCoolDownPosAsPercent(self.__cds.index(currShellCD), percent)
 
-    def __onEquipmentAdded(self, intCD, item, isOrder):
+    def __onEquipmentAdded(self, intCD, item):
         if item:
-            if isOrder:
+            if item.isAvatar():
                 self.__addOrderSlot(intCD, item)
             else:
                 self.__addEquipmentSlot(intCD, item)
@@ -279,14 +324,15 @@ class ConsumablesPanel(object):
                 self.__flashObject.showOrdersSlots(False)
         return
 
-    def __onEquipmentUpdated(self, intCD, item, isOrder, isDeployed):
+    def __onEquipmentUpdated(self, intCD, item):
         if intCD in self.__cds:
             idx = self.__cds.index(intCD)
-            if isOrder:
-                self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), item.getQuantity(), item.getTimeRemaining())
+            maxTime = item.getTotalTime()
+            if item.isAvatar():
+                self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), item.getQuantity(), item.getTimeRemaining(), maxTime)
                 self.__updateOrderSlot(idx, item)
             else:
-                self.__flashObject.setItemTimeQuantityInSlot(idx, item.getQuantity(), item.getTimeRemaining())
+                self.__flashObject.setItemTimeQuantityInSlot(idx, item.getQuantity(), item.getTimeRemaining(), maxTime)
                 self.onPopUpClosed()
         else:
             LOG_ERROR('Equipment is not found in panel', intCD, self.__cds)
@@ -319,7 +365,8 @@ class ConsumablesPanel(object):
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
         bwKey, sfKey = self.__genKey(idx)
         self.__keys[bwKey] = partial(self.__handleEquipmentPressed, intCD)
-        self.__flashObject.addOrderSlot(idx, bwKey, sfKey, item.getQuantity(), iconPath, toolTip, item.getStage() in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING), item.isQuantityUsed())
+        maxTime = item.getTotalTime()
+        self.__flashObject.addOrderSlot(idx, bwKey, sfKey, item.getQuantity(), iconPath, toolTip, item.getStage() in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING), item.isQuantityUsed(), item.getTimeRemaining(), maxTime)
         self.__updateOrderSlot(idx, item)
 
     def __updateOrderSlot(self, idx, item):
@@ -356,6 +403,7 @@ class ConsumablesPanel(object):
         self.__keys.clear()
         self.__currentOrderIdx = -1
         self.__flashObject.reset()
+        self.__plugins.reset()
         return
 
     def __onVehicleStateUpdated(self, state, value):
@@ -373,3 +421,42 @@ class ConsumablesPanel(object):
             if item and item.isEntityRequired():
                 bwKey, _ = self.__genKey(idx)
                 self.__keys[bwKey] = partial(self.__handleEquipmentPressed, self.__cds[idx], deviceName)
+
+
+class _RageBarPlugin(IPlugin):
+
+    def __init__(self, parentObj):
+        super(_RageBarPlugin, self).__init__(parentObj)
+        self.__currentValue = 0
+
+    def init(self):
+        super(_RageBarPlugin, self).init()
+        avatarStatsCtrl = g_sessionProvider.getAvatarStatsCtrl()
+        avatarStatsCtrl.onUpdated += self.__onAvatarStatsUpdated
+
+    def fini(self):
+        avatarStatsCtrl = g_sessionProvider.getAvatarStatsCtrl()
+        avatarStatsCtrl.onUpdated -= self.__onAvatarStatsUpdated
+        super(_RageBarPlugin, self).fini()
+
+    def start(self):
+        super(_RageBarPlugin, self).start()
+        avatarStatsCtrl = g_sessionProvider.getAvatarStatsCtrl()
+        self.__currentValue = avatarStatsCtrl.getStats().get('ragePoints', 0)
+        rageProps = _RageBarViewProps(maxValue=rage.g_cache.pointsLimit, curValue=self.__currentValue)
+        self._parentObj.flashObject.initializeRageProgress(isEventBattle(), rageProps._asdict())
+
+    def reset(self):
+        super(_RageBarPlugin, self).reset()
+        self._parentObj.flashObject.updateProgressBarValue(self.__currentValue)
+
+    def __onAvatarStatsUpdated(self, stats):
+        newValue = stats.get('ragePoints', 0)
+        if newValue == self.__currentValue:
+            return
+        delta = newValue - self.__currentValue
+        if delta < 0:
+            self._parentObj.flashObject.updateProgressBarValue(newValue)
+        else:
+            self._parentObj.flashObject.updateProgressBarValueByDelta(delta)
+        self.__currentValue = newValue

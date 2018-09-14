@@ -122,13 +122,15 @@ class WindowsManager(object):
         g_windowsStoredData.stop()
         return
 
-    def showBattleLoading(self):
+    def showBattleLoading(self, isMultiTeam = False):
         if self.window.cursorMgr is not None:
             self.window.cursorMgr.detachCursor(True)
         g_preDefinedHosts.savePeripheryTL(connectionManager.peripheryID)
         arena = getattr(BigWorld.player(), 'arena', None)
         if arena is not None and arena.guiType is ARENA_GUI_TYPE.TUTORIAL:
             eventType = VIEW_ALIAS.TUTORIAL_LOADING
+        elif isMultiTeam:
+            eventType = VIEW_ALIAS.FALLOUT_MULTI_TEAM_BATTLE_LOADING
         else:
             eventType = VIEW_ALIAS.BATTLE_LOADING
         self.window.fireEvent(LoadViewEvent(eventType), scope=EVENT_BUS_SCOPE.LOBBY)

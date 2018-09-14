@@ -5,13 +5,13 @@ from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from helpers import i18n
-from gui.Scaleform.locale.RES_COMMON import RES_COMMON
+from gui.shared.formatters import icons
 
 def getDefRes(value, addIcon = True):
     valueStr = BigWorld.wg_getIntegralFormat(value)
     text = TextManager.reference().getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, valueStr)
     if addIcon:
-        icon = TextManager.reference().getIcon(TextIcons.NUT_ICON)
+        icon = icons.nut()
         return text + ' ' + icon
     else:
         return text

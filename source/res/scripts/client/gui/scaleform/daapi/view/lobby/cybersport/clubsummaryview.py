@@ -71,7 +71,8 @@ class ClubSummaryView(StaticFormationSummaryViewMeta, ClubPage):
         bestMaps = _getMapsList(totalStats)
         noAwardsText = text_styles.stats(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_NOAWARDS)
         ribbonSource = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_RIBBON
-        self.as_setDataS({'placeText': _getPositionText(ladderInfo),
+        self.as_setDataS({'clubId': club.getClubDbID(),
+         'placeText': _getPositionText(ladderInfo),
          'leagueDivisionText': _getDivisionText(ladderInfo),
          'ladderPtsText': _getLadderPointsText(ladderInfo),
          'bestTanksText': bestTanksText,
@@ -93,8 +94,7 @@ class ClubSummaryView(StaticFormationSummaryViewMeta, ClubPage):
          'notEnoughMapsTFVisible': not len(bestMaps),
          'achievements': _makeAchievements(seasonDossier),
          'bestTanksGroupWidth': BEST_TANKS_GROUP_WIDTH,
-         'bestMapsGroupWidth': BEST_MAPS_GROUP_WIDTH,
-         'noSeasonText': _getSeasonText()})
+         'bestMapsGroupWidth': BEST_MAPS_GROUP_WIDTH})
         return
 
 
@@ -199,8 +199,3 @@ def _makeMapVO(idx, mapID, mapInfo):
     winsEfficiencyStr = BigWorld.wg_getNiceNumberFormat(winsEfficiency) + '%'
     return {'label': text_styles.standard(label + ' ' + mapName),
      'value': text_styles.stats(winsEfficiencyStr)}
-
-
-def _getSeasonText():
-    if not isSeasonInProgress():
-        return text_styles.alert(icons.noSeason() + _ms(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_NOSEASON))

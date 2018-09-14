@@ -63,6 +63,12 @@ class _LobbyLayout(IChannelController):
     def isJoined(self):
         return self._channel.isJoined()
 
+    def setHistory(self, history):
+        if self._channel:
+            self._channel.clearHistory()
+            for message in history:
+                self.addMessage(message)
+
     def getHistory(self):
         if self._channel:
             return self._channel.getHistory()

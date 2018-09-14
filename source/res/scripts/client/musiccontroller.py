@@ -196,7 +196,8 @@ class MusicController(object):
         ambientEvent = self.__musicEvents[MusicController._AMBIENT_EVENT]
         if ambientEvent is not None:
             ambientEvent.destroy()
-        FMOD.enableLightSound(0)
+        if FMOD.enabled:
+            FMOD.enableLightSound(0)
         return
 
     def stop(self):
@@ -228,12 +229,14 @@ class MusicController(object):
         BigWorld.player().arena.onPeriodChange += self.__onArenaStateChanged
         self.__isOnArena = True
         self.__onArenaStateChanged()
-        FMOD.enableLightSound(1)
+        if FMOD.enabled:
+            FMOD.enableLightSound(1)
 
     def onLeaveArena(self):
         self.__isOnArena = False
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStateChanged
-        FMOD.enableLightSound(0)
+        if FMOD.enabled:
+            FMOD.enableLightSound(0)
 
     def setAccountAttrs(self, accAttrs, restart = False):
         wasPremiumAccount = self.__isPremiumAccount
@@ -298,7 +301,7 @@ class MusicController(object):
             elif eventId == AMBIENT_EVENT_COMBAT:
                 soundEventName = arenaType.ambientSound
         if soundEventName:
-            soundEvent = SoundGroups.g_instance.FMODgetSound(soundEventName)
+            soundEvent = SoundGroups.g_instance.getSound2D(soundEventName)
             if soundEvent is not None:
                 soundEvent.stop()
         return soundEvent
@@ -339,9 +342,9 @@ class MusicController(object):
                 fallbackEventName = fallbackNames[i]
                 sound = soundsByName.get(eventName)
                 if sound is None:
-                    sound = SoundGroups.g_instance.FMODgetSound(eventName) if eventName != '' else None
+                    sound = SoundGroups.g_instance.getSound2D(eventName) if eventName != '' else None
                     if sound is None:
-                        sound = SoundGroups.g_instance.FMODgetSound(fallbackEventName) if fallbackEventName != '' else None
+                        sound = SoundGroups.g_instance.getSound2D(fallbackEventName) if fallbackEventName != '' else None
                 soundsByName[eventName] = sound
                 lstEvents.append(sound)
                 if sound is not None:

@@ -25,7 +25,7 @@ class SoundModes():
 
         def __init__(self, dataSection):
             self.name = dataSection.readString('name', 'default')
-            self.fmodLanguage = dataSection.readString('fmod_language', 'default')
+            self.voiceLanguage = dataSection.readString('fmod_language', 'default')
             descriptionLink = dataSection.readString('description', '')
             self.description = i18n.makeString(descriptionLink)
             self.invisible = dataSection.readBool('invisible', False)
@@ -46,6 +46,8 @@ class SoundModes():
             return self.__isValid
 
         def loadBanksManually(self):
+            if not FMOD.enabled:
+                return True
             for bankName, bankPath in self.banksToBeLoaded:
                 if bankPath != '':
                     loadSuccessfully = FMOD.loadSoundBankIntoMemoryFromPath(bankPath)
@@ -55,9 +57,10 @@ class SoundModes():
             return True
 
         def unloadBanksManually(self):
-            for bankName, bankPath in self.banksToBeLoaded:
-                if bankPath != '':
-                    FMOD.unloadSoundBankFromMemory(bankName)
+            if FMOD.enabled:
+                for bankName, bankPath in self.banksToBeLoaded:
+                    if bankPath != '':
+                        FMOD.unloadSoundBankFromMemory(bankName)
 
         def __validate(self, soundModes):
             prevMode = soundModes.currentMode
@@ -71,7 +74,7 @@ class SoundModes():
             return result
 
         def __repr__(self):
-            return 'SoundModeDesc<name=%s; lang=%s; visible=%s>' % (self.name, self.fmodLanguage, not self.invisible)
+            return 'SoundModeDesc<name=%s; lang=%s; visible=%s>' % (self.name, self.voiceLanguage, not self.invisible)
 
         def __cmp__(self, other):
             if not isinstance(other, SoundModes.SoundModeDesc):
@@ -188,11 +191,12 @@ class SoundModes():
             LOG_CURRENT_EXCEPTION()
 
         if not languageSet:
-            defaultFmodLanguage = ''
+            defaultVoiceLanguage = ''
             if SoundModes.DEFAULT_MODE_NAME in self.__modes:
-                defaultFmodLanguage = self.__modes[SoundModes.DEFAULT_MODE_NAME].fmodLanguage
+                defaultVoiceLanguage = self.__modes[SoundModes.DEFAULT_MODE_NAME].voiceLanguage
             try:
-                FMOD.setLanguage(defaultFmodLanguage, self.modifiedSoundGroups)
+                if FMOD.enabled:
+                    FMOD.setLanguage(defaultVoiceLanguage, self.modifiedSoundGroups)
                 self.__modes[SoundModes.DEFAULT_MODE_NAME].loadBanksManually()
             except:
                 LOG_CURRENT_EXCEPTION()
@@ -209,24 +213,26 @@ class SoundModes():
         self.__modes[self.__currentMode].unloadBanksManually()
         self.__currentMode = modeName
         modeDesc = self.__modes[modeName]
-        languageSet = FMOD.setLanguage(modeDesc.fmodLanguage, self.modifiedSoundGroups)
+        if FMOD.enabled:
+            languageSet = FMOD.setLanguage(modeDesc.voiceLanguage, self.modifiedSoundGroups)
         if not languageSet:
             LOG_DEBUG('Internal FMOD error in FMOD::setLanguage')
             return False
         if not self.__modes[self.__currentMode].loadBanksManually():
             LOG_DEBUG('Error while manual banks loading')
             return False
-        loadedSoundBanks = FMOD.getSoundBanks()
-        for bankName, bankPath in modeDesc.banksToBeLoaded:
-            found = False
-            for loadedBank in loadedSoundBanks:
-                if bankName == loadedBank:
-                    found = True
-                    break
+        if FMOD.enabled:
+            loadedSoundBanks = FMOD.getSoundBanks()
+            for bankName, bankPath in modeDesc.banksToBeLoaded:
+                found = False
+                for loadedBank in loadedSoundBanks:
+                    if bankName == loadedBank:
+                        found = True
+                        break
 
-            if not found:
-                LOG_DEBUG('Bank %s was not loaded while loading %s sound mode' % (bankName, modeName))
-                return False
+                if not found:
+                    LOG_DEBUG('Bank %s was not loaded while loading %s sound mode' % (bankName, modeName))
+                    return False
 
         return True
 
@@ -299,8 +305,6 @@ class SoundGroups(object):
         self.__activeStingerPriority = None
         self.__muffled = False
         self.__muffledByReplay = False
-        PlayerEvents.g_playerEvents.onAccountBecomePlayer += self.reviveSoundSystem
-        PlayerEvents.g_playerEvents.onAvatarBecomePlayer += self.reviveSoundSystem
         PlayerEvents.g_playerEvents.onAvatarReady += self.onAvatarReady
         self.__categories = {'voice': ('ingame_voice',),
          'vehicles': ('outside/vehicles', 'vehicles', 'inside/vehicles'),
@@ -360,12 +364,13 @@ class SoundGroups(object):
         settings = ResMgr.openSection('scripts/arena_defs/_default_.xml/preloadSoundGroups')
         if settings is not None:
             self.defaultGroupList = settings.readStrings('groupName')
-        for sg in self.defaultGroupList:
-            result = FMOD.WG_loadSoundGroup(sg)
-            if not result:
-                LOG_NOTE('Loading failed for default sound group ', sg)
+        if FMOD.enabled:
+            for sg in self.defaultGroupList:
+                result = FMOD.WG_loadSoundGroup(sg)
+                if not result:
+                    LOG_NOTE('Loading failed for default sound group ', sg)
 
-        FMOD.WG_unloadAll()
+            FMOD.WG_unloadAll()
         return
 
     def __del__(self):
@@ -409,7 +414,8 @@ class SoundGroups(object):
     def setMasterVolume(self, volume):
         self.__masterVolume = volume
         self.__muffledVolume = self.__masterVolume * self.getVolume('masterFadeVivox')
-        FMOD.setMasterVolume(self.__muffledVolume if self.__muffled else self.__masterVolume)
+        if FMOD.enabled:
+            FMOD.setMasterVolume(self.__muffledVolume if self.__muffled else self.__masterVolume)
         self.savePreferences()
         self.onMusicVolumeChanged('music', self.__masterVolume, self.getVolume('music'))
         self.onMusicVolumeChanged('ambient', self.__masterVolume, self.getVolume('ambient'))
@@ -418,11 +424,12 @@ class SoundGroups(object):
         return self.__masterVolume
 
     def setVolume(self, categoryName, volume, updatePrefs = True):
-        for category in self.__categories[categoryName]:
-            try:
-                BigWorld.wg_setCategoryVolume(category, volume)
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
+        if FMOD.enabled:
+            for category in self.__categories[categoryName]:
+                try:
+                    BigWorld.wg_setCategoryVolume(category, volume)
+                except Exception:
+                    LOG_CURRENT_EXCEPTION()
 
         if updatePrefs:
             self.__volumeByCategory[categoryName] = volume
@@ -461,7 +468,8 @@ class SoundGroups(object):
 
     def applyPreferences(self):
         if not self.__isWindowVisible:
-            FMOD.setMasterVolume(0)
+            if FMOD.enabled:
+                FMOD.setMasterVolume(0)
             return
         self.setMasterVolume(self.__masterVolume)
         for categoryName in self.__volumeByCategory.keys():
@@ -490,25 +498,26 @@ class SoundGroups(object):
         self.__ceilLess = BigWorld.player().vehicleTypeDescriptor.turret['ceilless']
 
     def unloadAll(self, path = None):
-        FMOD.WG_unloadAll()
+        if FMOD.enabled:
+            FMOD.WG_unloadAll()
         import MusicController
         MusicController.g_musicController.destroy()
         MusicController.g_musicController.init(path)
 
     def preloadSoundGroups(self, arenaName):
-        self.groupList = []
-        settings = ResMgr.openSection('scripts/arena_defs/' + arenaName + '.xml/preloadSoundGroups')
-        if settings is not None:
-            self.groupList = settings.readStrings('groupName')
-        for sg in self.groupList:
-            result = FMOD.WG_loadSoundGroup(sg)
-            if not result:
-                LOG_NOTE('Loading failed for arena sound group ', sg)
+        if not FMOD.enabled:
+            return
+        else:
+            self.groupList = []
+            settings = ResMgr.openSection('scripts/arena_defs/' + arenaName + '.xml/preloadSoundGroups')
+            if settings is not None:
+                self.groupList = settings.readStrings('groupName')
+            for sg in self.groupList:
+                result = FMOD.WG_loadSoundGroup(sg)
+                if not result:
+                    LOG_NOTE('Loading failed for arena sound group ', sg)
 
-        return
-
-    def reviveSoundSystem(self):
-        FMOD.WG_init()
+            return
 
     def checkAndReplace(self, event):
         if event == '':
@@ -520,20 +529,20 @@ class SoundGroups(object):
         else:
             return event
 
-    def playSound(self, model, event):
-        return model.playSound(self.checkAndReplace(event))
-
-    def getSound(self, model, event):
+    def getSound3D(self, model, event):
         return model.getSound(self.checkAndReplace(event))
 
-    def FMODplaySound(self, event):
-        return FMOD.playSound(self.checkAndReplace(event))
+    def playSoundModel(self, model, event):
+        if FMOD.enabled:
+            return model.playSound(self.checkAndReplace(event))
 
-    def FMODgetSound(self, event):
-        return FMOD.getSound(self.checkAndReplace(event))
+    def getSound2D(self, event):
+        if FMOD.enabled:
+            return FMOD.getSound(self.checkAndReplace(event))
 
-    def FMODloadSound(self, event):
-        return FMOD.WG_loadSound(self.checkAndReplace(event))
+    def playSound2D(self, event):
+        if FMOD.enabled:
+            return FMOD.playSound(self.checkAndReplace(event))
 
     def loadRemapping(self, arenaDescr):
         self.__replace = {}
@@ -545,27 +554,29 @@ class SoundGroups(object):
             self.__replace[s1] = s2
 
     def changePlayMode(self, mode):
-        FMOD.setEventsParam('viewPlayMode', mode)
-        if self.__handleInside == None:
-            self.__handleInside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'inside')
-        if self.__handleOutside == None:
-            self.__handleOutside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'outside')
-        if self.__ceilLess == True:
-            FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
-            FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
-        elif mode == 1:
-            FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
-            FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_LOW, -DSP_SEEKSPEED)
-        else:
-            FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_LOW, -DSP_SEEKSPEED)
-            FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
+        if FMOD.enabled:
+            FMOD.setEventsParam('viewPlayMode', mode)
+        if FMOD.enabled:
+            if self.__handleInside == None:
+                self.__handleInside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'inside')
+            if self.__handleOutside == None:
+                self.__handleOutside = FMOD.DSPgetHandleByNameAndCategory('FMOD Lowpass Simple', 'outside')
+            if self.__ceilLess == True:
+                FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
+                FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
+            elif mode == 1:
+                FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
+                FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_LOW, -DSP_SEEKSPEED)
+            else:
+                FMOD.DSPsetParamEx(self.__handleInside, 0, DSP_LOWPASS_LOW, -DSP_SEEKSPEED)
+                FMOD.DSPsetParamEx(self.__handleOutside, 0, DSP_LOWPASS_HI, DSP_SEEKSPEED)
         return
 
     def playStinger(self, event, priority):
         if self.__activeStinger is None or self.__activeStinger.isPlaying is False or priority > self.__activeStingerPriority:
             if self.__activeStinger is not None:
                 self.__activeStinger.stop()
-            self.__activeStinger = self.FMODplaySound(event)
+            self.__activeStinger = self.playSound2D(event)
             self.__activeStingerPriority = priority
         return
 
@@ -573,13 +584,14 @@ class SoundGroups(object):
         if self.__activeTrack is None or self.__activeTrack.isPlaying is False:
             if self.__activeTrack is not None:
                 self.__activeTrack.stop()
-            self.__activeTrack = self.FMODplaySound(event)
+            self.__activeTrack = self.playSound2D(event)
         return
 
 
 def reloadSoundBanks():
     import MusicController
-    FMOD.reloadSoundbanks()
+    if FMOD.enabled:
+        FMOD.reloadSoundbanks()
     MusicController.g_musicController.restart()
 
 
@@ -601,7 +613,8 @@ def loadPluginDB():
         pluginDB.append(DBplugin)
 
     DBitem = None
-    FMOD.DSPloadPluginDB(pluginDB)
+    if FMOD.enabled:
+        FMOD.DSPloadPluginDB(pluginDB)
     pluginDB = None
     return
 
@@ -619,10 +632,12 @@ def loadLightSoundsDB():
             DBitem = []
             DBitem.append(propertySection.readString('modelName'))
             DBitem.append(propertySection.readVector3('offset'))
-            DBitem.append(propertySection.readStrings('event'))
+            if FMOD.enabled:
+                DBitem.append(propertySection.readStrings('event'))
             DBitem.append(propertySection.readString('hardPoint'))
             lightSoundDB.append(DBitem)
 
-        FMOD.LSloadEventsDB(lightSoundDB)
+        if FMOD.enabled:
+            FMOD.LSloadEventsDB(lightSoundDB)
         lightSoundDB = None
         return

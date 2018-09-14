@@ -219,13 +219,7 @@ class Shell(FittingItem):
         """
         return (buyPrice[0] + buyPrice[1] * proxy.exchangeRateForShellsAndEqs, buyPrice[1])
 
-    @property
-    def type(self):
-        """ Returns shells type string (`HOLLOW_CHARGE` etc.). """
-        return self.descriptor['kind']
-
-    @property
-    def longUserName(self):
+    def _getFormatLongUserName(self, kind):
         if self.nationID == nations.INDICES['germany']:
             caliber = float(self.descriptor['caliber']) / 10
             dimension = i18n.makeString('#item_types:shell/dimension/sm')
@@ -235,10 +229,23 @@ class Shell(FittingItem):
         else:
             caliber = self.descriptor['caliber']
             dimension = i18n.makeString('#item_types:shell/dimension/mm')
-        return i18n.makeString('#item_types:shell/name') % {'kind': i18n.makeString('#item_types:shell/kinds/' + self.descriptor['kind']),
+        return i18n.makeString('#item_types:shell/name') % {'kind': i18n.makeString('#item_types:shell/%s/%s' % (kind, self.descriptor['kind'])),
          'name': self.userName,
          'caliber': BigWorld.wg_getNiceNumberFormat(caliber),
          'dimension': dimension}
+
+    @property
+    def type(self):
+        """ Returns shells type string (`HOLLOW_CHARGE` etc.). """
+        return self.descriptor['kind']
+
+    @property
+    def longUserName(self):
+        return self._getFormatLongUserName('kinds')
+
+    @property
+    def longUserNameAbbr(self):
+        return self._getFormatLongUserName('kindsAbbreviation')
 
     @property
     def icon(self):

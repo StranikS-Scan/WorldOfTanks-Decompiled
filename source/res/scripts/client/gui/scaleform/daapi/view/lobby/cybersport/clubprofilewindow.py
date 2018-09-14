@@ -79,6 +79,11 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
         if club:
             self.__updateFormationData(club)
 
+    def onClubsSeasonStateChanged(self, seasonState):
+        club = self.clubsCtrl.getClub(self.__clubDbID)
+        if club:
+            self.__updateFormationData(club)
+
     def onClubMembersChanged(self, members):
         club = self.clubsCtrl.getClub(self.__clubDbID)
         if club:
@@ -259,7 +264,7 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
         return (self.__getButtonLabels(status, textFormatter, statusArgs=statusArgs, tooltipArgs=tooltipArgs), isBtnEnabled, action)
 
     def __getButtonInfo(self, club):
-        dbID = account_helpers.getPlayerDatabaseID()
+        dbID = account_helpers.getAccountDatabaseID()
         if club.hasMember(dbID):
             return self.__getMemberBtnInfo(club)
         else:
@@ -283,13 +288,21 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
         return unit is not None and unit.isClub()
 
     def __updateFormationData(self, club):
-        profile = self.clubsCtrl.getProfile()
         link = makeHtmlString('html_templates:lobby/clubs', 'link', {'text': i18n.makeString(CYBERSPORT.STATICFORMATIONPROFILEWINDOW_HYPERLINK_TEXT),
          'linkType': 'clubSettings'})
+        seasonState = self.clubsCtrl.getSeasonState()
+        if not seasonState.isActive():
+            stateDescr = '#cybersport:StaticFormationSummaryView/season/state/%s' % seasonState.getStateString()
+            seasonStateString = '\n'.join([text_styles.middleTitle(club_fmts.getSeasonStateUserString(seasonState)), text_styles.main(stateDescr)])
+        else:
+            seasonStateString = None
+        profile = self.clubsCtrl.getProfile()
         canChange = self.clubsState.getLimits().canChangeWebSettings(profile, club).success
         self.as_updateFormationInfoS({'isShowLink': canChange,
+         'seasonText': seasonStateString,
          'editLinkText': text_styles.main(link),
-         'formationNameText': text_styles.promoSubTitle(club.getUserName())})
+         'formationNameText': club.getUserName()})
+        return
 
     def __setTabsLabels(self):
         self.as_setDataS({'stateMap': STATE_MAP,

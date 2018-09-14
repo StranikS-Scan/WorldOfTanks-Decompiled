@@ -5,6 +5,7 @@ from operator import itemgetter
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from constants import WIN_XP_FACTOR_MODE
+from shared_utils import findFirst, CONST_CONTAINER
 from gui import prb_control, makeHtmlString
 from gui.shared.economics import calcRentPackages, getActionPrc
 from helpers import i18n, time_utils
@@ -15,8 +16,8 @@ from gui.shared.gui_items import CLAN_LOCK, HasStrCD, FittingItem, GUI_ITEM_TYPE
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleChassis, VehicleEngine, VehicleRadio, VehicleFuelTank, VehicleTurret, VehicleGun
 from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
 from gui.shared.gui_items.Tankman import Tankman
-from gui.shared.utils import CONST_CONTAINER, findFirst
 from gui.shared.utils.gui_items import findVehicleArmorMinMax
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
     LIGHT_TANK = 'lightTank'
@@ -84,6 +85,8 @@ class Vehicle(FittingItem, HasStrCD):
         NOT_SUITABLE = 'not_suitable'
         GROUP_IS_NOT_READY_BROKEN = 'group_is_not_ready_broken'
         GROUP_IS_NOT_READY_CREW_NOT_FULL = 'group_is_not_ready_crewNotFull'
+        NOT_PRESENT = ('notpresent',)
+        UNAVAILABLE = ('unavailable',)
 
     CAN_SELL_STATES = [VEHICLE_STATE.UNDAMAGED,
      VEHICLE_STATE.CREW_NOT_FULL,
@@ -117,12 +120,12 @@ class Vehicle(FittingItem, HasStrCD):
         self.hasRentPackages = False
         self.isDisabledForBuy = False
         invData = dict()
-        if proxy is not None:
+        if proxy is not None and proxy.isSynced():
             invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
             self.xp = proxy.stats.vehiclesXPs.get(self.intCD, self.xp)
-            if not self.isEvent and (proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles):
+            if not self.isOnlyForEventBattles and (proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles):
                 self.dailyXPFactor = proxy.shop.dailyXPFactor
             self.isElite = len(vehDescr.type.unlocksDescrs) == 0 or self.intCD in proxy.stats.eliteVehicles
             self.isFullyElite = self.isElite and len([ data for data in vehDescr.type.unlocksDescrs if data[1] not in proxy.stats.unlocks ]) == 0
@@ -405,7 +408,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isAmmoFull(self):
-        if not self.isOnlyForEventBattles:
+        if not self.isEvent:
             mult = self.NOT_FULL_AMMO_MULTIPLIER
         else:
             mult = 1.0
@@ -427,7 +430,7 @@ class Vehicle(FittingItem, HasStrCD):
             return Vehicle.VEHICLE_STATE.DESTROYED
         return Vehicle.VEHICLE_STATE.UNDAMAGED
 
-    def getState(self):
+    def getState(self, isCurrnentPlayer = True):
         from gui.game_control import g_instance
         ms = self.modelState
         if self.isInBattle:
@@ -444,24 +447,24 @@ class Vehicle(FittingItem, HasStrCD):
             ms = Vehicle.VEHICLE_STATE.LOCKED
         elif self.isDisabledInRoaming:
             ms = Vehicle.VEHICLE_STATE.SERVER_RESTRICTION
-        ms = self.__checkUndamagedState(ms)
+        ms = self.__checkUndamagedState(ms, isCurrnentPlayer)
         return (ms, self.__getStateLevel(ms))
 
-    def __checkUndamagedState(self, state):
-        if state == Vehicle.VEHICLE_STATE.UNDAMAGED:
+    def __checkUndamagedState(self, state, isCurrnentPlayer = True):
+        if state == Vehicle.VEHICLE_STATE.UNDAMAGED and isCurrnentPlayer:
             if self.isBroken:
                 state = Vehicle.VEHICLE_STATE.DAMAGED
             elif not self.isCrewFull:
                 state = Vehicle.VEHICLE_STATE.CREW_NOT_FULL
-            elif not self.isAmmoFull and self.isOnlyForEventBattles:
+            elif not self.isAmmoFull and self.isEvent:
                 state = Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS
-            elif self.isOnlyForEventBattles and self.isGroupBroken():
+            elif self.isEvent and self.isGroupBroken():
                 state = Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY_BROKEN
-            elif self.isOnlyForEventBattles and not self.isGroupCrewFull():
+            elif self.isEvent and not self.isGroupCrewFull():
                 state = Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY_CREW_NOT_FULL
             elif not self.isAmmoFull:
                 state = Vehicle.VEHICLE_STATE.AMMO_NOT_FULL
-            elif self.isOnlyForEventBattles and not self.isGroupAmmoFull():
+            elif self.isEvent and not self.isGroupAmmoFull():
                 state = Vehicle.VEHICLE_STATE.GROUP_AMMO_NOT_FULL
         return state
 
@@ -527,7 +530,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isEvent(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.EVENT)
+        return self.isOnlyForEventBattles and self in Vehicle.__getEventVehicles()
 
     @property
     def isDisabledInRoaming(self):
@@ -632,7 +635,7 @@ class Vehicle(FittingItem, HasStrCD):
     def isReadyToPrebattle(self, checkForRent = True):
         if checkForRent and self.rentalIsOver:
             return False
-        if self.isOnlyForEventBattles and (self.isGroupBroken() or not self.isGroupCrewFull() or not self.isGroupAmmoFull() or not self.isAmmoFull):
+        if self.isEvent and (self.isGroupBroken() or not self.isGroupCrewFull() or not self.isGroupAmmoFull() or not self.isAmmoFull):
             return False
         result = not self.hasLockMode()
         if result:
@@ -643,7 +646,7 @@ class Vehicle(FittingItem, HasStrCD):
     def isReadyToFight(self):
         if self.rentalIsOver:
             return False
-        if self.isOnlyForEventBattles and (self.isGroupBroken() or not self.isGroupCrewFull() or not self.isGroupAmmoFull() or not self.isAmmoFull):
+        if self.isEvent and (self.isGroupBroken() or not self.isGroupCrewFull() or not self.isGroupAmmoFull() or not self.isAmmoFull):
             return False
         result = not self.hasLockMode()
         if result:
@@ -815,16 +818,18 @@ def getTypeSmallIconPath(vehicleType):
     return '../maps/icons/vehicleTypes/%s' % getTypeIconName(vehicleType)
 
 
-def getUserName(vehicleType):
-    return _getActualName(vehicleType.userString, vehicleType.tags)
+def getUserName(vehicleType, textPrefix = False):
+    return _getActualName(vehicleType.userString, vehicleType.tags, textPrefix)
 
 
-def getShortUserName(vehicleType):
-    return _getActualName(vehicleType.shortUserString, vehicleType.tags)
+def getShortUserName(vehicleType, textPrefix = False):
+    return _getActualName(vehicleType.shortUserString, vehicleType.tags, textPrefix)
 
 
-def _getActualName(name, tags):
+def _getActualName(name, tags, textPrefix = False):
     if _checkForTags(tags, VEHICLE_TAGS.PREMIUM_IGR):
+        if textPrefix:
+            return i18n.makeString(ITEM_TYPES.MARKER_IGR, vehName=name)
         return makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': name})
     return name
 
@@ -832,4 +837,4 @@ def _getActualName(name, tags):
 def _checkForTags(vTags, tags):
     if not hasattr(tags, '__iter__'):
         tags = (tags,)
-        return bool(vTags & frozenset(tags))
+    return bool(vTags & frozenset(tags))

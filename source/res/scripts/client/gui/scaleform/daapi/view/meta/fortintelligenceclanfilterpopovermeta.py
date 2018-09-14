@@ -9,9 +9,9 @@ class FortIntelligenceClanFilterPopoverMeta(DAAPIModule):
     def getAvailabilityProvider(self):
         self._printOverrideError('getAvailabilityProvider')
 
-    def as_setDescriptionsTextS(self, header, clanLevel, startHourRange, availability):
+    def as_setDescriptionsTextS(self, header, clanLevel, startHourRange):
         if self._isDAAPIInited():
-            return self.flashObject.as_setDescriptionsText(header, clanLevel, startHourRange, availability)
+            return self.flashObject.as_setDescriptionsText(header, clanLevel, startHourRange)
 
     def as_setButtonsTextS(self, defaultButtonText, applyButtonText, cancelButtonText):
         if self._isDAAPIInited():

@@ -5,10 +5,10 @@ import ResMgr
 import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.i18n import encodeUtf8
+from shared_utils import findFirst
 from external_strings_utils import unicode_from_utf8
 from adisp import process, async
 from gui import GUI_SETTINGS, game_control
-from gui.shared.utils import findFirst
 from gui.game_control.links import URLMarcos
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.meta.RssNewsFeedMeta import RssNewsFeedMeta

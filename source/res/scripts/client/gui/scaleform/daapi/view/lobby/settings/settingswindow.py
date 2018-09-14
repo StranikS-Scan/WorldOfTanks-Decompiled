@@ -4,7 +4,9 @@ import BigWorld
 import VOIP
 import SoundGroups
 from debug_utils import *
+from gui.GraphicsPresets import GraphicsPresets
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
@@ -48,6 +50,7 @@ class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
         isRestart = self.params.apply(settings, restartApproved)
         if settings_constants.GRAPHICS.INTERFACE_SCALE in settings:
             self.__updateInterfaceScale()
+        isPresetApplied = self.__isGraphicsPresetApplied(settings)
         if g_settingsCore.isChangesConfirmed and isCloseWnd:
             self.onWindowClose()
         if isRestart:
@@ -59,6 +62,9 @@ class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
                 g_settingsCore.isDeviseRecreated = False
             else:
                 BigWorld.callback(0.0, functools.partial(BigWorld.changeVideoMode, -1, BigWorld.isVideoWindowed()))
+        elif not isPresetApplied:
+            DialogsInterface.showI18nInfoDialog('graphicsPresetNotInstalled', None)
+        return
 
     def __restartGame(self):
         BigWorld.savePreferences()
@@ -189,3 +195,14 @@ class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
     def __updateInterfaceScale(self):
         self.as_setDataS(self.__getSettings())
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
+
+    def __isGraphicsPresetApplied(self, settings):
+        isGraphicsQualitySettings = False
+        for settingKey in settings.iterkeys():
+            if settingKey in GraphicsPresets.GRAPHICS_QUALITY_SETTINGS:
+                isGraphicsQualitySettings = True
+                break
+
+        if isGraphicsQualitySettings:
+            return self.as_isPresetAppliedS()
+        return True

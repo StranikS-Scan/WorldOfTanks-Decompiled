@@ -4,7 +4,7 @@ from account_helpers import gameplay_ctx
 from external_strings_utils import truncate_utf8
 from gui.prb_control import getUnitIdx, settings as prb_settings, getUnitMgrID
 from gui.prb_control.context import PrbCtrlRequestCtx
-from gui.prb_control.settings import UNIT_MODE_FLAGS, REQUEST_TYPE
+from gui.prb_control.settings import UNIT_MODE_FLAGS
 from gui.shared.utils.decorators import ReprInjector
 _CTRL_ENTITY_TYPE = prb_settings.CTRL_ENTITY_TYPE
 _REQUEST_TYPE = prb_settings.REQUEST_TYPE
@@ -389,4 +389,23 @@ class SquadSettingsCtx(_UnitRequestCtx):
         return self.__accountsToInvite
 
 
-__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx', 'SquadSettingsCtx')
+@ReprInjector.simple(('__division', 'division'), ('getWaitingID', 'waitingID'))
+
+class ChangeDivisionCtx(_UnitRequestCtx):
+    COOLDOWN = 5.0
+
+    def __init__(self, divisionID, waitingID = ''):
+        super(ChangeDivisionCtx, self).__init__(waitingID=waitingID)
+        self.__divisionID = int(divisionID)
+
+    def getDivisionID(self):
+        return self.__divisionID
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.CHANGE_DIVISION
+
+    def getCooldown(self):
+        return self.COOLDOWN
+
+
+__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx', 'SquadSettingsCtx', 'ChangeDivisionCtx')

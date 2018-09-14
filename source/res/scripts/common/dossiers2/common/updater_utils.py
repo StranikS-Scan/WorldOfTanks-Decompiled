@@ -102,6 +102,19 @@ def addBlock(updateCtx, block, blockFormat = '', blockValues = None):
         updateCtx['dossierCompDescr'] += struct.pack(blockFormat, *blockValues)
 
 
+def removeBlock(updateCtx, block):
+    header = updateCtx['header']
+    compDescr = updateCtx['dossierCompDescr']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    updateCtx['blocksLayout'].pop(blockIndex)
+    prevHeaderLength = updateCtx['headerLength']
+    blockSize = header.pop(blockIndex + 1)
+    blockOffset = prevHeaderLength + sum(header[1:blockIndex])
+    updateCtx['headerFormat'] = headerFormat = '<%s%d%s' % (updateCtx['versionFormat'], len(updateCtx['blocksLayout']), updateCtx['blockSizeFormat'])
+    updateCtx['headerLength'] = struct.calcsize(headerFormat)
+    updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + compDescr[prevHeaderLength:blockOffset] + compDescr[blockOffset + blockSize:]
+
+
 def addRecords(updateCtx, block, recordFormats, defaults):
     header = updateCtx['header']
     blockIndex = updateCtx['blocksLayout'].index(block)

@@ -28,6 +28,7 @@ from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.formatters import icons
 
 class VIEW_ALIASES:
     DEFENCE_ACTIVATED = FORTIFICATION_ALIASES.FORT_SETTINGS_ACTIVATED_VIEW
@@ -124,7 +125,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         conditionPrefix = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.settingswindow_blockcondition('defencePeriodTime')))
         blockDescr = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.settingswindow_blockdescr('defencePeriodTime')))
         if alertMessage:
-            alertMessage = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON) + ' ' + alertMessage
+            alertMessage = icons.alert() + ' ' + alertMessage
         return {'blockBtnEnabled': blockBtnEnabled,
          'blockDescr': blockDescr,
          'blockCondition': conditionPrefix + ' ' + conditionPostfix,
@@ -159,7 +160,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         conditionPrefix = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.settingswindow_blockcondition('weekEnd')))
         blockDescr = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.settingswindow_blockdescr('weekEnd')))
         if alertMessage:
-            alertMessage = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON) + ' ' + alertMessage
+            alertMessage = icons.alert() + ' ' + alertMessage
         return {'blockBtnEnabled': blockBtnEnabled,
          'blockDescr': blockDescr,
          'blockCondition': conditionPrefix + ' ' + conditionPostfix,
@@ -200,7 +201,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         conditionPrefix = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.settingswindow_blockcondition('vacation')))
         blockDescr = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.settingswindow_blockdescr('vacation')))
         if alertMessage:
-            alertMessage = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON) + ' ' + alertMessage
+            alertMessage = icons.alert() + ' ' + alertMessage
         return {'blockBtnEnabled': blockBtnEnabled,
          'blockDescr': blockDescr,
          'blockCondition': conditionPrefix + ' ' + conditionPostfix,
@@ -215,8 +216,8 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         titleText = _gt(TEXT_MANAGER_STYLES.PROMO_TITLE, _ms(FORTIFICATIONS.SETTINGSWINDOW_NOTACTIVATED_TITLE))
         description = _gt(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(FORTIFICATIONS.SETTINGSWINDOW_NOTACTIVATED_DESCRIPTION))
         conditionTitle = _gt(TEXT_MANAGER_STYLES.MIDDLE_TITLE, _ms(FORTIFICATIONS.SETTINGSWINDOW_NOTACTIVATED_CONDITIONTITLE))
-        firstConditionIcon = self.app.utilsManager.textManager.getIcon(TextIcons.CHECKMARK_ICON)
-        secondConditionIcon = self.app.utilsManager.textManager.getIcon(TextIcons.CHECKMARK_ICON)
+        firstConditionIcon = icons.checkmark()
+        secondConditionIcon = icons.checkmark()
         conditionsText = _gt(TEXT_MANAGER_STYLES.MIDDLE_TITLE, _ms(FORTIFICATIONS.SETTINGSWINDOW_NOTACTIVATED_CONDITIONS))
         fortConditionsText = _gt(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(FORTIFICATIONS.SETTINGSWINDOW_NOTACTIVATED_CONDITIONS_FORTLEVEL))
         defenceConditionsText = _gt(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(FORTIFICATIONS.SETTINGSWINDOW_NOTACTIVATED_CONDITIONS_DEFENCE))
@@ -256,16 +257,16 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         if isTopBlock:
             minFortLevel = FORT_BATTLE_DIVISIONS.CHAMPION.minFortLevel
             maxFortLevel = FORT_BATTLE_DIVISIONS.CHAMPION.maxFortLevel
-            defenceTankIcon = attackTankIconTop = self.__makeTankIconVO(False, FORT_BATTLE_DIVISIONS.CHAMPION.maxCombatants, RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_USA_A12_T32, fort_formatters.getIconLevel(FORT_BATTLE_DIVISIONS.CHAMPION.iconLevel), FORT_BATTLE_DIVISIONS.CHAMPION.divisionID)
+            defenceTankIcon = attackTankIconTop = self.__makeTankIconVO(False, FORT_BATTLE_DIVISIONS.CHAMPION.maxCombatants, RES_ICONS.MAPS_ICONS_LIBRARY_USA_A12_T32, fort_formatters.getIconLevel(FORT_BATTLE_DIVISIONS.CHAMPION.iconLevel), FORT_BATTLE_DIVISIONS.CHAMPION.divisionID)
             attackTankIconBottom = self.__makeTankIconVO(True, FORT_BATTLE_DIVISIONS.ABSOLUTE.maxCombatants, RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_USSR_T62A, fort_formatters.getIconLevel(FORT_BATTLE_DIVISIONS.ABSOLUTE.iconLevel), FORT_BATTLE_DIVISIONS.ABSOLUTE.divisionID)
         else:
             minFortLevel = FORT_BATTLE_DIVISIONS.ABSOLUTE.minFortLevel
             maxFortLevel = FORT_BATTLE_DIVISIONS.ABSOLUTE.maxFortLevel
             defenceTankIcon = attackTankIconTop = self.__makeTankIconVO(False, FORT_BATTLE_DIVISIONS.ABSOLUTE.maxCombatants, RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_USSR_T62A, fort_formatters.getIconLevel(FORT_BATTLE_DIVISIONS.ABSOLUTE.iconLevel), FORT_BATTLE_DIVISIONS.ABSOLUTE.divisionID)
-            attackTankIconBottom = self.__makeTankIconVO(True, FORT_BATTLE_DIVISIONS.CHAMPION.maxCombatants, RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_USA_A12_T32, fort_formatters.getIconLevel(FORT_BATTLE_DIVISIONS.CHAMPION.iconLevel), FORT_BATTLE_DIVISIONS.CHAMPION.divisionID)
+            attackTankIconBottom = self.__makeTankIconVO(True, FORT_BATTLE_DIVISIONS.CHAMPION.maxCombatants, RES_ICONS.MAPS_ICONS_LIBRARY_USA_A12_T32, fort_formatters.getIconLevel(FORT_BATTLE_DIVISIONS.CHAMPION.iconLevel), FORT_BATTLE_DIVISIONS.CHAMPION.divisionID)
         return {'startLvlSrc': fort_formatters.getIconLevel(minFortLevel),
          'endLvlSrc': fort_formatters.getIconLevel(maxFortLevel),
-         'buildingIcon': FORTIFICATION_ALIASES.FORT_BASE_BUILDING,
+         'buildingIcon': FortViewHelper.getSmallIconSource(FORTIFICATION_ALIASES.FORT_BASE_BUILDING, maxFortLevel),
          'lvlDashTF': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STATS_TEXT, '-'),
          'defenceTankIcon': defenceTankIcon,
          'attackTankIconTop': attackTankIconTop,
@@ -298,6 +299,12 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
 
     def onDefenceHourChanged(self, hour):
         self.updateData()
+
+    def onDefenceHourActivated(self, hour, initiatorDBID):
+        if not self.__defencePeriod:
+            self.destroy()
+        else:
+            self.updateData()
 
     def onOffDayChanged(self, offDay):
         self.updateData()

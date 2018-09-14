@@ -7,6 +7,7 @@ from gui.Scaleform.Flash import Flash
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_control import g_sessionProvider
+from gui.battle_control.battle_period_ctrl import getTimeLevel
 from items.vehicles import getVehicleType
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.shared import EVENT_BUS_SCOPE, events
@@ -309,7 +310,7 @@ class _BattleScreen(_LogitechScreen):
         else:
             arenaLength = int(arena.periodEndTime - BigWorld.serverTime())
             arenaLength = arenaLength if arenaLength > 0 else 0
-            self.call('battle.timerBar.setTotalTime', [arenaLength])
+            self.call('battle.timerBar.setTotalTime', [getTimeLevel(arenaLength), arenaLength])
             if arenaLength > 1:
                 self.__timerCallBackId = BigWorld.callback(1, self.__onSetArenaTime)
             return

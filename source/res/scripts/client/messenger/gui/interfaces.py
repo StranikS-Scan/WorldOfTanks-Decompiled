@@ -106,6 +106,9 @@ class IChannelController(IEntityController):
     def isJoined(self):
         return False
 
+    def setHistory(self, history):
+        pass
+
     def getHistory(self):
         return []
 

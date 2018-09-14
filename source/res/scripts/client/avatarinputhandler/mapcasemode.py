@@ -269,7 +269,6 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         return dumpStateEmpty()
 
     def enable(self, **args):
-        ctrlState = args.get('ctrlState')
         SoundGroups.g_instance.changePlayMode(2)
         targetPos = args.get('preferredPos', Vector3(0, 0, 0))
         self.__cam.enable(targetPos, args.get('saveDist', True))
@@ -283,17 +282,24 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         else:
             self.activateEquipment(equipmentID)
         self.setGUIVisible(BigWorld.player().isGuiVisible)
+        if BigWorld.player().gunRotator is not None:
+            BigWorld.player().gunRotator.clientMode = False
         return
 
     def disable(self):
-        self.__isEnabled = False
-        self.__cam.disable()
-        self.__activeSelector.destroy()
-        self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
-        self.setGUIVisible(False)
-        g_postProcessing.disable()
-        BigWorld.setFloraEnabled(True)
-        return
+        if not self.__isEnabled:
+            return
+        else:
+            self.__isEnabled = False
+            self.__cam.disable()
+            self.__activeSelector.destroy()
+            self.__activeSelector = _DefaultStrikeSelector(Vector3(0, 0, 0), None)
+            self.setGUIVisible(False)
+            g_postProcessing.disable()
+            BigWorld.setFloraEnabled(True)
+            if BigWorld.player().gunRotator is not None:
+                BigWorld.player().gunRotator.clientMode = True
+            return
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
         if not self.__isEnabled:
@@ -366,7 +372,8 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             GUI.mcursor().position = Math.Vector2(0, 0)
             self.__cam.update(dx, dy, dz)
             replayCtrl = BattleReplay.g_replayCtrl
-            replayCtrl.isRecording and self.__activeSelector.processHover(self.__getDesiredShotPoint())
+            return replayCtrl.isPlaying and True
+        self.__activeSelector.processHover(self.__getDesiredShotPoint())
         return True
 
     def onMinimapClicked(self, worldPos):

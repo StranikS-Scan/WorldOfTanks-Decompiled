@@ -28,14 +28,15 @@ class BattleRibbonsPanel(object):
 
     def __init__(self, parentUI):
         self.__ui = parentUI
+        self.__enabled = False
 
     def start(self):
         self.__flashObject = self.__ui.getMember('_level0.ribbonsPanel')
+        self.__enabled = bool(g_settingsCore.getSetting(GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS))
         if self.__flashObject:
             self.__flashObject.resync()
             self.__flashObject.script = self
-            isEnabled = g_settingsCore.getSetting(GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS)
-            self.__flashObject.setup(isEnabled, _RIBBON_SOUNDS_ENABLED, *_POS_COEFF)
+            self.__flashObject.setup(self.__enabled, _RIBBON_SOUNDS_ENABLED, *_POS_COEFF)
             self.__addListeners()
         else:
             LOG_ERROR('Display object is not found in the swf file.')
@@ -98,7 +99,7 @@ class BattleRibbonsPanel(object):
         self.__ui.call('battle.aimVisibleSizeChanged', bounds)
 
     def __onPlayerFeedbackReceived(self, eventID, series):
-        if eventID in _FEEDBACK_EVENT_TO_BATTLE_EFFICIENCY:
+        if self.__enabled and eventID in _FEEDBACK_EVENT_TO_BATTLE_EFFICIENCY:
             effType = _FEEDBACK_EVENT_TO_BATTLE_EFFICIENCY[eventID]
             effShortDesc = i18n.makeString('#ingame_gui:efficiencyRibbons/{0:>s}'.format(effType))
             self.__flashObject.addBattleEfficiencyEvent(effType, effShortDesc, series)
@@ -106,5 +107,5 @@ class BattleRibbonsPanel(object):
     def __onSettingsChanged(self, diff):
         key = GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS
         if key in diff and self.__flashObject:
-            isEnabled = bool(diff[key])
-            self.__flashObject.setup(isEnabled, _RIBBON_SOUNDS_ENABLED, *_POS_COEFF)
+            self.__enabled = bool(diff[key])
+            self.__flashObject.setup(self.__enabled, _RIBBON_SOUNDS_ENABLED, *_POS_COEFF)

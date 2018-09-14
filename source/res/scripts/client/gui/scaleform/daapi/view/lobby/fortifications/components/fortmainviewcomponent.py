@@ -7,6 +7,7 @@ from adisp import process
 from constants import PREBATTLE_TYPE, FORT_BUILDING_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 import fortified_regions
+from shared_utils import CONST_CONTAINER
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects, FortifiedWindowScopes
 from gui.Scaleform.daapi.view.lobby.fortifications.FortRosterIntroWindow import FortRosterIntroWindow
@@ -32,7 +33,9 @@ from gui.shared.events import FortEvent
 from gui.shared.fortifications import events_dispatcher as fort_events
 from gui.shared.fortifications.context import DirectionCtx
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
-from gui.shared.utils import CONST_CONTAINER
+from gui.shared.fortifications.fort_helpers import getRosterIntroWindowSetting
+from gui.shared.fortifications.fort_helpers import setRosterIntroWindowSetting
+from gui.shared.fortifications.settings import MUST_SHOW_FORT_UPGRADE, MUST_SHOW_DEFENCE_START
 from helpers import i18n, time_utils, setHangarVisibility
 
 def _checkBattleConsumesIntro(fort):
@@ -67,6 +70,11 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         self.__commanderHelpShown = False
         self.__transportingProgress = None
         self.__clanDBID = g_clanCache.clanDBID
+        self.__fortSettings = dict(AccountSettings.getSettings('fortSettings'))
+        self.__defenceHourArrowVisible = False
+        self.__intelligenceArrowVisible = False
+        if 'showDefHourArrow' not in self.__fortSettings:
+            self.__fortSettings['showDefHourArrow'] = True
         return
 
     @process
@@ -84,6 +92,24 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         filters = AccountSettings.getFilter(ORDERS_FILTER)
         filters['isSelected'] = value
         AccountSettings.setFilter(ORDERS_FILTER, filters)
+
+    @classmethod
+    def tryShowFortRosterIntroWindow(cls):
+        type = None
+        if cls.shouldShowIntroWindow(FortRosterIntroWindow.TYPE_FORT_UPGRADE):
+            type = FortRosterIntroWindow.TYPE_FORT_UPGRADE
+        elif cls.shouldShowIntroWindow(FortRosterIntroWindow.TYPE_DEFENCE_START):
+            type = FortRosterIntroWindow.TYPE_DEFENCE_START
+        if type is not None:
+            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_ROSTER_INTRO_WINDOW_ALIAS, ctx={'type': type}), EVENT_BUS_SCOPE.LOBBY)
+        return
+
+    @staticmethod
+    def shouldShowIntroWindow(type):
+        if type == FortRosterIntroWindow.TYPE_FORT_UPGRADE:
+            return not getRosterIntroWindowSetting(type) and getRosterIntroWindowSetting(MUST_SHOW_FORT_UPGRADE)
+        else:
+            return not getRosterIntroWindowSetting(type) and getRosterIntroWindowSetting(MUST_SHOW_DEFENCE_START)
 
     def _getDirectionsBattles(self):
         battlesByDir = {}
@@ -121,6 +147,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         setHangarVisibility(isVisible=False)
         self.as_setTutorialArrowVisibilityS(FORTIFICATION_ALIASES.TUTORIAL_ARROW_DEFENCE, False)
         self.as_setTutorialArrowVisibilityS(FORTIFICATION_ALIASES.TUTORIAL_ARROW_INTELLIGENCE, False)
+        FortMainViewComponent.tryShowFortRosterIntroWindow()
 
     def _dispose(self):
         setHangarVisibility(isVisible=True)
@@ -197,7 +224,8 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         else:
             alias = FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW
         self.fireEvent(events.LoadViewEvent(alias, ctx={'isDefenceHourEnabled': isDefenceHourEnabled}), EVENT_BUS_SCOPE.LOBBY)
-        self.as_setTutorialArrowVisibilityS(FORTIFICATION_ALIASES.TUTORIAL_ARROW_INTELLIGENCE, False)
+        self.__intelligenceArrowVisible = False
+        self.as_setTutorialArrowVisibilityS(FORTIFICATION_ALIASES.TUTORIAL_ARROW_INTELLIGENCE, self.__intelligenceArrowVisible)
 
     def onSortieClick(self):
         self.__joinToSortie()
@@ -214,18 +242,25 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
     def onSettingClick(self):
         self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
         self.as_setTutorialArrowVisibilityS(FORTIFICATION_ALIASES.TUTORIAL_ARROW_DEFENCE, False)
+        self.__defenceHourArrowVisible = False
 
     def onUpdated(self, isFullUpdate):
         self.updateData()
 
     def onClanMembersListChanged(self):
         self.updateData()
+        if len(g_clanCache.clanMembers) == fortified_regions.g_cache.defenceConditions.minClanMembers and self.__fortSettings['showDefHourArrow']:
+            self.__defenceHourArrowVisible = self.__setTutorialArrowToDefenseHourSettingsVisibility()
+            self.__fortSettings['showDefHourArrow'] = False
+            AccountSettings.setSettings('fortSettings', self.__fortSettings)
 
     def onDefenceHourActivated(self, hour, initiatorDBID):
         if initiatorDBID == 0:
             return None
         elif initiatorDBID == BigWorld.player().databaseID:
-            self.__setTutorialArrowToIntelligenceVisibility()
+            self.__intelligenceArrowVisible = self.__setTutorialArrowToIntelligenceVisibility()
+            setRosterIntroWindowSetting(FortRosterIntroWindow.TYPE_DEFENCE_START)
+            setRosterIntroWindowSetting(FortRosterIntroWindow.TYPE_FORT_UPGRADE)
             return None
         else:
             self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_ROSTER_INTRO_WINDOW_ALIAS, ctx={'type': FortRosterIntroWindow.TYPE_DEFENCE_START}), EVENT_BUS_SCOPE.LOBBY)
@@ -242,7 +277,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
             if commandCenterLevel == FORT_BATTLE_DIVISIONS.ABSOLUTE.minFortLevel:
                 self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_ROSTER_INTRO_WINDOW_ALIAS, ctx={'type': FortRosterIntroWindow.TYPE_FORT_UPGRADE}), EVENT_BUS_SCOPE.LOBBY)
             if commandCenterLevel == FORT_BATTLE_DIVISIONS.CHAMPION.minFortLevel:
-                self.__setTutorialArrowToDefenseHourSettingsVisibility()
+                self.__defenceHourArrowVisible = self.__setTutorialArrowToDefenseHourSettingsVisibility()
 
     def onViewReady(self):
         g_eventBus.handleEvent(events.FortEvent(events.FortEvent.VIEW_LOADED), scope=EVENT_BUS_SCOPE.FORT)
@@ -318,6 +353,10 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
             self.as_switchModeS(state)
             self.__currentModeIsDirty = False
             self.__currentMode = mode
+            if self.__defenceHourArrowVisible:
+                self.__setTutorialArrowToDefenseHourSettingsVisibility()
+            if self.__intelligenceArrowVisible:
+                self.__setTutorialArrowToIntelligenceVisibility()
 
     @staticmethod
     def __makeSystemMessages():
@@ -341,10 +380,12 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
     def __setTutorialArrowToDefenseHourSettingsVisibility(self):
         isVisible = self.__isClanConditionsSuccess() and not self.fortCtrl.getFort().isDefenceHourEnabled() and self.fortCtrl.getPermissions().canChangeSettings() and self.__currentMode == FORTIFICATION_ALIASES.MODE_COMMON
         self.as_setTutorialArrowVisibilityS(FORTIFICATION_ALIASES.TUTORIAL_ARROW_DEFENCE, isVisible)
+        return isVisible
 
     def __setTutorialArrowToIntelligenceVisibility(self):
         isVisible = self.__isClanConditionsSuccess() and self.fortCtrl.getFort().isDefenceHourEnabled() and self.fortCtrl.getPermissions().canCreateFortBattle() and not self.fortCtrl.getFort().getAttacks() and self.__currentMode == FORTIFICATION_ALIASES.MODE_COMMON
         self.as_setTutorialArrowVisibilityS(FORTIFICATION_ALIASES.TUTORIAL_ARROW_INTELLIGENCE, isVisible)
+        return isVisible
 
     def __isClanConditionsSuccess(self):
         currentCountOfClanMembers = len(g_clanCache.clanMembers)

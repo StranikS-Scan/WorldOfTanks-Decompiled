@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/shared/events.py
 from gui.shared.event_bus import SharedEvent
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 __all__ = ['ArgsEvent',
  'LoadEvent',
  'ComponentEvent',
@@ -23,6 +23,19 @@ class HasCtxEvent(SharedEvent):
         super(HasCtxEvent, self).__init__(eventType)
         self.ctx = ctx if ctx is not None else {}
         return
+
+
+class GameEvent(HasCtxEvent):
+    SCREEN_SHOT_MADE = 'game/screenShotMade'
+    SHOW_EXTENDED_INFO = 'game/showExtendedInfo'
+    CHOICE_CONSUMABLE = 'game/choiceConsumable'
+    HELP = 'game/help'
+    MINIMAP_CMD = 'game/minimapCmd'
+    RADIAL_MENU_CMD = 'game/radialMenuCmd'
+    GUI_VISIBILITY = 'game/guiVisibility'
+    SHOW_CURSOR = 'game/showCursor'
+    HIDE_CURSOR = 'game/hideCursor'
+    PLAYING_TIME_ON_ARENA = 'game/playingTimeOnArena'
 
 
 class GUICommonEvent(SharedEvent):
@@ -164,6 +177,7 @@ class LobbySimpleEvent(HasCtxEvent):
     CLOSE_HELPLAYOUT = 'closeHelplayout'
     EVENTS_UPDATED = 'questUpdated'
     HIDE_HANGAR = 'hideHangar'
+    NOTIFY_CURSOR_OVER_3DSCENE = 'notifyCursorOver3dScene'
 
 
 class TrainingSettingsEvent(HasCtxEvent):

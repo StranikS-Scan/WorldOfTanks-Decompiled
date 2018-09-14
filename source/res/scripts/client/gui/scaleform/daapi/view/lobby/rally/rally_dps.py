@@ -22,8 +22,8 @@ from gui.clubs.settings import CLIENT_CLUB_STATE, getLadderChevron16x16, getLadd
 from gui.prb_control.items.unit_items import getUnitCandidatesComparator
 from gui.prb_control.prb_helpers import unitFunctionalProperty
 from gui.shared.formatters import text_styles
-from gui.shared.utils import findFirst
 from gui.shared.view_helpers import UsersInfoHelper
+from shared_utils import findFirst
 from helpers import i18n
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
@@ -299,34 +299,61 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
 
     class _UserEntityAdapter(object):
 
-        def __init__(self, userID, proxy):
+        def __init__(self, userID, clubItem, user, proxy):
             self.__userID = userID
             self.__proxy = weakref.proxy(proxy)
+            self.__clubName = clubItem.getClubName()
+            self.__userEntity = user
 
         def getGuiType(self):
-            return USER_GUI_TYPE.OTHER
+            if self.__userEntity is not None:
+                return self.__userEntity.getGuiType()
+            else:
+                return USER_GUI_TYPE.OTHER
 
         def getTags(self):
-            return []
+            if self.__userEntity is not None:
+                return self.__userEntity.getTags()
+            else:
+                return []
 
         def getID(self):
             return self.__userID
 
         def getName(self):
-            return self.__proxy.getUserName(self.__userID)
+            if self.__proxy.isUseCreatorName():
+                return self.__proxy.getUserName(self.__userID)
+            else:
+                return self.__clubName
 
         def getFullName(self):
-            return self.__proxy.getUserFullName(self.__userID)
+            if self.__proxy.isUseCreatorName():
+                return self.__proxy.getUserFullName(self.__userID)
+            else:
+                return self.__clubName
 
         def getClanAbbrev(self):
             return self.__proxy.getUserClanAbbrev(self.__userID)
 
         def isOnline(self):
-            return False
+            if self.__userEntity is not None:
+                return self.__userEntity.isOnline()
+            else:
+                return False
 
     def __init__(self):
         super(ClubsDataProvider, self).__init__()
         self._lastResult = []
+        self._useCreatorName = True
+
+    def useClubName(self):
+        self._useCreatorName = False
+
+    def useCreatorName(self):
+        self._useCreatorName = True
+
+    def isUseCreatorName(self):
+        return self._useCreatorName
 
     def getVO(self, club = None, currentState = None, profile = None):
         if club is None or currentState is None or profile is None:
@@ -395,10 +422,8 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
         for clubItem in result:
             cfdUnitID = clubItem.getID()
             creatorID = clubItem.getCreatorID()
-            creator = userGetter(creatorID)
             rating = self.getUserRating(creatorID)
-            if creator is None:
-                creator = self._UserEntityAdapter(creatorID, self)
+            creator = self._UserEntityAdapter(creatorID, clubItem, userGetter(creatorID), self)
             creatorName = creator.getName()
             creatorVO = makeUserVO(creator, colorGetter)
             index = len(self.collection)
@@ -409,7 +434,7 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
               'unitMgrID': cfdUnitID,
               'creator': creatorVO,
               'creatorName': creatorName,
-              'rating': ratingFormatter(rating),
+              'rating': self.getGuiUserRating(creatorID),
               'playersCount': clubItem.getMembersCount(),
               'commandSize': clubItem.getCommandSize(),
               'inBattle': False,
@@ -445,7 +470,6 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
     def updateList(self, selectedID, result):
         isFullUpdate, diff = False, []
         self._selectedIdx = None
-        ratingFormatter = BigWorld.wg_getIntegralFormat
         result = set(result)
         for clubItem in result:
             try:
@@ -455,7 +479,7 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
                 LOG_ERROR('Item not found', clubItem)
                 continue
 
-            item.update({'rating': ratingFormatter(self.getUserRating(clubItem.getCreatorID())),
+            item.update({'rating': self.getGuiUserRating(clubItem.getCreatorID()),
              'playersCount': clubItem.getMembersCount(),
              'commandSize': clubItem.getCommandSize(),
              'description': clubItem.getDescription(),
@@ -484,7 +508,6 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
         diff = []
         userGetter = storage_getter('users')().getUser
         colorGetter = g_settings.getColorScheme('rosters').getColors
-        ratingFormatter = BigWorld.wg_getIntegralFormat
         for userDBID in userDBIDs:
             data = findFirst(lambda d: d['creator'].get('dbID') == userDBID, self.collection)
             if data is not None:
@@ -499,9 +522,10 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
                 creator = userGetter(userDBID)
                 creatorVO = makeUserVO(creator, colorGetter)
                 creatorName = creator.getName()
-                item.update({'creator': creatorVO,
-                 'creatorName': creatorName,
-                 'rating': ratingFormatter(self.getUserRating(userDBID))})
+                item.update({'creatorName': creatorName,
+                 'rating': self.getGuiUserRating(userDBID)})
+                if creator.hasValidName():
+                    item['creator'] = creatorVO
                 diff.append(index)
 
         if len(diff):

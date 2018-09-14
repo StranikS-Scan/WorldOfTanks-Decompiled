@@ -31,6 +31,7 @@ class AbstractRequester(object):
 
     def clear(self):
         self._data = None
+        self.__synced = False
         return
 
     def _response(self, resID, value, callback = None):
@@ -61,6 +62,8 @@ class AbstractSyncDataRequester(AbstractRequester):
 
     def clear(self):
         self._data.clear()
+        super(AbstractSyncDataRequester, self).clear()
+        self._data = {}
 
     def _getDefaultDataValue(self):
         return {}

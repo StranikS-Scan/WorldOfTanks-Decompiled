@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/unit_ext.py
 import time
-import BigWorld
 import weakref
+import BigWorld
 from PlayerEvents import g_playerEvents
-from UnitBase import UNIT_ERROR, UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_BROWSER_TYPE
-from account_helpers import getPlayerDatabaseID
+from UnitBase import UNIT_ERROR, UNIT_SLOT, INV_ID_CLEAR_VEHICLE
+from account_helpers import getAccountDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import prb_control, SystemMessages, game_control
@@ -370,9 +370,9 @@ class InventoryVehiclesWatcher(object):
                 if vInfo.vehTypeCD and vInfo.vehTypeCD not in vehCDs:
                     self.__functional.request(unit_ctx.SetVehicleUnitCtx(vehInvID=INV_ID_CLEAR_VEHICLE, waitingID='prebattle/change_settings'))
                 elif update:
-                    self.__functional.unit_onUnitPlayerVehDictChanged(getPlayerDatabaseID())
+                    self.__functional.unit_onUnitPlayerVehDictChanged(getAccountDatabaseID())
         elif update:
-            self.__functional.unit_onUnitPlayerVehDictChanged(getPlayerDatabaseID())
+            self.__functional.unit_onUnitPlayerVehDictChanged(getAccountDatabaseID())
 
     def __onVehiclesUpdated(self, *args):
         self.validate(update=True)
@@ -589,7 +589,49 @@ class FortBattlesScheduler(UnitScheduler, FortListener):
             g_eventDispatcher.showUnitWindow(self._unitFunc.getPrbType())
 
 
+class SortiesScheduler(UnitScheduler, FortListener):
+
+    def __init__(self, unitFunc):
+        super(SortiesScheduler, self).__init__(unitFunc)
+        self.__sortiesHoursCtrl = None
+        return
+
+    def onClientStateChanged(self, state):
+        super(SortiesScheduler, self).onClientStateChanged(state)
+        self.__registerCurfewController()
+
+    def init(self):
+        self.__registerCurfewController()
+        self.startFortListening()
+        super(SortiesScheduler, self).init()
+
+    def fini(self):
+        self.stopFortListening()
+        if self.__sortiesHoursCtrl:
+            self.__sortiesHoursCtrl.onStatusChanged -= self.__updateCurfew
+            self.__sortiesHoursCtrl = None
+        super(SortiesScheduler, self).fini()
+        return
+
+    def __registerCurfewController(self):
+        from gui.shared.ClanCache import g_clanCache
+        if not self.__sortiesHoursCtrl:
+            provider = g_clanCache.fortProvider
+            self.__sortiesHoursCtrl = provider.getController().getSortiesCurfewCtrl()
+            if self.__sortiesHoursCtrl:
+                self.__sortiesHoursCtrl.onStatusChanged += self.__updateCurfew
+                self.__updateCurfew()
+
+    def __updateCurfew(self):
+        g_eventDispatcher.updateUI()
+        for listener in self._unitFunc.getListenersIterator():
+            listener.onUnitCurfewChanged()
+
+
 def createUnitScheduler(unit):
-    if unit.getPrbType() == PREBATTLE_TYPE.FORT_BATTLE:
+    unitPrbtype = unit.getPrbType()
+    if unitPrbtype == PREBATTLE_TYPE.FORT_BATTLE:
         return FortBattlesScheduler(unit)
+    if unitPrbtype == PREBATTLE_TYPE.SORTIE:
+        return SortiesScheduler(unit)
     return UnitScheduler(unit)

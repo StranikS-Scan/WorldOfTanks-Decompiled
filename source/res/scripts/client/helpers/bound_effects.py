@@ -1,7 +1,4 @@
 # Embedded file name: scripts/client/helpers/bound_effects.py
-import BigWorld
-import Math
-import BattleReplay
 import helpers
 from debug_utils import *
 from functools import partial

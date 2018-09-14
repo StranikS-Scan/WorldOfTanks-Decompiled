@@ -177,7 +177,9 @@ class WebBrowser(AppRef):
             self.onNavigate(self.__browser.url)
 
     def navigate(self, url):
-        self.__delayedUrls.append(url)
+        lastIsSame = self.__delayedUrls and self.__delayedUrls[-1] == url
+        if not lastIsSame:
+            self.__delayedUrls.append(url)
         self.__processDelayedNavigation()
 
     def doNavigate(self, url):
@@ -389,6 +391,16 @@ class EventListener():
 
     def onAddConsoleMessage(self, message, lineNumber, source):
         pass
+
+    def onFilterNavigation(self, url):
+        """
+        This event occurs before frame navigations. You can use this to
+        block or log navigations for each frame of a WebView.
+        
+        :param url: The URL that the frame wants to navigate to.
+        :return: True to block a navigation. Return False to let it continue.
+        """
+        return False
 
     def onShowCreatedWebView(self, url, isPopup):
         LOG_BROWSER('onShowCreatedWebView', url, isPopup)

@@ -1,10 +1,33 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/score_panel.py
-import BigWorld
+import itertools
+import win_points
+from collections import defaultdict
 from account_helpers.settings_core import g_settingsCore
 from gui.Scaleform.daapi.view.battle.meta.FalloutScorePanelMeta import FalloutScorePanelMeta
+from gui.Scaleform.daapi.view.battle import FALLOUT_SCORE_PANEL
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from gui.battle_control import g_sessionProvider
-from gui.Scaleform.daapi.view.battle import markerComparator, FALLOUT_SCORE_PANEL
-from gui.battle_control.arena_info import isEventBattle
+from gui.battle_control.arena_info import getArenaType
+from gui.battle_control.avatar_getter import getPlayerVehicleID, getPlayerName
+from helpers import i18n
+_TEAM_PROPS = {'tf_width': 140,
+ 'tf_padding': 140,
+ 'y_position': 4}
+
+def _markerComparator(x1, x2):
+    INDEX_IS_ALIVE = 2
+    INDEX_VEHICLE_CLASS = 1
+    res = x1[INDEX_IS_ALIVE] - x2[INDEX_IS_ALIVE]
+    if not res:
+        return res
+    x1Index = VEHICLE_BATTLE_TYPES_ORDER_INDICES.get(x1[INDEX_VEHICLE_CLASS], 100)
+    x2Index = VEHICLE_BATTLE_TYPES_ORDER_INDICES.get(x2[INDEX_VEHICLE_CLASS], 100)
+    res = x1Index - x2Index
+    if not res:
+        return res
+    return 0
+
 
 class _IScorePanel(object):
 
@@ -26,7 +49,7 @@ class _IScorePanel(object):
     def addVehicle(self, team, vehicleID, vClassName, isAlive):
         pass
 
-    def updateScore(self, playerTeam):
+    def updateScore(self):
         pass
 
     def updateTeam(self, isEnemy, team):
@@ -40,66 +63,68 @@ class _FragCorrelationPanel(_IScorePanel):
 
     def __init__(self, parentUI):
         self.__ui = parentUI
-        self.__teamsFrags = [0, 0]
-        self.__fragsCache = [0, 0]
         self.clear()
 
     def populate(self):
-        getNumberOfTeam = g_sessionProvider.getArenaDP().getNumberOfTeam
+        arenaDP = g_sessionProvider.getArenaDP()
         getTeamName = g_sessionProvider.getCtx().getTeamName
-        playerTeamIdx = getNumberOfTeam()
-        _alliedTeamName = getTeamName(playerTeamIdx, True)
-        _enemyTeamName = getTeamName(playerTeamIdx, False)
+        getNumberOfTeam = arenaDP.getNumberOfTeam
+        playerTeamIdx, enemyTeamIdx = getNumberOfTeam(), getNumberOfTeam(True)
+        _alliedTeamName = getTeamName(playerTeamIdx)
+        _enemyTeamName = getTeamName(enemyTeamIdx)
         self.__callFlash('setTeamNames', [_alliedTeamName, _enemyTeamName])
         self.showVehiclesCounter(g_settingsCore.getSetting('showVehiclesCounter'))
-        self.updateScore(playerTeamIdx)
-        self.updateTeam(False, playerTeamIdx)
-        self.updateTeam(True, getNumberOfTeam(True))
+        self.updateScore()
+        for isEnemy, team in arenaDP.getTeamIDsIterator():
+            self.updateTeam(isEnemy, team)
 
     def destroy(self):
         self.__ui = None
-        self.__teamsFrags = None
-        self.__fragsCache = None
+        self.__teamsDeaths = None
+        self.__teamsShortLists = None
         return
 
     def clear(self, team = None):
         if team is None:
-            self.__teamsFrags = [0, 0]
-            self.__teamsShortLists = {1: [],
-             2: []}
+            self.__teamsDeaths = defaultdict(int)
+            self.__teamsShortLists = defaultdict(list)
         else:
             self.__teamsShortLists[team] = []
-            oppositeTeamsIndexes = (1, 0)
-            self.__teamsFrags[oppositeTeamsIndexes[team - 1]] = 0
+            self.__teamsDeaths[team] = 0
         return
 
-    def addFrags(self, team, count = 1):
-        self.__teamsFrags[team - 1] += count
-
     def addKilled(self, team, count = 1):
-        oppositeTeamsIndexes = (2, 1)
-        self.addFrags(oppositeTeamsIndexes[team - 1], count=count)
+        self.__teamsDeaths[team] += count
 
     def addVehicle(self, team, vehicleID, vClassName, isAlive):
         self.__teamsShortLists[team].append([vehicleID, vClassName, isAlive])
 
-    def updateScore(self, playerTeam):
-        if not playerTeam:
-            return
-        teamIndex = playerTeam - 1
-        enemyIndex = 1 - teamIndex
-        if len(self.__teamsFrags):
-            self.__callFlash('updateFrags', [self.__teamsFrags[teamIndex], self.__teamsFrags[enemyIndex]])
+    def updateScore(self):
+        if len(self.__teamsDeaths):
+            isTeamEnemy = g_sessionProvider.getArenaDP().isEnemyTeam
+            ally, enemy = (0, 0)
+            for teamIdx, score in self.__teamsDeaths.iteritems():
+                if isTeamEnemy(teamIdx):
+                    ally += score
+                else:
+                    enemy += score
+
+            self.__callFlash('updateFrags', [ally, enemy])
 
     def updateTeam(self, isEnemy, team):
         if not team:
             return
-        sortedList = sorted(self.__teamsShortLists[team], cmp=markerComparator)
-        team = [ pos for item in sortedList for pos in item ]
+        result = []
+        isTeamEnemy = g_sessionProvider.getArenaDP().isEnemyTeam
+        for teamIdx, vehs in self.__teamsShortLists.iteritems():
+            if isEnemy is isTeamEnemy(teamIdx):
+                result.extend(vehs)
+
+        result = list(itertools.chain(*sorted(result, cmp=_markerComparator)))
         if isEnemy:
-            self.__callFlash('updateEnemyTeam', team)
+            self.__callFlash('updateEnemyTeam', result)
         else:
-            self.__callFlash('updatePlayerTeam', team)
+            self.__callFlash('updatePlayerTeam', result)
 
     def showVehiclesCounter(self, isShown):
         self.__callFlash('showVehiclesCounter', [isShown])
@@ -108,53 +133,91 @@ class _FragCorrelationPanel(_IScorePanel):
         self.__ui.call('battle.fragCorrelationBar.' + funcName, args)
 
 
-class FalloutScorePanel(FalloutScorePanelMeta, _IScorePanel):
+class _FalloutScorePanel(FalloutScorePanelMeta, _IScorePanel):
+    WARNING_RATIO = 0.8
 
-    def __init__(self, proxy):
-        super(FalloutScorePanel, self).__init__()
-        self.__proxy = proxy
-        self.__ui = None
-        self.__maxScore = BigWorld.player().arena.arenaType.winPoints['winPointsCAP']
-        return
+    def __init__(self, proxy, ctxType):
+        super(_FalloutScorePanel, self).__init__()
+        self._proxy = proxy
+        self._contextType = ctxType
+        self._maxScore = 0
 
     def populate(self):
-        self.__ui = self.__proxy.getMember(FALLOUT_SCORE_PANEL)
-        super(FalloutScorePanel, self)._populate(self.__ui)
-        self.__makeData()
+        super(_FalloutScorePanel, self)._populate(self._proxy.getMember(FALLOUT_SCORE_PANEL))
+        arenaType = getArenaType()
+        if arenaType is not None:
+            self._maxScore = win_points.g_cache[getArenaType().winPoints].pointsCAP
+        self.as_initWarningValue(self.WARNING_RATIO * self._maxScore)
+        self._makeData()
+        return
 
     def destroy(self):
-        self.__proxy = None
-        self.__ui = None
+        self._proxy = None
         return
 
-    def updateScore(self, playerTeam):
-        if self.__ui is not None:
-            self.__makeData()
+    def updateScore(self):
+        if self._flashObject is not None:
+            self._makeData()
         return
 
-    def __makeData(self):
+    def _makeData(self):
         arenaDP = g_sessionProvider.getArenaDP()
-        playerVehID = BigWorld.player().playerVehicleID
-        playerTeamVehIDs = g_sessionProvider.getArenaDP().getVehiclesIDs()
-        allyScore = 0
-        playerScore = 0
-        for vID in playerTeamVehIDs:
-            details = arenaDP.getVehicleInteractiveStats(vID)
-            points = details.winPoints
-            allyScore += points
-            if vID == playerVehID:
-                playerScore += points
+        playerVehID = getPlayerVehicleID()
+        allyTeams = arenaDP.getAllyTeams()
+        allyScore, enemyScore, playerScore = (0, 0, 0)
+        for vInfoVO, _, viStatsVO in arenaDP.getAllVehiclesIterator():
+            points = viStatsVO.winPoints
+            if vInfoVO.team in allyTeams:
+                allyScore += points
+                if vInfoVO.vehicleID == playerVehID:
+                    playerScore += points
+            else:
+                enemyScore += points
 
-        enemyTeamVehIDs = g_sessionProvider.getArenaDP().getVehiclesIDs(True)
+        self.as_setDataS(self._contextType, self._maxScore, playerScore, allyScore, enemyScore, '', '', {})
+
+
+class _MultiteamFalloutPanel(_FalloutScorePanel):
+
+    def __init__(self, proxy, ctxType):
+        super(_MultiteamFalloutPanel, self).__init__(proxy, ctxType)
+
+    def _makeData(self):
+        arenaDP = g_sessionProvider.getArenaDP()
+        teamIds = arenaDP.getMultiTeamsIndexes()
+        playerVehID = getPlayerVehicleID()
+        allyTeams = arenaDP.getAllyTeams()
+        isSquadPlayer = arenaDP.isSquadMan(playerVehID)
+        teamScores = {}
         enemyScore = 0
-        for vID in enemyTeamVehIDs:
-            details = arenaDP.getVehicleInteractiveStats(vID)
-            enemyScore += details.winPoints
+        enemyName = ''
+        allyScore = 0
+        for vInfoVO, _, viStatsVO in arenaDP.getAllVehiclesIterator():
+            points = viStatsVO.winPoints
+            if vInfoVO.team in allyTeams:
+                allyScore += points
+            else:
+                if vInfoVO.team in teamScores:
+                    currentScore = teamScores[vInfoVO.team]
+                    totalScore = currentScore + points
+                else:
+                    totalScore = points
+                teamScores[vInfoVO.team] = totalScore
+                if totalScore > enemyScore:
+                    enemyScore = totalScore
+                    squadIndex = teamIds[vInfoVO.team]
+                    enemyName = i18n.makeString(INGAME_GUI.SCOREPANEL_SQUADLBL, sq_number=squadIndex) if squadIndex else vInfoVO.player.name
 
-        self.as_setDataS(self.__maxScore, allyScore, enemyScore, playerScore)
+        if isSquadPlayer:
+            playerName = i18n.makeString(INGAME_GUI.SCOREPANEL_MYSQUADLBL)
+        else:
+            playerName = getPlayerName()
+        self.as_setDataS(self._contextType, self._maxScore, 0, allyScore, enemyScore, playerName, enemyName, _TEAM_PROPS)
 
 
-def scorePanelFactory(parentUI):
-    if isEventBattle():
-        return FalloutScorePanel(parentUI)
+def scorePanelFactory(parentUI, isEvent = False, isMutlipleTeams = False):
+    if isEvent:
+        if isMutlipleTeams:
+            return _MultiteamFalloutPanel(parentUI, 'multi')
+        return _FalloutScorePanel(parentUI, 'single')
     return _FragCorrelationPanel(parentUI)

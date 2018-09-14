@@ -97,6 +97,7 @@ class StatisticsCollector:
                 ret['screenResWidth'] = resolutionContainer.width
                 ret['screenResHeight'] = resolutionContainer.height
                 ret['drrScale'] = int(round(BigWorld.getDRRScale() * 100))
+                ret['dynamicDRR'] = BigWorld.isDRRAutoscalingEnabled()
                 ret['invalidStats'] |= self.__invalidStats
                 ret['contentType'] = ResMgr.activeContentType()
         if andStop is True or not proceed:
@@ -104,10 +105,6 @@ class StatisticsCollector:
         return ret
 
     def __onSettingsChanged(self, diff):
-        if GRAPHICS.FULLSCREEN in diff:
-            self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_WM_CHANGED
-        if GRAPHICS.WINDOW_SIZE in diff or GRAPHICS.RESOLUTION in diff:
-            self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_RESOLUTION_CHANGED
         if GRAPHICS.DYNAMIC_RENDERER in diff:
             self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_DRR_SCALE_CHANGED
         importantSettings = set([GRAPHICS.TEXTURE_QUALITY,
@@ -131,7 +128,8 @@ class StatisticsCollector:
          GRAPHICS.MOTION_BLUR_QUALITY,
          GRAPHICS.SEMITRANSPARENT_LEAVES_ENABLED,
          GRAPHICS.VEHICLE_TRACES_ENABLED,
-         GRAPHICS.FPS_PERFOMANCER])
+         GRAPHICS.FPS_PERFOMANCER,
+         GRAPHICS.DRR_AUTOSCALER_ENABLED])
         if otherSettings & keys:
             self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_GS_MINOR_CHANGED
 

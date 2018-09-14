@@ -2,7 +2,6 @@
 import base64
 import re
 from urllib import quote_plus
-import BigWorld
 from constants import TOKEN_TYPE
 from ConnectionManager import connectionManager
 from debug_utils import LOG_ERROR
@@ -22,14 +21,19 @@ class URLMarcos(object):
          'TARGET_URL': 'getTargetURL',
          'DB_ID': 'getDatabaseID',
          'WGNI_TOKEN': 'getWgniToken'}
-        pattern = ('\\%s(' + reduce(lambda x, y: x + '|' + y, self.__macros.iterkeys()) + ')') % self.__MACROS_PREFIX
-        self.__filter = re.compile(pattern)
+        patterns = []
+        for macro in self.__macros.iterkeys():
+            patterns.append('\\%(macro)s\\(.*\\)|\\%(macro)s' % {'macro': self._getUserMacrosName(macro)})
+
+        self.__filter = re.compile('|'.join(patterns))
+        self.__argsFilter = re.compile('\\$(\\w*)(\\((.*)\\))?')
         self.__targetURL = ''
         self.__tokenRqs = TokenRequester(TOKEN_TYPE.WGNI, cache=False)
 
     def clear(self):
         self.__tokenRqs.clear()
         self.__macros.clear()
+        self.__argsFilter = None
         self.__filter = None
         return
 
@@ -41,18 +45,19 @@ class URLMarcos(object):
     def parse(self, url, callback):
         yield lambda callback: callback(True)
         for macros in self.__filter.findall(url):
-            replacement = yield self._replace(macros)
-            url = url.replace(self._getUserMacrosName(macros), replacement)
+            macroName, _, args = self.__argsFilter.match(macros).groups()
+            replacement = yield self._replace(macroName, args)
+            url = url.replace(macros, replacement)
 
         callback(url)
 
     @async
-    def getLanguageCode(self, callback):
+    def getLanguageCode(self, args, callback):
         code = getClientLanguage()
         callback(code.replace('_', '-'))
 
     @async
-    def getAreaID(self, callback):
+    def getAreaID(self, args, callback):
         areaID = connectionManager.areaID
         if areaID:
             result = str(areaID)
@@ -61,7 +66,7 @@ class URLMarcos(object):
         callback(result)
 
     @async
-    def getEncodedLogin(self, callback):
+    def getEncodedLogin(self, args, callback):
         login = connectionManager.loginName
         if login:
             result = login
@@ -70,7 +75,7 @@ class URLMarcos(object):
         callback(base64.b64encode(result))
 
     @async
-    def getQuotedLogin(self, callback):
+    def getQuotedLogin(self, args, callback):
         login = connectionManager.lastLoginName
         if login:
             result = quote_plus(login)
@@ -79,7 +84,7 @@ class URLMarcos(object):
         callback(result)
 
     @async
-    def getDatabaseID(self, callback):
+    def getDatabaseID(self, args, callback):
         dbID = connectionManager.databaseID
         if dbID:
             result = str(dbID)
@@ -88,14 +93,17 @@ class URLMarcos(object):
         callback(result)
 
     @async
-    def getTargetURL(self, callback):
-        result = self.__targetURL
-        if self.__targetURL:
-            result = quote_plus(self.__targetURL)
+    def getTargetURL(self, args, callback):
+        if args:
+            result = args
+        else:
+            result = self.__targetURL
+        if result:
+            result = quote_plus(result)
         callback(result)
 
     @async
-    def getWgniToken(self, callback):
+    def getWgniToken(self, args, callback):
 
         def _cbWrapper(response):
             if response and response.isValid():
@@ -114,11 +122,11 @@ class URLMarcos(object):
 
     @async
     @process
-    def _replace(self, macros, callback):
+    def _replace(self, macros, args, callback):
         yield lambda callback: callback(True)
         result = ''
         if macros in self.__macros:
-            result = yield getattr(self, self.__macros[macros])()
+            result = yield getattr(self, self.__macros[macros])(args)
         else:
             LOG_ERROR('URL marcos is not found', macros)
         callback(result)

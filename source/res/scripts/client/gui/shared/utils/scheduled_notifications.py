@@ -2,7 +2,7 @@
 import operator
 import BigWorld
 from helpers import time_utils
-from gui.shared.utils import findFirst, forEach
+from shared_utils import forEach, findFirst
 
 class Notifiable(object):
 
@@ -51,6 +51,12 @@ class _Notifier(object):
     def _getNextNotificationDelta(self, delta):
         raise NotImplementedError
 
+    def _registerCallback(self, nextNotification, notificationHandler):
+        return BigWorld.callback(nextNotification, notificationHandler)
+
+    def _cancelCallback(self):
+        return BigWorld.cancelCallback(self.__notificationCallbackID)
+
     def __processNotification(self):
         delta = self.__deltaFunc()
         if not delta:
@@ -58,11 +64,11 @@ class _Notifier(object):
         nextNotification = self._getNextNotificationDelta(delta)
         if not nextNotification:
             return
-        self.__notificationCallbackID = BigWorld.callback(nextNotification, self.__onNotification)
+        self.__notificationCallbackID = self._registerCallback(nextNotification, self.__onNotification)
 
     def __cancelNotification(self):
         if self.__notificationCallbackID is not None:
-            BigWorld.cancelCallback(self.__notificationCallbackID)
+            self._cancelCallback()
             self.__notificationCallbackID = None
         return
 
@@ -97,4 +103,6 @@ class DeltaNotifier(_Notifier):
 
 
 class SimpleNotifier(_Notifier):
-    pass
+
+    def _getNextNotificationDelta(self, delta):
+        return delta

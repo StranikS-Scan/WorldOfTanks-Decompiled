@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceClanFilterPopover.py
 import time
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared.fortifications.fort_helpers import adjustDefenceHoursListToLocal
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
@@ -27,8 +27,7 @@ class FortIntelligenceClanFilterPopover(View, FortIntelligenceClanFilterPopoverM
         headerText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_HEADER))
         clanLevelText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_CLANLEVEL))
         startHourRangeText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_STARTHOURRANGE))
-        availabilityText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_AVAILABILITY))
-        self.as_setDescriptionsTextS(headerText, clanLevelText, startHourRangeText, availabilityText)
+        self.as_setDescriptionsTextS(headerText, clanLevelText, startHourRangeText)
         defaultButtonText = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_DEFAULTBUTTONTEXT)
         applyButtonText = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_APPLYBUTTONTEXT)
         cancelButtonText = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_CANCELBUTTONTEXT)
@@ -40,7 +39,6 @@ class FortIntelligenceClanFilterPopover(View, FortIntelligenceClanFilterPopoverM
         maxClanLevel = FORTIFICATION_ALIASES.CLAN_FILTER_MAX_LEVEL
         startDefenseHour = FORTIFICATION_ALIASES.CLAN_FILTER_MIN_HOUR
         startDefenseMin = 0
-        availability = FORTIFICATION_ALIASES.CLAN_FILTER_DAY_ANY
         cache = self.fortCtrl.getPublicInfoCache()
         if cache:
             minClanLevel, maxClanLevel, startDefenseHour, availability = cache.getDefaultFilterData()

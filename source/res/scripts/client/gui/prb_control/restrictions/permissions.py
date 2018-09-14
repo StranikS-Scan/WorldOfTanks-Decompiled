@@ -190,7 +190,7 @@ class UnitPermissions(IUnitPermissions):
         return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0
 
     def canAssignToSlot(self, dbID):
-        return self._roles & UNIT_ROLE.ADD_REMOVE_MEMBERS > 0 or dbID == account_helpers.getPlayerDatabaseID()
+        return self._roles & UNIT_ROLE.ADD_REMOVE_MEMBERS > 0 or dbID == account_helpers.getAccountDatabaseID()
 
     def canReassignToSlot(self):
         return self._roles & UNIT_ROLE.ADD_REMOVE_MEMBERS > 0
@@ -213,6 +213,9 @@ class UnitPermissions(IUnitPermissions):
     def canChangeLeadership(self):
         return self._roles & UNIT_ROLE.CHANGE_LEADERSHIP > 0
 
+    def canStealLeadership(self):
+        return self.canChangeLeadership()
+
     def canChangeConsumables(self):
         return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0
 
@@ -230,6 +233,9 @@ class UnitPermissions(IUnitPermissions):
 class SquadPermissions(UnitPermissions):
 
     def canChangeLeadership(self):
+        return True
+
+    def canStealLeadership(self):
         return False
 
     def canExitFromQueue(self):

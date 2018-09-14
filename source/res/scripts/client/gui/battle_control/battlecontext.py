@@ -2,8 +2,16 @@
 import BigWorld
 import Settings
 from gui import game_control
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import PLAYER_ENTITY_NAME
 defNormalizePNameFunction = lambda pName: pName
+
+def _getDefaultTeamName(isAlly):
+    if isAlly:
+        return '#menu:loading/teams/allies'
+    else:
+        return '#menu:loading/teams/enemies'
+
 
 class BattleContext(object):
 
@@ -73,7 +81,7 @@ class BattleContext(object):
         vehType = vInfo.vehicleType
         if vehType is not None:
             if showVehShortName and self.__isShowVehShortName:
-                vehName = vehShortName = vehType.shortName
+                vehName = vehShortName = vehType.shortNameWithPrefix
                 key |= FM.VEHICLE
             else:
                 vehName = vehType.name
@@ -125,13 +133,17 @@ class BattleContext(object):
     def isPlayerObserver(self):
         return self.isObserver(getattr(BigWorld.player(), 'playerVehicleID', -1))
 
-    def isInTeam(self, vID = None, accID = None, enemy = False):
-        if vID is None:
-            vID = self.__arenaDP.getVehIDByAccDBID(accID)
-        return self.__arenaDP.getVehicleInfo(vID).team == self.__arenaDP.getNumberOfTeam(enemy)
+    def isInTeam(self, teamIdx, vID = None, accID = None):
+        return self._isInTeams([teamIdx], vID, accID)
+
+    def isAlly(self, vID = None, accID = None):
+        return self._isInTeams(self.__arenaDP.getAllyTeams(), vID, accID)
+
+    def isEnemy(self, vID = None, accID = None):
+        return self._isInTeams(self.__arenaDP.getEnemyTeams(), vID, accID)
 
     def getPlayerEntityName(self, vID, team):
-        if BigWorld.player().team == team:
+        if team in self.__arenaDP.getAllyTeams():
             if self.isSquadMan(vID=vID):
                 return PLAYER_ENTITY_NAME.squadman
             if self.isTeamKiller(vID=vID):
@@ -139,13 +151,15 @@ class BattleContext(object):
             return PLAYER_ENTITY_NAME.ally
         return PLAYER_ENTITY_NAME.enemy
 
-    def getTeamName(self, myTeam, isAlliedTeam):
-        teamName = '#menu:loading/team%s' % ('1' if isAlliedTeam else '2')
-        arena = getattr(BigWorld.player(), 'arena', None)
-        if arena:
-            extraData = arena.extraData or {}
-            if isAlliedTeam:
-                teamName = extraData.get('opponents', {}).get('%s' % myTeam, {}).get('name', teamName)
-            else:
-                teamName = extraData.get('opponents', {}).get('2' if myTeam == 1 else '1', {}).get('name', teamName)
+    def getTeamName(self, teamIdx):
+        arena = avatar_getter.getArena()
+        teamName = _getDefaultTeamName(teamIdx in self.__arenaDP.getAllyTeams())
+        if arena and 'opponents' in (arena.extraData or {}):
+            opponents = arena.extraData['opponents']
+            teamName = opponents.get('%s' % teamIdx, {}).get('name', teamName)
         return teamName
+
+    def _isInTeams(self, teams, vID = None, accID = None):
+        if vID is None:
+            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+        return self.__arenaDP.getVehicleInfo(vID).team in teams

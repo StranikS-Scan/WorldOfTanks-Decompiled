@@ -2,8 +2,8 @@
 from collections import namedtuple
 from functools import partial
 from club_shared import ladderRating, ladderRatingLocal
+from shared_utils import makeTupleByDict
 from gui import makeHtmlString
-from gui.shared.utils import makeTupleByDict
 from gui.shared.formatters import icons
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper
 from gui.battle_results import abstract, items

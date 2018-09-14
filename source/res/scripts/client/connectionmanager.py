@@ -2,14 +2,19 @@
 import constants
 import json
 import hashlib
-import BigWorld
+import ResMgr
 from Event import Event
 from Singleton import Singleton
 from enumerations import Enumeration
 from debug_utils import *
 from predefined_hosts import g_preDefinedHosts
 from functools import partial
-CONNECTION_STATUS = Enumeration('Connection status', ('disconnected', 'connected', 'connectionInProgress', 'disconnectingInProgress', 'kicked'))
+from helpers import getClientLanguage
+CONNECTION_STATUS = Enumeration('Connection status', ('disconnected',
+ 'connected',
+ 'connectionInProgress',
+ 'disconnectingInProgress',
+ 'kicked'))
 
 def getHardwareID():
     import Settings
@@ -30,7 +35,7 @@ def md5hex(concealed_value):
     return m.hexdigest()
 
 
-class AUTH_METHODS:
+class AUTH_METHODS():
     BASIC = 'basic'
     EBANK = 'ebank'
     TOKEN2 = 'token2'
@@ -112,6 +117,7 @@ class ConnectionManager(Singleton):
             loginParams['token2'] = token2
             loginParams['auth_method'] = AUTH_METHODS.TOKEN2
         LOG_NOTE('User authentication method: {0}'.format(loginParams['auth_method']))
+        clientContext = {'lang_id': getClientLanguage()}
 
         class LoginInfo:
             pass
@@ -119,6 +125,7 @@ class ConnectionManager(Singleton):
         loginInfo = LoginInfo()
         loginInfo.username = json.dumps(loginParams).encode('utf8')
         loginInfo.password = password
+        loginInfo.clientContext = json.dumps(clientContext)
         loginInfo.inactivityTimeout = constants.CLIENT_INACTIVITY_TIMEOUT
         if publicKeyPath is not None:
             loginInfo.publicKeyPath = publicKeyPath
@@ -240,7 +247,7 @@ class ConnectionManager(Singleton):
         return self.__connectionStatus == CONNECTION_STATUS.connected
 
     def isUpdateClientSoftwareNeeded(self):
-        return self.__rawStatus in ('LOGIN_BAD_PROTOCOL_VERSION', 'LOGIN_REJECTED_BAD_DIGEST')
+        return ResMgr.activeContentType() in (3, 4) or self.__rawStatus in ('LOGIN_BAD_PROTOCOL_VERSION', 'LOGIN_REJECTED_BAD_DIGEST')
 
     def isStandalone(self):
         return self.peripheryID == 0

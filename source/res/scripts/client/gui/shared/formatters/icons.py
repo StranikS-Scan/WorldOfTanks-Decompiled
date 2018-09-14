@@ -22,8 +22,8 @@ def swords(vspace = -4):
     return _getIcon('swords', vspace=vspace)
 
 
-def alert():
-    return _getIcon('alert')
+def alert(vspace = -4):
+    return _getIcon('alert', vspace=vspace)
 
 
 def arrow():
@@ -48,3 +48,27 @@ def checkmark():
 
 def info():
     return _getIcon('info')
+
+
+def premiumIgrBig():
+    return _getIcon('premiumIgrBig')
+
+
+def premiumIgrSmall():
+    return _getIcon('premiumIgrSmall')
+
+
+def freeXP():
+    return _getIcon('freeXP')
+
+
+def gold():
+    return _getIcon('gold')
+
+
+def nut():
+    return _getIcon('nut')
+
+
+def clock():
+    return _getIcon('clock')

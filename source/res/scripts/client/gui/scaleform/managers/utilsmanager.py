@@ -61,12 +61,12 @@ class UtilsManager(UtilsManagerMeta):
         return template.format(absoluteUrl, properties.width, properties.height, properties.vSpace, properties.hSpace)
 
     def getFirstDayOfWeek(self):
-        return calendar.firstweekday() + 1
+        return BigWorld.wg_firstDayOfWeek() + 1
 
     def getWeekDayNames(self, full, isUpper, isLower):
         source = list(MENU.DATETIME_WEEKDAYS_FULL_ENUM if full else MENU.DATETIME_WEEKDAYS_SHORT_ENUM)
         result = []
-        for day in calendar.Calendar().iterweekdays():
+        for day in calendar.Calendar(firstweekday=BigWorld.wg_firstDayOfWeek()).iterweekdays():
             name = i18n.makeString(source[day])
             if isUpper:
                 name = self.changeStringCasing(name, True, None)

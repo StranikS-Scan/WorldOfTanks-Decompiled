@@ -14,4 +14,4 @@ class MedalPoppelAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'medalPoppel')
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRandomStats().getSpottedEnemiesCount() + dossier.getTeam7x7Stats().getSpottedEnemiesCount() + dossier.getFortBattlesStats().getSpottedEnemiesCount() + dossier.getFortSortiesStats().getSpottedEnemiesCount()
+        return dossier.getRandomStats().getSpottedEnemiesCount() - dossier.getClanStats().getSpottedEnemiesCount() + dossier.getTeam7x7Stats().getSpottedEnemiesCount() + dossier.getFortBattlesStats().getSpottedEnemiesCount() + dossier.getFortSortiesStats().getSpottedEnemiesCount() + dossier.getGlobalMapStats().getSpottedEnemiesCount()

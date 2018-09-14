@@ -14,4 +14,4 @@ class MedalEkinsAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'medalEkins')
 
     def _readCurrentProgressValue(self, dossier):
-        return dossier.getRandomStats().getFrags8p() + dossier.getTeam7x7Stats().getFrags8p() + dossier.getFortBattlesStats().getFrags8p() + dossier.getFortSortiesStats().getFrags8p()
+        return dossier.getRandomStats().getFrags8p() + dossier.getTeam7x7Stats().getFrags8p() + dossier.getFortBattlesStats().getFrags8p() + dossier.getFortSortiesStats().getFrags8p() + dossier.getGlobalMapStats().getFrags8p()

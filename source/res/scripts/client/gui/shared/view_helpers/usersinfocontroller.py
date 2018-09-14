@@ -2,7 +2,7 @@
 import BigWorld
 from AccountCommands import isCodeValid
 from debug_utils import LOG_WARNING
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import RequestCtx
 from gui.shared.utils.requesters.RequestsController import RequestsController

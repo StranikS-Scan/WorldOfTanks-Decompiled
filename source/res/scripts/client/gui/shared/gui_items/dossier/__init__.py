@@ -81,19 +81,36 @@ class VehicleDossier(_Dossier, stats.VehicleDossierStats):
 
 class AccountDossier(_Dossier, stats.AccountDossierStats):
 
-    def __init__(self, dossier, playerDBID = None):
+    def __init__(self, dossier, playerDBID = None, rated7x7Seasons = None):
         super(AccountDossier, self).__init__(dossier, DOSSIER_TYPE.ACCOUNT, playerDBID)
+        self._rated7x7Seasons = rated7x7Seasons or {}
 
     def getGlobalRating(self):
         from gui.shared import g_itemsCache
         return g_itemsCache.items.stats.globalRating
 
     def pack(self):
-        return (AccountDossier, self._dossier.makeCompDescr(), self._playerDBID)
+        return (AccountDossier,
+         self._dossier.makeCompDescr(),
+         self._playerDBID,
+         self._rated7x7Seasons)
 
     @staticmethod
-    def unpack(dossierCD, playerDBID):
-        return AccountDossier(dossiers2.getAccountDossierDescr(dossierCD), playerDBID)
+    def unpack(dossierCD, playerDBID, seasons):
+        return AccountDossier(dossiers2.getAccountDossierDescr(dossierCD), playerDBID, seasons)
+
+    def getRated7x7SeasonDossier(self, seasonID):
+        return self._makeSeasonDossier(self._rated7x7Seasons.get(seasonID) or dossiers2.getRated7x7DossierDescr())
+
+    def getRated7x7Seasons(self):
+        result = {}
+        for sID, d in self._rated7x7Seasons.iteritems():
+            result[sID] = self._makeSeasonDossier(d)
+
+        return result
+
+    def _makeSeasonDossier(self, dossierDescr):
+        return ClubMemberDossier(dossierDescr, -1, self._playerDBID)
 
     def _getDossierItem(self):
         return self
@@ -110,8 +127,9 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         super(TankmanDossier, self).__init__(tankmanDossierDescr, DOSSIER_TYPE.TANKMAN, playerDBID)
         currentVehicleType = currentVehicleItem.descriptor.type if currentVehicleItem else None
         self.tmanDescr = tmanDescr
-        self.extStats = extDossier.getRandomStats()
-        self.addStats = extDossier.getTeam7x7Stats()
+        self.__totalStats = extDossier.getTotalStats()
+        self.__globalMapStats = extDossier.getGlobalMapStats()
+        self.__clanStats = extDossier.getClanStats()
         self.__extDossierDump = dumpDossier(extDossier)
         self.__currentVehicleIsPremium = currentVehicleItem and currentVehicleItem.isPremium
         self.__currentVehicleCrewXpFactor = currentVehicleType.crewXpFactor if currentVehicleType else 1.0
@@ -128,8 +146,8 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         return TankmanDossier(tankmen.TankmanDescr(tmanCompDescr), dossiers2.getTankmanDossierDescr(dossierCD), loadDossier(extDossierDump))
 
     def getAvgXP(self):
-        totalXP = self.extStats.getXP() + self.addStats.getXP()
-        totalBattles = self.extStats.getBattlesCount() + self.addStats.getBattlesCount()
+        totalXP = self.__totalStats.getXP() - self.__clanStats.getXP() + self.__globalMapStats.getXP()
+        totalBattles = self.__totalStats.getBattlesCount() - self.__clanStats.getBattlesCount() + self.__globalMapStats.getBattlesCount()
         if totalBattles == 0:
             return 0
         return totalXP / totalBattles
@@ -159,7 +177,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
         return ('skill', tankmen.getSkillsConfig()[self.tmanDescr.skills[-1]]['icon'])
 
     def __getNextSkillBattlesLeft(self, tankman):
-        if not self.getBattlesCount() or not self.extStats.getBattlesCount() or not self.extStats.getXP():
+        if not self.getBattlesCount():
             result = None
         else:
             avgExp = self.getAvgXP()
@@ -202,7 +220,7 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
          'image': image}
 
     def __repr__(self):
-        return ('TankmanDossier<extStats=%r; addStats=%r>' % self.extStats, self.addStats)
+        return 'TankmanDossier<stats.__totalStats=%r>' % self.__totalStats
 
 
 class FortDossier(_Dossier, stats.FortDossierStats):

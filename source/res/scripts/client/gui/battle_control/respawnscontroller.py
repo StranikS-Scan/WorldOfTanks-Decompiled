@@ -2,14 +2,15 @@
 import weakref
 import BigWorld
 from collections import namedtuple
-from gui import nationCompareByIndex
+import operator
+from gui.shared import g_itemsCache
 from items import vehicles
-from gui.battle_control.arena_info import IArenaController
+from gui.battle_control.arena_info.interfaces import IArenaRespawnController
 _Vehicle = namedtuple('_Vehicle', ('intCD', 'type', 'vehAmmo'))
 _RespawnInfo = namedtuple('_RespawnInfo', ('vehicleID', 'respawnTime'))
 
-class RespawnsController(IArenaController):
-    __slots__ = ('__ui', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback')
+class RespawnsController(IArenaRespawnController):
+    __slots__ = ('__ui', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__battle', '__showUICallback')
     __SHOW_UI_COOLDOWN = 3.0
 
     def __init__(self):
@@ -57,17 +58,20 @@ class RespawnsController(IArenaController):
         BigWorld.player().base.chooseVehicleForRespawn(vehicleID)
         self.__ui.setSelectedVehicle(vehicleID, self.__vehicles, self.__cooldowns)
 
+    def spawnVehicle(self, vehicleID):
+        self.__respawnInfo = None
+        if self.__ui is not None:
+            if BigWorld.player().isGuiVisible:
+                self.__battle.showAll(True)
+            self.__ui.hide()
+            self.__stopTimer()
+        return
+
     def updateRespawnVehicles(self, vehsList):
         self.__vehicles = []
-
-        def comparator(x, y):
-            xNationID, _ = vehicles.parseVehicleCompactDescr(x['compDescr'])
-            yNationID, _ = vehicles.parseVehicleCompactDescr(y['compDescr'])
-            return nationCompareByIndex(xNationID, yNationID)
-
-        for v in sorted(vehsList, comparator):
-            descr = vehicles.getVehicleType(v['compDescr'])
-            self.__vehicles.append(_Vehicle(descr.compactDescr, descr, v['vehAmmo']))
+        vehs = map(lambda v: (g_itemsCache.items.getItemByCD(vehicles.getVehicleTypeCompactDescr(v['compDescr'])), v), vehsList)
+        for v, vData in sorted(vehs, key=operator.itemgetter(0)):
+            self.__vehicles.append(_Vehicle(v.intCD, v.descriptor.type, vData['vehAmmo']))
 
     def updateRespawnCooldowns(self, cooldowns):
         self.__cooldowns = cooldowns
@@ -86,15 +90,6 @@ class RespawnsController(IArenaController):
                 self.__showUICallback = BigWorld.callback(self.__SHOW_UI_COOLDOWN, show)
             else:
                 show()
-        return
-
-    def updateRespawnRessurectedInfo(self, respawnInfo):
-        self.__respawnInfo = None
-        if self.__ui is not None:
-            if BigWorld.player().isGuiVisible:
-                self.__battle.showAll(True)
-            self.__ui.hide()
-            self.__stopTimer()
         return
 
     def __show(self):

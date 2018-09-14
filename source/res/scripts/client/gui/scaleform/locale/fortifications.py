@@ -13,6 +13,8 @@ class FORTIFICATIONS(object):
     CLANSTATS_PARAMS_SORTIE_AVGDEFRES_TOOLTIP = '#fortifications:clanStats/params/sortie/avgDefres/tooltip'
     CLANSTATS_PARAMS_PERIODDEFENCE_WINS_TOOLTIP = '#fortifications:clanStats/params/periodDefence/wins/tooltip'
     CLANSTATS_PARAMS_PERIODDEFENCE_AVGDEFRES_TOOLTIP = '#fortifications:clanStats/params/periodDefence/avgDefres/tooltip'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME = '#fortifications:FortIntelligence/ClanFilterPopover/tooltipOwnDefenceTime'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME = '#fortifications:FortIntelligence/ClanFilterPopover/tooltipLockTime'
     GENERAL_DIRECTION = '#fortifications:General/direction'
     GENERAL_DIRECTIONNAME1 = '#fortifications:General/directionName1'
     GENERAL_DIRECTIONNAME2 = '#fortifications:General/directionName2'
@@ -362,6 +364,8 @@ class FORTIFICATIONS(object):
     SORTIE_LISTVIEW_ENTERTEXT = '#fortifications:sortie/listView/enterText'
     SORTIE_LISTVIEW_SLOT_CLOSED = '#fortifications:sortie/listView/slot/closed'
     SORTIE_LISTVIEW_ABSENTDIVISIONS = '#fortifications:sortie/listView/absentDivisions'
+    SORTIE_LISTVIEW_CURFEW = '#fortifications:sortie/listView/curfew'
+    SORTIE_LISTVIEW_SORTIESREGULATIONS = '#fortifications:sortie/listView/sortiesRegulations'
     SORTIE_ROOM_CANDIDATES = '#fortifications:sortie/room/candidates'
     SORTIE_ROOM_INVITEFRIENDS = '#fortifications:sortie/room/inviteFriends'
     SORTIE_ROOM_MEMBERS = '#fortifications:sortie/room/members'
@@ -448,7 +452,6 @@ class FORTIFICATIONS(object):
     FORTINTELLIGENCE_CLANFILTERPOPOVER_HEADER = '#fortifications:FortIntelligence/ClanFilterPopover/header'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_CLANLEVEL = '#fortifications:FortIntelligence/ClanFilterPopover/clanLevel'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_STARTHOURRANGE = '#fortifications:FortIntelligence/ClanFilterPopover/startHourRange'
-    FORTINTELLIGENCE_CLANFILTERPOPOVER_AVAILABILITY = '#fortifications:FortIntelligence/ClanFilterPopover/availability'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_AVAILABILITY_ITEM_ANY = '#fortifications:FortIntelligence/ClanFilterPopover/availability/item/any'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_AVAILABILITY_ITEM_TODAY = '#fortifications:FortIntelligence/ClanFilterPopover/availability/item/today'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_AVAILABILITY_ITEM_TOMORROW = '#fortifications:FortIntelligence/ClanFilterPopover/availability/item/tomorrow'
@@ -457,6 +460,10 @@ class FORTIFICATIONS(object):
     FORTINTELLIGENCE_CLANFILTERPOPOVER_DEFAULTBUTTONTEXT = '#fortifications:FortIntelligence/ClanFilterPopover/defaultButtonText'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_APPLYBUTTONTEXT = '#fortifications:FortIntelligence/ClanFilterPopover/applyButtonText'
     FORTINTELLIGENCE_CLANFILTERPOPOVER_CANCELBUTTONTEXT = '#fortifications:FortIntelligence/ClanFilterPopover/cancelButtonText'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME_HEADER = FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME + '/header'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME_BODY = FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPLOCKTIME + '/body'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME_HEADER = FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME + '/header'
+    FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME_BODY = FORTINTELLIGENCE_CLANFILTERPOPOVER_TOOLTIPOWNDEFENCETIME + '/body'
     FORTINTELLIGENCE_TAGSEARCHTEXTINPUT_DEFAULT = '#fortifications:FortIntelligence/tagSearchTextInput/default'
     FORTINTELLIGENCE_CLEARFILTERBTN_TITLE = '#fortifications:FortIntelligence/clearFilterBtn/title'
     FORTINTELLIGENCE_FORTINTELFILTER_FILTERBUTTONSTATUS_MAX = '#fortifications:FortIntelligence/fortIntelFilter/filterButtonStatus/max'
@@ -499,7 +506,9 @@ class FORTIFICATIONS(object):
     DEMOUNTBUILDING_APPLYBUTTON_LABEL = '#fortifications:DemountBuilding/applyButton/label'
     DEMOUNTBUILDING_CANCELBUTTON_LABEL = '#fortifications:DemountBuilding/cancelButton/label'
     CHOICEDIVISION_WINDOWTITLE = '#fortifications:ChoiceDivision/windowTitle'
+    CHOICEDIVISION_CHANGEWINDOWTITLE = '#fortifications:ChoiceDivision/changewindowTitle'
     CHOICEDIVISION_APPLYBTNLBL = '#fortifications:ChoiceDivision/applyBtnLbl'
+    CHOICEDIVISION_CHANGEBTNLBL = '#fortifications:ChoiceDivision/changeBtnLbl'
     CHOICEDIVISION_CANCELBTNLBL = '#fortifications:ChoiceDivision/cancelBtnLbl'
     CHOICEDIVISION_DESCRIPTION = '#fortifications:ChoiceDivision/description'
     CHOICEDIVISION_DIVISIONFULLNAME = '#fortifications:ChoiceDivision/divisionFullName'
@@ -688,6 +697,13 @@ class FORTIFICATIONS(object):
     FORTCONSUMABLEORDER_DESCR_12 = '#fortifications:fortConsumableOrder/descr/12'
     FORTCONSUMABLEORDER_LEVELLBL = '#fortifications:fortConsumableOrder/levelLbl'
     FORTCONSUMABLEORDER_BATTLEPARAMS = '#fortifications:fortConsumableOrder/battleParams'
+    SWITCHPERIPHERYWINDOW_WINDOWTITLE = '#fortifications:switchPeripheryWindow/windowTitle'
+    SWITCHPERIPHERYWINDOW_HEADER = '#fortifications:switchPeripheryWindow/header'
+    SWITCHPERIPHERYWINDOW_DESCRIPTION = '#fortifications:switchPeripheryWindow/description'
+    SWITCHPERIPHERYWINDOW_SELECTSERVERLABEL = '#fortifications:switchPeripheryWindow/selectServerLabel'
+    SWITCHPERIPHERYWINDOW_APPLYSWITCHLABEL = '#fortifications:switchPeripheryWindow/applySwitchLabel'
+    SWITCHPERIPHERYWINDOW_BTNSWITCH = '#fortifications:switchPeripheryWindow/btnSwitch'
+    SWITCHPERIPHERYWINDOW_BTNCANCEL = '#fortifications:switchPeripheryWindow/btnCancel'
     FORTCONSUMABLEORDER_DESCR_ENUM = (FORTCONSUMABLEORDER_DESCR_11, FORTCONSUMABLEORDER_DESCR_12)
     SORTIE_DIVISION_NAME_ENUM = (SORTIE_DIVISION_NAME_ALL,
      SORTIE_DIVISION_NAME_ABSOLUTE,
@@ -807,6 +823,10 @@ class FORTIFICATIONS(object):
      BUILDINGSPROCESS_SHORTDESCR_CAR_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_BOMBER_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_ARTILLERY_BUILDING)
+    BUILDINGDIRECTION_LABEL_ENUM = (BUILDINGDIRECTION_LABEL1,
+     BUILDINGDIRECTION_LABEL2,
+     BUILDINGDIRECTION_LABEL3,
+     BUILDINGDIRECTION_LABEL4)
     FORTINTELLIGENCE_CLANTYPES_ENUM = (FORTINTELLIGENCE_CLANTYPES_ALL, FORTINTELLIGENCE_CLANTYPES_BOOKED, FORTINTELLIGENCE_CLANTYPES_LAST)
     BUILDINGS_PROCESSORDERINFO_ENUM = (BUILDINGS_PROCESSORDERINFO_WARSCHOOL_BUILDING,
      BUILDINGS_PROCESSORDERINFO_TROPHY_BUILDING,
@@ -948,6 +968,13 @@ class FORTIFICATIONS(object):
     def buildingsprocess_shortdescr(key):
         outcome = '#fortifications:BuildingsProcess/shortDescr/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGSPROCESS_SHORTDESCR_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome
+
+    @staticmethod
+    def buildingdirection_label(key):
+        outcome = '#fortifications:BuildingDirection/label1%s' % key
+        if outcome not in FORTIFICATIONS.BUILDINGDIRECTION_LABEL_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

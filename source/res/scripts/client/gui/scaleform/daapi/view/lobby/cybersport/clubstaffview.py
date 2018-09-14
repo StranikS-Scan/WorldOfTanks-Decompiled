@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/ClubStaffView.py
 import BigWorld
 from adisp import process
-from account_helpers import getPlayerDatabaseID
+from club_shared import CLUB_LIMITS
+from account_helpers import getAccountDatabaseID
 from gui.Scaleform.daapi.view.lobby.cyberSport.ClubProfileWindow import ClubPage
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
@@ -20,6 +21,51 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 
+def _getFlashMemberType(member):
+    if member.isOwner():
+        return FORMATION_MEMBER_TYPE.OWNER
+    elif member.isOfficer():
+        return FORMATION_MEMBER_TYPE.OFFICER
+    else:
+        return FORMATION_MEMBER_TYPE.SOLDIER
+
+
+def _packAppointment(profile, club, member, memberType, limits):
+    return {'memberType': memberType,
+     'canPromoted': member.isPrivate() and limits.canAssignOfficer(profile, club).success,
+     'canDemoted': member.isOfficer() and limits.canAssignPrivate(profile, club).success,
+     'promoteBtnIcon': RES_ICONS.MAPS_ICONS_BUTTONS_LEVEL_UP,
+     'officerIcon': RES_ICONS.MAPS_ICONS_LIBRARY_COMMANDERICON,
+     'demoteBtnIcon': RES_ICONS.MAPS_ICONS_LIBRARY_CROSS,
+     'ownerIcon': RES_ICONS.MAPS_ICONS_LIBRARY_OWNERICON,
+     'officerIconTooltip': TOOLTIPS.STATICFORMATION_OFFICERICON,
+     'ownerIconTooltip': TOOLTIPS.STATICFORMATION_OWNERICON,
+     'demoteBtnTooltip': TOOLTIPS.STATICFORMATION_DEMOTEBTN,
+     'promoteBtnTooltip': TOOLTIPS.STATICFORMATION_PROMOTEBTN}
+
+
+def _packTableHeaderItem(tooltip, iconId, label = '', icon = None, sortOrder = 0):
+    return {'label': text_styles.standard(label) if label else '',
+     'toolTip': tooltip,
+     'sortOrder': sortOrder,
+     'iconId': iconId,
+     'iconSource': icon}
+
+
+def _packTableHeaders():
+    return [_packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT, 'appointmentSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERAPPOINTMENT_TEXT, sortOrder=1),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME, 'userDataSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERNAME_TEXT, sortOrder=2),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING, 'ratingSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT, 'battlesCountSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_BATTLES24),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERDAMAGECOEF, 'damageCoefSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_DMGRATIO24),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRDAMAGE, 'avrDamageSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_AVGDAMAGE24),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVREXPIRIENCE, 'avrExperienceSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRASSISTDAMAGE, 'avrAssistDamageSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_ASSIST24),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERTAUNT, 'tauntSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_ARMORUSING24),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERJOINDATE, 'joinDateSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERJOINDATE_TEXT, sortOrder=3),
+     _packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERREMOVEMEMBER, 'canDelete')]
+
+
 class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
 
     def __init__(self):
@@ -27,7 +73,7 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
         UsersInfoHelper.__init__(self)
         ClubPage.__init__(self)
         self.__openCloseCallbackID = None
-        self.__viewerDbID = getPlayerDatabaseID()
+        self.__viewerDbID = getAccountDatabaseID()
         self.addListener(events.CoolDownEvent.CLUB, self.__handleClubCooldown, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
@@ -61,7 +107,9 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
     def onClubMembersChanged(self, members):
         club = self.clubsCtrl.getClub(self._clubDbID)
         if club:
+            self.as_updateHeaderDataS(self.__packHeaderSettings(club))
             self.as_updateStaffDataS(self.__packStaffData(club, syncUserInfo=True))
+            self.as_setStaticHeaderDataS(self.__packStaticHeaderData(club))
 
     def onUserNamesReceived(self, names):
         club = self.clubsCtrl.getClub(self._clubDbID)
@@ -93,42 +141,28 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
                 SystemMessages.pushMessage(club_fmts.getAssignPrivateSysMsg(self.getUserFullName(int(memberDbID))))
             self.hideWaiting()
 
-    @process
-    def removeMember(self, memberDbID, userName):
-        member = self.clubsCtrl.getClub(self._clubDbID).getMember(memberDbID)
-        if member.isOwner():
-            i18nId = 'staticFormation/staffView/discontinuingFormationConfirmation'
-        elif self.__viewerDbID == memberDbID:
-            i18nId = 'staticFormation/staffView/leaveClubConfirmation'
-        else:
-            i18nId = 'staticFormation/staffView/removeMemberConfirmation'
-        isOk = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(i18nId, messageCtx={'userName': userName}))
-        if isOk:
-            if member.isOwner():
-                ctx = DestroyClubCtx(self._clubDbID)
-                waitingID = WAITING.CLUBS_DESTROYCLUB
-                successSysMsg = club_fmts.getDestroyClubSysMsg(self.clubsCtrl.getClub(self._clubDbID))
-            elif self.__viewerDbID == memberDbID:
-                ctx = LeaveClubCtx(self._clubDbID)
-                waitingID = WAITING.CLUBS_LEAVECLUB
-                successSysMsg = club_fmts.getLeaveClubSysMsg(self.clubsCtrl.getClub(self._clubDbID))
+    def removeMe(self):
+        club = self.clubsCtrl.getClub(self._clubDbID)
+        profile = self.clubsCtrl.getProfile()
+        limits = self.clubsState.getLimits()
+        if club:
+            if limits.canDestroyClub(profile, club).success:
+                self._disbandClub(club)
             else:
-                ctx = KickMemberCtx(self._clubDbID, memberDbID)
-                waitingID = WAITING.CLUBS_CLUBKICKMEMBER
-                successSysMsg = club_fmts.getKickMemberSysMsg(self.getUserFullName(memberDbID))
-            self.showWaiting(waitingID)
-            result = yield self.clubsCtrl.sendRequest(ctx)
-            if result.isSuccess():
-                SystemMessages.pushMessage(successSysMsg)
-            self.hideWaiting()
+                self._leaveClub()
+
+    def removeMember(self, memberDbID, userName):
+        if memberDbID == self.__viewerDbID:
+            self.removeMe()
+        else:
+            self._kickMember(memberDbID, userName)
 
     @process
     def setRecruitmentOpened(self, opened):
         club = self.clubsCtrl.getClub(self._clubDbID)
-        stateIsOpened = club.getState().isOpened()
-        if stateIsOpened != opened:
+        if club.getState().isOpened() != opened:
             sendRequest = True
-            if not opened and (len(club.getInvites(onlyActive=True)) or len(club.getApplicants(onlyActive=True))):
+            if not opened and len(club.getApplicants(onlyActive=True)):
                 sendRequest = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('staticFormation/staffView/closeClub'))
             if sendRequest:
                 waitingID = WAITING.CLUBS_OPENCLUB if opened else WAITING.CLUBS_CLOSECLUB
@@ -137,20 +171,42 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
                 if result.isSuccess():
                     SystemMessages.pushMessage(club_fmts.getOpenClubSysMsg(opened))
                 self.hideWaiting()
-        club = self.clubsCtrl.getClub(self._clubDbID)
         self.as_updateHeaderDataS(self.__packHeaderSettings(club))
 
-    def _populate(self):
-        super(ClubStaffView, self)._populate()
+    def _disbandClub(self, club):
+        if len(club.getMembers()) > 1:
+            i18nKey = 'discontinuingFormationConfirmation'
+        else:
+            i18nKey = 'discontinuingEmptyFormationConfirmation'
+        sysMsg = club_fmts.getDestroyClubSysMsg(self.clubsCtrl.getClub(self._clubDbID))
+        self._doExitAction(DestroyClubCtx(self._clubDbID), I18nConfirmDialogMeta('staticFormation/staffView/%s' % i18nKey), WAITING.CLUBS_DESTROYCLUB, sysMsg)
+
+    def _leaveClub(self):
+        sysMsg = club_fmts.getLeaveClubSysMsg(self.clubsCtrl.getClub(self._clubDbID))
+        self._doExitAction(LeaveClubCtx(self._clubDbID), I18nConfirmDialogMeta('staticFormation/staffView/leaveClubConfirmation'), WAITING.CLUBS_LEAVECLUB, sysMsg)
+
+    def _kickMember(self, memberDbID, memberUserName):
+        sysMsg = club_fmts.getKickMemberSysMsg(memberUserName)
+        self._doExitAction(KickMemberCtx(self._clubDbID, memberDbID), I18nConfirmDialogMeta('staticFormation/staffView/removeMemberConfirmation', messageCtx={'userName': memberUserName}), WAITING.CLUBS_CLUBKICKMEMBER, sysMsg)
+
+    @process
+    def _doExitAction(self, ctx, dialogMeta, waiting, sysMsg):
+        isOk = yield DialogsInterface.showDialog(dialogMeta)
+        if isOk:
+            self.showWaiting(waiting)
+            result = yield self.clubsCtrl.sendRequest(ctx)
+            if result.isSuccess():
+                SystemMessages.pushMessage(sysMsg)
+            self.hideWaiting()
 
     def _dispose(self):
-        super(ClubStaffView, self)._dispose()
         self.clearClub()
         self.__viewerDbID = None
         self.removeListener(events.CoolDownEvent.CLUB, self.__handleClubCooldown, scope=EVENT_BUS_SCOPE.LOBBY)
         if self.__openCloseCallbackID:
             BigWorld.cancelCallback(self.__openCloseCallbackID)
             self.__openCloseCallbackID = None
+        super(ClubStaffView, self)._dispose()
         return
 
     def _initializeGui(self, club):
@@ -158,55 +214,55 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
         self.as_updateHeaderDataS(self.__packHeaderSettings(club))
         self.as_updateStaffDataS(self.__packStaffData(club, syncUserInfo=True))
 
-    def __packTableHeaders(self):
-        return [self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT, 'appointmentSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERAPPOINTMENT_TEXT, sortOrder=1),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME, 'userDataSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERNAME_TEXT, sortOrder=2),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING, 'ratingSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT, 'battlesCountSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_BATTLES24),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERDAMAGECOEF, 'damageCoefSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_DMGRATIO24),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRDAMAGE, 'avrDamageSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_AVGDAMAGE24),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVREXPIRIENCE, 'avrExperienceSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_AVGEXP24),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAVRASSISTDAMAGE, 'avrAssistDamageSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_ASSIST24),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERTAUNT, 'tauntSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_ARMORUSING24),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERJOINDATE, 'joinDateSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERJOINDATE_TEXT, sortOrder=3),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERREMOVEMEMBER, 'canDelete')]
-
-    def __packTableHeaderItem(self, tooltip, iconId, label = '', icon = None, sortOrder = 0):
-        return {'label': text_styles.standard(label) if label else '',
-         'toolTip': tooltip,
-         'sortOrder': sortOrder,
-         'iconId': iconId,
-         'iconSource': icon}
-
     def __packHeaderSettings(self, club):
-        memberInfo = club.getMember(self.__viewerDbID)
+        isInStaff = club.hasMember(self.__viewerDbID)
+        isEnoughPlayers = club.isStaffed()
         profile = self.clubsCtrl.getProfile()
         limits = self.clubsState.getLimits()
-        canInvite = limits.canSendInvite(profile, club).success
-        notEnoughPlayers = not club.canParticipateBattles()
-        return {'canInvite': canInvite,
-         'inviteBtnText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_INVITEBTN_TEXT),
-         'inviteBtnTooltip': TOOLTIPS.STATICFORMATIONSTAFFVIEW_INVITEBTN,
-         'canOpenClose': limits.canOpenClub(profile, club).success,
+        canSendInvite = limits.canSendInvite(profile, club).success
+        canSeeApplicants = limits.canSeeApplicants(profile, club).success
+        if isEnoughPlayers:
+            btnInviteTooltip = TOOLTIPS.STATICFORMATIONSTAFFVIEW_INVITEBTNDIS
+        else:
+            btnInviteTooltip = TOOLTIPS.STATICFORMATIONSTAFFVIEW_INVITEBTN
+        removeBtnVisible = limits.canDestroyClub(profile, club).success or limits.canLeaveClub(profile, club).success
+        return {'lblDescriptionVisible': not isInStaff,
+         'lblStaffedVisible': isEnoughPlayers and isInStaff,
+         'btnRemoveVisible': removeBtnVisible,
+         'btnInviteVisible': canSendInvite,
+         'btnInviteEnable': not isEnoughPlayers,
+         'showInviteBtnAnimation': not isEnoughPlayers and canSendInvite,
+         'btnInviteTooltip': btnInviteTooltip,
          'isRecruitmentOpened': club.getState().isOpened(),
-         'isClubMember': memberInfo is not None,
-         'showInviteBtnAnimation': notEnoughPlayers and canInvite}
+         'btnRecruitmentVisible': canSeeApplicants,
+         'cbOpenedVisible': limits.canOpenClub(profile, club).success}
 
     def __packStaticHeaderData(self, club):
-        memberInfo = club.getMember(self.__viewerDbID)
-        if memberInfo:
-            if memberInfo.isOwner():
-                description = CYBERSPORT.STATICFORMATION_STAFFVIEW_DESCRIPTION_OWNER_TEXT
-            else:
-                description = CYBERSPORT.STATICFORMATION_STAFFVIEW_DESCRIPTION_MEMBER_TEXT
+        profile = self.clubsCtrl.getProfile()
+        limits = self.clubsState.getLimits()
+        if limits.canDestroyClub(profile, club).success:
+            btnDestroyText = _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_DESTROYSTATIC_TEXT)
+        elif limits.canLeaveClub(profile, club).success:
+            btnDestroyText = _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_EXITSTATIC_TEXT)
         else:
-            description = _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_DESCRIPTION_OTHER_TEXT, clubName=club.getUserName())
-        return {'title': text_styles.highTitle(CYBERSPORT.STATICFORMATION_STAFFVIEW_TITLE_TEXT),
-         'description': text_styles.standard(description),
-         'recruitmentBtnText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_RECRUITMENTBTN_TEXT),
-         'recruitmentOpenedText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_RECRUITMENTOPENEDCHKBX_TEXT),
-         'recruitmentBtnTooltip': TOOLTIPS.STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN,
-         'tableHeaders': self.__packTableHeaders()}
+            btnDestroyText = ''
+        if club.canParticipateBattles():
+            lblStaffedText = ''.join([text_styles.success(CYBERSPORT.STATICFORMATION_STAFFVIEW_LBLSTAFFED_TEXT),
+             text_styles.standard(' ('),
+             text_styles.main(str(len(club.getMembers()))),
+             text_styles.standard('/%d)' % CLUB_LIMITS.MAX_MEMBERS)])
+        else:
+            lblStaffedText = ''
+        return {'lblTitleText': text_styles.highTitle(CYBERSPORT.STATICFORMATION_STAFFVIEW_TITLE_TEXT),
+         'lblDescriptionText': text_styles.standard(_ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_DESCRIPTION_OTHER_TEXT, clubName=club.getUserName())),
+         'btnRecruitmentText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_RECRUITMENTBTN_TEXT),
+         'btnRecruitmentTooltip': TOOLTIPS.STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN,
+         'btnInviteText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_INVITEBTN_TEXT),
+         'btnRemoveText': btnDestroyText,
+         'cbOpenedText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_RECRUITMENTOPENEDCHKBX_TEXT),
+         'lblStaffedText': lblStaffedText,
+         'lblStaffedTooltip': TOOLTIPS.STATICFORMATIONSTAFFVIEW_LBLSTAFFED,
+         'tableHeaders': _packTableHeaders()}
 
     def __handleClubCooldown(self, event):
         if event.requestID in (CLUB_REQUEST_TYPE.OPEN_CLUB, CLUB_REQUEST_TYPE.CLOSE_CLUB):
@@ -223,16 +279,15 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
         return
 
     def __packStaffData(self, club, syncUserInfo = False):
-        formatDate = BigWorld.wg_getShortDateFormat
         members = []
         membersDict = club.getMembers()
         membersCount = len(membersDict)
         for dbID, member in membersDict.iteritems():
-            memberType = self.__getFlashMemberType(member)
+            memberType = _getFlashMemberType(member)
             isSelf = dbID == self.__viewerDbID
             limits = self.clubsState.getLimits()
             profile = self.clubsCtrl.getProfile()
-            memberStats = member.getTotalDossier().getRated7x7Stats()
+            memberStats = member.getSeasonDossier().getRated7x7Stats()
             battlesCount = memberStats.getBattlesCount()
             rating = self.getUserRating(dbID)
             damageCoef = memberStats.getDamageEfficiency() or 0
@@ -241,9 +296,10 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
             avgExperience = memberStats.getAvgXP() or 0
             armorUsingEfficiency = memberStats.getArmorUsingEfficiency() or 0
             joinDate = member.getJoiningTime()
-            removeBtnTooltip = TOOLTIPS.STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN
             if isSelf:
                 removeBtnTooltip = TOOLTIPS.STATICFORMATIONSTAFFVIEW_REMOVEHIMSELFBTN
+            else:
+                removeBtnTooltip = TOOLTIPS.STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN
             members.append({'memberId': dbID,
              'canRemoved': self.__canBeRemoved(profile, club, member, membersCount, limits),
              'canPassOwnership': limits.canTransferOwnership(profile, club).success,
@@ -251,9 +307,9 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
              'removeMemberBtnIcon': RES_ICONS.MAPS_ICONS_LIBRARY_CROSS,
              'removeMemberBtnTooltip': removeBtnTooltip,
              'appointmentSortValue': memberType,
-             'appointment': self.__packAppointment(profile, club, member, memberType, limits),
+             'appointment': _packAppointment(profile, club, member, memberType, limits),
              'ratingSortValue': rating,
-             'rating': text_styles.neutral(shared_fmts.getGlobalRatingFmt(rating)),
+             'rating': self.getGuiUserRating(dbID, text_styles.neutral),
              'battlesCountSortValue': battlesCount,
              'battlesCount': text_styles.main(BigWorld.wg_getIntegralFormat(battlesCount)),
              'damageCoefSortValue': damageCoef,
@@ -267,15 +323,14 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
              'tauntSortValue': armorUsingEfficiency,
              'taunt': text_styles.main(BigWorld.wg_getNiceNumberFormat(armorUsingEfficiency)),
              'joinDateSortValue': joinDate,
-             'joinDate': text_styles.standard(formatDate(joinDate)),
+             'joinDate': text_styles.standard(BigWorld.wg_getShortDateFormat(joinDate)),
              'userDataSortValue': self.getUserFullName(dbID).lower(),
              'userData': self.getGuiUserData(dbID),
              'clubDbID': self._clubDbID})
 
-        members = sorted(members, key=lambda k: k['userDataSortValue'].lower())
         if syncUserInfo:
             self.syncUsersInfo()
-        return {'members': members}
+        return {'members': sorted(members, key=lambda k: k['userDataSortValue'].lower())}
 
     def __canBeRemoved(self, profile, club, member, membersCount, limits):
         isSelf = member.getDbID() == self.__viewerDbID
@@ -286,24 +341,3 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
                 return True
         else:
             return limits.canKickMember(profile, club).success
-
-    def __getFlashMemberType(self, member):
-        if member.isOwner():
-            return FORMATION_MEMBER_TYPE.OWNER
-        elif member.isOfficer():
-            return FORMATION_MEMBER_TYPE.OFFICER
-        else:
-            return FORMATION_MEMBER_TYPE.SOLDIER
-
-    def __packAppointment(self, profile, club, member, memberType, limits):
-        return {'memberType': memberType,
-         'canPromoted': member.isPrivate() and limits.canAssignOfficer(profile, club).success,
-         'canDemoted': member.isOfficer() and limits.canAssignPrivate(profile, club).success,
-         'promoteBtnIcon': RES_ICONS.MAPS_ICONS_BUTTONS_LEVEL_UP,
-         'officerIcon': RES_ICONS.MAPS_ICONS_LIBRARY_COMMANDERICON,
-         'demoteBtnIcon': RES_ICONS.MAPS_ICONS_LIBRARY_CROSS,
-         'ownerIcon': RES_ICONS.MAPS_ICONS_LIBRARY_OWNERICON,
-         'officerIconTooltip': TOOLTIPS.STATICFORMATION_OFFICERICON,
-         'ownerIconTooltip': TOOLTIPS.STATICFORMATION_OWNERICON,
-         'demoteBtnTooltip': TOOLTIPS.STATICFORMATION_DEMOTEBTN,
-         'promoteBtnTooltip': TOOLTIPS.STATICFORMATION_PROMOTEBTN}

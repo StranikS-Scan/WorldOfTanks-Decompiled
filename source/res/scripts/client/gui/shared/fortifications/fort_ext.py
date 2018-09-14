@@ -2,7 +2,7 @@
 import BigWorld
 import Event
 from FortifiedRegionBase import FORT_ERROR, FORT_AUTO_UNSUBSCRIBE_TIMEOUT
-from account_helpers import getPlayerDatabaseID
+from account_helpers import getAccountDatabaseID
 from constants import REQUEST_COOLDOWN
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
@@ -52,7 +52,7 @@ class PlayerFortRequester(SimpleFortRequester):
 
     def __init__(self, success = None):
         super(PlayerFortRequester, self).__init__(success)
-        self._databaseID = getPlayerDatabaseID()
+        self._databaseID = getAccountDatabaseID()
         self._individualRqIDs = set()
 
     def init(self):

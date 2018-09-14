@@ -114,14 +114,24 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_6 = '#menu:loading/battleTypes/desc/6'
     LOADING_BATTLETYPES_7 = '#menu:loading/battleTypes/7'
     LOADING_BATTLETYPES_DESC_7 = '#menu:loading/battleTypes/desc/7'
+    LOADING_BATTLETYPES_7_RESOURCE = '#menu:loading/battleTypes/7/resource'
+    LOADING_BATTLETYPES_DESC_7_RESOURCE = '#menu:loading/battleTypes/desc/7/resource'
+    LOADING_BATTLETYPES_7_MULTITEAM = '#menu:loading/battleTypes/7/multiteam'
+    LOADING_BATTLETYPES_DESC_7_MULTITEAM = '#menu:loading/battleTypes/desc/7/multiteam'
     LOADING_BATTLETYPES_8 = '#menu:loading/battleTypes/8'
     LOADING_BATTLETYPES_DESC_8 = '#menu:loading/battleTypes/desc/8'
     LOADING_BATTLETYPES_9 = '#menu:loading/battleTypes/9'
     LOADING_BATTLETYPES_DESC_9 = '#menu:loading/battleTypes/desc/9'
     LOADING_BATTLETYPES_10 = '#menu:loading/battleTypes/10'
     LOADING_BATTLETYPES_DESC_10 = '#menu:loading/battleTypes/desc/10'
+    LOADING_BATTLETYPES_MIX = '#menu:loading/battleTypes/mix'
+    LOADING_BATTLETYPES_RESOURCEPOINTS = '#menu:loading/battleTypes/resourcePoints'
+    LOADING_BATTLETYPES_MIX_UPPER = '#menu:loading/battleTypes/mix_upper'
+    LOADING_BATTLETYPES_RESOURCEPOINTS_UPPER = '#menu:loading/battleTypes/resourcePoints_upper'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
+    LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
+    LOADING_TEAMS_ENEMIES = '#menu:loading/teams/enemies'
     LOADING_HELPTIP = '#menu:loading/helpTip'
     HANGAR_VEHICLE_LOCKED = '#menu:hangar/vehicle_locked'
     LOBBY_MENU_TITLE = '#menu:lobby_menu/title'
@@ -226,6 +236,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY_BROKEN = '#menu:tankCarousel/vehicleStates/group_is_not_ready_broken'
     TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY_CREWNOTFULL = '#menu:tankCarousel/vehicleStates/group_is_not_ready_crewNotFull'
     TANKCAROUSEL_VEHICLESTATES_GROUPAMMONOTFULL = '#menu:tankCarousel/vehicleStates/groupAmmoNotFull'
+    TANKCAROUSEL_VEHICLESTATES_UNAVAILABLE = '#menu:tankCarousel/vehicleStates/unavailable'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
     STORE_VEHICLESTATES_CLANLOCKED = '#menu:store/vehicleStates/clanLocked'
@@ -472,7 +483,6 @@ class MENU(object):
     HEADERBUTTONS_NOTREADY = '#menu:headerButtons/notReady'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_HEADER = '#menu:headerButtons/fightBtn/tooltip/groupNotReady/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_BODY = '#menu:headerButtons/fightBtn/tooltip/groupNotReady/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_NOTE = '#menu:headerButtons/fightBtn/tooltip/groupNotReady/note'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_HEADER = '#menu:headerButtons/fightBtn/tooltip/vehicleNotValid/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_BODY = '#menu:headerButtons/fightBtn/tooltip/vehicleNotValid/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_NOTE = '#menu:headerButtons/fightBtn/tooltip/vehicleNotValid/note'
@@ -574,9 +584,6 @@ class MENU(object):
     EXCHANGE_SUBMIT = '#menu:exchange/submit'
     EXCHANGE_CANCEL = '#menu:exchange/cancel'
     EXCHANGE_NO_GOLD = '#menu:exchange/no_gold'
-    EXCHANGEVCOIN_TITLE = '#menu:exchangeVcoin/title'
-    EXCHANGEVCOIN_VCOINISTIGHT = '#menu:exchangeVcoin/vcoinIsTight'
-    EXCHANGEVCOIN_BUYVCOINBTNNAME = '#menu:exchangeVcoin/buyVcoinBtnName'
     EXCHANGEXP_TITLE = '#menu:exchangeXP/title'
     EXCHANGEXP_AVAILABLE = '#menu:exchangeXP/available'
     EXCHANGEXP_CHANGE = '#menu:exchangeXP/change'
@@ -685,6 +692,7 @@ class MENU(object):
     PREMIUMCONGRATULATION_HEDER = '#menu:premiumCongratulation/heder'
     PREMIUMCONGRATULATION_DESCRIPTION = '#menu:premiumCongratulation/description'
     PREMIUMCONGRATULATION_BTNLABEL = '#menu:premiumCongratulation/btnLabel'
+    PREMIUMCONGRATULATION_CLOSEBTN = '#menu:premiumCongratulation/closeBtn'
     PREMIUM_GOLD = '#menu:premium/gold'
     PREMIUM_SUBMITBUY = '#menu:premium/submitBuy'
     PREMIUM_SUBMITCONTINUE = '#menu:premium/submitContinue'
@@ -1185,6 +1193,7 @@ class MENU(object):
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_LOSE = '#menu:finalStatistic/commonStats/resultlabel/lose'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE = '#menu:finalStatistic/commonStats/resultlabel/tie'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TECHWIN = '#menu:finalStatistic/commonStats/resultlabel/techWin'
+    FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENDED = '#menu:finalStatistic/commonStats/resultlabel/ended'
     BROWSER_WINDOW_TITLE = '#menu:browser/window/title'
     BROWSER_DATAUNAVAILABLE_HEADER = '#menu:browser/dataUnavailable/header'
     BROWSER_DATAUNAVAILABLE_DESCRIPTION = '#menu:browser/dataUnavailable/description'
@@ -1218,6 +1227,7 @@ class MENU(object):
     BONUSTYPE_10 = '#menu:bonusType/10'
     BONUSTYPE_11 = '#menu:bonusType/11'
     BONUSTYPE_12 = '#menu:bonusType/12'
+    BONUSTYPE_13 = '#menu:bonusType/13'
     FORTIFICATIONCTX_DIRECTIONCONTROL = '#menu:fortificationCtx/directionControl'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_MODERNIZATION = '#menu:fortificationCtx/modernization'
@@ -1324,7 +1334,8 @@ class MENU(object):
     AWARDWINDOW_TITLE_BOOSTERAWARD = '#menu:awardWindow/title/boosterAward'
     AWARDWINDOW_BOOSTERAWARD_HEADER = '#menu:awardWindow/boosterAward/header'
     AWARDWINDOW_BOOSTERAWARD_DESCRIPTION_TILLTIME = '#menu:awardWindow/boosterAward/description/tillTime'
-    AWARDWINDOW_BOOSTERAWARD_DESCRIPTION_TIMEVALUE = '#menu:awardWindow/boosterAward/description/timeValue'
+    AWARDWINDOW_BOOSTERAWARD_DESCRIPTION_TIMEVALUE_DEFINED = '#menu:awardWindow/boosterAward/description/timeValue/defined'
+    AWARDWINDOW_BOOSTERAWARD_DESCRIPTION_TIMEVALUE_UNDEFINED = '#menu:awardWindow/boosterAward/description/timeValue/undefined'
     AWARDWINDOW_BOOSTERAWARD_ADDITIONAL = '#menu:awardWindow/boosterAward/additional'
     AWARDWINDOW_BOOSTERAWARD_ACTIVATEBTN_LABEL = '#menu:awardWindow/boosterAward/activateBtn/label'
     REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
@@ -1384,6 +1395,7 @@ class MENU(object):
     BOOSTERSWINDOW_ACTIVEBOOSTERS = '#menu:boostersWindow/activeBoosters'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER = '#menu:boostersWindow/boostersTableRenderer/header'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME = '#menu:boostersWindow/boostersTableRenderer/time'
+    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME = '#menu:boostersWindow/boostersTableRenderer/undefineTime'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN = '#menu:boostersWindow/boostersTableRenderer/questForOpen'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_ACTIVATEBTNLABEL = '#menu:boostersWindow/boostersTableRenderer/activateBtnLabel'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_GOTOQUESTBTNLABEL = '#menu:boostersWindow/boostersTableRenderer/goToQuestBtnLabel'
@@ -1751,9 +1763,15 @@ class MENU(object):
      LOADING_BATTLETYPES_5,
      LOADING_BATTLETYPES_6,
      LOADING_BATTLETYPES_7,
+     LOADING_BATTLETYPES_7_RESOURCE,
+     LOADING_BATTLETYPES_7_MULTITEAM,
      LOADING_BATTLETYPES_8,
      LOADING_BATTLETYPES_9,
-     LOADING_BATTLETYPES_10)
+     LOADING_BATTLETYPES_10,
+     LOADING_BATTLETYPES_MIX,
+     LOADING_BATTLETYPES_RESOURCEPOINTS,
+     LOADING_BATTLETYPES_MIX_UPPER,
+     LOADING_BATTLETYPES_RESOURCEPOINTS_UPPER)
     REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_ENUM = (REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_INVITE_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_SQUAD_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_REFERRALS_BLOCK)
     TANKCAROUSEL_VEHICLESTATES_ENUM = (TANKCAROUSEL_VEHICLESTATES_BATTLE,
      TANKCAROUSEL_VEHICLESTATES_LOCKED,
@@ -1778,11 +1796,13 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
      TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY_CREWNOTFULL,
-     TANKCAROUSEL_VEHICLESTATES_GROUPAMMONOTFULL)
+     TANKCAROUSEL_VEHICLESTATES_GROUPAMMONOTFULL,
+     TANKCAROUSEL_VEHICLESTATES_UNAVAILABLE)
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENUM = (FINALSTATISTIC_COMMONSTATS_RESULTLABEL_WIN,
      FINALSTATISTIC_COMMONSTATS_RESULTLABEL_LOSE,
      FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE,
-     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TECHWIN)
+     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TECHWIN,
+     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENDED)
     SHOP_TABLE_HEADER_COUNT_ENUM = (SHOP_TABLE_HEADER_COUNT_VEHICLE,
      SHOP_TABLE_HEADER_COUNT_MODULE,
      SHOP_TABLE_HEADER_COUNT_SHELL,
@@ -1804,6 +1824,8 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_5,
      LOADING_BATTLETYPES_DESC_6,
      LOADING_BATTLETYPES_DESC_7,
+     LOADING_BATTLETYPES_DESC_7_RESOURCE,
+     LOADING_BATTLETYPES_DESC_7_MULTITEAM,
      LOADING_BATTLETYPES_DESC_8,
      LOADING_BATTLETYPES_DESC_9,
      LOADING_BATTLETYPES_DESC_10)

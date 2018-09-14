@@ -1,8 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/boosters/BoostersWindow.py
+from collections import defaultdict
+from operator import attrgetter
 import BigWorld
 import constants
-from collections import defaultdict
+from adisp import process
+from helpers.i18n import makeString as _ms
 from gui import SystemMessages
+from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.boosters.BoostersPanelComponent import ADD_BOOSTER_ID
 from gui.Scaleform.framework.entities.View import View
@@ -16,12 +20,12 @@ from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items.processors.goodies import BoosterActivator
-from gui.shared.utils.decorators import process
+from gui.shared.utils import decorators
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
-from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 
 class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
 
@@ -42,12 +46,21 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
         self.as_setListDataS(self.__getBoostersVOs(self._isReceivedBoostersTab), False)
         self.__setCommonData()
 
+    @process
     def onBoosterActionBtnClick(self, boosterID, questID):
         if self._isReceivedBoostersTab:
             booster = g_goodiesCache.getBooster(boosterID)
-            self.__activateBoosterRequest(booster)
+            activeBooster = self.__getActiveBoosterByType(booster.boosterType)
+            if activeBooster is not None:
+                canActivate = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(BOOSTER_CONSTANTS.BOOSTER_ACTIVATION_CONFORMATION_TEXT_KEY, messageCtx={'newBoosterName': text_styles.middleTitle(booster.description),
+                 'curBoosterName': text_styles.middleTitle(activeBooster.description)}))
+            else:
+                canActivate = True
+            if canActivate:
+                self.__activateBoosterRequest(booster)
         else:
             quests_events.showEventsWindow(questID, constants.EVENT_TYPE.BATTLE_QUEST)
+        return
 
     def _populate(self):
         super(BoostersWindow, self)._populate()
@@ -55,7 +68,7 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
         g_eventsCache.onSyncCompleted += self.__onUpdateGoodies
         self._availableBoosters = self.__getAvailableBoosters()
         self._boosterQuests = self.__getBoosterQuests()
-        self._activeBoosters = self.__getActiveBooster()
+        self._activeBoosters = self.__getActiveBoosters()
         self._boostersInQuestCount = self.__getBoostersCountInQuests()
         self.as_setListDataS(self.__getBoostersVOs(self._isReceivedBoostersTab), True)
         self.__setCommonData()
@@ -72,7 +85,7 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
         return
 
     def __onUpdateGoodies(self, *args):
-        self._activeBoosters = self.__getActiveBooster()
+        self._activeBoosters = self.__getActiveBoosters()
         self._availableBoosters = self.__getAvailableBoosters()
         self._boosterQuests = self.__getBoosterQuests()
         self._boostersInQuestCount = self.__getBoostersCountInQuests()
@@ -116,10 +129,9 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
 
     def __getBoostersVOs(self, isReceivedBoostersTab):
         boosterVOs = []
-        isLimitExceeded = len(self._activeBoosters) >= MAX_ACTIVE_BOOSTERS_COUNT
         if isReceivedBoostersTab:
             for booster in self._availableBoosters:
-                boosterVOs.append(self.__makeBoosterVO(booster, not isLimitExceeded))
+                boosterVOs.append(self.__makeBoosterVO(booster, booster.isReadyToActivate))
 
         else:
             for (questID, qUserName), boosters in self._boosterQuests.iteritems():
@@ -128,18 +140,16 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
 
         return boosterVOs
 
+    def __getBoosterFullName(self, booster):
+        return text_styles.middleTitle(_ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER, boosterName=booster.userName, quality=booster.qualityStr))
+
     def __makeBoosterVO(self, booster, isBtnEnabled, questID = None, qUserName = None, qBoosterCount = None):
-        headerText = _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER, boosterName=booster.userName, quality=booster.qualityStr)
         activateBtnLabel = MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_ACTIVATEBTNLABEL if questID is None else MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_GOTOQUESTBTNLABEL
-        if self._isReceivedBoostersTab:
-            actionBtnEnabled = booster.isReadyToActivate and isBtnEnabled
-        else:
-            actionBtnEnabled = isBtnEnabled
         return {'id': booster.boosterID,
          'questID': questID,
-         'actionBtnEnabled': actionBtnEnabled,
-         'actionBtnTooltip': self.__getQuestTooltip(qUserName),
-         'headerText': text_styles.middleTitle(headerText),
+         'actionBtnEnabled': isBtnEnabled,
+         'actionBtnTooltip': self.__getQuestTooltip(qUserName, isBtnEnabled),
+         'headerText': self.__getBoosterFullName(booster),
          'descriptionText': text_styles.main(booster.description),
          'addDescriptionText': self.__getAdditionalDescription(booster, qUserName),
          'actionBtnLabel': _ms(activateBtnLabel),
@@ -154,26 +164,37 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
          'slotLinkage': BOOSTER_CONSTANTS.SLOT_UI,
          'showLeftTime': False}
 
-    def __getQuestTooltip(self, qUserName):
+    def __getQuestTooltip(self, qUserName, isBtnEnabled):
         if qUserName is not None:
             return makeTooltip(None, _ms(TOOLTIPS.BOOSTER_QUESTLINKBTN_BODY, questName=qUserName))
+        elif not isBtnEnabled:
+            return makeTooltip(None, _ms(TOOLTIPS.BOOSTER_ACTIVEBTN_DISABLED_BODY))
         else:
             return ''
 
     def __getAdditionalDescription(self, booster, qUserName):
-        text = ''
         if qUserName is not None:
             text = _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN, questName=qUserName)
-        elif booster.expiryTime is not None:
+        elif booster.expiryTime:
             text = _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME, tillTime=booster.getExpiryDate())
+        else:
+            text = _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME)
         return text_styles.standard(text)
 
     def __getAvailableBoosters(self):
         criteria = REQ_CRITERIA.BOOSTER.IN_ACCOUNT
         return g_goodiesCache.getBoosters(criteria=criteria).values()
 
-    def __getActiveBooster(self):
+    def __getActiveBoosters(self):
         return g_goodiesCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.ACTIVE).values()
+
+    def __getActiveBoosterByType(self, bType):
+        criteria = REQ_CRITERIA.BOOSTER.ACTIVE | REQ_CRITERIA.BOOSTER.BOOSTER_TYPES([bType])
+        activeBoosters = g_goodiesCache.getBoosters(criteria=criteria).values()
+        if len(activeBoosters) > 0:
+            return max(activeBoosters, key=attrgetter('effectValue'))
+        else:
+            return None
 
     def __getBoosterQuests(self):
         result = defaultdict(list)
@@ -187,7 +208,7 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
 
         return result
 
-    @process('loadStats')
+    @decorators.process('loadStats')
     def __activateBoosterRequest(self, booster):
         result = yield BoosterActivator(booster).request()
         if len(result.userMsg):

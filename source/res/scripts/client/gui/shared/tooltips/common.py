@@ -8,16 +8,19 @@ import BigWorld
 import constants
 import ArenaType
 import fortified_regions
+from shared_utils import findFirst, CONST_CONTAINER
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.Scaleform.framework.managers.TextManager import TextIcons
-from gui.clubs.formatters import getLeagueString, getDivisionString
+from gui.clubs import formatters as club_fmts
+from gui.clubs.ClubsController import g_clubsCtrl
 from gui.clubs.settings import getLadderChevron256x256, getPointsToNextDivision
 from gui.prb_control import getBattleID
 from gui.shared.economics import getPremiumCostActionPrc
 from gui.shared.formatters import text_styles
+from gui.shared.tooltips import formatters
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, getLevelIconPath
@@ -42,7 +45,6 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeBuildingIndicatorsVO
 from gui.prb_control.items.unit_items import SupportedRosterSettings
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils import findFirst, CONST_CONTAINER
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipMethodField, ToolTipParameterField, ToolTipData, ToolTipAttrField
 from gui.shared import g_itemsCache
@@ -114,7 +116,58 @@ class IgrTooltipData(ToolTipBaseData):
          'premVehQuests': premVehQuests}
 
 
-class EfficiencyTooltipData(ToolTipBaseData):
+_DEFAULT_MARGINS = {'top': 13,
+ 'left': 18,
+ 'bottom': 21,
+ 'right': 18}
+_DEFAULT_MARGIN_AFTER_BLOCK = 10
+_DEFAULT_MARGIN_AFTER_SEPARATOR = 17
+
+class BlocksTooltipData(ToolTipBaseData):
+
+    def __init__(self, context, toolTipType):
+        super(BlocksTooltipData, self).__init__(context, toolTipType)
+        self.__contentMargin = _DEFAULT_MARGINS.copy()
+        self.__marginAfterBlock = _DEFAULT_MARGIN_AFTER_BLOCK
+        self.__marginAfterSeparator = _DEFAULT_MARGIN_AFTER_SEPARATOR
+        self.__width = 0
+
+    def _getContentMargin(self):
+        return self.__contentMargin
+
+    def _setContentMargin(self, top = None, left = None, bottom = None, right = None):
+        if top is not None:
+            self.__contentMargin['top'] = top
+        if left is not None:
+            self.__contentMargin['left'] = left
+        if bottom is not None:
+            self.__contentMargin['bottom'] = bottom
+        if right is not None:
+            self.__contentMargin['right'] = right
+        return
+
+    def _setMargins(self, afterBlock = _DEFAULT_MARGIN_AFTER_BLOCK, afterSeparator = _DEFAULT_MARGIN_AFTER_SEPARATOR):
+        self.__marginAfterBlock = afterBlock
+        self.__marginAfterSeparator = afterSeparator
+
+    def _setWidth(self, width):
+        self.__width = width
+
+    def _getWidth(self):
+        return self.__width
+
+    def _packBlocks(self, *args, **kwargs):
+        return []
+
+    def getDisplayableData(self, *args, **kwargs):
+        return {'blocksData': self._packBlocks(*args, **kwargs),
+         'marginAfterBlock': self.__marginAfterBlock,
+         'marginAfterSeparator': self.__marginAfterSeparator,
+         'contentMargin': self._getContentMargin(),
+         'width': self._getWidth()}
+
+
+class EfficiencyTooltipData(BlocksTooltipData):
     _packers = {BATTLE_EFFICIENCY_TYPES.ARMOR: efficiency.ArmorItemPacker,
      BATTLE_EFFICIENCY_TYPES.DAMAGE: efficiency.DamageItemPacker,
      BATTLE_EFFICIENCY_TYPES.DESTRUCTION: efficiency.KillItemPacker,
@@ -127,24 +180,29 @@ class EfficiencyTooltipData(ToolTipBaseData):
     def __init__(self, context):
         super(EfficiencyTooltipData, self).__init__(context, TOOLTIP_TYPE.EFFICIENCY)
 
-    def getDisplayableData(self, _, value):
-        dataDict = value.toDict()
-        eventType = dataDict['type']
-        isGarage = dataDict['isGarage']
-        blocksData = self.getPackerData(eventType, dataDict)
-        return {'type': eventType,
-         'blocksData': blocksData,
-         'isGarage': isGarage,
-         'contentMargin': {'top': 10,
-                           'left': 17,
-                           'bottom': 15,
-                           'right': 17}}
-
-    def getPackerData(self, packerType, dataDict):
-        if packerType in self._packers:
-            return self._packers[packerType]().pack(dataDict)
+    def _packBlocks(self, data):
+        if data is not None and data.type in self._packers:
+            return self._packers[data.type]().pack(data.toDict())
         else:
             return []
+            return
+
+
+class Hangar3DSceneTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(Hangar3DSceneTooltipData, self).__init__(context, None)
+        return
+
+    def getDisplayableData(self, tooltipId):
+        title = TOOLTIPS.hangar3dscene_5thanniversary('%s/title' % tooltipId)
+        desc = TOOLTIPS.hangar3dscene_5thanniversary('%s/desc' % tooltipId)
+        icon = '../maps/icons/5thAnniversary/%s.png' % tooltipId
+        if icon not in RES_ICONS.MAPS_ICONS_5THANNIVERSARY_ENUM:
+            icon = None
+        return {'title': title,
+         'text': desc,
+         'icon': icon}
 
 
 class ContactTooltipData(ToolTipBaseData):
@@ -839,7 +897,8 @@ class ToolTipFortBuildingData(ToolTipBaseData, FortViewHelper):
          'statusLevel': statusLevel,
          'indicatorModel': indicatorsModel,
          'isAvailable': isReadyForBattle,
-         'infoMessage': infoMessage}
+         'infoMessage': infoMessage,
+         'buildingIcon': FortViewHelper.getPopoverIconSource(buildingUID, buildingLevel, True)}
         return result
 
 
@@ -964,20 +1023,21 @@ class ToolTipFortWrongTime(ToolTipBaseData):
     def __init__(self, context):
         super(ToolTipFortWrongTime, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
 
-    def getDisplayableData(self, wrongState, currentValue, lockValues):
+    def getDisplayableData(self, wrongState, timePeriods):
 
         def formatReceivedData(target):
-            return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, BigWorld.wg_getShortTimeFormat(time_utils.getTimeTodayForLocal(target)))
+            return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, target)
 
-        currentValue = int(currentValue)
         if wrongState == 'wrongTime':
             return {'header': i18n.makeString(TOOLTIPS.FORTWRONGTIME_HEADER),
              'body': i18n.makeString(TOOLTIPS.FORTWRONGTIME_BODY, local=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentTimestamp()), server=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentLocalServerTimestamp()))}
-        if wrongState == 'lockTime':
-            timeFinish = currentValue + 1 if currentValue < 23 else currentValue - 23
+        elif (wrongState == 'lockTime' or wrongState == 'ownDefenceTime') and timePeriods is not None and len(timePeriods) >= 1:
+            timeStart, timeFinish = timePeriods[0]
             return {'header': i18n.makeString(TOOLTIPS.FORTWRONGTIME_LOCKTIME_HEADER),
-             'body': i18n.makeString(TOOLTIPS.FORTWRONGTIME_LOCKTIME_BODY, timeStart=formatReceivedData(currentValue), timeFinish=formatReceivedData(timeFinish))}
-        raise AttributeError('%s: Unexpected state: %s' % (self, wrongState))
+             'body': i18n.makeString(TOOLTIPS.FORTWRONGTIME_LOCKTIME_BODY, timeStart=formatReceivedData(timeStart), timeFinish=formatReceivedData(timeFinish))}
+        else:
+            raise AttributeError('%s: Unexpected state: %s' % (self, wrongState))
+            return
 
 
 class MapSmallTooltipData(ToolTipBaseData):
@@ -1043,33 +1103,43 @@ class LadderTooltipData(ToolTipBaseData):
         super(LadderTooltipData, self).__init__(context, TOOLTIP_TYPE.CYBER_SPORT)
 
     def getDisplayableData(self, clubDbID):
-        from gui.clubs.ClubsController import g_clubsCtrl
         club = g_clubsCtrl.getClub(clubDbID)
         if club is None:
             return
         else:
+            seasonState = g_clubsCtrl.getSeasonState()
             ladderInfo = club.getLadderInfo()
-            ladderIconSource = getLadderChevron256x256(ladderInfo.getDivision())
             if ladderInfo.isInLadder():
-                isActive = True
-                league = getLeagueString(ladderInfo.getLeague())
-                division = getDivisionString(ladderInfo.division)
+                icon = getLadderChevron256x256(ladderInfo.getDivision())
+                league = club_fmts.getLeagueString(ladderInfo.getLeague())
+                division = club_fmts.getDivisionString(ladderInfo.getDivision())
+                ladderPlace = text_styles.promoSubTitle(i18n.makeString(TOOLTIPS.LADDER_PLACE, num=ladderInfo.position))
+                state = text_styles.middleTitle(i18n.makeString(TOOLTIPS.LADDER_STATE, league=text_styles.highTitle(league), division=text_styles.highTitle(division)))
+                if seasonState.isActive():
+                    points = text_styles.main(i18n.makeString(TOOLTIPS.LADDER_POINTS, num=text_styles.stats(str(ladderInfo.getRatingPoints()))))
+                else:
+                    points = None
+                if not ladderInfo.isTop():
+                    valueStr = str(getPointsToNextDivision(ladderInfo.getRatingPoints()))
+                    ladderStatus = text_styles.main(i18n.makeString(TOOLTIPS.LADDER_LEVELUP, num=text_styles.stats(valueStr)))
+                else:
+                    ladderStatus = None
             else:
-                isActive = False
-                league = division = ''
-            if not ladderInfo.isTop():
-                toNextLevel = getPointsToNextDivision(ladderInfo.getRatingPoints())
+                state, points = (None, None)
+                icon = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_NO_LADDER
+                ladderPlace = text_styles.middleTitle(TOOLTIPS.LADDER_INACTIVE_HEADER)
+                ladderStatus = text_styles.main(TOOLTIPS.LADDER_INACTIVE_DESCR)
+            if not seasonState.isActive():
+                seasonStateString = '\n'.join([text_styles.middleTitle(club_fmts.getSeasonStateUserString(seasonState)), text_styles.main('#tooltips:ladder/season/%s' % seasonState.getStateString())])
             else:
-                toNextLevel = None
-            return {'isActive': isActive,
-             'place': ladderInfo.position,
-             'league': league,
-             'division': division,
-             'points': ladderInfo.getRatingPoints(),
-             'icon': ladderIconSource,
-             'name': i18n.makeString(TOOLTIPS.LADDER_HEADER),
-             'descr': i18n.makeString(TOOLTIPS.LADDER_DESCR),
-             'toNextLevel': toNextLevel}
+                seasonStateString = None
+            return {'state': state,
+             'points': points,
+             'status': ladderStatus,
+             'season': seasonStateString,
+             'icon': icon,
+             'name': text_styles.highTitle(TOOLTIPS.LADDER_HEADER),
+             'place': ladderPlace}
 
 
 class FortDivisionTooltipData(ToolTipBaseData):

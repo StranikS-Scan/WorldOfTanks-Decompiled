@@ -2,17 +2,16 @@
 import BigWorld
 import Event
 import BattleReplay
-import Settings
 from VOIP.voip_constants import VOIP_SUPPORTED_API
 from adisp import async, process
-from debug_utils import LOG_WARNING, LOG_DEBUG
+from shared_utils import CONST_CONTAINER
+from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import AppRef, ViewTypes
 from helpers import isPlayerAccount, isPlayerAvatar
 from VOIP import getVOIPManager
 from PlayerEvents import g_playerEvents
 from gui import GUI_SETTINGS, DialogsInterface
-from gui.shared.utils import CONST_CONTAINER
 from gui.Scaleform.framework.entities.abstract.VoiceChatManagerMeta import VoiceChatManagerMeta
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.settings_constants import SOUND

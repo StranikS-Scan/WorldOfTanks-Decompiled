@@ -1,27 +1,32 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
-from goodies.goodie_constants import GOODIE_STATE
-from account_shared import LayoutIterator
 import dossiers2
-from gui.shared.utils.requesters.GoodiesRequester import GoodiesRequester
-from parsers.ShopDataParser import ShopDataParser
 import nations
 import constants
+from goodies.goodie_constants import GOODIE_STATE
+from account_shared import LayoutIterator
 from items import vehicles, tankmen, getTypeOfCompactDescr
 from adisp import async, process
 from debug_utils import LOG_WARNING, LOG_DEBUG
-from gui.Scaleform.Waiting import Waiting
 from StatsRequester import StatsRequester
 from ShopRequester import ShopRequester
 from InventoryRequester import InventoryRequester
 from DossierRequester import DossierRequester
+from gui.shared.utils.requesters.GoodiesRequester import GoodiesRequester
+from gui.shared.utils.requesters.parsers.ShopDataParser import ShopDataParser
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChassis, VehicleEngine, VehicleRadio, VehicleTurret
 from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.Tankman import Tankman
+
+def _getDiffID(itemdID):
+    if isinstance(itemdID, tuple):
+        itemdID, _ = itemdID
+    return itemdID
+
 
 class _CriteriaCondition(object):
     __metaclass__ = ABCMeta
@@ -133,6 +138,7 @@ class REQ_CRITERIA(object):
         IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.count > 0))
         ACTIVE = RequestCriteria(PredicateCondition(lambda item: item.finishTime is not None and item.state == GOODIE_STATE.ACTIVE))
         IS_READY_TO_ACTIVATE = RequestCriteria(PredicateCondition(lambda item: item.isReadyToActivate))
+        BOOSTER_TYPES = staticmethod(lambda boosterTypes: RequestCriteria(PredicateCondition(lambda item: item.boosterType in boosterTypes)))
         IN_BOOSTER_ID_LIST = staticmethod(lambda boostersList: RequestCriteria(PredicateCondition(lambda item: item.boosterID in boostersList)))
 
 
@@ -163,6 +169,7 @@ class ItemsRequester(object):
     @async
     @process
     def request(self, callback = None):
+        from gui.Scaleform.Waiting import Waiting
         Waiting.show('download/inventory')
         yield self.stats.request()
         yield self.inventory.request()
@@ -187,8 +194,9 @@ class ItemsRequester(object):
         dr = self.dossiers.getUserDossierRequester(databaseID)
         userAccDossier = yield dr.getAccountDossier()
         clanInfo = yield dr.getClanInfo()
+        seasons = yield dr.getRated7x7Seasons()
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        container[databaseID] = (userAccDossier, clanInfo)
+        container[databaseID] = (userAccDossier, clanInfo, seasons)
         callback((userAccDossier, clanInfo, dr.isHidden))
 
     def unloadUserDossier(self, databaseID):
@@ -240,8 +248,7 @@ class ItemsRequester(object):
             for cacheType, data in diff.get('cache', {}).iteritems():
                 if cacheType == 'vehsLock':
                     for id in data.keys():
-                        vehInvID = self.__getDiffID(id)
-                        vehData = self.inventory.getVehicleData(vehInvID)
+                        vehData = self.inventory.getVehicleData(_getDiffID(id))
                         if vehData is not None:
                             invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehData.descriptor.type.compactDescr)
 
@@ -254,8 +261,7 @@ class ItemsRequester(object):
 
                     for data in itemsDiff.itervalues():
                         for id in data.iterkeys():
-                            vehInvID = self.__getDiffID(id)
-                            vehData = self.inventory.getVehicleData(vehInvID)
+                            vehData = self.inventory.getVehicleData(_getDiffID(id))
                             if vehData is not None:
                                 invalidate[itemTypeID].add(vehData.descriptor.type.compactDescr)
                                 invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForVehicle(vehData))
@@ -264,7 +270,7 @@ class ItemsRequester(object):
                     for data in itemsDiff.itervalues():
                         invalidate[itemTypeID].update(data.keys())
                         for id in data.keys():
-                            tmanInvID = self.__getDiffID(id)
+                            tmanInvID = _getDiffID(id)
                             tmanData = self.inventory.getTankmanData(tmanInvID)
                             if tmanData is not None and tmanData.vehicle != -1:
                                 invalidate[GUI_ITEM_TYPE.VEHICLE].update(self.__getVehicleCDForTankman(tmanData))
@@ -400,21 +406,23 @@ class ItemsRequester(object):
         @return: AccountDossier object
         """
         if databaseID is None:
+            from gui.clubs.ClubsController import g_clubsCtrl
             dossierDescr = self.__getAccountDossierDescr()
-            return AccountDossier(dossierDescr)
+            seasonDossiers = dict(((s.getSeasonID(), s.getDossierDescr()) for s in g_clubsCtrl.getSeasons()))
+            return AccountDossier(dossierDescr, rated7x7Seasons=seasonDossiers)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        dossier, _ = container.get(int(databaseID))
+        dossier, _, seasons = container.get(int(databaseID))
         if dossier is None:
             LOG_WARNING('Trying to get empty user dossier', databaseID)
             return
         else:
-            return AccountDossier(dossier, playerDBID=databaseID)
+            return AccountDossier(dossier, databaseID, seasons)
 
     def getClanInfo(self, databaseID = None):
         if databaseID is None:
             return (self.stats.clanDBID, self.stats.clanInfo)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        _, clanInfo = container.get(int(databaseID))
+        _, clanInfo, _ = container.get(int(databaseID))
         if clanInfo is None:
             LOG_WARNING('Trying to get empty user clan info', databaseID)
             return
@@ -521,11 +529,6 @@ class ItemsRequester(object):
     def __getVehicleCDForTankman(self, tmanData):
         vehData = self.inventory.getVehicleData(tmanData.vehicle)
         if vehData is not None:
-            return set([vehData.descriptor.type.compactDescr])
+            return {vehData.descriptor.type.compactDescr}
         else:
             return set()
-
-    def __getDiffID(self, id):
-        if isinstance(id, tuple):
-            id, _ = id
-        return id

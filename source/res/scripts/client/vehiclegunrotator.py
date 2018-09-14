@@ -19,6 +19,7 @@ g__attachToCam = False
 class VehicleGunRotator(object):
     __INSUFFICIENT_TIME_DIFF = 0.02
     __MAX_TIME_DIFF = 0.2
+    __ANGLE_EPS = 0.001
     __ROTATION_TICK_LENGTH = SERVER_TICK_LENGTH
     USE_LOCK_PREDICTION = True
 
@@ -359,8 +360,8 @@ class VehicleGunRotator(object):
             turretYaw = replayCtrl.getTurretYaw()
             if turretYaw > -100000:
                 return turretYaw
-        if curAngle == shotAngle:
-            return curAngle
+        if math.fabs(curAngle - shotAngle) < VehicleGunRotator.__ANGLE_EPS:
+            return shotAngle
         shortWayDiff, longWayDiff = self.__getRotationWays(curAngle, shotAngle)
         if speedLimit < 1e-05:
             return curAngle
@@ -378,10 +379,10 @@ class VehicleGunRotator(object):
 
     def __getRotationWays(self, curAngle, shotAngle):
         shotDiff1 = shotAngle - curAngle
-        if shotDiff1 < 0:
-            shotDiff2 = 2 * pi + shotDiff1
+        if shotDiff1 < 0.0:
+            shotDiff2 = 2.0 * pi + shotDiff1
         else:
-            shotDiff2 = -2 * pi + shotDiff1
+            shotDiff2 = -2.0 * pi + shotDiff1
         if abs(shotDiff1) <= pi:
             return (shotDiff1, shotDiff2)
         else:
@@ -438,8 +439,8 @@ class VehicleGunRotator(object):
             descr = self.__avatar.vehicleTypeDescriptor
             speedLimit = descr.gun['rotationSpeed'] * timeDiff
         else:
-            if curAngle == shotAngle:
-                return curAngle
+            if math.fabs(curAngle - shotAngle) < VehicleGunRotator.__ANGLE_EPS:
+                return shotAngle
             shotDiff = shotAngle - curAngle
             speedLimit = self.__maxGunRotationSpeed * timeDiff
         if angleLimits is not None:
@@ -447,7 +448,7 @@ class VehicleGunRotator(object):
                 shotDiff = angleLimits[0] - curAngle
             elif shotAngle > angleLimits[1]:
                 shotDiff = angleLimits[1] - curAngle
-        if shotDiff > 0:
+        if shotDiff > 0.0:
             return curAngle + min(shotDiff, speedLimit)
         else:
             return curAngle + max(shotDiff, -speedLimit)
@@ -640,7 +641,7 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
     def __getTurretSound(self, vehicleTypDescriptor, soundName):
         event = vehicleTypDescriptor.turret[soundName]
         if event is not None and event != '':
-            return SoundGroups.g_instance.FMODgetSound(event)
+            return SoundGroups.g_instance.getSound2D(event)
         else:
             return
             return

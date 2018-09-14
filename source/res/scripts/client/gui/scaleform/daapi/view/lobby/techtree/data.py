@@ -577,10 +577,10 @@ class NationTreeData(_ItemsData):
         self._scrollIndex = -1
         super(NationTreeData, self).clear(full)
 
-    def load(self, nationID):
+    def load(self, nationID, override = None):
         self.clear()
         vehicleList = sorted(vehicles.g_list.getList(nationID).values(), key=lambda item: item['level'])
-        g_techTreeDP.load()
+        g_techTreeDP.load(override=override)
         getDisplayInfo = g_techTreeDP.getDisplayInfo
         getItem = self.getItem
         selectedID = ResearchItemsData.getRootCD()

@@ -1,9 +1,8 @@
 # Embedded file name: scripts/client/gui/clubs/settings.py
 from collections import namedtuple
 from club_shared import CLUB_SUBSCRIPTION_TYPE as _CST, CLIENT_CLUB_COMMANDS, CLUB_INVITE_STATE_NAMES
+from shared_utils import CONST_CONTAINER
 from helpers import time_utils
-from gui.shared.utils import CONST_CONTAINER
-IS_EMULATOR = False
 DEFAULT_COOLDOWN = 1.0
 REQUEST_TIMEOUT = 60.0
 MIN_BATTLES_FOR_STATS = 1
@@ -38,6 +37,7 @@ class CLIENT_CLUB_RESTRICTIONS(CONST_CONTAINER):
     INVITE_DOES_NOT_EXIST = 'INVITE_DOES_NOT_EXIST'
     INVITE_IS_NOT_ACTIVE = 'INVITE_IS_NOT_ACTIVE'
     CLUB_IS_NOT_IN_LADDER = 'This club is not in the ladder.'
+    NOT_A_CLUB_MEMBER = 'Account not a club member.'
     HAS_NO_CLUB = 'HAS_NO_CLUB'
     TOO_MANY_INVITES_PER_CALL = 'TOO_MANY_INVITES_PER_CALL'
     TOO_MANY_ACTIVE_INVITES = 'TEAM_ACTIVE_PROPOSALS_EXCEEDED'
@@ -91,6 +91,10 @@ class CLUB_REQUEST_TYPE(CONST_CONTAINER):
     GET_PRIVATE_PROFILE = 31
     GET_CLUBS_CONTENDERS = 32
     CLOSE_CLUB = 33
+    FIND_CLUBS = 34
+    GET_PLAYER_INFO = 35
+    GET_SEASONS = 36
+    GET_COMPLETED_SEASONS = 37
     COMMANDS = {CLIENT_CLUB_COMMANDS.SUBSCRIBE: SUBSCRIBE,
      CLIENT_CLUB_COMMANDS.CREATE: CREATE_CLUB,
      CLIENT_CLUB_COMMANDS.GET_MY_CLUBS: GET_MY_CLUBS,
@@ -120,7 +124,11 @@ class CLUB_REQUEST_TYPE(CONST_CONTAINER):
      CLIENT_CLUB_COMMANDS.ASSIGN_PRIVATE: ASSIGN_PRIVATE,
      CLIENT_CLUB_COMMANDS.EXPEL_MEMBER: KICK_MEMBER,
      CLIENT_CLUB_COMMANDS.GET_ACCOUNT_PROFILE: GET_PRIVATE_PROFILE,
-     CLIENT_CLUB_COMMANDS.SET_CLUB_REQUIREMENTS: SET_APPLICANT_REQUIREMENTS}
+     CLIENT_CLUB_COMMANDS.SET_CLUB_REQUIREMENTS: SET_APPLICANT_REQUIREMENTS,
+     CLIENT_CLUB_COMMANDS.FIND_OPEN_CLUBS: FIND_CLUBS,
+     CLIENT_CLUB_COMMANDS.GET_PLAYER_CLUBS: GET_PLAYER_INFO,
+     CLIENT_CLUB_COMMANDS.GET_CLUB_BATTLE_STATS_HISTORY: GET_SEASONS,
+     CLIENT_CLUB_COMMANDS.GET_COMPLETED_SEASONS: GET_COMPLETED_SEASONS}
 
 
 def getLeagueByDivision(division):
@@ -191,6 +199,15 @@ def getLadderChevron256x256(division = None):
     return _getLadderChevronIcon(256, division)
 
 
+def getLadderChevronIconName(division = None):
+    from gui.clubs.formatters import getDivisionString
+    if division is not None:
+        return '%d%s' % (getLeagueByDivision(division) + 1, getDivisionString(division))
+    else:
+        return 'no_ladder'
+        return
+
+
 def getPointsToNextDivision(localRating):
     return MAX_POINTS_IN_DIVISION - localRating
 
@@ -210,12 +227,7 @@ def _getStubEmblemPath(size):
 
 
 def _getLadderChevronIcon(iconSize, division = None):
-    from gui.clubs.formatters import getDivisionString
-    if division is not None:
-        imgFileName = '%d%s' % (getLeagueByDivision(division) + 1, getDivisionString(division))
-    else:
-        imgFileName = 'no_ladder'
-    return '%s/%d/%s.png' % (LADDER_CHEVRON_ICON_PATH, iconSize, imgFileName)
+    return '%s/%d/%s.png' % (LADDER_CHEVRON_ICON_PATH, iconSize, getLadderChevronIconName(division))
 
 
 _RestrResult = namedtuple('_RestrResult', 'success reason')

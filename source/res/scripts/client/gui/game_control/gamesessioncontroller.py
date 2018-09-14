@@ -1,141 +1,127 @@
 # Embedded file name: scripts/client/gui/game_control/GameSessionController.py
 import time
+import sys
+import operator
 import BigWorld
 import Event
 import account_shared
 import constants
-from adisp import process
-from gui.game_control.controllers import Controller
-from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import time_utils
-from debug_utils import *
-from gui.ClientUpdateManager import g_clientUpdateManager
+from debug_utils import LOG_DEBUG
 from gui.shared import g_itemsCache
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.LobbyContext import g_lobbyContext
+from gui.game_control.controllers import Controller
+_BAN_RESTR = constants.RESTRICTION_TYPE.BAN
+
+def _checkForNegative(t):
+    if t <= 0:
+        t += time_utils.ONE_DAY
+    return t
+
+
+def _stats():
+    return g_itemsCache.items.stats
+
+
+def _regionals():
+    return g_lobbyContext.getServerSettings().regionals
+
+
+def _getSvrLocalToday():
+    return time_utils.getServerRegionalTimeCurrentDay()
+
+
+def _getSvrUtcToday():
+    return time_utils.getServerTimeCurrentDay()
+
+
+def _getSvrLocal():
+    return time_utils._g_instance.serverRegionalTime
+
+
+def _getSevUtc():
+    return time_utils._g_instance.serverUTCTime
+
 
 class GameSessionController(Controller, Notifiable):
-    """ Game playing time and parent controlling class. """
     NOTIFY_PERIOD = time_utils.ONE_HOUR
-    PLAY_TIME_LEFT_NOTIFY = time_utils.QUARTER_HOUR
-    MIDNIGHT_BLOCK_TIME = time_utils.ONE_DAY - PLAY_TIME_LEFT_NOTIFY
+    TIME_RESERVE = 59
+    PLAY_TIME_LEFT_NOTIFY = time_utils.QUARTER_HOUR + TIME_RESERVE
     onClientNotify = Event.Event()
     onTimeTillBan = Event.Event()
     onNewDayNotify = Event.Event()
     onPremiumNotify = Event.Event()
 
     def init(self):
-        """ Singleton initialization method """
         self.addNotificators(PeriodicNotifier(self.__getClosestPremiumNotification, self.__notifyPremiumTime), PeriodicNotifier(lambda : self.NOTIFY_PERIOD, self.__notifyClient), PeriodicNotifier(self.__getClosestNewDayNotification, self.__notifyNewDay))
         self.__sessionStartedAt = -1
-        self.__stats = None
         self.__banCallback = None
         self.__lastBanMsg = None
-        self.isAdult = True
-        self.isPlayTimeBlock = False
-        self.__midnightBlockTime = None
-        self.__playTimeBlockTime = None
+        self.__curfewBlockTime = None
+        self.__curfewUnblockTime = None
         self.__doNotifyInStart = False
         self.__battles = 0
         LOG_DEBUG('GameSessionController::init')
         return
 
     def fini(self):
-        """        Singleton finalization method """
+        LOG_DEBUG('GameSessionController::fini')
         self._stop()
         self.onClientNotify.clear()
         self.onTimeTillBan.clear()
         self.onNewDayNotify.clear()
         self.onPremiumNotify.clear()
         self.clearNotification()
-        LOG_DEBUG('GameSessionController::fini')
         super(GameSessionController, self).fini()
 
-    @process
     def onLobbyStarted(self, ctx):
-        """
-        Starting new game session.
-        @param ctx: lobby start context
-        """
-        sessionStartTime = ctx.get('sessionStartedAt', -1)
-        LOG_DEBUG('GameSessionController::start', sessionStartTime)
-        from gui.shared.utils.requesters import StatsRequester
-        self.__stats = yield StatsRequester().request()
-        self.__sessionStartedAt = sessionStartTime
-        if constants.RESTRICTION_TYPE.BAN in self.__stats.restrictions:
-            for ban in self.__stats.restrictions[constants.RESTRICTION_TYPE.BAN].itervalues():
-                if ban.get('reason') == '#ban_reason:curfew_ban':
-                    self.isAdult = False
-
+        LOG_DEBUG('GameSessionController::start', self.__sessionStartedAt)
+        self.__sessionStartedAt = ctx.get('sessionStartedAt', -1)
+        self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(g_itemsCache.items.stats.restrictions)
         if self.__doNotifyInStart:
             self.__notifyClient()
         self.startNotification()
-        if self.__banCallback is None:
-            self.__midnightBlockTime = self.MIDNIGHT_BLOCK_TIME - time_utils.getServerRegionalTimeCurrentDay()
-            playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
-            self.__playTimeBlockTime = playTimeLeft - self.PLAY_TIME_LEFT_NOTIFY
-            self.isPlayTimeBlock = self.__playTimeBlockTime < self.__midnightBlockTime
-            self.__banCallback = BigWorld.callback(self.__getBlockTime(), self.__onBanNotifyHandler)
-        g_clientUpdateManager.addCallbacks({'account': self.__onAccountChanged})
-        return
+        self.__loadBanCallback()
+        g_clientUpdateManager.addCallbacks({'account': self.__onAccountChanged,
+         'stats.restrictions': self.__onRestrictionsChanged,
+         'stats.playLimits': self.__onPlayLimitsChanged})
 
     def onAvatarBecomePlayer(self):
-        self._stop(True)
+        self._stop(doNotifyInStart=True)
 
     def onDisconnected(self):
         self._stop()
 
     def isSessionStartedThisDay(self):
-        """
-        Is game session has been started at this day or not
-        @return: <bool> flag
-        """
-        serverRegionalSettings = BigWorld.player().serverSettings['regional_settings']
-        return int(time_utils._g_instance.serverRegionalTime) / 86400 == int(self.__sessionStartedAt + serverRegionalSettings['starting_time_of_a_new_day']) / 86400
+        svrDaysCount = int(_getSvrLocal()) / time_utils.ONE_DAY
+        clientDaysCount = int(self.__sessionStartedAt + _regionals().getDayStartingTime()) / time_utils.ONE_DAY
+        return svrDaysCount == clientDaysCount
 
     def getDailyPlayTimeLeft(self):
-        """
-        Returns value of this day playing time left in seconds
-        @return: playting time left
-        """
-        d, _ = self.__stats.playLimits
-        return d[0] - self._getDailyPlayHours()
+        return _stats().getDailyTimeLimits() - self._getDailyPlayHours()
 
     def getWeeklyPlayTimeLeft(self):
-        """
-        Returns value of this week playing time left in seconds
-        @return: playting time left
-        """
-        _, w = self.__stats.playLimits
-        return w[0] - self._getWeeklyPlayHours()
+        return _stats().getWeeklyTimeLimits() - self._getWeeklyPlayHours()
 
     @property
     def isParentControlEnabled(self):
-        """
-        Is parent control enabled. Algo has been taken
-        from a_mikhailik.
-        """
-        d, w = self.__stats.playLimits
-        return d[0] < time_utils.ONE_DAY or w[0] < 7 * time_utils.ONE_DAY
+        d, w = g_itemsCache.items.stats.getPlayTimeLimits()
+        return d < time_utils.ONE_DAY or w < 7 * time_utils.ONE_DAY
 
     @property
     def isParentControlActive(self):
-        """
-        Is parent control active now: current time between
-        MIDNIGHT_BLOCK_TIME and midnight or playing time is less
-        than PLAY_TIME_LEFT_NOTIFY.
-        
-        @return: <bool> is parent control active now
-        """
         playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
         parentControl = self.isParentControlEnabled and playTimeLeft <= self.PLAY_TIME_LEFT_NOTIFY
-        curfewControl = not self.isAdult and (time_utils.getServerRegionalTimeCurrentDay() >= self.MIDNIGHT_BLOCK_TIME or time_utils.getServerRegionalTimeCurrentDay() <= time_utils.QUARTER_HOUR)
+        notifyTime, _ = self.getCurfewBlockTime()
+        banTimeLeft = min(*self.__getBlockTimeLeft())
+        curfewControl = self.__curfewBlockTime is not None and banTimeLeft <= self.PLAY_TIME_LEFT_NOTIFY
         return parentControl or curfewControl
 
     @property
     def sessionDuration(self):
-        """
-        @return: <int> current session duration
-        """
-        return time_utils._g_instance.serverUTCTime - self.__sessionStartedAt
+        return _getSevUtc() - self.__sessionStartedAt
 
     @property
     def lastBanMsg(self):
@@ -145,48 +131,83 @@ class GameSessionController(Controller, Notifiable):
     def battlesCount(self):
         return self.__battles
 
+    @property
+    def isAdult(self):
+        return self.__curfewBlockTime is None
+
+    @property
+    def isPlayTimeBlock(self):
+        playTimeLeft, curfewTimeLeft = self.__getBlockTimeLeft()
+        return playTimeLeft < curfewTimeLeft
+
     def incBattlesCounter(self):
         self.__battles += 1
 
+    def getCurfewBlockTime(self):
+        if self.__curfewBlockTime is not None:
+            blockTime = self.__curfewBlockTime - _regionals().getDayStartingTime()
+            notifyStart = blockTime - self.PLAY_TIME_LEFT_NOTIFY
+        else:
+            notifyStart = blockTime = 0
+        return (_checkForNegative(notifyStart), _checkForNegative(blockTime))
+
+    def getParentControlNotificationMeta(self):
+        from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
+        if self.isPlayTimeBlock:
+            return I18nInfoDialogMeta('koreaPlayTimeNotification')
+        else:
+            notifyStartTime, blockTime = self.getCurfewBlockTime()
+            formatter = lambda t: time.strftime('%H:%M', time.localtime(t))
+            return I18nInfoDialogMeta('koreaParentNotification', messageCtx={'preBlockTime': formatter(notifyStartTime),
+             'blockTime': formatter(blockTime)})
+
     def _stop(self, doNotifyInStart = False):
-        """ Stopping current game session """
         LOG_DEBUG('GameSessionController::stop')
         self.stopNotification()
+        self.__curfewBlockTime = None
+        self.__curfewUnblockTime = None
         self.__sessionStartedAt = -1
-        self.__stats = None
         self.__doNotifyInStart = doNotifyInStart
         self.__clearBanCallback()
         g_clientUpdateManager.removeObjectCallbacks(self)
         return
 
     def _getDailyPlayHours(self):
-        """
-        Returns value of this day playing time in seconds.
-        @return: <int> playing time
-        """
         if self.isSessionStartedThisDay():
-            return self.__stats.dailyPlayHours[0] + (time_utils._g_instance.serverUTCTime - self.__sessionStartedAt)
+            offset = _getSevUtc() - self.__sessionStartedAt
         else:
-            return self.__stats.dailyPlayHours[0] + time_utils._g_instance.serverRegionalTime % 86400
+            offset = _getSvrLocal() % time_utils.ONE_DAY
+        return _stats().todayPlayHours + offset
 
     def _getWeeklyPlayHours(self):
-        """
-        Returns value of this week playing time in seconds.
-        @return: <int> playing time
-        """
-        serverRegionalSettings = BigWorld.player().serverSettings['regional_settings']
-        weekDaysCount = account_shared.currentWeekPlayDaysCount(time_utils._g_instance.serverUTCTime, serverRegionalSettings['starting_time_of_a_new_day'], serverRegionalSettings['starting_day_of_a_new_week'])
-        return self._getDailyPlayHours() + sum(self.__stats.dailyPlayHours[1:weekDaysCount])
+        regionals = _regionals()
+        weekDaysCount = account_shared.currentWeekPlayDaysCount(_getSevUtc(), regionals.getDayStartingTime(), regionals.getWeekStartingDay())
+        return self._getDailyPlayHours() + sum(_stats().dailyPlayHours[1:weekDaysCount])
 
-    def __getClosestPremiumNotification(self):
-        premiumTime = time_utils.makeLocalServerTime(g_itemsCache.items.stats.premiumExpiryTime)
-        return time_utils.getTimeDeltaFromNow(premiumTime)
+    @classmethod
+    def __getClosestNewDayNotification(cls):
+        return time_utils.ONE_DAY - _getSvrLocalToday()
 
-    def __getBlockTime(self):
-        return (self.__playTimeBlockTime if self.isPlayTimeBlock else self.__midnightBlockTime) + 5
+    @classmethod
+    def __getClosestPremiumNotification(cls):
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(_stats().premiumExpiryTime))
 
-    def __getClosestNewDayNotification(self):
-        return time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
+    def __getBlockTimeLeft(self):
+        playTimeLeft = min(self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft())
+        if self.__curfewBlockTime is not None:
+            curfewTimeLeft = self.__curfewBlockTime - _getSvrLocalToday()
+        else:
+            curfewTimeLeft = sys.maxint
+        return (playTimeLeft, _checkForNegative(curfewTimeLeft))
+
+    def __loadBanCallback(self, banTimeLeft = 0):
+        self.__clearBanCallback()
+        if not banTimeLeft:
+            banTimeLeft = min(*self.__getBlockTimeLeft()) - self.PLAY_TIME_LEFT_NOTIFY
+        banTimeLeft = max(banTimeLeft, 0)
+        LOG_DEBUG('Game session block callback', banTimeLeft)
+        if banTimeLeft:
+            self.__banCallback = BigWorld.callback(banTimeLeft, self.__onBanNotifyHandler)
 
     def __clearBanCallback(self):
         if self.__banCallback is not None:
@@ -195,31 +216,45 @@ class GameSessionController(Controller, Notifiable):
         return
 
     def __notifyClient(self):
-        playTimeLeft = None
         if self.isParentControlEnabled:
             playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
             playTimeLeft = max(playTimeLeft, 0)
-        self.onClientNotify(self.sessionDuration, time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay(), playTimeLeft)
+        else:
+            playTimeLeft = None
+        self.onClientNotify(self.sessionDuration, time_utils.ONE_DAY - _getSvrLocalToday(), playTimeLeft)
         return
 
     def __notifyNewDay(self):
-        nextNotification = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
-        self.onNewDayNotify(nextNotification)
+        self.onNewDayNotify(time_utils.ONE_DAY - _getSvrLocalToday())
 
     def __notifyPremiumTime(self):
         stats = g_itemsCache.items.stats
         self.onPremiumNotify(stats.isPremium, stats.attributes, stats.premiumExpiryTime)
 
     def __onBanNotifyHandler(self):
-        """ Ban notification event handler """
         LOG_DEBUG('GameSessionController:__onBanNotifyHandler')
-        banTime = time.strftime('%H:%M', time.gmtime(time.time() + self.PLAY_TIME_LEFT_NOTIFY))
+        banTime = time.strftime('%H:%M', time.localtime(time.time() + self.PLAY_TIME_LEFT_NOTIFY))
         self.__lastBanMsg = (self.isPlayTimeBlock, banTime)
         self.onTimeTillBan(*self.__lastBanMsg)
-        self.__banCallback = BigWorld.callback(time_utils.ONE_DAY, self.__onBanNotifyHandler)
+        self.__loadBanCallback()
 
     def __onAccountChanged(self, diff):
         if 'attrs' in diff or 'premiumExpiryTime' in diff:
             self.startNotification()
             stats = g_itemsCache.items.stats
             self.onPremiumNotify(stats.isPremium, stats.attributes, stats.premiumExpiryTime)
+
+    def __onRestrictionsChanged(self, _):
+        self.__curfewBlockTime, self.__curfewUnblockTime = self.__getCurfewBlockTime(g_itemsCache.items.stats.restrictions)
+        self.__loadBanCallback()
+
+    def __onPlayLimitsChanged(self, _):
+        self.__loadBanCallback()
+
+    @classmethod
+    def __getCurfewBlockTime(cls, restrictions):
+        if _BAN_RESTR in restrictions and len(restrictions[_BAN_RESTR]):
+            _, ban = max(restrictions[_BAN_RESTR].items(), key=operator.itemgetter(0))
+            if ban.get('reason') == '#ban_reason:curfew_ban' and 'curfew' in ban:
+                return (ban['curfew'].get('from', time_utils.ONE_DAY) + cls.TIME_RESERVE, ban['curfew'].get('to', time_utils.ONE_DAY))
+        return (None, None)

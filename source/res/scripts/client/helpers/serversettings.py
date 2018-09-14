@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/helpers/ServerSettings.py
 import types
 from collections import namedtuple
+from shared_utils import makeTupleByDict
 from gui.shared.utils.decorators import ReprInjector
 
 @ReprInjector.simple(('centerID', 'centerID'), ('dbidMin', 'dbidMin'), ('dbidMin', 'dbidMin'), ('regionCode', 'regionCode'))
@@ -36,8 +37,12 @@ class _RoamingSettings(namedtuple('_RoamingSettings', 'homeCenterID curCenterID 
 
         return None
 
+    @classmethod
+    def defaults(cls):
+        return cls(0, 0, [])
 
-class FileServerSettings(object):
+
+class _FileServerSettings(object):
 
     def __init__(self, fsSettings):
         self.__urls = dict(((n, d.get('url_template', '')) for n, d in fsSettings.iteritems()))
@@ -70,14 +75,64 @@ class FileServerSettings(object):
         else:
             return None
 
+    @classmethod
+    def defaults(cls):
+        return cls({})
+
+
+class _RegionalSettings(namedtuple('_RegionalSettings', ['starting_day_of_a_new_week', 'starting_time_of_a_new_day', 'starting_time_of_a_new_game_day'])):
+
+    def getWeekStartingDay(self):
+        return self.starting_day_of_a_new_week
+
+    def getDayStartingTime(self):
+        return self.starting_time_of_a_new_day
+
+    def getGameDayStartingTime(self):
+        return self.starting_time_of_a_new_game_day
+
+    @classmethod
+    def defaults(cls):
+        return cls(0, 0, 3)
+
+
+class _ESportCurrentSeason(namedtuple('_ESportSeason', ['eSportSeasonID', 'eSportSeasonStart', 'eSportSeasonFinish'])):
+
+    def getID(self):
+        return self.eSportSeasonID
+
+    def getStartTime(self):
+        return self.eSportSeasonStart
+
+    def getFinishTime(self):
+        return self.eSportSeasonFinish
+
+    @classmethod
+    def defaults(cls):
+        return cls(0, 0, 0)
+
 
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
-        self.__serverSettings = serverSettings
-        roamingSettings = self.__serverSettings['roaming']
-        self.__roamingSettings = _RoamingSettings(roamingSettings[0], roamingSettings[1], [ _ServerInfo(*s) for s in roamingSettings[2] ])
-        self.__fileServerSettings = FileServerSettings(self.__serverSettings['file_server'])
+        self.__serverSettings = serverSettings if serverSettings else {}
+        if 'roaming' in self.__serverSettings:
+            roamingSettings = self.__serverSettings['roaming']
+            self.__roamingSettings = _RoamingSettings(roamingSettings[0], roamingSettings[1], [ _ServerInfo(*s) for s in roamingSettings[2] ])
+        else:
+            self.__roamingSettings = _RoamingSettings.defaults()
+        if 'file_server' in self.__serverSettings:
+            self.__fileServerSettings = _FileServerSettings(self.__serverSettings['file_server'])
+        else:
+            self.__fileServerSettings = _FileServerSettings.defaults()
+        if 'regional_settings' in self.__serverSettings:
+            self.__regionalSettings = makeTupleByDict(_RegionalSettings, self.__serverSettings['regional_settings'])
+        else:
+            self.__regionalSettings = _RegionalSettings.defaults()
+        try:
+            self.__eSportCurrentSeason = makeTupleByDict(_ESportCurrentSeason, self.__serverSettings)
+        except TypeError:
+            self.__eSportCurrentSeason = _ESportCurrentSeason.defaults()
 
     def getSettings(self):
         return self.__serverSettings
@@ -89,6 +144,14 @@ class ServerSettings(object):
     @property
     def fileServer(self):
         return self.__fileServerSettings
+
+    @property
+    def regionals(self):
+        return self.__regionalSettings
+
+    @property
+    def eSportCurrentSeason(self):
+        return self.__eSportCurrentSeason
 
     def isPotapovQuestEnabled(self):
         return self.__getGlobalSetting('isPotapovQuestEnabled', False)
@@ -106,7 +169,13 @@ class ServerSettings(object):
         return True
 
     def getForbiddenFortDefenseHours(self):
-        return self.__getGlobalSetting('forbiddenFortDefenseHours', [])
+        return self.__getGlobalSetting('forbiddenFortDefenseHours', tuple())
+
+    def getForbiddenSortieHours(self):
+        return self.__getGlobalSetting('forbiddenSortieHours', tuple())
+
+    def getForbiddenSortiePeripheryIDs(self):
+        return self.__getGlobalSetting('forbiddenSortiePeripheryIDs', tuple())
 
     def __getGlobalSetting(self, settingsName, default = None):
         return self.__serverSettings.get(settingsName, default)

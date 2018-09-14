@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/block_tasks.py
-from gui.shared.utils import findFirst
+from shared_utils import findFirst
 from messenger.m_constants import USER_ACTION_ID, USER_TAG, PROTO_TYPE, CLIENT_ACTION_ID
 from messenger.proto.xmpp import entities, errors
 from messenger.proto.xmpp.contacts.tasks import TASK_RESULT, ContactTask, SeqTask, IQTask

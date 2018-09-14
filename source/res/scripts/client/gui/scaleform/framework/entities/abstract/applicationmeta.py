@@ -73,6 +73,10 @@ class ApplicationMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_registerManagers()
 
+    def as_setLibrariesListS(self, list):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setLibrariesList(list)
+
     def as_updateStageS(self, w, h, scale):
         if self._isDAAPIInited():
             return self.flashObject.as_updateStage(w, h, scale)

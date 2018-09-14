@@ -1,11 +1,12 @@
 # Embedded file name: scripts/client/gui/battle_results/VehicleProgressHelper.py
 import BigWorld
 import math
+from operator import attrgetter
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons
-from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
+from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
 from gui.shared.gui_items.Vehicle import getLevelIconPath
 from helpers.i18n import makeString as _ms
 
@@ -90,7 +91,11 @@ class VehicleProgressHelper(object):
                 if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
                     ready2BuyVehicles.append(self.__makeVehiclePurchaseVO(item, unlockProps, price[0]))
                 elif not item.isInstalled(self.__vehicle):
-                    ready2BuyModules.append(self.__makeModulePurchaseVO(item, unlockProps, price[0]))
+                    items = getVehicleComponentsByType(self.__vehicle, item.itemTypeID).values()
+                    if len(items) > 0:
+                        installedModule = max(items, key=attrgetter('level'))
+                        if item.level > installedModule.level:
+                            ready2BuyModules.append(self.__makeModulePurchaseVO(item, unlockProps, price[0]))
 
         return (ready2BuyVehicles, ready2BuyModules)
 

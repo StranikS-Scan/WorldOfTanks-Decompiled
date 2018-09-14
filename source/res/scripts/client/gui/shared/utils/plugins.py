@@ -2,7 +2,7 @@
 import weakref
 import operator
 from debug_utils import LOG_ERROR
-from gui.shared.utils import forEach
+from shared_utils import forEach
 
 class IPlugin(object):
 
@@ -21,6 +21,16 @@ class IPlugin(object):
 
     def stop(self):
         pass
+
+    def reset(self):
+        pass
+
+    def update(self):
+        pass
+
+    @property
+    def parentObj(self):
+        return self._parentObj
 
 
 class PluginsCollection(IPlugin):
@@ -50,6 +60,12 @@ class PluginsCollection(IPlugin):
 
     def stop(self):
         self._invoke('stop')
+
+    def reset(self):
+        self._invoke('reset')
+
+    def update(self):
+        self._invoke('update')
 
     def _invoke(self, method, *args):
         forEach(operator.methodcaller(method, *args), self.__plugins.itervalues())

@@ -24,4 +24,4 @@ class Goodie(object):
             return False
 
     def toPdata(self):
-        return (self.state, int(self.expiration), self.counter)
+        return (self.state, self.expiration, self.counter)

@@ -2,7 +2,6 @@
 from functools import partial
 from UnitBase import UNIT_BROWSER_TYPE
 from constants import PREBATTLE_TYPE
-from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.rally.rally_dps import ManualSearchDataProvider
@@ -21,7 +20,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import CSVehicleSelectEvent
 from gui.clubs import events_dispatcher as club_events
 from gui.shared.formatters import text_styles
-from gui.shared.view_helpers import ClubEmblemsHelper
+from gui.shared.view_helpers import ClubEmblemsHelper, CooldownHelper
 from helpers import int2roman
 from gui.Scaleform.framework import AppRef
 from helpers.i18n import makeString as _ms
@@ -34,6 +33,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         self._section = 'selectedListVehicles'
         self._selectedVehicles = self.unitFunctional.getSelectedVehicles(self._section)
         self._unitTypeFlags = UNIT_BROWSER_TYPE.ALL
+        self._cooldown = CooldownHelper(self.getCoolDownRequests(), self._onCooldownHandle, events.CoolDownEvent.PREBATTLE)
 
     def onUnitFunctionalInited(self):
         self.unitFunctional.setPrbType(PREBATTLE_TYPE.UNIT)
@@ -47,65 +47,6 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
     def canBeClosed(self, callback):
         self._isBackButtonClicked = True
         callback(True)
-
-    def _populate(self):
-        super(CyberSportUnitsListView, self)._populate()
-        self.addListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__onVehiclesSelectedTeams)
-        self.startUnitListening()
-        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.NONE:
-            self.unitFunctional.setPrbType(PREBATTLE_TYPE.UNIT)
-        self.updateSelectedVehicles()
-        unit_ext.initListReq(self._unitTypeFlags).start(self.__onUnitsListUpdated)
-        g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesChanged})
-        self.as_setSearchResultTextS(_ms(CYBERSPORT.WINDOW_UNITLISTVIEW_FOUNDTEAMS), '', self.__getFiltersData())
-        headerDescription = CYBERSPORT.WINDOW_UNITLISTVIEW_DESCRIPTION
-        headerTitle = CYBERSPORT.WINDOW_UNITLISTVIEW_TITLE
-        self.as_setHeaderS({'title': headerTitle,
-         'description': headerDescription,
-         'createBtnLabel': CYBERSPORT.WINDOW_UNITLISTVIEW_CREATE_BTN,
-         'createBtnTooltip': None,
-         'createBtnEnabled': True,
-         'columnHeaders': self.__getColumnHeaders()})
-        return
-
-    def __getColumnHeaders(self):
-        headers = []
-        headers.append(self.__createHedader('', 54, RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LADDERICON))
-        headers.append(self.__createHedader('', 58, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24))
-        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_COMMANDER, 152))
-        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_DESCRIPTION, 220))
-        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_PLAYERS, 76))
-        return headers
-
-    def __createHedader(self, label, buttonWidth, iconSource = None):
-        return {'label': label,
-         'buttonWidth': buttonWidth,
-         'iconSource': iconSource}
-
-    def __updateVehicleLabel(self):
-        settings = self.unitFunctional.getRosterSettings()
-        self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
-
-    def __getFiltersData(self):
-        return {'isSelected': self._unitTypeFlags == UNIT_BROWSER_TYPE.RATED_CLUBS,
-         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_RANKEDICON,
-         'label': _ms(CYBERSPORT.WINDOW_UNITLISTVIEW_FOUNDTEAMS_FILTERTEXT)}
-
-    def _onUserActionReceived(self, _, user):
-        self.__updateView(user)
-
-    def _dispose(self):
-        super(CyberSportUnitsListView, self)._dispose()
-        if self._isBackButtonClicked:
-            unit_ext.destroyListReq()
-            self._isBackButtonClicked = False
-        else:
-            listReq = unit_ext.getListReq()
-            if listReq:
-                listReq.stop()
-        self.stopUnitListening()
-        self.removeListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__onVehiclesSelectedTeams)
-        g_clientUpdateManager.removeObjectCallbacks(self)
 
     def updateSelectedVehicles(self):
         maxLevel = self.unitFunctional.getRosterSettings().getMaxLevel()
@@ -134,29 +75,12 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
          'levelsRange': levelsRange}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
-    def __onUnitsListUpdated(self, selectedID, isFullUpdate, isReqInCoolDown, units):
-        if isFullUpdate:
-            selectedIdx = self._searchDP.rebuildList(selectedID, units)
-            navigationData = {'previousVisible': True,
-             'previousEnabled': not isReqInCoolDown,
-             'nextVisible': True,
-             'nextEnabled': not isReqInCoolDown,
-             'icon': RES_ICONS.MAPS_ICONS_STATISTIC_RATING24}
-            self.as_updateNavigationBlockS(navigationData)
-        else:
-            selectedIdx = self._searchDP.updateList(selectedID, units)
-        if selectedIdx is not None:
-            self.as_selectByIndexS(selectedIdx)
-        return
-
     def loadPrevious(self):
-        LOG_DEBUG('load Previous click')
         listReq = unit_ext.getListReq()
         if listReq:
             listReq.request(req=REQUEST_TYPE.UNITS_NAV_LEFT)
 
     def loadNext(self):
-        LOG_DEBUG('load Next click')
         listReq = unit_ext.getListReq()
         if listReq:
             listReq.request(req=REQUEST_TYPE.UNITS_NAV_RIGHT)
@@ -165,12 +89,6 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         listReq = unit_ext.getListReq()
         if listReq:
             listReq.request(req=REQUEST_TYPE.UNITS_REFRESH)
-
-    def __onVehiclesSelectedTeams(self, event):
-        self._selectedVehicles = event.ctx
-        self.updateSelectedVehicles()
-        self.unitFunctional.setSelectedVehicles(self._section, self._selectedVehicles)
-        self.__recenterList()
 
     def getRallyDetails(self, index):
         cfdUnitID, vo = self._searchDP.getRally(index)
@@ -181,6 +99,93 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
 
     def showRallyProfile(self, clubDBID):
         club_events.showClubProfile(clubDBID)
+
+    def _populate(self):
+        super(CyberSportUnitsListView, self)._populate()
+        self._cooldown.start()
+        self.addListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__onVehiclesSelectedTeams)
+        self.startUnitListening()
+        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.NONE:
+            self.unitFunctional.setPrbType(PREBATTLE_TYPE.UNIT)
+        self.updateSelectedVehicles()
+        unit_ext.initListReq(self._unitTypeFlags).start(self.__onUnitsListUpdated)
+        g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesChanged})
+        self.as_setSearchResultTextS(_ms(CYBERSPORT.WINDOW_UNITLISTVIEW_FOUNDTEAMS), '', self.__getFiltersData())
+        headerDescription = CYBERSPORT.WINDOW_UNITLISTVIEW_DESCRIPTION
+        headerTitle = CYBERSPORT.WINDOW_UNITLISTVIEW_TITLE
+        self.as_setHeaderS({'title': headerTitle,
+         'description': headerDescription,
+         'createBtnLabel': CYBERSPORT.WINDOW_UNITLISTVIEW_CREATE_BTN,
+         'createBtnTooltip': None,
+         'createBtnEnabled': True,
+         'columnHeaders': self.__getColumnHeaders()})
+        return
+
+    def _dispose(self):
+        self._cooldown.stop()
+        self._cooldown = None
+        if self._isBackButtonClicked:
+            unit_ext.destroyListReq()
+            self._isBackButtonClicked = False
+        else:
+            listReq = unit_ext.getListReq()
+            if listReq:
+                listReq.stop()
+        self.stopUnitListening()
+        self.removeListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__onVehiclesSelectedTeams)
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        super(CyberSportUnitsListView, self)._dispose()
+        return
+
+    def _onUserActionReceived(self, _, user):
+        self.__updateView(user)
+
+    def _doEnableNavButtons(self, isEnabled):
+        self.as_updateNavigationBlockS({'previousVisible': True,
+         'previousEnabled': isEnabled,
+         'nextVisible': True,
+         'nextEnabled': isEnabled,
+         'icon': RES_ICONS.MAPS_ICONS_STATISTIC_RATING24})
+
+    def _onCooldownHandle(self, isInCooldown):
+        self._doEnableNavButtons(not isInCooldown)
+
+    def __getColumnHeaders(self):
+        return [self.__createHedader('', 54, RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LADDERICON),
+         self.__createHedader('', 58, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),
+         self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_COMMANDER, 152),
+         self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_DESCRIPTION, 220),
+         self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_PLAYERS, 76)]
+
+    def __createHedader(self, label, buttonWidth, iconSource = None):
+        return {'label': label,
+         'buttonWidth': buttonWidth,
+         'iconSource': iconSource}
+
+    def __updateVehicleLabel(self):
+        settings = self.unitFunctional.getRosterSettings()
+        self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
+
+    def __getFiltersData(self):
+        return {'isSelected': self._unitTypeFlags == UNIT_BROWSER_TYPE.RATED_CLUBS,
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_RANKEDICON,
+         'label': _ms(CYBERSPORT.WINDOW_UNITLISTVIEW_FOUNDTEAMS_FILTERTEXT)}
+
+    def __onUnitsListUpdated(self, selectedID, isFullUpdate, isReqInCoolDown, units):
+        if isFullUpdate:
+            selectedIdx = self._searchDP.rebuildList(selectedID, units)
+            self._doEnableNavButtons(not isReqInCoolDown)
+        else:
+            selectedIdx = self._searchDP.updateList(selectedID, units)
+        if selectedIdx is not None:
+            self.as_selectByIndexS(selectedIdx)
+        return
+
+    def __onVehiclesSelectedTeams(self, event):
+        self._selectedVehicles = event.ctx
+        self.updateSelectedVehicles()
+        self.unitFunctional.setSelectedVehicles(self._section, self._selectedVehicles)
+        self.__recenterList()
 
     def __setDetailsData(self, unitID, vo):
         _, unit = self.unitFunctional.getUnit(unitID)

@@ -29,3 +29,7 @@ class DEVELOPMENT(object):
     EDITOR_CONTEXTMENU_PASTE = '#development:editor/contextMenu/paste'
     EDITOR_CONTEXTMENU_COPY = '#development:editor/contextMenu/copy'
     EDITOR_CONTEXTMENU_CLOSE_EDITOR = '#development:editor/contextMenu/close_editor'
+    EDITOR_GOTO = '#development:editor/goto'
+    EDITOR_SEARCH = '#development:editor/search'
+    EDITOR_PAUSE = '#development:editor/Pause'
+    EDITOR_RESUME = '#development:editor/Resume'

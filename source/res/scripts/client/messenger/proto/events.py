@@ -13,6 +13,7 @@ class _ChannelsSharedEvents(object):
         self.onChannelInfoUpdated = Event.Event(self.__eventManager)
         self.onConnectStateChanged = Event.Event(self.__eventManager)
         self.onMessageReceived = Event.Event(self.__eventManager)
+        self.onHistoryReceived = Event.Event(self.__eventManager)
         self.onCommandReceived = Event.Event(self.__eventManager)
 
     def clear(self):

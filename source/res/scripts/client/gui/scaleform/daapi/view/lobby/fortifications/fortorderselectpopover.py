@@ -12,7 +12,7 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
-from gui.Scaleform.framework.managers.TextManager import TextIcons
+from gui.shared.formatters import icons
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 
@@ -82,7 +82,7 @@ class FortOrderSelectPopover(FortOrderSelectPopoverMeta, SmartPopOverView, View,
                     description = ''
                 else:
                     description = orderLevelLabel
-                icon = self.app.utilsManager.textManager.getIcon(TextIcons.CHECKMARK_ICON)
+                icon = icons.nut()
                 orderCountText = icon + _getText(TEXT_MANAGER_STYLES.SUCCESS_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_SELECTED))
             result.append({'orderID': orderTypeID,
              'orderIconSrc': orderItem.icon,

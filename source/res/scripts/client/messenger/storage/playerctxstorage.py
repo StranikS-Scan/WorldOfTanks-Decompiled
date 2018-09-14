@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/storage/PlayerCtxStorage.py
 import types
 import Event
-from constants import ACCOUNT_ATTR
+from constants import ACCOUNT_ATTR, WG_GAMES
 from debug_utils import LOG_WARNING
 from messenger.storage import SimpleCachedStorage
 
@@ -55,10 +55,12 @@ class PlayerCtxStorage(SimpleCachedStorage):
     def isChatAdmin(self):
         return self.__accAttrs & ACCOUNT_ATTR.CHAT_ADMIN != 0
 
-    def isChatBan(self):
+    def isBanned(self, components = None):
         if self.__banInfo:
-            return self.__banInfo.isChatBan()
-        return False
+            result = self.__banInfo.isBanned(game=WG_GAMES.TANKS, components=components)
+        else:
+            result = False
+        return result
 
     def getBanInfo(self):
         return self.__banInfo

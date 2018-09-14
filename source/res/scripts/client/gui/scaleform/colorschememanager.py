@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/ColorSchemeManager.py
 import types
-import BigWorld, Math, ResMgr
+import Math, ResMgr
 from debug_utils import LOG_ERROR, LOG_WARNING
 from windows import UIInterface
 
@@ -214,6 +214,10 @@ class _ColorSchemeManager(UIInterface):
              'transform': {'mult': cls.DEFAULT_TRANSFORM_COLOR_MULT,
                            'offset': cls.DEFAULT_TRANSFORM_COLOR_OFFSET}}
         return sub
+
+    @classmethod
+    def getRGBA(cls, schemeName, isColorBlind = False):
+        return cls.getSubScheme(schemeName, isColorBlind)['rgba']
 
     @classmethod
     def _makeRGB(cls, subScheme):

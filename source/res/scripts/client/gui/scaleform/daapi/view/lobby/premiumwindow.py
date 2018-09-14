@@ -2,9 +2,9 @@
 import sys
 import BigWorld
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.meta.PremiumWindowMeta import PremiumWindowMeta
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.genConsts.BUTTON_LINKAGES import BUTTON_LINKAGES
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -31,7 +31,7 @@ class PremiumWindow(View, PremiumWindowMeta, AbstractWindowView, AppRef):
         if action == 'closeAction':
             self.onWindowClose()
 
-    def onTariffClick(self, packetID):
+    def onRateClick(self, packetID):
         period = int(packetID)
         self.__premiumBuyRequest(period, self._actualPremiumCost[period])
 
@@ -59,7 +59,7 @@ class PremiumWindow(View, PremiumWindowMeta, AbstractWindowView, AppRef):
 
     def __onUpdateHandler(self, *args):
         premiumPackets, self._actualPremiumCost, selectedPacketID = self.__getPremiumPackets()
-        self.as_setTariffsS(MENU.PREMIUM_TARIFFS_HEADER, premiumPackets, selectedPacketID)
+        self.as_setRatesS(MENU.PREMIUM_TARIFFS_HEADER, premiumPackets, selectedPacketID)
         self.as_setButtonsS(self.__getBtnData(), TEXT_ALIGN.RIGHT, BTN_WIDTH)
 
     @process('loadStats')
@@ -75,7 +75,7 @@ class PremiumWindow(View, PremiumWindowMeta, AbstractWindowView, AppRef):
         self.as_setWindowTitleS(self.__getTitle())
         self.as_setHeaderS(MENU.PREMIUM_PERCENTFACTOR, MENU.PREMIUM_BONUS1, MENU.PREMIUM_BONUS2)
         premiumPackets, self._actualPremiumCost, selectedPacketID = self.__getPremiumPackets()
-        self.as_setTariffsS(MENU.PREMIUM_TARIFFS_HEADER, premiumPackets, selectedPacketID)
+        self.as_setRatesS(MENU.PREMIUM_TARIFFS_HEADER, premiumPackets, selectedPacketID)
         self.as_setButtonsS(self.__getBtnData(), TEXT_ALIGN.RIGHT, BTN_WIDTH)
 
     def __getTitle(self):

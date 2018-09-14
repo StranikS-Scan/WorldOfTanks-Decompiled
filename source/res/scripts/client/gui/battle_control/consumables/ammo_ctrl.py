@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/battle_control/consumables/ammo_ctrl.py
-from collections import namedtuple
 import weakref
+from collections import namedtuple
 import BigWorld
 import CommandMapping
 import Event
@@ -8,8 +8,8 @@ from constants import VEHICLE_SETTING
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERROR
+from gui.shared.utils.MethodsRules import MethodsRules
 from items import vehicles
-import BattleReplay
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 
 class _GunSettings(namedtuple('_GunSettings', 'clip burst shots')):
@@ -100,8 +100,8 @@ class _AutoShootsCtrl(object):
         return
 
 
-class AmmoController(object):
-    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunReloadTimeSetInPercent', '__weakref__', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '__reloadTime', '__baseTime', '__autoShoots')
+class AmmoController(MethodsRules):
+    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunReloadTimeSetInPercent', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '__reloadTime', '__baseTime', '__autoShoots', '__weakref__')
 
     def __init__(self):
         super(AmmoController, self).__init__()
@@ -127,6 +127,7 @@ class AmmoController(object):
         return '{0:>s}(ammo = {1!r:s}, current = {2!r:s}, next = {3!r:s}, gun = {4!r:s})'.format(self.__class__.__name__, self.__ammo, self.__currShellCD, self.__nextShellCD, self.__gunSettings)
 
     def clear(self, leave = True):
+        super(AmmoController, self).clear()
         if leave:
             self.__eManager.clear()
         self.__ammo.clear()
@@ -142,6 +143,7 @@ class AmmoController(object):
     def getGunSettings(self):
         return self.__gunSettings
 
+    @MethodsRules.delayable()
     def setGunSettings(self, gun):
         self.__gunSettings = _GunSettings.make(gun)
         self.onGunSettingsSet(self.__gunSettings)
@@ -149,6 +151,7 @@ class AmmoController(object):
     def getNextShellCD(self):
         return self.__nextShellCD
 
+    @MethodsRules.delayable('setShells')
     def setNextShellCD(self, intCD):
         result = False
         if intCD in self.__ammo:
@@ -163,6 +166,7 @@ class AmmoController(object):
     def getCurrentShellCD(self):
         return self.__currShellCD
 
+    @MethodsRules.delayable('setShells')
     def setCurrentShellCD(self, intCD):
         result = False
         if intCD in self.__ammo:
@@ -174,6 +178,7 @@ class AmmoController(object):
             LOG_CODEPOINT_WARNING('Shell is not found in received list to set as current.', intCD)
         return result
 
+    @MethodsRules.delayable('setCurrentShellCD')
     def setGunReloadTime(self, timeLeft, baseTime):
         interval = self.__gunSettings.clip.interval
         if interval > 0:
@@ -198,6 +203,7 @@ class AmmoController(object):
     def isGunReloading(self):
         return self.__reloadTime != 0
 
+    @MethodsRules.delayable('setGunReloadTime')
     def refreshGunReloading(self):
         self.onGunReloadTimeSet(self.__currShellCD, self.__reloadTime, self.__baseTime)
 
@@ -216,6 +222,7 @@ class AmmoController(object):
     def getCurrentShells(self):
         return self.getShells(self.__currShellCD)
 
+    @MethodsRules.delayable('setGunSettings')
     def setShells(self, intCD, quantity, quantityInClip):
         result = SHELL_SET_RESULT.UNDEFINED
         if intCD in self.__ammo:
@@ -226,6 +233,8 @@ class AmmoController(object):
                 result |= SHELL_SET_RESULT.CURRENT
                 if quantityInClip > 0 and prevAmmo[1] == 0 and quantity == prevAmmo[0]:
                     result |= SHELL_SET_RESULT.CASSETTE_RELOAD
+                else:
+                    avatar_getter.refreshShotDispersionAngle()
             self.onShellsUpdated(intCD, quantity, quantityInClip, result)
         else:
             self.__ammo[intCD] = (quantity, quantityInClip)
@@ -300,11 +309,11 @@ class AmmoController(object):
 
 
 class AmmoReplayRecorder(AmmoController):
-    __slots__ = ('__changeRecord', '__timeRecord')
+    __slots__ = ('__changeRecord', '__timeRecord', '__replayCtrl')
 
-    def __init__(self):
+    def __init__(self, replayCtrl):
         super(AmmoReplayRecorder, self).__init__()
-        replayCtrl = BattleReplay.g_replayCtrl
+        self.__replayCtrl = replayCtrl
         self.__changeRecord = replayCtrl.setAmmoSetting
         self.__timeRecord = replayCtrl.setGunReloadTime
 
@@ -325,16 +334,16 @@ class AmmoReplayRecorder(AmmoController):
 
 
 class AmmoReplayPlayer(AmmoController):
-    __slots__ = ('__callbackID', '__isActivated', '__timeGetter', '__percent')
+    __slots__ = ('__callbackID', '__isActivated', '__timeGetter', '__percent', '__replayCtrl')
 
-    def __init__(self):
+    def __init__(self, replayCtrl):
         super(AmmoReplayPlayer, self).__init__()
         self.__callbackID = None
         self.__isActivated = False
         self.__timeGetter = lambda : 0
         self.__percent = None
-        replayCtrl = BattleReplay.g_replayCtrl
-        replayCtrl.onAmmoSettingChanged += self.__onAmmoSettingChanged
+        self.__replayCtrl = replayCtrl
+        self.__replayCtrl.onAmmoSettingChanged += self.__onAmmoSettingChanged
         return
 
     def clear(self, leave = True):
@@ -343,7 +352,7 @@ class AmmoReplayPlayer(AmmoController):
                 BigWorld.cancelCallback(self.__callbackID)
                 self.__callbackID = None
             self.__timeGetter = lambda : 0
-            BattleReplay.g_replayCtrl.onAmmoSettingChanged -= self.__onAmmoSettingChanged
+            self.__replayCtrl.onAmmoSettingChanged -= self.__onAmmoSettingChanged
         super(AmmoReplayPlayer, self).clear(leave)
         return
 
@@ -351,7 +360,7 @@ class AmmoReplayPlayer(AmmoController):
         self.__percent = None
         if not self.__isActivated:
             self.__isActivated = True
-            self.__timeGetter = BattleReplay.g_replayCtrl.getGunReloadAmountLeft
+            self.__timeGetter = self.__replayCtrl.getGunReloadAmountLeft
             self.__timeLoop()
         return
 

@@ -26,9 +26,9 @@ class HangarMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setCarouselEnabled(value)
 
-    def as_setupAmmunitionPanelS(self, maintenanceEnabled, customizationEnabled, customizationTooltip):
+    def as_setupAmmunitionPanelS(self, maintenanceEnabled, maintenanceTooltip, customizationEnabled, customizationTooltip):
         if self._isDAAPIInited():
-            return self.flashObject.as_setupAmmunitionPanel(maintenanceEnabled, customizationEnabled, customizationTooltip)
+            return self.flashObject.as_setupAmmunitionPanel(maintenanceEnabled, maintenanceTooltip, customizationEnabled, customizationTooltip)
 
     def as_setControlsVisibleS(self, value):
         if self._isDAAPIInited():
@@ -61,3 +61,15 @@ class HangarMeta(DAAPIModule):
     def as_setVehicleIGRS(self, actionIgrDaysLeft):
         if self._isDAAPIInited():
             return self.flashObject.as_setVehicleIGR(actionIgrDaysLeft)
+
+    def as_showMiniClientInfoS(self, description, hyperlink):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showMiniClientInfo(description, hyperlink)
+
+    def as_show3DSceneTooltipS(self, id, args):
+        if self._isDAAPIInited():
+            return self.flashObject.as_show3DSceneTooltip(id, args)
+
+    def as_hide3DSceneTooltipS(self):
+        if self._isDAAPIInited():
+            return self.flashObject.as_hide3DSceneTooltip()

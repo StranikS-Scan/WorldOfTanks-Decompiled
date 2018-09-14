@@ -1,11 +1,15 @@
 # Embedded file name: scripts/client/messenger/m_settings.py
 from collections import namedtuple, defaultdict
-import Account
 import Event
 from debug_utils import LOG_ERROR
 from helpers.html.templates import XMLCollection
 from messenger import doc_loaders
 from messenger.doc_loaders.html_templates import MessageTemplates
+
+def _getAccountRepository():
+    import Account
+    return Account.g_accountRepository
+
 
 class _ColorScheme(defaultdict):
 
@@ -146,8 +150,9 @@ class MessengerSettings(object):
         self.__messageFormatters.clear()
 
     def update(self):
-        if Account.g_accountRepository:
-            settings = Account.g_accountRepository.serverSettings
+        repository = _getAccountRepository()
+        if repository:
+            settings = repository.serverSettings
         else:
             settings = {}
         self.server.update(settings)

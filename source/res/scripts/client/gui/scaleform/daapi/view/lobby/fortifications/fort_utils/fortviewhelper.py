@@ -2,11 +2,10 @@
 import calendar
 import BigWorld
 from FortifiedRegionBase import NOT_ACTIVATED
-from debug_utils import LOG_DEBUG
 import fortified_regions
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS, FORT_ORDER_TYPE
-from gui.Scaleform.framework.managers.TextManager import TextIcons, TextManager
+from gui.Scaleform.framework.managers.TextManager import TextManager
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -14,8 +13,10 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.fort_helpers import FortListener
-from gui.shared.utils import findFirst
+from gui.shared.formatters import icons
+from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from helpers import i18n, time_utils
+from shared_utils import findFirst
 
 class FortViewHelper(FortListener):
     FORT_UNKNOWN = FORTIFICATION_ALIASES.FORT_UNKNOWN
@@ -101,6 +102,47 @@ class FortViewHelper(FortListener):
          'clanCommanderName': g_clanCache.clanCommanderName,
          'level': level}
 
+    @staticmethod
+    def getMapIconSource(uid, level, hpVal = 0, maxHpValue = 0, isFortFrozen = False, isDefenceOn = False):
+        return FortViewHelper._getIconSource(uid, level, FORTIFICATION_ALIASES.FORT_ICONS_MAP, hpVal, maxHpValue, isFortFrozen, isDefenceOn)
+
+    @staticmethod
+    def getPopoverIconSource(uid, level, isDefenceOn = False):
+        return FortViewHelper._getIconSource(uid, level, FORTIFICATION_ALIASES.FORT_ICONS_POPOVERS, isDefenceOn=isDefenceOn)
+
+    @staticmethod
+    def getSmallIconSource(uid, level, isDefenceOn = False):
+        return FortViewHelper._getIconSource(uid, level, FORTIFICATION_ALIASES.FORT_ICONS_SMALL, isDefenceOn=isDefenceOn)
+
+    @staticmethod
+    def _getIconSource(uid, level, path, hpVal = 0, maxHpValue = 0, isFortFrozen = False, isDefenceOn = False):
+        buildingLevel = FortViewHelper._getUpgradeLevelByBuildingLevel(uid, level, isDefenceOn)
+        if hpVal < maxHpValue and buildingLevel > 1:
+            if uid == FORTIFICATION_ALIASES.FORT_BASE_BUILDING:
+                damageState = '_destroyed' if isFortFrozen else '_damaged'
+            else:
+                damageState = '_destroyed'
+        else:
+            damageState = ''
+        iconSource = '%s%s_level%d%s.png' % (path,
+         uid,
+         buildingLevel,
+         damageState)
+        return iconSource
+
+    @staticmethod
+    def _getUpgradeLevelByBuildingLevel(uid, level, isDefenceOn):
+        upgradeLevel = 1
+        if uid == FORTIFICATION_ALIASES.FORT_BASE_BUILDING:
+            isSecondUpgradeLevel = level == FORT_BATTLE_DIVISIONS.CHAMPION.minFortLevel and isDefenceOn or FORT_BATTLE_DIVISIONS.CHAMPION.minFortLevel < level <= FORT_BATTLE_DIVISIONS.CHAMPION.maxFortLevel
+        else:
+            isSecondUpgradeLevel = FORT_BATTLE_DIVISIONS.CHAMPION.minFortLevel <= level <= FORT_BATTLE_DIVISIONS.CHAMPION.maxFortLevel
+        if isSecondUpgradeLevel:
+            upgradeLevel = 2
+        elif FORT_BATTLE_DIVISIONS.ABSOLUTE.minFortLevel <= level <= FORT_BATTLE_DIVISIONS.ABSOLUTE.maxFortLevel:
+            upgradeLevel = 3
+        return upgradeLevel
+
     def _getCustomData(self):
         return {}
 
@@ -126,6 +168,11 @@ class FortViewHelper(FortListener):
         if orderTooltipData is not None:
             toolTipData += orderTooltipData
         return toolTipData
+
+    def _getBaseBuildingUpgradeLevel(self, isDefenceOn):
+        baseBuilding = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
+        buildingLevel = FortViewHelper._getUpgradeLevelByBuildingLevel(FORTIFICATION_ALIASES.FORT_BASE_BUILDING, baseBuilding.level, isDefenceOn)
+        return buildingLevel
 
     def _isBaseBuildingDamaged(self):
         baseBuilding = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
@@ -168,6 +215,7 @@ class FortViewHelper(FortListener):
         progress = FORTIFICATION_ALIASES.STATE_TROWEL
         isLevelUp = False
         cooldownStr = None
+        fort = self.fortCtrl.getFort()
         if buildingDescr is not None:
             uid = self.getBuildingUIDbyID(buildingDescr.typeID)
             defResVal = buildingDescr.storage
@@ -176,7 +224,6 @@ class FortViewHelper(FortListener):
             maxHpValue = buildingDescr.levelRef.hp
             level = buildingDescr.level
             if not onlyBaseData:
-                fort = self.fortCtrl.getFort()
                 progress = self._getProgress(buildingDescr.typeID, level)
                 buildingID = buildingDescr.typeID
                 limits = self.fortCtrl.getLimits()
@@ -192,13 +239,17 @@ class FortViewHelper(FortListener):
                     isExportAvailable = len(fort.getBuildingsAvailableForImport(buildingID)) > 0
                 if isImportAvailable:
                     isImportAvailable = len(fort.getBuildingsAvailableForExport(buildingID)) > 0
+        inProcess, _ = fort.getDefenceHourProcessing()
+        isDefenceOn = fort.isDefenceHourEnabled() or inProcess
+        iconSource = FortViewHelper.getMapIconSource(uid, level, hpVal, maxHpValue, self._isFortFrozen(), isDefenceOn)
         data = {'uid': uid,
          'defResVal': defResVal,
          'maxDefResValue': maxDefResValue,
          'hpVal': hpVal,
          'maxHpValue': maxHpValue,
          'buildingLevel': level,
-         'animationType': animation}
+         'animationType': animation,
+         'iconSource': iconSource}
         if not onlyBaseData:
             isDefenceHour = progress == FORTIFICATION_ALIASES.STATE_TROWEL and direction in self.fortCtrl.getFort().getDirectionsInBattle()
             data.update({'isDefenceHour': isDefenceHour,
@@ -216,7 +267,8 @@ class FortViewHelper(FortListener):
              'productionInPause': self._isProductionInPause(buildingDescr),
              'animationType': animation,
              'isBaseBuildingDamaged': self._isBaseBuildingDamaged(),
-             'isFortFrozen': self._isFortFrozen()})
+             'isFortFrozen': self._isFortFrozen(),
+             'directionType': self._getBaseBuildingUpgradeLevel(isDefenceOn)})
         return data
 
     def _isEnableActionBtn(self, descr):
@@ -287,7 +339,7 @@ class FortViewHelper(FortListener):
         return not self._isTutorial() and not isOnDefenceHour
 
     def getBuildingTooltipBody(self, hpVal, maxHpValue, defResVal, maxDefResValue):
-        nutIcon = ' ' + TextManager.reference().getIcon(TextIcons.NUT_ICON)
+        nutIcon = ' ' + icons.nut()
         labelOne = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STRENGTH)
         labelTwo = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STORE)
         fstLine = labelOne + self.__toFormattedStr(hpVal) + '/' + self.__toFormattedStr(maxHpValue) + nutIcon

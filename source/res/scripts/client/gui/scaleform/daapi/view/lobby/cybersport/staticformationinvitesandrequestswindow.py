@@ -201,7 +201,7 @@ class StaticFormationInvitesAndRequestsWindow(View, AbstractWindowView, StaticFo
                         canDecline = limits.canDeclineApplication(profile, club).success
                     else:
                         canAccept = canDecline = False
-                    apps.append(_DataItem(app.getID(), self.getUserFullName(dbID), self.getUserRating(dbID), canAccept, canDecline, False, _formatInviteStatus(app)))
+                    apps.append(_DataItem(app.getID(), self.getGuiUserFullName(dbID), self.getUserRating(dbID), canAccept, canDecline, False, _formatInviteStatus(app)))
 
             for invite in sorted(club.getInvites().itervalues()):
                 dbID = invite.getUserDbID()
@@ -209,7 +209,7 @@ class StaticFormationInvitesAndRequestsWindow(View, AbstractWindowView, StaticFo
                     canRevoke = limits.canRevokeInvite(profile, club).success
                 else:
                     canRevoke = False
-                invites.append(_DataItem(invite.getID(), self.getUserFullName(dbID), self.getUserRating(dbID), False, canRevoke, invite.isActive(), _formatInviteStatus(invite)))
+                invites.append(_DataItem(invite.getID(), self.getGuiUserFullName(dbID), self.getUserRating(dbID), False, canRevoke, invite.isActive(), _formatInviteStatus(invite)))
 
             if syncUserData:
                 self.syncUsersInfo()

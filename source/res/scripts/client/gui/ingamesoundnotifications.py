@@ -7,6 +7,7 @@ from functools import partial
 from debug_utils import *
 from Vehicle import Vehicle
 import SoundGroups
+import FMOD
 
 class IngameSoundNotifications(object):
     __CFG_SECTION_PATH = 'gui/sound_notifications.xml'
@@ -78,7 +79,7 @@ class IngameSoundNotifications(object):
                     queueItem = IngameSoundNotifications.QueueItem(soundPath, time + soundDesc['timeout'], minTimeBetweenEvents, idToBind, checkFn)
                     if rules == 0:
                         try:
-                            SoundGroups.g_instance.FMODplaySound(soundDesc['sound'])
+                            SoundGroups.g_instance.playSound2D(soundDesc['sound'])
                         except:
                             pass
 
@@ -162,17 +163,18 @@ class IngameSoundNotifications(object):
                 if time > timeout:
                     continue
                 succes = True
-                try:
-                    sound = SoundGroups.g_instance.FMODplaySound(soundPath)
-                    if sound is None:
+                if FMOD.enabled:
+                    try:
+                        sound = SoundGroups.g_instance.playSound2D(soundPath)
+                        if sound is None:
+                            succes = False
+                    except:
                         succes = False
-                except:
-                    succes = False
 
                 if not succes:
                     LOG_ERROR('Failed to load sound %s' % soundPath)
 
-            if succes:
+            if FMOD.enabled and succes:
                 if sound.duration == 0:
                     LOG_WARNING('Sound notification %s has zero duration and was skipped' % soundPath)
                     BigWorld.callback(0.01, partial(self.__playFirstFromQueue, category))
@@ -190,7 +192,7 @@ class IngameSoundNotifications(object):
             for category in ('fx', 'voice'):
                 soundSec = eventSec[category]
                 if soundSec is not None:
-                    event[category] = {'sound': soundSec.readString('sound'),
+                    event[category] = {'sound': soundSec.readString('sound') if FMOD.enabled else soundSec.readString('wwsound'),
                      'playRules': soundSec.readInt('playRules'),
                      'timeout': soundSec.readFloat('timeout', 3.0),
                      'minTimeBetweenEvents': soundSec.readFloat('minTimeBetweenEvents', 0),

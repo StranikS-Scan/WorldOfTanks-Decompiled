@@ -4,13 +4,12 @@ from gui.battle_control.consumables import ammo_ctrl
 from gui.battle_control.consumables import equipment_ctrl
 
 def createAmmoCtrl(isReplayPlaying, isReplayRecording):
+    import BattleReplay
     if isReplayRecording:
-        clazz = ammo_ctrl.AmmoReplayRecorder
-    elif isReplayPlaying:
-        clazz = ammo_ctrl.AmmoReplayPlayer
-    else:
-        clazz = ammo_ctrl.AmmoController
-    return clazz()
+        return ammo_ctrl.AmmoReplayRecorder(BattleReplay.g_replayCtrl)
+    if isReplayPlaying:
+        return ammo_ctrl.AmmoReplayPlayer(BattleReplay.g_replayCtrl)
+    return ammo_ctrl.AmmoController()
 
 
 def createEquipmentCtrl(isReplayPlaying):

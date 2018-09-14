@@ -86,7 +86,7 @@ class AccountValidator(object):
     def __validateInvItem(self, itemTypeID, errorCode):
         for intCompactDescr, itemData in g_itemsCache.items.inventory.getItemsData(itemTypeID).iteritems():
             try:
-                vehicles.getDictDescr(intCompactDescr)
+                vehicles.getDictDescr(abs(intCompactDescr))
             except Exception as e:
                 raise ValidateException(e.message, errorCode, self.__packItemData(itemTypeID, itemData))
 

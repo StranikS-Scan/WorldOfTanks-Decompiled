@@ -4,8 +4,9 @@ from chat_shared import CHAT_ACTIONS
 from constants import IS_DEVELOPMENT
 from debug_utils import *
 from ids_generators import SequenceIDGenerator
-from messenger import formatters
+from messenger.formatters import collections_by_type
 from messenger.m_constants import MESSENGER_SCOPE, SCH_MSGS_MAX_LENGTH
+from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from messenger.proto.events import g_messengerEvents
@@ -42,8 +43,8 @@ class ServiceChannelManager(ChatActionsListener):
         message = ServiceChannelMessage.fromChatAction(chatAction, personal=True)
         self.__addServerMessage(message)
 
-    def pushClientSysMessage(self, message, msgType, isAlert = False):
-        return self.__addClientMessage(message, formatters.SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name()])
+    def pushClientSysMessage(self, message, msgType, isAlert = False, priority = None):
+        return self.__addClientMessage(message, SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name(), priority])
 
     def pushClientMessage(self, message, msgType, isAlert = False, auxData = None):
         return self.__addClientMessage(message, msgType, isAlert=isAlert, auxData=auxData)
@@ -83,7 +84,7 @@ class ServiceChannelManager(ChatActionsListener):
     @process
     def __addServerMessage(self, message):
         yield lambda callback: callback(True)
-        formatter = formatters.SCH_SERVER_FORMATTERS_DICT.get(message.type)
+        formatter = collections_by_type.SERVER_FORMATTERS.get(message.type)
         serviceChannel = g_messengerEvents.serviceChannel
         serviceChannel.onChatMessageReceived(self.__idGenerator.next(), message)
         LOG_DEBUG('Server message received', message, formatter)
@@ -115,7 +116,7 @@ class ServiceChannelManager(ChatActionsListener):
         if auxData is None:
             auxData = []
         clientID = 0
-        formatter = formatters.SCH_CLIENT_FORMATTERS_DICT.get(msgType)
+        formatter = collections_by_type.CLIENT_FORMATTERS.get(msgType)
         if formatter:
             try:
                 formatted, settings = formatter.format(message, auxData)

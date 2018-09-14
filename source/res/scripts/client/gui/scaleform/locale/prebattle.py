@@ -41,5 +41,6 @@ class PREBATTLE(object):
     LABELS_COMPANY_PLAYERS_BOTTOM = '#prebattle:labels/company/players/bottom'
     LABELS_COMPANY_STATS_COUNT = '#prebattle:labels/company/stats/count'
     LABELS_COMPANY_QUEUE = '#prebattle:labels/company/queue'
+    LABELS_COMPANY_RESTRICTION = '#prebattle:labels/company/restriction'
     COMPANY_HEADER_FALLOUT_REQUIREMENTSTITLE = '#prebattle:Company/header/fallout/requirementsTitle'
     COMPANY_HEADER_FALLOUT_REQUIREDVEHICLESCOUNT = '#prebattle:Company/header/fallout/requiredVehiclesCount'

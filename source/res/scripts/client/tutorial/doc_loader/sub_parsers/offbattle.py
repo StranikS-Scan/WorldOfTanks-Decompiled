@@ -24,6 +24,13 @@ def _readExitQueueEffectSection(xmlCtx, section, flags, conditions):
     return chapter.HasTargetEffect(flagID, chapter.Effect.EXIT_QUEUE, conditions=conditions)
 
 
+def _readInternalBrowserSection(xmlCtx, section, flags, conditions):
+    flagID = sub_parsers._parseID(xmlCtx, section, 'Specify a flag ID')
+    if flagID not in flags:
+        flags.append(flagID)
+    return chapter.HasTargetEffect(flagID, chapter.Effect.OPEN_INTERNAL_BROWSER, conditions=conditions)
+
+
 def _readQueueTriggerSection(xmlCtx, section, chapter, triggerID):
     return triggers.TutorialQueueTrigger(triggerID, _xml.readString(xmlCtx, section, 'pop-up'))
 
@@ -52,10 +59,6 @@ def _readQueueDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
         _xml.raiseWrongSection(xmlCtx, 'time-pointcuts: should be the minimum and maximum value')
     content['timePointcuts'] = sorted(pointcuts)
     return chapter.VarRefPopUp(dialogID, dialogType, content, _xml.readString(xmlCtx, section, 'var-ref'))
-
-
-def _readVideoDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
-    return chapter.VarRefPopUp(dialogID, dialogType, content, None)
 
 
 def _readConfirmRefuseDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
@@ -94,13 +97,13 @@ def _readNoResultsWindowSection(xmlCtx, section, _, windowID, windowType, conten
 def init():
     sub_parsers.setEffectsParsers({'request-all-bonuses': _readRequestAllBonusesEffectSection,
      'enter-queue': _readEnterQueueEffectSection,
-     'exit-queue': _readExitQueueEffectSection})
+     'exit-queue': _readExitQueueEffectSection,
+     'open-internal-browser': _readInternalBrowserSection})
     sub_parsers.setTriggersParsers({'bonus': lobby._readBonusTriggerSection,
      'allBonuses': _readAllBonusesTriggerSection,
      'queue': _readQueueTriggerSection})
     sub_parsers.setDialogsParsers({'greeting': _readGreetingDialogSection,
      'queue': _readQueueDialogSection,
-     'video': _readVideoDialogSection,
      'confirmRefuse': _readConfirmRefuseDialogSection})
     sub_parsers.setWindowsParsers({'final': _readFinalWindowSection,
      'noResults': _readNoResultsWindowSection})

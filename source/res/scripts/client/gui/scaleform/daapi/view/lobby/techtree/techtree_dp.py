@@ -20,14 +20,6 @@ class _ConfigError(Exception):
         return 'Config error in {0:>s}. {1:>s}'.format(self.ctx[1], self.msg)
 
 
-def _makeList():
-    return []
-
-
-def _makeDict():
-    return {}
-
-
 def _makeLines():
     return {'outLiteral': None,
      'outPin': None,
@@ -46,6 +38,7 @@ class _TechTreeDataProvider(object):
         super(_TechTreeDataProvider, self).__init__()
         self.__loaded = False
         self.__availableNations = None
+        self.__override = ''
         self._clear()
         return
 
@@ -54,7 +47,7 @@ class _TechTreeDataProvider(object):
         self.__displaySettings = {}
         self.__topLevels = defaultdict(set)
         self.__topItems = defaultdict(set)
-        self.__nextLevels = defaultdict(_makeDict)
+        self.__nextLevels = defaultdict(dict)
         self.__unlockPrices = defaultdict(dict)
 
     def __readShared(self, clearCache = False):
@@ -89,6 +82,18 @@ class _TechTreeDataProvider(object):
 
             shared['settings'][settingsName] = settings
 
+        if self.__availableNations is None:
+            self.__availableNations = self.__readAvailableNations((None, TREE_SHARED_REL_FILE_PATH), section)
+        self.__readSharedMetrics(shared, xmlCtx, section)
+        if self.__override:
+            subSec = section['overrides/{0:>s}'.format(self.__override)]
+            if subSec:
+                xmlCtx = (None, '{0:>s}/overrides/{1:>s}'.format(TREE_SHARED_REL_FILE_PATH, '', self.__override))
+                self.__readSharedMetrics(shared, xmlCtx, subSec)
+        self.__readDefaultLine(shared, xmlCtx, section)
+        return shared
+
+    def __readSharedMetrics(self, shared, xmlCtx, section):
         precessed = _xml.getChildren(xmlCtx, section, 'grids')
         for name, gridSection in precessed:
             gridName = gridSection.asString
@@ -108,8 +113,6 @@ class _TechTreeDataProvider(object):
              'vertical': vertical,
              'horizontal': horizontal}
 
-        if self.__availableNations is None:
-            self.__availableNations = self.__readAvailableNations((None, TREE_SHARED_REL_FILE_PATH), section)
         precessed = _xml.getChildren(xmlCtx, section, 'lines')
         lines = shared['lines']
         for name, sub in precessed:
@@ -120,7 +123,7 @@ class _TechTreeDataProvider(object):
             pinsSec = _xml.getChildren(xmlCtx, sub, 'outPin')
             outPins = dict(((pName, pSec.asVector2.tuple()) for pName, pSec in pinsSec))
             pinsSec = _xml.getChildren(xmlCtx, sub, 'viaPin')
-            viaPins = defaultdict(_makeDict)
+            viaPins = defaultdict(dict)
             for outPin, setSec in pinsSec:
                 for inPin, pSec in setSec.items():
                     viaPins[outPin][inPin] = map(lambda section: section[1].asVector2.tuple(), pSec.items())
@@ -136,17 +139,20 @@ class _TechTreeDataProvider(object):
              'viaPins': viaPins,
              'default': default}
 
+        return
+
+    def __readDefaultLine(self, shared, xmlCtx, section):
         defSec = _xml.getSubsection(xmlCtx, section, 'default-line')
         xPath = '{0:>s}/default-line'.format(TREE_SHARED_REL_FILE_PATH)
         xmlCtx = (None, xPath)
         name = _xml.readString(xmlCtx, defSec, 'line')
         outPin = _xml.readString(xmlCtx, defSec, 'outPin')
         inPin = _xml.readString(xmlCtx, defSec, 'inPin')
-        self.__getLineInfo(xmlCtx, name, 0, outPin, inPin, lines)
+        self.__getLineInfo(xmlCtx, name, 0, outPin, inPin, shared['lines'])
         shared['default'] = {'line': name,
          'inPin': inPin,
          'outPin': outPin}
-        return shared
+        return
 
     def __getLineInfo(self, xmlCtx, lineName, nodeCD, outPin, inPin, lineShared):
         if lineName not in lineShared:
@@ -346,21 +352,26 @@ class _TechTreeDataProvider(object):
 
         return coordinates
 
-    def load(self, isReload = False):
-        if self.__loaded and not isReload:
-            return
-        self._clear()
-        try:
-            shared = self.__readShared(clearCache=isReload)
-            for nation in self.__availableNations:
-                info = self.__readNation(shared, nation, clearCache=isReload)
-                self.__displayInfo.update(info)
+    def load(self, override = None, isReload = False):
+        if self.__loaded and not isReload and override is not None and self.__override == override:
+            return False
+        else:
+            if override is not None:
+                self.__override = override
+            self._clear()
+            try:
+                shared = self.__readShared(clearCache=isReload)
+                for nation in self.__availableNations:
+                    info = self.__readNation(shared, nation, clearCache=isReload)
+                    self.__displayInfo.update(info)
 
-        except _ConfigError as error:
-            LOG_ERROR(error)
-        finally:
-            self.__makeAbsoluteCoordinates()
-            self.__loaded = True
+            except _ConfigError as error:
+                LOG_ERROR(error)
+            finally:
+                self.__makeAbsoluteCoordinates()
+                self.__loaded = True
+
+            return True
 
     def getDisplaySettings(self, nationID):
         try:
@@ -432,7 +443,7 @@ class _TechTreeDataProvider(object):
         filtered = filter(lambda item: item in self.__topItems, itemCDs)
         if not len(filtered) or not len(unlocked):
             return {}
-        available = defaultdict(_makeList)
+        available = defaultdict(list)
         parentCDs = set(filter(lambda item: getTypeOfCompactDescr(item) == _VEHICLE, itemCDs))
         for item in filtered:
             if item in unlocked:

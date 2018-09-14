@@ -30,7 +30,7 @@ class ProfileSummary(ProfileAchievementSection, ProfileSummaryMeta):
         totalStats = accountDossier.getTotalStats()
         outcome['significantAchievements'] = AchievementsUtils.packAchievementList(totalStats.getSignificantAchievements(), accountDossier.getDossierType(), dumpDossier(accountDossier), self._userID is None, False)
         outcome['nearestAchievements'] = AchievementsUtils.packAchievementList(totalStats.getNearestAchievements(), accountDossier.getDossierType(), dumpDossier(accountDossier), self._userID is None, True)
-        self.as_responseDossierS(self._battlesType, outcome)
+        self.as_responseDossierS(self._battlesType, outcome, '', '')
         return
 
     def _populate(self):
@@ -42,17 +42,11 @@ class ProfileSummary(ProfileAchievementSection, ProfileSummaryMeta):
     def __dossierResyncHandler(self, *args):
         self.__updateUserInfo()
 
-    @process
     def __updateUserInfo(self):
         dossier = g_itemsCache.items.getAccountDossier(self._userID)
-        clanDBID, clanInfo = g_itemsCache.items.getClanInfo(self._userID)
-        tID = 'clanInfo' + self._userName
-        clanEmblem = yield g_clanCache.getClanEmblemTextureID(clanDBID, False, tID)
         if dossier is not None:
-            info = getProfileCommonInfo(self._userName, dossier.getDossierDescr(), clanInfo, clanEmblem)
+            info = getProfileCommonInfo(self._userName, dossier.getDossierDescr())
             info['name'] = makeString(PROFILE.PROFILE_TITLE, info['name'])
-            info['clanLabel'] = makeString(PROFILE.SECTION_SUMMARY_BOTTOMBAR_CLANSROLELBL)
-            info['clanJoinTime'] = info['clanJoinTime']
             registrationDate = makeString(MENU.PROFILE_HEADER_REGISTRATIONDATETITLE) + ' ' + info['registrationDate']
             info['registrationDate'] = registrationDate
             if info['lastBattleDate'] is not None:

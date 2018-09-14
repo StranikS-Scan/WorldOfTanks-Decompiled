@@ -20,6 +20,9 @@ class RosterSlotSettingsWindow(View, RosterSlotSettingsWindowMeta, AbstractWindo
         self.currentSlot = self.__makeInitialSlotData(ctx.get('settings'))
         return
 
+    def _getLevelsRange(self):
+        return [0] + self.__levelsRange
+
     def _populate(self):
         super(RosterSlotSettingsWindow, self)._populate()
         self.as_setDefaultDataS(self.currentSlot)

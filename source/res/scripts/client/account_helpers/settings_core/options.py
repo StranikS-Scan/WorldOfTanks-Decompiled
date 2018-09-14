@@ -19,7 +19,6 @@ import Settings
 import SoundGroups
 import ArenaType
 from gui.GraphicsPresets import GraphicsPresets
-from gui.battle_control.arena_info import isEventBattle
 from helpers import isPlayerAccount, isPlayerAvatar
 import nations
 import CommandMapping
@@ -35,8 +34,10 @@ from Vibroeffects import VibroManager
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.SettingsCore import g_settingsCore
+from account_helpers.settings_core.settings_constants import GRAPHICS
+from shared_utils import CONST_CONTAINER
 from gui import GUI_SETTINGS
-from gui.shared.utils import graphics, CONST_CONTAINER, sound, functions
+from gui.shared.utils import graphics, sound, functions
 from gui.shared.utils.graphics import g_monitorSettings
 from gui.shared.utils.key_mapping import getScaleformKey, getBigworldKey, getBigworldNameFromKey
 from gui.Scaleform import VoiceChatInterface
@@ -46,6 +47,7 @@ from gui.battle_control import g_sessionProvider
 from ConnectionManager import connectionManager
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.shared.formatters import icons
+from gui.battle_control.arena_info import isEventBattle
 
 class APPLY_METHOD:
     NORMAL = 'normal'
@@ -842,6 +844,8 @@ class AspectRatioSetting(SettingAbstract):
 class DynamicRendererSetting(SettingAbstract):
 
     def _get(self):
+        if g_settingsCore.getSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED):
+            return round(BigWorld.getDRRAutoscalerBaseScale(), 2) * 100
         return round(BigWorld.getDRRScale(), 2) * 100
 
     def _set(self, value):
@@ -1936,8 +1940,9 @@ class ReplaySetting(StorageAccountSetting):
         return [ settingsKey % (self.settingName, type) for type in self.REPLAY_TYPES ]
 
     def setSystemValue(self, value):
-        if not (isPlayerAvatar() and isEventBattle()):
-            BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
+        if isPlayerAvatar() and isEventBattle():
+            value = 0
+        BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
 
 
 class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
@@ -1961,7 +1966,7 @@ class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
         if self.app is not None:
             params = list(GUI.screenResolution()[:2])
             params.append(scale)
-            self.app.as_updateStageS(*params)
+            self.app.updateStage(*params)
         g_monitorSettings.setGlyphCache(scale)
         return
 
@@ -1997,10 +2002,13 @@ class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
 
 
 class GraphicsQualityNote(SettingAbstract):
-    _GRAPHICS_QUALITY_TYPES = ('', i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD) + '  ' + icons.info(), '')
+    note = '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.info(), '</font>')
+    _GRAPHICS_QUALITY_TYPES = {1: note,
+     4: note,
+     5: note}
 
     def _get(self):
-        return self._GRAPHICS_QUALITY_TYPES[ResMgr.activeContentType()]
+        return self._GRAPHICS_QUALITY_TYPES.get(ResMgr.activeContentType(), '')
 
     def _set(self, value):
         pass

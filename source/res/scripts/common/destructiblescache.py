@@ -336,8 +336,13 @@ def _readDestructiblesEffects(sec):
         groupEffects = {}
         for effName, effSec in groupSec.items():
             variants = []
-            for varSec in effSec.values():
-                variants.append(_readEffectsTimeLine(varSec))
+            try:
+                for varSec in effSec.values():
+                    variants.append(_readEffectsTimeLine(varSec))
+
+            except Exception:
+                print Exception, groupName, groupSec, effName
+                LOG_CURRENT_EXCEPTION()
 
             groupEffects[effName] = tuple(variants)
 

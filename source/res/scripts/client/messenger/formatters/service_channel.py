@@ -10,28 +10,29 @@ from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 import account_helpers
 import ArenaType
 import BigWorld
+from shared_utils import BoundMethodWeakref
 from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.shared.formatters import text_styles
 import potapov_quests
-from gui import GUI_SETTINGS, nationCompareByIndex
+from gui import GUI_SETTINGS
 from gui.LobbyContext import g_lobbyContext
 from gui.clubs.formatters import getLeagueString, getDivisionString
 from gui.clubs.settings import getLeagueByDivision
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.shared.utils import BoundMethodWeakref
-from gui.shared import formatters as shared_fmts
+from gui.shared import formatters as shared_fmts, g_itemsCache
 from gui.shared.fortifications import formatters as fort_fmts
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, MsgCustomEvents
+from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from gui.shared.utils.transport import z_loads
+from gui.shared.utils.gui_items import formatPrice
+from gui.shared.gui_items.Vehicle import getUserName
 from messenger.m_constants import MESSENGER_I18N_FILE
-from messenger.proto.bw.wrappers import ServiceChannelMessage
 import offers
 from gui.prb_control.formatters import getPrebattleFullDescription
-from gui.shared.utils.gui_items import formatPrice
 from helpers import i18n, html, getClientLanguage, getLocalizedData
 from helpers import time_utils
 from items import getTypeInfoByIndex, getTypeInfoByName
@@ -86,10 +87,11 @@ class ServiceChannelFormatter(object):
         return False
 
     def _getGuiSettings(self, data, key = None, priorityLevel = None):
-        if isinstance(data, ServiceChannelMessage):
+        try:
             isAlert = data.isHighImportance and data.active
-        else:
+        except AttributeError:
             isAlert = False
+
         if priorityLevel is None:
             priorityLevel = g_settings.msgTemplates.priority(key)
         return NotificationGuiSettings(self.isNotify(), priorityLevel, isAlert)
@@ -123,6 +125,9 @@ class BattleResultsFormatter(ServiceChannelFormatter):
     __battleResultKeys = {-1: 'battleDefeatResult',
      0: 'battleDrawGameResult',
      1: 'battleVictoryResult'}
+    __eventBattleResultKeys = {-1: 'battleDefeatResult',
+     0: 'battleEndedGameResult',
+     1: 'battleVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
     __questsTemplateKey = 'battleQuests'
     __i18n_penalty = i18n.makeString('#%s:serviceChannelMessages/battleResults/penaltyForDamageAllies' % MESSENGER_I18N_FILE)
@@ -135,7 +140,10 @@ class BattleResultsFormatter(ServiceChannelFormatter):
         battleResults = message.data
         commonBattleResult = next(message.data.itervalues())
         arenaTypeID = commonBattleResult.get('arenaTypeID', 0)
-        arenaType = ArenaType.g_cache[arenaTypeID] if arenaTypeID > 0 else None
+        if arenaTypeID > 0 and arenaTypeID in ArenaType.g_cache:
+            arenaType = ArenaType.g_cache[arenaTypeID]
+        else:
+            arenaType = None
         arenaCreateTime = commonBattleResult.get('arenaCreateTime', None)
         if arenaCreateTime and arenaType:
             vehicleNames = {}
@@ -159,9 +167,9 @@ class BattleResultsFormatter(ServiceChannelFormatter):
             marksOfMastery = []
             vehs = []
             for vehIntCD, battleResult in battleResults.iteritems():
-                vt = vehicles_core.getVehicleType(vehIntCD)
-                vehs.append(vt)
-                vehicleNames[vehIntCD] = vt.userString
+                v = g_itemsCache.items.getItemByCD(vehIntCD)
+                vehs.append(v)
+                vehicleNames[vehIntCD] = v.userName
                 xp += battleResult.get('xp', 0)
                 xpPenalty += battleResult.get('xpPenalty', 0)
                 gold += battleResult.get('gold', 0)
@@ -174,12 +182,7 @@ class BattleResultsFormatter(ServiceChannelFormatter):
                 if 'markOfMastery' in battleResult and battleResult['markOfMastery'] > 0:
                     marksOfMastery.append(battleResult['markOfMastery'])
 
-            def comparator(x, y):
-                xNationID, _ = x.id
-                yNationID, _ = y.id
-                return nationCompareByIndex(xNationID, yNationID)
-
-            ctx['vehicleNames'] = ', '.join(map(operator.attrgetter('userString'), sorted(vehs, comparator)))
+            ctx['vehicleNames'] = ', '.join(map(operator.attrgetter('userName'), sorted(vehs)))
             if xp:
                 ctx['xp'] = BigWorld.wg_getIntegralFormat(xp)
             ctx['xpEx'] = self.__makeXpExString(xp, battleResKey, xpPenalty, battleResults)
@@ -205,7 +208,10 @@ class BattleResultsFormatter(ServiceChannelFormatter):
                     if battleResKey == 0:
                         battleResKey = 1 if buildTeam == team else -1
             ctx['club'] = self.__makeClubString(commonBattleResult)
-            templateName = self.__battleResultKeys[battleResKey]
+            if guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+                templateName = self.__eventBattleResultKeys[battleResKey]
+            else:
+                templateName = self.__battleResultKeys[battleResKey]
             bgIconSource = None
             if guiType == ARENA_GUI_TYPE.FORT_BATTLE:
                 bgIconSource = 'FORT_BATTLE'
@@ -355,7 +361,7 @@ class AutoMaintenanceFormatter(ServiceChannelFormatter):
                 formatMsgType = 'RepairSysMessage'
             else:
                 formatMsgType = 'PurchaseForCreditsSysMessage' if cost[1] == 0 else 'PurchaseForGoldSysMessage'
-            msg = i18n.makeString(self.__messages[result][typeID]) % vt.userString
+            msg = i18n.makeString(self.__messages[result][typeID]) % getUserName(vt)
             priorityLevel = NotificationPriorityLevel.MEDIUM
             if result == AUTO_MAINTENANCE_RESULT.OK:
                 priorityLevel = NotificationPriorityLevel.LOW
@@ -495,7 +501,7 @@ class GiftReceivedFormatter(ServiceChannelFormatter):
         vCompDesc = data.get('typeCD', None)
         result = None
         if vCompDesc is not None:
-            result = g_settings.msgTemplates.format(key, ctx={'vehicleName': vehicles_core.getVehicleType(vCompDesc).userString})
+            result = g_settings.msgTemplates.format(key, ctx={'vehicleName': getUserName(vehicles_core.getVehicleType(vCompDesc))})
         return (result, key)
 
 
@@ -578,7 +584,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
             crewLvl = calculateRoleLevel(vehData.get('crewLvl', 50), vehData.get('crewFreeXP', 0))
         vehUserString = None
         try:
-            vehUserString = vehicles_core.getVehicleType(vehCompDescr).userString
+            vehUserString = getUserName(vehicles_core.getVehicleType(vehCompDescr))
             if crewLvl > 50:
                 crewLvl = cls.__i18nCrewLvlString % crewLvl
                 if 'crewInBarracks' in vehData:
@@ -675,7 +681,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
                     tankman = Tankman(tmanData['tmanCompDescr'])
                 else:
                     tankman = Tankman(tmanData)
-                tmanUserStrings.append('{0:>s} {1:>s} ({2:>s}, {3:>s}, {4:d}%)'.format(tankman.rankUserName, tankman.lastUserName, tankman.roleUserName, tankman.vehicleNativeDescr.type.userString, tankman.roleLevel))
+                tmanUserStrings.append('{0:>s} {1:>s} ({2:>s}, {3:>s}, {4:d}%)'.format(tankman.rankUserName, tankman.lastUserName, tankman.roleUserName, getUserName(tankman.vehicleNativeDescr.type), tankman.roleLevel))
             except:
                 LOG_ERROR('Wrong tankman data', tmanData)
                 LOG_CURRENT_EXCEPTION()
@@ -1132,7 +1138,7 @@ class VehCamouflageTimedOutFormatter(ServiceChannelFormatter):
         if vehTypeCompDescr is not None:
             vType = vehicles_core.getVehicleType(vehTypeCompDescr)
             if vType is not None:
-                formatted = g_settings.msgTemplates.format('vehCamouflageTimedOut', ctx={'vehicleName': vType.userString})
+                formatted = g_settings.msgTemplates.format('vehCamouflageTimedOut', ctx={'vehicleName': getUserName(vType)})
         return (formatted, self._getGuiSettings(message, 'vehCamouflageTimedOut'))
 
 
@@ -1148,7 +1154,7 @@ class VehEmblemTimedOutFormatter(ServiceChannelFormatter):
         if vehTypeCompDescr is not None:
             vType = vehicles_core.getVehicleType(vehTypeCompDescr)
             if vType is not None:
-                formatted = g_settings.msgTemplates.format('vehEmblemTimedOut', ctx={'vehicleName': vType.userString})
+                formatted = g_settings.msgTemplates.format('vehEmblemTimedOut', ctx={'vehicleName': getUserName(vType)})
         return (formatted, self._getGuiSettings(message, 'vehEmblemTimedOut'))
 
 
@@ -1164,7 +1170,7 @@ class VehInscriptionTimedOutFormatter(ServiceChannelFormatter):
         if vehTypeCompDescr is not None:
             vType = vehicles_core.getVehicleType(vehTypeCompDescr)
             if vType is not None:
-                formatted = g_settings.msgTemplates.format('vehInscriptionTimedOut', ctx={'vehicleName': vType.userString})
+                formatted = g_settings.msgTemplates.format('vehInscriptionTimedOut', ctx={'vehicleName': getUserName(vType)})
         return (formatted, self._getGuiSettings(message, 'vehInscriptionTimedOut'))
 
 
@@ -1176,7 +1182,7 @@ class ConverterFormatter(ServiceChannelFormatter):
         return i18n.makeString(key) % kwargs
 
     def __vehName(self, vehCompDescr):
-        return vehicles_core.getVehicleType(abs(vehCompDescr)).userString
+        return getUserName(vehicles_core.getVehicleType(abs(vehCompDescr)))
 
     def format(self, message, *args):
         data = message.data
@@ -1226,12 +1232,12 @@ class ClientSysMessageFormatter(ServiceChannelFormatter):
     def _getGuiSettings(self, data, key = None, priorityLevel = None):
         if type(data) is types.TupleType and len(data):
             auxData = data[0][:]
+            if len(data[0]) > 1 and priorityLevel is None:
+                priorityLevel = data[0][1]
         else:
             auxData = []
         if priorityLevel is None:
             priorityLevel = g_settings.msgTemplates.priority(key)
-        else:
-            priorityLevel = NotificationPriorityLevel.MEDIUM
         return NotificationGuiSettings(self.isNotify(), priorityLevel=priorityLevel, auxData=auxData)
 
 
@@ -1260,7 +1266,7 @@ class VehicleTypeLockExpired(ServiceChannelFormatter):
                 templateKey = 'vehiclesAllLockExpired'
             else:
                 templateKey = 'vehicleLockExpired'
-                ctx['vehicleName'] = vehicles_core.getVehicleType(vehTypeCompDescr).userString
+                ctx['vehicleName'] = getUserName(vehicles_core.getVehicleType(vehTypeCompDescr))
             formatted = g_settings.msgTemplates.format(templateKey, ctx=ctx)
             result = (formatted, self._getGuiSettings(message, 'vehicleLockExpired'))
         return result
@@ -1321,7 +1327,7 @@ class BattleTutorialResultsFormatter(ClientSysMessageFormatter):
             vTypeCD = data.get('vTypeCD', None)
             vName = 'N/A'
             if vTypeCD is not None:
-                vName = vehicles_core.getVehicleType(vTypeCD).userString
+                vName = getUserName(vehicles_core.getVehicleType(vTypeCD))
             ctx = {'result': resultString,
              'reason': reasonString,
              'arenaName': i18n.makeString(arenaName),
@@ -1689,6 +1695,10 @@ class FortMessageFormatter(ServiceChannelFormatter, AppRef):
         return self._buildMessage(data['event'], {'building': fort_fmts.getBuildingUserString(FORT_BUILDING_TYPE.MILITARY_BASE)})
 
     def _defHourManipulationMessage(self, data):
+        if data.get('event') == SYS_MESSAGE_FORT_EVENT.DEF_HOUR_ACTIVATED:
+            from gui.shared.fortifications.settings import MUST_SHOW_DEFENCE_START
+            from gui.shared.fortifications.fort_helpers import setRosterIntroWindowSetting
+            setRosterIntroWindowSetting(MUST_SHOW_DEFENCE_START)
         return self._buildMessage(data['event'], {'defenceHour': fort_fmts.getDefencePeriodString(time_utils.getTimeTodayForUTC(data['defenceHour']))})
 
     def _offDayActivatedMessage(self, data):
@@ -1878,7 +1888,7 @@ class FortBattleInviteFormatter(ServiceChannelFormatter):
     def __toFakeInvite(cls, battleData):
         from gui.shared.ClanCache import g_clanCache
         from gui.prb_control.invites import PrbInviteWrapper
-        return PrbInviteWrapper(clientID=-1, receiver=BigWorld.player().name, state=PREBATTLE_INVITE_STATE.ACTIVE, receiverDBID=BigWorld.player().databaseID, prebattleID=-1, receiverClanAbbrev=g_lobbyContext.getClanAbbrev(g_clanCache.clanInfo), peripheryID=battleData.get('peripheryID'), extraData=battleData, type=PREBATTLE_TYPE.FORT_BATTLE, alwaysAvailable=True)
+        return PrbInviteWrapper(clientID=-1, receiver=getPlayerName(), state=PREBATTLE_INVITE_STATE.ACTIVE, receiverDBID=getPlayerDatabaseID(), prebattleID=-1, receiverClanAbbrev=g_lobbyContext.getClanAbbrev(g_clanCache.clanInfo), peripheryID=battleData.get('peripheryID'), extraData=battleData, type=PREBATTLE_TYPE.FORT_BATTLE, alwaysAvailable=True)
 
 
 class VehicleRentedFormatter(ServiceChannelFormatter):
@@ -1894,7 +1904,7 @@ class VehicleRentedFormatter(ServiceChannelFormatter):
             return (None, None)
 
     def _getMessage(self, vehTypeCD, expiryTime):
-        vehicleName = vehicles_core.getVehicleType(vehTypeCD).userString
+        vehicleName = getUserName(vehicles_core.getVehicleType(vehTypeCD))
         ctx = {'vehicleName': vehicleName,
          'expiryTime': text_styles.titleFont(TimeFormatter.getLongDatetimeFormat(expiryTime))}
         return g_settings.msgTemplates.format(self._templateKey, ctx=ctx)
@@ -1911,7 +1921,7 @@ class RentalsExpiredFormatter(ServiceChannelFormatter):
             return (None, None)
 
     def _getMessage(self, vehTypeCD):
-        vehicleName = vehicles_core.getVehicleType(vehTypeCD).userString
+        vehicleName = getUserName(vehicles_core.getVehicleType(vehTypeCD))
         ctx = {'vehicleName': vehicleName}
         return g_settings.msgTemplates.format(self._templateKey, ctx=ctx)
 

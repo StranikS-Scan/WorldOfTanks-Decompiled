@@ -1,7 +1,5 @@
 # Embedded file name: scripts/client/gui/shared/utils/__init__.py
 import imghdr
-import weakref
-import types
 import itertools
 import sys
 import inspect
@@ -13,12 +11,9 @@ from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import getLanguageCode, i18n
 from items import vehicles as vehs_core
+from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings
-ScalarTypes = (types.IntType,
- types.LongType,
- types.FloatType,
- types.BooleanType) + types.StringTypes
-IntegralTypes = (types.IntType, types.LongType)
+from avatar_helpers import getAvatarDatabaseID
 SHELLS_COUNT_PROP_NAME = 'shellsCount'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
 RELOAD_MAGAZINE_TIME_PROP_NAME = 'reloadMagazineTime'
@@ -39,69 +34,6 @@ GUN_NORMAL = 4
 CLIP_ICON_PATH = RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
 EXTRA_MODULE_INFO = 'extraModuleInfo'
 _FLASH_OBJECT_SYS_ATTRS = ('isPrototypeOf', 'propertyIsEnumerable', 'hasOwnProperty')
-
-class CONST_CONTAINER(object):
-    __keyByValue = None
-
-    @classmethod
-    def getIterator(cls):
-        for k, v in cls.__dict__.iteritems():
-            if not k.startswith('_') and type(v) in ScalarTypes:
-                yield (k, v)
-
-    @classmethod
-    def getKeyByValue(cls, value):
-        cls.__doInit()
-        return cls.__keyByValue.get(value)
-
-    @classmethod
-    def hasKey(cls, key):
-        return key in cls.__dict__
-
-    @classmethod
-    def hasValue(cls, value):
-        cls.__doInit()
-        return value in cls.__keyByValue
-
-    @classmethod
-    def ALL(cls):
-        return tuple([ v for k, v in cls.getIterator() ])
-
-    @classmethod
-    def __doInit(cls):
-        if cls.__keyByValue is None:
-            cls.__keyByValue = dict(((v, k) for k, v in cls.getIterator()))
-        return
-
-
-class BitmaskHelper(object):
-
-    @classmethod
-    def add(cls, mask, flag):
-        if not mask & flag:
-            mask |= flag
-            return mask
-        return -1
-
-    @classmethod
-    def addIfNot(cls, mask, flag):
-        if not mask & flag:
-            mask |= flag
-        return mask
-
-    @classmethod
-    def remove(cls, mask, flag):
-        if mask & flag > 0:
-            mask ^= flag
-            return mask
-        return -1
-
-    @classmethod
-    def removeIfHas(cls, mask, flag):
-        if mask & flag > 0:
-            mask ^= flag
-        return mask
-
 
 def flashObject2Dict(obj):
     if hasattr(obj, 'children'):
@@ -141,27 +73,6 @@ def isVehicleObserver(vehTypeCompDescr):
         return False
 
 
-class BoundMethodWeakref(object):
-
-    def __init__(self, func):
-        self.methodName = func.__name__
-        self.wrefCls = weakref.ref(func.__self__)
-
-    def __call__(self, *args, **kwargs):
-        return getattr(self.wrefCls(), self.methodName)(*args, **kwargs)
-
-
-def findFirst(function_or_None, sequence, default = None):
-    try:
-        return next(itertools.ifilter(function_or_None, sequence))
-    except StopIteration:
-        return default
-
-
-def first(sequence, default = None):
-    return findFirst(None, sequence, default)
-
-
 def class_for_name(module_name, class_name):
     __import__(module_name)
     m = sys.modules[module_name]
@@ -171,20 +82,6 @@ def class_for_name(module_name, class_name):
         return None
     else:
         return c
-
-
-def forEach(function, sequence):
-    for e in sequence:
-        function(e)
-
-
-def isEmpty(sequence):
-    try:
-        next(sequence)
-    except StopIteration:
-        return True
-
-    return False
 
 
 def sortByFields(fields, sequence, valueGetter = dict.get):
@@ -201,11 +98,6 @@ def sortByFields(fields, sequence, valueGetter = dict.get):
         return 0
 
     return sorted(sequence, cmp=comparator)
-
-
-def prettyPrint(dict, sort_keys = True, indent = 4):
-    import json
-    return json.dumps(dict, sort_keys=sort_keys, indent=indent)
 
 
 def roundByModulo(value, rate):
@@ -254,27 +146,6 @@ def copyToClipboard(text):
     LOG_DEBUG('Text has been copied to the clipboard', text)
 
 
-class AlwaysValidObject(object):
-
-    def __init__(self, name = ''):
-        self.__name = name
-
-    def __getattr__(self, item):
-        if item in self.__dict__:
-            return self.__dict__[item]
-        return AlwaysValidObject(self._makeName(self.__name, item))
-
-    def __call__(self, *args, **kwargs):
-        return AlwaysValidObject()
-
-    def getName(self):
-        return self.__name
-
-    @classmethod
-    def _makeName(cls, parentName, nodeName):
-        return '%s/%s' % (parentName, nodeName)
-
-
 class SettingRecord(dict):
 
     def __init__(self, *args, **kwargs):
@@ -318,16 +189,6 @@ class SettingRootRecord(SettingRecord):
         raise NotImplemented
 
 
-def makeTupleByDict(ntClass, data):
-    unsupportedFields = set(data) - set(ntClass._fields)
-    supported = {}
-    for k, v in data.iteritems():
-        if k not in unsupportedFields:
-            supported[k] = v
-
-    return ntClass(**supported)
-
-
 def mapTextureToTheMemory(textureData, uniqueID = None):
     if textureData and imghdr.what(None, textureData) is not None:
         uniqueID = str(uniqueID or uuid.uuid4())
@@ -362,8 +223,9 @@ def showInvitationInWindowsBar():
         LOG_CURRENT_EXCEPTION()
 
 
-def safeCancelCallback(callbackID):
-    try:
-        BigWorld.cancelCallback(callbackID)
-    except ValueError:
-        LOG_ERROR('Cannot cancel BigWorld callback: incorrect callback ID.')
+def getPlayerDatabaseID():
+    return getAccountDatabaseID() or getAvatarDatabaseID()
+
+
+def getPlayerName():
+    return getattr(BigWorld.player(), 'name', '')

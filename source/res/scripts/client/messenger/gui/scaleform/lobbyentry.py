@@ -37,7 +37,9 @@ class LobbyEntry(IGUIEntry):
         self.__channelsCtrl.init()
         self.__carouselHandler = ChannelsCarouselHandler(self)
         self.__carouselHandler.init()
-        g_messengerEvents.channels.onMessageReceived += self.__me_onMessageReceived
+        events = g_messengerEvents.channels
+        events.onMessageReceived += self.__me_onMessageReceived
+        events.onHistoryReceived += self.__me_onHistoryReceived
         add = g_eventBus.addListener
         add(MessengerEvent.LAZY_CHANNEL_CTRL_INITED, self.__handleLazyChannelCtlInited, scope=EVENT_BUS_SCOPE.LOBBY)
         add(MessengerEvent.LAZY_CHANNEL_CTRL_DESTROYED, self.__handleLazyChannelCtlDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -56,7 +58,9 @@ class LobbyEntry(IGUIEntry):
         if self.__carouselHandler is not None:
             self.__carouselHandler.clear()
             self.__carouselHandler = None
-        g_messengerEvents.channels.onMessageReceived -= self.__me_onMessageReceived
+        events = g_messengerEvents.channels
+        events.onMessageReceived -= self.__me_onMessageReceived
+        events.onHistoryReceived -= self.__me_onHistoryReceived
         remove = g_eventBus.removeListener
         remove(MessengerEvent.LAZY_CHANNEL_CTRL_INITED, self.__handleLazyChannelCtlInited, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(MessengerEvent.LAZY_CHANNEL_CTRL_DESTROYED, self.__handleLazyChannelCtlDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -116,6 +120,13 @@ class LobbyEntry(IGUIEntry):
             controller = self.__channelsCtrl.getController(clientID)
             if controller and not controller.addMessage(message):
                 self.__carouselHandler.notifyChannel(channel)
+
+    def __me_onHistoryReceived(self, history, channel):
+        if channel:
+            clientID = channel.getClientID()
+            controller = self.__channelsCtrl.getController(clientID)
+            if controller:
+                controller.setHistory(history)
 
     def __me_onCommandReceived(self, command):
         controller = self.__channelsCtrl.getController(command.getClientID())

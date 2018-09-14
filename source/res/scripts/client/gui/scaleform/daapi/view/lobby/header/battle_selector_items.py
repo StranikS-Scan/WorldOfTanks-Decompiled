@@ -292,24 +292,61 @@ _DEFAULT_PAN = PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE
 
 def _createItems():
     isInRoaming = game_control.g_instance.roaming.isInRoaming()
-    items = [_RandomQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_STANDART, PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE, 0),
-     (_DisabledSelectorItem if isInRoaming else _HistoricalItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLES, PREBATTLE_ACTION_NAME.HISTORICAL, 1, SELECTOR_BATTLE_TYPES.HISTORICAL, False),
-     _CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.UNIT, 2, SELECTOR_BATTLE_TYPES.UNIT),
-     (_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, 4, SELECTOR_BATTLE_TYPES.SORTIE),
-     _TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAINING, 6)]
+    items = []
+    _addRandomBattleType(items)
+    _addHistoricalBattleType(items, isInRoaming)
+    _addCommandBattleType(items)
+    _addSortieBattleType(items, isInRoaming)
+    _addTrainingBattleType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
-        items.append(_SpecBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLE, 5))
+        _addSpecialBattleType(items)
     if not IS_CHINA:
-        items.append(_CompanyItem(MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, 3))
+        _addCompanyBattleType(items)
+    if _isTutorialEnabled():
+        _addTutorialBattleType(items, isInRoaming)
+    return _BattleSelectorItems(items)
+
+
+def _addRandomBattleType(items):
+    items.append(_RandomQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_STANDART, PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE, 0))
+
+
+def _addHistoricalBattleType(items, isInRoaming):
+    items.append((_DisabledSelectorItem if isInRoaming else _HistoricalItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLES, PREBATTLE_ACTION_NAME.HISTORICAL, 1, SELECTOR_BATTLE_TYPES.HISTORICAL, False))
+
+
+def _addCommandBattleType(items):
+    items.append(_CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.UNIT, 2, SELECTOR_BATTLE_TYPES.UNIT))
+
+
+def _addSortieBattleType(items, isInRoaming):
+    items.append((_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, 4, SELECTOR_BATTLE_TYPES.SORTIE))
+
+
+def _addTrainingBattleType(items):
+    items.append(_TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAINING, 6))
+
+
+def _addSpecialBattleType(items):
+    items.append(_SpecBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLE, 5))
+
+
+def _addCompanyBattleType(items):
+    items.append(_CompanyItem(MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, 3))
+
+
+def _addTutorialBattleType(items, isInRoaming):
+    items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 7))
+
+
+def _isTutorialEnabled():
     isTutorialEnabled = IS_TUTORIAL_ENABLED
     player = BigWorld.player()
     if player is not None:
         serverSettings = getattr(player, 'serverSettings', {})
         if 'isTutorialEnabled' in serverSettings:
             isTutorialEnabled = serverSettings['isTutorialEnabled']
-    if isTutorialEnabled:
-        items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 7))
-    return _BattleSelectorItems(items)
+    return isTutorialEnabled
 
 
 def create():

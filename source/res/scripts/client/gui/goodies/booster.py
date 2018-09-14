@@ -1,8 +1,9 @@
 # Embedded file name: scripts/client/gui/goodies/Booster.py
 import BigWorld
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE
+from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 _BOOSTER_ICON_PATH = '../maps/icons/boosters/%s.png'
@@ -13,13 +14,14 @@ _BOOSTER_DESCRIPTION_LOCALE = '#menu:booster/description/%s'
 _BOOSTER_QUALITY_LOCALE = '#menu:booster/quality/%s'
 MAX_ACTIVE_BOOSTERS_COUNT = 3
 
-class BOOSTER_QUALITY(CONST_CONTAINER):
-    BIG = 12.5
-    MEDIUM = 7.5
-    SMALL = 5
+class BOOSTER_QUALITY_NAMES(CONST_CONTAINER):
+    BIG = 'big'
+    MEDIUM = 'medium'
+    SMALL = 'small'
 
 
-_BOOSTER_QUALITY_NAMES = dict([ (v, k.lower()) for k, v in BOOSTER_QUALITY.__dict__.iteritems() ])
+_BOOSTER_QUALITY_VALUES = {BOOSTER_QUALITY_NAMES.BIG: 12.5,
+ BOOSTER_QUALITY_NAMES.MEDIUM: 7.5}
 _BOOSTER_TYPE_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'booster_gold',
  GOODIE_RESOURCE_TYPE.CREDITS: 'booster_credits',
  GOODIE_RESOURCE_TYPE.XP: 'booster_xp',
@@ -28,13 +30,14 @@ _BOOSTER_TYPE_NAMES = {GOODIE_RESOURCE_TYPE.GOLD: 'booster_gold',
 
 class Booster(object):
 
-    def __init__(self, boosterID, boosterDescription, boosterValues, activeBoosterTypes):
+    def __init__(self, boosterID, boosterDescription, boosterValues, activeBoostersValues):
         self.boosterID = boosterID
         self.expiryTime = boosterDescription.useby
         self.maxCount = boosterDescription.limit
         self.effectTime = boosterDescription.lifetime
-        self.boosterType, self.effectValue, _ = boosterDescription.resources[0]
-        self.__activeBoosterTypes = activeBoosterTypes
+        self.boosterType, self.effectValue, _ = boosterDescription.resource
+        self.__activeBoostersValues = activeBoostersValues
+        self.enabled = boosterDescription.enabled
         if boosterValues is not None:
             self.state = boosterValues.state
             self.count = boosterValues.count
@@ -59,12 +62,13 @@ class Booster(object):
 
     @property
     def quality(self):
-        if self.effectValue >= BOOSTER_QUALITY.BIG:
-            return _BOOSTER_QUALITY_NAMES[BOOSTER_QUALITY.BIG]
-        elif self.effectValue >= BOOSTER_QUALITY.MEDIUM:
-            return _BOOSTER_QUALITY_NAMES[BOOSTER_QUALITY.MEDIUM]
+        boosterQualityValues = GUI_SETTINGS.lookup(self.boosterGuiType) or _BOOSTER_QUALITY_VALUES
+        if self.effectValue >= boosterQualityValues[BOOSTER_QUALITY_NAMES.BIG]:
+            return BOOSTER_QUALITY_NAMES.BIG
+        elif self.effectValue >= boosterQualityValues[BOOSTER_QUALITY_NAMES.MEDIUM]:
+            return BOOSTER_QUALITY_NAMES.MEDIUM
         else:
-            return _BOOSTER_QUALITY_NAMES[BOOSTER_QUALITY.SMALL]
+            return BOOSTER_QUALITY_NAMES.SMALL
 
     @property
     def qualityStr(self):
@@ -80,7 +84,23 @@ class Booster(object):
 
     @property
     def isReadyToActivate(self):
-        return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and self.boosterType not in self.__activeBoosterTypes
+        return self.isReadyToUse or self.isReadyToUpdate
+
+    @property
+    def isReadyToUse(self):
+        activeBoosterTypes = [ boosterType for boosterType, _, _ in self.__activeBoostersValues ]
+        if self.enabled:
+            return self.count > 0 and self.state == GOODIE_STATE.INACTIVE and len(self.__activeBoostersValues) < MAX_ACTIVE_BOOSTERS_COUNT and self.boosterType not in activeBoosterTypes
+        return False
+
+    @property
+    def isReadyToUpdate(self):
+        if self.enabled:
+            for aBoosterType, aEffectValue, _ in self.__activeBoostersValues:
+                if self.boosterType == aBoosterType and self.count > 0:
+                    return self.effectValue > aEffectValue
+
+        return False
 
     @property
     def userName(self):
@@ -116,7 +136,10 @@ class Booster(object):
         return _BOOSTER_QUALITY_SOURCE_PATH % self.quality
 
     def getExpiryDate(self):
-        return BigWorld.wg_getLongDateFormat(self.expiryTime)
+        if self.expiryTime is not None:
+            return BigWorld.wg_getLongDateFormat(self.expiryTime)
+        else:
+            return ''
 
     def _getLocalizedTime(self, seconds, locale):
         return time_utils.getTillTimeString(seconds, locale)

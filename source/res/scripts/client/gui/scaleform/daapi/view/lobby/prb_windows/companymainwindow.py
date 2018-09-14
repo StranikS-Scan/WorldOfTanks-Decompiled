@@ -117,8 +117,6 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
     @process
     def __requestToCreate(self):
         division = PREBATTLE_COMPANY_DIVISION.CHAMPION
-        if g_eventsCache.isEventEnabled():
-            division = PREBATTLE_COMPANY_DIVISION.EVENT
         yield self.prbDispatcher.create(prb_ctx.CompanySettingsCtx(waitingID='prebattle/create', division=division))
 
     @process

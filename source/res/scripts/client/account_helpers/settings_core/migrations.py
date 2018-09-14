@@ -14,7 +14,6 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.ENABLE_SPAM_FILTER: core.getSetting(GAME.ENABLE_SPAM_FILTER),
      GAME.INVITES_FROM_FRIENDS: core.getSetting(GAME.INVITES_FROM_FRIENDS),
      GAME.RECEIVE_FRIENDSHIP_REQUEST: core.getSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST),
-     GAME.RECEIVE_INVITES_IN_BATTLE: core.getSetting(GAME.RECEIVE_INVITES_IN_BATTLE),
      GAME.STORE_RECEIVER_IN_BATTLE: core.getSetting(GAME.STORE_RECEIVER_IN_BATTLE),
      GAME.REPLAY_ENABLED: core.getSetting(GAME.REPLAY_ENABLED),
      GAME.ENABLE_SERVER_AIM: core.getSetting(GAME.ENABLE_SERVER_AIM),
@@ -159,7 +158,7 @@ def _migrateTo13(core, data, initialized):
 
 
 def _migrateTo14(core, data, initialized):
-    data['gameData'][GAME.RECEIVE_INVITES_IN_BATTLE] = True
+    data['gameExtData'][GAME.RECEIVE_INVITES_IN_BATTLE] = True
 
 
 _versions = ((1,

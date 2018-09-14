@@ -77,24 +77,36 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
         return True
 
     def canSendInvite(self):
-        return self.prbFunctional.getPermissions().canSendInvite()
+        if self.prbFunctional:
+            return self.prbFunctional.getPermissions().canSendInvite()
+        return False
 
     def canChangePlayerTeam(self):
-        return self.prbFunctional.getPermissions().canChangePlayerTeam()
+        if self.prbFunctional:
+            return self.prbFunctional.getPermissions().canChangePlayerTeam()
+        return False
 
     def canChangeSetting(self):
-        return self.prbFunctional.getPermissions().canChangeSetting()
+        if self.prbFunctional:
+            return self.prbFunctional.getPermissions().canChangeSetting()
+        return False
 
     def canStartBattle(self):
-        return self.prbFunctional.getPermissions().canStartBattle()
+        if self.prbFunctional:
+            return self.prbFunctional.getPermissions().canStartBattle()
+        return False
 
     def canAssignToTeam(self, team):
-        return self.prbFunctional.getPermissions().canAssignToTeam(int(team))
+        if self.prbFunctional:
+            return self.prbFunctional.getPermissions().canAssignToTeam(int(team))
+        return False
 
     def canDestroyRoom(self):
-        settings = self.prbFunctional.getSettings()
-        playerName = BigWorld.player().name
-        return settings[PREBATTLE_SETTING_NAME.CREATOR] == playerName and settings[PREBATTLE_SETTING_NAME.DESTROY_IF_CREATOR_OUT]
+        if self.prbFunctional:
+            settings = self.prbFunctional.getSettings()
+            playerName = BigWorld.player().name
+            return settings[PREBATTLE_SETTING_NAME.CREATOR] == playerName and settings[PREBATTLE_SETTING_NAME.DESTROY_IF_CREATOR_OUT]
+        return False
 
     def getPlayerTeam(self, accID):
         return self.prbFunctional.getPlayerTeam(accID)

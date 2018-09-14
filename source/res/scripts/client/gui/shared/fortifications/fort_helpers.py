@@ -6,12 +6,13 @@ from constants import PREBATTLE_TYPE
 from FortifiedRegionBase import NOT_ACTIVATED
 from adisp import process
 from helpers import time_utils
-from gui import DialogsInterface, SystemMessages
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import interfaces
 from gui.shared.fortifications.context import CreateOrJoinFortBattleCtx
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
+from account_helpers.AccountSettings import AccountSettings
+from gui.shared.fortifications.settings import ROSTER_INTRO_WINDOW
 
 class fortProviderProperty(property):
 
@@ -128,6 +129,7 @@ def getTimeZoneOffset():
 @process
 def tryToConnectFortBattle(battleID, peripheryID):
     from gui.prb_control.dispatcher import g_prbLoader
+    from gui import DialogsInterface, SystemMessages
     yield lambda callback: callback(None)
     if g_lobbyContext.isAnotherPeriphery(peripheryID):
         if g_lobbyContext.isPeripheryAvailable(peripheryID):
@@ -138,3 +140,19 @@ def tryToConnectFortBattle(battleID, peripheryID):
             SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
     else:
         yield g_prbLoader.getDispatcher().join(CreateOrJoinFortBattleCtx(battleID, waitingID='fort/fortBattle/createOrJoin'))
+
+
+def getRosterIntroWindowSetting(type):
+    settings = dict(AccountSettings.getSettings('fortSettings'))
+    if ROSTER_INTRO_WINDOW not in settings:
+        settings[ROSTER_INTRO_WINDOW] = {}
+        AccountSettings.setSettings('fortSettings', settings)
+    return settings[ROSTER_INTRO_WINDOW].get(type)
+
+
+def setRosterIntroWindowSetting(type, value = True):
+    settings = dict(AccountSettings.getSettings('fortSettings'))
+    if ROSTER_INTRO_WINDOW not in settings:
+        settings[ROSTER_INTRO_WINDOW] = {}
+    settings[ROSTER_INTRO_WINDOW][type] = value
+    AccountSettings.setSettings('fortSettings', settings)

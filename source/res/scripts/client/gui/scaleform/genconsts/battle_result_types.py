@@ -3,8 +3,8 @@
 
 class BATTLE_RESULT_TYPES(object):
     TOOLTIP_HEAD_BLOCK_LINKAGE = 'TooltipFinalStatsHeadBlockUI'
-    TOOLTIP_TEXT_BLOCK_LINKAGE = 'TooltipFinalStatsTextBlockUI'
-    TOOLTIP_BUILDUP_BLOCK_LINKAGE = 'EfficiencyBuildUpBlockUI'
+    TOOLTIP_TEXT_BLOCK_LINKAGE = 'TooltipTextBlockUI'
+    TOOLTIP_BUILDUP_BLOCK_LINKAGE = 'TooltipBuildUpBlockUI'
     TOOLTIP_TOTAL_ITEMS_BLOCK_LINKAGE = 'EfficiencyBlockTotalItemsUI'
     TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE = 'EfficiencyBlockIconTextParameterUI'
     TOOLTIP_RESULT_TTILE_LEFT_LINKAGE = 'EfficiencyBlockResultTitleLefttUI'

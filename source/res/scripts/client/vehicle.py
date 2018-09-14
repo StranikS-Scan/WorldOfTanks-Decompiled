@@ -13,7 +13,9 @@ from gui.battle_control import g_sessionProvider
 import helpers
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from items import vehicles
-import VehicleAppearance
+import FMOD
+if FMOD.enabled:
+    import VehicleAppearance
 from gui import game_control
 from gui.WindowsManager import g_windowsManager
 import AreaDestructibles
@@ -33,8 +35,8 @@ from material_kinds import EFFECT_MATERIAL_INDEXES_BY_IDS, EFFECT_MATERIAL_INDEX
 class Vehicle(BigWorld.Entity):
     hornMode = property(lambda self: self.__hornMode)
     isEnteringWorld = property(lambda self: self.__isEnteringWorld)
-    isTurretDetached = property(lambda self: self.health == constants.SPECIAL_VEHICLE_HEALTH.TURRET_DETACHED and self.__turretDetachmentConfirmed)
-    isTurretMarkedForDetachment = property(lambda self: self.health == constants.SPECIAL_VEHICLE_HEALTH.TURRET_DETACHED)
+    isTurretDetached = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health) and self.__turretDetachmentConfirmed)
+    isTurretMarkedForDetachment = property(lambda self: constants.SPECIAL_VEHICLE_HEALTH.IS_TURRET_DETACHED(self.health))
     isTurretDetachmentConfirmationNeeded = property(lambda self: not self.__turretDetachmentConfirmed)
 
     def __init__(self):
@@ -59,7 +61,8 @@ class Vehicle(BigWorld.Entity):
         vehicles.reload()
         self.typeDescriptor = vehicles.VehicleDescr(compactDescr=self.publicInfo.compDescr)
         if wasStarted:
-            self.appearance = VehicleAppearance.VehicleAppearance()
+            if FMOD.enabled:
+                self.appearance = VehicleAppearance.VehicleAppearance()
             self.appearance.prerequisites(self)
             self.startVisual()
 
@@ -75,7 +78,8 @@ class Vehicle(BigWorld.Entity):
                 if hitTester.bspModelName is not None and not hitTester.isBspModelLoaded():
                     prereqs.append(hitTester.bspModelName)
 
-            self.appearance = VehicleAppearance.VehicleAppearance()
+            if FMOD.enabled:
+                self.appearance = VehicleAppearance.VehicleAppearance()
             prereqs += self.appearance.prerequisites(self)
             return prereqs
 
@@ -338,7 +342,7 @@ class Vehicle(BigWorld.Entity):
 
     def collideSegment(self, startPoint, endPoint, skipGun = False):
         filterMethod = getattr(self.filter, 'segmentMayHitEntity', self.segmentMayHitVehicle)
-        if not filterMethod(startPoint, endPoint):
+        if not filterMethod(startPoint, endPoint, 0):
             return
         else:
             worldToVehMatrix = Math.Matrix(self.model.matrix)
@@ -541,7 +545,7 @@ class Vehicle(BigWorld.Entity):
             self.__hornMode = hornDesc['mode']
             model = self.appearance.modelsDesc['turret']['model']
             for sndEventId in hornDesc['sounds']:
-                snd = SoundGroups.g_instance.getSound(model, sndEventId)
+                snd = SoundGroups.g_instance.getSound3D(model, sndEventId)
                 snd.volume *= self.typeDescriptor.type.hornVolumeFactor
                 self.__hornSounds.append(snd)
 

@@ -123,6 +123,7 @@ class WAITING(object):
     PREBATTLE_BATTLE_QUEUE = '#waiting:prebattle/battle_queue'
     PREBATTLE_GIVELEADERSHIP = '#waiting:prebattle/giveLeadership'
     PREBATTLE_TAKELEADERSHIP = '#waiting:prebattle/takeLeadership'
+    PREBATTLE_CHANGEDIVISION = '#waiting:prebattle/changeDivision'
     FORT_SUBSCRIBE = '#waiting:fort/subscribe'
     FORT_UNSUBSCRIBE = '#waiting:fort/unsubscribe'
     FORT_CREATE = '#waiting:fort/create'

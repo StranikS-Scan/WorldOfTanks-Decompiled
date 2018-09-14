@@ -75,7 +75,10 @@ def checkAccountName(token):
 
 
 def isSenderIgnored(user):
-    areFriendsOnly = g_settings.userPrefs.invitesFromFriendsOnly
+    return isNotFriendSenderIgnored(user, g_settings.userPrefs.invitesFromFriendsOnly)
+
+
+def isNotFriendSenderIgnored(user, areFriendsOnly):
     if user:
         if areFriendsOnly:
             if user.isFriend():

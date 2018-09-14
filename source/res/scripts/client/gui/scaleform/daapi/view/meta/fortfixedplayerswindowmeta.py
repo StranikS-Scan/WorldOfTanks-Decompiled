@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortFixedPlayersWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortFixedPlayersWindowMeta(DAAPIModule):
+class FortFixedPlayersWindowMeta(AbstractWindowView):
 
     def assignToBuilding(self):
         self._printOverrideError('assignToBuilding')

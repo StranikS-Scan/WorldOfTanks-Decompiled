@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CAPTCHAMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class CAPTCHAMeta(DAAPIModule):
+class CAPTCHAMeta(AbstractWindowView):
 
     def submit(self, responce):
         self._printOverrideError('submit')

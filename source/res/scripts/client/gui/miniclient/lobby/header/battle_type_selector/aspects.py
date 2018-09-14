@@ -54,6 +54,12 @@ class CompanyBattle(_BattleTypeDisable):
         _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, 3))
 
 
+class FalloutBattle(_BattleTypeDisable):
+
+    def __init__(self):
+        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.FALLOUT, 2))
+
+
 class OnBattleTypeSelectorPopulate(aop.Aspect):
 
     def atReturn(self, cd):

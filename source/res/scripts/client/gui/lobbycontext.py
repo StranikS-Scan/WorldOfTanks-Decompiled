@@ -78,9 +78,11 @@ class _LobbyContext(object):
 
     def getRegionCode(self, dbID):
         regionCode = None
-        from gui import game_control
-        if dbID and not game_control.g_instance.roaming.isSameRealm(dbID):
-            _, regionCode = game_control.g_instance.roaming.getPlayerHome(dbID)
+        serverSettings = g_lobbyContext.getServerSettings()
+        if serverSettings is not None:
+            roaming = serverSettings.roaming
+            if dbID and not roaming.isSameRealm(dbID):
+                _, regionCode = roaming.getPlayerHome(dbID)
         return regionCode
 
     def isAnotherPeriphery(self, peripheryID):

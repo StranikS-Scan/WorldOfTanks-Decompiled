@@ -3,33 +3,50 @@
 
 class GoodieTarget(object):
 
-    def __init__(self, targetId):
-        self._targetId = targetId
+    def __init__(self, targetID, limit):
+        self._targetID = targetID
+        self._limit = limit
 
     @property
-    def targetId(self):
-        return self._targetId
+    def targetID(self):
+        return self._targetID
+
+    @property
+    def limit(self):
+        return self._limit
 
     def __eq__(self, other):
-        return isinstance(other, self.__class__) and self._targetId == other._targetId
+        return isinstance(other, self.__class__) and self._targetID == other._targetID
 
     def __hash__(self):
-        return hash(self._targetId)
+        return hash(self._targetID)
 
 
 class BuyPremiumAccount(GoodieTarget):
 
-    def __init__(self, targetId):
-        super(BuyPremiumAccount, self).__init__(targetId)
+    def __init__(self, targetID, limit = None):
+        super(BuyPremiumAccount, self).__init__(targetID, limit)
 
 
 class BuySlot(GoodieTarget):
 
-    def __init__(self, targetId = None):
-        super(BuySlot, self).__init__(targetId)
+    def __init__(self, targetID = None, limit = None):
+        super(BuySlot, self).__init__(targetID, limit)
 
 
 class PostBattle(GoodieTarget):
 
-    def __init__(self, targetId = None):
-        super(PostBattle, self).__init__(targetId)
+    def __init__(self, targetID = None, limit = None):
+        super(PostBattle, self).__init__(targetID, limit)
+
+
+class BuyGoldTankmen(GoodieTarget):
+
+    def __init__(self, targetID = None, limit = None):
+        super(BuyGoldTankmen, self).__init__(targetID, limit)
+
+
+class FreeExperienceConversion(GoodieTarget):
+
+    def __init__(self, targetID = None, limit = None):
+        super(FreeExperienceConversion, self).__init__(targetID, limit)

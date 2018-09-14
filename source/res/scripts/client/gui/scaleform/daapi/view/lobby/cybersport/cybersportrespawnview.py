@@ -7,16 +7,17 @@ from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.utils.functions import getArenaGeomentryName
 from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.ext import channel_num_gen
 from constants import PREBATTLE_TYPE
 
 class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListener):
+    __background_alpha__ = 1.0
     MAP_BG_SOURCE = '../maps/icons/map/screen/%s.dds'
 
     def __init__(self, ctx = None):
         CyberSportRespawnViewMeta.__init__(self)
-        LobbySubView.__init__(self, 1.0)
+        LobbySubView.__init__(self)
         self.currentState = ''
 
     def onUnitRejoin(self):

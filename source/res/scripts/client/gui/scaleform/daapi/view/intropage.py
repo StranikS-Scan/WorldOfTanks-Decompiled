@@ -1,20 +1,32 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/IntroPage.py
 import BigWorld
+import SoundGroups
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.IntroPageMeta import IntroPageMeta
-import SoundGroups
-from gui.Scaleform.managers.Cursor import Cursor
 from gui.doc_loaders.GuiDirReader import GuiDirReader
+from gui.shared import events
 
-class IntroPage(View, IntroPageMeta, AppRef):
+class IntroPage(IntroPageMeta):
 
-    def __init__(self, ctx):
+    def __init__(self, _ = None):
         super(IntroPage, self).__init__()
-        self.__resultCallback = ctx.get('resultCallback')
         self.__movieFiles = GuiDirReader.getAvailableIntroVideoFiles()
         self.__soundValue = SoundGroups.g_instance.getMasterVolume() / 2
+
+    def stopVideo(self):
+        if self.__movieFiles is not None and len(self.__movieFiles):
+            self.__showNextMovie()
+            return
+        else:
+            LOG_DEBUG('Startup Video: STOP')
+            BigWorld.wg_setMovieSoundMuted(True)
+            self.__sendResult(True)
+            return
+
+    def handleError(self, data):
+        BigWorld.wg_setMovieSoundMuted(True)
+        self.__sendResult(False, 'Startup Video: ERROR - NetStream code = {0:>s}'.format(data))
 
     def _populate(self):
         super(IntroPage, self)._populate()
@@ -24,6 +36,10 @@ class IntroPage(View, IntroPageMeta, AppRef):
         else:
             self.__sendResult(False, 'There is no movie files for broadcast!')
         return
+
+    def _dispose(self):
+        BigWorld.wg_setMovieSoundMuted(True)
+        super(IntroPage, self)._dispose()
 
     def __showNextMovie(self):
         self.__showMovie(self.__movieFiles.pop(0))
@@ -39,28 +55,6 @@ class IntroPage(View, IntroPageMeta, AppRef):
         @param isSuccess: is result of current component working has no errors
         @param msg: described reason of error
         """
-        if self.__resultCallback is not None:
-            self.__resultCallback(isSuccess, msg)
-        return
-
-    def _dispose(self):
-        self.__resultCallback = None
-        BigWorld.wg_setMovieSoundMuted(True)
-        super(IntroPage, self)._dispose()
-        return
-
-    def stopVideo(self):
-        if self.__movieFiles is not None and len(self.__movieFiles):
-            self.__showNextMovie()
-            return
-        else:
-            LOG_DEBUG('Startup Video: STOP')
-            BigWorld.wg_setMovieSoundMuted(True)
-            self.__sendResult(True)
-            return
-
-    def handleError(self, data):
-        errorStr = 'Startup Video: ERROR - NetStream code = {0:>s}'.format(data)
-        LOG_ERROR(errorStr)
-        BigWorld.wg_setMovieSoundMuted(True)
-        self.__sendResult(False, errorStr)
+        if not isSuccess:
+            LOG_ERROR(msg)
+        self.fireEvent(events.GlobalSpaceEvent(events.GlobalSpaceEvent.GO_NEXT))

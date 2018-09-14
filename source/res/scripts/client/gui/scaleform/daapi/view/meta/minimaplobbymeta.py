@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/MinimapLobbyMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.meta.MinimapEntityMeta import MinimapEntityMeta
 
-class MinimapLobbyMeta(DAAPIModule):
+class MinimapLobbyMeta(MinimapEntityMeta):
 
     def setMap(self, arenaID):
         self._printOverrideError('setMap')

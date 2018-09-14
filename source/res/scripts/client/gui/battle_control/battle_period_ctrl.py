@@ -67,7 +67,7 @@ class ArenaPeriodController(IArenaPeriodController):
         self._playingTime = 0
         return
 
-    def destroy(self):
+    def clear(self):
         self.__clearCallback()
         self._stopSound()
         self._setPlayingTimeOnArena()
@@ -230,11 +230,11 @@ class ArenaPeriodRecorder(ArenaPeriodController):
         self.__recorder = None
         return
 
-    def destroy(self):
+    def clear(self):
         connectionManager.onDisconnected -= self.__onDisconnected
         BattleReplay.g_replayCtrl.onStopped -= self.__onReplayStopped
         self.__recorder = None
-        super(ArenaPeriodRecorder, self).destroy()
+        super(ArenaPeriodRecorder, self).clear()
         return
 
     def setPeriodInfo(self, period, endTime, length, soundID = None):
@@ -271,9 +271,9 @@ class ArenaPeriodPlayer(ArenaPeriodController):
         self.__replay = None
         return
 
-    def destroy(self):
+    def clear(self):
         self.__replay = None
-        super(ArenaPeriodPlayer, self).destroy()
+        super(ArenaPeriodPlayer, self).clear()
         return
 
     def setPeriodInfo(self, period, endTime, length, soundID = None):

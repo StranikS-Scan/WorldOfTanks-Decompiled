@@ -2,7 +2,6 @@
 import ResMgr
 from Vibroeffects import VibroManager
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 from gui.Scaleform.framework.entities.abstract.SoundManagerMeta import SoundManagerMeta
 from gui.shared.utils.sound import Sound
 from gui.doc_loaders.GuiSoundsLoader import GuiSoundsLoader
@@ -10,7 +9,7 @@ from gui.doc_loaders.GuiSoundsLoader import GuiSoundsLoader
 class SoundManager(SoundManagerMeta):
 
     def __init__(self):
-        DAAPIModule.__init__(self)
+        super(SoundManager, self).__init__()
         self.sounds = GuiSoundsLoader()
 
     def _populate(self):

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/FAQWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FAQWindowMeta(DAAPIModule):
+class FAQWindowMeta(AbstractWindowView):
 
     def onLinkClicked(self, name):
         self._printOverrideError('onLinkClicked')

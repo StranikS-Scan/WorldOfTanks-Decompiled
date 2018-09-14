@@ -5,9 +5,8 @@ from collections import defaultdict
 import types
 import BigWorld
 import constants
+from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import i18n, int2roman, time_utils
 from shared_utils import CONST_CONTAINER
@@ -15,6 +14,7 @@ from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import makeHtmlString
 from gui.shared import g_itemsCache, utils
+from gui.shared.formatters import text_styles
 from gui.server_events import formatters, conditions, settings as quest_settings
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -28,13 +28,13 @@ RENDER_BACKS = {1: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_EXP,
  3: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_PREMDAYS,
  4: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_VEHICLES}
 
-class _EventInfo(AppRef):
+class EVENT_STATUS(CONST_CONTAINER):
+    COMPLETED = 'done'
+    NOT_AVAILABLE = 'notAvailable'
+    NONE = ''
 
-    class EVENT_STATUS(CONST_CONTAINER):
-        COMPLETED = 'done'
-        NOT_AVAILABLE = 'notAvailable'
-        NONE = ''
 
+class _EventInfo(object):
     NO_BONUS_COUNT = -1
 
     def __init__(self, event):
@@ -42,7 +42,7 @@ class _EventInfo(AppRef):
 
     def getInfo(self, svrEvents, pCur = None, pPrev = None, noProgressInfo = False):
         if noProgressInfo:
-            status, statusMsg = self.EVENT_STATUS.NONE, self._getStatus()[1]
+            status, statusMsg = EVENT_STATUS.NONE, self._getStatus()[1]
             bonusCount = self.NO_BONUS_COUNT
             qProgCur, qProgTot, qProgbarType, tooltip = (0,
              0,
@@ -176,7 +176,7 @@ class _EventInfo(AppRef):
         return result
 
     def _getStatus(self, pCur = None):
-        return (self.EVENT_STATUS.NONE, '')
+        return (EVENT_STATUS.NONE, '')
 
     def _getBonusCount(self, pCur = None):
         return self.NO_BONUS_COUNT
@@ -334,7 +334,7 @@ class _QuestInfo(_EventInfo):
                 msg = i18n.makeString('#quests:details/status/completed/daily', time=self._getTillTimeString(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()))
             else:
                 msg = i18n.makeString('#quests:details/status/completed')
-            return (self.EVENT_STATUS.COMPLETED, msg)
+            return (EVENT_STATUS.COMPLETED, msg)
         else:
             isAvailable, errorMsg = self.event.isAvailable()
             if not isAvailable:
@@ -348,7 +348,7 @@ class _QuestInfo(_EventInfo):
                     msg = i18n.makeString('#quests:details/status/notAvailable/%s' % errorMsg, time=fmt)
                 else:
                     msg = i18n.makeString('#quests:details/status/notAvailable/%s' % errorMsg)
-                return (self.EVENT_STATUS.NOT_AVAILABLE, msg)
+                return (EVENT_STATUS.NOT_AVAILABLE, msg)
             bonus = self.event.bonusCond
             bonusLimit = bonus.getBonusLimit()
             if bonusLimit is None or bonusLimit >= MAX_BONUS_LIMIT:
@@ -364,7 +364,7 @@ class _QuestInfo(_EventInfo):
                     if groupBy is not None:
                         key = '#quests:details/header/completion/single/groupBy%s' % groupBy.capitalize()
                 msg = i18n.makeString(key, count=bonusLimit)
-            return (self.EVENT_STATUS.NONE, msg)
+            return (EVENT_STATUS.NONE, msg)
 
     def _getProgressValues(self, svrEvents = None, pCur = None, pPrev = None):
         current, total, progressType, tooltip = (0,
@@ -563,10 +563,9 @@ class _PotapovQuestInfo(_QuestInfo):
         return (_QuestInfo._getBonuses(self, None, bonuses=mainBonuses), _QuestInfo._getBonuses(self, None, bonuses=addBonuses))
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
-        _getText = self.app.utilsManager.textManager.getText
 
         def _packCondition(titleKey, text):
-            return '%s\n%s' % (_getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(titleKey)), _getText(TEXT_MANAGER_STYLES.MAIN_TEXT, text))
+            return '%s\n%s' % (text_styles.middleTitle(i18n.makeString(titleKey)), text_styles.main(text))
 
         def _packStatus(completed):
             if completed:
@@ -609,3 +608,15 @@ def getEventDetails(event, svrEvents = None):
 
 def getEventPostBattleInfo(event, svrEvents = None, pCur = None, pPrev = None, isProgressReset = False, isCompleted = False):
     return getEventInfoData(event).getPostBattleInfo(svrEvents, pCur or {}, pPrev or {}, isProgressReset, isCompleted)
+
+
+def getTutorialEventsDescriptor():
+    try:
+        from tutorial.control.quests.context import getQuestsDescriptor
+    except ImportError:
+        LOG_ERROR('Can not load package tutorial')
+
+        def getQuestsDescriptor():
+            return None
+
+    return getQuestsDescriptor()

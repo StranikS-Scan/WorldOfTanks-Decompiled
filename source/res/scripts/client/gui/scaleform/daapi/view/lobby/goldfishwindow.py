@@ -2,21 +2,18 @@
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.meta.GoldFishWindowMeta import GoldFishWindowMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.gold_fish import isGoldFishActionActive
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared import events
 from helpers.time_utils import getCurrentTimestamp
 BTN_WIDTH = 120
 
-class GoldFishWindow(View, GoldFishWindowMeta, AbstractWindowView, AppRef):
+class GoldFishWindow(GoldFishWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(GoldFishWindow, self).__init__()
 
     def onBtnClick(self, action):

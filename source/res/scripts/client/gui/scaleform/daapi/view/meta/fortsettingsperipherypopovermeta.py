@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortSettingsPeripheryPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class FortSettingsPeripheryPopoverMeta(DAAPIModule):
+class FortSettingsPeripheryPopoverMeta(SmartPopOverView):
 
     def onApply(self, server):
         self._printOverrideError('onApply')

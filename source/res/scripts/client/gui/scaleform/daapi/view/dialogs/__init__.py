@@ -5,7 +5,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import i18n, time_utils
 from gui import makeHtmlString
 from gui.shared import events, g_itemsCache
-from gui.Scaleform.framework import AppRef, ScopeTemplates
+from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 I18N_PRICE_KEY = '{0:>s}/messagePrice'
 I18N_TITLE_KEY = '{0:>s}/title'
@@ -321,17 +321,18 @@ class DemountDeviceDialogMeta(IconPriceDialogMeta):
 
 class HtmlMessageDialogMeta(SimpleDialogMeta):
 
-    def __init__(self, path, key, ctx = None, scope = ScopeTemplates.VIEW_SCOPE):
+    def __init__(self, path, key, ctx = None, scope = ScopeTemplates.VIEW_SCOPE, sourceKey = 'text'):
         super(HtmlMessageDialogMeta, self).__init__(scope=scope)
         self._path = path
         self._key = key
         self._ctx = ctx
+        self._sourceKey = sourceKey
 
     def getTitle(self):
         return None
 
     def getMessage(self):
-        return makeHtmlString(self._path, self._key, ctx=self._ctx)
+        return makeHtmlString(self._path, self._key, ctx=self._ctx, sourceKey=self._sourceKey)
 
 
 class HtmlMessageLocalDialogMeta(HtmlMessageDialogMeta):
@@ -340,7 +341,7 @@ class HtmlMessageLocalDialogMeta(HtmlMessageDialogMeta):
         super(HtmlMessageLocalDialogMeta, self).__init__(path, key, ctx, ScopeTemplates.LOBBY_SUB_SCOPE)
 
 
-class DisconnectMeta(I18nInfoDialogMeta, AppRef):
+class DisconnectMeta(I18nInfoDialogMeta):
 
     def __init__(self, reason = None, isBan = False, expiryTime = None):
         super(DisconnectMeta, self).__init__('disconnected', scope=ScopeTemplates.GLOBAL_SCOPE)
@@ -349,9 +350,6 @@ class DisconnectMeta(I18nInfoDialogMeta, AppRef):
         self.expiryTime = expiryTime
         if hasattr(BigWorld.player(), 'setForcedGuiControlMode'):
             BigWorld.player().setForcedGuiControlMode(True)
-        if self.app is not None:
-            self.app.logoff()
-        return
 
     def getCallbackWrapper(self, callback):
 

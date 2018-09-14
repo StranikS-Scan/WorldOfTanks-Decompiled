@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/IconDialogMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.dialogs.SimpleDialog import SimpleDialog
 
-class IconDialogMeta(DAAPIModule):
+class IconDialogMeta(SimpleDialog):
 
     def as_setIconS(self, path):
         if self._isDAAPIInited():

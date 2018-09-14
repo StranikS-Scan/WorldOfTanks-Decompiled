@@ -1,11 +1,11 @@
 # Embedded file name: scripts/client/account_helpers/AccountSettings.py
 import base64
 import copy
+import cPickle as pickle
 import constants
 import BigWorld
 import Settings
 import Event
-import cPickle as pickle
 from constants import FORT_BUILDING_TYPE as _FBT
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -13,6 +13,7 @@ KEY_FILTERS = 'filters'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
 CAROUSEL_FILTER = 'CAROUSEL_FILTER'
+FALLOUT_CAROUSEL_FILTER = 'FALLOUT_CAROUSEL_FILTER'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 SHOW_BATTLE_EFFICIENCY_RIBBONS = 'SHOW_BATTLE_EFFICIENCY_RIBBONS'
@@ -26,9 +27,10 @@ PROMO = 'PROMO'
 AWARDS = 'awards'
 CONTACTS = 'CONTACTS'
 BOOSTERS = 'BOOSTERS'
-FALLOUT = 'FALLOUT'
-SHOW_FALLOUT_VEHICLES = 'SHOW_FALLOUT_VEHICLES_9_9'
+FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
+JOIN_COMMAND_PRESSED = 'joinCommandPressed'
+SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
@@ -44,7 +46,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                'inventory_equipment': ('myVehicle', 0, 'onVehicle'),
                CAROUSEL_FILTER: {'nation': -1,
                                  'tankType': -1,
-                                 'ready': False},
+                                 'ready': False,
+                                 'gameModeFilter': False},
+               FALLOUT_CAROUSEL_FILTER: {'nation': -1,
+                                         'tankType': -1,
+                                         'ready': False,
+                                         'gameModeFilter': False},
                BARRACKS_FILTER: {'nation': -1,
                                  'role': 'None',
                                  'tankType': 'None',
@@ -58,8 +65,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                BOOSTERS: {'wasShown': False},
                CONTACTS: {'showOfflineUsers': True,
                           'showOthersCategory': True},
-               FALLOUT: {'wasShown': False},
-               SHOW_FALLOUT_VEHICLES: True,
                GOLD_FISH_LAST_SHOW_TIME: 0,
                'cs_intro_view_vehicle': {'nation': -1,
                                          'vehicleType': 'none',
@@ -84,8 +89,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                PROMO: {},
                AWARDS: {'vehicleResearchAward': -1,
                         'victoryAward': -1,
-                        'battlesCountAward': -1}},
- KEY_FAVORITES: {CURRENT_VEHICLE: 0},
+                        'battlesCountAward': -1},
+               JOIN_COMMAND_PRESSED: False,
+               SHOW_INVITE_COMMAND_BTN_ANIMATION: True},
+ KEY_FAVORITES: {CURRENT_VEHICLE: 0,
+                 FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': [],
                                'selectedListVehicles': []},
                 'fortSettings': {'clanDBID': 0,
@@ -210,7 +218,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                 'checkBoxConfirmator': {'questsConfirmDialogShow': True},
                 'customization': {},
                 'showVehModelsOnMap': 0,
-                'interfaceScale': 0}}
+                'interfaceScale': 0,
+                'medKitInstalled': False,
+                'repairKitInstalled': False,
+                'fireExtinguisherInstalled': False}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:

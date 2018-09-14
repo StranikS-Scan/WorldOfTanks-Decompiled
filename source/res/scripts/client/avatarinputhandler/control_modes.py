@@ -116,6 +116,9 @@ class IControlMode(object):
     def enableSwitchAutorotationMode(self):
         return True
 
+    def setForcedGuiControlMode(self, enable):
+        pass
+
 
 class _GunControlMode(IControlMode):
     aimingMode = property(lambda self: self._aimingMode)
@@ -275,6 +278,13 @@ class VideoCameraControlMode(_GunControlMode):
         self._gunMarker.setGUIVisible(self.__showGunMarker)
         return
 
+    def setForcedGuiControlMode(self, enable):
+        if not enable:
+            self._cam.resetMovement()
+
+    def isSelfVehicle(self):
+        return False
+
     def handleKeyEvent(self, isDown, key, mods, event = None):
         if self._cam.handleKeyEvent(key, isDown):
             return True
@@ -433,6 +443,13 @@ class CatControlMode(IControlMode):
         BigWorld.setWatcher('Client Settings/Camera Mass', 1)
         self.__shellingControl.setEnable(True)
         self.__isEnabled = True
+
+    def setForcedGuiControlMode(self, enable):
+        if not enable:
+            self.__cam.resetMovement()
+
+    def isSelfVehicle(self):
+        return False
 
     def disable(self):
         self.__shellingControl.setEnable(False)
@@ -991,7 +1008,6 @@ class PostMortemControlMode(IControlMode):
         return dumpStateEmpty()
 
     def enable(self, **args):
-        ctrlState = args.get('ctrlState')
         SoundGroups.g_instance.changePlayMode(0)
         player = BigWorld.player()
         if player:
@@ -1167,7 +1183,15 @@ class PostMortemControlMode(IControlMode):
             self.__updateVIDsList()
         return
 
-    def __onVehicleKilled(self, victimID, killerID, reason):
+    def __onVehicleRespawn(self, vehicleID):
+        player = BigWorld.player()
+        vDesc = player.arena.vehicles[vehicleID]
+        isPlayerObserver = player.vehicleTypeDescriptor is not None and 'observer' in player.vehicleTypeDescriptor.type.tags
+        if vDesc['team'] == player.team or isPlayerObserver:
+            self.__updateVIDsList(True)
+        return
+
+    def __onVehicleKilled(self, victimID, *args):
         player = BigWorld.player()
         vDesc = player.arena.vehicles[victimID]
         isPlayerObserver = player.vehicleTypeDescriptor is not None and 'observer' in player.vehicleTypeDescriptor.type.tags
@@ -1227,12 +1251,12 @@ class PostMortemControlMode(IControlMode):
             return res
         return 0
 
-    def __updateVIDsList(self):
+    def __updateVIDsList(self, respawned = False):
         player = BigWorld.player()
         isPlayerObserver = player.vehicleTypeDescriptor is not None and 'observer' in player.vehicleTypeDescriptor.type.tags
         data = []
         for vID, desc in player.arena.vehicles.items():
-            isAlive = desc['isAlive']
+            isAlive = desc['isAlive'] or respawned
             canPlayerSeeVehicle = (desc['team'] == player.team or isPlayerObserver) and isAlive
             if canPlayerSeeVehicle or vID == player.playerVehicleID and not isAlive:
                 vehicleType = desc['vehicleType'].type
@@ -1248,6 +1272,7 @@ class PostMortemControlMode(IControlMode):
     def __connectToArena(self):
         player = BigWorld.player()
         player.arena.onVehicleAdded += self.__onVehicleAdded
+        player.arena.onVehicleWillRespawn += self.__onVehicleRespawn
         player.arena.onVehicleKilled += self.__onVehicleKilled
         player.arena.onPeriodChange += self.__onPeriodChange
         player.onVehicleLeaveWorld += self.__onVehicleLeaveWorld
@@ -1256,6 +1281,7 @@ class PostMortemControlMode(IControlMode):
     def __disconnectFromArena(self):
         player = BigWorld.player()
         player.arena.onVehicleAdded -= self.__onVehicleAdded
+        player.arena.onVehicleWillRespawn -= self.__onVehicleRespawn
         player.arena.onVehicleKilled -= self.__onVehicleKilled
         player.arena.onPeriodChange -= self.__onPeriodChange
         player.onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
@@ -1264,10 +1290,14 @@ class PostMortemControlMode(IControlMode):
         if id == BigWorld.player().playerVehicleID:
             self.__updateVIDsList()
             return
-        index = self.__vIDs.index(id)
-        del self.__vIDs[index]
-        if index <= self.__curIndex:
-            self.__curIndex -= 1
+        index = 0
+        for item in self.__vIDs:
+            if item == id:
+                del self.__vIDs[index]
+                if index <= self.__curIndex:
+                    self.__curIndex -= 1
+                break
+            index += 1
 
     def __prepareNextVehicle(self, curNextIndex):
         player = BigWorld.player()

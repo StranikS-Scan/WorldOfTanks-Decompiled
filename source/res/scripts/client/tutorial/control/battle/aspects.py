@@ -4,7 +4,7 @@ from helpers import aop
 
 class AmmoQuantityAspect(aop.Aspect):
 
-    def __init__(self, trigger, *args, **kwargs):
+    def __init__(self, trigger):
         super(AmmoQuantityAspect, self).__init__()
         self.__triggerRef = weakref.ref(trigger)
 

@@ -2,8 +2,8 @@
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
-from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
@@ -16,11 +16,10 @@ from gui.shared.gui_items.dossier import dumpDossier
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from helpers import i18n
 
-class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
+class ProfileTechnique(ProfileTechniqueMeta):
 
     def __init__(self, *args):
-        ProfileSection.__init__(self, *args)
-        ProfileTechniqueMeta.__init__(self)
+        super(ProfileTechnique, self).__init__(*args)
 
     def _populate(self):
         super(ProfileTechnique, self)._populate()
@@ -36,7 +35,33 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES))
         if isFortificationBattlesEnabled():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES))
-        return {'dropDownProvider': dropDownProvider}
+        return {'dropDownProvider': dropDownProvider,
+         'tableHeader': self._getTableHeader()}
+
+    def _getTableHeader(self):
+        return [self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
+         self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL, inverted=True),
+         self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),
+         self._createTableBtnInfo('shortUserName', 154, 7, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NAME, 'ascending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_VEHICLENAME, sortType='string'),
+         self._createTableBtnInfo('battlesCount', 74, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_BATTLESCOUNT, 'descending', label=PROFILE.SECTION_SUMMARY_SCORES_TOTALBATTLES),
+         self._createTableBtnInfo('winsEfficiency', 74, 4, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINS, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_TOTALWINS),
+         self._createTableBtnInfo('avgExperience', 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_AVGEXPERIENCE),
+         self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, showSeparator=False)]
+
+    def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label = '', iconSource = '', inverted = False, sortType = 'numeric', showSeparator = True):
+        return {'id': iconId,
+         'buttonWidth': buttonWidth,
+         'sortOrder': sortOrder,
+         'toolTip': toolTip,
+         'defaultSortDirection': defaultSortDirection,
+         'label': label,
+         'iconSource': iconSource,
+         'inverted': inverted,
+         'sortType': sortType,
+         'showSeparator': showSeparator,
+         'ascendingIconSource': RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_ASCPROFILESORTARROW,
+         'descendingIconSource': RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_DESCPROFILESORTARROW,
+         'buttonHeight': 40}
 
     def getEmptyScreenLabel(self):
         emptyScreenLabelsDictionary = {PROFILE_DROPDOWN_KEYS.ALL: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_ALL,

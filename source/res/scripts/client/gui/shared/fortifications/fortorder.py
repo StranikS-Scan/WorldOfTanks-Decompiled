@@ -1,16 +1,16 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/FortOrder.py
 from FortifiedRegionBase import FORT_EVENT_TYPE
 from constants import FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.shared.fortifications import isFortificationBattlesEnabled
 from gui.shared.utils.ItemsParameters import g_instance as g_itemsParams
-from gui.Scaleform.framework import AppRef
+from gui.shared.formatters import text_styles, time_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import time_utils, i18n
 
-class FortOrder(AppRef):
+class FortOrder(object):
     ORDERS_ICONS = {FORT_ORDER_TYPE.SPECIAL_MISSION: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_RESERVEROULETTE, RES_ICONS.MAPS_ICONS_ORDERS_BIG_RESERVEROULETTE),
      FORT_ORDER_TYPE.COMBAT_PAYMENTS: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_COMBATPAYMENTS, RES_ICONS.MAPS_ICONS_ORDERS_BIG_COMBATPAYMENTS),
      FORT_ORDER_TYPE.MILITARY_EXERCISES: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_MILITARYEXERCISES, RES_ICONS.MAPS_ICONS_ORDERS_BIG_MILITARYEXERCISES),
@@ -114,7 +114,7 @@ class FortOrder(AppRef):
         if self.isSpecialMission:
             awardText = i18n.makeString(FORTIFICATIONS.ORDERS_SPECIALMISSION_POSSIBLEAWARD) + ' '
             bonusDescr = i18n.makeString(FORTIFICATIONS.orders_specialmission_possibleaward_description_level(self.level))
-            return self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.NEUTRAL_TEXT, awardText), (TEXT_MANAGER_STYLES.MAIN_TEXT, bonusDescr)))
+            return ''.join((text_styles.neutral(awardText), text_styles.main(bonusDescr)))
         elif self.isConsumable:
             return fort_formatters.getBonusText('', FortViewHelper.getBuildingUIDbyID(self.buildingID), ctx=dict(self.getParams()))
         else:
@@ -122,7 +122,7 @@ class FortOrder(AppRef):
             return fort_formatters.getBonusText('%s%%' % effectValueStr, FortViewHelper.getBuildingUIDbyID(self.buildingID))
 
     def _isSupported(self, orderID):
-        if not self.app.varsManager.isFortificationBattleAvailable():
+        if not isFortificationBattlesEnabled():
             if orderID in (FORT_ORDER_TYPE.EVACUATION, FORT_ORDER_TYPE.REQUISITION):
                 return False
         return True
@@ -141,7 +141,7 @@ class FortOrder(AppRef):
             return 0
 
     def getUsageLeftTimeStr(self):
-        return self.app.utilsManager.textManager.getTimeDurationStr(self.getProductionLeftTime())
+        return time_formatters.getTimeDurationStr(self.getProductionLeftTime())
 
     def getProductionLeftTime(self):
         if self.productionTime is not None:
@@ -150,7 +150,7 @@ class FortOrder(AppRef):
             return 0
 
     def getProductionLeftTimeStr(self):
-        return self.app.utilsManager.textManager.getTimeDurationStr(self.getProductionLeftTime())
+        return time_formatters.getTimeDurationStr(self.getProductionLeftTime())
 
     def getOperationDescription(self):
         if self.isConsumable:

@@ -4,21 +4,21 @@ from UnitBase import UNIT_BROWSER_ERROR
 from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
-from gui import DialogsInterface, SystemMessages, game_control
+from gui import DialogsInterface, SystemMessages
 from UnitBase import UNIT_OP
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.managers.windows_stored_data import stored_window, DATA_TYPE, TARGET_ID
 from gui.Scaleform.daapi.view.meta.FortBattleRoomWindowMeta import FortBattleRoomWindowMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
 from gui.prb_control import settings
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.context.unit_ctx import JoinUnitCtx, LeaveUnitCtx
+from gui.prb_control.formatters.windows import SwitchPeripheryFortCtx
 from gui.prb_control.formatters import messages
 from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, UNIT_MODE_FLAGS, FUNCTIONAL_EXIT
@@ -27,10 +27,14 @@ from gui.shared.events import FortEvent
 from gui.shared import events
 from gui.shared.fortifications.context import CreateSortieCtx, CreateOrJoinFortBattleCtx
 from gui.shared.fortifications.fort_helpers import fortProviderProperty, FortListener
+from gui.prb_control.items.sortie_items import getDivisionNameByUnit
+from gui.shared.utils import getPlayerDatabaseID
+from helpers import i18n
+from messenger.storage import storage_getter
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 
-class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
+class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
 
     def __init__(self, ctx = None):
         self.__isMinimize = False
@@ -88,7 +92,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
             self.__clearCache()
             sortiesAvailable, severAvailable = self.fortProvider.getController().getSortiesCurfewCtrl().getStatus()
             if not severAvailable:
-                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW))
+                g_eventDispatcher.showSwitchPeripheryWindow(ctx=SwitchPeripheryFortCtx())
             elif sortiesAvailable:
                 self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CHOICE_DIVISION_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
             else:
@@ -174,6 +178,21 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
     def onUnitRejoin(self):
         self.__clearState()
         self.__clearCache()
+
+    def onUnitRosterChanged(self):
+        super(FortBattleRoomWindow, self).onUnitRosterChanged()
+        chat = self.chat
+        if chat:
+            _, unit = self.unitFunctional.getUnit()
+            commanderID = unit.getCommanderDBID()
+            if commanderID != getPlayerDatabaseID():
+                getter = storage_getter('users')
+                commander = getter().getUser(commanderID)
+                division = getDivisionNameByUnit(unit)
+                divisionName = i18n.makeString(I18N_SYSTEM_MESSAGES.unit_notification_divisiontype(division))
+                key = I18N_SYSTEM_MESSAGES.UNIT_NOTIFICATION_CHANGEDIVISION
+                txt = i18n.makeString(key, name=commander.getName(), division=divisionName)
+                chat.addNotification(txt)
 
     def onIntroUnitFunctionalFinished(self):
         if self.unitFunctional.getExit() != settings.FUNCTIONAL_EXIT.UNIT:

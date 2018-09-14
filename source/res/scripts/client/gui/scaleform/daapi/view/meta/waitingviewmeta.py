@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/WaitingViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class WaitingViewMeta(DAAPIModule):
+class WaitingViewMeta(View):
 
     def showS(self, data):
         if self._isDAAPIInited():

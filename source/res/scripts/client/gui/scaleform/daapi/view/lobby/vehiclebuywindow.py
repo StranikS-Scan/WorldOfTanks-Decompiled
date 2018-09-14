@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleBuyWindow.py
 import BigWorld
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import text_styles
@@ -9,8 +8,6 @@ from account_helpers.AccountSettings import AccountSettings, VEHICLE_BUY_WINDOW_
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.VehicleBuyWindowMeta import VehicleBuyWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
 from gui import SystemMessages
 from gui.shared import g_itemsCache
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE, getItemActionTooltipData, getItemRentActionTooltipData
@@ -19,7 +16,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import i18n, time_utils
 from gui.game_control import g_instance as g_gameCtrl
 
-class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
+class VehicleBuyWindow(VehicleBuyWindowMeta):
 
     def __init__(self, ctx = None):
         super(VehicleBuyWindow, self).__init__()
@@ -48,7 +45,7 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
             shop = g_itemsCache.items.shop
             shopDefaults = shop.defaults
             tankMenCount = len(vehicle.crew)
-            tankMenStudyPrice = shop.tankmanCost
+            tankMenStudyPrice = shop.tankmanCostWithGoodyDiscount
             totalTankMenStudePrice = (tankMenStudyPrice[1]['credits'] * tankMenCount, tankMenStudyPrice[2]['gold'] * tankMenCount)
             defTankMenStudyPrice = shopDefaults.tankmanCost
             defTotalTankMenStudePrice = (defTankMenStudyPrice[1]['credits'] * tankMenCount, defTankMenStudyPrice[2]['gold'] * tankMenCount)

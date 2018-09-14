@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LobbyHeaderMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class LobbyHeaderMeta(DAAPIModule):
+class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def menuItemClick(self, alias):
         self._printOverrideError('menuItemClick')
@@ -67,9 +67,9 @@ class LobbyHeaderMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setPremiumParams(isPremiumAccount, btnLabel, doLabel, isYear, disableTTHeader, disableTTBody, isHasAction, tooltip, tooltipType)
 
-    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType):
+    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID):
         if self._isDAAPIInited():
-            return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType)
+            return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType, battleTypeID)
 
     def as_setServerS(self, name, tooltip, tooltipType):
         if self._isDAAPIInited():
@@ -79,9 +79,9 @@ class LobbyHeaderMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setWalletStatus(walletStatus)
 
-    def as_setFreeXPS(self, freeXP, btnDoText, tooltip, tooltipType):
+    def as_setFreeXPS(self, freeXP, btnDoText, isHasAction, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_setFreeXP(freeXP, btnDoText, tooltip, tooltipType)
+            return self.flashObject.as_setFreeXP(freeXP, btnDoText, isHasAction, tooltip, tooltipType)
 
     def as_disableFightButtonS(self, isDisabled):
         if self._isDAAPIInited():

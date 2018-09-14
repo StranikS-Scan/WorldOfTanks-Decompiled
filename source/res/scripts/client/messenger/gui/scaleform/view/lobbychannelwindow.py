@@ -3,11 +3,10 @@ from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from messenger.gui.Scaleform.data.MembersDataProvider import MembersDataProvider
 from messenger.gui.Scaleform.meta.LobbyChannelWindowMeta import LobbyChannelWindowMeta
-from messenger.gui.Scaleform.view.SimpleChannelWindow import SimpleChannelWindow
 
 @stored_window(DATA_TYPE.CHANNEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 
-class LobbyChannelWindow(SimpleChannelWindow, LobbyChannelWindowMeta):
+class LobbyChannelWindow(LobbyChannelWindowMeta):
 
     def _populate(self):
         super(LobbyChannelWindow, self)._populate()

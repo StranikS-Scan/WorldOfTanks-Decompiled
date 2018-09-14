@@ -101,8 +101,8 @@ class FittingItem(object):
 
     @property
     def isDisabledInRoaming(self):
-        from gui import game_control
-        return bool(self.tags & frozenset(('disabledInRoaming',))) and game_control.g_instance.roaming.isInRoaming()
+        from gui.LobbyContext import g_lobbyContext
+        return bool(self.tags & frozenset(('disabledInRoaming',))) and g_lobbyContext.getServerSettings().roaming.isInRoaming()
 
     @property
     def unicName(self):

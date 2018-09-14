@@ -32,13 +32,13 @@ class _Notifier(object):
 
     def __init__(self, deltaFunc, updateFunc):
         self.__deltaFunc = deltaFunc
-        self.__updateFunc = updateFunc
-        self.__notificationCallbackID = None
+        self._updateFunc = updateFunc
+        self._notificationCallbackID = None
         return
 
     def clear(self):
         self.__deltaFunc = None
-        self.__updateFunc = None
+        self._updateFunc = None
         return
 
     def startNotification(self):
@@ -55,7 +55,13 @@ class _Notifier(object):
         return BigWorld.callback(nextNotification, notificationHandler)
 
     def _cancelCallback(self):
-        return BigWorld.cancelCallback(self.__notificationCallbackID)
+        return BigWorld.cancelCallback(self._notificationCallbackID)
+
+    def _onNotification(self):
+        self._notificationCallbackID = None
+        self._updateFunc()
+        self.__processNotification()
+        return
 
     def __processNotification(self):
         delta = self.__deltaFunc()
@@ -64,18 +70,12 @@ class _Notifier(object):
         nextNotification = self._getNextNotificationDelta(delta)
         if not nextNotification:
             return
-        self.__notificationCallbackID = self._registerCallback(nextNotification, self.__onNotification)
+        self._notificationCallbackID = self._registerCallback(nextNotification, self._onNotification)
 
     def __cancelNotification(self):
-        if self.__notificationCallbackID is not None:
+        if self._notificationCallbackID is not None:
             self._cancelCallback()
-            self.__notificationCallbackID = None
-        return
-
-    def __onNotification(self):
-        self.__notificationCallbackID = None
-        self.__updateFunc()
-        self.__processNotification()
+            self._notificationCallbackID = None
         return
 
 
@@ -106,3 +106,11 @@ class SimpleNotifier(_Notifier):
 
     def _getNextNotificationDelta(self, delta):
         return delta
+
+
+class AcyclicNotifier(SimpleNotifier):
+
+    def _onNotification(self):
+        self._notificationCallbackID = None
+        self._updateFunc()
+        return

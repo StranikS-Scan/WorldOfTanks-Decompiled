@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/boosters/BoostersWindow.py
 from collections import defaultdict
 from operator import attrgetter
-import BigWorld
 import constants
 from adisp import process
 from helpers.i18n import makeString as _ms
@@ -9,10 +8,7 @@ from gui import SystemMessages
 from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.boosters.BoostersPanelComponent import ADD_BOOSTER_ID
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.BoostersWindowMeta import BoostersWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework import AppRef
 from gui.goodies.Booster import MAX_ACTIVE_BOOSTERS_COUNT
 from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.server_events import g_eventsCache, events_dispatcher as quests_events
@@ -26,8 +22,9 @@ from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 
-class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
+class BoostersWindow(BoostersWindowMeta):
 
     def __init__(self, ctx = None):
         super(BoostersWindow, self).__init__()
@@ -53,7 +50,7 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
             activeBooster = self.__getActiveBoosterByType(booster.boosterType)
             if activeBooster is not None:
                 canActivate = yield DialogsInterface.showDialog(I18nConfirmDialogMeta(BOOSTER_CONSTANTS.BOOSTER_ACTIVATION_CONFORMATION_TEXT_KEY, messageCtx={'newBoosterName': text_styles.middleTitle(booster.description),
-                 'curBoosterName': text_styles.middleTitle(activeBooster.description)}))
+                 'curBoosterName': text_styles.middleTitle(activeBooster.description)}, focusedID=DIALOG_BUTTON_ID.CLOSE))
             else:
                 canActivate = True
             if canActivate:
@@ -198,7 +195,7 @@ class BoostersWindow(View, BoostersWindowMeta, AbstractWindowView, AppRef):
 
     def __getBoosterQuests(self):
         result = defaultdict(list)
-        quests = g_eventsCache.getQuests(lambda q: not q.isCompleted())
+        quests = g_eventsCache.getQuests(lambda q: q.isAvailable()[0] and not q.isCompleted())
         for q in quests.itervalues():
             bonuses = q.getBonuses('goodies')
             for b in bonuses:

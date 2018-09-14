@@ -22,7 +22,7 @@ def _getString(section, name, default = ''):
         return field.asString
 
 
-class BuildingType:
+class BuildingType(object):
     __slots__ = ('type', 'name', 'levels', 'attachedPlayersLimit', 'orderType')
 
     def __init__(self, type, name, section):
@@ -49,7 +49,7 @@ class BuildingType:
          self.levels)
 
 
-class BuildingTypeLevel:
+class BuildingTypeLevel(object):
     __slots__ = ('hp', 'storage', 'upgradeCost', 'maxOrdersCount')
 
     def __init__(self, subsection):
@@ -65,7 +65,7 @@ class BuildingTypeLevel:
          self.maxOrdersCount)
 
 
-class OrderType:
+class OrderType(object):
     __slots__ = ('type', 'name', 'levels')
 
     def __init__(self, type, name, section):
@@ -78,7 +78,7 @@ class OrderType:
             levels[level] = OrderTypeLevel(subsection)
 
 
-class OrderTypeLevel:
+class OrderTypeLevel(object):
     __slots__ = ('effectValue', 'effectTime', 'productionCost', 'productionTime', 'equipment')
 
     def __init__(self, subsection):
@@ -100,7 +100,7 @@ class OrderTypeLevel:
         return
 
 
-class TransportLevel:
+class TransportLevel(object):
     __slots__ = ('maxResource', 'cooldownTime')
 
     def __init__(self, subsection):
@@ -108,7 +108,7 @@ class TransportLevel:
         self.cooldownTime = subsection['cooldown_time'].asInt
 
 
-class DefenceConditions:
+class DefenceConditions(object):
     __slots__ = ('minRegionLevel', 'minDirections', 'minClanMembers')
 
     def __init__(self, subsection):
@@ -117,7 +117,7 @@ class DefenceConditions:
         self.minClanMembers = subsection['min_clan_members'].asInt
 
 
-class Division:
+class SortieDivision(object):
     __slots__ = ('isConsumables', 'minPoints', 'maxPoints', 'resourceBonus', 'influencePoints', 'maps')
 
     def __init__(self, subsection):
@@ -129,8 +129,15 @@ class Division:
         self.maps = set(subsection['maps'].asString.split())
 
 
-class FortifiedRegionCache:
-    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'buildings', 'orders', 'transportLevels', 'defenceConditions', 'divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'attackMaxTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'bonusFactors', 'equipmentToOrder')
+class FortDivision(object):
+    __slots__ = ('isConsumables',)
+
+    def __init__(self, subsection):
+        self.isConsumables = subsection['is_consumables'].asBool
+
+
+class FortifiedRegionCache(object):
+    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'defenseHourShutdownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'battleConsumablesCount', 'buildings', 'orders', 'orderTypeIDToBuildTypeID', 'transportLevels', 'defenceConditions', 'divisions', 'fort_divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'attackMaxTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'maxSorties', 'consumablesSlotCount', 'maxLifetimeConsumable', 'bonusFactors', 'equipmentToOrder')
 
     def __init__(self):
         self.isSupported = False
@@ -158,6 +165,9 @@ class FortifiedRegionCache:
         self.battleConsumablesCount = 0
         self.mapCooldownTime = 0
         self.changePeripheryCooldownTime = 0
+        self.maxSorties = 0
+        self.consumablesSlotCount = 0
+        self.maxLifetimeConsumable = 0
         self.buildings = {}
         self.orders = {}
         self.orderTypeIDToBuildTypeID = {}
@@ -175,7 +185,7 @@ g_cache = None
 
 def init():
     global g_cache
-    LOG_NOTE('fortified_regions.init()')
+    LOG_DEBUG('fortified_regions.init()')
     geometryNamesToIDs = dict([ (arenaType.geometryName, arenaType.geometryID) for arenaType in ArenaType.g_cache.itervalues() if not arenaType.explicitRequestOnly ])
     g_cache = FortifiedRegionCache()
     section = ResMgr.openSection(_CONFIG_FILE)
@@ -216,11 +226,11 @@ def init():
     g_cache.defenceConditions = DefenceConditions(subsection)
     g_cache.divisions = divisions = {}
     for name, subsection in section['divisions']['sortie'].items():
-        divisions[name] = Division(subsection)
+        divisions[name] = SortieDivision(subsection)
 
     g_cache.fort_divisions = fort_divisions = {}
     for name, subsection in section['divisions']['fort_battle'].items():
-        fort_divisions[name] = Division(subsection)
+        fort_divisions[name] = FortDivision(subsection)
 
     for name in _getString(section, 'fort_battle_maps').split():
         if name not in geometryNamesToIDs:

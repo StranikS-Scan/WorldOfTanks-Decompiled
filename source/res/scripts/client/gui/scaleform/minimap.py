@@ -3,27 +3,27 @@ import string
 import math
 from functools import partial
 from weakref import proxy
-import CommandMapping
 import BigWorld
 import Math
+import CommandMapping
 import Keys
 from CTFManager import g_ctfManager
 from constants import REPAIR_POINT_ACTION, RESOURCE_POINT_STATE, FLAG_STATE
 from gui.battle_control.avatar_getter import getPlayerVehicleID
-from gui.battle_control.dyn_squad_arena_controllers import IDynSquadEntityClient
+from gui.battle_control.dyn_squad_functional import IDynSquadEntityClient
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 from ids_generators import SequenceIDGenerator
 from messenger import MessengerEntry
 from AvatarInputHandler import mathUtils
 from shared_utils import findFirst
 from gui.battle_control import g_sessionProvider
-from gui.battle_control.battle_constants import PLAYER_ENTITY_NAME, FEEDBACK_EVENT_ID, NEUTRAL_TEAM
-from gui.battle_control.arena_info import isLowLevelBattle, hasFlags, hasRepairPoints, hasResourcePoints
+from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, FEEDBACK_EVENT_ID, NEUTRAL_TEAM
+from gui.battle_control.arena_info import isLowLevelBattle, hasFlags, hasRepairPoints, hasResourcePoints, getIsMultiteam
 from gui.shared.utils.sound import Sound
-from gui.shared.gui_items import Vehicle
 from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from helpers.gui_utils import *
 from debug_utils import *
-from items.vehicles import VEHICLE_CLASS_TAGS
 from account_helpers.AccountSettings import AccountSettings
 from gui.battle_control import vehicle_getter
 CURSOR_NORMAL = 'cursorNormal'
@@ -91,9 +91,12 @@ class Minimap(IDynSquadEntityClient):
         player = BigWorld.player()
         arena = player.arena
         arenaType = arena.arenaType
+        self.__playerTeam = player.team
+        self.__playerVehicleID = player.playerVehicleID
+        self.__isTeamPlayer = self.__playerTeam in arenaType.squadTeamNumbers if getIsMultiteam(arenaType) else True
         self.__cfg['texture'] = arenaType.minimap
         self.__cfg['teamBasePositions'] = arenaType.teamBasePositions
-        if isLowLevelBattle() and player.team - 1 in arenaType.teamLowLevelSpawnPoints and len(arenaType.teamLowLevelSpawnPoints[player.team - 1]):
+        if isLowLevelBattle() and self.__playerTeam - 1 in arenaType.teamLowLevelSpawnPoints and len(arenaType.teamLowLevelSpawnPoints[self.__playerTeam - 1]):
             self.__cfg['teamSpawnPoints'] = arenaType.teamLowLevelSpawnPoints
         else:
             self.__cfg['teamSpawnPoints'] = arenaType.teamSpawnPoints
@@ -113,16 +116,16 @@ class Minimap(IDynSquadEntityClient):
         self.__vehicleIDToFlagUniqueID = {}
         self.__enemyEntries = {}
         self.__main = None
-        self.__vehiclesWaitStart = []
+        self.__vehiclesWaitStart = {}
         self.__isStarted = False
         self.__parentUI = parentUI
         self.__ownUI = None
-        self.__ownEntry = dict()
-        self.__aoiToFarCallbacks = dict()
-        self.__deadCallbacks = dict()
+        self.__ownEntry = {}
+        self.__aoiToFarCallbacks = {}
+        self.__deadCallbacks = {}
         self.__sndAttention = Sound('/GUI/notifications_FX/minimap_attention')
         self.__isFirstEnemyNonSPGMarked = False
-        self.__isFirstEnemySPGMarkedById = dict()
+        self.__isFirstEnemySPGMarkedById = {}
         self.__checkEnemyNonSPGLengthID = None
         self.__resetSPGMarkerTimoutCbckId = None
         self.zIndexManager = MinimapZIndexManager()
@@ -140,7 +143,7 @@ class Minimap(IDynSquadEntityClient):
         LOG_DEBUG('Minimap deleted')
 
     def updateSquadmanVeh(self, vID):
-        self.__callEntryFlash(vID, 'setEntryName', [PLAYER_ENTITY_NAME.squadman.name()])
+        self.__callEntryFlash(vID, 'setEntryName', [PLAYER_GUI_PROPS.squadman.name()])
 
     def start(self):
         self.__ownUI = GUI.WGMinimapFlash(self.__parentUI.movie)
@@ -150,15 +153,13 @@ class Minimap(IDynSquadEntityClient):
         bl, tr = BigWorld.player().arena.arenaType.boundingBox
         self.__ownUI.setArenaBB(bl, tr)
         player = BigWorld.player()
-        self.__playerTeam = player.team
-        self.__playerVehicleID = player.playerVehicleID
         tex = BigWorld.PyTextureProvider(self.__cfg['texture'])
         if not self.__ownUI.setBackground(tex):
             LOG_ERROR("Failed to set minimap texture: '%s'" % self.__cfg['texture'])
         self.__cameraHandle = None
         self.__cameraMatrix = None
-        BigWorld.player().inputHandler.onCameraChanged += self.__resetCamera
-        BigWorld.player().inputHandler.onPostmortemVehicleChanged += self.__clearCamera
+        player.inputHandler.onCameraChanged += self.__resetCamera
+        player.inputHandler.onPostmortemVehicleChanged += self.__clearCamera
         self.__parentUI.addExternalCallbacks({'minimap.onClick': self._onMapClicked,
          'minimap.playAttantion': self._playAttention,
          'minimap.setSize': self.onSetSize,
@@ -175,7 +176,12 @@ class Minimap(IDynSquadEntityClient):
             ctrl.onEquipmentMarkerShown += self.__onEquipmentMarkerShown
         ctrl = g_sessionProvider.getFeedback()
         if ctrl:
+            ctrl.onMinimapVehicleAdded += self.__onMinimapVehicleAdded
+            ctrl.onMinimapVehicleRemoved += self.__onMinimapVehicleRemoved
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
+        addListener = g_eventBus.addListener
+        addListener(GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
+        addListener(GameEvent.MINIMAP_CMD, self.__handleMinimapCmd, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__markerIDGenerator = SequenceIDGenerator()
         isFlagBearer = False
         if hasFlags():
@@ -190,7 +196,7 @@ class Minimap(IDynSquadEntityClient):
                 if vehicleID is None:
                     if flagInfo['state'] == FLAG_STATE.WAITING_FIRST_SPAWN:
                         self.__onFlagSpawning(flagID, flagInfo['respawnTime'])
-                    else:
+                    elif flagInfo['state'] in (FLAG_STATE.ON_GROUND, FLAG_STATE.ON_SPAWN):
                         self.__onFlagSpawnedAtBase(flagID, flagInfo['team'], flagInfo['minimapPos'])
                 elif vehicleID == self.__playerVehicleID:
                     isFlagBearer = True
@@ -219,7 +225,7 @@ class Minimap(IDynSquadEntityClient):
 
         self.__marks = {}
         if not g_sessionProvider.getCtx().isPlayerObserver():
-            mp = BigWorld.player().getOwnVehicleMatrix()
+            mp = player.getOwnVehicleMatrix()
             self.__ownEntry['handle'] = self.__ownUI.addEntry(mp, self.zIndexManager.getIndexByName('self'))
             entryName = 'normal'
             self.__ownUI.entryInvoke(self.__ownEntry['handle'], ('init', ['player', entryName + 'Flag' if isFlagBearer else entryName]))
@@ -228,10 +234,10 @@ class Minimap(IDynSquadEntityClient):
             self.__ownEntry['entryName'] = entryName
         self.__resetCamera(MODE_ARCADE)
         self.__isStarted = True
-        for id in self.__vehiclesWaitStart:
-            self.notifyVehicleStart(id)
+        for vInfo, guiProps in self.__vehiclesWaitStart.itervalues():
+            self.notifyVehicleStart(vInfo, guiProps)
 
-        self.__vehiclesWaitStart = []
+        self.__vehiclesWaitStart.clear()
         self.__mapSizeIndex = self.getStoredMinimapSize()
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged += self.setupMinimapSettings
@@ -281,7 +287,7 @@ class Minimap(IDynSquadEntityClient):
             vehicle = BigWorld.entity(self.__playerVehicleID)
             if vehicle is not None and vehicle.isAlive() and GUI_SETTINGS.showDirectionLine and self.__showDirectionLine:
                 self.__ownUI.entryInvoke(self.__cameraHandle, ('updateLinesScale', [self.__normalMarkerScale]))
-        if self.__ownEntry.has_key('handle'):
+        if 'handle' in self.__ownEntry:
             self.scaleMarker(self.__ownEntry['handle'], self.__ownEntry['matrix'], self.__markerScale)
             if self.isSpg() and GUI_SETTINGS.showSectorLines and self.__showSectorLine:
                 self.__ownUI.entryInvoke(self.__ownEntry['handle'], ('updateLinesScale', [self.__normalMarkerScale]))
@@ -347,8 +353,6 @@ class Minimap(IDynSquadEntityClient):
 
     def setTeamPoints(self):
         if self.__cfg['teamBasePositions'] or self.__cfg['teamSpawnPoints'] or self.__cfg['controlPoints'] or self.__cfg['repairPoints']:
-            player = BigWorld.player()
-            currentTeam = player.team
             for team, teamSpawnPoints in enumerate(self.__cfg['teamSpawnPoints'], 1):
                 teamSpawnData = {}
                 self.__points['spawn'][team] = teamSpawnData
@@ -359,7 +363,7 @@ class Minimap(IDynSquadEntityClient):
                     teamSpawnData[spawn] = EntryInfo(self.__ownUI.addEntry(m, self.zIndexManager.getTeamPointIndex()), m)
                     self.__ownUI.entryInvoke(teamSpawnData[spawn].handle, ('init', ['points',
                       'spawn',
-                      'blue' if team == currentTeam else 'red',
+                      'blue' if team == self.__playerTeam else 'red',
                       spawn + 1 if len(teamSpawnPoints) > 1 else 1]))
 
             for team, teamBasePoints in enumerate(self.__cfg['teamBasePositions'], 1):
@@ -372,7 +376,7 @@ class Minimap(IDynSquadEntityClient):
                     teamBaseData[base] = EntryInfo(self.__ownUI.addEntry(m, self.zIndexManager.getTeamPointIndex()), m)
                     self.__ownUI.entryInvoke(teamBaseData[base].handle, ('init', ['points',
                       'base',
-                      'blue' if team == currentTeam else 'red',
+                      'blue' if team == self.__playerTeam else 'red',
                       len(teamBaseData) + 1 if len(teamBasePoints) > 1 else 1]))
 
             if self.__cfg['controlPoints']:
@@ -420,7 +424,7 @@ class Minimap(IDynSquadEntityClient):
 
     def destroy(self):
         if not self.__isStarted:
-            self.__vehiclesWaitStart = []
+            self.__vehiclesWaitStart.clear()
             return
         else:
             while len(self.__aoiToFarCallbacks):
@@ -439,7 +443,12 @@ class Minimap(IDynSquadEntityClient):
                 ctrl.onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
             ctrl = g_sessionProvider.getFeedback()
             if ctrl:
+                ctrl.onMinimapVehicleAdded -= self.__onMinimapVehicleAdded
+                ctrl.onMinimapVehicleRemoved -= self.__onMinimapVehicleRemoved
                 ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
+            removeListener = g_eventBus.removeListener
+            removeListener(GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
+            removeListener(GameEvent.MINIMAP_CMD, self.__handleMinimapCmd, scope=EVENT_BUS_SCOPE.BATTLE)
             self.__markerIDGenerator = None
             if hasFlags():
                 g_ctfManager.onFlagSpawning -= self.__onFlagSpawning
@@ -472,60 +481,59 @@ class Minimap(IDynSquadEntityClient):
     def setVisible(self, visible):
         pass
 
-    def notifyVehicleStop(self, vehicleId):
+    def notifyVehicleStop(self, vehicleID):
+        vInfo = g_sessionProvider.getArenaDP().getVehicleInfo(vehicleID)
         if not self.__isStarted:
-            if vehicleId in self.__vehiclesWaitStart:
-                self.__vehiclesWaitStart.remove(vehicleId)
+            if vehicleID in self.__vehiclesWaitStart:
+                self.__vehiclesWaitStart.pop(vehicleID, None)
             return
-        elif vehicleId == self.__playerVehicleID:
+        elif vehicleID == self.__playerVehicleID:
+            return
+        elif not vInfo.isAlive():
             return
         else:
-            info = BigWorld.player().arena.vehicles.get(vehicleId)
-            if info is None or not info['isAlive']:
-                return
             entries = self.__entries
-            if vehicleId in entries:
-                location = entries[vehicleId]['location']
+            if vehicleID in entries:
+                location = entries[vehicleID]['location']
                 if location == VehicleLocation.AOI:
                     ownPos = Math.Matrix(BigWorld.camera().invViewMatrix).translation
-                    entryPos = Math.Matrix(entries[vehicleId]['matrix']).translation
+                    entryPos = Math.Matrix(entries[vehicleID]['matrix']).translation
                     inAoI = bool(abs(ownPos.x - entryPos.x) < self.__AOI_ESTIMATE and abs(ownPos.z - entryPos.z) < self.__AOI_ESTIMATE)
+                    guiProps = g_sessionProvider.getCtx().getPlayerGuiProps(vehicleID, vInfo.team)
                     if self.__permanentNamesShow or self.__onAltNamesShow:
                         battleCtx = g_sessionProvider.getCtx()
                         if not battleCtx.isObserver(self.__playerVehicleID):
-                            if entries[vehicleId]['matrix'] is not None:
-                                if type(entries[vehicleId]['matrix']) == Math.WGTranslationOnlyMP:
-                                    self.__addEntryLit(vehicleId, Math.Matrix(entries[vehicleId]['matrix'].source), not self.__onAltNamesShow)
+                            if entries[vehicleID]['matrix'] is not None:
+                                if type(entries[vehicleID]['matrix']) == Math.WGTranslationOnlyMP:
+                                    self.__addEntryLit(vInfo, guiProps, Math.Matrix(entries[vehicleID]['matrix'].source), not self.__onAltNamesShow)
                                 else:
                                     mp = Math.WGTranslationOnlyMP()
-                                    mp.source = Math.Matrix(entries[vehicleId]['matrix'])
-                                    self.__addEntryLit(vehicleId, mp, not self.__onAltNamesShow)
-                    self.__delEntry(vehicleId)
+                                    mp.source = Math.Matrix(entries[vehicleID]['matrix'])
+                                    self.__addEntryLit(vInfo, guiProps, mp, not self.__onAltNamesShow)
+                    self.__delEntry(vehicleID)
                     if not inAoI:
-                        self.__addEntry(vehicleId, VehicleLocation.AOI_TO_FAR, False)
+                        self.__addEntry(vInfo, guiProps, VehicleLocation.AOI_TO_FAR, False)
                 else:
                     LOG_DEBUG('notifyVehicleOnStop, unknown minimap entry location', location)
             return
 
-    def notifyVehicleStart(self, vehicleId):
+    def notifyVehicleStart(self, vInfo, guiProps):
+        vehicleID = vInfo.vehicleID
         if not self.__isStarted:
-            self.__vehiclesWaitStart.append(vehicleId)
+            self.__vehiclesWaitStart[vehicleID] = (vInfo, guiProps)
             return
-        elif vehicleId == self.__playerVehicleID:
+        if vehicleID == self.__playerVehicleID:
             return
-        else:
-            info = BigWorld.player().arena.vehicles.get(vehicleId)
-            if info is None or not info['isAlive']:
-                return
-            entries = self.__entries
-            doMark = True
-            if vehicleId in entries:
-                doMark = False
-                self.__delEntry(vehicleId)
-            self.__addEntry(vehicleId, VehicleLocation.AOI, doMark)
-            self.__delEntryLit(vehicleId)
-            self.__delCarriedFlagMarker(vehicleId)
+        if not vInfo.isAlive():
             return
+        entries = self.__entries
+        doMark = True
+        if vehicleID in entries:
+            doMark = False
+            self.__delEntry(vehicleID)
+        self.__addEntry(vInfo, guiProps, VehicleLocation.AOI, doMark)
+        self.__delEntryLit(vehicleID)
+        self.__delCarriedFlagMarker(vehicleID)
 
     def _playAttention(self, _):
         self.__sndAttention.play()
@@ -539,7 +547,7 @@ class Minimap(IDynSquadEntityClient):
             columnCount, rowCount = Minimap.__MINIMAP_CELLS
             column = cellIndexes / columnCount % columnCount
             row = cellIndexes % columnCount
-            if self.__marks.has_key(cellIndexes):
+            if cellIndexes in self.__marks:
                 BigWorld.cancelCallback(self.__marks[cellIndexes][1])
                 self._removeCellMark(cellIndexes)
             arenaDesc = BigWorld.player().arena.arenaType
@@ -602,14 +610,15 @@ class Minimap(IDynSquadEntityClient):
             worldPos = Math.Matrix(viewpointTranslate).applyPoint((pos[0] * spaceSize[0], 0.0, -pos[1] * spaceSize[1]))
             player.inputHandler.onMinimapClicked(worldPos)
 
-    def __onVehicleAdded(self, id):
-        arena = BigWorld.player().arena
-        if not arena.vehicles[id]['isAlive']:
+    def __onVehicleAdded(self, vehicleID):
+        vInfo = g_sessionProvider.getArenaDP().getVehicleInfo(vehicleID)
+        if not vInfo.isAlive():
             return
         else:
-            location = self.__detectLocation(id)
+            location = self.__detectLocation(vehicleID)
             if location is not None:
-                self.__addEntry(id, location, True)
+                guiProps = g_sessionProvider.getCtx().getPlayerGuiProps(vehicleID, vInfo.team)
+                self.__addEntry(vInfo, guiProps, location, True)
             return
 
     def __onTeamKiller(self, id):
@@ -617,45 +626,48 @@ class Minimap(IDynSquadEntityClient):
         entryVehicle = arena.vehicles[id]
         if BigWorld.player().team == entryVehicle.get('team') and g_sessionProvider.getCtx().isSquadMan(vID=id):
             return
-        self.__callEntryFlash(id, 'setEntryName', [PLAYER_ENTITY_NAME.teamKiller.name()])
+        self.__callEntryFlash(id, 'setEntryName', [PLAYER_GUI_PROPS.teamKiller.name()])
 
-    def __onVehicleRemoved(self, id):
-        if self.__entries.has_key(id):
+    def __onVehicleRemoved(self, vehicleID):
+        if vehicleID in self.__entries:
             self.__delEntry(id)
         self.__delEntryLit(id)
 
-    def __onVehicleKilled(self, victimId, killerID, reason):
+    def __onVehicleKilled(self, victimId, *args):
         self.__delEntryLit(victimId)
-        if self.__entries.has_key(victimId):
+        if victimId in self.__entries:
             entry = self.__delEntry(victimId)
             if GUI_SETTINGS.showMinimapDeath:
                 self.__addDeadEntry(entry, victimId)
 
     def __onFarPosUpdated(self):
         entries = self.__entries
+        arenaDP = g_sessionProvider.getArenaDP()
+        getVehicleInfo = arenaDP.getVehicleInfo
+        getPlayerGuiProps = arenaDP.getPlayerGuiProps
         arena = BigWorld.player().arena
-        vehicles = arena.vehicles
-        for id, pos in arena.positions.iteritems():
-            entry = entries.get(id)
-            if entry is not None:
+        for vehicleID, pos in arena.positions.iteritems():
+            vInfo = getVehicleInfo(vehicleID)
+            if vehicleID in entries:
+                entry = entries[vehicleID]
                 location = entry['location']
                 if location == VehicleLocation.FAR:
                     entry['matrix'].source.setTranslate(pos)
                 elif location == VehicleLocation.AOI_TO_FAR:
-                    self.__delEntry(id)
-                    self.__addEntry(id, VehicleLocation.FAR, False)
-            elif vehicles[id]['isAlive']:
-                self.__addEntry(id, VehicleLocation.FAR, True)
+                    self.__delEntry(vehicleID)
+                    self.__addEntry(vInfo, getPlayerGuiProps(vehicleID, vInfo.team), VehicleLocation.FAR, False)
+            elif vInfo.isAlive():
+                self.__addEntry(vInfo, getPlayerGuiProps(vehicleID, vInfo.team), VehicleLocation.FAR, True)
 
-        for id in set(entries).difference(set(arena.positions)):
-            location = entries[id]['location']
+        for vehicleID in set(entries).difference(set(arena.positions)):
+            location = entries[vehicleID]['location']
             if location in (VehicleLocation.FAR, VehicleLocation.AOI_TO_FAR):
                 if self.__permanentNamesShow or self.__onAltNamesShow:
-                    if hasattr(entries[id]['matrix'], 'source'):
-                        self.__addEntryLit(id, entries[id]['matrix'].source, not self.__onAltNamesShow)
-                self.__delEntry(id)
-
-        return
+                    if hasattr(entries[vehicleID]['matrix'], 'source'):
+                        vInfo = getVehicleInfo(vehicleID)
+                        guiProps = getPlayerGuiProps(vehicleID, vInfo.team)
+                        self.__addEntryLit(vInfo, guiProps, entries[vehicleID]['matrix'].source, not self.__onAltNamesShow)
+                self.__delEntry(vehicleID)
 
     def __validateEntries(self):
         entrySet = set(self.__entries.iterkeys())
@@ -667,36 +679,36 @@ class Minimap(IDynSquadEntityClient):
         for id in entrySet.difference(vehiclesSet) - playerOnlySet:
             self.__onVehicleRemoved(id)
 
-    def __detectLocation(self, id):
-        vehicle = BigWorld.entities.get(id)
+    def __detectLocation(self, vehicleID):
+        vehicle = BigWorld.entities.get(vehicleID)
         if vehicle is not None and vehicle.isStarted:
             return VehicleLocation.AOI
-        elif BigWorld.player().arena.positions.has_key(id):
+        elif vehicleID in BigWorld.player().arena.positions:
             return VehicleLocation.FAR
         else:
             return
             return
 
-    def __delEntry(self, id, inCallback = False):
-        entry = self.__entries.get(id)
+    def __delEntry(self, vehicleID):
+        entry = self.__entries.get(vehicleID)
         if entry is None:
             return
         else:
             self.__ownUI.delEntry(entry['handle'])
             if entry.get('location') == VehicleLocation.AOI_TO_FAR:
-                callbackId = self.__aoiToFarCallbacks.pop(id, None)
+                callbackId = self.__aoiToFarCallbacks.pop(vehicleID, None)
                 if callbackId is not None:
                     BigWorld.cancelCallback(callbackId)
-            if id in self.__enemyEntries:
-                self.__enemyEntries.pop(id)
+            if vehicleID in self.__enemyEntries:
+                self.__enemyEntries.pop(vehicleID)
                 if not len(self.__enemyEntries):
                     if self.__checkEnemyNonSPGLengthID:
                         BigWorld.cancelCallback(self.__checkEnemyNonSPGLengthID)
                     self.__checkEnemyNonSPGLengthID = BigWorld.callback(5, self.__checkEnemyNonSPGLength)
-            if id in self.__deadCallbacks:
-                callbackId = self.__deadCallbacks.pop(id)
+            if vehicleID in self.__deadCallbacks:
+                callbackId = self.__deadCallbacks.pop(vehicleID)
                 BigWorld.cancelCallback(callbackId)
-            return self.__entries.pop(id)
+            return self.__entries.pop(vehicleID)
 
     def __addDeadEntry(self, entry, id):
         """
@@ -773,24 +785,17 @@ class Minimap(IDynSquadEntityClient):
             self.__ownUI.delEntry(handle)
         return
 
-    def onAltPress(self, value):
-        if not self.__permanentNamesShow and self.__onAltNamesShow:
-            self.showVehicleNames(value)
-
     def showVehicleNames(self, value):
         self.__parentUI.call('minimap.setShowVehicleName', [value])
 
-    def __addEntryLit(self, id, matrix, visible = True):
-        battleCtx = g_sessionProvider.getCtx()
-        if battleCtx.isObserver(id):
+    def __addEntryLit(self, vInfo, guiProps, matrix, visible = True):
+        if vInfo.isObserver():
             return
         elif matrix is None:
             return
         else:
-            arena = BigWorld.player().arena
-            entryVehicle = arena.vehicles[id]
-            entityName = battleCtx.getPlayerEntityName(id, entryVehicle.get('team'))
-            markerType = entityName.base
+            vehicleID = vInfo.vehicleID
+            markerType = guiProps.base
             if self.__currentMode == MODE_POSTMORTEM and markerType == 'ally':
                 return
             mp = Math.WGReplayAwaredSmoothTranslationOnlyMP()
@@ -801,14 +806,14 @@ class Minimap(IDynSquadEntityClient):
                 scaleMatrix.setScale(Math.Vector3(self.__markerScale, self.__markerScale, self.__markerScale))
                 scaledMatrix = mathUtils.MatrixProviders.product(scaleMatrix, mp)
             if scaledMatrix is None:
-                handle = self.__ownUI.addEntry(mp, self.zIndexManager.getVehicleIndex(id))
+                handle = self.__ownUI.addEntry(mp, self.zIndexManager.getVehicleIndex(vehicleID))
             else:
-                handle = self.__ownUI.addEntry(scaledMatrix, self.zIndexManager.getVehicleIndex(id))
+                handle = self.__ownUI.addEntry(scaledMatrix, self.zIndexManager.getVehicleIndex(vehicleID))
             entry = {'matrix': mp,
              'handle': handle}
-            entryName = entityName.name()
-            self.__entrieLits[id] = entry
-            vName = Vehicle.getShortUserName(vehicleType=entryVehicle['vehicleType'].type, textPrefix=True)
+            entryName = guiProps.name()
+            self.__entrieLits[vehicleID] = entry
+            vName = vInfo.vehicleType.shortNameWithPrefix
             self.__ownUI.entryInvoke(entry['handle'], ('init', [markerType,
               entryName,
               'lastLit',
@@ -862,69 +867,61 @@ class Minimap(IDynSquadEntityClient):
             self.__ownUI.delEntry(entry['handle'])
         return
 
-    def __addEntry(self, id, location, doMark):
-        battleCtx = g_sessionProvider.getCtx()
-        if battleCtx.isObserver(id):
+    def __addEntry(self, vInfo, guiProps, location, doMark):
+        if vInfo.isObserver():
             return
         else:
-            arena = BigWorld.player().arena
-            entry = dict()
-            m = self.__getEntryMatrixByLocation(id, location)
+            entry = {}
+            vehicleID = vInfo.vehicleID
+            m = self.__getEntryMatrixByLocation(vehicleID, location)
             scaledMatrix = None
             if self.__markerScale is not None:
                 scaleMatrix = Math.Matrix()
                 scaleMatrix.setScale(Math.Vector3(self.__markerScale, self.__markerScale, self.__markerScale))
                 scaledMatrix = mathUtils.MatrixProviders.product(scaleMatrix, m)
             if location == VehicleLocation.AOI_TO_FAR:
-                self.__aoiToFarCallbacks[id] = BigWorld.callback(self.__AOI_TO_FAR_TIME, partial(self.__delEntry, id))
+                self.__aoiToFarCallbacks[vehicleID] = BigWorld.callback(self.__AOI_TO_FAR_TIME, partial(self.__delEntry, vehicleID))
             entry['location'] = location
             entry['matrix'] = m
             if scaledMatrix is None:
-                entry['handle'] = self.__ownUI.addEntry(m, self.zIndexManager.getVehicleIndex(id))
+                entry['handle'] = self.__ownUI.addEntry(m, self.zIndexManager.getVehicleIndex(vehicleID))
             else:
-                entry['handle'] = self.__ownUI.addEntry(scaledMatrix, self.zIndexManager.getVehicleIndex(id))
-            self.__entries[id] = entry
-            entryVehicle = arena.vehicles[id]
-            entityName = battleCtx.getPlayerEntityName(id, entryVehicle.get('team'))
-            markerType = entityName.base
-            entryName = entityName.name()
+                entry['handle'] = self.__ownUI.addEntry(scaledMatrix, self.zIndexManager.getVehicleIndex(vehicleID))
+            self.__entries[vehicleID] = entry
+            markerType = guiProps.base
+            entryName = guiProps.name()
+            classTag = vInfo.vehicleType.classTag
             markMarker = ''
-            if not entityName.isFriend:
+            if not guiProps.isFriend:
                 if doMark and not g_sessionProvider.getCtx().isPlayerObserver():
-                    if 'SPG' in entryVehicle['vehicleType'].type.tags:
-                        if not self.__isFirstEnemySPGMarkedById.has_key(id):
-                            self.__isFirstEnemySPGMarkedById[id] = False
-                        isFirstEnemySPGMarked = self.__isFirstEnemySPGMarkedById[id]
+                    if 'SPG' in classTag:
+                        if vehicleID not in self.__isFirstEnemySPGMarkedById:
+                            self.__isFirstEnemySPGMarkedById[vehicleID] = False
+                        isFirstEnemySPGMarked = self.__isFirstEnemySPGMarkedById[vehicleID]
                         if not isFirstEnemySPGMarked:
                             markMarker = 'enemySPG'
-                            self.__isFirstEnemySPGMarkedById[id] = True
-                            self.__resetSPGMarkerTimoutCbckId = BigWorld.callback(5, partial(self.__resetSPGMarkerCallback, id))
+                            self.__isFirstEnemySPGMarkedById[vehicleID] = True
+                            self.__resetSPGMarkerTimoutCbckId = BigWorld.callback(5, partial(self.__resetSPGMarkerCallback, vehicleID))
                     elif not self.__isFirstEnemyNonSPGMarked and markMarker == '':
                         if not len(self.__enemyEntries):
                             markMarker = 'firstEnemy'
                             self.__isFirstEnemyNonSPGMarked = True
                     if markMarker != '':
                         BigWorld.player().soundNotifications.play('enemy_sighted_for_team')
-                self.__enemyEntries[id] = entry
-            if entryVehicle['vehicleType'] is not None:
-                tags = set(entryVehicle['vehicleType'].type.tags & VEHICLE_CLASS_TAGS)
-            else:
-                LOG_ERROR('Try to show minimap marker without vehicle info.')
-                return
-            vClass = tags.pop() if len(tags) > 0 else ''
-            if GUI_SETTINGS.showMinimapSuperHeavy and entryVehicle['vehicleType'].type.level == 10 and vClass == 'heavyTank':
-                vClass = 'super' + vClass
-            vName = Vehicle.getShortUserName(vehicleType=entryVehicle['vehicleType'].type, textPrefix=True)
-            self.__callEntryFlash(id, 'init', [markerType,
+                self.__enemyEntries[vehicleID] = entry
+            if GUI_SETTINGS.showMinimapSuperHeavy and vInfo.vehicleType.level == 10 and classTag == 'heavyTank':
+                classTag = 'super' + classTag
+            vName = vInfo.vehicleType.shortNameWithPrefix
+            self.__callEntryFlash(vehicleID, 'init', [markerType,
              entryName,
-             vClass,
+             classTag,
              markMarker,
              vName])
-            if g_ctfManager.isFlagBearer(id):
-                self.__callEntryFlash(id, 'setVehicleClass', vClass + 'Flag')
+            if g_ctfManager.isFlagBearer(vehicleID):
+                self.__callEntryFlash(vehicleID, 'setVehicleClass', classTag + 'Flag')
             entry['markerType'] = markerType
             entry['entryName'] = entryName
-            entry['vClass'] = vClass
+            entry['vClass'] = classTag
             if self.__markerScale is None:
                 self.__parentUI.call('minimap.entryInited', [])
             return
@@ -946,25 +943,25 @@ class Minimap(IDynSquadEntityClient):
 
         return None
 
-    def __callEntryFlash(self, id, methodName, args = None):
+    def __callEntryFlash(self, entryID, methodName, args = None):
         if not self.__isStarted:
             return
         else:
             if args is None:
                 args = []
-            if self.__entries.has_key(id):
-                self.__ownUI.entryInvoke(self.__entries[id]['handle'], (methodName, args))
-            elif id == BigWorld.player().playerVehicleID:
-                if self.__ownEntry.has_key('handle'):
+            if entryID in self.__entries:
+                self.__ownUI.entryInvoke(self.__entries[entryID]['handle'], (methodName, args))
+            elif entryID == BigWorld.player().playerVehicleID:
+                if 'handle' in self.__ownEntry:
                     self.__ownUI.entryInvoke(self.__ownEntry['handle'], (methodName, args))
             return
 
     def __resetVehicleIfObserved(self, id):
         if self.__observedVehicleId > 0 and id == self.__observedVehicleId:
             self.__callEntryFlash(self.__observedVehicleId, 'setPostmortem', [False])
-            if self.__entries.has_key(self.__observedVehicleId):
+            if self.__observedVehicleId in self.__entries:
                 entry = self.__entries[self.__observedVehicleId]
-                if entry.has_key('handle'):
+                if 'handle' in entry:
                     mp1 = self.__getEntryMatrixByLocation(self.__observedVehicleId, entry['location'])
                     self.__ownUI.entrySetMatrix(entry['handle'], mp1)
                     entry['matrix'] = mp1
@@ -1019,9 +1016,9 @@ class Minimap(IDynSquadEntityClient):
                 self.__observedVehicleId = vehicleId
                 self.__callEntryFlash(vehicleId, 'setPostmortem', [True])
                 mp = BigWorld.player().getOwnVehicleMatrix()
-                if self.__entries.has_key(vehicleId):
+                if vehicleId in self.__entries:
                     entry = self.__entries[vehicleId]
-                    if entry.has_key('handle'):
+                    if 'handle' in entry:
                         mp1 = BigWorld.entities[vehicleId].matrix
                         self.__ownUI.entrySetMatrix(entry['handle'], mp1)
                         entry['matrix'] = mp1
@@ -1030,7 +1027,7 @@ class Minimap(IDynSquadEntityClient):
                 mp = Math.WGCombinedMP()
                 mp.translationSrc = BigWorld.player().getOwnVehicleMatrix()
                 mp.rotationSrc = BigWorld.camera().invViewMatrix
-            if self.__ownEntry.has_key('handle'):
+            if 'handle' in self.__ownEntry:
                 self.__ownUI.entrySetMatrix(self.__ownEntry['handle'], mp)
             self.__callEntryFlash(BigWorld.player().playerVehicleID, 'init', ['player', playerMarker])
         if not _isStrategic(mode) and self.__markerScale is not None:
@@ -1108,6 +1105,13 @@ class Minimap(IDynSquadEntityClient):
             BigWorld.callback(int(time), callback)
         return
 
+    def __handleShowExtendedInfo(self, event):
+        if not self.__permanentNamesShow and self.__onAltNamesShow:
+            self.showVehicleNames(event.ctx['isDown'])
+
+    def __handleMinimapCmd(self, event):
+        self.handleKey(event.ctx['key'])
+
     def __onFlagSpawning(self, flagID, respawnTime):
         flagType = FLAG_TYPE.COOLDOWN
         flagPos = self.__cfg['flagSpawnPoints'][flagID]['position']
@@ -1146,26 +1150,29 @@ class Minimap(IDynSquadEntityClient):
         for flagID in flagIDs:
             flagInfo = g_ctfManager.getFlagInfo(flagID)
             vehID = flagInfo['vehicle']
-            if vehID is not None and vehID != self.__playerVehicleID and vehID not in self.__entries:
-                flagPos = g_ctfManager.getFlagMinimapPos(flagID)
-                battleCtx = g_sessionProvider.getCtx()
-                if battleCtx.isObserver(vehID):
-                    marker = FLAG_TYPE.NEUTRAL
+            if vehID is not None and vehID != self.__playerVehicleID:
+                if vehID not in self.__entries:
+                    flagPos = g_ctfManager.getFlagMinimapPos(flagID)
+                    battleCtx = g_sessionProvider.getCtx()
+                    if battleCtx.isObserver(vehID):
+                        marker = FLAG_TYPE.NEUTRAL
+                    else:
+                        arena = BigWorld.player().arena
+                        entryVehicle = arena.vehicles[vehID]
+                        entityName = battleCtx.getPlayerGuiProps(vehID, entryVehicle.get('team'))
+                        marker = FLAG_TYPE.ALLY if entityName.isFriend else FLAG_TYPE.ENEMY
+                    uniqueID = self.__makeFlagUniqueID(flagID, marker)
+                    if uniqueID in self.__entrieMarkers:
+                        item = self.__entrieMarkers[uniqueID]
+                        mp = Math.Matrix()
+                        mp.translation = flagPos
+                        self.__ownUI.entrySetMatrix(item['handle'], mp)
+                        item['matrix'] = mp
+                    else:
+                        self.__addFlagMarker(flagID, flagPos, marker)
+                    self.__vehicleIDToFlagUniqueID[vehID] = uniqueID
                 else:
-                    arena = BigWorld.player().arena
-                    entryVehicle = arena.vehicles[vehID]
-                    entityName = battleCtx.getPlayerEntityName(vehID, entryVehicle.get('team'))
-                    marker = FLAG_TYPE.ALLY if entityName.isFriend else FLAG_TYPE.ENEMY
-                uniqueID = self.__makeFlagUniqueID(flagID, marker)
-                if uniqueID in self.__entrieMarkers:
-                    item = self.__entrieMarkers[uniqueID]
-                    mp = Math.Matrix()
-                    mp.translation = flagPos
-                    self.__ownUI.entrySetMatrix(item['handle'], mp)
-                    item['matrix'] = mp
-                else:
-                    self.__addFlagMarker(flagID, flagPos, marker)
-                self.__vehicleIDToFlagUniqueID[vehID] = uniqueID
+                    self.__delCarriedFlagMarker(vehID)
 
         return
 
@@ -1212,25 +1219,17 @@ class Minimap(IDynSquadEntityClient):
         return
 
     def __addFlagCaptureMarkers(self, isCarried = False):
-        player = BigWorld.player()
-        currentTeam = player.team
-        playerVehID = getPlayerVehicleID()
-        isSquadMan = g_sessionProvider.getArenaDP().isSquadMan(playerVehID)
         for pointIndex, point in enumerate(self.__cfg['flagAbsorptionPoints']):
             position = point['position']
-            isMyTeam = isSquadMan and point['team'] in (NEUTRAL_TEAM, currentTeam)
+            isMyTeam = self.__isTeamPlayer and point['team'] in (NEUTRAL_TEAM, self.__playerTeam)
             marker = FLAG_TYPE.ALLY_CAPTURE if isMyTeam else FLAG_TYPE.ENEMY_CAPTURE
             self.__addFlagMarker(pointIndex, position, marker, not isMyTeam or not isCarried)
             if isMyTeam:
                 self.__addFlagMarker(pointIndex, position, FLAG_TYPE.ALLY_CAPTURE_ANIMATION, isCarried)
 
     def __toggleFlagCaptureAnimation(self, isCarried = False):
-        player = BigWorld.player()
-        currentTeam = player.team
-        playerVehID = getPlayerVehicleID()
-        isSquadMan = g_sessionProvider.getArenaDP().isSquadMan(playerVehID)
         for pointIndex, point in enumerate(self.__cfg['flagAbsorptionPoints']):
-            if isSquadMan and point['team'] in (NEUTRAL_TEAM, currentTeam):
+            if self.__isTeamPlayer and point['team'] in (NEUTRAL_TEAM, self.__playerTeam):
                 captureUniqueID = self.__makeFlagUniqueID(pointIndex, FLAG_TYPE.ALLY_CAPTURE)
                 captureEntry = self.__entrieMarkers.get(captureUniqueID)
                 self.__ownUI.entryInvoke(captureEntry['handle'], ('setVisible', [not isCarried]))
@@ -1239,10 +1238,8 @@ class Minimap(IDynSquadEntityClient):
                 self.__ownUI.entryInvoke(captureAnimationEntry['handle'], ('setVisible', [isCarried]))
 
     def __getFlagMarkerType(self, flagID, flagTeam = 0):
-        player = BigWorld.player()
-        currentTeam = player.team
         if flagTeam > 0:
-            if flagTeam == currentTeam:
+            if flagTeam == self.__playerTeam:
                 return FLAG_TYPE.ALLY
             return FLAG_TYPE.ENEMY
         return FLAG_TYPE.NEUTRAL
@@ -1256,6 +1253,12 @@ class Minimap(IDynSquadEntityClient):
             pointVisible, pointCooldownVisible = (True, False) if action != REPAIR_POINT_ACTION.COMPLETE_REPAIR else (False, True)
             self.__ownUI.entryInvoke(point.handle, ('setVisible', [pointVisible]))
             self.__ownUI.entryInvoke(pointCooldown.handle, ('setVisible', [pointCooldownVisible]))
+
+    def __onMinimapVehicleAdded(self, vInfo, guiProps):
+        self.notifyVehicleStart(vInfo, guiProps)
+
+    def __onMinimapVehicleRemoved(self, vehicleID):
+        self.notifyVehicleStop(vehicleID)
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
         if eventID == FEEDBACK_EVENT_ID.MINIMAP_MARK_CELL:

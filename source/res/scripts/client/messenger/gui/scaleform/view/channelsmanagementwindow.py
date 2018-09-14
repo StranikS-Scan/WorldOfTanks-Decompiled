@@ -2,8 +2,6 @@
 from debug_utils import LOG_ERROR
 from external_strings_utils import unicode_from_utf8
 from gui import SystemMessages
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
@@ -19,7 +17,7 @@ from messenger.proto.interfaces import ISearchHandler
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHAT_MANAGEMENT)
 
-class ChannelsManagementWindow(View, AbstractWindowView, ChannelsManagementWindowMeta, ISearchHandler):
+class ChannelsManagementWindow(ChannelsManagementWindowMeta, ISearchHandler):
 
     def __init__(self, ctx = None):
         super(ChannelsManagementWindow, self).__init__()

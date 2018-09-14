@@ -4,7 +4,6 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.prb_control.formatters import getCompanyDivisionString
 from gui.prb_control.settings import PREBATTLE_ROSTER
-from gui.server_events import g_eventsCache
 from helpers import i18n
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
@@ -15,10 +14,7 @@ def getDivisionsList(addAll = True):
     if addAll:
         result.append({'data': 0,
          'label': i18n.makeString('#prebattle:labels/company/division/ALL')})
-    isEventEnabled = g_eventsCache.isEventEnabled()
     for divID in PREBATTLE_COMPANY_DIVISION.RANGE:
-        if divID in PREBATTLE_COMPANY_DIVISION.EVENT_ONLY and not isEventEnabled:
-            continue
         divName = PREBATTLE_COMPANY_DIVISION_NAMES[divID]
         result.append({'data': divID,
          'label': getCompanyDivisionString(divName)})

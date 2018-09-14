@@ -1,12 +1,12 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/pop_ups.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from tutorial.control import TutorialProxyHolder
-from tutorial.gui import GUIEvent, GUI_EFFECT_NAME
+from tutorial.data.events import ClickEvent
+from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.gui.Scaleform.meta.TutorialDialogMeta import TutorialDialogMeta
 from tutorial.logger import LOG_ERROR
 
-class TutorialPopUp(View, AbstractWindowView, TutorialProxyHolder):
+class TutorialPopUp(AbstractWindowView, TutorialProxyHolder):
 
     def __init__(self, content):
         super(TutorialPopUp, self).__init__()
@@ -16,7 +16,7 @@ class TutorialPopUp(View, AbstractWindowView, TutorialProxyHolder):
         if targetKey in self._content:
             targetID = self._content[targetKey]
             if len(targetID):
-                self._gui.onMouseClicked(GUIEvent('MouseEvent', targetID))
+                self._gui.onGUIInput(ClickEvent(targetID))
             else:
                 LOG_ERROR('ID of target is empty', targetKey)
         else:

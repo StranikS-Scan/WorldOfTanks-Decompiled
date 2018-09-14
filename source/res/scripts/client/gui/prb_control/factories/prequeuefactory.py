@@ -3,6 +3,7 @@ from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from gui.prb_control.context.pre_queue_ctx import LeavePreQueueCtx
 from gui.prb_control.factories.ControlFactory import ControlFactory
+from gui.prb_control.functional.fallout import FalloutEntry
 from gui.prb_control.functional.no_prebattle import NoPreQueueFunctional
 from gui.prb_control.functional.not_supported import QueueNotSupportedFunctional
 from gui.prb_control.functional.random_queue import RandomQueueFunctional
@@ -14,7 +15,8 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE, FU
 _SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: RandomQueueFunctional,
  QUEUE_TYPE.HISTORICAL: HistoricalQueueFunctional,
  QUEUE_TYPE.EVENT_BATTLES: EventBattlesQueueFunctional}
-_SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.HISTORICAL: (HistoricalEntry, None)}
+_SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.HISTORICAL: (HistoricalEntry, None),
+ PREBATTLE_ACTION_NAME.FALLOUT: (FalloutEntry, None)}
 
 class PreQueueFactory(ControlFactory):
 

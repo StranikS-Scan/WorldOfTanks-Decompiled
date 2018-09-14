@@ -60,10 +60,11 @@ class DecalMap:
             for texture in dataSec['textures'].values():
                 textures[texture.name] = texture.readString('texture')
 
-            dataSec = ResMgr.openSection('scripts/item_defs/vehicles/common/chassis_effects.xml/decals')
-            if dataSec is None:
+            chassisEffectsSection = ResMgr.openSection('scripts/item_defs/vehicles/common/chassis_effects.xml')
+            if not chassisEffectsSection or chassisEffectsSection['decals'] is None:
                 LOG_ERROR('Failed to read chassis_effects.xml file')
                 return
+            dataSec = chassisEffectsSection['decals']
             for group in dataSec['bufferPrefs'].values():
                 desc = dict()
                 desc['lifeTime'] = _readFloat(group, 'lifeTime', 0, 1000, 1)

@@ -3,15 +3,14 @@ from collections import namedtuple
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from adisp import process
 from gui import SystemMessages
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.view_helpers import UsersInfoHelper
 from gui.shared.formatters import text_styles
 from gui.clubs import contexts as club_ctx, formatters as club_fmts
 from gui.clubs.items import isInvite
 from gui.clubs.club_helpers import ClubListener
 from gui.clubs.settings import CLIENT_CLUB_STATE
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
+from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.daapi.view.meta.StaticFormationInvitesAndRequestsMeta import StaticFormationInvitesAndRequestsMeta
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 
@@ -37,7 +36,7 @@ def _formatInviteStatus(invitation):
     return ''
 
 
-class _DataProvider(DAAPIDataProvider):
+class _DataProvider(SortableDAAPIDataProvider):
 
     def __init__(self):
         super(_DataProvider, self).__init__()
@@ -69,7 +68,7 @@ class _DataProvider(DAAPIDataProvider):
         return
 
 
-class StaticFormationInvitesAndRequestsWindow(View, AbstractWindowView, StaticFormationInvitesAndRequestsMeta, ClubListener, UsersInfoHelper):
+class StaticFormationInvitesAndRequestsWindow(StaticFormationInvitesAndRequestsMeta, ClubListener, UsersInfoHelper):
 
     def __init__(self, ctx = None):
         super(StaticFormationInvitesAndRequestsWindow, self).__init__()
@@ -183,8 +182,21 @@ class StaticFormationInvitesAndRequestsWindow(View, AbstractWindowView, StaticFo
                 description = ''
             self.as_setStaticDataS({'windowDescription': header,
              'isTeamDescriptionEditable': limits.canChangeClubRequirements(profile, club).success,
-             'teamDescription': description})
+             'teamDescription': description,
+             'tableHeader': self._createTableHeader()})
         return
+
+    def _createTableHeader(self):
+        return [self._createTableBtnInfo('name', CYBERSPORT.INVITESANDREQUESTSWINDOW_PLAYERNAME, CYBERSPORT.INVITESANDREQUESTSWINDOW_PLAYERNAME, 175), self._createTableBtnInfo('rating', '', CYBERSPORT.INVITESANDREQUESTSWINDOW_PLAYERNAME, 81, iconSource=RES_ICONS.MAPS_ICONS_STATISTIC_RATING24), self._createTableBtnInfo('status', CYBERSPORT.INVITESANDREQUESTSWINDOW_STATUS, CYBERSPORT.INVITESANDREQUESTSWINDOW_STATUS, 139, showSeparator=False)]
+
+    def _createTableBtnInfo(self, id, label, toolTip, buttonWidth, iconSource = '', showSeparator = True):
+        return {'id': id,
+         'label': label,
+         'iconSource': iconSource,
+         'toolTip': toolTip,
+         'buttonWidth': buttonWidth,
+         'showSeparator': showSeparator,
+         'buttonHeight': 30}
 
     def __updateMembers(self, syncUserData = False):
         club = self.clubsCtrl.getClub(self.__clubDbID)

@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportClubsListView.py
+import operator
 import BigWorld
 from adisp import process
 from constants import PREBATTLE_TYPE
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.rally.rally_dps import ClubsDataProvider
 from gui.Scaleform.daapi.view.meta.CyberSportUnitsListMeta import CyberSportUnitsListMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -14,7 +14,6 @@ from gui.clubs.contexts import GetClubCtx
 from gui.clubs.items import Club
 from gui.clubs.settings import CLUB_REQUEST_TYPE, CLIENT_CLUB_STATE
 from gui.prb_control.functional import unit_ext
-from gui.Scaleform.framework import AppRef
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -25,7 +24,8 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 def _createHeader(label, buttonWidth, iconSource = None):
     return {'label': label,
      'buttonWidth': buttonWidth,
-     'iconSource': iconSource}
+     'iconSource': iconSource,
+     'enabled': False}
 
 
 def _getColumnHeaders(isSearch):
@@ -40,7 +40,7 @@ def _getColumnHeaders(isSearch):
      _createHeader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_PLAYERS, 76)]
 
 
-class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListener, ClubEmblemsHelper, AppRef):
+class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListener, ClubEmblemsHelper):
 
     def __init__(self):
         super(CyberSportClubsListView, self).__init__()
@@ -161,10 +161,14 @@ class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
             self._setCoolDowns(event.coolDown, event.requestID)
 
     def _checkCoolDowns(self):
+        cooldowns = {}
         for requestID in self.getCoolDownRequests():
-            coolDown = self.clubsCtrl.getRequestCtrl().getCooldownTime(requestID)
-            if coolDown > 0:
-                self._setCoolDowns(coolDown, requestID)
+            cooldowns[requestID] = self.clubsCtrl.getRequestCtrl().getCooldownTime(requestID)
+
+        if len(cooldowns):
+            requestID, cooldown = max(cooldowns.items(), key=operator.itemgetter(1))
+            if cooldown > 0:
+                self._setCoolDowns(cooldown, requestID)
 
     def _setCoolDowns(self, cooldown, requestID):
         self.as_setCoolDownS(cooldown, requestID)

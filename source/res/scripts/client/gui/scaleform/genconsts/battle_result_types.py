@@ -9,7 +9,6 @@ class BATTLE_RESULT_TYPES(object):
     TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE = 'EfficiencyBlockIconTextParameterUI'
     TOOLTIP_RESULT_TTILE_LEFT_LINKAGE = 'EfficiencyBlockResultTitleLefttUI'
     TOOLTIP_RESULT_TTILE_RIGHT_CENTER_LINKAGE = 'EfficiencyBlockResultTitleRightCenterUI'
-    TOOLTIP_TEXT_PARAMETER_LINKAGE = 'EfficiencyBlockTextParameterUI'
     KILL_REASON_SHOT = 0
     KILL_REASON_FIRE = 1
     KILL_REASON_RAMMING = 2

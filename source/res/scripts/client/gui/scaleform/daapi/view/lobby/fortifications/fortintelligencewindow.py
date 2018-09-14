@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceWindow.py
 import BigWorld
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from helpers import i18n
@@ -8,16 +9,13 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getTextLevel
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortIntelligenceWindowMeta import FortIntelligenceWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 
-class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMeta, FortViewHelper, AppRef):
+class FortIntelligenceWindow(FortIntelligenceWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortIntelligenceWindow, self).__init__()
         self._searchDP = None
         self.__cooldownCB = None
@@ -101,7 +99,21 @@ class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMet
                 self._searchDP.rebuildList(cache)
             self.__setStatus(cache.hasResults())
         self.addListener(FortEvent.ON_INTEL_FILTER_DO_REQUEST, self.__onDoInfoCacheRequest, EVENT_BUS_SCOPE.FORT)
+        self._initTable()
         return
+
+    def _initTable(self):
+        self.as_setTableHeaderS({'tableHeader': [self._createHeader(self.getLevelColumnIcons(), 'clanLvl', 64, 0, TOOLTIPS.FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_LEVEL),
+                         self._createHeader(FORTIFICATIONS.FORTINTELLIGENCE_SORTBTNS_CLANTAG, 'clanTag', 132, 1, TOOLTIPS.FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_CLANTAG),
+                         self._createHeader(FORTIFICATIONS.FORTINTELLIGENCE_SORTBTNS_DEFENCETIME, 'defenceStartTime', 203, 2, TOOLTIPS.FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_DEFENCETIME),
+                         self._createHeader(FORTIFICATIONS.FORTINTELLIGENCE_SORTBTNS_BUILDINGS, 'avgBuildingLvl', 195, 3, TOOLTIPS.FORTIFICATION_INTELLIGENCEWINDOW_SORTBTN_BUILDINGS)]})
+
+    def _createHeader(self, label, iconId, buttonWidth, sortOrder, toolTip):
+        return {'label': label,
+         'sortOrder': sortOrder,
+         'buttonWidth': buttonWidth,
+         'toolTip': toolTip,
+         'id': iconId}
 
     def _dispose(self):
         self.removeListener(FortEvent.ON_INTEL_FILTER_DO_REQUEST, self.__onDoInfoCacheRequest, EVENT_BUS_SCOPE.FORT)

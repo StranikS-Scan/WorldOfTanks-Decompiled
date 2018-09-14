@@ -10,15 +10,15 @@ import gui
 from gui.Scaleform.daapi.view.lobby.customization.BaseTimedCustomizationInterface import BaseTimedCustomizationInterface
 from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
 from gui.Scaleform.daapi.view.lobby.customization.data_providers import EmblemsDataProvider, EmblemRentalPackageDataProvider, EmblemGroupsDataProvider
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import time_utils, i18n
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 from items import vehicles
+from gui.LobbyContext import g_lobbyContext
 
-class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
+class EmblemInterface(BaseTimedCustomizationInterface):
     __metaclass__ = ABCMeta
 
     def __init__(self, name, nationId, type, position):
@@ -40,9 +40,11 @@ class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
         return item
 
     def isEnabled(self):
-        if self.app.varsManager.isInRoaming():
+        serverSettings = g_lobbyContext.getServerSettings()
+        if serverSettings is not None and serverSettings.roaming.isInRoaming():
             return False
-        return self._isEnabled
+        else:
+            return self._isEnabled
 
     def locateCameraOnSlot(self):
         res = g_hangarSpace.space.locateCameraOnEmblem(not self.isTurret, 'player', self._position - self._positionShift, self.ZOOM_FACTOR)

@@ -3,22 +3,18 @@ from FortifiedRegionBase import NOT_ACTIVATED
 from adisp import process
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.daapi.view.meta.FortPeriodDefenceWindowMeta import FortPeriodDefenceWindowMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.shared.formatters import text_styles
 from gui.shared.fortifications.context import SettingsCtx
 from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustOffDayToUTC, adjustDefenceHourToLocal, adjustDefenceHoursListToLocal
-from helpers import i18n
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.Scaleform.framework import AppRef
 from predefined_hosts import g_preDefinedHosts
 from ConnectionManager import connectionManager
 
-class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowMeta, FortViewHelper, AppRef):
+class FortPeriodDefenceWindow(FortPeriodDefenceWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortPeriodDefenceWindow, self).__init__()
         self.__textsCreated = False
         self.__peripheriesList = None
@@ -67,15 +63,14 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
 
     def __createTexts(self):
         self.__textsCreated = True
-        gt = self.__getHTMLText
         return {'windowLbl': FORTIFICATIONS.PERIODDEFENCEWINDOW_HEADERLBL,
-         'headerLbl': gt(TEXT_MANAGER_STYLES.HIGH_TITLE, FORTIFICATIONS.PERIODDEFENCEWINDOW_READY),
-         'peripheryLbl': gt(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY),
-         'peripheryDescr': gt(TEXT_MANAGER_STYLES.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY_DESCRIPTION),
-         'hourDefenceLbl': gt(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE),
-         'hourDefenceDescr': gt(TEXT_MANAGER_STYLES.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE_DESCRIPTION),
-         'holidayLbl': gt(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY),
-         'holidayDescr': gt(TEXT_MANAGER_STYLES.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY_DESCRIPTION),
+         'headerLbl': text_styles.highTitle(FORTIFICATIONS.PERIODDEFENCEWINDOW_READY),
+         'peripheryLbl': text_styles.neutral(FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY),
+         'peripheryDescr': text_styles.standard(FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY_DESCRIPTION),
+         'hourDefenceLbl': text_styles.neutral(FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE),
+         'hourDefenceDescr': text_styles.standard(FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE_DESCRIPTION),
+         'holidayLbl': text_styles.neutral(FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY),
+         'holidayDescr': text_styles.standard(FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY_DESCRIPTION),
          'acceptBtn': FORTIFICATIONS.PERIODDEFENCEWINDOW_BTN_ACTIVATE,
          'cancelBtn': FORTIFICATIONS.PERIODDEFENCEWINDOW_BTN_NOTNOW}
 
@@ -101,10 +96,6 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
          'isWrongLocalTime': self._isWrongLocalTime(),
          'skipValues': adjustDefenceHoursListToLocal(g_lobbyContext.getServerSettings().getForbiddenFortDefenseHours()),
          'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat()}
-
-    def __getHTMLText(self, style, localText):
-        text = i18n.makeString(localText)
-        return self.app.utilsManager.textManager.getText(style, text)
 
     @staticmethod
     def __getPeripheryList():

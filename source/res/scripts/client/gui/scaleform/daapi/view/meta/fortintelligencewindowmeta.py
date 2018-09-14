@@ -1,10 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortIntelligenceWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortIntelligenceWindowMeta(DAAPIModule):
-
-    def getLevelColumnIcons(self):
-        self._printOverrideError('getLevelColumnIcons')
+class FortIntelligenceWindowMeta(AbstractWindowView):
 
     def requestClanFortInfo(self, index):
         self._printOverrideError('requestClanFortInfo')
@@ -32,3 +29,7 @@ class FortIntelligenceWindowMeta(DAAPIModule):
     def as_selectByIndexS(self, index):
         if self._isDAAPIInited():
             return self.flashObject.as_selectByIndex(index)
+
+    def as_setTableHeaderS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setTableHeader(data)

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/GlobalVarsMgrMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class GlobalVarsMgrMeta(DAAPIModule):
+class GlobalVarsMgrMeta(BaseDAAPIModule):
 
     def isDevelopment(self):
         self._printOverrideError('isDevelopment')

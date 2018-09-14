@@ -1,24 +1,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/application.py
 import weakref
 import BigWorld
-import GUI
-from adisp import async
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from gui import SystemMessages, g_guiResetters, g_repeatKeyHandlers, GUI_SETTINGS
+from debug_utils import LOG_DEBUG
+from gui import g_guiResetters, g_repeatKeyHandlers
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import AppRef, ViewTypes
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
 from gui.Scaleform.framework.managers import ContainerManager
 from gui.Scaleform.framework.managers import LoaderManager
-from gui.Scaleform.framework.managers import CacheManager
 from gui.Scaleform.framework.ToolTip import ToolTip
-from gui.Scaleform.framework.managers.StatsStorage import StatsStorage
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.events import GUIEditorEvent, LoadViewEvent
-from gui.shared.utils.key_mapping import getScaleformKey, voidSymbol
-from helpers.i18n import convert, makeString
+from gui.shared.events import AppLifeCycleEvent, GUIEditorEvent, LoadViewEvent
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core import settings_constants
 
@@ -39,50 +33,8 @@ class AppBase(Flash):
                 self._setup()
             super(AppBase, self).active(state)
 
-    def bindExCallbackToKey(self, key, command, function):
-        try:
-            gfx_key = getScaleformKey(key)
-            if gfx_key != voidSymbol:
-                self.movie.invoke(('bindExCallbackToKey', [gfx_key, command]))
-                self.addExternalCallback(command, function)
-            else:
-                LOG_ERROR("Can't convert key:", key)
-        except:
-            LOG_CURRENT_EXCEPTION()
-
-    def clearExCallbackToKey(self, key, command, function = None):
-        try:
-            gfx_key = getScaleformKey(key)
-            if gfx_key != voidSymbol:
-                self.movie.invoke(('clearExCallbackToKey', [gfx_key]))
-                self.removeExternalCallback(command, function=function)
-            else:
-                LOG_ERROR("Can't convert key:", key)
-        except:
-            LOG_CURRENT_EXCEPTION()
-
-    def quit(self):
-        """ Close client """
-        BigWorld.quit()
-
-    @async
-    def logoff(self, disconnectNow = False, callback = None):
-        """ Log current account off """
-        self.disconnect(disconnectNow, callback)
-
-    def disconnect(self, disconnectNow = False, callback = None):
-
-        def logOff():
-            if callback is not None:
-                callback(True)
-            from ConnectionManager import connectionManager
-            connectionManager.disconnect()
-            return
-
-        if disconnectNow:
-            logOff()
-        else:
-            BigWorld.callback(0.0001, logOff)
+    def setBackgroundAlpha(self, value):
+        self.movie.backgroundAlpha = value
 
     def _setup(self):
         self.movie.setFocussed(SCALEFORM_SWF_PATH_V3)
@@ -94,7 +46,7 @@ class AppBase(Flash):
 
 class App(ApplicationMeta, AppBase):
 
-    def __init__(self, businessHandler):
+    def __init__(self, appNS, businessHandler):
         super(App, self).__init__()
         if businessHandler is None:
             raise Exception, 'Business handler can not be None'
@@ -107,7 +59,6 @@ class App(ApplicationMeta, AppBase):
         self._colorSchemeMgr = None
         self._eventLogMgr = None
         self._varsMgr = None
-        self._statsStorage = None
         self.__toolTip = None
         self._guiItemsMgr = None
         self._tweenMgr = None
@@ -115,9 +66,10 @@ class App(ApplicationMeta, AppBase):
         self._gameInputMgr = None
         self._utilsMgr = None
         self._cacheMgr = None
+        self._tutorialMgr = None
         self.__initialized = False
+        self.__ns = appNS
         self.__firingsAfterInit = {}
-        AppRef.setReference(self.proxy)
         self.__geShowed = False
         self.__aliasToLoad = []
         self.addExternalCallback('registerApplication', self.onFlashAppInit)
@@ -184,8 +136,16 @@ class App(ApplicationMeta, AppBase):
         return self.__getCursorFromContainer()
 
     @property
+    def tutorialManager(self):
+        return self._tutorialMgr
+
+    @property
     def initialized(self):
         return self.__initialized
+
+    @property
+    def appNS(self):
+        return self.__ns
 
     def onFlashAppInit(self):
         self.setFlashObject(self.movie.root)
@@ -193,6 +153,7 @@ class App(ApplicationMeta, AppBase):
         self.afterCreate()
 
     def afterCreate(self):
+        self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.INITIALIZING))
         LOG_DEBUG('[App] afterCreate')
         AppBase.afterCreate(self)
         self._createManagers()
@@ -203,15 +164,19 @@ class App(ApplicationMeta, AppBase):
         self.onUpdateStage()
         g_repeatKeyHandlers.add(self.component.handleKeyEvent)
         while len(self.__aliasToLoad):
-            alias, name, kargs, kwargs = self.__aliasToLoad.pop(0)
-            self.loadView(alias, name, *kargs, **kwargs)
+            alias, name, args, kwargs = self.__aliasToLoad.pop(0)
+            self.loadView(alias, name, *args, **kwargs)
 
         self._loadCursor()
         self._loadWaiting()
+        from gui.Scaleform.Waiting import Waiting
+        Waiting.setWainingViewGetter(self.__getWaitingFromContainer)
         self.__geShowed = False
 
     def beforeDelete(self):
         LOG_DEBUG('[App] beforeDelete')
+        from gui.Scaleform.Waiting import Waiting
+        Waiting.setWainingViewGetter(None)
         g_guiResetters.discard(self.onUpdateStage)
         g_repeatKeyHandlers.discard(self.component.handleKeyEvent)
         if self._containerMgr is not None:
@@ -244,9 +209,6 @@ class App(ApplicationMeta, AppBase):
         if self._eventLogMgr is not None:
             self._eventLogMgr.destroy()
             self._eventLogMgr = None
-        if self._statsStorage is not None:
-            self._statsStorage.destroy()
-            self._statsStorage = None
         if self._guiItemsMgr is not None:
             self._guiItemsMgr.destroy()
             self._guiItemsMgr = None
@@ -262,12 +224,15 @@ class App(ApplicationMeta, AppBase):
         if self._utilsMgr is not None:
             self._utilsMgr.destroy()
             self._utilsMgr = None
+        if self._tutorialMgr is not None:
+            self._tutorialMgr.destroy()
+            self._tutorialMgr = None
         if self._businessHandler is not None:
             self._businessHandler.destroy()
             self._businessHandler = None
         self._dispose()
         super(App, self).beforeDelete()
-        AppRef.clearReference()
+        self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.DESTROYED))
         return
 
     def loadView(self, newViewAlias, name = None, *args, **kwargs):
@@ -327,13 +292,12 @@ class App(ApplicationMeta, AppBase):
     def setTextMgr(self, flashObject):
         self._utilsMgr.registerTextManager(flashObject)
 
+    def setTutorialMgr(self, flashObject):
+        self._tutorialMgr.setFlashObject(flashObject)
+
     def onAsInitializationCompleted(self):
         self.__initialized = True
-        for eventType in self.__firingsAfterInit:
-            eventDict = self.__firingsAfterInit[eventType]
-            self.fireEvent(eventDict['event'], eventDict['scope'])
-
-        self.__firingsAfterInit.clear()
+        self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.INITIALIZED))
 
     def onUpdateStage(self):
         index = g_settingsCore.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
@@ -357,17 +321,9 @@ class App(ApplicationMeta, AppBase):
         if not self.__geShowed:
             self.as_updateStageS(w, h, scale)
 
-    def fireEventAfterInitialization(self, event, scope = EVENT_BUS_SCOPE.DEFAULT):
-        if self.__initialized:
-            self.fireEvent(event, scope=scope)
-        else:
-            self.__firingsAfterInit[event.eventType] = {'event': event,
-             'scope': scope}
-
     def _createManagers(self):
-        self._loaderMgr = LoaderManager()
+        self._loaderMgr = LoaderManager(self.proxy)
         self._containerMgr = ContainerManager(self._loaderMgr)
-        self._statsStorage = StatsStorage()
         self.__toolTip = ToolTip()
 
     def _loadCursor(self):
@@ -400,8 +356,6 @@ class App(ApplicationMeta, AppBase):
             raise Exception, 'Color scheme manager is not defined'
         if self._eventLogMgr is None:
             raise Exception, 'Event log manager is not defined'
-        if self._statsStorage is None:
-            raise Exception, 'Stats storage manager is not defined'
         if self._varsMgr is None:
             raise Exception, 'Global vars manager is not defined'
         if self._gameInputMgr is None:

@@ -70,7 +70,7 @@ def stripShortDescr(descr):
     return re.sub('<shortDesc>(.*?)</shortDesc>', '', descr)
 
 
-def makeTooltip(header = None, body = None, note = None):
+def makeTooltip(header = None, body = None, note = None, attention = None):
     """
     Make complex tooltip from carrying params.
     This special formatted string will be parsed from Flash
@@ -83,12 +83,14 @@ def makeTooltip(header = None, body = None, note = None):
         res_str += '{BODY}%s{/BODY}' % makeString(body)
     if note is not None:
         res_str += '{NOTE}%s{/NOTE}' % makeString(note)
+    if attention is not None:
+        res_str += '{ATTENTION}%s{/ATTENTION}' % makeString(attention)
     return res_str
 
 
 @async
 @process
-def checkAmmoLevel(callback):
+def checkAmmoLevel(vehicles, callback):
     """
     Check ammo for current vehicle, if it is lower then 20% shows message dialog
     Example:
@@ -99,32 +101,32 @@ def checkAmmoLevel(callback):
     @return: True if ammo level is ok or user confirm, False otherwise
     """
     showAmmoWarning = False
-    from CurrentVehicle import g_currentVehicle
-    if g_currentVehicle.isReadyToFight():
-        vehicle = g_currentVehicle.item
-        if not g_currentVehicle.isAutoLoadFull() or not g_currentVehicle.isAutoEquipFull():
-            from gui import SystemMessages
-            from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor
-            shellsLayout = []
-            eqsLayout = []
-            for shell in vehicle.shells:
-                shellsLayout.extend(shell.defaultLayoutValue)
+    for vehicle in vehicles:
+        if vehicle.isReadyToFight:
+            if not vehicle.isAutoLoadFull() or not vehicle.isAutoEquipFull():
+                from gui import SystemMessages
+                from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor
+                shellsLayout = []
+                eqsLayout = []
+                for shell in vehicle.shells:
+                    shellsLayout.extend(shell.defaultLayoutValue)
 
-            for eq in vehicle.eqsLayout:
-                if eq is not None:
-                    eqsLayout.extend(eq.defaultLayoutValue)
-                else:
-                    eqsLayout.extend((0, 0))
+                for eq in vehicle.eqsLayout:
+                    if eq is not None:
+                        eqsLayout.extend(eq.defaultLayoutValue)
+                    else:
+                        eqsLayout.extend((0, 0))
 
-            LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
-            result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
-            if result and result.auxData:
-                for m in result.auxData:
-                    SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
+                LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
+                result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
+                if result and result.auxData:
+                    for m in result.auxData:
+                        SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
-            if result and len(result.userMsg):
-                SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-        showAmmoWarning = not g_currentVehicle.item.isAmmoFull
+                if result and len(result.userMsg):
+                    SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            showAmmoWarning = showAmmoWarning or not vehicle.isAmmoFull
+
     if showAmmoWarning:
         from gui import DialogsInterface
         success = yield DialogsInterface.showI18nConfirmDialog('lowAmmo')
@@ -310,14 +312,18 @@ def showInformationDialog(infDialog, callback, customMessage = '', ns = 'common'
             does not fit.
     @param ns: 'common' or 'battle'.
     """
-    from gui.WindowsManager import g_windowsManager
+    from gui.app_loader import g_appLoader
 
     def onInformationDialogClosed(_):
-        g_windowsManager.battleWindow.removeExternalCallbacks('informationDialog.onClose')
+        battle = g_appLoader.getDefBattleApp()
+        if battle:
+            battle.removeExternalCallbacks('informationDialog.onClose')
         callback()
 
-    g_windowsManager.battleWindow.addExternalCallbacks({'informationDialog.onClose': onInformationDialogClosed})
-    g_windowsManager.battleWindow.call('{0:>s}.showInformationDialog'.format(ns), [infDialog, customMessage, 'informationDialog.onClose'])
+    battle = g_appLoader.getDefBattleApp()
+    if battle:
+        battle.addExternalCallbacks({'informationDialog.onClose': onInformationDialogClosed})
+        battle.call('{0:>s}.showInformationDialog'.format(ns), [infDialog, customMessage, 'informationDialog.onClose'])
 
 
 def showConfirmDialog(confirmDialog, callback, customMessage = '', ns = 'common'):
@@ -333,18 +339,22 @@ def showConfirmDialog(confirmDialog, callback, customMessage = '', ns = 'common'
             does not fit.
     @param ns: 'common' or 'battle'.
     """
-    from gui.WindowsManager import g_windowsManager
+    from gui.app_loader import g_appLoader
 
     def onConfirmResponse(confirm):
-        g_windowsManager.battleWindow.removeExternalCallbacks('confirmDialog.onConfirm', 'confirmDialog.onClose')
+        battle = g_appLoader.getDefBattleApp()
+        if battle:
+            battle.removeExternalCallbacks('confirmDialog.onConfirm', 'confirmDialog.onClose')
         callback(confirm)
 
-    g_windowsManager.battleWindow.addExternalCallbacks({'confirmDialog.onConfirm': lambda callBackId: onConfirmResponse(True),
-     'confirmDialog.onClose': lambda callBackId: onConfirmResponse(False)})
-    g_windowsManager.battleWindow.call('{0:>s}.showConfirmDialog'.format(ns), [confirmDialog,
-     customMessage,
-     'confirmDialog.onConfirm',
-     'confirmDialog.onClose'])
+    battle = g_appLoader.getDefBattleApp()
+    if battle:
+        battle.addExternalCallbacks({'confirmDialog.onConfirm': lambda callBackId: onConfirmResponse(True),
+         'confirmDialog.onClose': lambda callBackId: onConfirmResponse(False)})
+        battle.call('{0:>s}.showConfirmDialog'.format(ns), [confirmDialog,
+         customMessage,
+         'confirmDialog.onConfirm',
+         'confirmDialog.onClose'])
 
 
 _viewIdsGen = None

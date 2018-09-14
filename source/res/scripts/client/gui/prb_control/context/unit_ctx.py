@@ -18,6 +18,9 @@ class _UnitRequestCtx(PrbCtrlRequestCtx):
     def getUnitIdx(self):
         return getUnitIdx()
 
+    def getCooldown(self):
+        return 5.0
+
 
 @ReprInjector.simple(('__prbType', 'prbType'), ('getRosterID', 'rosterID'), ('getWaitingID', 'waitingID'))
 
@@ -392,7 +395,6 @@ class SquadSettingsCtx(_UnitRequestCtx):
 @ReprInjector.simple(('__division', 'division'), ('getWaitingID', 'waitingID'))
 
 class ChangeDivisionCtx(_UnitRequestCtx):
-    COOLDOWN = 5.0
 
     def __init__(self, divisionID, waitingID = ''):
         super(ChangeDivisionCtx, self).__init__(waitingID=waitingID)
@@ -404,8 +406,53 @@ class ChangeDivisionCtx(_UnitRequestCtx):
     def getRequestType(self):
         return _REQUEST_TYPE.CHANGE_DIVISION
 
+
+@ReprInjector.simple(('__vehsList', 'vehsList'), ('getWaitingID', 'waitingID'))
+
+class SetEventVehiclesCtx(_UnitRequestCtx):
+
+    def __init__(self, vehsList, waitingID = ''):
+        super(SetEventVehiclesCtx, self).__init__(waitingID=waitingID)
+        self.__vehsList = vehsList
+
+    def getVehsList(self):
+        return self.__vehsList
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.SET_ES_VEHICLE_LIST
+
     def getCooldown(self):
-        return self.COOLDOWN
+        return 2.0
 
 
-__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx', 'SquadSettingsCtx', 'ChangeDivisionCtx')
+@ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__isReady', 'isReady'), ('getWaitingID', 'waitingID'))
+
+class SetReadyEventSquadCtx(_UnitRequestCtx):
+
+    def __init__(self, isReady = True, waitingID = ''):
+        super(SetReadyEventSquadCtx, self).__init__(waitingID=waitingID)
+        self.__isReady = isReady
+
+    def isReady(self):
+        return self.__isReady
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.SET_ES_PLAYER_STATE
+
+
+@ReprInjector.simple(('__eventType', 'eventType'), ('getWaitingID', 'waitingID'))
+
+class ChangeEventSquadTypeCtx(_UnitRequestCtx):
+
+    def __init__(self, eventType = True, waitingID = ''):
+        super(ChangeEventSquadTypeCtx, self).__init__(waitingID=waitingID)
+        self.__eventType = eventType
+
+    def getBattleType(self):
+        return self.__eventType
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.CHANGE_ES_TYPE
+
+
+__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx', 'SquadSettingsCtx', 'ChangeDivisionCtx', 'SetEventVehiclesCtx', 'ChangeEventSquadTypeCtx')

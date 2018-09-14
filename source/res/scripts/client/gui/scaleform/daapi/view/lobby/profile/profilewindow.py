@@ -3,9 +3,6 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.ProfileWindowMeta import ProfileWindowMeta
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import getProfileCommonInfo
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.PROFILE import PROFILE
 from helpers.i18n import makeString
 from gui.shared import g_itemsCache
@@ -15,9 +12,8 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
-from gui import game_control
 
-class ProfileWindow(ProfileWindowMeta, AbstractWindowView, View, AppRef):
+class ProfileWindow(ProfileWindowMeta):
 
     def __init__(self, ctx = None):
         super(ProfileWindow, self).__init__()
@@ -48,11 +44,11 @@ class ProfileWindow(ProfileWindowMeta, AbstractWindowView, View, AppRef):
         return
 
     def __isEnabledInRoaming(self, dbID):
-        roamingCtrl = game_control.g_instance.roaming
+        roaming = g_lobbyContext.getServerSettings().roaming
         if g_settings.server.XMPP.isEnabled():
-            isEnabled = roamingCtrl.isSameRealm(dbID)
+            isEnabled = roaming.isSameRealm(dbID)
         else:
-            isEnabled = not roamingCtrl.isInRoaming() and not roamingCtrl.isPlayerInRoaming(dbID)
+            isEnabled = not roaming.isInRoaming() and not roaming.isPlayerInRoaming(dbID)
         return isEnabled
 
     @storage_getter('users')

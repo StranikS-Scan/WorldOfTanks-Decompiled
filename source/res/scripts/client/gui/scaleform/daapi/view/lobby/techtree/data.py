@@ -7,7 +7,10 @@ from gui.prb_control.prb_helpers import prbDispatcherProperty, preQueueFunctiona
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items import vehicles, getTypeOfCompactDescr, ITEM_TYPE_NAMES
-from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE, MAX_PATH_LIMIT, _RESEARCH_ITEMS, makeDefUnlockProps, UnlockProps, UnlockStats
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, MAX_PATH_LIMIT
+from gui.Scaleform.daapi.view.lobby.techtree.settings import RESEARCH_ITEMS
+from gui.Scaleform.daapi.view.lobby.techtree.settings import makeDefUnlockProps
+from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.dumpers import _BaseDumper
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 __all__ = ['ResearchItemsData', 'NationTreeData']
@@ -508,7 +511,7 @@ class ResearchItemsData(_ItemsData):
         itemGetter = self.getItem
         self._autoGunCD = -1
         self._autoTurretCD = -1
-        for itemTypeID in _RESEARCH_ITEMS:
+        for itemTypeID in RESEARCH_ITEMS:
             if itemTypeID > len(ITEM_TYPE_NAMES) - 1:
                 continue
             nodeCD = autoUnlocked[ITEM_TYPE_NAMES[itemTypeID]]
@@ -580,7 +583,8 @@ class NationTreeData(_ItemsData):
     def load(self, nationID, override = None):
         self.clear()
         vehicleList = sorted(vehicles.g_list.getList(nationID).values(), key=lambda item: item['level'])
-        g_techTreeDP.load(override=override)
+        g_techTreeDP.setOverride(override)
+        g_techTreeDP.load()
         getDisplayInfo = g_techTreeDP.getDisplayInfo
         getItem = self.getItem
         selectedID = ResearchItemsData.getRootCD()

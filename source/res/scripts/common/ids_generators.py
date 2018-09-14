@@ -5,13 +5,17 @@ class Int32IDGenerator(object):
 
     def __init__(self):
         self.__nextID = 0
+        self.__currID = 0
 
     def next(self):
         self.__nextID += 1
         if self.__nextID > 65535:
             self.__nextID = 0
         currTime = int(time.time())
-        return ((currTime & 32767) << 16) + self.__nextID
+        self.__currID = ((currTime & 32767) << 16) + self.__nextID
+        return self.__currID
+
+    currSequenceID = property(lambda self: self.__currID)
 
 
 class SequenceIDGenerator(object):

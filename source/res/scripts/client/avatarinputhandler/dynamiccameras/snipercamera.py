@@ -55,7 +55,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__curScrollSense = 0
             self.__waitVehicleCallbackId = None
             self.__onChangeControlMode = None
-            self.__aimingSystem = SniperAimingSystem()
+            self.__aimingSystem = SniperAimingSystem(dataSec)
             self.__aim = weakref.proxy(aim)
             self.__binoculars = binoculars
             self.__defaultAimOffset = self.__aim.offset()
@@ -89,6 +89,8 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__applyZoom(self.__zoom)
         self.__setupCamera(targetPos)
         vehicle = BigWorld.entity(player.playerVehicleID)
+        if self.__waitVehicleCallbackId is not None:
+            BigWorld.cancelCallback(self.__waitVehicleCallbackId)
         if vehicle is None:
             self.__whiteVehicleCallbackId = BigWorld.callback(0.1, self.__waitVehicle)
         else:
@@ -178,18 +180,9 @@ class SniperCamera(ICamera, CallbackDelayer):
         return (dx * self.__curSense * (-1 if self.__cfg['horzInvert'] else 1), dy * self.__curSense * (-1 if self.__cfg['vertInvert'] else 1))
 
     def __showVehicle(self, show):
-        if show:
-            drawFlags = BigWorld.DrawAll
-        else:
-            drawFlags = BigWorld.ShadowPassBit
         vehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
-        if vehicle is not None and vehicle.isStarted:
-            va = vehicle.appearance
-            va.changeDrawPassVisibility('chassis', drawFlags, show, show)
-            va.changeDrawPassVisibility('hull', drawFlags, show, True)
-            va.changeDrawPassVisibility('turret', drawFlags, show, True)
-            va.changeDrawPassVisibility('gun', drawFlags, show, True)
-            va.showStickers(show)
+        if vehicle is not None:
+            vehicle.show(show)
         return
 
     def __setupCamera(self, targetPos):

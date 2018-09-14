@@ -12,7 +12,6 @@ from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects, FortifiedWindowScopes
 from gui.Scaleform.daapi.view.lobby.fortifications.FortRosterIntroWindow import FortRosterIntroWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -24,13 +23,14 @@ from gui.shared import events, g_eventBus
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.FortMainViewMeta import FortMainViewMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.events import FortEvent
+from gui.shared.formatters import text_styles
 from gui.shared.fortifications import events_dispatcher as fort_events
+from gui.shared.fortifications import isFortificationBattlesEnabled
 from gui.shared.fortifications.context import DirectionCtx
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.fortifications.fort_helpers import getRosterIntroWindowSetting
@@ -46,7 +46,7 @@ def _checkBattleConsumesIntro(fort):
     AccountSettings.setSettings('fortSettings', settings)
 
 
-class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
+class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
 
     class DIR_BATTLE_TYPE(CONST_CONTAINER):
         ATTACK = 'attack'
@@ -216,7 +216,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
 
     def onIntelligenceClick(self):
         isDefenceHourEnabled = self.fortCtrl.getFort().isDefenceHourEnabled()
-        if not self.app.varsManager.isFortificationBattleAvailable():
+        if not isFortificationBattlesEnabled():
             isDefenceHourEnabled = False
             alias = FORTIFICATION_ALIASES.FORT_INTELLIGENCE_NOT_AVAILABLE_WINDOW
         elif not isDefenceHourEnabled:
@@ -287,7 +287,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         level = fort.level
         levelTxt = fort_formatters.getTextLevel(level)
         defResQuantity = fort.getTotalDefRes()
-        defResPrefix = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT))
+        defResPrefix = text_styles.main(i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT))
         disabledTransporting = False
         if self.__currentMode in (FORTIFICATION_ALIASES.MODE_TRANSPORTING_FIRST_STEP, FORTIFICATION_ALIASES.MODE_TRANSPORTING_NEXT_STEP, FORTIFICATION_ALIASES.MODE_TRANSPORTING_NOT_AVAILABLE):
             if not self.fortCtrl.getFort().isTransportationAvailable():
@@ -304,11 +304,11 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         isDefHourEnabled = self.fortCtrl.getFort().isDefenceHourEnabled()
         if self._isFortFrozen():
             message = i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_HEADER_FORTFROZEN)
-            message = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, message)
+            message = text_styles.error(message)
         elif isDefHourEnabled:
             periodStr = self.fortCtrl.getFort().getDefencePeriodStr()
             message = i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_HEADER_DEFENCEPERIOD, period=periodStr)
-            message = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STATS_TEXT, message)
+            message = text_styles.stats(message)
         self.as_setHeaderMessageS(message, self._isWrongLocalTime() and isDefHourEnabled)
 
     def __refreshCurrentMode(self):

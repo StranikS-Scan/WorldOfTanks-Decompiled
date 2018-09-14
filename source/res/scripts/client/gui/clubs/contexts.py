@@ -165,6 +165,9 @@ class FindClubsCtx(CommonRequestCtx):
     def getRequestType(self):
         return CLUB_REQUEST_TYPE.FIND_CLUBS
 
+    def getCooldown(self):
+        return 5.0
+
 
 @ReprInjector.withParent()
 

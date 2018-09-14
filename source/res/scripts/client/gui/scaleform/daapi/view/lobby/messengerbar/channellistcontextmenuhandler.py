@@ -37,7 +37,7 @@ class ChannelListContextMenuHandler(AbstractContextMenuHandler, EventSystemEntit
         self._canClose = None
         return
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         return [self._makeItem(CHANNEL.MINIMIZE_ALL, MENU.contextmenu('messenger/minimizeAll')),
          self._makeSeparator(),
          self._makeItem(CHANNEL.CLOSE_CURRENT, MENU.contextmenu('messenger/closeCurrent'), {'enabled': self._canClose}),

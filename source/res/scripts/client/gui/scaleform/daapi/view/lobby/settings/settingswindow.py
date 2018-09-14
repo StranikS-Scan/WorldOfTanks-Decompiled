@@ -5,22 +5,19 @@ import VOIP
 import SoundGroups
 from debug_utils import *
 from gui.GraphicsPresets import GraphicsPresets
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
 from gui.battle_control import g_sessionProvider
 from gui.shared.utils import flashObject2Dict, decorators
-from gui.Scaleform.daapi import AppRef
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.lobby.settings.SettingsParams import SettingsParams
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.options import APPLY_METHOD
 
-class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
+class SettingsWindow(SettingsWindowMeta):
 
     def __init__(self, ctx = None):
         super(SettingsWindow, self).__init__()
@@ -29,13 +26,24 @@ class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
         self.params = SettingsParams()
 
     def __getSettings(self):
-        return {'GameSettings': self.params.getGameSettings(),
+        settings = {'GameSettings': self.params.getGameSettings(),
          'GraphicSettings': self.params.getGraphicsSettings(),
          'SoundSettings': self.params.getSoundSettings(),
          'ControlsSettings': self.params.getControlsSettings(),
          'AimSettings': self.params.getAimSettings(),
          'MarkerSettings': self.params.getMarkersSettings(),
          'OtherSettings': self.params.getOtherSettings()}
+        reformatted_settings = {}
+        for key, value in settings.iteritems():
+            reformatted_keys = []
+            reformatted_values = []
+            reformatted_settings[key] = {'keys': reformatted_keys,
+             'values': reformatted_values}
+            for key, value in value.iteritems():
+                reformatted_keys.append(key)
+                reformatted_values.append(value)
+
+        return reformatted_settings
 
     def __commitSettings(self, settings = None, restartApproved = False, isCloseWnd = False):
         if settings is None:

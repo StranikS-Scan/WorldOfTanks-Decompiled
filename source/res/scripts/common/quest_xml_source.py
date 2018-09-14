@@ -1,16 +1,15 @@
 # Embedded file name: scripts/common/quest_xml_source.py
+from pprint import pformat
 import time
-import items
 import ResMgr
 import nations
 import ArenaType
 import battle_results_shared
-from functools import partial
-from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, DictBlockBuilder, ListBlockBuilder, BinarySetDossierBlockBuilder
+from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
-from account_shared import validateCustomizationItem
 from items import vehicles, tankmen
 from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, FORT_QUEST_SUFFIX
+from bonus_readers import getBonusReaders, readUTC
 _WEEKDAYS = {'Mon': 1,
  'Tue': 2,
  'Wed': 3,
@@ -20,7 +19,7 @@ _WEEKDAYS = {'Mon': 1,
  'Sun': 7}
 MAX_BONUS_LIMIT = 1000000
 
-class XMLNode:
+class XMLNode(object):
     __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'groupContent')
 
     def __init__(self, name = ''):
@@ -32,6 +31,14 @@ class XMLNode:
         self.bonus = {}
         self.groupContent = None
         return
+
+    def __repr__(self):
+        dump = {'name': self.name,
+         'conditions': self.questClientConditions,
+         'nested': self.value}
+        if self.relatedGroup:
+            dump.update(group=self.relatedGroup)
+        return pformat(dump, indent=4)
 
     def getChildNode(self, name, relatedGroup = None):
         childNode = None
@@ -68,7 +75,7 @@ class XMLNode:
             self.questClientConditions.append(('value', childNode))
 
 
-class Source:
+class Source(object):
 
     def __init__(self):
         pass
@@ -187,9 +194,9 @@ class Source:
             description = self.__readMetaSection(questSection['description'])
         else:
             description = ''
-        progressExpiryTime = self.__generateUTC(questSection.readString('progressExpiryTime'), 'progressExpiryTime', gFinishTime)
-        startTime = self.__generateUTC(questSection.readString('startTime'), 'startTime', gStartTime)
-        finishTime = self.__generateUTC(questSection.readString('finishTime'), 'finishTime', gFinishTime)
+        progressExpiryTime = readUTC(questSection, 'progressExpiryTime', gFinishTime)
+        startTime = readUTC(questSection, 'startTime', gStartTime)
+        finishTime = readUTC(questSection, 'finishTime', gFinishTime)
         weekDayNames = questSection.readString('weekDays', '').split()
         weekDays = set([ _WEEKDAYS[val] for val in weekDayNames ])
         intervalsInString = questSection.readString('activeTimeIntervals', '').split()
@@ -337,7 +344,8 @@ class Source:
              'tankman': self.__readBattleResultsConditionList,
              'critical': self.__readBattleResultsConditionList,
              'crit': self.__readBattleResultsConditionList,
-             'critName': self.__readCritName})
+             'critName': self.__readCritName,
+             'clubs': self.__readClubsSection})
         if eventType in (EVENT_TYPE.BATTLE_QUEST,):
             condition_readers.update({'red': self.__readClanIds,
              'silver': self.__readClanIds,
@@ -346,28 +354,23 @@ class Source:
         return condition_readers
 
     def __getBonusReaders(self, eventType):
-        bonus_readers = {'gold': self.__readBonus_int,
-         'credits': self.__readBonus_int,
-         'freeXP': self.__readBonus_int,
-         'item': self.__readBonus_item,
-         'equipment': self.__readBonus_equipment,
-         'slots': self.__readBonus_int,
-         'berths': self.__readBonus_int,
-         'premium': self.__readBonus_int,
-         'token': self.__readBonus_tokens,
-         'goodie': self.__readBonus_goodies,
-         'vehicle': partial(self.__readBonus_vehicle, eventType),
-         'dossier': self.__readBonus_dossier,
-         'tankmen': partial(self.__readBonus_tankmen, eventType),
-         'customizations': partial(self.__readBonus_customizations, eventType)}
+        bonusTypes = {'gold',
+         'credits',
+         'freeXP',
+         'item',
+         'equipment',
+         'slots',
+         'berths',
+         'premium',
+         'token',
+         'goodie',
+         'vehicle',
+         'dossier',
+         'tankmen',
+         'customizations'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.FORT_QUEST, EVENT_TYPE.PERSONAL_QUEST):
-            bonus_readers.update({'xp': self.__readBonus_int,
-             'tankmenXP': self.__readBonus_int,
-             'xpFactor': self.__readBonus_factor,
-             'creditsFactor': self.__readBonus_factor,
-             'freeXPFactor': self.__readBonus_factor,
-             'tankmenXPFactor': self.__readBonus_factor})
-        return bonus_readers
+            bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
+        return getBonusReaders(bonusTypes)
 
     def __readCondition_groupBy(self, _, section, node):
         s = section.asString
@@ -558,238 +561,8 @@ class Source:
         node.addChild(set(self.__readVehicleTypeList(section)))
 
     def __readVehicleTypeList(self, section):
-        res = []
         typeNames = section.asString.split()
-        for typeName in typeNames:
-            nationIdx, innationIdx = vehicles.g_list.getIDsByName(typeName)
-            vehType = vehicles.g_cache.vehicle(nationIdx, innationIdx)
-            res.append(vehType.compactDescr)
-
-        return res
-
-    def __readBonus_int(self, bonus, name, section, _gFinishTime):
-        value = section.asInt
-        if value <= 0:
-            raise Exception, 'Negative value (%s)' % name
-        bonus[name] = section.asInt
-
-    def __readBonus_factor(self, bonus, name, section, _gFinishTime):
-        value = section.asFloat
-        if value <= 0:
-            raise Exception, 'Negative value (%s)' % name
-        bonus[name] = value
-
-    def __readBonus_equipment(self, bonus, _name, section, _gFinishTime):
-        eqName = section.asString
-        cache = vehicles.g_cache
-        eqID = cache.equipmentIDs().get(eqName)
-        if eqID is None:
-            raise Exception, "Unknown equipment '%s'" % eqName
-        eqCompDescr = cache.equipments()[eqID].compactDescr
-        count = 1
-        if section.has_key('count'):
-            count = section['count'].asInt
-        bonus.setdefault('items', {})[eqCompDescr] = count
-        return
-
-    def __readBonus_item(self, bonus, _name, section, _gFinishTime):
-        compDescr = section.asInt
-        try:
-            descr = vehicles.getDictDescr(compDescr)
-            if descr['itemTypeName'] not in items.SIMPLE_ITEM_TYPE_NAMES:
-                raise Exception, 'Wrong compact descriptor (%d). Not simple item.' % compDescr
-        except:
-            raise Exception, 'Wrong compact descriptor (%d)' % compDescr
-
-        count = 1
-        if section.has_key('count'):
-            count = section['count'].asInt
-        bonus.setdefault('items', {})[compDescr] = count
-
-    def __readBonus_vehicle(self, eventType, bonus, _name, section, gFinishTime):
-        nationID, innationID = vehicles.g_list.getIDsByName(section.asString)
-        vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
-        extra = {}
-        if section.has_key('tankmen'):
-            self.__readBonus_tankmen(eventType, extra, vehTypeCompDescr, section['tankmen'], gFinishTime)
-        else:
-            if section.has_key('noCrew'):
-                extra['noCrew'] = True
-            if section.has_key('crewLvl'):
-                extra['crewLvl'] = section['crewLvl'].asInt
-            if section.has_key('crewFreeXP'):
-                extra['crewFreeXP'] = section['crewFreeXP'].asInt
-        if section.has_key('rent'):
-            self.__readBonus_rent(extra, None, section['rent'], gFinishTime)
-        if section.has_key('customCompensation'):
-            credits = section['customCompensation'].readInt('credits', 0)
-            gold = section['customCompensation'].readInt('gold', 0)
-            extra['customCompensation'] = (credits, gold)
-        bonus.setdefault('vehicles', {})[vehTypeCompDescr] = extra
-        return
-
-    def __readBonus_tankmen(self, eventType, bonus, vehTypeCompDescr, section, _gFinishTime):
-        lst = []
-        for subsection in section.values():
-            tmanDescr = subsection.asString
-            if tmanDescr:
-                try:
-                    tman = tankmen.TankmanDescr(tmanDescr)
-                    if type(vehTypeCompDescr) == int:
-                        _, vehNationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
-                        if vehNationID != tman.nationID or vehicleTypeID != tman.vehicleTypeID:
-                            raise Exception, 'Vehicle and tankman mismatch.'
-                except Exception as e:
-                    raise Exception, 'Invalid tankmen compact descr. Error: %s' % (e,)
-
-                lst.append(tmanDescr)
-                continue
-            tmanData = {'isFemale': subsection.readBool('isFemale', False),
-             'firstNameID': subsection.readInt('firstNameID', -1),
-             'lastNameID': subsection.readInt('lastNameID', -1),
-             'role': subsection.readString('role', ''),
-             'iconID': subsection.readInt('iconID', -1),
-             'roleLevel': subsection.readInt('roleLevel', 50),
-             'freeXP': subsection.readInt('freeXP', 0),
-             'fnGroupID': subsection.readInt('fnGroupID', 0),
-             'lnGroupID': subsection.readInt('lnGroupID', 0),
-             'iGroupID': subsection.readInt('iGroupID', 0),
-             'isPremium': subsection.readBool('isPremium', False),
-             'nationID': subsection.readInt('nationID', -1),
-             'vehicleTypeID': subsection.readInt('vehicleTypeID', -1),
-             'skills': subsection.readString('skills', '').split(),
-             'freeSkills': subsection.readString('freeSkills', '').split()}
-            for record in ('firstNameID', 'lastNameID', 'iconID'):
-                if tmanData[record] == -1:
-                    tmanData[record] = None
-
-            try:
-                if type(vehTypeCompDescr) == int:
-                    _, vehNationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
-                    if vehNationID != tmanData['nationID'] or vehicleTypeID != tmanData['vehicleTypeID']:
-                        raise Exception, 'Vehicle and tankman mismatch.'
-                if eventType != EVENT_TYPE.POTAPOV_QUEST:
-                    lst.append(tankmen.makeTmanDescrByTmanData(tmanData))
-                else:
-                    lst.append(tmanData)
-            except Exception as e:
-                raise Exception, '%s: %s' % (e, tmanData)
-
-        bonus['tankmen'] = lst
-        return
-
-    def __readBonus_rent(self, bonus, _name, section, _gFinishTime):
-        rent = {}
-        if section.has_key('expires'):
-            rent['expires'] = {}
-            subsection = section['expires']
-            if subsection.has_key('after'):
-                rent['expires']['after'] = subsection['after'].asInt
-            if subsection.has_key('at'):
-                rent['expires']['at'] = subsection['at'].asInt
-        if section.has_key('compensation'):
-            credits = section['compensation'].readInt('credits', 0)
-            gold = section['compensation'].readInt('gold', 0)
-            rent['compensation'] = (credits, gold)
-        bonus['rent'] = rent
-
-    def __readBonus_customizations(self, eventType, bonus, _name, section, _gFinishTime):
-        lst = []
-        for subsection in section.values():
-            custData = {'isPermanent': subsection.readBool('isPermanent', False),
-             'value': subsection.readInt('value', 0),
-             'custType': subsection.readString('custType', ''),
-             'id': (subsection.readInt('nationID', -1), subsection.readInt('innationID', -1))}
-            if subsection.has_key('boundVehicle'):
-                custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
-            elif subsection.has_key('boundToCurrentVehicle'):
-                if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
-                    raise Exception, "Unsupported tag 'boundToCurrentVehicle' in 'like token' quests"
-                custData['boundToCurrentVehicle'] = True
-            if custData['custType'] == 'emblems':
-                custData['id'] = custData['id'][1]
-            isValid, reason = validateCustomizationItem(custData)
-            if not isValid:
-                raise Exception, reason
-            if 'boundToCurrentVehicle' in custData:
-                customization = vehicles.g_cache.customization
-                if custData['custType'] == 'camouflages':
-                    nationID, innationID = custData['id']
-                    descr = customization(nationID)['camouflages'][innationID]
-                    if descr['allow'] or descr['deny']:
-                        raise Exception, 'Unsupported camouflage because allow and deny tags %s, %s, %s' % (custData, descr['allow'], descr['deny'])
-                elif custData['custType'] == 'inscriptions':
-                    nationID, innationID = custData['id']
-                    groupName = customization(nationID)['inscriptions'][innationID][0]
-                    allow, deny = customization(nationID)['inscriptionGroups'][groupName][3:5]
-                    if allow or deny:
-                        raise Exception, 'Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny)
-                elif custData['custType'] == 'emblems':
-                    innationID = custData['id']
-                    groups, emblems, _ = vehicles.g_cache.playerEmblems()
-                    allow, deny = groups[emblems[innationID][0]][4:6]
-                    if allow or deny:
-                        raise Exception, 'Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny)
-            lst.append(custData)
-
-        bonus['customizations'] = lst
-
-    def __readBonus_tokens(self, bonus, _name, section, gFinishTime):
-        id = section['id'].asString
-        token = bonus.setdefault('tokens', {})[id] = {}
-        expires = token.setdefault('expires', {})
-        self.__readBonus_expires(id, expires, section, gFinishTime)
-        if section.has_key('limit'):
-            token['limit'] = section['limit'].asInt
-        if section.has_key('count'):
-            token['count'] = section['count'].asInt
-
-    def __readBonus_goodies(self, bonus, _name, section, gFinishTime):
-        id = section['id'].asInt
-        goodie = bonus.setdefault('goodies', {})[id] = {}
-        if section.has_key('limit'):
-            goodie['limit'] = section['limit'].asInt
-        if section.has_key('count'):
-            goodie['count'] = section['count'].asInt
-        else:
-            goodie['count'] = 1
-
-    def __readBonus_expires(self, id, expires, section, gFinishTime):
-        if section['expires'].has_key('after'):
-            expires['after'] = section['expires']['after'].asInt
-        else:
-            at = section['expires'].asString
-            expires['at'] = self.__generateUTC(at, 'expires')
-            if expires['at'] < gFinishTime:
-                raise Exception('Invalid expiry time for %s: %s' % (id, at))
-
-    def __readBonus_dossier(self, bonus, _name, section, _gFinishTime):
-        blockName, record = section['name'].asString.split(':')
-        operation = 'add'
-        if section.has_key('type'):
-            operation = section['type'].asString
-        if operation not in ('add', 'append', 'set'):
-            raise Exception, 'Invalid dossier record %s' % operation
-        value = section['value'].asInt
-        unique = False
-        if section.has_key('unique'):
-            unique = section['unique'].asBool
-        for blockBuilder in accountDossierLayout + vehicleDossierLayout:
-            if blockBuilder.name == blockName:
-                blockType = type(blockBuilder)
-                if blockType in (StaticSizeBlockBuilder, BinarySetDossierBlockBuilder):
-                    if (record in blockBuilder.recordsLayout or record.startswith('tankExpert') or record.startswith('mechanicEngineer')) and operation in ('add', 'set'):
-                        break
-                elif blockType == DictBlockBuilder and operation == 'add':
-                    break
-                elif blockType == ListBlockBuilder and operation == 'append':
-                    break
-        else:
-            raise Exception, 'Invalid dossier record %s or unsupported block' % (blockName + ':' + record,)
-
-        bonus.setdefault('dossier', {})[blockName, record] = {'value': value,
-         'unique': unique,
-         'type': operation}
+        return [ vehicles.makeVehicleTypeCompDescrByName(typeName) for typeName in typeNames ]
 
     def __readBonusSection(self, bonusReaders, eventType, section, gFinishTime):
         if section is None:
@@ -807,13 +580,14 @@ class Source:
                             raise Exception, 'Invalid pack format (pack_id, where id between 1 and 10)'
                         if packID in bonus:
                             raise Exception, 'Invalid pack. Already defined.'
-                        bonus[packID] = self.__readBonusSubSection(bonusReaders, sub, gFinishTime)
+                        bonus[packID] = self.__readBonusSubSection(bonusReaders, eventType, sub, gFinishTime)
 
             else:
-                bonus = self.__readBonusSubSection(bonusReaders, section, gFinishTime)
+                bonus = self.__readBonusSubSection(bonusReaders, eventType, section, gFinishTime)
+            self.__postprocessBonus(bonus, eventType)
             return bonus
 
-    def __readBonusSubSection(self, bonusReaders, section, gFinishTime):
+    def __readBonusSubSection(self, bonusReaders, eventType, section, gFinishTime):
         if section is None:
             return {}
         else:
@@ -824,9 +598,17 @@ class Source:
                     continue
                 if name not in bonusReaders:
                     continue
-                bonusReaders[name](bonus, name, sub, gFinishTime)
+                bonusReaders[name](bonus, name, sub)
 
             return bonus
+
+    def __postprocessBonus(self, bonus, eventType):
+        if eventType != EVENT_TYPE.POTAPOV_QUEST and 'tankmen' in bonus:
+            tankmenList = [ tankmen.makeTmanDescrByTmanData(tmanData) for tmanData in bonus['tankmen'] ]
+            bonus['tankmen'] = tankmenList
+        if eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS and 'customization' in bonus:
+            if 'boundToCurrentVehicle' in bonus['customization']:
+                raise Exception, "Unsupported tag 'boundToCurrentVehicle' in 'like token' quests"
 
     def __readMetaSection(self, section):
         if section is None:
@@ -838,18 +620,15 @@ class Source:
 
             return meta
 
-    def __generateUTC(self, timeData, field, default = None):
-        try:
-            if timeData is None:
-                raise Exception, 'Wrong timeData'
-            if timeData != '':
-                timeData = time.strptime(timeData, '%d.%m.%Y %H:%M')
-                timeData = int(time.mktime(timeData))
-            else:
-                if default is None:
-                    raise Exception, 'Wrong default'
-                return default
-        except:
-            raise Exception, 'Invalid %s format (%s). Format must be like %s, for example 23.01.2011 00:00.' % (field, timeData, "'%d.%m.%Y %H:%M'")
-
-        return timeData
+    def __readClubsSection(self, readersMapping, section, node):
+        for name, sub in section.items():
+            subNode = XMLNode(name)
+            if name == 'seasonID':
+                self.__readCondition_int(readersMapping, sub, subNode)
+            elif name == 'division':
+                self.__readCondition_int(readersMapping, sub, subNode)
+            elif name == 'minBattles':
+                self.__readCondition_int(readersMapping, sub, subNode)
+            elif name == 'fromLowerDivision':
+                self.__readCondition_true(readersMapping, sub, subNode)
+            node.addChild(subNode)

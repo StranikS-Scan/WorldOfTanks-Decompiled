@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileAwards.py
-from gui.Scaleform.daapi.view.lobby.profile.ProfileAchievementSection import ProfileAchievementSection
 from gui.Scaleform.daapi.view.meta.ProfileAwardsMeta import ProfileAwardsMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from web_stubs import i18n
@@ -7,11 +6,10 @@ from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.shared.utils.RareAchievementsCache import IMAGE_TYPE
 from gui.shared.gui_items.dossier import dumpDossier
 
-class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
+class ProfileAwards(ProfileAwardsMeta):
 
     def __init__(self, *args):
-        ProfileAchievementSection.__init__(self, *args)
-        ProfileAwardsMeta.__init__(self)
+        super(ProfileAwards, self).__init__(*args)
         self.__achievementsFilter = PROFILE.SECTION_AWARDS_DROPDOWN_LABELS_ALL
 
     @classmethod

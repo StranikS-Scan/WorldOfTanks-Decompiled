@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortBuildingComponentMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class FortBuildingComponentMeta(DAAPIModule):
+class FortBuildingComponentMeta(BaseDAAPIComponent):
 
     def onTransportingRequest(self, exportFrom, importTo):
         self._printOverrideError('onTransportingRequest')

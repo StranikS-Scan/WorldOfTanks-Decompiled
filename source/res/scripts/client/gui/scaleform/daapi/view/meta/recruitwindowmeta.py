@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RecruitWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class RecruitWindowMeta(DAAPIModule):
+class RecruitWindowMeta(AbstractWindowView):
 
     def updateVehicleClassDropdown(self, nation):
         self._printOverrideError('updateVehicleClassDropdown')

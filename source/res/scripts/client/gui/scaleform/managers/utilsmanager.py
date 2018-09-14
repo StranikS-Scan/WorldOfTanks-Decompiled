@@ -1,13 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/managers/UtilsManager.py
 import calendar
-import string
 from gui.Scaleform.framework.managers.TextManager import TextManager
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils.functions import getAbsoluteUrl
-from helpers import i18n
 import nations
 import BigWorld
-from gui import GUI_NATIONS
+from gui import GUI_NATIONS, GUI_SETTINGS
 from gui.shared import utils
 from gui.Scaleform.framework.entities.abstract.UtilsManagerMeta import UtilsManagerMeta
 from helpers import i18n, getClientLanguage
@@ -20,10 +18,14 @@ class UtilsManager(UtilsManagerMeta):
     def __init__(self):
         super(UtilsManager, self).__init__()
         self._textMgr = TextManager()
-        TextManager.setReference(self._textMgr)
 
     def registerTextManager(self, flashObject):
         self._textMgr.setFlashObject(flashObject)
+
+    def _populate(self):
+        super(UtilsManager, self)._populate()
+        settings = GUI_SETTINGS.imageCache
+        self.as_setImageCacheSettingsS(settings['maxSize'], settings['minSize'])
 
     def destroy(self):
         self.__unregisterMrgs()
@@ -58,7 +60,7 @@ class UtilsManager(UtilsManagerMeta):
     def getHtmlIconText(cls, properties):
         template = "<img src='{0}' width='{1}' height='{2}' vspace='{3}' hspace='{4}'/>"
         absoluteUrl = cls.getAbsoluteUrl(properties.imageAlias)
-        return template.format(absoluteUrl, properties.width, properties.height, properties.vSpace, properties.hSpace)
+        return template.format(properties.imageAlias, properties.width, properties.height, properties.vSpace, properties.hSpace)
 
     def getFirstDayOfWeek(self):
         return BigWorld.wg_firstDayOfWeek() + 1
@@ -90,9 +92,7 @@ class UtilsManager(UtilsManagerMeta):
         return result
 
     def _dispose(self):
-        if self._textMgr is not None:
-            TextManager.clearReference()
-            self._textMgr = None
+        self._textMgr = None
         super(UtilsManager, self)._dispose()
         return
 

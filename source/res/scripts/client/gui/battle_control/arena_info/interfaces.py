@@ -7,7 +7,7 @@ class IArenaController(object):
     def getCtrlScope(self):
         raise NotImplementedError, 'Routine "getCtrlScope" must be implemented'
 
-    def destroy(self):
+    def clear(self):
         pass
 
     def setBattleCtx(self, battleCtx):

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/meta/TutorialBattleNoResultsMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class TutorialBattleNoResultsMeta(DAAPIModule):
+class TutorialBattleNoResultsMeta(AbstractWindowView):
 
     def as_setDataS(self, data):
         if self._isDAAPIInited():

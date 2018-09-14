@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ServerStatsMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class ServerStatsMeta(DAAPIModule):
+class ServerStatsMeta(BaseDAAPIComponent):
 
     def getServers(self):
         self._printOverrideError('getServers')

@@ -13,7 +13,8 @@ from messenger.m_constants import USER_TAG
 from club_shared import ACCOUNT_NOTIFICATION_TYPE, WEB_CMD_RESULT, CLUBS_SEASON_STATE
 from shared_utils import safeCancelCallback
 from gui import SystemMessages, DialogsInterface
-from gui.game_control import g_instance as g_gameCtrl
+from gui.LobbyContext import g_lobbyContext
+from gui.game_control.battle_availability import ClubAvailabilityController
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils import getPlayerDatabaseID
 from gui.clubs import subscriptions, contexts as club_ctx, states, formatters as club_fmts
@@ -87,20 +88,23 @@ class _AccountClubProfile(object):
         if not isClubsEnabled():
             LOG_DEBUG('Clubs is not enabled on this server. Skip profile resync.')
             return
-        clubsMgr = getClientClubsMgr()
-        if not forceResync and clubsMgr and not clubsMgr.isRelatedToClubs():
-            LOG_DEBUG('Account does not related to clubs. Skip profile resync.')
-            if firstInit and self.__state.getStateID() != CLIENT_CLUB_STATE.NO_CLUB:
-                self._changeState(states.NoClubState([], []))
+        else:
+            clubsMgr = getClientClubsMgr()
+            if not forceResync and clubsMgr and not clubsMgr.isRelatedToClubs():
+                LOG_DEBUG('Account does not related to clubs. Skip profile resync.')
+                if firstInit and self.__state.getStateID() != CLIENT_CLUB_STATE.NO_CLUB:
+                    self._changeState(states.NoClubState([], []))
+                return
+            serverSettings = g_lobbyContext.getServerSettings()
+            if serverSettings is not None and serverSettings.roaming.isInRoaming():
+                LOG_NOTE('There is no clubs in the roaming')
+                return
+            if self._waitForSync & _SYNC_TYPE.ALL:
+                LOG_DEBUG('Club profile resync already in progress')
+                return
+            self._waitForSync |= _SYNC_TYPE.ALL
+            self.__sendRequest(club_ctx.GetPrivateProfileCtx(), callback=partial(self.__onAccountProfileReceived, _SYNC_TYPE.ALL))
             return
-        if g_gameCtrl.roaming.isInRoaming():
-            LOG_NOTE('There is no clubs in the roaming')
-            return
-        if self._waitForSync & _SYNC_TYPE.ALL:
-            LOG_DEBUG('Club profile resync already in progress')
-            return
-        self._waitForSync |= _SYNC_TYPE.ALL
-        self.__sendRequest(club_ctx.GetPrivateProfileCtx(), callback=partial(self.__onAccountProfileReceived, _SYNC_TYPE.ALL))
 
     def syncClubs(self):
         if self._waitForSync & _SYNC_TYPE.CLUBS:
@@ -191,8 +195,8 @@ class _AccountClubProfile(object):
 
     def _updateApps(self, apps):
         self._apps = {}
-        for clubDbID, sendingTime, comment, status in apps:
-            app = ClubApplication(clubDbID, getPlayerDatabaseID(), comment, sendingTime, status)
+        for clubDbID, sendingTime, comment, status, updatingTime in apps:
+            app = ClubApplication(clubDbID, getPlayerDatabaseID(), comment, sendingTime, status, updatingTime)
             self._apps[app.getID()] = app
 
         if not self._isSynced:
@@ -204,8 +208,8 @@ class _AccountClubProfile(object):
         self._contactsState |= _CONTACTS_LIST.INVITES
         prevInvites = self._invites
         self._invites = {}
-        for sendingTime, inviterDbID, clubDbID, status in invites:
-            invite = ClubInvite(clubDbID, getPlayerDatabaseID(), inviterDbID, sendingTime, status)
+        for sendingTime, inviterDbID, clubDbID, status, updatingTime in invites:
+            invite = ClubInvite(clubDbID, getPlayerDatabaseID(), inviterDbID, sendingTime, status, updatingTime)
             self._invites[invite.getID()] = invite
 
         self.__processInvitations(prevInvites)
@@ -334,6 +338,7 @@ class ClubsController(subscriptions.ClubsListeners):
         self._requestsCtrl = ClubRequestsController(self)
         self._accountProfile = _AccountClubProfile(self)
         self._seasonsCache = ClubsSeasonsCache(self)
+        self._availabilityCtrl = ClubAvailabilityController()
 
     def init(self):
         g_messengerEvents.users.onUsersListReceived += self.__onUsersListReceived
@@ -345,6 +350,7 @@ class ClubsController(subscriptions.ClubsListeners):
         self.stop()
         self._requestsCtrl.fini()
         self.__subscriptions.clear()
+        self._availabilityCtrl.stop()
 
     def start(self):
         clubsMgr = getClientClubsMgr()
@@ -357,6 +363,7 @@ class ClubsController(subscriptions.ClubsListeners):
          'cache.eSportSeasonState': self.__onSeasonStateChanged})
         self._accountProfile.resync(firstInit=True)
         self._seasonsCache.start()
+        self._availabilityCtrl.start()
         return
 
     def stop(self, isDisconnected = False):
@@ -377,6 +384,7 @@ class ClubsController(subscriptions.ClubsListeners):
             s.stop()
 
         self.__subscriptions.clear()
+        self._availabilityCtrl.stop()
         return
 
     def markAppsNotificationShown(self):
@@ -384,6 +392,9 @@ class ClubsController(subscriptions.ClubsListeners):
 
     def isAppsNotificationShown(self):
         return self.__isAppsNotifyShown
+
+    def getAvailabilityCtrl(self):
+        return self._availabilityCtrl
 
     def addListener(self, listener, forceResync = False):
         if not self._accountProfile.isSynced():

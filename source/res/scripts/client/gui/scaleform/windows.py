@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/windows.py
 import GUI
-from gui import g_repeatKeyHandlers
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.Flash import Flash
+from gui.app_loader import g_appLoader
 
 class ModalWindow(Flash):
 
@@ -36,12 +36,7 @@ class ModalWindow(Flash):
         import BigWorld
 
         def logOff():
-            from gui.Scaleform.Disconnect import Disconnect
-            Disconnect.hide()
-            BigWorld.disconnect()
-            BigWorld.clearEntitiesAndSpaces()
-            from gui.WindowsManager import g_windowsManager
-            g_windowsManager.showLobby()
+            g_appLoader.goToLoginByRQ()
 
         BigWorld.callback(0.1, logOff)
 
@@ -100,28 +95,8 @@ class BattleWindow(Flash):
         import BigWorld
         BigWorld.quit()
 
-    def onLogoff(self, arg):
-        import BigWorld
-        from gui.WindowsManager import g_windowsManager
-        BigWorld.disconnect()
-        BigWorld.clearEntitiesAndSpaces()
-        g_windowsManager.showLobby()
-
-
-class GUIWindow(BattleWindow):
-
-    def __init__(self, swf):
-        BattleWindow.__init__(self, swf)
-        g_repeatKeyHandlers.add(self.component.handleKeyEvent)
-
-    def active(self, state):
-        if state != self.isActive:
-            BattleWindow.active(self, state)
-
-    def close(self):
-        if self.component:
-            g_repeatKeyHandlers.discard(self.component.handleKeyEvent)
-        BattleWindow.close(self)
+    def onLogoff(self, _):
+        g_appLoader.goToLoginByRQ()
 
 
 class UIInterface(object):

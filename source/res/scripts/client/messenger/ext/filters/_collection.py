@@ -4,10 +4,8 @@ import sre_compile
 import pickle
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from account_shared import unpackPostBattleUniqueSubUrl
 from external_strings_utils import normalized_unicode_trim
 from gui import GUI_SETTINGS
-from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
 from gui.shared.utils import functions
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.formatters import icons
@@ -143,17 +141,6 @@ class PostBattleLinksFilter(IIncomingMessageFilter):
 
     @classmethod
     def __reSubHandler(cls, match):
-        try:
-            arenaUniqueID, arenaTypeID, vehTypeCompDescr, xp, _ = unpackPostBattleUniqueSubUrl(match.group(3))
-            return g_settings.htmlTemplates.format('postBattleSharingLink', {'linkCode': pickle.dumps((arenaUniqueID, match.group(2))),
-             'arena': functions.getArenaShortName(arenaTypeID),
-             'vehicle': Vehicle(typeCompDescr=vehTypeCompDescr).shortUserName,
-             'xp': BigWorld.wg_getIntegralFormat(xp),
-             'arrowButton': icons.arrow()})
-        except:
-            LOG_DEBUG('Invalid post battle results in message', match)
-            LOG_CURRENT_EXCEPTION()
-
         return match.group()
 
     @classmethod

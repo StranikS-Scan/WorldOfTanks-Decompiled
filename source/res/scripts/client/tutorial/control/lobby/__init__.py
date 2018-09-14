@@ -4,26 +4,24 @@ from tutorial.control import context as core_ctx
 from tutorial.control.lobby import functional
 from tutorial.control.lobby import context
 from tutorial.control.lobby import queries
-from tutorial.data.chapter import Effect
+from tutorial.data.effects import EFFECT_TYPE
 
 class LobbyControlsFactory(ControlsFactory):
 
     def __init__(self):
-        effects = {Effect.ACTIVATE: core_func.FunctionalActivateEffect,
-         Effect.DEACTIVATE: core_func.FunctionalDeactivateEffect,
-         Effect.SHOW_HINT: functional.FunctionalShowHintEffect,
-         Effect.CLOSE_HINT: functional.FunctionalCloseHintEffect,
-         Effect.SHOW_DIALOG: core_func.FunctionalShowDialogEffect,
-         Effect.REFUSE_TRAINING: core_func.FunctionalRefuseTrainingEffect,
-         Effect.NEXT_CHAPTER: core_func.FunctionalNextChapterEffect,
-         Effect.RUN_TRIGGER: core_func.FunctionalRunTriggerEffect,
-         Effect.REQUEST_BONUS: core_func.FunctionalRequestBonusEffect,
-         Effect.SET_ITEM_PROPS: core_func.FunctionalGuiItemSetPropertiesEffect,
-         Effect.FINISH_TRAINING: core_func.FunctionalFinishTrainingEffect,
-         Effect.DEFINE_GUI_ITEM: core_func.FunctionalDefineGuiItem,
-         Effect.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
-         Effect.SET_FILTER: functional.FunctionalSetFilterEffect,
-         Effect.SHOW_MESSAGE: core_func.FunctionalShowMessageEffect}
+        effects = {EFFECT_TYPE.ACTIVATE: core_func.FunctionalActivateEffect,
+         EFFECT_TYPE.DEACTIVATE: core_func.FunctionalDeactivateEffect,
+         EFFECT_TYPE.SHOW_HINT: functional.FunctionalShowHintEffect,
+         EFFECT_TYPE.CLOSE_HINT: functional.FunctionalCloseHintEffect,
+         EFFECT_TYPE.SHOW_DIALOG: core_func.FunctionalShowDialogEffect,
+         EFFECT_TYPE.REFUSE_TRAINING: core_func.FunctionalRefuseTrainingEffect,
+         EFFECT_TYPE.NEXT_CHAPTER: core_func.FunctionalNextChapterEffect,
+         EFFECT_TYPE.RUN_TRIGGER: core_func.FunctionalRunTriggerEffect,
+         EFFECT_TYPE.REQUEST_BONUS: core_func.FunctionalRequestBonusEffect,
+         EFFECT_TYPE.SET_ITEM_PROPS: core_func.FunctionalGuiItemSetPropertiesEffect,
+         EFFECT_TYPE.FINISH_TRAINING: core_func.FunctionalFinishTrainingEffect,
+         EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
+         EFFECT_TYPE.SHOW_MESSAGE: core_func.FunctionalShowMessageEffect}
         _queries = {'vehicleItemInfo': queries.VehicleItemParams,
          'tankmanSkill': queries.TankmanSkillParams}
         ControlsFactory.__init__(self, effects, _queries)

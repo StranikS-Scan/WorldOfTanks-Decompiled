@@ -1,18 +1,17 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import BigWorld
-import math
 import constants
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
+from gui.shared.formatters.time_formatters import RentLeftFormatter
+from helpers import i18n
 from gui import makeHtmlString
-from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipDataField, ToolTipParameterField, ToolTipAttrField, ToolTipData, getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils import ItemsParameters, ParametersCache
 from gui.shared.utils.gui_items import InventoryVehicle
 from gui.prb_control.dispatcher import g_prbLoader
-from helpers import time_utils, i18n
 
 class VehicleStatusField(ToolTipDataField):
 
@@ -173,16 +172,11 @@ class VehicleStatsField(ToolTipDataField):
                     result.append(('defRentPrice', minDefaultRentPriceValue))
                     result.append(('rentActionPrc', rentActionPrc))
             if rentals and not vehicle.isPremiumIGR:
-                rentLeftTime = vehicle.rentLeftTime
-                if rentLeftTime > 0:
-                    if rentLeftTime > time_utils.ONE_DAY:
-                        timeLeft = math.ceil(vehicle.rentLeftTime / time_utils.ONE_DAY)
-                        description = i18n.makeString(TOOLTIPS.VEHICLE_RENTLEFT_DAYS)
-                    else:
-                        timeLeft = math.ceil(vehicle.rentLeftTime / time_utils.ONE_HOUR)
-                        description = i18n.makeString(TOOLTIPS.VEHICLE_RENTLEFT_HOURS)
-                    result.append(('rentals', {'left': timeLeft,
-                      'descr': description}))
+                rentFormatter = RentLeftFormatter(vehicle.rentInfo)
+                rentLeftInfo = rentFormatter.getRentLeftStr('#tooltips:vehicle/rentLeft/%s', formatter=lambda key, countType, count, _ = None: {'left': count,
+                 'descr': i18n.makeString(key % countType)})
+                if rentLeftInfo:
+                    result.append(('rentals', rentLeftInfo))
             return result
 
 

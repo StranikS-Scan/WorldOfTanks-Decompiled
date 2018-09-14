@@ -3,18 +3,19 @@ import SoundGroups
 import BigWorld
 import MusicController
 from adisp import process
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from PlayerEvents import g_playerEvents
 from account_helpers import isPremiumAccount
 from CurrentVehicle import g_currentVehicle
 from ConnectionManager import connectionManager
+from gui.app_loader import g_appLoader
 from helpers import isPlayerAccount, time_utils
 from predefined_hosts import g_preDefinedHosts
 from gui import SystemMessages, g_guiResetters, game_control, miniclient
+from gui import GUI_SETTINGS
 from gui.wgnc import g_wgncProvider
 from gui.server_events import g_eventsCache
 from gui.LobbyContext import g_lobbyContext
-from gui.WindowsManager import g_windowsManager
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
 from gui.goodies.GoodiesCache import g_goodiesCache
@@ -35,12 +36,21 @@ from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shared.utils import ParametersCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
+try:
+    from gui import mods
+    guiModsInit = mods.init
+    guiModsFini = mods.fini
+    guiModsSendEvent = mods.sendEvent
+except ImportError:
+    LOG_DEBUG('There is not mods package in the scripts')
+    guiModsInit = guiModsFini = guiModsSendEvent = lambda *args: None
 
 @process
 def onAccountShowGUI(ctx):
     global onCenterIsLongDisconnected
     g_lobbyContext.onAccountShowGUI(ctx)
     yield g_itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
+    g_eventsCache.start()
     yield g_eventsCache.update()
     yield g_settingsCache.update()
     if not g_itemsCache.isSynced():
@@ -67,12 +77,13 @@ def onAccountShowGUI(ctx):
     else:
         g_hangarSpace.init(premium)
     g_currentVehicle.init()
-    g_windowsManager.onAccountShowGUI(g_lobbyContext.getGuiCtx())
+    g_appLoader.showLobby()
     g_prbLoader.onAccountShowGUI(g_lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()
     g_clubsCtrl.start()
     SoundGroups.g_instance.enableLobbySounds(True)
     onCenterIsLongDisconnected(True)
+    guiModsSendEvent('onAccountShowGUI', ctx)
     Waiting.hide('enter')
 
 
@@ -81,6 +92,7 @@ def onAccountBecomeNonPlayer():
     g_goodiesCache.clear()
     g_currentVehicle.destroy()
     g_hangarSpace.destroy()
+    guiModsSendEvent('onAccountBecomeNonPlayer')
     UsersInfoHelper.clear()
 
 
@@ -92,12 +104,14 @@ def onAvatarBecomePlayer():
     g_prbLoader.onAvatarBecomePlayer()
     game_control.g_instance.onAvatarBecomePlayer()
     g_clanCache.onAvatarBecomePlayer()
+    guiModsSendEvent('onAvatarBecomePlayer')
     Waiting.cancelCallback()
 
 
 def onAccountBecomePlayer():
     g_lobbyContext.onAccountBecomePlayer()
     game_control.g_instance.onAccountBecomePlayer()
+    guiModsSendEvent('onAccountBecomePlayer')
 
 
 @process
@@ -139,13 +153,6 @@ def onIGRTypeChanged(roomType, xpFactor):
                  'igrXPFactor': xpFactor}})
 
 
-@process
-def onAppStarted(args):
-    yield lambda callback: callback(None)
-    if not connectionManager.isConnected():
-        return
-
-
 def init(loadingScreenGUI = None):
     global onShopResyncStarted
     global onAccountShowGUI
@@ -154,8 +161,10 @@ def init(loadingScreenGUI = None):
     global onAccountBecomeNonPlayer
     global onAvatarBecomePlayer
     global onAccountBecomePlayer
+    global onKickedFromServer
     global onShopResync
     miniclient.configure_state()
+    connectionManager.onKickedFromServer += onKickedFromServer
     g_playerEvents.onAccountShowGUI += onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer += onAccountBecomeNonPlayer
     g_playerEvents.onAccountBecomePlayer += onAccountBecomePlayer
@@ -165,6 +174,11 @@ def init(loadingScreenGUI = None):
     g_playerEvents.onShopResync += onShopResync
     g_playerEvents.onCenterIsLongDisconnected += onCenterIsLongDisconnected
     g_playerEvents.onIGRTypeChanged += onIGRTypeChanged
+    if GUI_SETTINGS.isGuiEnabled():
+        from gui.Scaleform.app_factory import AS3_AS2_AppFactory as AppFactory
+    else:
+        from gui.Scaleform.app_factory import NoAppFactory as AppFactory
+    g_appLoader.init(AppFactory())
     game_control.g_instance.init()
     from gui.Scaleform import SystemMessagesInterface
     SystemMessages.g_instance = SystemMessagesInterface.SystemMessagesInterface()
@@ -192,18 +206,18 @@ def init(loadingScreenGUI = None):
             init = lambda : None
 
         init()
+    guiModsInit()
 
 
 def start():
-    g_eventBus.addListener(events.GUICommonEvent.APP_STARTED, onAppStarted)
-    g_windowsManager.start()
+    g_appLoader.startLobby()
 
 
 def fini():
+    guiModsFini()
     Waiting.close()
-    g_eventBus.removeListener(events.GUICommonEvent.APP_STARTED, onAppStarted)
     LogitechMonitor.destroy()
-    g_windowsManager.destroy()
+    g_appLoader.fini()
     SystemMessages.g_instance.destroy()
     g_eventBus.clear()
     g_prbLoader.fini()
@@ -217,6 +231,7 @@ def fini():
     g_goodiesCache.fini()
     g_vehicleProgressCache.fini()
     UsersInfoHelper.fini()
+    connectionManager.onKickedFromServer -= onKickedFromServer
     g_playerEvents.onIGRTypeChanged -= onIGRTypeChanged
     g_playerEvents.onAccountShowGUI -= onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer -= onAccountBecomeNonPlayer
@@ -244,7 +259,8 @@ def onConnected():
 
 
 def onDisconnected():
-    if game_control.g_instance.roaming.isInRoaming():
+    serverSettings = g_lobbyContext.getServerSettings()
+    if serverSettings is not None and serverSettings.roaming.isInRoaming():
         g_preDefinedHosts.savePeripheryTL(connectionManager.peripheryID)
     g_prbLoader.onDisconnected()
     g_clanCache.onDisconnected()
@@ -259,6 +275,12 @@ def onDisconnected():
     UsersInfoHelper.clear()
     Waiting.rollback()
     Waiting.cancelCallback()
+    g_appLoader.goToLoginByEvent()
+    return
+
+
+def onKickedFromServer(reason, isBan, expiryTime):
+    g_appLoader.goToLoginByKick(reason, isBan, expiryTime)
 
 
 def onScreenShotMade(path):

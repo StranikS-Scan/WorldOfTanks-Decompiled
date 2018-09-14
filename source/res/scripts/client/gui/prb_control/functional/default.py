@@ -771,7 +771,7 @@ class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
 
         self._setListenerClass(None)
         if QUEUE_EVENT_TYPE.KICKED_FROM_ARENA in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.KICKED_FROM_ARENA] += self.onKickedFromArena
+            self._eventsMap[QUEUE_EVENT_TYPE.KICKED_FROM_ARENA] -= self.onKickedFromArena
         if QUEUE_EVENT_TYPE.KICKED_FROM_QUEUE in self._eventsMap:
             self._eventsMap[QUEUE_EVENT_TYPE.KICKED_FROM_QUEUE] -= self.onKickedFromQueue
         if QUEUE_EVENT_TYPE.ENQUEUE_ERROR in self._eventsMap:

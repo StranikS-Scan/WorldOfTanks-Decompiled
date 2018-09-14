@@ -404,14 +404,15 @@ class ModuleBuyerConfirmator(I18nMessageAbstractConfirmator):
 
 class HtmlMessageConfirmator(I18nMessageAbstractConfirmator):
 
-    def __init__(self, localeKey, metaPath, metaKey, ctx = None, activeHandler = None, isEnabled = True):
+    def __init__(self, localeKey, metaPath, metaKey, ctx = None, activeHandler = None, isEnabled = True, sourceKey = 'text'):
         super(HtmlMessageConfirmator, self).__init__(localeKey, ctx, activeHandler, isEnabled)
         self.metaPath = metaPath
         self.metaKey = metaKey
+        self.sourceKey = sourceKey
         self.ctx = ctx
 
     def _makeMeta(self):
-        return I18nConfirmDialogMeta(self.localeKey, self.ctx, self.ctx, meta=HtmlMessageDialogMeta(self.metaPath, self.metaKey, self.ctx), focusedID=DIALOG_BUTTON_ID.SUBMIT)
+        return I18nConfirmDialogMeta(self.localeKey, self.ctx, self.ctx, meta=HtmlMessageDialogMeta(self.metaPath, self.metaKey, self.ctx, sourceKey=self.sourceKey), focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
 class DismissTankmanConfirmator(I18nMessageAbstractConfirmator):

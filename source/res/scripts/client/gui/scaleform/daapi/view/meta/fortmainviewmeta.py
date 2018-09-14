@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortMainViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class FortMainViewMeta(DAAPIModule):
+class FortMainViewMeta(BaseDAAPIComponent):
 
     def onStatsClick(self):
         self._printOverrideError('onStatsClick')

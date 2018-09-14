@@ -1,15 +1,19 @@
 # Embedded file name: scripts/client/gui/game_control/SoundEventChecker.py
+from gui.app_loader.decorators import sf_lobby
 from gui.game_control.controllers import Controller
 from gui.shared import g_itemsCache
-from gui.Scaleform.framework import AppRef
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.SoundEffectsId import SoundEffectsId
 
-class SoundEventChecker(Controller, AppRef):
+class SoundEventChecker(Controller):
 
     def __init__(self, proxy):
         super(SoundEventChecker, self).__init__(proxy)
         self.__credits, self.__gold = (0, 0)
+
+    @sf_lobby
+    def app(self):
+        return None
 
     def onLobbyStarted(self, ctx):
         self.__credits, self.__gold = g_itemsCache.items.stats.money

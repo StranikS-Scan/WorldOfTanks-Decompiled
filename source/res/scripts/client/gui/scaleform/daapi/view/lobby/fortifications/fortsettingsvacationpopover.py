@@ -4,19 +4,16 @@ import fortified_regions
 from gui.shared.fortifications.fort_helpers import adjustVacationToUTC
 from helpers import i18n, time_utils
 from gui import SystemMessages
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortSettingsVacationPopoverMeta import FortSettingsVacationPopoverMeta
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.fortifications.context import VacationCtx
 SHOW_MAX_MONTH = 4
 
-class FortSettingsVacationPopover(View, FortSettingsVacationPopoverMeta, SmartPopOverView, FortViewHelper, AppRef):
+class FortSettingsVacationPopover(FortSettingsVacationPopoverMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortSettingsVacationPopover, self).__init__()
 
     def onApply(self, data):

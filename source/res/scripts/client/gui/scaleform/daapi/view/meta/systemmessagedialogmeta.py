@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SystemMessageDialogMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class SystemMessageDialogMeta(DAAPIModule):
+class SystemMessageDialogMeta(AbstractWindowView):
 
     def as_setInitDataS(self, value):
         if self._isDAAPIInited():

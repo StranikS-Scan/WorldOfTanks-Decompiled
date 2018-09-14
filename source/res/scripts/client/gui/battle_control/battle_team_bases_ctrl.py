@@ -78,7 +78,7 @@ class BattleTeamsBasesController(ITeamsBasesController):
         self.__ui = None
         return
 
-    def destroy(self):
+    def clear(self):
         self.__clearUpdateCallbacks()
         self.__stopCaptureSounds()
         self.__ui = None

@@ -52,7 +52,7 @@ class ClubResults(abstract.BattleResults, ClubEmblemsHelper, ClubListener):
         super(ClubResults, self).__init__(results, dp)
         personal = results['personal'].values()[0]
         self._ownClub = makeTupleByDict(_ClubInfo, personal['club'])
-        self._enemyClub = makeTupleByDict(_ClubInfo, personal['enemy_club'])
+        self._enemyClub = makeTupleByDict(_ClubInfo, personal['enemyClub'])
         self.__teamInfoCBs = {}
         for clubDbID in (self._ownClub.clubDBID, self._enemyClub.clubDBID):
             self.startClubListening(clubDbID)

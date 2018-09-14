@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TankCarouselMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class TankCarouselMeta(DAAPIModule):
+class TankCarouselMeta(BaseDAAPIComponent):
 
     def vehicleChange(self, vehicleInventoryId):
         self._printOverrideError('vehicleChange')
@@ -12,18 +12,25 @@ class TankCarouselMeta(DAAPIModule):
     def buyTankClick(self):
         self._printOverrideError('buyTankClick')
 
-    def setVehiclesFilter(self, nation, tankType, ready):
+    def setVehiclesFilter(self, nation, tankType, ready, gameModeFilter):
         self._printOverrideError('setVehiclesFilter')
-
-    def setFalloutFilter(self, falloutVehVisible):
-        self._printOverrideError('setFalloutFilter')
 
     def getVehicleTypeProvider(self):
         self._printOverrideError('getVehicleTypeProvider')
 
-    def as_setCarouselFilterS(self, data):
+    def setVehicleSelected(self, vehicleInventoryId, selected):
+        self._printOverrideError('setVehicleSelected')
+
+    def moveVehiclesSelectionSlot(self, vehicleInventoryId):
+        self._printOverrideError('moveVehiclesSelectionSlot')
+
+    def as_setMultiselectionModeS(self, enabled, formattedMessage, showSlots, slots):
         if self._isDAAPIInited():
-            return self.flashObject.as_setCarouselFilter(data)
+            return self.flashObject.as_setMultiselectionMode(enabled, formattedMessage, showSlots, slots)
+
+    def as_setCarouselFilterS(self, filter):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setCarouselFilter(filter)
 
     def as_setParamsS(self, params):
         if self._isDAAPIInited():
@@ -36,7 +43,3 @@ class TankCarouselMeta(DAAPIModule):
     def as_showVehiclesS(self, compactDescrList):
         if self._isDAAPIInited():
             return self.flashObject.as_showVehicles(compactDescrList)
-
-    def as_setIsEventS(self, isEvent):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setIsEvent(isEvent)

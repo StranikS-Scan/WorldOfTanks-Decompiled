@@ -16,6 +16,10 @@ class AbstractContextMenuHandler(object):
         self.__handlers = handlers or {}
         self._initFlashValues(ctx)
 
+    @property
+    def app(self):
+        return self.__cmProxy.app
+
     def fini(self):
         self._eManager.clear()
         self.__handlers = None
@@ -23,8 +27,8 @@ class AbstractContextMenuHandler(object):
         self._clearFlashValues()
         return
 
-    def getOptions(self):
-        return self._generateOptions()
+    def getOptions(self, ctx = None):
+        return self._generateOptions(ctx)
 
     def onOptionSelect(self, optionId):
         if optionId in self.__handlers:
@@ -47,7 +51,7 @@ class AbstractContextMenuHandler(object):
         return self._makeItem(_SEPARATOR_ID)
 
     @abstractmethod
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         raise NotImplementedError
 
     def _initFlashValues(self, ctx):

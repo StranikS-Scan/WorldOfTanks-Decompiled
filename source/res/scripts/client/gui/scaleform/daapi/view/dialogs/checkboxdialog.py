@@ -1,10 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/CheckBoxDialog.py
-from adisp import process
 from gui.Scaleform.daapi.view.meta.ConfirmDialogMeta import ConfirmDialogMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 
-class CheckBoxDialog(View, ConfirmDialogMeta, AbstractWindowView):
+class CheckBoxDialog(ConfirmDialogMeta):
 
     def __init__(self, meta, handler):
         super(CheckBoxDialog, self).__init__()

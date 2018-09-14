@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BasePrebattleListView.py
 from gui.Scaleform.daapi.view.meta.BasePrebattleListViewMeta import BasePrebattleListViewMeta
 from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 __author__ = 'a_ushyutsau'
 
 class BasePrebattleListView(BasePrebattleListViewMeta):

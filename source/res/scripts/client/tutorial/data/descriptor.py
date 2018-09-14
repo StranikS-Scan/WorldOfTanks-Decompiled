@@ -54,13 +54,13 @@ class DescriptorData(object):
 
     def getInitialChapterID(self, completed = None):
         result = None
-        if len(self.__initialChapterID):
+        if self.__initialChapterID:
             index = self.__idMapping.get(self.__initialChapterID, -1)
             if -1 < index < len(self.__contents):
                 result = self.__contents[index].getID()
         if result is None:
             if completed is None:
-                if len(self.__contents):
+                if self.__contents:
                     result = self.__contents[0].getID()
             else:
                 result = self.getNextChapterID(completed)

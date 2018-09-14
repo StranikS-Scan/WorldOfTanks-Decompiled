@@ -3,11 +3,12 @@ from collections import defaultdict
 import operator
 from constants import ARENA_GUI_TYPE, TEAMS_IN_ARENA
 from debug_utils import LOG_NOTE, LOG_WARNING, LOG_DEBUG
+from gui.shared import fo_precache
 from shared_utils import first
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO, VehicleArenaStatsDict, VehicleArenaStatsVO, VehicleArenaInteractiveStatsDict
-from gui.battle_control.battle_constants import MULTIPLE_TEAMS_TYPE
-from gui.battle_control.arena_info.settings import SQUAD_RANGE_TO_SHOW, INVALIDATE_OP
+from gui.battle_control.battle_constants import MULTIPLE_TEAMS_TYPE, PLAYER_GUI_PROPS
+from gui.battle_control.arena_info import settings
 
 class ArenaDataProvider(object):
     __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__viStatsVOs', '__prbStats', '__playersVIDs', '__weakref__', '__teamsOnArena', '__teamsVIStats')
@@ -23,6 +24,7 @@ class ArenaDataProvider(object):
         self.__playersVIDs = {}
         self.__viStatsVOs = VehicleArenaInteractiveStatsDict()
         self.__teamsVIStats = {}
+        fo_precache.add(settings.UNKNOWN_CONTOUR_ICON_RES_PATH)
 
     def __del__(self):
         LOG_DEBUG('Deleted:', self)
@@ -38,6 +40,7 @@ class ArenaDataProvider(object):
         self.__teamsVIStats.clear()
 
     def clear(self):
+        fo_precache.clear()
         self.clearInfo()
         self.clearStats()
 
@@ -72,8 +75,8 @@ class ArenaDataProvider(object):
         vInfoVO = self.__vInfoVOs[vID]
         flags = vInfoVO.update(**vInfo)
         prebattleId = vInfoVO.prebattleID
-        if flags & INVALIDATE_OP.PREBATTLE_CHANGED:
-            self.__prbStats[vInfoVO.team][prebattleId].append(vID)
+        if flags & settings.INVALIDATE_OP.PREBATTLE_CHANGED:
+            self.__updateStats(vInfoVO.team, prebattleId, vID)
             self.__findSquads(arenaGuiType)
         dbID = vInfoVO.player.accountDBID
         if dbID:
@@ -134,7 +137,7 @@ class ArenaDataProvider(object):
         if self.isMultipleTeams():
             squadTeamNumber = 0
             for team in self.__prbStats.itervalues():
-                squads = filter(lambda item: len(item[1]) in SQUAD_RANGE_TO_SHOW, team.iteritems())
+                squads = filter(lambda item: len(item[1]) in settings.SQUAD_RANGE_TO_SHOW, team.iteritems())
                 if len(squads):
                     squadTeamNumber += 1
 
@@ -209,6 +212,15 @@ class ArenaDataProvider(object):
         if vID is None:
             vID = self.getPlayerVehicleID()
         return self.__viStatsVOs[vID]
+
+    def getPlayerGuiProps(self, vID, team):
+        if team in self.getAllyTeams():
+            if self.isSquadMan(vID=vID):
+                return PLAYER_GUI_PROPS.squadman
+            if self.isTeamKiller(vID=vID):
+                return PLAYER_GUI_PROPS.teamKiller
+            return PLAYER_GUI_PROPS.ally
+        return PLAYER_GUI_PROPS.enemy
 
     def isSquadMan(self, vID, prebattleID = None):
         if prebattleID is None:
@@ -291,7 +303,7 @@ class ArenaDataProvider(object):
         if arenaGuiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EVENT_BATTLES):
             return
         for team in self.__prbStats.itervalues():
-            squads = filter(lambda item: len(item[1]) in SQUAD_RANGE_TO_SHOW, team.iteritems())
+            squads = filter(lambda item: len(item[1]) in settings.SQUAD_RANGE_TO_SHOW, team.iteritems())
             if len(squads):
                 squads = sorted(squads, key=lambda item: item[0])
                 for index, (prbID, vIDs) in enumerate(squads):
@@ -309,7 +321,7 @@ class ArenaDataProvider(object):
             self.__playersVIDs[dbID] = vID
         prebattleID = vInfoVO.prebattleID
         if prebattleID > 0:
-            self.__prbStats[vInfoVO.team][prebattleID].append(vID)
+            self.__updateStats(vInfoVO.team, prebattleID, vID)
             hasPrbID = True
         return hasPrbID
 
@@ -343,3 +355,8 @@ class ArenaDataProvider(object):
                     break
 
         return result
+
+    def __updateStats(self, team, prebattleID, vID):
+        if prebattleID not in self.__prbStats[team]:
+            self.__prbStats[team][prebattleID] = set()
+        self.__prbStats[team][prebattleID].add(vID)

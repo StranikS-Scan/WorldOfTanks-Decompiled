@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ChannelComponentMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class ChannelComponentMeta(DAAPIModule):
+class ChannelComponentMeta(BaseDAAPIComponent):
 
     def isJoined(self):
         self._printOverrideError('isJoined')

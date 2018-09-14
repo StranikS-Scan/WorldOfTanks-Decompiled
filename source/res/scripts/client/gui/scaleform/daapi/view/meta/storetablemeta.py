@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StoreTableMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class StoreTableMeta(DAAPIModule):
+class StoreTableMeta(BaseDAAPIComponent):
 
     def refreshStoreTableDataProvider(self):
         self._printOverrideError('refreshStoreTableDataProvider')

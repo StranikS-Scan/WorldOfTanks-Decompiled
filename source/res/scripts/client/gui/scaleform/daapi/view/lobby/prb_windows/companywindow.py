@@ -3,7 +3,6 @@ from adisp import process
 from messenger.ext import passCensor
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.prb_windows import companies_dps
-from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleWindow import PrebattleWindow
 from gui.Scaleform.daapi.view.meta.CompanyWindowMeta import CompanyWindowMeta
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.prb_control import getMaxSizeLimits, getTotalLevelLimits
@@ -15,7 +14,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import i18n
 from items.vehicles import VEHICLE_CLASS_TAGS
 
-class CompanyWindow(PrebattleWindow, CompanyWindowMeta):
+class CompanyWindow(CompanyWindowMeta):
 
     def __init__(self, ctx = None):
         super(CompanyWindow, self).__init__(prbName='company')

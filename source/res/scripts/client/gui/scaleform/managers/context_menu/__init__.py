@@ -6,8 +6,9 @@ from gui.shared.utils import class_for_name
 class ContextMenuManager(ContextMenuManagerMeta):
     _handlersMap = {}
 
-    def __init__(self):
+    def __init__(self, app):
         super(ContextMenuManager, self).__init__()
+        self.seEnvironment(app)
         self.__currentHandler = None
         self._handlersMap = self._initializeHandlers(self._handlersMap)
         return
@@ -34,7 +35,7 @@ class ContextMenuManager(ContextMenuManagerMeta):
         self.__currentHandler = self._getHandler(handlerType, ctx)
         if self.__currentHandler is not None:
             self.__currentHandler.onContextMenuHide += self.as_hideS
-            self._sendOptionsToFlash(self.__currentHandler.getOptions())
+            self._sendOptionsToFlash(self.__currentHandler.getOptions(ctx))
         return
 
     def onOptionSelect(self, optionId):
@@ -46,6 +47,7 @@ class ContextMenuManager(ContextMenuManagerMeta):
         self.__disposeHandler()
 
     def _dispose(self):
+        self.__app = None
         self._handlersMap.clear()
         self._handlersMap = None
         self.__disposeHandler()

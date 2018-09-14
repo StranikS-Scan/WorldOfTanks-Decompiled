@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/TweenManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class TweenManagerMeta(DAAPIModule):
+class TweenManagerMeta(BaseDAAPIModule):
 
     def createTween(self, tween):
         self._printOverrideError('createTween')

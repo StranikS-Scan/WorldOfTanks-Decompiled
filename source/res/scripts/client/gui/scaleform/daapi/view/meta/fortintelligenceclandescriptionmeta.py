@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortIntelligenceClanDescriptionMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class FortIntelligenceClanDescriptionMeta(DAAPIModule):
+class FortIntelligenceClanDescriptionMeta(BaseDAAPIComponent):
 
     def onOpenCalendar(self):
         self._printOverrideError('onOpenCalendar')

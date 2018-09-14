@@ -5,6 +5,7 @@ from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.utils.gui_items import formatPrice, formatGoldPrice
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
+from helpers import i18n
 
 class TankmanBerthsBuyer(Processor):
 
@@ -28,16 +29,17 @@ class TankmanBerthsBuyer(Processor):
 
 class PremiumAccountBuyer(Processor):
 
-    def __init__(self, period, price):
+    def __init__(self, period, price, arenaUniqueID = 0):
         self.wasPremium = g_itemsCache.items.stats.isPremium
         localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
         super(PremiumAccountBuyer, self).__init__((plugins.MessageConfirmator(localKey, ctx={'days': int(period),
           'gold': BigWorld.wg_getGoldFormat(price)}), plugins.MoneyValidator((0, price))))
         self.premiumPrice = price
         self.period = period
+        self.arenaUniqueID = arenaUniqueID
 
     def _errorHandler(self, code, errStr = '', ctx = None):
-        if len(errStr):
+        if len(errStr) and i18n.doesTextExist('#system_messages:premium/%s' % errStr):
             return makeI18nError('premium/%s' % errStr, period=self.period)
         return makeI18nError('premium/server_error', period=self.period)
 
@@ -47,7 +49,7 @@ class PremiumAccountBuyer(Processor):
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to buy premium account', self.period, self.premiumPrice)
-        BigWorld.player().stats.upgradeToPremium(self.period, lambda code: self._response(code, callback))
+        BigWorld.player().stats.upgradeToPremium(self.period, self.arenaUniqueID, lambda code: self._response(code, callback))
 
 
 class GoldToCreditsExchanger(Processor):
@@ -73,13 +75,13 @@ class GoldToCreditsExchanger(Processor):
 
 class FreeXPExchanger(Processor):
 
-    def __init__(self, xp, vehiclesCD):
+    def __init__(self, xp, vehiclesCD, freeConversion = False):
         rate = g_itemsCache.items.shop.freeXPConversion
         self.xp = xp
-        self.gold = round(rate[1] * xp / rate[0])
+        self.__freeConversion = bool(freeConversion)
+        self.gold = round(rate[1] * xp / rate[0]) if not freeConversion else 0
         self.vehiclesCD = vehiclesCD
-        super(FreeXPExchanger, self).__init__(plugins=(plugins.HtmlMessageConfirmator('exchangeXPConfirmation', 'html_templates:lobby/dialogs', 'confirmExchangeXP', {'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold),
-          'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.xp)}), plugins.MoneyValidator((0, self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
+        super(FreeXPExchanger, self).__init__(plugins=(self.__makeConfirmator(), plugins.MoneyValidator((0, self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
 
     def _errorHandler(self, code, errStr = '', ctx = None):
         if len(errStr):
@@ -91,4 +93,15 @@ class FreeXPExchanger(Processor):
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to exchange xp for credits')
-        BigWorld.player().stats.convertToFreeXP(self.vehiclesCD, self.xp, lambda code: self._response(code, callback))
+        BigWorld.player().stats.convertToFreeXP(self.vehiclesCD, self.xp, lambda code: self._response(code, callback), int(self.__freeConversion))
+
+    def __makeConfirmator(self):
+        xpLimit = g_itemsCache.items.shop.freeXPConversionLimit
+        extra = {'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.xp),
+         'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold)}
+        if self.__freeConversion:
+            sourceKey = 'XP_EXCHANGE_FOR_FREE'
+            extra['freeXPLimit'] = BigWorld.wg_getIntegralFormat(xpLimit)
+        else:
+            sourceKey = 'XP_EXCHANGE_FOR_GOLD'
+        return plugins.HtmlMessageConfirmator('exchangeXPConfirmation', 'html_templates:lobby/dialogs', 'confirmExchangeXP', extra, sourceKey=sourceKey)

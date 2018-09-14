@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/BaseContactViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class BaseContactViewMeta(DAAPIModule):
+class BaseContactViewMeta(BaseDAAPIComponent):
 
     def onOk(self, data):
         self._printOverrideError('onOk')

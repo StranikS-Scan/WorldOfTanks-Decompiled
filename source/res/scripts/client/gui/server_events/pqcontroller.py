@@ -49,8 +49,10 @@ class PQController(object):
             for qID, quest in self.__quests.iteritems():
                 quest.updateProgress(self.__eventsCache)
 
+            selectedQuests = self.__eventsCache.questsProgress.getSelectedPotapovQuestsIDs()
+            selectedChains = set([ self.__quests[questID].getChainID() for questID in selectedQuests ])
             for qID, quest in self.__quests.iteritems():
-                if not self.__hasQuestsForSelect and freeSlotsCount and quest.canBeSelected():
+                if not self.__hasQuestsForSelect and freeSlotsCount and quest.canBeSelected() and quest.getChainID() not in selectedChains:
                     self.__hasQuestsForSelect = True
                 if not self.__hasQuestsForReward and quest.needToGetReward():
                     self.__hasQuestsForReward = True

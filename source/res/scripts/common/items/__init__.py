@@ -20,6 +20,26 @@ ITEM_TYPES = ITEM_TYPES()
 ITEM_TYPE_INDICES = dict(((x[1], x[0]) for x in enumerate(ITEM_TYPE_NAMES) if x[1] != 'reserved'))
 SIMPLE_ITEM_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'optionalDevice', 'shell', 'equipment')
 SIMPLE_ITEM_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in SIMPLE_ITEM_TYPE_NAMES))
+VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
+ 'turret/rotationSpeed': 1.0,
+ 'circularVisionRadius': 1.0,
+ 'invisibility': [0.0, 1.0],
+ 'radio/distance': 1.0,
+ 'gun/rotationSpeed': 1.0,
+ 'chassis/shotDispersionFactors/movement': 1.0,
+ 'gun/shotDispersionFactors/turretRotation': 1.0,
+ 'gun/reloadTime': 1.0,
+ 'gun/aimingTime': 1.0,
+ 'gun/canShoot': True,
+ 'engine/fireStartingChance': 1.0,
+ 'healthBurnPerSecLossFraction': 1.0,
+ 'repairSpeed': 1.0,
+ 'brokenTrack': None,
+ 'vehicle/rotationSpeed': 1.0,
+ 'chassis/terrainResistance': [1.0, 1.0, 1.0],
+ 'ramming': 1.0,
+ 'crewLevelIncrease': 0,
+ 'crewChanceToHitFactor': 1.0}
 VEHICLE_COMPONENT_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio')
 VEHICLE_COMPONENT_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in VEHICLE_COMPONENT_TYPE_NAMES))
 

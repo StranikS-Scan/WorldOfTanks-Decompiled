@@ -1,10 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/AbstractPopOverView.py
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.PopOverViewMeta import PopOverViewMeta
-from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 from gui.shared.events import HidePopoverEvent
 
-class AbstractPopOverView(WrapperViewMeta, PopOverViewMeta):
+class AbstractPopOverView(PopOverViewMeta):
 
     def __init__(self, ctx = None):
         super(AbstractPopOverView, self).__init__()

@@ -30,7 +30,7 @@ from gui.shared.utils.requesters import DeprecatedStatsRequester
 class Barracks(BarracksMeta, LobbySubView, GlobalListener):
 
     def __init__(self, ctx = None):
-        super(Barracks, self).__init__(0.6)
+        super(Barracks, self).__init__()
         self.filter = dict(AccountSettings.getFilter(BARRACKS_FILTER))
 
     def _populate(self):

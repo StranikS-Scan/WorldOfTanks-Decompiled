@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ResearchViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class ResearchViewMeta(DAAPIModule):
+class ResearchViewMeta(View):
 
     def request4Unlock(self, itemCD, parentID, unlockIdx, xpCost):
         self._printOverrideError('request4Unlock')

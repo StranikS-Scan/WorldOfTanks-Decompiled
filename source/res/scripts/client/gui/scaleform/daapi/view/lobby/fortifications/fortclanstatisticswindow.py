@@ -1,9 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanStatisticsWindow.py
 from gui.Scaleform.daapi.view.meta.FortClanStatisticsWindowMeta import FortClanStatisticsWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortClanStatisticsWindow(AbstractWindowView, View, FortClanStatisticsWindowMeta):
+class FortClanStatisticsWindow(FortClanStatisticsWindowMeta):
 
     def __init__(self, ctx = None):
         super(FortClanStatisticsWindow, self).__init__()

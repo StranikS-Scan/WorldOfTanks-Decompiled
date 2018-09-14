@@ -7,10 +7,11 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
-from gui.shared.gui_items.processors.module import ModuleBuyer, getInstallerProcessor, BuyAndInstallItemProcessor
+from gui.shared.gui_items.processors.module import getInstallerProcessor, BuyAndInstallItemProcessor
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.view.lobby.techtree import unlock, UnlockStats, RequestState
+from gui.Scaleform.daapi.view.lobby.techtree import unlock
+from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats, RequestState
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta, BuyModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsMeta
 

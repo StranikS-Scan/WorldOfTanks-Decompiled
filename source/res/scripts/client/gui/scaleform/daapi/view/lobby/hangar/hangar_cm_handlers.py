@@ -59,7 +59,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'))]
 
     def _initFlashValues(self, ctx):
@@ -94,7 +94,7 @@ class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntit
         self._isCanceled = None
         return
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         options = [self._makeItem(MODULE.INFO, MENU.contextmenu(MODULE.INFO))]
         if self._isCanceled:
             options.append(self._makeItem(MODULE.CANCEL_BUY, MENU.contextmenu(MODULE.CANCEL_BUY)))
@@ -131,7 +131,7 @@ class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def buyVehicle(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.getVehCD())
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         return []
 
 
@@ -144,8 +144,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
          VEHICLE.CHECK: 'checkFavoriteVehicle',
          VEHICLE.UNCHECK: 'uncheckFavoriteVehicle',
          VEHICLE.STATS: 'showVehicleStats',
-         VEHICLE.BUY: 'buyVehicle',
-         VEHICLE.REMOVE: 'sellVehicle'})
+         VEHICLE.BUY: 'buyVehicle'})
 
     def getVehCD(self):
         return self.vehCD
@@ -178,7 +177,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         self.vehCD = None
         return
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         options = []
         vehicle = g_itemsCache.items.getVehicle(self.getVehInvID())
         vehicleWasInBattle = False
@@ -194,15 +193,14 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     money = g_itemsCache.items.stats.money
                     canBuyOrRent, _ = vehicle.mayRentOrBuy(money)
                     options.append(self._makeItem(VEHICLE.BUY, MENU.contextmenu(VEHICLE.BUY), {'enabled': canBuyOrRent}))
-                options.append(self._makeItem(VEHICLE.REMOVE, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
+                options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
             else:
                 options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
             options.extend([self._makeSeparator(), self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH))])
-            if not vehicle.isEvent:
-                if vehicle.isFavorite:
-                    options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
-                else:
-                    options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK)))
+            if vehicle.isFavorite:
+                options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
+            else:
+                options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK)))
         return options
 
     @process

@@ -1,12 +1,13 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_vos.py
 import operator
+from gui.shared import fo_precache
 from gui.shared.gui_items.Vehicle import getShortUserName
 import nations
 from collections import defaultdict
 from constants import IGR_TYPE, ARENA_GUI_TYPE, FLAG_ACTION
 from gui import makeHtmlString
 from gui.server_events import g_eventsCache
-from gui.battle_control.arena_info import getArenaGuiType, settings
+from gui.battle_control.arena_info import getArenaGuiType, settings, getPlayerVehicleID, isPlayerTeamKillSuspected
 from items.vehicles import VEHICLE_CLASS_TAGS, getVehicleType, PREMIUM_IGR_TAGS
 from gui.shared.gui_items import Vehicle
 _INVALIDATE_OP = settings.INVALIDATE_OP
@@ -126,7 +127,10 @@ class VehicleTypeInfoVO(object):
             self.guiName = getShortUserName(vehicleType)
             self.nationID = vehicleType.id[0]
             self.level = vehicleType.level
-            self.iconPath = settings.makeContourIconPath(vehicleType.name)
+            vName = vehicleType.name
+            self.iconPath = settings.makeContourIconSFPath(vName)
+            if not fo_precache.add(settings.makeContourIconResPath(vName)):
+                self.iconPath = settings.UNKNOWN_CONTOUR_ICON_SF_PATH
         else:
             self.compactDescr = 0
             self.classTag = None
@@ -137,7 +141,7 @@ class VehicleTypeInfoVO(object):
             self.shortNameWithPrefix = settings.UNKNOWN_VEHICLE_NAME
             self.nationID = nations.NONE_INDEX
             self.level = settings.UNKNOWN_VEHICLE_LEVEL
-            self.iconPath = settings.UNKNOWN_CONTOUR_ICON_PATH
+            self.iconPath = settings.UNKNOWN_CONTOUR_ICON_SF_PATH
             self.shortNameWithPrefix = settings.UNKNOWN_VEHICLE_NAME
         return
 
@@ -233,6 +237,8 @@ class VehicleArenaInfoVO(object):
     def isTeamKiller(self, playerTeam = None):
         if playerTeam and self.team != playerTeam:
             return False
+        elif self.vehicleID == getPlayerVehicleID() and isPlayerTeamKillSuspected():
+            return True
         else:
             return self.playerStatus & _PLAYER_STATUS.IS_TEAM_KILLER > 0
 
@@ -297,9 +303,9 @@ class VehicleArenaStatsDict(defaultdict):
 
 
 class VehicleArenaInteractiveStatsVO(object):
-    __slots__ = ('vehicleID', 'xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount', 'resourceAbsorbed', 'stopRespawn')
+    __slots__ = ('vehicleID', 'xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount', 'resourceAbsorbed', 'stopRespawn', 'equipmentDamage', 'equipmentKills')
 
-    def __init__(self, vehicleID, xp = 0, damageDealt = 0, capturePts = 0, flagActions = None, winPoints = 0, deathCount = 0, resourceAbsorbed = 0, stopRespawn = False, *args):
+    def __init__(self, vehicleID, xp = 0, damageDealt = 0, capturePts = 0, flagActions = None, winPoints = 0, deathCount = 0, resourceAbsorbed = 0, stopRespawn = False, equipmentDamage = 0, equipmentKills = 0, *args):
         super(VehicleArenaInteractiveStatsVO, self).__init__()
         self.vehicleID = vehicleID
         self.xp = xp
@@ -310,8 +316,10 @@ class VehicleArenaInteractiveStatsVO(object):
         self.deathCount = deathCount
         self.resourceAbsorbed = resourceAbsorbed
         self.stopRespawn = stopRespawn
+        self.equipmentDamage = equipmentDamage
+        self.equipmentKills = equipmentKills
 
-    def update(self, xp = 0, damageDealt = 0, capturePts = 0, flagActions = None, winPoints = 0, deathCount = 0, resourceAbsorbed = 0, stopRespawn = False, *args):
+    def update(self, xp = 0, damageDealt = 0, capturePts = 0, flagActions = None, winPoints = 0, deathCount = 0, resourceAbsorbed = 0, stopRespawn = False, equipmentDamage = 0, equipmentKills = 0, *args):
         self.xp += xp
         self.damageDealt += damageDealt
         self.capturePts += capturePts
@@ -321,6 +329,8 @@ class VehicleArenaInteractiveStatsVO(object):
         self.deathCount += deathCount
         self.resourceAbsorbed += resourceAbsorbed
         self.stopRespawn = self.stopRespawn or stopRespawn
+        self.equipmentDamage += equipmentDamage
+        self.equipmentKills += equipmentKills
         return _INVALIDATE_OP.VEHICLE_STATS
 
 

@@ -9,11 +9,13 @@ class ActionButtonStateVO(dict):
     __NOT_CRITICAL_STATES = (UNIT_RESTRICTION.UNDEFINED,
      UNIT_RESTRICTION.IS_IN_IDLE,
      UNIT_RESTRICTION.IS_IN_PRE_ARENA,
-     UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT)
+     UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT,
+     UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS)
 
     def __init__(self, unitFunctional):
         super(ActionButtonStateVO, self).__init__()
         self._playerInfo = unitFunctional.getPlayerInfo()
+        self._extra = unitFunctional.getExtra()
         self.__unitIsValid, self.__restrictionType = unitFunctional.canPlayerDoAction()
         self.__isEnabled = self._isEnabled(self.__unitIsValid, self.__restrictionType)
         self.__stats = unitFunctional.getStats()
@@ -41,7 +43,13 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.IS_IN_PRE_ARENA: (CYBERSPORT.WINDOW_UNIT_MESSAGE_WAITCOMMANDER, {}),
          UNIT_RESTRICTION.NOT_IN_SLOT: self.__notInSlotMessage(),
          UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTVALID, {}),
-         UNIT_RESTRICTION.CURFEW: (CYBERSPORT.WINDOW_UNIT_MESSAGE_CURFEW, {})}
+         UNIT_RESTRICTION.CURFEW: (CYBERSPORT.WINDOW_UNIT_MESSAGE_CURFEW, {}),
+         UNIT_RESTRICTION.VEHICLE_WRONG_MODE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGMODE, {}),
+         UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS: ('', {}),
+         UNIT_RESTRICTION.FALLOUT_VEHICLE_LEVEL_REQUIRED: self._getFalloutVehLevelStr(),
+         UNIT_RESTRICTION.FALLOUT_VEHICLE_MIN: self._getFalloutVehMinStr(),
+         UNIT_RESTRICTION.FALLOUT_VEHICLE_MAX: ('', {}),
+         UNIT_RESTRICTION.FALLOUT_VEHICLE_BROKEN: self._getFalloutVehBrokenStr()}
         stateKey, stateCtx = self.__getState()
         self['stateString'] = self.__stateTextStyleFormatter(i18n.makeString(stateKey, **stateCtx))
         self['label'] = self._getLabel()
@@ -56,6 +64,15 @@ class ActionButtonStateVO(dict):
         return (CYBERSPORT.WINDOW_UNIT_MESSAGE_READY, {})
 
     def _getArenaStateStr(self):
+        return ('', {})
+
+    def _getFalloutVehLevelStr(self):
+        return ('', {})
+
+    def _getFalloutVehMinStr(self):
+        return ('', {})
+
+    def _getFalloutVehBrokenStr(self):
         return ('', {})
 
     def _isEnabled(self, isValid, restriction):

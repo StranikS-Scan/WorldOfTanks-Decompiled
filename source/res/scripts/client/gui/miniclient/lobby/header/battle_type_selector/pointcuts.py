@@ -38,6 +38,12 @@ class CompanyBattle(_BattleItemSelector):
         _BattleItemSelector.__init__(self, '_addCompanyBattleType', (aspects.CompanyBattle,))
 
 
+class FalloutBattle(_BattleItemSelector):
+
+    def __init__(self):
+        _BattleItemSelector.__init__(self, '_addFalloutBattleType', (aspects.FalloutBattle,))
+
+
 class OnBattleTypeSelectorPopulate(aop.Pointcut):
 
     def __init__(self):

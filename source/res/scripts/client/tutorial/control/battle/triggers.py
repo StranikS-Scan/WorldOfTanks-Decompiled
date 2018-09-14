@@ -5,7 +5,7 @@ from constants import ARENA_PERIOD
 from gui.battle_control import g_sessionProvider
 from tutorial import g_tutorialWeaver
 from tutorial.control.battle import aspects
-from tutorial.control.triggers import _Trigger, _TriggerWithValidateVar
+from tutorial.control.triggers import Trigger, TriggerWithValidateVar
 from tutorial.logger import LOG_ERROR, LOG_DEBUG, LOG_MEMORY
 __all__ = ['VehicleOnArenaTrigger',
  'PlayerVehicleNoAmmoTrigger',
@@ -21,7 +21,7 @@ __all__ = ['VehicleOnArenaTrigger',
  'SniperModeTrigger',
  'TriggersDispatcher']
 
-class VehicleOnArenaTrigger(_TriggerWithValidateVar):
+class VehicleOnArenaTrigger(TriggerWithValidateVar):
 
     def __init__(self, triggerID, validateVarID, setVarID = None, key = 'name'):
         super(VehicleOnArenaTrigger, self).__init__(triggerID, validateVarID, setVarID=setVarID)
@@ -48,7 +48,7 @@ class VehicleOnArenaTrigger(_TriggerWithValidateVar):
             return result
 
 
-class PlayerVehicleNoAmmoTrigger(_Trigger):
+class PlayerVehicleNoAmmoTrigger(Trigger):
 
     def __init__(self, triggerID, stateFlagID = None):
         super(PlayerVehicleNoAmmoTrigger, self).__init__(triggerID)
@@ -64,7 +64,7 @@ class PlayerVehicleNoAmmoTrigger(_Trigger):
     def run(self):
         if not self.isSubscribed:
             self.__addListeners()
-            self.__pIdx = g_tutorialWeaver.weave(pointcut=aspects.AmmoQuantityPointcut, aspects=[aspects.AmmoQuantityAspect(self)])
+            self.__pIdx = g_tutorialWeaver.weave(pointcut=aspects.AmmoQuantityPointcut, aspects=(aspects.AmmoQuantityAspect(self),))
             self.isSubscribed = True
         if self._stateFlag is None:
             self._stateFlag = self._tutorial.getFlags().isActiveFlag(self._stateFlagID)
@@ -110,7 +110,7 @@ class PlayerVehicleNoAmmoTrigger(_Trigger):
         self.__ammoLayout[intCD] = quantity
 
 
-class _DispatchableTrigger(_TriggerWithValidateVar):
+class _DispatchableTrigger(TriggerWithValidateVar):
 
     def __init__(self, triggerID, validateVarID, setVarID = None, stateFlagID = None):
         super(_DispatchableTrigger, self).__init__(triggerID, validateVarID, setVarID=setVarID)
@@ -178,7 +178,7 @@ class AimAtVehicleTrigger(_DispatchableTrigger):
         return triggerType is TriggersManager.TRIGGER_TYPE.AIM_AT_VEHICLE and self.getVar() == event.get('vehicleId')
 
     def getAllowed(self):
-        return [TriggersManager.TRIGGER_TYPE.AIM_AT_VEHICLE]
+        return (TriggersManager.TRIGGER_TYPE.AIM_AT_VEHICLE,)
 
 
 class AutoAimAtVehicleTrigger(_DispatchableTrigger):
@@ -293,7 +293,7 @@ class SniperModeTrigger(_DispatchableTrigger):
         return [TriggersManager.TRIGGER_TYPE.SNIPER_MODE]
 
 
-class TriggersDispatcher(_Trigger, TriggersManager.ITriggerListener):
+class TriggersDispatcher(Trigger, TriggersManager.ITriggerListener):
 
     def __init__(self, triggerID, triggerIDs):
         super(TriggersDispatcher, self).__init__(triggerID)
@@ -307,7 +307,7 @@ class TriggersDispatcher(_Trigger, TriggersManager.ITriggerListener):
             if arena is not None:
                 arena.onPeriodChange += self.__arena_onPeriodChange
         self.isSubscribed = True
-        getter = self._tutorial._data.getTrigger
+        getter = self._data.getTrigger
         for triggerID in self._triggerIDs:
             trigger = getter(triggerID)
             if trigger is not None:
@@ -343,7 +343,7 @@ class TriggersDispatcher(_Trigger, TriggersManager.ITriggerListener):
         if eventType not in self._types:
             return
         else:
-            getter = self._tutorial._data.getTrigger
+            getter = self._data.getTrigger
             for triggerID in self._triggerIDs:
                 trigger = getter(triggerID)
                 if trigger is not None and trigger.isAllowed(eventType, event):

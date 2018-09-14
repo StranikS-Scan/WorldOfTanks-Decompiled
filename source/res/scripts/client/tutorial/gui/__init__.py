@@ -1,30 +1,26 @@
 # Embedded file name: scripts/client/tutorial/gui/__init__.py
-from ConnectionManager import connectionManager
 import Event
 from debug_utils import LOG_ERROR
-
-class GUIEvent(object):
-
-    def __init__(self, guiType, targetID):
-        super(GUIEvent, self).__init__()
-        self.type = guiType
-        self.targetID = targetID
-
 
 class GUI_EFFECT_NAME:
     SHOW_DIALOG = 'ShowDialog'
     SHOW_WINDOW = 'ShowWindow'
+    SHOW_HINT = 'ShowHint'
     UPDATE_CONTENT = 'UpdateContent'
+    SET_CRITERIA = 'SetCriteria'
+    SET_TRIGGER = 'SetTrigger'
 
 
 class GUIProxy(object):
     eManager = Event.EventManager()
     onGUILoaded = Event.Event(eManager)
-    onMouseClicked = Event.Event(eManager)
+    onGUIInput = Event.Event(eManager)
     onPageChanging = Event.Event(eManager)
+    onItemFound = Event.Event(eManager)
+    onItemLost = Event.Event(eManager)
 
     def init(self):
-        pass
+        return True
 
     def show(self):
         pass
@@ -59,6 +55,9 @@ class GUIProxy(object):
     def stopEffect(self, effectName, effectID):
         pass
 
+    def isEffectRunning(self, effectName, effectID = None):
+        return False
+
     def showWaiting(self, messageID, isSingle = False):
         pass
 
@@ -74,7 +73,13 @@ class GUIProxy(object):
     def showServiceMessage(self, data, msgTypeName):
         return 0
 
+    def getItemsOnScene(self):
+        return set()
+
     def setItemProps(self, itemRef, props, revert = False):
+        pass
+
+    def closePopUps(self):
         pass
 
     def isGuiDialogDisplayed(self):
@@ -100,21 +105,16 @@ class GUIProxy(object):
         from gui import WindowsManager
         return WindowsManager.g_windowsManager
 
-    @classmethod
-    def setDispatcher(cls, dispatcher):
+    def setDispatcher(self, dispatcher):
         pass
 
-    @classmethod
-    def getDispatcher(cls):
+    def getDispatcher(self):
         return None
 
     def setChapterInfo(self, title, description):
         pass
 
     def clearChapterInfo(self):
-        pass
-
-    def setPlayerXPLevel(self, level):
         pass
 
     def setTrainingPeriod(self, currentIdx, total):
@@ -126,28 +126,30 @@ class GUIProxy(object):
     def setChapterProgress(self, total, mask):
         pass
 
-    def setTrainingRestartMode(self):
-        pass
-
-    def setTrainingRunMode(self):
-        pass
-
 
 class GUIDispatcher(object):
-    DEFAULT_MODE = 0
-    RUN_MODE = 1
-    RESTART_MODE = 2
 
     def __init__(self):
         super(GUIDispatcher, self).__init__()
-        self._mode = GUIDispatcher.DEFAULT_MODE
+        self._loader = None
         self._isDisabled = False
+        self._isStarted = False
+        return
 
-    def start(self, ctx):
-        pass
+    def start(self, loader):
+        if self._isStarted:
+            return False
+        self._isStarted = True
+        self._loader = loader
+        return True
 
     def stop(self):
-        pass
+        if not self._isStarted:
+            return False
+        else:
+            self.clearGUI()
+            self._loader = None
+            return True
 
     def findGUI(self, root = None):
         return False
@@ -155,34 +157,21 @@ class GUIDispatcher(object):
     def clearGUI(self):
         pass
 
-    def refuseTraining(self):
-        result = True
-        if self._mode == GUIDispatcher.RUN_MODE:
-            from tutorial.loader import g_loader
-            g_loader.refuse()
-        else:
-            result = False
-            LOG_ERROR('TUTORIAL. Tutorial is not run.', self._mode)
-        return result
-
-    def restartTraining(self, reloadIfRun = False, afterBattle = False):
+    def stopTraining(self):
         result = False
-        if self._mode == GUIDispatcher.RESTART_MODE:
-            if self._isDisabled:
-                LOG_ERROR('Tutorial is not enabled')
-            else:
-                from tutorial.loader import g_loader
-                result = True
-                g_loader.restart(afterBattle=afterBattle)
-        elif reloadIfRun:
-            from tutorial.loader import g_loader
-            result = g_loader.reload(afterBattle=afterBattle)
+        if self._loader:
+            result = self._loader.stop()
         else:
-            LOG_ERROR('TUTORIAL. Tutorial is not stopped.', self._mode)
+            LOG_ERROR('Tutorial can not be stopped, loader is not defined')
         return result
 
-    def setPlayerXPLevel(self, level):
-        pass
+    def startTraining(self, settingsID, state):
+        result = False
+        if self._loader:
+            result = self._loader.run(settingsID, state)
+        else:
+            LOG_ERROR('Tutorial can not be run, loader is not defined')
+        return result
 
     def setChapterInfo(self, title, description):
         pass
@@ -192,21 +181,3 @@ class GUIDispatcher(object):
 
     def setDisabled(self, disabled):
         self._isDisabled = disabled
-
-    def setTrainingRestartMode(self):
-        self._mode = GUIDispatcher.RESTART_MODE
-
-    def setTrainingRunMode(self):
-        self._mode = GUIDispatcher.RUN_MODE
-
-
-class LobbyDispatcher(GUIDispatcher):
-
-    def _subscribe(self):
-        connectionManager.onDisconnected += self.__cm_onDisconnected
-
-    def _unsubscribe(self):
-        connectionManager.onDisconnected -= self.__cm_onDisconnected
-
-    def __cm_onDisconnected(self):
-        self.clearChapterInfo()

@@ -99,12 +99,17 @@ def indexing(uiElements, startIndex = 1, step = 1):
     return uiElements
 
 
-def _packTableHeaderBtn(btnID, width, label = '', tooltip = '', icon = None):
+def _packTableHeaderBtn(btnID, width, label = '', tooltip = '', icon = None, showSeparator = True):
     return {'id': btnID,
      'label': label,
      'toolTip': tooltip,
      'iconSource': icon,
-     'buttonWidth': width}
+     'buttonWidth': width,
+     'buttonHeight': 40,
+     'defaultSortDirection': 'descending',
+     'ascendingIconSource': '../maps/icons/buttons/tab_sort_button/ascProfileSortArrow.png',
+     'descendingIconSource': '../maps/icons/buttons/tab_sort_button/descProfileSortArrow.png',
+     'showSeparator': showSeparator}
 
 
 def _packNationBtn(width):
@@ -119,36 +124,36 @@ def _packVehLevelBtn(width):
     return _packTableHeaderBtn('level', width, label='', icon='../maps/icons/buttons/tab_sort_button/level.png', tooltip='#quests:tooltip/vehTable/level')
 
 
-def _packVehNameBtn(width):
-    return _packTableHeaderBtn('vName', width, label='#quests:details/requirements/vehiclesTable/name', tooltip='#quests:tooltip/vehTable/name')
+def _packVehNameBtn(width, showSeparator = True):
+    return _packTableHeaderBtn('vName', width, label='#quests:details/requirements/vehiclesTable/name', tooltip='#quests:tooltip/vehTable/name', showSeparator=showSeparator)
 
 
 def _packCountBtn(width):
     return _packTableHeaderBtn('count', width, label='#quests:details/requirements/vehiclesTable/count')
 
 
-def _packUnavailableBtn(width):
-    return _packTableHeaderBtn('notAvailable', width, label='', icon='../maps/icons/buttons/tab_sort_button/notAvailable.png', tooltip='#quests:tooltip/vehTable/availability')
+def _packUnavailableBtn(width, showSeparator = True):
+    return _packTableHeaderBtn('notAvailable', width, label='', icon='../maps/icons/buttons/tab_sort_button/notAvailable.png', tooltip='#quests:tooltip/vehTable/availability', showSeparator=showSeparator)
 
 
-def _packDiscountBtn(width):
-    return _packTableHeaderBtn('discount', width, label='#quests:details/requirements/vehiclesTable/discount', tooltip='#quests:tooltip/vehTable/discount')
+def _packDiscountBtn(width, showSeparator = True):
+    return _packTableHeaderBtn('discount', width, label='#quests:details/requirements/vehiclesTable/discount', tooltip='#quests:tooltip/vehTable/discount', showSeparator=showSeparator)
 
 
 VEH_KILLS_HEADER = VEH_OWNED_HEADER = VEH_UNLOCKS_HEADER = [_packNationBtn(40),
  _packVehTypeBtn(40),
  _packVehLevelBtn(40),
- _packVehNameBtn(254)]
+ _packVehNameBtn(254, showSeparator=False)]
 VEH_REQUIRED_HEADER = [_packNationBtn(40),
  _packVehTypeBtn(40),
  _packVehLevelBtn(40),
  _packVehNameBtn(197),
- _packUnavailableBtn(57)]
+ _packUnavailableBtn(57, showSeparator=False)]
 VEH_ACTION_HEADER = [_packNationBtn(40),
  _packVehTypeBtn(40),
  _packVehLevelBtn(40),
  _packVehNameBtn(154),
- _packDiscountBtn(100)]
+ _packDiscountBtn(100, showSeparator=False)]
 
 def _packVehicleTypesFilter(defaultVehType = -1):
     result = [{'label': '#menu:carousel_tank_filter/all',
@@ -359,7 +364,7 @@ def packVehiclesBlock(uniqueListID, header, vehs = None, showFilters = True, sho
      'showInHangarCB': showInHangarCB,
      'cbSelected': isShowInHangarCBChecked,
      'vehicles': packVehiclesList(vehs or [], disableChecker),
-     'headerElements': header,
+     'tableHeader': header,
      'nationFilterData': _packNationsFilter(),
      'tankFilterData': _packVehicleTypesFilter(),
      'levelFilterData': _packVehicleLevelsFilter(),

@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/offbattle/pop_ups.py
-import BigWorld
 from tutorial.gui.Scaleform.meta.TutorialBattleNoResultsMeta import TutorialBattleNoResultsMeta
 from tutorial.gui.Scaleform.meta.TutorialBattleStatisticMeta import TutorialBattleStatisticMeta
 from tutorial.gui.Scaleform.pop_ups import TutorialDialog, TutorialWindow
@@ -8,11 +7,11 @@ class TutorialConfirmRefuseDialog(TutorialDialog):
 
     def __init__(self, content):
         super(TutorialConfirmRefuseDialog, self).__init__(content)
-        self._tutorial._cache.setStartOnNextLogin(True)
+        self._cache.setStartOnNextLogin(True)
         self._content['doStartOnNextLogin'] = True
 
     def setStartOnNextLogin(self, value):
-        self._tutorial._cache.setStartOnNextLogin(value)
+        self._cache.setStartOnNextLogin(value)
 
 
 class TutorialBattleStatisticWindow(TutorialWindow, TutorialBattleStatisticMeta):

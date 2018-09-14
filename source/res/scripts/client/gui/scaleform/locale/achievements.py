@@ -245,6 +245,9 @@ class ACHIEVEMENTS(object):
     MECHANICENGINEER6 = '#achievements:mechanicEngineer6'
     MECHANICENGINEER6_DESCR = '#achievements:mechanicEngineer6_descr'
     MECHANICENGINEER6_CONDITION = '#achievements:mechanicEngineer6_condition'
+    MECHANICENGINEER7 = '#achievements:mechanicEngineer7'
+    MECHANICENGINEER7_DESCR = '#achievements:mechanicEngineer7_descr'
+    MECHANICENGINEER7_CONDITION = '#achievements:mechanicEngineer7_condition'
     TANKEXPERT = '#achievements:tankExpert'
     TANKEXPERT_DESCR = '#achievements:tankExpert_descr'
     TANKEXPERT0 = '#achievements:tankExpert0'
@@ -261,6 +264,8 @@ class ACHIEVEMENTS(object):
     TANKEXPERT5_DESCR = '#achievements:tankExpert5_descr'
     TANKEXPERT6 = '#achievements:tankExpert6'
     TANKEXPERT6_DESCR = '#achievements:tankExpert6_descr'
+    TANKEXPERT7 = '#achievements:tankExpert7'
+    TANKEXPERT7_DESCR = '#achievements:tankExpert7_descr'
     TITLESNIPER = '#achievements:titleSniper'
     TITLESNIPER_DESCR = '#achievements:titleSniper_descr'
     TITLESNIPER_CONDITION = '#achievements:titleSniper_condition'
@@ -493,6 +498,9 @@ class ACHIEVEMENTS(object):
     FALLOUTSTEELHUNTER = '#achievements:falloutSteelHunter'
     FALLOUTSTEELHUNTER_DESCR = '#achievements:falloutSteelHunter_descr'
     FALLOUTSTEELHUNTER_CONDITION = '#achievements:falloutSteelHunter_condition'
+    FALLOUTALWAYSINLINE = '#achievements:falloutAlwaysInLine'
+    FALLOUTALWAYSINLINE_DESCR = '#achievements:falloutAlwaysInLine_descr'
+    FALLOUTALWAYSINLINE_CONDITION = '#achievements:falloutAlwaysInLine_condition'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -791,6 +799,9 @@ class ACHIEVEMENTS(object):
      MECHANICENGINEER6,
      MECHANICENGINEER6_DESCR,
      MECHANICENGINEER6_CONDITION,
+     MECHANICENGINEER7,
+     MECHANICENGINEER7_DESCR,
+     MECHANICENGINEER7_CONDITION,
      TANKEXPERT,
      TANKEXPERT_DESCR,
      TANKEXPERT0,
@@ -807,6 +818,8 @@ class ACHIEVEMENTS(object):
      TANKEXPERT5_DESCR,
      TANKEXPERT6,
      TANKEXPERT6_DESCR,
+     TANKEXPERT7,
+     TANKEXPERT7_DESCR,
      TITLESNIPER,
      TITLESNIPER_DESCR,
      TITLESNIPER_CONDITION,
@@ -1039,6 +1052,9 @@ class ACHIEVEMENTS(object):
      FALLOUTSTEELHUNTER,
      FALLOUTSTEELHUNTER_DESCR,
      FALLOUTSTEELHUNTER_CONDITION,
+     FALLOUTALWAYSINLINE,
+     FALLOUTALWAYSINLINE_DESCR,
+     FALLOUTALWAYSINLINE_CONDITION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,

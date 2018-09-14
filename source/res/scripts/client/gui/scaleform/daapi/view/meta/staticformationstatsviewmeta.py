@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StaticFormationStatsViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class StaticFormationStatsViewMeta(DAAPIModule):
+class StaticFormationStatsViewMeta(BaseDAAPIComponent):
 
     def selectSeason(self, index):
         self._printOverrideError('selectSeason')

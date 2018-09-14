@@ -1,17 +1,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyMenu.py
 from adisp import process
-from helpers import i18n, getClientVersion
+from helpers import i18n
 from gui import DialogsInterface, game_control
+from gui.app_loader import g_appLoader
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class LobbyMenu(View, LobbyMenuMeta, AbstractWindowView, AppRef):
+class LobbyMenu(LobbyMenuMeta):
 
     def versionInfoClick(self):
         game_control.g_instance.promo.showPatchPromo()
@@ -30,7 +28,7 @@ class LobbyMenu(View, LobbyMenuMeta, AbstractWindowView, AppRef):
     def refuseTraining(self):
         isOk = yield DialogsInterface.showI18nConfirmDialog('refuseTraining')
         if isOk:
-            g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.REFUSE), scope=EVENT_BUS_SCOPE.GLOBAL)
+            g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.STOP_TRAINING), scope=EVENT_BUS_SCOPE.GLOBAL)
         self.destroy()
 
     @process
@@ -38,14 +36,14 @@ class LobbyMenu(View, LobbyMenuMeta, AbstractWindowView, AppRef):
         isOk = yield DialogsInterface.showI18nConfirmDialog('disconnect', focusedID=DIALOG_BUTTON_ID.CLOSE)
         if isOk:
             self.destroy()
-            self.app.logoff()
+            g_appLoader.goToLoginByRQ()
 
     @process
     def quitClick(self):
         isOk = yield DialogsInterface.showI18nConfirmDialog('quit', focusedID=DIALOG_BUTTON_ID.CLOSE)
         if isOk:
             self.destroy()
-            self.app.quit()
+            g_appLoader.quitFromGame()
 
     def _populate(self):
         super(LobbyMenu, self)._populate()

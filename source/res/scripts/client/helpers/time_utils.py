@@ -114,6 +114,12 @@ def getTimeDeltaFromNowInLocal(t):
     return 0
 
 
+def getTimestampFromNow(t):
+    if t > 0 and t > getCurrentTimestamp():
+        return t - getCurrentTimestamp()
+    return 0
+
+
 def getTimeDeltaTilNow(t):
     if t and datetime.datetime.utcnow() > datetime.datetime.utcfromtimestamp(t):
         delta = datetime.datetime.utcnow() - datetime.datetime.utcfromtimestamp(t)
@@ -121,8 +127,11 @@ def getTimeDeltaTilNow(t):
     return 0
 
 
-def getTillTimeString(timeValue, keyNamespace):
+def getTillTimeString(timeValue, keyNamespace, isRoundUp = False):
     gmtime = time.gmtime(timeValue)
+    if isRoundUp and gmtime.tm_sec > 0:
+        timeValue += ONE_MINUTE
+        gmtime = time.gmtime(timeValue)
     if timeValue >= ONE_DAY:
         fmtKey = 'days'
         gmtime = time.gmtime(timeValue - ONE_DAY)

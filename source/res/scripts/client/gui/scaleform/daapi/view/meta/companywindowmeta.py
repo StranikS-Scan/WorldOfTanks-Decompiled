@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CompanyWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleWindow import PrebattleWindow
 
-class CompanyWindowMeta(DAAPIModule):
+class CompanyWindowMeta(PrebattleWindow):
 
     def requestToAssign(self, pID):
         self._printOverrideError('requestToAssign')

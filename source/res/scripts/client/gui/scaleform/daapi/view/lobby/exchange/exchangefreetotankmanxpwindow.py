@@ -2,8 +2,6 @@
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from gui.Scaleform.daapi.view.meta.ExchangeFreeToTankmanXpWindowMeta import ExchangeFreeToTankmanXpWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.shared import g_itemsCache
 from gui.shared.events import SkillDropEvent
 from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor
@@ -12,7 +10,7 @@ from gui.shared.utils import decorators
 from gui import SystemMessages, game_control
 from items.tankmen import MAX_SKILL_LEVEL
 
-class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractWindowView, View):
+class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
 
     def __init__(self, ctx = None):
         super(ExchangeFreeToTankmanXpWindow, self).__init__()

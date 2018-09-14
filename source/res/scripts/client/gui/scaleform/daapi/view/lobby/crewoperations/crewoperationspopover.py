@@ -1,12 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/crewOperations/CrewOperationsPopOver.py
 from CurrentVehicle import g_currentVehicle
-from debug_utils import LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.Crew import Crew
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.CrewOperationsPopOverMeta import CrewOperationsPopOverMeta
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
 from gui.shared import g_itemsCache
 from gui.shared.events import LoadViewEvent
@@ -21,13 +18,13 @@ OPERATION_RETRAIN = 'retrain'
 OPERATION_RETURN = 'return'
 OPERATION_DROP_IN_BARRACK = 'dropInBarrack'
 
-class CrewOperationsPopOver(CrewOperationsPopOverMeta, View, SmartPopOverView):
+class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def __init__(self, ctx = None):
         super(CrewOperationsPopOver, self).__init__()
 
     def _populate(self):
-        super(CrewOperationsPopOverMeta, self)._populate()
+        super(CrewOperationsPopOver, self)._populate()
         g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryUpdate})
         self.__update()
 

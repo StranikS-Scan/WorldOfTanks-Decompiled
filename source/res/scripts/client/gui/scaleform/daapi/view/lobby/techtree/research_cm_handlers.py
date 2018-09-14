@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_cm_handlers.py
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
-from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE, UnlockStats
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import MODULE, SimpleVehicleCMHandler, VEHICLE
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -51,7 +51,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         self._nodeState = None
         return
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         options = [self._makeItem(MODULE.INFO, MENU.contextmenu(MODULE.INFO)), self._makeSeparator(), self._makeItem(MODULE.UNLOCK, MENU.contextmenu(MODULE.UNLOCK), {'enabled': NODE_STATE.isAvailable2Unlock(self._nodeState)})]
         if NODE_STATE.isUnlocked(self._nodeState):
             if NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isInstalled(self._nodeState):
@@ -114,7 +114,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         self._nodeInvID = None
         return
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         vehicle = g_itemsCache.items.getItemByCD(self._nodeCD)
         options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX),
          self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS, {'enabled': NODE_STATE.isWasInBattle(self._nodeState)}),

@@ -2,7 +2,6 @@
 import BigWorld
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS
-from debug_utils import LOG_DEBUG
 from helpers.i18n import makeString
 from gui import game_control
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -12,8 +11,6 @@ from gui.clubs import events_dispatcher as club_events
 from gui.clubs.club_helpers import MyClubListener
 from gui.clubs.settings import CLIENT_CLUB_STATE
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.AccountPopoverMeta import AccountPopoverMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -25,7 +22,7 @@ from gui.shared.view_helpers.emblems import ClubEmblemsHelper, ClanEmblemsHelper
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared.formatters import text_styles
 
-class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener, MyClubListener, ClubEmblemsHelper, ClanEmblemsHelper):
+class AccountPopover(AccountPopoverMeta, GlobalListener, MyClubListener, ClubEmblemsHelper, ClanEmblemsHelper):
 
     def __init__(self, _):
         super(AccountPopover, self).__init__()

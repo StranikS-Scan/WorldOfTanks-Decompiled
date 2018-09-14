@@ -5,12 +5,13 @@ from urllib import urlencode
 import BigWorld
 import Settings
 import constants
+from helpers import getLanguageCode
 from helpers.i18n import makeString as _ms
 from ConnectionManager import AUTH_METHODS
 from DataServer import DataServer
 from gui import GUI_SETTINGS, makeHtmlString
 
-class _SOCIAL_NETWORKS:
+class _SOCIAL_NETWORKS():
     FACEBOOK = 'facebook'
     GOOGLE = 'google'
     WGNI = 'wgni'
@@ -65,12 +66,14 @@ class Bridge(object):
          'requested_for': 'wot',
          'ip': '127.0.0.1'}
 
-    def initiateLogin(self, socialNetworkName, rememberMe):
+    def initiateLogin(self, socialNetworkName, rememberMe, isRegistration = False):
         serverStatus = self.__STATUS.OK
         try:
-            if self.__server is None:
-                self.__server = DataServer('SocialNetworkLoginServer', self.__serverReceivedDataCallback, self.__encryptToken)
-                self.__server.start()
+            if self.__server is not None:
+                self.__server.stop()
+                self.__server.server_close()
+            self.__server = DataServer('SocialNetworkLoginServer', self.__serverReceivedDataCallback, self.__encryptToken and not isRegistration)
+            self.__server.start()
         except socket.error:
             if self.__server is not None:
                 self.__server.stop()
@@ -78,9 +81,10 @@ class Bridge(object):
             serverStatus = self.__STATUS.HTTP_SERVER_ERROR
 
         if serverStatus == self.__STATUS.OK:
-            baseUrl = self.__getInitialLoginBaseURL(constants.IS_DEVELOPMENT)
-            params = self.__getInitialLoginParams(socialNetworkName, rememberMe)
-            if not BigWorld.wg_openWebBrowser(baseUrl + '?' + urlencode(params)):
+            baseUrl = self.__getInitialLoginBaseURL(constants.IS_DEVELOPMENT, isRegistration=isRegistration)
+            loginParams = self.__getInitialLoginParams(socialNetworkName, rememberMe, isRegistration=isRegistration)
+            url = baseUrl + ('&' if isRegistration else '?') + urlencode(loginParams)
+            if not BigWorld.wg_openWebBrowser(url):
                 serverStatus = self.__STATUS.WEB_BROWSER_ERROR
         return serverStatus == self.__STATUS.OK
 
@@ -155,23 +159,27 @@ class Bridge(object):
                 del previousLoginParams['requested_for']
             return
 
-    def __getInitialLoginParams(self, socialNetworkName, rememberMe):
-        params = {'game': 'wot',
-         'game_port': self.__server.server_port,
+    def __getInitialLoginParams(self, socialNetworkName, rememberMe, isRegistration = False):
+        params = {'game_port': self.__server.server_port,
          'remember': int(rememberMe)}
+        if not isRegistration:
+            params['game'] = 'wot'
         if socialNetworkName != _SOCIAL_NETWORKS.WGNI:
             params['external'] = socialNetworkName
-        if self.__encryptToken:
+        if self.__encryptToken and not isRegistration:
             params['token_secret'] = base64.b64encode(self.__server.tokenSecret)
         return params
 
     @staticmethod
-    def __getInitialLoginBaseURL(isDevelopmentMode):
-        baseUrl = GUI_SETTINGS.socialNetworkLogin['initialLoginURL']
+    def __getInitialLoginBaseURL(isDevelopmentMode, isRegistration = False):
+        if isRegistration:
+            baseUrl = GUI_SETTINGS.registrationURL.replace('$LANGUAGE_CODE', getLanguageCode())
+        else:
+            baseUrl = GUI_SETTINGS.socialNetworkLogin['initialLoginURL']
         if isDevelopmentMode:
             from gui.development.mock.social_network_login import getServer as getWGNIServerMock
             if getWGNIServerMock() is not None:
-                baseUrl = 'http://127.0.0.1:{0}/'.format(getWGNIServerMock().server_port)
+                baseUrl = 'http://127.0.0.1:{0}/{1}'.format(getWGNIServerMock().server_port, '?dummy=1' if isRegistration else '')
         return baseUrl
 
     def __readToken2FromPreferences(self):

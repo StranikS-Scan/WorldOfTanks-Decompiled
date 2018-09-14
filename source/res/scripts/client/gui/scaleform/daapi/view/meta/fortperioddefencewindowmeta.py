@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortPeriodDefenceWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortPeriodDefenceWindowMeta(DAAPIModule):
+class FortPeriodDefenceWindowMeta(AbstractWindowView):
 
     def onApply(self, data):
         self._printOverrideError('onApply')

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleLoadingMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class BattleLoadingMeta(DAAPIModule):
+class BattleLoadingMeta(View):
 
     def as_setProgressS(self, val):
         if self._isDAAPIInited():
@@ -22,6 +22,10 @@ class BattleLoadingMeta(DAAPIModule):
     def as_setArenaInfoS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setArenaInfo(data)
+
+    def as_setMapIconS(self, source):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setMapIcon(source)
 
     def as_setPlayerDataS(self, playerVehicleID, prebattleID):
         if self._isDAAPIInited():

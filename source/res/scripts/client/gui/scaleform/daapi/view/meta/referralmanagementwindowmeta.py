@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ReferralManagementWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ReferralManagementWindowMeta(DAAPIModule):
+class ReferralManagementWindowMeta(AbstractWindowView):
 
     def onInvitesManagementLinkClick(self):
         self._printOverrideError('onInvitesManagementLinkClick')

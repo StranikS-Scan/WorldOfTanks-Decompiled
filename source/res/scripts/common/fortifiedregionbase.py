@@ -1707,6 +1707,8 @@ class FortifiedRegionBase(OpsUnpacker):
         self.setBuilding(buildTypeID, building)
         if buildTypeID == FORT_BUILDING_TYPE.MILITARY_BASE:
             self.level = level
+            if level == 8:
+                self._broadcastFortSystemMessage(SYS_MESSAGE_FORT_EVENT.FORT_GOT_8_LEVEL)
         self.storeOp(FORT_OP.UPGRADE, buildTypeID, level, decStorage)
 
     def _updateOrders(self, orderTypeID, buildingTypeID, newLevel, newCount, resLeft):

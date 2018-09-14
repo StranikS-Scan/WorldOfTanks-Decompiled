@@ -2,10 +2,8 @@
 import ArenaType
 from account_helpers import gameplay_ctx
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.prb_control.context.prb_ctx import TrainingSettingsCtx
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
 from gui.prb_control.prb_helpers import prbFunctionalProperty
 from helpers import i18n
@@ -40,7 +38,7 @@ class ArenasCache(object):
         return self.__cache
 
 
-class TrainingSettingsWindow(View, AbstractWindowView, TrainingWindowMeta):
+class TrainingSettingsWindow(TrainingWindowMeta):
 
     def __init__(self, ctx = None):
         super(TrainingSettingsWindow, self).__init__()

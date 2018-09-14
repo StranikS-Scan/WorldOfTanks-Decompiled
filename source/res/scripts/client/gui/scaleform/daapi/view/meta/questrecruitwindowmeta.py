@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/QuestRecruitWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class QuestRecruitWindowMeta(DAAPIModule):
+class QuestRecruitWindowMeta(AbstractWindowView):
 
     def onApply(self, data):
         self._printOverrideError('onApply')

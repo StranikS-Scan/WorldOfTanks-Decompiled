@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortBuildingCardPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class FortBuildingCardPopoverMeta(DAAPIModule):
+class FortBuildingCardPopoverMeta(SmartPopOverView):
 
     def openUpgradeWindow(self, value):
         self._printOverrideError('openUpgradeWindow')

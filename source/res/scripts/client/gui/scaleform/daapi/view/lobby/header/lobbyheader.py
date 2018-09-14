@@ -4,19 +4,21 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 import account_helpers
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS
-from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.game_control import getFalloutCtrl
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.prb_control.prb_helpers import GlobalListener
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE, UNIT_RESTRICTION
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE, UNIT_RESTRICTION, PREBATTLE_RESTRICTION
+from gui.shared.formatters.ranges import toRomanRangeString
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import i18n, time_utils
+from helpers import i18n, time_utils, int2roman
 from debug_utils import LOG_ERROR
-from shared_utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER, findFirst
 from gui import makeHtmlString, game_control
 from gui.LobbyContext import g_lobbyContext
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -31,11 +33,10 @@ from gui.server_events import g_eventsCache
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyHeaderMeta import LobbyHeaderMeta
-from gui.Scaleform.framework import g_entitiesFactories, ViewTypes, AppRef
+from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from ConnectionManager import connectionManager
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS_CONSTANTS
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getEventVehiclesNamesStr
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
 
@@ -45,7 +46,7 @@ class TOOLTIP_TYPES(object):
     NONE = 'none'
 
 
-class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
+class LobbyHeader(LobbyHeaderMeta, GlobalListener, ClanEmblemsHelper):
 
     class BUTTONS(CONST_CONTAINER):
         SETTINGS = 'settings'
@@ -57,6 +58,11 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
         FREE_XP = 'freeXP'
         BATTLE_SELECTOR = 'battleSelector'
 
+    def __init__(self):
+        super(LobbyHeader, self).__init__()
+        self.__falloutCtrl = None
+        return
+
     def _populate(self):
         battle_selector_items.create()
         super(LobbyHeader, self)._populate()
@@ -65,6 +71,10 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
         game_control.g_instance.gameSession.onPremiumNotify += self.__onPremiumTimeChanged
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_eventsCache.onSyncCompleted += self.__onEventsCacheResync
+        g_itemsCache.onSyncCompleted += self.__onItemsChanged
+        self.__falloutCtrl = getFalloutCtrl()
+        self.__falloutCtrl.onVehiclesChanged += self.__updateFalloutSettings
+        self.__falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -108,9 +118,14 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
         game_control.g_instance.wallet.onWalletStatusChanged -= self.__onWalletChanged
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         g_eventsCache.onSyncCompleted -= self.__onEventsCacheResync
+        g_itemsCache.onSyncCompleted -= self.__onItemsChanged
+        self.__falloutCtrl.onVehiclesChanged -= self.__updateFalloutSettings
+        self.__falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
+        self.__falloutCtrl = None
         self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         self.stopGlobalListening()
         super(LobbyHeader, self)._dispose()
+        return
 
     def onPreQueueSettingsChanged(self, _):
         self.__updatePrebattleControls()
@@ -200,7 +215,8 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
         self.as_goldResponseS(BigWorld.wg_getGoldFormat(gold), MENU.HEADERBUTTONS_BTNLABEL_BUY_GOLD, TOOLTIPS.HEADER_REFILL, TOOLTIP_TYPES.COMPLEX)
 
     def __setFreeXP(self, freeXP):
-        self.as_setFreeXPS(BigWorld.wg_getIntegralFormat(freeXP), MENU.HEADERBUTTONS_BTNLABEL_GATHERING_EXPERIENCE, TOOLTIPS.HEADER_XP_GATHERING, TOOLTIP_TYPES.COMPLEX)
+        isActionActive = g_itemsCache.items.shop.isXPConversionActionActive
+        self.as_setFreeXPS(BigWorld.wg_getIntegralFormat(freeXP), MENU.HEADERBUTTONS_BTNLABEL_GATHERING_EXPERIENCE, isActionActive, TOOLTIPS.HEADER_XP_GATHERING, TOOLTIP_TYPES.COMPLEX)
 
     def __setAccountsAttrs(self, isPremiumAccount, premiumExpiryTime = 0):
         disableTTHeader = ''
@@ -249,7 +265,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
 
     def __onWalletChanged(self, status):
         self.as_goldResponseS(BigWorld.wg_getGoldFormat(g_itemsCache.items.stats.actualGold), MENU.HEADERBUTTONS_BTNLABEL_BUY_GOLD, TOOLTIPS.HEADER_REFILL, TOOLTIP_TYPES.COMPLEX)
-        self.as_setFreeXPS(BigWorld.wg_getIntegralFormat(g_itemsCache.items.stats.actualFreeXP), MENU.HEADERBUTTONS_BTNLABEL_GATHERING_EXPERIENCE, TOOLTIPS.HEADER_XP_GATHERING, TOOLTIP_TYPES.COMPLEX)
+        self.as_setFreeXPS(BigWorld.wg_getIntegralFormat(g_itemsCache.items.stats.actualFreeXP), MENU.HEADERBUTTONS_BTNLABEL_GATHERING_EXPERIENCE, g_itemsCache.items.shop.isXPConversionActionActive, TOOLTIPS.HEADER_XP_GATHERING, TOOLTIP_TYPES.COMPLEX)
         self.as_setWalletStatusS(status)
 
     def __onPremiumTimeChanged(self, isPremium, _, premiumExpiryTime):
@@ -281,18 +297,31 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
             view.update()
 
     def __getFightBtnTooltipData(self, state):
-        vehicleNames = getEventVehiclesNamesStr()
-        if state == UNIT_RESTRICTION.VEHICLE_NOT_VALID:
-            header = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_HEADER)
-            body = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_BODY)
-            note = vehicleNames
+        falloutCtrl = getFalloutCtrl()
+        config = falloutCtrl.getConfig()
+        if state == PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY:
+            header = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutOnly/header')
+            body = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutOnly/body')
+        elif state == PREBATTLE_RESTRICTION.FALLOUT_NOT_SELECTED:
+            header = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutNotSelected/header')
+            body = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutNotSelected/body')
+        elif state == PREBATTLE_RESTRICTION.VEHICLE_GROUP_IS_NOT_READY:
+            header = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutNotReady/header')
+            body = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutNotReady/body')
+        elif state == UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS:
+            header = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutNotEnoughPlayer/header')
+            body = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutNotEnoughPlayer/body')
+        elif state == UNIT_RESTRICTION.FALLOUT_VEHICLE_LEVEL_REQUIRED:
+            header = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutVehLevelRequired/header')
+            body = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutVehLevelRequired/body', level=int2roman(config.vehicleLevelRequired))
+        elif state == UNIT_RESTRICTION.FALLOUT_VEHICLE_MIN:
+            header = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutVehMin/header')
+            body = i18n.makeString('#menu:headerButtons/fightBtn/tooltip/falloutVehMin/body', min=str(config.minVehiclesPerPlayer), level=toRomanRangeString(list(config.allowedLevels), 1))
         else:
-            header = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_HEADER)
-            body = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_BODY)
-            note = vehicleNames
+            return None
         return {'header': header,
          'body': body,
-         'note': note}
+         'note': ''}
 
     def __updatePrebattleControls(self):
         prbDispatcher = g_prbLoader.getDispatcher()
@@ -308,23 +337,23 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
                 isInSquad = True
             else:
                 isInSquad = False
-                self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, not state.hasLockedState)
-            isFallout = g_eventsCache.isEventEnabled()
+                isSqaudDisabled = state.hasLockedState or self.__falloutCtrl.isEnabled() and not self.__falloutCtrl.getBattleType()
+                self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, not isSqaudDisabled)
+            falloutCtrl = getFalloutCtrl()
+            isFallout = falloutCtrl.isSelected()
             if isInSquad:
                 tooltip = TOOLTIPS.HEADER_SQUAD_MEMBER
             else:
                 tooltip = TOOLTIPS.HEADER_DOMINATIONSQUAD if isFallout else TOOLTIPS.HEADER_SQUAD
             self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX)
             isFightBtnDisabled = not canDo or selected.isFightButtonForcedDisabled()
-            isEventVehicle = g_currentVehicle.isPresent() and g_currentVehicle.item.isEvent
-            isInCompany = state.isInPrebattle(PREBATTLE_TYPE.COMPANY)
-            if isFightBtnDisabled and isEventVehicle and not state.hasLockedState and not isInCompany:
+            if isFightBtnDisabled:
                 self.as_setFightBtnTooltipDataS(self.__getFightBtnTooltipData(canDoMsg))
             else:
                 self.as_setFightBtnTooltipDataS(None)
             self.as_disableFightButtonS(isFightBtnDisabled)
             self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
-            self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), not selected.isDisabled(), TOOLTIPS.HEADER_BATTLETYPE, TOOLTIP_TYPES.COMPLEX)
+            self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), not selected.isDisabled(), TOOLTIPS.HEADER_BATTLETYPE, TOOLTIP_TYPES.COMPLEX, selected.getData())
             if selected.isDisabled():
                 self.__closeBattleTypeSelectPopover()
             else:
@@ -346,10 +375,13 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
     def __showBubbleTooltip(self, event):
         self.as_showBubbleTooltipS(event.getMessage(), event.getDuration())
 
-    def __onVehicleChanged(self):
+    def __onVehicleChanged(self, *args):
         self.__updatePrebattleControls()
 
     def __onEventsCacheResync(self):
+        self.__updatePrebattleControls()
+
+    def __updateFalloutSettings(self, *args):
         self.__updatePrebattleControls()
 
     def __updateGoodies(self, *args):
@@ -365,3 +397,11 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener, ClanEmblemsHelper):
         enabledVal = isGoldFishActionActive()
         tooltip = TOOLTIPS.HEADER_REFILL_ACTION if enabledVal else TOOLTIPS.HEADER_REFILL
         self.as_setGoldFishEnabledS(enabledVal, True, tooltip, TOOLTIP_TYPES.COMPLEX)
+
+    def __onItemsChanged(self, updateReason, invalidItems):
+        vehiclesDiff = invalidItems.get(GUI_ITEM_TYPE.VEHICLE)
+        if vehiclesDiff is not None:
+            falloutVehicle = findFirst(lambda v: v.intCD in vehiclesDiff, getFalloutCtrl().getSelectedVehicles())
+            if falloutVehicle is not None:
+                self.__updatePrebattleControls()
+        return

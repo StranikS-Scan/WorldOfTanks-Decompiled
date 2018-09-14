@@ -18,7 +18,6 @@ from gui import GUI_SETTINGS
 from gui.LobbyContext import g_lobbyContext
 from gui.clubs.formatters import getLeagueString, getDivisionString
 from gui.clubs.settings import getLeagueByDivision
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.shared import formatters as shared_fmts, g_itemsCache
 from gui.shared.fortifications import formatters as fort_fmts
@@ -125,7 +124,7 @@ class BattleResultsFormatter(ServiceChannelFormatter):
     __battleResultKeys = {-1: 'battleDefeatResult',
      0: 'battleDrawGameResult',
      1: 'battleVictoryResult'}
-    __eventBattleResultKeys = {-1: 'battleDefeatResult',
+    __eventBattleResultKeys = {-1: 'battleEndedGameResult',
      0: 'battleEndedGameResult',
      1: 'battleVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
@@ -182,7 +181,7 @@ class BattleResultsFormatter(ServiceChannelFormatter):
                 if 'markOfMastery' in battleResult and battleResult['markOfMastery'] > 0:
                     marksOfMastery.append(battleResult['markOfMastery'])
 
-            ctx['vehicleNames'] = ', '.join(map(operator.attrgetter('userName'), sorted(vehs)))
+            ctx['vehicleNames'] = ', '.join(map(operator.attrgetter('userName'), vehs))
             if xp:
                 ctx['xp'] = BigWorld.wg_getIntegralFormat(xp)
             ctx['xpEx'] = self.__makeXpExString(xp, battleResKey, xpPenalty, battleResults)
@@ -208,7 +207,7 @@ class BattleResultsFormatter(ServiceChannelFormatter):
                     if battleResKey == 0:
                         battleResKey = 1 if buildTeam == team else -1
             ctx['club'] = self.__makeClubString(commonBattleResult)
-            if guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+            if guiType == ARENA_GUI_TYPE.EVENT_BATTLES and arenaType.maxTeamsInArena > constants.TEAMS_IN_ARENA.MIN_TEAMS:
                 templateName = self.__eventBattleResultKeys[battleResKey]
             else:
                 templateName = self.__battleResultKeys[battleResKey]
@@ -283,6 +282,7 @@ class BattleResultsFormatter(ServiceChannelFormatter):
                 xpFactor = battleResult.get('dailyXPFactor', 1)
                 if xpFactor > 1:
                     xpFactorStrings.append(i18n.makeString('#%s:serviceChannelMessages/battleResults/doubleXpFactor' % MESSENGER_I18N_FILE) % xpFactor)
+                    break
 
             if xpFactorStrings:
                 exStrings.append(', '.join(xpFactorStrings))
@@ -584,7 +584,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
             crewLvl = calculateRoleLevel(vehData.get('crewLvl', 50), vehData.get('crewFreeXP', 0))
         vehUserString = None
         try:
-            vehUserString = getUserName(vehicles_core.getVehicleType(vehCompDescr))
+            vehUserString = getUserName(vehicles_core.getVehicleType(abs(vehCompDescr)))
             if crewLvl > 50:
                 crewLvl = cls.__i18nCrewLvlString % crewLvl
                 if 'crewInBarracks' in vehData:
@@ -1607,7 +1607,7 @@ class ClanMessageFormatter(ServiceChannelFormatter):
             return None
 
 
-class FortMessageFormatter(ServiceChannelFormatter, AppRef):
+class FortMessageFormatter(ServiceChannelFormatter):
     __templates = {SYS_MESSAGE_FORT_EVENT.DEF_HOUR_SHUTDOWN: 'fortHightPriorityMessageWarning',
      SYS_MESSAGE_FORT_EVENT.BASE_DESTROYED: 'fortHightPriorityMessageWarning'}
     DEFAULT_WARNING = 'fortMessageWarning'
@@ -1636,7 +1636,8 @@ class FortMessageFormatter(ServiceChannelFormatter, AppRef):
          SYS_MESSAGE_FORT_EVENT.BATTLE_DELETED: BoundMethodWeakref(self._battleDeletedMessage),
          SYS_MESSAGE_FORT_EVENT.SPECIAL_ORDER_EXPIRED: BoundMethodWeakref(self._specialReserveExpiredMessage),
          SYS_MESSAGE_FORT_EVENT.RESOURCE_SET: BoundMethodWeakref(self._resourceSetMessage),
-         SYS_MESSAGE_FORT_EVENT.RESERVE_SET: BoundMethodWeakref(self._reserveSetMessage)}
+         SYS_MESSAGE_FORT_EVENT.RESERVE_SET: BoundMethodWeakref(self._reserveSetMessage),
+         SYS_MESSAGE_FORT_EVENT.FORT_GOT_8_LEVEL: BoundMethodWeakref(self._simpleMessage)}
 
     def format(self, message, *args):
         LOG_DEBUG('Message has received from fort', message)
@@ -1670,7 +1671,7 @@ class FortMessageFormatter(ServiceChannelFormatter, AppRef):
         order = fort_fmts.getOrderUserString(data['orderTypeID'])
         if event == SYS_MESSAGE_FORT_EVENT.RESERVE_ACTIVATED and FORT_ORDER_TYPE.isOrderPermanent(orderTypeID):
             return i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_FORT_PERMANENT_RESERVE_ACTIVATED, order=order)
-        timeExpiration = self.app.utilsManager.textManager.getTimeDurationStr(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(data['timeExpiration'])))
+        timeExpiration = shared_fmts.time_formatters.getTimeDurationStr(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(data['timeExpiration'])))
         return self._buildMessage(event, {'order': order,
          'time': timeExpiration})
 

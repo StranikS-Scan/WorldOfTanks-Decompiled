@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/tutorial/control/battle/__init__.py
-from tutorial.data.chapter import Effect
+from tutorial.data.effects import EFFECT_TYPE
 from tutorial.control import ControlsFactory, functional as core_func
 from tutorial.control.battle import functional
 from tutorial.control.battle import context
@@ -7,25 +7,25 @@ from tutorial.control.battle import context
 class BattleControlsFactory(ControlsFactory):
 
     def __init__(self):
-        funcEffects = {Effect.ACTIVATE: core_func.FunctionalActivateEffect,
-         Effect.DEACTIVATE: core_func.FunctionalDeactivateEffect,
-         Effect.RUN_TRIGGER: core_func.FunctionalRunTriggerEffect,
-         Effect.FINISH_TRAINING: core_func.FunctionalFinishTrainingEffect,
-         Effect.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
-         Effect.SHOW_MESSAGE: core_func.FunctionalShowMessageEffect,
-         Effect.INVOKE_PLAYER_CMD: core_func.FunctionalPlayerCommandEffect,
-         Effect.SHOW_DIALOG: functional.FunctionalShowBattleDialogEffect,
-         Effect.REQUEST_BONUS: functional.FunctionalRequestBonusEffect,
-         Effect.NEXT_CHAPTER: functional.FunctionalNextChapterEffect,
-         Effect.SHOW_MARKER: functional.FunctionalShowMarker,
-         Effect.REMOVE_MARKER: functional.FunctionalRemoveMarker,
-         Effect.NEXT_TASK: functional.FunctionalNextTaskEffect,
-         Effect.SHOW_HINT: functional.FunctionalShowHintEffect,
-         Effect.TELEPORT: functional.FunctionalTeleportEffect,
-         Effect.SHOW_GREETING: functional.FunctionalShowGreeting,
-         Effect.REFUSE_TRAINING: functional.FunctionalRefuseTrainingEffect,
-         Effect.ENABLE_CAMERA_ZOOM: functional.FunctionalEnableCameraZoomEffect,
-         Effect.DISABLE_CAMERA_ZOOM: functional.FunctionalDisableCameraZoomEffect}
+        funcEffects = {EFFECT_TYPE.ACTIVATE: core_func.FunctionalActivateEffect,
+         EFFECT_TYPE.DEACTIVATE: core_func.FunctionalDeactivateEffect,
+         EFFECT_TYPE.RUN_TRIGGER: core_func.FunctionalRunTriggerEffect,
+         EFFECT_TYPE.FINISH_TRAINING: core_func.FunctionalFinishTrainingEffect,
+         EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
+         EFFECT_TYPE.SHOW_MESSAGE: core_func.FunctionalShowMessageEffect,
+         EFFECT_TYPE.INVOKE_PLAYER_CMD: core_func.FunctionalPlayerCommandEffect,
+         EFFECT_TYPE.SHOW_DIALOG: functional.FunctionalShowBattleDialogEffect,
+         EFFECT_TYPE.REQUEST_BONUS: functional.FunctionalRequestBonusEffect,
+         EFFECT_TYPE.NEXT_CHAPTER: functional.FunctionalNextChapterEffect,
+         EFFECT_TYPE.SHOW_MARKER: functional.FunctionalShowMarker,
+         EFFECT_TYPE.REMOVE_MARKER: functional.FunctionalRemoveMarker,
+         EFFECT_TYPE.NEXT_TASK: functional.FunctionalNextTaskEffect,
+         EFFECT_TYPE.SHOW_HINT: functional.FunctionalShowHintEffect,
+         EFFECT_TYPE.TELEPORT: functional.FunctionalTeleportEffect,
+         EFFECT_TYPE.SHOW_GREETING: functional.FunctionalShowGreeting,
+         EFFECT_TYPE.REFUSE_TRAINING: functional.FunctionalRefuseTrainingEffect,
+         EFFECT_TYPE.ENABLE_CAMERA_ZOOM: functional.FunctionalEnableCameraZoomEffect,
+         EFFECT_TYPE.DISABLE_CAMERA_ZOOM: functional.FunctionalDisableCameraZoomEffect}
         ControlsFactory.__init__(self, funcEffects, {})
 
     def createBonuses(self, completed):

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CrewOperationsPopOverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class CrewOperationsPopOverMeta(DAAPIModule):
+class CrewOperationsPopOverMeta(SmartPopOverView):
 
     def invokeOperation(self, operationName):
         self._printOverrideError('invokeOperation')

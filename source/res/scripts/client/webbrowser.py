@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/WebBrowser.py
+import weakref
 import BigWorld
 import Keys
 from gui.Scaleform.CursorDelegator import CursorDelegator
 from Event import Event
-from gui.Scaleform.framework import AppRef
-from debug_utils import _doLog
+from debug_utils import _doLog, LOG_CURRENT_EXCEPTION
 from constants import IS_DEVELOPMENT
 _BROWSER_LOGGING = True
 _BROWSER_KEY_LOGGING = False
@@ -14,7 +14,7 @@ def LOG_BROWSER(msg, *kargs):
         _doLog('BROWSER', msg, kargs)
 
 
-class WebBrowser(AppRef):
+class WebBrowser(object):
     hasBrowser = property(lambda self: self.__browser is not None)
     baseUrl = property(lambda self: ('' if self.__browser is None else self.__baseUrl))
     url = property(lambda self: ('' if self.__browser is None else self.__browser.url))
@@ -38,6 +38,7 @@ class WebBrowser(AppRef):
         if self.__browser is None:
             return
         else:
+            self.__ui = weakref.ref(uiObj)
             self.__keysDown = set()
 
             def injectBrowserKeyEvent(me, e):
@@ -151,6 +152,7 @@ class WebBrowser(AppRef):
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
             self.__cbID = None
+        self.__ui = None
         g_mgr.delBrowser(self)
         return
 
@@ -158,14 +160,18 @@ class WebBrowser(AppRef):
         if self.hasBrowser and not self.isFocused:
             self.__browser.focus()
             self.__isFocused = True
-            self.app.cursorMgr.setCursorForced(self.__browser.script.cursorType)
+            ui = self.__ui()
+            if ui:
+                ui.cursorMgr.setCursorForced(self.__browser.script.cursorType)
 
     def unfocus(self):
         if self.hasBrowser and self.isFocused:
             self.__browser.unfocus()
             self.__isFocused = False
             self.__isWaitingForUnfocus = False
-            self.app.cursorMgr.setCursorForced(None)
+            ui = self.__ui()
+            if ui:
+                ui.cursorMgr.setCursorForced(None)
         return
 
     def refresh(self, ignoreCache = True):
@@ -332,7 +338,9 @@ class WebBrowser(AppRef):
 
     def __onCursorUpdated(self):
         if self.hasBrowser and self.isFocused:
-            self.app.cursorMgr.setCursorForced(self.__browser.script.cursorType)
+            ui = self.__ui()
+            if ui:
+                ui.cursorMgr.setCursorForced(self.__browser.script.cursorType)
 
     def executeJavascript(self, script, frame):
         if self.hasBrowser:

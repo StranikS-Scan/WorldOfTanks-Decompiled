@@ -5,7 +5,7 @@ from helpers import aop
 class OnViewPopulate(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.fortifications.components.FortWelcomeViewComponent', 'FortWelcomeViewComponent', '_populate', aspects=(aspects.OnViewPopulate,))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.fortifications.components.FortWelcomeInfoView', 'FortWelcomeInfoView', '_populate', aspects=(aspects.OnViewPopulate,))
 
 
 class OnFortifiedRegionsOpen(aop.Pointcut):

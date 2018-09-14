@@ -8,9 +8,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.TechnicalMaintenanceMeta import TechnicalMaintenanceMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.prb_control.prb_helpers import GlobalListener
@@ -27,10 +24,12 @@ from gui.server_events import g_eventsCache
 from helpers import i18n
 from helpers.i18n import makeString
 from gui.Scaleform.locale.MENU import MENU
+from gui.doc_loaders.hints_layout import getLayout
+from account_helpers.settings_core.settings_constants import TUTORIAL
 
-class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, GlobalListener, AppRef):
+class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(TechnicalMaintenance, self).__init__()
         self.__currentVehicleId = None
         self.__isConfirmDialogShown = False
@@ -44,7 +43,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
         self.destroy()
 
     def _populate(self):
-        super(View, self)._populate()
+        super(TechnicalMaintenance, self)._populate()
         g_itemsCache.onSyncCompleted += self._onShopResync
         self.addListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'stats.credits': self.onCreditsChange,
@@ -57,6 +56,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
             self.__currentVehicleId = g_currentVehicle.item.intCD
         self.populateTechnicalMaintenance(self._getHistoricalBattleData())
         self.populateTechnicalMaintenanceEquipmentDefaults()
+        self.setupContextHints(TUTORIAL.TECHNICAL_MAINTENANCE)
 
     def _dispose(self):
         g_itemsCache.onSyncCompleted -= self._onShopResync
@@ -64,7 +64,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.stopGlobalListening()
         self.removeListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
-        super(View, self)._dispose()
+        super(TechnicalMaintenance, self)._dispose()
 
     def onCreditsChange(self, value):
         value = g_itemsCache.items.stats.credits
@@ -75,6 +75,9 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
         self.as_setGoldS(value)
 
     def _onShopResync(self, reason, diff):
+        if not g_currentVehicle.isPresent():
+            self.destroy()
+            return
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC or self.__currentVehicleId in diff.get(GUI_ITEM_TYPE.VEHICLE, {}):
             self.populateTechnicalMaintenance(self._getHistoricalBattleData())
             self.populateTechnicalMaintenanceEquipment(**self.__layout)
@@ -132,7 +135,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
              'gunIntCD': vehicle.gun.intCD,
              'casseteFieldText': '' if casseteCount == 1 else casseteText,
              'shells': [],
-             'infoAfterShellBlock': self._getInfoTextAfterShellBlock()})
+             'infoAfterShellBlock': ''})
             shells = data['shells']
             for shell in vehicle.shells:
                 price = shell.altPrice
@@ -294,13 +297,6 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
 
     def onPreQueueFunctionalFinished(self):
         self.populateTechnicalMaintenance()
-
-    @classmethod
-    def _getInfoTextAfterShellBlock(cls):
-        if g_currentVehicle.item.isEvent and not g_currentVehicle.item.isAmmoFull:
-            return text_styles.alert(MENU.HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_AMMO_NOT_READY)
-        else:
-            return ''
 
     def _getHistoricalBattleData(self):
         historicalBattleData = None

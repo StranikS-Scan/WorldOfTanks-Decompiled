@@ -4,6 +4,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 class ListenersCollection(object):
 
     def __init__(self):
+        super(ListenersCollection, self).__init__()
         self._listeners = []
         self._clazz = None
         return

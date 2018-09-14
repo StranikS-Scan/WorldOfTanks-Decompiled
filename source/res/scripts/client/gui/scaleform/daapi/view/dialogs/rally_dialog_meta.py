@@ -11,7 +11,7 @@ from gui.Scaleform.framework.ScopeTemplates import VIEW_SCOPE, WINDOW_SCOPE, Sim
 _P_TYPE = PREBATTLE_TYPE
 _Q_TYPE = QUEUE_TYPE
 _C_TYPE = CTRL_ENTITY_TYPE
-_VIEW_SCOPES = {(_C_TYPE.PREBATTLE, _P_TYPE.SQUAD): SimpleScope(PREBATTLE_ALIASES.SQUAD_VIEW_PY, VIEW_SCOPE),
+_VIEW_SCOPES = {(_C_TYPE.UNIT, _P_TYPE.SQUAD): SimpleScope(PREBATTLE_ALIASES.SQUAD_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.PREBATTLE, _P_TYPE.COMPANY): SimpleScope(PREBATTLE_ALIASES.COMPANY_ROOM_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.UNIT, _P_TYPE.UNIT): SimpleScope(CYBER_SPORT_ALIASES.UNIT_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.UNIT, _P_TYPE.SORTIE): SimpleScope(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_VIEW_PY, VIEW_SCOPE),
@@ -92,7 +92,8 @@ _EXIT_TO_PREFIX = {FUNCTIONAL_EXIT.SWITCH: 'goToAnother',
  FUNCTIONAL_EXIT.SQUAD: 'goToSquad',
  FUNCTIONAL_EXIT.BATTLE_TUTORIAL: 'goToBattleTutorial',
  FUNCTIONAL_EXIT.INTRO_PREBATTLE: 'goToIntro',
- FUNCTIONAL_EXIT.INTRO_UNIT: 'goToIntro'}
+ FUNCTIONAL_EXIT.INTRO_UNIT: 'goToIntro',
+ FUNCTIONAL_EXIT.COMPANY_EXPIRED: 'companyTimeFinished'}
 _DEFAULT_PREFIX = 'leave'
 
 def _createLeaveRallyMeta(funcExit, ctrlType, entityType):
@@ -100,15 +101,18 @@ def _createLeaveRallyMeta(funcExit, ctrlType, entityType):
         prefix = _EXIT_TO_PREFIX[funcExit]
     else:
         prefix = _DEFAULT_PREFIX
+    if funcExit == FUNCTIONAL_EXIT.COMPANY_EXPIRED:
+        return RallyScopeInfoDialogMeta(ctrlType, entityType, prefix)
     return RallyScopeConfirmDialogMeta(ctrlType, entityType, prefix)
 
 
 def _createLeaveIntroMeta(funcExit, ctrlType, entityType):
     if funcExit == FUNCTIONAL_EXIT.SQUAD:
-        meta = RallyScopeConfirmDialogMeta(ctrlType, entityType, _EXIT_TO_PREFIX[funcExit])
+        return RallyScopeConfirmDialogMeta(ctrlType, entityType, _EXIT_TO_PREFIX[funcExit])
+    elif funcExit == FUNCTIONAL_EXIT.COMPANY_EXPIRED:
+        return RallyScopeInfoDialogMeta(ctrlType, entityType, _EXIT_TO_PREFIX[funcExit])
     else:
-        meta = None
-    return meta
+        return None
 
 
 def createPrbIntroLeaveMeta(funcExit, prbType):

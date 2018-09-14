@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleResultsMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class BattleResultsMeta(DAAPIModule):
+class BattleResultsMeta(AbstractWindowView):
 
     def saveSorting(self, iconType, sortDirection, bonusType):
         self._printOverrideError('saveSorting')

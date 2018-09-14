@@ -6,6 +6,7 @@ from helpers import i18n
 from gui.Scaleform.daapi.view.battle.messages.FadingMessages import FadingMessages
 from MemoryCriticalController import g_critMemHandler
 from debug_utils import LOG_DEBUG
+from items import vehicles
 
 class VehicleMessages(FadingMessages):
 
@@ -26,6 +27,7 @@ class VehicleMessages(FadingMessages):
         if ctrl:
             ctrl.onShowVehicleMessageByCode += self.__onShowVehicleMessageByCode
             ctrl.onShowVehicleMessageByKey += self.__onShowVehicleMessageByKey
+            ctrl.onUIPopulated()
 
     def _removeGameListeners(self):
         g_eventBus.removeListener(GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade)
@@ -44,8 +46,8 @@ class VehicleMessages(FadingMessages):
             return
         self.showMessage('SCREENSHOT_CREATED', {'path': i18n.encodeUtf8(event.ctx['path'])})
 
-    def __onShowVehicleMessageByCode(self, code, postfix, entityID, extra):
-        LOG_DEBUG('onShowVehicleMessage', code, postfix, entityID, extra)
+    def __onShowVehicleMessageByCode(self, code, postfix, entityID, extra, equipmentID):
+        LOG_DEBUG('onShowVehicleMessage', code, postfix, entityID, extra, equipmentID)
         names = {'device': '',
          'entity': '',
          'target': ''}
@@ -53,6 +55,10 @@ class VehicleMessages(FadingMessages):
             names['device'] = extra.deviceUserString
         if entityID:
             names['entity'] = g_sessionProvider.getCtx().getFullPlayerName(entityID)
+        if equipmentID:
+            equipment = vehicles.g_cache.equipments().get(equipmentID)
+            if equipment is not None:
+                postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
         self.showMessage(code, names, postfix=postfix)
         return
 

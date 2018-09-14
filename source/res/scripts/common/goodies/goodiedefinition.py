@@ -3,6 +3,10 @@ import time
 from Goodie import Goodie
 from goodie_constants import GOODIE_VARIETY, GOODIE_STATE
 
+class OverLimitException(Exception):
+    pass
+
+
 class GoodieDefinition(object):
     __slots__ = ['uid',
      'variety',
@@ -49,19 +53,28 @@ class GoodieDefinition(object):
         if not isinstance(resources, set):
             resources = {resources}
         for resource in resources:
+            if resource.value == 0:
+                continue
             if resource.__class__ == self.resource:
                 if self.variety == GOODIE_VARIETY.DISCOUNT:
-                    return resource.__class__(self.value.reduce(resource.value))
-                if self.variety == GOODIE_VARIETY.BOOSTER:
-                    return resource.__class__(self.value.increase(resource.value))
-                raise Exception, 'Programming error, Goodie is not a discount or booster' % self.variety
+                    result = self.value.reduce(resource.value)
+                    if self.target.limit is not None and resource.value - result > self.target.limit:
+                        raise OverLimitException, 'Discount is over the limit' % self.target.limit
+                    else:
+                        return resource.__class__(result)
+                else:
+                    if self.variety == GOODIE_VARIETY.BOOSTER:
+                        return resource.__class__(self.value.increase(resource.value))
+                    raise Exception, 'Programming error, Goodie is not a discount or booster' % self.variety
 
-        return None
+        return
 
     def apply_delta(self, resources):
         if not isinstance(resources, set):
             resources = {resources}
         for resource in resources:
+            if resource.value == 0:
+                continue
             if resource.__class__ == self.resource:
                 return resource.__class__(self.value.delta(resource.value))
 

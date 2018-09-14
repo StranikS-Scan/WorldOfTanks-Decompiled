@@ -28,3 +28,9 @@ BTMS_COMMANDS = enumerations.Enumeration('Battle messenger commands', [('Channel
  ('ShowHistoryMessages', lambda : 'Messenger.Battle.ShowHistoryMessages'),
  ('GetLastMessages', lambda : 'Messenger.Battle.GetLastMessages'),
  ('ShowLatestMessages', lambda : 'Messenger.Battle.ShowLatestMessages')], instance=enumerations.CallabbleEnumItem)
+
+class FILL_COLORS(object):
+    BLACK = 'black'
+    BROWN = 'brown'
+    GREEN = 'green'
+    RED = 'red'

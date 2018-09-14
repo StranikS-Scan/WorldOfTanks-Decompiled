@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SettingsWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class SettingsWindowMeta(DAAPIModule):
+class SettingsWindowMeta(AbstractWindowView):
 
     def applySettings(self, settings, isCloseWnd):
         self._printOverrideError('applySettings')

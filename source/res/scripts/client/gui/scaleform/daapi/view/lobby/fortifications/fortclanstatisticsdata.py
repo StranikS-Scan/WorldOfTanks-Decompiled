@@ -2,12 +2,10 @@
 from Event import Event
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextIcons
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
+from gui.shared.formatters import icons, text_styles
 from gui.shared.fortifications.fort_helpers import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import i18n
@@ -18,7 +16,7 @@ def getDataObject(callback):
     _FortClanStatisticsData(callback)
 
 
-class _FortClanStatisticsData(FortListener, AppRef):
+class _FortClanStatisticsData(FortListener):
 
     def __init__(self, initSuccessCallback):
         self.__data = {}
@@ -42,17 +40,14 @@ class _FortClanStatisticsData(FortListener, AppRef):
             self.onDataChanged()
         return
 
-    def onDossierChanged(self):
+    def onDossierChanged(self, _):
         self.onDataChanged()
 
     def getData(self):
-        self.__refreshData()
-        return self.__data
-
-    def __refreshData(self):
         self.__data.clear()
         self.__updateSortieData()
         self.__updateDefenceData()
+        return self.__data
 
     def __updateSortieData(self):
         ms = i18n.makeString
@@ -60,7 +55,7 @@ class _FortClanStatisticsData(FortListener, AppRef):
         sortiesStats = dossier.getSortiesStats()
         totalRes = sortiesStats.getLoot()
         defresValueStr = str(BigWorld.wg_getIntegralFormat(totalRes)) + ' '
-        formattedDefresValue = self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.DEFRES_TEXT, defresValueStr), (TextIcons.NUT_ICON,)))
+        formattedDefresValue = ''.join((text_styles.defRes(defresValueStr), icons.nut()))
         middleBattlesCount = BigWorld.wg_getIntegralFormat(sortiesStats.getMiddleBattlesCount())
         championshipBattlesCount = BigWorld.wg_getIntegralFormat(sortiesStats.getChampionBattlesCount())
         absoluteBattlesCount = BigWorld.wg_getIntegralFormat(sortiesStats.getAbsoluteBattlesCount())
@@ -76,7 +71,7 @@ class _FortClanStatisticsData(FortListener, AppRef):
                                 'label': ms(FORTIFICATIONS.CLANSTATS_PARAMS_SORTIE_DEFRES_LOOTINSORTIES_LABEL)}]})
 
     def __getMiddleTitleText(self, msg):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, msg)
+        return text_styles.middleTitle(msg)
 
     def __updateDefenceData(self):
         dossier = self.fortCtrl.getFort().getFortDossier()
@@ -121,7 +116,4 @@ class _FortClanStatisticsData(FortListener, AppRef):
                                 'label': ms(FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_BATTLES_PROFIT_LABEL)}]})
 
     def __getFormattedDefresValue(self, value):
-        return self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.DEFRES_TEXT, ProfileUtils.getAvailableValueStr(value) + ' '), (TextIcons.NUT_ICON,)))
-
-    def onWindowClose(self):
-        self.destroy()
+        return ''.join((text_styles.defRes(ProfileUtils.getAvailableValueStr(value) + ' '), icons.nut()))

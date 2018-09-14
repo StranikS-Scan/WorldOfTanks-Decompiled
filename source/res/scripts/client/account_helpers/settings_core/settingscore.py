@@ -14,6 +14,7 @@ class _SettingsCore(object):
         from account_helpers.settings_core import options, settings_storages, settings_constants
         from gui.shared.utils import graphics
         GAME = settings_constants.GAME
+        TUTORIAL = settings_constants.TUTORIAL
         GRAPHICS = settings_constants.GRAPHICS
         SOUND = settings_constants.SOUND
         CONTROLS = settings_constants.CONTROLS
@@ -25,6 +26,7 @@ class _SettingsCore(object):
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
         GAME_SETTINGS_STORAGE = settings_storages.GameSettingsStorage(self.serverSettings, self)
         EXTENDED_GAME_SETTINGS_STORAGE = settings_storages.ExtendedGameSettingsStorage(self.serverSettings, self)
+        TUTORIAL_SETTINGS_STORAGE = settings_storages.TutorialStorage(self.serverSettings, self)
         GAMEPLAY_SETTINGS_STORAGE = settings_storages.GameplaySettingsStorage(self.serverSettings, self)
         GRAPHICS_SETTINGS_STORAGE = settings_storages.GraphicsSettingsStorage(self.serverSettings, self)
         SOUND_SETTINGS_STORAGE = settings_storages.SoundSettingsStorage(self.serverSettings, self)
@@ -49,7 +51,8 @@ class _SettingsCore(object):
          'messenger': MESSENGER_SETTINGS_STORAGE,
          'extendedMessenger': EXTENDED_MESSENGER_SETTINGS_STORAGE,
          'marksOnGun': MARK_ON_GUN_SETTINGS_STORAGE,
-         'FOV': FOV_SETTINGS_STORAGE}
+         'FOV': FOV_SETTINGS_STORAGE,
+         'tutorial': TUTORIAL_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
         self.__options = options.SettingsContainer(((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
@@ -162,7 +165,19 @@ class _SettingsCore(object):
          (OTHER.VIBRO_HITS, options.VibroSetting('hits')),
          (OTHER.VIBRO_COLLISIONS, options.VibroSetting('collisions')),
          (OTHER.VIBRO_DAMAGE, options.VibroSetting('damage')),
-         (OTHER.VIBRO_GUI, options.VibroSetting('gui'))))
+         (OTHER.VIBRO_GUI, options.VibroSetting('gui')),
+         (TUTORIAL.CUSTOMIZATION, options.TutorialSetting(TUTORIAL.CUSTOMIZATION, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.TECHNICAL_MAINTENANCE, options.TutorialSetting(TUTORIAL.TECHNICAL_MAINTENANCE, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.PERSONAL_CASE, options.TutorialSetting(TUTORIAL.PERSONAL_CASE, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.RESEARCH, options.TutorialSetting(TUTORIAL.RESEARCH, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.RESEARCH_TREE, options.TutorialSetting(TUTORIAL.RESEARCH_TREE, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.MEDKIT_INSTALLED, options.TutorialSetting(TUTORIAL.MEDKIT_INSTALLED, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.MEDKIT_USED, options.TutorialSetting(TUTORIAL.MEDKIT_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.REPAIRKIT_INSTALLED, options.TutorialSetting(TUTORIAL.REPAIRKIT_INSTALLED, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.REPAIRKIT_USED, options.TutorialSetting(TUTORIAL.REPAIRKIT_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.FIRE_EXTINGUISHER_INSTALLED, options.TutorialSetting(TUTORIAL.FIRE_EXTINGUISHER_INSTALLED, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.FIRE_EXTINGUISHER_USED, options.TutorialSetting(TUTORIAL.FIRE_EXTINGUISHER_USED, storage=TUTORIAL_SETTINGS_STORAGE)),
+         (TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, options.TutorialSetting(TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED, storage=TUTORIAL_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()

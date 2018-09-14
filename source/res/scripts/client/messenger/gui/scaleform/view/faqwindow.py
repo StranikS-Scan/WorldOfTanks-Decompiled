@@ -1,13 +1,11 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/FAQWindow.py
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.shared.events import OpenLinkEvent
 from messenger.gui.Scaleform.data.faq_data import FAQList
 from messenger.gui.Scaleform.meta.FAQWindowMeta import FAQWindowMeta
 from messenger import g_settings
 FAQ_BATCH_SIZE = 5
 
-class FAQWindow(View, AbstractWindowView, FAQWindowMeta):
+class FAQWindow(FAQWindowMeta):
 
     def __init__(self, ctx = None):
         super(FAQWindow, self).__init__()

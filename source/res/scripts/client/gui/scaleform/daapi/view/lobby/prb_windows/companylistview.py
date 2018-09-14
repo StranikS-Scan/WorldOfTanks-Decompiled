@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.meta.CompanyListMeta import CompanyListMeta
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.settings import REQUEST_TYPE
 from messenger.ext import channel_num_gen
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import LAZY_CHANNEL
 __author__ = 'a_ushyutsau'
 

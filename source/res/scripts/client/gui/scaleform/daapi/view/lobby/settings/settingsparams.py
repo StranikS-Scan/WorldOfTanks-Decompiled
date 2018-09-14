@@ -4,10 +4,9 @@ from account_helpers.settings_core import settings_constants, options
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.shared.utils import graphics
 from gui.shared.utils.graphics import g_monitorSettings
-from gui.Scaleform.daapi import AppRef
 _DEFERRED_RENDER_IDX = 0
 
-class SettingsParams(AppRef):
+class SettingsParams(object):
 
     def __settingsDiffPreprocessing(self, diff):
         smoothing = diff.pop('smoothing', None)

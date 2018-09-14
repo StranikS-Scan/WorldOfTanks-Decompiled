@@ -29,7 +29,7 @@ class SimpleContactsCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def removeGroup(self):
         self.fireEvent(events.ContactsEvent(events.ContactsEvent.REMOVE_GROUP, ctx={'targetGroupName': self.targetGroupName}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         return [self._makeItem(CONTACTS_ACTION_ID.EDIT_GROUP, MESSENGER.MESSENGER_CONTACTS_CONTEXTMENU_EDITGROUP), self._makeItem(CONTACTS_ACTION_ID.REMOVE_GROUP, MESSENGER.MESSENGER_CONTACTS_CONTEXTMENU_REMOVEGROUP)]
 
     def _initFlashValues(self, ctx):

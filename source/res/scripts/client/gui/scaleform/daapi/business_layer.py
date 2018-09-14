@@ -1,13 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/business_layer.py
-import BigWorld
 from debug_utils import *
-from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
-from gui.Scaleform.daapi.settings.config import VIEWS_SETTINGS, VIEWS_PACKAGES
+from gui.Scaleform.daapi.settings.config import VIEWS_SETTINGS
 from gui.Scaleform.framework import ViewTypes, g_entitiesFactories
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.managers.loaders import SequenceIDLoader, PackageBusinessHandler
+from gui.Scaleform.framework.managers.loaders import SequenceIDLoader
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.genConsts.FALLOUT_ALIASES import FALLOUT_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowDialogEvent, LoginEventEx, LoginCreateEvent
@@ -17,16 +16,14 @@ class BusinessHandler(SequenceIDLoader):
     def __init__(self):
         super(BusinessHandler, self).__init__()
         g_entitiesFactories.initSettings(VIEWS_SETTINGS)
-        self.__packagesHandlers = []
-        self.__initPackages(VIEWS_PACKAGES)
         self.__lobbyHdlr = BusinessLobbyHandler()
         self.__dlgsHdlr = BusinessDlgsHandler()
         self._LISTENERS = {LoginEventEx.SET_LOGIN_QUEUE: (self.__showLoginQueue, EVENT_BUS_SCOPE.LOBBY),
          LoginEventEx.SET_AUTO_LOGIN: (self.__showLoginQueue, EVENT_BUS_SCOPE.LOBBY),
          LoginCreateEvent.CREATE_ACC: (self.__createAcc, EVENT_BUS_SCOPE.LOBBY),
-         VIEW_ALIAS.LOGIN: (self.__showViewSimple,),
-         VIEW_ALIAS.INTRO_VIDEO: (self.__showViewSimple,),
-         VIEW_ALIAS.LOBBY: (self.__showViewSimple,),
+         VIEW_ALIAS.LOGIN: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.INTRO_VIDEO: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.LOBBY: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.LOBBY_MENU: (self.__lobbyHdlr.showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.LOBBY_HANGAR: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.LOBBY_SHOP: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
@@ -48,28 +45,23 @@ class BusinessHandler(SequenceIDLoader):
          VIEW_ALIAS.ELITE_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.RECRUIT_WINDOW: (self.__showRecruitWindow,),
          VIEW_ALIAS.QUESTS_RECRUIT_WINDOW: (self.__showViewSimple,),
-         VIEW_ALIAS.EXCHANGE_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.PROFILE_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
-         VIEW_ALIAS.EXCHANGE_VCOIN_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
-         VIEW_ALIAS.EXCHANGE_XP_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
-         VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.VEHICLE_BUY_WINDOW: (self.__showViewSimple,),
-         VIEW_ALIAS.NOTIFICATIONS_LIST: (self.__showViewSimple,),
-         VIEW_ALIAS.CREW_OPERATIONS_POPOVER: (self.__showViewSimple,),
+         VIEW_ALIAS.NOTIFICATIONS_LIST: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.CREW_OPERATIONS_POPOVER: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
-         FORTIFICATION_ALIASES.FORT_BUILDING_CARD_POPOVER_ALIAS: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_ORDER_POPOVER_ALIAS: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS: (self.__showViewSimple,),
-         VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER: (self.__showViewSimple,),
-         CONTACTS_ALIASES.CONTACTS_POPOVER: (self.__showViewSimple,),
-         VIEW_ALIAS.ACCOUNT_POPOVER: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS: (self.__showViewSimple,),
-         FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_BUILDING_CARD_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_ORDER_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.ACCOUNT_POPOVER: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_ALIAS: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.AWARD_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.BOOSTERS_WINDOW: (self.__showViewSimple,),
@@ -92,7 +84,9 @@ class BusinessHandler(SequenceIDLoader):
          VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.SQUAD_PROMO_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW: (self.__showViewSimple,),
+         FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.BROWSER_WINDOW: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
+         VIEW_ALIAS.GET_PREMIUM_POPOVER: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          ShowDialogEvent.SHOW_SIMPLE_DLG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_ICON_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_ICON_PRICE_DIALOG: (self.__dlgsHdlr,),
@@ -110,9 +104,6 @@ class BusinessHandler(SequenceIDLoader):
         for event, argValues in self._LISTENERS.iteritems():
             self.addListener(event, *argValues)
 
-        for handler in self.__packagesHandlers:
-            handler.init()
-
     def _dispose(self):
         for event, argValues in self._LISTENERS.iteritems():
             self.removeListener(event, *argValues)
@@ -123,32 +114,7 @@ class BusinessHandler(SequenceIDLoader):
         self.__dlgsHdlr = None
         self._LISTENERS.clear()
         self._LISTENERS = None
-        while len(self.__packagesHandlers):
-            self.__packagesHandlers.pop().fini()
-
         EventSystemEntity._dispose(self)
-        return
-
-    def __initPackages(self, packages):
-        for package in packages:
-            name = '{0:>s}.sf_settings'.format(package)
-            imported = __import__(name, fromlist=['sf_settings'])
-            getter = getattr(imported, 'getViewSettings', None)
-            if getter is None or not callable(getter):
-                raise Exception, 'Package {0} does not have method getViewSettings'.format(name)
-            g_entitiesFactories.initSettings(getter())
-            getter = getattr(imported, 'getBusinessHandlers', None)
-            if getter is not None:
-                if callable(getter):
-                    handlers = getter()
-                    for handler in handlers:
-                        if not isinstance(handler, PackageBusinessHandler):
-                            raise Exception, 'Package {0} returned invalid business handler'.format(name)
-                        self.__packagesHandlers.append(handler)
-
-                else:
-                    raise Exception, 'Package {0} does not have method getBusinessHandler'.format(name)
-
         return
 
     def __showFreeXPInfoWindow(self, event):
@@ -197,10 +163,6 @@ class BusinessLobbyHandler(SequenceIDLoader):
         else:
             LOG_ERROR("Passes event '{0}' is not listed in event to alias dict".format(event))
         return
-
-
-class StatsStorageHandler(EventSystemEntity):
-    pass
 
 
 class BusinessDlgsHandler(SequenceIDLoader):

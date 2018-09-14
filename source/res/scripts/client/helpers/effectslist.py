@@ -101,6 +101,7 @@ class EffectsList(object):
 
 class EffectsListPlayer:
     effectsList = property(lambda self: self.__effectsList)
+    isPlaying = property(lambda self: self.__isStarted)
     activeEffects = []
 
     @staticmethod
@@ -554,9 +555,7 @@ class _SoundEffectDesc(_EffectDesc):
         if sound is not None:
             startParams = args.get('soundParams', ())
             for soundStartParam in startParams:
-                param = sound.param(soundStartParam.name)
-                if param is not None:
-                    param.value = soundStartParam.value
+                sound.setParameterByName(soundStartParam.name, soundStartParam.value)
 
             sound.play()
             list.append({'typeDesc': self,
@@ -874,27 +873,29 @@ def _createEffectDesc(type, dataSection):
         return _PixieEffectDesc(dataSection)
     elif type == 'animation':
         return _AnimationEffectDesc(dataSection)
-    elif type == 'sound':
-        return _SoundEffectDesc(dataSection)
-    elif type == 'soundParam':
-        return _SoundParameterEffectDesc(dataSection)
-    elif type == 'visibility':
-        return _VisibilityEffectDesc(dataSection)
-    elif type == 'model':
-        return _ModelEffectDesc(dataSection)
-    elif type == 'decal':
-        return _DecalEffectDesc(dataSection)
-    elif type == 'shockWave':
-        return _ShockWaveEffectDesc(dataSection)
-    elif type == 'flashBang':
-        return _FlashBangEffectDesc(dataSection)
-    elif type == 'stopEmission':
-        return _StopEmissionEffectDesc(dataSection)
-    elif type == 'posteffect':
-        return _PostProcessEffectDesc(dataSection)
-    elif type == 'light':
-        return _LightEffectDesc(dataSection)
     else:
+        if type == 'sound':
+            if FMOD.enabled:
+                return _SoundEffectDesc(dataSection)
+        else:
+            if type == 'soundParam':
+                return _SoundParameterEffectDesc(dataSection)
+            if type == 'visibility':
+                return _VisibilityEffectDesc(dataSection)
+            if type == 'model':
+                return _ModelEffectDesc(dataSection)
+            if type == 'decal':
+                return _DecalEffectDesc(dataSection)
+            if type == 'shockWave':
+                return _ShockWaveEffectDesc(dataSection)
+            if type == 'flashBang':
+                return _FlashBangEffectDesc(dataSection)
+            if type == 'stopEmission':
+                return _StopEmissionEffectDesc(dataSection)
+            if type == 'posteffect':
+                return _PostProcessEffectDesc(dataSection)
+            if type == 'light':
+                return _LightEffectDesc(dataSection)
         raise Exception, 'EffectsList factory has no class associated with type %s.' % type
         return None
 
@@ -962,7 +963,12 @@ def _findTargetNode(model, nodes, localTransform = None, orientByClosestSurfaceN
 
     if orientByClosestSurfaceNormal:
         localTransform = _getSurfaceAlignedTransform(targetNode, nodes[length - 1], localTransform, precalculatedNormal)
-    return targetNode.node(nodes[length - 1], localTransform)
+    try:
+        node = targetNode.node(nodes[length - 1], localTransform)
+    except:
+        node = targetNode.node('', localTransform)
+
+    return node
 
 
 def _findTargetModel(model, nodes):
@@ -1050,17 +1056,10 @@ class FalloutDestroyEffect:
             effects = vehicle.typeDescriptor.type.effects['fullDestruction']
             if not effects:
                 return
-            drawFlags = BigWorld.ShadowPassBit
-            if vehicle is not None and vehicle.isStarted:
-                va = vehicle.appearance
-                va.changeDrawPassVisibility('chassis', drawFlags, False, False)
-                va.changeDrawPassVisibility('hull', drawFlags, False, True)
-                va.changeDrawPassVisibility('turret', drawFlags, False, True)
-                va.changeDrawPassVisibility('gun', drawFlags, False, True)
-                va.showStickers(False)
-                fakeModel = helpers.newFakeModel()
-                BigWorld.addModel(fakeModel)
-                fakeModel.position = vehicle.model.position
-                effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
-                effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.delModel, fakeModel))
+            vehicle.show(False)
+            fakeModel = helpers.newFakeModel()
+            BigWorld.addModel(fakeModel)
+            fakeModel.position = vehicle.model.position
+            effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
+            effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.delModel, fakeModel))
             return

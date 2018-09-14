@@ -2,17 +2,17 @@
 import BigWorld
 import constants
 from constants import PREBATTLE_TYPE
+from debug_utils import LOG_DEBUG
 from helpers import i18n
 from adisp import process
-from gui import game_control
 from gui import SystemMessages
+from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.context import unit_ctx, SendInvitesCtx
 from gui.prb_control.prb_helpers import prbDispatcherProperty, prbFunctionalProperty
 from gui.shared import g_itemsCache, event_dispatcher as shared_events, utils
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
 from messenger import g_settings
@@ -22,6 +22,7 @@ from messenger.storage import storage_getter
 
 class USER(object):
     INFO = 'userInfo'
+    CLAN_INFO = 'clanInfo'
     CREATE_PRIVATE_CHANNEL = 'createPrivateChannel'
     ADD_TO_FRIENDS = 'addToFriends'
     ADD_TO_FRIENDS_AGAIN = 'addToFriendsAgain'
@@ -47,7 +48,7 @@ class DENUICATIONS(object):
     BOT = 'bot'
 
 
-class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
+class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
     def __init__(self, cmProxy, ctx = None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -74,8 +75,15 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
     def isSquadCreator(self):
         return self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.isCreator()
 
-    @process
     def showUserInfo(self):
+
+        def onDossierReceived(databaseID, userName):
+            shared_events.showProfileWindow(databaseID, userName)
+
+        self.__receiveProfile(successCallback=onDossierReceived)
+
+    @process
+    def __receiveProfile(self, successCallback):
         databaseID = self.databaseID
         userName = self.userName
         userDossier, _, isHidden = yield g_itemsCache.items.requestUserDossier(databaseID)
@@ -87,7 +95,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
             from gui import DialogsInterface
             DialogsInterface.showI18nInfoDialog(key, lambda result: None, I18nInfoDialogMeta(key, messageCtx={'userName': userName}))
         else:
-            shared_events.showProfileWindow(databaseID, userName)
+            successCallback(databaseID, userName)
         return
 
     def createPrivateChannel(self):
@@ -160,15 +168,14 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
     def _getUseCmInfo(self):
         return UserContextMenuInfo(self.databaseID, self.userName)
 
-    def getOptions(self):
+    def getOptions(self, ctx = None):
         if not self._getUseCmInfo().isCurrentPlayer:
-            return self._generateOptions()
+            return self._generateOptions(ctx)
         else:
             return None
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         userCMInfo = self._getUseCmInfo()
-        ignoring = USER.REMOVE_FROM_IGNORED if userCMInfo.isIgnored else USER.ADD_TO_IGNORED
         options = [self._makeItem(USER.INFO, MENU.contextmenu(USER.INFO))]
         options = self._addFriendshipInfo(options, userCMInfo)
         options = self._addChannelInfo(options, userCMInfo)
@@ -339,16 +346,15 @@ class UserContextMenuInfo(object):
 
     @property
     def isSameRealm(self):
-        roamingCtrl = game_control.g_instance.roaming
-        return roamingCtrl.isSameRealm(self.databaseID)
+        return g_lobbyContext.getServerSettings().roaming.isSameRealm(self.databaseID)
 
     @property
     def canCreateChannel(self):
-        roamingCtrl = game_control.g_instance.roaming
+        roaming = g_lobbyContext.getServerSettings().roaming
         if g_settings.server.XMPP.isEnabled():
-            canCreate = roamingCtrl.isSameRealm(self.databaseID)
+            canCreate = roaming.isSameRealm(self.databaseID)
         else:
-            canCreate = not roamingCtrl.isInRoaming() and not roamingCtrl.isPlayerInRoaming(self.databaseID) and self.isOnline
+            canCreate = not roaming.isInRoaming() and not roaming.isPlayerInRoaming(self.databaseID) and self.isOnline
         return canCreate
 
     def getTags(self):

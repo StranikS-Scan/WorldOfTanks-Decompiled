@@ -7,7 +7,7 @@ from debug_utils import LOG_DEBUG
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BaseRallyRoomViewMeta import BaseRallyRoomViewMeta
-from gui.Scaleform.framework import ViewTypes, AppRef
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -17,14 +17,14 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT, REQUEST_
 from gui.shared import events
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.proto.events import g_messengerEvents
 from helpers import i18n
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
-from gui.shared.formatters import text_styles
 
-class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
+class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
 
     def __init__(self):
         super(BaseRallyRoomView, self).__init__()
@@ -116,7 +116,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         self._setActionButtonState()
 
     def onUnitPlayerVehDictChanged(self, pInfo):
-        if pInfo.isCurrentPlayer() or self.unitFunctional.isCreator():
+        if pInfo.isCurrentPlayer():
             self._updateRallyData()
             self._setActionButtonState()
 

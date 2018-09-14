@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortOrderInfoWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortOrderInfoWindowMeta(DAAPIModule):
+class FortOrderInfoWindowMeta(AbstractWindowView):
 
     def as_setWindowDataS(self, data):
         if self._isDAAPIInited():

@@ -1,31 +1,36 @@
 # Embedded file name: scripts/client/tutorial/control/__init__.py
 from abc import ABCMeta, abstractmethod
+import BigWorld
 from helpers.aop import Weaver
 from tutorial.logger import LOG_ERROR
-from tutorial.data.chapter import EFFECT_TYPE_NAMES
+from tutorial.data.effects import EFFECT_TYPE_NAMES
 
 class TutorialProxyHolder(object):
     _tutorial = None
 
     @property
     def _gui(self):
-        return self._tutorial._gui
+        return self._tutorial.getGUIProxy()
 
     @property
     def _data(self):
-        return self._tutorial._data
+        return self._tutorial.getChapterData()
 
     @property
     def _cache(self):
-        return self._tutorial._cache
+        return self._tutorial.getCache()
 
     @property
     def _bonuses(self):
-        return self._tutorial._bonuses
+        return self._tutorial.getBonuses()
 
     @property
     def _sound(self):
-        return self._tutorial._sound
+        return self._tutorial.getSoundPlayer()
+
+    @property
+    def _descriptor(self):
+        return self._tutorial.getDescriptor()
 
 
 def setTutorialProxy(tutorial):
@@ -91,6 +96,15 @@ class ControlsFactory:
 
     def createFuncEffects(self, effects):
         return filter(lambda item: item is not None, map(self.createFuncEffect, effects))
+
+
+def getServerSettings():
+    try:
+        serverSettings = BigWorld.player().serverSettings
+    except AttributeError:
+        serverSettings = {}
+
+    return serverSettings
 
 
 g_tutorialWeaver = Weaver()

@@ -4,21 +4,18 @@ from adisp import async
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from debug_utils import LOG_ERROR
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.shared.formatters import text_styles
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from gui.shared.utils.functions import getViewName
 from helpers import i18n, strcmp
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from items import tankmen
 from gui import TANKMEN_ROLES_ORDER_DICT, SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
 from gui.shared.events import LoadViewEvent
 from gui.shared.utils import decorators, isVehicleObserver, roundByModulo
@@ -28,8 +25,9 @@ from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.serializers import packTankman, packVehicle
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport
 from gui.shared import EVENT_BUS_SCOPE, events, g_itemsCache, REQ_CRITERIA
+from account_helpers.settings_core.settings_constants import TUTORIAL
 
-class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, AppRef):
+class PersonalCase(PersonalCaseMeta, GlobalListener):
 
     def __init__(self, ctx = None):
         super(PersonalCase, self).__init__()
@@ -185,6 +183,7 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
         g_clientUpdateManager.addCallbacks({'': self.onClientChanged})
         g_itemsCache.onSyncCompleted += self._refreshData
         self.startGlobalListening()
+        self.setupContextHints(TUTORIAL.PERSONAL_CASE)
 
     def _dispose(self):
         self.stopGlobalListening()
@@ -219,14 +218,13 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
         self.as_setSkillsDataS(data)
 
 
-class PersonalCaseDataProvider(AppRef):
+class PersonalCaseDataProvider(object):
 
     def __init__(self, tmanInvID):
         """
         @param tmanInvID: tankman inventory id
         """
         self.tmanInvID = tmanInvID
-        self.__textMgr = self.app.utilsManager.textManager
 
     @async
     def getCommonData(self, callback):
@@ -292,8 +290,7 @@ class PersonalCaseDataProvider(AppRef):
             return
 
     def __makeStandardText(self, locale):
-        text = i18n.makeString(locale)
-        return self.__textMgr.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, text)
+        return text_styles.standard(i18n.makeString(locale))
 
     @async
     def getRetrainingData(self, callback):

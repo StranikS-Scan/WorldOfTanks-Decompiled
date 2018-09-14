@@ -4,8 +4,8 @@ import sys
 from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.app_loader.decorators import sf_lobby
 from gui.shared import g_itemsCache
 from gui.shared.formatters import icons
 from helpers.i18n import makeString
@@ -32,6 +32,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     PRIVATE_QUESTS = 'privateQuests'
     CONTACT = 'contact'
     QUESTS = 'quests'
+    HANGAR_TUTORIAL = 'hangarTutorial'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -50,6 +51,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     SETTINGS = 'settings'
     CUSTOMIZATION = 'customization'
     CONTACT = 'contact'
+    HANGAR_TUTORIAL = 'hangarTutorial'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):
@@ -66,11 +68,15 @@ class ACTION_TOOLTIPS_STATE(CONST_CONTAINER):
     PENALTY = 'penalty'
 
 
-class ToolTipBaseData(AppRef):
+class ToolTipBaseData(object):
 
     def __init__(self, context, toolTipType):
         self._context = context
         self._toolTipType = toolTipType
+
+    @sf_lobby
+    def app(self):
+        return None
 
     @property
     def context(self):
@@ -225,7 +231,6 @@ def getUnlockPrice(compactDescr, parentCD = None):
         return (isAvailable, unlockPrice, min(need, needWithFreeXP))
 
     if item_type_id == vehicles._VEHICLE:
-        g_techTreeDP.load()
         isAvailable, props = g_techTreeDP.isNext2Unlock(compactDescr, unlocks, xpVehs, freeXP)
         if parentCD is not None:
             return getUnlockProps(isAvailable, parentCD)

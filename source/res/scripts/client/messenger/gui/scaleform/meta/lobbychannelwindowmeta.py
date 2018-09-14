@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/LobbyChannelWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from messenger.gui.Scaleform.view.SimpleChannelWindow import SimpleChannelWindow
 
-class LobbyChannelWindowMeta(DAAPIModule):
+class LobbyChannelWindowMeta(SimpleChannelWindow):
 
     def as_getMembersDPS(self):
         if self._isDAAPIInited():

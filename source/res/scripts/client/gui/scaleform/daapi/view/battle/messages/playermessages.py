@@ -39,11 +39,16 @@ class PlayerMessages(FadingMessages):
             arena.onCombatEquipmentUsed -= self.__onCombatEquipmentUsed
         super(PlayerMessages, self)._removeGameListeners()
 
-    def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID):
-        LOG_DEBUG('onShowPlayerMessage', code, postfix, targetID, attackerID)
+    def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID):
+        LOG_DEBUG('onShowPlayerMessage', code, postfix, targetID, attackerID, equipmentID)
         getFullName = g_sessionProvider.getCtx().getFullPlayerName
+        if equipmentID:
+            equipment = vehicles.g_cache.equipments().get(equipmentID)
+            if equipment is not None:
+                postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
         self.showMessage(code, {'target': getFullName(targetID, showClan=False),
          'attacker': getFullName(attackerID, showClan=False)}, extra=(('target', targetID), ('attacker', attackerID)), postfix=postfix)
+        return
 
     def __onShowPlayerMessageByKey(self, key, args = None, extra = None):
         self.showMessage(key, args, extra)
@@ -53,9 +58,12 @@ class PlayerMessages(FadingMessages):
             postfix = item.getDescriptor().name.split('_')[0].upper()
             self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
 
-    def __onCombatEquipmentUsed(self, eqID):
-        equipment = vehicles.g_cache.equipments().get(eqID)
-        if equipment is not None:
-            postfix = equipment.name.split('_')[0].upper()
-            self.showMessage('COMBAT_EQUIPMENT_USED', {}, postfix=postfix)
+    def __onCombatEquipmentUsed(self, shooterID, eqID):
+        battleCxt = g_sessionProvider.getCtx()
+        if not battleCxt.isCurrentPlayer(shooterID):
+            equipment = vehicles.g_cache.equipments().get(eqID)
+            getFullName = battleCxt.getFullPlayerName
+            if equipment is not None:
+                postfix = equipment.name.split('_')[0].upper()
+                self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=postfix)
         return

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleSellDialogMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class VehicleSellDialogMeta(DAAPIModule):
+class VehicleSellDialogMeta(AbstractWindowView):
 
     def getDialogSettings(self):
         self._printOverrideError('getDialogSettings')

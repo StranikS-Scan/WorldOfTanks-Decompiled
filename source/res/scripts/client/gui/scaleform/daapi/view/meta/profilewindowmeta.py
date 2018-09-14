@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ProfileWindowMeta(DAAPIModule):
+class ProfileWindowMeta(AbstractWindowView):
 
     def userAddFriend(self):
         self._printOverrideError('userAddFriend')

@@ -1,10 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from debug_utils import LOG_ERROR
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.clubs.club_helpers import ClubListener
+from gui.shared.formatters import text_styles
 from helpers import i18n
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
 from gui.shared.fortifications import isFortificationEnabled
-from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
@@ -27,7 +28,7 @@ def _parseProviderType(value):
     return value.split('/')
 
 
-class ProfileStatistics(ProfileSection, ProfileStatisticsMeta, ClubListener):
+class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
 
     def __init__(self, *args):
         try:
@@ -36,9 +37,7 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta, ClubListener):
             LOG_ERROR('There is error while parsing profile stats page arguments', args)
             self.__ctx = {}
 
-        ProfileSection.__init__(self, *args)
-        ProfileStatisticsMeta.__init__(self)
-        ClubListener.__init__(self)
+        super(ProfileStatistics, self).__init__(*args)
 
     def _populate(self):
         super(ProfileStatistics, self)._populate()
@@ -71,7 +70,8 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta, ClubListener):
 
         self.as_setInitDataS({'dropDownProvider': dropDownProvider,
          'seasonItems': seasonItems,
-         'seasonIndex': seasonIndex})
+         'seasonIndex': seasonIndex,
+         'seasonEnabled': len(seasonItems) > 1})
         return
 
     def _sendAccountData(self, targetData, accountDossier):
@@ -81,6 +81,7 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta, ClubListener):
                 self._setInitData(self._battlesType, accountDossier)
                 self._battlesType = PROFILE_DROPDOWN_KEYS.STATICTEAM
                 vo['headerText'] = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_STATICTEAM)
+                vo['dropdownSeasonLabel'] = text_styles.main(CYBERSPORT.STATICFORMATIONSTATSVIEW_SEASONFILTER)
                 vo['showSeasonDropdown'] = True
             else:
                 vo['showSeasonDropdown'] = False

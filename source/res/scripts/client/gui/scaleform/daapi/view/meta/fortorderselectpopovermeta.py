@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortOrderSelectPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class FortOrderSelectPopoverMeta(DAAPIModule):
+class FortOrderSelectPopoverMeta(SmartPopOverView):
 
     def addOrder(self, orderID):
         self._printOverrideError('addOrder')

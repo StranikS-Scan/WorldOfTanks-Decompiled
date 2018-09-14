@@ -7,9 +7,8 @@ import time
 import Event
 from abc import abstractmethod, ABCMeta
 from debug_utils import LOG_WARNING, LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.customization.CustomizationHelper import getInventoryItemsFor
 from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -25,7 +24,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui import g_tankActiveCamouflage
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 
-class BaseCustomizationDataProvider(DAAPIModule):
+class BaseCustomizationDataProvider(BaseDAAPIModule):
 
     def __init__(self, nationID):
         super(BaseCustomizationDataProvider, self).__init__()

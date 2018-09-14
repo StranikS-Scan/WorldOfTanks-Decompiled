@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ApplicationMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class ApplicationMeta(DAAPIModule):
+class ApplicationMeta(BaseDAAPIModule):
 
     def setLoaderMgr(self, mgr):
         self._printOverrideError('setLoaderMgr')
@@ -30,9 +30,6 @@ class ApplicationMeta(DAAPIModule):
     def setTooltipMgr(self, mgr):
         self._printOverrideError('setTooltipMgr')
 
-    def setStatsStorage(self, mgr):
-        self._printOverrideError('setStatsStorage')
-
     def setVoiceChatMgr(self, mgr):
         self._printOverrideError('setVoiceChatMgr')
 
@@ -50,6 +47,9 @@ class ApplicationMeta(DAAPIModule):
 
     def setTextMgr(self, mgr):
         self._printOverrideError('setTextMgr')
+
+    def setTutorialMgr(self, mgr):
+        self._printOverrideError('setTutorialMgr')
 
     def handleGlobalKeyEvent(self, command):
         self._printOverrideError('handleGlobalKeyEvent')

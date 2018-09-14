@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RetrainCrewWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class RetrainCrewWindowMeta(DAAPIModule):
+class RetrainCrewWindowMeta(AbstractWindowView):
 
     def submit(self, data):
         self._printOverrideError('submit')

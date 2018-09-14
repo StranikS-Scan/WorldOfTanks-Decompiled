@@ -22,6 +22,10 @@ class FortListMeta(BaseRallyListView):
         if self._isDAAPIInited():
             return self.flashObject.as_setRegulationInfo(data)
 
+    def as_setTableHeaderS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setTableHeader(data)
+
     def as_tryShowTextMessageS(self):
         if self._isDAAPIInited():
             return self.flashObject.as_tryShowTextMessage()

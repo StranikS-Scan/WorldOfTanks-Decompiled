@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.dialogs.IconPriceDialog import IconPriceDialog
 class DemountDeviceDialog(IconPriceDialog):
 
     def __init__(self, meta, handler):
-        IconPriceDialog.__init__(self, meta, handler)
+        super(IconPriceDialog, self).__init__(meta, handler)
         self._meta.onConfirmationStatusChnaged += self.__confirmationStatusChangeHandler
 
     def _populate(self):

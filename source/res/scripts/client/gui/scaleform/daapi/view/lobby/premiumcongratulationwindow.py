@@ -1,17 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PremiumCongratulationWindow.py
-import BigWorld
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
 from gui.Scaleform.daapi.view.meta.PremiumCongratulationWindowMeta import PremiumCongratulationWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 BUTTON_WIDTH = 120
 BG_PADDING = -64
 CLOSE_ACTION = 'closeAction'
 
-class PremiumCongratulationWindow(View, PremiumCongratulationWindowMeta, AbstractWindowView, AppRef):
+class PremiumCongratulationWindow(PremiumCongratulationWindowMeta):
 
     def __init__(self, ctx = None):
         super(PremiumCongratulationWindow, self).__init__()

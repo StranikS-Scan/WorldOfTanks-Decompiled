@@ -7,10 +7,9 @@ from constants import FORT_BUILDING_TYPE
 from gui.shared import events
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.FortBuildingComponentMeta import FortBuildingComponentMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 
-class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHelper, AppRef):
+class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHelper):
 
     def __init__(self):
         super(FortBuildingComponent, self).__init__()

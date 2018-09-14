@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleCustomizationMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class VehicleCustomizationMeta(DAAPIModule):
+class VehicleCustomizationMeta(View):
 
     def dropCurrentItemInSection(self, section, kind):
         self._printOverrideError('dropCurrentItemInSection')

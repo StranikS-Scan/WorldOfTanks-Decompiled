@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileSectionMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class ProfileSectionMeta(DAAPIModule):
+class ProfileSectionMeta(BaseDAAPIComponent):
 
     def setActive(self, value):
         self._printOverrideError('setActive')

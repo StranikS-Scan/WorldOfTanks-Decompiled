@@ -6,7 +6,7 @@ from gui.Scaleform.windows import UIInterface
 from gui.battle_control import g_sessionProvider
 from messenger import g_settings
 from messenger.ext import isBattleChatEnabled
-from messenger.gui.Scaleform import BTMS_COMMANDS
+from messenger.gui.Scaleform import BTMS_COMMANDS, FILL_COLORS
 from messenger.gui.interfaces import IBattleChannelView
 from messenger.m_constants import BATTLE_CHANNEL
 
@@ -79,10 +79,14 @@ class BattleChannelView(UIInterface, IBattleChannelView):
             self.__flashCall(BTMS_COMMANDS.UpdateReceivers(), result)
 
     def addMessage(self, message, isCurrentPlayer = False):
+        if isCurrentPlayer:
+            fillColor = FILL_COLORS.BROWN
+        else:
+            fillColor = FILL_COLORS.BLACK
         history = self.__sharedHistory()
         if history:
-            history.addMessage(message, isCurrentPlayer)
-        self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [0, message, isCurrentPlayer])
+            history.addMessage(message, fillColor)
+        self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [0, message, fillColor])
 
     def __getRecvConfig(self, controller):
         config = ['', 0, False]
@@ -149,8 +153,8 @@ class BattleChannelView(UIInterface, IBattleChannelView):
             message = g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': errorMsg})
             history = self.__sharedHistory()
             if history:
-                history.addMessage(message, False)
-            self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [clientID, message, False])
+                history.addMessage(message)
+            self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [clientID, message, FILL_COLORS.BLACK])
 
     def __onSendChannelMessage(self, *args):
         parser = CommandArgsParser(self.__onSendChannelMessage.__name__, 2, [long])

@@ -1,14 +1,12 @@
 # Embedded file name: scripts/client/notification/NotificationListView.py
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.NotificationsListMeta import NotificationsListMeta
-from gui.Scaleform.framework.entities.View import View
 from messenger.formatters import TimeFormatter
 from notification.NotificationLayoutView import NotificationLayoutView
 from notification import NotificationMVC
 from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE
 
-class NotificationListView(NotificationsListMeta, View, NotificationLayoutView, SmartPopOverView):
+class NotificationListView(NotificationsListMeta, NotificationLayoutView):
 
     def __init__(self, _):
         super(NotificationListView, self).__init__()

@@ -2,17 +2,17 @@
 import cgi
 import time
 import BigWorld
-import weakref
 from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE, UNIT_ERROR, SORTIE_DIVISION
 import account_helpers
+from gui.game_control import getFalloutCtrl
 from gui.prb_control.functional import action_handlers
 from gui.prb_control.restrictions import createUnitActionValidator
 from gui.shared.fortifications import getClientFortMgr
 from messenger.ext import passCensor
 from account_helpers.AccountSettings import AccountSettings
 from adisp import process
-from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN
+from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN, FALLOUT_BATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui import prb_control, DialogsInterface
 from gui.clubs import contexts as clubs_ctx
@@ -25,7 +25,7 @@ from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.functional import interfaces
 from gui.prb_control.functional import unit_ext
 from gui.prb_control.items import unit_items
-from gui.prb_control.prb_cooldown import PrbCooldownManager
+from gui.prb_control.prb_cooldown import UnitCooldownManager
 from gui.prb_control.restrictions.interfaces import IUnitPermissions
 from gui.prb_control.restrictions.permissions import UnitPermissions, SquadPermissions
 from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT, FUNCTIONAL_EXIT, CTRL_ENTITY_TYPE
@@ -111,7 +111,12 @@ class SquadEntry(interfaces.IPrbEntry):
             unitMgr = prb_control.getClientUnitMgr()
             if unitMgr:
                 ctx.startProcessing(callback=callback)
-                unitMgr.createSquad()
+                falloutCtrl = getFalloutCtrl()
+                battleType = falloutCtrl.getBattleType()
+                if falloutCtrl.isSelected():
+                    unitMgr.createEventSquad(battleType)
+                else:
+                    unitMgr.createSquad()
             else:
                 LOG_ERROR('Unit manager is not defined')
         else:
@@ -304,7 +309,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         if not unit:
             return {}
         players = unit.getPlayers()
-        memberIDs = set((value['playerID'] for value in unit.getMembers().itervalues()))
+        memberIDs = set((value['accountDBID'] for value in unit.getMembers().itervalues()))
         dbIDs = set(players.keys()).difference(memberIDs)
         result = {}
         for dbID, data in players.iteritems():
@@ -326,11 +331,19 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
             dbID = account_helpers.getAccountDatabaseID()
         _, unit = self.getUnit(unitIdx=unitIdx)
         if unit:
-            vehicles = unit.getVehicles()
-            if dbID in vehicles:
-                result = unit_items.VehicleInfo(**vehicles[dbID])
+            extra = unit.getExtra()
+            if unit.isSquad() and extra.eventType != FALLOUT_BATTLE_TYPE.UNDEFINED:
+                vehicles = extra.accountVehicles.get(dbID, ())
+                vehInvIDs, vehCDs = (), ()
+                if vehicles:
+                    vehInvIDs, vehCDs = zip(*extra.accountVehicles.get(dbID, ()))
+                result = unit_items.FalloutVehiclesInfo(vehInvIDs, vehCDs)
             else:
-                result = unit_items.VehicleInfo()
+                vehicles = unit.getVehicles()
+                if dbID in vehicles:
+                    result = unit_items.VehicleInfo(**vehicles[dbID])
+                else:
+                    result = unit_items.VehicleInfo()
         else:
             result = unit_items.VehicleInfo()
         return result
@@ -419,13 +432,11 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
             selectedVehicles = []
             for vehCD in vehicles:
                 vehicle = g_itemsCache.items.getItemByCD(int(vehCD))
-                if vehicle.isInInventory and not vehicle.rentalIsOver and not vehicle.isDisabledInPremIGR:
+                if vehicle.isInInventory:
                     selectedVehicles.append(int(vehCD))
 
         else:
             criteria = REQ_CRITERIA.INVENTORY
-            criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
-            criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
             selectedVehicles = [ k for k, v in g_itemsCache.items.getVehicles(criteria).iteritems() if v.level in self._rosterSettings.getLevelsRange() ]
         return selectedVehicles
 
@@ -497,7 +508,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
             player = None
             vehicle = None
             if not state.isFree and slotIdx in members:
-                dbID = members[slotIdx].get('playerID', -1L)
+                dbID = members[slotIdx].get('accountDBID', -1L)
                 if dbID in players:
                     player = unit_items.PlayerUnitInfo(dbID, unitIdx, unit, isReady=isPlayerReady(slotIdx), isInSlot=True, slotIdx=slotIdx, **players[dbID])
                 if dbID in vehicles:
@@ -669,7 +680,10 @@ class UnitFunctional(_UnitFunctional):
          RQ_TYPE.BATTLE_QUEUE: self.doBattleQueue,
          RQ_TYPE.GIVE_LEADERSHIP: self.giveLeadership,
          RQ_TYPE.CHANGE_RATED: self.changeRated,
-         RQ_TYPE.CHANGE_DIVISION: self.changeDivision}
+         RQ_TYPE.CHANGE_DIVISION: self.changeDivision,
+         RQ_TYPE.SET_ES_VEHICLE_LIST: self.setEventSquadVehicleList,
+         RQ_TYPE.SET_ES_PLAYER_STATE: self.setEventSquadReady,
+         RQ_TYPE.CHANGE_ES_TYPE: self.changeEventSquadType}
         if prbType == PREBATTLE_TYPE.SQUAD:
             self._actionHandler = action_handlers.SquadActionsHandler(self)
         else:
@@ -678,7 +692,7 @@ class UnitFunctional(_UnitFunctional):
         self._requestsProcessor = None
         self._vehiclesWatcher = None
         self._lastErrorCode = UNIT_ERROR.OK
-        self._cooldown = PrbCooldownManager()
+        self._cooldown = UnitCooldownManager()
         self._actionValidator = createUnitActionValidator(prbType, rosterSettings, self)
         self._deferredReset = False
         self._scheduler = unit_ext.createUnitScheduler(self)
@@ -707,6 +721,7 @@ class UnitFunctional(_UnitFunctional):
                 listener.onUnitFlagsChanged(flags, timeLeftInIdle)
 
         unit_ext.destroyListReq()
+        g_eventDispatcher.loadHangar()
         g_eventDispatcher.updateUI()
         self._scheduler.init()
         return initResult | FUNCTIONAL_INIT_RESULT.INITED | FUNCTIONAL_INIT_RESULT.LOAD_WINDOW
@@ -935,7 +950,7 @@ class UnitFunctional(_UnitFunctional):
         if isReady:
             vehInfo = self.getVehicleInfo()
             g_currentVehicle.selectVehicle(vehInfo.vehInvID)
-        if self._isInCoolDown(settings.REQUEST_TYPE.SET_PLAYER_STATE):
+        if self._isInCoolDown(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown()):
             return
         pPermissions = self.getPermissions()
         if not pPermissions.canSetReady():
@@ -944,10 +959,10 @@ class UnitFunctional(_UnitFunctional):
                 callback(False)
             return
         self._requestsProcessor.doRequest(ctx, 'setReady', isReady, ctx.resetVehicle)
-        self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE)
+        self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown())
 
     def closeSlot(self, ctx, callback = None):
-        if self._isInCoolDown(settings.REQUEST_TYPE.CLOSE_SLOT):
+        if self._isInCoolDown(settings.REQUEST_TYPE.CLOSE_SLOT, coolDown=ctx.getCooldown()):
             return
         slotIdx = ctx.getSlotIdx()
         rosterSettings = self.getRosterSettings()
@@ -986,7 +1001,7 @@ class UnitFunctional(_UnitFunctional):
                 callback(False)
             return
         self._requestsProcessor.doRequest(ctx, 'closeSlot', slotIdx, isClosed, unitIdx=ctx.getUnitIdx())
-        self._cooldown.process(settings.REQUEST_TYPE.CLOSE_SLOT)
+        self._cooldown.process(settings.REQUEST_TYPE.CLOSE_SLOT, coolDown=ctx.getCooldown())
 
     def changeOpened(self, ctx, callback = None):
         isOpened = self.getFlags().isOpened()
@@ -995,7 +1010,7 @@ class UnitFunctional(_UnitFunctional):
             if callback:
                 callback(True)
             return
-        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_UNIT_STATE):
+        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown()):
             return
         pPermissions = self.getPermissions()
         if not pPermissions.canChangeUnitState():
@@ -1004,7 +1019,7 @@ class UnitFunctional(_UnitFunctional):
                 callback(False)
             return
         self._requestsProcessor.doRequest(ctx, 'openUnit', isOpen=ctx.isOpened(), unitIdx=ctx.getUnitIdx())
-        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE)
+        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
 
     def changeComment(self, ctx, callback = None):
         _, unit = self.getUnit()
@@ -1012,7 +1027,7 @@ class UnitFunctional(_UnitFunctional):
             if callback:
                 callback(False)
             return
-        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_UNIT_STATE):
+        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown()):
             return
         pPermissions = self.getPermissions()
         if not pPermissions.canChangeComment():
@@ -1021,7 +1036,7 @@ class UnitFunctional(_UnitFunctional):
                 callback(False)
             return
         self._requestsProcessor.doRequest(ctx, 'setComment', cgi.escape(ctx.getComment()), unitIdx=ctx.getUnitIdx())
-        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE)
+        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
 
     def lock(self, ctx, callback = None):
         isLocked = self.getFlags().isLocked()
@@ -1030,7 +1045,7 @@ class UnitFunctional(_UnitFunctional):
             if callback:
                 callback(True)
             return
-        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_UNIT_STATE):
+        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown()):
             return
         pPermissions = self.getPermissions()
         if not pPermissions.canChangeUnitState():
@@ -1039,7 +1054,7 @@ class UnitFunctional(_UnitFunctional):
                 callback(False)
             return
         self._requestsProcessor.doRequest(ctx, 'lockUnit', isLocked=ctx.isLocked(), unitIdx=ctx.getUnitIdx())
-        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE)
+        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
 
     def setRostersSlots(self, ctx, callback = None):
         pPermissions = self.getPermissions()
@@ -1162,6 +1177,10 @@ class UnitFunctional(_UnitFunctional):
             waitingID = 'prebattle/player_ready'
         else:
             waitingID = 'prebattle/player_not_ready'
+        if self.getPrbType() == PREBATTLE_TYPE.SQUAD and self.getExtra().eventType:
+            selVehCtx = unit_ctx.SetReadyEventSquadCtx(notReady, waitingID=waitingID)
+            self.setEventSquadReady(selVehCtx)
+            return
         if launchChain:
             if notReady:
                 selVehCtx = unit_ctx.SetVehicleUnitCtx(vTypeCD=g_currentVehicle.item.intCD, waitingID='prebattle/change_settings')
@@ -1225,7 +1244,7 @@ class UnitFunctional(_UnitFunctional):
                 if callback:
                     callback(True)
                 return
-            if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_RATED):
+            if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_RATED, coolDown=ctx.getCooldown()):
                 return
             pPermissions = self.getPermissions()
             if not pPermissions.canChangeRated():
@@ -1234,7 +1253,7 @@ class UnitFunctional(_UnitFunctional):
                     callback(False)
                 return
             self._requestsProcessor.doRequest(ctx, 'setRatedBattle', isRatedBattle=ctx.isRated(), unitIdx=ctx.getUnitIdx())
-            self._cooldown.process(settings.REQUEST_TYPE.CHANGE_RATED)
+            self._cooldown.process(settings.REQUEST_TYPE.CHANGE_RATED, coolDown=ctx.getCooldown())
             return
 
     def changeDivision(self, ctx, callback = None):
@@ -1243,7 +1262,7 @@ class UnitFunctional(_UnitFunctional):
             if callback:
                 callback(False)
             return
-        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_DIVISION):
+        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_DIVISION, coolDown=ctx.getCooldown()):
             return
         pPermissions = self.getPermissions()
         if not pPermissions.canChangeRosters():
@@ -1252,10 +1271,82 @@ class UnitFunctional(_UnitFunctional):
                 callback(False)
             return
         self._requestsProcessor.doRequest(ctx, 'changeSortieDivision', division=ctx.getDivisionID(), unitIdx=ctx.getUnitIdx())
-        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_DIVISION)
+        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_DIVISION, coolDown=ctx.getCooldown())
 
     def exitFromQueue(self):
         self._actionHandler.exitFromQueue()
+
+    def setEventSquadVehicleList(self, ctx, callback = None):
+        if self._isInCoolDown(settings.REQUEST_TYPE.SET_ES_VEHICLE_LIST, coolDown=ctx.getCooldown()):
+            return
+        else:
+            pPermissions = self.getPermissions()
+            if not pPermissions.canSetVehicle():
+                LOG_ERROR('Player can not set vehicle', pPermissions)
+                if callback:
+                    callback(False)
+                return
+            vehsList = ctx.getVehsList()
+            if vehsList:
+                for vehInvID in vehsList:
+                    if vehInvID != INV_ID_CLEAR_VEHICLE and g_itemsCache.items.getVehicle(vehInvID) is None:
+                        LOG_ERROR('Vehicle is not in inventory', ctx)
+                        if callback:
+                            callback(False)
+                        return
+
+            self._requestsProcessor.doRequest(ctx, 'setEventSquadVehicleList', vehicleList=vehsList)
+            self._cooldown.process(settings.REQUEST_TYPE.SET_ES_VEHICLE_LIST, coolDown=ctx.getCooldown())
+            return
+
+    def setEventSquadReady(self, ctx, callback = None):
+        isReady = ctx.isReady()
+        pInfo = self.getPlayerInfo()
+        if isReady and self.isParentControlActivated(callback=callback):
+            return
+        if not pInfo.isInSlot:
+            LOG_ERROR('Player is not in slot', ctx)
+            if callback:
+                callback(False)
+            return
+        if pInfo.isReady is isReady:
+            LOG_DEBUG('Player already ready', ctx)
+            if callback:
+                callback(True)
+            return
+        if not self.isVehicleReadyToBattle():
+            LOG_DEBUG('Vehicle is not ready to battle', ctx)
+            if callback:
+                callback(False)
+            return
+        if self._isInCoolDown(settings.REQUEST_TYPE.SET_ES_PLAYER_STATE, coolDown=ctx.getCooldown()):
+            return
+        pPermissions = self.getPermissions()
+        if not pPermissions.canSetReady():
+            LOG_ERROR('Player can not set ready state', pPermissions)
+            if callback:
+                callback(False)
+            return
+        self._requestsProcessor.doRequest(ctx, 'setEventSquadReady', isReady)
+        self._cooldown.process(settings.REQUEST_TYPE.SET_ES_PLAYER_STATE, coolDown=ctx.getCooldown())
+
+    def changeEventSquadType(self, ctx, callback = None):
+        battleType = ctx.getBattleType()
+        if battleType not in FALLOUT_BATTLE_TYPE.ALL:
+            LOG_ERROR('Incorrect value of battle type', battleType)
+            if callback:
+                callback(False)
+            return
+        if self._isInCoolDown(settings.REQUEST_TYPE.CHANGE_ES_TYPE, coolDown=ctx.getCooldown()):
+            return
+        pPermissions = self.getPermissions()
+        if not pPermissions.canChangeRosters():
+            LOG_ERROR('Player can not change battle type', pPermissions)
+            if callback:
+                callback(False)
+            return
+        self._requestsProcessor.doRequest(ctx, 'changeEventSquadType', newEventType=battleType)
+        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_ES_TYPE, coolDown=ctx.getCooldown())
 
     def unit_onUnitFlagsChanged(self, prevFlags, nextFlags):
         unitIdx, unit = self.getUnit()
@@ -1275,14 +1366,14 @@ class UnitFunctional(_UnitFunctional):
             listener.onUnitFlagsChanged(flags, timeLeftInIdle)
 
         if not flags.isOnlyRosterWaitChanged():
-            self._actionHandler.setUnitChanged()
+            self._actionHandler.setUnitChanged(flags)
         members = unit.getMembers()
         diff = []
         for slotIdx in self._rosterSettings.getAllSlotsRange():
             if prevFlags is not nextFlags:
                 if slotIdx not in members:
                     continue
-                dbID = members[slotIdx]['playerID']
+                dbID = members[slotIdx]['accountDBID']
                 pInfo = self.getPlayerInfo(dbID=dbID, unitIdx=unitIdx)
                 diff.append(pInfo)
 
@@ -1322,7 +1413,7 @@ class UnitFunctional(_UnitFunctional):
             if prevValue is not nextValue:
                 if slotIdx not in members:
                     continue
-                dbID = members[slotIdx]['playerID']
+                dbID = members[slotIdx]['accountDBID']
                 data = players.get(dbID, {})
                 pInfo = unit_items.PlayerUnitInfo(dbID, unitIdx, unit, isReady=nextValue, isInSlot=True, slotIdx=slotIdx, **data)
                 diff.append(pInfo)
@@ -1505,7 +1596,7 @@ class UnitFunctional(_UnitFunctional):
         setReadyAfterVehicleSelect = ctx.setReady
         self._requestsProcessor.doRequest(ctx, 'setVehicle', vehInvID=vehInvID, setReady=setReadyAfterVehicleSelect)
         if setReadyAfterVehicleSelect:
-            self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE)
+            self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown())
 
     def _clearVehicle(self, ctx, callback = None):
         vInfo = self.getVehicleInfo()
@@ -1525,8 +1616,8 @@ class UnitFunctional(_UnitFunctional):
                 result = max(0, int(time.time() - time_utils.makeLocalServerTime(timestamp)))
         return result
 
-    def _isInCoolDown(self, requestType, callback = None):
-        if self._cooldown.validate(requestType):
+    def _isInCoolDown(self, requestType, callback = None, coolDown = None):
+        if self._cooldown.validate(requestType, coolDown):
             if callback:
                 callback(False)
             return True

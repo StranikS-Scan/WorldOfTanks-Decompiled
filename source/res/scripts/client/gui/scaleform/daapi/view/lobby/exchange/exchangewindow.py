@@ -3,13 +3,12 @@ import BigWorld
 from PlayerEvents import g_playerEvents
 from gui import SystemMessages, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.exchange.BaseExchangeWindow import BaseExchangeWindow
 from gui.Scaleform.daapi.view.meta.ExchangeWindowMeta import ExchangeWindowMeta
 from gui.shared import g_itemsCache
 from gui.shared.gui_items.processors.common import GoldToCreditsExchanger
 from gui.shared.utils import decorators
 
-class ExchangeWindow(ExchangeWindowMeta, BaseExchangeWindow):
+class ExchangeWindow(ExchangeWindowMeta):
 
     def _populate(self):
         super(ExchangeWindow, self)._populate()

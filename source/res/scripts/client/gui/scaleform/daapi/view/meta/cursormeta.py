@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CursorMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class CursorMeta(DAAPIModule):
+class CursorMeta(View):
 
     def as_setCursorS(self, cursor):
         if self._isDAAPIInited():

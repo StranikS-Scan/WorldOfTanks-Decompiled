@@ -2,11 +2,14 @@
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control.settings import UNIT_RESTRICTION
+from gui.server_events import g_eventsCache
+from gui.shared.formatters.ranges import toRomanRangeString
+from helpers import int2roman
 
 class SquadActionButtonStateVO(ActionButtonStateVO):
 
     def _isEnabled(self, isValid, restriction):
-        if not isValid and restriction == UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT:
+        if not isValid and restriction == UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS:
             return True
         return isValid
 
@@ -25,3 +28,18 @@ class SquadActionButtonStateVO(ActionButtonStateVO):
 
     def _getIdleStateStr(self):
         return ('', {})
+
+    def _getFalloutVehLevelStr(self):
+        config = g_eventsCache.getFalloutConfig(self._extra.eventType)
+        if len(config.allowedLevels) > 1:
+            return ('#cyberSport:window/unit/message/falloutMin', {'level': toRomanRangeString(list(config.allowedLevels), 1)})
+        else:
+            return ('#cyberSport:window/unit/message/falloutLevel', {'level': int2roman(config.vehicleLevelRequired)})
+
+    def _getFalloutVehMinStr(self):
+        config = g_eventsCache.getFalloutConfig(self._extra.eventType)
+        return ('#cyberSport:window/unit/message/falloutMin', {'min': str(config.minVehiclesPerPlayer),
+          'level': toRomanRangeString(list(config.allowedLevels), 1)})
+
+    def _getFalloutVehBrokenStr(self):
+        return ('#cyberSport:window/unit/message/falloutGroupNotReady', {})

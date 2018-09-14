@@ -20,12 +20,12 @@ from gui.battle_control.DRRScaleController import DRRScaleController
 from gui.battle_control.RepairController import RepairController
 from gui.battle_control.arena_info.ArenaDataProvider import ArenaDataProvider
 from gui.battle_control.arena_info.listeners import ListenersCollection
+from gui.battle_control.dyn_squad_functional import DynSquadFunctional
 from gui.battle_control.hit_direction_ctrl import HitDirectionController
 from gui.battle_control.requests import AvatarRequestsController
-from gui.battle_control.arena_info import isEventBattle
 
 class BattleSessionProvider(object):
-    __slots__ = ('__ammoCtrl', '__equipmentsCtrl', '__optDevicesCtrl', '__vehicleStateCtrl', '__chatCommands', '__drrScaleCtrl', '__feedback', '__ctx', '__arenaDP', '__arenaListeners', '__arenaLoadCtrl', '__respawnsCtrl', '__notificationsCtrl', '__isBattleUILoaded', '__arenaTeamsBasesCtrl', '__periodCtrl', '__messagesCtrl', '__repairCtrl', '__hitDirectionCtrl', '__requestsCtrl', '__avatarStatsCtrl')
+    __slots__ = ('__ammoCtrl', '__equipmentsCtrl', '__optDevicesCtrl', '__vehicleStateCtrl', '__chatCommands', '__drrScaleCtrl', '__feedback', '__ctx', '__arenaDP', '__arenaListeners', '__arenaLoadCtrl', '__respawnsCtrl', '__notificationsCtrl', '__isBattleUILoaded', '__arenaTeamsBasesCtrl', '__periodCtrl', '__messagesCtrl', '__repairCtrl', '__hitDirectionCtrl', '__requestsCtrl', '__avatarStatsCtrl', '__dynSquadFunctional', '__weakref__')
 
     def __init__(self):
         super(BattleSessionProvider, self).__init__()
@@ -47,6 +47,7 @@ class BattleSessionProvider(object):
         self.__respawnsCtrl = None
         self.__notificationsCtrl = None
         self.__repairCtrl = None
+        self.__dynSquadFunctional = None
         self.__avatarStatsCtrl = None
         self.__arenaListeners = None
         self.__isBattleUILoaded = False
@@ -139,9 +140,6 @@ class BattleSessionProvider(object):
         replayCtrl = BattleReplay.g_replayCtrl
         isReplayRecording = replayCtrl.isRecording
         isReplayPlaying = replayCtrl.isPlaying
-        if isEventBattle():
-            isReplayRecording = False
-            replayCtrl.enableAutoRecordingBattles(0)
         self.__arenaDP = ArenaDataProvider(avatar=avatar)
         self.__ctx.start(self.__arenaDP)
         self.__ammoCtrl = consumables.createAmmoCtrl(isReplayPlaying, isReplayRecording)
@@ -155,6 +153,7 @@ class BattleSessionProvider(object):
         self.__drrScaleCtrl = DRRScaleController()
         self.__respawnsCtrl = RespawnsController()
         self.__repairCtrl = RepairController()
+        self.__dynSquadFunctional = DynSquadFunctional()
         self.__notificationsCtrl = NotificationsController(self.__arenaDP)
         ctx = weakref.proxy(self.__ctx)
         self.__arenaListeners = ListenersCollection()
@@ -217,14 +216,10 @@ class BattleSessionProvider(object):
         self.__respawnsCtrl = None
         self.__notificationsCtrl = None
         self.__repairCtrl = None
+        self.__dynSquadFunctional = None
         if self.__avatarStatsCtrl is not None:
             self.__avatarStatsCtrl.stop()
             self.__avatarStatsCtrl = None
-        import BattleReplay
-        replayCtrl = BattleReplay.g_replayCtrl
-        if isEventBattle():
-            from account_helpers.settings_core.SettingsCore import g_settingsCore
-            replayCtrl.enableAutoRecordingBattles(g_settingsCore.getSetting('replayEnabled'))
         self.__ctx.stop()
         return
 
@@ -236,6 +231,7 @@ class BattleSessionProvider(object):
         self.__hitDirectionCtrl.setUI(battleUI.indicators)
         self.__drrScaleCtrl.start(battleUI)
         self.__repairCtrl.start(battleUI)
+        self.__dynSquadFunctional.setUI(battleUI, self)
 
     def clearBattleUI(self):
         self.__isBattleUILoaded = False
@@ -244,14 +240,13 @@ class BattleSessionProvider(object):
         self.__hitDirectionCtrl.clearUI()
         self.__drrScaleCtrl.stop()
         self.__repairCtrl.stop()
+        self.__dynSquadFunctional.clearUI(self)
 
     def switchToPostmortem(self):
         self.__ammoCtrl.clear()
         self.__equipmentsCtrl.clear()
         self.__optDevicesCtrl.clear()
         self.__feedback.setPlayerVehicle(0L)
-        from gui.WindowsManager import g_windowsManager
-        g_windowsManager.showPostMortem()
         self.__vehicleStateCtrl.switchToPostmortem()
 
     def useLoaderIntuition(self):
@@ -263,6 +258,7 @@ class BattleSessionProvider(object):
         self.__equipmentsCtrl.clear(False)
         self.__optDevicesCtrl.clear(False)
         self.__vehicleStateCtrl.movingToRespawn()
+        self.__respawnsCtrl.movingToRespawn()
 
     def invalidateVehicleState(self, state, value):
         self.__vehicleStateCtrl.invalidate(state, value)

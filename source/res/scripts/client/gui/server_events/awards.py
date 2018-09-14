@@ -3,7 +3,6 @@ import random
 from collections import namedtuple
 import BigWorld
 import constants
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 import potapov_quests
 from helpers import i18n
 from shared_utils import findFirst
@@ -13,6 +12,11 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, packRibbonInfo
 from gui.shared.formatters import text_styles
+_BG_IMG_BY_VEH_TYPE = {'lightTank': RES_ICONS.MAPS_ICONS_QUESTS_LTAWARDBACK,
+ 'mediumTank': RES_ICONS.MAPS_ICONS_QUESTS_MTAWARDBACK,
+ 'heavyTank': RES_ICONS.MAPS_ICONS_QUESTS_HTAWARDBACK,
+ 'AT-SPG': RES_ICONS.MAPS_ICONS_QUESTS_AT_SPGAWARDBACK,
+ 'SPG': RES_ICONS.MAPS_ICONS_QUESTS_SPGAWARDBACK}
 
 def _getNextQuestInTileByID(questID):
     quests = g_eventsCache.potapov.getQuests()
@@ -50,7 +54,7 @@ class AchievementsAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_REFERRAL_AWARD_CREDITS_GLOW
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_MEDALS_HEADER))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_QUESTS_MEDALS_HEADER))
 
     def getDescription(self):
         descr = []
@@ -59,7 +63,7 @@ class AchievementsAward(AwardAbstract):
             if len(noteInfo):
                 descr.append(noteInfo)
 
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, '\n\n'.join(descr))
+        return text_styles.main('\n\n'.join(descr))
 
     def getExtraFields(self):
         result = []
@@ -89,10 +93,10 @@ class TokenAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_QUESTS_TOKEN256
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_HEADER, count=self.__tokenCount))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_HEADER, count=self.__tokenCount))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_DESCRIPTION))
+        return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_DESCRIPTION))
 
     def handleBodyButton(self):
         from gui.server_events import events_dispatcher as quests_events
@@ -128,10 +132,10 @@ class VehicleAward(AwardAbstract):
         return self.__vehicle.iconUniqueLight
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_DESCRIPTION))
+        return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_DESCRIPTION))
 
 
 class TankwomanAward(AwardAbstract):
@@ -150,10 +154,10 @@ class TankwomanAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_QUESTS_TANKMANFEMALEORANGE
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TANKMANFEMALE_HEADER))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_QUESTS_TANKMANFEMALE_HEADER))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TANKMANFEMALE_DESCRIPTION))
+        return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_QUESTS_TANKMANFEMALE_DESCRIPTION))
 
     def getOkButtonText(self):
         return i18n.makeString(MENU.AWARDWINDOW_RECRUITBUTTON)
@@ -163,12 +167,7 @@ class TankwomanAward(AwardAbstract):
         quests_events.showTankwomanRecruitWindow(self.__questID, self.__tankmanData.isPremium, self.__tankmanData.fnGroupID, self.__tankmanData.lnGroupID, self.__tankmanData.iGroupID)
 
 
-class RegularAward(AwardAbstract):
-    _BG_IMG_BY_VEH_TYPE = {'lightTank': RES_ICONS.MAPS_ICONS_QUESTS_LTAWARDBACK,
-     'mediumTank': RES_ICONS.MAPS_ICONS_QUESTS_MTAWARDBACK,
-     'heavyTank': RES_ICONS.MAPS_ICONS_QUESTS_HTAWARDBACK,
-     'AT-SPG': RES_ICONS.MAPS_ICONS_QUESTS_AT_SPGAWARDBACK,
-     'SPG': RES_ICONS.MAPS_ICONS_QUESTS_SPGAWARDBACK}
+class FormattedAward(AwardAbstract):
 
     class _BonusFormatter(object):
         _BonusFmt = namedtuple('_BonusFmt', 'icon value')
@@ -199,26 +198,38 @@ class RegularAward(AwardAbstract):
 
             return result
 
-    def __init__(self, potapovQuest, isMainReward = False, isAddReward = False):
-        raise True in (isMainReward, isAddReward) or AssertionError
-        self.__potapovQuest = potapovQuest
-        self.__isMainReward = isMainReward
-        self.__isAddReward = isAddReward
-        self.__formatters = {'gold': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG),
+    def __init__(self):
+        self._formatters = {'gold': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG),
          'credits': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG_1),
          'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_FREEXPICONBIG),
          'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG),
          'items': self._ItemsFormatter()}
+
+    def clear(self):
+        if self._formatters is not None:
+            self._formatters.clear()
+            self._formatters = None
+        return
+
+
+class RegularAward(FormattedAward):
+
+    def __init__(self, potapovQuest, isMainReward = False, isAddReward = False):
+        super(RegularAward, self).__init__()
+        raise True in (isMainReward, isAddReward) or AssertionError
+        self.__potapovQuest = potapovQuest
+        self.__isMainReward = isMainReward
+        self.__isAddReward = isAddReward
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_TASKCOMPLETE)
 
     def getBackgroundImage(self):
         vehType = findFirst(None, self.__potapovQuest.getVehicleClasses())
-        if vehType in self._BG_IMG_BY_VEH_TYPE:
-            return self._BG_IMG_BY_VEH_TYPE[vehType]
+        if vehType in _BG_IMG_BY_VEH_TYPE:
+            return _BG_IMG_BY_VEH_TYPE[vehType]
         else:
-            return random.choice(self._BG_IMG_BY_VEH_TYPE.values())
+            return random.choice(_BG_IMG_BY_VEH_TYPE.values())
 
     def getAwardImage(self):
         return ''
@@ -269,7 +280,7 @@ class RegularAward(AwardAbstract):
     def __getMainRewards(self):
         result = []
         for b in self.__potapovQuest.getBonuses(isMain=True):
-            formatter = self.__formatters.get(b.getName(), lambda *args: [])
+            formatter = self._formatters.get(b.getName(), lambda *args: [])
             for bonus in formatter(b):
                 result.append({'itemSource': bonus.icon,
                  'value': bonus.value})

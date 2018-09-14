@@ -1,18 +1,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ReferralReferrerIntroWindow.py
 from gui import makeHtmlString
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.ReferralReferrerIntroWindowMeta import ReferralReferrerIntroWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
+from gui.shared.formatters import text_styles, icons
 from helpers import i18n
 
-class ReferralReferrerIntroWindow(View, AbstractWindowView, ReferralReferrerIntroWindowMeta, AppRef):
+class ReferralReferrerIntroWindow(ReferralReferrerIntroWindowMeta):
 
     def __init__(self, ctx = None):
         super(ReferralReferrerIntroWindow, self).__init__(ctx)
@@ -30,14 +26,14 @@ class ReferralReferrerIntroWindow(View, AbstractWindowView, ReferralReferrerIntr
     def _populate(self):
         super(ReferralReferrerIntroWindow, self)._populate()
         blocks = [self.__packContentBlock('invite_block', RES_ICONS.MAPS_ICONS_LIBRARY_REFERRALINVITEICON_1, ctx={'inviteCount': self.__invitesCount,
-          'link': self.__makeHyperLink(OpenLinkEvent.INVIETES_MANAGEMENT, MENU.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_LINK)}, showLinkBtn=True), self.__packContentBlock('squad_block', RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_SQUAD), self.__packContentBlock('referrals_block', RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALHAND, ctx={'icon': self.app._utilsMgr.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALSMALLHAND, 16, 16, -4, 0))})]
-        self.as_setDataS({'titleMsg': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.PROMO_TITLE, i18n.makeString(MENU.REFERRALREFERRERINTROWINDOW_TITLEMESSAGE)),
+          'link': self.__makeHyperLink(OpenLinkEvent.INVIETES_MANAGEMENT, MENU.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_LINK)}, showLinkBtn=True), self.__packContentBlock('squad_block', RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_SQUAD), self.__packContentBlock('referrals_block', RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALHAND, ctx={'icon': icons.makeImageTag(RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALSMALLHAND, 16, 16, -4, 0)})]
+        self.as_setDataS({'titleMsg': text_styles.promoTitle(i18n.makeString(MENU.REFERRALREFERRERINTROWINDOW_TITLEMESSAGE)),
          'blocksVOs': blocks})
 
     def __packContentBlock(self, localeKey, iconSource, ctx = None, showLinkBtn = False):
         return {'iconSource': iconSource,
-         'titleTF': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.referralreferrerintrowindow_textblock_title(localeKey))),
-         'bodyTF': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(MENU.referralreferrerintrowindow_textblock_body(localeKey), **(ctx or {}))),
+         'titleTF': text_styles.highTitle(i18n.makeString(MENU.referralreferrerintrowindow_textblock_title(localeKey))),
+         'bodyTF': text_styles.main(i18n.makeString(MENU.referralreferrerintrowindow_textblock_body(localeKey), **(ctx or {}))),
          'showLinkBtn': showLinkBtn}
 
     @classmethod

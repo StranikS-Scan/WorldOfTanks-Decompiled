@@ -2,7 +2,7 @@
 from shared_utils import CONST_CONTAINER
 
 class CONTROLLER(CONST_CONTAINER):
-    ROAMING = 'roaming'
+    RELOGIN = 'relogin'
     AOGAS = 'aogas'
     GAME_SESSION = 'gameSession'
     CAPTCHA = 'captcha'
@@ -22,6 +22,7 @@ class CONTROLLER(CONST_CONTAINER):
     CHINA = 'china'
     AWARD = 'award'
     BOOSTERS = 'boosters'
+    FALLOUT = 'fallout'
 
 
 class BROWSER(CONST_CONTAINER):
@@ -30,6 +31,7 @@ class BROWSER(CONST_CONTAINER):
     BACKGROUND = 'file:///gui/maps/bg.png'
     PROMO_SIZE = (780, 470)
     CLUB_SIZE = (780, 470)
+    VIDEO_SIZE = (864, 486)
     PROMO_BACKGROUND = 'file:///gui/maps/promo_bg.png'
 
 

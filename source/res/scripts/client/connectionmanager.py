@@ -1,20 +1,18 @@
 # Embedded file name: scripts/client/ConnectionManager.py
-import constants
 import json
 import hashlib
 import ResMgr
+import BigWorld
+from account_shared import isValidClientVersion
+import constants
 from Event import Event
+from functools import partial
 from Singleton import Singleton
 from enumerations import Enumeration
-from debug_utils import *
-from predefined_hosts import g_preDefinedHosts
-from functools import partial
 from helpers import getClientLanguage
-CONNECTION_STATUS = Enumeration('Connection status', ('disconnected',
- 'connected',
- 'connectionInProgress',
- 'disconnectingInProgress',
- 'kicked'))
+from predefined_hosts import g_preDefinedHosts
+from debug_utils import LOG_DEBUG, LOG_UNEXPECTED, LOG_MX, LOG_NOTE
+CONNECTION_STATUS = Enumeration('Connection status', ('disconnected', 'connected', 'connectionInProgress', 'disconnectingInProgress', 'kicked'))
 
 def getHardwareID():
     import Settings
@@ -35,7 +33,7 @@ def md5hex(concealed_value):
     return m.hexdigest()
 
 
-class AUTH_METHODS():
+class AUTH_METHODS:
     BASIC = 'basic'
     EBANK = 'ebank'
     TOKEN2 = 'token2'
@@ -55,6 +53,7 @@ class ConnectionManager(Singleton):
         self.__connectionStatus = CONNECTION_STATUS.disconnected
         self.onConnected = Event()
         self.onDisconnected = Event()
+        self.onKickedFromServer = Event()
         self.onRejected = Event()
         self.__rawStatus = ''
         self.__loginName = None
@@ -149,15 +148,9 @@ class ConnectionManager(Singleton):
         return
 
     def disconnect(self):
-        keepClientOnlySpaces = False
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        if g_hangarSpace is not None and g_hangarSpace.inited:
-            keepClientOnlySpaces = g_hangarSpace.spaceLoading()
         BigWorld.disconnect()
-        BigWorld.clearEntitiesAndSpaces(keepClientOnlySpaces)
         if self.isConnected():
             self.__setConnectionStatus(CONNECTION_STATUS.disconnectingInProgress)
-        return
 
     @property
     def serverUserName(self):
@@ -200,17 +193,17 @@ class ConnectionManager(Singleton):
     def isVersionsDiffered(self):
         return self.__isVersionsDiffered
 
-    def onKickedFromServer(self, reason, isBan, expiryTime):
+    def setKickedFromServer(self, reason, isBan, expiryTime):
+        self.disconnect()
         self.__setConnectionStatus(CONNECTION_STATUS.kicked)
-        from gui import DialogsInterface
-        DialogsInterface.showDisconnect(reason, isBan, expiryTime)
+        self.onKickedFromServer(reason, isBan, expiryTime)
 
     def connectionWatcher(self, isAutoRegister, stage, status, serverMsg):
         self.__connectionStatusCallback(stage, status, serverMsg, isAutoRegister)
         self.connectionStatusCallbacks(stage, status, serverMsg, isAutoRegister)
 
     def checkClientServerVersions(self, clientVersion, serverVersion):
-        if serverVersion != clientVersion:
+        if not isValidClientVersion(clientVersion, serverVersion):
             LOG_DEBUG('Version mismatch. Client is "%s", server needs "%s".' % (clientVersion, serverVersion))
             self.__isVersionsDiffered = True
             BigWorld.callback(0.001, BigWorld.disconnect)

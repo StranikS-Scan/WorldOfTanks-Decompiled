@@ -1,13 +1,11 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/SimpleChannelWindow.py
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.shared.events import FocusEvent
 from messenger.gui.Scaleform.meta.BaseChannelWindowMeta import BaseChannelWindowMeta
 from gui.shared import events, EVENT_BUS_SCOPE
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.inject import channelsCtrlProperty
 
-class SimpleChannelWindow(View, AbstractWindowView, BaseChannelWindowMeta):
+class SimpleChannelWindow(BaseChannelWindowMeta):
 
     def __init__(self, ctx):
         super(SimpleChannelWindow, self).__init__()

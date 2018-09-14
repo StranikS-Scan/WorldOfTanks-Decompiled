@@ -85,16 +85,18 @@ def root_generator(filePath):
 
 def getSubSection(ctx, section, name, safe = False):
     subSection = section[name]
-    if not subSection and not safe:
+    if subSection is None and not safe:
         raise ResourceError(ctx, 'Section {0} is not found.'.format(name))
     return (ctx.next(name), subSection)
 
 
 def getIterator(xmlCtx, section):
-    if not section:
-        raise ResourceError(xmlCtx, 'Section is empty')
+    if section is None:
+        raise ResourceError(xmlCtx, 'Section is not found')
     for _, subSection in section.items():
         yield (xmlCtx.next(subSection), subSection)
+
+    return
 
 
 def _readItemAttr(xmlCtx, section, attr, default = None, keys = None):
@@ -195,7 +197,7 @@ def readDict(xmlCtx, section, valueName = 'value'):
             raise ResourceError(nextCtx, '{0}: name is required in each item'.format(name))
         result[item.name] = item.value
 
-    return _ResourceItem(RESOURCE_ITEM_TYPE.LIST, name, result)
+    return _ResourceItem(RESOURCE_ITEM_TYPE.DICT, name, result)
 
 
 def readSeqPairs(xmlCtx, section, valueName = 'value'):

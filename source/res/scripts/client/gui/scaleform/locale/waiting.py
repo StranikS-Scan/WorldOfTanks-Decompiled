@@ -26,7 +26,6 @@ class WAITING(object):
     UPDATESHOP = '#waiting:updateShop'
     LOADSTATS = '#waiting:loadStats'
     TRANSFERMONEY = '#waiting:transferMoney'
-    EBANKBUYGOLD = '#waiting:ebankBuyGold'
     EXCHANGEVEHICLESXP = '#waiting:exchangeVehiclesXP'
     REQUESTCAPTCHA = '#waiting:requestCaptcha'
     RELOADCAPTCHA = '#waiting:reloadCaptcha'

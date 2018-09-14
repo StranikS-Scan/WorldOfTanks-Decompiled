@@ -385,7 +385,7 @@ class EquipmentsController(object):
         else:
             result, error = True, None
             for intCD, item in self.__equipments.iteritems():
-                if item.getTag() == tag:
+                if item.getTag() == tag and item.getQuantity() > 0:
                     result, error = self.__doChangeSetting(item, entityName, avatar)
                     break
 
@@ -434,10 +434,10 @@ class EquipmentsReplayPlayer(EquipmentsController):
         return (False, None)
 
     def changeSetting(self, intCD, entityName = None, avatar = None):
-        pass
+        return (False, None)
 
     def changeSettingByTag(self, tag, entityName = None, avatar = None):
-        pass
+        return (False, None)
 
 
 __all__ = ('EquipmentsController', 'EquipmentsReplayPlayer')

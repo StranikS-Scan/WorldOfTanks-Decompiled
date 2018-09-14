@@ -2,8 +2,10 @@
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from helpers import i18n
 from shared_utils import BitmaskHelper
-CONTOUR_ICON_PATH = '../maps/icons/vehicle/contour/{0}.png'
-UNKNOWN_CONTOUR_ICON_PATH = CONTOUR_ICON_PATH.format('unknown')
+CONTOUR_ICON_SF_PATH = '../maps/icons/vehicle/contour/{0}.png'
+CONTOUR_ICON_RES_PATH = 'gui/maps/icons/vehicle/contour/{0}.png'
+UNKNOWN_CONTOUR_ICON_SF_PATH = CONTOUR_ICON_SF_PATH.format('unknown')
+UNKNOWN_CONTOUR_ICON_RES_PATH = CONTOUR_ICON_RES_PATH.format('unknown')
 UNKNOWN_VEHICLE_NAME = i18n.makeString('#ingame_gui:players_panel/unknown_vehicle')
 UNKNOWN_VEHICLE_CLASS_NAME = 'unknown'
 UNKNOWN_PLAYER_NAME = i18n.makeString('#ingame_gui:players_panel/unknown_name')
@@ -42,8 +44,12 @@ class INVALIDATE_OP(BitmaskHelper):
     PREBATTLE_CHANGED = 32
 
 
-def makeContourIconPath(vName):
-    return CONTOUR_ICON_PATH.format(vName.replace(':', '-'))
+def makeContourIconSFPath(vName):
+    return CONTOUR_ICON_SF_PATH.format(vName.replace(':', '-'))
+
+
+def makeContourIconResPath(vName):
+    return CONTOUR_ICON_RES_PATH.format(vName.replace(':', '-'))
 
 
 def getOrderByVehicleClass(className = None):

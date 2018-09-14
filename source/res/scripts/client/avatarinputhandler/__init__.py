@@ -13,6 +13,7 @@ from Event import Event
 from debug_utils import *
 from gui import g_guiResetters
 from gui.Scaleform.CursorDelegator import g_cursorDelegator
+from gui.app_loader import g_appLoader
 from post_processing.post_effect_controllers import g_postProcessingEvents
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
@@ -191,9 +192,10 @@ class AvatarInputHandler(CallbackDelayer):
                         aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
                 return True
             if self.__showMarkersKey is not None and key == self.__showMarkersKey and not BigWorld.player().isGuiVisible:
-                from gui.WindowsManager import g_windowsManager
-                markersManager = g_windowsManager.battleWindow.markersManager
-                markersManager.active(not markersManager.isActive)
+                battle = g_appLoader.getDefBattleApp()
+                if battle:
+                    markersManager = battle.markersManager
+                    markersManager.active(not markersManager.isActive)
                 return True
             if key == Keys.KEY_F5 and constants.IS_DEVELOPMENT:
                 self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
@@ -302,6 +304,8 @@ class AvatarInputHandler(CallbackDelayer):
         self.onControlModeChanged('arcade')
         arcadeMode = self.__ctrls['arcade']
         arcadeMode.camera.setToVehicleDirection()
+        self.__identifySPG()
+        self.setReloading(-1)
 
     def setKillerVehicleID(self, killerVehicleID):
         self.__killerVehicleID = killerVehicleID
@@ -313,10 +317,7 @@ class AvatarInputHandler(CallbackDelayer):
         g_guiResetters.add(self.__onRecreateDevice)
         import aims
         aims.clearState()
-        ownVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
-        vehTypeDesc = ownVehicle.typeDescriptor.type
-        self.__isSPG = 'SPG' in vehTypeDesc.tags
-        self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
+        self.__identifySPG()
         for control in self.__ctrls.itervalues():
             control.create()
 
@@ -348,7 +349,7 @@ class AvatarInputHandler(CallbackDelayer):
     def stop(self):
         self.__isStarted = False
         import SoundGroups
-        SoundGroups.g_instance.changePlayMode(1)
+        SoundGroups.g_instance.changePlayMode(0)
         self.__removeBattleCtrlListeners()
         for control in self.__ctrls.itervalues():
             control.destroy()
@@ -539,11 +540,21 @@ class AvatarInputHandler(CallbackDelayer):
             impulseValue *= vehicleSensitivity
         return (impulseDir, impulseValue)
 
+    def __identifySPG(self):
+        vehTypeDesc = BigWorld.entity(BigWorld.player().playerVehicleID).typeDescriptor.type
+        self.__isSPG = 'SPG' in vehTypeDesc.tags
+        self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
+
     def reloadDynamicSettings(self):
         if not constants.IS_DEVELOPMENT:
             return
+        ResMgr.purge(_INPUT_HANDLER_CFG)
         sec = ResMgr.openSection(_INPUT_HANDLER_CFG)
         self.__dynamicCameraSettings = DynamicCameraSettings(sec['dynamicCameraCommon'])
+        try:
+            self.__ctrls['sniper'].camera.aimingSystem.reloadConfig(sec['sniperMode']['camera'])
+        except:
+            pass
 
     def _readCfg(self):
         sec = ResMgr.openSection(_INPUT_HANDLER_CFG)

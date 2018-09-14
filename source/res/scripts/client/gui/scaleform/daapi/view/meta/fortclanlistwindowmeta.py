@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortClanListWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortClanListWindowMeta(DAAPIModule):
+class FortClanListWindowMeta(AbstractWindowView):
 
     def as_setDataS(self, data):
         if self._isDAAPIInited():

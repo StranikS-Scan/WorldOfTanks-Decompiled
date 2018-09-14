@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortCombatReservesIntroMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortCombatReservesIntroMeta(DAAPIModule):
+class FortCombatReservesIntroMeta(AbstractWindowView):
 
     def as_setDataS(self, data):
         if self._isDAAPIInited():

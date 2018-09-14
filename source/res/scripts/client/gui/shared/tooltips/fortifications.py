@@ -10,7 +10,7 @@ from helpers import i18n
 def _packTimeLimitsBlock(block, limits):
     textOffset = 30
     for limit in limits:
-        text = i18n.makeString(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_TIMELIMITFORMAT, startHour=limit.startHour, startMin=limit.startMin, endHour=limit.endHour, endMin=limit.endMin)
+        text = i18n.makeString(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_TIMELIMITFORMAT, startTime=limit.startTime, endTime=limit.endTime)
         block.append(formatters.packImageTextBlockData(title=text_styles.error(text), txtOffset=textOffset))
 
 
@@ -33,7 +33,8 @@ class FortListViewTooltipData(BlocksTooltipData):
         limits = timeLimits
         timeBlock = []
         _packTimeLimitsBlock(timeBlock, limits)
-        mainBlock.append(formatters.packBuildUpBlockData(timeBlock, 0))
+        if len(timeBlock) > 0:
+            mainBlock.append(formatters.packBuildUpBlockData(timeBlock, 0))
         items.append(formatters.packBuildUpBlockData(mainBlock, blocksGap, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         items.append(formatters.packBuildUpBlockData([formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_FOOTER))], blocksGap))
         return items

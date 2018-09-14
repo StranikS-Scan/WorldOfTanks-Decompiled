@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SimpleDialogMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class SimpleDialogMeta(DAAPIModule):
+class SimpleDialogMeta(AbstractWindowView):
 
     def onButtonClick(self, buttonId):
         self._printOverrideError('onButtonClick')

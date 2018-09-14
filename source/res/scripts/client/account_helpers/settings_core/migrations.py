@@ -161,6 +161,10 @@ def _migrateTo14(core, data, initialized):
     data['gameExtData'][GAME.RECEIVE_INVITES_IN_BATTLE] = True
 
 
+def _migrateTo15(core, data, initialized):
+    data['gameExtData'][GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -211,6 +215,10 @@ _versions = ((1,
   False),
  (14,
   _migrateTo14,
+  False,
+  False),
+ (15,
+  _migrateTo15,
   False,
   False))
 

@@ -127,7 +127,7 @@ class ShowTutorialBattleHistoryHandler(_ShowArenaResultHandler):
         return ('showTutorialBattleHistory',)
 
     def _triggerEvent(self, _, arenaUniqueID):
-        g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.SHOW_TUTORIAL_BATTLE_HISTORY, {'data': arenaUniqueID}))
+        g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.SHOW_TUTORIAL_BATTLE_HISTORY, targetID=arenaUniqueID))
 
     def _updateNotification(self, notification):
         super(ShowTutorialBattleHistoryHandler, self)._updateNotification(notification)

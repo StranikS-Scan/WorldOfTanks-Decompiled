@@ -41,7 +41,7 @@ class FortContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity, Fort
         self.buildingID = None
         return
 
-    def _generateOptions(self):
+    def _generateOptions(self, ctx = None):
         result = []
         buildingDescr = self.fortCtrl.getFort().getBuilding(FortViewHelper.getBuildingIDbyUID(self.buildingID))
         if buildingDescr is not None and self.fortCtrl.getPermissions().canViewContext():

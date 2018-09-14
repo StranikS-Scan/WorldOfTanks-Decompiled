@@ -2,18 +2,18 @@
 import itertools
 import operator
 from ClientFortifiedRegion import ORDER_UPDATE_REASON
+from gui.shared.formatters import time_formatters
 from helpers import i18n
 from constants import CLAN_MEMBER_FLAGS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.meta.SlotsPanelMeta import SlotsPanelMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.utils.functions import makeTooltip
 
-class FortOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, AppRef):
+class FortOrdersPanelComponent(SlotsPanelMeta, FortViewHelper):
     SLOTS_PROPS = {'slotsCount': -1,
      'groupCount': -1,
      'slotWidth': 50,
@@ -123,7 +123,7 @@ class FortOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, AppRef):
 
     def _getProgressInfo(self, description, order):
         createdTime = order.getProductionLeftTime()
-        createdTimeStr = self.app.utilsManager.textManager.getTimeDurationStr(createdTime)
+        createdTimeStr = time_formatters.getTimeDurationStr(createdTime)
         productionCountStr = ''
         if order.productionCount > 1:
             productionCountStr = ' (x%d)' % order.productionCount
@@ -138,7 +138,7 @@ class FortOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, AppRef):
     def _getCooldownInfo(self, order):
         if not order.isPermanent:
             leftTime = order.getUsageLeftTime()
-            leftTimeStr = self.app.utilsManager.textManager.getTimeDurationStr(leftTime)
+            leftTimeStr = time_formatters.getTimeDurationStr(leftTime)
             return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_PROGRESSBAR_TIMELEFT, timeLeft=leftTimeStr)
         else:
             return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_INDEFENSIVE)

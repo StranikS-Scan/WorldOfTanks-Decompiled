@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TechTreeMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.techtree.ResearchView import ResearchView
 
-class TechTreeMeta(DAAPIModule):
+class TechTreeMeta(ResearchView):
 
     def requestNationTreeData(self):
         self._printOverrideError('requestNationTreeData')

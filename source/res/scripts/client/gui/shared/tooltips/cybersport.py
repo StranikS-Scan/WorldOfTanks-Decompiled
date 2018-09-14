@@ -57,8 +57,8 @@ class CybersportSlotSelectedToolTipData(CybersportToolTipData):
                 LOG_ERROR('Unit is not exists')
                 return {}
 
-            playerID = unit._members[index]['playerID']
-            vehicle = g_itemsCache.items.getItemByCD(unit._vehicles[playerID]['vehTypeCompDescr'])
+            accountDBID = unit._members[index]['accountDBID']
+            vehicle = g_itemsCache.items.getItemByCD(unit._vehicles[accountDBID]['vehTypeCompDescr'])
             return vo_converters.makeVehicleVO(vehicle, functional.getRosterSettings().getLevelsRange())
         else:
             super(CybersportSlotSelectedToolTipData, self).getDisplayableData(index, unitIdx)

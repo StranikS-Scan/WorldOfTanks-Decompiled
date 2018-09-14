@@ -3,6 +3,7 @@ import types
 from collections import namedtuple
 from shared_utils import makeTupleByDict
 from gui.shared.utils.decorators import ReprInjector
+from gui import GUI_SETTINGS
 
 @ReprInjector.simple(('centerID', 'centerID'), ('dbidMin', 'dbidMin'), ('dbidMin', 'dbidMin'), ('regionCode', 'regionCode'))
 
@@ -19,7 +20,7 @@ class _ServerInfo(object):
         return self.dbidMin <= playerDBID <= self.dbidMax
 
 
-class _RoamingSettings(namedtuple('_RoamingSettings', 'homeCenterID curCenterID servers')):
+class RoamingSettings(namedtuple('RoamingSettings', 'homeCenterID curCenterID servers')):
 
     def getHomeCenterID(self):
         return self.homeCenterID
@@ -33,9 +34,23 @@ class _RoamingSettings(namedtuple('_RoamingSettings', 'homeCenterID curCenterID 
     def getPlayerHome(self, playerDBID):
         for s in self.getRoamingServers():
             if s.isPlayerHome(playerDBID):
-                return s.centerID
+                return (s.centerID, s.regionCode)
 
-        return None
+        return (None, None)
+
+    def isEnabled(self):
+        return GUI_SETTINGS.roaming
+
+    def isSameRealm(self, playerDBID):
+        centerID, _ = self.getPlayerHome(playerDBID)
+        return centerID == self.getHomeCenterID()
+
+    def isInRoaming(self):
+        return self.getCurrentCenterID() != self.getHomeCenterID()
+
+    def isPlayerInRoaming(self, playerDBID):
+        centerID, _ = self.getPlayerHome(playerDBID)
+        return centerID != self.getCurrentCenterID()
 
     @classmethod
     def defaults(cls):
@@ -118,9 +133,9 @@ class ServerSettings(object):
         self.__serverSettings = serverSettings if serverSettings else {}
         if 'roaming' in self.__serverSettings:
             roamingSettings = self.__serverSettings['roaming']
-            self.__roamingSettings = _RoamingSettings(roamingSettings[0], roamingSettings[1], [ _ServerInfo(*s) for s in roamingSettings[2] ])
+            self.__roamingSettings = RoamingSettings(roamingSettings[0], roamingSettings[1], [ _ServerInfo(*s) for s in roamingSettings[2] ])
         else:
-            self.__roamingSettings = _RoamingSettings.defaults()
+            self.__roamingSettings = RoamingSettings.defaults()
         if 'file_server' in self.__serverSettings:
             self.__fileServerSettings = _FileServerSettings(self.__serverSettings['file_server'])
         else:
@@ -176,6 +191,12 @@ class ServerSettings(object):
 
     def getForbiddenSortiePeripheryIDs(self):
         return self.__getGlobalSetting('forbiddenSortiePeripheryIDs', tuple())
+
+    def getForbiddenRatedBattles(self):
+        return self.__getGlobalSetting('forbiddenRatedBattles', {})
+
+    def isPremiumInPostBattleEnabled(self):
+        return self.__getGlobalSetting('isPremiumInPostBattleEnabled', True)
 
     def __getGlobalSetting(self, settingsName, default = None):
         return self.__serverSettings.get(settingsName, default)

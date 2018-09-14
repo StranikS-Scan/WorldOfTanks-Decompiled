@@ -4,12 +4,12 @@ from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from PlayerEvents import g_playerEvents
 from gui import SystemMessages
-from gui.game_control import g_instance as g_gameCtrl
+from gui.game_control import g_instance as g_gameCtrl, getFalloutCtrl
 from gui.prb_control import isParentControlActivated, isInEventBattlesQueue
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.context import pre_queue_ctx
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.prb_control.functional.decorators import vehicleAmmoCheck
+from gui.prb_control.functional.decorators import groupAmmoCheck
 from gui.prb_control.functional.default import PreQueueFunctional
 from gui.prb_control.context import PrbCtrlRequestCtx
 from gui.prb_control.formatters import messages
@@ -39,7 +39,7 @@ class EventBattlesQueueFunctional(PreQueueFunctional):
         super(EventBattlesQueueFunctional, self).fini(woEvents)
         return
 
-    @vehicleAmmoCheck
+    @groupAmmoCheck
     def join(self, ctx, callback = None):
         if self.__requestCtx.isProcessing():
             LOG_ERROR('Request is processing', self.__requestCtx)
@@ -58,7 +58,7 @@ class EventBattlesQueueFunctional(PreQueueFunctional):
             return
         self.__requestCtx = ctx
         self.__requestCtx.startProcessing(callback)
-        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryID())
+        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryIDs(), ctx.getBattleType())
         LOG_DEBUG('Player is joining to event battles queue', ctx)
 
     def leave(self, ctx, callback = None):
@@ -97,7 +97,8 @@ class EventBattlesQueueFunctional(PreQueueFunctional):
                 if not success:
                     _leavePreQueue()
 
-            self.join(pre_queue_ctx.JoinEventBattlesQueueCtx(waitingID='prebattle/join'), callback=_joinResponse)
+            falloutCtrl = getFalloutCtrl()
+            self.join(pre_queue_ctx.JoinEventBattlesQueueCtx(map(lambda v: v.invID, falloutCtrl.getSelectedVehicles()), falloutCtrl.getBattleType(), waitingID='prebattle/join'), callback=_joinResponse)
         else:
             _leavePreQueue()
         return result

@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/BattleSharedHistory.py
 from collections import deque
 from debug_utils import LOG_WARNING
+from messenger.gui.Scaleform import FILL_COLORS
 from messenger.m_constants import BATTLE_SHARED_HISTORY_MAX_LEN
 
 class BattleSharedHistory(object):
@@ -32,9 +33,9 @@ class BattleSharedHistory(object):
     def deactivate(self):
         self.__cursor = -1
 
-    def addMessage(self, message, isCurrentPlayer = False):
+    def addMessage(self, message, fillColor = FILL_COLORS.BLACK):
         if self.isEnabled():
-            self.__history.append((message, isCurrentPlayer))
+            self.__history.append((message, fillColor))
             if self.__syncCursor:
                 self.next()
 

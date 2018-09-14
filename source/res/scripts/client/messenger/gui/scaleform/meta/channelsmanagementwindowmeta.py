@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ChannelsManagementWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ChannelsManagementWindowMeta(DAAPIModule):
+class ChannelsManagementWindowMeta(AbstractWindowView):
 
     def getSearchLimitLabel(self):
         self._printOverrideError('getSearchLimitLabel')

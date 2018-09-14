@@ -11,15 +11,14 @@ from gui.Scaleform.Waiting import Waiting
 from account_helpers import pwd_token
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR
 from external_strings_utils import isAccountLoginValid, isPasswordValid, _LOGIN_NAME_MIN_LENGTH
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity
 from gui import SystemMessages, GUI_SETTINGS, makeHtmlString
+from gui.app_loader import g_appLoader
 from gui.doc_loaders.LoginDataLoader import LoginDataLoader
 from gui.Scaleform.locale.BAN_REASON import BAN_REASON
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui import DialogsInterface
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from gui.social_network_login.Bridge import bridge as socialNetworkLogin
@@ -29,7 +28,7 @@ from helpers.time_utils import makeLocalServerTime
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_TIMEOUT, getHostURL, REQUEST_RATE, HOST_AVAILABILITY
 __author__ = 'd_trofimov'
 
-class LoginDispatcher(DisposableEntity, AppRef):
+class LoginDispatcher(DisposableEntity):
     __autoLoginTimerID = None
     __lg_Timeout = 0
     __lg_maxTimeout = 20
@@ -99,7 +98,6 @@ class LoginDispatcher(DisposableEntity, AppRef):
         connectionManager.connectionStatusCallbacks += self.__handleConnectionStatus
         connectionManager.searchServersCallbacks += self.__serversFind
         connectionManager.onConnected += self.__onConnected
-        connectionManager.onDisconnected -= LoginDispatcher.__onDisconnected
         connectionManager.startSearchServers()
         g_preDefinedHosts.readScriptConfig(Settings.g_instance.scriptConfig)
         g_playerEvents.onLoginQueueNumberReceived += self.handleQueue
@@ -131,7 +129,6 @@ class LoginDispatcher(DisposableEntity, AppRef):
         connectionManager.connectionStatusCallbacks -= self.__handleConnectionStatus
         connectionManager.searchServersCallbacks -= self.__serversFind
         connectionManager.onConnected -= self.__onConnected
-        connectionManager.onDisconnected += LoginDispatcher.__onDisconnected
         connectionManager.stopSearchServers()
         g_playerEvents.onLoginQueueNumberReceived -= self.handleQueue
         g_playerEvents.onAccountBecomePlayer -= self.__pe_onAccountBecomePlayer
@@ -297,14 +294,10 @@ class LoginDispatcher(DisposableEntity, AppRef):
         LOG_DEBUG('onConnected')
 
         def iCallback():
-            self.app.logoff(True)
+            g_appLoader.goToLoginByRQ()
             Waiting.close()
 
         Waiting.show('enter', interruptCallback=iCallback)
-
-    @staticmethod
-    def __onDisconnected():
-        DialogsInterface.showDisconnect()
 
     def __getFullServersList(self):
         serversList = g_preDefinedHosts.shortList()

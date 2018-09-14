@@ -5,11 +5,15 @@ import MusicController
 import SoundGroups
 from constants import FORT_BUILDING_TYPE
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework import AppRef
+from gui.app_loader.decorators import sf_lobby
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 
-class _FortSoundController(FortViewHelper, AppRef):
+class _FortSoundController(FortViewHelper):
+
+    @sf_lobby
+    def app(self):
+        return None
 
     def init(self):
         SoundGroups.g_instance.onVolumeChanged += self.__onVolumeChanged
@@ -128,8 +132,9 @@ class _FortSoundController(FortViewHelper, AppRef):
         self.__playSound('fortClanWarResult_' + result)
 
     def __playSound(self, soundID):
-        if self.app.soundManager is not None:
-            self.app.soundManager.playEffectSound(soundID)
+        app = self.app
+        if app is not None and app.soundManager is not None:
+            app.soundManager.playEffectSound(soundID)
         return
 
     def __onVolumeChanged(self, categoryName, volume):

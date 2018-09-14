@@ -315,6 +315,7 @@ class IPreQueueListener(object):
 class IUnitFunctional(IClientFunctional, IListenersCollection):
 
     def __init__(self):
+        super(IUnitFunctional, self).__init__()
         LOG_DEBUG('Unit functional inited:', self)
 
     def __del__(self):

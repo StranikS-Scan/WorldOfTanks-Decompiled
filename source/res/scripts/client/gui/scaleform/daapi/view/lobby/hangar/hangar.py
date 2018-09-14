@@ -4,9 +4,9 @@ from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 import SoundGroups
 from constants import IGR_TYPE, QUEUE_TYPE, IS_SHOW_SERVER_STATS
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.shared.formatters import text_styles
+from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import i18n
 from gui.shared.utils.functions import makeTooltip
@@ -22,17 +22,17 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from gui.Scaleform.daapi import LobbySubView
-from gui.shared import events, g_itemsCache
+from gui.shared import g_itemsCache, events, EVENT_BUS_SCOPE
 from gui.server_events import g_eventsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
-from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from ConnectionManager import connectionManager
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 
 class Hangar(LobbySubView, HangarMeta, GlobalListener):
+    __background_alpha__ = 0.0
 
     class COMPONENTS:
         CAROUSEL = 'tankCarousel'
@@ -42,7 +42,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         RESEARCH_PANEL = 'researchPanel'
         TMEN_XP_PANEL = 'tmenXpPanel'
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         LobbySubView.__init__(self, 0)
         self.__isCursorOver3dScene = False
         self.__selected3DEntity = None
@@ -71,6 +71,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.__updateAll()
         self.addListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
         self.addListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
+        self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
 
     def _onCustomizationShow(self, event):
         self.as_setVisibleS(not event.ctx)
@@ -111,6 +112,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def _dispose(self):
         self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
         self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
+        self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         g_eventsCache.onSyncCompleted -= self.onEventsCacheResync
         g_itemsCache.onSyncCompleted -= self.onCacheResync
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -170,11 +172,14 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def __highlight3DEntityAndShowTT(self, entity):
         BigWorld.wgAddEdgeDetectEntity(entity, 0, 0)
         itemId = entity.selectionId
-        self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.HANGAR_3DSCENE_5THANNIVERSARY, [itemId])
+        self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
     def __fade3DEntityAndHideTT(self, entity):
         BigWorld.wgDelEdgeDetectEntity(entity)
         self.as_hide3DSceneTooltipS()
+
+    def __onWaitingShown(self, event):
+        self.closeHelpLayout()
 
     def __onNotifyCursorOver3dScene(self, event):
         self.__isCursorOver3dScene = event.ctx.get('isOver3dScene', False)
@@ -190,7 +195,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         if self.__isCursorOver3dScene:
             self.__highlight3DEntityAndShowTT(entity)
             if entity.mouseOverSoundName:
-                SoundGroups.g_instance.playSoundModel(entity.model, entity.mouseOverSoundName)
+                SoundGroups.g_instance.playSound3D(entity.model, entity.mouseOverSoundName)
 
     def __on3DObjectUnSelected(self, entity):
         self.__selected3DEntity = None
@@ -223,7 +228,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
             self.__updateAll()
             return
         else:
-            if reason in (CACHE_SYNC_REASON.STATS_RESYNC, CACHE_SYNC_REASON.INVENTORY_RESYNC):
+            if reason in (CACHE_SYNC_REASON.STATS_RESYNC, CACHE_SYNC_REASON.INVENTORY_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
                 self.__updateCarouselParams()
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 self.__updateCarouselVehicles(diff.get(GUI_ITEM_TYPE.VEHICLE))
@@ -320,38 +325,20 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         if g_currentVehicle.isPresent() and g_currentVehicle.isPremiumIGR() and igrType == IGR_TYPE.PREMIUM:
             igrActionIcon = makeHtmlString('html_templates:igr/iconSmall', 'premium', {})
             localization = '#menu:vehicleIgr/%s'
-            timeLeft = g_currentVehicle.item.rentLeftTime
-            vehicleIgrTimeLeft = getRentLeftTimeStr(localization, timeLeft, timeStyle=TEXT_MANAGER_STYLES.STATS_TEXT, ctx={'igrIcon': igrActionIcon})
+            rentInfo = g_currentVehicle.item.rentInfo
+            vehicleIgrTimeLeft = getTimeLeftStr(localization, rentInfo.timeLeft, timeStyle=text_styles.stats, ctx={'igrIcon': igrActionIcon})
         self.as_setVehicleIGRS(vehicleIgrTimeLeft)
 
     def __updateState(self):
-        maintenanceEnabledInRent = True
-        customizationEnabledInRent = False
-        if g_currentVehicle.isPresent():
-            customizationEnabledInRent = not g_currentVehicle.isDisabledInRent()
-            if g_currentVehicle.isPremiumIGR():
-                vehDoss = g_itemsCache.items.getVehicleDossier(g_currentVehicle.item.intCD)
-                battlesCount = 0 if vehDoss is None else vehDoss.getTotalStats().getBattlesCount()
-                if battlesCount == 0:
-                    customizationEnabledInRent = maintenanceEnabledInRent = not g_currentVehicle.isDisabledInPremIGR() and not g_currentVehicle.isDisabledInRent()
-        isVehicleDisabled = False
-        if self.prbDispatcher is not None:
-            permission = self.prbDispatcher.getGUIPermissions()
-            if permission is not None:
-                isVehicleDisabled = not permission.canChangeVehicle()
-        crewEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar()
-        carouselEnabled = not isVehicleDisabled
-        maintenanceEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar() and maintenanceEnabledInRent
-        customizationEnabled = g_currentVehicle.isInHangar() and not isVehicleDisabled and not g_currentVehicle.isBroken() and customizationEnabledInRent
-        self.as_setCrewEnabledS(crewEnabled)
-        self.as_setCarouselEnabledS(carouselEnabled)
-        customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
-        if g_currentVehicle.isPresent() and g_currentVehicle.item.isOnlyForEventBattles:
-            customizationEnabled = False
+        state = g_currentVehicle.getViewState()
+        self.as_setCrewEnabledS(state.isCrewOpsEnabled())
+        self.as_setCarouselEnabledS(not state.isLocked())
+        if state.isOnlyForEventBattles():
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY))
-        self.as_setupAmmunitionPanelS(maintenanceEnabled, makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), customizationEnabled, customizationTooltip)
-        self.as_setControlsVisibleS(g_currentVehicle.isPresent())
-        return
+        else:
+            customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
+        self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), state.isCustomizationEnabled(), customizationTooltip)
+        self.as_setControlsVisibleS(state.isUIShown())
 
     def __onStatsReceived(self, stats):
         if IS_SHOW_SERVER_STATS:

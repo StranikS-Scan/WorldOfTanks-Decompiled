@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_utils/FortTransportationViewHelper.py
-from gui.Scaleform.framework.managers.TextManager import TextManager
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.shared.formatters import time_formatters
 from helpers import i18n
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -24,7 +24,7 @@ class FortTransportationViewHelper(FortViewHelper):
             buildingName = building.userName
             if building.isInCooldown():
                 state = 'cooldown'
-                timeStr = TextManager.reference().getTimeDurationStr(building.getEstimatedCooldown())
+                timeStr = time_formatters.getTimeDurationStr(building.getEstimatedCooldown())
                 headerArgs = {'buildingName': buildingName}
                 bodyArgs = {'time': timeStr}
             elif not building.hasStorageToExport():

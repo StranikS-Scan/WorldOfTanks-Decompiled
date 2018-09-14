@@ -302,7 +302,7 @@ class UnitAutoSearchHandler(object):
         else:
             g_eventDispatcher.showUnitWindow(self.__functional.getPrbType())
 
-    def unitBrowser_onSearchSuccessReceived(self, unitMgrID, unitIdx, acceptDeadlineUTC):
+    def unitBrowser_onSearchSuccessReceived(self, unitMgrID, acceptDeadlineUTC):
         self.__hasResult = True
         acceptDelta = self.getAcceptDelta(acceptDeadlineUTC)
         LOG_DEBUG('onUnitAutoSearchSuccess', acceptDelta, acceptDeadlineUTC)
@@ -367,12 +367,14 @@ class InventoryVehiclesWatcher(object):
                 self.__functional.request(unit_ctx.AssignUnitCtx(pInfo.dbID, UNIT_SLOT.REMOVE, 'prebattle/assign'))
             else:
                 vInfo = self.__functional.getVehicleInfo()
-                if vInfo.vehTypeCD and vInfo.vehTypeCD not in vehCDs:
-                    self.__functional.request(unit_ctx.SetVehicleUnitCtx(vehInvID=INV_ID_CLEAR_VEHICLE, waitingID='prebattle/change_settings'))
+                resultCtx = vInfo.updateInventory(vehCDs)
+                if resultCtx is not None:
+                    self.__functional.request(resultCtx)
                 elif update:
                     self.__functional.unit_onUnitPlayerVehDictChanged(getAccountDatabaseID())
         elif update:
             self.__functional.unit_onUnitPlayerVehDictChanged(getAccountDatabaseID())
+        return
 
     def __onVehiclesUpdated(self, *args):
         self.validate(update=True)

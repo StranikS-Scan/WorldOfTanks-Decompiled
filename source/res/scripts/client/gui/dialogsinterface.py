@@ -41,15 +41,11 @@ def showDisconnect(reason = None, isBan = False, expiryTime = None):
     global __ifDisconnectDialogShown
     if __ifDisconnectDialogShown:
         return
-    if g_sessionProvider.isBattleUILoaded():
-        from gui.Scaleform.Disconnect import Disconnect
-        Disconnect.showKick(reason, isBan, expiryTime)
-    else:
-        Waiting.close()
+    Waiting.close()
 
-        def callback(res):
-            global __ifDisconnectDialogShown
-            __ifDisconnectDialogShown = False
+    def callback(_):
+        global __ifDisconnectDialogShown
+        __ifDisconnectDialogShown = False
 
-        __ifDisconnectDialogShown = True
-        showDialog(DisconnectMeta(reason, isBan, expiryTime), callback)
+    __ifDisconnectDialogShown = True
+    showDialog(DisconnectMeta(reason, isBan, expiryTime), callback)

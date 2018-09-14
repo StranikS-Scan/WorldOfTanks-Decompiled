@@ -30,17 +30,19 @@ class ClientUnitMgr(object):
         self.__account = None
         self.__eManager.clear()
         self._clearUnits()
+        self.unitIdx = 0
         return
 
     def __getNextRequestID(self):
         self.__requestID += 1
         return self.__requestID
 
-    def onUnitUpdate(self, unitMgrID, unitIdx, packedUnit, packedOps):
-        LOG_DAN('onUnitUpdate: unitMgrID=%s, unitIdx=%s, packedUnit=%r, packedOps=%r' % (unitMgrID,
-         unitIdx,
-         packedUnit,
-         packedOps))
+    def onUnitUpdate(self, unitMgrID, packedUnit, packedOps):
+        LOG_DAN('onUnitUpdate: unitMgrID=%s, packedUnit=%r, packedOps=%r' % (unitMgrID, packedUnit, packedOps))
+        if not unitMgrID:
+            unitIdx = 0
+        else:
+            unitIdx = 1
         if self.id != unitMgrID:
             prevMgrID = self.id
             prevUnitIdx = self.unitIdx
@@ -55,20 +57,17 @@ class ClientUnitMgr(object):
                 self.units[unitIdx].destroy()
             self.units[unitIdx] = unit
             self.onUnitJoined(self.id, self.unitIdx)
+            if 'battleID' in unit._extras:
+                self.battleID = unit._extras['battleID']
         if packedOps:
             unit = self.units.get(unitIdx)
             if unit:
                 unit.unpackOps(packedOps)
                 unit.onUnitUpdated()
 
-    def setBattleID(self, battleID):
-        self.battleID = battleID
-
-    def onUnitError(self, requestID, unitMgrID, unitIdx, errorCode, errorString):
-        LOG_DEBUG('onUnitError: unitMgr=%s, unitIdx=%s, errorCode=%s, errorString=%r' % (unitMgrID,
-         unitIdx,
-         errorCode,
-         errorString))
+    def onUnitError(self, requestID, unitMgrID, errorCode, errorString):
+        LOG_DEBUG('onUnitError: unitMgr=%s, errorCode=%s, errorString=%r' % (unitMgrID, errorCode, errorString))
+        unitIdx = 1
         if errorCode == UNIT_ERROR.UNIT_RESTORED:
             self._restore()
         self.onUnitErrorReceived(requestID, unitMgrID, unitIdx, errorCode, errorString)
@@ -89,54 +88,58 @@ class ClientUnitMgr(object):
         self.__account.base.createSquadUnitMgr(requestID)
         return requestID
 
+    def createEventSquad(self, eventType):
+        requestID = self.__getNextRequestID()
+        LOG_DAN('unit.createEventSquadUnitMgr', requestID)
+        self.__account.base.createEventSquadUnitMgr(requestID, eventType)
+        return requestID
+
     def join(self, unitMgrID, unitIdx = 1, vehInvID = 0, slotIdx = UNIT_SLOT.REMOVE):
         requestID = self.__getNextRequestID()
         LOG_DAN('unit.joinUnit', requestID, unitMgrID, unitIdx, slotIdx)
-        self.__account.base.joinUnit(requestID, unitMgrID, unitIdx, slotIdx)
+        self.__account.base.joinUnit(requestID, unitMgrID, slotIdx)
         return requestID
 
-    def __doUnitCmd(self, cmd, unitMgrID = 0, unitIdx = 0, uint64Arg = 0, int32Arg = 0, strArg = ''):
+    def __doUnitCmd(self, cmd, unitMgrID = 0, uint64Arg = 0, int32Arg = 0, strArg = ''):
         requestID = self.__getNextRequestID()
         if not unitMgrID:
             unitMgrID = self.id
-        if not unitIdx:
-            unitIdx = self.unitIdx
-        LOG_DAN('unit.__doUnitCmd', cmd, requestID, unitMgrID, unitIdx, uint64Arg, int32Arg, strArg)
-        self.__account.base.doUnitCmd(cmd, requestID, unitMgrID, unitIdx, uint64Arg, int32Arg, strArg)
+        LOG_DAN('unit.__doUnitCmd', cmd, requestID, unitMgrID, uint64Arg, int32Arg, strArg)
+        self.__account.base.doUnitCmd(cmd, requestID, unitMgrID, uint64Arg, int32Arg, strArg)
         return requestID
 
-    def doCustomUnitCmd(self, cmd, unitMgrID = 0, unitIdx = 0, uint64Arg = 0, int32Arg = 0, strArg = ''):
-        return self.__doUnitCmd(cmd, unitMgrID, unitIdx, uint64Arg, int32Arg, strArg)
+    def doCustomUnitCmd(self, cmd, unitMgrID = 0, uint64Arg = 0, int32Arg = 0, strArg = ''):
+        return self.__doUnitCmd(cmd, unitMgrID, uint64Arg, int32Arg, strArg)
 
     def leave(self):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.LEAVE_UNIT)
 
     def setVehicle(self, vehInvID = INV_ID_CLEAR_VEHICLE, setReady = False):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_VEHICLE, 0, 0, vehInvID, int(setReady))
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_VEHICLE, 0, vehInvID, int(setReady))
 
     def setMember(self, vehInvID, slotIdx = UNIT_SLOT.ANY):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_MEMBER, 0, 0, vehInvID, slotIdx)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_MEMBER, 0, vehInvID, slotIdx)
 
     def fit(self, playerID, slotIdx = UNIT_SLOT.ANY, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.FIT_UNIT_MEMBER, self.id, unitIdx, playerID, slotIdx)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.FIT_UNIT_MEMBER, self.id, playerID, slotIdx)
 
     def unfit(self, playerID, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.FIT_UNIT_MEMBER, self.id, unitIdx, playerID, UNIT_SLOT.REMOVE)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.FIT_UNIT_MEMBER, self.id, playerID, UNIT_SLOT.REMOVE)
 
     def assign(self, playerID, slotIdx, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.ASSIGN_UNIT_MEMBER, self.id, unitIdx, playerID, slotIdx)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.ASSIGN_UNIT_MEMBER, self.id, playerID, slotIdx)
 
     def unassign(self, playerID, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.ASSIGN_UNIT_MEMBER, self.id, unitIdx, playerID, UNIT_SLOT.REMOVE)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.ASSIGN_UNIT_MEMBER, self.id, playerID, UNIT_SLOT.REMOVE)
 
     def reassign(self, playerID, slotIdx, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.REASSIGN_UNIT_MEMBER, self.id, unitIdx, playerID, slotIdx)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.REASSIGN_UNIT_MEMBER, self.id, playerID, slotIdx)
 
     def kick(self, playerID, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.KICK_UNIT_PLAYER, self.id, unitIdx, playerID)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.KICK_UNIT_PLAYER, self.id, playerID)
 
     def setReady(self, isReady = True, resetVehicle = False):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_MEMBER_READY, self.id, 0, int(isReady), int(resetVehicle))
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_MEMBER_READY, self.id, int(isReady), int(resetVehicle))
 
     def setRosterSlot(self, rosterSlotIdx, vehTypeID = None, nationNames = [], levels = (1, 8), vehClassNames = [], unitIdx = 0):
         LOG_DAN('setRosterSlot: slot=%s, vehTypeID=%s, nationNames=%s, levels=%s, vehClassNames=%s' % (rosterSlotIdx,
@@ -145,12 +148,10 @@ class ClientUnitMgr(object):
          repr(levels),
          repr(vehClassNames)))
         rSlot = UnitRosterSlot(vehTypeID, nationNames, levels, vehClassNames)
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_ROSTER_SLOT, self.id, self.unitIdx, 0, rosterSlotIdx, rSlot.pack())
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_ROSTER_SLOT, self.id, 0, rosterSlotIdx, rSlot.pack())
 
     def setAllRosterSlots(self, rosterDefsDict, unitIdx = 0):
-        if not unitIdx:
-            unitIdx = self.unitIdx
-        LOG_DAN('setAllRosterSlots: rosterDefsDict=%r, unitIdx=%s' % (rosterDefsDict, unitIdx))
+        LOG_DAN('setAllRosterSlots: rosterDefsDict=%r' % rosterDefsDict)
         rosterSlots = {}
         for rosterSlotIdx, rosterDict in rosterDefsDict.iteritems():
             vehTypeID = rosterDict.get('vehTypeID', None)
@@ -161,25 +162,25 @@ class ClientUnitMgr(object):
             rosterSlots[rosterSlotIdx] = rSlot.pack()
 
         requestID = self.__getNextRequestID()
-        LOG_DAN('unit.setAllRosterSlots: rosterSlots=%r' % rosterSlots, requestID, self.id, unitIdx)
-        self.__account.base.setAllRosterSlots(requestID, self.id, unitIdx, rosterSlots.keys(), rosterSlots.values())
+        LOG_DAN('unit.setAllRosterSlots: rosterSlots=%r' % rosterSlots, requestID, self.id)
+        self.__account.base.setAllRosterSlots(requestID, self.id, rosterSlots.keys(), rosterSlots.values())
         return requestID
 
     def lockUnit(self, isLocked = True, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.LOCK_UNIT, self.id, unitIdx, int(isLocked))
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.LOCK_UNIT, self.id, int(isLocked))
 
     def closeSlot(self, slotIdx, isClosed = True, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.CLOSE_UNIT_SLOT, self.id, unitIdx, int(isClosed), slotIdx)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.CLOSE_UNIT_SLOT, self.id, int(isClosed), slotIdx)
 
     def openUnit(self, isOpen = True, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.OPEN_UNIT, self.id, unitIdx, int(isOpen))
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.OPEN_UNIT, self.id, int(isOpen))
 
     def setDevMode(self, isDevMode = True, unitIdx = 0):
         if constants.IS_DEVELOPMENT:
-            return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, self.id, unitIdx, int(isDevMode))
+            return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, self.id, int(isDevMode))
 
     def setRatedBattle(self, isRatedBattle = True, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_RATED_BATTLE, self.id, unitIdx, int(isRatedBattle))
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_RATED_BATTLE, self.id, int(isRatedBattle))
 
     def invite(self, accountsToInvite, comment):
         requestID = self.__getNextRequestID()
@@ -190,28 +191,37 @@ class ClientUnitMgr(object):
     def startBattle(self, unitIdx = 0, vehInvID = 0, gameplaysMask = None):
         if gameplaysMask is not None:
             self.setGameplaysMask(gameplaysMask)
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, self.id, unitIdx, vehInvID)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, self.id, vehInvID)
 
     def stopBattle(self, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.STOP_UNIT_BATTLE, self.id, unitIdx)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.STOP_UNIT_BATTLE, self.id)
 
     def startAutoSearch(self, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.START_AUTO_SEARCH, self.id, unitIdx)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.START_AUTO_SEARCH, self.id)
 
     def stopAutoSearch(self, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.STOP_AUTO_SEARCH, self.id, unitIdx)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.STOP_AUTO_SEARCH, self.id)
 
     def setComment(self, strComment, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_COMMENT, self.id, unitIdx, 0, 0, strComment)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_COMMENT, self.id, 0, 0, strComment)
 
     def setGameplaysMask(self, gameplaysMask, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_GAMEPLAYS_MASK, self.id, unitIdx, gameplaysMask)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_GAMEPLAYS_MASK, self.id, gameplaysMask)
 
     def giveLeadership(self, memberDBID, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.GIVE_LEADERSHIP, self.id, unitIdx, memberDBID)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.GIVE_LEADERSHIP, self.id, memberDBID)
 
     def changeSortieDivision(self, division, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.CHANGE_SORTIE_DIVISION, self.id, unitIdx, division)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.CHANGE_SORTIE_DIVISION, self.id, division)
+
+    def setEventSquadVehicleList(self, vehicleList, unitIdx = 0):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_EVENT_SQUAD_VEHICLE_LIST, self.id, 0, 0, ','.join(map(str, vehicleList)))
+
+    def changeEventSquadType(self, newEventType):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.CHANGE_EVENT_SQUAD_TYPE, self.id, newEventType)
+
+    def setEventSquadReady(self, isReady = True):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_EVENT_SQUAD_MEMBER_READY, self.id, int(isReady))
 
     def _clearUnits(self):
         while len(self.units):
@@ -243,7 +253,6 @@ class ClientUnitBrowser(object):
         self.onErrorReceived = Event.Event(self.__eManager)
         self.results = {}
         self._acceptUnitMgrID = 0
-        self._acceptUnitIdx = 0
         self._acceptDeadlineUTC = 0
 
     def destroy(self):
@@ -332,23 +341,20 @@ class ClientUnitBrowser(object):
     def stopSearch(self):
         self.__account.dequeueUnitAssembler()
 
-    def onSearchSuccess(self, unitMgrID, unitIdx, acceptDeadlineUTC):
-        LOG_DAN('onSearchSuccess: unitMgrID=%s, unitIdx=%s, acceptDeadlineUTC=%s' % (unitMgrID, unitIdx, acceptDeadlineUTC))
+    def onSearchSuccess(self, unitMgrID, acceptDeadlineUTC):
+        LOG_DAN('onSearchSuccess: unitMgrID=%s, acceptDeadlineUTC=%s' % (unitMgrID, acceptDeadlineUTC))
         self._acceptUnitMgrID = unitMgrID
-        self._acceptUnitIdx = unitIdx
         self._acceptDeadlineUTC = acceptDeadlineUTC
-        self.onSearchSuccessReceived(unitMgrID, unitIdx, acceptDeadlineUTC)
+        self.onSearchSuccessReceived(unitMgrID, acceptDeadlineUTC)
 
-    def acceptSearch(self, unitMgrID = 0, unitIdx = 0):
+    def acceptSearch(self, unitMgrID = 0):
         if not unitMgrID:
             unitMgrID = self._acceptUnitMgrID
-            unitIdx = self._acceptUnitIdx
-        LOG_DAN('unitBrowser.acceptUnitAutoSearch', unitMgrID, unitIdx)
-        self.__account.base.acceptUnitAutoSearch(unitMgrID, unitIdx)
+        LOG_DAN('unitBrowser.acceptUnitAutoSearch', unitMgrID)
+        self.__account.base.acceptUnitAutoSearch(unitMgrID)
 
-    def declineSearch(self, unitMgrID = 0, unitIdx = 0):
+    def declineSearch(self, unitMgrID = 0):
         if not unitMgrID:
             unitMgrID = self._acceptUnitMgrID
-            unitIdx = self._acceptUnitIdx
-        LOG_DAN('unitBrowser.declineSearch', unitMgrID, unitIdx)
-        self.__account.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, unitMgrID, unitIdx, 0)
+        LOG_DAN('unitBrowser.declineSearch', unitMgrID)
+        self.__account.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, unitMgrID, 0, 0)

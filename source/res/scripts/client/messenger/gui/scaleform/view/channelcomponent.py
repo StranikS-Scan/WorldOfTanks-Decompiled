@@ -6,6 +6,7 @@ from debug_utils import LOG_DEBUG
 from gui.shared import event_dispatcher as shared_events
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.meta.ChannelComponentMeta import ChannelComponentMeta
+from messenger.proto.bw_chat2.wrappers import UnitDataFactory
 
 class ChannelComponent(ChannelComponentMeta):
 
@@ -62,3 +63,8 @@ class ChannelComponent(ChannelComponentMeta):
         if self._controller():
             result = '\n'.join(self._controller().getHistory())
         return result
+
+    def addNotification(self, text):
+        factory = UnitDataFactory()
+        message = factory.messageVO(factory.broadcastArgs(text))
+        self._controller().addMessage(message, False)

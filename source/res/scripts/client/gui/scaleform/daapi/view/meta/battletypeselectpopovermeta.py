@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleTypeSelectPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class BattleTypeSelectPopoverMeta(DAAPIModule):
+class BattleTypeSelectPopoverMeta(SmartPopOverView):
 
     def selectFight(self, actionName):
         self._printOverrideError('selectFight')

@@ -1,14 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortNotCommanderFirstEnterWindow.py
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortNotCommanderFirstEnterWindowMeta import FortNotCommanderFirstEnterWindowMeta
-from gui.Scaleform.framework import AppRef
 from helpers import i18n
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 
-class FortNotCommanderFirstEnterWindow(AbstractWindowView, View, FortNotCommanderFirstEnterWindowMeta, AppRef):
+class FortNotCommanderFirstEnterWindow(FortNotCommanderFirstEnterWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortNotCommanderFirstEnterWindow, self).__init__()
 
     def _populate(self):

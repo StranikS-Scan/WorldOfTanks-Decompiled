@@ -2,8 +2,6 @@
 import BigWorld
 import Math
 from AvatarInputHandler import mathUtils
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from gui.WindowsManager import g_windowsManager
 from constants import SERVER_TICK_LENGTH
 OVER_TERRAIN_HEIGHT = 0.5
 MARKER_HEIGHT = 5.0
@@ -83,3 +81,11 @@ class CombatSelectedArea(object):
         self.__fakeModel = None
         self.__rotateModelNode = None
         return
+
+    def pointInside(self, point):
+        m = Math.Matrix(self.__fakeModel.matrix)
+        m.invert()
+        point = m.applyPoint(point)
+        x_side = self.__size.x / 2
+        y_side = self.__size.y / 2
+        return -x_side < point.x < x_side and -y_side < point.z < y_side

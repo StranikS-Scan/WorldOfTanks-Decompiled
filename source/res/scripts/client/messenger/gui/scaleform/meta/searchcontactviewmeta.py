@@ -17,7 +17,3 @@ class SearchContactViewMeta(BaseContactView):
     def as_setSearchDisabledS(self, coolDown):
         if self._isDAAPIInited():
             return self.flashObject.as_setSearchDisabled(coolDown)
-
-    def as_setSearchTextValidS(self, isValid, reason):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setSearchTextValid(isValid, reason)

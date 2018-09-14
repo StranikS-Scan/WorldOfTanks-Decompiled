@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/ContactsListPopover.py
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from helpers.i18n import makeString
@@ -8,14 +7,13 @@ from messenger.gui.Scaleform.meta.ContactsListPopoverMeta import ContactsListPop
 from messenger.gui.Scaleform.view.ContactsCMListener import ContactsCMListener
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
-from gui import game_control
+from gui.LobbyContext import g_lobbyContext
 from messenger.proto.events import g_messengerEvents
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.AccountSettings import AccountSettings, CONTACTS
-from gui.Scaleform.framework.entities.View import View
 from messenger.storage import storage_getter
 
-class ContactsListPopover(View, SmartPopOverView, ContactsListPopoverMeta, ContactsCMListener):
+class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
 
     def __init__(self, ctx = None):
         super(ContactsListPopover, self).__init__(ctx)
@@ -86,8 +84,8 @@ class ContactsListPopover(View, SmartPopOverView, ContactsListPopoverMeta, Conta
         self.destroy()
 
     def isEnabledInRoaming(self, uid):
-        roamingCtrl = game_control.g_instance.roaming
-        return not roamingCtrl.isInRoaming() and not roamingCtrl.isPlayerInRoaming(uid)
+        roaming = g_lobbyContext.getServerSettings().roaming
+        return not roaming.isInRoaming() and not roaming.isPlayerInRoaming(uid)
 
     def addToFriends(self, uid, name):
         LOG_DEBUG('addToFriends: ', uid)

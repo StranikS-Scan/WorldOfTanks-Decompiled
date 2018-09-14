@@ -7,18 +7,14 @@ from gui.Scaleform.daapi.view.meta.CyberSportUnitMeta import CyberSportUnitMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control import settings
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
+from gui.shared.formatters import text_styles
 from helpers import int2roman, i18n
 
 class CyberSportUnitView(CyberSportUnitMeta):
-
-    def __init__(self):
-        super(CyberSportUnitView, self).__init__()
-        self.textMgr = self.app.utilsManager.textManager
 
     def getCoolDownRequests(self):
         requests = super(CyberSportUnitView, self).getCoolDownRequests()
@@ -143,10 +139,10 @@ class CyberSportUnitView(CyberSportUnitMeta):
     def _updateLabels(self, functional):
         _, unit = functional.getUnit()
         slotsBusy = len(unit.getMembers())
-        slotsBusy = self.textMgr.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, str(slotsBusy))
+        slotsBusy = text_styles.main(str(slotsBusy))
         maxSlots = unit.getMaxSlotCount()
         teamLbl = i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMMEMBERS, current=slotsBusy, max=str(maxSlots))
-        teamLbl = self.textMgr.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, teamLbl)
+        teamLbl = text_styles.standard(teamLbl)
         self.as_setPlayerCountLblS(teamLbl)
 
     def _setActionButtonState(self):
@@ -171,7 +167,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.CandidatesDataProvider()
-        self._candidatesDP.init(self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
+        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
 
     def rebuildCandidatesDP(self):
         self._candidatesDP.rebuild(self.unitFunctional.getCandidates())

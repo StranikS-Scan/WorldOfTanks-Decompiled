@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/NotificationPopUpViewerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class NotificationPopUpViewerMeta(DAAPIModule):
+class NotificationPopUpViewerMeta(BaseDAAPIComponent):
 
     def setListClear(self):
         self._printOverrideError('setListClear')

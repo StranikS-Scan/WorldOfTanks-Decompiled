@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PrequeueWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class PrequeueWindowMeta(DAAPIModule):
+class PrequeueWindowMeta(AbstractWindowView):
 
     def requestToEnqueue(self):
         self._printOverrideError('requestToEnqueue')

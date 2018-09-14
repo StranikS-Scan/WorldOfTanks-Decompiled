@@ -5,10 +5,12 @@ from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.framework import AppRef, ViewTypes
+from gui.Scaleform.framework import ViewTypes
+from gui.app_loader import g_appLoader
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import LoginEventEx
+from gui.shared.events import LoginEventEx, GUICommonEvent
 from gui.shared.actions.chains import ActionsChain
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from predefined_hosts import g_preDefinedHosts, getHostURL
 __all__ = ['LeavePrbModalEntity',
  'DisconnectFromPeriphery',
@@ -77,7 +79,7 @@ class LeavePrbModalEntity(Action):
         self._running = False
 
 
-class DisconnectFromPeriphery(Action, AppRef):
+class DisconnectFromPeriphery(Action):
 
     def __init__(self):
         super(DisconnectFromPeriphery, self).__init__()
@@ -87,19 +89,21 @@ class DisconnectFromPeriphery(Action, AppRef):
 
     def invoke(self):
         self._running = True
-        self.app.logoff()
+        g_appLoader.goToLoginByRQ()
 
     def isRunning(self):
-        from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-        view = self.app.containerManager.getView(ViewTypes.DEFAULT)
-        if view and view.settings.alias == VIEW_ALIAS.LOGIN and view._isCreated() and connectionManager.isDisconnected():
-            LOG_DEBUG('Disconnect action. Player came to login')
-            self._completed = True
-            self._running = False
+        app = g_appLoader.getApp()
+        if app:
+            from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+            view = app.containerManager.getView(ViewTypes.DEFAULT)
+            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view._isCreated() and connectionManager.isDisconnected():
+                LOG_DEBUG('Disconnect action. Player came to login')
+                self._completed = True
+                self._running = False
         return self._running
 
 
-class ConnectToPeriphery(Action, AppRef):
+class ConnectToPeriphery(Action):
 
     def __init__(self, peripheryID):
         super(ConnectToPeriphery, self).__init__()
@@ -228,3 +232,25 @@ class WaitFlagActivation(Action):
 
     def isInstantaneous(self):
         return False
+
+
+class ShowCompanyWindow(Action):
+
+    def __init__(self):
+        super(ShowCompanyWindow, self).__init__()
+        self.__isLobbyInited = False
+        g_eventBus.addListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
+
+    def invoke(self):
+        self._running = True
+        self._completed = False
+        if self.__isLobbyInited:
+            from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
+            battle_selector_items.getItems().select(PREBATTLE_ACTION_NAME.COMPANY)
+            self._completed = True
+            self._running = False
+
+    def __onLobbyInited(self, _):
+        self.__isLobbyInited = True
+        g_eventBus.removeListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
+        self.invoke()

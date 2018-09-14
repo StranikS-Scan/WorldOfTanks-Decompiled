@@ -1,15 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/IconPriceDialog.py
-import BigWorld
-from gui.Scaleform.daapi.view.dialogs.IconDialog import IconDialog
 from gui.Scaleform.daapi.view.meta.IconPriceDialogMeta import IconPriceDialogMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from helpers import i18n
 
-class IconPriceDialog(IconPriceDialogMeta, IconDialog):
+class IconPriceDialog(IconPriceDialogMeta):
 
     def __init__(self, meta, handler):
-        IconDialog.__init__(self, meta, handler)
-        IconPriceDialogMeta.__init__(self)
+        super(IconPriceDialog, self).__init__(meta, handler)
 
     def _populate(self):
         super(IconPriceDialog, self)._populate()

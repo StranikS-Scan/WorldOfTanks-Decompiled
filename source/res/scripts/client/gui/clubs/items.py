@@ -195,11 +195,12 @@ class _Member(_User):
 
 class _ClubInvitation(object):
 
-    def __init__(self, clubDbID, userDbID, timestamp, status):
+    def __init__(self, clubDbID, userDbID, timestamp, status, updatingTime):
         self._id, self._showAt = _g_invitesIDs.getInviteID(clubDbID, userDbID, timestamp)
         self._clubDbID = clubDbID
         self._userDbID = userDbID
         self._timestamp = timestamp
+        self._updatingTime = updatingTime
         self._status = status or _CIS.CANCELLED
 
     def getID(self):
@@ -213,6 +214,9 @@ class _ClubInvitation(object):
 
     def getTimestamp(self):
         return self._timestamp
+
+    def getUpdatingTime(self):
+        return self._updatingTime
 
     def isActive(self):
         return self._status == _CIS.ACTIVE
@@ -247,8 +251,8 @@ class _ClubInvitation(object):
 
 class ClubInvite(_ClubInvitation):
 
-    def __init__(self, clubDbID, userDbID, inviterDbID, timestamp, status):
-        super(ClubInvite, self).__init__(clubDbID, userDbID, timestamp, status)
+    def __init__(self, clubDbID, userDbID, inviterDbID, timestamp, status, updatingTime):
+        super(ClubInvite, self).__init__(clubDbID, userDbID, timestamp, status, updatingTime)
         self._inviterDbID = inviterDbID
 
     def getInviterDbID(self):
@@ -259,8 +263,8 @@ class ClubInvite(_ClubInvitation):
 
 class ClubApplication(_ClubInvitation):
 
-    def __init__(self, clubDbID, userDbID, comment, timestamp, status):
-        super(ClubApplication, self).__init__(clubDbID, userDbID, timestamp, status)
+    def __init__(self, clubDbID, userDbID, comment, timestamp, status, updatingTime):
+        super(ClubApplication, self).__init__(clubDbID, userDbID, timestamp, status, updatingTime)
         self._comment = comment
 
     def getComment(self):
@@ -284,9 +288,9 @@ class _UnitInfo(namedtuple('_UnitInfo', ['unitMgrID', 'peripheryID'])):
 class Club(object):
 
     def __init__(self, clubDbID, clubDescr):
+        self._clubDescr = ClubDescr(clubDbID, clubDescr)
         self.__clubDbID = clubDbID
-        self.__clubDescr = ClubDescr(clubDbID, clubDescr)
-        self.__restrictions = RestrictionsCollection(self.__clubDescr.restrictions)
+        self.__restrictions = RestrictionsCollection(self._clubDescr.restrictions)
 
     @storage_getter('users')
     def users(self):
@@ -296,52 +300,52 @@ class Club(object):
         return self.__clubDbID
 
     def getDescriptor(self):
-        return self.__clubDescr
+        return self._clubDescr
 
     def getUserName(self):
-        return i18n.encodeUtf8(self.__clubDescr.name)
+        return i18n.encodeUtf8(self._clubDescr.name)
 
     def getUserDescription(self):
-        return i18n.encodeUtf8(self.__clubDescr.description or '')
+        return i18n.encodeUtf8(self._clubDescr.description or '')
 
     def getUserShortDescription(self):
-        return i18n.encodeUtf8(self.__clubDescr.shortDescription or '')
+        return i18n.encodeUtf8(self._clubDescr.shortDescription or '')
 
     def getOwnerDbID(self):
-        return self.__clubDescr.owner
+        return self._clubDescr.owner
 
     def getOwner(self):
-        return self.getMember(self.__clubDescr.owner)
+        return self.getMember(self._clubDescr.owner)
 
     def getState(self):
-        return _ClubState(self.__clubDescr.state)
+        return _ClubState(self._clubDescr.state)
 
     def getLadderInfo(self):
-        return _LadderInfo(*self.__clubDescr.ladder)
+        return _LadderInfo(*self._clubDescr.ladder)
 
     def getEmblem16x16(self):
-        return self.__clubDescr.emblems.get(EMBLEM_TYPE.SIZE_16x16)
+        return self._clubDescr.emblems.get(EMBLEM_TYPE.SIZE_16x16)
 
     def getEmblem24x24(self):
-        return self.__clubDescr.emblems.get(EMBLEM_TYPE.SIZE_24x24)
+        return self._clubDescr.emblems.get(EMBLEM_TYPE.SIZE_24x24)
 
     def getEmblem32x32(self):
-        return self.__clubDescr.emblems.get(EMBLEM_TYPE.SIZE_32x32)
+        return self._clubDescr.emblems.get(EMBLEM_TYPE.SIZE_32x32)
 
     def getEmblem64x64(self):
-        return self.__clubDescr.emblems.get(EMBLEM_TYPE.SIZE_64x64)
+        return self._clubDescr.emblems.get(EMBLEM_TYPE.SIZE_64x64)
 
     def getEmblem256x256(self):
-        return self.__clubDescr.emblems.get(EMBLEM_TYPE.SIZE_256x256)
+        return self._clubDescr.emblems.get(EMBLEM_TYPE.SIZE_256x256)
 
     def getApplicantsRequirements(self):
-        return _ApplicantsRequirements(self.__clubDescr.minWinRate, self.__clubDescr.minBattleCount, self.getUserShortDescription())
+        return _ApplicantsRequirements(self._clubDescr.minWinRate, self._clubDescr.minBattleCount, self.getUserShortDescription())
 
     def hasMember(self, dbID):
-        return dbID in self.__clubDescr.members
+        return dbID in self._clubDescr.members
 
     def isStaffed(self):
-        return len(self.__clubDescr.members) >= CLUB_LIMITS.MAX_MEMBERS
+        return len(self._clubDescr.members) >= CLUB_LIMITS.MAX_MEMBERS
 
     def wasInRatedBattleThisSeason(self):
         return self.getSeasonDossier().getTotalStats().getBattlesCount() > 0
@@ -349,13 +353,13 @@ class Club(object):
     def getMember(self, memberDbID = None):
         memberDbID = memberDbID or getPlayerDatabaseID()
         if self.hasMember(memberDbID):
-            return self.__makeMemberItem(memberDbID, self.__clubDescr.members[memberDbID])
+            return self.__makeMemberItem(memberDbID, self._clubDescr.members[memberDbID])
         else:
             return None
 
     def getMembers(self):
         result = {}
-        for memberDbID, roleMask in self.__clubDescr.members.iteritems():
+        for memberDbID, roleMask in self._clubDescr.members.iteritems():
             result[memberDbID] = self.__makeMemberItem(memberDbID, roleMask)
 
         return result
@@ -368,9 +372,9 @@ class Club(object):
 
     def getInvites(self, onlyActive = False):
         result = {}
-        for inviteeDbID, data in self.__clubDescr.invites.iteritems():
-            timestamp, inviterDbID, status = data
-            invite = ClubInvite(self.__clubDbID, inviteeDbID, inviterDbID, timestamp, status)
+        for inviteeDbID, data in self._clubDescr.invites.iteritems():
+            timestamp, inviterDbID, status, updatingTime = data
+            invite = ClubInvite(self.__clubDbID, inviteeDbID, inviterDbID, timestamp, status, updatingTime)
             if not onlyActive or invite.isActive():
                 result[invite.getID()] = invite
 
@@ -378,28 +382,28 @@ class Club(object):
 
     def getApplicants(self, onlyActive = False):
         result = {}
-        for applicantDbID, data in self.__clubDescr.applicants.iteritems():
-            timestamp, comment, status = data
-            app = ClubApplication(self.__clubDbID, applicantDbID, comment, timestamp, status)
+        for applicantDbID, data in self._clubDescr.applicants.iteritems():
+            timestamp, comment, status, updatingTime = data
+            app = ClubApplication(self.__clubDbID, applicantDbID, comment, timestamp, status, updatingTime)
             if not onlyActive or app.isActive():
                 result[app.getID()] = app
 
         return result
 
     def getSeasonDossier(self):
-        return ClubDossier(self.__clubDescr.getDossierDescr()[0], self.__clubDbID)
+        return ClubDossier(self._clubDescr.getDossierDescr()[0], self.__clubDbID)
 
     def getTotalDossier(self):
-        return ClubDossier(self.__clubDescr.getDossierDescr()[1], self.__clubDbID)
+        return ClubDossier(self._clubDescr.getDossierDescr()[1], self.__clubDbID)
 
     def isChanged(self, newClub):
-        return self.__clubDescr.rev != newClub.getDescriptor().rev
+        return self._clubDescr.rev != newClub.getDescriptor().rev
 
     def getPermissions(self, memberDbID = None):
         if memberDbID is None:
             memberDbID = getPlayerDatabaseID()
         if self.hasMember(memberDbID):
-            return MemberPermissions(self.__clubDescr.members[memberDbID])
+            return MemberPermissions(self._clubDescr.members[memberDbID])
         else:
             return DefaultMemberPermissions()
 
@@ -418,13 +422,13 @@ class Club(object):
         return self.__restrictions
 
     def getCreationTime(self):
-        return self.__clubDescr.createdAt
+        return self._clubDescr.createdAt
 
     def canParticipateBattles(self):
-        return len(self.__clubDescr.members) >= MIN_MEMBERS_COUNT
+        return len(self._clubDescr.members) >= MIN_MEMBERS_COUNT
 
     def __makeMemberItem(self, memberDbID, roleMask):
-        return _Member(memberDbID, roleMask, clubDbID=self.__clubDbID, extra=_MemberExtra(*self.__clubDescr.getMemberExtras(memberDbID)))
+        return _Member(memberDbID, roleMask, clubDbID=self.__clubDbID, extra=_MemberExtra(*self._clubDescr.getMemberExtras(memberDbID)))
 
     def __repr__(self):
         return 'Club(dbID = %d, state = %s, members = %d)' % (self.__clubDbID, self.getState(), len(self.getMembers()))
@@ -536,6 +540,9 @@ class SeasonState(object):
 
     def getStateString(self):
         return CLUBS_SEASON_STATE.TO_TEXT.get(self.__state, 'UNKNOWN')
+
+    def __repr__(self):
+        return 'SeasonState(%s[%d])' % (self.getStateString(), self.__state)
 
 
 class SeasonInfo(namedtuple('SeasonInfo', ['seasonID',

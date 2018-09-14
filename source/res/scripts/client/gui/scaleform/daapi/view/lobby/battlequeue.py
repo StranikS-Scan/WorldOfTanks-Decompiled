@@ -7,7 +7,7 @@ from gui import prb_control, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.prb_control.prb_helpers import preQueueFunctionalProperty
+from gui.prb_control.prb_helpers import preQueueFunctionalProperty, prbDispatcherProperty
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared import events
 from gui.server_events import g_eventsCache
@@ -69,6 +69,10 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
     def preQueueFunctional(self):
         return None
 
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        return None
+
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
@@ -86,7 +90,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             dispatcher.exitFromQueue()
         return
 
-    def onQueueInfoReceived(self, randomsQueueInfo, companiesQueueInfo, historicalQueueInfo):
+    def onQueueInfoReceived(self, randomsQueueInfo, companiesQueueInfo, historicalQueueInfo, eventQueueInfo):
         if prb_control.isCompany():
             data = {'title': '#menu:prebattle/typesCompaniesTitle',
              'data': list()}
@@ -120,6 +124,21 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
                 vClassesData.append((message, byClassA + byClassB))
 
             self.as_setListByTypeS(data)
+        elif self.__isInEventBattles():
+            info = dict(eventQueueInfo)
+            vClasses = info.get('classes', [])
+            vClassesLen = len(vClasses)
+            totalPlayers = info.get('players', 0)
+            self.flashObject.as_setPlayers(makeHtmlString('html_templates:lobby/queue/playersLabel', 'players', {'count': totalPlayers}))
+            if vClassesLen:
+                data = {'title': '#menu:prebattle/typesTitle',
+                 'data': []}
+                vClassesData = data['data']
+                for vClass, message in BattleQueue.TYPES_ORDERED:
+                    idx = constants.VEHICLE_CLASS_INDICES[vClass]
+                    vClassesData.append((message, vClasses[idx] if idx < vClassesLen else 0))
+
+                self.as_setListByTypeS(data)
         else:
             info = dict(randomsQueueInfo)
             if 'classes' in info:
@@ -161,8 +180,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         if currPlayer is not None and hasattr(currPlayer, 'requestQueueInfo'):
             if prb_control.isCompany():
                 qType = constants.QUEUE_TYPE.COMPANIES
-            elif prb_control.isInHistoricalQueue():
-                qType = constants.QUEUE_TYPE.HISTORICAL
+            elif self.__isInEventBattles():
+                qType = constants.QUEUE_TYPE.EVENT_BATTLES
             else:
                 qType = constants.QUEUE_TYPE.RANDOMS
             currPlayer.requestQueueInfo(qType)
@@ -177,3 +196,10 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.flashObject.as_setTimer(textLabel, timeLabel)
         self.createTime += 1
         return
+
+    def __isInEventBattles(self):
+        if self.prbDispatcher:
+            isInFallout = self.prbDispatcher.getFunctionalState().isInFallout()
+        else:
+            isInFallout = False
+        return prb_control.isInEventBattlesQueue() or isInFallout

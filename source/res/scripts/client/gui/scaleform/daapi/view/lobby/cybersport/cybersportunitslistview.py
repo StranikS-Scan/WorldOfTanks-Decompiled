@@ -22,10 +22,9 @@ from gui.clubs import events_dispatcher as club_events
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import ClubEmblemsHelper, CooldownHelper
 from helpers import int2roman
-from gui.Scaleform.framework import AppRef
 from helpers.i18n import makeString as _ms
 
-class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListener, ClubEmblemsHelper, AppRef):
+class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListener, ClubEmblemsHelper):
 
     def __init__(self):
         super(CyberSportUnitsListView, self).__init__()
@@ -160,7 +159,8 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
     def __createHedader(self, label, buttonWidth, iconSource = None):
         return {'label': label,
          'buttonWidth': buttonWidth,
-         'iconSource': iconSource}
+         'iconSource': iconSource,
+         'enabled': False}
 
     def __updateVehicleLabel(self):
         settings = self.unitFunctional.getRosterSettings()

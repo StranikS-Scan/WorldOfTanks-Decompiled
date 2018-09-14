@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleBuyWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class VehicleBuyWindowMeta(DAAPIModule):
+class VehicleBuyWindowMeta(AbstractWindowView):
 
     def submit(self, data):
         self._printOverrideError('submit')

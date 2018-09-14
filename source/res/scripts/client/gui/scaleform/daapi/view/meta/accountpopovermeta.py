@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/AccountPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class AccountPopoverMeta(DAAPIModule):
+class AccountPopoverMeta(SmartPopOverView):
 
     def openBoostersWindow(self, slotId):
         self._printOverrideError('openBoostersWindow')

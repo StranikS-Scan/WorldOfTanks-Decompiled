@@ -1,18 +1,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PromoPremiumIgrWindow.py
 from account_helpers.AccountSettings import AccountSettings, IGR_PROMO
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.PromoPremiumIgrWindowMeta import PromoPremiumIgrWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
+from gui.shared.formatters import icons, text_styles
 from helpers import i18n
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
-class PromoPremiumIgrWindow(AbstractWindowView, View, PromoPremiumIgrWindowMeta, AppRef):
+class PromoPremiumIgrWindow(PromoPremiumIgrWindowMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(PromoPremiumIgrWindow, self).__init__()
 
     def _populate(self):
@@ -28,10 +24,9 @@ class PromoPremiumIgrWindow(AbstractWindowView, View, PromoPremiumIgrWindowMeta,
 
     def __initData(self):
         ms = i18n.makeString
-        getTxt = self.app.utilsManager.textManager.getText
         igrIcon = RES_ICONS.MAPS_ICONS_LIBRARY_PREMIUM_SMALL
-        icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(igrIcon, 34, 16, -4))
+        icon = icons.makeImageTag(igrIcon, 34, 16, -4)
         self.as_setWindowTitleS(ms(MENU.PROMOPREMIUMIGRWINDOW_WINDOWTITLE))
-        self.as_setTitleS(getTxt(TEXT_MANAGER_STYLES.HIGH_TITLE, ms(MENU.PROMOPREMIUMIGRWINDOW_TITLE)))
-        self.as_setTextS(getTxt(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.PROMOPREMIUMIGRWINDOW_TEXT, iconIgr=icon)))
+        self.as_setTitleS(text_styles.highTitle(ms(MENU.PROMOPREMIUMIGRWINDOW_TITLE)))
+        self.as_setTextS(text_styles.standard(ms(MENU.PROMOPREMIUMIGRWINDOW_TEXT, iconIgr=icon)))
         self.as_setApplyButtonLabelS(ms(MENU.PROMOPREMIUMIGRWINDOW_APPLYBUTTONLABEL))

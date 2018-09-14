@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/Shop.py
 import BigWorld
 from PlayerEvents import g_playerEvents
-from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.tooltips import getItemActionTooltipData, getItemRentActionTooltipData
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.MENU import MENU
@@ -14,13 +14,12 @@ from account_helpers.AccountSettings import AccountSettings
 from gui import getNationIndex
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.ShopMeta import ShopMeta
-from gui.Scaleform.daapi.view.lobby.store import Store
 from gui.shared.utils.gui_items import InventoryVehicle
 from items import ITEM_TYPE_INDICES
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.Vehicle import Vehicle
 
-class Shop(Store, ShopMeta):
+class Shop(ShopMeta):
 
     def __init__(self, ctx = None):
         super(Shop, self).__init__(ctx)
@@ -241,8 +240,7 @@ class Shop(Store, ShopMeta):
         name = module.userName if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS else module.longUserName
         price = module.altPrice or module.buyPrice
         defaultPrice = module.defaultAltPrice or module.defaultPrice
-        localization = '#menu:vehicle/rentLeft/%s'
-        rentLeftTimeStr = getRentLeftTimeStr(localization, module.rentLeftTime)
+        rentLeftTimeStr = RentLeftFormatter(module.rentInfo).getRentLeftStr()
         minRentPricePackage = module.getRentPackage()
         action = None
         if price != defaultPrice and not minRentPricePackage:

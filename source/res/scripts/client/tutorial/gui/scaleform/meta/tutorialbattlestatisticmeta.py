@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/meta/TutorialBattleStatisticMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class TutorialBattleStatisticMeta(DAAPIModule):
+class TutorialBattleStatisticMeta(AbstractWindowView):
 
     def restart(self):
         self._printOverrideError('restart')

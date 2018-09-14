@@ -10,7 +10,6 @@ __all__ = ['ArgsEvent',
  'LoginCreateEvent',
  'LoginEventEx',
  'ShowWindowEvent',
- 'StatsStorageEvent',
  'LobbySimpleEvent',
  'FightButtonDisablingEvent',
  'FightButtonEvent',
@@ -23,6 +22,27 @@ class HasCtxEvent(SharedEvent):
         super(HasCtxEvent, self).__init__(eventType)
         self.ctx = ctx if ctx is not None else {}
         return
+
+
+class AppLifeCycleEvent(SharedEvent):
+    INITIALIZING = 'app/initializing'
+    INITIALIZED = 'app/initialized'
+    DESTROYED = 'app/destroyed'
+
+    def __init__(self, ns, eventType):
+        super(AppLifeCycleEvent, self).__init__(eventType)
+        self.__ns = ns
+
+    @property
+    def ns(self):
+        return self.__ns
+
+
+class GlobalSpaceEvent(SharedEvent):
+    GO_NEXT = 'globalSpace/goNext'
+
+    def __init__(self, eventType):
+        super(GlobalSpaceEvent, self).__init__(eventType)
 
 
 class GameEvent(HasCtxEvent):
@@ -39,9 +59,10 @@ class GameEvent(HasCtxEvent):
 
 
 class GUICommonEvent(SharedEvent):
-    APP_STARTED = 'appStarted'
-    APP_LOGOFF = 'appLogoff'
     LOBBY_VIEW_LOADED = 'lobbyViewLoaded'
+
+    def __init__(self, eventType = None):
+        super(GUICommonEvent, self).__init__(eventType)
 
 
 class GUIEditorEvent(HasCtxEvent):
@@ -110,7 +131,6 @@ class ShowDialogEvent(SharedEvent):
 
 class LoginEvent(SharedEvent):
     CANCEL_LGN_QUEUE = 'cancelLoginQueue'
-    CLOSE_CREATE_AN_ACCOUNT = 'closeCreateAnAccount'
 
     def __init__(self, eventType, alias = '', isSuccess = False, errorMsg = ''):
         super(LoginEvent, self).__init__(eventType=eventType)
@@ -151,23 +171,12 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_VEHICLE_SELECTOR_WINDOW = 'showVehicleSelectorWindow'
     HIDE_ROSTER_SLOT_SETTINGS_WINDOW = 'showRosterSlotSettingsWindow'
     HIDE_LEGAL_INFO_WINDOW = 'showLegalInfoWindow'
+    HIDE_FALLOUT_WINDOW = 'hideFalloutWindow'
 
 
 class HidePopoverEvent(HasCtxEvent):
     HIDE_POPOVER = 'hidePopover'
     POPOVER_DESTROYED = 'popoverDestroyed'
-
-
-class StatsStorageEvent(HasCtxEvent):
-    EXPERIENCE_RESPONSE = 'common.experienceResponse'
-    TANKMAN_CHANGE_RESPONSE = 'common.tankmanChangeResponse'
-    CREDITS_RESPONSE = 'common.creditsResponse'
-    PREMIUM_RESPONSE = 'common.premiumResponse'
-    VEHICLE_CHANGE_RESPONSE = 'common.vehicleChangeResponse'
-    SPEAKING_PLAYERS_RESPONSE = 'common.speakingPlayersResponse'
-    ACCOUNT_ATTRS = 'common.accountAttrs'
-    DENUNCIATIONS = 'common.denunciations'
-    NATIONS = 'common.nations'
 
 
 class LobbySimpleEvent(HasCtxEvent):
@@ -178,6 +187,8 @@ class LobbySimpleEvent(HasCtxEvent):
     EVENTS_UPDATED = 'questUpdated'
     HIDE_HANGAR = 'hideHangar'
     NOTIFY_CURSOR_OVER_3DSCENE = 'notifyCursorOver3dScene'
+    PREMIUM_BOUGHT = 'premiumBought'
+    WAITING_SHOWN = 'waitingShown'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -235,10 +246,26 @@ class CoolDownEvent(SharedEvent):
         self.requestID = requestID
 
 
-class TutorialEvent(HasCtxEvent):
-    RESTART = 'restartTutorial'
-    REFUSE = 'refuseTutorial'
+class TutorialEvent(SharedEvent):
+    START_TRAINING = 'startTraining'
+    STOP_TRAINING = 'stopTraining'
     SHOW_TUTORIAL_BATTLE_HISTORY = 'Tutorial.Dispatcher.BattleHistory'
+    ON_COMPONENT_FOUND = 'onComponentFound'
+    ON_COMPONENT_LOST = 'onComponentLost'
+    ON_TRIGGER_ACTIVATED = 'onTriggerActivated'
+
+    def __init__(self, eventType, settingsID = '', targetID = '', reloadIfRun = False, initialChapter = None, restoreIfRun = False):
+        super(TutorialEvent, self).__init__(eventType)
+        self.settingsID = settingsID
+        self.targetID = targetID
+        self.reloadIfRun = reloadIfRun
+        self.initialChapter = initialChapter
+        self.restoreIfRun = restoreIfRun
+
+    def getState(self):
+        return {'reloadIfRun': self.reloadIfRun,
+         'initialChapter': self.initialChapter,
+         'restoreIfRun': self.restoreIfRun}
 
 
 class MessengerEvent(HasCtxEvent):
@@ -353,6 +380,9 @@ class OpenLinkEvent(SharedEvent):
     CLAN_CREATE = 'clanCreate'
     CLUB_SETTINGS = 'clubSettings'
     CLUB_HELP = 'clubHelp'
+    MEDKIT_HELP = 'medkitHelp'
+    REPAIRKITHELP_HELP = 'repairkitHelp'
+    FIRE_EXTINGUISHERHELP_HELP = 'fireExtinguisherHelp'
     INVIETES_MANAGEMENT = 'invitesManagementURL'
 
     def __init__(self, eventType, url = '', title = ''):

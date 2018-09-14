@@ -23,7 +23,7 @@ _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 
 class BattleMessagesController(object):
-    __slots__ = ('__battleCtx', '__eManager', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey')
+    __slots__ = ('__battleCtx', '__eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey')
 
     def __init__(self):
         self.__battleCtx = None
@@ -33,6 +33,8 @@ class BattleMessagesController(object):
         self.onShowVehicleErrorByKey = Event.Event(self.__eManager)
         self.onShowPlayerMessageByCode = Event.Event(self.__eManager)
         self.onShowPlayerMessageByKey = Event.Event(self.__eManager)
+        self._buffer = []
+        self._isUIPopulated = False
         return
 
     def start(self, battleCtx):
@@ -43,7 +45,7 @@ class BattleMessagesController(object):
         self.__battleCtx = None
         return
 
-    def showVehicleKilledMessage(self, avatar, targetID, attackerID, reason):
+    def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
         try:
             playerVehicleID = avatar.playerVehicleID
         except AttributeError:
@@ -56,13 +58,13 @@ class BattleMessagesController(object):
         elif targetID == attackerID and self.__battleCtx.isObserver(targetID):
             return
         else:
-            code, postfix, sound = self.__getKillInfo(avatar, targetID, attackerID, reason)
+            code, postfix, sound = self.__getKillInfo(avatar, targetID, attackerID, equipmentID, reason)
             if sound is not None:
                 avatar.soundNotifications.play(sound)
-            self.onShowPlayerMessageByCode(code, postfix, targetID, attackerID)
+            self.onShowPlayerMessageByCode(code, postfix, targetID, attackerID, equipmentID)
             return
 
-    def showVehicleDamageInfo(self, avatar, code, entityID, extra):
+    def showVehicleDamageInfo(self, avatar, code, entityID, extra, equipmentID):
         try:
             targetID = avatar.playerVehicleID
         except AttributeError:
@@ -71,8 +73,8 @@ class BattleMessagesController(object):
         if not avatar.isVehicleAlive and entityID == avatar.inputHandler.ctrl.curVehicleID:
             targetID = entityID
         code, postfix = self.__getDamageInfo(avatar, code, entityID, targetID)
-        self.onShowPlayerMessageByCode(code, postfix, targetID, entityID)
-        self.onShowVehicleMessageByCode(code, postfix, entityID, extra)
+        self.onShowPlayerMessageByCode(code, postfix, targetID, entityID, equipmentID)
+        self.onShowVehicleMessageByCode(code, postfix, entityID, extra, equipmentID)
 
     def showVehicleMessage(self, key, args = None):
         self.onShowVehicleMessageByKey(key, args, None)
@@ -106,7 +108,7 @@ class BattleMessagesController(object):
             postfix = '%s_%s' % (entity.upper(), target.upper())
         return (code, postfix)
 
-    def __getKillInfo(self, avatar, targetID, attackerID, reason):
+    def __getKillInfo(self, avatar, targetID, attackerID, equipmentID, reason):
         attacker = self.__getEntityString(avatar, attackerID)
         target = _ENTITY_TYPE.SUICIDE
         if targetID != attackerID:
@@ -120,13 +122,18 @@ class BattleMessagesController(object):
                 sound = _PLAYER_KILL_ALLY_SOUND
         return (code, '%s_%s' % (attacker.upper(), target.upper()), sound)
 
+    def onUIPopulated(self):
+        self._isUIPopulated = True
+        for args in self._buffer:
+            self.onShowVehicleMessageByKey(*args)
+
 
 class BattleMessagesPlayer(BattleMessagesController):
 
-    def showVehicleKilledMessage(self, avatar, targetID, attackerID, reason):
+    def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        super(BattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, reason)
+        super(BattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
 
     def showVehicleDamageInfo(self, avatar, code, entityID, extra):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
@@ -147,6 +154,12 @@ class BattleMessagesPlayer(BattleMessagesController):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
         super(BattleMessagesPlayer, self).showAllyHitMessage(vehicleID)
+
+    def showInfoMessage(self, key, withBuffer = False, args = None):
+        if withBuffer and not self._isUIPopulated:
+            self._buffer.append((key, args))
+        else:
+            super(BattleMessagesPlayer, self).showVehicleMessage(key, args)
 
 
 def createBattleMessagesCtrl(isReplayPlaying):

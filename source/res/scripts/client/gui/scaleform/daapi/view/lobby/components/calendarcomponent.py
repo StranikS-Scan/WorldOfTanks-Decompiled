@@ -3,9 +3,8 @@ from debug_utils import LOG_DEBUG
 import BigWorld
 from Event import Event, EventManager
 from gui.Scaleform.daapi.view.meta.CalendarMeta import CalendarMeta
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
-class CalendarComponent(CalendarMeta, DAAPIModule):
+class CalendarComponent(CalendarMeta):
 
     def __init__(self):
         super(CalendarComponent, self).__init__()

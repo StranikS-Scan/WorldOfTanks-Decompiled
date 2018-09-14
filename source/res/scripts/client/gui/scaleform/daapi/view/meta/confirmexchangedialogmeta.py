@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ConfirmExchangeDialogMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ConfirmExchangeDialogMeta(DAAPIModule):
+class ConfirmExchangeDialogMeta(AbstractWindowView):
 
     def exchange(self, goldValue):
         self._printOverrideError('exchange')

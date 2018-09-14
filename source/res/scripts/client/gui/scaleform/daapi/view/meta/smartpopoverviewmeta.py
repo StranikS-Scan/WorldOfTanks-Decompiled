@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SmartPopOverViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractPopOverView import AbstractPopOverView
 
-class SmartPopOverViewMeta(DAAPIModule):
+class SmartPopOverViewMeta(AbstractPopOverView):
 
     def as_setPositionKeyPointS(self, valX, valY):
         if self._isDAAPIInited():

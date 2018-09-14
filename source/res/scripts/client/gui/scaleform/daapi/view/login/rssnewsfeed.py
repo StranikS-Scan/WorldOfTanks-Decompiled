@@ -10,10 +10,9 @@ from external_strings_utils import unicode_from_utf8
 from adisp import process, async
 from gui import GUI_SETTINGS, game_control
 from gui.game_control.links import URLMarcos
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.meta.RssNewsFeedMeta import RssNewsFeedMeta
 
-class RssNewsFeed(RssNewsFeedMeta, AppRef):
+class RssNewsFeed(RssNewsFeedMeta):
     UPDATE_INTERVAL = 60
     DESCRIPTION_MAX_LENGTH = 250
     DESCRIPTION_TAIL = '...'

@@ -1,12 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LoginPageMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class LoginPageMeta(DAAPIModule):
+class LoginPageMeta(View):
 
     def onLogin(self, user, password, host, isSocial):
         self._printOverrideError('onLogin')
 
-    def onRegister(self):
+    def onRegister(self, host):
         self._printOverrideError('onRegister')
 
     def onRecovery(self):

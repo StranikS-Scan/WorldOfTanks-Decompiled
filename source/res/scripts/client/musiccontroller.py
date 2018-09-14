@@ -443,7 +443,8 @@ class MusicController(object):
             return
         else:
             musicName = settings.readString('music')
-            ambientName = settings.readString('ambientSound')
+            if FMOD.enabled:
+                ambientName = settings.readString('ambientSound')
             combatVictory = settings.readString('combatVictory')
             combatLose = settings.readString('combatLose')
             combatDraw = settings.readString('combatDraw')

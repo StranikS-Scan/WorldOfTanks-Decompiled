@@ -422,7 +422,7 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
             return
         g_messengerEvents.channels.onCommandReceived(cmd)
 
-    def __onVehicleKilled(self, victimID, killerID, reason):
+    def __onVehicleKilled(self, victimID, *args):
         provider = self.provider()
         if victimID in self.__targetIDs:
             self.__targetIDs.remove(victimID)

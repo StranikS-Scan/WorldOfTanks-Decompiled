@@ -36,6 +36,10 @@ class TimeFormatter(object):
         return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(time), BigWorld.wg_getLongTimeFormat(time))
 
     @classmethod
+    def getShortTimeDateFormat(cls, time):
+        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortTimeFormat(time), BigWorld.wg_getShortDateFormat(time))
+
+    @classmethod
     def getShortDatetimeFormat(cls, time):
         return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(time), BigWorld.wg_getShortTimeFormat(time))
 
@@ -45,7 +49,7 @@ class TimeFormatter(object):
             DAY_SECONDS = 86400
             currentTime = time.time()
             if currentTime - timestamp > DAY_SECONDS or gmtime().tm_mday != gmtime(timestamp).tm_mday:
-                return TimeFormatter.getShortDatetimeFormat(timestamp)
+                return TimeFormatter.getShortTimeDateFormat(timestamp)
             return TimeFormatter.getShortTimeFormat(timestamp)
         except:
             LOG_ERROR('There is error while formatting message time', timestamp)

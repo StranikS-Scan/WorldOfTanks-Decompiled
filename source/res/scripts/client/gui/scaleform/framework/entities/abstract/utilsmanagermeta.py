@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/UtilsManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class UtilsManagerMeta(DAAPIModule):
+class UtilsManagerMeta(BaseDAAPIModule):
 
     def getNationNames(self):
         self._printOverrideError('getNationNames')
@@ -35,3 +35,7 @@ class UtilsManagerMeta(DAAPIModule):
 
     def isTwelveHoursFormat(self):
         self._printOverrideError('isTwelveHoursFormat')
+
+    def as_setImageCacheSettingsS(self, maxSize, minSize):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setImageCacheSettings(maxSize, minSize)

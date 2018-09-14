@@ -3,10 +3,7 @@ from fortified_regions import g_cache as g_fortCache
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortCreateDirectionWindowMeta import FortCreateDirectionWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -20,9 +17,9 @@ from shared_utils import findFirst
 from gui import makeHtmlString, DialogsInterface, SystemMessages
 from adisp import process
 
-class FortCreateDirectionWindow(AbstractWindowView, View, FortCreateDirectionWindowMeta, FortViewHelper, AppRef):
+class FortCreateDirectionWindow(FortCreateDirectionWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortCreateDirectionWindow, self).__init__()
 
     def _populate(self):

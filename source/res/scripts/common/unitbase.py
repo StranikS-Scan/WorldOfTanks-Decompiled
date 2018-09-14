@@ -1,6 +1,8 @@
 # Embedded file name: scripts/common/UnitBase.py
 import struct
 import copy
+import cPickle
+import weakref
 from items import vehicles
 from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE
 from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, reprBitMaskFromDict
@@ -8,7 +10,17 @@ from unit_roster_config import SortieRoster6, SortieRoster8, SortieRoster10, For
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, FortBattleExtrasHandler
 from unit_helpers.ExtrasHandler import ClubExtrasHandler, SortieExtrasHandler
+from unit_helpers.ExtrasHandler import SquadExtrasHandler
 from debug_utils import LOG_DAN, LOG_SVAN_DEV
+
+class UNIT_MGR_STATE:
+    IDLE = 0
+    IN_QUEUE = 1
+    IN_PRE_ARENA = 2
+    IN_AUTO_SEARCH = 3
+    IN_WAITING_JOINING_ACCOUNTS = 4
+    IN_ROSTER_WAIT = 5
+
 
 class UNIT_FLAGS:
     LOCKED = 1
@@ -18,6 +30,7 @@ class UNIT_FLAGS:
     DEV_MODE = 16
     IN_ARENA = 32
     SORTIES_FORBIDDEN = 64
+    RATED_BATTLE_FORBIDDEN = 128
     IN_PRE_ARENA = 256
     IN_ROSTER_WAIT = 512
     DEFAULT = 0
@@ -114,9 +127,11 @@ class UNIT_ERROR:
     BAD_PARAMS = 72
     PLAYER_READY = 73
     SORTIES_FORBIDDEN = 74
+    RATED_BATTLE_FORBIDDEN = 75
 
 
 OK = UNIT_ERROR.OK
+UNIT_ERROR_NAMES = dict(((v, k) for k, v in UNIT_ERROR.__dict__.iteritems()))
 
 class UNIT_SLOT:
     ANY = -1
@@ -210,6 +225,7 @@ class UNIT_NOTIFY_CMD:
     EXTRAS_UPDATED = 7
     ROSTER_CONFIRM = 8
     SORTIE_DIVISION_CHANGE = 9
+    SET_FALLOUT_BATTLE_TYPE = 10
 
 
 class CLIENT_UNIT_CMD:
@@ -236,6 +252,9 @@ class CLIENT_UNIT_CMD:
     CHANGE_SORTIE_DIVISION = 20
     SET_RATED_BATTLE = 21
     SET_GAMEPLAYS_MASK = 22
+    SET_EVENT_SQUAD_VEHICLE_LIST = 23
+    CHANGE_EVENT_SQUAD_TYPE = 24
+    SET_EVENT_SQUAD_MEMBER_READY = 25
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -247,15 +266,14 @@ class UNIT_NOTIFY_ID:
 class UNIT_MGR_FLAGS:
     DEFAULT = 0
     SORTIE = 1
-    DOUBLE_UNIT = 2
-    SORTIE_DIVISION_6 = 4
-    SORTIE_DIVISION_8 = 8
+    SORTIE_DIVISION_6 = 2
+    SORTIE_DIVISION_8 = 4
     SORTIE_DIVISION_FLAG_MASK = SORTIE | SORTIE_DIVISION_8 | SORTIE_DIVISION_6
-    FORT_BATTLE = 16
-    FORT_BATTLE_DIVISION_8 = 32
+    FORT_BATTLE = 8
+    FORT_BATTLE_DIVISION_8 = 16
     FORT_BATTLE_DIVISION_FLAG_MASK = FORT_BATTLE | FORT_BATTLE_DIVISION_8
-    CLUBS = 64
-    SQUAD = 128
+    CLUBS = 32
+    SQUAD = 64
 
 
 class ROSTER_TYPE:
@@ -275,6 +293,7 @@ class EXTRAS_HANDLER_TYPE:
     FORT_BATTLE = 1
     CLUBS = 2
     SORTIE = 3
+    SQUAD = 4
 
 
 class SORTIE_DIVISION(object):
@@ -313,7 +332,8 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.FORT_BATTLE: FortBattleExtrasHandler,
  EXTRAS_HANDLER_TYPE.CLUBS: ClubExtrasHandler,
- EXTRAS_HANDLER_TYPE.SORTIE: SortieExtrasHandler}
+ EXTRAS_HANDLER_TYPE.SORTIE: SortieExtrasHandler,
+ EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler}
 
 class UnitBase(OpsUnpacker):
     _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qHi', '_setVehicle'),
@@ -344,7 +364,7 @@ class UnitBase(OpsUnpacker):
      UNIT_OP.GAMEPLAYS_MASK: ('i', '_setGameplaysMask')})
     MAX_PLAYERS = 250
 
-    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', extras = '', packedUnit = '', rosterTypeID = ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID = EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID = PREBATTLE_TYPE.UNIT):
+    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', extrasInit = None, packedUnit = '', rosterTypeID = ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID = EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID = PREBATTLE_TYPE.UNIT):
         if packedUnit:
             self.unpack(packedUnit)
         else:
@@ -358,13 +378,8 @@ class UnitBase(OpsUnpacker):
             self._dirty = 1
             self._flags = UNIT_FLAGS.DEFAULT
             self._extrasHandlerID = extrasHandlerID
-            eHandler = self._extrasHandler = EXTRAS_HANDLER_TYPE_TO_HANDLER[extrasHandlerID](self)
-            newExtras = eHandler.new()
-            if extras:
-                unpackedExtras = eHandler.unpack(extras)
-                if unpackedExtras:
-                    newExtras.update(unpackedExtras)
-            self._extras = newExtras
+            eHandler = self._initExtrasHandler()
+            self._extras = eHandler.new(initial=extrasInit)
             self._initClean()
 
     def _initClean(self):
@@ -383,38 +398,47 @@ class UnitBase(OpsUnpacker):
         self._reservedSlots = set()
         self._modalTimestamp = 0
 
-    def _setVehicle(self, playerID, vehTypeCompDescr, vehInvID):
+    def _initExtrasHandler(self):
+        weakSelf = weakref.proxy(self)
+        eHnd = self.__extrasHandler = EXTRAS_HANDLER_TYPE_TO_HANDLER[self._extrasHandlerID](weakSelf)
+        return eHnd
+
+    @property
+    def _extrasHandler(self):
+        return self.__extrasHandler
+
+    def _setVehicle(self, accountDBID, vehTypeCompDescr, vehInvID):
         classTag = vehicles.getVehicleClass(vehTypeCompDescr)
         vehType = vehicles.getVehicleType(vehTypeCompDescr)
         vehClassIdx = VEHICLE_CLASS_INDICES.get(classTag, _BAD_CLASS_INDEX)
-        self._vehicles[playerID] = {'vehTypeCompDescr': vehTypeCompDescr,
+        self._vehicles[accountDBID] = {'vehTypeCompDescr': vehTypeCompDescr,
          'vehInvID': vehInvID,
          'nationIdx': vehType.id[0],
          'inNationIdx': vehType.id[1],
          'vehLevel': vehType.level,
          'vehClassIdx': vehClassIdx}
-        self.storeOp(UNIT_OP.SET_VEHICLE, playerID, vehTypeCompDescr, vehInvID)
-        self._storeNotification(playerID, UNIT_NOTIFY_CMD.SET_VEHICLE, [vehInvID])
+        self.storeOp(UNIT_OP.SET_VEHICLE, accountDBID, vehTypeCompDescr, vehInvID)
+        self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE, [vehInvID])
         self._dirty = 1
         return True
 
-    def _clearVehicle(self, playerID):
-        self._vehicles.pop(playerID, None)
-        slotIdx = self._playerSlots.get(playerID)
+    def _clearVehicle(self, accountDBID):
+        self._vehicles.pop(accountDBID, None)
+        slotIdx = self._playerSlots.get(accountDBID)
         if slotIdx is not None:
-            self.setMemberReady(playerID, False)
+            self.setMemberReady(accountDBID, False)
         self._dirty = 1
-        self.storeOp(UNIT_OP.CLEAR_VEHICLE, playerID)
-        self._storeNotification(playerID, UNIT_NOTIFY_CMD.SET_VEHICLE, [0])
+        self.storeOp(UNIT_OP.CLEAR_VEHICLE, accountDBID)
+        self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE, [0])
         return
 
-    def _setMember(self, playerID, slotChosenIdx):
-        member = dict(playerID=playerID, slotIdx=slotChosenIdx)
+    def _setMember(self, accountDBID, slotChosenIdx):
+        member = dict(accountDBID=accountDBID, slotIdx=slotChosenIdx)
         self._members[slotChosenIdx] = member
         self._freeSlots.discard(slotChosenIdx)
-        self._playerSlots[playerID] = slotChosenIdx
+        self._playerSlots[accountDBID] = slotChosenIdx
         self._fullReadyMask |= 1 << slotChosenIdx
-        self.storeOp(UNIT_OP.SET_MEMBER, playerID, slotChosenIdx)
+        self.storeOp(UNIT_OP.SET_MEMBER, accountDBID, slotChosenIdx)
         self._dirty = 1
 
     def _delMemberBySlot(self, slotIdx):
@@ -422,38 +446,38 @@ class UnitBase(OpsUnpacker):
         if not member:
             return UNIT_ERROR.FAIL_UNIT_METHOD
         else:
-            playerID = member['playerID']
-            self.setMemberReady(playerID, False)
+            accountDBID = member['accountDBID']
+            self.setMemberReady(accountDBID, False)
             self._members.pop(slotIdx)
             self._freeSlots.add(slotIdx)
-            self._playerSlots.pop(playerID, None)
+            self._playerSlots.pop(accountDBID, None)
             clearMask = ~(1 << slotIdx)
             self._fullReadyMask &= clearMask
             self._dirty = 1
             self.storeOp(UNIT_OP.DEL_MEMBER, slotIdx)
             return OK
 
-    def _addPlayer(self, playerID, **kwargs):
-        self._players[playerID] = kwargs
+    def _addPlayer(self, accountDBID, **kwargs):
+        self._players[accountDBID] = kwargs
         self._dirty = 1
-        packed = struct.pack(self._PLAYER_DATA, playerID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0))
+        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0))
         packed += packPascalString(kwargs.get('nickName', ''))
         packed += packPascalString(kwargs.get('clanAbbrev', ''))
         self._appendOp(UNIT_OP.ADD_PLAYER, packed)
 
-    def _removePlayer(self, playerID):
-        self._players.pop(playerID, None)
-        self._vehicles.pop(playerID, None)
+    def _removePlayer(self, accountDBID):
+        self._players.pop(accountDBID, None)
+        self._vehicles.pop(accountDBID, None)
         self._dirty = 1
-        self.storeOp(UNIT_OP.REMOVE_PLAYER, playerID)
+        self.storeOp(UNIT_OP.REMOVE_PLAYER, accountDBID)
         return
 
-    def _changePlayerRole(self, playerID, roleFlags):
-        playerData = self._players.get(playerID)
+    def _changePlayerRole(self, accountDBID, roleFlags):
+        playerData = self._players.get(accountDBID)
         if playerData:
             playerData['role'] = roleFlags
             self._dirty = 1
-            self.storeOp(UNIT_OP.CHANGE_ROLE, playerID, roleFlags)
+            self.storeOp(UNIT_OP.CHANGE_ROLE, accountDBID, roleFlags)
 
     def _setRosterSlot(self, rosterSlotIdx, packedSlot):
         packedArgs = struct.pack('<B', rosterSlotIdx)
@@ -479,7 +503,7 @@ class UnitBase(OpsUnpacker):
         return
 
     def isEmpty(self):
-        for playerID, playerInfo in self._players.iteritems():
+        for accountDBID, playerInfo in self._players.iteritems():
             role = playerInfo.get('role', 0)
             if role & UNIT_ROLE.INVITED == 0:
                 return False
@@ -519,14 +543,14 @@ class UnitBase(OpsUnpacker):
          self._modalTimestamp,
          self._gameplaysMask)
         packed += struct.pack(self._HEADER, *args)
-        for playerID, veh in vehs.iteritems():
-            packed += struct.pack(self._PLAYER_VEHICLES, playerID, veh['vehInvID'], veh['vehTypeCompDescr'])
+        for accountDBID, veh in vehs.iteritems():
+            packed += struct.pack(self._PLAYER_VEHICLES, accountDBID, veh['vehInvID'], veh['vehTypeCompDescr'])
 
         for slotIdx, member in members.iteritems():
-            packed += struct.pack(self._SLOT_PLAYERS, slotIdx, member['playerID'])
+            packed += struct.pack(self._SLOT_PLAYERS, slotIdx, member['accountDBID'])
 
-        for playerID, playerData in players.iteritems():
-            packed += struct.pack(self._PLAYER_DATA, playerID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0))
+        for accountDBID, playerData in players.iteritems():
+            packed += struct.pack(self._PLAYER_DATA, accountDBID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0))
             packed += packPascalString(playerData.get('nickName', ''))
             packed += packPascalString(playerData.get('clanAbbrev', ''))
 
@@ -541,7 +565,7 @@ class UnitBase(OpsUnpacker):
         self._rosterTypeID, self._extrasHandlerID, self._prebattleTypeID = struct.unpack_from(self._IDS, packed)
         RosterType = ROSTER_TYPE_TO_CLASS.get(self._rosterTypeID)
         self._roster = RosterType()
-        self._extrasHandler = EXTRAS_HANDLER_TYPE_TO_HANDLER[self._extrasHandlerID](self)
+        self._initExtrasHandler()
         unpacking = packed[self._IDS_SIZE:]
         unpacking = self._roster.unpack(unpacking)
         slotCount = self.getMaxSlotCount()
@@ -549,22 +573,22 @@ class UnitBase(OpsUnpacker):
         memberCount, vehCount, playerCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._gameplaysMask = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
         for i in xrange(0, vehCount):
-            playerID, vehInvID, vehTypeCompDescr = struct.unpack_from(self._PLAYER_VEHICLES, unpacking)
-            self._setVehicle(playerID, vehTypeCompDescr, vehInvID)
+            accountDBID, vehInvID, vehTypeCompDescr = struct.unpack_from(self._PLAYER_VEHICLES, unpacking)
+            self._setVehicle(accountDBID, vehTypeCompDescr, vehInvID)
             unpacking = unpacking[self._PLAYER_VEHICLES_SIZE:]
 
         for i in xrange(0, memberCount):
-            slotIdx, playerID = struct.unpack_from(self._SLOT_PLAYERS, unpacking)
-            self._setMember(playerID, slotIdx)
+            slotIdx, accountDBID = struct.unpack_from(self._SLOT_PLAYERS, unpacking)
+            self._setMember(accountDBID, slotIdx)
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
         sz = self._PLAYER_DATA_SIZE
         for i in xrange(0, playerCount):
-            playerID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, unpacking)
+            accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, unpacking)
             nickName, lenNickBytes = unpackPascalString(unpacking, sz)
             clanAbbrev, lenClanBytes = unpackPascalString(unpacking, sz + lenNickBytes)
             unpacking = unpacking[sz + lenNickBytes + lenClanBytes:]
-            self._addPlayer(playerID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
+            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
 
         self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
         unpacking = unpacking[extrasLen:]
@@ -585,18 +609,18 @@ class UnitBase(OpsUnpacker):
         return self._dirty
 
     def getCommanderDBID(self):
-        return self._members.get(LEADER_SLOT, {}).get('playerID', 0)
+        return self._members.get(LEADER_SLOT, {}).get('accountDBID', 0)
 
     def updateUnitExtras(self, updateStr):
         oldExtras = copy.deepcopy(self._extras)
         self._extrasHandler.updateUnitExtras(self._extras, updateStr)
         newExtras = self._extras
         self.storeOp(UNIT_OP.EXTRAS_UPDATE, updateStr)
-        for playerID, playerData in self._players.iteritems():
+        for accountDBID, playerData in self._players.iteritems():
             if playerData and playerData.get('role', 0) & UNIT_ROLE.INVITED == 0:
-                self._storeNotification(playerID, UNIT_NOTIFY_CMD.EXTRAS_UPDATED, [self, newExtras])
+                self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.EXTRAS_UPDATED, [newExtras])
 
-        self._storeNotification(UNIT_NOTIFY_ID.PARENT_UNIT_MGR, UNIT_NOTIFY_CMD.EXTRAS_UPDATED, [self, oldExtras, newExtras])
+        self._storeNotification(UNIT_NOTIFY_ID.PARENT_UNIT_MGR, UNIT_NOTIFY_CMD.EXTRAS_UPDATED, [oldExtras, newExtras])
         self._dirty = 1
 
     def getPacked(self):
@@ -633,8 +657,11 @@ class UnitBase(OpsUnpacker):
     def isSortiesForbidden(self):
         return bool(self._flags & UNIT_FLAGS.SORTIES_FORBIDDEN)
 
+    def isRatedBattleForbidden(self):
+        return bool(self._flags & UNIT_FLAGS.RATED_BATTLE_FORBIDDEN)
+
     def shouldPublish(self):
-        return not self.isInviteOnly() and not self.isSortiesForbidden()
+        return not self.isInviteOnly() and not (self.isSortiesForbidden() or self.isRatedBattle())
 
     def __repr__(self):
         repr = 'Unit(\n  _members len=%s {' % len(self._members)
@@ -649,13 +676,13 @@ class UnitBase(OpsUnpacker):
         repr += '\n  state(names):%s' % reprBitMaskFromDict(self._flags, UNIT_STATE_NAMES)
         repr += '\n  modalTimestamp:%s' % self._modalTimestamp
         repr += '\n  _vehicles len=%s {' % len(self._vehicles)
-        for playerID, veh in self._vehicles.iteritems():
-            repr += '\n    [%d] %s' % (playerID, veh)
+        for accountDBID, veh in self._vehicles.iteritems():
+            repr += '\n    [%d] %s' % (accountDBID, veh)
 
         repr += '\n  },'
         repr += '\n  _players len=%s {' % len(self._players)
-        for playerID, playerData in self._players.iteritems():
-            repr += '\n    [%d] %s role=%s' % (playerID, playerData, reprBitMaskFromDict(playerData.get('role', 0), UNIT_ROLE_NAMES))
+        for accountDBID, playerData in self._players.iteritems():
+            repr += '\n    [%d] %s role=%s' % (accountDBID, playerData, reprBitMaskFromDict(playerData.get('role', 0), UNIT_ROLE_NAMES))
 
         repr += '\n  },'
         repr += '\n  _freeSlots=%r,' % self._freeSlots
@@ -668,7 +695,7 @@ class UnitBase(OpsUnpacker):
     def dump(self):
         repr = 'Unit(\n membs(%s)={' % len(self._members)
         for slotIdx, member in self._members.iteritems():
-            repr += '%d:%s, ' % (slotIdx, member.get('playerID', 0))
+            repr += '%d:%s, ' % (slotIdx, member.get('accountDBID', 0))
 
         repr += '},'
         repr += '\n state=%02X, rdy=%02X, fullRdy=%02X, closed=%02X' % (self._flags,
@@ -677,13 +704,13 @@ class UnitBase(OpsUnpacker):
          self._closedSlotMask)
         repr += ', stamp:%s, free=%r' % (self._modalTimestamp, list(self._freeSlots))
         repr += '\n vehs(%s)={' % len(self._vehicles)
-        for playerID, veh in self._vehicles.iteritems():
-            repr += '%d:%s, ' % (playerID, veh.get('vehTypeCompDescr', 0))
+        for accountDBID, veh in self._vehicles.iteritems():
+            repr += '%d:%s, ' % (accountDBID, veh.get('vehTypeCompDescr', 0))
 
         repr += '},'
         repr += '\n plrs(%s)={' % len(self._players)
-        for playerID, playerData in self._players.iteritems():
-            repr += '%d:%r:%02X, ' % (playerID, playerData.get('nickName', ''), playerData.get('role', 0))
+        for accountDBID, playerData in self._players.iteritems():
+            repr += '%d:%r:%02X, ' % (accountDBID, playerData.get('nickName', ''), playerData.get('role', 0))
 
         repr += '},'
         repr += '\n roster=%r' % self._roster.getPacked()
@@ -691,16 +718,22 @@ class UnitBase(OpsUnpacker):
         repr += '\n)'
         return repr
 
-    def setMemberReady(self, playerID, isReady = True):
-        slotIdx = self._playerSlots.get(playerID)
+    def setMemberReady(self, accountDBID, isReady = True):
+        slotIdx = self._playerSlots.get(accountDBID)
         if slotIdx is None:
             return UNIT_ERROR.BAD_SLOT_IDX
         else:
             prevReadyMask = self._readyMask
+            isEventSquad = self._prebattleTypeID == PREBATTLE_TYPE.SQUAD and 'eventType' in self._extras
             if isReady:
-                veh = self._vehicles.get(playerID)
-                if veh is None:
-                    return UNIT_ERROR.VEHICLE_NOT_CHOSEN
+                if isEventSquad:
+                    vehicles = self._extras['accountVehicles'].get(accountDBID)
+                    if not vehicles:
+                        return UNIT_ERROR.VEHICLE_NOT_CHOSEN
+                else:
+                    veh = self._vehicles.get(accountDBID)
+                    if veh is None:
+                        return UNIT_ERROR.VEHICLE_NOT_CHOSEN
                 newReadyMask = prevReadyMask | 1 << slotIdx
             else:
                 newReadyMask = prevReadyMask & ~(1 << slotIdx)
@@ -708,7 +741,7 @@ class UnitBase(OpsUnpacker):
                 self._readyMask = newReadyMask
                 self.storeOp(UNIT_OP.READY_MASK, newReadyMask)
                 self._dirty = 1
-                self._storeNotification(playerID, UNIT_NOTIFY_CMD.SET_MEMBER_READY, [isReady])
+                self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_MEMBER_READY, [isReady, isEventSquad])
             return OK
 
     def _setGameplaysMask(self, newGameplaysMask):
@@ -760,8 +793,8 @@ class UnitBase(OpsUnpacker):
     def getPointsSum(self):
         sum = 0
         for slotIdx, member in self._members.iteritems():
-            playerID = member.get('playerID', 0)
-            veh = self._vehicles.get(playerID)
+            accountDBID = member.get('accountDBID', 0)
+            veh = self._vehicles.get(accountDBID)
             if veh:
                 sum += veh.get('vehLevel', 0)
 
@@ -769,8 +802,8 @@ class UnitBase(OpsUnpacker):
 
     def checkVehicleLevelsRange(self, minLvl, maxLvl):
         for slotIdx, member in self._members.iteritems():
-            playerID = member.get('playerID', 0)
-            veh = self._vehicles.get(playerID)
+            accountDBID = member.get('accountDBID', 0)
+            veh = self._vehicles.get(accountDBID)
             if veh:
                 lvl = veh.get('vehLevel', 0)
                 if lvl < minLvl or maxLvl < lvl:
@@ -781,8 +814,8 @@ class UnitBase(OpsUnpacker):
     def getArtyCount(self):
         count = 0
         for slotIdx, member in self._members.iteritems():
-            playerID = member.get('playerID', 0)
-            veh = self._vehicles.get(playerID)
+            accountDBID = member.get('accountDBID', 0)
+            veh = self._vehicles.get(accountDBID)
             if veh and veh['vehClassIdx'] == VEHICLE_CLASS_SPG:
                 count += 1
 
@@ -790,8 +823,8 @@ class UnitBase(OpsUnpacker):
 
     def hasInArenaMembers(self):
         for slotIdx, member in self._members.iteritems():
-            playerID = member.get('playerID', 0)
-            role = self.getAccountRole(playerID)
+            accountDBID = member.get('accountDBID', 0)
+            role = self.getAccountRole(accountDBID)
             if role & UNIT_ROLE.IN_ARENA:
                 return True
 
@@ -799,8 +832,8 @@ class UnitBase(OpsUnpacker):
 
     def getLegionaryCount(self):
         count = 0
-        for playerID, slotIdx in self._playerSlots.iteritems():
-            playerData = self._players[playerID]
+        for accountDBID, slotIdx in self._playerSlots.iteritems():
+            playerData = self._players[accountDBID]
             role = playerData.get('role', 0)
             if role & UNIT_ROLE.LEGIONARY:
                 count += 1
@@ -837,7 +870,7 @@ class UnitBase(OpsUnpacker):
     def _appendCmdrOp(self, op, packedArgs):
         pass
 
-    def _storeNotification(self, playerID, notifyCmd, argList = []):
+    def _storeNotification(self, accountDBID, notifyCmd, argList = []):
         pass
 
     def _unpackRosterSlot(self, packedOps):
@@ -847,22 +880,22 @@ class UnitBase(OpsUnpacker):
         self._setRosterSlot(rosterSlotIdx, packedSlot)
         return packedOps[opLen:]
 
-    def _packVehicleDict(self, playerID, vehDict = {}):
-        packedArgs = struct.pack(self._VEHICLE_DICT_HEADER, len(vehDict), playerID)
+    def _packVehicleDict(self, accountDBID, vehDict = {}):
+        packedArgs = struct.pack(self._VEHICLE_DICT_HEADER, len(vehDict), accountDBID)
         for vehTypeCompDescr, vehInvID in vehDict.iteritems():
             packedArgs += struct.pack(self._VEHICLE_DICT_ITEM, vehTypeCompDescr, vehInvID)
 
         self._appendCmdrOp(UNIT_OP.VEHICLE_DICT, packedArgs)
 
     def _packFullVehDictUpdates(self):
-        for playerID, playerData in self._players.iteritems():
+        for accountDBID, playerData in self._players.iteritems():
             if playerData and playerData.get('role', 0) & UNIT_ROLE.INVITED == 0:
                 vehDict = playerData.get('vehDict')
                 if vehDict:
-                    self._packVehicleDict(playerID, vehDict)
+                    self._packVehicleDict(accountDBID, vehDict)
 
     def _unpackVehicleDict(self, packedOps):
-        vehCount, playerID = struct.unpack_from(self._VEHICLE_DICT_HEADER, packedOps)
+        vehCount, accountDBID = struct.unpack_from(self._VEHICLE_DICT_HEADER, packedOps)
         vehDict = {}
         opLen = self._VEHICLE_DICT_HEADER_SIZE
         for i in xrange(vehCount):
@@ -870,32 +903,32 @@ class UnitBase(OpsUnpacker):
             vehDict[vehTypeCompDescr] = vehInvID
             opLen += self._VEHICLE_DICT_ITEM_SIZE
 
-        playerData = self._players.get(playerID)
+        playerData = self._players.get(accountDBID)
         if playerData:
             playerData['vehDict'] = vehDict
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
         sz = self._PLAYER_DATA_SIZE
-        playerID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, packedOps)
+        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, packedOps)
         nickName, lenNickBytes = unpackPascalString(packedOps, sz)
         clanAbbrev, lenClanBytes = unpackPascalString(packedOps, sz + lenNickBytes)
         playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
-        self._addPlayer(playerID, **playerInfo)
+        self._addPlayer(accountDBID, **playerInfo)
         return packedOps[sz + lenNickBytes + lenClanBytes:]
 
     def _giveLeadership(self, newLeaderDBID):
         swapSlotIdx = self._playerSlots.get(newLeaderDBID)
-        prevLeaderDBID = self._members[LEADER_SLOT]['playerID']
+        prevLeaderDBID = self._members[LEADER_SLOT]['accountDBID']
         self.setMemberReady(prevLeaderDBID, False)
         self.setMemberReady(newLeaderDBID, False)
         if swapSlotIdx is not None:
-            self._members[swapSlotIdx] = dict(playerID=prevLeaderDBID, slotIdx=swapSlotIdx)
+            self._members[swapSlotIdx] = dict(accountDBID=prevLeaderDBID, slotIdx=swapSlotIdx)
             self._playerSlots[prevLeaderDBID] = swapSlotIdx
         else:
             self._playerSlots.pop(prevLeaderDBID)
         self._players[prevLeaderDBID]['role'] &= ~UNIT_ROLE.CREATOR
-        self._members[LEADER_SLOT] = dict(playerID=newLeaderDBID, slotIdx=LEADER_SLOT)
+        self._members[LEADER_SLOT] = dict(accountDBID=newLeaderDBID, slotIdx=LEADER_SLOT)
         self._playerSlots[newLeaderDBID] = LEADER_SLOT
         self._players[newLeaderDBID]['role'] |= UNIT_ROLE.CREATOR
         self.storeOp(UNIT_OP.GIVE_LEADERSHIP, newLeaderDBID)
@@ -942,7 +975,7 @@ class UnitBase(OpsUnpacker):
             return True
 
     def _getLeaderDBID(self):
-        return self._members.get(LEADER_SLOT, {}).get('playerID', 0)
+        return self._members.get(LEADER_SLOT, {}).get('accountDBID', 0)
 
     def isRatedBattle(self):
         return bool(self._extras.get('isRatedBattle'))

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/GameInputManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class GameInputManagerMeta(DAAPIModule):
+class GameInputManagerMeta(BaseDAAPIModule):
 
     def handleGlobalKeyEvent(self, keyCode, eventType):
         self._printOverrideError('handleGlobalKeyEvent')

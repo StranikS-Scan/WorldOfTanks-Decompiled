@@ -7,8 +7,6 @@ from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortCalendarWindowMeta import FortCalendarWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
@@ -17,7 +15,7 @@ from gui.shared.utils import toLower
 from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
 
-class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarWindowMeta):
+class FortCalendarWindow(FortViewHelper, FortCalendarWindowMeta):
 
     class TIME_LIMITS:
         LOW = FORTIFICATION_ALIASES.ACTIVE_EVENTS_PAST_LIMIT * time_utils.ONE_DAY

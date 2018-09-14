@@ -1,18 +1,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesListView.py
 import BigWorld
 from constants import PREBATTLE_TYPE
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.shared.formatters import text_styles
+from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n, time_utils, int2roman
 from gui.prb_control.prb_helpers import UnitListener
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortClanBattleListMeta import FortClanBattleListMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications.fort_helpers import FortListener
 from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE, FORT_BATTLE_DIVISIONS
 
-class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, AppRef):
+class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
 
     def __init__(self):
         super(FortBattlesListView, self).__init__()
@@ -144,12 +145,24 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, Ap
     def __makeData(self):
         result = {}
         self.__updateNextBattleCount()
-        result['actionDescr'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_ACTIONDESCR))
-        result['titleLbl'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.PROMO_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_TITLELBL))
-        result['descrLbl'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DESCRLBL))
+        result['actionDescr'] = text_styles.standard(i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_ACTIONDESCR))
+        result['titleLbl'] = text_styles.promoTitle(i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_TITLELBL))
+        result['descrLbl'] = text_styles.main(i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DESCRLBL))
         localeBattleCount = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_CURRENTBTLCOUNT)
-        result['battlesCountTitle'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, localeBattleCount)
+        result['battlesCountTitle'] = text_styles.highTitle(localeBattleCount)
+        result['tableHeader'] = self._createTableHeader()
         self.as_setClanBattleDataS(result)
+
+    def _createTableHeader(self):
+        return [self._createTableBtnInfo(FORTIFICATIONS.FORTCLANBATTLELIST_TABLEHEADER_BATTLENAME, 'direction', 247, 1, TOOLTIPS.FORTIFICATION_FORTCLANBATTLELIST_BATTLENAME, TEXT_ALIGN.LEFT), self._createTableBtnInfo(FORTIFICATIONS.FORTCLANBATTLELIST_TABLEHEADER_DAYOFBATTLE, 'description', 200, 2, TOOLTIPS.FORTIFICATION_FORTCLANBATTLELIST_BATTLEDATE, TEXT_ALIGN.CENTER), self._createTableBtnInfo(FORTIFICATIONS.FORTCLANBATTLELIST_TABLEHEADER_BATTLETIME, 'startTimeLeft', 122, 0, TOOLTIPS.FORTIFICATION_FORTCLANBATTLELIST_BATTLETIME, TEXT_ALIGN.RIGHT)]
+
+    def _createTableBtnInfo(self, label, btnID, buttonWidth, sortOrder, toolTip, textAlign):
+        return {'label': label,
+         'id': btnID,
+         'buttonWidth': buttonWidth,
+         'sortOrder': sortOrder,
+         'toolTip': toolTip,
+         'textAlign': textAlign}
 
     def __updateNextBattleCount(self):
         cache = self.fortCtrl.getFortBattlesCache()
@@ -157,7 +170,7 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, Ap
             return
         else:
             currentBattlesCount = BigWorld.wg_getNiceNumberFormat(len(self._searchDP.collection))
-            result = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, currentBattlesCount)
+            result = text_styles.highTitle(currentBattlesCount)
             self.as_upateClanBattlesCountS(result)
             return
 
@@ -181,20 +194,20 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, Ap
             elif startTimeLeft == 0 or item.isInProgress():
                 isInBattle = True
             isCreationAvailable = not isCreated and isBegin
-            result['titleText'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.PROMO_SUB_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONTITLE))
+            result['titleText'] = text_styles.promoSubTitle(i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONTITLE))
             result['buttonLbl'] = FORTIFICATIONS.SORTIE_LISTVIEW_CREATE
             result['isCreationAvailable'] = not isCreated
             _, clanAbbrev, _ = item.getOpponentClanInfo()
             isDefence = item.getType() == BATTLE_ITEM_TYPE.DEFENCE
             localeStr = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_TITLE if isDefence else FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_ATTACK_TITLE
-            result['detailsTitle'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(localeStr, clanName='[%s]' % clanAbbrev))
-            result['description'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_DESCRIPTION, directionName=i18n.makeString('#fortifications:General/directionName%d' % item.getDirection())))
+            result['detailsTitle'] = text_styles.highTitle(i18n.makeString(localeStr, clanName='[%s]' % clanAbbrev))
+            result['description'] = text_styles.main(i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_DESCRIPTION, directionName=i18n.makeString('#fortifications:General/directionName%d' % item.getDirection())))
             result['isEnableBtn'] = isCreationAvailable
             if isCreationAvailable:
                 descrText = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONDESCR
             else:
                 descrText = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONDESCR_DISABLE
-            result['descrText'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(descrText))
+            result['descrText'] = text_styles.main(i18n.makeString(descrText))
             if isCreated and isInBattle:
                 for slot in result['slots']:
                     slot['canBeTaken'] = False

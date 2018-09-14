@@ -18,7 +18,7 @@ class Server(ThreadingMixIn, HTTPServer):
                     HTTPServer.__init__(self, (self.__BIND_ADDRESS, port_number), requestHandlerClass)
                     socketBindSuccess = True
             except SocketError as e:
-                self._currentStatus = 'Failed to bind socket to {0}:{1}'.format(self.__BIND_ADDRESS, port_number)
+                self._currentStatus = 'Failed to bind socket to {0}:{1} ({2})'.format(self.__BIND_ADDRESS, port_number, e)
                 self._logStatus()
                 if port_number == self.__PORTS_POOL[4]:
                     self._currentStatus = 'Giving up.'

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PrebattleWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class PrebattleWindowMeta(DAAPIModule):
+class PrebattleWindowMeta(AbstractWindowView):
 
     def requestToReady(self, value):
         self._printOverrideError('requestToReady')

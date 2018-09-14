@@ -1,19 +1,18 @@
 # Embedded file name: scripts/client/VehicleStickers.py
 import BigWorld
 from collections import namedtuple
-import random
 import math
 import constants
 import Account
 from gui.prb_control.prb_helpers import preQueueFunctionalProperty
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.server_events import g_eventsCache
+from gui.LobbyContext import g_lobbyContext
 import items
 from items import vehicles
 import Math
 import BattleReplay
 from debug_utils import *
-from gui import game_control
 from VehicleEffects import TankComponentNames
 TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 
@@ -127,7 +126,8 @@ class ModelStickers():
                 arenaBonusType = None
                 if hasattr(BigWorld.player(), 'arena'):
                     arenaBonusType = BigWorld.player().arena.bonusType
-                if game_control.g_instance.roaming.isInRoaming() or arenaBonusType == constants.ARENA_BONUS_TYPE.HISTORICAL or isHBParticipatingVehicle or self.__isLoadingClanEmblems:
+                serverSettings = g_lobbyContext.getServerSettings()
+                if serverSettings is not None and serverSettings.roaming.isInRoaming() or arenaBonusType == constants.ARENA_BONUS_TYPE.HISTORICAL or isHBParticipatingVehicle or self.__isLoadingClanEmblems:
                     continue
                 self.__isLoadingClanEmblems = True
                 accountRep = Account.g_accountRepository

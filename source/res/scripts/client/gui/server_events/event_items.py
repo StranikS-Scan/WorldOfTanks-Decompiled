@@ -1,19 +1,19 @@
 # Embedded file name: scripts/client/gui/server_events/event_items.py
 import operator
-import random
 import time
 from abc import ABCMeta
 from collections import namedtuple, OrderedDict
-import math
 import nations
 import constants
 import ResMgr
 import BigWorld
 import ArenaType
+from ConnectionManager import connectionManager
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from potapov_quests import PQ_STATE as _PQS
 from account_shared import AmmoIterator, getHistoricalCustomizedVehCompDescr
 from helpers import getLocalizedData, i18n, time_utils, getClientLanguage
+from predefined_hosts import g_preDefinedHosts
 from shared_utils import findFirst, CONST_CONTAINER
 from gui import makeHtmlString
 from gui.shared import g_itemsCache
@@ -167,6 +167,9 @@ class ServerEventAbstract(object):
     def _checkConditions(self):
         return True
 
+    def __repr__(self):
+        return '%s(qID = %s, groupID = %s)' % (self.__class__.__name__, self._id, self._groupID)
+
 
 class Group(ServerEventAbstract):
 
@@ -184,7 +187,7 @@ class Quest(ServerEventAbstract):
         self._children, self._parents = {}, {}
         conds = dict(tmpData['conditions'])
         preBattle = dict(conds['preBattle'])
-        self.accountReqs = AccountRequirements(preBattle['account'])
+        self.accountReqs = AccountRequirements(self.getType(), preBattle['account'])
         self.vehicleReqs = VehicleRequirements(preBattle['vehicle'])
         self.preBattleCond = PreBattleConditions(preBattle['battle'])
         self.bonusCond = BonusConditions(conds['bonus'], self.getProgressData(), self.preBattleCond)
@@ -887,6 +890,97 @@ class PotapovQuest(Quest):
     def __repr__(self):
         return 'PQuest<id=%d; state=%s; unlocked=%s>' % (self._id, self.__pqProgress.state, self.isUnlocked())
 
+
+class ClubsQuest(Quest):
+
+    def __init__(self, seasonID, questDescr, progress = None):
+        Quest.__init__(self, questDescr.questID, questDescr.questData, progress)
+        self.__seasonID = seasonID
+
+    def getSeasonID(self):
+        return self.__seasonID
+
+    def getUserName(self):
+        return i18n.makeString(Quest.getUserName(self))
+
+    def getDescription(self):
+        return i18n.makeString(Quest.getDescription(self))
+
+
+class CompanyBattles(namedtuple('CompanyBattles', ['startTime', 'finishTime', 'peripheryIDs'])):
+    DELTA = 1
+
+    def getCreationTimeLeft(self):
+        if self.startTime is not None:
+            startTimeDelta = time_utils.getTimestampFromNow(self.startTime)
+            if startTimeDelta <= CompanyBattles.DELTA:
+                return 0
+            return startTimeDelta
+        else:
+            return self.startTime
+
+    def getDestroyingTimeLeft(self):
+        if self.finishTime is not None:
+            destroyTimeDelta = time_utils.getTimestampFromNow(self.finishTime)
+            if destroyTimeDelta <= CompanyBattles.DELTA:
+                return 0
+            return destroyTimeDelta
+        else:
+            return self.finishTime
+
+    def isCreationTimeCorrect(self):
+        creationTime = self.getCreationTimeLeft()
+        return creationTime is None or creationTime <= 0
+
+    def isDestroyingTimeCorrect(self):
+        destroyingTime = self.getDestroyingTimeLeft()
+        return destroyingTime > 0 or destroyingTime is None
+
+    def needToChangePeriphery(self):
+        return not connectionManager.isStandalone() and connectionManager.peripheryID not in self.peripheryIDs
+
+    def isValid(self):
+        return (self.startTime is None or self.startTime > 0) and (self.finishTime is None or self.finishTime > 0) and (connectionManager.isStandalone() or self.__validatePeripheryIDs())
+
+    def isRunning(self):
+        return self.isCreationTimeCorrect() and self.isDestroyingTimeCorrect()
+
+    def __validatePeripheryIDs(self):
+        validPeripheryIDs = set((host.peripheryID for host in g_preDefinedHosts.hosts() if host.peripheryID != 0))
+        return self.peripheryIDs <= validPeripheryIDs and len(self.peripheryIDs) != 0
+
+
+class FalloutConfig(namedtuple('FalloutConfig', ['allowedVehicles',
+ 'allowedLevels',
+ 'additionalTags',
+ 'minVehiclesPerPlayer',
+ 'maxVehiclesPerPlayer',
+ 'vehicleLevelRequired'])):
+
+    def getAllowedVehicles(self):
+        from gui.shared import g_itemsCache
+        result = []
+        for v in self.allowedVehicles:
+            item = g_itemsCache.items.getItemByCD(v)
+            if item.isInInventory:
+                result.append(item)
+
+        return sorted(result)
+
+    def hasRequiredVehicles(self):
+        for v in self.getAllowedVehicles():
+            if v.level == self.vehicleLevelRequired:
+                return True
+
+        return False
+
+
+FalloutConfig.__new__.__defaults__ = ((),
+ set(),
+ set(),
+ 0,
+ 0,
+ 0)
 
 def _getTileIconPath(tileIconID, prefix, state):
     return '../maps/icons/quests/tiles/%s_%s_%s.png' % (tileIconID, prefix, state)

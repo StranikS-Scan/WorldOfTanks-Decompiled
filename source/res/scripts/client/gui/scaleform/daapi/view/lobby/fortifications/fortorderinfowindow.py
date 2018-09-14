@@ -1,21 +1,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderInfoWindow.py
 from helpers.i18n import makeString as _ms
 from constants import MAX_FORTIFICATION_LEVEL
-from debug_utils import LOG_DEBUG
 from gui.shared.formatters import text_styles
 from gui.shared.fortifications.FortOrder import FortOrder
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortOrderInfoWindowMeta import FortOrderInfoWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 def _newLine(fontSize):
     return "<font size='%d'><br><br></font>" % fontSize
 
 
-class FortOrderInfoWindow(View, AbstractWindowView, FortOrderInfoWindowMeta, AppRef, FortViewHelper):
+class FortOrderInfoWindow(FortOrderInfoWindowMeta, FortViewHelper):
 
     def __init__(self, ctx = None):
         super(FortOrderInfoWindow, self).__init__()
@@ -55,7 +51,7 @@ class FortOrderInfoWindow(View, AbstractWindowView, FortOrderInfoWindowMeta, App
         if isCurrentLevel:
             paramsStyle, levelStyle = text_styles.stats, text_styles.neutral
         else:
-            paramsStyle = levelStyle = text_styles.disable
+            paramsStyle = levelStyle = text_styles.disabled
         levelStr = _ms('#fortifications:fortConsumableOrder/levelLbl', level=fort_formatters.getTextLevel(level))
         return {'params': paramsStyle(_newLine(2).join(map(str, dict(battleOrder.getParams()).values()))),
          'orderLevel': levelStyle(levelStr),

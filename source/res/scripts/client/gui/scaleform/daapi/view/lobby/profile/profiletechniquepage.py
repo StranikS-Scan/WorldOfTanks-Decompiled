@@ -1,17 +1,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechniquePage.py
-from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.profile.ProfileTechnique import ProfileTechnique
 from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechniquePageMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.shared.ItemsCache import g_itemsCache
 from helpers.i18n import makeString
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 
-class ProfileTechniquePage(ProfileTechnique, ProfileTechniquePageMeta):
+class ProfileTechniquePage(ProfileTechniquePageMeta):
 
     def __init__(self, *args):
-        ProfileTechnique.__init__(self, *args)
-        ProfileTechniquePageMeta.__init__(self)
+        super(ProfileTechniquePage, self).__init__(*args)
         self.__isInHangarSelected = False
 
     def _sendAccountData(self, targetData, accountDossier):

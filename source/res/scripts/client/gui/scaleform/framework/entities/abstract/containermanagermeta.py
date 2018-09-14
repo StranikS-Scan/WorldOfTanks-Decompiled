@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ContainerManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class ContainerManagerMeta(DAAPIModule):
+class ContainerManagerMeta(BaseDAAPIModule):
 
     def isModalViewsIsExists(self):
         self._printOverrideError('isModalViewsIsExists')

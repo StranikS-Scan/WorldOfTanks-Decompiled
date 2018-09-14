@@ -7,11 +7,9 @@ from adisp import process
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, game_control
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.CAPTCHAMeta import CAPTCHAMeta
-from gui.Scaleform.framework.entities.View import View
 
 class CaptchaImageWorker(threading.Thread):
 
@@ -49,7 +47,7 @@ class CaptchaImageWorker(threading.Thread):
             return
 
 
-class CaptchaDialog(View, CAPTCHAMeta, AbstractWindowView):
+class CaptchaDialog(CAPTCHAMeta):
     CAPTCHA_IMAGE_NAME = 'captcha-cache-{0:n}'
 
     def __init__(self, meta, handler):

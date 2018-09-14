@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/items_manager.py
-from gui.Scaleform.framework import ViewTypes, AppRef
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
+from gui.app_loader.decorators import sf_lobby
 from tutorial import LOG_WARNING
 
 class AttributeCriteria(ExternalCriteria):
@@ -20,10 +21,14 @@ class AttributeCriteria(ExternalCriteria):
         return nextAttr
 
 
-class ItemsManager(AppRef):
+class ItemsManager(object):
 
     def __init__(self):
         super(ItemsManager, self).__init__()
+
+    @sf_lobby
+    def app(self):
+        return None
 
     def findTargetByCriteria(self, targetPath, valuePath, value):
         result = None

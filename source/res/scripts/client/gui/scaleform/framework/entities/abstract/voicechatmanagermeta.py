@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/VoiceChatManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class VoiceChatManagerMeta(DAAPIModule):
+class VoiceChatManagerMeta(BaseDAAPIModule):
 
     def isPlayerSpeaking(self, accountDBID):
         self._printOverrideError('isPlayerSpeaking')
@@ -15,6 +15,6 @@ class VoiceChatManagerMeta(DAAPIModule):
     def isVOIPEnabled(self):
         self._printOverrideError('isVOIPEnabled')
 
-    def as_onPlayerSpeakS(self, accountDBID, isSpeak, isHimself):
+    def as_onPlayerSpeakS(self, accountDBID, isSpeak, isHimseljoinUnitButtonf):
         if self._isDAAPIInited():
-            return self.flashObject.as_onPlayerSpeak(accountDBID, isSpeak, isHimself)
+            return self.flashObject.as_onPlayerSpeak(accountDBID, isSpeak, isHimseljoinUnitButtonf)

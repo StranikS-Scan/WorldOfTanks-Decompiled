@@ -7,14 +7,14 @@ from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
 from dossiers2.custom.records import RECORD_DB_IDS as DOSSIER_REC_DB_IDS
 from UnitBase import SORTIE_DIVISION_NAMES, SORTIE_DIVISION
 from debug_utils import *
-_divisionToRecordNames = {'MIDDLE': ('middleBattlesCount', 'fortResourceInMiddle'),
- 'CHAMPION': ('championBattlesCount', 'fortResourceInChampion'),
- 'ABSOLUTE': ('absoluteBattlesCount', 'fortResourceInAbsolute')}
+_divisionToRecordNames = {'MIDDLE': ('middleBattlesCount', 'fortResourceInMiddle', 'middleWins'),
+ 'CHAMPION': ('championBattlesCount', 'fortResourceInChampion', 'championWins'),
+ 'ABSOLUTE': ('absoluteBattlesCount', 'fortResourceInAbsolute', 'absoluteWins')}
 
 def updateFortSortieDossier(dossierDescr, divisionName, winner, fortResource, isCommander):
     if divisionName not in _divisionToRecordNames:
         raise Exception, 'Unknown sortie division'
-    counterRecordName, resourceRecordName = _divisionToRecordNames[divisionName]
+    counterRecordName, resourceRecordName, winsRecordName = _divisionToRecordNames[divisionName]
     sortieBlock = dossierDescr['fortSorties']
     sortieBlock[resourceRecordName] += fortResource
     if not isCommander:
@@ -22,6 +22,7 @@ def updateFortSortieDossier(dossierDescr, divisionName, winner, fortResource, is
     sortieBlock['battlesCount'] += 1
     if winner == 1:
         sortieBlock['wins'] += 1
+        sortieBlock[winsRecordName] += 1
     if winner == 2:
         sortieBlock['losses'] += 1
     sortieBlock[counterRecordName] += 1
@@ -199,7 +200,7 @@ def __updateDossierCommonPart(dossierDescr, results, dossierXP):
     frags8p = 0
     maxValuesChanged = []
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_KILL_LIST):
-        frags8p = __processKillList(dossierDescr, results['kill_list'])
+        frags8p = __processKillList(dossierDescr, results['killList'])
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_15X15):
         __updateAggregatedValues(dossierDescr.expand('a15x15'), dossierDescr.expand('a15x15_2'), results, dossierXP, frags8p)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_7X7):
@@ -226,7 +227,7 @@ def __updateDossierCommonPart(dossierDescr, results, dossierXP):
             winnerTeam = results['winnerTeam']
         __updateAggregatedValues(dossierDescr.expand('fortBattles'), dossierDescr.expand('fortBattles'), results, dossierXP, frags8p, winnerTeam)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS):
-        for recordDBID in results['achievements'] + results['protoAchievements']:
+        for recordDBID in results['achievements']:
             __processArenaAchievement(dossierDescr, recordDBID)
 
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAX15X15):
@@ -279,7 +280,7 @@ def __processKillList(dossierDescr, killList):
 
 def __updateAggregatedValues(block, block2, results, dossierXP, frags8p, winnerTeam = None):
     __updateBaseStatistics(block, block2, results, dossierXP, winnerTeam)
-    if results['killerID'] == 0 and results['winnerTeam'] == results['team']:
+    if results['deathCount'] == 0 and results['winnerTeam'] == results['team']:
         block['winAndSurvived'] += 1
     if frags8p != 0:
         block['frags8p'] += frags8p
@@ -298,7 +299,7 @@ def __updateBaseStatistics(block, block2, results, dossierXP, winnerTeam = None)
         pass
     else:
         block['losses'] += 1
-    if results['killerID'] == 0:
+    if results['deathCount'] == 0:
         block['survivedBattles'] += 1
     for record in ('shots', 'directHits', 'spotted', 'damageDealt', 'damageReceived', 'capturePoints'):
         if bool(results[record]):
@@ -307,7 +308,7 @@ def __updateBaseStatistics(block, block2, results, dossierXP, winnerTeam = None)
     droppedCapturePoints = min(results['droppedCapturePoints'], 100)
     if droppedCapturePoints != 0:
         block['droppedCapturePoints'] += droppedCapturePoints
-    kills = results['kills']
+    kills = len(results['killList'])
     if kills:
         block['frags'] += kills
     for record in ('damageAssistedTrack', 'damageAssistedRadio', 'directHitsReceived', 'noDamageDirectHitsReceived', 'piercingsReceived', 'explosionHitsReceived', 'explosionHits', 'piercings', 'potentialDamageReceived', 'damageBlockedByArmor'):
@@ -330,7 +331,7 @@ def __updateMaxValues(block, results, dossierXP):
     if dossierXP != 0 and dossierXP >= block['maxXP']:
         block['maxXP'] = dossierXP
         maxValuesChanged.append('maxXPVehicle')
-    kills = results['kills']
+    kills = len(results['killList'])
     if kills > 0 and kills >= block['maxFrags']:
         block['maxFrags'] = kills
         maxValuesChanged.append('maxFragsVehicle')
@@ -360,8 +361,8 @@ def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results):
         if achievements['maxAimerSeries'] < results['aimerSeries']:
             achievements['maxAimerSeries'] = results['aimerSeries']
     isSPG = isVehicleSPG(vehTypeCompDescr)
-    _updatePerBattleSeries(achievements, 'invincibleSeries', results['killerID'] == 0 and results['damageReceived'] == 0 and not isSPG)
-    _updatePerBattleSeries(achievements, 'diehardSeries', results['killerID'] == 0 and not isSPG)
+    _updatePerBattleSeries(achievements, 'invincibleSeries', results['deathCount'] == 0 and results['damageReceived'] == 0 and not isSPG)
+    _updatePerBattleSeries(achievements, 'diehardSeries', results['deathCount'] == 0 and not isSPG)
     _updateInBattleSeries(achievements, 'sniper', results)
     _updateInBattleSeries(achievements, 'killing', results)
     _updateInBattleSeries(achievements, 'piercing', results)

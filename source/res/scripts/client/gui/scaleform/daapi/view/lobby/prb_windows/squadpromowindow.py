@@ -4,11 +4,8 @@ from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.meta.SquadPromoWindowMeta import SquadPromoWindowMeta
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework import AppRef
 
-class SquadPromoWindow(View, SquadPromoWindowMeta, AbstractWindowView, AppRef):
+class SquadPromoWindow(SquadPromoWindowMeta):
     _BTN_WIDTH = 120
     _CLOSE_BTN_ACTION = 'closeAction'
 

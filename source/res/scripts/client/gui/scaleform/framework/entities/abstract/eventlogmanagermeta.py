@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/EventLogManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class EventLogManagerMeta(DAAPIModule):
+class EventLogManagerMeta(BaseDAAPIModule):
 
     def logEvent(self, subSystemType, eventType, uiid, arg):
         self._printOverrideError('logEvent')

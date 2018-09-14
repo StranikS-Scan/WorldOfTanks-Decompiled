@@ -16,6 +16,8 @@ from gui.battle_control.battle_constants import MULTIPLE_TEAMS_TYPE
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from messenger.storage import storage_getter
 from unit_roster_config import SquadRoster
+from gui.LobbyContext import g_lobbyContext
+from gui.battle_control.arena_info import hasResourcePoints
 PLAYERS_PANEL_LENGTH = 24
 
 def _getRoster(user):
@@ -106,14 +108,13 @@ class BattleArenaController(IArenaVehiclesController):
         super(BattleArenaController, self).__init__()
         self._battleUI = weakref.proxy(battleUI)
         self._battleCtx = None
-        self._panelsUpdatable = True
         self._regionGetter = lambda dbID: None
         self._isSpeaking = VoiceChatInterface.g_instance.isPlayerSpeaking
         self._userGetter = self.usersStorage.getUser
-        roamingCtrl = game_control.g_instance.roaming
+        roaming = g_lobbyContext.getServerSettings().roaming
 
         def isMenuEnabled(dbID):
-            return not roamingCtrl.isInRoaming() and not roamingCtrl.isPlayerInRoaming(dbID)
+            return not roaming.isInRoaming() and not roaming.isPlayerInRoaming(dbID)
 
         self._isMenuEnabled = isMenuEnabled
         invitesManager = self.prbInvites
@@ -132,7 +133,7 @@ class BattleArenaController(IArenaVehiclesController):
     def prbInvites(self):
         return None
 
-    def destroy(self):
+    def clear(self):
         invitesManager = self.prbInvites
         invitesManager.onReceivedInviteListModified -= self.__onReceivedInviteModified
         invitesManager.onSentInviteListModified -= self.__onSentInviteListModified
@@ -150,12 +151,6 @@ class BattleArenaController(IArenaVehiclesController):
         else:
             self._regionGetter = None
         return
-
-    def setPanelsUpdatable(self, value):
-        if self._panelsUpdatable ^ value:
-            self._panelsUpdatable = value
-            if self._panelsUpdatable:
-                self.invalidateGUI()
 
     def invalidateArenaInfo(self):
         self.invalidateVehiclesInfo(self._battleCtx.getArenaDP())
@@ -249,12 +244,10 @@ class BattleArenaController(IArenaVehiclesController):
                 break
             if self._battleCtx.isObserver(vInfoVO.vehicleID) and self._battleCtx.isPlayerObserver():
                 continue
-            if not self._panelsUpdatable:
-                continue
             playerFullName = self._battleCtx.getFullPlayerName(vID=vInfoVO.vehicleID, showVehShortName=False)
             if not playerFullName:
                 playerFullName = vInfoVO.player.getPlayerLabel()
-            valuesHash = self._makeHash(index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited)
+            valuesHash = self._makeHash(index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited, isEnemy)
             pName, frags, vName, additionalData = self._battleUI.statsForm.getFormattedStrings(vInfoVO, vStatsVO, viStatsVO, ctx, playerFullName)
             pNamesList.append(pName)
             fragsList.append(frags)
@@ -262,8 +255,7 @@ class BattleArenaController(IArenaVehiclesController):
             additionalDataList.append(additionalData)
             valuesHashes.append(valuesHash)
 
-        if self._panelsUpdatable:
-            self._battleUI.setTeamValuesData(self._makeTeamValues(isEnemy, ctx, pNamesList, fragsList, vNamesList, additionalDataList, valuesHashes))
+        self._battleUI.setTeamValuesData(self._makeTeamValues(isEnemy, ctx, pNamesList, fragsList, vNamesList, additionalDataList, valuesHashes))
 
     def _makeTeamValues(self, isEnemy, ctx, pNamesList, fragsList, vNamesList, additionalDatas, valuesHashes):
         return {'isEnemy': isEnemy,
@@ -278,7 +270,7 @@ class BattleArenaController(IArenaVehiclesController):
          'vehiclesStr': ''.join(vNamesList),
          'valuesHashes': valuesHashes}
 
-    def _makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited):
+    def _makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited, isEnemy):
         vehicleID = vInfoVO.vehicleID
         vTypeVO = vInfoVO.vehicleType
         playerVO = vInfoVO.player
@@ -299,7 +291,7 @@ class BattleArenaController(IArenaVehiclesController):
          'label': playerFullName,
          'userName': playerVO.getPlayerLabel(),
          'icon': vTypeVO.iconPath,
-         'vehicle': vTypeVO.shortNameWithPrefix,
+         'vehicle': vTypeVO.shortName,
          'vehicleState': vInfoVO.vehicleStatus,
          'frags': vStatsVO.frags,
          'squad': squadIndex,
@@ -324,7 +316,10 @@ class BattleArenaController(IArenaVehiclesController):
          'isEnabledInRoaming': self._isMenuEnabled(dbID),
          'region': self._regionGetter(dbID),
          'isPrebattleCreator': playerVO.isPrebattleCreator,
-         'dynamicSquad': self._getDynamicSquadData(dbID, playerAccountID, isInSquad=squadIndex > 0, inviteSendingProhibited=isInvitesForbidden, invitesReceivingProhibited=invitesReceivingProhibited)}
+         'dynamicSquad': self._getDynamicSquadData(dbID, playerAccountID, isInSquad=squadIndex > 0, inviteSendingProhibited=isInvitesForbidden, invitesReceivingProhibited=invitesReceivingProhibited),
+         'vehicleType': vTypeVO.getClassName(),
+         'teamColorScheme': 'vm_enemy' if isEnemy else 'vm_ally',
+         'vLevel': vTypeVO.level}
 
     def _getDynamicSquadData(self, userDBID, currentAccountDBID, isInSquad, inviteSendingProhibited, invitesReceivingProhibited):
         INVITE_DISABLED = 0
@@ -373,24 +368,29 @@ class FalloutBattleArenaController(BattleArenaController):
 
     def _makeTeamValues(self, isEnemy, ctx, pNamesList, fragsList, vNamesList, additionalDatas, valuesHashes):
         result = super(FalloutBattleArenaController, self)._makeTeamValues(isEnemy, ctx, pNamesList, fragsList, vNamesList, additionalDatas, valuesHashes)
-        resourcePointsStr = ''
+        specialPointsStr = ''
         damageStr = ''
         deathsStr = ''
         scoreStr = ''
-        for scoreString, damageString, deathsString, resourcePointsString in additionalDatas:
+        for scoreString, damageString, deathsString, specialPointsString in additionalDatas:
             scoreStr += scoreString
             deathsStr += deathsString
             damageStr += damageString
-            resourcePointsStr += resourcePointsString
+            specialPointsStr += specialPointsString
 
-        result.update({'resourcePointsStr': resourcePointsStr,
+        if hasResourcePoints():
+            battleType = 'resources'
+        else:
+            battleType = 'flags'
+        result.update({'specialPointsStr': specialPointsStr,
          'damageStr': damageStr,
          'deathsStr': deathsStr,
-         'scoreStr': scoreStr})
+         'scoreStr': scoreStr,
+         'battleType': battleType})
         return result
 
-    def _makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited):
-        result = super(FalloutBattleArenaController, self)._makeHash(index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited)
+    def _makeHash(self, index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited, isEnemy):
+        result = super(FalloutBattleArenaController, self)._makeHash(index, playerFullName, vInfoVO, vStatsVO, viStatsVO, ctx, playerAccountID, inviteSendingProhibited, invitesReceivingProhibited, isEnemy)
         state = result['vehicleState'] & (_VEHICLE_STATUS.IS_READY | _VEHICLE_STATUS.NOT_AVAILABLE)
         if not viStatsVO.stopRespawn:
             state |= _VEHICLE_STATUS.IS_ALIVE
@@ -414,39 +414,38 @@ class MultiteamBattleArenaController(BattleArenaController):
         teamIds = arenaDP.getMultiTeamsIndexes()
         camraVehicleID = self._battleUI.getCameraVehicleID()
         playerNameLength = int(self._battleUI.getPlayerNameLength(isEnemy))
-        if self._panelsUpdatable:
-            for index, (vInfoVO, vStatsVO, viStatsVO) in enumerate(arenaDP.getAllVehiclesIteratorByTeamScore()):
-                team = vInfoVO.team
-                isEnemy = arenaDP.isEnemyTeam(team)
-                ctx = makeTeamCtx(team, isEnemy, arenaDP, playerNameLength, camraVehicleID)
-                if ctx.playerVehicleID == vInfoVO.vehicleID:
-                    playerIdx = index
-                playerFullName = self._battleCtx.getFullPlayerName(vID=vInfoVO.vehicleID, showVehShortName=False)
-                if not playerFullName:
-                    playerFullName = vInfoVO.player.getPlayerLabel()
-                pName, frags, vName, additionalData = self._battleUI.statsForm.getFormattedStrings(vInfoVO, vStatsVO, viStatsVO, ctx, playerFullName)
-                pNamesList.append(pName)
-                fragsList.append(frags)
-                vNamesList.append(vName)
-                additionalDataList.append(additionalData)
-                valuesHashes.append({'vehicleState': 0 if viStatsVO.stopRespawn else _VEHICLE_STATUS.IS_ALIVE})
-                teamIdx = teamIds[team]
-                if (team, teamIdx) not in teamsList:
-                    teamsList.append((team, teamIdx))
-                format = self._battleUI.statsForm.getTeamScoreFormat()
-                teamScores[team].append((viStatsVO.winPoints, format))
+        for index, (vInfoVO, vStatsVO, viStatsVO) in enumerate(arenaDP.getAllVehiclesIteratorByTeamScore()):
+            team = vInfoVO.team
+            isEnemy = arenaDP.isEnemyTeam(team)
+            ctx = makeTeamCtx(team, isEnemy, arenaDP, playerNameLength, camraVehicleID)
+            if ctx.playerVehicleID == vInfoVO.vehicleID:
+                playerIdx = index
+            playerFullName = self._battleCtx.getFullPlayerName(vID=vInfoVO.vehicleID, showVehShortName=False)
+            if not playerFullName:
+                playerFullName = vInfoVO.player.getPlayerLabel()
+            pName, frags, vName, additionalData = self._battleUI.statsForm.getFormattedStrings(vInfoVO, vStatsVO, viStatsVO, ctx, playerFullName)
+            pNamesList.append(pName)
+            fragsList.append(frags)
+            vNamesList.append(vName)
+            additionalDataList.append(additionalData)
+            valuesHashes.append({'vehicleState': 0 if viStatsVO.stopRespawn else _VEHICLE_STATUS.IS_ALIVE})
+            teamIdx = teamIds[team]
+            if (team, teamIdx) not in teamsList:
+                teamsList.append((team, teamIdx))
+            format = self._battleUI.statsForm.getTeamScoreFormat()
+            teamScores[team].append((viStatsVO.winPoints, format))
 
-            for team, _ in teamsList:
-                teamScore = teamScores[team]
-                totalScore = sum([ score for score, _ in teamScore ])
-                scoreIndexForTable = len(teamScore) / 2
-                for index, (score, format) in enumerate(teamScore):
-                    teamScoreStr = format % ' '
-                    if index == scoreIndexForTable:
-                        teamScoreStr = format % BigWorld.wg_getNiceNumberFormat(totalScore)
-                    teamScoreList.append(teamScoreStr)
+        for team, _ in teamsList:
+            teamScore = teamScores[team]
+            totalScore = sum([ score for score, _ in teamScore ])
+            scoreIndexForTable = len(teamScore) / 2
+            for index, (score, format) in enumerate(teamScore):
+                teamScoreStr = format % ' '
+                if index == scoreIndexForTable:
+                    teamScoreStr = format % BigWorld.wg_getNiceNumberFormat(totalScore)
+                teamScoreList.append(teamScoreStr)
 
-            self._battleUI.setMultiteamValues(self._makeMultiTeamValues(playerTeamID, playerIdx, pNamesList, fragsList, vNamesList, teamsList, teamScoreList, additionalDataList, valuesHashes, arenaDP.getMultiTeamsType()))
+        self._battleUI.setMultiteamValues(self._makeMultiTeamValues(playerTeamID, playerIdx, pNamesList, fragsList, vNamesList, teamsList, teamScoreList, additionalDataList, valuesHashes, arenaDP.getMultiTeamsType()))
 
     def _makeMultiTeamValues(self, playerTeamID, playerIdx, pNamesList, fragsList, vNamesList, teamsList, teamScoreList, additionalDataList, valuesHashes, multiteamType):
         flagsStr = ''

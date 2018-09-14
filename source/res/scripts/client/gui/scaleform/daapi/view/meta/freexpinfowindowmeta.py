@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FreeXPInfoWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FreeXPInfoWindowMeta(DAAPIModule):
+class FreeXPInfoWindowMeta(AbstractWindowView):
 
     def onSubmitButton(self):
         self._printOverrideError('onSubmitButton')

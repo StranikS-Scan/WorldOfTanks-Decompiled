@@ -4,11 +4,11 @@ from constants import JOIN_FAILURE_NAMES
 from gui.ClientUpdateManager import g_clientUpdateManager
 from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
 from tutorial.control.offbattle.functional import ContentChangedEvent
-from tutorial.control.triggers import _Trigger
+from tutorial.control.triggers import Trigger
 from tutorial.control.offbattle.context import OffBattleClientCtx
 __all__ = ['TutorialQueueTrigger', 'AllBonusesTrigger']
 
-class TutorialQueueTrigger(_Trigger):
+class TutorialQueueTrigger(Trigger):
     _inQueue = GlobalStorage(GLOBAL_FLAG.IN_QUEUE, False)
 
     def __init__(self, triggerID, popUpID):
@@ -66,7 +66,7 @@ class TutorialQueueTrigger(_Trigger):
         self._tutorial.refuse()
 
 
-class AllBonusesTrigger(_Trigger):
+class AllBonusesTrigger(Trigger):
 
     def __init__(self, triggerID, setVarID):
         super(AllBonusesTrigger, self).__init__(triggerID)

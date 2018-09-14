@@ -1,10 +1,12 @@
 # Embedded file name: scripts/common/ArenaType.py
 import ResMgr
-from constants import IS_BOT, IS_WEB, ARENA_TYPE_XML_PATH, ARENA_GAMEPLAY_NAMES, ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA
+from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
+from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES
 from items.vehicles import CAMOUFLAGE_KINDS
-from debug_utils import *
+from debug_utils import LOG_CURRENT_EXCEPTION
 if IS_CLIENT:
     from helpers import i18n
+    import FMOD
 elif IS_WEB:
     from web_stubs import *
 g_cache = {}
@@ -172,10 +174,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['maxTeamsInArena'] = __readTeamsCount('maxTeamsInArena', section, defaultXml)
     if raiseIfMissing or __hasKey('minTeamsInArena', section, defaultXml):
         cfg['minTeamsInArena'] = __readTeamsCount('minTeamsInArena', section, defaultXml)
-    if raiseIfMissing or __hasKey('maxSquadTeams', section, defaultXml):
-        cfg['maxSquadTeams'] = __readSquadTeamsCount('maxSquadTeams', section, defaultXml)
-    if raiseIfMissing or __hasKey('minSquadTeams', section, defaultXml):
-        cfg['minSquadTeams'] = __readSquadTeamsCount('minSquadTeams', section, defaultXml)
     if raiseIfMissing or __hasKey('runDelay', section, defaultXml):
         cfg['runDelay'] = __readInt('runDelay', section, defaultXml)
     if raiseIfMissing or __hasKey('roundLength', section, defaultXml):
@@ -195,6 +193,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg.update(__readGameplayPoints(section))
         cfg['teamBasePositions'] = __readTeamBasePositions(section, maxTeamsInArena)
         cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
+        cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
         if IS_CLIENT or IS_WEB:
             if raiseIfMissing or __hasKey('description', section, defaultXml):
                 cfg['description'] = i18n.makeString(__readString('description', section, defaultXml))
@@ -338,11 +337,21 @@ def __readTeamsCount(key, section, defaultXml):
     return value
 
 
-def __readSquadTeamsCount(key, section, defaultXml):
-    value = __readInt(key, section, defaultXml, 0)
-    if not 0 <= value <= TEAMS_IN_ARENA.MAX_TEAMS:
-        raise Exception, 'Invalid squad teams count'
-    return value
+def __readTeamNumbers(section, maxTeamsInArena):
+    if not (section.has_key('squadTeamNumbers') or section.has_key('soloTeamNumbers')):
+        if maxTeamsInArena > 2:
+            raise 'For multiteam mode squadTeamNumbers and (or) soloTeamNumbers must be set'
+        return (set(), set())
+    squadTeamNumbers = set([ int(v) for v in section.readString('squadTeamNumbers', '').split() ])
+    soloTeamNumbers = set([ int(v) for v in section.readString('soloTeamNumbers', '').split() ])
+    if len(squadTeamNumbers) + len(soloTeamNumbers) != maxTeamsInArena:
+        raise Exception, 'Number of squad (%d) and solo (%d) teams must be equal to maxTeamsInArena (%d)' % (len(squadTeamNumbers), len(soloTeamNumbers), maxTeamsInArena)
+    if len(squadTeamNumbers & soloTeamNumbers) > 0:
+        raise Exception, 'Squad and solo team numbers contains identical team numbers (%s)' % str(squadTeamNumbers & soloTeamNumbers)
+    allTeamNumbers = squadTeamNumbers | soloTeamNumbers
+    if min(allTeamNumbers) < 1 or max(allTeamNumbers) > TEAMS_IN_ARENA.MAX_TEAMS:
+        raise Exception, 'Invalid team number. Must be between 1 and %d.' % TEAMS_IN_ARENA.MAX_TEAMS
+    return (squadTeamNumbers, soloTeamNumbers)
 
 
 def __readMapActivitiesTimeframes(section):
@@ -393,7 +402,7 @@ def __readTeamBasePositions(section, maxTeamsInArena):
             teamIdx = idx + 1
             s = section['team%s' % teamIdx]
             if s is None:
-                raise Exception, "missing 'teamBasePositions/team%s'" % teamIdx
+                continue
             for name, value in s.items():
                 try:
                     id = int(name[8:])

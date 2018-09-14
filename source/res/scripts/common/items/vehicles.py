@@ -1120,6 +1120,15 @@ class VehicleType(object):
         self.installableComponents = compactDescrs
         self.unlocksDescrs = self.__convertAndValidateUnlocksDescrs(unlocksDescrs)
         self.autounlockedItems = self.__collectDefaultUnlocks()
+        if IS_CELLAPP or IS_CLIENT:
+            try:
+                self.xphysics = _readXPhysics(xmlCtx, section, 'physics')
+            except:
+                LOG_CURRENT_EXCEPTION()
+                self.xphysics = None
+
+        if IS_CLIENT and section.has_key('repaintParameters'):
+            self.repaintParameters = _readRepaintParams(xmlCtx, _xml.getSubsection(xmlCtx, section, 'repaintParameters'))
         section = None
         ResMgr.purge(xmlPath, True)
         return
@@ -1566,6 +1575,11 @@ __ITEM_TYPE_VEHICLE = items.ITEM_TYPES.vehicle
 def getVehicleTypeCompactDescr(compactDescr):
     nationID, vehicleTypeID = parseVehicleCompactDescr(compactDescr)
     return __ITEM_TYPE_VEHICLE + (nationID << 4) + (vehicleTypeID << 8)
+
+
+def makeVehicleTypeCompDescrByName(name):
+    nationID, innationID = g_list.getIDsByName(name)
+    return makeIntCompactDescrByID('vehicle', nationID, innationID)
 
 
 def getDictDescr(compactDescr):
@@ -2261,6 +2275,117 @@ def _readRadio(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem =
     res.update(_readDeviceHealthParams(xmlCtx, section))
     res['unlocks'] = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, compactDescr)
     return res
+
+
+def _parseSectionList(ctx, section, listItemParser, listSubSectionTag = None):
+    if listSubSectionTag:
+        subsection = _xml.getSubsection(ctx, section, listSubSectionTag)
+        ctx = (ctx, listSubSectionTag)
+    else:
+        subsection = section
+    res = {}
+    for name, sec in subsection.items():
+        named_ctx = (ctx, name)
+        res[name] = listItemParser(named_ctx, sec)
+
+    return res
+
+
+def _parseFloatList(ctx, sec, floatList):
+    return dict(((pn, _xml.readFloat(ctx, sec, pn)) for pn in floatList))
+
+
+def _parseFloatArrList(ctx, sec, floatArrList):
+    return dict(((pn, _xml.readTupleOfFloats(ctx, sec, pn, sz)) for pn, sz in floatArrList))
+
+
+def _xphysicsParse_engine(isDetailed, ctx, sec):
+    res = {}
+    floatParamsCommon = ('startRPM',)
+    res.update(_parseFloatList(ctx, sec, floatParamsCommon))
+    if isDetailed:
+        floatParamsDetailed = ('engineInertia', 'idleRPM', 'gearChangeTimeout', 'gearIncreaseFactor', 'gearDecreaseFactor', 'idleChoker')
+        res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
+        floatArrParamsDetailed = (('engineLoses', 2), ('gearVelocities', 11), ('engineTorque', 8))
+        res.update(_parseFloatArrList(ctx, sec, floatArrParamsDetailed))
+        res['engineTorque'] = tuple(zip(res['engineTorque'][0::2], res['engineTorque'][1::2]))
+        res['gearVelocities'] = tuple((KMH_TO_MS * v for v in res['gearVelocities']))
+    else:
+        floatParamsSimplified = ('minRPM', 'smplEngPower')
+        res.update(_parseFloatList(ctx, sec, floatParamsSimplified))
+    return res
+
+
+def _xphysicsParse_ground(ctx, sec):
+    if 'medium' in sec.keys():
+        return _parseSectionList(ctx, sec, _xphysicsParse_ground)
+    floatParams = ('dirtCumulationRate', 'dirtReleaseRate', 'dirtSideVelocity', 'maxDirt', 'sideFriction', 'fwdFriction', 'rollingFriction')
+    res = _parseFloatList(ctx, sec, floatParams)
+    res['dirtSideVelocity'] *= KMH_TO_MS
+    res['dirtCumulationRate'] *= KMH_TO_MS
+    res['hbComSideFriction'] = sec.readFloat('hbComSideFriction', 0.0)
+    res['hbSideFrictionAddition'] = sec.readFloat('hbSideFrictionAddition', 0.0)
+    return res
+
+
+def _xphysicsParse_chassis(isDetailed, ctx, sec):
+    res = {}
+    res['grounds'] = _parseSectionList(ctx, sec, _xphysicsParse_ground, 'grounds')
+    floatParamsCommon = ('chassisMassFraction', 'hullCOMShiftY', 'wheelRadius', 'bodyHeight', 'clearance', 'wheelStroke', 'stiffness0', 'stiffness1', 'damping', 'movementRevertSpeed', 'comSideFriction', 'wheelInertiaFactor', 'rotationBrake', 'brake', 'angVelocityFactor')
+    res.update(_parseFloatList(ctx, sec, floatParamsCommon))
+    res['movementRevertSpeed'] *= KMH_TO_MS
+    res['isRotationAroundCenter'] = sec.readBool('isRotationAroundCenter', False)
+    res['comFrictionYOffs'] = sec.readFloat('comFrictionYOffs', 0.7)
+    res['rotFritionFactor'] = sec.readFloat('rotFritionFactor', 0.0)
+    res['wheelSinkageResistFactor'] = sec.readFloat('wheelSinkageResistFactor', 0.0)
+    res['wPushedRot'] = sec.readFloat('wPushedRot', 0.0)
+    res['wPushedDiag'] = sec.readFloat('wPushedDiag', 0.0)
+    res['pushRot'] = sec.readFloat('pushRot', 0.0)
+    res['pushDiag'] = sec.readFloat('pushDiag', 0.0)
+    res['pushStop'] = sec.readFloat('pushStop', 0.0)
+    res['wPushedMediumFactor'] = sec.readFloat('wPushedMediumFactor', 1.0)
+    res['wPushedSoftFactor'] = sec.readFloat('wPushedSoftFactor', 1.0)
+    res['sideFrictionConstantRatio'] = sec.readFloat('sideFrictionConstantRatio', 0.0)
+    floatArrParamsCommon = (('hullCOM', 3),
+     ('roadWheelPositions', 5),
+     ('stiffnessFactors', 5),
+     ('hullInertiaFactors', 3))
+    res.update(_parseFloatArrList(ctx, sec, floatArrParamsCommon))
+    if isDetailed:
+        floatParamsDetailed = ('centerRotationFwdSpeed', 'rotationByLockChoker', 'fwLagRatio', 'bkLagRatio')
+        res.update(_parseFloatList(ctx, sec, floatParamsDetailed))
+        res['centerRotationFwdSpeed'] *= KMH_TO_MS
+    else:
+        floatParamsSimplified = ('smplRotSpeed', 'smplMaxSpeed', 'smplRotSpeed')
+        res.update(_parseFloatList(ctx, sec, floatParamsSimplified))
+        res['smplMaxSpeed'] *= KMH_TO_MS
+        res['smplRotSpeed'] *= KMH_TO_MS
+    return res
+
+
+def _readXPhysicsMode(xmlCtx, sec, subsectionName, isDetailed):
+    subsec = sec[subsectionName]
+    if subsec is None:
+        return
+    else:
+        ctx = (xmlCtx, subsectionName)
+        res = {}
+        res['engines'] = _parseSectionList(ctx, subsec, partial(_xphysicsParse_engine, isDetailed), 'engines')
+        res['chassis'] = _parseSectionList(ctx, subsec, partial(_xphysicsParse_chassis, isDetailed), 'chassis')
+        return res
+
+
+def _readXPhysics(xmlCtx, section, subsectionName):
+    xsec = section[subsectionName]
+    if xsec is None:
+        return
+    else:
+        ctx = (xmlCtx, subsectionName)
+        res = {}
+        res['mode'] = _xml.readInt(ctx, xsec, 'mode', 1)
+        res['detailed'] = _readXPhysicsMode(ctx, xsec, 'detailed', True)
+        res['simplified'] = _readXPhysicsMode(ctx, xsec, 'simplified', False)
+        return res
 
 
 def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem = None):
@@ -3505,6 +3630,13 @@ def _readCustomization(xmlPath, nationID, idsRange):
         insigniaOnGun[rank] = (textureName, bumpTextureName, False)
 
     res['insigniaOnGun'] = insigniaOnGun
+    tintGroups = {}
+    if section.has_key('tintGroup'):
+        for tintName, subsection in _xml.getChildren(xmlCtx, section, 'tintGroup'):
+            tintColor = _xml.readVector3(xmlCtx, subsection, 'color')
+            tintGroups[tintName] = tintColor
+
+        res['tintGroups'] = tintGroups
     section = None
     subsection = None
     ResMgr.purge(xmlPath, True)
@@ -3607,11 +3739,11 @@ def _readNationVehiclesByNames(xmlCtx, section, sectionName, defNationID):
             if vehName.find(':') == -1:
                 vehName = defNationNameTempl + vehName
             try:
-                nationID, vehID = g_list.getIDsByName(vehName)
+                vehTypeCompDescr = makeVehicleTypeCompDescrByName(vehName)
             except:
                 _xml.raiseWrongXml(xmlCtx, sectionName, "unknown vehicle name '%s'" % vehName)
 
-            res.add(makeIntCompactDescrByID('vehicle', nationID, vehID))
+            res.add(vehTypeCompDescr)
 
         return frozenset(res)
 
@@ -3942,6 +4074,17 @@ def _readAODecals(xmlCtx, section, secname):
             m = subsection.readMatrix('transform')
             res.append(m)
 
+    return res
+
+
+def _readRepaintParams(xmlCtx, section):
+    res = {}
+    if not section.has_key('refColor') or not section.has_key('refGloss') or not section.has_key('refColorMult') or not section.has_key('refGlossMult'):
+        return res
+    res['refColor'] = _xml.readVector3(xmlCtx, section, 'refColor')
+    res['refGloss'] = _xml.readFloat(xmlCtx, section, 'refGloss')
+    res['refColorMult'] = _xml.readFloat(xmlCtx, section, 'refColorMult')
+    res['refGlossMult'] = _xml.readFloat(xmlCtx, section, 'refGlossMult')
     return res
 
 

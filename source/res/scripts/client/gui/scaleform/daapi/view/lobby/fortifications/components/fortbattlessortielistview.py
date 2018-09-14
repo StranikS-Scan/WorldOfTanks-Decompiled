@@ -1,39 +1,35 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesSortieListView.py
-from ConnectionManager import connectionManager
+import BigWorld
 from constants import PREBATTLE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortListMeta import FortListMeta
-from gui.Scaleform.framework import AppRef, ViewTypes
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.shared.fortifications.fort_hours_ctrlr import getForbiddenPeriods
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.game_control.battle_availability import getForbiddenPeriods
 from gui.prb_control.prb_helpers import UnitListener
-from gui.shared.fortifications.fort_helpers import FortListener, adjustDefenceHourToLocal
+from gui.shared.fortifications.fort_helpers import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import int2roman
+from helpers.time_utils import ONE_HOUR
 from messenger.proto.events import g_messengerEvents
 from messenger.m_constants import USER_ACTION_ID
 from predefined_hosts import g_preDefinedHosts
 
-def formatGuiTimeLimitStr(startHour, endHour, useLocalTime = True):
+def formatGuiTimeLimitStr(startHour, endHour):
 
     def _formatHour(hour):
-        locHours = adjustDefenceHourToLocal(hour)[0] if useLocalTime else hour
-        if locHours >= 10:
-            return str(locHours)
-        return '0%d' % locHours
+        return BigWorld.wg_getShortTimeFormat(hour * ONE_HOUR)
 
-    if endHour > 23:
-        endHour = 0
-    return {'startHour': _formatHour(startHour),
-     'startMin': '00',
-     'endHour': _formatHour(endHour),
-     'endMin': '00'}
+    return {'startTime': _formatHour(startHour),
+     'endTime': _formatHour(endHour)}
 
 
-class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef):
+class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
 
     def __init__(self):
         super(FortBattlesSortieListView, self).__init__()
@@ -125,6 +121,21 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
         self.__validateCreation()
         g_messengerEvents.users.onUserActionReceived += self.onContactsUpdated
         self.__registerSortiesCurfewController()
+        self._initListColumns()
+
+    def _initListColumns(self):
+        self.as_setTableHeaderS({'tableHeader': [self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_NAME, 'creatorName', 141, 0, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN),
+                         self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_DESCR, 'description', 140, 1, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_DESCR),
+                         self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_DIVISION, 'commandSize', 115, 2, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN),
+                         self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_MEMBERSCOUNT, 'playersCount', 107, 3, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN),
+                         self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_STATUS, 'isInBattle', 74, 4, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_STATUS)]})
+
+    def _createTableBtnInfo(self, label, btnId, buttonWidth, sortOrder, toolTip):
+        return {'label': label,
+         'id': btnId,
+         'buttonWidth': buttonWidth,
+         'sortOrder': sortOrder,
+         'toolTip': toolTip}
 
     def _dispose(self):
         self.stopFortListening()

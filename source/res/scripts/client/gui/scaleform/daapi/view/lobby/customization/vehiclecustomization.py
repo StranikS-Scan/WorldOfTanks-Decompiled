@@ -14,7 +14,6 @@ from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel impo
 from gui.Scaleform.daapi.view.lobby.customization import _VEHICLE_CUSTOMIZATIONS
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 from gui.Scaleform.daapi.view.meta.VehicleCustomizationMeta import VehicleCustomizationMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.DIALOGS import DIALOGS
@@ -27,8 +26,9 @@ from helpers import i18n
 from shared_utils import findFirst
 from items import vehicles
 from items.vehicles import VehicleDescr
+from account_helpers.settings_core.settings_constants import TUTORIAL
 
-class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
+class VehicleCustomization(VehicleCustomizationMeta, View):
 
     def __init__(self, ctx = None):
         super(VehicleCustomization, self).__init__()
@@ -91,6 +91,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
 
         if not self.__steps:
             self.__finishInitData()
+        self.setupContextHints(TUTORIAL.CUSTOMIZATION)
         return
 
     def _dispose(self):
@@ -288,6 +289,8 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
         self.__isIgrChanged = True
 
     def __cv_onChanged(self, *args):
+        if self.__steps:
+            return
         if not g_currentVehicle.isReadyToFight() and not g_currentVehicle.isReadyToPrebattle():
             if g_currentVehicle.isCrewFull() and not g_currentVehicle.isBroken():
                 self.closeWindow()

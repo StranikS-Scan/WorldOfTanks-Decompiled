@@ -2,15 +2,13 @@
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.RetrainCrewWindowMeta import RetrainCrewWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items.processors.tankman import TankmanCrewRetraining
 from gui.shared.utils import decorators
 from gui import SystemMessages
 from items import tankmen
 
-class RetrainCrewWindow(RetrainCrewWindowMeta, View, AbstractWindowView):
+class RetrainCrewWindow(RetrainCrewWindowMeta):
     AVAILABLE_OPERATIONS = range(3)
 
     def __init__(self, ctx = None):

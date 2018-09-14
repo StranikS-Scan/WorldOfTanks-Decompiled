@@ -2,10 +2,8 @@
 from gui.Scaleform.daapi.view.meta.SimpleWindowMeta import SimpleWindowMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class CrewAboutDogWindow(View, SimpleWindowMeta, AbstractWindowView):
+class CrewAboutDogWindow(SimpleWindowMeta):
 
     def __init__(self, ctx = None):
         super(CrewAboutDogWindow, self).__init__()

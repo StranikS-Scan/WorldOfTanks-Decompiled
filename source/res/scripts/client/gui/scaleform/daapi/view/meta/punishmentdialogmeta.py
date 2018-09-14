@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PunishmentDialogMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.dialogs.SimpleDialog import SimpleDialog
 
-class PunishmentDialogMeta(DAAPIModule):
+class PunishmentDialogMeta(SimpleDialog):
 
     def as_setMsgTitleS(self, value):
         if self._isDAAPIInited():

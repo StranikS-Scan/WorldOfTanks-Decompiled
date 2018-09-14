@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StoreMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class StoreMeta(DAAPIModule):
+class StoreMeta(View):
 
     def requestTableData(self, nation, type, filter):
         self._printOverrideError('requestTableData')

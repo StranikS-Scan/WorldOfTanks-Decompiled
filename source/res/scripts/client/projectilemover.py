@@ -16,24 +16,34 @@ from ClientArena import Plane
 from debug_utils import *
 from projectile_trajectory import computeProjectileTrajectory
 from constants import DESTRUCTIBLE_MATKIND
+import AvatarInputHandler
 import FlockManager
+
+def ownVehicleGunPositionGetter():
+    ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID)
+    if ownVehicle:
+        return ownVehicle.appearance.modelsDesc['gun']['model'].position
+    else:
+        return Math.Vector3(0.0, 0.0, 0.0)
+
 
 class ProjectileMover(object):
     __PROJECTILE_HIDING_TIME = 0.05
     __PROJECTILE_TIME_AFTER_DEATH = 2.0
-    __MOVEMENT_CALLBACK_TIMEOUT = 0.001
     __AUTO_SCALE_DISTANCE = 180.0
 
     def __init__(self):
         self.__projectiles = dict()
-        self.__movementCallbackId = None
         self.salvo = BigWorld.PySalvo(1000, 0, -100)
+        self.__ballistics = BigWorld.PyBallisticsSimulator(lambda start, end: BigWorld.player().arena.collideWithSpaceBB(start, end), self.__killProjectile, self.__deleteProjectile)
+        if self.__ballistics is not None:
+            self.__ballistics.setBallisticsConstants(self.__PROJECTILE_HIDING_TIME, self.__PROJECTILE_TIME_AFTER_DEATH, self.__AUTO_SCALE_DISTANCE, constants.SERVER_TICK_LENGTH)
+        BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
         return
 
     def destroy(self):
-        if self.__movementCallbackId is not None:
-            BigWorld.cancelCallback(self.__movementCallbackId)
-            self.__movementCallbackId = None
+        BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
+        self.__ballistics = None
         for shotID in self.__projectiles.keys():
             self.__delProjectile(shotID)
 
@@ -48,43 +58,24 @@ class ProjectileMover(object):
             if artID is not None:
                 self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
                 return
-            projectiles = self.__projectiles
-            if shotID in projectiles:
+            projectileMotor = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, ownVehicleGunPositionGetter(), tracerCameraPos)
+            if projectileMotor is None:
                 return
-            if -shotID in projectiles:
-                projectiles[-shotID]['startTime'] = BigWorld.time() - 1.0
             projModelName, projModelOwnShotName, projEffects = effectsDescr['projectile']
-            gravity = Math.Vector3(0.0, -gravity, 0.0)
-            trajectory = self.__calcTrajectory(refStartPoint, refVelocity, gravity, maxDistance, isOwnShoot, tracerCameraPos)
-            trajectoryEnd = trajectory[len(trajectory) - 1]
-            if (trajectoryEnd[0] - startPoint).length == 0.0 or trajectoryEnd[1] == 0.0:
-                LOG_CODEPOINT_WARNING()
-                return
             model = BigWorld.Model(projModelOwnShotName if isOwnShoot else projModelName)
             proj = {'model': model,
-             'startTime': BigWorld.time(),
+             'motor': projectileMotor,
              'effectsDescr': effectsDescr,
-             'refStartPoint': refStartPoint,
-             'refVelocity': refVelocity,
-             'startPoint': startPoint,
-             'stopPlane': None,
-             'gravity': gravity,
              'showExplosion': False,
-             'impactVelDir': None,
-             'deathTime': None,
              'fireMissedTrigger': isOwnShoot,
              'autoScaleProjectile': isOwnShoot,
-             'collisions': trajectory,
-             'velocity': self.__calcStartVelocity(trajectoryEnd[0], startPoint, trajectoryEnd[1], gravity),
              'effectsData': {}}
             BigWorld.player().addModel(model)
-            model.position = startPoint
+            model.addMotor(projectileMotor)
             model.visible = False
             model.visibleAttachments = True
             projEffects.attachTo(proj['model'], proj['effectsData'], 'flying')
-            if self.__movementCallbackId is None:
-                self.__movementCallbackId = BigWorld.callback(self.__MOVEMENT_CALLBACK_TIMEOUT, self.__movementCallback)
-            projectiles[shotID] = proj
+            self.__projectiles[shotID] = proj
             FlockManager.getManager().onProjectile(startPoint)
             return
 
@@ -98,8 +89,8 @@ class ProjectileMover(object):
             self.__projectiles[-shotID] = proj
             proj['fireMissedTrigger'] = False
             proj['showExplosion'] = False
-            proj['stopPlane'] = self.__getStopPlane(endPoint, proj['refStartPoint'], proj['refVelocity'], proj['gravity'])
             self.__notifyProjectileHit(endPoint, proj)
+            self.__ballistics.hideProjectile(shotID, endPoint)
             return
 
     def explode(self, shotID, effectsDescr, effectMaterial, endPoint, velocityDir):
@@ -113,30 +104,17 @@ class ProjectileMover(object):
             if proj['fireMissedTrigger']:
                 proj['fireMissedTrigger'] = False
                 TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_MISSED)
-            if proj['deathTime'] is not None:
-                pos = proj['model'].position
-                self.__addExplosionEffect(pos, effectsDescr, effectMaterial, proj['impactVelDir'])
+            params = self.__ballistics.explodeProjectile(shotID, endPoint)
+            if params is not None:
+                self.__addExplosionEffect(params[0], effectsDescr, effectMaterial, params[1])
             else:
                 proj['showExplosion'] = True
                 proj['effectMaterial'] = effectMaterial
-                proj['stopPlane'] = self.__getStopPlane(endPoint, proj['refStartPoint'], proj['refVelocity'], proj['gravity'])
-                nearestDist = None
-                nearestCollision = None
-                for p, t, d in proj['collisions']:
-                    dist = (Math.Vector3(p) - Math.Vector3(endPoint)).lengthSquared
-                    if dist < nearestDist or nearestDist is None:
-                        nearestCollision = (p, t, d)
-                        nearestDist = dist
-
-                proj['collisions'] = [nearestCollision]
             self.__notifyProjectileHit(endPoint, proj)
             return
 
     def hold(self, shotID):
-        proj = self.__projectiles.get(shotID)
-        if proj is not None:
-            proj['holdTime'] = self.__PROJECTILE_HIDING_TIME
-        return
+        self.__ballistics.holdProjectile(shotID)
 
     def __notifyProjectileHit(self, hitPosition, proj):
         caliber = proj['effectsDescr']['caliber']
@@ -165,198 +143,27 @@ class ProjectileMover(object):
         BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0))
         return
 
-    def __calcTrajectory(self, r0, v0, gravity, maxDistance, isOwnShoot, tracerCameraPos):
-        ret = []
-        ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID)
-        prevPos = r0
-        prevVelocity = v0
-        dt = 0.0
-        destrID = []
-        while True:
-            dt += constants.SERVER_TICK_LENGTH
-            checkPoints = computeProjectileTrajectory(prevPos, prevVelocity, gravity, constants.SERVER_TICK_LENGTH, constants.SHELL_TRAJECTORY_EPSILON_CLIENT)
-            prevCheckPoint = prevPos
-            prevDist0 = r0.distTo(prevCheckPoint)
-            for curCheckPoint in checkPoints:
-                curDist0 = r0.distTo(curCheckPoint)
-                if curDist0 > maxDistance:
-                    curCheckPoint = prevCheckPoint + (curCheckPoint - prevCheckPoint) * ((maxDistance - prevDist0) / (curDist0 - prevDist0))
-                    ret.append((curCheckPoint, (curCheckPoint[0] - r0[0]) / v0[0], None))
-                    return ret
-                hitPoint = BigWorld.player().arena.collideWithSpaceBB(prevCheckPoint, curCheckPoint)
-                if hitPoint is not None:
-                    ret.append((hitPoint, (hitPoint[0] - r0[0]) / v0[0], None))
-                    return ret
-                testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, prevCheckPoint, curCheckPoint, 128, lambda matKind, collFlags, itemID, chunkID: (False if itemID in destrID else True))
-                if testRes is not None:
-                    hitPoint = testRes[0]
-                    distStatic = (hitPoint - prevCheckPoint).length
-                    destructibleDesc = None
-                    matKind = testRes[2]
-                    if matKind in xrange(DESTRUCTIBLE_MATKIND.NORMAL_MIN, DESTRUCTIBLE_MATKIND.NORMAL_MAX + 1):
-                        destructibleDesc = (testRes[5], testRes[4], matKind)
-                        destrID.append(testRes[4])
-                    distWater = -1.0
-                    useTracerCameraPos = False
-                    if isOwnShoot:
-                        rayDir = hitPoint - tracerCameraPos
-                        rayDir.normalise()
-                        if ownVehicle is not None:
-                            gunPos = ownVehicle.appearance.modelsDesc['gun']['model'].position
-                            if tracerCameraPos.y > gunPos.y:
-                                if (hitPoint - gunPos).length > 30.0:
-                                    useTracerCameraPos = True
-                        if not useTracerCameraPos:
-                            distWater = BigWorld.wg_collideWater(prevCheckPoint, curCheckPoint, False)
-                        else:
-                            rayEnd = hitPoint + rayDir * 1.5
-                            testRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, tracerCameraPos, rayEnd, 128)
-                            if testRes is not None:
-                                distStatic = (testRes[0] - tracerCameraPos).length
-                                distWater = BigWorld.wg_collideWater(tracerCameraPos, rayEnd, False)
-                    else:
-                        distWater = BigWorld.wg_collideWater(prevCheckPoint, curCheckPoint, False)
-                    if distWater < 0 or distWater > distStatic:
-                        ret.append((hitPoint, self.__getCollisionTime(r0, hitPoint, v0), destructibleDesc))
-                        if destructibleDesc is None:
-                            return ret
-                        prevCheckPoint = hitPoint
-                        continue
-                    if distWater >= 0:
-                        srcPoint = tracerCameraPos if useTracerCameraPos else prevCheckPoint
-                        hitDirection = hitPoint - srcPoint
-                        hitDirection.normalise()
-                        hitPoint = srcPoint + hitDirection * distWater
-                        ret.append((hitPoint, self.__getCollisionTime(r0, hitPoint, v0), None))
-                        return ret
-                prevCheckPoint = curCheckPoint
-                prevDist0 = curDist0
-
-            prevPos = r0 + v0.scale(dt) + gravity.scale(dt * dt * 0.5)
-            prevVelocity = v0 + gravity.scale(dt)
-
-        return
-
-    def __getCollisionTime(self, startPoint, hitPoint, velocity):
-        if velocity[0] != 0:
-            return (hitPoint[0] - startPoint[0]) / velocity[0]
-        elif velocity[2] != 0:
-            return (hitPoint[2] - startPoint[2]) / velocity[2]
+    def __killProjectile(self, shotID, position, impactVelDir):
+        proj = self.__projectiles.get(shotID)
+        if proj is None:
+            return
         else:
-            return 1000000.0
-
-    def __getStopPlane(self, point, r0, v0, gravity):
-        vx = v0.x
-        if abs(vx) > 1e-06:
-            t = (point[0] - r0[0]) / vx
-        else:
-            t = (point[2] - r0[2]) / v0[2]
-        v = v0 + gravity.scale(t)
-        v.normalise()
-        d = v.dot(point)
-        return Plane(v, d)
-
-    def __moveByTrajectory(self, proj, time):
-        model = proj['model']
-        gravity = proj['gravity']
-        r0 = proj['startPoint']
-        v0 = proj['velocity']
-        if 'holdTime' in proj:
-            time -= proj['holdTime']
-        dt = time - proj['startTime']
-        if dt < 0:
-            return False
-        else:
-            if not model.visible and dt >= self.__PROJECTILE_HIDING_TIME:
-                model.visible = True
-            endPoint = None
-            endTime = None
-            for p, t, destrDesc in proj['collisions']:
-                if dt < t:
-                    break
-                if destrDesc is not None:
-                    areaDestr = AreaDestructibles.g_destructiblesManager.getController(destrDesc[0])
-                    if areaDestr is not None:
-                        if areaDestr.isDestructibleBroken(destrDesc[1], destrDesc[2]):
-                            continue
-                endPoint = p
-                endTime = t
-                break
-
-            if endPoint is not None:
-                stopPlane = proj['stopPlane']
-                if stopPlane is not None and stopPlane.testPoint(endPoint):
-                    testRes = stopPlane.intersectSegment(model.position, endPoint)
-                    if testRes is not None:
-                        endPoint = testRes
-                dir = endPoint - model.position
-                dir.normalise()
-                proj['impactVelDir'] = dir
-                model.visible = False
-                self.__setModelLocation(model, endPoint - dir.scale(0.01), v0, proj['autoScaleProjectile'])
-                return True
-            r = r0 + v0.scale(dt) + gravity.scale(dt * dt * 0.5)
-            v = v0 + gravity.scale(dt)
-            stopPlane = proj['stopPlane']
-            if stopPlane and stopPlane.testPoint(r):
-                testRes = stopPlane.intersectSegment(model.position, r)
-                if testRes is None:
-                    testRes = stopPlane.intersectSegment(proj['refStartPoint'], r0)
-                    if testRes is None:
-                        testRes = model.position
-                dir = testRes - model.position
-                dir.normalise()
-                proj['impactVelDir'] = dir
-                model.visible = False
-                self.__setModelLocation(model, testRes - dir.scale(0.01), v, proj['autoScaleProjectile'])
-                return True
-            self.__setModelLocation(model, r, v, proj['autoScaleProjectile'])
-            return False
-
-    def __setModelLocation(self, model, pos, velocity, autoScaleProjectile):
-        model.straighten()
-        model.rotate(velocity.pitch, Math.Vector3(1.0, 0.0, 0.0))
-        model.rotate(velocity.yaw, Math.Vector3(0.0, 1.0, 0.0))
-        model.vel = velocity
-        model.position = pos
-        if autoScaleProjectile:
-            model.scale = self.__calcModelAutoScale(pos)
-
-    def __calcModelAutoScale(self, modelPos):
-        camera = BigWorld.camera()
-        distance = (camera.position - modelPos).length
-        inputHandler = BigWorld.player().inputHandler
-        from AvatarInputHandler.control_modes import SniperControlMode
-        if distance <= ProjectileMover.__AUTO_SCALE_DISTANCE or not isinstance(inputHandler.ctrl, SniperControlMode):
-            return Math.Vector3(1, 1, 1)
-        return Math.Vector3(1, 1, 1) * distance / ProjectileMover.__AUTO_SCALE_DISTANCE
-
-    def __movementCallback(self):
-        self.__movementCallbackId = None
-        time = BigWorld.time()
-        for shotID, proj in self.__projectiles.items():
-            player = BigWorld.player()
             effectsDescr = proj['effectsDescr']
-            deathTime = proj['deathTime']
-            if deathTime is None and self.__moveByTrajectory(proj, time):
-                proj['deathTime'] = time
-                projEffects = effectsDescr['projectile'][2]
-                projEffects.detachFrom(proj['effectsData'], 'stopFlying')
-                if proj['showExplosion']:
-                    pos = proj['model'].position
-                    dir = proj['impactVelDir']
-                    self.__addExplosionEffect(pos, effectsDescr, proj['effectMaterial'], dir)
-            if deathTime and time - deathTime >= self.__PROJECTILE_TIME_AFTER_DEATH:
-                self.__delProjectile(shotID)
-                if proj['fireMissedTrigger']:
-                    TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_MISSED)
+            projEffects = effectsDescr['projectile'][2]
+            projEffects.detachFrom(proj['effectsData'], 'stopFlying')
+            if proj['showExplosion']:
+                self.__addExplosionEffect(position, effectsDescr, proj['effectMaterial'], impactVelDir)
+            return
 
-        self.__movementCallbackId = BigWorld.callback(self.__MOVEMENT_CALLBACK_TIMEOUT, self.__movementCallback)
-        return
-
-    def __calcStartVelocity(self, r, r0, dt, gravity):
-        v0 = (r - r0).scale(1.0 / dt) - gravity.scale(dt * 0.5)
-        return v0
+    def __deleteProjectile(self, shotID):
+        proj = self.__projectiles.get(shotID)
+        if proj is None:
+            return
+        else:
+            self.__delProjectile(shotID)
+            if proj['fireMissedTrigger']:
+                TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_MISSED)
+            return
 
     def __addWaterRipples(self, position, rippleDiameter, ripplesLeft):
         BigWorld.wg_addWaterRipples(position, rippleDiameter)
@@ -364,11 +171,18 @@ class ProjectileMover(object):
             BigWorld.callback(0, lambda : self.__addWaterRipples(position, rippleDiameter, ripplesLeft - 1))
 
     def __delProjectile(self, shotID):
-        proj = self.__projectiles[shotID]
-        projEffects = proj['effectsDescr']['projectile'][2]
-        projEffects.detachAllFrom(proj['effectsData'])
-        BigWorld.player().delModel(proj['model'])
-        del self.__projectiles[shotID]
+        proj = self.__projectiles.pop(shotID)
+        if proj is None:
+            return
+        else:
+            projEffects = proj['effectsDescr']['projectile'][2]
+            projEffects.detachAllFrom(proj['effectsData'])
+            proj['model'].delMotor(proj['motor'])
+            BigWorld.player().delModel(proj['model'])
+            return
+
+    def __onCameraChanged(self, cameraName, currentVehicleId = None):
+        self.__ballistics.setBallisticsAutoScale(cameraName != 'sniper')
 
 
 class EntityCollisionData(namedtuple('collisionData', ('entity', 'hitAngleCos', 'armor'))):

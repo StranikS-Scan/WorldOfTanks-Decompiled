@@ -9,10 +9,8 @@ from gui.server_events import g_eventsCache
 from gui.shared.gui_items.processors.quests import PotapovQuestsGetTankwomanReward
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.QuestRecruitWindowMeta import QuestRecruitWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class QuestsRecruitWindow(View, AbstractWindowView, QuestRecruitWindowMeta):
+class QuestsRecruitWindow(QuestRecruitWindowMeta):
 
     def __init__(self, ctx = None):
         super(QuestsRecruitWindow, self).__init__()

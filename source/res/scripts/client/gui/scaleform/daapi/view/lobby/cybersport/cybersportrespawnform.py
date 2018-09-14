@@ -29,7 +29,6 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
     def __init__(self):
         super(CyberSportRespawnForm, self).__init__()
         self.__extra = self.unitFunctional.getExtra()
-        self.textMgr = self.app.utilsManager.textManager
         self.__timerCallback = None
         self.__warningCallback = None
         return

@@ -10,6 +10,7 @@ from Event import Event, EventManager
 from debug_utils import LOG_DAN, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_SVAN_DEV
 from ClubDescr import ClubDescr
 from pprint import pformat
+CLIENT_CLUB_COMMANDS_NAMES = {v:k for k, v in CLIENT_CLUB_COMMANDS.__dict__.iteritems() if isinstance(v, int)}
 
 def _logClubResponse(*args):
     LOG_SVAN_DEV('\n\n[SERVER CMD RESPONSE]\n{}\n', args)
@@ -63,7 +64,7 @@ class ClientClubs(object):
     def synchronize(self, isFullSync, diff):
         cacheDiff = diff.get('cache', None)
         if cacheDiff is not None:
-            for key in ('relatedToClubs', 'cybersportSeasonInProgress', 'eSportSeasonState', 'eSportSeasons'):
+            for key in ('relatedToClubs', 'eSportSeasonInProgress', 'eSportSeasonState', 'eSportSeasons', 'isEstbOnline'):
                 if key in cacheDiff:
                     self.__cache[key] = cacheDiff[key]
 
@@ -79,7 +80,7 @@ class ClientClubs(object):
         return self.__cache.get('eSportSeasonState')
 
     def isSeasonInProgress(self):
-        return self.__cache.get('cybersportSeasonInProgress')
+        return self.__cache.get('eSportSeasonInProgress')
 
     def getCache(self, callback = None):
         if self.__ignore:

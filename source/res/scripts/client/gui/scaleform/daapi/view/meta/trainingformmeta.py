@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TrainingFormMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class TrainingFormMeta(DAAPIModule):
+class TrainingFormMeta(View):
 
     def joinTrainingRequest(self, id):
         self._printOverrideError('joinTrainingRequest')
@@ -15,6 +15,6 @@ class TrainingFormMeta(DAAPIModule):
     def onLeave(self):
         self._printOverrideError('onLeave')
 
-    def as_setListS(self, provider, totalPlayers):
+    def as_setListS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_setList(provider, totalPlayers)
+            return self.flashObject.as_setList(data)

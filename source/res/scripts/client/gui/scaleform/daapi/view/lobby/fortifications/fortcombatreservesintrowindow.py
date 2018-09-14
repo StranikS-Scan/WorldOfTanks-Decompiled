@@ -1,12 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortCombatReservesIntroWindow.py
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.meta.FortCombatReservesIntroMeta import FortCombatReservesIntroMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
-class FortCombatReservesIntroWindow(View, AbstractWindowView, FortCombatReservesIntroMeta):
+class FortCombatReservesIntroWindow(FortCombatReservesIntroMeta):
 
     def _populate(self):
         super(FortCombatReservesIntroWindow, self)._populate()

@@ -22,24 +22,24 @@ def decodeAngleFromUint(code, bits):
     return pi * 2.0 * code / (1 << bits) - pi
 
 
-def encodeRestrictedAngleToUint(angle, bits, minBound, maxBound):
+def encodeRestrictedValueToUint(angle, bits, minBound, maxBound):
     t = (angle - minBound) / (maxBound - minBound)
     t = _clamp(0.0, t, 1.0)
     mask = (1 << bits) - 1
     return int(round(mask * t)) & mask
 
 
-def decodeRestrictedAngleFromUint(code, bits, minBound, maxBound):
+def decodeRestrictedValueFromUint(code, bits, minBound, maxBound):
     t = float(code) / ((1 << bits) - 1)
     return minBound + t * (maxBound - minBound)
 
 
 def encodeGunAngles(yaw, pitch, pitchLimits):
-    return encodeAngleToUint(yaw, 10) << 6 | encodeRestrictedAngleToUint(pitch, 6, *pitchLimits)
+    return encodeAngleToUint(yaw, 10) << 6 | encodeRestrictedValueToUint(pitch, 6, *pitchLimits)
 
 
 def decodeGunAngles(code, pitchLimits):
-    return (decodeAngleFromUint(code >> 6 & 1023, 10), decodeRestrictedAngleFromUint((code & 63), 6, *pitchLimits))
+    return (decodeAngleFromUint(code >> 6 & 1023, 10), decodeRestrictedValueFromUint((code & 63), 6, *pitchLimits))
 
 
 def _clamp(minBound, value, maxBound):

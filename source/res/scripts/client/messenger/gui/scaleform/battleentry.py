@@ -4,17 +4,16 @@ import VOIP
 from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.CommandArgsParser import CommandArgsParser
-from gui.battle_control import g_sessionProvider
-from gui.battle_control.dyn_squad_arena_controllers import DynSquadMessagesController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from messenger import g_settings
 from messenger.formatters.users_messages import getUserActionReceivedMessage
 from messenger.gui.Scaleform.data.BattleSharedHistory import BattleSharedHistory
+from messenger.gui.Scaleform.data.message_formatters import getMessageFormatter
 from messenger.gui.Scaleform.view.BattleChannelView import BattleChannelView
 from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE, MESSENGER_COMMAND_TYPE
 from messenger.gui.interfaces import IGUIEntry
-from messenger.gui.Scaleform import BTMS_COMMANDS, channels
+from messenger.gui.Scaleform import BTMS_COMMANDS, channels, FILL_COLORS
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
@@ -26,7 +25,6 @@ class BattleEntry(IGUIEntry):
         self.__focused = False
         self.__initialized = 0
         self.__channelsCtrl = None
-        self.__dynSquadMsgController = None
         self.__view = None
         self.__sharedHistory = BattleSharedHistory(g_settings.battle.numberOfMessagesInHistory)
         self.__enableRecord = True
@@ -93,6 +91,7 @@ class BattleEntry(IGUIEntry):
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
         g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
         g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
+        g_messengerEvents.onWarningReceived += self.__me_onWarningReceived
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated += self.__ms_onColorsSchemesUpdated
         self.__initialized = 0
@@ -100,18 +99,13 @@ class BattleEntry(IGUIEntry):
         g_eventBus.addListener(MessengerEvent.BATTLE_CHANNEL_CTRL_INITED, self.__handleChannelControllerInited, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__channelsCtrl = channels.BattleControllers()
         self.__channelsCtrl.init()
-        self.__dynSquadMsgController = DynSquadMessagesController(self.__onDynSquadMsgReceivedCallback)
-        g_sessionProvider.addArenaCtrl(self.__dynSquadMsgController)
 
     def close(self, nextScope):
-        if self.__dynSquadMsgController:
-            g_sessionProvider.removeArenaCtrl(self.__dynSquadMsgController)
-            self.__dynSquadMsgController.destroy()
-            self.__dynSquadMsgController = None
         g_messengerEvents.channels.onMessageReceived -= self.__me_onMessageReceived
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
         g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
         g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
+        g_messengerEvents.onWarningReceived -= self.__me_onWarningReceived
         g_settings.onUserPreferencesUpdated -= self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated -= self.__ms_onColorsSchemesUpdated
         self.dispossessUI()
@@ -136,9 +130,13 @@ class BattleEntry(IGUIEntry):
             LOG_ERROR('Method is not specific', method)
 
     def addClientMessage(self, message, isCurrentPlayer = False):
-        self.__sharedHistory.addMessage(message, isCurrentPlayer=isCurrentPlayer)
+        if isCurrentPlayer:
+            fillColor = FILL_COLORS.BROWN
+        else:
+            fillColor = FILL_COLORS.BLACK
+        self.__sharedHistory.addMessage(message, fillColor=fillColor)
         self.__updateHistoryControls()
-        self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [0, message, isCurrentPlayer])
+        self.__flashCall(BTMS_COMMANDS.ReceiveMessage(), [0, message, fillColor])
 
     def isEditing(self, event):
         return self.__focused and event.key != Keys.KEY_SYSRQ
@@ -149,7 +147,14 @@ class BattleEntry(IGUIEntry):
     def __showErrorMessage(self, message):
         formatted = g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': message})
         self.__sharedHistory.addMessage(formatted)
-        self.__flashCall(BTMS_COMMANDS.ShowActionFailureMessage(), [formatted])
+        self.__flashCall(BTMS_COMMANDS.ShowActionFailureMessage(), [formatted, FILL_COLORS.BLACK])
+
+    def __showWarningMessage(self, actionMessage):
+        formatter = getMessageFormatter(actionMessage)
+        formatted = formatter.getFormattedMessage()
+        fillColor = formatter.getFillColor()
+        self.__sharedHistory.addMessage(formatted, fillColor=fillColor)
+        self.__flashCall(BTMS_COMMANDS.ShowActionFailureMessage(), [formatted, fillColor])
 
     def __me_onUserActionReceived(self, action, user):
         message = getUserActionReceivedMessage(action, user)
@@ -181,8 +186,11 @@ class BattleEntry(IGUIEntry):
     def __me_onErrorReceived(self, error):
         self.__showErrorMessage(error.getMessage())
 
+    def __me_onWarningReceived(self, message):
+        self.__showWarningMessage(message)
+
     def __ms_onUserPreferencesUpdated(self):
-        self.__flashCall(BTMS_COMMANDS.UserPreferencesUpdated(), [g_settings.userPrefs.storeReceiverInBattle, True, self.__getToolTipText()])
+        self.__flashCall(BTMS_COMMANDS.UserPreferencesUpdated(), [g_settings.userPrefs.storeReceiverInBattle, FILL_COLORS.BROWN, self.__getToolTipText()])
         if self.__view:
             self.__view.updateReceiversData()
 
@@ -246,11 +254,11 @@ class BattleEntry(IGUIEntry):
                 self.__flashCall(BTMS_COMMANDS.ClearMessages(), [])
             numberOfMessages = self.__sharedHistory.numberOfMessages()
             idx = len(historyList)
-            for value, isCurrentPlayer in historyList:
+            for message, fillColor in historyList:
                 numberOfMessages -= 1
                 idx -= 1
-                self.__flashCall(BTMS_COMMANDS.ShowHistoryMessages(), [value,
-                 isCurrentPlayer,
+                self.__flashCall(BTMS_COMMANDS.ShowHistoryMessages(), [message,
+                 fillColor,
                  numberOfMessages,
                  idx])
 
@@ -270,8 +278,8 @@ class BattleEntry(IGUIEntry):
                 numberOfMessages -= 1
                 historyList = historyList[-numberOfMessages:]
         self.__flashCall(BTMS_COMMANDS.ClearMessages(), [])
-        for value, isCurrentPlayer in historyList:
-            self.__flashCall(BTMS_COMMANDS.ShowLatestMessages(), [value, isCurrentPlayer])
+        for message, fillColor in historyList:
+            self.__flashCall(BTMS_COMMANDS.ShowLatestMessages(), [message, fillColor])
 
     def __flashCall(self, funcName, args = None):
         if self.__ui:
@@ -337,8 +345,3 @@ class BattleEntry(IGUIEntry):
 
     def __onUnsetMuted(self, _, uid):
         self.proto.contacts.unsetMuted(uid)
-
-    def __onDynSquadMsgReceivedCallback(self, message):
-        formatted = g_settings.htmlTemplates.format('battleWarningMessage', ctx={'message': message})
-        self.__sharedHistory.addMessage(formatted)
-        self.__flashCall(BTMS_COMMANDS.ShowActionFailureMessage(), [formatted])

@@ -23,20 +23,11 @@ class MakeTankUnavailableInCarousel(aop.Aspect):
         self.__vehicle_is_available = config['vehicle_is_available']
         aop.Aspect.__init__(self)
 
-    def atCall(self, cd):
-        cd.change()
-        original_args = list(cd.args)
-
-        class vehicleItemMock:
-            level = 0
-            isPremium = False
-
-        for intCD, vehicleData in original_args[0].iteritems():
-            vehicleItemMock.level = vehicleData['level']
-            vehicleItemMock.isPremium = vehicleData['premium']
-            if not self.__vehicle_is_available(vehicleItemMock):
-                vehicleData['stat'] = str(Vehicle.VEHICLE_STATE.UNAVAILABLE)
-                vehicleData['stateLevel'] = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-                vehicleData['statStr'] = cd.self.getStringStatus(Vehicle.VEHICLE_STATE.UNAVAILABLE)
-
-        return (original_args, cd.kwargs)
+    def atReturn(self, cd):
+        original_return_value = cd.returned
+        original_args = cd.args
+        if not self.__vehicle_is_available(original_args[0]):
+            original_return_value['stat'] = str(Vehicle.VEHICLE_STATE.UNAVAILABLE)
+            original_return_value['stateLevel'] = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
+            original_return_value['statStr'] = cd.self.getStringStatus(Vehicle.VEHICLE_STATE.UNAVAILABLE)
+        return original_return_value

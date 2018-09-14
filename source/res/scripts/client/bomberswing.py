@@ -8,6 +8,7 @@ import BigWorld
 import ResMgr
 from Math import Vector3
 import SoundGroups
+import FMOD
 CurveControlPoint = namedtuple('CurveControlPoint', ['position', 'direction', 'time'])
 BomberDesc = namedtuple('BomberDesc', ['modelName',
  'soundEvent',
@@ -70,7 +71,8 @@ class Bomber(object):
     def __playSound(self):
         if self.__desc and self.__desc.soundEvent:
             try:
-                self.__sound = SoundGroups.g_instance.playSoundModel(self.__model, self.__desc.soundEvent)
+                self.__sound = SoundGroups.g_instance.getSound3D(self.__model, self.__desc.soundEvent)
+                self.__sound.play()
             except:
                 self.__sound = None
                 LOG_CURRENT_EXCEPTION()
@@ -81,10 +83,7 @@ class Bomber(object):
         if self.__sound is None:
             return
         else:
-            param = self.__sound.param('bombing')
-            if param is None:
-                return
-            param.value = 1 if isAttacking else 0
+            self.__sound.setParameterByName('bombing', 1 if isAttacking else 0)
             return
 
     def addControlPoint(self, position, velocity, time, attackEnded = False):

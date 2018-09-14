@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ReportBugPanelMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class ReportBugPanelMeta(DAAPIModule):
+class ReportBugPanelMeta(BaseDAAPIComponent):
 
     def reportBug(self):
         self._printOverrideError('reportBug')

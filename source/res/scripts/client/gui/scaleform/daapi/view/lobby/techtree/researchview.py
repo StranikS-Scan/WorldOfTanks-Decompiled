@@ -3,14 +3,15 @@ from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
-from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 
 class ResearchView(LobbySubView, ResearchViewMeta):
+    __background_alpha__ = 0.0
 
     def __init__(self, data):
-        super(ResearchView, self).__init__(backAlpha=0)
+        super(ResearchView, self).__init__()
         self._data = data
         self._canBeClosed = True
         self._listener = TTListenerDecorator()

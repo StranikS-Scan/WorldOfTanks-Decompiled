@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportIntroView.py
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers.i18n import makeString as _ms
 from adisp import process
 from gui import SystemMessages
@@ -9,18 +10,17 @@ from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME as _VCN
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.events import CSVehicleSelectEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.clubs import formatters as club_fmts, events_dispatcher as club_events, contexts as club_ctx
 from gui.clubs.club_helpers import MyClubListener, tryToConnectClubBattle
 from gui.clubs.settings import CLIENT_CLUB_STATE, getLadderChevron256x256, LADDER_CHEVRON_ICON_PATH, CLIENT_CLUB_RESTRICTIONS
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.CyberSportIntroMeta import CyberSportIntroMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
+from gui.game_control.battle_availability import isHourInForbiddenList
 _ACCEPTED_VEH_TYPES = (_VCN.LIGHT_TANK, _VCN.MEDIUM_TANK, _VCN.HEAVY_TANK)
 
 class _IntroViewVO(object):
@@ -36,6 +36,8 @@ class _IntroViewVO(object):
          'teamHeaderText': '',
          'teamDescriptionText': '',
          'isTeamDescriptionBackVisible': False,
+         'isTeamDescriptionTooltip': False,
+         'teamDescriptionTooltip': '',
          'createBtnLabel': '',
          'createBtnTooltip': '',
          'isCreateBtnEnabled': False,
@@ -84,6 +86,10 @@ class _IntroViewVO(object):
         self.__data['teamDescriptionText'] = description
         self.__data['isTeamDescriptionBackVisible'] = isBackVisible
 
+    def setClubDescriptionTooltip(self, tooltip):
+        self.__data['isTeamDescriptionTooltip'] = True
+        self.__data['teamDescriptionTooltip'] = tooltip
+
     def showCreateButton(self, label, tooltip, enabled = True):
         self.__data['isCreateBtnVisible'] = True
         self.__data['isCreateBtnEnabled'] = enabled
@@ -118,7 +124,7 @@ class _IntroViewVO(object):
         self.showCreateButton(_ms(CYBERSPORT.WINDOW_INTRO_CREATE_BTN_ASSEMBLETEAM), TOOLTIPS.CYBERSPORT_INTRO_CREATEBTN_ASSEMBLETEAM, enabled=False)
 
 
-class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
+class CyberSportIntroView(CyberSportIntroMeta, MyClubListener):
 
     def __init__(self):
         super(CyberSportIntroView, self).__init__()
@@ -167,6 +173,9 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
     def onClubUpdated(self, club):
         self.__updateClubData()
 
+    def onClubsSeasonStateChanged(self, seasonState):
+        self.__updateClubData()
+
     def onClubUnitInfoChanged(self, unitInfo):
         self.__updateClubData()
 
@@ -185,6 +194,9 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
     def onClubMembersChanged(self, members):
         self.__updateClubData()
 
+    def onStatusChanged(self):
+        self.__updateClubData()
+
     def _populate(self):
         super(CyberSportIntroView, self)._populate()
         self.addListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__updateSelectedVehicles)
@@ -195,15 +207,19 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
          'listRoomBtnLabel': _ms(CYBERSPORT.WINDOW_INTRO_SEARCH_BTN),
          'autoTitleLblText': text_styles.middleTitle(CYBERSPORT.WINDOW_INTRO_AUTO_TITLE),
          'autoDescrLblText': text_styles.main(CYBERSPORT.WINDOW_INTRO_AUTO_DESCRIPTION),
-         'vehicleBtnTitleTfText': text_styles.standard(CYBERSPORT.BUTTON_CHOOSEVEHICLES_SELECTED)})
+         'vehicleBtnTitleTfText': text_styles.standard(CYBERSPORT.BUTTON_CHOOSEVEHICLES_SELECTED),
+         'regulationsInfoText': '{0}{1}'.format(icons.info(), text_styles.main(CYBERSPORT.LADDERREGULATIONS_INFO)),
+         'regulationsInfoTooltip': TOOLTIPS_CONSTANTS.LADDER_REGULATIONS})
         self.__updateClubData()
         self.__updateAutoSearchVehicle(self.__getSelectedVehicles())
         self.startMyClubListening()
+        self.clubsCtrl.getAvailabilityCtrl().onStatusChanged += self.onStatusChanged
 
     def _dispose(self):
         self.stopMyClubListening()
         self.removeListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__updateSelectedVehicles)
         g_clientUpdateManager.removeObjectCallbacks(self)
+        self.clubsCtrl.getAvailabilityCtrl().onStatusChanged -= self.onStatusChanged
         super(CyberSportIntroView, self)._dispose()
 
     def __updateClubData(self):
@@ -222,7 +238,7 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
                 unitInfo = club.getUnitInfo()
                 resultVO.showCreateButton(_ms(CYBERSPORT.WINDOW_INTRO_CREATE_BTN_JOINTEAM), TOOLTIPS.CYBERSPORT_INTRO_CREATEBTN_JOINTEAM)
                 if unitInfo.isInBattle():
-                    isInBattleIcon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_SWORDSICON, 16, 16, -3, 0))
+                    isInBattleIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_SWORDSICON, 16, 16, -3, 0)
                     resultVO.setClubDescription(text_styles.neutral('%s %s' % (isInBattleIcon, _ms(CYBERSPORT.WINDOW_INTRO_TEAM_DESCRIPTION_TEAMINBATTLE))))
                 else:
                     resultVO.setClubDescription(text_styles.neutral(CYBERSPORT.STATICFORMATIONPROFILEWINDOW_STATUSLBL_CLUBISCALLED))
@@ -259,6 +275,9 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
         else:
             resultVO.fillDefault()
             resultVO.acceptNavigationByChevron(False)
+        if isHourInForbiddenList(self.clubsCtrl.getAvailabilityCtrl().getForbiddenHours()):
+            resultVO.setClubDescriptionTooltip(TOOLTIPS_CONSTANTS.LADDER_REGULATIONS)
+            resultVO.setClubDescription('{0}{1}'.format(icons.alert(), text_styles.main(CYBERSPORT.LADDERREGULATIONS_WARNING)), True)
         self.as_setStaticTeamDataS(resultVO.getData())
         return
 

@@ -2,10 +2,8 @@
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
 from gui.Scaleform.daapi.view.meta.AbstractRallyWindowMeta import AbstractRallyWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class AbstractRallyWindow(View, AbstractRallyWindowMeta, AbstractWindowView):
+class AbstractRallyWindow(AbstractRallyWindowMeta):
 
     def __init__(self):
         super(AbstractRallyWindow, self).__init__()

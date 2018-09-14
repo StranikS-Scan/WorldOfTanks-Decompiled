@@ -1,14 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceNotAvailableWindow.py
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.formatters import icons
+from gui.shared.formatters import icons, text_styles
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortIntelligenceNotAvailableWindowMeta import FortIntelligenceNotAvailableWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from helpers import i18n
 TEXTS = (FORTIFICATIONS.FORTINTELLIGENCE_HEADERBLOCK,
@@ -16,7 +11,7 @@ TEXTS = (FORTIFICATIONS.FORTINTELLIGENCE_HEADERBLOCK,
  FORTIFICATIONS.FORTINTELLIGENCE_MIDDLEBLOCK,
  FORTIFICATIONS.FORTINTELLIGENCE_BOTTOMBLOCK)
 
-class FortIntelligenceNotAvailableWindow(AbstractWindowView, View, FortIntelligenceNotAvailableWindowMeta, FortViewHelper, AppRef):
+class FortIntelligenceNotAvailableWindow(FortIntelligenceNotAvailableWindowMeta, FortViewHelper):
 
     def __init__(self, ctx):
         super(FortIntelligenceNotAvailableWindow, self).__init__()
@@ -49,20 +44,20 @@ class FortIntelligenceNotAvailableWindow(AbstractWindowView, View, FortIntellige
             countIteration += 1
 
         if self.__isDefenceHourEnabled:
-            data.append(self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, self.__getText(FORTIFICATIONS.FORTINTELLIGENCE_ADDITIONALTEXT_COMINGSOON)))
+            data.append(text_styles.neutral(self.__getText(FORTIFICATIONS.FORTINTELLIGENCE_ADDITIONALTEXT_COMINGSOON)))
         self.as_setDataS(data)
 
     def __getLocalize(self, value, countIteration):
-        headerText = TEXT_MANAGER_STYLES.PROMO_SUB_TITLE
-        bodyText = TEXT_MANAGER_STYLES.MAIN_TEXT
+        headerFormatter = text_styles.promoSubTitle
+        bodyFormatter = text_styles.main
         alertIcon = ''
         if countIteration == 0:
-            headerText = TEXT_MANAGER_STYLES.PROMO_TITLE
+            headerFormatter = text_styles.promoTitle
             if not self.__isDefenceHourEnabled:
-                bodyText = TEXT_MANAGER_STYLES.ALERT_TEXT
+                bodyFormatter = text_styles.alert
                 alertIcon = icons.alert() + ' '
-        valueHeader = self.app.utilsManager.textManager.getText(headerText, self.__getText(value + '/header'))
-        valueBody = self.app.utilsManager.textManager.getText(bodyText, alertIcon + self.__getText(value + '/body'))
+        valueHeader = headerFormatter(self.__getText(value + '/header'))
+        valueBody = bodyFormatter(alertIcon + self.__getText(value + '/body'))
         return (valueHeader, valueBody)
 
     def __getText(self, value):

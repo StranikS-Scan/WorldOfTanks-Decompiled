@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/EULAMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class EULAMeta(DAAPIModule):
+class EULAMeta(AbstractWindowView):
 
     def requestEULAText(self):
         self._printOverrideError('requestEULAText')

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ContactsListPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class ContactsListPopoverMeta(DAAPIModule):
+class ContactsListPopoverMeta(SmartPopOverView):
 
     def addToFriends(self, uid, name):
         self._printOverrideError('addToFriends')

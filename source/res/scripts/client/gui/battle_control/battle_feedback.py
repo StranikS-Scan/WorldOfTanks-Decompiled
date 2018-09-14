@@ -13,22 +13,28 @@ _VHF_NAMES = dict([ (k, v) for k, v in _VHF.__dict__.iteritems() if not k.starts
 _VHF_NAMES.pop('IS_ANY_DAMAGE_MASK', None)
 _VHF_NAMES.pop('IS_ANY_PIERCING_MASK', None)
 _CELL_BLINKING_DURATION = 3.0
-_RAMMING_COOLDOWN = 1
+_RAMMING_COOLDOWN = 1.0
 
 class BattleFeedbackAdaptor(object):
-    __slots__ = ('onPlayerFeedbackReceived', 'onVehicleFeedbackReceived', 'onMinimapFeedbackReceived', 'onAimPositionUpdated', '__isEnabled', '__arenaDP', '__series', '__rammingCallbackID', '__queue', '__callbackID', '__aimProps', '__weakref__')
+    __slots__ = ('onPlayerFeedbackReceived', 'onAimPositionUpdated', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onMinimapFeedbackReceived', '__isPEEnabled', '__arenaDP', '__series', '__rammingCallbackID', '__queue', '__callbackID', '__aimProps', '__visible', '__pending', '__weakref__')
 
     def __init__(self):
         super(BattleFeedbackAdaptor, self).__init__()
-        self.__isEnabled = False
+        self.__isPEEnabled = False
         self.__arenaDP = None
         self.__queue = set()
         self.__series = defaultdict(lambda : 0)
+        self.__visible = set()
+        self.__pending = {}
         self.__callbackID = None
         self.__rammingCallbackID = None
         self.__aimProps = None
         self.onPlayerFeedbackReceived = Event.Event()
+        self.onVehicleMarkerAdded = Event.Event()
+        self.onVehicleMarkerRemoved = Event.Event()
         self.onVehicleFeedbackReceived = Event.Event()
+        self.onMinimapVehicleAdded = Event.Event()
+        self.onMinimapVehicleRemoved = Event.Event()
         self.onMinimapFeedbackReceived = Event.Event()
         self.onAimPositionUpdated = Event.Event()
         return
@@ -43,16 +49,22 @@ class BattleFeedbackAdaptor(object):
         if self.__rammingCallbackID is not None:
             BigWorld.cancelCallback(self.__rammingCallbackID)
             self.__rammingCallbackID = None
-        self.__isEnabled = False
+        self.__visible.clear()
+        while self.__pending:
+            _, callbackID = self.__pending.popitem()
+            if callbackID is not None:
+                BigWorld.cancelCallback(callbackID)
+
+        self.__isPEEnabled = False
         self.__arenaDP = None
         self.__aimProps = None
         return
 
     def setPlayerVehicle(self, vID):
         if vID:
-            self.__isEnabled = not self.__arenaDP.isObserver(vID)
+            self.__isPEEnabled = not self.__arenaDP.isObserver(vID)
         else:
-            self.__isEnabled = False
+            self.__isPEEnabled = False
 
     def setAimPositionUpdated(self, mode, x, y):
         self.__aimProps = (mode, x, y)
@@ -62,7 +74,7 @@ class BattleFeedbackAdaptor(object):
         return self.__aimProps
 
     def setPlayerShotResults(self, vehHitFlags, _):
-        if not self.__isEnabled:
+        if not self.__isPEEnabled:
             return
         if IS_DEVELOPMENT:
             result = []
@@ -77,7 +89,7 @@ class BattleFeedbackAdaptor(object):
             self.__pushPlayerEvent(_EVENT_ID.PLAYER_DAMAGED_DEVICE_ENEMY)
 
     def setPlayerAssistResult(self, assistType, details):
-        if not self.__isEnabled:
+        if not self.__isPEEnabled:
             return
         else:
             eventID = None
@@ -103,11 +115,47 @@ class BattleFeedbackAdaptor(object):
             return
 
     def setPlayerKillResult(self, targetID):
-        if not self.__isEnabled:
+        if not self.__isPEEnabled:
             return
         vo = self.__arenaDP.getVehicleInfo(targetID)
         if self.__arenaDP.isEnemyTeam(vo.team):
             self.__pushPlayerEvent(_EVENT_ID.PLAYER_KILLED_ENEMY)
+
+    def startVehicleVisual(self, vProxy, isImmediate = False):
+        vehicleID = vProxy.id
+        vInfo = self.__arenaDP.getVehicleInfo(vehicleID)
+        if vInfo.isObserver():
+            return
+        guiProps = self.__arenaDP.getPlayerGuiProps(vehicleID, vInfo.team)
+        self.__visible.add(vehicleID)
+        if not vProxy.isPlayer:
+
+            def __addVehicleToUI():
+                self.__pending[vehicleID] = None
+                self.onVehicleMarkerAdded(vProxy, vInfo, guiProps)
+                if not isImmediate and not vProxy.isAlive():
+                    self.setVehicleState(vProxy.id, _EVENT_ID.VEHICLE_DEAD, True)
+                return
+
+            if isImmediate:
+                __addVehicleToUI()
+            else:
+                self.__pending[vehicleID] = BigWorld.callback(0.0, __addVehicleToUI)
+        self.onMinimapVehicleAdded(vInfo, guiProps)
+
+    def stopVehicleVisual(self, vehicleID, isPlayer):
+        callbackID = self.__pending.pop(vehicleID, None)
+        if callbackID is not None:
+            BigWorld.cancelCallback(callbackID)
+        self.__visible.discard(vehicleID)
+        if not isPlayer:
+            self.onVehicleMarkerRemoved(vehicleID)
+        self.onMinimapVehicleRemoved(vehicleID)
+        return
+
+    def setVehicleState(self, vehicleID, eventID, isImmediate = False):
+        if vehicleID != avatar_getter.getPlayerVehicleID():
+            self.onVehicleFeedbackReceived(eventID, vehicleID, isImmediate)
 
     def showActionMarker(self, vehicleID, vMarker = '', mMarker = ''):
         if vMarker and vehicleID != avatar_getter.getPlayerVehicleID():
@@ -115,18 +163,29 @@ class BattleFeedbackAdaptor(object):
         if mMarker:
             self.onMinimapFeedbackReceived(_EVENT_ID.MINIMAP_SHOW_MARKER, vehicleID, mMarker)
 
-    def setVehicleNewHealth(self, vehicleID, newHealth, attackerID = 0, attackReasonID = -1):
-        if not self.__isEnabled:
-            return
-        elif not newHealth:
-            return
-        elif not attackerID or attackerID != avatar_getter.getPlayerVehicleID():
+    def setVehicleNewHealth(self, vehicleID, newHealth, attackerID = 0, attackReasonID = 0):
+        self._setVehicleHealthChanged(vehicleID, newHealth, attackerID, attackReasonID)
+        self._findPlayerFeedbackByAttack(vehicleID, newHealth, attackerID, attackReasonID)
+
+    def markCellOnMinimap(self, cell):
+        self.onMinimapFeedbackReceived(_EVENT_ID.MINIMAP_MARK_CELL, 0, (cell, _CELL_BLINKING_DURATION))
+
+    def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):
+        if attackerID:
+            aInfo = self.__arenaDP.getVehicleInfo(attackerID)
+        else:
+            aInfo = None
+        self.onVehicleFeedbackReceived(_EVENT_ID.VEHICLE_HEALTH, vehicleID, (newHealth, aInfo, attackReasonID))
+        return
+
+    def _findPlayerFeedbackByAttack(self, vehicleID, newHealth, attackerID, attackReasonID):
+        if not self.__isPEEnabled or not newHealth or not attackerID or attackerID != avatar_getter.getPlayerVehicleID():
             return
         else:
             vo = self.__arenaDP.getVehicleInfo(vehicleID)
             if self.__arenaDP.isAllyTeam(vo.team):
                 return
-            elif attackReasonID >= len(_AR):
+            if attackReasonID >= len(_AR):
                 return
             LOG_DEBUG("Enemy's vehicle health has been changed by player action", newHealth, _AR[attackReasonID])
             if _AR[attackReasonID] == 'ramming':
@@ -137,9 +196,6 @@ class BattleFeedbackAdaptor(object):
                     BigWorld.cancelCallback(self.__rammingCallbackID)
                     self.__setRammingCooldown()
             return
-
-    def markCellOnMinimap(self, cell):
-        self.onMinimapFeedbackReceived(_EVENT_ID.MINIMAP_MARK_CELL, 0, (cell, _CELL_BLINKING_DURATION))
 
     def __setRammingCooldown(self):
         self.__rammingCallbackID = BigWorld.callback(_RAMMING_COOLDOWN, self.__clearRammingCooldown)
@@ -188,8 +244,8 @@ class BattleFeedbackPlayer(BattleFeedbackAdaptor):
     def setPlayerKillResult(self, targetID):
         pass
 
-    def setVehicleNewHealth(self, vehicleID, newHealth, attackerID = 0, attackReasonID = -1):
-        pass
+    def setVehicleNewHealth(self, vehicleID, newHealth, attackerID = 0, attackReasonID = 0):
+        self._setVehicleHealthChanged(vehicleID, newHealth, attackerID=attackerID, attackReasonID=attackReasonID)
 
 
 def createFeedbackAdaptor(isReplayPlaying):

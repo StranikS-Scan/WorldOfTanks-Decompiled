@@ -360,7 +360,10 @@ class SortiesCache(object):
         if fort:
             if unitMgrID in self.__cache:
                 self.__cache[sortieID]._isDirty = False
+            if self.getSelectedID() == sortieID:
+                self.__selectedUnit = None
             self.__controller._listeners.notify('onSortieUnitReceived', self.__getClientIdx(sortieID))
+        return
 
 
 _FortBattleItemData = namedtuple('_FortBattleItemData', ('defenderClanDBID',

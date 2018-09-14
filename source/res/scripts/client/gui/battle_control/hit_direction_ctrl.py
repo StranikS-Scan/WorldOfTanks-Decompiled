@@ -2,6 +2,8 @@
 from functools import partial
 import weakref
 import BigWorld
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 _HIT_INDICATOR_MAX_ON_SCREEN = 5
 
 class IHitIndicator(object):
@@ -120,9 +122,10 @@ class HitDirectionController(object):
         return
 
     def start(self):
-        pass
+        g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
 
     def stop(self):
+        g_eventBus.removeListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__clearHideCallbacks()
 
     def getHit(self, idx):
@@ -205,3 +208,6 @@ class HitDirectionController(object):
 
         self.__callbackIDs.clear()
         return
+
+    def __handleGUIVisibility(self, event):
+        self.setVisible(event.ctx['visible'])

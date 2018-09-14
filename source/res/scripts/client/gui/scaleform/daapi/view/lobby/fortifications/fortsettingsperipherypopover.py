@@ -3,17 +3,14 @@ from ConnectionManager import connectionManager
 from predefined_hosts import g_preDefinedHosts
 from adisp import process
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortSettingsPeripheryPopoverMeta import FortSettingsPeripheryPopoverMeta
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications.context import PeripheryCtx
 from helpers import i18n
 
-class FortSettingsPeripheryPopover(View, FortSettingsPeripheryPopoverMeta, SmartPopOverView, FortViewHelper, AppRef):
+class FortSettingsPeripheryPopover(FortSettingsPeripheryPopoverMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortSettingsPeripheryPopover, self).__init__()
 
     def setTexts(self):

@@ -95,12 +95,15 @@ class ISearchProcessor(object):
         return 0
 
 
-class IChatError(object):
-
-    def getTitle(self):
-        return ''
+class IChatMessage(object):
 
     def getMessage(self):
+        return ''
+
+
+class IChatError(IChatMessage):
+
+    def getTitle(self):
         return ''
 
     def isModal(self):

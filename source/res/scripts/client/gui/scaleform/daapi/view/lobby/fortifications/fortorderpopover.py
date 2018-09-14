@@ -6,22 +6,19 @@ from gui.Scaleform.daapi.view.lobby.fortifications.ConfirmOrderDialogMeta import
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortOrderPopoverMeta import FortOrderPopoverMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events
 from gui.server_events import g_eventsCache, events_dispatcher as quests_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles, time_formatters
 from gui.shared.fortifications.context import OrderCtx
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 
-class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHelper, AppRef):
+class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
 
     def __init__(self, ctx = None):
         super(FortOrderPopover, self).__init__()
@@ -37,17 +34,14 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         formatedLvl = fort_formatters.getTextLevel(level)
         return i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_LEVELSLBL, orderLevel=formatedLvl)
 
-    def _getFormattedTimeStr(self, time):
-        return self.app.utilsManager.textManager.getTimeDurationStr(time)
-
     def _getFormattedLeftTime(self, order):
         if order.inCooldown:
             if not order.isPermanent:
                 secondsLeft = order.getUsageLeftTime()
-                return self._getFormattedTimeStr(secondsLeft)
+                return time_formatters.getTimeDurationStr(secondsLeft)
             else:
                 nextBattle = i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_NEXTBATTLE)
-                return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.SUCCESS_TEXT, nextBattle)
+                return text_styles.success(nextBattle)
         return ''
 
     def _getBuildingStr(self, order):
@@ -55,13 +49,16 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         building = i18n.makeString(FORTIFICATIONS.buildings_buildingname(buildingID))
         hasBuilding = order.hasBuilding
         if not hasBuilding:
-            return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, building)
+            return text_styles.error(building)
         return building
 
     def _getCountStr(self, order):
         count = order.count
-        countColor = TEXT_MANAGER_STYLES.NEUTRAL_TEXT if count > 0 else TEXT_MANAGER_STYLES.STANDARD_TEXT
-        return self.app.utilsManager.textManager.getText(countColor, count)
+        if count > 0:
+            result = text_styles.neutral(count)
+        else:
+            result = text_styles.standard(count)
+        return result
 
     def _canGiveOrder(self):
         return self.fortCtrl.getPermissions().canActivateOrder()
@@ -86,7 +83,7 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
          'description': self._getOrderDescription(order),
          'effectTimeStr': self._getEffectTimeStr(order),
          'leftTimeStr': '' if order.isConsumable else self._getFormattedLeftTime(order),
-         'productionTime': self._getFormattedTimeStr(order.productionTotalTime),
+         'productionTime': time_formatters.getTimeDurationStr(order.productionTotalTime),
          'buildingStr': self._getBuildingStr(order),
          'productionCost': fort_formatters.getDefRes(order.productionCost, True),
          'producedAmount': self._getCountStr(order),
@@ -122,13 +119,12 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
     def _getOrderDescription(self, order):
         if order.isSpecialMission:
             if order.inCooldown:
-                textsStyle = (TEXT_MANAGER_STYLES.NEUTRAL_TEXT, TEXT_MANAGER_STYLES.MAIN_TEXT)
                 award = i18n.makeString(FORTIFICATIONS.ORDERS_SPECIALMISSION_AWARD) + ' '
                 serverData = self.__getFortQuestBonusesStr()
                 serverData += '\n' + i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_SPECIALMISSION_SHORTDESCR)
-                return self.app.utilsManager.textManager.concatStyles(((textsStyle[0], award), (textsStyle[1], serverData)))
+                return ''.join((text_styles.neutral(award), text_styles.main(serverData)))
             else:
-                return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_SPECIALMISSION_DESCRIPTION))
+                return text_styles.main(i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_SPECIALMISSION_DESCRIPTION))
         else:
             return order.description
 
@@ -138,7 +134,7 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         elif order.isConsumable:
             return i18n.makeString('#fortifications:Orders/orderPopover/battleConsumable')
         else:
-            return self._getFormattedTimeStr(order.effectTime)
+            return time_formatters.getTimeDurationStr(order.effectTime)
 
     def _populate(self):
         super(FortOrderPopover, self)._populate()
@@ -214,7 +210,7 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
             if order.isPermanent:
                 return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_PERMANENTORDER_INFO)
             else:
-                leftTimeStr = self.app.utilsManager.textManager.getTimeDurationStr(order.getUsageLeftTime())
+                leftTimeStr = time_formatters.getTimeDurationStr(order.getUsageLeftTime())
                 return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_PROGRESSBAR_TIMELEFT, timeLeft=leftTimeStr)
         return ''
 

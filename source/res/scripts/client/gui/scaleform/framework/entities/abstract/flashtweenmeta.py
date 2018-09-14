@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/FlashTweenMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class FlashTweenMeta(DAAPIModule):
+class FlashTweenMeta(BaseDAAPIModule):
 
     def moveOnPositionS(self, percent):
         if self._isDAAPIInited():

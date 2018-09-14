@@ -8,7 +8,6 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.meta.SlotsPanelMeta import SlotsPanelMeta
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -24,7 +23,7 @@ ADD_BOOSTER_ID = 'add'
 _ADD_AVAILABLE_BOOSTER_ID = 'addAvailable'
 _EMPTY_BOOSTER_ID = 'empty'
 
-class BoostersPanelComponent(SlotsPanelMeta, AppRef):
+class BoostersPanelComponent(SlotsPanelMeta):
 
     def __init__(self):
         super(BoostersPanelComponent, self).__init__()
@@ -43,11 +42,11 @@ class BoostersPanelComponent(SlotsPanelMeta, AppRef):
 
     def getSlotTooltipBody(self, slotIdx):
         boosterID = self._slotsMap.get(int(slotIdx), None)
-        if boosterID == _EMPTY_BOOSTER_ID:
-            tooltip = ''
-        elif boosterID in (ADD_BOOSTER_ID, _ADD_AVAILABLE_BOOSTER_ID):
-            body = TOOLTIPS.BOOSTERSPANEL_OPENBOOSTERSWINDOW_BODY
-            tooltip = makeTooltip(None, body)
+        tooltip = ''
+        if boosterID in (ADD_BOOSTER_ID, _ADD_AVAILABLE_BOOSTER_ID):
+            if not self._isPanelInactive:
+                body = TOOLTIPS.BOOSTERSPANEL_OPENBOOSTERSWINDOW_BODY
+                tooltip = makeTooltip(None, body)
         else:
             booster = g_goodiesCache.getBooster(int(boosterID))
             tooltip = makeTooltip(i18n.makeString(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER, boosterName=booster.userName, quality=booster.qualityStr), booster.description, i18n.makeString(TOOLTIPS.BOOSTERSPANEL_BOOSTERDESCRIPTION_NOTE, time=booster.getUsageLeftTimeStr()))

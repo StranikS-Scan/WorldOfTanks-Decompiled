@@ -1,12 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummary.py
 import BigWorld
-from adisp import process
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from gui.Scaleform.daapi.view.lobby.profile.ProfileAchievementSection import ProfileAchievementSection
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, getProfileCommonInfo
 from gui.Scaleform.daapi.view.meta.ProfileSummaryMeta import ProfileSummaryMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.shared.ClanCache import g_clanCache
 from helpers import i18n
 from PlayerEvents import g_playerEvents
 from gui.shared import g_itemsCache
@@ -14,11 +11,10 @@ from helpers.i18n import makeString
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.gui_items.dossier import dumpDossier
 
-class ProfileSummary(ProfileAchievementSection, ProfileSummaryMeta):
+class ProfileSummary(ProfileSummaryMeta):
 
     def __init__(self, *args):
-        ProfileAchievementSection.__init__(self, *args)
-        ProfileSummaryMeta.__init__(self)
+        super(ProfileSummary, self).__init__(*args)
 
     def _sendAccountData(self, targetData, accountDossier):
         outcome = ProfileUtils.packProfileDossierInfo(targetData)

@@ -222,9 +222,10 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
 
     def canRevokeApplication(self, profile, club = None):
         stateID = profile.getState().getStateID()
-        if stateID != _CCB.SENT_APP or profile.getState().getClubDbID() != club.getClubDbID():
+        if stateID != _CCB.SENT_APP or club is not None and profile.getState().getClubDbID() != club.getClubDbID():
             return error(_CCR.NOT_IN_APPLICANTS)
-        return self._isClubRequestValid(_CRT.REVOKE_APPLICATION, club, 'canRevokeApplication')
+        else:
+            return self._isClubRequestValid(_CRT.REVOKE_APPLICATION, club, 'canRevokeApplication')
 
     def canSeeContenders(self, profile, club = None):
         if club and not club.getLadderInfo().isInLadder():

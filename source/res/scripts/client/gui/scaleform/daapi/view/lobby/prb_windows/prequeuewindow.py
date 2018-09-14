@@ -5,16 +5,13 @@ from gui.prb_control.context import pre_queue_ctx
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.prb_control.prb_helpers import QueueListener
 from gui.Scaleform.daapi.view.meta.PrequeueWindowMeta import PrequeueWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 
-class PrequeueWindow(View, AbstractWindowView, PrequeueWindowMeta, QueueListener, AppRef):
+class PrequeueWindow(PrequeueWindowMeta, QueueListener):
 
     def __init__(self, queueName = 'prequeue'):
         super(PrequeueWindow, self).__init__()

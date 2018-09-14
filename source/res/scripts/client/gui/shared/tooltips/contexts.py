@@ -451,5 +451,11 @@ class FortOrderContext(FortificationContext):
         return FortOrder(int(fortOrderTypeID), level=int(level))
 
 
+class HangarTutorialContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude = None):
+        super(HangarTutorialContext, self).__init__(TOOLTIP_COMPONENT.HANGAR_TUTORIAL, fieldsToExclude)
+
+
 class FortSortieLimitContext(FortificationContext):
     pass

@@ -173,7 +173,7 @@ class PrbInviteDecorator(_NotificationDecorator):
         return None
 
     def __init__(self, invite):
-        self._createdAt = invite.createTime
+        self._createdAt = invite.getCreateTime()
         super(PrbInviteDecorator, self).__init__(invite.clientID, invite)
 
     def clear(self):

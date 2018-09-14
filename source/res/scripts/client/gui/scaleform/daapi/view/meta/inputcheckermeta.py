@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/InputCheckerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class InputCheckerMeta(DAAPIModule):
+class InputCheckerMeta(BaseDAAPIComponent):
 
     def sendUserInput(self, value, isValidSyntax):
         self._printOverrideError('sendUserInput')

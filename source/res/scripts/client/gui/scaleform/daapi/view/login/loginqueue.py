@@ -1,14 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LoginQueue.py
-from debug_utils import LOG_DEBUG
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from ConnectionManager import connectionManager
 from gui.Scaleform.daapi.view.meta.LoginQueueWindowMeta import LoginQueueWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoginEvent, LoginEventEx, ArgsEvent
 __author__ = 'd_trofimov'
 
-class LoginQueue(View, AbstractWindowView, LoginQueueWindowMeta, AppRef):
+class LoginQueue(LoginQueueWindowMeta):
 
     def __init__(self, title, message, cancelLabel, showAutoLoginBtn):
         super(LoginQueue, self).__init__()
@@ -45,12 +42,12 @@ class LoginQueue(View, AbstractWindowView, LoginQueueWindowMeta, AppRef):
 
     def onAutoLoginClick(self):
         self.fireEvent(LoginEventEx(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, '', '', '', '', False), EVENT_BUS_SCOPE.LOBBY)
-        self.app.disconnect(True)
+        connectionManager.disconnect()
         self.destroy()
 
     def __windowClosing(self):
         self.fireEvent(LoginEventEx(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, '', '', '', '', False), EVENT_BUS_SCOPE.LOBBY)
-        self.app.disconnect(True)
+        connectionManager.disconnect()
         self.destroy()
 
     def __onCancelLoginQueue(self, event):

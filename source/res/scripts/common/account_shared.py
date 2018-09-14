@@ -3,6 +3,7 @@ import time
 import collections
 import base64
 import struct
+import re
 import ArenaType
 import nations
 from items import vehicles, ITEM_TYPES
@@ -325,34 +326,33 @@ class NotificationItem(object):
         return hash(self.asString)
 
 
-_POST_BATTLE_PACK_METHOD_VERSION = 1
+_VERSION_REGEXP = re.compile('^([a-z]{2,4}_)?([0-9]+\\.[0-9]+\\.[0-9]+)(_[0-9]+)?$')
 
-def packPostBattleUniqueSubUrl(arenaUniqueID, arenaTypeID, vehTypeCompDescr, xp):
-    return base64.urlsafe_b64encode(struct.pack('>QQ', *(arenaUniqueID, arenaTypeID << 40 | vehTypeCompDescr << 24 | xp << 8 | _POST_BATTLE_PACK_METHOD_VERSION)))[:-2]
+def parseVersion(version):
+    result = _VERSION_REGEXP.search(version)
+    if result is None:
+        return
+    else:
+        realmCode, mainVersion, patchVersion = result.groups()
+        if mainVersion:
+            realmCode = realmCode.replace('_', '') if realmCode else ''
+            patchVersion = int(patchVersion.replace('_', '')) if patchVersion else 0
+            return (realmCode, mainVersion, patchVersion)
+        return
 
 
-def unpackPostBattleUniqueSubUrl(packedData):
-    arenaUniqueID, value = struct.unpack('>QQ', base64.urlsafe_b64decode(str(packedData) + '=='))
-    version = int(value & 255)
-    value >>= 8
-    if version > _POST_BATTLE_PACK_METHOD_VERSION:
-        raise RuntimeError('url version is not valid', version)
-    xp = int(value & 65535)
-    value >>= 16
-    vehTypeCompDescr = int(value & 65535)
-    value >>= 16
-    typeID, nationID, vehTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
-    if typeID != _ITEM_TYPE_VEHICLE:
-        raise RuntimeError('item type is not vehicle', vehTypeCompDescr)
-    try:
-        vehicles.g_cache.vehicle(nationID, vehTypeID)
-    except Exception as e:
-        raise RuntimeError('unknown vehicle', nationID, vehTypeID, e.message)
-
-    if value not in ArenaType.g_cache:
-        raise RuntimeError('unknown arena type id', value)
-    return (arenaUniqueID,
-     int(value),
-     vehTypeCompDescr,
-     xp,
-     version)
+def isValidClientVersion(clientVersion, serverVersion):
+    if clientVersion != serverVersion:
+        clientParsedVersion = parseVersion(clientVersion)
+        serverParsedVersion = parseVersion(serverVersion)
+        if clientParsedVersion is None or serverParsedVersion is None:
+            return False
+        clientRealmCode, clientMainVersion, clientPatchVersion = clientParsedVersion
+        serverRealmCode, serverMainVersion, serverPatchVersion = serverParsedVersion
+        if clientRealmCode != serverRealmCode:
+            return False
+        if clientMainVersion != serverMainVersion:
+            return False
+        if clientPatchVersion < serverPatchVersion:
+            return False
+    return True

@@ -1,13 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleInfoWindow.py
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from items import tankmen
 from helpers import i18n
 from debug_utils import LOG_ERROR
 from gui.shared import g_itemsCache
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 
-class VehicleInfoWindow(View, VehicleInfoMeta, AbstractWindowView):
+class VehicleInfoWindow(VehicleInfoMeta):
 
     def __init__(self, ctx = None):
         super(VehicleInfoWindow, self).__init__()

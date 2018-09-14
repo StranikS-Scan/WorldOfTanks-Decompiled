@@ -7,7 +7,7 @@ from abc import ABCMeta, abstractmethod
 from constants import WIN_XP_FACTOR_MODE
 from debug_utils import LOG_DEBUG
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
-from goodies.goodie_helpers import NamedGoodieData, getPremiumCost
+from goodies.goodie_helpers import NamedGoodieData, getPremiumCost, getPriceWithDiscount
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
 class ShopCommonStats(object):
@@ -190,18 +190,6 @@ class ShopCommonStats(object):
         @return: tankman passport replace cost in gold
         """
         return self.getValue('femalePassportChangeCost', 500)
-
-    @property
-    def ebankVCoinExchangeRate(self):
-        return self.getValue('ebank/vcoinExchangeRate', 20)
-
-    @property
-    def ebankMinTransactionValue(self):
-        return self.getValue('ebank/vcoinMinTransactionValue', 50)
-
-    @property
-    def ebankMaxTransactionValue(self):
-        return self.getValue('ebank/vcoinMaxTransactionValue', 50000)
 
     @property
     def freeXPToTManXPRate(self):
@@ -389,6 +377,81 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
 
         return (tmanCost, action)
 
+    def getVehicleSlotsPrice(self, currentSlotsCount):
+        price = super(ShopRequester, self).getVehicleSlotsPrice(currentSlotsCount)
+        slotGoodies = self.personalSlotDiscounts
+        if slotGoodies:
+            bestGoody = self.bestGoody(slotGoodies)
+            return getPriceWithDiscount(price, bestGoody.resource)
+        else:
+            return price
+
+    @property
+    def tankmanCostWithGoodyDiscount(self):
+        prices = self.tankmanCost
+        tankmanGoodies = self.personalTankmanDiscounts
+        if tankmanGoodies:
+            bestGoody = self.bestGoody(tankmanGoodies)
+            return self.__applyGoodyToStudyCost(prices, bestGoody)
+        else:
+            return prices
+
+    @property
+    def freeXPConversionLimit(self):
+        goody = self.bestGoody(self.personalXPExchangeDiscounts)
+        if goody:
+            return goody.target[2] * self.defaults.freeXPConversion[0]
+        else:
+            return None
+            return None
+
+    @property
+    def freeXPConversionWithDiscount(self):
+        goody = self.bestGoody(self.personalXPExchangeDiscounts)
+        rate = self.freeXPConversion
+        if goody:
+            return (getPriceWithDiscount(rate[0], goody.resource), rate[1])
+        else:
+            return rate
+
+    @property
+    def isXPConversionActionActive(self):
+        return self.freeXPConversion[0] > self.defaults.freeXPConversion[0]
+
+    @property
+    def personalSlotDiscounts(self):
+        return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_BUY_SLOT)
+
+    @property
+    def personalTankmanDiscounts(self):
+        return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN)
+
+    @property
+    def personalXPExchangeDiscounts(self):
+        return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION)
+
+    def bestGoody(self, goodies):
+        if goodies:
+            _, goody = sorted(goodies.iteritems(), key=lambda (_, goody): goody.resource[1])[-1]
+            return goody
+        else:
+            return None
+            return None
+
+    def __applyGoodyToStudyCost(self, prices, goody):
+
+        def convert(price):
+            newPrice = price.copy()
+            if price['isPremium']:
+                newPrice['gold'] = getPriceWithDiscount(price['gold'], goody.resource)
+            return newPrice
+
+        return tuple(map(convert, prices))
+
+    def __personalDiscountsByTarget(self, targetID):
+        discounts = filter(lambda (discountID, item): item.targetID == targetID, self.discounts.iteritems())
+        return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, discounts))
+
 
 class DefaultShopRequester(ShopCommonStats):
 
@@ -575,18 +638,6 @@ class DefaultShopRequester(ShopCommonStats):
         @return: tankman passport replace cost in gold
         """
         return self.getValue('femalePassportChangeCost', self.__proxy.passportFemaleChangeCost)
-
-    @property
-    def ebankVCoinExchangeRate(self):
-        return self.getValue('ebank/vcoinExchangeRate', self.__proxy.ebankVCoinExchangeRate)
-
-    @property
-    def ebankMinTransactionValue(self):
-        return self.getValue('ebank/vcoinMinTransactionValue', self.__proxy.ebankMinTransactionValue)
-
-    @property
-    def ebankMaxTransactionValue(self):
-        return self.getValue('ebank/vcoinMaxTransactionValue', self.__proxy.ebankMaxTransactionValue)
 
     @property
     def freeXPToTManXPRate(self):

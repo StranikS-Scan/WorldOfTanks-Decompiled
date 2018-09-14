@@ -4,7 +4,7 @@ import BigWorld
 import time
 import math
 import Math
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 import resource_helper
 import ResMgr
 TWEEN_CONSTRAINTS_FILE_PATH = 'gui/tween_constraints.xml'
@@ -368,7 +368,8 @@ class _AbstractTween(AbstractTweenMeta):
     def initialiaze(self, props):
         self.__target = self.getTargetDisplayObjectS()
         props.setTweenIdx(self.__tweenIdx)
-        self.__startTargetProps = self.__createStartProps(self.__target)
+        if self.__target:
+            self.__startTargetProps = self.__createStartProps(self.__target)
         duration = props.getDuration()
         if not duration == 0:
             self.setDuration(duration)

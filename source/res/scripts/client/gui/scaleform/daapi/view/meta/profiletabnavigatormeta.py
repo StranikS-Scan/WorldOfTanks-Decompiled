@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileTabNavigatorMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class ProfileTabNavigatorMeta(DAAPIModule):
+class ProfileTabNavigatorMeta(BaseDAAPIComponent):
 
     def as_setInitDataS(self, data):
         if self._isDAAPIInited():

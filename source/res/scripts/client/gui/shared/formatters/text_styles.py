@@ -1,11 +1,19 @@
 # Embedded file name: scripts/client/gui/shared/formatters/text_styles.py
+import types
 from helpers import i18n
 from gui import makeHtmlString
+__all__ = ('standard', 'main', 'neutral', 'stats', 'statInfo', 'middleTitle', 'highTitle', 'disabled', 'promoTitle', 'promoSubTitle', 'alert', 'success', 'error', 'warning', 'critical', 'expText', 'gold', 'credits', 'defRes', 'counter', 'titleFont', 'tutorial', 'playerOnline', 'getRawStyles', 'getStyles', 'concatStylesToSingleLine', 'concatStylesToMultiLine')
+
+def _getStyle(style, ctx = None):
+    if ctx is None:
+        ctx = {}
+    return makeHtmlString('html_templates:lobby/textStyle', style, ctx)
+
 
 def _formatText(style, text = ''):
-    if i18n.isValidKey(text):
+    if type(text) in types.StringTypes and i18n.isValidKey(text):
         text = i18n.makeString(text)
-    return makeHtmlString('html_templates:lobby/textStyle', style, {'message': text})
+    return _getStyle(style, {'message': text})
 
 
 def standard(text):
@@ -36,7 +44,7 @@ def highTitle(text):
     return _formatText('highTitle', text)
 
 
-def disable(text):
+def disabled(text):
     return _formatText('disabledText', text)
 
 
@@ -64,12 +72,24 @@ def warning(text):
     return _formatText('statusWarningText', text)
 
 
+def critical(text):
+    return _formatText('statusCriticalText', text)
+
+
 def expText(text):
     return _formatText('expText', text)
 
 
-def creditsText(text):
+def gold(text):
+    return _formatText('goldText', text)
+
+
+def credits(text):
     return _formatText('creditsText', text)
+
+
+def defRes(text):
+    return _formatText('defresText', text)
 
 
 def counter(text):
@@ -80,5 +100,58 @@ def titleFont(text):
     return _formatText('titleFont', text)
 
 
-def gold(text):
-    return _formatText('goldText', text)
+def tutorial(text):
+    return _formatText('tutorialText', text)
+
+
+def playerOnline(text):
+    return _formatText('playerOnline', text)
+
+
+def getRawStyles(names):
+    return dict(map(lambda name: (name, _getStyle(name)), names))
+
+
+def getStyles(names):
+    return dict(map(lambda name: (name, _formatText(name)), names))
+
+
+def _processStyle(style):
+    if hasattr(style, '__iter__'):
+        if not style:
+            raise ValueError('Empty sequence')
+        return _formatText(*style[:1])
+    else:
+        return _formatText(style)
+
+
+def concatStylesToSingleLine(*styles):
+    return ''.join(map(_processStyle, styles))
+
+
+def concatStylesToMultiLine(*styles):
+    return '\n'.join(map(_processStyle, styles))
+
+
+def concatStylesWithSpace(*styles):
+    return ' '.join(map(_processStyle, styles))
+
+
+class _StylesBuilder(object):
+
+    def __init__(self, delimiter = ''):
+        super(_StylesBuilder, self).__init__()
+        self.__chunks = []
+        self.__delimiter = delimiter
+
+    def addStyledText(self, style, text = ''):
+        self.__chunks.append((style, text))
+        return self
+
+    def render(self):
+        formattedStyles = map(lambda style: _formatText(*style), self.__chunks)
+        return self.__delimiter.join(formattedStyles)
+
+
+def builder(*args):
+    return _StylesBuilder(*args)

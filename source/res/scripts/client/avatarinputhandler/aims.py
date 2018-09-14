@@ -12,6 +12,8 @@ from gui.Scaleform.Flash import Flash
 from gui.Scaleform.ColorSchemeManager import _ColorSchemeManager
 from gui.battle_control.consumables.ammo_ctrl import SHELL_SET_RESULT
 from gui.shared.gui_items import Vehicle
+from gui import makeHtmlString
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 
 def _getScreenSize():
     return GUI.screenResolution()[:2]
@@ -482,7 +484,7 @@ class PostMortemAim(Aim):
 
     def __init__(self, offset):
         Aim.__init__(self, 'postmortem', offset)
-        self.__msgCaption = i18n.makeString('#ingame_gui:player_messages/postmortem_caption')
+        self.__msgCaption = i18n.makeString(INGAME_GUI.PLAYER_MESSAGES_POSTMORTEM_CAPTION)
 
     def create(self):
         Aim.create(self)
@@ -521,10 +523,11 @@ class PostMortemAim(Aim):
         return
 
     def __setText(self, name, type, health):
-        text = self.__msgCaption % {'name': name,
-         'type': type,
-         'health': health}
-        Aim._flashCall(self, 'updatePlayerInfo', [text])
+        isPlayer = self.__vID == BigWorld.player().playerVehicleID
+        caption = makeHtmlString('html_templates:battle/postmortemMessages', 'player' if isPlayer else 'ally', {'message': i18n.makeString(INGAME_GUI.PLAYER_MESSAGES_POSTMORTEM_CAPTION_SELF) if isPlayer else self.__msgCaption})
+        Aim._flashCall(self, 'updatePlayerInfo', [caption % {'name': name,
+          'type': type,
+          'health': health}])
 
 
 class ArcadeAim(Aim):

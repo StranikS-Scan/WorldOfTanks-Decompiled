@@ -3,17 +3,13 @@ from gui import game_control
 from gui.game_control.gc_constants import BROWSER
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserMeta import BrowserMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import icons
 from helpers import i18n
 
-class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
+class BrowserWindow(BrowserMeta):
 
     def __init__(self, ctx = None):
         super(BrowserWindow, self).__init__()

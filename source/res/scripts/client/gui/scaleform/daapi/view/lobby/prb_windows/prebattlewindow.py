@@ -4,9 +4,7 @@ from adisp import process
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.PrebattleWindowMeta import PrebattleWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework import AppRef, ViewTypes
-from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
@@ -21,7 +19,7 @@ from gui.shared.events import FocusEvent
 from helpers import int2roman
 from messenger import g_settings, MessengerEntry
 from messenger.ext import channel_num_gen
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
@@ -29,7 +27,7 @@ from prebattle_shared import decodeRoster
 
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
 
-class PrebattleWindow(View, AbstractWindowView, PrebattleWindowMeta, PrbListener, AppRef):
+class PrebattleWindow(PrebattleWindowMeta, PrbListener):
 
     def __init__(self, prbName = 'prebattle'):
         super(PrebattleWindow, self).__init__()

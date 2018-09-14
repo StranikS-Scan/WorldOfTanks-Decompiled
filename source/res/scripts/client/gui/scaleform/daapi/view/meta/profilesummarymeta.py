@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileSummaryMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.profile.ProfileAchievementSection import ProfileAchievementSection
 
-class ProfileSummaryMeta(DAAPIModule):
+class ProfileSummaryMeta(ProfileAchievementSection):
 
     def getPersonalScoreWarningText(self, data):
         self._printOverrideError('getPersonalScoreWarningText')

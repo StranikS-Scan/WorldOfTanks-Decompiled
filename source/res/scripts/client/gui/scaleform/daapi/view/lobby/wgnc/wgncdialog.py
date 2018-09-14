@@ -1,10 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/wgnc/WGNCDialog.py
 from gui.Scaleform.daapi.view.meta.WGNCDialogMeta import WGNCDialogMeta
 from gui.wgnc import g_wgncProvider
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class WGNCDialog(WGNCDialogMeta, View, AbstractWindowView):
+class WGNCDialog(WGNCDialogMeta):
 
     def __init__(self, ctx = None):
         super(WGNCDialog, self).__init__()

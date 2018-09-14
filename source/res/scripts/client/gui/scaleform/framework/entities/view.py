@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/View.py
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
+from gui.doc_loaders import hints_layout
+from gui.shared.events import FocusEvent
 __author__ = 'd_trofimov'
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
-class View(DAAPIModule):
+class View(AbstractViewMeta):
 
     def __init__(self, ctx = None):
         super(View, self).__init__()
@@ -12,6 +14,9 @@ class View(DAAPIModule):
         from gui.Scaleform.framework import ScopeTemplates
         self.__scope = ScopeTemplates.DEFAULT_SCOPE
         return
+
+    def onFocusIn(self, alias):
+        self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED))
 
     def __del__(self):
         LOG_DEBUG('View deleted:', self)
@@ -69,6 +74,16 @@ class View(DAAPIModule):
             self.__uniqueName = name
         else:
             LOG_DEBUG('uniqueName can`t be None!')
+        return
+
+    def setupContextHints(self, hintID):
+        if hintID is not None:
+            hintsData = dict(hints_layout.getLayout(hintID))
+            if hintsData is not None:
+                builder = hintsData.pop('builderLnk', '')
+                self.as_setupContextHintBuilderS(builder, hintsData)
+            else:
+                LOG_ERROR('Hint layout is nor defined', hintID)
         return
 
     def _dispose(self):

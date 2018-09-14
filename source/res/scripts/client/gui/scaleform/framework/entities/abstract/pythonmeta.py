@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/PythonMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class PythonMeta(DAAPIModule):
+class PythonMeta(BaseDAAPIModule):
 
     def getFinishScaleX(self):
         self._printOverrideError('getFinishScaleX')

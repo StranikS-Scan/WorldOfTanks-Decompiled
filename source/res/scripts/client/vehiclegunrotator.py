@@ -2,7 +2,7 @@
 import BigWorld, Math
 import weakref
 import math
-from AvatarInputHandler import AimingSystems
+from AvatarInputHandler import AimingSystems, mathUtils
 from AvatarInputHandler.CallbackDelayer import CallbackDelayer
 from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT, AIMING_MODE
 import ProjectileMover
@@ -440,7 +440,10 @@ class VehicleGunRotator(object):
             speedLimit = descr.gun['rotationSpeed'] * timeDiff
         else:
             if math.fabs(curAngle - shotAngle) < VehicleGunRotator.__ANGLE_EPS:
-                return shotAngle
+                if angleLimits is None:
+                    return mathUtils.clamp(angleLimits[0], angleLimits[1], shotAngle)
+                else:
+                    return shotAngle
             shotDiff = shotAngle - curAngle
             speedLimit = self.__maxGunRotationSpeed * timeDiff
         if angleLimits is not None:
@@ -595,6 +598,9 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
         self.__keyOffCalled = False
         self.__manualSound = None
         self.__gearSound = None
+        self.__gearDamagedParam = None
+        self.__manGearDamagedParam = None
+        self.__gearKeyOffParam = None
         self.__stateTable = ((None,
           self.__startManualSound,
           self.__initHighSpeed,
@@ -616,7 +622,13 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
     def init_sound(self):
         if _ENABLE_TURRET_ROTATOR_SOUND:
             self.__manualSound = self.__getTurretSound(BigWorld.player().vehicleTypeDescriptor, 'turretRotatorSoundManual')
+            if self.__manualSound is not None:
+                self.__manGearDamagedParam = self.__manualSound.param('turret_damaged')
             self.__gearSound = self.__getTurretSound(BigWorld.player().vehicleTypeDescriptor, 'turretRotatorSoundGear')
+            if self.__gearSound is not None:
+                self.__gearDamagedParam = self.__gearSound.param('turret_damaged')
+                self.__gearKeyOffParam = self.__gearSound.param(_PlayerTurretRotationSoundEffect.__GEAR_KEYOFF_PARAM)
+        return
 
     def destroy(self):
         CallbackDelayer.destroy(self)
@@ -688,12 +700,10 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
             else:
                 __p = BigWorld.player().position
             isTurretAlive = BigWorld.player().deviceStates.get('turretRotator', None) is None
-            if self.__gearSound is not None:
-                if self.__gearSound.param('turret_damaged'):
-                    self.__gearSound.param('turret_damaged').value = 0 if isTurretAlive else 1
-            if self.__manualSound is not None:
-                if self.__manualSound.param('turret_damaged'):
-                    self.__manualSound.param('turret_damaged').value = 0 if isTurretAlive else 1
+            if self.__gearDamagedParam is not None:
+                self.__gearDamagedParam.value = 0.0 if isTurretAlive else 1.0
+            if self.__manGearDamagedParam is not None:
+                self.__manGearDamagedParam.value = 0.0 if isTurretAlive else 1.0
             if self.__manualSound is not None:
                 self.__manualSound.position = __p
             if self.__gearSound is not None:
@@ -702,10 +712,9 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
 
     def __stopGearByKeyOff(self):
         if self.__gearSound is not None and self.__gearSound.isPlaying:
-            param = self.__gearSound.param(_PlayerTurretRotationSoundEffect.__GEAR_KEYOFF_PARAM)
-            if param is not None:
+            if self.__gearKeyOffParam is not None:
                 self.__keyOffCalled = True
-                param.keyOff()
+                self.__gearKeyOffParam.keyOff()
             else:
                 self.__gearSound.stop()
         return

@@ -2,10 +2,22 @@
 import BigWorld
 from helpers import i18n
 
-class Waiting:
+class Waiting(object):
+    __wainingViewGetter = None
     __waitingStack = []
     __suspendStack = []
     __isVisible = False
+
+    @classmethod
+    def setWainingViewGetter(cls, getter):
+        cls.__wainingViewGetter = getter
+
+    @classmethod
+    def getWaitingView(cls):
+        view = None
+        if callable(cls.__wainingViewGetter):
+            view = cls.__wainingViewGetter()
+        return view
 
     @classmethod
     def isVisible(cls):
@@ -20,13 +32,14 @@ class Waiting:
         BigWorld.Screener.setEnabled(False)
         if not (isSingle and message in Waiting.__waitingStack):
             Waiting.__waitingStack.append(message)
-        from gui.WindowsManager import g_windowsManager
-        if g_windowsManager.window is not None:
-            waitingView = g_windowsManager.window.waitingManager
-            if waitingView is not None:
-                waitingView.showS(i18n.makeString('#waiting:%s' % message))
-                Waiting.__isVisible = True
-                waitingView.setCallback(interruptCallback)
+        view = Waiting.getWaitingView()
+        if view is not None:
+            view.showS(i18n.makeString('#waiting:%s' % message))
+            Waiting.__isVisible = True
+            view.setCallback(interruptCallback)
+            from gui.shared.events import LobbySimpleEvent
+            from gui.shared import EVENT_BUS_SCOPE
+            view.fireEvent(LobbySimpleEvent(LobbySimpleEvent.WAITING_SHOWN), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     @staticmethod
@@ -67,12 +80,11 @@ class Waiting:
     @staticmethod
     def close():
         BigWorld.Screener.setEnabled(True)
-        from gui.WindowsManager import g_windowsManager
-        if g_windowsManager.window is not None and g_windowsManager.window.waitingManager is not None:
-            g_windowsManager.window.waitingManager.close()
+        view = Waiting.getWaitingView()
+        if view:
+            view.close()
         Waiting.__isVisible = False
         Waiting.__waitingStack = []
-        return
 
     @staticmethod
     def rollback():
@@ -81,9 +93,7 @@ class Waiting:
 
     @staticmethod
     def cancelCallback():
-        from gui.WindowsManager import g_windowsManager
-        if g_windowsManager.window is not None:
-            waitingView = g_windowsManager.window.waitingManager
-            if waitingView is not None:
-                waitingView.cancelCallback()
+        view = Waiting.getWaitingView()
+        if view is not None:
+            view.cancelCallback()
         return

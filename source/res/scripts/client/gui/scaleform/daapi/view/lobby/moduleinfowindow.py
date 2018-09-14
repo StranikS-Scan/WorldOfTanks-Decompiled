@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
 import BigWorld
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.shared import g_itemsCache
 from gui.shared.utils import SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_NORMAL, GUN_CLIP, RELOAD_TIME_PROP_NAME, CLIP_ICON_PATH, EXTRA_MODULE_INFO
 from gui.Scaleform.locale.MENU import MENU
@@ -11,7 +10,7 @@ from gui.shared.utils import ItemsParameters
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 
-class ModuleInfoWindow(View, ModuleInfoMeta, AbstractWindowView):
+class ModuleInfoWindow(ModuleInfoMeta):
 
     def __init__(self, ctx = None):
         super(ModuleInfoWindow, self).__init__()

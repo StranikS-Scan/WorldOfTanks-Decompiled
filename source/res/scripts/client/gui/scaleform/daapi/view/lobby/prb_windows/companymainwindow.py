@@ -10,11 +10,10 @@ from gui.prb_control import formatters
 from gui.prb_control.context.prb_ctx import LeavePrbCtx
 from gui.prb_control.prb_helpers import PrbListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
-from gui.server_events import g_eventsCache
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FocusEvent
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 
 class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
 
@@ -116,8 +115,7 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
 
     @process
     def __requestToCreate(self):
-        division = PREBATTLE_COMPANY_DIVISION.CHAMPION
-        yield self.prbDispatcher.create(prb_ctx.CompanySettingsCtx(waitingID='prebattle/create', division=division))
+        yield self.prbDispatcher.create(prb_ctx.CompanySettingsCtx(waitingID='prebattle/create', division=PREBATTLE_COMPANY_DIVISION.CHAMPION))
 
     @process
     def __requestToJoin(self, prbID):

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/LobbyPageMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class LobbyPageMeta(DAAPIModule):
+class LobbyPageMeta(View):
 
     def moveSpace(self, x, y, delta):
         self._printOverrideError('moveSpace')

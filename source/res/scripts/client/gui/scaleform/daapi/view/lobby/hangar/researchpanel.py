@@ -7,11 +7,10 @@ from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.ResearchPanelMeta import ResearchPanelMeta
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.utils.requesters import DeprecatedStatsRequester
 
-class ResearchPanel(ResearchPanelMeta, DAAPIModule):
+class ResearchPanel(ResearchPanelMeta):
 
     def _populate(self):
         super(ResearchPanel, self)._populate()

@@ -27,6 +27,9 @@ class INVITES(object):
     INVITES_TEXT_SORTIE = '#invites:invites/text/SORTIE'
     INVITES_TEXT_FORT_BATTLE = '#invites:invites/text/FORT_BATTLE'
     INVITES_TEXT_CLUBS = '#invites:invites/text/CLUBS'
+    INVITES_TEXT_FALLOUT = '#invites:invites/text/FALLOUT'
+    INVITES_TEXT_FALLOUT_1 = '#invites:invites/text/fallout/1'
+    INVITES_TEXT_FALLOUT_2 = '#invites:invites/text/fallout/2'
     INVITES_TEXT_FORT_OFFENCE = '#invites:invites/text/fort/offence'
     INVITES_TEXT_FORT_DEFENCE = '#invites:invites/text/fort/defence'
     INVITES_TEXT_FORT_DIRECTION = '#invites:invites/text/fort/direction'
@@ -107,6 +110,9 @@ class INVITES(object):
      INVITES_TEXT_SORTIE,
      INVITES_TEXT_FORT_BATTLE,
      INVITES_TEXT_CLUBS,
+     INVITES_TEXT_FALLOUT,
+     INVITES_TEXT_FALLOUT_1,
+     INVITES_TEXT_FALLOUT_2,
      INVITES_TEXT_FORT_OFFENCE,
      INVITES_TEXT_FORT_DEFENCE,
      INVITES_TEXT_FORT_DIRECTION,

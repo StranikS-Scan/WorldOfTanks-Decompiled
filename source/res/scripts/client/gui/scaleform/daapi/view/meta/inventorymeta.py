@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/InventoryMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.store import Store
 
-class InventoryMeta(DAAPIModule):
+class InventoryMeta(Store):
 
     def sellItem(self, data):
         self._printOverrideError('sellItem')

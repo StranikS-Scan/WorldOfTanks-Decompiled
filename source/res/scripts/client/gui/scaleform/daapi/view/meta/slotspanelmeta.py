@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SlotsPanelMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class SlotsPanelMeta(DAAPIModule):
+class SlotsPanelMeta(BaseDAAPIComponent):
 
     def getSlotTooltipBody(self, orderID):
         self._printOverrideError('getSlotTooltipBody')

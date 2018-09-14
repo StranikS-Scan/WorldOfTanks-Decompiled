@@ -41,13 +41,8 @@ def createSRTMatrix(scale, rotation, translation):
     return result
 
 
-def clamp(minVal, maxVal, val):
-    if minVal > val:
-        return minVal
-    if maxVal < val:
-        return maxVal
-    return val
-
+clamp = lambda minVal, maxVal, val: if val < minVal:
+minVal(maxVal if val > maxVal else val)
 
 def clampVector3(minVal, maxVal, val):
     return Vector3(clamp(minVal.x, maxVal.x, val.x), clamp(minVal.y, maxVal.y, val.y), clamp(minVal.z, maxVal.z, val.z))

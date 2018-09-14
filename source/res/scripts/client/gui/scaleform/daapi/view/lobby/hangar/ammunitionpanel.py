@@ -3,10 +3,12 @@ from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
-from gui.Scaleform.framework import AppRef
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -19,10 +21,11 @@ from gui.server_events import g_eventsCache
 from gui.shared.events import LobbySimpleEvent, LoadViewEvent
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from helpers import i18n
 from items import ITEM_TYPE_NAMES
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 
-class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
+class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
     __FITTING_SLOTS = (GUI_ITEM_TYPE_NAMES[2],
      GUI_ITEM_TYPE_NAMES[3],
      GUI_ITEM_TYPE_NAMES[4],
@@ -53,6 +56,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
             exchangeRate = g_itemsCache.items.shop.exchangeRate
             vehicle = g_currentVehicle.item
             self.as_setVehicleHasTurretS(vehicle.hasTurrets)
+            devices = []
             for type in AmmunitionPanel.__FITTING_SLOTS:
                 data = g_itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[type], REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE_INDICES[type]])).values()
                 data.sort(reverse=True)
@@ -72,17 +76,14 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
                     action = None
                     if price != defaultPrice:
                         action = getItemActionTooltipData(module)
-                    moduleData = {'id': str(module.intCD),
+                    moduleData = {'id': module.intCD,
                      'type': type,
                      'name': module.userName,
                      'desc': module.getShortInfo(),
                      'target': target if thisTypeHBItem is not None else module.getTarget(vehicle),
                      'price': price,
-                     'money': money,
                      'currency': 'credits' if price[1] == 0 else 'gold',
-                     'icon': module.icon if type in AmmunitionPanel.__ARTEFACTS_SLOTS else module.level,
                      'actionPriceData': action,
-                     'exchangeRate': exchangeRate,
                      'moduleLabel': module.getGUIEmblemID()}
                     if type == ITEM_TYPE_NAMES[4]:
                         if module.isClipGun(vehicle.descriptor):
@@ -113,21 +114,59 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
                     else:
                         if isFit:
                             reason = self._getInstallReason(module, vehicle, reason)
+                        moduleData['icon'] = module.level
                         moduleData['removable'] = True
                         moduleData['isSelected'] = moduleData.get('target') == 1
                         moduleData['status'] = self.__getStatus(reason)
                         moduleData['disabled'] = not isFit or reason == 'unlock_error'
                         dataProvider.append(moduleData)
 
-                self.as_setDataS(dataProvider, type)
+                if type in AmmunitionPanel.__ARTEFACTS_SLOTS:
+                    for i in xrange(3):
+                        self.__addDevice(devices, dataProvider[i], type, i)
 
+                else:
+                    self.__addDevice(devices, dataProvider, type)
+
+            self.as_setDataS(devices)
             statusId, msg, msgLvl = g_currentVehicle.getHangarMessage()
             rentAvailable = False
             if statusId == Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER:
                 canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
                 rentAvailable = vehicle.isRentable and canBuyOrRent
-            self.as_updateVehicleStatusS(msg, msgLvl, rentAvailable)
+            self.as_updateVehicleStatusS(i18n.makeString(msg), msgLvl, rentAvailable)
         return
+
+    def __addDevice(self, seq, dp, type, slotIndex = 0):
+        device = {'slotType': type,
+         'slotIndex': slotIndex,
+         'selectedIndex': self.__getSelectedItemIndex(dp),
+         'availableDevices': dp,
+         'tooltip': '',
+         'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_MODULE}
+        self.updateDeviceTooltip(device, type)
+        seq.append(device)
+
+    def updateDeviceTooltip(self, device, type):
+        if device['selectedIndex'] == -1:
+            if type == FITTING_TYPES.OPTIONAL_DEVICE:
+                device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
+                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY
+            elif type == FITTING_TYPES.EQUIPMENT:
+                device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
+                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
+            else:
+                LOG_ERROR('Wrong device state! Module cannot be unselected!')
+        else:
+            device['tooltipType'] = TOOLTIPS_CONSTANTS.HANGAR_MODULE
+            device['tooltip'] = ''
+
+    def __getSelectedItemIndex(self, seq):
+        for idx, item in enumerate(seq):
+            if item['isSelected']:
+                return idx
+
+        return -1
 
     def _getInstallReason(self, module, vehicle, reason, slotIdx = None):
         _, installReason = module.mayInstall(vehicle, slotIdx)
@@ -137,38 +176,25 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
             return installReason
 
     def __updateAmmo(self, shellsData = None, historicalBattleID = -1):
-        ammo = {'gunName': '',
-         'maxAmmo': 0,
-         'defaultAmmoCount': 0,
-         'vehicleLocked': True,
-         'shells': [],
-         'stateWarning': 0}
+        shells = []
+        stateWarning = False
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            default_ammo_count = 0
-            default_ammo = dict(((s.intCD, s.defaultCount) for s in vehicle.shells))
             isAmmoFull = vehicle.isAmmoFull or historicalBattleID != -1
             stateWarning = vehicle.isBroken or not isAmmoFull or not g_currentVehicle.isAutoLoadFull() or not g_currentVehicle.isAutoEquipFull()
-            for compactDescr, count in default_ammo.iteritems():
-                default_ammo_count += count
-
-            ammo.update({'gunName': vehicle.gun.longUserName,
-             'maxAmmo': vehicle.ammoMaxSize,
-             'defaultAmmoCount': default_ammo_count,
-             'vehicleLocked': g_currentVehicle.isLocked(),
-             'stateWarning': int(stateWarning)})
             if shellsData is None:
                 shellsData = map(lambda shell: (shell, shell.count), vehicle.shells)
-            shells = ammo.get('shells')
             for shell, count in shellsData:
-                shells.append({'id': str(shell.intCD),
-                 'type': shell.type,
+                shells.append({'id': shell.intCD,
+                 'ammunitionType': shell.type,
                  'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
                  'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
                  'count': count,
-                 'historicalBattleID': historicalBattleID})
+                 'historicalBattleID': historicalBattleID,
+                 'tooltip': '',
+                 'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_SHELL})
 
-        self.as_setAmmoS(ammo)
+        self.as_setAmmoS(shells, stateWarning)
         return
 
     def showTechnicalMaintenance(self):

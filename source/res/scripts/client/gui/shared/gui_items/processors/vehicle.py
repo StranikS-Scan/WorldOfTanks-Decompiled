@@ -5,6 +5,7 @@ from account_shared import LayoutIterator
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from AccountCommands import VEHICLE_SETTINGS_FLAG
+from gui.shared.gui_items.service_items import Price
 from shared_utils import findFirst
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
@@ -15,7 +16,7 @@ from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSu
 def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     if crewType != -1:
         tankmenCount = len(vehicle.crew)
-        tankmanCost = g_itemsCache.items.shop.tankmanCost[crewType]
+        tankmanCost = g_itemsCache.items.shop.tankmanCostWithGoodyDiscount[crewType]
         result[0] += tankmanCost['credits'] * tankmenCount
         result[1] += tankmanCost['gold'] * tankmenCount
     if buyShells:
@@ -104,8 +105,17 @@ class VehicleBuyer(VehicleRenter):
 class VehicleSlotBuyer(Processor):
 
     def __init__(self, showConfirm = True, showWarning = True):
+        self.__hasDiscounts = bool(g_itemsCache.items.shop.personalSlotDiscounts)
+        self.__frozenSlotPrice = None
         slotCost = self.__getSlotPrice()
-        super(VehicleSlotBuyer, self).__init__((plugins.MessageInformator('buySlotNotEnoughCredits', activeHandler=lambda : not plugins.MoneyValidator(slotCost).validate().success, isEnabled=showWarning), plugins.MessageConfirmator('buySlotConfirmation', isEnabled=showConfirm, ctx={'gold': slotCost[1]}), plugins.MoneyValidator(slotCost)))
+        if self.__hasDiscounts and slotCost.gold == 0:
+            confirmationType = 'freeSlotConfirmation'
+            ctx = {}
+        else:
+            confirmationType = 'buySlotConfirmation'
+            ctx = {'gold': slotCost[1]}
+        super(VehicleSlotBuyer, self).__init__((plugins.MessageInformator('buySlotNotEnoughCredits', activeHandler=lambda : not plugins.MoneyValidator(slotCost).validate().success, isEnabled=showWarning), plugins.MessageConfirmator(confirmationType, isEnabled=showConfirm, ctx=ctx), plugins.MoneyValidator(slotCost)))
+        return
 
     def _errorHandler(self, code, errStr = '', ctx = None):
         if len(errStr):
@@ -120,7 +130,13 @@ class VehicleSlotBuyer(Processor):
         BigWorld.player().stats.buySlot(lambda code: self._response(code, callback))
 
     def __getSlotPrice(self):
-        return (0, g_itemsCache.items.shop.getVehicleSlotsPrice(g_itemsCache.items.stats.vehicleSlots))
+        if self.__frozenSlotPrice is not None:
+            price = self.__frozenSlotPrice
+        else:
+            price = g_itemsCache.items.shop.getVehicleSlotsPrice(g_itemsCache.items.stats.vehicleSlots)
+            if self.__hasDiscounts:
+                self.__frozenSlotPrice = price
+        return Price(0, price)
 
 
 class VehicleSeller(ItemProcessor):
@@ -335,7 +351,6 @@ class VehicleLayoutProcessor(Processor):
 
     def getShellsLayoutPrice(self):
         """
-        @param layout: shells layout
         @return: price that should be paid to fill layout
         """
         goldPrice = 0
@@ -362,7 +377,6 @@ class VehicleLayoutProcessor(Processor):
 
     def getEqsLayoutPrice(self):
         """
-        @param layout: eqs layout
         @return: price that should be paid to fill layout
         """
         goldPrice = 0

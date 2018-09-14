@@ -8,3 +8,4 @@ class NATIONS(object):
     FRANCE = '#nations:france'
     UK = '#nations:uk'
     JAPAN = '#nations:japan'
+    CZECH = '#nations:czech'

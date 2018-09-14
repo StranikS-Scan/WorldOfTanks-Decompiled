@@ -1,12 +1,12 @@
 # Embedded file name: scripts/client/tutorial/control/triggers.py
 from tutorial.control import TutorialProxyHolder
-from tutorial.data import IHasID
+from tutorial.data.has_id import IHasID
 from tutorial.logger import LOG_ERROR
 
-class _Trigger(TutorialProxyHolder, IHasID):
+class Trigger(TutorialProxyHolder, IHasID):
 
     def __init__(self, triggerID):
-        super(_Trigger, self).__init__()
+        super(Trigger, self).__init__()
         self.__triggerID = triggerID
         self.__onEffects = []
         self.__offEffects = []
@@ -43,7 +43,7 @@ class _Trigger(TutorialProxyHolder, IHasID):
         effects = self.__offEffects
         if isOn:
             effects = self.__onEffects
-            getter = self._tutorial._data.getTrigger
+            getter = self._data.getTrigger
             for triggerID in self.__excludeTriggerIDs:
                 trigger = getter(triggerID)
                 if trigger is not None:
@@ -72,28 +72,56 @@ class _Trigger(TutorialProxyHolder, IHasID):
             return
 
 
-class _TriggerWithValidateVar(_Trigger):
+class TriggerWithValidateVar(Trigger):
 
-    def __init__(self, triggerID, validateVarID, setVarID = None):
-        super(_TriggerWithValidateVar, self).__init__(triggerID)
+    def __init__(self, triggerID, validateVarID, setVarID = None, validateUpdateOnly = False):
+        super(TriggerWithValidateVar, self).__init__(triggerID)
         self._validateVarID = validateVarID
         self._setVarID = setVarID
+        self._validateUpdateOnly = validateUpdateOnly
 
     def vars(self):
         return self._tutorial.getVars()
 
-    def getVar(self):
-        return self._tutorial.getVars().get(self._validateVarID)
+    def getVar(self, varID = None):
+        if varID is None:
+            varID = self._validateVarID
+        return self._tutorial.getVars().get(varID)
 
     def getIterVar(self):
         var = self._tutorial.getVars().get(self._validateVarID)
         if hasattr(var, '__iter__'):
             var = set(var)
         else:
-            var = set([var])
+            var = {var}
         return var
 
     def setVar(self, value):
         if self._setVarID is not None:
             self._tutorial.getVars().set(self._setVarID, value)
         return
+
+
+class TriggerWithSubscription(TriggerWithValidateVar):
+
+    def run(self):
+        self.isRunning = True
+        if not self.isSubscribed:
+            self.isSubscribed = True
+            self._subscribe()
+        if not self._validateUpdateOnly:
+            self.toggle(isOn=self.isOn())
+        else:
+            self.isRunning = False
+
+    def clear(self):
+        if self.isSubscribed:
+            self._unsubscribe()
+        self.isSubscribed = False
+        self.isRunning = False
+
+    def _subscribe(self):
+        raise NotImplementedError
+
+    def _unsubscribe(self):
+        raise NotImplementedError

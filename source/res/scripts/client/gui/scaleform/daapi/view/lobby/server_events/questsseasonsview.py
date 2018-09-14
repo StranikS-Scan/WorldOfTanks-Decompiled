@@ -3,19 +3,18 @@ import weakref
 import operator
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.shared.formatters import icons, text_styles
 from helpers import i18n
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.server_events import event_items
 from gui.shared.gui_items import Vehicle
 from gui.server_events import g_eventsCache, events_dispatcher as quest_events, settings as quest_settings, formatters as quests_fmts
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.meta.QuestsSeasonsViewMeta import QuestsSeasonsViewMeta
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 
-class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
+class QuestsSeasonsView(QuestsSeasonsViewMeta):
 
     def __init__(self):
         super(QuestsSeasonsView, self).__init__()
@@ -66,7 +65,6 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
         self.__populateSlotsData()
 
     def __populateSeasonsData(self):
-        _getText = self.app.utilsManager.textManager.getText
         pqSettings = quest_settings.get()
         seasons = []
         for seasonID, season in g_eventsCache.potapov.getSeasons().iteritems():
@@ -80,15 +78,15 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
                     bgImgUp, bgImgOver = event_items.getTileGrayUpIconPath(iconID), event_items.getTileGrayOverIconPath(iconID)
                 vehicleBonus = tile.getVehicleBonus()
                 if vehicleBonus is not None:
-                    vehLevelStr = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(Vehicle.getLevelSmallIconPath(vehicleBonus.level), 16, 16, -3, 0))
-                    vehTypeStr = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(Vehicle.getTypeSmallIconPath(vehicleBonus.type), 16, 16, -3, 0))
+                    vehLevelStr = icons.makeImageTag(Vehicle.getLevelSmallIconPath(vehicleBonus.level), 16, 16, -3, 0)
+                    vehTypeStr = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicleBonus.type), 16, 16, -3, 0)
                     vehicleBonusLabel = i18n.makeString(QUESTS.PERSONAL_SEASONS_TILELABEL, type=vehTypeStr, level=vehLevelStr, name=vehicleBonus.userName)
                 else:
                     vehicleBonusLabel = ''
-                tokenIcon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_QUESTS_TOKEN16, 16, 16, -3, 0))
+                tokenIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_QUESTS_TOKEN16, 16, 16, -3, 0)
                 if isUnlocked and not isCompleted:
                     gottenTokensCount, totalTokensCount = tile.getTokensCount()
-                    progress = _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_TILEPROGRESS, count=_getText(TEXT_MANAGER_STYLES.GOLD_TEXT, str(gottenTokensCount)), total=str(totalTokensCount), icon=tokenIcon))
+                    progress = text_styles.standard(i18n.makeString(QUESTS.PERSONAL_SEASONS_TILEPROGRESS, count=text_styles.gold(str(gottenTokensCount)), total=str(totalTokensCount), icon=tokenIcon))
                 else:
                     progress = ''
                 if tile.isFullCompleted():
@@ -97,7 +95,7 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
                     animation = None
                 tiles.append({'id': tile.getID(),
                  'isNew': isUnlocked and quest_settings.isPQTileNew(tile.getID(), pqSettings),
-                 'label': _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, vehicleBonusLabel),
+                 'label': text_styles.standard(vehicleBonusLabel),
                  'progress': progress,
                  'isCompleted': isUnlocked and isCompleted,
                  'enabled': isUnlocked,
@@ -127,10 +125,9 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
 
         self.as_setSlotsDataS({'questSlots': slots,
          'hasActiveQuests': len(selectedQuests) > 0,
-         'noActiveQuestsText': self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_NOACTIVESLOTS_HEADER) + '\n'), (TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_NOACTIVESLOTS_BODY))))})
+         'noActiveQuestsText': text_styles.concatStylesToMultiLine((TEXT_MANAGER_STYLES.MIDDLE_TITLE, QUESTS.PERSONAL_SEASONS_SLOTS_NOACTIVESLOTS_HEADER), (TEXT_MANAGER_STYLES.STANDARD_TEXT, QUESTS.PERSONAL_SEASONS_SLOTS_NOACTIVESLOTS_BODY))})
 
     def __packQuestSlot(self, quest = None):
-        _getText = self.app.utilsManager.textManager.getText
         ttHeader, ttBody, ttAttention, ttNote = (None, None, None, None)
         if quest is not None:
             tile = g_eventsCache.potapov.getTiles()[quest.getTileID()]
@@ -139,16 +136,16 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
             ttHeader = quest.getUserName()
             ttBody = quests_fmts.getFullTileUserName(season, tile)
             if quest.needToGetReward():
-                icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, 16, 16, -3, 0))
-                description = _getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_GETAWARD, icon=icon))
+                icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, 16, 16, -3, 0)
+                description = text_styles.neutral(i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_GETAWARD, icon=icon))
                 ttAttention = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_ATTENTION)
             else:
-                description = _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, quests_fmts.getPQFullDescription(quest))
+                description = text_styles.standard(quests_fmts.getPQFullDescription(quest))
                 ttNote = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_MISSION_NOTE)
-            title = _getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_TITLE, questName=quest.getUserName()))
+            title = text_styles.middleTitle(i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_TITLE, questName=quest.getUserName()))
         else:
             title, isInProgress = '', False
-            description = _getText(TEXT_MANAGER_STYLES.DISABLED_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_NODATA))
+            description = text_styles.disabled(i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_NODATA))
             ttHeader = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_EMPTY_HEADER)
             ttBody = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_EMPTY_BODY)
         return {'id': quest.getID() if quest else None,

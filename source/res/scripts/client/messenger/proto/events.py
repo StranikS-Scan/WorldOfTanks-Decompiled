@@ -100,7 +100,7 @@ class _ServiceChannelEvents(object):
 
 
 class _MessengerEvents(object):
-    __slots__ = ('__channels', '__users', '__serviceChannel', '__voip', 'onErrorReceived', 'onPluginConnected', 'onPluginDisconnected', 'onPluginConnectFailed')
+    __slots__ = ('__channels', '__users', '__serviceChannel', '__voip', 'onErrorReceived', 'onWarningReceived', 'onPluginConnected', 'onPluginDisconnected', 'onPluginConnectFailed')
 
     def __init__(self):
         super(_MessengerEvents, self).__init__()
@@ -109,6 +109,7 @@ class _MessengerEvents(object):
         self.__serviceChannel = _ServiceChannelEvents()
         self.__voip = _VOIPSharedEvents()
         self.onErrorReceived = Event.Event()
+        self.onWarningReceived = Event.Event()
         self.onPluginConnected = Event.Event()
         self.onPluginDisconnected = Event.Event()
         self.onPluginConnectFailed = Event.Event()
@@ -135,6 +136,7 @@ class _MessengerEvents(object):
         self.__serviceChannel.clear()
         self.__voip.clear()
         self.onErrorReceived.clear()
+        self.onWarningReceived.clear()
 
 
 g_messengerEvents = _MessengerEvents()

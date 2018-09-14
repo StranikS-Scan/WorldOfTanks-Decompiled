@@ -5,20 +5,18 @@ import gui
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
-from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.tooltips import getItemActionTooltipData, getItemRentActionTooltipData
 from gui.shared.utils import CLIP_ICON_PATH
 from gui.shared.utils.gui_items import InventoryVehicle
 from gui.server_events import g_eventsCache
 from helpers import i18n, html
-from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp, VehicleClassInfo, SelectedNation
+from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp
+from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
+from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 import nations
-__all__ = ['_BaseDumper',
- 'ResearchItemsObjDumper',
- 'ResearchItemsXMLDumper',
- 'NationObjDumper',
- 'NationXMLDumper']
+__all__ = ('ResearchItemsObjDumper', 'ResearchItemsXMLDumper', 'NationObjDumper', 'NationXMLDumper')
 
 class _BaseDumper(object):
     __slots__ = ('_cache', '_vClassInfo')
@@ -45,8 +43,7 @@ class _BaseDumper(object):
                     status = i18n.makeString('#menu:currentVehicleStatus/rentalIsOver')
                 statusLevel = InventoryVehicle.STATE_LEVEL.CRITICAL
             elif not item.isPremiumIGR:
-                localization = '#menu:vehicle/rentLeft/%s'
-                status = getRentLeftTimeStr(localization, item.rentLeftTime)
+                status = RentLeftFormatter(item.rentInfo).getRentLeftStr()
                 statusLevel = InventoryVehicle.STATE_LEVEL.RENTED
         return (status, statusLevel)
 

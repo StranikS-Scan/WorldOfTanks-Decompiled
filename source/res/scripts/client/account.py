@@ -201,7 +201,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def onKickedFromServer(self, reason, isBan, expiryTime):
         LOG_MX('onKickedFromServer', reason, isBan, expiryTime)
-        connectionManager.onKickedFromServer(reason, isBan, expiryTime)
+        connectionManager.setKickedFromServer(reason, isBan, expiryTime)
 
     def onStreamComplete(self, id, desc, data):
         isCorrupted, origPacketLen, packetLen, origCrc32, crc32 = desc
@@ -372,9 +372,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         events.onPrebattleLeft()
         return
 
-    def setBattleID(self, *args):
-        self.unitMgr.setBattleID(*args)
-
     def onUnitUpdate(self, *args):
         self.unitMgr.onUnitUpdate(*args)
 
@@ -469,11 +466,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         events.onAccountShowGUI(ctx)
         BigWorld.Screener.setUserId(self.databaseID)
 
-    def receiveQueueInfo(self, randomsQueueInfo, companiesQueueInfo, historicalQueueInfo):
+    def receiveQueueInfo(self, randomsQueueInfo, companiesQueueInfo, historicalQueueInfo, eventQueueInfo):
         unpacked = None
         if historicalQueueInfo is not None:
             unpacked = self.__unpackHistoricalQueueInfo(historicalQueueInfo)
-        events.onQueueInfoReceived(randomsQueueInfo, companiesQueueInfo, unpacked)
+        events.onQueueInfoReceived(randomsQueueInfo, companiesQueueInfo, unpacked, eventQueueInfo)
         return
 
     def __unpackHistoricalQueueInfo(self, historicalQueueInfo):
@@ -594,10 +591,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, errorStr, ext.get('clanDBID', 0), ext.get('clanInfo', None))
         self._doCmdInt3(AccountCommands.CMD_REQ_PLAYER_CLAN_INFO, databaseID, 0, 0, proxy)
 
-    def cmdPublishBattleResults(self, uniqueSubUrl, arenaUniqueID):
-        self._doCmdInt2Str(AccountCommands.CMD_PUBLISH_BATTLE_RESULTS, arenaUniqueID, 0, uniqueSubUrl, None)
-        return
-
     def requestPlayerGlobalRating(self, accountID, callback):
         if events.isPlayerEntityChanging:
             return
@@ -645,9 +638,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_HISTORICAL, 0, 0, 0)
 
-    def enqueueEventBattles(self, vehInvIDs):
+    def enqueueEventBattles(self, vehInvIDs, battleType, gameplaysMask = 65535):
         if not events.isPlayerEntityChanging:
-            arr = [len(vehInvIDs)] + vehInvIDs
+            arr = [len(vehInvIDs)] + vehInvIDs + [battleType, gameplaysMask]
             self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, arr)
 
     def dequeueEventBattles(self):
@@ -807,8 +800,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntArr(AccountCommands.CMD_GET_POTAPOV_QUEST_REWARD, arr, proxy)
         return
 
-    def activateGoodie(self, goodieId, callback):
-        self._doCmdIntArr(AccountCommands.CMD_ACTIVATE_GOODIE, goodieId, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+    def activateGoodie(self, goodieID, callback):
+        self._doCmdIntArr(AccountCommands.CMD_ACTIVATE_GOODIE, goodieID, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def makeDenunciation(self, violatorID, topicID, violatorKind):
         self._doCmdInt3(AccountCommands.CMD_MAKE_DENUNCIATION, violatorID, topicID, violatorKind, None)

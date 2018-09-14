@@ -1,10 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/ToolTip.py
 from gui import makeHtmlString
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
 from helpers import i18n, isPlayerAccount
 
-class ToolTip(ToolTipMgrMeta, AppRef):
+class ToolTip(ToolTipMgrMeta):
     TOOLTIP_KIND = ['header',
      'body',
      'note',

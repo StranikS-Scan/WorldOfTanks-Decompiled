@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/__init__.py
 import BigWorld
 import constants
-from debug_utils import LOG_WARNING
 from constants import ARENA_BONUS_TYPE_CAPS as caps
 
 def getClientArena(avatar = None):
@@ -16,7 +15,7 @@ def getClientArena(avatar = None):
 
 
 def getArenaType(avatar = None):
-    return getattr(getClientArena(avatar), 'arenaType')
+    return getattr(getClientArena(avatar), 'arenaType', None)
 
 
 def getArenaTypeID(avatar = None):
@@ -28,6 +27,10 @@ def getArenaTypeID(avatar = None):
         arenaTypeID = 0
 
     return arenaTypeID
+
+
+def getPlayerVehicleID():
+    return getattr(BigWorld.player(), 'playerVehicleID', 0)
 
 
 def isPlayerTeamKillSuspected():
@@ -79,12 +82,17 @@ def isArenaInWaiting():
 
 
 def getArenaIconKey(arenaType = None, arenaGuiType = None):
-    arenaType = arenaType or getClientArena().arenaType
+    if arenaType is None:
+        arena = getClientArena()
+        if arena is None:
+            return ''
+        arenaType = arena.arenaType
     arenaGuiType = arenaGuiType or getArenaGuiType()
     arenaIcon = arenaType.geometryName
     if arenaGuiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES and arenaType.gameplayName.startswith('fallout'):
         return '%s_fallout' % arenaIcon
-    return arenaIcon
+    else:
+        return arenaIcon
 
 
 def getArenaIcon(iconKey, arenaType = None, arenaGuiType = None):
@@ -111,6 +119,12 @@ def hasResourcePoints(arenaType = None, arenBonusType = None):
         return caps.get(arenBonusType) & caps.RESOURCE_POINTS > 0 and arenaType.resourcePoints
     else:
         return False
+
+
+def getIsMultiteam(arenaType = None):
+    if arenaType is None:
+        arenaType = getArenaType()
+    return arenaType.gameplayName in ('fallout', 'fallout1', 'fallout2', 'fallout3')
 
 
 def hasRepairPoints(arenaType = None, arenBonusType = None):

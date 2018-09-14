@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileTechniquePageMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.profile.ProfileTechnique import ProfileTechnique
 
-class ProfileTechniquePageMeta(DAAPIModule):
+class ProfileTechniquePageMeta(ProfileTechnique):
 
     def setIsInHangarSelected(self, value):
         self._printOverrideError('setIsInHangarSelected')

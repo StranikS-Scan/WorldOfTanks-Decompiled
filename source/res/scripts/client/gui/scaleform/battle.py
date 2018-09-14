@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/Battle.py
 import weakref
 import BigWorld
-from CTFManager import g_ctfManager
 import GUI
 import Math
 import VOIP
@@ -10,6 +9,7 @@ import BattleReplay
 import CommandMapping
 from ConnectionManager import connectionManager
 from account_helpers.settings_core.SettingsCore import g_settingsCore
+from gui.Scaleform.LogitechMonitor import LogitechMonitor
 from gui.Scaleform.daapi.view.battle.resource_points import ResourcePointsPlugin
 from gui.Scaleform.daapi.view.battle.respawn_view import RespawnViewPlugin
 from gui.Scaleform.daapi.view.battle.PlayersPanelsSwitcher import PlayersPanelsSwitcher
@@ -27,14 +27,15 @@ from gui.Scaleform.daapi.view.battle.stats_form import statsFormFactory
 from gui.Scaleform.daapi.view.battle.teams_bases_panel import TeamBasesPanel
 from gui.Scaleform.daapi.view.battle.markers import MarkersManager
 from gui.Scaleform.daapi.view.lobby.ReportBug import makeHyperLink, reportBugOpenConfirm
+from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.MENU import MENU
 import gui
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.DynSquadViewListener import DynSquadViewListener
 from gui.battle_control.battle_arena_ctrl import battleArenaControllerFactory
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-from gui.battle_control.dyn_squad_arena_controllers import DynSquadSoundsController, DynSquadEntityController
 from gui.prb_control.formatters import getPrebattleFullDescription
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import PluginsCollection
 from messenger import MessengerEntry, g_settings
@@ -55,7 +56,7 @@ from gui.Scaleform.Minimap import Minimap
 from gui.Scaleform.CursorDelegator import g_cursorDelegator
 from gui.Scaleform.ingame_help import IngameHelp
 from gui.Scaleform import SCALEFORM_SWF_PATH
-from gui.battle_control.arena_info import isEventBattle, getArenaIcon, hasFlags, hasRespawns, hasResourcePoints
+from gui.battle_control.arena_info import isEventBattle, getArenaIcon, hasFlags, hasRespawns, hasResourcePoints, getIsMultiteam
 from gui.battle_control import avatar_getter
 
 def _isVehicleEntity(entity):
@@ -64,6 +65,8 @@ def _isVehicleEntity(entity):
 
 
 _CONTOUR_ICONS_MASK = '../maps/icons/vehicle/contour/%(unicName)s.png'
+_SMALL_MAP_SOURCE = '../maps/icons/map/battleLoading/%s.png'
+_SCOPE = EVENT_BUS_SCOPE.BATTLE
 
 class Battle(BattleWindow):
     teamBasesPanel = property(lambda self: self.__teamBasesPanel)
@@ -96,9 +99,13 @@ class Battle(BattleWindow):
      'swindle': constants.DENUNCIATION.SWINDLE,
      'blackmail': constants.DENUNCIATION.BLACKMAIL}
     __cameraVehicleID = -1
-    __stateHandlers = {VEHICLE_VIEW_STATE.FIRE: '_setFireInVehicle'}
+    __stateHandlers = {VEHICLE_VIEW_STATE.FIRE: '_setFireInVehicle',
+     VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER: '_showVehicleTimer',
+     VEHICLE_VIEW_STATE.HIDE_DESTROY_TIMER: '_hideVehicleTimer',
+     VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY: '_showSixthSenseIndicator'}
 
-    def __init__(self):
+    def __init__(self, appNS):
+        self.__ns = appNS
         self.__soundManager = None
         self.__arena = BigWorld.player().arena
         self.__plugins = PluginsCollection(self)
@@ -130,6 +137,10 @@ class Battle(BattleWindow):
         self.onPostmortemVehicleChanged(BigWorld.player().playerVehicleID)
         return
 
+    @property
+    def appNS(self):
+        return self.__ns
+
     def getRoot(self):
         return self.__battle_flashObject
 
@@ -141,10 +152,8 @@ class Battle(BattleWindow):
             self.__fragCorrelation.populate()
         return
 
-    def showAll(self, isShow):
-        self.call('battle.showAll', [isShow])
-        self.__markersManager.active(isShow)
-        g_sessionProvider.getHitDirectionCtrl().setVisible(isShow)
+    def showAll(self, event):
+        self.call('battle.showAll', [event.ctx['visible']])
 
     def showCursor(self, isShow):
         self.cursorVisibility(-1, isShow)
@@ -185,7 +194,7 @@ class Battle(BattleWindow):
             self.__cameraVehicleID = id
             self.__arenaCtrl.invalidateGUI(not g_sessionProvider.getCtx().isPlayerObserver())
             g_sessionProvider.getVehicleStateCtrl().switchToAnother(id)
-            self.hideVehicleTimer('ALL')
+            self._hideVehicleTimer('ALL')
             self.__vErrorsPanel.clear()
             self.__vMsgsPanel.clear()
             aim = BigWorld.player().inputHandler.aim
@@ -215,7 +224,7 @@ class Battle(BattleWindow):
             self.__cameraVehicleID = -1
             self.__vErrorsPanel.clear()
             self.__vMsgsPanel.clear()
-            self.hideVehicleTimer('ALL')
+            self._hideVehicleTimer('ALL')
             aim = BigWorld.player().inputHandler.aim
             if aim is not None:
                 aim.updateAmmoState(True)
@@ -231,21 +240,16 @@ class Battle(BattleWindow):
         else:
             return False
 
-    def showVehicleTimer(self, code, time, warnLvl = 'critical'):
+    def _showVehicleTimer(self, value):
+        code, time, warnLvl = value
         LOG_DEBUG('show vehicles destroy timer', code, time, warnLvl)
         self.call('destroyTimer.show', [self.VEHICLE_DESTROY_TIMER[code], time, warnLvl])
 
-    def hideVehicleTimer(self, code):
+    def _hideVehicleTimer(self, code):
         LOG_DEBUG('hide vehicles destroy timer', code)
         self.call('destroyTimer.hide', [self.VEHICLE_DESTROY_TIMER[code]])
 
-    def setVehicleTimerPosition(self, code, time, warnLvl, position):
-        self.call('destroyTimer.setTimerPosition', [self.VEHICLE_DESTROY_TIMER[code],
-         time,
-         warnLvl,
-         position])
-
-    def showSixthSenseIndicator(self, isShow):
+    def _showSixthSenseIndicator(self, isShow):
         self.call('sixthSenseIndicator.show', [isShow])
 
     def setVisible(self, bool):
@@ -253,6 +257,8 @@ class Battle(BattleWindow):
         self.component.visible = bool
 
     def afterCreate(self):
+        event = events.AppLifeCycleEvent
+        g_eventBus.handleEvent(event(self.__ns, event.INITIALIZING))
         player = BigWorld.player()
         voice = VoiceChatInterface.g_instance
         LOG_DEBUG('[Battle] afterCreate')
@@ -264,6 +270,9 @@ class Battle(BattleWindow):
         setattr(self.movie, '_global.wg_isKorea', constants.IS_KOREA)
         setattr(self.movie, '_global.wg_isReplayPlaying', BattleReplay.g_replayCtrl.isPlaying)
         BattleWindow.afterCreate(self)
+        addListener = g_eventBus.addListener
+        addListener(events.GameEvent.HELP, self.toggleHelpWindow, scope=_SCOPE)
+        addListener(events.GameEvent.GUI_VISIBILITY, self.showAll, scope=_SCOPE)
         player.inputHandler.onPostmortemVehicleChanged += self.onPostmortemVehicleChanged
         player.inputHandler.onCameraChanged += self.onCameraChanged
         g_settingsCore.onSettingsChanged += self.__accs_onSettingsChanged
@@ -286,8 +295,6 @@ class Battle(BattleWindow):
         self.__soundManager = SoundManager()
         self.__soundManager.populateUI(self.proxy)
         self.__timersBar = TimersBar(self.proxy, isEvent)
-        self.__teamBasesPanel = TeamBasesPanel(self.proxy)
-        self.__dynSquadSoundCtrl = DynSquadSoundsController(self.__soundManager)
         self.__teamBasesPanel = TeamBasesPanel(self.proxy)
         self.__debugPanel = DebugPanel(self.proxy)
         self.__consumablesPanel = ConsumablesPanel(self.proxy)
@@ -340,12 +347,8 @@ class Battle(BattleWindow):
         self.__radialMenu.populateUI(self.proxy)
         self.__ribbonsPanel.start()
         g_sessionProvider.setBattleUI(self)
-        self.__dynSquadSoundCtrl = DynSquadSoundsController(self.__soundManager)
-        self.__markersEntitiesCtrl = DynSquadEntityController((self.__minimap, self.__markersManager))
         self.__arenaCtrl = battleArenaControllerFactory(self, isEvent, isMutlipleTeams)
         g_sessionProvider.addArenaCtrl(self.__arenaCtrl)
-        g_sessionProvider.addArenaCtrl(self.__dynSquadSoundCtrl)
-        g_sessionProvider.addArenaCtrl(self.__markersEntitiesCtrl)
         self.updateFlagsColor()
         self.movie.setFocussed(SCALEFORM_SWF_PATH)
         self.call('battle.initDynamicSquad', self.__getDynamicSquadsInitParams())
@@ -360,12 +363,18 @@ class Battle(BattleWindow):
             VOIP.getVOIPManager().setMicMute(True)
         ctrl = g_sessionProvider.getVehicleStateCtrl()
         ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
         self.__dynSquadListener = DynSquadViewListener(self.proxy)
+        g_eventBus.handleEvent(event(self.__ns, event.INITIALIZED))
 
     def beforeDelete(self):
         LOG_DEBUG('[Battle] beforeDelete')
+        removeListener = g_eventBus.removeListener
+        removeListener(events.GameEvent.HELP, self.toggleHelpWindow, scope=_SCOPE)
+        removeListener(events.GameEvent.GUI_VISIBILITY, self.showAll, scope=_SCOPE)
         ctrl = g_sessionProvider.getVehicleStateCtrl()
         ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
         if self.colorManager:
             self.colorManager.dispossessUI()
         voice = VoiceChatInterface.g_instance
@@ -383,10 +392,6 @@ class Battle(BattleWindow):
         if self.__soundManager is not None:
             self.__soundManager.dispossessUI()
             self.__soundManager = None
-        if self.__dynSquadSoundCtrl is not None:
-            g_sessionProvider.removeArenaCtrl(self.__dynSquadSoundCtrl)
-            self.__dynSquadSoundCtrl.destroy()
-            self.__dynSquadSoundCtrl = None
         if self.colorManager is not None:
             self.colorManager.dispossessUI()
             self.colorManager = None
@@ -412,13 +417,9 @@ class Battle(BattleWindow):
         g_sessionProvider.clearBattleUI()
         if self.__arenaCtrl is not None:
             g_sessionProvider.removeArenaCtrl(self.__arenaCtrl)
-            self.__arenaCtrl.destroy()
+            self.__arenaCtrl.clear()
             self.__arenaCtrl = None
         self.__ppSwitcher.destroy()
-        if self.__markersEntitiesCtrl is not None:
-            g_sessionProvider.removeArenaCtrl(self.__markersEntitiesCtrl)
-            self.__markersEntitiesCtrl.destroy()
-            self.__markersEntitiesCtrl = None
         self.__leftPlayersPanel.dispossessUI()
         self.__rightPlayersPanel.dispossessUI()
         MessengerEntry.g_instance.gui.invoke('dispossessUI')
@@ -431,6 +432,8 @@ class Battle(BattleWindow):
             self.__dynSquadListener.destroy()
             self.__dynSquadListener = None
         BattleWindow.beforeDelete(self)
+        event = events.AppLifeCycleEvent
+        g_eventBus.handleEvent(event(self.__ns, event.DESTROYED))
         return
 
     def __onVehicleStateUpdated(self, state, value):
@@ -481,7 +484,8 @@ class Battle(BattleWindow):
     def isPlayerSpeaking(self, accountDBID):
         return VoiceChatInterface.g_instance.isPlayerSpeaking(accountDBID)
 
-    def showPostmortemTips(self):
+    def __onPostMortemSwitched(self):
+        LogitechMonitor.onScreenChange('postmortem')
         if self.radialMenu is not None:
             self.radialMenu.forcedHide()
         if not g_sessionProvider.getCtx().isPlayerObserver():
@@ -493,9 +497,6 @@ class Battle(BattleWindow):
             g_cursorDelegator.syncMousePosition(self, x, y, customCall)
         else:
             g_cursorDelegator.restoreMousePosition()
-        guiType = self.__arena.guiType
-        if not GUI_SETTINGS.isBattlePanelsUpdatableInCtrl and guiType == constants.ARENA_GUI_TYPE.RANDOM or guiType == constants.ARENA_GUI_TYPE.TRAINING and constants.IS_DEVELOPMENT:
-            self.__arenaCtrl.setPanelsUpdatable(value=not visible)
         if BigWorld.player() is not None and isPlayerAvatar():
             BigWorld.player().setForcedGuiControlMode(visible, False, enableAiming)
         return
@@ -531,7 +532,7 @@ class Battle(BattleWindow):
             BigWorld.player().leaveArena()
         return
 
-    def toggleHelpWindow(self):
+    def toggleHelpWindow(self, _):
         self.__callEx('showHideHelp', [not self.__isHelpWindowShown])
 
     def setAimingMode(self, isAiming):
@@ -602,7 +603,10 @@ class Battle(BattleWindow):
                 winText = getBattleSubTypeWinText(BigWorld.player().arenaTypeID, teamHasBase)
             else:
                 typeEvent = 'fallout'
-                winText = i18n.makeString('#arenas:type/fallout/description')
+                if getIsMultiteam():
+                    winText = i18n.makeString(ARENAS.TYPE_FALLOUTMUTLITEAM_DESCRIPTION)
+                else:
+                    winText = i18n.makeString('#arenas:type/%s/description' % arenaSubType)
             arenaData.append(winText)
             arenaData.append(typeEvent)
             vehInfo = arenaDP.getVehicleInfo(arenaDP.getPlayerVehicleID())
@@ -617,6 +621,7 @@ class Battle(BattleWindow):
                 else:
                     pqTipData = [i18n.makeString('#ingame_gui:potapovQuests/tip'), None, None]
             arenaData.extend(pqTipData)
+            arenaData.extend([getArenaIcon(_SMALL_MAP_SOURCE)])
         self.__callEx('arenaData', arenaData)
         return
 

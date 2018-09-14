@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortBuildingProcessWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortBuildingProcessWindowMeta(DAAPIModule):
+class FortBuildingProcessWindowMeta(AbstractWindowView):
 
     def requestBuildingInfo(self, uid):
         self._printOverrideError('requestBuildingInfo')

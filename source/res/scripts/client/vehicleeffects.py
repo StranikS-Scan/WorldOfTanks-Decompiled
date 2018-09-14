@@ -8,9 +8,10 @@ import math
 from constants import VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_CODEPOINT_WARNING, LOG_WARNING, LOG_ERROR
 from items import _xml
-from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
+import items.vehicles
 import material_kinds
 from functools import partial
+from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 
 class TankComponentNames():
     CHASSIS = 'chassis'
@@ -258,12 +259,15 @@ class RangeTable(object):
 
     def lookup(self, point, defaultValue = None):
         foundValue = defaultValue
-        for leftBound, value in zip(self.keys, self.values):
+        idx = -1
+        for leftBound in self.keys:
             if point < leftBound:
                 break
-            foundValue = value
+            idx += 1
 
-        return foundValue
+        if idx == -1 or len(self.values) <= idx:
+            return foundValue
+        return self.values[idx]
 
 
 class ExhaustEffectsDescriptor(object):
@@ -550,3 +554,21 @@ class DamageFromShotDecoder(object):
          int(segment & 255),
          segStart - offset,
          segEnd + offset)
+
+
+class RepaintParams(object):
+
+    @staticmethod
+    def getRepaintParams(vehicleDescr):
+        tintGroups = items.vehicles.g_cache.customization(vehicleDescr.type.customizationNationID)['tintGroups']
+        for i in tintGroups.keys():
+            grp = tintGroups[i]
+            repaintReplaceColor = Math.Vector4(grp.x, grp.y, grp.z, 0.0) / 255.0
+
+        refColor = vehicleDescr.type.repaintParameters['refColor'] / 255.0
+        repaintReferenceGloss = vehicleDescr.type.repaintParameters['refGloss'] / 255.0
+        repaintColorRangeScale = vehicleDescr.type.repaintParameters['refColorMult']
+        repaintGlossRangeScale = vehicleDescr.type.repaintParameters['refGlossMult']
+        repaintReferenceColor = Math.Vector4(refColor.x, refColor.y, refColor.z, repaintReferenceGloss)
+        repaintReplaceColor.w = repaintColorRangeScale
+        return (repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale)

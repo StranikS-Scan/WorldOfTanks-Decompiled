@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/tutorial/__init__.py
 import weakref
 import BigWorld
+import Event
 from tutorial import doc_loader
 from tutorial.control import setTutorialProxy, clearTutorialProxy
 from tutorial.control import states, summary
@@ -9,6 +10,7 @@ from tutorial.control.context import GlobalStorage
 from tutorial.data import chapter
 from tutorial.logger import LOG_WARNING, LOG_ERROR, LOG_DEBUG, LOG_MEMORY
 from tutorial.settings import TUTORIAL_SETTINGS, TUTORIAL_STOP_REASON
+from tutorial.settings import createTutorialElement
 
 class INITIAL_FLAG(object):
     GUI_LOADED = 1
@@ -18,17 +20,17 @@ class INITIAL_FLAG(object):
 
 class Tutorial(object):
 
-    def __init__(self, settings):
+    def __init__(self, settings, descriptor):
         super(Tutorial, self).__init__()
         self._cache = None
         self.__callbackID = None
         self._currentChapter = None
         self._currentState = None
         self._settings = settings
-        self._ctrlFactory = TUTORIAL_SETTINGS.factory(settings.ctrl)
-        self._descriptor = doc_loader.loadDescriptorData(settings.descriptorPath, settings.exParsers)
+        self._ctrlFactory = createTutorialElement(settings.ctrl)
+        self._descriptor = descriptor
         self._data = None
-        self._tutorialStopped = True
+        self._stopped = True
         self._nextChapter = False
         self._nextScene = None
         self._funcScene = None
@@ -40,43 +42,53 @@ class Tutorial(object):
         self._bonuses = None
         self._sound = None
         self._initialized = 0
+        self._triggeredEffects = set()
+        self.onStarted = Event.Event()
+        self.onStopped = Event.Event()
         return
 
     def __del__(self):
         pass
 
-    def run(self, ctx):
+    def isStopped(self):
+        return self._stopped
+
+    def run(self, dispatcher, ctx):
         self._cache = ctx.cache
         if self._cache is None:
             LOG_ERROR('Cache is not init.')
-            return
+            return False
         else:
             self._bonuses = self._ctrlFactory.createBonuses(ctx.bonusCompleted)
             self._sound = self._ctrlFactory.createSoundPlayer()
-            if not self._tutorialStopped:
+            GlobalStorage.setFlags(ctx.globalFlags)
+            if not self._stopped:
                 LOG_ERROR('Tutorial is already running.')
-                return
-            self._gui = TUTORIAL_SETTINGS.factory(self._settings.gui)
+                return False
+            self._gui = createTutorialElement(self._settings.gui)
+            self._gui.setDispatcher(dispatcher)
             self._gui.onGUILoaded += self.__onGUILoaded
             if not self._gui.init():
                 self._gui.onGUILoaded -= self.__onGUILoaded
+                self._gui.setDispatcher(None)
                 LOG_ERROR('GUI can not init. Tutorial is stopping.')
-                return
+                return False
             LOG_DEBUG('Start training', ctx)
-            self._tutorialStopped = False
+            self._stopped = False
             proxy = weakref.proxy(self)
             setTutorialProxy(proxy)
-            if self.__resolveInitialChapter():
-                self._gui.setPlayerXPLevel(self._cache.getPlayerXPLevel())
-                self._gui.setTrainingRunMode()
+            if self.__resolveInitialChapter(ctx):
                 self._gui.loadConfig(self._descriptor.getGuiFilePath())
-                self._gui.onMouseClicked += self.__onMouseClicked
+                self._gui.onGUIInput += self.__onGUIInput
                 self._gui.onPageChanging += self.__onPageChanging
+                self._gui.onItemFound += self.__onItemFound
+                self._gui.onItemLost += self.__onItemLost
                 self.__tryRunFirstState(INITIAL_FLAG.CHAPTER_RESOLVED)
-            return
+            self.onStarted()
+            return True
 
     def stop(self, finished = False, reason = TUTORIAL_STOP_REASON.DEFAULT):
-        if self._tutorialStopped:
+        if self._stopped:
             return
         else:
             if self.__callbackID is not None:
@@ -102,47 +114,23 @@ class Tutorial(object):
             clearTutorialProxy()
             self.removeEffectsInQueue()
             self._nextChapter = False
-            self._tutorialStopped = True
+            self._stopped = True
             self._initialized = 0
+            self._triggeredEffects.clear()
+            self.onStopped()
             return
 
     def refuse(self):
-        title = self._data.getTitle()
-        description = self._data.getDescription(afterBattle=self._cache.isAfterBattle())
         self._cache.setRefused(True).write()
-        level = self._cache.getPlayerXPLevel()
         self.stop(reason=TUTORIAL_STOP_REASON.PLAYER_ACTION)
-        dispatcher = TUTORIAL_SETTINGS.getClass(self._settings.gui).getDispatcher()
-        if dispatcher is not None:
-            dispatcher.setPlayerXPLevel(level)
-            dispatcher.setTrainingRestartMode()
-            dispatcher.setChapterInfo(title, description)
-        return
 
-    def pause(self, ctx):
-        self._cache = ctx.cache
-        if self._cache is None:
-            LOG_ERROR('Cache is not init.')
-            return
-        else:
-            self._bonuses = self._ctrlFactory.createBonuses(ctx.bonusCompleted)
-            if self.__resolveInitialChapter():
-                chapter = self._descriptor.getChapter(self._currentChapter)
-                dispatcher = TUTORIAL_SETTINGS.getClass(self._settings.gui).getDispatcher()
-                if dispatcher is not None:
-                    dispatcher.setPlayerXPLevel(self._cache.getPlayerXPLevel())
-                    dispatcher.setTrainingRestartMode()
-                    dispatcher.setChapterInfo(chapter.getTitle(), chapter.getDescription(afterBattle=self._cache.isAfterBattle()))
-            self._cache = None
-            return
-
-    def restart(self, ctx):
+    def restart(self, dispatcher, ctx):
         if ctx.cache:
             ctx.cache.setRefused(False)
-        self.run(ctx)
+        self.run(dispatcher, ctx)
 
     def reload(self, afterBattle = False):
-        if not self._tutorialStopped:
+        if not self._stopped:
             self._funcScene.reload()
             self._sound.stop()
             self._cache.setAfterBattle(afterBattle).write()
@@ -153,47 +141,6 @@ class Tutorial(object):
         else:
             LOG_ERROR('Tutorial is not running.')
 
-    def __timeLoop(self):
-        self.__callbackID = None
-        if not self._tutorialStopped:
-            self._tick()
-            self.__callbackID = BigWorld.callback(0.1, self.__timeLoop)
-        return
-
-    def _tick(self):
-        if not self._nextChapter:
-            self._currentState._tick()
-        else:
-            self.loadCurrentChapter()
-
-    def __resolveInitialChapter(self):
-        self._currentChapter = None
-        bonusCompleted = self._bonuses.getCompleted()
-        fromCache = self._cache.currentChapter()
-        if fromCache is not None and self._settings.findChapterInCache:
-            chapter = self._descriptor.getChapter(fromCache)
-            if self._descriptor.isChapterInitial(chapter, bonusCompleted):
-                self._currentChapter = fromCache
-            else:
-                self._cache.clearChapterData()
-                LOG_WARNING('Initial chapter not found in cache or bonuses is invalid', fromCache, chapter.getBonusID() if chapter is not None else None, bonusCompleted)
-        if self._currentChapter is None:
-            self._currentChapter = self._descriptor.getInitialChapterID(completed=bonusCompleted)
-        if self._currentChapter is None:
-            LOG_ERROR('Initial chapter not found. Tutorial is stopping')
-            self.stop(reason=TUTORIAL_STOP_REASON.CRITICAL_ERROR)
-            return False
-        else:
-            return True
-
-    def __tryRunFirstState(self, nextFlag):
-        self._initialized |= nextFlag
-        if self._initialized == INITIAL_FLAG.INITIALIZED:
-            self._currentState = states.TutorialStateLoading()
-            self._currentState._tick()
-            self.loadCurrentChapter(initial=True)
-            self.__timeLoop()
-
     def loadCurrentChapter(self, initial = False):
         afterBattle = self._cache.isAfterBattle()
         LOG_DEBUG('Chapter is loading', self._currentChapter, afterBattle)
@@ -201,7 +148,7 @@ class Tutorial(object):
         if self._data is not None:
             self._data.clear()
         chapter = self._descriptor.getChapter(self._currentChapter)
-        self._data = doc_loader.loadChapterData(chapter, afterBattle=afterBattle, initial=initial)
+        self._data = doc_loader.loadChapterData(chapter, self._settings.chapterParser, afterBattle=afterBattle, initial=initial)
         if self._data is None:
             LOG_ERROR('Chapter documentation is not valid. Tutorial is stopping', self._currentChapter)
             self._gui.hideWaiting('chapter-loading')
@@ -264,6 +211,30 @@ class Tutorial(object):
     def removeEffectsInQueue(self):
         self._effectsQueue = []
 
+    def getSettings(self):
+        return self._settings
+
+    def getID(self):
+        return self._settings.id
+
+    def getDescriptor(self):
+        return self._descriptor
+
+    def getBonuses(self):
+        return self._bonuses
+
+    def getCache(self):
+        return self._cache
+
+    def getChapterData(self):
+        return self._data
+
+    def getSoundPlayer(self):
+        return self._sound
+
+    def getGUIProxy(self):
+        return self._gui
+
     def getFlags(self):
         return self._flags
 
@@ -273,7 +244,7 @@ class Tutorial(object):
     def invalidateFlags(self):
         self._funcInfo.invalidate()
         if self._funcScene is not None:
-            self._funcScene._sceneToBeUpdated = True
+            self._funcScene.invalidate()
         return
 
     def goToNextChapter(self, chapterID):
@@ -282,8 +253,8 @@ class Tutorial(object):
         self._currentChapter = chapterID
         self._nextChapter = True
 
-    def getNextScene(self):
-        return self._nextScene
+    def getNextScene(self, sceneID):
+        return (self._nextScene, self._data.isInScene(self._nextScene, sceneID))
 
     def getFunctionalScene(self):
         return self._funcScene
@@ -295,17 +266,64 @@ class Tutorial(object):
         self._funcScene.enter()
         return
 
-    def setDispatcher(self, dispatcher):
-        TUTORIAL_SETTINGS.getClass(self._settings.gui).setDispatcher(dispatcher)
+    def isEffectTriggered(self, effectID):
+        return effectID in self._triggeredEffects
+
+    def setEffectTriggered(self, effectID):
+        self._triggeredEffects.add(effectID)
+
+    def __timeLoop(self):
+        self.__callbackID = None
+        if not self._stopped:
+            self.__tick()
+            self.__callbackID = BigWorld.callback(0.1, self.__timeLoop)
+        return
+
+    def __tick(self):
+        if not self._nextChapter:
+            self._currentState.tick()
+        else:
+            self.loadCurrentChapter()
+
+    def __resolveInitialChapter(self, ctx):
+        self._currentChapter = None
+        if ctx.initialChapter is not None:
+            self._currentChapter = ctx.initialChapter
+            return True
+        completed = self._bonuses.getCompleted()
+        fromCache = self._cache.currentChapter()
+        if fromCache is not None and self._settings.findChapterInCache:
+            chapter = self._descriptor.getChapter(fromCache)
+            if self._descriptor.isChapterInitial(chapter, completed):
+                self._currentChapter = fromCache
+            else:
+                self._cache.clearChapterData()
+                LOG_WARNING('Initial chapter not found in cache or bonuses is invalid', fromCache, chapter.getBonusID() if chapter is not None else None, completed)
+        if self._currentChapter is None:
+            self._currentChapter = self._descriptor.getInitialChapterID(completed=completed)
+        if self._currentChapter is None:
+            LOG_ERROR('Initial chapter not found. Tutorial is stopping')
+            self.stop(reason=TUTORIAL_STOP_REASON.CRITICAL_ERROR)
+            return False
+        else:
+            return True
+
+    def __tryRunFirstState(self, nextFlag):
+        self._initialized |= nextFlag
+        if self._initialized == INITIAL_FLAG.INITIALIZED:
+            self._currentState = states.TutorialStateLoading()
+            self._currentState.tick()
+            self.loadCurrentChapter(initial=True)
+            self.__timeLoop()
 
     def __onGUILoaded(self):
         self.__tryRunFirstState(INITIAL_FLAG.GUI_LOADED)
 
-    def __onMouseClicked(self, event):
-        self._currentState.mouseClicked(event)
+    def __onGUIInput(self, event):
+        self._currentState.setInput(event)
 
     def __onPageChanging(self, sceneID):
-        if self._nextScene.getID() == sceneID:
+        if self._data.isInScene(self._nextScene, sceneID):
             return
         else:
             scene = self._data.getScene(sceneID)
@@ -315,3 +333,13 @@ class Tutorial(object):
             self._nextScene = scene
             self.setState(states.STATE_WAIT_SCENE)
             return
+
+    def __onItemFound(self, itemID):
+        if self._funcScene is not None:
+            self._funcScene.addItemOnScene(itemID)
+        return
+
+    def __onItemLost(self, itemID):
+        if self._funcScene is not None:
+            self._funcScene.removeItemFromScene(itemID)
+        return

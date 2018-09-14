@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StaticFormationLadderViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class StaticFormationLadderViewMeta(DAAPIModule):
+class StaticFormationLadderViewMeta(BaseDAAPIComponent):
 
     def showFormationProfile(self, fromationId):
         self._printOverrideError('showFormationProfile')

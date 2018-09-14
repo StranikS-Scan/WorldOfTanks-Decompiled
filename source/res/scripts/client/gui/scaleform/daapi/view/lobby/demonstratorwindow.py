@@ -1,12 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/DemonstratorWindow.py
 import ArenaType
 from gui.Scaleform.daapi.view.meta.DemonstratorWindowMeta import DemonstratorWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.prb_control.context import PrebattleAction
 from gui.prb_control.dispatcher import g_prbLoader
 
-class DemonstratorWindow(View, AbstractWindowView, DemonstratorWindowMeta):
+class DemonstratorWindow(DemonstratorWindowMeta):
 
     def _populate(self):
         super(DemonstratorWindow, self)._populate()

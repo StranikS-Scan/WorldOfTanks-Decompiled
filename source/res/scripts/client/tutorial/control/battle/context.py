@@ -1,23 +1,15 @@
 # Embedded file name: scripts/client/tutorial/control/battle/context.py
-import BigWorld, FMOD
 from collections import namedtuple
 import struct
+import BigWorld
+import SoundGroups
 from constants import ARENA_GUI_TYPE
+from gui.battle_control import arena_info
 from tutorial.control import context
 from tutorial.control.context import ClientCtx, GlobalStorage
 from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
-import SoundGroups
-BATTLE_RECORDS = ['completed',
- 'failed',
- 'accCompleted',
- 'startedAt',
- 'chapterIdx']
-EXTENDED_BATTLE_RECORDS = ['playerTeam',
- 'winnerTeam',
- 'finishReason',
- 'vTypeCD',
- 'arenaTypeID',
- 'arenaUniqueID']
+BATTLE_RECORDS = ('completed', 'failed', 'accCompleted', 'startedAt', 'chapterIdx')
+EXTENDED_BATTLE_RECORDS = ('playerTeam', 'winnerTeam', 'finishReason', 'vTypeCD', 'arenaTypeID', 'arenaUniqueID')
 ALL_BATTLE_RECORDS = BATTLE_RECORDS + EXTENDED_BATTLE_RECORDS
 BATTLE_RECORDS_FORMAT = '3ifh'
 ALL_BATTLE_RECORDS_FORMAT = '3if4h2iQ'
@@ -148,24 +140,27 @@ class ExtendedBattleClientCtx(ClientCtx, namedtuple('ExtendedBattleClientCtx', A
         return ExtendedBattleClientCtx(**params)
 
     def makeRecord(self):
-        return struct.pack(ALL_BATTLE_RECORDS_FORMAT, *self)
+        try:
+            record = struct.pack(ALL_BATTLE_RECORDS_FORMAT, *self)
+        except struct.error as error:
+            LOG_ERROR('Can not pack client context', error.message, self)
+            record = ''
+
+        return record
 
 
 class BattleStartReqs(context.StartReqs):
 
     def isEnabled(self):
-        arena = getattr(BigWorld.player(), 'arena', None)
-        enabled = False
-        if arena is not None:
-            enabled = arena.guiType == ARENA_GUI_TYPE.TUTORIAL
-        return enabled
+        return arena_info.getArenaGuiType() == ARENA_GUI_TYPE.TUTORIAL
 
-    def process(self):
-        loader, ctx = self._flush()
+    def prepare(self, ctx):
         clientCtx = BattleClientCtx.fetch()
         ctx.bonusCompleted = clientCtx.completed
         GlobalStorage.clearVars()
-        loader._doRun(ctx)
+
+    def process(self, descriptor, ctx):
+        return True
 
 
 class BattleBonusesRequester(context.BonusesRequester):
@@ -188,7 +183,7 @@ class BattleBonusesRequester(context.BonusesRequester):
                 return
             LOG_DEBUG('Received bonus', bonusID)
             self._completed |= mask
-            self._gui.setTrainingProgress(self._tutorial._descriptor.getProgress(localCtx.completed))
+            self._gui.setTrainingProgress(self._descriptor.getProgress(localCtx.completed))
             return
 
 

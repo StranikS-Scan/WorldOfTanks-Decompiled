@@ -36,6 +36,8 @@ class FadingMessages(object):
                 return
         if key in self.__messages:
             self.__doShowMessage(key, args, extra)
+            return
+        LOG_DEBUG('Message was not processed', key, args, extra, postfix)
 
     def _addGameListeners(self):
         g_settingsCore.onSettingsChanged += self.__onSettingsChanged

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/SkillDropMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class SkillDropMeta(DAAPIModule):
+class SkillDropMeta(AbstractWindowView):
 
     def calcDropSkillsParams(self, tmanCompDescr, xpReuseFraction):
         self._printOverrideError('calcDropSkillsParams')

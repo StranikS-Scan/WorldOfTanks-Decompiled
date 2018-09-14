@@ -1,9 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/SystemMessageDialog.py
 from gui.Scaleform.daapi.view.meta.SystemMessageDialogMeta import SystemMessageDialogMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 
-class SystemMessageDialog(SystemMessageDialogMeta, AbstractWindowView, View):
+class SystemMessageDialog(SystemMessageDialogMeta):
 
     def __init__(self, meta, handler):
         super(SystemMessageDialog, self).__init__()

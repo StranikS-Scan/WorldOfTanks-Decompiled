@@ -10,14 +10,15 @@ from gui.Scaleform.daapi.view.lobby.customization.BaseTimedCustomizationInterfac
 from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
 from gui.Scaleform.daapi.view.lobby.customization.data_providers import InscriptionDataProvider, InscriptionRentalPackageDataProvider, InscriptionGroupsDataProvider
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.game_control import getRoamingCtrl
 from gui.shared.utils.HangarSpace import g_hangarSpace
+from gui.LobbyContext import g_lobbyContext
 from helpers import time_utils, i18n
 from items import vehicles
 
-class InscriptionInterface(BaseTimedCustomizationInterface, AppRef):
+class InscriptionInterface(BaseTimedCustomizationInterface):
     __metaclass__ = ABCMeta
 
     def __init__(self, name, nationId, type, position):
@@ -33,9 +34,11 @@ class InscriptionInterface(BaseTimedCustomizationInterface, AppRef):
         return super(InscriptionInterface, self).getCurrentItem()
 
     def isEnabled(self):
-        if self.app.varsManager.isInRoaming():
+        serverSettigns = g_lobbyContext.getServerSettings()
+        if serverSettigns is not None and serverSettigns.roaming.isInRoaming():
             return False
-        return self._isEnabled
+        else:
+            return self._isEnabled
 
     def locateCameraOnSlot(self):
         res = g_hangarSpace.space.locateCameraOnEmblem(not self.isTurret, 'inscription', self._position - self._positionShift, self.ZOOM_FACTOR)

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ConnectToSecureChannelWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ConnectToSecureChannelWindowMeta(DAAPIModule):
+class ConnectToSecureChannelWindowMeta(AbstractWindowView):
 
     def sendPassword(self, value):
         self._printOverrideError('sendPassword')

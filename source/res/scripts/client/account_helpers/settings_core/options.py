@@ -19,6 +19,7 @@ import Settings
 import SoundGroups
 import ArenaType
 from gui.GraphicsPresets import GraphicsPresets
+from gui.app_loader.decorators import sf_lobby
 from helpers import isPlayerAccount, isPlayerAvatar
 import nations
 import CommandMapping
@@ -41,13 +42,11 @@ from gui.shared.utils import graphics, sound, functions
 from gui.shared.utils.graphics import g_monitorSettings
 from gui.shared.utils.key_mapping import getScaleformKey, getBigworldKey, getBigworldNameFromKey
 from gui.Scaleform import VoiceChatInterface
-from gui.Scaleform.daapi import AppRef
 from gui.Scaleform.LogitechMonitor import LogitechMonitor
 from gui.battle_control import g_sessionProvider
 from ConnectionManager import connectionManager
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.shared.formatters import icons
-from gui.battle_control.arena_info import isEventBattle
 
 class APPLY_METHOD:
     NORMAL = 'normal'
@@ -417,6 +416,12 @@ class StorageAccountSetting(StorageDumpSetting):
         return AccountSettings.getSettingsDefault(self.settingName)
 
 
+class TutorialSetting(StorageDumpSetting):
+
+    def getDefaultValue(self):
+        return False
+
+
 class ExcludeInReplayAccountSetting(StorageAccountSetting):
 
     def getDumpValue(self):
@@ -617,17 +622,22 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
         return -1
 
 
-class VOIPSupportSetting(ReadOnlySetting, AppRef):
+class VOIPSupportSetting(ReadOnlySetting):
 
     def __init__(self):
         super(VOIPSupportSetting, self).__init__(self.__isSupported)
 
+    @sf_lobby
+    def app(self):
+        return None
+
     def __isVoiceChatReady(self):
         if g_sessionProvider.getCtx().isInBattle:
             return VoiceChatInterface.g_instance.ready
-        elif self.app is not None and self.app.voiceChatManager is not None:
-            return self.app.voiceChatManager.ready
         else:
+            app = self.app
+            if app is not None and app.voiceChatManager is not None:
+                return app.voiceChatManager.ready
             return False
             return
 
@@ -1510,10 +1520,8 @@ class FOVSetting(RegularSetting):
         super(FOVSetting, self).__init__(settingName, isPreview)
         self.__static = StaticFOVSetting(isPreview)
         self.__dynamic = DynamicFOVSetting(isPreview)
-        self.__multiplier = DynamicFOVMultiplierSetting(isPreview)
         self.__storage = weakref.proxy(storage)
         self.__storage.proxyFOV(self)
-        self.__storage.proxyMultiplier(self.__multiplier)
 
     def _get(self):
         return (self.__static.get(),) + tuple(self.__dynamic.get())
@@ -1612,10 +1620,14 @@ class BackDraftInversionSetting(StorageControlSetting, StorageAccountSetting):
             BigWorld.player().invRotationOnBackMovement = value
 
 
-class KeyboardSetting(StorageControlSetting, AppRef):
+class KeyboardSetting(StorageControlSetting):
 
     def __init__(self, cmd, storage):
         super(KeyboardSetting, self).__init__(cmd, storage)
+
+    @sf_lobby
+    def app(self):
+        return None
 
     def _getDefault(self):
         command = CommandMapping.g_instance.getCommand(self.settingName)
@@ -1774,7 +1786,7 @@ class FPSPerfomancerSetting(StorageDumpSetting):
             LOG_CURRENT_EXCEPTION()
 
 
-class AltVoicesSetting(StorageDumpSetting, AppRef):
+class AltVoicesSetting(StorageDumpSetting):
     ALT_VOICES_PREVIEW = itertools.cycle(('sound_mode_preview01', 'sound_mode_preview02', 'sound_mode_preview03'))
     DEFAULT_IDX = 0
     PREVIEW_SOUNDS_COUNT = 3
@@ -1792,6 +1804,10 @@ class AltVoicesSetting(StorageDumpSetting, AppRef):
          self.SOUND_MODE_TYPE.REGULAR: self.__applyRegularMode,
          self.SOUND_MODE_TYPE.NATIONAL: self.__applyNationalMode}
         return
+
+    @sf_lobby
+    def app(self):
+        return None
 
     def playPreviewSound(self, soundMgr = None):
         if self.isSoundModeValid():
@@ -1940,18 +1956,20 @@ class ReplaySetting(StorageAccountSetting):
         return [ settingsKey % (self.settingName, type) for type in self.REPLAY_TYPES ]
 
     def setSystemValue(self, value):
-        if isPlayerAvatar() and isEventBattle():
-            value = 0
         BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
 
 
-class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
+class InterfaceScaleSetting(UserPrefsFloatSetting):
 
     def __init__(self, sectionName = None, isPreview = False):
         super(InterfaceScaleSetting, self).__init__(sectionName, isPreview)
         self.__interfaceScale = 0
         connectionManager.onDisconnected += self.onDisconnected
         connectionManager.onConnected += self.onConnected
+
+    @sf_lobby
+    def app(self):
+        return None
 
     def get(self):
         self.__checkAndCorrectScaleValue(self.__interfaceScale)
@@ -1963,10 +1981,11 @@ class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
     def setSystemValue(self, value):
         self.__interfaceScale = value
         scale = g_settingsCore.interfaceScale.getScaleByIndex(value)
-        if self.app is not None:
+        app = self.app
+        if app is not None:
             params = list(GUI.screenResolution()[:2])
             params.append(scale)
-            self.app.updateStage(*params)
+            app.updateStage(*params)
         g_monitorSettings.setGlyphCache(scale)
         return
 

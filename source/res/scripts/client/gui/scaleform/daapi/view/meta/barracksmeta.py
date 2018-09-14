@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BarracksMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class BarracksMeta(DAAPIModule):
+class BarracksMeta(View):
 
     def invalidateTanksList(self):
         self._printOverrideError('invalidateTanksList')

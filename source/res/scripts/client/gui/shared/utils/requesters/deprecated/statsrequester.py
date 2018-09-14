@@ -164,8 +164,8 @@ class StatsRequester(object):
 
     @async
     @responseIfNotAccount(False)
-    def upgradeToPremium(self, days, callback):
-        BigWorld.player().stats.upgradeToPremium(days, self.__response)
+    def upgradeToPremium(self, days, arenaUniqueID, callback):
+        BigWorld.player().stats.upgradeToPremium(days, arenaUniqueID, self.__response)
 
     @async
     @responseIfNotAccount(False)
@@ -268,34 +268,9 @@ class StatsRequester(object):
         BigWorld.player().stats.get('clanDBID', self.__valueResponse)
 
     @async
-    @responseIfNotAccount((0, ''))
-    def ebankGetBalance(self, callback):
-        BigWorld.player().ebankGetBalance(lambda code, errStr, props: self.__callback((props.get('vcoinBalance', 0), errStr)))
-
-    @async
-    @responseIfNotAccount((0, ''))
-    def ebankBuyGold(self, vcoin, callback):
-        BigWorld.player().ebankBuyGold(vcoin, lambda code, errStr, props: self.__callback((code >= 0, errStr)))
-
-    @async
-    @responseIfNotAccount(1)
-    def ebankGetExchangeRate(self, callback):
-        BigWorld.player().shop.ebankVCoinExchangeRate(self.__valueResponse)
-
-    @async
     @responseIfNotAccount(dict())
     def setAndFillLayouts(self, vehInvID, shellsLayout, eqsLayout, callback):
         BigWorld.player().inventory.setAndFillLayouts(vehInvID, shellsLayout, eqsLayout, lambda resID, errStr, value: self.__callback((resID, errStr, value)))
-
-    @async
-    @responseIfNotAccount(50)
-    def ebankGetMinTransactionValue(self, callback):
-        BigWorld.player().shop.ebankMinTransactionValue(self.__valueResponse)
-
-    @async
-    @responseIfNotAccount(500000)
-    def ebankGetMaxTransactionValue(self, callback):
-        BigWorld.player().shop.ebankMaxTransactionValue(self.__valueResponse)
 
     @async
     @responseIfNotAccount(dict())

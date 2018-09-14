@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ToolTipMgrMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class ToolTipMgrMeta(DAAPIModule):
+class ToolTipMgrMeta(BaseDAAPIModule):
 
     def onCreateComplexTooltip(self, tooltipId, stateType):
         self._printOverrideError('onCreateComplexTooltip')

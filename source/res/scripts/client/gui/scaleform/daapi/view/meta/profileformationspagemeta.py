@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileFormationsPageMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 
-class ProfileFormationsPageMeta(DAAPIModule):
+class ProfileFormationsPageMeta(ProfileSection):
 
     def showFort(self):
         self._printOverrideError('showFort')

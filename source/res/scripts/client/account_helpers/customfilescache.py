@@ -247,7 +247,7 @@ class WorkerThread(threading.Thread):
                 file = db[name]
             _LOG_EXECUTING_TIME(startTime, '__run_read')
         except Exception as e:
-            LOG_ERROR("Client couldn't read file.", e, name)
+            LOG_WARNING("Client couldn't read file.", e, name)
 
         callback(file, None, None)
         return

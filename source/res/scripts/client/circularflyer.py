@@ -4,6 +4,7 @@ import Math
 from Math import Matrix, Vector3
 import math
 from debug_utils import LOG_CURRENT_EXCEPTION
+import FMOD
 import SoundGroups
 
 class CircularFlyer(BigWorld.UserDataObject):

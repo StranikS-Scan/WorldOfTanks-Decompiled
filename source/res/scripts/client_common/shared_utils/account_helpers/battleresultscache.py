@@ -51,9 +51,7 @@ class BattleResultsCache(object):
                 callback(errorCode, results)
             return
         else:
-            self.__waiting = True
-            proxy = partial(self.__onGetResponse, callback, resultsSubUrl)
-            self.__account._doCmdStr(AccountCommands.CMD_REQ_BATTLE_RESULTS_URL, resultsSubUrl, proxy)
+            raise NotImplementedError
             return
 
     def __checkErrorsAndGetFromCache(self, arenaUniqueID, uniqueFolderName):
@@ -153,23 +151,30 @@ def clean():
 
 
 def convertToFullForm(compactForm):
-    arenaUniqueID, fullResultsList, pickled, uniqueSubUrl = compactForm
+    arenaUniqueID, avatarResults, fullResultsList, pickled = compactForm
     fullResultsList = cPickle.loads(zlib.decompress(fullResultsList))
+    avatarResults = cPickle.loads(zlib.decompress(avatarResults))
     personal = {}
     fullForm = {'arenaUniqueID': arenaUniqueID,
      'personal': personal,
      'common': {},
      'players': {},
      'vehicles': {},
-     'uniqueSubUrl': uniqueSubUrl}
+     'avatars': {}}
+    personal['avatar'] = avatarResults = AVATAR_FULL_RESULTS.unpack(avatarResults)
     for vehTypeCompDescr, ownResults in fullResultsList.iteritems():
         vehPersonal = personal[vehTypeCompDescr] = VEH_FULL_RESULTS.unpack(ownResults)
         vehPersonal['details'] = VehicleInteractionDetails.fromPacked(vehPersonal['details']).toDict()
+        vehPersonal['isPrematureLeave'] = avatarResults['isPrematureLeave']
+        vehPersonal['fairplayViolations'] = avatarResults['fairplayViolations']
 
-    commonAsList, playersAsList, vehiclesAsList = cPickle.loads(zlib.decompress(pickled))
+    commonAsList, playersAsList, vehiclesAsList, avatarsAsList = cPickle.loads(zlib.decompress(pickled))
     fullForm['common'] = COMMON_RESULTS.unpack(commonAsList)
     for accountDBID, playerAsList in playersAsList.iteritems():
         fullForm['players'][accountDBID] = PLAYER_INFO.unpack(playerAsList)
+
+    for accountDBID, avatarAsList in avatarsAsList.iteritems():
+        fullForm['avatars'][accountDBID] = AVATAR_PUBLIC_RESULTS.unpack(avatarAsList)
 
     for vehicleID, vehiclesInfo in vehiclesAsList.iteritems():
         fullForm['vehicles'][vehicleID] = []

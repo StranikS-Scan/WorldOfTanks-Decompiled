@@ -167,14 +167,14 @@ class ResourcePointsPlugin(IPlugin):
         self._parentObj.movie.loadResourcePointsPanel()
 
     def stop(self):
+        self.__cancelUpdateCallback()
+        self.__cancelFreezeCallback()
         if self.__resourceIndicator is not None:
             self.__resourceIndicator.destroy()
             self.__resourceIndicator = None
         if self.__resourcePointsPanel is not None:
             self.__resourcePointsPanel.destroy()
             self.__resourcePointsPanel = None
-        self.__cancelUpdateCallback()
-        self.__cancelFreezeCallback()
         super(ResourcePointsPlugin, self).stop()
         return
 
@@ -203,8 +203,10 @@ class ResourcePointsPlugin(IPlugin):
         return
 
     def __update(self):
-        self.__resourcePointsPanel.update()
+        if self.__resourcePointsPanel is not None:
+            self.__resourcePointsPanel.update()
         self.__initUpdateCallback()
+        return
 
     def __initFreezeCallback(self):
         self.__freezeCallbackID = BigWorld.callback(1.0, self.__updateFreeze)
@@ -222,7 +224,8 @@ class ResourcePointsPlugin(IPlugin):
         else:
             timeDelta = 0
         timeStr = time_utils.getTimeLeftFormat(timeDelta)
-        self.__resourceIndicator.setFreeze(True, timeStr)
+        if self.__resourceIndicator is not None:
+            self.__resourceIndicator.setFreeze(True, timeStr)
         self.__initFreezeCallback()
         return
 
@@ -242,11 +245,14 @@ class ResourcePointsPlugin(IPlugin):
     def __onOwnVehicleInside(self, pointID):
         self.__cancelFreezeCallback()
         if pointID is None:
-            self.__resourceIndicator.setFreeze(False, '')
-            self.__resourceIndicator.hide()
+            if self.__resourceIndicator is not None:
+                self.__resourceIndicator.setFreeze(False, '')
+                self.__resourceIndicator.hide()
         else:
-            self.__resourcePointsPanel.update()
-            self.__resourceIndicator.show(pointID)
+            if self.__resourcePointsPanel is not None:
+                self.__resourcePointsPanel.update()
+            if self.__resourceIndicator is not None:
+                self.__resourceIndicator.show(pointID)
             if g_ctfManager.getResourcePointLock() is not None:
                 self.__updateFreeze()
         return
@@ -255,6 +261,6 @@ class ResourcePointsPlugin(IPlugin):
         self.__cancelFreezeCallback()
         if unlockTime is not None:
             self.__updateFreeze()
-        else:
+        elif self.__resourceIndicator is not None:
             self.__resourceIndicator.setFreeze(False, '')
         return

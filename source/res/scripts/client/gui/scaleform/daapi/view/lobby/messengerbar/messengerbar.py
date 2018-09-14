@@ -1,12 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/MessengerBar.py
 from gui.Scaleform.daapi.view.meta.MessengerBarMeta import MessengerBarMeta
-from gui.Scaleform.framework import AppRef, ViewTypes, g_entitiesFactories
+from gui.Scaleform.framework import ViewTypes, g_entitiesFactories
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 
-class MessengerBar(MessengerBarMeta, AppRef):
+class MessengerBar(MessengerBarMeta):
 
     def __init__(self):
         super(MessengerBar, self).__init__()

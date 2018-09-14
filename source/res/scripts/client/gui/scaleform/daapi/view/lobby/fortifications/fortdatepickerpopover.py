@@ -5,15 +5,13 @@ from ClientFortifiedRegion import ATTACK_PLAN_RESULT
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.daapi.view.meta.FortDatePickerPopoverMeta import FortDatePickerPopoverMeta
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
-class FortDatePickerPopover(View, FortDatePickerPopoverMeta, SmartPopOverView, FortViewHelper):
+class FortDatePickerPopover(FortDatePickerPopoverMeta, FortViewHelper):
 
     class TIME_LIMITS:
         LOW = FORTIFICATION_ALIASES.ACTIVE_EVENTS_PAST_LIMIT * time_utils.ONE_DAY

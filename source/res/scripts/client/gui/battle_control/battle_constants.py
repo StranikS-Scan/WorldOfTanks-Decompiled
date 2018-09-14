@@ -27,8 +27,11 @@ class VEHICLE_VIEW_STATE(object):
     CRUISE_MODE = 128
     REPAIRING = 256
     PLAYER_INFO = 512
-    RESPAWNING = 1024
-    SWITCHING = 2048
+    SHOW_DESTROY_TIMER = 1024
+    HIDE_DESTROY_TIMER = 2048
+    OBSERVED_BY_ENEMY = 4096
+    RESPAWNING = 8192
+    SWITCHING = 16384
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')
@@ -52,7 +55,7 @@ def makeExtraName(entityName):
     return ''.join([entityName, EXTRA_SUFFIX])
 
 
-PLAYER_ENTITY_NAME = Enumeration("Name of player's entity in the battle", [('ally', {'isFriend': True,
+PLAYER_GUI_PROPS = Enumeration('Gui properties for entity', [('ally', {'isFriend': True,
    'base': 'ally'}),
  ('teamKiller', {'isFriend': True,
    'base': 'ally'}),

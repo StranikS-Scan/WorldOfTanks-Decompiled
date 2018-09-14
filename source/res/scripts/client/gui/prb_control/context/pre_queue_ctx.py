@@ -3,7 +3,7 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.prb_control.context import PrbCtrlRequestCtx
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE, FUNCTIONAL_EXIT
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared import g_itemsCache
 from gui.server_events import g_eventsCache
@@ -35,27 +35,23 @@ class JoinRandomQueueCtx(_PreQueueRequestCtx):
         return g_currentVehicle.invID
 
 
-@ReprInjector.simple(('getVehicleInventoryID', 'vInvID'), ('getWaitingID', 'waitingID'))
+@ReprInjector.simple(('getVehicleInventoryIDs', 'vInvIDs'), ('getBattleType', 'battleType'), ('getGameplaysMask', 'gameplayMask'), ('getWaitingID', 'waitingID'))
 
 class JoinEventBattlesQueueCtx(_PreQueueRequestCtx):
+
+    def __init__(self, vehInvIDs, battleType, waitingID = ''):
+        super(JoinEventBattlesQueueCtx, self).__init__(waitingID=waitingID)
+        self.__vehInvIDs = vehInvIDs
+        self.__battleType = battleType
 
     def getRequestType(self):
         return REQUEST_TYPE.JOIN
 
-    def getVehicleInventoryID(self):
-        result = [g_currentVehicle.invID]
-        try:
-            eb = g_eventsCache.getEventBattles()
-            for vehIntCD in eb.vehicles:
-                invID = g_itemsCache.items.getItemByCD(vehIntCD).invID
-                if invID not in result:
-                    result.append(invID)
+    def getVehicleInventoryIDs(self):
+        return list(self.__vehInvIDs)
 
-        except:
-            LOG_ERROR('There is error while getting fallout vehicles')
-            LOG_CURRENT_EXCEPTION()
-
-        return result
+    def getBattleType(self):
+        return self.__battleType
 
 
 @ReprInjector.simple(('getVehicleInventoryID', 'vInvID'), ('getHistBattleID', 'histBattleID'), ('getIsCreditsAmmo', 'isCreditsAmmo'), ('getWaitingID', 'waitingID'))
@@ -84,8 +80,8 @@ class JoinHistoricalQueueCtx(_PreQueueRequestCtx):
 
 class JoinModeCtx(_PreQueueRequestCtx):
 
-    def __init__(self, queueType, waitingID = ''):
-        super(JoinModeCtx, self).__init__(waitingID=waitingID)
+    def __init__(self, queueType, funcExit = FUNCTIONAL_EXIT.NO_FUNC, waitingID = ''):
+        super(JoinModeCtx, self).__init__(funcExit=funcExit, waitingID=waitingID)
         self.__queueType = queueType
 
     def getQueueType(self):

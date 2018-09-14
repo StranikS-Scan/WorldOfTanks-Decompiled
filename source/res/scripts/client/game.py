@@ -97,6 +97,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
         clubs_settings.init()
         import potapov_quests
         potapov_quests.init()
+        import clubs_quests
+        clubs_quests.init()
         BigWorld.worldDrawEnabled(False)
         import LcdKeyboard
         LcdKeyboard.enableLcdKeyboardSpecificKeys(True)
@@ -455,10 +457,6 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'join': 'BigWorld.player().joinArena',
  'leave': 'BigWorld.player().leaveArena',
  'cv': 'import vehicles_check;vehicles_check.check',
- 'chat': 'from messenger.MessengerEntry import g_instance;g_instance',
- 'battleUI': 'from gui.WindowsManager import g_windowsManager; g_windowsManager.battleWindow',
- 'wm': 'from gui.WindowsManager import g_windowsManager; wm = g_windowsManager; wm',
- 'cm': 'from gui.WindowsManager import g_windowsManager; cm = g_windowsManager.window.containerManager; cm',
  'cls': "print '\\n' * 100",
  'items': 'from gui.shared import g_itemsCache, REQ_CRITERIA; items = g_itemsCache.items; items',
  'unlockAll': 'BigWorld.player().stats.unlockAll(lambda *args:None)',
@@ -525,3 +523,14 @@ def asyncore_call():
         LOG_CURRENT_EXCEPTION()
 
     BigWorld.callback(0.1, asyncore_call)
+
+
+g_scenarioPlayer = None
+
+def scenarioPlayer():
+    global g_scenarioPlayer
+    if g_scenarioPlayer is None:
+        sys.path.append('scripts/bot')
+        from client.ScenarioPlayer import ScenarioPlayerObject
+        g_scenarioPlayer = ScenarioPlayerObject
+    return g_scenarioPlayer

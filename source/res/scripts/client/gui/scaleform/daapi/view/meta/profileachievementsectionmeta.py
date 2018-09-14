@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileAchievementSectionMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 
-class ProfileAchievementSectionMeta(DAAPIModule):
+class ProfileAchievementSectionMeta(ProfileSection):
 
     def as_setRareAchievementDataS(self, data):
         if self._isDAAPIInited():

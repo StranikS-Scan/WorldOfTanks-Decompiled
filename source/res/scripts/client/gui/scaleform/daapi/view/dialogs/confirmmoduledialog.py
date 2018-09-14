@@ -3,15 +3,13 @@ from PlayerEvents import g_playerEvents
 from adisp import process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.ConfirmModuleWindowMeta import ConfirmModuleWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.shared import g_itemsCache
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO
 from gui.shared.utils.requesters import ItemsRequester
 from items import vehicles
 
-class ConfirmModuleDialog(View, ConfirmModuleWindowMeta, AbstractWindowView):
+class ConfirmModuleDialog(ConfirmModuleWindowMeta):
     """
     Basic implementation of window which provides operation with modules.
     """

@@ -3,13 +3,13 @@ import weakref
 from account_helpers.AccountSettings import AccountSettings
 from gui import DEPTH_OF_Aim
 from gui.Scaleform.Flash import Flash
+from gui.app_loader import g_appLoader
 from gui.battle_control import g_sessionProvider
 from helpers import i18n
 from helpers.aop import Aspect
 from tutorial.control.battle.functional import IDirectionIndicator
 from tutorial.control import g_tutorialWeaver
-from tutorial.gui import GUIProxy
-from tutorial.gui.Scaleform.battle import ScaleformLayout
+from tutorial.gui.Scaleform.battle.legacy import ScaleformLayout
 from tutorial.logger import LOG_CURRENT_EXCEPTION, LOG_MEMORY, LOG_ERROR
 
 class _DirectionIndicator(Flash, IDirectionIndicator):
@@ -106,14 +106,20 @@ def normalizePlayerName(pName):
 
 
 class BattleLayout(ScaleformLayout):
-    __dispatcher = None
+
+    def __init__(self, swf):
+        super(BattleLayout, self).__init__(swf)
+        self.__dispatcher = None
+        return
 
     def _resolveGuiRoot(self):
         proxy = None
         try:
-            window = GUIProxy.windowsManager().battleWindow
-            self._guiRef = weakref.ref(window)
-            proxy = window.proxy
+            app = g_appLoader.getDefBattleApp()
+            if not app:
+                return
+            proxy = weakref.proxy(app)
+            self._guiRef = weakref.ref(app)
             dispatcher = self.getDispatcher()
             if dispatcher is not None and proxy is not None:
                 dispatcher.populateUI(proxy)
@@ -142,12 +148,12 @@ class BattleLayout(ScaleformLayout):
         result = super(BattleLayout, self).init()
         if result:
             g_sessionProvider.getCtx().setNormalizePlayerName(normalizePlayerName)
-            g_tutorialWeaver.weave('gui.WindowsManager', 'WindowsManager', '^showBattle$', aspects=[ShowBattleAspect])
-            g_tutorialWeaver.weave('gui.Scaleform.Minimap', 'Minimap', '^getStoredMinimapSize|storeMinimapSize$', aspects=[MinimapDefaultSizeAspect(self.uiHolder)])
+            g_tutorialWeaver.weave('gui.app_loader', '_AppLoader', '^showBattle$', aspects=(ShowBattleAspect,))
+            g_tutorialWeaver.weave('gui.Scaleform.Minimap', 'Minimap', '^getStoredMinimapSize|storeMinimapSize$', aspects=(MinimapDefaultSizeAspect(self.uiHolder),))
         return result
 
     def show(self):
-        self.windowsManager().showBattle()
+        g_appLoader.showBattle()
 
     def clear(self):
         if self._guiRef is not None and self._guiRef() is not None:
@@ -172,20 +178,18 @@ class BattleLayout(ScaleformLayout):
 
     def getGuiRoot(self):
         try:
-            root = GUIProxy.windowsManager().battleWindow
+            root = g_appLoader.getDefBattleApp()
         except AttributeError:
             LOG_CURRENT_EXCEPTION()
             root = None
 
         return root
 
-    @classmethod
-    def setDispatcher(cls, dispatcher):
-        cls.__dispatcher = dispatcher
+    def setDispatcher(self, dispatcher):
+        self.__dispatcher = dispatcher
 
-    @classmethod
-    def getDispatcher(cls):
-        return cls.__dispatcher
+    def getDispatcher(self):
+        return self.__dispatcher
 
     def setTrainingPeriod(self, currentIdx, total):
         if self._movieView is not None:

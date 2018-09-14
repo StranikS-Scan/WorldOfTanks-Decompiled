@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleInfoMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class VehicleInfoMeta(DAAPIModule):
+class VehicleInfoMeta(AbstractWindowView):
 
     def getVehicleInfo(self):
         self._printOverrideError('getVehicleInfo')

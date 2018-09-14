@@ -1,10 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/managers/GlobalVarsManager.py
 import constants
+from gui.game_control import getRoamingCtrl, getWalletCtrl
 from helpers import getClientOverride
-from gui import GUI_SETTINGS, game_control, server_events
+from gui import GUI_SETTINGS, server_events
 from gui.shared import g_itemsCache
 from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
 from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
+from gui.LobbyContext import g_lobbyContext
 
 class GlobalVarsManager(GlobalVarsMgrMeta):
 
@@ -47,10 +49,14 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         return getClientOverride()
 
     def isRoamingEnabled(self):
-        return game_control.g_instance.roaming.isEnabled()
+        ctrl = getRoamingCtrl()
+        if ctrl:
+            return ctrl.isEnabled()
+        else:
+            return False
 
     def isInRoaming(self):
-        return game_control.g_instance.roaming.isInRoaming()
+        return g_lobbyContext.getServerSettings().roaming.isInRoaming()
 
     def isFortificationAvailable(self):
         return isFortificationEnabled()
@@ -59,7 +65,11 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         return isFortificationBattlesEnabled()
 
     def isWalletAvailable(self):
-        return game_control.g_instance.wallet.isAvailable
+        ctrl = getWalletCtrl()
+        if ctrl:
+            return ctrl.isAvailable
+        else:
+            return False
 
     def isShowLoginRssFeed(self):
         return GUI_SETTINGS.loginRssFeed.show

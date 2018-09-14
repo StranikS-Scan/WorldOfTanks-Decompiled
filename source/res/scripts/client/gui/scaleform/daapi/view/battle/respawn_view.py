@@ -1,11 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/respawn_view.py
 import BigWorld
 import constants
-from gui.battle_control.arena_info import getClientArena, hasResourcePoints, hasFlags
+from gui.battle_control.arena_info import getClientArena, hasResourcePoints
 from gui.battle_control.avatar_getter import getPlayerVehicleID
 from gui.shared.utils.plugins import IPlugin
 import nations
 from helpers import i18n, time_utils
+from gui import makeHtmlString
 from items.vehicles import VEHICLE_CLASS_TAGS
 from shared_utils import findFirst
 from gui.Scaleform.daapi.view.battle.meta.BattleRespawnViewMeta import BattleRespawnViewMeta
@@ -14,8 +15,11 @@ from gui.battle_control import g_sessionProvider
 from gui.shared.formatters.text_styles import standard, main, statInfo
 from gui.shared.gui_items.Vehicle import getIconPath
 from gui.Scaleform.daapi.view.fallout_info_panel_helper import getHelpText
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 _FLAG_ICON_TEMPLATE = '../maps/icons/battle/respawn/optimize_flags_160x100/%s.png'
-_VEHICLE_TYPE_TEMPLATE = '../maps/icons/battle/respawn/vehicleType/%s.png'
+_VEHICLE_TYPE_TEMPLATE = '../maps/icons/vehicleTypes/%s.png'
+_VEHICLE_TYPE_ELITE_TEMPLATE = '../maps/icons/vehicleTypes/elite/%s.png'
+_VEHICLE_LEVEL_TEMPLATE = '../maps/icons/levels/tank_level_%d.png'
 _CALLBACK_NAME = 'battle.onLoadRespawnView'
 _MUST_TOP_ELEMENTS = ('fragCorrelationBar', 'battleTimer', 'debugPanel')
 
@@ -25,16 +29,15 @@ class _BattleRespawnView(BattleRespawnViewMeta):
         super(_BattleRespawnView, self).__init__()
         self.__proxy = proxy
         self.__selectedVehicleID = None
+        self.__igrVehicleFormat = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {})
         return
 
     def start(self, vehsList):
         self._populate(self.__proxy.getMember('_level0.battleRespawnView').getInstance())
         slotsData = self.__getSlotsData(vehsList)
         generalData = self.__getGeneralData()
-        arenaDP = g_sessionProvider.getArenaDP()
-        playerVehID = getPlayerVehicleID()
-        isSquadPlayer = arenaDP.isSquadMan(playerVehID)
-        helpText = getHelpText(isSolo=not isSquadPlayer)
+        arenaType = BigWorld.player().arena.arenaType
+        helpText = getHelpText(arenaType)
         self.as_initializeS(generalData, slotsData, helpText)
 
     def destroy(self):
@@ -81,11 +84,14 @@ class _BattleRespawnView(BattleRespawnViewMeta):
         for v in vehsList:
             nationID, _ = v.type.id
             classTag = tuple(VEHICLE_CLASS_TAGS & v.type.tags)[0]
+            isElite = False
             result.append({'vehicleID': v.intCD,
-             'vehicleName': v.type.userString,
+             'vehicleName': self.__getVehicleName(v),
              'flagIcon': _FLAG_ICON_TEMPLATE % nations.NAMES[nationID],
              'vehicleIcon': getIconPath(v.type.name),
-             'vehicleType': _VEHICLE_TYPE_TEMPLATE % classTag})
+             'vehicleType': _VEHICLE_TYPE_ELITE_TEMPLATE % classTag if isElite else _VEHICLE_TYPE_TEMPLATE % classTag,
+             'isElite': isElite,
+             'vehicleLevel': _VEHICLE_LEVEL_TEMPLATE % v.type.level})
 
         return result
 
@@ -119,7 +125,16 @@ class _BattleRespawnView(BattleRespawnViewMeta):
 
     def __getSelectedVehicle(self, vehsList):
         selectedVehicle = self.__getVehicleByID(self.__selectedVehicleID, vehsList)
-        return main(i18n.makeString(INGAME_GUI.RESPAWNVIEW_NEXTVEHICLENAME)) + statInfo(selectedVehicle.type.userString)
+        vName = self.__getVehicleName(selectedVehicle)
+        return main(i18n.makeString(INGAME_GUI.RESPAWNVIEW_NEXTVEHICLENAME)) + statInfo(vName)
+
+    def __getVehicleName(self, vehile):
+        tags = vehile.type.tags
+        isIGR = bool(VEHICLE_TAGS.PREMIUM_IGR in tags)
+        vehicleName = vehile.type.shortUserString
+        if isIGR:
+            vehicleName = self.__igrVehicleFormat % {'vehicle': vehicleName}
+        return vehicleName
 
 
 class RespawnViewPlugin(IPlugin):

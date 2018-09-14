@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TrainingRoomMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class TrainingRoomMeta(DAAPIModule):
+class TrainingRoomMeta(View):
 
     def showTrainingSettings(self):
         self._printOverrideError('showTrainingSettings')

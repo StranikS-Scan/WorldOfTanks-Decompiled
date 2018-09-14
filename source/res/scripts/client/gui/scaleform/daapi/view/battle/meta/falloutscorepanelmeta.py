@@ -8,3 +8,6 @@ class FalloutScorePanelMeta(BattleComponentMeta):
 
     def as_setDataS(self, contextType, maxValue, playerScore, allyValue, enemyValue, playerName, enemyName, props):
         self._flashObject.as_setData(contextType, maxValue, playerScore, allyValue, enemyValue, playerName, enemyName, props)
+
+    def as_onSettingsChanged(self):
+        self._flashObject.as_onSettingsChanged()

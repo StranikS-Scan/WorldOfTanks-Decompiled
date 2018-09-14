@@ -41,12 +41,13 @@ def clearVehiclesData():
 
 class _NavigationInfo(object):
     PQInfo = namedtuple('PQInfo', 'tileID questID filters')
-    CommonInfo = namedtuple('CommonInfo', 'questID')
+    QuestInfo = namedtuple('CommonInfo', 'questID')
 
     def __init__(self):
         self.tabID = None
         self.potapov = self.PQInfo(None, None, None)
-        self.common = self.CommonInfo(None)
+        self.common = self.QuestInfo(None)
+        self.tutorial = self.QuestInfo(None)
         return
 
     def selectTab(self, tabID, doResetNavInfo = False):
@@ -67,6 +68,10 @@ class _NavigationInfo(object):
     def selectCommonQuest(self, questID):
         self.tabID = _QA.TAB_COMMON_QUESTS
         self.common = self.common._replace(questID=questID)
+
+    def selectTutorialQuest(self, questID):
+        self.tabID = _QA.TAB_BEGINNER_QUESTS
+        self.tutorial = self.tutorial._replace(questID=questID)
 
     @classmethod
     def __clearCache(cls, cacheTuple):

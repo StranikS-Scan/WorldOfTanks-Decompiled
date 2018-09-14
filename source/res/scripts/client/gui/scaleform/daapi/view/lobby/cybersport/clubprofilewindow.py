@@ -2,12 +2,10 @@
 import account_helpers
 from adisp import process
 from club_shared import RESTRICTION_REASONS_NAMES, RESTRICTION_REASONS
-from debug_utils import LOG_DEBUG
 from gui import makeHtmlString, SystemMessages
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.StaticFormationProfileWindowMeta import StaticFormationProfileWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.clubs import formatters as club_fmts
@@ -19,6 +17,7 @@ from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper
 from gui.shared.formatters import text_styles, icons
+from gui.game_control.battle_availability import isHourInForbiddenList
 from helpers import i18n
 DEFAULT_WINDOW_SIZE = {'width': 1006,
  'height': 596}
@@ -43,7 +42,7 @@ STATE_MAP = [(CYBER_SPORT_ALIASES.STATIC_FORMATION_SUMMARY_UI, CYBER_SPORT_ALIAS
  (CYBER_SPORT_ALIASES.STATIC_FORMATION_STATS_UI, CYBER_SPORT_ALIASES.STATIC_FORMATION_STATS_PY),
  (CYBER_SPORT_ALIASES.STATIC_FORMATION_LADDER_UI, CYBER_SPORT_ALIASES.STATIC_FORMATION_LADDER_PY)]
 
-class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowView, ClubListener, GlobalListener, ClubEmblemsHelper):
+class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalListener, ClubEmblemsHelper):
 
     def __init__(self, ctx = None):
         super(ClubProfileWindow, self).__init__()
@@ -125,6 +124,11 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
         if club:
             self.__updateActionButton(club)
 
+    def onStatusChanged(self):
+        club = self.clubsCtrl.getClub(self.__clubDbID)
+        if club:
+            self.__updateActionButton(club)
+
     def actionBtnClickHandler(self, action):
         if action == ACTIONS.JOIN_CLUB_UNIT:
             self.__joinClubUnit()
@@ -151,6 +155,7 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
             club = self.clubsCtrl.getClub(self.__clubDbID)
             if club is not None:
                 self.__initializeGui(club)
+            self.clubsCtrl.getAvailabilityCtrl().onStatusChanged += self.onStatusChanged
             return
 
     def _dispose(self):
@@ -158,6 +163,7 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
         self.stopGlobalListening()
         self.__clubDbID = None
         self.__viewToShow = None
+        self.clubsCtrl.getAvailabilityCtrl().onStatusChanged -= self.onStatusChanged
         super(ClubProfileWindow, self)._dispose()
         return
 
@@ -198,12 +204,17 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
 
     def __updateActionButton(self, club):
         labels, isEnableActionBtn, action = self.__getButtonInfo(club)
-        self.as_updateActionButtonS({'buttonLabel': labels[0],
+        data = {'buttonLabel': labels[0],
          'statusLbl': labels[1],
          'tooltipHeader': labels[2],
          'tooltipBody': labels[3],
          'action': action,
-         'enabled': isEnableActionBtn})
+         'enabled': isEnableActionBtn}
+        if isHourInForbiddenList(self.clubsCtrl.getAvailabilityCtrl().getForbiddenHours()):
+            data['statusLbl'] = '{0}{1}'.format(icons.alert(), text_styles.main(CYBERSPORT.LADDERREGULATIONS_WARNING))
+            data['isTooltipStatus'] = True
+            data['tooltipStatus'] = TOOLTIPS_CONSTANTS.LADDER_REGULATIONS
+        self.as_updateActionButtonS(data)
 
     def __getMemberBtnInfo(self, club):
         profile = self.clubsCtrl.getProfile()

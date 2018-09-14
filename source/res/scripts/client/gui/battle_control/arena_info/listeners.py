@@ -4,7 +4,6 @@ import operator
 import BigWorld
 from constants import ARENA_PERIOD
 from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_ERROR
-from gui.battle_control.arena_info import getClientArena
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
@@ -38,7 +37,7 @@ class _Listener(object):
             ref = self._controllers.pop()
             ctrl = ref()
             if ctrl:
-                ctrl.destroy()
+                ctrl.clear()
 
     def start(self, arena, **kwargs):
         self._arena = arena
@@ -144,7 +143,7 @@ class ArenaVehiclesListener(_Listener):
         flags, vo = self._dataProvider.updateVehicleInfo(vID, self._arena().vehicles[vID], self._arena().guiType)
         self._invokeListenersMethod('invalidateVehicleInfo', flags, vo, self._dataProvider)
 
-    def __arena_onVehicleKilled(self, victimID, killerID, reason):
+    def __arena_onVehicleKilled(self, victimID, *args):
         flags, vo = self._dataProvider.updateVehicleStatus(victimID, self._arena().vehicles[victimID])
         self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._dataProvider)
 

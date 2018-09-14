@@ -66,6 +66,7 @@ class ClientArena(object):
         self.onRespawnRandomVehicle = Event.Event(em)
         self.onRespawnResurrected = Event.Event(em)
         self.onInteractiveStats = Event.Event(em)
+        self.onVehicleWillRespawn = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
         if self.arenaType is None:
@@ -173,11 +174,11 @@ class ClientArena(object):
         self.onVehicleStatisticsUpdate(vehicleID)
 
     def __onVehicleKilled(self, argStr):
-        victimID, killerID, reason = cPickle.loads(argStr)
+        victimID, killerID, equipmentID, reason = cPickle.loads(argStr)
         vehInfo = self.__vehicles.get(victimID, None)
         if vehInfo is not None:
             vehInfo['isAlive'] = False
-            self.onVehicleKilled(victimID, killerID, reason)
+            self.onVehicleKilled(victimID, killerID, equipmentID, reason)
         return
 
     def __onAvatarReady(self, argStr):
@@ -205,12 +206,13 @@ class ClientArena(object):
         return
 
     def __onCombatEquipmentUsed(self, argStr):
-        equipmentID = cPickle.loads(argStr)
-        self.onCombatEquipmentUsed(equipmentID)
+        shooterID, equipmentID = cPickle.loads(argStr)
+        self.onCombatEquipmentUsed(shooterID, equipmentID)
 
     def __onRespawnAvailableVehicles(self, argStr):
         vehsList = cPickle.loads(zlib.decompress(argStr))
         self.onRespawnAvailableVehicles(vehsList)
+        LOG_TU('[RESPAWN] onRespawnAvailableVehicles', vehsList)
 
     def __onRespawnCooldowns(self, argStr):
         cooldowns = cPickle.loads(zlib.decompress(argStr))
@@ -227,6 +229,7 @@ class ClientArena(object):
     def __onDisappearVehicleBeforeRespawn(self, argStr):
         vehID = cPickle.loads(argStr)
         FalloutDestroyEffect.play(vehID)
+        self.onVehicleWillRespawn(vehID)
 
     def __onFlagTeamsReceived(self, argStr):
         data = cPickle.loads(argStr)

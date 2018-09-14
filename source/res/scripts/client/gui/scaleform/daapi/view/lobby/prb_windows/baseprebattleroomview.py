@@ -3,7 +3,7 @@ from CurrentVehicle import g_currentVehicle
 from adisp import process
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.BasePrebattleRoomViewMeta import BasePrebattleRoomViewMeta
-from gui.Scaleform.framework import AppRef, ViewTypes
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.context import prb_ctx
@@ -16,13 +16,13 @@ from helpers import int2roman
 from messenger import g_settings
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
 
-class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener, AppRef):
+class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener):
 
     def __init__(self, prbName = 'prebattle'):
         super(BasePrebattleRoomView, self).__init__()
@@ -144,9 +144,9 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener, AppRef):
         self.as_enableReadyBtnS(self.isReadyBtnEnabled())
 
     def _dispose(self):
-        super(BasePrebattleRoomView, self)._dispose()
         self.stopListening()
         self._closeSendInvitesWindow()
+        super(BasePrebattleRoomView, self)._dispose()
 
     def _closeSendInvitesWindow(self):
         container = self.app.containerManager.getContainer(ViewTypes.WINDOW)

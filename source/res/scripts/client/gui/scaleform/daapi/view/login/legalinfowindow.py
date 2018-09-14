@@ -1,12 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LegalInfoWindow.py
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.LegalInfoWindowMeta import LegalInfoWindowMeta
 from debug_utils import LOG_ERROR
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events
 
-class LegalInfoWindow(View, LegalInfoWindowMeta, AbstractWindowView):
+class LegalInfoWindow(LegalInfoWindowMeta):
 
     def __init__(self, ctx = None):
         super(LegalInfoWindow, self).__init__()

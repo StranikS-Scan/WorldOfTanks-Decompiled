@@ -62,8 +62,11 @@ class SearchDataProvider(DAAPIDataProvider, ISearchHandler):
 
 class SearchChannelsDataProvider(SearchDataProvider):
 
-    def __init__(self):
-        super(SearchChannelsDataProvider, self).__init__(SearchChannelsProcessor())
+    def __init__(self, searchProcessor = None):
+        if searchProcessor is None:
+            searchProcessor = SearchChannelsProcessor()
+        super(SearchChannelsDataProvider, self).__init__(searchProcessor)
+        return
 
     def buildList(self, result):
         self._list = []

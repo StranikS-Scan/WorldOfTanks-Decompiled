@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CalendarMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class CalendarMeta(DAAPIModule):
+class CalendarMeta(BaseDAAPIComponent):
 
     def onMonthChanged(self, rawDate):
         self._printOverrideError('onMonthChanged')

@@ -1,66 +1,26 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/TextManager.py
 from debug_utils import LOG_ERROR
-from gui import makeHtmlString
 from gui.Scaleform.framework.entities.abstract.TextManagerMeta import TextManagerMeta
-from gui.Scaleform.locale.MENU import MENU
-from helpers import time_utils, i18n
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES as _TMS
+from gui.shared.formatters import text_styles
 
 class TextManager(TextManagerMeta):
-    __reference = None
 
-    @classmethod
-    def setReference(cls, app):
-        cls.__reference = app
-
-    @classmethod
-    def clearReference(cls):
-        cls.__reference = None
-        return
-
-    @classmethod
-    def reference(cls):
-        return cls.__reference
-
-    @classmethod
-    def getText(self, style = 'mainText', message = ''):
-        text = makeHtmlString('html_templates:lobby/textStyle', style, {'message': str(message)})
-        return text
-
-    @classmethod
-    def getIcon(cls, style = None):
-        if style is None or style not in TextIcons.ICONS:
-            return
-        else:
-            iconRes = makeHtmlString('html_templates:lobby/iconText', style, {})
-            return iconRes
-
-    def getTimeDurationStr(self, seconds):
-        return time_utils.getTillTimeString(seconds, MENU.TIME_TIMEVALUE)
-
-    @classmethod
-    def concatStyles(cls, messages = None):
-        result = ''
-        style = ''
-        if messages is None:
-            return result
-        else:
-            for messageItem in messages:
-                length = len(messageItem)
-                if length == 1:
-                    item = messageItem[0]
-                    if item is not None and item in TextIcons.ICONS:
-                        style = cls.getIcon(messageItem[0])
-                    else:
-                        LOG_ERROR('not found icon source. ', messageItem)
-                elif length > 1:
-                    key, value = messageItem
-                    style = cls.getText(key, value)
-                result += style
-
-            return result
+    def __init__(self):
+        super(TextManager, self).__init__()
+        self.__styles = text_styles.getRawStyles([ v for k, v in _TMS.__dict__.iteritems() if not k.startswith('_') ])
 
     def getTextStyle(self, style):
-        return makeHtmlString('html_templates:lobby/textStyle', style)
+        if style in self.__styles:
+            result = self.__styles[style]
+        else:
+            LOG_ERROR('Style is not found', style)
+            result = ''
+        return result
+
+    def _dispose(self):
+        self.__styles.clear()
+        super(TextManager, self)._dispose()
 
 
 class TextIcons:

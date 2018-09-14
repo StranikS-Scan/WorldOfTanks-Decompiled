@@ -8,19 +8,15 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundControlle
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortTransportConfirmationWindowMeta import FortTransportConfirmationWindowMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
-from gui.shared.formatters import icons
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.shared.formatters import icons, text_styles, time_formatters
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.fortifications.context import TransportationCtx
 from helpers import i18n
 
-class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportConfirmationWindowMeta, FortViewHelper, AppRef):
+class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortViewHelper):
 
     def __init__(self, ctx = None):
         super(FortTransportConfirmationWindow, self).__init__()
@@ -53,14 +49,14 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
 
     def _update(self):
         prefix = i18n.makeString(FORTIFICATIONS.FORTTRANSPORTCONFIRMATIONWINDOW_MAXTRANSPORTINGSIZELABEL)
-        stdText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, prefix)
+        stdText = text_styles.standard(prefix)
         defResText = fort_formatters.getDefRes(self.getTransportingSize(), True)
         self.as_setMaxTransportingSizeS(stdText + defResText)
         clockIcon = icons.clock()
-        time = self.app.utilsManager.textManager.getTimeDurationStr(self.fortCtrl.getFort().getTransportationLevel().cooldownTime)
+        time = time_formatters.getTimeDurationStr(self.fortCtrl.getFort().getTransportationLevel().cooldownTime)
         ctx = {'estimatedTime': time}
         estimatedTextString = i18n.makeString(FORTIFICATIONS.FORTTRANSPORTCONFIRMATIONWINDOW_TRANSPORTINGFOOTERTEXT, **ctx)
-        estimatedText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, estimatedTextString)
+        estimatedText = text_styles.standard(estimatedTextString)
         self.as_setFooterTextS(clockIcon + estimatedText)
         data = self.__buildData()
         self.as_setDataS(data)

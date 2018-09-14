@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CompaniesWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class CompaniesWindowMeta(DAAPIModule):
+class CompaniesWindowMeta(AbstractWindowView):
 
     def createCompany(self):
         self._printOverrideError('createCompany')

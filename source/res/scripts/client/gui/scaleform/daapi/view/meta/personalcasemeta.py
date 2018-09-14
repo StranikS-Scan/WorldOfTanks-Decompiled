@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PersonalCaseMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class PersonalCaseMeta(DAAPIModule):
+class PersonalCaseMeta(AbstractWindowView):
 
     def dismissTankman(self, inventoryID):
         self._printOverrideError('dismissTankman')

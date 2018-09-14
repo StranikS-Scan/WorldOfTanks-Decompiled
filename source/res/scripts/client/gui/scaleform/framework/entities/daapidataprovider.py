@@ -1,9 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/DAAPIDataProvider.py
 from abc import ABCMeta, abstractmethod, abstractproperty
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 from gui.shared.utils import sortByFields
 
-class DAAPIDataProvider(DAAPIModule):
+class DAAPIDataProvider(BaseDAAPIModule):
     __metaclass__ = ABCMeta
 
     def __init__(self):

@@ -6,8 +6,7 @@ import threading
 from functools import partial
 from collections import namedtuple
 from debug_utils import LOG_DEBUG
-from helpers import threads, getFullClientVersion, http, time_utils
-from gui.shared.local_cache import ShelfLocalCache
+from helpers import threads, getFullClientVersion, http, time_utils, local_cache
 _CLIENT_VERSION = getFullClientVersion()
 _TIMEOUT = 10.0
 _REMOTE_DATA_CACHE_VERSION = 1
@@ -89,7 +88,7 @@ class _HttpHostDownloader(threads.ThreadPool):
         return _HttpConnectionWorker(self._jobs, self._host)
 
 
-class _LocalCache(ShelfLocalCache):
+class _LocalCache(local_cache.ShelfLocalCache):
 
     class _Record(namedtuple('_Record', ['data',
      'lastModified',

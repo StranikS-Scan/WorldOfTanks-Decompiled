@@ -1,11 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/MinimapLobby.py
 import Math
 import ArenaType
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 from gui.Scaleform.daapi.view.meta.MinimapLobbyMeta import MinimapLobbyMeta
-from gui.Scaleform.daapi.view.meta.MinimapEntityMeta import MinimapEntityMeta
 
-class MinimapLobby(MinimapLobbyMeta, MinimapEntityMeta, DAAPIModule):
+class MinimapLobby(MinimapLobbyMeta):
     MINIMAP_SIZE = 300
 
     def __init__(self):

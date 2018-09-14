@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/prb_control/restrictions/__init__.py
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, FALLOUT_BATTLE_TYPE
+from gui.server_events import g_eventsCache
 from prebattle_shared import decodeRoster
 
 def createPermissions(functional, pID = None):
@@ -22,7 +23,11 @@ def createUnitActionValidator(prbType, rosterSettings, proxy):
     elif prbType == PREBATTLE_TYPE.CLUBS:
         validator = limits.ClubsActionValidator(rosterSettings, proxy)
     elif prbType == PREBATTLE_TYPE.SQUAD:
-        validator = limits.SquadActionValidator(rosterSettings)
+        battleType = proxy.getExtra().eventType
+        if battleType != FALLOUT_BATTLE_TYPE.UNDEFINED:
+            validator = limits.FalloutSquadActionValidator(rosterSettings)
+        else:
+            validator = limits.SquadActionValidator(rosterSettings)
     else:
         validator = limits.UnitActionValidator(rosterSettings)
     return validator

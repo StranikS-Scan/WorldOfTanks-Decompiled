@@ -1,25 +1,23 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/AwardWindow.py
 from collections import namedtuple
-from debug_utils import LOG_DEBUG
 from helpers import i18n
 from gui.Scaleform.daapi.view.meta.AwardWindowMeta import AwardWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 AwardsRibbonInfo = namedtuple('AwardsRibbonInfo', ['awardForCompleteText',
  'isAwardForCompleteVisible',
  'awardReceivedText',
  'isAwardsReceivedVisible',
+ 'awardBonusStrText',
+ 'isAwardBonusStrVisible',
  'ribbonSource',
  'awards'])
 
-def packRibbonInfo(awards = None, awardForCompleteText = '', awardReceivedText = ''):
-    return AwardsRibbonInfo(awardForCompleteText=awardForCompleteText, isAwardForCompleteVisible=bool(len(awardForCompleteText)), awardReceivedText=awardReceivedText, isAwardsReceivedVisible=bool(len(awardReceivedText)), ribbonSource=RES_ICONS.MAPS_ICONS_QUESTS_AWARDRIBBON, awards=awards or [])
+def packRibbonInfo(awards = None, awardForCompleteText = '', awardReceivedText = '', awardBonusStrText = ''):
+    return AwardsRibbonInfo(awardForCompleteText=awardForCompleteText, isAwardForCompleteVisible=bool(len(awardForCompleteText)), awardReceivedText=awardReceivedText, isAwardsReceivedVisible=bool(len(awardReceivedText)), awardBonusStrText=awardBonusStrText, isAwardBonusStrVisible=bool(len(awardBonusStrText)), ribbonSource=RES_ICONS.MAPS_ICONS_QUESTS_AWARDRIBBON, awards=awards or [])
 
 
-class AwardAbstract(AppRef):
+class AwardAbstract(object):
 
     def getWindowTitle(self):
         return ''
@@ -70,7 +68,7 @@ class AwardAbstract(AppRef):
         pass
 
 
-class AwardWindow(View, AbstractWindowView, AwardWindowMeta, AppRef):
+class AwardWindow(AwardWindowMeta):
 
     def __init__(self, ctx):
         super(AwardWindow, self).__init__()
@@ -81,16 +79,16 @@ class AwardWindow(View, AbstractWindowView, AwardWindowMeta, AppRef):
         self.destroy()
 
     def onOKClick(self):
+        self.__award.handleOkButton()
         self.onWindowClose()
-        return self.__award.handleOkButton()
 
     def onCloseClick(self):
+        self.__award.handleCloseButton()
         self.onWindowClose()
-        return self.__award.handleCloseButton()
 
     def onTakeNextClick(self):
+        self.__award.handleBodyButton()
         self.onWindowClose()
-        return self.__award.handleBodyButton()
 
     def _populate(self):
         super(AwardWindow, self)._populate()
@@ -116,5 +114,8 @@ class AwardWindow(View, AbstractWindowView, AwardWindowMeta, AppRef):
         return
 
     def _dispose(self):
-        self.__award.clear()
+        if self.__award is not None:
+            self.__award.clear()
+            self.__award = None
         super(AwardWindow, self)._dispose()
+        return

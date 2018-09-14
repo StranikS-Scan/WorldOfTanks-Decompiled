@@ -5,6 +5,7 @@ import zlib
 import cPickle as pickle
 from collections import defaultdict
 import BigWorld
+import clubs_quests
 from Event import Event
 from adisp import async, process
 from constants import EVENT_TYPE, EVENT_CLIENT_DATA
@@ -12,14 +13,26 @@ from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from gui.LobbyContext import g_lobbyContext
 from gui.shared import events
 from gui.server_events import caches as quests_caches
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
 from gui.server_events.PQController import PQController
-from gui.server_events.event_items import EventBattles, HistoricalBattle, createQuest, createAction
+from gui.server_events.CompanyBattleController import CompanyBattleController
+from gui.server_events.event_items import EventBattles, HistoricalBattle, createQuest, createAction, FalloutConfig
+from gui.server_events.event_items import CompanyBattles, ClubsQuest
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from shared_utils import makeTupleByDict
+
+def _defaultQuestMaker(qID, qData, progress):
+    return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
+
+
+def _clubsQuestMaker(qID, qData, progress, seasonID, questDescr):
+    return ClubsQuest(seasonID, questDescr, progress.getQuestProgress(qID))
+
 
 class _EventsCache(object):
     USER_QUESTS = (EVENT_TYPE.BATTLE_QUEST,
@@ -37,12 +50,16 @@ class _EventsCache(object):
         self.__actionsCache = defaultdict(lambda : defaultdict(dict))
         self.__questsDossierBonuses = defaultdict(set)
         self.__potapov = PQController(self)
+        self.__companies = CompanyBattleController(self)
         self.onSyncStarted = Event()
         self.onSyncCompleted = Event()
         return
 
     def init(self):
         self.__potapov.init()
+
+    def start(self):
+        self.__companies.start()
 
     def fini(self):
         self.__potapov.fini()
@@ -51,6 +68,7 @@ class _EventsCache(object):
         self.__clearInvalidateCallback()
 
     def clear(self):
+        self.__companies.stop()
         quests_caches.clearNavInfo()
 
     @property
@@ -65,9 +83,16 @@ class _EventsCache(object):
     def potapov(self):
         return self.__potapov
 
+    @property
+    def companies(self):
+        return self.__companies
+
     @async
     @process
     def update(self, diff = None, callback = None):
+        if diff is not None:
+            if diff.get('eventsData', {}).get(EVENT_CLIENT_DATA.INGAME_EVENTS):
+                self.__companies.setNotificators()
         yield self.__progress.request()
         isNeedToInvalidate = True
         isNeedToClearItemsCaches = False
@@ -174,6 +199,15 @@ class _EventsCache(object):
 
         return result
 
+    def getCompanyBattles(self):
+        battle = self.__getCompanyBattlesData()
+        startTime = battle.get('startTime', 0.0)
+        finishTime = battle.get('finishTime', 0.0)
+        return CompanyBattles(startTime=None if startTime is None else float(startTime), finishTime=None if finishTime is None else float(finishTime), peripheryIDs=battle.get('peripheryIDs', set()))
+
+    def getFalloutConfig(self, battleType):
+        return makeTupleByDict(FalloutConfig, self.__getFallout().get(battleType, {}))
+
     def getItemAction(self, item, isBuying = True, forCredits = False):
         result = []
         type = ACTION_MODIFIER_TYPE.DISCOUNT if isBuying else ACTION_MODIFIER_TYPE.SELLING
@@ -210,10 +244,10 @@ class _EventsCache(object):
         return tuple(result + resultMult)
 
     def getCamouflageAction(self, vehicleIntCD):
-        return self.__actionsCache[ACTION_SECTION_TYPE.CUSTOMIZATION][ACTION_MODIFIER_TYPE.DISCOUNT].get(vehicleIntCD, tuple())
+        return tuple(self.__actionsCache[ACTION_SECTION_TYPE.CUSTOMIZATION][ACTION_MODIFIER_TYPE.DISCOUNT].get(vehicleIntCD, tuple()))
 
     def getEmblemsAction(self, group):
-        return self.__actionsCache[ACTION_SECTION_TYPE.CUSTOMIZATION][ACTION_MODIFIER_TYPE.DISCOUNT].get(group, tuple())
+        return tuple(self.__actionsCache[ACTION_SECTION_TYPE.CUSTOMIZATION][ACTION_MODIFIER_TYPE.DISCOUNT].get(group, tuple()))
 
     def getQuestsDossierBonuses(self):
         return self.__questsDossierBonuses
@@ -237,12 +271,10 @@ class _EventsCache(object):
         return result
 
     def _getQuests(self, filterFunc = None, includePotapovQuests = False):
-        quests = self.__getCommonQuestsData()
-        filterFunc = filterFunc or (lambda a: True)
         result = {}
         groups = {}
-        for qID, qData in quests.iteritems():
-            q = self._makeQuest(qID, qData)
+        filterFunc = filterFunc or (lambda a: True)
+        for qID, q in self.__getCommonQuestsIterator():
             if q.getType() == EVENT_TYPE.GROUP:
                 groups[qID] = q
                 continue
@@ -272,11 +304,9 @@ class _EventsCache(object):
         return result
 
     def _getQuestsGroups(self, filterFunc = None):
-        quests = self.__getCommonQuestsData()
         filterFunc = filterFunc or (lambda a: True)
         result = {}
-        for qID, qData in quests.iteritems():
-            q = self._makeQuest(qID, qData)
+        for qID, q in self.__getCommonQuestsIterator():
             if q.getType() != EVENT_TYPE.GROUP:
                 continue
             if not filterFunc(q):
@@ -326,11 +356,11 @@ class _EventsCache(object):
     def _onResync(self, *args):
         self.__invalidateData()
 
-    def _makeQuest(self, qID, qData):
+    def _makeQuest(self, qID, qData, maker = _defaultQuestMaker, **kwargs):
         storage = self.__cache['quests']
         if qID in storage:
             return storage[qID]
-        q = storage[qID] = createQuest(qData.get('type', 0), qID, qData, self.__progress.getQuestProgress(qID), self.__progress.getTokenExpiryTime(qData.get('requiredToken')))
+        q = storage[qID] = maker(qID, qData, self.__progress, **kwargs)
         return q
 
     def _makeAction(self, aID, aData):
@@ -482,14 +512,26 @@ class _EventsCache(object):
     def __getEventBattles(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('eventBattles', {})
 
+    def __getCompanyBattlesData(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('eventCompanies', {})
+
     def __getHistoricalBattlesData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.HISTORICAL_BATTLES)
 
-    def __getCommonQuestsData(self):
-        quests = self.__getQuestsData()
-        quests.update(self.__getFortQuestsData())
-        quests.update(self.__getPersonalQuestsData())
-        return quests
+    def __getFallout(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.FALLOUT)
+
+    def __getCommonQuestsIterator(self):
+        questsData = self.__getQuestsData()
+        questsData.update(self.__getFortQuestsData())
+        questsData.update(self.__getPersonalQuestsData())
+        for qID, qData in questsData.iteritems():
+            yield (qID, self._makeQuest(qID, qData))
+
+        currentESportSeasonID = g_lobbyContext.getServerSettings().eSportCurrentSeason.getID()
+        eSportQuests = clubs_quests.g_cache.getLadderQuestsBySeasonID(currentESportSeasonID) or []
+        for questDescr in eSportQuests:
+            yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData, maker=_clubsQuestMaker, seasonID=currentESportSeasonID, questDescr=questDescr))
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

@@ -1,12 +1,11 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/FortBuilding.py
 from FortifiedRegionBase import BuildingDescr
-from debug_utils import LOG_DEBUG
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.shared.formatters import time_formatters
 from gui.shared.gui_items import HasStrCD
 from helpers import time_utils, i18n
 
-class FortBuilding(BuildingDescr, HasStrCD, AppRef):
+class FortBuilding(BuildingDescr, HasStrCD):
 
     def __init__(self, buildingCompactDescr = None, typeID = None):
         BuildingDescr.__init__(self, buildingCompactDescr, typeID=typeID)
@@ -58,7 +57,7 @@ class FortBuilding(BuildingDescr, HasStrCD, AppRef):
             return 0
 
     def getEstimatedCooldownStr(self):
-        return self.app.utilsManager.textManager.getTimeDurationStr(self.getEstimatedCooldown())
+        return time_formatters.getTimeDurationStr(self.getEstimatedCooldown())
 
     def isExportAvailable(self, resCount = None):
         enoughRes = True

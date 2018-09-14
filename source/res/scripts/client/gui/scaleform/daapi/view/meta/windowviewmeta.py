@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/WindowViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
-class WindowViewMeta(DAAPIModule):
+class WindowViewMeta(WrapperViewMeta):
 
     def onWindowMinimize(self):
         self._printOverrideError('onWindowMinimize')

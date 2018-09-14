@@ -8,7 +8,7 @@ import dossiers2.custom.tankmen_dossier1_updater
 ACCOUNT_DOSSIER_VERSION = 98
 VEHICLE_DOSSIER_VERSION = 92
 TANKMAN_DOSSIER_VERSION = 66
-FORT_DOSSIER_VERSION = 2
+FORT_DOSSIER_VERSION = 3
 RATED7X7_DOSSIER_VERSION = 1
 CLUB_DOSSIER_VERSION = 2
 
@@ -2941,6 +2941,21 @@ def __updateFromFortDossier1(compDescr):
     return (2, updateCtx['dossierCompDescr'])
 
 
+def __updateFromFortDossier2(compDescr):
+    blocksLayout = ['total',
+     'fortBattles',
+     'fortSorties',
+     'achievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addRecords(updateCtx, 'fortSorties', [('middleWins', 'I'), ('championWins', 'I'), ('absoluteWins', 'I')], {})
+    setVersion(updateCtx, 3)
+    return (3, updateCtx['dossierCompDescr'])
+
+
 def __updateFromClubDossier1(compDescr):
     blocksLayout = ['total',
      'clubBattles',
@@ -3053,6 +3068,7 @@ tankmanVersionUpdaters = {10: __updateFromTankmanDossier1,
  14: __updateFromTankmanDossier1,
  64: __updateFromTankmanDossier64,
  65: __updateFromTankmanDossier65}
-fortVersionUpdaters = {1: __updateFromFortDossier1}
+fortVersionUpdaters = {1: __updateFromFortDossier1,
+ 2: __updateFromFortDossier2}
 rated7x7VersionUpdaters = {}
 clubVersionUpdaters = {1: __updateFromClubDossier1}

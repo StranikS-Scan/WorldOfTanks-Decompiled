@@ -10,11 +10,10 @@ from gui.prb_control import formatters
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleWindow import PrebattleWindow
 from gui.Scaleform.daapi.view.meta.BattleSessionWindowMeta import BattleSessionWindowMeta
 from gui import makeHtmlString
 
-class BattleSessionWindow(PrebattleWindow, BattleSessionWindowMeta):
+class BattleSessionWindow(BattleSessionWindowMeta):
     START_TIME_SYNC_PERIOD = 10
     NATION_ICON_PATH = '../maps/icons/filters/nations/%(nation)s.png'
 

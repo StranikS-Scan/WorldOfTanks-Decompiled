@@ -89,6 +89,9 @@ class FreeCamera:
     def handleMouse(self, dx, dy, dz):
         return self.__cam.handleMouseEvent(BigWorld.MouseEvent(dx, dy, dz, (0, 0)))
 
+    def resetMovement(self):
+        self.__cam.resetKeys()
+
 
 def readBool(dataSec, name, defaultVal):
     if dataSec is None:

@@ -2,7 +2,7 @@
 import types
 import Event
 from account_helpers.settings_core.SettingsCache import g_settingsCache
-from gui.shared.local_cache import FileLocalCache, PickleIO, CryptIO
+from helpers.local_cache import FileLocalCache, PickleIO, CryptIO
 _MESSENGER_CACHE_VERSION = 2
 _MESSENGER_CACHE_MIN_REV = 1
 _MESSENGER_CACHE_MAX_REV = 32767

@@ -7,27 +7,23 @@ from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING
 from gui import game_control, SystemMessages
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.ReferralManagementWindowMeta import ReferralManagementWindowMeta
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.prb_control.context import unit_ctx, SendInvitesCtx
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import i18n, time_utils
 from shared_utils import findFirst
 from gui.shared.events import OpenLinkEvent
-from gui.shared.formatters import icons
+from gui.shared.formatters import icons, text_styles
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
-class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindowMeta, AppRef, GlobalListener, Notifiable):
+class ReferralManagementWindow(ReferralManagementWindowMeta, GlobalListener, Notifiable):
     MIN_REF_NUMBER = 4
     TOTAL_QUESTS = 6
     BONUSES_PRIORITY = ('vehicles', 'tankmen', 'credits')
@@ -93,20 +89,32 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         ms = i18n.makeString
         refSystem = game_control.g_instance.refSystem
         invitedPlayers = len(refSystem.getReferrals())
-        infoIcon = icons.info()
-        multiplyExpText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXPMULTIPLIER))
-        tableExpText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXP))
         data = {'windowTitle': ms(MENU.REFERRALMANAGEMENTWINDOW_TITLE),
          'infoHeaderText': ms(MENU.REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK) if not refSystem.isTotallyCompleted() else ms(MENU.REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK),
          'descriptionText': ms(MENU.REFERRALMANAGEMENTWINDOW_DESCRIPTION),
          'invitedPlayersText': ms(MENU.REFERRALMANAGEMENTWINDOW_INVITEDPLAYERS, playersNumber=invitedPlayers),
-         'invitesManagementLinkText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_INVITEMANAGEMENTLINK)),
+         'invitesManagementLinkText': text_styles.main(ms(MENU.REFERRALMANAGEMENTWINDOW_INVITEMANAGEMENTLINK)),
          'closeBtnLabel': ms(MENU.REFERRALMANAGEMENTWINDOW_CLOSEBTNLABEL),
-         'tableNickText': ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_NICK),
-         'tableExpText': ms(tableExpText + ' ' + infoIcon),
-         'tableExpTT': TOOLTIPS.REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE,
-         'tableExpMultiplierText': ms(multiplyExpText + ' ' + infoIcon)}
+         'tableHeader': self.__makeTableHeader()}
         self.as_setDataS(data)
+
+    def __makeTableHeader(self):
+        ms = i18n.makeString
+        infoIcon = icons.info()
+        multiplyExpText = text_styles.standard(ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXPMULTIPLIER))
+        tableExpText = text_styles.standard(ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXP))
+        return [self.__makeSortingButton(ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_NICK), 146, TEXT_ALIGN.LEFT),
+         self.__makeSortingButton(ms(tableExpText + ' ' + infoIcon), 143, TEXT_ALIGN.RIGHT, toolTip=TOOLTIPS.REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE),
+         self.__makeSortingButton(ms(multiplyExpText + ' ' + infoIcon), 193, TEXT_ALIGN.CENTER, toolTipSpecial='refSysXPMultiplier'),
+         self.__makeSortingButton('', 166, TEXT_ALIGN.CENTER)]
+
+    def __makeSortingButton(self, label, buttonWidth, textAlign, toolTip = '', toolTipSpecial = ''):
+        return {'label': label,
+         'buttonWidth': buttonWidth,
+         'sortOrder': 0,
+         'textAlign': textAlign,
+         'toolTip': toolTip,
+         'toolTipSpecialType': toolTipSpecial}
 
     def __makeTableData(self):
         ms = i18n.makeString
@@ -115,14 +123,14 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         referrals = refSystem.getReferrals()
         numOfReferrals = len(referrals)
         for i, item in enumerate(referrals):
-            referralNumber = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STATS_TEXT, ms('%d.' % (i + 1)))
+            referralNumber = text_styles.stats(ms('%d.' % (i + 1)))
             dbID = item.getAccountDBID()
             user = self.usersStorage.getUser(dbID)
             if not user:
                 raise AssertionError('User must be defined')
                 isOnline = user.isOnline()
                 xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
-                icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(xpIcon, 16, 16, -3, 0))
+                icon = icons.makeImageTag(xpIcon, 16, 16, -3, 0)
                 bonus, timeLeft = item.getBonus()
                 if bonus == 1:
                     multiplier = '-'
@@ -132,11 +140,11 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
                     multiplier = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
                     multiplierTooltip = ''
                 if timeLeft:
-                    multiplierTime = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(item.getBonusTimeLeftStr()))
-                    expMultiplierText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
+                    multiplierTime = text_styles.main(ms(item.getBonusTimeLeftStr()))
+                    expMultiplierText = text_styles.standard(ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
                 else:
                     expMultiplierText = ''
-                multiplierFactor = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, multiplier)
+                multiplierFactor = text_styles.credits(multiplier)
                 multiplierStr = ms(icon + '<nobr>' + multiplierFactor + ' ' + expMultiplierText)
                 referralData = {'accID': dbID,
                  'fullName': user.getFullName(),
@@ -160,7 +168,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
 
         if numOfReferrals < self.MIN_REF_NUMBER:
             for i in xrange(numOfReferrals, self.MIN_REF_NUMBER):
-                referralNumber = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DISABLED_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EMPTYLINE, lineNo=str(i + 1)))
+                referralNumber = text_styles.disabled(ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EMPTYLINE, lineNo=str(i + 1)))
                 result.append({'isEmpty': True,
                  'referralNo': referralNumber})
 
@@ -170,16 +178,16 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         refSystem = game_control.g_instance.refSystem
         totalXP = refSystem.getTotalXP()
         currentXP = refSystem.getReferralsXPPool()
-        progressText = '%(currentXP)s / %(totalXP)s %(icon)s' % {'currentXP': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, BigWorld.wg_getIntegralFormat(currentXP)),
+        progressText = '%(currentXP)s / %(totalXP)s %(icon)s' % {'currentXP': text_styles.credits(BigWorld.wg_getIntegralFormat(currentXP)),
          'totalXP': BigWorld.wg_getIntegralFormat(totalXP),
-         'icon': self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON, 16, 16, -3, 0))}
+         'icon': icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON, 16, 16, -3, 0)}
         text = i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_PROGRESS, progress=progressText)
         awardData = {}
-        progresData = {'text': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, text)}
+        progresData = {'text': text_styles.main(text)}
         progressAlertText = ''
         if refSystem.isTotallyCompleted():
             completedText = i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_COMPLETE)
-            completedText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, completedText)
+            completedText = text_styles.middleTitle(completedText)
             awardData['completedText'] = completedText
             _, lastStepQuests = refSystem.getQuests()[-1]
             vehicleBonus = findFirst(lambda q: q.getBonuses('vehicles'), reversed(lastStepQuests))
@@ -226,7 +234,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
             else:
                 LOG_WARNING('Referral quests is in invalid state: ', quests)
                 progressAlertIcon = icons.alert()
-                progressAlertText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSNOTAVAILABLE))
+                progressAlertText = text_styles.alert(i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSNOTAVAILABLE))
                 progressAlertText = i18n.makeString(progressAlertIcon + ' ' + progressAlertText)
             progresData.update({'steps': stepsData,
              'progress': progress})

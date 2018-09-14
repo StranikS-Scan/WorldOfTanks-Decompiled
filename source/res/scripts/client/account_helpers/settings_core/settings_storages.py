@@ -1,17 +1,16 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_storages.py
-import BigWorld
 import functools
 import weakref
 import math
+import BigWorld
 from AvatarInputHandler.cameras import FovExtended
-from adisp import process, async
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from adisp import async
+from debug_utils import LOG_DEBUG
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import TimerConfirmDialogMeta
 from gui.shared.utils.graphics import g_monitorSettings
 from helpers import isPlayerAccount
 from messenger import g_settings as messenger_settings
-from account_helpers.settings_core import g_settingsCore
 
 class ISettingsStorage(object):
 
@@ -181,6 +180,18 @@ class ExtendedGameSettingsStorage(ISettingsStorage):
         return self._settings.get(settingOption, default)
 
 
+class TutorialStorage(ISettingsStorage):
+
+    def apply(self, restartApproved):
+        if self._settings:
+            self._manager.setTutorialSetting(self._settings)
+        return super(TutorialStorage, self).apply(restartApproved)
+
+    def extract(self, settingOption, default = None):
+        default = self._manager.getTutorialSetting(settingOption, default)
+        return self._settings.get(settingOption, default)
+
+
 class GameplaySettingsStorage(ISettingsStorage):
 
     def apply(self, restartApproved):
@@ -306,7 +317,6 @@ class FOVSettingsStorage(ISettingsStorage):
         super(FOVSettingsStorage, self).__init__(manager, core)
         self.__dynamicFOVEnabled = None
         self.__FOV = None
-        self.__multiplier = None
         return
 
     def proxyDynamicFOVEnabled(self, option):
@@ -325,9 +335,6 @@ class FOVSettingsStorage(ISettingsStorage):
     def proxyFOV(self, option):
         self.__FOV = weakref.proxy(option)
 
-    def proxyMultiplier(self, option):
-        self.__multiplier = weakref.proxy(option)
-
     @property
     def FOV(self):
         value = self.__FOV.get() if self.__dynamicFOVEnabled is not None else None
@@ -344,12 +351,9 @@ class FOVSettingsStorage(ISettingsStorage):
             dynamicFOVEnabled = self.dynamicFOVEnabled
 
             def setFov(value, multiplier, dynamicFOVEnabled):
-                if self.__multiplier is not None:
-                    self.__multiplier.setSystemValue(multiplier)
                 if not dynamicFOVEnabled:
                     FovExtended.instance().resetFov()
                 FovExtended.instance().defaultHorizontalFov = value
-                return
 
             if dynamicFOVEnabled:
                 multiplier = float(dynamicFOVLow) / dynamicFOVTop

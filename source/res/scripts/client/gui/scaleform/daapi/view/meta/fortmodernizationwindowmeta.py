@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortModernizationWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortModernizationWindowMeta(DAAPIModule):
+class FortModernizationWindowMeta(AbstractWindowView):
 
     def applyAction(self):
         self._printOverrideError('applyAction')

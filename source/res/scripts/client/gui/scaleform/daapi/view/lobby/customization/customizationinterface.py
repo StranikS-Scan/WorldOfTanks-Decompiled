@@ -1,9 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/CustomizationInterface.py
 import Event
-from gui.Scaleform.daapi.view.lobby.customization.data_providers import ITEM_REMOVE_TYPE
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class CustomizationInterface(DAAPIModule):
+class CustomizationInterface(BaseDAAPIModule):
     _eventManager = Event.EventManager()
     onDataInited = Event.Event(_eventManager)
     onCustomizationChangeSuccess = Event.Event(_eventManager)

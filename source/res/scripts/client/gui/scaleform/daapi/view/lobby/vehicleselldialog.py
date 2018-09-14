@@ -1,13 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleSellDialog.py
 import BigWorld
 from collections import defaultdict
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from account_helpers.AccountSettings import AccountSettings
 from gui import SystemMessages, makeHtmlString
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.tooltips import ACTION_TOOLTIPS_STATE, ACTION_TOOLTIPS_TYPE, getItemActionTooltipData
@@ -16,7 +14,7 @@ from gui.shared.gui_items.vehicle_modules import Shell
 from gui.shared.utils import decorators, flashObject2Dict
 from gui.ClientUpdateManager import g_clientUpdateManager
 
-class VehicleSellDialog(View, VehicleSellDialogMeta, AbstractWindowView):
+class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __init__(self, ctx = None):
         """ Ctor """

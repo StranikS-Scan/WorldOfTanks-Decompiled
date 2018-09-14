@@ -1,11 +1,16 @@
 # Embedded file name: scripts/client/tutorial/data/chapter.py
 import types
+import operator
 from TriggersManager import TRIGGER_TYPE
-from tutorial.data import HasID, HasTargetID, HasIDAndTarget
+from tutorial.data.has_id import HasID, HasTargetID, HasIDAndTarget
+
+class VAR_FINDER_TYPE(object):
+    GAME_ATTRIBUTE = 1
+
 
 class Chapter(HasID):
 
-    def __init__(self, entityID, title, descriptions, bonus, forcedLoading, filePaths, sharedScene):
+    def __init__(self, entityID, title, descriptions, bonus, forcedLoading, filePaths, sharedScene, predefinedVars = None):
         super(Chapter, self).__init__(entityID=entityID)
         self.__title = title
         self.__descriptions = descriptions
@@ -21,6 +26,7 @@ class Chapter(HasID):
         self.__hasID = {}
         self.__triggers = {}
         self.__varSets = []
+        self.__predefinedVars = predefinedVars or []
         self.__valid = False
         return
 
@@ -87,6 +93,13 @@ class Chapter(HasID):
             initialScene = self.__scenes[0]
         return initialScene
 
+    def isInScene(self, scene, nextSceneID):
+        sceneID = scene.getID()
+        if self.__defaultSceneID is not None and self.__initialSceneID is not None and self.__defaultSceneID == self.__initialSceneID and nextSceneID not in self.__sceneMap:
+            return True
+        else:
+            return sceneID == nextSceneID
+
     def addHasIDEntity(self, entity):
         self.__hasID[entity.getID()] = entity
 
@@ -103,7 +116,7 @@ class Chapter(HasID):
         self.__varSets.append(varSet)
 
     def getVarSets(self):
-        return self.__varSets[:]
+        return self.__varSets + self.__predefinedVars
 
     def clear(self):
         self.__valid = False
@@ -133,8 +146,8 @@ class Scene(HasID):
     def __init__(self, entityID = None):
         super(Scene, self).__init__(entityID=entityID)
         self.__postEffects = []
-        self.__guiItems = []
         self.__effects = []
+        self.__guiItems = {}
 
     def addPostEffect(self, postEffect, front = -1):
         if front > -1:
@@ -155,20 +168,28 @@ class Scene(HasID):
         return self.__effects[:]
 
     def addGuiItem(self, item):
-        self.__guiItems.append(item)
+        self.__guiItems[item.getTargetID()] = item
 
     def getGuiItems(self):
-        return self.__guiItems[:]
+        return self.__guiItems.values()
+
+    def getGuiItem(self, targetID):
+        if targetID in self.__guiItems:
+            item = self.__guiItems[targetID]
+        else:
+            item = None
+        return item
 
     def clear(self):
         while len(self.__postEffects):
             self.__postEffects.pop().clear()
 
-        while len(self.__guiItems):
-            self.__guiItems.pop().clear()
-
         while len(self.__effects):
             self.__effects.pop().clear()
+
+        while len(self.__guiItems):
+            _, item = self.__guiItems.popitem()
+            item.clear()
 
 
 class Bonus(HasID):
@@ -183,118 +204,6 @@ class Bonus(HasID):
 
     def getValues(self):
         return self.__values
-
-
-class Effect(object):
-    ACTIVATE, DEACTIVATE, GLOBAL_ACTIVATE, GLOBAL_DEACTIVATE, SHOW_HINT, CLOSE_HINT, SHOW_DIALOG, SHOW_WINDOW, CLOSE_WINDOW, SHOW_GREETING, REFUSE_TRAINING, NEXT_CHAPTER, RUN_TRIGGER, REQUEST_BONUS, REQUEST_ALL_BONUSES, SET_ITEM_PROPS, FINISH_TRAINING, DEFINE_GUI_ITEM, INVOKE_GUI_CMD, SET_FILTER, SHOW_MESSAGE, SHOW_MARKER, REMOVE_MARKER, NEXT_TASK, INVOKE_PLAYER_CMD, TELEPORT, ENTER_QUEUE, EXIT_QUEUE, ENABLE_CAMERA_ZOOM, DISABLE_CAMERA_ZOOM, PLAY_MUSIC, OPEN_INTERNAL_BROWSER = range(0, 32)
-
-    def __init__(self, conditions = None, **kwargs):
-        super(Effect, self).__init__(**kwargs)
-        self.__conditions = conditions
-
-    def getType(self):
-        raise NotImplementedError, 'Effect.getType not implemented'
-
-    def getConditions(self):
-        return self.__conditions
-
-    def clear(self):
-        if self.__conditions is not None:
-            self.__conditions.clear()
-        self.__conditions = None
-        return
-
-
-EFFECT_TYPE_NAMES = dict([ (v, k) for k, v in Effect.__dict__.iteritems() if k.isupper() ])
-
-class SimpleEffect(Effect):
-
-    def __init__(self, effectType, conditions = None, **kwargs):
-        super(SimpleEffect, self).__init__(conditions=conditions, **kwargs)
-        self.__type = effectType
-
-    def __repr__(self):
-        return 'SimpleEffect(type = {0!r:s})'.format(EFFECT_TYPE_NAMES.get(self.__type))
-
-    def getType(self):
-        return self.__type
-
-
-class HasTargetEffect(SimpleEffect, HasTargetID):
-
-    def __init__(self, targetID, effectType, conditions = None):
-        super(HasTargetEffect, self).__init__(effectType, conditions=conditions, targetID=targetID)
-
-    def __repr__(self):
-        return 'HasTargetEffect(type = {0!r:s}, targetID = {1:>s})'.format(EFFECT_TYPE_NAMES.get(self.getType()), self.getTargetID())
-
-
-class DefineGuiItemEffect(HasTargetEffect):
-
-    def __init__(self, targetID, effectType, parentRef, extraRef, conditions = None):
-        super(DefineGuiItemEffect, self).__init__(targetID, effectType, conditions=conditions)
-        self.__parentRef = parentRef
-        self.__extraRef = extraRef
-
-    def __repr__(self):
-        return ('HasTargetEffect(type = {0!r:s}, targetID = {1:>s}, ' + 'parent = {2:>s}, extra-ref = {3:>s}').format(EFFECT_TYPE_NAMES.get(self.getType()), self.getTargetID(), self.__parentRef, self.__extraRef)
-
-    def getParentReference(self):
-        return self.__parentRef
-
-    def getExtraReference(self):
-        return self.__extraRef
-
-
-class SetGuiItemProperty(HasTargetEffect):
-
-    def __init__(self, targetID, props, conditions = None, revert = False):
-        super(SetGuiItemProperty, self).__init__(targetID, Effect.SET_ITEM_PROPS, conditions=conditions)
-        self.__props = props
-        self.__revert = revert
-
-    def getProps(self):
-        return self.__props.copy()
-
-    def isRevert(self):
-        return self.__revert
-
-    def clear(self):
-        super(SetGuiItemProperty, self).clear()
-        self.__props.clear()
-
-
-class SetFilter(HasTargetEffect):
-
-    def __init__(self, targetID, value, conditions = None):
-        super(SetFilter, self).__init__(targetID, Effect.SET_FILTER, conditions=conditions)
-        self.__value = value
-
-    def getValue(self):
-        return self.__value[:]
-
-
-class Conditions(list):
-
-    def __init__(self, *args):
-        list.__init__(self, *args)
-        self._eitherBlocks = []
-
-    def __repr__(self):
-        return 'Conditions({0:s}): {1!r:s}, {2!r:s}'.format(hex(id(self)), self[:], self._eitherBlocks)
-
-    def appendEitherBlock(self, block):
-        self._eitherBlocks.append(block)
-
-    def eitherBlocks(self):
-        return self._eitherBlocks[:]
-
-    def clear(self):
-        while len(self._eitherBlocks):
-            self._eitherBlocks.pop()
-
-        while len(self):
-            self.pop()
 
 
 class HasIDConditions(HasID):
@@ -322,46 +231,6 @@ class HasIDConditions(HasID):
         self.__conditions.clear()
 
 
-class Condition(HasID):
-    FLAG_CONDITION = 0
-    GLOBAL_FLAG_CONDITION = 1
-    WINDOW_ON_SCENE_CONDITION = 2
-    VEHICLE_CONDITION = 3
-
-    def __init__(self, condType, entityID):
-        super(Condition, self).__init__(entityID=entityID)
-        self._type = condType
-
-    def getType(self):
-        return self._type
-
-
-class FlagCondition(Condition):
-    FLAG_ACTIVE = 0
-    FLAG_INACTIVE = 1
-
-    def __init__(self, entityID, state = 0, condType = Condition.FLAG_CONDITION):
-        super(FlagCondition, self).__init__(condType, entityID)
-        self._state = state
-
-    def isActiveState(self):
-        return self._state == FlagCondition.FLAG_ACTIVE
-
-    def isInactiveState(self):
-        return self._state == FlagCondition.FLAG_INACTIVE
-
-
-class VehicleCondition(Condition):
-    CV_TYPE_NAME = 0
-
-    def __init__(self, varID, value):
-        super(VehicleCondition, self).__init__(Condition.VEHICLE_CONDITION, varID)
-        self._value = value
-
-    def isValueEqual(self, other):
-        return self._value == other
-
-
 class Exit(HasID):
 
     def __init__(self, entityID, nextChapter = None, nextDelay = 0, finishDelay = 0, isSpeakOver = False):
@@ -384,6 +253,59 @@ class Exit(HasID):
         return self.__isSpeakOver
 
 
+class Action(HasIDAndTarget):
+
+    def __init__(self, eventType, targetID):
+        super(Action, self).__init__(targetID=targetID, entityType=eventType)
+        self.__effects = []
+
+    def addEffect(self, effect):
+        self.__effects.append(effect)
+
+    def getEffects(self):
+        return self.__effects[:]
+
+    def clear(self):
+        while len(self.__effects):
+            self.__effects.pop().clear()
+
+
+class ActionsHolder(HasID):
+
+    def __init__(self, entityID = None, **kwargs):
+        super(ActionsHolder, self).__init__(entityID, **kwargs)
+        self.__actions = {}
+
+    def addAction(self, action):
+        self.__actions[action.getType(), action.getTargetID()] = action
+
+    def removeAction(self, action):
+        self.__actions.pop((action.getType(), action.getTargetID()), None)
+        return
+
+    def getAction(self, event):
+        key = event.getActionCriteria()
+        if key in self.__actions:
+            return self.__actions[key]
+        else:
+            return None
+            return None
+
+    def getActionTypes(self):
+        return map(operator.itemgetter(0), self.__actions.keys())
+
+    def getActions(self):
+        return self.__actions.values()
+
+    def setActions(self, actions):
+        self.__actions = dict(map(lambda action: ((action.getType(), action.getTargetID()), action), actions))
+
+    def clear(self):
+        while len(self.__actions):
+            _, action = self.__actions.popitem()
+            action.clear()
+
+
 class Message(HasID):
 
     def __init__(self, entityID, guiType, text):
@@ -401,13 +323,9 @@ class Message(HasID):
 class Query(HasID):
 
     def __init__(self, entityID, queryType, varRef, extra = None):
-        super(Query, self).__init__(entityID=entityID)
-        self.__type = queryType
+        super(Query, self).__init__(entityID=entityID, entityType=queryType)
         self.__varRef = varRef
         self.__extra = extra
-
-    def getType(self):
-        return self.__type
 
     def getVarRef(self):
         return self.__varRef
@@ -478,6 +396,42 @@ class SimpleHint(HasID):
         return self.__speakID
 
 
+class ChainHint(ActionsHolder, HasTargetID):
+
+    def __init__(self, entityID, targetID, text, hasBox = None, arrow = None, padding = None):
+        super(ChainHint, self).__init__(entityID=entityID, targetID=targetID)
+        self.__text = text
+        self.__hasBox = hasBox
+        self.__arrow = arrow
+        self.__padding = padding
+
+    def getText(self):
+        return self.__text
+
+    def hasBox(self):
+        return self.__hasBox
+
+    def getArrow(self):
+        return self.__arrow
+
+    def getPadding(self):
+        return self.__padding
+
+
+class TutorialSetting(HasID):
+
+    def __init__(self, entityID, settingName, settingValue):
+        super(TutorialSetting, self).__init__(entityID=entityID)
+        self.__settingName = settingName
+        self.__settingValue = settingValue
+
+    def getSettingName(self):
+        return self.__settingName
+
+    def getSettingValue(self):
+        return self.__settingValue
+
+
 class Greeting(HasID):
 
     def __init__(self, entityID, title, text, speakID = None):
@@ -493,120 +447,32 @@ class Greeting(HasID):
         return self.__speakID
 
 
-class ItemHint(HasIDAndTarget):
+class PopUp(ActionsHolder):
 
-    def __init__(self, entityID, targetID, containerID, position, text, inPin, outPin, line, topmostLevel):
-        super(ItemHint, self).__init__(entityID=entityID, targetID=targetID)
-        self.__containerID = containerID
-        self.__position = position
-        self.__text = text
-        self.__inPin = inPin
-        self.__outPin = outPin
-        self.__line = line
-        self.__topmostLevel = topmostLevel
-
-    def getContainerID(self):
-        return self.__containerID
-
-    def setContainerID(self, containerID):
-        self.__containerID = containerID
-
-    def getData(self):
-        return [self._id,
-         self.__position[0],
-         self.__position[1],
-         self.__text,
-         self.__inPin,
-         self.__outPin,
-         self.__line,
-         self.__topmostLevel]
-
-
-class PopUp(HasID):
-
-    def __init__(self, entityID, popUpType, content):
-        super(PopUp, self).__init__(entityID=entityID)
-        self.__type = popUpType
+    def __init__(self, entityID, popUpType, content, varRef = None, forcedQuery = False):
+        super(PopUp, self).__init__(entityID=entityID, entityType=popUpType)
         self.__content = content
-        self.__actions = {}
-
-    def getType(self):
-        return self.__type
+        self.__varRef = varRef
+        self.__forcedQuery = forcedQuery
 
     def getContent(self):
         return self.__content.copy()
-
-    def isContentFull(self):
-        return True
-
-    def addAction(self, action):
-        self.__actions[action.getTargetID()] = action
-
-    def getAction(self, targetID):
-        return self.__actions.get(targetID)
-
-    def getActions(self):
-        return self.__actions.values()
-
-    def setActions(self, actions):
-        self.__actions = dict(map(lambda action: (action.getTargetID(), action), actions))
-
-    def clear(self):
-        while len(self.__actions):
-            _, action = self.__actions.popitem()
-            action.clear()
-
-
-class VarRefPopUp(PopUp):
-
-    def __init__(self, entityID, popUpType, content, varRef):
-        super(VarRefPopUp, self).__init__(entityID, popUpType, content)
-        self.__varRef = varRef
 
     def getVarRef(self):
         return self.__varRef
 
     def isContentFull(self):
-        return False
-
-
-class Action(HasTargetID):
-    PRESS = 0
-    CLICK = 1
-    CLICK_POINT = 2
-    CLOSE = 3
-    CHANGE = 4
-    CLICK_ITEM = 5
-    PRESS_ITEM = 6
-    CHANGE_TEXT = 7
-
-    def __init__(self, actionType, targetID):
-        super(Action, self).__init__(targetID=targetID)
-        self.__type = actionType
-        self.__effects = []
-
-    def getType(self):
-        return self.__type
-
-    def addEffect(self, effect):
-        self.__effects.append(effect)
-
-    def getEffects(self):
-        return self.__effects[:]
-
-    def clear(self):
-        while len(self.__effects):
-            self.__effects.pop().clear()
+        return self.__varRef is None and not self.__forcedQuery
 
 
 class GuiItemRef(HasTargetID):
-    LIFE_CYCLE_PERMANENT = 0
-    LIFE_CYCLE_DYNAMIC = 1
 
     def __init__(self, targetID, props, conditions = None):
         super(GuiItemRef, self).__init__(targetID=targetID)
         self.__props = props
         self.__conditions = conditions
+        self.__notOnSceneEffects = []
+        self.__onSceneEffects = []
 
     def getProps(self):
         return self.__props.copy()
@@ -616,32 +482,6 @@ class GuiItemRef(HasTargetID):
 
     def getConditions(self):
         return self.__conditions
-
-    def clear(self):
-        self.__props.clear()
-        if self.__conditions is not None:
-            self.__conditions.clear()
-        self.__conditions = None
-        return
-
-
-class PermanentGuiItemRef(GuiItemRef):
-
-    def getLifeCycle(self):
-        return GuiItemRef.LIFE_CYCLE_PERMANENT
-
-
-class DynamicGuiItemRef(GuiItemRef):
-
-    def __init__(self, targetID, props, conditions = None):
-        super(DynamicGuiItemRef, self).__init__(targetID, props, conditions)
-        self.__findCriteria = None
-        self.__notOnSceneEffects = []
-        self.__onSceneEffects = []
-        return
-
-    def getLifeCycle(self):
-        return GuiItemRef.LIFE_CYCLE_DYNAMIC
 
     def addNotOnSceneEffect(self, effect):
         self.__notOnSceneEffects.append(effect)
@@ -655,18 +495,10 @@ class DynamicGuiItemRef(GuiItemRef):
     def getOnSceneEffects(self):
         return self.__onSceneEffects[:]
 
-    def setFindCriteria(self, criteria):
-        self.__findCriteria = criteria
-
-    def getFindCriteria(self):
-        if self.__findCriteria:
-            return self.__findCriteria[:]
-        else:
-            return None
-
     def clear(self):
-        super(DynamicGuiItemRef, self).clear()
-        self.__findCriteria = None
+        self.__props.clear()
+        if self.__conditions is not None:
+            self.__conditions.clear()
         while len(self.__notOnSceneEffects):
             self.__notOnSceneEffects.pop().clear()
 
@@ -676,13 +508,27 @@ class DynamicGuiItemRef(GuiItemRef):
         return
 
 
+class GuiItemCriteria(HasIDAndTarget):
+
+    def __init__(self, entityID, targetID, value, cached = False):
+        super(GuiItemCriteria, self).__init__(entityID=entityID, targetID=targetID)
+        self.__value = value
+        self.__cached = cached
+
+    def getValue(self):
+        return self.__value
+
+    def isCached(self):
+        return self.__cached
+
+
 class PlayerCommand(HasID):
 
     def __init__(self, entityID, name, cmdArgs = None, cmdKwargs = None):
         super(PlayerCommand, self).__init__(entityID=entityID)
         self.__name = name
         if cmdArgs is None:
-            cmdArgs = tuple()
+            cmdArgs = ()
         self.__args = cmdArgs
         if cmdKwargs is None:
             cmdKwargs = {}
@@ -798,3 +644,17 @@ class VarSet(HasID):
 
     def __iter__(self):
         return iter(self.__varSet)
+
+
+class GameAttribute(HasIDAndTarget):
+
+    def __init__(self, entityID, name, varID, args = None):
+        super(GameAttribute, self).__init__(entityID=entityID, targetID=varID, entityType=VAR_FINDER_TYPE.GAME_ATTRIBUTE)
+        self.__name = name
+        self.__args = args or ()
+
+    def getName(self):
+        return self.__name
+
+    def getArgs(self):
+        return self.__args

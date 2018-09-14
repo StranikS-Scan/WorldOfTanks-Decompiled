@@ -168,6 +168,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_a
  (_AB.SINGLE, 'falloutSingleWolf'): _AchieveFactory.get(_as.FalloutAchievement),
  (_AB.SINGLE, 'falloutPackOfWolfs'): _AchieveFactory.get(_as.FalloutAchievement),
  (_AB.SINGLE, 'falloutSteelHunter'): _AchieveFactory.get(_as.FalloutAchievement),
+ (_AB.SINGLE, 'falloutAlwaysInLine'): _AchieveFactory.get(_as.FalloutAchievement),
  (_AB.TEAM_7X7, 'geniusForWarMedal'): _CustomAchieveFactory.get(_as.GeniusForWarAchievement),
  (_AB.TEAM_7X7, 'wolfAmongSheepMedal'): _CustomAchieveFactory.get(_as.WolfAmongSheepAchievement),
  (_AB.TEAM_7X7, 'fightingReconnaissanceMedal'): _CustomAchieveFactory.get(_as.FightingReconnaissanceAchievement),

@@ -2,6 +2,7 @@
 import BigWorld, Math, Keys, GUI
 from debug_utils import *
 from functools import partial
+from gui.app_loader import g_appLoader
 import items.vehicles
 import math
 import Account
@@ -60,8 +61,7 @@ class OfflineMapCreator:
         global _V_START_ANGLES
         try:
             LOG_DEBUG('OfflineMapCreator.Create( %s )' % mapName)
-            from gui.WindowsManager import g_windowsManager
-            g_windowsManager.showBattle()
+            g_appLoader.showBattle()
             cfgType = 'basic'
             self.__loadCfg(cfgType, mapName)
             BigWorld.worldDrawEnabled(False)

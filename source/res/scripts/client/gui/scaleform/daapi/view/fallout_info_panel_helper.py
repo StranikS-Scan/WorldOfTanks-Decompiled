@@ -1,14 +1,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/fallout_info_panel_helper.py
 import BigWorld
 import constants
-from gui.battle_control.arena_info import hasResourcePoints
+from gui.battle_control.arena_info import hasResourcePoints, getIsMultiteam
 import win_points
 from gui.Scaleform.locale.FALLOUT import FALLOUT
 from helpers.i18n import makeString
 from gui.shared.formatters.text_styles import neutral, main, warning
 
-def getHelpTextAsDicts(arenaType = None, arenaBonusType = None, isSolo = False):
+def getHelpTextAsDicts(arenaType = None, arenaBonusType = None):
     pointsObjective = hasResourcePoints(arenaType, arenaBonusType)
+    isMultiteam = getIsMultiteam()
     if pointsObjective:
         objectiveHead = neutral(FALLOUT.INFOPANEL_RESOURCEPOINTS_HEAD)
         objectiveDescr = main(FALLOUT.INFOPANEL_RESOURCEPOINTS_DESCR)
@@ -19,8 +20,12 @@ def getHelpTextAsDicts(arenaType = None, arenaBonusType = None, isSolo = False):
     secretsWinDescr = main(FALLOUT.INFOPANEL_SECRETWIN_DESCR)
     repairHead = neutral(FALLOUT.INFOPANEL_REPAIR_HEAD)
     repairDescr = main(FALLOUT.INFOPANEL_REPAIR_DESCR)
-    garageHead = neutral(FALLOUT.INFOPANEL_GARAGE_HEAD)
-    garageDescr = main(FALLOUT.INFOPANEL_GARAGE_DESCR)
+    if isMultiteam:
+        garageHead = neutral(FALLOUT.INFOPANEL_GARAGEMULTITEAM_HEAD)
+        garageDescr = main(FALLOUT.INFOPANEL_GARAGEMULTITEAM_DESCR)
+    else:
+        garageHead = neutral(FALLOUT.INFOPANEL_GARAGE_HEAD)
+        garageDescr = main(FALLOUT.INFOPANEL_GARAGE_DESCR)
     return [{'head': objectiveHead,
       'descr': objectiveDescr},
      {'head': secretsWinHead,
@@ -31,20 +36,20 @@ def getHelpTextAsDicts(arenaType = None, arenaBonusType = None, isSolo = False):
       'descr': garageDescr}]
 
 
-def getHelpText(arenaType = None, arenaBonusType = None, isSolo = False):
+def getHelpText(arenaType = None, arenaBonusType = None):
     result = []
-    helpText = getHelpTextAsDicts(arenaType, arenaBonusType, isSolo)
+    helpText = getHelpTextAsDicts(arenaType, arenaBonusType)
     for item in helpText:
         result.append('\n'.join((item['head'], item['descr'])))
 
     return result
 
 
-def getCosts(arenaType, isSolo = False):
+def getCosts(arenaType, isSolo = False, forVehicle = True):
     costKill = 0
     costFlags = set()
     if hasattr(arenaType, 'winPoints'):
         winPoints = win_points.g_cache[arenaType.winPoints]
-        costKill = winPoints.pointsForKill(isSolo)
+        costKill = winPoints.pointsForKill(isSolo, forVehicle)
         costFlags = set(winPoints.pointsForFlag(isSolo))
     return (costKill, costFlags)

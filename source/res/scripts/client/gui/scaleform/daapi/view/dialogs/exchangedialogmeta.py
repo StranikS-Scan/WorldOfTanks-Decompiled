@@ -14,13 +14,12 @@ from gui.shared.utils import decorators, CLIP_ICON_PATH
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.gui_items.processors.common import FreeXPExchanger, GoldToCreditsExchanger
-from gui.shared.formatters import icons
+from gui.shared.formatters import icons, text_styles
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
-from gui.Scaleform.daapi.view.lobby.techtree import UnlockStats
-from gui.Scaleform.framework import ScopeTemplates, AppRef
-from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
+from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
+from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.genConsts.CONFIRM_EXCHANGE_DIALOG_TYPES import CONFIRM_EXCHANGE_DIALOG_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 STEP_SIZE = 1
@@ -30,7 +29,7 @@ I18N_GOLDNOTENOUGHTEXT_KEY = '{0:>s}/goldNotEnoughText'
 I18N_EXCHANGENONEEDTEXT_KEY = '{0:>s}/exchangeNoNeedText'
 I18N_NEEDITEMSSTEPPERTITLE_KEY = '{0:>s}/needItemsStepperTitle'
 
-class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
+class _ExchangeDialogMeta(I18nConfirmDialogMeta):
 
     def __init__(self, key, typeCompactDescr):
         self.__typeCompactDescr = typeCompactDescr
@@ -78,25 +77,25 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
          'iconModuleType': item.itemTypeName,
          'icon': self.__getIcon(item) if self.__getIconType(item) == CONFIRM_EXCHANGE_DIALOG_TYPES.VEHICLE_ICON else item.getGUIEmblemID(),
          'iconType': self.__getIconType(item),
-         'itemName': TextManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, item.userName),
+         'itemName': text_styles.middleTitle(item.userName),
          'needItemsText': self.__getResourceToExchangeTxt(resToExchange),
          'needGoldText': self.__getGoldToExchangeTxt(resToExchange),
          'exchangeBlockData': self.__getExchangeBlockData(resToExchange)}
 
     def _getCurrencyTxt(self, strResource):
-        return TextManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, self._makeString(I18N_NEEDITEMSTEXT_KEY.format(self._key), {'value': strResource}))
+        return text_styles.error(self._makeString(I18N_NEEDITEMSTEXT_KEY.format(self._key), {'value': strResource}))
 
     def _getExchangeTxt(self, strGold):
-        return TextManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, self._makeString(I18N_NEEDGOLDTEXT_KEY.format(self._key), {'gold': strGold}))
+        return text_styles.main(self._makeString(I18N_NEEDGOLDTEXT_KEY.format(self._key), {'gold': strGold}))
 
     def _getResourceStepperTxt(self):
-        return TextManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, self._makeString(I18N_NEEDITEMSSTEPPERTITLE_KEY.format(self._key), {}))
+        return text_styles.main(self._makeString(I18N_NEEDITEMSSTEPPERTITLE_KEY.format(self._key), {}))
 
     def _getNoNeedExchangeStateTxt(self):
-        return TextManager.getText(TEXT_MANAGER_STYLES.SUCCESS_TEXT, self._makeString(I18N_EXCHANGENONEEDTEXT_KEY.format(self._key), {}))
+        return text_styles.success(self._makeString(I18N_EXCHANGENONEEDTEXT_KEY.format(self._key), {}))
 
     def _getNotEnoughGoldStateTxt(self, strGold):
-        return TextManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, self._makeString(I18N_GOLDNOTENOUGHTEXT_KEY.format(self._key), {'gold': strGold}))
+        return text_styles.error(self._makeString(I18N_GOLDNOTENOUGHTEXT_KEY.format(self._key), {'gold': strGold}))
 
     def _onStatsChanged(self, *args):
         self.onInvalidate()
@@ -130,7 +129,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
 
     def __getExchangeBlockData(self, resToExchange):
         goldStepperTitleStr = i18n.makeString(DIALOGS.CONFIRMEXCHANGEDIALOG_GOLDITEMSSTEPPERTITLE)
-        goldStepperTitleFmt = TextManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, goldStepperTitleStr)
+        goldStepperTitleFmt = text_styles.main(goldStepperTitleStr)
         return {'exchangeRateItemsIcon': self._getExchangeRateItemsIcon(),
          'goldStepperTitle': goldStepperTitleFmt,
          'needItemsIcon': self._getCurrencyIconPath(),
@@ -160,7 +159,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
     def __getResourceToExchangeTxt(self, resToExchange):
         if resToExchange > 0:
             resource = BigWorld.wg_getIntegralFormat(resToExchange)
-            resStr = TextManager.getText(self._getCurrencyFormat(), resource) + self._getCurrencyIconStr()
+            resStr = self._getCurrencyFormat()(resource) + self._getCurrencyIconStr()
             return self._getCurrencyTxt(resStr)
         return ''
 
@@ -172,8 +171,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta, AppRef):
         return ''
 
     def __getGoldValueWithIcon(self, gold):
-        formattedGold = BigWorld.wg_getGoldFormat(gold)
-        return TextManager.getText(TEXT_MANAGER_STYLES.GOLD_TEXT, formattedGold) + TextManager.getIcon(TextIcons.GOLD)
+        return ''.join(text_styles.gold(BigWorld.wg_getGoldFormat(gold)) + icons.gold())
 
     def __getGoldToExchange(self, resToExchange):
         if resToExchange > 0:
@@ -254,7 +252,7 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
                     self.onCloseDialog()
 
     def _getCurrencyFormat(self):
-        return TEXT_MANAGER_STYLES.CREDITS_TEXT
+        return text_styles.credits
 
     def _getCurrencyIconPath(self):
         return RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2
@@ -334,7 +332,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         return RES_ICONS.MAPS_ICONS_LIBRARY_ELITEXPICON_2
 
     def _getCurrencyFormat(self):
-        return TEXT_MANAGER_STYLES.EXP_TEXT
+        return text_styles.expText
 
     def _getMaxExchangeValue(self):
         eliteVehicles = self._items.getVehicles(REQ_CRITERIA.VEHICLE.ELITE).values()

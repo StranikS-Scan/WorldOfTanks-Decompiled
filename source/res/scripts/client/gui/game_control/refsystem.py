@@ -11,10 +11,9 @@ from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.game_control.controllers import Controller
+from gui.shared.formatters import icons, text_styles
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
@@ -56,11 +55,11 @@ class CreditsAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_REFERRAL_AWARD_CREDITS_GLOW
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_HEADER))
+        return text_styles.highTitle(_ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_HEADER))
 
     def getDescription(self):
-        creditsCount = '%s<nobr>%s' % (self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, BigWorld.wg_getIntegralFormat(self.__creditsValue)), self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, 16, 16, -4, 0)))
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_DESCRIPTION, credits=creditsCount))
+        creditsCount = '%s<nobr>%s' % (text_styles.credits(BigWorld.wg_getIntegralFormat(self.__creditsValue)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, 16, 16, -4, 0))
+        return text_styles.main(_ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_DESCRIPTION, credits=creditsCount))
 
 
 class VehicleAward(AwardAbstract):
@@ -80,7 +79,7 @@ class VehicleAward(AwardAbstract):
         return self.__vehicle.iconUniqueLight
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
+        return text_styles.highTitle(_ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
 
     def getDescription(self):
         if self.__boughtVehicle:
@@ -89,14 +88,14 @@ class VehicleAward(AwardAbstract):
             descriptionText = _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NORMAL, expCount=BigWorld.wg_getIntegralFormat(self.__achievedXp), vehicleName=self.__vehicle.userName)
         else:
             descriptionText = _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NOXP, vehicleName=self.__vehicle.userName)
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, descriptionText)
+        return text_styles.main(descriptionText)
 
     def getAdditionalText(self):
         result = []
         for _, xpFactor in _getRefSystemPeriods():
-            result.append('%s<nobr>x%s' % (self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -8, 0)), BigWorld.wg_getNiceNumberFormat(xpFactor)))
+            result.append('%s<nobr>x%s' % (icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -8, 0), BigWorld.wg_getNiceNumberFormat(xpFactor)))
 
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(MENU.AWARDWINDOW_REFERRAL_COMPLETE, modifiers=', '.join(result)))
+        return text_styles.main(_ms(MENU.AWARDWINDOW_REFERRAL_COMPLETE, modifiers=', '.join(result)))
 
 
 class TankmanAward(AwardAbstract):
@@ -116,22 +115,22 @@ class TankmanAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_REFERRAL_TANKMANMALE
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_HEADER))
+        return text_styles.highTitle(_ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_HEADER))
 
     def getDescription(self):
         if self.__achievedXp is not None:
             description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NORMAL, expCount=BigWorld.wg_getIntegralFormat(self.__achievedXp), tankman=self.__tankman.roleUserName)
         else:
             description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NOXP, tankman=self.__tankman.roleUserName)
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, description)
+        return text_styles.main(description)
 
     def getAdditionalText(self):
         if self.__nextXp is not None:
-            expCount = '%s<nobr>%s' % (BigWorld.wg_getIntegralFormat(self.__nextXp), self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -8, 0)))
-            additionalText = _ms(MENU.AWARDWINDOW_REFERRAL_NEXTTANKMAN, expCount=self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, expCount))
+            expCount = '%s<nobr>%s' % (BigWorld.wg_getIntegralFormat(self.__nextXp), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -8, 0))
+            additionalText = _ms(MENU.AWARDWINDOW_REFERRAL_NEXTTANKMAN, expCount=text_styles.credits(expCount))
         else:
             additionalText = ''
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, additionalText)
+        return text_styles.main(additionalText)
 
 
 class RefSystem(Controller):

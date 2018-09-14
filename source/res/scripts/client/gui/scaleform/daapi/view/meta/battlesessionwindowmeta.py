@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleSessionWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleWindow import PrebattleWindow
 
-class BattleSessionWindowMeta(DAAPIModule):
+class BattleSessionWindowMeta(PrebattleWindow):
 
     def requestToAssignMember(self, accId):
         self._printOverrideError('requestToAssignMember')

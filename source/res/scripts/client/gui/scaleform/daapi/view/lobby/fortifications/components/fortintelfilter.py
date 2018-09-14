@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortIntelFilter.py
 import constants
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.shared.formatters import text_styles
 from helpers import i18n
 from constants import FORT_SCOUTING_DATA_FILTER
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -12,7 +11,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from shared_utils import findFirst
 
-class FortIntelFilter(FortIntelFilterMeta, FortViewHelper, AppRef):
+class FortIntelFilter(FortIntelFilterMeta, FortViewHelper):
     FILTER_TYPE_MAPPING = {None: FORT_SCOUTING_DATA_FILTER.DEFAULT,
      FORTIFICATION_ALIASES.CLAN_TYPE_FILTER_STATE_ALL: FORT_SCOUTING_DATA_FILTER.FILTER,
      FORTIFICATION_ALIASES.CLAN_TYPE_FILTER_STATE_BOOKMARKS: FORT_SCOUTING_DATA_FILTER.ELECT,
@@ -97,7 +96,7 @@ class FortIntelFilter(FortIntelFilterMeta, FortViewHelper, AppRef):
                 elif self.__getSelectedFilterType() == FORTIFICATION_ALIASES.CLAN_TYPE_FILTER_STATE_LASTSEARCH:
                     status = FORTIFICATIONS.FORTINTELLIGENCE_FORTINTELFILTER_STATUS_APPLIEDLASTFOUNDFILTER
             self.as_setClanAbbrevS(cache.getAbbrevPattern())
-            status = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(status))
+            status = text_styles.standard(i18n.makeString(status))
             self.as_setFilterStatusS(status)
             self.__setFilterButtonStatus(not cache.isFilterApplied())
 
@@ -131,8 +130,8 @@ class FortIntelFilter(FortIntelFilterMeta, FortViewHelper, AppRef):
     def __setFilterButtonStatus(self, isMax):
         if isMax:
             status = i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_FORTINTELFILTER_FILTERBUTTONSTATUS_MAX)
-            status = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DISABLED_TEXT, status)
+            status = text_styles.disabled(status)
         else:
             status = i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_FORTINTELFILTER_FILTERBUTTONSTATUS_MIN)
-            status = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, status)
+            status = text_styles.neutral(status)
         self.as_setFilterButtonStatusS(status, not isMax)

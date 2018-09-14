@@ -1,15 +1,13 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/ConnectToSecureChannelWindow.py
 from external_strings_utils import unicode_from_utf8
 from gui import SystemMessages
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from helpers import i18n
 from messenger.gui.Scaleform.meta.ConnectToSecureChannelWindowMeta import ConnectToSecureChannelWindowMeta
 from messenger.m_constants import CHANNEL_PWD_MIN_LENGTH, CHANNEL_PWD_MAX_LENGTH, PROTO_TYPE
 from messenger.proto import proto_getter
 
-class ConnectToSecureChannelWindow(View, AbstractWindowView, ConnectToSecureChannelWindowMeta):
+class ConnectToSecureChannelWindow(ConnectToSecureChannelWindowMeta):
 
     def __init__(self, ctx = None):
         super(ConnectToSecureChannelWindow, self).__init__()

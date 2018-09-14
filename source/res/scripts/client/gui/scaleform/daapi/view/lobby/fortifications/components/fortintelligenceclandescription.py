@@ -9,11 +9,10 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_format
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
 from gui.Scaleform.daapi.view.meta.FortIntelligenceClanDescriptionMeta import FortIntelligenceClanDescriptionMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters import text_styles
 from gui.shared.fortifications import getDirectionFromDirPos, getPositionFromDirPos
 from gui.shared.fortifications.context import FavoriteCtx, RequestClanCardCtx
 from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
@@ -29,7 +28,7 @@ from helpers import time_utils
 from gui.shared.utils import functions
 from helpers.i18n import makeString as _ms
 
-class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortViewHelper, AppRef):
+class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortViewHelper):
 
     def __init__(self):
         super(FortIntelligenceClanDescription, self).__init__()
@@ -266,11 +265,11 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
     def __getSelectedDateText(self):
         if self.fortCtrl.getPermissions().canPlanAttack():
             if self._isFortFrozen():
-                selectedDateText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_ATTACKIMPOSSIBLE))
+                selectedDateText = text_styles.error(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_ATTACKIMPOSSIBLE))
             else:
-                selectedDateText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_SELECTDATE))
+                selectedDateText = text_styles.standard(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_SELECTDATE))
         else:
-            selectedDateText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_SELECTDATE_CANTATTACK))
+            selectedDateText = text_styles.standard(_ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_SELECTDATE_CANTATTACK))
         return selectedDateText
 
     def __getDirectionBuildings(self, direction):

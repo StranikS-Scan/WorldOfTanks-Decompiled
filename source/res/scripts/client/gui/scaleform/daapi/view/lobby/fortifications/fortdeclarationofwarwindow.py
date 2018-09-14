@@ -5,8 +5,6 @@ from FortifiedRegionBase import FORT_EVENT_TYPE
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortDeclarationOfWarWindowMeta import FortDeclarationOfWarWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.ClanCache import g_clanCache
@@ -16,7 +14,7 @@ from gui.shared.fortifications.context import AttackCtx
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 
-class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarWindowMeta, FortViewHelper):
+class FortDeclarationOfWarWindow(FortDeclarationOfWarWindowMeta, FortViewHelper):
 
     def __init__(self, ctx = None):
         super(FortDeclarationOfWarWindow, self).__init__()

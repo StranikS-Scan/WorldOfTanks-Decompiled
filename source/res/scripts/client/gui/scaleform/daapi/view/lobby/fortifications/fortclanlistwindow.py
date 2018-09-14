@@ -3,19 +3,18 @@ import BigWorld
 from gui import game_control
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortClanListWindowMeta import FortClanListWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
+from gui.shared.formatters import icons, text_styles
 from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
 
-class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRef, FortViewHelper):
+class FortClanListWindow(FortClanListWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortClanListWindow, self).__init__()
 
     def _populate(self):
@@ -33,8 +32,22 @@ class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRe
 
     def _update(self):
         initData = {'windowTitle': i18n.makeString(FORTIFICATIONS.FORTCLANLISTWINDOW_TITLE, clanName=g_clanCache.clanTag),
-         'members': self._getClanMembers()}
+         'members': self._getClanMembers(),
+         'tableHeader': [self._createHeader(FORTIFICATIONS.CLANLISTWINDOW_TABLE_MEMBERNAME, 'userName', 181, 0, TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_NIC, TEXT_ALIGN.LEFT, sortType='string'),
+                         self._createHeader(FORTIFICATIONS.CLANLISTWINDOW_TABLE_ROLE, 'playerRoleID', 203, 1, TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_FORTROLE, TEXT_ALIGN.LEFT),
+                         self._createHeader(i18n.makeString(FORTIFICATIONS.FIXEDPLAYERS_LISTHEADER_FIELDWEEK, icon=icons.nut()), 'intWeekMining', 137, 2, TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_WEEK, TEXT_ALIGN.RIGHT),
+                         self._createHeader(i18n.makeString(FORTIFICATIONS.FIXEDPLAYERS_LISTHEADER_FIELDALLTIME, icon=icons.nut()), 'intTotalMining', 147, 3, TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_ALLTIME, TEXT_ALIGN.CENTER)]}
         self.as_setDataS(initData)
+
+    def _createHeader(self, label, iconId, buttonWidth, sortOrder, toolTip, textAlign, sortType = 'numeric'):
+        return {'label': label,
+         'id': iconId,
+         'sortOrder': sortOrder,
+         'buttonWidth': buttonWidth,
+         'toolTip': toolTip,
+         'textAlign': textAlign,
+         'sortType': sortType,
+         'defaultSortDirection': 'ascending'}
 
     def _getClanMembers(self):
         clanMembers = []
@@ -47,19 +60,19 @@ class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRe
 
         return clanMembers
 
-    def __gameSession_onNewDayNotify(self, nextUpdateTime):
+    def __gameSession_onNewDayNotify(self, _):
         self._update()
 
     def _getClanRole(self, member):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(getClanRoleString(member.getClanRole())))
+        return text_styles.standard(i18n.makeString(getClanRoleString(member.getClanRole())))
 
     def _getWeekMiningStr(self, weekMining):
         randWeek = BigWorld.wg_getIntegralFormat(weekMining)
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, randWeek)
+        return text_styles.defRes(randWeek)
 
     def _getTotalMiningStr(self, totalMining):
         allTime = BigWorld.wg_getIntegralFormat(totalMining)
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, allTime)
+        return text_styles.defRes(allTime)
 
     def onWindowClose(self):
         self.destroy()

@@ -5,7 +5,7 @@ from gui import InputHandler
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.WaitingViewMeta import WaitingViewMeta
 
-class WaitingView(WaitingViewMeta, View):
+class WaitingView(WaitingViewMeta):
 
     def __init__(self):
         super(WaitingView, self).__init__()

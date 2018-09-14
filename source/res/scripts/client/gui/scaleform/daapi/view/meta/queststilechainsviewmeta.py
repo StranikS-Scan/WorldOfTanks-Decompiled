@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/QuestsTileChainsViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class QuestsTileChainsViewMeta(DAAPIModule):
+class QuestsTileChainsViewMeta(BaseDAAPIComponent):
 
     def getTileData(self, vehicleType, taskFilterType):
         self._printOverrideError('getTileData')

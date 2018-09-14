@@ -47,10 +47,10 @@ def isBattleChatEnabled(common = False):
 
 
 def getMinimapCellName(cellIdx):
-    from gui.WindowsManager import g_windowsManager
-    battleWindow = g_windowsManager.battleWindow
-    if battleWindow:
-        cellName = battleWindow.minimap.getCellName(cellIdx)
+    from gui.app_loader import g_appLoader
+    battle = g_appLoader.getDefBattleApp()
+    if battle:
+        cellName = battle.minimap.getCellName(cellIdx)
     else:
         cellName = 'N/A'
     return cellName

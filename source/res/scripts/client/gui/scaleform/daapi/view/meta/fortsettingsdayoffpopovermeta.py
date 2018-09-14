@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortSettingsDayoffPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class FortSettingsDayoffPopoverMeta(DAAPIModule):
+class FortSettingsDayoffPopoverMeta(SmartPopOverView):
 
     def onApply(self, dayOff):
         self._printOverrideError('onApply')

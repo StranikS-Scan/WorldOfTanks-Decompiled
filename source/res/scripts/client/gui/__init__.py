@@ -14,6 +14,7 @@ GUI_SETTINGS = GuiSettings()
 DEPTH_OF_Disconnect = 0.0
 DEPTH_OF_Postmortem = 0.01
 DEPTH_OF_BotsMenu = 0.05
+DEPTH_OF_PhysicChart = 0.7
 DEPTH_OF_Battle = 0.1
 DEPTH_OF_Statistic = 0.1
 DEPTH_OF_PlayerBonusesPanel = 0.2

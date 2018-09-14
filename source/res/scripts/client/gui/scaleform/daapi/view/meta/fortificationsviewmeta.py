@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortificationsViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class FortificationsViewMeta(DAAPIModule):
+class FortificationsViewMeta(View):
 
     def onFortCreateClick(self):
         self._printOverrideError('onFortCreateClick')

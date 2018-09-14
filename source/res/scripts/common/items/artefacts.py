@@ -215,6 +215,9 @@ class Equipment(object):
     def extraName(self):
         return self.name
 
+    def updateVehicleAttrFactors(self, factors):
+        pass
+
     def _readConfig(self, xmlCtx, scriptSection):
         pass
 
@@ -251,12 +254,25 @@ class Extinguisher(Equipment):
             self.fireStartingChanceFactor = _xml.readPositiveFloat(xmlCtx, section, 'fireStartingChanceFactor')
         self.autoactivate = section.readBool('autoactivate', False)
 
+    def updateVehicleAttrFactors(self, factors):
+        try:
+            factors['engine/fireStartingChance'] *= self.fireStartingChanceFactor
+        except:
+            pass
+
 
 class Fuel(Equipment):
 
     def _readConfig(self, xmlCtx, section):
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
         self.turretRotationSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'turretRotationSpeedFactor')
+
+    def updateVehicleAttrFactors(self, factors):
+        try:
+            factors['engine/power'] *= self.enginePowerFactor
+            factors['turret/rotationSpeed'] *= self.turretRotationSpeedFactor
+        except:
+            pass
 
 
 class Stimulator(Equipment):
@@ -278,12 +294,24 @@ class RemovedRpmLimiter(Equipment):
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
         self.engineHpLossPerSecond = _xml.readPositiveFloat(xmlCtx, section, 'engineHpLossPerSecond')
 
+    def updateVehicleAttrFactors(self, factors):
+        try:
+            factors['engine/power'] *= self.enginePowerFactor
+        except:
+            pass
+
 
 class Afterburning(Equipment):
 
     def _readConfig(self, xmlCtx, section):
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
         self.durationSeconds = _xml.readInt(xmlCtx, section, 'durationSeconds', 1)
+
+    def updateVehicleAttrFactors(self, factors):
+        try:
+            factors['engine/power'] *= self.enginePowerFactor
+        except:
+            pass
 
 
 class Artillery(Equipment):

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StaticFormationStaffViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class StaticFormationStaffViewMeta(DAAPIModule):
+class StaticFormationStaffViewMeta(BaseDAAPIComponent):
 
     def showRecriutmentWindow(self):
         self._printOverrideError('showRecriutmentWindow')

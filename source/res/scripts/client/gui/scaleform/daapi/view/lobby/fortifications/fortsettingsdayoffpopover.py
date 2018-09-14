@@ -3,22 +3,19 @@ from FortifiedRegionBase import NOT_ACTIVATED
 from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.FortSettingsDayoffPopoverMeta import FortSettingsDayoffPopoverMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters import text_styles
 from gui.shared.fortifications.context import OffDayCtx
 from gui.shared.fortifications.fort_helpers import adjustOffDayToUTC
 from helpers import i18n
 
-class FortSettingsDayoffPopover(View, SmartPopOverView, FortViewHelper, AppRef, FortSettingsDayoffPopoverMeta):
+class FortSettingsDayoffPopover(FortViewHelper, FortSettingsDayoffPopoverMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortSettingsDayoffPopover, self).__init__()
 
     def onApply(self, offDay):
@@ -35,8 +32,8 @@ class FortSettingsDayoffPopover(View, SmartPopOverView, FortViewHelper, AppRef, 
 
     def _populate(self):
         super(FortSettingsDayoffPopover, self)._populate()
-        description = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_DESCRIPTION))
-        dayOffText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_DROPDOWNDESCRIPTION))
+        description = text_styles.standard(i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_DESCRIPTION))
+        dayOffText = text_styles.main(i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_DROPDOWNDESCRIPTION))
         self.as_setDescriptionsTextS(description, dayOffText)
         applyButtonText = i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_APPLYBUTTONLABEL)
         cancelButtonText = i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_CANCELBUTTONLABEL)

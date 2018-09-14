@@ -4,19 +4,16 @@ from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortDisableDefencePeriodWindowMeta import FortDisableDefencePeriodWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as ALIAS, FORTIFICATIONS
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.shared.formatters import text_styles
 from gui.shared.fortifications.context import DefencePeriodCtx
 from helpers import i18n
 
-class FortDisableDefencePeriodWindow(AbstractWindowView, View, FortDisableDefencePeriodWindowMeta, FortViewHelper, AppRef):
+class FortDisableDefencePeriodWindow(FortDisableDefencePeriodWindowMeta, FortViewHelper):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortDisableDefencePeriodWindow, self).__init__()
         self.__inputChecker = None
         self.__controlNumber = self.fortCtrl.getFort().getTotalDefRes()
@@ -59,21 +56,21 @@ class FortDisableDefencePeriodWindow(AbstractWindowView, View, FortDisableDefenc
         return
 
     def __makeInputCheckerError(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
+        return text_styles.error(i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
 
     def __makeInputCheckerTitle(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_INPUTCHECKER_TITLE))
+        return text_styles.middleTitle(i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_INPUTCHECKER_TITLE))
 
     def __makeInputCheckerBody(self):
         controlNumber = BigWorld.wg_getIntegralFormat(self.__controlNumber)
-        controlNumber = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, str(controlNumber))
-        questionBody = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_INPUTCHECKER_BODY, controlNumber=controlNumber))
+        controlNumber = text_styles.middleTitle(str(controlNumber))
+        questionBody = text_styles.standard(i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_INPUTCHECKER_BODY, controlNumber=controlNumber))
         return questionBody
 
     def __makeMainData(self):
-        titleText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_TITLE))
-        redText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODYREDTEXT))
-        bodyText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODY, redText=redText))
+        titleText = text_styles.main(i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_TITLE))
+        redText = text_styles.error(i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODYREDTEXT))
+        bodyText = text_styles.main(i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODY, redText=redText))
         self.as_setDataS({'titleText': titleText,
          'bodyText': bodyText})
 

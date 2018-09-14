@@ -21,14 +21,10 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         ACTIONS = 1
         QUESTS = 2
 
-    def __init__(self):
-        super(QuestsCurrentTab, self).__init__()
-        self._navInfo = quest_caches.getNavInfo()
-
     def getSortedTableData(self, tableData):
         return formatters.packVehiclesList(*quest_caches.sortVehTable(tableData.tableID, tableData.buttonID, tableData.sortingDirection, int(tableData.nation), int(tableData.vehType), int(tableData.level), tableData.cbSelected, tableData.isAction))
 
-    def selectQuest(self, questID):
+    def _selectQuest(self, questID):
         quests = self._getEvents()
         if questID in quests:
             return self.as_setSelectedQuestS(questID)
@@ -36,18 +32,19 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
 
     def sort(self, filterType, hideCompleted):
         self.__filterType = filterType
-        self.__hideCompleted = hideCompleted
-        self.__invalidateEventsData()
+        self._hideCompleted = hideCompleted
+        self._invalidateEventsData()
 
     def getQuestInfo(self, eventID):
         svrEvents = self._getEvents()
         event = svrEvents.get(eventID)
         quest_settings.visitEventGUI(event)
         self._navInfo.selectCommonQuest(eventID)
+        info = None
         if event is not None:
-            return events_helpers.getEventDetails(event, svrEvents)
-        else:
-            return
+            info = events_helpers.getEventDetails(event, svrEvents)
+        self.as_updateQuestInfoS(info)
+        return
 
     def _populate(self):
         super(QuestsCurrentTab, self)._populate()
@@ -58,11 +55,37 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
          'inventory.1': self.__onEventsUpdated,
          'stats.unlocks': self.__onItemUnlocked})
         self.__filterType = self.FILTER_TYPE.ALL_EVENTS
-        self.__hideCompleted = False
+        self._hideCompleted = False
         self.addListener(events.LobbySimpleEvent.EVENTS_UPDATED, self.__onEventsUpdated)
-        self.__invalidateEventsData()
+        self._invalidateEventsData()
         if self._navInfo.common.questID:
-            self.selectQuest(self._navInfo.common.questID)
+            self._selectQuest(self._navInfo.common.questID)
+
+    def _invalidateEventsData(self):
+        svrEvents = self._getEvents()
+        svrGroups = self._getGroups()
+        result = []
+        groups = defaultdict(list)
+        for e in self._applyFilters(svrEvents.values()):
+            groupID = e.getGroupID()
+            groups[groupID].append(events_helpers.getEventInfo(e, svrEvents))
+
+        for groupID, group in self._getSortedEvents(svrGroups):
+            groupItems = groups[groupID]
+            if len(groupItems) > 0:
+                result.append(formatters.packGroupBlock(group.getUserName()))
+                result.extend(groupItems)
+
+        ungroupedQuests = groups[DEFAULTS_GROUPS.UNGROUPED_QUESTS]
+        if len(ungroupedQuests) > 0:
+            result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_UNGOUPEDQUESTS))
+            result.extend(ungroupedQuests)
+        ungroupedActions = groups[DEFAULTS_GROUPS.UNGROUPED_ACTIONS]
+        if len(ungroupedActions) > 0:
+            result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_UNGOUPEDACTIONS))
+            result.extend(ungroupedActions)
+        self.as_setQuestsDataS({'quests': result,
+         'isSortable': True})
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -81,7 +104,7 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
 
     @classmethod
     def _isQuest(cls, svrEvent):
-        return svrEvent.getType() in (constants.EVENT_TYPE.BATTLE_QUEST, constants.EVENT_TYPE.TOKEN_QUEST, constants.EVENT_TYPE.FORT_QUEST)
+        return svrEvent.getType() in constants.EVENT_TYPE.QUEST_RANGE
 
     @classmethod
     def _isFortQuest(cls, svrEvent):
@@ -91,17 +114,12 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
     def _isAction(cls, svrEvent):
         return svrEvent.getType() == constants.EVENT_TYPE.ACTION
 
-    def __onItemUnlocked(self, unlocks):
-        for intCD in unlocks:
-            if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
-                return self.__onEventsUpdated()
-
-    def __onEventsUpdated(self, *args):
-        quest_settings.updateCommonEventsSettings(g_eventsCache.getEvents())
-        self.__invalidateEventsData()
+    @classmethod
+    def _isClubQuest(cls, svrEvent):
+        return svrEvent.getType() == constants.EVENT_TYPE.CLUBS_QUEST
 
     @classmethod
-    def __sortFunc(cls, a, b):
+    def _sortFunc(cls, a, b):
         res = cmp(a.isCompleted(), b.isCompleted())
         if res:
             return res
@@ -113,49 +131,33 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
             return res
         return cmp(a.getUserName(), b.getUserName())
 
-    def __filterFunc(self, a):
+    def _filterFunc(self, a):
         if self.__filterType == self.FILTER_TYPE.ACTIONS and not self._isAction(a):
             return False
         if self.__filterType == self.FILTER_TYPE.QUESTS and not self._isQuest(a):
             return False
-        return not self.__hideCompleted or not a.isCompleted()
+        return (not self._hideCompleted or not a.isCompleted()) and not self._isClubQuest(a)
 
-    def __applyFilters(self, quests):
-        return filter(self.__filterFunc, self.__applySort(quests))
+    def _applyFilters(self, quests):
+        return filter(self._filterFunc, self.__applySort(quests))
+
+    def _getSortedEvents(self, events):
+        return sorted(events.items(), key=lambda (eID, event): (event.getPriority(), event.getUserName()))
 
     def __applySort(self, quests):
-        return sorted(quests, self.__sortFunc)
+        return sorted(quests, self._sortFunc)
 
     def __onEventsCacheSyncCompleted(self):
         self.__onInvalidateCallback()
 
-    def __invalidateEventsData(self):
-        svrEvents = self._getEvents()
-        svrGroups = self._getGroups()
-        result = []
-        groups = defaultdict(list)
-        for e in self.__applyFilters(svrEvents.values()):
-            groupID = e.getGroupID()
-            groups[groupID].append(events_helpers.getEventInfo(e, svrEvents))
-
-        for groupID, group in self.__getSortedEvents(svrGroups):
-            groupItems = groups[groupID]
-            if len(groupItems) > 0:
-                result.append(formatters.packGroupBlock(group.getUserName()))
-                result.extend(groupItems)
-
-        ungroupedQuests = groups[DEFAULTS_GROUPS.UNGROUPED_QUESTS]
-        if len(ungroupedQuests) > 0:
-            result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_UNGOUPEDQUESTS))
-            result.extend(ungroupedQuests)
-        ungroupedActions = groups[DEFAULTS_GROUPS.UNGROUPED_ACTIONS]
-        if len(ungroupedActions) > 0:
-            result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_UNGOUPEDACTIONS))
-            result.extend(ungroupedActions)
-        self.as_setQuestsDataS(result, len(svrEvents))
-
-    def __getSortedEvents(self, events):
-        return sorted(events.items(), key=lambda (eID, event): (event.getPriority(), event.getUserName()))
-
     def __onInvalidateCallback(self):
-        self.__invalidateEventsData()
+        self._invalidateEventsData()
+
+    def __onItemUnlocked(self, unlocks):
+        for intCD in unlocks:
+            if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
+                return self.__onEventsUpdated()
+
+    def __onEventsUpdated(self, *args):
+        quest_settings.updateCommonEventsSettings(g_eventsCache.getEvents())
+        self._invalidateEventsData()

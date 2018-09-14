@@ -2,13 +2,16 @@
 import BattleReplay
 import BigWorld
 import constants
+from debug_utils import LOG_ERROR
+from helpers import tips, i18n
 from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform import getNecessaryArenaFrameName
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.battle_control.arena_info import getClientArena, getArenaTypeID, getArenaIcon, hasResourcePoints, hasFlags
+from gui.battle_control.arena_info import getClientArena, getArenaTypeID, getArenaIcon
+from gui.battle_control.arena_info import hasResourcePoints, hasFlags
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.prb_control.formatters import getPrebattleFullDescription
@@ -20,19 +23,17 @@ from gui.Scaleform.daapi.view.meta.BattleLoadingMeta import BattleLoadingMeta
 from gui.Scaleform.daapi.view.meta.FalloutMultiTeamLoadingMeta import FalloutMultiTeamLoadingMeta
 from gui.Scaleform.daapi.view.fallout_info_panel_helper import getHelpTextAsDicts
 from messenger.storage import storage_getter
-from helpers import tips, i18n
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.formatters.text_styles import _formatText
 DEFAULT_BATTLES_COUNT = 100
 
 class _BaseBattleLoading(LobbySubView, IArenaVehiclesController):
     MAP_BG_SOURCE = 'gui/maps/icons/map/screen/%s.dds'
     SMALL_MAP_SOURCE = '../maps/icons/map/battleLoading/%s.png'
+    __background_alpha__ = 0.0
 
-    def __init__(self, ctx = None):
-        super(_BaseBattleLoading, self).__init__(backAlpha=0.0)
+    def __init__(self, _ = None):
+        super(_BaseBattleLoading, self).__init__()
         self._battleCtx = None
-        self._logArenaUniID = False
         self._isArenaTypeDataInited = False
         return
 
@@ -45,7 +46,7 @@ class _BaseBattleLoading(LobbySubView, IArenaVehiclesController):
         g_sessionProvider.addArenaCtrl(self)
         BigWorld.wg_updateColorGrading()
         BigWorld.wg_enableGUIBackground(True, False)
-        self.__addArenaTypeData()
+        self._addArenaTypeData()
         Waiting.close()
 
     def _dispose(self):
@@ -132,7 +133,7 @@ class _BaseBattleLoading(LobbySubView, IArenaVehiclesController):
     def _setProgress(self, progress):
         pass
 
-    def _makeItem(self, vInfoVO, viStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, squadIdx):
+    def _makeItem(self, vInfoVO, viStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, squadIdx, isFallout = False):
         player = vInfoVO.player
         vTypeVO = vInfoVO.vehicleType
         dbID = player.accountDBID
@@ -141,6 +142,7 @@ class _BaseBattleLoading(LobbySubView, IArenaVehiclesController):
             isMuted = user.isMuted()
         else:
             isMuted = False
+        alias = 'vm_enemy' if isEnemy else 'vm_ally'
         return {'accountDBID': dbID,
          'isMuted': isMuted,
          'isSpeaking': isSpeaking(dbID),
@@ -156,7 +158,11 @@ class _BaseBattleLoading(LobbySubView, IArenaVehiclesController):
          'playerName': player.getPlayerLabel(),
          'igrType': player.igrType,
          'clanAbbrev': player.clanAbbrev,
-         'region': regionGetter(dbID)}
+         'region': regionGetter(dbID),
+         'vehicleType': vTypeVO.getClassName(),
+         'teamColor': self.app.colorManager.getColorScheme(alias).get('aliasColor'),
+         'vLevel': vTypeVO.level,
+         'isFallout': isFallout}
 
     def _updateTipsInfo(self):
         pass
@@ -170,14 +176,8 @@ class _BaseBattleLoading(LobbySubView, IArenaVehiclesController):
     def _getSquadIdx(self, arenaDP, vInfoVO):
         return vInfoVO.squadIndex
 
-    def __addArenaTypeData(self):
-        arena = getClientArena()
-        if arena:
-            arenaType = arena.arenaType
-            mapBG = arenaType.geometryName
-            if arenaType.gameplayName.startswith('fallout'):
-                mapBG += '_fallout'
-            BigWorld.wg_setGUIBackground(BattleLoading.MAP_BG_SOURCE % mapBG)
+    def _addArenaTypeData(self):
+        BigWorld.wg_setGUIBackground(getArenaIcon(BattleLoading.MAP_BG_SOURCE))
 
     def _addArenaExtraData(self, arenaDP):
         self._setArenaInfo({})
@@ -199,10 +199,12 @@ class BattleLoading(_BaseBattleLoading, BattleLoadingMeta):
         userGetter = self.usersStorage.getUser
         actionGetter = VehicleActions.getBitMask
         playerTeam = arenaDP.getNumberOfTeam()
+        arena = getClientArena()
+        isFallout = arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES
         for isEnemy in (False, True):
             result = []
             for vInfoVO, _, viStatsVO in arenaDP.getVehiclesIterator(isEnemy):
-                result.append(self._makeItem(vInfoVO, viStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, self._getSquadIdx(arenaDP, vInfoVO)))
+                result.append(self._makeItem(vInfoVO, viStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, self._getSquadIdx(arenaDP, vInfoVO), isFallout))
 
             self._setVehiclesData(isEnemy, result)
 
@@ -231,10 +233,8 @@ class BattleLoading(_BaseBattleLoading, BattleLoadingMeta):
         self.as_setProgressS(progress)
 
     def _setTipsInfo(self):
-        showFalloutEventInfo = False
         arena = getClientArena()
-        if arena is not None:
-            showFalloutEventInfo = arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES
+        isFallout = arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES
         arenaDP = self._battleCtx.getArenaDP()
         if hasResourcePoints():
             bgUrl = RES_ICONS.MAPS_ICONS_EVENTINFOPANEL_FALLOUTRESOURCEPOINTSEVENT
@@ -242,22 +242,34 @@ class BattleLoading(_BaseBattleLoading, BattleLoadingMeta):
             bgUrl = RES_ICONS.MAPS_ICONS_EVENTINFOPANEL_FALLOUTFLAGSEVENT
         else:
             bgUrl = ''
-        if showFalloutEventInfo:
+        if isFallout:
             self.as_setEventInfoPanelDataS({'bgUrl': bgUrl,
-             'items': getHelpTextAsDicts(isSolo=not arenaDP.isSquadMan(arenaDP.getPlayerVehicleID()))})
+             'items': getHelpTextAsDicts(arena.arenaType)})
         elif not self.__isTipInited:
             battlesCount = DEFAULT_BATTLES_COUNT
             if g_lobbyContext.getBattlesCount() is not None:
                 battlesCount = g_lobbyContext.getBattlesCount()
             vType, vLvl, nation = arenaDP.getVehicleInfo().getTypeInfo()
-            statusStr, tipStr, tipIcon = next(tips.getTipsIterator(battlesCount, vType, nation, vLvl))
+            tipsIterator = tips.getTipsIterator(arena.guiType, battlesCount, vType, nation, vLvl)
+            statusStr, tipStr = ('', '')
+            if tipsIterator is not None:
+                statusStr, tipStr = next(tipsIterator)
+            else:
+                LOG_ERROR('No required tips found')
             self.as_setTipTitleS(text_styles.highTitle(statusStr))
-            self.as_setTipS(text_styles.main(tipStr))
+            self.as_setTipS(text_styles.playerOnline(tipStr))
             self.__isTipInited = True
         return
 
     def _setArenaInfo(self, arenaInfoData):
         self.as_setArenaInfoS(arenaInfoData)
+
+    def _addArenaTypeData(self):
+        arena = getClientArena()
+        if arena:
+            arenaType = arena.arenaType
+            self.as_setMapIconS(BattleLoading.SMALL_MAP_SOURCE % arenaType.geometryName)
+        super(BattleLoading, self)._addArenaTypeData()
 
     def _addArenaExtraData(self, arenaDP):
         arena = getClientArena()
@@ -272,7 +284,7 @@ class BattleLoading(_BaseBattleLoading, BattleLoadingMeta):
             hasBase = isBaseExists(arenaTypeID, team)
             allyTeamName, enemyTeamName = self._battleCtx.getTeamName(team), self._battleCtx.getTeamName(enemy)
             if arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
-                winText = i18n.makeString('#arenas:type/fallout/description')
+                winText = i18n.makeString('#arenas:type/%s/description' % arenaSubType)
             else:
                 winText = getBattleSubTypeWinText(arenaTypeID, 1 if hasBase else 2)
             if descExtra:
@@ -284,20 +296,6 @@ class BattleLoading(_BaseBattleLoading, BattleLoadingMeta):
             elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING]:
                 battleTypeLocaleStr = '#arenas:type/%s/name' % arenaSubType
                 battleTypeFrameLabel = getNecessaryArenaFrameName(arenaSubType, hasBase)
-                if arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and self._logArenaUniID == False:
-                    self._logArenaUniID = True
-                    from time import strftime, localtime
-                    from debug_utils import LOG_NOTE
-                    msg = 'arenaUniqueID: %d | timestamp: %s' % (arena.arenaUniqueID, strftime('%d.%m.%Y %H:%M:%S', localtime()))
-                    LOG_NOTE(msg)
-                    if False:
-                        try:
-                            file = open('arena_unique_id.txt', 'a')
-                            file.write(msg + '\n')
-                            file.close()
-                        except:
-                            pass
-
             elif arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES and hasResourcePoints():
                 battleTypeFrameLabel = 'resourcePoints'
                 battleTypeLocaleStr = MENU.LOADING_BATTLETYPES_RESOURCEPOINTS
@@ -352,16 +350,14 @@ class FalloutMultiTeamBattleLoading(_BaseBattleLoading, FalloutMultiTeamLoadingM
     def _setProgress(self, progress):
         self.as_setProgressS(progress)
 
-    def _makeItem(self, vInfoVO, viStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, squadIdx):
-        result = super(FalloutMultiTeamBattleLoading, self)._makeItem(vInfoVO, viStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, squadIdx)
-        if not isEnemy:
-            result['playerName'] = _formatText('goldText', result['playerName'])
+    def _makeItem(self, vInfoVO, viStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, squadIdx, isFallout = True):
+        result = super(FalloutMultiTeamBattleLoading, self)._makeItem(vInfoVO, viStatsVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam, isEnemy, squadIdx, isFallout)
         result['points'] = viStatsVO.winPoints
         return result
 
     def _setTipsInfo(self):
         self.as_setEventInfoPanelDataS({'bgUrl': RES_ICONS.MAPS_ICONS_EVENTINFOPANEL_FALLOUTFLAGSEVENT,
-         'items': getHelpTextAsDicts()})
+         'items': getHelpTextAsDicts(getClientArena().arenaType)})
 
     def _setArenaInfo(self, arenaInfoData):
         self.as_setArenaInfoS(arenaInfoData)
@@ -370,8 +366,8 @@ class FalloutMultiTeamBattleLoading(_BaseBattleLoading, FalloutMultiTeamLoadingM
         return arenaDP.getMultiTeamsIndexes()[vInfoVO.team]
 
     def _addArenaExtraData(self, arenaDP):
-        battleTypeLocaleStr = text_styles.promoTitle(MENU.LOADING_BATTLETYPES_MIX)
+        arena = getClientArena()
         winText = text_styles.main(FALLOUT.BATTLELOADING_MULTITEAM_WINTEXT)
-        arenaInfoData = {'battleTypeLocaleStr': battleTypeLocaleStr,
+        arenaInfoData = {'battleTypeLocaleStr': arena.arenaType.name,
          'winText': winText}
         self._setArenaInfo(arenaInfoData)

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TechnicalMaintenanceMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class TechnicalMaintenanceMeta(DAAPIModule):
+class TechnicalMaintenanceMeta(AbstractWindowView):
 
     def getEquipment(self, id1, currency1, id2, currency2, id3, currency3, installSlotIndex):
         self._printOverrideError('getEquipment')

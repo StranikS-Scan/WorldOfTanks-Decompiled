@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/QuestsPersonalWelcomeViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class QuestsPersonalWelcomeViewMeta(DAAPIModule):
+class QuestsPersonalWelcomeViewMeta(BaseDAAPIComponent):
 
     def success(self):
         self._printOverrideError('success')

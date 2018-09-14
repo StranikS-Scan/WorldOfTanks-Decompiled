@@ -3,13 +3,11 @@ from account_helpers.AccountSettings import AccountSettings
 from gui.Scaleform.daapi.view.lobby.cyberSport.VehicleSelectorBase import VehicleSelectorBase
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.RosterSlotSettingsWindowMeta import RosterSlotSettingsWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.shared.ItemsCache import g_itemsCache, REQ_CRITERIA
 from gui.shared.events import CSRosterSlotSettingsWindow
 __author__ = 'd_savitski'
 
-class RosterSlotSettingsWindow(View, RosterSlotSettingsWindowMeta, AbstractWindowView, VehicleSelectorBase):
+class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase):
 
     def __init__(self, ctx = None):
         super(RosterSlotSettingsWindow, self).__init__()

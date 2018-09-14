@@ -5,7 +5,6 @@ from FortifiedRegionBase import NOT_ACTIVATED
 import fortified_regions
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS, FORT_ORDER_TYPE
-from gui.Scaleform.framework.managers.TextManager import TextManager
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -13,7 +12,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.fort_helpers import FortListener
-from gui.shared.formatters import icons
+from gui.shared.formatters import icons, time_formatters
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from helpers import i18n, time_utils
 from shared_utils import findFirst
@@ -162,7 +161,7 @@ class FortViewHelper(FortListener):
                     orderTooltipData = '\n' + i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INPAUSE)
                 else:
                     order = self.fortCtrl.getFort().getOrder(self.fortCtrl.getFort().getBuildingOrder(buildingDescr.typeID))
-                    orderTime = TextManager.reference().getTimeDurationStr(order.getProductionLeftTime())
+                    orderTime = time_formatters.getTimeDurationStr(order.getProductionLeftTime())
                     orderTooltipData = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_ORDER, order.productionCount, orderTime)
         toolTipData = self.getBuildingTooltipBody(hpVal, maxHpValue, defResVal, maxDefResValue)
         if orderTooltipData is not None:

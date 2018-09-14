@@ -8,9 +8,9 @@ from gui.shared.utils.decorators import ReprInjector
 @ReprInjector.simple('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'hasLockedState', 'isIntroMode')
 
 class FunctionalState(object):
-    __slots__ = ('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'hasLockedState', 'isIntroMode', 'funcState')
+    __slots__ = ('ctrlTypeID', 'entityTypeID', 'hasModalEntity', 'hasLockedState', 'isIntroMode', 'funcState', 'extra')
 
-    def __init__(self, ctrlTypeID = 0, entityTypeID = 0, hasModalEntity = False, hasLockedState = False, isIntroMode = False, funcState = None):
+    def __init__(self, ctrlTypeID = 0, entityTypeID = 0, hasModalEntity = False, hasLockedState = False, isIntroMode = False, funcState = None, extra = None):
         super(FunctionalState, self).__init__()
         self.ctrlTypeID = ctrlTypeID
         self.entityTypeID = entityTypeID
@@ -18,6 +18,7 @@ class FunctionalState(object):
         self.hasLockedState = hasLockedState
         self.isIntroMode = isIntroMode
         self.funcState = funcState
+        self.extra = extra
 
     def isInPrebattle(self, prbType = 0):
         result = False
@@ -55,6 +56,12 @@ class FunctionalState(object):
                 result = self.entityTypeID != 0
         return result
 
+    def isInFallout(self):
+        if self.isInUnit(PREBATTLE_TYPE.SQUAD) and self.extra is not None and self.extra.eventType:
+            return True
+        else:
+            return False
+
     def doLeaveToAcceptInvite(self, prbType = 0):
         result = False
         if self.hasModalEntity:
@@ -68,7 +75,7 @@ class FunctionalState(object):
         return self.hasModalEntity and not self.isIntroMode and (self.isInPrebattle() or self.isInUnit())
 
     def isNavigationDisabled(self):
-        return self.hasLockedState and (self.isInPreQueue() or self.isInPrebattle(PREBATTLE_TYPE.COMPANY) or self.isInPrebattle(PREBATTLE_TYPE.SQUAD) or self.isInClubsPreArena())
+        return self.hasLockedState and (self.isInPreQueue() or self.isInPrebattle(PREBATTLE_TYPE.COMPANY) or self.isInUnit(PREBATTLE_TYPE.SQUAD) or self.isInClubsPreArena())
 
 
 class PlayerDecorator(object):

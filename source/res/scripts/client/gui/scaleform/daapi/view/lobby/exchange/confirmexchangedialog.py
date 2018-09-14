@@ -1,13 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ConfirmExchangeDialog.py
-import BigWorld
 from adisp import process
 from gui import SystemMessages
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.daapi.view.meta.ConfirmExchangeDialogMeta import ConfirmExchangeDialogMeta
 
-class ConfirmExchangeDialog(AbstractWindowView, View, ConfirmExchangeDialogMeta, AppRef):
+class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
 
     def __init__(self, meta, handler):
         super(ConfirmExchangeDialog, self).__init__()

@@ -1,23 +1,25 @@
 # Embedded file name: scripts/client/notification/LayoutController.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import AppRef, ViewTypes
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.app_loader import g_appLoader
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from notification.BaseMessagesController import BaseMessagesController
 from notification.settings import LAYOUT_PADDING
 
-class LayoutController(BaseMessagesController, EventSystemEntity, AppRef):
+class LayoutController(BaseMessagesController, EventSystemEntity):
 
     def __init__(self, model):
         BaseMessagesController.__init__(self, model)
-        isViewAvailable = self.app.containerManager.isViewAvailable(ViewTypes.LOBBY_SUB)
+        app = g_appLoader.getDefLobbyApp()
+        isViewAvailable = app.containerManager.isViewAvailable(ViewTypes.LOBBY_SUB)
         if isViewAvailable:
-            view = self.app.containerManager.getView(ViewTypes.LOBBY_SUB)
+            view = app.containerManager.getView(ViewTypes.LOBBY_SUB)
             isNowHangarLoading = view.settings.alias == VIEW_ALIAS.LOBBY_HANGAR
         else:
-            isNowHangarLoading = self.app.loaderManager.isViewLoading(VIEW_ALIAS.LOBBY_HANGAR)
+            isNowHangarLoading = app.loaderManager.isViewLoading(VIEW_ALIAS.LOBBY_HANGAR)
         if isNowHangarLoading:
             self.__onHangarViewSelected({})
         else:

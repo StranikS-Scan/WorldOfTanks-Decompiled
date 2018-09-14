@@ -1,19 +1,26 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
 import BigWorld
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.game_control import getFalloutCtrl
+from helpers import i18n, time_utils
 from account_helpers import isDemonstrator
 from adisp import process
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_TUTORIAL_ENABLED, IS_CHINA
+from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR, IS_TUTORIAL_ENABLED
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
-from gui import game_control
+from gui.Scaleform.genConsts.FALLOUT_ALIASES import FALLOUT_ALIASES
+from gui.LobbyContext import g_lobbyContext
 from gui.prb_control import areSpecBattlesHidden
 from gui.prb_control.context import PrebattleAction
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES, FUNCTIONAL_EXIT
+from gui.prb_control.formatters.windows import SwitchPeripheryCompanyCtx
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.server_events import g_eventsCache
+from gui.shared.formatters import text_styles
+from gui.shared.formatters import time_formatters
 from gui.shared.fortifications import isFortificationEnabled, isSortieEnabled
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
@@ -77,7 +84,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInPrebattle(PREBATTLE_TYPE.SQUAD)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -86,12 +93,16 @@ class _SelectorItem(object):
             self._isSelected = False
 
     def getVO(self):
-        return {'label': self._label,
+        return {'label': self.getFormattedLabel(),
          'data': self._data,
          'disabled': self._isDisabled,
          'icon': self.getLargerIcon(),
          'active': self._isSelected,
-         'isNew': self._isNew}
+         'isNew': self._isNew,
+         'specialBgIcon': ''}
+
+    def getFormattedLabel(self):
+        return text_styles.middleTitle(i18n.makeString(self._label))
 
     def getOrder(self):
         return self._order
@@ -134,7 +145,7 @@ class _RandomQueueItem(_SelectorItem):
 
     def _update(self, state):
         self._isDisabled = state.hasLockedState
-        self._isSelected = not state.hasModalEntity or state.isInPrebattle(PREBATTLE_TYPE.SQUAD)
+        self._isSelected = not getFalloutCtrl().isEnabled() and (not state.hasModalEntity or state.isInPrebattle(PREBATTLE_TYPE.SQUAD))
 
 
 class _HistoricalItem(_SelectorItem):
@@ -176,9 +187,49 @@ class _CompanyItem(_SelectorItem):
     def isInSquad(self, state):
         return False
 
+    def getFormattedLabel(self):
+        battleTypeName = super(_CompanyItem, self).getFormattedLabel()
+        availabilityStr = self.__getAvailabilityStr()
+        if availabilityStr is None:
+            return battleTypeName
+        else:
+            return '%s\n%s' % (battleTypeName, availabilityStr)
+
+    def select(self):
+        battle = g_eventsCache.getCompanyBattles()
+        if battle.isRunning():
+            if battle.needToChangePeriphery():
+                g_eventDispatcher.showSwitchPeripheryWindow(ctx=SwitchPeripheryCompanyCtx())
+            else:
+                super(_CompanyItem, self).select()
+
     def _update(self, state):
         self._isSelected = state.isInPrebattle(PREBATTLE_TYPE.COMPANY)
-        self._isDisabled = state.hasLockedState
+        battle = g_eventsCache.getCompanyBattles()
+        self._isDisabled = not (battle.isRunning() and battle.isValid())
+
+    @staticmethod
+    def _getDateTimeString(timeValue):
+        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(timeValue), BigWorld.wg_getShortTimeFormat(timeValue))
+
+    def __getAvailabilityStr(self):
+        battle = g_eventsCache.getCompanyBattles()
+        if not battle.isValid():
+            return
+        else:
+            startTimeLeft = battle.getCreationTimeLeft()
+            finishTimeLeft = battle.getDestroyingTimeLeft()
+            if startTimeLeft is not None and startTimeLeft > 0:
+                if startTimeLeft < time_utils.ONE_DAY:
+                    return text_styles.alert(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_AVAILABLESINCESOON, time=text_styles.stats(time_formatters.getTimeDurationStr(startTimeLeft, True))))
+                else:
+                    return text_styles.stats(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_AVAILABLESINCE, datetime=self._getDateTimeString(battle.startTime)))
+            elif finishTimeLeft is not None and finishTimeLeft > 0:
+                if finishTimeLeft < time_utils.ONE_DAY:
+                    return text_styles.success(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_AVAILABLEUNTILSOON, time=text_styles.stats(time_formatters.getTimeDurationStr(finishTimeLeft, True))))
+                else:
+                    return text_styles.success(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_AVAILABLEUNTIL, datetime=self._getDateTimeString(battle.finishTime)))
+            return
 
 
 class _FortItem(_SelectorItem):
@@ -240,7 +291,21 @@ class _BattleTutorialItem(_SelectorItem):
     def _doSelect(self, dispatcher):
         result = yield dispatcher.unlock(FUNCTIONAL_EXIT.BATTLE_TUTORIAL, True)
         if result:
-            g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.RESTART, ctx={'reloadIfRun': True}), scope=EVENT_BUS_SCOPE.GLOBAL)
+            g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='OFFBATTLE', reloadIfRun=True, restoreIfRun=True), scope=EVENT_BUS_SCOPE.GLOBAL)
+
+
+class _FalloutItem(_SelectorItem):
+
+    def _update(self, state):
+        falloutCtrl = getFalloutCtrl()
+        self._isSelected = falloutCtrl.isEnabled()
+        self._isDisabled = state.hasLockedState or self._isSelected and not falloutCtrl.canChangeBattleType()
+        self._isVisible = falloutCtrl.isAvailable()
+
+    def getVO(self):
+        vo = super(_FalloutItem, self).getVO()
+        vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_FALLOUTSELECTORRENDERERBGEVENT
+        return vo
 
 
 class _BattleSelectorItems(object):
@@ -291,7 +356,7 @@ _g_items = None
 _DEFAULT_PAN = PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE
 
 def _createItems():
-    isInRoaming = game_control.g_instance.roaming.isInRoaming()
+    isInRoaming = g_lobbyContext.getServerSettings().roaming.isInRoaming()
     items = []
     _addRandomBattleType(items)
     _addHistoricalBattleType(items, isInRoaming)
@@ -300,10 +365,11 @@ def _createItems():
     _addTrainingBattleType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
-    if not IS_CHINA:
-        _addCompanyBattleType(items)
+    _addCompanyBattleType(items)
     if _isTutorialEnabled():
         _addTutorialBattleType(items, isInRoaming)
+    if g_eventsCache.isEventEnabled():
+        _addFalloutBattleType(items)
     return _BattleSelectorItems(items)
 
 
@@ -316,27 +382,31 @@ def _addHistoricalBattleType(items, isInRoaming):
 
 
 def _addCommandBattleType(items):
-    items.append(_CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.UNIT, 2, SELECTOR_BATTLE_TYPES.UNIT))
+    items.append(_CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.UNIT, 3, SELECTOR_BATTLE_TYPES.UNIT))
 
 
 def _addSortieBattleType(items, isInRoaming):
-    items.append((_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, 4, SELECTOR_BATTLE_TYPES.SORTIE))
+    items.append((_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, 5, SELECTOR_BATTLE_TYPES.SORTIE))
 
 
 def _addTrainingBattleType(items):
-    items.append(_TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAINING, 6))
+    items.append(_TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAINING, 7))
 
 
 def _addSpecialBattleType(items):
-    items.append(_SpecBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLE, 5))
+    items.append(_SpecBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLE, 6))
 
 
 def _addCompanyBattleType(items):
-    items.append(_CompanyItem(MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, 3))
+    items.append(_CompanyItem(MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, 4))
 
 
 def _addTutorialBattleType(items, isInRoaming):
-    items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 7))
+    items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 8))
+
+
+def _addFalloutBattleType(items):
+    items.append(_FalloutItem(MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.FALLOUT, 2))
 
 
 def _isTutorialEnabled():

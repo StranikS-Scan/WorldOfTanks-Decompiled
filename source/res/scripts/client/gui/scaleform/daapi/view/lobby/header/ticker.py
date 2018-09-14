@@ -2,11 +2,9 @@
 import BigWorld, time, constants
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi.view.meta.TickerMeta import TickerMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 from gui import GUI_SETTINGS, game_control
 
-class Ticker(TickerMeta, DAAPIModule, AppRef):
+class Ticker(TickerMeta):
     UPDATE_INTERVAL = 600
     RSS_URL = 'http://wot.kongzhong.com/erji/ticker.xml'
 

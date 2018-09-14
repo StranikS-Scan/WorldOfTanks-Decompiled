@@ -4,13 +4,11 @@ import BigWorld
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.meta.PremiumWindowMeta import PremiumWindowMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.shared import g_itemsCache
+from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items.processors.common import PremiumAccountBuyer
 from gui.shared.tooltips import ACTION_TOOLTIPS_STATE, ACTION_TOOLTIPS_TYPE
 from gui import makeHtmlString, game_control, SystemMessages
@@ -19,12 +17,16 @@ from helpers import i18n, time_utils
 BTN_WIDTH = 120
 PREMIUM_PACKET_LOCAL_KEY = '#menu:premium/packet/days%s'
 
-class PremiumWindow(View, PremiumWindowMeta, AbstractWindowView, AppRef):
+class PremiumWindow(PremiumWindowMeta):
 
     def __init__(self, ctx = None):
         super(PremiumWindow, self).__init__()
         self._items = g_itemsCache.items
         self._actualPremiumCost = None
+        if ctx is not None:
+            self._arenaUniqueID = ctx.get('arenaUniqueID', 0)
+        else:
+            self._arenaUniqueID = 0
         return
 
     def onBtnClick(self, action):
@@ -64,11 +66,15 @@ class PremiumWindow(View, PremiumWindowMeta, AbstractWindowView, AppRef):
 
     @process('loadStats')
     def __premiumBuyRequest(self, days, cost):
-        result = yield PremiumAccountBuyer(days, cost).request()
+        wasPremium = g_itemsCache.items.stats.isPremium
+        result = yield PremiumAccountBuyer(days, cost, self._arenaUniqueID).request()
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
+            becomePremium = g_itemsCache.items.stats.isPremium and not wasPremium
             self.onWindowClose()
+            self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.PREMIUM_BOUGHT, ctx={'arenaUniqueID': self._arenaUniqueID,
+             'becomePremium': becomePremium}))
 
     def __populateData(self):
         self.as_setImageS(RES_ICONS.MAPS_ICONS_WINDOWS_PREM_PREMHEADER, 0)
@@ -154,11 +160,13 @@ class PremiumWindow(View, PremiumWindowMeta, AbstractWindowView, AppRef):
           'action': 'buyAction',
           'isFocused': True,
           'tooltip': '',
-          'enabled': self.__isBuyBtnEnabled()}, {'label': MENU.PREMIUM_CANCEL,
+          'enabled': self.__isBuyBtnEnabled(),
+          'btnName': 'submitButton'}, {'label': MENU.PREMIUM_CANCEL,
           'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK,
           'action': 'closeAction',
           'isFocused': False,
-          'tooltip': ''}]
+          'tooltip': '',
+          'btnName': 'closeButton'}]
 
     def __isBuyBtnEnabled(self):
         premiumCost = self._items.shop.getPremiumCostWithDiscount()

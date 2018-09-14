@@ -16,6 +16,7 @@ import items.vehicles
 import math
 import time
 import VehicleStickers
+from HangarVehicle import HangarVehicle
 import constants
 from PlayerEvents import g_playerEvents
 from ConnectionManager import connectionManager
@@ -29,6 +30,7 @@ import weakref
 import FMOD
 if FMOD.enabled:
     import VehicleAppearance
+from VehicleEffects import RepaintParams
 _DEFAULT_HANGAR_SPACE_PATH_BASIC = 'spaces/hangar_v2'
 _DEFAULT_HANGAR_SPACE_PATH_PREM = 'spaces/hangar_premium_v2'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
@@ -189,7 +191,7 @@ class ClientHangarSpace():
         spacePathLC = spacePath.lower()
         if _HANGAR_CFGS.has_key(spacePathLC):
             self.__loadConfig(_CFG, _HANGAR_CFGS[spacePathLC], _CFG)
-        self.__vEntityId = BigWorld.createEntity('OfflineEntity', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
+        self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
         self.__setupCamera()
@@ -668,6 +670,14 @@ class _VehicleAppearance():
             self.__showMarksOnGun = not diff['showMarksOnGun']
             self.refresh()
         elif 'dynamicFov' in diff or 'fov' in diff:
+            if 'fov' in diff:
+                staticFOV, dynamicFOVLow, dynamicFOVTop = diff['fov']
+                defaultHorizontalFov = math.radians(dynamicFOVTop)
+
+                def resetFov(value):
+                    FovExtended.instance().defaultHorizontalFov = value
+
+                BigWorld.callback(0.0, partial(resetFov, defaultHorizontalFov))
             self.__hangarSpace.updateCameraByMouseMove(0, 0, 0)
 
     def __assembleModel(self):
@@ -793,6 +803,9 @@ class _VehicleAppearance():
     def __setupModel(self, buildIdx):
         model = self.__assembleModel()
         model.addMotor(BigWorld.Servo(_createMatrix(_CFG['v_scale'], _CFG['v_start_angles'], _CFG['v_start_pos'])))
+        entity = BigWorld.entity(self.__vEntityId)
+        if isinstance(entity, HangarVehicle):
+            entity.typeDescriptor = self.__vDesc
         BigWorld.addModel(model)
         if self.__setupModelCb is not None:
             BigWorld.cancelCallback(self.__setupModelCb)
@@ -824,6 +837,7 @@ class _VehicleAppearance():
                     self.__onLoadedCallback()
                     self.__onLoadedCallback = None
                 self.updateCamouflage()
+                self.updateRepaint()
                 if self.__smCb is None:
                     self.__setupHangarShadowMap()
             if self.__vDesc is not None and 'observer' in self.__vDesc.type.tags:
@@ -1007,6 +1021,26 @@ class _VehicleAppearance():
                         fashion.setCamouflage(texture, exclusionMap, tiling, colors[0], colors[1], colors[2], colors[3], weights)
                     else:
                         fashion.removeCamouflage()
+
+            return
+
+    def updateRepaint(self):
+        if not hasattr(self.__vDesc.type, 'repaintParameters'):
+            return
+        else:
+            repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale = RepaintParams.getRepaintParams(self.__vDesc)
+            for model in self.__models:
+                fashion = None
+                if hasattr(model, 'wg_fashion'):
+                    fashion = model.wg_fashion
+                elif hasattr(model, 'wg_baseFashion'):
+                    fashion = model.wg_baseFashion
+                elif hasattr(model, 'wg_gunRecoil'):
+                    fashion = model.wg_gunRecoil
+                else:
+                    fashion = model.wg_baseFashion = BigWorld.WGBaseFashion()
+                if fashion is not None:
+                    fashion.setRepaint(repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale)
 
             return
 

@@ -6,12 +6,13 @@ from functools import partial
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import async, process
-from constants import IGR_TYPE
+from constants import IGR_TYPE, FALLOUT_BATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from FortifiedRegionBase import FORT_ERROR
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS, game_control
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
+from gui.game_control import getFalloutCtrl
 from gui.prb_control import functional, getClientPrebattle
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control import getClientUnitMgr
@@ -26,7 +27,8 @@ from gui.prb_control import areSpecBattlesHidden
 from gui.prb_control.context import PrbCtrlRequestCtx, StartDispatcherCtx
 from gui.prb_control.context import CreateFunctionalCtx
 from gui.prb_control import isParentControlActivated, getClientUnitBrowser
-from gui.prb_control.settings import PREBATTLE_RESTRICTION, FUNCTIONAL_EXIT, UNIT_MODE_FLAGS, PREBATTLE_ACTION_NAME
+from gui.prb_control.settings import PREBATTLE_RESTRICTION, FUNCTIONAL_EXIT, UNIT_MODE_FLAGS
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.prb_control.settings import IGNORED_UNIT_MGR_ERRORS
@@ -35,6 +37,7 @@ from gui.prb_control.settings import RETURN_INTRO_UNIT_MGR_ERRORS
 from PlayerEvents import g_playerEvents
 from gui.shared import actions
 from gui.shared.fortifications import getClientFortMgr
+from gui.server_events import g_eventsCache
 
 class _PrebattleDispatcher(object):
 
@@ -186,7 +189,7 @@ class _PrebattleDispatcher(object):
     def unlock(self, funcExit, forced, callback = None):
         state = self.getFunctionalState()
         result = True
-        if state.hasModalEntity and (not state.isIntroMode or forced):
+        if state.hasModalEntity and (not state.isIntroMode or forced) and not (funcExit == FUNCTIONAL_EXIT.FALLOUT and state.isInFallout()):
             factory = self.__factories.get(state.ctrlTypeID)
             result = False
             if factory:
@@ -203,6 +206,8 @@ class _PrebattleDispatcher(object):
                     LOG_ERROR('Can not create leave ctx', state)
             else:
                 LOG_ERROR('Factory is not found', state)
+        if getFalloutCtrl().isEnabled() and not funcExit == FUNCTIONAL_EXIT.SQUAD:
+            g_eventDispatcher.unloadFallout()
         if callback:
             callback(result)
         yield lambda callback = None: callback
@@ -252,8 +257,16 @@ class _PrebattleDispatcher(object):
 
     def canPlayerDoAction(self):
         canDo, restriction = self.__collection.canPlayerDoAction(False)
+        falloutCtrl = getFalloutCtrl()
         if canDo:
-            if not g_currentVehicle.isReadyToFight():
+            if falloutCtrl.isEnabled():
+                if falloutCtrl.getBattleType() == FALLOUT_BATTLE_TYPE.UNDEFINED:
+                    canDo = False
+                    restriction = PREBATTLE_RESTRICTION.FALLOUT_NOT_SELECTED
+                elif not g_currentVehicle.isGroupReady():
+                    canDo = False
+                    restriction = PREBATTLE_RESTRICTION.VEHICLE_GROUP_IS_NOT_READY
+            elif not g_currentVehicle.isReadyToFight():
                 if not g_currentVehicle.isPresent():
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT
@@ -266,9 +279,9 @@ class _PrebattleDispatcher(object):
                 elif g_currentVehicle.isBroken():
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_BROKEN
-                elif not g_currentVehicle.isGroupReady():
+                elif g_currentVehicle.isFalloutOnly():
                     canDo = False
-                    restriction = PREBATTLE_RESTRICTION.VEHICLE_GROUP_IS_NOT_READY
+                    restriction = PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY
                 elif g_currentVehicle.isDisabledInRoaming():
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_ROAMING
@@ -389,12 +402,14 @@ class _PrebattleDispatcher(object):
         g_prbCtrlEvents.onUnitIntroModeLeft += self.ctrl_onUnitIntroModeLeft
         g_prbCtrlEvents.onPreQueueFunctionalCreated += self.ctrl_onPreQueueFunctionalCreated
         g_prbCtrlEvents.onPreQueueFunctionalDestroyed += self.ctrl_onPreQueueFunctionalDestroyed
+        g_eventsCache.companies.onCompanyStateChanged += self.onCompanyStateChanged
         return
 
     def _stopListening(self):
         """
         Unsubscribe from player events.
         """
+        g_eventsCache.companies.onCompanyStateChanged -= self.onCompanyStateChanged
         g_playerEvents.onPrebattleJoined -= self.pe_onPrebattleJoined
         g_playerEvents.onPrebattleJoinFailure -= self.pe_onPrebattleJoinFailure
         g_playerEvents.onPrebattleLeft -= self.pe_onPrebattleLeft
@@ -420,6 +435,10 @@ class _PrebattleDispatcher(object):
             fortMgr.onFortResponseReceived -= self.fortMgr_onFortResponseReceived
             fortMgr.onFortStateChanged -= self.forMgr_onFortStateChanged
         g_prbCtrlEvents.clear()
+
+    def onCompanyStateChanged(self, _):
+        if not g_prbLoader.getDispatcher().getPrbFunctional().hasLockedState():
+            g_eventDispatcher.updateUI()
 
     def _setRequestCtx(self, ctx):
         result = True
@@ -490,11 +509,12 @@ class _PrebattleDispatcher(object):
         else:
             prbFunctional = self.getFunctional(CTRL_ENTITY_TYPE.PREBATTLE)
             prbType = 0
-            if prbFunctional and prbFunctional.getExit() not in [FUNCTIONAL_EXIT.NO_FUNC,
+            if prbFunctional and prbFunctional.getExit() not in (FUNCTIONAL_EXIT.NO_FUNC,
              FUNCTIONAL_EXIT.BATTLE_TUTORIAL,
              FUNCTIONAL_EXIT.RANDOM,
              FUNCTIONAL_EXIT.SWITCH,
-             FUNCTIONAL_EXIT.SQUAD]:
+             FUNCTIONAL_EXIT.SQUAD,
+             FUNCTIONAL_EXIT.FALLOUT):
                 prbType = prbFunctional.getPrbType()
             self._changePrbFunctional(prbType=prbType, stop=False)
             return

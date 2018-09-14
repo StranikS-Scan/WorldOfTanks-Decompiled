@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/QuestsSeasonAwardsWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class QuestsSeasonAwardsWindowMeta(DAAPIModule):
+class QuestsSeasonAwardsWindowMeta(AbstractWindowView):
 
     def showVehicleInfo(self, vehicleId):
         self._printOverrideError('showVehicleInfo')

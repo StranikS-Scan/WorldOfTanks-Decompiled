@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/BaseDAAPIComponentMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class BaseDAAPIComponentMeta(DAAPIModule):
+class BaseDAAPIComponentMeta(BaseDAAPIModule):
 
     def registerFlashComponent(self, component, alias):
         self._printOverrideError('registerFlashComponent')
@@ -11,10 +11,6 @@ class BaseDAAPIComponentMeta(DAAPIModule):
 
     def unregisterFlashComponent(self, alias):
         self._printOverrideError('unregisterFlashComponent')
-
-    def as_isDAAPIInitedS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_isDAAPIInited()
 
     def as_populateS(self):
         if self._isDAAPIInited():

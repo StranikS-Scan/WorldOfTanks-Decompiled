@@ -1,16 +1,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/Inventory.py
 from account_helpers.AccountSettings import AccountSettings
+from constants import IS_RENTALS_ENABLED
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import getNationIndex, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.meta.InventoryMeta import InventoryMeta
-from gui.Scaleform.daapi.view.lobby.store import Store
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.events import LoadViewEvent
@@ -23,7 +23,7 @@ from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES
 from items import vehicles
 
-class Inventory(Store, InventoryMeta):
+class Inventory(InventoryMeta):
 
     def __init__(self, ctx = None):
         super(Inventory, self).__init__(ctx)
@@ -98,7 +98,7 @@ class Inventory(Store, InventoryMeta):
                 if type == self._VEHICLE and 'premiumIGR' not in extra:
                     if module.isPremiumIGR:
                         continue
-                if type == self._VEHICLE and 'rentals' not in extra:
+                if type == self._VEHICLE and IS_RENTALS_ENABLED and 'rentals' not in extra:
                     if module.isRented and not module.isPremiumIGR:
                         continue
                 if 'onVehicle' in extra:
@@ -246,9 +246,7 @@ class Inventory(Store, InventoryMeta):
             statusLevel = module.getState()[1]
             if module.isRented:
                 isRented = True
-                if not module.isPremiumIGR:
-                    localization = '#menu:vehicle/rentLeft/%s'
-                    rentLeftTimeStr = getRentLeftTimeStr(localization, module.rentLeftTime)
+                rentLeftTimeStr = RentLeftFormatter(module.rentInfo, module.isPremiumIGR).getRentTimeLeftStr()
             if module.isInInventory:
                 inventoryId = module.invID
         name = module.userName if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS else module.longUserName

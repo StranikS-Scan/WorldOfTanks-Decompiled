@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ContactsTreeComponentMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class ContactsTreeComponentMeta(DAAPIModule):
+class ContactsTreeComponentMeta(BaseDAAPIComponent):
 
     def onGroupSelected(self, mainGroup, groupData):
         self._printOverrideError('onGroupSelected')

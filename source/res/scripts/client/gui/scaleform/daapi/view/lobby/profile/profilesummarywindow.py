@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSummaryWindow.py
 import BigWorld
 from adisp import process
+from gui.clubs import events_dispatcher as club_events
 from helpers.i18n import makeString as _ms
 from gui import makeHtmlString
 from gui.shared import g_itemsCache
@@ -9,7 +10,6 @@ from gui.shared.ClanCache import ClanInfo
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import getClanRoleString, getAbsoluteUrl
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper, ClanEmblemsHelper
-from gui.clubs import events_dispatcher as club_events
 from gui.clubs.ClubsController import g_clubsCtrl
 from gui.clubs.contexts import GetPlayerInfoCtx
 from gui.Scaleform.daapi.view.meta.ProfileSummaryWindowMeta import ProfileSummaryWindowMeta
@@ -18,7 +18,7 @@ from gui.Scaleform.locale.PROFILE import PROFILE
 class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClubEmblemsHelper, ClanEmblemsHelper):
 
     def __init__(self, *args):
-        ProfileSummaryWindowMeta.__init__(self, *args)
+        super(ProfileSummaryWindow, self).__init__(*args)
         self.__rating = 0
 
     def getGlobalRating(self, databaseID):
@@ -59,7 +59,7 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClubEmblemsHelper, ClanEmbl
              'bottomLabel': _ms(PROFILE.PROFILE_SUMMARY_CLAN_JOINDATE),
              'bottomValue': text_styles.main(BigWorld.wg_getLongDateFormat(clanInfo.getJoiningTime())),
              'btnLabel': _ms(PROFILE.PROFILE_SUMMARY_CLAN_BTNLABEL),
-             'btnEnabled': False,
+             'btnEnabled': True,
              'btnVisible': isShowClanProfileBtnVisible})
             self.requestClanEmblem32x32(clanDBID)
         return

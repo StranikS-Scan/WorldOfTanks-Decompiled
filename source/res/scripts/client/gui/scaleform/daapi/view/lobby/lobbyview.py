@@ -17,13 +17,13 @@ from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared import EVENT_BUS_SCOPE, events, event_dispatcher as shared_events
-from gui.Scaleform.framework import ViewTypes, AppRef
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.utils.functions import getViewName
 from helpers import i18n
 
-class LobbyView(View, LobbyPageMeta, AppRef):
+class LobbyView(LobbyPageMeta):
     VIEW_WAITING = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_INVENTORY,
      VIEW_ALIAS.LOBBY_SHOP,
@@ -42,7 +42,7 @@ class LobbyView(View, LobbyPageMeta, AppRef):
         HEADER = 'lobbyHeader'
 
     def __init__(self, ctx = None):
-        View.__init__(self)
+        super(LobbyView, self).__init__(ctx)
         self.__currIgrType = constants.IGR_TYPE.NONE
 
     def getSubContainerType(self):

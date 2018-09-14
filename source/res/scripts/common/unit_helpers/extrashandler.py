@@ -7,14 +7,17 @@ class EmptyExtrasHandler(object):
     def __init__(self, unit):
         pass
 
-    def new(self):
-        return {}
+    def new(self, initial = None):
+        result = {}
+        if initial:
+            result.update(initial)
+        return result
 
     def pack(self, extras):
         return ''
 
     def unpack(self, extrasStr):
-        return None
+        return {}
 
     def reset(self, extras):
         return self.new()
@@ -30,8 +33,10 @@ class FortBattleExtrasHandler(EmptyExtrasHandler):
         from unit_helpers.MsgProcessor import FortBattleMgrMsgProcessor
         self._processor = FortBattleMgrMsgProcessor(unit)
 
-    def new(self):
-        return {'isBattleRound': 0,
+    def new(self, initial = None):
+        result = {'battleID': 0,
+         'scheduleTime': 0,
+         'isBattleRound': 0,
          'prevBuildNum': 0,
          'currentBuildNum': 0,
          'roundStart': 0,
@@ -39,6 +44,9 @@ class FortBattleExtrasHandler(EmptyExtrasHandler):
          'isEnemyReadyForBattle': 0,
          'clanEquipments': None,
          'lastEquipRev': 0}
+        if initial:
+            result.update(initial)
+        return result
 
     def pack(self, extras):
         return cPickle.dumps(extras, -1)
@@ -58,8 +66,8 @@ class ClubExtrasHandler(EmptyExtrasHandler):
     def __init__(self, unit = None):
         self._unit = unit
 
-    def new(self):
-        return {'clubDBID': None,
+    def new(self, initial = None):
+        result = {'clubDBID': None,
          'divisionID': None,
          'clubName': None,
          'accDBIDtoRole': None,
@@ -70,6 +78,9 @@ class ClubExtrasHandler(EmptyExtrasHandler):
          'isEnemyReady': False,
          'isBaseDefence': None,
          'startTime': None}
+        if initial:
+            result.update(initial)
+        return result
 
     def pack(self, extras):
         return cPickle.dumps(extras, -1)
@@ -103,9 +114,12 @@ class SortieExtrasHandler(EmptyExtrasHandler):
     def __init__(self, unit = None):
         self._unit = unit
 
-    def new(self):
-        return {'clanEquipments': None,
+    def new(self, initial = None):
+        result = {'clanEquipments': None,
          'lastEquipRev': 0}
+        if initial:
+            result.update(initial)
+        return result
 
     def pack(self, extras):
         return cPickle.dumps(extras, -1)
@@ -119,4 +133,26 @@ class SortieExtrasHandler(EmptyExtrasHandler):
     def updateUnitExtras(self, extras, updateStr):
         update = cPickle.loads(updateStr)
         LOG_OGNICK_DEV('updateUnitExtras', update)
+        extras.update(update)
+
+
+class SquadExtrasHandler(EmptyExtrasHandler):
+
+    def new(self, initial = None):
+        result = {}
+        if initial:
+            result.update(initial)
+        return result
+
+    def pack(self, extras):
+        return cPickle.dumps(extras, -1)
+
+    def unpack(self, extrasStr):
+        return cPickle.loads(extrasStr)
+
+    def reset(self, extras):
+        return extras
+
+    def updateUnitExtras(self, extras, updateStr):
+        update = cPickle.loads(updateStr)
         extras.update(update)

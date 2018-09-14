@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/meta/TutorialDialogMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class TutorialDialogMeta(DAAPIModule):
+class TutorialDialogMeta(AbstractWindowView):
 
     def submit(self):
         self._printOverrideError('submit')

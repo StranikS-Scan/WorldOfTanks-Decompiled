@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortDisconnectViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class FortDisconnectViewMeta(DAAPIModule):
+class FortDisconnectViewMeta(BaseDAAPIComponent):
 
     def as_setWarningTextsS(self, warningTxt, warningDescTxt):
         if self._isDAAPIInited():

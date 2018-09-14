@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PopOverViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
-class PopOverViewMeta(DAAPIModule):
+class PopOverViewMeta(WrapperViewMeta):
 
     def as_setArrowDirectionS(self, value):
         if self._isDAAPIInited():

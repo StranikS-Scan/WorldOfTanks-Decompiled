@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/NotificationsListMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class NotificationsListMeta(DAAPIModule):
+class NotificationsListMeta(SmartPopOverView):
 
     def onClickAction(self, typeID, entityID, action):
         self._printOverrideError('onClickAction')

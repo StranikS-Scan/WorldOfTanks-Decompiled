@@ -8,7 +8,10 @@ from gui.game_control.controllers import Controller
 from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
-_LISTENERS = {OpenLinkEvent.CLUB_HELP: '_handleClubHelp'}
+_LISTENERS = {OpenLinkEvent.CLUB_HELP: '_handleClubHelp',
+ OpenLinkEvent.MEDKIT_HELP: '_handleVideoHelp',
+ OpenLinkEvent.REPAIRKITHELP_HELP: '_handleVideoHelp',
+ OpenLinkEvent.FIRE_EXTINGUISHERHELP_HELP: '_handleVideoHelp'}
 
 class InternalLinksHandler(Controller):
 
@@ -58,10 +61,13 @@ class InternalLinksHandler(Controller):
         callback(url)
 
     @process
-    def __openInternalBrowse(self, urlName, title = '', browserSize = None):
+    def __openInternalBrowse(self, urlName, title = '', browserSize = None, showActionBtn = True, showCloseBtn = False):
         parsedUrl = yield self.getURL(urlName)
         if parsedUrl:
-            self._browserID = yield self._proxy.getController(gc_constants.CONTROLLER.BROWSER).load(parsedUrl, browserID=self._browserID, title=title, browserSize=browserSize)
+            self._browserID = yield self._proxy.getController(gc_constants.CONTROLLER.BROWSER).load(parsedUrl, browserID=self._browserID, title=title, browserSize=browserSize, showActionBtn=showActionBtn, showCloseBtn=showCloseBtn)
 
     def _handleClubHelp(self, event):
-        self.__openInternalBrowse('clubHelp', event.title, browserSize=gc_constants.BROWSER.CLUB_SIZE)
+        self.__openInternalBrowse(event.eventType, event.title, browserSize=gc_constants.BROWSER.CLUB_SIZE)
+
+    def _handleVideoHelp(self, event):
+        self.__openInternalBrowse(event.eventType, event.title, browserSize=gc_constants.BROWSER.VIDEO_SIZE, showActionBtn=False, showCloseBtn=True)

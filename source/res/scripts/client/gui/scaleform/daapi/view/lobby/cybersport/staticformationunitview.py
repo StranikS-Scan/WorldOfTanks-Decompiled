@@ -2,9 +2,9 @@
 import BigWorld
 from UnitBase import UNIT_OP
 from gui import makeHtmlString
-from gui.shared.formatters import text_styles
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
-from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
@@ -13,13 +13,14 @@ from gui.Scaleform.daapi.view.meta.StaticFormationUnitMeta import StaticFormatio
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clubs import events_dispatcher as club_events
-from gui.clubs.club_helpers import isSeasonInProgress, ClubListener
+from gui.clubs.club_helpers import ClubListener
 from gui.clubs.settings import getLadderChevron64x64, getLadderBackground
 from gui.prb_control import settings
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper
+from gui.game_control.battle_availability import isHourInForbiddenList
 from helpers import int2roman
 
 class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblemsHelper):
@@ -59,6 +60,9 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         self.__updateHeader()
 
     def onClubsSeasonStateChanged(self, seasonState):
+        self.__updateHeader()
+
+    def onStatusChanged(self):
         self.__updateHeader()
 
     def __makeLegionnairesCountString(self, unit):
@@ -163,7 +167,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.StaticFormationCandidatesDP()
-        self._candidatesDP.init(self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
+        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
 
     def rebuildCandidatesDP(self):
         self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
@@ -210,11 +214,13 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         _, unit = self.unitFunctional.getUnit()
         self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
+        self.clubsCtrl.getAvailabilityCtrl().onStatusChanged += self.onStatusChanged
 
     def _dispose(self):
         self.ABSENT_VALUES = None
         self.__extra = None
         self.stopClubListening(self.__clubDBID)
+        self.clubsCtrl.getAvailabilityCtrl().onStatusChanged -= self.onStatusChanged
         super(StaticFormationUnitView, self)._dispose()
         return
 
@@ -224,7 +230,9 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         seasonState = self.clubsCtrl.getSeasonState()
         modeLabel = ''
         modeTooltip = ''
+        modeTooltipType = ''
         isFixedMode = True
+        isModeTooltip = False
         if self.__extra.isRatedBattle:
             isFixedMode = not canSetRanked
             if canSetRanked:
@@ -233,9 +241,13 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
                 modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_RANKEDMODE
         elif seasonState.isSuspended():
             modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONPAUSED
+            isModeTooltip = True
+            modeTooltipType = TOOLTIPS_CONSTANTS.COMPLEX
             modeTooltip = makeTooltip(CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONPAUSEDTOOLTIP_HEADER, CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONPAUSEDTOOLTIP_BODY)
         elif seasonState.isFinished():
             modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONFINISHED
+            isModeTooltip = True
+            modeTooltipType = TOOLTIPS_CONSTANTS.COMPLEX
             modeTooltip = makeTooltip(CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONFINISHEDTOOLTIP_HEADER, CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_SEASONFINISHEDTOOLTIP_BODY)
         elif canSetRanked:
             isFixedMode = False
@@ -245,6 +257,11 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
                 modeLabel = text_styles.neutral(modeLabel)
             else:
                 modeLabel = text_styles.standard(modeLabel)
+        if isHourInForbiddenList(self.clubsCtrl.getAvailabilityCtrl().getForbiddenHours()):
+            modeLabel = '{0}{1}'.format(icons.alert(), text_styles.main(CYBERSPORT.LADDERREGULATIONS_WARNING))
+            isFixedMode = True
+            isModeTooltip = True
+            modeTooltipType = TOOLTIPS_CONSTANTS.LADDER_REGULATIONS
         bgSource = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_UNRANKED
         battles = self.ABSENT_VALUES
         winRate = self.ABSENT_VALUES
@@ -274,7 +291,9 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
          'isFixedMode': isFixedMode,
          'modeLabel': modeLabel,
          'modeTooltip': modeTooltip,
-         'bgSource': bgSource})
+         'bgSource': bgSource,
+         'modeTooltipType': modeTooltipType,
+         'isModeTooltip': isModeTooltip})
         return
 
     def __updateTotalData(self):

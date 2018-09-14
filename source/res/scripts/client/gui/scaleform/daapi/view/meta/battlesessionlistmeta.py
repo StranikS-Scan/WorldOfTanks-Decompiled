@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleSessionListMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class BattleSessionListMeta(DAAPIModule):
+class BattleSessionListMeta(AbstractWindowView):
 
     def requestToJoinTeam(self, prbID, prbType):
         self._printOverrideError('requestToJoinTeam')

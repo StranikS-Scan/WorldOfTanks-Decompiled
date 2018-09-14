@@ -1,11 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/FreeXPInfoWindow.py
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FreeXPInfoWindowMeta import FreeXPInfoWindowMeta
-from gui.Scaleform.framework import AppRef
 __author__ = 'd_savitski'
 
-class FreeXPInfoWindow(View, FreeXPInfoWindowMeta, AppRef, AbstractWindowView):
+class FreeXPInfoWindow(FreeXPInfoWindowMeta):
 
     def __init__(self, ctx = None):
         super(FreeXPInfoWindow, self).__init__()

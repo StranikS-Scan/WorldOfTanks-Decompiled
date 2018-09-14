@@ -1,13 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/BaseExchangeWindow.py
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.BaseExchangeWindowMeta import BaseExchangeWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 
-class BaseExchangeWindow(View, BaseExchangeWindowMeta, AbstractWindowView):
+class BaseExchangeWindow(BaseExchangeWindowMeta):
 
     def __init__(self, ctx = None):
-        View.__init__(self)
+        super(BaseExchangeWindow, self).__init__(self)
 
     def _populate(self):
         super(BaseExchangeWindow, self)._populate()

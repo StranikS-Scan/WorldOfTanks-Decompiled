@@ -76,23 +76,6 @@ class DebugPolyLine(object):
             idx += 1
 
 
-class _FlockSound:
-
-    def __init__(self, soundName, parent, spaceID):
-        self.soundModel = helpers.newFakeModel()
-        self.soundModel.addMotor(BigWorld.Servo(parent.root))
-        BigWorld.addModel(self.soundModel, spaceID)
-        self.sound = SoundGroups.g_instance.playSoundModel(self.soundModel, soundName)
-        self.parent = parent
-
-    def attachTo(self, model):
-        self.soundModel.motors[0].signal = model.matrix
-        self.parent = model
-
-    def destroy(self):
-        BigWorld.delModel(self.soundModel)
-
-
 class FlockLike:
     __SoundNames = None
     MAX_DIST_SQ = 10000
@@ -111,8 +94,7 @@ class FlockLike:
         return
 
     def destroy(self):
-        if self.__sound is not None:
-            self.__sound.destroy()
+        self.__sound = None
         return
 
     def _getModelsToLoad(self):
@@ -155,25 +137,20 @@ class FlockLike:
             if soundName is None or soundName == '':
                 return
             try:
-                flockSound = _FlockSound(soundName, model, self.spaceID)
+                self.__sound = SoundGroups.g_instance.getSound3D(model, soundName)
+                self.__sound.play()
             except Exception:
                 LOG_CURRENT_EXCEPTION()
                 return
 
-            if flockSound is not None:
-                if flockSound.sound is not None:
-                    self.__sound = flockSound
-                    self.__sound.attachTo(model)
-                else:
-                    flockSound.destroy()
             return
 
     def _switchSounds(self, enable):
         if self.__sound is not None:
             if enable:
-                self.__sound.sound.play()
+                self.__sound.play()
             else:
-                self.__sound.sound.stop()
+                self.__sound.stop()
         return
 
 
@@ -219,7 +196,7 @@ class Flock(BigWorld.Entity, FlockLike):
         self.middlePosition = Math.Vector3(self.position)
         self.physics = 0
         newPosition = Math.Vector3(self.position)
-        newPosition.y = (self.minHeight + self.maxHeight) / 2
+        newPosition.y = (self.minHeight + self.maxHeight) / 2.0
         self.physics.teleport(newPosition)
         self.__makeDecision()
 
@@ -244,14 +221,13 @@ class Flock(BigWorld.Entity, FlockLike):
         self.__decisionStrategy = self.__doAroundCenterFly
         self.deadZoneRadius = self.radius
         for boid in self.models:
-            boid.position = Vector3(0, 0, self.deadZoneRadius)
+            boid.position = Vector3(0.0, 0.0, self.deadZoneRadius)
             if self.flyAroundCenter == Flock.STRATEGY_FLY_AROUND_CW:
-                boid.yaw = math.pi / 2
+                boid.yaw = math.pi / 2.0
             else:
-                boid.yaw = -math.pi / 2
+                boid.yaw = -math.pi / 2.0
 
     def __doUsualFly(self):
-        randY = self.position.y
         flightZoneHeight = self.maxHeight - self.minHeight
         if self.__decisionCount >= Flock.HEIGHT_CHANGE_DECISION_COUNT:
             randY = random.uniform(self.minHeight, self.maxHeight)
@@ -269,7 +245,7 @@ class Flock(BigWorld.Entity, FlockLike):
             elif randY > self.maxHeight:
                 randY = self.maxHeight
         randRadius = random.uniform(self.deadZoneRadius, self.radius)
-        randAngle = random.uniform(0, 2 * math.pi)
+        randAngle = random.uniform(0.0, 2.0 * math.pi)
         newPosition = Math.Vector3(self.middlePosition.x + randRadius * math.cos(randAngle), randY, self.middlePosition.z + randRadius * math.sin(randAngle))
         self.physics.teleport(newPosition)
 

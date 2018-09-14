@@ -6,6 +6,7 @@ import Math
 import TriggersManager
 from constants import ARENA_PERIOD
 from PlayerEvents import g_playerEvents
+from gui.battle_control import avatar_getter
 from tutorial import g_tutorialWeaver
 from tutorial.control.battle import aspects
 from tutorial.control.battle.context import BattleClientCtx
@@ -428,7 +429,7 @@ class FunctionalShowHintEffect(FunctionalEffect):
 
     def _getImagePaths(self, hint):
         if hint.hasImageRef():
-            image = self._tutorial._data.getHasIDEntity(hint.getImage())
+            image = self._data.getHasIDEntity(hint.getImage())
         else:
             image = hint.getImage()
         return image.getImagePaths(self._tutorial.getVars())
@@ -506,7 +507,7 @@ class FunctionalNextChapterEffect(FunctionalEffect):
         if exitEntity is not None:
             self.__nextChapter = exitEntity.getNextChapter()
             if self.__nextChapter is None or not len(self.__nextChapter):
-                self.__nextChapter = self._tutorial._descriptor.getNextChapterID(BattleClientCtx.fetch().completed)
+                self.__nextChapter = self._descriptor.getNextChapterID(BattleClientCtx.fetch().completed)
             if self.__nextChapter is None:
                 LOG_DEBUG('Next chapter not found')
                 self._tutorial._funcScene.setExit(exitEntity)
@@ -574,7 +575,7 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
 
     def triggerEffect(self):
         self._cache.setRefused(True).write()
-        _leaveArena()
+        avatar_getter.leaveArena()
 
     def isStillRunning(self):
         return True
@@ -601,7 +602,7 @@ class FunctionalBattleChapterInfo(FunctionalChapterInfo):
                 self._progress.append((func, ok))
 
         self._gui.setChapterInfo(chapter.getTitle(), chapter.getDescription())
-        descriptor = self._tutorial._descriptor
+        descriptor = self._descriptor
         chapterIdx = descriptor.getChapterIdx(chapterID)
         localCtx = BattleClientCtx.fetch().setChapterIdx(chapterIdx)
         self._gui.setTrainingPeriod(descriptor.getChapterIdx(chapterID), descriptor.getNumberOfChapters())
@@ -648,7 +649,9 @@ class FunctionalBattleScene(FunctionalScene):
                 self._vehTypeName = vehType.name
             else:
                 LOG_ERROR('Player\\s vehicle not found')
-        self._updateScene(playEffects=False)
+        for item in self._scene.getGuiItems():
+            self._gui.setItemProps(item.getTargetID(), item.getProps(), revert=True)
+
         self._gui.show()
         return
 

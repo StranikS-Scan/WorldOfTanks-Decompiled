@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleSelectorPopupMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class VehicleSelectorPopupMeta(DAAPIModule):
+class VehicleSelectorPopupMeta(AbstractWindowView):
 
     def onFiltersUpdate(self, nation, vehicleType, isMain, level, compatibleOnly):
         self._printOverrideError('onFiltersUpdate')

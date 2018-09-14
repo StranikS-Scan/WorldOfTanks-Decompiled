@@ -183,7 +183,7 @@ class VehicleProgressHelper(object):
          'description': self.__makeVehicleDescription(item),
          'vehicleIcon': item.iconSmall,
          'lvlIcon': getLevelIconPath(item.level),
-         'price': text_styles.creditsText(formattedPrice),
+         'price': text_styles.credits(formattedPrice),
          'linkEvent': PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE,
          'linkId': unlockProps.parentID}
 
@@ -193,6 +193,6 @@ class VehicleProgressHelper(object):
          'description': text_styles.main(item.userName),
          'fittingType': item.itemTypeName,
          'lvlIcon': getLevelIconPath(item.level),
-         'price': text_styles.creditsText(formattedPrice),
+         'price': text_styles.credits(formattedPrice),
          'linkEvent': PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE,
          'linkId': unlockProps.parentID}

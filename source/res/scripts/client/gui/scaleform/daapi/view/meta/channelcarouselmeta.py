@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ChannelCarouselMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class ChannelCarouselMeta(DAAPIModule):
+class ChannelCarouselMeta(BaseDAAPIComponent):
 
     def channelOpenClick(self, itemID):
         self._printOverrideError('channelOpenClick')

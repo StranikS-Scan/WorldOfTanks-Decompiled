@@ -22,6 +22,7 @@ class ProfileUtils(object):
     UNAVAILABLE_SYMBOL = '--'
     VIEW_TYPE_TABLES = 0
     VIEW_TYPE_CHARTS = 1
+    VIEW_TYPE_TABLE = 2
 
     def __init__(self):
         super(ProfileUtils, self).__init__()
@@ -102,12 +103,18 @@ class ProfileUtils(object):
 
     @staticmethod
     def getLabelViewTypeDataObject(label, data, viewType):
-        if viewType != ProfileUtils.VIEW_TYPE_TABLES and viewType != ProfileUtils.VIEW_TYPE_CHARTS:
+        if viewType != ProfileUtils.VIEW_TYPE_TABLES and viewType != ProfileUtils.VIEW_TYPE_CHARTS and viewType != ProfileUtils.VIEW_TYPE_TABLE:
             LOG_ERROR('Unknown view type', viewType)
             return None
         else:
             result = ProfileUtils.getLabelDataObject(label, data)
             result['viewType'] = viewType
+            if viewType == ProfileUtils.VIEW_TYPE_TABLES:
+                result['linkage'] = 'DetailedStatisticsView_UI'
+            elif viewType == ProfileUtils.VIEW_TYPE_CHARTS:
+                result['linkage'] = 'ChartsStatisticsView_UI'
+            elif viewType == ProfileUtils.VIEW_TYPE_TABLE:
+                result['linkage'] = 'ClanProfileTableStatisticsViewUI'
             return result
 
     @staticmethod

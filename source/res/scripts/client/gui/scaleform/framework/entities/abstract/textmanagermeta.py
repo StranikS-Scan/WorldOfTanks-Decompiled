@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/TextManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class TextManagerMeta(DAAPIModule):
+class TextManagerMeta(BaseDAAPIModule):
 
     def getTextStyle(self, style):
         self._printOverrideError('getTextStyle')

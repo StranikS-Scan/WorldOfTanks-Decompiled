@@ -1,20 +1,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/sorties_dps.py
-import random
 import BigWorld
 from UnitBase import UNIT_FLAGS
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getIconLevel
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getUnitMaxLevel, makeFortBattleShortVO
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeSortieShortVO
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider, SortableDAAPIDataProvider
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS, FORTIFICATIONS
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.prb_control.items.sortie_items import getDivisionsOrderData
 from gui.prb_control.prb_helpers import unitFunctionalProperty
+from gui.shared.formatters import icons, text_styles
 from gui.shared.fortifications.fort_seqs import getDivisionSettings, BATTLE_ITEM_TYPE
 from gui.shared.utils import sortByFields
 from helpers import i18n, time_utils
@@ -85,7 +82,7 @@ class DivisionsDataProvider(DAAPIDataProvider):
         return found
 
 
-class SortiesDataProvider(SortableDAAPIDataProvider, AppRef):
+class SortiesDataProvider(SortableDAAPIDataProvider):
 
     def __init__(self):
         super(SortiesDataProvider, self).__init__()
@@ -93,7 +90,6 @@ class SortiesDataProvider(SortableDAAPIDataProvider, AppRef):
         self._listMapping = {}
         self._mapping = {}
         self._selectedID = None
-        self.txtMgr = self.app.utilsManager.textManager
         return
 
     @unitFunctionalProperty
@@ -205,7 +201,7 @@ class SortiesDataProvider(SortableDAAPIDataProvider, AppRef):
         return {'sortieID': item.getID(),
          'creatorName': item.getCommanderFullName(),
          'divisionName': I18N_FORTIFICATIONS.sortie_division_name(item.getDivisionName()),
-         'description': self.txtMgr.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, item.getDescription()),
+         'description': text_styles.standard(item.getDescription()),
          'descriptionForTT': item.getDescription(),
          'isInBattle': isInBattle,
          'division': item.getDivision(),
@@ -325,7 +321,7 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
          'clanLvl': item.getLevel()}
 
 
-class FortBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
+class FortBattlesDataProvider(SortableDAAPIDataProvider):
 
     class DAY_OF_BATTLE(CONST_CONTAINER):
         TODAY = 0
@@ -472,38 +468,35 @@ class FortBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
     def __makeBattleName(self, item, battleType):
         _, clanAbbrev, _ = item.getOpponentClanInfo()
         clanName = '[%s]' % clanAbbrev
-        result = i18n.makeString(FORTIFICATIONS.fortclanbattlelist_renderbattlename(battleType), clanName=clanName)
-        result = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, result)
+        result = i18n.makeString(I18N_FORTIFICATIONS.fortclanbattlelist_renderbattlename(battleType), clanName=clanName)
+        result = text_styles.middleTitle(result)
         return result
 
     def __makeBattleDirection(self, item):
         direction = i18n.makeString('#fortifications:General/directionName%d' % item.getDirection())
-        directionName = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERDIRECTION, directionName=direction)
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, directionName)
+        directionName = i18n.makeString(I18N_FORTIFICATIONS.FORTCLANBATTLELIST_RENDERDIRECTION, directionName=direction)
+        return text_styles.standard(directionName)
 
     def __makeDayOfBattle(self, dayOfBattle, timestamp):
         if dayOfBattle == self.DAY_OF_BATTLE.TODAY:
-            availability = i18n.makeString(FORTIFICATIONS.fortclanbattlelist_renderdayofbattle('today'))
+            availability = i18n.makeString(I18N_FORTIFICATIONS.fortclanbattlelist_renderdayofbattle('today'))
         elif dayOfBattle == self.DAY_OF_BATTLE.TOMORROW:
-            availability = i18n.makeString(FORTIFICATIONS.fortclanbattlelist_renderdayofbattle('tomorrow'))
+            availability = i18n.makeString(I18N_FORTIFICATIONS.fortclanbattlelist_renderdayofbattle('tomorrow'))
         else:
             availability = BigWorld.wg_getShortDateFormat(timestamp)
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, availability)
+        return text_styles.main(availability)
 
     def __makeTimeOfBattle(self, item, battleItem, currentState):
         result = {}
         if currentState == FORTIFICATION_ALIASES.CLAN_BATTLE_IS_IN_BATTLE:
-            icon = RES_ICONS.MAPS_ICONS_LIBRARY_BATTLERESULTICON_1
-            units = self.app.utilsManager
-            icon = units.getHtmlIconText(ImageUrlProperties(icon, 16, 16, -3, 0))
-            formattedText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_ISBATTLE))
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_BATTLERESULTICON_1, 16, 16, -3, 0)
+            formattedText = text_styles.error(i18n.makeString(I18N_FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_ISBATTLE))
             result['text'] = icon + ' ' + formattedText
         elif currentState == FORTIFICATION_ALIASES.CLAN_BATTLE_BEGINS:
             battleID = item.getBattleID()
             timer = {}
-            htmlFormatter = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, '###')
-            locale = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE)
-            locale = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, locale)
+            htmlFormatter = text_styles.alert('###')
+            locale = text_styles.main(i18n.makeString(I18N_FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE))
             result['text'] = locale
             if battleItem:
                 startTimeLeft = battleItem.getRoundStartTimeLeft()
@@ -517,6 +510,5 @@ class FortBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
             result['timer'] = timer
         else:
             lastBattleTimeUserString = '%s - %s' % (BigWorld.wg_getShortTimeFormat(item.getStartTime()), BigWorld.wg_getShortTimeFormat(item.getFinishTime()))
-            result['text'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, lastBattleTimeUserString)
-        i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE)
+            result['text'] = text_styles.main(lastBattleTimeUserString)
         return result

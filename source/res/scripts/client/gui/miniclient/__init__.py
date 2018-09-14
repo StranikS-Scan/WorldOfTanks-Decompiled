@@ -45,13 +45,16 @@ def configure_state():
 def _get_config(content_type):
 
     def vehicle_filter(vehicle_item):
+        extraCondition = not vehicle_item.isOnlyForEventBattles
         if content_type == CONTENT_TYPE.SANDBOX:
             max_vehicle_level = 2
+            extraCondition = extraCondition and not vehicle_item.isExcludedFromSandbox
         elif content_type == CONTENT_TYPE.TUTORIAL:
             max_vehicle_level = 1
         else:
             max_vehicle_level = 10
-        return vehicle_item.level <= max_vehicle_level and not vehicle_item.isPremium
+            extraCondition = True
+        return vehicle_item.level <= max_vehicle_level and extraCondition
 
     return {'vehicle_is_available': vehicle_filter}
 

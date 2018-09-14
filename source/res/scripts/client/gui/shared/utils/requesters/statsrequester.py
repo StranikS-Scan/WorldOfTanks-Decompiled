@@ -2,6 +2,7 @@
 import BigWorld
 from account_helpers import isPremiumAccount
 from adisp import async
+from helpers import time_utils
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
 class StatsRequester(AbstractSyncDataRequester):
@@ -158,7 +159,7 @@ class StatsRequester(AbstractSyncDataRequester):
 
     @property
     def playLimits(self):
-        return self.getCacheValue('playLimits', ((0, ''), (0, '')))
+        return self.getCacheValue('playLimits', ((time_utils.ONE_DAY, ''), (time_utils.ONE_WEEK, '')))
 
     def getDailyTimeLimits(self):
         return self.playLimits[0][0]
@@ -240,3 +241,7 @@ class StatsRequester(AbstractSyncDataRequester):
         if gfKey in spaDict:
             result = int(spaDict[gfKey])
         return result
+
+    @property
+    def tutorialsCompleted(self):
+        return self.getCacheValue('tutorialsCompleted', {})

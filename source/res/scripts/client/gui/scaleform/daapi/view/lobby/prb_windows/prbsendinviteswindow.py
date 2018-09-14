@@ -2,9 +2,7 @@
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui import SystemMessages
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.daapi.view.meta.PrbSendInvitesWindowMeta import PrbSendInvitesWindowMeta
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.prb_control.context import SendInvitesCtx
 from gui.prb_control.prb_helpers import prbDispatcherProperty
@@ -16,7 +14,7 @@ from messenger.gui.Scaleform.view.ContactsTreeComponent import ContactsTreeCompo
 from messenger.proto.interfaces import ISearchHandler
 from messenger.proto.events import g_messengerEvents
 
-class PrbSendInvitesWindow(View, PrbSendInvitesWindowMeta, AbstractWindowView, ISearchHandler):
+class PrbSendInvitesWindow(PrbSendInvitesWindowMeta, ISearchHandler):
 
     def __init__(self, ctx = None):
         super(PrbSendInvitesWindow, self).__init__()
@@ -68,6 +66,9 @@ class PrbSendInvitesWindow(View, PrbSendInvitesWindowMeta, AbstractWindowView, I
             tree.showContacts(onlineMode=self._onlineMode, showEmptyGroups=False, showFriends=not self._showClanOnly, showGroupMenu=False)
         return
 
+    def _getTitle(self):
+        return i18n.makeString(DIALOGS.SENDINVITES_COMMON_TITLE)
+
     def sendInvites(self, accountsToInvite, comment):
         functional = self.prbDispatcher.getFunctional(self._ctrlType)
         if functional:
@@ -91,7 +92,7 @@ class PrbSendInvitesWindow(View, PrbSendInvitesWindowMeta, AbstractWindowView, I
         usersEvents.onUserActionReceived += self.__onUserDataChanged
         usersEvents.onUserStatusUpdated += self.__onUserStatusUpdated
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.as_setWindowTitleS(i18n.makeString(DIALOGS.SENDINVITES_COMMON_TITLE))
+        self.as_setWindowTitleS(self._getTitle())
         self.as_setDefaultOnlineFlagS(self._onlineMode)
 
     def _dispose(self):

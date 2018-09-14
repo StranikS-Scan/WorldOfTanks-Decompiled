@@ -3,7 +3,7 @@ from debug_utils import LOG_ERROR
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from messenger.ext import channel_num_gen
 from gui.shared.utils.functions import getViewName
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 
 def showLobbyChannelWindow(clientID):
     g_eventBus.handleEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, ctx={'clientID': clientID}), scope=EVENT_BUS_SCOPE.LOBBY)

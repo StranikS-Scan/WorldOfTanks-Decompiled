@@ -3,12 +3,10 @@ import BigWorld
 from ConnectionManager import connectionManager
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.meta.EULAMeta import EULAMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.shared.events import CloseWindowEvent, OpenLinkEvent
 
-class EULADlg(View, EULAMeta, AbstractWindowView):
+class EULADlg(EULAMeta):
 
     def __init__(self, ctx = None):
         super(EULADlg, self).__init__()

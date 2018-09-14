@@ -6,17 +6,14 @@ from adisp import process
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortDemountBuildingWindowMeta import FortDemountBuildingWindowMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as ALIAS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.shared.formatters import text_styles
 from gui.shared.fortifications.context import BuildingCtx
 from helpers import i18n
 
-class FortDemountBuildingWindow(AbstractWindowView, View, FortDemountBuildingWindowMeta, FortViewHelper, AppRef):
+class FortDemountBuildingWindow(FortDemountBuildingWindowMeta, FortViewHelper):
 
     def __init__(self, ctx = None):
         super(FortDemountBuildingWindow, self).__init__()
@@ -85,24 +82,24 @@ class FortDemountBuildingWindow(AbstractWindowView, View, FortDemountBuildingWin
 
     def __makeTitle(self):
         text = i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_TITLE, buildingName=self.__formattedBuildingName, buildingLevel=fort_formatters.getTextLevel(self.__buildingLevel))
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, text)
+        return text_styles.standard(text)
 
     def __makeBody(self):
-        text = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODYINNERTEXT))
-        concatTexts = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODY, bodyInnerText=text))
+        text = text_styles.error(i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODYINNERTEXT))
+        concatTexts = text_styles.standard(i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODY, bodyInnerText=text))
         return concatTexts
 
     def __makeInputCheckerTitle(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_TITLE))
+        return text_styles.middleTitle(i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_TITLE))
 
     def __makeInputCheckerBody(self):
         controlNumber = BigWorld.wg_getIntegralFormat(self.__currHpVal)
-        controlNumber = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, str(controlNumber))
-        questionBody = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_BODY, controlNumber=controlNumber))
+        controlNumber = text_styles.middleTitle(str(controlNumber))
+        questionBody = text_styles.standard(i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_BODY, controlNumber=controlNumber))
         return questionBody
 
     def __makeInputCheckerError(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
+        return text_styles.error(i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
 
     def applyDemount(self):
         self.__requestToDelete()

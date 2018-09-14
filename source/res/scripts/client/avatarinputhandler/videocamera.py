@@ -39,6 +39,9 @@ class KeySensor:
         self.__currentKeys.clear()
         self.currentVelocity = defaultVelocity
 
+    def resetKeys(self):
+        self.__currentKeys.clear()
+
     def handleKeyEvent(self, key, isDown):
         for senseKey, acceleration in self.__sensitivityKeys.iteritems():
             if senseKey == key:
@@ -372,6 +375,9 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
             if key in self.__verticalMovementSensor.keyMappings:
                 self.__verticalMovementSensor.handleKeyEvent(key, isDown)
             return self.__movementSensor.handleKeyEvent(key, isDown) or self.__rotationSensor.handleKeyEvent(key, isDown) or self.__zoomSensor.handleKeyEvent(key, isDown) or self.__targetRadiusSensor.handleKeyEvent(key, isDown)
+
+    def resetMovement(self):
+        self.__movementSensor.resetKeys()
 
     def handleMouseEvent(self, dx, dy, dz):
         relativeSenseGrowth = self.__rotationSensor.sensitivity / self.__rotationSensor.defaultSensitivity

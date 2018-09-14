@@ -9,6 +9,7 @@ class COMMON_VIEW_ALIAS(object):
     LOGIN = 'login'
     INTRO_VIDEO = 'introVideo'
     LOBBY = 'lobby'
+    BATTLE = 'battle'
     CURSOR = 'cursor'
     WAITING = 'waiting'
 
@@ -38,23 +39,3 @@ g_entitiesFactories = EntitiesFactories((DAAPIModuleFactory((ViewTypes.COMPONENT
   ViewTypes.BROWSER,
   ViewTypes.TOP_WINDOW,
   ViewTypes.SERVICE_LAYOUT))))
-
-class AppRef(object):
-    __reference = None
-
-    @property
-    def app(self):
-        return AppRef.__reference
-
-    @property
-    def gfx(self):
-        return AppRef.__reference.movie
-
-    @classmethod
-    def setReference(cls, app):
-        cls.__reference = app
-
-    @classmethod
-    def clearReference(cls):
-        cls.__reference = None
-        return

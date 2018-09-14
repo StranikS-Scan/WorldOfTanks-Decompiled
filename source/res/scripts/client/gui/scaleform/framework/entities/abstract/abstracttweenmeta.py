@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/AbstractTweenMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class AbstractTweenMeta(DAAPIModule):
+class AbstractTweenMeta(BaseDAAPIModule):
 
     def initialiaze(self, props):
         self._printOverrideError('initialiaze')

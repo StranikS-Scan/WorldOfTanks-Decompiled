@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/ContactsWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ContactsWindowMeta(DAAPIModule):
+class ContactsWindowMeta(AbstractWindowView):
 
     def searchContact(self, criteria):
         self._printOverrideError('searchContact')

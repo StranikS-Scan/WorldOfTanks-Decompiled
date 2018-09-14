@@ -352,7 +352,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'fallout2',
  'falloutSingleWolf',
  'falloutPackOfWolfs',
- 'falloutSteelHunter']
+ 'falloutSteelHunter',
+ 'falloutAlwaysInLine']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -371,7 +372,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'fallout2',
  'falloutSingleWolf',
  'falloutPackOfWolfs',
- 'falloutSteelHunter']
+ 'falloutSteelHunter',
+ 'falloutAlwaysInLine']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

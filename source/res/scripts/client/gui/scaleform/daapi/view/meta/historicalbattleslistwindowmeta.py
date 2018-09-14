@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/HistoricalBattlesListWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.prb_windows.PrequeueWindow import PrequeueWindow
 
-class HistoricalBattlesListWindowMeta(DAAPIModule):
+class HistoricalBattlesListWindowMeta(PrequeueWindow):
 
     def onBattleSelected(self, battleID):
         self._printOverrideError('onBattleSelected')

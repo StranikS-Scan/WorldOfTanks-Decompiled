@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortDatePickerPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class FortDatePickerPopoverMeta(DAAPIModule):
+class FortDatePickerPopoverMeta(SmartPopOverView):
     pass

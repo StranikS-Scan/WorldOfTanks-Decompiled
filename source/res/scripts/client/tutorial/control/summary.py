@@ -72,13 +72,13 @@ class FlagSummary(object):
 
 class VarSummary(object):
 
-    def __init__(self, varSets):
+    def __init__(self, varSets, runtime = None):
         super(VarSummary, self).__init__()
-        if varSets is None:
-            varSets = []
-        self.__varSets = dict(map(lambda varSet: (varSet.getID(), FunctionalVarSet(varSet)), varSets))
-        self.__runtime = {}
-        return
+        if varSets:
+            self.__varSets = dict(map(lambda varSet: (varSet.getID(), FunctionalVarSet(varSet)), varSets))
+        else:
+            self.__varSets = {}
+        self.__runtime = runtime or {}
 
     def get(self, varID, default = None):
         if varID in self.__varSets:

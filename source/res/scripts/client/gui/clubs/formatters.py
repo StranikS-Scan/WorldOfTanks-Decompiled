@@ -109,7 +109,8 @@ class ClubAppsHtmlTextFormatter(object):
 
 
 _CUSTOM_ERR_MESSAGES = {(_CRT.SEND_INVITE, _WCR.FORBIDDEN_FOR_ACCOUNT): 'sendInvite/ignored',
- (_CRT.SEND_APPLICATION, _WCR.FORBIDDEN_FOR_ACCOUNT): 'sendApp/ignored'}
+ (_CRT.SEND_APPLICATION, _WCR.FORBIDDEN_FOR_ACCOUNT): 'sendApp/ignored',
+ (_CRT.JOIN_UNIT, _WCR.WEB_UNAVAILABLE): 'joinUnit/webUnavailable'}
 
 def getRequestErrorMsg(result, ctx):
     msgKey = (ctx.getRequestType(), result.code)

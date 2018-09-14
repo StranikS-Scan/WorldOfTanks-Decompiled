@@ -39,6 +39,17 @@ class DeltaPacker(object):
             return ret
 
 
+class ValueReplayPacker:
+
+    def pack(self, value):
+        if isinstance(value, str):
+            return value
+        return value.pack()
+
+    def unpack(self, value):
+        return value
+
+
 class DictPacker(object):
 
     def __init__(self, *metaData):
@@ -64,7 +75,8 @@ class DictPacker(object):
                         v = None
                 l[index] = v
             except Exception as e:
-                LOG_DEBUG_DEV('error while packing:', index, metaEntry, str(e))
+                LOG_ERROR('error while packing:', index, metaEntry, str(e))
+                raise
 
         return l
 

@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/Vibroeffects/VibroManager.py
-import BigWorld
 import copy
 from EffectsSettings import EffectsSettings
 from VibroEffect import VibroEffect
@@ -41,14 +40,13 @@ class VibroManager:
         return
 
     def start(self):
-        from gui.WindowsManager import g_windowsManager
-        if g_windowsManager.window is not None:
-            g_windowsManager.window.addExternalCallback('StartGameVideo.StopVideo', self.__onStopVideo)
-            g_windowsManager.window.addExternalCallback('StartGameVideo.NetSteamError', self.__onStopVideo)
-        return
+        from gui.app_loader import g_appLoader
+        g_appLoader.onGUISpaceChanged += self.__onGUISpaceChanged
 
-    def __onStopVideo(self, *args):
-        self.stopAllEffects()
+    def __onGUISpaceChanged(self, spaceID):
+        from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+        if spaceID == GUI_GLOBAL_SPACE_ID.LOGIN:
+            self.stopAllEffects()
 
     def __onAccountShowGUI(self, ctx):
         self.connect()
@@ -67,6 +65,8 @@ class VibroManager:
                 effect.destroy()
 
     def destroy(self):
+        from gui.app_loader import g_appLoader
+        g_appLoader.onGUISpaceChanged -= self.__onGUISpaceChanged
         self.clearEffects()
         self.__effects = None
         self.__quickEffects = None

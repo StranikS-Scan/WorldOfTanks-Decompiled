@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ConfirmModuleWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ConfirmModuleWindowMeta(DAAPIModule):
+class ConfirmModuleWindowMeta(AbstractWindowView):
 
     def submit(self, count, currency):
         self._printOverrideError('submit')

@@ -1,9 +1,10 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/ChannelsCarouselHandler.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.ChannelCarouselMeta import ChannelCarouselMeta
-from gui.Scaleform.framework import AppRef, ViewTypes
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.managers.containers import ExternalCriteria
+from gui.app_loader.decorators import sf_lobby
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelManagementEvent, ChannelCarouselEvent, PreBattleChannelEvent
 from gui.shared.events import FocusEvent, ComponentEvent
@@ -20,7 +21,7 @@ class ChannelFindCriteria(ExternalCriteria):
         return getattr(obj, '_clientID', 0) == self._criteria
 
 
-class ChannelsCarouselHandler(AppRef):
+class ChannelsCarouselHandler(object):
 
     def __init__(self, guiEntry):
         super(ChannelsCarouselHandler, self).__init__()
@@ -30,6 +31,10 @@ class ChannelsCarouselHandler(AppRef):
         self.__handlers = {}
         self.__showByReqs = {}
         return
+
+    @sf_lobby
+    def app(self):
+        return None
 
     def init(self):
         self.__channelsDP = ChannelsDataProvider()
@@ -64,7 +69,10 @@ class ChannelsCarouselHandler(AppRef):
             if clientID not in self.__handlers:
                 return
             criteria, openHandler, viewType = self.__handlers[clientID]
-            containerMgr = self.app.containerManager
+            app = self.app
+            if not app:
+                return
+            containerMgr = app.containerManager
             if containerMgr is not None:
                 container = containerMgr.getContainer(viewType)
                 if container is not None:
@@ -140,8 +148,9 @@ class ChannelsCarouselHandler(AppRef):
         if clientID in self.__handlers:
             criteria, openHandler, viewType = self.__handlers.pop(clientID)
             window = None
-            if self.app is not None and self.app.containerManager is not None:
-                window = self.app.containerManager.getView(viewType, criteria)
+            app = self.app
+            if app is not None and app.containerManager is not None:
+                window = app.containerManager.getView(viewType, criteria)
             if window is not None:
                 window.destroy()
         self.__channelsDP.removeItem(clientID)
@@ -312,7 +321,7 @@ class ChannelsCarouselHandler(AppRef):
                     return
             elif viewType == ViewTypes.LOBBY_SUB:
                 view = viewContainer.getView(viewType, criteria)
-                if view is not None and isinstance(view, AbstractWindowView):
+                if hasattr(view, 'onWindowMinimize') and callable(getattr(view, 'onWindowMinimize')):
                     view.onWindowMinimize()
                     return
             fields = {'isNotified': False,

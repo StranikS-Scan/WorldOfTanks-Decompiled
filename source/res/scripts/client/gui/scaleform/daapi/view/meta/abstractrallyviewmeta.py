@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/AbstractRallyViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class AbstractRallyViewMeta(DAAPIModule):
+class AbstractRallyViewMeta(BaseDAAPIComponent):
 
     def as_setPyAliasS(self, alias):
         if self._isDAAPIInited():

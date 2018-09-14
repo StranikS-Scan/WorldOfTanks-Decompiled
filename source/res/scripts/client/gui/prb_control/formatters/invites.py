@@ -191,9 +191,22 @@ class PrbFortBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
         return 'fortBattleOffenceInviteIcon'
 
 
+class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
+
+    def getTitle(self, invite):
+        if invite.senderFullName:
+            creatorName = makeHtmlString('html_templates:lobby/prebattle', 'inviteTitleCreatorName', ctx={'name': invite.senderFullName})
+        else:
+            creatorName = ''
+        return makeHtmlString('html_templates:lobby/prebattle', 'inviteTitle', ctx={'sender': creatorName,
+         'battleType': i18n.makeString('#invites:invites/text/fallout/%d' % invite.getExtraData().get('falloutBattleType'))}, sourceKey='FALLOUT')
+
+
 def getPrbInviteHtmlFormatter(invite):
     if invite.type == PREBATTLE_TYPE.FORT_BATTLE:
         return PrbFortBattleInviteHtmlTextFormatter()
+    if invite.getExtraData().get('falloutBattleType'):
+        return FalloutInviteHtmlTextFormatter()
     return PrbInviteHtmlTextFormatter()
 
 

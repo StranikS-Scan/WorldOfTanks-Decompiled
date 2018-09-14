@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/LogitechMonitor.py
 import BigWorld
+from collections import defaultdict
 import constants
 import CommandMapping
 from debug_utils import LOG_DEBUG
@@ -10,7 +11,7 @@ from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_period_ctrl import getTimeLevel
 from items.vehicles import getVehicleType
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.utils.requesters import DeprecatedStatsRequester
 from CurrentVehicle import g_currentVehicle
 from helpers import i18n, isPlayerAccount
@@ -143,7 +144,7 @@ class _LogitechScreen(object):
 class _LogoScreen(_LogitechScreen):
 
     def __init__(self, component):
-        _LogitechScreen.__init__(self, component, 'logo')
+        super(_LogoScreen, self).__init__(component, 'logo')
 
     def onLoadedMono(self):
         self.uiHolder.call('logitech.setMonoText', [i18n.makeString('#menu:login/version')])
@@ -152,7 +153,7 @@ class _LogoScreen(_LogitechScreen):
 class _StatsScreen(_LogitechScreen):
 
     def __init__(self, component):
-        _LogitechScreen.__init__(self, component, 'stats')
+        super(_StatsScreen, self).__init__(component, 'stats')
 
     def onLoadedMono(self):
         if g_currentVehicle.item:
@@ -175,7 +176,7 @@ class _BattleLoadingScreen(_LogitechScreen):
     _MAP_SOURCE = '../maps/icons/map/screen/%s.png'
 
     def __init__(self, component):
-        _LogitechScreen.__init__(self, component, 'mapLoading')
+        super(_BattleLoadingScreen, self).__init__(component, 'mapLoading')
 
     def onLoaded(self):
         arena = getattr(BigWorld.player(), 'arena', None)
@@ -194,8 +195,8 @@ class _BattleScreen(_LogitechScreen):
     __timerCallBackId = None
     __debugCallBackId = None
 
-    def __init__(self, component):
-        _LogitechScreen.__init__(self, component, 'battle')
+    def __init__(self, component, frame = 'battle'):
+        super(_BattleScreen, self).__init__(component, frame)
         self._colorManager = None
         return
 
@@ -286,21 +287,24 @@ class _BattleScreen(_LogitechScreen):
             return
         else:
             vehicles = arena.vehicles
-            frags = {1: 0,
-             2: 0}
-            total = {1: 0,
-             2: 0}
+            frags = defaultdict(int)
+            total = defaultdict(int)
             for vId, vData in vehicles.items():
                 vStats = arena.statistics.get(vId, None)
                 frags[vData['team']] += 0 if vStats is None else vStats['frags']
                 total[vData['team']] += 1
 
             playerTeam = BigWorld.player().team
-            enemyTeam = 3 - playerTeam
-            return (frags[playerTeam],
-             frags[enemyTeam],
-             total[playerTeam],
-             total[enemyTeam])
+            playerTeamFrags = frags[playerTeam]
+            playerTeamTotalFrags = total[playerTeam]
+            enemyTeamsFrags = [ v for t, v in frags.iteritems() if t != playerTeam ]
+            enemyTeamsTotalFrags = [ v for t, v in total.iteritems() if t != playerTeam ]
+            enemyTeamsFrags = sum(enemyTeamsFrags)
+            enemyTeamsTotalFrags = sum(enemyTeamsTotalFrags)
+            return (playerTeamFrags,
+             enemyTeamsFrags,
+             playerTeamTotalFrags,
+             enemyTeamsTotalFrags)
 
     def __onSetArenaTime(self, *args):
         self.__timerCallBackId = None
@@ -345,7 +349,7 @@ class _BattleScreen(_LogitechScreen):
 class _PostmortemScreen(_BattleScreen):
 
     def __init__(self, component):
-        _LogitechScreen.__init__(self, component, 'postmortem')
+        super(_PostmortemScreen, self).__init__(component, 'postmortem')
 
     def load(self, isColored):
         _BattleScreen.load(self, isColored)

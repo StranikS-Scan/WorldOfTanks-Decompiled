@@ -2,7 +2,7 @@
 import MusicController
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui import GUI_NATIONS, GUI_NATIONS_ORDER_INDEX
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -25,8 +25,8 @@ class Store(LobbySubView, StoreMeta):
     _EQUIPMENT = 'equipment'
     _DATA_PROVIDER = 'dataProvider'
 
-    def __init__(self, ctx = None):
-        super(Store, self).__init__(0.6)
+    def __init__(self, _ = None):
+        super(Store, self).__init__()
         self.__nations = []
         self.__filterHash = {}
         self._table = None

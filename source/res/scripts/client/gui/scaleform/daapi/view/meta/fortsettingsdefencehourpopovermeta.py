@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortSettingsDefenceHourPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class FortSettingsDefenceHourPopoverMeta(DAAPIModule):
+class FortSettingsDefenceHourPopoverMeta(SmartPopOverView):
 
     def onApply(self, hour):
         self._printOverrideError('onApply')

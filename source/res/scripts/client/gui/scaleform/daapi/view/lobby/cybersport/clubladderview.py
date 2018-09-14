@@ -9,6 +9,7 @@ from gui.clubs.events_dispatcher import showClubProfile
 from gui.clubs.formatters import getDivisionString, getLeagueString
 from gui.clubs.items import ClubContenderItem
 from gui.clubs.settings import getLadderChevron64x64, getLadderChevron256x256
+from gui.clubs.settings import CLIENT_CLUB_STATE
 from gui.Scaleform.daapi.view.lobby.cyberSport.ClubProfileWindow import ClubPage
 from gui.Scaleform.daapi.view.meta.StaticFormationLadderViewMeta import StaticFormationLadderViewMeta
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -126,7 +127,7 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
         return {'divisionName': self.__getDivisionText(ladderInfo),
          'divisionPositionText': self.__getPositionText(ladderInfo),
          'formationIconPath': getLadderChevron64x64(ladderInfo.division) if ladderInfo.isInLadder() else '',
-         'tableHeaders': self.__packTableHeaders(),
+         'tableHeader': self.__packTableHeaders(),
          'clubDBID': self._clubDbID}
 
     def __getDivisionText(self, ladderInfo):
@@ -144,21 +145,28 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
         return ''
 
     def __packTableHeaders(self):
-        return [self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERPLACE_TEXT, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE, fieldName='placeSortValue', sortOrder=1),
-         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERPOINTS_TEXT, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERPOINTS, fieldName='pointsSortValue', sortOrder=2),
-         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERFORMATIONNAME_TEXT, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERFORMATIONNAME, fieldName='formationNameSortValue'),
-         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERBATTLESCOUNT_TEXT, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERBATTLESCOUNT, fieldName='battlesCountSortValue'),
-         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERWINSPERCENT_TEXT, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT, fieldName='winPercentSortValue'),
-         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERSHOWFORMATIONPROFILE_TEXT, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE)]
+        return [self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERPLACE_TEXT, 70, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE, fieldName='placeSortValue', sortOrder=1),
+         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERPOINTS_TEXT, 75, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERPOINTS, fieldName='pointsSortValue', sortOrder=2),
+         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERFORMATIONNAME_TEXT, 470, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERFORMATIONNAME, fieldName='formationNameSortValue', sortType='string'),
+         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERBATTLESCOUNT_TEXT, 80, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERBATTLESCOUNT, fieldName='battlesCountSortValue'),
+         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERWINSPERCENT_TEXT, 80, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERWINPERCENT, fieldName='winPercentSortValue'),
+         self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERSHOWFORMATIONPROFILE_TEXT, 180, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERSHOWFORMATIONPROFILE)]
 
-    def __packTableHeaderItem(self, label, tooltip = '', fieldName = '', sortOrder = 0):
+    def __packTableHeaderItem(self, label, buttonWidth, tooltip = '', fieldName = '', sortOrder = 0, sortType = 'numeric'):
         return {'label': text_styles.standard(label),
          'toolTip': tooltip,
          'sortOrder': sortOrder,
-         'iconId': fieldName}
+         'id': fieldName,
+         'buttonWidth': buttonWidth,
+         'sortType': sortType}
 
     def __packLadderData(self, clubs):
         formations = []
+        clubsState = self.clubsCtrl.getState()
+        if clubsState.getStateID() == CLIENT_CLUB_STATE.HAS_CLUB:
+            myClubDbID = clubsState.getClubDbID()
+        else:
+            myClubDbID = None
         club = self.clubsCtrl.getClub(self._clubDbID)
         ladderInfo = club.getLadderInfo()
         if club and ladderInfo.isInLadder():
@@ -187,6 +195,7 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
                  'battlesCountSortValue': clubInfo.battlesCount,
                  'winPercent': text_styles.stats(winsPercentStr),
                  'winPercentSortValue': winsPercent,
-                 'isCurrentTeam': self._clubDbID == clubInfo.clubDBID})
+                 'isCurrentTeam': self._clubDbID == clubInfo.clubDBID,
+                 'isMyClub': myClubDbID == clubInfo.clubDBID})
 
         return {'formations': formations}

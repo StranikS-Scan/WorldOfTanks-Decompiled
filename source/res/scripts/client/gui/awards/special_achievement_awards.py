@@ -25,10 +25,10 @@ class ResearchAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_AWARDS_VEHICLESRESEARCH
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString('#menu:awardWindow/specialAchievement/research/description%d' % self.messageNumber, vehiclesCount=self.vehiclesCount))
+        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/research/description%d' % self.messageNumber, vehiclesCount=self.vehiclesCount))
 
 
 class VictoryAward(AwardAbstract):
@@ -47,10 +47,10 @@ class VictoryAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_AWARDS_VICTORY
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString('#menu:awardWindow/specialAchievement/victory/description%d' % self.messageNumber, victoriesCount=self.victoriesCount))
+        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/victory/description%d' % self.messageNumber, victoriesCount=self.victoriesCount))
 
 
 class BattleAward(AwardAbstract):
@@ -69,10 +69,10 @@ class BattleAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_AWARDS_BATTLESWORDS
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_SPECIALACHIEVEMENT_HEADER))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=self.battlesCount))
+        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=self.battlesCount))
 
 
 class PremiumDiscountAward(AwardAbstract):

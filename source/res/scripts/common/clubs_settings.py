@@ -1,7 +1,7 @@
 # Embedded file name: scripts/common/clubs_settings.py
 import time
 import ResMgr
-from debug_utils import LOG_NOTE, LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 _CONFIG_FILE = 'scripts/item_defs/clubs_settings.xml'
 
 class ClubsSettings:
@@ -28,7 +28,7 @@ def __asDate(date):
 
 def init():
     global g_cache
-    LOG_NOTE('clubs.init()')
+    LOG_DEBUG('clubs.init()')
     try:
         section = ResMgr.openSection(_CONFIG_FILE)
         prearenaWaitTime = section['prearena_wait_time'].asInt

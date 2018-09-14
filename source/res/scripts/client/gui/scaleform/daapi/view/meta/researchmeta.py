@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ResearchMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.techtree.ResearchView import ResearchView
 
-class ResearchMeta(DAAPIModule):
+class ResearchMeta(ResearchView):
 
     def requestNationData(self):
         self._printOverrideError('requestNationData')

@@ -7,9 +7,10 @@ from account_shared import getCustomizedVehCompDescr
 from gui.shared import g_itemsCache
 from items import vehicles
 import constants
-from gui import game_control, g_mouseEventHandlers, g_keyEventHandlers, InputHandler
+from gui import game_control, g_mouseEventHandlers, InputHandler
 from gui.ClientHangarSpace import ClientHangarSpace
 from gui.Scaleform.Waiting import Waiting
+from gui.LobbyContext import g_lobbyContext
 from debug_utils import LOG_DEBUG
 
 class HangarVideoCameraController:
@@ -171,7 +172,8 @@ class _HangarSpace(object):
         return
 
     def _stripVehCompDescrIfRoaming(self, vehCompDescr):
-        if game_control.g_instance.roaming.isInRoaming():
+        serverSettings = g_lobbyContext.getServerSettings()
+        if serverSettings is not None and serverSettings.roaming.isInRoaming():
             vehCompDescr = vehicles.stripCustomizationFromVehicleCompactDescr(vehCompDescr, True, True, False)[0]
         return vehicles.VehicleDescr(compactDescr=vehCompDescr)
 

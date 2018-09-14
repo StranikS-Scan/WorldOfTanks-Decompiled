@@ -3,15 +3,14 @@ from functools import partial
 import math
 import weakref
 from Math import Vector3, Matrix
-import BattleReplay
 from CTFManager import g_ctfManager
 from account_helpers.settings_core import g_settingsCore
 import constants
 import GUI
 import BigWorld
-from gui.battle_control.arena_info import hasFlags, hasRepairPoints, hasResourcePoints
-from gui.battle_control.avatar_getter import getPlayerVehicleID, getArena
-from gui.battle_control.dyn_squad_arena_controllers import IDynSquadEntityClient
+from gui.battle_control.dyn_squad_functional import IDynSquadEntityClient
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 from gui.shared.utils.plugins import PluginsCollection, IPlugin
 from helpers import i18n, time_utils
 from debug_utils import LOG_ERROR
@@ -19,10 +18,11 @@ from gui import DEPTH_OF_VehicleMarker, GUI_SETTINGS
 from gui.Scaleform import VoiceChatInterface, ColorSchemeManager
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.battle_control import g_sessionProvider
+from gui.battle_control import g_sessionProvider, avatar_getter, arena_info
 from gui.battle_control.arena_info.arena_vos import VehicleActions
-from gui.battle_control.battle_constants import PLAYER_ENTITY_NAME, FEEDBACK_EVENT_ID, NEUTRAL_TEAM
-from items.vehicles import VEHICLE_CLASS_TAGS
+from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, NEUTRAL_TEAM
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
+_SCOPE = EVENT_BUS_SCOPE.BATTLE
 _MARKER_POSITION_ADJUSTMENT = Vector3(0.0, 12.0, 0.0)
 _MARKERS_MANAGER_SWF = 'VehicleMarkersManager.swf'
 
@@ -77,28 +77,23 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         self.colorManager.populateUI(weakref.proxy(self))
         self.__plugins = PluginsCollection(self)
         plugins = {'equipments': _EquipmentsMarkerPlugin}
-        if hasFlags():
+        if arena_info.hasFlags():
             plugins['flags'] = _FlagsMarkerPlugin
-        if hasRepairPoints():
+        if arena_info.hasRepairPoints():
             plugins['repairs'] = _RepairsMarkerPlugin
-        if hasResourcePoints():
+        if arena_info.hasResourcePoints():
             plugins['resources'] = _ResourceMarkerPlugin
         self.__plugins.addPlugins(plugins)
         self.__ownUI = None
         self.__parentUI = parentUI
-        self.__markers = dict()
+        self.__markers = {}
         return
 
     def updateSquadmanVeh(self, vID):
-        handle = getattr(BigWorld.entity(vID), 'marker', None)
-        if handle is not None:
-            self.invokeMarker(handle, 'setEntityName', [PLAYER_ENTITY_NAME.squadman.name()])
-        return
-
-    def showExtendedInfo(self, value):
-        self.__invokeCanvas('setShowExInfoFlag', [value])
-        for handle in self.__markers.iterkeys():
-            self.invokeMarker(handle, 'showExInfo', [value])
+        if vID not in self.__markers:
+            return
+        marker = self.__markers[vID]
+        self.invokeMarker(marker.id, 'setEntityName', [PLAYER_GUI_PROPS.squadman.name()])
 
     def setScaleProps(self, minScale = 40, maxScale = 100, defScale = 100, speed = 3.0):
         if constants.IS_DEVELOPMENT:
@@ -128,14 +123,22 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         self.__plugins.init()
         ctrl = g_sessionProvider.getFeedback()
         if ctrl:
+            ctrl.onVehicleMarkerAdded += self.__onVehicleMarkerAdded
+            ctrl.onVehicleMarkerRemoved += self.__onVehicleMarkerRemoved
             ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         self.__plugins.start()
+        g_eventBus.addListener(GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=_SCOPE)
+        g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=_SCOPE)
 
     def destroy(self):
+        g_eventBus.removeListener(GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=_SCOPE)
+        g_eventBus.removeListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=_SCOPE)
         self.__plugins.stop()
         g_settingsCore.interfaceScale.onScaleChanged -= self.updateMarkersScale
         ctrl = g_sessionProvider.getFeedback()
         if ctrl:
+            ctrl.onVehicleMarkerAdded -= self.__onVehicleMarkerAdded
+            ctrl.onVehicleMarkerRemoved -= self.__onVehicleMarkerRemoved
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         if self.__parentUI is not None:
             setattr(self.__parentUI.component, 'vehicleMarkersManager', None)
@@ -147,50 +150,55 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         self.close()
         return
 
-    def createMarker(self, vProxy):
-        vInfo = dict(vProxy.publicInfo)
-        battleCtx = g_sessionProvider.getCtx()
-        if battleCtx.isObserver(vProxy.id):
-            return -1
-        isFriend = vInfo['team'] == BigWorld.player().team
-        vehID = vProxy.id
-        vInfoEx = g_sessionProvider.getArenaDP().getVehicleInfo(vehID)
+    def addVehicleMarker(self, vProxy, vInfo, guiProps):
         vTypeDescr = vProxy.typeDescriptor
         maxHealth = vTypeDescr.maxHealth
         mProv = vProxy.model.node('HP_gui')
-        tags = set(vTypeDescr.type.tags & VEHICLE_CLASS_TAGS)
-        vClass = tags.pop() if len(tags) > 0 else ''
-        entityName = battleCtx.getPlayerEntityName(vehID, vInfoEx.team)
-        entityType = 'ally' if BigWorld.player().team == vInfoEx.team else 'enemy'
+        isAlly = guiProps.isFriend
         speaking = False
         if GUI_SETTINGS.voiceChat:
-            speaking = VoiceChatInterface.g_instance.isPlayerSpeaking(vInfoEx.player.accountDBID)
-        hunting = VehicleActions.isHunting(vInfoEx.events)
-        handle = self.__ownUI.addMarker(mProv, 'VehicleMarkerAlly' if isFriend else 'VehicleMarkerEnemy')
-        self.__markers[handle] = _VehicleMarker(vProxy, self.__ownUIProxy(), handle)
+            speaking = VoiceChatInterface.g_instance.isPlayerSpeaking(vInfo.player.accountDBID)
+        hunting = VehicleActions.isHunting(vInfo.events)
+        markerID = self.__ownUI.addMarker(mProv, 'VehicleMarkerAlly' if isAlly else 'VehicleMarkerEnemy')
+        self.__markers[vInfo.vehicleID] = _VehicleMarker(markerID, vProxy, self.__ownUIProxy)
+        battleCtx = g_sessionProvider.getCtx()
         fullName, pName, clanAbbrev, regionCode, vehShortName = battleCtx.getFullPlayerNameWithParts(vProxy.id)
-        self.invokeMarker(handle, 'init', [vClass,
-         vInfoEx.vehicleType.iconPath,
+        vType = vInfo.vehicleType
+        squadIcon = ''
+        if arena_info.getIsMultiteam() and vInfo.isSquadMan():
+            teamIdx = g_sessionProvider.getArenaDP().getMultiTeamsIndexes()[vInfo.team]
+            squadIconTemplate = '%s%d'
+            if guiProps.name() == 'squadman':
+                squadTeam = 'my'
+            elif isAlly:
+                squadTeam = 'ally'
+            else:
+                squadTeam = 'enemy'
+            squadIcon = squadIconTemplate % (squadTeam, teamIdx)
+        self.invokeMarker(markerID, 'init', [vType.classTag,
+         vType.iconPath,
          vehShortName,
-         vInfoEx.vehicleType.level,
+         vType.level,
          fullName,
          pName,
          clanAbbrev,
          regionCode,
          vProxy.health,
          maxHealth,
-         entityName.name(),
+         guiProps.name(),
          speaking,
          hunting,
-         entityType,
-         g_ctfManager.isFlagBearer(vehID)])
-        return handle
+         guiProps.base,
+         g_ctfManager.isFlagBearer(vInfo.vehicleID),
+         squadIcon])
+        return markerID
 
-    def destroyMarker(self, handle):
-        if self.__markers.has_key(handle):
-            self.__markers[handle].destroy()
-            del self.__markers[handle]
-            self.__ownUI.delMarker(handle)
+    def removeVehicleMarker(self, vehicleID):
+        marker = self.__markers.pop(vehicleID, None)
+        if marker is not None:
+            self.__ownUI.delMarker(marker.id)
+            marker.destroy()
+        return
 
     def createStaticMarker(self, pos, symbol):
         mProv = Matrix()
@@ -208,22 +216,22 @@ class MarkersManager(Flash, IDynSquadEntityClient):
     def showActionMarker(self, handle, newState):
         self.invokeMarker(handle, 'showActionMarker', [newState])
 
-    def updateFlagbearerState(self, handle, newState):
-        self.invokeMarker(handle, 'updateFlagbearerState', [newState])
+    def updateFlagbearerState(self, vehID, newState):
+        marker = self.__markers.get(vehID)
+        if marker is not None:
+            self.invokeMarker(marker.id, 'updateFlagbearerState', [newState])
+        return
 
-    def onVehicleHealthChanged(self, handle, curHealth, attackerID = -1, attackReasonID = 0):
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-            return
-        if curHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(curHealth):
-            curHealth = 0
-        self.invokeMarker(handle, 'updateHealth', [curHealth, self.__getVehicleDamageType(attackerID), constants.ATTACK_REASONS[attackReasonID]])
+    def updateVehicleHealth(self, handle, newHealth, aInfo, attackReasonID):
+        if newHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth):
+            newHealth = 0
+        self.invokeMarker(handle, 'updateHealth', [newHealth, self.__getVehicleDamageType(aInfo), constants.ATTACK_REASONS[attackReasonID]])
 
     def showDynamic(self, vID, flag):
-        handle = getattr(BigWorld.entity(vID), 'marker', None)
-        if handle is not None and GUI_SETTINGS.voiceChat:
-            self.invokeMarker(handle, 'setSpeaking', [flag])
-        return
+        if vID not in self.__markers:
+            return
+        marker = self.__markers[vID]
+        self.invokeMarker(marker.id, 'setSpeaking', [flag])
 
     def updateMarkersScale(self, scale = None):
         if self.__ownUIProxy() is not None:
@@ -234,14 +242,13 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         return
 
     def setTeamKiller(self, vID):
+        if vID not in self.__markers:
+            return
+        marker = self.__markers[vID]
         ctx = g_sessionProvider.getCtx()
-        if not ctx.isTeamKiller(vID=vID) or ctx.isSquadMan(vID=vID):
+        if not ctx.isTeamKiller(vID=vID) or ctx.isSquadMan(vID=vID) and not arena_info.isEventBattle():
             return
-        else:
-            handle = getattr(BigWorld.entity(vID), 'marker', None)
-            if handle is not None:
-                self.invokeMarker(handle, 'setEntityName', [PLAYER_ENTITY_NAME.teamKiller.name()])
-            return
+        self.invokeMarker(marker.id, 'setEntityName', [PLAYER_GUI_PROPS.teamKiller.name()])
 
     def invokeMarker(self, handle, function, args = None):
         if handle == -1:
@@ -261,14 +268,14 @@ class MarkersManager(Flash, IDynSquadEntityClient):
 
     def updateMarkers(self):
         self.colorManager.update()
-        for handle in self.__markers.iterkeys():
-            self.invokeMarker(handle, 'update', [])
+        for marker in self.__markers.itervalues():
+            self.invokeMarker(marker.id, 'update', [])
 
         self.__plugins.update()
 
     def updateMarkerSettings(self):
-        for handle in self.__markers.iterkeys():
-            self.invokeMarker(handle, 'updateMarkerSettings', [])
+        for marker in self.__markers.itervalues():
+            self.invokeMarker(marker.id, 'updateMarkerSettings', [])
 
     def __invokeCanvas(self, function, args = None):
         if args is None:
@@ -276,61 +283,70 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         self.call('battle.vehicleMarkersCanvas.' + function, args)
         return
 
-    def __getVehicleDamageType(self, attackerID):
-        if not attackerID:
+    def __getVehicleDamageType(self, attackerInfo):
+        if not attackerInfo:
             return _DAMAGE_TYPE.FROM_UNKNOWN
-        if attackerID == BigWorld.player().playerVehicleID:
+        attackerID = attackerInfo.vehicleID
+        if attackerID == avatar_getter.getPlayerVehicleID():
             return _DAMAGE_TYPE.FROM_PLAYER
-        entityName = g_sessionProvider.getCtx().getPlayerEntityName(attackerID, BigWorld.player().arena.vehicles.get(attackerID, dict()).get('team'))
-        if entityName == PLAYER_ENTITY_NAME.squadman:
+        entityName = g_sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
+        if entityName == PLAYER_GUI_PROPS.squadman:
             return _DAMAGE_TYPE.FROM_SQUAD
-        if entityName == PLAYER_ENTITY_NAME.ally:
+        if entityName == PLAYER_GUI_PROPS.ally:
             return _DAMAGE_TYPE.FROM_ALLY
-        if entityName == PLAYER_ENTITY_NAME.enemy:
+        if entityName == PLAYER_GUI_PROPS.enemy:
             return _DAMAGE_TYPE.FROM_ENEMY
         return _DAMAGE_TYPE.FROM_UNKNOWN
 
+    def __onVehicleMarkerAdded(self, vProxy, vInfo, guiProps):
+        self.addVehicleMarker(vProxy, vInfo, guiProps)
+
+    def __onVehicleMarkerRemoved(self, vehicleID):
+        self.removeVehicleMarker(vehicleID)
+
     def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
-        entity = BigWorld.entity(vehicleID)
-        if entity is None or not entity.isStarted:
+        if vehicleID not in self.__markers:
             return
-        else:
-            try:
-                handle = entity.marker
-            except AttributeError:
-                return
+        marker = self.__markers[vehicleID]
+        if eventID == _EVENT_ID.VEHICLE_HIT:
+            self.updateMarkerState(marker.id, 'hit', value)
+        elif eventID == _EVENT_ID.VEHICLE_ARMOR_PIERCED:
+            self.updateMarkerState(marker.id, 'hit_pierced', value)
+        elif eventID == _EVENT_ID.VEHICLE_DEAD:
+            self.updateMarkerState(marker.id, 'dead', value)
+        elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
+            self.showActionMarker(marker.id, value)
+        elif eventID == _EVENT_ID.VEHICLE_HEALTH:
+            self.updateVehicleHealth(marker.id, *value)
 
-            if eventID == FEEDBACK_EVENT_ID.VEHICLE_SHOW_MARKER:
-                self.showActionMarker(handle, value)
-            return
+    def __handleShowExtendedInfo(self, event):
+        isDown = event.ctx['isDown']
+        self.__invokeCanvas('setShowExInfoFlag', [isDown])
+        for marker in self.__markers.itervalues():
+            self.invokeMarker(marker.id, 'showExInfo', [isDown])
+
+    def __handleGUIVisibility(self, event):
+        self.active(event.ctx['visible'])
 
 
-class _VehicleMarker():
+class _VehicleMarker(object):
 
-    def __init__(self, vProxy, uiProxy, handle):
+    def __init__(self, markerID, vProxy, uiProxy):
+        self.id = markerID
         self.vProxy = vProxy
         self.uiProxy = uiProxy
-        self.handle = handle
-        self.uiProxy.markerSetScale(g_settingsCore.interfaceScale.get())
         self.vProxy.appearance.onModelChanged += self.__onModelChanged
-        g_settingsCore.interfaceScale.onScaleChanged += self.__onScaleChanged
 
     def destroy(self):
-        g_settingsCore.interfaceScale.onScaleChanged -= self.__onScaleChanged
         self.vProxy.appearance.onModelChanged -= self.__onModelChanged
         self.vProxy = None
         self.uiProxy = None
-        self.handle = -1
+        self.markerID = -1
         return
 
     def __onModelChanged(self):
-        if self.uiProxy is not None:
-            self.uiProxy.markerSetMatrix(self.handle, self.vProxy.model.node('HP_gui'))
-        return
-
-    def __onScaleChanged(self, scale):
-        if self.uiProxy is not None:
-            self.uiProxy.markerSetScale(scale)
+        if self.uiProxy() is not None:
+            self.uiProxy().markerSetMatrix(self.id, self.vProxy.model.node('HP_gui'))
         return
 
 
@@ -391,6 +407,8 @@ class _FlagsMarkerPlugin(IPlugin):
         self.__capturePoints = []
         self.__spawnPoints = []
         self.__captureMarkers = []
+        self.__playerTeam = 0
+        self.__isTeamPlayer = False
 
     def init(self):
         super(_FlagsMarkerPlugin, self).init()
@@ -413,15 +431,18 @@ class _FlagsMarkerPlugin(IPlugin):
         playerVehicleID = player.playerVehicleID
         arena = player.arena
         arenaType = arena.arenaType
+        self.__playerTeam = player.team
+        self.__isTeamPlayer = self.__playerTeam in arenaType.squadTeamNumbers if arena_info.getIsMultiteam(arenaType) else True
         self.__capturePoints = arenaType.flagAbsorptionPoints
         self.__spawnPoints = arenaType.flagSpawnPoints
         isFlagBearer = False
         for flagID, flagInfo in g_ctfManager.getFlags():
             vehicleID = flagInfo['vehicle']
             if vehicleID is None:
-                if flagInfo['state'] == constants.FLAG_STATE.WAITING_FIRST_SPAWN:
+                flagState = flagInfo['state']
+                if flagState == constants.FLAG_STATE.WAITING_FIRST_SPAWN:
                     self.__onFlagSpawning(flagID, flagInfo['respawnTime'])
-                else:
+                elif flagState in (constants.FLAG_STATE.ON_GROUND, constants.FLAG_STATE.ON_SPAWN):
                     self.__onSpawnedAtBase(flagID, flagInfo['team'], flagInfo['minimapPos'])
             elif vehicleID == playerVehicleID:
                 isFlagBearer = True
@@ -470,19 +491,9 @@ class _FlagsMarkerPlugin(IPlugin):
             self.__markers[flagID] = (handle, callbackId)
             return
 
-    def __updateFlagbearerMarker(self, vehicleID, state = False):
-        vehHandle = getattr(BigWorld.entity(vehicleID), 'marker', None)
-        if vehHandle is not None:
-            self._parentObj.invokeMarker(vehHandle, 'updateFlagbearerState', [state])
-        return
-
     def __addCaptureMarkers(self):
-        player = BigWorld.player()
-        currentTeam = player.team
-        playerVehID = getPlayerVehicleID()
-        isSquadMan = g_sessionProvider.getArenaDP().isSquadMan(playerVehID)
         for point in self.__capturePoints:
-            if isSquadMan and point['team'] in (NEUTRAL_TEAM, currentTeam):
+            if self.__isTeamPlayer and point['team'] in (NEUTRAL_TEAM, self.__playerTeam):
                 position = point['position']
                 _, handle = self._parentObj.createStaticMarker(position + _MARKER_POSITION_ADJUSTMENT, _FLAG_CAPTURE_MARKER_TYPE)
                 self.__captureMarkers.append((handle, None))
@@ -511,14 +522,14 @@ class _FlagsMarkerPlugin(IPlugin):
         self.__addFlagMarker(flagID, flagPos, flagType)
 
     def __onCapturedByVehicle(self, flagID, flagTeam, vehicleID):
-        self.__updateFlagbearerMarker(vehicleID, True)
+        self._parentObj.updateFlagbearerState(vehicleID, True)
         self.__delFlagMarker(flagID)
         if vehicleID == BigWorld.player().playerVehicleID:
             self.__addCaptureMarkers()
 
     def __onDroppedToGround(self, flagID, flagTeam, loserVehicleID, flagPos, respawnTime):
         flagType = self.__getFlagMarkerType(flagID, flagTeam)
-        self.__updateFlagbearerMarker(loserVehicleID)
+        self._parentObj.updateFlagbearerState(loserVehicleID, False)
         self.__addFlagMarker(flagID, flagPos, flagType)
         timer = respawnTime - BigWorld.serverTime()
         self.__initTimer(int(math.ceil(timer)), flagID)
@@ -526,7 +537,7 @@ class _FlagsMarkerPlugin(IPlugin):
             self.__delCaptureMarkers()
 
     def __onAbsorbed(self, flagID, flagTeam, vehicleID, respawnTime):
-        self.__updateFlagbearerMarker(vehicleID)
+        self._parentObj.updateFlagbearerState(vehicleID, False)
         self.__delFlagMarker(flagID)
         if vehicleID == BigWorld.player().playerVehicleID:
             self.__delCaptureMarkers()

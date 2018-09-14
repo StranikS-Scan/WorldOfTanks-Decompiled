@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortCreateDirectionWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortCreateDirectionWindowMeta(DAAPIModule):
+class FortCreateDirectionWindowMeta(AbstractWindowView):
 
     def openNewDirection(self):
         self._printOverrideError('openNewDirection')

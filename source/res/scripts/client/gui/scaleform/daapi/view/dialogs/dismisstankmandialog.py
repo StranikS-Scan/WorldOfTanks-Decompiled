@@ -5,15 +5,13 @@ from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.shared.gui_items.serializers import packTankman
 from helpers import i18n
 from items import tankmen
-from gui.Scaleform.daapi.view.dialogs.SimpleDialog import SimpleDialog
 from gui.Scaleform.daapi.view.meta.DismissTankmanDialogMeta import DismissTankmanDialogMeta
 from gui.shared.utils.requesters.ItemsRequester import ItemsRequester
 
-class DismissTankmanDialog(DismissTankmanDialogMeta, SimpleDialog):
+class DismissTankmanDialog(DismissTankmanDialogMeta):
 
     def __init__(self, meta, handler):
-        SimpleDialog.__init__(self, meta.getMessage(), meta.getTitle(), meta.getButtonLabels(), meta.getCallbackWrapper(handler))
-        DismissTankmanDialogMeta.__init__(self)
+        super(DismissTankmanDialog, self).__init__(meta.getMessage(), meta.getTitle(), meta.getButtonLabels(), meta.getCallbackWrapper(handler))
         self.__meta = meta
         self.__tankman = self.__meta.getTankman()
         self.__controlNumber = None

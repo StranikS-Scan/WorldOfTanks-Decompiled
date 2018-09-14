@@ -25,7 +25,10 @@ _fortSortiesBlockLayout = ['battlesCount',
  'absoluteBattlesCount',
  'fortResourceInMiddle',
  'fortResourceInChampion',
- 'fortResourceInAbsolute']
+ 'fortResourceInAbsolute',
+ 'middleWins',
+ 'championWins',
+ 'absoluteWins']
 _fortSortiesBlockBuilder = StaticSizeBlockBuilder('fortSorties', _fortSortiesBlockLayout, {}, [])
 _fortAchievementsBlockLayout = ['citadel']
 _fortAchievementsPopUps = ['citadel']

@@ -5,7 +5,7 @@ import gettext
 import BigWorld
 from collections import defaultdict
 from encodings import utf_8
-from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 
 def _getTranslator(domain):
     path = convert(BigWorld.wg_resolveFileName('text')[:-5])
@@ -31,7 +31,7 @@ def convert(utf8String):
 
 
 def isValidKey(key):
-    return key and key[0] == '#'
+    return key and key[0] == '#' and ':' in key
 
 
 def doesTextExist(key):

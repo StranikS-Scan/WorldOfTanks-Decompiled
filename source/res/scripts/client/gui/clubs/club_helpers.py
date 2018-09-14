@@ -219,15 +219,16 @@ class ClubsSeasonsCache(object):
 
     @process
     def updateCompletedSeasons(self, force = False):
-        if not self._isCompletedSeasonsInfoReceived or force:
+        if (not self._isCompletedSeasonsInfoReceived or force) and self._clubsCtrl.getState().isAvailable():
             ctx = GetCompletedSeasonsCtx()
             response = yield self._clubsCtrl.sendRequest(ctx, allowDelay=True)
-            if response.isSuccess():
+            if response.isSuccess() and response.data is not None:
                 self._isCompletedSeasonsInfoReceived = True
                 for season in response.data:
                     self._completedSeasonsCache[season[0]] = SeasonCommonInfo(*season)
 
                 self._clubsCtrl.notify('onCompletedSeasonsInfoChanged')
+        return
 
     def __repr__(self):
         return 'ClubsSeasonsCache(cached clubs=%s)' % self._cache.keys()

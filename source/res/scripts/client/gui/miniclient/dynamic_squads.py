@@ -32,4 +32,4 @@ class DisableGameSettingPointcut(aop.Pointcut):
 class InviteReceivedMessagePointcut(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.battle_control.dyn_squad_arena_controllers', 'DynSquadMessagesController', '_inviteReceived', aspects=(aop.DummyAspect,))
+        aop.Pointcut.__init__(self, 'gui.battle_control.dyn_squad_functional', 'DynSquadMessagesController', '_inviteReceived', aspects=(aop.DummyAspect,))

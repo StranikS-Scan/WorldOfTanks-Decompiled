@@ -15,7 +15,6 @@ from gui.battle_control import g_sessionProvider
 from gui.Scaleform import SCALEFORM_WALLPAPER_PATH
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
@@ -29,9 +28,10 @@ from helpers import i18n, getFullClientVersion
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.locale.MENU import MENU
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, REQUEST_RATE, HOST_AVAILABILITY
+from gui.social_network_login.Bridge import _SOCIAL_NETWORKS
 from gui.social_network_login.Bridge import bridge as socialNetworkLoginBridge
 
-class LoginView(View, LoginPageMeta, AppRef):
+class LoginView(LoginPageMeta):
 
     def __init__(self, ctx = None):
         super(LoginView, self).__init__(ctx=None)
@@ -84,8 +84,6 @@ class LoginView(View, LoginPageMeta, AppRef):
 
         self.__capsLockCallback = BigWorld.callback(0.1, self.__checkUserInputState)
         g_sessionProvider.getCtx().lastArenaUniqueID = None
-        if self.app.cursorMgr is not None:
-            self.app.cursorMgr.attachCursor(True)
         self.__showRequiredLoginScreen()
         return
 
@@ -109,7 +107,7 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__setStatus(newStatus, statusCode)
 
     def onLoginAppFailed(self, status, message):
-        self.__createAnAccountResponse(True, '')
+        pass
 
     def onSetOptions(self, optionsList, host):
         options = []
@@ -176,10 +174,9 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__setStatus('', 0)
 
     def onHandleAutoRegisterInvalidPass(self):
-        self.__createAnAccountResponse(False, MENU.LOGIN_STATUS_LOGIN_REJECTED_NICKNAME_ALREADY_EXIST)
+        pass
 
     def onHandleAutoRegisterActivating(self):
-        self.__createAnAccountResponse(True, '')
         Waiting.hide('login')
 
     def onHandleAutoLoginQueryFailed(self, message):
@@ -200,13 +197,13 @@ class LoginView(View, LoginPageMeta, AppRef):
             self.as_doAutoLoginS()
 
     def onAccountNameIsInvalid(self):
-        self.__createAnAccountResponse(False, MENU.LOGIN_STATUS_INVALID_NICKNAME)
+        pass
 
     def onNicknameTooSmall(self):
-        self.__createAnAccountResponse(False, i18n.makeString(MENU.LOGIN_STATUS_INVALID_LOGIN_LENGTH) % {'count': _ACCOUNT_NAME_MIN_LENGTH_REG})
+        pass
 
     def onHandleAutoRegisterJSONParsingFailed(self):
-        self.__createAnAccountResponse(False, MENU.LOGIN_STATUS_LOGIN_REJECTED_UNABLE_TO_PARSE_JSON)
+        pass
 
     def onHandleKickWhileLogin(self, messageType, message):
         self.__setAutoLogin(WAITING.titles(messageType), message, WAITING.BUTTONS_CEASE)
@@ -279,9 +276,6 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__loginPreferences.writeString('token2', '')
         self.__loginPreferences.writeString('user', '')
 
-    def onRegister(self):
-        self.fireEvent(OpenLinkEvent(OpenLinkEvent.REGISTRATION))
-
     def onRecovery(self):
         self.fireEvent(OpenLinkEvent(OpenLinkEvent.RECOVERY_PASSWORD))
 
@@ -317,9 +311,18 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.fireEvent(events.HideWindowEvent(HideWindowEvent.HIDE_LEGAL_INFO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def onLoginBySocial(self, socialNetworkName, host):
+        self.__initiateSocialLogin(socialNetworkName, host, False)
+
+    def onRegister(self, host):
+        if GUI_SETTINGS.socialNetworkLogin['enabled']:
+            self.__initiateSocialLogin(_SOCIAL_NETWORKS.WGNI, host, True)
+        else:
+            self.fireEvent(OpenLinkEvent(OpenLinkEvent.REGISTRATION))
+
+    def __initiateSocialLogin(self, socialNetworkName, host, isRegistration):
         self.__loginHost = host
         self.__lastLoginType = socialNetworkName
-        if not self.__socialNetworkLogin.initiateLogin(socialNetworkName, self.__rememberMe):
+        if not self.__socialNetworkLogin.initiateLogin(socialNetworkName, self.__rememberMe, isRegistration=isRegistration):
             self.__setStatus(i18n.makeString('#menu:login/social/status/SYSTEM_ERROR'), 0)
 
     def __onServerReceivedData(self, token, spaID, tokenDecrypter):
@@ -425,9 +428,6 @@ class LoginView(View, LoginPageMeta, AppRef):
     def __setStatus(self, status, statusCode):
         self.as_setErrorMessageS(status, statusCode)
         Waiting.close()
-
-    def __createAnAccountResponse(self, success, errorMsg):
-        self.fireEvent(LoginEvent(LoginEvent.CLOSE_CREATE_AN_ACCOUNT, View.alias, success, errorMsg))
 
     def __loadRandomBgImage(self):
         wallpapperSettings = self.__readUserPreferenceLogin()

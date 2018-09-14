@@ -20,13 +20,16 @@ from post_processing import g_postProcessing
 from items import vehicles, artefacts
 from constants import AIMING_MODE
 
-class _DefaultStrikeSelector(object):
+class _DefaultStrikeSelector(object, CallbackDelayer):
+    _TICK_DELAY = 0.1
 
     def __init__(self, position, equipment):
+        CallbackDelayer.__init__(self)
         self.equipment = equipment
+        self.delayCallback(self._TICK_DELAY, self.__tick)
 
     def destroy(self):
-        pass
+        CallbackDelayer.destroy(self)
 
     def setGUIVisible(self, isVisible):
         pass
@@ -43,11 +46,60 @@ class _DefaultStrikeSelector(object):
     def processReplayHover(self):
         pass
 
+    def tick(self):
+        pass
 
-class _ArtilleryStrikeSelector(_DefaultStrikeSelector):
+    def __tick(self):
+        self.tick()
+        return self._TICK_DELAY
+
+
+class _VehiclesSelector():
+
+    def __init__(self, intersectChecker):
+        self.__edgedVehicles = []
+        self.__intersectChecker = intersectChecker
+        BigWorld.player().onVehicleLeaveWorld += self.__onVehicleLeaveWorld
+
+    def destroy(self):
+        self.__intersectChecker = None
+        self.__clearEdgedVehicles()
+        BigWorld.player().onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
+        return
+
+    def __onVehicleLeaveWorld(self, vehicle):
+        if vehicle in self.__edgedVehicles:
+            self.__edgedVehicles.remove(vehicle)
+            BigWorld.wgDelEdgeDetectEntity(vehicle)
+
+    def __clearEdgedVehicles(self):
+        for v in self.__edgedVehicles:
+            if v is not None:
+                BigWorld.wgDelEdgeDetectEntity(v)
+
+        self.__edgedVehicles = []
+        return
+
+    def highlightVehicles(self):
+        self.__clearEdgedVehicles()
+        vehicles = [ v for v in BigWorld.player().vehicles if v.isAlive() ]
+        selected = self.__intersectChecker(vehicles)
+        for v in selected:
+            if v.isPlayer:
+                edgeType = 0
+            elif BigWorld.player().team == v.publicInfo['team']:
+                edgeType = 2
+            else:
+                edgeType = 1
+            BigWorld.wgAddEdgeDetectEntity(v, edgeType, 0)
+            self.__edgedVehicles.append(v)
+
+
+class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
 
     def __init__(self, position, equipment):
         _DefaultStrikeSelector.__init__(self, position, equipment)
+        _VehiclesSelector.__init__(self, self.__intersected)
         self.hitPosition = position
         myTeam = BigWorld.player().team
         udos = BigWorld.userDataObjects.values()
@@ -68,6 +120,8 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector):
         return
 
     def destroy(self):
+        _DefaultStrikeSelector.destroy(self)
+        _VehiclesSelector.destroy(self)
         self.__marker.destroy()
         self.__marker = None
         return
@@ -116,6 +170,9 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector):
         self.writeStateToReplay()
         return
 
+    def tick(self):
+        self.highlightVehicles()
+
     def processReplayHover(self):
         replayCtrl = BattleReplay.g_replayCtrl
         _, self.hitPosition, direction = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0))
@@ -128,6 +185,13 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector):
             if self.hitPosition is not None:
                 replayCtrl.setConsumablesPosition(self.hitPosition)
         return
+
+    def __intersected(self, vehicles):
+        vPositions = [ v.position for v in vehicles ]
+        pointsInside = self.__marker.component.wg_pointsInside(vPositions)
+        for v, isInside in zip(vehicles, pointsInside):
+            if isInside:
+                yield v
 
 
 _DEFAULT_STRIKE_DIRECTION = Vector3(1, 0, 0)
@@ -147,6 +211,7 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
         return
 
     def destroy(self):
+        _DefaultStrikeSelector.destroy(self)
         if self.area is not None:
             self.area.destroy()
             self.area = None
@@ -189,11 +254,16 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
             replayCtrl.setConsumablesPosition(self.area.position, self.direction)
 
 
-class _BomberStrikeSelector(_AreaStrikeSelector):
+class _BomberStrikeSelector(_AreaStrikeSelector, _VehiclesSelector):
 
     def __init__(self, position, equipment):
         _AreaStrikeSelector.__init__(self, position, equipment)
+        _VehiclesSelector.__init__(self, self.__intersected)
         self.selectingPosition = True
+
+    def destroy(self):
+        _AreaStrikeSelector.destroy(self)
+        _VehiclesSelector.destroy(self)
 
     def processSelection(self, position, reset = False):
         if reset:
@@ -223,6 +293,14 @@ class _BomberStrikeSelector(_AreaStrikeSelector):
             if self.direction.lengthSquared <= 0.001:
                 self.direction = Vector3(0, 0, 1)
             _AreaStrikeSelector.processHover(self, self.area.position)
+
+    def tick(self):
+        self.highlightVehicles()
+
+    def __intersected(self, vehicles):
+        for v in vehicles:
+            if self.area.pointInside(v.position):
+                yield v
 
 
 _STRIKE_SELECTORS = {artefacts.Artillery: _ArtilleryStrikeSelector,

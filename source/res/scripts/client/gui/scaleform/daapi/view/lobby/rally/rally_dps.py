@@ -2,7 +2,6 @@
 import weakref
 import operator
 import BigWorld
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers import html
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
@@ -10,18 +9,16 @@ from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makePlayerVO, makeUnitShortVO, makeSortiePlayerVO, makeUserVO, makeStaticFormationPlayerVO
 from gui.Scaleform.daapi.view.lobby.rally.data_providers import BaseRallyListDataProvider
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties, UtilsManager
 from gui.clubs.formatters import getLeagueString, getDivisionString
 from gui.clubs.settings import CLIENT_CLUB_STATE, getLadderChevron16x16, getLadderChevron128x128
 from gui.prb_control.items.unit_items import getUnitCandidatesComparator
 from gui.prb_control.prb_helpers import unitFunctionalProperty
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import icons, text_styles
 from gui.shared.view_helpers import UsersInfoHelper
 from shared_utils import findFirst
 from helpers import i18n
@@ -30,13 +27,14 @@ from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
 from gui.shared.gui_items.dossier import dumpDossier
 
-class CandidatesDataProvider(DAAPIDataProvider, AppRef):
+class CandidatesDataProvider(DAAPIDataProvider):
 
     def __init__(self):
         super(CandidatesDataProvider, self).__init__()
         self.clear()
 
-    def init(self, flashObject, candidates):
+    def init(self, app, flashObject, candidates):
+        self.seEnvironment(app)
         self.setFlashObject(flashObject)
         self.rebuild(candidates)
 
@@ -127,12 +125,10 @@ class SortieCandidatesLegionariesDP(SortieCandidatesDP):
             self._buildData(legionaryPlayers)
 
     def __addAdditionalBlocks(self, playersCount, legionariesCount):
-        headerClanPlayers = {'headerText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_CLANPLAYERS))}
+        headerClanPlayers = {'headerText': text_styles.standard(i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_CLANPLAYERS))}
         emptyRenders = {'emptyRender': True}
-        units = self.app.utilsManager
-        icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE
-        legionariesIcon = units.getHtmlIconText(ImageUrlProperties(icon, 16, 16, -4, 0))
-        textResult = legionariesIcon + self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS))
+        legionariesIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE, 16, 16, -4, 0)
+        textResult = legionariesIcon + text_styles.standard(i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS))
         headerLegionasriesPlayers = {'headerText': textResult,
          'headerToolTip': TOOLTIPS.FORTIFICATION_BATTLEROOMLEGIONARIES}
         if playersCount > 0:
@@ -170,7 +166,7 @@ class StaticFormationCandidatesDP(CandidatesDataProvider):
         if playersCount > 0 and legionariesCount > 0:
             self._list.append({'emptyRender': True})
         if legionariesCount > 0:
-            self._list.append({'headerText': '%s%s' % (UtilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE, 16, 16, -4, 0)), text_styles.standard(i18n.makeString(CYBERSPORT.WINDOW_UNIT_CANDIDATES_LEGIONARIES))),
+            self._list.append({'headerText': '%s%s' % (icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE, 16, 16, -4, 0), text_styles.standard(i18n.makeString(CYBERSPORT.WINDOW_UNIT_CANDIDATES_LEGIONARIES))),
              'headerToolTip': TOOLTIPS.CYBERSPORT_STATICFORMATION_WAITLIST_LEGIONNAIRES})
 
 
@@ -295,7 +291,7 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
         return self._selectedIdx
 
 
-class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
+class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper):
 
     class _UserEntityAdapter(object):
 

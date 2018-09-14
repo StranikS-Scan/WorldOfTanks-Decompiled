@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.BaseRallyMainWindowMeta import BaseRallyMainW
 from gui.shared.events import FocusEvent
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 
 class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
     LEADERSHIP_NOTIFICATION_TIME = 2.5

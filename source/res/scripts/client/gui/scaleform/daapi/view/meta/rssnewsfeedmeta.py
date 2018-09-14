@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RssNewsFeedMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class RssNewsFeedMeta(DAAPIModule):
+class RssNewsFeedMeta(BaseDAAPIComponent):
 
     def openBrowser(self, linkToOpen):
         self._printOverrideError('openBrowser')

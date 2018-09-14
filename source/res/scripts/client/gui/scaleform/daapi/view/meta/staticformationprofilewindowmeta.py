@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StaticFormationProfileWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class StaticFormationProfileWindowMeta(DAAPIModule):
+class StaticFormationProfileWindowMeta(AbstractWindowView):
 
     def actionBtnClickHandler(self, action):
         self._printOverrideError('actionBtnClickHandler')

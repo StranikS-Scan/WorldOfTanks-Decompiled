@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/server_events/parsers.py
 import weakref
 from collections import defaultdict
+from constants import EVENT_TYPE
 from helpers import i18n
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString, GUI_NATIONS_ORDER_INDEX
@@ -90,9 +91,16 @@ class ConditionsParser(object):
 
 class AccountRequirements(ConditionsParser):
 
-    def __init__(self, section):
+    def __init__(self, questType, section):
         super(AccountRequirements, self).__init__(section, rootName='account')
         self._hasIgrCondition = False
+        self._questType = questType
+
+    def getConditions(self):
+        rootNode = super(AccountRequirements, self).getConditions()
+        if self._questType == EVENT_TYPE.CLUBS_QUEST and not rootNode.find('hasClub'):
+            rootNode.add(conditions.HasClub(formatters.makeUniquePath('root', 'hasClub')))
+        return rootNode
 
     def clearItemsCache(self):
         self.forEachNodeInTree(lambda node: node.clearItemsCache())
@@ -259,6 +267,8 @@ class PostBattleConditions(ConditionsParser):
             return conditions.BattleResults(uniqueName, data)
         if name == 'unit':
             return conditions.UnitResults(uniqueName, data, self.__preBattleCond)
+        if name == 'clubs':
+            return conditions.ClubDivision(uniqueName, data)
 
     def format(self, svrEvents, event = None):
         conds = self.getConditions()

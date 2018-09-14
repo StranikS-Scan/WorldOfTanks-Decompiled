@@ -2,7 +2,6 @@
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as DSUtils
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import HeaderItemsTypes
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.shared.fortifications import isFortificationBattlesEnabled
 from gui.Scaleform.locale.PROFILE import PROFILE
@@ -68,10 +67,29 @@ def _getFortAvgLoot(targetData, totalLootValue):
     return PUtils.UNAVAILABLE_VALUE
 
 
-class ProfileStatisticsVO(dict):
+class BaseDictStatisticsVO(dict):
+
+    def __init__(self, data):
+        super(BaseDictStatisticsVO, self).__init__({})
+        headerText = self._getHeaderText(data)
+        if headerText:
+            self['headerText'] = headerText
+        self['headerParams'] = self._getHeaderData(data)
+        self['bodyParams'] = {'dataList': self._getDetailedData(data)}
+
+    def _getHeaderText(self, data):
+        return None
+
+    def _getHeaderData(self, data):
+        raise NotImplementedError
+
+    def _getDetailedData(self, data):
+        raise NotImplementedError
+
+
+class ProfileDictStatisticsVO(BaseDictStatisticsVO):
 
     def __init__(self, targetData, accountDossier, isCurrentUser):
-        super(ProfileStatisticsVO, self).__init__()
         self._isCurrentUser = isCurrentUser
         self._formattedWinsEfficiency = PUtils.getFormattedWinsEfficiency(targetData)
         self._dmgDealt = targetData.getDamageDealt()
@@ -87,26 +105,16 @@ class ProfileStatisticsVO(dict):
         self._maxXP_formattedStr = BigWorld.wg_getIntegralFormat(maxXP)
         self._armorUsingToolTipData = PUtils.createToolTipData([PUtils.getAvgDamageBlockedValue(targetData)])
         self._avgAssistDmg = BigWorld.wg_getNiceNumberFormat(PUtils.getValueOrUnavailable(targetData.getDamageAssistedEfficiency()))
-        self['headerText'] = self._getHeaderText()
-        self['headerParams'] = self._getHeaderData(targetData, accountDossier)
-        self['bodyParams'] = {'dataList': self._getDetailedData(targetData, accountDossier)}
-
-    def _getHeaderText(self):
-        raise NotImplementedError
-
-    def _getHeaderData(self, targetData, accountDossier):
-        raise NotImplementedError
-
-    def _getDetailedData(self, targetData, accountDossier):
-        raise NotImplementedError
+        super(ProfileDictStatisticsVO, self).__init__((targetData, accountDossier))
 
 
-class ProfileAllStatisticsVO(ProfileStatisticsVO):
+class ProfileAllStatisticsVO(ProfileDictStatisticsVO):
 
-    def _getHeaderText(self):
+    def _getHeaderText(self, data):
         return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_ALL)
 
-    def _getHeaderData(self, targetData, accountDossier):
+    def _getHeaderData(self, data):
+        targetData = data[0]
         return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
          PUtils.packLditItemData(self._formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS, 'wins40x32.png'),
          _packAvgDmgLditItemData(self._avgDmg),
@@ -114,16 +122,18 @@ class ProfileAllStatisticsVO(ProfileStatisticsVO):
          PUtils.packLditItemData(self._maxXP_formattedStr, PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, 'maxExp40x32.png', PUtils.getVehicleRecordTooltipData(targetData.getMaxXpVehicle)),
          PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), PROFILE.SECTION_STATISTICS_SCORES_COOLSIGNS, PROFILE.PROFILE_PARAMS_TOOLTIP_MARKOFMASTERY, 'markOfMastery40x32.png'))
 
-    def _getDetailedData(self, targetData, accountDossier):
+    def _getDetailedData(self, data):
+        targetData = data[0]
         return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsData(targetData))
 
 
-class ProfileHistoricalStatisticsVO(ProfileStatisticsVO):
+class ProfileHistoricalStatisticsVO(ProfileDictStatisticsVO):
 
-    def _getHeaderText(self):
+    def _getHeaderText(self, data):
         return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_HISTORICAL)
 
-    def _getHeaderData(self, targetData, accountDossier):
+    def _getHeaderData(self, data):
+        targetData = data[0]
         histBattleFieldAchievesCount = 0
         for record in layouts.HISTORY_BATTLEFIELD_GROUP:
             achieve = targetData.getAchievement(record)
@@ -136,34 +146,36 @@ class ProfileHistoricalStatisticsVO(ProfileStatisticsVO):
          PUtils.packLditItemData(histBattleFieldAchievesCount, PROFILE.SECTION_STATISTICS_SCORES_ACHIEVEMENTSCOUNT, PROFILE.PROFILE_PARAMS_TOOLTIP_ACHIEVEMENTSCOUNT, 'honors40x32.png'),
          PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(len(targetData.getVehicles())), PROFILE.SECTION_STATISTICS_SCORES_USEDTECHNICS, PROFILE.PROFILE_PARAMS_TOOLTIP_USEDTECHNICS, 'techRatio40x32.png'))
 
-    def _getDetailedData(self, targetData, accountDossier):
-        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser),)
+    def _getDetailedData(self, data):
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, data[0], self._isCurrentUser),)
 
 
-class Profile7x7StatisticsVO(ProfileStatisticsVO):
+class Profile7x7StatisticsVO(ProfileDictStatisticsVO):
 
-    def _getHeaderText(self):
+    def _getHeaderText(self, data):
         return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_TEAM)
 
-    def _getHeaderData(self, targetData, accountDossier):
-        return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
+    def _getHeaderData(self, data):
+        return (PUtils.getTotalBattlesHeaderParam(data[0], PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
          PUtils.packLditItemData(self._damageEfficiency, PROFILE.SECTION_STATISTICS_DETAILED_DAMAGECOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DAMAGECOEFF, 'dmgRatio40x32.png', PUtils.createToolTipData((BigWorld.wg_getIntegralFormat(self._dmgDealt), BigWorld.wg_getIntegralFormat(self._dmgReceived)))),
          _packAvgDmgLditItemData(self._avgDmg),
          _packAvgXPLditItemData(self._avgXP),
          PUtils.packLditItemData(self._avgAssistDmg, PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE, 'assist40x32.png'),
          PUtils.packLditItemData(BigWorld.wg_getNiceNumberFormat(self._armorUsingEfficiency), PROFILE.SECTION_STATISTICS_SCORES_ARMORUSING, PROFILE.PROFILE_PARAMS_TOOLTIP_ARMORUSING, 'armorUsing40x32.png', self._armorUsingToolTipData))
 
-    def _getDetailedData(self, targetData, accountDossier):
+    def _getDetailedData(self, data):
+        targetData = data[0]
         return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsData(targetData))
 
 
 class StaticProfile7x7StatisticsVO(Profile7x7StatisticsVO):
 
-    def _getDetailedData(self, targetData, accountDossier):
+    def _getDetailedData(self, data):
+        targetData = data[0]
         return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser),)
 
 
-class ProfileFortStatisticsVO(ProfileStatisticsVO):
+class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
 
     def __init__(self, targetData, accountDossier, isCurrentUser):
         self.__fortMiscTargetData = accountDossier.getFortMiscStats()
@@ -172,10 +184,10 @@ class ProfileFortStatisticsVO(ProfileStatisticsVO):
         self.__avgFortSortiesLoot = _getFortAvgLoot(targetData, self.__totalSortiesLoot)
         super(ProfileFortStatisticsVO, self).__init__(targetData, accountDossier, isCurrentUser)
 
-    def _getHeaderText(self):
+    def _getHeaderText(self, data):
         return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_FORTIFICATIONS)
 
-    def _getHeaderData(self, targetData, accountDossier):
+    def _getHeaderData(self, data):
         headerParams = []
         if isFortificationBattlesEnabled():
             headerParams.append(PUtils.getTotalBattlesHeaderParam(self.__fortBattlesTargetData, PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES))
@@ -183,12 +195,13 @@ class ProfileFortStatisticsVO(ProfileStatisticsVO):
         else:
             headerParams.append(PUtils.packLditItemData(str(PUtils.UNAVAILABLE_VALUE), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLE_FORT_BATTLES, 'battles40x32.png'))
             headerParams.append(PUtils.packLditItemData(str(PUtils.UNAVAILABLE_VALUE), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLESWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLE_FORT_WINSEFFICIENCY, 'wins40x32.png'))
-        headerParams.append(PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIE, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIE))
+        headerParams.append(PUtils.getTotalBattlesHeaderParam(data[0], PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIE, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIE))
         headerParams.append(PUtils.packLditItemData(self._formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIEWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIEWINSEFFICIENCY, 'wins40x32.png'))
         headerParams.append(PUtils.packLditItemData(str(self.__avgFortSortiesLoot), PROFILE.SECTION_STATISTICS_SCORES_FORT_RESOURCE, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_RESOURCE, 'resources40x32.png'))
         return headerParams
 
-    def _getDetailedData(self, targetData, accountDossier):
+    def _getDetailedData(self, data):
+        targetData = data[0]
         dataList = []
         if isFortificationBattlesEnabled():
             fortBattlesDetaildStatisticsTabData = _getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTBATTLES, self.__fortBattlesTargetData, isCurrentUser=self._isCurrentUser)
@@ -228,12 +241,13 @@ class ProfileFortStatisticsVO(ProfileStatisticsVO):
         return dataList
 
 
-class ProfileGlobalMapStatisticsVO(ProfileStatisticsVO):
+class ProfileGlobalMapStatisticsVO(ProfileDictStatisticsVO):
 
-    def _getHeaderText(self):
+    def _getHeaderText(self, data):
         return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_CLAN)
 
-    def _getHeaderData(self, targetData, accountDossier):
+    def _getHeaderData(self, data):
+        targetData = data[0]
         return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
          PUtils.packLditItemData(self._formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS, 'wins40x32.png'),
          _packAvgDmgLditItemData(self._avgDmg),
@@ -241,7 +255,8 @@ class ProfileGlobalMapStatisticsVO(ProfileStatisticsVO):
          PUtils.packLditItemData(self._maxXP_formattedStr, PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, 'maxExp40x32.png', PUtils.getVehicleRecordTooltipData(targetData.getMaxXpVehicle)),
          PUtils.packLditItemData(self._damageEfficiency, PROFILE.SECTION_STATISTICS_SCORES_CLAN_SUMMARYDAMAGECOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT, 'dmgRatio40x32.png', PUtils.createToolTipData((BigWorld.wg_getIntegralFormat(self._dmgDealt), BigWorld.wg_getIntegralFormat(self._dmgReceived)))))
 
-    def _getDetailedData(self, targetData, accountDossier):
+    def _getDetailedData(self, data):
+        accountDossier = data[1]
         return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_CLAN6, accountDossier.getGlobalMapMiddleStats(), self._isCurrentUser), _getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_CLAN8, accountDossier.getGlobalMapChampionStats(), self._isCurrentUser), _getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_CLAN10, accountDossier.getGlobalMapAbsoluteStats(), self._isCurrentUser))
 
 

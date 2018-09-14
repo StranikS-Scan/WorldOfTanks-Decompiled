@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/StaticFormationInvitesAndRequestsMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class StaticFormationInvitesAndRequestsMeta(DAAPIModule):
+class StaticFormationInvitesAndRequestsMeta(AbstractWindowView):
 
     def setDescription(self, value):
         self._printOverrideError('setDescription')

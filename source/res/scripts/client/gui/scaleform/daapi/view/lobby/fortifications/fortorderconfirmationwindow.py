@@ -2,21 +2,18 @@
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.MENU import MENU
 from helpers import time_utils
 from adisp import process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortOrderConfirmationWindowMeta import FortOrderConfirmationWindowMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.fortifications.context import OrderCtx
 from helpers import i18n
 
-class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, AbstractWindowView, FortViewHelper, AppRef):
+class FortOrderConfirmationWindow(FortOrderConfirmationWindowMeta, FortViewHelper):
 
     def __init__(self, meta, handler):
         super(FortOrderConfirmationWindow, self).__init__()

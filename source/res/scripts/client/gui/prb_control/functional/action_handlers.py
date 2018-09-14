@@ -90,11 +90,12 @@ class CommonUnitActionsHandler(AbstractActionsHandler):
 
 class SquadActionsHandler(AbstractActionsHandler):
 
-    def setUnitChanged(self, data = None):
-        if self._functional.getPlayerInfo().isReady and self._functional.getFlags().isInQueue():
-            g_eventDispatcher.loadBattleQueue()
-        else:
-            g_eventDispatcher.loadHangar()
+    def setUnitChanged(self, flags):
+        if flags.isInQueueChanged():
+            if self._functional.getPlayerInfo().isReady and flags.isInQueue():
+                g_eventDispatcher.loadBattleQueue()
+            else:
+                g_eventDispatcher.loadHangar()
 
     def setPlayerInfoChanged(self, data = None):
         g_eventDispatcher.updateUI()

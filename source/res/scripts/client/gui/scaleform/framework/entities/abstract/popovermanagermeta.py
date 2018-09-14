@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/PopoverManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class PopoverManagerMeta(DAAPIModule):
+class PopoverManagerMeta(BaseDAAPIModule):
 
     def requestShowPopover(self, alias, data):
         self._printOverrideError('requestShowPopover')

@@ -9,13 +9,12 @@ from helpers.i18n import makeString as _ms
 from gui.game_control import getBrowserCtrl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.settings import FUNCTIONAL_EXIT
-from tutorial import GlobalStorage
 from tutorial.control import TutorialProxyHolder
-from tutorial.control.context import GLOBAL_VAR
+from tutorial.control.context import GLOBAL_VAR, GlobalStorage
 from tutorial.control.functional import FunctionalEffect
 from tutorial.control.offbattle.context import OffbattleBonusesRequester
 from tutorial.control.offbattle.context import OffBattleClientCtx
-from tutorial.control.offbattle.context import _getBattleDescriptor
+from tutorial.control.offbattle.context import getBattleDescriptor
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.logger import LOG_ERROR, LOG_WARNING
 from tutorial.settings import PLAYER_XP_LEVEL
@@ -79,7 +78,7 @@ class ContentChangedEvent(TutorialProxyHolder):
         self._popUpID = popUpID
 
     def fire(self, value):
-        popUp = self._tutorial._data.getHasIDEntity(self._popUpID)
+        popUp = self._data.getHasIDEntity(self._popUpID)
         if popUp is not None:
             content = popUp.getContent()
             if not popUp.isContentFull():
@@ -110,7 +109,7 @@ class FunctionalRequestAllBonusesEffect(FunctionalEffect):
         localCtx = OffBattleClientCtx.fetch(self._cache)
         inBattle = localCtx.completed
         inStats = self._bonuses.getCompleted()
-        descriptor = _getBattleDescriptor()
+        descriptor = getBattleDescriptor()
         if descriptor is None:
             return
         else:
@@ -167,7 +166,7 @@ class FunctionalShowMessage4QueryEffect(FunctionalEffect):
 class FunctionalRefuseTrainingEffect(FunctionalEffect):
 
     def triggerEffect(self):
-        descriptor = _getBattleDescriptor()
+        descriptor = getBattleDescriptor()
         if descriptor is not None and descriptor.areAllBonusesReceived(self._bonuses.getCompleted()):
             self._cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL).write()
         self._tutorial.refuse()

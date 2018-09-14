@@ -1,8 +1,6 @@
 # Embedded file name: scripts/client/Vehicle.py
 import BigWorld, Math
-import functools
 import weakref, random
-from itertools import izip
 from AvatarInputHandler import ShakeReason
 import SoundGroups
 from VehicleEffects import DamageFromShotDecoder
@@ -10,14 +8,14 @@ from debug_utils import *
 import constants
 from constants import VEHICLE_HIT_EFFECT
 from gui.battle_control import g_sessionProvider
-import helpers
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from items import vehicles
+from physics_shared import decodeTrackScrolling
 import FMOD
 if FMOD.enabled:
     import VehicleAppearance
-from gui import game_control
-from gui.WindowsManager import g_windowsManager
+from gui.LobbyContext import g_lobbyContext
 import AreaDestructibles
 import DestructiblesCache
 import math
@@ -29,8 +27,8 @@ import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 from ModelHitTester import segmentMayHitVehicle, SegmentCollisionResult
 from gun_rotation_shared import decodeGunAngles
-from constants import DESTRUCTIBLE_MATKIND, SPT_MATKIND
-from material_kinds import EFFECT_MATERIAL_INDEXES_BY_IDS, EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
+from constants import SPT_MATKIND
+from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 
 class Vehicle(BigWorld.Entity):
     hornMode = property(lambda self: self.__hornMode)
@@ -145,33 +143,29 @@ class Vehicle(BigWorld.Entity):
             if not self.isAlive():
                 return
             if attackerID == BigWorld.player().playerVehicleID and maxHitEffectCode is not None and not self.isPlayer:
-                marker = getattr(self, 'marker', None)
-                if marker is not None:
-                    manager = g_windowsManager.battleWindow.markersManager
-                    manager.updateMarkerState(marker, 'hit_pierced' if hasPiercedHit else 'hit')
+                if hasPiercedHit:
+                    eventID = _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED
+                else:
+                    eventID = _GUI_EVENT_ID.VEHICLE_HIT
+                g_sessionProvider.getFeedback().setVehicleState(self.id, eventID)
             return
 
     def showDamageFromExplosion(self, attackerID, center, effectsIndex):
         if not self.isStarted:
             return
-        else:
-            impulse = vehicles.g_cache.shotEffects[effectsIndex]['targetImpulse']
-            dir = self.position - center
-            dir.normalise()
-            self.appearance.receiveShotImpulse(dir, impulse / 4.0)
-            self.appearance.executeHitVibrations(VEHICLE_HIT_EFFECT.MAX_CODE + 1)
-            if not self.isAlive():
-                return
-            if self.id == attackerID:
-                return
-            player = BigWorld.player()
-            player.inputHandler.onVehicleShaken(self, center, dir, vehicles.g_cache.shotEffects[effectsIndex]['caliber'], ShakeReason.SPLASH)
-            if attackerID == BigWorld.player().playerVehicleID:
-                marker = getattr(self, 'marker', None)
-                if marker is not None:
-                    manager = g_windowsManager.battleWindow.markersManager
-                    manager.updateMarkerState(marker, 'hit_pierced')
+        impulse = vehicles.g_cache.shotEffects[effectsIndex]['targetImpulse']
+        dir = self.position - center
+        dir.normalise()
+        self.appearance.receiveShotImpulse(dir, impulse / 4.0)
+        self.appearance.executeHitVibrations(VEHICLE_HIT_EFFECT.MAX_CODE + 1)
+        if not self.isAlive():
             return
+        if self.id == attackerID:
+            return
+        player = BigWorld.player()
+        player.inputHandler.onVehicleShaken(self, center, dir, vehicles.g_cache.shotEffects[effectsIndex]['caliber'], ShakeReason.SPLASH)
+        if attackerID == BigWorld.player().playerVehicleID:
+            g_sessionProvider.getFeedback().setVehicleState(self.id, _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED)
 
     def showVehicleCollisionEffect(self, pos, delta_spd):
         if not self.isStarted:
@@ -244,33 +238,31 @@ class Vehicle(BigWorld.Entity):
     def set_health(self, prev):
         pass
 
+    def set_gear(self, prev):
+        pass
+
+    def set_trackScrolling(self, prev):
+        leftScroll, rightScroll = decodeTrackScrolling(self.trackScrolling)
+
     def set_isCrewActive(self, prev):
         if self.isStarted:
             self.appearance.onVehicleHealthChanged()
             if not self.isPlayer:
-                marker = getattr(self, 'marker', None)
-                if marker is not None:
-                    g_windowsManager.battleWindow.markersManager.onVehicleHealthChanged(marker, self.health)
+                g_sessionProvider.getFeedback().setVehicleNewHealth(self.id, self.health)
             if not self.isCrewActive and self.health > 0:
                 self.__onVehicleDeath()
-        return
 
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
             return
-        elif not self.isStarted:
+        if not self.isStarted:
             return
-        else:
-            if not self.isPlayer:
-                marker = getattr(self, 'marker', None)
-                if marker is not None:
-                    g_sessionProvider.getFeedback().setVehicleNewHealth(self.id, newHealth, attackerID, attackReasonID)
-                    g_windowsManager.battleWindow.markersManager.onVehicleHealthChanged(marker, newHealth, attackerID, attackReasonID)
-            self.appearance.onVehicleHealthChanged()
-            if self.health <= 0 and self.isCrewActive:
-                self.__onVehicleDeath()
-            return
+        if not self.isPlayer:
+            g_sessionProvider.getFeedback().setVehicleNewHealth(self.id, newHealth, attackerID, attackReasonID)
+        self.appearance.onVehicleHealthChanged()
+        if self.health <= 0 and self.isCrewActive:
+            self.__onVehicleDeath()
 
     def showAmmoBayEffect(self, mode, fireballVolume, projectedTurretSpeed):
         self.appearance.showAmmoBayEffect(mode, fireballVolume)
@@ -384,19 +376,16 @@ class Vehicle(BigWorld.Entity):
                 if self.isAlive():
                     BigWorld.wgAddEdgeDetectEntity(self, 0, 1, True)
                     self.appearance.setupGunMatrixTargets(avatar.gunRotator)
-            else:
-                self.marker = g_windowsManager.battleWindow.markersManager.createMarker(self.proxy)
             if hasattr(self.filter, 'allowStrafeCompensation'):
                 self.filter.allowStrafeCompensation = not self.isPlayer
             self.isStarted = True
             self.set_publicStateModifiers()
             self.set_damageStickers()
+            g_sessionProvider.getFeedback().startVehicleVisual(self.proxy)
             if not self.isAlive():
                 self.__onVehicleDeath(True)
             if self.isTurretMarkedForDetachment:
                 self.confirmTurretDetachment()
-            minimap = g_windowsManager.battleWindow.minimap
-            minimap.notifyVehicleStart(self.id)
             self.__startWGPhysics()
             nationId = self is BigWorld.player().getVehicleAttached() and self.typeDescriptor.type.id[0]
             SoundGroups.g_instance.soundModes.setCurrentNation(nations.NAMES[nationId])
@@ -405,19 +394,27 @@ class Vehicle(BigWorld.Entity):
     def stopVisual(self):
         if not self.isStarted:
             raise AssertionError
-            if self.isPlayer:
-                BigWorld.wgDelEdgeDetectEntity(self)
-            self.__stopExtras()
-            manager = hasattr(self, 'marker') and g_windowsManager.battleWindow.markersManager
-            manager.destroyMarker(self.marker)
-            self.marker = -1
+            self.isPlayer and BigWorld.wgDelEdgeDetectEntity(self)
+        self.__stopExtras()
+        g_sessionProvider.getFeedback().stopVehicleVisual(self.id, self.isPlayer)
         self.appearance.destroy()
         self.appearance = None
         self.isStarted = False
-        minimap = g_windowsManager.battleWindow.minimap
-        minimap.notifyVehicleStop(self.id)
         self.__stopWGPhysics()
         return
+
+    def show(self, show):
+        if show:
+            drawFlags = BigWorld.DrawAll
+        else:
+            drawFlags = BigWorld.ShadowPassBit
+        if self.isStarted:
+            va = self.appearance
+            va.changeDrawPassVisibility('chassis', drawFlags, show, show)
+            va.changeDrawPassVisibility('hull', drawFlags, show, True)
+            va.changeDrawPassVisibility('turret', drawFlags, show, True)
+            va.changeDrawPassVisibility('gun', drawFlags, show, True)
+            va.showStickers(show)
 
     def showPlayerMovementCommand(self, flags):
         if not self.isStarted:
@@ -456,6 +453,8 @@ class Vehicle(BigWorld.Entity):
     def __showStaticCollisionEffect(self, energy, matKind, effectIdx, hitPoint, normal, isTrackCollision):
         heavyVelocities = self.typeDescriptor.type.heavyCollisionEffectVelocities
         heavyEnergy = heavyVelocities['track'] if isTrackCollision else heavyVelocities['hull']
+        heavyEnergy = 0.5 * heavyEnergy * heavyEnergy
+        postfix = '%sCollisionLight' if energy < heavyEnergy else '%sCollisionHeavy'
         heavyEnergy = 0.5 * heavyEnergy * heavyEnergy
         postfix = '%sCollisionLight' if energy < heavyEnergy else '%sCollisionHeavy'
         effectName = ''
@@ -522,24 +521,19 @@ class Vehicle(BigWorld.Entity):
 
     def __onVehicleDeath(self, isDeadStarted = False):
         if not self.isPlayer:
-            marker = getattr(self, 'marker', None)
-            if marker is not None:
-                manager = g_windowsManager.battleWindow.markersManager
-                manager.updateMarkerState(marker, 'dead', isDeadStarted)
+            g_sessionProvider.getFeedback().setVehicleState(self.id, _GUI_EVENT_ID.VEHICLE_DEAD, isDeadStarted)
         self.stopHornSound(True)
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.VEHICLE_DESTROYED, vehicleId=self.id)
         bwfilter = self.filter
         if hasattr(bwfilter, 'velocityErrorCompensation'):
             bwfilter.velocityErrorCompensation = 100.0
-        return
 
     def playHornSound(self, hornID):
-        if not self.isStarted:
+        return
+        hornDesc = vehicles.g_cache.horns().get(hornID)
+        if hornDesc is None:
             return
         else:
-            hornDesc = vehicles.g_cache.horns().get(hornID)
-            if hornDesc is None:
-                return
             self.stopHornSound(True)
             self.__hornSounds = []
             self.__hornMode = hornDesc['mode']
@@ -592,6 +586,8 @@ class Vehicle(BigWorld.Entity):
 
 
 def _stripVehCompDescrIfRoaming(vehCompDescr):
-    if game_control.g_instance.roaming.isInRoaming():
-        vehCompDescr = vehicles.stripCustomizationFromVehicleCompactDescr(vehCompDescr, True, True, False)[0]
+    serverSettings = g_lobbyContext.getServerSettings()
+    if serverSettings:
+        if serverSettings.roaming.isInRoaming():
+            vehCompDescr = vehicles.stripCustomizationFromVehicleCompactDescr(vehCompDescr, True, True, False)[0]
     return vehCompDescr

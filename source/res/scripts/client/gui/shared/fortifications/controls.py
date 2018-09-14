@@ -10,7 +10,7 @@ from gui.shared.fortifications.FortFinder import FortFinder
 from gui.shared.fortifications.context import FortRequestCtx
 from gui.shared.fortifications.fort_ext import FortCooldownManager
 from gui.shared.fortifications.fort_ext import PlayerFortRequester
-from gui.shared.fortifications.fort_hours_ctrlr import SortiesCurfewController
+from gui.game_control.battle_availability import SortiesCurfewController
 from gui.shared.fortifications.fort_seqs import SortiesCache, PublicInfoCache, FortBattlesCache
 from gui.shared.fortifications.interfaces import IFortController
 from gui.shared.fortifications.restrictions import FortPermissions, NoFortLimits, IntroFortLimits, NoFortValidators, FortValidators

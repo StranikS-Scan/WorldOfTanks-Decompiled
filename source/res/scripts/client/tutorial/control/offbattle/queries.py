@@ -1,14 +1,11 @@
 # Embedded file name: scripts/client/tutorial/control/offbattle/queries.py
-import SoundGroups
 from constants import FINISH_REASON
-from gui import GUI_SETTINGS
-from tutorial import GlobalStorage
 from tutorial.control import ContentQuery
 from tutorial.control.battle.context import TRAINING_RESULT_KEY
 from tutorial.control.battle.context import TRAINING_FINISH_REASON_KEY
-from tutorial.control.context import GLOBAL_VAR, GLOBAL_FLAG
+from tutorial.control.context import GLOBAL_VAR, GLOBAL_FLAG, GlobalStorage
 from tutorial.control.offbattle.context import OffBattleClientCtx
-from tutorial.control.offbattle.context import _getBattleDescriptor
+from tutorial.control.offbattle.context import getBattleDescriptor
 from tutorial.settings import PLAYER_XP_LEVEL, TUTORIAL_AVG_SESSION_TIME
 from helpers import i18n
 
@@ -16,7 +13,7 @@ class GreetingContent(ContentQuery):
 
     def invoke(self, content, _):
         result = []
-        descriptor = _getBattleDescriptor()
+        descriptor = getBattleDescriptor()
         if descriptor is None:
             return
         else:
@@ -80,7 +77,7 @@ class BattleFinalStatistic(ContentQuery):
 
     def invoke(self, content, varID):
         localCtx = OffBattleClientCtx.fetch(self._cache)
-        descriptor = _getBattleDescriptor()
+        descriptor = getBattleDescriptor()
         if descriptor is None:
             return
         else:
@@ -135,7 +132,7 @@ class BattleResultMessage(ContentQuery):
         received = self.getVar(varID, default=0)
         localCtx = OffBattleClientCtx.fetch(self._cache)
         self._lastHistoryID = localCtx.arenaUniqueID
-        descriptor = _getBattleDescriptor()
+        descriptor = getBattleDescriptor()
         if descriptor is None:
             return
         else:

@@ -1,7 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/RecruitWindow.py
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 import nations
 from gui.Scaleform.locale.DIALOGS import DIALOGS
@@ -18,10 +16,10 @@ from gui.shared.utils import decorators
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.tankman import TankmanRecruit, TankmanEquip, TankmanRecruitAndEquip
 
-class RecruitWindow(View, AbstractWindowView, RecruitWindowMeta):
+class RecruitWindow(RecruitWindowMeta):
 
     def __init__(self, ctx = None):
-        View.__init__(self)
+        super(RecruitWindow, self).__init__()
         self._initData = ctx.get('data', None)
         self._menuEnabled = ctx.get('menuEnabled', False)
         self._currentVehicleInvId = ctx.get('currentVehicleId', -1)

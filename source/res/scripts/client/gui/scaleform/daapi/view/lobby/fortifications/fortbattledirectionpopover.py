@@ -4,7 +4,6 @@ import sys
 import BigWorld
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import getBattleID
 from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty, prbDispatcherProperty
@@ -13,16 +12,13 @@ from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
 from helpers import i18n, time_utils
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.FortBattleDirectionPopoverMeta import FortBattleDirectionPopoverMeta
-from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, icons
 
-class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopOverView, FortViewHelper, AppRef):
+class FortBattleDirectionPopover(FortBattleDirectionPopoverMeta, FortViewHelper):
     INVALIDATE_INTERVAL = 60
 
     def __init__(self, ctx = None):
@@ -103,11 +99,11 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
                 infoTip = ''
             if battleItem.isHot() and startTimeLeft > 0:
                 timerData = {'timeBeforeBattle': startTimeLeft,
-                 'htmlFormatter': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, '###')}
+                 'htmlFormatter': text_styles.alert('###')}
             else:
                 timerData = None
             battleHourFmt = i18n.makeString('#fortifications:fortBattleDirectionPopover/battleDurationFmt')
-            battleHourLabel = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, battleHourFmt % {'prevHour': BigWorld.wg_getShortTimeFormat(startTime),
+            battleHourLabel = text_styles.main(battleHourFmt % {'prevHour': BigWorld.wg_getShortTimeFormat(startTime),
              'nextHour': BigWorld.wg_getShortTimeFormat(startTime + time_utils.ONE_HOUR)})
             divisionIcon = getDivisionIcon(battleItem.defenderFortLevel, battleItem.attackerFortLevel, determineAlert=battleItem.getType() == BATTLE_ITEM_TYPE.ATTACK)
             result.append({'description': descr,
@@ -123,7 +119,7 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
 
         title = i18n.makeString(FORTIFICATIONS.GENERAL_DIRECTION, value=i18n.makeString('#fortifications:General/directionName%d' % self._direction))
         nextBattles = i18n.makeString(FORTIFICATIONS.FORTBATTLEDIRECTIONPOPOVER_COMMINGBATTLES)
-        nextBattlesLabel = self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.STANDARD_TEXT, nextBattles), (TEXT_MANAGER_STYLES.MAIN_TEXT, len(result))))
+        nextBattlesLabel = ''.join((text_styles.standard(nextBattles), text_styles.main(len(result))))
         self.as_setDataS({'title': title,
          'nextBattles': nextBattlesLabel,
          'battlesList': result})
@@ -141,12 +137,12 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
     def __getBattleInfo(self, startTime, startTimeLeft):
         if startTimeLeft > time_utils.QUARTER_HOUR:
             if time_utils.isTimeNextDay(startTime):
-                return self.app.utilsManager.textManager.getText(i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TOMORROW), TEXT_MANAGER_STYLES.STANDARD_TEXT)
+                return text_styles.standard(i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TOMORROW))
             if time_utils.isTimeThisDay(startTime):
-                return self.app.utilsManager.textManager.getText(i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TODAY), TEXT_MANAGER_STYLES.STANDARD_TEXT)
+                return text_styles.standard(i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TODAY))
         else:
             if startTimeLeft > 0:
-                return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE) + ' ')
+                return text_styles.standard(i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE) + ' ')
             inBattleText = ' ' + i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_ISBATTLE)
             return text_styles.error(icons.swords() + inBattleText)
         return ''

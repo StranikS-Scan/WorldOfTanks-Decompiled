@@ -1,9 +1,8 @@
 # Embedded file name: scripts/client/gui/battle_control/BattleContext.py
 import BigWorld
 import Settings
-from gui import game_control
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import PLAYER_ENTITY_NAME
+from gui.LobbyContext import g_lobbyContext
 defNormalizePNameFunction = lambda pName: pName
 
 def _getDefaultTeamName(isAlly):
@@ -113,8 +112,11 @@ class BattleContext(object):
 
     def getRegionCode(self, dbID):
         regionCode = None
-        if dbID and not game_control.g_instance.roaming.isSameRealm(dbID):
-            _, regionCode = game_control.g_instance.roaming.getPlayerHome(dbID)
+        serverSettings = g_lobbyContext.getServerSettings()
+        if serverSettings:
+            roaming = serverSettings.roaming
+            if dbID and not roaming.isSameRealm(dbID):
+                _, regionCode = roaming.getPlayerHome(dbID)
         return regionCode
 
     def isSquadMan(self, vID = None, accID = None, prebattleID = None):
@@ -142,14 +144,11 @@ class BattleContext(object):
     def isEnemy(self, vID = None, accID = None):
         return self._isInTeams(self.__arenaDP.getEnemyTeams(), vID, accID)
 
-    def getPlayerEntityName(self, vID, team):
-        if team in self.__arenaDP.getAllyTeams():
-            if self.isSquadMan(vID=vID):
-                return PLAYER_ENTITY_NAME.squadman
-            if self.isTeamKiller(vID=vID):
-                return PLAYER_ENTITY_NAME.teamKiller
-            return PLAYER_ENTITY_NAME.ally
-        return PLAYER_ENTITY_NAME.enemy
+    def isCurrentPlayer(self, vID):
+        return self.__arenaDP.getPlayerVehicleID() == vID
+
+    def getPlayerGuiProps(self, vID, team):
+        return self.__arenaDP.getPlayerGuiProps(vID, team)
 
     def getTeamName(self, teamIdx):
         arena = avatar_getter.getArena()

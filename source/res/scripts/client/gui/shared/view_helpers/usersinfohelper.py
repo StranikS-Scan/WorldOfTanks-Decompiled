@@ -109,7 +109,7 @@ class UsersInfoHelper(object):
         userRating = self.getUserRating(userDbID)
         if userRating != '0':
             return formatter(shared_fmts.getGlobalRatingFmt(userRating))
-        return '0'
+        return '-1'
 
     def syncUsersInfo(self):
         if len(self._invalid['names']):

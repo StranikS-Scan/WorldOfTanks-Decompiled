@@ -4,6 +4,7 @@ from FortifiedRegionBase import FORT_STATE
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.shared.fortifications import getClientFort, isStartingScriptDone
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+from gui.LobbyContext import g_lobbyContext
 
 class _ClientFortState(object):
 
@@ -38,9 +39,9 @@ class RoamingState(_ClientFortState):
         super(RoamingState, self).__init__(CLIENT_FORT_STATE.ROAMING, isDisabled=True)
 
     def update(self, provider):
-        from gui import game_control
         result = False
-        if not game_control.g_instance.roaming.isInRoaming():
+        serverSettings = g_lobbyContext.getServerSettings()
+        if serverSettings is not None and not serverSettings.roaming.isInRoaming():
             state = NoClanState()
             result = state.update(provider)
             if not result:

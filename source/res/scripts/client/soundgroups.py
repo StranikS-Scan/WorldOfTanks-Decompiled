@@ -9,6 +9,8 @@ from debug_utils import *
 from helpers import i18n
 import PlayerEvents
 import traceback
+from ReplayEvents import g_replayEvents
+from functools import partial
 g_instance = None
 DSP_LOWPASS_LOW = 7000
 DSP_LOWPASS_HI = 20000
@@ -371,6 +373,7 @@ class SoundGroups(object):
                     LOG_NOTE('Loading failed for default sound group ', sg)
 
             FMOD.WG_unloadAll()
+        g_replayEvents.onMuteSound += self.__onReplayMute
         return
 
     def __del__(self):
@@ -405,10 +408,10 @@ class SoundGroups(object):
             volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
-    def enableReplaySounds(self, enable):
-        self.__muffledByReplay = not enable
+    def __onReplayMute(self, mute):
+        self.__muffledByReplay = mute
         for categoryName in ('vehicles', 'effects', 'ambient'):
-            volume = 0.0 if not enable else self.__volumeByCategory[categoryName]
+            volume = 0.0 if mute else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
     def setMasterVolume(self, volume):
@@ -536,6 +539,17 @@ class SoundGroups(object):
         if FMOD.enabled:
             return model.playSound(self.checkAndReplace(event))
 
+    def playSound3D(self, node, event):
+        if FMOD.enabled:
+            s = FMOD.getSound3D(self.checkAndReplace(event), node)
+            if s is not None:
+                s.play()
+        return
+
+    def playSound3D(self, node, event):
+        if FMOD.enabled:
+            return FMOD.getSound3D(self.checkAndReplace(event), node)
+
     def getSound2D(self, event):
         if FMOD.enabled:
             return FMOD.getSound(self.checkAndReplace(event))
@@ -543,6 +557,9 @@ class SoundGroups(object):
     def playSound2D(self, event):
         if FMOD.enabled:
             return FMOD.playSound(self.checkAndReplace(event))
+
+    def playSoundPos(self, event, pos):
+        pass
 
     def loadRemapping(self, arenaDescr):
         self.__replace = {}

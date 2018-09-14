@@ -41,3 +41,9 @@ class PrbCooldownManager(RequestCooldownManager):
 
     def getDefaultCoolDown(self):
         return _rqc.DEFAULT_COOLDOWN_TO_REQUEST
+
+
+class UnitCooldownManager(PrbCooldownManager):
+
+    def getDefaultCoolDown(self):
+        return 0.0

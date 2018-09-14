@@ -131,22 +131,22 @@ class Stats(object):
             self.__account.shop.getExchangeRate(partial(self.__exchange_onGetRate, gold, callback))
             return
 
-    def convertToFreeXP(self, vehTypeCompDescrs, xp, callback = None):
+    def convertToFreeXP(self, vehTypeCompDescrs, xp, callback = None, useDiscount = 0):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            self.__account.shop.getFreeXPConversion(partial(self.__convertToFreeXP_onGetParameters, vehTypeCompDescrs, xp, callback))
+            self.__account.shop.getFreeXPConversion(partial(self.__convertToFreeXP_onGetParameters, vehTypeCompDescrs, xp, callback, useDiscount))
             return
 
-    def upgradeToPremium(self, days, callback = None):
+    def upgradeToPremium(self, days, arenaUniqueID, callback = None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, 0)
             return
         else:
-            self.__account.shop.getPremiumCost(partial(self.__premium_onGetPremCost, days, callback))
+            self.__account.shop.getPremiumCost(partial(self.__premium_onGetPremCost, days, arenaUniqueID, callback))
             return
 
     def buySlot(self, callback = None):
@@ -263,7 +263,7 @@ class Stats(object):
             self.__account._doCmdInt3(AccountCommands.CMD_EXCHANGE, shopRev, gold, 0, proxy)
             return
 
-    def __convertToFreeXP_onGetParameters(self, vehTypeCompDescrs, xp, callback, resultID, freeXPConversion, shopRev):
+    def __convertToFreeXP_onGetParameters(self, vehTypeCompDescrs, xp, callback, useDiscount, resultID, freeXPConversion, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID, None)
@@ -274,7 +274,7 @@ class Stats(object):
                 callback(AccountCommands.RES_FAILURE)
             return
         else:
-            arr = [shopRev, xp] + list(vehTypeCompDescrs)
+            arr = [shopRev, xp, useDiscount] + list(vehTypeCompDescrs)
             if callback is not None:
                 proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)
             else:
@@ -282,7 +282,7 @@ class Stats(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_FREE_XP_CONV, arr, proxy)
             return
 
-    def __premium_onGetPremCost(self, days, callback, resultID, premCost, shopRev):
+    def __premium_onGetPremCost(self, days, arenaUniqueID, callback, resultID, premCost, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID, None)
@@ -303,7 +303,7 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_PREMIUM, shopRev, days, 0, proxy)
+            self.__account._doCmdInt3(AccountCommands.CMD_PREMIUM, shopRev, days, arenaUniqueID, proxy)
             return
 
     def __slot_onShopSynced(self, callback, resultID, shopRev):

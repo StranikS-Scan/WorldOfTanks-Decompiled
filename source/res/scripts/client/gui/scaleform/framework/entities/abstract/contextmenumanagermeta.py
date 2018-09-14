@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/ContextMenuManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class ContextMenuManagerMeta(DAAPIModule):
+class ContextMenuManagerMeta(BaseDAAPIModule):
 
     def requestOptions(self, type, ctx):
         self._printOverrideError('requestOptions')

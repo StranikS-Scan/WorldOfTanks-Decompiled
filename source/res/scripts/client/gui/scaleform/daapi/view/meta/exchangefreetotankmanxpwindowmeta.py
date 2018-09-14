@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ExchangeFreeToTankmanXpWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ExchangeFreeToTankmanXpWindowMeta(DAAPIModule):
+class ExchangeFreeToTankmanXpWindowMeta(AbstractWindowView):
 
     def apply(self):
         self._printOverrideError('apply')

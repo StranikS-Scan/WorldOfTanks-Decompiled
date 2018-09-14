@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortIntelligenceClanFilterPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class FortIntelligenceClanFilterPopoverMeta(DAAPIModule):
+class FortIntelligenceClanFilterPopoverMeta(SmartPopOverView):
 
     def useFilter(self, value, isDefaultData):
         self._printOverrideError('useFilter')

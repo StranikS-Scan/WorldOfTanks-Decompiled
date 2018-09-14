@@ -32,6 +32,7 @@ class RES_LOGIN(object):
     MAPS_LOGIN_BACK_38_WITHOUT_SPARKS = '../maps/login/back_38_without_sparks.png'
     MAPS_LOGIN_BACK_39_WITHOUT_SPARKS = '../maps/login/back_39_without_sparks.png'
     MAPS_LOGIN_BACK_40_WITHOUT_SPARKS = '../maps/login/back_40_without_sparks.png'
+    MAPS_LOGIN_BACK_41_WITHOUT_SPARKS = '../maps/login/back_41_without_sparks.png'
     MAPS_LOGIN_BACK_4_WITHOUT_SPARKS = '../maps/login/back_4_without_sparks.png'
     MAPS_LOGIN_BACK_5_WITHOUT_SPARKS = '../maps/login/back_5_without_sparks.png'
     MAPS_LOGIN_BACK_8_WITHOUT_SPARKS = '../maps/login/back_8_without_sparks.png'

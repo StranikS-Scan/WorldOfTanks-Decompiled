@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileTechniqueMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import ProfileSection
 
-class ProfileTechniqueMeta(DAAPIModule):
+class ProfileTechniqueMeta(ProfileSection):
 
     def as_responseVehicleDossierS(self, data):
         if self._isDAAPIInited():

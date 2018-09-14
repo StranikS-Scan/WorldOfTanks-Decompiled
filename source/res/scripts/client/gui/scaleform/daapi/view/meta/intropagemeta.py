@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/IntroPageMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class IntroPageMeta(DAAPIModule):
+class IntroPageMeta(View):
 
     def stopVideo(self):
         self._printOverrideError('stopVideo')

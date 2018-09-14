@@ -49,13 +49,14 @@ class RentalsController(Controller):
         notificationList = []
         for vehicle in rentedVehicles:
             delta = vehicle.rentLeftTime
-            if delta > time_utils.ONE_DAY:
-                period = time_utils.ONE_DAY
-            elif delta > time_utils.ONE_HOUR:
-                period = time_utils.ONE_HOUR
-            else:
-                period = delta
-            notificationList.append((vehicle.intCD, delta % period or period))
+            if delta > 0:
+                if delta > time_utils.ONE_DAY:
+                    period = time_utils.ONE_DAY
+                elif delta > time_utils.ONE_HOUR:
+                    period = time_utils.ONE_HOUR
+                else:
+                    period = delta
+                notificationList.append((vehicle.intCD, delta % period or period))
 
         if len(notificationList) > 0:
             _, nextRentNotification = min(notificationList, key=itemgetter(1))

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/GuiItemsManagerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 
-class GuiItemsManagerMeta(DAAPIModule):
+class GuiItemsManagerMeta(BaseDAAPIModule):
 
     def _getItemAttribute(self, itemTypeIdx, id, attrName):
         self._printOverrideError('_getItemAttribute')

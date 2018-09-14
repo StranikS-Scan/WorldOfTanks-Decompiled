@@ -1,10 +1,11 @@
 # Embedded file name: scripts/client/gui/miniclient/continue_download.py
-import os
 import BigWorld
+from gui import GUI_SETTINGS
 from gui.DialogsInterface import showDialog
 from gui.Scaleform.daapi.view.dialogs import SimpleDialogMeta, I18nConfirmDialogButtons, DIALOG_BUTTON_ID
 from helpers import aop
 from helpers.i18n import makeString as _ms
+_CONTINUE_DOWNLOAD_URL = GUI_SETTINGS.miniclient['webBridgeRootURL'] + '/wot_client_url/'
 
 class _PrepareLibrariesListAspect(aop.Aspect):
 
@@ -30,7 +31,7 @@ class _OnHyperlinkClickAspect(aop.Aspect):
 class _OnBrowserHyperlinkClickAspect(aop.Aspect):
 
     def atCall(self, cd):
-        if cd.args[0] == 'file:///_index_':
+        if cd.args[0] == _CONTINUE_DOWNLOAD_URL:
             cd.avoid()
             _show_continue_client_download_dialog()
             return True
@@ -40,7 +41,7 @@ class _OnFailLoadingFrameAspect(aop.Aspect):
 
     def atCall(self, cd):
         cd.avoid()
-        if cd.args[1] and cd.args[4] == 'file:///_index_':
+        if cd.args[1] and cd.args[4] == _CONTINUE_DOWNLOAD_URL:
             cd.self.onLoadEnd(True)
 
 

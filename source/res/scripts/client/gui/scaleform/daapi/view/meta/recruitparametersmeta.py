@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RecruitParametersMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class RecruitParametersMeta(DAAPIModule):
+class RecruitParametersMeta(BaseDAAPIComponent):
 
     def onNationChanged(self, nationID):
         self._printOverrideError('onNationChanged')

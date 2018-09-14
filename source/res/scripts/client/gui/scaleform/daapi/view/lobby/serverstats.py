@@ -28,7 +28,7 @@ class ServerStats(ServerStatsMeta, PrbListener):
         else:
             success = yield DialogsInterface.showI18nConfirmDialog('changePeriphery')
         if success:
-            game_control.g_instance.roaming.relogin(peripheryID)
+            game_control.g_instance.relogin.doRelogin(peripheryID)
         self.__isGuiUpdateSuppressed = False
         self.as_setPeripheryChangingS(success)
 

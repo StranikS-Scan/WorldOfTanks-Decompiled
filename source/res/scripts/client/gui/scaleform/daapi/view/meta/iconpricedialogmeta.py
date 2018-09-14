@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/IconPriceDialogMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.dialogs.IconDialog import IconDialog
 
-class IconPriceDialogMeta(DAAPIModule):
+class IconPriceDialogMeta(IconDialog):
 
     def as_setMessagePriceS(self, price, currency, actionPriceData):
         if self._isDAAPIInited():

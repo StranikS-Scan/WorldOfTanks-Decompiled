@@ -1,5 +1,5 @@
 # Embedded file name: scripts/common/nations.py
-NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan')
+NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan', 'czech')
 INDICES = dict(((n, i) for i, n in enumerate(NAMES)))
-AVAILABLE_NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan')
+AVAILABLE_NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan', 'czech')
 NONE_INDEX = 15

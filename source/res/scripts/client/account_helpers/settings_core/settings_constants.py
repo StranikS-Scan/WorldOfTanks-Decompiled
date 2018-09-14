@@ -85,6 +85,21 @@ class GAME(CONST_CONTAINER):
     SNIPER_MODE_SWINGING_ENABLED = 'SNIPER_MODE_SWINGING_ENABLED'
 
 
+class TUTORIAL(CONST_CONTAINER):
+    CUSTOMIZATION = 'customization'
+    PERSONAL_CASE = 'personalCase'
+    TECHNICAL_MAINTENANCE = 'technicalMaintenance'
+    RESEARCH = 'research'
+    RESEARCH_TREE = 'researchTree'
+    MEDKIT_INSTALLED = 'medKitInstalled'
+    REPAIRKIT_INSTALLED = 'repairKitInstalled'
+    FIRE_EXTINGUISHER_INSTALLED = 'fireExtinguisherInstalled'
+    MEDKIT_USED = 'medKitUsed'
+    REPAIRKIT_USED = 'repairKitUsed'
+    FIRE_EXTINGUISHER_USED = 'fireExtinguisherUsed'
+    WAS_QUESTS_TUTORIAL_STARTED = 'wasQuestsTutorialStarted'
+
+
 class SOUND(CONST_CONTAINER):
     MASTER = 'masterVolume'
     MUSIC = 'musicVolume'

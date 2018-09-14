@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/WrapperViewMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class WrapperViewMeta(DAAPIModule):
+class WrapperViewMeta(View):
 
     def onWindowClose(self):
         self._printOverrideError('onWindowClose')

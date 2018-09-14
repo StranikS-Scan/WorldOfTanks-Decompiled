@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortOrderConfirmationWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortOrderConfirmationWindowMeta(DAAPIModule):
+class FortOrderConfirmationWindowMeta(AbstractWindowView):
 
     def submit(self, count):
         self._printOverrideError('submit')

@@ -3,8 +3,6 @@ import BigWorld
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
 from gui.Scaleform.daapi.view.meta.FortRosterIntroWindowMeta import FortRosterIntroWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_FORT import RES_FORT
@@ -13,7 +11,7 @@ from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.fortifications.fort_helpers import setRosterIntroWindowSetting
 from helpers.i18n import makeString as _ms
 
-class FortRosterIntroWindow(View, AbstractWindowView, FortViewHelper, FortRosterIntroWindowMeta):
+class FortRosterIntroWindow(FortRosterIntroWindowMeta, FortViewHelper):
     TYPE_FORT_UPGRADE = 'fort upgrade'
     TYPE_DEFENCE_START = 'defence start'
 

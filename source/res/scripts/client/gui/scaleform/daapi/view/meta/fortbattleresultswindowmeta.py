@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortBattleResultsWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class FortBattleResultsWindowMeta(DAAPIModule):
+class FortBattleResultsWindowMeta(AbstractWindowView):
 
     def getMoreInfo(self, battleID):
         self._printOverrideError('getMoreInfo')

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/BaseChannelWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class BaseChannelWindowMeta(DAAPIModule):
+class BaseChannelWindowMeta(AbstractWindowView):
 
     def showFAQWindow(self):
         self._printOverrideError('showFAQWindow')

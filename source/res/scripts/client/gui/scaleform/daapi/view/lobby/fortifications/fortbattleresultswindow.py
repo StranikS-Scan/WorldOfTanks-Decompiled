@@ -5,17 +5,15 @@ import constants
 from adisp import process
 from constants import FORT_COMBAT_RESULT
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.shared.formatters import text_styles
+from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
 from gui import SystemMessages
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.daapi.view.meta.FortBattleResultsWindowMeta import FortBattleResultsWindowMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from debug_utils import LOG_DEBUG
@@ -24,7 +22,7 @@ from gui.shared.gui_items.dossier import getAchievementFactory
 from dossiers2.ui import achievements
 from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
 
-class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowMeta, AppRef):
+class FortBattleResultsWindow(FortBattleResultsWindowMeta):
 
     class BATTLE_RESULT(CONST_CONTAINER):
         WIN = 'battleWin'
@@ -149,9 +147,9 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
             combatResult, startTime, _, isDefendersBuilding, buildingTypeID = data
             building = FortBuilding(typeID=buildingTypeID)
             if combatResult in (constants.FORT_COMBAT_RESULT.WIN, constants.FORT_COMBAT_RESULT.TECH_WIN):
-                battleResult = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.SUCCESS_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_WIN))
+                battleResult = text_styles.success(_ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_WIN))
             else:
-                battleResult = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_DEFEAT))
+                battleResult = text_styles.error(_ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_DEFEAT))
             battles.append({'battleID': 0,
              'startTime': BigWorld.wg_getShortTimeFormat(startTime),
              'building': building.userName,
@@ -175,7 +173,17 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
          'showByPlayerInfo': showByPlayerInfo,
          'battles': battles,
          'achievementsLeft': achievementsLeft,
-         'achievementsRight': achievementsRight})
+         'achievementsRight': achievementsRight,
+         'tableHeader': self._createTableHeader()})
+
+    def _createTableHeader(self):
+        return [self._createTableBtnInfo(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_STARTTIME, 88), self._createTableBtnInfo(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_BUILDING, 320), self._createTableBtnInfo(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT, 180)]
+
+    def _createTableBtnInfo(self, label, buttonWidth):
+        return {'label': label,
+         'buttonWidth': buttonWidth,
+         'sortOrder': 0,
+         'textAlign': TEXT_ALIGN.LEFT}
 
     @process
     def getClanEmblem(self):

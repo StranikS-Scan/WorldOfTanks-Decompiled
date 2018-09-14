@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
 import nations
+from collections import namedtuple
 from debug_utils import *
-from helpers import i18n
+from helpers import i18n, time_utils
 from items import ITEM_TYPE_NAMES, vehicles, getTypeInfoByName, ITEM_TYPE_INDICES
 from shared_utils import CONST_CONTAINER
 from gui import nationCompareByIndex, GUI_SETTINGS
@@ -215,6 +216,22 @@ class HasStrCD(object):
         return self.strCompactDescr
 
 
+_RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime',
+ 'compensations',
+ 'battlesLeft',
+ 'isRented'))
+_RentalInfoProvider.__new__.__defaults__ = (0,
+ (0, 0),
+ 0,
+ False)
+
+class RentalInfoProvider(_RentalInfoProvider):
+
+    @property
+    def timeLeft(self):
+        return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.rentExpiryTime)))
+
+
 class FittingItem(GUIItem, HasIntCD):
 
     class TARGETS(object):
@@ -237,6 +254,7 @@ class FittingItem(GUIItem, HasIntCD):
         self.sellForGold = False
         self.isUnlocked = False
         self.isBoughtForCredits = isBoughtForCredits
+        self.rentInfo = RentalInfoProvider()
         if proxy is not None and proxy.isSynced():
             self.defaultPrice = proxy.shop.defaults.getItemPrice(self.intCompactDescr)
             if self.defaultPrice is None:

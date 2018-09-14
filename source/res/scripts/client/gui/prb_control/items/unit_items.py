@@ -2,14 +2,16 @@
 from collections import namedtuple
 import itertools
 import weakref
-from UnitBase import UNIT_ROLE, UNIT_FLAGS, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE
+from UnitBase import UNIT_ROLE, UNIT_FLAGS, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE, INV_ID_CLEAR_VEHICLE
 from account_helpers import getAccountDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
+from gui.prb_control.context import unit_ctx
 from gui.prb_control.settings import CREATOR_SLOT_INDEX, UNIT_RESTRICTION
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils.decorators import ReprInjector
+from shared_utils import findFirst
 
 class PlayerUnitInfo(object):
     __slots__ = ('dbID', 'unitIdx', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
@@ -164,11 +166,67 @@ class VehicleInfo(object):
                 result = vehicle.isReadyToPrebattle(checkForRent=not state.isInPreArena())
         return result
 
+    def updateInventory(self, vehInvCDs):
+        if self.vehTypeCD and self.vehTypeCD not in vehInvCDs:
+            return unit_ctx.SetVehicleUnitCtx(vehInvID=INV_ID_CLEAR_VEHICLE, waitingID='prebattle/change_settings')
+        else:
+            return None
+
     def getVehicle(self):
         if self.vehInvID:
             return g_itemsCache.items.getVehicle(self.vehInvID)
         else:
             return None
+
+
+class FalloutVehiclesInfo(object):
+    __slots__ = ('vehInvIDs', 'vehTypeCDs')
+
+    def __init__(self, vehInvIDs = None, vehTypeCDs = None, **kwargs):
+        super(FalloutVehiclesInfo, self).__init__()
+        self.vehInvIDs = vehInvIDs or ()
+        self.vehTypeCDs = vehTypeCDs or ()
+
+    @property
+    def vehInvID(self):
+        if self.vehInvIDs:
+            return self.vehInvIDs[0]
+        return 0
+
+    @property
+    def vehTypeCD(self):
+        if self.vehTypeCDs:
+            return self.vehTypeCDs[0]
+        return 0
+
+    def isEmpty(self):
+        return findFirst(None, self.vehInvIDs) is None
+
+    def isReadyToBattle(self, state):
+        result = False
+        for vehicle in self.getVehicles():
+            if vehicle:
+                result = vehicle.isReadyToPrebattle(checkForRent=not state.isInPreArena())
+
+        return result
+
+    def updateInventory(self, vehInvCDs):
+        if not self.vehTypeCDs:
+            return None
+        vehsList = list(self.vehInvIDs)
+        isChanged = False
+        for i, vCD in enumerate(self.vehTypeCDs):
+            if vCD != INV_ID_CLEAR_VEHICLE and vCD not in vehInvCDs:
+                vehsList[i] = INV_ID_CLEAR_VEHICLE
+                isChanged = True
+
+        if isChanged:
+            return unit_ctx.SetEventVehiclesCtx(vehsList, waitingID='prebattle/change_settings')
+        else:
+            return None
+
+    def getVehicles(self):
+        return map(g_itemsCache.items.getVehicle, self.vehInvIDs)
 
 
 class SlotState(object):
@@ -233,6 +291,9 @@ class UnitFlags(object):
 
     def isInQueue(self):
         return self.__flags & UNIT_FLAGS.IN_QUEUE > 0 or self.__flags & UNIT_FLAGS.PRE_QUEUE > 0
+
+    def isInQueueChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.IN_QUEUE > 0 or self.__flagsDiff & UNIT_FLAGS.PRE_QUEUE > 0
 
     def isInIdle(self):
         return self.__flags & UNIT_FLAGS.MODAL_STATES > 0

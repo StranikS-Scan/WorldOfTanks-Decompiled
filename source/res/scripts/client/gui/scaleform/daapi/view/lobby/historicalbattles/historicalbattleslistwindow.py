@@ -22,13 +22,12 @@ from gui.shared import events, g_itemsCache, REQ_CRITERIA
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.meta.HistoricalBattlesListWindowMeta import HistoricalBattlesListWindowMeta
-from gui.Scaleform.daapi.view.lobby.prb_windows.PrequeueWindow import PrequeueWindow
 from gui.Scaleform.locale.HISTORICAL_BATTLES import HISTORICAL_BATTLES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from messenger.ext import channel_num_gen
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 
-class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMeta, MethodsRules):
+class HistoricalBattlesListWindow(HistoricalBattlesListWindowMeta, MethodsRules):
     COOLDOWN_TRESHOLD = 172800
     COOLDOWN_TICK = 60
 

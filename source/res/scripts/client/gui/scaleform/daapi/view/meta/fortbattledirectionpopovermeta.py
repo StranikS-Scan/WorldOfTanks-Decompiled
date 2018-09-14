@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortBattleDirectionPopoverMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
-class FortBattleDirectionPopoverMeta(DAAPIModule):
+class FortBattleDirectionPopoverMeta(SmartPopOverView):
 
     def requestToJoin(self, fortBattleID):
         self._printOverrideError('requestToJoin')

@@ -18,13 +18,13 @@ _TEAM_PROPS = {'tf_width': 140,
 def _markerComparator(x1, x2):
     INDEX_IS_ALIVE = 2
     INDEX_VEHICLE_CLASS = 1
-    res = x1[INDEX_IS_ALIVE] - x2[INDEX_IS_ALIVE]
-    if not res:
+    res = x2[INDEX_IS_ALIVE] - x1[INDEX_IS_ALIVE]
+    if res:
         return res
     x1Index = VEHICLE_BATTLE_TYPES_ORDER_INDICES.get(x1[INDEX_VEHICLE_CLASS], 100)
     x2Index = VEHICLE_BATTLE_TYPES_ORDER_INDICES.get(x2[INDEX_VEHICLE_CLASS], 100)
     res = x1Index - x2Index
-    if not res:
+    if res:
         return res
     return 0
 
@@ -144,6 +144,7 @@ class _FalloutScorePanel(FalloutScorePanelMeta, _IScorePanel):
 
     def populate(self):
         super(_FalloutScorePanel, self)._populate(self._proxy.getMember(FALLOUT_SCORE_PANEL))
+        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
         arenaType = getArenaType()
         if arenaType is not None:
             self._maxScore = win_points.g_cache[getArenaType().winPoints].pointsCAP
@@ -151,7 +152,11 @@ class _FalloutScorePanel(FalloutScorePanelMeta, _IScorePanel):
         self._makeData()
         return
 
+    def __onSettingsChanged(self, diff = None):
+        self.as_onSettingsChanged()
+
     def destroy(self):
+        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self._proxy = None
         return
 

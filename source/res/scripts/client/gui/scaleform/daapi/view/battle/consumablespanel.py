@@ -11,6 +11,8 @@ from gui.Scaleform.daapi.view.battle import COMMAND_AMMO_CHOICE_MASK, AMMO_ICON_
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info import isEventBattle, hasRage
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_DEVICE_IN_COMPLEX_ITEM
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getScaleformKey
 from gui.shared.utils.plugins import PluginsCollection, IPlugin
 from helpers import i18n
@@ -101,12 +103,6 @@ class ConsumablesPanel(object):
             self.__flashObject = None
         return
 
-    def handleKey(self, bwKey):
-        if bwKey in self.__keys:
-            handler = self.__keys[bwKey]
-            if handler and callable(handler):
-                handler()
-
     def bindCommands(self):
         keys = {}
         slots = []
@@ -120,7 +116,7 @@ class ConsumablesPanel(object):
         self.__keys = keys
 
     def onClickedToSlot(self, bwKey):
-        self.handleKey(int(bwKey))
+        self.__handleBWKey(int(bwKey))
 
     def onPopUpClosed(self):
         keys = {}
@@ -157,8 +153,10 @@ class ConsumablesPanel(object):
         optDevicesCtrl = g_sessionProvider.getOptDevicesCtrl()
         optDevicesCtrl.onOptionalDeviceAdded += self.__onOptionalDeviceAdded
         optDevicesCtrl.onOptionalDeviceUpdated += self.__onOptionalDeviceUpdated
+        g_eventBus.addListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
 
     def __removeListeners(self):
+        g_eventBus.removeListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
         vehicleCtrl = g_sessionProvider.getVehicleStateCtrl()
         vehicleCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
         vehicleCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
@@ -228,6 +226,15 @@ class ConsumablesPanel(object):
                  handler)
 
         return
+
+    def __handleConsumableChoice(self, event):
+        self.__handleBWKey(event.ctx['key'])
+
+    def __handleBWKey(self, bwKey):
+        if bwKey in self.__keys:
+            handler = self.__keys[bwKey]
+            if handler and callable(handler):
+                handler()
 
     def __handleAmmoPressed(self, intCD):
         g_sessionProvider.getAmmoCtrl().changeSetting(intCD)

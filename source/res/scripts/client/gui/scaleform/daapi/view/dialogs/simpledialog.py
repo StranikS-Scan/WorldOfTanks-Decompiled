@@ -2,11 +2,9 @@
 import BigWorld
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.SimpleDialogMeta import SimpleDialogMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.framework.entities.View import View
 
-class SimpleDialog(View, SimpleDialogMeta, AbstractWindowView):
+class SimpleDialog(SimpleDialogMeta):
 
     def __init__(self, message, title, buttons, handler, dialogScope = ScopeTemplates.DEFAULT_SCOPE, timer = 0):
         super(SimpleDialog, self).__init__()

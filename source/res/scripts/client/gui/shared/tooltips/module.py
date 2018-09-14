@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 import gui
-from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE
+from debug_utils import LOG_ERROR
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES

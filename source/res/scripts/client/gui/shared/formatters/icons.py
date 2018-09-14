@@ -1,5 +1,8 @@
 # Embedded file name: scripts/client/gui/shared/formatters/icons.py
 from gui import makeHtmlString
+from gui.shared.utils.functions import getAbsoluteUrl
+__all__ = ('noSeason', 'swords', 'alert', 'arrow', 'xp', 'credits', 'notAvailable', 'notAvailableRed', 'checkmark', 'info', 'premiumIgrBig', 'premiumIgrSmall', 'freeXP', 'gold', 'nut', 'clock', 'makeImageTag')
+_IMG_TAG_TPL = "<img src='{0}' width='{1}' height='{2}' vspace='{3}' hspace='{4}'/>"
 
 def _getIcon(icon, width = None, height = None, vspace = None, hspace = None):
     ctx = {}
@@ -38,6 +41,10 @@ def credits():
     return _getIcon('credits')
 
 
+def notAvailable():
+    return _getIcon('notAvailable')
+
+
 def notAvailableRed():
     return _getIcon('notAvailableRed')
 
@@ -70,5 +77,13 @@ def nut():
     return _getIcon('nut')
 
 
+def nutStat():
+    return _getIcon('nutStat')
+
+
 def clock():
     return _getIcon('clock')
+
+
+def makeImageTag(source, width = 16, height = 16, vSpace = -4, hSpace = 0):
+    return _IMG_TAG_TPL.format(getAbsoluteUrl(source), width, height, vSpace, hSpace)

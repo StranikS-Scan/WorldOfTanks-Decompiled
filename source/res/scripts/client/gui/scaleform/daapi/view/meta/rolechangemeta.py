@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RoleChangeMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class RoleChangeMeta(DAAPIModule):
+class RoleChangeMeta(AbstractWindowView):
 
     def onVehicleSelected(self, vehicleId):
         self._printOverrideError('onVehicleSelected')

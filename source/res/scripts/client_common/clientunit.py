@@ -47,13 +47,19 @@ class _FortBattleExtra(namedtuple('_FortBattleExtra', ('clanEquipments', 'lastEq
         return result
 
 
+class _SquadExtra(namedtuple('_SquadExtra', ('eventType', 'accountVehicles'))):
+    pass
+
+
+_SquadExtra.__new__.__defaults__ = (0, {})
 _EXTRA_BY_PRB_TYPE = {PREBATTLE_TYPE.CLUBS: _ClubExtra,
  PREBATTLE_TYPE.SORTIE: _SortieExtra,
- PREBATTLE_TYPE.FORT_BATTLE: _FortBattleExtra}
+ PREBATTLE_TYPE.FORT_BATTLE: _FortBattleExtra,
+ PREBATTLE_TYPE.SQUAD: _SquadExtra}
 
 class ClientUnit(UnitBase):
 
-    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', extras = '', packedUnit = ''):
+    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', extrasInit = None, packedUnit = ''):
         self.__eManager = Event.EventManager()
         self.onUnitFlagsChanged = Event.Event(self.__eManager)
         self.onUnitReadyMaskChanged = Event.Event(self.__eManager)
@@ -70,7 +76,7 @@ class ClientUnit(UnitBase):
         self.onUnitExtraChanged = Event.Event(self.__eManager)
         self.onUnitUpdated = Event.Event(self.__eManager)
         self._creatorDBID = 0L
-        UnitBase.__init__(self, slotDefs, slotCount, packedRoster, extras, packedUnit)
+        UnitBase.__init__(self, slotDefs, slotCount, packedRoster, extrasInit, packedUnit)
 
     def destroy(self):
         self.__eManager.clear()
@@ -111,11 +117,11 @@ class ClientUnit(UnitBase):
 
     def getLegionarySlots(self):
         result = {}
-        for playerID, slotIdx in self._playerSlots.iteritems():
-            playerData = self._players[playerID]
+        for accountDBID, slotIdx in self._playerSlots.iteritems():
+            playerData = self._players[accountDBID]
             role = playerData.get('role', 0)
             if role & UNIT_ROLE.LEGIONARY:
-                result[playerID] = slotIdx
+                result[accountDBID] = slotIdx
 
         return result
 
@@ -229,50 +235,50 @@ class ClientUnit(UnitBase):
         UnitBase._setReadyMask(self, mask)
         self.onUnitReadyMaskChanged(prevMask, self._readyMask)
 
-    def _setVehicle(self, playerID, vehTypeCompDescr, vehInvID):
-        UnitBase._setVehicle(self, playerID, vehTypeCompDescr, vehInvID)
-        self.onUnitVehicleChanged(playerID, vehInvID, vehTypeCompDescr)
+    def _setVehicle(self, accountDBID, vehTypeCompDescr, vehInvID):
+        UnitBase._setVehicle(self, accountDBID, vehTypeCompDescr, vehInvID)
+        self.onUnitVehicleChanged(accountDBID, vehInvID, vehTypeCompDescr)
 
-    def _clearVehicle(self, playerID):
-        UnitBase._clearVehicle(self, playerID)
-        self.onUnitVehicleChanged(playerID, 0, 0)
+    def _clearVehicle(self, accountDBID):
+        UnitBase._clearVehicle(self, accountDBID)
+        self.onUnitVehicleChanged(accountDBID, 0, 0)
 
     def _unpackPlayer(self, packedOps):
-        playerID, hasPlayer = 0, False
+        accountDBID, hasPlayer = 0, False
         try:
-            playerID, = struct.unpack_from(PLAYER_ID_CHR, packedOps)
+            accountDBID, = struct.unpack_from(PLAYER_ID_CHR, packedOps)
             filtered = dict(filter(lambda item: item[1].get('role', 0) & UNIT_ROLE.INVITED == 0, self._players.iteritems()))
-            hasPlayer = playerID in filtered
+            hasPlayer = accountDBID in filtered
         except struct.error as e:
             LOG_ERROR(e)
 
         nextOps = UnitBase._unpackPlayer(self, packedOps)
-        if not hasPlayer and playerID:
-            self.onUnitPlayerAdded(playerID, self.getPlayer(playerID))
+        if not hasPlayer and accountDBID:
+            self.onUnitPlayerAdded(accountDBID, self.getPlayer(accountDBID))
         if hasPlayer:
-            LOG_DEBUG_DEV('onUnitPlayerInfoChanged', playerID, self.getPlayer(playerID))
-            self.onUnitPlayerInfoChanged(playerID, self.getPlayer(playerID))
+            LOG_DEBUG_DEV('onUnitPlayerInfoChanged', accountDBID, self.getPlayer(accountDBID))
+            self.onUnitPlayerInfoChanged(accountDBID, self.getPlayer(accountDBID))
         return nextOps
 
-    def _addPlayer(self, playerID, **kwargs):
-        if 'role' in kwargs and kwargs['role'] & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self._playerSlots.get(playerID) == LEADER_SLOT:
-            self._creatorDBID = playerID
-        UnitBase._addPlayer(self, playerID, **kwargs)
+    def _addPlayer(self, accountDBID, **kwargs):
+        if 'role' in kwargs and kwargs['role'] & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self._playerSlots.get(accountDBID) == LEADER_SLOT:
+            self._creatorDBID = accountDBID
+        UnitBase._addPlayer(self, accountDBID, **kwargs)
 
-    def _removePlayer(self, playerID):
-        pInfo = self.getPlayer(playerID)
+    def _removePlayer(self, accountDBID):
+        pInfo = self.getPlayer(accountDBID)
         if pInfo:
-            self.onUnitPlayerRemoved(playerID, pInfo)
-        UnitBase._removePlayer(self, playerID)
+            self.onUnitPlayerRemoved(accountDBID, pInfo)
+        UnitBase._removePlayer(self, accountDBID)
 
-    def _changePlayerRole(self, playerID, roleFlags):
+    def _changePlayerRole(self, accountDBID, roleFlags):
         prevRoleFlags = UNIT_ROLE.DEFAULT
-        if playerID in self._players:
-            prevRoleFlags = self._players[playerID]['role']
-        UnitBase._changePlayerRole(self, playerID, roleFlags)
-        if roleFlags & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self._playerSlots.get(playerID) == LEADER_SLOT:
-            self._creatorDBID = playerID
-        self.onUnitPlayerRoleChanged(playerID, prevRoleFlags, roleFlags)
+        if accountDBID in self._players:
+            prevRoleFlags = self._players[accountDBID]['role']
+        UnitBase._changePlayerRole(self, accountDBID, roleFlags)
+        if roleFlags & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self._playerSlots.get(accountDBID) == LEADER_SLOT:
+            self._creatorDBID = accountDBID
+        self.onUnitPlayerRoleChanged(accountDBID, prevRoleFlags, roleFlags)
 
     def setComment(self, strComment):
         UnitBase.setComment(self, strComment)
@@ -289,8 +295,8 @@ class ClientUnit(UnitBase):
     def _unpackVehicleDict(self, packedOps):
         nextOps = UnitBase._unpackVehicleDict(self, packedOps)
         try:
-            playerID, = struct.unpack_from(PLAYER_ID_CHR, packedOps, offset=VEH_LEN_SIZE)
-            self.onUnitPlayerVehDictChanged(playerID)
+            accountDBID, = struct.unpack_from(PLAYER_ID_CHR, packedOps, offset=VEH_LEN_SIZE)
+            self.onUnitPlayerVehDictChanged(accountDBID)
         except struct.error as e:
             LOG_ERROR(e)
 

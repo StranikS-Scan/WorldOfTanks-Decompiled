@@ -5,23 +5,23 @@ import math
 import operator
 from functools import partial
 import BigWorld
-from gui.shared.formatters import text_styles
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.battle_control.arena_info import getArenaIcon, hasResourcePoints, hasFlags
+from gui.battle_control.arena_info import getArenaIcon, hasResourcePoints
 from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
 from gui.battle_results.VehicleProgressHelper import VehicleProgressHelper, PROGRESS_ACTION
-from gui.shared.event_dispatcher import showResearchView, showPersonalCase
+from gui.shared.event_dispatcher import showResearchView, showPersonalCase, showBattleResultsFromData
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.functions import getArenaSubTypeName
 from gui.Scaleform.daapi.view.fallout_info_panel_helper import getCosts
 import nations
 import potapov_quests
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers import getAccountDatabaseID
-from account_shared import getFairPlayViolationName, packPostBattleUniqueSubUrl
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from account_shared import getFairPlayViolationName
+from debug_utils import LOG_DEBUG
 from helpers import i18n, time_utils
 from adisp import async, process
 from CurrentVehicle import g_currentVehicle
@@ -30,10 +30,10 @@ from dossiers2.custom.records import RECORD_DB_IDS, DB_ID_TO_RECORD
 from dossiers2.ui import achievements
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
-from gui import makeHtmlString, SystemMessages, GUI_SETTINGS
+from gui import makeHtmlString, GUI_SETTINGS, SystemMessages
 from gui.server_events import g_eventsCache, events_dispatcher as quests_events
-from gui.shared import g_itemsCache
-from gui.shared.utils import isVehicleObserver, copyToClipboard, functions
+from gui.shared import g_itemsCache, events
+from gui.shared.utils import isVehicleObserver
 from items import vehicles as vehicles_core, vehicles
 from items.vehicles import VEHICLE_CLASS_TAGS
 from shared_utils import findFirst
@@ -42,16 +42,12 @@ from gui.clubs.club_helpers import ClubListener
 from gui.clubs.settings import getLeagueByDivision, getDivisionWithinLeague
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.FortBuilding import FortBuilding
-from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.gui_items.dossier import getAchievementFactory
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from messenger.storage import storage_getter
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.shared.formatters import text_styles
@@ -83,13 +79,14 @@ VEHICLE_ICON_FILE = '../maps/icons/vehicle/{0}.png'
 VEHICLE_ICON_FALLOUT_FILE = '../maps/icons/vehicle/falloutBattleResults/{0}.png'
 VEHICLE_ICON_SMALL_FILE = '../maps/icons/vehicle/small/{0}.png'
 VEHICLE_NO_IMAGE_FILE_NAME = 'noImage'
-ARENA_SCREEN_FILE = '../maps/icons/map/stats/{0}.png'
+ARENA_SCREEN_FILE = '../maps/icons/map/stats/%s.png'
 ARENA_NAME_PATTERN = '{0} - {1}'
 LINE_BRAKE_STR = '<br/>'
 STATS_KEYS = (('shots', True, None),
  ('hits', False, None),
  ('explosionHits', True, None),
  ('damageDealt', True, None),
+ ('damageDealtByOrder', True, None),
  ('sniperDamageDealt', True, None),
  ('directHitsReceived', True, None),
  ('piercingsReceived', True, None),
@@ -99,18 +96,24 @@ STATS_KEYS = (('shots', True, None),
  ('teamHitsDamage', False, None),
  ('spotted', True, None),
  ('damagedKilled', False, None),
+ ('killed', True, None),
+ ('killsByOrder', True, None),
  ('damageAssisted', True, 'damageAssistedSelf'),
  ('capturePointsVal', False, None),
  ('mileage', False, None),
  ('flags', True, None),
  ('deaths', True, None))
 TIME_STATS_KEYS = ('arenaCreateTimeOnlyStr', 'duration', 'playerKilled')
-FALLOUT_ONLY_STATS = ('flags', 'deaths')
-FALLOUT_EXCLUDE_ACCOUNT_STATS = ('creditsContributionIn', 'creditsToDraw', 'creditsPenalty', 'creditsContributionOut', 'xpPenalty', 'playerKilled')
-FALLOUT_EXCLUDE_VEHICLE_STATS = ('sniperDamageDealt', 'tkills', 'tdamageDealt', 'capturePoints', 'droppedCapturePoints', 'capturePointsVal', 'teamHitsDamage')
+FALLOUT_ONLY_STATS = ('killed', 'killsByOrder', 'damageDealtByOrder', 'flags', 'deaths')
+FALLOUT_ORDER_STATS = ('damageDealtByOrder', 'killsByOrder')
+FALLOUT_EXCLUDE_VEHICLE_STATS = ('damagedKilled', 'sniperDamageDealt', 'capturePoints', 'droppedCapturePoints', 'capturePointsVal', 'mileage')
 
 def _intSum(a, b):
     return a + b
+
+
+def _intMax(a, b):
+    return max(a, b)
 
 
 def _listSum(a, b):
@@ -121,36 +124,68 @@ def _listCollect(a, b):
     return tuple(a) + tuple(b)
 
 
-CUMULATIVE_ACCOUNT_DATA = {'credits': (0, _intSum),
- 'achievementCredits': (0, _intSum),
- 'creditsContributionIn': (0, _intSum),
- 'creditsToDraw': (0, _intSum),
- 'creditsPenalty': (0, _intSum),
- 'creditsContributionOut': (0, _intSum),
- 'originalCredits': (0, _intSum),
- 'eventCredits': (0, _intSum),
- 'eventGold': (0, _intSum),
- 'orderCredits': (0, _intSum),
- 'boosterCredits': (0, _intSum),
- 'autoRepairCost': (0, _intSum),
- 'autoLoadCost': ((0, 0), _listSum),
- 'autoEquipCost': ((0, 0), _listSum),
- 'histAmmoCost': ((0, 0), _listSum),
- 'xp': (0, _intSum),
- 'freeXP': (0, _intSum),
- 'achievementXP': (0, _intSum),
- 'achievementFreeXP': (0, _intSum),
- 'xpPenalty': (0, _intSum),
- 'originalXP': (0, _intSum),
- 'originalFreeXP': (0, _intSum),
- 'dossierPopUps': ((), _listCollect),
- 'orderXP': (0, _intSum),
- 'boosterXP': (0, _intSum),
- 'orderFreeXP': (0, _intSum),
- 'boosterFreeXP': (0, _intSum),
- 'eventXP': (0, _intSum),
- 'eventFreeXP': (0, _intSum),
- 'premiumVehicleXP': (0, _intSum)}
+def _calculateDailyXP(oritinalData, data):
+    return (data['originalXP'] - int(data.get('xpPenaltyBase', 0))) * data['dailyXPFactor10'] / 10.0
+
+
+def _calculateDailyFreeXP(oritinalData, data):
+    return data['originalFreeXP'] * data['dailyXPFactor10'] / 10.0
+
+
+def _calculateBaseXpPenalty(originalData, data):
+    aogasFactor = originalData.get('aogasFactor10', 10) / 10.0
+    if not aogasFactor:
+        return 0
+    isPremium = originalData.get('isPremium', False)
+    igrXpFactor = originalData.get('igrXPFactor10', 10) / 10.0
+    premXpFactor = originalData.get('premiumXPFactor10', 10) / 10.0
+    dailyXpFactor = originalData.get('dailyXPFactor10', 10) / 10.0
+    xpPenalty = data['xpPenalty']
+    xpPenalty = math.ceil(int(xpPenalty / aogasFactor) / dailyXpFactor)
+    if isPremium:
+        xpPenalty = math.ceil(xpPenalty / premXpFactor)
+    if igrXpFactor:
+        xpPenalty = math.ceil(xpPenalty / igrXpFactor)
+    return xpPenalty
+
+
+RELATED_ACCOUNT_DATA = {'dailyXP': _calculateDailyXP,
+ 'dailyFreeXP': _calculateDailyFreeXP,
+ 'xpPenaltyBase': _calculateBaseXpPenalty}
+CUMULATIVE_ACCOUNT_DATA = (('credits', (0, _intSum)),
+ ('achievementCredits', (0, _intSum)),
+ ('creditsContributionIn', (0, _intSum)),
+ ('creditsToDraw', (0, _intSum)),
+ ('creditsPenalty', (0, _intSum)),
+ ('creditsContributionOut', (0, _intSum)),
+ ('originalCredits', (0, _intSum)),
+ ('eventCredits', (0, _intSum)),
+ ('eventGold', (0, _intSum)),
+ ('orderCredits', (0, _intSum)),
+ ('boosterCredits', (0, _intSum)),
+ ('autoRepairCost', (0, _intSum)),
+ ('autoLoadCost', ((0, 0), _listSum)),
+ ('autoEquipCost', ((0, 0), _listSum)),
+ ('histAmmoCost', ((0, 0), _listSum)),
+ ('xp', (0, _intSum)),
+ ('freeXP', (0, _intSum)),
+ ('achievementXP', (0, _intSum)),
+ ('achievementFreeXP', (0, _intSum)),
+ ('xpPenalty', (0, _intSum)),
+ ('originalXP', (0, _intSum)),
+ ('originalFreeXP', (0, _intSum)),
+ ('dossierPopUps', ((), _listCollect)),
+ ('orderXP', (0, _intSum)),
+ ('boosterXP', (0, _intSum)),
+ ('orderFreeXP', (0, _intSum)),
+ ('boosterFreeXP', (0, _intSum)),
+ ('eventXP', (0, _intSum)),
+ ('eventFreeXP', (0, _intSum)),
+ ('premiumVehicleXP', (0, _intSum)),
+ ('dailyXPFactor10', (10, _intMax)),
+ ('xpPenaltyBase', (0, _intSum)),
+ ('dailyXP', (0, _intSum)),
+ ('dailyFreeXP', (0, _intSum)))
 CUMULATIVE_STATS_DATA = {'shots': (0, _intSum),
  'tkills': (0, _intSum),
  'damageDealt': (0, _intSum),
@@ -177,18 +212,20 @@ CUMULATIVE_STATS_DATA = {'shots': (0, _intSum),
  'damageAssistedRadio': (0, _intSum),
  'spotted': (0, _intSum)}
 
-class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, ClubListener):
+class BattleResultsWindow(BattleResultsMeta, ClubListener):
     RESEARCH_UNLOCK_TYPE = 'UNLOCK_LINK_TYPE'
     PURCHASE_UNLOCK_TYPE = 'PURCHASE_LINK_TYPE'
     NEW_SKILL_UNLOCK_TYPE = 'NEW_SKILL_LINK_TYPE'
     __playersNameCache = dict()
     __rated7x7Animations = set()
+    __buyPremiumCache = set()
 
     def __init__(self, ctx = None):
         super(BattleResultsWindow, self).__init__()
         raise 'dataProvider' in ctx or AssertionError
         raise ctx['dataProvider'] is not None or AssertionError
         self.dataProvider = ctx['dataProvider']
+        self.__premiumBonusesDiff = {}
         return
 
     @storage_getter('users')
@@ -198,6 +235,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
     @process
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
+        self.addListener(events.LobbySimpleEvent.PREMIUM_BOUGHT, self.__onPremiumBought)
         commonData = yield self.__getCommonData()
         self.as_setDataS(commonData)
         if commonData is not None:
@@ -210,6 +248,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
 
     def _dispose(self):
         self.dataProvider.destroy()
+        self.removeListener(events.LobbySimpleEvent.PREMIUM_BOUGHT, self.__onPremiumBought)
         super(BattleResultsWindow, self)._dispose()
 
     def onWindowClose(self):
@@ -311,17 +350,21 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
     def __resultLabel(self, label):
         return i18n.makeString(RESULT_LINE_STR.format(label))
 
-    def __makeCreditsLabel(self, value, canBeFaded = False):
+    def __makeCreditsLabel(self, value, canBeFaded = False, isDiff = False):
         valStr = BigWorld.wg_getGoldFormat(int(value))
         if value < 0:
             valStr = self.__makeRedLabel(valStr)
+        if isDiff:
+            valStr = '+ %s' % valStr
         templateName = 'credits_small_inactive_label' if canBeFaded and value == 0 else 'credits_small_label'
         return makeHtmlString('html_templates:lobby/battle_results', templateName, {'value': valStr})
 
-    def __makeXpLabel(self, value, canBeFaded = False):
+    def __makeXpLabel(self, value, canBeFaded = False, isDiff = False):
         valStr = BigWorld.wg_getIntegralFormat(int(value))
         if value < 0:
             valStr = self.__makeRedLabel(valStr)
+        if isDiff:
+            valStr = '+ %s' % valStr
         templateName = 'xp_small_inactive_label' if canBeFaded and value == 0 else 'xp_small_label'
         return makeHtmlString('html_templates:lobby/battle_results', templateName, {'value': valStr})
 
@@ -356,10 +399,12 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
     def __populateStatValues(self, node, isFallout, isSelf = False):
         node = node.copy()
         if not isFallout:
-            node['teamHitsDamage'] = self.__makeTeamDamageStr(node)
+            node['damagedKilled'] = self.__makeSlashedValuesStr(node, 'damaged', 'kills')
             node['capturePointsVal'] = self.__makeSlashedValuesStr(node, 'capturePoints', 'droppedCapturePoints')
+        else:
+            node['killed'] = node['kills']
+        node['teamHitsDamage'] = self.__makeTeamDamageStr(node)
         node['hits'] = self.__makeSlashedValuesStr(node, 'directHits', 'piercings')
-        node['damagedKilled'] = self.__makeSlashedValuesStr(node, 'damaged', 'kills')
         node['mileage'] = self.__makeMileageStr(node.get('mileage', 0))
         flagActions = node.get('flagActions', [0] * len(FLAG_ACTION.RANGE))
         node['flags'] = flagActions[FLAG_ACTION.CAPTURED]
@@ -370,6 +415,8 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             if not isFallout and key in FALLOUT_ONLY_STATS:
                 continue
             if isFallout and key in FALLOUT_EXCLUDE_VEHICLE_STATS:
+                continue
+            if key in FALLOUT_ORDER_STATS and key not in node:
                 continue
             if isInt:
                 value = node.get(key, 0)
@@ -386,26 +433,28 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
         return result
 
     def __populateAccounting(self, commonData, personalCommonData, personalData, playersData, personalDataOutput, isFallout):
+        if self.dataProvider.getArenaUniqueID() in self.__buyPremiumCache:
+            isPostBattlePremium = True
+        else:
+            isPostBattlePremium = personalCommonData.get('isPremium', False)
         isPremium = personalCommonData.get('isPremium', False)
         premCreditsFactor = personalCommonData.get('premiumCreditsFactor10', 10) / 10.0
-        personalDataOutput['xpTitleStr'] = i18n.makeString(XP_TITLE)
-        personalDataOutput['isPremium'] = isPremium
+        igrXpFactor = personalCommonData.get('igrXPFactor10', 10) / 10.0
+        premXpFactor = personalCommonData.get('premiumXPFactor10', 10) / 10.0
+        aogasFactor = personalCommonData.get('aogasFactor10', 10) / 10.0
+        refSystemFactor = personalCommonData.get('refSystemXPFactor10', 10) / 10.0
+        aogasValStr = ''
+        personalDataOutput['xpTitleStrings'] = xpTitleStrings = []
+        personalDataOutput['isPremium'] = isPostBattlePremium
         personalDataOutput['creditsNoPremValues'] = creditsNoPremValues = []
         personalDataOutput['creditsPremValues'] = creditsPremValues = []
         personalDataOutput['xpNoPremValues'] = xpNoPremValues = []
         personalDataOutput['xpPremValues'] = xpPremValues = []
         personalDataOutput['resValues'] = resValues = []
         personalDataOutput['resPremValues'] = resPremValues = []
-        dailyXpFactor = personalCommonData.get('dailyXPFactor10', 10) / 10.0
-        igrXpFactor = personalCommonData.get('igrXPFactor10', 10) / 10.0
-        premXpFactor = personalCommonData.get('premiumXPFactor10', 10) / 10.0
-        aogasFactor = personalCommonData.get('aogasFactor10', 10) / 10.0
-        refSystemFactor = personalCommonData.get('refSystemXPFactor10', 10) / 10.0
-        aogasValStr = ''
-        if dailyXpFactor > 1:
-            personalDataOutput['xpTitleStr'] += i18n.makeString(XP_TITLE_DAILY, dailyXpFactor)
         showIntermediateTotal = False
         fairPlayViolationName = self.__getFairPlayViolationName(personalCommonData)
+        hasViolation = fairPlayViolationName is not None
         playerData = playersData.get(personalCommonData.get('accountDBID', 0), {'igrType': 0,
          'clanDBID': 0,
          'clanAbbrev': ''})
@@ -413,7 +462,8 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
         igrType = playerData.get('igrType', 0)
         vehsCreditsData = []
         vehsXPData = []
-        for vehIntCD, sourceData in self.__buildPersonalDataSource(personalData, commonData, isFallout):
+        for vehIntCD, sourceData in self.__buildPersonalDataSource(personalData, isFallout):
+            dailyXpFactor = sourceData['dailyXPFactor10'] / 10.0
             creditsData = []
             creditsToDraw = self.__calculateBaseParam('creditsToDraw', sourceData, premCreditsFactor, isPremium)
             achievementCredits = sourceData['achievementCredits']
@@ -421,51 +471,50 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             creditsCompensation = self.__calculateBaseParam('creditsContributionIn', sourceData, premCreditsFactor, isPremium)
             isNoPenalty = achievementCredits > 0
             creditsBase = sourceData['originalCredits']
-            creditsCell = creditsBase - achievementCredits + creditsPenalty - creditsCompensation - creditsToDraw
-            creditsCellPrem = int(creditsBase * premCreditsFactor) - int(achievementCredits * premCreditsFactor) + int(creditsPenalty * premCreditsFactor) - int(round(creditsToDraw * premCreditsFactor)) - int(round(creditsCompensation * premCreditsFactor))
-            creditsCellStr = self.__makeCreditsLabel(creditsCell, not isPremium)
-            creditsCellPremStr = self.__makeCreditsLabel(creditsCellPrem, isPremium)
+            creditsCell = creditsBase - achievementCredits - creditsToDraw
+            creditsCellPrem = int(round(creditsBase * premCreditsFactor)) - int(round(achievementCredits * premCreditsFactor)) - int(round(creditsToDraw * premCreditsFactor))
+            creditsCellStr = self.__makeCreditsLabel(creditsCell, not isPostBattlePremium)
+            creditsCellPremStr = self.__makeCreditsLabel(creditsCellPrem, isPostBattlePremium)
             creditsData.append(self.__getStatsLine(self.__resultLabel('base'), creditsCellStr, None, creditsCellPremStr, None))
             achievementCreditsPrem = 0
             if isNoPenalty:
                 showIntermediateTotal = True
-                achievementCreditsPrem = int(achievementCredits * premCreditsFactor)
-                creditsData.append(self.__getStatsLine(self.__resultLabel('noPenalty'), self.__makeCreditsLabel(achievementCredits, not isPremium), None, self.__makeCreditsLabel(achievementCreditsPrem, isPremium), None))
+                achievementCreditsPrem = int(round(achievementCredits * premCreditsFactor))
+                creditsData.append(self.__getStatsLine(self.__resultLabel('noPenalty'), self.__makeCreditsLabel(achievementCredits, not isPostBattlePremium), None, self.__makeCreditsLabel(achievementCreditsPrem, isPostBattlePremium), None))
             boosterCredits = self.__calculateBaseParam('boosterCredits', sourceData, premCreditsFactor, isPremium)
             boosterCreditsPrem = int(round(boosterCredits * premCreditsFactor))
             if boosterCredits > 0 or boosterCreditsPrem > 0:
                 showIntermediateTotal = True
-                boosterCreditsStr = self.__makeCreditsLabel(boosterCredits, not isPremium) if boosterCredits else None
-                boosterCreditsPremStr = self.__makeCreditsLabel(boosterCreditsPrem, isPremium) if boosterCreditsPrem else None
+                boosterCreditsStr = self.__makeCreditsLabel(boosterCredits, not isPostBattlePremium) if boosterCredits else None
+                boosterCreditsPremStr = self.__makeCreditsLabel(boosterCreditsPrem, isPostBattlePremium) if boosterCreditsPrem else None
                 creditsData.append(self.__getStatsLine(self.__resultLabel('boosters'), boosterCreditsStr, None, boosterCreditsPremStr, None))
             orderCredits = self.__calculateBaseParam('orderCredits', sourceData, premCreditsFactor, isPremium)
             orderCreditsPrem = int(round(orderCredits * premCreditsFactor))
             if orderCredits > 0 or orderCreditsPrem > 0:
                 showIntermediateTotal = True
-                orderCreditsStr = self.__makeCreditsLabel(orderCredits, not isPremium) if orderCredits else None
-                orderCreditsPremStr = self.__makeCreditsLabel(orderCreditsPrem, isPremium) if orderCreditsPrem else None
+                orderCreditsStr = self.__makeCreditsLabel(orderCredits, not isPostBattlePremium) if orderCredits else None
+                orderCreditsPremStr = self.__makeCreditsLabel(orderCreditsPrem, isPostBattlePremium) if orderCreditsPrem else None
                 creditsData.append(self.__getStatsLine(self.__resultLabel('battlePayments'), orderCreditsStr, None, orderCreditsPremStr, None))
-            eventCredits = sourceData['eventCredits']
+            eventCredits = self.__calculateBaseParam('eventCredits', sourceData, premXpFactor, isPremium)
+            creditsEventStr = self.__makeCreditsLabel(eventCredits, not isPostBattlePremium) if eventCredits else None
+            eventCreditsPrem = self.__calculateParamWithPrem('eventCredits', sourceData, premXpFactor, isPremium)
+            creditsEventPremStr = self.__makeCreditsLabel(eventCreditsPrem, isPostBattlePremium) if eventCreditsPrem else None
             eventGold = sourceData['eventGold']
-            creditsEventStr = self.__makeCreditsLabel(eventCredits, not isPremium) if eventCredits else None
-            creditsEventPremStr = self.__makeCreditsLabel(eventCredits, isPremium) if eventCredits else None
-            goldEventStr = self.__makeGoldLabel(eventGold, not isPremium) if eventGold else None
-            goldEventPremStr = self.__makeGoldLabel(eventGold, isPremium) if eventGold else None
+            goldEventStr = self.__makeGoldLabel(eventGold, not isPostBattlePremium) if eventGold else None
+            goldEventPremStr = self.__makeGoldLabel(eventGold, isPostBattlePremium) if eventGold else None
             if eventCredits > 0 or eventGold > 0:
                 showIntermediateTotal = True
                 creditsData.append(self.__getStatsLine(self.__resultLabel('event'), creditsEventStr, goldEventStr, creditsEventPremStr, goldEventPremStr))
             creditsData.append(self.__getStatsLine())
-            hasViolation = fairPlayViolationName is not None
             if hasViolation:
                 penaltyValue = self.__makePercentLabel(int(-100))
                 creditsData.append(self.__getStatsLine(self.__resultLabel('fairPlayViolation/' + fairPlayViolationName), penaltyValue, None, penaltyValue, None))
-            if not isFallout:
-                creditsPenaltyStr = self.__makeCreditsLabel(int(-creditsPenalty), not isPremium)
-                creditsPenaltyPremStr = self.__makeCreditsLabel(int(-creditsPenalty * premCreditsFactor), isPremium)
-                creditsData.append(self.__getStatsLine(self.__resultLabel('friendlyFirePenalty'), creditsPenaltyStr, None, creditsPenaltyPremStr, None))
-                creditsCompensationStr = self.__makeCreditsLabel(int(round(creditsCompensation)), not isPremium)
-                creditsCompensationPremStr = self.__makeCreditsLabel(int(round(creditsCompensation * premCreditsFactor)), isPremium)
-                creditsData.append(self.__getStatsLine(self.__resultLabel('friendlyFireCompensation'), creditsCompensationStr, None, creditsCompensationPremStr, None))
+            creditsPenaltyStr = self.__makeCreditsLabel(int(-creditsPenalty), not isPostBattlePremium)
+            creditsPenaltyPremStr = self.__makeCreditsLabel(int(-creditsPenalty * premCreditsFactor), isPostBattlePremium)
+            creditsData.append(self.__getStatsLine(self.__resultLabel('friendlyFirePenalty'), creditsPenaltyStr, None, creditsPenaltyPremStr, None))
+            creditsCompensationStr = self.__makeCreditsLabel(int(creditsCompensation), not isPostBattlePremium)
+            creditsCompensationPremStr = self.__makeCreditsLabel(int(creditsCompensation * premCreditsFactor), isPostBattlePremium)
+            creditsData.append(self.__getStatsLine(self.__resultLabel('friendlyFireCompensation'), creditsCompensationStr, None, creditsCompensationPremStr, None))
             creditsData.append(self.__getStatsLine())
             if creditsPenalty or creditsCompensation:
                 showIntermediateTotal = True
@@ -475,70 +524,68 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
                 aogasValStr = self.__makeRedLabel(aogasValStr)
                 creditsData.append(self.__getStatsLine(self.__resultLabel('aogasFactor'), aogasValStr, None, aogasValStr, None))
                 creditsData.append(self.__getStatsLine())
-            creditsWithoutPremTotal = self.__calculateTotalCredits(sourceData, eventCredits, premCreditsFactor, isPremium, aogasFactor, creditsBase, orderCredits, boosterCredits, creditsToDraw, hasViolation, False)
-            creditsNoPremValues.append(self.__makeCreditsLabel(creditsCell, not isPremium))
-            creditsWithPremTotal = self.__calculateTotalCredits(sourceData, eventCredits, premCreditsFactor, isPremium, aogasFactor, creditsBase, orderCredits, boosterCredits, creditsToDraw, hasViolation, True)
-            creditsPremValues.append(self.__makeCreditsLabel(creditsCellPrem, isPremium))
+            creditsWithoutPremTotal = self.__calculateTotalCredits(sourceData, eventCredits, premCreditsFactor, isPremium, aogasFactor, creditsBase, orderCredits, boosterCredits, creditsToDraw, creditsPenalty, creditsCompensation, hasViolation, False)
+            creditsNoPremValues.append(self.__makeCreditsLabel(creditsCell, not isPostBattlePremium))
+            xpTitleString = i18n.makeString(XP_TITLE)
+            if dailyXpFactor > 1:
+                xpTitleString = ' '.join((xpTitleString, i18n.makeString(XP_TITLE_DAILY, dailyXpFactor)))
+            xpTitleStrings.append(xpTitleString)
+            creditsWithPremTotal = self.__calculateTotalCredits(sourceData, eventCredits, premCreditsFactor, isPremium, aogasFactor, creditsBase, orderCredits, boosterCredits, creditsToDraw, creditsPenalty, creditsCompensation, hasViolation, True)
             if showIntermediateTotal:
-                creditsData.append(self.__getStatsLine(self.__resultLabel('intermediateTotal'), self.__makeCreditsLabel(creditsWithoutPremTotal), goldEventStr, self.__makeCreditsLabel(creditsWithPremTotal), goldEventPremStr))
+                creditsData.append(self.__getStatsLine(self.__resultLabel('intermediateTotal'), self.__makeCreditsLabel(creditsWithoutPremTotal, not isPostBattlePremium), goldEventStr, self.__makeCreditsLabel(creditsWithPremTotal, isPostBattlePremium), goldEventPremStr))
                 creditsData.append(self.__getStatsLine())
             creditsAutoRepair = sourceData['autoRepairCost']
             if creditsAutoRepair is None:
                 creditsAutoRepair = 0
-            creditsAutoRepairStr = self.__makeCreditsLabel(-creditsAutoRepair, not isPremium)
-            creditsAutoRepairPremStr = self.__makeCreditsLabel(-creditsAutoRepair, isPremium)
+            creditsAutoRepairStr = self.__makeCreditsLabel(-creditsAutoRepair, not isPostBattlePremium)
+            creditsAutoRepairPremStr = self.__makeCreditsLabel(-creditsAutoRepair, isPostBattlePremium)
             creditsData.append(self.__getStatsLine(self.__resultLabel('autoRepair'), creditsAutoRepairStr, None, creditsAutoRepairPremStr, None))
             autoLoadCost = sourceData['autoLoadCost']
             if autoLoadCost is None:
                 autoLoadCost = (0, 0)
             creditsAutoLoad, goldAutoLoad = autoLoadCost
-            creditsAutoLoadStr = self.__makeCreditsLabel(-creditsAutoLoad, not isPremium)
-            creditsAutoLoadPremStr = self.__makeCreditsLabel(-creditsAutoLoad, isPremium)
-            goldAutoLoadStr = self.__makeGoldLabel(-goldAutoLoad, not isPremium) if goldAutoLoad else None
-            goldAutoLoadPremStr = self.__makeGoldLabel(-goldAutoLoad, isPremium) if goldAutoLoad else None
+            creditsAutoLoadStr = self.__makeCreditsLabel(-creditsAutoLoad, not isPostBattlePremium)
+            creditsAutoLoadPremStr = self.__makeCreditsLabel(-creditsAutoLoad, isPostBattlePremium)
+            goldAutoLoadStr = self.__makeGoldLabel(-goldAutoLoad, not isPostBattlePremium) if goldAutoLoad else None
+            goldAutoLoadPremStr = self.__makeGoldLabel(-goldAutoLoad, isPostBattlePremium) if goldAutoLoad else None
             creditsData.append(self.__getStatsLine(self.__resultLabel('autoLoad'), creditsAutoLoadStr, goldAutoLoadStr, creditsAutoLoadPremStr, goldAutoLoadPremStr))
             autoEquipCost = sourceData['autoEquipCost']
             if autoEquipCost is None:
                 autoEquipCost = (0, 0)
             creditsAutoEquip, goldAutoEquip = autoEquipCost
-            creditsAutoEquipStr = self.__makeCreditsLabel(-creditsAutoEquip, not isPremium)
-            creditsAutoEquipPremStr = self.__makeCreditsLabel(-creditsAutoEquip, isPremium)
-            goldAutoEquipStr = self.__makeGoldLabel(-goldAutoEquip, not isPremium)
-            goldAutoEquipPremStr = self.__makeGoldLabel(-goldAutoEquip, isPremium)
+            creditsAutoEquipStr = self.__makeCreditsLabel(-creditsAutoEquip, not isPostBattlePremium)
+            creditsAutoEquipPremStr = self.__makeCreditsLabel(-creditsAutoEquip, isPostBattlePremium)
+            goldAutoEquipStr = self.__makeGoldLabel(-goldAutoEquip, not isPostBattlePremium)
+            goldAutoEquipPremStr = self.__makeGoldLabel(-goldAutoEquip, isPostBattlePremium)
             creditsData.append(self.__getStatsLine(self.__resultLabel('autoEquip'), creditsAutoEquipStr, goldAutoEquipStr, creditsAutoEquipPremStr, goldAutoEquipPremStr))
             creditsData.append(self.__getStatsLine())
-            creditsWithoutPremTotalStr = self.__makeCreditsLabel(creditsWithoutPremTotal - creditsAutoRepair - creditsAutoEquip - creditsAutoLoad, not isPremium)
-            creditsWithPremTotalStr = self.__makeCreditsLabel(creditsWithPremTotal - creditsAutoRepair - creditsAutoEquip - creditsAutoLoad, isPremium)
+            creditsWithoutPremTotalStr = self.__makeCreditsLabel(creditsWithoutPremTotal - creditsAutoRepair - creditsAutoEquip - creditsAutoLoad, not isPostBattlePremium and not hasViolation)
+            creditsWithPremTotalStr = self.__makeCreditsLabel(creditsWithPremTotal - creditsAutoRepair - creditsAutoEquip - creditsAutoLoad, isPostBattlePremium and not hasViolation)
             if vehIntCD is not None:
                 _, personalDataRecord = findFirst(lambda (vId, d): vId == vehIntCD, personalData, (None, None))
                 if personalDataRecord is not None:
                     personalDataRecord['pureCreditsReceived'] = (creditsWithPremTotal if isPremium else creditsWithoutPremTotal) - creditsAutoRepair - creditsAutoEquip - creditsAutoLoad
-            goldTotalStr = self.__makeGoldLabel(eventGold - goldAutoEquip - goldAutoLoad, not isPremium)
-            goldTotalPremStr = self.__makeGoldLabel(eventGold - goldAutoEquip - goldAutoLoad, isPremium)
+            goldTotalStr = self.__makeGoldLabel(eventGold - goldAutoEquip - goldAutoLoad, not isPostBattlePremium and not hasViolation)
+            goldTotalPremStr = self.__makeGoldLabel(eventGold - goldAutoEquip - goldAutoLoad, isPostBattlePremium and not hasViolation)
             totalLbl = makeHtmlString('html_templates:lobby/battle_results', 'lightText', {'value': self.__resultLabel('total')})
             creditsData.append(self.__getStatsLine(totalLbl, creditsWithoutPremTotalStr, goldTotalStr, creditsWithPremTotalStr, goldTotalPremStr))
             vehsCreditsData.append(creditsData)
             xpData = []
             achievementXP = int(sourceData['achievementXP'])
             achievementFreeXP = sourceData['achievementFreeXP']
-            xpPenalty = int(self.__calculateBaseXpPenalty(sourceData, aogasFactor, dailyXpFactor, premXpFactor, igrXpFactor, isPremium))
+            xpPenalty = int(sourceData.get('xpPenaltyBase', 0))
             xpBase = int(sourceData['originalXP'])
-            xpCell = xpBase - achievementXP + xpPenalty
-            xpCellPrem = int(xpCell * premXpFactor)
-            xpCellStr = self.__makeXpLabel(xpCell, not isPremium)
-            xpCellPremStr = self.__makeXpLabel(xpCellPrem, isPremium)
+            xpCell = xpBase - achievementXP
+            xpCellPrem = int(round(xpCell * premXpFactor))
+            dailyXP = sourceData['dailyXP']
+            dailyXPCell = dailyXP - achievementXP
+            dailyXPCellPrem = int(round(dailyXPCell * premXpFactor))
+            xpCellStr = self.__makeXpLabel(xpCell, not isPostBattlePremium)
+            xpCellPremStr = self.__makeXpLabel(xpCellPrem, isPostBattlePremium)
             freeXpBase = sourceData['originalFreeXP']
-            freeXpBaseStr = self.__makeFreeXpLabel(freeXpBase - achievementFreeXP, not isPremium)
-            freeXpBasePremStr = self.__makeFreeXpLabel(int((freeXpBase - achievementFreeXP) * premXpFactor), isPremium)
-            xpNoPremValues.append(self.__makeXpLabel(xpCell * igrXpFactor * dailyXpFactor, not isPremium))
-            xpPremValues.append(self.__makeXpLabel(xpCellPrem * igrXpFactor * dailyXpFactor, isPremium))
-            if 'xpStr' not in personalDataOutput and 'creditsStr' not in personalDataOutput:
-                if fairPlayViolationName is not None:
-                    personalDataOutput['xpStr'] = 0
-                    personalDataOutput['creditsStr'] = 0
-                else:
-                    personalDataOutput['xpStr'] = BigWorld.wg_getIntegralFormat((xpCellPrem if isPremium else xpCell) * igrXpFactor * dailyXpFactor)
-                    personalDataOutput['creditsStr'] = BigWorld.wg_getIntegralFormat(creditsCellPrem if isPremium else creditsCell)
+            dailyFreeXP = sourceData['dailyFreeXP']
+            freeXpBaseStr = self.__makeFreeXpLabel(freeXpBase - achievementFreeXP, not isPostBattlePremium)
+            freeXpBasePremStr = self.__makeFreeXpLabel(int(round((freeXpBase - achievementFreeXP) * premXpFactor)), isPostBattlePremium)
             medals = sourceData['dossierPopUps']
             if RECORD_DB_IDS[('max15x15', 'maxXP')] in map(lambda (id, value): id, medals):
                 label = makeHtmlString('html_templates:lobby/battle_results', 'xpRecord', {})
@@ -546,14 +593,13 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
                 label = self.__resultLabel('base')
             xpData.append(self.__getStatsLine(label, xpCellStr, freeXpBaseStr, xpCellPremStr, freeXpBasePremStr))
             if isNoPenalty:
-                xpData.append(self.__getStatsLine(self.__resultLabel('noPenalty'), self.__makeXpLabel(achievementXP, not isPremium), self.__makeFreeXpLabel(achievementFreeXP, not isPremium), self.__makeXpLabel(int(achievementXP * premXpFactor), isPremium), self.__makeFreeXpLabel(int(achievementFreeXP * premXpFactor), isPremium)))
+                xpData.append(self.__getStatsLine(self.__resultLabel('noPenalty'), self.__makeXpLabel(achievementXP, not isPostBattlePremium), self.__makeFreeXpLabel(achievementFreeXP, not isPostBattlePremium), self.__makeXpLabel(int(round(achievementXP * premXpFactor)), isPostBattlePremium), self.__makeFreeXpLabel(int(round(achievementFreeXP * premXpFactor)), isPostBattlePremium)))
             if fairPlayViolationName is not None:
                 penaltyXPVal = self.__makePercentLabel(int(-100))
                 xpData.append(self.__getStatsLine(self.__resultLabel('fairPlayViolation/' + fairPlayViolationName), penaltyXPVal, penaltyXPVal, penaltyXPVal, penaltyXPVal))
-            if not isFallout:
-                xpPenaltyStr = self.__makeXpLabel(-xpPenalty, not isPremium)
-                xpPenaltyPremStr = self.__makeXpLabel(int(-xpPenalty * premXpFactor), isPremium)
-                xpData.append(self.__getStatsLine(self.__resultLabel('friendlyFirePenalty'), xpPenaltyStr, None, xpPenaltyPremStr, None))
+            xpPenaltyStr = self.__makeXpLabel(-xpPenalty, not isPostBattlePremium)
+            xpPenaltyPremStr = self.__makeXpLabel(int(round(-xpPenalty * premXpFactor)), isPostBattlePremium)
+            xpData.append(self.__getStatsLine(self.__resultLabel('friendlyFirePenalty'), xpPenaltyStr, None, xpPenaltyPremStr, None))
             if igrXpFactor > 1:
                 icon = makeHtmlString('html_templates:igr/iconSmall', 'premium' if igrType == IGR_TYPE.PREMIUM else 'basic')
                 igrBonusLabelStr = i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_IGRBONUS, igrIcon=icon)
@@ -567,38 +613,40 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             boosterFreeXP = self.__calculateBaseParam('boosterFreeXP', sourceData, premXpFactor, isPremium)
             boosterFreeXPPrem = self.__calculateParamWithPrem('boosterFreeXP', sourceData, premXpFactor, isPremium)
             if boosterXP > 0 or boosterFreeXP > 0:
-                boosterXPStr = self.__makeXpLabel(boosterXP, not isPremium) if boosterXP else None
-                boosterXPPremStr = self.__makeXpLabel(boosterXPPrem, isPremium) if boosterXPPrem else None
-                boosterFreeXPStr = self.__makeFreeXpLabel(boosterFreeXP, not isPremium) if boosterFreeXP else None
-                boosterFreeXPPremStr = self.__makeFreeXpLabel(boosterFreeXPPrem, isPremium) if boosterFreeXPPrem else None
+                boosterXPStr = self.__makeXpLabel(boosterXP, not isPostBattlePremium) if boosterXP else None
+                boosterXPPremStr = self.__makeXpLabel(boosterXPPrem, isPostBattlePremium) if boosterXPPrem else None
+                boosterFreeXPStr = self.__makeFreeXpLabel(boosterFreeXP, not isPostBattlePremium) if boosterFreeXP else None
+                boosterFreeXPPremStr = self.__makeFreeXpLabel(boosterFreeXPPrem, isPostBattlePremium) if boosterFreeXPPrem else None
                 xpData.append(self.__getStatsLine(self.__resultLabel('boosters'), boosterXPStr, boosterFreeXPStr, boosterXPPremStr, boosterFreeXPPremStr))
             orderXP = self.__calculateBaseParam('orderXP', sourceData, premXpFactor, isPremium)
             orderXPPrem = self.__calculateParamWithPrem('orderXP', sourceData, premXpFactor, isPremium)
             if orderXP > 0:
-                orderXPStr = self.__makeXpLabel(orderXP, not isPremium) if orderXP else None
-                orderXPPremStr = self.__makeXpLabel(orderXPPrem, isPremium) if orderXPPrem else None
+                orderXPStr = self.__makeXpLabel(orderXP, not isPostBattlePremium) if orderXP else None
+                orderXPPremStr = self.__makeXpLabel(orderXPPrem, isPostBattlePremium) if orderXPPrem else None
                 xpData.append(self.__getStatsLine(self.__resultLabel('tacticalTraining'), orderXPStr, None, orderXPPremStr, None))
             orderFreeXP = self.__calculateBaseParam('orderFreeXP', sourceData, premXpFactor, isPremium)
             orderFreeXPPrem = self.__calculateParamWithPrem('orderFreeXP', sourceData, premXpFactor, isPremium)
             if orderFreeXP > 0:
-                orderFreeXPStr = self.__makeFreeXpLabel(orderFreeXP, not isPremium) if orderFreeXP else None
-                orderFreeXPPremStr = self.__makeFreeXpLabel(orderFreeXPPrem, isPremium) if orderFreeXPPrem else None
+                orderFreeXPStr = self.__makeFreeXpLabel(orderFreeXP, not isPostBattlePremium) if orderFreeXP else None
+                orderFreeXPPremStr = self.__makeFreeXpLabel(orderFreeXPPrem, isPostBattlePremium) if orderFreeXPPrem else None
                 xpData.append(self.__getStatsLine(self.__resultLabel('militaryManeuvers'), None, orderFreeXPStr, None, orderFreeXPPremStr))
-            eventXP = sourceData['eventXP']
-            eventFreeXP = sourceData['eventFreeXP']
+            eventXP = self.__calculateBaseParam('eventXP', sourceData, premXpFactor, isPremium)
+            eventXPPrem = self.__calculateParamWithPrem('eventXP', sourceData, premXpFactor, isPremium)
+            eventFreeXP = self.__calculateBaseParam('eventFreeXP', sourceData, premXpFactor, isPremium)
+            eventFreeXPPrem = self.__calculateParamWithPrem('eventFreeXP', sourceData, premXpFactor, isPremium)
             if eventXP > 0 or eventFreeXP > 0:
-                eventXPStr = self.__makeXpLabel(eventXP, not isPremium)
-                eventXPPremStr = self.__makeXpLabel(eventXP, isPremium)
-                eventFreeXPStr = self.__makeFreeXpLabel(eventFreeXP, not isPremium)
-                eventFreeXPPremStr = self.__makeFreeXpLabel(eventFreeXP, isPremium)
+                eventXPStr = self.__makeXpLabel(eventXP, not isPostBattlePremium)
+                eventXPPremStr = self.__makeXpLabel(eventXPPrem, isPostBattlePremium)
+                eventFreeXPStr = self.__makeFreeXpLabel(eventFreeXP, not isPostBattlePremium)
+                eventFreeXPPremStr = self.__makeFreeXpLabel(eventFreeXPPrem, isPostBattlePremium)
                 xpData.append(self.__getStatsLine(self.__resultLabel('event'), eventXPStr, eventFreeXPStr, eventXPPremStr, eventFreeXPPremStr))
             if refSystemFactor > 1:
                 refSysXpValue = xpBase * igrXpFactor * refSystemFactor
                 refSysFreeXpValue = freeXpBase * refSystemFactor
-                refSysXPStr = self.__makeXpLabel(refSysXpValue, not isPremium)
-                refSysFreeXPStr = self.__makeFreeXpLabel(refSysFreeXpValue, not isPremium)
-                refSysXPPremStr = self.__makeXpLabel(refSysXpValue * premXpFactor, isPremium)
-                refSysFreeXPPremStr = self.__makeFreeXpLabel(refSysFreeXpValue * premXpFactor, isPremium)
+                refSysXPStr = self.__makeXpLabel(refSysXpValue, not isPostBattlePremium)
+                refSysFreeXPStr = self.__makeFreeXpLabel(refSysFreeXpValue, not isPostBattlePremium)
+                refSysXPPremStr = self.__makeXpLabel(round(refSysXpValue * premXpFactor), isPostBattlePremium)
+                refSysFreeXPPremStr = self.__makeFreeXpLabel(round(refSysFreeXpValue * premXpFactor), isPostBattlePremium)
                 xpData.append(self.__getStatsLine(self.__resultLabel('referralBonus'), refSysXPStr, refSysFreeXPStr, refSysXPPremStr, refSysFreeXPPremStr))
             premiumVehicleXP = sourceData['premiumVehicleXP']
             if premiumVehicleXP > 0:
@@ -609,12 +657,39 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
                 xpData.append(self.__getStatsLine())
             if len(xpData) < 7:
                 xpData.append(self.__getStatsLine())
-            xpTotal = self.__makeXpLabel(self.__calculateTotalXp(sourceData, aogasFactor, dailyXpFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, xpBase, orderXP, boosterXP, eventXP, hasViolation), not isPremium)
-            xpPremTotal = self.__makeXpLabel(self.__calculateTotalXp(sourceData, aogasFactor, dailyXpFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, xpBase, orderXP, boosterXP, eventXP, hasViolation, True), isPremium)
-            freeXpTotal = self.__makeFreeXpLabel(self.__calculateTotalFreeXp(sourceData, aogasFactor, dailyXpFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, freeXpBase, orderFreeXP, boosterFreeXP, eventFreeXP, hasViolation), not isPremium)
-            freeXpPremTotal = self.__makeFreeXpLabel(self.__calculateTotalFreeXp(sourceData, aogasFactor, dailyXpFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, freeXpBase, orderFreeXP, boosterFreeXP, eventFreeXP, hasViolation, True), isPremium)
+            xpWithoutPremTotal = self.__calculateTotalXp(sourceData, aogasFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, xpBase, dailyXP, xpPenalty, orderXP, boosterXP, eventXP, hasViolation, False)
+            xpTotal = self.__makeXpLabel(xpWithoutPremTotal, not isPostBattlePremium and not hasViolation)
+            xpWithPremTotal = self.__calculateTotalXp(sourceData, aogasFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, xpBase, dailyXP, xpPenalty, orderXP, boosterXP, eventXP, hasViolation, True)
+            xpPremTotal = self.__makeXpLabel(xpWithPremTotal, isPostBattlePremium and not hasViolation)
+            freeXpTotal = self.__makeFreeXpLabel(self.__calculateTotalFreeXp(sourceData, aogasFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, freeXpBase, dailyFreeXP, orderFreeXP, boosterFreeXP, eventFreeXP, hasViolation, False), not isPostBattlePremium and not hasViolation)
+            freeXpPremTotal = self.__makeFreeXpLabel(self.__calculateTotalFreeXp(sourceData, aogasFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, freeXpBase, dailyFreeXP, orderFreeXP, boosterFreeXP, eventFreeXP, hasViolation, True), isPostBattlePremium and not hasViolation)
             xpData.append(self.__getStatsLine(totalLbl, xpTotal, freeXpTotal, xpPremTotal, freeXpPremTotal))
             vehsXPData.append(xpData)
+            if 'xpStr' not in personalDataOutput and 'creditsStr' not in personalDataOutput:
+                if fairPlayViolationName is not None:
+                    personalDataOutput['xpStr'] = 0
+                    personalDataOutput['creditsStr'] = 0
+                else:
+                    showPremium = isPremium or isPostBattlePremium
+                    personalDataOutput['xpStr'] = BigWorld.wg_getIntegralFormat(xpWithPremTotal if showPremium else xpWithoutPremTotal)
+                    personalDataOutput['creditsStr'] = BigWorld.wg_getIntegralFormat(creditsCellPrem if showPremium else creditsCell)
+            showDiffs = False
+            personalDataOutput['hasGetPremBtn'] = False
+            creditsDiff = creditsWithPremTotal - creditsWithoutPremTotal
+            xpDiff = xpWithPremTotal - xpWithoutPremTotal
+            self.__premiumBonusesDiff = {'xpDiff': xpDiff,
+             'creditDiff': creditsDiff}
+            if g_lobbyContext.getServerSettings().isPremiumInPostBattleEnabled() and not isPremium and not g_itemsCache.items.stats.isPremium and commonData.get('bonusType', 0) == ARENA_BONUS_TYPE.REGULAR and xpDiff > 0 and creditsDiff > 0:
+                personalDataOutput['getPremVO'] = {'arenaUniqueID': self.dataProvider.getArenaUniqueID(),
+                 'creditsDiff': creditsDiff,
+                 'xpDiff': xpDiff}
+                showDiffs = True
+                personalDataOutput['hasGetPremBtn'] = True
+            valString = xpWithPremTotal if not showDiffs else xpDiff
+            xpNoPremValues.append(self.__makeXpLabel(xpWithoutPremTotal, not isPostBattlePremium))
+            xpPremValues.append(self.__makeXpLabel(valString, isPostBattlePremium, showDiffs))
+            valString = creditsCellPrem if not showDiffs else creditsDiff
+            creditsPremValues.append(self.__makeCreditsLabel(valString, isPostBattlePremium, showDiffs))
 
         personalDataOutput['creditsData'] = vehsCreditsData
         personalDataOutput['xpData'] = vehsXPData
@@ -625,30 +700,34 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             orderFortResource = personalCommonData.get('orderFortResource', 0) if clanDBID else 0
             baseResValue = resValue - orderFortResource
             personalDataOutput['fortResourceTotal'] = baseResValue
-            resValues.append(self.__makeResourceLabel(baseResValue, not isPremium) if clanDBID else '-')
-            resPremValues.append(self.__makeResourceLabel(baseResValue, isPremium) if clanDBID else '-')
+            resValues.append(self.__makeResourceLabel(baseResValue, not isPostBattlePremium) if clanDBID else '-')
+            resPremValues.append(self.__makeResourceLabel(baseResValue, isPostBattlePremium) if clanDBID else '-')
             resData = []
-            resData.append(self.__getStatsLine(self.__resultLabel('base'), None, self.__makeResourceLabel(baseResValue, not isPremium), None, self.__makeResourceLabel(baseResValue, isPremium)))
+            resData.append(self.__getStatsLine(self.__resultLabel('base'), None, self.__makeResourceLabel(baseResValue, not isPostBattlePremium), None, self.__makeResourceLabel(baseResValue, isPostBattlePremium)))
             if orderFortResource:
-                resData.append(self.__getStatsLine(self.__resultLabel('heavyTrucks'), None, self.__makeResourceLabel(orderFortResource, not isPremium), None, self.__makeResourceLabel(orderFortResource, isPremium)))
+                resData.append(self.__getStatsLine(self.__resultLabel('heavyTrucks'), None, self.__makeResourceLabel(orderFortResource, not isPostBattlePremium), None, self.__makeResourceLabel(orderFortResource, isPostBattlePremium)))
             if len(resData) > 1:
                 resData.append(self.__getStatsLine())
-            resData.append(self.__getStatsLine(self.__resultLabel('total'), None, self.__makeResourceLabel(resValue, not isPremium), None, self.__makeResourceLabel(resValue, isPremium)))
+            resData.append(self.__getStatsLine(self.__resultLabel('total'), None, self.__makeResourceLabel(resValue, not isPostBattlePremium), None, self.__makeResourceLabel(resValue, isPostBattlePremium)))
             personalDataOutput['resourceData'] = resData
         return
 
-    def __buildPersonalDataSource(self, personalData, commonData, isFallout):
+    def __buildPersonalDataSource(self, personalData, isFallout):
         totalData = {}
         personaDataSource = [(None, totalData)]
         for vehIntCD, pData in personalData:
             data = {}
-            for k, (d, func) in CUMULATIVE_ACCOUNT_DATA.iteritems():
-                if isFallout and k in FALLOUT_EXCLUDE_ACCOUNT_STATS:
-                    continue
-                v = pData.get(k, d)
+            for k, (d, func) in CUMULATIVE_ACCOUNT_DATA:
+                if k in RELATED_ACCOUNT_DATA:
+                    v = RELATED_ACCOUNT_DATA[k](pData, data)
+                else:
+                    v = pData.get(k, d)
                 data[k] = v
-                totalData.setdefault(k, d)
-                totalData[k] = func(totalData[k], v)
+                if func is not None:
+                    totalData.setdefault(k, d)
+                    totalData[k] = func(totalData[k], v)
+                else:
+                    totalData[k] = d
 
             personaDataSource.append((vehIntCD, data))
 
@@ -921,18 +1000,20 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
          'value': i18n.makeString('#item_types:tankman/roles/{0}'.format(key))})
 
     @classmethod
-    def __populateResultStrings(cls, commonData, pData, commonDataOutput, isFallout):
+    def __populateResultStrings(cls, commonData, pData, commonDataOutput, isFallout, isMultiTeamMode):
         bonusType = commonData.get('bonusType', 0)
         winnerTeam = commonData.get('winnerTeam', 0)
         finishReason = commonData.get('finishReason', 0)
         if not winnerTeam:
             status = 'tie'
-            if isFallout:
+            if isMultiTeamMode and isFallout:
                 status = 'ended'
         elif winnerTeam == pData.get('team'):
             status = 'win'
         else:
             status = 'lose'
+            if isMultiTeamMode and isFallout:
+                status = 'ended'
 
         def _finishReasonFormatter(formatter, **kwargs):
             if finishReason == 1:
@@ -959,22 +1040,25 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
         if not isFallout:
             commonDataOutput['finishReasonStr'] = _frFormatter()
         else:
-            resultTemplate = '#battle_results:fallout/%s' % status
-            if status != 'ended':
+            falloutSubMode = 'multiteam' if isMultiTeamMode else 'classic'
+            resultTemplate = '#battle_results:fallout/{submode}/{status}'.format(submode=falloutSubMode, status=status)
+            if status != 'tie' and status != 'ended':
                 finishReasonStr = 'points'
                 if finishReason == FR.WIN_POINTS_CAP:
                     finishReasonStr = 'cap'
+                elif finishReason == FR.EXTERMINATION:
+                    finishReasonStr = 'extermination'
                 resultTemplate += '/' + finishReasonStr
             commonDataOutput['finishReasonStr'] = i18n.makeString(resultTemplate)
         commonDataOutput['resultStr'] = RESULT_.format(status)
         return
 
-    def __populateTankSlot(self, commonDataOutput, pData, pCommonData):
+    def __populateTankSlot(self, commonDataOutput, pData, pCommonData, isFallout):
         vehsData = []
         playerNameData = self.__getPlayerName(pCommonData.get('accountDBID', None))
         commonDataOutput['playerNameStr'], commonDataOutput['clanNameStr'], commonDataOutput['regionNameStr'], _ = playerNameData[1]
         commonDataOutput['playerFullNameStr'] = playerNameData[0]
-        if len(pData) > 1:
+        if len(pData) > 1 or isFallout:
             vehsData.append({'vehicleName': i18n.makeString(BATTLE_RESULTS.ALLVEHICLES),
              'tankIcon': RES_ICONS.MAPS_ICONS_LIBRARY_FALLOUTVEHICLESALL})
         for vehTypeCompDescr, data in pData:
@@ -1030,10 +1114,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
         createTime = time_utils.makeLocalServerTime(createTime)
         commonDataOutput['arenaCreateTimeStr'] = BigWorld.wg_getShortDateFormat(createTime) + ' ' + BigWorld.wg_getShortTimeFormat(createTime)
         commonDataOutput['arenaCreateTimeOnlyStr'] = BigWorld.wg_getShortTimeFormat(createTime)
-        arenaIcon = arenaType.geometryName
-        if isFallout and arenaType.gameplayName.startswith('fallout'):
-            arenaIcon += '_fallout'
-        commonDataOutput['arenaIcon'] = ARENA_SCREEN_FILE.format(arenaIcon)
+        commonDataOutput['arenaIcon'] = getArenaIcon(ARENA_SCREEN_FILE, arenaType, arenaGuiType)
         duration = commonData.get('duration', 0)
         minutes = int(duration / 60)
         seconds = int(duration % 60)
@@ -1046,8 +1127,6 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             commonDataOutput['playerKilled'] = i18n.makeString(TIME_DURATION_STR, minutes, seconds)
         commonDataOutput['timeStats'] = []
         for key in TIME_STATS_KEYS:
-            if isFallout and key in FALLOUT_EXCLUDE_ACCOUNT_STATS:
-                continue
             commonDataOutput['timeStats'].append({'label': i18n.makeString(TIME_STATS_KEY_BASE.format(key)),
              'value': commonDataOutput[key]})
 
@@ -1079,7 +1158,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             val = makeHtmlString('html_templates:lobby/battle_results', 'empty_stat_value', {'value': val})
         return val
 
-    def __populateTeamsData(self, pCommonData, playersData, commonData, commonDataOutput, isFallout, isMultiTeamMode):
+    def __populateTeamsData(self, pCommonData, playersData, commonData, commonDataOutput, avatarsData, isFallout, isMultiTeamMode):
         squads = defaultdict(dict)
         stat = defaultdict(list)
         teamsScore = defaultdict(int)
@@ -1093,6 +1172,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
         enemyTeams = allTeams - {playerTeam}
         bonusType = self.dataProvider.getArenaBonusType()
         winnerTeam = commonData.get('winnerTeam', 0)
+        finishReason = commonData.get('finishReason', 0)
         playerNamePosition = bonusType in (ARENA_BONUS_TYPE.FORT_BATTLE, ARENA_BONUS_TYPE.CYBERSPORT, ARENA_BONUS_TYPE.RATED_CYBERSPORT)
         isPlayerObserver = isVehicleObserver(pCommonData.get('typeCompDescr', 0))
         fairPlayViolationName = self.__getFairPlayViolationName(pCommonData)
@@ -1111,26 +1191,26 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
 
                 scorePatterns.append(i18n.makeString(TOOLTIPS.BATTLERESULTS_VICTORYSCOREDESCRIPTION_POINTSPATTERN, pointsFlag=', '.join(costFlagTextPatterns)))
             tooltipText = i18n.makeString(TOOLTIPS.BATTLERESULTS_VICTORYSCOREDESCRIPTION_BODY, scorePattern=';\n'.join(scorePatterns))
+            isExtermination = finishReason == FR.EXTERMINATION
+            playerVictory = playerTeam == winnerTeam
+            enemyVictory = winnerTeam in enemyTeams
+            alliesSpecialStatus = BATTLE_RESULTS.EXTERMINATIONVICTORY_ALLIES if playerVictory and isExtermination else ''
+            enemiesSpecialStatus = BATTLE_RESULTS.EXTERMINATIONVICTORY_ENEMIES if enemyVictory and isExtermination else ''
             commonDataOutput['victoryScore'] = [{'score': 0,
-              'victory': playerTeam == winnerTeam,
-              'tooltip': tooltipText}, {'score': 0,
-              'victory': winnerTeam in enemyTeams,
-              'tooltip': tooltipText}]
-
-        def comparator(x, y):
-            xIntCD = x.get('typeCompDescr', None)
-            yIntCD = y.get('typeCompDescr', None)
-            xVeh = g_itemsCache.items.getItemByCD(xIntCD)
-            yVeh = g_itemsCache.items.getItemByCD(yIntCD)
-            return cmp(xVeh, yVeh)
-
+              'victory': playerVictory,
+              'tooltip': tooltipText,
+              'specialStatusStr': alliesSpecialStatus}, {'score': 0,
+              'victory': enemyVictory,
+              'tooltip': tooltipText,
+              'specialStatusStr': enemiesSpecialStatus}]
         isInfluencePointsAvailable = True
         teamResource = 0
         teamInfluence = 0
         for pId, pInfo in playersData.iteritems():
-            vehsData = sorted(self.dataProvider.getVehiclesData(pId), comparator)
+            vehsData = self.dataProvider.getVehiclesData(pId)
             vId = self.dataProvider.getVehicleID(pId)
             row = {'vehicleId': vId}
+            isSelf = playerDBID == pId
             damageAssisted = []
             totalDamageAssisted = 0
             statValues = []
@@ -1144,7 +1224,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
                 totalDamageAssisted += assisted
                 xp += data.get('xp', 0) - data.get('achievementXP', 0)
                 damageDealt += data.get('damageDealt', 0)
-                statValues.append(self.__populateStatValues(data, isFallout, True))
+                statValues.append(self.__populateStatValues(data, isFallout, isSelf))
                 achievementsData += data.get('achievements', [])
                 for k, (d, func) in CUMULATIVE_STATS_DATA.iteritems():
                     if isFallout and k in FALLOUT_EXCLUDE_VEHICLE_STATS:
@@ -1158,18 +1238,22 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             damageAssisted.insert(0, totalDamageAssisted)
             totalStatValues['damageAssisted'] = totalDamageAssisted
             row['kills'] = kills = totalStatValues['kills']
-            teamKills = 0
-            if not isFallout:
-                row['tkills'] = teamKills = totalStatValues['tkills']
+            row['tkills'] = teamKills = totalStatValues['tkills']
             row['realKills'] = kills - teamKills
             row['xp'] = xp
             row['damageDealt'] = damageDealt
-            statValues.insert(0, self.__populateStatValues(totalStatValues, isFallout, True))
+            if pId in avatarsData:
+                curAvatarData = avatarsData[pId]
+                self.__addOrderDataToTotalValue(avatarsData[pId], totalStatValues)
+                row['damageDealt'] += curAvatarData['damageDealt']
+                row['kills'] += curAvatarData['kills']
+                row['realKills'] += curAvatarData['kills']
+            statValues.insert(0, self.__populateStatValues(totalStatValues, isFallout, isSelf))
             row['statValues'] = statValues
             vehs = []
             vInfo = vehsData[0]
             team = pInfo['team']
-            if len(vehsData) > 1:
+            if len(vehsData) > 1 or isFallout:
                 vehs.append({'label': i18n.makeString(BATTLE_RESULTS.ALLVEHICLES),
                  'icon': RES_ICONS.MAPS_ICONS_LIBRARY_FALLOUTVEHICLESALL})
                 for vInfo in vehsData:
@@ -1265,7 +1349,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
                 else:
                     teamIdx = 0 if team == playerTeam else 1
                     commonDataOutput['victoryScore'][teamIdx]['score'] += playerScore
-            row['isSelf'] = playerDBID == pId
+            row['isSelf'] = isSelf
             prebattleID = pInfo.get('prebattleID', 0)
             row['prebattleID'] = prebattleID
             if playerDBID == pId:
@@ -1329,63 +1413,63 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             map(lambda teamID: team2.extend(stat[teamID]), enemyTeams)
         return (team1, team2)
 
-    def __calculateBaseXpPenalty(self, pData, aogasFactor, dailyXpFactor, premXpFactor, igrXpFactor, isPremium):
-        if not aogasFactor:
-            return 0
-        xpPenalty = pData.get('xpPenalty', 0)
-        xpPenalty = math.ceil(int(xpPenalty / aogasFactor) / dailyXpFactor)
-        if isPremium:
-            xpPenalty = math.ceil(xpPenalty / premXpFactor)
-        if igrXpFactor:
-            xpPenalty = math.ceil(xpPenalty / igrXpFactor)
-        return xpPenalty
+    def __addOrderDataToTotalValue(self, avatarData, resultDict):
+        if 'damageDealt' in avatarData and 'kills' in avatarData:
+            damageByOrder = avatarData['damageDealt']
+            killsByOrder = avatarData['kills']
+            resultDict['damageDealt'] += damageByOrder
+            resultDict['kills'] += killsByOrder
+            resultDict['damaged'] = avatarData['totalDamaged']
+            resultDict['damagedByOrder'] = avatarData['damaged']
+            resultDict['damageDealtByOrder'] = damageByOrder
+            resultDict['killsByOrder'] = killsByOrder
 
     def __formatDeathsString(self, deathCount, isDead):
         if isDead:
-            return text_styles.critical(str(deathCount))
-        return text_styles.standard(str(deathCount))
+            result = text_styles.critical(str(deathCount))
+        else:
+            result = text_styles.standard(str(deathCount))
+        return result
 
-    def __calculateTotalCredits(self, pData, eventCredits, premCreditsFactor, isPremium, aogasFactor, baseCredits, baseOrderCredits, baseBoosterCredits, creditsToDraw, hasViolation, usePremFactor = False):
+    def __calculateTotalCredits(self, pData, eventCredits, premCreditsFactor, isPremium, aogasFactor, baseCredits, baseOrderCredits, baseBoosterCredits, creditsToDraw, creditsPenalty, creditsCompensation, hasViolation, usePremFactor = False):
         premFactor = premCreditsFactor if usePremFactor else 1.0
         givenCredits = pData['credits']
         credits = int(givenCredits - round(creditsToDraw * premFactor))
         if isPremium != usePremFactor:
             givenCredits = 0
             if not hasViolation:
-                givenCredits = (int(baseCredits * premFactor) + round(baseOrderCredits * premFactor) + round(baseBoosterCredits * premFactor) + eventCredits) * aogasFactor
-            credits = int(givenCredits - round(creditsToDraw * premFactor * aogasFactor))
+                givenCredits = (int(round(baseCredits * premFactor)) + int(round(baseOrderCredits * premFactor)) + int(round(baseBoosterCredits * premFactor)) + int(round(eventCredits * premFactor))) * aogasFactor
+            credits = int(givenCredits - round(creditsToDraw * premFactor * aogasFactor) - int(round(creditsPenalty * premFactor * aogasFactor)) + int(round(creditsCompensation * premFactor * aogasFactor)))
         return credits
 
-    def __calculateTotalFreeXp(self, pData, aogasFactor, dailyXpFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, baseFreeXp, baseOrderFreeXp, baseBoosterFreeXP, eventFreeXP, hasViolation, usePremFactor = False):
-        if not baseFreeXp:
-            return 0
+    def __calculateTotalFreeXp(self, pData, aogasFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, baseFreeXp, dailyFreeXp, baseOrderFreeXp, baseBoosterFreeXP, eventFreeXP, hasViolation, usePremFactor = False):
         if hasViolation:
             return 0
         freeXP = float(pData['freeXP'])
         if isPremium != usePremFactor:
             premXpFactor = premXpFactor if usePremFactor else 1.0
-            subtotalXp = int(int(baseFreeXp * igrXpFactor) * premXpFactor)
-            resultXp = int(subtotalXp * dailyXpFactor)
+            subtotalXp = int(round(int(round(baseFreeXp * premXpFactor)) * igrXpFactor))
+            resultXp = int(round(int(round(dailyFreeXp * premXpFactor)) * igrXpFactor))
             if abs(refSystemFactor - 1.0) > 0.001:
-                resultXp += int(subtotalXp * refSystemFactor)
-            freeXP = int((resultXp + int(baseOrderFreeXp * premXpFactor) + int(baseBoosterFreeXP * premXpFactor) + eventFreeXP) * aogasFactor)
+                resultXp += int(round(subtotalXp * refSystemFactor))
+            freeXP = int(round((resultXp + int(round(baseOrderFreeXp * premXpFactor)) + int(round(baseBoosterFreeXP * premXpFactor)) + int(round(eventFreeXP * premXpFactor))) * aogasFactor))
         return freeXP
 
-    def __calculateTotalXp(self, pData, aogasFactor, dailyXpFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, baseXp, baseOrderXp, baseBoosterXP, eventXP, hasViolation, usePremFactor = False):
+    def __calculateTotalXp(self, pData, aogasFactor, premXpFactor, igrXpFactor, refSystemFactor, isPremium, baseXp, dailyXP, xpPenalty, baseOrderXp, baseBoosterXP, eventXP, hasViolation, usePremFactor = False):
         if hasViolation:
             return 0
         xp = pData['xp']
         if isPremium != usePremFactor:
             premFactor = premXpFactor if usePremFactor else 1.0
             if isPremium:
-                premiumVehicleXP = pData['premiumVehicleXP'] / premXpFactor
+                premiumVehicleXP = pData['premiumVehicleXP'] / premFactor
             else:
-                premiumVehicleXP = pData['premiumVehicleXP'] * premXpFactor
-            subtotalXp = int(int(baseXp * igrXpFactor) * premFactor)
-            resultXp = int(subtotalXp * dailyXpFactor)
+                premiumVehicleXP = pData['premiumVehicleXP'] * premFactor
+            subtotalXp = int(round(int(round((baseXp - xpPenalty) * premFactor)) * igrXpFactor))
+            resultXp = int(round(int(round(dailyXP * premFactor)) * igrXpFactor))
             if abs(refSystemFactor - 1.0) > 0.001:
-                resultXp += int(subtotalXp * refSystemFactor)
-            xp = int((resultXp + int(baseOrderXp * premFactor) + int(baseBoosterXP * premFactor) + eventXP + premiumVehicleXP) * aogasFactor)
+                resultXp += int(round(subtotalXp * refSystemFactor))
+            xp = int(round(resultXp + int(round(baseOrderXp * premFactor)) + int(round(baseBoosterXP * premFactor)) + int(round(eventXP * premFactor)) + int(round(premiumVehicleXP * aogasFactor))))
         return xp
 
     def __calculateBaseCreditsPenalty(self, pData, isPremium):
@@ -1398,13 +1482,13 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
     def __calculateBaseParam(self, paramKey, pData, premFactor, isPremium):
         paramValue = pData.get(paramKey, 0)
         if isPremium:
-            paramValue = round(paramValue / premFactor)
+            paramValue = int(paramValue / premFactor)
         return paramValue
 
     def __calculateParamWithPrem(self, paramKey, pData, premFactor, isPremium):
         paramValue = pData.get(paramKey, 0)
         if not isPremium:
-            paramValue = int(paramValue * premFactor)
+            paramValue = int(round(paramValue * premFactor))
         return paramValue
 
     def selectVehicle(self, inventoryId):
@@ -1489,17 +1573,15 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             results = None
         LOG_DEBUG('Player got battle results', self.dataProvider, results)
         if results:
-            personalData = results.get('personal', {}).copy()
-            personalCommonData = personalData.values()[0]
+            personalDataSource = results.get('personal', {}).copy()
+            avatarsData = results.pop('avatars', {})
+            personalCommonData = personalDataSource.values()[0]
+            playerID = personalCommonData['accountDBID']
+            personalData = []
+            for vehicleData in self.dataProvider.getVehiclesData(playerID):
+                vehTypeCD = vehicleData['typeCompDescr']
+                personalData.append((vehTypeCD, personalDataSource[vehTypeCD]))
 
-            def comparator(x, y):
-                xIntCD, _ = x
-                yIntCD, _ = y
-                xVeh = g_itemsCache.items.getItemByCD(xIntCD)
-                yVeh = g_itemsCache.items.getItemByCD(yIntCD)
-                return cmp(xVeh, yVeh)
-
-            personalData = sorted(personalData.iteritems(), comparator)
             playersData = results.get('players', {}).copy()
             commonData = results.get('common', {}).copy()
             bonusType = commonData.get('bonusType', 0)
@@ -1554,17 +1636,19 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             damageAssisted.insert(0, totalDamageAssisted)
             personalDataOutput['damageAssisted'] = damageAssisted
             totalStatValues['damageAssisted'] = totalDamageAssisted
+            if playerID in avatarsData:
+                self.__addOrderDataToTotalValue(avatarsData[playerID], totalStatValues)
             statValues.insert(0, self.__populateStatValues(totalStatValues, isFallout, True))
             personalDataOutput['statValues'] = statValues
-            self.__populateResultStrings(commonData, personalCommonData, commonDataOutput, isFallout)
+            self.__populateResultStrings(commonData, personalCommonData, commonDataOutput, isFallout, isMultiTeamMode)
             self.__populatePersonalMedals(personalData, personalDataOutput)
             self.__populateArenaData(commonData, personalCommonData, commonDataOutput, isFallout, isMultiTeamMode, isResource)
             self.__populateAccounting(commonData, personalCommonData, personalData, playersData, personalDataOutput, isFallout)
-            self.__populateTankSlot(commonDataOutput, personalData, personalCommonData)
+            self.__populateTankSlot(commonDataOutput, personalData, personalCommonData, isFallout)
             self.__populateEfficiency(personalData, personalCommonData, playersData, commonData, personalDataOutput)
-            team1, team2 = self.__populateTeamsData(personalCommonData, playersData, commonData, commonDataOutput, isFallout, isMultiTeamMode)
+            team1, team2 = self.__populateTeamsData(personalCommonData, playersData, commonData, commonDataOutput, avatarsData, isFallout, isMultiTeamMode)
             resultingVehicles = []
-            falloutMode = None
+            falloutMode = ''
             if isFallout:
                 if isResource:
                     falloutMode = 'points'
@@ -1574,14 +1658,20 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             commonDataOutput['wasInBattle'] = self.dataProvider.wasInBattle(getAccountDatabaseID())
             if isMultiTeamMode:
                 tabInfo = [{'label': MENU.FINALSTATISTIC_TABS_COMMONSTATS,
-                  'linkage': 'CommonStats'}, {'label': MENU.FINALSTATISTIC_TABS_TEAMSTATS,
-                  'linkage': 'MultiteamStatsUI'}, {'label': MENU.FINALSTATISTIC_TABS_DETAILSSTATS,
-                  'linkage': 'detailsStatsScrollPane'}]
+                  'linkage': 'CommonStats',
+                  'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_TEAMSTATS,
+                  'linkage': 'MultiteamStatsUI',
+                  'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_DETAILSSTATS,
+                  'linkage': 'detailsStatsScrollPane',
+                  'showWndBg': True}]
             else:
                 tabInfo = [{'label': MENU.FINALSTATISTIC_TABS_COMMONSTATS,
-                  'linkage': 'CommonStats'}, {'label': MENU.FINALSTATISTIC_TABS_TEAMSTATS,
-                  'linkage': 'TeamStatsUI'}, {'label': MENU.FINALSTATISTIC_TABS_DETAILSSTATS,
-                  'linkage': 'detailsStatsScrollPane'}]
+                  'linkage': 'CommonStats',
+                  'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_TEAMSTATS,
+                  'linkage': 'TeamStatsUI',
+                  'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_DETAILSSTATS,
+                  'linkage': 'detailsStatsScrollPane',
+                  'showWndBg': True}]
             textData = {'windowTitle': i18n.makeString(MENU.FINALSTATISTIC_WINDOW_TITLE),
              'shareButtonLabel': i18n.makeString(BATTLE_RESULTS.COMMON_RESULTSSHAREBTN),
              'shareButtonTooltip': i18n.makeString(TOOLTIPS.BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN)}
@@ -1625,20 +1715,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
         club_events.showClubProfile(long(teamDBID))
 
     def onResultsSharingBtnPress(self):
-        try:
-            results = self.dataProvider.getResults()
-            arenaUniqueID = self.dataProvider.getArenaUniqueID()
-            common = results['common']
-            personal = results['personal'].values()[0]
-            svrPackedData = results['uniqueSubUrl']
-            clientPackedData = packPostBattleUniqueSubUrl(arenaUniqueID, common['arenaTypeID'], personal['typeCompDescr'], personal['xp'])
-            copyToClipboard(functions.getPostBattleUniqueSubUrl(svrPackedData, clientPackedData))
-            if hasattr(BigWorld.player(), 'cmdPublishBattleResults'):
-                BigWorld.player().cmdPublishBattleResults(svrPackedData, arenaUniqueID)
-            SystemMessages.pushI18nMessage('#system_messages:battleResults/sharing/success', priority=NotificationPriorityLevel.MEDIUM)
-        except:
-            LOG_ERROR('There is error while getting post battle sub url')
-            LOG_CURRENT_EXCEPTION()
+        raise NotImplemented
 
     def _isSharingBtnEnabled(self):
         results = self.dataProvider.getResults()
@@ -1734,3 +1811,18 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef, C
             self.onWindowClose()
         elif unlockType == PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE:
             showPersonalCase(itemId, 2)
+
+    def __onPremiumBought(self, event):
+        arenaUniqueID = event.ctx.get('arenaUniqueID')
+        if arenaUniqueID and arenaUniqueID not in self.__buyPremiumCache:
+            self.__buyPremiumCache.add(arenaUniqueID)
+            if arenaUniqueID == self.dataProvider.getArenaUniqueID():
+                SystemMessages.g_instance.pushI18nMessage('#system_messages:premium/post_battle_premium', type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM, **self.__premiumBonusesDiff)
+                self.__showStats()
+        elif event.ctx.get('becomePremium', False):
+            self.__showStats()
+
+    def __showStats(self):
+        results = self.dataProvider.getResults()
+        self.onWindowClose()
+        showBattleResultsFromData(results)

@@ -2,6 +2,7 @@
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
+from gui.game_control import getFalloutCtrl
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.functional.interfaces import IPrbFunctional, IPreQueueFunctional
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -32,7 +33,7 @@ class NoPreQueueFunctional(IPreQueueFunctional):
         result = False
         if action is not None:
             actionName = action.actionName or _PAN.UNDEFINED
-            if actionName in (_PAN.JOIN_RANDOM_QUEUE, _PAN.UNDEFINED) and g_currentVehicle.item.isOnlyForEventBattles:
+            if actionName in (_PAN.JOIN_RANDOM_QUEUE, _PAN.UNDEFINED) and getFalloutCtrl().isSelected():
                 actionName = _PAN.JOIN_EVENT_BATTLES_QUEUE
             if actionName in self.CREATE_QUEUE_BY_ACTION:
                 queueType, doAction = self.CREATE_QUEUE_BY_ACTION[actionName]

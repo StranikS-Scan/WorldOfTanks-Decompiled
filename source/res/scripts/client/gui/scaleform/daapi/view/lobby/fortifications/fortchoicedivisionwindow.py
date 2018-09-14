@@ -6,8 +6,6 @@ from adisp import process
 from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.meta.FortChoiceDivisionWindowMeta import FortChoiceDivisionWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS
 from gui.prb_control.prb_helpers import prbDispatcherProperty
 from gui.prb_control.items.unit_items import SupportedRosterSettings
@@ -16,7 +14,7 @@ from gui.shared.events import FortEvent
 from gui.shared.formatters.text_styles import main, standard, highTitle
 from gui.prb_control.context import unit_ctx
 
-class FortChoiceDivisionWindow(AbstractWindowView, View, FortChoiceDivisionWindowMeta):
+class FortChoiceDivisionWindow(FortChoiceDivisionWindowMeta):
 
     def __init__(self, ctx = None):
         super(FortChoiceDivisionWindow, self).__init__()
@@ -39,9 +37,8 @@ class FortChoiceDivisionWindow(AbstractWindowView, View, FortChoiceDivisionWindo
         if self.__divisionID is None:
             self.__divisionID = divisionID
             self.fireEvent(FortEvent(FortEvent.CHOICE_DIVISION, ctx={'data': divisionID}), EVENT_BUS_SCOPE.LOBBY)
-        elif divisionID != self.__divisionID:
-            self.__divisionID = divisionID
-            self.sendRequest(unit_ctx.ChangeDivisionCtx(divisionID, 'prebattle/changeDivision'))
+        else:
+            self.changedDivision(divisionID)
         return
 
     def changedDivision(self, divisionID):

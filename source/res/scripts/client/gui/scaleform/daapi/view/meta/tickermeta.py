@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TickerMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class TickerMeta(DAAPIModule):
+class TickerMeta(BaseDAAPIComponent):
 
     def showBrowser(self, entryID):
         self._printOverrideError('showBrowser')

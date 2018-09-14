@@ -45,8 +45,11 @@ class _Dossier(GUIItem):
 
     def isInRoaming(self):
         if not self.isCurrentUser():
-            from gui import game_control
-            return game_control.g_instance.roaming.isInRoaming() or game_control.g_instance.roaming.isPlayerInRoaming(self._playerDBID)
+            from gui.LobbyContext import g_lobbyContext
+            serverSettings = g_lobbyContext.getServerSettings()
+            if serverSettings is not None:
+                roaming = serverSettings.roaming
+                return roaming.isInRoaming() or roaming.isPlayerInRoaming(self._playerDBID)
         return False
 
     def isCurrentUser(self):

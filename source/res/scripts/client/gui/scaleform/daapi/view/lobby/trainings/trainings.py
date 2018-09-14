@@ -6,7 +6,6 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.prb_control.context.prb_ctx import JoinTrainingCtx, LeavePrbCtx
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -18,12 +17,14 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.TrainingFormMeta import TrainingFormMeta
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.Scaleform.locale.MENU import MENU
+from gui.shared.formatters import text_styles
+from helpers import i18n
 
-class Trainings(LobbySubView, AbstractWindowView, TrainingFormMeta, PrbListener):
+class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(Trainings, self).__init__()
-        self.app.component.wg_inputKeyMode = 1
         self.__requester = None
         return
 
@@ -33,6 +34,7 @@ class Trainings(LobbySubView, AbstractWindowView, TrainingFormMeta, PrbListener)
         MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
         MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
         self.addListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self.__createTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.sendData([], 0)
 
     def _dispose(self):
         self.stopPrbListening()
@@ -59,12 +61,12 @@ class Trainings(LobbySubView, AbstractWindowView, TrainingFormMeta, PrbListener)
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onPrbListReceived(self, prebattles):
-        result = []
-        totalPlayersCount = 0
+        listData = []
+        playersTotal = 0
         for item in prebattles:
             arena = ArenaType.g_cache[item.arenaTypeID]
-            totalPlayersCount += item.playersCount
-            result.append({'id': item.prbID,
+            playersTotal += item.playersCount
+            listData.append({'id': item.prbID,
              'comment': item.getCensoredComment(),
              'arena': getArenaFullName(item.arenaTypeID),
              'count': item.playersCount,
@@ -77,7 +79,13 @@ class Trainings(LobbySubView, AbstractWindowView, TrainingFormMeta, PrbListener)
              'icon': formatters.getMapIconPath(arena, prefix='small/'),
              'disabled': not item.isOpened})
 
-        self.as_setListS(result, totalPlayersCount)
+        self.sendData(listData, playersTotal)
+
+    def sendData(self, listData, playersTotal):
+        result = {'listData': listData,
+         'roomsLabel': text_styles.main(i18n.makeString(MENU.TRAINING_ROOMSLABEL, roomsTotal=text_styles.stats(str(len(listData))))),
+         'playersLabel': text_styles.main(i18n.makeString(MENU.TRAINING_PLAYERSLABEL, playersTotal=text_styles.stats(str(playersTotal))))}
+        self.as_setListS(result)
 
     @process
     def joinTrainingRequest(self, prbID):

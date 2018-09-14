@@ -3,6 +3,8 @@ import BigWorld
 import Keys
 import GUI
 from gui.battle_control import g_sessionProvider
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 from helpers import isPlayerAvatar
 from gui.shared.utils.key_mapping import getScaleformKey, BW_TO_SCALEFORM
 from debug_utils import LOG_ERROR
@@ -118,13 +120,17 @@ class RadialMenu(UIInterface):
             list = self.__getDataForFlash(state)
             self.GUICtrl.buildData(list)
 
+        g_eventBus.addListener(GameEvent.RADIAL_MENU_CMD, self.__handleRadialMenuCmd, scope=EVENT_BUS_SCOPE.BATTLE)
+
     def setSettings(self, settings):
         self.__settings = settings
         SHCTS_SECTION = 'shortcuts'
         self.KEYB_MAPPINGS = self.__settings.KEYBOARD_MAPPING_BLOCKS[SHCTS_SECTION]
         self.KEYB_CMDS_MAPPINGS = self.__settings.KEYBOARD_MAPPING_COMMANDS[SHCTS_SECTION]
 
-    def handleKey(self, key, isDown, offset):
+    def __handleRadialMenuCmd(self, event):
+        ctx = event.ctx
+        key, isDown, offset = ctx['key'], ctx['isDown'], ctx['offset']
         cmdMap = CommandMapping.g_instance
         if cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key):
             if isDown:
@@ -274,6 +280,7 @@ class RadialMenu(UIInterface):
         self.__onMenuHide()
 
     def destroy(self):
+        g_eventBus.removeListener(GameEvent.RADIAL_MENU_CMD, self.__handleRadialMenuCmd, scope=EVENT_BUS_SCOPE.BATTLE)
         self.KEYB_MAPPINGS = None
         self.KEYB_CMDS_MAPPINGS = None
         self.__settings = None

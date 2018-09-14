@@ -5,7 +5,6 @@ from collections import namedtuple
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.daapi.view.meta.SlotsPanelMeta import SlotsPanelMeta
-from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
@@ -32,9 +31,9 @@ def _makeEmptySlotVO(slotIdx):
     return _makeSlotVO(ORDER_TYPES.EMPTY_ORDER, slotIdx, orderIcon=RES_ICONS.MAPS_ICONS_ARTEFACT_EMPTYORDER)
 
 
-class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, UnitListener, AppRef):
+class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, UnitListener):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(FortBattleRoomOrdersPanelComponent, self).__init__()
 
     def getSlotTooltipBody(self, orderID):

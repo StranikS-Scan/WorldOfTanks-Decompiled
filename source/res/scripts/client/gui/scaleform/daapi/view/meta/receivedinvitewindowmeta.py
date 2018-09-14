@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ReceivedInviteWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class ReceivedInviteWindowMeta(DAAPIModule):
+class ReceivedInviteWindowMeta(AbstractWindowView):
 
     def acceptInvite(self):
         self._printOverrideError('acceptInvite')

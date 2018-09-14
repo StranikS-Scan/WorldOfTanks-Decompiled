@@ -2,9 +2,9 @@
 import BigWorld
 from helpers import i18n
 from UnitBase import UNIT_OP
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import event_dispatcher
+from gui.shared.formatters import icons, text_styles
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
@@ -12,7 +12,6 @@ from gui.Scaleform.daapi.view.lobby.rally import vo_converters, rally_dps
 from gui.Scaleform.daapi.view.meta.FortRoomMeta import FortRoomMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control import settings
@@ -115,7 +114,7 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.SortieCandidatesLegionariesDP()
-        self._candidatesDP.init(self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
+        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
 
     def rebuildCandidatesDP(self):
         self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
@@ -193,14 +192,13 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         return
 
     def __playersLabel(self, playerCount, limit):
-        concat = ' / ' + str(limit) + ')'
-        currentPlayerColor = TEXT_MANAGER_STYLES.MAIN_TEXT
         if playerCount == 0:
-            currentPlayerColor = TEXT_MANAGER_STYLES.STANDARD_TEXT
-        resultCount = self.app.utilsManager.textManager.concatStyles(((currentPlayerColor, str(playerCount)), (TEXT_MANAGER_STYLES.STANDARD_TEXT, concat)))
-        units = self.app.utilsManager
-        legionariesIcon = units.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE, 16, 16, -4, 0))
-        leftBrace = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, '( ')
+            players = text_styles.standard(str(playerCount))
+        else:
+            players = text_styles.main(str(playerCount))
+        resultCount = ''.join((players, text_styles.standard(' / {0} )'.format(limit))))
+        legionariesIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE, 16, 16, -4, 0)
+        leftBrace = text_styles.standard('( ')
         result = leftBrace + legionariesIcon + resultCount
         return result
 

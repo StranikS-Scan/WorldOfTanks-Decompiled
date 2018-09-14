@@ -66,8 +66,13 @@ def showAwardWindow(award, isUniqueName = True):
 
 
 def showProfileWindow(databaseID, userName):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PROFILE_WINDOW, getViewName(VIEW_ALIAS.PROFILE_WINDOW, databaseID), ctx={'userName': userName,
+    alias = VIEW_ALIAS.PROFILE_WINDOW
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, getViewName(alias, databaseID), ctx={'userName': userName,
      'databaseID': databaseID}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showClanProfileWindow(userID):
+    pass
 
 
 def selectVehicleInHangar(itemCD):
@@ -87,9 +92,8 @@ def showPremiumCongratulationWindow(award):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW), ctx={'award': award}))
 
 
-def showPremiumWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx=None))
-    return
+def showPremiumWindow(arenaUniqueID = 0):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx={'arenaUniqueID': arenaUniqueID}))
 
 
 def showBoostersWindow():

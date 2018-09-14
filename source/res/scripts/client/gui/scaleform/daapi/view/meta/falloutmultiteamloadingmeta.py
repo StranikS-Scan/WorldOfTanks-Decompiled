@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FalloutMultiTeamLoadingMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class FalloutMultiTeamLoadingMeta(DAAPIModule):
+class FalloutMultiTeamLoadingMeta(View):
 
     def as_setProgressS(self, progressValue):
         if self._isDAAPIInited():

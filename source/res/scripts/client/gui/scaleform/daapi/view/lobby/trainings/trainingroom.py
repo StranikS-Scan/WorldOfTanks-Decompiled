@@ -5,8 +5,7 @@ from adisp import process
 from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
-from gui.Scaleform.framework import AppRef, ViewTypes
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -16,7 +15,8 @@ from gui.prb_control.context import prb_ctx
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.prb_helpers import PrbListener
-from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME, FUNCTIONAL_EXIT
+from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
+from gui.prb_control.settings import FUNCTIONAL_EXIT
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import int2roman, i18n
@@ -26,10 +26,12 @@ from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
 from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.Scaleform.locale.MENU import MENU
+from gui.shared.formatters import text_styles
 
-class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, PrbListener):
+class TrainingRoom(LobbySubView, TrainingRoomMeta, PrbListener):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(TrainingRoom, self).__init__()
 
     @storage_getter('users')
@@ -206,11 +208,11 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
 
     def onRostersChanged(self, functional, rosters, full):
         if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
-            self.as_setTeam1S(self.__makeAccountsData(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]))
+            self.as_setTeam1S(self.__makeAccountsData(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1], MENU.TRAINING_INFO_TEAM1LABEL))
         if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in rosters:
-            self.as_setTeam2S(self.__makeAccountsData(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2]))
+            self.as_setTeam2S(self.__makeAccountsData(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2], MENU.TRAINING_INFO_TEAM2LABEL))
         if PREBATTLE_ROSTER.UNASSIGNED in rosters:
-            self.as_setOtherS(self.__makeAccountsData(rosters[PREBATTLE_ROSTER.UNASSIGNED]))
+            self.as_setOtherS(self.__makeAccountsData(rosters[PREBATTLE_ROSTER.UNASSIGNED], MENU.TRAINING_INFO_OTHERLABEL))
         self.__updateStartButton(functional)
 
     def onPlayerStateChanged(self, functional, roster, accountInfo):
@@ -302,14 +304,11 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
 
     def __showRosters(self, functional, rosters):
         accounts = rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]
-        if len(accounts):
-            self.as_setTeam1S(self.__makeAccountsData(accounts))
+        self.as_setTeam1S(self.__makeAccountsData(accounts, MENU.TRAINING_INFO_TEAM1LABEL))
         accounts = rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2]
-        if len(accounts):
-            self.as_setTeam2S(self.__makeAccountsData(accounts))
+        self.as_setTeam2S(self.__makeAccountsData(accounts, MENU.TRAINING_INFO_TEAM2LABEL))
         accounts = rosters[PREBATTLE_ROSTER.UNASSIGNED]
-        if len(accounts):
-            self.as_setOtherS(self.__makeAccountsData(accounts))
+        self.as_setOtherS(self.__makeAccountsData(accounts, MENU.TRAINING_INFO_OTHERLABEL))
         self.__updateStartButton(functional)
 
     def __updateStartButton(self, functional):
@@ -325,8 +324,8 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
         if VIEW_ALIAS.MINIMAP_LOBBY in self.components:
             self.components[VIEW_ALIAS.MINIMAP_LOBBY].swapTeams(team)
 
-    def __makeAccountsData(self, accounts):
-        result = []
+    def __makeAccountsData(self, accounts, label = None):
+        listData = []
         isPlayerSpeaking = self.app.voiceChatManager.isPlayerSpeaking
         accounts = sorted(accounts, cmp=getPlayersComparator())
         getUser = self.usersStorage.getUser
@@ -341,7 +340,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
                 vContourIcon = vehicle.iconContour
                 vShortName = vehicle.shortUserName
                 vLevel = int2roman(vehicle.level)
-            result.append({'accID': account.accID,
+            listData.append({'accID': account.accID,
              'dbID': account.dbID,
              'userName': account.name,
              'fullName': account.getFullName(),
@@ -355,6 +354,10 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
              'region': g_lobbyContext.getRegionCode(account.dbID),
              'igrType': account.igrType})
 
+        if label is not None:
+            label = text_styles.main(i18n.makeString(label, total=text_styles.stats(str(len(listData)))))
+        result = {'listData': listData,
+         'teamLabel': label}
         return result
 
     def __handleSetPrebattleCoolDown(self, event):

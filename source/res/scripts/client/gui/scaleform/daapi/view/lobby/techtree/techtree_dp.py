@@ -1,9 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_dp.py
 from collections import defaultdict
 from constants import IS_DEVELOPMENT
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import GUI_NATIONS_ORDER_INDEX
-from gui.Scaleform.daapi.view.lobby.techtree import TREE_SHARED_REL_FILE_PATH, NATION_TREE_REL_FILE_PATH, makeDefUnlockProps, UnlockProps
+from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_FILE_PATH
+from gui.Scaleform.daapi.view.lobby.techtree.settings import makeDefUnlockProps
+from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items import _xml, vehicles, getTypeOfCompactDescr
 import nations
@@ -352,26 +355,29 @@ class _TechTreeDataProvider(object):
 
         return coordinates
 
-    def load(self, override = None, isReload = False):
-        if self.__loaded and not isReload and override is not None and self.__override == override:
+    def load(self, isReload = False):
+        if self.__loaded and not isReload:
             return False
-        else:
-            if override is not None:
-                self.__override = override
-            self._clear()
-            try:
-                shared = self.__readShared(clearCache=isReload)
-                for nation in self.__availableNations:
-                    info = self.__readNation(shared, nation, clearCache=isReload)
-                    self.__displayInfo.update(info)
+        LOG_DEBUG('Tech tree data is being loaded')
+        self._clear()
+        try:
+            shared = self.__readShared(clearCache=isReload)
+            for nation in self.__availableNations:
+                info = self.__readNation(shared, nation, clearCache=isReload)
+                self.__displayInfo.update(info)
 
-            except _ConfigError as error:
-                LOG_ERROR(error)
-            finally:
-                self.__makeAbsoluteCoordinates()
-                self.__loaded = True
+        except _ConfigError as error:
+            LOG_ERROR(error)
+        finally:
+            self.__makeAbsoluteCoordinates()
+            self.__loaded = True
 
-            return True
+        return True
+
+    def setOverride(self, override = ''):
+        if self.__override != override:
+            self.__override = override
+            self.__loaded = False
 
     def getDisplaySettings(self, nationID):
         try:

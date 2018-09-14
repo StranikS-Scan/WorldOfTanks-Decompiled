@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Crew.py
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.framework import AppRef
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -18,7 +17,7 @@ from gui.shared.utils import decorators, sound
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanEquip
 
-class Crew(CrewMeta, AppRef):
+class Crew(CrewMeta):
 
     def __init__(self):
         super(Crew, self).__init__()

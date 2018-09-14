@@ -20,6 +20,9 @@ from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.prb_control.functional.default import PrbEntry, PrbFunctional, IntroPrbFunctional, PrbRosterRequester
 from gui.prb_control.restrictions.permissions import CompanyPrbPermissions
+from gui.prb_control.context.prb_ctx import LeavePrbCtx
+from gui.prb_control.prb_helpers import prbDispatcherProperty
+from gui.server_events import g_eventsCache
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelCarouselEvent
 from prebattle_shared import decodeRoster
@@ -115,6 +118,7 @@ class CompanyIntroFunctional(IntroPrbFunctional):
         g_eventDispatcher.loadCompany()
         result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_WINDOW)
         g_eventDispatcher.updateUI()
+        g_eventsCache.companies.onCompanyStateChanged += self.onCompanyStateChanged
         return result
 
     def fini(self, clientPrb = None, woEvents = False):
@@ -125,6 +129,15 @@ class CompanyIntroFunctional(IntroPrbFunctional):
             else:
                 g_eventDispatcher.removeCompanyFromCarousel()
             g_eventDispatcher.updateUI()
+        g_eventsCache.companies.onCompanyStateChanged -= self.onCompanyStateChanged
+
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        return None
+
+    def onCompanyStateChanged(self, state):
+        if not state:
+            DialogsInterface.showDialog(self.getConfirmDialogMeta(FUNCTIONAL_EXIT.COMPANY_EXPIRED), self.__companyExpiredCallback)
 
     def canPlayerDoAction(self):
         return (not self._hasEntity, '')
@@ -151,6 +164,11 @@ class CompanyIntroFunctional(IntroPrbFunctional):
 
     def _onPrbRosterReceived(self, prbID, roster):
         self._invokeListeners('onPrbRosterReceived', prbID, roster)
+
+    def __companyExpiredCallback(self, _):
+        ctx = LeavePrbCtx(waitingID='prebattle/leave')
+        if self.prbDispatcher._setRequestCtx(ctx):
+            self.leave(ctx)
 
 
 class CompanyFunctional(PrbFunctional):
@@ -179,7 +197,16 @@ class CompanyFunctional(PrbFunctional):
         result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_PAGE)
         g_eventBus.addListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventDispatcher.updateUI()
+        g_eventsCache.companies.onCompanyStateChanged += self.onCompanyStateChanged
         return result
+
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        return None
+
+    def onCompanyStateChanged(self, state):
+        if not state and not self.hasLockedState():
+            DialogsInterface.showDialog(self.getConfirmDialogMeta(FUNCTIONAL_EXIT.COMPANY_EXPIRED), self.__companyExpiredCallback)
 
     def isGUIProcessed(self):
         return True
@@ -195,6 +222,7 @@ class CompanyFunctional(PrbFunctional):
         else:
             g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.COMPANY)
         g_eventBus.removeListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventsCache.companies.onCompanyStateChanged -= self.onCompanyStateChanged
 
     @vehicleAmmoCheck
     def setPlayerState(self, ctx, callback = None):
@@ -402,3 +430,8 @@ class CompanyFunctional(PrbFunctional):
 
     def __handleCarouselInited(self, _):
         g_eventDispatcher.addCompanyToCarousel()
+
+    def __companyExpiredCallback(self, _):
+        ctx = LeavePrbCtx(waitingID='prebattle/leave')
+        if self.prbDispatcher._setRequestCtx(ctx):
+            self.leave(ctx)

@@ -5,18 +5,20 @@ from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import g_guiResetters
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.techtree.ResearchView import ResearchView
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
-from gui.Scaleform.daapi.view.lobby.techtree import dumpers, SelectedNation, USE_XML_DUMPING
+from gui.Scaleform.daapi.view.lobby.techtree import dumpers
+from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
+from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
 from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 import nations
+from account_helpers.settings_core.settings_constants import TUTORIAL
 _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 768
 _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_768'
 
-class TechTree(ResearchView, TechTreeMeta):
+class TechTree(TechTreeMeta):
 
     def __init__(self, ctx = None):
         if USE_XML_DUMPING and IS_DEVELOPMENT:
@@ -103,6 +105,7 @@ class TechTree(ResearchView, TechTreeMeta):
         if IS_DEVELOPMENT:
             from gui import InputHandler
             InputHandler.g_instance.onKeyUp += self.__handleReloadData
+        self.setupContextHints(TUTORIAL.RESEARCH_TREE)
 
     def _dispose(self):
         g_guiResetters.discard(self.__onUpdateStage)
@@ -112,7 +115,8 @@ class TechTree(ResearchView, TechTreeMeta):
         super(TechTree, self)._dispose()
 
     def __onUpdateStage(self):
-        if g_techTreeDP.load(override=self._getOverride()):
+        g_techTreeDP.setOverride(self._getOverride())
+        if g_techTreeDP.load():
             self.as_refreshNationTreeDataS(SelectedNation.getName())
 
     def __handleReloadData(self, event):

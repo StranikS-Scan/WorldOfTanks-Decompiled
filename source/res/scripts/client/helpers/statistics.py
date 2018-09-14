@@ -115,7 +115,8 @@ class StatisticsCollector:
          GRAPHICS.FLORA_QUALITY,
          GRAPHICS.POST_PROCESSING_QUALITY,
          GRAPHICS.SNIPER_MODE_GRASS_ENABLED,
-         GRAPHICS.VEHICLE_DUST_ENABLED])
+         GRAPHICS.VEHICLE_DUST_ENABLED,
+         GRAPHICS.DRR_AUTOSCALER_ENABLED])
         keys = set(diff.keys())
         if importantSettings & keys:
             self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_GS_MAJOR_CHANGED
@@ -128,8 +129,7 @@ class StatisticsCollector:
          GRAPHICS.MOTION_BLUR_QUALITY,
          GRAPHICS.SEMITRANSPARENT_LEAVES_ENABLED,
          GRAPHICS.VEHICLE_TRACES_ENABLED,
-         GRAPHICS.FPS_PERFOMANCER,
-         GRAPHICS.DRR_AUTOSCALER_ENABLED])
+         GRAPHICS.FPS_PERFOMANCER])
         if otherSettings & keys:
             self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_GS_MINOR_CHANGED
 

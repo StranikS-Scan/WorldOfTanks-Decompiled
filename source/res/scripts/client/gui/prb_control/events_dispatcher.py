@@ -4,13 +4,15 @@ import weakref
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewTypes, AppRef
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.genConsts.FALLOUT_ALIASES import FALLOUT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.app_loader.decorators import sf_lobby
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, utils
 from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
@@ -31,22 +33,29 @@ _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
 _defCarouselItemCtx = _CarouselItemCtx(label=None, canClose=False, isNotified=False, icon=None, order=channel_num_gen.getOrder4Prebattle(), criteria=None, viewType=ViewTypes.WINDOW, openHandler=None, readyData=None, tooltipData=None)
 _LOCKED_SCREENS = (PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY)
 
-class EventDispatcher(AppRef):
+class EventDispatcher(object):
 
     def __init__(self):
         super(EventDispatcher, self).__init__()
         self.__loadingEvent = None
         return
 
+    @sf_lobby
+    def app(self):
+        return None
+
     def init(self, dispatcher):
         self._setPrebattleDispatcher(dispatcher)
-        self.app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
+        app = self.app
+        if app and app.containerManager:
+            app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
 
     def fini(self):
         self._setPrebattleDispatcher(None)
         self.__loadingEvent = None
-        if self.app and self.app.containerManager:
-            self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
+        app = self.app
+        if app and app.containerManager:
+            app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         return
 
     def isTrainingLoaded(self):
@@ -88,7 +97,7 @@ class EventDispatcher(AppRef):
 
     def loadSquad(self, ctx = None, isTeamReady = False):
         self.__addSquadToCarousel(isTeamReady)
-        self.__showSquadWindow(ctx['showInvitesWindow'] if ctx and 'showInvitesWindow' in ctx else False)
+        self.__showSquadWindow(ctx and ctx.get('showInvitesWindow', False))
 
     def loadPreArenaUnit(self, prbType, modeFlags = 0):
         utils.showInvitationInWindowsBar()
@@ -240,6 +249,9 @@ class EventDispatcher(AppRef):
     def showUnitPreArenaWindow(self, prbType, modeFlags = 0):
         self._fireShowEvent(CYBER_SPORT_ALIASES.CS_RESPAWN_PY)
 
+    def showSwitchPeripheryWindow(self, ctx):
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW, ctx=ctx))
+
     def removeUnitFromCarousel(self, prbType):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
         if not clientID:
@@ -308,6 +320,36 @@ class EventDispatcher(AppRef):
          'isShowByReq': False,
          'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def loadFallout(self):
+        from gui.game_control import getFalloutCtrl
+        getFalloutCtrl().setEnabled(True)
+        self.addFalloutToCarousel()
+        self._fireShowEvent(FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW)
+
+    def unloadFallout(self):
+        self.removeFalloutFromCarousel()
+        self._fireHideEvent(events.HideWindowEvent.HIDE_FALLOUT_WINDOW)
+        from gui.game_control import getFalloutCtrl
+        getFalloutCtrl().setEnabled(False)
+
+    def addFalloutToCarousel(self):
+        clientID = channel_num_gen.getClientID4PreQueue(QUEUE_TYPE.EVENT_BATTLES)
+        if not clientID:
+            LOG_ERROR('Client ID not found', 'addFalloutToCarousel')
+            return
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label='#fallout:channel/label', criteria={POP_UP_CRITERIA.VIEW_ALIAS: 'falloutBattleSelectorWindow'}, openHandler=self.showFalloutWindow)
+        self._handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
+
+    def removeFalloutFromCarousel(self):
+        clientID = channel_num_gen.getClientID4PreQueue(QUEUE_TYPE.EVENT_BATTLES)
+        if not clientID:
+            LOG_ERROR('Client ID not found', 'removeFalloutFromCarousel')
+            return
+        self._handleRemoveRequest(clientID)
+
+    def showFalloutWindow(self):
+        self._fireShowEvent(FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW)
+
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
         if not clientID:
@@ -328,8 +370,8 @@ class EventDispatcher(AppRef):
     def _closeHistoryBattlesWindow(self):
         self._fireHideEvent(events.HideWindowEvent.HIDE_HISTORICAL_BATTLES_WINDOW)
 
-    def _fireEvent(self, event):
-        g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+    def _fireEvent(self, event, scope = EVENT_BUS_SCOPE.LOBBY):
+        g_eventBus.handleEvent(event, scope)
 
     def _fireHideEvent(self, event):
         self._fireEvent(events.HideWindowEvent(event))
@@ -394,8 +436,9 @@ class EventDispatcher(AppRef):
         return
 
     def __getLoadedEvent(self):
-        if self.app and self.app.colorManager:
-            container = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
+        app = self.app
+        if app and app.containerManager:
+            container = app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
             if container:
                 view = container.getView()
                 if view:

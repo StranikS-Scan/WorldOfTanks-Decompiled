@@ -5,10 +5,8 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.wgnc import g_wgncProvider
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.WGNCPollWindowMeta import WGNCPollWindowMeta
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class WGNCPollWindow(View, WGNCPollWindowMeta, AbstractWindowView):
+class WGNCPollWindow(WGNCPollWindowMeta):
 
     def __init__(self, ctx = None):
         super(WGNCPollWindow, self).__init__()

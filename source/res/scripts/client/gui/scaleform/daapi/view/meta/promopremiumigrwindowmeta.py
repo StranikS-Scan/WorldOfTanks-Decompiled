@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/PromoPremiumIgrWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class PromoPremiumIgrWindowMeta(DAAPIModule):
+class PromoPremiumIgrWindowMeta(AbstractWindowView):
 
     def as_setTitleS(self, value):
         if self._isDAAPIInited():

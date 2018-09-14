@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ParamsMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class ParamsMeta(DAAPIModule):
+class ParamsMeta(BaseDAAPIComponent):
 
     def as_setValuesS(self, data):
         if self._isDAAPIInited():

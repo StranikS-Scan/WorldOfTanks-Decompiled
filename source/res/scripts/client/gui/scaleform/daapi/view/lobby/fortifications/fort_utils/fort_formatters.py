@@ -1,15 +1,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_utils/fort_formatters.py
 import BigWorld
-from gui.Scaleform.framework.managers.TextManager import TextIcons, TextManager
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from helpers import i18n
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
-from helpers import i18n
-from gui.shared.formatters import icons
+from gui.shared.formatters import icons, text_styles
 
 def getDefRes(value, addIcon = True):
-    valueStr = BigWorld.wg_getIntegralFormat(value)
-    text = TextManager.reference().getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, valueStr)
+    text = text_styles.defRes(BigWorld.wg_getIntegralFormat(value))
     if addIcon:
         icon = icons.nut()
         return text + ' ' + icon
@@ -19,14 +16,13 @@ def getDefRes(value, addIcon = True):
 
 def getBonusText(strValue, buildingID, textsStyle = None, ctx = None):
     ctx = ctx or {}
-    textsStyle = textsStyle or (TEXT_MANAGER_STYLES.NEUTRAL_TEXT, TEXT_MANAGER_STYLES.MAIN_TEXT)
+    textsStyle = textsStyle or (text_styles.neutral, text_styles.main)
     descrStr = i18n.makeString(FORTIFICATIONS.buildings_defresinfo(buildingID), **ctx)
-    resultDescr = TextManager.reference().concatStyles(((textsStyle[0], strValue + ' ' if strValue else ''), (textsStyle[1], descrStr)))
-    return resultDescr
+    return ''.join((textsStyle[0](strValue + ' ' if strValue else ''), textsStyle[1](descrStr)))
 
 
 def getDefResWithText(mainTextValue, defResValue, addIcon):
-    mainText = TextManager.reference().getText(TEXT_MANAGER_STYLES.MAIN_TEXT, mainTextValue)
+    mainText = text_styles.main(mainTextValue)
     defResText = getDefRes(defResValue, addIcon)
     return mainText + defResText
 

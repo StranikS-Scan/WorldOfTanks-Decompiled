@@ -1,19 +1,19 @@
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
 import Event
 from WebBrowser import WebBrowser
+from gui.app_loader import g_appLoader
 from gui.game_control.controllers import Controller
 from gui.game_control.gc_constants import BROWSER
 from ids_generators import SequenceIDGenerator
 from adisp import async, process
 from gui import GUI_SETTINGS
 from gui.game_control.links import URLMarcos
-from gui.shared import EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import LoadViewEvent
 from gui.shared.utils.functions import getViewName
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import AppRef
 
-class BrowserController(Controller, AppRef):
+class BrowserController(Controller):
     _BROWSER_TEXTURE = 'BrowserBg'
     _ALT_BROWSER_TEXTURE = 'AltBrowserBg'
 
@@ -56,24 +56,26 @@ class BrowserController(Controller, AppRef):
             browserID = self.__browserIDGenerator.next()
         if browserID not in self.__browsers:
             texture = self._BROWSER_TEXTURE if isDefault else self._ALT_BROWSER_TEXTURE
-            self.__browsers[browserID] = WebBrowser(browserID, self.app, texture, size, url, backgroundUrl=background)
-            self.onBrowserAdded(browserID)
-        ctx = {'url': url,
-         'title': title,
-         'showActionBtn': showActionBtn,
-         'showWaiting': showWaiting,
-         'browserID': browserID,
-         'size': size,
-         'isDefault': isDefault,
-         'isAsync': isAsync,
-         'showCloseBtn': showCloseBtn}
+            app = g_appLoader.getApp()
+            if not app:
+                raise AssertionError('Application can not be None')
+                self.__browsers[browserID] = WebBrowser(browserID, app, texture, size, url, backgroundUrl=background)
+                self.onBrowserAdded(browserID)
+            ctx = {'url': url,
+             'title': title,
+             'showActionBtn': showActionBtn,
+             'showWaiting': showWaiting,
+             'browserID': browserID,
+             'size': size,
+             'isDefault': isDefault,
+             'isAsync': isAsync,
+             'showCloseBtn': showCloseBtn}
 
-        def browserCallback(*args):
-            self.__clearCallback(browserID)
-            self.__showBrowser(browserID, ctx)
+            def browserCallback(*args):
+                self.__clearCallback(browserID)
+                self.__showBrowser(browserID, ctx)
 
-        if isAsync:
-            self.__browsersCallbacks[browserID] = (None, browserCallback)
+            self.__browsersCallbacks[browserID] = isAsync and (None, browserCallback)
             self.__browsers[browserID].onLoadEnd += browserCallback
         else:
             self.__browsersCallbacks[browserID] = (browserCallback, None)
@@ -118,4 +120,4 @@ class BrowserController(Controller, AppRef):
         return
 
     def __showBrowser(self, browserID, ctx):
-        self.app.fireEvent(LoadViewEvent(VIEW_ALIAS.BROWSER_WINDOW, getViewName(VIEW_ALIAS.BROWSER_WINDOW, browserID), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(LoadViewEvent(VIEW_ALIAS.BROWSER_WINDOW, getViewName(VIEW_ALIAS.BROWSER_WINDOW, browserID), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)

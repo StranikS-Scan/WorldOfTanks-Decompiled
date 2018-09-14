@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/AwardWindowMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class AwardWindowMeta(DAAPIModule):
+class AwardWindowMeta(AbstractWindowView):
 
     def onOKClick(self):
         self._printOverrideError('onOKClick')

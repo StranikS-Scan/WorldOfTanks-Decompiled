@@ -4,14 +4,12 @@ from constants import VEHICLE_CLASSES
 from gui.Scaleform.daapi.view.lobby.cyberSport.VehicleSelectorBase import VehicleSelectorBase
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.VehicleSelectorPopupMeta import VehicleSelectorPopupMeta
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ItemsCache import g_itemsCache, REQ_CRITERIA
 from gui.shared.events import CSVehicleSelectEvent, HideWindowEvent
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
-class VehicleSelectorPopup(View, VehicleSelectorPopupMeta, AbstractWindowView, VehicleSelectorBase):
+class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
 
     def __init__(self, ctx = None):
         super(VehicleSelectorPopup, self).__init__()

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattlePageMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.View import View
 
-class BattlePageMeta(DAAPIModule):
+class BattlePageMeta(View):
 
     def openTestWindow(self):
         self._printOverrideError('openTestWindow')

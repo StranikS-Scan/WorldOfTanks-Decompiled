@@ -153,6 +153,15 @@ class XMPPChatChannelEntity(_XMPPChannelEntity):
         super(XMPPChatChannelEntity, self).clear()
 
 
+class XMPPMucChannelEntity(_XMPPChannelEntity):
+
+    def __init__(self, jid, name = ''):
+        super(XMPPMucChannelEntity, self).__init__(str(jid), XMPPChannelData(name, MESSAGE_TYPE.GROUPCHAT))
+
+    def getFullName(self):
+        return self._data.name
+
+
 class XMPPMemberEntity(MemberEntity):
 
     def getProtoType(self):

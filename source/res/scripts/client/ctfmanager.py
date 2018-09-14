@@ -193,22 +193,38 @@ class _CTFManager():
             self.onFlagAbsorbed(flagID, flagTeam, vehicleID, respawnTime)
         return
 
+    def __flagModelSet(self, flagID, flagPos, isVisible):
+        if flagID not in self.__flags:
+            return
+        else:
+            flagModel = self.__flags[flagID]['model']
+            if flagModel is None:
+                self.__createFlagAt(flagID, flagPos, isVisible)
+            else:
+                BigWorld.wgEdgeDetectModelSetVisible(flagModel, isVisible)
+                if flagPos is not None:
+                    flagModel.position = flagPos
+            return
+
     def __createFlagAt(self, flagID, position, isVisible):
         if self.__flagModelFile is None:
             LOG_ERROR('CTFManager: flag model is not specified')
             return
         else:
-            BigWorld.loadResourceListBG((self.__flagModelFile, self.__flagCircleModelFile), partial(self.__onFlagModelLoaded, flagID, position, isVisible))
+            if 'spawnData' not in self.__flags[flagID]:
+                BigWorld.loadResourceListBG((self.__flagModelFile, self.__flagCircleModelFile), partial(self.__onFlagModelLoaded, flagID))
+            self.__flags[flagID]['spawnData'] = (position, isVisible)
             return
 
-    def __onFlagModelLoaded(self, flagID, position, isVisible, resourceRefs):
+    def __onFlagModelLoaded(self, flagID, resourceRefs):
         if resourceRefs.failedIDs:
             LOG_ERROR('Failed to load flag model %s' % (resourceRefs.failedIDs,))
         else:
             model = resourceRefs[self.__flagModelFile]
             circleModel = resourceRefs[self.__flagCircleModelFile]
-            if position is not None:
-                model.position = position
+            spawnPosition, isVisible = self.__flags[flagID].get('spawnData', (None, False))
+            if spawnPosition is not None:
+                model.position = spawnPosition
             BigWorld.addModel(model, BigWorld.player().spaceID)
             model.root.attach(circleModel)
             BigWorld.wgAddEdgeDetectModel(model, 3, 2)
@@ -218,7 +234,7 @@ class _CTFManager():
                     animAction = model.action(self.__flagAnimAction)
                     animAction()
                 except:
-                    pass
+                    LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (self.__flagAnimAction, self.__flagModelFile))
 
             self.__flags[flagID]['model'] = model
         return
@@ -252,19 +268,6 @@ class _CTFManager():
     def __getVehicle(self, vehicleID):
         return BigWorld.entities.get(vehicleID)
 
-    def __flagModelSet(self, flagID, flagPos, isVisible):
-        if flagID not in self.__flags:
-            return
-        else:
-            flagModel = self.__flags[flagID]['model']
-            if flagModel is None:
-                self.__createFlagAt(flagID, flagPos, isVisible)
-            else:
-                BigWorld.wgEdgeDetectModelSetVisible(flagModel, isVisible)
-                if flagPos is not None:
-                    flagModel.position = flagPos
-            return
-
     def onResourcePointStateChanged(self, data):
         pointID = data[0]
         prevState = data[1]
@@ -295,9 +298,11 @@ class _CTFManager():
         self.onOwnVehicleLockedForResPoint(unlockTime)
 
     def onResourcePointAmountChanged(self, pointID, amount):
-        point = self.__resourcePoints[pointID]
-        point['amount'] = amount
-        self.onResPointAmountChanged(pointID, amount, point['totalAmount'])
+        point = self.__resourcePoints.get(pointID, None)
+        if point is not None:
+            point['amount'] = amount
+            self.onResPointAmountChanged(pointID, amount, point['totalAmount'])
+        return
 
     def getResourcePoints(self):
         return sorted(self.__resourcePoints.iteritems(), key=operator.itemgetter(0))
@@ -438,6 +443,34 @@ class _CTFCheckPoint():
             return
 
 
+class _FlagResourceLoader():
+
+    class __LoadTask:
+        pass
+
+    def __init__(self):
+        self.__tasks = {}
+
+    def startLoadTask(self, resourceList, callbackFn):
+        task = self.__LoadTask()
+        self.__tasks[task] = callbackFn
+        BigWorld.loadResourceListBG(resourceList, partial(self.__onResourcesLoaded, task))
+        return task
+
+    def stopLoadTask(self, task):
+        if task in self.__tasks:
+            del self.__tasks[task]
+
+    def __onResourcesLoaded(self, task, resourceRefs):
+        if task not in self.__tasks:
+            return
+        callbackFn = self.__tasks[task]
+        del self.__tasks[task]
+        callbackFn(resourceRefs)
+
+
+_g_resLoader = _FlagResourceLoader()
+
 class _CTFPointFlag():
 
     def __init__(self, flagModelName, flagPos):
@@ -445,6 +478,7 @@ class _CTFPointFlag():
         self.__flagModel = None
         self.__flagAnimAction = None
         self.__flagPos = flagPos
+        self.__loadTask = None
         flagModelParams = _g_ctfConfig.readModelParams(flagModelName)
         if flagModelParams is not None:
             self.__flagModelFile = flagModelParams.get('file')
@@ -454,6 +488,9 @@ class _CTFPointFlag():
         return
 
     def __del__(self):
+        if self.__loadTask is not None:
+            _g_resLoader.stopLoadTask(self.__loadTask)
+            self.__loadTask = None
         if self.__flagModel is not None:
             BigWorld.delModel(self.__flagModel)
             self.__flagModel = None
@@ -464,7 +501,7 @@ class _CTFPointFlag():
 
     def _createFlag(self, applyOverlay = False):
         raise self.__flagModelFile is not None or AssertionError
-        BigWorld.loadResourceListBG((self.__flagModelFile,), partial(self.__onModelLoaded, applyOverlay))
+        self.__loadTask = _g_resLoader.startLoadTask((self.__flagModelFile,), partial(self.__onModelLoaded, applyOverlay))
         return
 
     def __onModelLoaded(self, applyOverlay, resourceRefs):
@@ -494,6 +531,7 @@ class _CTFResourcePointModel():
         self.__model = None
         self.__effectsTimeLine = None
         self.__effectsPlayer = None
+        self.__loadTask = None
         g_ctfManager.registerResourcePointModel(self)
         modelParams = _g_ctfConfig.readModelParams(pointModelName)
         if modelParams is not None:
@@ -506,6 +544,9 @@ class _CTFResourcePointModel():
         return
 
     def __del__(self):
+        if self.__loadTask is not None:
+            _g_resLoader.stopLoadTask(self.__loadTask)
+            self.__loadTask = None
         g_ctfManager.unregisterResourcePointModel(self)
         if self.__effectsPlayer is not None:
             self.stopEffect()
@@ -519,7 +560,7 @@ class _CTFResourcePointModel():
 
     def _createPoint(self):
         raise self.__modelFile is not None or AssertionError
-        BigWorld.loadResourceListBG((self.__modelFile,), self.__onModelLoaded)
+        self.__loadTask = _g_resLoader.startLoadTask((self.__modelFile,), self.__onModelLoaded)
         return
 
     def __onModelLoaded(self, resourceRefs):

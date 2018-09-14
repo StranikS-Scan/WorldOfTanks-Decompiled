@@ -27,7 +27,9 @@ _MECH_ENGINEER_PREFIX = 'mechanicEngineer'
 _HIST_BATTLEFIELD_POSTFIX = 'battlefield'
 TANK_EXPERT_GROUP = [_total(_TANK_EXPERT_PREFIX)]
 MECH_ENGINEER_GROUP = [_total(_MECH_ENGINEER_PREFIX)]
-for _nID, _ in enumerate(nations.AVAILABLE_NAMES):
+for _nID, name in enumerate(nations.AVAILABLE_NAMES):
+    if name == 'czech':
+        continue
     TANK_EXPERT_GROUP.append(_total('%s%d' % (_TANK_EXPERT_PREFIX, _nID)))
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))
 

@@ -11,7 +11,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.CompaniesWindowMeta import CompaniesWindowMeta
 from gui.shared.events import FocusEvent
 from messenger.ext import channel_num_gen
-from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import LAZY_CHANNEL
 
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)

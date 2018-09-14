@@ -7,7 +7,7 @@ from adisp import async, process
 from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import AppRef, ViewTypes
+from gui.Scaleform.framework import ViewTypes
 from helpers import isPlayerAccount, isPlayerAvatar
 from VOIP import getVOIPManager
 from PlayerEvents import g_playerEvents
@@ -16,7 +16,7 @@ from gui.Scaleform.framework.entities.abstract.VoiceChatManagerMeta import Voice
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.settings_constants import SOUND
 
-class VoiceChatManager(VoiceChatManagerMeta, AppRef):
+class VoiceChatManager(VoiceChatManagerMeta):
 
     class PROVIDERS(CONST_CONTAINER):
         UNKNOWN = 'unknown'
@@ -26,8 +26,9 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
     onPlayerSpeaking = Event.Event()
     onStateToggled = Event.Event()
 
-    def __init__(self):
+    def __init__(self, app):
         super(VoiceChatManager, self).__init__()
+        self.__app = app
         self.__failedEventRaised = False
         self.__callbacks = []
         self.__captureDevicesCallbacks = []
@@ -66,7 +67,7 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
     def _populate(self):
         super(VoiceChatManager, self)._populate()
         g_playerEvents.onAccountBecomePlayer += self.onAccountBecomePlayer
-        self.app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
+        self.__app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
         voipMgr = getVOIPManager()
         voipMgr.onInitialized += self.__initResponse
         voipMgr.onFailedToConnect += self.checkForInitialization
@@ -77,7 +78,7 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
     def _dispose(self):
         self.__callbacks = None
         self.__captureDevicesCallbacks = None
-        containerMgr = self.app.containerManager
+        containerMgr = self.__app.containerManager
         if containerMgr:
             containerMgr.onViewAddedToContainer -= self.__onViewAddedToContainer
         voipMgr = getVOIPManager()
@@ -88,6 +89,7 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
         voipMgr.onStateToggled -= self.__onStateToggled
         g_playerEvents.onAccountBecomePlayer -= self.onAccountBecomePlayer
         super(VoiceChatManager, self)._dispose()
+        self.__app = None
         return
 
     def checkForInitialization(self, *args):

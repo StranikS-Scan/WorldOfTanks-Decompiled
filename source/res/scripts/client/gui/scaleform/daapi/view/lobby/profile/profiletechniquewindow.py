@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.profile.ProfileTechnique import ProfileTechn
 class ProfileTechniqueWindow(ProfileTechnique):
 
     def __init__(self, *args):
-        ProfileTechnique.__init__(self, *args)
+        super(ProfileTechniqueWindow, self).__init__(*args)
         self.__dataReceiver = QueuedVehicleDossierReceiver()
         self.__currentlyRequestingVehicleId = None
         self.__dataReceiver.onDataReceived += self.__requestedDataReceived

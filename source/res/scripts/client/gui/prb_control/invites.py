@@ -21,11 +21,13 @@ from messenger import g_settings
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
-from messenger.ext import isSenderIgnored, isNotFriendSenderIgnored
+from messenger.ext import isNotFriendSenderIgnored
 from predefined_hosts import g_preDefinedHosts
 
-def isInviteSenderIgnoredInBattle(user, areFriendsOnly, isInBattle):
-    return isNotFriendSenderIgnored(user, not isInBattle and areFriendsOnly)
+def isInviteSenderIgnoredInBattle(user, areFriendsOnly, isFromBattle):
+    if isFromBattle:
+        return isNotFriendSenderIgnored(user, False)
+    return isNotFriendSenderIgnored(user, areFriendsOnly)
 
 
 class _INVITE_VERSION(object):
@@ -57,10 +59,6 @@ class PrbInviteWrapper(_PrbInviteData):
 
     @staticmethod
     def __new__(cls, clientID = -1L, createTime = None, type = 0, comment = str(), creator = str(), creatorDBID = -1L, creatorClanAbbrev = None, receiver = str(), receiverDBID = -1L, receiverClanAbbrev = None, state = None, count = 0, peripheryID = 0, prebattleID = 0, extraData = None, alwaysAvailable = None, ownerDBID = -1L, expiryTime = None, id = -1L, **kwargs):
-        if createTime is not None:
-            createTime = int(time_utils.makeLocalServerTime(createTime))
-        if expiryTime is not None:
-            expiryTime = int(time_utils.makeLocalServerTime(expiryTime))
         if ownerDBID < 0L:
             ownerDBID = creatorDBID
         result = _PrbInviteData.__new__(cls, clientID, createTime, type, comment, creator, creatorDBID, creatorClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, state, count, peripheryID, prebattleID, extraData or {}, alwaysAvailable, ownerDBID, expiryTime, id)
@@ -92,11 +90,26 @@ class PrbInviteWrapper(_PrbInviteData):
                 return True
         return False
 
+    def getCreateTime(self):
+        if self.createTime is not None:
+            return int(time_utils.makeLocalServerTime(self.createTime))
+        else:
+            return
+
+    def getExpiryTime(self):
+        if self.expiryTime is not None:
+            return int(time_utils.makeLocalServerTime(self.expiryTime))
+        else:
+            return
+
     def getExtraData(self, key = None):
         if key is not None:
             return self.extraData.get(key)
         else:
             return self.extraData
+
+    def isCreatedInBattle(self):
+        return not self.isFromHangar()
 
     def isIncoming(self):
         return True
@@ -144,7 +157,7 @@ class PrbInviteWrapper(_PrbInviteData):
         if other.creatorClanAbbrev:
             data['creatorClanAbbrev'] = other.creatorClanAbbrev
         if other.createTime is not None:
-            data['createTime'] = int(time_utils.makeLocalServerTime(other.createTime))
+            data['createTime'] = other.createTime
         if other.expiryTime:
             data['expiryTime'] = other.expiryTime
         if other.ownerDBID:
@@ -170,8 +183,6 @@ class PrbInvitationWrapper(PrbInviteWrapper):
 
     @staticmethod
     def __new__(cls, clientID = -1L, id = -1L, type = 0, status = None, sentAt = None, expiresAt = None, ownerID = -1L, senderDBID = -1L, receiverDBID = -1L, info = None, sender = str(), senderClanAbbrev = None, receiver = str(), receiverClanAbbrev = None, **kwargs):
-        if sentAt is not None:
-            createTime = int(time_utils.makeLocalServerTime(sentAt))
         info = info or {}
         peripheryID, prbID = cls.getPrbInfo(info)
         result = PrbInviteWrapper.__new__(cls, clientID, sentAt, type, info.get('comment', ''), sender, senderDBID, senderClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, status, 1, peripheryID, prbID, info, False, ownerID, expiresAt, id, **kwargs)
@@ -196,7 +207,8 @@ class PrbInvitationWrapper(PrbInviteWrapper):
         return self.ownerDBID != getPlayerDatabaseID()
 
     def isExpired(self):
-        return self.expiryTime is not None and self.expiryTime < time_utils.getCurrentTimestamp()
+        expiryTime = self.getExpiryTime()
+        return expiryTime is not None and expiryTime < time_utils.getCurrentTimestamp()
 
     def getState(self):
         return PRB_INVITE_STATE.getFromNewState(self)
@@ -455,7 +467,7 @@ class InvitesManager(UsersInfoHelper):
         return inviteID
 
     def _addInvite(self, invite, userGetter):
-        if self.__isInviteSenderIgnoredInBattle(userGetter(invite.creatorDBID)):
+        if self.__isInviteSenderIgnoredInBattle(invite, userGetter):
             return False
         self.__invites[invite.clientID] = invite
         if invite.isActive():
@@ -465,7 +477,7 @@ class InvitesManager(UsersInfoHelper):
     def _updateInvite(self, other, userGetter):
         inviteID = other.clientID
         invite = self.__invites[inviteID]
-        if invite == other or self.__isInviteSenderIgnoredInBattle(userGetter(invite.creatorDBID)):
+        if invite == other or self.__isInviteSenderIgnoredInBattle(invite, userGetter):
             return False
         prevCount = invite.count
         invite = invite._merge(other)
@@ -669,5 +681,5 @@ class InvitesManager(UsersInfoHelper):
         self.__invites.clear()
         self.__unreadInvitesCount = 0
 
-    def __isInviteSenderIgnoredInBattle(self, user):
-        return isInviteSenderIgnoredInBattle(user, g_settings.userPrefs.invitesFromFriendsOnly, self.__isInBattle)
+    def __isInviteSenderIgnoredInBattle(self, invite, userGetter):
+        return isInviteSenderIgnoredInBattle(userGetter(invite.creatorDBID), g_settings.userPrefs.invitesFromFriendsOnly, invite.isCreatedInBattle())

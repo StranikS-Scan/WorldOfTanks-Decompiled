@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/factories.py
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 from gui.Scaleform.framework.entities.View import View
 from gui.shared.events import LoadViewEvent
 
@@ -37,15 +37,15 @@ class EntityFactory(object):
         return pyEntity
 
 
-DAAPIModuleType = type(DAAPIModule)
+DAAPIModuleType = type(BaseDAAPIModule)
 ViewEntityType = type(View)
 
 class DAAPIModuleFactory(EntityFactory):
 
     def validate(self, settings):
         super(DAAPIModuleFactory, self).validate(settings)
-        if DAAPIModule not in getattr(settings.clazz, '__mro__', tuple()):
-            raise Exception, 'Class does not extend DAAPIModule in settings {0}'.format(settings)
+        if BaseDAAPIModule not in getattr(settings.clazz, '__mro__', tuple()):
+            raise Exception, 'Class does not extend BaseDAAPIModule in settings {0}'.format(settings)
 
     def castType(self, clazz):
         return type(clazz) is DAAPIModuleType
@@ -81,6 +81,7 @@ class ViewFactory(DAAPIModuleFactory):
 
 
 class EntitiesFactories(object):
+    __slots__ = ('__settings', '__factories', '__eventToAlias', '__aliasToEvent', '__viewTypes')
 
     def __init__(self, factories):
         super(EntitiesFactories, self).__init__()
@@ -95,8 +96,17 @@ class EntitiesFactories(object):
                 self.__viewTypes[viewType] = idx
 
     def initSettings(self, settingsList):
+        result = set()
+        add = self.addSettings
         for settings in settingsList:
-            self.addSettings(settings)
+            result.add(add(settings))
+
+        return result
+
+    def clearSettings(self, aliases):
+        remove = self.removeSettings
+        for alias in aliases:
+            remove(alias)
 
     def addSettings(self, settings):
         viewType = settings.type
@@ -110,7 +120,7 @@ class EntitiesFactories(object):
         if eventType is not None and len(eventType):
             self.__eventToAlias[eventType] = alias
             self.__aliasToEvent[alias] = eventType
-        return
+        return alias
 
     def removeSettings(self, alias):
         if alias in self.__settings:

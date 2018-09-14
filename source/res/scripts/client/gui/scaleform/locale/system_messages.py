@@ -72,6 +72,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
+    PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
     PREBATTLE_VEHICLEINVALID_LIMITS_CLASSES = '#system_messages:prebattle/vehicleInvalid/limits/classes'
     PREBATTLE_TEAMINVALID_LIMIT_MINCOUNT = '#system_messages:prebattle/teamInvalid/limit/minCount'
@@ -560,6 +561,8 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_REQUEST_NAME_CLOSE_SLOT = '#system_messages:prebattle/request/name/CLOSE_SLOT'
     PREBATTLE_REQUEST_NAME_CHANGE_RATED = '#system_messages:prebattle/request/name/CHANGE_RATED'
     PREBATTLE_REQUEST_NAME_CHANGE_DIVISION = '#system_messages:prebattle/request/name/CHANGE_DIVISION'
+    PREBATTLE_REQUEST_NAME_SET_ES_VEHICLE_LIST = '#system_messages:prebattle/request/name/SET_ES_VEHICLE_LIST'
+    PREBATTLE_REQUEST_NAME_CHANGE_ES_TYPE = '#system_messages:prebattle/request/name/CHANGE_ES_TYPE'
     FORTIFICATION_REQUEST_NAME_CREATE_FORT = '#system_messages:fortification/request/name/CREATE_FORT'
     FORTIFICATION_REQUEST_NAME_DELETE_FORT = '#system_messages:fortification/request/name/DELETE_FORT'
     FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION = '#system_messages:fortification/request/name/OPEN_DIRECTION'
@@ -634,6 +637,7 @@ class SYSTEM_MESSAGES(object):
     CLUBS_REQUEST_SUCCESS_USERS_TRANSFEROWNERSHIP = '#system_messages:clubs/request/success/users/transferOwnership'
     CLUBS_REQUEST_SUCCESS_USERS_KICK = '#system_messages:clubs/request/success/users/kick'
     CLUBS_REQUEST_ERRORS_DEFAULT = '#system_messages:clubs/request/errors/default'
+    CLUBS_REQUEST_ERRORS_SOME_ERROR_ON_ESTB_SIDE__SEE_SERVER_LOG_FOR_DETAILS_ = '#system_messages:clubs/request/errors/Some error on estb side. See server log for details.'
     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_OWNS_THE_CLUB_ = '#system_messages:clubs/request/errors/Account already owns the club.'
     CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_A_CLUB_MEMBER_ = '#system_messages:clubs/request/errors/Account already a club member.'
     CLUBS_REQUEST_ERRORS_NO_CLUB_FOUND_ = '#system_messages:clubs/request/errors/No club found.'
@@ -709,6 +713,7 @@ class SYSTEM_MESSAGES(object):
     CLUBS_REQUEST_ERRORS_TIME_OUT = '#system_messages:clubs/request/errors/time out'
     CLUBS_REQUEST_ERRORS_SENDINVITE_IGNORED = '#system_messages:clubs/request/errors/sendInvite/ignored'
     CLUBS_REQUEST_ERRORS_SENDAPP_IGNORED = '#system_messages:clubs/request/errors/sendApp/ignored'
+    CLUBS_REQUEST_ERRORS_JOINUNIT_WEBUNAVAILABLE = '#system_messages:clubs/request/errors/joinUnit/webUnavailable'
     EXCHANGE_SUCCESS = '#system_messages:exchange/success'
     EXCHANGE_NOT_ENOUGH_GOLD = '#system_messages:exchange/not_enough_gold'
     EXCHANGE_WALLET_NOT_AVAILABLE = '#system_messages:exchange/wallet_not_available'
@@ -810,6 +815,10 @@ class SYSTEM_MESSAGES(object):
     UNIT_NOTIFICATION_PLAYERADDED = '#system_messages:unit/notification/playerAdded'
     UNIT_NOTIFICATION_PLAYERREMOVED = '#system_messages:unit/notification/playerRemoved'
     UNIT_NOTIFICATION_GIVELEADERSHIP = '#system_messages:unit/notification/giveLeadership'
+    UNIT_NOTIFICATION_CHANGEDIVISION = '#system_messages:unit/notification/changeDivision'
+    UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE = '#system_messages:unit/notification/divisionType/MIDDLE'
+    UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION = '#system_messages:unit/notification/divisionType/CHAMPION'
+    UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE = '#system_messages:unit/notification/divisionType/ABSOLUTE'
     UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT = '#system_messages:unitBrowser/errors/BAD_ACCEPT_CONTEXT'
     PERIPHERY_ERRORS_ISNOTAVAILABLE = '#system_messages:periphery/errors/isNotAvailable'
     UNIT_ERRORS_BAD_CLAN = '#system_messages:unit/errors/BAD_CLAN'
@@ -966,7 +975,9 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_UNITS_LIST,
      PREBATTLE_REQUEST_NAME_CLOSE_SLOT,
      PREBATTLE_REQUEST_NAME_CHANGE_RATED,
-     PREBATTLE_REQUEST_NAME_CHANGE_DIVISION)
+     PREBATTLE_REQUEST_NAME_CHANGE_DIVISION,
+     PREBATTLE_REQUEST_NAME_SET_ES_VEHICLE_LIST,
+     PREBATTLE_REQUEST_NAME_CHANGE_ES_TYPE)
     FORTIFICATION_REQUEST_NAME_ENUM = (FORTIFICATION_REQUEST_NAME_CREATE_FORT,
      FORTIFICATION_REQUEST_NAME_DELETE_FORT,
      FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION,
@@ -1147,12 +1158,14 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
      FORTIFICATION_ERRORS_ATTACK_TOO_LATE,
      FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR)
+    UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNITBROWSER_ERRORS_ENUM = UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
      UNIT_NOTIFICATION_PLAYERREMOVED,
-     UNIT_NOTIFICATION_GIVELEADERSHIP)
+     UNIT_NOTIFICATION_GIVELEADERSHIP,
+     UNIT_NOTIFICATION_CHANGEDIVISION)
     UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_WARNINGS_KICKED_CANDIDATE,
@@ -1238,6 +1251,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
+     PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
      PREBATTLE_VEHICLEINVALID_LIMITS_CLASSES,
      PREBATTLE_TEAMINVALID_LIMIT_MINCOUNT,
@@ -1722,6 +1736,8 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_CLOSE_SLOT,
      PREBATTLE_REQUEST_NAME_CHANGE_RATED,
      PREBATTLE_REQUEST_NAME_CHANGE_DIVISION,
+     PREBATTLE_REQUEST_NAME_SET_ES_VEHICLE_LIST,
+     PREBATTLE_REQUEST_NAME_CHANGE_ES_TYPE,
      FORTIFICATION_REQUEST_NAME_CREATE_FORT,
      FORTIFICATION_REQUEST_NAME_DELETE_FORT,
      FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION,
@@ -1796,6 +1812,7 @@ class SYSTEM_MESSAGES(object):
      CLUBS_REQUEST_SUCCESS_USERS_TRANSFEROWNERSHIP,
      CLUBS_REQUEST_SUCCESS_USERS_KICK,
      CLUBS_REQUEST_ERRORS_DEFAULT,
+     CLUBS_REQUEST_ERRORS_SOME_ERROR_ON_ESTB_SIDE__SEE_SERVER_LOG_FOR_DETAILS_,
      CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_OWNS_THE_CLUB_,
      CLUBS_REQUEST_ERRORS_ACCOUNT_ALREADY_A_CLUB_MEMBER_,
      CLUBS_REQUEST_ERRORS_NO_CLUB_FOUND_,
@@ -1871,6 +1888,7 @@ class SYSTEM_MESSAGES(object):
      CLUBS_REQUEST_ERRORS_TIME_OUT,
      CLUBS_REQUEST_ERRORS_SENDINVITE_IGNORED,
      CLUBS_REQUEST_ERRORS_SENDAPP_IGNORED,
+     CLUBS_REQUEST_ERRORS_JOINUNIT_WEBUNAVAILABLE,
      EXCHANGE_SUCCESS,
      EXCHANGE_NOT_ENOUGH_GOLD,
      EXCHANGE_WALLET_NOT_AVAILABLE,
@@ -1972,6 +1990,10 @@ class SYSTEM_MESSAGES(object):
      UNIT_NOTIFICATION_PLAYERADDED,
      UNIT_NOTIFICATION_PLAYERREMOVED,
      UNIT_NOTIFICATION_GIVELEADERSHIP,
+     UNIT_NOTIFICATION_CHANGEDIVISION,
+     UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE,
+     UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION,
+     UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE,
      UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT,
      PERIPHERY_ERRORS_ISNOTAVAILABLE,
      UNIT_ERRORS_BAD_CLAN,
@@ -2148,6 +2170,15 @@ class SYSTEM_MESSAGES(object):
     def fortification_errors(key):
         outcome = '#system_messages:fortification/errors/%s' % key
         if outcome not in SYSTEM_MESSAGES.FORTIFICATION_ERRORS_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def unit_notification_divisiontype(key):
+        outcome = '#system_messages:unit/notification/divisionType/%s' % key
+        if outcome not in SYSTEM_MESSAGES.UNIT_NOTIFICATION_DIVISIONTYPE_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
             return None
         else:

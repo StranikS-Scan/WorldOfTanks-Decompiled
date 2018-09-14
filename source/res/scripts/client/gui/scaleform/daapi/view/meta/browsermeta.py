@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BrowserMeta.py
-from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
+from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
-class BrowserMeta(DAAPIModule):
+class BrowserMeta(AbstractWindowView):
 
     def browserAction(self, action):
         self._printOverrideError('browserAction')

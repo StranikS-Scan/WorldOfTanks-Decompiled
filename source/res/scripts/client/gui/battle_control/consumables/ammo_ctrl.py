@@ -322,6 +322,7 @@ class AmmoReplayRecorder(AmmoController):
         if leave:
             self.__changeRecord = None
             self.__timeRecord = None
+            self.__replayCtrl = None
         return
 
     def setGunReloadTime(self, timeLeft, baseTime):
@@ -353,6 +354,7 @@ class AmmoReplayPlayer(AmmoController):
                 self.__callbackID = None
             self.__timeGetter = lambda : 0
             self.__replayCtrl.onAmmoSettingChanged -= self.__onAmmoSettingChanged
+            self.__replayCtrl = None
         super(AmmoReplayPlayer, self).clear(leave)
         return
 

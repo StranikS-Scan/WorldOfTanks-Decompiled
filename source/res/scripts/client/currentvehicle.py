@@ -2,7 +2,8 @@
 import random
 import BigWorld
 from Event import Event
-from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.shared.formatters.time_formatters import getTimeLeftStr
+from gui.vehicle_view_states import createState4CurrentVehicle
 from items import vehicles
 from helpers import isPlayerAccount, i18n
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
@@ -35,6 +36,7 @@ class _CurrentVehicle():
          'cache.vehsLock': self.onLocksUpdate})
         game_control.g_instance.igr.onIgrTypeChanged += self.onIgrTypeChanged
         game_control.g_instance.rentals.onRentChangeNotify += self.onRentChange
+        game_control.getFalloutCtrl().onSettingsChanged += self.__onFalloutChanged
         prbVehicle = self.__checkPrebattleLockedVehicle()
         storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
         self.selectVehicle(prbVehicle or storedVehInvID)
@@ -47,6 +49,7 @@ class _CurrentVehicle():
         g_clientUpdateManager.removeObjectCallbacks(self)
         game_control.g_instance.igr.onIgrTypeChanged -= self.onIgrTypeChanged
         game_control.g_instance.rentals.onRentChangeNotify -= self.onRentChange
+        game_control.getFalloutCtrl().onSettingsChanged -= self.__onFalloutChanged
         _getHangarSpace().removeVehicle()
         self.selectNoVehicle()
 
@@ -123,12 +126,7 @@ class _CurrentVehicle():
         return self.isPresent() and self.item.isBroken
 
     def isGroupReady(self):
-        if self.isPresent():
-            if self.item.isOnlyForEventBattles:
-                return not self.item.isGroupBroken() and self.item.isGroupCrewFull() and self.item.isGroupAmmoFull() and self.item.isAmmoFull
-            return True
-        else:
-            return False
+        return self.isPresent() and self.item.isGroupReady()[0]
 
     def isDisabledInRoaming(self):
         return self.isPresent() and self.item.isDisabledInRoaming
@@ -163,6 +161,9 @@ class _CurrentVehicle():
     def isAwaitingBattle(self):
         return self.isPresent() and self.item.isAwaitingBattle
 
+    def isOnlyForEventBattles(self):
+        return self.item.isOnlyForEventBattles
+
     def isAlive(self):
         return self.isPresent() and self.item.isAlive
 
@@ -173,20 +174,13 @@ class _CurrentVehicle():
         return self.isPresent() and self.item.isReadyToFight
 
     def isAutoLoadFull(self):
-        if self.isPresent() and self.item.isAutoLoad:
-            for shell in self.item.shells:
-                if shell.count != shell.defaultCount:
-                    return False
-
-        return True
+        return not self.isPresent() or self.item.isAutoLoadFull()
 
     def isAutoEquipFull(self):
-        if self.isPresent() and self.item.isAutoEquip:
-            for i, e in enumerate(self.item.eqsLayout):
-                if e != self.item.eqs[i]:
-                    return False
+        return not self.isPresent() or self.item.isAutoEquipFull()
 
-        return True
+    def isFalloutOnly(self):
+        return self.isPresent() and self.item.isFalloutOnly()
 
     def selectVehicle(self, vehInvID = 0):
         vehicle = g_itemsCache.items.getVehicle(vehInvID)
@@ -202,12 +196,14 @@ class _CurrentVehicle():
     def selectNoVehicle(self):
         self.__selectVehicle(0)
 
+    def getDossier(self):
+        return g_itemsCache.items.getVehicleDossier(self.item.intCD)
+
     def getHangarMessage(self):
         if self.isPresent():
             state, stateLvl = self.item.getState()
             if state == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
-                localization = '#menu:vehicle/igrRentLeft/%s'
-                rentLeftStr = getRentLeftTimeStr(localization, self.item.rentLeftTime)
+                rentLeftStr = getTimeLeftStr('#menu:vehicle/igrRentLeft/%s', self.item.rentInfo.timeLeft)
                 icon = icons.premiumIgrBig()
                 if self.item.isRented:
                     message = i18n.makeString('#menu:currentVehicleStatus/' + state, icon=icon, time=rentLeftStr)
@@ -222,6 +218,9 @@ class _CurrentVehicle():
         self.__historicalBattle = historicalBattle
         self.refreshModel()
         self.onChanged()
+
+    def getViewState(self):
+        return createState4CurrentVehicle(self)
 
     def __selectVehicle(self, vehInvID):
         if vehInvID == self.__vehInvID:
@@ -260,6 +259,10 @@ class _CurrentVehicle():
                             return vehicle.invID
 
         return 0
+
+    def __onFalloutChanged(self):
+        if self.isPresent() and (self.item.isOnlyForEventBattles or self.item.isFalloutAvailable):
+            self.onChanged()
 
     def __repr__(self):
         return 'CurrentVehicle(%s)' % str(self.item)

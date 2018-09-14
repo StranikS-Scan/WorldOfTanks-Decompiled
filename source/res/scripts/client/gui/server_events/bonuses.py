@@ -5,11 +5,11 @@ import Math
 from constants import EVENT_TYPE as _ET
 from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.shared.formatters import text_styles
+from helpers import time_utils
 from items import vehicles, tankmen
 from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.Scaleform.framework.managers.TextManager import TextManager
 from helpers import getLocalizedData, i18n
-from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from shared_utils import makeTupleByDict
 from gui import makeHtmlString
@@ -427,9 +427,9 @@ class CustomizationsBonus(SimpleBonus):
             value = item.get('value', 0)
             valueStr = None
             if not isPermanent:
-                value *= 86400
+                value *= time_utils.ONE_DAY
             elif value > 1:
-                valueStr = TextManager.getText(message=i18n.makeString(QUESTS.BONUSES_CUSTOMIZATION_VALUE, count=value))
+                valueStr = text_styles.main(i18n.makeString(QUESTS.BONUSES_CUSTOMIZATION_VALUE, count=value))
             res = {'id': itemId,
              'type': CUSTOMIZATION_ITEM_TYPE.CI_TYPES.index(itemType),
              'nationId': nationId,
@@ -472,7 +472,8 @@ _BONUSES = {'credits': CreditsBonus,
  'dossier': DossierBonus,
  'tankmen': TankmenBonus,
  'customizations': CustomizationsBonus,
- 'goodies': BoosterBonus}
+ 'goodies': BoosterBonus,
+ 'strBonus': SimpleBonus}
 _BONUSES_BY_TYPE = {(_ET.POTAPOV_QUEST, 'tokens'): PotapovTokensBonus,
  (_ET.POTAPOV_QUEST, 'dossier'): PotapovDossierBonus,
  (_ET.POTAPOV_QUEST, 'tankmen'): PotapovTankmenBonus,
@@ -483,6 +484,13 @@ def getBonusObj(quest, name, value):
     if key in _BONUSES_BY_TYPE:
         return _BONUSES_BY_TYPE[key](name, value)
     elif name in _BONUSES:
+        return _BONUSES[name](name, value)
+    else:
+        return None
+
+
+def getTutorialBonusObj(name, value):
+    if name in _BONUSES:
         return _BONUSES[name](name, value)
     else:
         return None

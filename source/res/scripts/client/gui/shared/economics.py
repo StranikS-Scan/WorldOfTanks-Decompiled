@@ -29,3 +29,9 @@ def calcRentPackages(vehicle, proxy):
                  'defaultRentPrice': defaultRentPrice})
 
     return result
+
+
+def getPremiumCostActionPrc(discounts, packet, proxy):
+    defaultPremiumCost = proxy.shop.defaults.premiumCost
+    premiumCost = proxy.shop.getPremiumCostWithDiscount(discounts)
+    return getActionPrc(premiumCost.get(packet), defaultPremiumCost.get(packet))

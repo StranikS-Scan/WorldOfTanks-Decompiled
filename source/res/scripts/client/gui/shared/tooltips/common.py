@@ -3,27 +3,31 @@ import cPickle
 import types
 import math
 from collections import namedtuple
-from operator import methodcaller, itemgetter
+from operator import methodcaller, itemgetter, attrgetter
 import BigWorld
 import constants
 import ArenaType
 import fortified_regions
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
+from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.clubs.formatters import getLeagueString, getDivisionString
 from gui.clubs.settings import getLadderChevron256x256, getPointsToNextDivision
 from gui.prb_control import getBattleID
+from gui.shared.economics import getPremiumCostActionPrc
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
-from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
+from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, getLevelIconPath
 from gui.LobbyContext import g_lobbyContext
-from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeClubFullName
+from gui.shared.tooltips import efficiency
+from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeClubFullName, makeContactStatusDescription
 from predefined_hosts import g_preDefinedHosts
-from constants import PREBATTLE_TYPE
-from debug_utils import LOG_WARNING, LOG_DEBUG
-from helpers import i18n, time_utils, html
+from constants import PREBATTLE_TYPE, WG_GAMES
+from debug_utils import LOG_WARNING
+from helpers import i18n, time_utils, html, int2roman
 from helpers.i18n import makeString as ms, makeString
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as FORT
@@ -46,14 +50,11 @@ from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.lobby.customization import CAMOUFLAGES_KIND_TEXTS, CAMOUFLAGES_NATIONS_TEXTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
-from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
-from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from items import vehicles
 from messenger.storage import storage_getter
 from messenger.m_constants import USER_TAG
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.framework import AppRef
 
 class FortOrderParamField(ToolTipParameterField):
 
@@ -96,7 +97,7 @@ class IgrTooltipData(ToolTipBaseData):
                         header = makeHtmlString('html_templates:lobby/tooltips', 'prem_igr_veh_quest_header', ctx={'qLabel': metaList[0].format()})
                         text = i18n.makeString('#tooltips:vehicleIgr/specialAbility')
                         localization = '#tooltips:vehicleIgr/%s'
-                        actionLeft = getRentLeftTimeStr(localization, leftTime, timeStyle=TextType.STATS_TEXT)
+                        actionLeft = getRentLeftTimeStr(localization, leftTime, timeStyle=TEXT_MANAGER_STYLES.STATS_TEXT)
                         text += '\n' + actionLeft
                         premVehQuests.append({'header': header,
                          'descr': text})
@@ -114,12 +115,36 @@ class IgrTooltipData(ToolTipBaseData):
 
 
 class EfficiencyTooltipData(ToolTipBaseData):
+    _packers = {BATTLE_EFFICIENCY_TYPES.ARMOR: efficiency.ArmorItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DAMAGE: efficiency.DamageItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DESTRUCTION: efficiency.KillItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DETECTION: efficiency.DetectionItemPacker,
+     BATTLE_EFFICIENCY_TYPES.ASSIST: efficiency.AssistItemPacker,
+     BATTLE_EFFICIENCY_TYPES.CRITS: efficiency.CritsItemPacker,
+     BATTLE_EFFICIENCY_TYPES.CAPTURE: efficiency.CaptureItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DEFENCE: efficiency.DefenceItemPacker}
 
     def __init__(self, context):
         super(EfficiencyTooltipData, self).__init__(context, TOOLTIP_TYPE.EFFICIENCY)
 
     def getDisplayableData(self, _, value):
-        return value
+        dataDict = value.toDict()
+        eventType = dataDict['type']
+        isGarage = dataDict['isGarage']
+        blocksData = self.getPackerData(eventType, dataDict)
+        return {'type': eventType,
+         'blocksData': blocksData,
+         'isGarage': isGarage,
+         'contentMargin': {'top': 10,
+                           'left': 17,
+                           'bottom': 15,
+                           'right': 17}}
+
+    def getPackerData(self, packerType, dataDict):
+        if packerType in self._packers:
+            return self._packers[packerType]().pack(dataDict)
+        else:
+            return []
 
 
 class ContactTooltipData(ToolTipBaseData):
@@ -142,13 +167,12 @@ class ContactTooltipData(ToolTipBaseData):
             return {'userProps': {'userName': defaultName}}
         else:
             commonGuiData = self.__converter.makeVO(userEntity, False)
-            statusDescription = ''
             tags = userEntity.getTags()
-            if userEntity.isOnline():
-                if USER_TAG.PRESENCE_DND in tags:
-                    statusDescription = makeString(TOOLTIPS.CONTACT_STATUS_INBATTLE)
-                else:
-                    statusDescription = makeString(TOOLTIPS.CONTACT_STATUS_ONLINE)
+            resourceID = commonGuiData['resource']
+            if resourceID == WG_GAMES.TANKS:
+                statusDescription = makeContactStatusDescription(userEntity.isOnline(), tags, userEntity.getClientInfo())
+            else:
+                statusDescription = makeString('#tooltips:Contact/resource/%s' % resourceID)
             commonGuiData['statusDescription'] = statusDescription
             units = []
             currentUnit = ''
@@ -245,16 +269,16 @@ class SortieDivisionTooltipData(ToolTipBaseData):
         return (division.getMinSlots(), division.getMaxSlots())
 
     def __getPlayerLimitsStr(self, minCount, maxCount):
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, str(minCount) + ' - ' + str(maxCount))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, str(minCount) + ' - ' + str(maxCount))
 
     def __getLevelsStr(self, maxlvl):
         minLevel = 1
         minLevelStr = fort_formatters.getTextLevel(minLevel)
         maxLevelStr = fort_formatters.getTextLevel(maxlvl)
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, minLevelStr + ' - ' + maxLevelStr)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, minLevelStr + ' - ' + maxLevelStr)
 
     def __getBonusStr(self, bonus):
-        text = (TextType.DEFRES_TEXT, BigWorld.wg_getIntegralFormat(bonus) + ' ')
+        text = (TEXT_MANAGER_STYLES.DEFRES_TEXT, BigWorld.wg_getIntegralFormat(bonus) + ' ')
         icon = (TextIcons.NUT_ICON,)
         return self.app.utilsManager.textManager.concatStyles((text, icon))
 
@@ -324,20 +348,17 @@ class SettingsControlTooltipData(ToolTipBaseData):
         super(SettingsControlTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
 
     def getDisplayableData(self, controlID):
+        result = {}
         key = '#settings:%s/name' % controlID
         if i18n.doesTextExist(key):
-            name = i18n.makeString(key)
+            result['header'] = i18n.makeString(key)
         else:
-            name = i18n.makeString('#settings:%s' % controlID)
-        warning = ''
+            result['header'] = i18n.makeString('#settings:%s' % controlID)
+        result['body'] = i18n.makeString('#settings:%s/description' % controlID)
         key = '#settings:%s/warning' % controlID
         if i18n.doesTextExist(key):
-            warning = i18n.makeString(key)
-        return {'name': name,
-         'descr': i18n.makeString('#settings:%s/description' % controlID),
-         'recommended': '',
-         'status': {'level': 'warning',
-                    'text': warning}}
+            result['attention'] = i18n.makeString(key)
+        return result
 
 
 class SettingsButtonTooltipData(ToolTipBaseData):
@@ -397,7 +418,7 @@ class CustomizationItemTooltipData(ToolTipBaseData):
         footerList = []
         if timeLeft >= 0:
             timeLeftText = self.__getTimeLeftText(timeLeft, isUsed)
-            timeLeftText = self.__getText(TextType.MAIN_TEXT, timeLeftText)
+            timeLeftText = self.__getText(TEXT_MANAGER_STYLES.MAIN_TEXT, timeLeftText)
         else:
             timeLeftText = ''
         if isPermanent and value > 1:
@@ -407,7 +428,7 @@ class CustomizationItemTooltipData(ToolTipBaseData):
             allow = item['allow']
             deny = item['deny']
             typeText = ms(VEHICLE_CUSTOMIZATION.CAMOUFLAGE) + ' ' + ms(CAMOUFLAGES_KIND_TEXTS[item['kind']])
-            descriptionText = self.__getText(TextType.STANDARD_TEXT, ms(item['description'] + '/description'))
+            descriptionText = self.__getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(item['description'] + '/description'))
         elif type == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
             groupName, _, _, _, emblemName, _, _, allow, deny = item
             groups, _, _ = vehicles.g_cache.playerEmblems()
@@ -429,12 +450,12 @@ class CustomizationItemTooltipData(ToolTipBaseData):
         if boundVehicle is None and deny and len(deny) > 0:
             denyStr = ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_DENYVEHICLE, vehicle=', '.join(deny))
         if boundToCurrentVehicle:
-            usageStr = self.__getText(TextType.STATS_TEXT, ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_CURRENTVEHICLE))
+            usageStr = self.__getText(TEXT_MANAGER_STYLES.STATS_TEXT, ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_CURRENTVEHICLE))
         elif boundVehicle:
             vehicle = vehicles.getVehicleType(int(boundVehicle))
-            usageStr = self.__getText(TextType.STATS_TEXT, ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_EXACTVEHICLE, vehicle=vehicle.shortUserString))
+            usageStr = self.__getText(TEXT_MANAGER_STYLES.STATS_TEXT, ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_EXACTVEHICLE, vehicle=vehicle.shortUserString))
         elif type != CUSTOMIZATION_ITEM_TYPE.EMBLEM and not allowStr:
-            usageStr = self.__getText(TextType.STATS_TEXT, ms(CAMOUFLAGES_NATIONS_TEXTS[nationId]))
+            usageStr = self.__getText(TEXT_MANAGER_STYLES.STATS_TEXT, ms(CAMOUFLAGES_NATIONS_TEXTS[nationId]))
         if usageStr:
             footerList.append(usageStr)
         if allowStr:
@@ -442,9 +463,9 @@ class CustomizationItemTooltipData(ToolTipBaseData):
         if denyStr:
             footerList.append(denyStr)
         if len(footerList):
-            footerStr = self.__getText(TextType.STATS_TEXT, '\n'.join(footerList))
-        return {'header': self.__getText(TextType.HIGH_TITLE, ms(headerText)),
-         'kind': self.__getText(TextType.MAIN_TEXT, typeText),
+            footerStr = self.__getText(TEXT_MANAGER_STYLES.STATS_TEXT, '\n'.join(footerList))
+        return {'header': self.__getText(TEXT_MANAGER_STYLES.HIGH_TITLE, ms(headerText)),
+         'kind': self.__getText(TEXT_MANAGER_STYLES.MAIN_TEXT, typeText),
          'description': descriptionText,
          'timeLeft': timeLeftText,
          'vehicleType': footerStr}
@@ -482,7 +503,7 @@ class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):
     def getDisplayableData(self, clanDBID):
         fortCtrl = g_clanCache.fortProvider.getController()
         isFortFrozen = False
-        if clanDBID is None:
+        if clanDBID is None or clanDBID == g_clanCache.clanDBID:
             fort = fortCtrl.getFort()
             fortDossier = fort.getFortDossier()
             battlesStats = fortDossier.getBattlesStats()
@@ -533,7 +554,7 @@ class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):
         if profitEff is not None:
             topStats.append((i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PROFITPERCENTAGE), BigWorld.wg_getNiceNumberFormat(profitEff) if profitEff > 0 else ProfileUtils.UNAVAILABLE_SYMBOL))
         if creationTime is not None:
-            fortCreationData = self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPCLANINFO_FORTCREATIONDATE, creationDate=BigWorld.wg_getLongDateFormat(creationTime)))
+            fortCreationData = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPCLANINFO_FORTCREATIONDATE, creationDate=BigWorld.wg_getLongDateFormat(creationTime)))
         else:
             fortCreationData = None
 
@@ -543,10 +564,10 @@ class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):
         infoTexts, protectionHeader = [], ''
         if defence[0]:
             if isFortFrozen:
-                protectionHeader = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSETIMESTOPPED))
+                protectionHeader = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSETIMESTOPPED))
             else:
-                protectionHeader = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSETIME))
-            statsValueColor = TextType.DISABLE_TEXT if isFortFrozen else TextType.STATS_TEXT
+                protectionHeader = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSETIME))
+            statsValueColor = TEXT_MANAGER_STYLES.DISABLED_TEXT if isFortFrozen else TEXT_MANAGER_STYLES.STATS_TEXT
             defencePeriodString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_PERIOD, startTime=BigWorld.wg_getShortTimeFormat(defence[0]), finishTime=BigWorld.wg_getShortTimeFormat(defence[1]))
             defencePeriodString = self.app.utilsManager.textManager.getText(statsValueColor, defencePeriodString)
             infoTexts.append(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_DEFENSEHOUR, period=defencePeriodString))
@@ -562,10 +583,10 @@ class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):
                 vacationString = i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_NOVACATION)
             vacationString = self.app.utilsManager.textManager.getText(statsValueColor, vacationString)
             infoTexts.append(i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_VACATION, period=vacationString))
-        return {'headerText': self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_HEADER, clanTag=clanTag, clanLevel=fort_formatters.getTextLevel(clanLvl))),
-         'fullClanName': self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, clanName),
-         'sloganText': self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, clanMotto),
-         'infoDescriptionTopText': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, _makeLabels(topStats, 0)),
+        return {'headerText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(TOOLTIPS.FORTIFICATION_TOOLTIPENEMYCLANINFO_HEADER, clanTag=clanTag, clanLevel=fort_formatters.getTextLevel(clanLvl))),
+         'fullClanName': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, clanName),
+         'sloganText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, clanMotto),
+         'infoDescriptionTopText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, _makeLabels(topStats, 0)),
          'infoTopText': self.app.utilsManager.textManager.getText('statsText', _makeLabels(topStats, 1)),
          'infoDescriptionBottomText': '',
          'infoBottomText': '',
@@ -590,19 +611,19 @@ class ToolTipRefSysDescription(ToolTipBaseData):
 
     def __makeTitle(self):
         localMsg = ms(TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_HEADER_TITLETF)
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, localMsg)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, localMsg)
 
     def __makeMainText(self, value):
         localMsg = ms(value)
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, localMsg)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, localMsg)
 
     def __makeConditions(self):
         txt = ms(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=game_control.g_instance.refSystem.getPosByXPinTeam())
-        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, txt)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, txt)
 
     def __makeStandardText(self, value):
         localMsg = ms(value)
-        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, localMsg)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, localMsg)
 
     def __makeBlocks(self):
         result = []
@@ -616,7 +637,7 @@ class ToolTipRefSysDescription(ToolTipBaseData):
                         awardDescrPars.append(', '.join(map(methodcaller('getDescription'), bonuses)))
 
             awardDescr = ', '.join(awardDescrPars)
-            result.append({'leftTF': self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, xpCost),
+            result.append({'leftTF': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, xpCost),
              'rightTF': awardDescr,
              'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON})
 
@@ -658,25 +679,25 @@ class ToolTipRefSysAwards(ToolTipBaseData):
          'awardStatus': self.__makeStatus(isCompleted)}
 
     def __makeTitle(self, value):
-        award = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, value)
+        award = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, value)
         return self.__makeTitleGeneralText(award)
 
     def __makeTitleGeneralText(self, award):
         text = i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_TITLE_GENERAL, awardMsg=award)
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, text)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, text)
 
     def __makeBody(self, expCount, isCompleted):
         howManyExp = expCount - game_control.g_instance.refSystem.getReferralsXPPool()
         notEnoughMsg = ''
         if not isCompleted and howManyExp > 0:
-            notEnough = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS_NOTENOUGH))
+            notEnough = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS_NOTENOUGH))
             notEnoughMsg = i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS_NOTENOUGHMSG, notEnough=notEnough, howMany=self.__formatExpCount(howManyExp))
-        resultFormatter = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS, expCount=self.__formatExpCount(expCount), notEnoughMsg=notEnoughMsg))
+        resultFormatter = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS, expCount=self.__formatExpCount(expCount), notEnoughMsg=notEnoughMsg))
         return resultFormatter
 
     def __formatExpCount(self, value):
         value = BigWorld.wg_getIntegralFormat(value)
-        value = self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, value)
+        value = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, value)
         iconLocal = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
         utilsManager = self.app.utilsManager
         icon = utilsManager.getHtmlIconText(ImageUrlProperties(iconLocal, 16, 16, -3, 0))
@@ -684,14 +705,14 @@ class ToolTipRefSysAwards(ToolTipBaseData):
 
     def __makeConditions(self):
         txt = i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=game_control.g_instance.refSystem.getPosByXPinTeam())
-        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, txt)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, txt)
 
     def __makeStatus(self, isReceived):
         loc = TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_NOTACCESS
         if isReceived:
             loc = TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_ACCESS
         txt = i18n.makeString(loc)
-        txt = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, txt)
+        txt = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, txt)
         return txt
 
 
@@ -704,18 +725,18 @@ class ToolTipRefSysXPMultiplier(ToolTipBaseData):
         refSystem = game_control.g_instance.refSystem
         xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
         icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(xpIcon, 16, 16, -3, 0))
-        expNum = self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, ms(BigWorld.wg_getNiceNumberFormat(refSystem.getMaxReferralXPPool())))
-        titleText = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_TITLE))
-        descriptionText = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_DESCRIPTION))
-        conditionsText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS))
-        bottomText = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_BOTTOM, expNum=expNum + '<nobr>' + icon))
+        expNum = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, ms(BigWorld.wg_getNiceNumberFormat(refSystem.getMaxReferralXPPool())))
+        titleText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_TITLE))
+        descriptionText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_DESCRIPTION))
+        conditionsText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS))
+        bottomText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_BOTTOM, expNum=expNum + '<nobr>' + icon))
         xpBlocks = []
         for i, (period, bonus) in enumerate(refSystem.getRefPeriods()):
             xpBonus = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
             condition = self.__formatPeriod(period)
             xpBlocks.append({'xpIconSource': RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON,
-             'multiplierText': self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, xpBonus),
-             'descriptionText': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, condition)})
+             'multiplierText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, xpBonus),
+             'descriptionText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, condition)})
 
         return {'titleText': titleText,
          'descriptionText': descriptionText,
@@ -736,9 +757,9 @@ _battleStatus = namedtuple('_battleStatus', ('level', 'msg', 'color', 'prefix'))
 class ToolTipFortBuildingData(ToolTipBaseData, FortViewHelper):
 
     class BATTLE_STATUSES(CONST_CONTAINER):
-        NO_BATTLE = _battleStatus('warning', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_WASNOTBATTLE, TextType.DEFRES_TEXT, '')
-        LOST = _battleStatus('critical', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_DEFEAT, TextType.ERROR_TEXT, '-')
-        WON = _battleStatus('info', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_VICTORY, TextType.SUCCESS_TEXT, '+')
+        NO_BATTLE = _battleStatus('warning', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_WASNOTBATTLE, TEXT_MANAGER_STYLES.DEFRES_TEXT, '')
+        LOST = _battleStatus('critical', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_DEFEAT, TEXT_MANAGER_STYLES.ERROR_TEXT, '-')
+        WON = _battleStatus('info', FORT.TOOLTIPBUILDINGINFO_STATUSMSG_VICTORY, TEXT_MANAGER_STYLES.SUCCESS_TEXT, '+')
 
     def __init__(self, context):
         super(ToolTipFortBuildingData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
@@ -773,9 +794,9 @@ class ToolTipFortBuildingData(ToolTipBaseData, FortViewHelper):
         buildingLevelData = fortified_regions.g_cache.buildings[buildingTypeID].levels[normLevel]
         hpTotalVal = buildingLevelData.hp
         maxDefResVal = buildingLevelData.storage
-        buildingName = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, ms(FORT.buildings_buildingname(buildingUID)))
+        buildingName = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, ms(FORT.buildings_buildingname(buildingUID)))
         currentMapTxt = None
-        buildingLevelTxt = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(FORT.FORTMAINVIEW_HEADER_LEVELSLBL, buildLevel=str(fort_formatters.getTextLevel(buildingLevel))))
+        buildingLevelTxt = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(FORT.FORTMAINVIEW_HEADER_LEVELSLBL, buildLevel=str(fort_formatters.getTextLevel(buildingLevel))))
         descrActionTxt = None
         statusTxt = None
         statusLevel = None
@@ -796,18 +817,18 @@ class ToolTipFortBuildingData(ToolTipBaseData, FortViewHelper):
                     if battle.isDefence() and isAttack or not battle.isDefence() and not isAttack:
                         battleStatus = self.BATTLE_STATUSES.WON
                 arenaType = ArenaType.g_cache.get(arenaTypeID)
-                prefix = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_MEP_MAPPREFIX))
-                mapName = self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, arenaType.name)
+                prefix = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_MEP_MAPPREFIX))
+                mapName = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, arenaType.name)
                 currentMapTxt = prefix + mapName
                 statusLevel = battleStatus.level
                 statusTxt = ms(battleStatus.msg)
                 defResStatusTxt = self.app.utilsManager.textManager.concatStyles(((battleStatus.color, '%s %s' % (battleStatus.prefix, BigWorld.wg_getIntegralFormat(resCount))), (TextIcons.NUT_ICON,)))
-                descrActionTxt = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_DESCRACTION))
+                descrActionTxt = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_DESCRACTION))
                 descrActionTxt = descrActionTxt % {'value': defResStatusTxt}
             else:
                 minResCount = hpTotalVal * 0.2
-                minResStatusTxt = self.app.utilsManager.textManager.concatStyles(((TextType.NEUTRAL_TEXT, BigWorld.wg_getIntegralFormat(minResCount)), (TextIcons.NUT_ICON,)))
-                infoMessage = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_DESTROYEDMESSAGE))
+                minResStatusTxt = self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.NEUTRAL_TEXT, BigWorld.wg_getIntegralFormat(minResCount)), (TextIcons.NUT_ICON,)))
+                infoMessage = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(FORT.TOOLTIPBUILDINGINFO_DESTROYEDMESSAGE))
                 infoMessage = infoMessage % {'value': minResStatusTxt}
         result = {'buildingUID': buildingUID,
          'buildingName': buildingName,
@@ -916,7 +937,7 @@ class ActionTooltipData(ToolTipBaseData):
                 newPriceCurrency = oldPriceCurrency = 'credits'
         if actionNames:
             actionNames = set(actionNames)
-        if newPriceCurrency and oldPriceCurrency and newPriceValue and oldPriceValue:
+        if newPriceCurrency and oldPriceCurrency and newPriceValue is not None and oldPriceValue:
             formatedNewPrice = makeHtmlString('html_templates:lobby/quests/actions', newPriceCurrency, {'value': BigWorld.wg_getGoldFormat(newPriceValue)})
             formatedOldPrice = makeHtmlString('html_templates:lobby/quests/actions', oldPriceCurrency, {'value': BigWorld.wg_getGoldFormat(oldPriceValue)})
             body = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
@@ -934,8 +955,8 @@ class ActionTooltipData(ToolTipBaseData):
         if hasRentCompensation:
             formattedRentCompensation = makeHtmlString('html_templates:lobby/quests/actions', 'gold', {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
             descr += '\n' + i18n.makeString(TOOLTIPS.ACTIONPRICE_RENTCOMPENSATION, rentCompensation=formattedRentCompensation)
-        return {'name': i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER),
-         'descr': body + '\n' + descr if descr else body}
+        return {'header': i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER),
+         'body': body + '\n' + descr if descr else body}
 
 
 class ToolTipFortWrongTime(ToolTipBaseData):
@@ -943,9 +964,20 @@ class ToolTipFortWrongTime(ToolTipBaseData):
     def __init__(self, context):
         super(ToolTipFortWrongTime, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
 
-    def getDisplayableData(self):
-        return {'name': i18n.makeString(TOOLTIPS.FORTWRONGTIME_HEADER),
-         'descr': i18n.makeString(TOOLTIPS.FORTWRONGTIME_BODY, local=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentTimestamp()), server=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentLocalServerTimestamp()))}
+    def getDisplayableData(self, wrongState, currentValue, lockValues):
+
+        def formatReceivedData(target):
+            return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, BigWorld.wg_getShortTimeFormat(time_utils.getTimeTodayForLocal(target)))
+
+        currentValue = int(currentValue)
+        if wrongState == 'wrongTime':
+            return {'header': i18n.makeString(TOOLTIPS.FORTWRONGTIME_HEADER),
+             'body': i18n.makeString(TOOLTIPS.FORTWRONGTIME_BODY, local=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentTimestamp()), server=BigWorld.wg_getShortTimeFormat(time_utils.getCurrentLocalServerTimestamp()))}
+        if wrongState == 'lockTime':
+            timeFinish = currentValue + 1 if currentValue < 23 else currentValue - 23
+            return {'header': i18n.makeString(TOOLTIPS.FORTWRONGTIME_LOCKTIME_HEADER),
+             'body': i18n.makeString(TOOLTIPS.FORTWRONGTIME_LOCKTIME_BODY, timeStart=formatReceivedData(currentValue), timeFinish=formatReceivedData(timeFinish))}
+        raise AttributeError('%s: Unexpected state: %s' % (self, wrongState))
 
 
 class MapSmallTooltipData(ToolTipBaseData):
@@ -1040,6 +1072,28 @@ class LadderTooltipData(ToolTipBaseData):
              'toNextLevel': toNextLevel}
 
 
+class FortDivisionTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(FortDivisionTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
+
+    def getDisplayableData(self, divisionID, showWarning):
+        if divisionID == FORT_BATTLE_DIVISIONS.ABSOLUTE.divisionID:
+            division = FORT_BATTLE_DIVISIONS.ABSOLUTE
+            divisionType = 'absolute'
+            warning = i18n.makeString('#tooltips:fortDivision/warning/lowBacklog')
+        else:
+            division = FORT_BATTLE_DIVISIONS.CHAMPION
+            divisionType = 'champion'
+            warning = i18n.makeString('#tooltips:fortDivision/warning/forbiddenEquipment')
+        result = {'name': i18n.makeString('#tooltips:fortDivision/%s/header' % divisionType),
+         'descr': i18n.makeString('#tooltips:fortDivision/%s/description' % divisionType),
+         'params': [[i18n.makeString('#tooltips:fortDivision/params/vehicleLevel'), int2roman(1) + ' - ' + int2roman(division.maxVehicleLevel)], [i18n.makeString('#tooltips:fortDivision/params/vehiclesCount'), division.maxCombatants]]}
+        if showWarning:
+            result['warning'] = warning
+        return result
+
+
 class FortSortieTooltipData(ToolTipBaseData):
 
     def __init__(self, context):
@@ -1048,12 +1102,12 @@ class FortSortieTooltipData(ToolTipBaseData):
     def getDisplayableData(self, data):
         _ms = i18n.makeString
         _gt = self.app.utilsManager.textManager.getText
-        division = _gt(TextType.MAIN_TEXT, _ms(data.divisionName))
+        division = _gt(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(data.divisionName))
         inBattleIcon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_SWORDSICON, 16, 16, -3, 0))
-        descriptionText = _gt(TextType.MAIN_TEXT, _ms(data.descriptionForTT)) if data.descriptionForTT != '' else ''
-        return {'titleText': _gt(TextType.HIGH_TITLE, _ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_TITLE, name=data.creatorName)),
-         'divisionText': _gt(TextType.STANDARD_TEXT, _ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_DIVISION, division=division)),
+        descriptionText = _gt(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(data.descriptionForTT)) if data.descriptionForTT != '' else ''
+        return {'titleText': _gt(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_TITLE, name=data.creatorName)),
+         'divisionText': _gt(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_DIVISION, division=division)),
          'descriptionText': descriptionText,
-         'hintText': _gt(TextType.STANDARD_TEXT, _ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_HINT)),
-         'inBattleText': _gt(TextType.ERROR_TEXT, _ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_INBATTLE) + ' ' + inBattleIcon) if data.isInBattle else '',
+         'hintText': _gt(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_HINT)),
+         'inBattleText': _gt(TEXT_MANAGER_STYLES.ERROR_TEXT, _ms(TOOLTIPS.FORTIFICATION_TOOLTIPFORTSORTIE_INBATTLE) + ' ' + inBattleIcon) if data.isInBattle else '',
          'isInBattle': data.isInBattle}

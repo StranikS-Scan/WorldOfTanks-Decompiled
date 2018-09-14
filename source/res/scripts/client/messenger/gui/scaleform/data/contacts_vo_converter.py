@@ -1,14 +1,17 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_vo_converter.py
+from constants import WG_GAMES
 from gui import makeHtmlString
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n
 from helpers.html import escape
 from messenger import g_settings
 from messenger.m_constants import USER_TAG
 from messenger.storage import storage_getter
 from account_helpers.settings_core.SettingsCore import g_settingsCore
+from predefined_hosts import g_preDefinedHosts
 _CATEGORY_I18N_KEY = {CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_FRIENDS,
  CONTACTS_ALIASES.GROUP_FORMATIONS_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_FORMATIONS,
  CONTACTS_ALIASES.GROUP_OTHER_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER}
@@ -29,6 +32,31 @@ def makeClubFullName(clubName):
     if clubName:
         formatted = '{0} {1}'.format(i18n.makeString(I18N_MESSENGER.DIALOGS_CONTACTS_TREE_CLUB), clubName)
     return formatted
+
+
+def makeContactStatusDescription(isOnline, tags, clientInfo = None):
+    name, description = ('', '')
+    if isOnline:
+        if clientInfo:
+            gameHost = clientInfo.gameHost
+            arenaLabel = clientInfo.arenaLabel
+        else:
+            gameHost, arenaLabel = ('', '')
+        if gameHost:
+            item = g_preDefinedHosts.byUrl(gameHost)
+            name = item.shortName or item.name
+        if USER_TAG.PRESENCE_DND in tags:
+            key = None
+            if arenaLabel:
+                key = TOOLTIPS.contact_status_inbattle(arenaLabel)
+            if not key:
+                key = TOOLTIPS.CONTACT_STATUS_INBATTLE_UNKNOWN
+            description = i18n.makeString(key)
+        else:
+            description = i18n.makeString(TOOLTIPS.CONTACT_STATUS_ONLINE)
+        if name:
+            description = '{0}, {1}'.format(description, name)
+    return description
 
 
 def _setMutableRule(rules, flag):
@@ -109,11 +137,20 @@ class ContactConverter(object):
         isOnline = contact.isOnline()
         baseUserProps = self.makeBaseUserProps(contact)
         baseUserProps['rgb'] = self.getColor(tags, isOnline)
+        resourceId = contact.getResourceID() or WG_GAMES.TANKS
+        if resourceId != WG_GAMES.TANKS:
+            for prefix in WG_GAMES.ALL:
+                if prefix != WG_GAMES.TANKS:
+                    if prefix in resourceId:
+                        resourceId = prefix
+                        break
+
         return {'userProps': baseUserProps,
          'dbID': dbID,
          'note': escape(note),
          'isOnline': isOnline,
-         'isColorBlind': g_settingsCore.getSetting('isColorBlind')}
+         'isColorBlind': g_settingsCore.getSetting('isColorBlind'),
+         'resource': resourceId}
 
     @classmethod
     def makeBaseUserProps(cls, contact):

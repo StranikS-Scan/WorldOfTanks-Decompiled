@@ -1,31 +1,33 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanBattleRoom.py
+import ArenaType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from helpers import i18n, int2roman
+from UnitBase import UNIT_OP
 from adisp import process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE, FORT_BUILDING_TYPE, FORT_BUILDING_STATUS
-from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import rally_dps
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
+from gui.Scaleform.daapi.view.lobby.rally import vo_converters
+from gui.Scaleform.framework.managers.TextManager import TextIcons, TextManager
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.context.unit_ctx import LeaveUnitCtx
 from gui.prb_control.prb_helpers import UnitListener
-from gui.shared.ClanCache import g_clanCache
-from gui.shared.fortifications.settings import CLIENT_FORT_STATE
-from gui.shared.utils import CONST_CONTAINER, findFirst
-from helpers import i18n
-import ArenaType
-from UnitBase import UNIT_OP
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
-from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.prb_control import settings, getBattleID
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT
+from gui import SystemMessages
 from gui.shared import events
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.ClanCache import g_clanCache
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+from gui.shared.utils import CONST_CONTAINER, findFirst
 
 class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
@@ -59,7 +61,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.__initData()
         self.__makeData()
 
-    def onUnitStateChanged(self, unitState, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         self.__setReadyStatus()
         self._setActionButtonState()
         self.__initData()
@@ -143,9 +145,6 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         super(FortClanBattleRoom, self)._dispose()
         return
 
-    def _updateVehiclesLabel(self, minVal, maxVal):
-        self.as_setVehiclesTitleS(i18n.makeString(FORTIFICATIONS.SORTIE_ROOM_VEHICLES))
-
     def _updateRallyData(self):
         functional = self.unitFunctional
         data = vo_converters.makeFortBattleVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
@@ -174,6 +173,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.__updateHeaderTeamSection()
         self.__requestMineClanEmblem()
         self.__requestEnemyClanEmblem()
+        self._updateVehiclesLabel(int2roman(1), int2roman(self.__battle.additionalData.division))
 
     def __makeMainVO(self):
         result = {}
@@ -184,24 +184,28 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         activeConsumes = extra.getConsumables()
         result['mapID'] = arenaTypeID
         arenaType = ArenaType.g_cache.get(arenaTypeID)
+        canUseEquipments = self.__battle.itemData.canUseEquipments
         if arenaType is not None:
-            mapName = _getText(TextType.MAIN_TEXT, arenaType.name)
+            mapName = _getText(TEXT_MANAGER_STYLES.MAIN_TEXT, arenaType.name)
         else:
             mapName = ''
         infoIcon = self.app.utilsManager.textManager.getIcon(TextIcons.INFO_ICON)
-        result['headerDescr'] = _getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_MAPTITLE, mapName=mapName) + ' ' + infoIcon)
-        result['isOrdersBgVisible'] = bool(not unitPermissions.canChangeConsumables() and len(activeConsumes))
+        result['headerDescr'] = _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_MAPTITLE, mapName=mapName) + ' ' + infoIcon)
+        result['isOrdersBgVisible'] = bool(not unitPermissions.canChangeConsumables() and len(activeConsumes) and not canUseEquipments)
         result['mineClanName'] = g_clanCache.clanTag
         _, enemyClanAbbev, _ = self.__battle.getOpponentClanInfo()
         result['enemyClanName'] = '[%s]' % enemyClanAbbev
+        if not canUseEquipments and unitPermissions.canChangeConsumables():
+            result['ordersDisabledMessage'] = TextManager.getIcon(TextIcons.ALERT_ICON) + ' ' + TextManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_ORDERSDISABLED))
+            result['ordersDisabledTooltip'] = TOOLTIPS.FORTIFICATION_FORTCLANBATTLEROOM_ORDERSDISABLED_DIVISIONMISMATCH
         self.as_setBattleRoomDataS(result)
         return
 
     def __setReadyStatus(self):
-        self.as_updateReadyStatusS(self.unitFunctional.getState().isInQueue(), self.__battle.isEnemyReadyForBattle())
+        self.as_updateReadyStatusS(self.unitFunctional.getFlags().isInQueue(), self.__battle.isEnemyReadyForBattle())
 
     def __setTimerDelta(self):
-        isInBattle = self.unitFunctional.getState().isInArena()
+        isInBattle = self.unitFunctional.getFlags().isInArena()
         self.as_setTimerDeltaS({'deltaTime': self.__battle.getRoundStartTimeLeft() if not isInBattle else 0,
          'htmlFormatter': "<font face='$FieldFont' size='18' color='#FFDD99'>###</font>",
          'alertHtmlFormatter': "<font face='$FieldFont' size='18' color='#ff7f00'>###</font>",
@@ -273,13 +277,13 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         return False
 
     def __updateHeaderTeamSection(self):
-        isInBattle = self.unitFunctional.getState().isInArena()
+        isInBattle = self.unitFunctional.getFlags().isInArena()
         if not isInBattle:
             titleText = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_TEAMSECTIONTITLE_PREPARETEAM)
-            titleStyle = TextType.STANDARD_TEXT
+            titleStyle = TEXT_MANAGER_STYLES.STANDARD_TEXT
         else:
             titleText = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_TEAMSECTIONTITLE_INBATTLE)
-            titleStyle = TextType.ALERT_TEXT
+            titleStyle = TEXT_MANAGER_STYLES.ALERT_TEXT
         titleText = self.app.utilsManager.textManager.getText(titleStyle, titleText)
         self.as_updateTeamHeaderTextS(titleText)
 

@@ -6,7 +6,8 @@ from collections import namedtuple
 import Event
 import AccountCommands
 import ClientPrebattle
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, Trader, CustomFilesCache, BattleResultsCache, ClientClubs
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, Trader, CustomFilesCache, BattleResultsCache, ClientClubs, ClientGoodies
+from account_helpers.ClientInvitations import ClientInvitations
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents as events
 from account_helpers.settings_core import IntUserSettings
@@ -57,8 +58,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dossierCache = g_accountRepository.dossierCache
         self.battleResultsCache = g_accountRepository.battleResultsCache
         self.intUserSettings = g_accountRepository.intUserSettings
+        self.prebattleInvitations = g_accountRepository.prebattleInvitations
         self.fort = g_accountRepository.fort
         self.clubs = g_accountRepository.clubs
+        self.goodies = g_accountRepository.goodies
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -69,8 +72,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dossierCache.setAccount(self)
         self.battleResultsCache.setAccount(self)
         self.intUserSettings.setProxy(self, self.syncData)
+        self.prebattleInvitations.setProxy(self)
         self.fort._setAccount(self)
+        self.fort._setServerSettings(g_accountRepository.serverSettings)
         self.clubs.setAccount(self)
+        self.goodies.setAccount(self)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
         self.unitBrowser = ClientUnitBrowser(self)
@@ -108,7 +114,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dossierCache.onAccountBecomePlayer()
         self.battleResultsCache.onAccountBecomePlayer()
         self.intUserSettings.onProxyBecomePlayer()
+        self.prebattleInvitations.onProxyBecomePlayer()
         self.clubs.onAccountBecomePlayer()
+        self.goodies.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         return
@@ -129,7 +137,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.dossierCache.onAccountBecomeNonPlayer()
             self.battleResultsCache.onAccountBecomeNonPlayer()
             self.intUserSettings.onProxyBecomeNonPlayer()
+            self.prebattleInvitations.onProxyBecomeNonPlayer()
             self.clubs.onAccountBecomeNonPlayer()
+            self.goodies.onAccountBecomeNonPlayer()
             self.__cancelCommands()
             self.syncData.setAccount(None)
             self.inventory.setAccount(None)
@@ -140,7 +150,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.dossierCache.setAccount(None)
             self.battleResultsCache.setAccount(None)
             self.intUserSettings.setProxy(None, None)
+            self.prebattleInvitations.setProxy(None)
             self.clubs.setAccount(None)
+            self.goodies.setAccount(None)
             self.fort.clear()
             events.onAccountBecomeNonPlayer()
             del self.inputHandler
@@ -575,9 +587,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_HISTORICAL, 0, 0, 0)
 
-    def enqueueEventBattles(self, vehInvID):
+    def enqueueEventBattles(self, vehInvIDs):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, vehInvID, 0, 0)
+            arr = [len(vehInvIDs)] + vehInvIDs
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_EVENT_BATTLES, arr)
 
     def dequeueEventBattles(self):
         if not events.isPlayerEntityChanging:
@@ -736,6 +749,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntArr(AccountCommands.CMD_GET_POTAPOV_QUEST_REWARD, arr, proxy)
         return
 
+    def activateGoodie(self, goodieId, callback):
+        self._doCmdIntArr(AccountCommands.CMD_ACTIVATE_GOODIE, goodieId, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
     def makeDenunciation(self, violatorID, topicID, violatorKind):
         self._doCmdInt3(AccountCommands.CMD_MAKE_DENUNCIATION, violatorID, topicID, violatorKind, None)
         return
@@ -809,6 +825,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
         MessengerEntry.g_instance.protos.BW_CHAT2.onActionReceived(actionID, reqID, args)
 
+    def processInvitations(self, invitations):
+        self.prebattleInvitations.processInvitations(invitations)
+
     def _doCmdStr(self, cmd, str, callback):
         self.__doCmd('doCmdStr', cmd, callback, str)
 
@@ -852,6 +871,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.trader.synchronize(isFullSync, diff)
             self.intUserSettings.synchronize(isFullSync, diff)
             self.clubs.synchronize(isFullSync, diff)
+            self.goodies.synchronize(isFullSync, diff)
             self.__synchronizeEventNotifications(diff)
             self.__synchronizeCacheDict(self.prebattleAutoInvites, diff.get('account', None), 'prebattleAutoInvites', 'replace', events.onPrebattleAutoInvitesChanged)
             self.__synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
@@ -1022,8 +1042,10 @@ class _AccountRepository(object):
         self.customFilesCache = CustomFilesCache.CustomFilesCache()
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()
+        self.prebattleInvitations = ClientInvitations()
         self.clubs = ClientClubs.ClientClubs(self.syncData)
-        self.fort = ClientFortMgr()
+        self.goodies = ClientGoodies.ClientGoodies(self.syncData)
+        self.fort = ClientFortMgr(serverSettings=serverSettings)
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN
 

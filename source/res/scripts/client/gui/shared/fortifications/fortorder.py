@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/FortOrder.py
 from FortifiedRegionBase import FORT_EVENT_TYPE
 from constants import FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared.utils.ItemsParameters import g_instance as g_itemsParams
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -114,7 +114,7 @@ class FortOrder(AppRef):
         if self.isSpecialMission:
             awardText = i18n.makeString(FORTIFICATIONS.ORDERS_SPECIALMISSION_POSSIBLEAWARD) + ' '
             bonusDescr = i18n.makeString(FORTIFICATIONS.orders_specialmission_possibleaward_description_level(self.level))
-            return self.app.utilsManager.textManager.concatStyles(((TextType.NEUTRAL_TEXT, awardText), (TextType.MAIN_TEXT, bonusDescr)))
+            return self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.NEUTRAL_TEXT, awardText), (TEXT_MANAGER_STYLES.MAIN_TEXT, bonusDescr)))
         elif self.isConsumable:
             return fort_formatters.getBonusText('', FortViewHelper.getBuildingUIDbyID(self.buildingID), ctx=dict(self.getParams()))
         else:

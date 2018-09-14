@@ -3,11 +3,11 @@ from collections import defaultdict
 from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_NOTE, LOG_WARNING, LOG_DEBUG
 from gui.battle_control import avatar_getter
-from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO, VehicleArenaStatsDict, VehicleArenaStatsVO
-from gui.battle_control.arena_info.settings import SQUAD_RANGE_TO_SHOW, TEAM_RANGE, invertTeam
+from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO, VehicleArenaStatsDict, VehicleArenaStatsVO, VehicleArenaInteractiveStatsDict
+from gui.battle_control.arena_info.settings import SQUAD_RANGE_TO_SHOW, TEAM_RANGE, invertTeam, INVALIDATE_OP
 
 class ArenaDataProvider(object):
-    __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__prbStats', '__playersVIDs')
+    __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__viStatsVOs', '__prbStats', '__playersVIDs', '__weakref__')
 
     def __init__(self):
         super(ArenaDataProvider, self).__init__()
@@ -17,6 +17,7 @@ class ArenaDataProvider(object):
         self.__vStatsVOs = VehicleArenaStatsDict()
         self.__prbStats = {}
         self.__playersVIDs = {}
+        self.__viStatsVOs = VehicleArenaInteractiveStatsDict()
 
     def __del__(self):
         LOG_DEBUG('Deleted:', self)
@@ -28,6 +29,7 @@ class ArenaDataProvider(object):
 
     def clearStats(self):
         self.__vStatsVOs.clear()
+        self.__viStatsVOs.clear()
 
     def clear(self):
         self.clearInfo()
@@ -60,9 +62,13 @@ class ArenaDataProvider(object):
             LOG_WARNING('Vehicle already exists', self.__vInfoVOs[vID])
         return vInfoVO
 
-    def updateVehicleInfo(self, vID, vInfo):
+    def updateVehicleInfo(self, vID, vInfo, arenaGuiType):
         vInfoVO = self.__vInfoVOs[vID]
         flags = vInfoVO.update(**vInfo)
+        prebattleId = vInfoVO.prebattleID
+        if flags & INVALIDATE_OP.PREBATTLE_CHANGED:
+            self.__prbStats[vInfoVO.team][prebattleId].append(vID)
+            self.__findSquads(arenaGuiType)
         dbID = vInfoVO.player.accountDBID
         if dbID:
             self.__playersVIDs[dbID] = vID
@@ -82,6 +88,12 @@ class ArenaDataProvider(object):
         vStatsVO = self.__vStatsVOs[vID]
         flags = vStatsVO.update(**vStats)
         return (flags, vStatsVO)
+
+    def updateVehicleInteractiveStats(self, iStats):
+        self.__viStatsVOs.clear()
+        for (vID, _), iStat in iStats.iteritems():
+            vStatsVO = self.__viStatsVOs[vID]
+            vStatsVO.update(*iStat)
 
     def isRequiredDataExists(self):
         return self.__checkRequiredData()
@@ -105,7 +117,26 @@ class ArenaDataProvider(object):
         return result
 
     def getVehicleStats(self, vID = None):
+        if vID is None:
+            vID = self.getPlayerVehicleID()
         return self.__vStatsVOs[vID]
+
+    def getVehIDsByPrebattleID(self, team, prebattleID):
+        vehIDs = None
+        if team in self.__prbStats and prebattleID in self.__prbStats[team]:
+            vehIDs = self.__prbStats[team][prebattleID]
+        return vehIDs
+
+    def getPrbVehCount(self, team, prebattleID):
+        vehIDs = self.getVehIDsByPrebattleID(team, prebattleID)
+        if vehIDs:
+            return len(vehIDs)
+        return 0
+
+    def getVehicleInteractiveStats(self, vID = None):
+        if vID is None:
+            vID = self.getPlayerVehicleID()
+        return self.__viStatsVOs[vID]
 
     def isSquadMan(self, vID, prebattleID = None):
         if prebattleID is None:
@@ -137,7 +168,7 @@ class ArenaDataProvider(object):
         else:
             data = sorted(filter(lambda vInfoVO: vInfoVO.team == team, self.__vInfoVOs.itervalues()))
         for vInfoVO in data:
-            yield (vInfoVO, self.__vStatsVOs[vInfoVO.vehicleID])
+            yield (vInfoVO, self.__vStatsVOs[vInfoVO.vehicleID], self.__viStatsVOs[vInfoVO.vehicleID])
 
     def getVehiclesIDsIterator(self, enemy = False):
         team = self.getNumberOfTeam(enemy)

@@ -2,7 +2,7 @@
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.FortWelcomeViewMeta import FortWelcomeViewMeta
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -78,15 +78,15 @@ class FortWelcomeViewComponent(FortWelcomeViewMeta, FortViewHelper, AppRef):
             self.as_setRequirementTextS(self.__getClanMemberWelcomeText(data))
 
     def __getNoClanText(self):
-        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCLAN))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCLAN))
 
     def __getNotEnoughMembersText(self, data):
         minClanSize = data.get('minClanSize', 0)
-        text = self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_WARNING, minClanSize=minClanSize))
+        text = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_WARNING, minClanSize=minClanSize))
         header = i18n.makeString(TOOLTIPS.FORTIFICATION_WELCOME_CANTCREATEFORT_HEADER)
         body = i18n.makeString(TOOLTIPS.FORTIFICATION_WELCOME_CANTCREATEFORT_BODY, minClanSize=minClanSize)
         return (text, header, body)
 
     def __getClanMemberWelcomeText(self, data):
-        textOne = ((TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCOMMANDER)), (TextType.NEUTRAL_TEXT, data.get('clanCommanderName', '')))
+        textOne = ((TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCOMMANDER)), (TEXT_MANAGER_STYLES.NEUTRAL_TEXT, data.get('clanCommanderName', '')))
         return self.app.utilsManager.textManager.concatStyles(textOne)

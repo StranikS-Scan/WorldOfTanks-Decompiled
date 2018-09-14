@@ -10,8 +10,8 @@ from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOver
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortOrderPopoverMeta import FortOrderPopoverMeta
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events
@@ -47,7 +47,7 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
                 return self._getFormattedTimeStr(secondsLeft)
             else:
                 nextBattle = i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_NEXTBATTLE)
-                return self.app.utilsManager.textManager.getText(TextType.SUCCESS_TEXT, nextBattle)
+                return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.SUCCESS_TEXT, nextBattle)
         return ''
 
     def _getBuildingStr(self, order):
@@ -55,12 +55,12 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         building = i18n.makeString(FORTIFICATIONS.buildings_buildingname(buildingID))
         hasBuilding = order.hasBuilding
         if not hasBuilding:
-            return self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, building)
+            return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, building)
         return building
 
     def _getCountStr(self, order):
         count = order.count
-        countColor = TextType.NEUTRAL_TEXT if count > 0 else TextType.STANDARD_TEXT
+        countColor = TEXT_MANAGER_STYLES.NEUTRAL_TEXT if count > 0 else TEXT_MANAGER_STYLES.STANDARD_TEXT
         return self.app.utilsManager.textManager.getText(countColor, count)
 
     def _canGiveOrder(self):
@@ -122,13 +122,13 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
     def _getOrderDescription(self, order):
         if order.isSpecialMission:
             if order.inCooldown:
-                textsStyle = (TextType.NEUTRAL_TEXT, TextType.MAIN_TEXT)
+                textsStyle = (TEXT_MANAGER_STYLES.NEUTRAL_TEXT, TEXT_MANAGER_STYLES.MAIN_TEXT)
                 award = i18n.makeString(FORTIFICATIONS.ORDERS_SPECIALMISSION_AWARD) + ' '
                 serverData = self.__getFortQuestBonusesStr()
                 serverData += '\n' + i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_SPECIALMISSION_SHORTDESCR)
                 return self.app.utilsManager.textManager.concatStyles(((textsStyle[0], award), (textsStyle[1], serverData)))
             else:
-                return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_SPECIALMISSION_DESCRIPTION))
+                return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_SPECIALMISSION_DESCRIPTION))
         else:
             return order.description
 

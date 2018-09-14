@@ -2,6 +2,7 @@
 import BigWorld
 from adisp import process
 from constants import PREBATTLE_TYPE
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.rally.rally_dps import ClubsDataProvider
 from gui.Scaleform.daapi.view.meta.CyberSportUnitsListMeta import CyberSportUnitsListMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -124,7 +125,7 @@ class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
     def __onClubsListUpdated(self, selectedID, isFullUpdate, isReqInCoolDown, result):
         if isFullUpdate:
             selectedIdx = self._searchDP.rebuildList(selectedID, result)
-            self.__setNavigationData(isReqInCoolDown)
+            self._checkCoolDowns()
         else:
             selectedIdx = self._searchDP.updateList(selectedID, result)
         if selectedIdx is not None:
@@ -201,5 +202,20 @@ class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
          'description': headerDescription,
          'createBtnLabel': CYBERSPORT.WINDOW_CLUBSLISTVIEW_CREATE_BTN,
          'createBtnTooltip': createBtnTooltip,
-         'createBtnEnabled': createBtnEnabled})
+         'createBtnEnabled': createBtnEnabled,
+         'columnHeaders': self.__getColumnHeaders()})
         return
+
+    def __getColumnHeaders(self):
+        headers = []
+        headers.append(self.__createHedader('', 54, RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LADDERICON))
+        headers.append(self.__createHedader('', 58, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24))
+        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_CAPTAIN, 152))
+        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_DESCRIPTION, 220))
+        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_PLAYERS, 76))
+        return headers
+
+    def __createHedader(self, label, buttonWidth, iconSource = None):
+        return {'label': label,
+         'buttonWidth': buttonWidth,
+         'iconSource': iconSource}

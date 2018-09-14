@@ -77,6 +77,14 @@ def adjustDefenceHourToLocal(defenceHour, timestamp = None):
     return (localtime.tm_hour, localtime.tm_min)
 
 
+def adjustDefenceHoursListToLocal(hList):
+    result = []
+    for defH in hList:
+        result.append(adjustDefenceHourToLocal(defH)[0])
+
+    return result
+
+
 def adjustVacationToUTC(vacationStart, vacationDuration):
     vacationStart, _ = time_utils.getDayTimeBoundsForUTC(vacationStart)
     return (vacationStart, vacationDuration)

@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw/ServiceChannelManager.py
 from collections import deque
 from chat_shared import CHAT_ACTIONS
+from constants import IS_DEVELOPMENT
 from debug_utils import *
 from ids_generators import SequenceIDGenerator
 from messenger import formatters
@@ -83,8 +84,9 @@ class ServiceChannelManager(ChatActionsListener):
     def __addServerMessage(self, message):
         yield lambda callback: callback(True)
         formatter = formatters.SCH_SERVER_FORMATTERS_DICT.get(message.type)
-        g_messengerEvents.serviceChannel.onChatMessageReceived(self.__idGenerator.next(), message)
-        LOG_NOTE('Server message received', message, formatter)
+        serviceChannel = g_messengerEvents.serviceChannel
+        serviceChannel.onChatMessageReceived(self.__idGenerator.next(), message)
+        LOG_DEBUG('Server message received', message, formatter)
         if formatter:
             try:
                 if formatter.isAsync():
@@ -99,11 +101,15 @@ class ServiceChannelManager(ChatActionsListener):
                 clientID = self.__idGenerator.next()
                 self.__messages.append((clientID, (True, formatted, settings)))
                 self.__unreadMessagesCount += 1
-                g_messengerEvents.serviceChannel.onServerMessageReceived(clientID, formatted, settings)
+                serviceChannel.onServerMessageReceived(clientID, formatted, settings)
+                customEvent = settings.getCustomEvent()
+                if customEvent is not None:
+                    serviceChannel.onCustomMessageDataReceived(clientID, customEvent)
             elif IS_DEVELOPMENT:
                 LOG_WARNING('Not enough data to format. Action data : ', message)
         elif IS_DEVELOPMENT:
             LOG_WARNING('Formatter not found. Action data : ', message)
+        return
 
     def __addClientMessage(self, message, msgType, isAlert = False, auxData = None):
         if auxData is None:

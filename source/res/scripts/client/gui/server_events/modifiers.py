@@ -1,5 +1,7 @@
 # Embedded file name: scripts/client/gui/server_events/modifiers.py
 import operator
+import types
+import BigWorld
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
 import constants
@@ -8,7 +10,7 @@ import nations
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from items import vehicles, ITEM_TYPE_NAMES
 from helpers import i18n
-from gui import nationCompareByName
+from gui import nationCompareByName, makeHtmlString
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils import CONST_CONTAINER, BoundMethodWeakref as bwr
@@ -22,6 +24,7 @@ class ACTION_MODIFIER_TYPE(CONST_CONTAINER):
     DISCOUNT = 1
     SELLING = 2
     RENT = 3
+    AVAILABILITY = 4
 
 
 class ACTION_SECTION_TYPE(CONST_CONTAINER):
@@ -469,13 +472,22 @@ class EconomicsSet(ActionModifier):
          ('emblemPacket30Cost', bwr(self._handlerEmblemPacket30Cost)))
 
     def format(self, event = None):
-        result = []
+        result = {}
         data = self.parse()
         for name, handler in self.__handlers:
             wrappedName = self._wrapParamName(name)
             if wrappedName in data:
                 try:
-                    result.append(handler(data[wrappedName]))
+                    fResult = handler(data[wrappedName])
+                    if fResult:
+                        if isinstance(fResult, types.TupleType):
+                            dVal, dType = fResult
+                        else:
+                            dType = self.getType()
+                            dVal = fResult
+                        if not result.has_key(dType):
+                            result[dType] = []
+                        result[dType].append(dVal)
                 except Exception:
                     LOG_ERROR('Error while formatting economics param', name, wrappedName)
                     LOG_CURRENT_EXCEPTION()
@@ -564,7 +576,10 @@ class EconomicsSet(ActionModifier):
 
     def _handlerFreeXPToTManXPRate(self, value):
         default = g_itemsCache.items.shop.defaults.freeXPToTManXPRate
-        return self.__pack('freeXPToTManXPRate', value, default, _DT.PERCENT)
+        if default <= 0:
+            return (formatters.packTextBlock(i18n.makeString(QUESTS.DETAILS_MODIFIERS_ECONOMICS_AVAILABLE_FREEXPTOTMANXPRATE), makeHtmlString('html_templates:lobby/quests/actions', _DT.MULTIPLIER, {'value': BigWorld.wg_getIntegralFormat(value)})), ACTION_MODIFIER_TYPE.AVAILABILITY)
+        else:
+            return self.__pack('freeXPToTManXPRate', value, default, _DT.PERCENT)
 
     def _handlerPremiumPacket1(self, value):
         default = g_itemsCache.items.shop.defaults.getPremiumPacketCost(1)

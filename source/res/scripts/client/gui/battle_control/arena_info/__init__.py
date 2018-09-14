@@ -18,6 +18,15 @@ def getArenaGuiType():
     return getattr(getClientArena(), 'guiType', constants.ARENA_GUI_TYPE.UNKNOWN)
 
 
+def getArenaGuiTypeLabel():
+    arenaGuiType = getArenaGuiType()
+    if arenaGuiType in constants.ARENA_GUI_TYPE_LABEL.LABELS:
+        label = constants.ARENA_GUI_TYPE_LABEL.LABELS[getArenaGuiType()]
+    else:
+        label = ''
+    return label
+
+
 def isLowLevelBattle():
     arena, battleLevel = getClientArena(), None
     if arena is not None:
@@ -77,4 +86,19 @@ class IArenaController(object):
         pass
 
     def arenaLoadCompleted(self):
+        pass
+
+    def updateRespawnVehicles(self, vehsList):
+        pass
+
+    def updateRespawnCooldowns(self, cooldowns):
+        pass
+
+    def updateRespawnInfo(self, respawnInfo):
+        pass
+
+    def updateRespawnRessurectedInfo(self, respawnInfo):
+        pass
+
+    def invalidateVehicleInteractiveStats(self):
         pass

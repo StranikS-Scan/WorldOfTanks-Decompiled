@@ -54,7 +54,7 @@ class _InviteWindow(View, AbstractWindowView, GlobalListener, ReceivedInviteWind
     def onUnitFunctionalFinished(self):
         self._updateReceivedInfo()
 
-    def onUnitStateChanged(self, state, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         self._updateReceivedInfo()
 
     def cancelInvite(self):

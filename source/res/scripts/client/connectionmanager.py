@@ -94,15 +94,10 @@ class ConnectionManager(Singleton):
 
     def connect(self, url, login, password, publicKeyPath = None, nickName = None, token2 = '', isNeedSavingPwd = False, tokenLoginParams = None):
         self.disconnect()
-        LOG_DEBUG('url: %s; login: %s; pass: %s; name: %s; token: %s' % (url,
-         login,
-         password,
-         nickName,
-         token2))
         self.__isVersionsDiffered = False
         self.__setConnectionStatus(CONNECTION_STATUS.connectionInProgress)
         basicLoginParams = {'login': login,
-         'auth_method': AUTH_METHODS.EBANK if constants.IS_VIETNAM else AUTH_METHODS.BASIC}
+         'auth_method': AUTH_METHODS.BASIC}
         loginParams = tokenLoginParams if tokenLoginParams is not None else basicLoginParams
         loginParams['session'] = md5hex(getHardwareID())
         loginParams['auth_realm'] = constants.AUTH_REALM
@@ -216,7 +211,7 @@ class ConnectionManager(Singleton):
             self.__isVersionsDiffered = False
 
     def __connectionStatusCallback(self, stage, status, serverMsg, isAutoRegister):
-        LOG_MX('__connectionStatusCallback', stage, status, serverMsg)
+        LOG_MX('__connectionStatusCallback', stage, status)
         self.__rawStatus = status
         if stage == 0:
             pass
@@ -246,6 +241,9 @@ class ConnectionManager(Singleton):
 
     def isUpdateClientSoftwareNeeded(self):
         return self.__rawStatus in ('LOGIN_BAD_PROTOCOL_VERSION', 'LOGIN_REJECTED_BAD_DIGEST')
+
+    def isStandalone(self):
+        return self.peripheryID == 0
 
 
 def _getClientUpdateUrl():

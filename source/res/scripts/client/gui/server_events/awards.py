@@ -3,21 +3,35 @@ import random
 from collections import namedtuple
 import BigWorld
 import constants
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 import potapov_quests
 from helpers import i18n
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.shared.utils import findFirst
 from gui.server_events import g_eventsCache
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, packRibbonInfo
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.shared.formatters import text_styles
 
-def _canSeeQuest(questID):
-    if potapov_quests.g_cache.hasPotapovQuest(questID):
-        tileID = g_eventsCache.potapov.getQuests()[questID].getTileID()
-        if g_eventsCache.potapov.getTiles()[tileID].isUnlocked():
-            return True
-    return False
+def _getNextQuestInTileByID(questID):
+    quests = g_eventsCache.potapov.getQuests()
+    questsInTile = sorted(potapov_quests.g_cache.questListByTileIDChainID(quests[questID].getTileID(), quests[questID].getChainID()))
+    try:
+        questInd = questsInTile.index(questID)
+        for nextID in questsInTile[questInd + 1:]:
+            if quests[nextID].isAvailableToPerform():
+                return nextID
+
+        for nextID in questsInTile[:questInd + 1]:
+            if quests[nextID].isAvailableToPerform():
+                return nextID
+
+    except ValueError:
+        LOG_ERROR('Cannot find quest ID {questID} in quests from tile {quests}'.format(questID=questID, quests=questsInTile))
+        LOG_CURRENT_EXCEPTION()
+
+    return None
 
 
 class AchievementsAward(AwardAbstract):
@@ -36,7 +50,7 @@ class AchievementsAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_REFERRAL_AWARD_CREDITS_GLOW
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_MEDALS_HEADER))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_MEDALS_HEADER))
 
     def getDescription(self):
         descr = []
@@ -45,7 +59,7 @@ class AchievementsAward(AwardAbstract):
             if len(noteInfo):
                 descr.append(noteInfo)
 
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, '\n\n'.join(descr))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, '\n\n'.join(descr))
 
     def getExtraFields(self):
         result = []
@@ -75,16 +89,17 @@ class TokenAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_QUESTS_TOKEN256
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_HEADER, count=self.__tokenCount))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_HEADER, count=self.__tokenCount))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_DESCRIPTION))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_DESCRIPTION))
 
     def handleBodyButton(self):
         from gui.server_events import events_dispatcher as quests_events
-        nextQuestID = int(self.__potapovQuest.getID()) + 1
-        if _canSeeQuest(nextQuestID):
+        nextQuestID = _getNextQuestInTileByID(int(self.__potapovQuest.getID()))
+        if nextQuestID is not None:
             quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
+        return
 
     def getBodyButtonText(self):
         return i18n.makeString(MENU.AWARDWINDOW_TAKENEXTBUTTON)
@@ -93,8 +108,9 @@ class TokenAward(AwardAbstract):
         if not self.__potapovQuest.isFinal():
             return super(TokenAward, self).getButtonStates()
         else:
-            nextQuestID = int(self.__potapovQuest.getID()) + 1
-            return (False, True, _canSeeQuest(nextQuestID))
+            nextQuestID = _getNextQuestInTileByID(int(self.__potapovQuest.getID()))
+            return (False, True, nextQuestID is not None)
+            return None
 
 
 class VehicleAward(AwardAbstract):
@@ -112,10 +128,10 @@ class VehicleAward(AwardAbstract):
         return self.__vehicle.iconUniqueLight
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_DESCRIPTION))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_DESCRIPTION))
 
 
 class TankwomanAward(AwardAbstract):
@@ -134,10 +150,10 @@ class TankwomanAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_QUESTS_TANKMANFEMALEORANGE
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TANKMANFEMALE_HEADER))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TANKMANFEMALE_HEADER))
 
     def getDescription(self):
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TANKMANFEMALE_DESCRIPTION))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TANKMANFEMALE_DESCRIPTION))
 
     def getOkButtonText(self):
         return i18n.makeString(MENU.AWARDWINDOW_RECRUITBUTTON)
@@ -214,20 +230,25 @@ class RegularAward(AwardAbstract):
         return i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_DESCRIPTION)
 
     def getAdditionalText(self):
+        nextQuestID = _getNextQuestInTileByID(self.__potapovQuest.getID())
+        if nextQuestID:
+            nextQuestInfo = i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_NEXTTASKAUTOCHOICE, taskName=g_eventsCache.potapov.getQuests()[nextQuestID].getUserName())
+        else:
+            nextQuestInfo = ''
         if self.__isAddReward:
-            _getText = self.app.utilsManager.textManager.getText
             result = []
             for b in self.__potapovQuest.getBonuses(isMain=False):
                 if b.isShowInGUI():
                     result.append(b.format())
 
-            return _getText(TextType.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONAL, award=', '.join(result)))
+            taskComplete = i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONAL, award=', '.join(result))
+            return text_styles.main('{0}\n{1}'.format(taskComplete, nextQuestInfo))
         else:
-            return i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONALNOTCOMPLETE)
+            return '{0}\n{1}'.format(i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONALNOTCOMPLETE), nextQuestInfo)
 
     def getButtonStates(self):
-        nextQuestID = int(self.__potapovQuest.getID()) + 1
-        return (False, True, _canSeeQuest(nextQuestID))
+        nextQuestID = _getNextQuestInTileByID(int(self.__potapovQuest.getID()))
+        return (False, True, nextQuestID is not None)
 
     def getBodyButtonText(self):
         return i18n.makeString(MENU.AWARDWINDOW_TAKENEXTBUTTON)
@@ -240,9 +261,10 @@ class RegularAward(AwardAbstract):
 
     def handleBodyButton(self):
         from gui.server_events import events_dispatcher as quests_events
-        nextQuestID = int(self.__potapovQuest.getID()) + 1
-        if _canSeeQuest(nextQuestID):
+        nextQuestID = _getNextQuestInTileByID(int(self.__potapovQuest.getID()))
+        if nextQuestID is not None:
             quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
+        return
 
     def __getMainRewards(self):
         result = []

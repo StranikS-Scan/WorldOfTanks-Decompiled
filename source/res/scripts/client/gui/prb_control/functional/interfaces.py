@@ -320,7 +320,7 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
     def __del__(self):
         LOG_DEBUG('Unit functional deleted:', self)
 
-    def init(self):
+    def init(self, ctx = None):
         return FUNCTIONAL_INIT_RESULT.INITED
 
     def fini(self, woEvents = False):
@@ -374,8 +374,8 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
     def getVehicleInfo(self, dbID = None, unitIdx = None):
         return unit_items.VehicleInfo()
 
-    def getState(self, unitIdx = None):
-        return unit_items.UnitState(0)
+    def getFlags(self, unitIdx = None):
+        return unit_items.UnitFlags(0)
 
     def getStats(self, unitIdx = None):
         return unit_items.UnitStats(0, 0, 0, 0, [], 0, 0)
@@ -395,7 +395,7 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
     def doLeadershipNotificationShown(self):
         pass
 
-    def validateLevels(self, stats = None, state = None, vInfo = None):
+    def validateLevels(self, stats = None, flags = None, vInfo = None):
         return (True, '')
 
     def getUnitInvalidLevels(self, stats = None):
@@ -431,7 +431,7 @@ class IUnitListener(IIntroUnitListener):
     def onUnitFunctionalFinished(self):
         pass
 
-    def onUnitStateChanged(self, state, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         pass
 
     def onUnitPlayerStateChanged(self, pInfo):

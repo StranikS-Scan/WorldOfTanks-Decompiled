@@ -21,6 +21,8 @@ def createUnitActionValidator(prbType, rosterSettings, proxy):
         validator = limits.FortBattleActionValidator(rosterSettings)
     elif prbType == PREBATTLE_TYPE.CLUBS:
         validator = limits.ClubsActionValidator(rosterSettings, proxy)
+    elif prbType == PREBATTLE_TYPE.SQUAD:
+        validator = limits.SquadActionValidator(rosterSettings)
     else:
         validator = limits.UnitActionValidator(rosterSettings)
     return validator

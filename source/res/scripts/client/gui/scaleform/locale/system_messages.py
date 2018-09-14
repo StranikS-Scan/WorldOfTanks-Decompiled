@@ -19,6 +19,12 @@ class SYSTEM_MESSAGES(object):
     PREMIUM_SERVER_ERROR = '#system_messages:premium/server_error'
     PREMIUM_NOT_ENOUGH_GOLD = '#system_messages:premium/not_enough_gold'
     PREMIUM_WALLET_NOT_AVAILABLE = '#system_messages:premium/wallet_not_available'
+    BOOSTER_ACTIVATIONSUCCESS = '#system_messages:booster/activationSuccess'
+    BOOSTER_SERVER_ERROR = '#system_messages:booster/server_error'
+    BOOSTER_NO_BOOSTERS = '#system_messages:booster/NO_BOOSTERS'
+    BOOSTER_ALREADY_USED = '#system_messages:booster/ALREADY_USED'
+    BOOSTER_DISABLED = '#system_messages:booster/DISABLED'
+    BOOSTER_EXCEPTION = '#system_messages:booster/EXCEPTION'
     UPGRADETANKMAN_SUCCESS = '#system_messages:upgradeTankman/success'
     UPGRADETANKMAN_SERVER_ERROR = '#system_messages:upgradeTankman/server_error'
     ARENA_START_ERRORS_JOIN_TIME_OUT = '#system_messages:arena_start_errors/join/TIME_OUT'
@@ -38,6 +44,7 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_JOIN_NO_VEHICLE = '#system_messages:arena_start_errors/join/no_vehicle'
     ARENA_START_ERRORS_JOIN_NO_READYVEHICLE = '#system_messages:arena_start_errors/join/no_readyVehicle'
     ARENA_START_ERRORS_JOIN_WRONG_BATTLE_ID = '#system_messages:arena_start_errors/join/WRONG_BATTLE_ID'
+    ARENA_START_ERRORS_JOIN_EVENT_DISABLED = '#system_messages:arena_start_errors/join/EVENT_DISABLED'
     PREBATTLE_KICK_TYPE_SQUAD = '#system_messages:prebattle/kick/type/squad'
     PREBATTLE_KICK_TYPE_TEAM = '#system_messages:prebattle/kick/type/team'
     PREBATTLE_KICK_TYPE_UNKNOWN = '#system_messages:prebattle/kick/type/unknown'
@@ -59,6 +66,8 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_LIMITS_COMPONENTS = '#system_messages:prebattle/vehicleInvalid/limits/components'
     PREBATTLE_VEHICLEINVALID_LIMITS_AMMO = '#system_messages:prebattle/vehicleInvalid/limits/ammo'
     PREBATTLE_VEHICLEINVALID_LIMITS_SHELLS = '#system_messages:prebattle/vehicleInvalid/limits/shells'
+    PREBATTLE_VEHICLEINVALID_LIMITS_TAGS = '#system_messages:prebattle/vehicleInvalid/limits/tags'
+    PREBATTLE_VEHICLEINVALID_LIMITS_NOT_SUPPORTED = '#system_messages:prebattle/vehicleInvalid/limits/not_supported'
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
@@ -224,6 +233,9 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_ADDED_CAMOUFLAGES = '#system_messages:customization/added/camouflages'
     CUSTOMIZATION_ADDED_EMBLEMS = '#system_messages:customization/added/emblems'
     CUSTOMIZATION_ADDED_INSCRIPTIONS = '#system_messages:customization/added/inscriptions'
+    CUSTOMIZATION_REMOVED_CAMOUFLAGES = '#system_messages:customization/removed/camouflages'
+    CUSTOMIZATION_REMOVED_EMBLEMS = '#system_messages:customization/removed/emblems'
+    CUSTOMIZATION_REMOVED_INSCRIPTIONS = '#system_messages:customization/removed/inscriptions'
     CUSTOMIZATION_ADDED_CAMOUFLAGESVALUE = '#system_messages:customization/added/camouflagesValue'
     CUSTOMIZATION_ADDED_EMBLEMSVALUE = '#system_messages:customization/added/emblemsValue'
     CUSTOMIZATION_ADDED_INSCRIPTIONSVALUE = '#system_messages:customization/added/inscriptionsValue'
@@ -349,6 +361,8 @@ class SYSTEM_MESSAGES(object):
     CHANGE_TANKMAN_ROLE_NOT_ENOUGH_GOLD = '#system_messages:change_tankman_role/not_enough_gold'
     CHANGE_TANKMAN_ROLE_NOT_ENOUGH_CREDITS = '#system_messages:change_tankman_role/not_enough_credits'
     CHANGE_TANKMAN_ROLE_WALLET_NOT_AVAILABLE = '#system_messages:change_tankman_role/wallet_not_available'
+    CHANGE_TANKMAN_ROLE_INVALID_VEHICLE = '#system_messages:change_tankman_role/invalid_vehicle'
+    CHANGE_TANKMAN_ROLE_INVALID_ROLE = '#system_messages:change_tankman_role/invalid_role'
     FREE_XP_TO_TMAN_SKILL_SUCCESS = '#system_messages:free_xp_to_tman_skill/success'
     FREE_XP_TO_TMAN_SKILL_SERVER_ERROR = '#system_messages:free_xp_to_tman_skill/server_error'
     FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE = '#system_messages:free_xp_to_tman_skill/error/WRONG_ARGS_TYPE'
@@ -651,6 +665,7 @@ class SYSTEM_MESSAGES(object):
     CLUBS_REQUEST_ERRORS_INACTIVE_APPLICATION_ = '#system_messages:clubs/request/errors/Inactive application.'
     CLUBS_REQUEST_ERRORS_INACTIVE_INVITE_ = '#system_messages:clubs/request/errors/Inactive invite.'
     CLUBS_REQUEST_ERRORS_TOO_MANY_REQUESTS_ARE_IN_THE_PENDING_STATE_ = '#system_messages:clubs/request/errors/Too many requests are in the pending state.'
+    CLUBS_REQUEST_ERRORS_TOO_MANY_INVITES_SENT_TO_THAT_PLAYER_ = '#system_messages:clubs/request/errors/Too many invites sent to that player.'
     CLUBS_REQUEST_ERRORS_THIS_CLUB_NAME_IS_ALREADY_TAKEN_ = '#system_messages:clubs/request/errors/This club name is already taken.'
     CLUBS_REQUEST_ERRORS_INCORRECT_CHECKOUT_TOKEN_ = '#system_messages:clubs/request/errors/Incorrect checkout token.'
     CLUBS_REQUEST_ERRORS_CLUB_IS_LOCKED_ = '#system_messages:clubs/request/errors/Club is locked.'
@@ -661,6 +676,7 @@ class SYSTEM_MESSAGES(object):
     CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_RESTRICTED_ON_WEB_SIDE_ = '#system_messages:clubs/request/errors/This operation is restricted on web side.'
     CLUBS_REQUEST_ERRORS_WEB_API_IS_NOT_AVAILABLE_AT_THIS_MOMENT_ = '#system_messages:clubs/request/errors/Web API is not available at this moment.'
     CLUBS_REQUEST_ERRORS_THIS_CLUB_IS_NOT_IN_THE_LADDER_ = '#system_messages:clubs/request/errors/This club is not in the ladder.'
+    CLUBS_REQUEST_ERRORS_UNITMGR_NOT_AVAILABLE = '#system_messages:clubs/request/errors/UnitMgr not available'
     CLUBS_REQUEST_ERRORS_TEAM_DOES_NOT_EXIST = '#system_messages:clubs/request/errors/TEAM_DOES_NOT_EXIST'
     CLUBS_REQUEST_ERRORS_TEAM_IS_FULL = '#system_messages:clubs/request/errors/TEAM_IS_FULL'
     CLUBS_REQUEST_ERRORS_TEAM_IS_NOT_ACTIVE = '#system_messages:clubs/request/errors/TEAM_IS_NOT_ACTIVE'
@@ -691,8 +707,12 @@ class SYSTEM_MESSAGES(object):
     CLUBS_REQUEST_ERRORS_INVITE_DOES_NOT_EXIST = '#system_messages:clubs/request/errors/INVITE_DOES_NOT_EXIST'
     CLUBS_REQUEST_ERRORS_INVITE_IS_NOT_ACTIVE = '#system_messages:clubs/request/errors/INVITE_IS_NOT_ACTIVE'
     CLUBS_REQUEST_ERRORS_HAS_NO_CLUB = '#system_messages:clubs/request/errors/HAS_NO_CLUB'
+    CLUBS_REQUEST_ERRORS_TOO_MANY_INVITES_PER_CALL = '#system_messages:clubs/request/errors/TOO_MANY_INVITES_PER_CALL'
+    CLUBS_REQUEST_ERRORS_TEAM_ACTIVE_PROPOSALS_EXCEEDED = '#system_messages:clubs/request/errors/TEAM_ACTIVE_PROPOSALS_EXCEEDED'
+    CLUBS_REQUEST_ERRORS_NOT_ENOUGH_RATED_BATTLES = '#system_messages:clubs/request/errors/NOT_ENOUGH_RATED_BATTLES'
     CLUBS_REQUEST_ERRORS_HAVE_NO_RIGHTS = '#system_messages:clubs/request/errors/HAVE_NO_RIGHTS'
-    CLUBS_REQUEST_ERRORS_COOLDOWN = '#system_messages:clubs/request/errors/cooldown'
+    CLUBS_REQUEST_ERRORS_CLUBS_ARE_DISABLED = '#system_messages:clubs/request/errors/CLUBS ARE DISABLED'
+    CLUBS_REQUEST_ERRORS_TIME_OUT = '#system_messages:clubs/request/errors/time out'
     EXCHANGE_SUCCESS = '#system_messages:exchange/success'
     EXCHANGE_NOT_ENOUGH_GOLD = '#system_messages:exchange/not_enough_gold'
     EXCHANGE_WALLET_NOT_AVAILABLE = '#system_messages:exchange/wallet_not_available'
@@ -926,6 +946,7 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_ERRORS_TOO_MANY_DEFENCES = '#system_messages:fortification/errors/TOO_MANY_DEFENCES'
     FORTIFICATION_ERRORS_CURFEW_HOUR = '#system_messages:fortification/errors/CURFEW_HOUR'
     FORTIFICATION_ERRORS_JOIN_CTX_LOCKED = '#system_messages:fortification/errors/JOIN_CTX_LOCKED'
+    FORTIFICATION_ERRORS_ATTACK_TOO_LATE = '#system_messages:fortification/errors/ATTACK_TOO_LATE'
     BUTTONS_GOTOPOLL = '#system_messages:buttons/goToPoll'
     INVITE_STATUS_WRONG_CLAN = '#system_messages:invite/status/WRONG_CLAN'
     INVITE_STATUS_LEGIONARIES_NOT_ALLOWED = '#system_messages:invite/status/LEGIONARIES_NOT_ALLOWED'
@@ -1118,7 +1139,8 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_FORT_BATTLES_DISABLED,
      FORTIFICATION_ERRORS_TOO_MANY_DEFENCES,
      FORTIFICATION_ERRORS_CURFEW_HOUR,
-     FORTIFICATION_ERRORS_JOIN_CTX_LOCKED)
+     FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
+     FORTIFICATION_ERRORS_ATTACK_TOO_LATE)
     UNITBROWSER_ERRORS_ENUM = UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
@@ -1157,6 +1179,12 @@ class SYSTEM_MESSAGES(object):
      PREMIUM_SERVER_ERROR,
      PREMIUM_NOT_ENOUGH_GOLD,
      PREMIUM_WALLET_NOT_AVAILABLE,
+     BOOSTER_ACTIVATIONSUCCESS,
+     BOOSTER_SERVER_ERROR,
+     BOOSTER_NO_BOOSTERS,
+     BOOSTER_ALREADY_USED,
+     BOOSTER_DISABLED,
+     BOOSTER_EXCEPTION,
      UPGRADETANKMAN_SUCCESS,
      UPGRADETANKMAN_SERVER_ERROR,
      ARENA_START_ERRORS_JOIN_TIME_OUT,
@@ -1176,6 +1204,7 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_JOIN_NO_VEHICLE,
      ARENA_START_ERRORS_JOIN_NO_READYVEHICLE,
      ARENA_START_ERRORS_JOIN_WRONG_BATTLE_ID,
+     ARENA_START_ERRORS_JOIN_EVENT_DISABLED,
      PREBATTLE_KICK_TYPE_SQUAD,
      PREBATTLE_KICK_TYPE_TEAM,
      PREBATTLE_KICK_TYPE_UNKNOWN,
@@ -1197,6 +1226,8 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_LIMITS_COMPONENTS,
      PREBATTLE_VEHICLEINVALID_LIMITS_AMMO,
      PREBATTLE_VEHICLEINVALID_LIMITS_SHELLS,
+     PREBATTLE_VEHICLEINVALID_LIMITS_TAGS,
+     PREBATTLE_VEHICLEINVALID_LIMITS_NOT_SUPPORTED,
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
@@ -1358,6 +1389,9 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_ADDED_CAMOUFLAGES,
      CUSTOMIZATION_ADDED_EMBLEMS,
      CUSTOMIZATION_ADDED_INSCRIPTIONS,
+     CUSTOMIZATION_REMOVED_CAMOUFLAGES,
+     CUSTOMIZATION_REMOVED_EMBLEMS,
+     CUSTOMIZATION_REMOVED_INSCRIPTIONS,
      CUSTOMIZATION_ADDED_CAMOUFLAGESVALUE,
      CUSTOMIZATION_ADDED_EMBLEMSVALUE,
      CUSTOMIZATION_ADDED_INSCRIPTIONSVALUE,
@@ -1483,6 +1517,8 @@ class SYSTEM_MESSAGES(object):
      CHANGE_TANKMAN_ROLE_NOT_ENOUGH_GOLD,
      CHANGE_TANKMAN_ROLE_NOT_ENOUGH_CREDITS,
      CHANGE_TANKMAN_ROLE_WALLET_NOT_AVAILABLE,
+     CHANGE_TANKMAN_ROLE_INVALID_VEHICLE,
+     CHANGE_TANKMAN_ROLE_INVALID_ROLE,
      FREE_XP_TO_TMAN_SKILL_SUCCESS,
      FREE_XP_TO_TMAN_SKILL_SERVER_ERROR,
      FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE,
@@ -1785,6 +1821,7 @@ class SYSTEM_MESSAGES(object):
      CLUBS_REQUEST_ERRORS_INACTIVE_APPLICATION_,
      CLUBS_REQUEST_ERRORS_INACTIVE_INVITE_,
      CLUBS_REQUEST_ERRORS_TOO_MANY_REQUESTS_ARE_IN_THE_PENDING_STATE_,
+     CLUBS_REQUEST_ERRORS_TOO_MANY_INVITES_SENT_TO_THAT_PLAYER_,
      CLUBS_REQUEST_ERRORS_THIS_CLUB_NAME_IS_ALREADY_TAKEN_,
      CLUBS_REQUEST_ERRORS_INCORRECT_CHECKOUT_TOKEN_,
      CLUBS_REQUEST_ERRORS_CLUB_IS_LOCKED_,
@@ -1795,6 +1832,7 @@ class SYSTEM_MESSAGES(object):
      CLUBS_REQUEST_ERRORS_THIS_OPERATION_IS_RESTRICTED_ON_WEB_SIDE_,
      CLUBS_REQUEST_ERRORS_WEB_API_IS_NOT_AVAILABLE_AT_THIS_MOMENT_,
      CLUBS_REQUEST_ERRORS_THIS_CLUB_IS_NOT_IN_THE_LADDER_,
+     CLUBS_REQUEST_ERRORS_UNITMGR_NOT_AVAILABLE,
      CLUBS_REQUEST_ERRORS_TEAM_DOES_NOT_EXIST,
      CLUBS_REQUEST_ERRORS_TEAM_IS_FULL,
      CLUBS_REQUEST_ERRORS_TEAM_IS_NOT_ACTIVE,
@@ -1825,8 +1863,12 @@ class SYSTEM_MESSAGES(object):
      CLUBS_REQUEST_ERRORS_INVITE_DOES_NOT_EXIST,
      CLUBS_REQUEST_ERRORS_INVITE_IS_NOT_ACTIVE,
      CLUBS_REQUEST_ERRORS_HAS_NO_CLUB,
+     CLUBS_REQUEST_ERRORS_TOO_MANY_INVITES_PER_CALL,
+     CLUBS_REQUEST_ERRORS_TEAM_ACTIVE_PROPOSALS_EXCEEDED,
+     CLUBS_REQUEST_ERRORS_NOT_ENOUGH_RATED_BATTLES,
      CLUBS_REQUEST_ERRORS_HAVE_NO_RIGHTS,
-     CLUBS_REQUEST_ERRORS_COOLDOWN,
+     CLUBS_REQUEST_ERRORS_CLUBS_ARE_DISABLED,
+     CLUBS_REQUEST_ERRORS_TIME_OUT,
      EXCHANGE_SUCCESS,
      EXCHANGE_NOT_ENOUGH_GOLD,
      EXCHANGE_WALLET_NOT_AVAILABLE,
@@ -2060,6 +2102,7 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_TOO_MANY_DEFENCES,
      FORTIFICATION_ERRORS_CURFEW_HOUR,
      FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
+     FORTIFICATION_ERRORS_ATTACK_TOO_LATE,
      BUTTONS_GOTOPOLL,
      INVITE_STATUS_WRONG_CLAN,
      INVITE_STATUS_LEGIONARIES_NOT_ALLOWED,

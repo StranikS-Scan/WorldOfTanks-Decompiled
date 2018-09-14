@@ -362,6 +362,9 @@ class FittingItem(GUIItem, HasIntCD):
     def getRentPackage(self, days = None):
         return None
 
+    def getGUIEmblemID(self):
+        return 'notFound'
+
     @property
     def icon(self):
         return _ICONS_MASK % {'type': self.itemTypeName,

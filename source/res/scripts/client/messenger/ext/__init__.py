@@ -6,7 +6,7 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from external_strings_utils import isAccountNameValid
 from external_strings_utils import _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH
 import constants
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from messenger import g_settings
 from messenger.ext import dictionaries
 from messenger.m_constants import CLIENT_ERROR_ID
@@ -72,3 +72,20 @@ def checkAccountName(token):
     elif reason == CLIENT_ERROR_ID.NAME_INVALID:
         reason = i18n.makeString(MESSENGER.CLIENT_WARNING_INVALIDUSERSEARCHTOKEN_MESSAGE, _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH)
     return (result, reason)
+
+
+def isSenderIgnored(user):
+    areFriendsOnly = g_settings.userPrefs.invitesFromFriendsOnly
+    if user:
+        if areFriendsOnly:
+            if user.isFriend():
+                return False
+            else:
+                LOG_DEBUG('Invite is ignored, shows invites from friends only', user)
+                return True
+        if user.isIgnored():
+            LOG_DEBUG('Invite is ignored, there is the contact in ignore list', user)
+            return True
+    elif areFriendsOnly:
+        LOG_DEBUG('Invite is ignored, shows invites from friends only', user)
+    return areFriendsOnly

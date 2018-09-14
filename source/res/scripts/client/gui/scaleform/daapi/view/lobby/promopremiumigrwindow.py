@@ -4,11 +4,11 @@ from gui.Scaleform.framework.entities.abstract.AbstractWindowView import Abstrac
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.PromoPremiumIgrWindowMeta import PromoPremiumIgrWindowMeta
 from gui.Scaleform.framework import AppRef
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from helpers import i18n
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.framework.managers.TextManager import TextType
 
 class PromoPremiumIgrWindow(AbstractWindowView, View, PromoPremiumIgrWindowMeta, AppRef):
 
@@ -32,6 +32,6 @@ class PromoPremiumIgrWindow(AbstractWindowView, View, PromoPremiumIgrWindowMeta,
         igrIcon = RES_ICONS.MAPS_ICONS_LIBRARY_PREMIUM_SMALL
         icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(igrIcon, 34, 16, -4))
         self.as_setWindowTitleS(ms(MENU.PROMOPREMIUMIGRWINDOW_WINDOWTITLE))
-        self.as_setTitleS(getTxt(TextType.HIGH_TITLE, ms(MENU.PROMOPREMIUMIGRWINDOW_TITLE)))
-        self.as_setTextS(getTxt(TextType.STANDARD_TEXT, ms(MENU.PROMOPREMIUMIGRWINDOW_TEXT, iconIgr=icon)))
+        self.as_setTitleS(getTxt(TEXT_MANAGER_STYLES.HIGH_TITLE, ms(MENU.PROMOPREMIUMIGRWINDOW_TITLE)))
+        self.as_setTextS(getTxt(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.PROMOPREMIUMIGRWINDOW_TEXT, iconIgr=icon)))
         self.as_setApplyButtonLabelS(ms(MENU.PROMOPREMIUMIGRWINDOW_APPLYBUTTONLABEL))

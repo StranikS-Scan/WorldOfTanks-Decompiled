@@ -17,13 +17,19 @@ class XMPPUserEntity(UserEntity):
     def __repr__(self):
         return 'XMPPUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, item={3!r:s}, isOnline={4!r:s}, clanInfo={5!r:s})'.format(self._databaseID, self.getFullName(), self.getTags(), self._item, self.isOnline(), self._clanInfo)
 
+    def getResourceID(self):
+        return self._item.getResources().getHighestPriorityID()
+
+    def getClientInfo(self):
+        return self._item.getClientInfo()
+
     def clear(self):
         self._gos = GAME_ONLINE_STATUS.UNDEFINED
         super(XMPPUserEntity, self).clear()
 
     def getPersistentState(self):
         state = None
-        tags = USER_TAG.filterToStore(self.getTags())
+        tags = USER_TAG.filterToStoreTags(self.getTags())
         if self._databaseID and (self._item.isTrusted() or tags):
             state = (self._name, self._item.getItemType(), tags if tags else None)
         return state

@@ -38,3 +38,7 @@ class PrbSendInvitesWindowMeta(DAAPIModule):
     def as_onListStateChangedS(self, isEmpty):
         if self._isDAAPIInited():
             return self.flashObject.as_onListStateChanged(isEmpty)
+
+    def as_enableDescriptionS(self, isEnabled):
+        if self._isDAAPIInited():
+            return self.flashObject.as_enableDescription(isEnabled)

@@ -10,6 +10,7 @@ import copy
 import SoundGroups
 from constants import ARENA_PERIOD
 from debug_utils import *
+from functools import partial
 
 class Timer:
     __timeMethod = None
@@ -179,6 +180,7 @@ class WarplaneActivity(IMapActivity):
         self.__startTime = startTime
         self.__fadedIn = False
         self.__period = self.__settings.readFloat('period', 0.0)
+        self.__possibility = self.__settings.readFloat('possibility', 1.0)
         self.clampStartTime()
         self.__firstLaunch = True
         self.__curve = BigWorld.WGActionCurve(self.__settings)
@@ -213,33 +215,37 @@ class WarplaneActivity(IMapActivity):
         self.__period = period
 
     def start(self):
-        if self.__firstLaunch is True:
-            BigWorld.addModel(self.__model)
-            self.__model.forceReflect = True
-            self.__motor = BigWorld.WGWarplaneMotor(self.__curve, 0)
-            self.__model.addMotor(self.__motor)
-            self.__endTime = self.__motor.totalTime + self.__startTime
-            if self.__endTime <= Timer.getTime():
-                self.__fadedIn = True
-            else:
-                self.__motor.restart(Timer.getTime() - self.__startTime)
-            self.__firstLaunch = False
+        if self.isPeriodic() and self.__possibility < random.uniform(0.0, 1.0):
+            self.__startTime += self.__period
+            return
         else:
-            self.pause()
-            if self.__motor is not None:
+            if self.__firstLaunch is True:
+                BigWorld.addModel(self.__model)
+                self.__model.forceReflect = True
+                self.__motor = BigWorld.WGWarplaneMotor(self.__curve, 0)
                 self.__model.addMotor(self.__motor)
-                self.__motor.restart()
                 self.__endTime = self.__motor.totalTime + self.__startTime
-            if self.__cbID is not None:
-                BigWorld.cancelCallback(self.__cbID)
-            if self.__sound is not None:
-                self.__sound.stop()
-                self.__sound = None
-            self.__fadedIn = False
-        self.__model.visible = 1
-        self.__startTime += self.__period
-        self.__waitEnterWorld()
-        return
+                if self.__endTime <= Timer.getTime():
+                    self.__fadedIn = True
+                else:
+                    self.__motor.restart(Timer.getTime() - self.__startTime)
+                self.__firstLaunch = False
+            else:
+                self.pause()
+                if self.__motor is not None:
+                    self.__model.addMotor(self.__motor)
+                    self.__motor.restart()
+                    self.__endTime = self.__motor.totalTime + self.__startTime
+                if self.__cbID is not None:
+                    BigWorld.cancelCallback(self.__cbID)
+                if self.__sound is not None:
+                    self.__sound.stop()
+                    self.__sound = None
+                self.__fadedIn = False
+            self.__model.visible = 1
+            self.__startTime += self.__period
+            self.__waitEnterWorld()
+            return
 
     def stop(self):
         if self.__cbID is not None:
@@ -294,7 +300,7 @@ class WarplaneActivity(IMapActivity):
             ds = self.__curve.getChannelProperty(0, 'effectName')
             effectName = ds.asString if ds is not None else ''
             if effectName != '':
-                Pixie.createBG(effectName, self.__onParticlesLoaded)
+                Pixie.createBG(effectName, partial(self.__onParticlesLoaded, effectName))
         elif visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
             self.pause()
             return
@@ -312,11 +318,14 @@ class WarplaneActivity(IMapActivity):
         else:
             LOG_ERROR('Could not load model %s' % self.__modelName)
 
-    def __onParticlesLoaded(self, particles):
+    def __onParticlesLoaded(self, effectName, particles):
         if self.__curve is None:
             return
         else:
             propValue = self.__curve.getChannelProperty(0, 'effectHardpoint')
+            if particles is None:
+                LOG_ERROR("Can't create pixie '%s'." % effectName)
+                return
             if propValue is None:
                 return
             hardPointName = propValue.asString

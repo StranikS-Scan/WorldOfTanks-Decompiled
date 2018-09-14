@@ -4,11 +4,13 @@ import BigWorld, ResMgr
 import ArenaType
 from items import vehicles
 import constants
-import cPickle
+import cPickle, zlib
 import Event
 from constants import ARENA_PERIOD, ARENA_UPDATE
 from PlayerEvents import g_playerEvents
 from debug_utils import *
+from CTFManager import g_ctfManager
+from helpers.EffectsList import FalloutDestroyEffect
 
 class ClientArena(object):
     __onUpdate = {ARENA_UPDATE.VEHICLE_LIST: '_ClientArena__onVehicleListUpdate',
@@ -22,7 +24,14 @@ class ClientArena(object):
      ARENA_UPDATE.BASE_CAPTURED: '_ClientArena__onBaseCaptured',
      ARENA_UPDATE.TEAM_KILLER: '_ClientArena__onTeamKiller',
      ARENA_UPDATE.VEHICLE_UPDATED: '_ClientArena__onVehicleUpdatedUpdate',
-     ARENA_UPDATE.COMBAT_EQUIPMENT_USED: '_ClientArena__onCombatEquipmentUsed'}
+     ARENA_UPDATE.COMBAT_EQUIPMENT_USED: '_ClientArena__onCombatEquipmentUsed',
+     ARENA_UPDATE.RESPAWN_AVAILABLE_VEHICLES: '_ClientArena__onRespawnAvailableVehicles',
+     ARENA_UPDATE.RESPAWN_COOLDOWNS: '_ClientArena__onRespawnCooldowns',
+     ARENA_UPDATE.RESPAWN_RANDOM_VEHICLE: '_ClientArena__onRespawnRandomVehicle',
+     ARENA_UPDATE.RESPAWN_RESURRECTED: '_ClientArena__onRespawnResurrected',
+     ARENA_UPDATE.FLAG_STATE_CHANGED: '_ClientArena__onFlagStateChanged',
+     ARENA_UPDATE.INTERACTIVE_STATS: '_ClientArena__onInteractiveStats',
+     ARENA_UPDATE.DISAPPEAR_BEFORE_RESPAWN: '_ClientArena__onDisappearVehicleBeforeRespawn'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -48,8 +57,15 @@ class ClientArena(object):
         self.onTeamBaseCaptured = Event.Event(em)
         self.onTeamKiller = Event.Event(em)
         self.onCombatEquipmentUsed = Event.Event(em)
+        self.onRespawnAvailableVehicles = Event.Event(em)
+        self.onRespawnCooldowns = Event.Event(em)
+        self.onRespawnRandomVehicle = Event.Event(em)
+        self.onRespawnResurrected = Event.Event(em)
+        self.onInteractiveStats = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
-        self.arenaType = ArenaType.g_cache[arenaTypeID]
+        self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
+        if self.arenaType is None:
+            LOG_ERROR('Arena ID not found ', arenaTypeID)
         self.bonusType = arenaBonusType
         self.guiType = arenaGuiType
         self.extraData = arenaExtraData
@@ -110,7 +126,7 @@ class ClientArena(object):
         return True
 
     def __onVehicleListUpdate(self, argStr):
-        list = cPickle.loads(argStr)
+        list = cPickle.loads(zlib.decompress(argStr))
         vehicles = self.__vehicles
         vehicles.clear()
         for infoAsTuple in list:
@@ -121,26 +137,26 @@ class ClientArena(object):
         self.onNewVehicleListReceived()
 
     def __onVehicleAddedUpdate(self, argStr):
-        infoAsTuple = cPickle.loads(argStr)
+        infoAsTuple = cPickle.loads(zlib.decompress(argStr))
         id, info = self.__vehicleInfoAsDict(infoAsTuple)
         self.__vehicles[id] = info
         self.__rebuildIndexToId()
         self.onVehicleAdded(id)
 
     def __onVehicleUpdatedUpdate(self, argStr):
-        infoAsTuple = cPickle.loads(argStr)
+        infoAsTuple = cPickle.loads(zlib.decompress(argStr))
         id, info = self.__vehicleInfoAsDict(infoAsTuple)
         self.__vehicles[id] = info
         self.onVehicleUpdated(id)
 
     def __onPeriodInfoUpdate(self, argStr):
-        self.__periodInfo = cPickle.loads(argStr)
+        self.__periodInfo = cPickle.loads(zlib.decompress(argStr))
         self.onPeriodChange(*self.__periodInfo)
         g_playerEvents.onArenaPeriodChange(*self.__periodInfo)
 
     def __onStatisticsUpdate(self, argStr):
         self.__statistics = {}
-        statList = cPickle.loads(argStr)
+        statList = cPickle.loads(zlib.decompress(argStr))
         for s in statList:
             vehicleID, stats = self.__vehicleStatisticsAsDict(s)
             self.__statistics[vehicleID] = stats
@@ -148,7 +164,7 @@ class ClientArena(object):
         self.onNewStatisticsReceived()
 
     def __onVehicleStatisticsUpdate(self, argStr):
-        vehicleID, stats = self.__vehicleStatisticsAsDict(cPickle.loads(argStr))
+        vehicleID, stats = self.__vehicleStatisticsAsDict(cPickle.loads(zlib.decompress(argStr)))
         self.__statistics[vehicleID] = stats
         self.onVehicleStatisticsUpdate(vehicleID)
 
@@ -188,6 +204,35 @@ class ClientArena(object):
         equipmentID = cPickle.loads(argStr)
         self.onCombatEquipmentUsed(equipmentID)
 
+    def __onRespawnAvailableVehicles(self, argStr):
+        vehsList = cPickle.loads(zlib.decompress(argStr))
+        self.onRespawnAvailableVehicles(vehsList)
+
+    def __onRespawnCooldowns(self, argStr):
+        cooldowns = cPickle.loads(zlib.decompress(argStr))
+        self.onRespawnCooldowns(cooldowns)
+
+    def __onRespawnRandomVehicle(self, argStr):
+        respawnInfo = cPickle.loads(zlib.decompress(argStr))
+        self.onRespawnRandomVehicle(respawnInfo)
+
+    def __onRespawnResurrected(self, argStr):
+        respawnInfo = cPickle.loads(zlib.decompress(argStr))
+        self.onRespawnResurrected(respawnInfo)
+
+    def __onDisappearVehicleBeforeRespawn(self, argStr):
+        vehID = cPickle.loads(argStr)
+        FalloutDestroyEffect.play(vehID)
+
+    def __onFlagStateChanged(self, argStr):
+        data = cPickle.loads(argStr)
+        LOG_DEBUG('[FLAGS] flag state changed', data)
+        g_ctfManager.onFlagStateChanged(data)
+
+    def __onInteractiveStats(self, argStr):
+        stats = cPickle.loads(zlib.decompress(argStr))
+        self.onInteractiveStats(stats)
+
     def __rebuildIndexToId(self):
         vehicles = self.__vehicles
         self.__vehicleIndexToId = dict(zip(range(len(vehicles)), sorted(vehicles.keys())))
@@ -205,9 +250,10 @@ class ClientArena(object):
          'clanDBID': info[9],
          'prebattleID': info[10],
          'isPrebattleCreator': bool(info[11]),
-         'events': info[12],
-         'igrType': info[13],
-         'potapovQuestIDs': info[14]}
+         'forbidInBattleInvitations': bool(info[12]),
+         'events': info[13],
+         'igrType': info[14],
+         'potapovQuestIDs': info[15]}
         return (info[0], infoAsDict)
 
     def __vehicleStatisticsAsDict(self, stats):

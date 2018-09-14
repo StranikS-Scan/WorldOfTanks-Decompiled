@@ -202,7 +202,7 @@ class Shop(Store, ShopMeta):
                 requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         elif type == self._VEHICLE:
             requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
-            requestCriteria |= ~REQ_CRITERIA.VEHICLE.IN_PREMIUM_IGR
+            requestCriteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
             typeSize = int(filter.pop(0))
             requestType = filter[0:typeSize]
             extra = filter[typeSize:]
@@ -276,4 +276,5 @@ class Shop(Store, ShopMeta):
          'goldEqsForCredits': isEnabledBuyingGoldEqsForCredits,
          'actionPriceData': action,
          'rentLeft': rentLeftTimeStr,
+         'moduleLabel': module.getGUIEmblemID(),
          EXTRA_MODULE_INFO: extraModuleInfo}

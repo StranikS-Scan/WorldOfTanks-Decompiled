@@ -23,8 +23,8 @@ MAX_BONUS_LIMIT = 1000000
 class XMLNode:
     __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus')
 
-    def __init__(self):
-        self.name = ''
+    def __init__(self, name = ''):
+        self.name = name
         self.value = []
         self.questClientConditions = []
         self.relatedGroup = ''
@@ -99,26 +99,19 @@ class Source:
             eventType = EVENT_TYPE.NAME_TO_TYPE[typeName]
             conditionReaders = self.__getConditionReaders(eventType)
             bonusReaders = self.__getBonusReaders(eventType)
-            mainNode = XMLNode()
-            mainNode.name = 'main'
+            mainNode = XMLNode('main')
             mainNode.info = info = self.__readHeader(eventType, questSection, gStartTime, gFinishTime, curTime)
-            bonusNode = XMLNode()
-            bonusNode.name = 'bonus'
-            prebattleNode = XMLNode()
-            prebattleNode.name = 'preBattle'
+            bonusNode = XMLNode('bonus')
+            prebattleNode = XMLNode('preBattle')
             prebattleNode.addChild(bonusNode, False)
             mainNode.addChild(prebattleNode)
-            accountNode = XMLNode()
-            accountNode.name = 'account'
+            accountNode = XMLNode('account')
             prebattleNode.addChild(accountNode)
-            vehicleNode = XMLNode()
-            vehicleNode.name = 'vehicle'
+            vehicleNode = XMLNode('vehicle')
             prebattleNode.addChild(vehicleNode)
-            battleNode = XMLNode()
-            battleNode.name = 'battle'
+            battleNode = XMLNode('battle')
             prebattleNode.addChild(battleNode)
-            postbattleNode = XMLNode()
-            postbattleNode.name = 'postBattle'
+            postbattleNode = XMLNode('postBattle')
             mainNode.addChild(postbattleNode)
             postbattleNode.addChild(bonusNode, False)
             mainNode.addChild(bonusNode)
@@ -151,8 +144,7 @@ class Source:
             battles = bonusNode.getChildNode('battles')
             battleCount = battles.getChildNode('count').getFirstChildValue() if battles else None
             if bonusLimit is None:
-                bonusLimitNode = XMLNode()
-                bonusLimitNode.name = 'bonusLimit'
+                bonusLimitNode = XMLNode('bonusLimit')
                 bonusLimitNode.addChild(1 if eventType in EVENT_TYPE.ONE_BONUS_QUEST else MAX_BONUS_LIMIT)
                 bonusNode.addChild(bonusLimitNode)
             if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
@@ -162,7 +154,7 @@ class Source:
                     raise Exception, 'battleQuest: daily and groupBy should be used with cumulative, unit, vehicleKills, bonusLimit or battles tags'
                 if battles and not battleCount:
                     raise Exception, 'Invalid battles section'
-            elif eventType == EVENT_TYPE.LIKE_TOKEN_QUESTS:
+            elif eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
                 if cumulative or unit or vehicleKills or groupBy or battles:
                     raise Exception, 'tokenQuest: Unexpected tags (cumulative, unit, vehicleKills, groupBy, battles)'
                 if not bonusLimit and daily:
@@ -350,6 +342,7 @@ class Source:
          'berths': self.__readBonus_int,
          'premium': self.__readBonus_int,
          'token': self.__readBonus_tokens,
+         'goodie': self.__readBonus_goodies,
          'vehicle': partial(self.__readBonus_vehicle, eventType),
          'dossier': self.__readBonus_dossier,
          'tankmen': partial(self.__readBonus_tankmen, eventType),
@@ -412,7 +405,7 @@ class Source:
 
     def __readCondition_cumulative(self, _, section, node):
         for name, sub in section.items():
-            if name not in battle_results_shared.VEH_FULL_RESULTS_INDICES:
+            if name not in battle_results_shared.VEH_FULL_RESULTS.names():
                 raise Exception, "Unsupported misc variable '%s'" % name
             node.addChild((name, int(sub.asFloat)))
 
@@ -421,8 +414,7 @@ class Source:
             if name in 'meta':
                 node.questClientConditions.append(('meta', self.__readMetaSection(sub)))
                 continue
-            subNode = XMLNode()
-            subNode.name = name
+            subNode = XMLNode(name)
             if name in ('greater', 'equal', 'less', 'lessOrEqual', 'greaterOrEqual'):
                 subNode.relatedGroup = 'operator'
             conditionReaders[name](conditionReaders, sub, subNode)
@@ -470,7 +462,7 @@ class Source:
 
     def __readCondition_keyResults(self, _, section, node):
         name = section.asString
-        if name not in battle_results_shared.VEH_BASE_RESULTS_INDICES and name not in battle_results_shared.COMMON_RESULTS_INDICES and name not in battle_results_shared.VEH_FULL_RESULTS_INDICES:
+        if name not in battle_results_shared.VEH_BASE_RESULTS.names() and name not in battle_results_shared.COMMON_RESULTS.names() and name not in battle_results_shared.VEH_FULL_RESULTS.names():
             raise Exception, "Unsupported battle result variable '%s'" % name
         node.addChild(name)
 
@@ -731,19 +723,34 @@ class Source:
 
     def __readBonus_tokens(self, bonus, _name, section, gFinishTime):
         id = section['id'].asString
-        bonus.setdefault('tokens', {})[id] = {}
-        expires = bonus['tokens'][id].setdefault('expires', {})
+        token = bonus.setdefault('tokens', {})[id] = {}
+        expires = token.setdefault('expires', {})
+        self.__readBonus_expires(id, expires, section, gFinishTime)
+        if section.has_key('limit'):
+            token['limit'] = section['limit'].asInt
+        if section.has_key('count'):
+            token['count'] = section['count'].asInt
+
+    def __readBonus_goodies(self, bonus, _name, section, gFinishTime):
+        id = section['id'].asInt
+        goodie = bonus.setdefault('goodies', {})[id] = {}
+        expires = goodie.setdefault('expires', {})
+        self.__readBonus_expires(id, expires, section, gFinishTime)
+        if section.has_key('limit'):
+            goodie['limit'] = section['limit'].asInt
+        if section.has_key('count'):
+            goodie['count'] = section['count'].asInt
+        else:
+            goodie['count'] = 1
+
+    def __readBonus_expires(self, id, expires, section, gFinishTime):
         if section['expires'].has_key('after'):
             expires['after'] = section['expires']['after'].asInt
         else:
             at = section['expires'].asString
             expires['at'] = self.__generateUTC(at, 'expires')
             if expires['at'] < gFinishTime:
-                raise Exception, 'Invalid token expiry time %s, %s' % (id, at)
-        if section.has_key('limit'):
-            bonus['tokens'][id]['limit'] = section['limit'].asInt
-        if section.has_key('count'):
-            bonus['tokens'][id]['count'] = section['count'].asInt
+                raise Exception('Invalid expiry time for %s: %s' % (id, at))
 
     def __readBonus_dossier(self, bonus, _name, section, _gFinishTime):
         blockName, record = section['name'].asString.split(':')

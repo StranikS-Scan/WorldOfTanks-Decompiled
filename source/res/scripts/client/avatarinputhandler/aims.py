@@ -11,14 +11,10 @@ from helpers.func_utils import *
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.ColorSchemeManager import _ColorSchemeManager
-from gui.shared.utils.graphics import getScaleByIndex
 from gui.battle_control.consumables.ammo_ctrl import SHELL_SET_RESULT
 
-class AimVisibleRadius():
-    ARCADE = 120
-    STARTEGIC = 260
-    SNIPER = 200
-    POSTMORTEM = 230
+def _getScreenSize():
+    return GUI.screenResolution()[:2]
 
 
 def createAim(type):
@@ -26,13 +22,15 @@ def createAim(type):
         from gui.development.no_gui.battle import Aim
         return Aim()
     if type == 'strategic':
-        return StrategicAim((0, 0.0), AimVisibleRadius.STARTEGIC)
+        return StrategicAim((0, 0.0))
     if type == 'arcade':
-        return ArcadeAim((0, 0.15), AimVisibleRadius.ARCADE, False)
+        return ArcadeAim((0, 0.15), False)
     if type == 'sniper':
-        return ArcadeAim((0, 0.0), AimVisibleRadius.SNIPER, True)
+        return ArcadeAim((0, 0.0), True)
     if type == 'postmortem':
-        return PostMortemAim((0, 0.0), AimVisibleRadius.POSTMORTEM)
+        return PostMortemAim((0, 0.0))
+    if type == 'falloutdeath':
+        return FalloutDeathAim((0, 0.0))
     LOG_ERROR('Undefined aim type. <%s>' % type)
 
 
@@ -87,12 +85,12 @@ class Aim(Flash):
     _UPDATE_INTERVAL = 0.03
     __FLASH_CLASS = 'WGAimFlash'
     _AIM_TYPES = ('arcade', 'sniper')
-    _posX = 0
-    _posY = 0
+    EPSILON = 0.001
 
-    def __init__(self, mode, offset, visibleR):
+    def __init__(self, mode, offset):
         Flash.__init__(self, 'crosshair_panel_{0:>s}.swf'.format(mode), self.__FLASH_CLASS)
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
+        self._posX = 0
+        self._posY = 0
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_Aim
         self.component.focus = False
@@ -100,26 +98,18 @@ class Aim(Flash):
         self.component.heightMode = 'PIXEL'
         self.component.widthMode = 'PIXEL'
         self.movie.backgroundAlpha = 0
-        self.__scale = None
-        self.__applyScale()
-        self.__scale = getScaleByIndex(g_settingsCore.getSetting('interfaceScale'))
-        self.movie._root._xscale = 100 * self.__scale
-        self.movie._root._yscale = 100 * self.__scale
         self._offset = offset
         self._isLoaded = False
         self.mode = mode
-        self._visibleR = visibleR
         self.__timeInterval = _TimeInterval(Aim._UPDATE_INTERVAL, '_update', weakref.proxy(self))
+        from account_helpers.settings_core.SettingsCore import g_settingsCore
+        self.settingsCore = weakref.proxy(g_settingsCore)
         self.__aimSettings = None
-        self.__isColorBlind = g_settingsCore.getSetting('isColorBlind')
+        self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
+        self.settingsCore.interfaceScale.onScaleChanged += self.__refreshScale
+        self.__refreshScale(self.settingsCore.interfaceScale.get())
         self._reloadingHndl = getReloadingHandler()
         return
-
-    def getVisibleBounds(self):
-        return (self._posX - self._visibleR,
-         self._posY - self._visibleR,
-         self._posX + self._visibleR,
-         self._posY + self._visibleR)
 
     def prerequisites(self):
         return []
@@ -128,15 +118,14 @@ class Aim(Flash):
         return self.__isColorBlind
 
     def create(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged += self.onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.onSettingsChanged
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             self._flashCall('setupReloadingCounter', [False])
 
     def destroy(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.onSettingsChanged
+        self.settingsCore.interfaceScale.onScaleChanged -= self.__refreshScale
         self.close()
         self.__timeInterval.stop()
         self.__timeInterval = None
@@ -144,15 +133,12 @@ class Aim(Flash):
         return
 
     def onSettingsChanged(self, diff = None):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         if self.mode in self._AIM_TYPES and (diff is None or self.mode in diff):
-            self.__aimSettings = g_settingsCore.getSetting(self.mode)
+            self.__aimSettings = self.settingsCore.getSetting(self.mode)
             self.applySettings()
         if diff is not None:
             if 'isColorBlind' in diff:
                 self.__isColorBlind = diff['isColorBlind']
-            if 'interfaceScale' in diff:
-                self.__applyScale()
         return
 
     def applySettings(self):
@@ -181,7 +167,6 @@ class Aim(Flash):
         _g_aimState['target']['id'] = None
         self._enable(_g_aimState, _g_aimState['isFirstInit'])
         _g_aimState['isFirstInit'] = False
-        self.onOffsetUpdate()
         self.onRecreateDevice()
         return
 
@@ -195,34 +180,40 @@ class Aim(Flash):
     def updateMarkerPos(self, pos, relaxTime):
         self.component.updateMarkerPos(pos, relaxTime)
 
-    def onOffsetUpdate(self):
-        screen = GUI.screenResolution()
-        width = screen[0]
-        height = screen[1]
-        offsetX = self._offset[0]
-        offsetY = self._offset[1]
-        self._posX = 0.5 * width * (1.0 + offsetX) / self.__scale
-        self._posX = round(self._posX) if width % 2 == 0 else int(self._posX)
-        self._posY = 0.5 * height * (1.0 - offsetY) / self.__scale
-        self._posY = round(self._posY) if height % 2 == 0 else int(self._posY)
-        self._flashCall('onRecreateDevice', [self._posX, self._posY])
+    def onOffsetUpdate(self, screen, forced = False):
+        width, height = screen
+        offsetX, offsetY = self._offset[:2]
+        scale = self.settingsCore.interfaceScale.get()
+        posX = 0.5 * width * (1.0 + offsetX) / scale
+        posX = round(posX) if width % 2 == 0 else int(posX)
+        posY = 0.5 * height * (1.0 - offsetY) / scale
+        posY = round(posY) if height % 2 == 0 else int(posY)
+        if forced or self._posX != posX or self._posY != posY:
+            self._posX = posX
+            self._posY = posY
+            self._flashCall('onRecreateDevice', [self._posX, self._posY])
+            g_sessionProvider.setAimPositionUpdated(self.mode, self._posX, self._posY)
 
     def onRecreateDevice(self):
-        screen = GUI.screenResolution()
+        screen = _getScreenSize()
         self.component.size = screen
-        self.__applyScale()
-        self.onOffsetUpdate()
+        self.onOffsetUpdate(screen, True)
 
     def setVisible(self, isVisible):
         self.component.visible = isVisible
 
     def offset(self, value = None):
-        if value is not None:
+        if value is not None and self.offsetChanged(value, self._offset):
             self._offset = value
-            self.onOffsetUpdate()
+            self.onOffsetUpdate(_getScreenSize())
         else:
             return self._offset
         return
+
+    def offsetChanged(self, offset1, offset2):
+        if type(offset1) is Math.Vector2 and type(offset2) is Math.Vector2:
+            return abs(offset1.x - offset2.x) > Aim.EPSILON or abs(offset1.y - offset2.y) > Aim.EPSILON
+        return abs(offset1[0] - offset2[0]) > Aim.EPSILON or abs(offset1[1] - offset2[1]) > Aim.EPSILON
 
     def setTarget(self, target):
         state = _g_aimState['target']
@@ -313,8 +304,8 @@ class Aim(Flash):
         return (isLow, state)
 
     def setClipParams(self, capacity, burst):
-        _g_aimState['clip'] = (capacity, burst)
-        if capacity > 1:
+        if _g_aimState['clip'] != (capacity, burst):
+            _g_aimState['clip'] = (capacity, burst)
             self._setClipParams(capacity, burst)
 
     def showHit(self, gYaw, isDamage):
@@ -418,6 +409,7 @@ class Aim(Flash):
         self._flashCall('setClipParams', [capacity, burst])
 
     def _update(self):
+        newDistance = None
         targetID = _g_aimState['target']['id']
         if targetID is not None:
             targ = BigWorld.entity(targetID)
@@ -426,26 +418,26 @@ class Aim(Flash):
                 LOG_ERROR('Invalid target ID')
             else:
                 state = _g_aimState['target']
-                state['dist'] = int((targ.position - BigWorld.player().getOwnVehiclePosition()).length)
-                state['health'] = math.ceil(100.0 * max(0, targ.health) / targ.typeDescriptor.maxHealth)
-        return
+                newDistance = int((targ.position - BigWorld.player().getOwnVehiclePosition()).length)
+                if newDistance != state['dist']:
+                    state['dist'] = newDistance
+                else:
+                    newDistance = None
+        return newDistance
 
     def _flashCall(self, funcName, args = None):
         self.call('Aim.' + funcName, args)
 
-    def __applyScale(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        scale = getScaleByIndex(g_settingsCore.getSetting('interfaceScale'))
-        if self.__scale != scale:
-            self.__scale = scale
-            self.movie._root._xscale = 100 * self.__scale
-            self.movie._root._yscale = 100 * self.__scale
+    def __refreshScale(self, scale):
+        self.movie._root._xscale = 100 * scale
+        self.movie._root._yscale = 100 * scale
 
 
 class StrategicAim(Aim):
 
-    def __init__(self, offset, visibleR, isPostMortem = False):
-        Aim.__init__(self, 'strategic', offset, visibleR)
+    def __init__(self, offset, isPostMortem = False):
+        Aim.__init__(self, 'strategic', offset)
+        self._distance = 0
 
     def create(self):
         Aim.create(self)
@@ -466,7 +458,8 @@ class StrategicAim(Aim):
         if isFirstInit:
             return
         else:
-            Aim._flashCall(self, 'updateDistance', [self._getAimDistance()])
+            self._distance = self._getAimDistance()
+            self._flashCall('updateDistance', [self._distance])
             hs = state['health']
             self._setHealth(hs['cur'], hs['max'])
             ammoCtrl = g_sessionProvider.getAmmoCtrl()
@@ -477,8 +470,7 @@ class StrategicAim(Aim):
             else:
                 self._setReloading(self._reloadingHndl.state['duration'], 0, False)
             capacity, burst = state['clip']
-            if capacity > 1:
-                self._setClipParams(capacity, burst)
+            self._setClipParams(capacity, burst)
             self._setAmmoStock(*self._reloadingHndl.ammoStock)
             return
 
@@ -489,8 +481,10 @@ class StrategicAim(Aim):
         self.__damageCtrl.add(hitDesc)
 
     def _update(self):
-        Aim._update(self)
-        Aim._flashCall(self, 'updateDistance', [self._getAimDistance()])
+        newDistance = self._getAimDistance()
+        if newDistance != self._distance:
+            self._distance = newDistance
+            self._flashCall('updateDistance', [self._distance])
 
     def _clearTarget(self, startTime):
         pass
@@ -503,8 +497,8 @@ class StrategicAim(Aim):
 
 class PostMortemAim(Aim):
 
-    def __init__(self, offset, visibleR):
-        Aim.__init__(self, 'postmortem', offset, visibleR)
+    def __init__(self, offset):
+        Aim.__init__(self, 'postmortem', offset)
         self.__msgCaption = i18n.makeString('#ingame_gui:player_messages/postmortem_caption')
 
     def create(self):
@@ -534,7 +528,6 @@ class PostMortemAim(Aim):
         self._flashCall('updateAdjust', list(adjustTuple))
 
     def _update(self):
-        Aim._update(self)
         if self.__vID is not None:
             vehicle = BigWorld.entity(self.__vID)
             if vehicle is not None:
@@ -542,20 +535,19 @@ class PostMortemAim(Aim):
                 type = vehicle.typeDescriptor.type.userString
                 healthPercent = math.ceil(100.0 * max(0, vehicle.health) / vehicle.typeDescriptor.maxHealth)
                 self.__setText(playerName, type, healthPercent)
-        Aim._flashCall(self, 'updateTarget', [_g_aimState['target']['dist']])
         return
 
     def __setText(self, name, type, health):
-        text = i18n.convert(self.__msgCaption % {'name': name,
+        text = self.__msgCaption % {'name': name,
          'type': type,
-         'health': health})
+         'health': health}
         Aim._flashCall(self, 'updatePlayerInfo', [text])
 
 
 class ArcadeAim(Aim):
 
-    def __init__(self, offset, visibleR, isSniper):
-        Aim.__init__(self, 'sniper' if isSniper else 'arcade', offset, visibleR)
+    def __init__(self, offset, isSniper):
+        Aim.__init__(self, 'sniper' if isSniper else 'arcade', offset)
         self.__isSniper = isSniper
 
     def create(self):
@@ -588,8 +580,7 @@ class ArcadeAim(Aim):
             else:
                 self._setReloading(self._reloadingHndl.state['duration'], 0, False)
             capacity, burst = state['clip']
-            if capacity > 1:
-                self._setClipParams(capacity, burst)
+            self._setClipParams(capacity, burst)
             self._setAmmoStock(*self._reloadingHndl.ammoStock)
             return
 
@@ -608,8 +599,10 @@ class ArcadeAim(Aim):
         self.__damageCtrl.add(hitDesc)
 
     def _update(self):
-        Aim._update(self)
-        Aim._flashCall(self, 'updateTarget', [_g_aimState['target']['dist']])
+        distance = Aim._update(self)
+        if distance is not None:
+            Aim._flashCall(self, 'updateTarget', [distance])
+        return
 
 
 class _DamageIndicatorCtrl():
@@ -683,10 +676,26 @@ class _DamageIndicatorCtrl():
         return
 
 
+class FalloutDeathAim(Aim):
+
+    def __init__(self, offset):
+        super(FalloutDeathAim, self).__init__('falloutdeath', offset)
+        self.__msgCaption = i18n.makeString('#ingame_gui:player_messages/postmortem_caption')
+
+    def create(self):
+        super(FalloutDeathAim, self).create()
+
+    def destroy(self):
+        super(FalloutDeathAim, self).destroy()
+
+    def onSettingsChanged(self, diff = None):
+        super(FalloutDeathAim, self).onSettingsChanged(diff)
+
+
 class _DamageIndicator(Flash):
     __SWF_FILE_NAME = 'DamageIndicator.swf'
     __FLASH_CLASS = 'WGHitIndicatorFlash'
-    __FLASH_MC_NAME = 'damageMC'
+    __FLASH_MC_NAME = ('damageMC',)
     __FLASH_SIZE = (680, 680)
     TOTAL_FRAMES = 90
     FRAME_RATE = 24
@@ -704,7 +713,8 @@ class _DamageIndicator(Flash):
     def setup(self, gYaw, offset):
         self.component.position.x = offset[0]
         self.component.position.y = offset[1]
-        self.component.wg_globalYaw = gYaw
+        for mcName in _DamageIndicator.__FLASH_MC_NAME:
+            self.component.setGlobalYaw(mcName, gYaw)
 
     def __del__(self):
         pass

@@ -132,6 +132,18 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         defaultBerthPrice = g_itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
         tankmenList = list()
         tankmenInBarracks = 0
+        action = None
+        if berthPrice[0] != defaultBerthPrice[0]:
+            action = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
+             'key': 'berthsPrices',
+             'isBuying': True,
+             'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
+             'newPrice': (0, berthPrice[0]),
+             'oldPrice': (0, defaultBerthPrice[0])}
+        tankmenList.append({'buy': True,
+         'price': BigWorld.wg_getGoldFormat(berthPrice[0]),
+         'actionPriceData': action,
+         'count': berthPrice[1]})
         for tankman in sorted(tankmen, TankmenComparator(g_itemsCache.items.getVehicle)):
             if not tankman.isInTank:
                 tankmenInBarracks += 1
@@ -175,15 +187,10 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
              'isInSelfVehicleClass': vehicle.type == tankmanVehicle.type if tankman.isInTank else True,
              'isInSelfVehicleType': vehicle.shortUserName == tankmanVehicle.shortUserName if tankman.isInTank else True})
 
-        action = None
-        if berthPrice[0] != defaultBerthPrice[0]:
-            action = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-             'key': 'berthsPrices',
-             'isBuying': True,
-             'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
-             'newPrice': (0, berthPrice[0]),
-             'oldPrice': (0, defaultBerthPrice[0])}
-        self.as_setTankmenS(len(tankmen), slots, tankmenInBarracks, BigWorld.wg_getGoldFormat(berthPrice[0]), action, berthPrice[1], tankmenList)
+        if tankmenInBarracks < slots:
+            tankmenList.insert(1, {'empty': True,
+             'freePlaces': slots - tankmenInBarracks})
+        self.as_setTankmenS(len(tankmen), slots, tankmenInBarracks, tankmenList)
         return
 
     @staticmethod

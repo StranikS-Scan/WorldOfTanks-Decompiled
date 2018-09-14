@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/StaticFormationUnitView.py
 import BigWorld
 from UnitBase import UNIT_OP
-from gui.Scaleform.framework.managers.TextManager import TextType, TextManager
+from gui.Scaleform.framework.managers.TextManager import TextManager
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers import int2roman
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
@@ -61,19 +62,19 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         _, unit = functional.getUnit()
         if self._candidatesDP is not None:
             self._candidatesDP.rebuild(functional.getCandidates())
-        self.as_setLegionnairesCountS(_ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self.as_setLegionnairesCountS(False, _ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
         self.__updateHeader()
         self._updateMembersData()
         self.__updateTotalData()
         return
 
-    def onUnitStateChanged(self, unitState, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         functional = self.unitFunctional
         pInfo = functional.getPlayerInfo()
         isCreator = pInfo.isCreator()
-        if isCreator and unitState.isOpenedStateChanged():
-            self.as_setOpenedS(unitState.isOpened(), vo_converters.makeStaticFormationStatusLbl(unitState))
-        if unitState.isChanged():
+        if isCreator and flags.isOpenedStateChanged():
+            self.as_setOpenedS(flags.isOpened(), vo_converters.makeStaticFormationStatusLbl(flags))
+        if flags.isChanged():
             self._updateMembersData()
         else:
             self._setActionButtonState()
@@ -84,13 +85,13 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         elif opCode in [UNIT_OP.CLOSE_SLOT, UNIT_OP.OPEN_SLOT]:
             functional = self.unitFunctional
             _, unit = functional.getUnit()
-            unitState = functional.getState()
+            unitFlags = functional.getFlags()
             slotState = functional.getSlotState(value)
             pInfo = functional.getPlayerInfo()
             canAssign, vehicles = pInfo.canAssignToSlot(value)
             canTakeSlot = not (pInfo.isLegionary() and unit.isClub())
             vehCount = len(vehicles)
-            slotLabel = vo_converters.makeStaticSlotLabel(unitState, slotState, pInfo.isCreator(), vehCount, pInfo.isLegionary(), unit.isRated())
+            slotLabel = vo_converters.makeStaticSlotLabel(unitFlags, slotState, pInfo.isCreator(), vehCount, pInfo.isLegionary(), unit.isRated())
             if opCode == UNIT_OP.CLOSE_SLOT:
                 self.as_closeSlotS(value, settings.UNIT_CLOSED_SLOT_COST, slotLabel)
             else:
@@ -124,7 +125,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         _, unit = functional.getUnit()
         if self._candidatesDP is not None:
             self._candidatesDP.rebuild(functional.getCandidates())
-        self.as_setLegionnairesCountS(_ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self.as_setLegionnairesCountS(False, _ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
         self.__updateHeader()
         self._updateMembersData()
         self.__updateTotalData()
@@ -142,14 +143,14 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         _, unit = functional.getUnit()
         if self._candidatesDP is not None:
             self._candidatesDP.rebuild(functional.getCandidates())
-        self.as_setLegionnairesCountS(_ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self.as_setLegionnairesCountS(False, _ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
         self.__updateHeader()
         self._updateMembersData()
         self.__updateTotalData()
         return
 
     def toggleStatusRequest(self):
-        self.requestToOpen(not self.unitFunctional.getState().isOpened())
+        self.requestToOpen(not self.unitFunctional.getFlags().isOpened())
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.StaticFormationCandidatesDP()
@@ -198,7 +199,8 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
         self.__updateHeader()
         _, unit = self.unitFunctional.getUnit()
-        self.as_setLegionnairesCountS(_ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self.as_setLegionnairesCountS(False, _ms(CYBERSPORT.STATICFORMATION_UNITVIEW_LEGIONNAIRESTOTAL, cur=unit.getLegionaryCount(), max=unit.getLegionaryMaxCount()))
+        self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
     def _dispose(self):
         self.ABSENT_VALUES = None
@@ -214,7 +216,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         seasonActive = isSeasonInProgress()
         modeLabel = ''
         modeTooltip = ''
-        modeTextStyle = TextType.STANDARD_TEXT
+        modeTextStyle = TEXT_MANAGER_STYLES.STANDARD_TEXT
         if not seasonActive:
             modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_NOSEASON
             modeTooltip = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_NOSEASONTOOLTIP
@@ -228,7 +230,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
                 modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_SETRANKEDMODE
         elif self.__extra.isRatedBattle:
             modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_RANKEDMODE
-            modeTextStyle = TextType.NEUTRAL_TEXT
+            modeTextStyle = TEXT_MANAGER_STYLES.NEUTRAL_TEXT
         else:
             modeLabel = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_WRONGROLE
             modeTooltip = CYBERSPORT.STATICFORMATION_UNITVIEW_MODECHANGEWARNING_WRONGROLETOOLTIP

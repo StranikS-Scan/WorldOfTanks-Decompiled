@@ -1,12 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
-import random
 import time
 import operator
 from collections import defaultdict
 import BigWorld
 import constants
+import types
 from gui import GUI_SETTINGS
 from gui.Scaleform.framework import AppRef
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers import i18n, int2roman, time_utils
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -15,7 +16,6 @@ from gui.shared import g_itemsCache, utils
 from gui.server_events import formatters, conditions, settings as quest_settings
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.Scaleform.framework.managers.TextManager import TextType
 from quest_xml_source import MAX_BONUS_LIMIT
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
@@ -470,6 +470,18 @@ class _QuestInfo(_EventInfo):
                 result.append(formatters.packTopLevelContainer(i18n.makeString('#quests:details/conditions/groupBy/%s' % bonus.getGroupByValue()), subBlocks=progressesFmt, isResizable=len(progressesFmt) > 5))
         return formatters.todict(result)
 
+    def _getActiveDateTimeString(self):
+        timeLeft = self.event.getFinishTimeLeft()
+        if timeLeft <= time_utils.THREE_QUARTER_HOUR:
+            return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOENDINMINUTES, minutes=getMinutesRoundByTime(timeLeft))
+        return super(_QuestInfo, self)._getActiveDateTimeString()
+
+    def _getTimerMsg(self):
+        timeLeft = self.event.getFinishTimeLeft()
+        if timeLeft <= time_utils.THREE_QUARTER_HOUR:
+            return makeHtmlString('html_templates:lobby/quests', 'comeToEndInMinutes', {'minutes': getMinutesRoundByTime(timeLeft)})
+        return super(_QuestInfo, self)._getTimerMsg()
+
 
 class _ActionInfo(_EventInfo):
 
@@ -489,13 +501,21 @@ class _ActionInfo(_EventInfo):
     def _getConditions(self, svrEvents):
         modifiers = defaultdict(list)
         for m in self.event.getModifiers():
-            fmtData = m.format(self.event)
-            if fmtData is not None:
-                modifiers[m.getType()].extend(fmtData)
+            fmtResult = m.format(self.event)
+            if fmtResult is not None:
+                if isinstance(fmtResult, types.DictType):
+                    for fDType, fData in fmtResult.iteritems():
+                        modifiers[fDType].extend(fData)
+
+                else:
+                    modifiers[m.getType()].extend(fmtResult)
 
         result = []
         if len(modifiers[ACTION_MODIFIER_TYPE.DISCOUNT]):
             result.append(formatters.packTopLevelContainer(i18n.makeString(QUESTS.DETAILS_MODIFIERS_TITLE_DISCOUNT), subBlocks=modifiers[ACTION_MODIFIER_TYPE.DISCOUNT]))
+        availabilityModifiers = modifiers.get(ACTION_MODIFIER_TYPE.AVAILABILITY, [])
+        if len(availabilityModifiers):
+            result.append(formatters.packTopLevelContainer(i18n.makeString(QUESTS.DETAILS_MODIFIERS_TITLE_AVAILABILITY), subBlocks=availabilityModifiers))
         if len(modifiers[ACTION_MODIFIER_TYPE.RENT]):
             result.append(formatters.packTopLevelContainer(i18n.makeString(QUESTS.DETAILS_MODIFIERS_TITLE_DISCOUNT), subBlocks=modifiers[ACTION_MODIFIER_TYPE.RENT]))
         for fmtData in modifiers[ACTION_MODIFIER_TYPE.SELLING]:
@@ -504,13 +524,19 @@ class _ActionInfo(_EventInfo):
         return formatters.todict(result)
 
     def _getActiveDateTimeString(self):
-        if self.event.getFinishTimeLeft() <= GUI_SETTINGS.actionComeToEnd:
+        timeLeft = self.event.getFinishTimeLeft()
+        if timeLeft <= GUI_SETTINGS.actionComeToEnd:
             return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOEND)
+        if timeLeft <= time_utils.THREE_QUARTER_HOUR:
+            return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOENDINMINUTES, minutes=getMinutesRoundByTime(timeLeft))
         return super(_ActionInfo, self)._getActiveDateTimeString()
 
     def _getTimerMsg(self):
-        if self.event.getFinishTimeLeft() <= GUI_SETTINGS.actionComeToEnd:
+        timeLeft = self.event.getFinishTimeLeft()
+        if timeLeft <= GUI_SETTINGS.actionComeToEnd:
             return makeHtmlString('html_templates:lobby/quests', 'comeToEnd')
+        if timeLeft <= time_utils.THREE_QUARTER_HOUR:
+            return makeHtmlString('html_templates:lobby/quests', 'comeToEndInMinutes', {'minutes': getMinutesRoundByTime(timeLeft)})
         return super(_ActionInfo, self)._getTimerMsg()
 
 
@@ -525,7 +551,7 @@ class _PotapovQuestInfo(_QuestInfo):
         _getText = self.app.utilsManager.textManager.getText
 
         def _packCondition(titleKey, text):
-            return '%s\n%s' % (_getText(TextType.MIDDLE_TITLE, i18n.makeString(titleKey)), _getText(TextType.MAIN_TEXT, text))
+            return '%s\n%s' % (_getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(titleKey)), _getText(TEXT_MANAGER_STYLES.MAIN_TEXT, text))
 
         def _packStatus(completed):
             if completed:
@@ -551,6 +577,11 @@ def getEventInfoData(event):
     if event.getType() == constants.EVENT_TYPE.ACTION:
         return _ActionInfo(event)
     return _EventInfo(event)
+
+
+def getMinutesRoundByTime(timeLeft):
+    timeLeft = int(timeLeft)
+    return (timeLeft / time_utils.QUARTER_HOUR + cmp(timeLeft % time_utils.QUARTER_HOUR, 0)) * time_utils.QUARTER
 
 
 def getEventInfo(event, svrEvents = None, noProgressInfo = False):

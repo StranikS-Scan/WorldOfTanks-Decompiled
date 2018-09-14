@@ -117,6 +117,7 @@ class _HangarSpace(object):
 
     def init(self, isPremium):
         self.__videoCameraController.init()
+        self.__spaceDestroyedDuringLoad = False
         if not self.__spaceInited:
             LOG_DEBUG('_HangarSpace::init')
             Waiting.show('loadHangarSpace')
@@ -158,6 +159,9 @@ class _HangarSpace(object):
         elif self.spaceLoading():
             LOG_DEBUG('_HangarSpace::destroy - delayed until space load done')
             self.__spaceDestroyedDuringLoad = True
+            self.__space.destroy()
+            self.__inited = False
+            self.__spaceInited = False
         if self.__delayedRefreshCallback is not None:
             BigWorld.cancelCallback(self.__delayedRefreshCallback)
             self.__delayedRefreshCallback = None

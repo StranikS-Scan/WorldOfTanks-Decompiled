@@ -8,6 +8,8 @@ from VehicleEffects import VehicleTrailEffects, VehicleExhaustEffects
 from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE
 import constants
 import vehicle_extras
+from OcclusionDecal import OcclusionDecal
+from ShadowForwardDecal import ShadowForwardDecal
 import helpers
 from helpers import bound_effects, DecalMap, isPlayerAvatar, newFakeModel
 from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
@@ -28,6 +30,7 @@ from LightFx.LightControllersManager import LightControllersManager as LightFxCo
 import LightFx.LightManager
 import SoundGroups
 import BattleReplay
+from VehicleEffects import TankComponentNames
 from AvatarInputHandler.mathUtils import clamp
 _ENABLE_VEHICLE_VALIDATION = False
 _VEHICLE_DISAPPEAR_TIME = 0.2
@@ -63,6 +66,7 @@ _EFFECT_MATERIALS_HARDNESS = {'ground': 0.1,
  'water': 0.2}
 _ALLOW_LAMP_LIGHTS = False
 frameTimeStamp = 0
+MAX_DISTANCE = 500
 _ENABLE_NEW_ENGINE_SOUND = False
 
 class VehicleAppearance(object):
@@ -111,6 +115,7 @@ class VehicleAppearance(object):
         self.gunMatrix = Math.WGAdaptiveMatrixProvider()
         self.__vehicle = None
         self.__filter = None
+        self.__originalFilter = None
         self.__engineSound = None
         self.__movementSound = None
         self.__waterHeight = -1.0
@@ -142,7 +147,11 @@ class VehicleAppearance(object):
         self.__rightFrontLight = None
         self.__prevVelocity = None
         self.__prevTime = None
+        self.__isPillbox = False
         self.__maxClimbAngle = math.radians(20.0)
+        self.__chassisOcclusionDecal = OcclusionDecal()
+        self.__chassisShadowForwardDecal = ShadowForwardDecal()
+        self.__splodge = None
         self.__vehicleStickers = None
         self.onModelChanged = Event()
         return
@@ -185,7 +194,6 @@ class VehicleAppearance(object):
         else:
             vehicle = self.__vehicle
             self.__vehicle = None
-            self.__filter = None
             if IS_DEVELOPMENT and _ENABLE_VEHICLE_VALIDATION and self.__validateCallbackId is not None:
                 BigWorld.cancelCallback(self.__validateCallbackId)
                 self.__validateCallbackId = None
@@ -225,7 +233,9 @@ class VehicleAppearance(object):
                     if arcadeCamera is not None:
                         arcadeCamera.removeVehicleToCollideWith(self)
             vehicle.model.delMotor(vehicle.model.motors[0])
-            vehicle.filter.vehicleCollisionCallback = None
+            self.__filter = None
+            vehicle.filter = self.__originalFilter
+            self.__originalFilter = None
             self.__vehicleStickers = None
             self.__removeHavok()
             self.modelsDesc = None
@@ -242,18 +252,26 @@ class VehicleAppearance(object):
                 self.__periodicTimerIDEngine = None
             self.__crashedTracksCtrl.destroy()
             self.__crashedTracksCtrl = None
+            self.__chassisOcclusionDecal.destroy()
+            self.__chassisOcclusionDecal = None
+            self.__chassisShadowForwardDecal.destroy()
+            self.__chassisShadowForwardDecal = None
             return
 
     def preStart(self, typeDesc):
         self.__typeDesc = typeDesc
-        self.__filter = BigWorld.WGVehicleFilter()
-        self.__filter.vehicleWidth = typeDesc.chassis['topRightCarryingPoint'][0] * 2
-        self.__filter.maxMove = typeDesc.physics['speedLimits'][0] * 2.0
-        self.__filter.vehicleMinNormalY = typeDesc.physics['minPlaneNormalY']
-        self.__maxClimbAngle = math.acos(typeDesc.physics['minPlaneNormalY'])
-        for p1, p2, p3 in typeDesc.physics['carryingTriangles']:
-            self.__filter.addTriangle((p1[0], 0, p1[1]), (p2[0], 0, p2[1]), (p3[0], 0, p3[1]))
+        self.__isPillbox = 'pillbox' in self.__typeDesc.type.tags
+        if self.__isPillbox:
+            self.__filter = BigWorld.WGPillboxFilter()
+        else:
+            self.__filter = BigWorld.WGVehicleFilter()
+            self.__filter.vehicleWidth = typeDesc.chassis['topRightCarryingPoint'][0] * 2
+            self.__filter.maxMove = typeDesc.physics['speedLimits'][0] * 2.0
+            self.__filter.vehicleMinNormalY = typeDesc.physics['minPlaneNormalY']
+            for p1, p2, p3 in typeDesc.physics['carryingTriangles']:
+                self.__filter.addTriangle((p1[0], 0, p1[1]), (p2[0], 0, p2[1]), (p3[0], 0, p3[1]))
 
+        self.__maxClimbAngle = math.acos(typeDesc.physics['minPlaneNormalY'])
         self.setupGunMatrixTargets()
         self.__createGunRecoil()
         self.__createExhaust()
@@ -267,8 +285,10 @@ class VehicleAppearance(object):
             self.__typeDesc.chassis['hitTester'].loadBspModel()
             self.__typeDesc.hull['hitTester'].loadBspModel()
             self.__typeDesc.turret['hitTester'].loadBspModel()
-        self.__filter.isStrafing = vehicle.isStrafing
-        self.__filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
+        if not self.__isPillbox:
+            self.__filter.isStrafing = vehicle.isStrafing
+            self.__filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
+        self.__originalFilter = vehicle.filter
         vehicle.filter = self.__filter
         self.__createStickers(prereqs)
         _setupVehicleFashion(self, self.__fashion, self.__vehicle)
@@ -520,7 +540,11 @@ class VehicleAppearance(object):
         gun = modelsDesc['gun']
         if not isFirstInit:
             self.__detachStickers()
+            if MAX_DISTANCE > 0:
+                self.__detachSplodge(self.__splodge)
             self.__removeHavok()
+            self.__chassisOcclusionDecal.detach()
+            self.__chassisShadowForwardDecal.detach()
             self.__destroyLampLights()
             if hasattr(gun['model'], 'wg_gunRecoil'):
                 delattr(gun['model'], 'wg_gunRecoil')
@@ -574,12 +598,18 @@ class VehicleAppearance(object):
             self.__destroyExhaust()
             self.__attachStickers(items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha'], True)
         self.__updateCamouflage()
+        self.__chassisShadowForwardDecal.attach(vehicle, self.modelsDesc)
         self.__applyVisibility()
         self.__vehicle.model.height = self.__computeVehicleHeight()
         self.onModelChanged()
         if 'observer' in vehicle.typeDescriptor.type.tags:
             vehicle.model.visible = False
             vehicle.model.visibleAttachments = False
+        else:
+            self.__chassisOcclusionDecal.attach(vehicle, self.modelsDesc)
+        if MAX_DISTANCE > 0:
+            transform = vehicle.typeDescriptor.chassis['AODecals'][0]
+            self.__attachSplodge(BigWorld.Splodge(transform, MAX_DISTANCE, vehicle.typeDescriptor.chassis['hullPosition'].y))
         return
 
     def __reattachEffects(self):
@@ -592,7 +622,7 @@ class VehicleAppearance(object):
         if kind == 'empty':
             return
         enableDecal = True
-        if kind in ('explosion', 'destruction'):
+        if not self.__isPillbox and kind in ('explosion', 'destruction'):
             filter = self.__vehicle.filter
             isFlying = filter.numLeftTrackContacts < 2 and filter.numRightTrackContacts < 2
             if isFlying:
@@ -807,6 +837,8 @@ class VehicleAppearance(object):
         else:
             frameTimeStamp = BigWorld.wg_getFrameTimestamp()
             self.__periodicTimerID = BigWorld.callback(_PERIODIC_TIME, self.__onPeriodicTimer)
+            if self.__isPillbox:
+                return
             self.detailedEngineState.refresh(self.__vehicle.getSpeed(), self.__vehicle.typeDescriptor)
             try:
                 self.__updateVibrations()
@@ -869,7 +901,7 @@ class VehicleAppearance(object):
                 param.value = engineLoad
             param = sound.param('submersion')
             if param is not None:
-                param.value = 1 if self.__isUnderWater else 0
+                param.value = 1 if self.__isUnderWater and self.__engineMode[0] > 0 else 0
             if self.__vt is not None:
                 self.__vt.addValue2('speed range', speedRange)
                 self.__vt.addValue2('speed range for one gear', speedRangeGear)
@@ -1046,7 +1078,6 @@ class VehicleAppearance(object):
                 decFactor = 0.0 if decFactor <= 0.0 else (decFactor if decFactor <= 1.0 else 1.0)
                 subs = _ROUGHNESS_DECREASE_FACTOR2 * decFactor
                 decFactor = 1.0 - (1.0 - _ROUGHNESS_DECREASE_FACTOR) * decFactor
-                surfaceCurvature = None
                 if filter.placingOnGround:
                     surfaceCurvature = filter.suspCompressionRate
                 else:
@@ -1281,6 +1312,19 @@ class VehicleAppearance(object):
 
     def __detachStickers(self):
         self.__vehicleStickers.detach()
+
+    def __attachSplodge(self, splodge):
+        node = self.modelsDesc[TankComponentNames.HULL]['_node']
+        if splodge is not None and self.__splodge is None:
+            self.__splodge = splodge
+            node.attach(splodge)
+        return
+
+    def __detachSplodge(self, splodge):
+        if self.__splodge != None:
+            self.modelsDesc[TankComponentNames.HULL]['_node'].detach(self.__splodge)
+            self.__splodge = None
+        return
 
     def __createLampLights(self):
         if not _ALLOW_LAMP_LIGHTS:
@@ -1664,13 +1708,14 @@ def _createWheelsListByTemplate(startIndex, template, count):
 def _setupVehicleFashion(self, fashion, vehicle, isCrashedTrack = False):
     vDesc = vehicle.typeDescriptor
     tracesCfg = vDesc.chassis['traces']
-    if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
-        fashion.placingCompensationMatrix = vehicle.filter.placingCompensationMatrix
-        fashion.physicsInfo = vehicle.filter.physicsInfo
-    fashion.movementInfo = vehicle.filter.movementInfo
     fashion.maxMovement = vDesc.physics['speedLimits'][0]
     try:
-        vehicle.filter.placingOnGround = vehicle.filter.placingOnGround if setupTracksFashion(fashion, vehicle.typeDescriptor, isCrashedTrack) else False
+        isTrackFashionSet = setupTracksFashion(fashion, vehicle.typeDescriptor, isCrashedTrack)
+        if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
+            fashion.placingCompensationMatrix = vehicle.filter.placingCompensationMatrix
+            fashion.physicsInfo = vehicle.filter.physicsInfo
+            fashion.movementInfo = vehicle.filter.movementInfo
+            vehicle.filter.placingOnGround = vehicle.filter.placingOnGround if isTrackFashionSet else False
         textures = {}
         bumpTexId = -1
         for matKindName, texId in DecalMap.g_instance.getTextureSet(tracesCfg['textureSet']).iteritems():

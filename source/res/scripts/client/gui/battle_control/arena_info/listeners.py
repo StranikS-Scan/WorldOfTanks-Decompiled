@@ -82,6 +82,11 @@ class ArenaListener(_Listener):
             arena.onNewStatisticsReceived += self.__arena_onNewStatisticsReceived
             arena.onVehicleStatisticsUpdate += self.__arena_onVehicleStatisticsUpdate
             arena.onTeamKiller += self.__arena_onTeamKiller
+            arena.onRespawnAvailableVehicles += self.__arena_onRespawnAvailableVehicles
+            arena.onRespawnCooldowns += self.__arena_onRespawnCooldowns
+            arena.onRespawnRandomVehicle += self.__arena_onRespawnRandomVehicle
+            arena.onRespawnResurrected += self.__arena_onRespawnResurrected
+            arena.onInteractiveStats += self.__arena_onInteractiveStats
             return
 
     def stop(self):
@@ -105,6 +110,11 @@ class ArenaListener(_Listener):
             arena.onNewStatisticsReceived -= self.__arena_onNewStatisticsReceived
             arena.onVehicleStatisticsUpdate -= self.__arena_onVehicleStatisticsUpdate
             arena.onTeamKiller -= self.__arena_onTeamKiller
+            arena.onRespawnAvailableVehicles -= self.__arena_onRespawnAvailableVehicles
+            arena.onRespawnCooldowns -= self.__arena_onRespawnCooldowns
+            arena.onRespawnRandomVehicle -= self.__arena_onRespawnRandomVehicle
+            arena.onRespawnResurrected -= self.__arena_onRespawnResurrected
+            arena.onInteractiveStats -= self.__arena_onInteractiveStats
             return
 
     def addController(self, battleCtx, controller):
@@ -140,7 +150,7 @@ class ArenaListener(_Listener):
         self._invokeListenersMethod('addVehicleInfo', vo, self._dataProvider)
 
     def __arena_onVehicleUpdated(self, vID):
-        flags, vo = self._dataProvider.updateVehicleInfo(vID, self._arena().vehicles[vID])
+        flags, vo = self._dataProvider.updateVehicleInfo(vID, self._arena().vehicles[vID], self._arena().guiType)
         self._invokeListenersMethod('invalidateVehicleInfo', flags, vo, self._dataProvider)
 
     def __arena_onVehicleKilled(self, victimID, killerID, reason):
@@ -163,6 +173,22 @@ class ArenaListener(_Listener):
         flags, vo = self._dataProvider.updatePlayerStatus(vID, self._arena().vehicles[vID])
         self._invokeListenersMethod('invalidatePlayerStatus', flags, vo, self._dataProvider)
 
+    def __arena_onRespawnAvailableVehicles(self, vehsList):
+        self._invokeListenersMethod('updateRespawnVehicles', vehsList)
+
+    def __arena_onRespawnCooldowns(self, cooldowns):
+        self._invokeListenersMethod('updateRespawnCooldowns', cooldowns)
+
+    def __arena_onRespawnRandomVehicle(self, respawnInfo):
+        self._invokeListenersMethod('updateRespawnInfo', respawnInfo)
+
+    def __arena_onRespawnResurrected(self, respawnInfo):
+        self._invokeListenersMethod('updateRespawnRessurectedInfo', respawnInfo)
+
+    def __arena_onInteractiveStats(self, stats):
+        self._dataProvider.updateVehicleInteractiveStats(stats)
+        self._invokeListenersMethod('invalidateVehicleInteractiveStats')
+
     def __isRequiredDataExists(self):
         self.__callbackID = None
         if self._dataProvider is not None and self._dataProvider.isRequiredDataExists():
@@ -171,6 +197,8 @@ class ArenaListener(_Listener):
             self.__callbackID = BigWorld.callback(0.1, self.__isRequiredDataExists)
         return
 
+
+_TAGS_TO_UPDATE = {USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.MUTED}
 
 class UsersListListener(_Listener):
 
@@ -184,7 +212,7 @@ class UsersListListener(_Listener):
         self.clear()
 
     def __me_onUsersListReceived(self, tags):
-        if USER_TAG.includeToContactsList(tags):
+        if _TAGS_TO_UPDATE & tags:
             self._invokeListenersMethod('invalidateUsersTags')
 
     def __me_onUserActionReceived(self, actionID, user):

@@ -2,7 +2,9 @@
 from gui.Scaleform.framework import COMMON_VIEW_ALIAS
 
 class VIEW_ALIAS(COMMON_VIEW_ALIAS):
-    PREMIUM_DIALOG = 'premiumDialog'
+    PREMIUM_WINDOW = 'premiumWindow'
+    PREMIUM_CONGRATULATION_WINDOW = 'premiumCongratulationWindow'
+    GOLD_FISH_WINDOW = 'goldFishWindow'
     PERSONAL_CASE = 'personalCase'
     EULA = 'EULA'
     EULA_FULL = 'EULAFull'
@@ -73,6 +75,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'
     AWARD_WINDOW = 'awardWindow'
     REFERRAL_MANAGEMENT_WINDOW = 'referralManagementWindow'
+    BOOSTERS_WINDOW = 'boostersWindow'
     CYBER_SPORT_SEND_INVITES_WINDOW = 'cyberSport/sendInvitesWindow'
     SHOP_TABLE = 'shopTable'
     MINIMAP_LOBBY = 'minimapLobby'
@@ -90,5 +93,8 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     PROMO_PREMIUM_IGR_WINDOW = 'PromoPremiumIgrWindow'
     CONFIRM_EXCHANGE_DIALOG = 'ConfirmExchangeDialog'
     QUESTS_SEASON_AWARDS_WINDOW = 'QuestsSeasonAwardsWindow'
+    CHECK_BOX_DIALOG = 'CheckBoxDialog'
     ROLE_CHANGE = 'roleChange'
     REPORT_BUG = 'reportBug'
+    SQUAD_PROMO_WINDOW = 'squadPromoWindow'
+    BOOSTERS_PANEL = 'boostersPanel'

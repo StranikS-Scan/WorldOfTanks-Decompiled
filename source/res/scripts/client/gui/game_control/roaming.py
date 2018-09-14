@@ -41,7 +41,7 @@ class RoamingController(Controller):
         super(RoamingController, self).fini()
         return
 
-    def onConnected(self):
+    def onAccountBecomePlayer(self):
         roamingSettings = BigWorld.player().serverSettings
         self.start(roamingSettings)
 

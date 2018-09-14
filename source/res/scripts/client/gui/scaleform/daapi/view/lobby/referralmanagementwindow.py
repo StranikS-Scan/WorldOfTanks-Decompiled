@@ -11,11 +11,12 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.ReferralManagementWindowMeta import ReferralManagementWindowMeta
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
+from gui.Scaleform.framework.managers.TextManager import TextIcons
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
-from gui.prb_control.context import prb_ctx, SendInvitesCtx
+from gui.prb_control.context import unit_ctx, SendInvitesCtx
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared.utils import findFirst
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
@@ -93,13 +94,13 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         refSystem = game_control.g_instance.refSystem
         invitedPlayers = len(refSystem.getReferrals())
         infoIcon = self.app.utilsManager.textManager.getIcon(TextIcons.INFO_ICON)
-        multiplyExpText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXPMULTIPLIER))
-        tableExpText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXP))
+        multiplyExpText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXPMULTIPLIER))
+        tableExpText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXP))
         data = {'windowTitle': ms(MENU.REFERRALMANAGEMENTWINDOW_TITLE),
          'infoHeaderText': ms(MENU.REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK) if not refSystem.isTotallyCompleted() else ms(MENU.REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK),
          'descriptionText': ms(MENU.REFERRALMANAGEMENTWINDOW_DESCRIPTION),
          'invitedPlayersText': ms(MENU.REFERRALMANAGEMENTWINDOW_INVITEDPLAYERS, playersNumber=invitedPlayers),
-         'invitesManagementLinkText': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_INVITEMANAGEMENTLINK)),
+         'invitesManagementLinkText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_INVITEMANAGEMENTLINK)),
          'closeBtnLabel': ms(MENU.REFERRALMANAGEMENTWINDOW_CLOSEBTNLABEL),
          'tableNickText': ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_NICK),
          'tableExpText': ms(tableExpText + ' ' + infoIcon),
@@ -114,7 +115,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         referrals = refSystem.getReferrals()
         numOfReferrals = len(referrals)
         for i, item in enumerate(referrals):
-            referralNumber = self.app.utilsManager.textManager.getText(TextType.STATS_TEXT, ms('%d.' % (i + 1)))
+            referralNumber = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STATS_TEXT, ms('%d.' % (i + 1)))
             dbID = item.getAccountDBID()
             user = self.usersStorage.getUser(dbID)
             if not user:
@@ -131,11 +132,11 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
                     multiplier = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
                     multiplierTooltip = ''
                 if timeLeft:
-                    multiplierTime = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(item.getBonusTimeLeftStr()))
-                    expMultiplierText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
+                    multiplierTime = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(item.getBonusTimeLeftStr()))
+                    expMultiplierText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
                 else:
                     expMultiplierText = ''
-                multiplierFactor = self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, multiplier)
+                multiplierFactor = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, multiplier)
                 multiplierStr = ms(icon + '<nobr>' + multiplierFactor + ' ' + expMultiplierText)
                 referralData = {'accID': dbID,
                  'fullName': user.getFullName(),
@@ -159,7 +160,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
 
         if numOfReferrals < self.MIN_REF_NUMBER:
             for i in xrange(numOfReferrals, self.MIN_REF_NUMBER):
-                referralNumber = self.app.utilsManager.textManager.getText(TextType.DISABLE_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EMPTYLINE, lineNo=str(i + 1)))
+                referralNumber = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DISABLED_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EMPTYLINE, lineNo=str(i + 1)))
                 result.append({'isEmpty': True,
                  'referralNo': referralNumber})
 
@@ -169,27 +170,26 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         refSystem = game_control.g_instance.refSystem
         totalXP = refSystem.getTotalXP()
         currentXP = refSystem.getReferralsXPPool()
-        progressText = '%(currentXP)s / %(totalXP)s %(icon)s' % {'currentXP': self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, BigWorld.wg_getIntegralFormat(currentXP)),
+        progressText = '%(currentXP)s / %(totalXP)s %(icon)s' % {'currentXP': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, BigWorld.wg_getIntegralFormat(currentXP)),
          'totalXP': BigWorld.wg_getIntegralFormat(totalXP),
          'icon': self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON, 16, 16, -3, 0))}
         text = i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_PROGRESS, progress=progressText)
-        data = {'isCompleted': refSystem.isTotallyCompleted(),
-         'text': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, text)}
+        awardData = {}
+        progresData = {'text': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, text)}
+        progressAlertText = ''
         if refSystem.isTotallyCompleted():
             completedText = i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_COMPLETE)
-            completedText = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, completedText)
-            data['completedText'] = completedText
+            completedText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, completedText)
+            awardData['completedText'] = completedText
             _, lastStepQuests = refSystem.getQuests()[-1]
             vehicleBonus = findFirst(lambda q: q.getBonuses('vehicles'), reversed(lastStepQuests))
             vehicleBonusIcon = ''
             if vehicleBonus is not None:
                 vehicleBonusIcon = vehicleBonus.getBonuses('vehicles')[0].getTooltipIcon()
-            data['completedImage'] = vehicleBonusIcon
+            awardData['completedImage'] = vehicleBonusIcon
         else:
             stepsData = []
             progress = 0.0
-            isProgressAvailable = True
-            progressAlertText = ''
             quests = refSystem.getQuests()
             totalQuestsCount = len(tuple(itertools.chain(*dict(quests).values())))
             if quests and totalQuestsCount == self.TOTAL_QUESTS:
@@ -225,15 +225,17 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
                     progress = totalProgress + totalStepProgress
             else:
                 LOG_WARNING('Referral quests is in invalid state: ', quests)
-                isProgressAvailable = False
                 progressAlertIcon = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON)
-                progressAlertText = self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSNOTAVAILABLE))
+                progressAlertText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSNOTAVAILABLE))
                 progressAlertText = i18n.makeString(progressAlertIcon + ' ' + progressAlertText)
-            data.update({'steps': stepsData,
-             'progress': progress,
-             'isProgressAvailable': isProgressAvailable,
-             'progressAlertText': progressAlertText})
-        self.as_setProgressDataS(data)
+            progresData.update({'steps': stepsData,
+             'progress': progress})
+        if progressAlertText != '':
+            self.as_showAlertS(progressAlertText)
+        elif refSystem.isTotallyCompleted():
+            self.as_setAwardDataDataS(awardData)
+        else:
+            self.as_setProgressDataS(progresData)
         return
 
     def __getBonusIcon(self, event):
@@ -249,9 +251,9 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         if self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite():
             user = self.usersStorage.getUser(referralID)
             if self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE:
-                result = yield self.prbDispatcher.create(prb_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=[referralID], isForced=True))
+                result = yield self.prbDispatcher.create(unit_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=[referralID], isForced=True))
             else:
-                result = yield self.prbDispatcher.sendPrbRequest(SendInvitesCtx([referralID], ''))
+                result = yield self.prbDispatcher.sendUnitRequest(SendInvitesCtx([referralID], ''))
             if result:
                 self.__showInviteMessage(user)
 

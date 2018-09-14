@@ -163,6 +163,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_a
  (_AB.SINGLE, 'aimer'): _CustomAchieveFactory.get(_as.AimerAchievement),
  (_AB.SINGLE, 'tankwomen'): _CustomAchieveFactory.get(_as.TankwomenAchievement),
  (_AB.SINGLE, 'operationWinter'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'fallout'): _CustomAchieveFactory.get(_as.FalloutAchievement),
  (_AB.TEAM_7X7, 'geniusForWarMedal'): _CustomAchieveFactory.get(_as.GeniusForWarAchievement),
  (_AB.TEAM_7X7, 'wolfAmongSheepMedal'): _CustomAchieveFactory.get(_as.WolfAmongSheepAchievement),
  (_AB.TEAM_7X7, 'fightingReconnaissanceMedal'): _CustomAchieveFactory.get(_as.FightingReconnaissanceAchievement),

@@ -319,10 +319,14 @@ class AccountClubLimits(RestrictionsCollection, interfaces.IAccountClubLimits):
         url = GUI_SETTINGS.lookup('clubSettings')
         if not url:
             return error(_CCR.DEFAULT)
-        permissions = club.getPermissions()
-        if not permissions.canChangeWebSettings():
-            return error(_CCR.DEFAULT)
-        return success()
+        else:
+            if club is not None:
+                permissions = club.getPermissions()
+                if not permissions.canChangeWebSettings():
+                    return error(_CCR.DEFAULT)
+                if club.getTotalDossier().getTotalStats().getBattlesCount() < CLUB_LIMITS.MIN_BATTLES_COUNT_TO_CHANGE_NAME:
+                    return error(_CCR.NOT_ENOUGH_RATED_BATTLES)
+            return success()
 
     def _isAccountRequestValid(self, requestTypeID):
         return self.isRequestValid(requestTypeID)

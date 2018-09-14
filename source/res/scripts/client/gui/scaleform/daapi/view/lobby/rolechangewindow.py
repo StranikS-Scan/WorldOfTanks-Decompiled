@@ -1,12 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
 import BigWorld
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers.i18n import makeString
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.RoleChangeMeta import RoleChangeMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.managers.TextManager import TextManager, TextType, TextIcons
+from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items import Tankman
 from gui.shared.gui_items.serializers import packTankman
@@ -140,7 +141,7 @@ class RoleChangeWindow(View, AbstractWindowView, RoleChangeMeta):
         formattedPrice = BigWorld.wg_getIntegralFormat(changeRoleCost)
         actualGold = self.__items.stats.gold
         enoughGold = actualGold - changeRoleCost >= 0
-        textType = TextType.GOLD_TEXT if enoughGold else TextType.ERROR_TEXT
+        textType = TEXT_MANAGER_STYLES.GOLD_TEXT if enoughGold else TEXT_MANAGER_STYLES.ERROR_TEXT
         priceString = TextManager.getText(textType, formattedPrice)
         priceString += TextManager.getIcon(TextIcons.GOLD)
         self.as_setPriceS(priceString, enoughGold)

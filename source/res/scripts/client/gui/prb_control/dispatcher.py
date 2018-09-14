@@ -265,6 +265,9 @@ class _PrebattleDispatcher(object):
                 elif g_currentVehicle.isBroken():
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_BROKEN
+                elif not g_currentVehicle.isGroupReady():
+                    canDo = False
+                    restriction = PREBATTLE_RESTRICTION.VEHICLE_GROUP_IS_NOT_READY
                 elif g_currentVehicle.isDisabledInRoaming():
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_ROAMING
@@ -272,11 +275,15 @@ class _PrebattleDispatcher(object):
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_IN_PREMIUM_IGR_ONLY
                 elif g_currentVehicle.isDisabledInRent():
-                    canDo = False
-                    if g_currentVehicle.isPremiumIGR():
-                        restriction = PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER
+                    unit = self.getUnitFunctional()
+                    if unit is not None and unit.getFlags().isInPreArena():
+                        canDo = True
                     else:
-                        restriction = PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER
+                        canDo = False
+                        if g_currentVehicle.isPremiumIGR():
+                            restriction = PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER
+                        else:
+                            restriction = PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER
             if canDo:
                 canDo, restriction = self.__collection.canPlayerDoAction(True)
         return (canDo, restriction)
@@ -359,6 +366,7 @@ class _PrebattleDispatcher(object):
         if unitMgr:
             unitMgr.onUnitJoined += self.unitMgr_onUnitJoined
             unitMgr.onUnitLeft += self.unitMgr_onUnitLeft
+            unitMgr.onUnitRestored += self.unitMgr_onUnitRestored
             unitMgr.onUnitErrorReceived += self.unitMgr_onUnitErrorReceived
         else:
             LOG_ERROR('Unit manager is not defined')
@@ -401,6 +409,7 @@ class _PrebattleDispatcher(object):
         if unitMgr:
             unitMgr.onUnitJoined -= self.unitMgr_onUnitJoined
             unitMgr.onUnitLeft -= self.unitMgr_onUnitLeft
+            unitMgr.onUnitRestored -= self.unitMgr_onUnitRestored
             unitMgr.onUnitErrorReceived -= self.unitMgr_onUnitErrorReceived
         unitBrowser = getClientUnitBrowser()
         if unitBrowser:
@@ -437,8 +446,9 @@ class _PrebattleDispatcher(object):
     def pe_onArenaJoinFailure(self, errorCode, _):
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
-    def pe_onKickedFromArena(self, _):
+    def pe_onKickedFromArena(self, reasonCode):
         self.__collection.reset()
+        SystemMessages.pushMessage(messages.getKickReasonMessage(reasonCode), type=SystemMessages.SM_TYPE.Error)
 
     def pe_onPrebattleAutoInvitesChanged(self):
         if GUI_SETTINGS.specPrebatlesVisible:
@@ -565,6 +575,13 @@ class _PrebattleDispatcher(object):
         if update:
             g_eventDispatcher.updateUI()
 
+    def unitMgr_onUnitRestored(self, unitMgrID, unitIdx):
+        unitFunctional = self.getFunctional(CTRL_ENTITY_TYPE.UNIT)
+        flags = unitFunctional.getFlags()
+        pInfo = unitFunctional.getPlayerInfo()
+        if flags.isInPreArena() and pInfo.isInSlot:
+            g_eventDispatcher.loadHangar()
+
     def unitMgr_onUnitErrorReceived(self, requestID, unitMgrID, unitIdx, errorCode, errorString):
         unitFunctional = self.getFunctional(CTRL_ENTITY_TYPE.UNIT)
         if unitFunctional:
@@ -610,7 +627,7 @@ class _PrebattleDispatcher(object):
                 unitFunctional.setExit(funcExit)
             else:
                 LOG_ERROR('Unit functional is not found')
-        self.__factories.createFunctional(self, CreateFunctionalCtx(CTRL_ENTITY_TYPE.UNIT, prbType, create={'modeFlags': modeFlags}))
+        self.__factories.createFunctional(self, CreateFunctionalCtx(CTRL_ENTITY_TYPE.UNIT, prbType, create={'modeFlags': modeFlags}, init={'ctx': self.__requestCtx}))
         self.__requestCtx.stopProcessing(result=True)
         return
 

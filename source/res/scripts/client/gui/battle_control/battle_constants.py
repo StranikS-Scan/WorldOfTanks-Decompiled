@@ -17,12 +17,17 @@ class CANT_SHOOT_ERROR(object):
 
 
 class VEHICLE_VIEW_STATE(object):
-    FIRE = 2
-    DEVICES = 4
-    HEALTH = 8
-    DESTROYED = 16
-    CREW_DEACTIVATED = 32
-    AUTO_ROTATION = 64
+    FIRE = 1
+    DEVICES = 2
+    HEALTH = 4
+    DESTROYED = 8
+    CREW_DEACTIVATED = 16
+    AUTO_ROTATION = 32
+    SPEED = 64
+    CRUISE_MODE = 128
+    REPAIRING = 256
+    PLAYER_INFO = 512
+    RESPAWNING = 1024
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')
@@ -54,3 +59,15 @@ PLAYER_ENTITY_NAME = Enumeration("Name of player's entity in the battle", [('all
    'base': 'ally'}),
  ('enemy', {'isFriend': False,
    'base': 'enemy'})], instance=AttributeEnumItem)
+VEHICLE_WAINING_INTERVAL = 0.05
+VEHICLE_UPDATE_INTERVAL = 0.03
+
+class FEEDBACK_EVENT_ID(object):
+    PLAYER_KILLED_ENEMY = 1
+    PLAYER_DAMAGED_HP_ENEMY = 2
+    PLAYER_DAMAGED_DEVICE_ENEMY = 4
+    PLAYER_SPOTTED_ENEMY = 8
+    PLAYER_ASSIST_TO_KILL_ENEMY = 16
+    PLAYER_USED_ARMOR = 32
+    PLAYER_CAPTURED_BASE = 64
+    PLAYER_DROPPED_CAPTURE = 128

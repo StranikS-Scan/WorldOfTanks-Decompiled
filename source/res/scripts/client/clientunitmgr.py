@@ -4,8 +4,8 @@ from ClientUnit import ClientUnit
 import Event
 import constants
 from debug_utils import LOG_DEBUG, LOG_DAN, LOG_CURRENT_EXCEPTION
-from UnitBase import UNIT_SLOT, UNIT_BROWSER_CMD, CLIENT_UNIT_CMD, INV_ID_CLEAR_VEHICLE, UNIT_BROWSER_TYPE
-from UnitRoster import UnitRosterSlot
+from UnitBase import UNIT_SLOT, UNIT_BROWSER_CMD, CLIENT_UNIT_CMD, INV_ID_CLEAR_VEHICLE, UNIT_BROWSER_TYPE, UNIT_ERROR
+from unit_roster_config import UnitRosterSlot
 from gui.shared import g_itemsCache
 import AccountCommands
 
@@ -15,6 +15,7 @@ class ClientUnitMgr(object):
         self.__eManager = Event.EventManager()
         self.onUnitJoined = Event.Event(self.__eManager)
         self.onUnitLeft = Event.Event(self.__eManager)
+        self.onUnitRestored = Event.Event(self.__eManager)
         self.onUnitErrorReceived = Event.Event(self.__eManager)
         self.onUnitResponseReceived = Event.Event(self.__eManager)
         self.id = 0
@@ -69,6 +70,8 @@ class ClientUnitMgr(object):
          unitIdx,
          errorCode,
          errorString))
+        if errorCode == UNIT_ERROR.UNIT_RESTORED:
+            self._restore()
         self.onUnitErrorReceived(requestID, unitMgrID, unitIdx, errorCode, errorString)
 
     def onUnitCallOk(self, requestID):
@@ -79,6 +82,12 @@ class ClientUnitMgr(object):
         requestID = self.__getNextRequestID()
         LOG_DAN('unit.createUnitMgr', requestID, unitMgrFlags)
         self.__account.base.createUnitMgr(requestID, unitMgrFlags)
+        return requestID
+
+    def createSquad(self):
+        requestID = self.__getNextRequestID()
+        LOG_DAN('unit.createSquadUnitMgr', requestID)
+        self.__account.base.createSquadUnitMgr(requestID)
         return requestID
 
     def join(self, unitMgrID, unitIdx = 1, vehInvID = 0, slotIdx = UNIT_SLOT.REMOVE):
@@ -100,8 +109,8 @@ class ClientUnitMgr(object):
     def leave(self):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.LEAVE_UNIT)
 
-    def setVehicle(self, vehInvID = INV_ID_CLEAR_VEHICLE):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_VEHICLE, 0, 0, vehInvID)
+    def setVehicle(self, vehInvID = INV_ID_CLEAR_VEHICLE, setReady = False):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_VEHICLE, 0, 0, vehInvID, int(setReady))
 
     def setMember(self, vehInvID, slotIdx = UNIT_SLOT.ANY):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_MEMBER, 0, 0, vehInvID, slotIdx)
@@ -124,8 +133,8 @@ class ClientUnitMgr(object):
     def kick(self, playerID, unitIdx = 0):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.KICK_UNIT_PLAYER, self.id, unitIdx, playerID)
 
-    def setReady(self, isReady = True):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_MEMBER_READY, self.id, 0, int(isReady))
+    def setReady(self, isReady = True, resetVehicle = False):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_MEMBER_READY, self.id, 0, int(isReady), int(resetVehicle))
 
     def setRosterSlot(self, rosterSlotIdx, vehTypeID = None, nationNames = [], levels = (1, 8), vehClassNames = [], unitIdx = 0):
         LOG_DAN('setRosterSlot: slot=%s, vehTypeID=%s, nationNames=%s, levels=%s, vehClassNames=%s' % (rosterSlotIdx,
@@ -176,8 +185,10 @@ class ClientUnitMgr(object):
         self.__account.base.sendUnitInvites(requestID, accountsToInvite, comment)
         return requestID
 
-    def startBattle(self, unitIdx = 0):
-        return self.__doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, self.id, unitIdx)
+    def startBattle(self, unitIdx = 0, vehInvID = 0, gameplaysMask = None):
+        if gameplaysMask is not None:
+            self.setGameplaysMask(gameplaysMask)
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.START_UNIT_BATTLE, self.id, unitIdx, vehInvID)
 
     def stopBattle(self, unitIdx = 0):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.STOP_UNIT_BATTLE, self.id, unitIdx)
@@ -191,6 +202,9 @@ class ClientUnitMgr(object):
     def setComment(self, strComment, unitIdx = 0):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_COMMENT, self.id, unitIdx, 0, 0, strComment)
 
+    def setGameplaysMask(self, gameplaysMask, unitIdx = 0):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.SET_GAMEPLAYS_MASK, self.id, unitIdx, gameplaysMask)
+
     def giveLeadership(self, memberDBID, unitIdx = 0):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.GIVE_LEADERSHIP, self.id, unitIdx, memberDBID)
 
@@ -201,6 +215,17 @@ class ClientUnitMgr(object):
         while len(self.units):
             _, unit = self.units.popitem()
             unit.destroy()
+
+    def _restore(self):
+        prevMgrID = self.id
+        prevUnitIdx = self.unitIdx
+        if prevMgrID:
+            self.onUnitRestored(prevMgrID, prevUnitIdx)
+        self.id = 0
+        self.unitIdx = 0
+        self._clearUnits()
+        if prevMgrID:
+            self.onUnitLeft(prevMgrID, prevUnitIdx)
 
 
 class ClientUnitBrowser(object):

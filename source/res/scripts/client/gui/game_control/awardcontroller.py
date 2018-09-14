@@ -3,6 +3,12 @@ import types
 import weakref
 from abc import ABCMeta, abstractmethod
 import ArenaType
+from goodies.goodie_constants import GOODIE_TARGET_TYPE
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
+from gui.goodies.GoodiesCache import g_goodiesCache
+from gui.shared.economics import getPremiumCostActionPrc
+from gui.shared.utils import findFirst
 import potapov_quests
 import gui.awards.event_dispatcher as shared_events
 from constants import EVENT_TYPE
@@ -10,7 +16,7 @@ from helpers import i18n
 from chat_shared import SYS_MESSAGE_TYPE
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr
 from messenger.proto.events import g_messengerEvents
 from messenger.formatters import NCContextItemFormatter, TimeFormatter
@@ -46,7 +52,11 @@ class AwardController(Controller, GlobalListener):
          VehiclesResearchHandler(self),
          VictoryHandler(self),
          BattlesCountHandler(self),
-         PotapovQuestsAutoWindowHandler(self)]
+         PotapovQuestsAutoWindowHandler(self),
+         PersonalDiscountHandler(self),
+         QuestBoosterAwardHandler(self),
+         BoosterAfterBattleAwardHandler(self),
+         GoldFishHandler(self)]
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
 
@@ -78,7 +88,7 @@ class AwardController(Controller, GlobalListener):
         else:
             return self.__isLobbyLoaded and not (prbDispatcher.getFunctionalState().hasLockedState or prbDispatcher.getPlayerInfo().isReady)
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self.__isLobbyLoaded = False
 
     def onLobbyInited(self, *args):
@@ -89,7 +99,7 @@ class AwardController(Controller, GlobalListener):
     def onPlayerStateChanged(self, functional, roster, accountInfo):
         self.handlePostponed()
 
-    def onUnitStateChanged(self, state, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         self.handlePostponed()
 
     def onDequeued(self):
@@ -145,24 +155,26 @@ class PunishWindowHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         _, message = ctx
-        arenaTypeID = message.data.get('arenaTypeID', 0)
-        arenaType = ArenaType.g_cache[arenaTypeID] if arenaTypeID > 0 else None
-        arenaCreateTime = message.data.get('arenaCreateTime', None)
-        fairplayViolations = message.data.get('fairplayViolations', None)
-        if arenaCreateTime and arenaType and fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
-            penaltyType = None
-            violation = None
-            if fairplayViolations[1] != 0:
-                penaltyType = 'penalty'
-                violation = fairplayViolations[1]
-            elif fairplayViolations[0] != 0:
-                penaltyType = 'warning'
-                violation = fairplayViolations[0]
-            from gui.DialogsInterface import showDialog
-            showDialog(I18PunishmentDialogMeta('punishmentWindow', None, {'penaltyType': penaltyType,
-             'arenaName': i18n.makeString(arenaType.name),
-             'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
-             'reason': i18n.makeString(DIALOGS.all('punishmentWindow/reason/%s' % getFairPlayViolationName(violation)))}), lambda *args: None)
+        for dataForVehicle in message.data.values():
+            arenaTypeID = dataForVehicle.get('arenaTypeID', 0)
+            arenaType = ArenaType.g_cache[arenaTypeID] if arenaTypeID > 0 else None
+            arenaCreateTime = dataForVehicle.get('arenaCreateTime', None)
+            fairplayViolations = dataForVehicle.get('fairplayViolations', None)
+            if arenaCreateTime and arenaType and fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
+                penaltyType = None
+                violation = None
+                if fairplayViolations[1] != 0:
+                    penaltyType = 'penalty'
+                    violation = fairplayViolations[1]
+                elif fairplayViolations[0] != 0:
+                    penaltyType = 'warning'
+                    violation = fairplayViolations[0]
+                from gui.DialogsInterface import showDialog
+                showDialog(I18PunishmentDialogMeta('punishmentWindow', None, {'penaltyType': penaltyType,
+                 'arenaName': i18n.makeString(arenaType.name),
+                 'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
+                 'reason': i18n.makeString(DIALOGS.all('punishmentWindow/reason/%s' % getFairPlayViolationName(violation)))}), lambda *args: None)
+
         return
 
 
@@ -194,6 +206,26 @@ class FortResultsWindowHandler(ServiceChannelHandler):
             if battleResult['attackResult'] == FORT_ATTACK_RESULT.TECHNICAL_DRAW:
                 battleResult['isWinner'] = -1
         g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': battleResult}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+class PersonalDiscountHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(PersonalDiscountHandler, self).__init__(SYS_MESSAGE_TYPE.premiumPersonalDiscount.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        data = ctx[1].data
+        if data:
+            newGoodies = data.get('newGoodies', [])
+            if len(newGoodies) > 0:
+                discountID = findFirst(None, newGoodies)
+                shopDiscounts = g_itemsCache.items.shop.premiumPacketsDiscounts
+                discount = shopDiscounts.get(discountID, None)
+                if discount is not None and discount.targetID == GOODIE_TARGET_TYPE.ON_BUY_PREMIUM:
+                    packet = discount.getTargetValue()
+                    discountPrc = getPremiumCostActionPrc(shopDiscounts, packet, g_itemsCache.items)
+                    shared_events.showPremiumDiscountAward(discount.condition[1], packet, discountPrc)
+        return
 
 
 class PotapovQuestsBonusHandler(ServiceChannelHandler):
@@ -241,16 +273,16 @@ class PotapovWindowAfterBattleHandler(ServiceChannelHandler):
         super(PotapovWindowAfterBattleHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
-        battleResult = ctx[1].data
         achievements = []
-        for recordIdx, value in battleResult.get('popUpRecords') or {}:
-            recordName = DB_ID_TO_RECORD[recordIdx]
-            if recordName in POTAPOV_QUESTS_GROUP:
-                factory = getAchievementFactory(recordName)
-                if factory is not None:
-                    a = factory.create(value=int(value))
-                    if a is not None:
-                        achievements.append(a)
+        for vehTypeCompDescr, battleResult in ctx[1].data.iteritems():
+            for recordIdx, value in battleResult.get('popUpRecords') or {}:
+                recordName = DB_ID_TO_RECORD[recordIdx]
+                if recordName in POTAPOV_QUESTS_GROUP:
+                    factory = getAchievementFactory(recordName)
+                    if factory is not None:
+                        a = factory.create(value=int(value))
+                        if a is not None:
+                            achievements.append(a)
 
         if achievements:
             quests_events.showAchievementsAward(achievements)
@@ -280,6 +312,39 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
                 quests_events.showVehicleAward(Vehicle(typeCompDescr=abs(vehTypeCompDescr)))
 
 
+class QuestBoosterAwardHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(QuestBoosterAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        data = ctx[1].data
+        goodies = data.get('goodies', {})
+        for boosterID in goodies:
+            booster = g_goodiesCache.getBooster(boosterID)
+            if booster is not None:
+                shared_events.showBoosterAward(booster)
+
+        return
+
+
+class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(BoosterAfterBattleAwardHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        battleResult = ctx[1].data
+        battleResult = next(battleResult.itervalues())
+        goodies = battleResult.get('goodies', {})
+        for boosterID in goodies:
+            booster = g_goodiesCache.getBooster(boosterID)
+            if booster is not None:
+                shared_events.showBoosterAward(booster)
+
+        return
+
+
 class PotapovQuestsAutoWindowHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
@@ -287,13 +352,13 @@ class PotapovQuestsAutoWindowHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         pqCompletedQuests = {}
-        battleResult = ctx[1].data
-        completedQuestIDs = battleResult.get('completedQuestIDs', set())
-        for qID in completedQuestIDs:
-            if potapov_quests.g_cache.isPotapovQuest(qID):
-                pqType = potapov_quests.g_cache.questByUniqueQuestID(qID)
-                if pqType.id not in pqCompletedQuests and not pqType.isFinal:
-                    pqCompletedQuests[pqType.id] = (pqType.mainQuestID in completedQuestIDs, pqType.addQuestID in completedQuestIDs)
+        for vehTypeCompDescr, battleResult in ctx[1].data.iteritems():
+            completedQuestIDs = battleResult.get('completedQuestIDs', set())
+            for qID in completedQuestIDs:
+                if potapov_quests.g_cache.isPotapovQuest(qID):
+                    pqType = potapov_quests.g_cache.questByUniqueQuestID(qID)
+                    if pqType.id not in pqCompletedQuests and not pqType.isFinal:
+                        pqCompletedQuests[pqType.id] = (pqType.mainQuestID in completedQuestIDs, pqType.addQuestID in completedQuestIDs)
 
         for potapovQuestID, (isMain, isAdd) in pqCompletedQuests.iteritems():
             quests_events.showRegularAward(g_eventsCache.potapov.getQuests()[potapovQuestID], isMain, isAdd)
@@ -361,16 +426,28 @@ class SpecialAchievement(AwardHandler):
         raise NotImplementedError
 
     def _needToShowAward(self, ctx = None):
+        return self._awardCtrl.canShow() == False or self._getAchievementToShow() != None
+
+    def _getAchievementToShow(self):
         achievementCount = self.getAchievementCount()
         lastElement = max(self.__awardCntToMsg.keys())
-        return achievementCount != 0 and (achievementCount in self.__awardCntToMsg or achievementCount % lastElement == 0) and self.isChanged(achievementCount)
+        if achievementCount != 0 and self.isChanged(achievementCount):
+            if achievementCount in self.__awardCntToMsg or achievementCount % lastElement == 0:
+                return achievementCount
+            sortedKeys = sorted(self.__awardCntToMsg.keys(), reverse=True)
+            for i in xrange(len(sortedKeys) - 1):
+                if sortedKeys[i] > achievementCount and achievementCount > sortedKeys[i + 1] and self.isChanged(sortedKeys[i + 1]):
+                    return sortedKeys[i + 1]
+
+        return None
 
     def _showAward(self, ctx = None):
-        achievementCount = self.getAchievementCount()
-        messageNumber = self.__awardCntToMsg.get(achievementCount, self.__awardCntToMsg[max(self.__awardCntToMsg.keys())])
-        if self.isChanged(achievementCount):
+        achievementCount = self._getAchievementToShow()
+        if achievementCount is not None:
+            messageNumber = self.__awardCntToMsg.get(achievementCount, self.__awardCntToMsg[max(self.__awardCntToMsg.keys())])
             self.__setNewValue(achievementCount)
             self.showAwardWindow(achievementCount, messageNumber)
+        return
 
     def __setNewValue(self, value):
         achievement = AccountSettings.getFilter(AWARDS)
@@ -395,7 +472,7 @@ class VehiclesResearchHandler(SpecialAchievement):
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def getAchievementCount(self):
-        return len(g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IN_PREMIUM_IGR))
+        return len(g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR))
 
     def onUnlocksChanged(self, unlocks):
         isChanged = False
@@ -426,10 +503,12 @@ class VictoryHandler(SpecialAchievement):
     def init(self):
         g_playerEvents.onGuiCacheSyncCompleted += self.handle
         g_playerEvents.onDossiersResync += self.handle
+        g_playerEvents.onBattleResultsReceived += self.handle
 
     def fini(self):
         g_playerEvents.onGuiCacheSyncCompleted -= self.handle
         g_playerEvents.onDossiersResync -= self.handle
+        g_playerEvents.onBattleResultsReceived -= self.handle
 
     def getAchievementCount(self):
         return g_itemsCache.items.getAccountDossier().getTotalStats().getWinsCount()
@@ -456,13 +535,31 @@ class BattlesCountHandler(SpecialAchievement):
     def init(self):
         g_playerEvents.onGuiCacheSyncCompleted += self.handle
         g_playerEvents.onDossiersResync += self.handle
+        g_playerEvents.onBattleResultsReceived += self.handle
 
     def fini(self):
         g_playerEvents.onGuiCacheSyncCompleted -= self.handle
         g_playerEvents.onDossiersResync -= self.handle
+        g_playerEvents.onBattleResultsReceived -= self.handle
 
     def getAchievementCount(self):
         return g_itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
 
     def showAwardWindow(self, achievementCount, messageNumber):
         return shared_events.showBattleAward(achievementCount, messageNumber)
+
+
+class GoldFishHandler(AwardHandler):
+
+    def __init__(self, awardCtrl):
+        super(GoldFishHandler, self).__init__(awardCtrl)
+
+    def init(self):
+        self.handle()
+
+    def _needToShowAward(self, ctx):
+        return True
+
+    def _showAward(self, ctx):
+        if isGoldFishActionActive() and isTimeToShowGoldFishPromo():
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GOLD_FISH_WINDOW))

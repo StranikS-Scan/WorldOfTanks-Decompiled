@@ -2,8 +2,8 @@
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import IGR_TYPE, QUEUE_TYPE, IS_SHOW_SERVER_STATS
-from debug_utils import LOG_DEBUG
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from helpers import i18n
 from gui.shared.utils.functions import makeTooltip
@@ -75,10 +75,15 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         windowsContainer = containerManager.getContainer(ViewTypes.WINDOW)
         browserWindowContainer = containerManager.getContainer(ViewTypes.BROWSER)
         if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount() and not browserWindowContainer.getViewCount():
+            containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.SHOW_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
             self.as_showHelpLayoutS()
 
+    def __onViewAddedToContainer(self, _, pyEntity):
+        self.closeHelpLayout()
+
     def closeHelpLayout(self):
+        self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.CLOSE_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
         self.as_closeHelpLayoutS()
 
@@ -267,7 +272,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
             igrActionIcon = makeHtmlString('html_templates:igr/iconSmall', 'premium', {})
             localization = '#menu:vehicleIgr/%s'
             timeLeft = g_currentVehicle.item.rentLeftTime
-            vehicleIgrTimeLeft = getRentLeftTimeStr(localization, timeLeft, timeStyle=TextType.STATS_TEXT, ctx={'igrIcon': igrActionIcon})
+            vehicleIgrTimeLeft = getRentLeftTimeStr(localization, timeLeft, timeStyle=TEXT_MANAGER_STYLES.STATS_TEXT, ctx={'igrIcon': igrActionIcon})
         self.as_setVehicleIGRS(vehicleIgrTimeLeft)
 
     def __updateState(self):
@@ -291,7 +296,11 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         customizationEnabled = g_currentVehicle.isInHangar() and not isVehicleDisabled and not g_currentVehicle.isBroken() and customizationEnabledInRent
         self.as_setCrewEnabledS(crewEnabled)
         self.as_setCarouselEnabledS(carouselEnabled)
-        self.as_setupAmmunitionPanelS(maintenanceEnabled, customizationEnabled)
+        customizationTooltip = TOOLTIPS.HANGAR_TUNING
+        if g_currentVehicle.isPresent() and g_currentVehicle.item.isOnlyForEventBattles:
+            customizationEnabled = False
+            customizationTooltip = TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE
+        self.as_setupAmmunitionPanelS(maintenanceEnabled, customizationEnabled, customizationTooltip)
         self.as_setControlsVisibleS(g_currentVehicle.isPresent())
         return
 

@@ -1,11 +1,10 @@
 # Embedded file name: scripts/client/notification/decorators.py
-import operator
 import BigWorld
 from debug_utils import LOG_ERROR
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings
-from helpers import i18n, time_utils
+from helpers import i18n
 from messenger import g_settings
 from messenger.formatters.users_messages import makeFriendshipRequestText
 from messenger.m_constants import PROTO_TYPE
@@ -16,6 +15,7 @@ from notification.settings import makePathToIcon
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from gui.clubs.ClubsController import g_clubsCtrl
 from gui.clubs.formatters import ClubInviteHtmlTextFormatter, ClubAppsHtmlTextFormatter
+from helpers import time_utils
 
 def _makeShowTime():
     return BigWorld.time()
@@ -174,7 +174,7 @@ class PrbInviteDecorator(_NotificationDecorator):
 
     def __init__(self, invite):
         self._createdAt = invite.createTime
-        super(PrbInviteDecorator, self).__init__(invite.id, invite)
+        super(PrbInviteDecorator, self).__init__(invite.clientID, invite)
 
     def clear(self):
         self._createdAt = 0
@@ -193,7 +193,7 @@ class PrbInviteDecorator(_NotificationDecorator):
         return (self.showAt(), self._createdAt)
 
     def _make(self, invite = None, settings = None):
-        invite = invite or self.prbInvites.getReceivedInvite(self._entityID)
+        invite = invite or self.prbInvites.getInvite(self._entityID)
         if not invite:
             LOG_ERROR('Invite not found', self._entityID)
             self._vo = {}
@@ -381,14 +381,14 @@ class ClubInviteDecorator(_NotificationDecorator):
             self._vo = {}
             self._settings = NotificationGuiSettings(False, NotificationPriorityLevel.LOW, showAt=_makeShowTime())
             return
-        if not invite.showAt or invite.isActive():
-            if invite.showAt > 0:
+        if not invite.showAt() or invite.isActive():
+            if invite.showAt() > 0:
                 self._isOrderChanged = True
-            invite.showAt = _makeShowTime()
+            invite.setShowTime(_makeShowTime())
         if invite.isActive():
-            self._settings = NotificationGuiSettings(True, NotificationPriorityLevel.HIGH, showAt=invite.showAt)
+            self._settings = NotificationGuiSettings(True, NotificationPriorityLevel.HIGH, showAt=invite.showAt())
         else:
-            self._settings = NotificationGuiSettings(False, NotificationPriorityLevel.LOW, showAt=invite.showAt)
+            self._settings = NotificationGuiSettings(False, NotificationPriorityLevel.LOW, showAt=invite.showAt())
         canAccept = invite.isActive()
         canDecline = invite.isActive()
         if canAccept or canDecline:
@@ -401,7 +401,7 @@ class ClubInviteDecorator(_NotificationDecorator):
             submitState = cancelState = 0
         formatter = ClubInviteHtmlTextFormatter()
         message = g_settings.msgTemplates.format('clubInvite', ctx={'text': formatter.getText(invite)}, data={'timestamp': self._createdAt,
-         'icon': makePathToIcon('companyInviteIcon-1'),
+         'icon': makePathToIcon('clubInviteIcon'),
          'defaultIcon': makePathToIcon('prebattleInviteIcon'),
          'buttonsStates': {'submit': submitState,
                            'cancel': cancelState}})

@@ -21,6 +21,7 @@ class StickerAttributes():
     IS_INSCRIPTION = 1
     DOUBLESIDED = 2
     IS_MIRRORED = 4
+    IS_UV_PROPORTIONAL = 8
 
 
 class SlotTypes():
@@ -128,8 +129,12 @@ class ModelStickers():
                 if game_control.g_instance.roaming.isInRoaming() or arenaBonusType == constants.ARENA_BONUS_TYPE.HISTORICAL or isHBParticipatingVehicle or self.__isLoadingClanEmblems:
                     continue
                 self.__isLoadingClanEmblems = True
-                fileCache = Account.g_accountRepository.customFilesCache
-                fileServerSettings = Account.g_accountRepository.fileServerSettings
+                accountRep = Account.g_accountRepository
+                if accountRep is None:
+                    LOG_ERROR('Failed to attach stickers to the vehicle - account repository is not initialized')
+                    continue
+                fileCache = accountRep.customFilesCache
+                fileServerSettings = accountRep.fileServerSettings
                 clan_emblems = fileServerSettings.get('clan_emblems')
                 if clan_emblems is None:
                     continue
@@ -155,11 +160,11 @@ class ModelStickers():
             self.__isDamaged = False
             return
 
-    def addDamageSticker(self, texName, bumpTexName, segStart, segEnd, sizes, rayUp):
+    def addDamageSticker(self, stickerID, segStart, segEnd):
         if self.__model is None:
             return 0
         else:
-            return self.__stickerModel.addSticker(texName, bumpTexName, self.__model, segStart, segEnd, sizes, rayUp, 0)
+            return self.__stickerModel.addDamageSticker(stickerID, self.__model, segStart, segEnd)
 
     def delDamageSticker(self, handle):
         if self.__model is not None:
@@ -202,6 +207,8 @@ class ModelStickers():
                     stickerAttributes |= StickerAttributes.DOUBLESIDED
                 if slot.isMirrored and isStickerMirrored:
                     stickerAttributes |= StickerAttributes.IS_MIRRORED
+                if slot.isUVProportional:
+                    stickerAttributes |= StickerAttributes.IS_UV_PROPORTIONAL
                 self.__stickerModel.addSticker(texName, bumpTexName, self.__model, slot.rayStart, slot.rayEnd, sizes, slot.rayUp, stickerAttributes)
 
             return
@@ -232,13 +239,10 @@ class ComponentStickers(object):
 
 class DamageSticker(object):
 
-    def __init__(self, textureName, bumpTextureName, rayStart, rayEnd, sizes, rayUp, handle):
-        self.textureName = textureName
-        self.bumpTextureName = bumpTextureName
+    def __init__(self, stickerID, rayStart, rayEnd, handle):
         self.rayStart = rayStart
         self.rayEnd = rayEnd
-        self.sizes = sizes
-        self.rayUp = rayUp
+        self.stickerID = stickerID
         self.handle = handle
 
 
@@ -297,7 +301,7 @@ class VehicleStickers(object):
                         componentStickers.stickers.delDamageSticker(damageSticker.handle)
                         damageSticker.handle = None
                         LOG_WARNING('Adding %s damage sticker to occupied slot' % componentName)
-                    damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.textureName, damageSticker.bumpTextureName, damageSticker.rayStart, damageSticker.rayEnd, damageSticker.sizes, damageSticker.rayUp)
+                    damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.stickerID, damageSticker.rayStart, damageSticker.rayEnd)
 
         gunModel, gunNode = modelsWithParentNodes[-1]
         if gunModel is None or gunNode is None:
@@ -328,32 +332,12 @@ class VehicleStickers(object):
         if componentStickers.damageStickers.has_key(code):
             return
         desc = items.vehicles.g_cache.damageStickers['descrs'][stickerID]
-        texParams = random.choice(desc['variants'])
-        textureName = texParams['texName']
-        bumpTexName = texParams['bumpTexName']
-        sizes = texParams['modelSizes']
-        randomYaw = texParams['randomYaw']
-        sizeVariation = texParams['variation']
-        if sizeVariation > 0.0:
-            randomVariation = random.random() * sizeVariation + 1.0
-            sizes = (sizes[0] * randomVariation, sizes[1] * randomVariation)
         segment = segEnd - segStart
         segLen = segment.lengthSquared
         if segLen != 0:
             segStart -= 0.25 * segment / math.sqrt(segLen)
-        angle = 0.0
-        if randomYaw:
-            angle = random.random() * math.pi * 2.0
-        rotAxis = 0
-        for i in xrange(1, 3):
-            if abs(segment[i]) > abs(segment[rotAxis]):
-                rotAxis = i
-
-        up = Math.Vector3()
-        up[(rotAxis + 1) % 3] = math.sin(angle)
-        up[(rotAxis + 2) % 3] = math.cos(angle)
-        handle = componentStickers.stickers.addDamageSticker(textureName, bumpTexName, segStart, segEnd, sizes, up)
-        componentStickers.damageStickers[code] = DamageSticker(textureName, bumpTexName, segStart, segEnd, up, sizes, handle)
+        handle = componentStickers.stickers.addDamageSticker(stickerID, segStart, segEnd)
+        componentStickers.damageStickers[code] = DamageSticker(stickerID, segStart, segEnd, handle)
 
     def delDamageSticker(self, code):
         for componentStickers in self.__stickers.itervalues():

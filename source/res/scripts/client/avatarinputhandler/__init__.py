@@ -7,14 +7,16 @@ import Math
 import ResMgr
 import Keys
 import FMOD
-from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 import GUI
+from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from Event import Event
 from debug_utils import *
 from gui import g_guiResetters
 from gui.Scaleform.CursorDelegator import g_cursorDelegator
 from gui.battle_control import g_sessionProvider
 from post_processing.post_effect_controllers import g_postProcessingEvents
+from constants import ARENA_PERIOD, AIMING_MODE
+from control_modes import _ARCADE_CAM_PIVOT_POS
 import control_modes
 import MapCaseMode
 import constants
@@ -23,7 +25,7 @@ import DynamicCameras.ArcadeCamera
 import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
 import BattleReplay
-from constants import ARENA_PERIOD, AIMING_MODE
+import FalloutDeathMode
 _INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _CTRLS_FIRST = 'arcade'
 
@@ -40,7 +42,8 @@ _CTRLS_DESC_MAP = {'arcade': ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUA
  'debug': ('DebugControlMode', None, _CTRL_TYPE.DEVELOPMENT),
  'cat': ('CatControlMode', None, _CTRL_TYPE.DEVELOPMENT),
  'video': ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
- 'mapcase': ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL)}
+ 'mapcase': ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
+ 'falloutdeath': ('FalloutDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL)}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera, DynamicCameras.SniperCamera.SniperCamera, DynamicCameras.StrategicCamera.StrategicCamera)
 
 class ShakeReason():
@@ -184,7 +187,7 @@ class AvatarInputHandler(CallbackDelayer):
                 return True
             if self.__showMarkersKey is not None and key == self.__showMarkersKey and not BigWorld.player().isGuiVisible:
                 from gui.WindowsManager import g_windowsManager
-                markersManager = g_windowsManager.battleWindow.vMarkersManager
+                markersManager = g_windowsManager.battleWindow.markersManager
                 markersManager.active(not markersManager.isActive)
                 return True
             if key == Keys.KEY_F5 and constants.IS_DEVELOPMENT:
@@ -266,18 +269,34 @@ class AvatarInputHandler(CallbackDelayer):
     def switchAutorotation(self):
         self.setAutorotation(not self.__isAutorotation)
 
-    def activatePostmortem(self):
-        try:
-            params = self.__curCtrl.postmortemCamParams
-        except:
-            params = None
+    def activatePostmortem(self, isRespawn):
+        if not isRespawn:
+            try:
+                params = self.__curCtrl.postmortemCamParams
+            except:
+                params = None
 
-        onPostmortemActivation = getattr(self.__curCtrl, 'onPostmortemActivation', None)
-        if onPostmortemActivation is not None:
-            onPostmortemActivation()
+            onPostmortemActivation = getattr(self.__curCtrl, 'onPostmortemActivation', None)
+            if onPostmortemActivation is not None:
+                onPostmortemActivation()
+            else:
+                self.onControlModeChanged('postmortem', postmortemParams=params, bPostmortemDelay=True)
         else:
-            self.onControlModeChanged('postmortem', postmortemParams=params, bPostmortemDelay=True)
+            BigWorld.player().autoAim(None)
+            for ctlMode in self.__ctrls.itervalues():
+                ctlMode.resetAimingMode()
+
+            self.onControlModeChanged('falloutdeath')
         return
+
+    def reinitVehicleMatrix(self):
+        arcadeMode = self.__ctrls['arcade']
+        arcadeMode.camera.reinitMatrix()
+
+    def deactivatePostmortem(self):
+        self.onControlModeChanged('arcade')
+        arcadeMode = self.__ctrls['arcade']
+        arcadeMode.camera.setToVehicleDirection()
 
     def setKillerVehicleID(self, killerVehicleID):
         self.__killerVehicleID = killerVehicleID
@@ -376,7 +395,8 @@ class AvatarInputHandler(CallbackDelayer):
                     self.__prevModeAutorotation = None
             self.__targeting.onRecreateDevice()
             aim = self.aim
-            GUI.mcursor().position = aim.offset() if aim is not None else (0, 0)
+            if self.__detachCount == 0:
+                GUI.mcursor().position = aim.offset() if aim is not None else (0, 0)
             self.__curCtrl.setGUIVisible(self.__isGUIVisible)
             self.__curCtrl.enable(ctrlState=ctrlState, **args)
             self.onCameraChanged(eMode)
@@ -534,7 +554,7 @@ class AvatarInputHandler(CallbackDelayer):
             return sec
 
     def __setupCtrls(self, section):
-        modules = (control_modes, MapCaseMode)
+        modules = (control_modes, MapCaseMode, FalloutDeathMode)
         for name, desc in _CTRLS_DESC_MAP.items():
             if desc[2] != _CTRL_TYPE.DEVELOPMENT or desc[2] == _CTRL_TYPE.DEVELOPMENT and constants.IS_DEVELOPMENT:
                 if name not in self.__ctrls:

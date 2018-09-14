@@ -7,8 +7,10 @@ from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_NOTE
 from account_helpers import getPlayerDatabaseID
 from PlayerEvents import g_playerEvents
-from messenger import g_settings
 from messenger.storage import storage_getter
+from messenger.ext import isSenderIgnored
+from messenger.proto.events import g_messengerEvents
+from messenger.m_constants import USER_TAG
 from club_shared import ACCOUNT_NOTIFICATION_TYPE, WEB_CMD_RESULT
 from gui import SystemMessages, DialogsInterface
 from gui.game_control import g_instance as g_gameCtrl
@@ -34,6 +36,13 @@ class _SYNC_TYPE(object):
     ALL = CLUBS | INVITES | APPS | RESTRICTIONS
 
 
+class _CONTACTS_LIST(object):
+    INVITES = {'invites'}
+    CONTACTS = {USER_TAG.FRIEND, USER_TAG.IGNORED}
+    ALL = CONTACTS | INVITES
+    EMPTY = set()
+
+
 class _AccountClubProfile(object):
     _ClubInfo = namedtuple('_ClubInfo', ['id', 'joined_at', 'role'])
 
@@ -47,7 +56,7 @@ class _AccountClubProfile(object):
 
     def stop(self):
         self.__cancelResyncCallback()
-        self._clear()
+        self._clear(stop=True)
 
     def getState(self):
         return self.__state
@@ -133,8 +142,12 @@ class _AccountClubProfile(object):
             callback(None)
         return
 
-    def _clear(self):
-        self._changeState(states.UnavailableClubsState())
+    def isInvitesAvailable(self):
+        return self._contactsState & _CONTACTS_LIST.ALL == _CONTACTS_LIST.ALL
+
+    def _clear(self, stop = False):
+        self._changeState(states.UnavailableClubsState(), stop=stop)
+        self._contactsState = _CONTACTS_LIST.EMPTY
         self._clubs = []
         self._invites = {}
         self._apps = {}
@@ -142,10 +155,11 @@ class _AccountClubProfile(object):
         self._waitForSync = 0
         self._isSynced = False
 
-    def _changeState(self, newState):
+    def _changeState(self, newState, stop = False):
         oldState, self.__state = self.__state, newState
         if oldState.getStateID() != newState.getStateID():
-            self.__loadResyncCallback()
+            if not stop:
+                self.__loadResyncCallback()
             self.__notify('_onClubsStateChanged', newState)
 
     def _updateClubs(self, clubs):
@@ -165,54 +179,54 @@ class _AccountClubProfile(object):
             self.__notify('onAccountClubAppsChanged', self._apps.values())
 
     def _updateInvites(self, invites):
+        self._contactsState |= _CONTACTS_LIST.INVITES
         prevInvites = self._invites
         self._invites = {}
         for sendingTime, inviterDbID, clubDbID, status in invites:
             invite = ClubInvite(clubDbID, getPlayerDatabaseID(), inviterDbID, sendingTime, status)
-            if not self._isSenderIgnored(invite):
-                self._invites[invite.getID()] = invite
+            self._invites[invite.getID()] = invite
 
+        self.__processInvitations(prevInvites)
+
+    def _onUsersListReceived(self, tags):
+        self._contactsState |= tags
+        self.__processInvitations(self._invites)
+
+    def __processInvitations(self, prevInvites):
+        if not self.isInvitesAvailable():
+            LOG_DEBUG('Clubs controller waits for all contact lists')
+            return
+        userGetter = self.users.getUser
+        invites = {}
+        for uniqueID, invite in self._invites.iteritems():
+            if not isSenderIgnored(userGetter(invite.getInviterDbID())):
+                invites[uniqueID] = invite
+
+        self._invites = invites
         if not self._isSynced:
-            self.__notify('onAccountClubInvitesInited', self._invites.values())
+            self.__notify('onAccountClubInvitesInited', invites)
         else:
             added = []
             removed = []
             changed = []
             if prevInvites:
-                for uniqueID, invite in self._invites.iteritems():
+                for uniqueID, invite in invites.iteritems():
                     if uniqueID not in prevInvites:
                         added.append(invite)
                     elif invite.getStatus() != prevInvites[uniqueID].getStatus():
                         changed.append(invite)
 
                 for uniqueID, invite in prevInvites.iteritems():
-                    if uniqueID not in self._invites:
+                    if uniqueID not in invites:
                         removed.append(invite)
 
             else:
-                added = self._invites.values()
+                added = invites.values()
             self.__notify('onAccountClubInvitesChanged', added, removed, changed)
 
     def _updateRestrictions(self, restrs):
         oldRestrs, self._restrictions = self._restrictions, restrs
         return oldRestrs != restrs
-
-    def _isSenderIgnored(self, invite):
-        user = self.users.getUser(invite.getUserDbID())
-        areFriendsOnly = g_settings.userPrefs.invitesFromFriendsOnly
-        if user:
-            if areFriendsOnly:
-                if user.isFriend():
-                    return False
-                else:
-                    LOG_DEBUG('Invite is ignored, shows invites from friends only', invite)
-                    return True
-            if user.isIgnored():
-                LOG_DEBUG('Invite is ignored, there is the contact in ignore list', invite, user)
-                return True
-        elif areFriendsOnly:
-            LOG_DEBUG('Invite is ignored, shows invites from friends only', invite)
-        return areFriendsOnly
 
     def __getAccountResyncDelta(self):
         if self.__state.getStateID() == CLIENT_CLUB_STATE.UNKNOWN:
@@ -299,9 +313,10 @@ class ClubsController(subscriptions.ClubsListeners):
         self._accountProfile = _AccountClubProfile(self)
 
     def init(self):
-        pass
+        g_messengerEvents.users.onUsersListReceived += self.__onUsersListReceived
 
     def fini(self):
+        g_messengerEvents.users.onUsersListReceived -= self.__onUsersListReceived
         self.stop()
         self._requestsCtrl.fini()
         self.__subscriptions.clear()
@@ -321,7 +336,7 @@ class ClubsController(subscriptions.ClubsListeners):
     def stop(self, isDisconnected = False):
         if isDisconnected:
             self.__isAppsNotifyShown = False
-        clearInvitesIDs()
+            clearInvitesIDs()
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_playerEvents.onCenterIsLongDisconnected -= self.__onCenterIsLongDisconnected
         clubsMgr = getClientClubsMgr()
@@ -415,6 +430,9 @@ class ClubsController(subscriptions.ClubsListeners):
 
     def __onCenterIsLongDisconnected(self, _):
         self._accountProfile.resync()
+
+    def __onUsersListReceived(self, tags):
+        self._accountProfile._onUsersListReceived(tags)
 
     def __onSpaAttrChanged(self, isRelatedToClubs):
         self.notify('onAccountClubRelationChanged', isRelatedToClubs)

@@ -118,6 +118,14 @@ class _CurrentVehicle():
     def isBroken(self):
         return self.isPresent() and self.item.isBroken
 
+    def isGroupReady(self):
+        if self.isPresent():
+            if self.item.isOnlyForEventBattles:
+                return not self.item.isGroupBroken() and self.item.isGroupCrewFull() and self.item.isGroupAmmoFull() and self.item.isAmmoFull
+            return True
+        else:
+            return False
+
     def isDisabledInRoaming(self):
         return self.isPresent() and self.item.isDisabledInRoaming
 
@@ -131,7 +139,7 @@ class _CurrentVehicle():
         return self.isPresent() and self.item.isCrewFull
 
     def isDisabledInRent(self):
-        return self.isPresent() and self.item.rentalIsOver and self.item.isRented
+        return self.isPresent() and self.item.rentalIsOver
 
     def isDisabledInPremIGR(self):
         return self.isPresent() and self.item.isDisabledInPremIGR
@@ -155,7 +163,7 @@ class _CurrentVehicle():
         return self.isPresent() and self.item.isAlive
 
     def isReadyToPrebattle(self):
-        return self.isPresent() and self.item.isReadyToPrebattle
+        return self.isPresent() and self.item.isReadyToPrebattle()
 
     def isReadyToFight(self):
         return self.isPresent() and self.item.isReadyToFight

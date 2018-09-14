@@ -76,14 +76,11 @@ class ClubListener(MyClubListener):
         return
 
     def __initClubChannel(self, channel):
-        if self.__clubChannel is not None:
-            LOG_ERROR('Clan channel is defined', self.__clubChannel, channel)
-            return
-        else:
+        if self.__clubChannel is None:
             self.__clubChannel = channel
             self.__clubChannel.onMembersListChanged += self.__ce_onMembersListChanged
             self.__setClubMembersStatues()
-            return
+        return
 
     def __clearClubChannel(self):
         if not self.__clubChannel:

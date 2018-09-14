@@ -22,9 +22,11 @@ from gui.shared.utils import decorators
 from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA as _RC
 from gui.shared import events, g_itemsCache
+from gui.shared.formatters import text_styles
 from gui.server_events import g_eventsCache
 from helpers import i18n
 from helpers.i18n import makeString
+from gui.Scaleform.locale.MENU import MENU
 
 class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, GlobalListener, AppRef):
 
@@ -130,7 +132,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
              'gunIntCD': vehicle.gun.intCD,
              'casseteFieldText': '' if casseteCount == 1 else casseteText,
              'shells': [],
-             'historicalBattle': historicalBattleData})
+             'infoAfterShellBlock': self._getInfoTextAfterShellBlock()})
             shells = data['shells']
             for shell in vehicle.shells:
                 price = shell.altPrice
@@ -156,7 +158,11 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
                                  'gold': gold},
                  'actionPriceData': action})
 
-        self.as_setDataS(data)
+        if historicalBattleData is None:
+            self.as_setDataS(data)
+        else:
+            data.update({'historicalBattle': historicalBattleData})
+            self.as_setHistoricalDataS(data)
         return
 
     def populateTechnicalMaintenanceEquipmentDefaults(self):
@@ -219,7 +225,8 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
              'goldEqsForCredits': goldEqsForCredits,
              'userCredits': {'credits': credits,
                              'gold': gold},
-             'actionPriceData': action})
+             'actionPriceData': action,
+             'moduleLabel': module.getGUIEmblemID()})
 
         vehicle.eqs = list(installedItems)
         installed = map(lambda e: (e.intCD if e is not None else None), installedItems)
@@ -287,6 +294,13 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
 
     def onPreQueueFunctionalFinished(self):
         self.populateTechnicalMaintenance()
+
+    @classmethod
+    def _getInfoTextAfterShellBlock(cls):
+        if g_currentVehicle.item.isOnlyForEventBattles and not g_currentVehicle.item.isAmmoFull:
+            return text_styles.alert(MENU.HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_AMMO_NOT_READY)
+        else:
+            return ''
 
     def _getHistoricalBattleData(self):
         historicalBattleData = None

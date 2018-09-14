@@ -26,7 +26,7 @@ class ServerStats(Controller):
         g_playerEvents.onServerStatsReceived += self.__onStatsReceived
         self.__loadStatsCallback(0.0)
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self.__stop()
 
     def onDisconnected(self):

@@ -469,5 +469,21 @@ class _TechTreeDataProvider(object):
     def getUnlockPrices(self, compactDescr):
         return self.__unlockPrices[compactDescr]
 
+    def getAllPossibleItems2Unlock(self, vehicle, unlocked):
+        items = {}
+        for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
+            if required.issubset(unlocked) and nodeCD not in unlocked:
+                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
+
+        return items
+
+    def getUnlockedVehicleItems(self, vehicle, unlocked):
+        items = {}
+        for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
+            if required.issubset(unlocked) and nodeCD in unlocked:
+                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
+
+        return items
+
 
 g_techTreeDP = _TechTreeDataProvider()

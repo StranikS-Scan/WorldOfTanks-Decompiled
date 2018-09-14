@@ -3,13 +3,6 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class BattleLoadingMeta(DAAPIModule):
 
-    def onLoadComplete(self):
-        self._printOverrideError('onLoadComplete')
-
-    def as_setMapBGS(self, imgsource):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMapBG(imgsource)
-
     def as_setProgressS(self, val):
         if self._isDAAPIInited():
             return self.flashObject.as_setProgress(val)
@@ -45,6 +38,10 @@ class BattleLoadingMeta(DAAPIModule):
     def as_setTipTitleS(self, title):
         if self._isDAAPIInited():
             return self.flashObject.as_setTipTitle(title)
+
+    def as_setEventInfoPanelDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setEventInfoPanelData(data)
 
     def as_setPlayerDataS(self, playerVehicleID, prebattleID):
         if self._isDAAPIInited():

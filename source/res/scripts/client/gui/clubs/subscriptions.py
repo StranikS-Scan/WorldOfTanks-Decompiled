@@ -11,7 +11,6 @@ from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiabl
 from gui.clubs import contexts as club_ctx
 from gui.clubs.club_helpers import getClientClubsMgr
 from gui.clubs.items import Club
-from gui.clubs.club_helpers import getClientClubsMgr
 from gui.clubs.interfaces import IClubListener
 from gui.clubs.settings import SUBSCRIPTION_STATE
 from gui.clubs.comparators import SimpleTypeComparator
@@ -31,6 +30,10 @@ class ClubsListeners(ListenersCollection):
     def clear(self):
         while len(self._listeners):
             self._listeners.pop()
+
+    def addListener(self, listener):
+        if not self.hasListener(listener):
+            super(ClubsListeners, self).addListener(listener)
 
 
 @ReprInjector.simple(('getClubDbID', 'clubDbID'), ('getSubscriptionType', 'sType'), ('getClub', 'club'), ('getState', 'state'), ('isExpired', 'expired'))
@@ -107,7 +110,7 @@ class _Subscription(Notifiable, ClubsListeners):
 
     def _request(self, ctx, callback = None):
         if self.__clubsCtrl is not None:
-            self.__clubsCtrl._requestsCtrl.request(ctx, callback, allowDelay=True)
+            self.__clubsCtrl.sendRequest(ctx, allowDelay=True)(callback)
         else:
             LOG_WARNING('Trying to send club request while clubs control is not specified', self, ctx)
             callback(RES_FAILURE, '', None)

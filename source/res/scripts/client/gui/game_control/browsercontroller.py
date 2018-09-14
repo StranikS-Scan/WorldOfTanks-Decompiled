@@ -36,7 +36,7 @@ class BrowserController(Controller, AppRef):
         super(BrowserController, self).fini()
         return
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self.__stop()
 
     def onDisconnected(self):

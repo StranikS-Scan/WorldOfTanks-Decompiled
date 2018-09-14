@@ -67,6 +67,14 @@ class ContactItem(object):
     def getSubscriptionFrom(self):
         return self._sub[1]
 
+    def getClientInfo(self):
+        resource = self._resources.getHighestPriority()
+        if resource is not None:
+            clientInfo = resource.getClientInfo()
+        else:
+            clientInfo = None
+        return clientInfo
+
     def update(self, **kwargs):
         if 'trusted' in kwargs:
             self.setTrusted(kwargs['trusted'])

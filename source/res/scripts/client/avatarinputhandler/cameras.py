@@ -267,12 +267,22 @@ class FovExtended(object):
     def resetFov(self):
         self.setFovByMultiplier(1.0)
 
-    def setFovByMultiplier(self, multiplier):
+    def setFovByMultiplier(self, multiplier, rampTime = None):
         self.__multiplier = multiplier
         if not self.__enabled:
             return
-        defaultFov = self.actualDefaultVerticalFov
-        BigWorld.projection().fov = FovExtended.clampFov(defaultFov * self.__multiplier)
+        else:
+            defaultFov = self.actualDefaultVerticalFov
+            finalFov = FovExtended.clampFov(defaultFov * self.__multiplier)
+            if rampTime is None:
+                BigWorld.projection().fov = finalFov
+            else:
+                BigWorld.projection().rampFov(finalFov, rampTime)
+            return
+
+    def setFovByAbsoluteValue(self, horizontalFov, rampTime = None):
+        multiplier = horizontalFov / self.defaultHorizontalFov
+        self.setFovByMultiplier(multiplier, rampTime)
 
     def refreshFov(self):
         self.__isHorizontalFovFixed = getScreenAspectRatio() > FovExtended.__TO_HORIZONTAL_THRESHOLD

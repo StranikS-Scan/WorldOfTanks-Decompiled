@@ -353,7 +353,10 @@ class TankmanChangeRole(ItemProcessor):
         self.__vehTypeCompDescr = vehTypeCompDescr
         self.__changeRoleCost = g_itemsCache.items.shop.changeRoleCost
         vehicle = g_itemsCache.items.getItemByCD(self.__vehTypeCompDescr)
-        super(TankmanChangeRole, self).__init__(tankman, [plugins.MessageConfirmator('tankmanChageRole/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory), plugins.VehicleValidator(vehicle, False), plugins.MoneyValidator((0, self.__changeRoleCost))])
+        super(TankmanChangeRole, self).__init__(tankman, [plugins.MessageConfirmator('tankmanChageRole/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory),
+         plugins.VehicleValidator(vehicle, False),
+         plugins.VehicleRoleValidator(vehicle, role),
+         plugins.MoneyValidator((0, self.__changeRoleCost))])
 
     def _errorHandler(self, code, errStr = '', ctx = None):
         if len(errStr):

@@ -110,6 +110,12 @@ class VehicleGunRotator(object):
     def lock(self, isLocked):
         self.__isLocked = isLocked
 
+    def reset(self):
+        self.__turretYaw = self.__gunPitch = 0.0
+        self.__updateTurretMatrix(0.0, 0.0)
+        self.__updateGunMatrix(0.0, 0.0)
+        self.__isLocked = False
+
     def update(self, turretYaw, gunPitch, maxTurretRotationSpeed, maxGunRotationSpeed):
         if self.__timerID is None or maxTurretRotationSpeed < self.__maxTurretRotationSpeed:
             self.__turretYaw = turretYaw
@@ -586,6 +592,8 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
         self.__updatePeriod = updatePeriod
         self.__currentSpeedState = self.__SPEED_IDLE
         self.__keyOffCalled = False
+        self.__manualSound = None
+        self.__gearSound = None
         self.__stateTable = ((None,
           self.__startManualSound,
           self.__initHighSpeed,

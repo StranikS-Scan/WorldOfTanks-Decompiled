@@ -323,6 +323,9 @@ class App(ApplicationMeta, AppBase):
     def setTweenMgr(self, flashObject):
         self._tweenMgr.setFlashObject(flashObject)
 
+    def setTextMgr(self, flashObject):
+        self._utilsMgr.registerTextManager(flashObject)
+
     def onAsInitializationCompleted(self):
         self.__initialized = True
         for eventType in self.__firingsAfterInit:

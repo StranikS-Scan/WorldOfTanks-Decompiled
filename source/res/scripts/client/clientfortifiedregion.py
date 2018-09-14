@@ -70,7 +70,7 @@ def getBattleEquipmentByOrderID(orderID, level):
 class ClientFortifiedRegion(FortifiedRegionBase):
     DEF_RES_STEP = 1
 
-    def __init__(self):
+    def __init__(self, serverSettings):
         self.__eManager = Event.EventManager()
         self.onSortieChanged = Event.Event(self.__eManager)
         self.onSortieRemoved = Event.Event(self.__eManager)
@@ -91,6 +91,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onSettingCooldown = Event.Event(self.__eManager)
         self.onPeripheryChanged = Event.Event(self.__eManager)
         self.onDefenceHourChanged = Event.Event(self.__eManager)
+        self.onDefenceHourActivated = Event.Event(self.__eManager)
         self.onOffDayChanged = Event.Event(self.__eManager)
         self.onVacationChanged = Event.Event(self.__eManager)
         self.onEnemyClanCardReceived = Event.Event(self.__eManager)
@@ -101,6 +102,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onEnemyStateChanged = Event.Event(self.__eManager)
         self.onConsumablesChanged = Event.Event(self.__eManager)
         self.__battlesMapping = {}
+        self.__serverSettings = serverSettings
         FortifiedRegionBase.__init__(self)
 
     def refresh(self):
@@ -611,8 +613,8 @@ class ClientFortifiedRegion(FortifiedRegionBase):
 
         return result
 
-    def _addFortBattle(self, battleID, direction, attackTime, attackerClanDBID, defenderClanDBID):
-        FortifiedRegionBase._addFortBattle(self, battleID, direction, attackTime, attackerClanDBID, defenderClanDBID)
+    def _addFortBattle(self, battleID, direction, attackTime, attackerClanDBID, defenderClanDBID, canUseEquipments, division):
+        FortifiedRegionBase._addFortBattle(self, battleID, direction, attackTime, attackerClanDBID, defenderClanDBID, canUseEquipments, division)
         self.__updateBattlesMapping()
         self.onFortBattleChanged(battleID)
 
@@ -759,6 +761,10 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         FortifiedRegionBase._changePeriphery(self, peripheryID, timeCooldown)
         self.onPeripheryChanged(peripheryID)
 
+    def _activateDefHour(self, value, initiatorDBID = 0):
+        FortifiedRegionBase._activateDefHour(self, value)
+        self.onDefenceHourActivated(value, initiatorDBID)
+
     def _changeDefHour(self, newValue, timeActivation, timeCooldown, initiatorDBID):
         FortifiedRegionBase._changeDefHour(self, newValue, timeActivation, timeCooldown, initiatorDBID)
         self.onDefenceHourChanged(newValue)
@@ -789,13 +795,13 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.__updateBattlesMapping()
         self.onFortBattleChanged(battleID)
 
-    def _addAttack(self, timeAttack, dirFrom, dirTo, defClanDBID, battleID, peripheryID, attackResult, attackResource, defClanAbbrev):
-        FortifiedRegionBase._addAttack(self, timeAttack, dirFrom, dirTo, defClanDBID, battleID, peripheryID, attackResult, attackResource, defClanAbbrev)
+    def _addAttack(self, timeAttack, dirFrom, dirTo, defClanDBID, battleID, attackerFortLevel, defenderFortLevel, division, peripheryID, attackResult, attackResource, defClanAbbrev):
+        FortifiedRegionBase._addAttack(self, timeAttack, dirFrom, dirTo, defClanDBID, battleID, attackerFortLevel, defenderFortLevel, division, peripheryID, attackResult, attackResource, defClanAbbrev)
         self.__updateBattlesMapping()
         self.onFortBattleChanged(battleID)
 
-    def _addDefence(self, timeAttack, dirFrom, dirTo, attackerClanDBID, battleID, attackResult, attackResource, attackerClanAbbrev):
-        FortifiedRegionBase._addDefence(self, timeAttack, dirFrom, dirTo, attackerClanDBID, battleID, attackResult, attackResource, attackerClanAbbrev)
+    def _addDefence(self, timeAttack, dirFrom, dirTo, attackerClanDBID, battleID, attackerFortLevel, defenderFortLevel, division, attackResult, attackResource, attackerClanAbbrev):
+        FortifiedRegionBase._addDefence(self, timeAttack, dirFrom, dirTo, attackerClanDBID, battleID, attackerFortLevel, defenderFortLevel, division, attackResult, attackResource, attackerClanAbbrev)
         self.__updateBattlesMapping()
         self.onFortBattleChanged(battleID)
 
@@ -818,3 +824,12 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def _deleteConsumables(self, unitMgrID, peripheryID):
         FortifiedRegionBase._deleteConsumables(self, unitMgrID, peripheryID)
         self.onConsumablesChanged(unitMgrID)
+
+    def setServerSettings(self, serverSettings):
+        self.__serverSettings = serverSettings
+
+    def getServerSettings(self):
+        return self.__serverSettings
+
+    def getForbiddenDefenseHours(self):
+        return self.getServerSettings()['forbiddenFortDefenseHours']

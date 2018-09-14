@@ -1,88 +1,216 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/SquadView.py
-from adisp import process
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import SquadActionButtonStateVO
+import operator
+from CurrentVehicle import g_currentVehicle
+from account_helpers.AccountSettings import AccountSettings, FALLOUT
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
+from gui.Scaleform.framework.managers.TextManager import TextManager
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from prebattle_shared import decodeRoster
-from gui.prb_control.context import prb_ctx
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.prb_control.context import unit_ctx
 from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.locale.MENU import MENU
-from gui.prb_control.prb_helpers import PrbListener
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE, FUNCTIONAL_EXIT
+from gui.server_events import g_eventsCache
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.utils import findFirst
+from helpers import i18n
+from gui.prb_control import settings
+from gui.shared.formatters.text_styles import alert, error
+from gui.shared.utils.functions import makeTooltip
 
-class SquadView(SquadViewMeta, PrbListener):
+class SquadView(SquadViewMeta):
+
+    def __init__(self):
+        super(SquadView, self).__init__()
+        self.__isFallout = None
+        return
 
     def inviteFriendRequest(self):
-        if self.canSendInvite():
+        if self.__canSendInvite():
             self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'squad',
-             'ctrlType': CTRL_ENTITY_TYPE.PREBATTLE}), scope=EVENT_BUS_SCOPE.LOBBY)
+             'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def canSendInvite(self):
-        return self.prbFunctional.getPermissions().canSendInvite()
-
-    @process
     def toggleReadyStateRequest(self):
-        value = not self.prbFunctional.getPlayerInfo().isReady()
-        if value:
-            waitingID = 'prebattle/player_ready'
+        self.unitFunctional.togglePlayerReadyAction(True)
+
+    def onUnitVehicleChanged(self, dbID, vInfo):
+        functional = self.unitFunctional
+        pInfo = functional.getPlayerInfo(dbID=dbID)
+        if g_eventsCache.isEventEnabled() and pInfo.isCreator():
+            self.__isFallout = None
+            if not vInfo.isEmpty():
+                vehicle = g_itemsCache.items.getItemByCD(vInfo.vehTypeCD)
+                self.__isFallout = vehicle.isEvent
+            self._updateRallyData()
+            self._setActionButtonState()
+            return
         else:
-            waitingID = 'prebattle/player_not_ready'
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.SetPlayerStateCtx(value, waitingID=waitingID))
+            if pInfo.isInSlot:
+                slotIdx = pInfo.slotIdx
+                if not vInfo.isEmpty():
+                    vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange(), isFallout=self.__isFallout, isCreator=pInfo.isCreator())
+                    slotCost = vInfo.vehLevel
+                else:
+                    slotState = functional.getSlotState(slotIdx)
+                    vehicleVO = None
+                    if slotState.isClosed:
+                        slotCost = settings.UNIT_CLOSED_SLOT_COST
+                    else:
+                        slotCost = 0
+                self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
+            return
 
     def chooseVehicleRequest(self):
         pass
 
     def leaveSquad(self):
-        self.prbDispatcher.doLeaveAction(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave'))
+        self.prbDispatcher.doLeaveAction(unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.NO_FUNC))
 
-    def onPlayerAdded(self, functional, playerInfo):
-        super(SquadView, self).onPlayerAdded(functional, playerInfo)
+    def onUnitPlayerAdded(self, pInfo):
+        super(SquadView, self).onUnitPlayerAdded(pInfo)
         self._setActionButtonState()
 
-    def onPlayerRemoved(self, functional, playerInfo):
-        super(SquadView, self).onPlayerRemoved(functional, playerInfo)
+    def onUnitPlayerRemoved(self, pInfo):
+        super(SquadView, self).onUnitPlayerRemoved(pInfo)
         self._setActionButtonState()
 
-    def onPlayerStateChanged(self, functional, roster, playerInfo):
+    def onUnitPlayerStateChanged(self, pInfo):
         self._updateRallyData()
         self._setActionButtonState()
 
-    def onTeamStatesReceived(self, functional, team1State, team2State):
+    def onUnitFlagsChanged(self, flags, timeLeft):
+        super(SquadView, self).onUnitFlagsChanged(flags, timeLeft)
         self._setActionButtonState()
-        if team1State.isInQueue():
+        if flags.isInQueue():
             self._closeSendInvitesWindow()
 
-    def onRostersChanged(self, functional, rosters, full):
-        self._updateRallyData()
-        if full:
-            self._setActionButtonState()
-        if not self.canSendInvite():
+    def onUnitRosterChanged(self):
+        super(SquadView, self).onUnitRosterChanged()
+        self._setActionButtonState()
+        if not self.__canSendInvite():
             self._closeSendInvitesWindow()
+
+    def onUnitMembersListChanged(self):
+        super(SquadView, self).onUnitMembersListChanged()
+        self.__updateFalloutState()
+        self._updateRallyData()
+        self._setActionButtonState()
 
     def _populate(self):
+        self.__updateFalloutState()
         super(SquadView, self)._populate()
-        self.startPrbListening()
+        g_eventsCache.onSyncCompleted += self.__onEventsUpdated
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.as_updateBattleTypeS(MENU.HEADERBUTTONS_BATTLE_MENU_STANDART)
+
+    def _getEventVehiclesNamesStr(self):
+        eventVehicles = g_eventsCache.getEventVehicles()
+        return ', '.join(map(operator.attrgetter('userName'), eventVehicles))
 
     def _dispose(self):
+        g_eventsCache.onSyncCompleted -= self.__onEventsUpdated
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.stopPrbListening()
         super(SquadView, self)._dispose()
 
     def _setActionButtonState(self):
-        self.as_updateInviteBtnStateS(self._isInviteBtnEnabled())
-        self.as_setActionButtonStateS(SquadActionButtonStateVO(self.prbFunctional))
+        functional = self.unitFunctional
+        enabled = not (functional.getFlags().isInQueue() and functional.getPlayerInfo().isReady) and self.__canSendInvite()
+        if enabled:
+            enabled = False
+            for slot in functional.getSlotsIterator(*functional.getUnit(unitIdx=functional.getUnitIdx())):
+                if not slot.player:
+                    enabled = True
+                    break
+
+        self.as_updateInviteBtnStateS(enabled)
+        self.as_setActionButtonStateS(self.__getActionButtonStateVO())
+
+    def _updateMembersData(self):
+        functional = self.unitFunctional
+        self.as_setMembersS(*vo_converters.makeSlotsVOs(functional, functional.getUnitIdx(), app=self.app, isFallout=self.__isFallout))
+        self._setActionButtonState()
 
     def _updateRallyData(self):
-        self.as_updateRallyS(vo_converters.makeSquadVO(self.prbFunctional, app=self.app))
+        functional = self.unitFunctional
+        data = vo_converters.makeUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app, isFallout=self.__isFallout)
+        self.as_updateRallyS(data)
+        falloutFilter = AccountSettings.getFilter(FALLOUT)
+        wasShown = falloutFilter['wasShown']
+        isNew = False
+        isEventEnabled = g_eventsCache.isEventEnabled()
+        if isEventEnabled:
+            battleTypeName = i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_STANDART) + '\n' + i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_DOMINATION)
+            tooltipStr = makeTooltip(body=TOOLTIPS.SQUADWINDOW_EVENT_DOMINATION, note=alert(i18n.makeString(TOOLTIPS.SQUADWINDOW_EVENT_DOMINATION_NOTE, vehicles=self._getEventVehiclesNamesStr())))
+            isNew = not wasShown
+        else:
+            battleTypeName = i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_STANDART)
+            tooltipStr = ''
+        self.as_updateBattleTypeInfoS(tooltipStr, isEventEnabled)
+        self.as_updateBattleTypeS(battleTypeName, isEventEnabled, isNew)
+        if isNew:
+            falloutFilter['wasShown'] = True
+            AccountSettings.setFilter(FALLOUT, falloutFilter)
 
     def _isInviteBtnEnabled(self):
-        functional = self.prbFunctional
-        team, assigned = decodeRoster(functional.getRosterKey())
-        return not (functional.getTeamState().isInQueue() and functional.getPlayerInfo().isReady() and assigned) and self.canSendInvite()
+        functional = self.unitFunctional
+        enabled = not (functional.getFlags().isInIdle() and functional.getPlayerInfo().isReady) and self.__canSendInvite()
+        if enabled:
+            enabled = False
+            for slot in functional.getSlotsIterator(*functional.getUnit(unitIdx=functional.getUnitIdx())):
+                if not slot.player:
+                    enabled = True
+                    break
+
+        return enabled
+
+    def __getActionButtonStateVO(self):
+        stateString = ''
+        unitFunctional = self.unitFunctional
+        pInfo = unitFunctional.getPlayerInfo()
+        isInQueue = unitFunctional.getFlags().isInIdle()
+        isEnabled = g_currentVehicle.isReadyToPrebattle() and not isInQueue
+        playerReady = pInfo.isReady
+        if not g_currentVehicle.isPresent():
+            stateString = i18n.makeString('#cybersport:window/unit/message/vehicleNotSelected')
+        elif not g_currentVehicle.isReadyToPrebattle():
+            stateString = i18n.makeString('#cybersport:window/unit/message/vehicleNotValid')
+        elif not playerReady:
+            stateString = i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_GETREADY)
+        elif g_eventsCache.isEventEnabled() and self.__isFallout is not None and self.__isFallout != g_currentVehicle.item.isEvent:
+            stateString = error(MENU.CURRENTVEHICLESTATUS_NOTVALIDVEHICLE)
+        elif playerReady and not isInQueue:
+            stateString = i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_GETNOTREADY)
+        stateString = TextManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT if isEnabled else TEXT_MANAGER_STYLES.ERROR_TEXT, stateString)
+        if playerReady:
+            label = CYBERSPORT.WINDOW_UNIT_NOTREADY
+        else:
+            label = CYBERSPORT.WINDOW_UNIT_READY
+        return {'stateString': stateString,
+         'label': label,
+         'isEnabled': isEnabled,
+         'isReady': playerReady}
+
+    def __canSendInvite(self):
+        return self.unitFunctional.getPermissions().canSendInvite()
 
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.SET_PLAYER_STATE:
             self.as_setCoolDownForReadyButtonS(event.coolDown)
+
+    def __updateFalloutState(self):
+        if g_eventsCache.isEventEnabled():
+            slots = self.unitFunctional.getSlotsIterator(*self.unitFunctional.getUnit())
+            creator = findFirst(lambda s: s.player is not None and s.player.isCreator, slots)
+            self.__isFallout = None
+            if creator is not None and creator.vehicle is not None:
+                creatorVehicle = g_itemsCache.items.getItemByCD(creator.vehicle['vehTypeCompDescr'])
+                self.__isFallout = creatorVehicle.isEvent
+        return
+
+    def __onEventsUpdated(self):
+        self.__updateFalloutState()
+        self._updateRallyData()

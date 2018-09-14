@@ -2,9 +2,10 @@
 from gui.shared.utils import findFirst
 from messenger.m_constants import USER_ACTION_ID, USER_TAG, PROTO_TYPE, CLIENT_ACTION_ID
 from messenger.proto.xmpp import entities, errors
-from messenger.proto.xmpp.contacts.tasks import TASK_RESULT, ContactTask, SeqTask
+from messenger.proto.xmpp.contacts.tasks import TASK_RESULT, ContactTask, SeqTask, IQTask
 from messenger.proto.xmpp.extensions import blocking_cmd
 from messenger.proto.xmpp.find_criteria import ItemsFindCriteria
+from messenger.proto.xmpp.jid import ContactJID
 from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.proto.xmpp.xmpp_items import BlockItem
@@ -95,3 +96,25 @@ class RemoveBlockItemTask(_BlockItemTask):
 
     def _getError(self, pyGlooxTag):
         return errors.createServerActionError(CLIENT_ACTION_ID.REMOVE_IGNORED, pyGlooxTag)
+
+
+class SyncBlockItemTask(IQTask):
+    __slots__ = ('_handlers',)
+
+    def __init__(self):
+        super(SyncBlockItemTask, self).__init__()
+        block = blocking_cmd.BlockItemHandler().getFilterString()
+        unblock = blocking_cmd.UnblockItemHandler().getFilterString()
+        self._handlers = {block: AddBlockItemTask,
+         unblock: RemoveBlockItemTask}
+
+    def set(self, pyGlooxTag):
+        for xPath, clazz in self._handlers.iteritems():
+            result = pyGlooxTag.filterXPath(xPath)
+            if not result:
+                continue
+            jid = result[0].findAttribute('jid')
+            if jid:
+                return clazz(ContactJID(jid)).set(pyGlooxTag)
+
+        return self._result

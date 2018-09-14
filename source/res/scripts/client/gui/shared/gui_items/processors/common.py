@@ -3,7 +3,7 @@ import BigWorld
 from debug_utils import *
 from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.utils.gui_items import formatPrice
+from gui.shared.utils.gui_items import formatPrice, formatGoldPrice
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
 
 class TankmanBerthsBuyer(Processor):
@@ -24,6 +24,30 @@ class TankmanBerthsBuyer(Processor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to buy tankman berths')
         BigWorld.player().stats.buyBerths(lambda code: self._response(code, callback))
+
+
+class PremiumAccountBuyer(Processor):
+
+    def __init__(self, period, price):
+        self.wasPremium = g_itemsCache.items.stats.isPremium
+        localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
+        super(PremiumAccountBuyer, self).__init__((plugins.MessageConfirmator(localKey, ctx={'days': int(period),
+          'gold': BigWorld.wg_getGoldFormat(price)}), plugins.MoneyValidator((0, price))))
+        self.premiumPrice = price
+        self.period = period
+
+    def _errorHandler(self, code, errStr = '', ctx = None):
+        if len(errStr):
+            return makeI18nError('premium/%s' % errStr, period=self.period)
+        return makeI18nError('premium/server_error', period=self.period)
+
+    def _successHandler(self, code, ctx = None):
+        localKey = 'premium/continueSuccess' if self.wasPremium else 'premium/buyingSuccess'
+        return makeI18nSuccess(localKey, period=self.period, money=formatGoldPrice(self.premiumPrice), type=SM_TYPE.PurchaseForGold)
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to buy premium account', self.period, self.premiumPrice)
+        BigWorld.player().stats.upgradeToPremium(self.period, lambda code: self._response(code, callback))
 
 
 class GoldToCreditsExchanger(Processor):

@@ -87,7 +87,6 @@ class ProjectileMover(object):
             if self.__movementCallbackId is None:
                 self.__movementCallbackId = BigWorld.callback(self.__MOVEMENT_CALLBACK_TIMEOUT, self.__movementCallback)
             projectiles[shotID] = proj
-            TriggersManager.g_manager.onAddProjectile(startPoint)
             return
 
     def hide(self, shotID, endPoint):
@@ -142,7 +141,6 @@ class ProjectileMover(object):
         caliber = proj['effectsDescr']['caliber']
         isOwnShot = proj['autoScaleProjectile']
         BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, isOwnShot)
-        TriggersManager.g_manager.onExplodeProjectile(hitPosition)
 
     def __addExplosionEffect(self, position, effectsDescr, effectMaterial, velocityDir):
         effectTypeStr = effectMaterial + 'Hit'
@@ -246,7 +244,11 @@ class ProjectileMover(object):
             return 1000000.0
 
     def __getStopPlane(self, point, r0, v0, gravity):
-        t = (point[0] - r0[0]) / v0[0]
+        vx = v0.x
+        if abs(vx) > 1e-06:
+            t = (point[0] - r0[0]) / vx
+        else:
+            t = (point[2] - r0[2]) / v0[2]
         v = v0 + gravity.scale(t)
         v.normalise()
         d = v.dot(point)
@@ -408,7 +410,7 @@ def collideVehiclesAndStaticScene(startPoint, endPoint, vehicles, collisionFlags
 
 
 def segmentMayHitEntity(entity, startPoint, endPoint):
-    method = getattr(entity.filter, 'segmentMayHitEntity', lambda : True)
+    method = getattr(entity.filter, 'segmentMayHitEntity', lambda a, b: True)
     return method(startPoint, endPoint)
 
 

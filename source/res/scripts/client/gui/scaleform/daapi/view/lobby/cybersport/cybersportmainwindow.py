@@ -19,7 +19,7 @@ from gui.prb_control.context import unit_ctx
 from gui.prb_control.formatters import messages
 from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty
 from gui.prb_control import settings
-from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, FUNCTIONAL_EXIT
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, FUNCTIONAL_EXIT, CREATOR_ROSTER_SLOT_INDEXES
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.events import OpenLinkEvent
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
@@ -72,26 +72,26 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
         return
 
     def onUnitRejoin(self):
-        if not self.unitFunctional.getState().isInIdle():
+        if not self.unitFunctional.getFlags().isInIdle():
             self.__clearState()
 
-    def onUnitStateChanged(self, state, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         if self.unitFunctional.hasLockedState():
-            if state.isInSearch():
+            if flags.isInSearch():
                 self.as_enableWndCloseBtnS(False)
                 self.currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_WAITING_PLAYERS_STATE
-            elif state.isInQueue() or state.isInArena():
+            elif flags.isInQueue() or flags.isInArena():
                 self.as_enableWndCloseBtnS(False)
                 self.currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE
             else:
-                LOG_ERROR('View for modal state is not resolved', state)
+                LOG_ERROR('View for modal state is not resolved', flags)
             self.__initState(timeLeft=timeLeft)
         else:
             self.__clearState()
         self.__updateChatAvailability()
 
     def onUnitPlayerStateChanged(self, pInfo):
-        if self.unitFunctional.getState().isInIdle():
+        if self.unitFunctional.getFlags().isInIdle():
             self.__initState()
 
     def onUnitMembersListChanged(self):
@@ -288,9 +288,15 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
             model = self.__createAutoUpdateModel(self.currentState, acceptDelta, '', [])
         elif self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_WAITING_PLAYERS_STATE:
             model = self.__createAutoUpdateModel(self.currentState, timeLeft, '', self.unitFunctional.getReadyStates())
-            model['extraData'] = {'showAlert': True,
-             'alertTooltip': TOOLTIPS.CYBERSPORT_WAITINGPLAYERS_CONFIGALERT,
-             'alertIcon': RES_ICONS.MAPS_ICONS_LIBRARY_GEAR}
+            idx, unit = self.unitFunctional.getUnit()
+            if unit and unit.isRosterSet(ignored=CREATOR_ROSTER_SLOT_INDEXES):
+                model['extraData'] = {'showAlert': True,
+                 'alertTooltip': TOOLTIPS.CYBERSPORT_WAITINGPLAYERS_CONFIGALERT,
+                 'alertIcon': RES_ICONS.MAPS_ICONS_LIBRARY_GEAR}
+            else:
+                model['extraData'] = {'showAlert': False,
+                 'alertTooltip': '',
+                 'alertIcon': ''}
         elif self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE:
             model = self.__createAutoUpdateModel(self.currentState, timeLeft, '', [])
         elif self.currentState == CYBER_SPORT_ALIASES.AUTO_SEARCH_ERROR_STATE:
@@ -326,7 +332,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
             return CYBER_SPORT_ALIASES.UNIT_VIEW_UI
 
     def __updateChatAvailability(self):
-        state = self.unitFunctional.getState()
+        state = self.unitFunctional.getFlags()
         pInfo = self.unitFunctional.getPlayerInfo()
         if self.chat is not None:
             self.chat.as_setJoinedS(not state.isInPreArena() or pInfo.isInSlot)

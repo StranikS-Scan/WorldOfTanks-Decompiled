@@ -44,3 +44,7 @@ class CyberSportUnitMeta(BaseRallyRoomView):
     def as_setTotalLabelS(self, hasTotalLevelError, totalLevelLabel, totalLevel):
         if self._isDAAPIInited():
             return self.flashObject.as_setTotalLabel(hasTotalLevelError, totalLevelLabel, totalLevel)
+
+    def as_setPlayerCountLblS(self, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setPlayerCountLbl(value)

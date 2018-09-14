@@ -132,18 +132,13 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self.__onChangeControlMode = None
             self.__aimingSystem = None
             self.__focalPointDist = 1.0
-            self.__autoUpdateDxDyDz = Vector3(0)
+            self.__autoUpdateDxDyDz = Vector3(0.0)
             return
 
     def create(self, pivotPos, onChangeControlMode = None, postmortemMode = False):
         self.__onChangeControlMode = onChangeControlMode
         self.__postmortemMode = postmortemMode
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.playerVehicleID != 0:
-            vehicleID = replayCtrl.playerVehicleID
-        else:
-            vehicleID = BigWorld.player().playerVehicleID
-        targetMat = BigWorld.entity(vehicleID).matrix
+        targetMat = self.getTargetMProv()
         self.__aimingSystem = ArcadeAimingSystem(self.__refineVehicleMProv(targetMat), pivotPos.y, pivotPos.z, self.__calcAimMatrix(), self.__cfg['angleRange'], not postmortemMode)
         self.setCameraDistance(self.__cfg['startDist'])
         self.__aimingSystem.pitch = self.__cfg['startAngle']
@@ -151,6 +146,21 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__updateAngles(0, 0)
         cameraPosProvider = Math.Vector4Translation(self.__aimingSystem.matrix)
         self.__cam.cameraPositionProvider = cameraPosProvider
+
+    def getTargetMProv(self):
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.playerVehicleID != 0:
+            vehicleID = replayCtrl.playerVehicleID
+        else:
+            vehicleID = BigWorld.player().playerVehicleID
+        return BigWorld.entity(vehicleID).matrix
+
+    def reinitMatrix(self):
+        self.__setVehicleMProv(self.getTargetMProv())
+
+    def setToVehicleDirection(self):
+        matrix = Math.Matrix(self.getTargetMProv())
+        self.setYawPitch(matrix.yaw, matrix.pitch)
 
     def destroy(self):
         CallbackDelayer.destroy(self)

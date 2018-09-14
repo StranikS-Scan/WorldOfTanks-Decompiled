@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/prb_control/settings.py
 from UnitBase import UNIT_ERROR, UNIT_BROWSER_ERROR, LEADER_SLOT
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, PREBATTLE_INVITE_STATE
 from prebattle_shared import SETTING_DEFAULTS, PrebattleSettings
 from gui.shared.utils import CONST_CONTAINER, BitmaskHelper
 VEHICLE_MIN_LEVEL = 1
@@ -169,16 +169,19 @@ class PREBATTLE_RESTRICTION:
     LIMIT_COMPONENTS = 'limits/components'
     LIMIT_AMMO = 'limits/ammo'
     LIMIT_SHELLS = 'limits/shells'
+    LIMIT_TAGS = 'limits/tags'
     LIMIT_LIGHT_TANK = 'limits/classes/lightTank'
     LIMIT_MEDIUM_TANK = 'limits/classes/mediumTank'
     LIMIT_HEAVY_TANK = 'limits/classes/heavyTank'
     LIMIT_SPG = 'limits/classes/SPG'
     LIMIT_AT_SPG = 'limits/classes/AT-SPG'
     HAS_PLAYER_IN_BATTLE = 'player/inBattle'
+    TEAM_IS_IN_QUEUE = 'team/inQueue'
     VEHICLE_NOT_READY = 'vehicle/notReady'
     VEHICLE_NOT_PRESENT = 'vehicle/notPresent'
     VEHICLE_IN_BATTLE = 'vehicle/inBattle'
     VEHICLE_BROKEN = 'vehicle/broken'
+    VEHICLE_GROUP_IS_NOT_READY = 'vehicle/group_is_not_ready'
     VEHICLE_ROAMING = 'vehicle/roaming'
     VEHICLE_RENTALS_IS_OVER = 'vehicle/rentalsIsOver'
     VEHICLE_IGR_RENTALS_IS_OVER = 'vehicle/igrRentalsIsOver'
@@ -195,7 +198,8 @@ class PREBATTLE_RESTRICTION:
      LIMIT_NATIONS,
      LIMIT_COMPONENTS,
      LIMIT_AMMO,
-     LIMIT_SHELLS)
+     LIMIT_SHELLS,
+     LIMIT_TAGS)
     VEHICLE_CLASS_LIMITS = (('lightTank', LIMIT_LIGHT_TANK),
      ('mediumTank', LIMIT_MEDIUM_TANK),
      ('heavyTank', LIMIT_HEAVY_TANK),
@@ -295,6 +299,29 @@ class QUEUE_EVENT_TYPE(object):
 class FUNCTIONAL_ORDER(object):
     ENTRY = (CTRL_ENTITY_TYPE.PREQUEUE, CTRL_ENTITY_TYPE.PREBATTLE, CTRL_ENTITY_TYPE.UNIT)
     ACTION = (CTRL_ENTITY_TYPE.UNIT, CTRL_ENTITY_TYPE.PREQUEUE, CTRL_ENTITY_TYPE.PREBATTLE)
-    EXIT_FROM_QUEUE = (CTRL_ENTITY_TYPE.PREBATTLE, CTRL_ENTITY_TYPE.PREQUEUE)
+    EXIT_FROM_QUEUE = (CTRL_ENTITY_TYPE.PREBATTLE, CTRL_ENTITY_TYPE.PREQUEUE, CTRL_ENTITY_TYPE.UNIT)
     BEFORE_GENERAL_CHECKING = (CTRL_ENTITY_TYPE.PREQUEUE,)
     AFTER_GENERAL_CHECKING = (CTRL_ENTITY_TYPE.UNIT, CTRL_ENTITY_TYPE.PREBATTLE)
+
+
+class PRB_INVITE_STATE(CONST_CONTAINER):
+    ERROR = -1
+    PENDING = 0
+    ACCEPTED = 1
+    DECLINED = 2
+    REVOKED = 3
+    EXPIRED = 4
+    OLD_MAPPING = {PREBATTLE_INVITE_STATE.ACTIVE: PENDING,
+     PREBATTLE_INVITE_STATE.ACCEPTED: ACCEPTED,
+     PREBATTLE_INVITE_STATE.DECLINED: DECLINED,
+     PREBATTLE_INVITE_STATE.EXPIRED: EXPIRED}
+
+    @classmethod
+    def getFromOldState(cls, invite):
+        return cls.OLD_MAPPING.get(invite.state, cls.ERROR)
+
+    @classmethod
+    def getFromNewState(cls, invite):
+        if invite.isExpired():
+            return cls.EXPIRED
+        return invite.state

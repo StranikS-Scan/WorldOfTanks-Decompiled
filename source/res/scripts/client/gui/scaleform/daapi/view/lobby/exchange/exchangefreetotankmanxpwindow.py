@@ -61,38 +61,42 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractW
         toNextPrcLeft = self.__getCurrentTankmanLevelCost(tankman)
         toNextPrcLeft = self.__roundByModulo(toNextPrcLeft, rate)
         needMaxXp = max(1, toNextPrcLeft / rate)
-        nextSkillLevel = tankman.descriptor.lastSkillLevel
+        tDescr = tankman.descriptor
+        nextSkillLevel = tDescr.lastSkillLevel
         freeXp = items.stats.freeXP
         if freeXp - needMaxXp >= 0:
             nextSkillLevel += 1
             while nextSkillLevel < MAX_SKILL_LEVEL:
-                needMaxXp += self.__calcLevelUpCost(tankman, nextSkillLevel, tankman.descriptor.lastSkillNumber) / rate
+                needMaxXp += self.__calcLevelUpCost(tankman, nextSkillLevel, tDescr.lastSkillNumber - tDescr.freeSkillsNumber) / rate
                 if freeXp - needMaxXp < 0:
                     break
                 nextSkillLevel += 1
 
         data = {'tankmanID': self.__tankManId,
          'currentSkill': packTankmanSkill(tankman.skills[len(tankman.skills) - 1]),
-         'lastSkillLevel': tankman.descriptor.lastSkillLevel,
+         'lastSkillLevel': tDescr.lastSkillLevel,
          'nextSkillLevel': nextSkillLevel}
         self.as_setInitDataS(data)
 
     def __getCurrentTankmanLevelCost(self, tankman):
         if tankman.roleLevel != MAX_SKILL_LEVEL or not tankman.hasNewSkill:
-            if tankman.descriptor.lastSkillNumber == 0 or tankman.roleLevel != MAX_SKILL_LEVEL:
+            tankmanDescriptor = tankman.descriptor
+            lastSkillNumberValue = tankmanDescriptor.lastSkillNumber - tankmanDescriptor.freeSkillsNumber
+            if lastSkillNumberValue == 0 or tankman.roleLevel != MAX_SKILL_LEVEL:
                 nextSkillLevel = tankman.roleLevel
             else:
-                nextSkillLevel = tankman.descriptor.lastSkillLevel
+                nextSkillLevel = tankmanDescriptor.lastSkillLevel
             skillSeqNum = 0
             if tankman.roleLevel == MAX_SKILL_LEVEL:
-                skillSeqNum = tankman.descriptor.lastSkillNumber
-            return self.__calcLevelUpCost(tankman, nextSkillLevel, skillSeqNum) - tankman.descriptor.freeXP
+                skillSeqNum = lastSkillNumberValue
+            return self.__calcLevelUpCost(tankman, nextSkillLevel, skillSeqNum) - tankmanDescriptor.freeXP
         return 0
 
     def calcValueRequest(self, toLevel):
         items = g_itemsCache.items
         tankman = items.getTankman(self.__tankManId)
-        if toLevel == tankman.descriptor.lastSkillLevel:
+        tankmanDescriptor = tankman.descriptor
+        if toLevel == tankmanDescriptor.lastSkillLevel:
             self.__selectedXpForConvert = 0
             self.as_setCalcValueResponseS(0, None)
             return
@@ -101,8 +105,8 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractW
             if toLevel > MAX_SKILL_LEVEL:
                 toLevel = MAX_SKILL_LEVEL
             needXp = self.__getCurrentTankmanLevelCost(tankman)
-            for level in range(int(tankman.descriptor.lastSkillLevel + 1), toLevel, 1):
-                needXp += self.__calcLevelUpCost(tankman, level, tankman.descriptor.lastSkillNumber)
+            for level in range(int(tankmanDescriptor.lastSkillLevel + 1), toLevel, 1):
+                needXp += self.__calcLevelUpCost(tankman, level, tankmanDescriptor.lastSkillNumber - tankmanDescriptor.freeSkillsNumber)
 
             rate = items.shop.freeXPToTManXPRate
             roundedNeedXp = self.__roundByModulo(needXp, rate)

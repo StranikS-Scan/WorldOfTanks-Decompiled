@@ -19,3 +19,4 @@ class SLOT_LABEL(object):
     NOT_AVAILABLE = 'notAvailable'
     NOT_ALLOWED = 'notAllowed'
     EMPTY = 'emptySlot'
+    REQUIRED = 'required'

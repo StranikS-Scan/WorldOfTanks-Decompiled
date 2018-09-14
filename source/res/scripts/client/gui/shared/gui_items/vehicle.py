@@ -5,7 +5,7 @@ from operator import itemgetter
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from constants import WIN_XP_FACTOR_MODE
-from gui import prb_control
+from gui import prb_control, makeHtmlString
 from gui.shared.economics import calcRentPackages, getActionPrc
 from helpers import i18n, time_utils
 from items import vehicles, tankmen, getTypeInfoByName
@@ -58,6 +58,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     SPECIAL = 'special'
     OBSERVER = 'observer'
     DISABLED_IN_ROAMING = 'disabledInRoaming'
+    EVENT = 'event_battles'
 
 
 class Vehicle(FittingItem, HasStrCD):
@@ -74,13 +75,20 @@ class Vehicle(FittingItem, HasStrCD):
         LOCKED = 'locked'
         CREW_NOT_FULL = 'crewNotFull'
         AMMO_NOT_FULL = 'ammoNotFull'
+        AMMO_NOT_FULL_EVENTS = 'ammoNotFullEvents'
+        GROUP_AMMO_NOT_FULL = 'groupAmmoNotFull'
         SERVER_RESTRICTION = 'serverRestriction'
         RENTAL_IS_ORVER = 'rentalIsOver'
         IGR_RENTAL_IS_ORVER = 'igrRentalIsOver'
         IN_PREMIUM_IGR_ONLY = 'inPremiumIgrOnly'
         NOT_SUITABLE = 'not_suitable'
+        GROUP_IS_NOT_READY_BROKEN = 'group_is_not_ready_broken'
+        GROUP_IS_NOT_READY_CREW_NOT_FULL = 'group_is_not_ready_crewNotFull'
 
-    CAN_SELL_STATES = [VEHICLE_STATE.UNDAMAGED, VEHICLE_STATE.CREW_NOT_FULL, VEHICLE_STATE.AMMO_NOT_FULL]
+    CAN_SELL_STATES = [VEHICLE_STATE.UNDAMAGED,
+     VEHICLE_STATE.CREW_NOT_FULL,
+     VEHICLE_STATE.AMMO_NOT_FULL,
+     VEHICLE_STATE.GROUP_AMMO_NOT_FULL]
 
     class VEHICLE_STATE_LEVEL:
         CRITICAL = 'critical'
@@ -114,7 +122,7 @@ class Vehicle(FittingItem, HasStrCD):
             if invDataTmp is not None:
                 invData = invDataTmp
             self.xp = proxy.stats.vehiclesXPs.get(self.intCD, self.xp)
-            if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles:
+            if not self.isEvent and (proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles):
                 self.dailyXPFactor = proxy.shop.dailyXPFactor
             self.isElite = len(vehDescr.type.unlocksDescrs) == 0 or self.intCD in proxy.stats.eliteVehicles
             self.isFullyElite = self.isElite and len([ data for data in vehDescr.type.unlocksDescrs if data[1] not in proxy.stats.unlocks ]) == 0
@@ -397,7 +405,11 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isAmmoFull(self):
-        return sum((s.count for s in self.shells)) >= self.ammoMaxSize * self.NOT_FULL_AMMO_MULTIPLIER
+        if not self.isOnlyForEventBattles:
+            mult = self.NOT_FULL_AMMO_MULTIPLIER
+        else:
+            mult = 1.0
+        return sum((s.count for s in self.shells)) >= self.ammoMaxSize * mult
 
     @property
     def hasShells(self):
@@ -420,7 +432,7 @@ class Vehicle(FittingItem, HasStrCD):
         ms = self.modelState
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
-        elif self.isRented and self.rentalIsOver:
+        elif self.rentalIsOver:
             ms = Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER
             if self.isPremiumIGR:
                 ms = Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER
@@ -437,29 +449,57 @@ class Vehicle(FittingItem, HasStrCD):
 
     def __checkUndamagedState(self, state):
         if state == Vehicle.VEHICLE_STATE.UNDAMAGED:
-            from gui.prb_control.dispatcher import g_prbLoader
-            prbDisp = g_prbLoader.getDispatcher()
-            isHistoricalBattle = False
-            if prbDisp is not None:
-                preQueue = prbDisp.getPreQueueFunctional()
-                isHistoricalBattle = preQueue is not None and preQueue.getQueueType() == constants.QUEUE_TYPE.HISTORICAL
-            if self.repairCost > 0:
+            if self.isBroken:
                 state = Vehicle.VEHICLE_STATE.DAMAGED
             elif not self.isCrewFull:
                 state = Vehicle.VEHICLE_STATE.CREW_NOT_FULL
-            elif not self.isAmmoFull and not isHistoricalBattle:
+            elif not self.isAmmoFull and self.isOnlyForEventBattles:
+                state = Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS
+            elif self.isOnlyForEventBattles and self.isGroupBroken():
+                state = Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY_BROKEN
+            elif self.isOnlyForEventBattles and not self.isGroupCrewFull():
+                state = Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY_CREW_NOT_FULL
+            elif not self.isAmmoFull:
                 state = Vehicle.VEHICLE_STATE.AMMO_NOT_FULL
+            elif self.isOnlyForEventBattles and not self.isGroupAmmoFull():
+                state = Vehicle.VEHICLE_STATE.GROUP_AMMO_NOT_FULL
         return state
 
     @classmethod
-    def __getStateLevel(cls, state):
+    def __getEventVehicles(cls):
+        from gui.server_events import g_eventsCache
+        return g_eventsCache.getEventVehicles()
+
+    def isGroupBroken(self):
+        for v in self.__getEventVehicles():
+            if v.isBroken:
+                return True
+
+        return False
+
+    def isGroupCrewFull(self):
+        for v in self.__getEventVehicles():
+            if not v.isCrewFull:
+                return False
+
+        return True
+
+    def isGroupAmmoFull(self):
+        for v in self.__getEventVehicles():
+            if not v.isAmmoFull:
+                return False
+
+        return True
+
+    def __getStateLevel(self, state):
         if state in [Vehicle.VEHICLE_STATE.CREW_NOT_FULL,
          Vehicle.VEHICLE_STATE.DAMAGED,
          Vehicle.VEHICLE_STATE.EXPLODED,
          Vehicle.VEHICLE_STATE.DESTROYED,
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER,
-         Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER]:
+         Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER,
+         Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS]:
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         if state in [Vehicle.VEHICLE_STATE.UNDAMAGED]:
             return Vehicle.VEHICLE_STATE_LEVEL.INFO
@@ -467,28 +507,35 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isPremium(self):
-        return self._checkForTags(VEHICLE_TAGS.PREMIUM)
+        return _checkForTags(self.tags, VEHICLE_TAGS.PREMIUM)
 
     @property
     def isPremiumIGR(self):
-        return self._checkForTags(VEHICLE_TAGS.PREMIUM_IGR)
+        return _checkForTags(self.tags, VEHICLE_TAGS.PREMIUM_IGR)
 
     @property
     def isSecret(self):
-        return self._checkForTags(VEHICLE_TAGS.SECRET)
+        return _checkForTags(self.tags, VEHICLE_TAGS.SECRET)
 
     @property
     def isSpecial(self):
-        return self._checkForTags(VEHICLE_TAGS.SPECIAL)
+        return _checkForTags(self.tags, VEHICLE_TAGS.SPECIAL)
 
     @property
     def isObserver(self):
-        return self._checkForTags(VEHICLE_TAGS.OBSERVER)
+        return _checkForTags(self.tags, VEHICLE_TAGS.OBSERVER)
+
+    @property
+    def isEvent(self):
+        return _checkForTags(self.tags, VEHICLE_TAGS.EVENT)
 
     @property
     def isDisabledInRoaming(self):
         from gui import game_control
-        return self._checkForTags(VEHICLE_TAGS.DISABLED_IN_ROAMING) and game_control.g_instance.roaming.isInRoaming()
+        return _checkForTags(self.tags, VEHICLE_TAGS.DISABLED_IN_ROAMING) and game_control.g_instance.roaming.isInRoaming()
+
+    def canNotBeSold(self):
+        return _checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
 
     @property
     def isDisabledInPremIGR(self):
@@ -501,17 +548,17 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def userName(self):
-        return self.descriptor.type.userString
+        return getUserName(self.descriptor.type)
 
     @property
     def longUserName(self):
         typeInfo = getTypeInfoByName('vehicle')
         tagsDump = [ typeInfo['tags'][tag]['userString'] for tag in self.tags if typeInfo['tags'][tag]['userString'] != '' ]
-        return '%s %s' % (''.join(tagsDump), self.descriptor.type.userString)
+        return '%s %s' % (''.join(tagsDump), getUserName(self.descriptor.type))
 
     @property
     def shortUserName(self):
-        return self.descriptor.type.shortUserString
+        return getShortUserName(self.descriptor.type)
 
     @property
     def level(self):
@@ -535,7 +582,7 @@ class Vehicle(FittingItem, HasStrCD):
                 return False
             if st in (self.VEHICLE_STATE.RENTAL_IS_ORVER, self.VEHICLE_STATE.IGR_RENTAL_IS_ORVER):
                 st = self.__checkUndamagedState(self.modelState)
-        return st in self.CAN_SELL_STATES and not self._checkForTags(VEHICLE_TAGS.CANNOT_BE_SOLD)
+        return st in self.CAN_SELL_STATES and not _checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
 
     @property
     def isLocked(self):
@@ -572,12 +619,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isOnlyForEventBattles(self):
-        from gui.server_events import g_eventsCache
-        eventBattles = g_eventsCache.getEventBattles()
-        if eventBattles is not None:
-            return self._checkForTags(eventBattles.vehicleTags)
-        else:
-            return False
+        return _checkForTags(self.tags, VEHICLE_TAGS.EVENT)
 
     def hasLockMode(self):
         isBS = prb_control.isBattleSession()
@@ -587,18 +629,21 @@ class Vehicle(FittingItem, HasStrCD):
                 return True
         return False
 
-    @property
-    def isReadyToPrebattle(self):
-        if self.isRented and self.rentalIsOver:
+    def isReadyToPrebattle(self, checkForRent = True):
+        if checkForRent and self.rentalIsOver:
+            return False
+        if self.isOnlyForEventBattles and (self.isGroupBroken() or not self.isGroupCrewFull() or not self.isGroupAmmoFull() or not self.isAmmoFull):
             return False
         result = not self.hasLockMode()
         if result:
-            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR
+            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle
         return result
 
     @property
     def isReadyToFight(self):
-        if self.isRented and self.rentalIsOver:
+        if self.rentalIsOver:
+            return False
+        if self.isOnlyForEventBattles and (self.isGroupBroken() or not self.isGroupCrewFull() or not self.isGroupAmmoFull() or not self.isAmmoFull):
             return False
         result = not self.hasLockMode()
         if result:
@@ -662,6 +707,9 @@ class Vehicle(FittingItem, HasStrCD):
             return min(self.rentPackages, key=itemgetter('rentPrice'))
         return
 
+    def getGUIEmblemID(self):
+        return self.icon
+
     def getRentPackageActionPrc(self, days = None):
         package = self.getRentPackage(days)
         if package:
@@ -700,11 +748,6 @@ class Vehicle(FittingItem, HasStrCD):
          self.intCD,
          self.nationID,
          self.lock)
-
-    def _checkForTags(self, tags):
-        if not hasattr(tags, '__iter__'):
-            tags = (tags,)
-        return bool(self.tags & frozenset(tags))
 
     def _getShortInfo(self, vehicle = None, expanded = False):
         description = i18n.makeString('#menu:descriptions/' + self.itemTypeName)
@@ -770,3 +813,23 @@ def getTypeIconName(vehicleType):
 
 def getTypeSmallIconPath(vehicleType):
     return '../maps/icons/vehicleTypes/%s' % getTypeIconName(vehicleType)
+
+
+def getUserName(vehicleType):
+    return _getActualName(vehicleType.userString, vehicleType.tags)
+
+
+def getShortUserName(vehicleType):
+    return _getActualName(vehicleType.shortUserString, vehicleType.tags)
+
+
+def _getActualName(name, tags):
+    if _checkForTags(tags, VEHICLE_TAGS.PREMIUM_IGR):
+        return makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': name})
+    return name
+
+
+def _checkForTags(vTags, tags):
+    if not hasattr(tags, '__iter__'):
+        tags = (tags,)
+        return bool(vTags & frozenset(tags))

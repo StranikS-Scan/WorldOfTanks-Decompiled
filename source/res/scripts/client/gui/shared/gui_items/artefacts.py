@@ -89,8 +89,18 @@ class Equipment(VehicleArtefact):
 
             return conflictEqs
 
+    def getGUIEmblemID(self):
+        return self.name
+
 
 class OptionalDevice(VehicleArtefact):
+
+    def __init__(self, intCompactDescr, proxy = None, isBoughtForCredits = False):
+        super(OptionalDevice, self).__init__(intCompactDescr, proxy, isBoughtForCredits)
+        splitIcon = self.icon.split('/')
+        labelWithExtension = splitIcon[len(splitIcon) - 1]
+        label = labelWithExtension.split('.')[0]
+        self.GUIEmblemID = label
 
     @property
     def isRemovable(self):
@@ -124,3 +134,6 @@ class OptionalDevice(VehicleArtefact):
                 result.add(vehicle)
 
         return result
+
+    def getGUIEmblemID(self):
+        return self.GUIEmblemID

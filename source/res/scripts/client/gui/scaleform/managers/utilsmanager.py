@@ -22,6 +22,18 @@ class UtilsManager(UtilsManagerMeta):
         self._textMgr = TextManager()
         TextManager.setReference(self._textMgr)
 
+    def registerTextManager(self, flashObject):
+        self._textMgr.setFlashObject(flashObject)
+
+    def destroy(self):
+        self.__unregisterMrgs()
+        super(UtilsManagerMeta, self).destroy()
+
+    def __unregisterMrgs(self):
+        self._textMgr.destroy()
+        self._textMgr = None
+        return
+
     @property
     def textManager(self):
         return self._textMgr

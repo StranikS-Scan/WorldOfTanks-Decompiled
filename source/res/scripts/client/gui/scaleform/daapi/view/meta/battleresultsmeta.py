@@ -24,6 +24,9 @@ class BattleResultsMeta(DAAPIModule):
     def onTeamCardClick(self, teamDBID):
         self._printOverrideError('onTeamCardClick')
 
+    def showUnlockWindow(self, itemId, unlockType):
+        self._printOverrideError('showUnlockWindow')
+
     def as_setDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setData(data)

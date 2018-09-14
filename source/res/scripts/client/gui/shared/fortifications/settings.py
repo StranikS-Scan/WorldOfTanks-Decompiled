@@ -1,5 +1,27 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/settings.py
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.utils import CONST_CONTAINER
+
+class FORT_BATTLE_DIVISIONS:
+
+    class CHAMPION:
+        minFortLevel = 5
+        maxFortLevel = 7
+        maxCombatants = 10
+        iconLevel = 8
+        iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_USA_A12_T32
+        divisionID = 0
+        maxVehicleLevel = 8
+
+    class ABSOLUTE:
+        minFortLevel = 8
+        maxFortLevel = 10
+        maxCombatants = 15
+        iconLevel = 10
+        iconPath = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_USSR_T62A
+        divisionID = 1
+        maxVehicleLevel = 10
+
 
 class CLIENT_FORT_STATE(CONST_CONTAINER):
     UNKNOWN = 0

@@ -59,8 +59,10 @@ class BattleDamageMessages(object):
         if not hasattr(p, 'playerVehicleID'):
             return
         targetID = p.playerVehicleID
-        if not p.isVehicleAlive and entityID == p.inputHandler.ctrl.curVehicleID:
-            targetID = entityID
+        if not p.isVehicleAlive:
+            ctrl = p.inputHandler.ctrl
+            if ctrl.getAim().mode == 'postmortem' and entityID == ctrl.curVehicleID:
+                targetID = entityID
         code, postfix = self.__getDamageInfo(code, entityID, targetID)
         self.onShowPlayerMessage(code, postfix, targetID, entityID)
         self.onShowVehicleMessage(code, postfix, entityID, extra)

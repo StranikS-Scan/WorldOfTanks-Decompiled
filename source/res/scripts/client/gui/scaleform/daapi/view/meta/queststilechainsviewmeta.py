@@ -3,7 +3,7 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class QuestsTileChainsViewMeta(DAAPIModule):
 
-    def getTileData(self, vehicleType, taskFilterType, hideCompleted):
+    def getTileData(self, vehicleType, taskFilterType):
         self._printOverrideError('getTileData')
 
     def getChainProgress(self):

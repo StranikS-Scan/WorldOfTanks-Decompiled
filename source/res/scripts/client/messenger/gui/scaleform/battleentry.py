@@ -4,6 +4,8 @@ import VOIP
 from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.CommandArgsParser import CommandArgsParser
+from gui.battle_control import g_sessionProvider
+from gui.battle_control.dyn_squad_arena_controllers import DynSquadMessagesController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from messenger import g_settings
@@ -24,6 +26,7 @@ class BattleEntry(IGUIEntry):
         self.__focused = False
         self.__initialized = 0
         self.__channelsCtrl = None
+        self.__dynSquadMsgController = None
         self.__view = None
         self.__sharedHistory = BattleSharedHistory(g_settings.battle.numberOfMessagesInHistory)
         self.__enableRecord = True
@@ -97,8 +100,14 @@ class BattleEntry(IGUIEntry):
         g_eventBus.addListener(MessengerEvent.BATTLE_CHANNEL_CTRL_INITED, self.__handleChannelControllerInited, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__channelsCtrl = channels.BattleControllers()
         self.__channelsCtrl.init()
+        self.__dynSquadMsgController = DynSquadMessagesController(self.__onDynSquadMsgReceivedCallback)
+        g_sessionProvider.addArenaCtrl(self.__dynSquadMsgController)
 
     def close(self, nextScope):
+        if self.__dynSquadMsgController:
+            g_sessionProvider.removeArenaCtrl(self.__dynSquadMsgController)
+            self.__dynSquadMsgController.destroy()
+            self.__dynSquadMsgController = None
         g_messengerEvents.channels.onMessageReceived -= self.__me_onMessageReceived
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
         g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
@@ -328,3 +337,8 @@ class BattleEntry(IGUIEntry):
 
     def __onUnsetMuted(self, _, uid):
         self.proto.contacts.unsetMuted(uid)
+
+    def __onDynSquadMsgReceivedCallback(self, message):
+        formatted = g_settings.htmlTemplates.format('battleWarningMessage', ctx={'message': message})
+        self.__sharedHistory.addMessage(formatted)
+        self.__flashCall(BTMS_COMMANDS.ShowActionFailureMessage(), [formatted])

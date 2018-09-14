@@ -1,19 +1,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
 import BigWorld
-from CurrentVehicle import g_currentVehicle
+import operator
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons, TextManager
+from gui.Scaleform.framework.managers.TextManager import TextIcons, TextManager
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.MENU import MENU
-from prebattle_shared import decodeRoster
 from gui.prb_control import settings
 from gui.prb_control.items.sortie_items import getDivisionNameByType, getDivisionLevel
 from gui.prb_control.settings import UNIT_RESTRICTION
@@ -24,8 +24,10 @@ from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
+from gui.server_events import g_eventsCache
+from gui.shared.utils.functions import makeTooltip
 
-def getPlayerStatus(slotState, pInfo, autoReadyCreator = False):
+def getPlayerStatus(slotState, pInfo):
     if slotState.isClosed:
         return PLAYER_GUI_STATUS.LOCKED
     else:
@@ -37,13 +39,27 @@ def getPlayerStatus(slotState, pInfo, autoReadyCreator = False):
         return PLAYER_GUI_STATUS.NORMAL
 
 
-def makeSlotLabel(unitState, slotState, isCreator = False, vehCount = 0, checkForVehicles = True):
+def getSquadPlayerStatus(slotState, pInfo):
+    if slotState.isClosed:
+        return PLAYER_GUI_STATUS.LOCKED
+    else:
+        if pInfo is not None:
+            if pInfo.isInArena():
+                return PLAYER_GUI_STATUS.BATTLE
+            if pInfo.isReady:
+                return PLAYER_GUI_STATUS.READY
+        return PLAYER_GUI_STATUS.NORMAL
+
+
+def makeSlotLabel(unitFlags, slotState, isCreator = False, vehCount = 0, checkForVehicles = True, isFallout = None):
     slotLabel = SLOT_LABEL.DEFAULT
     if slotState.isFree:
-        if unitState.isLocked():
+        if unitFlags.isLocked():
             template = SLOT_LABEL.LOCKED
         elif not isCreator and checkForVehicles and vehCount == 0:
             template = SLOT_LABEL.NOT_AVAILABLE
+        elif isFallout:
+            template = SLOT_LABEL.REQUIRED
         else:
             template = SLOT_LABEL.EMPTY
         slotLabel = makeHtmlString('html_templates:lobby/cyberSport/unit', template)
@@ -69,15 +85,20 @@ def makeStaticSlotLabel(unitState, slotState, isCreator = False, vehCount = 0, c
     return slotLabel
 
 
-def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None):
+def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None, isFallout = None, isCreator = False):
     if vehicle is None:
         return
     else:
         vState, vStateLvl = vehicle.getState()
         isReadyToFight = vehicle.isReadyToFight
+        isNotValidFallout = isFallout is not None and isFallout != vehicle.isEvent
         if vState == Vehicle.VEHICLE_STATE.UNDAMAGED or vState == Vehicle.VEHICLE_STATE.IN_PREBATTLE:
-            vState = ''
-            isReadyToFight = True
+            if isNotValidFallout:
+                vState = i18n.makeString(MENU.tankcarousel_vehiclestates(Vehicle.VEHICLE_STATE.NOT_SUITABLE))
+                isReadyToFight = False
+            else:
+                vState = ''
+                isReadyToFight = True
         elif vState == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
             vState = makeHtmlString('html_templates:lobby', 'inPremiumIgrOnly')
         else:
@@ -87,8 +108,12 @@ def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None):
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_OVERFLOWLEVEL
         elif vehicleTypes is not None and vehicle.type not in vehicleTypes:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_INCOMPATIBLETYPE
-        elif vehicle.isOnlyForEventBattles:
-            enabled, tooltip = False, '#tooltips:redButton/disabled/vehicle/not_supported'
+        elif isNotValidFallout:
+            enabled = False
+            if isCreator:
+                tooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_HEADER, TOOLTIPS.SQUADWINDOW_TEAMMATE_NOTVALIDVEHICLE_BODY)
+            else:
+                tooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_HEADER, TOOLTIPS.SQUADWINDOW_DEMANDFORVEHICLE_NOTVALIDVEHICLE_BODY)
         return {'intCD': vehicle.intCD,
          'nationID': vehicle.nationID,
          'name': vehicle.name,
@@ -101,7 +126,13 @@ def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None):
          'isReadyToFight': isReadyToFight,
          'enabled': enabled,
          'tooltip': tooltip,
-         'state': vState}
+         'state': vState,
+         'isFalloutVehicle': vehicle.isEvent}
+
+
+def getEventVehiclesNamesStr():
+    eventVehicles = g_eventsCache.getEventVehicles()
+    return ', '.join(map(operator.attrgetter('userName'), eventVehicles))
 
 
 def makeUserVO(user, colorGetter, isPlayerSpeaking = False):
@@ -165,8 +196,7 @@ def makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
 def makeStaticFormationPlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
     staticFormationPlayerVO = makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
     staticFormationPlayerVO['isLegionaries'] = pInfo.isLegionary()
-    staticFormationPlayerVO['clanAbbrev'] = None
-    staticFormationPlayerVO['isRatingAvailable'] = pInfo.isLegionary()
+    staticFormationPlayerVO['isRatingAvailable'] = pInfo.isLegionary() and not pInfo.isInSlot
     return staticFormationPlayerVO
 
 
@@ -196,14 +226,14 @@ def makeUnitStateLabel(unitState):
     return makeHtmlString('html_templates:lobby/cyberSport', 'teamUnlocked' if unitState.isOpened() else 'teamLocked', {})
 
 
-def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levelsRange = None, checkForVehicles = True):
+def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levelsRange = None, checkForVehicles = True, isFallout = None):
     isPlayerCreator = pInfo.isCreator()
     isPlayerInSlot = pInfo.isInSlot
     slots = []
     userGetter = storage_getter('users')().getUser
     colorGetter = g_settings.getColorScheme('rosters').getColors
     vehicleGetter = g_itemsCache.items.getItemByCD
-    canTakeSlot = not (pInfo.isLegionary() and unit.isClub())
+    canTakeSlot = not pInfo.isLegionary()
     if app:
         isPlayerSpeaking = app.voiceChatManager.isPlayerSpeaking
     else:
@@ -214,7 +244,7 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
         makeVO = makeClanBattlePlayerVO
     elif unit.isSortie():
         makeVO = makeSortiePlayerVO
-    elif unit.isClub() and not unit.isRated():
+    elif unit.isClub():
         makeVO = makeStaticFormationPlayerVO
     else:
         makeVO = makePlayerVO
@@ -235,12 +265,15 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
                 if 'vehLevel' in vehicle:
                     slotLevel = vehicle['vehLevel']
                 if 'vehTypeCompDescr' in vehicle:
-                    vehicleVO = makeVehicleVO(vehicleGetter(vehicle['vehTypeCompDescr']), levelsRange)
+                    vehicleVO = makeVehicleVO(vehicleGetter(vehicle['vehTypeCompDescr']), levelsRange, isFallout=isFallout, isCreator=isPlayerCreator)
         if unit is not None and unit.isClub():
             slotLabel = makeStaticSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, pInfo.isLegionary(), unit.isRated())
         else:
-            slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles)
-        playerStatus = getPlayerStatus(slotState, player, unit.isFortBattle() if unit is not None else False)
+            slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isFallout=isFallout)
+        if unit.isSquad():
+            playerStatus = getSquadPlayerStatus(slotState, player)
+        else:
+            playerStatus = getPlayerStatus(slotState, player)
         if unit is not None:
             restrictions = makeUnitRosterVO(unit, pInfo, index=index, isSortie=unit.isSortie(), levelsRange=levelsRange)['conditions']
         else:
@@ -257,19 +290,20 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
          'compatibleVehiclesCount': vehCount,
          'selectedVehicle': vehicleVO,
          'selectedVehicleLevel': 1 if slotState.isClosed else slotLevel,
-         'restrictions': restrictions}
+         'restrictions': restrictions,
+         'isFallout': isFallout}
         slots.append(slot)
 
     return slots
 
 
-def makeSlotsVOs(unitFunctional, unitIdx = None, app = None):
+def makeSlotsVOs(unitFunctional, unitIdx = None, app = None, isFallout = None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
     else:
         unit, unitState, unitStats, pInfo, slotsIter = fullData
-        slots = _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange())
+        slots = _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange(), isFallout=isFallout)
         isRosterSet = unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES)
         return (isRosterSet, slots)
 
@@ -303,8 +337,8 @@ def makeSortieShortVO(unitFunctional, unitIdx = None, app = None):
         title = i18n.makeString(FORTIFICATIONS.SORTIE_LISTVIEW_ALERTTEXT_TITLE)
         body = i18n.makeString(FORTIFICATIONS.SORTIE_LISTVIEW_ALERTTEXT_BODY)
         alertView = {'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON,
-         'titleMsg': textMgr.getText(TextType.ALERT_TEXT, title),
-         'bodyMsg': textMgr.getText(TextType.MAIN_TEXT, body),
+         'titleMsg': textMgr.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, title),
+         'bodyMsg': textMgr.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, body),
          'buttonLbl': FORTIFICATIONS.SORTIE_LISTVIEW_ENTERBTN}
         return {'isShowAlertView': True,
          'alertView': alertView}
@@ -337,9 +371,9 @@ def makeFortBattleShortVO(unitFunctional, unitIdx = None, app = None):
 
 def makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role, roleID):
     week = BigWorld.wg_getIntegralFormat(intWeekMining)
-    week = TextManager.reference().getText(TextType.DEFRES_TEXT, week)
+    week = TextManager.reference().getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, week)
     allTime = BigWorld.wg_getIntegralFormat(intTotalMining)
-    allTime = TextManager.reference().getText(TextType.DEFRES_TEXT, allTime)
+    allTime = TextManager.reference().getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, allTime)
     databaseID = member.getID()
     return {'dbID': databaseID,
      'uid': databaseID,
@@ -354,7 +388,7 @@ def makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role, role
      'fullName': member.getFullName()}
 
 
-def makeUnitVO(unitFunctional, unitIdx = None, app = None):
+def makeUnitVO(unitFunctional, unitIdx = None, app = None, isFallout = None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
@@ -371,7 +405,7 @@ def makeUnitVO(unitFunctional, unitIdx = None, app = None):
          'sumLevelsInt': unitStats.curTotalLevel,
          'sumLevels': sumLevelsStr,
          'sumLevelsError': canDoAction,
-         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
+         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange(), isFallout=isFallout),
          'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
 
 
@@ -409,7 +443,7 @@ def makeSortieVO(unitFunctional, unitIdx = None, app = None):
         division = getDivisionNameByType(unit.getRosterTypeID())
         divisionTypeStr = i18n.makeString(FORTIFICATIONS.sortie_division_name(division))
         divisionStr = i18n.makeString(FORTIFICATIONS.SORTIE_ROOM_DIVISION)
-        divisionLbl = TextManager.reference().concatStyles(((TextType.STANDARD_TEXT, divisionStr), (TextType.MAIN_TEXT, divisionTypeStr)))
+        divisionLbl = TextManager.reference().concatStyles(((TEXT_MANAGER_STYLES.STANDARD_TEXT, divisionStr), (TEXT_MANAGER_STYLES.MAIN_TEXT, divisionTypeStr)))
         isPlayerCreator = pInfo.isCreator()
         canDoAction, restriction = unitFunctional.validateLevels(stats=unitStats)
         sumLevelsStr = makeTotalLevelLabel(unitStats, restriction)
@@ -539,16 +573,16 @@ def makeBuildingIndicatorsVOByDescr(buildingDescr):
 
 
 def makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResVal, maxDefResVal):
-    textStyle = TextType.DEFRES_TEXT
+    textStyle = TEXT_MANAGER_STYLES.DEFRES_TEXT
     if progress == FORT_ALIAS.STATE_FOUNDATION_DEF or progress == FORT_ALIAS.STATE_FOUNDATION:
-        textStyle = TextType.ALERT_TEXT
+        textStyle = TEXT_MANAGER_STYLES.ALERT_TEXT
     FORMAT_PATTERN = '###'
     hpValueFormatter = TextManager.reference().getText(textStyle, FORMAT_PATTERN)
     hpTotalFormatted = str(BigWorld.wg_getIntegralFormat(hpTotalVal)) + ' '
-    formattedHpTotal = TextManager.reference().concatStyles(((TextType.STANDARD_TEXT, hpTotalFormatted), (TextIcons.NUT_ICON,)))
-    defResValueFormatter = TextManager.reference().getText(TextType.DEFRES_TEXT, FORMAT_PATTERN)
+    formattedHpTotal = TextManager.reference().concatStyles(((TEXT_MANAGER_STYLES.STANDARD_TEXT, hpTotalFormatted), (TextIcons.NUT_ICON,)))
+    defResValueFormatter = TextManager.reference().getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, FORMAT_PATTERN)
     maxDefDerFormatted = str(BigWorld.wg_getIntegralFormat(maxDefResVal)) + ' '
-    formattedDefResTotal = TextManager.reference().concatStyles(((TextType.STANDARD_TEXT, maxDefDerFormatted), (TextIcons.NUT_ICON,)))
+    formattedDefResTotal = TextManager.reference().concatStyles(((TEXT_MANAGER_STYLES.STANDARD_TEXT, maxDefDerFormatted), (TextIcons.NUT_ICON,)))
     hpProgressLabels = {'currentValue': str(BigWorld.wg_getIntegralFormat(hpVal)),
      'currentValueFormatter': hpValueFormatter,
      'totalValue': formattedHpTotal,
@@ -566,30 +600,3 @@ def makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResV
      'hpProgressLabels': hpProgressLabels,
      'defResProgressLabels': storeProgressLabels}
     return result
-
-
-class SquadActionButtonStateVO(dict):
-
-    def __init__(self, prbFunctional):
-        super(SquadActionButtonStateVO, self).__init__()
-        stateString = ''
-        pInfo = prbFunctional.getPlayerInfo()
-        team, assigned = decodeRoster(prbFunctional.getRosterKey())
-        isInQueue = prbFunctional.getTeamState().isInQueue()
-        isEnabled = g_currentVehicle.isReadyToPrebattle() and not (isInQueue and assigned)
-        if not g_currentVehicle.isPresent():
-            stateString = i18n.makeString(CYBERSPORT.WINDOW_UNIT_MESSAGE_NOVEHICLE)
-        elif not g_currentVehicle.isReadyToPrebattle():
-            stateString = i18n.makeString(CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY)
-        elif not pInfo.isReady():
-            stateString = i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_GETREADY)
-        elif pInfo.isReady() and not isInQueue:
-            stateString = i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_GETNOTREADY)
-        if pInfo.isReady():
-            label = CYBERSPORT.WINDOW_UNIT_NOTREADY
-        else:
-            label = CYBERSPORT.WINDOW_UNIT_READY
-        self['stateString'] = stateString
-        self['label'] = label
-        self['isEnabled'] = isEnabled
-        self['isReady'] = pInfo.isReady()

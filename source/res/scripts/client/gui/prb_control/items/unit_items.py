@@ -2,7 +2,7 @@
 from collections import namedtuple
 import itertools
 import weakref
-from UnitBase import UNIT_ROLE, UNIT_STATE, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE
+from UnitBase import UNIT_ROLE, UNIT_FLAGS, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE
 from account_helpers import getPlayerDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
@@ -58,19 +58,19 @@ class PlayerUnitInfo(object):
 
     def isInSearch(self):
         if self.unit is not None:
-            return self.unit.getState() & UNIT_STATE.IN_SEARCH > 0
+            return self.unit.getFlags() & UNIT_FLAGS.IN_SEARCH > 0
         else:
             return False
 
     def isInQueue(self):
         if self.unit is not None:
-            return self.unit.getState() & UNIT_STATE.IN_QUEUE > 0
+            return self.unit.getFlags() & UNIT_FLAGS.IN_QUEUE > 0
         else:
             return False
 
     def isInPreArena(self):
         if self.unit is not None:
-            return self.unit.getState() & UNIT_STATE.IN_PRE_ARENA > 0
+            return self.unit.getFlags() & UNIT_FLAGS.IN_PRE_ARENA > 0
         else:
             return False
 
@@ -84,7 +84,7 @@ class PlayerUnitInfo(object):
         requestCriteria = REQ_CRITERIA.INVENTORY
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
         requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
-        requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_VEHICLE
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         if self.isCurrentPlayer():
             vehicles = g_itemsCache.items.getVehicles(requestCriteria).keys()
         else:
@@ -114,7 +114,7 @@ class PlayerUnitInfo(object):
                 result = (False, UNIT_RESTRICTION.UNIT_IS_FULL)
             elif not len(self.getAvailableSlots(allSlots=allSlots)):
                 result = (False, UNIT_RESTRICTION.VEHICLE_NOT_FOUND)
-            elif UnitState(self.unit.getState()).isLocked():
+            elif UnitFlags(self.unit.getFlags()).isLocked():
                 result = (False, UNIT_RESTRICTION.UNIT_IS_LOCKED)
         return result
 
@@ -140,17 +140,6 @@ class PlayerUnitInfo(object):
 
         return result
 
-    @classmethod
-    def fromPrbInfo(cls, prbInfo, slotIdx = -1):
-        role = UNIT_ROLE.DEFAULT
-        if prbInfo.isCreator:
-            role |= UNIT_ROLE.CREATOR
-        if prbInfo.isOffline():
-            role |= UNIT_ROLE.OFFLINE
-        if prbInfo.inBattle():
-            role |= UNIT_ROLE.IN_ARENA
-        return PlayerUnitInfo(prbInfo.dbID, -1, None, prbInfo.name, accountID=prbInfo.accID, role=role, isReady=prbInfo.isReady(), isInSlot=True, clanAbbrev=prbInfo.clanAbbrev, igrType=prbInfo.igrType, slotIdx=slotIdx)
-
 
 class VehicleInfo(object):
     __slots__ = ('vehInvID', 'vehTypeCD', 'vehLevel')
@@ -167,12 +156,12 @@ class VehicleInfo(object):
     def isEmpty(self):
         return not self.vehInvID
 
-    def isReadyToBattle(self):
+    def isReadyToBattle(self, state):
         result = False
         if self.vehInvID:
             vehicle = g_itemsCache.items.getVehicle(self.vehInvID)
             if vehicle:
-                result = vehicle.isReadyToPrebattle
+                result = vehicle.isReadyToPrebattle(checkForRent=not state.isInPreArena())
         return result
 
 
@@ -202,60 +191,63 @@ class SlotInfo(object):
         return 'SlotInfo(index = {0:n}, state = {1!r:s}, player = {2!r:s}, vehicle = {3!r:s})'.format(self.index, self.state, self.player, self.vehicle)
 
 
-class UnitState(object):
-    __slots__ = ('__state', '__stateDiff', '__isReady')
+class UnitFlags(object):
+    __slots__ = ('__flags', '__flagsDiff', '__isReady')
 
-    def __init__(self, state, prevState = None, isReady = False):
-        super(UnitState, self).__init__()
-        self.__state = state
+    def __init__(self, flags, prevFlags = None, isReady = False):
+        super(UnitFlags, self).__init__()
+        self.__flags = flags
         self.__isReady = isReady
-        self.__stateDiff = state ^ prevState if prevState is not None else state
+        self.__flagsDiff = flags ^ prevFlags if prevFlags is not None else flags
         return
 
     def __repr__(self):
-        return 'UnitState(bitmask = {0!r:s}, isReady = {1!r:s}, diff = {2!r:s})'.format(self.__state, self.__isReady, self.__stateDiff)
+        return 'UnitFlags(bitmask = {0!r:s}, isReady = {1!r:s}, diff = {2!r:s})'.format(self.__flags, self.__isReady, self.__flagsDiff)
 
     def __eq__(self, other):
-        return self.__state == other.state
+        return self.__flags == other.flags
 
     def isLocked(self):
-        return self.__state & UNIT_STATE.LOCKED > 0
+        return self.__flags & UNIT_FLAGS.LOCKED > 0
 
     def isLockedStateChanged(self):
-        return self.__stateDiff & UNIT_STATE.LOCKED > 0
+        return self.__flagsDiff & UNIT_FLAGS.LOCKED > 0
 
     def isOpened(self):
-        return self.__state & UNIT_STATE.INVITE_ONLY == 0
+        return self.__flags & UNIT_FLAGS.INVITE_ONLY == 0
 
     def isOpenedStateChanged(self):
-        return self.__stateDiff & UNIT_STATE.INVITE_ONLY > 0
+        return self.__flagsDiff & UNIT_FLAGS.INVITE_ONLY > 0
 
     def isInSearch(self):
-        return self.__state & UNIT_STATE.IN_SEARCH > 0 or self.__state & UNIT_STATE.PRE_SEARCH > 0
+        return self.__flags & UNIT_FLAGS.IN_SEARCH > 0 or self.__flags & UNIT_FLAGS.PRE_SEARCH > 0
 
     def isInQueue(self):
-        return self.__state & UNIT_STATE.IN_QUEUE > 0 or self.__state & UNIT_STATE.PRE_QUEUE > 0
+        return self.__flags & UNIT_FLAGS.IN_QUEUE > 0 or self.__flags & UNIT_FLAGS.PRE_QUEUE > 0
 
     def isInIdle(self):
-        return self.__state & UNIT_STATE.MODAL_STATES > 0
+        return self.__flags & UNIT_FLAGS.MODAL_STATES > 0
 
     def isReady(self):
         return self.__isReady
 
     def isDevMode(self):
-        return self.__state & UNIT_STATE.DEV_MODE > 0
+        return self.__flags & UNIT_FLAGS.DEV_MODE > 0
 
     def isInArena(self):
-        return self.__state & UNIT_STATE.IN_ARENA > 0
+        return self.__flags & UNIT_FLAGS.IN_ARENA > 0
 
     def isInPreArena(self):
-        return self.__state & UNIT_STATE.IN_PRE_ARENA > 0
+        return self.__flags & UNIT_FLAGS.IN_PRE_ARENA > 0
 
     def isFreezed(self):
         return self.isLocked() or self.isInSearch() or self.isInQueue() or self.isInArena() or self.isInPreArena()
 
     def isChanged(self):
-        return self.__stateDiff & UNIT_STATE.CHANGED_STATE_ASQ > 0
+        return self.__flagsDiff & UNIT_FLAGS.CHANGED_STATE_ASQ > 0
+
+    def isPreArenaChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.IN_PRE_ARENA > 0
 
 
 UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'levelsSeq', 'minTotalLevel', 'maxTotalLevel'))

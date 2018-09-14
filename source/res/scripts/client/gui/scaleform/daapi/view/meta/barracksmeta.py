@@ -30,9 +30,9 @@ class BarracksMeta(DAAPIModule):
     def openPersonalCase(self, value, tabNumber):
         self._printOverrideError('openPersonalCase')
 
-    def as_setTankmenS(self, tankmenCount, placesCount, tankmenInBarracks, berthPrice, actionPriceData, berthBuyCount, tankmanArr):
+    def as_setTankmenS(self, tankmenCount, placesCount, tankmenInBarracks, tankmanArr):
         if self._isDAAPIInited():
-            return self.flashObject.as_setTankmen(tankmenCount, placesCount, tankmenInBarracks, berthPrice, actionPriceData, berthBuyCount, tankmanArr)
+            return self.flashObject.as_setTankmen(tankmenCount, placesCount, tankmenInBarracks, tankmanArr)
 
     def as_updateTanksListS(self, provider):
         if self._isDAAPIInited():

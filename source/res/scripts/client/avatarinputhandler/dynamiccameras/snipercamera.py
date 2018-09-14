@@ -261,7 +261,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             binocularsOffset = self.__calcAimOffset()
             if replayCtrl.isRecording:
                 replayCtrl.setAimClipPosition(aimOffset)
-        self.__aim.offset((aimOffset.x, aimOffset.y))
+        self.__aim.offset(aimOffset)
         self.__binoculars.setMaskCenter(binocularsOffset.x, binocularsOffset.y)
         player = BigWorld.player()
         if allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrix.translation) or player.isGunLocked):

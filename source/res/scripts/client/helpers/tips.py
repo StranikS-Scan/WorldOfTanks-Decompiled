@@ -1,12 +1,26 @@
 # Embedded file name: scripts/client/helpers/tips.py
-import random
 import re
-from debug_utils import LOG_CURRENT_EXCEPTION
+import sys
+from collections import defaultdict
+from gui.shared.utils.functions import rnd_choice_loop
 from helpers import i18n
+from debug_utils import LOG_CURRENT_EXCEPTION
+ALL = 'all'
+INFINITY_STR_VALUE = 'infinity'
+TIPS_PATTERN_PARTS_COUNT = 7
+BATTLE_CONDITIONS_PARTS_COUNT = 2
 
-def _readNumberOfTips():
-    result = 0
-    tipsPattern = re.compile('^tip(\\d+)$')
+def getTipsIterator(battlesCount, vehicleType, vehicleNation, vehicleLvl):
+    tipsItems = _getConditionedTips(battlesCount, vehicleType, vehicleNation, vehicleLvl)
+    if len(tipsItems) > 0:
+        return rnd_choice_loop(*tipsItems)
+    else:
+        return None
+
+
+def _readTips():
+    result = defaultdict(lambda : defaultdict(lambda : defaultdict(lambda : defaultdict(list))))
+    tipsPattern = re.compile('^tip(\\d+)')
     try:
         translator = i18n.g_translators['tips']
     except IOError:
@@ -17,18 +31,43 @@ def _readNumberOfTips():
         if len(key) > 0:
             sreMatch = tipsPattern.match(key)
             if sreMatch is not None and len(sreMatch.groups()) > 0:
-                number = int(sreMatch.groups()[0])
-                result = max(number, result)
+                strTipsConditions = key.split('/')
+                if len(strTipsConditions) == TIPS_PATTERN_PARTS_COUNT:
+                    tipID, status, group, battlesCountConditions, vehicleTypeCondition, nation, vehLevel = strTipsConditions
+                    battlesCountConditions = battlesCountConditions.split('_')
+                    if len(battlesCountConditions) == BATTLE_CONDITIONS_PARTS_COUNT:
+                        minBattlesCount = _getIntValue(battlesCountConditions[0])
+                        maxBattlesCount = _getIntValue(battlesCountConditions[1])
+                        if minBattlesCount is not None and maxBattlesCount is not None:
+                            battleCondition = (minBattlesCount, maxBattlesCount)
+                            result[battleCondition][vehicleTypeCondition][nation][vehLevel].append((i18n.makeString('#tips:%s' % status), i18n.makeString('#tips:%s' % key)))
 
     return result
 
 
-def getNextNumberOfTip():
-    return random.randint(0, g_totalNumberOfTips)
+def _getIntValue(strCondition):
+    if strCondition == INFINITY_STR_VALUE:
+        return sys.maxint
+    else:
+        intValue = None
+        try:
+            intValue = int(strCondition)
+        except ValueError:
+            LOG_CURRENT_EXCEPTION()
+
+        return intValue
+        return
 
 
-def getTip():
-    return i18n.makeString('#tips:tip{0:d}'.format(getNextNumberOfTip()))
+_predefinedTips = _readTips()
 
+def _getConditionedTips(battlesCount, vehicleType, vehicleNation, vehicleLvl):
+    result = []
+    battlesCountConditions = filter(lambda ((minBattlesCount, maxBattlesCount), item): minBattlesCount <= battlesCount <= maxBattlesCount, _predefinedTips.iteritems())
+    for _, vehicleTypeConditions in battlesCountConditions:
+        for vehType in (vehicleType, ALL):
+            for nation in (vehicleNation, ALL):
+                for level in (str(vehicleLvl), ALL):
+                    result.extend(vehicleTypeConditions[vehType][nation][level])
 
-g_totalNumberOfTips = _readNumberOfTips()
+    return result

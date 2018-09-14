@@ -3,7 +3,8 @@ from Event import Event
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
+from gui.Scaleform.framework.managers.TextManager import TextIcons
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
@@ -59,7 +60,7 @@ class _FortClanStatisticsData(FortListener, AppRef):
         sortiesStats = dossier.getSortiesStats()
         totalRes = sortiesStats.getLoot()
         defresValueStr = str(BigWorld.wg_getIntegralFormat(totalRes)) + ' '
-        formattedDefresValue = self.app.utilsManager.textManager.concatStyles(((TextType.DEFRES_TEXT, defresValueStr), (TextIcons.NUT_ICON,)))
+        formattedDefresValue = self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.DEFRES_TEXT, defresValueStr), (TextIcons.NUT_ICON,)))
         middleBattlesCount = BigWorld.wg_getIntegralFormat(sortiesStats.getMiddleBattlesCount())
         championshipBattlesCount = BigWorld.wg_getIntegralFormat(sortiesStats.getChampionBattlesCount())
         absoluteBattlesCount = BigWorld.wg_getIntegralFormat(sortiesStats.getAbsoluteBattlesCount())
@@ -75,7 +76,7 @@ class _FortClanStatisticsData(FortListener, AppRef):
                                 'label': ms(FORTIFICATIONS.CLANSTATS_PARAMS_SORTIE_DEFRES_LOOTINSORTIES_LABEL)}]})
 
     def __getMiddleTitleText(self, msg):
-        return self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, msg)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, msg)
 
     def __updateDefenceData(self):
         dossier = self.fortCtrl.getFort().getFortDossier()
@@ -120,7 +121,7 @@ class _FortClanStatisticsData(FortListener, AppRef):
                                 'label': ms(FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_BATTLES_PROFIT_LABEL)}]})
 
     def __getFormattedDefresValue(self, value):
-        return self.app.utilsManager.textManager.concatStyles(((TextType.DEFRES_TEXT, ProfileUtils.getAvailableValueStr(value) + ' '), (TextIcons.NUT_ICON,)))
+        return self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.DEFRES_TEXT, ProfileUtils.getAvailableValueStr(value) + ' '), (TextIcons.NUT_ICON,)))
 
     def onWindowClose(self):
         self.destroy()

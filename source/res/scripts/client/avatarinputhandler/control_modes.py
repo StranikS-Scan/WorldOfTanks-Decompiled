@@ -28,7 +28,6 @@ import VideoCamera
 from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera
 from items.vehicles import VEHICLE_CLASS_TAGS
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
-from gui.shared.utils.graphics import getScaleByIndex
 _ARCADE_CAM_PIVOT_POS = Math.Vector3(0, 4, 3)
 
 class IControlMode(object):
@@ -76,6 +75,9 @@ class IControlMode(object):
         pass
 
     def getAimingMode(self, mode):
+        pass
+
+    def resetAimingMode(self):
         pass
 
     def getDesiredShotPoint(self):
@@ -145,11 +147,11 @@ class _GunControlMode(IControlMode):
 
     def enable(self, **args):
         self._isEnabled = True
-        ctrlState = args.get('ctrlState')
-        self._gunMarker.enable(ctrlState.get('gunMarker', None))
         self._aimingMode = args.get('aimingMode', self._aimingMode)
         if self._aim is not None:
             self._aim.enable()
+        ctrlState = args.get('ctrlState')
+        self._gunMarker.enable(ctrlState.get('gunMarker', None))
         return
 
     def disable(self):
@@ -190,6 +192,9 @@ class _GunControlMode(IControlMode):
         else:
             self._aimingMode &= -1 - mode
 
+    def resetAimingMode(self):
+        self._aimingMode = 0
+
     def getDesiredShotPoint(self):
         if not self._isEnabled:
             raise AssertionError
@@ -224,8 +229,22 @@ class _GunControlMode(IControlMode):
         self._aih.onSetReloadingPercents += self._gunMarker.setReloadingInPercent
 
 
+class CameraLocationPoint():
+    name = property(lambda self: self.__name)
+    matrix = property(lambda self: self.__matrix)
+
+    def __init__(self, name, matrix):
+        self.name = name
+        self.matrix = matrix
+
+    @staticmethod
+    def keyForSortLocationPoint(point):
+        return point.name
+
+
 class VideoCameraControlMode(_GunControlMode):
     curVehicleID = property(lambda self: self.__curVehicleID)
+    __locationPoints = []
 
     def __init__(self, dataSection, avatarInputHandler):
         super(VideoCameraControlMode, self).__init__(avatarInputHandler)
@@ -235,6 +254,15 @@ class VideoCameraControlMode(_GunControlMode):
         self.__showGunMarker = False
         self._cam = VideoCamera.VideoCamera(cameraDataSection)
         self.__curVehicleID = None
+        locationXmlPath = 'spaces/' + BigWorld.player().arena.arenaType.geometryName + '/locations.xml'
+        xmlSec = ResMgr.openSection(locationXmlPath)
+        if xmlSec is not None:
+            for name, section in xmlSec.items():
+                if name == 'bookmark':
+                    matrix = section.readMatrix('view', Math.Matrix())
+                    point = CameraLocationPoint(section.readString('name', ''), matrix)
+                    self.__locationPoints.append(point)
+
         return
 
     def enable(self, **args):
@@ -260,6 +288,18 @@ class VideoCameraControlMode(_GunControlMode):
                     self._gunMarker.setGUIVisible(self.__showGunMarker)
                     return True
             return False
+
+    def teleport(self, index):
+        raise index > 0 and index <= len(self.__locationPoints) or AssertionError('Out of range')
+        self._cam.setViewMatrix(self.__locationPoints[index - 1].matrix)
+
+    def teleportByName(self, name):
+        for point in self.__locationPoints:
+            if point.name == name:
+                self._cam.setViewMatrix(point.matrix)
+                return
+
+        raise False or AssertionError('Location with name %s not found' % name)
 
     def handleMouseEvent(self, dx, dy, dz):
         self._cam.handleMouseEvent(dx, dy, dz)
@@ -446,7 +486,8 @@ class ArcadeControlMode(_GunControlMode):
         self.__canShot = False
         self.__isArenaStarted = False
         self.__sightOffset = list(self._aim.offset())
-        self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', False)
+        self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.IS_DEVELOPMENT)
+        self.__videoControlModeAvailable &= BattleReplay.g_replayCtrl.isPlaying or constants.IS_DEVELOPMENT
 
     def create(self):
         self._cam.create(_ARCADE_CAM_PIVOT_POS, self.onChangeControlModeByScroll)
@@ -489,7 +530,7 @@ class ArcadeControlMode(_GunControlMode):
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F2:
             self._aih.onControlModeChanged('cat', camMatrix=self._cam.camera.matrix)
             return True
-        elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and BattleReplay.g_replayCtrl.isPlaying and self.__videoControlModeAvailable:
+        elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and self.__videoControlModeAvailable:
             self._aih.onControlModeChanged('video', prevModeName='arcade', camMatrix=self._cam.camera.matrix)
             return True
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
@@ -929,7 +970,7 @@ class PostMortemControlMode(IControlMode):
         self.__isObserverMode = False
         self.__isBackwardSwitching = False
         self.__isSortingModeInited = False
-        self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', False)
+        self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.IS_DEVELOPMENT)
         return
 
     def prerequisites(self):
@@ -1480,7 +1521,7 @@ class _SuperGunMarker():
         else:
             self.__gm1 = _FlashGunMarker(self.GUN_MARKER_CLIENT, mode)
         if isStrategic:
-            self.__gm2 = _SPGFlashGunMarker(_PlayerGunInformation.getCurrentShotInfo, _PlayerGunInformation.updateServerMarkerDispersion, self.GUN_MARKER_SERVER, True)
+            self.__gm2 = _SPGFlashGunMarker(_PlayerGunInformation.getCurrentShotInfo, _PlayerGunInformation.updateServerMarkerDispersion, self.GUN_MARKER_SERVER, True, True)
         else:
             self.__gm2 = _FlashGunMarker(self.GUN_MARKER_SERVER, mode, True)
 
@@ -1587,11 +1628,12 @@ class _SPGFlashGunMarker(Flash):
     _SWF_FILE_NAME = 'crosshair_strategic.swf'
     _SWF_SIZE = (620, 620)
 
-    def __init__(self, gunInfoFunc, dispersionUpdateFunc, key, isDebug = False):
+    def __init__(self, gunInfoFunc, dispersionUpdateFunc, key, isDebug = False, enableSmoothFiltering = False):
         Flash.__init__(self, self._SWF_FILE_NAME, self._FLASH_CLASS)
         self.__curShotInfoFunc = gunInfoFunc
         self.__dispersionUpdateFunc = dispersionUpdateFunc
         self.key = key
+        self.component.wg_enableSmoothFiltering = enableSmoothFiltering
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_GunMarker
         self.component.focus = False
@@ -1623,8 +1665,7 @@ class _SPGFlashGunMarker(Flash):
         self.component.wg_sizeConstraints = Math.Vector2(50.0, 100.0)
         self.component.wg_usePyCollDetect = False
         self.component.wg_setRelaxTime(0.1)
-        scale = getScaleByIndex(g_settingsCore.getSetting('interfaceScale'))
-        self.component.wg_setPointsBaseScale(scale)
+        self.component.wg_setPointsBaseScale(g_settingsCore.interfaceScale.get())
         self.active(True)
         self.__reload = {'start_time': 0,
          'duration': 0,
@@ -1741,10 +1782,15 @@ class _FlashGunMarker(Flash):
         self.flashSize = self._SWF_SIZE
         self.mode = mode
         self.key = key
+        self.__replSwitchTime = 0.0
+        from account_helpers.settings_core.SettingsCore import g_settingsCore
+        self.settingsCore = weakref.proxy(g_settingsCore)
         self.__curSize = 0.0
         self.__animMat = None
         self.__applyFilter = applyFilter
         self.__scaleNeedToUpdate = True
+        self.aim = {'arcade': self.settingsCore.getSetting('arcade'),
+         'sniper': self.settingsCore.getSetting('sniper')}
         return
 
     def prerequisites(self):
@@ -1756,10 +1802,10 @@ class _FlashGunMarker(Flash):
          'size': self.__curSize}
 
     def create(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        type = 'color_blind' if g_settingsCore.getSetting('isColorBlind') else 'default'
+        type = 'color_blind' if self.settingsCore.getSetting('isColorBlind') else 'default'
         self._curColors = self._colorsByPiercing[type]
-        g_settingsCore.onSettingsChanged += self.applySettings
+        self.settingsCore.onSettingsChanged += self.applySettings
+        self.settingsCore.interfaceScale.onScaleChanged += self.onScaleChanged
         self.component.wg_sizeConstraint = (10, 300)
         self.component.wg_setStartSize(10.0)
         self.active(True)
@@ -1767,18 +1813,20 @@ class _FlashGunMarker(Flash):
          'duration': 0,
          'isReloading': False}
         self.onRecreateDevice()
+        self.onScaleChanged()
 
     def applySettings(self, diff):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
+        if type(diff) is dict:
+            self.aim['arcade'] = diff.get('arcade', self.aim['arcade'])
+            self.aim['sniper'] = diff.get('sniper', self.aim['sniper'])
         if self.mode in diff:
-            for type in ('arcade', 'sniper'):
-                if type in diff:
-                    settings = g_settingsCore.getSetting(type)
+            for mode in ('arcade', 'sniper'):
+                if mode in diff:
+                    settings = self.aim[mode]
                     current = settings['gunTag']
                     currentType = settings['gunTagType']
-                    scale = getScaleByIndex(g_settingsCore.getSetting('interfaceScale'))
                     self.__scaleNeedToUpdate = True
-                    self.call('Crosshair.setGunTag', [current, currentType, scale])
+                    self.call('Crosshair.setGunTag', [current, currentType, self.settingsCore.interfaceScale.get()])
                     current = settings['mixing']
                     currentType = settings['mixingType']
                     self.call('Crosshair.setMixing', [current, currentType])
@@ -1786,15 +1834,13 @@ class _FlashGunMarker(Flash):
                         self.call('Crosshair.setFilter')
 
         if 'isColorBlind' in diff:
-            type = 'color_blind' if diff['isColorBlind'] else 'default'
-            self._curColors = self._colorsByPiercing[type]
-        if 'interfaceScale' in diff:
-            self.__scaleNeedToUpdate = True
+            mode = 'color_blind' if diff['isColorBlind'] else 'default'
+            self._curColors = self._colorsByPiercing[mode]
 
     def destroy(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.applySettings
-        self.active(False)
+        self.settingsCore.onSettingsChanged -= self.applySettings
+        self.settingsCore.interfaceScale.onScaleChanged -= self.onScaleChanged
+        self.close()
         self.__animMat = None
         return
 
@@ -1808,7 +1854,10 @@ class _FlashGunMarker(Flash):
                 rs = state['reload']
                 self.setReloading(rs['duration'], rs['startTime'], rs['isReloading'], correction=rs.get('correction'), switched=True)
             self.setPosition(state['pos1'])
-            self.component.wg_updateSize(state['size'], 0)
+            self.component.wg_updateSize(state['size'], 0.0)
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isClientReady:
+            self.__replSwitchTime = 0.2
         return
 
     def disable(self):
@@ -1851,7 +1900,6 @@ class _FlashGunMarker(Flash):
         self.call('Crosshair.setReloadingAsPercent', [percent, isReloading])
 
     def update(self, pos, dir, size, relaxTime, collData):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         if not self.component.visible:
             return
         else:
@@ -1860,31 +1908,36 @@ class _FlashGunMarker(Flash):
             self.__setupMatrixAnimation()
             self.__animMat.keyframes = ((0.0, Math.Matrix(self.__animMat)), (relaxTime, m))
             self.__animMat.time = 0.0
-            self.__curSize = _calcScale(m, size) * (GUI.screenResolution()[0] * 0.5)
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isPlaying and replayCtrl.isClientReady:
                 s = replayCtrl.getArcadeGunMarkerSize()
                 if s != -1.0:
-                    self.__curSize = s
+                    size = s
             elif replayCtrl.isRecording:
                 if replayCtrl.isServerAim and self.key == _SuperGunMarker.GUN_MARKER_SERVER:
-                    replayCtrl.setArcadeGunMarkerSize(self.__curSize)
+                    replayCtrl.setArcadeGunMarkerSize(size)
                 elif self.key == _SuperGunMarker.GUN_MARKER_CLIENT:
-                    replayCtrl.setArcadeGunMarkerSize(self.__curSize)
+                    replayCtrl.setArcadeGunMarkerSize(size)
+            self.__curSize = _calcScale(m, size) * (GUI.screenResolution()[0] * 0.5)
             if collData is None or collData[0].health <= 0 or collData[0].publicInfo['team'] == BigWorld.player().team:
                 self.call('Crosshair.setMarkerType', ['normal'])
             else:
                 self._changeColor(pos, collData[2])
-            self.component.wg_updateSize(self.__curSize, relaxTime)
+            if self.__replSwitchTime > 0.0:
+                self.__replSwitchTime -= relaxTime
+                self.component.wg_updateSize(self.__curSize, 0.0)
+            else:
+                self.component.wg_updateSize(self.__curSize, relaxTime)
             if self.__scaleNeedToUpdate:
-                scale = getScaleByIndex(g_settingsCore.getSetting('interfaceScale'))
-                self.call('Crosshair.setScale', [scale])
+                self.call('Crosshair.setScale', [self.settingsCore.interfaceScale.get()])
                 self.__scaleNeedToUpdate = False
             return
 
     def onRecreateDevice(self):
-        self.__scaleNeedToUpdate = True
         self.component.size = GUI.screenResolution()
+
+    def onScaleChanged(self, scale = None):
+        self.__scaleNeedToUpdate = True
 
     def setPosition(self, pos):
         m = Math.Matrix()

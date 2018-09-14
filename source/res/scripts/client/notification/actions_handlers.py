@@ -112,9 +112,11 @@ class ShowFortBattleResultsHandler(_ShowArenaResultHandler):
 
     def _showWindow(self, notification, data):
         if data:
-            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': data}), scope=EVENT_BUS_SCOPE.LOBBY)
+            battleResultData = data.get('battleResult', None)
+            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': battleResultData}), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self._updateNotification(notification)
+        return
 
 
 class ShowTutorialBattleHistoryHandler(_ShowArenaResultHandler):
@@ -188,7 +190,7 @@ class AcceptPrbInviteHandler(_ActionHandler):
         super(AcceptPrbInviteHandler, self).handleAction(model, entityID, action)
         yield lambda callback: callback(None)
         postActions = []
-        invite = self.prbInvites.getReceivedInvite(entityID)
+        invite = self.prbInvites.getInvite(entityID)
         state = self.prbDispatcher.getFunctionalState()
         if state.doLeaveToAcceptInvite(invite.type):
             postActions.append(actions.LeavePrbModalEntity())
@@ -251,7 +253,9 @@ class AcceptPrbFortInviteHandler(_ActionHandler):
             LOG_ERROR('Notification not found', NOTIFICATION_TYPE.MESSAGE, entityID)
             return
         else:
-            battleID, peripheryID = notification.getSavedData()
+            customData = notification.getSavedData()
+            battleID = customData.get('battleID')
+            peripheryID = customData.get('peripheryID')
             if battleID is not None and peripheryID is not None:
                 if battleID == getBattleID():
                     fort_events.showFortBattleRoomWindow()

@@ -4,6 +4,7 @@ from gui.shared.utils.decorators import ReprInjector
 from messenger.m_constants import USER_TAG
 from messenger.proto.xmpp.gloox_constants import PRESENCES_ORDER, PRESENCE
 from messenger.proto.xmpp.wrappers import WGExtsInfo
+from messenger import g_settings
 
 @ReprInjector.simple('priority', 'message', 'presence', ('__wgExts', 'exts'))
 
@@ -23,7 +24,7 @@ class Resource(object):
         tags = set()
         if self.presence == PRESENCE.DND:
             tags.add(USER_TAG.PRESENCE_DND)
-        info = self.__wgExts.IGR
+        info = self.__wgExts.client
         if info:
             if info.igrID == IGR_TYPE.BASE:
                 tags.add(USER_TAG.IGR_BASE)
@@ -33,6 +34,9 @@ class Resource(object):
         if info and info.isChatBan():
             tags.add(USER_TAG.BAN_CHAT)
         return tags
+
+    def getClientInfo(self):
+        return self.__wgExts.client
 
     def getClanInfo(self):
         return self.__wgExts.clan
@@ -47,13 +51,15 @@ class Resource(object):
         return other
 
 
-def priorityComparator(resource, other):
+def priorityComparator(resItem, otherItem):
+    resource = resItem[1]
+    other = otherItem[1]
     if resource.presence ^ other.presence:
         result = cmp(PRESENCES_ORDER.index(resource.presence), PRESENCES_ORDER.index(other.presence))
     elif resource.priority ^ other.priority:
         result = cmp(other.priority, resource.priority)
     else:
-        result = cmp(resource.name, other.name)
+        result = 0
     return result
 
 
@@ -101,6 +107,24 @@ class ResourceDictionary(object):
         return not self.__resources
 
     def getHighestPriority(self):
+        self.__initHighestData()
+        if self.__highest:
+            return self.__highest[1]
+        else:
+            return None
+
+    def getHighestPriorityID(self):
+        self.__initHighestData()
+        if self.__highest:
+            return self.__highest[0]
+        else:
+            return None
+
+    def __initHighestData(self):
         if len(self.__resources) > 0 and self.__highest is None:
-            self.__highest = sorted(self.__resources.values(), cmp=priorityComparator)[0]
-        return self.__highest
+            wotId = g_settings.server.XMPP.resource
+            if wotId in self.__resources:
+                self.__highest = (wotId, self.__resources[wotId])
+            elif self.__highest is None:
+                self.__highest = sorted(self.__resources.items(), cmp=priorityComparator)[0]
+        return

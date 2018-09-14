@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleBuyWindow.py
 import BigWorld
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter
 from account_helpers.AccountSettings import AccountSettings, VEHICLE_BUY_WINDOW_SETTINGS
 from debug_utils import LOG_ERROR
@@ -95,6 +97,7 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
                  'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
                  'newPrice': (0, slotPrice),
                  'oldPrice': (0, slotDefaultPrice)}
+            tankmenLabel = i18n.makeString(DIALOGS.BUYVEHICLEDIALOG_TANKMENLABEL, count=text_styles.titleFont(i18n.makeString(DIALOGS.BUYVEHICLEDIALOG_TANKMEN) + ' ' + str(tankMenCount)))
             initData = {'expanded': windowExpanded,
              'name': vehicle.userName,
              'longName': vehicle.longUserName,
@@ -104,7 +107,7 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
              'nation': self.nationID,
              'level': vehicle.level,
              'isElite': vehicle.isElite,
-             'tankmenCount': tankMenCount,
+             'tankmenLabel': tankmenLabel,
              'studyPriceCredits': totalTankMenStudePrice[0],
              'studyPriceCreditsActionData': studyPriceCreditsActionData,
              'studyPriceGold': totalTankMenStudePrice[1],

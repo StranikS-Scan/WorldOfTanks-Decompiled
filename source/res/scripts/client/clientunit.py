@@ -5,7 +5,7 @@ from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG_DEV, LOG_CURRENT_EXCEPTION
 import Event
 import fortified_regions
-from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, UNIT_STATE, LEADER_SLOT
+from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, UNIT_FLAGS, LEADER_SLOT
 from gui.shared.utils import makeTupleByDict
 PLAYER_ID_CHR = '<q'
 VEH_LEN_CHR = '<H'
@@ -36,7 +36,7 @@ class _SortieExtra(namedtuple('_SortieExtra', ('clanEquipments', 'lastEquipRev')
         return result
 
 
-class _FortBattleExtra(namedtuple('_FortBattleExtra', ('clanEquipments', 'lastEquipRev'))):
+class _FortBattleExtra(namedtuple('_FortBattleExtra', ('clanEquipments', 'lastEquipRev', 'canUseEquipments'))):
 
     def getConsumables(self):
         result = {}
@@ -55,7 +55,7 @@ class ClientUnit(UnitBase):
 
     def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', extras = '', packedUnit = ''):
         self.__eManager = Event.EventManager()
-        self.onUnitStateChanged = Event.Event(self.__eManager)
+        self.onUnitFlagsChanged = Event.Event(self.__eManager)
         self.onUnitReadyMaskChanged = Event.Event(self.__eManager)
         self.onUnitVehicleChanged = Event.Event(self.__eManager)
         self.onUnitSettingChanged = Event.Event(self.__eManager)
@@ -76,8 +76,8 @@ class ClientUnit(UnitBase):
         self.__eManager.clear()
         self._initClean()
 
-    def getState(self):
-        return self._state
+    def getFlags(self):
+        return self._flags
 
     def getReadyMask(self):
         return self._readyMask
@@ -181,6 +181,9 @@ class ClientUnit(UnitBase):
     def isSortie(self):
         return self._prebattleTypeID == PREBATTLE_TYPE.SORTIE
 
+    def isSquad(self):
+        return self._prebattleTypeID == PREBATTLE_TYPE.SQUAD
+
     def isFortBattle(self):
         return self._prebattleTypeID == PREBATTLE_TYPE.FORT_BATTLE
 
@@ -216,10 +219,10 @@ class ClientUnit(UnitBase):
         UnitBase.onUnitExtrasUpdate(self, updateStr)
         self.onUnitExtraChanged(self._extras)
 
-    def _setUnitState(self, state):
-        prevState = self._state
-        UnitBase._setUnitState(self, state)
-        self.onUnitStateChanged(prevState, self._state)
+    def _setUnitFlags(self, flags):
+        prevFlags = self._flags
+        UnitBase._setUnitFlags(self, flags)
+        self.onUnitFlagsChanged(prevFlags, self._flags)
 
     def _setReadyMask(self, mask):
         prevMask = self._readyMask

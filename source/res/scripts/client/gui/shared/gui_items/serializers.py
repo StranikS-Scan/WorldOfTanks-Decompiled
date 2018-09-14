@@ -1,9 +1,9 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/serializers.py
 import cPickle
 from items import tankmen
-from gui.shared.gui_items import _ICONS_MASK, Tankman
+from gui.shared.gui_items import _ICONS_MASK, Tankman, Vehicle
 
-def packTankmanSkill(skill):
+def packTankmanSkill(skill, isPermanent = False):
     if skill.roleType in tankmen.getSkillsConfig():
         roleIconPath = Tankman.getRoleSmallIconPath(skill.roleType)
     else:
@@ -19,7 +19,8 @@ def packTankmanSkill(skill):
      'isActive': skill.isActive,
      'isEnable': skill.isEnable,
      'roleType': skill.roleType,
-     'isPerk': skill.isPerk}
+     'isPerk': skill.isPerk,
+     'isPermanent': isPermanent}
 
 
 def packTankman(tankman, isCountPermanentSkills = True):
@@ -30,20 +31,22 @@ def packTankman(tankman, isCountPermanentSkills = True):
          'unicName': vDescr.name.replace(':', '-')}
 
     nativeVehicleData = {'typeCompDescr': tankman.vehicleNativeDescr.type.compactDescr,
-     'userName': tankman.vehicleNativeDescr.type.shortUserString,
+     'userName': Vehicle.getShortUserName(tankman.vehicleNativeDescr.type),
      'icon': vehicleIcon(tankman.vehicleNativeDescr),
      'iconContour': vehicleIcon(tankman.vehicleNativeDescr, 'contour/')}
     currentVehicleData = None
     if tankman.isInTank:
         currentVehicleData = {'inventoryID': tankman.vehicleInvID,
          'typeCompDescr': tankman.vehicleDescr.type.compactDescr,
-         'userName': tankman.vehicleDescr.type.shortUserString,
+         'userName': Vehicle.getShortUserName(tankman.vehicleDescr.type),
          'icon': vehicleIcon(tankman.vehicleDescr),
          'iconContour': vehicleIcon(tankman.vehicleDescr, 'contour/')}
     skills = []
-    for skill in tankman.skills:
-        if not (skill.name == 'brotherhood' and tankman.descriptor.isFemale and not isCountPermanentSkills):
-            skills.append(packTankmanSkill(skill))
+    tManFreeSkillsNum = tankman.descriptor.freeSkillsNumber
+    startSkillNumber = 0 if isCountPermanentSkills else tManFreeSkillsNum
+    tManSkills = tankman.skills
+    for i in range(startSkillNumber, len(tManSkills)):
+        skills.append(packTankmanSkill(tManSkills[i], isPermanent=True if i < tManFreeSkillsNum else False))
 
     return {'strCD': cPickle.dumps(tankman.strCD),
      'inventoryID': tankman.invID,

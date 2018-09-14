@@ -1,6 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceClanFilterPopover.py
 import time
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.LobbyContext import g_lobbyContext
+from gui.shared.fortifications.fort_helpers import adjustDefenceHoursListToLocal
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -22,10 +24,10 @@ class FortIntelligenceClanFilterPopover(View, FortIntelligenceClanFilterPopoverM
 
     def _populate(self):
         super(FortIntelligenceClanFilterPopover, self)._populate()
-        headerText = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_HEADER))
-        clanLevelText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_CLANLEVEL))
-        startHourRangeText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_STARTHOURRANGE))
-        availabilityText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_AVAILABILITY))
+        headerText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_HEADER))
+        clanLevelText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_CLANLEVEL))
+        startHourRangeText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_STARTHOURRANGE))
+        availabilityText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_AVAILABILITY))
         self.as_setDescriptionsTextS(headerText, clanLevelText, startHourRangeText, availabilityText)
         defaultButtonText = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_DEFAULTBUTTONTEXT)
         applyButtonText = _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANFILTERPOPOVER_APPLYBUTTONTEXT)
@@ -49,7 +51,8 @@ class FortIntelligenceClanFilterPopover(View, FortIntelligenceClanFilterPopoverM
          'startDefenseHour': startDefenseHour,
          'startDefenseMinutes': startDefenseMin,
          'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat(),
-         'isWrongLocalTime': self._isWrongLocalTime()}
+         'isWrongLocalTime': self._isWrongLocalTime(),
+         'skipValues': adjustDefenceHoursListToLocal(g_lobbyContext.getServerSettings().getForbiddenFortDefenseHours())}
         defenceStart, _ = self.fortCtrl.getFort().getLocalDefenceHour()
         if defenceStart != NOT_ACTIVATED:
             data['yourOwnClanStartDefenseHour'] = defenceStart

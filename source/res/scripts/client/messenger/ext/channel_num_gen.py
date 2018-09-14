@@ -3,14 +3,7 @@ import BigWorld
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui.shared.utils import CONST_CONTAINER
 from ids_generators import SequenceIDGenerator
-from messenger.m_constants import LAZY_CHANNEL, BATTLE_CHANNEL
-
-class PRIMARY_CHANNEL_ORDER(object):
-    LAZY = 1
-    SYSTEM = 2
-    OTHER = 3
-
-
+from messenger.m_constants import LAZY_CHANNEL, BATTLE_CHANNEL, PRIMARY_CHANNEL_ORDER
 _CHANNEL_LAZY_ORDER = {LAZY_CHANNEL.COMMON: 1,
  LAZY_CHANNEL.COMPANIES: 2,
  LAZY_CHANNEL.SPECIAL_BATTLES: 3}
@@ -25,7 +18,8 @@ _idGen = SequenceIDGenerator()
 _PRB_CLIENT_IDS = {}
 _PRB_CLIENT_COMBINED_IDS = {PREBATTLE_TYPE.SORTIE: PREBATTLE_TYPE.UNIT,
  PREBATTLE_TYPE.FORT_BATTLE: PREBATTLE_TYPE.UNIT,
- PREBATTLE_TYPE.CLUBS: PREBATTLE_TYPE.UNIT}
+ PREBATTLE_TYPE.CLUBS: PREBATTLE_TYPE.UNIT,
+ PREBATTLE_TYPE.SQUAD: PREBATTLE_TYPE.UNIT}
 for idx, prbType in enumerate(PREBATTLE_TYPE.RANGE):
     index = idx
     if prbType in _PRB_CLIENT_COMBINED_IDS:
@@ -38,13 +32,7 @@ _BATTLE_CLIENT_IDS = dict(((item.name, -(idx + 1 + 128)) for idx, item in enumer
 _SPECIAL_CLIENT_IDS = dict(((name, -(idx + 1 + 256)) for idx, name in enumerate(SPECIAL_CLIENT_WINDOWS.ALL())))
 
 def genOrder4Channel(channel):
-    primary = PRIMARY_CHANNEL_ORDER.OTHER
-    secondary = BigWorld.time()
-    if channel.getName() in LAZY_CHANNEL.ALL:
-        primary = PRIMARY_CHANNEL_ORDER.LAZY
-    elif channel.isSystem():
-        primary = PRIMARY_CHANNEL_ORDER.SYSTEM
-    return (primary, secondary)
+    return (channel.getPrimaryOrder(), BigWorld.time())
 
 
 def getOrder4Prebattle():

@@ -1,12 +1,42 @@
 # Embedded file name: scripts/common/debug_utils.py
-from collections import defaultdict
 import sys
-from functools import wraps
+from collections import defaultdict
 from warnings import warn_explicit
-from constants import IS_DEVELOPMENT, IS_CLIENT, IS_CELLAPP, IS_BASEAPP
 import BigWorld
+from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM
 _src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
 _g_logMapping = {}
+
+class LOG_LEVEL:
+    DEV = 1
+    ST = 2
+    CT = 3
+    SVR_RELEASE = 4
+    RELEASE = 5
+
+
+if CURRENT_REALM == 'DEV':
+    _logLevel = LOG_LEVEL.DEV
+elif CURRENT_REALM == 'ST':
+    _logLevel = LOG_LEVEL.ST
+elif CURRENT_REALM == 'CT':
+    _logLevel = LOG_LEVEL.CT
+elif IS_CLIENT:
+    _logLevel = LOG_LEVEL.RELEASE
+else:
+    _logLevel = LOG_LEVEL.SVR_RELEASE
+
+class _LogWrapper(object):
+
+    def __init__(self, logLevel):
+        self.__lvl = logLevel
+
+    def __call__(self, func):
+        if self.__lvl >= _logLevel:
+            return func
+        else:
+            return lambda *args: None
+
 
 class CriticalError(BaseException):
     pass
@@ -55,6 +85,7 @@ def init():
      'HACK': BigWorld.logHack}
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def CRITICAL_ERROR(msg, *kargs):
     msg = '{0}:{1}:{2}'.format(_makeMsgHeader(sys._getframe(1)), msg, kargs)
     BigWorld.logCritical('CRITICAL', msg, None)
@@ -70,6 +101,7 @@ def CRITICAL_ERROR(msg, *kargs):
     return
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_CURRENT_EXCEPTION():
     from traceback import format_exc
     msg = _makeMsgHeader(sys._getframe(1)) + '\n' + format_exc()
@@ -77,6 +109,7 @@ def LOG_CURRENT_EXCEPTION():
     return
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
     sys.stderr.write('[%s] (%s, %d):' % ('EXCEPTION', orgSource, orgLineno))
     from sys import exc_info
@@ -97,142 +130,144 @@ def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
         sys.stderr.write(ln.replace(wrapperName, orgName))
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_CODEPOINT_WARNING(*kargs):
     _doLog('WARNING', 'this code point should have never been reached', kargs)
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_ERROR(msg, *kargs):
     _doLog('ERROR', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_ERROR_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('ERROR', msg, kargs)
+    _doLog('ERROR', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_WARNING(msg, *kargs):
     _doLog('WARNING', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_NOTE(msg, *kargs):
     _doLog('NOTE', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_DEBUG(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('DEBUG', msg, kargs)
+    _doLog('DEBUG', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_DEBUG_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('DEBUG', msg, kargs)
+    _doLog('DEBUG', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_NESTE(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('NESTE', msg, kargs)
+    _doLog('NESTE', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_MX(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('MX', msg, kargs)
+    _doLog('MX', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_MX_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('MX', msg, kargs)
+    _doLog('MX', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_DZ(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('DZ', msg, kargs)
+    _doLog('DZ', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_TU(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('TU', msg, kargs)
+    _doLog('TU', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_RF(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('RF', msg, kargs)
+    _doLog('RF', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_DAN(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('DAN', msg, kargs)
+    _doLog('DAN', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_DAN_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('DAN', msg, kargs)
+    _doLog('DAN', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_VLK_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('VLK', msg, kargs)
+    _doLog('VLK', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_VLK(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('VLK', msg, kargs)
+    _doLog('VLK', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_SK_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('SK', msg, kargs)
+    _doLog('SK', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_SK(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('SK', msg, kargs)
+    _doLog('SK', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_OGNICK_DEV(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('OGNICK', msg, kargs)
+    _doLog('OGNICK', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_OGNICK(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('OGNICK', msg, kargs)
+    _doLog('OGNICK', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_MK(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('MK', msg, kargs)
+    _doLog('MK', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
 def LOG_EZ(msg, *kargs):
-    if IS_DEVELOPMENT:
-        _doLog('JKqq', msg, kargs)
+    _doLog('JKqq', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_IG(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('IG', msg, kargs)
+    _doLog('IG', msg, kargs)
 
 
-if IS_DEVELOPMENT:
-
-    def LOG_SVAN_DEV(fmt, *args):
-        _doLogFmt('SVAN', fmt, *args)
-
-
-else:
-
-    def LOG_SVAN_DEV(*args, **kwargs):
-        pass
+@_LogWrapper(LOG_LEVEL.DEV)
+def LOG_SVAN_DEV(fmt, *args):
+    _doLogFmt('SVAN', fmt, *args)
 
 
+@_LogWrapper(LOG_LEVEL.DEV)
+def LOG_AQ(msg, *kargs):
+    _doLog('MRAQ', msg, kargs)
+
+
+@_LogWrapper(LOG_LEVEL.CT)
 def LOG_GUI(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('GUI', msg, kargs)
+    _doLog('GUI', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.SVR_RELEASE)
 def LOG_VOIP(msg, *kargs):
-    if IS_DEVELOPMENT or not IS_CLIENT:
-        _doLog('VOIP', msg, kargs)
+    _doLog('VOIP', msg, kargs)
 
 
 def FLUSH_LOG():
@@ -240,10 +275,12 @@ def FLUSH_LOG():
     BigWorld.flushPythonLog()
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_UNEXPECTED(msg, *kargs):
     _doLog('LOG_UNEXPECTED', msg, kargs)
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_WRONG_CLIENT(entity, *kargs):
     if hasattr(entity, 'id'):
         entity = entity.id
@@ -255,7 +292,7 @@ def _doLog(category, msg, args = None):
     header = _makeMsgHeader(sys._getframe(2))
     logFunc = _g_logMapping.get(category, None)
     if not logFunc:
-        logFunc = BigWorld.logInfo
+        logFunc = BigWorld.logDebug
     if args:
         output = ' '.join(map(str, [header, msg, args]))
     else:
@@ -265,7 +302,12 @@ def _doLog(category, msg, args = None):
 
 
 def _makeMsgHeader(frame):
-    return '(%s, %d):' % (frame.f_code.co_filename, frame.f_lineno)
+    filename = frame.f_code.co_filename
+    trim_to, trim_to_len = _src_file_trim_to
+    idx = filename.find(trim_to)
+    if idx != -1:
+        filename = filename[idx + trim_to_len:]
+    return '(%s, %d):' % (filename, frame.f_lineno)
 
 
 def _doLogFmt(prefix, fmt, *args):

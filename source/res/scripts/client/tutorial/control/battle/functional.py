@@ -310,7 +310,7 @@ class FunctionalShowMarker(FunctionalEffect):
         entityID = self._tutorial.getVars().get(data.getVarRef())
         marker = None
         root = self._gui.getGuiRoot()
-        vMarkers = getattr(root, 'vMarkersManager', None)
+        vMarkers = getattr(root, 'markersManager', None)
         minimap = getattr(root, 'minimap', None)
         if vMarkers is None:
             LOG_ERROR('Markers manager is not defined')

@@ -9,9 +9,8 @@ from PlayerEvents import g_playerEvents
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
 from account_helpers import pwd_token
-from account_helpers.SteamAccount import g_steamAccount
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR
-from external_strings_utils import isAccountLoginValid, isPasswordValid, _LOGIN_NAME_MIN_LENGTH, isAccountNameValid, _ACCOUNT_NAME_MIN_LENGTH_REG
+from external_strings_utils import isAccountLoginValid, isPasswordValid, _LOGIN_NAME_MIN_LENGTH
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity
 from gui import SystemMessages, GUI_SETTINGS, makeHtmlString
@@ -39,7 +38,7 @@ class LoginDispatcher(DisposableEntity, AppRef):
     __isAutoLoginTimerSet = False
     __isAutoLoginShow = False
     __APPLICATION_CLOSE_DELAY_DEFAULT = 15
-    EVENTS = ('onSetOptions', 'onAfterAutoLoginTimerClearing', 'onCancelQueue', 'onHandleUpdateClientSoftwareNeeded', 'onSetStatus', 'onHandleLoginRejectedRateLimited', 'onHandleActivating', 'onShowCreateAnAccountDialog', 'onHandleAutoRegisterInvalidPass', 'onHandleAutoRegisterActivating', 'onHandleAutoLoginQueryFailed', 'onHandleAutoRegisterJSONParsingFailed', 'onDoAutoLogin', 'onHandleKickWhileLogin', 'onAccountNameIsInvalid', 'onNicknameTooSmall', 'onHandleQueue', 'onConfigLoaded', 'onHandleInvalidPasswordWithToken', 'onLoginAppFailed')
+    EVENTS = ('onSetOptions', 'onAfterAutoLoginTimerClearing', 'onCancelQueue', 'onHandleUpdateClientSoftwareNeeded', 'onSetStatus', 'onHandleLoginRejectedRateLimited', 'onHandleActivating', 'onHandleAutoRegisterInvalidPass', 'onHandleAutoRegisterActivating', 'onHandleAutoLoginQueryFailed', 'onHandleAutoRegisterJSONParsingFailed', 'onDoAutoLogin', 'onHandleKickWhileLogin', 'onAccountNameIsInvalid', 'onNicknameTooSmall', 'onHandleQueue', 'onConfigLoaded', 'onHandleInvalidPasswordWithToken', 'onLoginAppFailed')
     __logOnFailedHandlers = {'LOGIN_REJECTED_BAN': 'handleLoginRejectedBan',
      'LOGIN_CUSTOM_DEFINED_ERROR': 'handleLoginRejectedBan',
      'LOGIN_REJECTED_RATE_LIMITED': 'handleLoginRejectedRateLimited',
@@ -63,7 +62,6 @@ class LoginDispatcher(DisposableEntity, AppRef):
     onSetStatus = Event()
     onHandleLoginRejectedRateLimited = Event()
     onHandleActivating = Event()
-    onShowCreateAnAccountDialog = Event()
     onHandleAutoRegisterInvalidPass = Event()
     onHandleAutoRegisterActivating = Event()
     onHandleAutoLoginQueryFailed = Event()
@@ -154,9 +152,7 @@ class LoginDispatcher(DisposableEntity, AppRef):
         if self.__closeCallbackId:
             BigWorld.cancelCallback(self.__closeCallbackId)
             self.__closeCallbackId = None
-        if g_steamAccount.isValid:
-            user, password = g_steamAccount.getCredentials()
-        elif not isSocialToken2Login:
+        if not isSocialToken2Login:
             if not self.__validateCredentials(user.lower().strip(), password.strip()):
                 self.__onLoggingTryingEndHdlr()
                 return
@@ -164,8 +160,6 @@ class LoginDispatcher(DisposableEntity, AppRef):
         self.__loginDataLoader.host = host
         self.__loginDataLoader.user = user
         self.__loginDataLoader.passLength = len(password)
-        if constants.IS_VIETNAM:
-            self.__pass = password
         self.__loginDataLoader.saveUserConfig(user, self.__loginDataLoader.host)
         password = pwd_token.generate(password)
         if len(self.__loginDataLoader.token2):
@@ -191,44 +185,12 @@ class LoginDispatcher(DisposableEntity, AppRef):
             else:
                 g_preDefinedHosts.stopCSISUpdate()
 
-    def onTryCreateAnAccount(self, nickname):
-        if len(nickname) < _ACCOUNT_NAME_MIN_LENGTH_REG:
-            self.onNicknameTooSmall()
-            return
-        elif not isAccountNameValid(nickname):
-            self.onAccountNameIsInvalid()
-            return
-        else:
-            host = g_preDefinedHosts.byUrl(self.__loginDataLoader.host)
-            password = pwd_token.generate(self.__pass)
-            urls = host.urlIterator
-            if urls is not None:
-                if urls.end():
-                    urls.cursor = 0
-                host = urls.next()
-                LOG_DEBUG('Gets next LoginApp url:', host)
-            LOG_DEBUG('Try create an account: url=%s; login=%s; password=%s; nickName=%s' % (host.url,
-             self.__loginDataLoader.user,
-             password,
-             nickname))
-            connectionManager.connect(host.url, self.__loginDataLoader.user, password, host.keyPath, nickName=nickname, token2='', isNeedSavingPwd=False)
-            return
-
     def resetToken(self):
         self.__loginDataLoader.passLength = 0
         self.__loginDataLoader.token2 = ''
 
     def isToken(self):
         return len(self.__loginDataLoader.token2) > 0
-
-    def steamLogin(self):
-        if LoginDispatcher.IS_FIRST_RUN and g_steamAccount.isValid:
-            LoginDispatcher.IS_FIRST_RUN = False
-            self.__loginDataLoader.loadUserConfig()
-            host = self.__loginDataLoader.host
-            if not g_preDefinedHosts.predefined(host):
-                host = g_preDefinedHosts.first().url
-            self.onLogin('', '', host)
 
     def setRememberPwd(self, remember):
         self.__loginDataLoader.rememberPwd = bool(remember)
@@ -290,7 +252,7 @@ class LoginDispatcher(DisposableEntity, AppRef):
 
     def handleLogOnSuccess(self, status, message):
         try:
-            LOG_DEBUG('handleLogOnSuccess', message)
+            LOG_DEBUG('handleLogOnSuccess')
             if not len(message):
                 return
             msg_dict = json.loads(message)
@@ -425,8 +387,6 @@ class LoginDispatcher(DisposableEntity, AppRef):
             self.handleLogOnFailed(status, message)
 
     def handleNotRegistered(self, status, message):
-        if constants.IS_VIETNAM:
-            self.onShowCreateAnAccountDialog()
         Waiting.close()
 
     def handleLoginCustomDefinedError(self, _, message):

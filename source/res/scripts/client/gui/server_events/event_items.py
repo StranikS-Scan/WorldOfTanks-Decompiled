@@ -763,6 +763,9 @@ class PotapovQuest(Quest):
     def isInProgress(self):
         return self.__pqProgress is not None and self.__pqProgress.selected and not self.needToGetReward()
 
+    def isAvailableToPerform(self):
+        return self.__pqProgress is not None and self.__pqProgress.unlocked and self.__pqProgress.state <= _PQS.UNLOCKED
+
     def hasProgress(self):
         return self.__pqProgress.state > _PQS.NONE
 

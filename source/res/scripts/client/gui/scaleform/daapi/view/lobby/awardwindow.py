@@ -66,6 +66,9 @@ class AwardAbstract(AppRef):
     def handleBodyButton(self):
         pass
 
+    def clear(self):
+        pass
+
 
 class AwardWindow(View, AbstractWindowView, AwardWindowMeta, AppRef):
 
@@ -111,3 +114,7 @@ class AwardWindow(View, AbstractWindowView, AwardWindowMeta, AppRef):
             data.update({'awardsBlock': ribbonInfo._asdict()})
         self.as_setDataS(data)
         return
+
+    def _dispose(self):
+        self.__award.clear()
+        super(AwardWindow, self)._dispose()

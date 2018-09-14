@@ -26,9 +26,9 @@ class HangarMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setCarouselEnabled(value)
 
-    def as_setupAmmunitionPanelS(self, maintenanceEnabled, customizationEnabled):
+    def as_setupAmmunitionPanelS(self, maintenanceEnabled, customizationEnabled, customizationTooltip):
         if self._isDAAPIInited():
-            return self.flashObject.as_setupAmmunitionPanel(maintenanceEnabled, customizationEnabled)
+            return self.flashObject.as_setupAmmunitionPanel(maintenanceEnabled, customizationEnabled, customizationTooltip)
 
     def as_setControlsVisibleS(self, value):
         if self._isDAAPIInited():

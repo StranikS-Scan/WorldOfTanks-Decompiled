@@ -2,12 +2,11 @@
 import BigWorld
 import constants
 from constants import PREBATTLE_TYPE
-from debug_utils import LOG_DEBUG
 from helpers import i18n
 from adisp import process
-from gui import game_control, GUI_SETTINGS
+from gui import game_control
 from gui import SystemMessages
-from gui.prb_control.context import prb_ctx, SendInvitesCtx
+from gui.prb_control.context import unit_ctx, SendInvitesCtx
 from gui.prb_control.prb_helpers import prbDispatcherProperty, prbFunctionalProperty
 from gui.shared import g_itemsCache, event_dispatcher as shared_events, utils
 from gui.Scaleform.locale.MENU import MENU
@@ -121,7 +120,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity, AppRef):
     @process
     def createSquad(self):
         user = self.usersStorage.getUser(self.databaseID)
-        result = yield self.prbDispatcher.create(prb_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=[self.databaseID], isForced=True))
+        result = yield self.prbDispatcher.create(unit_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=[self.databaseID], isForced=True))
         if result:
             self.__showInviteMessage(user)
 
@@ -343,7 +342,7 @@ class UserContextMenuInfo(object):
     @property
     def canCreateChannel(self):
         roamingCtrl = game_control.g_instance.roaming
-        if g_settings.server.XMPP.isEnabled() and GUI_SETTINGS.useXmppToCreatePrivate:
+        if g_settings.server.XMPP.isEnabled():
             canCreate = roamingCtrl.isSameRealm(self.databaseID)
         else:
             canCreate = not roamingCtrl.isInRoaming() and not roamingCtrl.isPlayerInRoaming(self.databaseID) and self.isOnline

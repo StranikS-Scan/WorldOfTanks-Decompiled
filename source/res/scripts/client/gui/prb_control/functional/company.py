@@ -15,7 +15,7 @@ from gui.prb_control.functional.decorators import vehicleAmmoCheck
 from gui.prb_control.functional.interfaces import IPrbListRequester
 from gui.prb_control.items import prb_seqs, prb_items
 from gui.prb_control.restrictions.limits import CompanyLimits
-from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER, FUNCTIONAL_EXIT, PREBATTLE_ACTION_NAME
+from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER, FUNCTIONAL_EXIT, PREBATTLE_ACTION_NAME, PREBATTLE_RESTRICTION
 from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.prb_control.functional.default import PrbEntry, PrbFunctional, IntroPrbFunctional, PrbRosterRequester
@@ -223,10 +223,10 @@ class CompanyFunctional(PrbFunctional):
     def canPlayerDoAction(self):
         isValid, notValidReason = True, ''
         team, assigned = decodeRoster(self.getRosterKey())
-        if self.isCreator():
+        if self.getTeamState().isInQueue() and assigned:
+            isValid, notValidReason = False, PREBATTLE_RESTRICTION.TEAM_IS_IN_QUEUE
+        elif self.isCreator():
             isValid, notValidReason = self._limits.isTeamValid()
-        elif self.getTeamState().isInQueue() and assigned:
-            isValid = False
         return (isValid, notValidReason)
 
     def doAction(self, action = None, dispatcher = None):

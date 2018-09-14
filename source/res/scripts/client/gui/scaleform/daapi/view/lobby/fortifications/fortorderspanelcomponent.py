@@ -7,13 +7,13 @@ from constants import CLAN_MEMBER_FLAGS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.daapi.view.meta.OrdersPanelMeta import OrdersPanelMeta
+from gui.Scaleform.daapi.view.meta.SlotsPanelMeta import SlotsPanelMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.utils.functions import makeTooltip
 
-class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
+class FortOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, AppRef):
     SLOTS_PROPS = {'slotsCount': -1,
      'groupCount': -1,
      'slotWidth': 50,
@@ -34,14 +34,14 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
 
     def _buildList(self):
         result = filter(None, map(self._buildData, self.BUILDINGS))
-        totalDifferentTypes = tuple(itertools.groupby(result, key=operator.itemgetter('orderType')))
+        totalDifferentTypes = tuple(itertools.groupby(result, key=operator.itemgetter('type')))
         propsData = dict(self.SLOTS_PROPS)
         if result:
             propsData['slotsCount'] = len(result)
         if totalDifferentTypes:
             propsData['groupCount'] = len(totalDifferentTypes) + 1
         self.as_setPanelPropsS(propsData)
-        self.as_setOrdersS(result)
+        self.as_setSlotsS(result)
         return
 
     def _buildData(self, buildingID, isRecharged = False):
@@ -55,11 +55,11 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
             builidngUID = self.getBuildingUIDbyID(buildingID)
             order = self.fortCtrl.getFort().getOrder(orderID)
             return {'fortOrderTypeID': order.orderID,
-             'orderGroup': order.group,
-             'orderType': order.type,
+             'group': order.group,
+             'type': order.type,
              'enabled': order.hasBuilding,
-             'orderID': orderUID,
-             'orderIcon': order.icon,
+             'id': orderUID,
+             'icon': order.icon,
              'count': order.count,
              'level': order.level,
              'inProgress': order.inProgress,
@@ -68,9 +68,10 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
              'cooldownPercent': order.getCooldownAsPercent(),
              'leftTime': order.getUsageLeftTime(),
              'isPermanent': order.isPermanent,
-             'isRecharged': isRecharged}
+             'isRecharged': isRecharged,
+             'isDischarging': True}
 
-    def getOrderTooltipBody(self, orderID):
+    def getSlotTooltipBody(self, orderID):
         header = i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(orderID))
         note = None
         fort = self.fortCtrl.getFort()
@@ -145,12 +146,12 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
     def onOrderChanged(self, orderTypeID, reason):
         g_fortSoundController.playReadyOrder()
         buildingTypeID, _, _, _ = self.fortCtrl.getFort().getOrderData(orderTypeID)
-        self.as_updateOrderS(self._buildData(buildingTypeID, reason == ORDER_UPDATE_REASON.ADDED))
+        self.as_updateSlotS(self._buildData(buildingTypeID, reason == ORDER_UPDATE_REASON.ADDED))
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
         data = self._buildData(buildingTypeID)
         if data is not None:
-            self.as_updateOrderS(data)
+            self.as_updateSlotS(data)
         return
 
     def onConsumablesChanged(self, unitMgrID):

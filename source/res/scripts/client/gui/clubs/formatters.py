@@ -99,8 +99,6 @@ class ClubAppsHtmlTextFormatter(object):
 
 
 def getRequestErrorMsg(errorMsg):
-    if errorMsg in ('UnitMgr not available', 'CLUBS ARE DISABLED'):
-        errorMsg = 'HAVE_NO_RIGHTS'
     key = '#system_messages:clubs/request/errors/%s' % errorMsg
     if doesTextExist(key):
         return makeString(key)

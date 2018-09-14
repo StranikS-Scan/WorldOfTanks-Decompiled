@@ -630,6 +630,10 @@ class DIALOGS(object):
     RALLY_LEAVE_MESSAGE = '#dialogs:rally/leave/message'
     RALLY_LEAVE_SUBMIT = '#dialogs:rally/leave/submit'
     RALLY_LEAVE_CANCEL = '#dialogs:rally/leave/cancel'
+    RALLY_GOTOINTRO_TITLE = '#dialogs:rally/goToIntro/title'
+    RALLY_GOTOINTRO_MESSAGE = '#dialogs:rally/goToIntro/message'
+    RALLY_GOTOINTRO_SUBMIT = '#dialogs:rally/goToIntro/submit'
+    RALLY_GOTOINTRO_CANCEL = '#dialogs:rally/goToIntro/cancel'
     SQUAD_LEAVE_TITLE = '#dialogs:squad/leave/title'
     SQUAD_LEAVE_MESSAGE = '#dialogs:squad/leave/message'
     SQUAD_LEAVE_SUBMIT = '#dialogs:squad/leave/submit'
@@ -670,6 +674,10 @@ class DIALOGS(object):
     REPORTBUG_MESSAGE = '#dialogs:reportBug/message'
     REPORTBUG_SUBMIT = '#dialogs:reportBug/submit'
     REPORTBUG_CANCEL = '#dialogs:reportBug/cancel'
+    FORTMODERNIZATIONABSOLUTEDIVISION_TITLE = '#dialogs:fortModernizationAbsoluteDivision/title'
+    FORTMODERNIZATIONABSOLUTEDIVISION_MESSAGE = '#dialogs:fortModernizationAbsoluteDivision/message'
+    FORTMODERNIZATIONABSOLUTEDIVISION_SUBMIT = '#dialogs:fortModernizationAbsoluteDivision/submit'
+    FORTMODERNIZATIONABSOLUTEDIVISION_CANCEL = '#dialogs:fortModernizationAbsoluteDivision/cancel'
     STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_TITLE = '#dialogs:staticFormation/staffView/removeMemberConfirmation/title'
     STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_MESSAGE = '#dialogs:staticFormation/staffView/removeMemberConfirmation/message'
     STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_SUBMIT = '#dialogs:staticFormation/staffView/removeMemberConfirmation/submit'
@@ -727,6 +735,11 @@ class DIALOGS(object):
     CLUBS_APP_CREATE_MESSAGE = '#dialogs:clubs/app/create/message'
     CLUBS_APP_CREATE_SUBMIT = '#dialogs:clubs/app/create/submit'
     CLUBS_APP_CREATE_CANCEL = '#dialogs:clubs/app/create/cancel'
+    QUESTSCONFIRMDIALOG_TITLE = '#dialogs:questsConfirmDialog/title'
+    QUESTSCONFIRMDIALOG_MESSAGE = '#dialogs:questsConfirmDialog/message'
+    QUESTSCONFIRMDIALOG_SUBMIT = '#dialogs:questsConfirmDialog/submit'
+    QUESTSCONFIRMDIALOG_CANCEL = '#dialogs:questsConfirmDialog/cancel'
+    QUESTSCONFIRMDIALOG_CHECKBOX = '#dialogs:questsConfirmDialog/checkBox'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1353,6 +1366,10 @@ class DIALOGS(object):
      RALLY_LEAVE_MESSAGE,
      RALLY_LEAVE_SUBMIT,
      RALLY_LEAVE_CANCEL,
+     RALLY_GOTOINTRO_TITLE,
+     RALLY_GOTOINTRO_MESSAGE,
+     RALLY_GOTOINTRO_SUBMIT,
+     RALLY_GOTOINTRO_CANCEL,
      SQUAD_LEAVE_TITLE,
      SQUAD_LEAVE_MESSAGE,
      SQUAD_LEAVE_SUBMIT,
@@ -1393,6 +1410,10 @@ class DIALOGS(object):
      REPORTBUG_MESSAGE,
      REPORTBUG_SUBMIT,
      REPORTBUG_CANCEL,
+     FORTMODERNIZATIONABSOLUTEDIVISION_TITLE,
+     FORTMODERNIZATIONABSOLUTEDIVISION_MESSAGE,
+     FORTMODERNIZATIONABSOLUTEDIVISION_SUBMIT,
+     FORTMODERNIZATIONABSOLUTEDIVISION_CANCEL,
      STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_TITLE,
      STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_MESSAGE,
      STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_SUBMIT,
@@ -1449,7 +1470,12 @@ class DIALOGS(object):
      CLUBS_APP_CREATE_TITLE,
      CLUBS_APP_CREATE_MESSAGE,
      CLUBS_APP_CREATE_SUBMIT,
-     CLUBS_APP_CREATE_CANCEL)
+     CLUBS_APP_CREATE_CANCEL,
+     QUESTSCONFIRMDIALOG_TITLE,
+     QUESTSCONFIRMDIALOG_MESSAGE,
+     QUESTSCONFIRMDIALOG_SUBMIT,
+     QUESTSCONFIRMDIALOG_CANCEL,
+     QUESTSCONFIRMDIALOG_CHECKBOX)
 
     @staticmethod
     def recruitwindow_vehicleclassdropdown(key):

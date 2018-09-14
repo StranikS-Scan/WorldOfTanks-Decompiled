@@ -11,6 +11,7 @@ from gui.shared.utils import CONST_CONTAINER
 
 class SETTINGS_SECTIONS(CONST_CONTAINER):
     GAME = 'GAME'
+    GAME_EXTENDED = 'GAME_EXTENDED'
     GAMEPLAY = 'GAMEPLAY'
     GRAPHICS = 'GRAPHICS'
     SOUND = 'SOUND'
@@ -27,7 +28,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
 
 
 class ServerSettingsManager(object):
-    __version = 13
+    __version = 14
     GAME = settings_constants.GAME
     GRAPHICS = settings_constants.GRAPHICS
     SOUND = settings_constants.SOUND
@@ -53,6 +54,9 @@ class ServerSettingsManager(object):
                               GAME.DATE_TIME_MESSAGE_INDEX: Offset(16, 983040),
                               GAME.MINIMAP_ALPHA: Offset(20, 267386880),
                               GAME.SHOW_VEH_MODELS_ON_MAP: Offset(29, 1610612736)}),
+     SETTINGS_SECTIONS.GAME_EXTENDED: Section(masks={GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS: 0,
+                                       GAME.CHAT_CONTACTS_LIST_ONLY: 1,
+                                       GAME.RECEIVE_INVITES_IN_BATTLE: 2}, offsets={}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GRAPHICS.FPS_PERFOMANCER: 0,
                                   GAME.LENS_EFFECT: 1}, offsets={}),
@@ -135,6 +139,12 @@ class ServerSettingsManager(object):
 
     def setGameSettings(self, settings):
         self._setSectionSettings(SETTINGS_SECTIONS.GAME, settings)
+
+    def getExtendedGameSetting(self, key, default = None):
+        return self._getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, key, default)
+
+    def setExtendedGameSettings(self, settings):
+        self._setSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, settings)
 
     def getGameplaySetting(self, key, default = None):
         return self._getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, key, default)

@@ -26,6 +26,7 @@ class INVITES(object):
     INVITES_TEXT_UNIT = '#invites:invites/text/UNIT'
     INVITES_TEXT_SORTIE = '#invites:invites/text/SORTIE'
     INVITES_TEXT_FORT_BATTLE = '#invites:invites/text/FORT_BATTLE'
+    INVITES_TEXT_CLUBS = '#invites:invites/text/CLUBS'
     INVITES_TEXT_FORT_OFFENCE = '#invites:invites/text/fort/offence'
     INVITES_TEXT_FORT_DEFENCE = '#invites:invites/text/fort/defence'
     INVITES_TEXT_FORT_DIRECTION = '#invites:invites/text/fort/direction'
@@ -36,10 +37,12 @@ class INVITES(object):
     CLUB_APPLICATIONS_COMMENT = '#invites:club/applications/comment'
     CLUB_APPLICATIONS_BUTTONS_DETAILS = '#invites:club/applications/buttons/details'
     INVITES_COMMENT = '#invites:invites/comment'
-    INVITES_STATE_ACTIVE = '#invites:invites/state/ACTIVE'
+    INVITES_STATE_PENDING = '#invites:invites/state/PENDING'
     INVITES_STATE_ACCEPTED = '#invites:invites/state/ACCEPTED'
     INVITES_STATE_DECLINED = '#invites:invites/state/DECLINED'
+    INVITES_STATE_REVOKED = '#invites:invites/state/REVOKED'
     INVITES_STATE_EXPIRED = '#invites:invites/state/EXPIRED'
+    INVITES_STATE_ERROR = '#invites:invites/state/ERROR'
     INVITES_NOTE_SERVER_CHANGE = '#invites:invites/note/server_change'
     INVITES_NOTE_LEAVE_COMPANY = '#invites:invites/note/leave/COMPANY'
     INVITES_NOTE_CHANGE_AND_LEAVE_COMPANY = '#invites:invites/note/change_and_leave/COMPANY'
@@ -59,6 +62,8 @@ class INVITES(object):
     INVITES_NOTE_CHANGE_AND_LEAVE_SORTIE = '#invites:invites/note/change_and_leave/SORTIE'
     INVITES_NOTE_LEAVE_FORT_BATTLE = '#invites:invites/note/leave/FORT_BATTLE'
     INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE = '#invites:invites/note/change_and_leave/FORT_BATTLE'
+    INVITES_NOTE_LEAVE_CLUBS = '#invites:invites/note/leave/CLUBS'
+    INVITES_NOTE_CHANGE_AND_LEAVE_CLUBS = '#invites:invites/note/change_and_leave/CLUBS'
     GUI_TITLES_RECEIVEDINVITES = '#invites:gui/titles/receivedInvites'
     GUI_TITLES_INVITE = '#invites:gui/titles/invite'
     GUI_TITLES_BARTER = '#invites:gui/titles/barter'
@@ -80,10 +85,12 @@ class INVITES(object):
     CLUBS_STATE_ACCEPTED = '#invites:clubs/state/ACCEPTED'
     CLUBS_STATE_DECLINED = '#invites:clubs/state/DECLINED'
     CLUBS_STATE_CANCELLED = '#invites:clubs/state/CANCELLED'
-    INVITES_STATE_ENUM = (INVITES_STATE_ACTIVE,
+    INVITES_STATE_ENUM = (INVITES_STATE_PENDING,
      INVITES_STATE_ACCEPTED,
      INVITES_STATE_DECLINED,
-     INVITES_STATE_EXPIRED)
+     INVITES_STATE_REVOKED,
+     INVITES_STATE_EXPIRED,
+     INVITES_STATE_ERROR)
     INVITES_PREBATTLE_ALREADYJOINED_ENUM = (INVITES_PREBATTLE_ALREADYJOINED_SQUAD,
      INVITES_PREBATTLE_ALREADYJOINED_COMPANY,
      INVITES_PREBATTLE_ALREADYJOINED_TRAINING,
@@ -99,6 +106,7 @@ class INVITES(object):
      INVITES_TEXT_UNIT,
      INVITES_TEXT_SORTIE,
      INVITES_TEXT_FORT_BATTLE,
+     INVITES_TEXT_CLUBS,
      INVITES_TEXT_FORT_OFFENCE,
      INVITES_TEXT_FORT_DEFENCE,
      INVITES_TEXT_FORT_DIRECTION,
@@ -111,7 +119,8 @@ class INVITES(object):
      INVITES_NOTE_CHANGE_AND_LEAVE_TOURNAMENT,
      INVITES_NOTE_CHANGE_AND_LEAVE_HISTORICAL,
      INVITES_NOTE_CHANGE_AND_LEAVE_SORTIE,
-     INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE)
+     INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE,
+     INVITES_NOTE_CHANGE_AND_LEAVE_CLUBS)
     INVITES_NOTE_LEAVE_ENUM = (INVITES_NOTE_LEAVE_COMPANY,
      INVITES_NOTE_LEAVE_SQUAD,
      INVITES_NOTE_LEAVE_TRAINING,
@@ -120,7 +129,8 @@ class INVITES(object):
      INVITES_NOTE_LEAVE_TOURNAMENT,
      INVITES_NOTE_LEAVE_HISTORICAL,
      INVITES_NOTE_LEAVE_SORTIE,
-     INVITES_NOTE_LEAVE_FORT_BATTLE)
+     INVITES_NOTE_LEAVE_FORT_BATTLE,
+     INVITES_NOTE_LEAVE_CLUBS)
 
     @staticmethod
     def invites_state(key):

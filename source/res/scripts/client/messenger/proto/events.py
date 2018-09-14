@@ -60,7 +60,7 @@ class _VOIPSharedEvents(object):
 
 
 class _UsersSharedEvents(object):
-    __slots__ = ('__eventManager', 'onUsersListReceived', 'onFriendsReceived', 'onIgnoredReceived', 'onMutedReceived', 'onUserActionReceived', 'onUserStatusUpdated', 'onEmptyGroupsChanged', 'onClanMembersListChanged', 'onFindUsersComplete', 'onFindUsersFailed', 'onFriendshipRequestReceived', 'onNotesListReceived')
+    __slots__ = ('__eventManager', 'onUsersListReceived', 'onFriendsReceived', 'onIgnoredReceived', 'onMutedReceived', 'onUserActionReceived', 'onUserStatusUpdated', 'onEmptyGroupsChanged', 'onClanMembersListChanged', 'onFindUsersComplete', 'onFindUsersFailed', 'onNotesListReceived', 'onFriendshipRequestsAdded', 'onFriendshipRequestsUpdated')
 
     def __init__(self):
         super(_UsersSharedEvents, self).__init__()
@@ -75,7 +75,8 @@ class _UsersSharedEvents(object):
         self.onClanMembersListChanged = Event.Event(self.__eventManager)
         self.onFindUsersComplete = Event.Event(self.__eventManager)
         self.onFindUsersFailed = Event.Event(self.__eventManager)
-        self.onFriendshipRequestReceived = Event.Event(self.__eventManager)
+        self.onFriendshipRequestsAdded = Event.Event(self.__eventManager)
+        self.onFriendshipRequestsUpdated = Event.Event(self.__eventManager)
         self.onNotesListReceived = Event.Event(self.__eventManager)
 
     def clear(self):
@@ -83,12 +84,13 @@ class _UsersSharedEvents(object):
 
 
 class _ServiceChannelEvents(object):
-    __slots__ = ('__eventManager', 'onServerMessageReceived', 'onClientMessageReceived', 'onChatMessageReceived')
+    __slots__ = ('__eventManager', 'onServerMessageReceived', 'onCustomMessageDataReceived', 'onClientMessageReceived', 'onChatMessageReceived')
 
     def __init__(self):
         super(_ServiceChannelEvents, self).__init__()
         self.__eventManager = Event.EventManager()
         self.onServerMessageReceived = Event.Event(self.__eventManager)
+        self.onCustomMessageDataReceived = Event.Event(self.__eventManager)
         self.onClientMessageReceived = Event.Event(self.__eventManager)
         self.onChatMessageReceived = Event.Event(self.__eventManager)
 

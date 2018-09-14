@@ -46,7 +46,7 @@ class WalletController(Controller):
             self.__checkFreeXPConditions()
         self.__processStatus(self.STATUS.AVAILABLE if g_itemsCache.items.stats.mayConsumeWalletResources else self.STATUS.SYNCING, True)
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self.__clearWeaver()
 
     def onDisconnected(self):

@@ -95,12 +95,9 @@ class _FlockSound:
 
 class FlockLike:
     __SoundNames = None
-    MAX_SOUNDS = 2
-    SOUND_RECALC_TIME = 0.6
     MAX_DIST_SQ = 10000
 
     def __init__(self):
-        self.__recalcSoundsCallback = None
         if FlockLike.__SoundNames is None:
             FlockLike.__SoundNames = {}
             flockDataSect = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/birds')
@@ -110,21 +107,12 @@ class FlockLike:
                 if modelName != '' and soundName != '':
                     FlockLike.__SoundNames[modelName] = soundName
 
-        self.__sounds = {}
+        self.__sound = None
         return
 
-    def __getAllSounds(self):
-        for modelSounds in self.__sounds.values():
-            for flockSound in modelSounds:
-                yield flockSound
-
     def destroy(self):
-        if self.__recalcSoundsCallback is not None:
-            BigWorld.cancelCallback(self.__recalcSoundsCallback)
-        allSounds = self.__getAllSounds()
-        for flockSound in allSounds:
-            flockSound.destroy()
-
+        if self.__sound is not None:
+            self.__sound.destroy()
         return
 
     def _getModelsToLoad(self):
@@ -139,6 +127,7 @@ class FlockLike:
 
     def _loadModels(self, prereqs):
         try:
+            firstModel = True
             for modelId in prereqs.keys():
                 if modelId in prereqs.failedIDs:
                     LOG_ERROR('Failed to load flock model: %s' % modelId)
@@ -147,7 +136,9 @@ class FlockLike:
                 model.outsideOnly = 1
                 model.moveAttachments = True
                 self.addModel(model)
-                self.__addSound(model)
+                if firstModel:
+                    self.__addSound(model)
+                    firstModel = False
                 animSpeed = random.uniform(self.animSpeedMin, self.animSpeedMax)
                 model.actionScale = animSpeed
                 model.action('FlockAnimAction')()
@@ -155,22 +146,14 @@ class FlockLike:
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-        self.__recalcSounds()
-
     def __addSound(self, model):
         if not model.sources:
             return
         else:
             modelName = model.sources[0]
-            if modelName not in self.__sounds:
-                self.__sounds[modelName] = []
-            soundsForModel = self.__sounds[modelName]
-            if len(soundsForModel) >= FlockLike.MAX_SOUNDS:
-                return
             soundName = FlockLike.__SoundNames.get(modelName, None)
             if soundName is None or soundName == '':
                 return
-            flockSound = None
             try:
                 flockSound = _FlockSound(soundName, model, self.spaceID)
             except Exception:
@@ -179,49 +162,18 @@ class FlockLike:
 
             if flockSound is not None:
                 if flockSound.sound is not None:
-                    soundsForModel.append(flockSound)
+                    self.__sound = flockSound
+                    self.__sound.attachTo(model)
                 else:
                     flockSound.destroy()
             return
 
-    def __recalcSounds(self):
-        self.__recalcSoundsCallback = None
-        camera = BigWorld.camera()
-
-        def closest(x1, x2):
-            dist1 = (camera.position - x1.position).lengthSquared
-            dist2 = (camera.position - x2.position).lengthSquared
-            return cmp(dist1, dist2)
-
-        modelsByDist = sorted(self.models, closest)
-        soundsToTalkIdx = {}
-        for flockModel in modelsByDist:
-            if not flockModel.sources:
-                continue
-            modelName = flockModel.sources[0]
-            soundsToTalkIdx[modelName] = soundsToTalkIdx.get(modelName, -1) + 1
-            idx = soundsToTalkIdx[modelName]
-            soundsForModel = self.__sounds[modelName]
-            if idx < len(soundsForModel):
-                soundsForModel[idx].attachTo(flockModel)
-
-        self.__recalcSoundsCallback = BigWorld.callback(FlockLike.SOUND_RECALC_TIME, self.__recalcSounds)
-        return
-
     def _switchSounds(self, enable):
-        allSounds = self.__getAllSounds()
-        for flockSound in allSounds:
+        if self.__sound is not None:
             if enable:
-                flockSound.sound.play()
+                self.__sound.sound.play()
             else:
-                flockSound.sound.stop()
-
-        if enable:
-            if self.__recalcSoundsCallback is None:
-                self.__recalcSounds()
-        elif self.__recalcSoundsCallback is not None:
-            BigWorld.cancelCallback(self.__recalcSoundsCallback)
-            self.__recalcSoundsCallback = None
+                self.__sound.sound.stop()
         return
 
 

@@ -19,10 +19,11 @@ class OptionalDevicesController(object):
     def __repr__(self):
         return 'OptionalDevicesController({0!r:s})'.format(self.__optionalDevices)
 
-    def clear(self):
+    def clear(self, leave = True):
+        if leave:
+            self.__eManager.clear()
+            g_playerEvents.onArenaPeriodChange -= self.__pe_onArenaPeriodChange
         self.__optionalDevices.clear()
-        self.__eManager.clear()
-        g_playerEvents.onArenaPeriodChange -= self.__pe_onArenaPeriodChange
 
     def isOptionalDeviceOn(self, deviceID):
         isOn = False

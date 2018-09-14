@@ -17,7 +17,10 @@ class _IController(object):
     def onDisconnected(self):
         raise NotImplementedError
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
+        raise NotImplementedError
+
+    def onAccountBecomePlayer(self):
         raise NotImplementedError
 
     def onLobbyStarted(self, ctx):
@@ -48,8 +51,11 @@ class ControllersCollection(_IController):
     def onDisconnected(self):
         self._invoke('onDisconnected')
 
-    def onBattleStarted(self):
-        self._invoke('onBattleStarted')
+    def onAvatarBecomePlayer(self):
+        self._invoke('onAvatarBecomePlayer')
+
+    def onAccountBecomePlayer(self):
+        self._invoke('onAccountBecomePlayer')
 
     def onLobbyStarted(self, ctx):
         self._invoke('onLobbyStarted', ctx)
@@ -95,7 +101,10 @@ class Controller(_IController):
     def onDisconnected(self):
         pass
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
+        pass
+
+    def onAccountBecomePlayer(self):
         pass
 
     def onLobbyStarted(self, ctx):

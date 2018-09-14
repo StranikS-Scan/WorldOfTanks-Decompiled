@@ -31,6 +31,7 @@ class CyberSportSendInvitesWindow(PrbSendInvitesWindow, ClubListener):
     def _populate(self):
         super(CyberSportSendInvitesWindow, self)._populate()
         g_messengerEvents.users.onFindUsersComplete += self.__onFindUsersComplete
+        self.as_enableDescriptionS(False)
 
     def _dispose(self):
         g_messengerEvents.users.onFindUsersComplete -= self.__onFindUsersComplete

@@ -26,12 +26,17 @@ class _InvitesIDsManager(object):
 
     def getInviteID(self, clubDbID, userDbID, creationTime):
         uniqueID = (clubDbID, userDbID, creationTime)
-        inviteID = self.__idsMap['clubIDs'].get(uniqueID)
-        if inviteID is None:
-            inviteID = self.__idsGen.next()
+        if uniqueID not in self.__idsMap['clubIDs']:
+            inviteID, showAt = self.__idsGen.next(), None
             self.__idsMap['inviteIDs'][inviteID] = uniqueID
-            self.__idsMap['clubIDs'][uniqueID] = inviteID
-        return inviteID
+            self.__idsMap['clubIDs'][uniqueID] = (inviteID, showAt)
+        else:
+            inviteID, showAt = self.__idsMap['clubIDs'][uniqueID]
+        return (inviteID, showAt)
+
+    def setShowTime(self, inviteID, showAt):
+        uniqueID = self.__idsMap['inviteIDs'][inviteID]
+        self.__idsMap['clubIDs'][uniqueID] = (inviteID, showAt)
 
 
 _g_invitesIDs = _InvitesIDsManager()
@@ -155,12 +160,11 @@ class _Member(_User):
 class _ClubInvitation(object):
 
     def __init__(self, clubDbID, userDbID, timestamp, status):
-        self._id = _g_invitesIDs.getInviteID(clubDbID, userDbID, timestamp)
+        self._id, self._showAt = _g_invitesIDs.getInviteID(clubDbID, userDbID, timestamp)
         self._clubDbID = clubDbID
         self._userDbID = userDbID
         self._timestamp = timestamp
         self._status = status or _CIS.CANCELLED
-        self.showAt = 0
 
     def getID(self):
         return self._id
@@ -185,6 +189,13 @@ class _ClubInvitation(object):
 
     def isCancelled(self):
         return self._status == _CIS.CANCELLED
+
+    def showAt(self):
+        return self._showAt
+
+    def setShowTime(self, showAt):
+        self._showAt = showAt
+        _g_invitesIDs.setShowTime(self._id, showAt)
 
     def getStatus(self):
         return self._status

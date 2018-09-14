@@ -46,7 +46,9 @@ class ModuleInfoWindow(View, ModuleInfoMeta, AbstractWindowView):
          'level': icon,
          'params': [],
          'compatible': [],
-         'effects': {}}
+         'effects': {},
+         'moduleLabel': module.getGUIEmblemID(),
+         'moduleLevel': module.level}
         params = ItemsParameters.g_instance.get(module.descriptor, self.__vehicleDescr)
         moduleParameters = params.get('parameters', tuple())
         isGun = module.itemTypeName == ITEM_TYPE_NAMES[4]

@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortCalendarWindow.py
-from collections import defaultdict
 import BigWorld
+from collections import defaultdict
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from gui import makeHtmlString
@@ -15,6 +15,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.utils import toLower
 from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
 
 class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarWindowMeta):
 
@@ -108,19 +109,21 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
                 if dayStartTimestamp == targetDayStartTimestamp:
                     for battle in sorted(battles):
                         startTimestamp = battle.getStartTime()
-                        isInPast = battle.isEnded()
+                        battleHasEnded = battle.isEnded()
                         opponentsClanInfo = battle.getOpponentClanInfo()
                         if battle.getType() == BATTLE_ITEM_TYPE.ATTACK:
-                            if isInPast:
+                            if battleHasEnded:
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_OFFENCEPAST
                             else:
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_OFFENCEFUTURE
+                            tankIconVO = getDivisionIcon(battle.defenderFortLevel, battle.attackerFortLevel)
                             titleTpl = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_ITEM_TITLE_OFFENCE)
                         else:
-                            if isInPast:
+                            if battleHasEnded:
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEPAST
                             else:
                                 icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEFUTURE
+                            tankIconVO = getDivisionIcon(battle.defenderFortLevel, battle.attackerFortLevel, determineAlert=False)
                             titleTpl = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_ITEM_TITLE_DEFENCE)
                         if battle.isWin():
                             background = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_BATTLEFORTVICTORY
@@ -139,11 +142,12 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
                          'direction': _ms(FORTIFICATIONS.GENERAL_DIRECTION, value=_ms('#fortifications:General/directionName%d' % battle.getDirection())),
                          'timeInfo': _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_ITEM_TIMEINFO) % {'startTime': BigWorld.wg_getShortTimeFormat(startTimestamp),
                                       'endTime': BigWorld.wg_getShortTimeFormat(startTimestamp + time_utils.ONE_HOUR)},
-                         'background': background}
-                        if isInPast and resultLabel:
+                         'background': background,
+                         'tankIconVO': tankIconVO,
+                         'showTankIcon': not battleHasEnded}
+                        if battleHasEnded and resultLabel:
                             resultText = makeHtmlString('html_templates:lobby/fortifications', 'battleResult', {'result': _ms(MENU.finalstatistic_commonstats_resultlabel(resultLabel))})
-                            eventItem.update({'result': resultText,
-                             'resultTTHeader': resultText})
+                            eventItem.update({'result': resultText})
                         eventItems.append(eventItem)
 
             if not len(eventItems):

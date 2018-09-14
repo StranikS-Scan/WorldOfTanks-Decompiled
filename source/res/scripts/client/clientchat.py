@@ -302,7 +302,9 @@ class ClientChat(object):
                 if messageType == SYS_MESSAGE_TYPE.serverReboot.index():
                     messageData['data'] = tm.makeLocalServerDatetime(messageData['data'])
                 elif messageType == SYS_MESSAGE_TYPE.battleResults.index():
-                    messageData['data']['arenaCreateTime'] = tm.makeLocalServerTime(messageData['data']['arenaCreateTime'])
+                    for value in messageData['data'].itervalues():
+                        value['arenaCreateTime'] = tm.makeLocalServerTime(value['arenaCreateTime'])
+
                 elif messageType == SYS_MESSAGE_TYPE.goldReceived.index():
                     messageData['data']['date'] = tm.makeLocalServerTime(messageData['data']['date'])
                 elif messageType in (SYS_MESSAGE_TYPE.accountTypeChanged.index(),

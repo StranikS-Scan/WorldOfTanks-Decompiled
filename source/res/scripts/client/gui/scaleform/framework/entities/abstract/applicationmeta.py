@@ -48,6 +48,9 @@ class ApplicationMeta(DAAPIModule):
     def setCacheMgr(self, mgr):
         self._printOverrideError('setCacheMgr')
 
+    def setTextMgr(self, mgr):
+        self._printOverrideError('setTextMgr')
+
     def handleGlobalKeyEvent(self, command):
         self._printOverrideError('handleGlobalKeyEvent')
 

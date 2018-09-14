@@ -17,7 +17,7 @@ class SoundEventChecker(Controller, AppRef):
         from CurrentVehicle import g_currentVehicle
         g_currentVehicle.onChangeStarted += self.__onVehicleChanging
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self.__stop()
 
     def onDisconnected(self):

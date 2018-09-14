@@ -127,44 +127,36 @@ class PyExtension(object):
         return data
 
 
+class SimpleExtension(PyExtension):
+    __slots__ = ('_value',)
+
+    def __init__(self, name, value):
+        super(SimpleExtension, self).__init__(name)
+        self._value = str(value)
+
+    def _makeChildrenString(self):
+        return self._value
+
+
 class PyQuery(object):
-    __slots__ = ('_iqType', '_iqExt')
+    __slots__ = ('_type', '_to', '_ext')
 
-    def __init__(self, iqType, iqExt):
+    def __init__(self, queryType, queryExt = None, to = ''):
         super(PyQuery, self).__init__()
-        self._iqType = iqType
-        self._iqExt = iqExt
-
-    def getType(self):
-        return self._iqType
-
-    def getBody(self):
-        return self._iqExt.getTag()
-
-
-class PyMessage(object):
-    __slots__ = ('_msgType', '_to', '_msgBody', '_customExt')
-
-    def __init__(self, msgType, to, msgBody = '', customExt = None):
-        super(PyMessage, self).__init__()
+        self._type = queryType
+        self._ext = queryExt
         self._to = to
-        self._msgType = msgType
-        self._msgBody = msgBody
-        self._customExt = customExt
 
     def getType(self):
-        return self._msgType
+        return self._type
 
     def getTo(self):
         return self._to
 
-    def getBody(self):
-        return self._msgBody
-
-    def getCustomTag(self):
+    def getTag(self):
         tag = ''
-        if self._customExt:
-            tag = self._customExt.getTag()
+        if self._ext:
+            tag = self._ext.getTag()
         return tag
 
 
@@ -191,30 +183,3 @@ class PyHandler(object):
         else:
             result = self._ext.getDefaultData()
         return result
-
-
-class IQHandler(PyHandler):
-
-    def getFilterString(self):
-        return '/iq/{0}'.format(self._ext.getXPath())
-
-
-class IQChildHandler(PyHandler):
-    __slots__ = ('_index',)
-
-    def __init__(self, ext, index = 0):
-        super(IQChildHandler, self).__init__(ext)
-        self._index = index
-
-    def getFilterString(self):
-        return '/iq/{0}'.format(self._ext.getXPath(self._index))
-
-    def handleTag(self, pyGlooxTag):
-        child = self._ext.getChild(self._index)
-        if not child:
-            return
-        result = pyGlooxTag.filterXPath(self.getFilterString())
-        for tag in result:
-            data = child.parseTag(tag)
-            if data:
-                yield data

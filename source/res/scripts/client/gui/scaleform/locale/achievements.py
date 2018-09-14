@@ -478,6 +478,9 @@ class ACHIEVEMENTS(object):
     TESTARTILLERYMAN = '#achievements:testartilleryman'
     TESTARTILLERYMAN_DESCR = '#achievements:testartilleryman_descr'
     TESTARTILLERYMAN_CONDITION = '#achievements:testartilleryman_condition'
+    FALLOUT = '#achievements:fallout'
+    FALLOUT_DESCR = '#achievements:fallout_descr'
+    FALLOUT_CONDITION = '#achievements:fallout_condition'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -1009,6 +1012,9 @@ class ACHIEVEMENTS(object):
      TESTARTILLERYMAN,
      TESTARTILLERYMAN_DESCR,
      TESTARTILLERYMAN_CONDITION,
+     FALLOUT,
+     FALLOUT_DESCR,
+     FALLOUT_CONDITION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,

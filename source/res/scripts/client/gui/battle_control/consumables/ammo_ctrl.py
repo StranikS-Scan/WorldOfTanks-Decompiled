@@ -1,6 +1,8 @@
 # Embedded file name: scripts/client/gui/battle_control/consumables/ammo_ctrl.py
 from collections import namedtuple
+import weakref
 import BigWorld
+import CommandMapping
 import Event
 from constants import VEHICLE_SETTING
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
@@ -43,8 +45,63 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots')):
         return power
 
 
+_IGNORED_RELOADING_TIME = 0.15
+
+class _AutoShootsCtrl(object):
+    __slots__ = ('__proxy', '__isStarted', '__callbackID')
+
+    def __init__(self, proxy):
+        super(_AutoShootsCtrl, self).__init__()
+        self.__proxy = proxy
+        self.__isStarted = False
+        self.__callbackID = None
+        return
+
+    def destroy(self):
+        self.reset()
+        self.__proxy = None
+        return
+
+    def reset(self):
+        self.__clearCallback()
+        self.__isStarted = False
+
+    def process(self, timeLeft, prevTimeLeft):
+        result = self.__isStarted
+        if self.__isStarted:
+            self.__clearCallback()
+            if timeLeft == 0:
+                self.__setCallback(_IGNORED_RELOADING_TIME + 0.01)
+            if timeLeft < _IGNORED_RELOADING_TIME:
+                result = True
+            else:
+                self.__isStarted = result = False
+        elif 0 < timeLeft < _IGNORED_RELOADING_TIME:
+            if prevTimeLeft == -1:
+                self.__isStarted = result = True
+            elif prevTimeLeft == 0:
+                result = True
+        return result
+
+    def __setCallback(self, reloadTime):
+        self.__callbackID = BigWorld.callback(reloadTime + 0.01, self.__update)
+
+    def __clearCallback(self):
+        if self.__callbackID is not None:
+            BigWorld.cancelCallback(self.__callbackID)
+            self.__callbackID = None
+        return
+
+    def __update(self):
+        self.__callbackID = None
+        if self.__proxy:
+            self.__isStarted = False
+            self.__proxy.refreshGunReloading()
+        return
+
+
 class AmmoController(object):
-    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunReloadTimeSetInPercent', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '__reloadTime')
+    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunReloadTimeSetInPercent', '__weakref__', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '__reloadTime', '__baseTime', '__autoShoots')
 
     def __init__(self):
         super(AmmoController, self).__init__()
@@ -62,19 +119,24 @@ class AmmoController(object):
         self.__nextShellCD = None
         self.__gunSettings = _GunSettings.default()
         self.__reloadTime = 0.0
+        self.__baseTime = 0.0
+        self.__autoShoots = _AutoShootsCtrl(weakref.proxy(self))
         return
 
     def __repr__(self):
         return '{0:>s}(ammo = {1!r:s}, current = {2!r:s}, next = {3!r:s}, gun = {4!r:s})'.format(self.__class__.__name__, self.__ammo, self.__currShellCD, self.__nextShellCD, self.__gunSettings)
 
-    def clear(self):
-        self.__eManager.clear()
+    def clear(self, leave = True):
+        if leave:
+            self.__eManager.clear()
         self.__ammo.clear()
         self._order = []
         self.__currShellCD = None
         self.__nextShellCD = None
         self.__gunSettings = _GunSettings.default()
         self.__reloadTime = 0.0
+        self.__baseTime = 0.0
+        self.__autoShoots.destroy()
         return
 
     def getGunSettings(self):
@@ -117,8 +179,15 @@ class AmmoController(object):
         if interval > 0:
             if self.__ammo[self.__currShellCD][1] != 1:
                 baseTime = interval
+        isIgnored = False
+        if CommandMapping.g_instance.isActive(CommandMapping.CMD_CM_SHOOT):
+            isIgnored = self.__autoShoots.process(timeLeft, self.__reloadTime)
+        else:
+            self.__autoShoots.reset()
         self.__reloadTime = timeLeft
-        self.onGunReloadTimeSet(self.__currShellCD, timeLeft, baseTime)
+        self.__baseTime = baseTime
+        if not isIgnored:
+            self.onGunReloadTimeSet(self.__currShellCD, timeLeft, baseTime)
 
     def getGunReloadTime(self):
         return self.__reloadTime
@@ -128,6 +197,9 @@ class AmmoController(object):
 
     def isGunReloading(self):
         return self.__reloadTime != 0
+
+    def refreshGunReloading(self):
+        self.onGunReloadTimeSet(self.__currShellCD, self.__reloadTime, self.__baseTime)
 
     def getShells(self, intCD):
         try:
@@ -236,10 +308,11 @@ class AmmoReplayRecorder(AmmoController):
         self.__changeRecord = replayCtrl.setAmmoSetting
         self.__timeRecord = replayCtrl.setGunReloadTime
 
-    def clear(self):
-        super(AmmoReplayRecorder, self).clear()
-        self.__changeRecord = None
-        self.__timeRecord = None
+    def clear(self, leave = True):
+        super(AmmoReplayRecorder, self).clear(leave)
+        if leave:
+            self.__changeRecord = None
+            self.__timeRecord = None
         return
 
     def setGunReloadTime(self, timeLeft, baseTime):
@@ -264,13 +337,14 @@ class AmmoReplayPlayer(AmmoController):
         replayCtrl.onAmmoSettingChanged += self.__onAmmoSettingChanged
         return
 
-    def clear(self):
-        if self.__callbackID is not None:
-            BigWorld.cancelCallback(self.__callbackID)
-            self.__callbackID = None
-        self.__timeGetter = lambda : 0
-        BattleReplay.g_replayCtrl.onAmmoSettingChanged -= self.__onAmmoSettingChanged
-        super(AmmoReplayPlayer, self).clear()
+    def clear(self, leave = True):
+        if leave:
+            if self.__callbackID is not None:
+                BigWorld.cancelCallback(self.__callbackID)
+                self.__callbackID = None
+            self.__timeGetter = lambda : 0
+            BattleReplay.g_replayCtrl.onAmmoSettingChanged -= self.__onAmmoSettingChanged
+        super(AmmoReplayPlayer, self).clear(leave)
         return
 
     def setGunReloadTime(self, timeLeft, baseTime):

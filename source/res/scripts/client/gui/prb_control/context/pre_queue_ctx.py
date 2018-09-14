@@ -1,9 +1,12 @@
 # Embedded file name: scripts/client/gui/prb_control/context/pre_queue_ctx.py
 from CurrentVehicle import g_currentVehicle
 from account_helpers import gameplay_ctx
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.prb_control.context import PrbCtrlRequestCtx
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.shared.utils.decorators import ReprInjector
+from gui.shared import g_itemsCache
+from gui.server_events import g_eventsCache
 
 class _PreQueueRequestCtx(PrbCtrlRequestCtx):
 
@@ -40,7 +43,19 @@ class JoinEventBattlesQueueCtx(_PreQueueRequestCtx):
         return REQUEST_TYPE.JOIN
 
     def getVehicleInventoryID(self):
-        return g_currentVehicle.invID
+        result = [g_currentVehicle.invID]
+        try:
+            eb = g_eventsCache.getEventBattles()
+            for vehIntCD in eb.vehicles:
+                invID = g_itemsCache.items.getItemByCD(vehIntCD).invID
+                if invID not in result:
+                    result.append(invID)
+
+        except:
+            LOG_ERROR('There is error while getting fallout vehicles')
+            LOG_CURRENT_EXCEPTION()
+
+        return result
 
 
 @ReprInjector.simple(('getVehicleInventoryID', 'vInvID'), ('getHistBattleID', 'histBattleID'), ('getIsCreditsAmmo', 'isCreditsAmmo'), ('getWaitingID', 'waitingID'))

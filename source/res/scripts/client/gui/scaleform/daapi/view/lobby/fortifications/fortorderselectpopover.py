@@ -1,9 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderSelectPopover.py
 import constants
 from adisp import process
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers.i18n import makeString as _ms
-from debug_utils import LOG_DEBUG
-from gui.prb_control import getBattleID
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.fortifications.context import ActivateConsumableCtx, ReturnConsumableCtx
 from gui.Scaleform.daapi.view.meta.FortOrderSelectPopoverMeta import FortOrderSelectPopoverMeta
@@ -13,7 +12,7 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
+from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 
@@ -67,27 +66,27 @@ class FortOrderSelectPopover(FortOrderSelectPopoverMeta, SmartPopOverView, View,
                 returnBtnLabel = FORTIFICATIONS.ORDERSELECTPOPOVER_RETURNBTNLABEL
             else:
                 returnBtnLabel = ''
-            orderLevelLabel = _getText(TextType.MAIN_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_ORDERLEVEL, orderLevel=fort_formatters.getTextLevel(orderItem.level)))
+            orderLevelLabel = _getText(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_ORDERLEVEL, orderLevel=fort_formatters.getTextLevel(orderItem.level)))
             if not isBuildingReady:
                 icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_REDNOTAVAILABLE, 16, 16, -2, 0))
-                description = '%s %s' % (icon, _getText(TextType.ERROR_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_NOTAVAILABLE)))
+                description = '%s %s' % (icon, _getText(TEXT_MANAGER_STYLES.ERROR_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_NOTAVAILABLE)))
                 orderCountText = ''
             elif not isSelected:
                 description = orderLevelLabel
                 if orderItem.count:
-                    orderCountText = _getText(TextType.STANDARD_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_ORDERCOUNT, orderNumber=_getText(TextType.STATS_TEXT, str(orderItem.count))))
+                    orderCountText = _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_ORDERCOUNT, orderNumber=_getText(TEXT_MANAGER_STYLES.STATS_TEXT, str(orderItem.count))))
                 else:
-                    orderCountText = _getText(TextType.STANDARD_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_ORDERCOUNT, orderNumber=orderItem.count))
+                    orderCountText = _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_ORDERCOUNT, orderNumber=_getText(TEXT_MANAGER_STYLES.ERROR_TEXT, str(orderItem.count))))
             else:
                 if isSelectedInThisSlot:
                     description = ''
                 else:
                     description = orderLevelLabel
                 icon = self.app.utilsManager.textManager.getIcon(TextIcons.CHECKMARK_ICON)
-                orderCountText = icon + _getText(TextType.SUCCESS_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_SELECTED))
+                orderCountText = icon + _getText(TEXT_MANAGER_STYLES.SUCCESS_TEXT, _ms(FORTIFICATIONS.ORDERSELECTPOPOVER_SELECTED))
             result.append({'orderID': orderTypeID,
              'orderIconSrc': orderItem.icon,
-             'headerText': _getText(TextType.MIDDLE_TITLE, _ms(orderItem.userName)),
+             'headerText': _getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, _ms(orderItem.userName)),
              'descriptionText': description,
              'orderCountText': orderCountText,
              'isEnabled': isConsumableEnabled,

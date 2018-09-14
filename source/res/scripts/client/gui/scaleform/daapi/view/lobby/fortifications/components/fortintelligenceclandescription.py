@@ -7,9 +7,10 @@ from constants import FORT_MAX_ELECTED_CLANS, FORT_BUILDING_TYPE
 import fortified_regions
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
 from gui.Scaleform.daapi.view.meta.FortIntelligenceClanDescriptionMeta import FortIntelligenceClanDescriptionMeta
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -152,6 +153,8 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
          'isOurFortFrozen': self._isFortFrozen(),
          'isSelected': self.__item is not None,
          'haveResults': self.__hasResults}
+        isWarDeclared = False
+        isAlreadyFought = False
         if self.__item is not None:
             clanID = self.__item.getClanDBID()
             selectedDefenceHour = time_utils.getDateTimeInLocal(self.__selectedDefencePeriodStart).hour
@@ -165,8 +168,10 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
             if self.__weAreAtWar:
                 closestAttack = self.__upcomingAttack or self.__attackInCooldown
                 closestAttackTime = closestAttack.getStartTime()
-                data.update({'isWarDeclared': self.__upcomingAttack is not None,
-                 'isAlreadyFought': self.__attackInCooldown is not None and not self.__hasBeenCounterAttacked,
+                isWarDeclared = self.__upcomingAttack is not None
+                isAlreadyFought = self.__attackInCooldown is not None and not self.__hasBeenCounterAttacked
+                data.update({'isWarDeclared': isWarDeclared,
+                 'isAlreadyFought': isAlreadyFought,
                  'warPlannedDate': BigWorld.wg_getLongDateFormat(closestAttackTime),
                  'warNextAvailableDate': BigWorld.wg_getLongDateFormat(closestAttackTime + time_utils.ONE_WEEK)})
             isFrozen = fort.isFrozen()
@@ -198,6 +203,10 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
                                'ttHeader': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_HEADER),
                                'ttBody': _ms(TOOLTIPS.FORTIFICATION_FORTINTELLIGENCECLANDESCRIPTION_AVGDEFRES_BODY)},
              'directions': self.__getDirectionsData()})
+            if self.fortCtrl.getPermissions().canPlanAttack() and not isWarDeclared and not isAlreadyFought:
+                attackerLevel = self.fortCtrl.getFort().level
+                defenderLevel = self.__item.getLevel()
+                data['divisionIcon'] = getDivisionIcon(defenderLevel, attackerLevel)
         self.as_setDataS(data)
         return
 
@@ -257,11 +266,11 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
     def __getSelectedDateText(self):
         if self.fortCtrl.getPermissions().canPlanAttack():
             if self._isFortFrozen():
-                selectedDateText = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_ATTACKIMPOSSIBLE))
+                selectedDateText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_ATTACKIMPOSSIBLE))
             else:
-                selectedDateText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_SELECTDATE))
+                selectedDateText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_SELECTDATE))
         else:
-            selectedDateText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_SELECTDATE_CANTATTACK))
+            selectedDateText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, _ms(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_SELECTDATE_CANTATTACK))
         return selectedDateText
 
     def __getDirectionBuildings(self, direction):

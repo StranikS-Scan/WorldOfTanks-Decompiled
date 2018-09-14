@@ -17,6 +17,7 @@ _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.COMPANY: 'company',
  constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
+_ET = constants.EVENT_TYPE
 
 def _getArenaBonusType(preBattleCond):
     if preBattleCond is not None:
@@ -585,7 +586,7 @@ class Token(_Requirement):
     def _format(self, svrEvents, event = None):
         result = []
         for eID, e in svrEvents.iteritems():
-            if e.getType() in (constants.EVENT_TYPE.BATTLE_QUEST, constants.EVENT_TYPE.TOKEN_QUEST, constants.EVENT_TYPE.FORT_QUEST):
+            if e.getType() in set(_ET.LIKE_BATTLE_QUESTS + _ET.LIKE_TOKEN_QUESTS):
                 children = e.getChildren()
                 if self._id in children:
                     for qID in children[self._id]:
@@ -603,7 +604,7 @@ class Token(_Requirement):
                             else:
                                 label = i18n.makeString('#quests:details/requirements/token', questName=quest.getUserName())
                             counterDescr = None
-                            if e.getType() != constants.EVENT_TYPE.TOKEN_QUEST:
+                            if e.getType() != _ET.TOKEN_QUEST:
                                 counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
                             result.append(formatters.packTextBlock(label, questID=qID, isAvailable=isAvailable, counterValue=battlesLeft, counterDescr=counterDescr))
                         else:

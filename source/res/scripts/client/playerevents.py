@@ -53,6 +53,7 @@ class _PlayerEvents(object):
         self.onPrebattleAutoInvitesChanged = Event.Event()
         self.onAccountGlobalRatingChanged = Event.Event()
         self.onPrebattleInvitesChanged = Event.Event()
+        self.onPrebattleInvitationsChanged = Event.Event()
         self.onPrebattleInvitesStatus = Event.Event()
         self.onClanMembersListChanged = Event.Event()
         self.onEventsDataChanged = Event.Event()

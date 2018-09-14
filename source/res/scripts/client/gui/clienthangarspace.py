@@ -1,9 +1,12 @@
 # Embedded file name: scripts/client/gui/ClientHangarSpace.py
 from collections import namedtuple
+import functools
+from AvatarInputHandler.cameras import FovExtended
 import BigWorld, Math, ResMgr
 import Keys
 import copy
 import MusicController
+from account_helpers.settings_core import g_settingsCore
 from debug_utils import *
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from functools import partial
@@ -197,6 +200,7 @@ class ClientHangarSpace():
         else:
             self.__camDistConstr = ((0.0, 0.0), (0.0, 0.0))
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
+        self.__destroyFunc = None
         MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
         g_keyEventHandlers.add(self.handleKeyEvent)
         g_mouseEventHandlers.add(self.handleMouseEventGlobal)
@@ -217,7 +221,8 @@ class ClientHangarSpace():
 
     def removeVehicle(self):
         self.__boundingRadius = None
-        self.__vAppearance.destroy()
+        if self.__vAppearance is not None:
+            self.__vAppearance.destroy()
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         try:
             BigWorld.entities[self.__vEntityId].model = None
@@ -241,12 +246,15 @@ class ClientHangarSpace():
         self.__vAppearance.updateVehicleSticker(model[0], model[1])
 
     def destroy(self):
-        if self.__waitCallback is not None and not self.spaceLoaded():
-            self.__destroyFunc = self.__destroy
-            return
-        else:
-            self.__destroy()
-            return
+        self.__onLoadedCallback = None
+        if self.__waitCallback is not None:
+            BigWorld.cancelCallback(self.__waitCallback)
+            self.__waitCallback = None
+            if not self.spaceLoaded():
+                self.__destroyFunc = self.__destroy
+                return
+        self.__destroy()
+        return
 
     def handleMouseEvent(self, dx, dy, dz):
         if not self.spaceLoaded():
@@ -364,6 +372,11 @@ class ClientHangarSpace():
         mat.setRotateYPR((yaw, pitch, 0.0))
         self.__cam.source = mat
         self.__cam.pivotMaxDist = dist
+        if g_settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
+            relativeDist = (dist - distConstr[0]) / (distConstr[1] - distConstr[0])
+            _, minFov, maxFov = g_settingsCore.getSetting('fov')
+            fov = mathUtils.lerp(minFov, maxFov, relativeDist)
+            BigWorld.callback(0, functools.partial(FovExtended.instance().setFovByAbsoluteValue, math.radians(fov), 0.1))
         return
 
     def spaceLoaded(self):
@@ -391,6 +404,9 @@ class ClientHangarSpace():
             self.__vAppearance = None
         self.__onLoadedCallback = None
         self.__boundingRadius = None
+        if self.__waitCallback is not None:
+            BigWorld.cancelCallback(self.__waitCallback)
+            self.__waitCallback = None
         g_keyEventHandlers.remove(self.handleKeyEvent)
         g_mouseEventHandlers.remove(self.handleMouseEventGlobal)
         BigWorld.SetDrawInflux(False)
@@ -405,6 +421,7 @@ class ClientHangarSpace():
         self.__vEntityId = None
         BigWorld.wg_disableSpecialFPSMode()
         g_postProcessing.disable()
+        FovExtended.instance().resetFov()
         return
 
     def __setupCamera(self):
@@ -426,11 +443,11 @@ class ClientHangarSpace():
         BigWorld.camera(self.__cam)
 
     def __waitLoadingSpace(self):
-        self.__waitCallback = None
         self.__loadingStatus = BigWorld.spaceLoadStatus()
         if self.__loadingStatus < 1:
             self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         else:
+            self.__waitCallback = None
             BigWorld.worldDrawEnabled(True)
             self.__requestFakeShadowModel()
             self.modifyFakeShadowScale(_CFG['v_scale'])
@@ -548,6 +565,7 @@ class _VehicleAppearance():
         self.__isVehicleDestroyed = False
         self.__smCb = None
         self.__smRemoveCb = None
+        self.__setupModelCb = None
         self.__hangarSpace = weakref.proxy(hangarSpace)
         self.__removeHangarShadowMap()
         from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -582,6 +600,8 @@ class _VehicleAppearance():
         if self.__smRemoveCb is not None:
             BigWorld.cancelCallback(self.__smRemoveCb)
             self.__smRemoveCb = None
+        if self.__setupModelCb is not None:
+            BigWorld.cancelCallback(self.__setupModelCb)
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
         g_itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
@@ -643,6 +663,8 @@ class _VehicleAppearance():
         if 'showMarksOnGun' in diff:
             self.__showMarksOnGun = not diff['showMarksOnGun']
             self.refresh()
+        elif 'dynamicFov' in diff:
+            self.__hangarSpace.updateCameraByMouseMove(0, 0, 0)
 
     def __assembleModel(self):
         resources = self.__resources
@@ -672,11 +694,6 @@ class _VehicleAppearance():
             model.visibleAttachments = False
 
         return chassis
-
-    def __removeHangarShadow(self):
-        if self.__smRemoveCb is None:
-            self.__removeHangarShadowMap()
-        return
 
     def __removeHangarShadowMap(self):
         if self.__smCb is not None:
@@ -768,17 +785,21 @@ class _VehicleAppearance():
         model = self.__assembleModel()
         model.addMotor(BigWorld.Servo(_createMatrix(_CFG['v_scale'], _CFG['v_start_angles'], _CFG['v_start_pos'])))
         BigWorld.addModel(model)
-        BigWorld.callback(0.0, partial(self.__doFinalSetup, buildIdx, model, True))
+        if self.__setupModelCb is not None:
+            BigWorld.cancelCallback(self.__setupModelCb)
+        self.__setupModelCb = BigWorld.callback(0.0, partial(self.__doFinalSetup, buildIdx, model, True))
+        return
 
     def __doFinalSetup(self, buildIdx, model, delModel):
         if delModel:
             BigWorld.delModel(model)
         if model.attached:
-            BigWorld.callback(0.0, partial(self.__doFinalSetup, buildIdx, model, False))
-            return
-        elif buildIdx != self.__curBuildInd:
+            self.__setupModelCb = BigWorld.callback(0.0, partial(self.__doFinalSetup, buildIdx, model, False))
             return
         else:
+            self.__setupModelCb = None
+            if buildIdx != self.__curBuildInd:
+                return
             entity = BigWorld.entity(self.__vEntityId)
             if entity:
                 for m in self.__models:

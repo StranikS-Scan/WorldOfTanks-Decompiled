@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/VoiceChatInterface.py
-import BigWorld, Settings, Event
+import BigWorld, Event
 import BattleReplay
 from VOIP import getVOIPManager
 from VOIP.voip_constants import VOIP_SUPPORTED_API
@@ -8,6 +8,7 @@ from enumerations import Enumeration
 from windows import UIInterface
 from debug_utils import *
 from gui import GUI_SETTINGS
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 VC_STATES = Enumeration('Voice chat states enumeration', ['NotInitialized', 'Initialized', 'Failed'])
 
 class _VoiceChatInterface(UIInterface):
@@ -99,10 +100,11 @@ class _VoiceChatInterface(UIInterface):
             callback(False)
             return
         if self.__state == VC_STATES.Initialized:
+            g_settingsCore.options.getSetting('enableVoIP').initFromPref()
             callback(True)
             return
         self.__callback = callback
-        rh.enable(Settings.g_instance.userPrefs.readBool(Settings.KEY_ENABLE_VOIP))
+        g_settingsCore.options.getSetting('enableVoIP').initFromPref()
         rh.initialize(domain)
 
     def __captureDevicesResponse(self):

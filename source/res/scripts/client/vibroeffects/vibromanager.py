@@ -6,10 +6,10 @@ from VibroEffect import VibroEffect
 import Settings
 from debug_utils import *
 import Event
+from PlayerEvents import g_playerEvents
 g_instance = None
 
 class VibroManager:
-    __CONNECTION_CHECK_PERIOD = 10.0
 
     class GroupSettings:
         pass
@@ -19,7 +19,7 @@ class VibroManager:
         self.__quickEffects = {}
         self.__vibrationObject = BigWorld.WGVibration()
         self.__vibrationObject.reset()
-        self.__connectionCheckId = BigWorld.callback(VibroManager.__CONNECTION_CHECK_PERIOD, self.__checkConnection)
+        g_playerEvents.onAccountShowGUI += self.__onAccountShowGUI
         self.__eventManager = Event.EventManager()
         self.onConnect = Event.Event(self.__eventManager)
         self.onDisconnect = Event.Event(self.__eventManager)
@@ -50,6 +50,9 @@ class VibroManager:
     def __onStopVideo(self, *args):
         self.stopAllEffects()
 
+    def __onAccountShowGUI(self, ctx):
+        self.connect()
+
     def playButtonClickEffect(self, buttonType):
         if not self.__isConnected:
             return
@@ -70,10 +73,8 @@ class VibroManager:
         self.__runningEffects = None
         self.__vibrationObject = None
         self.saveUserPrefs()
-        if self.__connectionCheckId is not None:
-            BigWorld.cancelCallback(self.__connectionCheckId)
-            self.__connectionCheckId = None
         self.__eventManager.clear()
+        g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
         return
 
     def loadUserPrefs(self):
@@ -147,10 +148,6 @@ class VibroManager:
 
             self.__runningEffects.clear()
         self.__isEnabledByUser = enable
-
-    def __checkConnection(self):
-        self.connect()
-        self.__connectionCheckId = BigWorld.callback(VibroManager.__CONNECTION_CHECK_PERIOD, self.__checkConnection)
 
     def connect(self):
         wasConnected = self.__isConnected

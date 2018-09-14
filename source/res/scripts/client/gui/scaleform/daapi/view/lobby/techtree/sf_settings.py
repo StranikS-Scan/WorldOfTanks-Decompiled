@@ -8,7 +8,7 @@ from gui.shared.events import LoadEvent
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.techtree.Research import Research
     from gui.Scaleform.daapi.view.lobby.techtree.TechTree import TechTree
-    return [ViewSettings(VIEW_ALIAS.LOBBY_TECHTREE, TechTree, 'techtree.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_TECHTREE, ScopeTemplates.DEFAULT_SCOPE), ViewSettings(VIEW_ALIAS.LOBBY_RESEARCH, Research, 'research.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_RESEARCH, ScopeTemplates.DEFAULT_SCOPE)]
+    return [ViewSettings(VIEW_ALIAS.LOBBY_TECHTREE, TechTree, 'techtree.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_TECHTREE, ScopeTemplates.DEFAULT_SCOPE, True), ViewSettings(VIEW_ALIAS.LOBBY_RESEARCH, Research, 'research.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_RESEARCH, ScopeTemplates.DEFAULT_SCOPE, True)]
 
 
 def getBusinessHandlers():

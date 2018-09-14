@@ -85,6 +85,8 @@ class ConfirmModuleDialog(View, ConfirmModuleWindowMeta, AbstractWindowView):
              'defaultValue': self.meta.getDefaultValue(module),
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(module),
              'isActionNow': isAction,
+             'moduleLabel': module.getGUIEmblemID(),
+             'moduleLevel': module.level,
              EXTRA_MODULE_INFO: extraData}
             self.as_setDataS(resultData)
         else:

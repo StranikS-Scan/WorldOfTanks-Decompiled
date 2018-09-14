@@ -688,10 +688,10 @@ class ContactsDataProvider(DAAPIDataProvider):
             return
         contacts = self.usersStorage.getList(self.__categories.getCriteria())
         if self.__showEmptyGroups:
-            _, category = self.__categories.findCategory(CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID)
-            if category:
-                category.showEmptyItem(True)
-                category.changeGroups(self.usersStorage.getEmptyGroups())
+            _, friendsCategory = self.__categories.findCategory(CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID)
+            if friendsCategory:
+                friendsCategory.showEmptyItem(True)
+                friendsCategory.changeGroups(self.usersStorage.getEmptyGroups())
         for contact in contacts:
             if _TAG.CACHED not in contact.getTags():
                 self.__categories.addContact(contact)
@@ -766,7 +766,8 @@ class ContactsDataProvider(DAAPIDataProvider):
         events.onUserActionReceived += self.__me_onUserActionReceived
         events.onUserStatusUpdated += self.__me_onUserStatusUpdated
         events.onClanMembersListChanged += self.__me_onClanMembersListChanged
-        events.onFriendshipRequestReceived += self.__me_onFriendshipRequestReceived
+        events.onFriendshipRequestsAdded += self.__me_onFriendshipRequestsAdded
+        events.onFriendshipRequestsUpdated += self.__me_onFriendshipRequestsUpdated
         events.onEmptyGroupsChanged += self.__me_onEmptyGroupsChanged
         events.onNotesListReceived += self.__me_onNotesListReceived
 
@@ -776,7 +777,8 @@ class ContactsDataProvider(DAAPIDataProvider):
         events.onUserActionReceived -= self.__me_onUserActionReceived
         events.onUserStatusUpdated -= self.__me_onUserStatusUpdated
         events.onClanMembersListChanged -= self.__me_onClanMembersListChanged
-        events.onFriendshipRequestReceived -= self.__me_onFriendshipRequestReceived
+        events.onFriendshipRequestsAdded -= self.__me_onFriendshipRequestsAdded
+        events.onFriendshipRequestsUpdated -= self.__me_onFriendshipRequestsUpdated
         events.onEmptyGroupsChanged -= self.__me_onEmptyGroupsChanged
         events.onNotesListReceived -= self.__me_onNotesListReceived
 
@@ -796,6 +798,19 @@ class ContactsDataProvider(DAAPIDataProvider):
             return True
         else:
             return False
+
+    def __updateContacts(self, actionID, contacts):
+        setAction = self.__categories.setAction
+        result, data = False, []
+        for contact in contacts:
+            updated, data = setAction(actionID, contact)
+            result |= updated
+
+        if result:
+            self.__updateCollection(data)
+            self.refresh()
+        self.__setEmpty()
+        self.onTotalStatusChanged()
 
     def __updateCollection(self, targetList):
         self.__list = _OpenedTreeCreator().build(targetList)
@@ -840,8 +855,11 @@ class ContactsDataProvider(DAAPIDataProvider):
         self.refresh()
         self.onTotalStatusChanged()
 
-    def __me_onFriendshipRequestReceived(self, contact):
-        self.__me_onUserActionReceived(_ACTION_ID.SUBSCRIPTION_CHANGED, contact)
+    def __me_onFriendshipRequestsAdded(self, contacts):
+        self.__updateContacts(_ACTION_ID.SUBSCRIPTION_CHANGED, contacts)
+
+    def __me_onFriendshipRequestsUpdated(self, contacts):
+        self.__updateContacts(_ACTION_ID.SUBSCRIPTION_CHANGED, contacts)
 
     def __me_onEmptyGroupsChanged(self, include, exclude):
         if not self.__showEmptyGroups:

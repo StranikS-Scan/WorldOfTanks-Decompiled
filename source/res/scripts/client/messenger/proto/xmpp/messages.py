@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/messages.py
 import time
-from debug_utils import LOG_ERROR
 from messenger import g_settings
 from messenger.ext.player_helpers import getPlayerDatabaseID, getPlayerName
 from messenger.m_constants import USER_ACTION_ID, USER_TAG, CLIENT_ACTION_ID, PROTO_TYPE
@@ -15,6 +14,7 @@ from messenger.proto.xmpp.extensions.chat import ChatMessageHandler, ChatMessage
 from messenger.proto.xmpp.gloox_constants import GLOOX_EVENT as _EVENT, MESSAGE_TYPE
 from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
 from messenger.proto.xmpp.jid import makeContactJID, ContactBareJID
+from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
 from messenger.proto.xmpp.wrappers import XMPPMessageData
 from messenger.proto.xmpp.xmpp_constants import MESSAGE_LIMIT
 from messenger.storage import storage_getter
@@ -61,9 +61,7 @@ class _ChatSessions(ClientEventsHandler):
             channel = self._addChannel(search, jid.getDatabaseID(), name, True)
             if not channel:
                 return
-            g_messengerEvents.channels.onPlayerEnterChannelByAction(channel)
-        else:
-            g_messengerEvents.channels.onPlayerEnterChannelByAction(channel)
+        g_messengerEvents.channels.onPlayerEnterChannelByAction(channel)
         self.__sessions.add(jid)
 
     def stopSession(self, jid):
@@ -110,6 +108,11 @@ class _ChatSessions(ClientEventsHandler):
     def onMessageReceived(self, jid, body, _, info, sentAt):
         dbID = info['dbID']
         name = info['name']
+        if jid not in self.__sessions and g_settings.userPrefs.chatContactsListOnly:
+            contact = self.usersStorage.getUser(dbID)
+            if not contact or not USER_TAG.filterClosedContactsTags(contact.getTags()):
+                g_logOutput.debug(CLIENT_LOG_AREA.MESSAGE, "There is not closed contact in player's contacts list,contact's massage is ignored", jid, name)
+                return
         search = entities.XMPPChatChannelEntity(jid, name)
         channel = self.channelsStorage.getChannel(search)
         if not channel:
@@ -231,7 +234,7 @@ class MessagesManager(ClientEventsHandler):
         if msgType == MESSAGE_TYPE.CHAT:
             state, info, sentAt = ChatMessageHandler().handleTag(pyGlooxTag)
             if not info:
-                LOG_ERROR('Can not find sender info', pyGlooxTag.getXml())
+                g_logOutput.error(CLIENT_LOG_AREA.MESSAGE, 'Can not find sender info', pyGlooxTag.getXml())
                 return
             if body:
                 body = self.__msgFilters.chainIn(info['dbID'], body)

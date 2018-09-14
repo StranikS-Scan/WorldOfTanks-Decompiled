@@ -15,6 +15,7 @@ from helpers import i18n
 from items.vehicles import VEHICLE_CLASS_TAGS
 from gui import SystemMessages
 from gui.prb_control.prb_helpers import GlobalListener
+from gui.server_events import g_eventsCache
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache, REQ_CRITERIA
 from gui.shared.utils import decorators
 from gui.shared.gui_items import CLAN_LOCK
@@ -99,10 +100,16 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
         self.updateVehicles(vehicles)
 
     def _updateIgrType(self, *args):
-        filterCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.IN_PREMIUM_IGR
+        filterCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
         items = g_itemsCache.items
         filteredVehs = items.getVehicles(filterCriteria)
         self.updateVehicles(filteredVehs)
+
+    def _updateEventBattles(self, *args):
+        filterCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+        items = g_itemsCache.items
+        filteredVehs = items.getVehicles(filterCriteria)
+        self.updateVehicles(filteredVehs, updateEventBattles=False)
 
     def __getProviderObject(self, vehicleType):
         assetPath = {'label': self.__getVehicleTypeLabel(vehicleType),
@@ -136,7 +143,7 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
         filterCriteria = REQ_CRITERIA.INVENTORY
         if self.vehiclesFilter['nation'] != -1:
             if self.vehiclesFilter['nation'] == 100:
-                filterCriteria |= REQ_CRITERIA.VEHICLE.IN_PREMIUM_IGR
+                filterCriteria |= REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
             else:
                 filterCriteria |= REQ_CRITERIA.NATIONS([self.vehiclesFilter['nation']])
         if self.vehiclesFilter['tankType'] != 'none':
@@ -147,17 +154,22 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
         filteredVehs = items.getVehicles(filterCriteria)
 
         def sorting(v1, v2):
+            if v1.isOnlyForEventBattles and not v2.isOnlyForEventBattles:
+                return -1
+            if not v1.isOnlyForEventBattles and v2.isOnlyForEventBattles:
+                return 1
             if v1.isFavorite and not v2.isFavorite:
                 return -1
             if not v1.isFavorite and v2.isFavorite:
                 return 1
             return v1.__cmp__(v2)
 
-        vehsCDs = map(attrgetter('intCD'), sorted(filteredVehs.itervalues(), sorting))
+        vehsCDs = map(attrgetter('intCD'), sorted(set(g_eventsCache.getEventVehicles() + filteredVehs.values()), sorting))
         LOG_DEBUG('Showing carousel vehicles: ', vehsCDs)
         self.as_showVehiclesS(vehsCDs)
 
-    def updateVehicles(self, vehicles = None):
+    def updateVehicles(self, vehicles = None, updateEventBattles = True):
+        eventVehicles = g_eventsCache.getEventBattles().vehicles
         isSet = vehicles is None
         filterCriteria = REQ_CRITERIA.INVENTORY
         if vehicles is not None:
@@ -199,7 +211,8 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
                  'exp': vehicle.xp,
                  'current': 0,
                  'enabled': True,
-                 'rentLeft': self.getRentLeftInfo(vehicle.isPremiumIGR, vehicle.rentLeftTime)}
+                 'rentLeft': self.getRentLeftInfo(vehicle.isPremiumIGR, vehicle.rentLeftTime),
+                 'groupIndicatorVisible': vehicle.intCD in eventVehicles}
                 vehsData[intCD] = data
 
         LOG_DEBUG('Updating carousel vehicles: ', vehsData if not isSet else 'full sync')
@@ -210,6 +223,8 @@ class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
         if self.__updateVehiclesTimerId is None and (isVehTypeLock or isGlobalVehLock):
             self.__updateVehiclesTimerId = BigWorld.callback(self.UPDATE_LOCKS_PERIOD, self.updateLockTimers)
             LOG_DEBUG('Lock timer updated')
+        if updateEventBattles:
+            self._updateEventBattles()
         return
 
     def updateParams(self):

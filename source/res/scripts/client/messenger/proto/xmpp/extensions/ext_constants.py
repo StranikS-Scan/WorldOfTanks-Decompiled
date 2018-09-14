@@ -8,6 +8,7 @@ class XML_NAME_SPACE(object):
     STANZA_ERROR = 'urn:ietf:params:xml:ns:xmpp-stanzas'
     RESULT_SET_MANAGEMENT = 'http://jabber.org/protocol/rsm'
     WG_EXTENSION = 'http://wargaming.net/xmpp#v2'
+    WG_CLIENT = 'http://wargaming.net/xmpp#client'
     WG_SPA_RESOLVER = 'http://wargaming.net/xmpp#spa-resolver'
     WG_STORAGE = 'http://wargaming.net/xmpp#storage'
 
@@ -24,3 +25,4 @@ class XML_TAG_NAME(object):
     ERROR = 'error'
     SET = 'set'
     WG_EXTENSION = 'wgexts'
+    WG_CLIENT = 'wgexts-client'

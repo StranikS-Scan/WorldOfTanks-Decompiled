@@ -10,7 +10,7 @@ class LanguageController(Controller):
         self.__currentLanguage = None
         return
 
-    def onConnected(self):
+    def onAccountBecomePlayer(self):
         if self.__currentLanguage is None:
             self.__currentLanguage = getClientLanguage()
             BigWorld.player().setLanguage(self.__currentLanguage)

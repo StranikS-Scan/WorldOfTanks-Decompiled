@@ -131,13 +131,13 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
         if chat and not pInfo.isCurrentPlayer():
             chat.as_addMessageS(messages.getUnitPlayerNotification(key, pInfo))
 
-    def onUnitStateChanged(self, state, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         if self.unitFunctional.hasLockedState():
-            if state.isInQueue():
+            if flags.isInQueue():
                 self.as_enableWndCloseBtnS(False)
                 self.currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE
             else:
-                LOG_ERROR('View for modal state is not resolved', state)
+                LOG_ERROR('View for modal state is not resolved', flags)
             self.__initState(timeLeft=timeLeft)
         else:
             self.__clearState()
@@ -184,8 +184,10 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
             self.__initIntroView()
         self.unitFunctional.initEvents(self)
         g_eventDispatcher.hideUnitProgressInCarousel(PREBATTLE_TYPE.SORTIE)
+        self.startFortListening()
 
     def _dispose(self):
+        self.stopFortListening()
         self.removeListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(FortEvent.CHOICE_DIVISION, self.__onLoadStart, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__clearCache()

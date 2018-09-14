@@ -85,8 +85,8 @@ def _set_ACHIEVEMENT7X7_DEPENDENCIES():
      'prematureDetonation': [_updatePrematureDetonationMedal],
      'sentinel': [_updateSentinelMedal],
      'infiltrator': [_updateInfiltratorMedal],
-     'wolfAmongSheepMedal': [_updateAwardCount],
-     'geniusForWarMedal': [_updateAwardCount],
+     'wolfAmongSheepMedal': [_updateAwardCount, _updateBattleHeroesWith7x7Medals],
+     'geniusForWarMedal': [_updateAwardCount, _updateBattleHeroesWith7x7Medals],
      'fightingReconnaissanceMedal': [_updateAwardCount],
      'crucialShotMedal': [_updateAwardCount],
      'promisingFighterMedal': [_updateAwardCount],
@@ -311,6 +311,10 @@ def _updateMedalLavrinenko(dossierDescr, dossierBlockDescr, key, value, prevValu
 
 def _updateBattleHeroes(dossierDescr, dossierBlockDescr, key, value, prevValue):
     dossierBlockDescr['battleHeroes'] += value - prevValue
+
+
+def _updateBattleHeroesWith7x7Medals(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    dossierDescr['achievements']['battleHeroes'] += value - prevValue
 
 
 def _updateTankwomen(dossierDescr, dossierBlockDescr, key, value, prevValue):

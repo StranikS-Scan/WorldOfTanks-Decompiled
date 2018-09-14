@@ -1,11 +1,16 @@
 # Embedded file name: scripts/client/gui/LobbyContext.py
 import BigWorld
+from constants import CURRENT_REALM
 from ConnectionManager import connectionManager
 from helpers.ServerSettings import ServerSettings
 from account_helpers import isRoamingEnabled
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_NOTE
 from gui.shared import g_itemsCache
 from predefined_hosts import g_preDefinedHosts
+
+def _isSkipPeripheryChecking():
+    return connectionManager.isStandalone() and CURRENT_REALM == 'CT'
+
 
 class _LobbyContext(object):
 
@@ -14,10 +19,12 @@ class _LobbyContext(object):
         self.__credentials = None
         self.__guiCtx = {}
         self.__serverSettings = None
+        self.__battlesCount = None
         return
 
     def clear(self):
         self.__credentials = None
+        self.__battlesCount = None
         self.__guiCtx.clear()
         return
 
@@ -32,6 +39,12 @@ class _LobbyContext(object):
 
     def getCredentials(self):
         return self.__credentials
+
+    def getBattlesCount(self):
+        return self.__battlesCount
+
+    def updateBattlesCount(self, battlesCount):
+        self.__battlesCount = battlesCount
 
     def updateGuiCtx(self, ctx):
         self.__guiCtx.update(ctx)
@@ -68,20 +81,27 @@ class _LobbyContext(object):
         return regionCode
 
     def isAnotherPeriphery(self, peripheryID):
-        return connectionManager.peripheryID != peripheryID
+        if not _isSkipPeripheryChecking():
+            return connectionManager.peripheryID != peripheryID
+        LOG_NOTE('Skip periphery checking in standalone mode')
+        return False
 
     def isPeripheryAvailable(self, peripheryID):
         result = True
-        if g_preDefinedHosts.periphery(peripheryID) is None:
-            LOG_ERROR('Periphery not found', peripheryID)
-            result = False
-        elif self.__credentials is None:
-            LOG_ERROR('Login info not found', peripheryID)
-            result = False
-        elif g_preDefinedHosts.isRoamingPeriphery(peripheryID) and not isRoamingEnabled(g_itemsCache.items.stats.attributes):
-            LOG_ERROR('Roaming is not supported', peripheryID)
-            result = False
-        return result
+        if _isSkipPeripheryChecking():
+            LOG_NOTE('Skip periphery checking in standalone mode')
+            return result
+        else:
+            if g_preDefinedHosts.periphery(peripheryID) is None:
+                LOG_ERROR('Periphery not found', peripheryID)
+                result = False
+            elif self.__credentials is None:
+                LOG_ERROR('Login info not found', peripheryID)
+                result = False
+            elif g_preDefinedHosts.isRoamingPeriphery(peripheryID) and not isRoamingEnabled(g_itemsCache.items.stats.attributes):
+                LOG_ERROR('Roaming is not supported', peripheryID)
+                result = False
+            return result
 
     def getPeripheryName(self, peripheryID):
         name = None

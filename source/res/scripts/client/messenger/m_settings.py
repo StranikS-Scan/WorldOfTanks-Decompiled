@@ -101,10 +101,10 @@ class _BattleSettings(object):
         self.lifeTimeRecoveredMessages = 1
 
 
-_UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat', 'chatContactsListOnly', 'receiveFriendshipRequest'))
+_UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat', 'chatContactsListOnly', 'receiveFriendshipRequest', 'receiveInvitesInBattle'))
 
 def _makeDefUserPrefs():
-    return _UserPrefs(1, 2, True, False, False, False, False, False, True)
+    return _UserPrefs(1, 2, True, False, False, False, False, False, True, True)
 
 
 class MessengerSettings(object):

@@ -77,7 +77,7 @@ class GameSessionController(Controller, Notifiable):
         g_clientUpdateManager.addCallbacks({'account': self.__onAccountChanged})
         return
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self._stop(True)
 
     def onDisconnected(self):

@@ -3,9 +3,9 @@ import BigWorld
 import Keys
 from gui.Scaleform.CursorDelegator import CursorDelegator
 from Event import Event
-from debug_utils import *
 from gui.Scaleform.framework import AppRef
 from debug_utils import _doLog
+from constants import IS_DEVELOPMENT
 _BROWSER_LOGGING = True
 _BROWSER_KEY_LOGGING = False
 
@@ -252,6 +252,7 @@ class WebBrowser(AppRef):
             return
         if z != 0:
             self.__browser.injectMouseWheelEvent(z * 20)
+            return
         self.__browser.injectMouseMoveEvent(x, y)
 
     def browserDown(self, x, y, z):

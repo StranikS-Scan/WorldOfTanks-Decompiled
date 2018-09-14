@@ -4,11 +4,12 @@ import weakref
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from external_strings_utils import unicode_from_utf8
-from messenger.proto.xmpp.gloox_constants import PRESENCE, CONNECTION_STATE, DISCONNECT_REASON, GLOOX_EVENT
+from messenger.proto.xmpp.extensions.wg_items import makeWGInfoFromPresence
+from messenger.proto.xmpp.gloox_constants import PRESENCE, CONNECTION_STATE, DISCONNECT_REASON, GLOOX_EVENT, INBOUND_SUB_BATCH_SIZE, INBOUND_SUB_INTERVAL
 from messenger.proto.xmpp.jid import ContactJID, ContactBareJID
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.resources import Resource
-from messenger.proto.xmpp.wrappers import makeWGInfoFromPresence, makeClanInfo
+from messenger.proto.xmpp.wrappers import makeClanInfo
 _GLOOX_EVENTS_LISTENERS = (('onConnect', 'onConnected'),
  ('onReady', 'onLogin'),
  ('onDisconnect', 'onDisconnected'),
@@ -29,6 +30,8 @@ class ClientDecorator(object):
         self.__client = BigWorld.XmppClient()
         self.__handlers = defaultdict(set)
         self.__address = None
+        self.__inboundSubs = []
+        self.__subsCallbackID = None
         return
 
     def init(self):
@@ -52,6 +55,7 @@ class ClientDecorator(object):
         return
 
     def fini(self):
+        self.__cancelInboundSubsCallback()
         client = self.__client
         for handlerName, _ in _GLOOX_EVENTS_LISTENERS:
             if not hasattr(client, handlerName):
@@ -103,17 +107,14 @@ class ClientDecorator(object):
             return
         self.__client.presence = presence
 
-    def setClientPresenceWithIGR(self, presence, igrID = 0, igrRoomID = 0):
-        if presence not in PRESENCE.RANGE:
-            g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Value of presence is invalid', presence)
-            return
-        self.__client.setPresenceWithIGR(presence, str(igrID), str(igrRoomID))
+    def sendPresence(self, query):
+        self.__client.sendCustomPresence(query.getType(), query.getTo(), query.getTag())
 
     def sendIQ(self, query):
-        return self.__client.sendCustomQuery(query.getType(), query.getBody())
+        return self.__client.sendCustomQuery(query.getType(), query.getTag(), query.getTo())
 
     def sendMessage(self, message):
-        self.__client.sendCustomMessage(message.getType(), str(message.getTo()), message.getBody(), message.getCustomTag())
+        self.__client.sendCustomMessage(message.getType(), str(message.getTo()), message.getBody(), message.getTag())
 
     def setContactToRoster(self, jid, name = '', groups = None):
         if groups is None:
@@ -169,6 +170,7 @@ class ClientDecorator(object):
     def onDisconnected(self, reason = DISCONNECT_REASON.BY_REQUEST, description = None):
         if reason != DISCONNECT_REASON.BY_REQUEST:
             self.__address = None
+        self.__cancelInboundSubsCallback()
         self.__handleEvent(GLOOX_EVENT.DISCONNECTED, reason, description)
         return
 
@@ -194,7 +196,15 @@ class ClientDecorator(object):
         self.__handleEvent(GLOOX_EVENT.PRESENCE, ContactJID(jid), Resource(priority, status, presence, makeWGInfoFromPresence(wgexts)))
 
     def onSubscriptionRequest(self, jid, message, nickname, wgexts):
-        self.__handleEvent(GLOOX_EVENT.SUBSCRIPTION_REQUEST, ContactJID(jid), nickname, message, makeWGInfoFromPresence(wgexts))
+        self.__cancelInboundSubsCallback()
+        self.__inboundSubs.append((ContactJID(jid),
+         nickname,
+         message,
+         makeWGInfoFromPresence(wgexts)))
+        if len(self.__inboundSubs) >= INBOUND_SUB_BATCH_SIZE:
+            self.__fireInboundSubsEvent()
+        else:
+            self.__subsCallbackID = BigWorld.callback(INBOUND_SUB_INTERVAL, self.__invokeInboundSubsCallback)
 
     def onLog(self, level, source, message):
         self.__handleEvent(GLOOX_EVENT.LOG, level, source, message)
@@ -221,6 +231,21 @@ class ClientDecorator(object):
             except TypeError:
                 g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, ' Handler is invoked with error', handler)
                 LOG_CURRENT_EXCEPTION()
+
+    def __fireInboundSubsEvent(self):
+        self.__handleEvent(GLOOX_EVENT.SUBSCRIPTION_REQUEST, self.__inboundSubs)
+        self.__inboundSubs = []
+
+    def __cancelInboundSubsCallback(self):
+        if self.__subsCallbackID is not None:
+            BigWorld.cancelCallback(self.__subsCallbackID)
+            self.__subsCallbackID = None
+        return
+
+    def __invokeInboundSubsCallback(self):
+        self.__subsCallbackID = None
+        self.__fireInboundSubsEvent()
+        return
 
 
 class ClientHolder(object):

@@ -67,7 +67,6 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'markerScaleSettings': (0, 0, 0, 0),
  'markerBgSettings': (0, 0, 0, 0),
  'specPrebatlesVisible': True,
- 'battleStatsInHangar': True,
  'roaming': True,
  'movingText': MovingTextProps(False, False),
  'loginRssFeed': LoginRssFeedProps(True, '', False),
@@ -81,12 +80,13 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'isBattleCmdCoolDownVisible': False,
  'browser': BrowserProps('about:blank', ''),
  'reportBugLinks': [],
- 'useXmppToCreatePrivate': False,
  'cache': [],
  'postBattleExchange': PostBattleExchangeProps(False, ''),
- 'isXmppNotesEnabled': False,
  'actionComeToEnd': time_utils.QUARTER_HOUR,
- 'guiScale': []}
+ 'goldFishActionShowCooldown': 86400,
+ 'guiScale': [],
+ 'playerFeedbackDelay': 0.75,
+ 'allowedNotSupportedGraphicSettings': {}}
 
 class GuiSettings(object):
 
@@ -107,7 +107,7 @@ class GuiSettings(object):
                 value = item.value
             settings[item.name] = value
 
-        if IS_DEVELOPMENT:
+        if constants.IS_DEVELOPMENT:
             diff = set(self.__settings.keys()) - set(settings.keys())
             if len(diff):
                 LOG_NOTE('Settings are not in {0}:'.format(GUI_SETTINGS_FILE_PATH), diff)

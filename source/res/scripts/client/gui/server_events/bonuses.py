@@ -3,6 +3,7 @@ from collections import namedtuple
 import BigWorld
 import Math
 from constants import EVENT_TYPE as _ET
+from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.shared.formatters import text_styles
 from items import vehicles, tankmen
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -169,6 +170,31 @@ class ItemsBonus(SimpleBonus):
         for item, count in self.getItems().iteritems():
             if item is not None and count:
                 result.append(i18n.makeString('#quests:bonuses/items/name', name=item.userName, count=count))
+
+        if result:
+            return ', '.join(result)
+        else:
+            return
+
+
+class BoosterBonus(SimpleBonus):
+
+    def getBoosters(self):
+        boosters = {}
+        if self._value is not None:
+            _getBooster = g_goodiesCache.getBooster
+            for boosterID, info in self._value.iteritems():
+                booster = _getBooster(int(boosterID))
+                if booster is not None:
+                    boosters[booster] = info.get('count', 1)
+
+        return boosters
+
+    def format(self):
+        result = []
+        for booster, count in self.getBoosters().iteritems():
+            if booster is not None:
+                result.append(i18n.makeString('#quests:bonuses/boosters/name', name=booster.userName, quality=booster.qualityStr, count=count))
 
         if result:
             return ', '.join(result)
@@ -445,7 +471,8 @@ _BONUSES = {'credits': CreditsBonus,
  'tokens': TokensBonus,
  'dossier': DossierBonus,
  'tankmen': TankmenBonus,
- 'customizations': CustomizationsBonus}
+ 'customizations': CustomizationsBonus,
+ 'goodies': BoosterBonus}
 _BONUSES_BY_TYPE = {(_ET.POTAPOV_QUEST, 'tokens'): PotapovTokensBonus,
  (_ET.POTAPOV_QUEST, 'dossier'): PotapovDossierBonus,
  (_ET.POTAPOV_QUEST, 'tankmen'): PotapovTankmenBonus,

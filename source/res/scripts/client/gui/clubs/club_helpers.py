@@ -99,6 +99,9 @@ class ClubListPaginator(ListPaginator):
     def _request(self):
         result = yield self._requester.sendRequest(GetClubsCtx(self._offset, self._count, onlyOpened=True, waitingID='clubs/club/list'), allowDelay=True)
         if result.isSuccess():
+            if not result.data:
+                self.revertOffset()
+                return
             self.onListUpdated(self._selectedID, True, True, map(ClubListItem.build, reversed(result.data or [])))
 
 

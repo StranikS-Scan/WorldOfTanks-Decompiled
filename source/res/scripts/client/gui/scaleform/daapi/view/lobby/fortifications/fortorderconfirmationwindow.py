@@ -49,6 +49,7 @@ class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, Abstrac
             building = self.fortCtrl.getFort().getBuilding(order.buildingID)
             defRes = building.storage
             maxPurchase = int(defRes / order.productionCost)
+            maxAvailableCount = min(order.maxCount - order.count, maxPurchase, 100)
             resultData = {'orderIcon': order.icon,
              'name': orderTitle,
              'description': order.description,
@@ -56,7 +57,7 @@ class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, Abstrac
              'productionCost': order.productionCost,
              'level': order.level,
              'defaultValue': -1,
-             'maxAvailableCount': min(order.maxCount - order.count, maxPurchase)}
+             'maxAvailableCount': maxAvailableCount}
         self.as_setDataS(resultData)
 
     def onWindowClose(self):

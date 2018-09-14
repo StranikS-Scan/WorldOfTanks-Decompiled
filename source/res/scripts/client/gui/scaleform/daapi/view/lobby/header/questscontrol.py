@@ -1,20 +1,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/QuestsControl.py
 from collections import namedtuple
 from account_helpers.AccountSettings import AccountSettings, IGR_PROMO
-from items import getTypeOfCompactDescr
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers import i18n
 from gui import game_control
 from gui.shared import events
-from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.server_events import g_eventsCache, isPotapovQuestEnabled, settings as quest_settings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.meta.QuestsControlMeta import QuestsControlMeta
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 _QuestButtonInfo = namedtuple('QuestButtonInfo', 'text tooltip alert highlight')
 
@@ -58,7 +55,7 @@ class QuestsControl(QuestsControlMeta, DAAPIModule, AppRef):
             elif g_eventsCache.potapov.hasQuestsForSelect():
                 btnInfo = _createBtnInfo(QUESTS.QUESTSCONTROL_ADDITIONALTITLE_FREESLOTSANDFREEQUESTS, TOOLTIPS.PRIVATEQUESTS_QUESTCONTROL_AVAILABLE, alert=True)
         self.as_setDataS({'titleText': QUESTS.QUESTSCONTROL_TITLE,
-         'additionalText': self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, i18n.makeString(btnInfo.text)),
+         'additionalText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, i18n.makeString(btnInfo.text)),
          'tooltip': btnInfo.tooltip})
         self.as_isShowAlertIconS(btnInfo.alert, btnInfo.highlight)
         premiumIgrVehiclesQuests = g_eventsCache.getQuests(lambda q: q.getStartTimeLeft() <= 0 < q.getFinishTimeLeft() and q.hasPremIGRVehBonus())

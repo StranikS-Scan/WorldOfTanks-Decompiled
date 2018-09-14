@@ -174,7 +174,7 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
         return accountDossier.getFortSortiesStats()
 
     def __getDetailedStatisticsData(self, label, targetData):
-        detailedStatisticsData = DetailedStatisticsUtils.getStatistics(targetData)
+        detailedStatisticsData = DetailedStatisticsUtils.getStatistics(targetData, self._userID is None)
         detailedStatisticsData[0]['data'].append(DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_CAPTUREPOINTS, BigWorld.wg_getIntegralFormat(targetData.getCapturePoints()), PROFILE.PROFILE_PARAMS_TOOLTIP_CAPTUREPOINTS))
         detailedStatisticsData[0]['data'].append(DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_DROPPEDCAPTUREPOINTS, BigWorld.wg_getIntegralFormat(targetData.getDroppedCapturePoints()), PROFILE.PROFILE_PARAMS_TOOLTIP_DROPPEDCAPTUREPOINTS))
         result = []

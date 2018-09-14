@@ -10,16 +10,17 @@ _DEFERRED_RENDER_IDX = 0
 class SettingsParams(AppRef):
 
     def __settingsDiffPreprocessing(self, diff):
-        if settings_constants.GRAPHICS.SMOOTHING in diff:
+        smoothing = diff.pop('smoothing', None)
+        if smoothing is not None:
             rppSetting = graphics.GRAPHICS_SETTINGS.RENDER_PIPELINE
             renderOptions = graphics.getGraphicsSetting(rppSetting)
             isAdvancedRender = renderOptions.value == _DEFERRED_RENDER_IDX
             if rppSetting in diff:
                 isAdvancedRender = diff[rppSetting] == _DEFERRED_RENDER_IDX
             if isAdvancedRender:
-                diff[settings_constants.GRAPHICS.CUSTOM_AA] = diff[settings_constants.GRAPHICS.SMOOTHING]
+                diff[settings_constants.GRAPHICS.CUSTOM_AA] = smoothing
             else:
-                diff[settings_constants.GRAPHICS.MULTISAMPLING] = diff[settings_constants.GRAPHICS.SMOOTHING]
+                diff[settings_constants.GRAPHICS.MULTISAMPLING] = smoothing
         return diff
 
     def getGameSettings(self):
@@ -53,6 +54,15 @@ class SettingsParams(AppRef):
          settings_constants.GRAPHICS.INTERFACE_SCALE))
 
     def preview(self, settingName, value):
+        if settingName == 'smoothing':
+            rppSetting = graphics.GRAPHICS_SETTINGS.RENDER_PIPELINE
+            renderOptions = graphics.getGraphicsSetting(rppSetting)
+            isAdvancedRender = renderOptions.value == _DEFERRED_RENDER_IDX
+            if isAdvancedRender:
+                g_settingsCore.previewSetting(settings_constants.GRAPHICS.CUSTOM_AA, value)
+            else:
+                g_settingsCore.previewSetting(settings_constants.GRAPHICS.MULTISAMPLING, value)
+            return
         g_settingsCore.previewSetting(settingName, value)
 
     def revert(self):

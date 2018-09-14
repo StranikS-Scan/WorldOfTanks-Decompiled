@@ -122,6 +122,9 @@ class IFortListener(object):
     def onDefenceHourChanged(self, hour):
         pass
 
+    def onDefenceHourActivated(self, hour, initiatorDBID):
+        pass
+
     def onDefenceHourStateChanged(self):
         pass
 

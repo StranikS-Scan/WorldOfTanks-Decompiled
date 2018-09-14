@@ -20,10 +20,13 @@ class EventsNotificationsController(Controller):
         super(EventsNotificationsController, self).fini()
         return
 
-    def onConnected(self):
+    def onLobbyInited(self, event):
         g_playerEvents.onEventNotificationsChanged += self.__onEventNotification
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
+        self.__stop()
+
+    def onDisconnected(self):
         self.__stop()
 
     def getEventsNotifications(self, filterFunc = None):

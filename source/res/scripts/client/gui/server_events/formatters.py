@@ -18,6 +18,7 @@ class DISCOUNT_TYPE(CONST_CONTAINER):
     CREDITS = 'credits'
     XP = 'xp'
     FREE_XP = 'freeXp'
+    MULTIPLIER = 'multiplier'
 
 
 class PROGRESS_BAR_TYPE(CONST_CONTAINER):
@@ -290,8 +291,8 @@ def formatBright(msg):
     return makeHtmlString('html_templates:lobby/quests', 'brightTemplate', {'msg': i18n.makeString(msg)})
 
 
-def formatYellow(msg):
-    return makeHtmlString('html_templates:lobby/quests', 'yellowTemplate', {'msg': i18n.makeString(msg)})
+def formatYellow(msg, *args, **kwargs):
+    return makeHtmlString('html_templates:lobby/quests', 'yellowTemplate', {'msg': i18n.makeString(msg, *args, **kwargs)})
 
 
 def formatIndex(index, msg):

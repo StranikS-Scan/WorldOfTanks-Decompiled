@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/messenger/proto/migration/contacts.py
-from gui import GUI_SETTINGS
 from messenger.m_constants import CLIENT_ERROR_ID, CLIENT_ACTION_ID
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_errors import ClientActionError
@@ -167,7 +166,7 @@ class XMPPContactsManagerProxy(IContactsManagerProxy):
         return True
 
     def isNoteSupported(self):
-        return GUI_SETTINGS.isXmppNotesEnabled
+        return True
 
     def isBidiFriendshipSupported(self):
         return True
@@ -251,13 +250,8 @@ class XMPPContactsManagerProxy(IContactsManagerProxy):
         return result
 
     def createPrivateChannel(self, dbID, name):
-        if GUI_SETTINGS.useXmppToCreatePrivate:
-            result, error = self.__xmppProto.messages.startChatSession(dbID, name)
-            if not result:
-                g_messengerEvents.onErrorReceived(error)
-        else:
-            self.__bwProto.users.createPrivateChannel(dbID, name)
-        return True
+        result, error = self.__xmppProto.messages.startChatSession(dbID, name)
+        return result
 
     def setNote(self, dbID, note):
         result, error = self.__xmppProto.contacts.setNote(dbID, note)

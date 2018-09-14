@@ -1,17 +1,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortPeriodDefenceWindow.py
-import time
 from FortifiedRegionBase import NOT_ACTIVATED
-import constants
 from adisp import process
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.daapi.view.meta.FortPeriodDefenceWindowMeta import FortPeriodDefenceWindowMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared.fortifications.context import SettingsCtx
-from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustOffDayToUTC, adjustDefenceHourToLocal
-from helpers import i18n, time_utils
+from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustOffDayToUTC, adjustDefenceHourToLocal, adjustDefenceHoursListToLocal
+from helpers import i18n
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.framework import AppRef
 from predefined_hosts import g_preDefinedHosts
@@ -70,21 +69,18 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
         self.__textsCreated = True
         gt = self.__getHTMLText
         return {'windowLbl': FORTIFICATIONS.PERIODDEFENCEWINDOW_HEADERLBL,
-         'headerLbl': gt(TextType.HIGH_TITLE, FORTIFICATIONS.PERIODDEFENCEWINDOW_READY),
-         'peripheryLbl': gt(TextType.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY),
-         'peripheryDescr': gt(TextType.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY_DESCRIPTION),
-         'hourDefenceLbl': gt(TextType.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE),
-         'hourDefenceDescr': gt(TextType.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE_DESCRIPTION),
-         'holidayLbl': gt(TextType.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY),
-         'holidayDescr': gt(TextType.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY_DESCRIPTION),
+         'headerLbl': gt(TEXT_MANAGER_STYLES.HIGH_TITLE, FORTIFICATIONS.PERIODDEFENCEWINDOW_READY),
+         'peripheryLbl': gt(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY),
+         'peripheryDescr': gt(TEXT_MANAGER_STYLES.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY_DESCRIPTION),
+         'hourDefenceLbl': gt(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE),
+         'hourDefenceDescr': gt(TEXT_MANAGER_STYLES.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE_DESCRIPTION),
+         'holidayLbl': gt(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY),
+         'holidayDescr': gt(TEXT_MANAGER_STYLES.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY_DESCRIPTION),
          'acceptBtn': FORTIFICATIONS.PERIODDEFENCEWINDOW_BTN_ACTIVATE,
          'cancelBtn': FORTIFICATIONS.PERIODDEFENCEWINDOW_BTN_NOTNOW}
 
     def __createData(self):
         fort = self.fortCtrl.getFort()
-        skipValues = []
-        if constants.IS_KOREA:
-            skipValues = [0, 7]
         peripheryList = self.__getPeripheryList()
         currentPeripheryID = fort.peripheryID
         isServerValid = False
@@ -103,14 +99,15 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
          'hour': -1,
          'minutes': defenceMin,
          'isWrongLocalTime': self._isWrongLocalTime(),
-         'skipValues': skipValues,
+         'skipValues': adjustDefenceHoursListToLocal(g_lobbyContext.getServerSettings().getForbiddenFortDefenseHours()),
          'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat()}
 
     def __getHTMLText(self, style, localText):
         text = i18n.makeString(localText)
         return self.app.utilsManager.textManager.getText(style, text)
 
-    def __getPeripheryList(self):
+    @staticmethod
+    def __getPeripheryList():
         result = []
         optionsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         for _, name, _, peripheryID in optionsList:

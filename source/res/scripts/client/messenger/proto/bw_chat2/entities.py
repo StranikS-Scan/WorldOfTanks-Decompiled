@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/entities.py
 from constants import PREBATTLE_TYPE_NAMES
 from messenger.ext import channel_num_gen
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, PRIMARY_CHANNEL_ORDER
 from messenger.proto.bw_chat2.wrappers import ChannelProtoData, CHAT_TYPE
 from messenger.proto.entities import ChannelEntity, MemberEntity
 
@@ -72,6 +72,9 @@ class BWClubChannelEntity(_BWChannelEntity):
 
     def getFullName(self):
         return self.getName()
+
+    def getPrimaryOrder(self):
+        return PRIMARY_CHANNEL_ORDER.CLUB
 
 
 class BWMemberEntity(MemberEntity):

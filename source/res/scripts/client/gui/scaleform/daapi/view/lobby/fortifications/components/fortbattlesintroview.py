@@ -3,7 +3,7 @@ import BigWorld
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortIntroMeta import FortIntroMeta
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
@@ -45,7 +45,7 @@ class FortBattlesIntroView(FortIntroMeta, FortViewHelper, AppRef):
         self.as_setIntroDataS(data)
 
     def __makeAdditionalText(self, value):
-        return self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, value)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, value)
 
     def __getButtonData(self):
         if self.fortState.getStateID() == CLIENT_FORT_STATE.HAS_FORT:

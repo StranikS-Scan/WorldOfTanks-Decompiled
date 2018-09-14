@@ -1,16 +1,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesListView.py
 import BigWorld
 from constants import PREBATTLE_TYPE
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from helpers import i18n, time_utils, int2roman
+from gui.prb_control.prb_helpers import UnitListener
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortClanBattleListMeta import FortClanBattleListMeta
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.fortifications.fort_helpers import FortListener
 from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
-from gui.shared.fortifications.settings import CLIENT_FORT_STATE
-from helpers import i18n, time_utils, int2roman
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE, FORT_BATTLE_DIVISIONS
 
 class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, AppRef):
 
@@ -106,7 +106,6 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, Ap
 
     def _dispose(self):
         self.__clearCallback()
-        self.fortCtrl.removeFortBattlesCache()
         self.stopFortListening()
         super(FortBattlesListView, self)._dispose()
 
@@ -145,11 +144,11 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, Ap
     def __makeData(self):
         result = {}
         self.__updateNextBattleCount()
-        result['actionDescr'] = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_ACTIONDESCR))
-        result['titleLbl'] = self.app.utilsManager.textManager.getText(TextType.PROMO_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_TITLELBL))
-        result['descrLbl'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DESCRLBL))
+        result['actionDescr'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_ACTIONDESCR))
+        result['titleLbl'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.PROMO_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_TITLELBL))
+        result['descrLbl'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DESCRLBL))
         localeBattleCount = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_CURRENTBTLCOUNT)
-        result['battlesCountTitle'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, localeBattleCount)
+        result['battlesCountTitle'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, localeBattleCount)
         self.as_setClanBattleDataS(result)
 
     def __updateNextBattleCount(self):
@@ -158,15 +157,18 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, Ap
             return
         else:
             currentBattlesCount = BigWorld.wg_getNiceNumberFormat(len(self._searchDP.collection))
-            result = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, currentBattlesCount)
+            result = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, currentBattlesCount)
             self.as_upateClanBattlesCountS(result)
             return
 
     def __makeDetailsData(self, clientIdx):
         result = self._searchDP.getUnitVO(clientIdx)
         cache = self.fortCtrl.getFortBattlesCache()
+        maxVehicleLevel = FORT_BATTLE_DIVISIONS.ABSOLUTE.maxVehicleLevel
         if cache is not None:
             item, battleItem = cache.getItem(cache.getSelectedID())
+            if battleItem is not None:
+                maxVehicleLevel = battleItem.additionalData.division
             isCreated = bool(result)
             isInBattle = False
             isBegin = False
@@ -179,25 +181,26 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener, Ap
             elif startTimeLeft == 0 or item.isInProgress():
                 isInBattle = True
             isCreationAvailable = not isCreated and isBegin
-            result['titleText'] = self.app.utilsManager.textManager.getText(TextType.PROMO_SUB_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONTITLE))
+            result['titleText'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.PROMO_SUB_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONTITLE))
             result['buttonLbl'] = FORTIFICATIONS.SORTIE_LISTVIEW_CREATE
             result['isCreationAvailable'] = not isCreated
             _, clanAbbrev, _ = item.getOpponentClanInfo()
             isDefence = item.getType() == BATTLE_ITEM_TYPE.DEFENCE
             localeStr = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_TITLE if isDefence else FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_ATTACK_TITLE
-            result['detailsTitle'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(localeStr, clanName='[%s]' % clanAbbrev))
-            result['description'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_DESCRIPTION, directionName=i18n.makeString('#fortifications:General/directionName%d' % item.getDirection())))
+            result['detailsTitle'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, i18n.makeString(localeStr, clanName='[%s]' % clanAbbrev))
+            result['description'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_DESCRIPTION, directionName=i18n.makeString('#fortifications:General/directionName%d' % item.getDirection())))
             result['isEnableBtn'] = isCreationAvailable
             if isCreationAvailable:
                 descrText = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONDESCR
             else:
                 descrText = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONDESCR_DISABLE
-            result['descrText'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(descrText))
+            result['descrText'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(descrText))
             if isCreated and isInBattle:
                 for slot in result['slots']:
                     slot['canBeTaken'] = False
 
         self.as_setDetailsS(result)
+        self._updateVehiclesLabel(int2roman(1), int2roman(maxVehicleLevel))
         return
 
     def __updateSearchDP(self, state):

@@ -72,7 +72,7 @@ class AOGASController(Controller):
 
         self.__lastNotifyMessages = []
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         LOG_DEBUG('disableNotifyAccount')
         self.__isNotifyAccount = False
 

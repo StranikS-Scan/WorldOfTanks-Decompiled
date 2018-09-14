@@ -21,6 +21,7 @@ class CONTROLLER(CONST_CONTAINER):
     EVENTS_NOTIFICATION = 'eventsNotifications'
     CHINA = 'china'
     AWARD = 'award'
+    BOOSTERS = 'boosters'
 
 
 class BROWSER(CONST_CONTAINER):

@@ -33,6 +33,9 @@ class VehicleModule(FittingItem):
     def _sortByType(self, other):
         return MODULE_TYPES_ORDER_INDICES[self.itemTypeName] - MODULE_TYPES_ORDER_INDICES[other.itemTypeName]
 
+    def getGUIEmblemID(self):
+        return self.itemTypeName
+
 
 class VehicleChassis(VehicleModule):
     """
@@ -242,6 +245,9 @@ class Shell(FittingItem):
         return _ICONS_MASK[:-4] % {'type': self.itemTypeName,
          'subtype': '',
          'unicName': self.descriptor['icon'][0]}
+
+    def getGUIEmblemID(self):
+        return self.type
 
     @property
     def defaultLayoutValue(self):

@@ -3,8 +3,8 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class AccountPopoverMeta(DAAPIModule):
 
-    def openProfile(self):
-        self._printOverrideError('openProfile')
+    def openBoostersWindow(self, slotId):
+        self._printOverrideError('openBoostersWindow')
 
     def openClanStatistic(self):
         self._printOverrideError('openClanStatistic')
@@ -15,9 +15,9 @@ class AccountPopoverMeta(DAAPIModule):
     def openReferralManagement(self):
         self._printOverrideError('openReferralManagement')
 
-    def as_setDataS(self, userData, isTeamKiller, mainAchievements, infoBtnEnabled, clanData, crewData):
+    def as_setDataS(self, userData, isTeamKiller, mainAchievements, infoBtnEnabled, clanData, crewData, boostersBlockTitle):
         if self._isDAAPIInited():
-            return self.flashObject.as_setData(userData, isTeamKiller, mainAchievements, infoBtnEnabled, clanData, crewData)
+            return self.flashObject.as_setData(userData, isTeamKiller, mainAchievements, infoBtnEnabled, clanData, crewData, boostersBlockTitle)
 
     def as_setClanEmblemS(self, emblemId):
         if self._isDAAPIInited():

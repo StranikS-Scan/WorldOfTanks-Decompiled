@@ -133,7 +133,21 @@ class _EventsCache(object):
         if len(battles):
             return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID'))
         else:
+            return EventBattles(set(), [], 0, None)
             return None
+
+    def isEventEnabled(self):
+        return len(self.__getEventBattles()) > 0
+
+    def getEventVehicles(self):
+        from gui.shared import g_itemsCache
+        result = []
+        for v in g_eventsCache.getEventBattles().vehicles:
+            item = g_itemsCache.items.getItemByCD(v)
+            if item.isInInventory:
+                result.append(item)
+
+        return sorted(result)
 
     def getEvents(self, filterFunc = None):
         svrEvents = self.getQuests(filterFunc)

@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/battle_results/data_providers.py
-from collections import namedtuple
 import BigWorld
 from adisp import async, process
+from collections import namedtuple, defaultdict
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.utils.requesters.abstract import AbstractRequester
 from gui.battle_results import formatters as results_fmts, results
@@ -78,12 +78,19 @@ class _AsyncPostBattleResultsDataProvider(AbstractRequester):
         self._playerInfoGetter = playerInfoGetter or _PlayersInfoFromDataGetter()
         self.__results = None
         self.__players = {}
+        self.__vehicles = defaultdict(list)
+        self.__vehicleIDToAccountDBID = {}
+        self.__accountDBIDToVehicleID = {}
         return
 
     def destroy(self):
+        self.__accountDBIDToVehicleID = None
+        self.__vehicleIDToAccountDBID = None
+        self.__vehicles.clear()
         self.__players.clear()
         self.__results.clear()
         del self._playerInfoGetter
+        return
 
     @property
     def results(self):
@@ -107,6 +114,18 @@ class _AsyncPostBattleResultsDataProvider(AbstractRequester):
     def getPlayerData(self, playerDbID):
         return self.__players.get(playerDbID, _PlayerData(playerDbID))
 
+    def getVehicles(self):
+        return self.__vehicles
+
+    def getVehiclesData(self, playerDbID):
+        return self.__vehicles.get(playerDbID, ())
+
+    def getAccountDBID(self, vehicleID):
+        return self.__vehicleIDToAccountDBID.get(vehicleID)
+
+    def getVehicleID(self, accountDBID):
+        return self.__accountDBIDToVehicleID.get(accountDBID)
+
     @async
     @process
     def request(self, callback):
@@ -124,6 +143,13 @@ class _AsyncPostBattleResultsDataProvider(AbstractRequester):
                 info = dict(pData)
                 info.update(self._playerInfoGetter.getInfo(playerDbID)._asdict())
                 self.__players[playerDbID] = _PlayerData(playerDbID, **info)
+
+            for vId, vInfos in self._data['vehicles'].iteritems():
+                for vInfo in vInfos:
+                    accountDBID = vInfo['accountDBID']
+                    self.__vehicleIDToAccountDBID[vId] = accountDBID
+                    self.__accountDBIDToVehicleID[accountDBID] = vId
+                    self.__vehicles[accountDBID].append(vInfo)
 
             self.__results = results.createResults(self._data, self)
         return

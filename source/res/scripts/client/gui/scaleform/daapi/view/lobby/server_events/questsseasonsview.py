@@ -1,14 +1,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsSeasonsView.py
 import weakref
 import operator
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers import i18n
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.server_events import event_items
 from gui.shared.gui_items import Vehicle
 from gui.server_events import g_eventsCache, events_dispatcher as quest_events, settings as quest_settings, formatters as quests_fmts
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.daapi.view.meta.QuestsSeasonsViewMeta import QuestsSeasonsViewMeta
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -88,7 +88,7 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
                 tokenIcon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_QUESTS_TOKEN16, 16, 16, -3, 0))
                 if isUnlocked and not isCompleted:
                     gottenTokensCount, totalTokensCount = tile.getTokensCount()
-                    progress = _getText(TextType.STANDARD_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_TILEPROGRESS, count=_getText(TextType.GOLD_TEXT, str(gottenTokensCount)), total=str(totalTokensCount), icon=tokenIcon))
+                    progress = _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_TILEPROGRESS, count=_getText(TEXT_MANAGER_STYLES.GOLD_TEXT, str(gottenTokensCount)), total=str(totalTokensCount), icon=tokenIcon))
                 else:
                     progress = ''
                 if tile.isFullCompleted():
@@ -97,7 +97,7 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
                     animation = None
                 tiles.append({'id': tile.getID(),
                  'isNew': isUnlocked and quest_settings.isPQTileNew(tile.getID(), pqSettings),
-                 'label': _getText(TextType.STANDARD_TEXT, vehicleBonusLabel),
+                 'label': _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, vehicleBonusLabel),
                  'progress': progress,
                  'isCompleted': isUnlocked and isCompleted,
                  'enabled': isUnlocked,
@@ -138,15 +138,15 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
             ttBody = quests_fmts.getFullTileUserName(season, tile)
             if quest.needToGetReward():
                 icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, 16, 16, -3, 0))
-                description = _getText(TextType.NEUTRAL_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_GETAWARD, icon=icon))
+                description = _getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_GETAWARD, icon=icon))
                 ttAttention = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_ATTENTION)
             else:
-                description = _getText(TextType.STANDARD_TEXT, quests_fmts.getPQFullDescription(quest))
+                description = _getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, quests_fmts.getPQFullDescription(quest))
                 ttNote = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_MISSION_NOTE)
-            title = _getText(TextType.MIDDLE_TITLE, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_TITLE, questName=quest.getUserName()))
+            title = _getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_TITLE, questName=quest.getUserName()))
         else:
             title, isInProgress = '', False
-            description = _getText(TextType.DISABLE_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_NODATA))
+            description = _getText(TEXT_MANAGER_STYLES.DISABLED_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_NODATA))
             ttHeader = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_EMPTY_HEADER)
             ttBody = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_EMPTY_BODY)
         return {'id': quest.getID() if quest else None,

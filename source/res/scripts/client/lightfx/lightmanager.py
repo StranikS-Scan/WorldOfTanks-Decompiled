@@ -180,7 +180,7 @@ class _ChatActionsHandler:
         invitesManager = g_prbLoader.getInvitesManager()
         if invitesManager is not None:
             invitesManager.onReceivedInviteListModified += self.__onReceivedInviteListModified
-            invitesManager.onReceivedInviteListInited += self.__onReceivedInviteListModified
+            invitesManager.onInvitesListInited += self.__onReceivedInviteListModified
         g_messengerEvents.serviceChannel.onServerMessageReceived += self.__onSysMessage
         g_messengerEvents.serviceChannel.onClientMessageReceived += self.__onSysMessage
         g_messengerEvents.channels.onConnectStateChanged += self.__onConnectStateChanged
@@ -190,7 +190,7 @@ class _ChatActionsHandler:
         invitesManager = g_prbLoader.getInvitesManager()
         if invitesManager is not None:
             invitesManager.onReceivedInviteListModified -= self.__onReceivedInviteListModified
-            invitesManager.onReceivedInviteListInited -= self.__onReceivedInviteListModified
+            invitesManager.onInvitesListInited -= self.__onReceivedInviteListModified
         g_messengerEvents.serviceChannel.onServerMessageReceived -= self.__onSysMessage
         g_messengerEvents.serviceChannel.onClientMessageReceived -= self.__onSysMessage
         g_messengerEvents.channels.onConnectStateChanged -= self.__onConnectStateChanged

@@ -20,6 +20,8 @@ from gui.shared.events import OpenLinkEvent
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper
 from gui.shared.formatters import text_styles, icons
 from helpers import i18n
+DEFAULT_WINDOW_SIZE = {'width': 1006,
+ 'height': 596}
 STATE_BAR = [{'label': CYBERSPORT.STATICFORMATIONPROFILEWINDOW_TABSLBL_SUMMARY,
   'view': CYBER_SPORT_ALIASES.STATIC_FORMATION_SUMMARY_UI},
  {'label': CYBERSPORT.STATICFORMATIONPROFILEWINDOW_TABSLBL_STAFF,
@@ -49,7 +51,7 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
         self.__viewToShow = ctx.get('viewIdx', -1)
         return
 
-    def hyperLinkHandler(self, value):
+    def onClickHyperLink(self, value):
         g_eventBus.handleEvent(OpenLinkEvent(value))
 
     def onClubUpdated(self, club):
@@ -133,6 +135,7 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
 
     def _populate(self):
         super(ClubProfileWindow, self)._populate()
+        self.as_setWindowSizeS(DEFAULT_WINDOW_SIZE['width'], DEFAULT_WINDOW_SIZE['height'])
         if self.__clubDbID is None:
             self.onWindowClose()
             return
@@ -147,7 +150,7 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
 
     def _dispose(self):
         self.stopClubListening(self.__clubDbID)
-        self.stopClubListening()
+        self.stopGlobalListening()
         self.__clubDbID = None
         self.__viewToShow = None
         super(ClubProfileWindow, self)._dispose()
@@ -276,7 +279,7 @@ class ClubProfileWindow(View, StaticFormationProfileWindowMeta, AbstractWindowVi
          tooltipBody)
 
     def _isMemberInClubUnit(self):
-        _, unit = self.unitFunctional.getUnit()
+        _, unit = self.unitFunctional.getUnit(safe=True)
         return unit is not None and unit.isClub()
 
     def __updateFormationData(self, club):

@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/__init__.py
+from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from constants import IS_IGR_ENABLED
-from gui import GUI_SETTINGS
+from gui.battle_control.arena_info import getArenaGuiTypeLabel
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID, CLIENT_ERROR_ID, USER_TAG, CLIENT_ACTION_ID, MESSENGER_SCOPE
 from messenger.proto import notations
@@ -10,17 +11,19 @@ from messenger.proto.shared_errors import ChatCoolDownError, ClientActionError, 
 from messenger.proto.shared_find_criteria import ProtoFindCriteria
 from messenger.proto.xmpp import entities
 from messenger.proto.xmpp.XmppCooldownManager import XmppCooldownManager
-from messenger.proto.xmpp.contacts import block_tasks, roster_tasks, sub_tasks, note_tasks
+from messenger.proto.xmpp.contacts import block_tasks, roster_tasks, sub_tasks, note_tasks, sub_helper
 from messenger.proto.xmpp.contacts.tasks import ContactTaskQueue, SeqTaskQueue
 from messenger.proto.xmpp.decorators import xmpp_query, QUERY_SIGN, local_query
 from messenger.proto.xmpp.errors import ClientContactError, ClientIntLimitError
+from messenger.proto.xmpp.extensions.shared_queries import PresenceQuery
 from messenger.proto.xmpp.find_criteria import ItemsFindCriteria, GroupFindCriteria, RqFriendshipCriteria, MutedOnlyFindCriteria
 from messenger.proto.xmpp.gloox_constants import SUBSCRIPTION as _SUB, GLOOX_EVENT as _EVENT, PRESENCE, DISCONNECT_REASON
 from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler, ClientHolder
 from messenger.proto.xmpp.jid import makeContactJID
-from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
+from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA as _LOG
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE, CONTACT_LIMIT, CONTACT_ERROR_ID, LIMIT_ERROR_ID
 from messenger.storage import storage_getter
+from predefined_hosts import g_preDefinedHosts
 _MAX_TRIES_FAILED_IN_LOBBY = 2
 _MAX_TRIES_FAILED_IN_BATTLE = 1
 
@@ -55,15 +58,13 @@ class _UserPresence(ClientHolder):
         for presence in seq:
             if not initial and client.getClientPresence() == presence:
                 continue
+            query = self.__createQuery(presence)
             if IS_IGR_ENABLED:
                 from gui.game_control import getIGRCtrl
                 ctrl = getIGRCtrl()
                 if ctrl:
-                    client.setClientPresenceWithIGR(presence, igrID=ctrl.getRoomType())
-                else:
-                    client.setClientPresence(presence)
-            else:
-                client.setClientPresence(presence)
+                    query.setIgrID(ctrl.getRoomType())
+            client.sendPresence(query)
 
         return True
 
@@ -73,12 +74,23 @@ class _UserPresence(ClientHolder):
     def removeListeners(self):
         g_playerEvents.onIGRTypeChanged -= self.__onIGRTypeChanged
 
+    def __createQuery(self, presence):
+        query = PresenceQuery(presence)
+        item = g_preDefinedHosts.byName(connectionManager.serverUserName)
+        if item.url:
+            query.setGameServerHost(item.url)
+        if self.__scope == MESSENGER_SCOPE.BATTLE and presence == PRESENCE.DND:
+            query.setArenaGuiLabel(getArenaGuiTypeLabel())
+        return query
+
     def __onIGRTypeChanged(self, igrID, _):
         if not IS_IGR_ENABLED:
             return
         client = self.client()
         if client and client.isConnected():
-            client.setClientPresenceWithIGR(client.getClientPresence(), igrID=igrID)
+            query = self.__createQuery(client.getClientPresence())
+            query.setIgrID(igrID)
+            client.sendPresence(query)
 
 
 class _VoipHandler(object):
@@ -115,14 +127,16 @@ class _VoipHandler(object):
 
 
 class ContactsManager(ClientEventsHandler):
-    __slots__ = ('__seq', '__tasks', '__cooldown', '__presence', '__voip')
+    __slots__ = ('__seq', '__tasks', '__cooldown', '__presence', '__voip', '__rqRestrictions')
 
     def __init__(self):
         super(ContactsManager, self).__init__()
         self.__seq = SeqTaskQueue()
         self.__seq.suspend()
-        self.__tasks = ContactTaskQueue()
+        self.__tasks = ContactTaskQueue([block_tasks.SyncBlockItemTask()])
         self.__cooldown = XmppCooldownManager()
+        self.__subsBatch = sub_helper.InboundSubscriptionsBatch()
+        self.__subsRestrictions = sub_helper.SubscriptionsRestrictions()
         self.__presence = _UserPresence()
         self.__presence.addListeners()
         self.__voip = _VoipHandler()
@@ -148,6 +162,7 @@ class ContactsManager(ClientEventsHandler):
         self.usersStorage.onRestoredFromCache -= self.__us_onRestoredFromCache
         self.__presence.removeListeners()
         self.__voip.removeListeners()
+        self.__subsBatch.clear()
         super(ContactsManager, self).clear()
 
     def switch(self, scope):
@@ -176,6 +191,7 @@ class ContactsManager(ClientEventsHandler):
         unregister(_EVENT.ROSTER_RESULT, self.__handleRosterResult)
         unregister(_EVENT.ROSTER_ITEM_SET, self.__handleRosterItemSet)
         unregister(_EVENT.ROSTER_ITEM_REMOVED, self.__handleRosterItemRemoved)
+        unregister(_EVENT.PRESENCE, self.__handlePresence)
         unregister(_EVENT.SUBSCRIPTION_REQUEST, self.__handleSubscriptionRequest)
         self.__tasks.clear()
 
@@ -204,8 +220,8 @@ class ContactsManager(ClientEventsHandler):
             else:
                 jid = makeContactJID(dbID)
                 subTo = _SUB.OFF
-            error = self.__checkRosterSize()
-            if error:
+            result, error = self.__subsRestrictions.canAddFriends()
+            if not result:
                 return (False, error)
             if itemType == XMPP_ITEM_TYPE.BLOCK_ITEM:
                 tasks.append(block_tasks.RemoveBlockItemTask(jid, name))
@@ -349,46 +365,12 @@ class ContactsManager(ClientEventsHandler):
     def canApproveFriendship(self, contact):
         if not self.client() or not self.client().isConnected():
             return (False, ClientError(CLIENT_ERROR_ID.NOT_CONNECTED))
-        elif not contact:
-            return (False, ClientContactError(CONTACT_ERROR_ID.CONTACT_ITEM_NOT_FOUND))
-        tags = contact.getTags()
-        if USER_TAG.SUB_APPROVED in tags:
-            return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_APPROVED, contact.getFullName()))
-        if contact.getItemType() == XMPP_ITEM_TYPE.ROSTER_ITEM:
-            if USER_TAG.SUB_FROM in contact.getTags():
-                return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_APPROVED, contact.getFullName()))
-            else:
-                return (True, None)
-        if contact.getItemType() == XMPP_ITEM_TYPE.SUB_PENDING:
-            if USER_TAG.SUB_IN_PROCESS in tags:
-                return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_RQ_PROCESS, contact.getFullName()))
-            if USER_TAG.SUB_CANCELED in tags:
-                return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_CANCELED, contact.getFullName()))
-            error = self.__checkRosterSize()
-            if error:
-                return (False, error)
-            return (True, None)
-        else:
-            return (False, ClientContactError(CONTACT_ERROR_ID.CONTACT_ITEM_NOT_FOUND))
+        return self.__subsRestrictions.canApproveFriendship(contact)
 
     def canCancelFriendship(self, contact):
         if not self.client() or not self.client().isConnected():
             return (False, ClientError(CLIENT_ERROR_ID.NOT_CONNECTED))
-        elif not contact:
-            return (False, ClientContactError(CONTACT_ERROR_ID.CONTACT_ITEM_NOT_FOUND))
-        tags = contact.getTags()
-        if USER_TAG.SUB_APPROVED in tags:
-            return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_APPROVED, contact.getFullName()))
-        elif USER_TAG.SUB_FROM in tags:
-            return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_APPROVED, contact.getFullName()))
-        elif USER_TAG.SUB_IN_PROCESS in tags:
-            return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_RQ_PROCESS, contact.getFullName()))
-        elif USER_TAG.SUB_CANCELED in tags:
-            return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_CANCELED, contact.getFullName()))
-        elif contact.getItemType() == XMPP_ITEM_TYPE.ROSTER_ITEM:
-            return (False, ClientContactError(CONTACT_ERROR_ID.ROSTER_ITEM_EXISTS, contact.getFullName()))
-        else:
-            return (True, None)
+        return self.__subsRestrictions.canCancelFriendship(contact)
 
     @xmpp_query(QUERY_SIGN.DATABASE_ID)
     def approveFriendship(self, dbID):
@@ -563,26 +545,17 @@ class ContactsManager(ClientEventsHandler):
             error = ChatCoolDownError(actionID, self.__cooldown.getDefaultCoolDown())
         return error
 
-    def __checkRosterSize(self):
-        length = self.usersStorage.getCount(ItemsFindCriteria((XMPP_ITEM_TYPE.ROSTER_ITEM,)))
-        if length >= CONTACT_LIMIT.ROSTER_MAX_COUNT:
-            return ClientIntLimitError(LIMIT_ERROR_ID.MAX_ROSTER_ITEMS, CONTACT_LIMIT.ROSTER_MAX_COUNT)
-        else:
-            return None
-
     def __handleConnected(self):
         self.__tasks.suspend()
         self.__seq.onInited += self.__onSeqsInited
-        tasks = [roster_tasks.RosterResultTask(), block_tasks.BlockListResultTask()]
-        if GUI_SETTINGS.isXmppNotesEnabled:
-            tasks.append(note_tasks.NotesListTask())
-        self.__seq.init(*tasks)
+        self.__seq.init(roster_tasks.RosterResultTask(), block_tasks.BlockListResultTask(), note_tasks.NotesListTask())
 
     def __handleDisconnected(self, reason, description):
         if reason == DISCONNECT_REASON.BY_REQUEST:
             self.__seq.suspend()
         self.__seq.fini()
         self.__tasks.clear()
+        self.__subsBatch.clear()
         for contact in self.usersStorage.getList(ProtoFindCriteria(PROTO_TYPE.XMPP)):
             resources = contact.getItem().getResources()
             if not resources.isEmpty():
@@ -597,15 +570,15 @@ class ContactsManager(ClientEventsHandler):
         self.__tasks.setIQ(iqID, jid, context)
 
     def __handleRosterResult(self, generator):
-        g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Roster result is received')
+        g_logOutput.debug(_LOG.ROSTER, 'Roster result is received')
         self.__seq.sync(0, generator())
 
     def __handleRosterItemSet(self, jid, name, groups, sub, clanInfo):
-        g_logOutput.debug(CLIENT_LOG_AREA.ROSTER, 'Roster push is received', jid, name, groups, sub, clanInfo)
+        g_logOutput.debug(_LOG.ROSTER, 'Roster push is received', jid, name, groups, sub, clanInfo)
         self.__tasks.sync(jid, name, groups, sub, clanInfo, defaultTask=roster_tasks.SyncSubscriptionTask)
 
     def __handleRosterItemRemoved(self, jid):
-        self.__tasks.sync(jid)
+        self.__tasks.sync(jid, defaultTask=roster_tasks.RemoveRosterItemTask)
 
     def __handlePresence(self, jid, resource):
         dbID = jid.getDatabaseID()
@@ -613,7 +586,7 @@ class ContactsManager(ClientEventsHandler):
         if resource.presence == PRESENCE.UNAVAILABLE:
             if user and not user.isCurrentPlayer():
                 user.update(jid=jid, resource=None, clanInfo=resource.getClanInfo())
-                g_logOutput.debug(CLIENT_LOG_AREA.RESOURCE, 'Resource is removed', user.getName(), jid.getResource(), resource)
+                g_logOutput.debug(_LOG.RESOURCE, 'Resource is removed', user.getName(), jid.getResource(), resource)
         elif resource.presence != PRESENCE.UNKNOWN:
             if not user:
                 user = entities.XMPPUserEntity(dbID)
@@ -622,19 +595,27 @@ class ContactsManager(ClientEventsHandler):
                 self.playerCtx.setBanInfo(resource.getBanInfo())
             else:
                 user.update(jid=jid, resource=resource, clanInfo=resource.getClanInfo())
-                g_logOutput.debug(CLIENT_LOG_AREA.RESOURCE, 'Resource is set', user.getName(), jid.getResource(), resource)
+                g_logOutput.debug(_LOG.RESOURCE, 'Resource is set', user.getName(), jid.getResource(), resource)
         if user:
             g_messengerEvents.users.onUserStatusUpdated(user)
         return
 
-    def __handleSubscriptionRequest(self, jid, name, _, wgexts):
-        self.__addTasks(USER_ACTION_ID.SUBSCRIPTION_CHANGED, jid, sub_tasks.InboundSubscriptionTask(jid, name, wgexts.clan))
+    def __handleSubscriptionRequest(self, subs):
+        self.__subsBatch.addSubs(subs)
+        if not self.__seq.isInited():
+            return
+        self.__subsRestrictions.setToUseCachedCounts(True)
+        self.__subsBatch.process(self.__tasks)
+        self.__subsRestrictions.setToUseCachedCounts(False)
 
     def __onSeqsInited(self):
-        g_logOutput.debug(CLIENT_LOG_AREA.GENERIC, 'Starts to process contacts tasks')
+        g_logOutput.debug(_LOG.GENERIC, 'Starts to process contacts tasks')
         self.__presence.sendPresence(True)
         self.__tasks.release()
         self.__tasks.onSeqTaskRequested += self.__onSeqTaskRequested
+        self.__subsRestrictions.setToUseCachedCounts(True)
+        self.__subsBatch.process(self.__tasks)
+        self.__subsRestrictions.setToUseCachedCounts(False)
         g_messengerEvents.users.onUsersListReceived({USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.MUTED})
 
     def __onSeqTaskRequested(self, task):
@@ -657,11 +638,13 @@ class ContactsManager(ClientEventsHandler):
     def __us_onRestoredFromCache(self, stateGenerator):
         if not g_settings.server.XMPP.isEnabled():
             return
-        if stateGenerator and not self.__seq.isInited():
+        if stateGenerator:
             setUser = self.usersStorage.setUser
+            isInited = self.__seq.isInited()
             for dbID, state in stateGenerator(PROTO_TYPE.XMPP):
                 contact = entities.XMPPUserEntity(dbID)
-                if contact.setPersistentState(state):
+                result = contact.setPersistentState(state)
+                if result and (not isInited or contact.getItemType() == XMPP_ITEM_TYPE.SUB_PENDING):
                     setUser(contact)
 
         g_messengerEvents.users.onUsersListReceived({USER_TAG.CACHED,

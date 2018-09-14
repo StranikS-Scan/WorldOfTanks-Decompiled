@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
-from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_INVITE_STATE, PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
 from constants import QUEUE_TYPE_NAMES
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
@@ -10,6 +10,7 @@ from gui.prb_control.formatters import getBattleSessionStartTimeString
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.prb_control.prb_helpers import prbDispatcherProperty
 from gui.prb_control.prb_helpers import prbAutoInvitesProperty
+from gui.prb_control.settings import PRB_INVITE_STATE
 from gui.shared.fortifications import formatters as fort_fmt
 from helpers import i18n, html
 from messenger.ext import passCensor
@@ -38,11 +39,9 @@ def getPreQueueName(queueType, lowercase = False):
     return queueName
 
 
-PREBATTLE_INVITE_STATE_NAMES = dict([ (v, k) for k, v in PREBATTLE_INVITE_STATE.__dict__.iteritems() if not k.startswith('_') ])
-
 def getPrbInviteStateName(state):
     try:
-        stateName = PREBATTLE_INVITE_STATE_NAMES[state]
+        stateName = PRB_INVITE_STATE.getKeyByValue(state)
     except KeyError:
         LOG_ERROR('State of prebattle invite not found', state)
         stateName = 'N/A'
@@ -99,7 +98,7 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID):
 class InviteFormatter(object):
 
     def getCtx(self, invite):
-        return {'sender': invite.creatorFullName,
+        return {'sender': invite.senderFullName,
          'receiver': invite.receiverFullName}
 
     def getNote(self, invite):
@@ -123,8 +122,8 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         return '{0:>s}InviteIcon'.format(getPrbName(invite.type, True))
 
     def getTitle(self, invite):
-        if invite.creatorFullName:
-            creatorName = makeHtmlString('html_templates:lobby/prebattle', 'inviteTitleCreatorName', ctx={'name': invite.creatorFullName})
+        if invite.senderFullName:
+            creatorName = makeHtmlString('html_templates:lobby/prebattle', 'inviteTitleCreatorName', ctx={'name': invite.senderFullName})
         else:
             creatorName = ''
         return makeHtmlString('html_templates:lobby/prebattle', 'inviteTitle', ctx={'sender': creatorName}, sourceKey=getPrbName(invite.type))
@@ -145,7 +144,7 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         return note
 
     def getState(self, invite):
-        key = I18N_INVITES.invites_state(getPrbInviteStateName(invite.state))
+        key = I18N_INVITES.invites_state(getPrbInviteStateName(invite.getState()))
         if not key:
             return ''
         state = i18n.makeString(key)

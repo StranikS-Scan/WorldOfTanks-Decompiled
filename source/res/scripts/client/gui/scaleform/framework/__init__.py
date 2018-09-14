@@ -13,8 +13,23 @@ class COMMON_VIEW_ALIAS(object):
     WAITING = 'waiting'
 
 
-ViewSettings = namedtuple('ViewSettings', ('alias', 'clazz', 'url', 'type', 'event', 'scope'))
-GroupedViewSettings = namedtuple('GroupedViewSettings', ('alias', 'clazz', 'url', 'type', 'group', 'event', 'scope'))
+ViewSettings = namedtuple('ViewSettings', ('alias', 'clazz', 'url', 'type', 'event', 'scope', 'cacheable'))
+ViewSettings.__new__.__defaults__ = (None,
+ None,
+ None,
+ None,
+ None,
+ None,
+ False)
+GroupedViewSettings = namedtuple('GroupedViewSettings', ('alias', 'clazz', 'url', 'type', 'group', 'event', 'scope', 'cacheable'))
+GroupedViewSettings.__new__.__defaults__ = (None,
+ None,
+ None,
+ None,
+ None,
+ None,
+ None,
+ False)
 g_entitiesFactories = EntitiesFactories((DAAPIModuleFactory((ViewTypes.COMPONENT,)), ViewFactory((ViewTypes.DEFAULT,
   ViewTypes.LOBBY_SUB,
   ViewTypes.CURSOR,

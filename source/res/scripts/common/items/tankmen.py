@@ -307,9 +307,7 @@ class TankmanDescr(object):
 
     @property
     def lastSkillLevel(self):
-        if self.freeSkillsNumber < len(self.__skills):
-            return self.__lastSkillLevel
-        return MAX_SKILL_LEVEL
+        return self.__lastSkillLevel
 
     @property
     def lastSkillNumber(self):
@@ -401,22 +399,34 @@ class TankmanDescr(object):
         self.__levelUpLastSkill()
 
     def isFreeDropSkills(self):
-        return self.lastSkillNumber <= 1 + self.freeSkillsNumber and self.__lastSkillLevel == 0
+        if self.lastSkillNumber < 1 + self.freeSkillsNumber:
+            return True
+        if self.lastSkillNumber == 1 + self.freeSkillsNumber and self.__lastSkillLevel == 0:
+            return True
+        return False
 
-    def dropSkills(self, xpReuseFraction = 0.0):
+    def dropSkills(self, xpReuseFraction = 0.0, throwIfNoChange = True):
         if not 0.0 <= xpReuseFraction <= 1.0:
             raise AssertionError
+            if len(self.__skills) == 0:
+                if throwIfNoChange:
+                    raise Exception, 'attempt to reset empty skills'
+                return
             prevTotalXP = self.totalXP()
             if self.numLevelsToNextRank != 0:
                 self.numLevelsToNextRank += self.__lastSkillLevel
                 numSkills = self.lastSkillNumber - self.freeSkillsNumber
+                if numSkills < 1:
+                    if throwIfNoChange:
+                        raise Exception, 'attempt to reset free skills'
+                    return
                 if numSkills > 1:
                     self.numLevelsToNextRank += MAX_SKILL_LEVEL * (numSkills - 1)
             del self.__skills[self.freeSkillsNumber:]
-            if self.freeSkillsNumber < len(self.__skills):
-                self.__lastSkillLevel = 0
-            else:
+            if self.freeSkillsNumber:
                 self.__lastSkillLevel = MAX_SKILL_LEVEL
+            else:
+                self.__lastSkillLevel = 0
             xpReuseFraction != 0.0 and self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())))
 
     def dropSkill(self, skillName, xpReuseFraction = 0.0):
@@ -627,6 +637,10 @@ def makeTmanDescrByTmanData(tmanData):
         raise Exception, 'Wrong tankman level'
     skills = tmanData.get('skills', [])
     freeSkills = tmanData.get('freeSkills', [])
+    if skills == None:
+        skills = []
+    if freeSkills == None:
+        freeSkills = []
     __validateSkills(skills)
     __validateSkills(freeSkills)
     if not set(skills).isdisjoint(set(freeSkills)):

@@ -52,17 +52,13 @@ class CompanyRoomMeta(BasePrebattleRoomView):
         if self._isDAAPIInited():
             return self.flashObject.as_setDivision(divisionID)
 
-    def as_setTotalLimitLabelsS(self, totalLevel, levelRange):
+    def as_setTotalLimitLabelsS(self, totalLevel):
         if self._isDAAPIInited():
-            return self.flashObject.as_setTotalLimitLabels(totalLevel, levelRange)
+            return self.flashObject.as_setTotalLimitLabels(totalLevel)
 
     def as_setMaxCountLimitLabelS(self, label):
         if self._isDAAPIInited():
             return self.flashObject.as_setMaxCountLimitLabel(label)
-
-    def as_setClassesLimitsS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setClassesLimits(data)
 
     def as_setInvalidVehiclesS(self, data):
         if self._isDAAPIInited():
@@ -71,3 +67,7 @@ class CompanyRoomMeta(BasePrebattleRoomView):
     def as_setChangeSettingCoolDownS(self, coolDown):
         if self._isDAAPIInited():
             return self.flashObject.as_setChangeSettingCoolDown(coolDown)
+
+    def as_setHeaderDataS(self, viewType, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setHeaderData(viewType, value)

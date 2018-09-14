@@ -1,6 +1,6 @@
 # Embedded file name: scripts/common/ArenaType.py
 import ResMgr
-from constants import IS_CLIENT, IS_BASEAPP, IS_WEB, IS_CELLAPP, ARENA_TYPE_XML_PATH, ARENA_GAMEPLAY_NAMES, ARENA_GAMEPLAY_IDS
+from constants import IS_BOT, IS_CLIENT, IS_BASEAPP, IS_WEB, IS_CELLAPP, ARENA_TYPE_XML_PATH, ARENA_GAMEPLAY_NAMES, ARENA_GAMEPLAY_IDS
 from items.vehicles import CAMOUFLAGE_KINDS
 from debug_utils import *
 if IS_CLIENT:
@@ -30,6 +30,10 @@ def getGameplayName(gameplayID):
 
 def getGameplayIDForName(gameplayName):
     return ARENA_GAMEPLAY_IDS[gameplayName]
+
+
+def parseTypeID(typeID):
+    return (typeID >> 16, typeID & 65535)
 
 
 _DEFAULT_XML = ARENA_TYPE_XML_PATH + '_default_.xml'
@@ -67,6 +71,8 @@ class ArenaType(object):
         self.__geometryCfg = geometryCfg
         self.__gameplayCfg = gameplayCfg
         self.__gameplayCfg['id'] = gameplayCfg['gameplayID'] << 16 | geometryCfg['geometryID']
+        if self.maxPlayersInTeam < self.minPlayersInTeam:
+            raise Exception, "'maxPlayersInTeam' value < 'minPlayersInTeam' value"
 
     def __getattr__(self, name):
         if name in self.__gameplayCfg:
@@ -109,6 +115,7 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
             cfg['waterFreqZ'] = section.readFloat('water/freqZ', 1.0)
             cfg['defaultGroundEffect'] = __readDefaultGroundEffect(section, defaultXml)
         cfg.update(__readCommonCfg(section, defaultXml, True))
+        cfg.update(__readGameplayPoints(defaultXml))
     except Exception as e:
         raise Exception, "Wrong arena type XML '%s' : %s" % (geometryName, str(e))
 
@@ -156,7 +163,9 @@ def __readGameplayCfg(gameplayName, section, defaultXml):
 def __readCommonCfg(section, defaultXml, raiseIfMissing):
     cfg = {}
     if raiseIfMissing or __hasKey('minPlayersInTeam', section, defaultXml):
-        cfg['minPlayersInTeam'], cfg['maxPlayersInTeam'] = __readMinMaxPlayersInTeam(section, defaultXml)
+        cfg['minPlayersInTeam'] = __readMinPlayersInTeam(section, defaultXml)
+    if raiseIfMissing or __hasKey('maxPlayersInTeam', section, defaultXml):
+        cfg['maxPlayersInTeam'] = __readMaxPlayersInTeam(section, defaultXml)
     if raiseIfMissing or __hasKey('runDelay', section, defaultXml):
         cfg['runDelay'] = __readInt('runDelay', section, defaultXml)
     if raiseIfMissing or __hasKey('roundLength', section, defaultXml):
@@ -169,6 +178,9 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing):
         cfg['artilleryPreparationChance'] = __readFloat('artilleryPreparationChance', section, defaultXml)
     if raiseIfMissing or section.has_key('mapActivities'):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
+    if raiseIfMissing or __hasKey('winPoints', section, defaultXml):
+        cfg.update(__readWinPoints(section, defaultXml))
+    cfg.update(__readGameplayPoints(section))
     cfg['teamBasePositions'] = __readTeamBasePositions(section)
     cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section)
     if IS_CLIENT or IS_WEB:
@@ -194,7 +206,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing):
             cfg['mapActivitiesSection'] = section['mapActivities']
         if section.has_key('soundRemapping'):
             cfg['soundRemapping'] = section['soundRemapping']
-    if IS_CLIENT:
+    if IS_CLIENT or IS_BOT:
         cfg['controlPoints'] = __readControlPoints(section)
         cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, nodeNameTemplate='team%d_low', required=False)
     return cfg
@@ -294,16 +306,18 @@ def __readVehicleCamouflageKind(section):
     return kind
 
 
-def __readMinMaxPlayersInTeam(section, defaultXml):
+def __readMinPlayersInTeam(section, defaultXml):
     minPlayersInTeam = __readInt('minPlayersInTeam', section, defaultXml)
     if minPlayersInTeam < 0:
         raise Exception, "wrong 'minPlayersInTeam' value"
+    return minPlayersInTeam
+
+
+def __readMaxPlayersInTeam(section, defaultXml):
     maxPlayersInTeam = __readInt('maxPlayersInTeam', section, defaultXml)
     if maxPlayersInTeam < 0:
         raise Exception, "wrong 'maxPlayersInTeam' value"
-    if maxPlayersInTeam < minPlayersInTeam:
-        raise Exception, "'maxPlayersInTeam' value < 'minPlayersInTeam' value"
-    return (minPlayersInTeam, maxPlayersInTeam)
+    return maxPlayersInTeam
 
 
 def __readMapActivitiesTimeframes(section):
@@ -382,3 +396,35 @@ def __readTeamSpawnPoints(section, nodeNameTemplate = 'team%d', required = True)
                     teamSpawnPoints[teamIdx].append(value.readVector2(''))
 
         return teamSpawnPoints
+
+
+def __readGameplayPoints(section):
+    sps = []
+    aps = []
+    rps = []
+    for name, value in section.items():
+        if name == 'flagSpawnPoint':
+            sps.append({'position': value.readVector2('position'),
+             'team': value.readInt('team'),
+             'winPoints': value.readFloat('winPoints')})
+        elif name == 'flagAbsorptionPoint':
+            aps.append({'position': value.readVector3('position'),
+             'team': value.readInt('team')})
+        elif name == 'repairPoint':
+            rps.append({'position': value.readVector3('position'),
+             'radius': value.readFloat('radius'),
+             'cooldown': value.readFloat('cooldown'),
+             'repairTime': value.readFloat('repairTime'),
+             'repairFlags': value.readInt('repairFlags')})
+
+    cfg = {'flagSpawnPoints': sps,
+     'flagAbsorptionPoints': aps,
+     'repairPoints': rps}
+    return cfg
+
+
+def __readWinPoints(section, defaultXml):
+    section = section['winPoints'] if section.has_key('winPoints') else defaultXml['winPoints']
+    winPoints = {'winPointsCAP': section.readInt('winPointsCAP'),
+     'winPointsForKill': section.readInt('winPointsForKill')}
+    return {'winPoints': winPoints}

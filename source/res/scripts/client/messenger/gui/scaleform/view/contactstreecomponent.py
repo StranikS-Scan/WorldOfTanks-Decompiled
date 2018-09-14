@@ -13,12 +13,15 @@ class ContactsTreeComponent(ContactsTreeComponentMeta):
         super(ContactsTreeComponent, self).__init__()
         self._mainDP = ContactsDataProvider()
         self.onListStateChanged = Event.Event()
+        self.onGroupToggled = Event.Event()
 
     def getMainDP(self):
         return self._mainDP
 
     def onGroupSelected(self, mainGroup, groupData):
-        self._mainDP.toggleGroup(mainGroup, groupData.id)
+        groupName = groupData.groupName
+        self._mainDP.toggleGroup(mainGroup, groupName)
+        self.onGroupToggled(mainGroup, groupName, not groupData.currentOpened)
 
     def searchLocalContact(self, searchFilter):
         if self._mainDP.setSearchFilter(searchFilter):

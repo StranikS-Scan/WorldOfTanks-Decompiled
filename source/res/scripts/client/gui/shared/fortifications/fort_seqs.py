@@ -88,7 +88,7 @@ class SortieItem(object):
     def getCommanderDatabaseID(self):
         return self.itemData.cmdrDBID
 
-    def getState(self):
+    def getFlags(self):
         return self.itemData.unitState
 
     def getDescription(self):
@@ -377,7 +377,9 @@ _FortBattleItemData = namedtuple('_FortBattleItemData', ('defenderClanDBID',
  'prevBuildNum',
  'currentBuildNum',
  'isEnemyReadyForBattle',
- 'isBattleRound'))
+ 'isBattleRound',
+ 'canUseEquipments',
+ 'division'))
 
 @ReprInjector.simple(('_battleID', 'battleID'), ('_peripheryID', 'peripheryID'), ('itemData', 'data'), ('additionalData', 'additional'))
 
@@ -1299,7 +1301,7 @@ class ClanCardItem(IClanFortInfo):
 
 class _BattleItemAbstract(object):
 
-    def __init__(self, peripheryID, startTime, opponentClanDBID, opponentClanAbbrev, opponentDirection, ourDirection, battleID, attackResult, attackResource):
+    def __init__(self, peripheryID, startTime, opponentClanDBID, opponentClanAbbrev, opponentDirection, ourDirection, atkLevel, defLevel, division, battleID, attackResult, attackResource):
         self._peripheryID = peripheryID
         self._startTime = startTime
         self._ourDirection = ourDirection
@@ -1309,9 +1311,40 @@ class _BattleItemAbstract(object):
         self._battleID = battleID
         self._attackResult = attackResult
         self._attackResource = attackResource
+        self.__attackerFortLevel = atkLevel
+        self.__defenderFortLevel = defLevel
+        self.__division = division
+
+    @property
+    def division(self):
+        return self.__division
+
+    @property
+    def capturedResources(self):
+        return abs(self._attackResource)
+
+    @property
+    def attackerFortLevel(self):
+        return self.__attackerFortLevel
+
+    @property
+    def defenderFortLevel(self):
+        return self.__defenderFortLevel
+
+    @property
+    def opponentClanAbbrev(self):
+        return self._opponentClanAbbrev
 
     def filter(self):
         return not self.isEnded()
+
+    def getCapturedBuildingsNumber(self):
+        attackResult = abs(self._attackResult)
+        if FORT_ATTACK_RESULT.PLANNED > attackResult > FORT_ATTACK_RESULT.DRAW:
+            if attackResult < FORT_ATTACK_RESULT.BASE_CAPTURED_FLAG:
+                return attackResult
+            else:
+                return attackResult - FORT_ATTACK_RESULT.BASE_CAPTURED_FLAG
 
     def getType(self):
         return BATTLE_ITEM_TYPE.UNKNOWN
@@ -1376,8 +1409,8 @@ class _BattleItemAbstract(object):
 
 class AttackItem(_BattleItemAbstract):
 
-    def __init__(self, startTime, ourDirection, defClanDBID, defClanAbbrev, dirTo, battleID, peripheryID, attackResult, attackResource):
-        super(AttackItem, self).__init__(peripheryID, startTime, defClanDBID, defClanAbbrev, dirTo, ourDirection, battleID, attackResult, attackResource)
+    def __init__(self, startTime, ourDirection, defClanDBID, defClanAbbrev, dirTo, battleID, atkLevel, defLevel, division, peripheryID, attackResult, attackResource):
+        super(AttackItem, self).__init__(peripheryID, startTime, defClanDBID, defClanAbbrev, dirTo, ourDirection, atkLevel, defLevel, division, battleID, attackResult, attackResource)
 
     def getType(self):
         return BATTLE_ITEM_TYPE.ATTACK
@@ -1385,8 +1418,8 @@ class AttackItem(_BattleItemAbstract):
 
 class DefenceItem(_BattleItemAbstract):
 
-    def __init__(self, startTime, ourDirection, peripheryID, attackerClanDBID, attackerClanAbbrev, dirFrom, battleID, attackResult, attackResource):
-        super(DefenceItem, self).__init__(peripheryID, startTime, attackerClanDBID, attackerClanAbbrev, dirFrom, ourDirection, battleID, attackResult, attackResource)
+    def __init__(self, startTime, ourDirection, peripheryID, attackerClanDBID, attackerClanAbbrev, dirFrom, battleID, atkLevel, defLevel, division, attackResult, attackResource):
+        super(DefenceItem, self).__init__(peripheryID, startTime, attackerClanDBID, attackerClanAbbrev, dirFrom, ourDirection, atkLevel, defLevel, division, battleID, attackResult, attackResource)
 
     def getType(self):
         return BATTLE_ITEM_TYPE.DEFENCE

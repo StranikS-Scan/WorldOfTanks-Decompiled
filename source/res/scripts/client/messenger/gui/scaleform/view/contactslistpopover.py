@@ -68,10 +68,18 @@ class ContactsListPopover(View, SmartPopOverView, ContactsListPopoverMeta, Conta
         if alias == CONTACTS_ALIASES.CONTACTS_TREE:
             tree = self.pyTree
             if tree:
+                g_messengerEvents.users.onEmptyGroupsChanged += self.__onEmptyGroupsChanged
+                tree.onGroupToggled += self.__onGroupToggled
                 settings = g_settingsCore.serverSettings.getSection(CONTACTS, AccountSettings.getFilterDefault(CONTACTS))
                 onlineMode = None if settings['showOfflineUsers'] else True
                 showOthers = bool(settings['showOthersCategory'])
                 tree.showContacts(onlineMode=onlineMode, showVisibleOthers=showOthers, showEmptyGroups=True)
+                myDP = tree.getMainDP()
+                openedGroups = self.usersStorage.getOpenedGroups()
+                for categoryId, groupsSet in openedGroups.iteritems():
+                    for groupName in groupsSet:
+                        myDP.toggleGroup(categoryId, groupName)
+
         return
 
     def onWindowClose(self):
@@ -109,8 +117,12 @@ class ContactsListPopover(View, SmartPopOverView, ContactsListPopoverMeta, Conta
         return
 
     def _dispose(self):
+        tree = self.pyTree
+        if tree:
+            tree.onGroupToggled -= self.__onGroupToggled
         g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.stopListenContextMenu()
+        g_messengerEvents.users.onEmptyGroupsChanged -= self.__onEmptyGroupsChanged
         g_messengerEvents.onPluginConnected -= self.__onPluginConnected
         g_messengerEvents.onPluginDisconnected -= self.__onPluginDisconnected
         g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -165,9 +177,20 @@ class ContactsListPopover(View, SmartPopOverView, ContactsListPopoverMeta, Conta
 
     def __onPluginDisconnected(self, protoType):
         if protoType == PROTO_TYPE.MIGRATION:
-            LOG_DEBUG('Not Connected handler invoked')
             self.as_showWaitingS(None, None)
         return
+
+    def __onGroupToggled(self, categoryID, groupName, isOpened):
+        self.usersStorage.setOpenedGroups(categoryID, groupName, isOpened)
+
+    def __onEmptyGroupsChanged(self, include, exclude):
+        if include:
+            for group in include:
+                self.usersStorage.setOpenedGroups(CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID, group, True)
+
+        if exclude:
+            for group in exclude:
+                self.usersStorage.setOpenedGroups(CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID, group, False)
 
     def __onSettingsChanged(self, diff):
         isChanged, onlineMode, showOthers = False, True, False

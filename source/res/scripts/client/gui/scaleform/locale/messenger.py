@@ -151,6 +151,7 @@ class MESSENGER(object):
     DIALOGS_SQUADCHANNEL_MEMBERS = '#messenger:dialogs/squadChannel/members'
     DIALOGS_SQUADCHANNEL_VEHICLES = '#messenger:dialogs/squadChannel/vehicles'
     DIALOGS_SQUADCHANNEL_BATTLETYPE = '#messenger:dialogs/squadChannel/battleType'
+    DIALOGS_SQUADCHANNEL_BATTLETYPEDOMINATION = '#messenger:dialogs/squadChannel/battleTypeDomination'
     DIALOGS_SQUADCHANNEL_BUTTONS_INVITE = '#messenger:dialogs/squadChannel/buttons/invite'
     DIALOGS_SQUADCHANNEL_BUTTONS_RECOMMEND = '#messenger:dialogs/squadChannel/buttons/recommend'
     DIALOGS_SQUADCHANNEL_BUTTONS_LEAVE = '#messenger:dialogs/squadChannel/buttons/leave'
@@ -244,6 +245,17 @@ class MESSENGER(object):
     CLIENT_ERROR_BROADCASTINCOOLDOWN = '#messenger:client/error/broadcastInCooldown'
     CLIENT_ERROR_COMMANDINCOOLDOWN_LIMITED = '#messenger:client/error/commandInCooldown/limited'
     CLIENT_ERROR_COMMANDINCOOLDOWN_UNLIMITED = '#messenger:client/error/commandInCooldown/unlimited'
+    CLIENT_DYNSQUAD_INVITESENT = '#messenger:client/dynSquad/inviteSent'
+    CLIENT_DYNSQUAD_INVITERECEIVED = '#messenger:client/dynSquad/inviteReceived'
+    CLIENT_DYNSQUAD_INVITEACCEPTED_USER = '#messenger:client/dynSquad/inviteAccepted/user'
+    CLIENT_DYNSQUAD_INVITEACCEPTED_MYSELF = '#messenger:client/dynSquad/inviteAccepted/myself'
+    CLIENT_DYNSQUAD_INVITEACCEPTED_MYSELF_WITHOUTVOIP = '#messenger:client/dynSquad/inviteAccepted/myself/withoutVOIP'
+    CLIENT_DYNSQUAD_CREATED_OWNER = '#messenger:client/dynSquad/created/owner'
+    CLIENT_DYNSQUAD_CREATED_OWNER_WITHOUTVOIP = '#messenger:client/dynSquad/created/owner/withoutVOIP'
+    CLIENT_DYNSQUAD_CREATED_RECRUIT = '#messenger:client/dynSquad/created/recruit'
+    CLIENT_DYNSQUAD_CREATED_RECRUIT_WITHOUTVOIP = '#messenger:client/dynSquad/created/recruit/withoutVOIP'
+    CLIENT_DYNSQUAD_CREATED_ALLIES = '#messenger:client/dynSquad/created/allies'
+    CLIENT_DYNSQUAD_CREATED_ENEMIES = '#messenger:client/dynSquad/created/enemies'
     COMMAND_FINDUSER = '#messenger:command/findUser'
     COMMAND_FINDCHATCHANNELS = '#messenger:command/findChatChannels'
     COMMAND_ADDFRIEND = '#messenger:command/addFriend'
@@ -278,7 +290,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_TECHDEFEAT = '#messenger:serviceChannelMessages/battleResults/techDefeat'
     SERVICECHANNELMESSAGES_BATTLERESULTS_BATTLE = '#messenger:serviceChannelMessages/battleResults/battle'
     SERVICECHANNELMESSAGES_BATTLERESULTS_TRAINING_BATTLE = '#messenger:serviceChannelMessages/battleResults/training_battle'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_TANK = '#messenger:serviceChannelMessages/battleResults/tank'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_TANKS = '#messenger:serviceChannelMessages/battleResults/tanks'
     SERVICECHANNELMESSAGES_BATTLERESULTS_EXPERIENCE = '#messenger:serviceChannelMessages/battleResults/experience'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FREEXP = '#messenger:serviceChannelMessages/battleResults/freeXP'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CREDITS = '#messenger:serviceChannelMessages/battleResults/credits'
@@ -315,7 +327,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_CLUB_RATING_DOWN = '#messenger:serviceChannelMessages/battleResults/club/rating/down'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CLUB_DIVISION_NEW = '#messenger:serviceChannelMessages/battleResults/club/division/new'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CLUB_LEAGUE_NEW = '#messenger:serviceChannelMessages/battleResults/club/league/new'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_BATTLECANCELED = '#messenger:serviceChannelMessages/battleResults/battleCanceled'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/results/finished'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FAILED = '#messenger:serviceChannelMessages/battleTutorial/results/failed'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/reasons/finished'
@@ -350,6 +361,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_COMPENSATION_GOLD = '#messenger:serviceChannelMessages/invoiceReceived/compensation/gold'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_COMPENSATION_CREDITS = '#messenger:serviceChannelMessages/invoiceReceived/compensation/credits'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMEN = '#messenger:serviceChannelMessages/invoiceReceived/tankmen'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_BOOSTERS = '#messenger:serviceChannelMessages/invoiceReceived/boosters'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PIECES = '#messenger:serviceChannelMessages/invoiceReceived/pieces'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWLVL = '#messenger:serviceChannelMessages/invoiceReceived/crewLvl'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_RENTDAYS = '#messenger:serviceChannelMessages/invoiceReceived/rentDays'
@@ -358,6 +370,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
     SERVICECHANNELMESSAGES_PREMIUMEXPIRED = '#messenger:serviceChannelMessages/premiumExpired'
+    SERVICECHANNELMESSAGES_BOOSTEREXPIRED = '#messenger:serviceChannelMessages/boosterExpired'
     SERVICECHANNELMESSAGES_CREDITSANDGOLDRECEIVEDASGIFT = '#messenger:serviceChannelMessages/creditsAndGoldReceivedAsGift'
     SERVICECHANNELMESSAGES_CREDITSRECEIVEDASGIFT = '#messenger:serviceChannelMessages/creditsReceivedAsGift'
     SERVICECHANNELMESSAGES_GOLDRECEIVEDASGIFT = '#messenger:serviceChannelMessages/goldReceivedAsGift'
@@ -481,6 +494,10 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_FORT_SPECIAL_ORDER_EXPIRED_EVACUATION_ADDITIONAL = '#messenger:serviceChannelMessages/fort/SPECIAL_ORDER_EXPIRED_EVACUATION_ADDITIONAL'
     SERVICECHANNELMESSAGES_FORT_SPECIAL_ORDER_EXPIRED_REQUISITION = '#messenger:serviceChannelMessages/fort/SPECIAL_ORDER_EXPIRED_REQUISITION'
     SERVICECHANNELMESSAGES_FORT_SPECIAL_ORDER_EXPIRED_REQUISITION_ADDITIONAL = '#messenger:serviceChannelMessages/fort/SPECIAL_ORDER_EXPIRED_REQUISITION_ADDITIONAL'
+    SERVICECHANNELMESSAGES_FORT_PROM_RESOURCE_EARNED = '#messenger:serviceChannelMessages/fort/PROM_RESOURCE_EARNED'
+    SERVICECHANNELMESSAGES_FORT_PROM_RESOURCE_WITHDRAWN = '#messenger:serviceChannelMessages/fort/PROM_RESOURCE_WITHDRAWN'
+    SERVICECHANNELMESSAGES_FORT_RESERVES_EARNED = '#messenger:serviceChannelMessages/fort/RESERVES_EARNED'
+    SERVICECHANNELMESSAGES_FORT_RESERVES_WITHDRAWN = '#messenger:serviceChannelMessages/fort/RESERVES_WITHDRAWN'
     COMMAND_SUCCESS_USERBAN = '#messenger:command/success/USERBAN'
     COMMAND_SUCCESS_USERUNBAN = '#messenger:command/success/USERUNBAN'
     CHAT_ERROR_NOT_ALLOWED = '#messenger:chat_error/NOT_ALLOWED'
@@ -506,6 +523,7 @@ class MESSENGER(object):
     CLIENT_ERROR_SHARED_DBID_INVALID = '#messenger:client_error/shared/DBID_INVALID'
     CLIENT_ERROR_SHARED_NAME_EMPTY = '#messenger:client_error/shared/NAME_EMPTY'
     CLIENT_ERROR_SHARED_NAME_INVALID = '#messenger:client_error/shared/NAME_INVALID'
+    CLIENT_ERROR_SHARED_WAITING_BEFORE_START = '#messenger:client_error/shared/WAITING_BEFORE_START'
     CLIENT_ERROR_CONTACT_CONTACT_ITEM_NOT_FOUND = '#messenger:client_error/contact/CONTACT_ITEM_NOT_FOUND'
     CLIENT_ERROR_CONTACT_ROSTER_ITEM_EXISTS = '#messenger:client_error/contact/ROSTER_ITEM_EXISTS'
     CLIENT_ERROR_CONTACT_ROSTER_ITEM_NOT_FOUND = '#messenger:client_error/contact/ROSTER_ITEM_NOT_FOUND'
@@ -666,7 +684,8 @@ class MESSENGER(object):
      CLIENT_ERROR_SHARED_NOT_SUPPORTED,
      CLIENT_ERROR_SHARED_DBID_INVALID,
      CLIENT_ERROR_SHARED_NAME_EMPTY,
-     CLIENT_ERROR_SHARED_NAME_INVALID)
+     CLIENT_ERROR_SHARED_NAME_INVALID,
+     CLIENT_ERROR_SHARED_WAITING_BEFORE_START)
     CLIENT_ERROR_CONTACT_ENUM = (CLIENT_ERROR_CONTACT_CONTACT_ITEM_NOT_FOUND,
      CLIENT_ERROR_CONTACT_ROSTER_ITEM_EXISTS,
      CLIENT_ERROR_CONTACT_ROSTER_ITEM_NOT_FOUND,

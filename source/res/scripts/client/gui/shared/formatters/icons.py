@@ -28,3 +28,23 @@ def alert():
 
 def arrow():
     return _getIcon('arrowButton')
+
+
+def xp():
+    return _getIcon('xp')
+
+
+def credits():
+    return _getIcon('credits')
+
+
+def notAvailableRed():
+    return _getIcon('notAvailableRed')
+
+
+def checkmark():
+    return _getIcon('checkmark')
+
+
+def info():
+    return _getIcon('info')

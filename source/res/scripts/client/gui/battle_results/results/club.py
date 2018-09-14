@@ -50,7 +50,7 @@ class ClubResults(abstract.BattleResults, ClubEmblemsHelper, ClubListener):
 
     def __init__(self, results, dp):
         super(ClubResults, self).__init__(results, dp)
-        personal = results['personal']
+        personal = results['personal'].values()[0]
         self._ownClub = makeTupleByDict(_ClubInfo, personal['club'])
         self._enemyClub = makeTupleByDict(_ClubInfo, personal['enemy_club'])
         self.__teamInfoCBs = {}

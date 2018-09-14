@@ -3,11 +3,13 @@ import operator
 import sys
 import BigWorld
 from gui import SystemMessages
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import getBattleID
 from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty, prbDispatcherProperty
 from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
+from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
 from helpers import i18n, time_utils
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -18,6 +20,7 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters import text_styles, icons
 
 class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopOverView, FortViewHelper, AppRef):
     INVALIDATE_INTERVAL = 60
@@ -46,6 +49,7 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
                 fort_helpers.tryToConnectFortBattle(battleID, battle.getPeripheryID())
             else:
                 SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ERRORS_BATTLE_DOES_NOT_EXIST, type=SystemMessages.SM_TYPE.Error)
+        self.destroy()
         return
 
     def onWindowClose(self):
@@ -99,12 +103,13 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
                 infoTip = ''
             if battleItem.isHot() and startTimeLeft > 0:
                 timerData = {'timeBeforeBattle': startTimeLeft,
-                 'htmlFormatter': self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, '###')}
+                 'htmlFormatter': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ALERT_TEXT, '###')}
             else:
                 timerData = None
-            battleHoutFmt = i18n.makeString('#fortifications:fortBattleDirectionPopover/battleDurationFmt')
-            battleHourLabel = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, battleHoutFmt % {'prevHour': BigWorld.wg_getShortTimeFormat(startTime),
+            battleHourFmt = i18n.makeString('#fortifications:fortBattleDirectionPopover/battleDurationFmt')
+            battleHourLabel = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, battleHourFmt % {'prevHour': BigWorld.wg_getShortTimeFormat(startTime),
              'nextHour': BigWorld.wg_getShortTimeFormat(startTime + time_utils.ONE_HOUR)})
+            divisionIcon = getDivisionIcon(battleItem.defenderFortLevel, battleItem.attackerFortLevel, determineAlert=battleItem.getType() == BATTLE_ITEM_TYPE.ATTACK)
             result.append({'description': descr,
              'canJoin': battleItem.isHot(),
              'battleInfo': self.__getBattleInfo(startTime, startTimeLeft),
@@ -113,11 +118,12 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
              'fortBattleID': battleItem.getBattleID(),
              'battleTypeTooltip': typeTip,
              'battleInfoTooltip': infoTip,
-             'timer': timerData})
+             'timer': timerData,
+             'divisionIcon': divisionIcon})
 
         title = i18n.makeString(FORTIFICATIONS.GENERAL_DIRECTION, value=i18n.makeString('#fortifications:General/directionName%d' % self._direction))
-        nextBattles = ' %s' % i18n.makeString(FORTIFICATIONS.FORTBATTLEDIRECTIONPOPOVER_COMMINGBATTLES)
-        nextBattlesLabel = self.app.utilsManager.textManager.concatStyles(((TextType.STANDARD_TEXT, nextBattles), (TextType.MAIN_TEXT, len(result))))
+        nextBattles = i18n.makeString(FORTIFICATIONS.FORTBATTLEDIRECTIONPOPOVER_COMMINGBATTLES)
+        nextBattlesLabel = self.app.utilsManager.textManager.concatStyles(((TEXT_MANAGER_STYLES.STANDARD_TEXT, nextBattles), (TEXT_MANAGER_STYLES.MAIN_TEXT, len(result))))
         self.as_setDataS({'title': title,
          'nextBattles': nextBattlesLabel,
          'battlesList': result})
@@ -135,14 +141,14 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
     def __getBattleInfo(self, startTime, startTimeLeft):
         if startTimeLeft > time_utils.QUARTER_HOUR:
             if time_utils.isTimeNextDay(startTime):
-                return self.app.utilsManager.textManager.getText(i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TOMORROW), TextType.STANDARD_TEXT)
+                return self.app.utilsManager.textManager.getText(i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TOMORROW), TEXT_MANAGER_STYLES.STANDARD_TEXT)
             if time_utils.isTimeThisDay(startTime):
-                return self.app.utilsManager.textManager.getText(i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TODAY), TextType.STANDARD_TEXT)
+                return self.app.utilsManager.textManager.getText(i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TODAY), TEXT_MANAGER_STYLES.STANDARD_TEXT)
         else:
             if startTimeLeft > 0:
-                return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE) + ' ')
+                return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE) + ' ')
             inBattleText = ' ' + i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_ISBATTLE)
-            return self.app.utilsManager.textManager.concatStyles(((TextIcons.SWORDS,), (TextType.ERROR_TEXT, inBattleText)))
+            return text_styles.error(icons.swords() + inBattleText)
         return ''
 
     def __invalidateCallbackHandler(self):

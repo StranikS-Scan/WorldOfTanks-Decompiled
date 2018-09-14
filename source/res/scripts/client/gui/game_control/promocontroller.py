@@ -39,7 +39,7 @@ class PromoController(Controller):
         self._getBrowserController().onBrowserDeleted += self.__onBrowserDeleted
         self._processPromo(self._getEventNotifications())
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self._stop()
 
     def onDisconnected(self):

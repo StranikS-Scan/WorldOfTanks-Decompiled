@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBattleRoomOrdersPanelComponent.py
-from collections import namedtuple
 import fortified_regions
 from helpers import i18n
+from collections import namedtuple
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.utils.functions import makeTooltip
-from gui.Scaleform.daapi.view.meta.OrdersPanelMeta import OrdersPanelMeta
+from gui.Scaleform.daapi.view.meta.SlotsPanelMeta import SlotsPanelMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -12,16 +12,15 @@ from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.FortBuilding import FortBuilding
-_SlotDataVO = namedtuple('_SlotDataVO', ['orderID',
+_SlotDataVO = namedtuple('_SlotDataVO', ['id',
  'slotID',
  'buildingStr',
  'level',
- 'orderType',
- 'orderIcon',
- 'orderGroup',
+ 'type',
+ 'icon',
+ 'group',
  'fortOrderTypeID',
  'isInactive'])
 
@@ -33,12 +32,12 @@ def _makeEmptySlotVO(slotIdx):
     return _makeSlotVO(ORDER_TYPES.EMPTY_ORDER, slotIdx, orderIcon=RES_ICONS.MAPS_ICONS_ARTEFACT_EMPTYORDER)
 
 
-class FortBattleRoomOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, UnitListener, AppRef):
+class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, UnitListener, AppRef):
 
     def __init__(self, ctx = None):
         super(FortBattleRoomOrdersPanelComponent, self).__init__()
 
-    def getOrderTooltipBody(self, orderID):
+    def getSlotTooltipBody(self, orderID):
         if orderID == ORDER_TYPES.EMPTY_ORDER:
             return makeTooltip(i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(orderID)), i18n.makeString(TOOLTIPS.FORTORDERSPANELCOMPONENT_EMPTYSLOT_BODY), None)
         else:
@@ -72,7 +71,7 @@ class FortBattleRoomOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, UnitLi
         super(FortBattleRoomOrdersPanelComponent, self)._dispose()
 
     def _isConsumablesAvailable(self):
-        return True
+        return self.unitFunctional.getExtra().canUseEquipments
 
     def __updateSlots(self):
         if not self._isConsumablesAvailable():
@@ -93,7 +92,7 @@ class FortBattleRoomOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, UnitLi
                         result.append(_makeEmptySlotVO(slotIdx))
 
             self.as_setPanelPropsS(dict(self._getSlotsProps()))
-            self.as_setOrdersS(result)
+            self.as_setSlotsS(result)
             return
 
     def _getSlotsProps(self):

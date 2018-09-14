@@ -14,10 +14,10 @@ class SimpleWindowMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setText(header, descrition)
 
-    def as_setImageS(self, imgPath):
+    def as_setImageS(self, imgPath, imgBottomMargin):
         if self._isDAAPIInited():
-            return self.flashObject.as_setImage(imgPath)
+            return self.flashObject.as_setImage(imgPath, imgBottomMargin)
 
-    def as_setButtonsS(self, buttonsList, align, btnBottomMargin, btnWidth):
+    def as_setButtonsS(self, buttonsList, align, btnWidth):
         if self._isDAAPIInited():
-            return self.flashObject.as_setButtons(buttonsList, align, btnBottomMargin, btnWidth)
+            return self.flashObject.as_setButtons(buttonsList, align, btnWidth)

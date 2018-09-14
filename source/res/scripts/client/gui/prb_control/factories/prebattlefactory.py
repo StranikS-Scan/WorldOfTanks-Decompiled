@@ -11,7 +11,6 @@ from gui.prb_control.functional.not_supported import NotSupportedEntry
 from gui.prb_control.functional.default import PrbInitFunctional, PrbIntro, IntroPrbFunctional
 from gui.prb_control.functional.training import TrainingEntry, TrainingFunctional
 from gui.prb_control.functional.training import TrainingIntroFunctional
-from gui.prb_control.functional.squad import SquadEntry, SquadFunctional
 from gui.prb_control.functional.company import CompanyEntry, CompanyFunctional
 from gui.prb_control.functional.company import CompanyIntroFunctional
 from gui.prb_control.functional.battle_session import BattleSessionEntry
@@ -21,16 +20,13 @@ from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT
 _PAN = PREBATTLE_ACTION_NAME
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.TRAINING: TrainingEntry,
- PREBATTLE_TYPE.SQUAD: SquadEntry,
  PREBATTLE_TYPE.COMPANY: CompanyEntry,
  PREBATTLE_TYPE.TOURNAMENT: BattleSessionEntry,
  PREBATTLE_TYPE.CLAN: BattleSessionEntry}
-_SUPPORTED_ENTRY_BY_ACTION = {_PAN.SQUAD: (SquadEntry, None),
- _PAN.TRAINING: (PrbIntro, (PREBATTLE_TYPE.TRAINING,)),
+_SUPPORTED_ENTRY_BY_ACTION = {_PAN.TRAINING: (PrbIntro, (PREBATTLE_TYPE.TRAINING,)),
  _PAN.COMPANY: (PrbIntro, (PREBATTLE_TYPE.COMPANY,)),
  _PAN.SPEC_BATTLE: (BattleSessionListEntry, None)}
 _SUPPORTED_FUNCTIONAL = {PREBATTLE_TYPE.TRAINING: TrainingFunctional,
- PREBATTLE_TYPE.SQUAD: SquadFunctional,
  PREBATTLE_TYPE.COMPANY: CompanyFunctional,
  PREBATTLE_TYPE.TOURNAMENT: BattleSessionFunctional,
  PREBATTLE_TYPE.CLAN: BattleSessionFunctional}

@@ -59,7 +59,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         queueType = None
         if dispatcher is not None:
             queueType = dispatcher.getPreQueueFunctional().getQueueType()
-            permissions = dispatcher.getPrbFunctional().getPermissions()
+            permissions = dispatcher.getUnitFunctional().getPermissions()
             if permissions and not permissions.canExitFromQueue():
                 self.as_showExitS(False)
         self.as_setTypeS(prb_control.getArenaGUIType(queueType=queueType))

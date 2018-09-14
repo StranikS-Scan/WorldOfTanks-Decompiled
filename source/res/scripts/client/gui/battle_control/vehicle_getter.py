@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/battle_control/vehicle_getter.py
 from collections import defaultdict
 from gui import TANKMEN_ROLES_ORDER_DICT
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_DEVICES, VEHICLE_GUI_ITEMS, VEHICLE_COMPLEX_ITEMS, VEHICLE_INDICATOR_TYPE
 
 def hasTurretRotator(vDesc):
@@ -38,6 +39,16 @@ def getVehicleIndicatorType(vDesc):
             elif 'AT-SPG' in tags:
                 iType = VEHICLE_INDICATOR_TYPE.AT_SPG
         return iType
+
+
+def isAutoRotationOn(vDesc):
+    isOn = None
+    if hasYawLimits(vDesc):
+        aih = avatar_getter.getInputHandler()
+        isOn = False
+        if aih is not None:
+            isOn = aih.getAutorotation()
+    return isOn
 
 
 class TankmenStatesIterator(object):

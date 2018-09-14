@@ -1,27 +1,39 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/CompanyRoomView.py
 from adisp import process
+from constants import PREBATTLE_COMPANY_DIVISION
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.prb_windows import companies_dps
 from gui.Scaleform.daapi.view.meta.CompanyRoomMeta import CompanyRoomMeta
+from gui.Scaleform.genConsts.COMPANY_ALIASES import COMPANY_ALIASES
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control import getMaxSizeLimits, getTotalLevelLimits
 from gui.prb_control import formatters, getClassLevelLimits
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
+from gui.server_events.EventsCache import g_eventsCache
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.formatters import text_styles
 from helpers import i18n
 from items.vehicles import VEHICLE_CLASS_TAGS
 from messenger.proto.events import g_messengerEvents
-__author__ = 'a_ushyutsau'
 
 class CompanyRoomView(CompanyRoomMeta):
 
     def __init__(self):
         super(CompanyRoomView, self).__init__(prbName='company')
+        self.textMgr = self.app.utilsManager.textManager
+        self.__selectedDivision = None
+        self.__eventVehicles = g_eventsCache.getEventVehicles()
+        return
 
     def startListening(self):
         super(CompanyRoomView, self).startListening()
+        g_eventsCache.onSyncCompleted += self.__onEventsCacheChanged
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived += self.__onUsersReceived
@@ -29,6 +41,7 @@ class CompanyRoomView(CompanyRoomMeta):
 
     def stopListening(self):
         super(CompanyRoomView, self).stopListening()
+        g_eventsCache.onSyncCompleted -= self.__onEventsCacheChanged
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived -= self.__onUsersReceived
@@ -56,6 +69,7 @@ class CompanyRoomView(CompanyRoomMeta):
 
     @process
     def requestToChangeDivision(self, divisionID):
+        self.__selectedDivision = divisionID
         result = yield self.prbDispatcher.sendPrbRequest(prb_ctx.ChangeDivisionCtx(divisionID, 'prebattle/change_settings'))
         if not result:
             self.as_setDivisionS(self.prbFunctional.getSettings()[PREBATTLE_SETTING_NAME.DIVISION])
@@ -134,6 +148,9 @@ class CompanyRoomView(CompanyRoomMeta):
 
     def _dispose(self):
         super(CompanyRoomView, self)._dispose()
+        self.textMgr = None
+        self.__eventVehicles = None
+        return
 
     def _setRosterList(self, rosters):
         accounts = rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]
@@ -151,9 +168,12 @@ class CompanyRoomView(CompanyRoomMeta):
         settings = self.prbFunctional.getSettings()
         self.as_setOpenedS(settings[PREBATTLE_SETTING_NAME.IS_OPENED])
         self.as_setCommentS(settings[PREBATTLE_SETTING_NAME.COMMENT])
+        self.__selectedDivision = settings[PREBATTLE_SETTING_NAME.DIVISION]
         self.as_setDivisionsListS(companies_dps.getDivisionsList(addAll=False), settings[PREBATTLE_SETTING_NAME.DIVISION])
 
     def __setLimits(self, rosters, teamLimits):
+        settings = self.prbFunctional.getSettings()
+        self.__selectedDivision = settings[PREBATTLE_SETTING_NAME.DIVISION]
         totalLimit = getTotalLevelLimits(teamLimits)
         totalLevel = 0
         playersCount = 0
@@ -165,14 +185,52 @@ class CompanyRoomView(CompanyRoomMeta):
                 if playerInfo.isReady():
                     playersCount += 1
 
-        self.as_setClassesLimitsS(map(self.__makeClassLimitItem, classesLimit.iteritems()))
-        self.as_setTotalLimitLabelsS(self.__makeTotalLevelString(totalLevel, totalLimit), self.__makeMinMaxString(totalLevel, totalLimit))
-        self.as_setMaxCountLimitLabelS(self.__makeMaxCountLimitLabel(playersCount, getMaxSizeLimits(teamLimits)[0]))
+        maxPlayerCount = getMaxSizeLimits(teamLimits)[0]
+        classesLimits = map(self.__makeClassLimitItem, classesLimit.iteritems())
+        mixMax = self.__makeMinMaxString(totalLevel, totalLimit)
+        self.__makeHeaderData(classesLimits, mixMax, maxPlayerCount)
+        self.as_setTotalLimitLabelsS(self.__makeTotalLevelString(totalLevel, totalLimit))
+        self.as_setMaxCountLimitLabelS(self.__makeMaxCountLimitLabel(playersCount, maxPlayerCount))
         if PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM1 in rosters:
             for playerInfo in rosters[PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM1]:
                 self.__validateVehicle(playerInfo, classesLimit, invalidVehs)
 
         self.as_setInvalidVehiclesS(invalidVehs)
+
+    def __makeHeaderData(self, limits, minMax, maxPlayerCount):
+        if self.__selectedDivision in PREBATTLE_COMPANY_DIVISION.EVENT_ONLY:
+            viewType, viewLinkage, vehTypeAlias = COMPANY_ALIASES.FALLOUT_MAP
+            reqsTxt = text_styles.middleTitle(i18n.makeString(PREBATTLE.COMPANY_HEADER_FALLOUT_REQUIREMENTSTITLE))
+            reqVehsCount = text_styles.standard(i18n.makeString(PREBATTLE.COMPANY_HEADER_FALLOUT_REQUIREDVEHICLESCOUNT, vehiclesCount=str(maxPlayerCount)))
+            data = {'viewLinkage': viewLinkage,
+             'vehicleTypeAlias': vehTypeAlias,
+             'requirementsTitle': reqsTxt,
+             'vehiclesType': self.__makeRequiredVehicles(),
+             'vehiclesCount': reqVehsCount,
+             'x_position': 229,
+             'y_position': 29,
+             'h_spacing': 15}
+        else:
+            viewType, viewLinkage = COMPANY_ALIASES.STANDARD_MAP
+            data = {'viewLinkage': viewLinkage,
+             'vehiclesType': limits,
+             'minMax': minMax}
+        self.as_setHeaderDataS(viewType, data)
+
+    def __makeRequiredVehicles(self):
+        strResult = []
+        for vehicle in self.__eventVehicles:
+            icon = RES_ICONS.maps_icons_vehicletypes_elite(vehicle.type + '.png')
+            userName = self.textMgr.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, vehicle.userName)
+            voData = {'resIcon': icon,
+             'vehicleName': userName}
+            strResult.append(voData)
+
+        return strResult
+
+    def __makeRequiredVehiclesCount(self, maxPlayerCount):
+        txt = i18n.makeString(PREBATTLE.COMPANY_HEADER_FALLOUT_REQUIREDVEHICLESCOUNT, vehiclesCount=str(maxPlayerCount))
+        return self.textMgr.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, txt)
 
     def __validateVehicle(self, playerInfo, classesLimit, invalidVehs):
         level = 0
@@ -183,9 +241,17 @@ class CompanyRoomView(CompanyRoomMeta):
             if vehClass in classesLimit:
                 current, (minLimit, maxLimit) = classesLimit[vehClass]
                 classesLimit[vehClass][0] = max(current, level)
-                if level not in xrange(minLimit, maxLimit + 1):
-                    invalidVehs.append(playerInfo.accID)
+                isValidVehicleType = self.__isInvalidVehicleType(vehicle.intCD)
+                if level not in xrange(minLimit, maxLimit + 1) or isValidVehicleType:
+                    data = {'accID': playerInfo.accID,
+                     'tooltip': TOOLTIPS.MEMBERS_INVALIDVEHICLETYPE_BODY if isValidVehicleType else ''}
+                    invalidVehs.append(data)
         return level
+
+    def __isInvalidVehicleType(self, intCD):
+        isEventVehicle = g_itemsCache.items.getItemByCD(intCD).isEvent
+        isEventType = self.__selectedDivision in PREBATTLE_COMPANY_DIVISION.EVENT_ONLY
+        return isEventVehicle != isEventType
 
     def __makeClassLimitItem(self, data):
         return {'vehClass': data[0],
@@ -212,8 +278,9 @@ class CompanyRoomView(CompanyRoomMeta):
         return i18n.makeString(PREBATTLE.LABELS_STATS_TOTALLEVEL, totalLevel=totalString)
 
     def __makeMaxCountLimitLabel(self, playersCount, maxCount):
-        return makeHtmlString('html_templates:lobby/prebattle', 'companyPlayersCount', {'playersCount': playersCount,
-         'maxCount': maxCount})
+        playerCountType = TEXT_MANAGER_STYLES.ERROR_TEXT if playersCount != maxCount else TEXT_MANAGER_STYLES.MAIN_TEXT
+        playerCountFormatted = self.textMgr.getText(playerCountType, str(playersCount))
+        return text_styles.standard(i18n.makeString(PREBATTLE.LABELS_COMPANY_STATS_COUNT, playersCount=playerCountFormatted, maxCount=str(maxCount)))
 
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.SET_PLAYER_STATE:
@@ -222,3 +289,10 @@ class CompanyRoomView(CompanyRoomMeta):
             self.as_setChangeSettingCoolDownS(event.coolDown)
         elif event.requestID is REQUEST_TYPE.SET_PLAYER_STATE:
             self.as_setCoolDownForReadyButtonS(event.coolDown)
+
+    def __onEventsCacheChanged(self):
+        self.__eventVehicles = g_eventsCache.getEventVehicles()
+        self.__setSettings()
+        rosters = self.prbFunctional.getRosters()
+        self._setRosterList(rosters)
+        self.__setLimits(rosters, self.prbFunctional.getSettings().getTeamLimits(1))

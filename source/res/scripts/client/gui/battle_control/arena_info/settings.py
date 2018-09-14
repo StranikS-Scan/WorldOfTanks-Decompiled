@@ -32,6 +32,7 @@ class INVALIDATE_OP(BitmaskHelper):
     VEHICLE_INFO = 4
     VEHICLE_STATS = 8
     PLAYER_STATUS = 16
+    PREBATTLE_CHANGED = 32
 
 
 def makeContourIconPath(vName):

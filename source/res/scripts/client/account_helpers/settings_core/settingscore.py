@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/SettingsCore.py
 import Event
+from InterfaceScaleManager import InterfaceScaleManager
 from Vibroeffects import VibroManager
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager
@@ -11,7 +12,6 @@ class _SettingsCore(object):
 
     def init(self):
         from account_helpers.settings_core import options, settings_storages, settings_constants
-        from gui.Scaleform.managers.windows_stored_data import TARGET_ID
         from gui.shared.utils import graphics
         GAME = settings_constants.GAME
         GRAPHICS = settings_constants.GRAPHICS
@@ -21,8 +21,10 @@ class _SettingsCore(object):
         MARKERS = settings_constants.MARKERS
         OTHER = settings_constants.OTHER
         self.__serverSettings = ServerSettingsManager(self)
+        self.interfaceScale = InterfaceScaleManager(self)
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
         GAME_SETTINGS_STORAGE = settings_storages.GameSettingsStorage(self.serverSettings, self)
+        EXTENDED_GAME_SETTINGS_STORAGE = settings_storages.ExtendedGameSettingsStorage(self.serverSettings, self)
         GAMEPLAY_SETTINGS_STORAGE = settings_storages.GameplaySettingsStorage(self.serverSettings, self)
         GRAPHICS_SETTINGS_STORAGE = settings_storages.GraphicsSettingsStorage(self.serverSettings, self)
         SOUND_SETTINGS_STORAGE = settings_storages.SoundSettingsStorage(self.serverSettings, self)
@@ -33,7 +35,9 @@ class _SettingsCore(object):
         MARK_ON_GUN_SETTINGS_STORAGE = settings_storages.MarksOnGunSettingsStorage(self.serverSettings, self)
         FOV_SETTINGS_STORAGE = settings_storages.FOVSettingsStorage(self.serverSettings, self)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
+        EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
         self.__storages = {'game': GAME_SETTINGS_STORAGE,
+         'extendedGame': EXTENDED_GAME_SETTINGS_STORAGE,
          'gameplay': GAMEPLAY_SETTINGS_STORAGE,
          'sound': SOUND_SETTINGS_STORAGE,
          'keyboard': KEYBOARD_SETTINGS_STORAGE,
@@ -43,6 +47,7 @@ class _SettingsCore(object):
          'graphics': GRAPHICS_SETTINGS_STORAGE,
          'video': VIDEO_SETTINGS_STORAGE,
          'messenger': MESSENGER_SETTINGS_STORAGE,
+         'extendedMessenger': EXTENDED_MESSENGER_SETTINGS_STORAGE,
          'marksOnGun': MARK_ON_GUN_SETTINGS_STORAGE,
          'FOV': FOV_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
@@ -53,6 +58,7 @@ class _SettingsCore(object):
          (GAME.ENABLE_POSTMORTEM, options.PostProcessingSetting(GAME.ENABLE_POSTMORTEM, 'mortem_post_effect', storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_POSTMORTEM_DELAY, options.PostMortemDelaySetting(GAME.ENABLE_POSTMORTEM_DELAY, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEHICLES_COUNTER, options.StorageAccountSetting(GAME.SHOW_VEHICLES_COUNTER, storage=GAME_SETTINGS_STORAGE)),
+         (GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS, options.ExcludeInReplayAccountSetting(GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_MARKS_ON_GUN, options.ShowMarksOnGunSetting(GAME.SHOW_MARKS_ON_GUN, storage=MARK_ON_GUN_SETTINGS_STORAGE)),
          (GAME.DYNAMIC_CAMERA, options.DynamicCamera(GAME.DYNAMIC_CAMERA, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_MODE_STABILIZATION, options.SniperModeStabilization(GAME.SNIPER_MODE_STABILIZATION, storage=GAME_SETTINGS_STORAGE)),
@@ -62,8 +68,10 @@ class _SettingsCore(object):
          (GAME.SHOW_TIME_MESSAGE, options.MessengerDateTimeSetting(2, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.INVITES_FROM_FRIENDS, options.MessengerSetting(GAME.INVITES_FROM_FRIENDS, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.RECEIVE_FRIENDSHIP_REQUEST, options.MessengerSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST, storage=MESSENGER_SETTINGS_STORAGE)),
+         (GAME.RECEIVE_INVITES_IN_BATTLE, options.MessengerSetting(GAME.RECEIVE_INVITES_IN_BATTLE, storage=EXTENDED_MESSENGER_SETTINGS_STORAGE)),
          (GAME.STORE_RECEIVER_IN_BATTLE, options.MessengerSetting(GAME.STORE_RECEIVER_IN_BATTLE, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.DISABLE_BATTLE_CHAT, options.MessengerSetting(GAME.DISABLE_BATTLE_CHAT, storage=MESSENGER_SETTINGS_STORAGE)),
+         (GAME.CHAT_CONTACTS_LIST_ONLY, options.MessengerSetting(GAME.CHAT_CONTACTS_LIST_ONLY, storage=EXTENDED_MESSENGER_SETTINGS_STORAGE)),
          (GAME.PLAYERS_PANELS_SHOW_LEVELS, options.PlayersPanelSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS, 'players_panel', 'showLevels', storage=GAME_SETTINGS_STORAGE)),
          (GAME.PLAYERS_PANELS_SHOW_TYPES, options.AccountDumpSetting(GAME.PLAYERS_PANELS_SHOW_TYPES, 'players_panel', 'showTypes')),
          (GAME.PLAYERS_PANELS_STATE, options.AccountDumpSetting(GAME.PLAYERS_PANELS_STATE, 'players_panel', 'state')),
@@ -82,6 +90,7 @@ class _SettingsCore(object):
          (GRAPHICS.REFRESH_RATE, options.RefreshRateSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.FULLSCREEN, options.FullscreenSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
+         (GRAPHICS.GRAPHICS_QUALITY_HD_SD, options.GraphicsQualityNote()),
          (GRAPHICS.GAMMA, options.GammaSetting()),
          (GRAPHICS.TRIPLE_BUFFERED, options.TripleBufferedSetting()),
          (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
@@ -155,6 +164,7 @@ class _SettingsCore(object):
          (OTHER.VIBRO_GUI, options.VibroSetting('gui'))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
+        self.interfaceScale.init()
         LOG_DEBUG('SettingsCore is initialized')
 
     def fini(self):
@@ -162,6 +172,7 @@ class _SettingsCore(object):
         self.__storages = None
         self.__options = None
         self.__serverSettings = None
+        self.interfaceScale.fini()
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
         AccountSettings.clearCache()
         LOG_DEBUG('SettingsCore is destroyed')

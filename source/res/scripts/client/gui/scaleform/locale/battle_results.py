@@ -11,6 +11,9 @@ class BATTLE_RESULTS(object):
     TEAM_MEDALHEADER = '#battle_results:team/medalHeader'
     TEAM_RESOURCEHEADER = '#battle_results:team/resourceHeader'
     TEAM_PLAYERNUMBER = '#battle_results:team/playerNumber'
+    TEAM_VICTORYSCORE = '#battle_results:team/victoryScore'
+    TEAM_FLAGS = '#battle_results:team/flags'
+    TEAM_DEATHS = '#battle_results:team/deaths'
     CYBERSPORT_BTNTOTEAMPROFILE = '#battle_results:cyberSport/btnToTeamProfile'
     CYBERSPORT_POINTS = '#battle_results:cyberSport/points'
     CYBERSPORT_STATUS_WIN = '#battle_results:cyberSport/status/win'
@@ -35,19 +38,47 @@ class BATTLE_RESULTS(object):
     COMMON_BATTLEEFFICIENCY_TITLE = '#battle_results:common/battleEfficiency/title'
     COMMON_BATTLEEFFICIENCY_ALLIES = '#battle_results:common/battleEfficiency/allies'
     COMMON_BATTLEEFFICIENCY_NONE = '#battle_results:common/battleEfficiency/none'
+    COMMON_BATTLEEFFICIENCY_TECHNIQUE = '#battle_results:common/battleEfficiency/technique'
+    COMMON_BATTLEEFFICIENCY_BASES = '#battle_results:common/battleEfficiency/bases'
+    COMMON_BATTLEEFFICIENCY_ALLYBASE = '#battle_results:common/battleEfficiency/allyBase'
+    COMMON_BATTLEEFFICIENCY_ENEMYBASE = '#battle_results:common/battleEfficiency/enemyBase'
+    COMMON_BATTLEEFFICIENCY_NEUTRALBASE = '#battle_results:common/battleEfficiency/neutralBase'
     COMMON_DETAILS_PROGRESS = '#battle_results:common/details/progress'
     COMMON_QUESTS_NOPROGRESS = '#battle_results:common/quests/noprogress'
     COMMON_TOOLTIP_ASSIST_HEADER = '#battle_results:common/tooltip/assist/header'
     COMMON_TOOLTIP_ASSIST_DESCRIPTION = '#battle_results:common/tooltip/assist/description'
+    COMMON_TOOLTIP_PARAMS_VAL = '#battle_results:common/tooltip/params/val'
     COMMON_TOOLTIP_ASSIST_PART1 = '#battle_results:common/tooltip/assist/part1'
     COMMON_TOOLTIP_ASSIST_PART2 = '#battle_results:common/tooltip/assist/part2'
     COMMON_TOOLTIP_ASSIST_TOTAL = '#battle_results:common/tooltip/assist/total'
+    COMMON_PROGRESSTITLE = '#battle_results:common/progressTitle'
+    COMMON_VEHICLE_RESEARCH = '#battle_results:common/vehicle/research'
+    COMMON_VEHICLE_PURCHASE = '#battle_results:common/vehicle/purchase'
+    COMMON_VEHICLE_DETAILS = '#battle_results:common/vehicle/details'
+    COMMON_FITTING_RESEARCH = '#battle_results:common/fitting/research'
+    COMMON_FITTING_PURCHASE = '#battle_results:common/fitting/purchase'
+    COMMON_RESEARCHPREDICTION = '#battle_results:common/researchPrediction'
+    COMMON_NEWSKILLPREDICTION = '#battle_results:common/newSkillPrediction'
+    COMMON_CREWMEMBER_NEWSKILL = '#battle_results:common/crewMember/newSkill'
+    COMMON_CREWMEMBER_DESCRIPTION = '#battle_results:common/crewMember/description'
+    COMMON_NOPROGRESS = '#battle_results:common/noProgress'
     COMMON_TOOLTIP_DAMAGE_HEADER = '#battle_results:common/tooltip/damage/header'
     COMMON_TOOLTIP_DAMAGE_DESCRIPTION = '#battle_results:common/tooltip/damage/description'
     COMMON_TOOLTIP_DAMAGE_PART1 = '#battle_results:common/tooltip/damage/part1'
     COMMON_TOOLTIP_DAMAGE_PART2 = '#battle_results:common/tooltip/damage/part2'
     COMMON_TOOLTIP_SPOTTED_HEADER = '#battle_results:common/tooltip/spotted/header'
     COMMON_TOOLTIP_SPOTTED_DESCRIPTION = '#battle_results:common/tooltip/spotted/description'
+    COMMON_TOOLTIP_ARMOR_HEADER = '#battle_results:common/tooltip/armor/header'
+    COMMON_TOOLTIP_ARMOR_DESCRIPTION = '#battle_results:common/tooltip/armor/description'
+    COMMON_TOOLTIP_ARMOR_PART1 = '#battle_results:common/tooltip/armor/part1'
+    COMMON_TOOLTIP_ARMOR_PART2 = '#battle_results:common/tooltip/armor/part2'
+    COMMON_TOOLTIP_ARMOR_PART3 = '#battle_results:common/tooltip/armor/part3'
+    COMMON_TOOLTIP_DEFENCE_HEADER = '#battle_results:common/tooltip/defence/header'
+    COMMON_TOOLTIP_DEFENCE_DESCRIPTION = '#battle_results:common/tooltip/defence/description'
+    COMMON_TOOLTIP_DEFENCE_TOTALPOINTS = '#battle_results:common/tooltip/defence/totalPoints'
+    COMMON_TOOLTIP_CAPTURE_HEADER = '#battle_results:common/tooltip/capture/header'
+    COMMON_TOOLTIP_CAPTURE_DESCRIPTION = '#battle_results:common/tooltip/capture/description'
+    COMMON_TOOLTIP_CAPTURE_TOTALPOINTS = '#battle_results:common/tooltip/capture/totalPoints'
     COMMON_TOOLTIP_KILL_HEADER = '#battle_results:common/tooltip/kill/header'
     COMMON_TOOLTIP_KILL_1_DESCRIPTION = '#battle_results:common/tooltip/kill-1/description'
     COMMON_TOOLTIP_KILL0_DESCRIPTION = '#battle_results:common/tooltip/kill0/description'
@@ -70,6 +101,9 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_CRITS_CRITDESTRUCTION = '#battle_results:common/tooltip/crits/critDestruction'
     COMMON_TOOLTIP_CRITS_CRITWOUND = '#battle_results:common/tooltip/crits/critWound'
     COMMON_TOOLTIP_CRITS_TOTAL = '#battle_results:common/tooltip/crits/total'
+    COMMON_TOOLTIP_COUNTER = '#battle_results:common/tooltip/counter'
+    COMMON_TOOLTIP_COUNTER_FORENEMY = '#battle_results:common/tooltip/counter/forEnemy'
+    COMMON_TOOLTIP_COUNTER_NOITEMS = '#battle_results:common/tooltip/counter/noItems'
     COMMON_CLANABBREV = '#battle_results:common/clanAbbrev'
     COMMON_BATTLETYPE_SORTIE = '#battle_results:common/battleType/sortie'
     COMMON_VEHICLESTATE_ALIVE = '#battle_results:common/vehicleState/alive'
@@ -111,8 +145,13 @@ class BATTLE_RESULTS(object):
     TEAM_MEDALHEADER_BODY = TEAM_MEDALHEADER + '/body'
     TEAM_RESOURCEHEADER_HEADER = TEAM_RESOURCEHEADER + '/header'
     TEAM_RESOURCEHEADER_BODY = TEAM_RESOURCEHEADER + '/body'
+    TEAM_VICTORYSCORE_HEADER = TEAM_VICTORYSCORE + '/header'
+    TEAM_VICTORYSCORE_BODY = TEAM_VICTORYSCORE + '/body'
+    TEAM_FLAGS_HEADER = TEAM_FLAGS + '/header'
+    TEAM_FLAGS_BODY = TEAM_FLAGS + '/body'
+    TEAM_DEATHS_HEADER = TEAM_DEATHS + '/header'
+    TEAM_DEATHS_BODY = TEAM_DEATHS + '/body'
     TEAM_TEAMRESOURCETOTAL = '#battle_results:team/teamResourceTotal'
-    TEAM_TEAMINFLUENCETOTAL = '#battle_results:team/teamInfluenceTotal'
     TEAM_STATS_LABELS_SHOTS = '#battle_results:team/stats/labels_shots'
     TEAM_STATS_LABELS_HITS = '#battle_results:team/stats/labels_hits'
     TEAM_STATS_LABELS_EXPLOSIONHITS = '#battle_results:team/stats/labels_explosionHits'
@@ -131,6 +170,8 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_DAMAGEASSISTEDSELF = '#battle_results:team/stats/labels_damageAssistedSelf'
     TEAM_STATS_LABELS_CAPTUREPOINTSVAL = '#battle_results:team/stats/labels_capturePointsVal'
     TEAM_STATS_LABELS_MILEAGE = '#battle_results:team/stats/labels_mileage'
+    TEAM_STATS_LABELS_FLAGS = '#battle_results:team/stats/labels_flags'
+    TEAM_STATS_LABELS_DEATHS = '#battle_results:team/stats/labels_deaths'
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
     TEAM_STATS_CLOSE = '#battle_results:team/stats/close'
     DETAILS_STATS = '#battle_results:details/stats'
@@ -143,6 +184,7 @@ class BATTLE_RESULTS(object):
     DETAILS_TIME_LBL_DURATION = '#battle_results:details/time/lbl_duration'
     DETAILS_TIME_LBL_PLAYERKILLED = '#battle_results:details/time/lbl_playerKilled'
     DETAILS_TIME_VALUE = '#battle_results:details/time/value'
+    DETAILS_CALCULATIONS_BOOSTERS = '#battle_results:details/calculations/boosters'
     DETAILS_CALCULATIONS_BATTLEPAYMENTS = '#battle_results:details/calculations/battlePayments'
     DETAILS_CALCULATIONS_TACTICALTRAINING = '#battle_results:details/calculations/tacticalTraining'
     DETAILS_CALCULATIONS_MILITARYMANEUVERS = '#battle_results:details/calculations/militaryManeuvers'
@@ -168,10 +210,20 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_FORTORDER = '#battle_results:details/calculations/fortOrder'
     DETAILS_CALCULATIONS_REFERRALBONUS = '#battle_results:details/calculations/referralBonus'
     TANKSELECTOR_NEXT = '#battle_results:tankSelector/next'
+    VICTORYSCORE = '#battle_results:victoryScore'
+    SELECTVEHICLE = '#battle_results:selectVehicle'
+    ALLVEHICLES = '#battle_results:allVehicles'
+    FALLOUT_WIN_POINTS = '#battle_results:fallout/win/points'
+    FALLOUT_WIN_CAP = '#battle_results:fallout/win/cap'
+    FALLOUT_LOSE_POINTS = '#battle_results:fallout/lose/points'
+    FALLOUT_LOSE_CAP = '#battle_results:fallout/lose/cap'
+    FALLOUT_TIE = '#battle_results:fallout/tie'
+    FALLOUT_UNIQUEDAMAGE = '#battle_results:fallout/uniqueDamage'
     PLAYERS_TEAMMATE_UNKNOWN = '#battle_results:players/teammate/unknown'
     PLAYERS_ENEMY_UNKNOWN = '#battle_results:players/enemy/unknown'
     COMMON_TOOLTIP_ENUM = (COMMON_TOOLTIP_ASSIST_HEADER,
      COMMON_TOOLTIP_ASSIST_DESCRIPTION,
+     COMMON_TOOLTIP_PARAMS_VAL,
      COMMON_TOOLTIP_ASSIST_PART1,
      COMMON_TOOLTIP_ASSIST_PART2,
      COMMON_TOOLTIP_ASSIST_TOTAL,
@@ -181,6 +233,17 @@ class BATTLE_RESULTS(object):
      COMMON_TOOLTIP_DAMAGE_PART2,
      COMMON_TOOLTIP_SPOTTED_HEADER,
      COMMON_TOOLTIP_SPOTTED_DESCRIPTION,
+     COMMON_TOOLTIP_ARMOR_HEADER,
+     COMMON_TOOLTIP_ARMOR_DESCRIPTION,
+     COMMON_TOOLTIP_ARMOR_PART1,
+     COMMON_TOOLTIP_ARMOR_PART2,
+     COMMON_TOOLTIP_ARMOR_PART3,
+     COMMON_TOOLTIP_DEFENCE_HEADER,
+     COMMON_TOOLTIP_DEFENCE_DESCRIPTION,
+     COMMON_TOOLTIP_DEFENCE_TOTALPOINTS,
+     COMMON_TOOLTIP_CAPTURE_HEADER,
+     COMMON_TOOLTIP_CAPTURE_DESCRIPTION,
+     COMMON_TOOLTIP_CAPTURE_TOTALPOINTS,
      COMMON_TOOLTIP_KILL_HEADER,
      COMMON_TOOLTIP_KILL_1_DESCRIPTION,
      COMMON_TOOLTIP_KILL0_DESCRIPTION,
@@ -202,7 +265,10 @@ class BATTLE_RESULTS(object):
      COMMON_TOOLTIP_CRITS_CRITDAMAGE,
      COMMON_TOOLTIP_CRITS_CRITDESTRUCTION,
      COMMON_TOOLTIP_CRITS_CRITWOUND,
-     COMMON_TOOLTIP_CRITS_TOTAL)
+     COMMON_TOOLTIP_CRITS_TOTAL,
+     COMMON_TOOLTIP_COUNTER,
+     COMMON_TOOLTIP_COUNTER_FORENEMY,
+     COMMON_TOOLTIP_COUNTER_NOITEMS)
 
     @staticmethod
     def common_tooltip(key):

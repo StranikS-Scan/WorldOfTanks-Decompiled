@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SkillDropWindow.py
 import cPickle as pickle
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from items import tankmen
 from gui import SystemMessages
@@ -14,7 +15,6 @@ from gui.shared import events, g_itemsCache
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.framework import AppRef
 
 class SkillDropWindow(View, SkillDropMeta, AbstractWindowView, AppRef):
@@ -67,8 +67,8 @@ class SkillDropWindow(View, SkillDropMeta, AbstractWindowView, AppRef):
     def __getTexts(self):
         ms = i18n.makeString
         getTxt = self.app.utilsManager.textManager.getText
-        percentText = getTxt(TextType.NEUTRAL_TEXT, ms(MENU.SKILLDROPWINDOW_FREEDROPPERCENT))
-        freeDropText = getTxt(TextType.MAIN_TEXT, ms(MENU.SKILLDROPWINDOW_FREEDROPLABEL, percent=percentText))
+        percentText = getTxt(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, ms(MENU.SKILLDROPWINDOW_FREEDROPPERCENT))
+        freeDropText = getTxt(TEXT_MANAGER_STYLES.MAIN_TEXT, ms(MENU.SKILLDROPWINDOW_FREEDROPLABEL, percent=percentText))
         return {'freeDrop': freeDropText}
 
     def _populate(self):

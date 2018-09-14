@@ -5,7 +5,9 @@ import operator
 from gui.clubs.settings import CLIENT_CLUB_STATE
 from gui.clubs.club_helpers import ClubListener
 from gui.prb_control.prb_helpers import GlobalListener, prbInvitesProperty
+from gui.shared.notifications import MsgCustomEvents
 from gui.shared.utils import showInvitationInWindowsBar
+from helpers import time_utils
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -65,6 +67,51 @@ class ServiceChannelListener(_NotificationListener):
             model.addNotification(MessageDecorator(clientID, formatted, settings))
 
 
+class FortServiceChannelListener(_NotificationListener):
+
+    def __init__(self):
+        super(FortServiceChannelListener, self).__init__()
+        self.__fortInvitesData = {}
+
+    @proto_getter(PROTO_TYPE.BW)
+    def proto(self):
+        return None
+
+    def start(self, model):
+        result = super(FortServiceChannelListener, self).start(model)
+        if result:
+            g_messengerEvents.serviceChannel.onCustomMessageDataReceived += self.__onMsgReceived
+        return result
+
+    def stop(self):
+        self.__fortInvitesData = None
+        g_messengerEvents.serviceChannel.onCustomMessageDataReceived -= self.__onMsgReceived
+        super(FortServiceChannelListener, self).stop()
+        return
+
+    def __onMsgReceived(self, clientID, eventData):
+        eType, battleID = eventData
+        if eType == MsgCustomEvents.FORT_BATTLE_INVITE:
+            self.__fortInvitesData[battleID] = clientID
+        elif eType == MsgCustomEvents.FORT_BATTLE_FINISHED:
+            model = self._model()
+            if model:
+                storedClientID = self.__fortInvitesData.get(battleID, None)
+                if storedClientID:
+                    _, formatted, settings = self.proto.serviceChannel.getMessage(storedClientID)
+                    if formatted and settings:
+                        if formatted['savedData']['battleFinishTime'] - time_utils.getCurrentTimestamp() < 0:
+                            buttonsStates = {}
+                            buttonsLayout = formatted.get('buttonsLayout', [])
+                            for layout in buttonsLayout:
+                                buttonsStates[layout['type']] = NOTIFICATION_BUTTON_STATE.VISIBLE
+
+                            formatted['buttonsStates'] = buttonsStates
+                            model.updateNotification(NOTIFICATION_TYPE.MESSAGE, storedClientID, formatted, False)
+                            del self.__fortInvitesData[battleID]
+        return
+
+
 class PrbInvitesListener(_NotificationListener, GlobalListener):
 
     @prbInvitesProperty
@@ -76,7 +123,7 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
         self.startGlobalListening()
         prbInvites = self.prbInvites
         if result and prbInvites:
-            prbInvites.onReceivedInviteListInited += self.__onInviteListInited
+            prbInvites.onInvitesListInited += self.__onInviteListInited
             prbInvites.onReceivedInviteListModified += self.__onInviteListModified
             if prbInvites.isInited():
                 self.__addInvites()
@@ -87,7 +134,7 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
         self.stopGlobalListening()
         prbInvites = self.prbInvites
         if prbInvites:
-            prbInvites.onReceivedInviteListInited -= self.__onInviteListInited
+            prbInvites.onInvitesListInited -= self.__onInviteListInited
             prbInvites.onReceivedInviteListModified -= self.__onInviteListModified
 
     def onPrbFunctionalInited(self):
@@ -111,7 +158,7 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
     def onUnitFunctionalFinished(self):
         self.__updateInvites()
 
-    def onUnitStateChanged(self, state, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         self.__updateInvites()
 
     def onPreQueueFunctionalInited(self):
@@ -138,7 +185,7 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
             return
         else:
             for inviteID in added:
-                invite = self.prbInvites.getReceivedInvite(inviteID)
+                invite = self.prbInvites.getInvite(inviteID)
                 if invite:
                     model.addNotification(PrbInviteDecorator(invite))
 
@@ -146,7 +193,7 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
                 model.removeNotification(NOTIFICATION_TYPE.INVITE, inviteID)
 
             for inviteID in changed:
-                invite = self.prbInvites.getReceivedInvite(inviteID)
+                invite = self.prbInvites.getInvite(inviteID)
                 if invite:
                     model.updateNotification(NOTIFICATION_TYPE.INVITE, inviteID, invite, True)
 
@@ -170,7 +217,7 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
         if model:
             invites = self.prbInvites.getReceivedInvites()
             for invite in invites:
-                model.updateNotification(NOTIFICATION_TYPE.INVITE, invite.id, invite, False)
+                model.updateNotification(NOTIFICATION_TYPE.INVITE, invite.clientID, invite, False)
 
 
 class FriendshipRqsListener(_NotificationListener):
@@ -183,7 +230,8 @@ class FriendshipRqsListener(_NotificationListener):
         result = super(FriendshipRqsListener, self).start(model)
         g_messengerEvents.onPluginDisconnected += self.__me_onPluginDisconnected
         events = g_messengerEvents.users
-        events.onFriendshipRequestReceived += self.__me_onFriendshipRequestReceived
+        events.onFriendshipRequestsAdded += self.__me_onFriendshipRequestsAdded
+        events.onFriendshipRequestsUpdated += self.__me_onFriendshipRequestsUpdated
         events.onUserActionReceived += self.__me_onUserActionReceived
         contacts = self.proto.contacts.getFriendshipRqs()
         for contact in contacts:
@@ -194,7 +242,8 @@ class FriendshipRqsListener(_NotificationListener):
     def stop(self):
         g_messengerEvents.onPluginDisconnected -= self.__me_onPluginDisconnected
         events = g_messengerEvents.users
-        events.onFriendshipRequestReceived -= self.__me_onFriendshipRequestReceived
+        events.onFriendshipRequestsAdded -= self.__me_onFriendshipRequestsAdded
+        events.onFriendshipRequestsUpdated -= self.__me_onFriendshipRequestsUpdated
         events.onUserActionReceived -= self.__me_onUserActionReceived
         super(FriendshipRqsListener, self).stop()
 
@@ -227,8 +276,13 @@ class FriendshipRqsListener(_NotificationListener):
         if protoType == PROTO_TYPE.XMPP:
             self.__updateRequests()
 
-    def __me_onFriendshipRequestReceived(self, contact):
-        self.__setRequest(contact)
+    def __me_onFriendshipRequestsAdded(self, contacts):
+        for contact in contacts:
+            self.__setRequest(contact)
+
+    def __me_onFriendshipRequestsUpdated(self, contacts):
+        for contact in contacts:
+            self.__updateRequest(contact)
 
     def __me_onUserActionReceived(self, actionID, contact):
         if contact.getProtoType() != PROTO_TYPE.XMPP:
@@ -301,11 +355,12 @@ class ClubsInvitesListener(_NotificationListener, ClubListener):
 
     def __addClubInvites(self):
         model = self._model()
-        if model is None:
+        profile = self.clubsCtrl.getProfile()
+        if model is None or not profile.isInvitesAvailable():
             return
         else:
             model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_INVITE)
-            invites = self.clubsCtrl.getProfile().getInvites().values()
+            invites = profile.getInvites().values()
             invites = sorted(invites, cmp=lambda invite, other: cmp(invite.getTimestamp(), other.getTimestamp()))
             activeInvites = filter(operator.methodcaller('isActive'), invites)
             if len(activeInvites):
@@ -314,13 +369,6 @@ class ClubsInvitesListener(_NotificationListener, ClubListener):
                 model.addNotification(ClubInviteDecorator(invite))
 
             return
-
-    def __updateClubInvites(self):
-        model = self._model()
-        if model:
-            invites = self.clubsCtrl.getProfile().getInvites().values()
-            for invite in invites:
-                model.updateNotification(NOTIFICATION_TYPE.CLUB_INVITE, invite.getID(), invite, False)
 
 
 class WGNCListener(_NotificationListener):
@@ -419,6 +467,7 @@ class NotificationsListeners(_NotificationListener):
     def __init__(self):
         super(NotificationsListeners, self).__init__()
         self.__serviceListener = ServiceChannelListener()
+        self.__fortMsgsListener = FortServiceChannelListener()
         self.__invitesListener = PrbInvitesListener()
         self.__friendshipRqs = FriendshipRqsListener()
         self.__wgnc = WGNCListener()
@@ -427,6 +476,7 @@ class NotificationsListeners(_NotificationListener):
 
     def start(self, model):
         self.__serviceListener.start(model)
+        self.__fortMsgsListener.start(model)
         self.__invitesListener.start(model)
         self.__friendshipRqs.start(model)
         self.__wgnc.start(model)
@@ -435,6 +485,7 @@ class NotificationsListeners(_NotificationListener):
 
     def stop(self):
         self.__serviceListener.stop()
+        self.__fortMsgsListener.stop()
         self.__invitesListener.stop()
         self.__friendshipRqs.stop()
         self.__wgnc.stop()

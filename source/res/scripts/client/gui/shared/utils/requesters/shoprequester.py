@@ -1,10 +1,13 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ShopRequester.py
 import BigWorld
-from abc import ABCMeta, abstractmethod
-from constants import WIN_XP_FACTOR_MODE
 import weakref
 from adisp import async
+from collections import defaultdict
+from abc import ABCMeta, abstractmethod
+from constants import WIN_XP_FACTOR_MODE
 from debug_utils import LOG_DEBUG
+from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
+from goodies.goodie_helpers import NamedGoodieData, getPremiumCost
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
 class ShopCommonStats(object):
@@ -241,6 +244,28 @@ class ShopCommonStats(object):
     def premiumCost(self):
         return self.getValue('premiumCost', {})
 
+    @property
+    def goodies(self):
+        return self.getValue('goodies', {})
+
+    def getGoodieByID(self, discountID):
+        return self.goodies.get(discountID, None)
+
+    def getGoodiesByVariety(self, variety):
+        return dict(filter(lambda (goodieID, item): item.variety == variety, self.goodies.iteritems()))
+
+    @property
+    def boosters(self):
+        return self.getGoodiesByVariety(GOODIE_VARIETY.BOOSTER)
+
+    @property
+    def discounts(self):
+        return self.getGoodiesByVariety(GOODIE_VARIETY.DISCOUNT)
+
+    @property
+    def premiumPacketsDiscounts(self):
+        return dict(filter(lambda (discountID, item): item.targetID == GOODIE_TARGET_TYPE.ON_BUY_PREMIUM, self.discounts.iteritems()))
+
     def getPremiumPacketCost(self, days):
         return self.premiumCost.get(days)
 
@@ -272,9 +297,10 @@ class ShopCommonStats(object):
 
 class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
 
-    def __init__(self):
+    def __init__(self, goodies):
         super(ShopRequester, self).__init__()
         self.defaults = DefaultShopRequester({}, self)
+        self._goodies = weakref.proxy(goodies)
 
     def clear(self):
         super(ShopRequester, self).clear()
@@ -295,6 +321,27 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
         Overloaded method to request shop cache
         """
         BigWorld.player().shop.getCache(lambda resID, value, rev: self._response(resID, value, callback))
+
+    def _preprocessValidData(self, data):
+        data = dict(data)
+        formattedGoodies = defaultdict(dict)
+        for goodieID, goodieData in data.get('goodies', {}).iteritems():
+            formattedGoodies[goodieID] = NamedGoodieData(*goodieData)
+
+        data['goodies'] = formattedGoodies
+        return data
+
+    @property
+    def personalPremiumPacketsDiscounts(self):
+        return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, self.premiumPacketsDiscounts.iteritems()))
+
+    def getPremiumCostWithDiscount(self, premiumPacketDiscounts = None):
+        discounts = premiumPacketDiscounts or self.personalPremiumPacketsDiscounts
+        premiumCostWithDiscount = self.premiumCost.copy()
+        for discount in discounts.itervalues():
+            premiumCostWithDiscount[discount.getTargetValue()] = getPremiumCost(self.premiumCost, discount)
+
+        return premiumCostWithDiscount
 
     def getTankmanCostWithDefaults(self):
         """
@@ -606,6 +653,12 @@ class DefaultShopRequester(ShopCommonStats):
     def premiumCost(self):
         value = self.__proxy.premiumCost.copy()
         value.update(self.getValue('premiumCost', {}))
+        return value
+
+    @property
+    def goodies(self):
+        value = self.__proxy.goodies.copy()
+        value.update(self.getValue('goodies', {}))
         return value
 
     @property

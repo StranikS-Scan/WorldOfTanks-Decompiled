@@ -10,7 +10,7 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortDemountBuildingWindowMeta import FortDemountBuildingWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as ALIAS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.fortifications.context import BuildingCtx
@@ -85,24 +85,24 @@ class FortDemountBuildingWindow(AbstractWindowView, View, FortDemountBuildingWin
 
     def __makeTitle(self):
         text = i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_TITLE, buildingName=self.__formattedBuildingName, buildingLevel=fort_formatters.getTextLevel(self.__buildingLevel))
-        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, text)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, text)
 
     def __makeBody(self):
-        text = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODYINNERTEXT))
-        concatTexts = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODY, bodyInnerText=text))
+        text = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODYINNERTEXT))
+        concatTexts = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODY, bodyInnerText=text))
         return concatTexts
 
     def __makeInputCheckerTitle(self):
-        return self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_TITLE))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_TITLE))
 
     def __makeInputCheckerBody(self):
         controlNumber = BigWorld.wg_getIntegralFormat(self.__currHpVal)
-        controlNumber = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, str(controlNumber))
-        questionBody = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_BODY, controlNumber=controlNumber))
+        controlNumber = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, str(controlNumber))
+        questionBody = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_BODY, controlNumber=controlNumber))
         return questionBody
 
     def __makeInputCheckerError(self):
-        return self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
 
     def applyDemount(self):
         self.__requestToDelete()

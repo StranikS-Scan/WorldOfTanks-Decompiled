@@ -186,6 +186,7 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
                  'battlesCount': text_styles.stats(battlesCount),
                  'battlesCountSortValue': clubInfo.battlesCount,
                  'winPercent': text_styles.stats(winsPercentStr),
-                 'winPercentSortValue': winsPercent})
+                 'winPercentSortValue': winsPercent,
+                 'isCurrentTeam': self._clubDbID == clubInfo.clubDBID})
 
         return {'formations': formations}

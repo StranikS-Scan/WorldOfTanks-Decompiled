@@ -28,7 +28,6 @@ from gui.shared.events import ArgsEvent, OpenLinkEvent
 from helpers import i18n, getFullClientVersion
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.DIALOGS import DIALOGS
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, REQUEST_RATE, HOST_AVAILABILITY
 from gui.social_network_login.Bridge import bridge as socialNetworkLoginBridge
 
@@ -68,7 +67,6 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__loadVersion()
         self.__setCopyright()
         Waiting.close()
-        self.addListener(LoginCreateEvent.CREATE_AN_ACCOUNT_REQUEST, self.onTryCreateAccount, EVENT_BUS_SCOPE.LOBBY)
         MusicController.g_musicController.stopAmbient()
         MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOGIN)
         self.__loadRandomBgImage()
@@ -97,7 +95,6 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__loginDispatcher.destroy()
         self.__loginDispatcher = None
         self.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(LoginCreateEvent.CREATE_AN_ACCOUNT_REQUEST, self.onTryCreateAccount, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self.__onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)
         self.__lastSelectedServer = None
         if self.__capsLockCallback is not None:
@@ -208,11 +205,6 @@ class LoginView(View, LoginPageMeta, AppRef):
     def onNicknameTooSmall(self):
         self.__createAnAccountResponse(False, i18n.makeString(MENU.LOGIN_STATUS_INVALID_LOGIN_LENGTH) % {'count': _ACCOUNT_NAME_MIN_LENGTH_REG})
 
-    def onShowCreateAnAccountDialog(self):
-        LOG_DEBUG('onShowCreateAnAccountDialog')
-        if constants.IS_VIETNAM:
-            self.fireEvent(LoginCreateEvent(LoginCreateEvent.CREATE_ACC, View.alias, DIALOGS.CREATEANACCOUNT_TITLE, DIALOGS.CREATEANACCOUNT_MESSAGE, DIALOGS.CREATEANACCOUNT_SUBMIT), EVENT_BUS_SCOPE.LOBBY)
-
     def onHandleAutoRegisterJSONParsingFailed(self):
         self.__createAnAccountResponse(False, MENU.LOGIN_STATUS_LOGIN_REJECTED_UNABLE_TO_PARSE_JSON)
 
@@ -277,14 +269,13 @@ class LoginView(View, LoginPageMeta, AppRef):
         BigWorld.wg_openWebBrowser(self.__socialNetworkLogin.getSocialNetworkURL(socialNetworkName))
 
     def changeAccount(self):
-        self.as_showSimpleFormS(True, self.__socialNetworkLogin.getAvailableSocialNetworks())
-        self.as_setErrorMessageS(self.__socialNetworkLogin.getLogoutWarning(self.__lastLoginType), 0)
-        self.__lastLoginType = 'basic'
         self.__rememberMe = False
         self.as_setDefaultValuesS('', '', False, GUI_SETTINGS.rememberPassVisible, GUI_SETTINGS.igrCredentialsReset, not GUI_SETTINGS.isEmpty('recoveryPswdURL'))
+        self.__showRequiredLoginScreen()
+        self.as_setErrorMessageS(self.__socialNetworkLogin.getLogoutWarning(self.__lastLoginType), 0)
         self.__loginPreferences.writeString('login', '')
         self.__loginPreferences.writeBool('rememberPwd', False)
-        self.__loginPreferences.writeString('lastLoginType', self.__lastLoginType)
+        self.__loginPreferences.writeString('lastLoginType', 'basic')
         self.__loginPreferences.writeString('token2', '')
         self.__loginPreferences.writeString('user', '')
 
@@ -300,12 +291,6 @@ class LoginView(View, LoginPageMeta, AppRef):
 
     def onExitFromAutoLogin(self):
         self.__loginDispatcher.onExitFromAutoLogin()
-
-    def onTryCreateAccount(self, event):
-        self.__loginDispatcher.onTryCreateAnAccount(event.message)
-
-    def steamLogin(self):
-        self.__loginDispatcher.steamLogin()
 
     def isToken(self):
         return self.__loginDispatcher.isToken()
@@ -376,10 +361,17 @@ class LoginView(View, LoginPageMeta, AppRef):
     def __showRequiredLoginScreen(self):
         if GUI_SETTINGS.socialNetworkLogin['enabled']:
             socialList = self.__socialNetworkLogin.getAvailableSocialNetworks()
+            socialDataList = []
+            for socialId in socialList:
+                item = {'socialId': socialId,
+                 'tpHeader': self.__socialNetworkLogin.getTooltipHeader(socialId),
+                 'tpBody': self.__socialNetworkLogin.getTooltipBody(socialId)}
+                socialDataList.append(item)
+
             if self.__lastLoginType in socialList and self.__rememberMe:
                 self.as_showSocialFormS(self.__loginDispatcher.isToken(), self.__loginPreferences.readString('user'), makeHtmlString('html_templates:socialNetworkLogin', 'transparentLogo', {'socialNetwork': self.__lastLoginType}), self.__lastLoginType)
             else:
-                self.as_showSimpleFormS(True, socialList)
+                self.as_showSimpleFormS(True, socialDataList)
         else:
             self.as_showSimpleFormS(False, None)
         return

@@ -6,7 +6,7 @@ from gui.shared.utils import CONST_CONTAINER
 IS_EMULATOR = False
 DEFAULT_COOLDOWN = 1.0
 REQUEST_TIMEOUT = 60.0
-MIN_BATTLES_FOR_STATS = 10
+MIN_BATTLES_FOR_STATS = 1
 MIN_MEMBERS_COUNT = 4
 CLUBS_COUNT = 1
 APPLICATIONS_COUNT = 1
@@ -26,6 +26,7 @@ LADDER_CHEVRON_ICON_PATH = '../maps/icons/library/cybersport/ladder'
 LEAGUE_RIBBONS_ICON_PATH = '../maps/icons/library/cybersport/leagueRibbons'
 DEFAULT_EMBLEM_PATH = 'gui/maps/icons/library/cybersport/emblems'
 DEFAULT_EMBLEM_NAME_PREFIX = 'default'
+STUB_EMBLEM_NAME_PREFIX = 'stub'
 
 class CLIENT_CLUB_RESTRICTIONS(CONST_CONTAINER):
     DEFAULT = 'HAVE_NO_RIGHTS'
@@ -38,8 +39,9 @@ class CLIENT_CLUB_RESTRICTIONS(CONST_CONTAINER):
     INVITE_IS_NOT_ACTIVE = 'INVITE_IS_NOT_ACTIVE'
     CLUB_IS_NOT_IN_LADDER = 'This club is not in the ladder.'
     HAS_NO_CLUB = 'HAS_NO_CLUB'
-    TOO_MANY_INVITES_PER_CALL = 'Forbidden operation because applicants limit reached.'
-    TOO_MANY_ACTIVE_INVITES = 'Forbidden operation because applicants limit reached.'
+    TOO_MANY_INVITES_PER_CALL = 'TOO_MANY_INVITES_PER_CALL'
+    TOO_MANY_ACTIVE_INVITES = 'TEAM_ACTIVE_PROPOSALS_EXCEEDED'
+    NOT_ENOUGH_RATED_BATTLES = 'NOT_ENOUGH_RATED_BATTLES'
     TEMPORARILY_RESTRICTED = 'This operation is restricted on web side'
 
 
@@ -149,6 +151,18 @@ def getDefaultEmblem256x256():
     return _getDefaultEmblemPath(256)
 
 
+def getStubEmblem24x24():
+    return _getStubEmblemPath(24)
+
+
+def getStubEmblem32x32():
+    return _getStubEmblemPath(32)
+
+
+def getStubEmblem64x64():
+    return _getStubEmblemPath(64)
+
+
 def getLadderBackground(division = None):
     if division is not None:
         imgFileName = '%d' % (getLeagueByDivision(division) + 1)
@@ -184,6 +198,13 @@ def getPointsToNextDivision(localRating):
 def _getDefaultEmblemPath(size):
     return '%s/%s_%dx%d.png' % (DEFAULT_EMBLEM_PATH,
      DEFAULT_EMBLEM_NAME_PREFIX,
+     size,
+     size)
+
+
+def _getStubEmblemPath(size):
+    return '%s/%s_%dx%d.png' % (DEFAULT_EMBLEM_PATH,
+     STUB_EMBLEM_NAME_PREFIX,
      size,
      size)
 

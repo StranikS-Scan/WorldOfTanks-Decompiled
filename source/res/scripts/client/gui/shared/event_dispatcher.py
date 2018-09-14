@@ -75,3 +75,21 @@ def selectVehicleInHangar(itemCD):
     raise veh.isInInventory or AssertionError('Vehicle must be in inventory.')
     g_currentVehicle.selectVehicle(veh.invID)
     showHangar()
+
+
+def showPersonalCase(tankmanInvID, tabIndex):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, getViewName(VIEW_ALIAS.PERSONAL_CASE, tankmanInvID), {'tankmanID': tankmanInvID,
+     'page': tabIndex}))
+
+
+def showPremiumCongratulationWindow(award):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW), ctx={'award': award}))
+
+
+def showPremiumWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW, getViewName(VIEW_ALIAS.PREMIUM_WINDOW), ctx=None))
+    return
+
+
+def showBoostersWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW))

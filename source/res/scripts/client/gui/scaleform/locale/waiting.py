@@ -104,6 +104,7 @@ class WAITING(object):
     DOWNLOAD_INVENTORY = '#waiting:download/inventory'
     DOWNLOAD_SHOP = '#waiting:download/shop'
     DOWNLOAD_DOSSIER = '#waiting:download/dossier'
+    DOWNLOAD_DISCOUNTS = '#waiting:download/discounts'
     UPDATINGSKILLWINDOW = '#waiting:updatingSkillWindow'
     PREBATTLE_CREATE = '#waiting:prebattle/create'
     PREBATTLE_TEAM_READY = '#waiting:prebattle/team_ready'

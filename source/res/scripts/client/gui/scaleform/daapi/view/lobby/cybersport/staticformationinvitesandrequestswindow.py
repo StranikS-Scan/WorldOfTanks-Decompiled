@@ -103,16 +103,15 @@ class StaticFormationInvitesAndRequestsWindow(View, AbstractWindowView, StaticFo
             playerDbID = invitation.getUserDbID()
             if isInvite(invitation):
                 result = yield self.clubsCtrl.sendRequest(club_ctx.RevokeInviteCtx(club.getClubDbID(), playerDbID))
-                if result.isSuccess():
-                    SystemMessages.pushMessage(club_fmts.getInviteRevokeSysMsg())
+                sysMsg = club_fmts.getInviteRevokeSysMsg()
             elif isAccepted:
                 result = yield self.clubsCtrl.sendRequest(club_ctx.AcceptApplicationCtx(club.getClubDbID(), playerDbID))
-                if result.isSuccess():
-                    SystemMessages.pushMessage(club_fmts.getAppAcceptSysMsg(self.getUserFullName(playerDbID)))
+                sysMsg = club_fmts.getAppAcceptSysMsg(self.getUserFullName(playerDbID))
             else:
                 result = yield self.clubsCtrl.sendRequest(club_ctx.DeclineApplicationCtx(club.getClubDbID(), playerDbID))
-                if result.isSuccess():
-                    SystemMessages.pushMessage(club_fmts.getAppDeclineSysMsg(self.getUserFullName(playerDbID)))
+                sysMsg = club_fmts.getAppDeclineSysMsg(self.getUserFullName(playerDbID))
+            if result.isSuccess():
+                SystemMessages.pushMessage(sysMsg)
         else:
             LOG_ERROR('No club attached', inviteID, isAccepted)
         self.as_hideWaitingS()

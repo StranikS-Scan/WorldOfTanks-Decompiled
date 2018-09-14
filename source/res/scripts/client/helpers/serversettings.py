@@ -99,8 +99,14 @@ class ServerSettings(object):
     def isClubsEnabled(self):
         return self.__getGlobalSetting('isClubsEnabled', False)
 
+    def isGoldFishEnabled(self):
+        return self.__getGlobalSetting('isGoldFishEnabled', False)
+
     def isPromoAutoViewsEnabled(self):
         return True
+
+    def getForbiddenFortDefenseHours(self):
+        return self.__getGlobalSetting('forbiddenFortDefenseHours', [])
 
     def __getGlobalSetting(self, settingsName, default = None):
         return self.__serverSettings.get(settingsName, default)

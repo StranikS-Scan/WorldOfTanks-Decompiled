@@ -17,6 +17,14 @@ class ReferralManagementWindowMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setTableData(referrals)
 
+    def as_setAwardDataDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setAwardDataData(data)
+
     def as_setProgressDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setProgressData(data)
+
+    def as_showAlertS(self, alertStr):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showAlert(alertStr)

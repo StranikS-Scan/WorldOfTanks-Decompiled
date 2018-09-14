@@ -183,7 +183,7 @@ class PrbInvitesInit(Action):
                 self._completed = True
             else:
                 self._running = True
-                invitesManager.onReceivedInviteListInited += self.__onInvitesListInited
+                invitesManager.onInvitesListInited += self.__onInvitesListInited
         else:
             LOG_ERROR('Invites init action. Invites manager not found')
             self._completed = False
@@ -193,7 +193,7 @@ class PrbInvitesInit(Action):
         invitesManager = g_prbLoader.getInvitesManager()
         if invitesManager:
             LOG_DEBUG('Invites init action. List of invites is build')
-            invitesManager.onReceivedInviteListInited -= self.__onInvitesListInited
+            invitesManager.onInvitesListInited -= self.__onInvitesListInited
         else:
             LOG_ERROR('Invites manager not found')
         self._completed = True

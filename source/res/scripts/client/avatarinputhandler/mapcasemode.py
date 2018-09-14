@@ -12,6 +12,7 @@ import Math
 from Math import Matrix, Vector2, Vector3
 import weakref
 from AvatarInputHandler.control_modes import IControlMode, dumpStateEmpty
+from AvatarInputHandler import AimingSystems
 import SoundGroups
 from constants import SERVER_TICK_LENGTH
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
@@ -106,6 +107,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector):
 
     def processHover(self, position, force = False):
         if force:
+            position = AimingSystems.getDesiredShotPoint(Math.Vector3(position[0], 500.0, position[2]), Math.Vector3(0.0, -1.0, 0.0), True, True, True)
             self.__marker.setPosition(position)
             BigWorld.callback(SERVER_TICK_LENGTH, self.__markerForceUpdate)
         else:
@@ -198,6 +200,7 @@ class _BomberStrikeSelector(_AreaStrikeSelector):
             self.selectingPosition = True
             self.direction = _DEFAULT_STRIKE_DIRECTION
             _AreaStrikeSelector.processHover(self, position)
+            self.area.setSelectingDirection(False)
             return False
         else:
             if self.selectingPosition:
@@ -209,6 +212,7 @@ class _BomberStrikeSelector(_AreaStrikeSelector):
                 if position is not None:
                     replayCtrl.setConsumablesPosition(self.area.position, self.direction)
             self.selectingPosition = False
+            self.area.setSelectingDirection(True)
             return False
 
     def processHover(self, position, force = False):
@@ -461,7 +465,9 @@ def activateMapCase(equipmentID, deactivateCallback):
         MapCaseControlMode.deactivateCallback = deactivateCallback
         pos = inputHandler.getDesiredShotPoint()
         if pos is None:
-            pos = inputHandler.ctrl.camera.aimingSystem.getDesiredShotPoint()
+            camera = getattr(inputHandler.ctrl, 'camera', None)
+            if camera is not None:
+                pos = camera.aimingSystem.getDesiredShotPoint()
             if pos is None:
                 pos = Vector3(0.0, 0.0, 0.0)
         MapCaseControlMode.prevCtlMode = [pos, inputHandler.ctrlModeName, inputHandler.ctrl.aimingMode]

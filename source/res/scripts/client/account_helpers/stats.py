@@ -16,7 +16,7 @@ _TANKMAN = items.ITEM_TYPE_INDICES['tankman']
 _OPTIONALDEVICE = items.ITEM_TYPE_INDICES['optionalDevice']
 _SHELL = items.ITEM_TYPE_INDICES['shell']
 _EQUIPMENT = items.ITEM_TYPE_INDICES['equipment']
-_SIMPLE_VALUE_STATS = ('credits', 'gold', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits')
+_SIMPLE_VALUE_STATS = ('credits', 'fortResource', 'gold', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'denunciationsLeft', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits')
 _DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'refSystem')
 _GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs')
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
@@ -82,6 +82,9 @@ class Stats(object):
                 if stat in cacheDiff:
                     cache[stat] = cacheDiff[stat]
 
+            spaDiff = cacheDiff.get('SPA', None)
+            if spaDiff:
+                synchronizeDicts(spaDiff, cache.setdefault('SPA', dict()))
         return
 
     def getCache(self, callback = None):

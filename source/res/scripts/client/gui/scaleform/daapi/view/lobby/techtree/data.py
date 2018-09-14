@@ -36,8 +36,9 @@ class _ItemsData(object):
         return vehicleCanBeChanged
 
     def _getAllPossibleXP(self, nodeCD, unlockStats):
-        eliteVehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.ELITE).values()
-        dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles))
+        criteria = REQ_CRITERIA.VEHICLE.ELITE | ~REQ_CRITERIA.IN_CD_LIST([nodeCD])
+        eliteVehicles = g_itemsCache.items.getVehicles(criteria)
+        dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles.values()))
         exchangeRate = self._items.shop.freeXPConversion[0]
         result = min(int(dirtyResult / exchangeRate) * exchangeRate, self._stats.gold * exchangeRate)
         result += unlockStats.getVehTotalXP(nodeCD)

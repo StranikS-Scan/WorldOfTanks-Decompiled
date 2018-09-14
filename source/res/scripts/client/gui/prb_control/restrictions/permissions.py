@@ -1,11 +1,11 @@
 # Embedded file name: scripts/client/gui/prb_control/restrictions/permissions.py
-from UnitBase import UNIT_ROLE, UNIT_STATE
+from UnitBase import UNIT_ROLE, UNIT_FLAGS
 import account_helpers
 from constants import PREBATTLE_ROLE, PREBATTLE_TEAM_STATE
 from constants import PREBATTLE_ACCOUNT_STATE
 from gui import prb_control
 from gui.prb_control.items.prb_items import TeamStateInfo
-from gui.prb_control.items.unit_items import UnitState
+from gui.prb_control.items.unit_items import UnitFlags
 from gui.prb_control.restrictions.interfaces import IPrbPermissions, IUnitPermissions
 from gui.prb_control.restrictions.limits import MaxCount, TotalMaxCount, TeamNoPlayersInBattle
 
@@ -95,34 +95,6 @@ class TrainingPrbPermissions(DefaultPrbPermissions):
         return self.canSetTeamState(1) and self.canSetTeamState(2)
 
 
-class SquadPrbPermissions(DefaultPrbPermissions):
-
-    def canSendInvite(self):
-        return super(SquadPrbPermissions, self).canSendInvite() and self._canAddPlayers()
-
-    def canAssignToTeam(self, team = 1):
-        return False
-
-    def canChangePlayerTeam(self):
-        return False
-
-    def canExitFromQueue(self):
-        return self.isCreator(self._roles)
-
-    @classmethod
-    def isCreator(cls, roles):
-        return roles == PREBATTLE_ROLE.SQUAD_CREATOR
-
-    def _canAddPlayers(self):
-        clientPrb = prb_control.getClientPrebattle()
-        result = False
-        if clientPrb is not None:
-            settings = prb_control.getPrebattleSettings(prebattle=clientPrb)
-            rosters = prb_control.getPrebattleRosters(prebattle=clientPrb)
-            result, _ = MaxCount().check(rosters, 1, settings.getTeamLimits(1))
-        return result
-
-
 class CompanyPrbPermissions(DefaultPrbPermissions):
 
     def canSendInvite(self):
@@ -186,15 +158,15 @@ class BattleSessionPrbPermissions(DefaultPrbPermissions):
 
 class UnitPermissions(IUnitPermissions):
 
-    def __init__(self, roles = 0, state = UNIT_STATE.DEFAULT, isCurrentPlayer = False, isPlayerReady = False):
+    def __init__(self, roles = 0, flags = UNIT_FLAGS.DEFAULT, isCurrentPlayer = False, isPlayerReady = False):
         super(UnitPermissions, self).__init__()
         self._roles = roles
-        self._state = UnitState(state)
+        self._flags = UnitFlags(flags)
         self._isCurrentPlayer = isCurrentPlayer
         self._isPlayerReady = isPlayerReady
 
     def __repr__(self):
-        return '{0:>s}(roles = {1:n}, state = {2!r:s}, isCurrentPlayer = {3!r:s})'.format(self.__class__.__name__, self._roles, self._state, self._isCurrentPlayer)
+        return '{0:>s}(roles = {1:n}, state = {2!r:s}, isCurrentPlayer = {3!r:s})'.format(self.__class__.__name__, self._roles, self._flags, self._isCurrentPlayer)
 
     def canSendInvite(self):
         return self._roles & UNIT_ROLE.INVITE_KICK_PLAYERS > 0
@@ -224,16 +196,16 @@ class UnitPermissions(IUnitPermissions):
         return self._roles & UNIT_ROLE.ADD_REMOVE_MEMBERS > 0
 
     def canChangeComment(self):
-        return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0 and not self._state.isInIdle()
+        return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0 and not self._flags.isInIdle()
 
     def canInvokeAutoSearch(self):
-        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0 and not self._state.isInArena()
+        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0 and not self._flags.isInArena()
 
     def canStartBattleQueue(self):
         return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0
 
     def canStopBattleQueue(self):
-        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0 and not self._state.isInArena()
+        return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0 and not self._flags.isInArena()
 
     def canChangeVehicle(self):
         return self._isCurrentPlayer and not self._isPlayerReady
@@ -253,3 +225,12 @@ class UnitPermissions(IUnitPermissions):
     @classmethod
     def isCreator(cls, roles):
         return roles & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR
+
+
+class SquadPermissions(UnitPermissions):
+
+    def canChangeLeadership(self):
+        return False
+
+    def canExitFromQueue(self):
+        return self.isCreator(self._roles)

@@ -7,37 +7,38 @@ from gui.Scaleform.daapi.view.meta.CyberSportUnitMeta import CyberSportUnitMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control import settings
-from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
-from helpers import int2roman
+from helpers import int2roman, i18n
 
 class CyberSportUnitView(CyberSportUnitMeta):
 
     def __init__(self):
         super(CyberSportUnitView, self).__init__()
+        self.textMgr = self.app.utilsManager.textManager
 
     def getCoolDownRequests(self):
         requests = super(CyberSportUnitView, self).getCoolDownRequests()
         requests.append(REQUEST_TYPE.CLOSE_SLOT)
         return requests
 
-    def onUnitStateChanged(self, unitState, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         functional = self.unitFunctional
         pInfo = functional.getPlayerInfo()
         rosterSettings = functional.getRosterSettings()
         isCreator = pInfo.isCreator()
-        if unitState.isLockedStateChanged():
+        if flags.isLockedStateChanged():
             vehGetter = pInfo.getVehiclesToSlot
             slotGetter = functional.getSlotState
-            slotLabels = map(lambda idx: vo_converters.makeSlotLabel(unitState, slotGetter(idx), isCreator, len(vehGetter(idx))), rosterSettings.getAllSlotsRange())
-            self.as_lockUnitS(unitState.isLocked(), slotLabels)
-        if isCreator and unitState.isOpenedStateChanged():
-            self.as_setOpenedS(unitState.isOpened(), vo_converters.makeUnitStateLabel(unitState))
+            slotLabels = map(lambda idx: vo_converters.makeSlotLabel(flags, slotGetter(idx), isCreator, len(vehGetter(idx))), rosterSettings.getAllSlotsRange())
+            self.as_lockUnitS(flags.isLocked(), slotLabels)
+        if isCreator and flags.isOpenedStateChanged():
+            self.as_setOpenedS(flags.isOpened(), vo_converters.makeUnitStateLabel(flags))
         self._setActionButtonState()
-        if unitState.isChanged():
+        if flags.isChanged():
             self._updateMembersData()
 
     def onUnitSettingChanged(self, opCode, value):
@@ -45,12 +46,12 @@ class CyberSportUnitView(CyberSportUnitMeta):
             self.as_setCommentS(self.unitFunctional.getCensoredComment())
         elif opCode in [UNIT_OP.CLOSE_SLOT, UNIT_OP.OPEN_SLOT]:
             functional = self.unitFunctional
-            unitState = functional.getState()
+            unitFlags = functional.getFlags()
             slotState = functional.getSlotState(value)
             pInfo = functional.getPlayerInfo()
             canAssign, vehicles = pInfo.canAssignToSlot(value)
             vehCount = len(vehicles)
-            slotLabel = vo_converters.makeSlotLabel(unitState, slotState, pInfo.isCreator(), vehCount)
+            slotLabel = vo_converters.makeSlotLabel(unitFlags, slotState, pInfo.isCreator(), vehCount)
             if opCode == UNIT_OP.CLOSE_SLOT:
                 self.as_closeSlotS(value, settings.UNIT_CLOSED_SLOT_COST, slotLabel)
             else:
@@ -92,6 +93,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
         unitStats = functional.getStats()
         canDoAction, restriction = functional.validateLevels(stats=unitStats)
         self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
+        self._updateLabels(functional)
 
     def onUnitRejoin(self):
         super(CyberSportUnitView, self).onUnitRejoin()
@@ -102,12 +104,13 @@ class CyberSportUnitView(CyberSportUnitMeta):
         unitStats = functional.getStats()
         canDoAction, restriction = functional.validateLevels(stats=unitStats)
         self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
+        self._updateLabels(functional)
 
     def toggleFreezeRequest(self):
-        self.requestToLock(not self.unitFunctional.getState().isLocked())
+        self.requestToLock(not self.unitFunctional.getFlags().isLocked())
 
     def toggleStatusRequest(self):
-        self.requestToOpen(not self.unitFunctional.getState().isOpened())
+        self.requestToOpen(not self.unitFunctional.getFlags().isOpened())
 
     def showSettingsRoster(self, slots):
         container = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
@@ -135,6 +138,16 @@ class CyberSportUnitView(CyberSportUnitMeta):
         functional = self.unitFunctional
         data = vo_converters.makeUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
         self.as_updateRallyS(data)
+        self._updateLabels(functional)
+
+    def _updateLabels(self, functional):
+        _, unit = functional.getUnit()
+        slotsBusy = len(unit.getMembers())
+        slotsBusy = self.textMgr.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, str(slotsBusy))
+        maxSlots = unit.getMaxSlotCount()
+        teamLbl = i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMMEMBERS, current=slotsBusy, max=str(maxSlots))
+        teamLbl = self.textMgr.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, teamLbl)
+        self.as_setPlayerCountLblS(teamLbl)
 
     def _setActionButtonState(self):
         self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))

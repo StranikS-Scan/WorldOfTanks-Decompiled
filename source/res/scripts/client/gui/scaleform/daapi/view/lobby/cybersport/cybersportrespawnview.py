@@ -20,23 +20,23 @@ class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListene
         self.currentState = ''
 
     def onUnitRejoin(self):
-        if not self.unitFunctional.getState().isInIdle():
+        if not self.unitFunctional.getFlags().isInIdle():
             self.__clearState()
 
-    def onUnitStateChanged(self, state, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         if self.unitFunctional.hasLockedState():
-            if state.isInQueue() or state.isInArena():
+            if flags.isInQueue() or flags.isInArena():
                 self.currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_RESPAWN_STATE
-            elif state.isInPreArena():
+            elif flags.isInPreArena():
                 self.__clearState()
             else:
-                LOG_ERROR('View for modal state is not resolved', state)
+                LOG_ERROR('View for modal state is not resolved', flags)
             self.__initState(timeLeft=timeLeft)
         else:
             self.__clearState()
 
     def onUnitPlayerStateChanged(self, pInfo):
-        if self.unitFunctional.getState().isInIdle():
+        if self.unitFunctional.getFlags().isInIdle():
             self.__initState()
 
     def onUnitExtraChanged(self, extra):

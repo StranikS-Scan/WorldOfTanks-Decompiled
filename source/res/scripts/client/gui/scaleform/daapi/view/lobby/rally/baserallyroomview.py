@@ -12,6 +12,7 @@ from gui.Scaleform.framework import ViewTypes, AppRef
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT, REQUEST_TYPE
@@ -21,6 +22,8 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 from messenger.proto.events import g_messengerEvents
+from helpers import int2roman, i18n
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 import nations
 
 class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
@@ -28,6 +31,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
     def __init__(self):
         super(BaseRallyRoomView, self).__init__()
         self._candidatesDP = None
+        self.textMgr = self.app.utilsManager.textManager
         return
 
     def requestToAssign(self, pID, slotIdx):
@@ -62,7 +66,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
 
     @process
     def canBeClosed(self, callback):
-        meta = self.unitFunctional.getConfirmDialogMeta()
+        meta = self.unitFunctional.getConfirmDialogMeta(FUNCTIONAL_EXIT.INTRO_UNIT)
         if meta:
             isConfirmed = yield DialogsInterface.showDialog(meta)
         else:
@@ -152,7 +156,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         super(BaseRallyRoomView, self)._populate()
         self.initCandidatesDP()
         self.startListening()
-        self.addListener(events.CSVehicleSelectEvent.VEHICLE_SELECTED, self._onVehicleSelect)
+        self.addListener(events.CSVehicleSelectEvent.VEHICLE_SELECTED, self.__onVehicleSelectHandler)
         self._updateRallyData()
         self._setActionButtonState()
         usersEvents = g_messengerEvents.users
@@ -170,7 +174,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
             self._candidatesDP.fini()
             self._candidatesDP = None
         self.stopListening()
-        self.removeListener(events.CSVehicleSelectEvent.VEHICLE_SELECTED, self._onVehicleSelect)
+        self.removeListener(events.CSVehicleSelectEvent.VEHICLE_SELECTED, self.__onVehicleSelectHandler)
         super(BaseRallyRoomView, self)._dispose()
         return
 
@@ -233,8 +237,10 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
     def showFAQWindow(self):
         self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def _onVehicleSelect(self, event):
-        items = event.ctx
+    def __onVehicleSelectHandler(self, event):
+        self._selectVehicles(event.ctx)
+
+    def _selectVehicles(self, items):
         if len(items):
             self.sendRequest(unit_ctx.SetVehicleUnitCtx(vTypeCD=items[0], waitingID='prebattle/change_settings'))
 
@@ -248,8 +254,9 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         self._updateRallyData()
 
     def _updateVehiclesLabel(self, minVal, maxVal):
-        self.as_setVehiclesTitleS(makeHtmlString('html_templates:lobby/rally/', 'vehiclesLabel', {'minValue': minVal,
-         'maxValue': maxVal}))
+        vehicleLvl = self.textMgr.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(CYBERSPORT.WINDOW_UNIT_RANGEVALUE, minVal=minVal, maxVal=maxVal))
+        vehicleLbl = self.textMgr.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMVEHICLESLBL, levelsRange=vehicleLvl))
+        self.as_setVehiclesTitleS(vehicleLbl)
 
     def _closeSendInvitesWindow(self):
         self._destroyRelatedView(ViewTypes.WINDOW, PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)

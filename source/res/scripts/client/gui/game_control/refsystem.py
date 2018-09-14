@@ -7,9 +7,9 @@ from PlayerEvents import g_playerEvents
 from constants import REF_SYSTEM_FLAG, EVENT_TYPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.game_control.controllers import Controller
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
@@ -56,11 +56,11 @@ class CreditsAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_REFERRAL_AWARD_CREDITS_GLOW
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_HEADER))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_HEADER))
 
     def getDescription(self):
-        creditsCount = '%s<nobr>%s' % (self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, BigWorld.wg_getIntegralFormat(self.__creditsValue)), self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, 16, 16, -4, 0)))
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, _ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_DESCRIPTION, credits=creditsCount))
+        creditsCount = '%s<nobr>%s' % (self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, BigWorld.wg_getIntegralFormat(self.__creditsValue)), self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, 16, 16, -4, 0)))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(MENU.AWARDWINDOW_REFERRAL_CREDITS_DESCRIPTION, credits=creditsCount))
 
 
 class VehicleAward(AwardAbstract):
@@ -80,7 +80,7 @@ class VehicleAward(AwardAbstract):
         return self.__vehicle.iconUniqueLight
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_HEADER, vehicleName=self.__vehicle.userName))
 
     def getDescription(self):
         if self.__boughtVehicle:
@@ -89,14 +89,14 @@ class VehicleAward(AwardAbstract):
             descriptionText = _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NORMAL, expCount=BigWorld.wg_getIntegralFormat(self.__achievedXp), vehicleName=self.__vehicle.userName)
         else:
             descriptionText = _ms(MENU.AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NOXP, vehicleName=self.__vehicle.userName)
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, descriptionText)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, descriptionText)
 
     def getAdditionalText(self):
         result = []
         for _, xpFactor in _getRefSystemPeriods():
             result.append('%s<nobr>x%s' % (self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -8, 0)), BigWorld.wg_getNiceNumberFormat(xpFactor)))
 
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, _ms(MENU.AWARDWINDOW_REFERRAL_COMPLETE, modifiers=', '.join(result)))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, _ms(MENU.AWARDWINDOW_REFERRAL_COMPLETE, modifiers=', '.join(result)))
 
 
 class TankmanAward(AwardAbstract):
@@ -116,22 +116,22 @@ class TankmanAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_REFERRAL_TANKMANMALE
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_HEADER))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.HIGH_TITLE, _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_HEADER))
 
     def getDescription(self):
         if self.__achievedXp is not None:
             description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NORMAL, expCount=BigWorld.wg_getIntegralFormat(self.__achievedXp), tankman=self.__tankman.roleUserName)
         else:
             description = _ms(MENU.AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NOXP, tankman=self.__tankman.roleUserName)
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, description)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, description)
 
     def getAdditionalText(self):
         if self.__nextXp is not None:
             expCount = '%s<nobr>%s' % (BigWorld.wg_getIntegralFormat(self.__nextXp), self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -8, 0)))
-            additionalText = _ms(MENU.AWARDWINDOW_REFERRAL_NEXTTANKMAN, expCount=self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, expCount))
+            additionalText = _ms(MENU.AWARDWINDOW_REFERRAL_NEXTTANKMAN, expCount=self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.CREDITS_TEXT, expCount))
         else:
             additionalText = ''
-        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, additionalText)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, additionalText)
 
 
 class RefSystem(Controller):
@@ -170,7 +170,7 @@ class RefSystem(Controller):
         self.__update(g_itemsCache.items.stats.refSystem)
         self.__updateQuests()
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self.__stop()
 
     def onDisconnected(self):
@@ -282,6 +282,8 @@ class RefSystem(Controller):
             user = userGetter(dbID)
             if user:
                 user.addTags(tags)
+                if USER_TAG.INVALID_NAME in user.getTags():
+                    user.update(name=item.getNickName())
             else:
                 userSetter(SharedUserEntity(dbID, name=item.getNickName(), tags=tags, clanInfo=ClanInfo(abbrev=item.getClanAbbrev())))
 

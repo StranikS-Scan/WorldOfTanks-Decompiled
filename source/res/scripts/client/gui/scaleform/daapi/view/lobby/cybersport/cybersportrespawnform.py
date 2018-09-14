@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportRespawnForm.py
 import BigWorld
 import functools
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.clubs.club_helpers import MyClubListener
@@ -14,6 +13,7 @@ from gui import makeHtmlString
 from gui.shared.utils.functions import getArenaShortName
 from gui.shared.view_helpers import ClubEmblemsHelper
 from helpers import time_utils
+from helpers import int2roman
 
 class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmblemsHelper):
     WARNING_TIME = 10
@@ -29,6 +29,7 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
     def __init__(self):
         super(CyberSportRespawnForm, self).__init__()
         self.__extra = self.unitFunctional.getExtra()
+        self.textMgr = self.app.utilsManager.textManager
         self.__timerCallback = None
         self.__warningCallback = None
         return
@@ -37,9 +38,9 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
         if emblem:
             self.as_setTeamEmblemS(self.getMemoryTexturePath(emblem))
 
-    def onUnitStateChanged(self, unitState, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         self._setActionButtonState()
-        if unitState.isChanged():
+        if flags.isChanged():
             self._updateMembersData()
             self.__updateTimer()
             self.__updateWarning()
@@ -94,6 +95,8 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
         self.__updateTimer()
         self.__updateWarning()
         self.__updateTotal()
+        settings = self.unitFunctional.getRosterSettings()
+        self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
     def _dispose(self):
         self.__cancelTimerCallback()
@@ -124,8 +127,10 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
 
     def _updateRallyData(self):
         functional = self.unitFunctional
-        data = vo_converters.makeStaticFormationUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
-        self.as_updateRallyS(data)
+        if functional is not None:
+            data = vo_converters.makeStaticFormationUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
+            self.as_updateRallyS(data)
+        return
 
     def __updateHeader(self):
         self.as_setTeamNameS(self.__extra.clubName)
@@ -166,7 +171,7 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
     def __showWarning(self, timeLeft):
         self.__warningCallback = None
         level = 'warning' if timeLeft <= self.WARNING_TIME else 'info'
-        isInQueue = self.unitFunctional is not None and self.unitFunctional.getState().isInQueue()
+        isInQueue = self.unitFunctional is not None and self.unitFunctional.getFlags().isInQueue()
         msgStatus = 'ready' if isInQueue else level
         status = makeHtmlString('html_templates:lobby/cyberSport/respawn/status', msgStatus)
         tooltip = '#tooltips:cyberSport/respawn/status/%s' % msgStatus

@@ -1,30 +1,8 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/rsm.py
 from gui.shared.utils import findFirst
-from messenger.proto.xmpp.extensions import PyExtension
+from messenger.proto.xmpp.extensions import PyExtension, SimpleExtension
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
-
-class _MaxElement(PyExtension):
-    __slots__ = ('_max',)
-
-    def __init__(self, value):
-        super(_MaxElement, self).__init__('max')
-        self._max = str(value)
-
-    def _makeChildrenString(self):
-        return self._max
-
-
-class _NavElement(PyExtension):
-    __slots__ = ('_uid',)
-
-    def __init__(self, name, uid):
-        super(_NavElement, self).__init__(name)
-        self._uid = str(uid)
-
-    def _makeChildrenString(self):
-        return self._uid
-
 
 class ResultSet(PyExtension):
     __slots__ = '_converter'
@@ -67,12 +45,12 @@ class RqResultSet(ResultSet):
     def __init__(self, max = 0, after = None, before = None):
         super(RqResultSet, self).__init__()
         if max:
-            self.setChild(_MaxElement(max))
+            self.setChild(SimpleExtension('max', max))
             if not (not after or not before):
                 raise AssertionError('Can be defined after or before only')
                 if after:
-                    self.setChild(_NavElement('after', after))
-                before and self.setChild(_NavElement('before', before))
+                    self.setChild(SimpleExtension('after', after))
+                before and self.setChild(SimpleExtension('before', before))
 
     def getTag(self):
         tag = ''

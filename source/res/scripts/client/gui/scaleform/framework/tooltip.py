@@ -38,8 +38,7 @@ class ToolTip(ToolTipMgrMeta, AppRef):
                             if complexCondition(tooltipData['data']):
                                 self.as_showS(tooltipData, tooltipType)
                             else:
-                                tooltipId = '{HEADER}' + (tooltipData['data']['name'] + '{/HEADER}{BODY}') + (tooltipData['data']['descr'] + '{/BODY}')
-                                self.__genComplexToolTip(tooltipId, stateType, self.__getDefaultTooltipType())
+                                self.__genComplexToolTipFromData(tooltipData['data'], stateType, self.__getDefaultTooltipType())
                         else:
                             self.as_showS(tooltipData, tooltipType)
                 elif tooltipType is not None:
@@ -55,6 +54,16 @@ class ToolTip(ToolTipMgrMeta, AppRef):
         from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS
         item = TOOLTIPS['default']
         return item['tooltip']
+
+    def __genComplexToolTipFromData(self, tooltipData, stateType, tooltipType):
+        result = []
+        for kind in self.TOOLTIP_KIND:
+            if kind in tooltipData and tooltipData[kind] is not None:
+                result.append(self.__getFormattedText(tooltipData[kind], kind.upper(), stateType))
+
+        if len(result):
+            self.as_showS(''.join(result), self.__getDefaultTooltipType())
+        return
 
     def __genComplexToolTip(self, tooltipId, stateType, tooltipType):
         if not len(tooltipId):

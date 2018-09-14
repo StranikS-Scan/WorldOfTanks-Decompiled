@@ -9,6 +9,8 @@ from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.fortifications.fort_helpers import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import int2roman
+from messenger.proto.events import g_messengerEvents
+from messenger.m_constants import USER_ACTION_ID
 
 class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef):
 
@@ -18,6 +20,16 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
         self._isBackButtonClicked = False
         self.__clientIdx = None
         return
+
+    def onContactsUpdated(self, type, contacts):
+        if type in (USER_ACTION_ID.FRIEND_ADDED,
+         USER_ACTION_ID.FRIEND_REMOVED,
+         USER_ACTION_ID.IGNORED_REMOVED,
+         USER_ACTION_ID.IGNORED_ADDED,
+         USER_ACTION_ID.SUBSCRIPTION_CHANGED):
+            unitMgrID = self.unitFunctional.getID()
+            if unitMgrID <= 0:
+                self.__updateSearchDP(self.fortProvider.getState())
 
     def onClientStateChanged(self, state):
         self.__updateSearchDP(state)
@@ -88,6 +100,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
         self._divisionsDP.init(self.as_getDivisionsDPS())
         self.__updateSearchDP(self.fortProvider.getState())
         self.__validateCreation()
+        g_messengerEvents.users.onUserActionReceived += self.onContactsUpdated
 
     def _dispose(self):
         self.stopFortListening()
@@ -98,6 +111,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
         if self._isBackButtonClicked:
             self.fortCtrl.removeSortiesCache()
             self._isBackButtonClicked = False
+        g_messengerEvents.users.onUserActionReceived -= self.onContactsUpdated
         super(FortBattlesSortieListView, self)._dispose()
         return
 
@@ -142,7 +156,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener, AppRef
         return
 
     def __validateCreation(self):
-        isValid, _ = self.fortCtrl.getLimits().isSortieCreationValid()
+        isValid, reason = self.fortCtrl.getLimits().isSortieCreationValid()
         if isValid:
             self.as_setCreationEnabledS(True)
         else:

@@ -3,8 +3,8 @@ import constants
 from adisp import async
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui.Scaleform.framework.managers.TextManager import TextType
+from debug_utils import LOG_ERROR
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -293,7 +293,7 @@ class PersonalCaseDataProvider(AppRef):
 
     def __makeStandardText(self, locale):
         text = i18n.makeString(locale)
-        return self.__textMgr.getText(TextType.STANDARD_TEXT, text)
+        return self.__textMgr.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, text)
 
     @async
     def getRetrainingData(self, callback):

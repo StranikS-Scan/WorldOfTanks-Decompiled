@@ -40,11 +40,24 @@ class _PotapovQuestsSelect(Processor):
 class PotapovQuestSelect(_PotapovQuestsSelect):
 
     def __init__(self, quest):
-        super(PotapovQuestSelect, self).__init__(g_eventsCache.potapov.getSelectedQuests().values() + [quest])
-        self.addPlugins([plugins.PotapovQuestSlotsValidator(), plugins.PotapovQuestChainsValidator(quest), plugins.PotapovQuestSeasonsValidator(quest)])
+        quests, oldQuest = self._removeFromSameChain(g_eventsCache.potapov.getSelectedQuests().values(), quest)
+        super(PotapovQuestSelect, self).__init__(quests)
+        self.addPlugins([plugins.PotapovQuestSlotsValidator(), plugins.PotapovQuestSelectConfirmator(quest, oldQuest, isEnabled=oldQuest is not None)])
+        return
 
     def _getMessagePrefix(self):
         return 'potapovQuests/select'
+
+    def _removeFromSameChain(self, quests, newQuest):
+        result = [newQuest]
+        removedQuest = None
+        for quest in quests:
+            if quest.getChainID() != newQuest.getChainID() or quest.getTileID() != newQuest.getTileID():
+                result.append(quest)
+            else:
+                removedQuest = quest
+
+        return (result, removedQuest)
 
 
 class PotapovQuestRefuse(_PotapovQuestsSelect):

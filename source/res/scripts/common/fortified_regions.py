@@ -164,6 +164,7 @@ class FortifiedRegionCache:
         self.transportLevels = {}
         self.defenceConditions = None
         self.divisions = {}
+        self.fort_divisions = {}
         self.fortBattleMaps = set()
         self.bonusFactors = {}
         self.invalidPeripheryIDs = set()
@@ -228,8 +229,12 @@ def init():
     subsection = section['defence_conditions']
     g_cache.defenceConditions = DefenceConditions(subsection)
     g_cache.divisions = divisions = {}
-    for name, subsection in section['divisions'].items():
+    for name, subsection in section['divisions']['sortie'].items():
         divisions[name] = Division(subsection)
+
+    g_cache.fort_divisions = fort_divisions = {}
+    for name, subsection in section['divisions']['fort_battle'].items():
+        fort_divisions[name] = Division(subsection)
 
     for name in _getString(section, 'fort_battle_maps').split():
         if name not in geometryNamesToIDs:

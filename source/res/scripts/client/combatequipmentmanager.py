@@ -67,12 +67,6 @@ class CombatEquipmentManager(object):
             self.debugPoints = []
             self.debugDirs = []
 
-    def onEnterWorld(self, prereqs):
-        pass
-
-    def onLeaveWorld(self):
-        pass
-
     def onBecomePlayer(self):
         pass
 
@@ -125,7 +119,8 @@ class CombatEquipmentManager(object):
             LOG_DEBUG('===== showHittingArea =====')
             LOG_DEBUG(equipmentID)
             LOG_DEBUG(pos, dir, time)
-        areaUID = int(equipmentID)
+        correctedCoords = tuple((int(x * 1000.0) for x in pos.tuple()))
+        areaUID = (int(equipmentID), correctedCoords)
         if areaUID in self.__selectedAreas:
             return
         eq = vehicles.g_cache.equipments()[equipmentID]

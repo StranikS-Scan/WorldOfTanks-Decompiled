@@ -7,41 +7,6 @@ import Math
 from debug_utils import LOG_CURRENT_EXCEPTION
 from Flock import FlockLike
 from AvatarInputHandler.CallbackDelayer import CallbackDelayer
-import TriggersManager
-
-class FlockTriggersListener(TriggersManager.ITriggerListener):
-    triggerListener = None
-    flocks = set()
-
-    @staticmethod
-    def addTrigger(**args):
-        if FlockTriggersListener.triggerListener is None:
-            FlockTriggersListener.triggerListener = FlockTriggersListener()
-            TriggersManager.g_manager.addListener(FlockTriggersListener.triggerListener)
-        id = TriggersManager.g_manager.addTrigger(TriggersManager.TRIGGER_TYPE.EXOTIC_FLOCK, **args)
-        FlockTriggersListener.flocks.add(id)
-        return
-
-    @staticmethod
-    def removeAll():
-        if TriggersManager.g_manager is None:
-            return
-        else:
-            for flockId in FlockTriggersListener.flocks:
-                TriggersManager.g_manager.delTrigger(flockId)
-
-            TriggersManager.g_manager.delListener(FlockTriggersListener.triggerListener)
-            FlockTriggersListener.triggerListener = None
-            FlockTriggersListener.flocks = set()
-            return
-
-    def onTriggerActivated(self, args):
-        if args['type'] == TriggersManager.TRIGGER_TYPE.EXOTIC_FLOCK:
-            args['onTrigger']()
-
-    def onTriggerDeactivated(self, args):
-        pass
-
 
 class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
     __TRIGGER_CHECK_PERIOD = 1
@@ -83,10 +48,8 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
         self.__respawnCallbackId = BigWorld.callback(self.respawnTime, self.__respawnTrigger)
         self._switchSounds(False)
-        FlockTriggersListener.addTrigger(position=self.position, onTrigger=self.__onTrigger, radius=self.explosionRadius)
 
     def onLeaveWorld(self):
-        FlockTriggersListener.removeAll()
         self.models = []
         if self.__checkTriggerCallbackId is not None:
             BigWorld.cancelCallback(self.__checkTriggerCallbackId)

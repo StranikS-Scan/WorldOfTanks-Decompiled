@@ -1,11 +1,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/config.py
+from gui.Scaleform.daapi.view.dialogs.CheckBoxDialog import CheckBoxDialog
 from gui.Scaleform.daapi.view.dialogs.PunishmentDialog import PunishmentDialog
+from gui.Scaleform.daapi.view.lobby.GoldFishWindow import GoldFishWindow
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardWindow
+from gui.Scaleform.daapi.view.lobby.PremiumWindow import PremiumWindow
+from gui.Scaleform.daapi.view.lobby.PremiumCongratulationWindow import PremiumCongratulationWindow
 from gui.Scaleform.daapi.view.lobby.PromoPremiumIgrWindow import PromoPremiumIgrWindow
 from gui.Scaleform.daapi.view.lobby.RoleChangeWindow import RoleChangeWindow
 from gui.Scaleform.daapi.view.lobby.ReferralManagementWindow import ReferralManagementWindow
 from gui.Scaleform.daapi.view.lobby.ReferralReferralsIntroWindow import ReferralReferralsIntroWindow
 from gui.Scaleform.daapi.view.lobby.ReferralReferrerIntroWindow import ReferralReferrerIntroWindow
+from gui.Scaleform.daapi.view.lobby.boosters.BoostersPanelComponent import BoostersPanelComponent
+from gui.Scaleform.daapi.view.lobby.boosters.BoostersWindow import BoostersWindow
 from gui.Scaleform.daapi.view.lobby.header.AccountPopover import AccountPopover
 from gui.Scaleform.daapi.view.lobby.ServerStats import ServerStats
 from gui.Scaleform.daapi.view.lobby.ReportBug import ReportBugPanel
@@ -18,7 +24,6 @@ from gui.Scaleform.daapi.view.dialogs.IconDialog import IconDialog
 from gui.Scaleform.daapi.view.dialogs.DemountDeviceDialog import DemountDeviceDialog
 from gui.Scaleform.daapi.view.lobby.VehicleInfoWindow import VehicleInfoWindow
 from gui.Scaleform.daapi.view.lobby.VehicleSellDialog import VehicleSellDialog
-from gui.Scaleform.daapi.view.lobby.PremiumForm import PremiumForm
 from gui.Scaleform.daapi.view.lobby.PersonalCase import PersonalCase
 from gui.Scaleform.daapi.view.lobby.components.CalendarComponent import CalendarComponent
 from gui.Scaleform.daapi.view.lobby.eliteWindow.EliteWindow import EliteWindow
@@ -38,7 +43,6 @@ from gui.Scaleform.daapi.view.login.EULA import EULADlg
 from gui.Scaleform.daapi.view.login.LegalInfoWindow import LegalInfoWindow
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.daapi.view.BattleLoading import BattleLoading
-from gui.Scaleform.daapi.view.login.LoginCreateAnAccountWindow import LoginCreateAnAccountWindow
 from gui.Scaleform.daapi.view.login.RssNewsFeed import RssNewsFeed
 from gui.Scaleform.framework.WaitingView import WaitingView
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
@@ -137,10 +141,10 @@ VIEWS_SETTINGS = (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTyp
  GroupedViewSettings(VIEW_ALIAS.BROWSER_WINDOW, BrowserWindow, 'browser.swf', ViewTypes.BROWSER, '', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.AWARD_WINDOW, AwardWindow, 'awardWindow.swf', ViewTypes.WINDOW, 'awardWindow', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW, ReferralManagementWindow, 'referralManagementWindow.swf', ViewTypes.WINDOW, 'ReferralManagementWindow', None, ScopeTemplates.DEFAULT_SCOPE),
+ GroupedViewSettings(VIEW_ALIAS.BOOSTERS_WINDOW, BoostersWindow, 'boostersWindow.swf', ViewTypes.WINDOW, 'BoostersWindow', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.EULA, EULADlg, 'EULADlg.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.EULA_FULL, EULADlg, 'EULAFullDlg.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.LOGIN_QUEUE, LoginQueue, 'LoginQueueWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
- GroupedViewSettings(VIEW_ALIAS.LOGIN_CREATE_AN_ACC, LoginCreateAnAccountWindow, 'loginCreateAnAccount.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.SIMPLE_DIALOG, SimpleDialog, 'simpleDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.DISMISS_TANKMAN_DIALOG, DismissTankmanDialog, 'dismissTankmanDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.ICON_DIALOG, IconDialog, 'iconDialog.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE),
@@ -150,9 +154,12 @@ VIEWS_SETTINGS = (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTyp
  GroupedViewSettings(VIEW_ALIAS.PUNISHMENT_DIALOG, PunishmentDialog, 'punishmentDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.CAPTCHA_DIALOG, CaptchaDialog, 'CAPTCHA.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.LOBBY_MENU, LobbyMenu, 'lobbyMenu.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.LOBBY_SUB_SCOPE),
- GroupedViewSettings(VIEW_ALIAS.PREMIUM_DIALOG, PremiumForm, 'premiumForm.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
+ GroupedViewSettings(VIEW_ALIAS.PREMIUM_WINDOW, PremiumWindow, 'premiumWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
+ GroupedViewSettings(VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW, PremiumCongratulationWindow, 'premiumCongratulationWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
+ GroupedViewSettings(VIEW_ALIAS.GOLD_FISH_WINDOW, GoldFishWindow, 'goldFishWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, PromoPremiumIgrWindow, 'promoPremiumIgrWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
  GroupedViewSettings(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, QuestsSeasonAwardsWindow, 'questsSeasonAwardsWindow.swf', ViewTypes.WINDOW, 'pqSeasonAwards', None, ScopeTemplates.DEFAULT_SCOPE),
+ GroupedViewSettings(VIEW_ALIAS.CHECK_BOX_DIALOG, CheckBoxDialog, 'confirmDialog.swf', ViewTypes.TOP_WINDOW, 'confirmDialog', None, ScopeTemplates.DYNAMIC_SCOPE),
  ViewSettings(VIEW_ALIAS.SHOP_TABLE, StoreTable, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.LOBBY_HEADER, LobbyHeader, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.PROFILE_TAB_NAVIGATOR, ProfileTabNavigator, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -192,7 +199,8 @@ VIEWS_SETTINGS = (ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTyp
  ViewSettings(QUESTS_ALIASES.SEASONS_VIEW_ALIAS, QuestsSeasonsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(QUESTS_ALIASES.TILE_CHAINS_VIEW_ALIAS, QuestsTileChainsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
  ViewSettings(VIEW_ALIAS.SERVERS_STATS, ServerStats, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
- ViewSettings(VIEW_ALIAS.REPORT_BUG, ReportBugPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+ ViewSettings(VIEW_ALIAS.REPORT_BUG, ReportBugPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+ ViewSettings(VIEW_ALIAS.BOOSTERS_PANEL, BoostersPanelComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 RELEASE_PACKAGES = ['gui.Scaleform.daapi.view.lobby.prb_windows',
  'gui.Scaleform.daapi.view.lobby.trainings',
  'gui.Scaleform.daapi.view.lobby.techtree',

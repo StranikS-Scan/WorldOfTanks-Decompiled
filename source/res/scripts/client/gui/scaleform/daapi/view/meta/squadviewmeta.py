@@ -6,9 +6,13 @@ class SquadViewMeta(BaseRallyRoomView):
     def leaveSquad(self):
         self._printOverrideError('leaveSquad')
 
-    def as_updateBattleTypeS(self, battleTypeName):
+    def as_updateBattleTypeInfoS(self, tooltip, isVisible):
         if self._isDAAPIInited():
-            return self.flashObject.as_updateBattleType(battleTypeName)
+            return self.flashObject.as_updateBattleTypeInfo(tooltip, isVisible)
+
+    def as_updateBattleTypeS(self, battleTypeName, isFallout, isNew):
+        if self._isDAAPIInited():
+            return self.flashObject.as_updateBattleType(battleTypeName, isFallout, isNew)
 
     def as_updateInviteBtnStateS(self, isEnabled):
         if self._isDAAPIInited():

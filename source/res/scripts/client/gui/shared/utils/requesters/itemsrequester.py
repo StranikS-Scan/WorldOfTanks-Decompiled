@@ -1,8 +1,10 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+from goodies.goodie_constants import GOODIE_STATE
 from account_shared import LayoutIterator
 import dossiers2
+from gui.shared.utils.requesters.GoodiesRequester import GoodiesRequester
 from parsers.ShopDataParser import ShopDataParser
 import nations
 import constants
@@ -117,14 +119,21 @@ class REQ_CRITERIA(object):
         EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
-        IN_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
+        IS_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
-        EVENT_VEHICLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
+        EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
+        EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
 
     class TANKMAN:
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
         ROLES = staticmethod(lambda roles = tankmen.ROLES: RequestCriteria(PredicateCondition(lambda item: item.descriptor.role in roles)))
         NATIVE_TANKS = staticmethod(lambda vehiclesList = []: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeDescr.type.compactDescr in vehiclesList)))
+
+    class BOOSTER:
+        IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.count > 0))
+        ACTIVE = RequestCriteria(PredicateCondition(lambda item: item.finishTime is not None and item.state == GOODIE_STATE.ACTIVE))
+        IS_READY_TO_ACTIVATE = RequestCriteria(PredicateCondition(lambda item: item.isReadyToActivate))
+        IN_BOOSTER_ID_LIST = staticmethod(lambda boostersList: RequestCriteria(PredicateCondition(lambda item: item.boosterID in boostersList)))
 
 
 class ItemsRequester(object):
@@ -144,10 +153,11 @@ class ItemsRequester(object):
      GUI_ITEM_TYPE.TANKMAN: Tankman}
 
     def __init__(self):
-        self.shop = ShopRequester()
         self.inventory = InventoryRequester()
         self.stats = StatsRequester()
         self.dossiers = DossierRequester()
+        self.goodies = GoodiesRequester()
+        self.shop = ShopRequester(self.goodies)
         self.__itemsCache = defaultdict(dict)
 
     @async
@@ -163,10 +173,13 @@ class ItemsRequester(object):
         Waiting.show('download/dossier')
         yield self.dossiers.request()
         Waiting.hide('download/dossier')
+        Waiting.show('download/discounts')
+        yield self.goodies.request()
+        Waiting.hide('download/discounts')
         callback(self)
 
     def isSynced(self):
-        return self.stats.isSynced() and self.inventory.isSynced() and self.shop.isSynced() and self.dossiers.isSynced()
+        return self.stats.isSynced() and self.inventory.isSynced() and self.shop.isSynced() and self.dossiers.isSynced() and self.goodies.isSynced()
 
     @async
     @process
@@ -202,6 +215,7 @@ class ItemsRequester(object):
         self.shop.clear()
         self.stats.clear()
         self.dossiers.clear()
+        self.goodies.clear()
 
     def invalidateCache(self, diff = None):
         invalidate = defaultdict(set)

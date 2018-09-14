@@ -1,209 +1,22 @@
 # Embedded file name: scripts/common/dossiers2/custom/updaters.py
+import struct
 from dossiers2.common.updater_utils import getNewStaticSizeBlockValues, getStaticSizeBlockRecordValues
 from dossiers2.common.updater_utils import getNewBinarySetBlockValues, setStaticSizeBlockRecordValues
 from dossiers2.common.updater_utils import addBlock, addRecords, removeRecords, setVersion, getHeader
-from dossiers2.common.updater_utils import struct
-ACCOUNT_DOSSIER_VERSION = 92
-VEHICLE_DOSSIER_VERSION = 88
+import constants
+import dossiers2.custom.tankmen_dossier1_updater
+ACCOUNT_DOSSIER_VERSION = 93
+VEHICLE_DOSSIER_VERSION = 89
 TANKMAN_DOSSIER_VERSION = 66
 FORT_DOSSIER_VERSION = 2
 RATED7X7_DOSSIER_VERSION = 1
 CLUB_DOSSIER_VERSION = 2
 
 def __updateFromAccountDossier1(compDescr):
-    import dossiers1
-    d1 = dossiers1.getAccountDossierDescr(compDescr)
-    d1.expand()
+    if not constants.IS_DEVELOPMENT:
+        raise Exception, 'unexpected compact descriptor v1.0'
     import dossiers2
     d2 = dossiers2.getAccountDossierDescr()
-    total = d2.expand('total')
-    total.eventsEnabled = False
-    for record in ['creationTime',
-     'lastBattleTime',
-     'battleLifeTime',
-     'treesCut',
-     'mileage']:
-        total[record] = d1[record]
-
-    a15x15 = d2.expand('a15x15')
-    a15x15.eventsEnabled = False
-    for record in ['xp',
-     'battlesCount',
-     'wins',
-     'winAndSurvived',
-     'losses',
-     'survivedBattles',
-     'frags',
-     'frags8p',
-     'shots',
-     'directHits',
-     'spotted',
-     'damageDealt',
-     'damageReceived',
-     'capturePoints',
-     'droppedCapturePoints',
-     'xpBefore8_8',
-     'battlesCountBefore8_8']:
-        a15x15[record] = d1[record]
-
-    a15x15['battlesCountBefore9_0'] = a15x15['battlesCount']
-    a15x15_2 = d2.expand('a15x15_2')
-    a15x15_2.eventsEnabled = False
-    for record in ['originalXP',
-     'damageAssistedTrack',
-     'damageAssistedRadio',
-     'directHitsReceived',
-     'noDamageDirectHitsReceived',
-     'piercingsReceived',
-     'explosionHitsReceived',
-     'explosionHits',
-     'piercings']:
-        a15x15_2[record] = d1[record]
-
-    if d1['clan/battlesCount'] > 0:
-        clan = d2.expand('clan')
-        clan.eventsEnabled = False
-        for record in ['xp',
-         'battlesCount',
-         'wins',
-         'losses',
-         'survivedBattles',
-         'frags',
-         'shots',
-         'directHits',
-         'spotted',
-         'damageDealt',
-         'damageReceived',
-         'capturePoints',
-         'droppedCapturePoints']:
-            clan[record] = d1['clan/%s' % record]
-
-        clan['xpBefore8_9'] = clan['xp']
-        clan['battlesCountBefore8_9'] = clan['battlesCount']
-        clan['battlesCountBefore9_0'] = clan['battlesCount']
-    if d1['company/battlesCount'] > 0:
-        company = d2.expand('company')
-        company.eventsEnabled = False
-        for record in ['xp',
-         'battlesCount',
-         'wins',
-         'losses',
-         'survivedBattles',
-         'frags',
-         'shots',
-         'directHits',
-         'spotted',
-         'damageDealt',
-         'damageReceived',
-         'capturePoints',
-         'droppedCapturePoints']:
-            company[record] = d1['company/%s' % record]
-
-        company['xpBefore8_9'] = company['xp']
-        company['battlesCountBefore8_9'] = company['battlesCount']
-        company['battlesCountBefore9_0'] = company['battlesCount']
-    max15x15 = d2.expand('max15x15')
-    max15x15.eventsEnabled = False
-    for record in ['maxFrags',
-     'maxXP',
-     'maxXPVehicle',
-     'maxFragsVehicle']:
-        max15x15[record] = d1[record]
-
-    achievements = d2.expand('achievements')
-    achievements.eventsEnabled = False
-    for record in ['fragsBeast',
-     'sniperSeries',
-     'maxSniperSeries',
-     'invincibleSeries',
-     'maxInvincibleSeries',
-     'diehardSeries',
-     'maxDiehardSeries',
-     'killingSeries',
-     'fragsSinai',
-     'maxKillingSeries',
-     'piercingSeries',
-     'maxPiercingSeries',
-     'battleHeroes',
-     'warrior',
-     'invader',
-     'sniper',
-     'defender',
-     'steelwall',
-     'supporter',
-     'scout',
-     'evileye',
-     'medalKay',
-     'medalCarius',
-     'medalKnispel',
-     'medalPoppel',
-     'medalAbrams',
-     'medalLeClerc',
-     'medalLavrinenko',
-     'medalEkins',
-     'medalWittmann',
-     'medalOrlik',
-     'medalOskin',
-     'medalHalonen',
-     'medalBurda',
-     'medalBillotte',
-     'medalKolobanov',
-     'medalFadin',
-     'medalRadleyWalters',
-     'medalBrunoPietro',
-     'medalTarczay',
-     'medalPascucci',
-     'medalDumitru',
-     'medalLehvaslaiho',
-     'medalNikolas',
-     'medalLafayettePool',
-     'sinai',
-     'heroesOfRassenay',
-     'beasthunter',
-     'mousebane',
-     'tankExpertStrg',
-     'raider',
-     'kamikaze',
-     'lumberjack',
-     'medalBrothersInArms',
-     'medalCrucialContribution',
-     'medalDeLanglade',
-     'medalTamadaYoshio',
-     'bombardier',
-     'huntsman',
-     'alaric',
-     'sturdy',
-     'ironMan',
-     'luckyDevil',
-     'pattonValley',
-     'fragsPatton',
-     'mechanicEngineerStrg']:
-        achievements[record] = d1[record]
-
-    singleAchievements = d2.expand('singleAchievements')
-    singleAchievements.eventsEnabled = False
-    for record in ['titleSniper',
-     'invincible',
-     'diehard',
-     'handOfDeath',
-     'armorPiercer']:
-        singleAchievements[record] = d1[record]
-
-    vehTypeFrags = d2.expand('vehTypeFrags')
-    vehTypeFrags.eventsEnabled = False
-    for vehTypeCompDescr, frags in d1['vehTypeFrags'].iteritems():
-        vehTypeFrags[vehTypeCompDescr] = frags
-
-    a15x15Cut = d2.expand('a15x15Cut')
-    a15x15Cut.eventsEnabled = False
-    for vehTypeCompDescr, cut in d1['a15x15Cut'].iteritems():
-        a15x15Cut[vehTypeCompDescr] = cut
-
-    rareAchievements = d2.expand('rareAchievements')
-    rareAchievements.eventsEnabled = False
-    for achievement in d1['rareAchievements']:
-        rareAchievements.append(achievement)
-
     return (ACCOUNT_DOSSIER_VERSION, d2.makeCompDescr())
 
 
@@ -1510,187 +1323,93 @@ def __updateFromAccountDossier91(compDescr):
     return (92, updateCtx['dossierCompDescr'])
 
 
+def _countBattleHeroesBasedOn7x7Medals(ctx):
+    packing = {'wolfAmongSheepMedal': (2, 'H'),
+     'geniusForWarMedal': (6, 'H')}
+    awardNum = 0
+    values = getStaticSizeBlockRecordValues(ctx, 'achievements7x7', packing)
+    for val in values.itervalues():
+        awardNum += val
+
+    return awardNum
+
+
+def _medalKayClass(battleHeroes):
+    medalKayCfg = (1, 10, 100, 1000)
+    maxMedalClass = len(medalKayCfg)
+    for medalClass in xrange(1, maxMedalClass + 1):
+        if battleHeroes >= medalKayCfg[maxMedalClass - medalClass]:
+            break
+    else:
+        medalClass = 0
+
+    return medalClass
+
+
+def __updateFromAccountDossier92(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    battleHeroes7x7Count = _countBattleHeroesBasedOn7x7Medals(updateCtx)
+    if battleHeroes7x7Count > 0:
+        achievementsPacking = {'battleHeroes': (20, 'H'),
+         'medalKay': (38, 'B')}
+        values = getStaticSizeBlockRecordValues(updateCtx, 'achievements', achievementsPacking)
+        if values:
+            values['battleHeroes'] += battleHeroes7x7Count
+            values['medalKay'] = _medalKayClass(values['battleHeroes'])
+            setStaticSizeBlockRecordValues(updateCtx, 'achievements', achievementsPacking, values)
+    setVersion(updateCtx, 93)
+    return (93, updateCtx['dossierCompDescr'])
+
+
 def __updateFromVehicleDossier1(compDescr):
-    import dossiers1
-    d1 = dossiers1.getVehicleDossierDescr(compDescr)
-    d1.expand()
+    if not constants.IS_DEVELOPMENT:
+        raise Exception, 'unexpected compact descriptor v1.0'
     import dossiers2
     d2 = dossiers2.getVehicleDossierDescr()
-    total = d2.expand('total')
-    total.eventsEnabled = False
-    for record in ['creationTime',
-     'lastBattleTime',
-     'battleLifeTime',
-     'treesCut',
-     'mileage']:
-        total[record] = d1[record]
-
-    a15x15 = d2.expand('a15x15')
-    a15x15.eventsEnabled = False
-    for record in ['xp',
-     'battlesCount',
-     'wins',
-     'winAndSurvived',
-     'losses',
-     'survivedBattles',
-     'frags',
-     'frags8p',
-     'shots',
-     'directHits',
-     'spotted',
-     'damageDealt',
-     'damageReceived',
-     'capturePoints',
-     'droppedCapturePoints',
-     'xpBefore8_8',
-     'battlesCountBefore8_8']:
-        a15x15[record] = d1[record]
-
-    a15x15['battlesCountBefore9_0'] = a15x15['battlesCount']
-    a15x15_2 = d2.expand('a15x15_2')
-    a15x15_2.eventsEnabled = False
-    for record in ['originalXP',
-     'damageAssistedTrack',
-     'damageAssistedRadio',
-     'directHitsReceived',
-     'noDamageDirectHitsReceived',
-     'piercingsReceived',
-     'explosionHitsReceived',
-     'explosionHits',
-     'piercings']:
-        a15x15_2[record] = d1[record]
-
-    if d1['clan/battlesCount'] > 0:
-        clan = d2.expand('clan')
-        clan.eventsEnabled = False
-        for record in ['xp',
-         'battlesCount',
-         'wins',
-         'losses',
-         'survivedBattles',
-         'frags',
-         'shots',
-         'directHits',
-         'spotted',
-         'damageDealt',
-         'damageReceived',
-         'capturePoints',
-         'droppedCapturePoints']:
-            clan[record] = d1['clan/%s' % record]
-
-        clan['xpBefore8_9'] = clan['xp']
-        clan['battlesCountBefore8_9'] = clan['battlesCount']
-        clan['battlesCountBefore9_0'] = clan['battlesCount']
-    if d1['company/battlesCount'] > 0:
-        company = d2.expand('company')
-        company.eventsEnabled = False
-        for record in ['xp',
-         'battlesCount',
-         'wins',
-         'losses',
-         'survivedBattles',
-         'frags',
-         'shots',
-         'directHits',
-         'spotted',
-         'damageDealt',
-         'damageReceived',
-         'capturePoints',
-         'droppedCapturePoints']:
-            company[record] = d1['company/%s' % record]
-
-        company['xpBefore8_9'] = company['xp']
-        company['battlesCountBefore8_9'] = company['battlesCount']
-        company['battlesCountBefore9_0'] = company['battlesCount']
-    max15x15 = d2.expand('max15x15')
-    max15x15.eventsEnabled = False
-    for record in ['maxFrags', 'maxXP']:
-        max15x15[record] = d1[record]
-
-    achievements = d2.expand('achievements')
-    achievements.eventsEnabled = False
-    for record in ['fragsBeast',
-     'sniperSeries',
-     'maxSniperSeries',
-     'invincibleSeries',
-     'maxInvincibleSeries',
-     'diehardSeries',
-     'maxDiehardSeries',
-     'killingSeries',
-     'fragsSinai',
-     'maxKillingSeries',
-     'piercingSeries',
-     'maxPiercingSeries',
-     'battleHeroes',
-     'warrior',
-     'invader',
-     'sniper',
-     'defender',
-     'steelwall',
-     'supporter',
-     'scout',
-     'evileye',
-     'medalKay',
-     'medalCarius',
-     'medalKnispel',
-     'medalPoppel',
-     'medalAbrams',
-     'medalLeClerc',
-     'medalLavrinenko',
-     'medalEkins',
-     'medalWittmann',
-     'medalOrlik',
-     'medalOskin',
-     'medalHalonen',
-     'medalBurda',
-     'medalBillotte',
-     'medalKolobanov',
-     'medalFadin',
-     'medalRadleyWalters',
-     'medalBrunoPietro',
-     'medalTarczay',
-     'medalPascucci',
-     'medalDumitru',
-     'medalLehvaslaiho',
-     'medalNikolas',
-     'medalLafayettePool',
-     'sinai',
-     'heroesOfRassenay',
-     'beasthunter',
-     'mousebane',
-     'tankExpertStrg',
-     'raider',
-     'kamikaze',
-     'lumberjack',
-     'medalBrothersInArms',
-     'medalCrucialContribution',
-     'medalDeLanglade',
-     'medalTamadaYoshio',
-     'bombardier',
-     'huntsman',
-     'alaric',
-     'sturdy',
-     'ironMan',
-     'luckyDevil',
-     'pattonValley',
-     'fragsPatton',
-     'markOfMastery']:
-        achievements[record] = d1[record]
-
-    singleAchievements = d2.expand('singleAchievements')
-    singleAchievements.eventsEnabled = False
-    for record in ['titleSniper',
-     'invincible',
-     'diehard',
-     'handOfDeath',
-     'armorPiercer']:
-        singleAchievements[record] = d1[record]
-
-    vehTypeFrags = d2.expand('vehTypeFrags')
-    vehTypeFrags.eventsEnabled = False
-    for vehTypeCompDescr, frags in d1['vehTypeFrags'].iteritems():
-        vehTypeFrags[vehTypeCompDescr] = frags
-
     return (VEHICLE_DOSSIER_VERSION, d2.makeCompDescr())
 
 
@@ -2652,47 +2371,56 @@ def __updateFromVehicleDossier87(compDescr):
     return (88, updateCtx['dossierCompDescr'])
 
 
-def __updateFromTankmanDossier1(compDescr):
-    import dossiers1
-    d1 = dossiers1.getTankmanDossierDescr(compDescr)
-    d1.expand()
-    import dossiers2
-    d2 = dossiers2.getTankmanDossierDescr()
-    total = d2.expand('total')
-    total.eventsEnabled = False
-    total['battlesCount'] = d1['battlesCount']
-    achievements = d2.expand('achievements')
-    achievements.eventsEnabled = False
-    for record in ['warrior',
-     'invader',
-     'sniper',
-     'defender',
-     'steelwall',
-     'supporter',
-     'scout',
-     'evileye',
-     'medalWittmann',
-     'medalOrlik',
-     'medalOskin',
-     'medalHalonen',
-     'medalBurda',
-     'medalBillotte',
-     'medalKolobanov',
-     'medalFadin',
-     'medalRadleyWalters',
-     'medalBrunoPietro',
-     'medalTarczay',
-     'medalPascucci',
-     'medalDumitru',
-     'medalLehvaslaiho',
-     'medalNikolas',
-     'medalLafayettePool',
-     'heroesOfRassenay',
-     'medalDeLanglade',
-     'medalTamadaYoshio']:
-        achievements[record] = d1[record]
+def __updateFromVehicleDossier88(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    battleHeroes7x7Count = _countBattleHeroesBasedOn7x7Medals(updateCtx)
+    if battleHeroes7x7Count > 0:
+        achievementsPacking = {'battleHeroes': (20, 'H'),
+         'medalKay': (38, 'B')}
+        values = getStaticSizeBlockRecordValues(updateCtx, 'achievements', achievementsPacking)
+        if values:
+            values['battleHeroes'] += battleHeroes7x7Count
+            values['medalKay'] = _medalKayClass(values['battleHeroes'])
+            setStaticSizeBlockRecordValues(updateCtx, 'achievements', achievementsPacking, values)
+    setVersion(updateCtx, 89)
+    return (89, updateCtx['dossierCompDescr'])
 
-    return (TANKMAN_DOSSIER_VERSION, d2.makeCompDescr())
+
+def __updateFromTankmanDossier1(compDescr):
+    return (dossiers2.TANKMAN_DOSSIER_VERSION, dossiers2.custom.tankmen_dossier1_updater.updateDossierCompDescr(compDescr))
 
 
 def __updateFromTankmanDossier64(compDescr):
@@ -2803,7 +2531,8 @@ accountVersionUpdaters = {19: __updateFromAccountDossier1,
  88: __updateFromAccountDossier88,
  89: __updateFromAccountDossier89,
  90: __updateFromAccountDossier90,
- 91: __updateFromAccountDossier91}
+ 91: __updateFromAccountDossier91,
+ 92: __updateFromAccountDossier92}
 vehicleVersionUpdaters = {17: __updateFromVehicleDossier1,
  18: __updateFromVehicleDossier1,
  19: __updateFromVehicleDossier1,
@@ -2840,7 +2569,8 @@ vehicleVersionUpdaters = {17: __updateFromVehicleDossier1,
  84: __updateFromVehicleDossier84,
  85: __updateFromVehicleDossier85,
  86: __updateFromVehicleDossier86,
- 87: __updateFromVehicleDossier87}
+ 87: __updateFromVehicleDossier87,
+ 88: __updateFromVehicleDossier88}
 tankmanVersionUpdaters = {10: __updateFromTankmanDossier1,
  11: __updateFromTankmanDossier1,
  12: __updateFromTankmanDossier1,

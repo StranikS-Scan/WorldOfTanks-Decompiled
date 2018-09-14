@@ -171,30 +171,6 @@ def getInterfaceScalesList(size, powerOfTwo = True):
     return result
 
 
-def getScaleByIndex(ind, powerOfTwo = True):
-    scaleLength = getScaleLength()
-    if powerOfTwo:
-        if ind == 0:
-            return 2.0 ** (scaleLength - 2)
-        else:
-            return 2.0 ** (ind - 1)
-    else:
-        if ind == 0:
-            return scaleLength - 1
-        return ind
-
-
-def getScaleLength():
-    from account_helpers.settings_core.SettingsCore import g_settingsCore
-    from account_helpers.settings_core import settings_constants
-    options = g_settingsCore.options.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)._getOptions()
-    if g_settingsCore.getSetting(settings_constants.GRAPHICS.FULLSCREEN):
-        scaleLength = len(options[1][g_monitorSettings.activeMonitor][g_settingsCore.getSetting(settings_constants.GRAPHICS.RESOLUTION)])
-    else:
-        scaleLength = len(options[0][g_monitorSettings.activeMonitor][g_settingsCore.getSetting(settings_constants.GRAPHICS.WINDOW_SIZE)])
-    return scaleLength
-
-
 class MonitorSettings(object):
 
     def __init__(self):

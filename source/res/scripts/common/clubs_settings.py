@@ -1,20 +1,31 @@
 # Embedded file name: scripts/common/clubs_settings.py
 import ResMgr
 import time
-from debug_utils import LOG_NOTE
+from debug_utils import LOG_NOTE, LOG_SVAN_DEV
+import BigWorld
 _CONFIG_FILE = 'scripts/item_defs/clubs_settings.xml'
 
 class ClubsCache:
+
+    def __getSeasonSuspended(self):
+        return self.__seasonSuspended
+
+    def __setSeasonSuspended(self, value):
+        self.__seasonSuspended = True if value else False
+
+    seasonSuspended = property(__getSeasonSuspended, __setSeasonSuspended)
 
     def __init__(self):
         self.currentSeason = 0
         self.currentSeasonStart = 0
         self.currentSeasonFinish = 0
         self.prearenaWaitTime = 180
-        self.maxLegionariesCount = 3
+        self.maxLegionariesCount = 6
+        self.__seasonSuspended = False
 
     def seasonInProgress(self):
-        return self.currentSeasonStart <= time.time() <= self.currentSeasonFinish
+        LOG_SVAN_DEV('call seasonInProgress. seasonSuspended={}', self.seasonSuspended)
+        return not self.seasonSuspended and self.currentSeasonStart <= time.time() <= self.currentSeasonFinish
 
 
 g_cache = None

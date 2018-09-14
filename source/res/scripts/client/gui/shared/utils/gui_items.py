@@ -1788,6 +1788,14 @@ def formatPrice(price, reverse = False):
     return ''.join(outPrice)
 
 
+def formatGoldPrice(gold, reverse = False):
+    outPrice = []
+    gname = makeString('#menu:price/gold') + ': '
+    gformatted = BigWorld.wg_getGoldFormat(gold)
+    outPrice.extend([gformatted, ' ', gname] if reverse else [gname, ' ', gformatted])
+    return ''.join(outPrice)
+
+
 def formatTankmanPrice(costType, roleLevelIdx):
     message = ' %s' % makeString('#menu:price/spent')
     if roleLevelIdx == 1:

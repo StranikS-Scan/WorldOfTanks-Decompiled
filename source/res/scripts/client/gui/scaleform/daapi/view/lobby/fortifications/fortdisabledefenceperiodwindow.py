@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper imp
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortDisableDefencePeriodWindowMeta import FortDisableDefencePeriodWindowMeta
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as ALIAS, FORTIFICATIONS
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -59,21 +59,21 @@ class FortDisableDefencePeriodWindow(AbstractWindowView, View, FortDisableDefenc
         return
 
     def __makeInputCheckerError(self):
-        return self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
 
     def __makeInputCheckerTitle(self):
-        return self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_INPUTCHECKER_TITLE))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_INPUTCHECKER_TITLE))
 
     def __makeInputCheckerBody(self):
         controlNumber = BigWorld.wg_getIntegralFormat(self.__controlNumber)
-        controlNumber = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, str(controlNumber))
-        questionBody = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_INPUTCHECKER_BODY, controlNumber=controlNumber))
+        controlNumber = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MIDDLE_TITLE, str(controlNumber))
+        questionBody = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(ALIAS.DISABLEDEFENCEPERIODWINDOW_INPUTCHECKER_BODY, controlNumber=controlNumber))
         return questionBody
 
     def __makeMainData(self):
-        titleText = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_TITLE))
-        redText = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODYREDTEXT))
-        bodyText = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODY, redText=redText))
+        titleText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_TITLE))
+        redText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODYREDTEXT))
+        bodyText = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.DISABLEDEFENCEPERIODWINDOW_MAINTEXT_BODY, redText=redText))
         self.as_setDataS({'titleText': titleText,
          'bodyText': bodyText})
 

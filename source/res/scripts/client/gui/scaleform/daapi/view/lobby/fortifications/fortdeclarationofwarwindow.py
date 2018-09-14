@@ -46,6 +46,8 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
         enemyClanDBID = self.__item.getClanDBID()
         textureID = 'clanWar%d' % enemyClanDBID
         enemyEmblem = yield g_clanCache.getClanEmblemTextureID(enemyClanDBID, False, textureID)
+        if self.isDisposed():
+            return
         myClan = {'id': g_clanCache.clanDBID,
          'name': g_clanCache.clanTag,
          'emblem': myEmblem}
@@ -58,14 +60,19 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
         directions = []
         selectedDirection = -1
         enemyBuildings = [None, None]
-        for buildignID, buildingData in self.__item.getDictBuildingsBrief().iteritems():
-            dir = getDirectionFromDirPos(buildingData['dirPosByte'])
-            if self.__direction == dir:
+        for buildingID, buildingData in self.__item.getDictBuildingsBrief().iteritems():
+            dirId = getDirectionFromDirPos(buildingData['dirPosByte'])
+            if self.__direction == dirId:
                 pos = getPositionFromDirPos(buildingData['dirPosByte'])
                 level = buildingData['level']
-                enemyBuildings[pos] = {'uid': self.getBuildingUIDbyID(buildignID),
-                 'progress': self._getProgress(buildignID, level),
-                 'buildingLevel': level}
+                if 0 <= level < 5:
+                    isAvailable = False
+                else:
+                    isAvailable = self.__isBuildingAvailableForAttack(buildingData['hp'], g_fortCache.buildings[buildingID].levels[level].hp)
+                enemyBuildings[pos] = {'uid': self.getBuildingUIDbyID(buildingID),
+                 'progress': self._getProgress(buildingID, level),
+                 'buildingLevel': level,
+                 'isAvailable': isAvailable}
 
         enemyDirection = {'name': _ms('#fortifications:General/directionName%d' % self.__direction),
          'isMine': False,
@@ -79,15 +86,17 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
             ttHeader = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTOPENED_TOOLTIP_HEADER)
             ttBody = _ms(FORTIFICATIONS.FORTDECLARATIONOFWARWINDOW_ITEM_NOTOPENED_TOOLTIP_BODY)
             infoMessage = ''
-            dirBuildings = []
+            allieBuildings = []
             if isOpened:
                 for building in fort.getBuildingsByDirections().get(direction, ()):
                     data = None
                     if building is not None:
-                        data = {'uid': self.getBuildingUIDbyID(building.typeID),
-                         'progress': self._getProgress(building.typeID, building.level),
-                         'buildingLevel': building.level}
-                    dirBuildings.append(data)
+                        buildingTypeId = building.typeID
+                        data = {'uid': self.getBuildingUIDbyID(buildingTypeId),
+                         'progress': self._getProgress(buildingTypeId, building.level),
+                         'buildingLevel': building.level,
+                         'isAvailable': self.__isBuildingAvailableForAttack(building.hp, building.levelRef.hp)}
+                    allieBuildings.append(data)
 
                 eventTypeID = FORT_EVENT_TYPE.DIR_OPEN_ATTACKS_BASE + direction
                 availableTime, _, _ = fort.events.get(eventTypeID, (None, None, None))
@@ -120,7 +129,7 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
                                'uid': direction,
                                'isOpened': isOpened,
                                'isBusy': isBusy or availableTime is not None,
-                               'buildings': dirBuildings,
+                               'buildings': allieBuildings,
                                'ttHeader': ttHeader,
                                'ttBody': ttBody,
                                'infoMessage': infoMessage},
@@ -148,3 +157,6 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
                 g_fortSoundController.playFortClanWarDeclared()
             self.destroy()
         return
+
+    def __isBuildingAvailableForAttack(self, currHP, totalHP):
+        return currHP / float(totalHP) > 0.2

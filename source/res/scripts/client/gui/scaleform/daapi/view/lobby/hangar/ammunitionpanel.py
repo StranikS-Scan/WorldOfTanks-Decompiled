@@ -4,6 +4,7 @@ from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.gui_items.artefacts import Equipment
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.Scaleform.framework import AppRef
@@ -82,7 +83,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
                      'currency': 'credits' if price[1] == 0 else 'gold',
                      'icon': module.icon if type in AmmunitionPanel.__ARTEFACTS_SLOTS else module.level,
                      'actionPriceData': action,
-                     'exchangeRate': exchangeRate}
+                     'exchangeRate': exchangeRate,
+                     'moduleLabel': module.getGUIEmblemID()}
                     if type == ITEM_TYPE_NAMES[4]:
                         if module.isClipGun(vehicle.descriptor):
                             moduleData[EXTRA_MODULE_INFO] = CLIP_ICON_PATH
@@ -125,7 +127,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
             if statusId == Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER:
                 canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
                 rentAvailable = vehicle.isRentable and canBuyOrRent
-            self.as_updateVehicleStatusS(statusId, msg, msgLvl, rentAvailable)
+            self.as_updateVehicleStatusS(msg, msgLvl, rentAvailable)
         return
 
     def _getInstallReason(self, module, vehicle, reason, slotIdx = None):

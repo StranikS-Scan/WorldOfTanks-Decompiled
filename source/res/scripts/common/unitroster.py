@@ -4,7 +4,6 @@ import nations
 import constants
 from items import vehicles
 from constants import VEHICLE_CLASS_INDICES
-import fortified_regions, clubs_settings
 _BAD_CLASS_INDEX = 16
 
 class BaseUnitRoster:
@@ -15,7 +14,7 @@ class BaseUnitRoster:
     SLOT_TYPE = None
     DEFAULT_SLOT_PACK = None
     MIN_UNIT_POINTS_SUM = 1
-    MAX_UNIT_POINTS_SUM = 150
+    MAX_UNIT_POINTS_SUM = 10 * MAX_SLOTS
     MAX_LEGIONARIES_COUNT = 0
 
     def __init__(self, slotDefs = {}, slotCount = None, packedRoster = ''):
@@ -26,16 +25,16 @@ class BaseUnitRoster:
         if packedRoster:
             self.unpack(packedRoster)
             return
+        elif slotDefs and isinstance(slotDefs, dict) and len(slotDefs) <= slotCount * 2 and min(slotDefs.iterkeys()) >= 0 and max(slotDefs.iterkeys()) < slotCount * 2:
+            self.slots = dict(((i, self.SLOT_TYPE(**slotDef)) for i, slotDef in slotDefs.iteritems()))
+            self.pack()
+            return
         else:
-            if slotDefs and isinstance(slotDefs, dict) and len(slotDefs) <= slotCount * 2 and min(slotDefs.iterkeys()) >= 0 and max(slotDefs.iterkeys()) < slotCount * 2:
-                self.slots = dict(((i, self.SLOT_TYPE(**slotDef)) for i, slotDef in slotDefs.iteritems()))
-                self.pack()
+            if slotCount:
+                self.slots = dict(((i * 2, self.SLOT_TYPE()) for i in xrange(0, slotCount)))
             else:
-                if slotCount:
-                    self.slots = dict(((i * 2, self.SLOT_TYPE()) for i in xrange(0, slotCount)))
-                else:
-                    self.slots = {}
-                self._packed = None
+                self.slots = {}
+            self._packed = None
             return
 
     def __repr__(self):
@@ -96,10 +95,9 @@ class BaseUnitRoster:
     def matchVehicleListToSlotList(self, vehTypeCompDescrList, unitSlotIdxList = []):
         matchDict = {}
         for vehTypeCompDescr in vehTypeCompDescrList:
-            itemTypeIdx, nationIdx, inNationIdx = vehicles.parseIntCompactDescr(vehTypeCompDescr)
             slotList = []
             for idx in unitSlotIdxList:
-                res, chosenSlotIdx = self.__checkVehicleForUnitSlot(nationIdx, inNationIdx, vehTypeCompDescr, idx)
+                res, chosenSlotIdx = self.__checkVehicleForUnitSlot(vehTypeCompDescr, idx)
                 if res:
                     slotList.append(chosenSlotIdx)
 
@@ -117,34 +115,23 @@ class BaseUnitRoster:
         return matchList
 
     def checkVehicle(self, vehTypeCompDescr, unitSlotIdx = None):
-        itemTypeIdx, nationIdx, inNationIdx = vehicles.parseIntCompactDescr(vehTypeCompDescr)
         if unitSlotIdx is None:
             for i, slot in self.slots.iteritems():
-                if slot.checkVehicle(nationIdx, inNationIdx, vehTypeCompDescr):
+                if slot.checkVehicle(vehTypeCompDescr):
                     return (True, i / 2)
 
         else:
             if isinstance(unitSlotIdx, int):
-                return self.__checkVehicleForUnitSlot(nationIdx, inNationIdx, vehTypeCompDescr, unitSlotIdx)
+                return self.__checkVehicleForUnitSlot(vehTypeCompDescr, unitSlotIdx)
             for idx in unitSlotIdx:
-                res, chosenSlotIdx = self.__checkVehicleForUnitSlot(nationIdx, inNationIdx, vehTypeCompDescr, idx)
+                res, chosenSlotIdx = self.__checkVehicleForUnitSlot(vehTypeCompDescr, idx)
                 if res:
                     return (res, chosenSlotIdx)
 
         return (False, None)
 
-    def __checkVehicleForUnitSlot(self, nationIdx, inNationIdx, vehTypeCompDescr, unitSlotIdx):
-        for i in (0, 1):
-            rosterSlotIdx = unitSlotIdx * 2 + i
-            slot = self.slots.get(rosterSlotIdx)
-            if slot and slot.checkVehicle(nationIdx, inNationIdx, vehTypeCompDescr):
-                return (True, unitSlotIdx)
-
-        return (False, unitSlotIdx)
-
     def checkVehicleLevel(self, vehTypeCompDescr):
-        itemTypeIdx, nationIdx, inNationIdx = vehicles.parseIntCompactDescr(vehTypeCompDescr)
-        vehType = vehicles.g_cache.vehicle(nationIdx, inNationIdx)
+        vehType = vehicles.getVehicleType(vehTypeCompDescr)
         level = vehType.level
         if level < self.SLOT_TYPE.DEFAULT_LEVELS[0] or level > self.SLOT_TYPE.DEFAULT_LEVELS[1]:
             return False
@@ -152,6 +139,15 @@ class BaseUnitRoster:
 
     def getLegionariesMaxCount(self):
         return self.MAX_LEGIONARIES_COUNT
+
+    def __checkVehicleForUnitSlot(self, vehTypeCompDescr, unitSlotIdx):
+        for i in (0, 1):
+            rosterSlotIdx = unitSlotIdx * 2 + i
+            slot = self.slots.get(rosterSlotIdx)
+            if slot and slot.checkVehicle(vehTypeCompDescr):
+                return (True, unitSlotIdx)
+
+        return (False, unitSlotIdx)
 
 
 _DFLT_MASK = 255
@@ -177,7 +173,7 @@ def _reprBitMask(bitMask, nameList):
     return repr
 
 
-def _reprBitMaskFromDict(bitMask, nameDict):
+def reprBitMaskFromDict(bitMask, nameDict):
     repr = ''
     if bitMask:
         for nameMask, name in nameDict.iteritems():
@@ -196,11 +192,6 @@ def buildNamesDict(constDefClass):
             ret[v] = k
 
     return ret
-
-
-def _getVehClassTag(vehType):
-    for classTag in vehicles.VEHICLE_CLASS_TAGS.intersection(vehType.tags):
-        return classTag
 
 
 def _vehType__repr__(self):
@@ -234,12 +225,12 @@ class BaseUnitRosterSlot(object):
                 return
             self.nationMask = _makeBitMask(nationNames, nations.INDICES)
             self.vehClassMask = _makeBitMask(vehClassNames, constants.VEHICLE_CLASS_INDICES)
-            level_range = xrange(self.DEFAULT_LEVELS[0], self.DEFAULT_LEVELS[1] + 1)
-            if isinstance(levels, int) and levels in level_range:
+            levelRange = xrange(self.DEFAULT_LEVELS[0], self.DEFAULT_LEVELS[1] + 1)
+            if isinstance(levels, int) and levels in levelRange:
                 self.levels = (levels, levels)
                 return
             if isinstance(levels, tuple) and len(levels) == 2:
-                if levels[0] in level_range and levels[1] in level_range:
+                if levels[0] in levelRange and levels[1] in levelRange:
                     self.levels = levels
                     return
             self.levels = self.DEFAULT_LEVELS
@@ -257,7 +248,6 @@ class BaseUnitRosterSlot(object):
              strVehicles)
         else:
             return 'RosterSlot( vehTypeCompDescr=%s ) -- packed:%r' % (self.vehTypeCompDescr, self.pack())
-            return
 
     _VEHICLE_MASKS = '<BHB'
     _VEHICLE_MASKS_SIZE = struct.calcsize(_VEHICLE_MASKS)
@@ -271,7 +261,6 @@ class BaseUnitRosterSlot(object):
             return struct.pack(self._VEHICLE_MASKS, self.vehClassMask, self.nationMask, levelMask)
         else:
             return BaseUnitRosterSlot.__EXACT_TYPE_PREFIX + struct.pack('<H', self.vehTypeCompDescr)
-            return
 
     def unpack(self, packed):
         if packed[0] != BaseUnitRosterSlot.__EXACT_TYPE_PREFIX:
@@ -285,25 +274,23 @@ class BaseUnitRosterSlot(object):
             self.__dict__.clear()
             self.vehTypeCompDescr = struct.unpack_from('<H', packed, 1)[0]
             return packed[self._VEHICLE_TYPE_SIZE:]
-            return
 
     @staticmethod
     def getPackSize(firstByte):
         if firstByte != BaseUnitRosterSlot.__EXACT_TYPE_PREFIX:
             return BaseUnitRosterSlot._VEHICLE_MASKS_SIZE
-        else:
-            return BaseUnitRosterSlot._VEHICLE_TYPE_SIZE
+        return BaseUnitRosterSlot._VEHICLE_TYPE_SIZE
 
-    def checkVehicle(self, nationIdx, inNationIdx, vehTypeCompDescr):
+    def checkVehicle(self, vehTypeCompDescr):
         if self.vehTypeCompDescr is not None:
             return self.vehTypeCompDescr == vehTypeCompDescr
-        elif not self.nationMask & 1 << nationIdx:
+        vehType = vehicles.getVehicleType(vehTypeCompDescr)
+        if not self.nationMask & 1 << vehType.id[0]:
             return False
-        vehType = vehicles.g_cache.vehicle(nationIdx, inNationIdx)
         level = vehType.level
         if not (self.levels[0] <= level and level <= self.levels[1]):
             return False
-        classTag = _getVehClassTag(vehType)
+        classTag = vehicles.getVehicleClass(vehTypeCompDescr)
         classIndex = VEHICLE_CLASS_INDICES.get(classTag, _BAD_CLASS_INDEX)
         if not self.vehClassMask & 1 << classIndex:
             return False
@@ -312,72 +299,3 @@ class BaseUnitRosterSlot(object):
 
 
 _DEFAULT_ROSTER_SLOT_PACK = BaseUnitRosterSlot().pack()
-
-class UnitRosterSlot(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (6, 8)
-
-
-class UnitRoster(BaseUnitRoster):
-    MAX_SLOTS = 7
-    MAX_CLOSED_SLOTS = 0
-    SLOT_TYPE = UnitRosterSlot
-    DEFAULT_SLOT_PACK = UnitRosterSlot().pack()
-    MIN_UNIT_POINTS_SUM = 54
-    MAX_UNIT_POINTS_SUM = 54
-    MAX_UNIT_ASSEMBLER_ARTY = 2
-
-
-class RosterSlot6(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (1, 6)
-
-
-class RosterSlot8(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (1, 8)
-
-
-class RosterSlot10(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (1, 10)
-
-
-class BaseSortieRoster(BaseUnitRoster):
-
-    def getLegionariesMaxCount(self):
-        return fortified_regions.g_cache.maxLegionariesCount
-
-
-class SortieRoster6(BaseSortieRoster):
-    MAX_SLOTS = 7
-    MAX_EMPTY_SLOTS = 1
-    SLOT_TYPE = RosterSlot6
-    DEFAULT_SLOT_PACK = RosterSlot6().pack()
-    MAX_UNIT_POINTS_SUM = 42
-
-
-class SortieRoster8(BaseSortieRoster):
-    MAX_SLOTS = 10
-    MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot8
-    DEFAULT_SLOT_PACK = RosterSlot8().pack()
-    MAX_UNIT_POINTS_SUM = 80
-
-
-class SortieRoster10(BaseSortieRoster):
-    MAX_SLOTS = 15
-    MAX_EMPTY_SLOTS = 3
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
-    MAX_UNIT_POINTS_SUM = 150
-
-
-class FortRoster10(BaseUnitRoster):
-    MAX_SLOTS = 15
-    MAX_EMPTY_SLOTS = 14
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
-    MAX_UNIT_POINTS_SUM = 150
-
-
-class ClubRoster(UnitRoster):
-
-    def getLegionariesMaxCount(self):
-        return clubs_settings.g_cache.maxLegionariesCount

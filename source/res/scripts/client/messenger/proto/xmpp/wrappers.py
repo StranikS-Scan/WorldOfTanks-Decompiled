@@ -1,14 +1,13 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/wrappers.py
 from collections import namedtuple
 import time
-from constants import IGR_TYPE
+from constants import IGR_TYPE, ARENA_GUI_TYPE_LABEL
 from gui.shared.utils.decorators import ReprInjector
 from helpers import time_utils
 from messenger.proto.entities import ClanInfo
-from messenger.proto.xmpp.xmpp_constants import BAN_SOURCE
 XMPPChannelData = namedtuple('XMPPChannelData', ('name', 'msgType'))
 XMPPMessageData = namedtuple('XMPPChannelData', ('accountDBID', 'accountName', 'text', 'sentAt'))
-IGRInfo = namedtuple('WGExtsInfo', ('igrID', 'igrRoomID'))
+ClientInfo = namedtuple('ClientInfo', ('igrID', 'igrRoomID', 'gameHost', 'arenaLabel'))
 _BanInfoItem = namedtuple('_BanInfoItem', ('source', 'setter', 'expiresAt', 'reason'))
 
 @ReprInjector.simple(('_items', 'items'))
@@ -23,7 +22,7 @@ class BanInfo(object):
     def isChatBan(self):
         now = time.time()
         for item in self._items:
-            if item.source == BAN_SOURCE.CHAT and item.expiresAt > now:
+            if not item.expiresAt or item.expiresAt > now:
                 return True
 
         return False
@@ -31,19 +30,19 @@ class BanInfo(object):
     def getFirstActiveItem(self):
         now = time.time()
         for item in self._items:
-            if item.expiresAt > now:
+            if not item.expiresAt or item.expiresAt > now:
                 return item
 
         return None
 
 
-WGExtsInfo = namedtuple('WGExtsInfo', ('IGR', 'clan', 'ban'))
+WGExtsInfo = namedtuple('WGExtsInfo', ('client', 'clan', 'ban'))
 
-def makeIGRInfo(*args):
-    if len(args) < 2:
+def makeClientInfo(*args):
+    if len(args) < 4:
         return None
     else:
-        igrID, igrRoomID = args[:2]
+        igrID, igrRoomID, gameHost, arenaLabel = args[:4]
         if igrID and igrID.isdigit():
             igrID = int(igrID)
         else:
@@ -52,7 +51,9 @@ def makeIGRInfo(*args):
             igrRoomID = long(igrRoomID)
         else:
             igrRoomID = 0
-        return IGRInfo(igrID, igrRoomID)
+        if arenaLabel and arenaLabel not in ARENA_GUI_TYPE_LABEL.LABELS.values():
+            arenaLabel = ''
+        return ClientInfo(igrID, igrRoomID, gameHost, arenaLabel)
 
 
 def makeClanInfo(*args):
@@ -80,8 +81,6 @@ def makeBanInfo(*args):
             source = int(source)
         else:
             source = 0
-        if source not in BAN_SOURCE.RANGE:
-            continue
         if expiresAt.isdigit():
             expiresAt = time_utils.getTimestampFromUTC(time_utils.getTimeStructInUTC(float(expiresAt)))
         else:
@@ -93,19 +92,3 @@ def makeBanInfo(*args):
     else:
         info = None
     return info
-
-
-def makeWGInfoFromPresence(info):
-    if 'igrInfo' in info:
-        igr = makeIGRInfo(*info['igrInfo'])
-    else:
-        igr = None
-    if 'clanInfo' in info:
-        clanInfo = makeClanInfo(*info['clanInfo'])
-    else:
-        clanInfo = None
-    if 'banInfo' in info:
-        banInfo = makeBanInfo(*info['banInfo'])
-    else:
-        banInfo = None
-    return WGExtsInfo(igr, clanInfo, banInfo)

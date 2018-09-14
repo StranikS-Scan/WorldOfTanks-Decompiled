@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
 from gui.shared import g_itemsCache
@@ -117,7 +118,7 @@ class ProfileUtils(object):
         if bodyParamsList is not None:
             bodyData = {}
             for i in range(0, len(bodyParamsList)):
-                bodyData[HeaderItemsTypes.VALUE_PREFIX + str(i)] = '<b>' + str(bodyParamsList[i]) + '</b>'
+                bodyData[HeaderItemsTypes.VALUE_PREFIX + str(i)] = text_styles.titleFont(str(bodyParamsList[i]))
 
         result['body'] = bodyData
         result['header'] = {}
@@ -167,7 +168,7 @@ class DetailedStatisticsUtils(object):
         return dataObject
 
     @staticmethod
-    def getStatistics(targetData):
+    def getStatistics(targetData, isCurrentuser):
         battlesCount = targetData.getBattlesCount()
         lossesCount = targetData.getLossesCount()
         winsCount = targetData.getWinsCount()
@@ -215,7 +216,7 @@ class DetailedStatisticsUtils(object):
           None,
           DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDAMAGE, BigWorld.wg_getIntegralFormat(avgDmg), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDMG_SHORT),
           DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGRECEIVEDDAMAGE, BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageReceived())), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGRECEIVEDDAMAGE),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORT, ProfileUtils.formatEfficiency(targetData.getBattlesCountVer2(), targetData.getDamageAssistedEfficiency), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORT),
+          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentuser else PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTOTHER, ProfileUtils.formatEfficiency(targetData.getBattlesCountVer2(), targetData.getDamageAssistedEfficiency), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentuser else PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTOTHER),
           None,
           DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDETECTEDENEMIES, BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgEnemiesSpotted())), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDETECTEDENEMIES),
           DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgFrags())), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDESTROYEDVEHICLES)]), ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, maxXP_formattedStr, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, maxExpToolTipData), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, maxDmg_formattedStr, maxDamageTooltip, maxDamageToolTipData), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, BigWorld.wg_getIntegralFormat(targetData.getMaxFrags()), PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDESTROYED, maxDestroyedToolTipData)]))

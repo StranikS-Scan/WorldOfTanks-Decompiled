@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/clubs/requests.py
 import weakref
 from collections import namedtuple
-from AccountCommands import RES_FAILURE
 from debug_utils import LOG_WARNING, LOG_ERROR
 from ids_generators import Int32IDGenerator
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
@@ -54,7 +53,7 @@ class ClubRequester(RequestsByIDProcessor):
     def _makeResponse(self, code = 0, errMsg = '', data = None, ctx = None):
         response = self._Response(code, errMsg, data)
         if not response.isSuccess():
-            LOG_ERROR('Club request error', ctx, response)
+            LOG_WARNING('Club request error', ctx, response)
         return response
 
 

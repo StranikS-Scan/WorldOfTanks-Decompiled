@@ -7,7 +7,7 @@ from debug_utils import LOG_ERROR
 from messenger.ext import passCensor
 from messenger.proto.entities import ChannelEntity, MemberEntity, ChatEntity
 from messenger.proto.entities import UserEntity
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, LAZY_CHANNEL, PRIMARY_CHANNEL_ORDER
 from messenger.ext.player_helpers import getPlayerDatabaseID
 from messenger.proto.bw.wrappers import ChannelDataWrapper
 PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
@@ -70,6 +70,17 @@ class BWChannelEntity(ChannelEntity):
                 break
 
         return result
+
+    def getPrimaryOrder(self):
+        if self.getName() in LAZY_CHANNEL.ALL:
+            primary = PRIMARY_CHANNEL_ORDER.LAZY
+        elif self._data.flags & chat_shared.CHAT_CHANNEL_CLAN > 0:
+            primary = PRIMARY_CHANNEL_ORDER.CLAN
+        elif self._data.isSystem:
+            primary = PRIMARY_CHANNEL_ORDER.SYSTEM
+        else:
+            primary = PRIMARY_CHANNEL_ORDER.OTHER
+        return primary
 
     def getHistory(self):
         history = super(BWChannelEntity, self).getHistory()

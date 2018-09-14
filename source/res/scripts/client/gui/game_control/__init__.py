@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 import constants
+from gui.game_control.BoostersController import BoostersController
 from gui.game_control.ExternalLinksHandler import ExternalLinksHandler
 from gui.game_control.InternalLinksHandler import InternalLinksHandler
 from gui.shared import g_eventBus, events
@@ -43,10 +44,11 @@ class _GameControllers(ControllersCollection):
          CONTROLLER.BROWSER: BrowserController,
          CONTROLLER.PROMO: PromoController,
          CONTROLLER.EVENTS_NOTIFICATION: EventsNotificationsController,
-         CONTROLLER.AWARD: AwardController})
+         CONTROLLER.AWARD: AwardController,
+         CONTROLLER.BOOSTERS: BoostersController})
         if constants.IS_CHINA:
             self._addController(CONTROLLER.CHINA, ChinaController)
-        self.__collectUiStats = False
+        self.__collectUiStats = True
         self.__logUXEvents = False
 
     def init(self):
@@ -67,14 +69,8 @@ class _GameControllers(ControllersCollection):
 
     def onAccountShowGUI(self, ctx):
         self.onLobbyStarted(ctx)
-        self.__collectUiStats = ctx.get('collectUiStats', False)
+        self.__collectUiStats = ctx.get('collectUiStats', True)
         self.__logUXEvents = ctx.get('logUXEvents', False)
-
-    def onAvatarBecomePlayer(self):
-        self.onBattleStarted()
-
-    def onAccountBecomePlayer(self):
-        self.onConnected()
 
 
 g_instance = _GameControllers()

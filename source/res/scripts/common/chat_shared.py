@@ -1275,7 +1275,9 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'rentalsExpired',
  'rentCompensation',
  'potapovQuestBonus',
- 'battleCanceled'])
+ 'battleCanceled',
+ 'premiumPersonalDiscount',
+ 'goodieRemoved'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2

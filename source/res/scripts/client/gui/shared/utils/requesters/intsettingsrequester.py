@@ -69,6 +69,7 @@ class IntSettingsRequester(object):
      'FORT': 56,
      'USERS_STORAGE_REV': 57,
      'CONTACTS': 58,
+     'GAME_EXTENDED': 59,
      'MARKS_ON_GUN': constants.USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN}
 
     def __init__(self):

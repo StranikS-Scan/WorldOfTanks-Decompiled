@@ -211,7 +211,6 @@ class HistoricalQueueFunctional(PreQueueFunctional, IStatefulFunctional):
         self.__requestCtx.stopProcessing(True)
         g_eventDispatcher.loadHangar()
         g_eventDispatcher.updateUI()
-        SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
         self.__checkAvailability()
 
     def onCaptchaInputCanceled(self):

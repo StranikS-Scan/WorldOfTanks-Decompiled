@@ -90,7 +90,9 @@ class RallyScopeConfirmDialogMeta(_RallyScopeDialogMeta):
 _EXIT_TO_PREFIX = {FUNCTIONAL_EXIT.SWITCH: 'goToAnother',
  FUNCTIONAL_EXIT.RANDOM: 'goToAnother',
  FUNCTIONAL_EXIT.SQUAD: 'goToSquad',
- FUNCTIONAL_EXIT.BATTLE_TUTORIAL: 'goToBattleTutorial'}
+ FUNCTIONAL_EXIT.BATTLE_TUTORIAL: 'goToBattleTutorial',
+ FUNCTIONAL_EXIT.INTRO_PREBATTLE: 'goToIntro',
+ FUNCTIONAL_EXIT.INTRO_UNIT: 'goToIntro'}
 _DEFAULT_PREFIX = 'leave'
 
 def _createLeaveRallyMeta(funcExit, ctrlType, entityType):

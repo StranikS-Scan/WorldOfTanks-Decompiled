@@ -1,8 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/data_providers.py
 from abc import abstractmethod
 from debug_utils import LOG_ERROR
-from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider, SortableDAAPIDataProvider
-from gui.shared.utils import sortByFields
+from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 
 class BaseRallyListDataProvider(SortableDAAPIDataProvider):
 

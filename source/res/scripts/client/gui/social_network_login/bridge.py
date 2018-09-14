@@ -21,14 +21,14 @@ class _SOCIAL_NETWORKS:
     ODNOKLASSNIKI = 'odnoklassniki'
 
 
-_SOCIAL_NETWORK_TO_DOMAIN_MAPPING = {_SOCIAL_NETWORKS.FACEBOOK: ('Facebook', 'fb.com'),
- _SOCIAL_NETWORKS.GOOGLE: ('Google+', 'plus.google.com'),
- _SOCIAL_NETWORKS.WGNI: ('Wargaming.net', 'wargaming.net'),
- _SOCIAL_NETWORKS.VKONTAKTE: (u'\u0412\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u0435', 'vk.com'),
- _SOCIAL_NETWORKS.YAHOO: ('Yahoo!', 'yahoo.com'),
- _SOCIAL_NETWORKS.NAVER: ('NAVER', 'naver.com'),
- _SOCIAL_NETWORKS.TWITTER: ('Twitter', 'twitter.com'),
- _SOCIAL_NETWORKS.ODNOKLASSNIKI: (u'\u041e\u0434\u043d\u043e\u043a\u043b\u0430\u0441\u0441\u043d\u0438\u043a\u0438', 'ok.ru')}
+_SOCIAL_NETWORK_TO_DOMAIN_MAPPING = {_SOCIAL_NETWORKS.FACEBOOK: 'fb.com',
+ _SOCIAL_NETWORKS.GOOGLE: 'plus.google.com',
+ _SOCIAL_NETWORKS.WGNI: 'wargaming.net',
+ _SOCIAL_NETWORKS.VKONTAKTE: 'vk.com',
+ _SOCIAL_NETWORKS.YAHOO: 'yahoo.com',
+ _SOCIAL_NETWORKS.NAVER: 'naver.com',
+ _SOCIAL_NETWORKS.TWITTER: 'twitter.com',
+ _SOCIAL_NETWORKS.ODNOKLASSNIKI: 'ok.ru'}
 
 class Bridge(object):
 
@@ -98,19 +98,33 @@ class Bridge(object):
         localizationString = '#menu:login/social/warning/SOCIAL_NETWORK_LOGOUT'
         formatter = {'userName': Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('user'),
          'socialNetworkLink': makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': socialNetworkName,
-                               'socialNetworkOfficialName': _SOCIAL_NETWORK_TO_DOMAIN_MAPPING[socialNetworkName][0]})}
+                               'socialNetworkOfficialName': _ms('#tooltips:login/social/' + socialNetworkName)})}
         if socialNetworkName != _SOCIAL_NETWORKS.WGNI:
             localizationString += '_BOTH'
             formatter['wargamingNetLink'] = makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': _SOCIAL_NETWORKS.WGNI,
-             'socialNetworkOfficialName': _SOCIAL_NETWORK_TO_DOMAIN_MAPPING[_SOCIAL_NETWORKS.WGNI][0]})
+             'socialNetworkOfficialName': _ms('#tooltips:login/social/' + _SOCIAL_NETWORKS.WGNI)})
         return makeHtmlString('html_templates:socialNetworkLogin', 'logoutWarning', {'warningMessage': _ms(localizationString) % formatter})
+
+    @staticmethod
+    def getTooltipHeader(socialNetworkName):
+        if socialNetworkName == _SOCIAL_NETWORKS.WGNI:
+            return _ms('#tooltips:login/bySocial/' + _SOCIAL_NETWORKS.WGNI + '/header')
+        else:
+            return _ms('#tooltips:login/bySocial/header')
+
+    @staticmethod
+    def getTooltipBody(socialNetworkName):
+        if socialNetworkName == _SOCIAL_NETWORKS.WGNI:
+            return _ms('#tooltips:login/bySocial/' + _SOCIAL_NETWORKS.WGNI + '/body')
+        else:
+            return _ms('#tooltips:login/bySocial/body') % {'social': _ms('#tooltips:login/social/' + socialNetworkName)}
 
     @staticmethod
     def getSocialNetworkURL(socialNetworkName):
         protocol = 'http'
         if socialNetworkName != _SOCIAL_NETWORKS.NAVER:
             protocol += 's'
-        return protocol + '://' + _SOCIAL_NETWORK_TO_DOMAIN_MAPPING[socialNetworkName][1]
+        return protocol + '://' + _SOCIAL_NETWORK_TO_DOMAIN_MAPPING[socialNetworkName]
 
     def setCredentials(self, userName, token2):
         self.__userName = userName

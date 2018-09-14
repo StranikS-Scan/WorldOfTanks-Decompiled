@@ -188,6 +188,9 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
     def onClubLadderInfoChanged(self, ladderInfo):
         self.__updateClubData()
 
+    def onClubMembersChanged(self, members):
+        self.__updateClubData()
+
     def _populate(self):
         super(CyberSportIntroView, self)._populate()
         self.addListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__updateSelectedVehicles)
@@ -241,7 +244,7 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
                         resultVO.showCreateButton(_ms(CYBERSPORT.WINDOW_INTRO_CREATE_BTN_ADDPLAYERS), TOOLTIPS.CYBERSPORT_INTRO_CREATEBTN_ADDPLAYERS)
                     else:
                         resultVO.setClubDescription(text_styles.error(CYBERSPORT.WINDOW_INTRO_TEAM_DESCRIPTION_OWNERASSEMBLINGTEAM), isBackVisible=True)
-                        resultVO.showCreateButton(_ms(CYBERSPORT.WINDOW_INTRO_CREATE_BTN_ASSEMBLETEAM), '#tooltips:cyberSport/intro/createBtn/addPlayers/private')
+                        resultVO.showCreateButton(_ms('#cybersport:window/intro/create/btn/private/seeStaff'), '#tooltips:cyberSport/intro/createBtn/addPlayers/private')
                     resultVO.needAddPlayers()
                 else:
                     resultVO.setClubDescription(text_styles.error(CYBERSPORT.WINDOW_INTRO_TEAM_DESCRIPTION_NOTENOUGHPERMISSIONS_ASSEMBLINGTEAM), isBackVisible=True)
@@ -285,7 +288,7 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener, AppRef):
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
             else:
-                warnTooltip, isReadyVehicle = '', vehicle.isReadyToPrebattle
+                warnTooltip, isReadyVehicle = '', vehicle.isReadyToPrebattle()
             self.as_setSelectedVehicleS(makeVehicleVO(vehicle), isReadyVehicle, warnTooltip)
         else:
             self.as_setNoVehiclesS(TOOLTIPS.CYBERSPORT_NOVEHICLESINHANGAR)

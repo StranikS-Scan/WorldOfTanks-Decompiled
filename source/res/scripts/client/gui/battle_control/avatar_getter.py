@@ -146,6 +146,15 @@ def getArena(avatar = None):
     return result
 
 
+def getArenaUniqueID(avatar = None):
+    try:
+        return getArena(avatar).arenaUniqueID
+    except AttributeError:
+        LOG_WARNING('Attribute "arenaUniqueID" is not found')
+
+    return None
+
+
 def updateVehicleSetting(code, value, avatar = None):
     if avatar is None:
         avatar = BigWorld.player()

@@ -7,6 +7,7 @@ import zlib
 import base64
 from functools import partial
 from battle_results_shared import *
+from constants import IS_DEVELOPMENT
 from debug_utils import *
 BATTLE_RESULTS_VERSION = 1
 CACHE_DIR = os.path.join(os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath(), 'utf-8', errors='ignore')), 'battle_results')
@@ -151,23 +152,27 @@ def clean():
 
 
 def convertToFullForm(compactForm):
-    if len(compactForm) > 3:
-        uniqueSubUrl = compactForm[3]
-    else:
-        uniqueSubUrl = None
-    fullForm = {'arenaUniqueID': compactForm[0],
-     'personal': listToDict(VEH_FULL_RESULTS, compactForm[1]),
+    arenaUniqueID, fullResultsList, pickled, uniqueSubUrl = compactForm
+    fullResultsList = cPickle.loads(zlib.decompress(fullResultsList))
+    personal = {}
+    fullForm = {'arenaUniqueID': arenaUniqueID,
+     'personal': personal,
      'common': {},
      'players': {},
      'vehicles': {},
      'uniqueSubUrl': uniqueSubUrl}
-    fullForm['personal']['details'] = VehicleInteractionDetails.fromPacked(fullForm['personal']['details']).toDict()
-    commonAsList, playersAsList, vehiclesAsList = cPickle.loads(compactForm[2])
-    fullForm['common'] = listToDict(COMMON_RESULTS, commonAsList)
-    for accountDBID, playerAsList in playersAsList.iteritems():
-        fullForm['players'][accountDBID] = listToDict(PLAYER_INFO, playerAsList)
+    for vehTypeCompDescr, ownResults in fullResultsList.iteritems():
+        vehPersonal = personal[vehTypeCompDescr] = VEH_FULL_RESULTS.unpack(ownResults)
+        vehPersonal['details'] = VehicleInteractionDetails.fromPacked(vehPersonal['details']).toDict()
 
-    for vehicleID, vehicleAsList in vehiclesAsList.iteritems():
-        fullForm['vehicles'][vehicleID] = listToDict(VEH_PUBLIC_RESULTS, vehicleAsList)
+    commonAsList, playersAsList, vehiclesAsList = cPickle.loads(zlib.decompress(pickled))
+    fullForm['common'] = COMMON_RESULTS.unpack(commonAsList)
+    for accountDBID, playerAsList in playersAsList.iteritems():
+        fullForm['players'][accountDBID] = PLAYER_INFO.unpack(playerAsList)
+
+    for vehicleID, vehiclesInfo in vehiclesAsList.iteritems():
+        fullForm['vehicles'][vehicleID] = []
+        for vehTypeCompDescr, vehicleInfo in vehiclesInfo.iteritems():
+            fullForm['vehicles'][vehicleID].append(VEH_PUBLIC_RESULTS.unpack(vehicleInfo))
 
     return fullForm

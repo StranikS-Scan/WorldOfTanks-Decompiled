@@ -94,15 +94,20 @@ class USER_TAG(object):
      CLUB_MEMBER,
      REFERRER,
      REFERRAL}
-    _CONTACT_LIST = {FRIEND, IGNORED, MUTED}
+    _CLOSED_CONTACTS = _SHARED_TAGS | {FRIEND}
+    _ALL_CONTACTS = _SHARED_TAGS | {IGNORED, SUB_PENDING_IN}
     _STORED_TO_CACHE = {MUTED}
 
     @classmethod
-    def includeToContactsList(cls, tags):
-        return tags & cls._CONTACT_LIST
+    def filterAllContactsTags(cls, tags):
+        return tags & cls._ALL_CONTACTS
 
     @classmethod
-    def filterToStore(cls, tags):
+    def filterClosedContactsTags(cls, tags):
+        return tags & cls._CLOSED_CONTACTS
+
+    @classmethod
+    def filterToStoreTags(cls, tags):
         return tags & cls._STORED_TO_CACHE
 
     @classmethod
@@ -130,7 +135,7 @@ class USER_GUI_TYPE(object):
 
 
 class CLIENT_ERROR_ID(object):
-    GENERIC, LOCKED, WRONG_ARGS, NOT_CONNECTED, NOT_SUPPORTED, DBID_INVALID, NAME_EMPTY, NAME_INVALID, COOLDOWN = range(1, 10)
+    GENERIC, LOCKED, WRONG_ARGS, NOT_CONNECTED, NOT_SUPPORTED, DBID_INVALID, NAME_EMPTY, NAME_INVALID, COOLDOWN, WAITING_BEFORE_START = range(1, 11)
 
 
 CLIENT_ERROR_NAMES = {v:k for k, v in CLIENT_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
@@ -167,3 +172,11 @@ class GAME_ONLINE_STATUS(object):
         else:
             status = cls.removeBit(status, abs(bit))
         return status
+
+
+class PRIMARY_CHANNEL_ORDER(object):
+    LAZY = 1
+    CLAN = 2
+    CLUB = 3
+    SYSTEM = 4
+    OTHER = 5

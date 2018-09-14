@@ -13,6 +13,7 @@ class ListPaginator(object):
         self._eManager = Event.EventManager()
         self.onListUpdated = Event.Event(self._eManager)
         self._offset = offset or _getInitialOffset(count)
+        self._prevOffset = self._offset
         self._count = count
         self._selectedID = None
         self._requester = weakref.proxy(requester)
@@ -26,12 +27,14 @@ class ListPaginator(object):
 
     def right(self):
         self._selectedID = None
+        self._prevOffset = self._offset
         self._offset += self._count
         self._request()
         return
 
     def left(self):
         self._selectedID = None
+        self._prevOffset = self._offset
         self._offset -= self._count
         self._request()
         return
@@ -39,8 +42,12 @@ class ListPaginator(object):
     def reset(self):
         self._selectedID = None
         self._offset = _getInitialOffset(self._count)
+        self._prevOffset = self._offset
         self._request()
         return
+
+    def revertOffset(self):
+        self._offset = self._prevOffset
 
     def refresh(self):
         self._request()

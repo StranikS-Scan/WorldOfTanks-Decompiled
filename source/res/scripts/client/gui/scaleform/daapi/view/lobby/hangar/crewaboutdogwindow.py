@@ -25,10 +25,10 @@ class CrewAboutDogWindow(View, SimpleWindowMeta, AbstractWindowView):
         super(CrewAboutDogWindow, self)._dispose()
 
     def __populateData(self):
-        self.as_setImageS(RES_ICONS.MAPS_ICONS_TANKMEN_WINDOWS_ABOUTRUDY)
+        self.as_setImageS(RES_ICONS.MAPS_ICONS_TANKMEN_WINDOWS_ABOUTRUDY, -70)
         self.as_setWindowTitleS(MENU.HANGAR_CREW_RODY_DOG_WINDOW_TITLE)
         self.as_setTextS(MENU.HANGAR_CREW_RODY_DOG_WINDOW_HEADER, MENU.HANGAR_CREW_RODY_DOG_WINDOW_DESCRIPTION)
-        self.as_setButtonsS(self.getBtnData(), 'right', -70, 120)
+        self.as_setButtonsS(self.getBtnData(), 'right', 120)
 
     def getBtnData(self):
         return [{'label': MENU.HANGAR_CREW_RODY_DOG_WINDOW_CLOSEBTNLABEL,

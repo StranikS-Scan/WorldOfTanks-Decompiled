@@ -19,7 +19,7 @@ class EmptyExtrasHandler(object):
     def reset(self, extras):
         return self.new()
 
-    def onUnitExtrasUpdate(self, extras, updateStr):
+    def updateUnitExtras(self, extras, updateStr):
         pass
 
 
@@ -49,7 +49,7 @@ class FortBattleExtrasHandler(EmptyExtrasHandler):
     def reset(self, extras):
         return extras
 
-    def onUnitExtrasUpdate(self, extras, updateStr):
+    def updateUnitExtras(self, extras, updateStr):
         self._processor.unpackOps(updateStr)
 
 
@@ -63,8 +63,8 @@ class ClubExtrasHandler(EmptyExtrasHandler):
          'divisionID': None,
          'clubName': None,
          'accDBIDtoRole': None,
-         'accDBIDtoClubTimestamp': None,
          'isRatedBattle': True,
+         'accDBIDtoClubTimestamp': None,
          'clubEmblemIDs': None,
          'mapID': None,
          'isEnemyReady': False,
@@ -82,15 +82,15 @@ class ClubExtrasHandler(EmptyExtrasHandler):
          'divisionID': extras['divisionID'],
          'clubName': extras['clubName'],
          'accDBIDtoRole': extras['accDBIDtoRole'],
-         'accDBIDtoClubTimestamp': extras['accDBIDtoClubTimestamp'],
          'isRatedBattle': extras['isRatedBattle'],
+         'accDBIDtoClubTimestamp': extras['accDBIDtoClubTimestamp'],
          'clubEmblemIDs': extras['clubEmblemIDs'],
          'mapID': None,
          'isEnemyReady': False,
          'isBaseDefence': None,
          'startTime': extras['startTime']}
 
-    def onUnitExtrasUpdate(self, extras, updateStr):
+    def updateUnitExtras(self, extras, updateStr):
         update = cPickle.loads(updateStr)
         if isinstance(update, tuple):
             extras[update[0]] = update[1]
@@ -116,5 +116,7 @@ class SortieExtrasHandler(EmptyExtrasHandler):
     def reset(self, extras):
         return extras
 
-    def onUnitExtrasUpdate(self, extras, updateStr):
-        extras.update(cPickle.loads(updateStr))
+    def updateUnitExtras(self, extras, updateStr):
+        update = cPickle.loads(updateStr)
+        LOG_OGNICK_DEV('updateUnitExtras', update)
+        extras.update(update)

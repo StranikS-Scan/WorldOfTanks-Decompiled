@@ -20,13 +20,13 @@ class RentalsController(Controller):
         self._stop()
         super(RentalsController, self).fini()
 
-    def onConnected(self):
+    def onLobbyInited(self, event):
         g_itemsCache.onSyncCompleted += self._update
         if self.__rentNotifyTimeCallback is None:
             self.__startRentTimeNotifyCallback()
         return
 
-    def onBattleStarted(self):
+    def onAvatarBecomePlayer(self):
         self._stop()
 
     def onDisconnected(self):

@@ -1,11 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortCreationCongratulationsWindow.py
 import fortified_regions
-from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortCreationCongratulationsWindowMeta import FortCreationCongratulationsWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
+from gui.Scaleform.framework.managers.TextManager import TextIcons
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from helpers import i18n
 
@@ -19,9 +19,9 @@ class FortCreationCongratulationsWindow(AbstractWindowView, View, FortCreationCo
         self.__makeData()
 
     def __makeData(self):
-        sourceCount = self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, str(fortified_regions.g_cache.startResource))
+        sourceCount = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, str(fortified_regions.g_cache.startResource))
         sourceCount += ' ' + self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
-        sourceCount = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.CONGRATULATIONWINDOW_TEXTBODY, sourceCount=sourceCount))
+        sourceCount = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.CONGRATULATIONWINDOW_TEXTBODY, sourceCount=sourceCount))
         self.as_setTextS(sourceCount)
         self.as_setTitleS(i18n.makeString(FORTIFICATIONS.CONGRATULATIONWINDOW_TEXTTITLE))
         self.as_setButtonLblS(i18n.makeString(FORTIFICATIONS.CONGRATULATIONWINDOW_BUTTONLBL))

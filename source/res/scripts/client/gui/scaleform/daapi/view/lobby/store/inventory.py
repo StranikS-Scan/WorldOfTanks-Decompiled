@@ -285,4 +285,5 @@ class Inventory(Store, InventoryMeta):
          'goldEqsForCredits': isEnabledBuyingGoldEqsForCredits,
          'actionPriceData': action,
          'rentLeft': rentLeftTimeStr,
+         'moduleLabel': module.getGUIEmblemID(),
          EXTRA_MODULE_INFO: extraModuleInfo}

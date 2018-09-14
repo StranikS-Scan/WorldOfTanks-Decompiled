@@ -105,7 +105,11 @@ class _PrbFunctional(ListenersCollection, interfaces.IPrbFunctional):
 
     @process
     def doLeaveAction(self, dispatcher, ctx = None):
-        meta = self.getConfirmDialogMeta()
+        if ctx is not None:
+            funcExit = ctx.getFuncExit()
+        else:
+            funcExit = FUNCTIONAL_EXIT.NO_FUNC
+        meta = self.getConfirmDialogMeta(funcExit)
         if meta is not None:
             isConfirmed = yield DialogsInterface.showDialog(meta)
         else:

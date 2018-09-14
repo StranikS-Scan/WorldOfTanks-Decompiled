@@ -70,11 +70,21 @@ def isVehicleValid(vehDescr, vehAmmo, limits):
                 if count > shellsLimits.get(compDescr, 65535):
                     return (False, 'limits/shells')
 
+        tagsLimits = limits['tags']
+        if tagsLimits is not None:
+            isValid, tagSet = tagsLimits
+            for tag in tagSet:
+                if isValid and tag not in vehDescr.type.tags:
+                    return (False, 'limits/tags')
+                if not isValid and tag in vehDescr.type.tags:
+                    return (False, 'limits/tags')
+
         return (True, None)
 
 
 def isTeamValid(accountsInfo, limits):
     minLevel, maxLevel = limits['level']
+    tagsLimits = limits['tags']
     count = 0
     totalLevel = 0
     observerCount = 0
@@ -91,8 +101,17 @@ def isTeamValid(accountsInfo, limits):
             vehTypeCompDescr = accInfo['vehTypeCompDescr']
         if not minLevel <= vehLevel <= maxLevel:
             return (False, 'limits/level')
+        vehTags = vehicles.getVehicleType(vehTypeCompDescr).tags
+        if tagsLimits is not None:
+            isValid, tagSet = tagsLimits
+            for tag in tagSet:
+                if isValid and tag not in vehTags:
+                    return (False, 'limits/tags')
+                if not isValid and tag in vehTags:
+                    return (False, 'limits/tags')
+
         count += 1
-        observerCount += int('observer' in vehicles.getVehicleType(vehTypeCompDescr).tags)
+        observerCount += int('observer' in vehTags)
         totalLevel += vehLevel
         vehs[vehTypeCompDescr] = vehs.get(vehTypeCompDescr, 0) + 1
 
@@ -196,6 +215,7 @@ LIMIT_DEFAULTS = {'maxCountTotal': 256,
  'components': {},
  'ammo': None,
  'shells': {},
+ 'tags': None,
  'nations': None}
 
 def _collectCurrentReplaceableVehicleComponents(vehicleDescr):
@@ -214,3 +234,19 @@ def _collectCurrentReplaceableVehicleComponents(vehicleDescr):
             res.append(gunDescr['compactDescr'])
 
     return res
+
+
+def getClanWarsExtraEquipments(clansEquipments, joinedAccountsDBIDs, prebattleID):
+    cache = vehicles.g_cache
+    equipmentIDs = cache.equipmentIDs()
+    equipments = cache.equipments()
+    extraEquipments = {}
+    for team, info in clansEquipments.iteritems():
+        accountDBIDs = filter(lambda dbID: dbID in joinedAccountsDBIDs, info['top_leaders'])
+        if accountDBIDs:
+            extraEquipments[accountDBIDs[0]] = {'prebattleID': prebattleID,
+             'clanDBID': 0,
+             'rev': 0,
+             'equipments': [ equipments[equipmentIDs[equipmentName]].compactDescr for equipmentName in info['equipments'] ]}
+
+    return extraEquipments

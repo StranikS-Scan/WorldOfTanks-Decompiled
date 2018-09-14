@@ -46,9 +46,10 @@ class PQController(object):
             self.__hasQuestsForSelect = False
             self.__hasQuestsForReward = False
             freeSlotsCount = self.__eventsCache.questsProgress.getPotapovQuestsFreeSlots()
-            selectedQuestsIDs = self.__eventsCache.questsProgress.getSelectedPotapovQuestsIDs()
             for qID, quest in self.__quests.iteritems():
                 quest.updateProgress(self.__eventsCache)
+
+            for qID, quest in self.__quests.iteritems():
                 if not self.__hasQuestsForSelect and freeSlotsCount and quest.canBeSelected():
                     self.__hasQuestsForSelect = True
                 if not self.__hasQuestsForReward and quest.needToGetReward():

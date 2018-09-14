@@ -3,6 +3,7 @@ import GUI
 import BigWorld
 import constants
 from debug_utils import LOG_DEBUG
+from gui import g_guiResetters
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.locale.MENU import MENU
@@ -20,15 +21,20 @@ class GameLoading(Flash):
             self._displayRoot.setVersion(getFullClientVersion())
             if constants.IS_KOREA:
                 self._displayRoot.setInfo(MENU.LOADING_GAMEINFO)
-            width, height = GUI.screenResolution()
-            scaleLength = len(graphics.getInterfaceScalesList(BigWorld.wg_getCurrentResolution(True)))
-            self._displayRoot.updateStage(width, height, scaleLength - 1)
+            g_guiResetters.add(self.onUpdateStage)
+            self.onUpdateStage()
         return
+
+    def onUpdateStage(self):
+        width, height = GUI.screenResolution()
+        scaleLength = len(graphics.getInterfaceScalesList([width, height]))
+        self._displayRoot.updateStage(width, height, scaleLength - 1)
 
     def onLoad(self, dataSection):
         self.active(True)
 
     def onDelete(self):
+        g_guiResetters.discard(self.onUpdateStage)
         if self._displayRoot is not None:
             self._displayRoot.cleanup()
             self._displayRoot = None

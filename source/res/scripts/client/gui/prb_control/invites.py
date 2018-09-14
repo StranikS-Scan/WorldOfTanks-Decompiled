@@ -1,24 +1,34 @@
 # Embedded file name: scripts/client/gui/prb_control/invites.py
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 import BigWorld
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from account_helpers import getPlayerDatabaseID, isRoamingEnabled
-from constants import PREBATTLE_INVITE_STATE, PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES, PREBATTLE_TYPE
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from avatar_helpers import getAvatarDatabaseID
+from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES, PREBATTLE_TYPE
+from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import SystemMessages
 from gui.LobbyContext import g_lobbyContext
+from gui.prb_control.settings import PRB_INVITE_STATE
+from gui.battle_control import g_sessionProvider as g_battleCtrl
 from gui.shared import g_itemsCache
 from gui.shared.actions import ActionsChain
+from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from ids_generators import SequenceIDGenerator
 from helpers import time_utils
-from messenger import g_settings
 import Event
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from messenger.ext import isSenderIgnored
 from predefined_hosts import g_preDefinedHosts
-_PrbInviteData = namedtuple('_PrbInviteData', ' '.join(['id',
+
+class _INVITE_VERSION(object):
+    OLD = 1
+    NEW = 2
+
+
+_PrbInviteData = namedtuple('_PrbInviteData', ' '.join(['clientID',
  'createTime',
  'type',
  'comment',
@@ -33,20 +43,27 @@ _PrbInviteData = namedtuple('_PrbInviteData', ' '.join(['id',
  'peripheryID',
  'prebattleID',
  'extraData',
- 'alwaysAvailable']))
+ 'alwaysAvailable',
+ 'ownerDBID',
+ 'expiryTime',
+ 'id']))
 
 class PrbInviteWrapper(_PrbInviteData):
 
     @staticmethod
-    def __new__(cls, id = -1L, createTime = None, type = 0, comment = str(), creator = str(), creatorDBID = -1L, creatorClanAbbrev = None, receiver = str(), receiverDBID = -1L, receiverClanAbbrev = None, state = None, count = 0, peripheryID = 0, prebattleID = 0, extraData = None, alwaysAvailable = None, **kwargs):
+    def __new__(cls, clientID = -1L, createTime = None, type = 0, comment = str(), creator = str(), creatorDBID = -1L, creatorClanAbbrev = None, receiver = str(), receiverDBID = -1L, receiverClanAbbrev = None, state = None, count = 0, peripheryID = 0, prebattleID = 0, extraData = None, alwaysAvailable = None, ownerDBID = -1L, expiryTime = None, id = -1L, **kwargs):
         if createTime is not None:
-            createTime = time_utils.makeLocalServerTime(createTime)
-        result = _PrbInviteData.__new__(cls, id, createTime, type, comment, creator, creatorDBID, creatorClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, state, count, peripheryID, prebattleID, extraData or {}, alwaysAvailable)
+            createTime = int(time_utils.makeLocalServerTime(createTime))
+        if expiryTime is not None:
+            expiryTime = int(time_utils.makeLocalServerTime(expiryTime))
+        if ownerDBID < 0L:
+            ownerDBID = creatorDBID
+        result = _PrbInviteData.__new__(cls, clientID, createTime, type, comment, creator, creatorDBID, creatorClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, state, count, peripheryID, prebattleID, extraData or {}, alwaysAvailable, ownerDBID, expiryTime, id)
         result.showAt = 0
         return result
 
     @property
-    def creatorFullName(self):
+    def senderFullName(self):
         return g_lobbyContext.getPlayerFullName(self.creator, clanAbbrev=self.creatorClanAbbrev, pDBID=self.creatorDBID, regionCode=g_lobbyContext.getRegionCode(self.creatorDBID))
 
     @property
@@ -64,7 +81,7 @@ class PrbInviteWrapper(_PrbInviteData):
         if dispatcher:
             prbFunctional = dispatcher.getPrbFunctional()
             unitFunctional = dispatcher.getUnitFunctional()
-            if self.type in (PREBATTLE_TYPE.UNIT, PREBATTLE_TYPE.SORTIE, PREBATTLE_TYPE.FORT_BATTLE) and self._isCurrentPrebattle(unitFunctional):
+            if self.type in PREBATTLE_TYPE.UNIT_MGR_PREBATTLES and self._isCurrentPrebattle(unitFunctional):
                 return True
             if self._isCurrentPrebattle(prbFunctional):
                 return True
@@ -75,6 +92,34 @@ class PrbInviteWrapper(_PrbInviteData):
             return self.extraData.get(key)
         else:
             return self.extraData
+
+    def isIncoming(self):
+        return True
+
+    def isActive(self):
+        return self.getState() == PRB_INVITE_STATE.PENDING
+
+    def isExpired(self):
+        return False
+
+    def getState(self):
+        return PRB_INVITE_STATE.getFromOldState(self)
+
+    def accept(self, callback = None):
+        if connectionManager.peripheryID == self.peripheryID:
+            BigWorld.player().prb_acceptInvite(self.prebattleID, self.peripheryID)
+        else:
+            LOG_ERROR('Invalid periphery', (self.prebattleID, self.peripheryID), connectionManager.peripheryID)
+
+    def decline(self, callback = None):
+        BigWorld.player().prb_declineInvite(self.prebattleID, self.peripheryID)
+
+    def revoke(self, callback = None):
+        LOG_WARNING('Old-style invite can not be revoked')
+
+    @classmethod
+    def getVersion(cls):
+        return _INVITE_VERSION.OLD
 
     def _isCurrentPrebattle(self, functional):
         return functional is not None and self.prebattleID == functional.getID()
@@ -88,9 +133,14 @@ class PrbInviteWrapper(_PrbInviteData):
         if other.creatorClanAbbrev:
             data['creatorClanAbbrev'] = other.creatorClanAbbrev
         if other.createTime is not None:
-            data['createTime'] = time_utils.makeLocalServerTime(other.createTime)
-        if other.state > 0:
-            data['state'] = other.state
+            data['createTime'] = int(time_utils.makeLocalServerTime(other.createTime))
+        if other.expiryTime:
+            data['expiryTime'] = other.expiryTime
+        if other.ownerDBID:
+            data['ownerDBID'] = other.ownerDBID
+        if other.id:
+            data['id'] = other.id
+        data['state'] = other.state
         if other.count > 0:
             data['count'] = other.count
         if len(other.comment) or other.isActive():
@@ -102,18 +152,52 @@ class PrbInviteWrapper(_PrbInviteData):
         result.showAt = self.showAt
         return result
 
-    def isPlayerSender(self):
-        return False
 
-    def isActive(self):
-        return self.state == PREBATTLE_INVITE_STATE.ACTIVE
+class PrbInvitationWrapper(PrbInviteWrapper):
+
+    @staticmethod
+    def __new__(cls, clientID = -1L, id = -1L, type = 0, status = None, sentAt = None, expiresAt = None, ownerID = -1L, senderDBID = -1L, receiverDBID = -1L, info = None, sender = str(), senderClanAbbrev = None, receiver = str(), receiverClanAbbrev = None, **kwargs):
+        if sentAt is not None:
+            createTime = int(time_utils.makeLocalServerTime(sentAt))
+        info = info or {}
+        peripheryID, prbID = cls.getPrbInfo(info)
+        result = PrbInviteWrapper.__new__(cls, clientID, sentAt, type, info.get('comment', ''), sender, senderDBID, senderClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, status, 1, peripheryID, prbID, info, False, ownerID, expiresAt, id, **kwargs)
+        return result
+
+    @classmethod
+    def getPrbInfo(cls, inviteInfo):
+        return (inviteInfo.get('peripheryID', 0), inviteInfo.get('unitMgrID', 0))
+
+    @classmethod
+    def getVersion(cls):
+        return _INVITE_VERSION.NEW
+
+    def isIncoming(self):
+        return self.ownerDBID != (getPlayerDatabaseID() or getAvatarDatabaseID())
+
+    def isExpired(self):
+        return self.expiryTime is not None and self.expiryTime < time_utils.getCurrentTimestamp()
+
+    def getState(self):
+        return PRB_INVITE_STATE.getFromNewState(self)
+
+    def accept(self, callback = None):
+        if connectionManager.peripheryID == self.peripheryID:
+            BigWorld.player().prebattleInvitations.acceptInvitation(self.id, self.creatorDBID, callback)
+        else:
+            LOG_ERROR('Invalid periphery', (self.prebattleID, self.peripheryID), connectionManager.peripheryID)
+
+    def decline(self, callback = None):
+        BigWorld.player().prebattleInvitations.declineInvitation(self.id, self.creatorDBID, callback)
+
+    def revoke(self, callback = None):
+        LOG_WARNING('Need to call valid Account method')
 
 
 class _AcceptInvitesPostActions(ActionsChain):
 
-    def __init__(self, peripheryID, prebattleID, actions):
-        self.peripheryID = peripheryID
-        self.prebattleID = prebattleID
+    def __init__(self, invite, actions):
+        self.invite = invite
         super(_AcceptInvitesPostActions, self).__init__(actions)
 
 
@@ -127,29 +211,42 @@ class PRB_INVITES_INIT_STEP(object):
     INITED = CONTACTS_RECEIVED | DATA_BUILD | STARTED
 
 
-class InvitesManager(object):
+def _getOldInvites():
+    return getattr(BigWorld.player(), 'prebattleInvites', {})
+
+
+def _getNewInvites():
+    if hasattr(BigWorld.player(), 'prebattleInvitations'):
+        return BigWorld.player().prebattleInvitations.getInvites()
+    return {}
+
+
+class InvitesManager(UsersInfoHelper):
     __clanInfo = None
 
     def __init__(self, loader):
+        super(InvitesManager, self).__init__()
         self.__loader = loader
         self._IDGen = SequenceIDGenerator()
-        self._IDMap = {'inviteIDs': {},
-         'prbIDs': {}}
-        self.__receivedInvites = {}
+        self._IDMap = {}
+        self.__invites = {}
         self.__unreadInvitesCount = 0
         self.__eventManager = Event.EventManager()
         self.__acceptChain = None
-        self.onReceivedInviteListInited = Event.Event(self.__eventManager)
+        self.onInvitesListInited = Event.Event(self.__eventManager)
         self.onReceivedInviteListModified = Event.Event(self.__eventManager)
+        self.onSentInviteListModified = Event.Event(self.__eventManager)
         return
 
     def __del__(self):
         LOG_DEBUG('InvitesManager deleted')
+        super(InvitesManager, self).__del__()
 
     def init(self):
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
         g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
         g_playerEvents.onPrebattleInvitesChanged += self.__pe_onPrebattleInvitesChanged
+        g_playerEvents.onPrebattleInvitationsChanged += self.__pe_onPrebattleInvitationsChanged
         g_playerEvents.onPrebattleInvitesStatus += self.__pe_onPrebattleInvitesStatus
 
     def fini(self):
@@ -157,6 +254,7 @@ class InvitesManager(object):
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
         self.__loader = None
         g_messengerEvents.users.onUsersListReceived -= self.__me_onUsersListReceived
+        g_playerEvents.onPrebattleInvitationsChanged -= self.__pe_onPrebattleInvitationsChanged
         g_playerEvents.onPrebattleInvitesChanged -= self.__pe_onPrebattleInvitesChanged
         g_playerEvents.onPrebattleInvitesStatus -= self.__pe_onPrebattleInvitesStatus
         self.clear()
@@ -166,19 +264,16 @@ class InvitesManager(object):
         if self.__inited & PRB_INVITES_INIT_STEP.STARTED == 0:
             self.__inited |= PRB_INVITES_INIT_STEP.STARTED
             if self.__inited == PRB_INVITES_INIT_STEP.INITED:
-                self.onReceivedInviteListInited()
+                self.onInvitesListInited()
 
     def clear(self):
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
-        self.__receivedInvites.clear()
-        self.__unreadInvitesCount = 0
-        self._IDMap = {'inviteIDs': {},
-         'prbIDs': {}}
+        self.__clearInvites()
+        self._IDMap = {}
         self.__eventManager.clear()
 
     def onAvatarBecomePlayer(self):
-        if self.__inited & PRB_INVITES_INIT_STEP.STARTED > 0:
-            self.__inited ^= PRB_INVITES_INIT_STEP.STARTED
+        self.__clearInvites()
         self.__clearAcceptChain()
 
     @storage_getter('users')
@@ -190,16 +285,16 @@ class InvitesManager(object):
 
     def acceptInvite(self, inviteID, postActions = None):
         try:
-            prebattleID, peripheryID = self._IDMap['inviteIDs'][inviteID]
+            invite = self.__invites[inviteID]
         except KeyError:
             LOG_ERROR('Invite ID is invalid', inviteID, self._IDMap)
             return
 
         self.__clearAcceptChain()
         if not postActions:
-            self._doAccept(prebattleID, peripheryID)
+            invite.accept()
         else:
-            self.__acceptChain = _AcceptInvitesPostActions(peripheryID, prebattleID, postActions)
+            self.__acceptChain = _AcceptInvitesPostActions(invite, postActions)
             self.__acceptChain.onStopped += self.__accept_onPostActionsStopped
             self.__acceptChain.start()
         if self.__unreadInvitesCount > 0:
@@ -207,12 +302,23 @@ class InvitesManager(object):
 
     def declineInvite(self, inviteID):
         try:
-            prebattleID, peripheryID = self._IDMap['inviteIDs'][inviteID]
+            invite = self.__invites[inviteID]
         except KeyError:
             LOG_ERROR('Invite ID is invalid', inviteID, self._IDMap)
             return
 
-        BigWorld.player().prb_declineInvite(prebattleID, peripheryID)
+        invite.decline()
+        if self.__unreadInvitesCount > 0:
+            self.__unreadInvitesCount -= 1
+
+    def revokeInvite(self, inviteID):
+        try:
+            invite = self.__invites[inviteID]
+        except KeyError:
+            LOG_ERROR('Invite ID is invalid', inviteID, self._IDMap)
+            return
+
+        invite.revoke()
         if self.__unreadInvitesCount > 0:
             self.__unreadInvitesCount -= 1
 
@@ -220,7 +326,7 @@ class InvitesManager(object):
         result = False
         if invite.alwaysAvailable is True:
             result = True
-        elif invite.id in self.__receivedInvites:
+        elif invite.clientID in self.__invites:
             dispatcher = self.__loader.getDispatcher()
             if dispatcher:
                 prbFunctional = dispatcher.getPrbFunctional()
@@ -242,38 +348,56 @@ class InvitesManager(object):
                     LOG_ERROR('Roaming is not supported')
                     result = False
                 else:
-                    result = invite.id > 0 and invite.isActive()
+                    result = invite.clientID > 0 and invite.isActive()
             else:
-                result = invite.id > 0 and invite.isActive()
+                result = invite.clientID > 0 and invite.isActive()
         return result
 
     def canDeclineInvite(self, invite):
         result = False
-        if invite.id in self.__receivedInvites:
-            result = invite.id > 0 and invite.isActive()
+        if invite.clientID in self.__invites:
+            result = invite.clientID > 0 and invite.isActive()
         return result
 
-    def getInviteInfo(self, inviteID):
-        try:
-            prebattleID, peripheryID = self._IDMap['inviteIDs'][inviteID]
-            return (prebattleID, peripheryID)
-        except KeyError:
-            return (0, 0)
+    def canRevokeInvite(self, invite):
+        result = False
+        if invite.clientID in self.__invites:
+            result = invite.clientID > 0 and invite.isActive() and invite.creatorDBID == getPlayerDatabaseID()
+        return result
 
-    def getReceivedInviteCount(self):
-        return len(self.__receivedInvites)
+    def getInvites(self, incoming = None, version = None, onlyActive = None):
+        result = self.__invites.values()
+        if incoming is not None:
+            result = filter(lambda item: item.isIncoming() is incoming, result)
+        if version is not None:
+            result = filter(lambda item: item.getVersion() == version, result)
+        if onlyActive is not None:
+            result = filter(lambda item: item.isActive() is onlyActive, result)
+        return result
 
-    def getReceivedInvite(self, inviteID):
+    def getInvite(self, inviteID):
         invite = None
-        if inviteID in self.__receivedInvites:
-            invite = self.__receivedInvites[inviteID]
+        if inviteID in self.__invites:
+            invite = self.__invites[inviteID]
         return invite
 
+    def getReceivedInviteCount(self):
+        return len(self.getReceivedInvites())
+
     def getReceivedInvites(self, IDs = None):
-        result = self.__receivedInvites.values()
+        result = self.getInvites(incoming=True)
         if IDs is not None:
-            result = filter(lambda item: item.id in IDs, result)
+            result = filter(lambda item: item.clientID in IDs, result)
         return result
+
+    def getSentInvites(self, IDs = None):
+        result = self.getInvites(incoming=False)
+        if IDs is not None:
+            result = filter(lambda item: item.clientID in IDs, result)
+        return result
+
+    def getSentInviteCount(self):
+        return len(self.getSentInvites())
 
     def getUnreadCount(self):
         return self.__unreadInvitesCount
@@ -281,86 +405,126 @@ class InvitesManager(object):
     def resetUnreadCount(self):
         self.__unreadInvitesCount = 0
 
-    def _doAccept(self, prebattleID, peripheryID):
-        if connectionManager.peripheryID == peripheryID:
-            BigWorld.player().prb_acceptInvite(prebattleID, peripheryID)
-        else:
-            LOG_ERROR('Invalid periphery', (prebattleID, peripheryID), connectionManager.peripheryID)
+    def onUserNamesReceived(self, names):
+        updated = defaultdict(list)
+        rosterGetter = self.users.getUser
+        inviteMaker = self._getNewInviteMaker(rosterGetter)
+        prebattleInvitations = _getNewInvites()
+        for invite in self.getInvites(version=_INVITE_VERSION.NEW):
+            if invite.creatorDBID in names or invite.receiverDBID in names:
+                inviteData = prebattleInvitations.get(invite.id)
+                inviteID, invite = inviteMaker(inviteData)
+                if inviteData and self._updateInvite(invite, rosterGetter):
+                    updated[invite.isIncoming()].append(inviteID)
 
-    def _makeInviteID(self, prebattleID, peripheryID):
-        inviteID = self._IDMap['prbIDs'].get((prebattleID, peripheryID))
+        for isIncoming, event in ((True, self.onReceivedInviteListModified), (False, self.onSentInviteListModified)):
+            if updated[isIncoming]:
+                event([], updated[isIncoming], [])
+
+    def _makeInviteID(self, prebattleID, peripheryID, senderDBID, receiverDBID):
+        inviteKey = (prebattleID,
+         peripheryID,
+         senderDBID,
+         receiverDBID)
+        inviteID = self._IDMap.get(inviteKey)
         if inviteID is None:
             inviteID = self._IDGen.next()
-            self._IDMap['inviteIDs'][inviteID] = (prebattleID, peripheryID)
-            self._IDMap['prbIDs'][prebattleID, peripheryID] = inviteID
+            self._IDMap[inviteKey] = inviteID
         return inviteID
 
     def _addInvite(self, invite, userGetter):
-        if self._isSenderIgnored(invite, userGetter):
+        if isSenderIgnored(userGetter(invite.creatorDBID)):
             return False
-        self.__receivedInvites[invite.id] = invite
+        self.__invites[invite.clientID] = invite
         if invite.isActive():
             self.__unreadInvitesCount += 1
         return True
 
     def _updateInvite(self, other, userGetter):
-        inviteID = other.id
-        invite = self.__receivedInvites[inviteID]
-        if self._isSenderIgnored(invite, userGetter):
+        inviteID = other.clientID
+        invite = self.__invites[inviteID]
+        if invite == other or isSenderIgnored(userGetter(invite.creatorDBID)):
             return False
         prevCount = invite.count
         invite = invite._merge(other)
-        self.__receivedInvites[inviteID] = invite
+        self.__invites[inviteID] = invite
         if invite.isActive() and prevCount < invite.count:
             self.__unreadInvitesCount += 1
         return True
 
     def _delInvite(self, inviteID):
-        result = inviteID in self.__receivedInvites
+        result = inviteID in self.__invites
         if result:
-            self.__receivedInvites.pop(inviteID)
+            self.__invites.pop(inviteID)
         return result
 
-    def _isSenderIgnored(self, invite, userGetter):
-        user = userGetter(invite.creatorDBID)
-        areFriendsOnly = g_settings.userPrefs.invitesFromFriendsOnly
-        if user:
-            if areFriendsOnly:
-                if user.isFriend():
-                    return False
-                else:
-                    LOG_DEBUG('Invite is ignored, shows invites from friends only', invite)
-                    return True
-            if user.isIgnored():
-                LOG_DEBUG('Invite is ignored, there is the contact in ignore list', invite, user)
-                return True
-        elif areFriendsOnly:
-            LOG_DEBUG('Invite is ignored, shows invites from friends only', invite)
-        return areFriendsOnly
-
-    def _buildReceivedInvitesList(self, invitesData):
+    def _buildReceivedInvitesList(self, invitesLists):
         if self.__inited & PRB_INVITES_INIT_STEP.DATA_BUILD == 0:
             self.__inited |= PRB_INVITES_INIT_STEP.DATA_BUILD
-        self.__receivedInvites.clear()
-        self.__unreadInvitesCount = 0
-        receiver = getattr(BigWorld.player(), 'name', '')
+        self.__clearInvites()
+        userGetter = self.users.getUser
+        for invitesData, maker in invitesLists:
+            for item in invitesData:
+                _, invite = maker(item)
+                if invite:
+                    self._addInvite(invite, userGetter)
+
+        if not g_battleCtrl.isBattleUILoaded():
+            self.syncUsersInfo()
+
+    def _rebuildInvitesLists(self):
+        rosterGetter = self.users.getUser
+        self._buildReceivedInvitesList([(_getOldInvites().items(), self._getOldInviteMaker(rosterGetter)), (_getNewInvites().values(), self._getNewInviteMaker(rosterGetter))])
+
+    def _getOldInviteMaker(self, rosterGetter):
+        receiver = BigWorld.player().name
         receiverDBID = getPlayerDatabaseID()
         receiverClanAbbrev = g_lobbyContext.getClanAbbrev(self.__clanInfo)
-        userGetter = self.users.getUser
-        for (prebattleID, peripheryID), data in invitesData.iteritems():
-            inviteID = self._makeInviteID(prebattleID, peripheryID)
-            invite = PrbInviteWrapper(id=inviteID, receiver=receiver, receiverDBID=receiverDBID, receiverClanAbbrev=receiverClanAbbrev, peripheryID=peripheryID, prebattleID=prebattleID, **data)
-            self._addInvite(invite, userGetter)
+
+        def _inviteMaker(item):
+            (prebattleID, peripheryID), data = item
+            inviteID = self._makeInviteID(prebattleID, peripheryID, data['creatorDBID'], receiverDBID)
+            if data is not None:
+                invite = PrbInviteWrapper(clientID=inviteID, receiver=receiver, receiverDBID=receiverDBID, receiverClanAbbrev=receiverClanAbbrev, peripheryID=peripheryID, prebattleID=prebattleID, **data)
+            else:
+                invite = None
+            return (inviteID, invite)
+
+        return _inviteMaker
+
+    def _getNewInviteMaker(self, rosterGetter):
+
+        def _getUserName(userDBID):
+            name, abbrev = ('', None)
+            if userDBID:
+                if g_battleCtrl.isBattleUILoaded():
+                    name, abbrev = g_battleCtrl.getCtx().getFullPlayerNameWithParts(accID=userDBID, showVehShortName=False)[1:3]
+                if not name:
+                    userName = self.getUserName(userDBID)
+                    userClanAbbrev = self.getUserClanAbbrev(userDBID)
+                    user = rosterGetter(userDBID)
+                    if user and user.hasValidName():
+                        name, abbrev = userName, userClanAbbrev
+            return (name, abbrev)
+
+        def _inviteMaker(item):
+            peripheryID, prebattleID = PrbInvitationWrapper.getPrbInfo(item.get('info', {}))
+            senderDBID = item.get('senderDBID', 0)
+            receiverDBID = item.get('receiverDBID', 0)
+            inviteID = self._makeInviteID(prebattleID, peripheryID, senderDBID, receiverDBID)
+            senderName, senderClanAbbrev = _getUserName(senderDBID)
+            receiverName, receiverClanAbbrev = _getUserName(receiverDBID)
+            return (inviteID, PrbInvitationWrapper(inviteID, sender=senderName, senderClanAbbrev=senderClanAbbrev, receiver=receiverName, receiverClanAbbrev=receiverClanAbbrev, **item))
+
+        return _inviteMaker
 
     def __initReceivedInvites(self):
         step = PRB_INVITES_INIT_STEP.CONTACTS_RECEIVED
         if self.__inited & step != step:
             return
-        invitesData = getattr(BigWorld.player(), 'prebattleInvites', {})
-        LOG_DEBUG('Users roster received, list of invites are available', invitesData)
-        self._buildReceivedInvitesList(invitesData)
+        self._rebuildInvitesLists()
         if self.__inited == PRB_INVITES_INIT_STEP.INITED:
-            self.onReceivedInviteListInited()
+            self.onInvitesListInited()
 
     def __clearAcceptChain(self):
         if self.__acceptChain is not None:
@@ -389,38 +553,38 @@ class InvitesManager(object):
         if self.__inited & step != step:
             LOG_DEBUG('Received invites are ignored. Manager waits for client will receive contacts')
             return
-        else:
-            prbInvites = diff.get(('prebattleInvites', '_r'))
-            if prbInvites is not None:
-                self._buildReceivedInvitesList(prbInvites)
-            prbInvites = diff.get('prebattleInvites')
-            if prbInvites is not None:
-                self.__updatePrebattleInvites(prbInvites)
+        if ('prebattleInvites', '_r') in diff:
+            self._rebuildInvitesLists()
+        if 'prebattleInvites' in diff:
+            self.__updateOldPrebattleInvites(_getOldInvites())
+
+    def __pe_onPrebattleInvitationsChanged(self, invitations):
+        step = PRB_INVITES_INIT_STEP.CONTACTS_RECEIVED
+        if self.__inited & step != step:
+            LOG_DEBUG('Received invites are ignored. Manager waits for client will receive contacts')
             return
+        self.__updateNewPrebattleInvites(invitations)
 
     def __pe_onPrebattleInvitesStatus(self, dbID, name, status):
         if status != PREBATTLE_INVITE_STATUS.OK:
             statusName = PREBATTLE_INVITE_STATUS_NAMES[status]
             SystemMessages.pushI18nMessage('#system_messages:invite/status/%s' % statusName, name=name, type=SystemMessages.SM_TYPE.Warning)
 
-    def __updatePrebattleInvites(self, prbInvites):
-        receiver = BigWorld.player().name
-        receiverDBID = getPlayerDatabaseID()
-        receiverClanAbbrev = g_lobbyContext.getClanAbbrev(self.__clanInfo)
+    def __updateOldPrebattleInvites(self, prbInvites):
         added = []
         changed = []
         deleted = []
         modified = False
         rosterGetter = self.users.getUser
-        for (prebattleID, peripheryID), data in prbInvites.iteritems():
-            inviteID = self._makeInviteID(prebattleID, peripheryID)
-            if data is None:
+        inviteMaker = self._getOldInviteMaker(rosterGetter)
+        for item in prbInvites.iteritems():
+            inviteID, invite = inviteMaker(item)
+            if invite is None:
                 if self._delInvite(inviteID):
                     modified = True
                     deleted.append(inviteID)
                 continue
-            invite = PrbInviteWrapper(id=inviteID, receiver=receiver, receiverDBID=receiverDBID, receiverClanAbbrev=receiverClanAbbrev, peripheryID=peripheryID, prebattleID=prebattleID, **data)
-            inList = inviteID in self.__receivedInvites
+            inList = inviteID in self.__invites
             if not inList:
                 if self._addInvite(invite, rosterGetter):
                     modified = True
@@ -433,14 +597,66 @@ class InvitesManager(object):
             self.onReceivedInviteListModified(added, changed, deleted)
         return
 
+    def __updateNewPrebattleInvites(self, prbInvites):
+        added = defaultdict(list)
+        changed = defaultdict(list)
+        deleted = defaultdict(list)
+        modified = dict(((v, False) for v in (True, False)))
+        rosterGetter = self.users.getUser
+        inviteMaker = self._getNewInviteMaker(rosterGetter)
+        newInvites = {}
+        for data in prbInvites.itervalues():
+            inviteID, invite = inviteMaker(data)
+            if inviteID not in newInvites or invite.createTime > newInvites[inviteID].createTime:
+                newInvites[inviteID] = invite
+
+        for invite in self.getInvites(version=_INVITE_VERSION.NEW):
+            inviteID = invite.clientID
+            if inviteID not in newInvites and self._delInvite(inviteID):
+                isIncoming = invite.isIncoming()
+                modified[isIncoming] = True
+                deleted[isIncoming].append(inviteID)
+            else:
+                continue
+
+        for inviteID, invite in newInvites.iteritems():
+            isIncoming = invite.isIncoming()
+            if inviteID not in self.__invites:
+                if self._addInvite(invite, rosterGetter):
+                    modified[isIncoming] = True
+                    added[isIncoming].append(inviteID)
+            elif self._updateInvite(invite, rosterGetter):
+                modified[isIncoming] = True
+                changed[isIncoming].append(inviteID)
+
+        for isIncoming, event in ((True, self.onReceivedInviteListModified), (False, self.onSentInviteListModified)):
+            if modified[isIncoming]:
+                event(added[isIncoming], changed[isIncoming], deleted[isIncoming])
+
+        self.syncUsersInfo()
+        receiver = BigWorld.player().name
+        receiverDBID = getPlayerDatabaseID()
+        receiverClanAbbrev = g_lobbyContext.getClanAbbrev(self.__clanInfo)
+
+        def _inviteMaker(item):
+            (prebattleID, peripheryID), data = item
+            inviteID = self._makeInviteID(prebattleID, peripheryID, data.get('creatorDBID', 0), receiverDBID)
+            if data is not None:
+                invite = PrbInviteWrapper(clientID=inviteID, receiver=receiver, receiverDBID=receiverDBID, receiverClanAbbrev=receiverClanAbbrev, peripheryID=peripheryID, prebattleID=prebattleID, **data)
+            else:
+                invite = None
+            return (inviteID, invite)
+
+        return _inviteMaker
+
     def __accept_onPostActionsStopped(self, isCompleted):
         if not isCompleted:
             return
-        prebattleID = self.__acceptChain.prebattleID
-        peripheryID = self.__acceptChain.peripheryID
-        if (prebattleID, peripheryID) in self._IDMap['prbIDs']:
-            self._doAccept(prebattleID, peripheryID)
-            if self.__unreadInvitesCount > 0:
-                self.__unreadInvitesCount -= 1
-        else:
-            LOG_ERROR('Prebattle invite not found', prebattleID, peripheryID)
+        invite = self.__acceptChain.invite
+        invite.accept()
+        if self.__unreadInvitesCount > 0:
+            self.__unreadInvitesCount -= 1
+
+    def __clearInvites(self):
+        self.__invites.clear()
+        self.__unreadInvitesCount = 0

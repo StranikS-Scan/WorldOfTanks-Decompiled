@@ -6,8 +6,12 @@ class StaticFormationProfileWindowMeta(DAAPIModule):
     def actionBtnClickHandler(self, action):
         self._printOverrideError('actionBtnClickHandler')
 
-    def hyperLinkHandler(self, value):
-        self._printOverrideError('hyperLinkHandler')
+    def onClickHyperLink(self, value):
+        self._printOverrideError('onClickHyperLink')
+
+    def as_setWindowSizeS(self, width, height):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setWindowSize(width, height)
 
     def as_setDataS(self, data):
         if self._isDAAPIInited():

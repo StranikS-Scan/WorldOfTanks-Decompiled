@@ -7,7 +7,7 @@ from gui.shared import EVENT_BUS_SCOPE
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby import trainings
-    return [ViewSettings(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, trainings.Trainings, 'trainingForm.swf', ViewTypes.LOBBY_SUB, PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, ScopeTemplates.DEFAULT_SCOPE), ViewSettings(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, trainings.TrainingRoom, 'trainingRoom.swf', ViewTypes.LOBBY_SUB, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, ScopeTemplates.DEFAULT_SCOPE), GroupedViewSettings(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY, trainings.TrainingSettingsWindow, 'trainingWindow.swf', ViewTypes.WINDOW, PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY, None, ScopeTemplates.DEFAULT_SCOPE)]
+    return [ViewSettings(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, trainings.Trainings, 'trainingForm.swf', ViewTypes.LOBBY_SUB, PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, ScopeTemplates.DEFAULT_SCOPE, True), ViewSettings(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, trainings.TrainingRoom, 'trainingRoom.swf', ViewTypes.LOBBY_SUB, PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, ScopeTemplates.DEFAULT_SCOPE, True), GroupedViewSettings(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY, trainings.TrainingSettingsWindow, 'trainingWindow.swf', ViewTypes.WINDOW, PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY, None, ScopeTemplates.DEFAULT_SCOPE, True)]
 
 
 def getBusinessHandlers():

@@ -5,7 +5,7 @@ import BattleReplay
 import Settings
 from VOIP.voip_constants import VOIP_SUPPORTED_API
 from adisp import async, process
-from debug_utils import LOG_WARNING
+from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import AppRef, ViewTypes
 from helpers import isPlayerAccount, isPlayerAvatar
@@ -110,6 +110,8 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
     @async
     def initialize(self, domain, callback):
         if self.ready:
+            vOIPSetting = g_settingsCore.options.getSetting('enableVoIP')
+            vOIPSetting.initFromPref()
             callback(True)
             return
         if domain == '':
@@ -117,11 +119,10 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
             return
         self.__callbacks.append(callback)
         voipMgr = getVOIPManager()
-        if not voipMgr.isNotInitialized():
-            return
-        voipMgr.initialize(domain)
-        voipSetting = g_settingsCore.options.getSetting(SOUND.VOIP_ENABLE)
-        voipMgr.enable(voipSetting._readValue(Settings.g_instance.userPrefs))
+        if voipMgr.isNotInitialized():
+            voipMgr.initialize(domain)
+        vOIPSetting = g_settingsCore.options.getSetting('enableVoIP')
+        vOIPSetting.initFromPref()
 
     @async
     def requestCaptureDevices(self, firstTime = False, callback = None):

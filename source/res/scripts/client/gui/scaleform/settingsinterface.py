@@ -66,17 +66,49 @@ class SettingsInterface(UIInterface):
      'minimap': {'sizeUp': 'CMD_MINIMAP_SIZE_UP',
                  'sizeDown': 'CMD_MINIMAP_SIZE_DOWN',
                  'visible': 'CMD_MINIMAP_VISIBLE'}}
-    KEYBOARD_MAPPING_BLOCKS = {'movement': ('forward', 'backward', 'left', 'right', 'auto_rotation'),
+    KEYBOARD_MAPPING_BLOCKS = {'movement': ('forward',
+                  'backward',
+                  'left',
+                  'right',
+                  'auto_rotation'),
      'cruis_control': ('forward', 'backward', 'stop_fire'),
-     'firing': ('fire', 'lock_target', 'lock_target_off', 'alternate_mode', 'reloadPartialClip'),
+     'firing': ('fire',
+                'lock_target',
+                'lock_target_off',
+                'alternate_mode',
+                'reloadPartialClip'),
      'vehicle_other': ('showHUD', 'showRadialMenu'),
-     'equipment': ('item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08'),
-     'shortcuts': ('attack', 'to_base', 'positive', 'negative', 'help_me', 'reload'),
-     'camera': ('camera_up', 'camera_down', 'camera_left', 'camera_right'),
+     'equipment': ('item01',
+                   'item02',
+                   'item03',
+                   'item04',
+                   'item05',
+                   'item06',
+                   'item07',
+                   'item08'),
+     'shortcuts': ('attack',
+                   'to_base',
+                   'positive',
+                   'negative',
+                   'help_me',
+                   'reload'),
+     'camera': ('camera_up',
+                'camera_down',
+                'camera_left',
+                'camera_right'),
      'voicechat': ('pushToTalk',),
      'logitech_keyboard': ('switch_view',),
      'minimap': ('sizeUp', 'sizeDown', 'visible')}
-    KEYBOARD_MAPPING_BLOCKS_ORDER = ('movement', 'cruis_control', 'firing', 'vehicle_other', 'equipment', 'shortcuts', 'camera', 'voicechat', 'minimap', 'logitech_keyboard')
+    KEYBOARD_MAPPING_BLOCKS_ORDER = ('movement',
+     'cruis_control',
+     'firing',
+     'vehicle_other',
+     'equipment',
+     'shortcuts',
+     'camera',
+     'voicechat',
+     'minimap',
+     'logitech_keyboard')
     POPULATE_UI = 'SettingsDialog.PopulateUI'
     APPLY_SETTINGS = 'SettingsDialog.ApplySettings'
     COMMIT_SETTINGS = 'SettingsDialog.CommitSettings'
@@ -209,12 +241,7 @@ class SettingsInterface(UIInterface):
         elif isEnable is None:
             return
         else:
-            preveVoIP = Settings.g_instance.userPrefs.readBool(Settings.KEY_ENABLE_VOIP)
-            import VOIP
-            if preveVoIP != isEnable:
-                VOIP.getVOIPManager().enable(isEnable)
-                Settings.g_instance.userPrefs.writeBool(Settings.KEY_ENABLE_VOIP, bool(isEnable))
-                LOG_NOTE('Change state of voip: %s' % str(isEnable))
+            g_settingsCore.applySetting('enableVoIP', isEnable)
             return
 
     def onUseRedifineKeyMode(self, callbackId, isUse):
@@ -290,19 +317,23 @@ class SettingsInterface(UIInterface):
          'enableOlFilter': g_settingsCore.getSetting('enableOlFilter'),
          'enableSpamFilter': g_settingsCore.getSetting('enableSpamFilter'),
          'receiveFriendshipRequest': g_settingsCore.getSetting('receiveFriendshipRequest'),
+         'receiveInvitesInBattle': g_settingsCore.getSetting('receiveInvitesInBattle'),
          'invitesFromFriendsOnly': g_settingsCore.getSetting('invitesFromFriendsOnly'),
          'storeReceiverInBattle': g_settingsCore.getSetting('storeReceiverInBattle'),
          'disableBattleChat': g_settingsCore.getSetting('disableBattleChat'),
+         'chatContactsListOnly': g_settingsCore.getSetting('chatContactsListOnly'),
          'dynamicCamera': g_settingsCore.getSetting('dynamicCamera'),
          'horStabilizationSnp': g_settingsCore.getSetting('horStabilizationSnp'),
-         'enableVoIP': VOIP.getVOIPManager().isEnabled(),
+         'enableVoIP': g_settingsCore.getSetting('enableVoIP'),
          'enablePostMortemEffect': g_settingsCore.getSetting('enablePostMortemEffect'),
          'enablePostMortemDelay': g_settingsCore.getSetting('enablePostMortemDelay'),
          'nationalVoices': g_settingsCore.getSetting('nationalVoices'),
          'isColorBlind': g_settingsCore.getSetting('isColorBlind'),
+         'graphicsQualityHDSD': g_settingsCore.getSetting('graphicsQualityHDSD'),
          'useServerAim': g_settingsCore.getSetting('useServerAim'),
          'showVehiclesCounter': g_settingsCore.getSetting('showVehiclesCounter'),
          'showMarksOnGun': g_settingsCore.getSetting('showMarksOnGun'),
+         'showBattleEfficiencyRibbons': g_settingsCore.getSetting('showBattleEfficiencyRibbons'),
          'minimapAlpha': g_settingsCore.getSetting('minimapAlpha'),
          'showVectorOnMap': g_settingsCore.getSetting('showVectorOnMap'),
          'showSectorOnMap': g_settingsCore.getSetting('showSectorOnMap'),
@@ -509,6 +540,8 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('dead', settings['markers']['dead'])
         g_settingsCore.applySetting('ally', settings['markers']['ally'])
         g_settingsCore.applySetting('interfaceScale', settings['interfaceScale'])
+        if 'showBattleEfficiencyRibbons' in settings:
+            g_settingsCore.applySetting('showBattleEfficiencyRibbons', settings['showBattleEfficiencyRibbons'])
         g_settingsCore.applySetting('dynamicCamera', settings['dynamicCamera'])
         g_settingsCore.applySetting('horStabilizationSnp', settings['horStabilizationSnp'])
         if self.__altVoiceSetting.isOptionEnabled():
@@ -606,10 +639,12 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('enableSpamFilter', settings['enableSpamFilter'])
         g_windowsStoredData.start()
         g_settingsCore.applySetting('receiveFriendshipRequest', settings['receiveFriendshipRequest'])
+        g_settingsCore.applySetting('receiveInvitesInBattle', settings['receiveInvitesInBattle'])
         g_windowsStoredData.stop()
         g_settingsCore.applySetting('invitesFromFriendsOnly', settings['invitesFromFriendsOnly'])
         g_settingsCore.applySetting('storeReceiverInBattle', settings['storeReceiverInBattle'])
         g_settingsCore.applySetting('disableBattleChat', settings['disableBattleChat'])
+        g_settingsCore.applySetting('chatContactsListOnly', settings['chatContactsListOnly'])
         gameplayKeys = filter(lambda item: item.startswith(self.GAMEPLAY_PREFIX), settings.keys())
         for key in gameplayKeys:
             g_settingsCore.applySetting(key, settings[key])

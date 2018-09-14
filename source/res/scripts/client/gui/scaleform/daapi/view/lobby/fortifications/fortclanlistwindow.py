@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanListWindow.py
 import BigWorld
-from debug_utils import LOG_DEBUG
 from gui import game_control
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
@@ -8,7 +7,7 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortClanListWindowMeta import FortClanListWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.utils.functions import getClanRoleString
@@ -52,15 +51,15 @@ class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRe
         self._update()
 
     def _getClanRole(self, member):
-        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(getClanRoleString(member.getClanRole())))
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(getClanRoleString(member.getClanRole())))
 
     def _getWeekMiningStr(self, weekMining):
         randWeek = BigWorld.wg_getIntegralFormat(weekMining)
-        return self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, randWeek)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, randWeek)
 
     def _getTotalMiningStr(self, totalMining):
         allTime = BigWorld.wg_getIntegralFormat(totalMining)
-        return self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, allTime)
+        return self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.DEFRES_TEXT, allTime)
 
     def onWindowClose(self):
         self.destroy()

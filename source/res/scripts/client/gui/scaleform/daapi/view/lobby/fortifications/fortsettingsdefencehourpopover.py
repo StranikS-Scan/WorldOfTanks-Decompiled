@@ -2,13 +2,14 @@
 import BigWorld
 import constants
 from adisp import process
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortSettingsDefenceHourPopoverMeta import FortSettingsDefenceHourPopoverMeta
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.framework import AppRef
 from gui.shared.fortifications.context import DefenceHourCtx
-from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC
+from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustDefenceHoursListToLocal
 from helpers import i18n, time_utils
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui import SystemMessages
@@ -28,13 +29,10 @@ class FortSettingsDefenceHourPopover(View, FortSettingsDefenceHourPopoverMeta, S
 
     def setData(self):
         fort = self.fortCtrl.getFort()
-        skipValues = []
-        if constants.IS_KOREA:
-            skipValues = [0, 7]
         defenceDate = fort.getLocalDefenceDate()
         data = {'hour': defenceDate.tm_hour,
          'minutes': defenceDate.tm_min,
-         'skipValues': skipValues,
+         'skipValues': adjustDefenceHoursListToLocal(g_lobbyContext.getServerSettings().getForbiddenFortDefenseHours()),
          'isWrongLocalTime': self._isWrongLocalTime(),
          'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat()}
         self.as_setDataS(data)

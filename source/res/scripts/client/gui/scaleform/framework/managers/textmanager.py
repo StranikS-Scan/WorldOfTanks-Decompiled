@@ -1,10 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/TextManager.py
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
+from gui.Scaleform.framework.entities.abstract.TextManagerMeta import TextManagerMeta
 from gui.Scaleform.locale.MENU import MENU
 from helpers import time_utils, i18n
 
-class TextManager:
+class TextManager(TextManagerMeta):
     __reference = None
 
     @classmethod
@@ -58,29 +59,8 @@ class TextManager:
 
             return result
 
-
-class TextType:
-    PROMO_TITLE = 'promoTitle'
-    PROMO_SUB_TITLE = 'promoSubTitle'
-    HIGH_TITLE = 'highTitle'
-    MIDDLE_TITLE = 'middleTitle'
-    STATUS_CRITICAL_TEXT = 'statusCriticalText'
-    STATUS_WARNING_TEXT = 'statusWarningText'
-    STATUS_INFO_TEXT = 'statusInfoText'
-    MAIN_TEXT = 'mainText'
-    STANDARD_TEXT = 'standardText'
-    DISABLE_TEXT = 'disabledText'
-    SUCCESS_TEXT = 'successText'
-    ALERT_TEXT = 'alertText'
-    ERROR_TEXT = 'errorText'
-    NEUTRAL_TEXT = 'neutralText'
-    DEFRES_TEXT = 'defresText'
-    GOLD_TEXT = 'goldText'
-    CREDITS_TEXT = 'creditsText'
-    EXP_TEXT = 'expText'
-    STATS_TEXT = 'statsText'
-    PLAYER_ONLINE_TEXT = 'playerOnline'
-    PLAYER_OFFLINE_TEXT = 'playerOffline'
+    def getTextStyle(self, style):
+        return makeHtmlString('html_templates:lobby/textStyle', style)
 
 
 class TextIcons:

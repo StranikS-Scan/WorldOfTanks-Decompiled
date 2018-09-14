@@ -101,7 +101,7 @@ def getInvalidTeamMessage(reason, functional = None):
                 teamLimits = LIMIT_DEFAULTS
             message = _INVALID_TEAM[reason](teamLimits)
         else:
-            message = i18n.makeString('#system_messages:prebattle/teamInvalid/{0;>s}'.format(reason))
+            message = i18n.makeString('#system_messages:prebattle/teamInvalid/{0:>s}'.format(reason))
     else:
         LOG_ERROR('Reason can not be converted', reason)
         message = reason
@@ -109,7 +109,7 @@ def getInvalidTeamMessage(reason, functional = None):
 
 
 def getInvalidTeamServerMessage(errStr, functional = None):
-    if errStr == 'INVALID_EVENT_TEAM':
+    if errStr in ('INVALID_EVENT_TEAM', 'EVENT_DISABLED'):
         return i18n.makeString(SYSTEM_MESSAGES.PREBATTLE_TEAMINVALID_EVENT_BATTLE)
     else:
         return None

@@ -5,7 +5,7 @@ import constants
 from adisp import process
 from constants import FORT_COMBAT_RESULT
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers import i18n
 from gui import SystemMessages
 from gui.shared.ClanCache import g_clanCache
@@ -149,9 +149,9 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
             combatResult, startTime, _, isDefendersBuilding, buildingTypeID = data
             building = FortBuilding(typeID=buildingTypeID)
             if combatResult in (constants.FORT_COMBAT_RESULT.WIN, constants.FORT_COMBAT_RESULT.TECH_WIN):
-                battleResult = self.app.utilsManager.textManager.getText(TextType.SUCCESS_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_WIN))
+                battleResult = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.SUCCESS_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_WIN))
             else:
-                battleResult = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_DEFEAT))
+                battleResult = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.ERROR_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_DEFEAT))
             battles.append({'battleID': 0,
              'startTime': BigWorld.wg_getShortTimeFormat(startTime),
              'building': building.userName,

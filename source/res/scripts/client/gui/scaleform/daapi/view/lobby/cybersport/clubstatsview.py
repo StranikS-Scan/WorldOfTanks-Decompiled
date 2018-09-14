@@ -58,22 +58,22 @@ class ClubStatsView(StaticFormationStatsViewMeta, ClubPage):
          'statsGroupWidth': STATS_GROUP_WIDTH})
 
     def __makeStats(self, totalStats):
-        battlesNumData = {'value': BigWorld.wg_getNiceNumberFormat(totalStats.getBattlesCount()),
+        battlesNumData = {'text': BigWorld.wg_getNiceNumberFormat(totalStats.getBattlesCount()),
          'description': _ms(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_STATS_BATTLES),
-         'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_BATTLES40X32,
+         'iconPath': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_BATTLES40X32,
          'tooltip': TOOLTIPS.STATICFORMATIONSUMMARYVIEW_STATS_BATTLES}
         winsEfficiency = totalStats.getWinsEfficiency() * 100 if totalStats.getWinsEfficiency() else 0
-        winsPercentData = {'value': BigWorld.wg_getNiceNumberFormat(winsEfficiency) + '%',
+        winsPercentData = {'text': BigWorld.wg_getNiceNumberFormat(winsEfficiency) + '%',
          'description': _ms(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT),
-         'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_WINS40X32,
+         'iconPath': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_WINS40X32,
          'tooltip': TOOLTIPS.STATICFORMATIONSUMMARYVIEW_STATS_WINSPERCENT}
-        attackDamageEfficiency = {'value': BigWorld.wg_getIntegralFormat(totalStats.getAttackDamageEfficiency() or 0),
+        attackDamageEfficiency = {'text': BigWorld.wg_getIntegralFormat(totalStats.getAttackDamageEfficiency() or 0),
          'description': _ms(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_STATS_ATTACKDAMAGEEFFICIENCY),
-         'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_AVGATTACKDMG40X32,
+         'iconPath': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_AVGATTACKDMG40X32,
          'tooltip': TOOLTIPS.STATICFORMATIONSUMMARYVIEW_STATS_WINSBYCAPTURE}
-        defenceDamageEfficiency = {'value': BigWorld.wg_getIntegralFormat(totalStats.getDefenceDamageEfficiency() or 0),
+        defenceDamageEfficiency = {'text': BigWorld.wg_getIntegralFormat(totalStats.getDefenceDamageEfficiency() or 0),
          'description': _ms(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_STATS_DEFENCEDAMAGEEFFICIENCY),
-         'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_AVGDEFENCEDMG40X32,
+         'iconPath': RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_AVGDEFENCEDMG40X32,
          'tooltip': TOOLTIPS.STATICFORMATIONSUMMARYVIEW_STATS_TECHDEFEATS}
         return (battlesNumData,
          winsPercentData,

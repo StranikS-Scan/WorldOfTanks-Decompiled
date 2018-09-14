@@ -25,5 +25,6 @@ class ArenaLoadController(IArenaController):
         from gui.WindowsManager import g_windowsManager
         g_windowsManager.showBattle()
         BigWorld.wg_clearTextureReuseList()
+        BigWorld.wg_synchronizeParicleSystem()
         if BattleReplay.isPlaying:
             BattleReplay.g_replayCtrl.onArenaLoaded()

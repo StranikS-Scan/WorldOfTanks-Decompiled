@@ -41,6 +41,6 @@ class AmmunitionPanelMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setModulesEnabled(value)
 
-    def as_updateVehicleStatusS(self, id, message, stateLevel, rentAvailable):
+    def as_updateVehicleStatusS(self, message, stateLevel, rentAvailable):
         if self._isDAAPIInited():
-            return self.flashObject.as_updateVehicleStatus(id, message, stateLevel, rentAvailable)
+            return self.flashObject.as_updateVehicleStatus(message, stateLevel, rentAvailable)

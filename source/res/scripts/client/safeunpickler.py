@@ -10,7 +10,8 @@ class SafeUnpickler(object):
                      'list',
                      'tuple']),
      'datetime': set(['datetime']),
-     '_BWp': set(['Array', 'FixedDict'])}
+     '_BWp': set(['Array', 'FixedDict']),
+     'Math': set(['Vector2', 'Vector3'])}
 
     @classmethod
     def find_class(cls, module, name):

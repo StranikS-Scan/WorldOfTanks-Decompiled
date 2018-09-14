@@ -398,3 +398,27 @@ class I18PunishmentDialogMeta(I18nInfoDialogMeta):
 
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_PUNISHMENT_DIALOG
+
+
+class CheckBoxDialogMeta(I18nConfirmDialogMeta):
+
+    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None, scope = ScopeTemplates.VIEW_SCOPE, selected = False):
+        self.__checkBoxSelected = selected
+        super(CheckBoxDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID, scope)
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_CHECK_BOX_DIALOG
+
+    def getButtonsSubmitCancel(self):
+        submit, cancel = self.getButtonLabels()
+        return {'submit': i18n.makeString(submit['label']),
+         'cancel': i18n.makeString(cancel['label'])}
+
+    def getCheckBoxButtonLabel(self):
+        return self._makeString('%s/checkBox' % self._key, {})
+
+    def getCheckBoxSelected(self):
+        return self.__checkBoxSelected
+
+    def getViewScopeType(self):
+        return ScopeTemplates.DYNAMIC_SCOPE

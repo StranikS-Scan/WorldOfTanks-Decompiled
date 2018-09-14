@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/WaitingView.py
 import Keys
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import InputHandler
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.WaitingViewMeta import WaitingViewMeta
@@ -19,7 +20,12 @@ class WaitingView(WaitingViewMeta, View):
 
     def close(self):
         self.__callback = None
-        self.hideS(None)
+        try:
+            self.hideS(None)
+        except Exception:
+            LOG_ERROR('There is error while trying to close waiting')
+            LOG_CURRENT_EXCEPTION()
+
         return
 
     def destroy(self):

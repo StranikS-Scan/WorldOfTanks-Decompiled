@@ -609,3 +609,9 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         self.__position = localMat.translation
         self.__ypr.set(localMat.yaw, localMat.pitch, localMat.roll)
         return
+
+    def setViewMatrix(self, matrix):
+        invMatrix = Matrix(matrix)
+        invMatrix.invert()
+        self.__position = invMatrix.translation
+        self.__ypr = Vector3(invMatrix.yaw, invMatrix.pitch, invMatrix.roll)

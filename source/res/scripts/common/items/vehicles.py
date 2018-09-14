@@ -92,6 +92,7 @@ EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'hideIfDamaged',
  'type',
  'isMirrored',
+ 'isUVProportional',
  'emblemId'])
 
 def init(preloadEverything, pricesToCollect):
@@ -1854,9 +1855,10 @@ def _readHull(xmlCtx, section):
     else:
         res['fakeTurrets'] = {'lobby': _readFakeTurretIndices(xmlCtx, section, 'fakeTurrets/lobby', numTurrets),
          'battle': _readFakeTurretIndices(xmlCtx, section, 'fakeTurrets/battle', numTurrets)}
+    if IS_CLIENT or IS_BOT:
+        res['emblemSlots'] = _readEmblemSlots(xmlCtx, section, 'emblemSlots')
     if IS_CLIENT:
         res['models'] = _readModels(xmlCtx, section, 'models')
-        res['emblemSlots'] = _readEmblemSlots(xmlCtx, section, 'emblemSlots')
         res['swinging'] = {'lodDist': _readLodDist(xmlCtx, section, 'swinging/lodDist'),
          'sensitivityToImpulse': _xml.readNonNegativeFloat(xmlCtx, section, 'swinging/sensitivityToImpulse'),
          'pitchParams': _xml.readTupleOfFloats(xmlCtx, section, 'swinging/pitchParams', 6),
@@ -2276,11 +2278,12 @@ def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
         _readUserText(res, section)
     if IS_CLIENT or IS_WEB or IS_CELLAPP:
         res['primaryArmor'] = _readPrimaryArmor(xmlCtx, section, 'primaryArmor', res['materials'])
+    if IS_CLIENT or IS_BOT:
+        res['emblemSlots'] = _readEmblemSlots(xmlCtx, section, 'emblemSlots')
     if IS_CLIENT:
         res['ceilless'] = section.readBool('ceilless', False)
         res['models'] = _readModels(xmlCtx, section, 'models')
         res['showEmblemsOnGun'] = section.readBool('showEmblemsOnGun', False)
-        res['emblemSlots'] = _readEmblemSlots(xmlCtx, section, 'emblemSlots')
         if section.has_key('camouflage'):
             res['camouflageTiling'], res['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
         res['turretRotatorSoundManual'] = section.readString('turretRotatorSoundManual')
@@ -2987,7 +2990,7 @@ def _readEmblemSlots(xmlCtx, section, subsectionName):
         if sname not in _ALLOWED_EMBLEM_SLOTS:
             _xml.raiseWrongXml(xmlCtx, 'emblemSlots/' + sname, 'expected ' + str(_ALLOWED_EMBLEM_SLOTS))
         ctx = (xmlCtx, 'emblemSlots/' + sname)
-        descr = EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), intern(sname), subsection.readBool('isMirrored', False), _xml.readIntOrNone(ctx, subsection, 'emblemId'))
+        descr = EmblemSlot(_xml.readVector3(ctx, subsection, 'rayStart'), _xml.readVector3(ctx, subsection, 'rayEnd'), _xml.readVector3(ctx, subsection, 'rayUp'), _xml.readPositiveFloat(ctx, subsection, 'size'), subsection.readBool('hideIfDamaged', False), intern(sname), subsection.readBool('isMirrored', False), subsection.readBool('isUVProportional', True), _xml.readIntOrNone(ctx, subsection, 'emblemId'))
         slots.append(descr)
 
     return slots
@@ -3200,21 +3203,18 @@ def _readDamageStickers(xmlPath):
         ctx = (xmlCtx, sname)
         descr = {}
         stickerID = len(descrs)
-        descr['id'] = stickerID
         descr['priority'] = _xml.readInt(ctx, subsection, 'priority', 1)
         if IS_CLIENT:
             texParamVariants = []
-            texParams = _readDamageStickerTextureParams(ctx, subsection, False)
-            if texParams is not None:
-                texParamVariants.append(texParams)
+            stickerID = _readAndRegisterDamageStickerTextureParams(ctx, subsection, sname, False)
             for i in xrange(1, 100):
                 name = 'variant%d' % i
                 if not subsection.has_key(name):
                     break
                 else:
-                    texParamVariants.append(_readDamageStickerTextureParams(ctx, subsection[name], True))
+                    stickerID = _readAndRegisterDamageStickerTextureParams(ctx, subsection[name], sname, True)
 
-            descr['variants'] = texParamVariants
+        descr['id'] = stickerID
         ids[sname] = stickerID
         descrs.append(descr)
 
@@ -3226,24 +3226,22 @@ def _readDamageStickers(xmlPath):
     return res
 
 
-def _readDamageStickerTextureParams(xmlCtx, section, raiseError):
+def _readAndRegisterDamageStickerTextureParams(xmlCtx, section, stickerName, raiseError):
     if not section.has_key('texName'):
         if raiseError:
             _xml.raiseWrongXml(xmlCtx, section.name, 'texName for damage sticker is not specified')
         return
     else:
-        texParams = {}
-        texParams['texName'] = _xml.readNonEmptyString(xmlCtx, section, 'texName')
-        texParams['bumpTexName'] = _xml.readNonEmptyString(xmlCtx, section, 'bumpTexName') if section.has_key('bumpTexName') else ''
+        texName = _xml.readNonEmptyString(xmlCtx, section, 'texName')
+        bumpTexName = _xml.readNonEmptyString(xmlCtx, section, 'bumpTexName') if section.has_key('bumpTexName') else ''
+        randomYaw = True
         subsection = section['randomYaw']
         if subsection is not None:
-            texParams['randomYaw'] = subsection.asBool
-        else:
-            texParams['randomYaw'] = True
-        texParams['variation'] = section.readFloat('variation', 0.0)
+            randomYaw = subsection.asBool
+        variation = section.readFloat('variation', 0.0)
         v = _xml.readPositiveVector2(xmlCtx, section, 'modelSizes')
-        texParams['modelSizes'] = v.tuple()
-        return texParams
+        modelSizes = v.tuple()
+        return BigWorld.wg_registerDamageSticker(stickerName, texName, bumpTexName, modelSizes, variation, randomYaw)
 
 
 def _readCommonConfig(xmlCtx, section):
@@ -3882,7 +3880,7 @@ if IS_CLIENT:
      'collisionVehicleHeavy2',
      'collisionVehicleHeavy3',
      'rammingCollisionLight',
-     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ])
+     'rammingCollisionHeavy'] + [ '%sCollisionLight' % name for name in EFFECT_MATERIALS ] + [ '%sCollisionHeavy' % name for name in EFFECT_MATERIALS ] + [ 'explosionCandle%d' % i for i in xrange(1, 5) ] + ['fullDestruction'])
     _damagedStateGroupEffectKindNames = ('ammoBayExplosion',
      'ammoBayBurnOff',
      'fuelExplosion',

@@ -1,6 +1,11 @@
 # Embedded file name: scripts/client/gui/shared/notifications.py
 from constants import NC_MESSAGE_PRIORITY
 
+class MsgCustomEvents(object):
+    FORT_BATTLE_INVITE = 'fortBattleInv'
+    FORT_BATTLE_FINISHED = 'fortBattleFinished'
+
+
 class NotificationPriorityLevel(object):
     HIGH = 'high'
     MEDIUM = 'medium'
@@ -19,7 +24,7 @@ class NotificationPriorityLevel(object):
 
 
 class NotificationGuiSettings(object):
-    __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt')
+    __slots__ = ('isNotify', 'priorityLevel', 'isAlert', 'auxData', 'showAt', '__customEvent')
 
     def __init__(self, isNotify = False, priorityLevel = NotificationPriorityLevel.MEDIUM, isAlert = False, auxData = None, showAt = 0):
         super(NotificationGuiSettings, self).__init__()
@@ -28,3 +33,11 @@ class NotificationGuiSettings(object):
         self.isAlert = isAlert
         self.auxData = auxData or []
         self.showAt = showAt
+        self.__customEvent = None
+        return
+
+    def setCustomEvent(self, eType, ctx = None):
+        self.__customEvent = (eType, ctx)
+
+    def getCustomEvent(self):
+        return self.__customEvent

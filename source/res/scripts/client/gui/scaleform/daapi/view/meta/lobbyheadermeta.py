@@ -31,13 +31,13 @@ class LobbyHeaderMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setScreen(alias)
 
-    def as_creditsResponseS(self, credits):
+    def as_creditsResponseS(self, credits, btnDoText, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_creditsResponse(credits)
+            return self.flashObject.as_creditsResponse(credits, btnDoText, tooltip, tooltipType)
 
-    def as_goldResponseS(self, gold):
+    def as_goldResponseS(self, gold, btnDoText, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_goldResponse(gold)
+            return self.flashObject.as_goldResponse(gold, btnDoText, tooltip, tooltipType)
 
     def as_doDisableNavigationS(self):
         if self._isDAAPIInited():
@@ -47,41 +47,45 @@ class LobbyHeaderMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_doDisableHeaderButton(btnId, isEnabled)
 
-    def as_updateSquadS(self, isInSquad):
+    def as_setGoldFishEnabledS(self, isEnabled, playAnimation, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_updateSquad(isInSquad)
+            return self.flashObject.as_setGoldFishEnabled(isEnabled, playAnimation, tooltip, tooltipType)
 
-    def as_nameResponseS(self, fullName, name, clan, isTeamKiller, isClan):
+    def as_updateSquadS(self, isInSquad, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_nameResponse(fullName, name, clan, isTeamKiller, isClan)
+            return self.flashObject.as_updateSquad(isInSquad, tooltip, tooltipType)
+
+    def as_nameResponseS(self, fullName, name, clan, isTeamKiller, isClan, hasNew, hasActiveBooster, tooltip, tooltipType):
+        if self._isDAAPIInited():
+            return self.flashObject.as_nameResponse(fullName, name, clan, isTeamKiller, isClan, hasNew, hasActiveBooster, tooltip, tooltipType)
 
     def as_setClanEmblemS(self, tID):
         if self._isDAAPIInited():
             return self.flashObject.as_setClanEmblem(tID)
 
-    def as_setPremiumParamsS(self, isPremiumAccount, btnLabel, doLabel, isYear, disableTTHeader, disableTTBody):
+    def as_setPremiumParamsS(self, isPremiumAccount, btnLabel, doLabel, isYear, disableTTHeader, disableTTBody, isHasAction, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_setPremiumParams(isPremiumAccount, btnLabel, doLabel, isYear, disableTTHeader, disableTTBody)
+            return self.flashObject.as_setPremiumParams(isPremiumAccount, btnLabel, doLabel, isYear, disableTTHeader, disableTTBody, isHasAction, tooltip, tooltipType)
 
-    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled):
+    def as_updateBattleTypeS(self, battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled)
+            return self.flashObject.as_updateBattleType(battleTypeName, battleTypeIcon, isEnabled, tooltip, tooltipType)
 
-    def as_setServerS(self, name):
+    def as_setServerS(self, name, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_setServer(name)
+            return self.flashObject.as_setServer(name, tooltip, tooltipType)
 
     def as_setWalletStatusS(self, walletStatus):
         if self._isDAAPIInited():
             return self.flashObject.as_setWalletStatus(walletStatus)
 
-    def as_setFreeXPS(self, freeXP, useFreeXP):
+    def as_setFreeXPS(self, freeXP, btnDoText, tooltip, tooltipType):
         if self._isDAAPIInited():
-            return self.flashObject.as_setFreeXP(freeXP, useFreeXP)
+            return self.flashObject.as_setFreeXP(freeXP, btnDoText, tooltip, tooltipType)
 
-    def as_disableFightButtonS(self, isDisabled, toolTip):
+    def as_disableFightButtonS(self, isDisabled):
         if self._isDAAPIInited():
-            return self.flashObject.as_disableFightButton(isDisabled, toolTip)
+            return self.flashObject.as_disableFightButton(isDisabled)
 
     def as_setFightButtonS(self, label):
         if self._isDAAPIInited():
@@ -94,3 +98,7 @@ class LobbyHeaderMeta(DAAPIModule):
     def as_showBubbleTooltipS(self, message, duration):
         if self._isDAAPIInited():
             return self.flashObject.as_showBubbleTooltip(message, duration)
+
+    def as_setFightBtnTooltipDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setFightBtnTooltipData(data)

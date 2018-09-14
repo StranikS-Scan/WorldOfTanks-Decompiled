@@ -393,6 +393,7 @@ class ContainerManager(ContainerManagerMeta):
                     self.onViewAddedToContainer(container, pyView)
             else:
                 LOG_DEBUG('"%s" view cancelled to load, because its scope has been destroyed.' % str(pyView))
+                self.as_hideS(pyView.uniqueName)
                 pyView.destroy()
         else:
             LOG_ERROR('Type "%s" of view "%s" is not supported' % (viewType, pyView))

@@ -27,6 +27,7 @@ class FORTIFICATION_ALIASES(object):
     FORT_CHOICE_DIVISION_WINDOW = 'FortChoiceDivisionWindow'
     FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS = 'FortIntelligenceClanFilterPopover'
     FORT_PERIOD_DEFENCE_WINDOW_ALIAS = 'FortPeriodDefenceWindow'
+    FORT_ROSTER_INTRO_WINDOW_ALIAS = 'FortRosterIntroWindow'
     FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS = 'FortSettingsPeripheryPopover'
     FORT_SETTINGS_WINDOW_ALIAS = 'FortSettingsWindow'
     FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS = 'FortSettingsDefenceHourPopover'
@@ -63,6 +64,7 @@ class FORTIFICATION_ALIASES(object):
     FORT_CHOICE_DIVISION_WINDOW_EVENT = 'showFortChoiceDivisionWindow'
     FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_EVENT = 'showFortIntelligenceClanFilterPopover'
     FORT_PERIOD_DEFENCE_WINDOW_EVENT = 'FortPeriodDefenceWindow'
+    FORT_ROSTER_INTRO_WINDOW_EVENT = 'FortRosterIntroWindow'
     FORT_SETTINGS_WINDOW_EVENT = 'FortSettingsWindow'
     FORT_SETTINGS_PERIPHERY_POPOVER_EVENT = 'showFortSettingsPeripheryPopover'
     FORT_SETTINGS_DEFENCE_HOUR_POPOVER_EVENT = 'showFortSettingsDefenceHourPopover'
@@ -97,6 +99,7 @@ class FORTIFICATION_ALIASES(object):
     FORT_CHOICE_DIVISION_WINDOW_UI = 'fortChoiceDivisionWindow.swf'
     FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_UI = 'fortIntelligenceClanFilterPopover.swf'
     FORT_PERIOD_DEFENCE_WINDOW_UI = 'fortPeriodDefenceWindow.swf'
+    FORT_ROSTER_INTRO_WINDOW_UI = 'fortRosterIntro.swf'
     FORT_SETTINGS_WINDOW_UI = 'fortSettingsWindow.swf'
     FORT_SETTINGS_PERIPHERY_POPOVER_UI = 'fortSettingsPeripheryPopover.swf'
     FORT_SETTINGS_DEFENCE_HOUR_POPOVER_UI = 'fortSettingsDefenceHourPopover.swf'
@@ -163,6 +166,8 @@ class FORTIFICATION_ALIASES(object):
      MODE_TRANSPORTING_TUTORIAL,
      MODE_TRANSPORTING_TUTORIAL_FIRST_STEP,
      MODE_TRANSPORTING_TUTORIAL_NEXT_STEP]
+    TUTORIAL_ARROW_DEFENCE = 'commonDefenseTutor'
+    TUTORIAL_ARROW_INTELLIGENCE = 'commonIntelligenceTutor'
     FORT_UNKNOWN = 'unknown'
     FORT_FOUNDATION = 'foundation_state'
     FORT_BASE_BUILDING = 'base_building'

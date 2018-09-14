@@ -64,8 +64,23 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
          'description': headerDescription,
          'createBtnLabel': CYBERSPORT.WINDOW_UNITLISTVIEW_CREATE_BTN,
          'createBtnTooltip': None,
-         'createBtnEnabled': True})
+         'createBtnEnabled': True,
+         'columnHeaders': self.__getColumnHeaders()})
         return
+
+    def __getColumnHeaders(self):
+        headers = []
+        headers.append(self.__createHedader('', 54, RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LADDERICON))
+        headers.append(self.__createHedader('', 58, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24))
+        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_COMMANDER, 152))
+        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_DESCRIPTION, 220))
+        headers.append(self.__createHedader(CYBERSPORT.WINDOW_UNIT_UNITLISTVIEW_PLAYERS, 76))
+        return headers
+
+    def __createHedader(self, label, buttonWidth, iconSource = None):
+        return {'label': label,
+         'buttonWidth': buttonWidth,
+         'iconSource': iconSource}
 
     def __updateVehicleLabel(self):
         settings = self.unitFunctional.getRosterSettings()

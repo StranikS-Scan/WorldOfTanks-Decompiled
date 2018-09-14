@@ -29,16 +29,10 @@ class Flash(object):
         LOG_DEBUG('Deleted: %s' % self)
 
     def __onLogGui(self, type, msg, *kargs):
-        if type == 'DEBUG' and not constants.IS_DEVELOPMENT:
-            return
-        _doLog('%s.GUI' % str(type), msg, kargs)
+        LOG_GUI('%s.GUI' % str(type), msg, kargs)
 
     def __onLogGuiFormat(self, type, msg, *kargs):
-        if type == 'DEBUG' and not constants.IS_DEVELOPMENT:
-            return
-        else:
-            _doLog('%s.GUI' % str(type), msg % kargs, None)
-            return
+        LOG_GUI('%s.GUI' % str(type), msg % kargs)
 
     @property
     def movie(self):

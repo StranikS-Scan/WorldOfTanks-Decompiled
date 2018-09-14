@@ -28,9 +28,9 @@ class StaticFormationUnitMeta(BaseRallyRoomView):
         if self._isDAAPIInited():
             return self.flashObject.as_setTotalLabel(hasTotalLevelError, totalLevelLabel, totalLevel)
 
-    def as_setLegionnairesCountS(self, legionnairesCount):
+    def as_setLegionnairesCountS(self, visible, legionnairesCount):
         if self._isDAAPIInited():
-            return self.flashObject.as_setLegionnairesCount(legionnairesCount)
+            return self.flashObject.as_setLegionnairesCount(visible, legionnairesCount)
 
     def as_setHeaderDataS(self, data):
         if self._isDAAPIInited():

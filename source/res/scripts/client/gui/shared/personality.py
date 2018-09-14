@@ -2,6 +2,8 @@
 import SoundGroups
 import BigWorld
 import MusicController
+from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
+from gui.goodies.GoodiesCache import g_goodiesCache
 from predefined_hosts import g_preDefinedHosts
 from account_helpers.settings_core.SettingsCache import g_settingsCache
 from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -76,6 +78,7 @@ def onAccountShowGUI(ctx):
 
 def onAccountBecomeNonPlayer():
     g_itemsCache.clear()
+    g_goodiesCache.clear()
     g_currentVehicle.destroy()
     g_hangarSpace.destroy()
     UsersInfoHelper.clear()
@@ -175,6 +178,8 @@ def init(loadingScreenGUI = None):
     g_eventsCache.init()
     g_clanCache.init()
     g_clubsCtrl.init()
+    g_vehicleProgressCache.init()
+    g_goodiesCache.init()
     from constants import IS_DEVELOPMENT
     if IS_DEVELOPMENT:
         try:
@@ -206,6 +211,8 @@ def fini():
     g_settingsCache.fini()
     g_eventsCache.fini()
     g_itemsCache.fini()
+    g_goodiesCache.fini()
+    g_vehicleProgressCache.fini()
     UsersInfoHelper.fini()
     g_playerEvents.onIGRTypeChanged -= onIGRTypeChanged
     g_playerEvents.onAccountShowGUI -= onAccountShowGUI
@@ -228,7 +235,7 @@ def fini():
 
 
 def onConnected():
-    pass
+    game_control.g_instance.onConnected()
 
 
 def onDisconnected():
@@ -240,8 +247,10 @@ def onDisconnected():
     g_clubsCtrl.stop(isDisconnected=True)
     g_wgncProvider.clear()
     g_itemsCache.clear()
+    g_goodiesCache.clear()
     g_eventsCache.clear()
     g_lobbyContext.clear()
+    g_vehicleProgressCache.clear()
     UsersInfoHelper.clear()
     Waiting.rollback()
     Waiting.cancelCallback()

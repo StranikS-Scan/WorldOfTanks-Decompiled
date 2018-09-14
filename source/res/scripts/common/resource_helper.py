@@ -1,7 +1,9 @@
 # Embedded file name: scripts/common/resource_helper.py
+from contextlib import contextmanager
 import ResMgr
 from collections import namedtuple
 import types
+from debug_utils import LOG_CURRENT_EXCEPTION
 
 class RESOURCE_ITEM_TYPE(object):
     BOOL = 'bool'
@@ -14,6 +16,7 @@ class RESOURCE_ITEM_TYPE(object):
     VECTOR4 = 'vector4'
     LIST = 'list'
     DICT = 'dict'
+    SEQ_PAIRS = 'seq-pairs'
 
 
 class ResourceError(Exception):
@@ -63,6 +66,21 @@ def getRoot(filePath, msg = '', safe = False):
     if section is None and safe:
         raise ResourceError(ctx, msg or 'File {0} is not found.'.format(filePath))
     return (ctx, section)
+
+
+@contextmanager
+def root_generator(filePath):
+    try:
+        ctx, section = getRoot(filePath)
+    except ResourceError as error:
+        raise error
+    else:
+        try:
+            yield (ctx, section)
+        except:
+            LOG_CURRENT_EXCEPTION()
+        finally:
+            ResMgr.purge(filePath, True)
 
 
 def getSubSection(ctx, section, name, safe = False):
@@ -180,6 +198,17 @@ def readDict(xmlCtx, section, valueName = 'value'):
     return _ResourceItem(RESOURCE_ITEM_TYPE.LIST, name, result)
 
 
+def readSeqPairs(xmlCtx, section, valueName = 'value'):
+    result = []
+    name = _readItemName(xmlCtx, section)
+    subCtx, subSection = getSubSection(xmlCtx, section, valueName)
+    for nextCtx, nextSection in getIterator(subCtx, subSection):
+        item = readItem(nextCtx, nextSection)
+        result.append((item.name, item.value))
+
+    return _ResourceItem(RESOURCE_ITEM_TYPE.SEQ_PAIRS, name, tuple(result))
+
+
 _ITEM_VALUE_READERS = {RESOURCE_ITEM_TYPE.BOOL: readBoolItem,
  RESOURCE_ITEM_TYPE.INTEGER: readIntItem,
  RESOURCE_ITEM_TYPE.FLOAT: readFloatItem,
@@ -189,7 +218,8 @@ _ITEM_VALUE_READERS = {RESOURCE_ITEM_TYPE.BOOL: readBoolItem,
  RESOURCE_ITEM_TYPE.VECTOR3: readVector3Item,
  RESOURCE_ITEM_TYPE.VECTOR4: readVector4Item,
  RESOURCE_ITEM_TYPE.LIST: readList,
- RESOURCE_ITEM_TYPE.DICT: readDict}
+ RESOURCE_ITEM_TYPE.DICT: readDict,
+ RESOURCE_ITEM_TYPE.SEQ_PAIRS: readSeqPairs}
 
 def readItem(ctx, section, name = 'item'):
     if section.name != name:
@@ -197,8 +227,10 @@ def readItem(ctx, section, name = 'item'):
     keys = section.keys()
     itemType = _readItemType(ctx, section, keys=keys)
     name = _readItemName(ctx, section, keys=keys)
-    if itemType in _ITEM_VALUE_READERS:
-        item = _ITEM_VALUE_READERS[itemType](ctx, section)
+    reader = itemType in _ITEM_VALUE_READERS and _ITEM_VALUE_READERS[itemType]
+    if not reader:
+        raise AssertionError('Reader of type {0} must be defined'.format(itemType))
+        item = reader(ctx, section)
     else:
         raise ResourceError(ctx, '"{0}: type {1} is invalid.'.format(name, itemType))
     return item

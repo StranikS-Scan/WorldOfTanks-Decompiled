@@ -1,10 +1,11 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/contact_note.py
 import types
 from helpers import html
-from messenger.proto.xmpp.extensions import PyExtension, PyQuery, IQHandler
+from messenger.proto.xmpp.extensions import PyExtension, PyQuery
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
 from messenger.proto.xmpp.extensions.rsm import RqResultSet, ResultSet
+from messenger.proto.xmpp.extensions.shared_handlers import IQHandler
 from messenger.proto.xmpp.gloox_constants import IQ_TYPE
 
 class NoteID(PyExtension):

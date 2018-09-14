@@ -71,6 +71,7 @@ class BusinessHandler(SequenceIDLoader):
          FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_ALIAS: (self.__showViewSimple,),
          VIEW_ALIAS.AWARD_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.BOOSTERS_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.RETRAIN_CREW: (self.__showViewSimple,),
          VIEW_ALIAS.SETTINGS_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.DEMONSTRATOR_WINDOW: (self.__showViewSimple,),
@@ -78,7 +79,9 @@ class BusinessHandler(SequenceIDLoader):
          VIEW_ALIAS.MODULE_INFO_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.TECHNICAL_MAINTENANCE: (self.__showViewSimple, EVENT_BUS_SCOPE.LOBBY),
          VIEW_ALIAS.VEHICLE_SELL_DIALOG: (self.__showViewSimple,),
-         VIEW_ALIAS.PREMIUM_DIALOG: (self.__showViewSimple,),
+         VIEW_ALIAS.PREMIUM_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.PREMIUM_CONGRATULATION_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.GOLD_FISH_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.PERSONAL_CASE: (self.__showViewSimple,),
          VIEW_ALIAS.ROLE_CHANGE: (self.__showViewSimple,),
          VIEW_ALIAS.BATTLE_RESULTS: (self.__showViewSimple,),
@@ -96,7 +99,8 @@ class BusinessHandler(SequenceIDLoader):
          ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_CAPTCHA_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: (self.__dlgsHdlr,),
-         ShowDialogEvent.SHOW_PUNISHMENT_DIALOG: (self.__dlgsHdlr,)}
+         ShowDialogEvent.SHOW_PUNISHMENT_DIALOG: (self.__dlgsHdlr,),
+         ShowDialogEvent.SHOW_CHECK_BOX_DIALOG: (self.__dlgsHdlr,)}
 
     def _populate(self):
         EventSystemEntity._populate(self)
@@ -209,7 +213,8 @@ class BusinessDlgsHandler(SequenceIDLoader):
          ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG: self.__systemMsgDialogHandler,
          ShowDialogEvent.SHOW_CAPTCHA_DIALOG: self.__handleShowCaptcha,
          ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: self.__dismissTankmanHandler,
-         ShowDialogEvent.SHOW_PUNISHMENT_DIALOG: self.__punishmentWindowHandler}
+         ShowDialogEvent.SHOW_PUNISHMENT_DIALOG: self.__punishmentWindowHandler,
+         ShowDialogEvent.SHOW_CHECK_BOX_DIALOG: self.__confirmDialogHandler}
 
     def _dispose(self):
         self.handlers.clear()
@@ -246,6 +251,9 @@ class BusinessDlgsHandler(SequenceIDLoader):
 
     def __handleShowCaptcha(self, event):
         self._loadView(VIEW_ALIAS.CAPTCHA_DIALOG, event.meta, event.handler)
+
+    def __confirmDialogHandler(self, event):
+        self._loadView(VIEW_ALIAS.CHECK_BOX_DIALOG, event.meta, event.handler)
 
     def __call__(self, event):
         if event.eventType in self.handlers:

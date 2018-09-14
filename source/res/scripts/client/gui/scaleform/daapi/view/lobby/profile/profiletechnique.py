@@ -100,7 +100,7 @@ class ProfileTechnique(ProfileSection, ProfileTechniqueMeta):
             raise ValueError('Profile Technique: Unknown battle type: ' + self._battlesType)
         if achievementsList is not None:
             achievementsList.insert(0, specialMarksStats)
-        preparedStatistics = DetailedStatisticsUtils.getStatistics(stats)
+        preparedStatistics = DetailedStatisticsUtils.getStatistics(stats, self._userID is None)
         if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES:
             preparedStatistics[0]['data'][0]['tooltip'] = PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FORT_BATTLESCOUNT
         self.as_responseVehicleDossierS({'detailedData': preparedStatistics,

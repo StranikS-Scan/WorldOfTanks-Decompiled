@@ -242,3 +242,16 @@ class StatsRequester(AbstractSyncDataRequester):
     @property
     def refSystem(self):
         return self.getCacheValue('refSystem', {})
+
+    @property
+    def SPA(self):
+        return self.getCacheValue('SPA', {})
+
+    @property
+    def isGoldFishBonusApplied(self):
+        gfKey = '/common/goldfish_bonus_applied/'
+        result = False
+        spaDict = self.SPA
+        if gfKey in spaDict:
+            result = int(spaDict[gfKey])
+        return result

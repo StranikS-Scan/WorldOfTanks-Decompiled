@@ -3,7 +3,7 @@ from collections import deque
 from ids_generators import SequenceIDGenerator
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.utils.decorators import ReprInjector
-from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG, USER_DEFAULT_NAME_PREFIX, GAME_ONLINE_STATUS
+from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG, USER_DEFAULT_NAME_PREFIX, GAME_ONLINE_STATUS, PRIMARY_CHANNEL_ORDER
 from messenger.proto.events import ChannelEvents, MemberEvents
 from messenger.storage import storage_getter
 _g_namesGenerator = None
@@ -179,6 +179,13 @@ class ChannelEntity(ChatEntity, ChannelEvents):
 
     def getPrebattleType(self):
         return 0
+
+    def getPrimaryOrder(self):
+        if self.isSystem():
+            primary = PRIMARY_CHANNEL_ORDER.SYSTEM
+        else:
+            primary = PRIMARY_CHANNEL_ORDER.OTHER
+        return primary
 
     def isJoined(self):
         return self._isJoined
@@ -396,6 +403,12 @@ class UserEntity(ChatEntity):
 
     def getTags(self):
         return self._tags.copy()
+
+    def getResourceID(self):
+        return None
+
+    def getClientInfo(self):
+        return None
 
     def addTags(self, tags):
         self._tags = self._tags.union(tags)

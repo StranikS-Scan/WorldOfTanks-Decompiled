@@ -159,8 +159,7 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
         self.as_updateStaffDataS(self.__packStaffData(club, syncUserInfo=True))
 
     def __packTableHeaders(self):
-        return [self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERCOUNT, 'orderNumberSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERCOUNT_TEXT),
-         self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT, 'appointmentSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERAPPOINTMENT_TEXT, sortOrder=1),
+        return [self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERAPPOINTMENT, 'appointmentSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERAPPOINTMENT_TEXT, sortOrder=1),
          self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERNAME, 'userDataSortValue', label=CYBERSPORT.STATICFORMATION_STAFFVIEW_STAFFTABLE_HEADERNAME_TEXT, sortOrder=2),
          self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERRATING, 'ratingSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),
          self.__packTableHeaderItem(TOOLTIPS.STATICFORMATIONSTAFFVIEW_TABLE_HEADERBATTLESCOUNT, 'battlesCountSortValue', icon=RES_ICONS.MAPS_ICONS_STATISTIC_BATTLES24),
@@ -254,7 +253,7 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
              'appointmentSortValue': memberType,
              'appointment': self.__packAppointment(profile, club, member, memberType, limits),
              'ratingSortValue': rating,
-             'rating': text_styles.main(shared_fmts.getGlobalRatingFmt(rating)),
+             'rating': text_styles.neutral(shared_fmts.getGlobalRatingFmt(rating)),
              'battlesCountSortValue': battlesCount,
              'battlesCount': text_styles.main(BigWorld.wg_getIntegralFormat(battlesCount)),
              'damageCoefSortValue': damageCoef,
@@ -274,11 +273,6 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
              'clubDbID': self._clubDbID})
 
         members = sorted(members, key=lambda k: k['userDataSortValue'].lower())
-        for idx, member in enumerate(members):
-            staffIdx = idx + 1
-            member['orderNumberSortValue'] = staffIdx
-            member['orderNumber'] = text_styles.standard(str(staffIdx) + '.')
-
         if syncUserInfo:
             self.syncUsersInfo()
         return {'members': members}

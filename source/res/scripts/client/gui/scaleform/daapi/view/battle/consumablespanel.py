@@ -89,13 +89,16 @@ class ConsumablesPanel(object):
 
         self.__keys.clear()
         self.__keys = keys
-        g_sessionProvider.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        ctrl = g_sessionProvider.getVehicleStateCtrl()
+        ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
 
     def __callFlash(self, funcName, args = None):
         self.__ui.call('battle.consumablesPanel.%s' % funcName, args)
 
     def __addListeners(self):
-        g_sessionProvider.onPostMortemSwitched += self.__onPostMortemSwitched
+        vehicleCtrl = g_sessionProvider.getVehicleStateCtrl()
+        vehicleCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
+        vehicleCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         ammoCtrl = g_sessionProvider.getAmmoCtrl()
         ammoCtrl.onShellsAdded += self.__onShellsAdded
         ammoCtrl.onShellsUpdated += self.__onShellsUpdated
@@ -111,8 +114,10 @@ class ConsumablesPanel(object):
         optDevicesCtrl.onOptionalDeviceUpdated += self.__onOptionalDeviceUpdated
 
     def __removeListeners(self):
-        g_sessionProvider.onPostMortemSwitched -= self.__onPostMortemSwitched
-        g_sessionProvider.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        vehicleCtrl = g_sessionProvider.getVehicleStateCtrl()
+        vehicleCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+        vehicleCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
+        vehicleCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         ammoCtrl = g_sessionProvider.getAmmoCtrl()
         ammoCtrl.onShellsAdded -= self.__onShellsAdded
         ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
@@ -190,6 +195,12 @@ class ConsumablesPanel(object):
             self.__flashObject.collapseEquipmentSlot()
 
     def __handleEquipmentExpanded(self, intCD):
+        if not self.__flashObject.getVisibility():
+            return
+        result, error = g_sessionProvider.getEquipmentsCtrl().changeSetting(intCD)
+        if not result and error:
+            self.__ui.vErrorsPanel.showMessage(error.key, error.ctx)
+            return
         if intCD not in self.__cds:
             LOG_ERROR('Equipment is not found in panel', intCD, self.__cds)
             return
@@ -210,7 +221,8 @@ class ConsumablesPanel(object):
         self.__flashObject.expandEquipmentSlot(self.__cds.index(intCD), slots)
         self.__keys.clear()
         self.__keys = keys
-        g_sessionProvider.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        ctrl = g_sessionProvider.getVehicleStateCtrl()
+        ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
 
     def __onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
         toolTip = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)))
@@ -258,7 +270,7 @@ class ConsumablesPanel(object):
             else:
                 self.__addEquipmentSlot(intCD, item)
         else:
-            idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
+            idx = self.__genNextIdx(EQUIPMENT_FULL_MASK + ORDERS_FULL_MASK, EQUIPMENT_START_IDX)
             self.__cds[idx] = intCD
             self.__flashObject.addEquipmentSlot(idx, None, None, None, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP)
             if self.__cds[EQUIPMENT_START_IDX:EQUIPMENT_END_IDX + 1] == EMPTY_EQUIPMENTS_SLICE:
@@ -292,7 +304,8 @@ class ConsumablesPanel(object):
                 handler = partial(self.__handleEquipmentExpanded, intCD)
             else:
                 handler = partial(self.__handleEquipmentPressed, intCD)
-            self.__keys[bwKey] = handler
+            if item.getQuantity() > 0:
+                self.__keys[bwKey] = handler
         else:
             bwKey, sfKey = (None, None)
         self.__flashObject.addEquipmentSlot(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), iconPath, toolTip)
@@ -336,6 +349,14 @@ class ConsumablesPanel(object):
 
     def __onPostMortemSwitched(self):
         self.__flashObject.switchToPosmortem()
+
+    def __onRespawnBaseMoving(self):
+        self.__cds = [None] * PANEL_MAX_LENGTH
+        self.__mask = 0
+        self.__keys.clear()
+        self.__currentOrderIdx = -1
+        self.__flashObject.reset()
+        return
 
     def __onVehicleStateUpdated(self, state, value):
         if state != VEHICLE_VIEW_STATE.DEVICES:

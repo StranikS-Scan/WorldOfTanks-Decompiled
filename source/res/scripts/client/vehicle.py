@@ -9,6 +9,7 @@ from VehicleEffects import DamageFromShotDecoder
 from debug_utils import *
 import constants
 from constants import VEHICLE_HIT_EFFECT
+from gui.battle_control import g_sessionProvider
 import helpers
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from items import vehicles
@@ -47,7 +48,6 @@ class Vehicle(BigWorld.Entity):
         self.__hornSounds = (None,)
         self.__hornMode = ''
         self.__stopHornSoundCallback = None
-        self.wgPhysics = None
         self.__isEnteringWorld = False
         self.__turretDetachmentConfirmed = False
         return
@@ -143,7 +143,7 @@ class Vehicle(BigWorld.Entity):
             if attackerID == BigWorld.player().playerVehicleID and maxHitEffectCode is not None and not self.isPlayer:
                 marker = getattr(self, 'marker', None)
                 if marker is not None:
-                    manager = g_windowsManager.battleWindow.vMarkersManager
+                    manager = g_windowsManager.battleWindow.markersManager
                     manager.updateMarkerState(marker, 'hit_pierced' if hasPiercedHit else 'hit')
             return
 
@@ -165,7 +165,7 @@ class Vehicle(BigWorld.Entity):
             if attackerID == BigWorld.player().playerVehicleID:
                 marker = getattr(self, 'marker', None)
                 if marker is not None:
-                    manager = g_windowsManager.battleWindow.vMarkersManager
+                    manager = g_windowsManager.battleWindow.markersManager
                     manager.updateMarkerState(marker, 'hit_pierced')
             return
 
@@ -227,17 +227,18 @@ class Vehicle(BigWorld.Entity):
             self.appearance.changeEngineMode(self.engineMode, True)
 
     def set_isStrafing(self, prev):
-        if isinstance(self.filter, BigWorld.WGVehicleFilter):
+        if hasattr(self.filter, 'isStrafing'):
             self.filter.isStrafing = self.isStrafing
 
     def set_gunAnglesPacked(self, prev):
-        if isinstance(self.filter, BigWorld.WGVehicleFilter):
+        syncGunAngles = getattr(self.filter, 'syncGunAngles', None)
+        if syncGunAngles:
             yaw, pitch = decodeGunAngles(self.gunAnglesPacked, self.typeDescriptor.gun['pitchLimits']['absolute'])
-            self.filter.syncGunAngles(yaw, pitch)
+            syncGunAngles(yaw, pitch)
+        return
 
     def set_health(self, prev):
-        if self.health > 0 and prev <= 0:
-            self.health = prev
+        pass
 
     def set_isCrewActive(self, prev):
         if self.isStarted:
@@ -245,13 +246,14 @@ class Vehicle(BigWorld.Entity):
             if not self.isPlayer:
                 marker = getattr(self, 'marker', None)
                 if marker is not None:
-                    g_windowsManager.battleWindow.vMarkersManager.onVehicleHealthChanged(marker, self.health)
+                    g_windowsManager.battleWindow.markersManager.onVehicleHealthChanged(marker, self.health)
             if not self.isCrewActive and self.health > 0:
                 self.__onVehicleDeath()
         return
 
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
+            self.health = newHealth
             return
         elif not self.isStarted:
             return
@@ -259,7 +261,8 @@ class Vehicle(BigWorld.Entity):
             if not self.isPlayer:
                 marker = getattr(self, 'marker', None)
                 if marker is not None:
-                    g_windowsManager.battleWindow.vMarkersManager.onVehicleHealthChanged(marker, newHealth, attackerID, attackReasonID)
+                    g_sessionProvider.getFeedback().setVehicleNewHealth(self.id, newHealth, attackerID, attackReasonID)
+                    g_windowsManager.battleWindow.markersManager.onVehicleHealthChanged(marker, newHealth, attackerID, attackReasonID)
             self.appearance.onVehicleHealthChanged()
             if self.health <= 0 and self.isCrewActive:
                 self.__onVehicleDeath()
@@ -375,12 +378,12 @@ class Vehicle(BigWorld.Entity):
             self.appearance.onVehicleHealthChanged()
             if self.isPlayer:
                 if self.isAlive():
-                    BigWorld.wgAddEdgeDetectEntity(self, 0, True)
+                    BigWorld.wgAddEdgeDetectEntity(self, 0, 1, True)
                     self.appearance.setupGunMatrixTargets(avatar.gunRotator)
-                self.filter.allowStrafeCompensation = False
             else:
-                self.marker = g_windowsManager.battleWindow.vMarkersManager.createMarker(self.proxy)
-                self.filter.allowStrafeCompensation = True
+                self.marker = g_windowsManager.battleWindow.markersManager.createMarker(self.proxy)
+            if hasattr(self.filter, 'allowStrafeCompensation'):
+                self.filter.allowStrafeCompensation = not self.isPlayer
             self.isStarted = True
             self.set_publicStateModifiers()
             self.set_damageStickers()
@@ -401,7 +404,7 @@ class Vehicle(BigWorld.Entity):
             if self.isPlayer:
                 BigWorld.wgDelEdgeDetectEntity(self)
             self.__stopExtras()
-            manager = hasattr(self, 'marker') and g_windowsManager.battleWindow.vMarkersManager
+            manager = hasattr(self, 'marker') and g_windowsManager.battleWindow.markersManager
             manager.destroyMarker(self.marker)
             self.marker = -1
         self.appearance.destroy()
@@ -461,31 +464,29 @@ class Vehicle(BigWorld.Entity):
             self.appearance.executeRammingVibrations(matKind)
 
     def __startWGPhysics(self):
-        typeDescr = self.typeDescriptor
-        self.wgPhysics = BigWorld.WGVehiclePhysics()
-        physics = self.wgPhysics
-        physics_shared.initVehiclePhysics(physics, typeDescr)
-        arenaMinBound, arenaMaxBound = (-10000, -10000), (10000, 10000)
-        physics.setArenaBounds(arenaMinBound, arenaMaxBound)
-        physics.enginePower = typeDescr.physics['enginePower'] / 1000.0
-        physics.owner = weakref.ref(self)
-        physics.staticMode = False
-        physics.movementSignals = 0
-        physics.damageDestructibleCb = None
-        physics.destructibleHealthRequestCb = None
-        self.filter.setVehiclePhysics(physics)
-        player = BigWorld.player()
-        physics.visibilityMask = ArenaType.getVisibilityMask(player.arenaTypeID >> 16)
-        yaw, pitch = decodeGunAngles(self.gunAnglesPacked, typeDescr.gun['pitchLimits']['absolute'])
-        self.filter.syncGunAngles(yaw, pitch)
-        self.appearance.fashion.placingCompensationMatrix = self.filter.placingCompensationMatrix
-        return
+        if not hasattr(self.filter, 'setVehiclePhysics'):
+            return
+        else:
+            typeDescr = self.typeDescriptor
+            physics = BigWorld.WGVehiclePhysics()
+            physics_shared.initVehiclePhysics(physics, typeDescr)
+            arenaMinBound, arenaMaxBound = (-10000, -10000), (10000, 10000)
+            physics.setArenaBounds(arenaMinBound, arenaMaxBound)
+            physics.enginePower = typeDescr.physics['enginePower'] / 1000.0
+            physics.owner = weakref.ref(self)
+            physics.staticMode = False
+            physics.movementSignals = 0
+            physics.damageDestructibleCb = None
+            physics.destructibleHealthRequestCb = None
+            self.filter.setVehiclePhysics(physics)
+            physics.visibilityMask = ArenaType.getVisibilityMask(BigWorld.player().arenaTypeID >> 16)
+            yaw, pitch = decodeGunAngles(self.gunAnglesPacked, typeDescr.gun['pitchLimits']['absolute'])
+            self.filter.syncGunAngles(yaw, pitch)
+            self.appearance.fashion.placingCompensationMatrix = self.filter.placingCompensationMatrix
+            return
 
     def __stopWGPhysics(self):
-        self.wgPhysics.damageDestructibleCb = None
-        self.wgPhysics.destructibleHealthRequestCb = None
-        self.wgPhysics = None
-        return
+        pass
 
     def __stopExtras(self):
         extraTypes = self.typeDescriptor.extras
@@ -519,11 +520,13 @@ class Vehicle(BigWorld.Entity):
         if not self.isPlayer:
             marker = getattr(self, 'marker', None)
             if marker is not None:
-                manager = g_windowsManager.battleWindow.vMarkersManager
+                manager = g_windowsManager.battleWindow.markersManager
                 manager.updateMarkerState(marker, 'dead', isDeadStarted)
         self.stopHornSound(True)
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.VEHICLE_DESTROYED, vehicleId=self.id)
-        self.filter.velocityErrorCompensation = 100.0
+        bwfilter = self.filter
+        if hasattr(bwfilter, 'velocityErrorCompensation'):
+            bwfilter.velocityErrorCompensation = 100.0
         return
 
     def playHornSound(self, hornID):

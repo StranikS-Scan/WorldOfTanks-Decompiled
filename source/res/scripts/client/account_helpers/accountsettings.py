@@ -15,6 +15,7 @@ KEY_FAVORITES = 'favorites'
 CAROUSEL_FILTER = 'CAROUSEL_FILTER'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
+SHOW_BATTLE_EFFICIENCY_RIBBONS = 'SHOW_BATTLE_EFFICIENCY_RIBBONS'
 VEHICLE_BUY_WINDOW_SETTINGS = 'vehicleBuyWindowSettings'
 CURRENT_VEHICLE = 'current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
@@ -24,6 +25,9 @@ IGR_PROMO = 'IGR_PROMO'
 PROMO = 'PROMO'
 AWARDS = 'awards'
 CONTACTS = 'CONTACTS'
+BOOSTERS = 'BOOSTERS'
+FALLOUT = 'FALLOUT'
+GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
@@ -50,8 +54,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                EULA_VERSION: {'version': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
+               BOOSTERS: {'wasShown': False},
                CONTACTS: {'showOfflineUsers': True,
                           'showOthersCategory': True},
+               FALLOUT: {'wasShown': False},
+               GOLD_FISH_LAST_SHOW_TIME: 0,
                'cs_intro_view_vehicle': {'nation': -1,
                                          'vehicleType': 'none',
                                          'isMain': False,
@@ -170,6 +177,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                                      'markerAltVehicleName': True,
                                      'markerAltPlayerName': False}},
                 VEHICLE_BUY_WINDOW_SETTINGS: True,
+                'showBattleEfficiencyRibbons': True,
                 'showVehicleIcon': False,
                 'showVehicleLevel': False,
                 'showExInf4Destroyed': False,
@@ -180,6 +188,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                 'minimapAlpha': 0,
                 'minimapSize': 0,
                 'nationalVoices': False,
+                'enableVoIP': True,
                 'replayEnabled': 1,
                 'players_panel': {'state': 'medium',
                                   'showLevels': True,
@@ -196,6 +205,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                            'potapov': {'introShown': False,
                                        'tilesVisited': set(),
                                        'headerAlert': False}},
+                'checkBoxConfirmator': {'questsConfirmDialogShow': True},
                 'customization': {},
                 'showVehModelsOnMap': 0,
                 'interfaceScale': 0}}
@@ -216,7 +226,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 12
+    version = 13
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -405,6 +415,14 @@ class AccountSettings(object):
                     if 'unitWindow' in accSettings.keys():
                         accSettings.deleteSection('unitWindow')
 
+            if currVersion < 13:
+                enableVoIPVal = False
+                if Settings.g_instance.userPrefs.has_key('enableVoIP'):
+                    enableVoIPVal = Settings.g_instance.userPrefs.readBool('enableVoIP')
+                for key, section in _filterAccountSection(ads):
+                    AccountSettings.__readSection(section, KEY_SETTINGS).write('enableVoIP', _pack(enableVoIPVal))
+
+                Settings.g_instance.userPrefs.deleteSection('enableVoIP')
             ads.writeInt('version', AccountSettings.version)
 
     @staticmethod

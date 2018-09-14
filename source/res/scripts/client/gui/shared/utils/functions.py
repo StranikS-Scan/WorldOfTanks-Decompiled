@@ -20,6 +20,13 @@ def rnd_choice(*args):
         args.remove(c)
 
 
+def rnd_choice_loop(*args):
+    args = list(args)
+    while True:
+        for value in rnd_choice(*args):
+            yield value
+
+
 def clamp(value, minRange, maxRange):
     if value < minRange:
         return minRange

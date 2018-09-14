@@ -10,12 +10,15 @@ class ListenersCollection(object):
 
     def addListener(self, listener):
         if isinstance(listener, self._clazz):
-            if listener not in self._listeners:
+            if not self.hasListener(listener):
                 self._listeners.append(listener)
             else:
                 LOG_ERROR('Listener already added', listener)
         else:
             LOG_ERROR('Object is not extend {0:>s}'.format(self._clazz.__name__), listener)
+
+    def hasListener(self, listener):
+        return listener in self._listeners
 
     def removeListener(self, listener):
         if listener in self._listeners:

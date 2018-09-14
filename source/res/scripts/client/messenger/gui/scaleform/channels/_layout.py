@@ -214,8 +214,6 @@ class _BattleLayout(IChannelController):
 
     def addCommand(self, command):
         isCurrent, text = self._formatCommand(command)
-        if BattleReplay.g_replayCtrl.isRecording:
-            BattleReplay.g_replayCtrl.onBattleChatMessage(text, isCurrent)
         if self._view:
             self._view.addMessage(text, isCurrentPlayer=isCurrent)
 

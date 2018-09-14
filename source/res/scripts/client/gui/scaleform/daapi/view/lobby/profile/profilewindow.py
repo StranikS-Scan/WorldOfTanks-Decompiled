@@ -44,7 +44,7 @@ class ProfileWindow(ProfileWindowMeta, AbstractWindowView, View, AppRef):
         self.as_addFriendAvailableS(enabledInroaming and not isFriend)
         isIgnored = user is not None and user.isIgnored()
         self.as_setIgnoredAvailableS(enabledInroaming and not isIgnored)
-        self.as_setCreateChannelAvailableS(enabledInroaming)
+        self.as_setCreateChannelAvailableS(enabledInroaming and not isIgnored)
         return
 
     def __isEnabledInRoaming(self, dbID):

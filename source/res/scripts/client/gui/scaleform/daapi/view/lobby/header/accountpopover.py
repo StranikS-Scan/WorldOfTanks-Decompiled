@@ -1,6 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/AccountPopover.py
 import BigWorld
 from PlayerEvents import g_playerEvents
+from account_helpers.AccountSettings import AccountSettings, BOOSTERS
+from debug_utils import LOG_DEBUG
 from helpers.i18n import makeString
 from gui import game_control
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -21,6 +23,7 @@ from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import isStartingScriptDone
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper, ClanEmblemsHelper
 from gui.prb_control.prb_helpers import GlobalListener
+from gui.shared.formatters import text_styles
 
 class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener, MyClubListener, ClubEmblemsHelper, ClanEmblemsHelper):
 
@@ -32,8 +35,9 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener,
         self.__achieves = []
         return
 
-    def openProfile(self):
-        self.__showProfileWindow()
+    def openBoostersWindow(self, idx):
+        slotID = self.components.get(VIEW_ALIAS.BOOSTERS_PANEL).getBoosterSlotID(idx)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW, ctx={'slotID': slotID}))
         self.destroy()
 
     def openClanStatistic(self):
@@ -51,7 +55,7 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener,
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW))
         self.destroy()
 
-    def onUnitStateChanged(self, state, timeLeft):
+    def onUnitFlagsChanged(self, flags, timeLeft):
         self.__updateButtonsStates()
 
     def onTeamStatesReceived(self, functional, team1State, team2State):
@@ -85,6 +89,7 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener,
         self.__populateUserInfo()
         self.startGlobalListening()
         self.startMyClubListening()
+        AccountSettings.setFilter(BOOSTERS, {'wasShown': True})
         g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
 
     def _dispose(self):
@@ -93,19 +98,29 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener,
         self.stopGlobalListening()
         super(AccountPopover, self)._dispose()
 
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        super(AccountPopover, self)._onRegisterFlashComponent(viewPy, alias)
+        if alias == VIEW_ALIAS.BOOSTERS_PANEL:
+            self.components.get(alias).setSettings(isPanelInactive=not self.__infoBtnEnabled)
+
     def __updateButtonsStates(self):
         self.__setInfoButtonState()
         self.__setCrewData()
         self.__setClanData()
+        self.__setReferralData()
+        self.__updateBoostersPanelState()
         self.__syncUserInfo()
+
+    def __updateBoostersPanelState(self):
+        boostersPanel = self.components.get(VIEW_ALIAS.BOOSTERS_PANEL)
+        if boostersPanel is not None:
+            boostersPanel.setSettings(isPanelInactive=not self.__infoBtnEnabled)
+        return
 
     def __populateUserInfo(self):
         self.__setUserInfo()
         self.__syncUserInfo()
         self.__setReferralData()
-
-    def __showProfileWindow(self, ctx = None):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PROFILE, ctx=ctx or {}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __setUserInfo(self):
         self.__setInfoButtonState()
@@ -113,6 +128,7 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener,
         self.__setAchieves()
         self.__setClanData()
         self.__setCrewData()
+        self.__updateBoostersPanelState()
 
     def __setUserData(self):
         userName = BigWorld.player().name
@@ -161,7 +177,7 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener,
              'btnEnabled': not BigWorld.player().isLongDisconnectedFromCenter and self.__infoBtnEnabled}
 
     def __syncUserInfo(self):
-        self.as_setDataS(self.__userData, g_itemsCache.items.stats.isTeamKiller, self.__achieves, self.__infoBtnEnabled, self.__clanData, self.__crewData)
+        self.as_setDataS(self.__userData, g_itemsCache.items.stats.isTeamKiller, self.__achieves, self.__infoBtnEnabled, self.__clanData, self.__crewData, text_styles.middleTitle(MENU.HEADER_ACCOUNT_POPOVER_BOOSTERS_BLOCKTITLE))
 
     def __setInfoButtonState(self):
         self.__infoBtnEnabled = True
@@ -178,4 +194,5 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, GlobalListener,
         refSysCtrl = game_control.g_instance.refSystem
         if refSysCtrl.isReferrer():
             self.as_setReferralDataS({'invitedText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_INVITED, referrersNum=len(refSysCtrl.getReferrals())),
-             'moreInfoText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO)})
+             'moreInfoText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO),
+             'isLinkBtnEnabled': self.__infoBtnEnabled})

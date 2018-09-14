@@ -2,6 +2,7 @@
 import BigWorld
 import account_helpers
 from adisp import process
+from avatar_helpers import getAvatarDatabaseID
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
 from messenger.m_constants import USER_TAG
@@ -30,19 +31,8 @@ def _getInfo4AvatarPlayer():
     return (dbID, name, clanAbbrev)
 
 
-def _getAvatarDatabaseID():
-    dbID = 0L
-    player = BigWorld.player()
-    arena = getattr(player, 'arena', None)
-    if arena is not None:
-        vehID = getattr(player, 'playerVehicleID', None)
-        if vehID is not None and vehID in arena.vehicles:
-            dbID = arena.vehicles[vehID]['accountDBID']
-    return dbID
-
-
 def getPlayerDatabaseID():
-    return _getAccountDatabaseID() or _getAvatarDatabaseID()
+    return _getAccountDatabaseID() or getAvatarDatabaseID()
 
 
 def getPlayerName():

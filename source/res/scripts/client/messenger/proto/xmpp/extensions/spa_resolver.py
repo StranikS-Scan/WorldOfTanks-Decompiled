@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/spa_resolver.py
-from messenger.proto.xmpp.extensions import PyExtension, PyQuery, IQChildHandler
+from messenger.proto.xmpp.extensions import PyExtension, PyQuery
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
+from messenger.proto.xmpp.extensions.shared_handlers import IQChildHandler
 from messenger.proto.xmpp.gloox_constants import IQ_TYPE
 
 class SpaResolverError(PyExtension):

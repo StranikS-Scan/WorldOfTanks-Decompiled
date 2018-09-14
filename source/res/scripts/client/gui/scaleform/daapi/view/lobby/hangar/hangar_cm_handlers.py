@@ -198,10 +198,11 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             else:
                 options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
             options.extend([self._makeSeparator(), self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH))])
-            if vehicle.isFavorite:
-                options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
-            else:
-                options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK)))
+            if not vehicle.isEvent:
+                if vehicle.isFavorite:
+                    options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
+                else:
+                    options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK)))
         return options
 
     @process

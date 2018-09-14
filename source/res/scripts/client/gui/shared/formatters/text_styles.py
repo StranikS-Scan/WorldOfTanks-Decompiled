@@ -24,6 +24,10 @@ def stats(text):
     return _formatText('statsText', text)
 
 
+def statInfo(text):
+    return _formatText('statusInfoText', text)
+
+
 def middleTitle(text):
     return _formatText('middleTitle', text)
 
@@ -58,3 +62,19 @@ def error(text):
 
 def warning(text):
     return _formatText('statusWarningText', text)
+
+
+def expText(text):
+    return _formatText('expText', text)
+
+
+def creditsText(text):
+    return _formatText('creditsText', text)
+
+
+def counter(text):
+    return _formatText('counterText', text)
+
+
+def titleFont(text):
+    return _formatText('titleFont', text)

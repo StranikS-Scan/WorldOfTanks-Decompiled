@@ -43,8 +43,6 @@ def getClientOverride():
         return 'KR'
     elif constants.IS_CHINA:
         return 'CN'
-    elif constants.IS_VIETNAM:
-        return 'VN'
     else:
         return None
 

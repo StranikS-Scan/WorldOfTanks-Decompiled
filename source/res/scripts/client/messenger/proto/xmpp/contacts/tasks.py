@@ -247,13 +247,14 @@ class ContactTask(IQTask):
 
 
 class ContactTaskQueue(object):
-    __slots__ = ('__queue', '__isSuspend', '__pending', 'onSeqTaskRequested')
+    __slots__ = ('__queue', '__isSuspend', '__pending', '__syncByIQ', 'onSeqTaskRequested')
 
-    def __init__(self):
+    def __init__(self, syncByIQ = None):
         super(ContactTaskQueue, self).__init__()
         self.__queue = defaultdict(list)
         self.__isSuspend = False
         self.__pending = []
+        self.__syncByIQ = syncByIQ or []
         self.onSeqTaskRequested = Event.Event()
 
     def clear(self):
@@ -314,8 +315,14 @@ class ContactTaskQueue(object):
     def handleIQ(self, iqID, iqType, pyGlooxTag):
         isHandled = False
         for jid in self.__queue.keys():
-            result = self._handleTasksResult(jid, self._getIQGenerator(jid, iqID, iqType, pyGlooxTag))
-            if result:
+            isHandled |= self._handleTasksResult(jid, self._getIQGenerator(jid, iqID, iqType, pyGlooxTag))
+
+        if not isHandled and iqType == IQ_TYPE.SET:
+            for task in self.__syncByIQ:
+                result = task.handleIQ(iqID, iqType, pyGlooxTag)
+                if result in (TASK_RESULT.CLEAR, TASK_RESULT.REMOVE):
+                    break
+            else:
                 isHandled = True
 
         return isHandled

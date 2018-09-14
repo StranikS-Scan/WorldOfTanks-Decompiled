@@ -118,3 +118,5 @@ class GLOOX_EVENT(object):
 
 
 GLOOX_EVENTS_NAMES = dict([ (v, k) for k, v in GLOOX_EVENT.__dict__.iteritems() if v in GLOOX_EVENT.ALL ])
+INBOUND_SUB_BATCH_SIZE = 100
+INBOUND_SUB_INTERVAL = 2

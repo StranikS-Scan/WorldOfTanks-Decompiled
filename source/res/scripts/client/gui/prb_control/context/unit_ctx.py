@@ -1,8 +1,10 @@
 # Embedded file name: scripts/client/gui/prb_control/context/unit_ctx.py
+from constants import PREBATTLE_TYPE
+from account_helpers import gameplay_ctx
 from external_strings_utils import truncate_utf8
 from gui.prb_control import getUnitIdx, settings as prb_settings, getUnitMgrID
 from gui.prb_control.context import PrbCtrlRequestCtx
-from gui.prb_control.settings import UNIT_MODE_FLAGS
+from gui.prb_control.settings import UNIT_MODE_FLAGS, REQUEST_TYPE
 from gui.shared.utils.decorators import ReprInjector
 _CTRL_ENTITY_TYPE = prb_settings.CTRL_ENTITY_TYPE
 _REQUEST_TYPE = prb_settings.REQUEST_TYPE
@@ -134,6 +136,7 @@ class SetVehicleUnitCtx(_UnitRequestCtx):
         super(SetVehicleUnitCtx, self).__init__(waitingID=waitingID)
         self.__vehTypeCD = vTypeCD
         self.__vehInvID = vehInvID
+        self.setReady = False
 
     def getRequestType(self):
         return _REQUEST_TYPE.SET_VEHICLE
@@ -185,6 +188,7 @@ class SetReadyUnitCtx(_UnitRequestCtx):
     def __init__(self, isReady = True, waitingID = ''):
         super(SetReadyUnitCtx, self).__init__(waitingID=waitingID)
         self.__isReady = isReady
+        self.resetVehicle = False
 
     def isReady(self):
         return self.__isReady
@@ -253,7 +257,7 @@ class DeclineSearchUnitCtx(_UnitRequestCtx):
         return _REQUEST_TYPE.DECLINE_SEARCH
 
 
-@ReprInjector.simple(('getActionName', 'action'), ('getWaitingID', 'waitingID'))
+@ReprInjector.simple(('getActionName', 'action'), ('getWaitingID', 'waitingID'), ('getGamePlayMask', 'mask'))
 
 class BattleQueueUnitCtx(_UnitRequestCtx):
 
@@ -261,6 +265,7 @@ class BattleQueueUnitCtx(_UnitRequestCtx):
         super(BattleQueueUnitCtx, self).__init__(waitingID=waitingID)
         self.__action = action
         self.__vehTypes = [] if vehTypes is None else vehTypes
+        self.selectVehInvID = 0
         return
 
     def getActionName(self):
@@ -273,6 +278,9 @@ class BattleQueueUnitCtx(_UnitRequestCtx):
 
     def isRequestToStart(self):
         return self.__action > 0
+
+    def getGamePlayMask(self):
+        return gameplay_ctx.getMask()
 
 
 class RosterSlotCtx(object):
@@ -360,4 +368,25 @@ class ChangeRatedUnitCtx(_UnitRequestCtx):
         return self.__isRated
 
 
-__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx')
+@ReprInjector.simple(('getWaitingID', 'waitingID'), ('getFuncExit', 'funcExit'))
+
+class SquadSettingsCtx(_UnitRequestCtx):
+
+    def __init__(self, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.SQUAD, accountsToInvite = None, isForced = False):
+        super(SquadSettingsCtx, self).__init__(waitingID=waitingID, funcExit=funcExit, isForced=isForced)
+        self.__accountsToInvite = accountsToInvite or []
+
+    def getID(self):
+        return 0
+
+    def getPrbType(self):
+        return PREBATTLE_TYPE.SQUAD
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.CREATE
+
+    def getAccountsToInvite(self):
+        return self.__accountsToInvite
+
+
+__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx', 'SquadSettingsCtx')

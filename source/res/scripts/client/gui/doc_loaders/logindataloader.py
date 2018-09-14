@@ -4,7 +4,6 @@ import Settings
 from gui import GUI_SETTINGS
 from debug_utils import LOG_CURRENT_EXCEPTION
 from Event import Event
-from account_helpers.SteamAccount import g_steamAccount
 from helpers.obfuscators import PasswordObfuscator
 from external_strings_utils import _PASSWORD_MAX_LENGTH
 __author__ = 'd_trofimov'
@@ -117,9 +116,8 @@ class LoginDataLoader(object):
 
     def saveUserConfig(self, user, host):
         li = self.__getUserLoginSection()
-        if not g_steamAccount.isValid:
-            li.writeString(self.LOGIN_TAG, BigWorld.wg_cpdata(user) if not GUI_SETTINGS.clearLoginValue else '')
-            li.writeBool(self.REMEMBER_PWD_TAG, self.__rememberPwd if GUI_SETTINGS.rememberPassVisible else False)
+        li.writeString(self.LOGIN_TAG, BigWorld.wg_cpdata(user) if not GUI_SETTINGS.clearLoginValue else '')
+        li.writeBool(self.REMEMBER_PWD_TAG, self.__rememberPwd if GUI_SETTINGS.rememberPassVisible else False)
         li.writeString(self.HOST_TAG, host)
         self.saveUserToken(self.__passLength, self.__token2)
         Settings.g_instance.save()

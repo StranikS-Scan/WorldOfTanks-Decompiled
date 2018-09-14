@@ -43,7 +43,12 @@ class ControlFactoryDecorator(ControlFactory):
         return item
 
     def createEntryByAction(self, action):
-        return self._search(action, 'createEntryByAction')
+        for factory in self.__factories.itervalues():
+            result = factory.createEntryByAction(action)
+            if result:
+                return result
+
+        return None
 
     def createFunctional(self, dispatcher, ctx):
         item = None
@@ -56,11 +61,3 @@ class ControlFactoryDecorator(ControlFactory):
         ctx.clear()
         del ctx
         return item
-
-    def _search(self, action, method):
-        for factory in self.__factories.itervalues():
-            result = getattr(factory, method)(action)
-            if result:
-                return result
-
-        return None

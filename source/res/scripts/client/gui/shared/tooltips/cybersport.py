@@ -82,9 +82,11 @@ class CybersportUnitToolTipData(CybersportToolTipData):
 
     def getDisplayableData(self, data = None):
         if data is not None:
+            commanderRatingDesc = TOOLTIPS.CYBERSPORT_CAPTAIN_STATS if data.isStatic else TOOLTIPS.CYBERSPORT_COMMANDER_STATS
             return {'unitComment': data.description,
              'commanderName': data.creatorName,
-             'commanderRating': data.rating}
+             'commanderRating': data.rating,
+             'commanderRatingDesc': commanderRatingDesc}
         else:
             return super(CybersportUnitToolTipData, self).getDisplayableData(data)
 
@@ -110,7 +112,8 @@ class CybersportUnitLevelToolTipData(CybersportToolTipData):
                     statusLevel = 'critical'
                     statusMsg = ms(TOOLTIPS.CYBERSPORT_UNITLEVEL_BODY_MAXTOTALLEVELERROR, sumLevels=level)
                 elif restriction == UNIT_RESTRICTION.INVALID_TOTAL_LEVEL:
-                    reason = i18n.makeString(ActionButtonStateVO.getInvalidVehicleLevelsMessage(functional))
+                    msg, ctx = ActionButtonStateVO.getInvalidVehicleLevelsMessage(functional)
+                    reason = i18n.makeString(msg, **ctx)
                     description = makeHtmlString('html_templates:lobby/cyberSport/unit', 'invalidLevelDescription', {'description': description,
                      'reason': reason})
                 elif canDoAction and not restriction:

@@ -87,6 +87,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_CONFIRM_ORDER_DIALOG = 'showConfirmOrderDialog'
     SHOW_PUNISHMENT_DIALOG = 'showPunishmentDialog'
     SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
+    SHOW_CHECK_BOX_DIALOG = 'showCheckBoxDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -107,7 +108,6 @@ class LoginEvent(SharedEvent):
 
 class LoginCreateEvent(SharedEvent):
     CREATE_ACC = 'createAnAccount'
-    CREATE_AN_ACCOUNT_REQUEST = 'createAnAccountRequest'
 
     def __init__(self, eventType, alias, title, message, submit):
         super(LoginCreateEvent, self).__init__(eventType=eventType)
@@ -131,7 +131,6 @@ class LoginEventEx(LoginEvent):
 
 
 class HideWindowEvent(HasCtxEvent):
-    HIDE_SQUAD_WINDOW = 'hideSquadWindow'
     HIDE_COMPANY_WINDOW = 'hideCompanyWindow'
     HIDE_BATTLE_SESSION_WINDOW = 'hideBattleSessionWindow'
     HIDE_UNIT_WINDOW = 'hideUnitWindow'
@@ -201,6 +200,7 @@ class SkillDropEvent(SharedEvent):
 
 class CloseWindowEvent(SharedEvent):
     EULA_CLOSED = 'EULAClosed'
+    GOLD_FISH_CLOSED = 'GoldFishClosed'
 
     def __init__(self, eventType = None, isAgree = False):
         super(CloseWindowEvent, self).__init__(eventType)

@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsPersonalWelcomeView.py
 import weakref
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from helpers import i18n
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.server_events import settings as quest_settings
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.daapi.view.meta.QuestsPersonalWelcomeViewMeta import QuestsPersonalWelcomeViewMeta
 from gui.Scaleform.locale.QUESTS import QUESTS
 
@@ -29,7 +29,7 @@ class QuestsPersonalWelcomeView(QuestsPersonalWelcomeViewMeta, AppRef):
     def _populate(self):
         super(QuestsPersonalWelcomeView, self)._populate()
         self.as_setDataS({'buttonLbl': QUESTS.QUESTSPERSONALWELCOMEVIEW_BTNLABEL,
-         'titleText': self.app.utilsManager.textManager.getText(TextType.PROMO_TITLE, i18n.makeString(QUESTS.QUESTSPERSONALWELCOMEVIEW_MAINTITLE_TEXTLABEL)),
+         'titleText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.PROMO_TITLE, i18n.makeString(QUESTS.QUESTSPERSONALWELCOMEVIEW_MAINTITLE_TEXTLABEL)),
          'blockData': self.__makeBlocksData()})
 
     def _dispose(self):
@@ -40,7 +40,7 @@ class QuestsPersonalWelcomeView(QuestsPersonalWelcomeViewMeta, AppRef):
     def __makeBlocksData(self):
         result = []
         for blockName in ('block1', 'block2', 'block3'):
-            result.append({'blockTitle': self.app.utilsManager.textManager.getText(TextType.PROMO_SUB_TITLE, i18n.makeString(QUESTS.questspersonalwelcomeview_textblock_header(blockName))),
-             'blockBody': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(QUESTS.questspersonalwelcomeview_textblock_body(blockName)))})
+            result.append({'blockTitle': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.PROMO_SUB_TITLE, i18n.makeString(QUESTS.questspersonalwelcomeview_textblock_header(blockName))),
+             'blockBody': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.MAIN_TEXT, i18n.makeString(QUESTS.questspersonalwelcomeview_textblock_body(blockName)))})
 
         return result

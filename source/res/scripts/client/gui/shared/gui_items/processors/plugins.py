@@ -2,12 +2,13 @@
 from collections import namedtuple
 from constants import MAX_VEHICLE_LEVEL
 from adisp import process, async
+from account_helpers.AccountSettings import AccountSettings
 from gui import DialogsInterface
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.server_events import g_eventsCache
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, DismissTankmanDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, DismissTankmanDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
 
 def makeSuccess(**kwargs):
@@ -104,6 +105,23 @@ class VehicleValidator(SyncValidator):
         return makeSuccess()
 
 
+class VehicleRoleValidator(SyncValidator):
+
+    def __init__(self, vehicle, role, isEnabled = True):
+        super(VehicleRoleValidator, self).__init__(isEnabled)
+        self.vehicle = vehicle
+        self.role = role
+
+    def _validate(self):
+        if not self.vehicle:
+            return makeError('invalid_vehicle')
+        if self.vehicle:
+            mainRoles = set(map(lambda r: r[0], self.vehicle.descriptor.type.crewRoles))
+            if self.role not in mainRoles:
+                return makeError('invalid_role')
+        return makeSuccess()
+
+
 class VehicleSellValidator(SyncValidator):
 
     def __init__(self, vehicle, isEnabled = True):
@@ -111,7 +129,7 @@ class VehicleSellValidator(SyncValidator):
         self.vehicle = vehicle
 
     def _validate(self):
-        if self.vehicle._checkForTags(VEHICLE_TAGS.CANNOT_BE_SOLD):
+        if self.vehicle.canNotBeSold():
             return makeError('vehicle_cannot_be_sold')
         return makeSuccess()
 
@@ -561,4 +579,61 @@ class PotapovQuestRewardValidator(SyncValidator):
     def _validate(self):
         if not self.quest.needToGetReward():
             return makeError('NO_REWARD')
+        return makeSuccess()
+
+
+class CheckBoxConfirmator(DialogAbstractConfirmator):
+    __ACC_SETT_MAIN_KEY = 'checkBoxConfirmator'
+
+    def __init__(self, settingFieldName, activeHandler = None, isEnabled = True):
+        super(CheckBoxConfirmator, self).__init__(activeHandler, isEnabled)
+        self.settingFieldName = settingFieldName
+
+    def _activeHandler(self):
+        return self._getSetting().get(self.settingFieldName)
+
+    @async
+    @process
+    def _confirm(self, callback):
+        yield lambda callback: callback(None)
+        if self._activeHandler():
+            success, selected = yield DialogsInterface.showDialog(meta=self._makeMeta())
+            if selected:
+                self._setSetting(not selected)
+            if not success:
+                callback(makeError())
+        callback(makeSuccess())
+
+    def _getSetting(self):
+        return AccountSettings.getSettings(CheckBoxConfirmator.__ACC_SETT_MAIN_KEY)
+
+    def _setSetting(self, value):
+        settings = self._getSetting()
+        settings[self.settingFieldName] = value
+        AccountSettings.setSettings(CheckBoxConfirmator.__ACC_SETT_MAIN_KEY, settings)
+
+
+class PotapovQuestSelectConfirmator(CheckBoxConfirmator):
+
+    def __init__(self, quest, oldQuest, activeHandler = None, isEnabled = True):
+        super(PotapovQuestSelectConfirmator, self).__init__(settingFieldName='questsConfirmDialogShow', activeHandler=activeHandler, isEnabled=isEnabled)
+        self.quest = quest
+        self.oldQuest = oldQuest
+
+    def _makeMeta(self):
+        return CheckBoxDialogMeta('questsConfirmDialog', messageCtx={'newQuest': self.quest.getUserName(),
+         'oldQuest': self.oldQuest.getUserName()})
+
+
+class BoosterActivateValidator(SyncValidator):
+
+    def __init__(self, booster):
+        super(BoosterActivateValidator, self).__init__()
+        self.booster = booster
+
+    def _validate(self):
+        if not self.booster.isInAccount:
+            return makeError('NO_BOOSTERS')
+        if self.booster.inCooldown:
+            return makeError('ALREADY_USED')
         return makeSuccess()

@@ -108,7 +108,7 @@ class ChatCommandsController(object):
         else:
             entity = BigWorld.entity(vehicleID)
             if entity is not None and entity.isStarted:
-                self.__battleUI.vMarkersManager.showActionMarker(entity.marker, markerName)
+                self.__battleUI.markersManager.showActionMarker(entity.marker, markerName)
             return
 
     def __sendChatCommand(self, command):

@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/options.py
 import base64
 import cPickle
-import GUI
 from operator import itemgetter
 import sys
 import fractions
@@ -9,6 +8,7 @@ import itertools
 from collections import namedtuple
 import math
 import weakref
+import GUI
 from AvatarInputHandler.cameras import FovExtended
 import BigWorld
 import ResMgr
@@ -19,6 +19,7 @@ import Settings
 import SoundGroups
 import ArenaType
 from gui.GraphicsPresets import GraphicsPresets
+from gui.battle_control.arena_info import isEventBattle
 from helpers import isPlayerAccount, isPlayerAvatar
 import nations
 import CommandMapping
@@ -33,6 +34,7 @@ from MemoryCriticalController import g_critMemHandler
 from Vibroeffects import VibroManager
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings
+from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui import GUI_SETTINGS
 from gui.shared.utils import graphics, CONST_CONTAINER, sound, functions
 from gui.shared.utils.graphics import g_monitorSettings
@@ -42,6 +44,8 @@ from gui.Scaleform.daapi import AppRef
 from gui.Scaleform.LogitechMonitor import LogitechMonitor
 from gui.battle_control import g_sessionProvider
 from ConnectionManager import connectionManager
+from gui.Scaleform.locale.SETTINGS import SETTINGS
+from gui.shared.formatters import icons
 
 class APPLY_METHOD:
     NORMAL = 'normal'
@@ -411,6 +415,15 @@ class StorageAccountSetting(StorageDumpSetting):
         return AccountSettings.getSettingsDefault(self.settingName)
 
 
+class ExcludeInReplayAccountSetting(StorageAccountSetting):
+
+    def getDumpValue(self):
+        return None
+
+    def setDumpedValue(self, value):
+        pass
+
+
 class UserPrefsSetting(SettingAbstract):
 
     def __init__(self, sectionName = None, isPreview = False):
@@ -534,10 +547,14 @@ class PlayersPanelSetting(StorageDumpSetting):
         return AccountSettings.getSettingsDefault(self._settingKey).get(self._settingSubKey)
 
 
-class VOIPSetting(UserPrefsBoolSetting):
+class VOIPSetting(AccountSetting):
 
     def __init__(self, isPreview = False):
-        super(VOIPSetting, self).__init__(Settings.KEY_ENABLE_VOIP, isPreview)
+        super(VOIPSetting, self).__init__('enableVoIP')
+        self.isPreview = isPreview
+
+    def initFromPref(self):
+        self._set(super(VOIPSetting, self)._get())
 
     def _get(self):
         return VOIP.getVOIPManager().isEnabled()
@@ -1021,8 +1038,10 @@ class GraphicsPresetSetting(SettingAbstract):
                     continue
                 value = preset['settings'].get(settingName)
                 if value is not None and not self.__graphicsPresets.settingIsSupported(settingName, value):
-                    isSupported = False
-                    break
+                    allowedPresetSettings = GUI_SETTINGS.allowedNotSupportedGraphicSettings.get(preset['key'], [])
+                    if settingName not in allowedPresetSettings:
+                        isSupported = False
+                        break
 
             if isSupported:
                 result.append(preset)
@@ -1917,7 +1936,8 @@ class ReplaySetting(StorageAccountSetting):
         return [ settingsKey % (self.settingName, type) for type in self.REPLAY_TYPES ]
 
     def setSystemValue(self, value):
-        BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
+        if not (isPlayerAvatar() and isEventBattle()):
+            BattleReplay.g_replayCtrl.enableAutoRecordingBattles(value)
 
 
 class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
@@ -1937,11 +1957,12 @@ class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
 
     def setSystemValue(self, value):
         self.__interfaceScale = value
+        scale = g_settingsCore.interfaceScale.getScaleByIndex(value)
         if self.app is not None:
             params = list(GUI.screenResolution()[:2])
-            params.append(graphics.getScaleByIndex(value))
+            params.append(scale)
             self.app.as_updateStageS(*params)
-        g_monitorSettings.setGlyphCache(graphics.getScaleByIndex(value))
+        g_monitorSettings.setGlyphCache(scale)
         return
 
     def onConnected(self):
@@ -1968,7 +1989,18 @@ class InterfaceScaleSetting(UserPrefsFloatSetting, AppRef):
         return result
 
     def __checkAndCorrectScaleValue(self, value):
-        scaleLength = graphics.getScaleLength()
+        scaleLength = len(g_settingsCore.interfaceScale.getScaleOptions())
         if value >= scaleLength:
             self.__interfaceScale = scaleLength - 1
             self._set(self.__interfaceScale)
+            g_settingsCore.interfaceScale.scaleChanged()
+
+
+class GraphicsQualityNote(SettingAbstract):
+    _GRAPHICS_QUALITY_TYPES = ('', i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD) + '  ' + icons.info(), '')
+
+    def _get(self):
+        return self._GRAPHICS_QUALITY_TYPES[ResMgr.activeContentType()]
+
+    def _set(self, value):
+        pass

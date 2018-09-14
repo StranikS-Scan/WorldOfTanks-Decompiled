@@ -23,10 +23,14 @@ class EdgeDetectColorController:
         out['self'] = section.readVector4(cName + 'self', Math.Vector4(0.2, 0.2, 0.2, 0.5))
         out['enemy'] = section.readVector4(cName + 'enemy', Math.Vector4(1, 0, 0, 0.5))
         out['friend'] = section.readVector4(cName + 'friend', Math.Vector4(0, 1, 0, 0.5))
+        out['flag'] = section.readVector4(cName + 'flag', Math.Vector4(1, 1, 1, 1))
 
     def __changeColor(self, diff):
         if 'isColorBlind' not in diff:
             return
         cType = 'colorBlind' if diff['isColorBlind'] else 'common'
         colors = self.__colors[cType]
-        BigWorld.wgSetEdgeDetectColors((colors['self'], colors['enemy'], colors['friend']))
+        BigWorld.wgSetEdgeDetectColors((colors['self'],
+         colors['enemy'],
+         colors['friend'],
+         colors['flag']))

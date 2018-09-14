@@ -168,6 +168,18 @@ class GameSettingsStorage(ISettingsStorage):
         return self._settings.get(settingOption, default)
 
 
+class ExtendedGameSettingsStorage(ISettingsStorage):
+
+    def apply(self, restartApproved):
+        if self._settings:
+            self._manager.setExtendedGameSettings(self._settings)
+        return super(ExtendedGameSettingsStorage, self).apply(restartApproved)
+
+    def extract(self, settingOption, default = None):
+        default = self._manager.getExtendedGameSetting(settingOption, default)
+        return self._settings.get(settingOption, default)
+
+
 class GameplaySettingsStorage(ISettingsStorage):
 
     def apply(self, restartApproved):
@@ -333,6 +345,7 @@ class FOVSettingsStorage(ISettingsStorage):
             def setFov(value, multiplier):
                 if self.__multiplier is not None:
                     self.__multiplier.setSystemValue(multiplier)
+                FovExtended.instance().resetFov()
                 FovExtended.instance().defaultHorizontalFov = value
                 return
 

@@ -92,7 +92,7 @@ class SniperAimingSystem(IAimingSystem):
         self._matrix.set(currentGunMat)
         self.__oscillator.velocity = Vector3(0.0, 0.0, 0.0)
         _, uncompensatedPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleTypeDescriptor, BigWorld.player().getOwnVehicleMatrix(), self.getDesiredShotPoint())
-        self.__pitchCompensating = self.__idealGunPitch - uncompensatedPitch
+        self.__pitchCompensating = mathUtils.clamp(math.radians(-2.0), math.radians(2.0), self.__idealGunPitch - uncompensatedPitch)
 
     def __clampToLimits(self, turretYaw, gunPitch):
         if self.__yawLimits is not None:

@@ -162,7 +162,8 @@ class EffectsListPlayer:
             return
 
     def keyOff(self, waitForNextKeyOff = False):
-        self.__playKeyPoint(waitForNextKeyOff)
+        if self.__isStarted:
+            self.__playKeyPoint(waitForNextKeyOff)
 
     def reattachTo(self, model):
         if self.__isStarted:
@@ -1040,3 +1041,30 @@ def effectsFromSection(section):
             effectList.relatedEffects[tagName] = effectsFromSection(subSection)
 
     return EffectsTimeLine(keyPoints, effectList)
+
+
+class FalloutDestroyEffect:
+
+    @staticmethod
+    def play(vehicle_id):
+        vehicle = BigWorld.entity(vehicle_id)
+        if vehicle is None:
+            return
+        else:
+            effects = vehicle.typeDescriptor.type.effects['fullDestruction']
+            if not effects:
+                return
+            drawFlags = BigWorld.ShadowPassBit
+            if vehicle is not None and vehicle.isStarted:
+                va = vehicle.appearance
+                va.changeDrawPassVisibility('chassis', drawFlags, False, False)
+                va.changeDrawPassVisibility('hull', drawFlags, False, True)
+                va.changeDrawPassVisibility('turret', drawFlags, False, True)
+                va.changeDrawPassVisibility('gun', drawFlags, False, True)
+                va.showStickers(False)
+                fakeModel = helpers.newFakeModel()
+                BigWorld.addModel(fakeModel)
+                fakeModel.position = vehicle.model.position
+                effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
+                effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.delModel, fakeModel))
+            return

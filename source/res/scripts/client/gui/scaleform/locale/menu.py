@@ -3,6 +3,7 @@ from debug_utils import LOG_WARNING
 
 class MENU(object):
     TIME_TIMEVALUE = '#menu:Time/timeValue'
+    TIME_TIMEVALUESHORT = TIME_TIMEVALUE + 'Short'
     TRAINING_INFO_STATES_STATE = '#menu:training/info/states/state'
     MSGSTR_ = '#menu:msgstr'
     COPY = '#menu:copy'
@@ -177,6 +178,7 @@ class MENU(object):
     TANKMANPERSONALCASE_RETRAININGWARNING2 = '#menu:tankmanPersonalCase/retrainingWarning2'
     TANKMANPERSONALCASE_NOMODIFIERS = '#menu:tankmanPersonalCase/noModifiers'
     TANKMSNPERSONALCASE_LACKOFSKILLSFORLEARN = '#menu:tankmsnPersonalCase/lackOfSkillsForLearn'
+    TANKMSNPERSONALCASE_LOADINGINFO = '#menu:tankmsnPersonalCase/loadingInfo'
     TANKMANPERSONALCASE_NOACHIVS = '#menu:tankmanPersonalCase/noAchivs'
     TANKMANPERSONALCASE_ACHIVS = '#menu:tankmanPersonalCase/achivs'
     TANKMANPERSONALCASE_TABDOCS = '#menu:tankmanPersonalCase/tabDocs'
@@ -205,6 +207,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_CLANLOCKED = '#menu:tankCarousel/vehicleStates/clanLocked'
     TANKCAROUSEL_VEHICLESTATES_INPREBATTLE = '#menu:tankCarousel/vehicleStates/inPrebattle'
     TANKCAROUSEL_VEHICLESTATES_AMMONOTFULL = '#menu:tankCarousel/vehicleStates/ammoNotFull'
+    TANKCAROUSEL_VEHICLESTATES_AMMONOTFULLEVENTS = '#menu:tankCarousel/vehicleStates/ammoNotFullEvents'
     TANKCAROUSEL_VEHICLESTATES_DAMAGED = '#menu:tankCarousel/vehicleStates/damaged'
     TANKCAROUSEL_VEHICLESTATES_DESTROYED = '#menu:tankCarousel/vehicleStates/destroyed'
     TANKCAROUSEL_VEHICLESTATES_EXPLODED = '#menu:tankCarousel/vehicleStates/exploded'
@@ -213,17 +216,22 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_NOT_SUITABLE = '#menu:tankCarousel/vehicleStates/not_suitable'
     TANKCAROUSEL_VEHICLESTATES_SERVERRESTRICTION = '#menu:tankCarousel/vehicleStates/serverRestriction'
     TANKCAROUSEL_VEHICLESTATES_CREWNOTFULL = '#menu:tankCarousel/vehicleStates/crewNotFull'
+    TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY = '#menu:tankCarousel/vehicleStates/group_is_not_ready'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
     TANKCAROUSEL_VEHICLESTATES_IGRRENTALISOVER = '#menu:tankCarousel/vehicleStates/igrRentalIsOver'
     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
     TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/buyTankEmptyCount'
     TANKCAROUSEL_VEHICLESTATES_BUYSLOT = '#menu:tankCarousel/vehicleStates/buySlot'
+    TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY_BROKEN = '#menu:tankCarousel/vehicleStates/group_is_not_ready_broken'
+    TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY_CREWNOTFULL = '#menu:tankCarousel/vehicleStates/group_is_not_ready_crewNotFull'
+    TANKCAROUSEL_VEHICLESTATES_GROUPAMMONOTFULL = '#menu:tankCarousel/vehicleStates/groupAmmoNotFull'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
     STORE_VEHICLESTATES_CLANLOCKED = '#menu:store/vehicleStates/clanLocked'
     STORE_VEHICLESTATES_INPREBATTLE = '#menu:store/vehicleStates/inPrebattle'
     STORE_VEHICLESTATES_AMMONOTFULL = '#menu:store/vehicleStates/ammoNotFull'
+    STORE_VEHICLESTATES_AMMONOTFULLEVENTS = '#menu:store/vehicleStates/ammoNotFullEvents'
     STORE_VEHICLESTATES_DAMAGED = '#menu:store/vehicleStates/damaged'
     STORE_VEHICLESTATES_DESTROYED = '#menu:store/vehicleStates/destroyed'
     STORE_VEHICLESTATES_EXPLODED = '#menu:store/vehicleStates/exploded'
@@ -237,6 +245,9 @@ class MENU(object):
     STORE_VEHICLESTATES_BUYTANK = '#menu:store/vehicleStates/buyTank'
     STORE_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:store/vehicleStates/buyTankEmptyCount'
     STORE_VEHICLESTATES_BUYSLOT = '#menu:store/vehicleStates/buySlot'
+    STORE_VEHICLESTATES_GROUP_IS_NOT_READY_BROKEN = '#menu:store/vehicleStates/group_is_not_ready_broken'
+    STORE_VEHICLESTATES_GROUP_IS_NOT_READY_CREWNOTFULL = '#menu:store/vehicleStates/group_is_not_ready_crewNotFull'
+    STORE_VEHICLESTATES_GROUPAMMONOTFULL = '#menu:store/vehicleStates/groupAmmoNotFull'
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
@@ -246,12 +257,18 @@ class MENU(object):
     CURRENTVEHICLESTATUS_LOCKED = '#menu:currentVehicleStatus/locked'
     CURRENTVEHICLESTATUS_CLANLOCKED = '#menu:currentVehicleStatus/clanLocked'
     CURRENTVEHICLESTATUS_AMMONOTFULL = '#menu:currentVehicleStatus/ammoNotFull'
+    CURRENTVEHICLESTATUS_AMMONOTFULLEVENTS = '#menu:currentVehicleStatus/ammoNotFullEvents'
     CURRENTVEHICLESTATUS_DAMAGED = '#menu:currentVehicleStatus/damaged'
     CURRENTVEHICLESTATUS_DESTROYED = '#menu:currentVehicleStatus/destroyed'
     CURRENTVEHICLESTATUS_EXPLODED = '#menu:currentVehicleStatus/exploded'
     CURRENTVEHICLESTATUS_NOTPRESENT = '#menu:currentVehicleStatus/notpresent'
     CURRENTVEHICLESTATUS_UNDAMAGED = '#menu:currentVehicleStatus/undamaged'
+    CURRENTVEHICLESTATUS_WAITINGPLAYER = '#menu:currentVehicleStatus/waitingPlayer'
+    CURRENTVEHICLESTATUS_NOTVALIDVEHICLE = '#menu:currentVehicleStatus/notValidVehicle'
     CURRENTVEHICLESTATUS_CREWNOTFULL = '#menu:currentVehicleStatus/crewNotFull'
+    CURRENTVEHICLESTATUS_GROUP_IS_NOT_READY_BROKEN = '#menu:currentVehicleStatus/group_is_not_ready_broken'
+    CURRENTVEHICLESTATUS_GROUP_IS_NOT_READY_CREWNOTFULL = '#menu:currentVehicleStatus/group_is_not_ready_crewNotFull'
+    CURRENTVEHICLESTATUS_GROUPAMMONOTFULL = '#menu:currentVehicleStatus/groupAmmoNotFull'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
     REPAIR_CURIENCY = '#menu:repair/curiency'
     REPAIR_BUTTON = '#menu:repair/button'
@@ -291,6 +308,8 @@ class MENU(object):
     PREBATTLE_COMPANIESTITLE_MIDDLE = '#menu:prebattle/CompaniesTitle/MIDDLE'
     PREBATTLE_COMPANIESTITLE_CHAMPION = '#menu:prebattle/CompaniesTitle/CHAMPION'
     PREBATTLE_COMPANIESTITLE_ABSOLUTE = '#menu:prebattle/CompaniesTitle/ABSOLUTE'
+    PREBATTLE_COMPANIESTITLE_EVENT = '#menu:prebattle/CompaniesTitle/EVENT'
+    PREBATTLE_COMPANIESTITLE_EVENT_10X10 = '#menu:prebattle/CompaniesTitle/EVENT_10x10'
     PREBATTLE_INVITATIONS_LABELS_MAILINGLIST = '#menu:prebattle/invitations/labels/mailingList'
     PREBATTLE_INVITATIONS_LABELS_ISONLINE = '#menu:prebattle/invitations/labels/isOnline'
     PREBATTLE_INVITATIONS_LABELS_DEFAULTINVITETEXT = '#menu:prebattle/invitations/labels/defaultInviteText'
@@ -438,6 +457,8 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLESLEAVE = '#menu:headerButtons/battle/types/historicalBattlesLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL = '#menu:headerButtons/battle/types/battleTutorial'
     HEADERBUTTONS_BATTLE_MENU_STANDART = '#menu:headerButtons/battle/menu/standart'
+    HEADERBUTTONS_BATTLE_MENU_DOMINATION = '#menu:headerButtons/battle/menu/domination'
+    HEADERBUTTONS_BATTLE_MENU_FALLOUT = '#menu:headerButtons/battle/menu/fallout'
     HEADERBUTTONS_BATTLE_MENU_SQUAD = '#menu:headerButtons/battle/menu/squad'
     HEADERBUTTONS_BATTLE_MENU_TRAINING = '#menu:headerButtons/battle/menu/training'
     HEADERBUTTONS_BATTLE_MENU_TEAM = '#menu:headerButtons/battle/menu/team'
@@ -449,6 +470,12 @@ class MENU(object):
     HEADERBUTTONS_BATTLE = '#menu:headerButtons/battle'
     HEADERBUTTONS_READY = '#menu:headerButtons/ready'
     HEADERBUTTONS_NOTREADY = '#menu:headerButtons/notReady'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_HEADER = '#menu:headerButtons/fightBtn/tooltip/groupNotReady/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_BODY = '#menu:headerButtons/fightBtn/tooltip/groupNotReady/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_GROUPNOTREADY_NOTE = '#menu:headerButtons/fightBtn/tooltip/groupNotReady/note'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_HEADER = '#menu:headerButtons/fightBtn/tooltip/vehicleNotValid/header'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_BODY = '#menu:headerButtons/fightBtn/tooltip/vehicleNotValid/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_VEHICLENOTVALID_NOTE = '#menu:headerButtons/fightBtn/tooltip/vehicleNotValid/note'
     HEADERBUTTONS_RATING = '#menu:headerButtons/rating'
     HEADERBUTTONS_PROFILE = '#menu:headerButtons/profile'
     HEADERBUTTONS_INVENTORY = '#menu:headerButtons/inventory'
@@ -487,6 +514,7 @@ class MENU(object):
     HEADER_VEHICLETYPE_ELITE_SPG = '#menu:header/vehicleType/elite/SPG'
     HEADER_DEMONSTRATION_INFO = '#menu:header/demonstration/info'
     HEADER_DEMONSTRATION_BTNLABEL = '#menu:header/demonstration/btnLabel'
+    HEADER_ACCOUNT_POPOVER_BOOSTERS_BLOCKTITLE = '#menu:header/account/popover/boosters/blockTitle'
     HEADER_ACCOUNT_POPOVER_STATS_RATING = '#menu:header/account/popover/stats/rating'
     HEADER_ACCOUNT_POPOVER_STATS_FIGHTS = '#menu:header/account/popover/stats/fights'
     HEADER_ACCOUNT_POPOVER_STATS_RATIO = '#menu:header/account/popover/stats/ratio'
@@ -630,21 +658,43 @@ class MENU(object):
     ACCOUNTTYPES_DEMO = '#menu:accountTypes/demo'
     PREMIUM_BUYTITLE = '#menu:premium/buyTitle'
     PREMIUM_CONTINUETITLE = '#menu:premium/continueTitle'
+    PREMIUM_OFCREDITSANDEXPERIENCE = '#menu:premium/ofCreditsAndExperience'
+    PREMIUM_PEREVERBUTTLE = '#menu:premium/perEverButtle'
     PREMIUM_PROMOMESSAGE = '#menu:premium/promoMessage'
     PREMIUM_BUYMESSAGE = '#menu:premium/buyMessage'
     PREMIUM_CONTINUEMESSAGE = '#menu:premium/continueMessage'
-    PREMIUM_OFCREDITSANDEXPERIENCE = '#menu:premium/ofCreditsAndExperience'
-    PREMIUM_PEREVERBUTTLE = '#menu:premium/perEverButtle'
+    PREMIUM_PERCENTFACTOR = '#menu:premium/percentFactor'
+    PREMIUM_BONUS1 = '#menu:premium/bonus1'
+    PREMIUM_TARIFFS_HEADER = '#menu:premium/tariffs/header'
+    PREMIUM_TARIFFS_DURATION = '#menu:premium/tariffs/duration'
+    PREMIUM_BONUS2 = '#menu:premium/bonus2'
+    PREMIUM_DISCOUNT_STATUS = '#menu:premium/discount/status'
     PREMIUM_PERIODS_DAYS1 = '#menu:premium/periods/days1'
     PREMIUM_PERIODS_DAYS3 = '#menu:premium/periods/days3'
     PREMIUM_PERIODS_DAYS7 = '#menu:premium/periods/days7'
     PREMIUM_PERIODS_DAYS30 = '#menu:premium/periods/days30'
     PREMIUM_PERIODS_DAYS180 = '#menu:premium/periods/days180'
     PREMIUM_PERIODS_DAYS360 = '#menu:premium/periods/days360'
+    PREMIUM_PACKET_DAYS1 = '#menu:premium/packet/days1'
+    PREMIUM_PACKET_DAYS3 = '#menu:premium/packet/days3'
+    PREMIUM_PACKET_DAYS7 = '#menu:premium/packet/days7'
+    PREMIUM_PACKET_DAYS30 = '#menu:premium/packet/days30'
+    PREMIUM_PACKET_DAYS180 = '#menu:premium/packet/days180'
+    PREMIUM_PACKET_DAYS360 = '#menu:premium/packet/days360'
+    PREMIUMCONGRATULATION_TITLE = '#menu:premiumCongratulation/title'
+    PREMIUMCONGRATULATION_HEDER = '#menu:premiumCongratulation/heder'
+    PREMIUMCONGRATULATION_DESCRIPTION = '#menu:premiumCongratulation/description'
+    PREMIUMCONGRATULATION_BTNLABEL = '#menu:premiumCongratulation/btnLabel'
     PREMIUM_GOLD = '#menu:premium/gold'
     PREMIUM_SUBMITBUY = '#menu:premium/submitBuy'
     PREMIUM_SUBMITCONTINUE = '#menu:premium/submitContinue'
     PREMIUM_CANCEL = '#menu:premium/cancel'
+    GOLDFISH_WINDOWHEADER = '#menu:goldFish/windowHeader'
+    GOLDFISH_HEADER = '#menu:goldFish/header'
+    GOLDFISH_EVENTTITLE = '#menu:goldFish/eventTitle'
+    GOLDFISH_EVENTTEXT = '#menu:goldFish/eventText'
+    GOLDFISH_EVENTLINK = '#menu:goldFish/eventLink'
+    GOLDFISH_BUTTONCLOSE = '#menu:goldFish/buttonClose'
     MODULEINFO_TITLE = '#menu:moduleInfo/title'
     MODULEINFO_PARAMETERSLABEL = '#menu:moduleInfo/parametersLabel'
     MODULEINFO_PARAMETERSCLIPGUNLABEL = '#menu:moduleInfo/parametersClipGunLabel'
@@ -940,6 +990,7 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_AMMO_LIST_BUY = '#menu:hangar/ammunitionPanel/technicalMaitenance/ammo/list/buy'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_AMMO_LIST_INVENTORY = '#menu:hangar/ammunitionPanel/technicalMaitenance/ammo/list/inventory'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_AMMO_LIST_PRICE = '#menu:hangar/ammunitionPanel/technicalMaitenance/ammo/list/price'
+    HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_AMMO_NOT_READY = '#menu:hangar/ammunitionPanel/technicalMaitenance/ammo/not_ready'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENT_LABEL = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipment/label'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENT_CHECKBOXAUTO = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipment/checkboxAuto'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENT_LIST_INVENTORY = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipment/list/inventory'
@@ -1093,6 +1144,13 @@ class MENU(object):
     CONTEXTMENU_CREATECONTACTNOTE = '#menu:contextMenu/createContactNote'
     CONTEXTMENU_EDITCONTACTNOTE = '#menu:contextMenu/editContactNote'
     CONTEXTMENU_REMOVECONTACTNOTE = '#menu:contextMenu/removeContactNote'
+    CONTEXTMENU_INSQUAD = '#menu:contextMenu/inSquad'
+    CONTEXTMENU_LEAVESQUAD = '#menu:contextMenu/leaveSquad'
+    CONTEXTMENU_EXCLUDEDFROMSQUAD = '#menu:contextMenu/excludedFromSquad'
+    CONTEXTMENU_SENDINVITATIONTOSQUAD = '#menu:contextMenu/sendInvitationToSquad'
+    CONTEXTMENU_WITHDRAWINVITATIONTOSQUAD = '#menu:contextMenu/withdrawInvitationToSquad'
+    CONTEXTMENU_ACCEPTINVITATIONTOSQUAD = '#menu:contextMenu/acceptInvitationToSquad'
+    CONTEXTMENU_REJECTINVITATIONTOSQUAD = '#menu:contextMenu/rejectInvitationToSquad'
     DENUNCIATION_0 = '#menu:denunciation/0'
     DENUNCIATION_1 = '#menu:denunciation/1'
     DENUNCIATION_2 = '#menu:denunciation/2'
@@ -1227,6 +1285,7 @@ class MENU(object):
     AWARDWINDOW_RECRUITBUTTON = '#menu:awardWindow/recruitButton'
     AWARDWINDOW_QUESTS_TASKCOMPLETE_HEADER = '#menu:awardWindow/quests/taskComplete/header'
     AWARDWINDOW_QUESTS_TASKCOMPLETE_DESCRIPTION = '#menu:awardWindow/quests/taskComplete/description'
+    AWARDWINDOW_QUESTS_TASKCOMPLETE_NEXTTASKAUTOCHOICE = '#menu:awardWindow/quests/taskComplete/nextTaskAutoChoice'
     AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONAL = '#menu:awardWindow/quests/taskComplete/additional'
     AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONALNOTCOMPLETE = '#menu:awardWindow/quests/taskComplete/additionalNotComplete'
     AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDFORCOMLETE = '#menu:awardWindow/quests/taskComplete/awardForComlete'
@@ -1262,6 +1321,12 @@ class MENU(object):
     AWARDWINDOW_SPECIALACHIEVEMENT_BATTLE_DESCRIPTION3 = '#menu:awardWindow/specialAchievement/battle/description3'
     AWARDWINDOW_SPECIALACHIEVEMENT_BATTLE_DESCRIPTION4 = '#menu:awardWindow/specialAchievement/battle/description4'
     AWARDWINDOW_SPECIALACHIEVEMENT_HEADER = '#menu:awardWindow/specialAchievement/header'
+    AWARDWINDOW_TITLE_BOOSTERAWARD = '#menu:awardWindow/title/boosterAward'
+    AWARDWINDOW_BOOSTERAWARD_HEADER = '#menu:awardWindow/boosterAward/header'
+    AWARDWINDOW_BOOSTERAWARD_DESCRIPTION_TILLTIME = '#menu:awardWindow/boosterAward/description/tillTime'
+    AWARDWINDOW_BOOSTERAWARD_DESCRIPTION_TIMEVALUE = '#menu:awardWindow/boosterAward/description/timeValue'
+    AWARDWINDOW_BOOSTERAWARD_ADDITIONAL = '#menu:awardWindow/boosterAward/additional'
+    AWARDWINDOW_BOOSTERAWARD_ACTIVATEBTN_LABEL = '#menu:awardWindow/boosterAward/activateBtn/label'
     REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
@@ -1300,6 +1365,10 @@ class MENU(object):
     TIME_TIMEVALUE_HOURS = TIME_TIMEVALUE + '/hours'
     TIME_TIMEVALUE_MIN = TIME_TIMEVALUE + '/min'
     TIME_TIMEVALUE_LESSMIN = TIME_TIMEVALUE + '/lessMin'
+    TIME_TIMEVALUESHORT_DAYS = TIME_TIMEVALUE + 'Short/days'
+    TIME_TIMEVALUESHORT_HOURS = TIME_TIMEVALUE + 'Short/hours'
+    TIME_TIMEVALUESHORT_MIN = TIME_TIMEVALUE + 'Short/min'
+    TIME_TIMEVALUESHORT_LESSMIN = TIME_TIMEVALUE + 'Short/lessMin'
     PROMO_PATCH_TITLE = '#menu:promo/patch/title'
     PROMO_PATCH_MESSAGE = '#menu:promo/patch/message'
     PROMOPREMIUMIGRWINDOW_WINDOWTITLE = '#menu:PromoPremiumIgrWindow/windowTitle'
@@ -1308,6 +1377,31 @@ class MENU(object):
     PROMOPREMIUMIGRWINDOW_APPLYBUTTONLABEL = '#menu:PromoPremiumIgrWindow/applyButtonLabel'
     STATICFORAMTION_STAFF_CTXMENU_PASSOWNERSHIP = '#menu:staticForamtion/staff/ctxMenu/passOwnership'
     STATICFORAMTION_STAFF_CTXMENU_REMOVEMEMBER = '#menu:staticForamtion/staff/ctxMenu/removeMember'
+    BOOSTERSWINDOW_TITLE = '#menu:boostersWindow/title'
+    BOOSTERSWINDOW_CLOSEBTN_LABEL = '#menu:boostersWindow/closeBtn/label'
+    BOOSTERSWINDOW_TABS_AVAILABLELABEL = '#menu:boostersWindow/tabs/availableLabel'
+    BOOSTERSWINDOW_TABS_NOTAVAILABLELABEL = '#menu:boostersWindow/tabs/notAvailableLabel'
+    BOOSTERSWINDOW_ACTIVEBOOSTERS = '#menu:boostersWindow/activeBoosters'
+    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER = '#menu:boostersWindow/boostersTableRenderer/header'
+    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME = '#menu:boostersWindow/boostersTableRenderer/time'
+    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN = '#menu:boostersWindow/boostersTableRenderer/questForOpen'
+    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_ACTIVATEBTNLABEL = '#menu:boostersWindow/boostersTableRenderer/activateBtnLabel'
+    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_GOTOQUESTBTNLABEL = '#menu:boostersWindow/boostersTableRenderer/goToQuestBtnLabel'
+    BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO = '#menu:boostersWindow/boostersTable/noInfo'
+    BOOSTER_USERNAME_BOOSTER_XP = '#menu:booster/userName/booster_xp'
+    BOOSTER_DESCRIPTION_BOOSTER_XP = '#menu:booster/description/booster_xp'
+    BOOSTER_USERNAME_BOOSTER_FREE_XP = '#menu:booster/userName/booster_free_xp'
+    BOOSTER_DESCRIPTION_BOOSTER_FREE_XP = '#menu:booster/description/booster_free_xp'
+    BOOSTER_USERNAME_BOOSTER_CREW_XP = '#menu:booster/userName/booster_crew_xp'
+    BOOSTER_DESCRIPTION_BOOSTER_CREW_XP = '#menu:booster/description/booster_crew_xp'
+    BOOSTER_USERNAME_BOOSTER_CREDITS = '#menu:booster/userName/booster_credits'
+    BOOSTER_DESCRIPTION_BOOSTER_CREDITS = '#menu:booster/description/booster_credits'
+    BOOSTER_USERNAME_BOOSTER_REPAIR = '#menu:booster/userName/booster_repair'
+    BOOSTER_DESCRIPTION_BOOSTER_REPAIR = '#menu:booster/description/booster_repair'
+    BOOSTER_DESCRIPTION_EFFECTTIME = '#menu:booster/description/effectTime'
+    BOOSTER_QUALITY_SMALL = '#menu:booster/quality/small'
+    BOOSTER_QUALITY_MEDIUM = '#menu:booster/quality/medium'
+    BOOSTER_QUALITY_BIG = '#menu:booster/quality/big'
     NATION_TREE_TITLE_ENUM = (NATION_TREE_TITLE_USSR,
      NATION_TREE_TITLE_GERMANY,
      NATION_TREE_TITLE_USA,
@@ -1567,12 +1661,6 @@ class MENU(object):
      LOGIN_STATUS_VERSIONMISMATCH,
      LOGIN_STATUS_CENTERRESTART,
      LOGIN_STATUS_CLIENT_SERVER_VERSIONS_ARE_DIFFERENT)
-    PREMIUM_PERIODS_ENUM = (PREMIUM_PERIODS_DAYS1,
-     PREMIUM_PERIODS_DAYS3,
-     PREMIUM_PERIODS_DAYS7,
-     PREMIUM_PERIODS_DAYS30,
-     PREMIUM_PERIODS_DAYS180,
-     PREMIUM_PERIODS_DAYS360)
     TANKMANRECRUITRENDERER_ENUM = (TANKMANRECRUITRENDERER_PERSONALCASE,
      TANKMANRECRUITRENDERER_COMMANDER,
      TANKMANRECRUITRENDERER_GUNNER,
@@ -1672,6 +1760,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_CLANLOCKED,
      TANKCAROUSEL_VEHICLESTATES_INPREBATTLE,
      TANKCAROUSEL_VEHICLESTATES_AMMONOTFULL,
+     TANKCAROUSEL_VEHICLESTATES_AMMONOTFULLEVENTS,
      TANKCAROUSEL_VEHICLESTATES_DAMAGED,
      TANKCAROUSEL_VEHICLESTATES_DESTROYED,
      TANKCAROUSEL_VEHICLESTATES_EXPLODED,
@@ -1680,12 +1769,16 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_NOT_SUITABLE,
      TANKCAROUSEL_VEHICLESTATES_SERVERRESTRICTION,
      TANKCAROUSEL_VEHICLESTATES_CREWNOTFULL,
+     TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
      TANKCAROUSEL_VEHICLESTATES_IGRRENTALISOVER,
      TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
      TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT,
-     TANKCAROUSEL_VEHICLESTATES_BUYSLOT)
+     TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
+     TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY_BROKEN,
+     TANKCAROUSEL_VEHICLESTATES_GROUP_IS_NOT_READY_CREWNOTFULL,
+     TANKCAROUSEL_VEHICLESTATES_GROUPAMMONOTFULL)
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENUM = (FINALSTATISTIC_COMMONSTATS_RESULTLABEL_WIN,
      FINALSTATISTIC_COMMONSTATS_RESULTLABEL_LOSE,
      FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE,
@@ -1849,7 +1942,14 @@ class MENU(object):
      CONTEXTMENU_MESSENGER_CLOSEALLEXCEPTCURRENT,
      CONTEXTMENU_CREATECONTACTNOTE,
      CONTEXTMENU_EDITCONTACTNOTE,
-     CONTEXTMENU_REMOVECONTACTNOTE)
+     CONTEXTMENU_REMOVECONTACTNOTE,
+     CONTEXTMENU_INSQUAD,
+     CONTEXTMENU_LEAVESQUAD,
+     CONTEXTMENU_EXCLUDEDFROMSQUAD,
+     CONTEXTMENU_SENDINVITATIONTOSQUAD,
+     CONTEXTMENU_WITHDRAWINVITATIONTOSQUAD,
+     CONTEXTMENU_ACCEPTINVITATIONTOSQUAD,
+     CONTEXTMENU_REJECTINVITATIONTOSQUAD)
     MODULEINFO_COMPATIBLE_ENUM = (MODULEINFO_COMPATIBLE_TURRETS,
      MODULEINFO_COMPATIBLE_SHELLS,
      MODULEINFO_COMPATIBLE_GUNS,
@@ -1951,13 +2051,6 @@ class MENU(object):
     def login_status(key):
         outcome = '#menu:login/status/%s' % key
         if outcome not in MENU.LOGIN_STATUS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
-        return outcome
-
-    @staticmethod
-    def premium_periods(key):
-        outcome = '#menu:premium/periods/%s' % key
-        if outcome not in MENU.PREMIUM_PERIODS_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

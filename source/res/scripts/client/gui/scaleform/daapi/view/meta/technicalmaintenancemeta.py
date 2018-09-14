@@ -25,6 +25,10 @@ class TechnicalMaintenanceMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setData(data)
 
+    def as_setHistoricalDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setHistoricalData(data)
+
     def as_setEquipmentS(self, installed, setup, modules):
         if self._isDAAPIInited():
             return self.flashObject.as_setEquipment(installed, setup, modules)

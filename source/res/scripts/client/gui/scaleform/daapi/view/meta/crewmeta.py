@@ -24,9 +24,9 @@ class CrewMeta(DAAPIModule):
     def onCrewDogItemClick(self):
         self._printOverrideError('onCrewDogItemClick')
 
-    def as_tankmenResponseS(self, roles, tankmen):
+    def as_tankmenResponseS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_tankmenResponse(roles, tankmen)
+            return self.flashObject.as_tankmenResponse(data)
 
     def as_dogResponseS(self, dogName):
         if self._isDAAPIInited():

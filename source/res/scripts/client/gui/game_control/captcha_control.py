@@ -37,11 +37,11 @@ class CaptchaController(Controller):
 
     def fini(self):
         self.onCaptchaInputCanceled.clear()
-        self.onDisconnected()
+        self.__stop()
         self.__tryReset = False
         super(CaptchaController, self).fini()
 
-    def onConnected(self):
+    def onLobbyInited(self, event):
         self.__weaver = Weaver()
         BigWorld.player().stats.get('battlesTillCaptcha', self.__pc_onReceiveBattlesTillCaptcha)
         BigWorld.player().stats.get('captchaTriesLeft', self.__pc_onReceiveCaptchaTriesLeft)
@@ -51,13 +51,10 @@ class CaptchaController(Controller):
          'stats.captchaTriesLeft': self.__onCaptchaTriesLeft})
 
     def onDisconnected(self):
-        if self.__weaver is not None:
-            self.__weaver.clear()
-            self.__weaver = None
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        g_playerEvents.onEnqueueEventBattlesFailure -= self.__pe_onEnqueueEventBattlesFailure
-        g_playerEvents.onEnqueueRandomFailure -= self.__pe_onEnqueueRandomFailure
-        return
+        self.__stop()
+
+    def onAvatarBecomePlayer(self):
+        self.__stop()
 
     def showCaptcha(self, callback):
         if self.__triesLeft <= CAPTCHA_TRIES_LEFT_NOTIFY_THESHOLD:
@@ -114,6 +111,15 @@ class CaptchaController(Controller):
             self.__tryReset = True
             LOG_WARNING('Client try battlesTillCaptcha reset')
             BigWorld.player().challengeCaptcha('', '', lambda resultID, errorCode: None)
+
+    def __stop(self):
+        if self.__weaver is not None:
+            self.__weaver.clear()
+            self.__weaver = None
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        g_playerEvents.onEnqueueEventBattlesFailure -= self.__pe_onEnqueueEventBattlesFailure
+        g_playerEvents.onEnqueueRandomFailure -= self.__pe_onEnqueueRandomFailure
+        return
 
     def __pe_onEnqueueRandomFailure(self, errorCode, _):
         if errorCode != JOIN_FAILURE.CAPTCHA:

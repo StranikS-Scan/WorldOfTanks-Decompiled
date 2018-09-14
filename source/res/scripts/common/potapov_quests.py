@@ -151,6 +151,7 @@ class PQCache(object):
         self.__questUniqueIDToPotapovQuestID = {}
         self.__tileIDchainIDToPotapovQuestID = {}
         self.__tileIDchainIDToFinalPotapovQuestID = {}
+        self.__tileIDchainIDToInitialPotapovQuestID = {}
         self.__readQuestList()
 
     def questByPotapovQuestID(self, potapovQuestID):
@@ -173,6 +174,9 @@ class PQCache(object):
     def finalPotapovQuestIDByTileIDChainID(self, tileID, chainID):
         return self.__tileIDchainIDToFinalPotapovQuestID[tileID, chainID]
 
+    def initialPotapovQuestIDByTileIDChainID(self, tileID, chainID):
+        return self.__tileIDchainIDToInitialPotapovQuestID[tileID, chainID]
+
     def getPotapovQuestIDByUniqueID(self, uniqueQuestID):
         if uniqueQuestID not in self.__questUniqueIDToPotapovQuestID:
             raise Exception('Invalid potapov quest name (%s)' % (uniqueQuestID,))
@@ -190,6 +194,7 @@ class PQCache(object):
         self.__questUniqueIDToPotapovQuestID = questUniqueNameToPotapovQuestID = {}
         self.__tileIDchainIDToPotapovQuestID = tileIDchainIDToPotapovQuestID = {}
         self.__tileIDchainIDToFinalPotapovQuestID = tileIDchainIDToFinalPotapovQuestID = {}
+        self.__tileIDchainIDToInitialPotapovQuestID = tileIDchainIDToInitialPotapovQuestID = {}
         ids = {}
         curTime = int(time.time())
         xmlSource = quest_xml_source.Source()
@@ -270,6 +275,8 @@ class PQCache(object):
             tileIDchainIDToPotapovQuestID.setdefault(key, set()).add(potapovQuestID)
             if 'final' in tags:
                 tileIDchainIDToFinalPotapovQuestID[key] = potapovQuestID
+            if 'initial' in tags:
+                tileIDchainIDToInitialPotapovQuestID[key] = potapovQuestID
 
         ResMgr.purge(xmlPath, True)
         return

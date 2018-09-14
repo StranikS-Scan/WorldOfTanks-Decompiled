@@ -85,8 +85,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
         items.init(True, None if not constants.IS_DEVELOPMENT else {})
         import ArenaType
         ArenaType.init()
-        import dossiers1
-        dossiers1.init()
         import dossiers2
         dossiers2.init()
         import fortified_regions
@@ -211,6 +209,10 @@ def start():
             LOG_CURRENT_EXCEPTION()
 
         return
+
+
+def abort():
+    BigWorld.callback(0.0, fini)
 
 
 def fini():
@@ -444,7 +446,9 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'sc': 'from account_helpers.settings_core.SettingsCore import g_settingsCore; sc = g_settingsCore; sc',
  'quests': 'from gui.server_events import g_eventsCache; quests = g_eventsCache; quests',
  'wc': 'from gui.Scaleform.Waiting import Waiting; Waiting.close()',
- 'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache'}
+ 'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache',
+ 'camera': 'BigWorld.player().inputHandler.ctrl',
+ 'letsBattle': 'from gui.shared import g_itemsCache, REQ_CRITERIA; vehs = g_itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.EVENT); BigWorld.player().enqueueEventBattles(map(lambda v: v.invID, vehs.itervalues()))'}
 
 def expandMacros(line):
     import re

@@ -46,6 +46,7 @@ class SoundEffectsId(object):
     CS_ANIMATION_DIVISION_UP = 'cs_animation_division_up'
     CS_ANIMATION_DIVISION_UP_ALT = 'cs_animation_division_up_alt'
     CS_ANIMATION_DIVISION_DOWN = 'cs_animation_division_down'
+    DYN_SQUAD_STARTING_DYNAMIC_PLATOON = 'dyn_squad_starting_dynamic_platoon'
     RUDY_DOG = 'rody_dog'
 
     @classmethod

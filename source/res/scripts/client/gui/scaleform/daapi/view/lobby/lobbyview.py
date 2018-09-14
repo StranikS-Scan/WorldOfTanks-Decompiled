@@ -6,6 +6,7 @@ import CommandMapping
 from PlayerEvents import g_playerEvents
 from gui import GUI_SETTINGS, game_control, SystemMessages
 import gui
+from gui.LobbyContext import g_lobbyContext
 from gui.battle_control import g_sessionProvider
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View
@@ -13,6 +14,7 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared import EVENT_BUS_SCOPE, events, event_dispatcher as shared_events
 from gui.Scaleform.framework import ViewTypes, AppRef
@@ -58,6 +60,8 @@ class LobbyView(View, LobbyPageMeta, AppRef):
         self.app.loaderManager.onViewLoadError += self.__onViewLoadError
         game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrTypeChanged
         self.__showBattleResults()
+        battlesCount = g_itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
+        g_lobbyContext.updateBattlesCount(battlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
         if not BigWorld.isKeyDown(keyCode):
@@ -119,7 +123,7 @@ class LobbyView(View, LobbyPageMeta, AppRef):
 
     def __showBattleResults(self):
         battleCtx = g_sessionProvider.getCtx()
-        if GUI_SETTINGS.battleStatsInHangar and battleCtx.lastArenaUniqueID:
+        if battleCtx.lastArenaUniqueID:
             shared_events.showMyBattleResults(battleCtx.lastArenaUniqueID)
             battleCtx.lastArenaUniqueID = None
         return

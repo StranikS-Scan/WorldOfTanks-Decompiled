@@ -1,7 +1,10 @@
 # Embedded file name: scripts/client/account_helpers/__init__.py
-import BigWorld
-import constants
 import datetime
+import BigWorld
+from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
+import constants
+from gui import GUI_SETTINGS
+from helpers.time_utils import getCurrentTimestamp
 
 def __checkAccountAttr(attrs, attrID):
     return attrs is not None and attrs & attrID != 0

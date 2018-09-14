@@ -134,7 +134,6 @@ class EventBattlesQueueFunctional(PreQueueFunctional):
         g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
         g_eventDispatcher.loadHangar()
         g_eventDispatcher.updateUI()
-        SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
 
     def onCaptchaInputCanceled(self):
         self.__requestCtx.stopProcessing(True)

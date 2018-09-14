@@ -6,9 +6,11 @@ import itertools
 import sys
 import inspect
 import uuid
+import struct
 import BigWorld
 import AccountCommands
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG, LOG_WARNING
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import getLanguageCode, i18n
 from items import vehicles as vehs_core
 from account_helpers.AccountSettings import AccountSettings
@@ -34,7 +36,7 @@ GUN_RELOADING_TYPE = 'gunReloadingType'
 GUN_CAN_BE_CLIP = 1
 GUN_CLIP = 2
 GUN_NORMAL = 4
-CLIP_ICON_PATH = '../maps/icons/modules/magazineGunIcon.png'
+CLIP_ICON_PATH = RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
 EXTRA_MODULE_INFO = 'extraModuleInfo'
 _FLASH_OBJECT_SYS_ATTRS = ('isPrototypeOf', 'propertyIsEnumerable', 'hasOwnProperty')
 
@@ -334,6 +336,23 @@ def mapTextureToTheMemory(textureData, uniqueID = None):
     else:
         LOG_WARNING('There is invalid data for the memory mapping', textureData, uniqueID)
         return
+
+
+def getImageSize(imageData):
+    width, height = (None, None)
+    if imageData:
+        imgType = imghdr.what(None, imageData)
+        if imgType == 'png':
+            check = struct.unpack('>i', imageData[4:8])[0]
+            if check != 218765834:
+                return
+            width, height = struct.unpack('>ii', imageData[16:24])
+        elif imgType == 'gif':
+            width, height = struct.unpack('<HH', imageData[6:10])
+        elif imgType == 'jpeg':
+            LOG_WARNING('JPEG image type is not supported')
+            width, height = (None, None)
+    return (width, height)
 
 
 def showInvitationInWindowsBar():

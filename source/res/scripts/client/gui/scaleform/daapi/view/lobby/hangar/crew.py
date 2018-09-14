@@ -84,8 +84,8 @@ class Crew(CrewMeta, AppRef):
                     skillsList.append({'buy': True,
                      'tankmanID': tankman.invID,
                      'level': lastNewSkillLvl})
-                tankmanData = {'firstname': tankman.firstUserName,
-                 'lastname': tankman.lastUserName,
+                tankmanData = {'firstName': tankman.firstUserName,
+                 'lastName': tankman.lastUserName,
                  'rank': tankman.rankUserName,
                  'specializationLevel': tankman.realRoleLevel[0],
                  'role': tankman.roleUserName,
@@ -109,7 +109,8 @@ class Crew(CrewMeta, AppRef):
                  'skills': skillsList}
                 tankmenData.append(tankmanData)
 
-            self.as_tankmenResponseS(roles, tankmenData)
+            self.as_tankmenResponseS({'roles': roles,
+             'tankmen': tankmenData})
             dogName = ''
             if 'dog' in g_itemsCache.items.getItemByCD(g_currentVehicle.item.intCD).tags:
                 dogName = MENU.HANGAR_CREW_RODY_DOG_NAME

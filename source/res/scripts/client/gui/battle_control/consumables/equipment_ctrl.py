@@ -60,7 +60,9 @@ class _EquipmentItem(object):
 
     def clear(self):
         self._descriptor = None
-        self.update(0, 0, 0)
+        self._quantity = 0
+        self._stage = 0
+        self._timeRemaining = 0
         return
 
     def update(self, quantity, stage, timeRemaining):
@@ -141,7 +143,11 @@ class _ExpandedItem(_EquipmentItem):
             isRequired = self.isEntityRequired()
             if isRequired:
                 if entityName is None:
-                    return (False, None)
+                    for item in self.getEntitiesIterator():
+                        if item[0] in deviceStates:
+                            return (False, None)
+
+                    return (False, _ActivationError(self._getEntitiesAreSafeKey(), None))
                 if entityName not in deviceStates:
                     return (False, _ActivationError(self._getEntityIsSafeKey(), {'entity': self._getEntityUserString(entityName)}))
             return (True, None)
@@ -216,13 +222,10 @@ class _OrderItem(_TriggerItem):
 
     def update(self, quantity, stage, timeRemaining):
         from AvatarInputHandler import MapCaseMode
-        from gui.WindowsManager import g_windowsManager
         if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
             MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate))
-            g_windowsManager.battleWindow.setAimingMode(True)
         elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
             MapCaseMode.turnOffMapCase(self.getEquipmentID())
-            g_windowsManager.battleWindow.setAimingMode(False)
         super(_OrderItem, self).update(quantity, stage, timeRemaining)
 
 
@@ -279,14 +282,17 @@ class EquipmentsController(object):
     @classmethod
     def createItem(cls, descriptor, quantity, stage, timeRemaining):
         tag = _getSupportedTag(descriptor)
-        if tag:
-            item = _EQUIPMENT_TAG_TO_ITEM[tag](descriptor, quantity, stage, timeRemaining, tag)
+        clazz = tag and _EQUIPMENT_TAG_TO_ITEM[tag]
+        if not clazz:
+            raise AssertionError
+            item = clazz(descriptor, quantity, stage, timeRemaining, tag)
         else:
             item = _EquipmentItem(descriptor, quantity, stage, timeRemaining)
         return item
 
-    def clear(self):
-        self.__eManager.clear()
+    def clear(self, leave = True):
+        if leave:
+            self.__eManager.clear()
         while len(self.__equipments):
             _, item = self.__equipments.popitem()
             item.clear()

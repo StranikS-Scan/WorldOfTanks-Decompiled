@@ -6,12 +6,13 @@ from messenger.m_constants import USER_GUI_TYPE, BREAKERS_MAX_LENGTH, USER_TAG
 from messenger.storage.local_cache import RevCachedStorage
 
 class UsersStorage(RevCachedStorage):
-    __slots__ = ('__contacts', '__emptyGroups', '__clanMembersIDs', '__breakers')
+    __slots__ = ('__contacts', '__emptyGroups', '__openedGroups', '__clanMembersIDs', '__breakers')
 
     def __init__(self):
         super(UsersStorage, self).__init__()
         self.__contacts = {}
         self.__emptyGroups = set()
+        self.__openedGroups = {}
         self.__clanMembersIDs = set()
         self.__breakers = deque([], BREAKERS_MAX_LENGTH)
 
@@ -22,6 +23,7 @@ class UsersStorage(RevCachedStorage):
         self.__clanMembersIDs.clear()
         self.__breakers.clear()
         self.__emptyGroups.clear()
+        self.__openedGroups = {}
         while len(self.__contacts):
             _, user = self.__contacts.popitem()
             user.clear()
@@ -148,6 +150,23 @@ class UsersStorage(RevCachedStorage):
 
         return result
 
+    def setOpenedGroups(self, category, name, isOpened):
+        if isOpened:
+            if not self.__openedGroups.get(category):
+                self.__openedGroups[category] = set()
+            self.__openedGroups[category].add(name)
+        else:
+            categorySet = self.__openedGroups.get(category, None)
+            if categorySet:
+                if name in categorySet:
+                    categorySet.remove(name)
+                if len(categorySet) == 0:
+                    del self.__openedGroups[category]
+        return
+
+    def getOpenedGroups(self):
+        return self.__openedGroups
+
     def _setClanMembersList(self, members):
         membersIDs = set()
         tags = {USER_TAG.CLAN_MEMBER}
@@ -206,9 +225,14 @@ class UsersStorage(RevCachedStorage):
             data.append(contacts)
         else:
             data.append(None)
+        if len(self.__openedGroups) > 0:
+            data.append(self.__openedGroups)
+        else:
+            data.append(None)
         return data
 
     def _setCachedData(self, record):
+        result = None
         emptyGroups = record.pop(0)
         if type(emptyGroups) is types.TupleType:
             self.__emptyGroups = set(filter(lambda group: type(group) in types.StringTypes, emptyGroups))
@@ -226,9 +250,12 @@ class UsersStorage(RevCachedStorage):
                         continue
                     yield (dbID, state)
 
-            return stateGenerator
+            result = stateGenerator
+        if len(record) > 0:
+            self.__openedGroups = record.pop(0) or {}
         else:
-            return None
+            self.__openedGroups = {}
+        return result
 
     def _getServerRevKey(self):
         return 'USERS_STORAGE_REV'

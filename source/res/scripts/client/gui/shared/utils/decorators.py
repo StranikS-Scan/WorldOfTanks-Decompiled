@@ -77,7 +77,7 @@ def debugTime(func):
     def wrapper(*args, **kwargs):
         startTime = time.time()
         func(*args, **kwargs)
-        LOG_DEBUG("Method '%s' measuring time: %.5f" % (func.__name__, time.time() - startTime))
+        LOG_DEBUG("Method '%s' measuring time: %.10f" % (func.__name__, time.time() - startTime))
 
     return wrapper
 
@@ -153,7 +153,10 @@ class InternalRepresenter(object):
         for i in xrange(len(clazz.__repr_params__)):
             attrMethNames.append(makeArr(clazz.__repr_params__[i]))
             if attrMethNames[-1][0][:2] == '__':
-                attrMethNames[-1][0] = join(['_', clazz.__name__, attrMethNames[-1][0]], sep='')
+                if clazz.__name__[0] != '_':
+                    attrMethNames[-1][0] = join(['_', clazz.__name__, attrMethNames[-1][0]], sep='')
+                else:
+                    attrMethNames[-1][0] = join([clazz.__name__, attrMethNames[-1][0]], sep='')
             representation.append('{0} = {{{1}}}'.format(attrMethNames[-1][1], i))
 
         representation = join([clazz.__name__,

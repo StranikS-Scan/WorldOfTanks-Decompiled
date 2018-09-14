@@ -71,3 +71,7 @@ class FortMainViewMeta(DAAPIModule):
     def as_setBattlesDirectionDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setBattlesDirectionData(data)
+
+    def as_setTutorialArrowVisibilityS(self, arrowAlias, isVisible):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setTutorialArrowVisibility(arrowAlias, isVisible)

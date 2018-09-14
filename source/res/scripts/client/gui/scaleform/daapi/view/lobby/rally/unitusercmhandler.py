@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/UnitUserCMHandler.py
 from account_helpers import getPlayerDatabaseID
 from adisp import process
+from constants import PREBATTLE_TYPE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler, USER
 from gui.prb_control.context import unit_ctx
@@ -39,6 +40,11 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
         if not userCMInfo.isIgnored and self.app.voiceChatManager.isVOIPEnabled():
             option.append(self._makeItem(muted, MENU.contextmenu(muted)))
         return option
+
+    def _addSquadInfo(self, options, isIgnored):
+        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.SQUAD or not self.unitFunctional.isCreator():
+            return super(UnitUserCMHandler, self)._addSquadInfo(options, isIgnored)
+        return options
 
     def _addPrebattleInfo(self, options, userCMInfo):
         if self.unitFunctional.getPermissions().canKick():

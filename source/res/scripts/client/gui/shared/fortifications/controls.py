@@ -679,6 +679,7 @@ class FortController(_FortController):
         fort.onDefenceHourShutdown += self.__fort_onDefenceHourShutdown
         fort.onEmergencyRestore += self.__fort_onEmergencyRestore
         fort.onConsumablesChanged += self.__fort_onConsumablesChanged
+        fort.onDefenceHourActivated += self.__fort_onDefenceHourActivated
         fortMgr = getClientFortMgr()
         if not fortMgr:
             LOG_ERROR('No fort manager to subscribe')
@@ -715,6 +716,7 @@ class FortController(_FortController):
         fort.onDefenceHourShutdown -= self.__fort_onDefenceHourShutdown
         fort.onEmergencyRestore -= self.__fort_onEmergencyRestore
         fort.onConsumablesChanged -= self.__fort_onConsumablesChanged
+        fort.onDefenceHourActivated -= self.__fort_onDefenceHourActivated
         fortMgr = getClientFortMgr()
         if not fortMgr:
             LOG_ERROR('No fort manager to unsubscribe')
@@ -808,6 +810,10 @@ class FortController(_FortController):
 
     def __fort_onDefenceHourChanged(self, hour):
         self._listeners.notify('onDefenceHourChanged', hour)
+        self.__processDefencePeriodCallback()
+
+    def __fort_onDefenceHourActivated(self, hour, initiatorDBID):
+        self._listeners.notify('onDefenceHourActivated', hour, initiatorDBID)
         self.__processDefencePeriodCallback()
 
     def __fort_onOffDayChanged(self, offDay):

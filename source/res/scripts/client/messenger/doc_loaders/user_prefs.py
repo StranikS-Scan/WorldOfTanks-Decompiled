@@ -1,13 +1,42 @@
 # Embedded file name: scripts/client/messenger/doc_loaders/user_prefs.py
 from messenger.doc_loaders import _xml_helpers
 import types
-_userProps = {'datetimeIdx': ('readInt', 'writeInt', lambda value: value in xrange(0, 4)),
- 'enableOlFilter': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
- 'enableSpamFilter': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
- 'invitesFromFriendsOnly': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
- 'storeReceiverInBattle': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
- 'disableBattleChat': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType),
- 'receiveFriendshipRequest': ('readBool', 'writeBool', lambda value: type(value) is types.BooleanType)}
+_userProps = {'datetimeIdx': ('readInt',
+                 'writeInt',
+                 lambda value: value in xrange(0, 4),
+                 False),
+ 'enableOlFilter': ('readBool',
+                    'writeBool',
+                    lambda value: type(value) is types.BooleanType,
+                    False),
+ 'enableSpamFilter': ('readBool',
+                      'writeBool',
+                      lambda value: type(value) is types.BooleanType,
+                      False),
+ 'invitesFromFriendsOnly': ('readBool',
+                            'writeBool',
+                            lambda value: type(value) is types.BooleanType,
+                            False),
+ 'storeReceiverInBattle': ('readBool',
+                           'writeBool',
+                           lambda value: type(value) is types.BooleanType,
+                           False),
+ 'disableBattleChat': ('readBool',
+                       'writeBool',
+                       lambda value: type(value) is types.BooleanType,
+                       False),
+ 'chatContactsListOnly': ('readBool',
+                          'writeBool',
+                          lambda value: type(value) is types.BooleanType,
+                          True),
+ 'receiveFriendshipRequest': ('readBool',
+                              'writeBool',
+                              lambda value: type(value) is types.BooleanType,
+                              False),
+ 'receiveInvitesInBattle': ('readBool',
+                            'writeBool',
+                            lambda value: type(value) is types.BooleanType,
+                            True)}
 
 def loadDefault(xmlCtx, section, messengerSettings):
     data = {}
@@ -18,7 +47,7 @@ def loadDefault(xmlCtx, section, messengerSettings):
         name = _xml_helpers.readNoEmptyStr(ctx, subSec, 'name', 'Preference name is not defined')
         if name not in _userProps:
             raise _xml_helpers.XMLError(ctx, 'Preference {0:>s} is invalid'.format(name))
-        reader, _, validator = _userProps[name]
+        reader, _, validator, _ = _userProps[name]
         value = getattr(subSec, reader)('value')
         if validator(value):
             data[name] = value
@@ -32,8 +61,12 @@ def loadDefault(xmlCtx, section, messengerSettings):
 def loadFromServer(messengerSettings):
     from account_helpers.settings_core.SettingsCore import g_settingsCore
     data = messengerSettings.userPrefs._asdict()
-    for key, (_, _, _) in _userProps.iteritems():
-        settingValue = g_settingsCore.serverSettings.getGameSetting(key, None)
+    core = g_settingsCore.serverSettings
+    for key, (_, _, _, isExtended) in _userProps.iteritems():
+        if isExtended:
+            settingValue = core.getExtendedGameSetting(key, None)
+        else:
+            settingValue = core.getGameSetting(key, None)
         if settingValue is not None:
             data[key] = settingValue
 

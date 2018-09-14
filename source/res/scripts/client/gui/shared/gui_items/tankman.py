@@ -190,14 +190,33 @@ class Tankman(GUIItem, HasStrCD):
     def getNextLevelXpCost(self):
         if self.roleLevel != tankmen.MAX_SKILL_LEVEL or not self.hasNewSkill:
             descr = self.descriptor
-            if descr.lastSkillNumber == 0 or self.roleLevel != tankmen.MAX_SKILL_LEVEL:
+            lastSkillNumValue = descr.lastSkillNumber - descr.freeSkillsNumber
+            if lastSkillNumValue == 0 or self.roleLevel != tankmen.MAX_SKILL_LEVEL:
                 nextSkillLevel = self.roleLevel
             else:
                 nextSkillLevel = descr.lastSkillLevel
             skillSeqNum = 0
             if self.roleLevel == tankmen.MAX_SKILL_LEVEL:
-                skillSeqNum = descr.lastSkillNumber
+                skillSeqNum = lastSkillNumValue
             return descr.levelUpXpCost(nextSkillLevel, skillSeqNum) - descr.freeXP
+        return 0
+
+    def getNextSkillXpCost(self):
+        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or not self.hasNewSkill:
+            descr = self.descriptor
+            lastSkillNumValue = descr.lastSkillNumber - descr.freeSkillsNumber
+            if lastSkillNumValue == 0 or self.roleLevel != tankmen.MAX_SKILL_LEVEL:
+                nextSkillLevel = self.roleLevel
+            else:
+                nextSkillLevel = descr.lastSkillLevel
+            skillSeqNum = 0
+            if self.roleLevel == tankmen.MAX_SKILL_LEVEL:
+                skillSeqNum = lastSkillNumValue
+            needXp = 0
+            for level in range(nextSkillLevel, tankmen.MAX_SKILL_LEVEL):
+                needXp += descr.levelUpXpCost(level, skillSeqNum)
+
+            return needXp - descr.freeXP
         return 0
 
     @property

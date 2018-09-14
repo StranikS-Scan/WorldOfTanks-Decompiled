@@ -1,8 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/rally_dps.py
-import BigWorld
-import cPickle
 import weakref
-from club_shared import RESTRICTION_REASONS_NAMES, RESTRICTION_REASONS
+import operator
+import BigWorld
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from helpers import html
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
@@ -11,7 +12,6 @@ from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makePlayerVO, mak
 from gui.Scaleform.daapi.view.lobby.rally.data_providers import BaseRallyListDataProvider
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
-from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -127,12 +127,12 @@ class SortieCandidatesLegionariesDP(SortieCandidatesDP):
             self._buildData(legionaryPlayers)
 
     def __addAdditionalBlocks(self, playersCount, legionariesCount):
-        headerClanPlayers = {'headerText': self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_CLANPLAYERS))}
+        headerClanPlayers = {'headerText': self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_CLANPLAYERS))}
         emptyRenders = {'emptyRender': True}
         units = self.app.utilsManager
         icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE
         legionariesIcon = units.getHtmlIconText(ImageUrlProperties(icon, 16, 16, -4, 0))
-        textResult = legionariesIcon + self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS))
+        textResult = legionariesIcon + self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS))
         headerLegionasriesPlayers = {'headerText': textResult,
          'headerToolTip': TOOLTIPS.FORTIFICATION_BATTLEROOMLEGIONARIES}
         if playersCount > 0:
@@ -213,13 +213,14 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
              'rating': ratingFormatter(unitItem.rating),
              'playersCount': unitItem.playersCount,
              'commandSize': unitItem.commandSize,
-             'inBattle': unitItem.state.isInArena(),
-             'isFreezed': unitItem.state.isLocked(),
+             'inBattle': unitItem.flags.isInArena(),
+             'isFreezed': unitItem.flags.isLocked(),
              'isRestricted': unitItem.isRosterSet,
              'description': unitItem.description,
              'peripheryID': unitItem.peripheryID,
              'server': pNameGetter(unitItem.peripheryID),
-             'ladderIcon': ladderIcon})
+             'ladderIcon': ladderIcon,
+             'isStatic': unitItem.isClub})
 
         return self._selectedIdx
 
@@ -279,8 +280,8 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
              'rating': ratingFormatter(unitItem.rating),
              'playersCount': unitItem.playersCount,
              'commandSize': unitItem.commandSize,
-             'inBattle': unitItem.state.isInArena() or unitItem.state.isInPreArena(),
-             'isFreezed': unitItem.state.isLocked(),
+             'inBattle': unitItem.flags.isInArena() or unitItem.flags.isInPreArena(),
+             'isFreezed': unitItem.flags.isLocked(),
              'isRestricted': unitItem.isRosterSet,
              'description': unitItem.description})
             diff.append(index)
@@ -323,6 +324,10 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
         def isOnline(self):
             return False
 
+    def __init__(self):
+        super(ClubsDataProvider, self).__init__()
+        self._lastResult = []
+
     def getVO(self, club = None, currentState = None, profile = None):
         if club is None or currentState is None or profile is None:
             return
@@ -330,7 +335,6 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
             _ms = i18n.makeString
             ladderInfo = club.getLadderInfo()
             if ladderInfo.isInLadder():
-                LOG_ERROR('1111111111', ladderInfo)
                 ladderLeagueStr = getLeagueString(ladderInfo.getLeague())
                 ladderDivStr = getDivisionString(ladderInfo.getDivision())
                 ladderInfoStr = text_styles.middleTitle(_ms(CYBERSPORT.WINDOW_STATICRALLYINFO_LADDERINFO, league=ladderLeagueStr, division=ladderDivStr))
@@ -359,8 +363,8 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
                 buttonInfo = '#cyberSport:window/staticRallyInfo/joinInfo/alreadyJoined'
             elif not canSendApp:
                 isButtonDisabled = True
-                buttonTooltip = '#tooltips:StaticFormationProfileWindow/actionBtn/applicationCooldown'
-                buttonInfo = '#cyberSport:StaticFormationProfileWindow/statusLbl/applicationCooldown'
+                buttonTooltip = '#tooltips:cyberSport/staticRallyInfo/joinBtn/applicationCooldown'
+                buttonInfo = '#cyberSport:window/staticRallyInfo/joinInfo/applicationCooldown'
             return {'battlesCount': self.__getIndicatorData(clubTotalStats.getBattlesCount(), BigWorld.wg_getIntegralFormat, _ms(CYBERSPORT.WINDOW_STATICRALLYINFO_STATSBATTLESCOUNT), RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_BATTLES40X32, TOOLTIPS.CYBERSPORT_STATICRALLYINFO_STATSBATTLESCOUNT),
              'winsPercent': self.__getIndicatorData(clubTotalStats.getWinsEfficiency(), ProfileUtils.formatFloatPercent, _ms(CYBERSPORT.WINDOW_STATICRALLYINFO_STATICRALLY_STATSWINSPERCENT), RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_WINS40X32, TOOLTIPS.CYBERSPORT_STATICRALLYINFO_STATSWINSPERCENT),
              'ladderIcon': getLadderChevron128x128(ladderInfo.getDivision()),
@@ -375,21 +379,24 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
                            'name': text_styles.highTitle(club.getUserName()),
                            'profileBtnLabel': CYBERSPORT.RALLYINFO_PROFILEBTN_LABEL,
                            'profileBtnTooltip': TOOLTIPS.RALLYINFO_PROFILEBTN,
-                           'description': text_styles.main(club.getUserShortDescription()),
+                           'description': text_styles.main(html.escape(club.getUserShortDescription())),
                            'ladderIcon': None,
                            'id': club.getClubDbID(),
                            'showLadder': False}}
 
-    def buildList(self, selectedID, result):
+    def buildList(self, selectedID, result, syncUserInfo = True):
         self.clear()
         userGetter = storage_getter('users')().getUser
         colorGetter = g_settings.getColorScheme('rosters').getColors
         ratingFormatter = BigWorld.wg_getIntegralFormat
         self._selectedIdx = -1
+        self._lastResult = result
+        data = []
         for clubItem in result:
             cfdUnitID = clubItem.getID()
             creatorID = clubItem.getCreatorID()
             creator = userGetter(creatorID)
+            rating = self.getUserRating(creatorID)
             if creator is None:
                 creator = self._UserEntityAdapter(creatorID, self)
             creatorName = creator.getName()
@@ -398,22 +405,25 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
             if cfdUnitID == selectedID:
                 self._selectedIdx = index
             self.mapping[cfdUnitID] = index
-            self.collection.append({'cfdUnitID': cfdUnitID,
-             'unitMgrID': cfdUnitID,
-             'creator': creatorVO,
-             'creatorName': creatorName,
-             'rating': ratingFormatter(self.getUserRating(creatorID)),
-             'playersCount': clubItem.getMembersCount(),
-             'commandSize': clubItem.getCommandSize(),
-             'inBattle': False,
-             'isFreezed': False,
-             'isRestricted': False,
-             'description': clubItem.getShortDescription(),
-             'peripheryID': -1,
-             'server': None,
-             'ladderIcon': getLadderChevron16x16(clubItem.getDivision())})
+            data.append((rating, {'cfdUnitID': cfdUnitID,
+              'unitMgrID': cfdUnitID,
+              'creator': creatorVO,
+              'creatorName': creatorName,
+              'rating': ratingFormatter(rating),
+              'playersCount': clubItem.getMembersCount(),
+              'commandSize': clubItem.getCommandSize(),
+              'inBattle': False,
+              'isFreezed': False,
+              'isRestricted': False,
+              'description': html.escape(clubItem.getShortDescription()),
+              'peripheryID': -1,
+              'server': None,
+              'ladderIcon': getLadderChevron16x16(clubItem.getDivision()),
+              'isStatic': True}))
 
-        self.syncUsersInfo()
+        self.collection.extend(map(lambda (r, c): c, sorted(data, reverse=True, key=operator.itemgetter(0))))
+        if syncUserInfo:
+            self.syncUsersInfo()
         return self._selectedIdx
 
     def updateListItem(self, userDBID):
@@ -461,7 +471,8 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
         return self._selectedIdx
 
     def onUserRatingsReceived(self, ratings):
-        self.__updateUsersData(ratings.keys())
+        self.buildList(self._selectedIdx, self._lastResult, syncUserInfo=False)
+        self.refresh()
 
     def onUserNamesReceived(self, names):
         self.__updateUsersData(names.keys())
@@ -475,7 +486,7 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper, AppRef):
         colorGetter = g_settings.getColorScheme('rosters').getColors
         ratingFormatter = BigWorld.wg_getIntegralFormat
         for userDBID in userDBIDs:
-            data = findFirst(lambda data: data['creator'].get('dbID') == userDBID, self.collection)
+            data = findFirst(lambda d: d['creator'].get('dbID') == userDBID, self.collection)
             if data is not None:
                 clubDBID = data['cfdUnitID']
                 try:

@@ -4,7 +4,6 @@ import os
 import datetime
 import json
 import copy
-import BigWorld
 import Math
 import cPickle as pickle
 import ArenaType
@@ -16,6 +15,8 @@ import AreaDestructibles
 import gui.SystemMessages
 import gui.Scaleform.CursorDelegator
 import Keys
+from gui.battle_control import g_sessionProvider
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from debug_utils import *
 from ConnectionManager import connectionManager
@@ -84,7 +85,7 @@ class BattleReplay():
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged += self.__onSettingsChanging
         self.__playerDatabaseID = 0
-        self.__roamingSettings = None
+        self.__serverSettings = dict()
         if isPlayerAccount():
             self.__playerDatabaseID = BigWorld.player().databaseID
         self.__playbackSpeedModifiers = (0.0, 0.0625, 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0)
@@ -539,7 +540,7 @@ class BattleReplay():
                  'clientVersionFromXml': clientVersionFromXml,
                  'serverName': connectionManager.serverUserName,
                  'regionCode': constants.AUTH_REALM,
-                 'roamingSettings': self.__roamingSettings}
+                 'serverSettings': self.__serverSettings}
                 self.__replayCtrl.recMapName = arenaName
                 self.__replayCtrl.recPlayerVehicleName = vehicleName
                 self.__replayCtrl.setArenaInfoStr(json.dumps(arenaInfo))
@@ -570,15 +571,13 @@ class BattleReplay():
     def onBattleSwfLoaded(self):
         if self.isPlaying:
             self.__replayCtrl.onBattleSwfLoaded()
-            self.__roamingSettings = None
+            self.__serverSettings = dict()
             try:
-                self.__roamingSettings = json.loads(self.__replayCtrl.getArenaInfoStr()).get('roamingSettings')
+                self.__serverSettings = json.loads(self.__replayCtrl.getArenaInfoStr()).get('serverSettings')
                 from gui.game_control import g_instance
-                g_instance.roaming.start({'roaming': self.__roamingSettings})
+                g_instance.roaming.start({'roaming': self.__serverSettings['roaming']})
             except:
                 pass
-
-        return
 
     def onCommonSwfLoaded(self):
         self.__enableTimeWarp = False
@@ -745,15 +744,24 @@ class BattleReplay():
 
     def __onBattleResultsReceived(self, isPlayerVehicle, results):
         if isPlayerVehicle:
-            modifiedResults = copy.copy(results)
-            vehicles = modifiedResults.get('vehicles', None)
-            if vehicles is not None:
-                for vehicle in vehicles.itervalues():
-                    vehicle['damage_event_list'] = None
+            modifiedResults = copy.deepcopy(results)
+            allPlayersVehicles = modifiedResults.get('vehicles', None)
+            if allPlayersVehicles is not None:
+                for playerVehicles in allPlayersVehicles.itervalues():
+                    for vehicle in playerVehicles:
+                        vehicle['damage_event_list'] = None
 
-            personal = modifiedResults.get('personal', None)
-            if personal is not None:
-                personal['damage_event_list'] = None
+            personals = modifiedResults.get('personal', None)
+            if personals is not None:
+                for personal in personals.itervalues():
+                    personal['damage_event_list'] = None
+                    details = personal.pop('details', None)
+                    modifiedDetails = dict()
+                    for key, value in details.iteritems():
+                        modifiedDetails[str(key)] = value
+
+                    personal['details'] = modifiedDetails
+
             modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
             self.__replayCtrl.setArenaStatisticsStr(json.dumps(modifiedResults))
         return
@@ -767,7 +775,8 @@ class BattleReplay():
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:
                 self.__playerDatabaseID = player.databaseID
-                self.__roamingSettings = player.serverSettings['roaming']
+                self.__serverSettings['roaming'] = player.serverSettings['roaming']
+                self.__serverSettings['isPotapovQuestEnabled'] = player.serverSettings.get('isPotapovQuestEnabled', False)
             return
 
     def __onSettingsChanging(self, diff):
@@ -855,7 +864,7 @@ class BattleReplay():
         if self.isRecording:
             self.__replayCtrl.onSetCruiseMode(mode)
         elif self.isPlaying:
-            self.guiWindowManager.battleWindow.damagePanel.setCruiseMode(mode)
+            g_sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CRUISE_MODE, mode)
 
     def isNeedToPlay(self, entity_id):
         return self.__replayCtrl.isEffectNeedToPlay(entity_id)

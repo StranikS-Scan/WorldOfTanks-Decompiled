@@ -2,10 +2,11 @@
 import calendar
 import time
 from debug_utils import LOG_CURRENT_EXCEPTION
-from messenger.proto.xmpp.extensions import PyExtension, PyHandler, PyMessage
-from messenger.proto.xmpp.extensions.contact_item import WgContactInfoExtension
+from messenger.proto.xmpp.extensions import PyExtension, PyHandler
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
+from messenger.proto.xmpp.extensions.shared_queries import MessageQuery
+from messenger.proto.xmpp.extensions.wg_items import WgSharedExtension
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE
 
 class MESSAGE_TYPE_ATTR(object):
@@ -91,12 +92,12 @@ class _MessageCustomExtension(PyExtension):
     def __init__(self, msgType, state = CHAT_STATE.UNDEFINED):
         super(_MessageCustomExtension, self).__init__(_TAG.MESSAGE)
         self.setAttribute('type', msgType)
-        self.setChild(WgContactInfoExtension(False))
+        self.setChild(WgSharedExtension(False))
         self.setChild(ChatStateExtension(state))
         self.setChild(DelayExtension())
 
     def parseTag(self, pyGlooxTag):
-        info = self._getChildData(pyGlooxTag, 0, WgContactInfoExtension.getDefaultData())
+        info = self._getChildData(pyGlooxTag, 0, WgSharedExtension.getDefaultData())
         state = self._getChildData(pyGlooxTag, 1, ChatStateExtension.getDefaultData())
         sentAt = self._getChildData(pyGlooxTag, 2, time.time())
         return (state, info, sentAt)
@@ -105,7 +106,7 @@ class _MessageCustomExtension(PyExtension):
         return (CHAT_STATE.UNDEFINED, {}, 0)
 
 
-class ChatMessageHolder(PyMessage):
+class ChatMessageHolder(MessageQuery):
 
     def __init__(self, to, msgBody = '', state = CHAT_STATE.UNDEFINED):
         if state:

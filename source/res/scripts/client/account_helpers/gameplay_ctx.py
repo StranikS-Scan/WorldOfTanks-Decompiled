@@ -15,19 +15,21 @@ def getDefaultMask():
 
 def getMask():
     from account_helpers.settings_core.SettingsCore import g_settingsCore
-    mask = g_settingsCore.serverSettings.getGameplaySetting('gameplayMask', getDefaultMask())
+    settingsMask = userMask = g_settingsCore.serverSettings.getGameplaySetting('gameplayMask', getDefaultMask())
     ctfMask = 1 << constants.ARENA_GAMEPLAY_IDS['ctf']
     nationsMask = 1 << constants.ARENA_GAMEPLAY_IDS['nations']
-    if not mask:
-        LOG_WARNING('Gameplay is not defined', mask)
+    if not userMask:
+        LOG_WARNING('Gameplay is not defined', userMask)
     else:
-        if mask & ctfMask == 0:
-            LOG_WARNING('Gameplay "ctf" is not defined', mask)
-        if mask & nationsMask:
-            mask ^= nationsMask
+        if userMask & ctfMask == 0:
+            LOG_WARNING('Gameplay "ctf" is not defined', userMask)
+        if userMask & nationsMask:
+            userMask ^= nationsMask
             LOG_DEBUG('Nations battle mode currently unavailable')
-    mask |= ctfMask
-    return mask
+    userMask |= ctfMask
+    if settingsMask != userMask:
+        _setMask(userMask)
+    return userMask
 
 
 def setMaskByNames(names):
@@ -40,9 +42,13 @@ def setMaskByNames(names):
 
     gameplayMask = ArenaType.getGameplaysMask(gameplayNames)
     LOG_DEBUG('Set gameplay (names, mask)', gameplayNames, gameplayMask)
-    from account_helpers.settings_core.SettingsCore import g_settingsCore
-    g_settingsCore.serverSettings.setGameplaySettings({'gameplayMask': gameplayMask})
+    _setMask(gameplayMask)
 
 
 def isCreationEnabled(gameplayName):
     return gameplayName in ENABLED_ARENA_GAMEPLAY_NAMES
+
+
+def _setMask(gameplayMask):
+    from account_helpers.settings_core.SettingsCore import g_settingsCore
+    g_settingsCore.serverSettings.setGameplaySettings({'gameplayMask': gameplayMask})

@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/helpers/statistics.py
 import math
 import BigWorld
+import ResMgr
 from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
 from account_helpers.settings_core import SettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
@@ -97,6 +98,7 @@ class StatisticsCollector:
                 ret['screenResHeight'] = resolutionContainer.height
                 ret['drrScale'] = int(round(BigWorld.getDRRScale() * 100))
                 ret['invalidStats'] |= self.__invalidStats
+                ret['contentType'] = ResMgr.activeContentType()
         if andStop is True or not proceed:
             self.stop()
         return ret

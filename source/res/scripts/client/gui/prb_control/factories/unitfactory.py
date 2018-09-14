@@ -4,15 +4,17 @@ from debug_utils import LOG_ERROR
 from gui import prb_control
 from gui.prb_control.context.unit_ctx import LeaveUnitCtx
 from gui.prb_control.factories.ControlFactory import ControlFactory
-from gui.prb_control.functional.unit import NoUnitFunctional, UnitEntry, UnitIntro, FortBattleEntry, ClubBattleEntry
+from gui.prb_control.functional.unit import NoUnitFunctional, UnitEntry, UnitIntro, FortBattleEntry, ClubBattleEntry, SquadEntry
 from gui.prb_control.functional.unit import IntroFunctional, UnitFunctional
 from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.items.unit_items import SupportedRosterSettings, DynamicRosterSettings
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE, UNIT_MODE_FLAGS, FUNCTIONAL_EXIT
 _PAN = PREBATTLE_ACTION_NAME
-_SUPPORTED_ENTRY_BY_ACTION = {_PAN.UNIT: (UnitIntro, (PREBATTLE_TYPE.UNIT,)),
+_SUPPORTED_ENTRY_BY_ACTION = {_PAN.SQUAD: (SquadEntry, None),
+ _PAN.UNIT: (UnitIntro, (PREBATTLE_TYPE.UNIT,)),
  _PAN.FORT: (UnitIntro, (PREBATTLE_TYPE.SORTIE,))}
-_SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.UNIT: UnitEntry,
+_SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: SquadEntry,
+ PREBATTLE_TYPE.UNIT: UnitEntry,
  PREBATTLE_TYPE.SORTIE: UnitEntry,
  PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntry,
  PREBATTLE_TYPE.CLUBS: ClubBattleEntry}
@@ -63,7 +65,7 @@ class UnitFactory(ControlFactory):
         return PlayerDecorator(info.isCreator(), info.isReady)
 
     def createStateEntity(self, functional):
-        return FunctionalState(CTRL_ENTITY_TYPE.UNIT, functional.getPrbType(), True, functional.hasLockedState(), isinstance(functional, IntroFunctional), functional.getState())
+        return FunctionalState(CTRL_ENTITY_TYPE.UNIT, functional.getPrbType(), True, functional.hasLockedState(), isinstance(functional, IntroFunctional), functional.getFlags())
 
     def createLeaveCtx(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
         return LeaveUnitCtx(waitingID='prebattle/leave', funcExit=funcExit)

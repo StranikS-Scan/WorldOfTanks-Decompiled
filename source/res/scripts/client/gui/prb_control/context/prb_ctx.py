@@ -150,27 +150,6 @@ class CompanySettingsCtx(TeamSettingsCtx):
         return self.__division != settings[prb_settings.PREBATTLE_SETTING_NAME.DIVISION]
 
 
-@ReprInjector.simple(('getWaitingID', 'waitingID'), ('getFuncExit', 'funcExit'))
-
-class SquadSettingsCtx(_PrbRequestCtx):
-
-    def __init__(self, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.SQUAD, accountsToInvite = None, isForced = False):
-        super(SquadSettingsCtx, self).__init__(waitingID=waitingID, funcExit=funcExit, isForced=isForced)
-        self.__accountsToInvite = accountsToInvite or []
-
-    def getID(self):
-        return 0
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.SQUAD
-
-    def getRequestType(self):
-        return _REQUEST_TYPE.CREATE
-
-    def getAccountsToInvite(self):
-        return self.__accountsToInvite
-
-
 @ReprInjector.withParent(('__prbID', 'id'), ('__prbType', 'type'))
 
 class _JoinPrbCtx(_PrbRequestCtx):
@@ -444,4 +423,4 @@ class GetPrbRosterCtx(_PrbRequestCtx):
         return _REQUEST_TYPE.GET_ROSTER
 
 
-__all__ = ('JoinModeCtx', 'TeamSettingsCtx', 'TrainingSettingsCtx', 'CompanySettingsCtx', 'SquadSettingsCtx', 'JoinTrainingCtx', 'JoinCompanyCtx', 'LeavePrbCtx', 'AssignPrbCtx', 'SetTeamStateCtx', 'SetPlayerStateCtx', 'SwapTeamsCtx', 'ChangeOpenedCtx', 'ChangeCommentCtx', 'ChangeDivisionCtx', 'ChangeArenaVoipCtx', 'KickPlayerCtx', 'RequestPrebattlesCtx', 'RequestCompaniesCtx', 'GetPrbRosterCtx')
+__all__ = ('JoinModeCtx', 'TeamSettingsCtx', 'TrainingSettingsCtx', 'CompanySettingsCtx', 'JoinTrainingCtx', 'JoinCompanyCtx', 'LeavePrbCtx', 'AssignPrbCtx', 'SetTeamStateCtx', 'SetPlayerStateCtx', 'SwapTeamsCtx', 'ChangeOpenedCtx', 'ChangeCommentCtx', 'ChangeDivisionCtx', 'ChangeArenaVoipCtx', 'KickPlayerCtx', 'RequestPrebattlesCtx', 'RequestCompaniesCtx', 'GetPrbRosterCtx')

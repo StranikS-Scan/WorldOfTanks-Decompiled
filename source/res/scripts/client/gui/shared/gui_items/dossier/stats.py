@@ -15,6 +15,7 @@ _EPIC_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.EPIC]
 _ACTION_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.ACTION]
 _NEAREST_ACHIEVEMENTS_COUNT = 5
 _SIGNIFICANT_ACHIEVEMENTS_PER_SECTION = 3
+_7X7_AVAILABLE_RANGE = range(6, 9)
 
 def _nearestComparator(x, y):
     if x.getLevelUpValue() == 1 or y.getLevelUpValue() == 1:
@@ -106,6 +107,9 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
         return result
 
     def getBattlesStats(self):
+        return self._getBattlesStats(availableRange=range(1, constants.MAX_VEHICLE_LEVEL + 1))
+
+    def _getBattlesStats(self, availableRange):
         vehsByType = dict(((t, 0) for t in vehicles.VEHICLE_CLASS_TAGS))
         vehsByNation = dict(((idx, 0) for idx, n in enumerate(nations.NAMES)))
         vehsByLevel = dict(((k, 0) for k in xrange(1, constants.MAX_VEHICLE_LEVEL + 1)))
@@ -114,6 +118,10 @@ class _VehiclesStatsBlock(_StatsBlockAbstract):
             vehsByNation[vehType.id[0]] += vehCut.battlesCount
             vehsByLevel[vehType.level] += vehCut.battlesCount
             vehsByType[set(vehType.tags & vehicles.VEHICLE_CLASS_TAGS).pop()] += vehCut.battlesCount
+
+        for level in vehsByLevel.iterkeys():
+            if level not in availableRange:
+                vehsByLevel[level] = None
 
         return (vehsByType, vehsByNation, vehsByLevel)
 
@@ -135,6 +143,12 @@ class _MapStatsBlock(_StatsBlockAbstract):
 
         def __imul__(self, other):
             return self + other
+
+        @property
+        def winsEfficiency(self):
+            if self.battlesCount:
+                return float(self.wins) / self.battlesCount
+            return 0
 
     def __init__(self, dossier):
         self._mapsList = {}
@@ -762,10 +776,7 @@ class AccountTeam7x7StatsBlock(Team7x7StatsBlock, _MaxVehicleStatsBlock, _Vehicl
         return (-1, -1, -1, -1)
 
     def getBattlesStats(self):
-        battlesTypesData = _VehiclesStatsBlock.getBattlesStats(self)
-        battlesByLevels = battlesTypesData[2]
-        battlesByLevels[9], battlesByLevels[10] = (None, None)
-        return battlesTypesData
+        return self._getBattlesStats(availableRange=_7X7_AVAILABLE_RANGE)
 
     def _getVehDossiersCut(self, dossier):
         return dossier.getDossierDescr()['a7x7Cut']
@@ -1153,8 +1164,6 @@ class AccountDossierStats(_DossierStats):
 
     def getTotalStats(self):
         return AccountTotalStatsBlock(self._getDossierItem(), (self.getRandomStats(),
-         self.getClanStats(),
-         self.getCompanyStats(),
          self.getTeam7x7Stats(),
          self.getHistoricalStats(),
          self.getFortBattlesStats(),
@@ -1284,10 +1293,7 @@ class AccountRated7x7StatsBlock(Rated7x7Stats, _MaxVehicleStatsBlock, _VehiclesS
         return (-1, -1, -1, -1)
 
     def getBattlesStats(self):
-        battlesTypesData = _VehiclesStatsBlock.getBattlesStats(self)
-        battlesByLevels = battlesTypesData[2]
-        battlesByLevels[9], battlesByLevels[10] = (None, None)
-        return battlesTypesData
+        return self._getBattlesStats(availableRange=_7X7_AVAILABLE_RANGE)
 
     def _getVehDossiersCut(self, dossier):
         return dossier.getDossierDescr()['rated7x7Cut']

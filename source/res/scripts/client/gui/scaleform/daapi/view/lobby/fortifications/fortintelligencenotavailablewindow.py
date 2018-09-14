@@ -1,12 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceNotAvailableWindow.py
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortIntelligenceNotAvailableWindowMeta import FortIntelligenceNotAvailableWindowMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
+from gui.Scaleform.framework.managers.TextManager import TextIcons
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from helpers import i18n
 TEXTS = (FORTIFICATIONS.FORTINTELLIGENCE_HEADERBLOCK,
@@ -47,17 +48,17 @@ class FortIntelligenceNotAvailableWindow(AbstractWindowView, View, FortIntellige
             countIteration += 1
 
         if self.__isDefenceHourEnabled:
-            data.append(self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, self.__getText(FORTIFICATIONS.FORTINTELLIGENCE_ADDITIONALTEXT_COMINGSOON)))
+            data.append(self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, self.__getText(FORTIFICATIONS.FORTINTELLIGENCE_ADDITIONALTEXT_COMINGSOON)))
         self.as_setDataS(data)
 
     def __getLocalize(self, value, countIteration):
-        headerText = TextType.PROMO_SUB_TITLE
-        bodyText = TextType.MAIN_TEXT
+        headerText = TEXT_MANAGER_STYLES.PROMO_SUB_TITLE
+        bodyText = TEXT_MANAGER_STYLES.MAIN_TEXT
         alertIcon = ''
         if countIteration == 0:
-            headerText = TextType.PROMO_TITLE
+            headerText = TEXT_MANAGER_STYLES.PROMO_TITLE
             if not self.__isDefenceHourEnabled:
-                bodyText = TextType.ALERT_TEXT
+                bodyText = TEXT_MANAGER_STYLES.ALERT_TEXT
                 alertIcon = self.app.utilsManager.textManager.getIcon(TextIcons.ALERT_ICON) + ' '
         valueHeader = self.app.utilsManager.textManager.getText(headerText, self.__getText(value + '/header'))
         valueBody = self.app.utilsManager.textManager.getText(bodyText, alertIcon + self.__getText(value + '/body'))

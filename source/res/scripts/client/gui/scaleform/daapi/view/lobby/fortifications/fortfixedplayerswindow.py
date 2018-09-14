@@ -12,7 +12,7 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortFixedPlayersWindowMeta import FortFixedPlayersWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -87,7 +87,7 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
         btnTooltipData = TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNENABLED
         if self.__isAssigned:
             isVisible = False
-            result['playerIsAssigned'] = self.app.utilsManager.textManager.getText(TextType.NEUTRAL_TEXT, i18n.makeString(FORTIFICATIONS.FIXEDPLAYERS_HEADER_ISASSIGNED))
+            result['playerIsAssigned'] = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.NEUTRAL_TEXT, i18n.makeString(FORTIFICATIONS.FIXEDPLAYERS_HEADER_ISASSIGNED))
         if isVisible and len(self.__fixedPlayers) == self.__limitFixedPlayers:
             isEnabled = False
             btnTooltipData = TOOLTIPS.FORTIFICATION_FIXEDPLAYERS_ASSIGNBTNDISABLED
@@ -108,10 +108,10 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
     def __playersLabel(self):
         concat = ' / ' + str(self.__limitFixedPlayers)
         playerCount = len(self.__fixedPlayers)
-        currentPlayerColor = TextType.NEUTRAL_TEXT
+        currentPlayerColor = TEXT_MANAGER_STYLES.NEUTRAL_TEXT
         if playerCount == 0:
-            currentPlayerColor = TextType.STANDARD_TEXT
-        result = self.app.utilsManager.textManager.concatStyles(((currentPlayerColor, str(playerCount)), (TextType.STANDARD_TEXT, concat)))
+            currentPlayerColor = TEXT_MANAGER_STYLES.STANDARD_TEXT
+        result = self.app.utilsManager.textManager.concatStyles(((currentPlayerColor, str(playerCount)), (TEXT_MANAGER_STYLES.STANDARD_TEXT, concat)))
         return result
 
     def __makeRosters(self):
@@ -120,7 +120,7 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
             player = findFirst(lambda m: m.getID() == dbID, g_clanCache.clanMembers)
             if player is not None:
                 intTotalMining, intWeekMining = self.fortCtrl.getFort().getPlayerContributions(dbID)
-                role = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(getClanRoleString(player.getClanRole())))
+                role = self.app.utilsManager.textManager.getText(TEXT_MANAGER_STYLES.STANDARD_TEXT, i18n.makeString(getClanRoleString(player.getClanRole())))
                 roleID = self.CLAN_MEMBER_ROLES.index(player.getClanRole())
                 vo = vo_converters.makeSimpleClanListRenderVO(player, intTotalMining, intWeekMining, role, roleID)
                 result.append(vo)

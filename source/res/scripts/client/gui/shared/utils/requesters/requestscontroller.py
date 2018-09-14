@@ -26,6 +26,7 @@ class RequestsController(object):
         self._rqQueue = []
         self._rqCallbackID = None
         self._rqCtx = None
+        self._rqHandler = None
         return
 
     def fini(self):
@@ -83,7 +84,7 @@ class RequestsController(object):
     def hasHandler(self, requestTypeID):
         return self._getHandlerByRequestType(requestTypeID) is not None
 
-    def _doNextRequest(self):
+    def _doNextRequest(self, adjustCooldown = None):
         if len(self._rqQueue) and self._rqCallbackID is None:
             requestType, ctx, request = self._rqQueue.pop(0)
             cooldownLeft = self._cooldowns.getTime(requestType)
@@ -91,6 +92,8 @@ class RequestsController(object):
                 self._loadDelayedRequest(cooldownLeft, ctx, request)
             else:
                 request()
+        elif adjustCooldown and self._rqCallbackID is not None:
+            self._loadDelayedRequest(adjustCooldown, self._rqCtx, self._rqHandler)
         return
 
     def _getHandlerByRequestType(self, requestTypeID):
@@ -106,7 +109,7 @@ class RequestsController(object):
         self._cooldowns.adjust(requestType, cooldown)
         if callback:
             callback(*args)
-        self._doNextRequest()
+        self._doNextRequest(adjustCooldown=cooldown)
         return
 
     def _clearWaiters(self):
@@ -119,7 +122,7 @@ class RequestsController(object):
 
     def _onTimeout(self, cb, requestType, ctx):
         LOG_ERROR('Request timed out', self, requestType, ctx)
-        self._doRequestError(ctx, 'cooldown', cb)
+        self._doRequestError(ctx, 'time out', cb)
 
     def _doRequestError(self, ctx, msg, callback = None):
         if self._requester:
@@ -130,6 +133,7 @@ class RequestsController(object):
     def _loadDelayedRequest(self, seconds, ctx, request):
         self._clearDelayedRequest()
         self._rqCtx = ctx
+        self._rqHandler = request
         self._rqCtx.startProcessing()
         self._rqCallbackID = BigWorld.callback(seconds, request)
 
@@ -140,4 +144,6 @@ class RequestsController(object):
         if self._rqCtx is not None:
             self._rqCtx.stopProcessing()
             self._rqCtx = None
+        if self._rqHandler is not None:
+            self._rqHandler = None
         return

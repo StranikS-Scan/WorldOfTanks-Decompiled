@@ -3,8 +3,8 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from helpers import i18n
 from messenger.proto.interfaces import IChatError
 from messenger.proto.shared_errors import ClientError, I18nActionID, I18nErrorID, ChatBanError
-from messenger.proto.xmpp.extensions import IQHandler
 from messenger.proto.xmpp.extensions.error import StanzaErrorExtension
+from messenger.proto.xmpp.extensions.shared_handlers import IQHandler
 from messenger.proto.xmpp.xmpp_constants import CONTACT_ERROR_NAMES, LIMIT_ERROR_NAMES
 
 class _ContactErrorID(I18nErrorID):

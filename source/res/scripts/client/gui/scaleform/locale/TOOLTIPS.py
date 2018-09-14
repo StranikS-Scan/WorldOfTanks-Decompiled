@@ -221,6 +221,7 @@ class TOOLTIPS(object):
     ROLECHANGE_ROLETAKEN = '#tooltips:RoleChange/roleTaken'
     ROLECHANGE_ROLEANDVEHICLETAKEN = '#tooltips:RoleChange/roleAndVehicleTaken'
     ROLECHANGE_FOOTERINFO = '#tooltips:RoleChange/footerInfo'
+    ROLECHANGE_COMMANDERROLEFORBIDDEN = '#tooltips:RoleChange/commanderRoleForbidden'
     PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN = '#tooltips:personal_case/skills/accTeachingOfSkillBtn'
     PERSONAL_CASE_SKILLS_ACCTEACHINGOFSKILLBTN_NOTENOUGHFREEXP = '#tooltips:personal_case/skills/accTeachingOfSkillBtn/notEnoughFreeXP'
     PERSONAL_CASE_TRAINING_LIGHT_TANK_BTN = '#tooltips:personal_case/training/light_tank_btn'
@@ -945,6 +946,8 @@ class TOOLTIPS(object):
     BARRACKS_TANKMEN_RECOVERY_FREE_BODY = '#tooltips:barracks/tankmen/recovery/free/body'
     BARRACKS_TANKMEN_RECOVERY_GOLD_BODY = '#tooltips:barracks/tankmen/recovery/gold/body'
     BARRACKS_PLACESCOUNT_DISMISS_HEADER = '#tooltips:barracks/placesCount/dismiss/header'
+    CREW_LOCK_HEADER = '#tooltips:crew/lock/header'
+    CREW_LOCK_BODY = '#tooltips:crew/lock/body'
     BARRACKS_PLACESCOUNT_DISMISS_BODY = '#tooltips:barracks/placesCount/dismiss/body'
     BARRACKS_TANKMEN_RECOVERY_NEWSKILL = '#tooltips:barracks/tankmen/recovery/newSkill'
     HEADER_INFO_PLAYERS_UNAVAILABLE_HEADER = '#tooltips:header/info/players_unavailable/header'
@@ -1516,6 +1519,8 @@ class TOOLTIPS(object):
     CONTACT_UNITS_GROUPS = '#tooltips:Contact/units/groups'
     ROLECHANGE_CURRENTROLEWARNING_HEADER = '#tooltips:RoleChange/currentRoleWarning/header'
     ROLECHANGE_CURRENTROLEWARNING_BODY = '#tooltips:RoleChange/currentRoleWarning/body'
+    ROLECHANGE_ROLECHANGEFORBIDDEN_HEADER = '#tooltips:RoleChange/roleChangeForbidden/header'
+    ROLECHANGE_ROLECHANGEFORBIDDEN_BODY = '#tooltips:RoleChange/roleChangeForbidden/body'
     ROLECHANGE_ROLETAKEN_HEADER = '#tooltips:RoleChange/roleTaken/header'
     ROLECHANGE_ROLETAKEN_BODY = '#tooltips:RoleChange/roleTaken/body'
     ROLECHANGE_ROLEANDVEHICLETAKEN_HEADER = '#tooltips:RoleChange/roleAndVehicleTaken/header'
@@ -2002,6 +2007,18 @@ class TOOLTIPS(object):
     QUESTS_VEHICLES_HEADER = '#tooltips:quests/vehicles/header'
     QUESTS_VEHICLES_DESCRIPTION = '#tooltips:quests/vehicles/description'
     QUESTS_VEHICLES_BOTTOM = '#tooltips:quests/vehicles/bottom'
+    CREW_ROLECHANGEFORBID_HEADER = '#tooltips:crew/roleChangeForbid/header'
+    CREW_ROLECHANGEFORBID_TEXT = '#tooltips:crew/roleChangeForbid/text'
+    SABATON_COMMANDER_HEADER = '#tooltips:sabaton/commander/header'
+    SABATON_COMMANDER_BODY = '#tooltips:sabaton/commander/body'
+    SABATON_RADIOMAN_HEADER = '#tooltips:sabaton/radioman/header'
+    SABATON_RADIOMAN_BODY = '#tooltips:sabaton/radioman/body'
+    SABATON_LOADER_HEADER = '#tooltips:sabaton/loader/header'
+    SABATON_LOADER_BODY = '#tooltips:sabaton/loader/body'
+    SABATON_GUNNER_HEADER = '#tooltips:sabaton/gunner/header'
+    SABATON_GUNNER_BODY = '#tooltips:sabaton/gunner/body'
+    SABATON_DRIVER_HEADER = '#tooltips:sabaton/driver/header'
+    SABATON_DRIVER_BODY = '#tooltips:sabaton/driver/body'
     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,
@@ -2272,6 +2289,16 @@ class TOOLTIPS(object):
      BATTLETYPES_RANKED_STEPSCOUNT_7,
      BATTLETYPES_RANKED_STEPSCOUNT_8,
      BATTLETYPES_RANKED_STEPSCOUNT_9)
+    SABATON_ALL_HEADER_ENUM = (SABATON_COMMANDER_HEADER,
+     SABATON_RADIOMAN_HEADER,
+     SABATON_LOADER_HEADER,
+     SABATON_GUNNER_HEADER,
+     SABATON_DRIVER_HEADER)
+    SABATON_ALL_BODY_ENUM = (SABATON_COMMANDER_BODY,
+     SABATON_RADIOMAN_BODY,
+     SABATON_LOADER_BODY,
+     SABATON_GUNNER_BODY,
+     SABATON_DRIVER_BODY)
 
     @classmethod
     def tankcaruseltooltip_vehicletype_normal(cls, key0):
@@ -2511,6 +2538,24 @@ class TOOLTIPS(object):
     def rankStepsCount(cls, key0):
         outcome = '#tooltips:battleTypes/ranked/stepsCount/{}'.format(key0)
         if outcome not in cls.BATTLETYPES_RANKED_STEPSCOUNT_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def sabatonHeader(cls, role):
+        outcome = '#tooltips:sabaton/{}/header'.format(role)
+        if outcome not in cls.SABATON_ALL_HEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def sabatonBody(cls, role):
+        outcome = '#tooltips:sabaton/{}/body'.format(role)
+        if outcome not in cls.SABATON_ALL_BODY_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

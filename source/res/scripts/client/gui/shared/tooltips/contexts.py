@@ -12,7 +12,7 @@ from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from helpers import dependency
 from shared_utils import findFirst
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import TankmanSkill
+from gui.shared.gui_items.Tankman import getTankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -488,7 +488,7 @@ class PersonalCaseContext(ToolTipContext):
         tankman = self.itemsCache.items.getTankman(int(tankmanID))
         skill = findFirst(lambda x: x.name == skillID, tankman.skills)
         if skill is None:
-            skill = TankmanSkill(skillID)
+            skill = getTankmanSkill(skillID, tankman=tankman)
         return skill
 
 

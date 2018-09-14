@@ -11,6 +11,7 @@ from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils import isPopupsWindowsOpenDisabled
+from CurrentVehicle import HeroTankPreviewAppearance
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 import constants
@@ -126,6 +127,22 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW, ctx={'itemCD': vehTypeCompDescr,
          'previewAlias': previewAlias,
          'vehicleStrCD': vehStrCD}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showSabatonVehiclePreview():
+    """Show sabaton tank in preview mode
+    """
+    from items import sabaton_crew
+    from gui.Scaleform.daapi.view.lobby.vehiclePreview.vehicle_preview_dp import SabatonVehPreviewDataProvider
+    vehType = sabaton_crew.getSabatonVehType()
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW, ctx={'itemCD': vehType.compactDescr,
+     'previewAlias': VIEW_ALIAS.LOBBY_HANGAR,
+     'previewAppearance': HeroTankPreviewAppearance(),
+     'previewDP': SabatonVehPreviewDataProvider()}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def hideVehiclePreview():
+    g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideBattleResults():

@@ -97,6 +97,7 @@ class _HangarSpace(object):
         self.onObjectSelected = Event.Event()
         self.onObjectUnselected = Event.Event()
         self.onObjectClicked = Event.Event()
+        self.onObjectReleased = Event.Event()
         return
 
     @property
@@ -218,6 +219,9 @@ class _HangarSpace(object):
 
     def leftButtonClicked(self):
         self.onObjectClicked()
+
+    def leftButtonReleased(self):
+        self.onObjectReleased()
 
 
 g_hangarSpace = _HangarSpace()

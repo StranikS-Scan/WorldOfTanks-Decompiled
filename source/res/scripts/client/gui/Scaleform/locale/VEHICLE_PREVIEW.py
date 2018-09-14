@@ -26,3 +26,7 @@ class VEHICLE_PREVIEW(object):
     INFOPANEL_TAB_CREWINFO_NAME = '#vehicle_preview:infoPanel/tab/crewInfo/name'
     INFOPANEL_TAB_FACTSHEET_NAME = '#vehicle_preview:infoPanel/tab/factSheet/name'
     INFOPANEL_TAB_CREWINFO_LISTDESC_TEXT = '#vehicle_preview:infoPanel/tab/crewInfo/listDesc/text'
+    SPECIALCREW_SABATON_NAME = '#vehicle_preview:specialCrew/sabaton/name'
+    SPECIALCREW_SABATON_DESCRIPTION = '#vehicle_preview:specialCrew/sabaton/description'
+    SPECIALCREW_SABATON_PERK = '#vehicle_preview:specialCrew/sabaton/perk'
+    BUYINGPANEL_SABATON_BUYLABEL = '#vehicle_preview:buyingPanel/sabaton/buyLabel'

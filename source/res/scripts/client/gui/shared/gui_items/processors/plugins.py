@@ -5,7 +5,8 @@ from adisp import process, async
 from debug_utils import LOG_WARNING
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
-from items import tankmen as tmen_core
+from items import tankmen as tmen_core, tankmen
+from items.qualifiers import CREW_ROLE
 from gui import DialogsInterface
 from gui.game_control import restore_contoller
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
@@ -122,10 +123,11 @@ class VehicleValidator(SyncValidator):
 
 class VehicleRoleValidator(SyncValidator):
 
-    def __init__(self, vehicle, role, isEnabled=True):
+    def __init__(self, vehicle, role, tankman, isEnabled=True):
         super(VehicleRoleValidator, self).__init__(isEnabled)
         self.vehicle = vehicle
         self.role = role
+        self.tankman = tankman
 
     def _validate(self):
         if self.vehicle is None:
@@ -134,6 +136,9 @@ class VehicleRoleValidator(SyncValidator):
             if self.vehicle is not None:
                 mainRoles = set(map(lambda r: r[0], self.vehicle.descriptor.type.crewRoles))
                 if self.role not in mainRoles:
+                    return makeError('invalid_role')
+                td = self.tankman.descriptor
+                if not tankmen.tankmenGroupHasRole(td.nationID, td.gid, td.isPremium, self.role):
                     return makeError('invalid_role')
             return makeSuccess()
 

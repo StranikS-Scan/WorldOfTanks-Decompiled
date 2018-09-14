@@ -2202,6 +2202,11 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_30 = '../maps/icons/tankmen/icons/barracks/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_31 = '../maps/icons/tankmen/icons/barracks/sweden-31.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_32 = '../maps/icons/tankmen/icons/barracks/sweden-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_33 = '../maps/icons/tankmen/icons/barracks/sweden-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_34 = '../maps/icons/tankmen/icons/barracks/sweden-34.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_35 = '../maps/icons/tankmen/icons/barracks/sweden-35.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_36 = '../maps/icons/tankmen/icons/barracks/sweden-36.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_37 = '../maps/icons/tankmen/icons/barracks/sweden-37.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_4 = '../maps/icons/tankmen/icons/barracks/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_5 = '../maps/icons/tankmen/icons/barracks/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_6 = '../maps/icons/tankmen/icons/barracks/sweden-6.png'
@@ -2680,6 +2685,11 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_30 = '../maps/icons/tankmen/icons/big/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_31 = '../maps/icons/tankmen/icons/big/sweden-31.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_32 = '../maps/icons/tankmen/icons/big/sweden-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_33 = '../maps/icons/tankmen/icons/big/sweden-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_34 = '../maps/icons/tankmen/icons/big/sweden-34.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_35 = '../maps/icons/tankmen/icons/big/sweden-35.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_36 = '../maps/icons/tankmen/icons/big/sweden-36.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_37 = '../maps/icons/tankmen/icons/big/sweden-37.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_4 = '../maps/icons/tankmen/icons/big/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_5 = '../maps/icons/tankmen/icons/big/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_6 = '../maps/icons/tankmen/icons/big/sweden-6.png'
@@ -3159,6 +3169,11 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_30 = '../maps/icons/tankmen/icons/small/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_31 = '../maps/icons/tankmen/icons/small/sweden-31.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_32 = '../maps/icons/tankmen/icons/small/sweden-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_33 = '../maps/icons/tankmen/icons/small/sweden-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_34 = '../maps/icons/tankmen/icons/small/sweden-34.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_35 = '../maps/icons/tankmen/icons/small/sweden-35.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_36 = '../maps/icons/tankmen/icons/small/sweden-36.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_37 = '../maps/icons/tankmen/icons/small/sweden-37.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_4 = '../maps/icons/tankmen/icons/small/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_5 = '../maps/icons/tankmen/icons/small/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_6 = '../maps/icons/tankmen/icons/small/sweden-6.png'
@@ -4065,6 +4080,11 @@ class RES_ICONS(object):
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_30,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_31,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_32,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_33,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_34,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_35,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_36,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_37,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_4,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_5,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_6,

@@ -24,6 +24,20 @@
         </inscription>
       </inscriptions>
     </swedenhidden>
+    <S23_Strv_81_sabaton>
+      <userString>	#vehicle_customization:inscription/special	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	0.0	</priceFactor>
+      <allow>	sweden:S23_Strv_81_sabaton	</allow>
+      <inscriptions>
+        <inscription>
+          <id>	20	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_20.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/primovictoria	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </S23_Strv_81_sabaton>
     <sweden>
       <userString>	#vehicle_customization:inscription/historical	</userString>
       <priceFactor>	1.0	</priceFactor>
@@ -185,6 +199,7 @@
       <id>	133	</id>
       <group>	winter	</group>
       <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	240 240 240 227	</c0>
         <c1>	36 35 28 45	</c1>
@@ -221,6 +236,7 @@
       <id>	134	</id>
       <group>	winter	</group>
       <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	240 240 240 199	</c0>
         <c1>	36 35 28 0	</c1>
@@ -257,6 +273,7 @@
       <id>	135	</id>
       <group>	summer	</group>
       <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	70 74 45 98	</c0>
         <c1>	72 56 45 188	</c1>
@@ -296,6 +313,7 @@
       <id>	136	</id>
       <group>	summer	</group>
       <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	81 44 19 155	</c0>
         <c1>	82 100 74 140	</c1>
@@ -335,6 +353,7 @@
       <id>	137	</id>
       <group>	desert	</group>
       <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	81 44 19 0	</c0>
         <c1>	140 158 16 0	</c1>
@@ -374,6 +393,7 @@
       <id>	138	</id>
       <group>	desert	</group>
       <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	29 29 29 255	</c0>
         <c1>	125 128 125 255	</c1>
@@ -414,6 +434,7 @@
       <id>	139	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	79 79 79 225	</c0>
         <c1>	0 0 0 227	</c1>
@@ -454,6 +475,7 @@
       <id>	140	</id>
       <kind>	summer	</kind>
       <group>	IGRsummer	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	157 108 34 213	</c0>
         <c1>	226 210 154 223	</c1>
@@ -495,6 +517,7 @@
       <id>	141	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	196 126 34 202	</c0>
         <c1>	226 210 154 230	</c1>
@@ -536,6 +559,7 @@
       <id>	142	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	32 35 43 225	</c0>
         <c1>	101 74 50 227	</c1>
@@ -576,6 +600,7 @@
       <id>	143	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	138 90 68 202	</c0>
         <c1>	203 135 67 230	</c1>
@@ -614,6 +639,7 @@
       <id>	144	</id>
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	43 33 23 225	</c0>
         <c1>	101 74 50 227	</c1>
@@ -654,6 +680,7 @@
       <id>	145	</id>
       <kind>	summer	</kind>
       <group>	IGRsummer	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	52 78 41 213	</c0>
         <c1>	108 72 19 223	</c1>
@@ -694,6 +721,7 @@
       <id>	146	</id>
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	33 27 22 202	</c0>
         <c1>	153 116 60 230	</c1>
@@ -734,6 +762,7 @@
       <id>	147	</id>
       <group>	summer	</group>
       <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	94 12 0 152	</c0>
         <c1>	201 123 48 113	</c1>
@@ -775,6 +804,7 @@
       <id>	148	</id>
       <group>	winter	</group>
       <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	39 71 29 64	</c0>
         <c1>	255 255 255 137	</c1>
@@ -816,6 +846,7 @@
       <id>	149	</id>
       <group>	summer	</group>
       <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	78 107 69 108	</c0>
         <c1>	0 13 0 179	</c1>
@@ -856,6 +887,7 @@
       <id>	150	</id>
       <group>	summer	</group>
       <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	60 99 1 169	</c0>
         <c1>	164 217 38 79	</c1>
@@ -895,6 +927,7 @@
       <id>	151	</id>
       <group>	winter	</group>
       <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	255 255 255 243	</c0>
         <c1>	255 255 255 0	</c1>
@@ -935,6 +968,7 @@
       <id>	152	</id>
       <group>	summer	</group>
       <kind>	summer	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	125 86 34 255	</c0>
         <c1>	69 60 28 255	</c1>
@@ -975,6 +1009,7 @@
       <id>	153	</id>
       <group>	desert	</group>
       <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	162 123 77 222	</c0>
         <c1>	128 0 0 0	</c1>
@@ -1016,6 +1051,7 @@
       <id>	154	</id>
       <group>	desert	</group>
       <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	0 0 0 224	</c0>
         <c1>	36 36 36 186	</c1>
@@ -1053,6 +1089,7 @@
       <id>	155	</id>
       <group>	desert	</group>
       <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	0 0 0 224	</c0>
         <c1>	97 89 35 215	</c1>
@@ -1092,6 +1129,7 @@
       <id>	156	</id>
       <group>	desert	</group>
       <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	0 0 0 224	</c0>
         <c1>	77 15 15 215	</c1>
@@ -1131,6 +1169,7 @@
       <id>	157	</id>
       <group>	desert	</group>
       <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
         <c0>	0 0 0 224	</c0>
         <c1>	97 112 114 182	</c1>

@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/tankmen.py
-from functools import partial
 import math
 import ResMgr
 import random
 import struct
 import nations
-from items import _xml, vehicles, ITEM_TYPES
+from functools import partial
+from items import _xml, ITEM_TYPES, vehicles
+from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
 from vehicles import VEHICLE_CLASS_TAGS
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_WARNING
 from constants import IS_CLIENT, IS_WEB, ITEM_DEFS_PATH
 from account_shared import AmmoIterator
 if IS_CLIENT:
@@ -119,6 +120,20 @@ PERKS = frozenset(('brotherhood',
  'loader_desperado',
  'loader_intuition',
  'radioman_lastEffort'))
+
+class TANKMEN_ROLES():
+    COMMANDER = 'commander'
+    RADIOMAN = 'radioman'
+    DRIVER = 'driver'
+    GUNNER = 'gunner'
+    LOADER = 'loader'
+
+
+TANKMEN_ROLES_ORDER = {TANKMEN_ROLES.COMMANDER: 0,
+ TANKMEN_ROLES.GUNNER: 1,
+ TANKMEN_ROLES.DRIVER: 2,
+ TANKMEN_ROLES.RADIOMAN: 3,
+ TANKMEN_ROLES.LOADER: 4}
 MAX_FREE_SKILLS_SIZE = 16
 MAX_SKILL_LEVEL = 100
 MIN_ROLE_LEVEL = 50
@@ -132,7 +147,7 @@ class _GROUP_TAG(object):
     """Class contains all available tags in group configuration."""
     PASSPORT_REPLACEMENT_FORBIDDEN = 'passportReplacementForbidden'
     RESTRICTIONS = (PASSPORT_REPLACEMENT_FORBIDDEN,)
-    RANGE = RESTRICTIONS
+    RANGE = RESTRICTIONS + tuple(ROLES)
 
 
 def init(preloadEverything):
@@ -171,8 +186,12 @@ def getNationConfig(nationID):
 
 
 def generatePassport(nationID, isPremium=False):
+    return passportProducer(nationID, isPremium)[1]
+
+
+def passportProducer(nationID, isPremium=False):
     isPremium = False
-    groups = getNationConfig(nationID)['normalGroups' if not isPremium else 'premiumGroups']
+    groups = getNationGroups(nationID, isPremium)
     w = random.random()
     summWeight = 0.0
     group = None
@@ -182,49 +201,72 @@ def generatePassport(nationID, isPremium=False):
             break
         summWeight += weight
 
-    return (nationID,
-     isPremium,
-     group['isFemales'],
-     random.choice(group['firstNamesList']),
-     random.choice(group['lastNamesList']),
-     random.choice(group['iconsList']))
+    return (group, (nationID,
+      isPremium,
+      group['isFemales'],
+      random.choice(group['firstNamesList']),
+      random.choice(group['lastNamesList']),
+      random.choice(group['iconsList'])))
 
 
-def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skillsMask):
+def crewMemberPreviewProducer(nationID, isPremium=False, vehicleTypeID=None, role=None):
+    vehicleName = vehicles.g_cache.vehicle(nationID, vehicleTypeID).name if vehicleTypeID else None
+    nationalGroups = getNationGroups(nationID, isPremium)
+    groups = [ g for g in nationalGroups if vehicleName in g.get('tags', set()) and role in g.get('tags', set()) ]
+    if not groups:
+        groups = [ g for g in nationalGroups if vehicleName in g.get('tags', set()) ]
+    if not groups:
+        groups = [ g for g in nationalGroups if role in g.get('tags', set()) ]
+    if not groups:
+        groups = nationalGroups
+    group = random.choice(groups)
+    pos = random.randint(0, min(map(len, (group['firstNamesList'], group['lastNamesList'], group['iconsList']))) - 1)
+    return (group, (nationID,
+      isPremium,
+      group['isFemales'],
+      group['firstNamesList'][pos],
+      group['lastNamesList'][pos],
+      group['iconsList'][pos]))
+
+
+def generateSkills(role, skillsMask):
+    """
+    builds skills list with all skills according to role or particular skills according to mask
+    :param role: string name of role, see ROLES
+    :param skillsMask: mask to add roles from SKILLS_BY_ROLES
+    :return: list containing subset of SKILLS_BY_ROLES[role]
+    """
+    skills = []
+    if skillsMask != 0:
+        tankmanSkills = set()
+        for i in xrange(len(role)):
+            roleSkills = SKILLS_BY_ROLES[role[i]]
+            if skillsMask == ALL_SKILLS_MASK:
+                tankmanSkills.update(roleSkills)
+            for skill, idx in SKILL_INDICES.iteritems():
+                if 1 << idx & skillsMask and skill in roleSkills:
+                    tankmanSkills.add(skill)
+
+        skills.extend(tankmanSkills)
+    return skills
+
+
+def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skillsMask, isPreview=False):
     tankmenList = []
-    prevPassports = []
+    prevPassports = PassportCache()
     for i in xrange(len(roles)):
         role = roles[i]
-        for j in xrange(10):
-            passport = generatePassport(nationID, isPremium)
-            for prevPassport in prevPassports:
-                if passport[5] == prevPassport[5]:
-                    break
-                if passport[3:5] == prevPassport[3:5]:
-                    break
-            else:
-                break
-
+        pg = passport_generator(nationID, isPremium, partial(crewMemberPreviewProducer, vehicleTypeID=vehicleTypeID, role=role[0]) if isPreview else passportProducer, maxAttempts(10), distinctFrom(prevPassports), acceptOn('roles', role[0]))
+        passport = next(pg)
         prevPassports.append(passport)
-        skills = []
-        if skillsMask != 0:
-            tankmanSkills = set()
-            for i in xrange(len(role)):
-                roleSkills = SKILLS_BY_ROLES[role[i]]
-                if skillsMask == ALL_SKILLS_MASK:
-                    tankmanSkills.update(roleSkills)
-                for skill, idx in SKILL_INDICES.iteritems():
-                    if 1 << idx & skillsMask and skill in roleSkills:
-                        tankmanSkills.add(skill)
-
-            skills.extend(tankmanSkills)
+        skills = generateSkills(role, skillsMask)
         tmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role[0], roleLevel, skills)
         tankmenList.append(tmanCompDescr)
 
-    return tankmenList
+    return tankmenList if len(tankmenList) == len(roles) else []
 
 
-def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=[], lastSkillLevel=MAX_SKILL_LEVEL, dossierCompactDescr='', freeSkills=[]):
+def generateCompactDescr(passport, vehicleTypeID, role, roleLevel, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, dossierCompactDescr='', freeSkills=()):
     pack = struct.pack
     assert MIN_ROLE_LEVEL <= roleLevel <= MAX_SKILL_LEVEL
     nationID, isPremium, isFemale, firstNameID, lastNameID, iconID = passport
@@ -284,7 +326,7 @@ def getNextUniqueID(databaseID, lastID, nationID, isPremium, groupID, name):
 
 
 def stripNonBattle(compactDescr):
-    return compactDescr[:6 + ord(compactDescr[4]) + 1]
+    return compactDescr[:6 + ord(compactDescr[4]) + 1 + 6]
 
 
 def parseNationSpecAndRole(compactDescr):
@@ -378,6 +420,11 @@ class TankmanDescr(object):
         for skillName in self.__skills:
             level = MAX_SKILL_LEVEL if skillName != self.__skills[-1] else self.__lastSkillLevel
             yield (skillName, level)
+
+    @property
+    def isUnique(self):
+        g = getNationGroups(self.nationID, self.isPremium)[self.gid] if self.gid else {}
+        return 1 == len(g['firstNames']) * len(g['lastNames']) * len(g['icons']) if g else False
 
     def efficiencyFactorOnVehicle(self, vehicleDescrType):
         _, _, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescrType.compactDescr)
@@ -606,7 +653,7 @@ class TankmanDescr(object):
         Returns tankman composite group.
         TODO: add additional group range when implemented
         """
-        return self.isFemale | self.isPremium >> 1
+        return int(self.isFemale) | int(self.isPremium) << 1 | int(self.gid) << 2
 
     def makeCompactDescr(self):
         pack = struct.pack
@@ -670,10 +717,12 @@ class TankmanDescr(object):
             if self.freeSkillsNumber == len(self.__skills) and self.freeSkillsNumber:
                 self.__lastSkillLevel = MAX_SKILL_LEVEL
             cd = cd[1:]
-            if battleOnly:
-                return
             nationConfig = getNationConfig(nationID)
-            self.firstNameID, self.lastNameID, self.iconID, rank, self.freeXP = unpack('<4Hi', cd[:12])
+            self.firstNameID, self.lastNameID, self.iconID, rank, self.freeXP = unpack('<4Hi', cd[:12].ljust(12, '\x00'))
+            self.gid, _ = findGroupsByIDs(getNationGroups(nationID, self.isPremium), self.isFemale, self.firstNameID, self.lastNameID, self.iconID).pop(0)
+            if battleOnly:
+                del self.freeXP
+                return
             cd = cd[12:]
             self.dossierCompactDescr = cd
             self.__rankIdx = rank & 31
@@ -807,6 +856,62 @@ def ownVehicleHasTags(tankmanCD, tags=()):
     return bool(vehicleType.tags.intersection(tags))
 
 
+def hasTagInTankmenGroup(nationID, groupID, isPremium, tag):
+    """
+    Checks if tankmen group has specified tag.
+    :param nationID: int
+    :param groupID: int
+    :param isPremium: bool
+    :param tag: str
+    :return bool
+    """
+    nationGroups = getNationGroups(nationID, isPremium)
+    if groupID < 0 or groupID >= len(nationGroups):
+        LOG_WARNING('tankmen.hasTagInTankmenGroup: wrong value of the groupID (index out of range)', groupID)
+        return False
+    groupSet = nationGroups[groupID] if groupID >= 0 else {}
+    return False if 'tags' not in groupSet else tag in groupSet['tags']
+
+
+def unpackCrewParams(crewGroup):
+    """
+    :param crewGroup: int
+    :return tuple(groupID<int>, isFemale<bool>, isPremium<bool>)
+    """
+    groupID = crewGroup >> 2
+    isFemale = bool(crewGroup & 1)
+    isPremium = bool(crewGroup & 2)
+    return (groupID, isFemale, isPremium)
+
+
+def tankmenGroupHasRole(nationID, groupID, isPremium, role):
+    """
+    Checks if tankmen group can have specified role.
+    :param nationID: int
+    :param groupID: int
+    :param isPremium: bool
+    :param role: str
+    :return bool
+    """
+    nationGroups = getNationGroups(nationID, isPremium)
+    groupSet = nationGroups[groupID] if groupID >= 0 else {}
+    return False if 'roles' not in groupSet else role in groupSet['roles']
+
+
+def tankmenGroupCanChangeRole(nationID, groupID, isPremium):
+    """
+    Checks if tankmen group can change role.
+    :param nationID: int
+    :param groupID: int
+    :param isPremium: bool
+    :param role: str
+    :return bool
+    """
+    nationGroups = getNationGroups(nationID, isPremium)
+    groupSet = nationGroups[groupID] if groupID >= 0 else {}
+    return True if 'roles' not in groupSet else len(groupSet['roles']) > 1
+
+
 def getNationGroups(nationID, isPremium):
     """Gets nation-specific configuration of tankmen.
     :param nationID: integer containing ID of nation.
@@ -827,7 +932,7 @@ def findGroupsByIDs(groups, isFemale, firstNameID, secondNameID, iconID):
     :param iconID: integer containing ID of icon.
     :return: list where each item is tuple(ID/index of group, weight) and first item has max. overlaps.
     """
-    found = []
+    found = [(-1, 0)]
     for groupID, group in enumerate(groups):
         if isFemale != group['isFemales']:
             continue
@@ -882,6 +987,28 @@ def _readNationConfig(xmlPath):
     return res
 
 
+def _readGroupRoles(xmlCtx, section, subsectionName):
+    """
+    Returns contents of roles tag group as an immutable subset of ROLES
+    :param xmlCtx: xml context for reporting and error handling purposes.
+    :param section: group section to read roles section.
+    :param subsectionName: name of roles section inside group section.
+    :return: subset of ROLES.
+    """
+    source = _xml.readStringOrNone(xmlCtx, section, subsectionName)
+    if source is not None:
+        tags = source.split()
+        roles = []
+        for tag in tags:
+            if tag not in ROLES:
+                _xml.raiseWrongXml(xmlCtx, subsectionName, 'unknown tag "{}"'.format(tag))
+            roles.append(tag)
+
+    else:
+        tags = ROLES
+    return frozenset(tags)
+
+
 def _readNationConfigSection(xmlCtx, section):
     res = {}
     firstNames = {}
@@ -898,13 +1025,15 @@ def _readNationConfigSection(xmlCtx, section):
              'firstNames': _readIDs((ctx, 'firstNames'), _xml.getChildren(ctx, subsection, 'firstNames'), firstNames, _parseName),
              'lastNames': _readIDs((ctx, 'lastNames'), _xml.getChildren(ctx, subsection, 'lastNames'), lastNames, _parseName),
              'icons': _readIDs((ctx, 'icons'), _xml.getChildren(ctx, subsection, 'icons'), icons, _parseIcon),
-             'tags': _readGroupTags((ctx, 'tags'), subsection, 'tags')}
+             'tags': _readGroupTags((ctx, 'tags'), subsection, 'tags'),
+             'roles': _readGroupRoles((ctx, 'roles'), subsection, 'roles')}
             group['firstNamesList'] = list(group['firstNames'])
             group['lastNamesList'] = list(group['lastNames'])
             group['iconsList'] = list(group['icons'])
             weight = _xml.readNonNegativeFloat(ctx, subsection, 'weight')
             totalWeight += weight
             group['weight'] = weight
+            group['name'] = sname
             groups.append(group)
 
         totalWeight = max(0.001, totalWeight)
@@ -995,7 +1124,7 @@ def _readGroupTags(xmlCtx, section, subsectionName):
         tags = source.split()
         restrictions = []
         for tag in tags:
-            if tag not in _GROUP_TAG.RANGE:
+            if not (tag in _GROUP_TAG.RANGE or vehicles.g_list.isVehicleExisting(tag)):
                 _xml.raiseWrongXml(xmlCtx, subsectionName, 'unknown tag "{}"'.format(tag))
             if tag in _GROUP_TAG.RESTRICTIONS:
                 restrictions.append(tag)

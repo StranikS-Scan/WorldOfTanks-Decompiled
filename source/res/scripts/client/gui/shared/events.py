@@ -216,6 +216,7 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_MISSION_DETAILS_VIEW = 'hideMissionDetailsView'
     HIDE_BROWSER_WINDOW = 'hideBrowserWindow'
     HIDE_BOOSTERS_WINDOW = 'hideBoostersWindow'
+    HIDE_VEHICLE_PREVIEW = 'hideVehiclePreview'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -466,6 +467,7 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
+    SABATON_SHOP = 'sabatonShopURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)

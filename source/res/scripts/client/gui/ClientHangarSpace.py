@@ -20,7 +20,6 @@ import constants
 import items.vehicles
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler.cameras import FovExtended
-from HangarVehicle import HangarVehicle
 from ModelHitTester import ModelHitTester
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -39,6 +38,7 @@ from vehicle_systems.tankStructure import TankPartNames
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems import model_assembler
 from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
+from collections import namedtuple
 _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
@@ -68,10 +68,20 @@ class HangarCameraYawFilter():
         self.__reversed = self.__start > self.__end
         self.__cycled = int(math.degrees(math.fabs(self.__end - self.__start))) >= 359.0
         self.__prevDirection = 0.0
+        self.__yawLimits = None
+        self.setConstraints(start, end)
+        return
+
+    def setConstraints(self, start, end):
+        self.__start = start
+        self.__end = end
         if int(math.fabs(math.degrees(self.__start)) + 0.5) >= 180:
-            self.__start *= 179 / 180.0
+            self.__start *= 179.0 / 180.0
         if int(math.fabs(math.degrees(self.__end)) + 0.5) >= 180:
-            self.__end *= 179 / 180.0
+            self.__end *= 179.0 / 180.0
+
+    def setYawLimits(self, limits):
+        self.__yawLimits = limits
 
     def toLimit(self, inAngle):
         inAngle = mathUtils.reduceToPI(inAngle)
@@ -87,7 +97,7 @@ class HangarCameraYawFilter():
         return self.__end if math.fabs(delta1) > math.fabs(delta2) else self.__start
 
     def getNextYaw(self, currentYaw, targetYaw, delta):
-        if delta == 0.0 or self.__prevDirection * delta < 0:
+        if delta == 0.0 or self.__prevDirection * delta < 0.0:
             targetYaw = currentYaw
         self.__prevDirection = delta
         nextYaw = targetYaw + delta * self.__camSens
@@ -115,6 +125,10 @@ class HangarCameraYawFilter():
                 nextYaw = self.__end
             elif delta < 0.0 and nextYaw < self.__start and nextYaw >= self.__end:
                 nextYaw = self.__start
+        if nextYaw < 0.0:
+            nextYaw += 2.0 * math.pi
+        if self.__yawLimits is not None:
+            nextYaw = mathUtils.clamp(self.__yawLimits[0], self.__yawLimits[1], nextYaw)
         return nextYaw
 
 
@@ -197,6 +211,13 @@ class ClientHangarSpace():
     igrCtrl = dependency.descriptor(IIGRController)
     settingsCore = dependency.descriptor(ISettingsCore)
 
+    class CameraConstraints:
+
+        def __init__(self, yawLimits, pitchLimits, distLimits):
+            self.yawLimits = yawLimits
+            self.pitchLimits = pitchLimits
+            self.distLimits = distLimits
+
     def __init__(self):
         self.__spaceId = None
         self.__cam = None
@@ -216,10 +237,10 @@ class ClientHangarSpace():
         self.__fakeShadowAsset = None
         self.__fakeShadowScale = 1.0
         self.__prevDirection = 0.0
-        self.__camDistConstr = ((0.0, 0.0), (0.0, 0.0))
         self.__locatedOnEmbelem = False
         readHangarSettings(self.__igrHangarPathKey)
-        self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
+        self.__yawCameraFilter = None
+        self.__camConstraints = None
         return
 
     def create(self, isPremium, onSpaceLoadedCallback=None):
@@ -267,16 +288,10 @@ class ClientHangarSpace():
         self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
+        self.__camConstraints = self.CameraConstraints(_CFG['cam_yaw_constr'], _CFG['cam_pitch_constr'], ((0.0, 0.0), (0.0, 0.0)))
+        self.__yawCameraFilter.setYawLimits(self.__camConstraints.yawLimits)
         self.__setupCamera()
-        distConstrs = _CFG['cam_dist_constr']
-        previewConstr = _CFG.get('preview_cam_dist_constr', distConstrs)
-        if distConstrs is not None:
-            if previewConstr is not None:
-                self.__camDistConstr = (distConstrs, previewConstr)
-            else:
-                self.__camDistConstr = (distConstrs, distConstrs)
-        else:
-            self.__camDistConstr = ((0.0, 0.0), (0.0, 0.0))
+        self.setDefaultCameraDistance()
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
         self.__destroyFunc = None
         MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
@@ -285,6 +300,28 @@ class ClientHangarSpace():
         g_postProcessing.enable('hangar')
         BigWorld.pauseDRRAutoscaling(True)
         return
+
+    def setDefaultCameraDistance(self):
+        distConstrs = _CFG['cam_dist_constr']
+        previewConstr = _CFG.get('preview_cam_dist_constr')
+        if previewConstr is None:
+            previewConstr = distConstrs
+        if distConstrs is not None:
+            self.__camConstraints.distLimits = (distConstrs, previewConstr)
+        else:
+            self.__camConstraints.distLimits = ((0.0, 0.0), (0.0, 0.0))
+        return
+
+    def setCameraDistance(self, distanceMin, distanceMax, previewDistanceMin=None, previewDistanceMax=None):
+        if previewDistanceMin is None:
+            previewDistanceMin = distanceMin
+        if previewDistanceMax is None:
+            previewDistanceMax = distanceMax
+        self.__camConstraints.distLimits = ((distanceMin, distanceMax), (previewDistanceMin, previewDistanceMax))
+        return
+
+    def getCameraDistance(self, isPreview=False):
+        return self.__camConstraints.distLimits[1] if isPreview else self.__camConstraints.distLimits[0]
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
         if self.__vAppearance is None:
@@ -344,9 +381,11 @@ class ClientHangarSpace():
     def handleKeyEvent(self, event):
         if event.key == Keys.KEY_LEFTMOUSE:
             self.__isMouseDown = event.isKeyDown()
+            from gui.shared.utils.HangarSpace import g_hangarSpace
             if self.__isMouseDown:
-                from gui.shared.utils.HangarSpace import g_hangarSpace
                 g_hangarSpace.leftButtonClicked()
+            else:
+                g_hangarSpace.leftButtonReleased()
         return False
 
     def handleMouseEventGlobal(self, event):
@@ -367,9 +406,10 @@ class ClientHangarSpace():
          'pivotPos': self.__cam.pivotPosition,
          'yaw': sourceMat.yaw,
          'pitch': sourceMat.pitch,
-         'dist': self.__cam.pivotMaxDist}
+         'dist': self.__cam.pivotMaxDist,
+         'camConstraints': self.__camConstraints}
 
-    def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, ignoreConstraints=False):
+    def setCameraLocation(self, targetPos=None, pivotPos=None, yaw=None, pitch=None, dist=None, camConstraints=None, ignoreConstraints=False):
         sourceMat = Math.Matrix(self.__cam.source)
         if yaw is None:
             yaw = sourceMat.yaw
@@ -377,13 +417,20 @@ class ClientHangarSpace():
             pitch = sourceMat.pitch
         if dist is None:
             dist = self.__cam.pivotMaxDist
+        if camConstraints is not None:
+            self.__camConstraints = camConstraints
+        else:
+            self.__camConstraints.pitchLimits = _CFG['cam_pitch_constr']
+            self.__camConstraints.yawLimits = _CFG['cam_yaw_constr']
+        self.__yawCameraFilter.setConstraints(math.radians(self.__camConstraints.yawLimits[0]), math.radians(self.__camConstraints.yawLimits[1]))
+        self.__yawCameraFilter.setYawLimits(self.__camConstraints.yawLimits)
         if not ignoreConstraints:
             yaw = self.__yawCameraFilter.toLimit(yaw)
-            pitch = mathUtils.clamp(math.radians(_CFG['cam_pitch_constr'][0]), math.radians(_CFG['cam_pitch_constr'][1]), pitch)
+            pitch = mathUtils.clamp(math.radians(self.__camConstraints.pitchLimits[0]), math.radians(self.__camConstraints.pitchLimits[1]), pitch)
             if self.__selectedEmblemInfo is not None:
-                dist = mathUtils.clamp(self.__camDistConstr[1][0], self.__camDistConstr[1][1], dist)
+                dist = mathUtils.clamp(self.__camConstraints.distLimits[1][0], self.__camConstraints.distLimits[1][1], dist)
             else:
-                dist = mathUtils.clamp(self.__camDistConstr[0][0], self.__camDistConstr[0][1], dist)
+                dist = mathUtils.clamp(self.__camConstraints.distLimits[0][0], self.__camConstraints.distLimits[0][1], dist)
             if self.__boundingRadius is not None:
                 dist = dist if dist > self.__boundingRadius else self.__boundingRadius
         mat = Math.Matrix()
@@ -396,6 +443,11 @@ class ClientHangarSpace():
         if pivotPos is not None:
             self.__cam.pivotPosition = pivotPos
         return
+
+    def updateCameraDist(self, dist, distContr):
+        self.__camConstraints.distLimits = distContr
+        self.__cam.pivotMinDist = dist
+        self.__cam.pivotMaxDist = dist
 
     def locateCameraToPreview(self):
         self.setCameraLocation(targetPos=_CFG['preview_cam_start_target_pos'], pivotPos=_CFG['preview_cam_pivot_pos'], yaw=math.radians(_CFG['preview_cam_start_angles'][0]), pitch=math.radians(_CFG['preview_cam_start_angles'][1]), dist=_CFG['preview_cam_start_dist'])
@@ -413,7 +465,7 @@ class ClientHangarSpace():
             emblemSize = emblemDesc[3] * _CFG['v_scale']
             halfF = emblemSize / (2 * relativeSize)
             dist = halfF / math.tan(BigWorld.projection().fov / 2)
-            self.setCameraLocation(targetPos, Math.Vector3(0, 0, 0), dir.yaw, -dir.pitch, dist, True)
+            self.setCameraLocation(targetPos, Math.Vector3(0, 0, 0), dir.yaw, -dir.pitch, dist, None, True)
             self.__locatedOnEmbelem = True
             return True
 
@@ -422,47 +474,40 @@ class ClientHangarSpace():
         return
 
     def updateCameraByMouseMove(self, dx, dy, dz):
-        if self.__selectedEmblemInfo is not None:
-            self.__cam.target.setTranslate(_CFG['preview_cam_start_target_pos'])
-            self.__cam.pivotPosition = _CFG['preview_cam_pivot_pos']
-            if self.__locatedOnEmbelem:
-                self.__cam.maxDistHalfLife = 0.0
-            else:
-                self.__cam.maxDistHalfLife = _CFG['cam_fluency']
-        sourceMat = Math.Matrix(self.__cam.source)
-        yaw = sourceMat.yaw
-        pitch = sourceMat.pitch
-        dist = self.__cam.pivotMaxDist
-        currentMatrix = Math.Matrix(self.__cam.invViewMatrix)
-        currentYaw = currentMatrix.yaw
-        yaw = self.__yawCameraFilter.getNextYaw(currentYaw, yaw, dx)
-        pitch -= dy * _CFG['cam_sens']
-        dist -= dz * _CFG['cam_sens']
-        pitch = mathUtils.clamp(math.radians(_CFG['cam_pitch_constr'][0]), math.radians(_CFG['cam_pitch_constr'][1]), pitch)
-        prevDist = dist
-        distConstr = self.__camDistConstr[1] if self.__selectedEmblemInfo is not None else self.__camDistConstr[0]
-        dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
-        if self.__boundingRadius is not None:
-            boundingRadius = self.__boundingRadius if self.__boundingRadius < distConstr[1] else distConstr[1]
-            dist = dist if dist > boundingRadius else boundingRadius
-        if dist > prevDist and dz > 0:
-            if self.__selectedEmblemInfo is not None:
-                self.locateCameraOnEmblem(*self.__selectedEmblemInfo)
-                return
-        self.__locatedOnEmbelem = False
-        mat = Math.Matrix()
-        mat.setRotateYPR((yaw, pitch, 0.0))
-        self.__cam.source = mat
-        self.__cam.pivotMaxDist = dist
-        if self.settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
-            relativeDist = (dist - distConstr[0]) / (distConstr[1] - distConstr[0])
-            _, minFov, maxFov = self.settingsCore.getSetting('fov')
-            fov = mathUtils.lerp(minFov, maxFov, relativeDist)
-            BigWorld.callback(0, functools.partial(FovExtended.instance().setFovByAbsoluteValue, math.radians(fov), 0.1))
-        return
+        if self.__cam != BigWorld.camera():
+            return
+        else:
+            sourceMat = Math.Matrix(self.__cam.source)
+            yaw = sourceMat.yaw
+            pitch = sourceMat.pitch
+            dist = self.__cam.pivotMaxDist
+            currentMatrix = Math.Matrix(self.__cam.invViewMatrix)
+            currentYaw = currentMatrix.yaw
+            yaw = self.__yawCameraFilter.getNextYaw(currentYaw, yaw, dx)
+            pitch -= dy * _CFG['cam_sens']
+            dist -= dz * _CFG['cam_sens']
+            pitch = mathUtils.clamp(math.radians(self.__camConstraints.pitchLimits[0]), math.radians(self.__camConstraints.pitchLimits[1]), pitch)
+            prevDist = dist
+            distConstr = self.__camConstraints.distLimits[1] if self.__selectedEmblemInfo is not None else self.__camConstraints.distLimits[0]
+            dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
+            if dist > prevDist and dz > 0:
+                if self.__selectedEmblemInfo is not None:
+                    self.locateCameraOnEmblem(*self.__selectedEmblemInfo)
+                    return
+            self.__locatedOnEmbelem = False
+            mat = Math.Matrix()
+            mat.setRotateYPR((yaw, pitch, 0.0))
+            self.__cam.source = mat
+            self.__cam.pivotMaxDist = dist
+            if self.settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
+                relativeDist = (dist - distConstr[0]) / (distConstr[1] - distConstr[0])
+                _, minFov, maxFov = self.settingsCore.getSetting('fov')
+                fov = mathUtils.lerp(minFov, maxFov, relativeDist)
+                BigWorld.callback(0, functools.partial(FovExtended.instance().setFovByAbsoluteValue, math.radians(fov), 0.1))
+            return
 
     def spaceLoaded(self):
-        return not self.__loadingStatus < 1
+        return self.__loadingStatus >= 1
 
     def spaceLoading(self):
         return self.__waitCallback is not None
@@ -481,6 +526,7 @@ class ClientHangarSpace():
             self.__vAppearance = None
         self.__onLoadedCallback = None
         self.__boundingRadius = None
+        self.__camConstraints = None
         if self.__waitCallback is not None:
             BigWorld.cancelCallback(self.__waitCallback)
             self.__waitCallback = None
@@ -508,8 +554,10 @@ class ClientHangarSpace():
         self.__cam.pivotMinDist = 0.0
         self.__cam.maxDistHalfLife = _CFG['cam_fluency']
         self.__cam.turningHalfLife = _CFG['cam_fluency']
-        self.__cam.movementHalfLife = 0.0
+        self.__cam.movementHalfLife = _CFG['cam_fluency']
         self.__cam.pivotPosition = _CFG['cam_pivot_pos']
+        self.__camConstraints.pitchLimits = _CFG['cam_pitch_constr']
+        self.__camConstraints.yawLimits = _CFG['cam_yaw_constr']
         mat = Math.Matrix()
         yaw = self.__yawCameraFilter.toLimit(math.radians(_CFG['cam_start_angles'][0]))
         mat.setRotateYPR((yaw, math.radians(_CFG['cam_start_angles'][1]), 0.0))
@@ -639,7 +687,7 @@ class _VehicleAppearance(ComponentSystem):
             self.__isLoaded = False
             self.__startBuild(self.__vDesc, self.__vState)
         entity = BigWorld.entity(self.__vEntityId)
-        if isinstance(entity, HangarVehicle):
+        if entity is not None:
             entity.releaseBspModels()
         return
 
@@ -835,8 +883,9 @@ class _VehicleAppearance(ComponentSystem):
         model.matrix = matrix
         self.__doFinalSetup(buildIdx, model)
         entity = BigWorld.entity(self.__vEntityId)
-        if isinstance(entity, HangarVehicle):
+        if entity is not None:
             entity.typeDescriptor = self.__vDesc
+        return
 
     def __doFinalSetup(self, buildIdx, model):
         if buildIdx != self.__curBuildInd:
@@ -846,7 +895,7 @@ class _VehicleAppearance(ComponentSystem):
             if entity:
                 entity.model = model
                 self.__isLoaded = True
-                if isinstance(entity, HangarVehicle):
+                if entity is not None:
                     entity.canDoHitTest(True)
                 if self.__onLoadedCallback is not None:
                     self.__onLoadedCallback()

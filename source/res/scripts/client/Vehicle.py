@@ -27,12 +27,13 @@ from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
-from items import vehicles
+from items import vehicles, sabaton_crew
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import appearance_cache
 from vehicle_systems.tankStructure import TankPartNames
+from items.tankmen import hasTagInTankmenGroup, unpackCrewParams
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
@@ -545,21 +546,26 @@ class Vehicle(BigWorld.Entity):
         if self is not player.getVehicleAttached():
             return
         else:
+            crewGroup = 0
+            arena = getattr(player, 'arena', None)
+            if arena is not None:
+                crewGroup = arena.vehicles[self.id]['crewGroup']
             vehicleTypeID = self.typeDescriptor.type.id
+            nationID, _ = vehicleTypeID
+            LOG_DEBUG("Refreshing current vehicle's national voices", nationID)
+            groupID, isFemaleCrewCommander, isPremium = unpackCrewParams(crewGroup)
+            if nationID == nations.INDICES['sweden'] and hasTagInTankmenGroup(nationID, groupID, isPremium, sabaton_crew.SABATON_VEH_NAME):
+                SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, CREW_GENDER_SWITCHES.MALE)
+                SoundGroups.g_instance.soundModes.setMode('sabaton')
+                return
             if vehicleTypeID in _VALKYRIE_SOUND_MODES and self.id == player.playerVehicleID:
                 SoundGroups.g_instance.soundModes.setMode(_VALKYRIE_SOUND_MODES[vehicleTypeID])
                 return
             genderSwitch = CREW_GENDER_SWITCHES.DEFAULT
             if SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
-                arena = getattr(player, 'arena', None)
-                if arena is not None:
-                    vehicleData = arena.vehicles[self.id]
-                    isFemaleCrewCommander = vehicleData['crewGroup'] == 1
-                    if isFemaleCrewCommander:
-                        genderSwitch = CREW_GENDER_SWITCHES.FEMALE
-            nationId, _ = vehicleTypeID
-            LOG_DEBUG("Refreshing current vehicle's national voices", nationId)
-            nation = nations.NAMES[nationId]
+                if isFemaleCrewCommander:
+                    genderSwitch = CREW_GENDER_SWITCHES.FEMALE
+            nation = nations.NAMES[nationID]
             SoundGroups.g_instance.soundModes.setCurrentNation(nation, genderSwitch)
             return
 

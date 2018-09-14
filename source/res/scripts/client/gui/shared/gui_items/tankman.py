@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from helpers import i18n
-from items import tankmen, vehicles, ITEM_TYPE_NAMES
+from items import tankmen, vehicles, ITEM_TYPE_NAMES, sabaton_crew
 from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
 from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import ItemsCollection, GUI_ITEM_TYPE
@@ -50,19 +51,8 @@ class TankmenComparator(object):
 
 
 class Tankman(GUIItem, HasStrCD):
-
-    class ROLES:
-        COMMANDER = 'commander'
-        RADIOMAN = 'radioman'
-        DRIVER = 'driver'
-        GUNNER = 'gunner'
-        LOADER = 'loader'
-
-    TANKMEN_ROLES_ORDER = {ROLES.COMMANDER: 0,
-     ROLES.GUNNER: 1,
-     ROLES.DRIVER: 2,
-     ROLES.RADIOMAN: 3,
-     ROLES.LOADER: 4}
+    ROLES = tankmen.TANKMEN_ROLES
+    TANKMEN_ROLES_ORDER = tankmen.TANKMEN_ROLES_ORDER
 
     def __init__(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None):
         GUIItem.__init__(self, proxy)
@@ -98,7 +88,7 @@ class Tankman(GUIItem, HasStrCD):
         return
 
     def _buildSkills(self, proxy):
-        return [ TankmanSkill(skill, self, proxy) for skill in self.descriptor.skills ]
+        return [ getTankmanSkill(skill, self, proxy) for skill in self.descriptor.skills ]
 
     def _buildSkillsMap(self):
         return dict([ (skill.name, skill) for skill in self.skills ])
@@ -268,7 +258,7 @@ class Tankman(GUIItem, HasStrCD):
         commonSkills = []
         for skill in tankmen.COMMON_SKILLS:
             if skill not in self.descriptor.skills:
-                commonSkills.append(self.__packSkill(TankmanSkill(skill)))
+                commonSkills.append(self.__packSkill(getTankmanSkill(skill, tankman=self)))
 
         result.append({'id': 'common',
          'skills': commonSkills})
@@ -279,7 +269,7 @@ class Tankman(GUIItem, HasStrCD):
             skills = []
             for skill in roleSkills:
                 if skill not in tankmen.COMMON_SKILLS and skill not in self.descriptor.skills:
-                    skills.append(self.__packSkill(TankmanSkill(skill)))
+                    skills.append(self.__packSkill(getTankmanSkill(skill)))
 
             result.append({'id': role,
              'skills': skills})
@@ -327,11 +317,15 @@ class TankmanSkill(GUIItem):
             tdescr = tankman.descriptor
             skills = tdescr.skills
             self.isFemale = tankman.isFemale
-            self.level = tdescr.lastSkillLevel if skills.index(self.name) == len(skills) - 1 else tankmen.MAX_SKILL_LEVEL
+            if self.name in skills:
+                if skills.index(self.name) == len(skills) - 1:
+                    self.level = tdescr.lastSkillLevel
+                else:
+                    self.level = tankmen.MAX_SKILL_LEVEL
+                self.isPermanent = skills.index(self.name) < tdescr.freeSkillsNumber
             self.roleType = self.__getSkillRoleType(skillName)
             self.isActive = self.__getSkillActivity(tankman)
             self.isEnable = self.__getEnabledSkill(tankman)
-            self.isPermanent = skills.index(self.name) < tdescr.freeSkillsNumber
         return
 
     def __getEnabledSkill(self, tankman):
@@ -391,8 +385,44 @@ class TankmanSkill(GUIItem):
     def icon(self):
         return getSkillIconName(self.name)
 
+    @property
+    def bigIconPath(self):
+        return '../maps/icons/tankmen/skills/big/%s' % self.icon
+
+    @property
+    def smallIconPath(self):
+        return '../maps/icons/tankmen/skills/small/%s' % self.icon
+
     def __repr__(self):
         return 'TankmanSkill<name:%s, level:%d, isActive:%s>' % (self.name, self.level, str(self.isActive))
+
+
+class SabatonTankmanSkill(TankmanSkill):
+
+    def getSkillIconName(self, skillName):
+        """Change icon for brotherhood skill
+        :return:
+        """
+        return 'sabaton_brotherhood.png' if skillName == 'brotherhood' else i18n.convert(tankmen.getSkillsConfig()[skillName]['icon'])
+
+    def getSkillUserName(self, skillName):
+        """Change description for brotherhood skill
+        :param skillName:
+        :return:
+        """
+        return i18n.makeString(ITEM_TYPES.TANKMAN_SKILLS_BROTHERHOOD_SABATON) if skillName == 'brotherhood' else tankmen.getSkillsConfig()[skillName]['userString']
+
+    @property
+    def userName(self):
+        return self.getSkillUserName(self.name)
+
+    @property
+    def icon(self):
+        return self.getSkillIconName(self.name)
+
+
+def getTankmanSkill(skillName, tankman=None, proxy=None):
+    return SabatonTankmanSkill(skillName, tankman, proxy) if tankman and sabaton_crew.isSabatonCrew(tankman.descriptor) else TankmanSkill(skillName, tankman, proxy)
 
 
 def getFirstUserName(nationID, firstNameID):

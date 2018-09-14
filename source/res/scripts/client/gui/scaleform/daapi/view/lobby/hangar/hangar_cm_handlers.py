@@ -66,7 +66,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _generateOptions(self, ctx=None):
-        return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'))]
+        return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'), {'enabled': True})]
 
     def _initFlashValues(self, ctx):
         self._tankmanID = int(ctx.tankmanID)

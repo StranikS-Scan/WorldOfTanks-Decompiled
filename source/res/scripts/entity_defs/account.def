@@ -31,11 +31,11 @@
     <Interface>	AccountDebugger	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_91710>
+    <requiredVersion_91800>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.17.1_3	</Default>
-    </requiredVersion_91710>
+      <Default>	ru_0.9.18_1	</Default>
+    </requiredVersion_91800>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -167,6 +167,7 @@
       <Flags>	BASE	</Flags>
       <Persistent>	true	</Persistent>
       <DatabaseLength>	1024000	</DatabaseLength>
+      <Backupable>	false	</Backupable>
     </pdata>
     <bp>
       <Type>	PYTHON	</Type>
@@ -175,6 +176,7 @@
     <initialServerSettings>
       <Type>	PYTHON	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
+      <Backupable>	false	</Backupable>
     </initialServerSettings>
   </Properties>
   <ClientMethods>

@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R34_BT-SV/BT-SV_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -60,11 +60,11 @@
       <sensitivityToImpulse>	0.78	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_small	</pixie>
+      <pixie>	gas_medium	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.000000 0.772217 0.70386	</turret>
+      <turret>	0.000000 0.697194 0.5792	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R34_BT-SV/collision/Hull.model	</collisionModelServer>
@@ -76,7 +76,7 @@
         <rayEnd>	-0.403328 0.205524 2.36973	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
         <rayStart>	-1.28262 0.476665 0.0215172	</rayStart>
@@ -94,6 +94,9 @@
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R34_BT-SV/BT-SV_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	4 4 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <BT-SV>
@@ -129,13 +132,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.28 0.32	</size>
+        <size>	0.5 0.32	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.38	</textureScale>
+        <textureScale>	-3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -155,42 +158,46 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.266816	</radius>
+          <syncAngle>	72	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.305007	</radius>
+          <syncAngle>	60	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.266816	</radius>
+          <syncAngle>	72	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.305007	</radius>
+          <syncAngle>	60	</syncAngle>
         </wheel>
       </wheels>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.823169 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.877605 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R34_BT-SV/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R34_BT-SV/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.981412 1.75846	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.98 1.66548	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -203,6 +210,74 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R34_BT-SV/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R34_BT-SV/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/russian/R34_BT-SV/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/russian/R34_BT-SV/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/russian/R34_BT-SV/track/left.track	</left>
+        <right>	vehicles/russian/R34_BT-SV/track/right.track	</right>
+        <segmentLength>	0.338	</segmentLength>
+        <segmentOffset>	0.494	</segmentOffset>
+        <segment2Offset>	0.172	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.001	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.04	</maxAmplitude>
+        <maxOffset>	0.04	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0958549	</minOffset>
+          <maxOffset>	0.0803109	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0958549	</minOffset>
+          <maxOffset>	0.0803109	</maxOffset>
+        </group>
+      </groundNodes>
     </BT-SV>
   </chassis>
   <turrets0>
@@ -263,6 +338,9 @@
             <collisionModelServer>	vehicles/russian/R34_BT-SV/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R34_BT-SV/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
         </_45mm_20KL>
       </guns>
       <models>
@@ -274,14 +352,14 @@
         <collisionModelServer>	vehicles/russian/R34_BT-SV/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R34_BT-SV/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.21608 0.530131	</gunPosition>
+      <gunPosition>	0.000000 0.240303 0.5187	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	0.589874 0.280354 0.415803	</rayStart>
-          <rayEnd>	0.203277 0.178317 0.404361	</rayEnd>
+          <rayStart>	0.442393 0.250818 0.408954	</rayStart>
+          <rayEnd>	0.375588 0.214705 0.405959	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <player>
@@ -293,7 +371,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.972 -0.010 1.000 0.000 0.479 0.273 0.729 0.415 0.343 0.500 0.500 0.500 0.287 0.859 0.177	</physicsShape>
+      <physicsShape>	0.972 -0.010 1.000 0.000 0.490 0.293 0.729 0.415 0.410 0.500 0.595 0.500 0.344 0.859 0.177	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </BT-SV>
   </turrets0>
@@ -356,7 +434,7 @@
   </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	small	</damagedStateGroup>
+    <damagedStateGroup>	medium	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	ussr_star	</default>

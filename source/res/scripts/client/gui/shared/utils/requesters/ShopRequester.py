@@ -16,8 +16,14 @@ _TankmenRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'freeDuration credi
 _TargetData = namedtuple('_TargetData', 'targetType, targetValue, limit')
 _ResourceData = namedtuple('_ResourceData', 'resourceType, value, isPercentage')
 _ConditionData = namedtuple('_ConditionData', 'conditionType, value')
-_TradeInData = namedtuple('_TradeInData', ['sellPriceFactor', 'allowedVehicleLevels', 'forbiddenVehicles'])
-_TradeInData.__new__.__defaults__ = (0, (), ())
+_TradeInData = namedtuple('_TradeInData', ['sellPriceFactor',
+ 'allowedVehicleLevels',
+ 'forbiddenVehicles',
+ 'minAcceptableSellPrice'])
+_TradeInData.__new__.__defaults__ = (0,
+ (),
+ (),
+ 0)
 
 class _NamedGoodieData(GoodieData):
     """

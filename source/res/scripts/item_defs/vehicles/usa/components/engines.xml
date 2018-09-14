@@ -73,6 +73,16 @@
     <Continental_AOI-628-1_A>	92	</Continental_AOI-628-1_A>
     <Continental_AV-1790-1A>	95	</Continental_AV-1790-1A>
     <Chrysler_1200_HP>	96	</Chrysler_1200_HP>
+    <General_Motors_6V53T>	97	</General_Motors_6V53T>
+    <Continental_AOSI-895-5A>	98	</Continental_AOSI-895-5A>
+    <Continental_AOS-895-3A>	99	</Continental_AOS-895-3A>
+    <Ford_GAN_A>	100	</Ford_GAN_A>
+    <Continental_AOSI-895-5B>	101	</Continental_AOSI-895-5B>
+    <Ford_GAA_A>	102	</Ford_GAA_A>
+    <Twin_Cadillac_series_44T4L>	103	</Twin_Cadillac_series_44T4L>
+    <Wright_Continental_R-975C4L>	104	</Wright_Continental_R-975C4L>
+    <Wright_Continental_R-975EC2L>	105	</Wright_Continental_R-975EC2L>
+    <Wright_Continental_R-975C1L>	106	</Wright_Continental_R-975C1L>
     <Ford_GAN_T23>	1000	</Ford_GAN_T23>
     <Development_Engine>	65535	</Development_Engine>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
@@ -374,6 +384,23 @@
       <rpm_min>	406	</rpm_min>
       <rpm_max>	2500	</rpm_max>
     </Wright_Continental_R-975EC2>
+    <Wright_Continental_R-975EC2L>
+      <userString>	#usa_vehicles:Wright_Continental_R-975EC2L	</userString>
+      <shortUserString>	#usa_vehicles:Wright_Continental_R-975EC2L_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	14100	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	480	</power>
+      <weight>	515	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2761	</rpm_max>
+    </Wright_Continental_R-975EC2L>
     <Wright_Continental_R-975C1>
       <userString>	#usa_vehicles:Wright_Continental_R-975C1	</userString>
       <shortUserString>	#usa_vehicles:Wright_Continental_R-975C1_short	</shortUserString>
@@ -391,6 +418,23 @@
       <rpm_min>	374	</rpm_min>
       <rpm_max>	2601	</rpm_max>
     </Wright_Continental_R-975C1>
+    <Wright_Continental_R-975C1L>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C1L	</userString>
+      <shortUserString>	#usa_vehicles:Wright_Continental_R-975C1L_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	21500	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	516	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Wright_Continental_R-975C1L>
     <Wright_Continental_R-975C4>
       <userString>	#usa_vehicles:Wright_Continental_R-975C4	</userString>
       <shortUserString>	#usa_vehicles:Wright_Continental_R-975C4_short	</shortUserString>
@@ -408,6 +452,23 @@
       <rpm_min>	337	</rpm_min>
       <rpm_max>	2721	</rpm_max>
     </Wright_Continental_R-975C4>
+    <Wright_Continental_R-975C4L>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C4L	</userString>
+      <shortUserString>	#usa_vehicles:Wright_Continental_R-975C4L_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+    </Wright_Continental_R-975C4L>
     <Wright_Continental_R-975EC2_A>
       <userString>	#usa_vehicles:Wright_Continental_R-975EC2_A	</userString>
       <shortUserString>	#usa_vehicles:Wright_Continental_R-975EC2_A_short	</shortUserString>
@@ -442,6 +503,22 @@
       <rpm_min>	299	</rpm_min>
       <rpm_max>	2841	</rpm_max>
     </Ford_GAA>
+    <Ford_GAA_A>
+      <userString>	#usa_vehicles:Ford_GAA_A	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	36000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	569	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2901	</rpm_max>
+    </Ford_GAA_A>
     <Ford_GAN>
       <userString>	#usa_vehicles:Ford_GAN	</userString>
       <tags>	gasoline	</tags>
@@ -458,6 +535,22 @@
       <rpm_min>	274	</rpm_min>
       <rpm_max>	2921	</rpm_max>
     </Ford_GAN>
+    <Ford_GAN_A>
+      <userString>	#usa_vehicles:Ford_GAN_A	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	39400	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Ford_GAN_A>
     <Ford_GAN_T>
       <userString>	#usa_vehicles:Ford_GAN_T	</userString>
       <tags>	gasoline	</tags>
@@ -472,8 +565,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	312	</rpm_min>
-      <rpm_max>	2801	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2861	</rpm_max>
     </Ford_GAN_T>
     <Cuiberson_T-10204>
       <userString>	#usa_vehicles:Cuiberson_T-10204	</userString>
@@ -800,6 +893,23 @@
       <rpm_min>	439	</rpm_min>
       <rpm_max>	2392	</rpm_max>
     </Twin_Cadillac_series_44T4>
+    <Twin_Cadillac_series_44T4L>
+      <userString>	#usa_vehicles:Twin_Cadillac_series_44T4L	</userString>
+      <shortUserString>	#usa_vehicles:Twin_Cadillac_series_44T4L_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10800	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	380	</power>
+      <weight>	530	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	387	</rpm_min>
+      <rpm_max>	2560	</rpm_max>
+    </Twin_Cadillac_series_44T4L>
     <Wright_Continental_R-975C2>
       <userString>	#usa_vehicles:Wright_Continental_R-975C2	</userString>
       <shortUserString>	#usa_vehicles:Wright_Continental_R-975C2_short	</shortUserString>
@@ -939,16 +1049,16 @@
       <tags>	gasoline	</tags>
       <level>	6	</level>
       <price>	25300	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	670	</power>
       <weight>	569	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2681	</rpm_max>
+      <rpm_min>	605	</rpm_min>
+      <rpm_max>	2416	</rpm_max>
     </Ford_GAF>
     <Ford_GAF_V8>
       <userString>	#usa_vehicles:Ford_GAF_V8	</userString>
@@ -972,16 +1082,16 @@
       <tags>	gasoline	</tags>
       <level>	6	</level>
       <price>	34600	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	780	</power>
       <weight>	569	</weight>
       <maxHealth>	280.0	</maxHealth>
       <maxRegenHealth>	147.0	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	305	</rpm_min>
-      <rpm_max>	2821	</rpm_max>
+      <rpm_min>	456	</rpm_min>
+      <rpm_max>	2755	</rpm_max>
     </Ford_GAFM2>
     <Ford_GAFM4>
       <userString>	#usa_vehicles:Ford_GAFM4	</userString>
@@ -1014,8 +1124,8 @@
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	324	</rpm_min>
-      <rpm_max>	2761	</rpm_max>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
     </Ford_GAA_2>
     <Licoming_0-435t>
       <userString>	#usa_vehicles:Licoming_0-435t	</userString>
@@ -1042,14 +1152,14 @@
       <price>	30000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	450	</power>
+      <power>	470	</power>
       <weight>	756	</weight>
-      <maxHealth>	234	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	343	</rpm_min>
-      <rpm_max>	2701	</rpm_max>
+      <rpm_min>	330	</rpm_min>
+      <rpm_max>	2741	</rpm_max>
     </Continental_AOS-895-1>
     <Maybach_HL_230P45>
       <userString>	#usa_vehicles:Maybach_HL_230P45	</userString>
@@ -1156,6 +1266,23 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
     </Continental_AOS-895-3>
+    <Continental_AOS-895-3A>
+      <userString>	#usa_vehicles:Continental_AOS-895-3A	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AOS-895-3A_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	38400	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	771	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Continental_AOS-895-3A>
     <Continental_AOSI-895-5>
       <userString>	#usa_vehicles:Continental_AOSI-895-5	</userString>
       <shortUserString>	#usa_vehicles:Continental_AOSI-895-5_short	</shortUserString>
@@ -1173,22 +1300,56 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
     </Continental_AOSI-895-5>
+    <Continental_AOSI-895-5A>
+      <userString>	#usa_vehicles:Continental_AOSI-895-5A	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AOSI-895-5A_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	58000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	771	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Continental_AOSI-895-5A>
+    <Continental_AOSI-895-5B>
+      <userString>	#usa_vehicles:Continental_AOSI-895-5B	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AOSI-895-5B_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	93000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	840	</power>
+      <weight>	771	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2941	</rpm_max>
+    </Continental_AOSI-895-5B>
     <Continental_AOI-628-1>
       <userString>	#usa_vehicles:Continental_AOI-628-1	</userString>
       <shortUserString>	#usa_vehicles:Continental_AOI-628-1_short	</shortUserString>
       <tags>	gasoline	</tags>
-      <level>	5	</level>
+      <level>	6	</level>
       <price>	14000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	340	</power>
+      <power>	350	</power>
       <weight>	498	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	412	</rpm_min>
-      <rpm_max>	2480	</rpm_max>
+      <rpm_min>	406	</rpm_min>
+      <rpm_max>	2500	</rpm_max>
     </Continental_AOI-628-1>
     <Continental_AOI-628-1_A>
       <userString>	#usa_vehicles:Continental_AOI-628-1_A	</userString>
@@ -1216,14 +1377,14 @@
       <price>	34000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	400	</power>
+      <power>	420	</power>
       <weight>	498	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	374	</rpm_min>
-      <rpm_max>	2601	</rpm_max>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2641	</rpm_max>
     </Continental_AOI-628-2>
     <Continental_AOI-402-5>
       <userString>	#usa_vehicles:Continental_AOI-402-5	</userString>
@@ -1328,6 +1489,24 @@
       <rpm_min>	404	</rpm_min>
       <rpm_max>	2305	</rpm_max>
     </Chrysler_1200_HP>
+    <General_Motors_6V53T>
+      <userString>	#usa_vehicles:General_Motors_6V53T	</userString>
+      <shortUserString>	#usa_vehicles:General_Motors_6V53T_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	495	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
+    </General_Motors_6V53T>
     <Ford_GAN_T23>
       <userString>	#usa_vehicles:Ford_GAN_T23	</userString>
       <tags>	gasoline	</tags>
@@ -1371,14 +1550,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	400	</power>
+      <power>	420	</power>
       <weight>	498	</weight>
       <maxHealth>	234	</maxHealth>
       <maxRegenHealth>	123	</maxRegenHealth>
       <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	374	</rpm_min>
-      <rpm_max>	2601	</rpm_max>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2641	</rpm_max>
     </Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>
       <userString>	#igr_vehicles:Continental_AOSI-895-5_IGR	</userString>

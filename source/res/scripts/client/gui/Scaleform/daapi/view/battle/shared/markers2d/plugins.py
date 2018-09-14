@@ -5,9 +5,11 @@ import BattleReplay
 import BigWorld
 import constants
 from Math import Matrix
+from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS
-from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
+from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
+from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
@@ -24,7 +26,7 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from PlayerEvents import g_playerEvents
+_TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER}
 
 class IMarkersManager(object):
     """Plugins wait for specified manager's interface to manage markers."""
@@ -215,6 +217,57 @@ class EventBusPlugin(MarkerPlugin):
         self._parentObj.setVisible(not self._parentObj.isVisible())
 
 
+class AreaStaticMarkerPlugin(MarkerPlugin):
+    """
+    Plugin to create static area marker (marker over 3D scene terrain).
+    """
+    __slots__ = ('__objects',)
+
+    def __init__(self, parentObj):
+        super(AreaStaticMarkerPlugin, self).__init__(parentObj)
+        self.__objects = {}
+
+    def init(self, *args):
+        super(AreaStaticMarkerPlugin, self).init(*args)
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onStaticMarkerAdded += self.__addStaticMarker
+            ctrl.onStaticMarkerRemoved += self.__delStaticMarker
+        return
+
+    def fini(self):
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onStaticMarkerAdded -= self.__addStaticMarker
+            ctrl.onStaticMarkerRemoved -= self.__delStaticMarker
+        for key in self.__objects.iterkeys():
+            self._destroyMarker(self.__objects[key])
+
+        super(AreaStaticMarkerPlugin, self).fini()
+        return
+
+    def __addStaticMarker(self, areaID, position, markerSymbolName):
+        """
+        Arguments:
+        
+            areaID: unique marker ID;
+            position: Vertex Math.Vertex3 (coordinate on terrain);
+            markerSymbolName: some string to map to flash object (MARKER_SYMBOL_NAME).
+        
+        """
+        if areaID in self.__objects or markerSymbolName not in _TO_FLASH_SYMBOL_NAME_MAPPING:
+            return
+        markerID = self._createMarkerWithPosition(_TO_FLASH_SYMBOL_NAME_MAPPING[markerSymbolName], position, active=True)
+        self.__objects[areaID] = markerID
+
+    def __delStaticMarker(self, areaID):
+        if areaID in self.__objects:
+            markerID = self.__objects.pop(areaID, None)
+            if markerID is not None:
+                self._destroyMarker(markerID)
+        return
+
+
 class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     """ Base plugin that manages vehicle's 2D markers."""
     __slots__ = ('_markers', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled')
@@ -351,7 +404,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             squadIndex = 0
         hunting = VehicleActions.isHunting(vInfo.events)
-        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiProps.name(), hunting, squadIndex)
+        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiProps.name(), hunting, squadIndex, i18n.makeString(INGAME_GUI.STUN_SECONDS))
         self._invokeMarker(markerID, 'update')
 
     def __setupDynamic(self, marker, accountDBID=0):
@@ -419,6 +472,8 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             self.__showActionMarker(handle, value)
         elif eventID == _EVENT_ID.VEHICLE_HEALTH:
             self.__updateVehicleHealth(handle, *value)
+        elif eventID == _EVENT_ID.VEHICLE_STUN:
+            self.__updateStunMarker(handle, value)
 
     def __onVehicleModelChanged(self, markerID, matrixProvider):
         self._setMarkerMatrix(markerID, matrixProvider)
@@ -428,6 +483,18 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
 
     def __showActionMarker(self, handle, newState):
         self._invokeMarker(handle, 'showActionMarker', newState)
+
+    def __updateStunMarker(self, handle, stunDuration, animated=True):
+        """
+        Show/hide stun marker
+        :param handle:
+        :param stunDuration: stun time in sec
+        :param animated: optional, showing with/without animation
+        """
+        if stunDuration > 0:
+            self._invokeMarker(handle, 'showStunMarker', stunDuration, animated)
+        else:
+            self._invokeMarker(handle, 'hideStunMarker', animated)
 
     def __updateVehicleHealth(self, handle, newHealth, aInfo, attackReasonID):
         if newHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth):

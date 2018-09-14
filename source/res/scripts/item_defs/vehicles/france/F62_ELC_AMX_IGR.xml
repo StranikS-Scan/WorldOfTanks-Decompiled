@@ -1,15 +1,13 @@
 <F62_ELC_AMX_IGR.xml>
   <crew>
     <commander>	gunner
-
 			radioman
-
 			loader	</commander>
     <driver></driver>
   </crew>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	23	</backward>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.384	</moving>
@@ -42,9 +40,9 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2450	</weight>
-    <maxHealth>	320	</maxHealth>
+    <maxHealth>	256	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	125	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
@@ -96,7 +94,7 @@
       <userString>	#igr_vehicles:Chassis_ELC_AMX_2_IGR	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9510.0	</price>
+      <price>	9510	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	10	</leftTrack>
@@ -109,12 +107,12 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F62_ELC_AMX/normal/lod0/Chassis.model	</undamaged>
@@ -340,7 +338,7 @@
     <Turret_1_ELC_AMX_IGR>
       <userString>	#igr_vehicles:Turret_1_ELC_AMX_IGR	</userString>
       <tags></tags>
-      <level>	4	</level>
+      <level>	5	</level>
       <price>	4800	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -361,17 +359,17 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	500	</weight>
-      <maxHealth>	80	</maxHealth>
+      <maxHealth>	64	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	80	</maxHealth>
-        <maxRegenHealth>	40	</maxRegenHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	60	</maxHealth>
-        <maxRegenHealth>	30	</maxRegenHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -390,10 +388,10 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	14	</reloadTime>
           <aimingTime>	2.9	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.23	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -459,20 +457,20 @@
     </Turret_1_ELC_AMX_IGR>
   </turrets0>
   <engines>
-    <SOFAM_8Gxb_IGR>	shared	</SOFAM_8Gxb_IGR>
+    <Sovam_de_250cv_IGR>	shared	</Sovam_de_250cv_IGR>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <ER_53_IGR>	shared	</ER_53_IGR>
+    <SCR_508_IGR>	shared	</SCR_508_IGR>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <SOFAM_8Gxb_IGR>
-          <smplEnginePower>	264.3203	</smplEnginePower>
-        </SOFAM_8Gxb_IGR>
+        <Sovam_de_250cv_IGR>
+          <smplEnginePower>	180	</smplEnginePower>
+        </Sovam_de_250cv_IGR>
       </engines>
       <chassis>
         <Chassis_ELC_AMX_2_IGR>

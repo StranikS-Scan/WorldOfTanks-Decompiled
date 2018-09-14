@@ -203,6 +203,7 @@ class UNIT_OP:
     GAMEPLAYS_MASK = 20
     SET_VEHICLE_LIST = 21
     CHANGE_FALLOUT_TYPE = 22
+    ARENA_TYPE = 23
 
 
 class UNIT_ROLE:
@@ -302,6 +303,7 @@ class CLIENT_UNIT_CMD:
     SET_VEHICLE_LIST = 23
     CHANGE_FALLOUT_TYPE = 24
     SET_UNIT_VEHICLE_TYPE = 25
+    SET_ARENA_TYPE = 26
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -478,7 +480,8 @@ class UnitBase(OpsUnpacker):
                                 '_setVehicleList',
                                 'N',
                                 [('H', 'iH')]),
-     UNIT_OP.CHANGE_FALLOUT_TYPE: ('i', '_changeFalloutQueueType')})
+     UNIT_OP.CHANGE_FALLOUT_TYPE: ('i', '_changeFalloutQueueType'),
+     UNIT_OP.ARENA_TYPE: ('i', '_setArenaType')})
     MAX_PLAYERS = 250
 
     def __init__(self, limitsDefs={}, slotDefs={}, slotCount=0, packedRoster='', extrasInit=None, packedUnit='', rosterTypeID=ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID=EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID=PREBATTLE_TYPE.UNIT):
@@ -506,6 +509,7 @@ class UnitBase(OpsUnpacker):
         self._playerSlots = {}
         self._readyMask = 0
         self._gameplaysMask = 0
+        self._arenaType = 0
         self._fullReadyMask = 0
         self._strComment = ''
         self._packedOps = ''
@@ -636,7 +640,7 @@ class UnitBase(OpsUnpacker):
 
         return True
 
-    _HEADER = '<HHHHHHBii'
+    _HEADER = '<HHHHHHBiii'
     _PLAYER_DATA = '<qiIHBHHq'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
@@ -669,7 +673,8 @@ class UnitBase(OpsUnpacker):
          self._flags,
          self._closedSlotMask,
          self._modalTimestamp,
-         self._gameplaysMask)
+         self._gameplaysMask,
+         self._arenaType)
         packed += struct.pack(self._HEADER, *args)
         for accountDBID, vehList in vehs.iteritems():
             packed += struct.pack(self._PLAYER_VEHICLES_LIST, accountDBID, len(vehList))
@@ -700,7 +705,7 @@ class UnitBase(OpsUnpacker):
         unpacking = self._roster.unpack(unpacking)
         slotCount = self.getMaxSlotCount()
         self._freeSlots = set(xrange(0, slotCount))
-        memberCount, vehCount, playerCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._gameplaysMask = struct.unpack_from(self._HEADER, unpacking)
+        memberCount, vehCount, playerCount, extrasLen, self._readyMask, self._flags, self._closedSlotMask, self._modalTimestamp, self._gameplaysMask, self._arenaType = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
         for i in xrange(0, vehCount):
             accountDBID, vehListCount = struct.unpack_from(self._PLAYER_VEHICLES_LIST, unpacking)
@@ -903,6 +908,13 @@ class UnitBase(OpsUnpacker):
         if prevGameplaysMask != newGameplaysMask:
             self._gameplaysMask = newGameplaysMask
             self.storeOp(UNIT_OP.GAMEPLAYS_MASK, newGameplaysMask)
+        return OK
+
+    def _setArenaType(self, newArenaType):
+        prevArenaType = self._arenaType
+        if prevArenaType != newArenaType:
+            self._arenaType = newArenaType
+            self.storeOp(UNIT_OP.ARENA_TYPE, newArenaType)
         return OK
 
     def isMemberReady(self, accountDBID):

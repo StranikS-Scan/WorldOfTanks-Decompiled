@@ -3,7 +3,7 @@
 import BigWorld
 from debug_utils import LOG_DEBUG_DEV
 from AvatarInputHandler.aih_constants import CTRL_MODES
-from AvatarInputHandler.control_modes import ArcadeControlMode, SniperControlMode, StrategicControlMode
+from AvatarInputHandler.control_modes import ArcadeControlMode, SniperControlMode, StrategicControlMode, ArtyControlMode
 
 class VehicleObserver(object):
 
@@ -15,6 +15,9 @@ class VehicleObserver(object):
         self.__sniperCameraRotationToSend = None
         self.__sniperCameraZoomToSend = None
         self.__strategicCameraShotPointToSend = None
+        self.__artyCameraShotPointToSend = None
+        self.__artyCameraTranslationToSend = None
+        self.__artyCameraRotationToSend = None
         return
 
     def setArcadeCameraDataForObservers(self, shotPoint, translation):
@@ -31,6 +34,12 @@ class VehicleObserver(object):
     def setStrategicCameraDataForObservers(self, shotPoint):
         self.__cameraCaptureTime = BigWorld.serverTime()
         self.__strategicCameraShotPointToSend = shotPoint
+
+    def setArtyCameraDataForObservers(self, shotPoint, translation, rotation):
+        self.__cameraCaptureTime = BigWorld.serverTime()
+        self.__artyCameraShotPointToSend = shotPoint
+        self.__artyCameraTranslationToSend = translation
+        self.__artyCameraRotationToSend = rotation
 
     def transmitCameraData(self):
         player = BigWorld.player()
@@ -50,6 +59,12 @@ class VehicleObserver(object):
                 if self.__strategicCameraShotPointToSend:
                     self.cell.setRemoteCameraStrategic({'time': self.__cameraCaptureTime,
                      'shotPoint': self.__strategicCameraShotPointToSend})
+            elif isinstance(player.inputHandler.ctrl, ArtyControlMode):
+                if self.__artyCameraShotPointToSend:
+                    self.cell.setRemoteCameraArty({'time': self.__cameraCaptureTime,
+                     'shotPoint': self.__artyCameraShotPointToSend,
+                     'translation': self.__artyCameraTranslationToSend,
+                     'rotation': self.__artyCameraRotationToSend})
 
     def __onCameraChanged(self, cameraName, currentVehicleId=None):
         observerFPVControlMode = CTRL_MODES.index(cameraName)

@@ -8,8 +8,8 @@
         <postBattle>
           <and>
             <results>
-              <key>	directHits	</key>
-              <greaterOrEqual>	2	</greaterOrEqual>
+              <key>	critsCount	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -31,8 +31,8 @@
         <postBattle>
           <and>
             <results>
-              <key>	directHits	</key>
-              <greaterOrEqual>	2	</greaterOrEqual>
+              <key>	critsCount	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
             </results>
             <isAlive></isAlive>
             <win></win>

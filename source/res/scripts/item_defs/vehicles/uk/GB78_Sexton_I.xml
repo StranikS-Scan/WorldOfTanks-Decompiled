@@ -24,7 +24,7 @@
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB78_Sexton_I/Sexton_I_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -73,7 +73,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.10446 0.84295 1.31867	</turret>
+      <turret>	-0.1381 0.613451 1.2437	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB78_Sexton_I/collision/Hull.model	</collisionModelServer>
@@ -81,43 +81,46 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.00591406 0.309677 2.45586	</rayStart>
-        <rayEnd>	-0.00591406 -0.0127524 2.21914	</rayEnd>
+        <rayStart>	-0.0154824 0.313415 2.53775	</rayStart>
+        <rayEnd>	-0.0154824 0.0303599 2.25513	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.51032 1.27714 1.02821	</rayStart>
-        <rayEnd>	-1.11032 1.27714 1.02821	</rayEnd>
+        <rayStart>	-1.414 1.24995 0.988463	</rayStart>
+        <rayEnd>	-1.304 1.24995 0.988463	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </player>
       <inscription>
-        <rayStart>	-1.51032 0.724435 0.67404	</rayStart>
-        <rayEnd>	-1.11032 0.724435 0.67404	</rayEnd>
+        <rayStart>	-1.42532 0.724435 0.67404	</rayStart>
+        <rayEnd>	-1.19532 0.724435 0.67404	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	1.51032 0.724435 0.67404	</rayStart>
-        <rayEnd>	1.11032 0.724435 0.67404	</rayEnd>
+        <rayStart>	1.43632 0.724435 0.67404	</rayStart>
+        <rayEnd>	1.18432 0.724435 0.67404	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <player>
-        <rayStart>	1.51032 1.27714 1.02821	</rayStart>
-        <rayEnd>	1.11032 1.27714 1.02821	</rayEnd>
+        <rayStart>	1.409 1.24995 0.988463	</rayStart>
+        <rayEnd>	1.309 1.24995 0.988463	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
-    <hangarShadowTexture>	vehicles/british/GB78_Sexton_I/Sexton_I_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/british/GB78_Sexton_I/GB78_Sexton_I_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2 2 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Sexton_I>
@@ -152,22 +155,23 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
+        <textureSet>	usa_03	</textureSet>
         <size>	0.4 0.42	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.86	</textureScale>
+        <textureScale>	-2.5	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.352107	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -178,9 +182,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.280421	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -191,9 +196,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.352107	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -204,9 +210,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.280421	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -223,12 +230,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.934349 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB78_Sexton_I/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB78_Sexton_I/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.09767 1.91569	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.10032 1.9274	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -241,6 +248,128 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB78_Sexton_I/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB78_Sexton_I/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/british/GB78_Sexton_I/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/british/GB78_Sexton_I/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/british/GB78_Sexton_I/track/left.track	</left>
+        <right>	vehicles/british/GB78_Sexton_I/track/right.track	</right>
+        <segmentLength>	0.14	</segmentLength>
+        <segmentOffset>	0.159	</segmentOffset>
+        <segment2Offset>	0.061	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.026	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.084	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0563063	</minOffset>
+          <maxOffset>	0.0518018	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0563063	</minOffset>
+          <maxOffset>	0.0518018	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_Sexton_I>
   </chassis>
   <turrets0>
@@ -301,9 +430,6 @@
             <collisionModelServer>	vehicles/british/GB78_Sexton_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB78_Sexton_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <camouflage>
-            <tiling>	0.835 0.835 0.000000 0.000000	</tiling>
-          </camouflage>
         </_25pdr_Field_Gun>
       </guns>
       <models>
@@ -315,11 +441,14 @@
         <collisionModelServer>	vehicles/british/GB78_Sexton_I/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB78_Sexton_I/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.00301 0.34736 -0.079929	</gunPosition>
+      <gunPosition>	-0.000040 0.53345 -0.04187	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.749 0.087 1.000 0.000 1.000 0.000 0.421 0.100 0.500 0.500 0.000 0.500 0.391 1.000 0.000	</physicsShape>
+      <physicsShape>	0.986 0.028 1.157 -0.063 1.000 0.206 0.405 0.100 0.500 0.500 0.000 0.500 0.000 1.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1 0.5 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_1_Sexton_I>
   </turrets0>
   <engines>

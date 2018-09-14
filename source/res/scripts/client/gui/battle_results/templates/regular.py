@@ -134,7 +134,8 @@ _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'achievementsLeft': [],
  'achievementsRight': [],
  'showNoIncomeAlert': False,
- 'noIncomeAlert': None})
+ 'noIncomeAlert': None,
+ 'isStunDataEnabled': False})
 _PREMIUM_BUY_VO_META = base.PropertyMeta((('arenaUniqueID', 0, 'clientIndex'), ('creditsDiff', 0, 'creditsDiff'), ('xpDiff', 0, 'xpDiff')))
 _PREMIUM_BUY_VO_META.bind(personal.PremiumBuyBlock)
 _DAMAGE_DETAILS_VO_META = base.PropertyMeta((('damageTotalItems', 0, 'piercings'), ('damageDealtVals', None, 'damageDealtValues'), ('damageDealtNames', None, 'damageDealtNames')))
@@ -143,6 +144,8 @@ _ARMOR_USING_DETAILS_VO_META = base.PropertyMeta((('armorTotalItems', 0, 'usedAr
 _ARMOR_USING_DETAILS_VO_META.bind(personal.ArmorUsingDetailsBlock)
 _ASSIST_USING_DETAILS_VO_META = base.PropertyMeta((('damageAssisted', 0, 'damageAssisted'), ('damageAssistedVals', None, 'damageAssistedValues'), ('damageAssistedNames', None, 'damageAssistedNames')))
 _ASSIST_USING_DETAILS_VO_META.bind(personal.AssistDetailsBlock)
+_STUN_DETAILS_VO_META = base.PropertyMeta((('stunTotalItems', 0, 'stunNum'), ('stunVals', None, 'stunValues'), ('stunNames', None, 'stunNames')))
+_STUN_DETAILS_VO_META.bind(personal.StunDetailsBlock)
 _CRITS_DETAILS_VO_META = base.PropertyMeta((('critsCount', 0, 'critsCount'),
  ('criticalDevices', [], 'criticalDevices'),
  ('destroyedDevices', [], 'destroyedDevices'),
@@ -200,12 +203,14 @@ _TOTAL_EFFICIENCY_HEADER_META = base.PropertyMeta(((BATTLE_EFFICIENCY_TYPES.DEST
  (BATTLE_EFFICIENCY_TYPES.ARMOR, '-', 'damageBlockedByArmor'),
  (BATTLE_EFFICIENCY_TYPES.ASSIST, '-', 'damageAssisted'),
  (BATTLE_EFFICIENCY_TYPES.DETECTION, '-', 'spotted'),
+ (BATTLE_EFFICIENCY_TYPES.STUN, '-', 'damageAssistedStun'),
  ('killTooltip', None, 'killsTooltip'),
  ('damageTooltip', None, 'damageDealtTooltip'),
  ('critsTooltip', None, 'criticalDamagesTooltip'),
  ('armorTooltip', None, 'damageBlockedTooltip'),
  ('assistTooltip', None, 'damageAssistedTooltip'),
- ('spottedTooltip', None, 'spottedTooltip')))
+ ('spottedTooltip', None, 'spottedTooltip'),
+ ('stunTooltip', None, 'damageAssistedStunTooltip')))
 _TOTAL_EFFICIENCY_HEADER_META.bind(personal.TotalEfficiencyDetailsHeader)
 REGULAR_PERSONAL_STATS_BLOCK = base.StatsBlock(_PERSONAL_VO_META, 'personal')
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(0, personal.TotalEfficiencyDetailsHeader(_TOTAL_EFFICIENCY_HEADER_META, 'efficiencyHeader', _RECORD.PERSONAL))
@@ -224,6 +229,7 @@ REGULAR_PERSONAL_STATS_BLOCK.addComponent(12, details.BaseXPBlock(base.ListMeta(
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(13, details.PremiumXPBlock(base.ListMeta(), 'xpPremValues', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(14, details.TotalXPDetailsBlock(base.ListMeta(), 'xpData', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, vehicles.PersonalVehiclesRegularStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
+(REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, personal.StunDataFlag('isStunDataEnabled')),)
 _TEAM_PLAYER_VO_META = base.PropertyMeta((('userName', '', 'nameLabel'),
  ('fullName', '', 'fullNameLabel'),
  ('clanAbbrev', '', 'clanLabel'),
@@ -244,6 +250,8 @@ VEHICLE_STATS_BLOCK_VO_META = base.PropertyMeta((('shots', 0, 'shots'),
  ('spotted', 0, 'spotted'),
  ('damagedKilled', style.SlashedValuesBlock('damagedKilled'), 'damagedKilled'),
  ('damageAssisted', 0, 'damageAssisted'),
+ ('damageAssistedStun', 0, 'damageAssistedStun'),
+ ('stunNum', 0, 'stunNum'),
  ('capturePointsVal', style.SlashedValuesBlock('capturePointsVal'), 'capturePoints'),
  ('mileage', style.MetersToKillometersItem('mileage'), 'mileage')))
 VEHICLE_STATS_BLOCK_VO_META.bind(vehicles.RegularVehicleStatValuesBlock)

@@ -9,6 +9,7 @@ import itertools
 from collections import namedtuple
 import math
 import weakref
+from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 import GUI
 from AvatarInputHandler.cameras import FovExtended
 import BigWorld
@@ -33,7 +34,7 @@ import CommandMapping
 from helpers import i18n
 from Event import Event
 from AvatarInputHandler import _INPUT_HANDLER_CFG, AvatarInputHandler
-from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera
+from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera
 from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
@@ -271,7 +272,7 @@ class ReadOnlySetting(SettingAbstract):
 class SoundSetting(SettingAbstract):
     VOLUME_MULT = 100
 
-    def __init__(self, soundGroup, isPreview=False):
+    def __init__(self, soundGroup, isPreview=True):
         super(SoundSetting, self).__init__(isPreview)
         self.group = soundGroup
 
@@ -1458,10 +1459,11 @@ class StorageControlSetting(StorageDumpSetting, ControlSetting):
 
 
 class MouseSetting(ControlSetting):
-    CAMERAS = {'postmortem': (ArcadeCamera.getCameraAsSettingsHolder, 'postMortemMode/camera'),
-     'arcade': (ArcadeCamera.getCameraAsSettingsHolder, 'arcadeMode/camera'),
-     'sniper': (SniperCamera.getCameraAsSettingsHolder, 'sniperMode/camera'),
-     'strategic': (StrategicCamera.getCameraAsSettingsHolder, 'strategicMode/camera')}
+    CAMERAS = {CTRL_MODE_NAME.POSTMORTEM: (ArcadeCamera.getCameraAsSettingsHolder, 'postMortemMode/camera'),
+     CTRL_MODE_NAME.ARCADE: (ArcadeCamera.getCameraAsSettingsHolder, 'arcadeMode/camera'),
+     CTRL_MODE_NAME.SNIPER: (SniperCamera.getCameraAsSettingsHolder, 'sniperMode/camera'),
+     CTRL_MODE_NAME.STRATEGIC: (StrategicCamera.getCameraAsSettingsHolder, 'strategicMode/camera'),
+     CTRL_MODE_NAME.ARTY: (ArtyCamera.getCameraAsSettingsHolder, 'artyMode/camera')}
 
     def __init__(self, mode, setting, default, isPreview=False):
         super(MouseSetting, self).__init__(isPreview)
@@ -1471,7 +1473,7 @@ class MouseSetting(ControlSetting):
         self.__aihSection = ResMgr.openSection(_INPUT_HANDLER_CFG)
 
     def getCamera(self):
-        if self.__isControlModeAccessible():
+        if self._isControlModeAccessible():
             mode = BigWorld.player().inputHandler.ctrls[self.mode]
             if mode is not None:
                 return mode.camera
@@ -1481,9 +1483,6 @@ class MouseSetting(ControlSetting):
             return creator(self.__aihSection[section])
         else:
             return
-
-    def __isControlModeAccessible(self):
-        return BigWorld.player() is not None and hasattr(BigWorld.player(), 'inputHandler') and hasattr(BigWorld.player().inputHandler, 'ctrls')
 
     def _getDefault(self):
         return self.default
@@ -1499,9 +1498,12 @@ class MouseSetting(ControlSetting):
             return
         else:
             camera.setUserConfigValue(self.setting, value)
-            if not self.__isControlModeAccessible():
+            if not self._isControlModeAccessible():
                 camera.writeUserPreferences()
             return
+
+    def _isControlModeAccessible(self):
+        return BigWorld.player() is not None and hasattr(BigWorld.player(), 'inputHandler') and hasattr(BigWorld.player().inputHandler, 'ctrls')
 
 
 class MouseSensitivitySetting(MouseSetting):
@@ -1513,7 +1515,7 @@ class MouseSensitivitySetting(MouseSetting):
 class DynamicFOVMultiplierSetting(MouseSetting):
 
     def __init__(self, isPreview=False):
-        super(DynamicFOVMultiplierSetting, self).__init__('arcade', 'fovMultMinMaxDist', self.getDefaultValue(), isPreview)
+        super(DynamicFOVMultiplierSetting, self).__init__(CTRL_MODE_NAME.ARCADE, 'fovMultMinMaxDist', self.getDefaultValue(), isPreview)
 
     def _set(self, value):
         value = ArcadeCamera.MinMax(min=value, max=1.0)
@@ -1664,7 +1666,7 @@ class KeyboardSetting(ControlSetting):
         if value is not None:
             key = getBigworldNameFromKey(getBigworldKey(value))
         LOG_DEBUG('Settings key command', self.cmd, value, key)
-        if self.cmd == 'CMD_VOICECHAT_MUTE' and self.app.gameInputManager is not None:
+        if self.cmd == 'CMD_VOICECHAT_MUTE' and self.app is not None and self.app.gameInputManager is not None:
             self.app.gameInputManager.updateChatKeyHandlers(value)
         CommandMapping.g_instance.remove(self.cmd)
         CommandMapping.g_instance.add(self.cmd, key)
@@ -1689,6 +1691,7 @@ class KeyboardSettings(SettingsContainer):
        ('lock_target', 'CMD_CM_LOCK_TARGET'),
        ('lock_target_off', 'CMD_CM_LOCK_TARGET_OFF'),
        ('alternate_mode', 'CMD_CM_ALTERNATE_MODE'),
+       ('trajectory_view', 'CMD_CM_TRAJECTORY_VIEW'),
        ('reloadPartialClip', 'CMD_RELOAD_PARTIAL_CLIP'))),
      ('vehicle_other', (('showHUD', 'CMD_TOGGLE_GUI'), ('showRadialMenu', 'CMD_RADIAL_MENU_SHOW'))),
      ('equipment', (('item01', 'CMD_AMMO_CHOICE_1'),
@@ -1744,6 +1747,9 @@ class KeyboardSettings(SettingsContainer):
             if not isFull:
                 if groupName in cls.__hiddenGroups:
                     continue
+            if groupName == 'firing' and not GUI_SETTINGS.spgAlternativeAimingCameraEnabled:
+                groupValues = list(groupValues)
+                del groupValues[4]
             layout.append({'key': groupName,
              'values': [ cls.__mapValues(*x) for x in groupValues ]})
 

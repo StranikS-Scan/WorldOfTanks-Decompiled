@@ -27,3 +27,4 @@ class BATTLE_EFFICIENCY_TYPES(object):
     RECEIVED_BURN = 'receivedBurn'
     RECEIVED_RAM = 'receivedRam'
     RECEIVED_WORLD_COLLISION = 'receivedWorldCollision'
+    STUN = 'stun'

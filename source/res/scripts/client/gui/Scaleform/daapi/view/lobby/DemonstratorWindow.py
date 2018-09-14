@@ -4,16 +4,23 @@ import ArenaType
 from gui.Scaleform.daapi.view.meta.DemonstratorWindowMeta import DemonstratorWindowMeta
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction
+from gui.LobbyContext import g_lobbyContext
 
 class DemonstratorWindow(DemonstratorWindowMeta):
 
     def _populate(self):
         super(DemonstratorWindow, self)._populate()
         maps = dict(ctf=[], assault=[], domination=[], nations=[])
+        serverSettings = g_lobbyContext.getServerSettings()
+        availableRandomMaps = serverSettings.getRandomMapsForDemonstrator()
         for arenaTypeID, arenaType in ArenaType.g_cache.iteritems():
             if arenaType.explicitRequestOnly:
                 continue
-            if arenaType.gameplayName in maps:
+            if arenaType.gameplayName not in maps:
+                continue
+            gameplayID, geometryID = ArenaType.parseTypeID(arenaTypeID)
+            geometry = (geometryID, gameplayID)
+            if any((geometry in divisionMaps for divisionMaps in availableRandomMaps.itervalues())):
                 maps[arenaType.gameplayName].append({'id': arenaTypeID,
                  'name': arenaType.name,
                  'type': arenaType.gameplayName})

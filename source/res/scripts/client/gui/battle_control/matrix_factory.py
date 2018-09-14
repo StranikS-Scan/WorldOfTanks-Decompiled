@@ -3,6 +3,7 @@
 import BigWorld
 import Math
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
+from gui.battle_control.avatar_getter import getInputHandler
 from gui.battle_control.battle_constants import VEHICLE_LOCATION
 
 def makeVehicleEntityMP(vehicle):
@@ -85,6 +86,26 @@ def makeStrategicCameraMatrix():
     matrix.source = BigWorld.camera().invViewMatrix
     matrix.baseScale = (1.0, 1.0)
     return matrix
+
+
+def makeArtyAimPointMatrix():
+    """Makes combined matrix where translation is position of aiming,
+    rotation and scale is camera position.
+    
+    :return: instance of Math.WGCombinedMP
+    """
+    provider = Math.WGCombinedMP()
+    rotationMatrix = Math.WGStrategicAreaViewMP()
+    rotationMatrix.source = BigWorld.camera().invViewMatrix
+    rotationMatrix.baseScale = (1.0, 1.0)
+    handler = getInputHandler()
+    if handler is not None:
+        translationMatrix = handler.ctrl.camera.aimingSystem.aimMatrix
+    else:
+        translationMatrix = Math.Matrix()
+    provider.translationSrc = translationMatrix
+    provider.rotationSrc = rotationMatrix
+    return provider
 
 
 def makeDefaultCameraMatrix():

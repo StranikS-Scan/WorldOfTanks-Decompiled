@@ -51,6 +51,8 @@ class VehicleIsValid(IVehicleLimit):
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
         if g_currentVehicle.isFalloutOnly() and not self.falloutCtrl.isSelected():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY)
+        if g_currentVehicle.isRotationGroupLocked():
+            return (False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
         if not g_currentVehicle.isReadyToPrebattle():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
         vehicle = g_currentVehicle.item

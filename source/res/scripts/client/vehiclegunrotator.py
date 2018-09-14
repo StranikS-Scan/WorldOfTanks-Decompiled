@@ -112,12 +112,13 @@ class VehicleGunRotator(object):
         if not self.__isStarted:
             return
         else:
+            self.__isStarted = False
             self.settingsCore.onSettingsChanged -= self.applySettings
             if self.__avatar.inputHandler is None:
                 return
+            self.__avatar.inputHandler.onCameraChanged -= self.__onCameraChanged
             if self.__clientMode and self.__showServerMarker:
                 self.__avatar.inputHandler.showGunMarker2(False)
-            self.__isStarted = False
             return
 
     def applySettings(self, diff):

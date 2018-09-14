@@ -182,11 +182,9 @@ class StatisticsCollector:
         BigWorld.addUPLMessage(stateName)
         if showSummaryNow:
             reportHeader = _HANGAR_LOADING_STATES_PREFIX + ': SUMMARY'
-            stopWatch = HANGAR_LOADING_STATE.HANGAR_READY
             if self.__loadingStates[HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL] != 0.0:
-                stopWatch = HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL
                 reportHeader += ' (With Tutorial stage) '
-            self.__hangarLoadingTime = self.__loadingStates[stopWatch] - self.__loadingStates[self.__loadingInitialState]
+            self.__hangarLoadingTime = self.__loadingStates[state] - self.__loadingStates[self.__loadingInitialState]
             LOG_NOTE(reportHeader + ' TOTAL = ' + str(self.__hangarLoadingTime))
 
 

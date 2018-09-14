@@ -7,11 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <attackReason>	0	</attackReason>
-              <eventCount></eventCount>
-              <greaterOrEqual>	4	</greaterOrEqual>
-            </vehicleDamage>
+            <results>
+              <key>	stunNum	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -26,15 +25,15 @@
       <conditions>
         <postBattle>
           <and>
+            <results>
+              <key>	stunNum	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </results>
             <vehicleDamage>
               <attackReason>	0	</attackReason>
               <eventCount></eventCount>
-              <greaterOrEqual>	4	</greaterOrEqual>
+              <greaterOrEqual>	5	</greaterOrEqual>
             </vehicleDamage>
-            <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	2000	</greaterOrEqual>
-            </results>
           </and>
         </postBattle>
       </conditions>

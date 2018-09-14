@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/battle_chat_cmd.py
+import cPickle
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from helpers import dependency
@@ -9,21 +10,24 @@ from messenger.ext.channel_num_gen import getClientID4BattleChannel
 from messenger.m_constants import PROTO_TYPE, BATTLE_CHANNEL
 from messenger.proto.entities import OutChatCommand, ReceivedBattleChatCommand
 from messenger.proto.interfaces import IBattleCommandFactory
-from messenger_common_chat2 import messageArgs, BATTLE_CHAT_COMMANDS
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
+from messenger_common_chat2 import messageArgs, BATTLE_CHAT_COMMANDS
 from skeletons.gui.battle_session import IBattleSessionProvider
 _TARGETED_CMD_NAMES = ('ATTACKENEMY', 'TURNBACK', 'FOLLOWME', 'HELPMEEX', 'SUPPORTMEWITHFIRE', 'STOP')
 _PUBLIC_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE', 'POSITIVE', 'NEGATIVE', 'RELOADING_READY', 'RELOADING_UNAVAILABLE', 'HELPME', 'RELOADINGGUN', 'RELOADING_CASSETE', 'RELOADING_READY_CASSETE')
 _PRIVATE_CMD_NAMES = ('TURNBACK', 'FOLLOWME', 'HELPMEEX', 'STOP')
 _SHOW_MARKER_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE')
 _ENEMY_TARGET_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE')
+_MINIMAP_CMD_NAMES = ('ATTENTIONTOCELL', 'SPG_AIM_AREA')
+_SPG_AIM_CMD_NAMES = ('SPG_AIM_AREA', 'ATTACKENEMY')
 _TARGETED_CMD_IDS = []
 _PUBLIC_CMD_IDS = []
 _PRIVATE_CMD_IDS = []
 _SHOW_MARKER_CMD_IDS = []
 _ENEMY_TARGET_CMD_IDS = []
-_MINIMAP_CMD_ID = 0
+_MINIMAP_CMD_IDS = []
+_SPG_AIM_CMD_IDS = []
 for cmd in BATTLE_CHAT_COMMANDS:
     cmdID = cmd.id
     cmdName = cmd.name
@@ -37,8 +41,10 @@ for cmd in BATTLE_CHAT_COMMANDS:
         _PUBLIC_CMD_IDS.append(cmdID)
     elif cmdName in _PRIVATE_CMD_NAMES:
         _PRIVATE_CMD_IDS.append(cmdID)
-    if cmdName == 'ATTENTIONTOCELL':
-        _MINIMAP_CMD_ID = cmdID
+    if cmdName in _MINIMAP_CMD_NAMES:
+        _MINIMAP_CMD_IDS.append(cmdID)
+    if cmdName in _SPG_AIM_CMD_NAMES:
+        _SPG_AIM_CMD_IDS.append(cmdID)
 
 class _OutCmdDecorator(OutChatCommand):
     __slots__ = ('_name',)
@@ -84,13 +90,26 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
             return u''
         else:
             i18nKey = I18N_INGAME_GUI.chat_shortcuts(command.msgText)
+            i18nArguments = {}
             if i18nKey is not None:
                 if self.isOnMinimap():
-                    text = i18n.makeString(i18nKey, cellName=self._getCellName())
+                    cellIdx = None
+                    if self.isSPGAimCommand():
+                        dsp, cellIdx, reloadTime = cPickle.loads(self._protoData['strArg1'])
+                        if reloadTime > 0:
+                            i18nArguments['reloadTime'] = reloadTime
+                            i18nKey += '_reloading'
+                    i18nArguments['cellName'] = self._getCellName(cellIdx)
                 elif self.hasTarget():
-                    text = i18n.makeString(i18nKey, target=self._getTarget())
+                    i18nArguments['target'] = self._getTarget()
+                    if self.isSPGAimCommand():
+                        reloadTime = self._protoData['floatArg1']
+                        if reloadTime > 0:
+                            i18nArguments['reloadTime'] = reloadTime
+                            i18nKey += '_reloading'
                 else:
-                    text = i18n.makeString(i18nKey, **self._protoData)
+                    i18nArguments = self._protoData
+                text = i18n.makeString(i18nKey, **i18nArguments)
             else:
                 text = command.msgText
             return unicode(text, 'utf-8', errors='ignore')
@@ -104,11 +123,17 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     def getSecondTargetID(self):
         return self._protoData['floatArg1']
 
+    def getCommandData(self):
+        return self._protoData
+
     def getCellIndex(self):
         return self.getFirstTargetID() if self.isOnMinimap() else 0
 
+    def isSPGAimCommand(self):
+        return self._commandID in _SPG_AIM_CMD_IDS
+
     def isOnMinimap(self):
-        return self._commandID == _MINIMAP_CMD_ID
+        return self._commandID in _MINIMAP_CMD_IDS
 
     def hasTarget(self):
         return self._commandID in _TARGETED_CMD_IDS
@@ -132,9 +157,13 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
             target = g_settings.battle.targetFormat % {'target': target}
         return target
 
-    def _getCellName(self):
+    def _getCellName(self, cellIdx=None):
         from gui.battle_control import minimap_utils
-        return minimap_utils.getCellName(self.getFirstTargetID())
+        if cellIdx is None:
+            return minimap_utils.getCellName(self.getFirstTargetID())
+        else:
+            return minimap_utils.getCellName(cellIdx)
+            return
 
     def _getCommandVehMarker(self):
         command = _ACTIONS.battleChatCommandFromActionID(self._commandID)
@@ -152,6 +181,13 @@ class BattleCommandFactory(IBattleCommandFactory):
     def createByAction(actionID, args):
         return _ReceivedCmdDecorator(actionID, args)
 
+    def createSPGAimAreaCommand(self, dsp, cellIdx, reloadTime):
+        data = cPickle.dumps(((dsp.x, dsp.y, dsp.z), int(cellIdx), reloadTime))
+        return _OutCmdDecorator('SPG_AIM_AREA', messageArgs(strArg1=data))
+
+    def createSPGAimTargetCommand(self, targetID, reloadTime):
+        return _OutCmdDecorator('ATTACKENEMY', messageArgs(int32Arg1=targetID, floatArg1=reloadTime))
+
     def createByName(self, name):
         decorator = None
         if name in BATTLE_CHAT_COMMANDS_BY_NAMES:
@@ -165,10 +201,7 @@ class BattleCommandFactory(IBattleCommandFactory):
         return decorator
 
     def createByCellIdx(self, cellIdx):
-        decorator = None
-        if _MINIMAP_CMD_ID:
-            decorator = _OutCmdDecorator('ATTENTIONTOCELL', messageArgs(int32Arg1=cellIdx))
-        return decorator
+        return _OutCmdDecorator('ATTENTIONTOCELL', messageArgs(int32Arg1=cellIdx))
 
     def create4Reload(self, isCassetteClip, timeLeft, quantity):
         name = 'RELOADINGGUN'

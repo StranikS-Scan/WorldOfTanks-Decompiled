@@ -135,7 +135,8 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         """
         setup = {'equipments': plugins.EquipmentsPlugin,
          'vehicles': plugins.ArenaVehiclesPlugin,
-         'personal': plugins.PersonalEntriesPlugin}
+         'personal': plugins.PersonalEntriesPlugin,
+         'area': plugins.AreaStaticMarkerPlugin}
         if IS_DEVELOPMENT:
             setup['teleport'] = plugins.TeleportPlugin
         return setup

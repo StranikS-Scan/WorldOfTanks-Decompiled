@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	56.3	</forward>
+    <forward>	57	</forward>
     <backward>	21	</backward>
   </speedLimits>
   <invisibility>
@@ -106,8 +106,8 @@
         <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A71_T21/normal/lod0/Chassis.model	</undamaged>
@@ -341,8 +341,8 @@
         <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	135	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A71_T21/normal/lod0/Chassis.model	</undamaged>
@@ -583,124 +583,20 @@
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_76mm_Gun_M1A1L>	shared	  <maxAmmo>	70	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	QF_6_pounder_Mk_III	  <cost>	1880	</cost>
-            </gun>
-            <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	28.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <reloadTime>	3.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/american/A71_T21/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A71_T21/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A71_T21/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A71_T21/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A71_T21/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000031 0.000030 1.23036	</rayStart>
-              <rayEnd>	-0.0279727 -0.0699383 1.23015	</rayEnd>
-              <rayUp>	0.072 0.068 5	</rayUp>
-              <size>	0.45	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	1.3 0.4 3.2 0.2	</tiling>
-          </camouflage>
-        </_75mm_Gun_M3_L37>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	150	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	28.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	2.1	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/american/A71_T21/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/american/A71_T21/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/american/A71_T21/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A71_T21/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A71_T21/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000000 0.000000 0.956364	</rayStart>
-              <rayEnd>	-0.0295692 0.00974626 0.956355	</rayEnd>
-              <rayUp>	0.053 0.053 5	</rayUp>
-              <size>	0.4	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium	</effects>
-          <camouflage>
-            <tiling>	1.3 0.5 3.2 0.2	</tiling>
-          </camouflage>
-        </QF_6_pounder_Mk_III>
-        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	70	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_76mm_Gun_M1A2	  <cost>	5800	</cost>
+            <gun>	_76mm_Gun_M1A2L	  <cost>	5750	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -717,12 +613,12 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
+          <reloadTime>	4.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -748,14 +644,14 @@
           <camouflage>
             <tiling>	1.2 0.5 3.2 3.8	</tiling>
           </camouflage>
-        </_76mm_Gun_M1A1>
-        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	70	</maxAmmo>
+        </_76mm_Gun_M1A1L>
+        <_76mm_Gun_M1A2L>	shared	  <maxAmmo>	70	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	A103_T71E1	  <cost>	60000	</cost>
+            <vehicle>	A103_T71E1	  <cost>	68950	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -771,8 +667,8 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <reloadTime>	3.2	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <reloadTime>	4.2	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
@@ -780,6 +676,7 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/american/A71_T21/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A71_T21/crash/lod0/Gun_04.model	</destroyed>
@@ -803,7 +700,7 @@
           <camouflage>
             <tiling>	1.1 0.5 3.2 3.7	</tiling>
           </camouflage>
-        </_76mm_Gun_M1A2>
+        </_76mm_Gun_M1A2L>
       </guns>
       <models>
         <undamaged>	vehicles/american/A71_T21/normal/lod0/Turret_01.model	</undamaged>
@@ -855,38 +752,33 @@
     </Turret_2_T21>
   </turrets0>
   <engines>
-    <Ford_GAA>	shared	  <unlocks>
-        <engine>	Ford_GAN	  <cost>	11500.0	</cost>
+    <Ford_GAA_A>	shared	  <unlocks>
+        <engine>	Ford_GAN_A	  <cost>	12300	</cost>
         </engine>
       </unlocks>
-    </Ford_GAA>
-    <Ford_GAN>	shared	</Ford_GAN>
+    </Ford_GAA_A>
+    <Ford_GAN_A>	shared	</Ford_GAN_A>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_538	  <cost>	3800.0	</cost>
+    <AN-GRC-3>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
         </radio>
       </unlocks>
-    </SCR_508>
-    <SCR_538>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000.0	</cost>
-        </radio>
-      </unlocks>
-    </SCR_538>
+    </AN-GRC-3>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Ford_GAA>
-          <smplEnginePower>	549.7862	</smplEnginePower>
-        </Ford_GAA>
-        <Ford_GAN>
-          <smplEnginePower>	592.0775	</smplEnginePower>
-        </Ford_GAN>
+        <Ford_GAA_A>
+          <smplEnginePower>	550	</smplEnginePower>
+        </Ford_GAA_A>
+        <Ford_GAN_A>
+          <smplEnginePower>	600	</smplEnginePower>
+        </Ford_GAN_A>
       </engines>
       <chassis>
         <Chassis_T21>

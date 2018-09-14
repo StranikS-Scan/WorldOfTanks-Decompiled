@@ -16,6 +16,7 @@ class MARKER_SYMBOL_NAME(object):
     SAFE_ZONE_MARKER = 'SafeZoneIndicatorUI'
     RESOURCE_MARKER = 'ResourcePointMarkerUI'
     STATIC_OBJECT_MARKER = 'StaticObjectMarker'
+    STATIC_ARTY_MARKER = 'StaticArtyMarkerUI'
 
 
 class DAMAGE_TYPE(object):

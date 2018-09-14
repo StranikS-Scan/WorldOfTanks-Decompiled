@@ -20,7 +20,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R08_BT-2/BT-2_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -57,11 +57,11 @@
       <sensitivityToImpulse>	0.78	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_small	</pixie>
+      <pixie>	gas_medium	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.446087 0.461335	</turret>
+      <turret>	0.000165 0.655786 0.547038	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Hull.model	</collisionModelServer>
@@ -69,28 +69,31 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.000027 0.0620161 2.21907	</rayStart>
-        <rayEnd>	-0.000027 -0.292693 2.03419	</rayEnd>
+        <rayStart>	-0.000517845 0.237263 2.26212	</rayStart>
+        <rayEnd>	-0.000517845 -0.11259 2.0682	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-0.791502 0.330379 0.208042	</rayStart>
-        <rayEnd>	-0.771502 0.330379 0.208042	</rayEnd>
+        <rayStart>	-0.782222 0.511275 0.216103	</rayStart>
+        <rayEnd>	-0.762222 0.511275 0.216103	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.46	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	0.791502 0.330379 0.208042	</rayStart>
-        <rayEnd>	0.771502 0.330379 0.208042	</rayEnd>
+        <rayStart>	0.782222 0.511275 0.216103	</rayStart>
+        <rayEnd>	0.762222 0.511275 0.216103	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.46	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R08_BT-2/BT-2_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	3.4 3.4 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <BT-2>
@@ -129,13 +132,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.32 0.28	</size>
+        <size>	0.42 0.26	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.445	</textureScale>
+        <textureScale>	-1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -181,16 +184,16 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.949924 0.024438	</hullPosition>
+      <hullPosition>	0.000000 0.814233 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.949981 1.54304	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.986863 1.65092	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -203,6 +206,188 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R08_BT-2/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R08_BT-2/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/russian/R08_BT-2/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/russian/R08_BT-2/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/russian/R08_BT-2/track/left.track	</left>
+        <right>	vehicles/russian/R08_BT-2/track/right.track	</right>
+        <segmentLength>	0.488	</segmentLength>
+        <segmentOffset>	0.2	</segmentOffset>
+        <segment2Offset>	0.254	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.0003	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.07	</maxAmplitude>
+        <maxOffset>	0.07	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.049	</offset>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.057	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.067	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.092	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.049	</offset>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.057	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.067	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.092	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
     </BT-2>
     <BT-2bis>
       <userString>	#ussr_vehicles:BT-2bis	</userString>
@@ -236,13 +421,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.32 0.28	</size>
+        <size>	0.42 0.26	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.445	</textureScale>
+        <textureScale>	-1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -288,16 +473,16 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.949924 0.024438	</hullPosition>
+      <hullPosition>	0.000000 0.814233 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.949981 1.54304	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.986863 1.65092	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -310,6 +495,188 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R08_BT-2/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R08_BT-2/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/russian/R08_BT-2/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/russian/R08_BT-2/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/russian/R08_BT-2/track/left.track	</left>
+        <right>	vehicles/russian/R08_BT-2/track/right.track	</right>
+        <segmentLength>	0.488	</segmentLength>
+        <segmentOffset>	0.2	</segmentOffset>
+        <segment2Offset>	0.254	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.0003	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.07	</maxAmplitude>
+        <maxOffset>	0.07	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.049	</offset>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.057	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.067	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.092	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.049	</offset>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.057	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.067	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.107	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.092	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
     </BT-2bis>
   </chassis>
   <turrets0>
@@ -384,7 +751,7 @@
             <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+            <tiling>	1.5 2.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_37mm_B-3>
         <_20mm_TNSH>	shared	  <maxAmmo>	420	</maxAmmo>
@@ -423,6 +790,9 @@
             <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.5 2.5 0.000000 0.000000	</tiling>
+          </camouflage>
         </_20mm_TNSH>
       </guns>
       <models>
@@ -434,18 +804,18 @@
         <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.329118 0.476289	</gunPosition>
+      <gunPosition>	-0.05719 0.325445 0.424378	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.75 0.36 -0.06	</rayStart>
-          <rayEnd>	-0.35 0.36 -0.06	</rayEnd>
+          <rayStart>	-0.763179 0.340431 -0.172675	</rayStart>
+          <rayEnd>	-0.376807 0.340431 -0.0691517	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.75 0.36 -0.06	</rayStart>
-          <rayEnd>	0.35 0.36 -0.06	</rayEnd>
+          <rayStart>	0.763179 0.340431 -0.172675	</rayStart>
+          <rayEnd>	0.376807 0.340431 -0.0691517	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -530,7 +900,7 @@
             <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+            <tiling>	1.5 2.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_37mm_B-3>
         <_20mm_TNSH>	shared	  <maxAmmo>	420	</maxAmmo>
@@ -569,6 +939,9 @@
             <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.5 2.5 0.000000 0.000000	</tiling>
+          </camouflage>
         </_20mm_TNSH>
         <_45mm_20K>	shared	  <maxAmmo>	80	</maxAmmo>
           <shotDispersionFactors>
@@ -611,7 +984,7 @@
             <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	1.84 1.84 0.000000 0.000000	</tiling>
+            <tiling>	1.5 2.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_45mm_20K>
       </guns>
@@ -624,18 +997,18 @@
         <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.282194 0.554863	</gunPosition>
+      <gunPosition>	0.038939 0.318365 0.564201	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.1 0.4 -0.72	</rayStart>
-          <rayEnd>	0.000000 0.4 -0.72	</rayEnd>
+          <rayStart>	-0.270852 0.397933 -0.788588	</rayStart>
+          <rayEnd>	-0.171502 0.397933 -0.777205	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	1.1 0.4 -0.72	</rayStart>
-          <rayEnd>	0.000000 0.4 -0.72	</rayEnd>
+          <rayStart>	0.270852 0.397933 -0.788588	</rayStart>
+          <rayEnd>	0.171502 0.397933 -0.777205	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -643,7 +1016,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.939 -0.056 1.000 0.000 0.535 0.171 0.813 0.632 0.500 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+      <physicsShape>	0.939 -0.056 1.000 0.000 0.520 0.216 0.813 0.632 0.500 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
@@ -751,7 +1124,7 @@
   </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	small	</damagedStateGroup>
+    <damagedStateGroup>	medium	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	ussr_star	</default>

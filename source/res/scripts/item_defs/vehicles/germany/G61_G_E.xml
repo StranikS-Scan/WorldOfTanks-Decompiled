@@ -135,10 +135,10 @@
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
       <brakeForce>	87000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	18	</rotationSpeed>
+      <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -464,7 +464,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	310	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -477,12 +477,12 @@
             <armor_1>	20	</armor_1>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <reloadTime>	42.5	</reloadTime>
-          <aimingTime>	7.0	</aimingTime>
-          <shotDispersionRadius>	0.84	</shotDispersionRadius>
+          <reloadTime>	39	</reloadTime>
+          <aimingTime>	4.8	</aimingTime>
+          <shotDispersionRadius>	0.76	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.52	</turretRotation>
+            <turretRotation>	0.45	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

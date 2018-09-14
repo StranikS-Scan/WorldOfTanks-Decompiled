@@ -11,7 +11,7 @@
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.194	</moving>
+    <moving>	0.258	</moving>
     <still>	0.258	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
@@ -43,7 +43,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	14600	</weight>
-    <maxHealth>	320	</maxHealth>
+    <maxHealth>	280	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -110,8 +110,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	90	</maxHealth>
@@ -374,8 +374,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	100	</maxHealth>
@@ -622,184 +622,11 @@
     </VVSS_T48A>
   </chassis>
   <turrets0>
-    <M24A1>
-      <userString>	#usa_vehicles:M24A1	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	4800.0	</price>
-      <unlocks>
-        <turret>	M47	  <cost>	2700	</cost>
-        </turret>
-      </unlocks>
-      <armor>
-        <armor_1>	50.8	</armor_1>
-        <armor_2>	31.7	</armor_2>
-        <armor_3>	31.7	</armor_3>
-        <armor_4>	31.7	</armor_4>
-        <armor_5>	25.4	</armor_5>
-        <armor_6>	12.7	</armor_6>
-        <armor_8>	0	</armor_8>
-        <armor_9>	63.5	</armor_9>
-        <armor_10>	63.5	</armor_10>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	3500	</weight>
-      <maxHealth>	80	</maxHealth>
-      <rotationSpeed>	48	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	70	</maxHealth>
-        <maxRegenHealth>	35	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </surveyingDeviceHealth>
-      <guns>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	178	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	QF_6_pounder_Mk_III	  <cost>	1880	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	57.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.0765191 0.132107 1.24845	</rayStart>
-              <rayEnd>	-0.0302043 0.107844 1.24469	</rayEnd>
-              <rayUp>	0.036 0.033 3	</rayUp>
-              <size>	0.22	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.475 0.475 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_37mm_M-6_L53>
-        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	130	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	57.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	15	</gun>
-          </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.0769644 0.13194 1.00302	</rayStart>
-              <rayEnd>	0.151752 -0.0417083 1.00302	</rayEnd>
-              <rayUp>	0.049 0.049 4	</rayUp>
-              <size>	0.3	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
-          </camouflage>
-        </QF_6_pounder_Mk_III>
-      </guns>
-      <models>
-        <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/american/A23_M7_med/crash/lod0/Turret_01.model	</exploded>
-      </models>
-      <hitTester>
-        <collisionModelServer>	vehicles/american/A23_M7_med/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Turret_01.model	</collisionModelClient>
-      </hitTester>
-      <gunPosition>	0.000000 0.33698 0.376183	</gunPosition>
-      <emblemSlots>
-        <player>
-          <rayStart>	-0.915533 0.334146 0.26406	</rayStart>
-          <rayEnd>	-0.723399 0.306186 0.216075	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
-          <rayStart>	0.915533 0.334146 0.26406	</rayStart>
-          <rayEnd>	0.723399 0.306186 0.216075	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
-      <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.033 1.000 0.000 0.577 0.220 0.810 0.555 0.324 0.500 0.126 0.500 0.427 0.253 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <camouflage>
-        <tiling>	0.52 0.52 0.13 0.38	</tiling>
-      </camouflage>
-    </M24A1>
     <M47>
       <userString>	#usa_vehicles:M47	</userString>
       <tags></tags>
       <level>	5	</level>
       <price>	11500	</price>
-      <unlocks>
-        <gun>	_75mm_Gun_M2_L28	  <cost>	1500	</cost>
-        </gun>
-      </unlocks>
       <armor>
         <armor_1>	52.3	</armor_1>
         <armor_2>	41.2	</armor_2>
@@ -814,25 +641,31 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3400	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	70	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_M-6_L53>	shared	  <maxAmmo>	210	</maxAmmo>
+        <_75mm_Gun_M2_L28L>	shared	  <maxAmmo>	71	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
+            <maxPitch>	0 8 0.394671 8 0.458333 7 0.541667 7 0.605329 8 1 8	</maxPitch>
           </pitchLimits>
+          <unlocks>
+            <gun>	QF_6_pounder_Mk_III	  <cost>	1880	</cost>
+            </gun>
+            <gun>	_75mm_Gun_M3_L37L	  <cost>	2100	</cost>
+            </gun>
+          </unlocks>
           <armor>
             <armor_1>	52.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -842,33 +675,32 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	57.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	10	</gun>
+            <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	5.2	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000000 0.0598628 1.26724	</rayStart>
-              <rayEnd>	-0.0889919 -0.00206139 1.26352	</rayEnd>
-              <rayUp>	0.036 0.032 3	</rayUp>
-              <size>	0.25	</size>
+              <rayStart>	-0.000395291 0.0131364 0.961476	</rayStart>
+              <rayEnd>	-0.0676887 -0.0161282 0.954391	</rayEnd>
+              <rayUp>	0.069 0.058 4	</rayUp>
+              <size>	0.4	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
@@ -876,7 +708,7 @@
           <camouflage>
             <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
           </camouflage>
-        </_37mm_M-6_L53>
+        </_75mm_Gun_M2_L28L>
         <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	155	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
@@ -894,10 +726,10 @@
             <gun>	15	</gun>
           </armor>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <reloadTime>	3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -925,60 +757,13 @@
             <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </QF_6_pounder_Mk_III>
-        <_75mm_Gun_M2_L28>	shared	  <maxAmmo>	71	</maxAmmo>
+        <_75mm_Gun_M3_L37L>	shared	  <maxAmmo>	71	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 8 0.394671 8 0.458333 7 0.541667 7 0.605329 8 1 8	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_75mm_Gun_M3_L37	  <cost>	2100	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	52.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.47	</shotDispersionRadius>
-          <reloadTime>	3.8	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.000395291 0.0131364 0.961476	</rayStart>
-              <rayEnd>	-0.0676887 -0.0161282 0.954391	</rayEnd>
-              <rayUp>	0.069 0.058 4	</rayUp>
-              <size>	0.4	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_75mm_Gun_M2_L28>
-        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	71	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 8 0.394671 8 0.458333 7 0.541667 7 0.605329 8 1 8	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <vehicle>	A71_T21	  <cost>	28700	</cost>
+            <vehicle>	A71_T21	  <cost>	32300	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -992,10 +777,15 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	3.8	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	4.8	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_06.model	</destroyed>
@@ -1018,7 +808,7 @@
           <camouflage>
             <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
           </camouflage>
-        </_75mm_Gun_M3_L37>
+        </_75mm_Gun_M3_L37L>
       </guns>
       <models>
         <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Turret_02.model	</undamaged>
@@ -1063,46 +853,33 @@
     </M47>
   </turrets0>
   <engines>
-    <Wright_Continental_R-975EC2>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C1	  <cost>	900.0	</cost>
+    <Wright_Continental_R-975EC2L>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C1L	  <cost>	1860	</cost>
         </engine>
       </unlocks>
-    </Wright_Continental_R-975EC2>
-    <Wright_Continental_R-975C1>	shared	  <unlocks>
-        <engine>	Wright_Continental_R-975C4	  <cost>	1500.0	</cost>
-        </engine>
-      </unlocks>
-    </Wright_Continental_R-975C1>
-    <Wright_Continental_R-975C4>	shared	</Wright_Continental_R-975C4>
+    </Wright_Continental_R-975EC2L>
+    <Wright_Continental_R-975C1L>	shared	</Wright_Continental_R-975C1L>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_538	  <cost>	3800.0	</cost>
+    <AN-GRC-3>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
         </radio>
       </unlocks>
-    </SCR_508>
-    <SCR_538>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000.0	</cost>
-        </radio>
-      </unlocks>
-    </SCR_538>
+    </AN-GRC-3>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Wright_Continental_R-975EC2>
-          <smplEnginePower>	370.0484	</smplEnginePower>
-        </Wright_Continental_R-975EC2>
-        <Wright_Continental_R-975C1>
-          <smplEnginePower>	422.9124	</smplEnginePower>
-        </Wright_Continental_R-975C1>
-        <Wright_Continental_R-975C4>
-          <smplEnginePower>	486.3493	</smplEnginePower>
-        </Wright_Continental_R-975C4>
+        <Wright_Continental_R-975EC2L>
+          <smplEnginePower>	480	</smplEnginePower>
+        </Wright_Continental_R-975EC2L>
+        <Wright_Continental_R-975C1L>
+          <smplEnginePower>	600	</smplEnginePower>
+        </Wright_Continental_R-975C1L>
       </engines>
       <chassis>
         <VVSS_T48>

@@ -11,6 +11,7 @@ from debug_utils import *
 from functools import partial
 from PixieBG import PixieBG
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
+from ReplayEvents import g_replayEvents
 import string
 import SoundGroups
 _ALLOW_DYNAMIC_LIGHTS = True
@@ -216,8 +217,7 @@ class EffectsListPlayer:
         if self.__isStarted:
             if forceCallback and self.__callbackFunc is not None:
                 self.__callbackFunc()
-        import BattleReplay
-        if BattleReplay.g_replayCtrl.isPlaying and not EffectsListPlayer.clearInProgress:
+        if g_replayEvents.isPlaying and not EffectsListPlayer.clearInProgress:
             EffectsListPlayer.activeEffects.discard(self)
         self.__isStarted = False
         if self.__callbackID is not None:
@@ -619,7 +619,8 @@ class _NodeSoundEffectDesc(_BaseSoundEvent, object):
                         soundObject.setRTPC(soundStartParam.name, soundStartParam.value)
 
                     for sndName in soundName:
-                        soundObject.play(sndName)
+                        if len(sndName) > 0:
+                            soundObject.play(sndName)
 
                     self._register(list, node, soundObject)
                     return soundObject
@@ -692,7 +693,6 @@ class _SoundEffectDesc(_EffectDesc, object):
         self._soundNames = None
         self._switch_impact_surface = None
         self._switch_shell_type = None
-        self._switch_impact_type = None
         self._dynamic = False
         self._stopSyncVisual = False
         if dataSection.has_key('wwsoundPC') and dataSection.has_key('wwsoundNPC'):
@@ -704,8 +704,6 @@ class _SoundEffectDesc(_EffectDesc, object):
             self._switch_impact_surface = dataSection.readString('SWITCH_ext_impact_surface')
         if dataSection.has_key('SWITCH_ext_shell_type'):
             self._switch_shell_type = dataSection.readString('SWITCH_ext_shell_type')
-        if dataSection.has_key('SWITCH_ext_impact_type'):
-            self._switch_impact_type = dataSection.readString('SWITCH_ext_impact_type')
         self._dynamic = dataSection.readBool('dynamic', False)
         if not self._soundName and not self._soundNames and not self._impactNames:
             _raiseWrongConfig('wwsound or wwsoundNPC/wwsoundPC or impact tags', dataSection)
@@ -761,13 +759,12 @@ class _SoundEffectDesc(_EffectDesc, object):
                 elem['sound'].setRTPC(soundStartParam.name, soundStartParam.value)
 
             elem['sound'].play(soundName)
-        elif self._switch_shell_type and self._switch_impact_type:
+        elif self._switch_shell_type:
             if self._impactNames is None:
-                raise Exception('impact tags are invalid <%s> <%s> <%s> <%s> <%s>' % (self._soundName,
+                raise Exception('impact tags are invalid <%s> <%s> <%s> <%s>' % (self._soundName,
                  self._soundNames,
                  self._switch_impact_surface,
-                 self._switch_shell_type,
-                 self._switch_impact_type))
+                 self._switch_shell_type))
             m = Math.Matrix(node.actualNode)
             hitdir = args.get('hitdir')
             if hitdir is not None:
@@ -792,7 +789,6 @@ class _SoundEffectDesc(_EffectDesc, object):
                 if self._switch_impact_surface:
                     sound.setSwitch('SWITCH_ext_impact_surface', self._switch_impact_surface)
                 sound.setSwitch('SWITCH_ext_shell_type', self._switch_shell_type)
-                sound.setSwitch('SWITCH_ext_impact_type', self._switch_impact_type)
                 damage_size = 'SWITCH_ext_damage_size_medium'
                 if args.has_key('damageFactor'):
                     factor = args.get('damageFactor', 0.0)

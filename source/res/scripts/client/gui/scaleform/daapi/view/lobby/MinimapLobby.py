@@ -75,19 +75,23 @@ class MinimapLobby(MinimapLobbyMeta):
         self.as_clearS()
         self.as_changeMapS(self.__cfg['texture'])
         bottomLeft, upperRight = self.__cfg['size']
-        mapWidth, mapHeight = (upperRight - bottomLeft) / self.__minimapSize
-        viewpoint = (upperRight + bottomLeft) * 0.5
+        mapWidthMult, mapHeightMult = (upperRight - bottomLeft) / self.__minimapSize
+        offset = (upperRight + bottomLeft) * 0.5
+
+        def _normalizePoint(posX, posY):
+            return ((posX - offset.x) / mapWidthMult, (posY - offset.y) / mapHeightMult)
+
         for team, teamSpawnPoints in enumerate(self.__cfg['teamSpawnPoints'], 1):
             for spawn, spawnPoint in enumerate(teamSpawnPoints, 1):
-                pos = (spawnPoint[0], 0, spawnPoint[1])
-                self.as_addPointS(pos[0] / mapWidth - viewpoint.x * 0.5, pos[2] / mapHeight - viewpoint.y * 0.5, 'spawn', 'blue' if team == self.__playerTeam else 'red', spawn + 1 if len(teamSpawnPoints) > 1 else 1)
+                posX, posY = _normalizePoint(spawnPoint[0], spawnPoint[1])
+                self.as_addPointS(posX, posY, 'spawn', 'blue' if team == self.__playerTeam else 'red', spawn + 1 if len(teamSpawnPoints) > 1 else 1)
 
         for team, teamBasePoints in enumerate(self.__cfg['teamBasePositions'], 1):
             for baseNumber, basePoint in enumerate(teamBasePoints.values(), 2):
-                pos = (basePoint[0], 0, basePoint[1])
-                self.as_addPointS(pos[0] / mapWidth - viewpoint.x * 0.5, pos[2] / mapHeight - viewpoint.y * 0.5, 'base', 'blue' if team == self.__playerTeam else 'red', baseNumber if len(teamBasePoints) > 1 else 1)
+                posX, posY = _normalizePoint(basePoint[0], basePoint[1])
+                self.as_addPointS(posX, posY, 'base', 'blue' if team == self.__playerTeam else 'red', baseNumber if len(teamBasePoints) > 1 else 1)
 
         if self.__cfg['controlPoints']:
             for index, controlPoint in enumerate(self.__cfg['controlPoints'], 2):
-                pos = (controlPoint[0], 0, controlPoint[1])
-                self.as_addPointS(pos[0] / mapWidth - viewpoint.x * 0.5, pos[2] / mapHeight - viewpoint.y * 0.5, 'control', 'empty', index if len(self.__cfg['controlPoints']) > 1 else 1)
+                posX, posY = _normalizePoint(controlPoint[0], controlPoint[1])
+                self.as_addPointS(posX, posY, 'control', 'empty', index if len(self.__cfg['controlPoints']) > 1 else 1)

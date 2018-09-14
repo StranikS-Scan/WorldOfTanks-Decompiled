@@ -32,6 +32,8 @@ class FalloutVehiclesValidator(UnitVehiclesValidator):
                         return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_RENT_IS_OVER)
                     if vehicle.isInBattle:
                         return ValidationResult(False, UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE)
+                    if vehicle.isRotationGroupLocked():
+                        return ValidationResult(False, UNIT_RESTRICTION.ROTATION_GROUP_LOCKED)
                     isGroupReady, state = vehicle.isGroupReady()
                     if not isGroupReady:
                         if state == Vehicle.VEHICLE_STATE.FALLOUT_REQUIRED:

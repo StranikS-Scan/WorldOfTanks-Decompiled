@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
+from debug_utils import LOG_DEBUG
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
+from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
 from gui.shared.utils import GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_CLIP, CLIP_ICON_PATH, EXTRA_MODULE_INFO, HYDRAULIC_ICON_PATH
-from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils.functions import stripShortDescrTags
-from items import ITEM_TYPE_NAMES
 from helpers import i18n
-from gui.Scaleform.framework.entities.View import View
-from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
-from debug_utils import LOG_DEBUG
+from items import ITEM_TYPE_NAMES
 _DEF_SHOT_DISTANCE = 720
 
 class ModuleInfoWindow(ModuleInfoMeta):
@@ -101,9 +102,18 @@ class ModuleInfoWindow(ModuleInfoMeta):
 
         if module.itemTypeName == ITEM_TYPE_NAMES[11]:
             effectsNametemplate = '#artefacts:%s/%s'
-            moduleData['effects'] = {'effectOnUse': i18n.makeString(effectsNametemplate % (module.name, 'onUse')),
+            if g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+                isRemovingStun = module.isRemovingStun
+            else:
+                isRemovingStun = False
+            onUseStr = 'removingStun/onUse' if isRemovingStun else 'onUse'
+            moduleData['effects'] = {'effectOnUse': i18n.makeString(effectsNametemplate % (module.name, onUseStr)),
              'effectAlways': i18n.makeString(effectsNametemplate % (module.name, 'always')),
              'effectRestriction': i18n.makeString(effectsNametemplate % (module.name, 'restriction'))}
+            cooldownSeconds = module.descriptor.cooldownSeconds
+            if cooldownSeconds > 0:
+                moduleData['addParams'] = {'type': formatters.formatModuleParamName('cooldownSeconds') + '\n',
+                 'value': text_styles.stats(cooldownSeconds) + '\n'}
         if isShell and self.__isAdditionalInfoShow is not None:
             moduleData['additionalInfo'] = self.__isAdditionalInfoShow
         self.as_setModuleInfoS(moduleData)

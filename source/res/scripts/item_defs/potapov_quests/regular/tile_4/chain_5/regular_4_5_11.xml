@@ -7,9 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <multiDamageEvent>
-              <killedByShot>	2	</killedByShot>
-            </multiDamageEvent>
+            <multiStunEvent>
+              <stunnedByShot>	3	</stunnedByShot>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </multiStunEvent>
           </and>
         </postBattle>
       </conditions>
@@ -24,11 +25,14 @@
       <conditions>
         <postBattle>
           <and>
-            <multiDamageEvent>
-              <killedByShot>	2	</killedByShot>
-            </multiDamageEvent>
-            <win></win>
-            <isAlive></isAlive>
+            <multiStunEvent>
+              <stunnedByShot>	3	</stunnedByShot>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </multiStunEvent>
+            <results>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	200	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>

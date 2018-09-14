@@ -59,7 +59,12 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'invisibilityMovingFactor': MENU.TANK_PARAMS_PERCENT,
  'maxShotDistance': MENU.TANK_PARAMS_M,
  'switchOnTime': MENU.TANK_PARAMS_S,
- 'switchOffTime': MENU.TANK_PARAMS_S}
+ 'switchOffTime': MENU.TANK_PARAMS_S,
+ 'stunMaxDuration': MENU.TANK_PARAMS_S,
+ 'stunMinDuration': MENU.TANK_PARAMS_S,
+ 'stunMaxDurationList': MENU.TANK_PARAMS_S,
+ 'stunMinDurationList': MENU.TANK_PARAMS_S,
+ 'cooldownSeconds': MENU.TANK_PARAMS_S}
 COLORLESS_SCHEME = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_styles.warning)
 NO_BONUS_BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.stats)
@@ -74,9 +79,9 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
  ITEM_TYPES.vehicle: VEHICLE_PARAMS,
  ITEM_TYPES.equipment: {artefacts.Artillery: ('damage', 'piercingPower', 'caliber', 'shotsNumberRange', 'areaRadius', 'artDelayRange'),
                         artefacts.Bomber: ('bombDamage', 'piercingPower', 'bombsNumberRange', 'areaSquare', 'flyDelayRange')},
- ITEM_TYPES.shell: ('caliber', 'avgPiercingPower', 'damage', 'explosionRadius'),
+ ITEM_TYPES.shell: ('caliber', 'avgPiercingPower', 'damage', 'stunMinDuration', 'stunMaxDuration', 'explosionRadius'),
  ITEM_TYPES.optionalDevice: ('weight',),
- ITEM_TYPES.vehicleGun: ('caliber', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'avgPiercingPower', 'avgDamageList', 'dispertionRadius', 'aimingTime', 'maxShotDistance', 'weight')}
+ ITEM_TYPES.vehicleGun: ('caliber', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'avgPiercingPower', 'avgDamageList', 'stunMinDurationList', 'stunMaxDurationList', 'dispertionRadius', 'aimingTime', 'maxShotDistance', 'weight')}
 
 def measureUnitsForParameter(paramName):
     return i18n.makeString(MEASURE_UNITS[paramName])
@@ -186,7 +191,12 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'invisibilityStillFactor': _niceListFormat,
  'invisibilityMovingFactor': _niceListFormat,
  'switchOnTime': _niceFormat,
- 'switchOffTime': _niceFormat}
+ 'switchOffTime': _niceFormat,
+ 'stunMaxDuration': _niceFormat,
+ 'stunMinDuration': _niceFormat,
+ 'stunMaxDurationList': _niceListFormat,
+ 'stunMinDurationList': _niceListFormat,
+ 'cooldownSeconds': _niceFormat}
 
 def _deltaWrapper(fn):
 

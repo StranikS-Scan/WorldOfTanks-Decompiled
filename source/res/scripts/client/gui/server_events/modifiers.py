@@ -9,7 +9,7 @@ import constants
 from gui.goodies.goodies_cache import g_goodiesCache
 from gui.shared.economics import getActionPrc
 import nations
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from items import vehicles, ITEM_TYPE_NAMES
 from helpers import i18n
 from shared_utils import BoundMethodWeakref as bwr, CONST_CONTAINER
@@ -494,7 +494,14 @@ class EconomicsSet(ActionModifier):
         return result
 
     def _parse(self):
-        return dict(map(lambda (k, v): (k, float(v)), self._params.iteritems()))
+        result = {}
+        for k, v in self._params.iteritems():
+            try:
+                result[k] = float(v)
+            except ValueError as ex:
+                LOG_WARNING('There is error while converting action set_Economics param', ex.message)
+
+        return result
 
     def _wrapParamName(self, name):
         return name

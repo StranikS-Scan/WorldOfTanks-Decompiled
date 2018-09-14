@@ -301,6 +301,9 @@
       <crits>
         <Type>	INT32	</Type>
       </crits>
+      <stunDuration>
+        <Type>	FLOAT32	</Type>
+      </stunDuration>
       <allCrits>
         <Type>	INT32	</Type>
       </allCrits>
@@ -323,6 +326,10 @@
         <Type>	ARRAY	  <of>	OBJECT_ID	</of>
         </Type>
       </trackAssistants>
+      <stunAssistants>
+        <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+        </Type>
+      </stunAssistants>
       <distance>
         <Type>	FLOAT32	</Type>
       </distance>
@@ -715,6 +722,9 @@
       <radioAssist>
         <Type>	UINT32	</Type>
       </radioAssist>
+      <stunAssist>
+        <Type>	UINT32	</Type>
+      </stunAssist>
       <tankings>
         <Type>	UINT32	</Type>
       </tankings>
@@ -762,4 +772,20 @@
       </shotPoint>
     </Properties>
   </REMOTE_CAMERA_STRATEGIC_DATA>
+  <REMOTE_CAMERA_ARTY_DATA>	FIXED_DICT	  <Properties>
+      <time>
+        <Type>	FLOAT64	</Type>
+      </time>
+      <shotPoint>
+        <Type>	VECTOR3	</Type>
+      </shotPoint>
+      <translation>
+        <Type>	VECTOR3	</Type>
+      </translation>
+      <rotation>
+        <Type>	VECTOR3	</Type>
+      </rotation>
+    </Properties>
+  </REMOTE_CAMERA_ARTY_DATA>
+  <STUN_INFO>	FLOAT64	</STUN_INFO>
 </alias.xml>

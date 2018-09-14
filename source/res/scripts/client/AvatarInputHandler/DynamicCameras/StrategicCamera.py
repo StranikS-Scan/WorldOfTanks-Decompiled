@@ -12,7 +12,7 @@ from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, Camer
 from AvatarInputHandler.cameras import ICamera, getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
 from ClientArena import Plane
 from Math import Vector2, Vector3
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from constants import AVATAR_SUBFILTERS
@@ -89,6 +89,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         camTarget = Math.MatrixProduct()
         camTarget.b = self.__aimingSystem.matrix
         self.__cam.target = camTarget
+        self.__cam.wg_applyParams()
         self.__isRemoteCamera = isRemoteCamera
         BigWorld.camera(self.__cam)
         BigWorld.player().positionControl.moveTo(self.__aimingSystem.matrix.translation)
@@ -304,7 +305,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__readCfg(cameraSec)
 
     def __readCfg(self, dataSec):
-        if not dataSec:
+        if not dataSec or dataSec['strategic']:
             LOG_WARNING('Invalid section <strategicMode/camera> in avatar_input_handler.xml')
         self.__baseCfg = dict()
         bcfg = self.__baseCfg

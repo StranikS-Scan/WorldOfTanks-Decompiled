@@ -164,14 +164,12 @@ class EngineAuditionWWISE(EngineAudition):
         else:
             horsePower = self.__typeDesc.physics['enginePower'] / HP_TO_WATTS
             WWISE.WW_setRTCPGlobal('RTPC_ext_engine_power', horsePower)
-            self.__engineSound.setSwitch('SWITCH_ext_physics_state', 'SWITCH_ext_physics_state_on')
             if self.__eventC == '':
                 LOG_ERROR('Tracks sound is not defined for = {0}'.format(self.__typeDesc.name))
                 self.__movementSound = None
             else:
                 self.__movementSound = SoundGroups.g_instance.WWgetSoundObject(self.__movementSoundHP, None, (0.0, 0.0, 0.0), True)
             if self.__movementSound is not None:
-                self.__movementSound.setSwitch('SWITCH_ext_physics_state', 'SWITCH_ext_physics_state_on')
                 self.__movementSound.setRTPC('RTPC_ext_vehicle_weight', self.__typeDesc.physics['weight'] / 1000)
                 self.__movementSound.setRTPC('RTPC_ext_engine_state', 0.0)
                 self.__movementSound.setRTPC('RTPC_ext_physic_rpm_rel', 0.0)
@@ -329,7 +327,7 @@ class EngineAuditionWWISE(EngineAudition):
                     gear = self.detailedEngineState.gearNum
                     soundTrack.setRTPC('RTPC_ext_physic_rpm_rel', self.detailedEngineState.rpmPhysicRel)
                     soundEngine.setRTPC('RTPC_ext_physic_rpm_rel', self.detailedEngineState.rpmPhysicRel)
-                    if self.detailedEngineState.engineState == EngineState._CRITICAL:
+                    if self.detailedEngineState.engineState == EngineState._DESTROYED:
                         soundEngine.setRTPC('RTPC_ext_turbine', 0.0)
                     else:
                         soundEngine.setRTPC('RTPC_ext_turbine', self.detailedEngineState.rpmPhysicRel * 100.0)

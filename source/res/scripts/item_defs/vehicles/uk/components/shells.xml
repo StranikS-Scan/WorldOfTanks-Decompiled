@@ -965,6 +965,7 @@
     <userString>	#gb_vehicles:_18pdr_AP_Mk_1T	</userString>
     <icon>	ap	</icon>
     <price>	56	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	83.8	</caliber>
     <isTracer>	true	</isTracer>
@@ -1383,12 +1384,16 @@
     <price>	700	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	139.7	</caliber>
-    <explosionRadius>	3.15	</explosionRadius>
+    <explosionRadius>	7.2	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	22	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	900	</armor>
-      <devices>	191	</devices>
+      <armor>	600	</armor>
+      <devices>	96	</devices>
     </damage>
   </_5.5inch_HE_Mk_4>
   <_5.5inch_HE_Mk_5>
@@ -1399,12 +1404,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	139.7	</caliber>
-    <explosionRadius>	4.50	</explosionRadius>
+    <explosionRadius>	8.1	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	22	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	900	</armor>
-      <devices>	191	</devices>
+      <armor>	600	</armor>
+      <devices>	96	</devices>
     </damage>
   </_5.5inch_HE_Mk_5>
   <_6inch_HE>
@@ -1414,12 +1423,16 @@
     <price>	1220	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	152.4	</caliber>
-    <explosionRadius>	3.67	</explosionRadius>
+    <explosionRadius>	8	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	25	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1250	</armor>
-      <devices>	203	</devices>
+      <armor>	700	</armor>
+      <devices>	102	</devices>
     </damage>
   </_6inch_HE>
   <_6inch_AP>
@@ -1427,6 +1440,7 @@
     <userString>	#gb_vehicles:_6inch_AP	</userString>
     <icon>	ap	</icon>
     <price>	1400	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	152.4	</caliber>
     <isTracer>	true	</isTracer>
@@ -1444,12 +1458,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	152.4	</caliber>
-    <explosionRadius>	5.26	</explosionRadius>
+    <explosionRadius>	9	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	25	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1250	</armor>
-      <devices>	203	</devices>
+      <armor>	700	</armor>
+      <devices>	102	</devices>
     </damage>
   </_6inch_HE_Mk_6>
   <_7.2inch_HE>
@@ -1459,12 +1477,16 @@
     <price>	1830	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	182.9	</caliber>
-    <explosionRadius>	5.05	</explosionRadius>
+    <explosionRadius>	10	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1750	</armor>
-      <devices>	244	</devices>
+      <armor>	900	</armor>
+      <devices>	122	</devices>
     </damage>
   </_7.2inch_HE>
   <_7.2inch_HE_Mk_2>
@@ -1475,12 +1497,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	182.9	</caliber>
-    <explosionRadius>	7.32	</explosionRadius>
+    <explosionRadius>	11	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1750	</armor>
-      <devices>	244	</devices>
+      <armor>	900	</armor>
+      <devices>	122	</devices>
     </damage>
   </_7.2inch_HE_Mk_2>
   <_183mm_AP_Mk1>
@@ -1535,12 +1561,16 @@
     <price>	2450	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	233.7	</caliber>
-    <explosionRadius>	7.76	</explosionRadius>
+    <explosionRadius>	12.8	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	33	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	2200	</armor>
-      <devices>	315	</devices>
+      <armor>	1200	</armor>
+      <devices>	155	</devices>
     </damage>
   </_9.2inch_HE_Mk_18>
   <_9.2inch_HE_Mk_19>
@@ -1551,12 +1581,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	233.7	</caliber>
-    <explosionRadius>	11.10	</explosionRadius>
+    <explosionRadius>	14.2	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	33	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	2200	</armor>
-      <devices>	315	</devices>
+      <armor>	1200	</armor>
+      <devices>	155	</devices>
     </damage>
   </_9.2inch_HE_Mk_19>
 </shells.xml>

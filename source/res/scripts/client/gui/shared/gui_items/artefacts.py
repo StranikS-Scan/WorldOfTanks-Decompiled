@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/artefacts.py
 from debug_utils import LOG_CURRENT_EXCEPTION
-from items import artefacts
 from gui.shared.gui_items import FittingItem
 from gui.shared.money import Currency
+from items import artefacts
 
 class VehicleArtefact(FittingItem):
 
@@ -23,6 +23,10 @@ class VehicleArtefact(FittingItem):
     def crewLevelIncrease(self):
         """ Value of crew role levels increasing. """
         return 0 if not self.isStimulator else self.descriptor['crewLevelIncrease']
+
+    @property
+    def isRemovingStun(self):
+        return False
 
 
 class Equipment(VehicleArtefact):
@@ -47,6 +51,11 @@ class Equipment(VehicleArtefact):
     @property
     def defaultLayoutValue(self):
         return (self.intCD if not self.isBoughtForCredits else -self.intCD, 1)
+
+    @property
+    def isRemovingStun(self):
+        descr = self.descriptor
+        return bool(descr.stunResistanceEffect or descr.stunResistanceDuration)
 
     def isInstalled(self, vehicle, slotIdx=None):
         for idx, eq in enumerate(vehicle.eqs):

@@ -56,6 +56,7 @@ class DetailedEngineState(svarog_script.py_component.Component, CallbackDelayer)
         self._maxClimbAngle = math.radians(20.0)
         self._engineLoad = EngineLoad._STOPPED
         self._engineState = EngineState._NORMAL
+        self._roughnessValue = 0.0
         self._vehicle = None
         self._gearUpCbk = None
         self.__prevArenaPeriod = BigWorld.player().arena.period
@@ -89,8 +90,9 @@ class DetailedEngineState(svarog_script.py_component.Component, CallbackDelayer)
             self.__starting = False
 
     def __startEngineFunc(self):
+        if self._mode < EngineLoad._IDLE:
+            self._mode = EngineLoad._IDLE
         self.__starting = True
-        self._mode = EngineLoad._IDLE
         self.onEngineStart()
 
     def setMode(self, mode):
@@ -197,18 +199,22 @@ class DetailedEngineStateWWISE(DetailedEngineState):
                 self.__speed += (speed - self.__speed) * 0.5 * dt
                 speedRange = self._vehicle.typeDescriptor.physics['speedLimits'][0] + self._vehicle.typeDescriptor.physics['speedLimits'][1]
                 speedRangeGear = speedRange / 3
-                self._gearNum = math.ceil(math.floor(math.fabs(self.__speed) * 50) / 50 / speedRangeGear)
+                absSpeed = math.fabs(self.__speed)
+                if absSpeed > 5.0:
+                    self._gearNum = 1
+                else:
+                    self._gearNum = math.ceil(math.floor(absSpeed * 50) / 50 / speedRangeGear)
                 if self.__prevGearNum2 != self._gearNum:
                     self.__prevGearNum = self.__prevGearNum2
                 self._gearUp = self.__prevGearNum2 < self._gearNum and self._engineLoad > EngineLoad._IDLE
                 if self._gearNum == 2 and self.__prevGearNum < self._gearNum:
-                    self.__gear_2 = 100
+                    self.__gear2 = 100
                 else:
-                    self.__gear_2 = 0
+                    self.__gear2 = 0
                 if self._gearNum == 3 and self.__prevGearNum < self._gearNum:
-                    self.__gear_3 = 100
+                    self.__gear3 = 100
                 else:
-                    self.__gear_3 = 0
+                    self.__gear3 = 0
                 self.__prevGearNum2 = self._gearNum
                 if self._gearNum != 0 and self._engineLoad > EngineLoad._IDLE:
                     self._reativelRPM = math.fabs(1 + (self.__speed - self._gearNum * speedRangeGear) / speedRange)

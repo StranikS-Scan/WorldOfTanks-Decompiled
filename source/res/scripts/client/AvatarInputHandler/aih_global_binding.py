@@ -26,7 +26,7 @@ Usage:
         aih_global_binding.unsubscribe(BINDING_ID.AIM_OFFSET, on_aim_offset_changed)
 """
 import Math
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG
+from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
 _FLOAT_EPSILON = 0.002
 
 class BINDING_ID(object):
@@ -40,6 +40,7 @@ class BINDING_ID(object):
     CLIENT_SPG_GUN_MARKER_DATA_PROVIDER = 8
     SERVER_GUN_MARKER_DATA_PROVIDER = 9
     SERVER_SPG_GUN_MARKER_DATA_PROVIDER = 10
+    STRATEGIC_CAMERA = 11
     RANGE = (CTRL_MODE_NAME,
      AIM_OFFSET,
      ZOOM_FACTOR,
@@ -49,7 +50,8 @@ class BINDING_ID(object):
      CLIENT_GUN_MARKER_DATA_PROVIDER,
      CLIENT_SPG_GUN_MARKER_DATA_PROVIDER,
      SERVER_GUN_MARKER_DATA_PROVIDER,
-     SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
+     SERVER_SPG_GUN_MARKER_DATA_PROVIDER,
+     STRATEGIC_CAMERA)
 
 
 class _Observable(object):
@@ -110,7 +112,8 @@ _DEFAULT_VALUES = {BINDING_ID.CTRL_MODE_NAME: lambda : _Observable(CTRL_MODE_NAM
  BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
  BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
  BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
- BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None)}
+ BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
+ BINDING_ID.STRATEGIC_CAMERA: lambda : _Observable(STRATEGIC_CAMERA.DEFAULT)}
 
 class _GlobalDataDescriptor(object):
     __slots__ = ('__bindingID', '__reader', '__writer')

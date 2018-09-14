@@ -8,16 +8,15 @@
         <postBattle>
           <and>
             <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	3000	</greaterOrEqual>
-            </results>
-            <results>
-              <key>	damageDealt	</key>
-              <max>	1	</max>
-            </results>
-            <results>
               <key>	xp	</key>
               <max>	1	</max>
+            </results>
+            <results>
+              <plus>
+                <key>	damageAssistedStun	</key>
+                <key>	damageAssistedTrack	</key>
+              </plus>
+              <greaterOrEqual>	2500	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -60,16 +59,15 @@
         <postBattle>
           <and>
             <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	3000	</greaterOrEqual>
-            </results>
-            <results>
-              <key>	damageDealt	</key>
-              <max>	1	</max>
-            </results>
-            <results>
               <key>	xp	</key>
               <max>	1	</max>
+            </results>
+            <results>
+              <plus>
+                <key>	damageAssistedStun	</key>
+                <key>	damageAssistedTrack	</key>
+              </plus>
+              <greaterOrEqual>	2500	</greaterOrEqual>
             </results>
             <isAlive></isAlive>
           </and>

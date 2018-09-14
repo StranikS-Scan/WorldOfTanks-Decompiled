@@ -7,6 +7,7 @@ from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_T
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -19,8 +20,11 @@ from gui.shared.money import ZERO_MONEY
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
+from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as _ms
 from items import VEHICLE_COMPONENT_TYPE_NAMES, ITEM_TYPES
+from gui.LobbyContext import g_lobbyContext
 _TOOLTIP_MIN_WIDTH = 420
 _TOOLTIP_MAX_WIDTH = 480
 _AUTOCANNON_SHOT_DISTANCE = 400
@@ -51,6 +55,10 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         valueWidth = 110
         items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding)))
         if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
+            if module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
+                cooldownSeconds = module.descriptor.cooldownSeconds
+                if cooldownSeconds > 0:
+                    items.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName('cooldownSeconds'), value=text_styles.stats(int(cooldownSeconds)), valueWidth=valueWidth, padding=formatters.packPadding(left=leftPadding)))
             effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
             if len(effectsBlock) > 0:
                 items.append(formatters.packBuildUpBlockData(effectsBlock, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
@@ -129,6 +137,8 @@ class ModuleTooltipBlockConstructor(object):
                          'avgPiercingPower',
                          'avgDamageList',
                          'avgDamagePerMinute',
+                         'stunMinDurationList',
+                         'stunMaxDurationList',
                          'dispertionRadius',
                          AIMING_TIME_PROP_NAME,
                          'maxShotDistance',
@@ -366,7 +376,12 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
             localization = _ms('#artefacts:%s' % key)
             return (key != localization, localization)
 
-        onUse = checkLocalization('%s/onUse' % module.descriptor['name'])
+        if g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+            isRemovingStun = module.isRemovingStun
+        else:
+            isRemovingStun = False
+        onUseStr = '%s/removingStun/onUse' if isRemovingStun else '%s/onUse'
+        onUse = checkLocalization(onUseStr % module.descriptor['name'])
         always = checkLocalization('%s/always' % module.descriptor['name'])
         restriction = checkLocalization('%s/restriction' % module.descriptor['name'])
         if bonus_helper.isSituationalBonus(module.name):

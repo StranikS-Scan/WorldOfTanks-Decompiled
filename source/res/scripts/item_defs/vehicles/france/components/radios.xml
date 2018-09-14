@@ -23,10 +23,11 @@
     <Fanions_de_signaux_bot>	30	</Fanions_de_signaux_bot>
     <SCR_508_1>	31	</SCR_508_1>
     <SCR_528L>	33	</SCR_528L>
+    <SCR_528_Fr>	34	</SCR_528_Fr>
     <SCR_528_IGR>	60001	</SCR_528_IGR>
     <FuG8f_IGR>	60002	</FuG8f_IGR>
     <ER_56_IGR>	60003	</ER_56_IGR>
-    <ER_53_IGR>	60004	</ER_53_IGR>
+    <SCR_508_IGR>	60004	</SCR_508_IGR>
   </ids>
   <shared>
     <FuG_Spr.D>
@@ -291,6 +292,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </ER_27>
+    <SCR_528_Fr>
+      <userString>	#france_vehicles:SCR_528_Fr	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528_Fr>
     <SCR_528_IGR>
       <userString>	#igr_vehicles:SCR_528_IGR	</userString>
       <tags></tags>
@@ -327,17 +340,17 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </ER_56_IGR>
-    <ER_53_IGR>
-      <userString>	#igr_vehicles:ER_53_IGR	</userString>
+    <SCR_508_IGR>
+      <userString>	#igr_vehicles:SCR_508_IGR	</userString>
       <tags></tags>
-      <level>	5	</level>
-      <price>	3650	</price>
+      <level>	6	</level>
+      <price>	21600	</price>
       <notInShop>	true	</notInShop>
       <weight>	100	</weight>
-      <distance>	360	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </ER_53_IGR>
+      <distance>	400	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </SCR_508_IGR>
   </shared>
 </radios.xml>

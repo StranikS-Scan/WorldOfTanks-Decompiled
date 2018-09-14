@@ -7,7 +7,7 @@ import SoundGroups
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.Scaleform.genConsts.ACOUSTICS import ACOUSTICS
 from shared_utils import findFirst
-_SOUND_DELAY = 1.0
+_SOUND_DELAY = 0.5
 PresetItem = namedtuple('PresetItem', 'speakerIDs soundID')
 _PRESETS = {ACOUSTICS.TYPE_HEADPHONES: (PresetItem((ACOUSTICS.SPEAKER_ID_LEFT,), 'multichanel_test_L'), PresetItem((ACOUSTICS.SPEAKER_ID_RIGHT,), 'multichanel_test_R')),
  ACOUSTICS.TYPE_LAPTOP: (PresetItem((ACOUSTICS.SPEAKER_ID_LEFT,), 'multichanel_test_L'), PresetItem((ACOUSTICS.SPEAKER_ID_RIGHT,), 'multichanel_test_R')),

@@ -147,3 +147,10 @@ def removeRecords(updateCtx, block, recordsPacking):
 
     header[blockIndex + 1] -= totalSizeDec
     updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + dossierCompDescr[updateCtx['headerLength']:]
+
+
+def getBlockSize(updateCtx, block):
+    header = updateCtx['header']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    return blockSize

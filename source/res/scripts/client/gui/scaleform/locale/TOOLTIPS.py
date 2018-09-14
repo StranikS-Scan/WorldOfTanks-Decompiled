@@ -722,6 +722,8 @@ class TOOLTIPS(object):
     HANGAR_STARTBTN_SQUADNOTREADY_BODY = '#tooltips:hangar/startBtn/squadNotReady/body'
     HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_HEADER = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/header'
     HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_BODY = '#tooltips:hangar/tankCarusel/wrongSquadVehicle/body'
+    HANGAR_TANKCARUSEL_WRONGSQUADSPGVEHICLE_HEADER = '#tooltips:hangar/tankCarusel/wrongSquadSPGVehicle/header'
+    HANGAR_TANKCARUSEL_WRONGSQUADSPGVEHICLE_BODY = '#tooltips:hangar/tankCarusel/wrongSquadSPGVehicle/body'
     ACHIEVEMENT_HISTORYDESCRIPTIONHEADER = '#tooltips:achievement/historyDescriptionHeader'
     ACHIEVEMENT_CURRENTDEGREE = '#tooltips:achievement/currentDegree'
     ACHIEVEMENT_MARKSONGUNCOUNT = '#tooltips:achievement/marksOnGunCount'
@@ -944,9 +946,11 @@ class TOOLTIPS(object):
     TANKS_CAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#tooltips:tanks_carousel/vehicleStates/fallout_broken'
     TANKCARUSEL_MAINPROPERTY = '#tooltips:tankCarusel/MainProperty'
     TANKCARUSEL_LOCK_HEADER = '#tooltips:tankCarusel/lock/header'
+    TANKCARUSEL_LOCK_ROTATION_HEADER = '#tooltips:tankCarusel/lock/rotation/header'
     TANKCARUSEL_LOCK_TO = '#tooltips:tankCarusel/lock/To'
     TANKCARUSEL_LOCK_CLAN = '#tooltips:tankCarusel/lock/CLAN'
     TANKCARUSEL_LOCK_TOURNAMENT = '#tooltips:tankCarusel/lock/TOURNAMENT'
+    TANKCARUSEL_LOCK_ROTATION = '#tooltips:tankCarusel/lock/rotation'
     TANKCARUSEL_LOCK_ROAMING = '#tooltips:tankCarusel/lock/ROAMING'
     MULTISELECTION_ALERT_HEADER = '#tooltips:multiselection/alert/header'
     MULTISELECTION_ALERT_BODY = '#tooltips:multiselection/alert/body'
@@ -1201,6 +1205,8 @@ class TOOLTIPS(object):
     VEHICLESTATUS_FALLOUT_ONLY_HEADER = '#tooltips:vehicleStatus/fallout_only/header'
     VEHICLESTATUS_NOT_SUITABLE_HEADER = '#tooltips:vehicleStatus/not_suitable/header'
     VEHICLESTATUS_UNSUITABLETOQUEUE_HEADER = '#tooltips:vehicleStatus/unsuitableToQueue/header'
+    VEHICLESTATUS_UNSUITABLETOUNIT_HEADER = '#tooltips:vehicleStatus/unsuitableToUnit/header'
+    VEHICLESTATUS_ROTATIONGROUPUNLOCKED_HEADER = '#tooltips:vehicleStatus/rotationGroupUnlocked/header'
     TRADEINVEHICLESTATUS_BATTLE_HEADER = '#tooltips:tradeInVehicleStatus/battle/header'
     TRADEINVEHICLESTATUS_BATTLE_BODY = '#tooltips:tradeInVehicleStatus/battle/body'
     TRADEINVEHICLESTATUS_DAMAGED_HEADER = '#tooltips:tradeInVehicleStatus/damaged/header'
@@ -1866,6 +1872,7 @@ class TOOLTIPS(object):
     BATTLERESULTS_EFFICIENCYHEADER_SUMMCRITS = '#tooltips:battleResults/efficiencyHeader/summCrits'
     BATTLERESULTS_EFFICIENCYHEADER_SUMMDAMAGE = '#tooltips:battleResults/efficiencyHeader/summDamage'
     BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL = '#tooltips:battleResults/efficiencyHeader/summKill'
+    BATTLERESULTS_EFFICIENCYHEADER_SUMMSTUN = '#tooltips:battleResults/efficiencyHeader/summStun'
     BATTLERESULTS_EFFICIENCYHEADER_VALUE = '#tooltips:battleResults/efficiencyHeader/value'
     CONTACT_STATUS_INBATTLE_UNKNOWN = '#tooltips:Contact/status/inBattle/unknown'
     CONTACT_STATUS_INBATTLE_RANDOM = '#tooltips:Contact/status/inBattle/random'
@@ -2173,6 +2180,8 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR = '#tooltips:tank_params/desc/invisibilityMovingFactor'
     TANK_PARAMS_DESC_SWITCHONTIME = '#tooltips:tank_params/desc/switchOnTime'
     TANK_PARAMS_DESC_SWITCHOFFTIME = '#tooltips:tank_params/desc/switchOffTime'
+    TANK_PARAMS_DESC_STUNMINDURATION = '#tooltips:tank_params/desc/stunMinDuration'
+    TANK_PARAMS_DESC_STUNMAXDURATION = '#tooltips:tank_params/desc/stunMaxDuration'
     VEHICLEPARAMS_TITLE_VALUETEMPLATE = '#tooltips:vehicleParams/title/valueTemplate'
     VEHICLEPARAMS_POSSIBLEBONUSES_DESC = '#tooltips:vehicleParams/possibleBonuses/desc'
     VEHICLEPARAMS_BONUSES_TITLE = '#tooltips:vehicleParams/bonuses/title'
@@ -2180,7 +2189,7 @@ class TOOLTIPS(object):
     VEHICLEPARAMS_BONUS_ARTEFACT_TEMPLATE = '#tooltips:vehicleParams/bonus/artefact/template'
     VEHICLEPARAMS_BONUS_SKILL_TEMPLATE = '#tooltips:vehicleParams/bonus/skill/template'
     VEHICLEPARAMS_BONUS_ROLE_TEMPLATE = '#tooltips:vehicleParams/bonus/role/template'
-    VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGE = '#tooltips:vehicleParams/bonus/extra/camouflage'
+    VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGEEXTRAS = '#tooltips:vehicleParams/bonus/extra/camouflageExtras'
     VEHICLEPARAMS_SKILL_NAME = '#tooltips:vehicleParams/skill/name'
     VEHICLEPARAMS_BONUS_SITUATIONAL = '#tooltips:vehicleParams/bonus/situational'
     VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER = '#tooltips:vehicleParams/bonus/tankmanLevel/commander'
@@ -2385,9 +2394,11 @@ class TOOLTIPS(object):
      VEHICLE_DEAL_TELECOM_MAIN,
      VEHICLE_TRADE)
     TANKCARUSEL_LOCK_ENUM = (TANKCARUSEL_LOCK_HEADER,
+     TANKCARUSEL_LOCK_ROTATION_HEADER,
      TANKCARUSEL_LOCK_TO,
      TANKCARUSEL_LOCK_CLAN,
      TANKCARUSEL_LOCK_TOURNAMENT,
+     TANKCARUSEL_LOCK_ROTATION,
      TANKCARUSEL_LOCK_ROAMING)
     ACHIEVEMENT_PARAMS_LEFT_ENUM = (ACHIEVEMENT_PARAMS_LEFT4,
      ACHIEVEMENT_PARAMS_LEFT3,
@@ -2483,13 +2494,16 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,
      TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR,
      TANK_PARAMS_DESC_SWITCHONTIME,
-     TANK_PARAMS_DESC_SWITCHOFFTIME)
+     TANK_PARAMS_DESC_SWITCHOFFTIME,
+     TANK_PARAMS_DESC_STUNMINDURATION,
+     TANK_PARAMS_DESC_STUNMAXDURATION)
     BATTLERESULTS_EFFICIENCYHEADER_ENUM = (BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMASSIST,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMARMOR,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMCRITS,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMDAMAGE,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL,
+     BATTLERESULTS_EFFICIENCYHEADER_SUMMSTUN,
      BATTLERESULTS_EFFICIENCYHEADER_VALUE)
     AWARDITEM_ALL_HEADER_ENUM = (AWARDITEM_CREDITS_HEADER,
      AWARDITEM_GOLD_HEADER,
@@ -2531,7 +2545,7 @@ class TOOLTIPS(object):
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_LOADER,
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_DRIVER,
      VEHICLEPARAMS_BONUS_TANKMANLEVEL_RADIOMAN)
-    VEHICLEPARAMS_BONUS_EXTRA_ENUM = VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGE
+    VEHICLEPARAMS_BONUS_EXTRA_ENUM = (VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGEEXTRAS,)
     VEHICLEPREVIEW_BUYBUTTON_ALL_ENUM = (VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_PARENTMODULEISLOCKED_BODY,
      VEHICLEPREVIEW_BUYBUTTON_PARENTVEHICLEISLOCKED_HEADER,

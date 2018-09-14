@@ -62,6 +62,10 @@ class View(AbstractViewMeta):
         return
 
     @property
+    def key(self):
+        return self.createViewKey(self.alias, self.uniqueName)
+
+    @property
     def alias(self):
         return self.__settings.alias
 
@@ -88,6 +92,10 @@ class View(AbstractViewMeta):
             else:
                 LOG_ERROR('Hint layout is nor defined', hintID)
         return
+
+    @classmethod
+    def createViewKey(cls, viewAlias, viewName):
+        return (viewAlias, viewName)
 
     def _dispose(self):
         super(View, self)._dispose()

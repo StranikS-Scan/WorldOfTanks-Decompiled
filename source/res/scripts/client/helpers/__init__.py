@@ -148,7 +148,15 @@ def newFakeModel():
 
 
 _g_alphabetOrderExcept = {1105: 1077.5,
- 1025: 1045.5}
+ 1025: 1045.5,
+ 197: 196,
+ 196: 197,
+ 229: 228,
+ 228: 229,
+ 1030: 1048,
+ 1110: 1080,
+ 1028: 1045.5,
+ 1108: 1077.5}
 
 def _getSymOrderIdx(symbol):
     assert isinstance(symbol, types.UnicodeType)

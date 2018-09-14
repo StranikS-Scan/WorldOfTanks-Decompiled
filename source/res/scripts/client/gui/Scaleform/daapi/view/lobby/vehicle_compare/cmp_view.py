@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_view.py
+from constants import IS_TUTORIAL_ENABLED
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -39,7 +40,8 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.onBackClick()
 
     def onSelectModulesClick(self, vehicleID, index):
-        g_loader.stopOnceOnlyHint('VehCompareConfig')
+        if IS_TUTORIAL_ENABLED:
+            g_loader.stopOnceOnlyHint('VehCompareConfig')
         event = g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ctx={'index': int(index)})
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 

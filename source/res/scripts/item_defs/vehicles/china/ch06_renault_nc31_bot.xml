@@ -23,7 +23,7 @@
   <camouflage>
     <priceFactor>	0.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/chinese/Ch06_Renault_NC31/Renault_NC31_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -60,7 +60,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.002452 0.655486 0.583497	</turret>
+      <turret>	0.0012 0.550769 0.5362	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Hull.model	</collisionModelServer>
@@ -68,28 +68,31 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.0044005 0.0948903 2.16416	</rayStart>
-        <rayEnd>	-0.00440085 -0.103662 1.81692	</rayEnd>
+        <rayStart>	-0.00587464 -0.00520698 2.11801	</rayStart>
+        <rayEnd>	-0.00587463 -0.141711 1.74202	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.22	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-0.681167 0.241851 0.4307	</rayStart>
-        <rayEnd>	-0.281168 0.241851 0.4307	</rayEnd>
+        <rayStart>	-0.685168 0.187826 0.404922	</rayStart>
+        <rayEnd>	-0.285169 0.187826 0.404922	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.58	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	0.681167 0.241851 0.4307	</rayStart>
-        <rayEnd>	0.281168 0.241851 0.4307	</rayEnd>
+        <rayStart>	0.685168 0.187826 0.404922	</rayStart>
+        <rayEnd>	0.285169 0.187826 0.404922	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.58	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/chinese/Ch06_Renault_NC31/Renault_NC31_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	4 4 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Ch06_Renault_NC31_bot>
@@ -131,15 +134,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.23	</textureScale>
+        <textureScale>	-2.4	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.401136	</radius>
+          <syncAngle>	15	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -149,9 +153,10 @@
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.447108	</radius>
+          <syncAngle>	15	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -162,9 +167,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.401136	</radius>
+          <syncAngle>	15	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -174,9 +180,10 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L2	</name>
           <radius>	0.447108	</radius>
+          <syncAngle>	15	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -193,24 +200,141 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.964166 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.03073 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.726021 1.20625	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.719037 1.26677	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
         <decal>
           <transform>
-            <row0>	2.536350 0.000000 0.000000	</row0>
+            <row0>	2.507610 0.000000 0.000000	</row0>
             <row1>	0.000000 1.446250 0.000000	</row1>
             <row2>	0.000000 0.000000 4.583750	</row2>
             <row3>	0.000000 0.000000 0.000001	</row3>
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/chinese/Ch06_Renault_NC31/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/chinese/Ch06_Renault_NC31/track/segment.model	</segmentModelRight>
+        <left>	vehicles/chinese/Ch06_Renault_NC31/track/left.track	</left>
+        <right>	vehicles/chinese/Ch06_Renault_NC31/track/right.track	</right>
+        <segmentLength>	0.12	</segmentLength>
+        <segmentOffset>	0.029	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.009	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.264	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.296	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.264	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.264	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.296	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.264	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+        </node>
+      </trackNodes>
     </Chassis_Ch06_Renault_NC31_bot>
   </chassis>
   <turrets0>
@@ -221,15 +345,15 @@
       <price>	0	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	16	</armor_1>
+        <armor_1>	22	</armor_1>
         <armor_2>	8	</armor_2>
-        <armor_3>	16	</armor_3>
-        <armor_4>	14	</armor_4>
-        <armor_5>	16	</armor_5>
+        <armor_3>	22	</armor_3>
+        <armor_4>	16	</armor_4>
+        <armor_5>	22	</armor_5>
         <armor_6>	8	</armor_6>
         <armor_7>	8	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	8	</armor_9>
+        <armor_9>	16	</armor_9>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	170	</weight>
@@ -273,6 +397,9 @@
             <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </_37mm_APX_SA18_bot>
       </guns>
       <models>
@@ -284,18 +411,18 @@
         <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.235125 0.430947	</gunPosition>
+      <gunPosition>	0.00091 0.250686 0.448522	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.681706 0.291455 -0.00569651	</rayStart>
-          <rayEnd>	-0.290933 0.206037 -0.00569651	</rayEnd>
+          <rayStart>	-0.690999 0.236423 0.00941993	</rayStart>
+          <rayEnd>	-0.298747 0.158351 0.00300072	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.681706 0.291455 -0.00569651	</rayStart>
-          <rayEnd>	0.290933 0.206037 -0.00569651	</rayEnd>
+          <rayStart>	0.690999 0.236423 0.00941993	</rayStart>
+          <rayEnd>	0.298747 0.158351 0.00300072	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -303,11 +430,8 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.033 -0.006 1.003 0.000 0.462 0.116 0.565 0.492 0.550 0.500 0.210 0.500 0.237 0.486 0.000	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <camouflage>
-        <tiling>	1 0.865 0.000000 0.000000	</tiling>
-      </camouflage>
+      <physicsShape>	1.000 0.010 0.987 0.000 0.534 0.130 0.500 0.441 0.500 0.500 0.207 0.500 0.234 0.426 0.277	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
     </Turret_1_Ch06_Renault_NC31_bot>
   </turrets0>
   <engines>

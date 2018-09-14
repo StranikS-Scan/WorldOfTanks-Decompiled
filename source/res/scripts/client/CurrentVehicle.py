@@ -153,6 +153,15 @@ class _CurrentVehicle(_CachedVehicle):
                 self.onChanged()
         return
 
+    def onRotationUpdate(self, diff):
+        isVehicleChanged = False
+        if 'groupBattles' in diff:
+            isVehicleChanged = self.item.rotationGroupIdx in diff['groupBattles']
+        elif 'isGroupLocked' in diff:
+            isVehicleChanged = self.item.rotationGroupIdx in diff['isGroupLocked']
+        if isVehicleChanged:
+            self.onChanged()
+
     def onLocksUpdate(self, locksDiff):
         if self.__vehInvID in locksDiff:
             self.refreshModel()
@@ -207,6 +216,9 @@ class _CurrentVehicle(_CachedVehicle):
 
     def isDisabledInPremIGR(self):
         return self.isPresent() and self.item.isDisabledInPremIGR
+
+    def isRotationGroupLocked(self):
+        return self.isPresent() and self.item.isRotationGroupLocked
 
     def isPremiumIGR(self):
         return self.isPresent() and self.item.isPremiumIGR
@@ -293,7 +305,8 @@ class _CurrentVehicle(_CachedVehicle):
 
     def _addListeners(self):
         super(_CurrentVehicle, self)._addListeners()
-        g_clientUpdateManager.addCallbacks({'cache.vehsLock': self.onLocksUpdate})
+        g_clientUpdateManager.addCallbacks({'cache.vehsLock': self.onLocksUpdate,
+         'groupLocks': self.onRotationUpdate})
         self.igrCtrl.onIgrTypeChanged += self.onIgrTypeChanged
         self.rentals.onRentChangeNotify += self.onRentChange
         self.falloutCtrl.onSettingsChanged += self.__onFalloutChanged

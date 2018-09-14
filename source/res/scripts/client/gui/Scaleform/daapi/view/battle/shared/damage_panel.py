@@ -5,9 +5,11 @@ import BattleReplay
 import BigWorld
 import GUI
 import Math
+import weakref
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
+from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.DamagePanelMeta import DamagePanelMeta
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -31,7 +33,54 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.RPM: 'as_setNormalizedEngineRpmS',
  VEHICLE_VIEW_STATE.MAX_SPEED: 'as_setMaxSpeedS',
  VEHICLE_VIEW_STATE.VEHICLE_MOVEMENT_STATE: '_updateVehicleMovementState',
- VEHICLE_VIEW_STATE.VEHICLE_ENGINE_STATE: '_updateVehicleEngineState'}
+ VEHICLE_VIEW_STATE.VEHICLE_ENGINE_STATE: '_updateVehicleEngineState',
+ VEHICLE_VIEW_STATE.STUN: '_updateStun'}
+
+class _IStunAnimPlayer(object):
+
+    def showStun(self, time, animated):
+        raise NotImplementedError
+
+    def hideStun(self, animated):
+        raise NotImplementedError
+
+
+class _ActionScriptTimer(_IStunAnimPlayer):
+
+    def __init__(self, view):
+        super(_ActionScriptTimer, self).__init__()
+        self._view = view
+
+    def showStun(self, time, animated):
+        self._view.as_showStunS(time, True)
+
+    def hideStun(self, animated):
+        self._view.as_hideStunS(animated)
+
+
+class _PythonTimer(PythonTimer, _IStunAnimPlayer):
+
+    def __init__(self, panel):
+        super(_PythonTimer, self).__init__(panel, 0, 0, 0)
+
+    def showStun(self, totalTime, animated):
+        self._totalTime = totalTime
+        self._startTime = BigWorld.serverTime()
+        self._finishTime = self._startTime + totalTime if totalTime else 0
+        self.show()
+
+    def hideStun(self, animated):
+        self.hide()
+
+    def _showView(self, isBubble):
+        self._panel.as_setStunTimerSnapshotS(self._totalTime)
+
+    def _hideView(self):
+        self._panel.as_hideStunS(True)
+
+    def _setViewSnapshot(self, timeLeft):
+        self._panel.as_setStunTimerSnapshotS(math.ceil(timeLeft))
+
 
 class _TankIndicatorCtrl(object):
 
@@ -75,6 +124,7 @@ class DamagePanel(DamagePanelMeta):
         self.__maxHealth = 0
         self.__isAutoRotationOn = True
         self.__isAutoRotationShown = False
+        self.__stunAnimPlayer = None
         return
 
     def __del__(self):
@@ -102,6 +152,9 @@ class DamagePanel(DamagePanelMeta):
         self.__changeVehicleSetting('extinguisher', None)
         return
 
+    def hideStunImmidiate(self):
+        self.__stunAnimPlayer.hideStun(False)
+
     def _populate(self):
         super(DamagePanel, self)._populate()
         if self.app is not None:
@@ -115,6 +168,10 @@ class DamagePanel(DamagePanelMeta):
                 self.__onVehicleControlling(vehicle)
         self.as_setStaticDataS(i18n.makeString(INGAME_GUI.PLAYER_MESSAGES_TANK_IN_FIRE))
         g_replayEvents.onPause += self.__onReplayPaused
+        if self.sessionProvider.isReplayPlaying:
+            self.__stunAnimPlayer = _PythonTimer(weakref.proxy(self))
+        else:
+            self.__stunAnimPlayer = _ActionScriptTimer(self)
         return
 
     def _dispose(self):
@@ -172,6 +229,13 @@ class DamagePanel(DamagePanelMeta):
 
     def _switching(self, _):
         self.as_resetS()
+        self.__stunAnimPlayer.hideStun(False)
+
+    def _updateStun(self, stunDuration):
+        if stunDuration > 0:
+            self.__stunAnimPlayer.showStun(stunDuration, True)
+        else:
+            self.__stunAnimPlayer.hideStun(True)
 
     def __changeVehicleSetting(self, tag, entityName):
         ctrl = self.sessionProvider.shared.equipments

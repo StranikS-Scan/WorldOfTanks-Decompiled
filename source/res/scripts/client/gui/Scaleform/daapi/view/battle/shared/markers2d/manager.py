@@ -176,7 +176,8 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         return {'settings': plugins.SettingsPlugin,
          'eventBus': plugins.EventBusPlugin,
          'vehicles': plugins.VehicleMarkerPlugin,
-         'equipments': plugins.EquipmentsMarkerPlugin}
+         'equipments': plugins.EquipmentsMarkerPlugin,
+         'area': plugins.AreaStaticMarkerPlugin}
 
     def __addCanvas(self, arenaVisitor):
         self.__canvas = self._createCanvas(arenaVisitor)

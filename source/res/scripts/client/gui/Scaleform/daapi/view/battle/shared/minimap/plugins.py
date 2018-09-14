@@ -6,7 +6,9 @@ from functools import partial
 import BigWorld
 import Math
 from AvatarInputHandler import aih_constants
+from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
+from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
 from constants import VISIBILITY, AOI
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
@@ -19,11 +21,11 @@ from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_LOCATION, VEHICLE_VIEW_STATE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from ids_generators import SequenceIDGenerator
-from PlayerEvents import g_playerEvents
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _FEATURES = settings.ADDITIONAL_FEATURES
 _CTRL_MODE = aih_constants.CTRL_MODE_NAME
+_TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.ENTRY_SYMBOL_NAME.ARTY_MARKER}
 
 class PersonalEntriesPlugin(common.SimplePlugin):
     __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState')
@@ -96,7 +98,10 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def updateControlMode(self, mode, vehicleID):
         super(PersonalEntriesPlugin, self).updateControlMode(mode, vehicleID)
         activateID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
-        if self._isInStrategicMode():
+        if self._isInArtyMode():
+            activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
+            matrix = matrix_factory.makeArtyAimPointMatrix()
+        elif self._isInStrategicMode():
             activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
             matrix = matrix_factory.makeStrategicCameraMatrix()
         elif self._isInArcadeMode():
@@ -210,7 +215,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             entryID = add(name, container, matrix=matrix, active=active)
             if entryID:
                 yield (entryID, name, active)
-        if _CTRL_MODE.STRATEGIC in modes:
+        if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes:
             if self._isInStrategicMode():
                 matrix = matrix_factory.makeStrategicCameraMatrix()
                 active = True
@@ -519,7 +524,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                     self.__setInAoI(model, True)
                 self._notifyVehicleAdded(vehicleID)
 
-        for vehicleID in set(self._entries.keys()).difference(handled):
+        for vehicleID in set(self._entries.iterkeys()).difference(handled):
             self._delEntryEx(vehicleID)
 
         return
@@ -587,7 +592,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 self.__setActive(entry, True)
                 self._notifyVehicleAdded(vehicleID)
 
-        for vehicleID in set(self._entries.keys()).difference(handled):
+        for vehicleID in set(self._entries.iterkeys()).difference(handled):
             entry = self._entries[vehicleID]
             if entry.getLocation() in (VEHICLE_LOCATION.FAR, VEHICLE_LOCATION.AOI_TO_FAR):
                 self.__clearAoIToFarCallback(vehicleID)
@@ -858,3 +863,31 @@ class EquipmentsPlugin(common.IntervalPlugin):
         if model is not None:
             self._setCallback(uniqueID, int(interval))
         return
+
+
+class AreaStaticMarkerPlugin(common.EntriesPlugin):
+    """
+    Any static marker on minimap corresponding to some position on terrain.
+    """
+
+    def start(self):
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onStaticMarkerAdded += self.__addStaticMarker
+            ctrl.onStaticMarkerRemoved += self.__delStaticMarker
+        return
+
+    def stop(self):
+        ctrl = self.sessionProvider.shared.feedback
+        if ctrl is not None:
+            ctrl.onStaticMarkerAdded -= self.__addStaticMarker
+            ctrl.onStaticMarkerRemoved -= self.__delStaticMarker
+        super(AreaStaticMarkerPlugin, self).fini()
+        return
+
+    def __addStaticMarker(self, objectID, position, markerSymbolName):
+        if markerSymbolName in _TO_FLASH_SYMBOL_NAME_MAPPING:
+            self._addEntryEx(objectID, _TO_FLASH_SYMBOL_NAME_MAPPING[markerSymbolName], _C_NAME.EQUIPMENTS, matrix=minimap_utils.makePositionMatrix(position), active=True)
+
+    def __delStaticMarker(self, objectID):
+        self._delEntryEx(objectID)

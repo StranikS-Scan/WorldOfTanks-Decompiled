@@ -17,7 +17,7 @@ from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeft
 from gui.shared.gui_items import RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
-from gui.shared.gui_items.Vehicle import Vehicle, getTypeBigIconPath
+from gui.shared.gui_items.Vehicle import Vehicle, getBattlesLeft, getTypeBigIconPath
 from gui.shared.items_parameters import RELATIVE_PARAMS, formatters as param_formatter, params_helper, bonus_helper
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus
 from gui.shared.items_parameters.comparator import PARAM_STATE
@@ -27,10 +27,10 @@ from gui.shared.money import Money, Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
-from helpers import i18n, time_utils, int2roman, dependency
+from helpers import dependency
+from helpers import i18n, time_utils, int2roman
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IFalloutController, ITradeInController
-from debug_utils import LOG_DEBUG
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _ARTEFACT_TYPES = (_EQUIPMENT, _OPTION_DEVICE)
@@ -87,18 +87,28 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if len(simplifiedStatsBlock) > 0:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
-        commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
-        if len(commonStatsBlock) > 0:
-            items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
+        if not vehicle.isRotationGroupLocked:
+            commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
+            if len(commonStatsBlock) > 0:
+                items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
         footnoteBlock = FootnoteBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if len(footnoteBlock):
             items.append(formatters.packBuildUpBlockData(footnoteBlock, gap=textGap, padding=blockPadding))
-        items.append(formatters.packBuildUpBlockData(AdditionalStatsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
-        statusBlock = StatusBlockConstructor(vehicle, statusConfig).construct()
-        if len(statusBlock) > 0:
-            items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
+        if vehicle.isRotationGroupLocked:
+            statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
+        elif vehicle.isDisabledInRoaming:
+            statsBlockConstructor = RoamingLockAdditionalStatsBlockConstructor
+        elif vehicle.clanLock and vehicle.clanLock > time_utils.getCurrentTimestamp():
+            statsBlockConstructor = ClanLockAdditionalStatsBlockConstructor
         else:
-            self._setContentMargin(bottom=bottomPadding)
+            statsBlockConstructor = AdditionalStatsBlockConstructor
+        items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
+        if not vehicle.isRotationGroupLocked:
+            statusBlock = StatusBlockConstructor(vehicle, statusConfig).construct()
+            if len(statusBlock) > 0:
+                items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
+            else:
+                self._setContentMargin(bottom=bottomPadding)
         return items
 
 
@@ -525,7 +535,7 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
     PARAMS = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'circularVisionRadius'),
      VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
      VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage', 'avgPiercingPower', 'hullArmor', 'turretArmor'),
-     VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
+     VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
      VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime'),
      'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
 
@@ -610,34 +620,59 @@ class AdditionalStatsBlockConstructor(VehicleTooltipBlockConstructor):
                 block.append(self._makeStatBlock(currentCrewSizeStr, totalCrewSize, TOOLTIPS.VEHICLE_CREW))
             else:
                 block.append(formatters.packTextParameterBlockData(name=text_styles.main(_ms(TOOLTIPS.VEHICLE_CREW)), value=text_styles.stats(str(totalCrewSize)), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-2)))
+        return block
+
+    def _makeStatBlock(self, current, total, text):
+        return formatters.packTextParameterBlockData(name=text_styles.main(_ms(text)), value=text_styles.stats(str(current) + '/' + str(total)), valueWidth=self._valueWidth)
+
+
+class LockAdditionalStatsBlockConstructor(AdditionalStatsBlockConstructor):
+
+    def construct(self):
+        block = super(LockAdditionalStatsBlockConstructor, self).construct()
         lockBlock = self._makeLockBlock()
         if lockBlock is not None:
             block.append(lockBlock)
         return block
 
     def _makeLockBlock(self):
-        clanLockTime = self.vehicle.clanLock
-        if clanLockTime and clanLockTime <= time_utils.getCurrentTimestamp():
-            LOG_DEBUG('clan lock time is less than current time: %s' % clanLockTime)
-            clanLockTime = None
-        isDisabledInRoaming = self.vehicle.isDisabledInRoaming
-        if clanLockTime or isDisabledInRoaming:
-            headerLock = text_styles.concatStylesToMultiLine(text_styles.warning(_ms(TOOLTIPS.TANKCARUSEL_LOCK_HEADER)))
-            if isDisabledInRoaming:
-                textLock = text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROAMING))
-            else:
-                time = time_utils.getDateTimeFormat(clanLockTime)
-                timeStr = text_styles.main(text_styles.concatStylesWithSpace(_ms(TOOLTIPS.TANKCARUSEL_LOCK_TO), time))
-                textLock = text_styles.concatStylesToMultiLine(timeStr, text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_CLAN)))
-            lockHeaderBlock = formatters.packTextBlockData(headerLock, padding=formatters.packPadding(left=77 + self.leftPadding, top=5))
-            lockTextBlock = formatters.packTextBlockData(textLock, padding=formatters.packPadding(left=77 + self.leftPadding))
-            return formatters.packBuildUpBlockData([lockHeaderBlock, lockTextBlock], stretchBg=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LOCK_BG_LINKAGE, padding=formatters.packPadding(left=-17, top=20, bottom=0))
-        else:
-            return
-            return
+        header = self._makeLockHeader()
+        text = self._makeLockText()
+        headerPadding = formatters.packPadding(left=77 + self.leftPadding, top=5)
+        textPadding = formatters.packPadding(left=77 + self.leftPadding)
+        headerBlock = formatters.packTextBlockData(header, padding=headerPadding)
+        textBlock = formatters.packTextBlockData(text, padding=textPadding)
+        return formatters.packBuildUpBlockData([headerBlock, textBlock], stretchBg=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LOCK_BG_LINKAGE, padding=formatters.packPadding(left=-17, top=20, bottom=0))
 
-    def _makeStatBlock(self, current, total, text):
-        return formatters.packTextParameterBlockData(name=text_styles.main(_ms(text)), value=text_styles.stats(str(current) + '/' + str(total)), valueWidth=self._valueWidth)
+    def _makeLockHeader(self):
+        return text_styles.warning(_ms(TOOLTIPS.TANKCARUSEL_LOCK_HEADER))
+
+    def _makeLockText(self):
+        pass
+
+
+class RotationLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructor):
+
+    def _makeLockHeader(self):
+        return text_styles.warning(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROTATION_HEADER, groupNum=self.vehicle.rotationGroupNum))
+
+    def _makeLockText(self):
+        return text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROTATION))
+
+
+class RoamingLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructor):
+
+    def _makeLockText(self):
+        return text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROAMING))
+
+
+class ClanLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructor):
+
+    def _makeLockText(self):
+        clanLockTime = self.vehicle.clanLock
+        time = time_utils.getDateTimeFormat(clanLockTime)
+        timeStr = text_styles.main(text_styles.concatStylesWithSpace(_ms(TOOLTIPS.TANKCARUSEL_LOCK_TO), time))
+        return text_styles.concatStylesToMultiLine(timeStr, text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_CLAN)))
 
 
 class StatusBlockConstructor(VehicleTooltipBlockConstructor):
@@ -746,6 +781,8 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             if not isSuitableVeh:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % Vehicle.VEHICLE_STATE.NOT_SUITABLE)
                 level = Vehicle.VEHICLE_STATE_LEVEL.WARNING
+            elif state == Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED:
+                header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state, groupNum=vehicle.rotationGroupNum, battlesLeft=getBattlesLeft(vehicle))
             else:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state)
                 if header is None and text is None:

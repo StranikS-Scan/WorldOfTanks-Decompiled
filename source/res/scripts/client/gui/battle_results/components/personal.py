@@ -34,6 +34,13 @@ class CanUpgradeToPremiumFlag(base.StatsItem):
         return reusable.canUpgradeToPremium and reusable.personal.getCreditsDiff() > 0 and reusable.personal.getXPDiff() > 0
 
 
+class StunDataFlag(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        return reusable.isStunEnabled
+
+
 class PremiumBuyBlock(base.StatsBlock):
     __slots__ = ('clientIndex', 'creditsDiff', 'xpDiff')
 
@@ -204,6 +211,27 @@ class AssistDetailsBlock(base.StatsBlock):
             self.damageAssistedNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART1, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_TOTAL, vals=tooltipStyle)]
 
 
+class StunDetailsBlock(base.StatsBlock):
+    """The block contains information about stun for one enemy."""
+    __slots__ = ('stunNum', 'stunValues', 'stunNames')
+
+    def __init__(self, meta=None, field='', *path):
+        super(StunDetailsBlock, self).__init__(meta, field, *path)
+        self.stunNum = None
+        self.stunValues = None
+        self.stunNames = None
+        return
+
+    def setRecord(self, result, _):
+        count = result.stunNum
+        assisted = result.damageAssistedStun
+        self.stunNum = count
+        if count > 0 or assisted > 0:
+            self.stunValues = [BigWorld.wg_getIntegralFormat(assisted), BigWorld.wg_getIntegralFormat(count)]
+            tooltipStyle = style.getTooltipParamsStyle()
+            self.stunNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART1, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART2)]
+
+
 class CritsDetailsBlock(base.StatsBlock):
     """The block contains critical damages info for one enemy."""
     __slots__ = ('critsCount', 'criticalDevices', 'destroyedDevices', 'destroyedTankmen')
@@ -314,7 +342,8 @@ class EnemyDetailsBlock(base.StatsBlock):
         blocks = (DamageDetailsBlock(),
          ArmorUsingDetailsBlock(),
          AssistDetailsBlock(),
-         CritsDetailsBlock())
+         CritsDetailsBlock(),
+         StunDetailsBlock())
         for block in blocks:
             block.setRecord(result, reusable)
             self.addComponent(self.getNextComponentIndex(), block)
@@ -336,7 +365,7 @@ class EnemyDetailsBlock(base.StatsBlock):
 
 class TotalEfficiencyDetailsHeader(base.StatsBlock):
     """The block contains header of personal efficiency table in tab 'Common'."""
-    __slots__ = ('kills', 'damageDealt', 'criticalDamages', 'damageBlockedByArmor', 'damageAssisted', 'spotted', 'killsTooltip', 'damageDealtTooltip', 'criticalDamagesTooltip', 'damageBlockedTooltip', 'damageAssistedTooltip', 'spottedTooltip')
+    __slots__ = ('kills', 'damageDealt', 'criticalDamages', 'damageBlockedByArmor', 'damageAssisted', 'damageAssistedStun', 'spotted', 'killsTooltip', 'damageDealtTooltip', 'criticalDamagesTooltip', 'damageBlockedTooltip', 'damageAssistedTooltip', 'spottedTooltip', 'damageAssistedStunTooltip')
 
     def __init__(self, meta=None, field='', *path):
         super(TotalEfficiencyDetailsHeader, self).__init__(meta, field, *path)
@@ -345,12 +374,14 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
         self.criticalDamages = None
         self.damageBlockedByArmor = None
         self.damageAssisted = None
+        self.damageAssistedStun = None
         self.spotted = None
         self.killsTooltip = None
         self.damageDealtTooltip = None
         self.criticalDamagesTooltip = None
         self.damageBlockedTooltip = None
         self.damageAssistedTooltip = None
+        self.damageAssistedStunTooltip = None
         self.spottedTooltip = None
         return
 
@@ -371,6 +402,9 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
         value = info.damageAssisted
         self.damageAssisted = numbers.makeStringWithThousandSymbol(value)
         self.damageAssistedTooltip = self.__makeEfficiencyHeaderTooltip('summAssist', value)
+        value = info.damageAssistedStun
+        self.damageAssistedStun = numbers.makeStringWithThousandSymbol(value)
+        self.damageAssistedStunTooltip = self.__makeEfficiencyHeaderTooltip('summStun', value)
         value = info.spotted
         self.spotted = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
         self.spottedTooltip = self.__makeEfficiencyHeaderTooltip('summSpotted', value)

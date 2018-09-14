@@ -10,8 +10,11 @@ from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from gui.LobbyContext import g_lobbyContext
 from .actions_handler import BalancedSquadActionsHandler, RandomSquadActionsHandler
 from .actions_validator import BalancedSquadActionsValidator, RandomSquadActionsValidator
+from .actions_validator import SPGForbiddenSquadActionsValidator, SPGForbiddenBalancedSquadActionsValidator
 
 class BalancedSquadDynamicRosterSettings(DynamicRosterSettings):
     """
@@ -69,24 +72,30 @@ class RandomSquadEntity(SquadEntity):
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
-        self._isBalancedSquad = self.isBalancedSquadEnabled()
+        self._isBalancedSquad = False
+        self._isSPGForbidden = False
+        self._mapID = 0
         super(RandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, PREBATTLE_TYPE.SQUAD)
 
     def init(self, ctx=None):
         rv = super(RandomSquadEntity, self).init(ctx)
         self._isBalancedSquad = self.isBalancedSquadEnabled()
+        self._isSPGForbidden = self.isSPGForbiddenInSquads()
         self._switchActionsValidator()
         self._switchRosterSettings()
-        self.eventsCache.onSyncCompleted += self._onEventsSyncCompleted
-        if self._isBalancedSquad:
+        g_lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
+        self.eventsCache.onSyncCompleted += self._onServerSettingChanged
+        if self._isBalancedSquad or self._isSPGForbidden:
             g_clientUpdateManager.addCallbacks({'inventory.1': self._onInventoryVehiclesUpdated})
         return rv
 
     def fini(self, ctx=None, woEvents=False):
-        self.eventsCache.onSyncCompleted -= self._onEventsSyncCompleted
-        if self._isBalancedSquad:
+        g_lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingChanged
+        self.eventsCache.onSyncCompleted -= self._onServerSettingChanged
+        if self._isBalancedSquad or self._isSPGForbidden:
             g_clientUpdateManager.removeObjectCallbacks(self, force=True)
             self._isBalancedSquad = False
+            self._isSPGForbidden = False
             self.invalidateVehicleStates()
         return super(RandomSquadEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
@@ -105,6 +114,16 @@ class RandomSquadEntity(SquadEntity):
             return SelectResult(True)
         return super(RandomSquadEntity, self).doSelectAction(action)
 
+    def doAction(self, action=None):
+        self._mapID = 0 if action is None else action.mapID
+        super(RandomSquadEntity, self).doAction(action)
+        return
+
+    def doBattleQueue(self, ctx, callback=None):
+        ctx.mapID = self._mapID
+        self._mapID = 0
+        super(RandomSquadEntity, self).doBattleQueue(ctx, callback)
+
     def isBalancedSquadEnabled(self):
         """
         Is balanced squad enabled on server side
@@ -117,6 +136,13 @@ class RandomSquadEntity(SquadEntity):
         """
         return self.eventsCache.getBalancedSquadBounds()
 
+    @staticmethod
+    def isSPGForbiddenInSquads():
+        """
+        Is SPG forbidden in squads on server side.
+        """
+        return g_lobbyContext.getServerSettings().isSPGForbiddenInSquads()
+
     def _createRosterSettings(self):
         if self._isBalancedSquad:
             _, unit = self.getUnit()
@@ -128,7 +154,11 @@ class RandomSquadEntity(SquadEntity):
         return BalancedSquadActionsHandler(self) if self.isBalancedSquadEnabled() else RandomSquadActionsHandler(self)
 
     def _createActionsValidator(self):
-        return BalancedSquadActionsValidator(self) if self.isBalancedSquadEnabled() else RandomSquadActionsValidator(self)
+        if self.isBalancedSquadEnabled() and self.isSPGForbiddenInSquads():
+            return SPGForbiddenBalancedSquadActionsValidator(self)
+        if self.isBalancedSquadEnabled():
+            return BalancedSquadActionsValidator(self)
+        return SPGForbiddenSquadActionsValidator(self) if self.isSPGForbiddenInSquads() else RandomSquadActionsValidator(self)
 
     def unit_onUnitVehicleChanged(self, dbID, vehInvID, vehTypeCD):
         super(RandomSquadEntity, self).unit_onUnitVehicleChanged(dbID, vehInvID, vehTypeCD)
@@ -149,19 +179,27 @@ class RandomSquadEntity(SquadEntity):
             self.unit_onUnitRosterChanged()
 
     def _vehicleStateCondition(self, v):
-        return v.level in self._rosterSettings.getLevelsRange() if self._isBalancedSquad else super(RandomSquadEntity, self)._vehicleStateCondition(v)
+        if self._isBalancedSquad and self.isSPGForbiddenInSquads():
+            return v.level in self._rosterSettings.getLevelsRange() and not v.type == VEHICLE_CLASS_NAME.SPG
+        if self._isBalancedSquad:
+            return v.level in self._rosterSettings.getLevelsRange()
+        return not v.type == VEHICLE_CLASS_NAME.SPG if self.isSPGForbiddenInSquads() else super(RandomSquadEntity, self)._vehicleStateCondition(v)
 
-    def _onEventsSyncCompleted(self):
+    def _onServerSettingChanged(self, *args, **kwargs):
         """
-        Listener for events cache update
+        Listener for events cache/server settings updates
         """
-        enabled = self.isBalancedSquadEnabled()
-        if enabled != self._isBalancedSquad:
-            if enabled:
+        balancedEnabled = self.isBalancedSquadEnabled()
+        spgForbidden = self.isSPGForbiddenInSquads()
+        if balancedEnabled != self._isBalancedSquad or spgForbidden != self._isSPGForbidden:
+            if not self._isSPGForbidden and not self._isBalancedSquad and (balancedEnabled or spgForbidden):
                 g_clientUpdateManager.addCallbacks({'inventory.1': self._onInventoryVehiclesUpdated})
-            else:
+            elif not balancedEnabled and not spgForbidden:
                 g_clientUpdateManager.removeObjectCallbacks(self, force=True)
-            self._isBalancedSquad = enabled
+            if self._isSPGForbidden != spgForbidden:
+                self.invalidateVehicleStates()
+            self._isBalancedSquad = balancedEnabled
+            self._isSPGForbidden = spgForbidden
         self._switchActionsValidator()
         self.unit_onUnitRosterChanged()
 

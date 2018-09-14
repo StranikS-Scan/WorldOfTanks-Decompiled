@@ -79,10 +79,13 @@ class SimplePlugin(IPlugin):
         self._parentObj.playSound2D(soundID)
 
     def _isInStrategicMode(self):
-        return self._ctrlMode in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.MAP_CASE)
+        return self._ctrlMode in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY, CTRL_MODE_NAME.MAP_CASE)
 
     def _isInArcadeMode(self):
         return self._ctrlMode in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER)
+
+    def _isInArtyMode(self):
+        return self._ctrlMode == CTRL_MODE_NAME.ARTY
 
     def _isInPostmortemMode(self):
         return self._ctrlMode == CTRL_MODE_NAME.POSTMORTEM

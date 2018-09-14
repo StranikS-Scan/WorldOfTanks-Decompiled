@@ -13,6 +13,7 @@ class ShakeReason(object):
 class CTRL_MODE_NAME(object):
     ARCADE = 'arcade'
     STRATEGIC = 'strategic'
+    ARTY = 'arty'
     SNIPER = 'sniper'
     POSTMORTEM = 'postmortem'
     DEBUG = 'debug'
@@ -25,6 +26,7 @@ class CTRL_MODE_NAME(object):
 
 CTRL_MODES = (CTRL_MODE_NAME.ARCADE,
  CTRL_MODE_NAME.STRATEGIC,
+ CTRL_MODE_NAME.ARTY,
  CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.POSTMORTEM,
  CTRL_MODE_NAME.DEBUG,
@@ -58,3 +60,9 @@ class SHOT_RESULT(int):
     NOT_PIERCED = 1
     LITTLE_PIERCED = 2
     GREAT_PIERCED = 3
+
+
+class STRATEGIC_CAMERA(int):
+    AERIAL = 0
+    TRAJECTORY = 1
+    DEFAULT = AERIAL

@@ -113,8 +113,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.33	</vehicleMovement>
-        <vehicleRotation>	0.33	</vehicleRotation>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	120	</maxHealth>
@@ -436,8 +436,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	130	</maxHealth>
@@ -770,7 +770,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	275	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -778,7 +778,7 @@
       </surveyingDeviceHealth>
       <guns>
         <_150mm_sFH18_L30>	shared	  <maxAmmo>	30	</maxAmmo>
-          <reloadTime>	28.5	</reloadTime>
+          <reloadTime>	27.2	</reloadTime>
           <unlocks>
             <gun>	_150mm_sFH36_L43	  <cost>	16010	</cost>
             </gun>
@@ -787,15 +787,15 @@
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <aimingTime>	7.0	</aimingTime>
+          <aimingTime>	5.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.74	</shotDispersionRadius>
+          <shotDispersionRadius>	0.66	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.66	</turretRotation>
+            <turretRotation>	0.46	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -824,7 +824,7 @@
           </camouflage>
         </_150mm_sFH18_L30>
         <_150mm_sFH36_L43>	shared	  <maxAmmo>	30	</maxAmmo>
-          <reloadTime>	34.5	</reloadTime>
+          <reloadTime>	26	</reloadTime>
           <unlocks>
             <vehicle>	G94_GW_Tiger_P	  <cost>	113600	</cost>
             </vehicle>
@@ -833,15 +833,15 @@
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <shotDispersionRadius>	0.7	</shotDispersionRadius>
-          <aimingTime>	7	</aimingTime>
+          <shotDispersionRadius>	0.62	</shotDispersionRadius>
+          <aimingTime>	5.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.66	</turretRotation>
+            <turretRotation>	0.44	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

@@ -50,35 +50,35 @@ class ScopeController(DisposableEntity):
         """
         return self.__currentType
 
-    def getViewByAlias(self, alias):
+    def getViewByKey(self, key):
         """
         Finds a view with the given alias in the list of loaded views. If there is no view in
         the inner list, tries to find it in sub controllers.
         
-        :param alias: View alias represented by a string.
+        :param key: View key represented by tuple (alias, view name)
         :return: Reference to view object or None if there is no view with the given alias.
         """
-        view = findFirst(lambda v: v.settings.alias == alias, self.__views, None)
+        view = findFirst(lambda v: v.key == key, self.__views, None)
         if view is None:
             for c in self.__subControllers:
-                view = c.getViewByAlias(alias)
+                view = c.getViewByKey(key)
                 if view is not None:
                     break
 
         return view
 
-    def getLoadingViewByAlias(self, alias):
+    def getLoadingViewByKey(self, key):
         """
         Finds a view with the given alias in the list of views being loaded now. If there is no
         such view tries to find it in sub-controllers.
         
-        :param alias: View alias represented by a string.
+        :param key: View key represented by tuple (alias, view name)
         :return: Reference to view object or None if there is no view with the given alias.
         """
-        view = findFirst(lambda v: v.settings.alias == alias, self.__loadingViews, None)
+        view = findFirst(lambda v: v.key == key, self.__loadingViews, None)
         if view is None:
             for c in self.__subControllers:
-                view = c.getLoadingViewByAlias(alias)
+                view = c.getLoadingViewByKey(key)
                 if view is not None:
                     break
 
@@ -134,13 +134,14 @@ class ScopeController(DisposableEntity):
                 removingScopeController.destroy()
             removingScopeController.removeSubScopeController(scopeType)
 
-    def isViewLoading(self, pyView=None, alias=None):
+    def isViewLoading(self, pyView=None, key=None):
         """
         Checks if the given view is being loaded now (check is preformed by all hierarchy,
         including sub-controllers).
         
         :param pyView: Reference to a view objects.
-        :param alias: View alias (for an alternative search).
+        :param key: View key represented by tuple (alias, view name) to be used for an alternative
+                    search.
         :return: True if the given view is in loading list, otherwise False.
         """
         if pyView is not None:
@@ -152,8 +153,8 @@ class ScopeController(DisposableEntity):
                         break
 
             return outcome
-        elif alias is not None:
-            return self.getLoadingViewByAlias(alias) is not None
+        elif key is not None:
+            return self.getLoadingViewByKey(key) is not None
         else:
             raise ValueError('pyView or pyView alias can not be None!')
             return

@@ -10,8 +10,8 @@
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.036	</moving>
-    <still>	0.073	</still>
+    <moving>	0.056	</moving>
+    <still>	0.093	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.11	</firePenalty>
@@ -22,11 +22,11 @@
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	133.4	</armor_1>
+      <armor_1>	152.4	</armor_1>
       <armor_2>	184.2	</armor_2>
       <armor_3>	101.6	</armor_3>
       <armor_4>	76.2	</armor_4>
@@ -35,7 +35,7 @@
       <armor_7>	101.6	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	19.1	</armor_9>
-      <armor_10>	76.2	</armor_10>
+      <armor_10>	82.6	</armor_10>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	35709	</weight>
@@ -75,20 +75,6 @@
         <size>	0.35	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
-      <inscription>
-        <rayStart>	-1.91807 0.471287 -0.782898	</rayStart>
-        <rayEnd>	-1.72667 0.413262 -0.782898	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	1	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
-        <rayStart>	1.91807 0.471287 -0.782898	</rayStart>
-        <rayEnd>	1.72667 0.413262 -0.782898	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	1	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/american/A115_Chrysler_K/Chrysler_K_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
@@ -129,7 +115,7 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
         <textureSet>	t97	</textureSet>
-        <size>	0.6 0.8	</size>
+        <size>	0.6 0.91	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -200,10 +186,10 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	4.916890 0.000000 0.000000	</row0>
+            <row0>	5.209010 0.000000 0.000000	</row0>
             <row1>	0.000000 1.310320 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.478600	</row2>
-            <row3>	-0.000084 0.000001 0.000031	</row3>
+            <row2>	0.000000 0.000000 7.607830	</row2>
+            <row3>	-0.000085 0.000001 0.000030	</row3>
           </transform>
         </decal>
       </AODecals>
@@ -237,7 +223,7 @@
           <name>	Track_VT_L0	</name>
           <forwardElastK>	1.8	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.234	</offset>
+          <offset>	-0.19	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -304,34 +290,10 @@
         </node>
         <node>
           <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	1	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-          <forwardElastK>	2	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
-          <offset>	-0.234	</offset>
+          <offset>	-0.19	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -396,6 +358,30 @@
           <offset>	-0.176	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
         </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
       </trackNodes>
       <groundNodes>
         <group>
@@ -425,16 +411,16 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	228.6	</armor_1>
-        <armor_2>	215.9	</armor_2>
+        <armor_1>	254	</armor_1>
+        <armor_2>	241.3	</armor_2>
         <armor_3>	127	</armor_3>
         <armor_4>	88.9	</armor_4>
         <armor_5>	38.1	</armor_5>
         <armor_6>	25.4	</armor_6>
-        <armor_7>	88.9	</armor_7>
+        <armor_7>	177.8	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	177.8	</armor_9>
-        <armor_10>	203.2	</armor_10>
+        <armor_9>	203.2	</armor_9>
+        <armor_10>	228.6	</armor_10>
         <armor_11>	139.7	</armor_11>
         <armor_12>	76.2	</armor_12>
         <armor_13>	63.5	</armor_13>
@@ -460,9 +446,9 @@
       <guns>
         <_105mm_Gun_T5E1_2>	shared	  <maxAmmo>	100	</maxAmmo>
           <armor>
-            <armor_1>	228.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	254	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	203.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	228.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -472,7 +458,7 @@
             </armor_5>
             <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_7>
             <armor_8>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_8>
@@ -524,23 +510,7 @@
         <collisionModelClient>	vehicles/american/A115_Chrysler_K/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000025 0.491709 1.40896	</gunPosition>
-      <emblemSlots>
-        <player>
-          <rayStart>	-1.44244 0.652318 -0.0754307	</rayStart>
-          <rayEnd>	-1.29353 0.519325 -0.0636684	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.32	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
-          <rayStart>	1.44244 0.652318 -0.0754307	</rayStart>
-          <rayEnd>	1.29353 0.519325 -0.0636684	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.32	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-        </player>
-      </emblemSlots>
+      <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.960 -0.013 1.027 0.000 0.607 0.084 0.610 0.560 0.483 0.470 0.380 0.550 0.397 0.510 0.070	</physicsShape>
@@ -618,4 +588,5 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
+  <customDefaultCamouflage>	true	</customDefaultCamouflage>
 </A115_Chrysler_K.xml>

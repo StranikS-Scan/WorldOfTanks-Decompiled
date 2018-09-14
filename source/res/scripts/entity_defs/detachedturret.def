@@ -57,6 +57,10 @@
       <Type>	ATTACKER_INFO	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
     </vehicleInfo>
+    <isAtackerProxy>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </isAtackerProxy>
     <arena>
       <Type>	MAILBOX	</Type>
       <Flags>	BASE	</Flags>
@@ -93,6 +97,7 @@
     <applyForceToCOM>
       <Arg>	VECTOR3	</Arg>
     </applyForceToCOM>
+    <onDamageVehicle></onDamageVehicle>
   </CellMethods>
   <BaseMethods>
     <smartDestroy></smartDestroy>

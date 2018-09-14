@@ -75,6 +75,10 @@
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </publicStateModifiers>
+    <stunInfo>
+      <Type>	STUN_INFO	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </stunInfo>
     <status>
       <Type>	INT8	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
@@ -387,6 +391,7 @@
       <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	BOOL	</Arg>

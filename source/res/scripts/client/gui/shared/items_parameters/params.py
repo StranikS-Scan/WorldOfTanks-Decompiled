@@ -6,27 +6,30 @@ import inspect
 import math
 import operator
 from collections import namedtuple, defaultdict
-from operator import itemgetter
 from math import ceil
-from constants import SHELL_TYPES
-from debug_utils import LOG_DEBUG
+from operator import itemgetter
+from constants import SHELL_TYPES, PIERCING_POWER
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
-from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
+from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors
+from gui.shared.items_parameters import functions, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.items_parameters import functions
-from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP, RELOAD_TIME_PROP_NAME, GUN_CAN_BE_CLIP
+from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME
+from gui.shared.utils import DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME
+from gui.shared.utils import GUN_CAN_BE_CLIP, RELOAD_TIME_PROP_NAME
+from gui.shared.utils import RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP
 from helpers import time_utils
 from items import getTypeOfCompactDescr, vehicles, getTypeInfoByIndex, ITEM_TYPES
 from items import utils as items_utils
 from shared_utils import findFirst
 MAX_VISION_RADIUS = 500
 MIN_VISION_RADIUS = 150
-PIERCING_DISTANCES = (100, 250, 500)
+PIERCING_DISTANCES = (50, 200, 500)
 ONE_HUNDRED_PERCENTS = 100
 MIN_RELATIVE_VALUE = 1
+EXTRAS_CAMOUFLAGE = 'camouflageExtras'
 _Weight = namedtuple('_Weight', 'current, max')
 _Invisibility = namedtuple('_Invisibility', 'current, atShot')
 _PenaltyInfo = namedtuple('_PenaltyInfo', 'roleName, value, vehicleIsNotNative')
@@ -63,7 +66,7 @@ def _processExtraBonuses(vehicle):
     result = []
     withRareCamouflage = vehicle.intCD in g_paramsCache.getVehiclesWithoutCamouflage()
     if withRareCamouflage or any(map(itemgetter(0), vehicle.descriptor.camouflages)):
-        result.append(('camouflage', 'extra'))
+        result.append((EXTRAS_CAMOUFLAGE, 'extra'))
     return result
 
 
@@ -86,6 +89,11 @@ def _getInstalledModuleVehicle(vehicleDescr, itemDescr):
 
 def _average(listOfNumbers):
     return sum(listOfNumbers) / len(listOfNumbers)
+
+
+def _isStunParamVisible(shellDict):
+    from gui.LobbyContext import g_lobbyContext
+    return shellDict['hasStun'] and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
 
 
 class _ParameterBase(object):
@@ -427,9 +435,24 @@ class VehicleParams(_ParameterBase):
             return None
             return None
 
+    @property
+    def stunMaxDuration(self):
+        return self._itemDescr.shot['shell'].get('stunDuration', None)
+
+    @property
+    def stunMinDuration(self):
+        item = self._itemDescr.shot['shell']
+        if 'guaranteedStunDuration' in item and 'stunDuration' in item:
+            return item['guaranteedStunDuration'] * item['stunDuration']
+        else:
+            return None
+            return None
+
     def getParamsDict(self, preload=False):
         conditionalParams = ('turretYawLimits', 'gunYawLimits', 'clipFireRate', 'gunRotationSpeed', 'turretRotationSpeed', 'turretArmor', 'reloadTimeSecs', 'switchOnTime', 'switchOffTime')
-        return _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None),))
+        stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
+        result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot['shell']))))
+        return result
 
     def getAllDataDict(self):
 
@@ -637,6 +660,16 @@ class GunParams(WeightedParam):
     def avgDamagePerMinute(self):
         return round(self.reloadTime[0] * self.avgDamageList[0])
 
+    @property
+    def stunMaxDurationList(self):
+        res = self._getRawParams().get(STUN_DURATION_PROP_NAME)
+        return res if res else None
+
+    @property
+    def stunMinDurationList(self):
+        res = self._getRawParams().get(GUARANTEED_STUN_DURATION_PROP_NAME)
+        return res if res else None
+
     def _extractRawParams(self):
         if self._vehicleDescr is not None:
             descriptors = getGunDescriptors(self._itemDescr, self._vehicleDescr)
@@ -646,7 +679,10 @@ class GunParams(WeightedParam):
         return params
 
     def getParamsDict(self):
-        return _ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == _AUTOCANNON_SHOT_DISTANCE),))
+        stunConditionParams = (STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME)
+        stunItem = self._itemDescr['shots'][0]['shell']
+        result = _ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == _AUTOCANNON_SHOT_DISTANCE), (stunConditionParams, lambda s: _isStunParamVisible(stunItem))))
+        return result
 
     def getReloadingType(self, vehicleCD=None):
         return self._getPrecachedInfo().getReloadingType(vehicleCD)
@@ -710,13 +746,11 @@ class ShellParams(CompatibleParams):
                 return NO_DATA
             result = []
             shellDescriptor = getShellDescriptors(self._itemDescr, self._vehicleDescr)[0]
-            piercingMax, piercingMin = shellDescriptor[PIERCING_POWER_PROP_NAME]
-            lossPerMeter = (piercingMax - piercingMin) / 400.0
             maxDistance = self.maxShotDistance
             for distance in PIERCING_DISTANCES:
                 if distance > maxDistance:
                     distance = int(maxDistance)
-                currPiercing = piercingMax - lossPerMeter * (distance - 100.0)
+                currPiercing = PIERCING_POWER.computePiercingPowerAtDist(shellDescriptor[PIERCING_POWER_PROP_NAME], distance, maxDistance)
                 result.append((distance, currPiercing))
 
             return result
@@ -739,8 +773,22 @@ class ShellParams(CompatibleParams):
     def compatibles(self):
         return self._getPrecachedInfo().guns
 
+    @property
+    def stunMaxDuration(self):
+        return self._itemDescr.get('stunDuration', None)
+
+    @property
+    def stunMinDuration(self):
+        if 'guaranteedStunDuration' in self._itemDescr and 'stunDuration' in self._itemDescr:
+            return self._itemDescr['guaranteedStunDuration'] * self._itemDescr['stunDuration']
+        else:
+            return None
+            return None
+
     def getParamsDict(self):
-        return _ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == _AUTOCANNON_SHOT_DISTANCE),))
+        stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
+        result = _ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == _AUTOCANNON_SHOT_DISTANCE), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr))))
+        return result
 
     def _extractRawParams(self):
         if self._vehicleDescr is not None:

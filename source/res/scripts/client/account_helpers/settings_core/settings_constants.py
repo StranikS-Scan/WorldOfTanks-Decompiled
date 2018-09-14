@@ -144,6 +144,7 @@ class CONTROLS(CONST_CONTAINER):
     MOUSE_ARCADE_SENS = 'mouseArcadeSens'
     MOUSE_SNIPER_SENS = 'mouseSniperSens'
     MOUSE_STRATEGIC_SENS = 'mouseStrategicSens'
+    MOUSE_ASSIST_AIM_SENS = 'mouseAssistAimSens'
     MOUSE_HORZ_INVERSION = 'mouseHorzInvert'
     MOUSE_VERT_INVERSION = 'mouseVertInvert'
     BACK_DRAFT_INVERSION = 'backDraftInvert'
@@ -196,6 +197,7 @@ class DAMAGE_LOG(CONST_CONTAINER):
     SHOW_DETAILS = 'damageLogShowDetails'
     SHOW_EVENT_TYPES = 'damageLogShowEventTypes'
     EVENT_POSITIONS = 'damageLogEventsPosition'
+    ASSIST_STUN = 'damageLogAssistStun'
 
 
 class BATTLE_EVENTS(CONST_CONTAINER):

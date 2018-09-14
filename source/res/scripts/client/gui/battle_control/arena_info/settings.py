@@ -56,6 +56,7 @@ class INVITATION_DELIVERY_STATUS(BitmaskHelper):
     RECEIVED_INACTIVE = 8
     SENT_TO = 16
     SENT_INACTIVE = 32
+    SPG_IS_FORBIDDEN = 64
 
 
 class PERSONAL_STATUS(BitmaskHelper):

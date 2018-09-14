@@ -6,7 +6,7 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	72.4	</forward>
+    <forward>	65	</forward>
     <backward>	24	</backward>
   </speedLimits>
   <invisibility>
@@ -16,10 +16,10 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.33	</firePenalty>
   </invisibility>
-  <repairCost>	9.0	</repairCost>
+  <repairCost>	10.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.6	</priceFactor>
+    <priceFactor>	1.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
@@ -28,26 +28,20 @@
       <armor_1>	25.4	</armor_1>
       <armor_2>	31.8	</armor_2>
       <armor_3>	25.4	</armor_3>
-      <armor_4>	12.7	</armor_4>
-      <armor_5>	12.7	</armor_5>
-      <armor_6>	19.1	</armor_6>
+      <armor_4>	19.1	</armor_4>
+      <armor_5>	19.1	</armor_5>
+      <armor_6>	9.5	</armor_6>
       <armor_7>	19.1	</armor_7>
-      <armor_8>	19.1	</armor_8>
-      <armor_9>	38.1	</armor_9>
-      <armor_10>	9.5	</armor_10>
-      <armor_11>	19.1	</armor_11>
-      <armor_12>	25.4	</armor_12>
-      <armor_13>	0	</armor_13>
-      <armor_14>	25.4	</armor_14>
-      <armor_15>	25.4	</armor_15>
-      <armor_16>	25.4	</armor_16>
+      <armor_8>	0	</armor_8>
+      <armor_9>	12.7	</armor_9>
+      <armor_10>	38.1	</armor_10>
     </armor>
-    <primaryArmor>	armor_1 armor_3 armor_6	</primaryArmor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10952	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	2.0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -90,10 +84,10 @@
     <Chassis_A100_T49>
       <userString>	#usa_vehicles:Chassis_A100_T49	</userString>
       <tags></tags>
-      <level>	7	</level>
-      <price>	16300	</price>
+      <level>	8	</level>
+      <price>	32600	</price>
       <unlocks>
-        <chassis>	Chassis_A100_T49_2	  <cost>	15000	</cost>
+        <chassis>	Chassis_A100_T49_2	  <cost>	23600	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -107,13 +101,13 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	7.5	</repairCost>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	175	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A100_T49/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A100_T49/crash/lod0/Chassis.model	</destroyed>
@@ -345,8 +339,8 @@
     <Chassis_A100_T49_2>
       <userString>	#usa_vehicles:Chassis_A100_T49_2	</userString>
       <tags></tags>
-      <level>	8	</level>
-      <price>	31700	</price>
+      <level>	9	</level>
+      <price>	63400	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -358,13 +352,13 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.1	</vehicleMovement>
+        <vehicleRotation>	0.1	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	165	</maxRegenHealth>
-      <repairCost>	7.5	</repairCost>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A100_T49/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A100_T49/crash/lod0/Chassis.model	</destroyed>
@@ -598,43 +592,37 @@
     <Turret_1_A100_T49>
       <userString>	#usa_vehicles:Turret_1_A100_T49	</userString>
       <tags></tags>
-      <level>	7	</level>
-      <price>	16000	</price>
+      <level>	8	</level>
+      <price>	32000	</price>
       <unlocks>
-        <turret>	Turret_2_A100_T49	  <cost>	18500	</cost>
+        <turret>	Turret_2_A100_T49	  <cost>	25200	</cost>
         </turret>
       </unlocks>
       <armor>
         <armor_1>	25.4	</armor_1>
-        <armor_2>	25.4	</armor_2>
+        <armor_2>	19.1	</armor_2>
         <armor_3>	25.4	</armor_3>
         <armor_4>	25.4	</armor_4>
-        <armor_5>	25.4	</armor_5>
+        <armor_5>	12.7	</armor_5>
         <armor_6>	12.7	</armor_6>
-        <armor_7>	19.1	</armor_7>
-        <armor_8>	25.4	</armor_8>
-        <armor_9>	12.7	</armor_9>
-        <armor_10>	25.4	</armor_10>
-        <armor_11>	12.7	</armor_11>
-        <armor_12>	12.7	</armor_12>
-        <armor_13>	12.7	</armor_13>
-        <armor_14>	0	</armor_14>
-        <armor_15>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_15>
+        <armor_7>	25.4	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5360	</weight>
-      <maxHealth>	200	</maxHealth>
+      <maxHealth>	260	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -642,25 +630,26 @@
           <armor>
             <armor_1>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_6>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
-          <reloadTime>	6.3	</reloadTime>
+          <reloadTime>	6.4	</reloadTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -19.5 1 -19.5	</minPitch>
             <maxPitch>	0 9.5 1 9.5	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_01.model	</destroyed>
@@ -733,68 +722,64 @@
     <Turret_2_A100_T49>
       <userString>	#usa_vehicles:Turret_2_A100_T49	</userString>
       <tags></tags>
-      <level>	8	</level>
-      <price>	32500	</price>
+      <level>	9	</level>
+      <price>	64000	</price>
       <unlocks>
-        <gun>	_152mm_Gun_Launcher_M81	  <cost>	18900	</cost>
+        <gun>	_152mm_Gun_Launcher_M81	  <cost>	52000	</cost>
         </gun>
       </unlocks>
       <armor>
-        <armor_1>	19.1	</armor_1>
-        <armor_2>	38.1	</armor_2>
+        <armor_1>	38.1	</armor_1>
         <armor_3>	15.9	</armor_3>
         <armor_4>	15.9	</armor_4>
         <armor_5>	12.7	</armor_5>
-        <armor_6>	12.7	</armor_6>
         <armor_7>	15.9	</armor_7>
-        <armor_8>	12.7	</armor_8>
-        <armor_9>	0	</armor_9>
-        <armor_10>	12.7	</armor_10>
-        <armor_11>	12.7	</armor_11>
-        <armor_14>	0	</armor_14>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25.4	</armor_9>
       </armor>
-      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	360	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	410	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.218	</invisibilityFactor>
       <guns>
         <_90mm_Gun_T132E3>	shared	  <maxAmmo>	46	</maxAmmo>
           <armor>
-            <armor_1>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_6>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
-          <reloadTime>	6.3	</reloadTime>
+          <reloadTime>	6	</reloadTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.375 10 0.388889 7.8 0.611111 7.8 0.625 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_03.model	</destroyed>
@@ -820,22 +805,18 @@
         </_90mm_Gun_T132E3>
         <_152mm_Gun_Launcher_M81>	shared	  <maxAmmo>	22	</maxAmmo>
           <unlocks>
-            <vehicle>	A89_T54E1	  <cost>	190100	</cost>
+            <vehicle>	A116_XM551	  <cost>	229000	</cost>
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_6>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.6	</shotDispersionRadius>
@@ -923,15 +904,15 @@
     </Turret_2_A100_T49>
   </turrets0>
   <engines>
-    <Continental_AOS-895-3>	shared	  <unlocks>
-        <engine>	Continental_AOSI-895-5	  <cost>	18000	</cost>
+    <Continental_AOSI-895-5A>	shared	  <unlocks>
+        <engine>	Continental_AOSI-895-5B	  <cost>	28750	</cost>
         </engine>
       </unlocks>
-    </Continental_AOS-895-3>
-    <Continental_AOSI-895-5>	shared	</Continental_AOSI-895-5>
+    </Continental_AOSI-895-5A>
+    <Continental_AOSI-895-5B>	shared	</Continental_AOSI-895-5B>
   </engines>
   <fuelTanks>
-    <Heavy>	shared	</Heavy>
+    <Large>	shared	</Large>
   </fuelTanks>
   <radios>
     <AN-GRC-3>	shared	  <unlocks>
@@ -944,12 +925,12 @@
   <physics>
     <detailed>
       <engines>
-        <Continental_AOS-895-3>
-          <smplEnginePower>	528.6406	</smplEnginePower>
-        </Continental_AOS-895-3>
-        <Continental_AOSI-895-5>
-          <smplEnginePower>	581.5046	</smplEnginePower>
-        </Continental_AOSI-895-5>
+        <Continental_AOSI-895-5A>
+          <smplEnginePower>	800	</smplEnginePower>
+        </Continental_AOSI-895-5A>
+        <Continental_AOSI-895-5B>
+          <smplEnginePower>	900	</smplEnginePower>
+        </Continental_AOSI-895-5B>
       </engines>
       <chassis>
         <Chassis_A100_T49>

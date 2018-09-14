@@ -44,7 +44,7 @@ class BattleFeedbackAdaptor(IBattleController):
     Class adapts some events from Avatar, Vehicle, ... to GUI event (FEEDBACK_EVENT_ID) to display
     response on player actions.
     """
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onDevelopmentInfoSet', 'onMinimapFeedbackReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -65,6 +65,8 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onMinimapVehicleRemoved = Event.Event()
         self.onMinimapFeedbackReceived = Event.Event()
         self.onDevelopmentInfoSet = Event.Event()
+        self.onStaticMarkerAdded = Event.Event()
+        self.onStaticMarkerRemoved = Event.Event()
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.FEEDBACK
@@ -200,6 +202,9 @@ class BattleFeedbackAdaptor(IBattleController):
 
     def setVehicleNewHealth(self, vehicleID, newHealth, attackerID=0, attackReasonID=0):
         self._setVehicleHealthChanged(vehicleID, newHealth, attackerID, attackReasonID)
+
+    def invalidateStun(self, vehicleID, stunDuration):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_STUN, vehicleID, stunDuration)
 
     def markCellOnMinimap(self, cell):
         self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_CELL, 0, (cell, _CELL_BLINKING_DURATION))

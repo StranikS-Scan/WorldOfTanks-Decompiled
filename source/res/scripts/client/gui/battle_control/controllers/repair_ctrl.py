@@ -128,7 +128,7 @@ class ReadyState(RepairState):
 
 
 class RepairingState(TimeTrackState):
-    __slots__ = ()
+    __slots__ = ('_isPlayerInPoint',)
 
     def __init__(self, pointIndex):
         super(RepairingState, self).__init__(pointIndex, REPAIR_STATE_ID.REPAIRING, _ACTION.START_REPAIR, _ACTION.RESTART_REPAIR)
@@ -139,7 +139,7 @@ class RepairingState(TimeTrackState):
 
 
 class CooldownState(TimeTrackState):
-    __slots__ = ()
+    __slots__ = ('_isPlayerInPoint',)
 
     def __init__(self, pointIndex):
         super(CooldownState, self).__init__(pointIndex, REPAIR_STATE_ID.COOLDOWN, _ACTION.COMPLETE_REPAIR, _ACTION.ENTER_WHILE_CD, _ACTION.LEAVE_WHILE_CD)

@@ -3,7 +3,7 @@
 import ResMgr
 import nations
 from items import _xml
-from constants import IS_CLIENT, ITEM_DEFS_PATH
+from constants import IS_CLIENT, IS_CELLAPP, ITEM_DEFS_PATH
 if IS_CLIENT:
     from helpers import i18n
 ITEM_TYPE_NAMES = ('_reserved', 'vehicle', 'vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio', 'tankman', 'optionalDevice', 'shell', 'equipment')
@@ -44,6 +44,8 @@ def init(preloadEverything, pricesToCollect=None):
         pricesToCollect['notInShopInscriptionGroups'] = [ set() for x in nations.NAMES ]
         pricesToCollect['playerEmblemGroupPriceFactors'] = {}
         pricesToCollect['notInShopPlayerEmblemGroups'] = set()
+    from items import stun
+    stun.init()
     from items import vehicles
     vehicles.init(preloadEverything, pricesToCollect)
     from items import tankmen

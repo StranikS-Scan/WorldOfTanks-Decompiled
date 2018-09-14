@@ -278,6 +278,13 @@ class _ReceivedWorldCollisionHitRibbon(_SingleVehicleReceivedHitRibbon):
         return BATTLE_EFFICIENCY_TYPES.RECEIVED_WORLD_COLLISION
 
 
+class _StunAssistRibbon(_SingleVehicleDamageRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.STUN
+
+
 class _MultiVehicleRibbon(_Ribbon):
     __slots__ = ('_hits',)
 
@@ -361,18 +368,21 @@ class _DamageRibbonClassFactory(_RibbonClassFactory):
 
 
 class _AssistRibbonClassFactory(_RibbonClassFactory):
-    __slots__ = ('__trackAssistCls', '__radioAssistCls')
+    __slots__ = ('__trackAssistCls', '__radioAssistCls', '__stunAssistCls')
 
-    def __init__(self, trackAssistCls, radioAssistCls):
+    def __init__(self, trackAssistCls, radioAssistCls, stunAssistCls):
         super(_AssistRibbonClassFactory, self).__init__()
         self.__trackAssistCls = trackAssistCls
         self.__radioAssistCls = radioAssistCls
+        self.__stunAssistCls = stunAssistCls
 
     def getRibbonClass(self, event):
         if event.getBattleEventType() == _BET.TRACK_ASSIST:
             return self.__trackAssistCls
+        elif event.getBattleEventType() == _BET.RADIO_ASSIST:
+            return self.__radioAssistCls
         else:
-            return self.__radioAssistCls if event.getBattleEventType() == _BET.RADIO_ASSIST else None
+            return self.__stunAssistCls if event.getBattleEventType() == _BET.STUN_ASSIST else None
 
 
 _RIBBON_TYPES_AGGREGATED_WITH_KILL_RIBBON = (BATTLE_EFFICIENCY_TYPES.DAMAGE,
@@ -392,7 +402,8 @@ _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE:
  FEEDBACK_EVENT_ID.ENEMY_DAMAGED_DEVICE_PLAYER: _RibbonSingleClassFactory(_ReceivedCriticalHitRibbon),
  FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY: _DamageRibbonClassFactory(damageCls=_CausedDamageRibbon, fireCls=_FireHitRibbon, ramCls=_RamHitRibbon, wcCls=_WorldCollisionHitRibbon),
  FEEDBACK_EVENT_ID.ENEMY_DAMAGED_HP_PLAYER: _DamageRibbonClassFactory(damageCls=_ReceivedDamageHitRibbon, fireCls=_ReceivedFireHitRibbon, ramCls=_ReceivedRamHitRibbon, wcCls=_ReceivedWorldCollisionHitRibbon),
- FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_KILL_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon)}
+ FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_KILL_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_STUN_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon)}
 
 def _createRibbonFromPlayerFeedbackEvent(ribbonID, event):
     etype = event.getType()

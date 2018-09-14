@@ -23,10 +23,11 @@ class SiegeModeControl(InputHandlerCommand):
         keyCaptured = cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown
         if not keyCaptured:
             return False
-        vehicle = BigWorld.player().getVehicleAttached()
-        if vehicle.isAlive():
-            self.__switchSiegeMode()
-        return True
+        else:
+            vehicle = BigWorld.player().getVehicleAttached()
+            if vehicle is not None and vehicle.isAlive():
+                self.__switchSiegeMode()
+            return True
 
     def notifySiegeModeChanged(self, vehicle, newState, timeToNextMode):
         if not vehicle.isPlayerVehicle:

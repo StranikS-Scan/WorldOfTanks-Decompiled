@@ -160,7 +160,10 @@ class MonitorSettings(object):
 
     @property
     def videoModes(self):
-        return self.__suitableVideoModes[self.activeMonitor]
+        return self.videoModesForAdapterOutputIndex(self.activeMonitor)
+
+    def videoModesForAdapterOutputIndex(self, adapterOutputIndex):
+        return self.__suitableVideoModes[adapterOutputIndex]
 
     @property
     def currentVideoMode(self):

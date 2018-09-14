@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/chat_cmd_ctrl.py
+import cPickle
 import math
 import weakref
 import CommandMapping
+import Math
+from battleground.StunAreaManager import g_stunAreaManager
 from debug_utils import LOG_ERROR
-from gui.battle_control import avatar_getter
+from gui.battle_control import avatar_getter, minimap_utils
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, GUN_RELOADING_VALUE_TYPE
 from gui.battle_control.controllers.interfaces import IBattleController
 from messenger import MessengerEntry
@@ -25,6 +28,7 @@ class CHAT_COMMANDS(object):
     SUPPORTMEWITHFIRE = 'SUPPORTMEWITHFIRE'
     ATTACKENEMY = 'ATTACKENEMY'
     STOP = 'STOP'
+    SPG_AIM_AREA = 'SPG_AIM_AREA'
 
 
 KB_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: CommandMapping.CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET,
@@ -103,6 +107,19 @@ class ChatCommandsController(IBattleController):
                 else:
                     self.handleChatCommand(action)
 
+    def handleSPGAimAreaCommand(self, player):
+        boundingBox = player.arena.arenaType.boundingBox
+        desiredShotPoint = player.inputHandler.getMarkerPoint()
+        if desiredShotPoint is not None:
+            reloadTime = self.__getReloadTime()
+            cellIdx = minimap_utils.getCellIdxFromPosition(desiredShotPoint, boundingBox)
+            command = self.proto.battleCmd.createSPGAimAreaCommand(desiredShotPoint, cellIdx, reloadTime)
+            if command:
+                self.__sendChatCommand(command)
+            else:
+                LOG_ERROR('Failed to create {} command: {}'.format(CHAT_COMMANDS.SPG_AIM_AREA, (desiredShotPoint, boundingBox, reloadTime)))
+        return
+
     def handleChatCommand(self, action, targetID=None):
         if action in TARGET_ACTIONS:
             self.sendTargetedCommand(action, targetID)
@@ -131,7 +148,10 @@ class ChatCommandsController(IBattleController):
     def sendTargetedCommand(self, cmdName, targetID):
         if not avatar_getter.isVehicleAlive():
             return
-        command = self.proto.battleCmd.createByNameTarget(cmdName, targetID)
+        if cmdName == CHAT_COMMANDS.ATTACKENEMY:
+            command = self.proto.battleCmd.createSPGAimTargetCommand(targetID, self.__getReloadTime())
+        else:
+            command = self.proto.battleCmd.createByNameTarget(cmdName, targetID)
         if command:
             self.__sendChatCommand(command)
         else:
@@ -149,6 +169,13 @@ class ChatCommandsController(IBattleController):
             self.__sendChatCommand(command)
         else:
             LOG_ERROR('Can not create reloading command')
+
+    def __getReloadTime(self):
+        reloadTime = 0
+        reloadState = self.__ammo.getGunReloadingState()
+        if reloadState.getValueType() == GUN_RELOADING_VALUE_TYPE.TIME:
+            reloadTime = reloadState.getTimeLeft()
+        return reloadTime
 
     def __playSound(self, cmd):
         soundNotifications = avatar_getter.getSoundNotifications()
@@ -221,7 +248,12 @@ class ChatCommandsController(IBattleController):
         if cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
             return
         if cmd.isOnMinimap():
-            self.__feedback.markCellOnMinimap(cmd.getCellIndex())
+            if cmd.isSPGAimCommand():
+                dsp, cellIdx, reloadTime = cPickle.loads(cmd.getCommandData()['strArg1'])
+                senderID = cmd.getSenderID()
+                g_stunAreaManager.manageStunArea(Math.Vector3(*dsp), senderID)
+            else:
+                self.__feedback.markCellOnMinimap(cmd.getCellIndex())
         elif cmd.isPrivate():
             self.__handlePrivateCommand(cmd)
         else:

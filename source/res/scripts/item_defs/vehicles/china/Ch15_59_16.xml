@@ -41,7 +41,7 @@
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
-      <repairCost>	2.0	</repairCost>
+      <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/chinese/Ch15_59_16/normal/lod0/Hull.model	</undamaged>
@@ -100,12 +100,12 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.15	</vehicleMovement>
+        <vehicleRotation>	0.15	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/chinese/Ch15_59_16/normal/lod0/Chassis.model	</undamaged>
@@ -446,12 +446,12 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	54	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	135	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/chinese/Ch15_59_16/normal/lod0/Chassis.model	</undamaged>
@@ -804,14 +804,14 @@
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57mm_55-57FG>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_57mm_55-57FGA>	shared	  <maxAmmo>	70	</maxAmmo>
           <unlocks>
             <gun>	_76mm_54-76T	  <cost>	4300	</cost>
             </gun>
@@ -826,7 +826,7 @@
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	2.9	</reloadTime>
+          <reloadTime>	3.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -860,7 +860,7 @@
           <camouflage>
             <tiling>	1 0.5 0.000000 0.2	</tiling>
           </camouflage>
-        </_57mm_55-57FG>
+        </_57mm_55-57FGA>
         <_76mm_54-76T>	shared	  <maxAmmo>	45	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_Ch15_59_16	  <cost>	4500	</cost>
@@ -875,14 +875,14 @@
             </armor_3>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	3.5	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	4.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.380783 5 0.444444 3 0.555556 3 0.619218 5 1 5	</maxPitch>
@@ -967,8 +967,8 @@
       <level>	6	</level>
       <price>	18000	</price>
       <unlocks>
-        <gun>	_76mm_54-76TG	  <cost>	5800	</cost>
-        </gun>
+        <vehicle>	Ch16_WZ_131	  <cost>	48600	</cost>
+        </vehicle>
       </unlocks>
       <armor>
         <armor_1>	45	</armor_1>
@@ -984,21 +984,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4600	</weight>
-      <maxHealth>	150	</maxHealth>
+      <maxHealth>	160	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57mm_55-57FG>	shared	  <maxAmmo>	70	</maxAmmo>
+        <_57mm_55-57FGA>	shared	  <maxAmmo>	70	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -1009,7 +1009,7 @@
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
+          <reloadTime>	3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -1043,7 +1043,7 @@
           <camouflage>
             <tiling>	1 0.5 0.000000 0.2	</tiling>
           </camouflage>
-        </_57mm_55-57FG>
+        </_57mm_55-57FGA>
         <_76mm_54-76T>	shared	  <maxAmmo>	45	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -1054,14 +1054,14 @@
             </armor_3>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.380783 5 0.444444 3 0.555556 3 0.619218 5 1 5	</maxPitch>
@@ -1091,61 +1091,6 @@
             <tiling>	1 0.5 0.000000 0.2	</tiling>
           </camouflage>
         </_76mm_54-76T>
-        <_76mm_54-76TG>	shared	  <maxAmmo>	45	</maxAmmo>
-          <unlocks>
-            <vehicle>	Ch16_WZ_131	  <cost>	43000	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	9	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <clip>
-            <count>	5	</count>
-            <rate>	45	</rate>
-          </clip>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 0.380783 5 0.444444 3 0.555556 3 0.619218 5 1 5	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/chinese/Ch15_59_16/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch15_59_16/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch15_59_16/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch15_59_16/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch15_59_16/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.00131106 -0.00168223 1.31949	</rayStart>
-              <rayEnd>	-0.164722 -0.0901891 1.30361	</rayEnd>
-              <rayUp>	0.06 0.051 5	</rayUp>
-              <size>	0.4	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_medium_mb	</effects>
-          <camouflage>
-            <tiling>	1 0.5 0.000000 0.2	</tiling>
-          </camouflage>
-        </_76mm_54-76TG>
       </guns>
       <models>
         <undamaged>	vehicles/chinese/Ch15_59_16/normal/lod0/Turret_02.model	</undamaged>
@@ -1195,7 +1140,7 @@
   </turrets0>
   <engines>
     <_Type_102>	shared	  <unlocks>
-        <engine>	_12150L3	  <cost>	1500	</cost>
+        <engine>	_12150L3	  <cost>	4400	</cost>
         </engine>
       </unlocks>
     </_Type_102>
@@ -1221,10 +1166,10 @@
     <detailed>
       <engines>
         <_Type_102>
-          <smplEnginePower>	422.9124	</smplEnginePower>
+          <smplEnginePower>	400	</smplEnginePower>
         </_Type_102>
         <_12150L3>
-          <smplEnginePower>	454.6309	</smplEnginePower>
+          <smplEnginePower>	450	</smplEnginePower>
         </_12150L3>
       </engines>
       <chassis>
@@ -1300,11 +1245,6 @@
     </detailed>
   </physics>
   <clientAdjustmentFactors>
-    <guns>
-      <_76mm_54-76TG>
-        <delta>	1.121121121	</delta>
-      </_76mm_54-76TG>
-    </guns>
     <armour>	0.858354398	</armour>
   </clientAdjustmentFactors>
   <effects>

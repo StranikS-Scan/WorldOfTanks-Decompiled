@@ -6,25 +6,30 @@
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
-          <and>
-            <win></win>
-            <or>
-              <unit>
-                <and>
-                  <results>
-                    <key>	percentFromTotalTeamDamage	</key>
-                    <greaterOrEqual>	20	</greaterOrEqual>
-                  </results>
-                </and>
-              </unit>
-              <and>
+          <or>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <eventCount></eventCount>
+              <greaterOrEqual>	6	</greaterOrEqual>
+            </vehicleDamage>
+            <results>
+              <key>	stunNum	</key>
+              <greaterOrEqual>	8	</greaterOrEqual>
+            </results>
+            <unit>
+              <or>
+                <unitVehicleDamage>
+                  <attackReason>	0	</attackReason>
+                  <eventCount></eventCount>
+                  <greaterOrEqual>	6	</greaterOrEqual>
+                </unitVehicleDamage>
                 <results>
-                  <key>	percentFromTotalTeamDamage	</key>
-                  <greaterOrEqual>	20	</greaterOrEqual>
+                  <key>	stunNum	</key>
+                  <greaterOrEqual>	8	</greaterOrEqual>
                 </results>
-              </and>
-            </or>
-          </and>
+              </or>
+            </unit>
+          </or>
         </postBattle>
       </conditions>
       <bonus>
@@ -39,24 +44,31 @@
       <conditions>
         <postBattle>
           <and>
-            <win></win>
             <or>
+              <vehicleDamage>
+                <attackReason>	0	</attackReason>
+                <eventCount></eventCount>
+                <greaterOrEqual>	6	</greaterOrEqual>
+              </vehicleDamage>
+              <results>
+                <key>	stunNum	</key>
+                <greaterOrEqual>	8	</greaterOrEqual>
+              </results>
               <unit>
-                <and>
+                <or>
+                  <unitVehicleDamage>
+                    <attackReason>	0	</attackReason>
+                    <eventCount></eventCount>
+                    <greaterOrEqual>	6	</greaterOrEqual>
+                  </unitVehicleDamage>
                   <results>
-                    <key>	percentFromTotalTeamDamage	</key>
-                    <greaterOrEqual>	20	</greaterOrEqual>
+                    <key>	stunNum	</key>
+                    <greaterOrEqual>	8	</greaterOrEqual>
                   </results>
-                </and>
+                </or>
               </unit>
-              <and>
-                <results>
-                  <key>	percentFromTotalTeamDamage	</key>
-                  <greaterOrEqual>	20	</greaterOrEqual>
-                </results>
-              </and>
             </or>
-            <isAlive></isAlive>
+            <win></win>
           </and>
         </postBattle>
       </conditions>

@@ -38,6 +38,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
     PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
     PLAYER_ERRORS_EQUIPMENT_ALREADYACTIVATED = '#ingame_gui:player_errors/equipment/alreadyActivated'
+    PLAYER_ERRORS_EQUIPMENT_ISINCOOLDOWN = '#ingame_gui:player_errors/equipment/isInCooldown'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE = '#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_ALLTANKMENARESAFE = '#ingame_gui:player_errors/equipment/medkit/allTankmenAreSafe'
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_DEVICEISNOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/deviceIsNotDamaged'
@@ -95,7 +96,10 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_POSITIVE = '#ingame_gui:chat_shortcuts/positive'
     CHAT_SHORTCUTS_NEGATIVE = '#ingame_gui:chat_shortcuts/negative'
     CHAT_SHORTCUTS_ATTENTION_TO_CELL = '#ingame_gui:chat_shortcuts/attention_to_cell'
+    CHAT_SHORTCUTS_SPG_AIM_AREA = '#ingame_gui:chat_shortcuts/spg_aim_area'
+    CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading'
     CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
+    CHAT_SHORTCUTS_ATTACK_ENEMY_RELOADING = '#ingame_gui:chat_shortcuts/attack_enemy_reloading'
     CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE = '#ingame_gui:chat_example/support_me_with_fire'
     CHAT_EXAMPLE_RELOADING_GUN = '#ingame_gui:chat_example/reloading_gun'
     CHAT_EXAMPLE_RELOADING_CASSETTE = '#ingame_gui:chat_example/reloading_cassette'
@@ -113,6 +117,7 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_NEGATIVE = '#ingame_gui:chat_example/negative'
     CHAT_EXAMPLE_ATTENTION_TO_CELL = '#ingame_gui:chat_example/attention_to_cell'
     CHAT_EXAMPLE_ATTACK_ENEMY = '#ingame_gui:chat_example/attack_enemy'
+    CHAT_EXAMPLE_SPG_AIM_AREA = '#ingame_gui:chat_example/spg_aim_area'
     STATISTICS_HEADER = '#ingame_gui:statistics/header'
     STATISTICS_TEAM1TITLE = '#ingame_gui:statistics/team1title'
     STATISTICS_TEAM2TITLE = '#ingame_gui:statistics/team2title'
@@ -161,6 +166,7 @@ class INGAME_GUI(object):
     SHELLS_KINDS_ARMOR_PIERCING_HE = '#ingame_gui:shells_kinds/ARMOR_PIERCING_HE'
     SHELLS_KINDS_ARMOR_PIERCING_CR = '#ingame_gui:shells_kinds/ARMOR_PIERCING_CR'
     SHELLS_KINDS_PARAMS = '#ingame_gui:shells_kinds/params'
+    SHELLS_KINDS_STUNPARAMS = '#ingame_gui:shells_kinds/stunParams'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_NORMAL = '#ingame_gui:damage_panel/devices/turretRotator/normal'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_CRITICAL = '#ingame_gui:damage_panel/devices/turretRotator/critical'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_DESTROYED = '#ingame_gui:damage_panel/devices/turretRotator/destroyed'
@@ -206,6 +212,7 @@ class INGAME_GUI(object):
     DAMAGE_PANEL_CREW_LOADER2_DESTROYED = '#ingame_gui:damage_panel/crew/loader2/destroyed'
     CRUISE_CTRL_SPEEDMETRIC = '#ingame_gui:cruise_ctrl/speedMetric'
     CONSUMABLES_PANEL_EQUIPMENT_TOOLTIP_EMPTY = '#ingame_gui:consumables_panel/equipment/tooltip/empty'
+    CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS = '#ingame_gui:consumables_panel/equipment/cooldownSeconds'
     TIMER_WAITING = '#ingame_gui:timer/waiting'
     TIMER_STARTING = '#ingame_gui:timer/starting'
     TIMER_STARTED = '#ingame_gui:timer/started'
@@ -453,6 +460,7 @@ class INGAME_GUI(object):
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_CR'
     DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE = '#ingame_gui:damageLog/shellType/HOLLOW_CHARGE'
     DAMAGELOG_MULTIPLIER = '#ingame_gui:damageLog/multiplier'
+    EFFICIENCYRIBBONS_STUN = '#ingame_gui:efficiencyRibbons/stun'
     RESPAWNVIEW_TITLE = '#ingame_gui:respawnView/title'
     RESPAWNVIEW_ADDITIONALTIP = '#ingame_gui:respawnView/additionalTip'
     RESPAWNVIEW_ADDITIONALTIPLIMITED = '#ingame_gui:respawnView/additionalTipLimited'
@@ -500,6 +508,11 @@ class INGAME_GUI(object):
     SIEGEMODE_HINT_FORMODE_2 = '#ingame_gui:siegeMode/hint/forMode/2'
     SIEGEMODE_HINT_FORMODE_3 = '#ingame_gui:siegeMode/hint/forMode/3'
     SIEGEMODE_HINT_NOBINDING = '#ingame_gui:siegeMode/hint/noBinding'
+    TRAJECTORYVIEW_HINT_NOBINDINGKEY = '#ingame_gui:trajectoryView/hint/noBindingKey'
+    TRAJECTORYVIEW_HINT_ALTERNATEMODELEFT = '#ingame_gui:trajectoryView/hint/alternateModeLeft'
+    TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT = '#ingame_gui:trajectoryView/hint/alternateModeRight'
+    STUN_INDICATOR = '#ingame_gui:stun/indicator'
+    STUN_SECONDS = '#ingame_gui:stun/seconds'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,
@@ -516,7 +529,10 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_POSITIVE,
      CHAT_SHORTCUTS_NEGATIVE,
      CHAT_SHORTCUTS_ATTENTION_TO_CELL,
-     CHAT_SHORTCUTS_ATTACK_ENEMY)
+     CHAT_SHORTCUTS_SPG_AIM_AREA,
+     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING,
+     CHAT_SHORTCUTS_ATTACK_ENEMY,
+     CHAT_SHORTCUTS_ATTACK_ENEMY_RELOADING)
     CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
      CHAT_EXAMPLE_RELOADING_GUN,
      CHAT_EXAMPLE_RELOADING_CASSETTE,
@@ -533,7 +549,8 @@ class INGAME_GUI(object):
      CHAT_EXAMPLE_POSITIVE,
      CHAT_EXAMPLE_NEGATIVE,
      CHAT_EXAMPLE_ATTENTION_TO_CELL,
-     CHAT_EXAMPLE_ATTACK_ENEMY)
+     CHAT_EXAMPLE_ATTACK_ENEMY,
+     CHAT_EXAMPLE_SPG_AIM_AREA)
     EFFICIENCYRIBBONS_ENUM = (EFFICIENCYRIBBONS_ARMOR,
      EFFICIENCYRIBBONS_CAPTURE,
      EFFICIENCYRIBBONS_DAMAGE,
@@ -550,7 +567,8 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_RECEIVEDDAMAGE,
      EFFICIENCYRIBBONS_RECEIVEDBURN,
      EFFICIENCYRIBBONS_RECEIVEDRAM,
-     EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION)
+     EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION,
+     EFFICIENCYRIBBONS_STUN)
     SIEGEMODE_HINT_FORMODE_ENUM = (SIEGEMODE_HINT_FORMODE_0,
      SIEGEMODE_HINT_FORMODE_1,
      SIEGEMODE_HINT_FORMODE_2,

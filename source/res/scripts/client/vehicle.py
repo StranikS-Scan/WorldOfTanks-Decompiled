@@ -1,37 +1,37 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vehicle.py
-import weakref
-import random
 import math
+import random
+import weakref
+import AreaDestructibles
+import ArenaType
+import BattleReplay
+import DestructiblesCache
 import Math
-from AvatarInputHandler.aih_constants import ShakeReason
 import SoundGroups
-from VehicleEffects import DamageFromShotDecoder
-from helpers import dependency
-from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicle_systems.tankStructure import TankPartNames
-from debug_utils import *
+import TriggersManager
 import constants
+import nations
+import physics_shared
+from AvatarInputHandler.aih_constants import ShakeReason
+from ModelHitTester import segmentMayHitVehicle, SegmentCollisionResult
+from TriggersManager import TRIGGER_TYPE
+from VehicleEffects import DamageFromShotDecoder
+from VehicleObserver import VehicleObserver
+from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE
+from debug_utils import *
+from gui.LobbyContext import g_lobbyContext
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
+from gun_rotation_shared import decodeGunAngles
+from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
 from items import vehicles
-from gui.LobbyContext import g_lobbyContext
-import AreaDestructibles
-import DestructiblesCache
-import nations
-import physics_shared
-import ArenaType
-import BattleReplay
-import TriggersManager
-from TriggersManager import TRIGGER_TYPE
-from ModelHitTester import segmentMayHitVehicle, SegmentCollisionResult
-from gun_rotation_shared import decodeGunAngles
-from constants import SPT_MATKIND
-from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS, EFFECT_MATERIAL_NAMES_BY_INDEXES
+from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
+from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems import appearance_cache
-from VehicleObserver import VehicleObserver
+from vehicle_systems.tankStructure import TankPartNames
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
@@ -345,6 +345,28 @@ class Vehicle(BigWorld.Entity, VehicleObserver):
                 self.__onVehicleDeath()
             return
 
+    def set_stunInfo(self, prev):
+        LOG_DEBUG('Set stun info(curr,~ prev): ', self.stunInfo, prev)
+        self.updateStunInfo()
+
+    def updateStunInfo(self):
+        attachedVehicle = BigWorld.player().getVehicleAttached()
+        if attachedVehicle is None:
+            return
+        else:
+            isAttachedVehicle = self.id == attachedVehicle.id
+            if g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+                stunDuration = self.stunInfo - BigWorld.serverTime() if self.stunInfo else 0.0
+                if isAttachedVehicle:
+                    self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.STUN, stunDuration)
+                if not self.isPlayerVehicle:
+                    ctrl = self.guiSessionProvider.shared.feedback
+                    if ctrl is not None:
+                        ctrl.invalidateStun(self.id, stunDuration)
+            else:
+                LOG_WARNING('Stun features is disabled!')
+            return
+
     def showAmmoBayEffect(self, mode, fireballVolume, projectedTurretSpeed):
         if self.isStarted:
             self.appearance.showAmmoBayEffect(mode, fireballVolume)
@@ -373,24 +395,25 @@ class Vehicle(BigWorld.Entity, VehicleObserver):
         isTrackCollision = bool(miscFlags & 1)
         isSptCollision = bool(miscFlags >> 1 & 1)
         isSptDestroyed = bool(miscFlags >> 2 & 1)
+        if isSptDestroyed:
+            return
         hitPoint = point + self.position if isTrackCollision else point
         surfNormal = normal
         matKind = SPT_MATKIND.SOLID
         if destrEffectIdx < 0:
+            if isTrackCollision:
+                damageFactor = damageLeftTrack if damageLeftTrack > damageRightTrack else damageRightTrack
+            else:
+                damageFactor = damageHull
             if not isSptCollision:
                 surfaceMaterial = calcSurfaceMaterialNearPoint(hitPoint, normal, self.spaceID)
                 hitPoint, surfNormal, matKind, effectIdx = surfaceMaterial
             else:
-                if isSptDestroyed:
-                    return
                 effectIdx = EFFECT_MATERIAL_INDEXES_BY_NAMES['wood']
-        else:
-            effectIdx = destrEffectIdx
-        if isTrackCollision:
-            damageFactor = damageLeftTrack if damageLeftTrack > damageRightTrack else damageRightTrack
-        else:
-            damageFactor = damageHull
-        self.__showStaticCollisionEffect(energy, matKind, effectIdx, hitPoint, surfNormal, isTrackCollision, damageFactor * 100.0)
+            if matKind != 0:
+                self.__showStaticCollisionEffect(energy, matKind, effectIdx, hitPoint, surfNormal, isTrackCollision, damageFactor * 100.0)
+        if self.isPlayerVehicle:
+            self.appearance.executeRammingVibrations(matKind)
 
     def getAimParams(self):
         if self.appearance is not None:
@@ -501,6 +524,8 @@ class Vehicle(BigWorld.Entity, VehicleObserver):
         self.set_publicStateModifiers()
         self.set_damageStickers()
         self.guiSessionProvider.startVehicleVisual(self.proxy, True)
+        if self.stunInfo > 0.0:
+            self.updateStunInfo()
         if not self.isAlive():
             self.__onVehicleDeath(True)
         if self.isTurretMarkedForDetachment:
@@ -575,8 +600,6 @@ class Vehicle(BigWorld.Entity, VehicleObserver):
         effectName = postfix % effectName
         if effectName in self.typeDescriptor.type.effects:
             self.showCollisionEffect(hitPoint, effectName, normal, isTrackCollision, damageFactor, self.__getImpulse(self.getSpeed()))
-        if self.isPlayerVehicle:
-            self.appearance.executeRammingVibrations(matKind)
 
     def __startWGPhysics(self):
         if not hasattr(self.filter, 'setVehiclePhysics'):

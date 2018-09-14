@@ -56,6 +56,13 @@ class ScreenCastController(IScreenCastController, IArenaVehiclesController):
         """
         self.__checkDbID()
 
+    def onDisconnected(self):
+        """Listener for event onDisconnected
+        """
+        self._dbID = 0
+        self._isSet = False
+        BigWorld.Screener.setUserId(0)
+
     def __checkDbID(self):
         """Check for database id, if we got one, set controller
         """

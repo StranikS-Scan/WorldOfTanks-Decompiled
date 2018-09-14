@@ -52,6 +52,8 @@ class Preferences(dict):
             except ValueError:
                 LOG_WARNING('Ignoring login info from preferences.xml')
 
+        self.__invalidateSettingsSanity()
+
     def writeLoginInfo(self):
         _LOG_PERSONAL_DATA('Wrote login info into preferences.xml: {0}'.format(self))
         if self.__oldFormat:
@@ -59,6 +61,12 @@ class Preferences(dict):
             Settings.g_instance.userPrefs.write(Settings.KEY_LOGIN_INFO, '')
             self.__oldFormat = False
         Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].writeString('data', _crypt(json.dumps(dict(self), encoding='utf-8')))
+
+    def __invalidateSettingsSanity(self):
+        if not GUI_SETTINGS.rememberPassVisible:
+            self['remember_user'] = False
+            self['token2'] = ''
+            self['password_length'] = 0
 
     def __readOldPreferencesFormat(self, loginInfo):
         self['login'] = BigWorld.wg_ucpdata(loginInfo.readString('login', ''))

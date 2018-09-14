@@ -352,16 +352,17 @@ class DeclineSearchUnitCtx(UnitRequestCtx):
         return _REQUEST_TYPE.DECLINE_SEARCH
 
 
-@ReprInjector.withParent(('selectVehInvID', 'selectVehInvID'), ('getGamePlayMask', 'gamePlayMask'))
+@ReprInjector.withParent(('selectVehInvID', 'selectVehInvID'), ('getGamePlayMask', 'gamePlayMask'), ('getDemoArenaTypeID', 'getDemoArenaTypeID'))
 class BattleQueueUnitCtx(AutoSearchUnitCtx):
     """
     Context for enqueue unit request
     """
-    __slots__ = ('selectVehInvID', '__isActionStartBattle')
+    __slots__ = ('selectVehInvID', '__isActionStartBattle', 'mapID')
 
     def __init__(self, waitingID='', action=1, vehTypes=None):
         super(BattleQueueUnitCtx, self).__init__(waitingID=waitingID, action=action, vehTypes=vehTypes)
         self.selectVehInvID = 0
+        self.mapID = 0
 
     def getRequestType(self):
         return _REQUEST_TYPE.BATTLE_QUEUE
@@ -371,6 +372,12 @@ class BattleQueueUnitCtx(AutoSearchUnitCtx):
         Getter for selected gameplay mask.
         """
         return gameplay_ctx.getMask()
+
+    def getDemoArenaTypeID(self):
+        """
+        Gets map arena type ID
+        """
+        return self.mapID
 
 
 class RosterSlotCtx(object):

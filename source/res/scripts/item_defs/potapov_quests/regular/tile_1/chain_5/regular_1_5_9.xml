@@ -7,12 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <attackReason>	0	</attackReason>
-              <whileEnemyMoving>	20	</whileEnemyMoving>
-              <eventCount></eventCount>
-              <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleDamage>
+            <results>
+              <key>	critsCount	</key>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -32,12 +30,10 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <attackReason>	0	</attackReason>
-              <whileEnemyMoving>	20	</whileEnemyMoving>
-              <eventCount></eventCount>
-              <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleDamage>
+            <results>
+              <key>	critsCount	</key>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </results>
             <isAlive></isAlive>
           </and>
         </postBattle>

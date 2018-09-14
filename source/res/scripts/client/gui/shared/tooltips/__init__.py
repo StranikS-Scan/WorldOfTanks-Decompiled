@@ -199,14 +199,14 @@ class ToolTipParameterField(ToolTipDataField):
         return None
 
 
-def getComplexStatus(statusKey):
+def getComplexStatus(statusKey, **kwargs):
     try:
         if not statusKey:
             return (None, None)
         headerKey = statusKey + '/header'
         textKey = statusKey + '/text'
-        header = makeString(headerKey)
-        text = makeString(textKey)
+        header = makeString(headerKey, **kwargs)
+        text = makeString(textKey, **kwargs)
         if headerKey == TOOLTIPS.VEHICLESTATUS_INPREMIUMIGRONLY_HEADER:
             icon = icons.premiumIgrSmall()
             header = makeString(headerKey, icon=icon)

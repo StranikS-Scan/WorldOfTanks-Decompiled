@@ -42,7 +42,7 @@ class FragsCollectableStats(broker.CollectableStats):
 
 
 class VehicleFragsComponent(vehicle.VehicleStatsComponent):
-    __slots__ = ('_frags',)
+    __slots__ = ('_frags', '_vehicleID')
 
     def __init__(self):
         super(VehicleFragsComponent, self).__init__()

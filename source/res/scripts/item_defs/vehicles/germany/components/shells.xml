@@ -924,6 +924,7 @@
     <userString>	#germany_vehicles:_90mm_DM13	</userString>
     <icon>	ap	</icon>
     <price>	330	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	90	</caliber>
     <isTracer>	true	</isTracer>
@@ -933,6 +934,20 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_DM13>
+  <_90mm_DM13A>
+    <id>	166	</id>
+    <userString>	#germany_vehicles:_90mm_DM13A	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	390	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_DM13A>
   <_90mm_DM13A1>
     <id>	131	</id>
     <userString>	#germany_vehicles:_90mm_DM13A1	</userString>
@@ -988,7 +1003,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	240	</armor>
+      <armor>	220	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_OFL_90>
@@ -1003,7 +1018,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHollowCharge	</effects>
     <damage>
-      <armor>	240	</armor>
+      <armor>	220	</armor>
       <devices>	122	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -1019,7 +1034,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	270	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_OE_90>
@@ -1033,7 +1048,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	240	</armor>
+      <armor>	220	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_Mecar_AP>
@@ -1048,7 +1063,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHollowCharge	</effects>
     <damage>
-      <armor>	240	</armor>
+      <armor>	220	</armor>
       <devices>	122	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -1064,10 +1079,55 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	270	</armor>
       <devices>	122	</devices>
     </damage>
   </_90mm_Mecar_HE>
+  <_90mm_Mecar_N_AP>
+    <id>	167	</id>
+    <userString>	#germany_vehicles:_90mm_Mecar_N_AP	</userString>
+    <icon>	ap	</icon>
+    <price>	315	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_Mecar_N_AP>
+  <_90mm_Mecar_N_HEAT>
+    <id>	168	</id>
+    <userString>	#germany_vehicles:_90mm_Mecar_N_HEAT	</userString>
+    <icon>	hc	</icon>
+    <price>	11	  <gold></gold>
+    </price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_Mecar_N_HEAT>
+  <_90mm_Mecar_N_HE>
+    <id>	169	</id>
+    <userString>	#germany_vehicles:_90mm_Mecar_N_HE	</userString>
+    <icon>	he	</icon>
+    <price>	210	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_Mecar_N_HE>
   <_90mm_AP_T_33>
     <id>	157	</id>
     <userString>	#germany_vehicles:_90mm_AP_T_33	</userString>
@@ -1469,6 +1529,51 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_105mm_HEAT-T_T384E4>
+  <_105mm_Exp_APDS>
+    <id>	163	</id>
+    <userString>	#germany_vehicles:_105mm_Exp_APDS	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1130	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_Exp_APDS>
+  <_105mm_Exp_HEAT>
+    <id>	164	</id>
+    <userString>	#germany_vehicles:_105mm_Exp_HEAT	</userString>
+    <icon>	hc	</icon>
+    <price>	12	  <gold></gold>
+    </price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_Exp_HEAT>
+  <_105mm_Exp_HE>
+    <id>	165	</id>
+    <userString>	#germany_vehicles:_105mm_Exp_HE	</userString>
+    <icon>	he	</icon>
+    <price>	815	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_Exp_HE>
   <_128mm_Pzgr_N4>
     <id>	112	</id>
     <userString>	#germany_vehicles:_128mm_Pzgr_N4	</userString>
@@ -1622,12 +1727,16 @@
     <price>	505	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	150	</caliber>
-    <explosionRadius>	3.57	</explosionRadius>
+    <explosionRadius>	7	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	10.5	</stunDuration>
+    <guaranteedStunDuration>	0.65	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.35	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	680	</armor>
-      <devices>	203	</devices>
+      <armor>	540	</armor>
+      <devices>	102	</devices>
     </damage>
   </_150mm_Sprg>
   <_150mmGr_39H1A>
@@ -1636,6 +1745,7 @@
     <icon>	hc	</icon>
     <price>	12	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	150	</caliber>
     <isTracer>	true	</isTracer>
@@ -1653,12 +1763,16 @@
     <price>	280	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	150	</caliber>
-    <explosionRadius>	3.57	</explosionRadius>
+    <explosionRadius>	6.5	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	6.6	</stunDuration>
+    <guaranteedStunDuration>	0.65	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.35	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	450	</armor>
-      <devices>	203	</devices>
+      <armor>	400	</armor>
+      <devices>	102	</devices>
     </damage>
   </_150mm_Sprg_L>
   <_150mmGr_39H1A_L>
@@ -1667,6 +1781,7 @@
     <icon>	hc	</icon>
     <price>	12	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	150	</caliber>
     <isTracer>	true	</isTracer>
@@ -1684,12 +1799,16 @@
     <price>	1120	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	150	</caliber>
-    <explosionRadius>	3.57	</explosionRadius>
+    <explosionRadius>	7.5	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	16	</stunDuration>
+    <guaranteedStunDuration>	0.65	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.35	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	950	</armor>
-      <devices>	203	</devices>
+      <armor>	680	</armor>
+      <devices>	102	</devices>
     </damage>
   </_150mm_SprgG>
   <_150mmGr_39H1A_G>
@@ -1698,6 +1817,7 @@
     <icon>	hc	</icon>
     <price>	12	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	150	</caliber>
     <isTracer>	true	</isTracer>
@@ -1714,6 +1834,7 @@
     <icon>	hc	</icon>
     <price>	14	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	150	</caliber>
     <isTracer>	true	</isTracer>
@@ -1729,6 +1850,7 @@
     <userString>	#germany_vehicles:_150mm_Sprg_L.erz.	</userString>
     <icon>	he	</icon>
     <price>	200	</price>
+    <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	150	</caliber>
     <explosionRadius>	3.57	</explosionRadius>
@@ -1747,12 +1869,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	150	</caliber>
-    <explosionRadius>	5.11	</explosionRadius>
+    <explosionRadius>	9	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	18	</stunDuration>
+    <guaranteedStunDuration>	0.6	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.4	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	1200	</armor>
-      <devices>	203	</devices>
+      <armor>	680	</armor>
+      <devices>	105	</devices>
     </damage>
   </_150mm_SprgG36>
   <_150mm_SprgG31>
@@ -1762,12 +1888,16 @@
     <price>	1120	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	150	</caliber>
-    <explosionRadius>	3.57	</explosionRadius>
+    <explosionRadius>	8	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	18	</stunDuration>
+    <guaranteedStunDuration>	0.6	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.4	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	1200	</armor>
-      <devices>	203	</devices>
+      <armor>	680	</armor>
+      <devices>	105	</devices>
     </damage>
   </_150mm_SprgG31>
   <_150mm_SprgG_ausf_45>
@@ -1912,12 +2042,16 @@
     <price>	1344	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	170	</caliber>
-    <explosionRadius>	4.45	</explosionRadius>
+    <explosionRadius>	9.4	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1400	</armor>
-      <devices>	228	</devices>
+      <armor>	850	</armor>
+      <devices>	114	</devices>
     </damage>
   </_170mm_Sprg18>
   <_170mm_Sprg18_Ausf_G>
@@ -1928,12 +2062,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	170	</caliber>
-    <explosionRadius>	6.37	</explosionRadius>
+    <explosionRadius>	10.4	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1400	</armor>
-      <devices>	228	</devices>
+      <armor>	850	</armor>
+      <devices>	114	</devices>
     </damage>
   </_170mm_Sprg18_Ausf_G>
   <_210mm_Sprg18>
@@ -1943,12 +2081,16 @@
     <price>	2080	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	210	</caliber>
-    <explosionRadius>	6.44	</explosionRadius>
+    <explosionRadius>	12.6	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	31	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	2000	</armor>
-      <devices>	280	</devices>
+      <armor>	1100	</armor>
+      <devices>	140	</devices>
     </damage>
   </_210mm_Sprg18>
   <_210mm_Sprg18_Ausf_G>
@@ -1959,12 +2101,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	210	</caliber>
-    <explosionRadius>	9.21	</explosionRadius>
+    <explosionRadius>	13.9	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	31	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	2000	</armor>
-      <devices>	280	</devices>
+      <armor>	1100	</armor>
+      <devices>	140	</devices>
     </damage>
   </_210mm_Sprg18_Ausf_G>
   <_210mm_Gr.18Be>
@@ -1972,6 +2118,7 @@
     <userString>	#germany_vehicles:_210mm_Gr.18Be	</userString>
     <icon>	ap	</icon>
     <price>	1930	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	210	</caliber>
     <isTracer>	true	</isTracer>

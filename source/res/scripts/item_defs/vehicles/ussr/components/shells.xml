@@ -418,6 +418,50 @@
       <devices>	61	</devices>
     </damage>
   </_45mm_UOF-243>
+  <_45mm_UBR-243SPU>
+    <id>	177	</id>
+    <userString>	#ussr_vehicles:_45mm_UBR-243SPU	</userString>
+    <icon>	ap	</icon>
+    <price>	38	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	45	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	61	</devices>
+    </damage>
+  </_45mm_UBR-243SPU>
+  <_45mm_UBR-243SPAU>
+    <id>	178	</id>
+    <userString>	#ussr_vehicles:_45mm_UBR-243SPAU	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	5	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	45	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR	</effects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	61	</devices>
+    </damage>
+  </_45mm_UBR-243SPAU>
+  <_45mm_UOF-243U>
+    <id>	179	</id>
+    <userString>	#ussr_vehicles:_45mm_UOF-243U	</userString>
+    <icon>	he	</icon>
+    <price>	24	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	45	</caliber>
+    <explosionRadius>	0.43	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	85	</armor>
+      <devices>	61	</devices>
+    </damage>
+  </_45mm_UOF-243U>
   <_57mm_UBR-271KO>
     <id>	19	</id>
     <userString>	#ussr_vehicles:_57mm_UBR-271KO	</userString>
@@ -554,6 +598,7 @@
     <userString>	#ussr_vehicles:_76mm_BR-350A	</userString>
     <icon>	ap	</icon>
     <price>	45	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	76	</caliber>
     <isTracer>	true	</isTracer>
@@ -682,6 +727,21 @@
       <devices>	105	</devices>
     </damage>
   </_76mm_UOF-354K>
+  <_76mm_UOF-354KA>
+    <id>	184	</id>
+    <userString>	#ussr_vehicles:_76mm_UOF-354KA	</userString>
+    <icon>	he	</icon>
+    <price>	38	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	76	</caliber>
+    <explosionRadius>	1.09	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	180	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_UOF-354KA>
   <_85mm_UBR-365K>
     <id>	36	</id>
     <userString>	#ussr_vehicles:_85mm_UBR-365K	</userString>
@@ -887,6 +947,20 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_UBR-412P>
+  <_100mm_UBR-412PA>
+    <id>	173	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412PA	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	396	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_UBR-412PA>
   <_100mm_UOF-412>
     <id>	44	</id>
     <userString>	#ussr_vehicles:_100mm_UOF-412	</userString>
@@ -1051,6 +1125,50 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_BR-412D>
+  <_100mm_3VBM>
+    <id>	165	</id>
+    <userString>	#ussr_vehicles:_100mm_3VBM	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	880	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_3VBM>
+  <_100mm_3VBB>
+    <id>	166	</id>
+    <userString>	#ussr_vehicles:_100mm_3VBB	</userString>
+    <icon>	ap	</icon>
+    <price>	11	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_3VBB>
+  <_100mm_3VOF>
+    <id>	167	</id>
+    <userString>	#ussr_vehicles:_100mm_3VOF	</userString>
+    <icon>	he	</icon>
+    <price>	670	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_3VOF>
   <_100mm_UBR-412BM>
     <id>	170	</id>
     <userString>	#ussr_vehicles:_100mm_UBR-412BM	</userString>
@@ -1347,6 +1465,21 @@
       <devices>	165	</devices>
     </damage>
   </_122mm_UOF-471>
+  <_122mm_UOF-471A>
+    <id>	185	</id>
+    <userString>	#ussr_vehicles:_122mm_UOF-471A	</userString>
+    <icon>	he	</icon>
+    <price>	608	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.75	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	500	</armor>
+      <devices>	83	</devices>
+    </damage>
+  </_122mm_UOF-471A>
   <_122mm_UOF-471BM>
     <id>	134	</id>
     <userString>	#ussr_vehicles:_122mm_UOF-471BM	</userString>
@@ -1398,6 +1531,7 @@
     <icon>	hc	</icon>
     <price>	11	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
@@ -1474,6 +1608,7 @@
     <icon>	hc	</icon>
     <price>	13	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	122	</caliber>
     <isTracer>	true	</isTracer>
@@ -1758,12 +1893,16 @@
     <price>	290	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	152	</caliber>
-    <explosionRadius>	3.66	</explosionRadius>
+    <explosionRadius>	6.5	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	6.5	</stunDuration>
+    <guaranteedStunDuration>	0.65	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.35	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	450	</armor>
-      <devices>	203	</devices>
+      <armor>	400	</armor>
+      <devices>	102	</devices>
     </damage>
   </_152mm_53OF500>
   <_152mm_53-G-530>
@@ -1826,6 +1965,25 @@
       <devices>	203	</devices>
     </damage>
   </_152mm_53-OF-530>
+  <_152mm_53-OF-531>
+    <id>	180	</id>
+    <userString>	#ussr_vehicles:_152mm_53-OF-531	</userString>
+    <icon>	he	</icon>
+    <price>	810	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	152	</caliber>
+    <explosionRadius>	7	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	11	</stunDuration>
+    <guaranteedStunDuration>	0.65	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.35	</damageDurationCoeff>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	102	</devices>
+    </damage>
+  </_152mm_53-OF-531>
   <_152mm_53-OF-551>
     <id>	65	</id>
     <userString>	#ussr_vehicles:_152mm_53-OF-551	</userString>
@@ -1841,6 +1999,25 @@
       <devices>	203	</devices>
     </damage>
   </_152mm_53-OF-551>
+  <_152mm_53-OF-551B>
+    <id>	181	</id>
+    <userString>	#ussr_vehicles:_152mm_53-OF-551B	</userString>
+    <icon>	he	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	152	</caliber>
+    <explosionRadius>	8	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	23	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	102	</devices>
+    </damage>
+  </_152mm_53-OF-551B>
   <_152mm_53-OF-551BM>
     <id>	66	</id>
     <userString>	#ussr_vehicles:_152mm_53-OF-551BM	</userString>
@@ -1849,12 +2026,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	152	</caliber>
-    <explosionRadius>	5.11	</explosionRadius>
+    <explosionRadius>	9	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	23	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	largeHighExplosive	</effects>
     <damage>
-      <armor>	950	</armor>
-      <devices>	203	</devices>
+      <armor>	700	</armor>
+      <devices>	102	</devices>
     </damage>
   </_152mm_53-OF-551BM>
   <_152mm_53-G-551>
@@ -1863,6 +2044,7 @@
     <icon>	ap	</icon>
     <price>	12	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	152	</caliber>
     <isTracer>	true	</isTracer>
@@ -2001,12 +2183,16 @@
     <price>	1980	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	180	</caliber>
-    <explosionRadius>	4.91	</explosionRadius>
+    <explosionRadius>	10	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	29	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1700	</armor>
-      <devices>	240	</devices>
+      <armor>	900	</armor>
+      <devices>	120	</devices>
     </damage>
   </_180mm_F-600D>
   <_180mm_F-600BM>
@@ -2017,12 +2203,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	180	</caliber>
-    <explosionRadius>	7.28	</explosionRadius>
+    <explosionRadius>	11	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	29	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1700	</armor>
-      <devices>	240	</devices>
+      <armor>	900	</armor>
+      <devices>	120	</devices>
     </damage>
   </_180mm_F-600BM>
   <_180mm_UBR-600>
@@ -2030,6 +2220,7 @@
     <userString>	#ussr_vehicles:_180mm_UBR-600	</userString>
     <icon>	ap	</icon>
     <price>	1980	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	180	</caliber>
     <isTracer>	true	</isTracer>
@@ -2046,12 +2237,16 @@
     <price>	1910	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	203	</caliber>
-    <explosionRadius>	6.07	</explosionRadius>
+    <explosionRadius>	11.5	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1850	</armor>
-      <devices>	270	</devices>
+      <armor>	1050	</armor>
+      <devices>	135	</devices>
     </damage>
   </_203mm_F-625D>
   <_203mm_G-620>
@@ -2059,6 +2254,7 @@
     <userString>	#ussr_vehicles:_203mm_G-620	</userString>
     <icon>	ap	</icon>
     <price>	1845	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	203	</caliber>
     <isTracer>	true	</isTracer>
@@ -2076,12 +2272,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	203	</caliber>
-    <explosionRadius>	8.49	</explosionRadius>
+    <explosionRadius>	13	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1850	</armor>
-      <devices>	270	</devices>
+      <armor>	1050	</armor>
+      <devices>	135	</devices>
     </damage>
   </_203mm_F-625DBM>
 </shells.xml>

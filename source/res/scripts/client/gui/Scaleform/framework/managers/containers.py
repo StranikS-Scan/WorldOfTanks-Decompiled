@@ -7,6 +7,7 @@ from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.ScopeControllers import GlobalScopeController
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.abstract.ContainerManagerMeta import ContainerManagerMeta
 from shared_utils import findFirst
 _POPUPS_CONTAINERS = (ViewTypes.TOP_WINDOW, ViewTypes.BROWSER, ViewTypes.WINDOW)
@@ -319,21 +320,22 @@ class ContainerManager(ContainerManagerMeta):
         """
         if name is None:
             name = alias
+        viewKey = View.createViewKey(alias, name)
         isViewExists = self.as_getViewS(name)
-        if self.__scopeController.isViewLoading(alias=alias):
-            LOG_DEBUG('View with alias {} is already loading.'.format(alias))
+        if self.__scopeController.isViewLoading(key=viewKey):
+            LOG_DEBUG('View with key {} is already loading.'.format(viewKey))
         else:
             pyEntity = None
             if isViewExists:
-                pyEntity = self.__scopeController.getViewByAlias(alias)
+                pyEntity = self.__scopeController.getViewByKey(viewKey)
                 if pyEntity is None:
                     isViewExists = False
-                    LOG_UNEXPECTED('Unexpected case: Could not find a view with alias {} in the scope ctrl. View will be reloaded.'.format(alias))
+                    LOG_UNEXPECTED('Unexpected case: Could not find a view with key {} in the scope ctrl. View will be reloaded.'.format(viewKey))
                 else:
-                    LOG_DEBUG('View with alias {} ({}) is already loaded.'.format(alias, str(pyEntity)))
+                    LOG_DEBUG('View with key {} ({}) is already loaded.'.format(viewKey, str(pyEntity)))
             if pyEntity is None:
-                LOG_DEBUG('Load view with alias "{}" (name - "{}")'.format(alias, name))
-                pyEntity = self.__loader.loadView(alias, name, *args, **kwargs)
+                LOG_DEBUG('Load view with key "{}".'.format(viewKey))
+                pyEntity = self.__loader.loadView(viewKey, *args, **kwargs)
             curType = pyEntity.settings.type
             if self.canCancelPreviousLoading(curType):
                 canceledViews = self.__scopeController.getLoadingViewsByType(curType)
@@ -518,7 +520,7 @@ class ContainerManager(ContainerManagerMeta):
     def __cancelLoadingForPyEntities(self, pyEntities):
         LOG_DEBUG('Loading is canceled for the following views: ', pyEntities)
         for curEntity in pyEntities:
-            self.__loader.cancelLoadingByName(curEntity.uniqueName)
+            self.__loader.cancelLoading(curEntity.key)
             self.__scopeController.removeLoadingView(curEntity)
             if curEntity.isCreated():
                 curEntity.destroy()

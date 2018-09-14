@@ -33,6 +33,7 @@ from post_processing import g_postProcessing
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IIGRController
 from vehicle_systems import camouflages
+from vehicle_systems.stricted_loading import makeCallbackWeak
 from vehicle_systems.tankStructure import TankPartNames
 from vehicle_systems.tankStructure import VehiclePartsTuple
 _DEFAULT_SPACES_PATH = 'spaces'
@@ -535,7 +536,7 @@ class ClientHangarSpace():
 
     def __requestFakeShadowModel(self):
         resources = [_CFG['shadow_model_name']]
-        BigWorld.loadResourceListBG(tuple(resources), partial(self.__onFakeShadowLoaded))
+        BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onFakeShadowLoaded))
 
     def __onFakeShadowLoaded(self, resourceRefs):
         modelName = _CFG['shadow_model_name']
@@ -681,7 +682,7 @@ class _VehicleAppearance():
             resources.extend(splineDesc.values())
         from vehicle_systems import model_assembler
         resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, self.__vState, self.__spaceId))
-        BigWorld.loadResourceListBG(tuple(resources), partial(self.__onResourcesLoaded, self.__curBuildInd))
+        BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onResourcesLoaded, self.__curBuildInd))
         return
 
     def __onResourcesLoaded(self, buildInd, resourceRefs):

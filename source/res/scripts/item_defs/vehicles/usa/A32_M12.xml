@@ -132,8 +132,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	18	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.46	</vehicleMovement>
-        <vehicleRotation>	0.46	</vehicleRotation>
+        <vehicleMovement>	0.41	</vehicleMovement>
+        <vehicleRotation>	0.41	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	100	</maxHealth>
@@ -253,8 +253,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.42	</vehicleMovement>
-        <vehicleRotation>	0.42	</vehicleRotation>
+        <vehicleMovement>	0.31	</vehicleMovement>
+        <vehicleRotation>	0.31	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	110	</maxHealth>
@@ -385,7 +385,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	270	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -404,14 +404,19 @@
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <aimingTime>	7	</aimingTime>
-          <shotDispersionRadius>	0.76	</shotDispersionRadius>
+          <aimingTime>	5.7	</aimingTime>
+          <shotDispersionRadius>	0.69	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <turretYawLimits>	-14 14	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.45	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A32_M12/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A32_M12/crash/lod0/Gun_01.model	</destroyed>
@@ -433,7 +438,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_155mm_Gun_M1918M1>
         <_155mm_Gun_M1A1>	shared	  <maxAmmo>	20	</maxAmmo>
-          <reloadTime>	37.5	</reloadTime>
+          <reloadTime>	27.7	</reloadTime>
           <unlocks>
             <vehicle>	A37_M40M43	  <cost>	116500	</cost>
             </vehicle>
@@ -446,11 +451,11 @@
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <shotDispersionRadius>	0.72	</shotDispersionRadius>
-          <aimingTime>	7.5	</aimingTime>
+          <shotDispersionRadius>	0.67	</shotDispersionRadius>
+          <aimingTime>	5.5	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.6	</turretRotation>
+            <turretRotation>	0.42	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

@@ -610,6 +610,20 @@
       <devices>	105	</devices>
     </damage>
   </_76mm_APDS_M331A2>
+  <_76mm_APDS_M331A3>
+    <id>	133	</id>
+    <userString>	#usa_vehicles:_76mm_APDS_M331A3	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	205	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	170	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_APDS_M331A3>
   <_76mm_HE_M352>
     <id>	65	</id>
     <userString>	#usa_vehicles:_76mm_HE_M352	</userString>
@@ -625,6 +639,21 @@
       <devices>	105	</devices>
     </damage>
   </_76mm_HE_M352>
+  <_76mm_HE_M352A1>
+    <id>	135	</id>
+    <userString>	#usa_vehicles:_76mm_HE_M352A1	</userString>
+    <icon>	he	</icon>
+    <price>	135	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	76	</caliber>
+    <explosionRadius>	1.09	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	260	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_HE_M352A1>
   <_76mm_HE_M42B1>
     <id>	20	</id>
     <userString>	#usa_vehicles:_76mm_HE_M42B1	</userString>
@@ -672,6 +701,22 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_76mm_HEAT_M496>
+  <_76mm_HEAT_M496A1>
+    <id>	134	</id>
+    <userString>	#usa_vehicles:_76mm_HEAT_M496A1	</userString>
+    <icon>	hc	</icon>
+    <price>	11	  <gold></gold>
+    </price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	170	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_76mm_HEAT_M496A1>
   <_90mm_AP_M77>
     <id>	23	</id>
     <userString>	#usa_vehicles:_90mm_AP_M77	</userString>
@@ -773,6 +818,20 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_AP_M318>
+  <_90mm_APCR_Experimental>
+    <id>	132	</id>
+    <userString>	#usa_vehicles:_90mm_APCR_Experimental	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	390	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_APCR_Experimental>
   <_90mm_AP_M318A1>
     <id>	114	</id>
     <userString>	#usa_vehicles:_90mm_AP_M318A1	</userString>
@@ -855,6 +914,7 @@
     <userString>	#usa_vehicles:_90mm_HEP_T142E2	</userString>
     <icon>	he	</icon>
     <price>	350	</price>
+    <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	90	</caliber>
     <explosionRadius>	1.46	</explosionRadius>
@@ -1058,6 +1118,51 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_APCR_T140E3>
+  <_105mm_Exp_APDS>
+    <id>	129	</id>
+    <userString>	#usa_vehicles:_105mm_Exp_APDS	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1100	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_Exp_APDS>
+  <_105mm_Exp_HEAT>
+    <id>	130	</id>
+    <userString>	#usa_vehicles:_105mm_Exp_HEAT	</userString>
+    <icon>	hc	</icon>
+    <price>	12	  <gold></gold>
+    </price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_Exp_HEAT>
+  <_105mm_Exp_HE>
+    <id>	131	</id>
+    <userString>	#usa_vehicles:_105mm_Exp_HE	</userString>
+    <icon>	he	</icon>
+    <price>	815	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_Exp_HE>
   <_25pdr_HE_Mk_1D>
     <id>	94	</id>
     <userString>	#usa_vehicles:_25pdr_HE_Mk_1D	</userString>
@@ -1375,6 +1480,25 @@
       <devices>	210	</devices>
     </damage>
   </_155mm_HE_M101>
+  <_155mm_HE_M101A1>
+    <id>	136	</id>
+    <userString>	#usa_vehicles:_155mm_HE_M101A1	</userString>
+    <icon>	he	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	155	</caliber>
+    <explosionRadius>	7	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	19	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHighExplosive	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_155mm_HE_M101A1>
   <_155mm_HE_M101E1>
     <id>	87	</id>
     <userString>	#usa_vehicles:_155mm_HE_M101E1	</userString>
@@ -1397,12 +1521,16 @@
     <price>	505	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	155	</caliber>
-    <explosionRadius>	3.78	</explosionRadius>
+    <explosionRadius>	7	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	10.4	</stunDuration>
+    <guaranteedStunDuration>	0.65	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.35	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	700	</armor>
-      <devices>	210	</devices>
+      <armor>	550	</armor>
+      <devices>	105	</devices>
     </damage>
   </_155mm_HE_M102>
   <_155mm_HEAT_M167>
@@ -1411,6 +1539,7 @@
     <icon>	hc	</icon>
     <price>	14	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	155	</caliber>
     <isTracer>	true	</isTracer>
@@ -1429,12 +1558,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	155	</caliber>
-    <explosionRadius>	5.3	</explosionRadius>
+    <explosionRadius>	8	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	19	</stunDuration>
+    <guaranteedStunDuration>	0.60	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.40	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	950	</armor>
-      <devices>	210	</devices>
+      <armor>	700	</armor>
+      <devices>	105	</devices>
     </damage>
   </_155mm_HE_M101M2>
   <_155mm_HE_M101M4>
@@ -1444,12 +1577,16 @@
     <price>	1120	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	155	</caliber>
-    <explosionRadius>	3.97	</explosionRadius>
+    <explosionRadius>	8	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	23	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1250	</armor>
-      <devices>	210	</devices>
+      <armor>	700	</armor>
+      <devices>	105	</devices>
     </damage>
   </_155mm_HE_M101M4>
   <_155mm_HE_M101M6>
@@ -1460,12 +1597,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	155	</caliber>
-    <explosionRadius>	5.34	</explosionRadius>
+    <explosionRadius>	9	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	23	</stunDuration>
+    <guaranteedStunDuration>	0.55	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1250	</armor>
-      <devices>	210	</devices>
+      <armor>	700	</armor>
+      <devices>	105	</devices>
     </damage>
   </_155mm_HE_M101M6>
   <_203mm_HE_M106>
@@ -1475,12 +1616,16 @@
     <price>	1870	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	203	</caliber>
-    <explosionRadius>	6.07	</explosionRadius>
+    <explosionRadius>	11.7	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1850	</armor>
-      <devices>	270	</devices>
+      <armor>	1050	</armor>
+      <devices>	130	</devices>
     </damage>
   </_203mm_HE_M106>
   <_203mm_HE_A1M1>
@@ -1491,12 +1636,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	203	</caliber>
-    <explosionRadius>	8.49	</explosionRadius>
+    <explosionRadius>	12.8	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	28	</stunDuration>
+    <guaranteedStunDuration>	0.50	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.50	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	1850	</armor>
-      <devices>	270	</devices>
+      <armor>	1050	</armor>
+      <devices>	130	</devices>
     </damage>
   </_203mm_HE_A1M1>
   <_203mm_M106_M78>
@@ -1504,6 +1653,7 @@
     <userString>	#usa_vehicles:_203mm_M106_M78	</userString>
     <icon>	ap	</icon>
     <price>	1765	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	203	</caliber>
     <isTracer>	true	</isTracer>
@@ -1520,12 +1670,16 @@
     <price>	2500	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	240	</caliber>
-    <explosionRadius>	8.13	</explosionRadius>
+    <explosionRadius>	13	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	35	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	2250	</armor>
-      <devices>	320	</devices>
+      <armor>	1300	</armor>
+      <devices>	160	</devices>
     </damage>
   </_240mm_HE_M146>
   <_240mm_HE_M160>
@@ -1536,12 +1690,16 @@
     </price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	240	</caliber>
-    <explosionRadius>	11.64	</explosionRadius>
+    <explosionRadius>	14.5	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	35	</stunDuration>
+    <guaranteedStunDuration>	0.45	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.55	</damageDurationCoeff>
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	2250	</armor>
-      <devices>	320	</devices>
+      <armor>	1300	</armor>
+      <devices>	160	</devices>
     </damage>
   </_240mm_HE_M160>
   <_240mm_M114_M78>
@@ -1549,6 +1707,7 @@
     <userString>	#usa_vehicles:_240mm_M114_M78	</userString>
     <icon>	ap	</icon>
     <price>	2500	</price>
+    <notInShop>	true	</notInShop>
     <kind>	ARMOR_PIERCING	</kind>
     <caliber>	240	</caliber>
     <isTracer>	true	</isTracer>

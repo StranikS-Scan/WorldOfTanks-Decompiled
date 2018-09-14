@@ -8,6 +8,7 @@ import BattleReplay
 import DynamicCameras.ArcadeCamera
 import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
+import DynamicCameras.ArtyCamera
 import FalloutDeathMode
 import Keys
 import MapCaseMode
@@ -18,13 +19,14 @@ import constants
 import control_modes
 from AvatarInputHandler import aih_global_binding, aih_constants, gun_marker_ctrl
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
+from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
 from Event import Event
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
 from debug_utils import *
-from gui import g_guiResetters, GUI_CTRL_MODE_FLAG
+from gui import g_guiResetters, GUI_CTRL_MODE_FLAG, GUI_SETTINGS
 from gui.app_loader import g_appLoader, settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers import dependency
@@ -40,6 +42,7 @@ class _CTRL_TYPE():
     DEVELOPMENT = 2
 
 
+_ARTY_CTRL_TYPE = _CTRL_TYPE.USUAL if GUI_SETTINGS.spgAlternativeAimingCameraEnabled else _CTRL_TYPE.DEVELOPMENT
 _ShakeReason = aih_constants.ShakeReason
 _CTRL_MODE = aih_constants.CTRL_MODE_NAME
 _GUN_MARKER_TYPE = aih_constants.GUN_MARKER_TYPE
@@ -49,6 +52,7 @@ _CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: ('StrategicControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.ARTY: ('ArtyControlMode', 'artyMode', _ARTY_CTRL_TYPE),
  _CTRL_MODE.SNIPER: ('SniperControlMode', 'sniperMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.POSTMORTEM: ('PostMortemControlMode', 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEBUG: ('DebugControlMode', None, _CTRL_TYPE.DEVELOPMENT),
@@ -56,7 +60,10 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_
  _CTRL_MODE.VIDEO: ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
  _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.FALLOUT_DEATH: ('FalloutDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL)}
-_DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera, DynamicCameras.SniperCamera.SniperCamera, DynamicCameras.StrategicCamera.StrategicCamera)
+_DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
+ DynamicCameras.SniperCamera.SniperCamera,
+ DynamicCameras.StrategicCamera.StrategicCamera,
+ DynamicCameras.ArtyCamera.ArtyCamera)
 
 class DynamicCameraSettings(object):
     settings = property(lambda self: self.__dynamic)
@@ -253,12 +260,21 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     def updateShootingStatus(self, canShoot):
         return None if self.__isDetached else self.__curCtrl.updateShootingStatus(canShoot)
 
-    def getDesiredShotPoint(self):
+    def getDesiredShotPoint(self, ignoreAimingMode=False):
         if self.__isDetached:
             return None
         else:
             g_postProcessingEvents.onFocalPlaneChanged()
-            return self.__curCtrl.getDesiredShotPoint()
+            return self.__curCtrl.getDesiredShotPoint(ignoreAimingMode)
+
+    def getMarkerPoint(self):
+        point = None
+        if self.__ctrlModeName in (_CTRL_MODE.ARCADE, _CTRL_MODE.STRATEGIC, _CTRL_MODE.ARTY):
+            AimingSystems.shootInSkyPoint.has_been_called = False
+            point = self.getDesiredShotPoint(ignoreAimingMode=True)
+            if AimingSystems.shootInSkyPoint.has_been_called:
+                point = None
+        return point
 
     def showGunMarker(self, isShown):
         self.__curCtrl.setGunMarkerFlag(isShown, _GUN_MARKER_FLAG.CLIENT_MODE_ENABLED)
@@ -509,7 +525,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         else:
             if eMode is None:
                 eMode = _CTRL_MODES[BigWorld.player().observerFPVControlMode]
-            targetPos = self.getDesiredShotPoint() if self.getDesiredShotPoint() is not None else Math.Vector3(0, 0, 0)
+            targetPos = self.getDesiredShotPoint() or Math.Vector3(0, 0, 0)
             LOG_DEBUG('onVehicleControlModeChanged: ', eMode, targetPos)
             self.onControlModeChanged(eMode, preferredPos=targetPos, aimingMode=0, saveZoom=False, saveDist=True, equipmentID=None, curVehicleID=BigWorld.player().getVehicleAttached(), isRemoteCamera=True)
             return

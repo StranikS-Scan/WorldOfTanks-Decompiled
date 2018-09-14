@@ -7,10 +7,12 @@
       <conditions>
         <postBattle>
           <and>
-            <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	2000	</greaterOrEqual>
-            </results>
+            <vehicleDamage>
+              <classes>	heavyTank AT-SPG	</classes>
+              <whenStunCaused></whenStunCaused>
+              <eventCount></eventCount>
+              <greaterOrEqual>	4	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -25,10 +27,12 @@
       <conditions>
         <postBattle>
           <and>
-            <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	2000	</greaterOrEqual>
-            </results>
+            <vehicleDamage>
+              <classes>	heavyTank AT-SPG	</classes>
+              <whenStunCaused></whenStunCaused>
+              <eventCount></eventCount>
+              <greaterOrEqual>	4	</greaterOrEqual>
+            </vehicleDamage>
             <win></win>
           </and>
         </postBattle>

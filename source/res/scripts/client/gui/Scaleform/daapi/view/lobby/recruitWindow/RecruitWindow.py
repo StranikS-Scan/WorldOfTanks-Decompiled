@@ -3,6 +3,7 @@
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 import nations
+import constants
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from adisp import process, async
@@ -151,7 +152,12 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getVehicleTypeCriteria(self, nationID, vclass):
-        return self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])
+        criteria = self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])
+        if not constants.IS_IGR_ENABLED:
+            criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
+        if constants.IS_DEVELOPMENT:
+            criteria |= ~REQ_CRITERIA.VEHICLE.IS_BOT
+        return criteria
 
     def updateVehicleTypeDropdown(self, nationID, vclass):
         Waiting.show('updating')

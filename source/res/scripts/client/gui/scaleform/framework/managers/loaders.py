@@ -41,57 +41,53 @@ class LoaderManager(LoaderManagerMeta):
         self.onViewLoadError = Event.Event(self.__eManager)
         self.onViewLoadCanceled = Event.Event(self.__eManager)
         self.__app = app
-        self.__nameToLoadingItem = {}
+        self.__loadingItems = {}
 
-    def loadView(self, alias, name, *args, **kwargs):
+    def loadView(self, key, *args, **kwargs):
         """
         Loads a view by the given alias and name with the given arguments (args and kwargs).
         
-        :param alias: value of view alias.
+        :param key: View key represented by tuple (alias, view name)
         :param name: name of view.
         :param args: args.
         :param kwargs: kwargs.
         :return: instance of view in python.
         """
-        return self.__doLoadView(alias, name, *args, **kwargs)
+        return self.__doLoadView(key, *args, **kwargs)
 
-    def cancelLoadingByName(self, name):
+    def cancelLoading(self, key):
         """
-        Cancels loading of view with the given name.
+        Cancels loading of view with the given key.
         
-        :param name: name of view.
+        :param key: View key represented by tuple (alias, view name).
         """
-        if name in self.__nameToLoadingItem:
-            item = self.__nameToLoadingItem.pop(name)
+        if key in self.__loadingItems:
+            item = self.__loadingItems.pop(key)
             item.isCancelled = True
-            self.onViewLoadCanceled(name, item)
+            self.onViewLoadCanceled(key, item)
 
-    def isViewLoading(self, viewAlias):
+    def isViewLoading(self, key):
         """
         Returns True if a view with the given alias is being loaded, otherwise returns False.
-        :param viewAlias: value of view alias.
+        
+        :param key: View key represented by tuple (alias, view name).
         :return: boolean.
         """
-        result = False
-        for item in self.__nameToLoadingItem.itervalues():
-            pyEntity = item.pyEntity
-            if pyEntity and pyEntity.settings.alias == viewAlias:
-                result = True
-                break
+        return key in self.__loadingItems
 
-        return result
-
-    def viewLoaded(self, name, gfxEntity):
+    def viewLoaded(self, alias, name, gfxEntity):
         """
         Callback to be invoked by AS when a view is loaded.
         
+        :param alias: value of view alias.
         :param name: name of view.
         :param gfxEntity: GFXEntity (AS entity) instance.
         """
-        if name in self.__nameToLoadingItem:
-            item = self.__nameToLoadingItem.pop(name)
+        viewKey = View.createViewKey(alias, name)
+        if viewKey in self.__loadingItems:
+            item = self.__loadingItems.pop(viewKey)
             if item.isCancelled:
-                self.onViewLoadCanceled(name, item)
+                self.onViewLoadCanceled(viewKey, item)
             else:
                 pyEntity = g_entitiesFactories.initialize(item.pyEntity, gfxEntity, item.factoryIdx, extra={'name': item.name})
                 if pyEntity is not None:
@@ -99,7 +95,7 @@ class LoaderManager(LoaderManagerMeta):
                 else:
                     LOG_ERROR('An error occurred before DAAPI initialization.')
         else:
-            LOG_WARNING('View loading for name has no associated data', name)
+            LOG_WARNING('View loading for key has no associated data', viewKey)
         return
 
     def viewLoadError(self, alias, name, errorTxt):
@@ -110,20 +106,21 @@ class LoaderManager(LoaderManagerMeta):
         :param name: name of view.
         :param errorTxt: error text represented by string.
         """
-        msg = 'Error occurred during view {0} loading. Name: {1}, error:{2}'.format(alias, name, errorTxt)
+        viewKey = View.createViewKey(alias, name)
+        msg = 'Error occurred during view {0} loading. Error:{1}'.format(viewKey, errorTxt)
         LOG_ERROR(msg)
-        if name in self.__nameToLoadingItem:
-            item = self.__nameToLoadingItem.pop(name)
+        if viewKey in self.__loadingItems:
+            item = self.__loadingItems.pop(viewKey)
             if item.isCancelled:
-                self.onViewLoadCanceled(name, item)
+                self.onViewLoadCanceled(viewKey, item)
             else:
-                self.onViewLoadError(name, msg, item)
+                self.onViewLoadError(viewKey, msg, item)
                 if item is not None:
                     settings = item.pyEntity.settings
                     if constants.IS_DEVELOPMENT and settings.url != NO_IMPL_URL:
                         g_entitiesFactories.addSettings(ViewSettings(NO_IMPL_ALIAS, View, NO_IMPL_URL, settings.type, None, ScopeTemplates.DEFAULT_SCOPE, False))
                         LOG_WARNING('Try to load noImpl swf...')
-                        self.__doLoadView(NO_IMPL_ALIAS, item.name)
+                        self.__doLoadView((NO_IMPL_ALIAS, item.name))
         else:
             LOG_WARNING('View loading for name has no associated data', name)
         return
@@ -135,27 +132,29 @@ class LoaderManager(LoaderManagerMeta):
         :param alias: value of view alias.
         :param name: name of view.
         """
-        msg = "View '{0}' does not implement net.wg.infrastructure.interfaces.IView".format(alias)
+        viewKey = View.createViewKey(alias, name)
+        msg = "View '{0}' does not implement net.wg.infrastructure.interfaces.IView".format(viewKey)
         LOG_ERROR(msg)
         item = None
-        if name in self.__nameToLoadingItem:
-            item = self.__nameToLoadingItem.pop(name)
+        if viewKey in self.__loadingItems:
+            item = self.__loadingItems.pop(viewKey)
             pyEntity = item.pyEntity
             pyEntity.destroy()
-        self.onViewLoadError(name, msg, item)
+        self.onViewLoadError(viewKey, msg, item)
         return
 
     def _dispose(self):
         self.__app = None
-        self.__nameToLoadingItem.clear()
+        self.__loadingItems.clear()
         self.__eManager.clear()
         super(LoaderManager, self)._dispose()
         return
 
-    def __doLoadView(self, alias, name, *args, **kwargs):
+    def __doLoadView(self, key, *args, **kwargs):
+        alias, name = key
         viewTutorialID = self.__app.tutorialManager.getViewTutorialID(name)
-        if name in self.__nameToLoadingItem:
-            item = self.__nameToLoadingItem[name]
+        if key in self.__loadingItems:
+            item = self.__loadingItems[key]
             item.isCancelled = False
             pyEntity = item.pyEntity
         else:
@@ -171,7 +170,7 @@ class LoaderManager(LoaderManagerMeta):
             if pyEntity is not None:
                 pyEntity.setUniqueName(name)
                 pyEntity.setEnvironment(self.__app)
-                self.__nameToLoadingItem[name] = _LoadingItem(name, pyEntity, factoryIdx, args, kwargs)
+                self.__loadingItems[key] = _LoadingItem(name, pyEntity, factoryIdx, args, kwargs)
                 self.onViewLoadInit(pyEntity)
                 viewDict = {'config': pyEntity.settings.getDAAPIObject(),
                  'alias': alias,

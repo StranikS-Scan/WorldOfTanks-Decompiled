@@ -16,6 +16,7 @@ from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE
 from constants import IGR_TYPE, IS_RENTALS_ENABLED
 from debug_utils import *
 from vehicle_config_types import LeveredSuspensionConfig, SuspensionLever, SoundSiegeModeStateChange
+from items.stun import g_cfg as stunConfig
 if IS_CELLAPP or IS_CLIENT or IS_BOT:
     from ModelHitTester import ModelHitTester
 if IS_CELLAPP or IS_CLIENT or IS_WEB:
@@ -115,6 +116,7 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'radio/distance': 1.0,
  'gun/rotationSpeed': 1.0,
  'chassis/shotDispersionFactors/movement': 1.0,
+ 'chassis/shotDispersionFactors/rotation': 1.0,
  'gun/shotDispersionFactors/turretRotation': 1.0,
  'gun/reloadTime': 1.0,
  'gun/aimingTime': 1.0,
@@ -124,10 +126,13 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'repairSpeed': 1.0,
  'brokenTrack': None,
  'vehicle/rotationSpeed': 1.0,
+ 'vehicle/maxSpeed': 1.0,
  'chassis/terrainResistance': [1.0, 1.0, 1.0],
  'ramming': 1.0,
  'crewLevelIncrease': 0,
- 'crewChanceToHitFactor': 1.0}
+ 'crewChanceToHitFactor': 1.0,
+ 'stunResistanceEffect': 0.0,
+ 'stunResistanceDuration': 0.0}
 
 def init(preloadEverything, pricesToCollect):
     global g_list
@@ -985,7 +990,9 @@ class VehicleDescriptor(object):
              'vehicleByChassisDamageFactor': 1.0,
              'fuelTankHealthFactor': 1.0,
              'crewLevelIncrease': 0,
-             'crewChanceToHitFactor': 1.0}
+             'crewChanceToHitFactor': 1.0,
+             'stunResistanceEffect': 0.0,
+             'stunResistanceDuration': 0.0}
             for device in self.optionalDevices:
                 if device is not None:
                     device.updateVehicleDescrAttrs(self)
@@ -3180,6 +3187,32 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
         res['explosionRadius'] = section.readFloat('explosionRadius')
         if res['explosionRadius'] <= 0.0:
             res['explosionRadius'] = res['caliber'] * res['caliber'] / 5555.0
+        explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor')
+        for f in explosionSettings:
+            factor = section.readFloat(f)
+            if factor <= 0:
+                factor = g_cache.commonConfig['miscParams'][f]
+            res[f] = factor
+
+        if res['explosionEdgeDamageFactor'] > 1.0:
+            _xml.raiseWrongXml(xmlCtx, 'explosionEdgeDamageFactor', 'explosionEdgeDamageFactor must be < 1')
+    res['hasStun'] = section.readBool('hasStun', False)
+    if res['hasStun']:
+        if section.has_key('stunRadius'):
+            stunRadius = _xml.readPositiveFloat(xmlCtx, section, 'stunRadius')
+        elif kind == 'HIGH_EXPLOSIVE':
+            stunRadius = res['explosionRadius']
+        else:
+            _xml.raiseWrongXml(xmlCtx, 'stunRadius', 'hasStun = true, but neither explosionRadius nor stunRadius defined')
+        res['stunRadius'] = stunRadius
+        res['stunDuration'] = _xml.readPositiveFloat(xmlCtx, section, 'stunDuration') if section.has_key('stunDuration') else stunConfig.get('baseStunDuration', 30)
+        res['stunFactor'] = _xml.readPositiveFloat(xmlCtx, section, 'stunFactor') if section.has_key('stunFactor') else 1.0
+        if res['stunFactor'] > 1:
+            _xml.raiseWrongXml(xmlCtx, 'stunFactor', 'stun factor cannot exceed 1')
+        res['guaranteedStunDuration'] = _xml.readFraction(xmlCtx, section, 'guaranteedStunDuration') if section.has_key('guaranteedStunDuration') else stunConfig['guaranteedStunDuration']
+        res['damageDurationCoeff'] = _xml.readFraction(xmlCtx, section, 'damageDurationCoeff') if section.has_key('damageDurationCoeff') else stunConfig['damageDurationCoeff']
+        res['guaranteedStunEffect'] = _xml.readFraction(xmlCtx, section, 'guaranteedStunEffect') if section.has_key('guaranteedStunEffect') else stunConfig['guaranteedStunEffect']
+        res['damageEffectCoeff'] = _xml.readFraction(xmlCtx, section, 'damageEffectCoeff') if section.has_key('damageEffectCoeff') else stunConfig['damageEffectCoeff']
     effName = _xml.readNonEmptyString(xmlCtx, section, 'effects')
     v = g_cache.shotEffectsIndexes.get(effName)
     if v is None:
@@ -3792,6 +3825,9 @@ def _readCommonConfig(xmlCtx, section):
     res['miscParams'] = {'projectileSpeedFactor': _xml.readPositiveFloat(xmlCtx, section, 'miscParams/projectileSpeedFactor'),
      'hornCooldown': hornCooldownParams,
      'minFireStartingDamage': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/minFireStartingDamage'),
+     'explosionDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageFactor'),
+     'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
+     'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
      'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting')}
     if IS_CLIENT:
         v = {}

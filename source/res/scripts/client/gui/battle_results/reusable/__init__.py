@@ -16,6 +16,7 @@ from gui.battle_results.reusable.vehicles import VehiclesInfo
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PREMIUM_STATE
 from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT
 from gui.shared import g_itemsCache
+from gui.LobbyContext import g_lobbyContext
 
 def _fetchRecord(results, recordName):
     if recordName in results:
@@ -154,6 +155,11 @@ class _ReusableInfo(object):
     def isSquadSupported(self):
         """Can some squad take part in the specified battle."""
         return self.__common.isSquadSupported()
+
+    @property
+    def isStunEnabled(self):
+        """Is stun info should be visible."""
+        return g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
 
     @property
     def common(self):

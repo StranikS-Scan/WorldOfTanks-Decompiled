@@ -27,6 +27,7 @@ class BATTLEDAMAGELOG_IMAGES(object):
     DAMAGELOG_CRITICAL_ENEMY_16X16 = 'damageLog_critical_enemy_16x16'
     DAMAGELOG_BURN_ENEMY_16X16 = 'damageLog_fire_enemy_16x16'
     DAMAGELOG_RAM_ENEMY_16X16 = 'damageLog_ram_enemy_16x16'
+    DAMAGELOG_STUN_16X16 = 'damageLog_stun_16x16'
     WHITE_ICON_AT_SPG_16X16 = 'whiteIconAt-SPG16x16'
     WHITE_ICON_HEAVYTANK_16X16 = 'whiteIconHeavyTank16x16'
     WHITE_ICON_LIGHTTANK_16X16 = 'whiteIconLightTank16x16'

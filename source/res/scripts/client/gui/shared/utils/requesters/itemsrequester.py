@@ -17,6 +17,7 @@ from StatsRequester import StatsRequester
 from ShopRequester import ShopRequester
 from InventoryRequester import InventoryRequester
 from DossierRequester import DossierRequester
+from vehicle_rotation_requester import VehicleRotationRequester
 from gui.shared.utils.requesters.GoodiesRequester import GoodiesRequester
 from gui.shared.utils.requesters.recycle_bin_requester import RecycleBinRequester
 from gui.shared.utils.requesters.parsers.ShopDataParser import ShopDataParser
@@ -134,6 +135,7 @@ class REQ_CRITERIA(object):
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
         IS_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
+        IS_BOT = RequestCriteria(PredicateCondition(lambda item: item.name.endswith('_bot')))
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
@@ -195,6 +197,7 @@ class ItemsRequester(object):
         self.dossiers = DossierRequester()
         self.goodies = GoodiesRequester()
         self.shop = ShopRequester(self.goodies)
+        self.vehicleRotation = VehicleRotationRequester()
         self.recycleBin = RecycleBinRequester()
         self.__itemsCache = defaultdict(dict)
         self.__vehCustomStateCache = defaultdict(dict)
@@ -206,6 +209,7 @@ class ItemsRequester(object):
         Waiting.show('download/inventory')
         yield self.stats.request()
         yield self.inventory.request()
+        yield self.vehicleRotation.request()
         Waiting.hide('download/inventory')
         Waiting.show('download/shop')
         yield self.shop.request()
@@ -222,7 +226,7 @@ class ItemsRequester(object):
         callback(self)
 
     def isSynced(self):
-        return self.stats.isSynced() and self.inventory.isSynced() and self.recycleBin.isSynced() and self.shop.isSynced() and self.dossiers.isSynced() and self.goodies.isSynced()
+        return self.stats.isSynced() and self.inventory.isSynced() and self.recycleBin.isSynced() and self.shop.isSynced() and self.dossiers.isSynced() and self.goodies.isSynced() and self.vehicleRotation.isSynced()
 
     @async
     @process
@@ -261,6 +265,7 @@ class ItemsRequester(object):
         self.stats.clear()
         self.dossiers.clear()
         self.goodies.clear()
+        self.vehicleRotation.clear()
         self.recycleBin.clear()
 
     def invalidateCache(self, diff=None):
@@ -291,6 +296,11 @@ class ItemsRequester(object):
                     vehData = self.inventory.getVehicleData(_getDiffID(id))
                     if vehData is not None:
                         invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehData.descriptor.type.compactDescr)
+
+        for cacheType, data in diff.get('groupLocks', {}).iteritems():
+            if cacheType in ('isGroupLocked', 'groupBattles'):
+                inventoryVehiclesCDs = map(lambda v: vehicles.getVehicleTypeCompactDescr(v['compDescr']), self.inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues())
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
 
         for itemTypeID, itemsDiff in diff.get('inventory', {}).iteritems():
             if itemTypeID == GUI_ITEM_TYPE.VEHICLE:

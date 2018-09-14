@@ -264,6 +264,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOQUEUE = '#menu:tankCarousel/vehicleStates/unsuitableToQueue'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_ONLY = '#menu:tankCarousel/vehicleStates/fallout_only'
     TANKCAROUSEL_VEHICLESTATES_DEALISOVER = '#menu:tankCarousel/vehicleStates/dealIsOver'
+    TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT = '#menu:tankCarousel/vehicleStates/unsuitableToUnit'
     TANKCAROUSEL_STATSSTATUS_UNAVAILABLE = '#menu:tankCarousel/statsStatus/unavailable'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
@@ -292,6 +293,9 @@ class MENU(object):
     STORE_VEHICLESTATES_UNSUITABLETOQUEUE = '#menu:store/vehicleStates/unsuitableToQueue'
     STORE_VEHICLESTATES_FALLOUT_ONLY = '#menu:store/vehicleStates/fallout_only'
     STORE_VEHICLESTATES_DEALISOVER = '#menu:store/vehicleStates/dealIsOver'
+    TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED = '#menu:tankCarousel/vehicleStates/rotationGroupUnlocked'
+    TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPLOCKED = '#menu:tankCarousel/vehicleStates/rotationGroupLocked'
+    STORE_VEHICLESTATES_ROTATIONGROUPLOCKED = '#menu:store/vehicleStates/rotationGroupLocked'
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
@@ -320,7 +324,8 @@ class MENU(object):
     CURRENTVEHICLESTATUS_FALLOUT_ONLY = '#menu:currentVehicleStatus/fallout_only'
     CURRENTVEHICLESTATUS_DEALISOVER = '#menu:currentVehicleStatus/dealIsOver'
     CURRENTVEHICLESTATUS_UNSUITABLETOUNIT = '#menu:currentVehicleStatus/unsuitableToUnit'
-    TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT = '#menu:tankCarousel/vehicleStates/unsuitableToUnit'
+    CURRENTVEHICLESTATUS_ROTATIONGROUPUNLOCKED = '#menu:currentVehicleStatus/rotationGroupUnlocked'
+    CURRENTVEHICLESTATUS_ROTATIONGROUPLOCKED = '#menu:currentVehicleStatus/rotationGroupLocked'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
     REPAIR_CURIENCY = '#menu:repair/curiency'
     REPAIR_BUTTON = '#menu:repair/button'
@@ -500,6 +505,8 @@ class MENU(object):
     TANK_PARAMS_PERCENT = '#menu:tank_params/percent'
     TANK_PARAMS_KG = '#menu:tank_params/kg'
     TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
+    TANK_PARAMS_STUNMAXDURATION = '#menu:tank_params/stunMaxDuration'
+    TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
@@ -861,6 +868,11 @@ class MENU(object):
     MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/maxShotDistance/footnote'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/noPiercingDistance/footnote'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE = '#menu:moduleInfo/params/noPiercingDistance/footnote/maxDistance'
+    MODULEINFO_PARAMS_STUNMAXDURATION = '#menu:moduleInfo/params/stunMaxDuration'
+    MODULEINFO_PARAMS_STUNMINDURATION = '#menu:moduleInfo/params/stunMinDuration'
+    MODULEINFO_PARAMS_STUNMAXDURATIONLIST = '#menu:moduleInfo/params/stunMaxDurationList'
+    MODULEINFO_PARAMS_STUNMINDURATIONLIST = '#menu:moduleInfo/params/stunMinDurationList'
+    MODULEINFO_PARAMS_COOLDOWNSECONDS = '#menu:moduleInfo/params/cooldownSeconds'
     MODULEINFO_COMPATIBLE_TURRETS = '#menu:moduleInfo/compatible/turrets'
     MODULEINFO_COMPATIBLE_SHELLS = '#menu:moduleInfo/compatible/shells'
     MODULEINFO_COMPATIBLE_GUNS = '#menu:moduleInfo/compatible/guns'
@@ -899,6 +911,8 @@ class MENU(object):
     VEHICLEINFO_PARAMS_RELOADTIMESECS = '#menu:vehicleInfo/params/reloadTimeSecs'
     VEHICLEINFO_PARAMS_SWITCHONTIME = '#menu:vehicleInfo/params/switchOnTime'
     VEHICLEINFO_PARAMS_SWITCHOFFTIME = '#menu:vehicleInfo/params/switchOffTime'
+    VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
+    VEHICLEINFO_PARAMS_STUNMINDURATION = '#menu:vehicleInfo/params/stunMinDuration'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
     VEHICLEINFO_TABS_BASE = '#menu:vehicleInfo/tabs/base'
     VEHICLEINFO_TABS_STATISTIC = '#menu:vehicleInfo/tabs/statistic'
@@ -1663,6 +1677,7 @@ class MENU(object):
     DISCOUNT_DESCRIPTION_VEHICLE = '#menu:discount/description/vehicle'
     CONTEXTMENU_VIEWCLANPROFILE = '#menu:contextMenu/viewClanProfile'
     CONTEXTMENU_COPYCLANNAME = '#menu:contextMenu/copyClanName'
+    INFINITYSYMBOL = '#menu:infinitySymbol'
     ONLINECOUNTER_TOTAL = '#menu:onlineCounter/total'
     ONLINECOUNTER_DELIMITER = '#menu:onlineCounter/delimiter'
     ONLINECOUNTER_UNAVAILABLE = '#menu:onlineCounter/unavailable'
@@ -1966,7 +1981,12 @@ class MENU(object):
      MODULEINFO_PARAMS_MAXSHOTDISTANCE,
      MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE,
      MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE,
-     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE)
+     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE,
+     MODULEINFO_PARAMS_STUNMAXDURATION,
+     MODULEINFO_PARAMS_STUNMINDURATION,
+     MODULEINFO_PARAMS_STUNMAXDURATIONLIST,
+     MODULEINFO_PARAMS_STUNMINDURATIONLIST,
+     MODULEINFO_PARAMS_COOLDOWNSECONDS)
     MODULEINFO_COMPATIBLE_ENUM = (MODULEINFO_COMPATIBLE_TURRETS,
      MODULEINFO_COMPATIBLE_SHELLS,
      MODULEINFO_COMPATIBLE_GUNS,
@@ -2091,7 +2111,9 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOQUEUE,
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_ONLY,
      TANKCAROUSEL_VEHICLESTATES_DEALISOVER,
-     TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT)
+     TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT,
+     TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,
+     TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPLOCKED)
     TANKMANTRAININGWINDOW_ENUM = (TANKMANTRAININGWINDOW_TITLE,
      TANKMANTRAININGWINDOW_ACADEMY,
      TANKMANTRAININGWINDOW_SCOOL,
@@ -2127,7 +2149,9 @@ class MENU(object):
      VEHICLEINFO_PARAMS_INVISIBILITYMOVINGFACTOR,
      VEHICLEINFO_PARAMS_RELOADTIMESECS,
      VEHICLEINFO_PARAMS_SWITCHONTIME,
-     VEHICLEINFO_PARAMS_SWITCHOFFTIME)
+     VEHICLEINFO_PARAMS_SWITCHOFFTIME,
+     VEHICLEINFO_PARAMS_STUNMAXDURATION,
+     VEHICLEINFO_PARAMS_STUNMINDURATION)
     TRAINING_INFO_ENUM = (TRAINING_INFO_TITLE,
      TRAINING_INFO_STARTBUTTON,
      TRAINING_INFO_SETTINGSBUTTON,
@@ -2310,7 +2334,9 @@ class MENU(object):
      TANK_PARAMS_GRADS,
      TANK_PARAMS_PERCENT,
      TANK_PARAMS_KG,
-     TANK_PARAMS_CLIPSEC)
+     TANK_PARAMS_CLIPSEC,
+     TANK_PARAMS_STUNMAXDURATION,
+     TANK_PARAMS_STUNMINDURATION)
     VEHPARAMS_ENUM = (VEHPARAMS_FIREPOWER,
      VEHPARAMS_ARMOR,
      VEHPARAMS_MOBILITY,

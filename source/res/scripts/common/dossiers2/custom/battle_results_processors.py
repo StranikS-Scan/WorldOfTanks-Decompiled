@@ -422,6 +422,8 @@ def __updateAggregatedValues(block, block2, results, dossierXP, frags8p, winnerT
 
 def __updateBaseStatistics(block, block2, results, dossierXP, winnerTeam=None):
     block['battlesCount'] += 1
+    if results['canStun']:
+        block2['battlesOnStunningVehicles'] += 1
     if dossierXP != 0:
         block['xp'] += dossierXP
         block2['originalXP'] += results['originalXP']
@@ -445,7 +447,7 @@ def __updateBaseStatistics(block, block2, results, dossierXP, winnerTeam=None):
     kills = len(results['killList'])
     if kills:
         block['frags'] += kills
-    for record in ('damageAssistedTrack', 'damageAssistedRadio', 'directHitsReceived', 'noDamageDirectHitsReceived', 'piercingsReceived', 'explosionHitsReceived', 'explosionHits', 'piercings', 'potentialDamageReceived', 'damageBlockedByArmor'):
+    for record in ('damageAssistedTrack', 'damageAssistedRadio', 'directHitsReceived', 'noDamageDirectHitsReceived', 'piercingsReceived', 'explosionHitsReceived', 'explosionHits', 'piercings', 'potentialDamageReceived', 'damageBlockedByArmor', 'stunNum', 'damageAssistedStun'):
         if bool(results[record]):
             block2[record] += results[record]
 

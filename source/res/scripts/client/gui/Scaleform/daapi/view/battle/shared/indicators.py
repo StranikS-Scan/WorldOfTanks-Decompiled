@@ -40,6 +40,7 @@ _DAMAGE_INDICATOR_ANIMATION_DURATION = _DAMAGE_INDICATOR_TOTAL_FRAMES / float(_D
 _DIRECT_INDICATOR_SWF = 'directionIndicator.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
+_DIRECT_ARTY_INDICATOR_MC_NAME = '_root.artyDirectionalIndicatorMc'
 _DIRECT_INDICATOR_SWF_SIZE = (680, 680)
 _MARKER_SMALL_SIZE_THRESHOLD = 0.1
 _MARKER_LARGE_SIZE_THRESHOLD = 0.3
@@ -794,3 +795,47 @@ def createDirectIndicator():
 
 def createDamageIndicator():
     return _DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
+
+
+class _ArtyDirectionIndicator(Flash, IDirectionIndicator):
+
+    def __init__(self, swf):
+        super(_ArtyDirectionIndicator, self).__init__(swf, _DIRECT_INDICATOR_COMPONENT, (_DIRECT_ARTY_INDICATOR_MC_NAME,), SCALEFORM_SWF_PATH_V3)
+        self.component.wg_inputKeyMode = 2
+        self.component.position.z = DEPTH_OF_Aim
+        self.movie.backgroundAlpha = 0.0
+        self.movie.scaleMode = 'NoScale'
+        self.component.focus = False
+        self.component.moveFocus = False
+        self.component.heightMode = 'PIXEL'
+        self.component.widthMode = 'PIXEL'
+        self.flashSize = _DIRECT_INDICATOR_SWF_SIZE
+        self.__isVisible = True
+        self.component.relativeRadius = 0.5
+        self._dObject = getattr(self.movie, _DIRECT_ARTY_INDICATOR_MC_NAME, None)
+        return
+
+    def __del__(self):
+        LOG_DEBUG('StunDirectionIndicator deleted')
+
+    def setShape(self, shape):
+        if self._dObject:
+            self._dObject.setShape(shape)
+
+    def setPosition(self, position):
+        self.component.position3D = position
+
+    def track(self, position):
+        self.active(True)
+        self.component.visible = True
+        self.component.position3D = position
+
+    def remove(self):
+        self._dObject = None
+        self.close()
+        return
+
+    def setVisibility(self, isVisible):
+        if not self.__isVisible == isVisible:
+            self.__isVisible = isVisible
+            self.component.visible = isVisible

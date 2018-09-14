@@ -372,7 +372,7 @@ class AutoInviteEvent(SharedEvent):
 
 
 class CSVehicleSelectEvent(HasCtxEvent):
-    VEHICLE_SELECTED = 'vehicleSelected'
+    VEHICLE_SELECTED = 'CSVehicleSelectEvent/vehicleSelected'
 
     def __init__(self, eventType=None, ctx=None):
         super(CSVehicleSelectEvent, self).__init__(eventType, ctx)
@@ -516,7 +516,7 @@ class MarkersManagerEvent(SharedEvent):
 
 
 class VehicleBuyEvent(HasCtxEvent):
-    VEHICLE_SELECTED = 'vehicleSelected'
+    VEHICLE_SELECTED = 'vehicleBuyEvent/vehicleSelected'
 
     def __init__(self, eventType=None, ctx=None):
         super(VehicleBuyEvent, self).__init__(eventType, ctx)

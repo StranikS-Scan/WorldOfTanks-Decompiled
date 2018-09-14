@@ -2351,7 +2351,7 @@
           <speed>	265	</speed>
           <gravity>	138	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	42 42	</piercingPower>
+          <piercingPower>	21 21	</piercingPower>
           <maxHeight>	169	</maxHeight>
         </_13pdr_HE>
       </shots>
@@ -3289,17 +3289,9 @@
           <speed>	410	</speed>
           <gravity>	190	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	42 42	</piercingPower>
+          <piercingPower>	21 21	</piercingPower>
           <maxHeight>	280	</maxHeight>
         </_18pdr_HE_Mk_1C>
-        <_18pdr_AP_Mk_1T>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	410	</speed>
-          <gravity>	190	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	65 50	</piercingPower>
-          <maxHeight>	280	</maxHeight>
-        </_18pdr_AP_Mk_1T>
       </shots>
     </_18_pdr_SPG_Gun>
     <_25pdr_AT_Field_Gun>
@@ -3659,7 +3651,7 @@
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
+      <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
         <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
@@ -3746,25 +3738,9 @@
           <speed>	410	</speed>
           <gravity>	160	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
+          <piercingPower>	22 22	</piercingPower>
           <maxHeight>	328	</maxHeight>
         </_25pdr_HE_Mk_1D>
-        <_25pdr_AP_Mk_1T_SC>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	410	</speed>
-          <gravity>	160	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	92 81	</piercingPower>
-          <maxHeight>	328	</maxHeight>
-        </_25pdr_AP_Mk_1T_SC>
-        <_25pdr_AP_Mk_1T>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	410	</speed>
-          <gravity>	160	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	71 63	</piercingPower>
-          <maxHeight>	328	</maxHeight>
-        </_25pdr_AP_Mk_1T>
       </shots>
     </OQF_25pdr_Gun_Mk_II>
     <_4.5inch_SPG_Howitzer>
@@ -3806,7 +3782,7 @@
           <speed>	270	</speed>
           <gravity>	146	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	57 57	</piercingPower>
+          <piercingPower>	28 28	</piercingPower>
           <maxHeight>	167	</maxHeight>
         </_4.5inch_HE_Mk_13>
       </shots>
@@ -3994,7 +3970,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	huge	</recoilEffect>
       </recoil>
-      <effects>	shot_superhuge	</effects>
+      <effects>	shot_huge	</effects>
       <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -4022,7 +3998,7 @@
           <speed>	440	</speed>
           <gravity>	146	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	70 70	</piercingPower>
+          <piercingPower>	35 35	</piercingPower>
           <maxHeight>	409	</maxHeight>
         </_5.5inch_HE_Mk_4>
         <_5.5inch_HE_Mk_5>
@@ -4030,7 +4006,7 @@
           <speed>	440	</speed>
           <gravity>	146	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	75 75	</piercingPower>
+          <piercingPower>	35 35	</piercingPower>
           <maxHeight>	409	</maxHeight>
         </_5.5inch_HE_Mk_5>
       </shots>
@@ -4046,7 +4022,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	huge	</recoilEffect>
       </recoil>
-      <effects>	shot_large	</effects>
+      <effects>	shot_huge	</effects>
       <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -4068,29 +4044,20 @@
         <afterShot>	6.4	</afterShot>
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
-      <shots>
-        <_6inch_HE>
+      <shots>	.	  <_6inch_HE>
           <defaultPortion>	1.0	</defaultPortion>
           <speed>	480	</speed>
           <gravity>	164	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	90 90	</piercingPower>
+          <piercingPower>	38 38	</piercingPower>
           <maxHeight>	432	</maxHeight>
         </_6inch_HE>
-        <_6inch_AP>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	480	</speed>
-          <gravity>	164	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	258 248	</piercingPower>
-          <maxHeight>	432	</maxHeight>
-        </_6inch_AP>
         <_6inch_HE_Mk_6>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	480	</speed>
           <gravity>	164	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	90 90	</piercingPower>
+          <piercingPower>	38 38	</piercingPower>
           <maxHeight>	432	</maxHeight>
         </_6inch_HE_Mk_6>
       </shots>
@@ -4134,7 +4101,7 @@
           <speed>	440	</speed>
           <gravity>	143	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	92 92	</piercingPower>
+          <piercingPower>	46 46	</piercingPower>
           <maxHeight>	417	</maxHeight>
         </_7.2inch_HE>
         <_7.2inch_HE_Mk_2>
@@ -4142,7 +4109,7 @@
           <speed>	440	</speed>
           <gravity>	143	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	97 97	</piercingPower>
+          <piercingPower>	46 46	</piercingPower>
           <maxHeight>	417	</maxHeight>
         </_7.2inch_HE_Mk_2>
       </shots>
@@ -4245,7 +4212,7 @@
           <speed>	395	</speed>
           <gravity>	155	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	117 117	</piercingPower>
+          <piercingPower>	59 59	</piercingPower>
           <maxHeight>	315	</maxHeight>
         </_9.2inch_HE_Mk_18>
         <_9.2inch_HE_Mk_19>
@@ -4253,7 +4220,7 @@
           <speed>	395	</speed>
           <gravity>	155	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	117 117	</piercingPower>
+          <piercingPower>	59 59	</piercingPower>
           <maxHeight>	315	</maxHeight>
         </_9.2inch_HE_Mk_19>
       </shots>
@@ -4472,7 +4439,7 @@
           <speed>	270	</speed>
           <gravity>	146	</gravity>
           <maxDistance>	10000	</maxDistance>
-          <piercingPower>	57 57	</piercingPower>
+          <piercingPower>	28 28	</piercingPower>
           <maxHeight>	167	</maxHeight>
         </_4.5inch_HE_Mk_13>
       </shots>

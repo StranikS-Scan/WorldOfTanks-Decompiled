@@ -36,6 +36,10 @@ class SquadEntity(UnitEntity):
         self.invalidateVehicleStates()
         return super(SquadEntity, self).init(ctx)
 
+    def fini(self, ctx=None, woEvents=False):
+        self.__clearCustomVehicleStates()
+        super(SquadEntity, self).fini(ctx, woEvents)
+
     def canKeepMode(self):
         return False
 
@@ -108,3 +112,18 @@ class SquadEntity(UnitEntity):
             else:
                 vehicle.clearCustomState()
         return changed
+
+    @staticmethod
+    def __clearCustomVehicleStates():
+        """
+        Removes all custom states in inventory vehicles
+        """
+        vehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
+        updatedVehicles = []
+        for intCD, v in vehicles.iteritems():
+            if v.isCustomStateSet():
+                v.clearCustomState()
+                updatedVehicles.append(intCD)
+
+        if updatedVehicles:
+            g_prbCtrlEvents.onVehicleClientStateChanged(updatedVehicles)

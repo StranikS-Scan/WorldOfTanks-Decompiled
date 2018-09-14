@@ -7,7 +7,7 @@ from collections import namedtuple
 import Event
 import AccountCommands
 import ClientPrebattle
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientClubs, ClientGoodies, client_recycle_bin
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientClubs, ClientGoodies, vehicle_rotation, client_recycle_bin
 from account_helpers import ClientInvitations
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents as events
@@ -68,6 +68,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.gMap = g_accountRepository.gMap
         self.clubs = g_accountRepository.clubs
         self.goodies = g_accountRepository.goodies
+        self.vehicleRotation = g_accountRepository.vehicleRotation
         self.recycleBin = g_accountRepository.recycleBin
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
@@ -83,6 +84,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.gMap.setAccount(self)
         self.clubs.setAccount(self)
         self.goodies.setAccount(self)
+        self.vehicleRotation.setAccount(self)
         self.recycleBin.setAccount(self)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -123,6 +125,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattleInvitations.onProxyBecomePlayer()
         self.clubs.onAccountBecomePlayer()
         self.goodies.onAccountBecomePlayer()
+        self.vehicleRotation.onAccountBecomePlayer()
         self.recycleBin.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
@@ -147,6 +150,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattleInvitations.onProxyBecomeNonPlayer()
         self.clubs.onAccountBecomeNonPlayer()
         self.goodies.onAccountBecomeNonPlayer()
+        self.vehicleRotation.onAccountBecomeNonPlayer()
         self.recycleBin.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
@@ -160,6 +164,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.prebattleInvitations.setProxy(None)
         self.clubs.setAccount(None)
         self.goodies.setAccount(None)
+        self.vehicleRotation.setAccount(None)
         self.recycleBin.setAccount(None)
         self.fort.clear()
         events.onAccountBecomeNonPlayer()
@@ -923,6 +928,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.intUserSettings.synchronize(isFullSync, diff)
             self.clubs.synchronize(isFullSync, diff)
             self.goodies.synchronize(isFullSync, diff)
+            self.vehicleRotation.synchronize(isFullSync, diff)
             self.recycleBin.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeEventNotifications(diff)
@@ -1125,6 +1131,7 @@ class _AccountRepository(object):
         self.prebattleInvitations = ClientInvitations.ClientInvitations(events)
         self.clubs = ClientClubs.ClientClubs(self.syncData)
         self.goodies = ClientGoodies.ClientGoodies(self.syncData)
+        self.vehicleRotation = vehicle_rotation.VehicleRotation(self.syncData)
         self.recycleBin = client_recycle_bin.ClientRecycleBin(self.syncData)
         self.fort = ClientFortMgr()
         self.gMap = ClientGlobalMap()

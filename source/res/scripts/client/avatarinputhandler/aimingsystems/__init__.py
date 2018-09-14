@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/__init__.py
 import math
+from functools import wraps
 import BigWorld
 import Math
 from Math import Vector3
@@ -15,6 +16,13 @@ class IAimingSystem(object):
 
     def __init__(self):
         self._matrix = mathUtils.createIdentityMatrix()
+
+    @property
+    def aimMatrix(self):
+        """Returns reference of matrix that containing transformation of player aiming.
+        But it may not consider collision with game objects and camera transformation equals
+        aim transformation by default."""
+        return self._matrix
 
     def destroy(self):
         pass
@@ -160,6 +168,18 @@ def getDesiredShotPoint(start, dir, onlyOnGround=False, isStrategicMode=False, t
     return g_desiredShotPoint
 
 
+def _trackcalls(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        wrapper.has_been_called = True
+        return func(*args, **kwargs)
+
+    wrapper.has_been_called = False
+    return wrapper
+
+
+@_trackcalls
 def shootInSkyPoint(startPos, dir):
     dirFromCam = dir
     start = startPos

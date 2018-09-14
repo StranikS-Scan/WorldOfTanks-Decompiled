@@ -16,6 +16,10 @@
       <Type>	REMOTE_CAMERA_STRATEGIC_DATA	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </remoteCameraStrategic>
+    <remoteCameraArty>
+      <Type>	REMOTE_CAMERA_ARTY_DATA	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </remoteCameraArty>
   </Properties>
   <CellMethods>
     <switchObserverFPVControlMode>
@@ -34,5 +38,9 @@
       <Exposed></Exposed>
       <Arg>	REMOTE_CAMERA_STRATEGIC_DATA	</Arg>
     </setRemoteCameraStrategic>
+    <setRemoteCameraArty>
+      <Exposed></Exposed>
+      <Arg>	REMOTE_CAMERA_ARTY_DATA	</Arg>
+    </setRemoteCameraArty>
   </CellMethods>
 </VehicleObserver.def>

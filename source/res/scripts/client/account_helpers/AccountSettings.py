@@ -39,6 +39,7 @@ LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
+TRAJECTORY_VIEW_HINT_COUNTER = 'trajectoryViewHintCounter'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
 SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
@@ -371,7 +372,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 NEW_SETTINGS_COUNTER: {'FeedbackSettings0': True,
                                        'FeedbackSettings1': True,
                                        'FeedbackSettings2': True,
-                                       'GameSettings': True}}}
+                                       'GameSettings': True},
+                TRAJECTORY_VIEW_HINT_COUNTER: 10}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -389,7 +391,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 27
+    version = 28
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -615,13 +617,7 @@ class AccountSettings(object):
 
                 CommandMapping.g_instance.restoreUserConfig()
             if currVersion < 19:
-                cmSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
-                for command, section in cmSection.items()[:]:
-                    fireKey = AccountSettings.__readSection(section, 'fireKey').asString
-                    if fireKey == 'KEY_G':
-                        cmSection.deleteSection(command)
-
-                CommandMapping.g_instance.restoreUserConfig()
+                pass
             if currVersion < 20:
                 for key, section in _filterAccountSection(ads):
                     accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
@@ -710,6 +706,24 @@ class AccountSettings(object):
                                 panelSettings['state'] = legacyToNewMode[presentMode]
                                 settingsSection.write('players_panel', _pack(panelSettings))
 
+            if currVersion < 28:
+                getSection = AccountSettings.__readSection
+                cmSection = getSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+                cmdItems = cmSection.items()[:]
+                if cmdItems:
+                    checkUserKeyBinding = AccountSettings.__checkUserKeyBinding
+                    hasKeyG, hasCmdVoice, bindedG = checkUserKeyBinding('KEY_G', 'CMD_VOICECHAT_ENABLE', cmdItems)
+                    hasKeyH, hasCmdHorn, bindedH = checkUserKeyBinding('KEY_H', 'CMD_USE_HORN', cmdItems)
+                    if hasCmdHorn:
+                        cmSection.deleteSection('CMD_USE_HORN')
+                    isKeyGDefault = not hasKeyG or bindedG
+                    keyForCmdTraject = 'KEY_G' if isKeyGDefault else 'KEY_NONE'
+                    getSection(cmSection, 'CMD_CM_TRAJECTORY_VIEW').writeString('fireKey', keyForCmdTraject)
+                    if not hasCmdVoice or bindedG:
+                        isKeyHDefault = not hasKeyH or bindedH
+                        keyForCmdVoice = 'KEY_H' if isKeyHDefault else 'KEY_NONE'
+                        getSection(cmSection, 'CMD_VOICECHAT_ENABLE').writeString('fireKey', keyForCmdVoice)
+                    CommandMapping.g_instance.restoreUserConfig()
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -778,3 +792,23 @@ class AccountSettings(object):
             else:
                 fds.deleteSection(name)
             AccountSettings.onSettingsChanging(name, value)
+
+    @staticmethod
+    def __checkUserKeyBinding(key=None, command=None, commandSectionItems=None):
+        """
+        Method is used to check some user key binding
+        """
+        if commandSectionItems is None:
+            commandSection = AccountSettings.__readSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
+            commandSectionItems = commandSection.items()[:]
+        hasKey, hasCommand, binded = False, False, False
+        for cmd, section in commandSectionItems:
+            fireKey = AccountSettings.__readSection(section, 'fireKey').asString
+            if key is not None and fireKey == key:
+                if cmd == command:
+                    return (True, True, True)
+                hasKey = True
+            if command is not None and cmd == command:
+                hasCommand = True
+
+        return (hasKey, hasCommand, binded)

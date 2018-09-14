@@ -114,8 +114,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	22	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.42	</vehicleMovement>
-        <vehicleRotation>	0.42	</vehicleRotation>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	140	</maxHealth>
@@ -345,8 +345,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.38	</vehicleMovement>
-        <vehicleRotation>	0.38	</vehicleRotation>
+        <vehicleMovement>	0.34	</vehicleMovement>
+        <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	150	</maxHealth>
@@ -590,7 +590,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
@@ -598,22 +598,22 @@
       </surveyingDeviceHealth>
       <guns>
         <_155mm_Gun_M46>	shared	  <maxAmmo>	40	</maxAmmo>
-          <reloadTime>	30.5	</reloadTime>
+          <reloadTime>	28	</reloadTime>
           <unlocks>
             <gun>	_203mm_Howitzer_M47	  <cost>	64000	</cost>
             </gun>
           </unlocks>
           <shotDispersionFactors>
-            <turretRotation>	0.64	</turretRotation>
-            <afterShot>	6.0	</afterShot>
+            <turretRotation>	0.47	</turretRotation>
+            <afterShot>	6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <shotDispersionRadius>	0.68	</shotDispersionRadius>
-          <aimingTime>	6	</aimingTime>
+          <shotDispersionRadius>	0.63	</shotDispersionRadius>
+          <aimingTime>	4.5	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <turretYawLimits>	-30 30	</turretYawLimits>
           <pitchLimits>
@@ -644,8 +644,8 @@
           </camouflage>
         </_155mm_Gun_M46>
         <_203mm_Howitzer_M47>	shared	  <maxAmmo>	20	</maxAmmo>
-          <reloadTime>	45.2	</reloadTime>
-          <shotDispersionRadius>	0.84	</shotDispersionRadius>
+          <reloadTime>	42	</reloadTime>
+          <shotDispersionRadius>	0.75	</shotDispersionRadius>
           <unlocks>
             <vehicle>	A38_T92	  <cost>	271000	</cost>
             </vehicle>
@@ -655,11 +655,11 @@
             <gunBreech>	0	</gunBreech>
           </armor>
           <shotDispersionFactors>
-            <turretRotation>	0.66	</turretRotation>
-            <afterShot>	6.0	</afterShot>
+            <turretRotation>	0.5	</turretRotation>
+            <afterShot>	6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	7	</aimingTime>
+          <aimingTime>	5.2	</aimingTime>
           <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -65 1 -65	</minPitch>

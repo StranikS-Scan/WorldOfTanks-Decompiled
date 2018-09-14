@@ -15,6 +15,7 @@ class CombatSelectedArea(object):
 
     def __init__(self):
         self.__terrainSelectedArea = None
+        self.__pixelQuad = None
         self.__terrainRotatedArea = None
         self.__fakeModel = None
         self.__matrix = None
@@ -38,6 +39,15 @@ class CombatSelectedArea(object):
         self.__nextPosition = position
         self.__speed = Math.Vector3(0.0, 0.0, 0.0)
         self.__time = 0.0
+
+    def addLine(self, position, color, width, height):
+        if self.__fakeModel is None:
+            self.__fakeModel = BigWorld.Model('')
+        rootNode = self.__fakeModel.node('')
+        self.__pixelQuad = BigWorld.PyStrictPixelQuad()
+        self.__pixelQuad.setup(width, height, color, position)
+        rootNode.attach(self.__pixelQuad)
+        return
 
     def setSelectingDirection(self, value=False):
         if value and self.__terrainRotatedArea is None:
@@ -85,6 +95,7 @@ class CombatSelectedArea(object):
         BigWorld.delModel(self.__fakeModel)
         self.__terrainSelectedArea = None
         self.__terrainRotatedArea = None
+        self.__pixelQuad = None
         self.__fakeModel = None
         self.__matrix = None
         self.__rotateModelNode = None

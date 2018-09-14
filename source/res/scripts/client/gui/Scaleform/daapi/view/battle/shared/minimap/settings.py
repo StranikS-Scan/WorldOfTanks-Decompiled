@@ -42,6 +42,7 @@ class ENTRY_SYMBOL_NAME(object):
     ALLY_ABSORPTION_FLAG = 'AllyAbsorptionFlagEntry'
     ENEMY_ABSORPTION_FLAG = 'EnemyAbsorptionFlagEntry'
     RESOURCE_POINT = 'ResourcePointEntry'
+    ARTY_MARKER = 'ArtyMarkerMinimapEntry'
 
 
 class TRANSFORM_FLAG(object):

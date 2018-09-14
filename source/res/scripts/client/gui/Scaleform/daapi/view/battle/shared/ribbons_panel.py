@@ -132,7 +132,8 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_CRITS: _criticalHitRibbonFormatter,
  _BET.RECEIVED_RAM: _singleVehRibbonFormatter,
  _BET.RECEIVED_BURN: _singleVehRibbonFormatter,
- _BET.RECEIVED_WORLD_COLLISION: _singleVehRibbonFormatter}
+ _BET.RECEIVED_WORLD_COLLISION: _singleVehRibbonFormatter,
+ _BET.STUN: _singleVehRibbonFormatter}
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -283,4 +284,5 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.RECEIVED_DAMAGE, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_DAMAGE))],
          [_BET.RECEIVED_BURN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_BURN))],
          [_BET.RECEIVED_RAM, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_RAM))],
-         [_BET.RECEIVED_WORLD_COLLISION, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_WORLD_COLLISION))]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName)
+         [_BET.RECEIVED_WORLD_COLLISION, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_WORLD_COLLISION))],
+         [_BET.STUN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.STUN))]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName)

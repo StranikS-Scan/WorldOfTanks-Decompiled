@@ -20,12 +20,12 @@ class ShowMiniclientInfo(aop.Aspect):
 class DisableTankServiceButtons(aop.Aspect):
 
     def __init__(self, config):
-        self.__vehicle_is_available = config['vehicle_is_available']
+        self.__config = config
         aop.Aspect.__init__(self)
 
     def atCall(self, cd):
-        tooltip = makeTooltip(None, None, None, MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP)
-        if g_currentVehicle.isPresent() and not self.__vehicle_is_available(g_currentVehicle.item):
+        tooltip = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP))
+        if g_currentVehicle.isPresent() and not self.__config['vehicle_is_available'](g_currentVehicle.item):
             cd.change()
             return ((False,
               tooltip,
@@ -39,17 +39,17 @@ class DisableTankServiceButtons(aop.Aspect):
 class MaintenanceButtonFlickering(aop.Aspect):
 
     def __init__(self, config):
-        self.__vehicle_is_available = config['vehicle_is_available']
+        self.__config = config
         aop.Aspect.__init__(self)
 
     def atCall(self, cd):
-        if g_currentVehicle.isPresent() and not self.__vehicle_is_available(g_currentVehicle.item):
+        if g_currentVehicle.isPresent() and not self.__config['vehicle_is_available'](g_currentVehicle.item):
             original_args = list(cd._args)
             shells = original_args[0]
             original_args[1] = False
             for shell in shells:
                 shell['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                shell['tooltip'] = makeTooltip(None, None, None, MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP)
+                shell['tooltip'] = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP))
 
             cd.change()
             return (original_args, cd.kwargs)
@@ -61,16 +61,16 @@ class MaintenanceButtonFlickering(aop.Aspect):
 class DeviceButtonsFlickering(aop.Aspect):
 
     def __init__(self, config):
-        self.__vehicle_is_available = config['vehicle_is_available']
+        self.__config = config
         aop.Aspect.__init__(self)
 
     def atCall(self, cd):
-        if g_currentVehicle.isPresent() and not self.__vehicle_is_available(g_currentVehicle.item):
+        if g_currentVehicle.isPresent() and not self.__config['vehicle_is_available'](g_currentVehicle.item):
             original_args = list(cd._args)
             devices = original_args[0]['devices']
             for device in devices:
                 device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                device['tooltip'] = makeTooltip(None, None, None, MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP)
+                device['tooltip'] = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP))
 
             cd.change()
             return (original_args, cd.kwargs)
@@ -82,11 +82,11 @@ class DeviceButtonsFlickering(aop.Aspect):
 class TankModelHangarVisibility(aop.Aspect):
 
     def __init__(self, config):
-        self.__vehicle_is_available = config['vehicle_is_available']
+        self.__config = config
         aop.Aspect.__init__(self)
 
     def atCall(self, cd):
-        if g_currentVehicle.isPresent() and not self.__vehicle_is_available(g_currentVehicle.item):
+        if g_currentVehicle.isPresent() and not self.__config['vehicle_is_available'](g_currentVehicle.item):
             cd.avoid()
             return False
         else:
@@ -97,13 +97,13 @@ class TankModelHangarVisibility(aop.Aspect):
 class TankHangarStatus(aop.Aspect):
 
     def __init__(self, config):
-        self.__vehicle_is_available = config['vehicle_is_available']
+        self.__config = config
         aop.Aspect.__init__(self)
 
     def atCall(self, cd):
-        if g_currentVehicle.isPresent() and not self.__vehicle_is_available(g_currentVehicle.item):
+        if g_currentVehicle.isPresent() and not self.__config['vehicle_is_available'](g_currentVehicle.item):
             cd.avoid()
-            return (Vehicle.VEHICLE_STATE.NOT_PRESENT, _ms('#miniclient:hangar/unavailable'), Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
+            return (Vehicle.VEHICLE_STATE.NOT_PRESENT, _ms(self.__config.get('sandbox_platform_message', '#miniclient:hangar/unavailable')), Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
         else:
             return None
             return None

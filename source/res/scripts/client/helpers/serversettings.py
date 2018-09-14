@@ -157,6 +157,16 @@ class _StrongholdSettings(namedtuple('_StrongholdSettings', ('wgshHostUrl',))):
         return cls('')
 
 
+class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ['stunEnabled', 'markTargetAreaEnabled'])):
+
+    def isStunEnabled(self):
+        return self.stunEnabled
+
+    @classmethod
+    def defaults(cls):
+        return cls(False, False)
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -184,6 +194,10 @@ class ServerSettings(object):
             self.__updateClanProfile(self.__serverSettings)
         else:
             self.__clanProfile = _ClanProfile.defaults()
+        if 'spgRedesignFeatures' in self.__serverSettings:
+            self.__spgRedesignFeatures = makeTupleByDict(_SpgRedesignFeatures, self.__serverSettings['spgRedesignFeatures'])
+        else:
+            self.__spgRedesignFeatures = _SpgRedesignFeatures.defaults()
         if 'strongholdSettings' in self.__serverSettings:
             settings = self.__serverSettings['strongholdSettings']
             self.__strongholdSettings = _StrongholdSettings(settings.get('wgshHostUrl', ''))
@@ -194,6 +208,8 @@ class ServerSettings(object):
         self.__serverSettings.update(serverSettingsDiff)
         if 'clanProfile' in serverSettingsDiff:
             self.__updateClanProfile(serverSettingsDiff)
+        if 'spgRedesignFeatures' in self.__serverSettings:
+            self.__spgRedesignFeatures = makeTupleByDict(_SpgRedesignFeatures, self.__serverSettings['spgRedesignFeatures'])
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -221,6 +237,10 @@ class ServerSettings(object):
     @property
     def clanProfile(self):
         return self.__clanProfile
+
+    @property
+    def spgRedesignFeatures(self):
+        return self.__spgRedesignFeatures
 
     @property
     def stronghold(self):
@@ -270,6 +290,12 @@ class ServerSettings(object):
 
     def getForbiddenRatedBattles(self):
         return self.__getGlobalSetting('forbiddenRatedBattles', {})
+
+    def isSPGForbiddenInSquads(self):
+        return self.__getGlobalSetting('forbidSPGinSquads', False)
+
+    def getRandomMapsForDemonstrator(self):
+        return self.__getGlobalSetting('randomMapsForDemonstrator', {})
 
     def isPremiumInPostBattleEnabled(self):
         return self.__getGlobalSetting('isPremiumInPostBattleEnabled', True)

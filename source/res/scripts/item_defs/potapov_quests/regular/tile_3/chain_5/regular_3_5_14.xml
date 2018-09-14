@@ -7,19 +7,25 @@
       <conditions>
         <postBattle>
           <or>
-            <and>
-              <vehicleDamage>
-                <classes>	heavyTank AT-SPG	</classes>
-                <greaterOrEqual>	4000	</greaterOrEqual>
-              </vehicleDamage>
-            </and>
+            <results>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	180	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	800	</greaterOrEqual>
+            </results>
             <unit>
-              <and>
-                <unitVehicleDamage>
-                  <classes>	heavyTank AT-SPG	</classes>
-                  <greaterOrEqual>	4000	</greaterOrEqual>
-                </unitVehicleDamage>
-              </and>
+              <or>
+                <results>
+                  <key>	stunDuration	</key>
+                  <greaterOrEqual>	180	</greaterOrEqual>
+                </results>
+                <results>
+                  <key>	damageAssistedTrack	</key>
+                  <greaterOrEqual>	800	</greaterOrEqual>
+                </results>
+              </or>
             </unit>
           </or>
         </postBattle>
@@ -37,22 +43,28 @@
         <postBattle>
           <and>
             <or>
-              <and>
-                <vehicleDamage>
-                  <classes>	heavyTank AT-SPG	</classes>
-                  <greaterOrEqual>	4000	</greaterOrEqual>
-                </vehicleDamage>
-              </and>
+              <results>
+                <key>	stunDuration	</key>
+                <greaterOrEqual>	180	</greaterOrEqual>
+              </results>
+              <results>
+                <key>	damageAssistedTrack	</key>
+                <greaterOrEqual>	800	</greaterOrEqual>
+              </results>
               <unit>
-                <and>
-                  <unitVehicleDamage>
-                    <classes>	heavyTank AT-SPG	</classes>
-                    <greaterOrEqual>	4000	</greaterOrEqual>
-                  </unitVehicleDamage>
-                </and>
+                <or>
+                  <results>
+                    <key>	stunDuration	</key>
+                    <greaterOrEqual>	180	</greaterOrEqual>
+                  </results>
+                  <results>
+                    <key>	damageAssistedTrack	</key>
+                    <greaterOrEqual>	800	</greaterOrEqual>
+                  </results>
+                </or>
               </unit>
             </or>
-            <isAlive></isAlive>
+            <win></win>
           </and>
         </postBattle>
       </conditions>

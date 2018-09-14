@@ -9,8 +9,6 @@ import Math
 from debug_utils import *
 from constants import IS_DEVELOPMENT
 import constants
-from OcclusionDecal import OcclusionDecal
-from ShadowForwardDecal import ShadowForwardDecal
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers import bound_effects, DecalMap
 from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
@@ -137,8 +135,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
         self.__prevVelocity = None
         self.__prevTime = None
         self.__isPillbox = False
-        self.__chassisOcclusionDecal = OcclusionDecal()
-        self.__chassisShadowForwardDecal = ShadowForwardDecal()
         self.__splodge = None
         self.__vehicleStickers = None
         self.onModelChanged = Event()
@@ -237,10 +233,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
                 self.__periodicTimerIDEngine = None
             self.__crashedTracksCtrl.destroy()
             self.__crashedTracksCtrl = None
-            self.__chassisOcclusionDecal.destroy()
-            self.__chassisOcclusionDecal = None
-            self.__chassisShadowForwardDecal.destroy()
-            self.__chassisShadowForwardDecal = None
             return
 
     def preStart(self, typeDesc):
@@ -478,8 +470,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
             if MAX_DISTANCE > 0:
                 self.__detachSplodge(self.__splodge)
             self.__removeHavok()
-            self.__chassisOcclusionDecal.detach()
-            self.__chassisShadowForwardDecal.detach()
             self.__destroyLampLights()
             if hasattr(gun['model'], 'wg_gunRecoil'):
                 delattr(gun['model'], 'wg_gunRecoil')
@@ -538,16 +528,12 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
             self.__attachStickers(items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha'], True)
         self.__updateCamouflage()
         self.__updateRepaint()
-        self.__chassisShadowForwardDecal.attach(vehicle, self.modelsDesc)
-        self.__chassisShadowForwardDecal.attach(vehicle, self.modelsDesc)
         self.__applyVisibility()
         self.__vehicle.model.height, _ = self.__computeVehicleHeight()
         self.onModelChanged()
         if 'observer' in vehicle.typeDescriptor.type.tags:
             vehicle.model.visible = False
             vehicle.model.visibleAttachments = False
-        else:
-            self.__chassisOcclusionDecal.attach(vehicle, self.modelsDesc)
         if MAX_DISTANCE > 0:
             transform = vehicle.typeDescriptor.chassis['AODecals'][0]
             self.__attachSplodge(BigWorld.Splodge(transform, MAX_DISTANCE, vehicle.typeDescriptor.chassis['hullPosition'].y))

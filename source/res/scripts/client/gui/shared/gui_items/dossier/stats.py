@@ -347,6 +347,21 @@ class _Battle2StatsBlock(_StatsBlockAbstract):
     def getArmorUsingEfficiency(self):
         return self._getAvgValue(lambda : self.getPotentialDamageReceived() - self.getDamageBlockedByArmor(), self.getDamageBlockedByArmor)
 
+    def getBattlesCountWithStun(self):
+        return self._getStat2('battlesOnStunningVehicles')
+
+    def getDamageAssistedStun(self):
+        return self._getStat2('damageAssistedStun')
+
+    def getAvgDamageAssistedStun(self):
+        return self._getAvgValue(self.getBattlesCountWithStun, self.getDamageAssistedStun)
+
+    def getStunNumber(self):
+        return self._getStat2('stunNum')
+
+    def getAvgStunNumber(self):
+        return self._getAvgValue(self.getBattlesCountWithStun, self.getStunNumber)
+
     @abstractmethod
     def getBattlesCountVer2(self):
         pass

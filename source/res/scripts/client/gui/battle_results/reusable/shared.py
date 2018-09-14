@@ -270,6 +270,16 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
+    def damageAssistedStun(self):
+        """Gets damage dealt with the SPG stun assistant."""
+        raise NotImplementedError
+
+    @property
+    def stunNum(self):
+        """Gets number for SPG stuns."""
+        raise NotImplementedError
+
+    @property
     def critsInfo(self):
         """ Gets critical information that personal vehicle(s) according to enemy."""
         raise NotImplementedError
@@ -343,7 +353,7 @@ class VehicleDetailedInfo(_VehicleInfo):
     This class can be used for vehicle and comments of properties related to this vehicle.
     Also this class can be used for enemies in the efficiency block and
     comments of properties related to some personal vehicle."""
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_fortResource', '_xp', '_fire')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_fortResource', '_xp', '_fire')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -363,6 +373,8 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._sniperDamageDealt = 0
         self._damageAssistedTrack = 0
         self._damageAssistedRadio = 0
+        self._damageAssistedStun = 0
+        self._stunNum = 0
         self._directHits = 0
         self._directHitsReceived = 0
         self._explosionHits = 0
@@ -443,6 +455,14 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._damageAssistedTrack + self._damageAssistedRadio
 
     @property
+    def damageAssistedStun(self):
+        return self._damageAssistedStun
+
+    @property
+    def stunNum(self):
+        return self._stunNum
+
+    @property
     def critsInfo(self):
         return self._critsInfo
 
@@ -503,7 +523,7 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._xp
 
     def haveInteractionDetails(self):
-        return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0
+        return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0
 
     @classmethod
     @no_key_error
@@ -557,6 +577,8 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._damageAssistedRadio = records['damageAssistedRadio']
         info._directHits = records['directHits']
         info._explosionHits = records['explosionHits']
+        info._damageAssistedStun = records['damageAssistedStun']
+        info._stunNum = records['stunNum']
 
 
 class VehicleSummarizeInfo(_VehicleInfo):
@@ -643,6 +665,14 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def damageAssisted(self):
         return self.__accumulate('damageAssisted')
+
+    @property
+    def damageAssistedStun(self):
+        return self.__accumulate('damageAssistedStun')
+
+    @property
+    def stunNum(self):
+        return self.__accumulate('stunNum')
 
     @property
     def critsInfo(self):

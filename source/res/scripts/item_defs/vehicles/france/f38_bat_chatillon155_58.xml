@@ -106,10 +106,10 @@
       <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
       <brakeForce>	35000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	18	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.4	</vehicleMovement>
-        <vehicleRotation>	0.4	</vehicleRotation>
+        <vehicleMovement>	0.5	</vehicleMovement>
+        <vehicleRotation>	0.5	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	170	</maxHealth>
@@ -234,13 +234,13 @@
       </armor>
       <weight>	8000	</weight>
       <maxHealth>	98	</maxHealth>
-      <rotationSpeed>	10	</rotationSpeed>
+      <rotationSpeed>	7	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	340	</circularVisionRadius>
+      <circularVisionRadius>	280	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -252,17 +252,17 @@
             <armor_1>	15	</armor_1>
             <gun>	25	</gun>
           </armor>
-          <shotDispersionRadius>	0.68	</shotDispersionRadius>
-          <reloadTime>	80	</reloadTime>
-          <aimingTime>	5.5	</aimingTime>
+          <shotDispersionRadius>	0.61	</shotDispersionRadius>
+          <reloadTime>	52	</reloadTime>
+          <aimingTime>	4.5	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.6	</turretRotation>
-            <afterShot>	4.5	</afterShot>
+            <turretRotation>	0.45	</turretRotation>
+            <afterShot>	6.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
-            <count>	4	</count>
-            <rate>	10	</rate>
+            <count>	3	</count>
+            <rate>	6	</rate>
           </clip>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>

@@ -10,6 +10,19 @@
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <armorColor>	15 36 36 0	</armorColor>
   <inscriptions>
+    <swedenhidden>
+      <userString>	#vehicle_customization:inscription/historical	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	1.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	5	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_05.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/gittan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </swedenhidden>
     <sweden>
       <userString>	#vehicle_customization:inscription/historical	</userString>
       <priceFactor>	1.0	</priceFactor>
@@ -36,12 +49,6 @@
           <id>	4	</id>
           <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_04.dds	</texName>
           <userString>	#vehicle_customization:inscription/sweden/gamla_bettan	</userString>
-          <qualifier>	map_kind_summer_all_crew	</qualifier>
-        </inscription>
-        <inscription>
-          <id>	5	</id>
-          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_05.dds	</texName>
-          <userString>	#vehicle_customization:inscription/sweden/gittan	</userString>
           <qualifier>	map_kind_summer_all_crew	</qualifier>
         </inscription>
         <inscription>

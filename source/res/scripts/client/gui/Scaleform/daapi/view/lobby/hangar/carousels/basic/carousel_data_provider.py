@@ -6,7 +6,7 @@ from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
-from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES
+from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getBattlesLeft
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
@@ -14,6 +14,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from helpers.i18n import makeString as _ms
+from gui.Scaleform.locale.MENU import MENU
 
 class _SUPPLY_ITEMS(object):
     BUY_TANK = 0
@@ -55,9 +56,9 @@ def _getStatusStyles(vStateLvl):
     """ Get text styles for small and large slots according to vehicle's state.
     """
     if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL:
-        return (text_styles.critical, text_styles.vehicleStatusCriticalText)
+        return (text_styles.stats, text_styles.vehicleStatusCriticalText)
     else:
-        return (text_styles.middleTitle, text_styles.vehicleStatusInfoText)
+        return (text_styles.stats, text_styles.vehicleStatusInfoText)
 
 
 def _getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substitute='', style=None, ctx=None):
@@ -73,7 +74,8 @@ def _getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substi
     :return: tuple (status for small slot, status for large slot)
     """
     ctx = ctx or {}
-    status = _ms('#menu:tankCarousel/vehicleStates/{}'.format(vState), **ctx)
+    state = MENU.tankcarousel_vehiclestates(vState)
+    status = _ms(state, **ctx)
     if style is None:
         smallStyle, largeStyle = _getStatusStyles(vStateLvl)
     else:
@@ -85,6 +87,27 @@ def _getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substi
     else:
         return (status, status)
         return
+
+
+def _isLockedBackground(vState, vStateLvl):
+    """
+    Gets 'locked' background state for Vehicle Data VO, depending on vehicle state and state level
+    :param vState: vState: one of VEHICLE_STATE
+    :param vStateLvl: vStateLvl: one of VEHICLE_STATE_LEVEL
+    :return: boolean result
+    """
+    if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL:
+        result = True
+    elif vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.WARNING:
+        result = vState in (Vehicle.VEHICLE_STATE.BATTLE,
+         Vehicle.VEHICLE_STATE.IN_PREBATTLE,
+         Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
+         Vehicle.VEHICLE_STATE.NOT_SUITABLE,
+         Vehicle.VEHICLE_STATE.NOT_PRESENT,
+         Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY)
+    else:
+        result = False
+    return result
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):
@@ -228,7 +251,11 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def _getVehicleDataVO(self, vehicle):
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
         vState, vStateLvl = vehicle.getState()
-        smallStatus, largeStatus = _getStatusStrings(vState, vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall()})
+        if vehicle.isRotationApplied():
+            if vState in (Vehicle.VEHICLE_STATE.AMMO_NOT_FULL, Vehicle.VEHICLE_STATE.LOCKED):
+                vState = Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED
+        smallStatus, largeStatus = _getStatusStrings(vState, vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
+         'battlesLeft': getBattlesLeft(vehicle)})
         if vehicle.dailyXPFactor > 1:
             bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
         else:
@@ -236,11 +263,11 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
         labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
         statsText = self._getVehicleStats(vehicle.intCD)
-        return {'id': vehicle.invID,
+        vehicleData = {'id': vehicle.invID,
          'infoText': largeStatus,
          'smallInfoText': smallStatus,
          'clanLock': vehicle.clanLock,
-         'lockBackground': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
+         'lockBackground': _isLockedBackground(vState, vStateLvl),
          'icon': vehicle.icon,
          'iconSmall': vehicle.iconSmall,
          'label': labelStyle(label),
@@ -252,7 +279,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
          'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
          'rentLeft': rentInfoText,
          'statsText': statsText,
-         'visibleStats': self._showVehicleStats}
+         'visibleStats': self._showVehicleStats,
+         'infoImgSrc': getVehicleStateIcon(vState),
+         'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL}
+        return vehicleData
 
     def _buildVehicleItems(self):
         self._vehicles = []

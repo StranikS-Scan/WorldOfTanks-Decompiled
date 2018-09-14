@@ -222,7 +222,7 @@ class SfLobbyProxy(GUIProxy):
                 self.onPageChanging(sceneID)
         return
 
-    def __onViewLoadError(self, name, msg, item):
+    def __onViewLoadError(self, key, msg, item):
         if item is not None:
             effectID = item.name
             for effectName in (GUI_EFFECT_NAME.SHOW_DIALOG, GUI_EFFECT_NAME.SHOW_WINDOW):

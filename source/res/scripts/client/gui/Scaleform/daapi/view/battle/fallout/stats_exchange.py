@@ -115,7 +115,7 @@ class FalloutMultiTeamItemsComposer(broker.SingleSideComposer):
 
 
 class FalloutStatsComponent(vehicle.VehicleStatsComponent):
-    __slots__ = ('_winPoints', '_frags', '_deaths', '_damage', '_specialPoints')
+    __slots__ = ('_winPoints', '_frags', '_deaths', '_damage', '_specialPoints', '_vehicleID')
 
     def __init__(self):
         super(FalloutStatsComponent, self).__init__()

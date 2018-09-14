@@ -134,8 +134,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.44	</vehicleMovement>
-        <vehicleRotation>	0.44	</vehicleRotation>
+        <vehicleMovement>	0.33	</vehicleMovement>
+        <vehicleRotation>	0.33	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -379,8 +379,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	22	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.4	</vehicleMovement>
-        <vehicleRotation>	0.4	</vehicleRotation>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	90	</maxHealth>
@@ -630,7 +630,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	265	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
@@ -641,7 +641,7 @@
             <gun>	_155mm_Howitzer_M45	  <cost>	6900	</cost>
             </gun>
           </unlocks>
-          <reloadTime>	22.5	</reloadTime>
+          <reloadTime>	20.3	</reloadTime>
           <maxAmmo>	36	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -65 1 -65	</minPitch>
@@ -651,11 +651,11 @@
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <shotDispersionRadius>	0.82	</shotDispersionRadius>
-          <aimingTime>	6.5	</aimingTime>
+          <shotDispersionRadius>	0.74	</shotDispersionRadius>
+          <aimingTime>	4.6	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.48	</turretRotation>
+            <turretRotation>	0.38	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -722,7 +722,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	265	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
@@ -734,7 +734,7 @@
             <minPitch>	0 -65 1 -65	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	22	</reloadTime>
+          <reloadTime>	19.9	</reloadTime>
           <unlocks>
             <vehicle>	A32_M12	  <cost>	59400	</cost>
             </vehicle>
@@ -745,11 +745,11 @@
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <shotDispersionRadius>	0.8	</shotDispersionRadius>
-          <aimingTime>	6	</aimingTime>
+          <shotDispersionRadius>	0.72	</shotDispersionRadius>
+          <aimingTime>	4.9	</aimingTime>
           <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.46	</turretRotation>
+            <turretRotation>	0.36	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

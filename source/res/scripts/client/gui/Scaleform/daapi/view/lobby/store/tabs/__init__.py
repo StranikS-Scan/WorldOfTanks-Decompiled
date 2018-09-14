@@ -15,6 +15,7 @@ from helpers import i18n, time_utils, dependency
 from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from gui.shared.gui_items.Vehicle import Vehicle
 
 def _getBtnVehCompareData(vehicle):
     comparisonBasket = dependency.instance(IVehicleComparisonBasket)
@@ -67,7 +68,7 @@ class StoreItemsTab(object):
         :return: <obj> VO for flash
         """
         item, extraModuleInfo, installedVehiclesCount = packedItem
-        statusMessage, disabled = self._getStatusParams(item)
+        statusMessage, disabled, statusImgSrc, isCritLvl = self.__getStatusInfo(item)
         stats = self._items.stats
         shop = self._items.shop
         return {'id': str(item.intCD),
@@ -85,7 +86,8 @@ class StoreItemsTab(object):
          'type': self._getItemTypeIcon(item),
          'disabled': disabled,
          'statusMessage': statusMessage,
-         'statusLevel': self._getItemStatusLevel(item),
+         'isCritLvl': isCritLvl,
+         'statusImgSrc': statusImgSrc,
          'removable': item.isRemovable,
          'itemTypeName': item.itemTypeName,
          'goldShellsForCredits': shop.isEnabledBuyingGoldShellsForCredits,
@@ -142,6 +144,14 @@ class StoreItemsTab(object):
         :return: <tuple(statusMessage<str>, disabled:<bool>)>
         """
         return ('', False)
+
+    def _getStatusImg(self, item):
+        """
+        Get status image
+        :param item: item to get status
+        :return: string
+        """
+        pass
 
     def _getItemPrice(self, item):
         """
@@ -213,6 +223,25 @@ class StoreItemsTab(object):
         :return:<str>
         """
         raise NotImplementedError
+
+    def __getStatusInfo(self, item):
+        """
+        Returns styled status message, image, critLevel flag
+        :param item: item:<FittingItem>
+        :return: tuple with values of styledStatus, disabled flag, statusImage icon, isCritLevel flag
+        """
+        isCritLvl = self._getItemStatusLevel(item) == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
+        statusMessage, disabled = self._getStatusParams(item)
+        if statusMessage:
+            statusImgSrc = self._getStatusImg(item)
+            styledStatus = text_styles.vehicleStatusCriticalText(statusMessage) if isCritLvl else text_styles.vehicleStatusInfoText(statusMessage)
+        else:
+            statusImgSrc = ''
+            styledStatus = ''
+        return (styledStatus,
+         disabled,
+         statusImgSrc,
+         isCritLvl)
 
 
 class StoreModuleTab(StoreItemsTab):

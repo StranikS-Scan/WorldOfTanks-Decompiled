@@ -181,7 +181,7 @@ class SettingsParams(object):
         :param diff: [dict(settingName->settingValue)] settings values
         :return: [options.APPLY_METHOD.*] settings apply method
         """
-        newMonitorIndex = diff.get(settings_constants.GRAPHICS.MONITOR, g_monitorSettings.currentMonitor)
+        newMonitorIndex = diff.get(settings_constants.GRAPHICS.MONITOR, g_monitorSettings.activeMonitor)
         currentVideoMode = g_monitorSettings.windowMode
         nextVideoMode = currentVideoMode
         if settings_constants.GRAPHICS.VIDEO_MODE in diff:

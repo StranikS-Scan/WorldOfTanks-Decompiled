@@ -7,7 +7,7 @@
     <driver></driver>
   </crew>
   <speedLimits>
-    <forward>	64.4	</forward>
+    <forward>	64	</forward>
     <backward>	23	</backward>
   </speedLimits>
   <invisibility>
@@ -40,7 +40,7 @@
       <armor_12>	9.5	</armor_12>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	7925	</weight>
+    <weight>	7950	</weight>
     <maxHealth>	672	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
@@ -109,8 +109,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	155	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A103_T71E1/normal/lod0/Chassis.model	</undamaged>
@@ -340,7 +340,7 @@
       <userString>	#igr_vehicles:Turret_1_T71_IGR	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	17400.0	</price>
+      <price>	17400	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	22.2	</armor_1>
@@ -359,14 +359,14 @@
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	80	</maxHealth>
-        <maxRegenHealth>	40	</maxRegenHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_T185_IGR>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_76mm_Gun_T185E_IGR>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.353005 7 0.416667 5 0.583333 5 0.646995 7 1 7	</maxPitch>
@@ -420,7 +420,7 @@
           <camouflage>
             <tiling>	0.7 0.7 0.23 0.000000	</tiling>
           </camouflage>
-        </_76mm_Gun_T185_IGR>
+        </_76mm_Gun_T185E_IGR>
       </guns>
       <models>
         <undamaged>	vehicles/american/A103_T71E1/normal/lod0/Turret_01.model	</undamaged>
@@ -461,7 +461,7 @@
     <Continental_AOI-628-2_IGR>	shared	</Continental_AOI-628-2_IGR>
   </engines>
   <fuelTanks>
-    <Heavy>	shared	</Heavy>
+    <Average>	shared	</Average>
   </fuelTanks>
   <radios>
     <AN-ARC-27_IGR>	shared	</AN-ARC-27_IGR>
@@ -470,7 +470,7 @@
     <detailed>
       <engines>
         <Continental_AOI-628-2_IGR>
-          <smplEnginePower>	422.9124	</smplEnginePower>
+          <smplEnginePower>	420	</smplEnginePower>
         </Continental_AOI-628-2_IGR>
       </engines>
       <chassis>

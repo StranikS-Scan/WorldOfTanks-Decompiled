@@ -796,6 +796,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         for i, equipment in enumerate(self.__vehicle.eqs):
             cmp_helpers.installEquipmentOnVehicle(vehicle, equipment.intCD if equipment else None, i)
 
+        vehicle.descriptor.activeGunShotIndex = self.__vehicle.descriptor.activeGunShotIndex
         return vehicle
 
     def _populate(self):

@@ -8,7 +8,6 @@ from AvatarInputHandler import mathUtils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from gun_rotation_shared import calcPitchLimitsFromDesc
-from constants import VEHICLE_MODE
 
 class SniperAimingSystem(IAimingSystem):
     turretYaw = property(lambda self: self.__idealTurretYaw + self.__oscillator.deviation.x)

@@ -2166,3 +2166,28 @@ class PrbVehicleKickFormatter(ServiceChannelFormatter):
             if vehicle:
                 formatted = g_settings.msgTemplates.format('prbVehicleKick', ctx={'vehName': vehicle.userName})
         return (formatted, self._getGuiSettings(message, 'prbVehicleKick'))
+
+
+class RotationGroupLockFormatter(ServiceChannelFormatter):
+    """ Vehicle rotation related message. This messages comes from server on rotation group lock.
+    """
+
+    def format(self, message, *args):
+        templateKey = self._getMessageTemplateKey()
+        if isinstance(message.data, list):
+            groups = ', '.join(map(str, message.data))
+        else:
+            groups = message.data
+        formatted = g_settings.msgTemplates.format(templateKey, ctx={'groupNum': groups})
+        return (formatted, self._getGuiSettings(message, templateKey))
+
+    def _getMessageTemplateKey(self):
+        pass
+
+
+class RotationGroupUnlockFormatter(RotationGroupLockFormatter):
+    """ Vehicle rotation related message. This messages comes from server on rotation group unlock.
+    """
+
+    def _getMessageTemplateKey(self):
+        pass

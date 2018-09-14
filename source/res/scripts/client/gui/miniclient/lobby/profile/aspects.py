@@ -3,12 +3,22 @@
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
 from gui.shared.utils.functions import makeTooltip
 from helpers import aop
-from helpers.i18n import makeString
 
 class MakeClanBtnUnavailable(aop.Aspect):
+
+    def __init__(self, config={}):
+        self.__config = config
+        aop.Aspect.__init__(self)
 
     def atReturn(self, cd):
         original_return_value = cd.returned
         original_return_value['btnEnabled'] = False
-        original_return_value['btnTooltip'] = makeTooltip(None, None, None, makeString(MINICLIENT.PROFILE_WARNING))
+        original_return_value['btnTooltip'] = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.ACCOUNTPOPOVER_WARNING))
         return original_return_value
+
+
+class MakeClubProfileButtonUnavailable(aop.Aspect):
+
+    def atCall(self, cd):
+        cd.change()
+        return ([False], {})

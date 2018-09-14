@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_log_panel.py
 import BigWorld
+from gui.LobbyContext import g_lobbyContext
 from helpers import dependency
 from collections import defaultdict
 from shared_utils import BitmaskHelper
@@ -8,6 +9,7 @@ from constants import SHELL_TYPES
 from account_helpers.settings_core.options import DamageLogDetailsSetting as _VIEW_MODE, DamageLogEventPositionsSetting as _EVENT_POSITIONS, DamageLogEventTypesSetting as _DISPLAYED_EVENT_TYPES
 from account_helpers.settings_core.settings_constants import DAMAGE_LOG, GRAPHICS
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.Scaleform.daapi.view.meta.BattleDamageLogPanelMeta import BattleDamageLogPanelMeta
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
@@ -17,7 +19,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from helpers import i18n
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.genConsts.DAMAGE_LOG_SHELL_BG_TYPES import DAMAGE_LOG_SHELL_BG_TYPES
-_POSITIVE_EVENTS_MASK = _ETYPE.DAMAGE | _ETYPE.ASSIST_DAMAGE
+_POSITIVE_EVENTS_MASK = _ETYPE.DAMAGE | _ETYPE.ASSIST_DAMAGE | _ETYPE.STUN
 _NEGATIVE_EVENTS_MASK = _ETYPE.BLOCKED_DAMAGE | _ETYPE.RECEIVED_DAMAGE | _ETYPE.RECEIVED_CRITICAL_HITS
 _ALL_EVENTS_MASK = _POSITIVE_EVENTS_MASK | _NEGATIVE_EVENTS_MASK
 _EVENT_POSITIONS_TO_CONTENT_MASK = {_EVENT_POSITIONS.ALL_BOTTOM: (0, _ALL_EVENTS_MASK),
@@ -38,7 +40,8 @@ _DISPLAYED_EVENT_TYPES_TO_CONTENT_MASK = {_DISPLAYED_EVENT_TYPES.ALL: _ALL_EVENT
  _DISPLAYED_EVENT_TYPES.ONLY_POSITIVE: _POSITIVE_EVENTS_MASK}
 _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK = {DAMAGE_LOG.TOTAL_DAMAGE: _ETYPE.DAMAGE,
  DAMAGE_LOG.ASSIST_DAMAGE: _ETYPE.ASSIST_DAMAGE,
- DAMAGE_LOG.BLOCKED_DAMAGE: _ETYPE.BLOCKED_DAMAGE}
+ DAMAGE_LOG.BLOCKED_DAMAGE: _ETYPE.BLOCKED_DAMAGE,
+ DAMAGE_LOG.ASSIST_STUN: _ETYPE.STUN}
 _LOGS_SETTINGS = (DAMAGE_LOG.SHOW_DETAILS, DAMAGE_LOG.EVENT_POSITIONS, DAMAGE_LOG.SHOW_EVENT_TYPES)
 _VEHICLE_CLASS_TAGS_ICONS = {'lightTank': _IMAGES.WHITE_ICON_LIGHTTANK_16X16,
  'mediumTank': _IMAGES.WHITE_ICON_MEDIUM_TANK_16X16,
@@ -255,7 +258,8 @@ _ETYPE_TO_RECORD_VO_BUILDER = {_ETYPE.DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHIC
  _ETYPE.RECEIVED_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _DamageShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _DamageActionImgVOBuilder(shotIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16, fireIcon=_IMAGES.DAMAGELOG_BURN_ENEMY_16X16, ramIcon=_IMAGES.DAMAGELOG_RAM_ENEMY_16X16, wcIcon=_IMAGES.DAMAGELOG_DAMAGE_ENEMY_16X16)),
  _ETYPE.BLOCKED_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _ShellVOBuilder(), _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_REFLECT_16X16)),
  _ETYPE.ASSIST_DAMAGE: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _AssistActionImgVOBuilder()),
- _ETYPE.RECEIVED_CRITICAL_HITS: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _CritsShellVOBuilder(), _CriticalHitValueVOBuilder(), _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_CRITICAL_ENEMY_16X16))}
+ _ETYPE.RECEIVED_CRITICAL_HITS: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _CritsShellVOBuilder(), _CriticalHitValueVOBuilder(), _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_CRITICAL_ENEMY_16X16)),
+ _ETYPE.STUN: _LogRecordVOBuilder(_DEFAULT_VEHICLE_VO_BUILDER, _EMPTY_SHELL_VO_BUILDER, _DAMAGE_VALUE_VO_BUILDER, _ActionImgVOBuilder(image=_IMAGES.DAMAGELOG_STUN_16X16))}
 
 class _LogViewComponent(object):
     """
@@ -360,6 +364,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__isVisible = False
         self.__logViewMode = _VIEW_MODE.SHOW_ALWAYS
+        self.__isSPG = None
         self.__totalDamageContentMask = 0
         self.__totalValues = defaultdict(int)
         self._totalEvents = None
@@ -372,7 +377,10 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__efficiencyCtrl = self.sessionProvider.shared.personalEfficiencyCtrl
         self.__topLog.initialize(setListProxyMethod=self._updateTopLog, addToListProxyMethod=self._addToTopLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
         self.__bottomLog.initialize(setListProxyMethod=self._updateBottomLog, addToListProxyMethod=self._addToBottomLog, efficiencyCtrl=self.__efficiencyCtrl, arenaDP=self.__arenaDP)
-        self._totalEvents = ((_ETYPE.DAMAGE, self._updateTotalDamageValue), (_ETYPE.BLOCKED_DAMAGE, self._updateTotalBlockedDamageValue), (_ETYPE.ASSIST_DAMAGE, self._updateTotalAssistValue))
+        self._totalEvents = ((_ETYPE.DAMAGE, self._updateTotalDamageValue),
+         (_ETYPE.BLOCKED_DAMAGE, self._updateTotalBlockedDamageValue),
+         (_ETYPE.ASSIST_DAMAGE, self._updateTotalAssistValue),
+         (_ETYPE.STUN, self._updateTotalStunValue))
         self._invalidatePanelVisibility()
         if self.__efficiencyCtrl is not None:
             self._invalidateContent()
@@ -436,6 +444,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         """
         contentMask = 0
         for settingName, bit in _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK.iteritems():
+            if settingName == DAMAGE_LOG.ASSIST_STUN:
+                if self._canShowStunAssist():
+                    contentMask |= bit
             if self.settingsCore.getSetting(settingName):
                 contentMask |= bit
 
@@ -444,6 +455,16 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             getter = self.__efficiencyCtrl.getTotalEfficiency
             args = [ self._setTotalValue(e, getter(e))[1] for e, _ in self._totalEvents ]
             self.as_summaryStatsS(*args)
+
+    def _canShowStunAssist(self):
+        if self.__isSPG is None:
+            if self.__arenaDP is None:
+                return False
+            vehicleType = self.__arenaDP.getVehicleInfo(None).vehicleType
+            if vehicleType is None or vehicleType.classTag is None:
+                return False
+            self.__isSPG = vehicleType.classTag == VEHICLE_CLASS_NAME.SPG
+        return self.__isSPG and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
 
     def _onTotalEfficiencyUpdated(self, diff):
         """
@@ -579,6 +600,9 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def _updateTotalAssistValue(self, value):
         self.as_updateSummaryAssistValueS(value)
+
+    def _updateTotalStunValue(self, value):
+        self.as_updateSummaryStunValueS(value)
 
     def _setSettings(self, isVisible, isColorBlind):
         self.as_setSettingsDamageLogComponentS(isVisible, isColorBlind)

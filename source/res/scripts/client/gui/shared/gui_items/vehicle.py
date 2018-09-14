@@ -10,6 +10,7 @@ from account_shared import LayoutIterator, getCustomizedVehCompDescr
 from constants import WIN_XP_FACTOR_MODE
 from gui import makeHtmlString
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control import prb_getters
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
@@ -111,6 +112,8 @@ class Vehicle(FittingItem, HasStrCD):
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
         CUSTOM = (NOT_SUITABLE, UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
         DEAL_IS_OVER = 'dealIsOver'
+        ROTATION_GROUP_UNLOCKED = 'rotationGroupUnlocked'
+        ROTATION_GROUP_LOCKED = 'rotationGroupLocked'
 
     CAN_SELL_STATES = [VEHICLE_STATE.UNDAMAGED,
      VEHICLE_STATE.CREW_NOT_FULL,
@@ -122,7 +125,9 @@ class Vehicle(FittingItem, HasStrCD):
      VEHICLE_STATE.FALLOUT_BROKEN,
      VEHICLE_STATE.FALLOUT_ONLY,
      VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
-     VEHICLE_STATE.UNSUITABLE_TO_UNIT]
+     VEHICLE_STATE.UNSUITABLE_TO_UNIT,
+     VEHICLE_STATE.ROTATION_GROUP_UNLOCKED,
+     VEHICLE_STATE.ROTATION_GROUP_LOCKED]
     GROUP_STATES = [VEHICLE_STATE.GROUP_IS_NOT_READY,
      VEHICLE_STATE.FALLOUT_MIN,
      VEHICLE_STATE.FALLOUT_MAX,
@@ -172,7 +177,7 @@ class Vehicle(FittingItem, HasStrCD):
             self._searchableUserName = makeSearchableString(self.userName)
         invData = dict()
         tradeInData = None
-        if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.recycleBin.isSynced():
+        if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.vehicleRotation.isSynced() and proxy.recycleBin.isSynced():
             invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
@@ -193,6 +198,10 @@ class Vehicle(FittingItem, HasStrCD):
             self.restorePrice = calcVehicleRestorePrice(self.defaultPrice, proxy.shop)
             self.restoreInfo = proxy.recycleBin.getVehicleRestoreInfo(self.intCD, restoreConfig.restoreDuration, restoreConfig.restoreCooldown)
             self._personalDiscountPrice = proxy.shop.getPersonalVehicleDiscountPrice(self.intCD)
+            self.rotationGroupNum = proxy.vehicleRotation.getGroupNum(self.intCD)
+            self.rotationBattlesLeft = proxy.vehicleRotation.getBattlesCount(self.rotationGroupNum)
+            self.isRotationGroupLocked = proxy.vehicleRotation.isGroupLocked(self.rotationGroupNum)
+            self.isInfiniteRotationGroup = proxy.vehicleRotation.isInfinite(self.rotationGroupNum)
         self.inventoryCount = 1 if len(invData.keys()) else 0
         data = invData.get('rent')
         if data is not None:
@@ -530,6 +539,8 @@ class Vehicle(FittingItem, HasStrCD):
             ms = Vehicle.VEHICLE_STATE.LOCKED
         elif self.isDisabledInRoaming:
             ms = Vehicle.VEHICLE_STATE.SERVER_RESTRICTION
+        elif self.isRotationGroupLocked:
+            ms = Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED
         ms = self.__checkUndamagedState(ms, isCurrnentPlayer)
         if ms in Vehicle.CAN_SELL_STATES and self.__customState:
             ms = self.__customState
@@ -561,6 +572,8 @@ class Vehicle(FittingItem, HasStrCD):
                 return Vehicle.VEHICLE_STATE.AMMO_NOT_FULL
             if self.isFalloutOnly() and not self.__isFalloutEnabled():
                 return Vehicle.VEHICLE_STATE.FALLOUT_ONLY
+            if not self.isRotationGroupLocked and self.rotationGroupNum != 0:
+                return Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED
         return state
 
     @classmethod
@@ -578,6 +591,9 @@ class Vehicle(FittingItem, HasStrCD):
 
     def isFalloutOnly(self):
         return _checkForTags(self.tags, VEHICLE_TAGS.FALLOUT)
+
+    def isRotationApplied(self):
+        return self.rotationGroupNum != 0
 
     def isGroupReady(self):
         if not self.falloutCtrl.isSelected():
@@ -607,9 +623,11 @@ class Vehicle(FittingItem, HasStrCD):
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS,
          Vehicle.VEHICLE_STATE.NOT_SUITABLE,
-         Vehicle.VEHICLE_STATE.DEAL_IS_OVER):
+         Vehicle.VEHICLE_STATE.DEAL_IS_OVER,
+         Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED,
+         Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-        return Vehicle.VEHICLE_STATE_LEVEL.INFO if state in (Vehicle.VEHICLE_STATE.UNDAMAGED,) else Vehicle.VEHICLE_STATE_LEVEL.WARNING
+        return Vehicle.VEHICLE_STATE_LEVEL.INFO if state in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED) else Vehicle.VEHICLE_STATE_LEVEL.WARNING
 
     @property
     def isPremium(self):
@@ -695,6 +713,10 @@ class Vehicle(FittingItem, HasStrCD):
         return self.descriptor.type.tags
 
     @property
+    def rotationGroupIdx(self):
+        return self.rotationGroupNum - 1
+
+    @property
     def canSell(self):
         st, _ = self.getState()
         if self.isRented:
@@ -774,7 +796,7 @@ class Vehicle(FittingItem, HasStrCD):
             return False
         result = not self.hasLockMode()
         if result:
-            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle
+            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked
         return result
 
     @property
@@ -789,7 +811,7 @@ class Vehicle(FittingItem, HasStrCD):
             return False
         result = not self.hasLockMode()
         if result:
-            result = self.isAlive and self.isCrewFull and not self.isDisabledInRoaming and not self.isDisabledInPremIGR
+            result = self.isAlive and self.isCrewFull and not self.isDisabledInRoaming and not self.isDisabledInPremIGR and not self.isRotationGroupLocked
         return result
 
     @property
@@ -1208,3 +1230,33 @@ def getVehicleClassTag(tags):
     if len(subSet):
         result = list(subSet).pop()
     return result
+
+
+def getBattlesLeft(vehicle):
+    if vehicle.isInfiniteRotationGroup:
+        return i18n.makeString('#menu:infinitySymbol')
+    else:
+        return str(vehicle.rotationBattlesLeft)
+
+
+_VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_BATTLE,
+ Vehicle.VEHICLE_STATE.IN_PREBATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_INPREBATTLE,
+ Vehicle.VEHICLE_STATE.DAMAGED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
+ Vehicle.VEHICLE_STATE.DESTROYED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
+ Vehicle.VEHICLE_STATE.EXPLODED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
+ Vehicle.VEHICLE_STATE.CREW_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CREWNOTFULL,
+ Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
+ Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
+ Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY}
+
+def getVehicleStateIcon(vState):
+    """
+    Gets status icon by vehicle state
+    :param vState: one of Vehicle.VEHICLE_STATE
+    :return: string(empty string means there is no icon for the state)
+    """
+    if vState in _VEHICLE_STATE_TO_ICON:
+        icon = _VEHICLE_STATE_TO_ICON[vState]
+    else:
+        icon = ''
+    return icon

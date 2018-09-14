@@ -12,6 +12,10 @@
       <Type>	REMOTE_CAMERA_STRATEGIC_DATA	</Type>
       <Flags>	OWN_CLIENT	</Flags>
     </remoteCameraStrategic>
+    <remoteCameraArty>
+      <Type>	REMOTE_CAMERA_ARTY_DATA	</Type>
+      <Flags>	OWN_CLIENT	</Flags>
+    </remoteCameraArty>
     <isObserverFPV>
       <Type>	BOOL	</Type>
       <Flags>	OWN_CLIENT	</Flags>
@@ -42,6 +46,9 @@
     <setRemoteCameraStrategic>
       <Arg>	REMOTE_CAMERA_STRATEGIC_DATA	</Arg>
     </setRemoteCameraStrategic>
+    <setRemoteCameraArty>
+      <Arg>	REMOTE_CAMERA_ARTY_DATA	</Arg>
+    </setRemoteCameraArty>
     <setNumOfObservers>
       <Arg>	UINT8	</Arg>
     </setNumOfObservers>

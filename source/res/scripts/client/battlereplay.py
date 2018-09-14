@@ -211,6 +211,7 @@ class BattleReplay():
             if not success:
                 LOG_ERROR('Failed to create replay file, replays folder may be write-protected')
                 return False
+            g_replayEvents.onRecording()
             if self.__replayCtrl.startRecording(fileName):
                 self.__fileName = fileName
                 return True
@@ -246,6 +247,7 @@ class BattleReplay():
         if self.__replayCtrl.startPlayback(fileName):
             self.__playbackSpeedIdx = self.__playbackSpeedModifiers.index(1.0)
             self.__savedPlaybackSpeedIdx = self.__playbackSpeedIdx
+            g_replayEvents.onPlaying()
             return True
         else:
             self.__fileName = None
@@ -822,8 +824,11 @@ class BattleReplay():
             return
         else:
             player = BigWorld.player()
-            self.__serverSettings['roaming'] = player.serverSettings['roaming']
-            self.__serverSettings['isPotapovQuestEnabled'] = player.serverSettings.get('isPotapovQuestEnabled', False)
+            serverSettings = player.serverSettings
+            self.__serverSettings['roaming'] = serverSettings['roaming']
+            self.__serverSettings['isPotapovQuestEnabled'] = serverSettings.get('isPotapovQuestEnabled', False)
+            if 'spgRedesignFeatures' in serverSettings:
+                self.__serverSettings['spgRedesignFeatures'] = serverSettings['spgRedesignFeatures']
             if player.databaseID is None:
                 BigWorld.callback(0.1, self.__onAccountBecomePlayer)
             else:

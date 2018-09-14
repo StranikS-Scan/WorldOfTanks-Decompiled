@@ -94,6 +94,10 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_ARMOR_PART1 = '#battle_results:common/tooltip/armor/part1'
     COMMON_TOOLTIP_ARMOR_PART2 = '#battle_results:common/tooltip/armor/part2'
     COMMON_TOOLTIP_ARMOR_PART3 = '#battle_results:common/tooltip/armor/part3'
+    COMMON_TOOLTIP_STUN_HEADER = '#battle_results:common/tooltip/stun/header'
+    COMMON_TOOLTIP_STUN_DESCRIPTION = '#battle_results:common/tooltip/stun/description'
+    COMMON_TOOLTIP_STUN_PART1 = '#battle_results:common/tooltip/stun/part1'
+    COMMON_TOOLTIP_STUN_PART2 = '#battle_results:common/tooltip/stun/part2'
     COMMON_TOOLTIP_DEFENCE_HEADER = '#battle_results:common/tooltip/defence/header'
     COMMON_TOOLTIP_DEFENCE_DESCRIPTION = '#battle_results:common/tooltip/defence/description'
     COMMON_TOOLTIP_DEFENCE_TOTALPOINTS = '#battle_results:common/tooltip/defence/totalPoints'
@@ -214,9 +218,12 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_DAMAGEDKILLED = '#battle_results:team/stats/labels_damagedKilled'
     TEAM_STATS_LABELS_KILLED = '#battle_results:team/stats/labels_killed'
     TEAM_STATS_LABELS_DAMAGEASSISTED = '#battle_results:team/stats/labels_damageAssisted'
+    TEAM_STATS_LABELS_DAMAGEASSISTEDSTUN = '#battle_results:team/stats/labels_damageAssistedStun'
+    TEAM_STATS_LABELS_STUNNUM = '#battle_results:team/stats/labels_stunNum'
     TEAM_STATS_LABELS_DAMAGEDEALTBYORDER = '#battle_results:team/stats/labels_damageDealtByOrder'
     TEAM_STATS_LABELS_KILLSBYORDER = '#battle_results:team/stats/labels_killsByOrder'
     TEAM_STATS_LABELS_DAMAGEASSISTEDSELF = '#battle_results:team/stats/labels_damageAssistedSelf'
+    TEAM_STATS_LABELS_DAMAGEASSISTEDSTUNSELF = '#battle_results:team/stats/labels_damageAssistedStunSelf'
     TEAM_STATS_LABELS_CAPTUREPOINTSVAL = '#battle_results:team/stats/labels_capturePointsVal'
     TEAM_STATS_LABELS_MILEAGE = '#battle_results:team/stats/labels_mileage'
     TEAM_STATS_LABELS_FLAGS = '#battle_results:team/stats/labels_flags'
@@ -307,6 +314,10 @@ class BATTLE_RESULTS(object):
      COMMON_TOOLTIP_ARMOR_PART1,
      COMMON_TOOLTIP_ARMOR_PART2,
      COMMON_TOOLTIP_ARMOR_PART3,
+     COMMON_TOOLTIP_STUN_HEADER,
+     COMMON_TOOLTIP_STUN_DESCRIPTION,
+     COMMON_TOOLTIP_STUN_PART1,
+     COMMON_TOOLTIP_STUN_PART2,
      COMMON_TOOLTIP_DEFENCE_HEADER,
      COMMON_TOOLTIP_DEFENCE_DESCRIPTION,
      COMMON_TOOLTIP_DEFENCE_TOTALPOINTS,

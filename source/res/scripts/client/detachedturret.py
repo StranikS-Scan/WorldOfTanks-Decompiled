@@ -222,10 +222,15 @@ class _TurretDetachmentEffects(Component):
 
     def __playPullEffect(self, effectMaterialIdx):
         self.__stopPullEffects()
-        stages, effectsList, _ = self.__detachmentEffectsDesc['pull'][effectMaterialIdx]
-        self.__pullEffectListPlayer = EffectsListPlayer(effectsList, stages)
-        self.__pullEffectListPlayer.play(self.__turretModel, SpecialKeyPointNames.START)
-        self.__pullEffectListPlayer.effectMaterialIdx = effectMaterialIdx
+        result = self.__detachmentEffectsDesc['pull'].get(effectMaterialIdx, None)
+        if result is None:
+            return
+        else:
+            stages, effectsList, _ = result
+            self.__pullEffectListPlayer = EffectsListPlayer(effectsList, stages)
+            self.__pullEffectListPlayer.play(self.__turretModel, SpecialKeyPointNames.START)
+            self.__pullEffectListPlayer.effectMaterialIdx = effectMaterialIdx
+            return
 
     def __playStateEffect(self, startKeyPoint=SpecialKeyPointNames.START):
         self.__stopStateEffects()

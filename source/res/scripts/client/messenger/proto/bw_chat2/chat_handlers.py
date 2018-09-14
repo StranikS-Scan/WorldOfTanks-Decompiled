@@ -337,6 +337,12 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
     def createByName(self, name):
         return self.__factory.createByName(name)
 
+    def createSPGAimAreaCommand(self, desiredShotPosition, cellIdx, reloadTime):
+        return self.__factory.createSPGAimAreaCommand(desiredShotPosition, cellIdx, reloadTime)
+
+    def createSPGAimTargetCommand(self, targetID, reloadTime):
+        return self.__factory.createSPGAimTargetCommand(targetID, reloadTime)
+
     def createByNameTarget(self, name, targetID):
         return self.__factory.createByNameTarget(name, targetID)
 

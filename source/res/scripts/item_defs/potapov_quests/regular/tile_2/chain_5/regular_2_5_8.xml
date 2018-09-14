@@ -7,10 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <classes>	heavyTank	</classes>
-              <greaterOrEqual>	1500	</greaterOrEqual>
-            </vehicleDamage>
+            <results>
+              <key>	xp	</key>
+              <max>	5	</max>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -30,14 +30,11 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleDamage>
-              <classes>	heavyTank	</classes>
-              <greaterOrEqual>	1500	</greaterOrEqual>
-            </vehicleDamage>
-            <vehicleKills>
-              <classes>	heavyTank	</classes>
-              <greaterOrEqual>	2	</greaterOrEqual>
-            </vehicleKills>
+            <results>
+              <key>	xp	</key>
+              <max>	5	</max>
+            </results>
+            <win></win>
           </and>
         </postBattle>
       </conditions>

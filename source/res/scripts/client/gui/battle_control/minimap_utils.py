@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/minimap_utils.py
+import math
 import string
 import BigWorld
 import Math
@@ -76,3 +77,20 @@ def makePointMatrixByCellIndex(cellIndex, bottomLeft, upperRight):
 
 def makePointMatrixByLocal(localX, localY, bottomLeft, upperRight):
     return makePointInBBoxMatrix(getPositionByLocal(localX, localY, bottomLeft, upperRight), bottomLeft, upperRight)
+
+
+def getCellIdxFromPosition(desiredShotPoint, boundingBox):
+    """
+    Getting cell index on minimap from position (3D coordinates)
+    :param desiredShotPoint: player.inputHandler.getDesiredShotPoint() or any other 3D world position (Math.Vector3)
+    :param boundingBox: player.arena.arenaType.boundingBox
+    :return: cell index
+    """
+    mapXLength = boundingBox[1][0] - boundingBox[0][0]
+    mapYLength = boundingBox[1][1] - boundingBox[0][1]
+    xOffset = -boundingBox[0][0]
+    yOffset = -boundingBox[0][1]
+    mapGridX = math.floor((xOffset + desiredShotPoint.x) / mapXLength * MINIMAP_DIMENSION)
+    mapGridY = MINIMAP_DIMENSION - math.floor((yOffset + desiredShotPoint.z) / mapYLength * MINIMAP_DIMENSION)
+    mapGridY -= 1
+    return mapGridX * MINIMAP_DIMENSION + mapGridY

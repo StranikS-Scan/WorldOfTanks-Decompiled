@@ -136,8 +136,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	14	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.36	</vehicleMovement>
-        <vehicleRotation>	0.36	</vehicleRotation>
+        <vehicleMovement>	0.32	</vehicleMovement>
+        <vehicleRotation>	0.32	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	110	</maxHealth>
@@ -257,8 +257,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	16	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	120	</maxHealth>
@@ -389,7 +389,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	260	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -413,9 +413,9 @@
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <shotDispersionRadius>	0.8	</shotDispersionRadius>
-          <reloadTime>	26	</reloadTime>
-          <aimingTime>	7	</aimingTime>
+          <shotDispersionRadius>	0.7	</shotDispersionRadius>
+          <reloadTime>	23	</reloadTime>
+          <aimingTime>	5.5	</aimingTime>
           <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.44	</turretRotation>
@@ -484,7 +484,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	260	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -492,7 +492,7 @@
       </surveyingDeviceHealth>
       <guns>
         <_152mm_BR-2>	shared	  <maxAmmo>	32	</maxAmmo>
-          <reloadTime>	27	</reloadTime>
+          <reloadTime>	25	</reloadTime>
           <unlocks>
             <gun>	_203mm_B-4	  <cost>	64000	</cost>
             </gun>
@@ -507,11 +507,11 @@
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <shotDispersionRadius>	0.76	</shotDispersionRadius>
-          <aimingTime>	7	</aimingTime>
+          <shotDispersionRadius>	0.69	</shotDispersionRadius>
+          <aimingTime>	5.3	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.52	</turretRotation>
+            <turretRotation>	0.46	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -541,15 +541,15 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_152mm_BR-2>
         <_203mm_B-4>	shared	  <maxAmmo>	16	</maxAmmo>
-          <reloadTime>	55.5	</reloadTime>
+          <reloadTime>	53.2	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -60 1 -60	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.88	</shotDispersionRadius>
+          <shotDispersionRadius>	0.82	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.64	</turretRotation>
-            <afterShot>	6.0	</afterShot>
+            <turretRotation>	0.57	</turretRotation>
+            <afterShot>	7	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -561,7 +561,7 @@
             <gunBreech>	0	</gunBreech>
           </armor>
           <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
-          <aimingTime>	8	</aimingTime>
+          <aimingTime>	6.6	</aimingTime>
           <turretYawLimits>	-4 4	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R91_SU14_1/normal/lod0/Gun_03.model	</undamaged>

@@ -3,6 +3,7 @@
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
 from gui.shared.items_parameters.params import VehicleParams
+from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
 
 def isSituationalBonus(bonusName):
     return bonusName in _SITUATIONAL_BONUSES
@@ -14,7 +15,7 @@ def _removeCamouflageModifier(vehicle, bonusID):
     """
     remove camouflage from vehicle copy
     """
-    if bonusID == 'camouflage':
+    if bonusID == EXTRAS_CAMOUFLAGE:
         oldCamouflages = vehicle.descriptor.camouflages
         for pos, _ in enumerate(oldCamouflages):
             vehicle.descriptor.setCamouflage(pos, None, 0, 0)
@@ -112,7 +113,7 @@ class BonusExtractor(object):
         """
         oldValue = self.__currValue
         self.__vehicle = _VEHICLE_MODIFIERS[bonusGroup](self.__vehicle, bonusID)
-        if bonusGroup == 'extra' and bonusID == 'camouflage':
+        if bonusGroup == 'extra' and bonusID == EXTRAS_CAMOUFLAGE:
             self.__removeCamouflage = True
         self.__updateCurrValue()
         return getParamExtendedData(self.__paramName, oldValue, self.__currValue)

@@ -8,8 +8,8 @@
     <driver></driver>
   </crew>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	23	</backward>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.384	</moving>
@@ -42,9 +42,9 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2450	</weight>
-    <maxHealth>	320	</maxHealth>
+    <maxHealth>	256	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	125	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
@@ -96,7 +96,7 @@
       <userString>	#france_vehicles:Chassis_ELC_AMX	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	4200.0	</price>
+      <price>	4200	</price>
       <unlocks>
         <chassis>	Chassis_ELC_AMX_2	  <cost>	2420	</cost>
         </chassis>
@@ -112,13 +112,13 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.27	</vehicleMovement>
-        <vehicleRotation>	0.27	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	80	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F62_ELC_AMX/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F62_ELC_AMX/crash/lod0/Chassis.model	</destroyed>
@@ -337,38 +337,12 @@
           </transform>
         </decal>
       </AODecals>
-      <splineDesc>
-        <segmentModelLeft></segmentModelLeft>
-        <segmentModelRight></segmentModelRight>
-        <left>	vehicles/french/F62_ELC_AMX/track/left.track	</left>
-        <right>	vehicles/french/F62_ELC_AMX/track/right.track	</right>
-        <segmentLength>	0.01	</segmentLength>
-        <segmentOffset>	0.000000	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
-        <atlas>
-          <UTiles>	1	</UTiles>
-          <VTiles>	1	</VTiles>
-        </atlas>
-      </splineDesc>
-      <trackThickness>	0.000000	</trackThickness>
-      <trackNodes>
-        <enable>	false	</enable>
-        <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.000000	</maxAmplitude>
-        <maxOffset>	0.000000	</maxOffset>
-        <gravity>	0.000000	</gravity>
-        <elasticity>	1500	</elasticity>
-        <damping>	20	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
-      </trackNodes>
     </Chassis_ELC_AMX>
     <Chassis_ELC_AMX_2>
       <userString>	#france_vehicles:Chassis_ELC_AMX_2	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	9510.0	</price>
+      <price>	9510	</price>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -380,12 +354,12 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	85	</maxRegenHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F62_ELC_AMX/normal/lod0/Chassis.model	</undamaged>
@@ -611,7 +585,7 @@
     <Turret_1_ELC_AMX>
       <userString>	#france_vehicles:Turret_1_ELC_AMX	</userString>
       <tags></tags>
-      <level>	4	</level>
+      <level>	5	</level>
       <price>	4800	</price>
       <notInShop>	true	</notInShop>
       <armor>
@@ -632,27 +606,27 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	500	</weight>
-      <maxHealth>	80	</maxHealth>
+      <maxHealth>	64	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	80	</maxHealth>
-        <maxRegenHealth>	40	</maxRegenHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	60	</maxHealth>
-        <maxRegenHealth>	30	</maxRegenHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_SA32>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_75mm_SA32L>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_75mm_Long_44	  <cost>	2700	</cost>
+            <gun>	_75mm_Long_44L	  <cost>	2700	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -664,11 +638,10 @@
             </armor_3>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	4.3	</reloadTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <turretYawLimits>	-15 15	</turretYawLimits>
           <models>
             <undamaged>	vehicles/french/F62_ELC_AMX/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F62_ELC_AMX/crash/lod0/Gun_01.model	</destroyed>
@@ -692,8 +665,8 @@
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
           </camouflage>
-        </_75mm_SA32>
-        <_75mm_Long_44>	shared	  <maxAmmo>	48	</maxAmmo>
+        </_75mm_SA32L>
+        <_75mm_Long_44L>	shared	  <maxAmmo>	48	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -711,11 +684,15 @@
             </armor_3>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	4.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <turretYawLimits>	-15 15	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/french/F62_ELC_AMX/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/french/F62_ELC_AMX/crash/lod0/Gun_02.model	</destroyed>
@@ -738,14 +715,14 @@
           <camouflage>
             <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
           </camouflage>
-        </_75mm_Long_44>
+        </_75mm_Long_44L>
         <_90mm_D914>	shared	  <maxAmmo>	36	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	F15_AMX_12t	  <cost>	26400	</cost>
+            <vehicle>	F15_AMX_12t	  <cost>	28150	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -758,10 +735,10 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	14	</reloadTime>
           <aimingTime>	2.9	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.23	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -828,32 +805,32 @@
   </turrets0>
   <engines>
     <Sovam_de_150cv>	shared	  <unlocks>
-        <engine>	SOFAM_8Gxb	  <cost>	1150	</cost>
+        <engine>	Sovam_de_250cv	  <cost>	1100	</cost>
         </engine>
       </unlocks>
     </Sovam_de_150cv>
-    <SOFAM_8Gxb>	shared	</SOFAM_8Gxb>
+    <Sovam_de_250cv>	shared	</Sovam_de_250cv>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
     <ER_52>	shared	  <unlocks>
-        <radio>	ER_53	  <cost>	610	</cost>
+        <radio>	SCR_508	  <cost>	1460	</cost>
         </radio>
       </unlocks>
     </ER_52>
-    <ER_53>	shared	</ER_53>
+    <SCR_508>	shared	</SCR_508>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Sovam_de_150cv>
-          <smplEnginePower>	158.5922	</smplEnginePower>
+          <smplEnginePower>	150	</smplEnginePower>
         </Sovam_de_150cv>
-        <SOFAM_8Gxb>
-          <smplEnginePower>	264.3203	</smplEnginePower>
-        </SOFAM_8Gxb>
+        <Sovam_de_250cv>
+          <smplEnginePower>	180	</smplEnginePower>
+        </Sovam_de_250cv>
       </engines>
       <chassis>
         <Chassis_ELC_AMX>

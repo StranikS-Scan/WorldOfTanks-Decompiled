@@ -13,5 +13,6 @@ class BATTLE_DESTROY_TIMER_STATES(object):
     OVERTURNED = 2
     FIRE = 3
     GAS_ATTACK = 4
+    STUN = 5
     WARNING_VIEW = 0
     CRITICAL_VIEW = 1

@@ -149,6 +149,7 @@ class MESSENGER(object):
     DIALOGS_SQUAD_MESSAGE_GETNOTREADY = '#messenger:dialogs/squad/message/getNotReady'
     DIALOGS_SQUAD_EVENT_VEHICLE = '#messenger:dialogs/squad/event/vehicle'
     DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL = '#messenger:dialogs/squad/message/invalidVehicleLevel'
+    DIALOGS_SQUAD_MESSAGE_SPGFORBIDDEN = '#messenger:dialogs/squad/message/spgForbidden'
     DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS = '#messenger:dialogs/squad/message/vehicles/differentLevels'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES = '#messenger:dialogs/falloutSquadChannel/vehicles'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES_STEELHUNTING = '#messenger:dialogs/falloutSquadChannel/vehicles/steelHunting'

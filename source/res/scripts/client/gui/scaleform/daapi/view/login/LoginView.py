@@ -458,7 +458,7 @@ class LoginView(LoginPageMeta):
         isValid = True
         errorMessage = None
         invalidFields = None
-        if isToken2Login or constants.IS_DEVELOPMENT and len(userName):
+        if isToken2Login and GUI_SETTINGS.rememberPassVisible or constants.IS_DEVELOPMENT and len(userName):
             return _ValidateCredentialsResult(isValid, errorMessage, invalidFields)
         else:
             if len(userName) < _LOGIN_NAME_MIN_LENGTH:

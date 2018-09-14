@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
 import BigWorld
 from debug_utils import LOG_ERROR
+from gui.LobbyContext import g_lobbyContext
 from gui.shared.formatters import text_styles
 from helpers import i18n
 from gui.shared import g_itemsCache
@@ -36,6 +37,12 @@ class _OnlyAccountField(_AbstractField):
 
     def isVisible(self, targetData, isCurrentUser):
         return isinstance(targetData, _VehiclesStatsBlock)
+
+
+class _OnlyTechniqueField(_AbstractField):
+
+    def isVisible(self, targetData, isCurrentUser):
+        return not isinstance(targetData, _VehiclesStatsBlock)
 
 
 class _BattlesCountField(_AbstractField):
@@ -154,6 +161,42 @@ class _AvgReceivedDmgField(_AbstractField):
 def _avgAssignedDmgField(targetData, isCurrentUser):
     formatedAssignedDmg = ProfileUtils.formatEfficiency(targetData.getBattlesCountVer2(), targetData.getDamageAssistedEfficiency)
     return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentUser else PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTOTHER, formatedAssignedDmg, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentUser else PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTOTHER)
+
+
+class _StunNumberField(_OnlyTechniqueField):
+
+    def isVisible(self, targetData, isCurrentUser):
+        return super(_StunNumberField, self).isVisible(targetData, isCurrentUser) and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getStunNumber()))
+
+
+class _AvgStunNumberField(_AbstractField):
+
+    def isVisible(self, targetData, isCurrentUser):
+        return super(_AvgStunNumberField, self).isVisible(targetData, isCurrentUser) and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgStunNumber()))
+
+
+class _AssistedStunDmgField(_OnlyTechniqueField):
+
+    def isVisible(self, targetData, isCurrentUser):
+        return super(_AssistedStunDmgField, self).isVisible(targetData, isCurrentUser) and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getDamageAssistedStun()))
+
+
+class _AvgAssistedStunDmgField(_AbstractField):
+
+    def isVisible(self, targetData, isCurrentUser):
+        return super(_AvgAssistedStunDmgField, self).isVisible(targetData, isCurrentUser) and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageAssistedStun()))
 
 
 def _avgDetectedField(targetData, isCurrentUser):
@@ -279,7 +322,9 @@ COMMON_SECTION_FIELDS = (_BattlesCountField(PROFILE.SECTION_STATISTICS_SCORES_TO
  _DestructionCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DESTRUCTIONCOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DESTROYCOEFF),
  _ArmorusingField(PROFILE.SECTION_STATISTICS_SCORES_ARMORUSING, PROFILE.PROFILE_PARAMS_TOOLTIP_ARMORUSING),
  _CapturePointsField(PROFILE.SECTION_STATISTICS_SCORES_CAPTUREPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_CAPTUREPOINTS),
- _DroppedPointsField(PROFILE.SECTION_STATISTICS_SCORES_DROPPEDCAPTUREPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_DROPPEDCAPTUREPOINTS))
+ _DroppedPointsField(PROFILE.SECTION_STATISTICS_SCORES_DROPPEDCAPTUREPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_DROPPEDCAPTUREPOINTS),
+ _StunNumberField(PROFILE.SECTION_TECHNIQUE_STATISTICS_STUNNUMBER, PROFILE.PROFILE_PARAMS_TOOLTIP_STUNNUMBER),
+ _AssistedStunDmgField(PROFILE.SECTION_TECHNIQUE_STATISTICS_ASSISTEDSTUNDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_ASSISTEDSTUNDAMAGE))
 COMMON_SECTION_FORT_FIELDS = (_BattlesCountField(PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FORT_BATTLESCOUNT),
  _WinsEfficiencyField(PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS),
  _SurvivalField(PROFILE.SECTION_STATISTICS_SCORES_SURVIVAL, PROFILE.PROFILE_PARAMS_TOOLTIP_SURVIVAL),
@@ -302,7 +347,9 @@ AVERAGE_SECTION_FIELDS = (_avgExpField,
  _emptyField,
  _AvgDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDMG_SHORT),
  _AvgReceivedDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGRECEIVEDDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGRECEIVEDDAMAGE),
+ _AvgStunNumberField(PROFILE.SECTION_TECHNIQUE_STATISTICS_AVGSTUNNUMBER, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGSTUNNUMBER),
  _avgAssignedDmgField,
+ _AvgAssistedStunDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGASSISTEDSTUNDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDSTUNDAMAGE),
  _emptyField,
  _avgDetectedField,
  _AvgDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDESTROYEDVEHICLES))

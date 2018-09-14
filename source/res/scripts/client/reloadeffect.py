@@ -76,7 +76,7 @@ class SimpleReload(CallbackDelayer):
         CallbackDelayer.destroy(self)
         return
 
-    def start(self, shellReloadTime, alert, lastShell, reloadShellCount):
+    def start(self, shellReloadTime, alert, lastShell, reloadShellCount, shellID, reloadStart):
         if gEffectsDisabled():
             return
         else:
@@ -116,14 +116,13 @@ class BarrelReload(SimpleReload):
         self.stop()
         SimpleReload.__del__(self)
 
-    def start(self, shellReloadTime, alert, shellCount, reloadShellCount):
+    def start(self, shellReloadTime, alert, shellCount, reloadShellCount, shellID, reloadStart):
         if gEffectsDisabled():
             return
         SoundGroups.g_instance.setSwitch('SWITCH_ext_rld_automat_caliber', self._desc.caliber)
         if shellCount == 0:
             self.stopCallback(self._startLoopEvent)
             self.stopCallback(self._loopOneShoot)
-            SoundGroups.g_instance.playSound2D(self._desc.stopLoop)
             time = shellReloadTime - self._desc.duration
             self.delayCallback(time, self._startLoopEvent)
             if reloadShellCount != 0:
@@ -131,9 +130,11 @@ class BarrelReload(SimpleReload):
             else:
                 self.__shellDt = self._desc.duration
             self.__reloadCount = reloadShellCount
-            if BARREL_DEBUG_ENABLED:
-                LOG_DEBUG('!!! Play Long  = {0}'.format(self._desc.startLong))
-            SoundGroups.g_instance.playSound2D(self._desc.startLong)
+            if reloadStart:
+                SoundGroups.g_instance.playSound2D(self._desc.stopLoop)
+                SoundGroups.g_instance.playSound2D(self._desc.startLong)
+                if BARREL_DEBUG_ENABLED:
+                    LOG_DEBUG('!!! Play Long  = {0}'.format(self._desc.startLong))
             if alert:
                 if BARREL_DEBUG_ENABLED:
                     LOG_DEBUG('!!! Play Ammo Low  = {0}'.format(self._desc.ammoLow))

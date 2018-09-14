@@ -7,10 +7,10 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
-              <classes>	AT-SPG SPG	</classes>
-              <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleKills>
+            <results>
+              <key>	stunned	</key>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -30,14 +30,11 @@
       <conditions>
         <postBattle>
           <and>
-            <vehicleKills>
-              <classes>	AT-SPG SPG	</classes>
-              <greaterOrEqual>	1	</greaterOrEqual>
-            </vehicleKills>
             <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	1000	</greaterOrEqual>
+              <key>	stunned	</key>
+              <greaterOrEqual>	2	</greaterOrEqual>
             </results>
+            <win></win>
           </and>
         </postBattle>
       </conditions>

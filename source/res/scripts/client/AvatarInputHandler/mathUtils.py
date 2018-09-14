@@ -77,6 +77,132 @@ def squareOut(a, b, t):
     return a + (b - a) * (-t * t + 2 * t)
 
 
+def linearTween(t, c, d):
+    return c * t / d
+
+
+def easeInQuad(t, c, d):
+    t /= d
+    return c * t * t
+
+
+def easeOutQuad(t, c, d):
+    t /= d
+    return -c * t * (t - 2.0)
+
+
+def easeInOutQuad(t, c, d):
+    t /= d / 2.0
+    if t < 1.0:
+        return c / 2.0 * t * t
+    t -= 1.0
+    return -c / 2.0 * (t * (t - 2.0) - 1.0)
+
+
+def easeInCubic(t, c, d):
+    t /= d
+    return c * t * t * t
+
+
+def easeOutCubic(t, c, d):
+    t /= d
+    t -= 1.0
+    return c * (t * t * t + 1.0)
+
+
+def easeInOutCubic(t, c, d):
+    t /= d / 2.0
+    if t < 1.0:
+        return c / 2.0 * t * t * t
+    t -= 2.0
+    return c / 2.0 * (t * t * t + 2.0)
+
+
+def easeInQuart(t, c, d):
+    t /= d
+    return c * t * t * t * t
+
+
+def easeOutQuart(t, c, d):
+    t /= d
+    t -= 1.0
+    return -c * (t * t * t * t - 1.0)
+
+
+def easeInOutQuart(t, c, d):
+    t /= d / 2.0
+    if t < 1.0:
+        return c / 2.0 * t * t * t * t
+    t -= 2.0
+    return -c / 2.0 * (t * t * t * t - 2.0)
+
+
+def easeInQuint(t, c, d):
+    t /= d
+    return c * t * t * t * t * t
+
+
+def easeOutQuint(t, c, d):
+    t /= d
+    t -= 1.0
+    return c * (t * t * t * t * t + 1.0)
+
+
+def easeInOutQuint(t, c, d):
+    t /= d / 2.0
+    if t < 1.0:
+        return c / 2.0 * t * t * t * t * t
+    t -= 2.0
+    return c / 2.0 * (t * t * t * t * t + 2.0)
+
+
+def easeInSine(t, c, d):
+    return -c * math.cos(t / d * (math.pi / 2.0)) + c
+
+
+def easeOutSine(t, c, d):
+    return c * math.sin(t / d * (math.pi / 2.0))
+
+
+def easeInOutSine(t, c, d):
+    return -c / 2.0 * (math.cos(math.pi * t / d) - 1.0)
+
+
+def easeInExpo(t, c, d):
+    return c * math.pow(2.0, 10.0 * (t / d - 1.0))
+
+
+def easeOutExpo(t, c, d):
+    return c * (-math.pow(2.0, -10.0 * t / d) + 1.0)
+
+
+def easeInOutExpo(t, c, d):
+    t /= d / 2.0
+    if t < 1.0:
+        return c / 2.0 * math.pow(2.0, 10.0 * (t - 1.0))
+    t -= 1.0
+    return c / 2.0 * (-math.pow(2.0, -10.0 * t) + 2.0)
+
+
+def easeInCirc(t, c, d):
+    t /= d
+    return -c * (math.sqrt(1.0 - t * t) - 1.0)
+
+
+def easeOutCirc(t, c, d):
+    t /= d
+    t -= 1.0
+    return c * math.sqrt(1.0 - t * t)
+
+
+def easeInOutCirc(t, c, d):
+    t /= d / 2.0
+    if t < 1.0:
+        return -c / 2.0 * (math.sqrt(1.0 - t * t) - 1.0)
+    t -= 2.0
+    return c / 2.0 * (math.sqrt(1.0 - t * t) + 1)
+
+
 class Easing(object):
     value = property(lambda self: self.__value)
     a = property(lambda self: self.__a)

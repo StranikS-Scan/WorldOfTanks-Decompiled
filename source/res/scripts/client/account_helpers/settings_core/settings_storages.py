@@ -6,7 +6,7 @@ import math
 import BigWorld
 from AvatarInputHandler.cameras import FovExtended
 from adisp import async
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import TimerConfirmDialogMeta
 from gui.shared.utils.graphics import g_monitorSettings
@@ -89,13 +89,23 @@ class VideoSettingsStorage(ISettingsStorage):
 
     @property
     def videoMode(self):
+        return self.videoModeForAdapterOutputIndex(g_monitorSettings.activeMonitor)
+
+    def videoModeForAdapterOutputIndex(self, adapterOutputIndex):
         width, height = self.resolution
         refreshRate = self.refreshRate
-        for mode in g_monitorSettings.videoModes:
+        adapterOutputExclusiveFullscreenModes = g_monitorSettings.videoModesForAdapterOutputIndex(adapterOutputIndex)
+        assert adapterOutputExclusiveFullscreenModes
+        for mode in adapterOutputExclusiveFullscreenModes:
             if mode.width == width and mode.height == height and mode.refreshRate == refreshRate:
                 return mode
 
-        return g_monitorSettings.currentVideoMode
+        if adapterOutputIndex == g_monitorSettings.activeMonitor:
+            LOG_ERROR('Unable to find appropriate display mode for the target monitor, falling back to the current mode.')
+            return g_monitorSettings.currentVideoMode
+        else:
+            LOG_ERROR('Unable to find appropriate display mode for the target monitor, falling back to the first supported mode.')
+            return adapterOutputExclusiveFullscreenModes[0]
 
     @property
     def windowSize(self):
@@ -141,10 +151,12 @@ class VideoSettingsStorage(ISettingsStorage):
             borderlessSizeWidth, borderlessSizeHeight = self.borderlessSize
             cWindowMode = g_monitorSettings.windowMode
             windowMode = self.windowMode
-            cVideoMode = g_monitorSettings.currentVideoMode
-            videoMode = self.videoMode
-            monitor = self.monitor
             cMonitor = g_monitorSettings.activeMonitor
+            monitor = self.monitor
+            exclusiveFullscreenMonitorIndex = g_monitorSettings.noRestartExclusiveFullscreenMonitorIndex
+            restartNeeded = windowMode == BigWorld.WindowModeExclusiveFullscreen and monitor != exclusiveFullscreenMonitorIndex
+            cVideoMode = g_monitorSettings.currentVideoMode
+            videoMode = self.videoModeForAdapterOutputIndex(monitor)
             windowSizeChanged = cWindowSize is not None and windowSizeWidth is not None and windowSizeHeight is not None and (windowSizeWidth != cWindowSize.width or windowSizeHeight != cWindowSize.height)
             borderlessSizeChanged = cBorderlessSize is not None and borderlessSizeWidth is not None and borderlessSizeHeight is not None and (borderlessSizeWidth != cBorderlessSize.width or borderlessSizeHeight != cBorderlessSize.height)
             monitorChanged = monitor != cMonitor
@@ -154,7 +166,10 @@ class VideoSettingsStorage(ISettingsStorage):
             if monitorChanged:
                 g_monitorSettings.changeMonitor(monitor)
                 deviseRecreated = windowMode == BigWorld.WindowModeExclusiveFullscreen or cWindowMode == BigWorld.WindowModeExclusiveFullscreen
-            if windowSizeChanged and windowMode == BigWorld.WindowModeWindowed:
+            if restartNeeded:
+                deviseRecreated = False
+                LOG_DEBUG("VideoSettingsStorage apply is expecting a restart so it didn't invoke changeVideoMode.")
+            elif windowSizeChanged and windowMode == BigWorld.WindowModeWindowed:
                 deviseRecreated = True
                 g_monitorSettings.changeWindowSize(windowSizeWidth, windowSizeHeight)
             elif borderlessSizeChanged and windowMode == BigWorld.WindowModeBorderless:

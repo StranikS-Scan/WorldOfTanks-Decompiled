@@ -109,8 +109,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	22	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.44	</vehicleMovement>
-        <vehicleRotation>	0.44	</vehicleRotation>
+        <vehicleMovement>	0.55	</vehicleMovement>
+        <vehicleRotation>	0.55	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	140	</maxHealth>
@@ -242,8 +242,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.4	</vehicleMovement>
-        <vehicleRotation>	0.4	</vehicleRotation>
+        <vehicleMovement>	0.5	</vehicleMovement>
+        <vehicleRotation>	0.5	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	150	</maxHealth>
@@ -380,13 +380,13 @@
       </armor>
       <weight>	8000	</weight>
       <maxHealth>	88	</maxHealth>
-      <rotationSpeed>	10	</rotationSpeed>
+      <rotationSpeed>	6	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	270	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
@@ -402,16 +402,16 @@
             <armor_1>	15	</armor_1>
             <gun>	25	</gun>
           </armor>
-          <shotDispersionRadius>	0.7	</shotDispersionRadius>
-          <reloadTime>	31.1	</reloadTime>
-          <aimingTime>	6	</aimingTime>
+          <shotDispersionRadius>	0.63	</shotDispersionRadius>
+          <reloadTime>	28	</reloadTime>
+          <aimingTime>	5.5	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.56	</turretRotation>
+            <turretRotation>	0.48	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -445,14 +445,14 @@
             <gun>	25	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.7	</shotDispersionRadius>
-          <reloadTime>	31.1	</reloadTime>
+          <shotDispersionRadius>	0.63	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.56	</turretRotation>
+            <turretRotation>	0.48	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	5.5	</aimingTime>
+          <aimingTime>	4.5	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>

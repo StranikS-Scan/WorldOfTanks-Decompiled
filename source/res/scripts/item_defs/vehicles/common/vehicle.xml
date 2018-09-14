@@ -17,6 +17,9 @@
       <clientWindowExpansion>	5	</clientWindowExpansion>
       <maxSignals>	3	</maxSignals>
     </hornCooldown>
+    <explosionDamageFactor>	0.5	</explosionDamageFactor>
+    <explosionDamageAbsorptionFactor>	1.3	</explosionDamageAbsorptionFactor>
+    <explosionEdgeDamageFactor>	0.15	</explosionEdgeDamageFactor>
     <collisionEffectVelocities>
       <hull>	1.4 4.5	</hull>
       <track>	2.0 2.0	</track>
@@ -96,6 +99,7 @@
         <fireStopped>	fire_stopped	</fireStopped>
       </sounds>
     </fire>
+    <stun>	NoneExtra : Stun	</stun>
     <commanderSixthSense>	NoneExtra : CommanderSixthSense	</commanderSixthSense>
     <stereoscope>	NoneExtra : Stereoscope	</stereoscope>
     <camouflageNet>	NoneExtra : CamouflageNet	</camouflageNet>

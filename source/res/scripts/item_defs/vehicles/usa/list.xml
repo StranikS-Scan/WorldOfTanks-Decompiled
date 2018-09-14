@@ -185,7 +185,7 @@
     <description>	#usa_vehicles:M7_med_descr	</description>
     <shortUserString>	#usa_vehicles:M7_med_short	</shortUserString>
     <price>	355000	</price>
-    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
+    <tags>	lightTank scout mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	5	</level>
   </A23_M7_med>
   <A24_T2_med>
@@ -238,7 +238,7 @@
     <userString>	#usa_vehicles:M40M43	</userString>
     <description>	#usa_vehicles:M40M43_descr	</description>
     <price>	2700000	</price>
-    <tags>	SPG mediumSPG largeCaliberHowitzerRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user	</tags>
+    <tags>	SPG mediumSPG largeCaliberHowitzerRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
     <level>	8	</level>
   </A37_M40M43>
   <A29_T40>
@@ -271,7 +271,7 @@
     <userString>	#usa_vehicles:T92	</userString>
     <description>	#usa_vehicles:T92_descr	</description>
     <price>	6100000	</price>
-    <tags>	SPG heavySPG largeCaliberHowitzerRammer_user wetCombatPack_class2_user improvedVentilation_class3_user noImprovedVentilation enhancedTorsions5t_user	</tags>
+    <tags>	SPG heavySPG largeCaliberHowitzerRammer_user wetCombatPack_class2_user improvedVentilation_class3_user noImprovedVentilation enhancedTorsions5t_user HD	</tags>
     <level>	10	</level>
   </A38_T92>
   <A40_T95>
@@ -510,7 +510,7 @@
     <description>	#usa_vehicles:T37_descr	</description>
     <shortUserString>	#usa_vehicles:T37_short	</shortUserString>
     <price>	910000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user mediumCaliberTankRammer_user HD	</tags>
     <level>	6	</level>
   </A94_T37>
   <A97_M41_Bulldog>
@@ -518,17 +518,17 @@
     <userString>	#usa_vehicles:M41_Bulldog	</userString>
     <description>	#usa_vehicles:M41_Bulldog_descr	</description>
     <shortUserString>	#usa_vehicles:M41_Bulldog_short	</shortUserString>
-    <price>	1370000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
-    <level>	7	</level>
+    <price>	2400000	</price>
+    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user mediumCaliberTankRammer_user HD	</tags>
+    <level>	8	</level>
   </A97_M41_Bulldog>
   <A100_T49>
     <id>	71	</id>
     <userString>	#usa_vehicles:T49	</userString>
     <description>	#usa_vehicles:T49_descr	</description>
-    <price>	2380000	</price>
+    <price>	3550000	</price>
     <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user largeCaliberTankRammer_user HD	</tags>
-    <level>	8	</level>
+    <level>	9	</level>
   </A100_T49>
   <A108_T18_HMC>
     <id>	72	</id>
@@ -570,6 +570,15 @@
     <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	2	</level>
   </A107_T1_HMC>
+  <A116_XM551>
+    <id>	76	</id>
+    <userString>	#usa_vehicles:A116_XM551	</userString>
+    <shortUserString>	#usa_vehicles:A116_XM551_short	</shortUserString>
+    <description>	#usa_vehicles:A116_XM551_descr	</description>
+    <price>	6100000	</price>
+    <tags>	lightTank scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user largeCaliberTankRammer_user HD	</tags>
+    <level>	10	</level>
+  </A116_XM551>
   <A19_T2_lt>
     <id>	201	</id>
     <userString>	#usa_vehicles:T2_lt	</userString>
@@ -587,7 +596,7 @@
     <price>	1750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user	</tags>
+    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedVertical_springs_class2_user HD	</tags>
     <level>	5	</level>
   </A62_Ram-II>
   <A33_MTLS-1G14>
@@ -638,7 +647,7 @@
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank	</tags>
+    <tags>	lightTank HD	</tags>
     <level>	2	</level>
   </A74_T1_E6>
   <A81_T95_E2>
@@ -679,7 +688,7 @@
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank	</tags>
+    <tags>	lightTank HD	</tags>
     <level>	2	</level>
   </A93_T7_Combat_Car>
   <A95_T95_E6>
@@ -755,7 +764,7 @@
     <price>	7450	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD secret	</tags>
+    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD	</tags>
     <level>	8	</level>
   </A111_T25_Pilot>
   <A112_T71E2>
@@ -788,7 +797,7 @@
     <price>	9200	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD secret	</tags>
+    <tags>	heavyTank aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </A115_Chrysler_K>
   <A117_T26E5>
@@ -828,10 +837,10 @@
     <userString>	#usa_vehicles:A118_M4_Thunderbolt	</userString>
     <description>	#usa_vehicles:A118_M4_Thunderbolt_descr	</description>
     <shortUserString>	#usa_vehicles:A118_M4_Thunderbolt_short	</shortUserString>
-    <price>	100	  <gold></gold>
+    <price>	3450	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD secret testTank	</tags>
+    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD	</tags>
     <level>	6	</level>
   </A118_M4_Thunderbolt>
   <A90_T69_IGR>

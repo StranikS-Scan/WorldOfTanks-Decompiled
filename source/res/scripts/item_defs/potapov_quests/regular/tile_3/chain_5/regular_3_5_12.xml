@@ -8,12 +8,16 @@
         <postBattle>
           <and>
             <results>
-              <key>	damageDealt	</key>
-              <max>	1	</max>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	150	</greaterOrEqual>
             </results>
-            <vehicleKills>
-              <greaterOrEqual>	3	</greaterOrEqual>
-            </vehicleKills>
+            <results>
+              <plus>
+                <key>	killsAssistedStun	</key>
+                <key>	killsAssistedTrack	</key>
+              </plus>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -29,12 +33,16 @@
         <postBattle>
           <and>
             <results>
-              <key>	damageDealt	</key>
-              <max>	1	</max>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	150	</greaterOrEqual>
             </results>
-            <vehicleKills>
-              <greaterOrEqual>	3	</greaterOrEqual>
-            </vehicleKills>
+            <results>
+              <plus>
+                <key>	killsAssistedStun	</key>
+                <key>	killsAssistedTrack	</key>
+              </plus>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
             <win></win>
           </and>
         </postBattle>

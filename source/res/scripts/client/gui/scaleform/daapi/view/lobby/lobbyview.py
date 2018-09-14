@@ -89,15 +89,15 @@ class _LobbySubViewsCtrl(object):
                 self.__invalidateWaitingStatus()
         return
 
-    def __onViewLoadCanceled(self, name, item):
+    def __onViewLoadCanceled(self, key, item):
         if item is not None and item.pyEntity is not None:
-            alias = item.pyEntity.settings.alias
+            alias = item.pyEntity.alias
             if alias in self.__SUB_VIEWS and alias in self.__loadingSubViews:
                 self.__loadingSubViews.remove(alias)
                 self.__invalidateWaitingStatus()
         return
 
-    def __onViewLoadError(self, name, msg, item):
+    def __onViewLoadError(self, key, msg, item):
         if item is not None and item.pyEntity is not None:
             alias = item.pyEntity.settings.alias
             if alias in self.__SUB_VIEWS and alias in self.__loadingSubViews:

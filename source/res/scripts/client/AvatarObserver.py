@@ -8,6 +8,7 @@ from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from constants import AVATAR_SUBFILTERS, FILTER_INTERPOLATION_TYPE, VEHICLE_SETTING
 from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
 from helpers.CallbackDelayer import CallbackDelayer
+_STRATEGIC_VIEW = (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.ARTY)
 
 class ObservedVehicleData(CallbackDelayer):
     RELOAD_UPDATE_FREQUENCY = 1.0
@@ -89,7 +90,9 @@ class AvatarObserver(CallbackDelayer):
             method = getattr(self.filter, methodName, None)
             if not method:
                 LOG_ERROR('Avatar.onEnterWorld: filter doesnt have method %s' % methodName)
-            return method
+                return lambda : None
+            else:
+                return method
 
         self.__filterSyncVector3 = getFilterMethod('syncVector3')
         self.__filterGetVector3 = getFilterMethod('getVector3')
@@ -213,7 +216,7 @@ class AvatarObserver(CallbackDelayer):
         self.__applyObserverModeChange()
 
     def __applyObserverModeChange(self):
-        if self.vehicle is None and self.inputHandler.ctrlModeName != CTRL_MODE_NAME.STRATEGIC:
+        if self.vehicle is None and self.inputHandler.ctrlModeName not in _STRATEGIC_VIEW:
             self.delayCallback(0.0, self.__applyObserverModeChange)
             return
         else:
@@ -238,8 +241,10 @@ class AvatarObserver(CallbackDelayer):
                 self.__resetSniperCameraData()
             elif eMode == CTRL_MODE_NAME.STRATEGIC:
                 self.__resetStrategicCameraData()
+            elif eMode == CTRL_MODE_NAME.ARTY:
+                self.__resetArtyCameraData()
             if self.isObserverFPV:
-                if eMode not in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER, CTRL_MODE_NAME.STRATEGIC):
+                if eMode not in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER) + _STRATEGIC_VIEW:
                     LOG_DEBUG_DEV("Avatar::set_observerFPVControlMode requested control mode '{0}' is not supported, switching out of FPV".format(eMode))
                     self.cell.switchObserverFPV(False)
                 else:
@@ -257,6 +262,8 @@ class AvatarObserver(CallbackDelayer):
             filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_SNIPER_ROTATION, time)
         elif eMode == CTRL_MODE_NAME.STRATEGIC:
             filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT, time)
+        elif eMode == CTRL_MODE_NAME.ARTY:
+            filteredValue = self.__filterGetVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT, time)
         if filteredValue is None or filteredValue == Math.Vector3(0, 0, 0):
             LOG_DEBUG_DEV('Avatar.__switchToObservedControlMode: no filtered value yet, rescheduling switch')
             BigWorld.callback(0.0, self.__switchToObservedControlMode)
@@ -271,6 +278,9 @@ class AvatarObserver(CallbackDelayer):
             self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARCADE_SHOT_POINT, FILTER_INTERPOLATION_TYPE.SLERP_OF_CARTESIAN)
             self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_SNIPER_ROTATION, FILTER_INTERPOLATION_TYPE.ANGLE_RADIANS)
             self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT, FILTER_INTERPOLATION_TYPE.LINEAR)
+            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT, FILTER_INTERPOLATION_TYPE.LINEAR)
+            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARTY_TRANSLATION, FILTER_INTERPOLATION_TYPE.SLERP_OF_CARTESIAN)
+            self.__filterSetInterpolationType(AVATAR_SUBFILTERS.CAMERA_ARTY_ROTATION, FILTER_INTERPOLATION_TYPE.ANGLE_RADIANS)
 
     def __resetArcadeCameraData(self):
         if self.isObserver():
@@ -285,6 +295,12 @@ class AvatarObserver(CallbackDelayer):
         if self.isObserver():
             self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT)
 
+    def __resetArtyCameraData(self):
+        if self.isObserver():
+            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT)
+            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_TRANSLATION)
+            self.__filterResetVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_ROTATION)
+
     def set_remoteCameraArcade(self, prev):
         if self.inWorld:
             self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_REL_TRANSLATION, self.remoteCameraArcade.relTranslation, self.remoteCameraArcade.time)
@@ -297,3 +313,9 @@ class AvatarObserver(CallbackDelayer):
     def set_remoteCameraStrategic(self, prev):
         if self.inWorld:
             self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT, self.remoteCameraStrategic.shotPoint, self.remoteCameraStrategic.time)
+
+    def set_remoteCameraArty(self, prev):
+        if self.inWorld:
+            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT, self.remoteCameraArty.shotPoint, self.remoteCameraArty.time)
+            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_TRANSLATION, self.remoteCameraArty.translation, self.remoteCameraArty.time)
+            self.__filterSyncVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_ROTATION, self.remoteCameraArty.rotation, self.remoteCameraArty.time)

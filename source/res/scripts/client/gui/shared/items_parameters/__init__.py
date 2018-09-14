@@ -3,7 +3,7 @@
 import math
 import sys
 from math import ceil
-from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME
+from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME
 from helpers import i18n, time_utils
 from items import vehicles, artefacts
 RELATIVE_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility')
@@ -31,7 +31,9 @@ def calcGunParams(gunDescr, descriptors):
      AIMING_TIME_PROP_NAME: (sys.maxint, -1),
      PIERCING_POWER_PROP_NAME: list(),
      DAMAGE_PROP_NAME: list(),
-     SHELLS_PROP_NAME: list()}
+     SHELLS_PROP_NAME: list(),
+     STUN_DURATION_PROP_NAME: list(),
+     GUARANTEED_STUN_DURATION_PROP_NAME: list()}
     for descr in descriptors:
         currShellsCount = descr['clip'][0]
         if currShellsCount > 1:
@@ -49,6 +51,10 @@ def calcGunParams(gunDescr, descriptors):
             result[PIERCING_POWER_PROP_NAME].append(shot[PIERCING_POWER_PROP_NAME][0])
             result[DAMAGE_PROP_NAME].append(shot['shell'][DAMAGE_PROP_NAME][0])
             result[SHELLS_PROP_NAME].append(i18n.makeString('#item_types:shell/kinds/' + shot['shell']['kind']))
+            if shot['shell']['hasStun']:
+                stunDuration = shot['shell'][STUN_DURATION_PROP_NAME]
+                result[STUN_DURATION_PROP_NAME].append(stunDuration)
+                result[GUARANTEED_STUN_DURATION_PROP_NAME].append(shot['shell'][GUARANTEED_STUN_DURATION_PROP_NAME] * stunDuration)
 
     return result
 

@@ -139,6 +139,16 @@ class IBattleCommandFactory(object):
         """
         return None
 
+    def createSPGAimAreaCommand(self, desiredShotPosition, cellIdx, reloadTime):
+        """
+        Creates command contains position of spg aim marker on 3D scene and minimap.
+        :param desiredShotPosition: coordinates on 3D scene
+        :param cellIdx: integer containing bound coordinates of cell on the minimap.
+        :param reloadTime: reloading time of ally spg
+        :return: instance of _OutCmdDecorator.
+        """
+        return None
+
 
 class IEntityFindCriteria(object):
     """

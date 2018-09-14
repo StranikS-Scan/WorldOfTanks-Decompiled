@@ -3,9 +3,11 @@
 import math
 from collections import defaultdict
 import BigWorld
+import CommandMapping
 from AvatarInputHandler import gun_marker_ctrl
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
+from account_helpers.AccountSettings import AccountSettings, TRAJECTORY_VIEW_HINT_COUNTER
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
@@ -16,20 +18,31 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, CROSSHAIR_VIEW_ID, SHELL_QUANTITY_UNKNOWN
 from gui.battle_control.battle_constants import GUN_RELOADING_VALUE_TYPE
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, VEHICLE_VIEW_STATE, NET_TYPE_OVERRIDE
+from gui.battle_control.battle_constants import STRATEGIC_CAMERA_ID
 from gui.battle_control.controllers import crosshair_proxy
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import IPlugin
-from helpers import dependency
+from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from PlayerEvents import g_playerEvents
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from gui.shared.utils.key_mapping import getReadableKey
+from gui import GUI_SETTINGS
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
 _SETTINGS_KEYS = set(_SETTINGS_KEY_TO_VIEW_ID.keys())
 _SETTINGS_VIEWS = set(_SETTINGS_KEY_TO_VIEW_ID.values())
 _TARGET_UPDATE_INTERVAL = 0.2
+_TRAJECTORY_VIEW_HINT_POSITION = (0, 120)
+_TRAJECTORY_VIEW_HINT_CHECK_STATES = (VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER,
+ VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER,
+ VEHICLE_VIEW_STATE.HIDE_DESTROY_TIMER,
+ VEHICLE_VIEW_STATE.HIDE_DEATHZONE_TIMER,
+ VEHICLE_VIEW_STATE.FIRE,
+ VEHICLE_VIEW_STATE.STUN)
 
 def createPlugins():
     return {'core': CorePlugin,
@@ -41,7 +54,8 @@ def createPlugins():
      'gunMarkerDistance': GunMarkerDistancePlugin,
      'gunMarkersInvalidate': GunMarkersInvalidatePlugin,
      'shotResultIndicator': ShotResultIndicatorPlugin,
-     'siegeMode': SiegeModePlugin}
+     'siegeMode': SiegeModePlugin,
+     'trajectoryViewHint': TrajectoryViewHintPlugin}
 
 
 def chooseSetting(viewID):
@@ -682,6 +696,9 @@ class SiegeModePlugin(CrosshairPlugin):
                 self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
             else:
                 self.__updateView()
+        else:
+            self.__siegeState = _SIEGE_STATE.DISABLED
+            self.__updateView()
         return
 
     def __onVehicleStateUpdated(self, stateID, value):
@@ -698,3 +715,148 @@ class SiegeModePlugin(CrosshairPlugin):
         elif self.__siegeState == _SIEGE_STATE.DISABLED:
             self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
         self._parentObj.as_setNetVisibleS(self.__siegeState not in _SIEGE_STATE.SWITCHING)
+
+
+class TrajectoryViewHintPlugin(CrosshairPlugin):
+    """The Plugin displays a hint for the new Trajectory View
+    in STRATEGIC crosshair view. The hint should not display if it was
+    already shown several times or it is a replay playing."""
+    __slots__ = ('__hintsLeft', '__isHintShown', '__cachedHint', '__isObserver', '__isDestroyTimerDisplaying', '__isDeathZoneTimerDisplaying')
+
+    def __init__(self, parentObj):
+        """
+        Constructor.
+        @param parentObj: CrosshairPanelContainer instance
+        """
+        super(TrajectoryViewHintPlugin, self).__init__(parentObj)
+        self.__hintsLeft = 0
+        self.__isHintShown = False
+        self.__cachedHint = None
+        self.__isDestroyTimerDisplaying = False
+        self.__isDeathZoneTimerDisplaying = False
+        self.__isObserver = False
+        return
+
+    def start(self):
+        arenaDP = self.sessionProvider.getArenaDP()
+        assert arenaDP is not None, 'Arena DP is not found'
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        assert crosshairCtrl is not None, 'Crosshair controller is not found'
+        vehicleCtrl = self.sessionProvider.shared.vehicleState
+        assert vehicleCtrl is not None, 'Vehicle State controller is not found'
+        vInfo = arenaDP.getVehicleInfo()
+        self.__isObserver = vInfo.isObserver()
+        crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+        crosshairCtrl.onStrategicCameraChanged += self.__onStrategicCameraChanged
+        vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        CommandMapping.g_instance.onMappingChanged += self.__onMappingChanged
+        self.__hintsLeft = AccountSettings.getSettings(TRAJECTORY_VIEW_HINT_COUNTER)
+        self.__setup(crosshairCtrl, vehicleCtrl)
+        return
+
+    def stop(self):
+        ctrl = self.sessionProvider.shared.crosshair
+        if ctrl is not None:
+            ctrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+            ctrl.onStrategicCameraChanged -= self.__onStrategicCameraChanged
+        ctrl = self.sessionProvider.shared.vehicleState
+        if ctrl is not None:
+            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
+        if not self.sessionProvider.isReplayPlaying:
+            AccountSettings.setSettings(TRAJECTORY_VIEW_HINT_COUNTER, self.__hintsLeft)
+        self.__cachedHint = None
+        return
+
+    def __setup(self, crosshairCtrl, vehicleCtrl):
+        self.__onCrosshairViewChanged(crosshairCtrl.getViewID())
+        self.__onStrategicCameraChanged(crosshairCtrl.getStrategicCameraID())
+        checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE,
+         VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER,
+         VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER,
+         VEHICLE_VIEW_STATE.STUN)
+        for stateID in checkStatesIDs:
+            stateValue = vehicleCtrl.getStateValue(stateID)
+            if stateValue:
+                self.__onVehicleStateUpdated(stateID, stateValue)
+
+    def __onCrosshairViewChanged(self, viewID):
+        if viewID == CROSSHAIR_VIEW_ID.STRATEGIC and self.__hintsLeft:
+            self.__showHint()
+        elif self.__isHintShown:
+            self.__hideHint()
+
+    def __onStrategicCameraChanged(self, cameraID):
+        if cameraID == STRATEGIC_CAMERA_ID.TRAJECTORY:
+            self.__hintsLeft = max(0, self.__hintsLeft - 1)
+        if not self.__hintsLeft and self.__isHintShown:
+            self.__hideHint()
+
+    def __onVehicleStateUpdated(self, stateID, stateValue):
+        if self.__isHintShown or self.__hintsLeft and stateID in _TRAJECTORY_VIEW_HINT_CHECK_STATES:
+            if stateID == VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER:
+                self.__isDestroyTimerDisplaying = True
+            elif stateID == VEHICLE_VIEW_STATE.HIDE_DESTROY_TIMER:
+                self.__isDestroyTimerDisplaying = False
+            elif stateID == VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER:
+                self.__isDeathZoneTimerDisplaying = True
+            elif stateID == VEHICLE_VIEW_STATE.HIDE_DEATHZONE_TIMER:
+                self.__isDeathZoneTimerDisplaying = False
+            if self.__isHintShown and self.__isThereAnyIndicators():
+                self.__hideHint()
+            else:
+                ctrl = self.sessionProvider.shared.crosshair
+                if ctrl is not None:
+                    self.__onCrosshairViewChanged(ctrl.getViewID())
+        return
+
+    def __isThereAnyIndicators(self):
+        if self.__isDestroyTimerDisplaying or self.__isDeathZoneTimerDisplaying:
+            result = True
+        else:
+            ctrl = self.sessionProvider.shared.vehicleState
+            if ctrl is not None and ctrl.getStateValue(VEHICLE_VIEW_STATE.STUN) or ctrl.getStateValue(VEHICLE_VIEW_STATE.FIRE):
+                result = True
+            else:
+                result = False
+        return result
+
+    def __onMappingChanged(self, *args):
+        if self.__isHintShown:
+            self.__cachedHint = self.__getHint()
+            self.__showHint()
+        elif self.__hintsLeft:
+            self.__cachedHint = self.__getHint()
+
+    def __showHint(self):
+        if self.__isObserver:
+            return
+        else:
+            if GUI_SETTINGS.spgAlternativeAimingCameraEnabled and not (self.sessionProvider.isReplayPlaying or self.__isThereAnyIndicators()):
+                if self.__cachedHint is None:
+                    self.__cachedHint = self.__getHint()
+                self._parentObj.as_showHintS(*self.__cachedHint)
+                self.__isHintShown = True
+            return
+
+    def __hideHint(self):
+        if self.__isObserver:
+            return
+        if not self.sessionProvider.isReplayPlaying:
+            self._parentObj.as_hideHintS()
+            self.__isHintShown = False
+
+    @staticmethod
+    def __getHint():
+        hintTextLeft = None
+        keyName = getReadableKey(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
+        if keyName is not '':
+            hintTextLeft = i18n.makeString(INGAME_GUI.TRAJECTORYVIEW_HINT_ALTERNATEMODELEFT)
+            hintTextRight = i18n.makeString(INGAME_GUI.TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT)
+        else:
+            hintTextRight = i18n.makeString(INGAME_GUI.TRAJECTORYVIEW_HINT_NOBINDINGKEY)
+        return (keyName,
+         hintTextLeft,
+         hintTextRight,
+         _TRAJECTORY_VIEW_HINT_POSITION[0],
+         _TRAJECTORY_VIEW_HINT_POSITION[1])

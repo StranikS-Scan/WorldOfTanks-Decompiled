@@ -100,6 +100,12 @@ class ArmorItemPacker(LinerItemPacker):
         super(ArmorItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_ARMOR, BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_DESCRIPTION)
 
 
+class StunItemPacker(LinerItemPacker):
+
+    def __init__(self):
+        super(StunItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_STUN, BATTLE_RESULTS.COMMON_TOOLTIP_STUN_DESCRIPTION)
+
+
 class AssistItemPacker(LinerItemPacker):
 
     def __init__(self):

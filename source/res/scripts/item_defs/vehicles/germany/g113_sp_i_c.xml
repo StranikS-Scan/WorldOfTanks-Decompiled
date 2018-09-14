@@ -39,7 +39,7 @@
       <armor_11>	8	</armor_11>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	3764	</weight>
+    <weight>	3739	</weight>
     <maxHealth>	648	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	190	</maxHealth>
@@ -104,8 +104,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	165	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Chassis.model	</undamaged>
@@ -224,9 +224,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	962	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -357,8 +354,8 @@
         <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	175	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Chassis.model	</undamaged>
@@ -477,9 +474,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	962	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -617,12 +611,6 @@
       <guns>
         <_90mm_D921_F1>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
-            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -631,12 +619,13 @@
             </armor_6>
             <gun>	10	</gun>
           </armor>
-          <pitchLimits>	-90 90	  <minPitch>	0 -15 1 -15	</minPitch>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 2.7 0.061111 2.7 0.088889 8 0.375 8 0.402778 6 0.597222 6 0.625 8 0.911111 8 0.938888 2.7 1 2.7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	7.9	</reloadTime>
+          <reloadTime>	10	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_01.model	</undamaged>
@@ -741,7 +730,7 @@
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	90	</maxHealth>
         <maxRegenHealth>	45	</maxRegenHealth>
@@ -753,16 +742,16 @@
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
+            <armor_5>	10	</armor_5>
+            <armor_6>	8	</armor_6>
+            <armor_7>	10	</armor_7>
+            <armor_8>	10	</armor_8>
             <gun>	10	</gun>
           </armor>
           <pitchLimits>
@@ -770,7 +759,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	7.8	</reloadTime>
+          <reloadTime>	9.5	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_02.model	</undamaged>
@@ -791,28 +780,48 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	0.0	</row>
+                <row>	15.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint1	</node>
+                  <table>
+                    <row>	0.0	</row>
+                    <row>	15.0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <tiling>	0.625 0.37 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_D921_F1>
         <_90mm_Mecar>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
-            <gun>	_90mm_Mecar_mit_Mehrladeeinrichtung	  <cost>	12500	</cost>
-            </gun>
+            <vehicle>	G88_Indien_Panzer	  <cost>	106000	</cost>
+            </vehicle>
+            <vehicle>	G126_HWK_12	  <cost>	102000	</cost>
+            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
+            <armor_5>	10	</armor_5>
+            <armor_6>	8	</armor_6>
+            <armor_7>	10	</armor_7>
+            <armor_8>	10	</armor_8>
             <gun>	10	</gun>
           </armor>
           <pitchLimits>
@@ -821,7 +830,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	7.9	</reloadTime>
+          <reloadTime>	9	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_03.model	</undamaged>
@@ -842,72 +851,28 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	0.0	</row>
+                <row>	15.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint1	</node>
+                  <table>
+                    <row>	0.0	</row>
+                    <row>	15.0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <tiling>	0.67 0.34 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_Mecar>
-        <_90mm_Mecar_mit_Mehrladeeinrichtung>	shared	  <maxAmmo>	39	</maxAmmo>
-          <unlocks>
-            <vehicle>	G88_Indien_Panzer	  <cost>	106000	</cost>
-            </vehicle>
-            <vehicle>	G103_RU_251	  <cost>	92700	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	10	</gun>
-          </armor>
-          <clip>
-            <count>	3	</count>
-            <rate>	20	</rate>
-          </clip>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	20	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.18	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
-          <models>
-            <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000001 0.0399404 1.78413	</rayStart>
-              <rayEnd>	-0.0351056 -0.0398971 1.78413	</rayEnd>
-              <rayUp>	0.056 0.056 4	</rayUp>
-              <size>	0.36	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.535 0.34 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_90mm_Mecar_mit_Mehrladeeinrichtung>
       </guns>
       <models>
         <undamaged>	vehicles/german/G113_SP_I_C/normal/lod0/Turret_02.model	</undamaged>
@@ -959,11 +924,6 @@
     </Turret_2_G113_SP_I_C>
   </turrets0>
   <engines>
-    <Hotchkiss_6_Zyl_Benzin_154_PS>	shared	  <unlocks>
-        <engine>	Hotchkiss_6_Zyl_Benzin_164_PS	  <cost>	5400	</cost>
-        </engine>
-      </unlocks>
-    </Hotchkiss_6_Zyl_Benzin_154_PS>
     <Hotchkiss_6_Zyl_Benzin_164_PS>	shared	  <unlocks>
         <engine>	Hotchkiss_6_Zyl_Benzin_195_PS	  <cost>	10200	</cost>
         </engine>
@@ -972,27 +932,24 @@
     <Hotchkiss_6_Zyl_Benzin_195_PS>	shared	</Hotchkiss_6_Zyl_Benzin_195_PS>
   </engines>
   <fuelTanks>
-    <Average>	shared	</Average>
+    <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
     <AN-GRC-4>	shared	  <unlocks>
-        <radio>	SEM25	  <cost>	9100	</cost>
+        <radio>	AN-GRC-7	  <cost>	9100	</cost>
         </radio>
       </unlocks>
     </AN-GRC-4>
-    <SEM25>	shared	</SEM25>
+    <AN-GRC-7>	shared	</AN-GRC-7>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Hotchkiss_6_Zyl_Benzin_154_PS>
-          <smplEnginePower>	162.8213	</smplEnginePower>
-        </Hotchkiss_6_Zyl_Benzin_154_PS>
         <Hotchkiss_6_Zyl_Benzin_164_PS>
-          <smplEnginePower>	173.3941	</smplEnginePower>
+          <smplEnginePower>	190	</smplEnginePower>
         </Hotchkiss_6_Zyl_Benzin_164_PS>
         <Hotchkiss_6_Zyl_Benzin_195_PS>
-          <smplEnginePower>	206.1698	</smplEnginePower>
+          <smplEnginePower>	230	</smplEnginePower>
         </Hotchkiss_6_Zyl_Benzin_195_PS>
       </engines>
       <chassis>
@@ -1068,11 +1025,6 @@
     </detailed>
   </physics>
   <clientAdjustmentFactors>
-    <guns>
-      <_90mm_Mecar_mit_Mehrladeeinrichtung>
-        <delta>	1.16	</delta>
-      </_90mm_Mecar_mit_Mehrladeeinrichtung>
-    </guns>
     <armour>	0.779232345	</armour>
   </clientAdjustmentFactors>
   <effects>

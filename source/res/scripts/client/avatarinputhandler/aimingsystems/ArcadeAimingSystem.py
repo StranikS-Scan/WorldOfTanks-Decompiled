@@ -43,14 +43,21 @@ class ArcadeAimingSystem(IAimingSystem):
     def __setPitch(self, value):
         self.__cursor.pitch = mathUtils.clamp(self.__anglesRange[0], self.__anglesRange[1], value)
 
-    def __setAimMatrix(self, aimMatrix):
+    @property
+    def aimMatrix(self):
+        """ Rotation transform from __cursor focus direction.
+        Informally: aimingSystem.matrix = aimMatrix *  __cursor.matrix final ray depicts actual aim direction
+        """
+        return self.__aimMatrix
+
+    @aimMatrix.setter
+    def aimMatrix(self, aimMatrix):
         self.__aimMatrix = aimMatrix
         self.__setDistanceFromFocus(self.distanceFromFocus)
 
     vehicleMProv = property(lambda self: self.__vehicleMProv, __setVehicleMProv)
     positionAboveVehicleProv = property(lambda self: self.__cursor.positionAboveBaseProvider)
     distanceFromFocus = property(lambda self: self.__cursor.distanceFromFocus, __setDistanceFromFocus)
-    aimMatrix = property(lambda self: self.__aimMatrix, __setAimMatrix)
     yaw = property(lambda self: self.__cursor.yaw, __setYaw)
     pitch = property(lambda self: self.__cursor.pitch, __setPitch)
     idealMatrix = property(lambda self: self.__idealMatrix)
@@ -64,7 +71,7 @@ class ArcadeAimingSystem(IAimingSystem):
         self.__cursor.base = vehicleMProv
         self.__cursor.heightAboveBase = heightAboveTarget
         self.__cursor.focusRadius = focusRadius
-        self.__idealMatrix = self._matrix
+        self.__idealMatrix = Matrix(self._matrix)
         self.__shotPointCalculator = ShotPointCalculatorPlanar() if enableSmartShotPointCalc else None
         return
 

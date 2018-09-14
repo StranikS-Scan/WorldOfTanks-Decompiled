@@ -8,8 +8,11 @@ from constants import DEATH_REASON_ALIVE
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.battle_results.components import base, personal, shared, style
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
+from gui.LobbyContext import g_lobbyContext
 from helpers import i18n
-_STAT_VALUES_VO_REPLACER = {'damageAssisted': 'damageAssistedSelf'}
+_STAT_VALUES_VO_REPLACER = {'damageAssisted': 'damageAssistedSelf',
+ 'damageAssistedStun': 'damageAssistedStunSelf'}
+_STAT_STUN_FIELD_NAMES = ('damageAssistedStun', 'stunNum')
 
 class TeamPlayerNameBlock(shared.PlayerNameBlock):
     __slots__ = ('igrType',)
@@ -119,7 +122,7 @@ class SortieVehicleStatsBlock(RegularVehicleStatsBlock):
 class RegularVehicleStatValuesBlock(base.StatsBlock):
     """Block contains detailed statistics of vehicle that are shown in separate view
     when player click to some vehicle in team list."""
-    __slots__ = ('_isPersonal', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'capturePoints', 'mileage')
+    __slots__ = ('_isPersonal', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'damageAssistedStun', 'stunNum', 'capturePoints', 'mileage', '__rawDamageAssistedStun', '__rawStunNum')
 
     def setPersonal(self, flag):
         self._isPersonal = flag
@@ -129,6 +132,8 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
         :param result: instance of VehicleDetailedInfo or VehicleSummarizeInfo
         :param reusable: instance of _ReusableInfo.
         """
+        self.__rawDamageAssistedStun = result.damageAssistedStun
+        self.__rawStunNum = result.stunNum
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
         self.hits = (result.directHits, result.piercings)
         self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
@@ -143,17 +148,24 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
         self.spotted = style.getIntegralFormatIfNoEmpty(result.spotted)
         self.damagedKilled = (result.damaged, result.kills)
         self.damageAssisted = style.getIntegralFormatIfNoEmpty(result.damageAssisted)
+        self.damageAssistedStun = style.getIntegralFormatIfNoEmpty(result.damageAssistedStun)
+        self.stunNum = style.getIntegralFormatIfNoEmpty(result.stunNum)
         self.capturePoints = (result.capturePoints, result.droppedCapturePoints)
         self.mileage = result.mileage
 
     def getVO(self):
         vo = []
+        isStunEnabled = g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
         for component in self._components:
             field = component.getField()
-            if self._isPersonal and field in _STAT_VALUES_VO_REPLACER:
-                field = _STAT_VALUES_VO_REPLACER[field]
-            value = component.getVO()
-            vo.append(style.makeStatValue(field, value))
+            showStunNum = False
+            if isStunEnabled:
+                showStunNum = self.__rawStunNum > 0
+            if showStunNum and field == 'stunNum' or showStunNum and field == 'damageAssistedStun' or field not in _STAT_STUN_FIELD_NAMES:
+                value = component.getVO()
+                if self._isPersonal and field in _STAT_VALUES_VO_REPLACER:
+                    field = _STAT_VALUES_VO_REPLACER[field]
+                vo.append(style.makeStatValue(field, value))
 
         return vo
 

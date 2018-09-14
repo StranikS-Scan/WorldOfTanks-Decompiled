@@ -89,9 +89,13 @@ class SiegeModeCameraShaker(object):
     def shake(newState, timeToNextMode):
         if newState not in VEHICLE_SIEGE_STATE.SWITCHING:
             return
-        vehicle = BigWorld.player().getVehicleAttached()
-        inputHandler = BigWorld.player().inputHandler
-        matrix = Math.Matrix(vehicle.model.matrix)
-        impulseDir = -matrix.applyToAxis(2)
-        impulsePosition = Math.Matrix(vehicle.model.node(TankNodeNames.GUN_JOINT)).translation
-        inputHandler.onSpecificImpulse(impulsePosition, impulseDir * SiegeModeCameraShaker.SIEGE_CAMERA_IMPULSE, 'sniper')
+        else:
+            vehicle = BigWorld.player().getVehicleAttached()
+            if vehicle is None:
+                return
+            inputHandler = BigWorld.player().inputHandler
+            matrix = Math.Matrix(vehicle.model.matrix)
+            impulseDir = -matrix.applyToAxis(2)
+            impulsePosition = Math.Matrix(vehicle.model.node(TankNodeNames.GUN_JOINT)).translation
+            inputHandler.onSpecificImpulse(impulsePosition, impulseDir * SiegeModeCameraShaker.SIEGE_CAMERA_IMPULSE, 'sniper')
+            return

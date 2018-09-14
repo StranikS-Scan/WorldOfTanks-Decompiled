@@ -7,9 +7,13 @@ from helpers.i18n import makeString as _ms
 
 class ClanBtnsUnavailableAspect(aop.Aspect):
 
+    def __init__(self, config={}):
+        self.__config = config
+        aop.Aspect.__init__(self)
+
     def atReturn(self, cd):
         original_return_value = cd.returned
-        warnTooltip = makeTooltip(None, None, None, _ms(MINICLIENT.ACCOUNTPOPOVER_WARNING))
+        warnTooltip = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.ACCOUNTPOPOVER_WARNING))
         original_return_value['btnTooltip'] = warnTooltip
         original_return_value['requestInviteBtnTooltip'] = warnTooltip
         original_return_value['searchClanTooltip'] = warnTooltip
@@ -21,9 +25,13 @@ class ClanBtnsUnavailableAspect(aop.Aspect):
 
 class MyClanInvitesBtnUnavailableAspect(aop.Aspect):
 
+    def __init__(self, config={}):
+        self.__config = config
+        aop.Aspect.__init__(self)
+
     def atReturn(self, cd):
         original_return_value = cd.returned
-        original_return_value['inviteBtnTooltip'] = makeTooltip(None, None, None, _ms(MINICLIENT.ACCOUNTPOPOVER_WARNING))
+        original_return_value['inviteBtnTooltip'] = makeTooltip(None, None, None, self.__config.get('sandbox_platform_message', MINICLIENT.ACCOUNTPOPOVER_WARNING))
         original_return_value['inviteBtnEnabled'] = False
         return original_return_value
 

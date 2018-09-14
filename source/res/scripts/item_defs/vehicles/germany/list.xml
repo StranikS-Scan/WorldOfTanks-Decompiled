@@ -195,7 +195,7 @@
     <shortUserString>	#germany_vehicles:VK1602_short	</shortUserString>
     <description>	#germany_vehicles:VK1602_descr	</description>
     <price>	355000	</price>
-    <tags>	lightTank scout enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank scout aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	5	</level>
   </G26_VK1602>
   <G23_Grille>
@@ -222,7 +222,7 @@
     <shortUserString>	#germany_vehicles:PzII_Luchs_short	</shortUserString>
     <description>	#germany_vehicles:PzII_Luchs_descr	</description>
     <price>	155000	</price>
-    <tags>	lightTank scout enhancedTorsions1t_user HD	</tags>
+    <tags>	lightTank enhancedTorsions1t_user HD	</tags>
     <level>	4	</level>
   </G25_PzII_Luchs>
   <G28_PzIII_IV>
@@ -292,7 +292,7 @@
     <shortUserString>	#germany_vehicles:Pz38_NA_short	</shortUserString>
     <description>	#germany_vehicles:Pz38_NA_descr	</description>
     <price>	145000	</price>
-    <tags>	lightTank scout enhancedSprings_user HD	</tags>
+    <tags>	lightTank enhancedSprings_user HD	</tags>
     <level>	4	</level>
   </G52_Pz38_NA>
   <G64_Panther_II>
@@ -355,7 +355,7 @@
     <shortUserString>	#germany_vehicles:VK2801_short	</shortUserString>
     <description>	#germany_vehicles:VK2801_descr	</description>
     <price>	945000	</price>
-    <tags>	lightTank scout enhancedTorsions1t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	lightTank scout enhancedTorsions1t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	6	</level>
   </G66_VK2801>
   <G54_E-50>
@@ -454,7 +454,7 @@
     <shortUserString>	#germany_vehicles:PzI_short	</shortUserString>
     <description>	#germany_vehicles:PzI_descr	</description>
     <price>	3600	</price>
-    <tags>	lightTank	</tags>
+    <tags>	lightTank HD	</tags>
     <level>	2	</level>
   </G53_PzI>
   <G82_Pz_II_AusfG>
@@ -609,7 +609,7 @@
     <shortUserString>	#germany_vehicles:Pz_IV_AusfA_short	</shortUserString>
     <description>	#germany_vehicles:Pz_IV_AusfA_descr	</description>
     <price>	41000	</price>
-    <tags>	mediumTank enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	3	</level>
   </G83_Pz_IV_AusfA>
   <G80_Pz_IV_AusfD>
@@ -644,9 +644,9 @@
     <userString>	#germany_vehicles:G103_RU_251	</userString>
     <shortUserString>	#germany_vehicles:G103_RU_251_short	</shortUserString>
     <description>	#germany_vehicles:G103_RU_251_descr	</description>
-    <price>	2440000	</price>
+    <price>	3460000	</price>
     <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
-    <level>	8	</level>
+    <level>	9	</level>
   </G103_RU_251>
   <G110_Typ_205>
     <id>	73	</id>
@@ -693,6 +693,24 @@
     <tags>	heavyTank antifragmentationLining_superheavy_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD enhancedLongitudinalTorsions_user	</tags>
     <level>	8	</level>
   </G115_Typ_205B>
+  <G125_Spz_57_Rh>
+    <id>	78	</id>
+    <userString>	#germany_vehicles:G125_Spz_57_Rh	</userString>
+    <shortUserString>	#germany_vehicles:G125_Spz_57_Rh_short	</shortUserString>
+    <description>	#germany_vehicles:G125_Spz_57_Rh_descr	</description>
+    <price>	6100000	</price>
+    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <level>	10	</level>
+  </G125_Spz_57_Rh>
+  <G126_HWK_12>
+    <id>	79	</id>
+    <userString>	#germany_vehicles:G126_HWK_12	</userString>
+    <shortUserString>	#germany_vehicles:G126_HWK_12_short	</shortUserString>
+    <description>	#germany_vehicles:G126_HWK_12_descr	</description>
+    <price>	2440000	</price>
+    <tags>	lightTank scout enhancedTorsions1t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <level>	8	</level>
+  </G126_HWK_12>
   <G44_JagdTigerH>
     <id>	193	</id>
     <userString>	#germany_vehicles:JagdTigerH	</userString>
@@ -700,7 +718,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG heavyAT-SPG antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD secret testTank	</tags>
+    <tags>	AT-SPG heavyAT-SPG antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD secret	</tags>
     <level>	8	</level>
   </G44_JagdTigerH>
   <G16_PzVIB_Tiger_II_F>
@@ -711,7 +729,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD secret testTank	</tags>
+    <tags>	heavyTank enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD secret	</tags>
     <level>	7	</level>
   </G16_PzVIB_Tiger_II_F>
   <G119_Panzer58_BF>

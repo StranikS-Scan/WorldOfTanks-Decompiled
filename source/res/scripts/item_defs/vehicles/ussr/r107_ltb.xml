@@ -16,10 +16,10 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.405	</firePenalty>
   </invisibility>
-  <repairCost>	8.0	</repairCost>
+  <repairCost>	9.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.4	</priceFactor>
+    <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
@@ -39,11 +39,11 @@
       <armor_12>	90	</armor_12>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	8550	</weight>
-    <maxHealth>	760	</maxHealth>
+    <weight>	8525	</weight>
+    <maxHealth>	840	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	2.0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -83,10 +83,10 @@
     <Chassis_R107_LTB>
       <userString>	#ussr_vehicles:Chassis_R107_LTB	</userString>
       <tags></tags>
-      <level>	6	</level>
-      <price>	8800	</price>
+      <level>	7	</level>
+      <price>	17600	</price>
       <unlocks>
-        <chassis>	Chassis_R107_LTB_2	  <cost>	9500	</cost>
+        <chassis>	Chassis_R107_LTB_2	  <cost>	14800	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -100,12 +100,12 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R107_LTB/normal/lod0/Chassis.model	</undamaged>
@@ -298,8 +298,6 @@
           <leftSibling>	Track_VT_R2	</leftSibling>
         </node>
       </trackNodes>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <trackThickness>	0.0142	</trackThickness>
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R107_LTB/track/segment.model	</segmentModelLeft>
@@ -318,6 +316,8 @@
         <lodDist>	MEDIUM	</lodDist>
         <mud>	smallTankMud	</mud>
       </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.902296 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R107_LTB/collision/Chassis.model	</collisionModelServer>
@@ -341,8 +341,8 @@
     <Chassis_R107_LTB_2>
       <userString>	#ussr_vehicles:Chassis_R107_LTB_2	</userString>
       <tags></tags>
-      <level>	7	</level>
-      <price>	18500	</price>
+      <level>	8	</level>
+      <price>	30600	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -354,12 +354,12 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	155	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R107_LTB/normal/lod0/Chassis.model	</undamaged>
@@ -552,8 +552,6 @@
           <backwardElastK>	0.9	</backwardElastK>
         </node>
       </trackNodes>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <trackThickness>	0.0142	</trackThickness>
       <splineDesc>
         <segmentModelLeft>	vehicles/russian/R107_LTB/track/segment.model	</segmentModelLeft>
@@ -572,6 +570,8 @@
         <lodDist>	MEDIUM	</lodDist>
         <mud>	smallTankMud	</mud>
       </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.902296 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R107_LTB/collision/Chassis.model	</collisionModelServer>
@@ -597,8 +597,8 @@
     <Turret_1_R107_LTB>
       <userString>	#ussr_vehicles:Turret_1_R107_LTB	</userString>
       <tags></tags>
-      <level>	7	</level>
-      <price>	20000	</price>
+      <level>	8	</level>
+      <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	90	</armor_1>
@@ -617,78 +617,23 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5450	</weight>
-      <maxHealth>	190	</maxHealth>
+      <maxHealth>	210	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	130	</maxHealth>
-        <maxRegenHealth>	65	</maxRegenHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	90	</maxHealth>
-        <maxRegenHealth>	45	</maxRegenHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_85mm_ZiS_S-53>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_85mm_D5T-85BMU>	shared	  <maxAmmo>	48	</maxAmmo>
           <unlocks>
-            <gun>	_85mm_D5T-85BM	  <cost>	15500	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	30	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	4.8	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R107_LTB/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R107_LTB/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R107_LTB/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R107_LTB/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R107_LTB/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000341584 -0.000009 1.01309	</rayStart>
-              <rayEnd>	0.0225649 0.00885288 1.00852	</rayEnd>
-              <rayUp>	0.092 0.084 5	</rayUp>
-              <size>	0.5	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_85mm_ZiS_S-53>
-        <_85mm_D5T-85BM>	shared	  <maxAmmo>	48	</maxAmmo>
-          <unlocks>
-            <gun>	_85mm_D10_85	  <cost>	16200	</cost>
+            <gun>	_85mm_D10_85	  <cost>	17200	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -705,16 +650,16 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	5.2	</reloadTime>
+          <reloadTime>	5.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 3.5 1 3.5	</maxPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
@@ -740,8 +685,12 @@
           <camouflage>
             <tiling>	0.475 0.475 0.000000 0.000000	</tiling>
           </camouflage>
-        </_85mm_D5T-85BM>
+        </_85mm_D5T-85BMU>
         <_85mm_D10_85>	shared	  <maxAmmo>	42	</maxAmmo>
+          <unlocks>
+            <vehicle>	R40_T-54	  <cost>	225300	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -756,16 +705,16 @@
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	5.1	</reloadTime>
+          <reloadTime>	5.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
@@ -844,23 +793,23 @@
   </turrets0>
   <engines>
     <KZ-V8>	shared	  <unlocks>
-        <engine>	V-16M	  <cost>	11200	</cost>
+        <engine>	KZ-V16	  <cost>	17300	</cost>
         </engine>
       </unlocks>
     </KZ-V8>
-    <V-16M>	shared	</V-16M>
+    <KZ-V16>	shared	</KZ-V16>
   </engines>
   <fuelTanks>
-    <Average>	shared	</Average>
+    <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_10R>	shared	  <unlocks>
+    <_9RM>	shared	  <unlocks>
         <radio>	R113	  <cost>	8700	</cost>
         </radio>
       </unlocks>
-    </_10R>
+    </_9RM>
     <R113>	shared	  <unlocks>
-        <vehicle>	R109_T54S	  <cost>	96300	</cost>
+        <vehicle>	R109_T54S	  <cost>	193200	</cost>
         </vehicle>
       </unlocks>
     </R113>
@@ -869,11 +818,11 @@
     <detailed>
       <engines>
         <KZ-V8>
-          <smplEnginePower>	606.7875	</smplEnginePower>
+          <smplEnginePower>	600	</smplEnginePower>
         </KZ-V8>
-        <V-16M>
-          <smplEnginePower>	772.275	</smplEnginePower>
-        </V-16M>
+        <KZ-V16>
+          <smplEnginePower>	770	</smplEnginePower>
+        </KZ-V16>
       </engines>
       <chassis>
         <Chassis_R107_LTB>

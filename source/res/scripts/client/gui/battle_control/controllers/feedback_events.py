@@ -22,6 +22,7 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.SPOTTED: _FET.PLAYER_SPOTTED_ENEMY,
  _BET.RADIO_ASSIST: _FET.PLAYER_ASSIST_TO_KILL_ENEMY,
  _BET.TRACK_ASSIST: _FET.PLAYER_ASSIST_TO_KILL_ENEMY,
+ _BET.STUN_ASSIST: _FET.PLAYER_ASSIST_TO_STUN_ENEMY,
  _BET.BASE_CAPTURE_POINTS: _FET.PLAYER_CAPTURED_BASE,
  _BET.BASE_CAPTURE_DROPPED: _FET.PLAYER_DROPPED_CAPTURE,
  _BET.TANKING: _FET.PLAYER_USED_ARMOR,
@@ -34,7 +35,8 @@ _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackD
  _FET.PLAYER_USED_ARMOR: _unpackDamage,
  _FET.PLAYER_DAMAGED_DEVICE_ENEMY: _unpackCrits,
  _FET.ENEMY_DAMAGED_HP_PLAYER: _unpackDamage,
- _FET.ENEMY_DAMAGED_DEVICE_PLAYER: _unpackCrits}
+ _FET.ENEMY_DAMAGED_DEVICE_PLAYER: _unpackCrits,
+ _FET.PLAYER_ASSIST_TO_STUN_ENEMY: _unpackDamage}
 
 def _getShellType(shellTypeID):
     """
@@ -207,18 +209,19 @@ class PlayerFeedbackEvent(_FeedbackEvent):
 
 
 class BattleSummaryFeedbackEvent(_FeedbackEvent):
-    __slots__ = ('__damage', '__trackAssistDamage', '__radioAssistDamage', '__blockedDamage')
+    __slots__ = ('__damage', '__trackAssistDamage', '__radioAssistDamage', '__blockedDamage', '__stunAssist')
 
-    def __init__(self, damage, trackAssist, radioAssist, tankings):
+    def __init__(self, damage, trackAssist, radioAssist, tankings, stunAssist):
         super(BattleSummaryFeedbackEvent, self).__init__(_FET.DAMAGE_LOG_SUMMARY)
         self.__damage = damage
         self.__trackAssistDamage = trackAssist
         self.__radioAssistDamage = radioAssist
         self.__blockedDamage = tankings
+        self.__stunAssist = stunAssist
 
     @staticmethod
     def fromDict(summaryData):
-        return BattleSummaryFeedbackEvent(damage=summaryData['damage'], trackAssist=summaryData['trackAssist'], radioAssist=summaryData['radioAssist'], tankings=summaryData['tankings'])
+        return BattleSummaryFeedbackEvent(damage=summaryData['damage'], trackAssist=summaryData['trackAssist'], radioAssist=summaryData['radioAssist'], tankings=summaryData['tankings'], stunAssist=summaryData['stunAssist'])
 
     def getTotalDamage(self):
         return self.__damage
@@ -228,6 +231,9 @@ class BattleSummaryFeedbackEvent(_FeedbackEvent):
 
     def getTotalBlockedDamage(self):
         return self.__blockedDamage
+
+    def getTotalStunDamage(self):
+        return self.__stunAssist
 
 
 class PostmortemSummaryEvent(_FeedbackEvent):

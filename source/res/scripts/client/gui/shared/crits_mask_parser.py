@@ -18,14 +18,14 @@ def critsParserGenerator(mask):
     destroyed devices/devices with critical damage/destroyed tank mans).
     
     The mask has the following format: |destroyed tankmans|destroyed devices|critical devices|. For
-    details see ..\\scripts\\item_defs\x0behicles\\common\x0behicle.xml and buildCritsFromDevicesHit
+    details see ..\\scripts\\item_defs\x0behicles\\common\x0behicle.xml and buildCritsFromAttackResults
     method of ..\\scripts\\cell\\helpers module.
     
     :param mask: Crits bit mask
     :return: string of crit type (from VEHICLE_DEVICE_TYPE_NAMES or VEHICLE_TANKMAN_TYPE_NAMES)
     """
     maskMap = {CRIT_MASK_SUB_TYPES.DESTROYED_DEVICES: (mask >> 12 & 4095, VEHICLE_DEVICE_TYPE_NAMES),
-     CRIT_MASK_SUB_TYPES.CRITICAL_DEVICES: (mask & 4095, VEHICLE_DEVICE_TYPE_NAMES),
+     CRIT_MASK_SUB_TYPES.CRITICAL_DEVICES: (mask & 255, VEHICLE_DEVICE_TYPE_NAMES),
      CRIT_MASK_SUB_TYPES.DESTROYED_TANKMENS: (mask >> 24 & 255, VEHICLE_TANKMAN_TYPE_NAMES)}
     for subType, (subMask, types) in maskMap.iteritems():
         if subMask > 0:

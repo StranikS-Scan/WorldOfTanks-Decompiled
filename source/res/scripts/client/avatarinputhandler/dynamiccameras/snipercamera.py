@@ -77,7 +77,8 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__cfg['increasedZoom'] = diff['increasedZoom']
             if not self.__cfg['increasedZoom']:
                 self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][:3][-1]
-                self.delayCallback(0.0, self.__applyZoom, self.__cfg['zoom'])
+                if self.camera is BigWorld.camera():
+                    self.delayCallback(0.0, self.__applyZoom, self.__cfg['zoom'])
         if 'fov' in diff and self.camera is BigWorld.camera():
             self.delayCallback(0.01, self.__applyZoom, self.__cfg['zoom'])
 

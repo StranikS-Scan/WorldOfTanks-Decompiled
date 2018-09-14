@@ -7,6 +7,7 @@ from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
+from BattleReplay import g_replayCtrl
 
 class _WWISE_EVENTS:
     BATTLE_ENDING_SOON = 'time_buzzer_02'
@@ -74,9 +75,11 @@ class BattleTimer(BattleTimerMeta):
                     self._callWWISE(_WWISE_EVENTS.BATTLE_ENDING_SOON)
             elif self.__isTicking:
                 self.__stopTicking()
-            if totalTime == _BATTLE_END_SOUND_TIME:
+            playBattleEnd = not g_replayCtrl.isPlaying if g_replayCtrl is not None else True
+            if totalTime == _BATTLE_END_SOUND_TIME and playBattleEnd:
                 self._callWWISE(_WWISE_EVENTS.BATTLE_END)
         self.as_setTotalTimeS('{:02d}'.format(minutes), '{:02d}'.format(seconds))
+        return
 
     def setState(self, state):
         self.__state = state

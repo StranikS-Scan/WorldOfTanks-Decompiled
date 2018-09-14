@@ -23,7 +23,7 @@
   <camouflage>
     <priceFactor>	0.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/japan/J01_NC27/NC27_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -66,12 +66,10 @@
     <exhaust>
       <pixie>	diesel_small	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
-      <tags>
-        <gasoline>	gas	</gasoline>
-      </tags>
+      <tags></tags>
     </exhaust>
     <turretPositions>
-      <turret>	-0.000179 0.45455 0.456375	</turret>
+      <turret>	0.000000 0.535453 0.43705	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/japan/J01_NC27/collision/Hull.model	</collisionModelServer>
@@ -79,14 +77,17 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.148715 0.224213 1.35259	</rayStart>
-        <rayEnd>	0.148715 0.034545 1.28914	</rayEnd>
+        <rayStart>	0.173939 0.302582 1.34454	</rayStart>
+        <rayEnd>	0.173939 0.111377 1.28589	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.22	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/japan/J01_NC27/NC27_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	4 2 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_NC27_bot>
@@ -122,128 +123,209 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	smallTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.2 0.33	</size>
+        <size>	0.35 0.33	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.2	</textureScale>
+        <textureScale>	-3.3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.270211	</radius>
+          <syncAngle>	32.7273	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.115293	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R2	</name>
-          <radius>	0.111484	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	W_R0	</name>
-          <radius>	0.115293	</radius>
+          <syncAngle>	32.7273	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
           <radius>	0.106273	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	10	</count>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.106273	</radius>
+          <startIndex>	8	</startIndex>
+          <count>	6	</count>
         </group>
         <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	W_R11	</name>
-          <radius>	0.115293	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R3	</name>
-          <radius>	0.274164	</radius>
-        </wheel>
-        <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.270212	</radius>
+          <syncAngle>	32.7273	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.115293	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L2	</name>
-          <radius>	0.111484	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	W_L0	</name>
-          <radius>	0.115293	</radius>
+          <syncAngle>	32.7273	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
           <radius>	0.106273	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	10	</count>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
         </group>
-        <wheel>
+        <group>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	W_L11	</name>
-          <radius>	0.115293	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L3	</name>
-          <radius>	0.274164	</radius>
-        </wheel>
+          <template>	W_L	</template>
+          <radius>	0.106273	</radius>
+          <startIndex>	8	</startIndex>
+          <count>	6	</count>
+        </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.971373 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.901047 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/japan/J01_NC27/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.699434 1.41678	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.686146 1.34952	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
         <decal>
           <transform>
-            <row0>	2.354400 0.000000 0.000000	</row0>
+            <row0>	2.349990 0.000000 0.000000	</row0>
             <row1>	0.000000 1.457060 0.000000	</row1>
             <row2>	0.000000 0.000000 5.383760	</row2>
             <row3>	0.000000 0.000000 0.000001	</row3>
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/japan/J01_NC27/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/japan/J01_NC27/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/japan/J01_NC27/track/left.track	</left>
+        <right>	vehicles/japan/J01_NC27/track/right.track	</right>
+        <segmentLength>	0.151	</segmentLength>
+        <segmentOffset>	0.19	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	14	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0332168	</minOffset>
+          <maxOffset>	0.0262238	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	14	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0332168	</minOffset>
+          <maxOffset>	0.0262238	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.000000	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-6	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.046	</offset>
+        </node>
+      </trackNodes>
     </Chassis_NC27_bot>
   </chassis>
   <turrets0>
@@ -312,6 +394,9 @@
             <collisionModelServer>	vehicles/japan/J01_NC27/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </_37mm_APX_SA18_bot>
       </guns>
       <models>
@@ -323,34 +408,34 @@
         <collisionModelServer>	vehicles/japan/J01_NC27/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/japan/J01_NC27/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.004277 0.222471 0.448236	</gunPosition>
+      <gunPosition>	0.000000 0.2737 0.4297	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.605905 0.206397 0.00430001	</rayStart>
-          <rayEnd>	-0.410917 0.161909 0.00430001	</rayEnd>
+          <rayStart>	-0.571944 0.249152 0.00219481	</rayStart>
+          <rayEnd>	-0.375818 0.210116 -0.00101479	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.22	</size>
+          <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	0.00505237 0.545548 0.264734	</rayStart>
-          <rayEnd>	0.00505237 0.357444 0.196789	</rayEnd>
+          <rayStart>	-0.000977975 0.571924 0.277034	</rayStart>
+          <rayEnd>	-0.000837821 0.381411 0.216176	</rayEnd>
           <rayUp>	0.000000 0.000000 -1	</rayUp>
-          <size>	0.6	</size>
+          <size>	0.5	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.605905 0.206397 0.00430001	</rayStart>
-          <rayEnd>	0.410917 0.161909 0.00430001	</rayEnd>
+          <rayStart>	0.571944 0.249152 0.00219481	</rayStart>
+          <rayEnd>	0.375818 0.210116 -0.00101479	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.22	</size>
+          <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.021 0.000 0.473 0.201 0.594 0.500 0.573 0.500 0.224 0.473 0.224 0.479 0.331	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.706 0.390 0.688 0.481 0.563 0.500 0.253 0.500 0.207 0.473 0.588	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
     </Turret_1_NC27_bot>
   </turrets0>
   <engines>

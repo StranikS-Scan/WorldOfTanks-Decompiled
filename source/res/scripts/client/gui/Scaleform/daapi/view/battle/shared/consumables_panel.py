@@ -1,17 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/consumables_panel.py
-import BigWorld
 import math
 from functools import partial
+from types import NoneType
+import BigWorld
 import CommandMapping
 import SoundGroups
 from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
+from gui import TANKMEN_ROLES_ORDER_DICT
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, GUN_RELOADING_VALUE_TYPE
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
+from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentSound, IgnoreEntitySelection
+from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getScaleformKey
@@ -19,7 +25,6 @@ from helpers import dependency
 from helpers import i18n
 from shared_utils import forEach
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentSound
 AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/%s'
 NO_AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/NO_%s'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
@@ -45,6 +50,11 @@ EMPTY_ORDERS_SLICE = [0] * (ORDERS_START_IDX - ORDERS_END_IDX + 1)
 EMPTY_EQUIPMENT_TOOLTIP = i18n.makeString('#ingame_gui:consumables_panel/equipment/tooltip/empty')
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
+_EQUIPMENT_GLOW_TIME = 7
+
+def _isEquipmentAvailableToUse(eq):
+    return eq.isAvailableToUse
+
 
 class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -55,6 +65,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         self.__mask = 0
         self.__keys = {}
         self.__currentOrderIdx = -1
+        self.__equipmentsGlowCallbacks = {}
         return
 
     def onClickedToSlot(self, bwKey):
@@ -68,10 +79,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
         self.__keys.clear()
         self.__keys = keys
-        ctrl = self.sessionProvider.shared.vehicleState
-        if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        return
 
     def handleEscKey(self, isDown):
         if isDown:
@@ -82,9 +89,12 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
     def _populate(self):
         super(ConsumablesPanel, self)._populate()
+        if self.sessionProvider.isReplayPlaying:
+            self.as_handleAsReplayS()
         self.__addListeners()
 
     def _dispose(self):
+        self.__clearAllEquipmentGlow()
         self.__removeListeners()
         self.__keys.clear()
         super(ConsumablesPanel, self)._dispose()
@@ -110,6 +120,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             eqCtrl.onEquipmentAdded += self.__onEquipmentAdded
             eqCtrl.onEquipmentUpdated += self.__onEquipmentUpdated
             eqCtrl.onEquipmentCooldownInPercent += self.__onEquipmentCooldownInPercent
+            eqCtrl.onEquipmentCooldownTime += self.__onEquipmentCooldownTime
         optDevicesCtrl = self.sessionProvider.shared.optionalDevices
         if optDevicesCtrl is not None:
             self.__fillOptionalDevices(optDevicesCtrl)
@@ -140,6 +151,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             eqCtrl.onEquipmentAdded -= self.__onEquipmentAdded
             eqCtrl.onEquipmentUpdated -= self.__onEquipmentUpdated
             eqCtrl.onEquipmentCooldownInPercent -= self.__onEquipmentCooldownInPercent
+            eqCtrl.onEquipmentCooldownTime -= self.__onEquipmentCooldownTime
         optDevicesCtrl = self.sessionProvider.shared.optionalDevices
         if optDevicesCtrl is not None:
             optDevicesCtrl.onOptionalDeviceAdded -= self.__onOptionalDeviceAdded
@@ -169,7 +181,14 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         kind = descriptor['kind']
         header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=BigWorld.wg_getNiceNumberFormat(descriptor['caliber']), userString=descriptor['userString'])
         if GUI_SETTINGS.technicalInfo:
-            body = i18n.makeString('#ingame_gui:shells_kinds/params', damage=str(int(descriptor['damage'][0])), piercingPower=str(piercingPower))
+            tooltipStr = INGAME_GUI.SHELLS_KINDS_PARAMS
+            paramsDict = {'damage': str(int(descriptor['damage'][0])),
+             'piercingPower': str(piercingPower)}
+            if descriptor['hasStun'] and g_lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+                tooltipStr = INGAME_GUI.SHELLS_KINDS_STUNPARAMS
+                paramsDict['stunMinDuration'] = BigWorld.wg_getNiceNumberFormat(descriptor['guaranteedStunDuration'] * descriptor['stunDuration'])
+                paramsDict['stunMaxDuration'] = BigWorld.wg_getNiceNumberFormat(descriptor['stunDuration'])
+            body = i18n.makeString(tooltipStr, **paramsDict)
             fmt = TOOLTIP_FORMAT
         else:
             body = ''
@@ -250,15 +269,20 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             return
         else:
             result, error = ctrl.changeSetting(intCD)
-            if not result and error is not None:
+            item = ctrl.getEquipment(intCD)
+            errorType = type(error)
+            if errorType == IgnoreEntitySelection:
+                return
+            if not result and errorType not in (NoneType, NeedEntitySelection):
                 ctrl = self.sessionProvider.shared.messages
                 if ctrl is not None:
                     ctrl.showVehicleError(error.key, error.ctx)
                 return
+            if errorType == InCooldownError:
+                return
             if intCD not in self.__cds:
                 LOG_ERROR('Equipment is not found in panel', intCD, self.__cds)
                 return
-            item = ctrl.getEquipment(intCD)
             if not item:
                 LOG_ERROR('Equipment is not found in control', intCD)
                 return
@@ -275,9 +299,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             self.__expandEquipmentSlot(self.__cds.index(intCD), slots)
             self.__keys.clear()
             self.__keys = keys
-            ctrl = self.sessionProvider.shared.vehicleState
-            if ctrl is not None:
-                ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             return
 
     def __onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
@@ -333,7 +354,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             idx = self.__genNextIdx(EQUIPMENT_FULL_MASK + ORDERS_FULL_MASK, EQUIPMENT_START_IDX)
             self.__cds[idx] = intCD
             bwKey, sfKey = self.__genKey(idx)
-            self.as_addEquipmentSlotS(idx, bwKey, sfKey, None, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP)
+            self.as_addEquipmentSlotS(idx, bwKey, sfKey, None, 0, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP)
             snap = self.__cds[EQUIPMENT_START_IDX:EQUIPMENT_END_IDX + 1]
             if snap == EMPTY_EQUIPMENTS_SLICE:
                 self.as_showEquipmentSlotsS(False)
@@ -352,12 +373,15 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
                 self.__updateOrderSlot(idx, item)
             else:
-                if not quantity:
-                    soundName = 'battle_equipment_%d' % intCD
-                    if soundName in EquipmentSound.getSounds():
-                        SoundGroups.g_instance.playSound2D(soundName)
                 self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
                 self.onPopUpClosed()
+                if item.isReusable:
+                    if self.__canApplyingGlowEquipment(item):
+                        self.__showEquipmentGlow(idx)
+                    elif item.becomeReady:
+                        self.as_setGlowS(idx, isGreen=True)
+                    elif idx in self.__equipmentsGlowCallbacks:
+                        self.__clearEquipmentGlow(idx)
         else:
             LOG_ERROR('Equipment is not found in panel', intCD, self.__cds)
 
@@ -365,12 +389,22 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         if intCD in self.__cds:
             self.as_setCoolDownPosAsPercentS(self.__cds.index(intCD), percent)
 
+    def __onEquipmentCooldownTime(self, intCD, timeLeft, isBaseTime, isFlash):
+        if intCD in self.__cds:
+            self.as_setCoolDownTimeSnapshotS(self.__cds.index(intCD), timeLeft, isBaseTime, isFlash)
+
     def __addEquipmentSlot(self, intCD, item):
         idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
         self.__cds[idx] = intCD
         descriptor = item.getDescriptor()
         iconPath = '../maps/icons/artefact/%s.png' % descriptor.icon[0]
-        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
+        body = descriptor.description
+        if item.getTotalTime() > 0:
+            tooltipStr = INGAME_GUI.CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS
+            cooldownSeconds = str(int(descriptor['cooldownSeconds']))
+            paramsString = i18n.makeString(tooltipStr, cooldownSeconds=cooldownSeconds)
+            body = body + '\n\n' + paramsString
+        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
         tag = item.getTag()
         if tag:
             bwKey, sfKey = self.__genKey(idx)
@@ -382,7 +416,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 self.__keys[bwKey] = handler
         else:
             bwKey, sfKey = (None, None)
-        self.as_addEquipmentSlotS(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), iconPath, toolTip)
+        self.as_addEquipmentSlotS(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), item.getTotalTime(), iconPath, toolTip)
         return None
 
     def __addOrderSlot(self, intCD, item):
@@ -398,7 +432,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         self.__updateOrderSlot(idx, item)
 
     def __updateOrderSlot(self, idx, item):
-        if item.getStage() == EQUIPMENT_STAGES.READY:
+        if item.isReady:
             self.as_setOrderAvailableS(idx, True)
         elif item.getStage() == EQUIPMENT_STAGES.PREPARING:
             self.__currentOrderIdx = idx
@@ -441,23 +475,108 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.SWITCHING:
             self.__reset()
-        elif state == VEHICLE_VIEW_STATE.DEVICES:
-            deviceName, _, actualState = value
-            if deviceName in VEHICLE_DEVICE_IN_COMPLEX_ITEM:
-                itemName = VEHICLE_DEVICE_IN_COMPLEX_ITEM[deviceName]
-            else:
-                itemName = deviceName
-            idx = int(self.as_updateEntityStateS(itemName, actualState))
-            if 0 <= idx < len(self.__cds):
-                intCD = self.__cds[idx]
-                ctrl = self.sessionProvider.shared.equipments
-                if ctrl is None or not ctrl.hasEquipment(intCD):
-                    return
-                item = ctrl.getEquipment(intCD)
-                if item and item.isEntityRequired():
-                    bwKey, _ = self.__genKey(idx)
-                    self.__keys[bwKey] = partial(self.__handleEquipmentPressed, self.__cds[idx], deviceName)
-        return
+            return
+        elif state == VEHICLE_VIEW_STATE.DESTROYED:
+            self.__clearAllEquipmentGlow()
+            return
+        elif self.__cds.count(None) == PANEL_MAX_LENGTH:
+            return
+        else:
+            ctrl = self.sessionProvider.shared.equipments
+            if ctrl is None:
+                return
+            if state == VEHICLE_VIEW_STATE.DEVICES:
+                deviceName, deviceState, actualState = value
+                if deviceName in VEHICLE_DEVICE_IN_COMPLEX_ITEM:
+                    itemName = VEHICLE_DEVICE_IN_COMPLEX_ITEM[deviceName]
+                else:
+                    itemName = deviceName
+                equipmentTag = 'medkit' if itemName in TANKMEN_ROLES_ORDER_DICT['enum'] else 'repairkit'
+                if deviceState == actualState and deviceState == DEVICE_STATE_DESTROYED:
+                    for intCD, _ in ctrl.iterEquipmentsByTag(equipmentTag, _isEquipmentAvailableToUse):
+                        self.__showEquipmentGlow(self.__cds.index(intCD))
+
+                elif deviceState != DEVICE_STATE_DESTROYED:
+                    for intCD, equipment in ctrl.iterEquipmentsByTag(equipmentTag):
+                        if not self.__canApplyingGlowEquipment(equipment):
+                            self.__clearEquipmentGlow(self.__cds.index(intCD))
+
+                idx = int(self.as_updateEntityStateS(itemName, actualState))
+                if idx > 0 and idx < len(self.__cds):
+                    intCD = self.__cds[idx]
+                    if not ctrl.hasEquipment(intCD):
+                        return
+                    item = ctrl.getEquipment(intCD)
+                    if item and item.isEntityRequired():
+                        bwKey, _ = self.__genKey(idx)
+                        self.__keys[bwKey] = partial(self.__handleEquipmentPressed, self.__cds[idx], deviceName)
+            elif state == VEHICLE_VIEW_STATE.STUN:
+                if value > 0:
+                    for intCD, _ in ctrl.iterEquipmentsByTag('medkit', _isEquipmentAvailableToUse):
+                        self.__showEquipmentGlow(self.__cds.index(intCD))
+
+                else:
+                    for intCD, equipment in ctrl.iterEquipmentsByTag('medkit'):
+                        if not self.__canApplyingGlowEquipment(equipment):
+                            self.__clearEquipmentGlow(self.__cds.index(intCD))
+
+            elif state == VEHICLE_VIEW_STATE.FIRE:
+                if value:
+                    hasReadyAutoExt = False
+                    glowCandidates = []
+                    for intCD, equipment in ctrl.iterEquipmentsByTag('extinguisher'):
+                        if not equipment.isReady:
+                            continue
+                        if equipment.getDescriptor().autoactivate:
+                            hasReadyAutoExt = True
+                        glowCandidates.append(intCD)
+
+                    if not hasReadyAutoExt:
+                        for cID in glowCandidates:
+                            self.__showEquipmentGlow(self.__cds.index(cID))
+
+                else:
+                    for intCD, equipment in ctrl.iterEquipmentsByTag('extinguisher'):
+                        if not equipment.getDescriptor().autoactivate:
+                            self.__clearEquipmentGlow(self.__cds.index(intCD))
+
+            return
+
+    def __canApplyingGlowEquipment(self, equipment):
+        if equipment.getTag() == 'extinguisher':
+            correction = True
+            entityName = None
+        else:
+            entityNames = [ name for name, state in equipment.getEntitiesIterator() if state == DEVICE_STATE_DESTROYED ]
+            correction = hasDestroyed = len(entityNames)
+            entityName = hasDestroyed and entityNames[0] or None
+        canActivate, info = equipment.canActivate(entityName)
+        infoType = type(info)
+        return correction and (canActivate or infoType == NeedEntitySelection) or infoType == IgnoreEntitySelection
+
+    def __showEquipmentGlow(self, equipmentIndex):
+        if equipmentIndex in self.__equipmentsGlowCallbacks:
+            BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
+            del self.__equipmentsGlowCallbacks[equipmentIndex]
+        else:
+            self.as_setGlowS(equipmentIndex, False)
+        self.__equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(_EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
+
+    def __hideEquipmentGlowCallback(self, equipmentIndex):
+        return self.__clearEquipmentGlow(equipmentIndex, cancelCallback=False)
+
+    def __clearEquipmentGlow(self, equipmentIndex, cancelCallback=True):
+        if equipmentIndex in self.__equipmentsGlowCallbacks:
+            self.as_hideGlowS(equipmentIndex)
+            if cancelCallback:
+                BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
+            del self.__equipmentsGlowCallbacks[equipmentIndex]
+
+    def __clearAllEquipmentGlow(self):
+        for equipmentIndex, callbackID in self.__equipmentsGlowCallbacks.items():
+            BigWorld.cancelCallback(callbackID)
+            self.as_hideGlowS(equipmentIndex)
+            del self.__equipmentsGlowCallbacks[equipmentIndex]
 
     def __expandEquipmentSlot(self, index, slots):
         self.as_expandEquipmentSlotS(index, slots)

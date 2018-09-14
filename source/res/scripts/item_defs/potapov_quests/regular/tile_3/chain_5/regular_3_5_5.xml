@@ -8,9 +8,11 @@
         <postBattle>
           <and>
             <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	8	</greaterOrEqual>
-              <compareWithMaxHealth></compareWithMaxHealth>
+              <plus>
+                <key>	damageAssistedStun	</key>
+                <key>	damageAssistedTrack	</key>
+              </plus>
+              <greaterOrEqual>	2000	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -32,14 +34,17 @@
         <postBattle>
           <and>
             <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	8	</greaterOrEqual>
-              <compareWithMaxHealth></compareWithMaxHealth>
+              <plus>
+                <key>	damageAssistedStun	</key>
+                <key>	damageAssistedTrack	</key>
+              </plus>
+              <greaterOrEqual>	2000	</greaterOrEqual>
             </results>
-            <results>
-              <key>	kills	</key>
-              <greaterOrEqual>	3	</greaterOrEqual>
-            </results>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <eventCount></eventCount>
+              <greaterOrEqual>	6	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>

@@ -139,8 +139,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	18	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.4	</vehicleMovement>
-        <vehicleRotation>	0.4	</vehicleRotation>
+        <vehicleMovement>	0.34	</vehicleMovement>
+        <vehicleRotation>	0.34	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	130	</maxHealth>
@@ -298,8 +298,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.36	</vehicleMovement>
-        <vehicleRotation>	0.36	</vehicleRotation>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	140	</maxHealth>
@@ -467,7 +467,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	265	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
@@ -490,11 +490,11 @@
             <minPitch>	0 -70 1 -70	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.72	</shotDispersionRadius>
-          <reloadTime>	25	</reloadTime>
-          <aimingTime>	6.5	</aimingTime>
+          <shotDispersionRadius>	0.63	</shotDispersionRadius>
+          <reloadTime>	26	</reloadTime>
+          <aimingTime>	4.3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.44	</turretRotation>
+            <turretRotation>	0.4	</turretRotation>
             <afterShot>	5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -539,14 +539,14 @@
             <minPitch>	0 -50 1 -50	</minPitch>
             <maxPitch>	0 1 1 1	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.72	</shotDispersionRadius>
-          <reloadTime>	33	</reloadTime>
+          <shotDispersionRadius>	0.65	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.48	</turretRotation>
+            <turretRotation>	0.44	</turretRotation>
             <afterShot>	5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	6.5	</aimingTime>
+          <aimingTime>	4.5	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <turretYawLimits>	-22 22	</turretYawLimits>
           <models>

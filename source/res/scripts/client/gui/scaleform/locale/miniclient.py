@@ -43,3 +43,4 @@ class MINICLIENT(object):
     ACCOUNTPOPOVER_WARNING = '#miniclient:accountPopover/warning'
     PROFILE_WARNING = '#miniclient:profile/warning'
     COMMUNICATIONCENTER_WARNING = '#miniclient:communicationCenter/warning'
+    HANGAR_SABDBOX_PLATFORM_MESSAGE = '#miniclient:hangar/sabdbox_platform_message'

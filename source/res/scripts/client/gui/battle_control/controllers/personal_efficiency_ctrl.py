@@ -128,12 +128,16 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
         return self.__critsExtra.getShellType()
 
 
-_AGGREGATED_DAMAGE_EFFICIENCY_TYPES = (_ETYPE.DAMAGE, _ETYPE.ASSIST_DAMAGE, _ETYPE.BLOCKED_DAMAGE)
+_AGGREGATED_DAMAGE_EFFICIENCY_TYPES = (_ETYPE.DAMAGE,
+ _ETYPE.ASSIST_DAMAGE,
+ _ETYPE.BLOCKED_DAMAGE,
+ _ETYPE.STUN)
 _FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE = {_FET.PLAYER_DAMAGED_HP_ENEMY: (_ETYPE.DAMAGE, _DamageEfficiencyInfo),
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: (_ETYPE.ASSIST_DAMAGE, _DamageEfficiencyInfo),
  _FET.PLAYER_USED_ARMOR: (_ETYPE.BLOCKED_DAMAGE, _DamageEfficiencyInfo),
  _FET.ENEMY_DAMAGED_HP_PLAYER: (_ETYPE.RECEIVED_DAMAGE, _DamageEfficiencyInfo),
- _FET.ENEMY_DAMAGED_DEVICE_PLAYER: (_ETYPE.RECEIVED_CRITICAL_HITS, _CriticalHitsEfficiencyInfo)}
+ _FET.ENEMY_DAMAGED_DEVICE_PLAYER: (_ETYPE.RECEIVED_CRITICAL_HITS, _CriticalHitsEfficiencyInfo),
+ _FET.PLAYER_ASSIST_TO_STUN_ENEMY: (_ETYPE.STUN, _DamageEfficiencyInfo)}
 
 def _createEfficiencyInfoFromFeedbackEvent(event):
     """
@@ -228,6 +232,7 @@ class PersonalEfficiencyController(IBattleController):
         self.__totalEfficiency[_ETYPE.DAMAGE] = event.getTotalDamage()
         self.__totalEfficiency[_ETYPE.BLOCKED_DAMAGE] = event.getTotalBlockedDamage()
         self.__totalEfficiency[_ETYPE.ASSIST_DAMAGE] = event.getTotalAssistDamage()
+        self.__totalEfficiency[_ETYPE.STUN] = event.getTotalStunDamage()
         self.onTotalEfficiencyUpdated(dict(self.__totalEfficiency))
 
     def _onVehicleChanged(self, *args, **kwargs):

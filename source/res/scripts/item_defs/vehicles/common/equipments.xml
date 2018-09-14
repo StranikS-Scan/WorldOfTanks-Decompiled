@@ -6,7 +6,9 @@
     <icon>	handExtinguishers 0 0	</icon>
     <price>	3000	</price>
     <tags>	extinguisher	</tags>
-    <script>	Extinguisher	</script>
+    <script>	Extinguisher	  <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
   </handExtinguishers>
   <autoExtinguishers>
     <id>	1	</id>
@@ -18,6 +20,8 @@
     <tags>	extinguisher	</tags>
     <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
       <autoactivate>	true	</autoactivate>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
     </script>
   </autoExtinguishers>
   <smallMedkit>
@@ -29,6 +33,10 @@
     <tags>	medkit	</tags>
     <script>	Repairkit	  <repairAll>	false	</repairAll>
       <bonusValue>	0	</bonusValue>
+      <stunResistanceEffect>	0.0	</stunResistanceEffect>
+      <stunResistanceDuration>	0.0	</stunResistanceDuration>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
     </script>
   </smallMedkit>
   <largeMedkit>
@@ -41,6 +49,10 @@
     <tags>	medkit	</tags>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.30	</bonusValue>
+      <stunResistanceEffect>	0.0	</stunResistanceEffect>
+      <stunResistanceDuration>	0.05	</stunResistanceDuration>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
     </script>
   </largeMedkit>
   <smallRepairkit>
@@ -52,6 +64,8 @@
     <tags>	repairkit	</tags>
     <script>	Repairkit	  <repairAll>	false	</repairAll>
       <bonusValue>	0	</bonusValue>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
     </script>
   </smallRepairkit>
   <largeRepairkit>
@@ -64,6 +78,8 @@
     <tags>	repairkit	</tags>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.1	</bonusValue>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
     </script>
   </largeRepairkit>
   <lendLeaseOil>

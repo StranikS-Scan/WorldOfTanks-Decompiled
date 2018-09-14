@@ -334,7 +334,8 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
-        repository.addArenaController(finish_sound_ctrl.FinishSoundController(), setup)
+        if not setup.isReplayPlaying:
+            repository.addArenaController(finish_sound_ctrl.FinishSoundController(), setup)
         return repository
 
 

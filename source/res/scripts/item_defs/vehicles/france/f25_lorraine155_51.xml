@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/french/F25_Lorraine155_51/Lorraine155_51_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -39,8 +39,7 @@
       <armor_7>	20	</armor_7>
       <armor_8>	20	</armor_8>
       <armor_9>	0	</armor_9>
-      <armor_10>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_10>
+      <armor_10>	30	</armor_10>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13605	</weight>
@@ -67,7 +66,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.4919 1.9994	</turret>
+      <turret>	-0.000080 -0.01727 1.91279	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F25_Lorraine155_51/collision/Hull.model	</collisionModelServer>
@@ -75,43 +74,46 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.467488 0.470227 2.99945	</rayStart>
-        <rayEnd>	0.467488 0.184738 2.71927	</rayEnd>
-        <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.28	</size>
+        <rayStart>	0.39637 0.154222 2.88641	</rayStart>
+        <rayEnd>	0.39637 0.0154582 2.74238	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	1.42762 1.66304 -0.30739	</rayStart>
-        <rayEnd>	1.12971 1.39611 -0.307355	</rayEnd>
+        <rayStart>	1.44818 1.37249 -0.0829163	</rayStart>
+        <rayEnd>	1.28047 1.26353 -0.0829163	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.29	</size>
+        <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
       </player>
       <player>
-        <rayStart>	-1.42762 1.66304 -0.30739	</rayStart>
-        <rayEnd>	-1.12971 1.39611 -0.307355	</rayEnd>
+        <rayStart>	-1.44818 1.37249 -0.0829163	</rayStart>
+        <rayEnd>	-1.28047 1.26353 -0.0829163	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.29	</size>
+        <size>	0.3	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </player>
       <inscription>
-        <rayStart>	1.63108 0.82222 0.322979	</rayStart>
-        <rayEnd>	1.23108 0.82222 0.322979	</rayEnd>
+        <rayStart>	1.59996 0.492738 0.405334	</rayStart>
+        <rayEnd>	1.39996 0.492738 0.405334	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.82	</size>
+        <size>	0.896	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	-1.63108 0.82222 0.322979	</rayStart>
-        <rayEnd>	-1.23108 0.82222 0.322979	</rayEnd>
+        <rayStart>	-1.59996 0.492738 0.405334	</rayStart>
+        <rayEnd>	-1.39996 0.492738 0.405334	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.82	</size>
+        <size>	0.896	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
-    <hangarShadowTexture>	vehicles/french/F25_Lorraine155_51/Lorraine155_51_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/french/F25_Lorraine155_51/Lorraine155_5_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2 2 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Lorraine155_51>
@@ -134,8 +136,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.44	</vehicleMovement>
-        <vehicleRotation>	0.44	</vehicleRotation>
+        <vehicleMovement>	0.33	</vehicleMovement>
+        <vehicleRotation>	0.33	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	120	</maxHealth>
@@ -156,7 +158,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.62	</textureScale>
+        <textureScale>	-1.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -165,6 +167,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.357462	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -178,6 +181,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.418676	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -191,6 +195,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.357462	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -204,6 +209,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.418676	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -216,16 +222,16 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.99182 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F25_Lorraine155_51/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F25_Lorraine155_51/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.30607 2.06868	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.38079 1.8872	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -238,6 +244,143 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F25_Lorraine155_51/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F25_Lorraine155_51/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/french/F25_Lorraine155_51/track/left.track	</left>
+        <right>	vehicles/french/F25_Lorraine155_51/track/right.track	</right>
+        <segmentLength>	0.137	</segmentLength>
+        <segmentOffset>	0.213	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0263	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.103	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.143	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.103	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.143	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0663366	</minOffset>
+          <maxOffset>	0.0762376	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0663366	</minOffset>
+          <maxOffset>	0.0762376	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_Lorraine155_51>
     <Chassis_Lorraine155_51_2>
       <userString>	#france_vehicles:Chassis_Lorraine155_51_2	</userString>
@@ -255,8 +398,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.4	</vehicleMovement>
-        <vehicleRotation>	0.4	</vehicleRotation>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	130	</maxHealth>
@@ -277,7 +420,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.62	</textureScale>
+        <textureScale>	-1.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -286,6 +429,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.357462	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -299,6 +443,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R5	</name>
           <radius>	0.418676	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -312,6 +457,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.357462	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -325,6 +471,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
           <radius>	0.418676	</radius>
+          <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -337,16 +484,16 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.99182 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F25_Lorraine155_51/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F25_Lorraine155_51/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.30607 2.06868	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.38079 1.8872	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -359,6 +506,143 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F25_Lorraine155_51/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F25_Lorraine155_51/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/french/F25_Lorraine155_51/track/left.track	</left>
+        <right>	vehicles/french/F25_Lorraine155_51/track/right.track	</right>
+        <segmentLength>	0.137	</segmentLength>
+        <segmentOffset>	0.201	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0263	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.103	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.143	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.103	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.143	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0663366	</minOffset>
+          <maxOffset>	0.0762376	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0663366	</minOffset>
+          <maxOffset>	0.0762376	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_Lorraine155_51_2>
   </chassis>
   <turrets0>
@@ -370,15 +654,8 @@
       <price>	20000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_1>
+        <armor_1>	10	</armor_1>
         <armor_2>	10	</armor_2>
-        <armor_3>	0	</armor_3>
-        <armor_4>	0	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	0	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	0	</armor_8>
       </armor>
       <weight>	170	</weight>
       <maxHealth>	78	</maxHealth>
@@ -388,7 +665,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	270	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
@@ -401,21 +678,19 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
             <gun>	25	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
-          <shotDispersionRadius>	0.76	</shotDispersionRadius>
-          <reloadTime>	26.7	</reloadTime>
-          <aimingTime>	6.5	</aimingTime>
+          <shotDispersionRadius>	0.68	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
+          <aimingTime>	6	</aimingTime>
           <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.44	</turretRotation>
+            <turretRotation>	0.4	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -426,19 +701,23 @@
             <exploded>	vehicles/french/F25_Lorraine155_51/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F24_Lorraine155_50/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F24_Lorraine155_50/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F25_Lorraine155_51/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F25_Lorraine155_51/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000000 0.306274 1.91122	</rayStart>
-              <rayEnd>	0.0565048 0.275994 1.90189	</rayEnd>
-              <rayUp>	0.154 0.141 0.000000	</rayUp>
-              <size>	0.503	</size>
+              <rayStart>	-0.0221237 0.0785427 2.42973	</rayStart>
+              <rayEnd>	-0.0409984 0.0923058 2.42751	</rayEnd>
+              <rayUp>	0.128 0.123 5	</rayUp>
+              <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_huge_mb	</effects>
+          <camouflage>
+            <tiling>	1.3 1.3 0.000000 1.3	</tiling>
+          </camouflage>
         </Obusier_de_155mm_mle.1950>
         <Canon_de_155mm_L_GPF>	shared	  <unlocks>
             <vehicle>	F67_Bat_Chatillon155_55	  <cost>	182000	</cost>
@@ -449,16 +728,16 @@
             <gunBreech>	0	</gunBreech>
           </armor>
           <maxAmmo>	28	</maxAmmo>
-          <shotDispersionRadius>	0.74	</shotDispersionRadius>
-          <reloadTime>	33	</reloadTime>
-          <aimingTime>	6.0	</aimingTime>
+          <shotDispersionRadius>	0.66	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
+          <aimingTime>	5.5	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -45 1 -45	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.48	</turretRotation>
+            <turretRotation>	0.42	</turretRotation>
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -474,17 +753,14 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000000 -0.0178327 3.98788	</rayStart>
-              <rayEnd>	0.080635 -0.0746281 3.98657	</rayEnd>
-              <rayUp>	0.118 0.11 4	</rayUp>
-              <size>	0.675	</size>
+              <rayStart>	-0.0264387 0.0944167 3.62244	</rayStart>
+              <rayEnd>	0.0184827 0.109257 3.62244	</rayEnd>
+              <rayUp>	0.102 0.099 5	</rayUp>
+              <size>	0.5	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
-          </camouflage>
         </Canon_de_155mm_L_GPF>
       </guns>
       <models>
@@ -496,11 +772,14 @@
         <collisionModelServer>	vehicles/french/F25_Lorraine155_51/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F25_Lorraine155_51/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.5444 -0.4046	</gunPosition>
+      <gunPosition>	0.022222 0.967213 -0.786513	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.734 0.712 0.201 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+      <physicsShape>	0.995 0.002 1.008 0.000 1.027 -0.020 0.667 0.625 0.252 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1 0.5 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_2_Lorraine155_51>
   </turrets0>
   <engines>

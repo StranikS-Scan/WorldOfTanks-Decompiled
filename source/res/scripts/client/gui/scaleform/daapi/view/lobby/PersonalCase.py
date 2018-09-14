@@ -301,7 +301,11 @@ class PersonalCaseDataProvider(object):
         items = g_itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         nativeVehicleCD = tankman.vehicleNativeDescr.type.compactDescr
-        criteria = REQ_CRITERIA.NATIONS([tankman.nationID]) | REQ_CRITERIA.UNLOCKED
+        criteria = REQ_CRITERIA.NATIONS([tankman.nationID]) | REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
+        if not constants.IS_IGR_ENABLED:
+            criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
+        if constants.IS_DEVELOPMENT:
+            criteria |= ~REQ_CRITERIA.VEHICLE.IS_BOT
         vData = items.getVehicles(criteria)
         tDescr = tankman.descriptor
         vehiclesData = vData.values()
@@ -310,8 +314,6 @@ class PersonalCaseDataProvider(object):
         result = []
         for vehicle in sorted(vehiclesData):
             vDescr = vehicle.descriptor
-            if isVehicleObserver(vDescr.type.compactDescr):
-                continue
             for role in vDescr.type.crewRoles:
                 if tDescr.role == role[0]:
                     result.append({'innationID': vehicle.innationID,

@@ -40,22 +40,24 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.MIN_TOTAL_LEVEL: (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, self.__validationCtx),
          UNIT_RESTRICTION.MAX_TOTAL_LEVEL: (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, self.__validationCtx),
          UNIT_RESTRICTION.INVALID_TOTAL_LEVEL: ActionButtonStateVO.getInvalidVehicleLevelsMessage(self.__validationCtx),
-         UNIT_RESTRICTION.IS_IN_IDLE: self._getIdleStateStr(),
-         UNIT_RESTRICTION.IS_IN_ARENA: self._getArenaStateStr(),
+         UNIT_RESTRICTION.IS_IN_IDLE: self._getIdleStateStr,
+         UNIT_RESTRICTION.IS_IN_ARENA: self._getArenaStateStr,
          UNIT_RESTRICTION.NEED_PLAYERS_SEARCH: ('', {}),
          UNIT_RESTRICTION.ZERO_TOTAL_LEVEL: ('', {}),
          UNIT_RESTRICTION.IS_IN_PRE_ARENA: (CYBERSPORT.WINDOW_UNIT_MESSAGE_WAITCOMMANDER, {}),
-         UNIT_RESTRICTION.NOT_IN_SLOT: self.__notInSlotMessage(),
+         UNIT_RESTRICTION.NOT_IN_SLOT: self.__notInSlotMessage,
          UNIT_RESTRICTION.VEHICLE_NOT_VALID_FOR_EVENT: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTVALID, {}),
          UNIT_RESTRICTION.CURFEW: (CYBERSPORT.WINDOW_UNIT_MESSAGE_CURFEW, {}),
          UNIT_RESTRICTION.VEHICLE_WRONG_MODE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_WRONGMODE, {}),
          UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS: ('', {}),
-         UNIT_RESTRICTION.FALLOUT_VEHICLE_LEVEL_REQUIRED: self._getFalloutVehLevelStr(),
-         UNIT_RESTRICTION.FALLOUT_VEHICLE_MIN: self._getFalloutVehMinStr(),
+         UNIT_RESTRICTION.FALLOUT_VEHICLE_LEVEL_REQUIRED: self._getFalloutVehLevelStr,
+         UNIT_RESTRICTION.FALLOUT_VEHICLE_MIN: self._getFalloutVehMinStr,
          UNIT_RESTRICTION.FALLOUT_VEHICLE_MAX: ('', {}),
-         UNIT_RESTRICTION.FALLOUT_VEHICLE_BROKEN: self._getFalloutVehBrokenStr(),
+         UNIT_RESTRICTION.FALLOUT_VEHICLE_BROKEN: self._getFalloutVehBrokenStr,
          UNIT_RESTRICTION.FORT_DISABLED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_FORTIFICATIONNOTAVAILABLE, {}),
-         UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL: (MESSENGER.DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL, {}),
+         UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL), {}),
+         UNIT_RESTRICTION.SPG_IS_FORBIDDEN: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_SPGFORBIDDEN), {}),
+         UNIT_RESTRICTION.ROTATION_GROUP_LOCKED: self.__rotationGroupBlockMessage,
          UNIT_RESTRICTION.UNIT_MAINTENANCE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_MAINTENANCE, {}),
          UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_UNDEF: (CYBERSPORT.WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERY, {}),
          UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_SORTIE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERYSORTIE, {}),
@@ -67,6 +69,9 @@ class ActionButtonStateVO(dict):
         self['isEnabled'] = self.__isEnabled
         self['isReady'] = self._playerInfo.isReady
         self['toolTipData'] = self.__toolTipData
+
+    def __getNotAvailableIcon(self):
+        return icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_REDNOTAVAILABLE, 12, 12, 0, 0) + ' '
 
     def _getReadyValidInSlotStateStr(self):
         return (CYBERSPORT.WINDOW_UNIT_MESSAGE_WAITING, {})
@@ -114,6 +119,8 @@ class ActionButtonStateVO(dict):
             else:
                 return (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {})
         else:
+            if callable(self.__INVALID_UNIT_MESSAGES[self.__restrictionType]):
+                return self.__INVALID_UNIT_MESSAGES[self.__restrictionType]()
             return self.__INVALID_UNIT_MESSAGES[self.__restrictionType]
 
     @property
@@ -141,6 +148,10 @@ class ActionButtonStateVO(dict):
             return (CYBERSPORT.WINDOW_UNIT_MESSAGE_CANDIDATE, {})
         else:
             return (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {})
+
+    def __rotationGroupBlockMessage(self):
+        from CurrentVehicle import g_currentVehicle
+        return (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_ROTATIONGROUPLOCKED, {'groupNum': g_currentVehicle.item.rotationGroupNum})
 
     @staticmethod
     def getInvalidVehicleLevelsMessage(ctx):

@@ -13,6 +13,7 @@ from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
 from items import vehicles
+from math import fabs
 import BattleReplay
 __all__ = ('AmmoController', 'AmmoReplayRecord', 'AmmoReplayPlayer')
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
@@ -156,7 +157,7 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
 _TIME_CORRECTION_THRESHOLD = 0.01
 
 class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
-    __slots__ = ()
+    __slots__ = ('_startTime', '_baseTime', '_actualTime')
 
     def getSnapshot(self):
         return ReloadingTimeSnapshot(actualTime=self._actualTime, baseTime=self._baseTime, startTime=self._startTime, updateTime=self._updateTime)
@@ -386,7 +387,7 @@ class AmmoController(MethodsRules, IBattleController):
     @MethodsRules.delayable('setCurrentShellCD')
     def setGunReloadTime(self, timeLeft, baseTime):
         interval = self.__gunSettings.clip.interval
-        self.triggerReloadEffect(timeLeft)
+        self.triggerReloadEffect(timeLeft, baseTime)
         if interval > 0:
             if not (self.__ammo[self.__currShellCD][1] == 1 and timeLeft == 0 or self.__ammo[self.__currShellCD][1] == 0 and timeLeft > 0):
                 baseTime = interval
@@ -399,7 +400,7 @@ class AmmoController(MethodsRules, IBattleController):
         if not isIgnored:
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot())
 
-    def triggerReloadEffect(self, timeLeft):
+    def triggerReloadEffect(self, timeLeft, baseTime):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
             return
@@ -411,7 +412,8 @@ class AmmoController(MethodsRules, IBattleController):
                 if clipCapacity > shellCounts[0]:
                     ammoLow = True
                     clipCapacity = shellCounts[0]
-                self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity)
+                reloadStart = fabs(timeLeft - baseTime) < 0.001
+                self.__gunSettings.reloadEffect.start(timeLeft, ammoLow, shellCounts[1], clipCapacity, self.__currShellCD, reloadStart)
             return
 
     def getGunReloadingState(self):
@@ -638,7 +640,7 @@ class AmmoReplayPlayer(AmmoController):
 
     def setGunReloadTime(self, timeLeft, baseTime):
         self.__percent = None
-        self.triggerReloadEffect(timeLeft)
+        self.triggerReloadEffect(timeLeft, baseTime)
         if not self.__isActivated:
             self.__isActivated = True
             self.__timeLoop()

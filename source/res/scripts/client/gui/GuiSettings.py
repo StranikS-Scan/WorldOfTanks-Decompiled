@@ -125,7 +125,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'cryptLoginInfo': True,
  'compulsoryIntroVideos': [],
  'encyclopedia': {},
- 'useDefaultGunMarkers': False}
+ 'useDefaultGunMarkers': False,
+ 'spgAlternativeAimingCameraEnabled': False}
 
 class GuiSettings(object):
 

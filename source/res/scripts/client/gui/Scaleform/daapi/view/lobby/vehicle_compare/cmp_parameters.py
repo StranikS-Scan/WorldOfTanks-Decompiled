@@ -102,6 +102,7 @@ class _VehCompareParametersData(object):
         self.__vehicleStrCD = None
         self.__equipment = []
         self.__hasCamouflage = False
+        self.__selectedShellIdx = 0
         self.__vehicle = None
         self.__isCrewInvalid = False
         self.__isInInvInvalid = False
@@ -145,10 +146,11 @@ class _VehCompareParametersData(object):
             self.__isCurrVehParamsInvalid = True
         return self.__isCrewInvalid
 
-    def setVehicleData(self, vehicleStrCD, equipment, hasCamouflage):
+    def setVehicleData(self, vehicleStrCD, equipment, hasCamouflage, selectedShellIdx):
         isDifferent = False
         camouflageInvalid = self.__hasCamouflage != hasCamouflage
         equipInvalid = equipment != self.__equipment
+        shellInvalid = selectedShellIdx != self.__selectedShellIdx
         if vehicleStrCD != self.__vehicleStrCD:
             self.__vehicleStrCD = vehicleStrCD
             self.__vehicle = Vehicle(self.__vehicleStrCD)
@@ -165,6 +167,10 @@ class _VehCompareParametersData(object):
         if camouflageInvalid:
             cmp_helpers.applyCamouflage(self.__vehicle, hasCamouflage)
             self.__hasCamouflage = hasCamouflage
+            isDifferent = True
+        if shellInvalid:
+            self.__vehicle.descriptor.activeGunShotIndex = selectedShellIdx
+            self.__selectedShellIdx = selectedShellIdx
             isDifferent = True
         return isDifferent
 
@@ -314,7 +320,10 @@ class VehCompareBasketParamsCache(object):
 
     def __addParamData(self, index):
         vehCompareData = self.comparisonBasket.getVehicleAt(index)
-        paramsData = _VehCompareParametersData(self.__cache, vehCompareData.getVehicleCD(), vehCompareData.isInInventory(), vehCompareData.getCrewData(), vehCompareData.getConfigurationType(), (vehCompareData.getVehicleStrCD(), vehCompareData.getEquipment(), vehCompareData.hasCamouflage()))
+        paramsData = _VehCompareParametersData(self.__cache, vehCompareData.getVehicleCD(), vehCompareData.isInInventory(), vehCompareData.getCrewData(), vehCompareData.getConfigurationType(), (vehCompareData.getVehicleStrCD(),
+         vehCompareData.getEquipment(),
+         vehCompareData.hasCamouflage(),
+         vehCompareData.getSelectedShellIndex()))
         self.__cache.insert(index, paramsData)
 
     def __rebuildList(self):
@@ -345,7 +354,7 @@ class VehCompareBasketParamsCache(object):
             paramsVehData.setIsInInventory(basketVehData.isInInventory())
             paramsVehData.setConfigurationType(basketVehData.getConfigurationType())
             isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setCrewData(*basketVehData.getCrewData())
-            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setVehicleData(basketVehData.getVehicleStrCD(), basketVehData.getEquipment(), basketVehData.hasCamouflage())
+            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setVehicleData(basketVehData.getVehicleStrCD(), basketVehData.getEquipment(), basketVehData.hasCamouflage(), basketVehData.getSelectedShellIndex())
 
         if self.__cache:
             bestParams = _reCalcBestParameters(self.__cache) if isBestScoreInvalid else None

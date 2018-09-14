@@ -8,14 +8,9 @@
         <postBattle>
           <and>
             <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	500	</greaterOrEqual>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	50	</greaterOrEqual>
             </results>
-            <results>
-              <key>	isNotSpotted	</key>
-              <equal>	1	</equal>
-            </results>
-            <isAlive></isAlive>
           </and>
         </postBattle>
       </conditions>
@@ -31,14 +26,9 @@
         <postBattle>
           <and>
             <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	500	</greaterOrEqual>
+              <key>	stunDuration	</key>
+              <greaterOrEqual>	50	</greaterOrEqual>
             </results>
-            <results>
-              <key>	isNotSpotted	</key>
-              <equal>	1	</equal>
-            </results>
-            <isAlive></isAlive>
             <vehicleKills>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>

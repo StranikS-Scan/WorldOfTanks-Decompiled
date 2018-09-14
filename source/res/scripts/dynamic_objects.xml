@@ -32,6 +32,16 @@
   <repairPointRadiusModel>	content/Interface/CheckPoint/CheckPoint_yellow_black.visual	</repairPointRadiusModel>
   <absorptionPointRadiusModel>	content/Interface/CheckPoint/CheckPoint_white.visual	</absorptionPointRadiusModel>
   <resourcePointRadiusModel>	content/Interface/CheckPoint/CheckPoint_white.visual	</resourcePointRadiusModel>
+  <stunAreaVisual>
+    <radius>	15.0	</radius>
+    <areasNum>	3	</areasNum>
+    <lifetime>	5.0	</lifetime>
+    <visual>	content/Interface/CheckPoint/CheckPoint_white.visual	</visual>
+    <color>	0xffffd04f	</color>
+    <lineColor>	0xffffffff	</lineColor>
+    <lineWidth>	2.0	</lineWidth>
+    <lineHeight>	3.0	</lineHeight>
+  </stunAreaVisual>
   <resourcePointEffect>
     <timeline>
       <effectEnd>	36000	</effectEnd>

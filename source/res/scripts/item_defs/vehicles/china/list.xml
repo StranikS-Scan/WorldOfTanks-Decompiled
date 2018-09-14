@@ -53,7 +53,7 @@
     <description>	#china_vehicles:Ch06_Renault_NC31_descr	</description>
     <shortUserString>	#china_vehicles:Ch06_Renault_NC31_short	</shortUserString>
     <price>	0	</price>
-    <tags>	lightTank	</tags>
+    <tags>	lightTank HD	</tags>
     <level>	1	</level>
   </Ch06_Renault_NC31>
   <Ch05_T34_2>
@@ -103,7 +103,7 @@
     <userString>	#china_vehicles:Ch09_M5	</userString>
     <description>	#china_vehicles:Ch09_M5_descr	</description>
     <price>	143000	</price>
-    <tags>	lightTank scout wetCombatPack_class1_user enhancedVertical_springs_class2_user	</tags>
+    <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_class2_user	</tags>
     <level>	4	</level>
   </Ch09_M5>
   <Ch16_WZ_131>
@@ -127,7 +127,7 @@
     <userString>	#china_vehicles:Ch17_WZ131_1_WZ132	</userString>
     <description>	#china_vehicles:Ch17_WZ131_1_WZ132_descr	</description>
     <price>	2400000	</price>
-    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </Ch17_WZ131_1_WZ132>
   <Ch19_121>
@@ -160,7 +160,7 @@
     <userString>	#china_vehicles:Ch15_59_16	</userString>
     <description>	#china_vehicles:Ch15_59_16_descr	</description>
     <price>	900000	</price>
-    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	6	</level>
   </Ch15_59_16>
   <Ch20_Type58>
@@ -179,6 +179,24 @@
     <tags>	heavyTank enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	10	</level>
   </Ch22_113>
+  <Ch28_WZ_132A>
+    <id>	22	</id>
+    <userString>	#china_vehicles:Ch28_WZ_132A	</userString>
+    <description>	#china_vehicles:Ch28_WZ_132A_descr	</description>
+    <shortUserString>	#china_vehicles:Ch28_WZ_132A_short	</shortUserString>
+    <price>	3400000	</price>
+    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <level>	9	</level>
+  </Ch28_WZ_132A>
+  <Ch29_Type_62C_prot>
+    <id>	23	</id>
+    <userString>	#china_vehicles:Ch29_Type_62C_prot	</userString>
+    <description>	#china_vehicles:Ch29_Type_62C_prot_descr	</description>
+    <shortUserString>	#china_vehicles:Ch29_Type_62C_prot_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <level>	10	</level>
+  </Ch29_Type_62C_prot>
   <Ch25_121_mod_1971B>
     <id>	248	</id>
     <userString>	#china_vehicles:Ch25_121_mod_1971B	</userString>
@@ -234,7 +252,7 @@
     <description>	#china_vehicles:Ch24_Type64_descr	</description>
     <price>	3500	  <gold></gold>
     </price>
-    <tags>	lightTank scout noImprovedVentilation enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
+    <tags>	lightTank scout noImprovedVentilation enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	6	</level>
   </Ch24_Type64>
   <Ch03_WZ_111_A>
@@ -253,7 +271,7 @@
     <userString>	#igr_vehicles:Ch17_WZ131_1_WZ132_IGR	</userString>
     <description>	#igr_vehicles:Ch17_WZ131_1_WZ132_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user premiumIGR secret	</tags>
+    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user premiumIGR secret HD	</tags>
     <level>	8	</level>
   </Ch17_WZ131_1_WZ132_IGR>
   <Ch11_110_IGR>
@@ -279,7 +297,7 @@
     <shortUserString>	#china_vehicles:Ch06_Renault_NC31_bot_short	</shortUserString>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret unrecoverable	</tags>
+    <tags>	lightTank secret HD unrecoverable	</tags>
     <level>	1	</level>
   </Ch06_Renault_NC31_bot>
 </list.xml>

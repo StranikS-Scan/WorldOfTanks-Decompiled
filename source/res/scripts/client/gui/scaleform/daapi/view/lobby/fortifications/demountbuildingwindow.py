@@ -22,7 +22,8 @@ class DemountBuildingWindow(AbstractWindowView, View, DemountBuildingWindowMeta,
         super(DemountBuildingWindow, self).__init__()
         self.__buildingID = ctx.get('data', None)
         self.__formattedBuildingName = i18n.makeString(ALIAS.buildings_buildingname(self.__buildingID))
-        buildingDescr = self.fortCtrl.getFort().getBuilding(self.UI_BUILDINGS_BIND.index(self.__buildingID))
+        self.getBuildingIDbyUID(self.__buildingID)
+        buildingDescr = self.fortCtrl.getFort().getBuilding(self.getBuildingIDbyUID(self.__buildingID))
         self.__buildingLevel = buildingDescr.level
         self.__currHpVal = buildingDescr.hp
         self.__buildingIntID = buildingDescr.typeID
@@ -108,7 +109,7 @@ class DemountBuildingWindow(AbstractWindowView, View, DemountBuildingWindowMeta,
 
     @process
     def __requestToDelete(self):
-        buildingTypeID = self.UI_BUILDINGS_BIND.index(self.__buildingID)
+        buildingTypeID = self.getBuildingIDbyUID(self.__buildingID)
         building = self.fortCtrl.getFort().getBuilding(buildingTypeID)
         result = yield self.fortProvider.sendRequest(BuildingCtx(buildingTypeID, isAdd=False, waitingID='fort/building/delete'))
         if result:

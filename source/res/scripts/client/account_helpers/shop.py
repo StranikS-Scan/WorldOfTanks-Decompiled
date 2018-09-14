@@ -220,6 +220,9 @@ class Shop(object):
     def getTankmanCost(self, callback):
         self.__getValue('tankmanCost', callback)
 
+    def getChangeRoleCost(self, callback):
+        self.__getValue('changeRoleCost', callback)
+
     def getDropSkillsCost(self, callback):
         self.__getValue('dropSkillsCost', callback)
 

@@ -61,10 +61,10 @@ class IArenaController(object):
     def invalidatePlayerStatus(self, flags, vo, arenaDP):
         pass
 
-    def invalidateChatRosters(self):
+    def invalidateUsersTags(self):
         pass
 
-    def invalidateChatRoster(self, user):
+    def invalidateUserTags(self, user):
         pass
 
     def spaceLoadStarted(self):

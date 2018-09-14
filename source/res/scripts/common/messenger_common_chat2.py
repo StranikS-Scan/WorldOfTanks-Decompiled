@@ -148,11 +148,11 @@ class MESSENGER_ACTION_IDS:
             return None
 
 
-_MESSENGER_ACTION_NAMES = dict(((_id, _name) for _name, _id in MESSENGER_ACTION_IDS.__dict__.iteritems() if type(_id) is int and not _name.startswith('_')))
-_MESSENGER_ERROR_NAMES = dict(((_id, _name) for _name, _id in MESSENGER_ERRORS.__dict__.iteritems() if not _name.startswith('_')))
+_MESSENGER_ACTION_NAMES = {_id:_name for _name, _id in MESSENGER_ACTION_IDS.__dict__.iteritems() if type(_id) is int and not _name.startswith('_')}
+_MESSENGER_ERROR_NAMES = {_id:_name for _name, _id in MESSENGER_ERRORS.__dict__.iteritems() if not _name.startswith('_')}
 AdminChatCommand = namedtuple('AdminChatCommand', ('id', 'name', 'timeout'))
 ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID), name='USERBAN', timeout=30.0), AdminChatCommand(id=_makeID(), name='USERUNBAN', timeout=30.0))
-ADMIN_CHAT_COMMANDS_BY_NAMES = dict(((v.name, v) for v in ADMIN_CHAT_COMMANDS))
+ADMIN_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in ADMIN_CHAT_COMMANDS}
 raise len(ADMIN_CHAT_COMMANDS) <= MESSENGER_ACTION_IDS._BATTLE_ACTION_START_ID - MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID or AssertionError
 BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'soundNotification'))
 BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name='HELPME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me', vehMarker='help_me', soundNotification='help_me'),
@@ -172,5 +172,5 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name='RELOADING_READY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready', vehMarker=None, soundNotification=None),
  BattleChatCommand(id=_makeID(), name='RELOADING_READY_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready_cassette', vehMarker=None, soundNotification=None),
  BattleChatCommand(id=_makeID(), name='RELOADING_UNAVAILABLE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_unavailable', vehMarker=None, soundNotification=None))
-BATTLE_CHAT_COMMANDS_BY_NAMES = dict(((v.name, v) for v in BATTLE_CHAT_COMMANDS))
+BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
 raise len(BATTLE_CHAT_COMMANDS) <= MESSENGER_ACTION_IDS._BATTLE_ACTION_END_ID - MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID or AssertionError

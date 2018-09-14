@@ -101,8 +101,10 @@ class SettingAbstract(ISetting):
     def getOptions(self):
         return self._getOptions()
 
-    def apply(self, value):
-        if value != self._get():
+    def apply(self, value, applyUnchanged = False):
+        if applyUnchanged:
+            self._set(value)
+        elif value != self._get():
             self._set(value)
         self._save(value)
         self.valueReal = None
@@ -420,16 +422,10 @@ class UserPrefsSetting(SettingAbstract):
         return None
 
     def _get(self):
-        if self.sectionName is None:
-            return self._readValue(Settings.g_instance.userPrefs)
-        else:
-            return self._readValue(Settings.g_instance.userPrefs)
+        return self._readValue(Settings.g_instance.userPrefs)
 
     def _save(self, value):
-        if self.sectionName is None:
-            return self._writeValue(Settings.g_instance.userPrefs, value)
-        else:
-            return self._writeValue(Settings.g_instance.userPrefs, value)
+        return self._writeValue(Settings.g_instance.userPrefs, value)
 
 
 class UserPrefsBoolSetting(UserPrefsSetting):
@@ -540,6 +536,9 @@ class VOIPSetting(UserPrefsBoolSetting):
 
     def __init__(self, isPreview = False):
         super(VOIPSetting, self).__init__(Settings.KEY_ENABLE_VOIP, isPreview)
+
+    def _get(self):
+        return VOIP.getVOIPManager().isEnabled()
 
     def _set(self, isEnable):
         if isEnable is None:

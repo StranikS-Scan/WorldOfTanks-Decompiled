@@ -7,7 +7,7 @@ from debug_utils import LOG_DEBUG
 from helpers import i18n
 from messenger import g_settings
 from messenger.ext.player_helpers import getPlayerDatabaseID
-from messenger.m_constants import LAZY_CHANNEL, MESSENGER_SCOPE
+from messenger.m_constants import LAZY_CHANNEL, MESSENGER_SCOPE, USER_TAG
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw import entities, battle_chat_cmd
 from messenger.proto.bw.errors import ChannelNotFound
@@ -33,10 +33,16 @@ class ChannelsManager(ChatActionsListener):
         self.__limits = limits.LobbyLimits()
         self.__channels = {}
         self.__creationInfo = {}
+        self.__messagesQueue = []
+        self.__isMessageEnabled = False
         return
 
     @storage_getter('channels')
     def channelsStorage(self):
+        return None
+
+    @storage_getter('users')
+    def usersStorage(self):
         return None
 
     def addListeners(self):
@@ -53,10 +59,12 @@ class ChannelsManager(ChatActionsListener):
         self.addListener(self.__onChannelInfoUpdated, CHAT_ACTIONS.channelInfoUpdated)
         self.addListener(self.__onChatChannelCreated, CHAT_ACTIONS.createChannel)
         self.addListener(self.__onUserChatCommand, CHAT_ACTIONS.userChatCommand)
+        g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
 
     def removeAllListeners(self):
         super(ChannelsManager, self).removeAllListeners()
+        g_messengerEvents.users.onUsersListReceived -= self.__me_onUsersListReceived
         g_settings.onUserPreferencesUpdated -= self.__ms_onUserPreferencesUpdated
 
     def switch(self, scope):
@@ -71,6 +79,8 @@ class ChannelsManager(ChatActionsListener):
         self.__filtersChain = msgFilterChain
 
     def clear(self):
+        self.__isMessageEnabled = False
+        self.__messagesQueue = []
         self.__creationInfo.clear()
         self.__eventManager.clear()
         self.__channels.clear()
@@ -164,8 +174,15 @@ class ChannelsManager(ChatActionsListener):
         self.onRequestChannelsComplete(requestID, channels)
 
     def __onBroadcast(self, chatAction):
+        if not self.__isMessageEnabled:
+            self.__messagesQueue.append(dict(chatAction))
+            return
         wrapper = ChatActionWrapper(**dict(chatAction))
-        text = self.__filtersChain.chainIn(wrapper.originator, wrapper.data)
+        senderDBID = wrapper.originator
+        user = self.usersStorage.getUser(senderDBID)
+        if user and user.isIgnored():
+            return
+        text = self.__filtersChain.chainIn(senderDBID, wrapper.data)
         if not text:
             return
         wrapper.data = text
@@ -322,6 +339,13 @@ class ChannelsManager(ChatActionsListener):
         for channel in channels:
             if channel.invalidateName():
                 g_messengerEvents.channels.onChannelInfoUpdated(channel)
+
+    def __me_onUsersListReceived(self, tags):
+        if USER_TAG.IGNORED not in tags:
+            return
+        self.__isMessageEnabled = True
+        while self.__messagesQueue:
+            self.__onBroadcast(self.__messagesQueue.pop(0))
 
     def __makeMemberFromDict(self, memberData):
         member = None

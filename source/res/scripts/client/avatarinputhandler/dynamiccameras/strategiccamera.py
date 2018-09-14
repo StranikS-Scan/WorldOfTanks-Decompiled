@@ -46,14 +46,17 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self._StrategicCamera__positionNoiseOscillator = None
         self._StrategicCamera__dynamicCfg = CameraDynamicConfig()
         self._StrategicCamera__readCfg(dataSec)
-        if aim is None:
-            return None
-        self._StrategicCamera__cam = None.CursorCamera()
+        self._StrategicCamera__cam = BigWorld.CursorCamera()
         self._StrategicCamera__curSense = self._StrategicCamera__cfg['sensitivity']
         self._StrategicCamera__onChangeControlMode = None
         self._StrategicCamera__aimingSystem = StrategicAimingSystem(self._StrategicCamera__cfg['distRange'][0], StrategicCamera._CAMERA_YAW)
         self._StrategicCamera__prevTime = BigWorld.time()
-        self._StrategicCamera__aim = aim
+        self._StrategicCamera__aimOffsetFunc = None
+        if aim is None:
+            
+            self._StrategicCamera__aimOffsetFunc = lambda x = None: (0, 0)
+        else:
+            self._StrategicCamera__aimOffsetFunc = aim.offset
         self._StrategicCamera__autoUpdatePosition = False
         self._StrategicCamera__dxdydz = Vector3(0, 0, 0)
         self._StrategicCamera__needReset = 0
@@ -112,6 +115,12 @@ class StrategicCamera(ICamera, CallbackDelayer):
     
     def teleport(self, pos):
         self.moveToPosition(pos)
+
+    
+    def setMaxDist(self):
+        distRange = self._StrategicCamera__cfg['distRange']
+        if len(distRange) > 1:
+            self._StrategicCamera__camDist = distRange[1]
 
     
     def restoreDefaultsState(self):
@@ -238,9 +247,9 @@ class StrategicCamera(ICamera, CallbackDelayer):
             aimOffset = self._StrategicCamera__calcAimOffset()
             if replayCtrl.isRecording:
                 replayCtrl.setAimClipPosition(aimOffset)
-        self._StrategicCamera__aim.offset((aimOffset.x, aimOffset.y))
+        self._StrategicCamera__aimOffsetFunc((aimOffset.x, aimOffset.y))
         shotDescr = BigWorld.player().vehicleTypeDescriptor.shot
-        BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Math.Vector3(0, -shotDescr['gravity'], 0), self._StrategicCamera__aim.offset())
+        BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Math.Vector3(0, -shotDescr['gravity'], 0), self._StrategicCamera__aimOffsetFunc())
         curTime = BigWorld.time()
         deltaTime = curTime - self._StrategicCamera__prevTime
         self._StrategicCamera__prevTime = curTime

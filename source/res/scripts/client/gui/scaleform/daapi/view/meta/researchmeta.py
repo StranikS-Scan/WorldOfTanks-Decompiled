@@ -12,12 +12,6 @@ class ResearchMeta(DAAPIModule):
     def onResearchItemsDrawn(self):
         self._printOverrideError('onResearchItemsDrawn')
 
-    def request4Install(self, itemCD):
-        self._printOverrideError('request4Install')
-
-    def requestModuleInfo(self, itemCD):
-        self._printOverrideError('requestModuleInfo')
-
     def goToTechTree(self, nation):
         self._printOverrideError('goToTechTree')
 

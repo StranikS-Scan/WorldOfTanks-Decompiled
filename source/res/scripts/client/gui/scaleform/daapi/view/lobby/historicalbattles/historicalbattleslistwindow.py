@@ -6,6 +6,7 @@ from AccountCommands import LOCK_REASON
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_DEBUG
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control import isInHistoricalQueue
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME, SELECTOR_BATTLE_TYPES
@@ -235,7 +236,7 @@ class HistoricalBattlesListWindow(PrequeueWindow, HistoricalBattlesListWindowMet
         headerTimerText = ''
         footerTimerText = ''
         if battle.isFuture() or timeRemaining <= self.COOLDOWN_TRESHOLD:
-            remainingText = time_utils.getTillTimeString(timeRemaining, '#historical_battles:remainingTime')
+            remainingText = time_utils.getTillTimeString(timeRemaining, MENU.TIME_TIMEVALUE)
             headerTimerText = i18n.makeString(HISTORICAL_BATTLES.TIMER_TOSTART if battle.isFuture() else HISTORICAL_BATTLES.TIMER_TOFINISH, time=remainingText)
             footerTimerText = i18n.makeString(HISTORICAL_BATTLES.BATTLESTATUS_REMAININGTIME, time=remainingText)
         self.as_updateTimerS(headerTimerText, footerTimerText)

@@ -52,7 +52,7 @@ class DAAPIModule(EventSystemEntity):
         if componentPy is not None:
             componentPy = g_entitiesFactories.initialize(componentPy, component, idx)
         else:
-            LOG_ERROR('Component not found in python', alias)
+            LOG_ERROR('Component %s not found in python'.format(alias), alias)
             return
         from gui.Scaleform.framework.entities.View import View
         if isinstance(componentPy, View):

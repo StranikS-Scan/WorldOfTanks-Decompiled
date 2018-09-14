@@ -2,9 +2,11 @@
 import weakref
 import types
 import itertools
+import sys
+import inspect
 import BigWorld
 import AccountCommands
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 from helpers import getLanguageCode, i18n
 from items import vehicles as vehs_core
 from account_helpers.AccountSettings import AccountSettings
@@ -117,8 +119,11 @@ def code2str(code):
 
 
 def isVehicleObserver(vehTypeCompDescr):
-    item_type_id, nation_id, item_id_within_nation = vehs_core.parseIntCompactDescr(vehTypeCompDescr)
-    return 'observer' in vehs_core.g_cache.vehicle(nation_id, item_id_within_nation).tags
+    if vehTypeCompDescr is not None:
+        item_type_id, nation_id, item_id_within_nation = vehs_core.parseIntCompactDescr(vehTypeCompDescr)
+        return 'observer' in vehs_core.g_cache.vehicle(nation_id, item_id_within_nation).tags
+    else:
+        return False
 
 
 class BoundMethodWeakref(object):
@@ -136,6 +141,22 @@ def findFirst(function_or_None, sequence, default = None):
         return next(itertools.ifilter(function_or_None, sequence))
     except StopIteration:
         return default
+
+
+def class_for_name(module_name, class_name):
+    __import__(module_name)
+    m = sys.modules[module_name]
+    c = getattr(m, class_name)
+    if not inspect.isclass(c):
+        LOG_ERROR('%s - is not a class, check module path or className' % class_name)
+        return None
+    else:
+        return c
+
+
+def forEach(function, sequence):
+    for e in sequence:
+        function(e)
 
 
 def isEmpty(sequence):
@@ -166,6 +187,13 @@ def sortByFields(fields, sequence, valueGetter = dict.get):
 def prettyPrint(dict, sort_keys = True, indent = 4):
     import json
     return json.dumps(dict, sort_keys=sort_keys, indent=indent)
+
+
+def roundByModulo(value, rate):
+    left = value % rate
+    if left > 0:
+        value += rate - left
+    return value
 
 
 _STR_CASING_OPTIONS = {'el': (8, 1, 0),
@@ -200,6 +228,11 @@ def toLower(string):
 
 def toUpper(string):
     return changeStringCasing(string, True)
+
+
+def copyToClipboard(text):
+    BigWorld.wg_copyToClipboard(unicode(text, 'utf-8', errors='ignore'))
+    LOG_DEBUG('Text has been copied to the clipboard', text)
 
 
 class AlwaysValidObject(object):

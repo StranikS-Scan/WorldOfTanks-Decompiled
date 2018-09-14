@@ -8,68 +8,63 @@ from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.decorators import ReprInjector
 
 class AbstractRequester(object):
-    """
-    Abstract requester for server data caches. Contains cache
-    member dict, common request and response methods.
-    """
 
     def __init__(self):
+        self._data = self._getDefaultDataValue()
         self.__synced = False
-        self.__cache = dict()
-
-    def _response(self, resID, value, callback):
-        """
-        Common server response method. Must be called ANYWAY after
-        server operation will complete.
-        
-        @param resID: request result id
-        @param value: requested value
-        @param callback: function to be called after operation will complete
-        """
-        self.__synced = resID >= 0
-        if resID < 0:
-            LOG_ERROR('[class %s] There is error while getting data from cache: %s[%d]' % (self.__class__.__name__, code2str(resID), resID))
-            return callback(dict())
-        callback(dict(value))
-
-    @async
-    def _requestCache(self, callback = None):
-        """
-        Empty request method. Just call response without
-        any data requesting.
-        """
-        self._response(0, {}, callback)
 
     @async
     @process
-    def request(self, callback = None):
-        """
-        Public request method. Validate player entity to request
-        possibility and itself as single callback argument.
-        """
+    def request(self, callback):
         self.__synced = False
         if not isPlayerAccount():
             yield lambda callback: callback(None)
             LOG_ERROR('[class %s] Player is not account.' % self.__class__.__name__)
         else:
-            self.__cache = yield self._requestCache()
+            self._data = yield self._requestCache()
         callback(self)
 
     def isSynced(self):
         return self.__synced
 
     def clear(self):
-        self.__cache.clear()
+        self._data = None
+        return
+
+    def _response(self, resID, value, callback = None):
+        self.__synced = resID >= 0
+        if resID < 0:
+            LOG_ERROR('There is error while getting data from cache', self.__class__.__name__, code2str(resID), resID)
+            if callback is not None:
+                callback(self._getDefaultDataValue())
+        elif callback is not None:
+            callback(self._preprocessValidData(value))
+        return
+
+    @async
+    def _requestCache(self, callback):
+        self._response(0, self._getDefaultDataValue(), callback)
+
+    def _getDefaultDataValue(self):
+        return None
+
+    def _preprocessValidData(self, data):
+        return data
+
+
+class AbstractSyncDataRequester(AbstractRequester):
 
     def getCacheValue(self, key, defaultValue = None):
-        """
-        Public interface method to get value from cache.
-        
-        @param key: value's key in cache
-        @param defaultValue: default value if key does not exist
-        @return: value
-        """
-        return self.__cache.get(key, defaultValue)
+        return self._data.get(key, defaultValue)
+
+    def clear(self):
+        self._data.clear()
+
+    def _getDefaultDataValue(self):
+        return {}
+
+    def _preprocessValidData(self, data):
+        return dict(data)
 
 
 @ReprInjector.simple(('getWaitingID', 'waitingID'), ('getRequestType', 'requestType'))

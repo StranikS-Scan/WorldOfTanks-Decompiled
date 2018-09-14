@@ -268,6 +268,17 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__multiRespecTman_onShopSynced, tmenInvIDsAndCostTypeIdx, vehTypeCompDescr, callback))
             return
 
+    def changeTankmanRole(self, tmanInvID, roleIdx, vehTypeCompDescr, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if vehTypeCompDescr is None:
+                vehTypeCompDescr = 0
+            self.__account.shop.waitForSync(partial(self.__changeTankmanRole_onShopSynced, tmanInvID, roleIdx, vehTypeCompDescr, callback))
+            return
+
     def replacePassport(self, tmanInvID, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, callback):
         if self.__ignore:
             if callback is not None:
@@ -442,6 +453,19 @@ class Inventory(object):
                 arr.append(tmanCostTypeIdx)
 
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_MULTI_RESPEC, arr, proxy)
+            return
+
+    def __changeTankmanRole_onShopSynced(self, tmanInvID, roleIdx, vehTypeCompDescr, callback, resultID, shopRev):
+        if resultID < 0:
+            if callback is not None:
+                callback(resultID, None)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, ext)
+            else:
+                proxy = None
+            self.__account._doCmdInt4(AccountCommands.CMD_TMAN_CHANGE_ROLE, shopRev, tmanInvID, roleIdx, vehTypeCompDescr, proxy)
             return
 
     def __replacePassport_onShopSynced(self, tmanInvID, isPremium, isFemale, fnGroupID, firstNameID, lnGroupID, lastNameID, iGroupID, iconID, callback, resultID, shopRev):

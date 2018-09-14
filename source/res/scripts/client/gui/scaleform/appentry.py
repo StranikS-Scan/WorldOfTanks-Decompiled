@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/AppEntry.py
-import WebBrowser
-from debug_utils import LOG_DEBUG
+from gui.Scaleform.framework.managers.CacheManager import CacheManager
 from gui.Scaleform.framework.managers.event_logging import EventLogManager
+from gui.Scaleform.managers.context_menu import ContextMenuManager
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils import decorators
 from gui.Scaleform.managers.PopoverManager import PopoverManager
@@ -12,7 +12,6 @@ from gui.Scaleform.framework.application import App
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.SoundManager import SoundManager
 from gui.Scaleform.managers.ColorSchemeManager import ColorSchemeManager
-from gui.Scaleform.managers.ContextMenuManager import ContextMenuManager
 from gui.Scaleform.managers.GuiItemsManager import GuiItemsManager
 from gui.Scaleform.managers.VoiceChatManager import VoiceChatManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
@@ -40,6 +39,7 @@ class AppEntry(App):
         self._utilsMgr = UtilsManager()
         self._tweenMgr = TweenManager()
         self._gameInputMgr = GameInputMgr()
+        self._cacheMgr = CacheManager()
 
     def _loadCursor(self):
         self._containerMgr.load(VIEW_ALIAS.CURSOR)

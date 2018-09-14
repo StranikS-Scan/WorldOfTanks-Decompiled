@@ -13,7 +13,7 @@ from gui.shared.utils import BitmaskHelper
 from helpers import i18n
 from urllib import urlencode
 import urllib2
-AUTO_LOGIN_QUERY_ENABLED = not (constants.IS_DEVELOPMENT or constants.IS_CHINA)
+AUTO_LOGIN_QUERY_ENABLED = True
 AUTO_LOGIN_QUERY_URL = 'auto.login.app:0000'
 AUTO_LOGIN_QUERY_TIMEOUT = 5
 STORED_AS_RECOMMEND_DELTA = 15 * 60

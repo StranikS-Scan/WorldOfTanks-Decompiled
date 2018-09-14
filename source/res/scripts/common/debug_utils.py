@@ -130,9 +130,51 @@ def LOG_VLK(msg, *kargs):
         _doLog('VLK', msg, kargs)
 
 
+def LOG_SK_DEV(msg, *kargs):
+    if IS_DEVELOPMENT:
+        _doLog('SK', msg, kargs)
+
+
+def LOG_SK(msg, *kargs):
+    if IS_DEVELOPMENT or not IS_CLIENT:
+        _doLog('SK', msg, kargs)
+
+
 def LOG_OGNICK_DEV(msg, *kargs):
     if IS_DEVELOPMENT:
         _doLog('OGNICK', msg, kargs)
+
+
+def LOG_OGNICK(msg, *kargs):
+    if IS_DEVELOPMENT or not IS_CLIENT:
+        _doLog('OGNICK', msg, kargs)
+
+
+def LOG_MK(msg, *kargs):
+    if IS_DEVELOPMENT:
+        _doLog('MK', msg, kargs)
+
+
+def LOG_EZ(msg, *kargs):
+    if IS_DEVELOPMENT:
+        _doLog('JKqq', msg, kargs)
+
+
+def LOG_IG(msg, *kargs):
+    if IS_DEVELOPMENT or not IS_CLIENT:
+        _doLog('IG', msg, kargs)
+
+
+if IS_DEVELOPMENT:
+
+    def LOG_SVAN_DEV(fmt, *args):
+        _doLogFmt('SVAN', fmt, *args)
+
+
+else:
+
+    def LOG_SVAN_DEV(*args, **kwargs):
+        pass
 
 
 def LOG_GUI(msg, *kargs):
@@ -166,6 +208,12 @@ def _doLog(s, msg, args):
         print header, msg, args
     else:
         print header, msg
+
+
+def _doLogFmt(prefix, fmt, *args):
+    msg = _makeMsgHeader(prefix, sys._getframe(2))
+    msg += fmt.format(*args) if args else fmt
+    print msg
 
 
 def _makeMsgHeader(s, frame):
@@ -214,6 +262,21 @@ def disabled(func):
         pass
 
     return empty_func
+
+
+def disabled_if(flag, msg = ''):
+    if flag:
+
+        def disable_func(func):
+            LOG_SVAN_DEV('Method ({}) disabled. {} ', func.__name__, msg)
+            return disabled(func)
+
+    else:
+
+        def disable_func(func):
+            return func
+
+    return disable_func
 
 
 def dump_garbage(source = False):

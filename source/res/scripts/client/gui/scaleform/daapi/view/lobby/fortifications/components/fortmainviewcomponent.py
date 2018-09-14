@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortMainViewComponent.py
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
-from account_helpers.AccountSettings import AccountSettings, FORT_MEMBER_TUTORIAL
+from account_helpers.AccountSettings import AccountSettings, FORT_MEMBER_TUTORIAL, ORDERS_FILTER
 from adisp import process
 from constants import PREBATTLE_TYPE, FORT_BUILDING_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -10,6 +10,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects, 
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.context.unit_ctx import JoinModeCtx
@@ -25,9 +26,18 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper imp
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.events import FortEvent
+from gui.shared.fortifications import events_dispatcher as fort_events
 from gui.shared.fortifications.context import DirectionCtx
 from gui.shared.utils import CONST_CONTAINER
 from helpers import i18n, time_utils, setHangarVisibility
+
+def _checkBattleConsumesIntro():
+    settings = dict(AccountSettings.getSettings('fortSettings'))
+    if not settings.get('battleConsumesIntroShown'):
+        fort_events.showBattleConsumesIntro()
+        settings['battleConsumesIntroShown'] = True
+    AccountSettings.setSettings('fortSettings', settings)
+
 
 class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
 
@@ -59,15 +69,20 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
 
     @process
     def updateData(self):
+        _checkBattleConsumesIntro()
         self.__updateCurrentMode()
-        data = self.getData()
         self.__updateHeaderMessage()
-        self.as_setMainDataS(data)
+        self.as_setMainDataS(self.getData())
         self.as_setBattlesDirectionDataS({'directionsBattles': self._getDirectionsBattles()})
         self.__checkDefHourConditions()
         clanIconId = yield g_clanCache.getClanEmblemID()
         if not self.isDisposed():
             self.as_setClanIconIdS(clanIconId)
+
+    def onSelectOrderSelector(self, value):
+        filters = AccountSettings.getFilter(ORDERS_FILTER)
+        filters['isSelected'] = value
+        AccountSettings.setFilter(ORDERS_FILTER, filters)
 
     def _getDirectionsBattles(self):
         battlesByDir = {}
@@ -225,7 +240,9 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         return {'clanName': g_clanCache.clanTag,
          'levelTitle': i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_HEADER_LEVELSLBL, buildLevel=levelTxt),
          'defResText': defResPrefix + fort_formatters.getDefRes(defResQuantity, True),
-         'disabledTransporting': disabledTransporting}
+         'disabledTransporting': disabledTransporting,
+         'orderSelectorVO': {'isSelected': AccountSettings.getFilter(ORDERS_FILTER)['isSelected'],
+                             'icon': RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_AIM}}
 
     def __updateHeaderMessage(self):
         message = ''

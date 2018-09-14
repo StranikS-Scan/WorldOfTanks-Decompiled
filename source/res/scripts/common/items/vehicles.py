@@ -11,6 +11,7 @@ from items import _xml
 from debug_utils import *
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT, IS_CELLAPP, IS_BASEAPP, IS_WEB, ITEM_DEFS_PATH
 from constants import DEFAULT_GUN_PITCH_LIMITS_TRANSITION, IGR_TYPE, IS_RENTALS_ENABLED
+import BigWorld
 if IS_CELLAPP or IS_CLIENT or IS_BOT:
     from ModelHitTester import ModelHitTester
 if IS_CELLAPP or IS_CLIENT or IS_WEB:
@@ -1586,7 +1587,7 @@ _dictDescrGetters = {'shell': lambda nationID, compTypeID: g_cache.shells(nation
  'vehicleFuelTank': lambda nationID, compTypeID: g_cache.fuelTanks(nationID)[compTypeID]}
 
 def getVehicleType(compactDescr):
-    if type(compactDescr) is int:
+    if isinstance(compactDescr, (long, int)):
         nationID = compactDescr >> 4 & 15
         vehicleTypeID = compactDescr >> 8 & 65535
     else:
@@ -3115,54 +3116,61 @@ def _readShotEffects(xmlCtx, section):
             _xml.raiseWrongXml(xmlCtx, 'targetStickers/armorPierced', 'unknown name of sticker')
     res['targetStickers']['armorPierced'] = v
     if IS_CLIENT:
-        model = _xml.readNonEmptyString(xmlCtx, section, 'projectile/model')
-        modelOwnShot = section.readString('projectile/modelOwnShot', model)
-        subsection = _xml.getSubsection(xmlCtx, section, 'projectile/effects')
-        try:
-            effects = EffectsList.EffectsList(subsection)
-        except Exception as x:
-            _xml.raiseWrongXml(xmlCtx, 'projectile/effects', str(x))
-
-        res['projectile'] = (model, modelOwnShot, effects)
-        res['targetImpulse'] = _xml.readNonNegativeFloat(xmlCtx, section, 'targetImpulse')
+        artillery = section.has_key('artillery')
+        if artillery:
+            res['artilleryID'] = BigWorld.PyGroundEffectManager().loadArtillery(section['artillery'])
+        airstrike = section.has_key('airstrike')
+        if airstrike:
+            res['airstrikeID'] = BigWorld.PyGroundEffectManager().loadAirstrike(section['airstrike'])
         res['caliber'] = _xml.readNonNegativeFloat(xmlCtx, section, 'caliber')
-        if not section.has_key('waterParams'):
-            res['waterParams'] = (2.0, 4.0)
-        else:
-            res['waterParams'] = (_xml.readPositiveFloat(xmlCtx, section, 'waterParams/shallowWaterDepth'), _xml.readPositiveFloat(xmlCtx, section, 'waterParams/rippleDiameter'))
-        res['armorHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorHit'))
-        res['armorCriticalHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorCriticalHit'))
-        res['armorResisted'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorResisted'))
-        if section.has_key('armorBasicRicochet'):
-            res['armorBasicRicochet'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorBasicRicochet'))
-        else:
-            res['armorBasicRicochet'] = res['armorResisted']
-        if section.has_key('armorRicochet'):
-            res['armorRicochet'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorRicochet'))
-        else:
-            res['armorRicochet'] = res['armorResisted']
-        defSubEffName = EFFECT_MATERIALS[0] + 'Hit'
-        res[defSubEffName] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, defSubEffName))
-        for subEffName in EFFECT_MATERIALS[1:]:
-            subEffName += 'Hit'
-            if section.has_key(subEffName):
-                res[subEffName] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, subEffName))
-            else:
-                res[subEffName] = res[defSubEffName]
-
-        if section.has_key('deepWaterHit'):
-            res['deepWaterHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'deepWaterHit'))
-        if section.has_key('shallowWaterHit'):
-            res['shallowWaterHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'shallowWaterHit'))
-        if not res.has_key('deepWaterHit'):
-            v = res.get('shallowWaterHit')
-            res['deepWaterHit'] = v if v else res[defSubEffName]
-        if not res.has_key('shallowWaterHit'):
-            res['shallowWaterHit'] = res['deepWaterHit']
+        res['targetImpulse'] = _xml.readNonNegativeFloat(xmlCtx, section, 'targetImpulse')
         res['physicsParams'] = {'shellVelocity': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/shellVelocity'),
          'shellMass': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/shellMass'),
          'splashRadius': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/splashRadius'),
          'splashStrength': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/splashStrength')}
+        res['armorHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorHit'))
+        res['armorCriticalHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorCriticalHit'))
+        res['armorResisted'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorResisted'))
+        if not artillery and not airstrike:
+            model = _xml.readNonEmptyString(xmlCtx, section, 'projectile/model')
+            modelOwnShot = section.readString('projectile/modelOwnShot', model)
+            subsection = _xml.getSubsection(xmlCtx, section, 'projectile/effects')
+            try:
+                effects = EffectsList.EffectsList(subsection)
+            except Exception as x:
+                _xml.raiseWrongXml(xmlCtx, 'projectile/effects', str(x))
+
+            res['projectile'] = (model, modelOwnShot, effects)
+            if not section.has_key('waterParams'):
+                res['waterParams'] = (2.0, 4.0)
+            else:
+                res['waterParams'] = (_xml.readPositiveFloat(xmlCtx, section, 'waterParams/shallowWaterDepth'), _xml.readPositiveFloat(xmlCtx, section, 'waterParams/rippleDiameter'))
+            if section.has_key('armorBasicRicochet'):
+                res['armorBasicRicochet'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorBasicRicochet'))
+            else:
+                res['armorBasicRicochet'] = res['armorResisted']
+            if section.has_key('armorRicochet'):
+                res['armorRicochet'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'armorRicochet'))
+            else:
+                res['armorRicochet'] = res['armorResisted']
+            defSubEffName = EFFECT_MATERIALS[0] + 'Hit'
+            res[defSubEffName] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, defSubEffName))
+            for subEffName in EFFECT_MATERIALS[1:]:
+                subEffName += 'Hit'
+                if section.has_key(subEffName):
+                    res[subEffName] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, subEffName))
+                else:
+                    res[subEffName] = res[defSubEffName]
+
+            if section.has_key('deepWaterHit'):
+                res['deepWaterHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'deepWaterHit'))
+            if section.has_key('shallowWaterHit'):
+                res['shallowWaterHit'] = __readEffectsTimeLine(xmlCtx, _xml.getSubsection(xmlCtx, section, 'shallowWaterHit'))
+            if not res.has_key('deepWaterHit'):
+                v = res.get('shallowWaterHit')
+                res['deepWaterHit'] = v if v else res[defSubEffName]
+            if not res.has_key('shallowWaterHit'):
+                res['shallowWaterHit'] = res['deepWaterHit']
     return res
 
 

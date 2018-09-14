@@ -5,10 +5,10 @@ import BigWorld
 import constants
 import dossiers2
 import AccountCommands
-from abstract import AbstractRequester
 from adisp import async
 from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
+from gui.shared.utils.requesters import abstract
 
 class RequestProcessor(object):
 
@@ -185,12 +185,7 @@ class UserDossier(object):
         return not self.isHidden and self.isAvailable
 
 
-class DossierRequester(AbstractRequester):
-    """
-    This requester store only vehicles dossiers (server architecture).
-    Account dossier is stored in Stats and tankmen dossiers - in its own
-    compact descriptor (in inventory).
-    """
+class DossierRequester(abstract.AbstractSyncDataRequester):
 
     def __init__(self):
         super(DossierRequester, self).__init__()
@@ -201,10 +196,6 @@ class DossierRequester(AbstractRequester):
         BigWorld.player().dossierCache.getCache(lambda resID, value: self._response(resID, value, callback))
 
     def getVehicleDossier(self, vehTypeCompDescr):
-        """
-        @param vehTypeCompDescr: vehicle type compact descriptor (int)
-        @return: vehicle dossier descriptor
-        """
         return self.getCacheValue((constants.DOSSIER_TYPE.VEHICLE, vehTypeCompDescr), (0, ''))[1]
 
     def getUserDossierRequester(self, databaseID):

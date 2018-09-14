@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileAwards.py
 from gui.Scaleform.daapi.view.lobby.profile.ProfileAchievementSection import ProfileAchievementSection
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.daapi.view.meta.ProfileAwardsMeta import ProfileAwardsMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from web_stubs import i18n
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
+from gui.shared.utils.RareAchievementsCache import IMAGE_TYPE
 
 class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
 
@@ -43,6 +43,16 @@ class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
                                'selectedItem': self.__achievementsFilter}}
         self.as_setInitDataS(initData)
 
+    def _onRareImageReceived(self, imgType, rareID, imageData):
+        if imgType == IMAGE_TYPE.IT_67X71:
+            stats = self._getNecessaryStats()
+            achievement = stats.getAchievement(('rareAchievements', rareID))
+            if achievement is not None:
+                image_id = achievement.getSmallIcon()[6:]
+                self.as_setRareAchievementDataS({'rareID': rareID,
+                 'rareIconId': image_id})
+        return
+
     def __packProviderItem(self, key):
         return {'label': i18n.makeString(key),
          'key': key}
@@ -50,9 +60,6 @@ class ProfileAwards(ProfileAchievementSection, ProfileAwardsMeta):
     def setFilter(self, data):
         self.__achievementsFilter = data
         self.invokeUpdate()
-
-    def requestData(self, data):
-        self.request(self._userID)
 
     def _dispose(self):
         self._disposeRequester()

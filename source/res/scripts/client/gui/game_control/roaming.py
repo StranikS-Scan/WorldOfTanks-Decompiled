@@ -1,9 +1,9 @@
 # Embedded file name: scripts/client/gui/game_control/roaming.py
+import BigWorld
 from collections import namedtuple
 from debug_utils import LOG_DEBUG
-from account_helpers import isRoamingEnabled
-from ConnectionManager import connectionManager
 from gui import GUI_SETTINGS
+from gui.game_control.controllers import Controller
 
 class _CenterInfo(object):
     __slots__ = ('centerID', 'dbidMin', 'dbidMax', 'regionCode')
@@ -26,31 +26,28 @@ class _CenterInfo(object):
 
 _RoamingSettings = namedtuple('_RoamingSettings', 'homeCenterID curCenterID servers')
 
-class RoamingController(object):
+class RoamingController(Controller):
 
-    def __init__(self):
+    def __init__(self, proxy):
+        super(RoamingController, self).__init__(proxy)
         self.__roamingSettings = None
         self.__reloginChain = None
         self.__reloginStoppedHandler = None
         return
 
-    def init(self):
-        pass
-
     def fini(self):
         self.__roamingSettings = None
         self.__clearReloginChain()
+        super(RoamingController, self).fini()
         return
+
+    def onConnected(self):
+        roamingSettings = BigWorld.player().serverSettings
+        self.start(roamingSettings)
 
     def start(self, serverSettings):
         roamingSettings = serverSettings['roaming']
         self.__roamingSettings = _RoamingSettings(roamingSettings[0], roamingSettings[1], [ _CenterInfo(*s) for s in roamingSettings[2] ])
-
-    def stop(self):
-        pass
-
-    def onDisconnected(self):
-        self.stop()
 
     def isEnabled(self):
         return GUI_SETTINGS.roaming

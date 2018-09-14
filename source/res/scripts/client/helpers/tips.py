@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/helpers/tips.py
 import random
 import re
-from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import i18n
 
@@ -28,9 +27,7 @@ def getNextNumberOfTip():
     return random.randint(0, g_totalNumberOfTips)
 
 
-def getTip(arenaGuiType = None):
-    if arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-        return i18n.makeString('#tips:eventTip')
+def getTip():
     return i18n.makeString('#tips:tip{0:d}'.format(getNextNumberOfTip()))
 
 

@@ -26,6 +26,7 @@ class ProjectileMover(object):
     def __init__(self):
         self.__projectiles = dict()
         self.__movementCallbackId = None
+        self.salvo = BigWorld.PySalvo(1000, 0, -100)
         return
 
     def destroy(self):
@@ -45,6 +46,10 @@ class ProjectileMover(object):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
         else:
+            artID = effectsDescr.get('artilleryID')
+            if artID is not None:
+                self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
+                return
             projectiles = self.__projectiles
             if shotID in projectiles:
                 return
@@ -97,11 +102,13 @@ class ProjectileMover(object):
             return
 
     def explode(self, shotID, effectsDescr, effectMaterial, endPoint, velocityDir):
-        proj = self.__projectiles.get(shotID)
-        if proj is None:
-            self.__addExplosionEffect(endPoint, effectsDescr, effectMaterial, velocityDir)
+        if effectsDescr.has_key('artilleryID'):
             return
         else:
+            proj = self.__projectiles.get(shotID)
+            if proj is None:
+                self.__addExplosionEffect(endPoint, effectsDescr, effectMaterial, velocityDir)
+                return
             if proj['fireMissedTrigger']:
                 proj['fireMissedTrigger'] = False
                 TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_SHOT_MISSED)

@@ -50,7 +50,7 @@ class FortSettingsDayoffPopover(View, SmartPopOverView, FortViewHelper, AppRef, 
     def __setup(self, offDay):
         offDayUTC = offDay
         if offDay != NOT_ACTIVATED:
-            offDayUTC = adjustOffDayToUTC(offDay, self.fortCtrl.getFort().getLocalDefenceHour())
+            offDayUTC = adjustOffDayToUTC(offDay, self.fortCtrl.getFort().getLocalDefenceHour()[0])
         result = yield self.fortProvider.sendRequest(OffDayCtx(offDayUTC, waitingID='fort/settings'))
         if result:
             if offDay == NOT_ACTIVATED:

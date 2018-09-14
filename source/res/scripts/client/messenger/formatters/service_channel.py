@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/messenger/formatters/service_channel.py
 import types
 from FortifiedRegionBase import FORT_ATTACK_RESULT, NOT_ACTIVATED
-from account_shared import getFairPlayViolationName
 from adisp import async, process
 from chat_shared import decompressSysMessage
 import constants
@@ -13,14 +12,12 @@ import potapov_quests
 from gui import GUI_SETTINGS
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.shared.utils import BoundMethodWeakref
 from gui.shared import formatters as shared_fmts
 from gui.shared.fortifications import formatters as fort_fmts
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings
 from gui.shared.utils.transport import z_loads
@@ -36,11 +33,10 @@ from items import vehicles as vehicles_core
 from account_helpers import rare_achievements
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from dossiers2.ui.layouts import POTAPOV_QUESTS_GROUP
 from messenger import g_settings
 from predefined_hosts import g_preDefinedHosts
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, PREBATTLE_INVITE_STATE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT, SYS_MESSAGE_FORT_EVENT_NAMES, FORT_BUILDING_TYPE, FORT_ORDER_TYPE, FORT_BUILDING_TYPE_NAMES, ARENA_GUI_TYPE
-from messenger.formatters import TimeFormatter, NCContextItemFormatter, SYS_MSG_EXTRA_HANDLER_TYPE, SysMsgExtraData
+from messenger.formatters import TimeFormatter, NCContextItemFormatter
 
 def _getTimeStamp(message):
     import time
@@ -154,41 +150,6 @@ class BattleResultsFormatter(ServiceChannelFormatter):
             formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'timestamp': arenaCreateTime,
              'savedData': battleResult.get('arenaUniqueID', 0)}, bgIconSource=bgIconSource)
             settings = self._getGuiSettings(message, templateName)
-            fairplayViolations = battleResult.get('fairplayViolations', None)
-            if fairplayViolations is not None and fairplayViolations[:2] != (0, 0):
-                penaltyType = None
-                violation = None
-                if fairplayViolations[1] != 0:
-                    penaltyType = 'penalty'
-                    violation = fairplayViolations[1]
-                elif fairplayViolations[0] != 0:
-                    penaltyType = 'warning'
-                    violation = fairplayViolations[0]
-                settings.extraHandlerData.append(SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.PUNISHMENT, {'penaltyType': penaltyType,
-                 'arenaName': i18n.makeString(arenaType.name),
-                 'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
-                 'reason': i18n.makeString(DIALOGS.all('punishmentWindow/reason/%s' % getFairPlayViolationName(violation)))}))
-            pqExtraData = {'achievements': []}
-            for recordIdx, value in battleResult.get('popUpRecords') or {}:
-                recordName = DB_ID_TO_RECORD[recordIdx]
-                if recordName in POTAPOV_QUESTS_GROUP:
-                    factory = getAchievementFactory(recordName)
-                    if factory is not None:
-                        a = factory.create(value=int(value))
-                        if a is not None:
-                            pqExtraData['achievements'].append(a)
-
-            settings.extraHandlerData.append(SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.POTAPOV_QUEST_AWARD, pqExtraData))
-            pqCompletedQuests = {}
-            completedQuestIDs = battleResult.get('completedQuestIDs', set())
-            for qID in completedQuestIDs:
-                if potapov_quests.g_cache.isPotapovQuest(qID):
-                    pqType = potapov_quests.g_cache.questByUniqueQuestID(qID)
-                    if pqType.id not in pqCompletedQuests and not pqType.isFinal:
-                        pqCompletedQuests[pqType.id] = (pqType.mainQuestID in completedQuestIDs, pqType.addQuestID in completedQuestIDs)
-
-            if len(pqCompletedQuests):
-                settings.extraHandlerData.append(SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.POTAPOV_QUEST_AUTO_REWARD, pqCompletedQuests))
             return (formatted, settings)
         else:
             return (None, None)
@@ -466,6 +427,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
      INVOICE_ASSET.DATA: 'dataInvoiceReceived'}
     __i18nPiecesString = i18n.makeString('#{0:>s}:serviceChannelMessages/invoiceReceived/pieces'.format(MESSENGER_I18N_FILE))
     __i18nCrewLvlString = i18n.makeString('#{0:>s}:serviceChannelMessages/invoiceReceived/crewLvl'.format(MESSENGER_I18N_FILE))
+    __i18nCrewDroppedString = i18n.makeString('#{0:>s}:serviceChannelMessages/invoiceReceived/droppedCrewsToBarracks'.format(MESSENGER_I18N_FILE))
 
     def __getOperationTimeString(self, data):
         operationTime = data.get('at', None)
@@ -511,78 +473,103 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
         return result
 
     @classmethod
-    def _getVehicleNames(cls, vehicles, exclude = None, validateNegative = True, showCrewLvl = True):
+    def __getVehicleName(cls, vehCompDescr, vehData, showCrewLvl = True, showRent = True):
+        crewLvl = 50
+        vInfo = []
+        if showRent and 'rent' in vehData:
+            rentDays = vehData.get('rent', {}).get('expires', {}).get('after', None)
+            if rentDays:
+                rentDaysStr = g_settings.htmlTemplates.format('rentDays', {'value': str(rentDays)})
+                vInfo.append(rentDaysStr)
+        if showCrewLvl:
+            crewLvl = calculateRoleLevel(vehData.get('crewLvl', 50), vehData.get('crewFreeXP', 0))
+        vehUserString = None
+        try:
+            vehUserString = vehicles_core.getVehicleType(vehCompDescr).userString
+            if crewLvl > 50:
+                crewLvl = cls.__i18nCrewLvlString % crewLvl
+                if 'crewInBarracks' in vehData:
+                    if 'crewFreeXP' in vehData or 'crewLvl' in vehData or 'tankmen' in vehData:
+                        crewLvl = '%s %s' % (crewLvl, cls.__i18nCrewDroppedString)
+                vInfo.append(crewLvl)
+            if len(vInfo):
+                vInfoStr = '; '.join(vInfo)
+                vehUserString = '{0:>s} ({1:>s})'.format(vehUserString, vInfoStr)
+        except:
+            LOG_ERROR('Wrong vehicle compact descriptor', vehCompDescr)
+            LOG_CURRENT_EXCEPTION()
+
+        return vehUserString
+
+    @classmethod
+    def _getVehicleNames(cls, vehicles):
         addVehNames = []
         removeVehNames = []
         rentedVehNames = []
-        if exclude is None:
-            exclude = []
-        vehGetter = getattr(vehicles, 'get', None)
-        for vehCompDescr in vehicles:
-            if vehCompDescr is not None:
-                isNegative = False
-                if type(vehCompDescr) is types.IntType:
-                    isNegative = vehCompDescr < 0
-                    vehCompDescr = abs(vehCompDescr)
-                if vehCompDescr in exclude:
-                    continue
-                crewLvl = 50
-                isRented = False
-                if vehGetter is not None and callable(vehGetter):
-                    vehData = vehGetter(vehCompDescr, {})
-                    isRented = len(vehData.get('rent', {})) > 0 and not len(vehData.get('customCompensation', {}))
-                    if showCrewLvl:
-                        crewLvl = calculateRoleLevel(vehData.get('crewLvl', 50), vehData.get('crewFreeXP', 0))
-                try:
-                    vehUserString = vehicles_core.getVehicleType(vehCompDescr).userString
-                    if crewLvl > 50:
-                        crewLvl = cls.__i18nCrewLvlString % crewLvl
-                        vehUserString = '{0:>s} ({1:>s})'.format(vehUserString, crewLvl)
-                    if isNegative and validateNegative:
-                        removeVehNames.append(vehUserString)
-                    elif isRented:
-                        rentedVehNames.append(vehUserString)
-                    else:
-                        addVehNames.append(vehUserString)
-                except:
-                    LOG_ERROR('Wrong vehicle compact descriptor', vehCompDescr)
-                    LOG_CURRENT_EXCEPTION()
+        for vehCompDescr, vehData in vehicles.iteritems():
+            if 'customCompensation' in vehData:
+                continue
+            isNegative = False
+            if type(vehCompDescr) is types.IntType:
+                isNegative = vehCompDescr < 0
+                vehCompDescr = abs(vehCompDescr)
+            isRented = 'rent' in vehData
+            vehUserString = cls.__getVehicleName(vehCompDescr, vehData)
+            if vehUserString is None:
+                continue
+            if isNegative:
+                removeVehNames.append(vehUserString)
+            elif isRented:
+                rentedVehNames.append(vehUserString)
+            else:
+                addVehNames.append(vehUserString)
 
         return (addVehNames, removeVehNames, rentedVehNames)
 
     @classmethod
-    def _getVehiclesString(cls, vehicles, exclude = None, htmlTplPostfix = 'InvoiceReceived'):
-        addVehNames, removeVehNames, rentedVehNames = cls._getVehicleNames(vehicles, exclude=exclude)
-        result = ''
+    def _getVehiclesString(cls, vehicles, htmlTplPostfix = 'InvoiceReceived'):
+        addVehNames, removeVehNames, rentedVehNames = cls._getVehicleNames(vehicles)
+        result = []
         if len(addVehNames):
-            result = g_settings.htmlTemplates.format('vehiclesAccrued' + htmlTplPostfix, ctx={'vehicles': ', '.join(addVehNames)})
+            result.append(g_settings.htmlTemplates.format('vehiclesAccrued' + htmlTplPostfix, ctx={'vehicles': ', '.join(addVehNames)}))
         if len(removeVehNames):
-            if len(result):
-                result += '<br/>'
-            result += g_settings.htmlTemplates.format('vehiclesDebited' + htmlTplPostfix, ctx={'vehicles': ', '.join(removeVehNames)})
+            result.append(g_settings.htmlTemplates.format('vehiclesDebited' + htmlTplPostfix, ctx={'vehicles': ', '.join(removeVehNames)}))
         if len(rentedVehNames):
-            result += g_settings.htmlTemplates.format('vehiclesRented' + htmlTplPostfix, ctx={'vehicles': ', '.join(rentedVehNames)})
-        return result
+            result.append(g_settings.htmlTemplates.format('vehiclesRented' + htmlTplPostfix, ctx={'vehicles': ', '.join(rentedVehNames)}))
+        return '<br/>'.join(result)
 
     @classmethod
-    def _getComptnString(cls, comptnList, htmlTplPostfix = 'InvoiceReceived'):
-        result = []
+    def _getComptnString(cls, vehicles, htmlTplPostfix = 'InvoiceReceived'):
         html = g_settings.htmlTemplates
-        for itemDict, comptn in comptnList:
-            itemNames = []
-            values = []
-            items = itemDict.get('vehicles')
-            if len(items):
-                itemNames, _, _ = cls._getVehicleNames(items, validateNegative=False, showCrewLvl=False)
-            gold = comptn.get('gold', 0)
-            if gold > 0:
-                values.append(html.format('goldCompensation' + htmlTplPostfix, ctx={'amount': BigWorld.wg_getGoldFormat(gold)}))
-            accCredits = comptn.get('credits', 0)
-            if accCredits > 0:
-                values.append(html.format('creditsCompensation' + htmlTplPostfix, ctx={'amount': BigWorld.wg_getIntegralFormat(accCredits)}))
-            if len(itemNames) and len(values):
-                result.append(html.format('compensationFor' + htmlTplPostfix, ctx={'items': ', '.join(itemNames),
-                 'compensation': ', '.join(values)}))
+        result = []
+        for vehCompDescr, vehData in vehicles.iteritems():
+            vehUserString = cls.__getVehicleName(vehCompDescr, vehData, showCrewLvl=False, showRent=False)
+            if vehUserString is None:
+                continue
+            if 'rentCompensation' in vehData:
+                credits, gold = vehData['rentCompensation']
+                if gold > 0:
+                    key = 'goldRentCompensationReceived'
+                    formattedGold = BigWorld.wg_getGoldFormat(account_helpers.convertGold(gold))
+                    ctx = {'gold': formattedGold,
+                     'vehicleName': vehUserString}
+                else:
+                    key = 'creditsRentCompensationReceived'
+                    formattedCredits = BigWorld.wg_getIntegralFormat(credits)
+                    ctx = {'credits': formattedCredits,
+                     'vehicleName': vehUserString}
+                result.append(html.format(key, ctx=ctx))
+            if 'customCompensation' in vehData:
+                itemNames = [vehUserString]
+                credits, gold = vehData['customCompensation']
+                values = []
+                if gold > 0:
+                    values.append(html.format('goldCompensation' + htmlTplPostfix, ctx={'amount': BigWorld.wg_getGoldFormat(gold)}))
+                if credits > 0:
+                    values.append(html.format('creditsCompensation' + htmlTplPostfix, ctx={'amount': BigWorld.wg_getIntegralFormat(credits)}))
+                if len(values):
+                    result.append(html.format('compensationFor' + htmlTplPostfix, ctx={'items': ', '.join(itemNames),
+                     'compensation': ', '.join(values)}))
 
         return '<br/>'.join(result)
 
@@ -630,15 +617,28 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
         return descr
 
     @classmethod
-    def _makeComptnItemDict(cls, data):
-        result = {}
-        for items, comptn in data.get('compensation', []):
-            for key, data in items.iteritems():
-                exKey = 'ex_{0:>s}'.format(key)
-                result.setdefault(exKey, [])
-                result[exKey].extend(data)
+    def _processCompensations(cls, data):
+        vehicles = data.get('vehicles')
+        credits = 0
+        gold = 0
+        if vehicles is not None:
+            for value in vehicles.itervalues():
+                if 'rentCompensation' in value:
+                    credits += value['rentCompensation'][0]
+                    gold += value['rentCompensation'][1]
+                if 'customCompensation' in value:
+                    credits += value['customCompensation'][0]
+                    gold += value['customCompensation'][1]
 
-        return result
+        if 'gold' in data:
+            data['gold'] -= gold
+            if data['gold'] == 0:
+                del data['gold']
+        if 'credits' in data:
+            data['credits'] -= credits
+            if data['credits'] == 0:
+                del data['credits']
+        return
 
     def __formatAmount(self, assetType, data):
         amount = data.get('amount', None)
@@ -654,7 +654,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
         if dataEx is None or not len(dataEx):
             return
         operations = []
-        comptnDict = self._makeComptnItemDict(data)
+        self._processCompensations(dataEx)
         gold = dataEx.get('gold')
         if gold is not None:
             operations.append(self.__getFinOperationString(INVOICE_ASSET.GOLD, gold))
@@ -670,18 +670,15 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
         items = dataEx.get('items', {})
         if items is not None and len(items) > 0:
             operations.append(self.__getItemsString(items))
-        tmen = dataEx.get('tankmen', {})
+        tmen = dataEx.get('tankmen', [])
         if tmen is not None and len(tmen) > 0:
             operations.append(self._getTankmenString(tmen))
         vehicles = dataEx.get('vehicles', {})
         if vehicles is not None and len(vehicles) > 0:
-            exclude = comptnDict.get('ex_vehicles', [])
-            result = self._getVehiclesString(vehicles, exclude=exclude)
+            result = self._getVehiclesString(vehicles)
             if len(result):
                 operations.append(result)
-        compensation = data.get('compensation', [])
-        if len(compensation):
-            comptnStr = self._getComptnString(compensation)
+            comptnStr = self._getComptnString(vehicles)
             if len(comptnStr):
                 operations.append(comptnStr)
         slots = dataEx.get('slots')
@@ -961,7 +958,7 @@ class PrebattleKickFormatter(PrebattleFormatter):
         if prbType > 0 and kickReason > 0:
             ctx = {}
             key = '#system_messages:prebattle/kick/type/unknown'
-            if prbType in PREBATTLE_TYPE.LIKE_SQUAD:
+            if prbType == PREBATTLE_TYPE.SQUAD:
                 key = '#system_messages:prebattle/kick/type/squad'
             elif prbType == PREBATTLE_TYPE.COMPANY:
                 key = '#system_messages:prebattle/kick/type/team'
@@ -1263,29 +1260,26 @@ class TokenQuestsFormatter(ServiceChannelFormatter):
 
     def format(self, message, *args):
         formatted, settings = (None, None)
+        data = message.data or {}
+        completedQuestIDs = data.get('completedQuestIDs', set())
         fmt = self._formatQuestAchieves(message)
         if fmt is not None:
-            settings = self._getGuiSettings(message, self._getTemplateName())
-            formatted = g_settings.msgTemplates.format(self._getTemplateName(), {'achieves': self._formatQuestAchieves(message)})
-        data = message.data
-        if data is not None and settings:
-            extraData = {'completedQuestIDs': data.get('completedQuestIDs', set()),
-             'tankmen': [],
-             'vehicles': [],
-             'achievements': [],
-             'tokens': {}}
-            settings.extraHandlerData.append(SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.POTAPOV_QUEST_AWARD, extraData))
-            for vehTypeCompDescr in data.get('vehicles') or {}:
-                extraData['vehicles'].append(Vehicle(typeCompDescr=abs(vehTypeCompDescr)))
-
+            settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
+            formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'achieves': self._formatQuestAchieves(message)})
         return (formatted, settings)
 
-    def _getTemplateName(self):
+    def _getTemplateName(self, completedQuestIDs = set()):
+        if len(completedQuestIDs):
+            for qID in completedQuestIDs:
+                if potapov_quests.g_cache.isPotapovQuest(qID):
+                    return 'potapovQuests'
+
         return 'tokenQuests'
 
     def _formatQuestAchieves(self, message):
         data = message.data
         result = []
+        InvoiceReceivedFormatter._processCompensations(data)
         if not self._asBattleFormatter:
             gold = data.get('gold', 0)
             if gold:
@@ -1299,15 +1293,12 @@ class TokenQuestsFormatter(ServiceChannelFormatter):
                 result.append(self.__makeQuestsAchieve('battleQuestsFreeXP', freeXP=BigWorld.wg_getIntegralFormat(freeXP)))
         vehicles = data.get('vehicles', {})
         if vehicles is not None and len(vehicles) > 0:
-            exclude = InvoiceReceivedFormatter._makeComptnItemDict(data).get('ex_vehicles', [])
-            msg = InvoiceReceivedFormatter._getVehiclesString(vehicles, exclude=exclude, htmlTplPostfix='QuestsReceived')
+            msg = InvoiceReceivedFormatter._getVehiclesString(vehicles, htmlTplPostfix='QuestsReceived')
             if len(msg):
                 result.append(msg)
-        compensation = data.get('compensation', [])
-        if len(compensation):
-            msg = InvoiceReceivedFormatter._getComptnString(compensation, htmlTplPostfix='QuestsReceived')
-            if len(msg):
-                result.append('<br/>' + msg)
+            comptnStr = InvoiceReceivedFormatter._getComptnString(vehicles, htmlTplPostfix='QuestsReceived')
+            if len(comptnStr):
+                result.append('<br/>' + comptnStr)
         if not self._asBattleFormatter:
             creditsVal = data.get('credits', 0)
             if creditsVal:
@@ -1432,7 +1423,6 @@ class NCMessageFormatter(ServiceChannelFormatter):
                     return (None, None)
             formatted = g_settings.msgTemplates.format(templateKey, ctx={'topic': topic,
              'body': body})
-            self.__processWindow(data, settings)
             return (formatted, settings)
 
     def __getTemplateKey(self, data):
@@ -1467,15 +1457,6 @@ class NCMessageFormatter(ServiceChannelFormatter):
         if 'context' in data:
             body = body % self.__formatContext(data['context'])
         return body
-
-    def __processWindow(self, data, settings):
-        if 'window' in data:
-            if 'context' in data:
-                ctx = self.__formatContext(data['context'])
-            else:
-                ctx = {}
-            settings.extraHandlerData.append(SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.REF_SYS_STATUS, {'window': data['window'],
-             'ctx': ctx}))
 
     def __fetchPollData(self, data, settings):
         result = False
@@ -1617,7 +1598,7 @@ class FortMessageFormatter(ServiceChannelFormatter, AppRef):
             return i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_FORT_NO_OFF_DAY_ACTIVATED)
         if 'defenceHour' in data:
             from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal, adjustDefenceHourToLocal
-            offDayLocal = adjustOffDayToLocal(offDay, adjustDefenceHourToLocal(data['defenceHour']))
+            offDayLocal = adjustOffDayToLocal(offDay, adjustDefenceHourToLocal(data['defenceHour'])[0])
         else:
             LOG_WARNING('_offDayActivatedMessage: received incorrect data, using offDay without adjustment... ', data)
             offDayLocal = offDay
@@ -1685,7 +1666,6 @@ class FortBattleResultsFormatter(ServiceChannelFormatter):
             ctx['achieves'] = self._makeAchievementsString(battleResult)
             templateName = self.__battleResultKeys[winnerCode]
             settings = self._getGuiSettings(message, templateName)
-            settings.extraHandlerData.append(SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.FORT_RESULTS, battleResult))
             formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'savedData': battleResult})
             return (formatted, settings)
         else:
@@ -1804,40 +1784,6 @@ class RentalsExpiredFormatter(ServiceChannelFormatter):
         return g_settings.msgTemplates.format(self._templateKey, ctx=ctx)
 
 
-class RentCompensationFormatter(ServiceChannelFormatter):
-    _templateKey = 'rentCompensation'
-
-    def format(self, message, *args):
-        dataList = message.data
-        compensations = []
-        for data in dataList:
-            gold = data.get('gold', 0)
-            credits = data.get('credits', 0)
-            vehTypeCD = data.get('vehTypeCD', None)
-            vehicleName = vehicles_core.getVehicleType(vehTypeCD).userString
-            if gold > 0:
-                key = 'goldRentCompensationReceived'
-                formattedGold = BigWorld.wg_getGoldFormat(account_helpers.convertGold(gold))
-                ctx = {'gold': formattedGold,
-                 'vehicleName': vehicleName}
-            else:
-                key = 'creditsRentCompensationReceived'
-                formattedCredits = BigWorld.wg_getIntegralFormat(credits)
-                ctx = {'credits': formattedCredits,
-                 'vehicleName': vehicleName}
-            compensations.append(g_settings.htmlTemplates.format(key, ctx=ctx))
-
-        if len(compensations) > 0:
-            return (self._getMessage(compensations), self._getGuiSettings(message, self._templateKey))
-        else:
-            return (None, None)
-            return
-
-    def _getMessage(self, compensationList):
-        ctx = {'compensations': ',\n'.join(compensationList)}
-        return g_settings.msgTemplates.format(self._templateKey, ctx=ctx)
-
-
 class RefSystemReferralBoughtVehicleFormatter(ServiceChannelFormatter):
 
     def isNotify(self):
@@ -1864,52 +1810,11 @@ class RefSystemReferralContributedXPFormatter(ServiceChannelFormatter):
 
 class RefSystemQuestsFormatter(TokenQuestsFormatter):
 
-    def format(self, message, *args):
-        formatted, settings = super(RefSystemQuestsFormatter, self).format(message, *args)
-        data = message.data
-        if data is not None and settings:
-            extraData = {'completedQuestIDs': data.get('completedQuestIDs', set()),
-             'tankmen': [],
-             'vehicles': [],
-             'credits': data.get('credits', 0)}
-            settings.extraHandlerData.append(SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.REF_QUEST_AWARD, extraData))
-            for tmanCompDescr in data.get('tankmen') or []:
-                extraData['tankmen'].append(Tankman(tmanCompDescr))
-
-            for vehTypeCompDescr in data.get('vehicles') or {}:
-                extraData['vehicles'].append(Vehicle(typeCompDescr=abs(vehTypeCompDescr)))
-
-        return (formatted, settings)
-
-    def _getTemplateName(self):
+    def _getTemplateName(self, completedQuestIDs = set()):
         return 'refSystemQuests'
 
 
 class PotapovQuestsFormatter(TokenQuestsFormatter):
 
-    def format(self, message, *args):
-        formatted, settings = super(PotapovQuestsFormatter, self).format(message, *args)
-        data = message.data
-        if data is not None and settings:
-            extraData = {'tankmen': [],
-             'vehicles': [],
-             'achievements': [],
-             'tokens': {}}
-            settings.extraHandlerData.append(SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.POTAPOV_QUEST_AWARD, extraData))
-            for tmanData in data.get('tankmen') or []:
-                extraData['tankmen'].append(tmanData)
-
-            for recordIdx, value in data.get('popUpRecords') or {}:
-                factory = getAchievementFactory(DB_ID_TO_RECORD[recordIdx])
-                if factory is not None:
-                    a = factory.create(value=int(value))
-                    if a is not None:
-                        extraData['achievements'].append(a)
-
-            for tokenID, tokenData in (data.get('tokens') or {}).iteritems():
-                extraData['tokens'][tokenID] = tokenData.get('count', 1)
-
-        return (formatted, settings)
-
-    def _getTemplateName(self):
+    def _getTemplateName(self, completedQuestIDs = set()):
         return 'potapovQuests'

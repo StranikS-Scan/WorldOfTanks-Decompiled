@@ -6,9 +6,10 @@ import cPickle
 import dossiers2
 import fortified_regions
 from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES, SYS_MESSAGE_FORT_EVENT, FORT_BUILDING_STATUS, IS_KOREA
+from constants import CLAN_MEMBER_FLAGS
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from UnitBase import UnitBase
-from debug_utils import LOG_DEBUG_DEV, LOG_DAN, IS_DEVELOPMENT, LOG_CURRENT_EXCEPTION, LOG_VLK, LOG_WARNING, LOG_OGNICK_DEV
+from debug_utils import LOG_DEBUG_DEV, LOG_DAN, IS_DEVELOPMENT, LOG_CURRENT_EXCEPTION, LOG_VLK, LOG_WARNING, LOG_OGNICK_DEV, LOG_OGNICK
 from UnitRoster import buildNamesDict
 NOT_ACTIVATED = -1
 TOTAL_CONTRIBUTION = 0
@@ -233,11 +234,13 @@ class FORT_OP():
     RETURN_CONSUMABLE = 56
     SET_FORT_BATTLE_RESULTS = 57
     DELETE_BATTLE_BY_ID = 58
+    ADD_INFLUENCE_POINTS = 59
     SET_RESOURCE = 101
     SET_DEF_HOUR = 102
     SET_OFF_DAY = 103
     SET_VACATION = 104
     SET_PERIPHERY = 105
+    SET_INFLUENCE_POINTS = 106
 
 
 class FORT_URGENT_OP():
@@ -346,6 +349,44 @@ class FORT_CLIENT_METHOD():
     ACTIVATE_CONSUMABLE = 36
     RETURN_CONSUMABLE = 37
 
+
+CLAN_LEADER = CLAN_MEMBER_FLAGS.LEADER
+CLAN_OFFICERS = CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER
+CLAN_ANY_MEMBERS = 0
+_FORT_CLIENT_METHOD_ROLES = {FORT_CLIENT_METHOD.CREATE: CLAN_LEADER,
+ FORT_CLIENT_METHOD.DELETE: CLAN_LEADER,
+ FORT_CLIENT_METHOD.CHANGE_DEF_HOUR: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.SHUTDOWN_DEF_HOUR: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.CANCEL_SHUTDOWN: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.CHANGE_VACATION: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.CHANGE_PERIPHERY: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.CHANGE_OFF_DAY: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.OPEN_DIR: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.CLOSE_DIR: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.ADD_BUILDING: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.DEL_BUILDING: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.UPGRADE: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.ADD_ORDER: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.ACTIVATE_ORDER: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.TRANSPORT: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.ADD_FAVORITE: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.REMOVE_FAVORITE: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.PLAN_ATTACK: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.ATTACH: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.KEEPALIVE: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.GET_ENEMY_CLAN_CARD: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.CREATE_JOIN_FORT_BATTLE: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.CREATE_SORTIE: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.GET_SORTIE_DATA: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.ACTIVATE_CONSUMABLE: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.RETURN_CONSUMABLE: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.SET_DEV_MODE: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.ADD_TIME_SHIFT: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.SCHEDULE_FORT_BATTLE: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.DELETE_PLANNED_BATTLES: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.CHANGE_ATTACK_RESULT: CLAN_OFFICERS,
+ FORT_CLIENT_METHOD.CONTRIBUTE: CLAN_ANY_MEMBERS,
+ FORT_CLIENT_METHOD.DMG_BUILDING: CLAN_ANY_MEMBERS}
 
 def makeDirPosByte(dir, pos):
     return dir << 4 | pos
@@ -580,12 +621,14 @@ class FortifiedRegionBase(OpsUnpacker):
      FORT_OP.SET_BUILD_MAPS: ('BiHH', '_setBuildingMaps'),
      FORT_OP.EMERGENCY_ON_RESTORE: ('', '_onEmergencyRestore'),
      FORT_OP.DELETE_BATTLE_BY_ID: ('qb', '_deleteBattleByID'),
+     FORT_OP.ADD_INFLUENCE_POINTS: ('i', '_addInfluencePoints'),
      FORT_OP.SET_RESOURCE: ('Bi', '_setBuildingResource'),
      FORT_OP.SET_DEF_HOUR: ('i', '_setDefHour'),
      FORT_OP.SET_OFF_DAY: ('i', '_setOffDay'),
      FORT_OP.SET_VACATION: ('ii', '_setVacation'),
-     FORT_OP.SET_PERIPHERY: ('H', '_setPeriphery')})
-    FORMAT_HEADER = '<qiiiiHBbbBBBBBBBBBHHHHHq'
+     FORT_OP.SET_PERIPHERY: ('H', '_setPeriphery'),
+     FORT_OP.SET_INFLUENCE_POINTS: ('i', '_setInfluencePoints')})
+    FORMAT_HEADER = '<qiiiiiHBbbBBBBBBBBBHHHHHq'
     SIZE_HEADER = struct.calcsize(FORMAT_HEADER)
     FORMAT_EVENT = '<BIqq'
     SIZE_EVENT = struct.calcsize(FORMAT_EVENT)
@@ -640,7 +683,7 @@ class FortifiedRegionBase(OpsUnpacker):
     def __repr__(self):
         if not self.dbID:
             return 'Fort: empty'
-        s = 'Fort:\n ID=%s, p=%s, l=%s, s=%x, dM=%x, lD=%x, dH=%s, oD=%s, v=%s/%s, _D=%s, t+=%s(%s), c=%s\n ev=%s\n buildings(%s)' % (self.dbID,
+        s = 'Fort:\n ID=%s, p=%s, l=%s, s=%x, dM=%x, lD=%x, dH=%s, oD=%s, v=%s/%s, _D=%s, t+=%s(%s), ip =%s, c=%s\n ev=%s\n buildings(%s)' % (self.dbID,
          self.peripheryID,
          self.level,
          self.state,
@@ -653,6 +696,7 @@ class FortifiedRegionBase(OpsUnpacker):
          self._devMode,
          self._debugTimeShift,
          time.ctime(time.time() + self._debugTimeShift),
+         self.influencePoints,
          self.creatorDBID,
          self.events,
          len(self.buildings))
@@ -700,7 +744,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self._dirty = False
         if self.dbID:
             statistics = self.statistics.makeCompDescr()
-            packed = struct.pack(self.FORMAT_HEADER, self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, len(self.events), len(self.buildings), len(self.orders), len(self.battles), len(self.battleUnits), len(self.sorties), len(self.playerContributions), len(statistics), len(self.attacks), len(self.defences), len(self.favorites), self.creatorDBID)
+            packed = struct.pack(self.FORMAT_HEADER, self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.influencePoints, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, len(self.events), len(self.buildings), len(self.orders), len(self.battles), len(self.battleUnits), len(self.sorties), len(self.playerContributions), len(statistics), len(self.attacks), len(self.defences), len(self.favorites), self.creatorDBID)
             for eventType, (unixtime, eventValue, initiatorDBID) in self.events.iteritems():
                 packed += struct.pack(self.FORMAT_EVENT, eventType, unixtime, eventValue, initiatorDBID)
 
@@ -784,7 +828,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self._dirPosToBuildType = {}
         self._playerAttachments = {}
         packed = packedData
-        self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, lenEvents, lenBuildings, lenOrders, lenBattles, lenBattleUnits, lenSorties, lenPlayerContributions, lenStatistics, lenPlannedAttacks, lenPlannedDefences, lenFavorites, self.creatorDBID = struct.unpack_from(self.FORMAT_HEADER, packed)
+        self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.influencePoints, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, lenEvents, lenBuildings, lenOrders, lenBattles, lenBattleUnits, lenSorties, lenPlayerContributions, lenStatistics, lenPlannedAttacks, lenPlannedDefences, lenFavorites, self.creatorDBID = struct.unpack_from(self.FORMAT_HEADER, packed)
         offset = self.SIZE_HEADER
         sz = self.SIZE_EVENT
         fmt = self.FORMAT_EVENT
@@ -956,6 +1000,7 @@ class FortifiedRegionBase(OpsUnpacker):
          self.vacationFinish,
          self._devMode,
          self._debugTimeShift,
+         self.influencePoints,
          self.creatorDBID,
          self.lockedDirMask), buildings=self.buildings, orders=self.orders, events=self.events, playerContributions=self.playerContributions, battles=self.battles, statistics=self.statistics.makeCompDescr(), favorites=self.favorites)
         return pdata
@@ -968,7 +1013,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self._dirty = True
         if self.dbID:
             self.statistics = dossiers2.getFortifiedRegionsDossierDescr(pdata['statistics'])
-            self.level, self.state, self.dirMask, self.peripheryID, self.defenceHour, self.offDay, self.vacationStart, self.vacationFinish, self._devMode, self._debugTimeShift, self.creatorDBID, self.lockedDirMask = pdata['attrs']
+            self.level, self.state, self.dirMask, self.peripheryID, self.defenceHour, self.offDay, self.vacationStart, self.vacationFinish, self._devMode, self._debugTimeShift, self.influencePoints, self.creatorDBID, self.lockedDirMask = pdata['attrs']
             self.buildings = pdata['buildings']
             self.orders = pdata['orders']
             self.events = pdata['events']
@@ -1133,6 +1178,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self.state = 0
         self._devMode = IS_DEVELOPMENT
         self._debugTimeShift = 0
+        self.influencePoints = 0
         self.creatorDBID = 1234
         now = self._getTime()
         self.peripheryID = 2
@@ -1272,10 +1318,15 @@ class FortifiedRegionBase(OpsUnpacker):
         contributionRecord[dateStamp] = contributionRecord.get(dateStamp, 0) + resCount
         return leftResCount
 
+    def _addInfluencePoints(self, influencePoints):
+        LOG_OGNICK_DEV('_addInfluencePoints', influencePoints)
+        self.storeOp(FORT_OP.ADD_INFLUENCE_POINTS, influencePoints)
+        self.influencePoints += influencePoints
+
     def _createNew(self, clanDBID, creatorDBID, peripheryID, clanMemberDBIDs):
         LOG_DAN('Fort._createNew', clanDBID, creatorDBID, peripheryID, clanMemberDBIDs)
         self.dbID = clanDBID
-        self.state = FORT_STATE.FORT_CREATED
+        self.state = FORT_STATE.FORT_CREATED | FORT_STATE.PLANNED_INFO_LOADED
         self.peripheryID = peripheryID
         self.defenceHour = NOT_ACTIVATED
         self.offDay = NOT_ACTIVATED
@@ -1287,6 +1338,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self.lockedDirMask = 0
         self._devMode = IS_DEVELOPMENT
         self._debugTimeShift = 0
+        self.influencePoints = 0
         self.creatorDBID = creatorDBID
         self.buildings = {}
         building = BuildingDescr(typeID=FORT_BUILDING_TYPE.MILITARY_BASE, level=1)
@@ -1328,7 +1380,7 @@ class FortifiedRegionBase(OpsUnpacker):
         return
 
     def _activateConsumable(self, battleID, consumableTypeID, slotIndex, count, level):
-        LOG_OGNICK_DEV('_activateConsumable', battleID, consumableTypeID, slotIndex, count, level)
+        LOG_OGNICK(self.dbID, '_activateConsumable', battleID, consumableTypeID, slotIndex, count, level)
         if count:
             self.orders[consumableTypeID] = (count, level)
         else:
@@ -1337,24 +1389,23 @@ class FortifiedRegionBase(OpsUnpacker):
             battle = self.battles[battleID]
             consumableList = battle['consumableList']
             consumableList.append((consumableTypeID, level, slotIndex))
+            LOG_OGNICK_DEV('_activateConsumable inOrder=%s consumables=%s' % (self.orders.get(consumableTypeID, (0, 0))[0], battle['consumableList']))
         self.storeOp(FORT_OP.ACTIVATE_CONSUMABLE, battleID, consumableTypeID, slotIndex, count, level)
         return
 
     def _returnConsumable(self, battleID, consumableTypeID, level):
-        LOG_OGNICK_DEV('_returnConsumable', battleID, consumableTypeID, level)
+        LOG_OGNICK(self.dbID, '_returnConsumable', battleID, consumableTypeID, level)
         if level:
             prevCount, prevLevel = self.orders.get(consumableTypeID, (0, 0))
             if not prevLevel:
                 prevLevel = level
             self.orders[consumableTypeID] = (prevCount + 1, prevLevel)
+        LOG_OGNICK('_returnConsumable orders=%s' % self.orders.get(consumableTypeID, (0, 0))[0])
         if battleID in self.battles:
             battle = self.battles[battleID]
             consumableList = battle['consumableList']
-            for i in xrange(len(consumableList)):
-                if consumableList[i][0] == consumableTypeID:
-                    del consumableList[i]
-                    break
-
+            battle['consumableList'] = [ cons for cons in consumableList if cons[0] != consumableTypeID ]
+            LOG_OGNICK_DEV('_returnConsumable consumables=%s' % battle['consumableList'])
         self.storeOp(FORT_OP.RETURN_CONSUMABLE, battleID, consumableTypeID, level)
 
     def _changeDefHour(self, newValue, timeActivation, timeCooldown, initiatorDBID):
@@ -1879,3 +1930,8 @@ class FortifiedRegionBase(OpsUnpacker):
     def _setPeriphery(self, peripheryID):
         self.peripheryID = peripheryID
         self.storeOp(FORT_OP.SET_PERIPHERY, peripheryID)
+
+    def _setInfluencePoints(self, influencePoints):
+        LOG_OGNICK_DEV('_setInfluencePoints', influencePoints)
+        self.influencePoints = influencePoints
+        self.storeOp(FORT_OP.SET_INFLUENCE_POINTS, influencePoints)

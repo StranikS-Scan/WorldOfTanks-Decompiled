@@ -1,13 +1,9 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/artefacts.py
-__author__ = 'i_maliavko'
-from debug_utils import *
+from debug_utils import LOG_CURRENT_EXCEPTION
 from items import artefacts
 from gui.shared.gui_items import FittingItem
 
 class VehicleArtefact(FittingItem):
-    """
-    Root class for equipments and optional devices.
-    """
 
     @property
     def icon(self):
@@ -30,9 +26,6 @@ class VehicleArtefact(FittingItem):
 
 
 class Equipment(VehicleArtefact):
-    """
-    Equipment item.
-    """
 
     def _getAltPrice(self, buyPrice, proxy):
         """ Overridden method for receiving special action price value for shells
@@ -98,9 +91,6 @@ class Equipment(VehicleArtefact):
 
 
 class OptionalDevice(VehicleArtefact):
-    """
-    Optional device item.
-    """
 
     @property
     def isRemovable(self):

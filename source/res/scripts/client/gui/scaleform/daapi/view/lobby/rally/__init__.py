@@ -1,5 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/__init__.py
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from gui.Scaleform.managers.context_menu import ContextMenuManager
 __author__ = 'd_dichkovsky'
+ContextMenuManager.registerHandler(CONTEXT_MENU_HANDLER_TYPE.UNIT_USER, 'gui.Scaleform.daapi.view.lobby.rally.UnitUserCMHandler', 'UnitUserCMHandler')
 
 class NavigationStack(object):
     __stacks = {}

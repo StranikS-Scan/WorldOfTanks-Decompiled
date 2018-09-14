@@ -13,12 +13,14 @@ class REQUEST_SCOPE(object):
     PRB_CONTROL = 1
     FORTIFICATION = 2
     BW_CHAT2 = 3
+    XMPP = 4
 
 
 _REQUEST_SCOPE_TO_EVENT = {REQUEST_SCOPE.GLOBAL: events.CoolDownEvent.GLOBAL,
  REQUEST_SCOPE.PRB_CONTROL: events.CoolDownEvent.PREBATTLE,
  REQUEST_SCOPE.FORTIFICATION: events.CoolDownEvent.FORTIFICATION,
- REQUEST_SCOPE.BW_CHAT2: events.CoolDownEvent.BW_CHAT2}
+ REQUEST_SCOPE.BW_CHAT2: events.CoolDownEvent.BW_CHAT2,
+ REQUEST_SCOPE.XMPP: events.CoolDownEvent.XMPP}
 _g_coolDowns = {}
 
 def isRequestInCoolDown(scopeID, rqTypeID):

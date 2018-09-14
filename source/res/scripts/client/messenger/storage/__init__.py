@@ -2,6 +2,7 @@
 from messenger import error
 from messenger.ext.ROPropertyMeta import ROPropertyMeta
 from messenger.storage.ChannelsStorage import ChannelsStorage
+from messenger.storage.local_cache import StorageLocalCache, SimpleCachedStorage
 from messenger.storage.PlayerCtxStorage import PlayerCtxStorage
 from messenger.storage.UsersStorage import UsersStorage
 _STORAGE = {'channels': ChannelsStorage(),
@@ -60,6 +61,43 @@ class StorageDecorator(object):
     def __repr__(self):
         return 'StorageDecorator(id=0x{0:08X}, ro={1!r:s})'.format(id(self), self.__readonly__.keys())
 
+    def __init__(self):
+        super(StorageDecorator, self).__init__()
+        self.__storageCache = None
+        return
+
+    def restoreFromCache(self):
+        if self.__storageCache:
+            return
+        from messenger.ext.player_helpers import getPlayerDatabaseID, getPlayerName
+        self.__storageCache = StorageLocalCache((getPlayerDatabaseID(), getPlayerName(), 'storage'))
+        self.__storageCache.onRead += self.__onRead
+        self.__storageCache.read()
+
+    def init(self):
+        for name, storage in self.__readonly__.iteritems():
+            if isinstance(storage, SimpleCachedStorage):
+                storage.init()
+
     def clear(self):
+        if self.__storageCache:
+            for name, storage in self.__readonly__.iteritems():
+                if isinstance(storage, SimpleCachedStorage):
+                    record = storage.makeRecordInCache()
+                    if record:
+                        self.__storageCache.addRecord(name, record)
+
+            self.__storageCache.write()
+            self.__storageCache.clear()
+            self.__storageCache = None
         for storage in self.__readonly__.itervalues():
             storage.clear()
+
+        return
+
+    def __onRead(self):
+        if not self.__storageCache:
+            return
+        for name, storage in self.__readonly__.iteritems():
+            if isinstance(storage, SimpleCachedStorage):
+                storage.restoreFromCache(self.__storageCache.popRecord(name))

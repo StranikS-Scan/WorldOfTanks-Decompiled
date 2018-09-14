@@ -63,7 +63,7 @@ class VOIPChatProvider(provider.ResponseDictHandler, IVOIPChatProvider):
         if super(VOIPChatProvider, self)._onResponseFailure(ids, args):
             error = errors.createVOIPError(args)
             if error:
-                g_messengerEvents.onServerErrorReceived(error)
+                g_messengerEvents.onErrorReceived(error)
             else:
                 LOG_WARNING('Error is not resolved on the client', ids, args)
 

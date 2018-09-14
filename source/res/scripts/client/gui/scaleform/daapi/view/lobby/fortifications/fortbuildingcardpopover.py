@@ -3,7 +3,7 @@ import BigWorld
 import ArenaType
 import fortified_regions
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
-from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
+from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS, FORT_ORDER_TYPE
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.lobby.fortifications.ConfirmOrderDialogMeta import BuyOrderDialogMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
@@ -100,7 +100,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
 
     def __prepareData(self):
         self.__isTutorial = not self.fortCtrl.getFort().isStartingScriptDone()
-        self._buildingID = self.UI_BUILDINGS_BIND.index(self._buildingUID)
+        self._buildingID = self.getBuildingIDbyUID(self._buildingUID)
         self.__congratMessage = False
         limits = self.fortCtrl.getLimits()
         canUpgrade, _ = limits.canUpgrade(self._buildingID)
@@ -152,7 +152,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
 
     def openBuyOrderWindow(self):
         currentOrderID = self.fortCtrl.getFort().getBuildingOrder(self._buildingID)
-        DialogsInterface.showDialog(BuyOrderDialogMeta(self.UI_ORDERS_BIND[currentOrderID]), None)
+        DialogsInterface.showDialog(BuyOrderDialogMeta(self.getOrderUIDbyID(currentOrderID)), None)
         return
 
     def onBuildingsUpdated(self, buildingsTypeIDs, cooldownPassed = False):
@@ -179,7 +179,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
         data = {'buildingType': self._buildingUID}
         assignedLbl = i18n.makeString(FORT.BUILDINGPOPOVER_ASSIGNPLAYERS)
         garrisonLabel = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORT.BUILDINGPOPOVER_GARRISONLABEL))
-        oldBuilding = self.UI_BUILDINGS_BIND[self.fortCtrl.getFort().getAssignedBuildingID(BigWorld.player().databaseID)]
+        oldBuilding = self.getBuildingUIDbyID(self.fortCtrl.getFort().getAssignedBuildingID(BigWorld.player().databaseID))
         isAssigned = self._buildingUID == oldBuilding
         data['isTutorial'] = self.__isTutorial
         data['assignLbl'] = assignedLbl
@@ -342,7 +342,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
             order = self.fortCtrl.getFort().getOrder(self.__orderID)
             icon = order.icon
             level = order.level
-            defResTitle = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString('#fortifications:General/orderType/%s' % self.UI_ORDERS_BIND[self.__orderID]))
+            defResTitle = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString('#fortifications:General/orderType/%s' % self.getOrderUIDbyID(self.__orderID)))
             defresDescr = order.description
             showAlertIcon = self._showOrderAlertIcon(order)
         result['showAlertIcon'] = showAlertIcon
@@ -407,7 +407,7 @@ class FortBuildingCardPopover(View, SmartPopOverView, FortViewHelper, FortBuildi
                     body = TOOLTIPS.FORTIFICATION_ORDERPROCESS_NOTAVAILABLE_BODY
                     result['toolTipData'] = makeTooltip(header, body)
                 if enableActionBtn:
-                    orderName = i18n.makeString(FORT.orders_orderpopover_ordertype(self.UI_ORDERS_BIND[self.__orderID]))
+                    orderName = i18n.makeString(FORT.orders_orderpopover_ordertype(self.getOrderUIDbyID(self.__orderID)))
                     result['toolTipData'] = i18n.makeString(TOOLTIPS.FORTIFICATION_POPOVER_PREPAREORDERENABLE, orderName=orderName)
         else:
             result['currentState'] = self.ACTION_STATES.NOT_BASE_NOT_COMMANDER

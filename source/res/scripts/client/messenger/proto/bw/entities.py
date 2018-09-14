@@ -1,13 +1,23 @@
 # Embedded file name: scripts/client/messenger/proto/bw/entities.py
+import cgi
 import types
 import chat_shared
+from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from messenger.ext import passCensor
 from messenger.proto.entities import ChannelEntity, MemberEntity, ChatEntity
 from messenger.proto.entities import UserEntity
-from messenger.m_constants import PROTO_TYPE, PREBATTLE_TYPE_CHAT_FLAG
+from messenger.m_constants import PROTO_TYPE
 from messenger.ext.player_helpers import getPlayerDatabaseID
 from messenger.proto.bw.wrappers import ChannelDataWrapper
+PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
+ PREBATTLE_TYPE.COMPANY: chat_shared.CHAT_CHANNEL_TEAM,
+ PREBATTLE_TYPE.TRAINING: chat_shared.CHAT_CHANNEL_TRAINING,
+ PREBATTLE_TYPE.CLAN: chat_shared.CHAT_CHANNEL_PREBATTLE_CLAN,
+ PREBATTLE_TYPE.TOURNAMENT: chat_shared.CHAT_CHANNEL_TOURNAMENT,
+ PREBATTLE_TYPE.UNIT: chat_shared.CHAT_CHANNEL_UNIT,
+ PREBATTLE_TYPE.SORTIE: chat_shared.CHAT_CHANNEL_UNIT}
+PREBATTLE_CHAT_FLAG_TYPE = dict(((v, k) for k, v in PREBATTLE_TYPE_CHAT_FLAG.iteritems()))
 
 class BWChannelEntity(ChannelEntity):
     __slots__ = ('_nameToInvalidate',)
@@ -29,7 +39,7 @@ class BWChannelEntity(ChannelEntity):
         channelName = self._data.channelName
         if getPlayerDatabaseID() != self._data.owner:
             channelName = passCensor(channelName)
-        return channelName
+        return cgi.escape(channelName)
 
     def getFullName(self):
         name = self.getName()
@@ -115,12 +125,28 @@ class BWMemberEntity(MemberEntity):
 
 
 class BWUserEntity(UserEntity):
+    __slots__ = ('_isOnline',)
 
-    def isFriend(self):
-        return bool(self._roster & chat_shared.USERS_ROSTER_FRIEND)
+    def __init__(self, databaseID, name = 'Unknown', tags = None, isOnline = False, clanAbbrev = None, clanRole = 0):
+        super(BWUserEntity, self).__init__(databaseID, name, tags, clanAbbrev, clanRole)
+        self._isOnline = isOnline
 
-    def isIgnored(self):
-        return bool(self._roster & chat_shared.USERS_ROSTER_IGNORED)
+    def __repr__(self):
+        return 'BWUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, isOnline={3!r:s}, clanRole={4:n})'.format(self._databaseID, self.getFullName(), self.getTags(), self.isOnline(), self._clanRole)
 
-    def isMuted(self):
-        return bool(self._roster & chat_shared.USERS_ROSTER_VOICE_MUTED)
+    def getProtoType(self):
+        return PROTO_TYPE.BW
+
+    def isOnline(self):
+        if self.isIgnored():
+            return False
+        return self._isOnline
+
+    def update(self, **kwargs):
+        if 'isOnline' in kwargs:
+            self._isOnline = kwargs['isOnline']
+        super(BWUserEntity, self).update(**kwargs)
+
+    def clear(self):
+        self._isOnline = False
+        super(BWUserEntity, self).clear()

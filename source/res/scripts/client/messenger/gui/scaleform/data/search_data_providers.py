@@ -3,13 +3,11 @@ from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from messenger.gui.Scaleform.data.users_data_providers import makeUserItem
-from messenger.gui.Scaleform.data.users_data_providers import getUsersCmp
-from messenger.gui.Scaleform.data.users_data_providers import makeEmptyUserItem
+from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
 from messenger.proto.bw.search_processors import SearchChannelsProcessor
-from messenger.proto import getSearchUserProcessor
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import ISearchHandler
+from messenger.proto.migration import getSearchUserProcessor
 
 class SearchDataProvider(DAAPIDataProvider, ISearchHandler):
 
@@ -88,6 +86,7 @@ class SearchUsersDataProvider(SearchDataProvider):
 
     def __init__(self, exclude = None):
         super(SearchUsersDataProvider, self).__init__(getSearchUserProcessor())
+        self._converter = ContactConverter()
         if exclude is not None:
             self.__exclude = exclude
         else:
@@ -96,28 +95,38 @@ class SearchUsersDataProvider(SearchDataProvider):
 
     def buildList(self, result):
         self._list = []
-        result = sorted(result, cmp=getUsersCmp())
+        result = sorted(result, cmp=self._getSearchComparator)
         for item in result:
             if item.getID() not in self.__exclude:
-                self._list.append(makeUserItem(item))
+                self._list.append(self._converter.makeVO(item))
 
     def emptyItem(self):
-        return makeEmptyUserItem()
+        return None
 
     def init(self, flashObject, exHandlers = None):
         super(SearchUsersDataProvider, self).init(flashObject, exHandlers)
-        g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived += self.__onUserActionReceived
+        g_messengerEvents.users.onUserStatusUpdated += self.__onUserStatusUpdated
 
     def fini(self):
         super(SearchUsersDataProvider, self).fini()
-        g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived -= self.__onUserActionReceived
+        g_messengerEvents.users.onUserStatusUpdated -= self.__onUserStatusUpdated
 
-    def _onUserRosterChanged(self, _, user):
+    def _getSearchComparator(self, user, other):
+        return cmp(user.getName().lower(), other.getName().lower())
+
+    def __onUserActionReceived(self, _, user):
+        self.__updateUserInSearch(user)
+
+    def __onUserStatusUpdated(self, user):
+        self.__updateUserInSearch(user)
+
+    def __updateUserInSearch(self, user):
         for idx, item in enumerate(self._list):
-            if item['uid'] == user.getID():
-                newItem = makeUserItem(user)
-                newItem['online'] = item['online']
-                newItem['displayName'] = item['displayName']
+            if item['dbID'] == user.getID():
+                newItem = self._converter.makeVO(user)
+                newItem['userProps']['clanAbbrev'] = item['userProps']['clanAbbrev']
                 self._list[idx] = newItem
                 break
 

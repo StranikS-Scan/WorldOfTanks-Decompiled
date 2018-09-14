@@ -83,12 +83,12 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener, AppRef):
     def startListening(self):
         self.startPrbListening()
         g_currentVehicle.onChanged += self._handleCurrentVehicleChanged
-        g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived += self._onUserActionReceived
 
     def stopListening(self):
         self.stopPrbListening()
         g_currentVehicle.onChanged -= self._handleCurrentVehicleChanged
-        g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived -= self._onUserActionReceived
 
     @property
     def chat(self):
@@ -189,14 +189,13 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener, AppRef):
              'fullName': account.getFullName(),
              'igrType': account.igrType,
              'time': account.time,
-             'himself': account.isCurrentPlayer(),
              'isCreator': account.isCreator,
              'state': account.state,
              'icon': vContourIcon,
              'vShortName': vShortName,
              'vLevel': vLevel,
              'vType': vType,
-             'chatRoster': user.getRoster() if user else 0,
+             'tags': list(user.getTags()) if user else [],
              'isPlayerSpeaking': isPlayerSpeaking(account.dbID),
              'colors': getColors(key)})
 
@@ -205,7 +204,7 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener, AppRef):
     def _handleCurrentVehicleChanged(self):
         self.as_enableReadyBtnS(self.isReadyBtnEnabled())
 
-    def _onUserRosterChanged(self, actionIndex, user):
+    def _onUserActionReceived(self, actionID, user):
         self._setRosterList(self.prbFunctional.getRosters())
 
     def _onRegisterFlashComponent(self, viewPy, alias):

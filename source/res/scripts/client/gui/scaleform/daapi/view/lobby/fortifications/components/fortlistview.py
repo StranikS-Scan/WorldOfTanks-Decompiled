@@ -137,7 +137,7 @@ class FortListView(FortListMeta, FortListener, UnitListener, AppRef):
             self._searchDP.rebuildList(cache)
             self.as_selectByIndexS(self._searchDP.getSelectedIdx())
 
-    def _onUserRosterChanged(self, _, user):
+    def _onUserActionReceived(self, _, user):
         if self.__clientIdx is not None:
             self.getRallyDetails(self.__clientIdx)
         return

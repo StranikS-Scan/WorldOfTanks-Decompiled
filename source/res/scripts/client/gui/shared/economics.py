@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/shared/economics.py
-import math
+
 
 def getActionPrc(price, defaultPrice):
 
@@ -23,7 +23,7 @@ def calcRentPackages(vehicle, proxy):
         if len(rentCost) and len(defaultRentCost) is not None:
             for key in sorted(rentCost.keys()):
                 rentPrice = rentCost[key].get('cost', (0, 0))
-                defaultRentPrice = defaultRentCost.get(key, {}).get('cost', (0, 0))
+                defaultRentPrice = defaultRentCost.get(key, {}).get('cost', rentPrice)
                 result.append({'days': key,
                  'rentPrice': rentPrice,
                  'defaultRentPrice': defaultRentPrice})

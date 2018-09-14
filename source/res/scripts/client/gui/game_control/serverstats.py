@@ -4,8 +4,9 @@ import constants
 import Event
 from PlayerEvents import g_playerEvents
 from gui import makeHtmlString
+from gui.game_control.controllers import Controller
 
-class ServerStats(object):
+class ServerStats(Controller):
     STATS_REQUEST_TIMEOUT = 5.0
 
     class TOOLTIP_TYPE:
@@ -15,21 +16,21 @@ class ServerStats(object):
 
     onStatsReceived = Event.Event()
 
-    def init(self):
+    def __init__(self, proxy):
+        super(ServerStats, self).__init__(proxy)
         self.__statsCallbackID = None
         self.__stats = {}
         return
 
-    def fini(self):
-        pass
-
-    def start(self):
+    def onLobbyStarted(self, ctx):
         g_playerEvents.onServerStatsReceived += self.__onStatsReceived
         self.__loadStatsCallback(0.0)
 
-    def stop(self):
-        g_playerEvents.onServerStatsReceived -= self.__onStatsReceived
-        self.__clearStatsCallback()
+    def onBattleStarted(self):
+        self.__stop()
+
+    def onDisconnected(self):
+        self.__stop()
 
     def getStats(self):
         return self.__stats
@@ -49,6 +50,10 @@ class ServerStats(object):
             tooltipType = self.TOOLTIP_TYPE.TYPE_UNAVAILABLE
             statsStr = '- / -'
         return (statsStr, tooltipType)
+
+    def __stop(self):
+        g_playerEvents.onServerStatsReceived -= self.__onStatsReceived
+        self.__clearStatsCallback()
 
     def __onStatsReceived(self, stats):
         self.__stats = dict(stats)

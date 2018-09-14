@@ -5,7 +5,7 @@ from adisp import process
 from gui import SystemMessages, GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
-from gui.Scaleform.framework import AppRef, ViewTypes, g_entitiesFactories
+from gui.Scaleform.framework import AppRef, ViewTypes
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -51,13 +51,13 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self.__updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         self.as_setObserverS(functional.getPlayerInfo().getVehicle().isObserver)
-        g_messengerEvents.users.onUserRosterChanged += self.__me_onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
 
     def _dispose(self):
         self.stopPrbListening()
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self.__updateTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_messengerEvents.users.onUserRosterChanged -= self.__me_onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
         self.__closeWindows()
         super(TrainingRoom, self)._dispose()
 
@@ -333,12 +333,11 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
              'dbID': account.dbID,
              'userName': account.name,
              'fullName': account.getFullName(),
-             'himself': account.isCurrentPlayer(),
              'stateString': formatters.getPlayerStateString(account.state),
              'icon': vContourIcon,
              'vShortName': vShortName,
              'vLevel': vLevel,
-             'chatRoster': user.getRoster() if user else 0,
+             'tags': list(user.getTags()) if user else [],
              'isPlayerSpeaking': bool(isPlayerSpeaking(account.dbID)),
              'clanAbbrev': account.clanAbbrev,
              'region': g_lobbyContext.getRegionCode(account.dbID),
@@ -356,17 +355,18 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, AbstractWindowView, AppRef, P
         elif event.requestID is REQUEST_TYPE.CHANGE_USER_STATUS:
             self.as_startCoolDownObserverS(event.coolDown)
 
-    def __me_onUserRosterChanged(self, _, user):
+    def __me_onUserActionReceived(self, _, user):
         dbID = user.getID()
         playerInfo = self.prbFunctional.getPlayerInfoByDbID(dbID)
         if playerInfo is None:
             return
         else:
             roster = playerInfo.roster
+            tags = list(user.getTags())
             if roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1:
-                self.as_setPlayerChatRosterInTeam1S(dbID, user.getRoster())
+                self.as_setPlayerTagsInTeam1S(dbID, tags)
             elif roster == PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2:
-                self.as_setPlayerChatRosterInTeam2S(dbID, user.getRoster())
+                self.as_setPlayerTagsInTeam2S(dbID, tags)
             else:
-                self.as_setPlayerChatRosterInOtherS(dbID, user.getRoster())
+                self.as_setPlayerTagsInOtherS(dbID, tags)
             return

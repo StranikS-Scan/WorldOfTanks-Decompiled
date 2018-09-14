@@ -449,4 +449,38 @@ class CreateOrJoinFortBattleCtx(PrbCtrlRequestCtx):
         self.__isUpdateExpected = value
 
 
-__all__ = ('FortRequestCtx', 'CreateFortCtx', 'DeleteFortCtx', 'DirectionCtx', 'BuildingCtx', 'TransportationCtx', 'OrderCtx', 'AttachCtx', 'OrderCtx', 'UpgradeCtx', 'CreateSortieCtx', 'RequestSortieUnitCtx', 'DefenceHourCtx', 'OffDayCtx', 'PeripheryCtx', 'VacationCtx', 'SettingsCtx', 'FortPublicInfoCtx', 'RequestClanCardCtx', 'FavoriteCtx', 'CreateOrJoinFortBattleCtx')
+@ReprInjector.withParent(('__consumableOrderTypeID', 'consumableOrderTypeID'), ('__slotIdx', 'slotIdx'))
+
+class ActivateConsumableCtx(FortRequestCtx):
+
+    def __init__(self, consumableOrderTypeID, slotIdx, waitingID = ''):
+        super(ActivateConsumableCtx, self).__init__(waitingID)
+        self.__consumableOrderTypeID = consumableOrderTypeID
+        self.__slotIdx = slotIdx
+
+    def getConsumableOrderTypeID(self):
+        return self.__consumableOrderTypeID
+
+    def getSlotIdx(self):
+        return self.__slotIdx
+
+    def getRequestType(self):
+        return FORT_REQUEST_TYPE.ACTIVATE_CONSUMABLE
+
+
+@ReprInjector.withParent(('__consumableOrderTypeID', 'consumableOrderTypeID'))
+
+class ReturnConsumableCtx(FortRequestCtx):
+
+    def __init__(self, consumableOrderTypeID, waitingID = ''):
+        super(ReturnConsumableCtx, self).__init__(waitingID)
+        self.__consumableOrderTypeID = consumableOrderTypeID
+
+    def getConsumableOrderTypeID(self):
+        return self.__consumableOrderTypeID
+
+    def getRequestType(self):
+        return FORT_REQUEST_TYPE.RETURN_CONSUMABLE
+
+
+__all__ = ('FortRequestCtx', 'CreateFortCtx', 'DeleteFortCtx', 'DirectionCtx', 'BuildingCtx', 'TransportationCtx', 'OrderCtx', 'AttachCtx', 'OrderCtx', 'UpgradeCtx', 'CreateSortieCtx', 'RequestSortieUnitCtx', 'DefenceHourCtx', 'OffDayCtx', 'PeripheryCtx', 'VacationCtx', 'SettingsCtx', 'FortPublicInfoCtx', 'RequestClanCardCtx', 'FavoriteCtx', 'CreateOrJoinFortBattleCtx', 'ActivateConsumableCtx', 'ReturnConsumableCtx')

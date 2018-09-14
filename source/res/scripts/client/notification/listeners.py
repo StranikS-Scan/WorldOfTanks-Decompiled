@@ -1,17 +1,13 @@
 # Embedded file name: scripts/client/notification/listeners.py
 import weakref
 import BigWorld
-from constants import EVENT_TYPE
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR
-from gui.server_events import events_dispatcher as quests_events
-from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
+from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.prb_control.prb_helpers import GlobalListener, prbInvitesProperty
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from messenger.formatters import SYS_MSG_EXTRA_HANDLER_TYPE
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
-from notification.decorators import MessageDecorator, PrbInviteDecorator
+from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
+from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator
 from notification.settings import NOTIFICATION_TYPE
 
 class _NotificationListener(object):
@@ -32,17 +28,6 @@ class _NotificationListener(object):
 
 
 class ServiceChannelListener(_NotificationListener):
-    _handlers = {SYS_MSG_EXTRA_HANDLER_TYPE.PUNISHMENT: ('handlePunishWindow', True),
-     SYS_MSG_EXTRA_HANDLER_TYPE.REF_QUEST_AWARD: ('handleRefQuestsWindow', True),
-     SYS_MSG_EXTRA_HANDLER_TYPE.REF_SYS_STATUS: ('handleRefSysStatusWindow', True),
-     SYS_MSG_EXTRA_HANDLER_TYPE.FORT_RESULTS: ('handleFortResultsWindow', True),
-     SYS_MSG_EXTRA_HANDLER_TYPE.POTAPOV_QUEST_AWARD: ('handlePotapovQuestsWindow', True),
-     SYS_MSG_EXTRA_HANDLER_TYPE.POTAPOV_QUEST_AUTO_REWARD: ('handlePotapovQuestsAutoWindow', True)}
-
-    def __init__(self):
-        super(ServiceChannelListener, self).__init__()
-        self.__isLobbyLoaded = False
-        self.__delayedHandlers = []
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
@@ -54,7 +39,6 @@ class ServiceChannelListener(_NotificationListener):
             channel = g_messengerEvents.serviceChannel
             channel.onServerMessageReceived += self.__onMessageReceived
             channel.onClientMessageReceived += self.__onMessageReceived
-            g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyLoaded)
             serviceChannel = self.proto.serviceChannel
             messages = serviceChannel.getReadMessages()
             addNotification = model.collection.addItem
@@ -66,101 +50,14 @@ class ServiceChannelListener(_NotificationListener):
 
     def stop(self):
         super(ServiceChannelListener, self).stop()
-        g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyLoaded)
         channel = g_messengerEvents.serviceChannel
         channel.onServerMessageReceived -= self.__onMessageReceived
         channel.onClientMessageReceived -= self.__onMessageReceived
-        self.__delayedHandlers = []
-
-    def handlePunishWindow(self, data):
-        from gui.DialogsInterface import showDialog
-        showDialog(I18PunishmentDialogMeta('punishmentWindow', None, data), lambda *args: None)
-        return
-
-    def handleRefQuestsWindow(self, data):
-        from gui.game_control import g_instance as g_gameCtrl
-        completedQuestIDs = data['completedQuestIDs']
-        for tankman in data['tankmen']:
-            g_gameCtrl.refSystem.showTankmanAwardWindow(tankman, completedQuestIDs)
-
-        for vehicle in data['vehicles']:
-            g_gameCtrl.refSystem.showVehicleAwardWindow(vehicle, completedQuestIDs)
-
-        if 'credits' in data:
-            g_gameCtrl.refSystem.showCreditsAwardWindow(data['credits'], completedQuestIDs)
-
-    def handleRefSysStatusWindow(self, data):
-        windowID, ctx = data['window'], data['ctx']
-        if windowID == 1:
-            self.__showRefSystemNotification('showReferrerIntroWindow', invitesCount=ctx.get('invites_count', 0))
-        elif windowID == 2:
-            self.__showRefSystemNotification('showReferralIntroWindow', nickname=ctx['nickname'], isNewbie=True)
-        elif windowID == 3:
-            self.__showRefSystemNotification('showReferralIntroWindow', nickname=ctx['nickname'], isNewbie=False)
-        else:
-            LOG_WARNING('Unknown referral system user status window', data)
-
-    def handlePotapovQuestsWindow(self, data):
-        from gui.server_events import g_eventsCache
-        allQuests = g_eventsCache.getAllQuests(includePotapovQuests=True)
-        if 'tokens' in data and len(data['tokens']):
-            quests_events.showTokensAward(data['tokens'])
-        if 'achievements' in data and len(data['achievements']):
-            quests_events.showAchievementsAward(data['achievements'])
-        needToShowVehAwardWindow = False
-        for qID in data.get('completedQuestIDs', set()):
-            if qID in allQuests:
-                for tokenID, children in allQuests[qID].getChildren().iteritems():
-                    for chID in children:
-                        chQuest = allQuests[chID]
-                        if chQuest.getType() == EVENT_TYPE.POTAPOV_QUEST:
-                            needToShowVehAwardWindow = True
-                            break
-
-        if needToShowVehAwardWindow:
-            for vehicle in data.get('vehicles', []):
-                quests_events.showVehicleAward(vehicle)
-
-    def handlePotapovQuestsAutoWindow(self, data):
-        from gui.server_events import g_eventsCache
-        for potapovQuestID, (isMain, isAdd) in data.iteritems():
-            quests_events.showRegularAward(g_eventsCache.potapov.getQuests()[potapovQuestID], isMain, isAdd)
-
-    def handleFortResultsWindow(self, data):
-        from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-        if data:
-            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': data}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def __handleLobbyLoaded(self, _):
-        self.__isLobbyLoaded = True
-        for handlerName, data in self.__delayedHandlers:
-            getattr(self, handlerName)(data)
-
-    def __handleExtraData(self, handlerType, data):
-        if handlerType in self._handlers:
-            handlerName, isLobbyRequired = self._handlers[handlerType]
-            if isLobbyRequired and not self.__isLobbyLoaded:
-                self.__delayedHandlers.append((handlerName, data))
-            else:
-                getattr(self, handlerName)(data)
-        else:
-            LOG_WARNING('Unknown handler for system message', handlerType, data)
 
     def __onMessageReceived(self, clientID, formatted, settings):
         model = self._model()
         if model:
             model.addNotification(MessageDecorator(clientID, formatted, settings))
-            for eHandler in settings.extraHandlerData:
-                self.__handleExtraData(eHandler.type, eHandler.data)
-
-    @classmethod
-    def __showRefSystemNotification(cls, methodName, **ctx):
-        try:
-            from gui import game_control
-            getattr(game_control.g_instance.refSystem, methodName)(**ctx)
-        except:
-            LOG_ERROR('There is exception while processing notification center window', methodName, ctx)
-            LOG_CURRENT_EXCEPTION()
 
 
 class PrbInvitesListener(_NotificationListener, GlobalListener):
@@ -277,17 +174,90 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
                 model.updateNotification(NOTIFICATION_TYPE.INVITE, invite.id, invite, False)
 
 
+class FriendshipRqsListener(_NotificationListener):
+
+    @proto_getter(PROTO_TYPE.XMPP)
+    def proto(self):
+        return None
+
+    def start(self, model):
+        result = super(FriendshipRqsListener, self).start(model)
+        g_messengerEvents.onPluginDisconnected += self.__me_onPluginDisconnected
+        events = g_messengerEvents.users
+        events.onFriendshipRequestReceived += self.__me_onFriendshipRequestReceived
+        events.onUserActionReceived += self.__me_onUserActionReceived
+        contacts = self.proto.contacts.getFriendshipRqs()
+        for contact in contacts:
+            self.__setRequest(contact)
+
+        return result
+
+    def stop(self):
+        g_messengerEvents.onPluginDisconnected -= self.__me_onPluginDisconnected
+        events = g_messengerEvents.users
+        events.onFriendshipRequestReceived -= self.__me_onFriendshipRequestReceived
+        events.onUserActionReceived -= self.__me_onUserActionReceived
+        super(FriendshipRqsListener, self).stop()
+
+    def __setRequest(self, contact):
+        model = self._model()
+        if model:
+            if contact.getProtoType() != PROTO_TYPE.XMPP:
+                return
+            if contact.getItemType() == XMPP_ITEM_TYPE.EMPTY_ITEM:
+                return
+            contactID = contact.getID()
+            if model.hasNotification(NOTIFICATION_TYPE.FRIENDSHIP_RQ, contactID):
+                model.updateNotification(NOTIFICATION_TYPE.FRIENDSHIP_RQ, contactID, contact, self.proto.contacts.canApproveFriendship(contact))
+            else:
+                model.addNotification(FriendshipRequestDecorator(contact))
+
+    def __updateRequest(self, contact, silence = False):
+        model = self._model()
+        if model:
+            if contact.getProtoType() != PROTO_TYPE.XMPP:
+                return
+            if silence:
+                isStateChanged = False
+            else:
+                isStateChanged, _ = self.proto.contacts.canApproveFriendship(contact)
+            model.updateNotification(NOTIFICATION_TYPE.FRIENDSHIP_RQ, contact.getID(), contact, isStateChanged)
+
+    def __updateRequests(self, silence = False):
+        contacts = self.proto.contacts.getFriendshipRqs()
+        for contact in contacts:
+            self.__updateRequest(contact, silence)
+
+    def __me_onPluginDisconnected(self, protoType):
+        if protoType == PROTO_TYPE.XMPP:
+            self.__updateRequests(True)
+
+    def __me_onFriendshipRequestReceived(self, contact):
+        self.__setRequest(contact)
+
+    def __me_onUserActionReceived(self, actionID, contact):
+        if contact.getProtoType() != PROTO_TYPE.XMPP:
+            return
+        if actionID in (USER_ACTION_ID.SUBSCRIPTION_CHANGED, USER_ACTION_ID.IGNORED_ADDED):
+            self.__updateRequest(contact)
+        elif actionID in (USER_ACTION_ID.FRIEND_ADDED, USER_ACTION_ID.FRIEND_REMOVED):
+            self.__updateRequests()
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
         super(NotificationsListeners, self).__init__()
         self.__serviceListener = ServiceChannelListener()
         self.__invitesListener = PrbInvitesListener()
+        self.__friendshipRqs = FriendshipRqsListener()
 
     def start(self, model):
         self.__serviceListener.start(model)
         self.__invitesListener.start(model)
+        self.__friendshipRqs.start(model)
 
     def stop(self):
         self.__serviceListener.stop()
         self.__invitesListener.stop()
+        self.__friendshipRqs.stop()

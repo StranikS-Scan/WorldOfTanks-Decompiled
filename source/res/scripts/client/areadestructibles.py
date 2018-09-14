@@ -626,7 +626,8 @@ class DestructiblesManager():
 
     def __dropDestructible(self, chunkID, destrIndex, fallDirYaw, pitchConstr, fallSpeed, isAnimate, obstacleCollisionFlags):
         self.__stopLifetimeEffect(chunkID, destrIndex, 0)
-        self.__launchFallEffect(chunkID, destrIndex, 'fractureEffect', fallDirYaw)
+        if isAnimate:
+            self.__launchFallEffect(chunkID, destrIndex, 'fractureEffect', fallDirYaw)
         useEffectsOnTouchDown = obstacleCollisionFlags & 8 or pitchConstr > _MAX_PITCH_TO_CHECK_TERRAIN
         desc = g_cache.getDestructibleDesc(self.__spaceID, chunkID, destrIndex)
         if desc is None:

@@ -1,13 +1,15 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/__init__.py
 from messenger import g_settings
-from messenger.m_constants import MESSENGER_SCOPE
+from messenger.m_constants import MESSENGER_SCOPE, PROTO_TYPE
 from messenger.proto.bw_chat2 import chat_handlers
 from messenger.proto.bw_chat2.VOIPChatProvider import VOIPChatProvider
+from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IProtoPlugin
 from messenger.proto.bw_chat2.provider import BWChatProvider
 from messenger.proto.bw_chat2.UsersHandler import UsersHandler
 
 class BWProtoPlugin(IProtoPlugin):
+    __slots__ = ('__provider', '__adminChat', '__users', '__arenaChat', '__battleCmd', '__unitChat', '__voipProvider', '__isConnected')
 
     def __init__(self):
         super(BWProtoPlugin, self).__init__()
@@ -24,6 +26,7 @@ class BWProtoPlugin(IProtoPlugin):
         self.__unitChat.registerHandlers()
         self.__voipProvider = VOIPChatProvider(self.__provider)
         self.__voipProvider.registerHandlers()
+        self.__isConnected = False
 
     @property
     def arenaChat(self):
@@ -53,18 +56,28 @@ class BWProtoPlugin(IProtoPlugin):
     def users(self):
         return self.__users
 
+    def isConnected(self):
+        return self.__isConnected
+
     def connect(self, scope):
         if scope != MESSENGER_SCOPE.BATTLE:
             self.__arenaChat.leave()
+        if not self.__isConnected:
+            self.__isConnected = True
+            g_messengerEvents.onPluginConnected(PROTO_TYPE.BW_CHAT2)
 
     def view(self, scope):
         self.__battleCmd.switch(scope)
         self.__voipProvider.switch(scope)
 
     def disconnect(self):
+        if not self.__isConnected:
+            return
+        self.__isConnected = False
         self.__arenaChat.disconnect()
         self.__unitChat.disconnect()
         self.__voipProvider.leave()
+        g_messengerEvents.onPluginDisconnected(PROTO_TYPE.BW_CHAT2)
 
     def setFilters(self, msgFilterChain):
         self.__provider.setFilters(msgFilterChain)

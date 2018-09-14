@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortCalendarWindow.py
 from collections import defaultdict
 import BigWorld
-from debug_utils import LOG_DEBUG
-from helpers import i18n, time_utils
+from helpers import time_utils
+from helpers.i18n import makeString as _ms
 from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -66,13 +66,24 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
         if calendar is not None:
             result = []
             for dayStartTimestamp, battles in self._getBattlesByDay().iteritems():
-                if time_utils.isFuture(dayStartTimestamp) or time_utils.isToday(dayStartTimestamp):
-                    tooltipHead = i18n.makeString(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_FUTURE_HEADER, count=len(battles))
-                    tooltipBody = i18n.makeString(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_FUTURE_BODY)
+                if time_utils.isFuture(dayStartTimestamp):
+                    tooltipHead = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_FUTURE_HEADER, count=len(battles))
+                    tooltipBody = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_FUTURE_BODY)
                     iconSource = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEFUTUREBG
+                elif time_utils.isToday(dayStartTimestamp):
+                    finishedBattles = [ b for b in battles if b.isEnded() ]
+                    upcomingBattles = [ b for b in battles if b.isPlanned() ]
+                    if not upcomingBattles:
+                        tooltipHead = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_PAST_HEADER, count=len(finishedBattles))
+                        tooltipBody = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_PAST_BODY)
+                        iconSource = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEPASTBG
+                    else:
+                        tooltipHead = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_FUTURE_HEADER, count=len(upcomingBattles))
+                        tooltipBody = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_FUTURE_BODY)
+                        iconSource = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEFUTUREBG
                 else:
-                    tooltipHead = i18n.makeString(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_PAST_HEADER, count=len(battles))
-                    tooltipBody = i18n.makeString(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_PAST_BODY)
+                    tooltipHead = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_PAST_HEADER, count=len(battles))
+                    tooltipBody = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_PAST_BODY)
                     iconSource = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_DEFENCEPASTBG
                 result.append({'tooltipHeader': tooltipHead,
                  'tooltipBody': tooltipBody,
@@ -83,7 +94,6 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
         return
 
     def _populatePreviewBlock(self):
-        _ms = i18n.makeString
         fort = self.fortCtrl.getFort()
         localDateTime = time_utils.getDateTimeInLocal(self.__selectedDate)
         targetDayStartTimestamp, _ = time_utils.getDayTimeBoundsForLocal(self.__selectedDate)
@@ -152,7 +162,7 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
             fort, message = self.fortCtrl.getFort(), ''
             vacationStart, vacationEnd = fort.getVacationDate()
             if self._isValidTime(vacationStart, self.__selectedDate) or self._isValidTime(vacationEnd, self.__selectedDate):
-                message = i18n.makeString(FORTIFICATIONS.FORTCALENDARWINDOW_MESSAGE_VACATION, date=fort.getVacationDateStr())
+                message = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_MESSAGE_VACATION, date=fort.getVacationDateStr())
             calendar.as_setCalendarMessageS(message)
         return
 

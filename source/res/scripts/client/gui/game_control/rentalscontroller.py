@@ -2,28 +2,37 @@
 from operator import itemgetter
 import BigWorld
 import Event
+from gui.game_control.controllers import Controller
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import time_utils
 
-class RentalsController(object):
+class RentalsController(Controller):
 
-    def init(self):
+    def __init__(self, proxy):
+        super(RentalsController, self).__init__(proxy)
         self.onRentChangeNotify = Event.Event()
         self.__rentNotifyTimeCallback = None
         self.__vehiclesForUpdate = []
         return
 
     def fini(self):
-        self.stop()
+        self._stop()
+        super(RentalsController, self).fini()
 
-    def start(self):
+    def onConnected(self):
         g_itemsCache.onSyncCompleted += self._update
         if self.__rentNotifyTimeCallback is None:
             self.__startRentTimeNotifyCallback()
         return
 
-    def stop(self):
+    def onBattleStarted(self):
+        self._stop()
+
+    def onDisconnected(self):
+        self._stop()
+
+    def _stop(self):
         self.__clearRentTimeNotifyCallback()
         self.__vehiclesForUpdate = None
         self.onRentChangeNotify.clear()

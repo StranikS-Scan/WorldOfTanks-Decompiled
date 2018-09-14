@@ -3,9 +3,9 @@ from collections import namedtuple
 import BigWorld
 import potapov_quests
 from adisp import async
-from abstract import AbstractRequester
+from gui.shared.utils.requesters import abstract
 
-class QuestsProgressRequester(AbstractRequester):
+class QuestsProgressRequester(abstract.AbstractSyncDataRequester):
     PotapovQuestProgress = namedtuple('PotapovQuestProgress', ['state',
      'selected',
      'rewards',
@@ -39,6 +39,10 @@ class QuestsProgressRequester(AbstractRequester):
     def getTokenCount(self, tokenID):
         tokenData = self.__getTokensData().get(tokenID, {})
         return tokenData.get('count', 0)
+
+    def getTokenExpiryTime(self, tokenID):
+        tokenData = self.__getTokensData().get(tokenID, {})
+        return tokenData.get('expiryTime')
 
     @async
     def _requestCache(self, callback = None):

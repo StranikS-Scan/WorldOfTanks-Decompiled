@@ -1,7 +1,5 @@
 # Embedded file name: scripts/client/messenger/m_constants.py
 from collections import namedtuple
-import chat_shared
-from constants import PREBATTLE_TYPE
 MESSENGER_XML_FILE = 'messenger'
 MESSENGER_I18N_FILE = 'messenger'
 MESSENGER_XML_FILE_PATH = 'gui/{0:>s}.xml'.format(MESSENGER_XML_FILE)
@@ -28,15 +26,16 @@ class PROTO_TYPE(object):
     BW = 1
     XMPP = 2
     BW_CHAT2 = 3
+    MIGRATION = 4
 
+
+PROTO_TYPE_NAMES = {v:k for k, v in PROTO_TYPE.__dict__.iteritems() if not k.startswith('_')}
 
 class MESSENGER_COMMAND_TYPE(object):
     UNDEFINED = 0
     BATTLE = 1
     ADMIN = 2
 
-
-PROTO_TYPE_NAMES = dict([ (v, k) for k, v in PROTO_TYPE.__dict__.iteritems() ])
 
 class LAZY_CHANNEL(object):
     COMMON = '#chat:channels/common'
@@ -63,15 +62,49 @@ class BATTLE_CHANNEL(object):
         return True
 
 
-PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
- PREBATTLE_TYPE.EVENT_SQUAD: chat_shared.CHAT_CHANNEL_SQUAD,
- PREBATTLE_TYPE.COMPANY: chat_shared.CHAT_CHANNEL_TEAM,
- PREBATTLE_TYPE.TRAINING: chat_shared.CHAT_CHANNEL_TRAINING,
- PREBATTLE_TYPE.CLAN: chat_shared.CHAT_CHANNEL_PREBATTLE_CLAN,
- PREBATTLE_TYPE.TOURNAMENT: chat_shared.CHAT_CHANNEL_TOURNAMENT,
- PREBATTLE_TYPE.UNIT: chat_shared.CHAT_CHANNEL_UNIT,
- PREBATTLE_TYPE.SORTIE: chat_shared.CHAT_CHANNEL_UNIT}
-PREBATTLE_CHAT_FLAG_TYPE = dict(((v, k) for k, v in PREBATTLE_TYPE_CHAT_FLAG.iteritems()))
+class USER_TAG(object):
+    CACHED = 'cached'
+    WO_NOTIFICATION = 'woNotification'
+    FRIEND = 'friend'
+    IGNORED = 'ignored'
+    MUTED = 'muted'
+    CURRENT = 'himself'
+    CLAN_MEMBER = 'clanMember'
+    REFERRER = 'referrer'
+    REFERRAL = 'referral'
+    IGR_BASE = 'igr/base'
+    IGR_PREMIUM = 'igr/premium'
+    SUB_NONE = 'sub/none'
+    SUB_PENDING_IN = 'sub/pendingIn'
+    SUB_PENDING_OUT = 'sub/pendingOut'
+    SUB_APPROVED = 'sub/approved'
+    SUB_CANCELED = 'sub/canceled'
+    SUB_IN_PROCESS = 'sub/inProcess'
+    SUB_TO = 'sub/to'
+    SUB_FROM = 'sub/from'
+    PRESENCE_DND = 'presence/dnd'
+    _SHARED_TAGS = {CLAN_MEMBER, REFERRER, REFERRAL}
+    _CONTACT_LIST = {FRIEND, IGNORED, MUTED}
+    _STORED_TO_CACHE = {MUTED}
+
+    @classmethod
+    def includeToContactsList(cls, tags):
+        return tags & cls._CONTACT_LIST
+
+    @classmethod
+    def filterToStore(cls, tags):
+        return tags & cls._STORED_TO_CACHE
+
+    @classmethod
+    def filterSharedTags(cls, tags):
+        return tags & cls._SHARED_TAGS
+
+
+class USER_ACTION_ID(object):
+    UNDEFINED, FRIEND_ADDED, FRIEND_REMOVED, IGNORED_ADDED, IGNORED_REMOVED, MUTE_SET, MUTE_UNSET, GROUPS_CHANGED, SUBSCRIPTION_CHANGED, NOTE_CHANGED, IGR_CHANGED = range(11)
+
+
+USER_ACTION_ID_NAMES = {v:k for k, v in USER_ACTION_ID.__dict__.iteritems() if not k.startswith('_')}
 
 class USER_GUI_TYPE(object):
     CURRENT_PLAYER = 'himself'
@@ -86,5 +119,14 @@ class USER_GUI_TYPE(object):
      BREAKER)
 
 
-class USER_ROSTER_ACTION(object):
-    AddToFriend, RemoveFromFriend, AddToIgnored, RemoveFromIgnored, SetMuted, UnsetMuted = range(6)
+class CLIENT_ERROR_ID(object):
+    GENERIC, LOCKED, WRONG_ARGS, NOT_CONNECTED, NOT_SUPPORTED, DBID_INVALID, NAME_EMPTY, NAME_INVALID, COOLDOWN = range(1, 10)
+
+
+CLIENT_ERROR_NAMES = {v:k for k, v in CLIENT_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
+
+class CLIENT_ACTION_ID(object):
+    ADD_FRIEND, REMOVE_FRIEND, ADD_IGNORED, REMOVE_IGNORED, SET_MUTE, UNSET_MUTE, ADD_GROUP, CHANGE_GROUP, RQ_FRIENDSHIP, APPROVE_FRIENDSHIP, CANCEL_FRIENDSHIP, SET_NOTE, REMOVE_NOTE, SEND_MESSAGE = range(1, 15)
+
+
+CLIENT_ACTION_NAMES = {v:k for k, v in CLIENT_ACTION_ID.__dict__.iteritems() if not k.startswith('_')}

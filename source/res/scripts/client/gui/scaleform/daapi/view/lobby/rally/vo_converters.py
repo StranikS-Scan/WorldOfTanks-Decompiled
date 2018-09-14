@@ -3,7 +3,7 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES
 from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons, TextManager
-from gui import makeHtmlString, game_control
+from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
@@ -23,7 +23,6 @@ from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
-from gui.Scaleform.genConsts.REFERRAL_SYSTEM import REFERRAL_SYSTEM
 
 def getPlayerStatus(slotState, pInfo, autoReadyCreator = False):
     status = PLAYER_GUI_STATUS.NORMAL
@@ -88,14 +87,11 @@ def makeVehicleVO(vehicle, levelsRange = None):
 def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
     if user is not None:
         colors = colorGetter(user.getGuiType())
-        chatRoster = user.getRoster()
-        referralType = game_control.g_instance.refSystem.getUserType(user.getID())
+        tags = list(user.getTags())
     else:
-        chatRoster = 0
         colors = colorGetter(USER_GUI_TYPE.OTHER)
-        referralType = REFERRAL_SYSTEM.TYPE_NO_REFERRAL
+        tags = []
     return {'isInvite': pInfo.isInvite(),
-     'himself': pInfo.isCurrentPlayer(),
      'dbID': pInfo.dbID,
      'accID': pInfo.accID,
      'isCommander': pInfo.isCreator(),
@@ -106,12 +102,11 @@ def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
      'colors': colors,
      'rating': BigWorld.wg_getIntegralFormat(pInfo.rating),
      'readyState': pInfo.isReady,
-     'chatRoster': chatRoster,
+     'tags': tags,
      'isPlayerSpeaking': isPlayerSpeaking,
      'isOffline': pInfo.isOffline(),
      'igrType': pInfo.igrType,
-     'isRatingAvailable': not pInfo.isInvite(),
-     'referralType': referralType}
+     'isRatingAvailable': not pInfo.isInvite()}
 
 
 def makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):

@@ -165,10 +165,6 @@ class SquadFunctional(PrbFunctional):
          pInfo,
          slotsIter)
 
-    def kickPlayer(self, ctx, callback = None):
-        playerInfo = self.getPlayerInfoByDbID(ctx.getPlayerID())
-        super(SquadFunctional, self).kickPlayer(prb_ctx.KickPlayerCtx(playerInfo.accID), ctx.getWaitingID())
-
     def prb_onPlayerStateChanged(self, pID, roster):
         super(SquadFunctional, self).prb_onPlayerStateChanged(pID, roster)
         if self.__doTeamReady:

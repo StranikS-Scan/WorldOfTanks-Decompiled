@@ -130,3 +130,8 @@ class OTHER(CONST_CONTAINER):
     VIBRO_COLLISIONS = 'vibroCollisions'
     VIBRO_DAMAGE = 'vibroDamage'
     VIBRO_GUI = 'vibroGUI'
+
+
+class CONTACTS(CONST_CONTAINER):
+    SHOW_OFFLINE_USERS = 'showOfflineUsers'
+    SHOW_OTHERS_CATEGORY = 'showOthersCategory'

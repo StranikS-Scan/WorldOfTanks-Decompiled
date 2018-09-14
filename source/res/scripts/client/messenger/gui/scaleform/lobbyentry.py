@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view import dialogs
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData, TARGET_ID, DATA_TYPE
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import MessengerEvent, ChannelManagementEvent
-from messenger.formatters.users_messages import getUserRosterChangedMessage
+from messenger.formatters.users_messages import getUserActionReceivedMessage
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform import channels
 from messenger.gui.Scaleform.data.ChannelsCarouselHandler import ChannelsCarouselHandler
@@ -75,8 +75,8 @@ class LobbyEntry(IGUIEntry):
         cEvents.onConnectingToSecureChannel += self.__me_onConnectingToSecureChannel
         cEvents.onChannelInfoUpdated += self.__me_onChannelInfoUpdated
         cEvents.onCommandReceived += self.__me_onCommandReceived
-        g_messengerEvents.users.onUserRosterChanged += self.__me_onUsersRosterChanged
-        g_messengerEvents.onServerErrorReceived += self.__me_onServerErrorReceived
+        g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
+        g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
 
     def close(self, nextScope):
         self.__components.clear()
@@ -97,8 +97,8 @@ class LobbyEntry(IGUIEntry):
         cEvents.onConnectingToSecureChannel -= self.__me_onConnectingToSecureChannel
         cEvents.onChannelInfoUpdated -= self.__me_onChannelInfoUpdated
         cEvents.onCommandReceived -= self.__me_onCommandReceived
-        g_messengerEvents.users.onUserRosterChanged -= self.__me_onUsersRosterChanged
-        g_messengerEvents.onServerErrorReceived -= self.__me_onServerErrorReceived
+        g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
+        g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
 
     def addClientMessage(self, message, isCurrentPlayer = False):
         pass
@@ -138,12 +138,12 @@ class LobbyEntry(IGUIEntry):
     def __me_onChannelInfoUpdated(self, channel):
         self.__carouselHandler.updateChannel(channel)
 
-    def __me_onUsersRosterChanged(self, action, user):
-        message = getUserRosterChangedMessage(action, user)
+    def __me_onUserActionReceived(self, action, user):
+        message = getUserActionReceivedMessage(action, user)
         if message:
             SystemMessages.pushMessage(message)
 
-    def __me_onServerErrorReceived(self, error):
+    def __me_onErrorReceived(self, error):
         if error.isModal():
             DialogsInterface.showDialog(dialogs.SimpleDialogMeta(error.getTitle(), error.getMessage(), dialogs.I18nInfoDialogButtons('common/error')), lambda *args: None)
         else:
@@ -180,7 +180,8 @@ class LobbyEntry(IGUIEntry):
             LOG_ERROR('Controller is not defined', ctx)
             return
         else:
-            self.__carouselHandler.addChannel(controller.getChannel())
+            channel = controller.getChannel()
+            self.__carouselHandler.addChannel(channel, isNotified=controller.hasUnreadMessages())
             return
 
     def __handleLobbyChannelCtlDestroyed(self, event):

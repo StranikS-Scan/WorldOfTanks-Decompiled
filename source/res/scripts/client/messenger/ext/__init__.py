@@ -9,6 +9,7 @@ import constants
 from debug_utils import LOG_ERROR
 from messenger import g_settings
 from messenger.ext import dictionaries
+from messenger.m_constants import CLIENT_ERROR_ID
 MESSENGER_OLDICT_FILE_PATH = 'text/messenger_oldictionary.xml'
 MESSENGER_DOMAIN_FILE_PATH = 'text/messenger_dndictionary.xml'
 g_dnDictionary = dictionaries.DomainNameDictionary.load(MESSENGER_DOMAIN_FILE_PATH)
@@ -53,12 +54,19 @@ def getMinimapCellName(cellIdx):
     return cellName
 
 
-def checkAccountName(token):
-    if not len(token):
-        reason = i18n.makeString(MESSENGER.CLIENT_WARNING_EMPTYUSERSEARCHTOKEN_MESSAGE)
-        return (False, reason)
-    elif not isAccountNameValid(token):
-        reason = i18n.makeString(MESSENGER.CLIENT_WARNING_INVALIDUSERSEARCHTOKEN_MESSAGE, _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH)
-        return (False, reason)
+def validateAccountName(name):
+    if not name:
+        return (False, CLIENT_ERROR_ID.NAME_EMPTY)
+    elif not isAccountNameValid(name):
+        return (False, CLIENT_ERROR_ID.NAME_INVALID)
     else:
         return (True, None)
+
+
+def checkAccountName(token):
+    result, reason = validateAccountName(token)
+    if reason == CLIENT_ERROR_ID.NAME_EMPTY:
+        reason = i18n.makeString(MESSENGER.CLIENT_WARNING_EMPTYUSERSEARCHTOKEN_MESSAGE)
+    elif reason == CLIENT_ERROR_ID.NAME_INVALID:
+        reason = i18n.makeString(MESSENGER.CLIENT_WARNING_INVALIDUSERSEARCHTOKEN_MESSAGE, _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH)
+    return (result, reason)

@@ -155,7 +155,7 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
         if self.__item is not None:
             clanID = self.__item.getClanDBID()
             selectedDefenceHour = time_utils.getDateTimeInLocal(self.__selectedDefencePeriodStart).hour
-            if self.__item.getLocalDefHour() != selectedDefenceHour and not self.__weAreAtWar:
+            if self.__item.getLocalDefHour()[0] != selectedDefenceHour and not self.__weAreAtWar:
                 warTime = '%s - %s' % (BigWorld.wg_getShortTimeFormat(self.__selectedDefencePeriodStart), BigWorld.wg_getShortTimeFormat(self.__selectedDefencePeriodEnd))
                 warPlannedIcon = makeHtmlString('html_templates:lobby/iconText', 'alert', {})
                 warPlannedMsg = makeHtmlString('html_templates:lobby/textStyle', 'alertText', {'message': warTime})
@@ -271,7 +271,7 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
             if direction == dir:
                 pos = getPositionFromDirPos(buildingData['dirPosByte'])
                 level = buildingData['level']
-                buildings[pos] = {'uid': self.UI_BUILDINGS_BIND[buildingID],
+                buildings[pos] = {'uid': self.getBuildingUIDbyID(buildingID),
                  'progress': self._getProgress(buildingID, level),
                  'buildingLevel': level}
 
@@ -330,9 +330,8 @@ class FortIntelligenceClanDescription(FortIntelligenceClanDescriptionMeta, FortV
             return (header, '\n'.join(bodyParts), infoMessage)
 
     def __calculateDefencePeriod(self):
-        currentDefencePeriod = time_utils.getTimeForLocal(self.__selectedDayStart, adjustDefenceHourToLocal(self.__item.getStartDefHour()))
-        localDefHour = self.__item.getDefHourFor(currentDefencePeriod)
-        self.__selectedDefencePeriodStart = time_utils.getTimeForLocal(self.__selectedDayStart, localDefHour)
+        currentDefencePeriod = time_utils.getTimeForLocal(self.__selectedDayStart, *adjustDefenceHourToLocal(self.__item.getStartDefHour()))
+        self.__selectedDefencePeriodStart = time_utils.getTimeForLocal(self.__selectedDayStart, *self.__item.getDefHourFor(currentDefencePeriod))
         self.__selectedDefencePeriodEnd = self.__selectedDefencePeriodStart + time_utils.ONE_HOUR
 
     def __onCalendarDataSelected(self, event):

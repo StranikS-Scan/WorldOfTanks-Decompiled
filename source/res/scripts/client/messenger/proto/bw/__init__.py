@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw/__init__.py
 from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from messenger.m_constants import PROTO_TYPE
 from messenger.proto.bw import errors
 from messenger.proto.bw.ChannelsManager import ChannelsManager
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
@@ -12,6 +13,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IProtoPlugin
 
 class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
+    __slots__ = ('__isConnected', 'channels', 'users', 'clanListener', 'serviceChannel', 'voipProvider')
 
     def __init__(self):
         super(BWProtoPlugin, self).__init__()
@@ -21,6 +23,9 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
         self.clanListener = ClanListener()
         self.serviceChannel = ServiceChannelManager()
         self.voipProvider = VOIPChatProvider()
+
+    def isConnected(self):
+        return self.__isConnected
 
     def clear(self):
         self.__isConnected = False
@@ -36,6 +41,7 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
             self._addChatActionsListeners()
             self.clanListener.start()
             self.__isConnected = True
+            g_messengerEvents.onPluginConnected(PROTO_TYPE.BW)
         self.channels.switch(scope)
         self.users.switch(scope)
         self.serviceChannel.switch(scope)
@@ -44,6 +50,7 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
         self.serviceChannel.clear()
         if self.__isConnected:
             self.clear()
+            g_messengerEvents.onPluginDisconnected(PROTO_TYPE.BW)
 
     def view(self, scope):
         self.users.view(scope)
@@ -91,22 +98,22 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
     def __onMemberBanned(self, chatAction):
         error = errors.MemberBannedError.create(chatAction)
         if error:
-            g_messengerEvents.onServerErrorReceived(error)
+            g_messengerEvents.onErrorReceived(error)
 
     def __onChatBanned(self, chatAction):
         error = errors.ChatBannedError.create(chatAction)
         if error:
-            g_messengerEvents.onServerErrorReceived(error)
+            g_messengerEvents.onErrorReceived(error)
 
     def __onCommandInCooldown(self, chatAction):
         error = errors.CommandInCooldownError.create(chatAction)
         if error:
-            g_messengerEvents.onServerErrorReceived(error)
+            g_messengerEvents.onErrorReceived(error)
 
     def __onActionFailure(self, chatAction):
         error = errors.ChatActionError.create(chatAction)
         if error:
-            g_messengerEvents.onServerErrorReceived(error)
+            g_messengerEvents.onErrorReceived(error)
 
     def __passError(self, chatAction):
         pass

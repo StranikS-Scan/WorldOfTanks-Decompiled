@@ -15,7 +15,7 @@ class FortBuilding(BuildingDescr, HasStrCD, AppRef):
     @property
     def userName(self):
         from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-        return i18n.makeString(FORTIFICATIONS.buildings_buildingname(FortViewHelper.UI_BUILDINGS_BIND[self.typeID]))
+        return i18n.makeString(FORTIFICATIONS.buildings_buildingname(FortViewHelper.getBuildingUIDbyID(self.typeID)))
 
     def getUserLevel(self, nextLevel = False):
         from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters

@@ -47,6 +47,8 @@ class DebugLine(object):
         BigWorld.addModel(self.model)
 
     def set(self, start, end):
+        self.start = start
+        self.end = end
         direction = end - start
         m = mathUtils.createSRTMatrix((self.__thickness, self.__thickness, direction.length), (direction.yaw, direction.pitch, 0), start + direction / 2)
         m.preMultiply(mathUtils.createTranslationMatrix(Vector3(-0.5, -0.5, -0.5)))

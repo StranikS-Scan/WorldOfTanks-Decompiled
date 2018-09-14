@@ -63,7 +63,7 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
             if self.__direction == dir:
                 pos = getPositionFromDirPos(buildingData['dirPosByte'])
                 level = buildingData['level']
-                enemyBuildings[pos] = {'uid': self.UI_BUILDINGS_BIND[buildignID],
+                enemyBuildings[pos] = {'uid': self.getBuildingUIDbyID(buildignID),
                  'progress': self._getProgress(buildignID, level),
                  'buildingLevel': level}
 
@@ -84,7 +84,7 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
                 for building in fort.getBuildingsByDirections().get(direction, ()):
                     data = None
                     if building is not None:
-                        data = {'uid': self.UI_BUILDINGS_BIND[building.typeID],
+                        data = {'uid': self.getBuildingUIDbyID(building.typeID),
                          'progress': self._getProgress(building.typeID, building.level),
                          'buildingLevel': building.level}
                     dirBuildings.append(data)

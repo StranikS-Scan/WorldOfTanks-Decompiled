@@ -23,6 +23,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared import events, g_itemsCache
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.events import LobbySimpleEvent
 from gui.shared.utils import findFirst
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import i18n
@@ -51,6 +52,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
 
     def _populate(self):
         BigWorld.player().resyncDossiers()
+        self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.HIDE_HANGAR, True))
         View._populate(self)
         credits, gold = g_itemsCache.items.stats.money
         self.as_setCreditsS(credits)
@@ -93,6 +95,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
         return
 
     def _dispose(self):
+        self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.HIDE_HANGAR, False))
         self.__resetPreviewMode()
         for interface in self.__interfaces.itervalues():
             interface.destroy()
@@ -180,7 +183,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
         return
 
     def closeWindow(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.destroy()
 
     def __ci_onDataInited(self, _):
         self.__steps -= 1
@@ -287,7 +290,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
             if g_currentVehicle.isCrewFull() and not g_currentVehicle.isBroken():
                 self.closeWindow()
         else:
-            self.as_setActionsLockedS(g_currentVehicle.isLocked() or g_currentVehicle.isBroken())
+            self.as_setActionsLockedS(g_currentVehicle.isLocked() or g_currentVehicle.isBroken() or g_currentVehicle.isDisabledInRent())
 
     def setNewItemId(self, section, itemId, kind, packageIdx):
         interface = self.__interfaces.get(section)

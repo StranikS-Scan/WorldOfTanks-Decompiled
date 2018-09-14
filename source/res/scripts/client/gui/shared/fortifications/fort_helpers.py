@@ -7,7 +7,6 @@ from FortifiedRegionBase import NOT_ACTIVATED
 from adisp import process
 from helpers import time_utils
 from gui import DialogsInterface, SystemMessages
-from gui.prb_control.dispatcher import g_prbLoader
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import interfaces
@@ -74,7 +73,8 @@ def adjustDefenceHourToUTC(defenceHour):
 
 def adjustDefenceHourToLocal(defenceHour, timestamp = None):
     timestamp = timestamp or time_utils.getCurrentTimestamp()
-    return time.localtime(time_utils.getTimeForUTC(timestamp, defenceHour)).tm_hour
+    localtime = time.localtime(time_utils.getTimeForUTC(timestamp, defenceHour))
+    return (localtime.tm_hour, localtime.tm_min)
 
 
 def adjustVacationToUTC(vacationStart, vacationDuration):
@@ -119,6 +119,7 @@ def getTimeZoneOffset():
 
 @process
 def tryToConnectFortBattle(battleID, peripheryID):
+    from gui.prb_control.dispatcher import g_prbLoader
     yield lambda callback: callback(None)
     if g_lobbyContext.isAnotherPeriphery(peripheryID):
         if g_lobbyContext.isPeripheryAvailable(peripheryID):

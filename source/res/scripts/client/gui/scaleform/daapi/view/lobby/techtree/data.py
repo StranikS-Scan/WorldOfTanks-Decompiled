@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/data.py
+import operator
 from AccountCommands import LOCK_REASON
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
@@ -33,6 +34,14 @@ class _ItemsData(object):
             if permission is not None:
                 vehicleCanBeChanged = permission.canChangeVehicle()
         return vehicleCanBeChanged
+
+    def _getAllPossibleXP(self, nodeCD, unlockStats):
+        eliteVehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.ELITE).values()
+        dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles))
+        exchangeRate = self._items.shop.freeXPConversion[0]
+        result = min(int(dirtyResult / exchangeRate) * exchangeRate, self._stats.gold * exchangeRate)
+        result += unlockStats.getVehTotalXP(nodeCD)
+        return result
 
     def _checkMoneyForRentOrBuy(self, state, nodeCD):
         state = NODE_STATE.removeIfHas(state, NODE_STATE.ENOUGH_MONEY)
@@ -215,16 +224,19 @@ class _ItemsData(object):
 
     def _canBuy(self, nodeCD):
         item = self.getItem(nodeCD)
-        canBuy, _ = item.mayPurchase((self._stats.credits, self._stats.gold))
-        return canBuy
-
-    def _canRent(self, nodeCD):
-        item = self.getItem(nodeCD)
-        canRent, _ = item.mayRent((self._stats.credits, self._stats.gold))
-        return canRent
+        canBuy, reason = item.mayPurchase(self._stats.money)
+        if not canBuy and reason == 'credit_error':
+            return item.mayPurchaseWithExchange(self._stats.money, self._items.shop.exchangeRate)
+        else:
+            return canBuy
 
     def _canRentOrBuy(self, nodeCD):
-        return self._canRent(nodeCD) or self._canBuy(nodeCD)
+        item = self.getItem(nodeCD)
+        canRentOrBuy, reason = item.mayRentOrBuy(self._stats.money)
+        if not canRentOrBuy and reason == 'credit_error':
+            return item.mayPurchaseWithExchange(self._stats.money, self._items.shop.exchangeRate)
+        else:
+            return canRentOrBuy
 
     def _canSell(self, nodeCD):
         raise NotImplementedError
@@ -250,7 +262,7 @@ class _ItemsData(object):
         for node in nodes:
             state = node['state']
             props = node['unlockProps']
-            if stats.getVehTotalXP(props.parentID) >= props.xpCost:
+            if self._getAllPossibleXP(props.parentID, stats) >= props.xpCost:
                 state = NODE_STATE.add(state, NODE_STATE.ENOUGH_XP)
             else:
                 state = NODE_STATE.remove(state, NODE_STATE.ENOUGH_XP)
@@ -389,12 +401,12 @@ class ResearchItemsData(_ItemsData):
             itemTypeID, _, _ = vehicles.parseIntCompactDescr(nodeCD)
             if itemTypeID == GUI_ITEM_TYPE.VEHICLE and (nodeCD in topLevelCDs or nodeCD == self.getRootCD()):
                 available, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, **unlockKwargs)
-                xp = unlockStats.getVehTotalXP(unlockProps.parentID)
+                xp = self._getAllPossibleXP(unlockProps.parentID, unlockStats)
             else:
                 unlockProps = node['unlockProps']
                 required = unlockProps.required
                 available = len(required) and unlockStats.isSeqUnlocked(required) and not unlockStats.isUnlocked(nodeCD)
-                xp = unlockStats.getVehTotalXP(self.getRootCD())
+                xp = self._getAllPossibleXP(self.getRootCD(), unlockStats)
             if available and state & NODE_STATE.LOCKED > 0:
                 state ^= NODE_STATE.LOCKED
                 state = NODE_STATE.addIfNot(state, NODE_STATE.NEXT_2_UNLOCK)
@@ -411,12 +423,6 @@ class ResearchItemsData(_ItemsData):
         result = False
         if getTypeOfCompactDescr(nodeCD) == GUI_ITEM_TYPE.VEHICLE or self.isInstallItemsEnabled():
             result = super(ResearchItemsData, self)._canBuy(nodeCD)
-        return result
-
-    def _canRent(self, nodeCD):
-        result = False
-        if getTypeOfCompactDescr(nodeCD) == GUI_ITEM_TYPE.VEHICLE:
-            result = super(ResearchItemsData, self)._canRent(nodeCD)
         return result
 
     def _canSell(self, nodeCD):
@@ -437,7 +443,7 @@ class ResearchItemsData(_ItemsData):
         state = NODE_STATE.LOCKED
         if topLevel and itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             available, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, **unlockStats._asdict())
-            xp = unlockStats.getVehTotalXP(unlockProps.parentID)
+            xp = self._getAllPossibleXP(unlockProps.parentID, unlockStats)
         if guiItem.isUnlocked:
             state = NODE_STATE.UNLOCKED
             if itemTypeID != GUI_ITEM_TYPE.VEHICLE and rootItem.isInInventory and guiItem.isInstalled(rootItem):
@@ -456,7 +462,7 @@ class ResearchItemsData(_ItemsData):
         else:
             if not topLevel:
                 available = unlockStats.isSeqUnlocked(unlockProps.required) and unlockStats.isUnlocked(self._rootCD)
-                xp = unlockStats.getVehTotalXP(self._rootCD)
+                xp = self._getAllPossibleXP(self._rootCD, unlockStats)
             if available:
                 state = NODE_STATE.NEXT_2_UNLOCK
                 if xp >= unlockProps.xpCost:
@@ -623,7 +629,7 @@ class NationTreeData(_ItemsData):
 
     def _changeNext2Unlock(self, nodeCD, unlockProps, unlockStats):
         state = NODE_STATE.NEXT_2_UNLOCK
-        totalXP = unlockStats.getVehTotalXP(unlockProps.parentID)
+        totalXP = self._getAllPossibleXP(unlockProps.parentID, unlockStats)
         if totalXP >= unlockProps.xpCost:
             state = NODE_STATE.addIfNot(state, NODE_STATE.ENOUGH_XP)
         else:
@@ -666,7 +672,7 @@ class NationTreeData(_ItemsData):
                 state |= NODE_STATE.SHOP_ACTION
         elif available:
             state = NODE_STATE.NEXT_2_UNLOCK
-            if unlockStats.getVehTotalXP(unlockProps.parentID) >= unlockProps.xpCost:
+            if self._getAllPossibleXP(unlockProps.parentID, unlockStats) >= unlockProps.xpCost:
                 state |= NODE_STATE.ENOUGH_XP
         if guiItem.isElite:
             state |= NODE_STATE.ELITE

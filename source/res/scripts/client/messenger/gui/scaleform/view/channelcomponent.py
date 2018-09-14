@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/ChannelComponent.py
 import weakref
+import pickle
 import constants
 from debug_utils import LOG_DEBUG
+from gui.shared import event_dispatcher as shared_events
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.meta.ChannelComponentMeta import ChannelComponentMeta
 
@@ -38,6 +40,10 @@ class ChannelComponent(ChannelComponentMeta):
 
     def getMessageMaxLength(self):
         return round(constants.CHAT_MESSAGE_MAX_LENGTH / 2, 0)
+
+    def onLinkClick(self, data):
+        arenaUniqueID, svrPackedData = pickle.loads(data)
+        shared_events.showUserBattleResults(arenaUniqueID, str(svrPackedData))
 
     def isJoined(self):
         isJoined = False

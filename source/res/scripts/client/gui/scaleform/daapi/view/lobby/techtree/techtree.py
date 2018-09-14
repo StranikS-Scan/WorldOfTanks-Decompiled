@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.lobby.techtree import dumpers, SelectedNation, USE
 from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 import nations
 
 class TechTree(ResearchView, TechTreeMeta):
@@ -44,23 +45,10 @@ class TechTree(ResearchView, TechTreeMeta):
         return self._data.dump()
 
     def request4Unlock(self, unlockCD, vehCD, unlockIdx, xpCost):
-        self.unlockItem(int(unlockCD), int(vehCD), int(unlockIdx), int(xpCost))
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, int(unlockCD), int(vehCD), int(unlockIdx), int(xpCost))
 
     def request4Buy(self, itemCD):
-        self.buyVehicle(int(itemCD))
-
-    def request4Sell(self, itemCD):
-        self.sellVehicle(int(itemCD))
-
-    def request4SelectInHangar(self, itemCD):
-        self.selectVehicleInHangar(itemCD)
-        self.onCloseTechTree()
-
-    def request4ShowVehicleStatistics(self, itemCD):
-        self.showVehicleStatistics(itemCD)
-
-    def requestVehicleInfo(self, pickleDump):
-        self.showVehicleInfo(pickleDump)
+        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))
 
     def goToNextVehicle(self, vehCD):
         exitEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': SelectedNation.getName()})

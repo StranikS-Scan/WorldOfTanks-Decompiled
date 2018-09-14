@@ -3,7 +3,7 @@ import constants
 from adisp import async
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -21,7 +21,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
 from gui.shared.events import LoadViewEvent
-from gui.shared.utils import decorators, isVehicleObserver
+from gui.shared.utils import decorators, isVehicleObserver, roundByModulo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.dossier import dumpDossier
@@ -53,6 +53,7 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
                 isTankmanChanged = True
         isMoneyChanged = 'credits' in stats or 'gold' in stats or 'mayConsumeWalletResources' in cache
         isVehicleChanged = 'unlocks' in stats or 'vehsLock' in cache or GUI_ITEM_TYPE.VEHICLE in inventory
+        isFreeXpChanged = 'freeXP' in stats
         if isVehicleChanged:
             tankman = g_itemsCache.items.getTankman(self.tmanInvID)
             if tankman.isInTank:
@@ -61,8 +62,9 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
                     return self.destroy()
                 vehsDiff = inventory.get(GUI_ITEM_TYPE.VEHICLE, {})
                 isTankmanVehicleChanged = len(filter(lambda hive: vehicle.inventoryID in hive or (vehicle.inventoryID, '_r') in hive, vehsDiff.itervalues())) > 0
-        if isTankmanChanged or isTankmanVehicleChanged:
+        if isTankmanChanged or isTankmanVehicleChanged or isFreeXpChanged:
             self.__setCommonData()
+        if isTankmanChanged or isTankmanVehicleChanged:
             self.__setSkillsData()
             self.__setDossierData()
         if isTankmanChanged or isMoneyChanged or isTankmanVehicleChanged:
@@ -111,6 +113,10 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
 
     def getDocumentsData(self):
         self.__setDocumentsData()
+
+    def openChangeRoleWindow(self):
+        ctx = {'tankmanID': self.tmanInvID}
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.ROLE_CHANGE, VIEW_ALIAS.ROLE_CHANGE, ctx=ctx), scope=EVENT_BUS_SCOPE.DEFAULT)
 
     @decorators.process('updating')
     def dismissTankman(self, tmanInvID):
@@ -224,15 +230,18 @@ class PersonalCaseDataProvider(AppRef):
 
     @async
     def getCommonData(self, callback):
-        """
-        Returns common personal case data for tankman, tankman's vehicles,
-        message, flags and so on.
-        """
-        tankman = g_itemsCache.items.getTankman(self.tmanInvID)
-        nativeVehicle = g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+        items = g_itemsCache.items
+        tankman = items.getTankman(self.tmanInvID)
+        rate = items.shop.freeXPToTManXPRate
+        if rate:
+            toNextPrcLeft = roundByModulo(tankman.getNextLevelXpCost(), rate)
+            enoughFreeXPForTeaching = items.stats.freeXP - max(1, toNextPrcLeft / rate) >= 0
+        else:
+            enoughFreeXPForTeaching = False
+        nativeVehicle = items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
         currentVehicle = None
         if tankman.isInTank:
-            currentVehicle = g_itemsCache.items.getItemByCD(tankman.vehicleDescr.type.compactDescr)
+            currentVehicle = items.getItemByCD(tankman.vehicleDescr.type.compactDescr)
         isLocked, reason = self.__getTankmanLockMessage(currentVehicle)
         bonuses = tankman.realRoleLevel[1]
         modifiers = []
@@ -253,7 +262,8 @@ class PersonalCaseDataProvider(AppRef):
          'nativeVehicle': packVehicle(nativeVehicle),
          'isOpsLocked': isLocked or g_currentVehicle.isLocked(),
          'lockMessage': reason,
-         'modifiers': modifiers})
+         'modifiers': modifiers,
+         'enoughFreeXPForTeaching': enoughFreeXPForTeaching})
         return
 
     @async
@@ -276,7 +286,7 @@ class PersonalCaseDataProvider(AppRef):
                     packedAchieves[sectionIdx].append(self.__packAchievement(achievement, pickledDossierCompDescr))
 
             callback({'achievements': packedAchieves,
-             'stats': tmanDossier.getStats(),
+             'stats': tmanDossier.getStats(g_itemsCache.items.getTankman(self.tmanInvID)),
              'firstMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO),
              'secondMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO)})
             return
@@ -289,12 +299,15 @@ class PersonalCaseDataProvider(AppRef):
     def getRetrainingData(self, callback):
         items = g_itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
+        nativeVehicleCD = tankman.vehicleNativeDescr.type.compactDescr
         criteria = REQ_CRITERIA.NATIONS([tankman.nationID]) | REQ_CRITERIA.UNLOCKED
         vData = items.getVehicles(criteria)
         tDescr = tankman.descriptor
-        vehiclesData = sorted(vData.values())
+        vehiclesData = vData.values()
+        if nativeVehicleCD not in vData:
+            vehiclesData.append(items.getItemByCD(nativeVehicleCD))
         result = []
-        for vehicle in vehiclesData:
+        for vehicle in sorted(vehiclesData):
             vDescr = vehicle.descriptor
             if isVehicleObserver(vDescr.type.compactDescr):
                 continue
@@ -411,3 +424,9 @@ class PersonalCaseDataProvider(AppRef):
         commonData = AchievementsUtils.getCommonAchievementData(achieve, constants.DOSSIER_TYPE.TANKMAN, dossierCompDescr)
         commonData['counterType'] = AchievementsUtils.getCounterType(achieve)
         return commonData
+
+    def __roundByModulo(self, targetXp, rate):
+        left_rate = targetXp % rate
+        if left_rate > 0:
+            targetXp += rate - left_rate
+        return targetXp

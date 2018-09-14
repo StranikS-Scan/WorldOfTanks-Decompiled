@@ -40,7 +40,7 @@ class BWChatProvider(object):
         if player:
             if self.__coolDown.isInProcess(actionID):
                 if not skipCoolDown:
-                    g_messengerEvents.onServerErrorReceived(createCoolDownError(actionID))
+                    g_messengerEvents.onErrorReceived(createCoolDownError(actionID))
             else:
                 if response:
                     reqID = self.__idGen.next()

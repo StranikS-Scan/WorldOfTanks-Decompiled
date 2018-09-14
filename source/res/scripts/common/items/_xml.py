@@ -1,5 +1,5 @@
 # Embedded file name: scripts/common/items/_xml.py
-import ResMgr
+
 
 def raiseWrongXml(xmlContext, subsectionName, msg):
     fileName = subsectionName
@@ -68,6 +68,19 @@ def readInt(xmlCtx, section, subsectionName, minVal = None, maxVal = None):
     return v
 
 
+def readIntOrNone(xmlCtx, section, subsectionName):
+    subsection = section[subsectionName]
+    if subsection is None:
+        return
+    else:
+        try:
+            return int(subsection.asString, 0)
+        except ValueError:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+
+        return
+
+
 def readFloat(xmlCtx, section, subsectionName):
     wrongVal = -1000000.0
     v = section.readFloat(subsectionName, wrongVal)
@@ -121,14 +134,30 @@ def readVector3(xmlCtx, section, subsectionName):
     return v
 
 
-def readTupleOfFloats(xmlCtx, section, subsectionName, count):
+def readTupleOfFloats(xmlCtx, section, subsectionName, count = None):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
-    if len(strings) != count:
+    if count is not None and len(strings) != count:
         raiseWrongXml(xmlCtx, subsectionName, '%d floats expected' % count)
     try:
         return tuple(map(float, strings))
     except Exception:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+
+    return
+
+
+def readTupleOfPositiveFloats(xmlCtx, section, subsectionName, count = None):
+    floats = readTupleOfFloats(xmlCtx, section, subsectionName, count)
+    if sum((1 for val in floats if val <= 0)):
+        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+    return floats
+
+
+def readTupleOfNonNegativeFloats(xmlCtx, section, subsectionName, count = None):
+    floats = readTupleOfFloats(xmlCtx, section, subsectionName, count)
+    if sum((1 for val in floats if val < 0)):
+        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+    return floats
 
 
 def readTupleOfInts(xmlCtx, section, subsectionName, count = None):
@@ -141,6 +170,20 @@ def readTupleOfInts(xmlCtx, section, subsectionName, count = None):
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
 
     return
+
+
+def readTupleOfPositiveInts(xmlCtx, section, subsectionName, count = None):
+    ints = readTupleOfInts(xmlCtx, section, subsectionName, count)
+    if sum((1 for val in ints if val <= 0)):
+        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+    return ints
+
+
+def readTupleOfNonNegativeInts(xmlCtx, section, subsectionName, count = None):
+    ints = readTupleOfInts(xmlCtx, section, subsectionName, count)
+    if sum((1 for val in ints if val < 0)):
+        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+    return ints
 
 
 def readPrice(xmlCtx, section, subsectionName):

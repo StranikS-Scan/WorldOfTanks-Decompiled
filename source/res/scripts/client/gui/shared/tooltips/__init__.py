@@ -19,6 +19,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     ACHIEVEMENT_ATTR = 'achievementAttr'
     MODULE = 'module'
     SHELL = 'shell'
+    EQUIPMENT = 'equipment'
     EFFICIENCY = 'efficiency'
     FORTIFICATIONS = 'fortification'
     IGR = 'igr'
@@ -29,6 +30,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     CONTROL = 'control'
     REF_SYSTEM = 'refSystem'
     PRIVATE_QUESTS = 'privateQuests'
+    CONTACT = 'contact'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -46,6 +48,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     FORTIFICATIONS = 'fortification'
     SETTINGS = 'settings'
     CUSTOMIZATION = 'customization'
+    CONTACT = 'contact'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

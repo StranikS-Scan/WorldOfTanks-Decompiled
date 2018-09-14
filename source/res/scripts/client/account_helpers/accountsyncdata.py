@@ -84,12 +84,10 @@ class AccountSyncData(object):
             if synchronizeDicts(accountDataGetDiffForPersistent(ext), self.__persistentCache.data)[1]:
                 self.__persistentCache.isDirty = True
         else:
+            LOG_DEBUG_DEV('Account cache: update')
             if self.__persistentCache.data is None:
-                LOG_DEBUG_DEV('Account cache: copy')
-                self.__persistentCache.data = deepcopy(accountDataExtractPersistent(ext))
-            else:
-                LOG_DEBUG_DEV('Account cache: update')
-                synchronizeDicts(accountDataGetDiffForPersistent(ext), self.__persistentCache.data)
+                self.__persistentCache.data = {}
+            synchronizeDicts(accountDataGetDiffForPersistent(ext), self.__persistentCache.data)
             self.__persistentCache.isDirty = True
         return True
 

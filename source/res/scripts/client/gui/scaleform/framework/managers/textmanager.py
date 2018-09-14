@@ -34,12 +34,10 @@ class TextManager:
             return iconRes
 
     def getTimeDurationStr(self, seconds):
-        if seconds >= 60:
-            return time_utils.getTillTimeString(seconds, MENU.TIME_TIMEVALUE)
-        else:
-            return i18n.makeString(MENU.TIME_TIMEVALUE_LESSMIN)
+        return time_utils.getTillTimeString(seconds, MENU.TIME_TIMEVALUE)
 
-    def concatStyles(self, messages = None):
+    @classmethod
+    def concatStyles(cls, messages = None):
         result = ''
         style = ''
         if messages is None:
@@ -50,12 +48,12 @@ class TextManager:
                 if length == 1:
                     item = messageItem[0]
                     if item is not None and item in TextIcons.ICONS:
-                        style = self.getIcon(messageItem[0])
+                        style = cls.getIcon(messageItem[0])
                     else:
                         LOG_ERROR('not found icon source. ', messageItem)
                 elif length > 1:
                     key, value = messageItem
-                    style = self.getText(key, value)
+                    style = cls.getText(key, value)
                 result += style
 
             return result
@@ -100,6 +98,11 @@ class TextIcons:
     LEVEL_10 = 'level10'
     SWORDS = 'swords'
     HUMANS = 'humans'
+    CREDITS = 'credits'
+    GOLD = 'gold'
+    XP = 'xp'
+    FREE_XP = 'freeXP'
+    ARROW_BUTTON = 'arrowButton'
     ICONS = (NUT_ICON,
      PERCENT_ICON,
      ALERT_ICON,
@@ -113,4 +116,9 @@ class TextIcons:
      LEVEL_5,
      LEVEL_10,
      SWORDS,
-     HUMANS)
+     HUMANS,
+     CREDITS,
+     GOLD,
+     XP,
+     FREE_XP,
+     ARROW_BUTTON)

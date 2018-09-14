@@ -32,25 +32,30 @@ class ProfileSection(ProfileSectionMeta):
         if self.__isActive and self.__needUpdate:
             self.__needUpdate = False
             accountDossier = g_itemsCache.items.getAccountDossier(self._userID)
-            if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_ALL:
-                data = self._getTotalStatsBlock(accountDossier)
-            elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_TEAM:
-                data = accountDossier.getTeam7x7Stats()
-            elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL:
-                data = accountDossier.getHistoricalStats()
-            elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS:
-                data = self._receiveFortDossier(accountDossier)
-            elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES:
-                data = accountDossier.getFortSortiesStats()
-            elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES:
-                data = accountDossier.getFortBattlesStats()
-            elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_COMPANY:
-                data = accountDossier.getCompanyStats()
-            elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_CLAN:
-                data = accountDossier.getClanStats()
-            else:
-                raise ValueError('ProfileSection: Unknown battle type: ' + self._battlesType)
-            self._sendAccountData(data, accountDossier)
+            self._sendAccountData(self._getNecessaryStats(accountDossier), accountDossier)
+
+    def _getNecessaryStats(self, accountDossier = None):
+        if accountDossier is None:
+            accountDossier = g_itemsCache.items.getAccountDossier(self._userID)
+        if self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_ALL:
+            data = self._getTotalStatsBlock(accountDossier)
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_TEAM:
+            data = accountDossier.getTeam7x7Stats()
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_HISTORICAL:
+            data = accountDossier.getHistoricalStats()
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS:
+            data = self._receiveFortDossier(accountDossier)
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES:
+            data = accountDossier.getFortSortiesStats()
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES:
+            data = accountDossier.getFortBattlesStats()
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_COMPANY:
+            data = accountDossier.getCompanyStats()
+        elif self._battlesType == PROFILE.PROFILE_DROPDOWN_LABELS_CLAN:
+            data = accountDossier.getClanStats()
+        else:
+            raise ValueError('ProfileSection: Unknown battle type: ' + self._battlesType)
+        return data
 
     def _receiveFortDossier(self, accountDossier):
         return None

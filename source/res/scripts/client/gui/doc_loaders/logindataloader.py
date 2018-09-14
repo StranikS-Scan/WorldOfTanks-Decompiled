@@ -1,16 +1,15 @@
 # Embedded file name: scripts/client/gui/doc_loaders/LoginDataLoader.py
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+import BigWorld
+import Settings
+from gui import GUI_SETTINGS
+from debug_utils import LOG_CURRENT_EXCEPTION
 from Event import Event
 from account_helpers.SteamAccount import g_steamAccount
 from helpers.obfuscators import PasswordObfuscator
 from external_strings_utils import _PASSWORD_MAX_LENGTH
-from gui import GUI_SETTINGS
-import BigWorld
-import Settings
 __author__ = 'd_trofimov'
 
 class LoginDataLoader(object):
-    USER_TAG = 'user'
     LOGIN_TAG = 'login'
     TOKEN2_TAG = 'token2'
     PWD_SECTION = 'pwd'
@@ -76,7 +75,6 @@ class LoginDataLoader(object):
             self.__rememberPwd = ds.readBool(self.REMEMBER_PWD_TAG, False)
         if ds:
             if GUI_SETTINGS.clearLoginValue:
-                ds.writeString(self.USER_TAG, '')
                 ds.writeString(self.LOGIN_TAG, '')
             self.__user = self.__getUserLoginName(ds)
             self.__host = ds.readString(self.HOST_TAG)
@@ -121,8 +119,6 @@ class LoginDataLoader(object):
         li = self.__getUserLoginSection()
         if not g_steamAccount.isValid:
             li.writeString(self.LOGIN_TAG, BigWorld.wg_cpdata(user) if not GUI_SETTINGS.clearLoginValue else '')
-            if 'user' in li.keys():
-                li.deleteSection(self.USER_TAG)
             li.writeBool(self.REMEMBER_PWD_TAG, self.__rememberPwd if GUI_SETTINGS.rememberPassVisible else False)
         li.writeString(self.HOST_TAG, host)
         self.saveUserToken(self.__passLength, self.__token2)
@@ -137,15 +133,13 @@ class LoginDataLoader(object):
         if self.PWD_SECTION in li.keys():
             li.deleteSection(self.PWD_SECTION)
         if GUI_SETTINGS.igrCredentialsReset and not rememberPwd:
-            li.writeString(self.USER_TAG, '')
+            li.writeString(self.LOGIN_TAG, '')
         li.writeString(self.TOKEN2_TAG, token2 if rememberPwd else '')
         Settings.g_instance.save()
 
     def __getUserLoginName(self, loginInfoSection):
         userLogin = ''
-        if self.USER_TAG in loginInfoSection.keys():
-            userLogin = loginInfoSection.readString(self.USER_TAG, '')
-        elif self.LOGIN_TAG in loginInfoSection.keys():
+        if self.LOGIN_TAG in loginInfoSection.keys() and loginInfoSection.readString(self.LOGIN_TAG, ''):
             userLogin = BigWorld.wg_ucpdata(loginInfoSection.readString(self.LOGIN_TAG, ''))
         return userLogin
 

@@ -110,6 +110,7 @@ class OffbattleStartReqs(context.StartReqs):
             if ctx.restart:
                 tutorial.restart(ctx)
             elif not self._areAllBonusesReceived and not loader.isAfterBattle and cache.doStartOnNextLogin():
+                cache.setRefused(False).write()
                 loader._doRun(ctx)
             else:
                 tutorial.pause(ctx)
@@ -117,6 +118,7 @@ class OffbattleStartReqs(context.StartReqs):
         if cache.isAfterBattle():
             loader._doRun(ctx)
         elif not loader.isAfterBattle and cache.doStartOnNextLogin():
+            cache.setRefused(False).write()
             loader._doRun(ctx)
         else:
             tutorial.pause(ctx)

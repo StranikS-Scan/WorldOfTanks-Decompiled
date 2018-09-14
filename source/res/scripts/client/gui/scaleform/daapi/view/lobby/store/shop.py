@@ -1,28 +1,23 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/Shop.py
+import BigWorld
 from PlayerEvents import g_playerEvents
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.tooltips import getItemActionTooltipData, getItemRentActionTooltipData
-from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared import REQ_CRITERIA, g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH
-from items import vehicles
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
 from account_helpers.AccountSettings import AccountSettings
-from adisp import process
-from gui import getNationIndex, DialogsInterface
+from gui import getNationIndex
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.ShopMeta import ShopMeta
 from gui.Scaleform.daapi.view.lobby.store import Store
-from gui.shared.events import LoadViewEvent
 from gui.shared.utils.gui_items import InventoryVehicle
-from gui.shared.utils.requesters import StatsRequester
-import BigWorld
 from items import ITEM_TYPE_INDICES
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 
 class Shop(Store, ShopMeta):
 
@@ -46,20 +41,13 @@ class Shop(Store, ShopMeta):
         g_playerEvents.onCenterIsLongDisconnected -= self._update
         return
 
-    @process
-    def __buyItem(self, typeCompactDescr):
-        stats = yield StatsRequester().request()
-        isOk, args = yield DialogsInterface.showDialog(BuyModuleMeta(typeCompactDescr, (stats.credits, stats.gold)))
-        LOG_DEBUG('Buy module confirm dialog results: success = ', isOk, args)
-
     def buyItem(self, data):
-        dataCompactId = int(data.id)
-        item = g_itemsCache.items.getItemByCD(dataCompactId)
-        if ITEM_TYPE_INDICES[item.itemTypeName] == vehicles._VEHICLE:
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.VEHICLE_BUY_WINDOW, ctx={'nationID': item.nationID,
-             'itemID': item.innationID}))
+        itemCD = int(data.id)
+        item = g_itemsCache.items.getItemByCD(itemCD)
+        if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, itemCD)
         else:
-            self.__buyItem(item.intCD)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_MODULE, itemCD)
 
     def requestTableData(self, nation, type, filter):
         Waiting.show('updateShop')
@@ -105,23 +93,27 @@ class Shop(Store, ShopMeta):
                         continue
             disabled = False
             statusMessage = ''
+            money = g_itemsCache.items.stats.money
             if type == self._VEHICLE:
                 if BigWorld.player().isLongDisconnectedFromCenter:
                     statusMessage = MENU.SHOP_ERRORS_CENTERISDOWN
                     disabled = True
-                if inventoryCount > 0:
+                elif inventoryCount > 0:
                     statusMessage = MENU.SHOP_ERRORS_INHANGAR
                     disabled = True
                     if module.isRentable:
-                        money = g_itemsCache.items.stats.money
                         canBuyOrRent, _ = module.mayRentOrBuy(money)
                         disabled = not canBuyOrRent
                 elif not module.isUnlocked:
                     statusMessage = MENU.SHOP_ERRORS_UNLOCKNEEDED
                     disabled = True
+                else:
+                    disabled = not self._isPurchaseEnabled(module, money)
             elif type not in (self._SHELL, self._OPTIONAL_DEVICE, self._EQUIPMENT) and not module.isUnlocked:
                 statusMessage = MENU.SHOP_ERRORS_UNLOCKNEEDED
                 disabled = True
+            else:
+                disabled = not self._isPurchaseEnabled(module, money)
             dataProviderValues.append((module,
              inventoryCount,
              vehicleCount,
@@ -137,6 +129,12 @@ class Shop(Store, ShopMeta):
         self._table.as_setTableTypeS(self.__tableType)
         Waiting.hide('updateShop')
         return
+
+    def _isPurchaseEnabled(self, item, money):
+        canBuy, reason = item.mayPurchase(money)
+        if not canBuy and reason == 'credit_error':
+            return item.mayPurchaseWithExchange(money, g_itemsCache.items.shop.exchangeRate)
+        return canBuy
 
     def requestFilterData(self, filterType):
         self._updateFilterOptions(filterType)

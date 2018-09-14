@@ -3,6 +3,7 @@ import struct
 import itertools
 import operator
 import BigWorld
+import time
 from ClientUnit import ClientUnit
 from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE
 import Event
@@ -17,6 +18,7 @@ from gui.shared.fortifications.fort_seqs import ClanCardItem, AttackItem, Defenc
 from gui.shared.gui_items.dossier import FortDossier
 from gui.shared.utils import CONST_CONTAINER, findFirst
 from helpers import time_utils, i18n
+from items import vehicles
 UNIT_MGR_ID_CHR = '<qH'
 
 class BUILDING_UPDATE_REASON(CONST_CONTAINER):
@@ -25,6 +27,12 @@ class BUILDING_UPDATE_REASON(CONST_CONTAINER):
     COMPLETED = 3
     UPGRADED = 4
     DELETED = 5
+
+
+class ORDER_UPDATE_REASON(CONST_CONTAINER):
+    ADDED = 1
+    UPDATED = 2
+    EXPIRED = 3
 
 
 class ATTACK_PLAN_RESULT(CONST_CONTAINER):
@@ -42,6 +50,18 @@ class ATTACK_PLAN_RESULT(CONST_CONTAINER):
     PREORDER_TIME = 'preorder_time'
     IN_COOLDOWN = 'in_cooldown'
     WAR_DECLARED = 'war_declared'
+
+
+def getBattleEquipmentByOrderID(orderID, level):
+    if orderID in FORT_ORDER_TYPE.CONSUMABLES:
+        order2eq = {}
+        for i in range(10):
+            order2eq[FORT_ORDER_TYPE.ARTILLERY, i + 1] = 19 + i
+            order2eq[FORT_ORDER_TYPE.BOMBER, i + 1] = 29 + i
+
+        return vehicles.g_cache.equipments().get(order2eq[orderID, level])
+    else:
+        return None
 
 
 class ClientFortifiedRegion(FortifiedRegionBase):
@@ -62,7 +82,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onDirectionClosed = Event.Event(self.__eManager)
         self.onDirectionLockChanged = Event.Event(self.__eManager)
         self.onStateChanged = Event.Event(self.__eManager)
-        self.onOrderReady = Event.Event(self.__eManager)
+        self.onOrderChanged = Event.Event(self.__eManager)
         self.onDossierChanged = Event.Event(self.__eManager)
         self.onPlayerAttached = Event.Event(self.__eManager)
         self.onSettingCooldown = Event.Event(self.__eManager)
@@ -76,6 +96,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onShutdownDowngrade = Event.Event(self.__eManager)
         self.onEmergencyRestore = Event.Event(self.__eManager)
         self.onEnemyStateChanged = Event.Event(self.__eManager)
+        self.onConsumablesChanged = Event.Event(self.__eManager)
         self.__battlesMapping = {}
         FortifiedRegionBase.__init__(self)
 
@@ -342,8 +363,14 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def getLocalDefenceHour(self):
         from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
         if not self.isDefenceHourEnabled():
-            return NOT_ACTIVATED
+            return (NOT_ACTIVATED, 0)
         return adjustDefenceHourToLocal(self.defenceHour)
+
+    def getLocalDefenceDate(self):
+        if not self.isDefenceHourEnabled():
+            return None
+        else:
+            return time.localtime(time_utils.getTimeForUTC(time_utils.getCurrentTimestamp(), self.defenceHour))
 
     def getDefencePeriod(self):
         if self.isDefenceHourEnabled():
@@ -391,7 +418,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
         if not self.isOffDayEnabled():
             return NOT_ACTIVATED
-        return adjustOffDayToLocal(self.offDay, self.getLocalDefenceHour())
+        return adjustOffDayToLocal(self.offDay, self.getLocalDefenceHour()[0])
 
     def getOffDayStr(self):
         if self.isOffDayEnabled():
@@ -463,9 +490,8 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def canPlanAttackOn(self, dayTimestamp, clanFortInfo):
         if self.isFrozen():
             return ATTACK_PLAN_RESULT.MY_FROZEN
-        currentDefHourTimestamp = time_utils.getTimeForLocal(dayTimestamp, clanFortInfo.getStartDefHour())
-        enemyDefHour = clanFortInfo.getDefHourFor(currentDefHourTimestamp)
-        enemyDefHourTimestamp = time_utils.getTimeForLocal(dayTimestamp, enemyDefHour)
+        currentDefHourTimestamp = time_utils.getTimeForLocal(dayTimestamp, *clanFortInfo.getLocalDefHour())
+        enemyDefHourTimestamp = time_utils.getTimeForLocal(dayTimestamp, *clanFortInfo.getDefHourFor(currentDefHourTimestamp))
         if enemyDefHourTimestamp - time_utils.getCurrentTimestamp() <= fortified_regions.g_cache.attackPreorderTime:
             return ATTACK_PLAN_RESULT.PREORDER_TIME
         elif self.isOnVacationAt(enemyDefHourTimestamp):
@@ -494,7 +520,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         for direction in self.getOpenedDirections():
             eventTypeID = FORT_EVENT_TYPE.DIR_OPEN_ATTACKS_BASE + direction
             availableTime, _, _ = self.events.get(eventTypeID, (None, None, None))
-            if availableTime <= enemyDefHourTimestamp:
+            if availableTime is None or availableTime <= enemyDefHourTimestamp:
                 hasAvailableDirections = True
 
                 def filterAttacks(item):
@@ -610,6 +636,10 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         FortifiedRegionBase._addOrders(self, buildingTypeID, count, timeFinish, initiatorDBID)
         self.onBuildingChanged(buildingTypeID, BUILDING_UPDATE_REASON.UPDATED)
 
+    def _activateOrder(self, orderTypeID, timeExpiration, effectValue, count, level, initiatorDBID):
+        FortifiedRegionBase._activateOrder(self, orderTypeID, timeExpiration, effectValue, count, level, initiatorDBID)
+        self.onOrderChanged(orderTypeID, ORDER_UPDATE_REASON.UPDATED)
+
     def _transport(self, fromBuildTypeID, toBuildTypeID, resCount, timeCooldown):
         reason = BUILDING_UPDATE_REASON.UPDATED
         previousState = self.getBuilding(toBuildTypeID)
@@ -649,15 +679,16 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def _expireEvent(self, eventTypeID, value):
         buildingTypeID = eventTypeID - FORT_EVENT_TYPE.PRODUCT_ORDERS_BASE
         orderTypeID = 0
-        orderCount = 0
-        isOrder = buildingTypeID in FORT_BUILDING_TYPE_NAMES
-        if isOrder:
-            building = self.getBuilding(buildingTypeID)
+        isOrderReady = buildingTypeID in FORT_BUILDING_TYPE_NAMES
+        expireOrderTypeID = eventTypeID - FORT_EVENT_TYPE.ACTIVE_ORDERS_BASE
+        isOrderExpire = expireOrderTypeID in FORT_ORDER_TYPE.ALL
+        if isOrderReady:
             orderTypeID = self.getBuildingOrder(buildingTypeID)
-            orderCount = building.orderInProduction.get('count')
         FortifiedRegionBase._expireEvent(self, eventTypeID, value)
-        if isOrder:
-            self.onOrderReady(orderTypeID, orderCount)
+        if isOrderReady:
+            self.onOrderChanged(orderTypeID, ORDER_UPDATE_REASON.ADDED)
+        elif isOrderExpire:
+            self.onOrderChanged(expireOrderTypeID, ORDER_UPDATE_REASON.EXPIRED)
         elif eventTypeID == FORT_EVENT_TYPE.DEFENCE_HOUR_CHANGE:
             self.onDefenceHourChanged(value)
         elif eventTypeID == FORT_EVENT_TYPE.OFF_DAY_CHANGE:
@@ -752,3 +783,11 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def _onEmergencyRestore(self, unpacking):
         self.onEmergencyRestore()
         return FortifiedRegionBase._onEmergencyRestore(self, unpacking)
+
+    def _activateConsumable(self, battleID, consumableTypeID, slotIndex, count, level):
+        FortifiedRegionBase._activateConsumable(self, battleID, consumableTypeID, slotIndex, count, level)
+        self.onConsumablesChanged(battleID, consumableTypeID)
+
+    def _returnConsumable(self, battleID, consumableTypeID, level):
+        FortifiedRegionBase._returnConsumable(self, battleID, consumableTypeID, level)
+        self.onConsumablesChanged(battleID, consumableTypeID)

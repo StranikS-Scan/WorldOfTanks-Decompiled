@@ -107,7 +107,7 @@ def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
     elif IS_CELLAPP:
 
         def getVehicleSpaceMatrix(vehicle):
-            toVehSpace = Math.Matrix(vehicle.mover.exactMatrix)
+            toVehSpace = Math.Matrix(vehicle.mover.matrix)
             toVehSpace.invert()
             return toVehSpace
 

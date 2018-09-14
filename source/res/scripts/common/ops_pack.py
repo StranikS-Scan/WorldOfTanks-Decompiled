@@ -32,6 +32,10 @@ def initOpsFormatDef(opsFormatDefs):
             packFormat = '<B' + unpackFormat
             calcSize = struct.calcsize(packFormat)
             unpackFormat = '<' + unpackFormat
+        elif unpackFormat is None:
+            packFormat = '<B'
+            calcSize = struct.calcsize(packFormat)
+            unpackFormat = '<'
         if specialFormat:
             ofs = 0
             for formatSymbol in specialFormat:
@@ -236,6 +240,8 @@ class OpsUnpacker:
 
                 packedOps = packedOps[packOfs:]
                 method(*args)
+            elif unpackFormat is None:
+                method()
             else:
                 packedOps = method(packedOps[1:])
             invokedOps.add(opCode)

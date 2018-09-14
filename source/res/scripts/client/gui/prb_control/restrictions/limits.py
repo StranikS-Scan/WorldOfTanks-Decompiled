@@ -30,21 +30,6 @@ class VehicleIsValid(IVehicleLimit):
         return isVehicleValid(vehicle.descriptor, shellsList, teamLimits)
 
 
-class EventVehicleIsValid(IVehicleLimit):
-
-    def check(self, teamLimits):
-        if not g_currentVehicle.isReadyToFight():
-            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
-        vehicle = g_currentVehicle.item
-        if not vehicle.isOnlyForEventBattles:
-            return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
-        shellsList = []
-        for shell in vehicle.shells:
-            shellsList.extend([shell.intCD, shell.count])
-
-        return isVehicleValid(vehicle.descriptor, shellsList, teamLimits)
-
-
 class AbstractTeamIsValid(ITeamLimit):
 
     def _getAccountsInfo(self, rosters, team):
@@ -266,13 +251,7 @@ class DefaultLimits(LimitsCollection):
 class SquadLimits(LimitsCollection):
 
     def __init__(self, functional):
-        super(SquadLimits, self).__init__(functional, (VehicleIsValid(),), (TeamIsValid(),))
-
-
-class EventSquadLimits(LimitsCollection):
-
-    def __init__(self, functional):
-        super(EventSquadLimits, self).__init__(functional, (EventVehicleIsValid(),), (TeamIsValid(),))
+        super(SquadLimits, self).__init__(functional, (VehicleIsValid(checkForEventBattles=False),), (TeamIsValid(),))
 
 
 class TrainingLimits(LimitsCollection):
@@ -332,8 +311,6 @@ class _UnitActionValidator(object):
             return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
         if not vInfo.isReadyToBattle():
             return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
-        if g_currentVehicle.invID != vInfo.vehInvID:
-            return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
         return (True, UNIT_RESTRICTION.UNDEFINED)
 
     def getRestrictionByLevel(self, stats, state):

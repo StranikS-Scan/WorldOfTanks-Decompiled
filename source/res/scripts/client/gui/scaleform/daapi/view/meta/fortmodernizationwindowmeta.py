@@ -6,6 +6,9 @@ class FortModernizationWindowMeta(DAAPIModule):
     def applyAction(self):
         self._printOverrideError('applyAction')
 
+    def openOrderDetailsWindow(self):
+        self._printOverrideError('openOrderDetailsWindow')
+
     def as_setDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setData(data)

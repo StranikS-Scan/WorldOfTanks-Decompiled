@@ -5,6 +5,10 @@ from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings
 from messenger import g_settings
+from messenger.formatters.users_messages import makeFriendshipRequestText
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
+from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
 
@@ -212,6 +216,59 @@ class PrbInviteDecorator(_NotificationDecorator):
         message = g_settings.msgTemplates.format('invite', ctx={'text': formatter.getText(invite)}, data={'timestamp': self._createdAt,
          'icon': makePathToIcon(formatter.getIconName(invite)),
          'defaultIcon': makePathToIcon('prebattleInviteIcon'),
+         'buttonsStates': {'submit': submitState,
+                           'cancel': cancelState}})
+        self._vo = {'typeID': self.getType(),
+         'entityID': self.getID(),
+         'message': message,
+         'notify': self.isNotify(),
+         'auxData': []}
+
+
+class FriendshipRequestDecorator(_NotificationDecorator):
+    __slots__ = ('_receivedAt',)
+
+    def __init__(self, user):
+        self._receivedAt = None
+        super(FriendshipRequestDecorator, self).__init__(user.getID(), entity=user, settings=NotificationGuiSettings(True, NotificationPriorityLevel.HIGH, showAt=_makeShowTime()))
+        return
+
+    @proto_getter(PROTO_TYPE.XMPP)
+    def proto(self):
+        return None
+
+    def getType(self):
+        return NOTIFICATION_TYPE.FRIENDSHIP_RQ
+
+    def getOrder(self):
+        return (self.showAt(), self._receivedAt)
+
+    def update(self, user):
+        self._make(user=user, settings=NotificationGuiSettings(False, NotificationPriorityLevel.LOW, showAt=self.showAt()))
+
+    def _make(self, user = None, settings = None):
+        if settings:
+            self._settings = settings
+        contacts = self.proto.contacts
+        if user.getItemType() == XMPP_ITEM_TYPE.SUB_PENDING:
+            self._receivedAt = user.getItem().receivedAt()
+        canCancel, error = contacts.canCancelFriendship(user)
+        if canCancel:
+            canApprove, error = contacts.canApproveFriendship(user)
+        else:
+            canApprove = False
+        if canApprove or canCancel:
+            submitState = cancelState = NOTIFICATION_BUTTON_STATE.VISIBLE
+            if canApprove:
+                submitState |= NOTIFICATION_BUTTON_STATE.ENABLED
+            if canCancel:
+                cancelState |= NOTIFICATION_BUTTON_STATE.ENABLED
+            self._settings.isNotify = True
+            self._settings.priorityLevel = NotificationPriorityLevel.HIGH
+        else:
+            submitState = cancelState = NOTIFICATION_BUTTON_STATE.HIDDEN
+        message = g_settings.msgTemplates.format('friendshipRequest', ctx={'text': makeFriendshipRequestText(user, error)}, data={'timestamp': self._receivedAt,
+         'icon': makePathToIcon('friendshipIcon'),
          'buttonsStates': {'submit': submitState,
                            'cancel': cancelState}})
         self._vo = {'typeID': self.getType(),

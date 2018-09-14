@@ -17,9 +17,10 @@ from gui.shared import g_itemsCache, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import isStartingScriptDone
+from gui.prb_control.prb_helpers import GlobalListener
 from PlayerEvents import g_playerEvents
 
-class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
+class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef, GlobalListener):
 
     def __init__(self, _):
         super(AccountPopover, self).__init__()
@@ -36,15 +37,30 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW))
         self.destroy()
 
+    def onUnitStateChanged(self, state, timeLeft):
+        self.__updateButtonsStates()
+
+    def onTeamStatesReceived(self, functional, team1State, team2State):
+        self.__updateButtonsStates()
+
+    def onEnqueued(self):
+        self.__updateButtonsStates()
+
     def _populate(self):
-        g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
         super(AccountPopover, self)._populate()
+        self.startGlobalListening()
+        g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
         self.__populateUserInfo()
         self.__populateClanEmblem()
 
     def _dispose(self):
-        super(AccountPopover, self)._dispose()
+        self.stopGlobalListening()
         g_playerEvents.onCenterIsLongDisconnected -= self.__onCenterIsLongDisconnected
+        super(AccountPopover, self)._dispose()
+
+    def __updateButtonsStates(self):
+        self.__setInfoButtonState()
+        self.__syncUserInfo()
 
     def __populateUserInfo(self):
         self.__setUserInfo()
@@ -130,9 +146,7 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
         self.__syncUserInfo()
 
     def __setReferralData(self):
-        refferals = game_control.g_instance.refSystem.getReferrals()
-        if refferals:
-            invitedText = makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_INVITED, referrersNum=len(refferals))
-            moreInfoText = makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO)
-            self.as_setReferralDataS({'invitedText': invitedText,
-             'moreInfoText': moreInfoText})
+        refSysCtrl = game_control.g_instance.refSystem
+        if refSysCtrl.isReferrer():
+            self.as_setReferralDataS({'invitedText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_INVITED, referrersNum=len(refSysCtrl.getReferrals())),
+             'moreInfoText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO)})

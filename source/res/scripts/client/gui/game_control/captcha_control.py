@@ -8,6 +8,7 @@ from adisp import async
 from constants import JOIN_FAILURE
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.game_control.controllers import Controller
 from helpers.aop import Aspect, Weaver, Pointcut
 from helpers import i18n
 from PlayerEvents import g_playerEvents
@@ -19,7 +20,7 @@ def _showDialog(text, callback):
     return DialogsInterface.showDialog(CaptchaDialogMeta(text), callback)
 
 
-class CaptchaController(object):
+class CaptchaController(Controller):
     __api = CAPTCHA_API_CLASS()
     __battlesTillCaptcha = 99
     __triesLeft = 3
@@ -27,7 +28,8 @@ class CaptchaController(object):
      'response-is-empty': i18n.makeString('#captcha:error-codes/response-is-empty'),
      'challenge-is-empty': i18n.makeString('#captcha:error-codes/challenge-is-empty')}
 
-    def init(self):
+    def __init__(self, proxy):
+        super(CaptchaController, self).__init__(proxy)
         self.__tryReset = False
         self.__weaver = None
         self.onCaptchaInputCanceled = Event.Event()
@@ -35,10 +37,11 @@ class CaptchaController(object):
 
     def fini(self):
         self.onCaptchaInputCanceled.clear()
-        self.stop()
+        self.onDisconnected()
         self.__tryReset = False
+        super(CaptchaController, self).fini()
 
-    def start(self):
+    def onConnected(self):
         self.__weaver = Weaver()
         BigWorld.player().stats.get('battlesTillCaptcha', self.__pc_onReceiveBattlesTillCaptcha)
         BigWorld.player().stats.get('captchaTriesLeft', self.__pc_onReceiveCaptchaTriesLeft)
@@ -47,7 +50,7 @@ class CaptchaController(object):
         g_clientUpdateManager.addCallbacks({'stats.battlesTillCaptcha': self.__onBattlesTillCaptcha,
          'stats.captchaTriesLeft': self.__onCaptchaTriesLeft})
 
-    def stop(self):
+    def onDisconnected(self):
         if self.__weaver is not None:
             self.__weaver.clear()
             self.__weaver = None

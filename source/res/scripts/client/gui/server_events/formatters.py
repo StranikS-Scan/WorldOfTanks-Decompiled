@@ -10,6 +10,7 @@ from gui.shared.utils import CONST_CONTAINER
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.server_events import caches
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.QUESTS import QUESTS
 
 class DISCOUNT_TYPE(CONST_CONTAINER):
     PERCENT = 'percent'
@@ -489,3 +490,15 @@ def packGroupByClassConditions(className, counterValue = None, inrow = False, co
 
 def getPQFullDescription(quest):
     return '%s\n%s' % (quest.getUserMainCondition(), quest.getUserAddCondition())
+
+
+def getFullSeasonUserName(season):
+    return i18n.makeString(QUESTS.PERSONAL_SEASONS_ITEMTITLE, num=season.getID(), name=season.getUserName())
+
+
+def getShortSeasonUserName(season):
+    return i18n.makeString('#quests:personal/seasons/shortSeasonName', num=season.getID())
+
+
+def getFullTileUserName(season, tile):
+    return '%s, %s' % (getShortSeasonUserName(season), tile.getUserName())

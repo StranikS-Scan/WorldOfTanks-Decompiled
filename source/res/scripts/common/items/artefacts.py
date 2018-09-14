@@ -1,4 +1,5 @@
 # Embedded file name: scripts/common/items/artefacts.py
+import Math
 import items, nations
 from items import _xml, vehicles
 from debug_utils import *
@@ -283,6 +284,54 @@ class Afterburning(Equipment):
     def _readConfig(self, xmlCtx, section):
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
         self.durationSeconds = _xml.readInt(xmlCtx, section, 'durationSeconds', 1)
+
+
+class Artillery(Equipment):
+
+    def _readConfig(self, xmlCtx, section):
+        self.delayRange = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'delayRange', 2)
+        self.durationRange = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'durationRange', 2)
+        self.shotsNumberRange = _xml.readTupleOfNonNegativeInts(xmlCtx, section, 'shotsNumberRange', 2)
+        self.areaRadius = _xml.readPositiveFloat(xmlCtx, section, 'areaRadius')
+        self.shellCompactDescr = _xml.readInt(xmlCtx, section, 'shellCompactDescr')
+        self.tracerKind = _xml.readInt(xmlCtx, section, 'tracerKind')
+        self.piercingPower = _xml.readTupleOfPositiveInts(xmlCtx, section, 'piercingPower', 2)
+        self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
+        self.areaColor = _xml.readIntOrNone(xmlCtx, section, 'areaColor')
+        self.areaMarker = _xml.readStringOrNone(xmlCtx, section, 'areaMarker')
+        self.areaLength = self.areaWidth = self.areaRadius * 2
+        self.reusable = _xml.readBool(xmlCtx, section, 'reusable')
+        self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownTime') if self.reusable else 0.0
+        self.deployTime = _xml.readNonNegativeFloat(xmlCtx, section, 'deployTime')
+
+
+class Bomber(Equipment):
+
+    def _readConfig(self, xmlCtx, section):
+        self.delayRange = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'delayRange', 2)
+        self.modelName = _xml.readString(xmlCtx, section, 'modelName')
+        self.soundEvent = _xml.readString(xmlCtx, section, 'soundEvent')
+        self.speed = _xml.readInt(xmlCtx, section, 'speed')
+        self.heights = _xml.readTupleOfPositiveInts(xmlCtx, section, 'heights', 2)
+        self.areaLength = _xml.readPositiveFloat(xmlCtx, section, 'areaLength')
+        self.areaWidth = _xml.readPositiveFloat(xmlCtx, section, 'areaWidth')
+        self.antepositions = _xml.readTupleOfFloats(xmlCtx, section, 'antepositions')
+        self.lateropositions = _xml.readTupleOfFloats(xmlCtx, section, 'lateropositions')
+        self.bombingMask = tuple((bool(v) for v in _xml.readTupleOfInts(xmlCtx, section, 'bombingMask')))
+        if not len(self.antepositions) == len(self.lateropositions) == len(self.bombingMask):
+            _xml.raiseWrongSection(xmlCtx, 'bombers number mismatch')
+        self.waveFraction = _xml.readPositiveFloat(xmlCtx, section, 'waveFraction')
+        self.bombsNumberRange = _xml.readTupleOfNonNegativeInts(xmlCtx, section, 'bombsNumberRange', 2)
+        self.shellCompactDescr = _xml.readInt(xmlCtx, section, 'shellCompactDescr')
+        self.tracerKind = _xml.readInt(xmlCtx, section, 'tracerKind')
+        self.piercingPower = _xml.readTupleOfPositiveInts(xmlCtx, section, 'piercingPower', 2)
+        self.gravity = _xml.readPositiveFloat(xmlCtx, section, 'gravity')
+        self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
+        self.areaColor = _xml.readIntOrNone(xmlCtx, section, 'areaColor')
+        self.areaMarker = _xml.readStringOrNone(xmlCtx, section, 'areaMarker')
+        self.reusable = _xml.readBool(xmlCtx, section, 'reusable')
+        self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownTime') if self.reusable else 0.0
+        self.deployTime = _xml.readNonNegativeFloat(xmlCtx, section, 'deployTime')
 
 
 class _VehicleFilter(object):

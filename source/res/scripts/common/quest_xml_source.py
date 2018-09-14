@@ -220,8 +220,6 @@ class Source:
          'name': questName,
          'type': eventType,
          'description': description,
-         'seqID': questSection.readInt('seqID', -1),
-         'groupID': questSection.readString('groupID', ''),
          'progressExpiryTime': progressExpiryTime,
          'weekDays': weekDays,
          'activeTimeIntervals': activeTimeIntervals,
@@ -472,7 +470,7 @@ class Source:
 
     def __readCondition_keyResults(self, _, section, node):
         name = section.asString
-        if name not in battle_results_shared.VEH_BASE_RESULTS_INDICES and name not in battle_results_shared.COMMON_RESULTS_INDICES and name not in battle_results_shared.VEH_FULL_RESULTS_UPDATE:
+        if name not in battle_results_shared.VEH_BASE_RESULTS_INDICES and name not in battle_results_shared.COMMON_RESULTS_INDICES and name not in battle_results_shared.VEH_FULL_RESULTS_INDICES:
             raise Exception, "Unsupported battle result variable '%s'" % name
         node.addChild(name)
 
@@ -618,6 +616,10 @@ class Source:
                 extra['crewFreeXP'] = section['crewFreeXP'].asInt
         if section.has_key('rent'):
             self.__readBonus_rent(extra, None, section['rent'], gFinishTime)
+        if section.has_key('customCompensation'):
+            credits = section['customCompensation'].readInt('credits', 0)
+            gold = section['customCompensation'].readInt('gold', 0)
+            extra['customCompensation'] = (credits, gold)
         bonus.setdefault('vehicles', {})[vehTypeCompDescr] = extra
         return
 

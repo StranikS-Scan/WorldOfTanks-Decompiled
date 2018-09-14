@@ -14,9 +14,10 @@ def getDefRes(value, addIcon = True):
         return text
 
 
-def getBonusText(strValue, buildingID, textsStyle = None):
+def getBonusText(strValue, buildingID, textsStyle = None, ctx = None):
+    ctx = ctx or {}
     textsStyle = textsStyle or (TextType.NEUTRAL_TEXT, TextType.MAIN_TEXT)
-    descrStr = i18n.makeString(FORTIFICATIONS.buildings_defresinfo(buildingID))
+    descrStr = i18n.makeString(FORTIFICATIONS.buildings_defresinfo(buildingID), **ctx)
     resultDescr = TextManager.reference().concatStyles(((textsStyle[0], strValue + ' '), (textsStyle[1], descrStr)))
     return resultDescr
 

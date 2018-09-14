@@ -4,6 +4,7 @@ import BigWorld
 from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_ERROR
 from gui.battle_control.arena_info import getClientArena
 from gui.battle_control.arena_info import IArenaController
+from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
 
 class _Listener(object):
@@ -171,22 +172,29 @@ class ArenaListener(_Listener):
         return
 
 
-class ChatRostersListener(_Listener):
+class UsersListListener(_Listener):
 
     def start(self, **kwargs):
-        g_messengerEvents.users.onUsersRosterReceived += self.__me_onUsersRosterReceived
-        g_messengerEvents.users.onUserRosterChanged += self.__me_onUserRosterChanged
+        g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
+        g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
 
     def stop(self):
-        g_messengerEvents.users.onUsersRosterReceived -= self.__me_onUsersRosterReceived
-        g_messengerEvents.users.onUserRosterChanged -= self.__me_onUserRosterChanged
+        g_messengerEvents.users.onUsersListReceived -= self.__me_onUsersListReceived
+        g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
         self.clear()
 
-    def __me_onUsersRosterReceived(self):
-        self._invokeListenersMethod('invalidateChatRosters')
+    def __me_onUsersListReceived(self, tags):
+        if USER_TAG.includeToContactsList(tags):
+            self._invokeListenersMethod('invalidateUsersTags')
 
-    def __me_onUserRosterChanged(self, _, user):
-        self._invokeListenersMethod('invalidateChatRoster', user)
+    def __me_onUserActionReceived(self, actionID, user):
+        if actionID in (USER_ACTION_ID.FRIEND_ADDED,
+         USER_ACTION_ID.FRIEND_REMOVED,
+         USER_ACTION_ID.IGNORED_ADDED,
+         USER_ACTION_ID.IGNORED_REMOVED,
+         USER_ACTION_ID.MUTE_SET,
+         USER_ACTION_ID.MUTE_UNSET):
+            self._invokeListenersMethod('invalidateUserTags', user)
 
 
 class ArenaSpaceLoadListener(_Listener):
@@ -260,34 +268,34 @@ class ArenaSpaceLoadListener(_Listener):
 
 
 class ListenersCollection(_Listener):
-    __slots__ = ('__arenaListener', '__chatRostersListener', '__arenaLoadListener')
+    __slots__ = ('__arenaListener', '__usersListListener', '__arenaLoadListener')
 
     def __init__(self):
         super(ListenersCollection, self).__init__()
         self.__arenaListener = ArenaListener()
-        self.__chatRostersListener = ChatRostersListener()
+        self.__usersListListener = UsersListListener()
         self.__arenaLoadListener = ArenaSpaceLoadListener()
 
     def addController(self, battleCtx, controller):
-        return self.__arenaListener.addController(battleCtx, controller) and self.__chatRostersListener.addController(battleCtx, controller) and self.__arenaLoadListener.addController(battleCtx, controller)
+        return self.__arenaListener.addController(battleCtx, controller) and self.__usersListListener.addController(battleCtx, controller) and self.__arenaLoadListener.addController(battleCtx, controller)
 
     def removeController(self, controller):
         result = self.__arenaListener.removeController(controller)
-        result |= self.__chatRostersListener.removeController(controller)
+        result |= self.__usersListListener.removeController(controller)
         result |= self.__arenaLoadListener.removeController(controller)
         return result
 
     def start(self, **kwargs):
         self.__arenaListener.start(**kwargs)
-        self.__chatRostersListener.start(**kwargs)
+        self.__usersListListener.start(**kwargs)
         self.__arenaLoadListener.start(**kwargs)
 
     def stop(self):
         self.__arenaListener.stop()
-        self.__chatRostersListener.stop()
+        self.__usersListListener.stop()
         self.__arenaLoadListener.stop()
 
     def clear(self):
         self.__arenaListener.clear()
-        self.__chatRostersListener.clear()
+        self.__usersListListener.clear()
         self.__arenaLoadListener.clear()

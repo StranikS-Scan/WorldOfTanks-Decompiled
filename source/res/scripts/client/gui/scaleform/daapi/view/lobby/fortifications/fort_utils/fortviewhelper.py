@@ -2,9 +2,10 @@
 import calendar
 import BigWorld
 from FortifiedRegionBase import NOT_ACTIVATED
+from debug_utils import LOG_DEBUG
 import fortified_regions
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
-from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
+from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS, FORT_ORDER_TYPE
 from gui.Scaleform.framework.managers.TextManager import TextIcons, TextManager
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
@@ -13,11 +14,14 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.utils import findFirst
 from helpers import i18n, time_utils
 
 class FortViewHelper(FortListener):
     FORT_UNKNOWN = FORTIFICATION_ALIASES.FORT_UNKNOWN
-    BUILDINGS = [FORT_BUILDING_TYPE.OFFICE,
+    BUILDINGS = [FORT_BUILDING_TYPE.ARTILLERY_SHOP,
+     FORT_BUILDING_TYPE.BOMBER_SHOP,
+     FORT_BUILDING_TYPE.OFFICE,
      FORT_BUILDING_TYPE.FINANCIAL_DEPT,
      FORT_BUILDING_TYPE.MILITARY_ACADEMY,
      FORT_BUILDING_TYPE.TANKODROME,
@@ -25,25 +29,27 @@ class FortViewHelper(FortListener):
      FORT_BUILDING_TYPE.TRANSPORT_DEPT,
      FORT_BUILDING_TYPE.TROPHY_BRIGADE,
      FORT_BUILDING_TYPE.INTENDANT_SERVICE]
-    UI_BUILDINGS_BIND = [FORT_UNKNOWN,
-     FORTIFICATION_ALIASES.FORT_BASE_BUILDING,
-     FORTIFICATION_ALIASES.FORT_FINANCE_BUILDING,
-     FORTIFICATION_ALIASES.FORT_TANKODROM_BUILDING,
-     FORTIFICATION_ALIASES.FORT_TRAINING_BUILDING,
-     FORTIFICATION_ALIASES.FORT_WAR_SCHOOL_BUILDING,
-     FORTIFICATION_ALIASES.FORT_CAR_BUILDING,
-     FORTIFICATION_ALIASES.FORT_INTENDANCY_BUILDING,
-     FORTIFICATION_ALIASES.FORT_TROPHY_BUILDING,
-     FORTIFICATION_ALIASES.FORT_OFFICE_BUILDING]
-    UI_ORDERS_BIND = [FORT_UNKNOWN,
-     ORDER_TYPES.BATTLE_PAYMENTS,
-     ORDER_TYPES.TACTICAL_TRAINING,
-     ORDER_TYPES.ADDITIONAL_BRIEFING,
-     ORDER_TYPES.MILITARY_MANEUVERS,
-     ORDER_TYPES.HEAVY_TRUCKS,
-     ORDER_TYPES.EVACUATION,
-     ORDER_TYPES.REQUISITION,
-     ORDER_TYPES.SPECIAL_MISSION]
+    UI_BUILDINGS_BIND = {FORT_BUILDING_TYPE.MILITARY_BASE: FORTIFICATION_ALIASES.FORT_BASE_BUILDING,
+     FORT_BUILDING_TYPE.FINANCIAL_DEPT: FORTIFICATION_ALIASES.FORT_FINANCE_BUILDING,
+     FORT_BUILDING_TYPE.TANKODROME: FORTIFICATION_ALIASES.FORT_TANKODROM_BUILDING,
+     FORT_BUILDING_TYPE.TRAINING_DEPT: FORTIFICATION_ALIASES.FORT_TRAINING_BUILDING,
+     FORT_BUILDING_TYPE.MILITARY_ACADEMY: FORTIFICATION_ALIASES.FORT_WAR_SCHOOL_BUILDING,
+     FORT_BUILDING_TYPE.TRANSPORT_DEPT: FORTIFICATION_ALIASES.FORT_CAR_BUILDING,
+     FORT_BUILDING_TYPE.INTENDANT_SERVICE: FORTIFICATION_ALIASES.FORT_INTENDANCY_BUILDING,
+     FORT_BUILDING_TYPE.TROPHY_BRIGADE: FORTIFICATION_ALIASES.FORT_TROPHY_BUILDING,
+     FORT_BUILDING_TYPE.OFFICE: FORTIFICATION_ALIASES.FORT_OFFICE_BUILDING,
+     FORT_BUILDING_TYPE.ARTILLERY_SHOP: FORTIFICATION_ALIASES.FORT_ARTILLERY_SHOP_BUILDING,
+     FORT_BUILDING_TYPE.BOMBER_SHOP: FORTIFICATION_ALIASES.FORT_BOMBER_SHOP_BUILDING}
+    UI_ORDERS_BIND = {FORT_ORDER_TYPE.COMBAT_PAYMENTS: ORDER_TYPES.BATTLE_PAYMENTS,
+     FORT_ORDER_TYPE.TACTICAL_TRAINING: ORDER_TYPES.TACTICAL_TRAINING,
+     FORT_ORDER_TYPE.ADDITIONAL_BRIEFING: ORDER_TYPES.ADDITIONAL_BRIEFING,
+     FORT_ORDER_TYPE.MILITARY_EXERCISES: ORDER_TYPES.MILITARY_MANEUVERS,
+     FORT_ORDER_TYPE.HEAVY_TRANSPORT: ORDER_TYPES.HEAVY_TRUCKS,
+     FORT_ORDER_TYPE.EVACUATION: ORDER_TYPES.EVACUATION,
+     FORT_ORDER_TYPE.REQUISITION: ORDER_TYPES.REQUISITION,
+     FORT_ORDER_TYPE.SPECIAL_MISSION: ORDER_TYPES.SPECIAL_MISSION,
+     FORT_ORDER_TYPE.ARTILLERY: ORDER_TYPES.ARTILLERY,
+     FORT_ORDER_TYPE.BOMBER: ORDER_TYPES.BOMBER}
     BUILDING_ANIMATIONS = {BUILDING_UPDATE_REASON.ADDED: FORTIFICATION_ALIASES.BUILD_FOUNDATION_ANIMATION,
      BUILDING_UPDATE_REASON.UPGRADED: FORTIFICATION_ALIASES.UPGRADE_BUILDING_ANIMATION,
      BUILDING_UPDATE_REASON.DELETED: FORTIFICATION_ALIASES.DEMOUNT_BUILDING_ANIMATION}
@@ -63,6 +69,26 @@ class FortViewHelper(FortListener):
         data = self._getBaseFortificationData()
         data.update(self._getCustomData())
         return data
+
+    @classmethod
+    def getBuildingUIDbyID(cls, buildingID):
+        raise isinstance(buildingID, int) or AssertionError('getBuildingUIDbyID requires INT, got %s' % str(buildingID))
+        return cls.UI_BUILDINGS_BIND.get(buildingID, cls.FORT_UNKNOWN)
+
+    @classmethod
+    def getBuildingIDbyUID(cls, buildingUID):
+        raise isinstance(buildingUID, str) or AssertionError('getBuildingUIDbyID requires STR, got %s' % str(buildingUID))
+        return findFirst(lambda k: cls.UI_BUILDINGS_BIND[k] == buildingUID, cls.UI_BUILDINGS_BIND)
+
+    @classmethod
+    def getOrderUIDbyID(cls, orderID):
+        raise isinstance(orderID, int) or AssertionError('getOrderUIDbyID requires INT, got %s' % str(orderID))
+        return cls.UI_ORDERS_BIND.get(orderID, cls.FORT_UNKNOWN)
+
+    @classmethod
+    def getOrderIDbyUID(cls, orderUID):
+        raise isinstance(orderUID, str) or AssertionError('getOrderIDbyUID requires STR, got %s' % str(orderUID))
+        return findFirst(lambda k: cls.UI_ORDERS_BIND[k] == orderUID, cls.UI_ORDERS_BIND)
 
     def _getBaseFortificationData(self):
         level = 0
@@ -143,7 +169,7 @@ class FortViewHelper(FortListener):
         isLevelUp = False
         cooldownStr = None
         if buildingDescr is not None:
-            uid = self.UI_BUILDINGS_BIND[buildingDescr.typeID]
+            uid = self.getBuildingUIDbyID(buildingDescr.typeID)
             defResVal = buildingDescr.storage
             maxDefResValue = buildingDescr.levelRef.storage
             hpVal = buildingDescr.hp
@@ -187,43 +213,11 @@ class FortViewHelper(FortListener):
              'orderTime': orderTime,
              'isLevelUp': isLevelUp,
              'isOpenCtxMenu': self.fortCtrl.getPermissions().canViewContext(),
-             'ctxMenuData': self.__makeContextMenuData(buildingDescr),
              'productionInPause': self._isProductionInPause(buildingDescr),
              'animationType': animation,
              'isBaseBuildingDamaged': self._isBaseBuildingDamaged(),
              'isFortFrozen': self._isFortFrozen()})
         return data
-
-    def __makeContextMenuData(self, buildingDescr):
-        if buildingDescr is None or not self.fortCtrl.getPermissions().canViewContext():
-            return
-        else:
-            result = []
-            canModernization = self._canModernization(buildingDescr)
-            enableModernizationBtn = self._isEnableModernizationBtnByProgress(buildingDescr) and self._isEnableModernizationBtnByDamaged(buildingDescr)
-            if self._isMilitaryBase(buildingDescr.typeID):
-                cxtMaps = [(FORTIFICATION_ALIASES.CTX_ACTION_DIRECTION_CONTROL, MENU.FORTIFICATIONCTX_DIRECTIONCONTROL), (FORTIFICATION_ALIASES.CTX_ACTION_ASSIGN_PLAYERS,
-                  MENU.FORTIFICATIONCTX_ASSIGNEDPLAYERS,
-                  None,
-                  None), (FORTIFICATION_ALIASES.CTX_ACTION_MODERNIZATION, MENU.FORTIFICATIONCTX_MODERNIZATION)]
-                if self._isVisibleDirectionCtrlBtn(buildingDescr):
-                    result.append(self.__createItem(cxtMaps[0], self._isEnableDirectionControl()))
-                result.append(self.__createItem(cxtMaps[1], True))
-                if canModernization:
-                    result.append(self.__createItem(cxtMaps[2], enableModernizationBtn))
-            else:
-                cxtMaps = [(FORTIFICATION_ALIASES.CTX_ACTION_PREPARE_ORDER, MENU.FORTIFICATIONCTX_PREPAREORDER),
-                 (FORTIFICATION_ALIASES.CTX_ACTION_ASSIGN_PLAYERS, MENU.FORTIFICATIONCTX_ASSIGNEDPLAYERS),
-                 (FORTIFICATION_ALIASES.CTX_ACTION_MODERNIZATION, MENU.FORTIFICATIONCTX_MODERNIZATION),
-                 (FORTIFICATION_ALIASES.CTX_ACTION_DESTROY, MENU.FORTIFICATIONCTX_DESTROY)]
-                if self._isVisibleActionBtn(buildingDescr):
-                    result.append(self.__createItem(cxtMaps[0], self._isEnableActionBtn(buildingDescr)))
-                result.append(self.__createItem(cxtMaps[1], True))
-                if canModernization:
-                    result.append(self.__createItem(cxtMaps[2], enableModernizationBtn))
-                if self._isVisibleDemountBtn(buildingDescr):
-                    result.append(self.__createItem(cxtMaps[3], self._isEnableDemountBtn(buildingDescr)))
-            return result
 
     def _isEnableActionBtn(self, descr):
         order = self.__getOrderByBuildingID(descr.typeID)

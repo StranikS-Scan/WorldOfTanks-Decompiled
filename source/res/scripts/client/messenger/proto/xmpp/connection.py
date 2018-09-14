@@ -8,9 +8,10 @@ from gui.shared.utils import backoff
 from gui.shared.utils.requesters import TokenRequester, TokenResponse
 from messenger import g_settings
 from messenger.ext.player_helpers import getPlayerDatabaseID
-from messenger.m_constants import MESSENGER_SCOPE
-from messenger.proto.xmpp.gloox_wrapper import GLOOX_EVENT, DISCONNECT_REASON, CONNECTION_IMPL_TYPE
-from messenger.proto.xmpp.gloox_wrapper import PRESENCE, ClientEventsHandler
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto.events import g_messengerEvents
+from messenger.proto.xmpp.gloox_constants import DISCONNECT_REASON, CONNECTION_IMPL_TYPE, GLOOX_EVENT
+from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.logger import sendEventToServer, XMPP_EVENT_LOG
 _BACK_OFF_MIN_DELAY = 10
@@ -75,8 +76,10 @@ class ConnectionsInfo(object):
         self.__backOff = backoff.RandomBackoff(minTime=_BACK_OFF_MIN_RANDOM, maxTime=_BACK_OFF_MAX_RANDOM)
 
     def clear(self):
-        self.__backOff.reset()
-        self.__iterator.clear()
+        if self.__backOff:
+            self.__backOff.reset()
+        if self.__iterator:
+            self.__iterator.clear()
 
     def getPlayerFullJID(self):
         return g_settings.server.XMPP.getFullJID(getPlayerDatabaseID())
@@ -223,15 +226,17 @@ class ConnectionHandler(ClientEventsHandler):
     def __handleConnect(self):
         g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Client is connected')
         self.__cancelReconnectCallback()
-        self.__connectionsInfo.clear()
         self.__reqTokenBackOff.reset()
         self.__doLogin()
 
     def __handleLogin(self):
         g_logOutput.debug(CLIENT_LOG_AREA.LOGIN, 'Client is login')
+        self.__connectionsInfo.clear()
         self.__reqTokenBackOff.reset()
+        g_messengerEvents.onPluginConnected(PROTO_TYPE.XMPP)
 
     def __handleDisconnect(self, reason, description):
+        g_messengerEvents.onPluginDisconnected(PROTO_TYPE.XMPP)
         client = self.client()
         if not client:
             return
@@ -246,6 +251,7 @@ class ConnectionHandler(ClientEventsHandler):
             g_logOutput.debug(CLIENT_LOG_AREA.CONNECTION, 'Will try to reconnect after {0} seconds'.format(delay), description)
             host, port = self.__connectionsInfo.getLastAddress()
             tries = self.__connectionsInfo.getTries()
+            g_messengerEvents.onPluginConnectFailed(PROTO_TYPE.XMPP, (host, port), tries)
             sendEventToServer(XMPP_EVENT_LOG.DISCONNECT, host, port, reason, description, tries)
 
     def __handleTokenError(self):
@@ -259,37 +265,3 @@ class ConnectionHandler(ClientEventsHandler):
         else:
             self.client().disconnect()
             self.__handleDisconnect(DISCONNECT_REASON.OTHER_ERROR, 'Received chat token is not valid')
-
-
-class PresenceHandler(ClientEventsHandler):
-
-    def __init__(self):
-        super(PresenceHandler, self).__init__()
-        self.clear()
-
-    def update(self, scope = None):
-        if scope:
-            self.__scope = scope
-        client = self.client()
-        if not client or not client.isConnected():
-            return
-        presence = PRESENCE.UNAVAILABLE
-        if self.__scope == MESSENGER_SCOPE.BATTLE:
-            presence = PRESENCE.DND
-        elif self.__scope == MESSENGER_SCOPE.LOBBY:
-            presence = PRESENCE.AVAILABLE
-        if client.getClientPresence() != presence:
-            client.setClientPresence(presence)
-
-    def clear(self):
-        self.__scope = None
-        return
-
-    def registerHandlers(self):
-        self.client().registerHandler(GLOOX_EVENT.LOGIN, self.__handleLogin)
-
-    def unregisterHandlers(self):
-        self.client().unregisterHandler(GLOOX_EVENT.LOGIN, self.__handleLogin)
-
-    def __handleLogin(self):
-        self.update()

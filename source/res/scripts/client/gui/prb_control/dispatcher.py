@@ -33,9 +33,7 @@ from gui.prb_control.settings import IGNORED_UNIT_BROWSER_ERRORS
 from gui.prb_control.settings import RETURN_INTRO_UNIT_MGR_ERRORS
 from PlayerEvents import g_playerEvents
 from gui.shared import actions
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.fortifications import getClientFortMgr
-from gui.shared.gui_items import GUI_ITEM_TYPE
 
 class _PrebattleDispatcher(object):
 
@@ -506,7 +504,7 @@ class _PrebattleDispatcher(object):
         if g_currentVehicle.isPresent() and g_currentVehicle.item.intCD in vehicles and g_currentVehicle.isDisabledInRent() and g_currentVehicle.isInPrebattle():
             self.__collection.reset()
 
-    def igr_onRoomChange(self, roomType, xpFactor):
+    def igr_onRoomChange(self, roomType, _):
         if roomType != IGR_TYPE.PREMIUM:
             if g_currentVehicle.isPremiumIGR() and g_currentVehicle.isInPrebattle():
                 self.__collection.reset()

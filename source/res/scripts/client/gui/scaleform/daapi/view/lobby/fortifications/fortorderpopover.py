@@ -2,7 +2,6 @@
 import constants
 from adisp import process
 from gui import DialogsInterface
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.fortifications.ConfirmOrderDialogMeta import BuyOrderDialogMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
@@ -12,10 +11,12 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortOrderPopoverMeta import FortOrderPopoverMeta
 from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import events
 from gui.server_events import g_eventsCache, events_dispatcher as quests_events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.fortifications.context import OrderCtx
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
@@ -50,7 +51,7 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         return ''
 
     def _getBuildingStr(self, order):
-        buildingID = self.UI_BUILDINGS_BIND[order.buildingID]
+        buildingID = self.getBuildingUIDbyID(order.buildingID)
         building = i18n.makeString(FORTIFICATIONS.buildings_buildingname(buildingID))
         hasBuilding = order.hasBuilding
         if not hasBuilding:
@@ -74,24 +75,26 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
         return self.fortCtrl.getPermissions().canAddOrder() and order.hasBuilding and isEnoughMoney and not order.inProgress and not self._isProductionInPause(building)
 
     def _prepareAndSetData(self):
-        orderID = self.UI_ORDERS_BIND.index(self._orderID)
+        orderID = self.getOrderIDbyUID(self._orderID)
         order = self.fortCtrl.getFort().getOrder(orderID)
         building = self.fortCtrl.getFort().getBuilding(order.buildingID)
         canActivateOrder, _ = self.fortCtrl.getLimits().canActivateOrder(orderID)
         isBtnDisabled = not canActivateOrder or self._isProductionInPause(building)
+        orderTypeID = self.getOrderIDbyUID(self._orderID)
+        isCombatOrder = orderTypeID in [constants.FORT_ORDER_TYPE.BOMBER, constants.FORT_ORDER_TYPE.ARTILLERY]
         data = {'title': self._getTitle(),
          'levelStr': self._getLevelStr(order.level),
          'description': self._getOrderDescription(order),
          'effectTimeStr': self._getEffectTimeStr(order),
-         'leftTimeStr': self._getFormattedLeftTime(order),
+         'leftTimeStr': '' if isCombatOrder else self._getFormattedLeftTime(order),
          'productionTime': self._getFormattedTimeStr(order.productionTotalTime),
          'buildingStr': self._getBuildingStr(order),
          'productionCost': fort_formatters.getDefRes(order.productionCost, True),
          'producedAmount': self._getCountStr(order),
          'icon': order.bigIcon,
-         'canUseOrder': self._canGiveOrder(),
+         'canUseOrder': False if isCombatOrder else self._canGiveOrder(),
          'canCreateOrder': self._canCreateOrder(order),
-         'inCooldown': order.inCooldown,
+         'inCooldown': False if isCombatOrder else order.inCooldown,
          'effectTime': order.effectTime,
          'leftTime': order.getUsageLeftTime(),
          'useBtnTooltip': self._getUseBtnTooltip(order, building, isBtnDisabled),
@@ -99,7 +102,8 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
          'isPermanent': order.isPermanent,
          'questID': self._getQuestID(order),
          'showLinkBtn': self._showLinkBtn(order),
-         'showAlertIcon': self._showOrderAlertIcon(order)}
+         'showAlertIcon': self._showOrderAlertIcon(order),
+         'showDetailsBtn': isCombatOrder}
         self.as_setInitDataS(data)
         self.as_disableOrderS(isBtnDisabled)
 
@@ -147,7 +151,7 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
 
     def _getUseBtnTooltip(self, order, buildingDescr, isDisabled):
         hasBuilding = order.hasBuilding
-        buildingID = self.UI_BUILDINGS_BIND[order.buildingID]
+        buildingID = self.getBuildingUIDbyID(order.buildingID)
         buildingStr = i18n.makeString(FORTIFICATIONS.buildings_buildingname(buildingID))
         body = None
         note = None
@@ -189,21 +193,21 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
 
     @process
     def __requestToUse(self):
-        orderTypeID = self.UI_ORDERS_BIND.index(self._orderID)
+        orderTypeID = self.getOrderIDbyUID(self._orderID)
         result = yield self.fortProvider.sendRequest(OrderCtx(orderTypeID, isAdd=False, waitingID='fort/order/activate'))
         if result:
             g_fortSoundController.playActivateOrder(self._orderID)
 
     def getLeftTime(self):
-        order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(self._orderID))
+        order = self.fortCtrl.getFort().getOrder(self.getOrderIDbyUID(self._orderID))
         return order.getUsageLeftTime()
 
     def getLeftTimeStr(self):
-        order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(self._orderID))
+        order = self.fortCtrl.getFort().getOrder(self.getOrderIDbyUID(self._orderID))
         return self._getFormattedLeftTime(order)
 
     def getLeftTimeTooltip(self):
-        order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(self._orderID))
+        order = self.fortCtrl.getFort().getOrder(self.getOrderIDbyUID(self._orderID))
         if order.inCooldown:
             if order.isPermanent:
                 return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_PERMANENTORDER_INFO)
@@ -220,6 +224,12 @@ class FortOrderPopover(View, FortOrderPopoverMeta, SmartPopOverView, FortViewHel
 
     def openQuest(self, questID):
         return quests_events.showEventsWindow(questID, constants.EVENT_TYPE.FORT_QUEST)
+
+    def openOrderDetailsWindow(self):
+        orderID = self.getOrderIDbyUID(self._orderID)
+        order = self.fortCtrl.getFort().getOrder(orderID)
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_ORDER_INFO_WINDOW_ALIAS, ctx={'orderID': orderID,
+         'orderLevel': order.level}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     @classmethod
     def __getFortQuest(cls):

@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/ClientUnit.py
-from debug_utils import *
+from debug_utils import LOG_ERROR, LOG_DEBUG_DEV
 import struct
 import Event
 from UnitBase import UnitBase, UNIT_OP, UNIT_ROLE, UNIT_STATE
@@ -9,7 +9,7 @@ VEH_LEN_SIZE = struct.calcsize(VEH_LEN_CHR)
 
 class ClientUnit(UnitBase):
 
-    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', packedUnit = ''):
+    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', extras = '', packedUnit = ''):
         self.__eManager = Event.EventManager()
         self.onUnitStateChanged = Event.Event(self.__eManager)
         self.onUnitReadyMaskChanged = Event.Event(self.__eManager)
@@ -25,7 +25,7 @@ class ClientUnit(UnitBase):
         self.onUnitPlayerInfoChanged = Event.Event(self.__eManager)
         self.onUnitUpdated = Event.Event(self.__eManager)
         self._creatorDBID = 0L
-        UnitBase.__init__(self, slotDefs, slotCount, packedRoster, packedUnit)
+        UnitBase.__init__(self, slotDefs, slotCount, packedRoster, extras, packedUnit)
 
     def destroy(self):
         self.__eManager.clear()
@@ -221,3 +221,9 @@ class ClientUnit(UnitBase):
         newRoleFlags = self._players[memberDBID]['role']
         self.onUnitMembersListChanged()
         self.onUnitPlayerRoleChanged(memberDBID, prevRoleFlags, newRoleFlags)
+
+    def _changeSortieDivision(self, division):
+        UnitBase._changeSortieDivision(self, division)
+        self.onUnitRosterChanged()
+        self.onUnitMembersListChanged()
+        self.onUnitSettingChanged(UNIT_OP.CHANGE_DIVISION, division)

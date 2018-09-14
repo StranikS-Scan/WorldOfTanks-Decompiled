@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/Battle.py
+from functools import partial
 import weakref
 import math
 import BigWorld
@@ -16,16 +17,17 @@ from gui.Scaleform.daapi.view.battle.RadialMenu import RadialMenu
 from gui.Scaleform.daapi.view.battle.PlayersPanel import PlayersPanel
 from gui.Scaleform.daapi.view.battle.ConsumablesPanel import ConsumablesPanel
 from gui.Scaleform.daapi.view.lobby.ReportBug import makeHyperLink, reportBugOpenConfirm
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.MENU import MENU
 import gui
 from gui.battle_control import g_sessionProvider, vehicle_getter
-from gui.battle_control.arena_info import isEventBattle
 from gui.battle_control.battle_arena_ctrl import BattleArenaController
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, PLAYER_ENTITY_NAME
 from gui.prb_control.formatters import getPrebattleFullDescription
 from messenger import MessengerEntry, g_settings
 import nations
+from Math import Vector3
 from windows import BattleWindow
 from SettingsInterface import SettingsInterface
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
@@ -33,8 +35,10 @@ from helpers import i18n, html, isPlayerAvatar
 from helpers.i18n import makeString
 from PlayerEvents import g_playerEvents
 from MemoryCriticalController import g_critMemHandler
+from items import vehicles
 from items.vehicles import VEHICLE_CLASS_TAGS
 from gui import DEPTH_OF_Battle, DEPTH_OF_VehicleMarker, TANKMEN_ROLES_ORDER_DICT, GUI_SETTINGS, g_tankActiveCamouflage, g_guiResetters, g_repeatKeyHandlers, game_control
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform import VoiceChatInterface, ColorSchemeManager
 from gui.Scaleform.SoundManager import SoundManager
 from gui.shared.utils import toUpper
@@ -55,7 +59,6 @@ _BATTLE_START_NOTIFICATION_TIME = 5.0
 _I18N_WAITING_PLAYER = makeString('#ingame_gui:timer/waiting')
 _I18N_ARENA_STARTING = makeString('#ingame_gui:timer/starting')
 _I18N_ARENA_STARTED = makeString('#ingame_gui:timer/started')
-IS_POTAPOV_QUEST_ENABLED = True
 
 class Battle(BattleWindow):
     teamBasesPanel = property(lambda self: self.__teamBasesPanel)
@@ -242,6 +245,8 @@ class Battle(BattleWindow):
         g_settingsCore.onSettingsChanged += self.__accs_onSettingsChanged
         if self.__arena:
             self.__arena.onPeriodChange += self.__onSetArenaTime
+            self.__arena.onCombatEquipmentUsed += self.__onCombatEquipmentUsed
+        g_sessionProvider.getEquipmentsCtrl().onEquipmentUpdated += self.__onCombatEquipmentUpdated
         self.proxy = weakref.proxy(self)
         voice.populateUI(self.proxy)
         voice.onPlayerSpeaking += self.setPlayerSpeaking
@@ -364,8 +369,10 @@ class Battle(BattleWindow):
         self.__rightPlayersPanel.dispossessUI()
         MessengerEntry.g_instance.gui.invoke('dispossessUI')
         g_playerEvents.onBattleResultsReceived -= self.__showFinalStatsResults
+        g_sessionProvider.getEquipmentsCtrl().onEquipmentUpdated -= self.__onCombatEquipmentUpdated
         if self.__arena:
             self.__arena.onPeriodChange -= self.__onSetArenaTime
+            self.__arena.onCombatEquipmentUsed -= self.__onCombatEquipmentUsed
         self.__arena = None
         g_guiResetters.discard(self.__onRecreateDevice)
         self.__settingsInterface.dispossessUI()
@@ -478,6 +485,9 @@ class Battle(BattleWindow):
     def toggleHelpWindow(self):
         self.__callEx('showHideHelp', [not self.__isHelpWindowShown])
 
+    def setAimingMode(self, isAiming):
+        self.__callEx('setAimingMode', [isAiming])
+
     def helpDialogOpenStatus(self, cid, isOpened):
         self.__isHelpWindowShown = isOpened
 
@@ -529,11 +539,13 @@ class Battle(BattleWindow):
             arenaSubType = getArenaSubTypeName(BigWorld.player().arenaTypeID)
             if descExtra:
                 arenaData.extend([arena.guiType + 1, descExtra])
-            elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING, constants.ARENA_GUI_TYPE.EVENT_BATTLES]:
+            elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING]:
                 arenaTypeName = '#arenas:type/%s/name' % arenaSubType
                 if arenaSubType == 'assault':
                     arenaSubType += '1' if isBaseExists(BigWorld.player().arenaTypeID, BigWorld.player().team) else '2'
                 arenaData.extend([arenaSubType, arenaTypeName])
+            elif arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
+                arenaData.extend(['neutral', '#menu:loading/battleTypes/%d' % arena.guiType])
             elif arena.guiType in constants.ARENA_GUI_TYPE.RANGE:
                 arenaData.extend([constants.ARENA_GUI_TYPE_LABEL.LABELS[arena.guiType], '#menu:loading/battleTypes/%d' % arena.guiType])
             else:
@@ -549,16 +561,17 @@ class Battle(BattleWindow):
             arenaData.append('normal')
             arenaDP = g_sessionProvider.getArenaDP()
             vehInfo = arenaDP.getVehicleInfo(arenaDP.getPlayerVehicleID())
-            pQuests = vehInfo.player.getPotapovQuests()
-            if arena.guiType == constants.ARENA_GUI_TYPE.RANDOM or arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and constants.IS_DEVELOPMENT:
-                if len(pQuests):
-                    quest = pQuests[0]
-                    pqTipData = [quest.getUserName(), quest.getUserMainCondition(), quest.getUserAddCondition()]
-                else:
-                    pqTipData = [i18n.makeString('#ingame_gui:potapovQuests/tip'), None, None]
-            else:
-                pqTipData = [None] * 3
-            arenaData.extend(pqTipData)
+            pqTipData = [None] * 3
+            if not BattleReplay.g_replayCtrl.isPlaying:
+                pQuests = vehInfo.player.getPotapovQuests()
+                isPQEnabled = g_lobbyContext.getServerSettings().isPotapovQuestEnabled()
+                if isPQEnabled and (arena.guiType == constants.ARENA_GUI_TYPE.RANDOM or arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and constants.IS_DEVELOPMENT):
+                    if len(pQuests):
+                        quest = pQuests[0]
+                        pqTipData = [quest.getUserName(), quest.getUserMainCondition(), quest.getUserAddCondition()]
+                    else:
+                        pqTipData = [i18n.makeString('#ingame_gui:potapovQuests/tip'), None, None]
+                arenaData.extend(pqTipData)
         self.__callEx('arenaData', arenaData)
         return
 
@@ -584,6 +597,18 @@ class Battle(BattleWindow):
             BigWorld.cancelCallback(self.__timerCallBackId)
         self.__setArenaTime()
         return
+
+    def __onCombatEquipmentUsed(self, eqID):
+        equipment = vehicles.g_cache.equipments().get(eqID)
+        if equipment is not None:
+            postfix = equipment.name.split('_')[0].upper()
+            self.pMsgsPanel.showMessage('COMBAT_EQUIPMENT_USED', {}, postfix=postfix)
+        return
+
+    def __onCombatEquipmentUpdated(self, intCD, item, isOrder, isDeployed):
+        if isDeployed:
+            postfix = item.getDescriptor().name.split('_')[0].upper()
+            self.pMsgsPanel.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
 
     def __setArenaTime(self):
         self.__timerCallBackId = None
@@ -1391,8 +1416,10 @@ class VehicleMarkersManager(Flash):
         self.__ownUIProxy = weakref.proxy(self.__ownUI)
         self.__parentUI.component.addChild(self.__ownUI, 'vehicleMarkersManager')
         self.__markersCanvasUI = self.getMember('vehicleMarkersCanvas')
+        g_sessionProvider.getEquipmentsCtrl().onEquipmentMarkerShown += self.__onEquipmentMarkerShown
 
     def destroy(self):
+        g_sessionProvider.getEquipmentsCtrl().onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
         if self.__parentUI is not None:
             setattr(self.__parentUI.component, 'vehicleMarkersManager', None)
         self.__parentUI = None
@@ -1529,6 +1556,20 @@ class VehicleMarkersManager(Flash):
         for handle in self.__markers.iterkeys():
             self.invokeMarker(handle, 'updateMarkerSettings', [])
 
+    def __onEquipmentMarkerShown(self, item, pos, dir, time):
+        mPov, handle = self.createStaticMarker(pos + Vector3(0, 7, 0), 'FortConsumablesMarker')
+        defaultPostfix = i18n.makeString(INGAME_GUI.FORTCONSUMABLES_TIMER_POSTFIX)
+        self.invokeMarker(handle, 'init', [item.getMarker(), str(int(time)), defaultPostfix])
+        self.__initTimer(int(time), handle)
+
+    def __initTimer(self, timer, handle):
+        timer = timer - 1
+        if timer < 0:
+            self.destroyStaticMarker(handle)
+            return
+        self.invokeMarker(handle, 'updateTimer', [str(timer)])
+        BigWorld.callback(1, partial(self.__initTimer, timer, handle))
+
 
 class _VehicleMarker():
 
@@ -1582,8 +1623,6 @@ class FadingMessagesPanel(object):
     def showMessage(self, key, args = None, extra = None, postfix = ''):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-            return
-        elif key == 'ALLY_HIT' and isEventBattle():
             return
         else:
             extKey = '%s_%s' % (key, postfix)

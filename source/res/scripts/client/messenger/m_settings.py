@@ -109,6 +109,7 @@ class MessengerSettings(object):
     def __init__(self):
         self.__colorsSchemes = {'groups': _ColorScheme(['default']),
          'rosters': _ColorScheme(['online', 'offline']),
+         'contacts': _ColorScheme(['online', 'offline']),
          'battle/player': _ColorScheme(['default', 'colorBlind']),
          'battle/message': _ColorScheme(['default', 'colorBlind']),
          'battle/receiver': _ColorScheme(['default', 'colorBlind'])}

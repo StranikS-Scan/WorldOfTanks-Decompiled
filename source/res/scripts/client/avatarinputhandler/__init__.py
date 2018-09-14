@@ -17,6 +17,7 @@ from gui.battle_control import g_sessionProvider
 from gui.battle_control.consumables.ammo_ctrl import SHELL_SET_RESULT
 from post_processing.post_effect_controllers import g_postProcessingEvents
 import control_modes
+import MapCaseMode
 import constants
 import cameras
 import DynamicCameras.ArcadeCamera
@@ -39,7 +40,8 @@ _CTRLS_DESC_MAP = {'arcade': ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUA
  'postmortem': ('PostMortemControlMode', 'postMortemMode', _CTRL_TYPE.USUAL),
  'debug': ('DebugControlMode', None, _CTRL_TYPE.DEVELOPMENT),
  'cat': ('CatControlMode', None, _CTRL_TYPE.DEVELOPMENT),
- 'video': ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL)}
+ 'video': ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
+ 'mapcase': ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL)}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera, DynamicCameras.SniperCamera.SniperCamera, DynamicCameras.StrategicCamera.StrategicCamera)
 
 class ShakeReason():
@@ -104,6 +106,7 @@ class AvatarInputHandler(CallbackDelayer):
     aim = property(lambda self: self.__curCtrl.getAim())
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
+    ctrlModeName = property(lambda self: self.__eMode)
     isSPG = property(lambda self: self.__isSPG)
     isATSPG = property(lambda self: self.__isATSPG)
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
@@ -148,6 +151,7 @@ class AvatarInputHandler(CallbackDelayer):
         self.__isATSPG = False
         self.__setupCtrls(sec)
         self.__curCtrl = self.__ctrls[_CTRLS_FIRST]
+        self.__eMode = _CTRLS_FIRST
         self.__detachCount = 0
         return
 
@@ -348,6 +352,7 @@ class AvatarInputHandler(CallbackDelayer):
             self.__curCtrl.disable()
             prevCtrl = self.__curCtrl
             self.__curCtrl = self.__ctrls[eMode]
+            self.__eMode = eMode
             if player is not None:
                 if not prevCtrl.isManualBind() and self.__curCtrl.isManualBind():
                     player.positionControl.bindToVehicle(False)
@@ -534,10 +539,17 @@ class AvatarInputHandler(CallbackDelayer):
             return sec
 
     def __setupCtrls(self, section):
+        modules = (control_modes, MapCaseMode)
         for name, desc in _CTRLS_DESC_MAP.items():
             if desc[2] != _CTRL_TYPE.DEVELOPMENT or desc[2] == _CTRL_TYPE.DEVELOPMENT and constants.IS_DEVELOPMENT:
                 if name not in self.__ctrls:
-                    self.__ctrls[name] = getattr(control_modes, desc[0])(section[desc[1]] if desc[1] else None, self)
+                    for module in modules:
+                        classType = getattr(module, desc[0], None)
+                        if classType is None:
+                            pass
+                        else:
+                            self.__ctrls[name] = classType(section[desc[1]] if desc[1] else None, self)
+                            break
 
         return
 

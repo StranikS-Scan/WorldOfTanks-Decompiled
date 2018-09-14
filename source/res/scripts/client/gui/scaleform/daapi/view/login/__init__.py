@@ -1,11 +1,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/__init__.py
 import random
 import sys
+import BigWorld
+import MusicController
+import ResMgr
+import Settings
+import constants
 from adisp import process
-from constants import IS_DEVELOPMENT
+from ConnectionManager import connectionManager
 from debug_utils import LOG_DEBUG
 from external_strings_utils import _ACCOUNT_NAME_MIN_LENGTH_REG
-from gui import GUI_SETTINGS, DialogsInterface
+from gui import GUI_SETTINGS, DialogsInterface, makeHtmlString
 from gui.battle_control import g_sessionProvider
 from gui.Scaleform import SCALEFORM_WALLPAPER_PATH
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -25,12 +30,7 @@ from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, REQUEST_RATE, HOST_AVAILABILITY
-import BigWorld
-import MusicController
-import ResMgr
-import Settings
-import constants
-__author__ = 'd_trofimov'
+from gui.social_network_login.Bridge import bridge as socialNetworkLoginBridge
 
 class LoginView(View, LoginPageMeta, AppRef):
 
@@ -45,6 +45,17 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__lastSelectedServer = None
         self.__enableInputsCbId = None
         self.__showLoginWallpaperNode = 'showLoginWallpaper'
+        if GUI_SETTINGS.socialNetworkLogin['enabled']:
+            if not Settings.g_instance.userPrefs.has_key(Settings.KEY_LOGIN_INFO):
+                Settings.g_instance.userPrefs.write(Settings.KEY_LOGIN_INFO, '')
+            self.__loginPreferences = Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO]
+            self.__rememberMe = self.__loginPreferences.readBool('rememberPwd', False)
+            self.__lastLoginType = self.__loginPreferences.readString('lastLoginType', 'basic')
+            self.__loginHost = None
+            self.__processingLoginBySocial = False
+            self.__tokenLoginParams = {}
+            self.__socialNetworkLogin = socialNetworkLoginBridge
+            self.__socialNetworkLogin.init(self.__onServerReceivedData, GUI_SETTINGS.socialNetworkLogin['encryptToken'])
         return
 
     def _populate(self):
@@ -77,10 +88,8 @@ class LoginView(View, LoginPageMeta, AppRef):
         g_sessionProvider.getCtx().lastArenaUniqueID = None
         if self.app.cursorMgr is not None:
             self.app.cursorMgr.attachCursor(True)
+        self.__showRequiredLoginScreen()
         return
-
-    def __onEULAClosed(self):
-        self.__enableInputsIfModalViewsNotExisting()
 
     def _dispose(self):
         self.__setupDispatcherHandlers(False)
@@ -94,6 +103,8 @@ class LoginView(View, LoginPageMeta, AppRef):
         if self.__capsLockCallback is not None:
             BigWorld.cancelCallback(self.__capsLockCallback)
             self.__capsLockCallback = None
+        if GUI_SETTINGS.socialNetworkLogin['enabled']:
+            self.__socialNetworkLogin.fini()
         super(LoginView, self)._dispose()
         return
 
@@ -129,7 +140,6 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__minOrderInQueue = 18446744073709551615L
         if clearInFlash:
             self.fireEvent(LoginEvent(LoginEvent.CANCEL_LGN_QUEUE, View.alias))
-            self.as_cancelLoginQueueS()
         return
 
     def onCancelQueue(self, showWaiting, logged):
@@ -179,8 +189,18 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__setAutoLogin(WAITING.TITLES_AUTO_LOGIN_QUERY_FAILED, message, WAITING.BUTTONS_CEASE)
 
     def onDoAutoLogin(self):
-        LOG_DEBUG('onDoAutoLogin')
-        self.as_doAutoLoginS()
+        lastLoginType = 'basic'
+        if GUI_SETTINGS.socialNetworkLogin['enabled']:
+            lastLoginType = self.__lastLoginType
+        if lastLoginType != 'basic':
+            self.__socialNetworkLogin.makeToken2LoginParams(self.__tokenLoginParams)
+            if AUTO_LOGIN_QUERY_URL == self.__loginHost:
+                g_preDefinedHosts.autoLoginQuery(self.__connectToHost)
+            else:
+                self.__connectToHost(g_preDefinedHosts.byUrl(self.__loginHost))
+        else:
+            LOG_DEBUG('onDoAutoLogin')
+            self.as_doAutoLoginS()
 
     def onAccountNameIsInvalid(self):
         self.__createAnAccountResponse(False, MENU.LOGIN_STATUS_INVALID_NICKNAME)
@@ -219,9 +239,12 @@ class LoginView(View, LoginPageMeta, AppRef):
             self.fireEvent(ArgsEvent(ArgsEvent.UPDATE_ARGS, VIEW_ALIAS.LOGIN_QUEUE, ctx), EVENT_BUS_SCOPE.LOBBY)
 
     def onConfigLoaded(self, user, password, rememberPwd, isRememberPwd):
+        if GUI_SETTINGS.socialNetworkLogin['enabled']:
+            user = user if self.__lastLoginType == 'basic' else ''
         self.as_setDefaultValuesS(user, password, rememberPwd, isRememberPwd, GUI_SETTINGS.igrCredentialsReset, not GUI_SETTINGS.isEmpty('recoveryPswdURL'))
 
     def onHandleInvalidPasswordWithToken(self, user, rememberPwd):
+        self.__showRequiredLoginScreen()
         self.as_setDefaultValuesS(user, '', rememberPwd, GUI_SETTINGS.rememberPassVisible, GUI_SETTINGS.igrCredentialsReset, not GUI_SETTINGS.isEmpty('recoveryPswdURL'))
 
     def startListenCsisUpdate(self, startListen):
@@ -238,26 +261,32 @@ class LoginView(View, LoginPageMeta, AppRef):
 
     def isPwdInvalid(self, password):
         isInvalid = False
-        if not IS_DEVELOPMENT and not self.__loginDispatcher.isToken():
+        if not constants.IS_DEVELOPMENT and not self.__loginDispatcher.isToken():
             from external_strings_utils import isPasswordValid
             isInvalid = not isPasswordValid(password)
         return isInvalid
 
     def isLoginInvalid(self, login):
         isInvalid = False
-        if not IS_DEVELOPMENT and not self.__loginDispatcher.isToken():
+        if not constants.IS_DEVELOPMENT and not self.__loginDispatcher.isToken():
             from external_strings_utils import isAccountLoginValid
             isInvalid = not isAccountLoginValid(login)
         return isInvalid
 
-    def onLogin(self, user, password, host):
-        self.as_enableS(False)
-        if host == AUTO_LOGIN_QUERY_URL:
-            self.__autoSearchVisited = True
-        else:
-            self.__autoSearchVisited = False
-        self.__loginDispatcher.onLogin(user, password, host, self.__onEndLoginTrying)
-        self.fireEvent(events.HideWindowEvent(HideWindowEvent.HIDE_LEGAL_INFO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+    def onTextLinkClick(self, socialNetworkName):
+        BigWorld.wg_openWebBrowser(self.__socialNetworkLogin.getSocialNetworkURL(socialNetworkName))
+
+    def changeAccount(self):
+        self.as_showSimpleFormS(True, self.__socialNetworkLogin.getAvailableSocialNetworks())
+        self.as_setErrorMessageS(self.__socialNetworkLogin.getLogoutWarning(self.__lastLoginType), 0)
+        self.__lastLoginType = 'basic'
+        self.__rememberMe = False
+        self.as_setDefaultValuesS('', '', False, True, False, False)
+        self.__loginPreferences.writeString('login', '')
+        self.__loginPreferences.writeBool('rememberPwd', False)
+        self.__loginPreferences.writeString('lastLoginType', self.__lastLoginType)
+        self.__loginPreferences.writeString('token2', '')
+        self.__loginPreferences.writeString('user', '')
 
     def onRegister(self):
         self.fireEvent(OpenLinkEvent(OpenLinkEvent.REGISTRATION))
@@ -266,23 +295,11 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.fireEvent(OpenLinkEvent(OpenLinkEvent.RECOVERY_PASSWORD))
 
     def onSetRememberPassword(self, remember):
+        self.__rememberMe = remember
         self.__loginDispatcher.setRememberPwd(remember)
 
     def onExitFromAutoLogin(self):
         self.__loginDispatcher.onExitFromAutoLogin()
-
-    def __onEndLoginTrying(self):
-        self.__enableInputsIfModalViewsNotExisting()
-
-    def __enableInputsIfModalViewsNotExisting(self):
-        if not self.app.containerManager.isModalViewsIsExists():
-            if self.__enableInputsCbId is not None:
-                BigWorld.cancelCallback(self.__enableInputsCbId)
-                self.__enableInputsCbId = None
-            self.as_enableS(True)
-        else:
-            self.__enableInputsCbId = BigWorld.callback(0.5, self.__enableInputsIfModalViewsNotExisting)
-        return
 
     def onTryCreateAccount(self, event):
         self.__loginDispatcher.onTryCreateAnAccount(event.message)
@@ -299,6 +316,87 @@ class LoginView(View, LoginPageMeta, AppRef):
 
     def onEscape(self):
         DialogsInterface.showI18nConfirmDialog('quit', self.__onConfirmClosed, focusedID=DIALOG_BUTTON_ID.CLOSE)
+
+    def onLogin(self, user, password, host, isSocialToken2Login):
+        if GUI_SETTINGS.socialNetworkLogin['enabled']:
+            self.__loginHost = host
+            connectionManager.onConnected += self.__onSocialLoginConnected
+            if not isSocialToken2Login:
+                self.__lastLoginType = 'basic'
+        self.as_enableS(False)
+        if host == AUTO_LOGIN_QUERY_URL:
+            self.__autoSearchVisited = True
+        else:
+            self.__autoSearchVisited = False
+        self.__loginDispatcher.onLogin(user, password, host, self.__onEndLoginTrying, isSocialToken2Login=isSocialToken2Login)
+        self.fireEvent(events.HideWindowEvent(HideWindowEvent.HIDE_LEGAL_INFO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+
+    def onLoginBySocial(self, socialNetworkName, host):
+        self.__loginHost = host
+        self.__lastLoginType = socialNetworkName
+        self.__socialNetworkLogin.initializeLogin(socialNetworkName, self.__rememberMe)
+
+    def __onServerReceivedData(self, token, spaID, tokenDecrypter):
+        if self.__processingLoginBySocial:
+            return None
+        else:
+            self.__processingLoginBySocial = True
+            self.__tokenLoginParams = self.__socialNetworkLogin.getLoginParams()
+            self.__tokenLoginParams['token'] = tokenDecrypter(token)
+            self.__tokenLoginParams['account_id'] = spaID
+            connectionManager.onConnected += self.__onSocialLoginConnected
+            connectionManager.onRejected += self.__onSocialLoginRejected
+            connectionManager.onDisconnected += self.__onSocialLoginDisconnected
+            if AUTO_LOGIN_QUERY_URL == self.__loginHost:
+                g_preDefinedHosts.autoLoginQuery(self.__connectToHost)
+            else:
+                self.__connectToHost(g_preDefinedHosts.byUrl(self.__loginHost))
+            BigWorld.wg_bringWindowToForeground()
+            return None
+
+    def __connectToHost(self, host):
+        connectionManager.connect(host.urlToken, '', '', host.keyPath, isNeedSavingPwd=self.__rememberMe, tokenLoginParams=self.__tokenLoginParams)
+
+    def __onSocialLoginConnected(self):
+        self.__loginPreferences.writeBool('rememberPwd', self.__rememberMe)
+        self.__loginPreferences.writeString('lastLoginType', self.__lastLoginType)
+        self.__loginPreferences.writeString('host', self.__loginHost)
+        connectionManager.onConnected -= self.__onSocialLoginConnected
+
+    def __onSocialLoginRejected(self):
+        self.__processingLoginBySocial = False
+        connectionManager.onRejected -= self.__onSocialLoginRejected
+
+    def __onSocialLoginDisconnected(self):
+        self.__processingLoginBySocial = False
+        connectionManager.onDisconnected -= self.__onSocialLoginDisconnected
+
+    def __showRequiredLoginScreen(self):
+        if GUI_SETTINGS.socialNetworkLogin['enabled']:
+            socialList = self.__socialNetworkLogin.getAvailableSocialNetworks()
+            if self.__lastLoginType in socialList and self.__rememberMe:
+                self.as_showSocialFormS(self.__loginDispatcher.isToken(), self.__loginPreferences.readString('user'), makeHtmlString('html_templates:socialNetworkLogin', 'transparentLogo', {'socialNetwork': self.__lastLoginType}), self.__lastLoginType)
+            else:
+                self.as_showSimpleFormS(True, socialList)
+        else:
+            self.as_showSimpleFormS(False, None)
+        return
+
+    def __onEULAClosed(self):
+        self.__enableInputsIfModalViewsNotExisting()
+
+    def __onEndLoginTrying(self):
+        self.__enableInputsIfModalViewsNotExisting()
+
+    def __enableInputsIfModalViewsNotExisting(self):
+        if not self.app.containerManager.isModalViewsIsExists():
+            if self.__enableInputsCbId is not None:
+                BigWorld.cancelCallback(self.__enableInputsCbId)
+                self.__enableInputsCbId = None
+            self.as_enableS(True)
+        else:
+            self.__enableInputsCbId = BigWorld.callback(0.5, self.__enableInputsIfModalViewsNotExisting)
+        return
 
     def __onConfirmClosed(self, isOk):
         if isOk:
@@ -358,7 +456,8 @@ class LoginView(View, LoginPageMeta, AppRef):
             wallpapperSettings['show'] = False
         self.as_showWallpaperS(wallpapperSettings['show'], bgImage)
 
-    def __getWallpapersList(self):
+    @staticmethod
+    def __getWallpapersList():
         result = []
         ds = ResMgr.openSection(SCALEFORM_WALLPAPER_PATH)
         for filename in ds.keys():
@@ -385,7 +484,8 @@ class LoginView(View, LoginPageMeta, AppRef):
         result['show'] = ds.readBool(self.__showLoginWallpaperNode, True)
         return result
 
-    def __saveUserPreferencesLogin(self, filename):
+    @staticmethod
+    def __saveUserPreferencesLogin(filename):
         ds = Settings.g_instance.userPrefs[Settings.KEY_LOGINPAGE_PREFERENCES]
         ds.writeString('lastLoginBgImage', filename)
 
@@ -399,7 +499,6 @@ class LoginView(View, LoginPageMeta, AppRef):
                 Waiting.show('enter')
             self.__setLoginQueue(False)
         self.fireEvent(LoginEvent(LoginEvent.CANCEL_LGN_QUEUE, View.alias))
-        self.as_cancelLoginQueueS()
 
     def __setupDispatcherHandlers(self, setup):
         for methodName in LoginDispatcher.EVENTS:

@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortPeriodDefenceWindow.py
+import time
 from FortifiedRegionBase import NOT_ACTIVATED
 import constants
 from adisp import process
@@ -9,8 +10,8 @@ from gui.Scaleform.daapi.view.meta.FortPeriodDefenceWindowMeta import FortPeriod
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.shared.fortifications.context import SettingsCtx
-from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustOffDayToUTC
-from helpers import i18n
+from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustOffDayToUTC, adjustDefenceHourToLocal
+from helpers import i18n, time_utils
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.framework import AppRef
 from predefined_hosts import g_preDefinedHosts
@@ -84,14 +85,26 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
         skipValues = []
         if constants.IS_KOREA:
             skipValues = [0, 7]
-        return {'peripheryData': self.__getPeripheryList(),
-         'peripherySelectedID': fort.peripheryID,
+        peripheryList = self.__getPeripheryList()
+        currentPeripheryID = fort.peripheryID
+        isServerValid = False
+        for i in xrange(len(peripheryList)):
+            if peripheryList[i]['id'] == currentPeripheryID:
+                isServerValid = True
+                break
+
+        if not isServerValid:
+            currentPeripheryID = -1
+        _, defenceMin = adjustDefenceHourToLocal(0)
+        return {'peripheryData': peripheryList,
+         'peripherySelectedID': currentPeripheryID,
          'holidayData': self._getDayoffsList(),
          'holidaySelectedID': fort.getLocalOffDay(),
-         'hour': fort.getLocalDefenceHour(),
+         'hour': -1,
+         'minutes': defenceMin,
          'isWrongLocalTime': self._isWrongLocalTime(),
          'skipValues': skipValues,
-         'isTwelveHoursFormat': False}
+         'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat()}
 
     def __getHTMLText(self, style, localText):
         text = i18n.makeString(localText)

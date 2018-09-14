@@ -60,7 +60,7 @@ class ContactsWindow(View, AbstractWindowView, ContactsWindowMeta, ISearchHandle
         super(ContactsWindow, self)._dispose()
         return
 
-    @proto_getter(PROTO_TYPE.BW)
+    @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
         return None
 
@@ -89,8 +89,8 @@ class ContactsWindow(View, AbstractWindowView, ContactsWindowMeta, ISearchHandle
 
     def addToFriends(self, uid, name):
         LOG_DEBUG('addToFriends: ', uid)
-        self.proto.users.addFriend(uid, name)
+        self.proto.contacts.addFriend(uid, name)
 
     def addToIgnored(self, uid, name):
         LOG_DEBUG('addToIgnored: ', uid)
-        self.proto.users.addIgnored(uid, name)
+        self.proto.contacts.addIgnored(uid, name)

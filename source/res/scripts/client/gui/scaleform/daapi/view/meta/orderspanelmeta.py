@@ -6,6 +6,10 @@ class OrdersPanelMeta(DAAPIModule):
     def getOrderTooltipBody(self, orderID):
         self._printOverrideError('getOrderTooltipBody')
 
+    def as_setPanelPropsS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setPanelProps(data)
+
     def as_setOrdersS(self, orders):
         if self._isDAAPIInited():
             return self.flashObject.as_setOrders(orders)

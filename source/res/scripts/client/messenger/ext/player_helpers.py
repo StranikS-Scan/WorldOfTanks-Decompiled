@@ -7,7 +7,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from messenger.storage import storage_getter
 
 def _getInfo4AccountPlayer():
-    return (account_helpers.getPlayerDatabaseID(), BigWorld.player().name, None)
+    return (account_helpers.getPlayerDatabaseID(), getPlayerName(), None)
 
 
 def _getAccountDatabaseID():
@@ -41,6 +41,10 @@ def _getAvatarDatabaseID():
 
 def getPlayerDatabaseID():
     return _getAccountDatabaseID() or _getAvatarDatabaseID()
+
+
+def getPlayerName():
+    return getattr(BigWorld.player(), 'name', '')
 
 
 def isCurrentPlayer(dbID):

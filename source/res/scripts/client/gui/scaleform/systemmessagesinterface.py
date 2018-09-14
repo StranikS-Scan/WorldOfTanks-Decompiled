@@ -5,7 +5,7 @@ from ConnectionManager import connectionManager
 import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import game_control, GUI_SETTINGS
-from helpers import i18n, getLocalizedData
+from helpers import i18n
 from gui.SystemMessages import SM_TYPE, BaseSystemMessages
 from gui.shared.utils.requesters import DeprecatedStatsRequester
 from messenger.formatters import SCH_CLIENT_MSG_TYPE
@@ -28,7 +28,7 @@ class SystemMessagesInterface(BaseSystemMessages):
         ctrl = game_control.g_instance
         ctrl.aogas.onNotifyAccount += self.__AOGAS_onNotifyAccount
         ctrl.gameSession.onClientNotify += self.__gameSession_onClientNotify
-        g_playerEvents.onEventNotificationsChanged += self.__onReceiveEventNotification
+        game_control.getEventsNotificationCtrl().onEventNotificationsChanged += self.__onReceiveEventNotification
 
     def destroy(self):
         connectionManager.onConnected -= self.__onConnected
@@ -37,7 +37,7 @@ class SystemMessagesInterface(BaseSystemMessages):
         ctrl = game_control.g_instance
         ctrl.aogas.onNotifyAccount -= self.__AOGAS_onNotifyAccount
         ctrl.gameSession.onClientNotify -= self.__gameSession_onClientNotify
-        g_playerEvents.onEventNotificationsChanged -= self.__onReceiveEventNotification
+        game_control.getEventsNotificationCtrl().onEventNotificationsChanged += self.__onReceiveEventNotification
         self.__clearLobbyListeners()
 
     @proto_getter(PROTO_TYPE.BW)
@@ -107,14 +107,14 @@ class SystemMessagesInterface(BaseSystemMessages):
             self.proto.serviceChannel.pushClientSysMessage('\n'.join(msgList), SM_TYPE.Warning)
         return
 
-    def __onReceiveEventNotification(self, notificationsDiff):
-        self.__processNotifications(notificationsDiff.get('added', []), 'Begin')
-        self.__processNotifications(notificationsDiff.get('removed', []), 'End')
+    def __onReceiveEventNotification(self, added, removed):
+        self.__processNotifications(added, 'Begin')
+        self.__processNotifications(removed, 'End')
 
     def __processNotifications(self, notifications, state):
         for notification in notifications:
-            text = getLocalizedData(notification, 'text')
-            msgType = notification.get('type', None)
+            msgType = notification.eventType
+            text = notification.text
             if msgType is not None and not msgType.startswith(self.__CMD_BLOCK_PREFIX) and not msgType.startswith(self.__PROMO_BLOCK_PREFIX) and text:
                 message = {'data': text,
                  'type': msgType,

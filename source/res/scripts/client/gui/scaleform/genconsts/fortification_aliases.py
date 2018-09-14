@@ -35,6 +35,10 @@ class FORTIFICATION_ALIASES(object):
     FORT_DISABLE_DEFENCE_PERIOD_ALIAS = 'fortDisableDefencePeriodWindow'
     FORT_BATTLE_RESULTS_WINDOW_ALIAS = 'FortBattleResultsWindow'
     FORT_NOT_COMMANDER_FIRST_ENTER_WINDOW_ALIAS = 'FortNotCommanderFirstEnterWindow'
+    FORT_ORDER_SELECT_POPOVER_ALIAS = 'FortOrderSelectPopover'
+    FORT_COMBAT_RESERVES_INTRO_ALIAS = 'FortCombatReservesIntroWindow'
+    FORT_ORDER_INFO_WINDOW_ALIAS = 'FortOrderInfoWindow'
+    FORT_BATTLEROOM_ORDERS_PANEL_COMPONENT_ALIAS = 'FortBattleRoomOrdersPanelComponent'
     FORT_BUILDING_PROCESS_WINDOW_EVENT = 'FortBuildingProcessWindow'
     FORT_FIXED_PLAYERS_WINDOW_EVENT = 'FortFixedPlayersWindow'
     FORTIFICATIONS_VIEW_EVENT = 'FortificationsView'
@@ -66,6 +70,8 @@ class FORTIFICATION_ALIASES(object):
     FORT_DISABLE_DEFENCE_PERIOD_EVENT = 'showFortDisableDefencePeriodEvent'
     FORT_BATTLE_RESULTS_WINDOW_EVENT = 'showFortBattleResultsWindow'
     FORT_NOT_COMMANDER_FIRST_ENTER_WINDOW_EVENT = 'showFortNotCommanderFirstEnterWindow'
+    FORT_ORDER_SELECT_POPOVER_EVENT = 'showFortOrderSelectPopover'
+    FORT_ORDER_INFO_WINDOW_EVENT = 'FortOrderInfoWindow'
     FORT_BUILDING_PROCESS_WINDOW_UI = 'fortBuildingProcessWindow.swf'
     FORT_FIXED_PLAYERS_WINDOW_UI = 'fortFixedPlayersWindow.swf'
     FORTIFICATIONS_VIEW_UI = 'fortificationsView.swf'
@@ -98,6 +104,9 @@ class FORTIFICATION_ALIASES(object):
     FORT_DISABLE_DEFENCE_PERIOD_UI = 'fortDisableDefencePeriodWindow.swf'
     FORT_BATTLE_RESULTS_WINDOW_UI = 'fortBattleResultsWindow.swf'
     FORT_NOT_COMMANDER_FIRST_ENTER_WINDOW_UI = 'fortNotCommanderFirstEnterWindow.swf'
+    FORT_ORDER_SELECT_POPOVER_UI = 'fortOrderSelectPopover.swf'
+    FORT_COMBAT_RESERVES_INTRO_UI = 'FortCombatReservesIntro.swf'
+    FORT_ORDER_INFO_WINDOW_UI = 'fortOrderInfoWindow.swf'
     WELCOME_VIEW_LINKAGE = 'FortWelcomeViewUI'
     DISCONNECT_VIEW_LINCKAGE = 'FortDisconnectViewUI'
     MAIN_VIEW_LINKAGE = 'FortMainViewUI'
@@ -106,6 +115,8 @@ class FORTIFICATION_ALIASES(object):
     DISCONNECT_VIEW_ALIAS = 'FortDisconnectView'
     FORT_INTEL_FILTER_ALIAS = 'intelFilter'
     FORT_INTELLIGENCE_CLAN_DESCRIPTION = 'FortIntelligenceClanDescription'
+    FORT_CONSUMABLES_ORDER_VALUE = 'ConsumablesOrderValuesUI'
+    FORT_CONSUMABLES_ORDER_DESCR = 'ConsumablesOrderDescrUI'
     FORT_BATTLE_ROOM_INTRO_VIEW_UI = 'FortIntroViewUI'
     FORT_BATTLE_ROOM_INTRO_VIEW_PY = 'forttifications/battleRoom/intro'
     FORT_BATTLE_ROOM_LIST_VIEW_UI = 'FortListViewUI'
@@ -162,6 +173,20 @@ class FORTIFICATION_ALIASES(object):
     FORT_FINANCE_BUILDING = 'finance_building'
     FORT_CAR_BUILDING = 'car_building'
     FORT_OFFICE_BUILDING = 'office_building'
+    FORT_ARTILLERY_SHOP_BUILDING = 'artillery_building'
+    FORT_BOMBER_SHOP_BUILDING = 'bomber_building'
+    HIT_AREA_BUILDINGS = [FORT_FOUNDATION,
+     FORT_BASE_BUILDING,
+     FORT_WAR_SCHOOL_BUILDING,
+     FORT_TROPHY_BUILDING,
+     FORT_TRAINING_BUILDING,
+     FORT_TANKODROM_BUILDING,
+     FORT_INTENDANCY_BUILDING,
+     FORT_FINANCE_BUILDING,
+     FORT_CAR_BUILDING,
+     FORT_OFFICE_BUILDING,
+     FORT_ARTILLERY_SHOP_BUILDING,
+     FORT_BOMBER_SHOP_BUILDING]
     FORT_DIRECTION_1 = 1
     FORT_DIRECTION_2 = 2
     FORT_DIRECTION_3 = 3

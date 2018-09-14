@@ -87,7 +87,7 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_KICK_TIMEOUT_ = '#system_messages:arena_start_errors/kick/timeout'
     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_SQUAD = '#system_messages:prebattle_start_failed/kickedFromQueue/squad'
     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_COMPANY = '#system_messages:prebattle_start_failed/kickedFromQueue/company'
-    PREBATTLE_START_FAILED_KICKEDFROMQUEUE_DEFAULT = '#system_messages:prebattle_start_failed/kickedFromQueue/default'
+    PREBATTLE_START_FAILED_KICKEDFROMQUEUE_DEAFULT = '#system_messages:prebattle_start_failed/kickedFromQueue/deafult'
     WRONG_SLOT = '#system_messages:wrong_slot'
     CLIENTINSTALLERROR_WRONG_NATION = '#system_messages:clientInstallError_wrong_nation'
     CLIENTINSTALLERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:clientInstallError_not_for_this_vehicle_type'
@@ -132,6 +132,7 @@ class SYSTEM_MESSAGES(object):
     SHOP_ITEM_NOT_ENOUGH_MONEY = '#system_messages:shop/item/not_enough_money'
     SHOP_VEHICLE_NOT_FOUND = '#system_messages:shop/vehicle/not_found'
     SHOP_ITEM_NOT_FOUND = '#system_messages:shop/item/not_found'
+    SHOP_ITEM_COMMON_RENT_OR_BUY_ERROR = '#system_messages:shop/item/common_rent_or_buy_error'
     SHOP_ITEM_BUY_SUCCESS = '#system_messages:shop/item/buy_success'
     SHOP_ITEM_BUY_SERVER_ERROR = '#system_messages:shop/item/buy_server_error'
     SHOP_ITEM_BUY_AND_EQUIP_IN_PROCESSING = '#system_messages:shop/item/buy_and_equip_in_processing'
@@ -340,6 +341,14 @@ class SYSTEM_MESSAGES(object):
     DROP_TANKMAN_SKILL_INVALID_VEHICLE = '#system_messages:drop_tankman_skill/invalid_vehicle'
     DROP_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:drop_tankman_skill/vehicle_need_repair'
     DROP_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:drop_tankman_skill/vehicle_locked'
+    CHANGE_TANKMAN_ROLE_SUCCESS = '#system_messages:change_tankman_role/success'
+    CHANGE_TANKMAN_ROLE_INSTALLED = '#system_messages:change_tankman_role/installed'
+    CHANGE_TANKMAN_ROLE_SLOT_IS_TAKEN = '#system_messages:change_tankman_role/slot_is_taken'
+    CHANGE_TANKMAN_ROLE_NO_VEHICLE = '#system_messages:change_tankman_role/no_vehicle'
+    CHANGE_TANKMAN_ROLE_SERVER_ERROR = '#system_messages:change_tankman_role/server_error'
+    CHANGE_TANKMAN_ROLE_NOT_ENOUGH_GOLD = '#system_messages:change_tankman_role/not_enough_gold'
+    CHANGE_TANKMAN_ROLE_NOT_ENOUGH_CREDITS = '#system_messages:change_tankman_role/not_enough_credits'
+    CHANGE_TANKMAN_ROLE_WALLET_NOT_AVAILABLE = '#system_messages:change_tankman_role/wallet_not_available'
     FREE_XP_TO_TMAN_SKILL_SUCCESS = '#system_messages:free_xp_to_tman_skill/success'
     FREE_XP_TO_TMAN_SKILL_SERVER_ERROR = '#system_messages:free_xp_to_tman_skill/server_error'
     FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE = '#system_messages:free_xp_to_tman_skill/error/WRONG_ARGS_TYPE'
@@ -565,6 +574,12 @@ class SYSTEM_MESSAGES(object):
     POTAPOVQUESTS_SELECT_SERVER_ERROR_QUEST_ALREADY_COMPLETED = '#system_messages:potapovQuests/select/server_error/QUEST_ALREADY_COMPLETED'
     POTAPOVQUESTS_SELECT_SERVER_ERROR_NOT_UNLOCKED_QUEST = '#system_messages:potapovQuests/select/server_error/NOT_UNLOCKED_QUEST'
     POTAPOVQUESTS_SELECT_SERVER_ERROR_TOO_MANY_QUESTS_IN_CHAIN = '#system_messages:potapovQuests/select/server_error/TOO_MANY_QUESTS_IN_CHAIN'
+    POTAPOVQUESTS_SELECT_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:potapovQuests/select/server_error/LOCKED_BY_VEHICLE_QUEST'
+    POTAPOVQUESTS_SELECT_SERVER_ERROR_SEASON_LIMIT_THE_SAME_CLASS = '#system_messages:potapovQuests/select/server_error/SEASON_LIMIT_THE_SAME_CLASS'
+    POTAPOVQUESTS_REFUSE_SUCCESS = '#system_messages:potapovQuests/refuse/success'
+    POTAPOVQUESTS_REFUSE_SERVER_ERROR = '#system_messages:potapovQuests/refuse/server_error'
+    POTAPOVQUESTS_REFUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:potapovQuests/refuse/server_error/LOCKED_BY_VEHICLE_QUEST'
+    POTAPOVQUESTS_REFUSE_DISABLED = '#system_messages:potapovQuests/refuse/DISABLED'
     POTAPOVQUESTS_REWARD_REGULAR_SUCCESS = '#system_messages:potapovQuests/reward/regular/success'
     POTAPOVQUESTS_REWARD_REGULAR_SERVER_ERROR = '#system_messages:potapovQuests/reward/regular/server_error'
     POTAPOVQUESTS_REWARD_REGULAR_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:potapovQuests/reward/regular/server_error/WRONG_ARGS_TYPE'
@@ -576,10 +591,8 @@ class SYSTEM_MESSAGES(object):
     POTAPOVQUESTS_REWARD_TANKWOMAN_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:potapovQuests/reward/tankwoman/server_error/WRONG_ARGS_TYPE'
     POTAPOVQUESTS_REWARD_TANKWOMAN_SERVER_ERROR_NO_REWARD = '#system_messages:potapovQuests/reward/tankwoman/server_error/NO_REWARD'
     POTAPOVQUESTS_REWARD_TANKWOMAN_SERVER_ERROR_INVALID_STATE = '#system_messages:potapovQuests/reward/tankwoman/server_error/INVALID_STATE'
-    POTAPOVQUESTS_REFUSE_DISABLED = '#system_messages:potapovQuests/refuse/DISABLED'
     POTAPOVQUESTS_REWARD_TANKWOMAN_SERVER_ERROR_DISABLED = '#system_messages:potapovQuests/reward/tankwoman/server_error/DISABLED'
     POTAPOVQUESTS_SELECT_DISABLED = '#system_messages:potapovQuests/select/DISABLED'
-    POTAPOVQUESTS_REFUSE_SUCCESS = '#system_messages:potapovQuests/refuse/success'
     UNIT_ERRORS_ALREADY_JOINED_UNIT = '#system_messages:unit/errors/ALREADY_JOINED_UNIT'
     UNIT_ERRORS_UNIT_MGR_ENTITY_CREATION_FAIL = '#system_messages:unit/errors/UNIT_MGR_ENTITY_CREATION_FAIL'
     UNIT_ERRORS_UNIT_ADD_FAIL = '#system_messages:unit/errors/UNIT_ADD_FAIL'
@@ -772,6 +785,7 @@ class SYSTEM_MESSAGES(object):
     INVITE_STATUS_LEGIONARIES_NOT_ALLOWED = '#system_messages:invite/status/LEGIONARIES_NOT_ALLOWED'
     RALLY_LEAVEDISABLED = '#system_messages:rally/leaveDisabled'
     SQUAD_LEAVEDISABLED = '#system_messages:squad/leaveDisabled'
+    BATTLERESULTS_SHARING_SUCCESS = '#system_messages:battleResults/sharing/success'
     PREBATTLE_REQUEST_NAME_ENUM = (PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS,
      PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP,
      PREBATTLE_REQUEST_NAME_CHANGE_USER_STATUS,
@@ -1062,7 +1076,7 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_KICK_TIMEOUT_,
      PREBATTLE_START_FAILED_KICKEDFROMQUEUE_SQUAD,
      PREBATTLE_START_FAILED_KICKEDFROMQUEUE_COMPANY,
-     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_DEFAULT,
+     PREBATTLE_START_FAILED_KICKEDFROMQUEUE_DEAFULT,
      WRONG_SLOT,
      CLIENTINSTALLERROR_WRONG_NATION,
      CLIENTINSTALLERROR_NOT_FOR_THIS_VEHICLE_TYPE,
@@ -1107,6 +1121,7 @@ class SYSTEM_MESSAGES(object):
      SHOP_ITEM_NOT_ENOUGH_MONEY,
      SHOP_VEHICLE_NOT_FOUND,
      SHOP_ITEM_NOT_FOUND,
+     SHOP_ITEM_COMMON_RENT_OR_BUY_ERROR,
      SHOP_ITEM_BUY_SUCCESS,
      SHOP_ITEM_BUY_SERVER_ERROR,
      SHOP_ITEM_BUY_AND_EQUIP_IN_PROCESSING,
@@ -1311,6 +1326,14 @@ class SYSTEM_MESSAGES(object):
      DROP_TANKMAN_SKILL_INVALID_VEHICLE,
      DROP_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      DROP_TANKMAN_SKILL_VEHICLE_LOCKED,
+     CHANGE_TANKMAN_ROLE_SUCCESS,
+     CHANGE_TANKMAN_ROLE_INSTALLED,
+     CHANGE_TANKMAN_ROLE_SLOT_IS_TAKEN,
+     CHANGE_TANKMAN_ROLE_NO_VEHICLE,
+     CHANGE_TANKMAN_ROLE_SERVER_ERROR,
+     CHANGE_TANKMAN_ROLE_NOT_ENOUGH_GOLD,
+     CHANGE_TANKMAN_ROLE_NOT_ENOUGH_CREDITS,
+     CHANGE_TANKMAN_ROLE_WALLET_NOT_AVAILABLE,
      FREE_XP_TO_TMAN_SKILL_SUCCESS,
      FREE_XP_TO_TMAN_SKILL_SERVER_ERROR,
      FREE_XP_TO_TMAN_SKILL_ERROR_WRONG_ARGS_TYPE,
@@ -1536,6 +1559,12 @@ class SYSTEM_MESSAGES(object):
      POTAPOVQUESTS_SELECT_SERVER_ERROR_QUEST_ALREADY_COMPLETED,
      POTAPOVQUESTS_SELECT_SERVER_ERROR_NOT_UNLOCKED_QUEST,
      POTAPOVQUESTS_SELECT_SERVER_ERROR_TOO_MANY_QUESTS_IN_CHAIN,
+     POTAPOVQUESTS_SELECT_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
+     POTAPOVQUESTS_SELECT_SERVER_ERROR_SEASON_LIMIT_THE_SAME_CLASS,
+     POTAPOVQUESTS_REFUSE_SUCCESS,
+     POTAPOVQUESTS_REFUSE_SERVER_ERROR,
+     POTAPOVQUESTS_REFUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
+     POTAPOVQUESTS_REFUSE_DISABLED,
      POTAPOVQUESTS_REWARD_REGULAR_SUCCESS,
      POTAPOVQUESTS_REWARD_REGULAR_SERVER_ERROR,
      POTAPOVQUESTS_REWARD_REGULAR_SERVER_ERROR_WRONG_ARGS_TYPE,
@@ -1547,10 +1576,8 @@ class SYSTEM_MESSAGES(object):
      POTAPOVQUESTS_REWARD_TANKWOMAN_SERVER_ERROR_WRONG_ARGS_TYPE,
      POTAPOVQUESTS_REWARD_TANKWOMAN_SERVER_ERROR_NO_REWARD,
      POTAPOVQUESTS_REWARD_TANKWOMAN_SERVER_ERROR_INVALID_STATE,
-     POTAPOVQUESTS_REFUSE_DISABLED,
      POTAPOVQUESTS_REWARD_TANKWOMAN_SERVER_ERROR_DISABLED,
      POTAPOVQUESTS_SELECT_DISABLED,
-     POTAPOVQUESTS_REFUSE_SUCCESS,
      UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_UNIT_MGR_ENTITY_CREATION_FAIL,
      UNIT_ERRORS_UNIT_ADD_FAIL,
@@ -1742,7 +1769,8 @@ class SYSTEM_MESSAGES(object):
      INVITE_STATUS_WRONG_CLAN,
      INVITE_STATUS_LEGIONARIES_NOT_ALLOWED,
      RALLY_LEAVEDISABLED,
-     SQUAD_LEAVEDISABLED)
+     SQUAD_LEAVEDISABLED,
+     BATTLERESULTS_SHARING_SUCCESS)
 
     @staticmethod
     def prebattle_request_name(key):

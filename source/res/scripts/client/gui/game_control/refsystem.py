@@ -7,10 +7,10 @@ from PlayerEvents import g_playerEvents
 from constants import REF_SYSTEM_FLAG, EVENT_TYPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
-from gui.Scaleform.genConsts.REFERRAL_SYSTEM import REFERRAL_SYSTEM
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.game_control.controllers import Controller
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
@@ -20,6 +20,10 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_itemsCache, events, g_eventBus, event_dispatcher as shared_events
 from gui.shared.utils import findFirst
 from gui.server_events import g_eventsCache
+from messenger.m_constants import USER_TAG
+from messenger.proto.entities import SharedUserEntity
+from messenger.proto.events import g_messengerEvents
+from messenger.storage import storage_getter
 
 def _getRefSysCfg():
     return g_itemsCache.items.shop.refSystem or {}
@@ -130,9 +134,10 @@ class TankmanAward(AwardAbstract):
         return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, additionalText)
 
 
-class RefSystem(object):
+class RefSystem(Controller):
 
-    def init(self):
+    def __init__(self, proxy):
+        super(RefSystem, self).__init__(proxy)
         self.__referrers = []
         self.__referrals = []
         self.__quests = []
@@ -146,24 +151,30 @@ class RefSystem(object):
         self.onPlayerBecomeReferrer = Event(self.__eventMgr)
         self.onPlayerBecomeReferral = Event(self.__eventMgr)
 
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
+
     def fini(self):
         self.__referrers = None
         self.__referrals = None
         self.__eventMgr.clear()
         self.__clearQuestsData()
+        super(RefSystem, self).fini()
         return
 
-    def start(self):
+    def onLobbyStarted(self, ctx):
         g_clientUpdateManager.addCallbacks({'stats.refSystem': self.__onRefStatsUpdated})
         g_eventsCache.onSyncCompleted += self.__onEventsUpdated
         g_playerEvents.onShopResync += self.__onShopUpdated
         self.__update(g_itemsCache.items.stats.refSystem)
         self.__updateQuests()
 
-    def stop(self):
-        g_playerEvents.onShopResync -= self.__onShopUpdated
-        g_eventsCache.onSyncCompleted -= self.__onEventsUpdated
-        g_clientUpdateManager.removeObjectCallbacks(self)
+    def onBattleStarted(self):
+        self.__stop()
+
+    def onDisconnected(self):
+        self.__stop()
 
     def getReferrers(self):
         return self.__referrers
@@ -220,12 +231,10 @@ class RefSystem(object):
     def getMaxNumberOfReferrals(cls):
         return _getMaxNumberOfReferrals()
 
-    def getUserType(self, userDBID):
-        if findFirst(lambda x: x.getAccountDBID() == userDBID, self.getReferrals()):
-            return REFERRAL_SYSTEM.TYPE_REFERRAL
-        if findFirst(lambda x: x.getAccountDBID() == userDBID, self.getReferrers()):
-            return REFERRAL_SYSTEM.TYPE_REFERRER
-        return REFERRAL_SYSTEM.TYPE_NO_REFERRAL
+    @classmethod
+    def isReferrer(cls):
+        refSystemStats = g_itemsCache.items.stats.refSystem
+        return refSystemStats.get('activeInvitations', 0) > 0 or len(refSystemStats.get('referrals', {})) > 0
 
     def showReferrerIntroWindow(self, invitesCount):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW, ctx={'invitesCount': invitesCount}))
@@ -235,6 +244,11 @@ class RefSystem(object):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, ctx={'referrerName': nickname,
          'newbie': isNewbie}))
         self.onPlayerBecomeReferral()
+
+    def __stop(self):
+        g_playerEvents.onShopResync -= self.__onShopUpdated
+        g_eventsCache.onSyncCompleted -= self.__onEventsUpdated
+        g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __getAwardParams(self, completedQuestIDs):
         completedQuestID = completedQuestIDs.pop() if len(completedQuestIDs) else -1
@@ -258,9 +272,29 @@ class RefSystem(object):
         self.__referrals = []
         self.__xpPoolOfDeletedRals = 0
         self.__posByXPinTeam = g_itemsCache.items.shop.refSystem['posByXPinTeam']
-        self.__buildReferrers(data)
-        self.__buildReferrals(data)
+        storage = self.usersStorage
+        userGetter = storage.getUser
+        userSetter = storage.addUser
+        storage.removeTags({USER_TAG.REFERRER, USER_TAG.REFERRAL})
+
+        def updateUser(item, tags):
+            dbID = item.getAccountDBID()
+            user = userGetter(dbID)
+            if user:
+                user.addTags(tags)
+            else:
+                userSetter(SharedUserEntity(dbID, name=item.getNickName(), tags=tags, clanAbbrev=item.getClanAbbrev()))
+
+        for referrer in self.__buildReferrers(data):
+            self.__referrers.append(referrer)
+            updateUser(referrer, {USER_TAG.REFERRER})
+
+        for referral in self.__buildReferrals(data):
+            self.__referrals.append(referral)
+            updateUser(referral, {USER_TAG.REFERRAL})
+
         self.onUpdated()
+        g_messengerEvents.users.onUsersListReceived({USER_TAG.REFERRER, USER_TAG.REFERRAL})
 
     @classmethod
     def __makeRefItem(cls, dbID, **data):
@@ -274,7 +308,7 @@ class RefSystem(object):
         for key, item in (data.get('referrers') or {}).iteritems():
             referrer = self.__makeRefItem(key, **item)
             if referrer is not None:
-                self.__referrers.append(referrer)
+                yield referrer
 
         return
 
@@ -285,7 +319,7 @@ class RefSystem(object):
             else:
                 referral = self.__makeRefItem(key, **item)
                 if referral is not None:
-                    self.__referrals.append(referral)
+                    yield referral
 
         return
 

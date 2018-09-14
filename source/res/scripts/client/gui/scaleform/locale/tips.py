@@ -151,4 +151,3 @@ class TIPS(object):
     TIP146 = '#tips:tip146'
     TIP147 = '#tips:tip147'
     TIP148 = '#tips:tip148'
-    EVENTTIP = '#tips:eventTip'

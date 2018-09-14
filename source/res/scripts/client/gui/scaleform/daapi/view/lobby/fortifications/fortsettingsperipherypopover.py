@@ -24,8 +24,18 @@ class FortSettingsPeripheryPopover(View, FortSettingsPeripheryPopoverMeta, Smart
         self.as_setTextsS(data)
 
     def setData(self):
-        data = {'servers': self.__getServersList(),
-         'currentServer': self.__getCurrentServer()}
+        servers = self.__getServersList()
+        currentPeripheryID = self.__getCurrentServer()
+        isServerValid = False
+        for i in xrange(len(servers)):
+            if servers[i]['id'] == currentPeripheryID:
+                isServerValid = True
+                break
+
+        if not isServerValid:
+            currentPeripheryID = -1
+        data = {'servers': servers,
+         'currentServer': currentPeripheryID}
         self.as_setDataS(data)
 
     def onApply(self, peripheryID):

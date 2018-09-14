@@ -12,7 +12,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.prb_windows.PrbSendInvitesWindow import PrbSendInvitesWindow
     from gui.Scaleform.daapi.view.lobby.prb_windows import invite_windows
     from gui.Scaleform.daapi.view.lobby.prb_windows.SquadWindow import SquadWindow
-    from gui.Scaleform.daapi.view.lobby.prb_windows.SquadWindowNY import SquadWindowNY
     from gui.Scaleform.daapi.view.lobby.prb_windows.CompanyListView import CompanyListView
     from gui.Scaleform.daapi.view.lobby.prb_windows.CompanyMainWindow import CompanyMainWindow
     from gui.Scaleform.daapi.view.lobby.prb_windows.CompanyRoomView import CompanyRoomView
@@ -20,7 +19,6 @@ def getViewSettings():
     return [GroupedViewSettings(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, PrbSendInvitesWindow, 'prbSendInvitesWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(PREBATTLE_ALIASES.AUTO_INVITE_WINDOW_PY, invite_windows.AutoInviteWindow, 'receivedInviteWindow.swf', ViewTypes.WINDOW, 'receivedInviteWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(PREBATTLE_ALIASES.SQUAD_WINDOW_PY, SquadWindow, 'squadWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.SQUAD_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(PREBATTLE_ALIASES.SQUAD_WINDOW_NY_PY, SquadWindowNY, 'squadWindowNY.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.SQUAD_WINDOW_NY_PY, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(PREBATTLE_ALIASES.COMPANY_WINDOW_PY, CompanyMainWindow, 'companyMainWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.COMPANY_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, BattleSessionWindow, 'battleSessionWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY, BattleSessionList, 'battleSessionList.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE),
@@ -37,7 +35,6 @@ class PrbPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = [(PREBATTLE_ALIASES.SQUAD_WINDOW_PY, self.__showPrebattleWindow),
-         (PREBATTLE_ALIASES.SQUAD_WINDOW_NY_PY, self.__showPrebattleWindow),
          (PREBATTLE_ALIASES.COMPANY_WINDOW_PY, self.__showCompanyMainWindow),
          (PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, self.__showPrebattleWindow),
          (PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY, self.__showPrebattleWindow),

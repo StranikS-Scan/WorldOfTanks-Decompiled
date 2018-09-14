@@ -1,10 +1,13 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/tankman.py
 import BigWorld
+from constants import EQUIP_TMAN_CODE
 from debug_utils import LOG_DEBUG
+from helpers.i18n import convert
 from items import tankmen
+from items.tankmen import SKILL_INDICES, getSkillsConfig, SKILL_NAMES
 from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeI18nError, plugins
 from gui.shared.utils.gui_items import formatPrice
 
@@ -341,6 +344,37 @@ class TankmanAddSkill(ItemProcessor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to add tankman skill:', self.item, self.skillName)
         BigWorld.player().inventory.addTankmanSkill(self.item.invID, self.skillName, lambda code: self._response(code, callback))
+
+
+class TankmanChangeRole(ItemProcessor):
+
+    def __init__(self, tankman, role, vehTypeCompDescr):
+        self.__roleIdx = SKILL_INDICES[role]
+        self.__vehTypeCompDescr = vehTypeCompDescr
+        self.__changeRoleCost = g_itemsCache.items.shop.changeRoleCost
+        vehicle = g_itemsCache.items.getItemByCD(self.__vehTypeCompDescr)
+        super(TankmanChangeRole, self).__init__(tankman, [plugins.MessageConfirmator('tankmanChageRole/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory), plugins.VehicleValidator(vehicle, False), plugins.MoneyValidator((0, self.__changeRoleCost))])
+
+    def _errorHandler(self, code, errStr = '', ctx = None):
+        if len(errStr):
+            return makeI18nError('change_tankman_role/%s' % errStr)
+        return makeI18nError('change_tankman_role/server_error')
+
+    def _successHandler(self, code, ctx = None):
+        msgType = SM_TYPE.FinancialTransactionWithGold
+        vehicle = g_itemsCache.items.getItemByCD(self.__vehTypeCompDescr)
+        if ctx == EQUIP_TMAN_CODE.OK:
+            auxData = makeI18nSuccess('change_tankman_role/installed', vehicle=vehicle.shortUserName)
+        elif ctx == EQUIP_TMAN_CODE.NO_FREE_SLOT:
+            roleStr = Tankman.getRoleUserName(SKILL_NAMES[self.__roleIdx])
+            auxData = makeI18nSuccess('change_tankman_role/slot_is_taken', vehicle=vehicle.shortUserName, role=roleStr)
+        else:
+            auxData = makeI18nSuccess('change_tankman_role/no_vehicle')
+        return makeI18nSuccess('change_tankman_role/success', money=formatPrice((0, self.__changeRoleCost)), type=msgType, auxData=auxData)
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to change tankman role:', self.item, self.__roleIdx, self.__vehTypeCompDescr)
+        BigWorld.player().inventory.changeTankmanRole(self.item.invID, self.__roleIdx, self.__vehTypeCompDescr, lambda code, ext: self._response(code, callback, ctx=ext))
 
 
 class TankmanDropSkills(ItemProcessor):

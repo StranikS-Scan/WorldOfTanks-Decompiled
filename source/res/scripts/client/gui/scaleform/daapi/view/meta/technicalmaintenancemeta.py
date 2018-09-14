@@ -40,3 +40,7 @@ class TechnicalMaintenanceMeta(DAAPIModule):
     def as_setGoldS(self, gold):
         if self._isDAAPIInited():
             return self.flashObject.as_setGold(gold)
+
+    def as_resetEquipmentS(self, equipmentCD):
+        if self._isDAAPIInited():
+            return self.flashObject.as_resetEquipment(equipmentCD)

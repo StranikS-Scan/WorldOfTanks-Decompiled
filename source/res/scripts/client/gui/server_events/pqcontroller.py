@@ -26,6 +26,7 @@ class PQController(object):
             tile._addQuest(quest)
             season = self.__makeSeason(tile.getSeasonID())
             season._addTile(tile)
+            quest.setSeasonID(season.getID())
 
     def fini(self):
         self.__em.clear()
@@ -114,10 +115,10 @@ class PQController(object):
             tile = self.__tiles[tileID]
         return tile
 
-    def __makeQuest(self, pqID):
+    def __makeQuest(self, pqID, seasonID = None):
         if pqID not in self.__quests:
             pqType = potapov_quests.g_cache.questByPotapovQuestID(pqID)
-            quest = self.__quests[pqID] = event_items.PotapovQuest(pqID, pqType)
+            quest = self.__quests[pqID] = event_items.PotapovQuest(pqID, pqType, seasonID=seasonID)
         else:
             quest = self.__quests[pqID]
         return quest

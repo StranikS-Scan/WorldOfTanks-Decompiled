@@ -23,3 +23,4 @@ class ArenaLoadController(IArenaController):
         MessengerEntry.g_instance.onAvatarShowGUI()
         from gui.WindowsManager import g_windowsManager
         g_windowsManager.showBattle()
+        BigWorld.wg_clearTextureReuseList()

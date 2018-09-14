@@ -142,6 +142,7 @@ class WebBrowser(AppRef):
             self.__browser.script.onLoadEnd -= self.__onLoadEnd
             self.__browser.script.onCursorUpdated -= self.__onCursorUpdated
             self.__browser.script = None
+            browserCleanupRoutine(self.__browser)
             self.__browser = None
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
@@ -311,6 +312,12 @@ class WebBrowser(AppRef):
             self.__browser.executeJavascript(script, frame)
 
 
+def browserCleanupRoutine(browser):
+    if browser.isLoading:
+        browser.stop()
+        BigWorld.callback(0.5, lambda : browserCleanupRoutine(browser))
+
+
 class EventListener():
     cursorType = property(lambda self: self.__cursorType)
 
@@ -332,6 +339,9 @@ class EventListener():
     def onChangeCursor(self, cursorType):
         self.__cursorType = self.__cursorTypes.get(cursorType) or CursorDelegator.ARROW
         self.onCursorUpdated()
+
+    def onChangeTitle(self, title):
+        LOG_BROWSER('Title is', title)
 
     def onBeginLoadingFrame(self, frameId, isMainFrame, url):
         if isMainFrame:
@@ -358,6 +368,7 @@ class EventListener():
 
 class WebBrowserManager():
     first = property(lambda self: next(iter(self.__browsers)))
+    len = property(lambda self: len(self.__browsers))
 
     def __init__(self):
         self.__browsers = set()

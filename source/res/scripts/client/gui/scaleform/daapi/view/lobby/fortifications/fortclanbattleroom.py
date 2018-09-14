@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper imp
 from gui.Scaleform.daapi.view.lobby.rally import rally_dps
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
-from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -46,11 +46,18 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         if self.__battleID == battleID:
             self.__setReadyStatus()
 
+    def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
+        self.__makeMainVO()
+
+    def onConsumablesChanged(self, battleID, consumableOrderTypeID):
+        self.__makeMainVO()
+
     def onFortBattleChanged(self, cache, item, battleItem):
         self.__initData()
         self.__makeData()
 
     def onUnitStateChanged(self, unitState, timeLeft):
+        self.__setReadyStatus()
         self._setActionButtonState()
         self.__initData()
         self.__makeData()
@@ -101,10 +108,6 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
     def rebuildCandidatesDP(self):
         self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
-
-    def toggleReadyStateRequest(self):
-        self.as_updateReadyStatusS(self.unitFunctional.getState().isInQueue(), self.__battle.isEnemyReadyForBattle())
-        self.unitFunctional.doAction()
 
     def inviteFriendRequest(self):
         self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.FORT_BATTLE],
@@ -162,13 +165,20 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
     def __makeMainVO(self):
         result = {}
-        result['headerDescr'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_MAPTITLE))
         (_, _, arenaTypeID), _ = self.__currentBuilding
+        _getText = self.app.utilsManager.textManager.getText
+        fortPermissions = self.fortCtrl.getPermissions()
+        unitPermissions = self.unitFunctional.getPermissions()
+        activeConsumes = self.__battle.getActiveConsumables()
         result['mapID'] = arenaTypeID
-        result['mapName'] = None
         arenaType = ArenaType.g_cache.get(arenaTypeID)
         if arenaType is not None:
-            result['mapName'] = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, arenaType.name)
+            mapName = _getText(TextType.MAIN_TEXT, arenaType.name)
+        else:
+            mapName = ''
+        infoIcon = self.app.utilsManager.textManager.getIcon(TextIcons.INFO_ICON)
+        result['headerDescr'] = _getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_MAPTITLE, mapName=mapName) + ' ' + infoIcon)
+        result['isOrdersBgVisible'] = bool(not unitPermissions.canChangeConsumables() and len(activeConsumes))
         result['mineClanName'] = g_clanCache.clanTag
         _, enemyClanAbbev, _ = self.__battle.getOpponentClanInfo()
         result['enemyClanName'] = '[%s]' % enemyClanAbbev
@@ -195,7 +205,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
             connectionIconTTHeader = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BATTLEICON_OFFENCE_TOOLTIP_HEADER)
             connectionIconTTBody = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BATTLEICON_OFFENCE_TOOLTIP_BODY)
             buildingIndicatorTTHeader = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BUILDINGINDICATOR_OFFENCE_TOOLTIP_HEADER)
-            buildingIndicatorTTBody = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BUILDINGINDICATOR_OFFENCE_TOOLTIP_BODY, building=i18n.makeString(FORTIFICATIONS.buildings_buildingname(self.UI_BUILDINGS_BIND[currentBuildingID])))
+            buildingIndicatorTTBody = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BUILDINGINDICATOR_OFFENCE_TOOLTIP_BODY, building=i18n.makeString(FORTIFICATIONS.buildings_buildingname(self.getBuildingUIDbyID(currentBuildingID))))
             mineBuildings, mineBaseBuilding = self.__makeBuildingsData(self.__battle.getAttackerBuildList(), self.__battle.getAttackerFullBuildList(), self.__battle.getLootedBuildList())
             enemyBuildings, enemyBaseBuilding = self.__makeBuildingsData(self.__battle.getDefenderBuildList(), self.__battle.getDefenderFullBuildList(), self.__battle.getLootedBuildList(), False)
         else:
@@ -203,7 +213,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
             connectionIconTTHeader = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BATTLEICON_DEFENCE_TOOLTIP_HEADER)
             connectionIconTTBody = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BATTLEICON_DEFENCE_TOOLTIP_BODY)
             buildingIndicatorTTHeader = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BUILDINGINDICATOR_DEFENCE_TOOLTIP_HEADER)
-            buildingIndicatorTTBody = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BUILDINGINDICATOR_DEFENCE_TOOLTIP_BODY, building=i18n.makeString(FORTIFICATIONS.buildings_buildingname(self.UI_BUILDINGS_BIND[currentBuildingID])))
+            buildingIndicatorTTBody = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_HEADER_BUILDINGINDICATOR_DEFENCE_TOOLTIP_BODY, building=i18n.makeString(FORTIFICATIONS.buildings_buildingname(self.getBuildingUIDbyID(currentBuildingID))))
             mineBuildings, mineBaseBuilding = self.__makeBuildingsData(self.__battle.getDefenderBuildList(), self.__battle.getDefenderFullBuildList(), self.__battle.getLootedBuildList(), False)
             enemyBuildings, enemyBaseBuilding = self.__makeBuildingsData(self.__battle.getAttackerBuildList(), self.__battle.getAttackerFullBuildList(), self.__battle.getLootedBuildList())
         _, _, enemyClanDir = self.__battle.getOpponentClanInfo()
@@ -282,7 +292,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
     def __makeBuildingData(self, buildingID, isAttack, level, isLooted, isAvailable):
         (curBuildingId, _, _), curBuildingIsAttack = self.__currentBuilding
-        return {'uid': self.UI_BUILDINGS_BIND[buildingID],
+        return {'uid': self.getBuildingUIDbyID(buildingID),
          'progress': self._getProgress(buildingID, level),
          'buildingLevel': level,
          'underAttack': curBuildingId == buildingID and curBuildingIsAttack == isAttack,

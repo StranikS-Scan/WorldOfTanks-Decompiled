@@ -1,37 +1,30 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/users_data_providers.py
 from debug_utils import LOG_DEBUG
-from gui import game_control
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from messenger import g_settings
-from messenger.proto.bw import find_criteria
+from messenger.m_constants import USER_TAG
+from messenger.proto import shared_find_criteria
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
-from gui.Scaleform.genConsts.REFERRAL_SYSTEM import REFERRAL_SYSTEM
 
 def makeEmptyUserItem():
-    return {'uid': 0L,
+    return {'dbID': 0L,
      'userName': '',
-     'chatRoster': 0,
-     'online': False,
-     'himself': False,
-     'displayName': '',
+     'fullName': '',
+     'tags': [],
+     'isOnline': False,
      'colors': [0, 0],
-     'group': None,
-     'clanName': None,
-     'referralType': REFERRAL_SYSTEM.TYPE_NO_REFERRAL}
+     'clanAbbrev': ''}
 
 
 def makeUserItem(user):
-    return {'uid': user.getID(),
+    return {'dbID': user.getID(),
      'userName': user.getName(),
-     'chatRoster': user.getRoster(),
-     'online': user.isOnline(),
-     'himself': user.isCurrentPlayer(),
-     'displayName': user.getFullName(),
+     'fullName': user.getFullName(),
+     'tags': list(user.getTags()),
+     'isOnline': user.isOnline(),
      'colors': g_settings.getColorScheme('rosters').getColors(user.getGuiType()),
-     'group': user.getGroup(),
-     'clanName': user.getClanAbbrev(),
-     'referralType': game_control.g_instance.refSystem.getUserType(user.getID())}
+     'clanAbbrev': user.getClanAbbrev()}
 
 
 def getUsersCmp():
@@ -68,8 +61,8 @@ class UsersDataProvider(object):
 
     def initialize(self, onlineMode = None):
         usersEvents = g_messengerEvents.users
-        usersEvents.onUsersRosterReceived += self._onUsersRosterReceived
-        usersEvents.onUserRosterChanged += self._onUserRosterChanged
+        usersEvents.onUsersListReceived += self._onUsersReceived
+        usersEvents.onUserActionReceived += self._onUserActionReceived
         self._criteria.setOnlineMode(onlineMode)
         self.buildList()
         self._refresh()
@@ -78,8 +71,8 @@ class UsersDataProvider(object):
         self._list = []
         self._criteria = None
         usersEvents = g_messengerEvents.users
-        usersEvents.onUsersRosterReceived -= self._onUsersRosterReceived
-        usersEvents.onUserRosterChanged -= self._onUserRosterChanged
+        usersEvents.onUsersListReceived -= self._onUsersReceived
+        usersEvents.onUserActionReceived -= self._onUserActionReceived
         return
 
     def getOnlineMode(self):
@@ -96,11 +89,11 @@ class UsersDataProvider(object):
     def _getRosterList(self):
         return self.usersStorage.getList(self._criteria)
 
-    def _onUsersRosterReceived(self):
+    def _onUsersReceived(self, _):
         self.buildList()
         self._refresh()
 
-    def _onUserRosterChanged(self, action, user):
+    def _onUserActionReceived(self, action, user):
         self.buildList()
         self._refresh()
 
@@ -129,17 +122,23 @@ class DAAPIUsersDataProvider(UsersDataProvider, DAAPIDataProvider):
 class FriendsDataProvider(DAAPIUsersDataProvider):
 
     def __init__(self):
-        super(FriendsDataProvider, self).__init__(find_criteria.BWFriendFindCriteria())
+        super(FriendsDataProvider, self).__init__(shared_find_criteria.FriendsFindCriteria())
 
     def init(self, flashObject, onlineMode = None):
-        g_messengerEvents.users.onUserRosterStatusUpdated += self._onUserRosterStatusUpdated
+        events = g_messengerEvents.users
+        events.onUserStatusUpdated += self._onUserStatusUpdated
         super(FriendsDataProvider, self).init(flashObject, onlineMode)
 
     def fini(self):
+        events = g_messengerEvents.users
+        events.onUserStatusUpdated -= self._onUserStatusUpdated
         super(FriendsDataProvider, self).fini()
-        g_messengerEvents.users.onUserRosterStatusUpdated -= self._onUserRosterStatusUpdated
 
-    def _onUserRosterStatusUpdated(self, _):
+    def _onUsersReceived(self, tags):
+        if {USER_TAG.FRIEND, USER_TAG.MUTED} & tags:
+            super(FriendsDataProvider, self)._onUsersReceived(tags)
+
+    def _onUserStatusUpdated(self, _):
         self.buildList()
         self._refresh()
 
@@ -147,31 +146,39 @@ class FriendsDataProvider(DAAPIUsersDataProvider):
 class IgnoredDataProvider(DAAPIUsersDataProvider):
 
     def __init__(self):
-        super(IgnoredDataProvider, self).__init__(find_criteria.BWIgnoredFindCriteria())
+        super(IgnoredDataProvider, self).__init__(shared_find_criteria.IgnoredFindCriteria())
+
+    def _onUsersReceived(self, tags):
+        if USER_TAG.IGNORED in tags:
+            super(IgnoredDataProvider, self)._onUsersReceived(tags)
 
 
 class MutedDataProvider(DAAPIUsersDataProvider):
 
     def __init__(self):
-        super(MutedDataProvider, self).__init__(find_criteria.BWMutedFindCriteria())
+        super(MutedDataProvider, self).__init__(shared_find_criteria.MutedFindCriteria())
+
+    def _onUsersReceived(self, tags):
+        if USER_TAG.MUTED in tags:
+            super(MutedDataProvider, self)._onUsersReceived(tags)
 
 
 class ClanMembersDataProvider(DAAPIUsersDataProvider):
 
     def __init__(self):
-        super(ClanMembersDataProvider, self).__init__(find_criteria.BWOnlineFindCriteria())
+        super(ClanMembersDataProvider, self).__init__(shared_find_criteria.OnlineFindCriteria())
 
     def init(self, flashObject, onlineMode = None):
         super(ClanMembersDataProvider, self).init(flashObject, onlineMode)
         usersEvents = g_messengerEvents.users
         usersEvents.onClanMembersListChanged += self._onClanMembersListChanged
-        usersEvents.onUserRosterStatusUpdated += self._onUserRosterStatusUpdated
+        usersEvents.onUserStatusUpdated += self._onUserStatusUpdated
 
     def fini(self):
         super(ClanMembersDataProvider, self).fini()
         usersEvents = g_messengerEvents.users
         usersEvents.onClanMembersListChanged -= self._onClanMembersListChanged
-        usersEvents.onUserRosterStatusUpdated -= self._onUserRosterStatusUpdated
+        usersEvents.onUserStatusUpdated -= self._onUserStatusUpdated
 
     def _getRosterList(self):
         return self.usersStorage.getList(self._criteria, iterator=self.usersStorage.getClanMembersIterator())
@@ -180,7 +187,7 @@ class ClanMembersDataProvider(DAAPIUsersDataProvider):
         self.buildList()
         self.refresh()
 
-    def _onUserRosterStatusUpdated(self, user):
+    def _onUserStatusUpdated(self, user):
         if self.usersStorage.isClanMember(user.getID()):
             self.buildList()
             self.refresh()

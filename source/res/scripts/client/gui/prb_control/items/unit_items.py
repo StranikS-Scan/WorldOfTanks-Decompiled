@@ -74,8 +74,11 @@ class PlayerUnitInfo(object):
         return self.dbID == getPlayerDatabaseID()
 
     def getVehiclesCDs(self):
+        requestCriteria = REQ_CRITERIA.INVENTORY
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
+        requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
         if self.isCurrentPlayer():
-            vehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).keys()
+            vehicles = g_itemsCache.items.getVehicles(requestCriteria).keys()
         else:
             vehicles = self.vehDict.keys()
         return vehicles or []
@@ -243,6 +246,9 @@ class UnitState(object):
 
     def isFortBattle(self):
         return self.__state & UNIT_STATE.FORT_BATTLE > 0
+
+    def isChanged(self):
+        return self.__stateDiff & UNIT_STATE.CHANGED_STATE_ASQ > 0
 
 
 UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'levelsSeq', 'minTotalLevel', 'maxTotalLevel'))

@@ -584,7 +584,7 @@ class TankmanDescr(object):
             raise
 
     def __paramsOnVehicle(self, vehicleType):
-        isPremium = 'premium' in vehicleType.tags
+        isPremium = 'premium' in vehicleType.tags or 'premiumIGR' in vehicleType.tags
         isSameClass = len(VEHICLE_CLASS_TAGS & vehicleType.tags & self.__vehicleTags)
         return (isPremium, isSameClass)
 

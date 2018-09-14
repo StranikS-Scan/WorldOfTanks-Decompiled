@@ -3,10 +3,12 @@ from dossiers2.common.updater_utils import getNewStaticSizeBlockValues, getStati
 from dossiers2.common.updater_utils import getNewBinarySetBlockValues, setStaticSizeBlockRecordValues
 from dossiers2.common.updater_utils import addBlock, addRecords, removeRecords, setVersion, getHeader
 from dossiers2.common.updater_utils import struct
-ACCOUNT_DOSSIER_VERSION = 88
-VEHICLE_DOSSIER_VERSION = 87
+ACCOUNT_DOSSIER_VERSION = 90
+VEHICLE_DOSSIER_VERSION = 88
 TANKMAN_DOSSIER_VERSION = 66
 FORT_DOSSIER_VERSION = 2
+RATED7X7_DOSSIER_VERSION = 1
+CLUB_DOSSIER_VERSION = 1
 
 def __updateFromAccountDossier1(compDescr):
     import dossiers1
@@ -1310,6 +1312,103 @@ def __updateFromAccountDossier87(compDescr):
     return (88, updateCtx['dossierCompDescr'])
 
 
+def __updateFromAccountDossier88(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'rated7x7')
+    addBlock(updateCtx, 'maxRated7x7')
+    setVersion(updateCtx, 89)
+    return (89, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier89(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'achievementsRated7x7')
+    setVersion(updateCtx, 90)
+    return (90, updateCtx['dossierCompDescr'])
+
+
 def __updateFromVehicleDossier1(compDescr):
     import dossiers1
     d1 = dossiers1.getVehicleDossierDescr(compDescr)
@@ -2413,6 +2512,45 @@ def __updateFromVehicleDossier86(compDescr):
     return (87, updateCtx['dossierCompDescr'])
 
 
+def __updateFromVehicleDossier87(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'rated7x7')
+    addBlock(updateCtx, 'maxRated7x7')
+    setVersion(updateCtx, 88)
+    return (88, updateCtx['dossierCompDescr'])
+
+
 def __updateFromTankmanDossier1(compDescr):
     import dossiers1
     d1 = dossiers1.getTankmanDossierDescr(compDescr)
@@ -2544,7 +2682,9 @@ accountVersionUpdaters = {19: __updateFromAccountDossier1,
  84: __updateFromAccountDossier84,
  85: __updateFromAccountDossier85,
  86: __updateFromAccountDossier86,
- 87: __updateFromAccountDossier87}
+ 87: __updateFromAccountDossier87,
+ 88: __updateFromAccountDossier88,
+ 89: __updateFromAccountDossier89}
 vehicleVersionUpdaters = {17: __updateFromVehicleDossier1,
  18: __updateFromVehicleDossier1,
  19: __updateFromVehicleDossier1,
@@ -2580,7 +2720,8 @@ vehicleVersionUpdaters = {17: __updateFromVehicleDossier1,
  83: __updateFromVehicleDossier83,
  84: __updateFromVehicleDossier84,
  85: __updateFromVehicleDossier85,
- 86: __updateFromVehicleDossier86}
+ 86: __updateFromVehicleDossier86,
+ 87: __updateFromVehicleDossier87}
 tankmanVersionUpdaters = {10: __updateFromTankmanDossier1,
  11: __updateFromTankmanDossier1,
  12: __updateFromTankmanDossier1,
@@ -2589,3 +2730,5 @@ tankmanVersionUpdaters = {10: __updateFromTankmanDossier1,
  64: __updateFromTankmanDossier64,
  65: __updateFromTankmanDossier65}
 fortVersionUpdaters = {1: __updateFromFortDossier1}
+rated7x7VersionUpdaters = {}
+clubVersionUpdaters = {}

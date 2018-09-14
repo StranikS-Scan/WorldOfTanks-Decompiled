@@ -21,7 +21,8 @@ class ClientArena(object):
      ARENA_UPDATE.BASE_POINTS: '_ClientArena__onBasePointsUpdate',
      ARENA_UPDATE.BASE_CAPTURED: '_ClientArena__onBaseCaptured',
      ARENA_UPDATE.TEAM_KILLER: '_ClientArena__onTeamKiller',
-     ARENA_UPDATE.VEHICLE_UPDATED: '_ClientArena__onVehicleUpdatedUpdate'}
+     ARENA_UPDATE.VEHICLE_UPDATED: '_ClientArena__onVehicleUpdatedUpdate',
+     ARENA_UPDATE.COMBAT_EQUIPMENT_USED: '_ClientArena__onCombatEquipmentUsed'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -46,6 +47,7 @@ class ClientArena(object):
         self.onTeamBasePointsUpdate = Event.Event(em)
         self.onTeamBaseCaptured = Event.Event(em)
         self.onTeamKiller = Event.Event(em)
+        self.onCombatEquipmentUsed = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self.arenaType = ArenaType.g_cache[arenaTypeID]
         self.bonusType = arenaBonusType
@@ -181,6 +183,10 @@ class ClientArena(object):
             vehInfo['isTeamKiller'] = True
             self.onTeamKiller(vehicleID)
         return
+
+    def __onCombatEquipmentUsed(self, argStr):
+        equipmentID = cPickle.loads(argStr)
+        self.onCombatEquipmentUsed(equipmentID)
 
     def __rebuildIndexToId(self):
         vehicles = self.__vehicles

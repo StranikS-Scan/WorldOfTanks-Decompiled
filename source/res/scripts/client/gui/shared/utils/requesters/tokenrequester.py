@@ -38,16 +38,23 @@ class TokenRequester(object):
 
     @async
     def request(self, callback = None):
-        self.__callback = callback
-        if self.__cache and self.__lastResponse and self.__lastResponse.isValid():
+        requester = getattr(BigWorld.player(), 'requestToken', None)
+        if not requester or not callable(requester):
+            if callback:
+                callback(None)
+            return
+        elif self.__cache and self.__lastResponse and self.__lastResponse.isValid():
             if callback:
                 callback(self.__lastResponse)
             return
-        self.__requestID = self.__idsGen.next()
-        repository = Account.g_accountRepository
-        if repository:
-            repository.onTokenReceived += self.__onTokenReceived
-        BigWorld.player().requestToken(self.__requestID, self.__tokenType)
+        else:
+            self.__callback = callback
+            self.__requestID = self.__idsGen.next()
+            repository = Account.g_accountRepository
+            if repository:
+                repository.onTokenReceived += self.__onTokenReceived
+            requester(self.__requestID, self.__tokenType)
+            return
 
     def __onTokenReceived(self, requestID, tokenType, data):
         if self.__requestID != requestID or tokenType != self.__tokenType:

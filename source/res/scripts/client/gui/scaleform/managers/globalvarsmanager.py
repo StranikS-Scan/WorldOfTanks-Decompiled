@@ -2,6 +2,7 @@
 import constants
 from helpers import getClientOverride
 from gui import GUI_SETTINGS, game_control, server_events
+from gui.shared import g_itemsCache
 from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
 from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
 
@@ -40,7 +41,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         self.__isTutorialRunning = isRunning
 
     def isFreeXpToTankman(self):
-        return GUI_SETTINGS.freeXpToTankman
+        return g_itemsCache.items.shop.freeXPToTManXPRate > 0
 
     def getLocaleOverride(self):
         return getClientOverride()

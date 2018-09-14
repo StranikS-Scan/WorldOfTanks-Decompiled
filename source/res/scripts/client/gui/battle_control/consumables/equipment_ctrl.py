@@ -1,22 +1,27 @@
 # Embedded file name: scripts/client/gui/battle_control/consumables/equipment_ctrl.py
 from collections import namedtuple
+from functools import partial
 import Event
-from constants import VEHICLE_SETTING
+from constants import VEHICLE_SETTING, EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS
+from gui.shared.utils import findFirst, forEach
 from helpers import i18n
 from items import vehicles
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 
 class _EquipmentItem(object):
-    __slots__ = ('_tag', '_descriptor', '_quantity', '_timeRemaining')
+    __slots__ = ('_tag', '_descriptor', '_quantity', '_stage', '_timeRemaining')
 
-    def __init__(self, descriptor, quantity, timeRemaining, tag = None):
+    def __init__(self, descriptor, quantity, stage, timeRemaining, tag = None):
         super(_EquipmentItem, self).__init__()
         self._tag = tag
         self._descriptor = descriptor
-        self.update(quantity, timeRemaining)
+        self._quantity = 0
+        self._stage = 0
+        self._timeRemaining = 0
+        self.update(quantity, stage, timeRemaining)
 
     def __repr__(self):
         return '{0:>s}(id={1!r:s}, quantity = {2:n}, timeRemaining = {3:n})'.format(self.__class__.__name__, self._descriptor.id, self._quantity, self._timeRemaining)
@@ -34,26 +39,40 @@ class _EquipmentItem(object):
         raise ValueError, 'Invokes getGuiIterator, than it is not required'
 
     def canActivate(self, entityName = None, avatar = None):
-        if self._quantity <= 0 or self._timeRemaining > 0:
+        if self._timeRemaining > 0:
             result = False
+            error = _ActivationError('equipmentAlreadyActivated', {'name': self._descriptor.userString})
+        elif self._stage and self._stage != EQUIPMENT_STAGES.READY:
+            result = False
+            error = None
+            if self._stage == EQUIPMENT_STAGES.ACTIVE:
+                error = _ActivationError('equipmentAlreadyActivated', {'name': self._descriptor.userString})
+        elif self._quantity <= 0:
+            result = False
+            error = None
         else:
             result = True
-        return (result, None)
+            error = None
+        return (result, error)
 
     def getActivationCode(self, entityName = None, avatar = None):
         return None
 
     def clear(self):
         self._descriptor = None
-        self.update(0, 0)
+        self.update(0, 0, 0)
         return
 
-    def update(self, quantity, timeRemaining):
+    def update(self, quantity, stage, timeRemaining):
         self._quantity = quantity
+        self._stage = stage
         self._timeRemaining = timeRemaining
 
-    def activate(self):
-        pass
+    def activate(self, entityName = None, avatar = None):
+        avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getActivationCode(entityName, avatar), avatar=avatar)
+
+    def deactivate(self):
+        avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, self.getEquipmentID())
 
     def getDescriptor(self):
         return self._descriptor
@@ -61,8 +80,21 @@ class _EquipmentItem(object):
     def getQuantity(self):
         return self._quantity
 
+    def isQuantityUsed(self):
+        return False
+
+    def getStage(self):
+        return self._stage
+
     def getTimeRemaining(self):
         return self._timeRemaining
+
+    def getMarker(self):
+        return self._descriptor.name.split('_')[0]
+
+    def getEquipmentID(self):
+        nationID, innationID = self._descriptor.id
+        return innationID
 
 
 class _AutoItem(_EquipmentItem):
@@ -79,19 +111,6 @@ class _TriggerItem(_EquipmentItem):
 
 
 class _ExtinguisherItem(_EquipmentItem):
-    __slots__ = ('_isActivated',)
-
-    def __init__(self, descriptor, quantity, timeRemaining, tag = None):
-        super(_ExtinguisherItem, self).__init__(descriptor, quantity, timeRemaining, tag)
-        self._isActivated = timeRemaining > 0
-
-    def update(self, quantity, timeRemaining):
-        super(_ExtinguisherItem, self).update(quantity, timeRemaining)
-        if timeRemaining == 0:
-            self._isActivated = False
-
-    def activate(self):
-        self._isActivated = True
 
     def canActivate(self, entityName = None, avatar = None):
         result, error = super(_ExtinguisherItem, self).canActivate(entityName, avatar)
@@ -99,16 +118,11 @@ class _ExtinguisherItem(_EquipmentItem):
             return (result, error)
         elif not avatar_getter.isVehicleInFire(avatar):
             return (False, _ActivationError('extinguisherDoesNotActivated', {'name': self._descriptor.userString}))
-        elif self._isActivated != 0:
-            return (False, _ActivationError('equipmentAlreadyActivated', {'name': self._descriptor.userString}))
         else:
             return (True, None)
 
     def getActivationCode(self, entityName = None, avatar = None):
         return 65536 + self._descriptor.id[1]
-
-    def changeSettingValue(self):
-        self._isActivated = True
 
 
 class _ExpandedItem(_EquipmentItem):
@@ -198,9 +212,43 @@ class _RepairKitItem(_ExpandedItem):
             return super(_RepairKitItem, self)._getEntityUserString(entityName, avatar)
 
 
+class _OrderItem(_TriggerItem):
+
+    def update(self, quantity, stage, timeRemaining):
+        from AvatarInputHandler import MapCaseMode
+        from gui.WindowsManager import g_windowsManager
+        if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
+            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate))
+            g_windowsManager.battleWindow.setAimingMode(True)
+        elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
+            MapCaseMode.turnOffMapCase(self.getEquipmentID())
+            g_windowsManager.battleWindow.setAimingMode(False)
+        super(_OrderItem, self).update(quantity, stage, timeRemaining)
+
+
+class _ArtilleryItem(_OrderItem):
+
+    def getMarker(self):
+        return 'artillery'
+
+
+class _BomberItem(_OrderItem):
+
+    def getMarker(self):
+        return 'bomber'
+
+
+def _tiggerItemFactory(descriptor, quantity, stage, timeRemaining, tag = None):
+    if descriptor.name.startswith('artillery'):
+        return _ArtilleryItem(descriptor, quantity, stage, timeRemaining, tag)
+    if descriptor.name.startswith('bomber'):
+        return _BomberItem(descriptor, quantity, stage, timeRemaining, tag)
+    return _TriggerItem(descriptor, quantity, stage, timeRemaining, tag)
+
+
 _EQUIPMENT_TAG_TO_ITEM = {'fuel': _AutoItem,
  'stimulator': _AutoItem,
- 'trigger': _TriggerItem,
+ 'trigger': _tiggerItemFactory,
  'extinguisher': _ExtinguisherItem,
  'medkit': _MedKitItem,
  'repairkit': _RepairKitItem}
@@ -215,25 +263,26 @@ def _getSupportedTag(descriptor):
 
 
 class EquipmentsController(object):
-    __slots__ = ('__eManager', '__equipments', 'onEquipmentAdded', 'onEquipmentUpdated')
+    __slots__ = ('__eManager', '__equipments', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentMarkerShown')
 
     def __init__(self):
         super(EquipmentsController, self).__init__()
         self.__eManager = Event.EventManager()
         self.onEquipmentAdded = Event.Event(self.__eManager)
         self.onEquipmentUpdated = Event.Event(self.__eManager)
+        self.onEquipmentMarkerShown = Event.Event(self.__eManager)
         self.__equipments = {}
 
     def __repr__(self):
         return 'EquipmentsController({0!r:s})'.format(self.__equipments)
 
     @classmethod
-    def createItem(cls, descriptor, quantity, timeRemaining):
+    def createItem(cls, descriptor, quantity, stage, timeRemaining):
         tag = _getSupportedTag(descriptor)
         if tag:
-            item = _EQUIPMENT_TAG_TO_ITEM[tag](descriptor, quantity, timeRemaining, tag)
+            item = _EQUIPMENT_TAG_TO_ITEM[tag](descriptor, quantity, stage, timeRemaining, tag)
         else:
-            item = _EquipmentItem(descriptor, quantity, timeRemaining)
+            item = _EquipmentItem(descriptor, quantity, stage, timeRemaining)
         return item
 
     def clear(self):
@@ -241,6 +290,14 @@ class EquipmentsController(object):
         while len(self.__equipments):
             _, item = self.__equipments.popitem()
             item.clear()
+
+    def cancel(self):
+        item = findFirst(lambda item: item.getStage() == EQUIPMENT_STAGES.PREPARING, self.__equipments.itervalues())
+        if item is not None:
+            item.deactivate()
+            return True
+        else:
+            return False
 
     def getEquipment(self, intCD):
         try:
@@ -251,20 +308,21 @@ class EquipmentsController(object):
 
         return item
 
-    def setEquipment(self, intCD, quantity, timeRemaining):
+    def setEquipment(self, intCD, quantity, stage, timeRemaining):
         if not intCD:
-            self.onEquipmentAdded(intCD, None)
+            self.onEquipmentAdded(intCD, None, False)
             return
         else:
             if intCD in self.__equipments:
                 item = self.__equipments[intCD]
-                item.update(quantity, timeRemaining)
-                self.onEquipmentUpdated(intCD, quantity, timeRemaining)
+                isDeployed = item.getStage() == EQUIPMENT_STAGES.DEPLOYING and stage == EQUIPMENT_STAGES.READY
+                item.update(quantity, stage, timeRemaining)
+                self.onEquipmentUpdated(intCD, item, isinstance(item, _OrderItem), isDeployed)
             else:
                 descriptor = vehicles.getDictDescr(intCD)
-                item = self.createItem(descriptor, quantity, timeRemaining)
+                item = self.createItem(descriptor, quantity, stage, timeRemaining)
                 self.__equipments[intCD] = item
-                self.onEquipmentAdded(intCD, item)
+                self.onEquipmentAdded(intCD, item, isinstance(item, _OrderItem))
             return
 
     def getActivationCode(self, intCD, entityName = None, avatar = None):
@@ -303,13 +361,21 @@ class EquipmentsController(object):
 
             return (result, error)
 
+    def showMarker(self, eq, pos, direction, time):
+        item = findFirst(lambda e: e.getEquipmentID() == eq.id[1], self.__equipments.itervalues())
+        if item is None:
+            item = self.createItem(eq, 0, -1, 0)
+        self.onEquipmentMarkerShown(item, pos, direction, time)
+        return
+
     def __doChangeSetting(self, item, entityName = None, avatar = None):
         result, error = item.canActivate(entityName, avatar)
-        if result:
-            value = item.getActivationCode(entityName, avatar)
-            if avatar_getter.isPlayerOnArena(avatar):
-                avatar_getter.changeVehicleSetting(VEHICLE_SETTING.ACTIVATE_EQUIPMENT, value, avatar)
-                item.activate()
+        if result and avatar_getter.isPlayerOnArena(avatar):
+            if item.getStage() == EQUIPMENT_STAGES.PREPARING:
+                item.deactivate()
+            else:
+                forEach(lambda e: e.deactivate(), [ e for e in self.__equipments.itervalues() if e.getStage() == EQUIPMENT_STAGES.PREPARING ])
+                item.activate(entityName, avatar)
         return (result, error)
 
 
@@ -328,8 +394,8 @@ class _ReplayItem(_EquipmentItem):
 class EquipmentsReplayPlayer(EquipmentsController):
 
     @classmethod
-    def createItem(cls, descriptor, quantity, timeRemaining):
-        return _ReplayItem(descriptor, quantity, timeRemaining, _getSupportedTag(descriptor))
+    def createItem(cls, descriptor, quantity, stage, timeRemaining):
+        return _ReplayItem(descriptor, quantity, timeRemaining, stage, _getSupportedTag(descriptor))
 
     def getActivationCode(self, intCD, entityName = None, avatar = None):
         return None

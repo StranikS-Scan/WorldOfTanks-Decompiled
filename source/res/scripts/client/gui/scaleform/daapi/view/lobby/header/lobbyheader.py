@@ -61,12 +61,10 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
          'account.premiumExpiryTime': self.__onPremiumExpireTimeChanged})
         self.as_setFightButtonS(i18n.makeString('#menu:headerButtons/battle'))
         self.as_setWalletStatusS(game_control.g_instance.wallet.componentsStatuses)
-        self.as_isEventSquadS(g_eventsCache.getEventBattles() is not None and g_eventsCache.getEventBattles().enabled)
         self.updateAccountInfo()
         self.startGlobalListening()
         self.__updateServerName()
         Waiting.hide('enter')
-        return
 
     def __updateServerName(self):
         serverShortName = connectionManager.serverUserNameShort.split()[-1].strip()
@@ -207,7 +205,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
 
     def __triggerViewLoad(self, alias):
         if alias == 'browser':
-            game_control.g_instance.china.showBrowser()
+            game_control.getChinaCtrl().showBrowser()
         else:
             event = g_entitiesFactories.makeLoadEvent(alias)
             if event is not None:
@@ -234,7 +232,7 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
             else:
                 self.as_setScreenS(settings.alias)
 
-    def __getBattleTypeSelectPopover(self, alias):
+    def __getBattleTypeSelectPopover(self):
         container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
         view = None
         if container:
@@ -242,46 +240,36 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         return view
 
     def __closeBattleTypeSelectPopover(self):
-        view = self.__getBattleTypeSelectPopover(VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER)
+        view = self.__getBattleTypeSelectPopover()
         if view:
             view.destroy()
 
     def __updateBattleTypeSelectPopover(self):
-        view = self.__getBattleTypeSelectPopover(VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER)
+        view = self.__getBattleTypeSelectPopover()
         if view:
             view.update()
-
-    def __closeSquadTypeSelectPopover(self):
-        view = self.__getBattleTypeSelectPopover(VIEW_ALIAS.SQUAD_TYPE_SELECT_POPOVER)
-        if view:
-            view.destroy()
 
     def __updatePrebattleControls(self):
         prbDispatcher = g_prbLoader.getDispatcher()
         if not prbDispatcher:
             return
+        items = battle_selector_items.getItems()
+        state = prbDispatcher.getFunctionalState()
+        selected = items.update(state)
+        canDo, _ = prbDispatcher.canPlayerDoAction()
+        playerInfo = prbDispatcher.getPlayerInfo()
+        if selected.isInSquad(state):
+            self.as_updateSquadS(True)
         else:
-            items = battle_selector_items.getItems()
-            state = prbDispatcher.getFunctionalState()
-            selected = items.update(state)
-            canDo, _ = prbDispatcher.canPlayerDoAction()
-            playerInfo = prbDispatcher.getPlayerInfo()
-            self.as_isEventSquadS(g_eventsCache.getEventBattles() is not None and g_eventsCache.getEventBattles().enabled)
-            if selected.isInSquad(state):
-                self.as_updateSquadS(True)
-            else:
-                self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, not state.hasLockedState)
-                self.as_updateSquadS(False)
-            self.as_disableFightButtonS(not canDo or selected.isFightButtonForcedDisabled(), '')
-            self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
-            self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), not selected.isDisabled())
-            if selected.isDisabled():
-                self.__closeBattleTypeSelectPopover()
-                self.__closeSquadTypeSelectPopover()
-            else:
-                self.__updateBattleTypeSelectPopover()
-                self.__closeSquadTypeSelectPopover()
-            return
+            self.as_doDisableHeaderButtonS(self.BUTTONS.SQUAD, not state.hasLockedState)
+            self.as_updateSquadS(False)
+        self.as_disableFightButtonS(not canDo or selected.isFightButtonForcedDisabled(), '')
+        self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
+        self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), not selected.isDisabled())
+        if selected.isDisabled():
+            self.__closeBattleTypeSelectPopover()
+        else:
+            self.__updateBattleTypeSelectPopover()
 
     def __handleFightButtonUpdated(self, _):
         self.__updatePrebattleControls()

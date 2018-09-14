@@ -1,24 +1,29 @@
 # Embedded file name: scripts/client/gui/game_control/SoundEventChecker.py
+from gui.game_control.controllers import Controller
 from gui.shared import g_itemsCache
 from gui.Scaleform.framework import AppRef
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.SoundEffectsId import SoundEffectsId
 
-class SoundEventChecker(AppRef):
+class SoundEventChecker(Controller, AppRef):
 
-    def init(self):
+    def __init__(self, proxy):
+        super(SoundEventChecker, self).__init__(proxy)
         self.__credits, self.__gold = (0, 0)
 
-    def fini(self):
-        pass
-
-    def start(self):
+    def onLobbyStarted(self, ctx):
         self.__credits, self.__gold = g_itemsCache.items.stats.money
         g_clientUpdateManager.addCallbacks({'stats': self.__onStatsChanged})
         from CurrentVehicle import g_currentVehicle
         g_currentVehicle.onChangeStarted += self.__onVehicleChanging
 
-    def stop(self):
+    def onBattleStarted(self):
+        self.__stop()
+
+    def onDisconnected(self):
+        self.__stop()
+
+    def __stop(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         from CurrentVehicle import g_currentVehicle
         g_currentVehicle.onChangeStarted -= self.__onVehicleChanging

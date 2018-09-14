@@ -100,6 +100,9 @@ class IUnitPermissions(IGUIPermissions):
     def canStopBattleQueue(self):
         return False
 
+    def canChangeLeadership(self):
+        return False
+
     @classmethod
     def isCreator(cls, roles):
         return False

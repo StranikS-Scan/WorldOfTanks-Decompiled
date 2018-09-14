@@ -274,7 +274,9 @@ class FortController(_FortController):
          FORT_REQUEST_TYPE.ADD_FAVORITE: self.addFavorite,
          FORT_REQUEST_TYPE.REMOVE_FAVORITE: self.removeFavorite,
          FORT_REQUEST_TYPE.PLAN_ATTACK: self.planAttack,
-         FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE: self.createOrJoinFortBattle})
+         FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE: self.createOrJoinFortBattle,
+         FORT_REQUEST_TYPE.ACTIVATE_CONSUMABLE: self.activateConsumable,
+         FORT_REQUEST_TYPE.RETURN_CONSUMABLE: self.returnConsumable})
         self.__cooldownCallback = None
         self.__cooldownBuildings = []
         self.__cooldownPassed = False
@@ -548,8 +550,8 @@ class FortController(_FortController):
 
     def cancelShutDownDefHour(self, ctx, callback = None):
         perm = self.getPermissions()
-        if not perm.canShutDownDefHour():
-            return self._failChecking('Player can not shut down def hour', ctx, callback)
+        if not perm.canCancelShutDownDefHour():
+            return self._failChecking('Player can not cancel shut down def hour', ctx, callback)
         return self._requester.doRequestEx(ctx, callback, 'cancelDefHourShutdown')
 
     def requestFortPublicInfo(self, ctx, callback = None):
@@ -626,6 +628,21 @@ class FortController(_FortController):
         slotIdx = ctx.getSlotIdx()
         return self._requester.doRequestEx(ctx, callback, 'createOrJoinFortBattle', battleID, slotIdx)
 
+    def activateConsumable(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canActivateConsumable():
+            return self._failChecking('Player can not activate consumable', ctx, callback)
+        orderTypeID = ctx.getConsumableOrderTypeID()
+        slotIdx = ctx.getSlotIdx()
+        return self._requester.doRequestEx(ctx, callback, 'activateConsumable', orderTypeID, slotIdx)
+
+    def returnConsumable(self, ctx, callback = None):
+        perm = self.getPermissions()
+        if not perm.canReturnConsumable():
+            return self._failChecking('Player can not return consumable', ctx, callback)
+        orderTypeID = ctx.getConsumableOrderTypeID()
+        return self._requester.doRequestEx(ctx, callback, 'returnConsumable', orderTypeID)
+
     def _setLimits(self):
         self._limits = FortLimits()
 
@@ -644,7 +661,7 @@ class FortController(_FortController):
         fort.onDirectionClosed += self.__fort_onDirectionClosed
         fort.onDirectionLockChanged += self.__fort_onDirectionLockChanged
         fort.onStateChanged += self.__fort_onStateChanged
-        fort.onOrderReady += self.__fort_onOrderReady
+        fort.onOrderChanged += self.__fort_onOrderChanged
         fort.onDossierChanged += self.__fort_onDossierChanged
         fort.onPlayerAttached += self.__fort_onPlayerAttached
         fort.onSettingCooldown += self.__fort_onSettingCooldown
@@ -657,6 +674,7 @@ class FortController(_FortController):
         fort.onShutdownDowngrade += self.__fort_onShutdownDowngrade
         fort.onDefenceHourShutdown += self.__fort_onDefenceHourShutdown
         fort.onEmergencyRestore += self.__fort_onEmergencyRestore
+        fort.onConsumablesChanged += self.__fort_onConsumablesChanged
         fortMgr = getClientFortMgr()
         if not fortMgr:
             LOG_ERROR('No fort manager to subscribe')
@@ -679,7 +697,7 @@ class FortController(_FortController):
         fort.onDirectionClosed -= self.__fort_onDirectionClosed
         fort.onDirectionLockChanged -= self.__fort_onDirectionLockChanged
         fort.onStateChanged -= self.__fort_onStateChanged
-        fort.onOrderReady -= self.__fort_onOrderReady
+        fort.onOrderChanged -= self.__fort_onOrderChanged
         fort.onDossierChanged -= self.__fort_onDossierChanged
         fort.onPlayerAttached -= self.__fort_onPlayerAttached
         fort.onSettingCooldown -= self.__fort_onSettingCooldown
@@ -692,6 +710,7 @@ class FortController(_FortController):
         fort.onShutdownDowngrade -= self.__fort_onShutdownDowngrade
         fort.onDefenceHourShutdown -= self.__fort_onDefenceHourShutdown
         fort.onEmergencyRestore -= self.__fort_onEmergencyRestore
+        fort.onConsumablesChanged -= self.__fort_onConsumablesChanged
         fortMgr = getClientFortMgr()
         if not fortMgr:
             LOG_ERROR('No fort manager to unsubscribe')
@@ -768,8 +787,8 @@ class FortController(_FortController):
     def __fort_onStateChanged(self, state):
         self._listeners.notify('onStateChanged', state)
 
-    def __fort_onOrderReady(self, orderTypeID, count):
-        self._listeners.notify('onOrderReady', orderTypeID, count)
+    def __fort_onOrderChanged(self, orderTypeID, reason):
+        self._listeners.notify('onOrderChanged', orderTypeID, reason)
 
     def __fort_onDossierChanged(self, compDossierDescr):
         self._listeners.notify('onDossierChanged', compDossierDescr)
@@ -819,6 +838,9 @@ class FortController(_FortController):
 
     def __fort_onEmergencyRestore(self):
         self.stopProcessing()
+
+    def __fort_onConsumablesChanged(self, battleID, consumableOrderTypeID):
+        self._listeners.notify('onConsumablesChanged', battleID, consumableOrderTypeID)
 
 
 def createInitial():

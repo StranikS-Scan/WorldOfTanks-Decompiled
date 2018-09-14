@@ -4,7 +4,8 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from helpers import i18n, html
 from helpers.time_utils import makeLocalServerTime
-from messenger.proto.interfaces import IServerError
+from messenger.proto.interfaces import IChatError
+from messenger.proto.shared_errors import ChatCoolDownError, ClientActionError, I18nActionID, I18nErrorID
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_ERRORS as _ERRORS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
@@ -38,24 +39,31 @@ def getChatErrorMessage(errorID, kwargs):
     return msg
 
 
-class _ActionCoolDownError(IServerError):
-    __slots__ = ('_actionID', '_coolDown')
+class _BWChat2I18nError(I18nErrorID):
 
-    def __init__(self, actionID, coolDown = None):
-        super(_ActionCoolDownError, self).__init__()
-        self._actionID = actionID
-        self._coolDown = coolDown
+    def getName(self):
+        return _ERRORS.getErrorName(self.errorID)
 
-    def getMessage(self):
-        name = getChatActionName(self._actionID)
-        if self._coolDown:
-            msg = i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_ACTION_IN_COOLDOWN, strArg1=name, floatArg1=self._coolDown)
-        else:
-            msg = i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_ACTION_IN_COOLDOWN_WO_PERIOD, strArg1=name)
-        return msg
+    def getI18nKey(self):
+        return I18N_MESSENGER.chat_error(self.getName())
 
 
-class _BattleCommandError(IServerError):
+class _BWChat2I18nAction(I18nActionID):
+
+    def getName(self):
+        return _ACTIONS.getActionName(self.actionID)
+
+    def getI18nName(self):
+        return getChatActionName(self.actionID)
+
+
+class _ActionCoolDownError(ChatCoolDownError):
+
+    def createAction(self, actionID):
+        return _BWChat2I18nAction(actionID)
+
+
+class _BattleCommandError(IChatError):
     __slots__ = ('_example', '_coolDown')
 
     def __init__(self, command):
@@ -80,18 +88,16 @@ class _BattleCommandGenericError(_BattleCommandError):
         return i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_COMMAND_GENERIC_ERROR, strArg1=self._example)
 
 
-class _SimpleActionError(IServerError):
-    __slots__ = ('_actionID', '_errorID')
+class _SimpleActionError(ClientActionError):
 
-    def __init__(self, actionID, errorID):
-        self._actionID = actionID
-        self._errorID = errorID
+    def createError(self, errorID):
+        return _BWChat2I18nError(errorID)
 
-    def getMessage(self):
-        return getChatErrorMessage(self._errorID, {'strArg1': getChatActionName(self._actionID)})
+    def createAction(self, actionID):
+        return _BWChat2I18nAction(actionID)
 
 
-class _AdminCommandError(IServerError):
+class _AdminCommandError(IChatError):
     __slots__ = ('_error',)
 
     def __init__(self, error):
@@ -120,7 +126,7 @@ class _AdminCommandCoolDownError(_AdminCommandError):
         super(_AdminCommandCoolDownError, self).__init__(i18n.makeString(I18N_MESSENGER.CLIENT_ERROR_COMMAND_IN_COOLDOWN_WO_NAME, floatArg1=_LIMITS.ADMIN_COMMANDS_FROM_CLIENT_COOLDOWN_SEC))
 
 
-class _ChatBanError(IServerError):
+class _ChatBanError(IChatError):
     __slots__ = ('_endTime', '_reason')
 
     def __init__(self, endTime, reason):

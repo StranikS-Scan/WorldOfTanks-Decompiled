@@ -15,6 +15,9 @@ class ChannelComponentMeta(DAAPIModule):
     def getMessageMaxLength(self):
         self._printOverrideError('getMessageMaxLength')
 
+    def onLinkClick(self, linkCode):
+        self._printOverrideError('onLinkClick')
+
     def as_setJoinedS(self, flag):
         if self._isDAAPIInited():
             return self.flashObject.as_setJoined(flag)

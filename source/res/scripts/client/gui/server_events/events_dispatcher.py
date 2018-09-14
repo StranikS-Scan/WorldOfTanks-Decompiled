@@ -25,8 +25,8 @@ def showAchievementsAward(achievements):
     shared_events.showAwardWindow(awards.AchievementsAward(achievements))
 
 
-def showTokensAward(tokens):
-    shared_events.showAwardWindow(awards.TokensAward(tokens))
+def showTokenAward(potapovQuest, tokenID, tokensCount):
+    shared_events.showAwardWindow(awards.TokenAward(potapovQuest, tokenID, tokensCount))
 
 
 def showVehicleAward(vehicle):
@@ -34,7 +34,7 @@ def showVehicleAward(vehicle):
 
 
 def showTankwomanAward(questID, tankmanData):
-    shared_events.showAwardWindow(awards.TankwomanAward(questID, tankmanData))
+    shared_events.showAwardWindow(awards.TankwomanAward(questID, tankmanData), isUniqueName=False)
 
 
 def showRegularAward(quest, isMainReward = True, isAddReward = False):

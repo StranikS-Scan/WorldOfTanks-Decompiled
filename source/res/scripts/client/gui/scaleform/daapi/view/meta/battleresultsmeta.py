@@ -12,6 +12,12 @@ class BattleResultsMeta(DAAPIModule):
     def getClanEmblem(self, uid, clanID):
         self._printOverrideError('getClanEmblem')
 
+    def startCSAnimationSound(self):
+        self._printOverrideError('startCSAnimationSound')
+
+    def onResultsSharingBtnPress(self):
+        self._printOverrideError('onResultsSharingBtnPress')
+
     def as_setDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setData(data)
@@ -19,3 +25,7 @@ class BattleResultsMeta(DAAPIModule):
     def as_setClanEmblemS(self, uid, iconTag):
         if self._isDAAPIInited():
             return self.flashObject.as_setClanEmblem(uid, iconTag)
+
+    def as_setAnimationS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setAnimation(data)

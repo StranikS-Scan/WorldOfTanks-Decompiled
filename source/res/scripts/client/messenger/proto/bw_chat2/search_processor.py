@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/search_processor.py
 from debug_utils import LOG_WARNING
-from messenger.proto import bw_proto_getter
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.search_processor import SearchProcessor
 from messenger_common_chat2 import MESSENGER_LIMITS
@@ -17,7 +18,7 @@ class SearchUsersProcessor(SearchProcessor):
         g_messengerEvents.users.onFindUsersComplete += self.__um_onSearchTokenComplete
         g_messengerEvents.users.onFindUsersFailed += self.__um_onSearchTokenFailed
 
-    @bw_proto_getter()
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
     def proto(self):
         return None
 

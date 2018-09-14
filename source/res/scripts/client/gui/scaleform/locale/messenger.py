@@ -2,12 +2,34 @@
 from debug_utils import LOG_WARNING
 
 class MESSENGER(object):
+    CONTACTS_TOOLTIPS_BTNS_SEARCH = '#messenger:contacts/tooltips/btns/search'
+    CONTACTS_TOOLTIPS_BTNS_ADDGROUP = '#messenger:contacts/tooltips/btns/addGroup'
+    CONTACTS_TOOLTIPS_BTNS_SETTINGS = '#messenger:contacts/tooltips/btns/settings'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_SEARCH = '#messenger:contacts/searchView/tooltips/btns/search'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD = '#messenger:contacts/searchView/tooltips/btns/add'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/searchView/tooltips/btns/close'
+    CONTACTS_TOOLTIPS_BTNS_EXTERNALSEARCH = '#messenger:contacts/tooltips/btns/externalSearch'
+    CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/settingsView/tooltips/btns/apply'
+    CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/settingsView/tooltips/btns/close'
+    CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/createGroupView/tooltips/btns/apply'
+    CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/createGroupView/tooltips/btns/close'
+    CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/groupRenameView/tooltips/btns/apply'
+    CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/groupRenameView/tooltips/btns/close'
+    CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/groupDeleteView/tooltips/btns/apply'
+    CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/groupDeleteView/tooltips/btns/close'
+    PREBATTLE_ADDALLBTN_TOOLTIP = '#messenger:prebattle/addAllBtn/tooltip'
+    PREBATTLE_ADDBTN_TOOLTIP = '#messenger:prebattle/addBtn/tooltip'
+    PREBATTLE_REMOVEALLBTN_TOOLTIP = '#messenger:prebattle/removeAllBtn/tooltip'
+    PREBATTLE_REMOVEBTN_TOOLTIP = '#messenger:prebattle/removeBtn/tooltip'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHDISABLED = '#messenger:contacts/searchView/tooltips/searchDisabled'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHCREDENTIALS = '#messenger:contacts/searchView/tooltips/searchCredentials'
     LISTVIEW_TITLE = '#messenger:listView/title'
     STATUS_ONLINE = '#messenger:status/online'
     STATUS_OFFLINE = '#messenger:status/offline'
     LOBBY_BUTTONS_CHANNELS = '#messenger:lobby/buttons/channels'
     LOBBY_BUTTONS_CONTACTS = '#messenger:lobby/buttons/contacts'
     LOBBY_BUTTONS_SEND = '#messenger:lobby/buttons/send'
+    LOBBY_BUTTONS_CANCEL = '#messenger:lobby/buttons/cancel'
     LOBBY_BSCHANNELS_TITLE_STARTTIME = '#messenger:lobby/bsChannels/title/startTime'
     LOBBY_CHANNELS_ACTIONS_REMOVE = '#messenger:lobby/channels/actions/remove'
     LOBBY_CHANNELS_ACTIONS_SETTIME = '#messenger:lobby/channels/actions/setTime'
@@ -320,6 +342,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMEN = '#messenger:serviceChannelMessages/invoiceReceived/tankmen'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_PIECES = '#messenger:serviceChannelMessages/invoiceReceived/pieces'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWLVL = '#messenger:serviceChannelMessages/invoiceReceived/crewLvl'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_RENTDAYS = '#messenger:serviceChannelMessages/invoiceReceived/rentDays'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_DROPPEDCREWSTOBARRACKS = '#messenger:serviceChannelMessages/invoiceReceived/droppedCrewsToBarracks'
     SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccounExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
@@ -383,6 +407,14 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PREBATTLE_SUBTOTAL = '#messenger:serviceChannelMessages/prebattle/subtotal'
     SERVICECHANNELMESSAGES_PREBATTLE_TOTAL = '#messenger:serviceChannelMessages/prebattle/total'
     SERVICECHANNELMESSAGES_PREBATTLE_FINISHEDTIME = '#messenger:serviceChannelMessages/prebattle/finishedTime'
+    PREBATTLE_ADDALLBTN_TOOLTIP_HEADER = PREBATTLE_ADDALLBTN_TOOLTIP + '/header'
+    PREBATTLE_ADDALLBTN_TOOLTIP_BODY = PREBATTLE_ADDALLBTN_TOOLTIP + '/body'
+    PREBATTLE_ADDBTN_TOOLTIP_HEADER = PREBATTLE_ADDBTN_TOOLTIP + '/header'
+    PREBATTLE_ADDBTN_TOOLTIP_BODY = PREBATTLE_ADDBTN_TOOLTIP + '/body'
+    PREBATTLE_REMOVEALLBTN_TOOLTIP_HEADER = PREBATTLE_REMOVEALLBTN_TOOLTIP + '/header'
+    PREBATTLE_REMOVEALLBTN_TOOLTIP_BODY = PREBATTLE_REMOVEALLBTN_TOOLTIP + '/body'
+    PREBATTLE_REMOVEBTN_TOOLTIP_HEADER = PREBATTLE_REMOVEBTN_TOOLTIP + '/header'
+    PREBATTLE_REMOVEBTN_TOOLTIP_BODY = PREBATTLE_REMOVEBTN_TOOLTIP + '/body'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION = '#messenger:serviceChannelMessages/serverDowntimeCompensation'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PREMIUM = '#messenger:serviceChannelMessages/serverDowntimeCompensation/premium'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_CAMOUFLAGES = '#messenger:serviceChannelMessages/serverDowntimeCompensation/camouflages'
@@ -456,15 +488,180 @@ class MESSENGER(object):
     CLIENT_ERROR_COMMAND_GENERIC_ERROR = '#messenger:client_error/command/generic_error'
     CLIENT_ERROR_ACTION_IN_COOLDOWN = '#messenger:client_error/action/in_cooldown'
     CLIENT_ERROR_ACTION_IN_COOLDOWN_WO_PERIOD = '#messenger:client_error/action/in_cooldown_wo_period'
+    CLIENT_ERROR_SHARED_GENERIC = '#messenger:client_error/shared/GENERIC'
+    CLIENT_ERROR_SHARED_LOCKED = '#messenger:client_error/shared/LOCKED'
+    CLIENT_ERROR_SHARED_NOT_CONNECTED = '#messenger:client_error/shared/NOT_CONNECTED'
+    CLIENT_ERROR_SHARED_WRONG_ARGS = '#messenger:client_error/shared/WRONG_ARGS'
+    CLIENT_ERROR_SHARED_NOT_SUPPORTED = '#messenger:client_error/shared/NOT_SUPPORTED'
+    CLIENT_ERROR_SHARED_DBID_INVALID = '#messenger:client_error/shared/DBID_INVALID'
+    CLIENT_ERROR_SHARED_NAME_EMPTY = '#messenger:client_error/shared/NAME_EMPTY'
+    CLIENT_ERROR_SHARED_NAME_INVALID = '#messenger:client_error/shared/NAME_INVALID'
+    CLIENT_ERROR_CONTACT_CONTACT_ITEM_NOT_FOUND = '#messenger:client_error/contact/CONTACT_ITEM_NOT_FOUND'
+    CLIENT_ERROR_CONTACT_ROSTER_ITEM_EXISTS = '#messenger:client_error/contact/ROSTER_ITEM_EXISTS'
+    CLIENT_ERROR_CONTACT_ROSTER_ITEM_NOT_FOUND = '#messenger:client_error/contact/ROSTER_ITEM_NOT_FOUND'
+    CLIENT_ERROR_CONTACT_FRIENDSHIP_APPROVED = '#messenger:client_error/contact/FRIENDSHIP_APPROVED'
+    CLIENT_ERROR_CONTACT_FRIENDSHIP_CANCELED = '#messenger:client_error/contact/FRIENDSHIP_CANCELED'
+    CLIENT_ERROR_CONTACT_FRIENDSHIP_RQ_PROCESS = '#messenger:client_error/contact/FRIENDSHIP_RQ_PROCESS'
+    CLIENT_ERROR_CONTACT_BLOCK_ITEM_EXISTS = '#messenger:client_error/contact/BLOCK_ITEM_EXISTS'
+    CLIENT_ERROR_CONTACT_BLOCK_ITEM_NOT_FOUND = '#messenger:client_error/contact/BLOCK_ITEM_NOT_FOUND'
+    CLIENT_ERROR_CONTACT_MUTED_ITEM_NOT_FOUND = '#messenger:client_error/contact/MUTED_ITEM_NOT_FOUND'
+    CLIENT_ERROR_CONTACT_GROUP_EMPTY = '#messenger:client_error/contact/GROUP_EMPTY'
+    CLIENT_ERROR_CONTACT_GROUP_EXISTS = '#messenger:client_error/contact/GROUP_EXISTS'
+    CLIENT_ERROR_CONTACT_GROUP_NOT_FOUND = '#messenger:client_error/contact/GROUP_NOT_FOUND'
+    CLIENT_ERROR_CONTACT_GROUP_INVALID_NAME = '#messenger:client_error/contact/GROUP_INVALID_NAME'
+    CLIENT_ERROR_CONTACT_NOTE_EMPTY = '#messenger:client_error/contact/NOTE_EMPTY'
+    CLIENT_ERROR_CONTACT_NOTE_NOT_FOUND = '#messenger:client_error/contact/NOTE_NOT_FOUND'
+    CLIENT_ERROR_LIMIT_MAX_ROSTER_ITEMS = '#messenger:client_error/limit/MAX_ROSTER_ITEMS'
+    CLIENT_ERROR_LIMIT_MAX_GROUP = '#messenger:client_error/limit/MAX_GROUP'
+    CLIENT_ERROR_LIMIT_MAX_BLOCK_ITEMS = '#messenger:client_error/limit/MAX_BLOCK_ITEMS'
+    CLIENT_ERROR_LIMIT_GROUP_INVALID_LENGTH = '#messenger:client_error/limit/GROUP_INVALID_LENGTH'
+    CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH = '#messenger:client_error/limit/NOTE_INVALID_LENGTH'
+    XMPP_ERROR_SIMPLE = '#messenger:xmpp_error/simple'
+    XMPP_ERROR_ACTION = '#messenger:xmpp_error/action'
     CHAT_ACTION_BROADCAST_UNIT_MESSAGE = '#messenger:chat_action/BROADCAST_UNIT_MESSAGE'
     CHAT_ACTION_BROADCAST_BATTLE_MESSAGE = '#messenger:chat_action/BROADCAST_BATTLE_MESSAGE'
     CHAT_ACTION_FIND_USERS_BY_NAME = '#messenger:chat_action/FIND_USERS_BY_NAME'
     CHAT_ACTION_GET_VOIP_CREDENTIALS = '#messenger:chat_action/GET_VOIP_CREDENTIALS'
+    CLIENT_ACTION_ADD_FRIEND = '#messenger:client_action/ADD_FRIEND'
+    CLIENT_ACTION_REMOVE_FRIEND = '#messenger:client_action/REMOVE_FRIEND'
+    CLIENT_ACTION_ADD_IGNORED = '#messenger:client_action/ADD_IGNORED'
+    CLIENT_ACTION_REMOVE_IGNORED = '#messenger:client_action/REMOVE_IGNORED'
+    CLIENT_ACTION_SET_MUTE = '#messenger:client_action/SET_MUTE'
+    CLIENT_ACTION_UNSET_MUTE = '#messenger:client_action/UNSET_MUTE'
+    CLIENT_ACTION_ADD_GROUP = '#messenger:client_action/ADD_GROUP'
+    CLIENT_ACTION_CHANGE_GROUP = '#messenger:client_action/CHANGE_GROUP'
+    CLIENT_ACTION_RQ_FRIENDSHIP = '#messenger:client_action/RQ_FRIENDSHIP'
+    CLIENT_ACTION_APPROVE_FRIENDSHIP = '#messenger:client_action/APPROVE_FRIENDSHIP'
+    CLIENT_ACTION_CANCEL_FRIENDSHIP = '#messenger:client_action/CANCEL_FRIENDSHIP'
+    CLIENT_ACTION_SEND_MESSAGE = '#messenger:client_action/SEND_MESSAGE'
+    CLIENT_ACTION_SET_NOTE = '#messenger:client_action/SET_NOTE'
+    CLIENT_ACTION_REMOVE_NOTE = '#messenger:client_action/REMOVE_NOTE'
     SERVICECHANNELMESSAGES_VEHICLERENTED = '#messenger:serviceChannelMessages/vehicleRented'
     SERVICECHANNELMESSAGES_RENTALSEXPIRED = '#messenger:serviceChannelMessages/rentalsExpired'
     SERVICECHANNELMESSAGES_RENTCOMPENSATION_COMPENSATION = '#messenger:serviceChannelMessages/rentCompensation/compensation'
     SERVICECHANNELMESSAGES_RENTCOMPENSATION_GOLDRECEIVED = '#messenger:serviceChannelMessages/rentCompensation/goldReceived'
     SERVICECHANNELMESSAGES_RENTCOMPENSATION_CREDITSRECEIVED = '#messenger:serviceChannelMessages/rentCompensation/creditsReceived'
+    MESSENGER_CONTACTS_TITLE = '#messenger:messenger/contacts/title'
+    MESSENGER_CONTACTS_SEARCHINPUTPROMPT = '#messenger:messenger/contacts/searchInputPrompt'
+    MESSENGER_CONTACTS_DROPCONTACTPROMPT = '#messenger:messenger/contacts/dropContactPrompt'
+    MESSENGER_CONTACTS_MAINGROPS_FRIENDS = '#messenger:messenger/contacts/mainGrops/Friends'
+    MESSENGER_CONTACTS_MAINGROPS_FORMATIONS = '#messenger:messenger/contacts/mainGrops/Formations'
+    MESSENGER_CONTACTS_MAINGROPS_OTHER = '#messenger:messenger/contacts/mainGrops/Other'
+    MESSENGER_CONTACTS_MAINGROPS_OTHER_IGNORED = '#messenger:messenger/contacts/mainGrops/Other/Ignored'
+    MESSENGER_CONTACTS_MAINGROPS_OTHER_FRIENDSHIPREQUEST = '#messenger:messenger/contacts/mainGrops/Other/friendshipRequest'
+    MESSENGER_CONTACTS_MAINGROUPS_OTHER_REFERRALS = '#messenger:messenger/contacts/mainGroups/other/referrals'
+    MESSENGER_CONTACTS_MAINGROUPS_OTHER_REFERRERS = '#messenger:messenger/contacts/mainGroups/other/referrers'
+    MESSENGER_CONTACTS_BUTTONS_EXTERNALSEARCH = '#messenger:messenger/contacts/buttons/externalSearch'
+    MESSENGER_CONTACTS_BUTTONS_EXTERNALSEARCHCANCEL = '#messenger:messenger/contacts/buttons/externalSearchCancel'
+    MESSENGER_CONTACTS_SEARCHUSERS_LISTEMPTYPROMPT_TITLE = '#messenger:messenger/contacts/searchUsers/listEmptyPrompt/title'
+    MESSENGER_CONTACTS_SEARCHUSERS_LISTEMPTYPROMPT_DESCR = '#messenger:messenger/contacts/searchUsers/listEmptyPrompt/descr'
+    MESSENGER_CONTACTS_SEARCHUSERS_NOONLINECONTACTS_TITLE = '#messenger:messenger/contacts/searchUsers/noOnlineContacts/title'
+    MESSENGER_CONTACTS_SEARCHUSERS_NOONLINECONTACTS_DESCR = '#messenger:messenger/contacts/searchUsers/noOnlineContacts/descr'
+    MESSENGER_CONTACTS_SEARCHUSERS_SEARCHFAIL_TITLE = '#messenger:messenger/contacts/searchUsers/searchFail/title'
+    MESSENGER_CONTACTS_SEARCHUSERS_SEARCHFAIL_DESCR = '#messenger:messenger/contacts/searchUsers/searchFail/descr'
+    MESSENGER_CONTACTS_SEARCHUSERS_SEARCHINPUTPROMPT = '#messenger:messenger/contacts/searchUsers/searchInputPrompt'
+    MESSENGER_CONTACTS_EXTERNALSEARCH_EMPTYSEARCHRESULTPROMPT = '#messenger:messenger/contacts/externalSearch/emptySearchResultPrompt'
+    MESSENGER_CONTACTS_CONTEXTMENU_EDITGROUP = '#messenger:messenger/contacts/contextmenu/editGroup'
+    MESSENGER_CONTACTS_CONTEXTMENU_REMOVEGROUP = '#messenger:messenger/contacts/contextmenu/removeGroup'
+    MESSENGER_CONTACTS_CONTEXTMENU_REMOVEFROMGROUP = '#messenger:messenger/contacts/contextmenu/removeFromGroup'
+    MESSENGER_CONTACTS_VIEW_ADDUSER_TITLE = '#messenger:messenger/contacts/view/addUser/title'
+    MESSENGER_CONTACTS_VIEW_SEARCHUSER_TITLE = '#messenger:messenger/contacts/view/searchUser/title'
+    MESSENGER_CONTACTS_VIEW_ADDUSER_BTNOK_LABEL = '#messenger:messenger/contacts/view/addUser/btnOk/Label'
+    MESSENGER_CONTACTS_VIEW_ADDUSER_BTNCANCEL_LABEL = '#messenger:messenger/contacts/view/addUser/btnCancel/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_SEARCHINPUTPROMPT = '#messenger:messenger/contacts/view/manageGroup/createGroup/searchInputPrompt'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_MAINLABEL = '#messenger:messenger/contacts/view/manageGroup/createGroup/mainLabel'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_BTNOK_LABEL = '#messenger:messenger/contacts/view/manageGroup/createGroup/btnOk/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATEGROUP_BTNCANCEL_LABEL = '#messenger:messenger/contacts/view/manageGroup/createGroup/btnCancel/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATENOTE_MAINLABEL = '#messenger:messenger/contacts/view/manageGroup/createNote/mainLabel'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATENOTE_BTNOK_LABEL = '#messenger:messenger/contacts/view/manageGroup/createNote/btnOk/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_CREATENOTE_BTNCANCEL_LABEL = '#messenger:messenger/contacts/view/manageGroup/createNote/btnCancel/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_EDITNOTE_MAINLABEL = '#messenger:messenger/contacts/view/manageGroup/editNote/mainLabel'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_EDITNOTE_BTNOK_LABEL = '#messenger:messenger/contacts/view/manageGroup/editNote/btnOk/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_EDITNOTE_BTNCANCEL_LABEL = '#messenger:messenger/contacts/view/manageGroup/editNote/btnCancel/Label'
+    MESSENGER_CONTACTS_VIEW_EDITNOTE_USERNAME = '#messenger:messenger/contacts/view/editNote/userName'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_SEARCHINPUTPROMPT = '#messenger:messenger/contacts/view/manageGroup/renameGroup/searchInputPrompt'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_MAINLABEL = '#messenger:messenger/contacts/view/manageGroup/renameGroup/mainLabel'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_BTNOK_LABEL = '#messenger:messenger/contacts/view/manageGroup/renameGroup/btnOk/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_BTNCANCEL_LABEL = '#messenger:messenger/contacts/view/manageGroup/renameGroup/btnCancel/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_DELETEGROUP_MAINLABEL = '#messenger:messenger/contacts/view/manageGroup/deleteGroup/mainLabel'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_DELETEGROUP_BTNOK_LABEL = '#messenger:messenger/contacts/view/manageGroup/deleteGroup/btnOk/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_DELETEGROUP_BTNCANCEL_LABEL = '#messenger:messenger/contacts/view/manageGroup/deleteGroup/btnCancel/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_DELETEGROUP_DELETEWITHMEMBERS_LABEL = '#messenger:messenger/contacts/view/manageGroup/deleteGroup/DeleteWithMembers/Label'
+    MESSENGER_CONTACTS_VIEW_MANAGEGROUP_DELETEGROUP_GROUPNAME_LABEL = '#messenger:messenger/contacts/view/manageGroup/deleteGroup/groupName/Label'
+    MESSENGER_CONTACTS_VIEW_SETTINGS_MAINLABEL = '#messenger:messenger/contacts/view/settings/mainLabel'
+    MESSENGER_CONTACTS_VIEW_SETTINGS_BTNOK_LABEL = '#messenger:messenger/contacts/view/settings/btnOk/Label'
+    MESSENGER_CONTACTS_VIEW_SETTINGS_BTNCANCEL_LABEL = '#messenger:messenger/contacts/view/settings/btnCancel/Label'
+    MESSENGER_CONTACTS_VIEW_SETTINGS_ISSHOWOFFLINEUSERS_LABEL = '#messenger:messenger/contacts/view/settings/IsShowOfflineUsers/Label'
+    MESSENGER_CONTACTS_VIEW_SETTINGS_ISSHOWOTHERS_LABEL = '#messenger:messenger/contacts/view/settings/IsShowOthers/Label'
+    MESSENGER_CONTACTS_VIEW_SETTINGS_LABEL = '#messenger:messenger/contacts/view/settings/Label'
+    MESSENGER_CONTACTS_VIEW_SETTINGS_RECEIVEFROMFRIENDSONLY_LABEL = '#messenger:messenger/contacts/view/settings/ReceiveFromFriendsOnly/Label'
+    MESSENGER_CONTACTS_VIEW_SETTINGS_GROUPMESSAGES_LABEL = '#messenger:messenger/contacts/view/settings/GroupMessages/Label'
+    MESSENGER_CONTACTS_VIEW_ADDUSER_ERROR_GROUPALREADYEXIST = '#messenger:messenger/contacts/view/addUser/error/groupAlreadyExist'
+    CONTACTS_TOOLTIPS_BTNS_SEARCH_HEADER = CONTACTS_TOOLTIPS_BTNS_SEARCH + '/header'
+    CONTACTS_TOOLTIPS_BTNS_SEARCH_BODY = CONTACTS_TOOLTIPS_BTNS_SEARCH + '/body'
+    CONTACTS_TOOLTIPS_BTNS_ADDGROUP_HEADER = CONTACTS_TOOLTIPS_BTNS_ADDGROUP + '/header'
+    CONTACTS_TOOLTIPS_BTNS_ADDGROUP_BODY = CONTACTS_TOOLTIPS_BTNS_ADDGROUP + '/body'
+    CONTACTS_TOOLTIPS_BTNS_SETTINGS_HEADER = CONTACTS_TOOLTIPS_BTNS_SETTINGS + '/header'
+    CONTACTS_TOOLTIPS_BTNS_SETTINGS_BODY = CONTACTS_TOOLTIPS_BTNS_SETTINGS + '/body'
+    CONTACTS_TOOLTIPS_BTNS_EXTERNALSEARCH_HEADER = CONTACTS_TOOLTIPS_BTNS_EXTERNALSEARCH + '/header'
+    CONTACTS_TOOLTIPS_BTNS_EXTERNALSEARCH_BODY = CONTACTS_TOOLTIPS_BTNS_EXTERNALSEARCH + '/body'
+    CONTACTS_TOOLTIPS_SEARCHINPUT_CREDENTIALS = '#messenger:contacts/tooltips/searchInput/credentials'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_SEARCH_HEADER = CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_SEARCH + '/header'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_SEARCH_BODY = CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_SEARCH + '/body'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD_HEADER = CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD + '/header'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD_BODY = CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD + '/body'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE_HEADER = CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE + '/header'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE_BODY = CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE + '/body'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHDISABLED_HEADER = CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHDISABLED + '/header'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHDISABLED_BODY = CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHDISABLED + '/body'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHCREDENTIALS_HEADER = CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHCREDENTIALS + '/header'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHCREDENTIALS_BODY = CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHCREDENTIALS + '/body'
+    CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY_HEADER = CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY + '/header'
+    CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY_BODY = CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY + '/body'
+    CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE_HEADER = CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE + '/header'
+    CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE_BODY = CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE + '/body'
+    CONTACTS_MANAGEGROUPVIEW_TOOLTIPS_INPUT = '#messenger:contacts/manageGroupView/tooltips/input'
+    CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY_HEADER = CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY + '/header'
+    CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY_BODY = CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY + '/body'
+    CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE_HEADER = CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE + '/header'
+    CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE_BODY = CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE + '/body'
+    CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY_HEADER = CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY + '/header'
+    CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY_BODY = CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY + '/body'
+    CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE_HEADER = CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE + '/header'
+    CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE_BODY = CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE + '/body'
+    CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_APPLY_HEADER = CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_APPLY + '/header'
+    CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_APPLY_BODY = CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_APPLY + '/body'
+    CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_CLOSE_HEADER = CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_CLOSE + '/header'
+    CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_CLOSE_BODY = CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_CLOSE + '/body'
+    CHAT_POSTBATTLESHARING_LABEL = '#messenger:chat/postBattleSharing/label'
+    CLIENT_ERROR_LIMIT_ENUM = (CLIENT_ERROR_LIMIT_MAX_ROSTER_ITEMS,
+     CLIENT_ERROR_LIMIT_MAX_GROUP,
+     CLIENT_ERROR_LIMIT_MAX_BLOCK_ITEMS,
+     CLIENT_ERROR_LIMIT_GROUP_INVALID_LENGTH,
+     CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH)
+    CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_GENERIC,
+     CLIENT_ERROR_SHARED_LOCKED,
+     CLIENT_ERROR_SHARED_NOT_CONNECTED,
+     CLIENT_ERROR_SHARED_WRONG_ARGS,
+     CLIENT_ERROR_SHARED_NOT_SUPPORTED,
+     CLIENT_ERROR_SHARED_DBID_INVALID,
+     CLIENT_ERROR_SHARED_NAME_EMPTY,
+     CLIENT_ERROR_SHARED_NAME_INVALID)
+    CLIENT_ERROR_CONTACT_ENUM = (CLIENT_ERROR_CONTACT_CONTACT_ITEM_NOT_FOUND,
+     CLIENT_ERROR_CONTACT_ROSTER_ITEM_EXISTS,
+     CLIENT_ERROR_CONTACT_ROSTER_ITEM_NOT_FOUND,
+     CLIENT_ERROR_CONTACT_FRIENDSHIP_APPROVED,
+     CLIENT_ERROR_CONTACT_FRIENDSHIP_CANCELED,
+     CLIENT_ERROR_CONTACT_FRIENDSHIP_RQ_PROCESS,
+     CLIENT_ERROR_CONTACT_BLOCK_ITEM_EXISTS,
+     CLIENT_ERROR_CONTACT_BLOCK_ITEM_NOT_FOUND,
+     CLIENT_ERROR_CONTACT_MUTED_ITEM_NOT_FOUND,
+     CLIENT_ERROR_CONTACT_GROUP_EMPTY,
+     CLIENT_ERROR_CONTACT_GROUP_EXISTS,
+     CLIENT_ERROR_CONTACT_GROUP_NOT_FOUND,
+     CLIENT_ERROR_CONTACT_GROUP_INVALID_NAME,
+     CLIENT_ERROR_CONTACT_NOTE_EMPTY,
+     CLIENT_ERROR_CONTACT_NOTE_NOT_FOUND)
     COMMAND_SUCCESS_ENUM = (COMMAND_SUCCESS_USERBAN, COMMAND_SUCCESS_USERUNBAN)
     CHAT_ERROR_ENUM = (CHAT_ERROR_NOT_ALLOWED,
      CHAT_ERROR_USER_NOT_FOUND,
@@ -473,6 +670,20 @@ class MESSENGER(object):
      CHAT_ERROR_NOT_READY,
      CHAT_ERROR_IS_BUSY,
      CHAT_ERROR_GENERIC_ERROR)
+    CLIENT_ACTION_ENUM = (CLIENT_ACTION_ADD_FRIEND,
+     CLIENT_ACTION_REMOVE_FRIEND,
+     CLIENT_ACTION_ADD_IGNORED,
+     CLIENT_ACTION_REMOVE_IGNORED,
+     CLIENT_ACTION_SET_MUTE,
+     CLIENT_ACTION_UNSET_MUTE,
+     CLIENT_ACTION_ADD_GROUP,
+     CLIENT_ACTION_CHANGE_GROUP,
+     CLIENT_ACTION_RQ_FRIENDSHIP,
+     CLIENT_ACTION_APPROVE_FRIENDSHIP,
+     CLIENT_ACTION_CANCEL_FRIENDSHIP,
+     CLIENT_ACTION_SEND_MESSAGE,
+     CLIENT_ACTION_SET_NOTE,
+     CLIENT_ACTION_REMOVE_NOTE)
     CHAT_ACTION_ENUM = (CHAT_ACTION_BROADCAST_UNIT_MESSAGE,
      CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
      CHAT_ACTION_FIND_USERS_BY_NAME,
@@ -482,6 +693,33 @@ class MESSENGER(object):
      DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_READY,
      DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_INBATTLE,
      DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_AFK)
+
+    @staticmethod
+    def client_error_limit(key):
+        outcome = '#messenger:client_error/limit/%s' % key
+        if outcome not in MESSENGER.CLIENT_ERROR_LIMIT_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def client_error_shared(key):
+        outcome = '#messenger:client_error/shared/%s' % key
+        if outcome not in MESSENGER.CLIENT_ERROR_SHARED_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def client_error_contact(key):
+        outcome = '#messenger:client_error/contact/%s' % key
+        if outcome not in MESSENGER.CLIENT_ERROR_CONTACT_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
 
     @staticmethod
     def command_success(key):
@@ -496,6 +734,15 @@ class MESSENGER(object):
     def chat_error(key):
         outcome = '#messenger:chat_error/%s' % key
         if outcome not in MESSENGER.CHAT_ERROR_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def client_action(key):
+        outcome = '#messenger:client_action/%s' % key
+        if outcome not in MESSENGER.CLIENT_ACTION_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
             return None
         else:

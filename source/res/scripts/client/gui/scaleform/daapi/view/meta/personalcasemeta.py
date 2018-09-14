@@ -39,6 +39,9 @@ class PersonalCaseMeta(DAAPIModule):
     def openExchangeFreeToTankmanXpWindow(self):
         self._printOverrideError('openExchangeFreeToTankmanXpWindow')
 
+    def openChangeRoleWindow(self):
+        self._printOverrideError('openChangeRoleWindow')
+
     def as_setCommonDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setCommonData(data)

@@ -48,6 +48,9 @@ class ApplicationMeta(DAAPIModule):
     def setGameInputMgr(self, mgr):
         self._printOverrideError('setGameInputMgr')
 
+    def setCacheMgr(self, mgr):
+        self._printOverrideError('setCacheMgr')
+
     def handleGlobalKeyEvent(self, command):
         self._printOverrideError('handleGlobalKeyEvent')
 

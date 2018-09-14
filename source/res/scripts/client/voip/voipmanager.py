@@ -8,10 +8,11 @@ from VOIPCommon import *
 from VOIPFsm import VOIPFsm, VOIP_FSM_STATE as STATE
 from VOIPHandler import VOIPHandler
 from VOIPLog import LOG_VOIP_INT, closeLog
-from debug_utils import LOG_WARNING
-from messenger.m_constants import USER_ROSTER_ACTION
-from messenger.proto import bw_proto_getter
+from messenger.m_constants import USER_ACTION_ID, USER_TAG
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
+from messenger.proto.shared_find_criteria import MutedFindCriteria
 from messenger.storage import storage_getter
 
 class VOIPManager(VOIPHandler):
@@ -44,7 +45,7 @@ class VOIPManager(VOIPHandler):
         self.onLeftChannel = Event.Event()
         self.__fsm.onStateChanged += self.__onStateChanged
 
-    @bw_proto_getter()
+    @proto_getter(PROTO_TYPE.MIGRATION)
     def bwProto(self):
         return None
 
@@ -104,12 +105,9 @@ class VOIPManager(VOIPHandler):
         voipEvents.onChannelEntered += self.__me_onChannelEntered
         voipEvents.onChannelLeft += self.__me_onChannelLeft
         voipEvents.onCredentialReceived += self.__me_onCredentialReceived
-        params = self.bwProto.voipProvider.getChannelParams()
-        if params[0]:
-            self.__me_onChannelEntered(*params)
         usersEvents = g_messengerEvents.users
-        usersEvents.onUsersRosterReceived += self.__me_onUsersRosterReceived
-        usersEvents.onUserRosterChanged += self.__me_onUserRosterChanged
+        usersEvents.onUsersListReceived += self.__me_onUsersListReceived
+        usersEvents.onUserActionReceived += self.__me_onUserActionReceived
 
     def onDisconnected(self):
         LOG_VOIP_INT('VOIPManager.Unsubscribe')
@@ -118,8 +116,8 @@ class VOIPManager(VOIPHandler):
         voipEvents.onChannelLeft -= self.__me_onChannelLeft
         voipEvents.onCredentialReceived -= self.__me_onCredentialReceived
         usersEvents = g_messengerEvents.users
-        usersEvents.onUsersRosterReceived -= self.__me_onUsersRosterReceived
-        usersEvents.onUserRosterChanged -= self.__me_onUserRosterChanged
+        usersEvents.onUsersListReceived -= self.__me_onUsersListReceived
+        usersEvents.onUserActionReceived -= self.__me_onUserActionReceived
 
     def enable(self, enabled):
         if enabled:
@@ -148,9 +146,6 @@ class VOIPManager(VOIPHandler):
 
     def initialize(self, domain):
         LOG_VOIP_INT('VOIPManager.Initialize')
-        if self.__fsm.inValidState():
-            LOG_WARNING('VOIPManager already is initialized(ing).')
-            return
         if not self.__initialized is False:
             raise AssertionError
             self.__voipDomain = domain
@@ -196,6 +191,8 @@ class VOIPManager(VOIPHandler):
         self.__fsm.update(self)
 
     def __enterChannel(self, channel, password):
+        if not self.__initialized and self.__fsm.inNoneState():
+            self.initialize(self.__voipDomain)
         if not self.__user[0] and self.isEnabled():
             self.__requestCredentials()
         LOG_VOIP_INT("VOIPManager.EnterChannel: '%s' '%s'" % (channel, password))
@@ -273,7 +270,6 @@ class VOIPManager(VOIPHandler):
     def setCaptureDevice(self, deviceName):
         LOG_VOIP_INT("VOIPManager.SetCaptureDevice: '%s'" % deviceName)
         BigWorld.VOIP.setCaptureDevice(deviceName)
-        self.requestCaptureDevices()
 
     def isParticipantTalking(self, dbid):
         outcome = self.__channelUsers.get(dbid, {}).get('talking', False)
@@ -368,6 +364,7 @@ class VOIPManager(VOIPHandler):
             self.onInitialized(data)
         else:
             self.__initialized = False
+            self.__fsm.reset()
             LOG_VOIP_INT('---------------------------')
             LOG_VOIP_INT("ERROR: '%d' - '%s'" % (int(data[KEY_STATUS_CODE]), data[KEY_STATUS_STRING]))
             LOG_VOIP_INT('---------------------------')
@@ -495,12 +492,14 @@ class VOIPManager(VOIPHandler):
         LOG_VOIP_INT("VOIPManager.OnUserCredentials: '%s' '%s'" % (name, pwd))
         self.__login(name, pwd)
 
-    def __me_onUsersRosterReceived(self):
-        for user in self.usersStorage.all():
+    def __me_onUsersListReceived(self, tags):
+        if USER_TAG.MUTED not in tags:
+            return
+        for user in self.usersStorage.getList(MutedFindCriteria()):
             dbID = user.getID()
-            if user.isMuted() and dbID in self.__channelUsers:
+            if dbID in self.__channelUsers:
                 self.__muteParticipantForMe(dbID, True)
 
-    def __me_onUserRosterChanged(self, actionIdx, user):
-        if actionIdx in [USER_ROSTER_ACTION.SetMuted, USER_ROSTER_ACTION.UnsetMuted]:
+    def __me_onUserActionReceived(self, actionID, user):
+        if actionID in (USER_ACTION_ID.MUTE_SET, USER_ACTION_ID.MUTE_UNSET):
             self.__onChatActionMute(user.getID(), user.isMuted())

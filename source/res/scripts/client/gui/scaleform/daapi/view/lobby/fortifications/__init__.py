@@ -1,8 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/__init__.py
-from gui.Scaleform.framework.ScopeTemplates import SimpleScope, VIEW_SCOPE, LOBBY_SUB_SCOPE, MultipleScope, SCOPE_TYPE, WINDOW_SCOPE
+from gui.shared.utils import CONST_CONTAINER
+from gui.Scaleform.framework.ScopeTemplates import SimpleScope, VIEW_SCOPE, LOBBY_SUB_SCOPE, MultipleScope, WINDOW_SCOPE
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.shared.utils import CONST_CONTAINER
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from gui.Scaleform.managers.context_menu import ContextMenuManager
 
 class FORT_SCOPE_TYPE(CONST_CONTAINER):
     FORT_WINDOWED_MULTISCOPE = 'FortWindowed'
@@ -13,6 +15,8 @@ class FortifiedWindowScopes(object):
     FORT_MAIN_SCOPE = SimpleScope(FORTIFICATION_ALIASES.MAIN_VIEW_ALIAS, LOBBY_SUB_SCOPE)
     FORT_WINDOWED_MULTISCOPE = MultipleScope(FORT_SCOPE_TYPE.FORT_WINDOWED_MULTISCOPE, (WINDOW_SCOPE, FORT_MAIN_SCOPE))
 
+
+ContextMenuManager.registerHandler(CONTEXT_MENU_HANDLER_TYPE.FORT_BUILDING, 'gui.Scaleform.daapi.view.lobby.fortifications.FortContextMenuHandler', 'FortContextMenuHandler')
 
 class FortificationEffects(object):
     NONE_STATE = 'none'
@@ -54,6 +58,7 @@ class FortificationEffects(object):
                                                       'totalDepotQuantity': VISIBLE,
                                                       'footerBitmapFill': VISIBLE,
                                                       'ordersPanel': VISIBLE,
+                                                      'orderSelector': VISIBLE,
                                                       'sortieBtn': VISIBLE,
                                                       'intelligenceButton': VISIBLE,
                                                       'leaveModeBtn': INVISIBLE,
@@ -71,6 +76,7 @@ class FortificationEffects(object):
                                                                'totalDepotQuantity': INVISIBLE,
                                                                'footerBitmapFill': INVISIBLE,
                                                                'ordersPanel': INVISIBLE,
+                                                               'orderSelector': INVISIBLE,
                                                                'sortieBtn': INVISIBLE,
                                                                'intelligenceButton': INVISIBLE,
                                                                'leaveModeBtn': INVISIBLE,
@@ -88,6 +94,7 @@ class FortificationEffects(object):
                                                                    'totalDepotQuantity': INVISIBLE,
                                                                    'footerBitmapFill': INVISIBLE,
                                                                    'ordersPanel': INVISIBLE,
+                                                                   'orderSelector': INVISIBLE,
                                                                    'sortieBtn': INVISIBLE,
                                                                    'intelligenceButton': INVISIBLE,
                                                                    'leaveModeBtn': INVISIBLE,
@@ -105,6 +112,7 @@ class FortificationEffects(object):
                                                                      'totalDepotQuantity': VISIBLE,
                                                                      'footerBitmapFill': INVISIBLE,
                                                                      'ordersPanel': INVISIBLE,
+                                                                     'orderSelector': INVISIBLE,
                                                                      'sortieBtn': INVISIBLE,
                                                                      'intelligenceButton': INVISIBLE,
                                                                      'leaveModeBtn': INVISIBLE,
@@ -122,6 +130,7 @@ class FortificationEffects(object):
                                                                                  'totalDepotQuantity': INVISIBLE,
                                                                                  'footerBitmapFill': FADE_OUT,
                                                                                  'ordersPanel': FADE_OUT,
+                                                                                 'orderSelector': FADE_OUT,
                                                                                  'sortieBtn': FADE_OUT,
                                                                                  'intelligenceButton': FADE_OUT,
                                                                                  'leaveModeBtn': FADE_IN,
@@ -139,6 +148,7 @@ class FortificationEffects(object):
                                                                                               'totalDepotQuantity': VISIBLE,
                                                                                               'footerBitmapFill': FADE_OUT,
                                                                                               'ordersPanel': FADE_OUT,
+                                                                                              'orderSelector': FADE_OUT,
                                                                                               'sortieBtn': FADE_OUT,
                                                                                               'intelligenceButton': FADE_OUT,
                                                                                               'leaveModeBtn': FADE_IN,
@@ -156,6 +166,7 @@ class FortificationEffects(object):
                                                                                                  'totalDepotQuantity': VISIBLE,
                                                                                                  'footerBitmapFill': FADE_OUT,
                                                                                                  'ordersPanel': FADE_OUT,
+                                                                                                 'orderSelector': FADE_OUT,
                                                                                                  'sortieBtn': FADE_OUT,
                                                                                                  'intelligenceButton': FADE_OUT,
                                                                                                  'leaveModeBtn': FADE_IN,
@@ -173,6 +184,7 @@ class FortificationEffects(object):
                                                                                               'totalDepotQuantity': VISIBLE,
                                                                                               'footerBitmapFill': FADE_IN,
                                                                                               'ordersPanel': FADE_IN,
+                                                                                              'orderSelector': FADE_IN,
                                                                                               'sortieBtn': FADE_IN,
                                                                                               'intelligenceButton': FADE_IN,
                                                                                               'leaveModeBtn': FADE_OUT,
@@ -190,6 +202,7 @@ class FortificationEffects(object):
                                                                                                               'totalDepotQuantity': VISIBLE,
                                                                                                               'footerBitmapFill': INVISIBLE,
                                                                                                               'ordersPanel': INVISIBLE,
+                                                                                                              'orderSelector': INVISIBLE,
                                                                                                               'sortieBtn': INVISIBLE,
                                                                                                               'intelligenceButton': INVISIBLE,
                                                                                                               'leaveModeBtn': VISIBLE,
@@ -207,6 +220,7 @@ class FortificationEffects(object):
                                                                                              'totalDepotQuantity': VISIBLE,
                                                                                              'footerBitmapFill': FADE_IN,
                                                                                              'ordersPanel': FADE_IN,
+                                                                                             'orderSelector': FADE_IN,
                                                                                              'sortieBtn': FADE_IN,
                                                                                              'intelligenceButton': FADE_IN,
                                                                                              'leaveModeBtn': FADE_OUT,
@@ -224,6 +238,7 @@ class FortificationEffects(object):
                                                                                                               'totalDepotQuantity': VISIBLE,
                                                                                                               'footerBitmapFill': INVISIBLE,
                                                                                                               'ordersPanel': INVISIBLE,
+                                                                                                              'orderSelector': INVISIBLE,
                                                                                                               'sortieBtn': INVISIBLE,
                                                                                                               'intelligenceButton': INVISIBLE,
                                                                                                               'leaveModeBtn': VISIBLE,
@@ -241,6 +256,7 @@ class FortificationEffects(object):
                                                                                                                  'totalDepotQuantity': VISIBLE,
                                                                                                                  'footerBitmapFill': INVISIBLE,
                                                                                                                  'ordersPanel': INVISIBLE,
+                                                                                                                 'orderSelector': INVISIBLE,
                                                                                                                  'sortieBtn': INVISIBLE,
                                                                                                                  'intelligenceButton': INVISIBLE,
                                                                                                                  'leaveModeBtn': VISIBLE,
@@ -258,6 +274,7 @@ class FortificationEffects(object):
                                                                                                  'totalDepotQuantity': VISIBLE,
                                                                                                  'footerBitmapFill': FADE_IN,
                                                                                                  'ordersPanel': FADE_IN,
+                                                                                                 'orderSelector': FADE_IN,
                                                                                                  'sortieBtn': FADE_IN,
                                                                                                  'intelligenceButton': FADE_IN,
                                                                                                  'leaveModeBtn': FADE_OUT,
@@ -275,6 +292,7 @@ class FortificationEffects(object):
                                                                                                                   'totalDepotQuantity': VISIBLE,
                                                                                                                   'footerBitmapFill': INVISIBLE,
                                                                                                                   'ordersPanel': INVISIBLE,
+                                                                                                                  'orderSelector': INVISIBLE,
                                                                                                                   'sortieBtn': INVISIBLE,
                                                                                                                   'intelligenceButton': INVISIBLE,
                                                                                                                   'leaveModeBtn': VISIBLE,
@@ -292,6 +310,7 @@ class FortificationEffects(object):
                                                                                  'totalDepotQuantity': VISIBLE,
                                                                                  'footerBitmapFill': FADE_IN,
                                                                                  'ordersPanel': FADE_IN,
+                                                                                 'orderSelector': FADE_IN,
                                                                                  'sortieBtn': FADE_IN,
                                                                                  'intelligenceButton': FADE_IN,
                                                                                  'leaveModeBtn': FADE_OUT,
@@ -309,6 +328,7 @@ class FortificationEffects(object):
                                                                                                    'totalDepotQuantity': INVISIBLE,
                                                                                                    'footerBitmapFill': INVISIBLE,
                                                                                                    'ordersPanel': INVISIBLE,
+                                                                                                   'orderSelector': INVISIBLE,
                                                                                                    'sortieBtn': INVISIBLE,
                                                                                                    'intelligenceButton': INVISIBLE,
                                                                                                    'leaveModeBtn': INVISIBLE,
@@ -326,6 +346,7 @@ class FortificationEffects(object):
                                                                                                      'totalDepotQuantity': FADE_IN,
                                                                                                      'footerBitmapFill': INVISIBLE,
                                                                                                      'ordersPanel': INVISIBLE,
+                                                                                                     'orderSelector': INVISIBLE,
                                                                                                      'sortieBtn': INVISIBLE,
                                                                                                      'intelligenceButton': INVISIBLE,
                                                                                                      'leaveModeBtn': INVISIBLE,
@@ -343,6 +364,7 @@ class FortificationEffects(object):
                                                                                                                                 'totalDepotQuantity': VISIBLE,
                                                                                                                                 'footerBitmapFill': INVISIBLE,
                                                                                                                                 'ordersPanel': INVISIBLE,
+                                                                                                                                'orderSelector': INVISIBLE,
                                                                                                                                 'sortieBtn': INVISIBLE,
                                                                                                                                 'intelligenceButton': INVISIBLE,
                                                                                                                                 'leaveModeBtn': INVISIBLE,
@@ -360,6 +382,7 @@ class FortificationEffects(object):
                                                                                                                        'totalDepotQuantity': VISIBLE,
                                                                                                                        'footerBitmapFill': INVISIBLE,
                                                                                                                        'ordersPanel': INVISIBLE,
+                                                                                                                       'orderSelector': INVISIBLE,
                                                                                                                        'sortieBtn': INVISIBLE,
                                                                                                                        'intelligenceButton': INVISIBLE,
                                                                                                                        'leaveModeBtn': FADE_IN,
@@ -377,6 +400,7 @@ class FortificationEffects(object):
                                                                                                                                 'totalDepotQuantity': VISIBLE,
                                                                                                                                 'footerBitmapFill': INVISIBLE,
                                                                                                                                 'ordersPanel': INVISIBLE,
+                                                                                                                                'orderSelector': INVISIBLE,
                                                                                                                                 'sortieBtn': INVISIBLE,
                                                                                                                                 'intelligenceButton': INVISIBLE,
                                                                                                                                 'leaveModeBtn': INVISIBLE,
@@ -394,6 +418,7 @@ class FortificationEffects(object):
                                                                                                                           'totalDepotQuantity': VISIBLE,
                                                                                                                           'footerBitmapFill': INVISIBLE,
                                                                                                                           'ordersPanel': INVISIBLE,
+                                                                                                                          'orderSelector': INVISIBLE,
                                                                                                                           'sortieBtn': INVISIBLE,
                                                                                                                           'intelligenceButton': INVISIBLE,
                                                                                                                           'leaveModeBtn': VISIBLE,
@@ -411,6 +436,7 @@ class FortificationEffects(object):
                                                                                                                       'totalDepotQuantity': VISIBLE,
                                                                                                                       'footerBitmapFill': INVISIBLE,
                                                                                                                       'ordersPanel': INVISIBLE,
+                                                                                                                      'orderSelector': INVISIBLE,
                                                                                                                       'sortieBtn': INVISIBLE,
                                                                                                                       'intelligenceButton': INVISIBLE,
                                                                                                                       'leaveModeBtn': INVISIBLE,

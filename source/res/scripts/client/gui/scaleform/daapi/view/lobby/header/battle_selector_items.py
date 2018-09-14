@@ -20,12 +20,11 @@ _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
 
 class _SelectorItem(object):
-    __slots__ = ('_label', '_description', '_data', '_order', '_isSelected', '_isNew', '_isDisabled', '_isLocked', '_isVisible', '_selectorType')
+    __slots__ = ('_label', '_data', '_order', '_isSelected', '_isNew', '_isDisabled', '_isLocked', '_isVisible', '_selectorType')
 
-    def __init__(self, label, data, order, selectorType = None, _isVisible = True, description = None):
+    def __init__(self, label, data, order, selectorType = None, _isVisible = True):
         super(_SelectorItem, self).__init__()
         self._label = label
-        self._description = description
         self._data = data
         self._order = order
         self._isSelected = False
@@ -40,9 +39,6 @@ class _SelectorItem(object):
 
     def getLabel(self):
         return self._label
-
-    def getDescription(self):
-        return self._description
 
     def getData(self):
         return self._data
@@ -81,7 +77,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInPrebattle(PREBATTLE_TYPE.SQUAD) or state.isInPrebattle(PREBATTLE_TYPE.EVENT_SQUAD)
+        return state.isInPrebattle(PREBATTLE_TYPE.SQUAD)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -91,7 +87,6 @@ class _SelectorItem(object):
 
     def getVO(self):
         return {'label': self._label,
-         'description': self._description,
          'data': self._data,
          'disabled': self._isDisabled,
          'icon': self.getLargerIcon(),
@@ -139,7 +134,7 @@ class _RandomQueueItem(_SelectorItem):
 
     def _update(self, state):
         self._isDisabled = state.hasLockedState
-        self._isSelected = not state.hasModalEntity or state.isInPrebattle(PREBATTLE_TYPE.SQUAD) or state.isInPrebattle(PREBATTLE_TYPE.EVENT_SQUAD)
+        self._isSelected = not state.hasModalEntity or state.isInPrebattle(PREBATTLE_TYPE.SQUAD)
 
 
 class _HistoricalItem(_SelectorItem):
@@ -228,26 +223,6 @@ class _TrainingItem(_SelectorItem):
         self._isDisabled = state.hasLockedState
 
 
-class _SquadItem(_SelectorItem):
-
-    def isRandomBattle(self):
-        return True
-
-    def _update(self, state):
-        self._isDisabled = state.hasLockedState
-
-
-class _EventSquadItem(_SelectorItem):
-
-    def isRandomBattle(self):
-        return True
-
-    def _update(self, state):
-        self._isDisabled = state.hasLockedState
-        self._isVisible = g_eventsCache.getEventBattles() is not None and g_eventsCache.getEventBattles().enabled
-        return
-
-
 class _BattleTutorialItem(_SelectorItem):
 
     def select(self):
@@ -270,10 +245,9 @@ class _BattleTutorialItem(_SelectorItem):
 
 class _BattleSelectorItems(object):
 
-    def __init__(self, items, squadItems):
+    def __init__(self, items):
         super(_BattleSelectorItems, self).__init__()
         self.__items = dict(map(lambda item: (item._data, item), items))
-        self.__squadItems = dict(map(lambda item: (item._data, item), squadItems))
         self.__isDemonstrator = False
         self.__isDemoButtonEnabled = False
 
@@ -282,18 +256,12 @@ class _BattleSelectorItems(object):
 
     def fini(self):
         self.__items.clear()
-        self.__squadItems.clear()
         self.__isDemonstrator = False
         self.__isDemoButtonEnabled = False
 
     def update(self, state):
         selected = self.__items[_DEFAULT_PAN]
         for item in self.__items.itervalues():
-            item.update(state)
-            if item.isSelected():
-                selected = item
-
-        for item in self.__squadItems.itervalues():
             item.update(state)
             if item.isSelected():
                 selected = item
@@ -318,9 +286,6 @@ class _BattleSelectorItems(object):
     def getVOs(self):
         return (map(lambda item: item.getVO(), filter(lambda item: item.isVisible(), sorted(self.__items.itervalues()))), self.__isDemonstrator, self.__isDemoButtonEnabled)
 
-    def getSquadVOs(self):
-        return map(lambda item: item.getVO(), filter(lambda item: item.isVisible(), sorted(self.__squadItems.itervalues())))
-
 
 _g_items = None
 _DEFAULT_PAN = PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE
@@ -344,8 +309,7 @@ def _createItems():
             isTutorialEnabled = serverSettings['isTutorialEnabled']
     if isTutorialEnabled:
         items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 7))
-    squadItems = [_EventSquadItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD, PREBATTLE_ACTION_NAME.EVENT_SQUAD, 0, description=MENU.HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD_DESCR), _SquadItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD, PREBATTLE_ACTION_NAME.SQUAD, 1, description=MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCR)]
-    return _BattleSelectorItems(items, squadItems)
+    return _BattleSelectorItems(items)
 
 
 def create():

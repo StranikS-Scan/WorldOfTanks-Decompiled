@@ -5,7 +5,7 @@ from constants import WIN_XP_FACTOR_MODE
 import weakref
 from adisp import async
 from debug_utils import LOG_DEBUG
-from abstract import AbstractRequester
+from gui.shared.utils.requesters import abstract
 
 class ShopCommonStats(object):
     __metaclass__ = ABCMeta
@@ -160,6 +160,13 @@ class ShopCommonStats(object):
         return self.getValue('tankmanCost', tuple())
 
     @property
+    def changeRoleCost(self):
+        """
+        @return: tankman change role cost in gold
+        """
+        return self.getValue('changeRoleCost', 600)
+
+    @property
     def freeXPConversion(self):
         """
         @return: free experience to vehicle xp exchange rate and cost
@@ -263,7 +270,7 @@ class ShopCommonStats(object):
         return self.getValue('refSystem', {})
 
 
-class ShopRequester(ShopCommonStats, AbstractRequester):
+class ShopRequester(abstract.AbstractSyncDataRequester, ShopCommonStats):
 
     def __init__(self):
         super(ShopRequester, self).__init__()
@@ -494,6 +501,13 @@ class DefaultShopRequester(ShopCommonStats):
             return newValues
 
     @property
+    def changeRoleCost(self):
+        """
+        @return: tankman change role cost in gold
+        """
+        return self.getValue('changeRoleCost', self.__proxy.changeRoleCost)
+
+    @property
     def freeXPConversion(self):
         """
         @return: free experience to vehicle xp exchange rate and cost
@@ -513,7 +527,7 @@ class DefaultShopRequester(ShopCommonStats):
         """
         @return: tankman passport replace cost in gold
         """
-        return self.getValue('passportFemaleChangeCost', self.__proxy.passportFemaleChangeCost)
+        return self.getValue('femalePassportChangeCost', self.__proxy.passportFemaleChangeCost)
 
     @property
     def ebankVCoinExchangeRate(self):

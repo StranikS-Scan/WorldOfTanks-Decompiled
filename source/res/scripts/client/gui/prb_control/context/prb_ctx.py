@@ -171,27 +171,6 @@ class SquadSettingsCtx(_PrbRequestCtx):
         return self.__accountsToInvite
 
 
-@ReprInjector.simple(('getWaitingID', 'waitingID'), ('getFuncExit', 'funcExit'))
-
-class EventSquadSettingsCtx(_PrbRequestCtx):
-
-    def __init__(self, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.SQUAD, accountsToInvite = None, isForced = False):
-        super(EventSquadSettingsCtx, self).__init__(waitingID=waitingID, funcExit=funcExit, isForced=isForced)
-        self.__accountsToInvite = accountsToInvite or []
-
-    def getID(self):
-        return 0
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.EVENT_SQUAD
-
-    def getRequestType(self):
-        return _REQUEST_TYPE.CREATE
-
-    def getAccountsToInvite(self):
-        return self.__accountsToInvite
-
-
 @ReprInjector.withParent(('__prbID', 'id'), ('__prbType', 'type'))
 
 class _JoinPrbCtx(_PrbRequestCtx):

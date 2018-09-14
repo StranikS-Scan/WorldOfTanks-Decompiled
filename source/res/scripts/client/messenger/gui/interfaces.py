@@ -109,6 +109,9 @@ class IChannelController(IEntityController):
     def getHistory(self):
         return []
 
+    def hasUnreadMessages(self):
+        return len(self.getHistory()) > 0
+
     def setMembersDP(self, membersDP):
         pass
 

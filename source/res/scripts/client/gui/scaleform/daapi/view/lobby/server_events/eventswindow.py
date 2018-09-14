@@ -12,24 +12,16 @@ class EventsWindow(View, QuestsWindowMeta, AbstractWindowView):
     def __init__(self, ctx = None):
         super(EventsWindow, self).__init__()
         self._navInfo = caches.getNavInfo()
-        if 'eventType' in ctx and 'eventID' in ctx:
-            if ctx['eventType'] == constants.EVENT_TYPE.POTAPOV_QUEST:
-                pQuest = g_eventsCache.potapov.getQuests()[int(ctx['eventID'])]
-                self._navInfo.selectPotapovQuest(pQuest.getTileID(), pQuest.getID())
-            else:
-                self._navInfo.selectCommonQuest(ctx['eventID'])
-
-    def _populate(self):
-        super(EventsWindow, self)._populate()
-        if isPotapovQuestEnabled():
-            tabID = self._navInfo.tabID or _QA.TAB_PERSONAL_QUESTS
-        else:
-            tabID = _QA.TAB_COMMON_QUESTS
-        self.as_selectTabS(tabID)
+        self._updateNavInfo(ctx.get('eventType'), ctx.get('eventID'))
 
     def onWindowClose(self):
         caches.clearVehiclesData()
         self.destroy()
+
+    def navigate(self, eventType = None, eventID = None):
+        if self._updateNavInfo(eventType, eventID):
+            tabID = self._selectLastTab()
+            self.onTabSelected(tabID)
 
     def onTabSelected(self, tabID):
         if tabID == _QA.TAB_PERSONAL_QUESTS:
@@ -44,6 +36,28 @@ class EventsWindow(View, QuestsWindowMeta, AbstractWindowView):
         else:
             LOG_WARNING('Unknown personal quests tab id', tabID)
         return
+
+    def _populate(self):
+        super(EventsWindow, self)._populate()
+        self._selectLastTab()
+
+    def _selectLastTab(self):
+        if isPotapovQuestEnabled():
+            tabID = self._navInfo.tabID or _QA.TAB_PERSONAL_QUESTS
+        else:
+            tabID = _QA.TAB_COMMON_QUESTS
+        self.as_selectTabS(tabID)
+        return tabID
+
+    def _updateNavInfo(self, eventType = None, eventID = None):
+        if eventType and eventID:
+            if eventType == constants.EVENT_TYPE.POTAPOV_QUEST:
+                pQuest = g_eventsCache.potapov.getQuests()[int(eventID)]
+                self._navInfo.selectPotapovQuest(pQuest.getTileID(), pQuest.getID())
+            else:
+                self._navInfo.selectCommonQuest(eventID)
+            return True
+        return False
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias in (_QA.PERSONAL_WELCOME_VIEW_ALIAS, _QA.TILE_CHAINS_VIEW_ALIAS, _QA.SEASONS_VIEW_ALIAS):

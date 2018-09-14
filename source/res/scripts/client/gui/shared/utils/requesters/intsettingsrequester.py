@@ -67,6 +67,8 @@ class IntSettingsRequester(object):
      'EULA_VERSION': 54,
      'GAMEPLAY': 55,
      'FORT': 56,
+     'USERS_STORAGE_REV': 57,
+     'CONTACTS': 58,
      'MARKS_ON_GUN': constants.USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN}
 
     def __init__(self):

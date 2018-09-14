@@ -3,6 +3,7 @@ import random
 from collections import namedtuple
 import BigWorld
 import constants
+import potapov_quests
 from helpers import i18n
 from gui.shared.utils import findFirst
 from gui.Scaleform.locale.MENU import MENU
@@ -48,11 +49,12 @@ class AchievementsAward(AwardAbstract):
         return {'achievements': result}
 
 
-class TokensAward(AwardAbstract):
+class TokenAward(AwardAbstract):
 
-    def __init__(self, tokens):
-        raise hasattr(tokens, '__iter__') or AssertionError
-        self.__tokens = tokens
+    def __init__(self, potapovQuest, tokenID, count):
+        self.__potapovQuest = potapovQuest
+        self.__tokenID = tokenID
+        self.__tokenCount = count
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_TOKENS)
@@ -64,13 +66,26 @@ class TokensAward(AwardAbstract):
         return RES_ICONS.MAPS_ICONS_QUESTS_TOKEN256
 
     def getHeader(self):
-        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_HEADER, count=self.__getTotalTokensCount()))
+        return self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_HEADER, count=self.__tokenCount))
 
     def getDescription(self):
         return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(MENU.AWARDWINDOW_QUESTS_TOKENS_DESCRIPTION))
 
-    def __getTotalTokensCount(self):
-        return sum(self.__tokens.values())
+    def handleBodyButton(self):
+        from gui.server_events import events_dispatcher as quests_events
+        nextQuestID = int(self.__potapovQuest.getID()) + 1
+        if potapov_quests.g_cache.hasPotapovQuest(nextQuestID):
+            quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
+
+    def getBodyButtonText(self):
+        return i18n.makeString(MENU.AWARDWINDOW_TAKENEXTBUTTON)
+
+    def getButtonStates(self):
+        if not self.__potapovQuest.isFinal():
+            return super(TokenAward, self).getButtonStates()
+        else:
+            nextQuestID = int(self.__potapovQuest.getID()) + 1
+            return (False, True, potapov_quests.g_cache.hasPotapovQuest(nextQuestID))
 
 
 class VehicleAward(AwardAbstract):
@@ -196,7 +211,8 @@ class RegularAward(AwardAbstract):
             return i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_ADDITIONALNOTCOMPLETE)
 
     def getButtonStates(self):
-        return (False, True, True)
+        nextQuestID = int(self.__potapovQuest.getID()) + 1
+        return (False, True, potapov_quests.g_cache.hasPotapovQuest(nextQuestID))
 
     def getBodyButtonText(self):
         return i18n.makeString(MENU.AWARDWINDOW_TAKENEXTBUTTON)
@@ -209,7 +225,9 @@ class RegularAward(AwardAbstract):
 
     def handleBodyButton(self):
         from gui.server_events import events_dispatcher as quests_events
-        quests_events.showEventsWindow(int(self.__potapovQuest.getID()) + 1, constants.EVENT_TYPE.POTAPOV_QUEST)
+        nextQuestID = int(self.__potapovQuest.getID()) + 1
+        if potapov_quests.g_cache.hasPotapovQuest(nextQuestID):
+            quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
 
     def __getMainRewards(self):
         result = []

@@ -6,7 +6,7 @@ import BigWorld
 import ArenaType
 import potapov_quests
 from account_helpers.AccountSettings import AccountSettings
-from account_shared import getFairPlayViolationName
+from account_shared import getFairPlayViolationName, packPostBattleUniqueSubUrl
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import i18n, time_utils
 from adisp import async, process
@@ -15,26 +15,26 @@ from constants import ARENA_BONUS_TYPE, IS_DEVELOPMENT, ARENA_GUI_TYPE, IGR_TYPE
 from dossiers2.custom.records import RECORD_DB_IDS, DB_ID_TO_RECORD
 from dossiers2.ui import achievements
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
-from gui import makeHtmlString
-from gui.LobbyContext import g_lobbyContext
+from gui import makeHtmlString, SystemMessages, GUI_SETTINGS
 from gui.server_events import g_eventsCache, events_dispatcher as quests_events
-from gui.shared import events
-from gui.shared.utils import isVehicleObserver
+from gui.shared import g_itemsCache
+from gui.shared.utils import isVehicleObserver, copyToClipboard, functions
 from gui.shared.utils.requesters.deprecated import Requester
 from items import vehicles as vehicles_core, vehicles
 from items.vehicles import VEHICLE_CLASS_TAGS
-from gui.shared.utils.requesters import DeprecatedStatsRequester, StatsRequester
+from gui.shared.utils.requesters import DeprecatedStatsRequester
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.gui_items.dossier import getAchievementFactory
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from messenger.storage import storage_getter
+from gui.Scaleform.framework import AppRef
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 RESULT_ = '#menu:finalStatistic/commonStats/resultlabel/{0}'
 BATTLE_RESULTS_STR = '#battle_results:{0}'
 FINISH_REASON = BATTLE_RESULTS_STR.format('finish/reason/{0}')
@@ -77,14 +77,16 @@ STATS_KEYS = [('shots', True, None),
  ('mileage', False, None)]
 TIME_STATS_KEYS = ['arenaCreateTimeOnlyStr', 'duration', 'playerKilled']
 
-class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
+class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta, AppRef):
     __playersNameCache = dict()
 
     def __init__(self, ctx = None):
         super(BattleResultsWindow, self).__init__()
-        self.arenaUniqueID = ctx.get('data')
-        self.battleResults = ctx.get('battleResults')
-        self.stats = None
+        raise 'dataProvider' in ctx or AssertionError
+        raise ctx['dataProvider'] is not None or AssertionError
+        self.dataProvider = ctx['dataProvider']
+        self.csAnimation = False
+        self.csAnimationType = 0
         return
 
     @storage_getter('users')
@@ -94,11 +96,13 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
     @process
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
-        self.stats = yield StatsRequester().request()
         commonData = yield self.__getCommonData()
         self.as_setDataS(commonData)
+        if self.csAnimation:
+            self.__setAnimation()
 
     def _dispose(self):
+        self.dataProvider.destroy()
         super(BattleResultsWindow, self)._dispose()
 
     def onWindowClose(self):
@@ -110,10 +114,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         self.destroy()
 
     def getDenunciations(self):
-        if self.stats is not None:
-            return self.stats.denunciationsLeft
-        else:
-            return 0
+        return g_itemsCache.items.stats.denunciationsLeft
 
     def showEventsWindow(self, eID, eventType):
         return quests_events.showEventsWindow(eID, eventType)
@@ -122,23 +123,15 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         AccountSettings.setSettings('statsSorting' if bonusType != ARENA_BONUS_TYPE.SORTIE else 'statsSortingSortie', {'iconType': iconType,
          'sortDirection': sortDirection})
 
-    def __getPlayerName(self, playerDBID, playersData):
+    def __getPlayerName(self, playerDBID):
         playerNameRes = self.__playersNameCache.get(playerDBID)
         if playerNameRes is None:
-            playerInfo = playersData.get(playerDBID, dict())
-            playerName = playerInfo.get('name', i18n.makeString(UNKNOWN_PLAYER_NAME_VALUE))
-            clanName = playerInfo.get('clanAbbrev', '')
-            igrType = playerInfo.get('igrType', '')
-            playerNameRes = self.__playersNameCache[playerDBID] = (g_lobbyContext.getPlayerFullName(playerName, clanAbbrev=clanName, pDBID=playerDBID), (playerName,
-              clanName,
-              g_lobbyContext.getRegionCode(playerDBID),
-              igrType))
+            player = self.dataProvider.getPlayerData(playerDBID)
+            playerNameRes = self.__playersNameCache[playerDBID] = (player.getFullName(), (player.name,
+              player.clanAbbrev,
+              player.getRegionCode(),
+              player.igrType))
         return playerNameRes
-
-    def __getPlayerClan(self, playerDBID, playersData):
-        playerInfo = playersData.get(playerDBID, dict())
-        clanName = playerInfo.get('clanAbbrev', '')
-        return clanName
 
     def __getVehicleData(self, vehicleCompDesc):
         vehicleName = i18n.makeString(UNKNOWN_VEHICLE_NAME_VALUE)
@@ -250,19 +243,14 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
     def __makeRedLabel(self, value):
         return makeHtmlString('html_templates:lobby/battle_results', 'negative_value', {'value': value})
 
-    def __populateStatValues(self, commonData, node, isSelf = False):
+    def __populateStatValues(self, node, isSelf = False):
         node['teamHitsDamage'] = self.__makeTeamDamageStr(node)
         node['hits'] = self.__makeSlashedValuesStr(node, 'directHits', 'piercings')
         node['damagedKilled'] = self.__makeSlashedValuesStr(node, 'damaged', 'kills')
         node['capturePointsVal'] = self.__makeSlashedValuesStr(node, 'capturePoints', 'droppedCapturePoints')
         node['mileage'] = self.__makeMileageStr(node.get('mileage', 0))
         result = []
-        if commonData.get('guiType', 0) == ARENA_GUI_TYPE.EVENT_BATTLES:
-            values = STATS_KEYS + [('healedHP', False, None)]
-            node['healedHP'] = self.__makeSlashedValuesStr(node, 'healedHPByMe', 'healedHP')
-        else:
-            values = STATS_KEYS
-        for key, isInt, selfKey in values:
+        for key, isInt, selfKey in STATS_KEYS:
             if isInt:
                 value = node.get(key, 0)
                 valueFormatted = BigWorld.wg_getIntegralFormat(value)
@@ -287,8 +275,6 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         premXpFactor = pData.get('premiumXPFactor10', 10) / 10.0
         aogasFactor = pData.get('aogasFactor10', 10) / 10.0
         refSystemFactor = pData.get('refSystemXPFactor10', 10) / 10.0
-        LOG_DEBUG('\n\n ================== PREM: \n\n')
-        LOG_DEBUG(premXpFactor)
         aogasValStr = ''
         if dailyXpFactor > 1:
             pData['xpTitleStr'] += i18n.makeString(XP_TITLE_DAILY, dailyXpFactor)
@@ -307,7 +293,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         if fairPlayViolationName is not None:
             pData['creditsStr'] = 0
         else:
-            pData['creditsStr'] = BigWorld.wg_getGoldFormat(creditsCellPrem if isPremium else creditsCell)
+            pData['creditsStr'] = BigWorld.wg_getIntegralFormat(creditsCellPrem if isPremium else creditsCell)
         creditsData.append(self.__getStatsLine(self.__resultLabel('base'), creditsCellStr, None, creditsCellPremStr, None))
         achievementCreditsPrem = 0
         if isNoPenalty:
@@ -596,7 +582,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             if vehiclePlayerDBID == playerDBID:
                 continue
             _, iInfo['vehicleName'], _, iInfo['tankIcon'], iInfo['balanceWeight'] = self.__getVehicleData(vInfo.get('typeCompDescr', None))
-            playerNameData = self.__getPlayerName(vehiclePlayerDBID, playersData)
+            playerNameData = self.__getPlayerName(vehiclePlayerDBID)
             iInfo['playerFullName'] = playerNameData[0]
             iInfo['playerName'], iInfo['playerClan'], iInfo['playerRegion'], _ = playerNameData[1]
             iInfo['vehicleId'] = vId
@@ -699,7 +685,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         return
 
     def __populateTankSlot(self, commonData, pData, vehiclesData, playersData):
-        playerNameData = self.__getPlayerName(pData.get('accountDBID', None), playersData)
+        playerNameData = self.__getPlayerName(pData.get('accountDBID', None))
         vehTypeCompDescr = pData.get('typeCompDescr')
         commonData['playerNameStr'], commonData['clanNameStr'], commonData['regionNameStr'], _ = playerNameData[1]
         commonData['playerFullNameStr'] = playerNameData[0]
@@ -711,16 +697,17 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         if isPrematureLeave:
             commonData['vehicleStateStr'] = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_PREMATURELEAVE)
         elif deathReason > -1:
-            commonData['vehicleStateStr'] = i18n.makeString('#battle_results:common/vehicleState/dead{0}'.format(deathReason))
             if vehTypeCompDescr and not isVehicleObserver(vehTypeCompDescr) and killerID:
+                commonData['vehicleStateStr'] = i18n.makeString('#battle_results:common/vehicleState/dead{0}'.format(deathReason))
                 killerVehicle = vehiclesData.get(killerID, dict())
                 killerPlayerId = killerVehicle.get('accountDBID', None)
                 commonData['vehicleStatePrefixStr'] = '{0} ('.format(commonData['vehicleStateStr'])
                 commonData['vehicleStateSuffixStr'] = ')'
-                playerNameData = self.__getPlayerName(killerPlayerId, playersData)
+                playerNameData = self.__getPlayerName(killerPlayerId)
                 commonData['killerFullNameStr'] = playerNameData[0]
                 commonData['killerNameStr'], commonData['killerClanNameStr'], commonData['killerRegionNameStr'], _ = playerNameData[1]
             else:
+                commonData['vehicleStateStr'] = ''
                 commonData['vehicleStatePrefixStr'], commonData['vehicleStateSuffixStr'] = ('', '')
                 commonData['killerFullNameStr'], commonData['killerNameStr'] = ('', '')
                 commonData['killerClanNameStr'], commonData['killerRegionNameStr'] = ('', '')
@@ -734,7 +721,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         arenaType = ArenaType.g_cache[arenaTypeID] if arenaTypeID > 0 else None
         if guiType == ARENA_GUI_TYPE.SORTIE:
             arenaGuiName = i18n.makeString(BATTLE_RESULTS.COMMON_BATTLETYPE_SORTIE)
-        elif guiType in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.EVENT_BATTLES):
+        elif guiType == ARENA_GUI_TYPE.RANDOM:
             arenaGuiName = ARENA_TYPE.format(arenaType.gameplayName)
         else:
             arenaGuiName = ARENA_SPECIAL_TYPE.format(guiType)
@@ -813,7 +800,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
                     pVehInfo = vInfo
                     row['vehicleId'] = vId
                     row['damageAssisted'] = row.get('damageAssistedTrack', 0) + row.get('damageAssistedRadio', 0)
-                    row['statValues'] = self.__populateStatValues(commonData, row)
+                    row['statValues'] = self.__populateStatValues(row)
                     health = vInfo.get('health', 0)
                     percents = 0
                     if health > 0:
@@ -844,13 +831,14 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
                         if isPrematureLeave:
                             row['vehicleStateStr'] = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_PREMATURELEAVE)
                         elif deathReason > -1:
-                            row['vehicleStateStr'] = i18n.makeString('#battle_results:common/vehicleState/dead{0}'.format(deathReason))
+                            row['vehicleStateStr'] = ''
                             if killerID:
+                                row['vehicleStateStr'] = i18n.makeString('#battle_results:common/vehicleState/dead{0}'.format(deathReason))
                                 killerVehicle = vehiclesData.get(killerID, dict())
                                 killerPlayerId = killerVehicle.get('accountDBID', None)
                                 row['vehicleStatePrefixStr'] = '{0} ('.format(row['vehicleStateStr'])
                                 row['vehicleStateSuffixStr'] = ')'
-                                playerNameData = self.__getPlayerName(killerPlayerId, playersData)
+                                playerNameData = self.__getPlayerName(killerPlayerId)
                                 row['killerFullNameStr'] = playerNameData[0]
                                 row['killerNameStr'], row['killerClanNameStr'], row['killerRegionNameStr'], _ = playerNameData[1]
                         else:
@@ -866,7 +854,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
                 row = pInfo.copy()
             row['playerId'] = pId
             row['userName'] = pInfo.get('name')
-            playerNameData = self.__getPlayerName(pId, playersData)
+            playerNameData = self.__getPlayerName(pId)
             row['playerFullName'] = playerNameData[0]
             row['playerName'], row['playerClan'], row['playerRegion'], row['playerIgrType'] = playerNameData[1]
             row['playerNamePosition'] = playerNamePosition
@@ -896,10 +884,11 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             squadsSorted[2] = sorted(squads[2].iteritems(), cmp=lambda x, y: cmp(x[0], y[0]))
             squads[1] = [ id for id, num in squadsSorted[1] if 1 < num < 4 ]
             squads[2] = [ id for id, num in squadsSorted[2] if 1 < num < 4 ]
+        isInfluencePointsAvailable = True
         for team in (1, 2):
             data = sorted(stat[team], cmp=self.__vehiclesComparator)
             sortIdx = len(data)
-            teamResourceTotal = 0
+            teamResourceTotal = teamInfluencePointsTotal = 0
             for item in data:
                 item['vehicleSort'] = sortIdx
                 item['xpSort'] = item.get('xp', 0) - item.get('achievementXP', 0)
@@ -911,10 +900,18 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
                     item['squadID'] = 0
                     item['isOwnSquad'] = False
                 if bonusType == ARENA_BONUS_TYPE.SORTIE:
+                    LOG_DEBUG('111111111', teamResourceTotal, item.get('resourceCount', 0))
                     teamResourceTotal += item.get('resourceCount', 0)
+                influencePoints = item.get('influencePoints')
+                if influencePoints is not None:
+                    teamInfluencePointsTotal += influencePoints
+                else:
+                    isInfluencePointsAvailable = False
 
             if team == playerTeam:
                 commonData['totalFortResourceStr'] = makeHtmlString('html_templates:lobby/battle_results', 'teamResourceTotal', {'resourceValue': teamResourceTotal})
+                if isInfluencePointsAvailable:
+                    commonData['totalInfluenceStr'] = makeHtmlString('html_templates:lobby/battle_results', 'teamInfluenceTotal', {'resourceValue': teamInfluencePointsTotal})
 
         return (stat[pData.get('team')], stat[pData.get('team') % 2 + 1])
 
@@ -1007,82 +1004,85 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
     @classmethod
     def __parseQuestsProgress(cls, battleResults):
         questsProgress = battleResults.get('personal', {}).get('questsProgress', {})
+        if not questsProgress:
+            return
+        else:
 
-        def _isFortQuest(q):
-            return q.getType() == EVENT_TYPE.FORT_QUEST
+            def _isFortQuest(q):
+                return q.getType() == EVENT_TYPE.FORT_QUEST
 
-        def _sortCommonQuestsFunc(aData, bData):
-            aQuest, aCurProg, aPrevProg, _, _ = aData
-            bQuest, bCurProg, bPrevProg, _, _ = bData
-            res = cmp(aQuest.isCompleted(aCurProg), bQuest.isCompleted(bCurProg))
-            if res:
-                return -res
-            res = cmp(_isFortQuest(aQuest), _isFortQuest(bQuest))
-            if res:
-                return -res
-            if aQuest.isCompleted() and bQuest.isCompleted(bCurProg):
-                res = aQuest.getBonusCount(aCurProg) - aPrevProg.get('bonusCount', 0) - (bQuest.getBonusCount(bCurProg) - bPrevProg.get('bonusCount', 0))
-                if not res:
-                    return res
-            return cmp(aQuest.getID(), bQuest.getID())
+            def _sortCommonQuestsFunc(aData, bData):
+                aQuest, aCurProg, aPrevProg, _, _ = aData
+                bQuest, bCurProg, bPrevProg, _, _ = bData
+                res = cmp(aQuest.isCompleted(aCurProg), bQuest.isCompleted(bCurProg))
+                if res:
+                    return -res
+                res = cmp(_isFortQuest(aQuest), _isFortQuest(bQuest))
+                if res:
+                    return -res
+                if aQuest.isCompleted() and bQuest.isCompleted(bCurProg):
+                    res = aQuest.getBonusCount(aCurProg) - aPrevProg.get('bonusCount', 0) - (bQuest.getBonusCount(bCurProg) - bPrevProg.get('bonusCount', 0))
+                    if not res:
+                        return res
+                return cmp(aQuest.getID(), bQuest.getID())
 
-        from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
-        quests = g_eventsCache.getQuests()
-        commonQuests, potapovQuests = [], {}
-        for qID, qProgress in questsProgress.iteritems():
-            pGroupBy, pPrev, pCur = qProgress
-            isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
-            if qID in quests:
-                quest = quests[qID]
-                isProgressReset = not isCompleted and quest.bonusCond.isInRow() and pCur.get('battlesCount', 0) == 0
-                if pPrev or max(pCur.itervalues()) != 0:
-                    commonQuests.append((quest,
-                     {pGroupBy: pCur},
-                     {pGroupBy: pPrev},
-                     isProgressReset,
-                     isCompleted))
-            elif potapov_quests.g_cache.isPotapovQuest(qID):
-                pqID = potapov_quests.g_cache.getPotapovQuestIDByUniqueID(qID)
-                quest = g_eventsCache.potapov.getQuests()[pqID]
-                progress = potapovQuests.setdefault(quest, {})
-                progress.update({qID: isCompleted})
+            from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+            quests = g_eventsCache.getQuests()
+            commonQuests, potapovQuests = [], {}
+            for qID, qProgress in questsProgress.iteritems():
+                pGroupBy, pPrev, pCur = qProgress
+                isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
+                if qID in quests:
+                    quest = quests[qID]
+                    isProgressReset = not isCompleted and quest.bonusCond.isInRow() and pCur.get('battlesCount', 0) == 0
+                    if pPrev or max(pCur.itervalues()) != 0:
+                        commonQuests.append((quest,
+                         {pGroupBy: pCur},
+                         {pGroupBy: pPrev},
+                         isProgressReset,
+                         isCompleted))
+                elif potapov_quests.g_cache.isPotapovQuest(qID):
+                    pqID = potapov_quests.g_cache.getPotapovQuestIDByUniqueID(qID)
+                    quest = g_eventsCache.potapov.getQuests()[pqID]
+                    progress = potapovQuests.setdefault(quest, {})
+                    progress.update({qID: isCompleted})
 
-        formatted = []
-        for e, data in sorted(potapovQuests.items(), key=operator.itemgetter(0)):
-            if data.get(e.getAddQuestID(), False):
-                complete = (True, True)
-            elif data.get(e.getMainQuestID(), False):
-                complete = (True, False)
-            else:
-                complete = (False, False)
-            info = events_helpers.getEventPostBattleInfo(e, quests, None, None, False, complete)
-            if info is not None:
-                formatted.append(info)
+            formatted = []
+            for e, data in sorted(potapovQuests.items(), key=operator.itemgetter(0)):
+                if data.get(e.getAddQuestID(), False):
+                    complete = (True, True)
+                elif data.get(e.getMainQuestID(), False):
+                    complete = (True, False)
+                else:
+                    complete = (False, False)
+                info = events_helpers.getEventPostBattleInfo(e, quests, None, None, False, complete)
+                if info is not None:
+                    formatted.append(info)
 
-        for e, pCur, pPrev, reset, complete in sorted(commonQuests, cmp=_sortCommonQuestsFunc):
-            info = events_helpers.getEventPostBattleInfo(e, quests, pCur, pPrev, reset, complete)
-            if info is not None:
-                formatted.append(info)
+            for e, pCur, pPrev, reset, complete in sorted(commonQuests, cmp=_sortCommonQuestsFunc):
+                info = events_helpers.getEventPostBattleInfo(e, quests, pCur, pPrev, reset, complete)
+                if info is not None:
+                    formatted.append(info)
 
-        return formatted
+            return formatted
 
     @async
     @process
     def __getCommonData(self, callback):
-        yield lambda callback: callback(None)
-        if self.battleResults:
-            results = self.battleResults
-        elif self.arenaUniqueID:
-            results = yield DeprecatedStatsRequester().getBattleResults(int(self.arenaUniqueID))
+        provider = yield self.dataProvider.request()
+        if provider.isSynced():
+            results = provider.getResults()
         else:
             results = None
-        LOG_DEBUG('Player got battle results: ', self.arenaUniqueID, results)
+        LOG_DEBUG('Player got battle results', self.dataProvider, results)
         if results:
-            personalData = results.get('personal', dict()).copy()
-            playersData = results.get('players', dict()).copy()
-            vehiclesData = results.get('vehicles', dict()).copy()
-            commonData = results.get('common', dict()).copy()
+            personalData = results.get('personal', {}).copy()
+            playersData = results.get('players', {}).copy()
+            vehiclesData = results.get('vehicles', {}).copy()
+            commonData = results.get('common', {}).copy()
             bonusType = commonData.get('bonusType', 0)
+            self.csAnimation = results.get('csAnimation')
+            self.csAnimationType = results.get('animType')
             if bonusType == ARENA_BONUS_TYPE.SORTIE or bonusType == ARENA_BONUS_TYPE.FORT_BATTLE:
                 commonData['clans'] = self.__processClanData(personalData, playersData)
             else:
@@ -1090,6 +1090,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
                             'clanAbbrev': ''},
                  'enemies': {'clanDBID': -1,
                              'clanAbbrev': ''}}
+            commonData['battleResultsSharingIsAvailable'] = GUI_SETTINGS.postBattleExchange.enabled and commonData.get('guiType') not in (ARENA_GUI_TYPE.FORT_BATTLE,) and 'uniqueSubUrl' in results and results['uniqueSubUrl'] is not None
             statsSorting = AccountSettings.getSettings('statsSorting' if bonusType != ARENA_BONUS_TYPE.SORTIE else 'statsSortingSortie')
             commonData['iconType'] = statsSorting.get('iconType')
             commonData['sortDirection'] = statsSorting.get('sortDirection')
@@ -1097,7 +1098,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             self.__populatePersonalMedals(personalData)
             self.__populateArenaData(commonData, personalData)
             personalData['damageAssisted'] = personalData.get('damageAssistedTrack', 0) + personalData.get('damageAssistedRadio', 0)
-            personalData['statValues'] = self.__populateStatValues(commonData, personalData, True)
+            personalData['statValues'] = self.__populateStatValues(personalData, True)
             self.__populateAccounting(commonData, personalData, playersData)
             self.__populateTankSlot(commonData, personalData, vehiclesData, playersData)
             self.__populateEfficiency(personalData, vehiclesData, playersData)
@@ -1154,6 +1155,22 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         if not self.isDisposed():
             self.as_setClanEmblemS(uid, ' <IMG SRC="img://{0}" width="24" height="24" vspace="-10"/>'.format(clanEmblem))
 
+    def onResultsSharingBtnPress(self):
+        try:
+            results = self.dataProvider.getResults()
+            arenaUniqueID = self.dataProvider.getArenaUniqueID()
+            common = results['common']
+            personal = results['personal']
+            svrPackedData = results['uniqueSubUrl']
+            clientPackedData = packPostBattleUniqueSubUrl(arenaUniqueID, common['arenaTypeID'], personal['typeCompDescr'], personal['xp'])
+            copyToClipboard(functions.getPostBattleUniqueSubUrl(svrPackedData, clientPackedData))
+            if hasattr(BigWorld.player(), 'cmdPublishBattleResults'):
+                BigWorld.player().cmdPublishBattleResults(svrPackedData, arenaUniqueID)
+            SystemMessages.pushI18nMessage('#system_messages:battleResults/sharing/success')
+        except:
+            LOG_ERROR('There is error while getting post battle sub url')
+            LOG_CURRENT_EXCEPTION()
+
     def __processClanData(self, personalData, playersData):
         clans = []
         resClans = {'allies': {'clanDBID': -1,
@@ -1175,3 +1192,113 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             return getFairPlayViolationName(fairPlayViolationData[1])
         else:
             return
+
+    def __getLeavesIcon(self, league, division):
+        if division == 'a' or division == 'b':
+            division = 'ab'
+        return RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_LEAVES + '/' + str(league) + division + '.png'
+
+    def __getRibbonIcon(self, league, division):
+        if division != 'a':
+            division = 'bcd'
+        return RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_BG + '/' + str(league) + division + '.png'
+
+    def __getDivisionIcon(self, league, division):
+        return RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_DIVISION + '/' + str(league) + division + '.png'
+
+    def __getLogoIcon(self, league):
+        return RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_LOGO + '/' + str(league) + '.png'
+
+    def __setAnimation(self):
+        from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+        from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+        import random
+        animationType = ''
+        ribbonNewSource = ''
+        divisionAdditionalSource = ''
+        logoOldSource = ''
+        logoNewSource = ''
+        leagueOld = 6
+        leagueNew = 6
+        divisionOld = 'd'
+        divisionNew = 'd'
+        if self.csAnimationType == 1:
+            animationType = CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_UP
+            leagueOld = random.randint(2, 6)
+            leagueNew = leagueOld - 1
+            divisionOld = 'a'
+            divisionNew = 'd'
+        elif self.csAnimationType == 2:
+            animationType = CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_DIVISION_UP
+            leagueOld = leagueNew = random.randint(1, 6)
+            divisionOld = random.choice(['c', 'd'])
+            divisionNew = 'c' if divisionOld == 'd' else 'b'
+        elif self.csAnimationType == 3:
+            animationType = CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_DIVISION_UP_ALT
+            leagueOld = leagueNew = random.randint(1, 6)
+            divisionOld = 'b'
+            divisionNew = 'a'
+        elif self.csAnimationType == 4:
+            animationType = CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_DIVISION_DOWN
+            leagueOld = random.randint(1, 5)
+            leagueNew = leagueOld + 1
+            divisionOld = 'd'
+            divisionNew = 'a'
+        elif self.csAnimationType == 5:
+            animationType = CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_DIVISION_DOWN
+            leagueOld = leagueNew = random.randint(1, 6)
+            divisionOld = random.choice(['a', 'b', 'c'])
+            if divisionOld == 'c':
+                divisionNew = 'd'
+            elif divisionOld == 'b':
+                divisionNew = 'c'
+            elif divisionOld == 'a':
+                divisionNew = 'b'
+        leavesOldSource = self.__getLeavesIcon(leagueOld, divisionOld)
+        leavesNewSource = self.__getLeavesIcon(leagueNew, divisionNew)
+        ribbonOldSource = self.__getRibbonIcon(leagueOld, divisionOld)
+        divisionOldSource = self.__getDivisionIcon(leagueOld, divisionOld)
+        divisionNewSource = self.__getDivisionIcon(leagueNew, divisionNew)
+        if animationType == CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_DIVISION_UP:
+            divisionAdditionalSource = divisionNewSource
+        elif animationType == CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_DIVISION_UP_ALT:
+            ribbonNewSource = self.__getRibbonIcon(leagueNew, divisionNew)
+            divisionAdditionalSource = divisionNewSource
+            logoNewSource = self.__getLogoIcon(leagueNew)
+        elif animationType == CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_DIVISION_DOWN:
+            ribbonNewSource = self.__getRibbonIcon(leagueNew, divisionNew)
+            if divisionOld == 'a':
+                logoOldSource = self.__getLogoIcon(leagueOld)
+            if divisionNew == 'a':
+                logoNewSource = self.__getLogoIcon(leagueNew)
+        elif animationType == CYBER_SPORT_ALIASES.CS_ANIMATION_LEAGUE_UP:
+            ribbonNewSource = self.__getRibbonIcon(leagueNew, divisionNew)
+            divisionAdditionalSource = divisionNewSource
+            logoOldSource = self.__getLogoIcon(leagueOld)
+        animationData = {'animationType': animationType,
+         'leavesOldSource': leavesOldSource,
+         'leavesNewSource': leavesNewSource,
+         'ribbonOldSource': ribbonOldSource,
+         'ribbonNewSource': ribbonNewSource,
+         'divisionOldSource': divisionOldSource,
+         'divisionNewSource': divisionNewSource,
+         'divisionAdditionalSource': divisionAdditionalSource,
+         'logoOldSource': logoOldSource,
+         'logoNewSource': logoNewSource,
+         'headerText': i18n.makeString(CYBERSPORT.CSANIMATION_HEADER),
+         'descriptionText': i18n.makeString(CYBERSPORT.CSANIMATION_DESCRIPTION),
+         'applyBtnLabel': CYBERSPORT.CSANIMATION_APPLYBTN_LABEL}
+        self.as_setAnimationS(animationData)
+
+    def startCSAnimationSound(self):
+        from gui.shared.SoundEffectsId import SoundEffectsId
+        if self.csAnimationType == 1:
+            self.app.soundManager.playEffectSound(SoundEffectsId.CS_ANIMATION_LEAGUE_UP)
+        elif self.csAnimationType == 2:
+            self.app.soundManager.playEffectSound(SoundEffectsId.CS_ANIMATION_DIVISION_UP)
+        elif self.csAnimationType == 3:
+            self.app.soundManager.playEffectSound(SoundEffectsId.CS_ANIMATION_DIVISION_UP_ALT)
+        elif self.csAnimationType == 4:
+            self.app.soundManager.playEffectSound(SoundEffectsId.CS_ANIMATION_LEAGUE_DOWN)
+        elif self.csAnimationType == 5:
+            self.app.soundManager.playEffectSound(SoundEffectsId.CS_ANIMATION_DIVISION_DOWN)

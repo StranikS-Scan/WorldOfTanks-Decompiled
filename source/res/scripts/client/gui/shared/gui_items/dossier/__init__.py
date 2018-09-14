@@ -137,26 +137,19 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     def getBattlesCount(self):
         return self.getTotalStats().getBattlesCount()
 
-    def getStats(self):
+    def getStats(self, tankman):
         imageType, image = self.__getCurrentSkillIcon()
         return ({'label': 'common',
           'stats': (self.__packStat('battlesCount', self.getBattlesCount()), self.__packStat('avgExperience', self.getAvgXP()))}, {'label': 'studying',
           'secondLabel': i18n.makeString(MENU.CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE),
           'isPremium': self.__currentVehicleIsPremium,
-          'stats': (self.__packStat('nextSkillXPLeft', self.__getNextSkillXPLeft(), imageType=imageType, image=image), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(), usePremiumXpFactor=True))})
+          'stats': (self.__packStat('nextSkillXPLeft', tankman.getNextLevelXpCost(), imageType=imageType, image=image), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(tankman), usePremiumXpFactor=True))})
 
     def _getDossierItem(self):
         return self
 
     def __isNewSkillReady(self):
         return self.tmanDescr.roleLevel == tankmen.MAX_SKILL_LEVEL and (not len(self.tmanDescr.skills) or self.tmanDescr.lastSkillLevel == tankmen.MAX_SKILL_LEVEL)
-
-    def __getSkillNextLevelCost(self):
-        skillsCount = len(self.tmanDescr.skills)
-        lastSkillLevel = self.tmanDescr.lastSkillLevel
-        if not skillsCount or self.tmanDescr.roleLevel != tankmen.MAX_SKILL_LEVEL:
-            lastSkillLevel = self.tmanDescr.roleLevel
-        return self.tmanDescr.levelUpXpCost(lastSkillLevel, self.tmanDescr.lastSkillNumber if self.tmanDescr.roleLevel == tankmen.MAX_SKILL_LEVEL else 0) - self.tmanDescr.freeXP
 
     def __getCurrentSkillIcon(self):
         if self.__isNewSkillReady():
@@ -165,19 +158,14 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
             return ('role', '%s.png' % self.tmanDescr.role)
         return ('skill', tankmen.getSkillsConfig()[self.tmanDescr.skills[-1]]['icon'])
 
-    def __getNextSkillXPLeft(self):
-        if self.tmanDescr.roleLevel != tankmen.MAX_SKILL_LEVEL or not self.__isNewSkillReady():
-            return self.__getSkillNextLevelCost()
-        return 0
-
-    def __getNextSkillBattlesLeft(self):
+    def __getNextSkillBattlesLeft(self, tankman):
         if not self.getBattlesCount() or not self.extStats.getBattlesCount() or not self.extStats.getXP():
             result = None
         else:
             avgExp = self.getAvgXP()
             newSkillReady = self.tmanDescr.roleLevel == tankmen.MAX_SKILL_LEVEL and (len(self.tmanDescr.skills) == 0 or self.tmanDescr.lastSkillLevel == tankmen.MAX_SKILL_LEVEL)
             if avgExp and not newSkillReady:
-                result = max(1, math.ceil(self.__getSkillNextLevelCost() / avgExp))
+                result = max(1, math.ceil(tankman.getNextLevelXpCost() / avgExp))
             else:
                 result = 0
         return result

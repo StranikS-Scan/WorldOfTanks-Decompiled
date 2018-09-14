@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/unit_ext.py
 import time
 import BigWorld
+import weakref
 from PlayerEvents import g_playerEvents
 from UnitBase import UNIT_ERROR, UNIT_SLOT, INV_ID_CLEAR_VEHICLE
 from account_helpers import getPlayerDatabaseID
@@ -9,7 +10,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import prb_control, SystemMessages, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
-from gui.prb_control import getClientUnitMgr, getClientUnitBrowser
+from gui.prb_control import getClientUnitMgr, getClientUnitBrowser, getBattleID
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.formatters import messages
 from gui.prb_control.functional import interfaces
@@ -18,7 +19,9 @@ from gui.prb_control.items.unit_seqs import UnitsUpdateIterator
 from gui.prb_control.prb_cooldown import PrbCooldownManager
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import REQ_CRITERIA, g_itemsCache
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+from gui.shared.utils.scheduled_notifications import Notifiable, DeltaNotifier
 from helpers import time_utils
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 
@@ -536,3 +539,56 @@ def destroyListReq():
 
 def getListReq():
     return _g_listReq
+
+
+class UnitScheduler(Notifiable):
+
+    def __init__(self, unitFunc):
+        super(UnitScheduler, self).__init__()
+        self._unitFunc = weakref.proxy(unitFunc)
+
+    def init(self):
+        pass
+
+    def fini(self):
+        pass
+
+
+class FortBattlesScheduler(UnitScheduler, FortListener):
+
+    def init(self):
+        self.startFortListening()
+        self.addNotificator(DeltaNotifier(self._getFortBattleTimer, self._showWindow, 10))
+        self.startNotification()
+
+    def fini(self):
+        self.stopFortListening()
+        self.clearNotification()
+
+    def onClientStateChanged(self, state):
+        if state.getStateID() == CLIENT_FORT_STATE.HAS_FORT:
+            self.startNotification()
+        elif self.fortState.getStateID() == CLIENT_FORT_STATE.CENTER_UNAVAILABLE:
+            self.stopNotification()
+
+    def onFortBattleChanged(self, cache, item, battleItem):
+        if getBattleID() == battleItem.getID():
+            self.startNotification()
+
+    def _getFortBattleTimer(self):
+        if self.fortState.getStateID() == CLIENT_FORT_STATE.HAS_FORT:
+            fortBattle = self.fortCtrl.getFort().getBattle(getBattleID())
+            if fortBattle is not None:
+                return fortBattle.getRoundStartTimeLeft()
+        return 0
+
+    def _showWindow(self):
+        pInfo = self._unitFunc.getPlayerInfo()
+        if pInfo.isInSlot and not pInfo.isReady:
+            g_eventDispatcher.showUnitWindow(self._unitFunc.getPrbType())
+
+
+def createUnitScheduler(unit):
+    if unit.getPrbType() == PREBATTLE_TYPE.FORT_BATTLE:
+        return FortBattlesScheduler(unit)
+    return UnitScheduler(unit)

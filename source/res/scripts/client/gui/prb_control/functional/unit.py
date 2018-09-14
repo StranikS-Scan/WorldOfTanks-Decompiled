@@ -575,6 +575,7 @@ class UnitFunctional(_UnitFunctional):
         self._cooldown = PrbCooldownManager()
         self._actionValidator = createUnitActionValidator(prbType, rosterSettings)
         self._deferredReset = False
+        self._scheduler = unit_ext.createUnitScheduler(self)
         return
 
     def canPlayerDoAction(self):
@@ -603,9 +604,11 @@ class UnitFunctional(_UnitFunctional):
 
         unit_ext.destroyListReq()
         g_eventDispatcher.updateUI()
+        self._scheduler.init()
         return FUNCTIONAL_INIT_RESULT.INITED | FUNCTIONAL_INIT_RESULT.LOAD_WINDOW
 
     def fini(self, woEvents = False):
+        self._scheduler.fini()
         self._requestHandlers.clear()
         self._hasEntity = False
         if not woEvents:
@@ -1064,7 +1067,7 @@ class UnitFunctional(_UnitFunctional):
 
     def giveLeadership(self, ctx, callback = None):
         pPermissions = self.getPermissions()
-        if not pPermissions.canGiveLeadership():
+        if not pPermissions.canChangeLeadership():
             LOG_ERROR('Player can not give leadership to player players', pPermissions)
             if callback:
                 callback(False)

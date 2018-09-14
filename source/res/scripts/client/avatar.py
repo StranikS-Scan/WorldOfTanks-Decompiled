@@ -37,6 +37,7 @@ from messenger.storage import storage_getter
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULS
 from PlayerEvents import g_playerEvents
 from ClientChat import ClientChat
+from CombatEquipmentManager import CombatEquipmentManager
 from ChatManager import chatManager
 from VehicleAppearance import StippleManager
 from helpers import bound_effects
@@ -87,7 +88,7 @@ class ClientVisibilityFlags():
     OBSERVER_OBJECTS = 2147483648L
 
 
-class PlayerAvatar(BigWorld.Entity, ClientChat):
+class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
     __onStreamCompletePredef = {STREAM_ID_AVATAR_BATTLE_RESULS: 'receiveBattleResults'}
     isOnArena = property(lambda self: self.__isOnArena)
     isVehicleAlive = property(lambda self: self.__isVehicleAlive)
@@ -99,6 +100,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
     def __init__(self):
         LOG_DEBUG('client Avatar.init')
         ClientChat.__init__(self)
+        CombatEquipmentManager.__init__(self)
         if not BattleReplay.isPlaying():
             self.intUserSettings = Account.g_accountRepository.intUserSettings
             self.syncData = AvatarSyncData.AvatarSyncData()
@@ -201,6 +203,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
 
     def onEnterWorld(self, prereqs):
         LOG_DEBUG('Avatar.onEnterWorld()')
+        CombatEquipmentManager.onEnterWorld(self, prereqs)
         list = []
         for p in set(self.__prereqs):
             try:
@@ -225,6 +228,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
 
     def onLeaveWorld(self):
         LOG_DEBUG('Avatar.onLeaveWorld()')
+        CombatEquipmentManager.onLeaveWorld(self)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.stop()
@@ -502,8 +506,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
                  CommandMapping.CMD_CHAT_SHORTCUT_HELPME,
                  CommandMapping.CMD_CHAT_SHORTCUT_RELOAD,
                  CommandMapping.CMD_RADIAL_MENU_SHOW), key) and self.__isVehicleAlive:
-                    if self.inputHandler.aim is not None:
-                        g_windowsManager.battleWindow.radialMenu.handleKey(key, isDown, self.inputHandler.aim.offset())
+                    aimOffset = (0, 0) if self.inputHandler.aim is None else self.inputHandler.aim.offset()
+                    g_windowsManager.battleWindow.radialMenu.handleKey(key, isDown, aimOffset)
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_VEHICLE_MARKERS_SHOW_INFO, key):
                     g_windowsManager.battleWindow.vMarkersManager.showExtendedInfo(isDown)
@@ -540,6 +544,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_RELOAD_PARTIAL_CLIP, key) and isDown:
                     g_sessionProvider.getAmmoCtrl().reloadPartialClip(self)
+                    return True
+                if key == Keys.KEY_ESCAPE and isDown and mods == 0 and g_sessionProvider.getEquipmentsCtrl().cancel():
                     return True
             except Exception:
                 LOG_CURRENT_EXCEPTION()
@@ -804,7 +810,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
             return
 
     def updateVehicleSetting(self, code, value):
-        if code == VEHICLE_SETTING.CURRENT_SHELLS:
+        if g_sessionProvider.getCtx().isObserver(self.playerVehicleID):
+            return
+        elif code == VEHICLE_SETTING.CURRENT_SHELLS:
             ammoCtrl = g_sessionProvider.getAmmoCtrl()
             if not ammoCtrl.setCurrentShellCD(value):
                 return
@@ -912,6 +920,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
         else:
             bestSound = None
             for vehicleID, flags in enemies.iteritems():
+                if vehicleID == self.playerVehicleID:
+                    continue
                 if flags & VHF.IS_ANY_PIERCING_MASK:
                     self.__fireNonFatalDamageTriggerID = BigWorld.callback(0.5, lambda : self.__fireNonFatalDamageTrigger(vehicleID))
                 sound = None
@@ -1487,6 +1497,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
         except:
             LOG_CURRENT_EXCEPTION()
 
+    def receiveNotification(self, notification):
+        LOG_DEBUG('receiveNotification', notification)
+
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
         LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
@@ -1960,8 +1973,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat):
             if not isCassetteReload:
                 self.getOwnVehicleShotDispersionAngle(self.gunRotator.turretRotationSpeed, 1)
 
-    def __processVehicleEquipments(self, compactDescr, quantity, _, timeRemaining):
-        g_sessionProvider.getEquipmentsCtrl().setEquipment(compactDescr, quantity, timeRemaining)
+    def __processVehicleEquipments(self, compactDescr, quantity, stage, timeRemaining):
+        g_sessionProvider.getEquipmentsCtrl().setEquipment(compactDescr, quantity, stage, timeRemaining)
 
     def __isOwnBarrelUnderWater(self):
         if self.vehicle is None:

@@ -152,6 +152,7 @@ class QuestsTileChainsView(QuestsTileChainsViewMeta, AppRef):
         try:
             vehicle = g_itemsCache.items.getItemByCD(int(vehTypeCompDescr))
             g_currentVehicle.selectVehicle(vehicle.invID)
+            shared_events.showHangar()
             self.__proxy.destroy()
         except:
             LOG_WARNING('Error while getting event window to slose it')
@@ -282,10 +283,10 @@ class QuestsTileChainsView(QuestsTileChainsViewMeta, AppRef):
         quest = g_eventsCache.potapov.getQuests()[questID]
         questInfoData = events_helpers.getEventInfoData(quest)
         self._navInfo.selectPotapovQuest(self.__tile.getID(), questID)
-        vehMinLevel = quest.getVehMinLevel()
+        vehMinLevel, vehClasses = quest.getVehMinLevel(), quest.getVehicleClasses()
         if vehMinLevel > 1:
             reqsHeader = _getText(TextType.MIDDLE_TITLE, _ms(QUESTS.QUESTTASKDETAILSVIEW_REQUIREMENTS))
-            reqs = _ms('#quests:QuestTaskDetailsView/requirements/text', level=int2roman(vehMinLevel))
+            reqs = _ms('#quests:QuestTaskDetailsView/requirements/text', level=int2roman(vehMinLevel), vehType=', '.join([ Vehicle.getTypeShortUserName(vc) for vc in vehClasses ]))
         else:
             reqsHeader = reqs = ''
         condition = makeHtmlString('html_templates:lobby/quests/potapov', 'questDetails', ctx={'mainCondHeader': _getText(TextType.MIDDLE_TITLE, _ms(QUESTS.QUESTTASKDETAILSVIEW_MAINCONDITIONS)),

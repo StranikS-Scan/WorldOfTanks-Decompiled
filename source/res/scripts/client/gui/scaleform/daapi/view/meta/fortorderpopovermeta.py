@@ -21,6 +21,9 @@ class FortOrderPopoverMeta(DAAPIModule):
     def openQuest(self, questID):
         self._printOverrideError('openQuest')
 
+    def openOrderDetailsWindow(self):
+        self._printOverrideError('openOrderDetailsWindow')
+
     def as_setInitDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setInitData(data)

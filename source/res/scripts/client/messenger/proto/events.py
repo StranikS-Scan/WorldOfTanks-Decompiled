@@ -60,36 +60,44 @@ class _VOIPSharedEvents(object):
 
 
 class _UsersSharedEvents(object):
-    __slots__ = ('__eventManager', 'onUsersRosterReceived', 'onUserRosterChanged', 'onUserRosterStatusUpdated', 'onClanMembersListChanged', 'onFindUsersComplete', 'onFindUsersFailed')
+    __slots__ = ('__eventManager', 'onUsersListReceived', 'onFriendsReceived', 'onIgnoredReceived', 'onMutedReceived', 'onUserActionReceived', 'onUserStatusUpdated', 'onEmptyGroupsChanged', 'onClanMembersListChanged', 'onFindUsersComplete', 'onFindUsersFailed', 'onFriendshipRequestReceived', 'onNotesListReceived')
 
     def __init__(self):
         super(_UsersSharedEvents, self).__init__()
         self.__eventManager = Event.EventManager()
-        self.onUsersRosterReceived = Event.Event()
-        self.onUserRosterChanged = Event.Event(self.__eventManager)
-        self.onUserRosterStatusUpdated = Event.Event(self.__eventManager)
+        self.onFriendsReceived = Event.Event()
+        self.onIgnoredReceived = Event.Event()
+        self.onMutedReceived = Event.Event()
+        self.onUsersListReceived = Event.Event()
+        self.onUserActionReceived = Event.Event(self.__eventManager)
+        self.onEmptyGroupsChanged = Event.Event(self.__eventManager)
+        self.onUserStatusUpdated = Event.Event(self.__eventManager)
         self.onClanMembersListChanged = Event.Event(self.__eventManager)
         self.onFindUsersComplete = Event.Event(self.__eventManager)
         self.onFindUsersFailed = Event.Event(self.__eventManager)
+        self.onFriendshipRequestReceived = Event.Event(self.__eventManager)
+        self.onNotesListReceived = Event.Event(self.__eventManager)
 
     def clear(self):
         self.__eventManager.clear()
 
 
 class _ServiceChannelEvents(object):
+    __slots__ = ('__eventManager', 'onServerMessageReceived', 'onClientMessageReceived', 'onChatMessageReceived')
 
     def __init__(self):
         super(_ServiceChannelEvents, self).__init__()
         self.__eventManager = Event.EventManager()
         self.onServerMessageReceived = Event.Event(self.__eventManager)
         self.onClientMessageReceived = Event.Event(self.__eventManager)
+        self.onChatMessageReceived = Event.Event(self.__eventManager)
 
     def clear(self):
         self.__eventManager.clear()
 
 
 class _MessengerEvents(object):
-    __slots__ = ('__channels', '__users', '__serviceChannel', '__voip', 'onServerErrorReceived')
+    __slots__ = ('__channels', '__users', '__serviceChannel', '__voip', 'onErrorReceived', 'onPluginConnected', 'onPluginDisconnected', 'onPluginConnectFailed')
 
     def __init__(self):
         super(_MessengerEvents, self).__init__()
@@ -97,7 +105,10 @@ class _MessengerEvents(object):
         self.__users = _UsersSharedEvents()
         self.__serviceChannel = _ServiceChannelEvents()
         self.__voip = _VOIPSharedEvents()
-        self.onServerErrorReceived = Event.Event()
+        self.onErrorReceived = Event.Event()
+        self.onPluginConnected = Event.Event()
+        self.onPluginDisconnected = Event.Event()
+        self.onPluginConnectFailed = Event.Event()
 
     @property
     def channels(self):
@@ -120,7 +131,7 @@ class _MessengerEvents(object):
         self.__users.clear()
         self.__serviceChannel.clear()
         self.__voip.clear()
-        self.onServerErrorReceived.clear()
+        self.onErrorReceived.clear()
 
 
 g_messengerEvents = _MessengerEvents()

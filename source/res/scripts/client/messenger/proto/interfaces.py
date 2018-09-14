@@ -2,6 +2,7 @@
 
 
 class IProtoPlugin(object):
+    __slots__ = ('__weakref__',)
 
     def connect(self, scope):
         pass
@@ -17,6 +18,9 @@ class IProtoPlugin(object):
 
     def clear(self):
         pass
+
+    def isConnected(self):
+        return False
 
 
 class IProtoSettings(object):
@@ -91,7 +95,7 @@ class ISearchProcessor(object):
         return 0
 
 
-class IServerError(object):
+class IChatError(object):
 
     def getTitle(self):
         return ''

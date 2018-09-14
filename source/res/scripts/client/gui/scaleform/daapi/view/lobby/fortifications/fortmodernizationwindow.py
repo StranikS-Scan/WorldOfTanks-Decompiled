@@ -19,8 +19,11 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.context import UpgradeCtx
 from gui.shared.fortifications.settings import FORT_RESTRICTION
+from gui.shared import events
 from helpers import i18n
 
 class MAX_LEVEL:
@@ -50,7 +53,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         return
 
     def __buildData(self):
-        self.intBuildingID = self.UI_BUILDINGS_BIND.index(self.__uid)
+        self.intBuildingID = self.getBuildingIDbyUID(self.__uid)
         self._buildingDescr = self.fortCtrl.getFort().getBuilding(self.intBuildingID)
         self.__buildingLevel = max(self._buildingDescr.level, 1)
         self.nextLevel = BuildingDescr(typeID=self.intBuildingID, level=self.__buildingLevel + 1)
@@ -212,14 +215,14 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         before['buildingType'] = self.__uid
         before['buildingLevel'] = self.__buildingLevel
         before['buildingIndicators'] = self.__prepareIndicatorData(isCanModernization, False)
-        before['defResInfo'] = self.__prepareOrderInfo(False, orderCount)
+        before['defResInfo'] = self.__prepareOrderInfo(False, orderCount, self.__buildingLevel)
         before['titleText'] = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_BEFORELABEL))
         result['beforeUpgradeData'] = before
         after = {}
         after['buildingType'] = self.__uid
         after['buildingLevel'] = self.__buildingLevel + 1
         after['buildingIndicators'] = self.__prepareIndicatorData(isCanModernization, True, resLeft)
-        after['defResInfo'] = self.__prepareOrderInfo(True, newCount)
+        after['defResInfo'] = self.__prepareOrderInfo(True, newCount, self.__buildingLevel + 1)
         after['titleText'] = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_AFTERLABEL))
         result['afterUpgradeData'] = after
         return result
@@ -278,9 +281,9 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         result['defResProgressLabels'] = storeProgressLabels
         return result
 
-    def __prepareOrderInfo(self, increment = False, orderCount = 0):
+    def __prepareOrderInfo(self, increment = False, orderCount = 0, orderLevel = 1):
         result = {}
-        if self.__uid == 'base_building':
+        if self.intBuildingID == FORT_BUILDING_TYPE.MILITARY_BASE:
             if increment:
                 building_bonus = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_HEADER_LEVELSLBL, buildLevel=fort_formatters.getTextLevel(min(self.__baseBuildingLevel + 1, MAX_FORTIFICATION_LEVEL)))
                 defresDescr = self.app.utilsManager.textManager.concatStyles(((TextType.NEUTRAL_TEXT, building_bonus + ' '), (TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGS_MODERNIZATIONDESCR_BASE_BUILDING))))
@@ -288,13 +291,12 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
                 building_bonus = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_HEADER_LEVELSLBL, buildLevel=fort_formatters.getTextLevel(self.__baseBuildingLevel))
                 defresDescr = self.app.utilsManager.textManager.concatStyles(((TextType.STANDARD_TEXT, building_bonus + ' '), (TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGS_MODERNIZATIONDESCR_BASE_BUILDING))))
         else:
-            orderTypeID = self._buildingDescr.typeRef.orderType
-            _, _, orderLevel, orderData = self.fortCtrl.getFort().getOrderData(orderTypeID)
-            foundedLevel = orderLevel
+            orderTypeID = self.fortCtrl.getFort().getBuildingOrder(self.intBuildingID)
+            _, _, foundedLevel, orderData = self.fortCtrl.getFort().getOrderData(orderTypeID)
             if increment:
                 bodyTextColor = TextType.MAIN_TEXT
                 bonusTextColor = TextType.NEUTRAL_TEXT
-                foundedLevel = orderLevel + 1
+                foundedLevel += 1
                 _, _, _, orderData = self.fortCtrl.getFort().getOrderData(orderTypeID, foundedLevel)
                 textPadding = '     '
             else:
@@ -305,6 +307,9 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
                 awardText = textPadding + i18n.makeString(FORTIFICATIONS.ORDERS_SPECIALMISSION_POSSIBLEAWARD) + ' '
                 bonusDescr = i18n.makeString(FORTIFICATIONS.orders_specialmission_possibleaward_description_level(foundedLevel))
                 defresDescr = self.app.utilsManager.textManager.concatStyles(((bonusTextColor, awardText), (bodyTextColor, bonusDescr)))
+            elif orderTypeID in FORT_ORDER_TYPE.CONSUMABLES:
+                battleOrder = FortOrder(orderTypeID, level=orderLevel)
+                defresDescr = fort_formatters.getBonusText(textPadding, self.__uid, ctx=dict(battleOrder.getParams()))
             else:
                 colorStyle = (bonusTextColor, bodyTextColor)
                 bonus = str(abs(orderData.effectValue))
@@ -313,6 +318,8 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         result['description'] = defresDescr
         result['buildingType'] = self.__uid
         result['showAlertIcon'] = False
+        isCombatOrderBuilding = self.__uid in [FORTIFICATION_ALIASES.FORT_ARTILLERY_SHOP_BUILDING, FORTIFICATION_ALIASES.FORT_BOMBER_SHOP_BUILDING]
+        result['descriptionLink'] = increment and isCombatOrderBuilding
         if self.__uid != FORTIFICATION_ALIASES.FORT_BASE_BUILDING:
             order = self.fortCtrl.getFort().getOrder(self._buildingDescr.typeRef.orderType)
             result['iconSource'] = order.icon
@@ -324,3 +331,10 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
             toolTipData['body'] = i18n.makeString(TOOLTIPS.FORTIFICATION_DEFRESICONINFO_BODY, testData='test py var')
             result['infoIconToolTipData'] = toolTipData
         return result
+
+    def openOrderDetailsWindow(self):
+        fort = self.fortCtrl.getFort()
+        order = fort.getOrder(self._buildingDescr.typeRef.orderType)
+        orderID = order.orderID
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_ORDER_INFO_WINDOW_ALIAS, ctx={'orderID': orderID,
+         'orderLevel': self.__buildingLevel}), scope=EVENT_BUS_SCOPE.LOBBY)

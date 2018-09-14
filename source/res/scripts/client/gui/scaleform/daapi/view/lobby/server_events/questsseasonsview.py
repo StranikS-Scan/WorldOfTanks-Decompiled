@@ -82,7 +82,7 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
                 if vehicleBonus is not None:
                     vehLevelStr = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(Vehicle.getLevelSmallIconPath(vehicleBonus.level), 16, 16, -3, 0))
                     vehTypeStr = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(Vehicle.getTypeSmallIconPath(vehicleBonus.type), 16, 16, -3, 0))
-                    vehicleBonusLabel = i18n.makeString(QUESTS.PERSONAL_SEASONS_TILELABEL, type=vehTypeStr, level=vehLevelStr, name=vehicleBonus.longUserName)
+                    vehicleBonusLabel = i18n.makeString(QUESTS.PERSONAL_SEASONS_TILELABEL, type=vehTypeStr, level=vehLevelStr, name=vehicleBonus.userName)
                 else:
                     vehicleBonusLabel = ''
                 tokenIcon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_QUESTS_TOKEN16, 16, 16, -3, 0))
@@ -106,7 +106,7 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
                  'animation': animation})
 
             seasons.append({'id': seasonID,
-             'title': i18n.makeString(QUESTS.PERSONAL_SEASONS_ITEMTITLE, num=seasonID, name=season.getUserName()),
+             'title': quests_fmts.getFullSeasonUserName(season),
              'tiles': tiles})
 
         self.as_setSeasonsDataS(seasons)
@@ -135,7 +135,7 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta, AppRef):
             season = g_eventsCache.potapov.getSeasons()[tile.getSeasonID()]
             isInProgress = True
             ttHeader = quest.getUserName()
-            ttBody = i18n.makeString(TOOLTIPS.PRIVATEQUESTS_SLOT_MISSIONCOMPLETE_BODY, season=season.getUserName(), tile=tile.getUserName())
+            ttBody = quests_fmts.getFullTileUserName(season, tile)
             if quest.needToGetReward():
                 icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, 16, 16, -3, 0))
                 description = _getText(TextType.NEUTRAL_TEXT, i18n.makeString(QUESTS.PERSONAL_SEASONS_SLOTS_GETAWARD, icon=icon))

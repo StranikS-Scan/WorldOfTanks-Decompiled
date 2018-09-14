@@ -355,15 +355,18 @@ class _VehsListCondition(_Condition, _VehsListParser):
 
 class _VehsListRequirement(_VehsListCondition, _AvailabilityCheckable, _Negatable):
 
+    def __init__(self, name, data, path):
+        super(_VehsListRequirement, self).__init__(name, data, path)
+        if self._relation is None:
+            self._relation = _RELATIONS.GTQ
+            self._relationValue = 1
+        return
+
     def _isAvailable(self):
         vehsList = self._getVehiclesList(self._data)
         if self._relation is not None:
             return _handleRelation(self._relation, len(filter(self._checkVehicle, vehsList)), self._relationValue)
         else:
-            for v in vehsList:
-                if not self._checkVehicle(v):
-                    return False
-
             return True
 
     def _checkVehicle(self, vehicle):

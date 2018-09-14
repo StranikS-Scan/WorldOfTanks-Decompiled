@@ -24,6 +24,7 @@ class BattleSessionProvider(object):
         self.__chatCommands = None
         self.__drrScaleCtrl = None
         self.__arenaDP = None
+        self.__arenaLoadCtrl = None
         self.__arenaListeners = None
         self.__isBattleUILoaded = False
         return

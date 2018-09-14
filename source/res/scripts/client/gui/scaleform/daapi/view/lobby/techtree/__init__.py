@@ -1,5 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/__init__.py
 from collections import namedtuple, defaultdict
+from debug_utils import LOG_DEBUG
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from gui.Scaleform.managers.context_menu import ContextMenuManager
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items import getTypeInfoByName
 from items.vehicles import VEHICLE_CLASS_TAGS
@@ -14,6 +17,8 @@ _RESEARCH_ITEMS = (GUI_ITEM_TYPE.GUN,
  GUI_ITEM_TYPE.ENGINE,
  GUI_ITEM_TYPE.CHASSIS)
 MAX_PATH_LIMIT = 5
+ContextMenuManager.registerHandler(CONTEXT_MENU_HANDLER_TYPE.RESEARCH_VEHICLE, 'gui.Scaleform.daapi.view.lobby.techtree.research_cm_handlers', 'ResearchVehicleContextMenuHandler')
+ContextMenuManager.registerHandler(CONTEXT_MENU_HANDLER_TYPE.RESEARCH_ITEM, 'gui.Scaleform.daapi.view.lobby.techtree.research_cm_handlers', 'ResearchItemContextMenuHandler')
 
 class NODE_STATE:
     LOCKED = 1
@@ -64,8 +69,36 @@ class NODE_STATE:
         return not state & cls.UNLOCKED and state & cls.NEXT_2_UNLOCK and state & cls.ENOUGH_XP
 
     @classmethod
+    def isUnlocked(cls, state):
+        return state & cls.UNLOCKED > 0
+
+    @classmethod
+    def inInventory(cls, state):
+        return state & cls.IN_INVENTORY > 0
+
+    @classmethod
+    def isVehicleCanBeChanged(cls, state):
+        return state & cls.VEHICLE_CAN_BE_CHANGED > 0
+
+    @classmethod
+    def isInstalled(cls, state):
+        return state & cls.INSTALLED > 0
+
+    @classmethod
     def isAvailable2Buy(cls, state):
-        return not state & cls.IN_INVENTORY and state & cls.UNLOCKED and state & cls.ENOUGH_MONEY
+        return (not state & cls.IN_INVENTORY or state & cls.VEHICLE_IN_RENT) and state & cls.UNLOCKED and state & cls.ENOUGH_MONEY
+
+    @classmethod
+    def isAvailable2Sell(cls, state):
+        return state & cls.CAN_SELL > 0
+
+    @classmethod
+    def isWasInBattle(cls, state):
+        return state & cls.WAS_IN_BATTLE > 0
+
+    @classmethod
+    def isPremium(cls, state):
+        return state & cls.PREMIUM > 0
 
     @classmethod
     def isBuyForCredits(cls, state):

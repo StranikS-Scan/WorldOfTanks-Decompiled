@@ -3,13 +3,14 @@ from functools import partial
 import math
 import BigWorld
 import CommandMapping
+from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.battle import COMMAND_AMMO_CHOICE_MASK, AMMO_ICON_PATH, NO_AMMO_ICON_PATH
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import i18n
-PANEL_MAX_LENGTH = 9
+PANEL_MAX_LENGTH = 12
 AMMO_START_IDX = 0
 AMMO_END_IDX = 2
 AMMO_RANGE = xrange(AMMO_START_IDX, AMMO_END_IDX + 1)
@@ -18,11 +19,16 @@ EQUIPMENT_START_IDX = 3
 EQUIPMENT_END_IDX = 5
 EQUIPMENT_RANGE = xrange(EQUIPMENT_START_IDX, EQUIPMENT_END_IDX + 1)
 EQUIPMENT_FULL_MASK = sum([ 1 << idx for idx in EQUIPMENT_RANGE ])
-OPT_DEVICE_START_IDX = 6
-OPT_DEVICE_END_IDX = 8
+ORDERS_START_IDX = 6
+ORDERS_END_IDX = 8
+ORDERS_RANGE = xrange(ORDERS_START_IDX, ORDERS_END_IDX + 1)
+ORDERS_FULL_MASK = sum([ 1 << idx for idx in ORDERS_RANGE ])
+OPT_DEVICE_START_IDX = 9
+OPT_DEVICE_END_IDX = 11
 OPT_DEVICE_RANGE = xrange(OPT_DEVICE_START_IDX, OPT_DEVICE_END_IDX + 1)
 OPT_DEVICE_FULL_MASK = sum([ 1 << idx for idx in OPT_DEVICE_RANGE ])
 EMPTY_EQUIPMENTS_SLICE = [0] * (EQUIPMENT_END_IDX - EQUIPMENT_START_IDX + 1)
+EMPTY_ORDERS_SLICE = [0] * (ORDERS_START_IDX - ORDERS_END_IDX + 1)
 EMPTY_EQUIPMENT_TOOLTIP = i18n.makeString('#ingame_gui:consumables_panel/equipment/tooltip/empty')
 TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 
@@ -33,6 +39,7 @@ class ConsumablesPanel(object):
         self.__cds = [None] * PANEL_MAX_LENGTH
         self.__mask = 0
         self.__keys = {}
+        self.__currentOrderIdx = -1
         return
 
     def start(self):
@@ -126,12 +133,12 @@ class ConsumablesPanel(object):
             idx = start
         else:
             idx = int(math.log(bits, 2)) + 1
-        raise -1 < idx < 10 or AssertionError
+        raise -1 < idx < PANEL_MAX_LENGTH - 1 or AssertionError
         self.__mask |= 1 << idx
         return idx
 
     def __genKey(self, idx):
-        if not -1 < idx < 10:
+        if not -1 < idx < PANEL_MAX_LENGTH - 1:
             raise AssertionError
             cmdMappingKey = COMMAND_AMMO_CHOICE_MASK.format(idx + 1 if idx < 9 else 0)
             bwKey = CommandMapping.g_instance.get(cmdMappingKey)
@@ -139,12 +146,7 @@ class ConsumablesPanel(object):
             sfKey = bwKey is not None and bwKey != 0 and getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
-    def __makeShellTooltip(self, intCD, descriptor, piercingPower):
-        healMult = {22346: 0.2,
-         29994: 0.4,
-         34826: 1}
-        if intCD in healMult:
-            return i18n.makeString('#ingame_gui:shells_kinds/EVENT', caliber=BigWorld.wg_getNiceNumberFormat(descriptor['caliber']), userString=descriptor['userString'], damage=str(int(descriptor['damage'][0])), heal=str(int(descriptor['damage'][0] * healMult[intCD])), piercingPower=str(piercingPower))
+    def __makeShellTooltip(self, descriptor, piercingPower):
         kind = descriptor['kind']
         header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=BigWorld.wg_getNiceNumberFormat(descriptor['caliber']), userString=descriptor['userString'])
         body = i18n.makeString('#ingame_gui:shells_kinds/params', damage=str(int(descriptor['damage'][0])), piercingPower=str(piercingPower))
@@ -163,7 +165,7 @@ class ConsumablesPanel(object):
                 handler = None
                 if idx in AMMO_RANGE:
                     handler = partial(self.__handleAmmoPressed, intCD)
-                elif idx in EQUIPMENT_RANGE:
+                elif idx in EQUIPMENT_RANGE or idx in ORDERS_RANGE:
                     item = getEquipment(intCD)
                     if item and item.getTag() and item.getQuantity() > 0:
                         if item.isEntityRequired():
@@ -211,9 +213,8 @@ class ConsumablesPanel(object):
         g_sessionProvider.onVehicleStateUpdated += self.__onVehicleStateUpdated
 
     def __onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
-        toolTip = self.__makeShellTooltip(intCD, descriptor, int(gunSettings.getPiercingPower(intCD)))
-        unicName = descriptor['icon'][0]
-        icon = unicName if intCD not in (22346, 29994, 34826) else 'EVENT_' + unicName
+        toolTip = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)))
+        icon = descriptor['icon'][0]
         shellIconPath = AMMO_ICON_PATH % icon
         noShellIconPath = NO_AMMO_ICON_PATH % icon
         idx = self.__genNextIdx(AMMO_FULL_MASK, AMMO_START_IDX)
@@ -250,36 +251,75 @@ class ConsumablesPanel(object):
         if currShellCD in self.__cds:
             self.__flashObject.setCoolDownPosAsPercent(self.__cds.index(currShellCD), percent)
 
-    def __onEquipmentAdded(self, intCD, item):
-        idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
-        self.__cds[idx] = intCD
+    def __onEquipmentAdded(self, intCD, item, isOrder):
         if item:
-            descriptor = item.getDescriptor()
-            iconPath = descriptor.icon[0]
-            toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
-            tag = item.getTag()
-            if tag:
-                bwKey, sfKey = self.__genKey(idx)
-                if item.isEntityRequired():
-                    handler = partial(self.__handleEquipmentExpanded, intCD)
-                else:
-                    handler = partial(self.__handleEquipmentPressed, intCD)
-                self.__keys[bwKey] = handler
+            if isOrder:
+                self.__addOrderSlot(intCD, item)
             else:
-                bwKey, sfKey = (None, None)
-            self.__flashObject.addEquipmentSlot(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), iconPath, toolTip)
+                self.__addEquipmentSlot(intCD, item)
         else:
+            idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
+            self.__cds[idx] = intCD
             self.__flashObject.addEquipmentSlot(idx, None, None, None, 0, 0, None, EMPTY_EQUIPMENT_TOOLTIP)
             if self.__cds[EQUIPMENT_START_IDX:EQUIPMENT_END_IDX + 1] == EMPTY_EQUIPMENTS_SLICE:
                 self.__flashObject.showEquipmentSlots(False)
+            if self.__cds[ORDERS_START_IDX:ORDERS_END_IDX + 1] == EMPTY_ORDERS_SLICE:
+                self.__flashObject.showOrdersSlots(False)
         return
 
-    def __onEquipmentUpdated(self, intCD, quantity, timeRemaining):
+    def __onEquipmentUpdated(self, intCD, item, isOrder, isDeployed):
         if intCD in self.__cds:
-            self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), quantity, timeRemaining)
-            self.onPopUpClosed()
+            idx = self.__cds.index(intCD)
+            if isOrder:
+                self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), item.getQuantity(), item.getTimeRemaining())
+                self.__updateOrderSlot(idx, item)
+            else:
+                self.__flashObject.setItemTimeQuantityInSlot(idx, item.getQuantity(), item.getTimeRemaining())
+                self.onPopUpClosed()
         else:
             LOG_ERROR('Equipment is not found in panel', intCD, self.__cds)
+
+    def __addEquipmentSlot(self, intCD, item):
+        idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
+        self.__cds[idx] = intCD
+        descriptor = item.getDescriptor()
+        iconPath = descriptor.icon[0]
+        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
+        tag = item.getTag()
+        if tag:
+            bwKey, sfKey = self.__genKey(idx)
+            if item.isEntityRequired():
+                handler = partial(self.__handleEquipmentExpanded, intCD)
+            else:
+                handler = partial(self.__handleEquipmentPressed, intCD)
+            self.__keys[bwKey] = handler
+        else:
+            bwKey, sfKey = (None, None)
+        self.__flashObject.addEquipmentSlot(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), iconPath, toolTip)
+        return None
+
+    def __addOrderSlot(self, intCD, item):
+        idx = self.__genNextIdx(ORDERS_FULL_MASK, ORDERS_START_IDX)
+        self.__cds[idx] = intCD
+        descriptor = item.getDescriptor()
+        iconPath = descriptor.icon[0]
+        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
+        bwKey, sfKey = self.__genKey(idx)
+        self.__keys[bwKey] = partial(self.__handleEquipmentPressed, intCD)
+        self.__flashObject.addOrderSlot(idx, bwKey, sfKey, item.getQuantity(), iconPath, toolTip, item.getStage() in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING), item.isQuantityUsed())
+        self.__updateOrderSlot(idx, item)
+
+    def __updateOrderSlot(self, idx, item):
+        if item.getStage() == EQUIPMENT_STAGES.READY:
+            self.__flashObject.setOrderAvailable(idx, True)
+        elif item.getStage() == EQUIPMENT_STAGES.PREPARING:
+            self.__currentOrderIdx = idx
+            self.__flashObject.setOrderActivated(idx)
+        else:
+            self.__flashObject.setOrderAvailable(idx, False)
+        if item.getStage() != EQUIPMENT_STAGES.PREPARING and self.__currentOrderIdx == idx:
+            self.__currentOrderIdx = -1
+            self.__flashObject.setOrderActivated(self.__currentOrderIdx)
 
     def __onOptionalDeviceAdded(self, intCD, descriptor, isOn):
         idx = self.__genNextIdx(OPT_DEVICE_FULL_MASK, OPT_DEVICE_START_IDX)

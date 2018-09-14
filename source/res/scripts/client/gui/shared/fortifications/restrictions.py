@@ -1,14 +1,17 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/restrictions.py
+from FortifiedRegionBase import _FORT_CLIENT_METHOD_ROLES, FORT_CLIENT_METHOD
 import constants
 from UnitBase import SORTIE_DIVISION
 from constants import CLAN_MEMBER_FLAGS, FORT_BUILDING_TYPE, MAX_FORTIFICATION_LEVEL, PREBATTLE_TYPE, FORT_SCOUTING_DATA_FILTER
 from external_strings_utils import isClanAbbrevValid
 import fortified_regions
-from gui.prb_control.prb_helpers import prbDispatcherProperty
 from gui.shared.fortifications import interfaces, getClientFort
 from gui.shared.fortifications.interfaces import IFortValidators
 from gui.shared.fortifications.settings import FORT_RESTRICTION, FORT_REQUEST_TYPE, FORT_REQUEST_VALIDATION
+from gui.shared.utils.decorators import ReprInjector
 from messenger.storage import storage_getter
+
+@ReprInjector.simple('_roles', 'roles')
 
 class FortPermissions(interfaces.IFortPermissions):
 
@@ -16,86 +19,98 @@ class FortPermissions(interfaces.IFortPermissions):
         super(FortPermissions, self).__init__()
         self._roles = roles
 
-    def __repr__(self):
-        return '{0:>s}(roles={1:n})'.format(self.__class__.__name__, self._roles)
-
     def canCreate(self):
-        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.CREATE)
 
     def canDelete(self):
-        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.DELETE)
 
     def canOpenDirection(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.OPEN_DIR)
 
     def canCloseDirection(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.CLOSE_DIR)
 
     def canAddBuilding(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.ADD_BUILDING)
 
     def canDeleteBuilding(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.DEL_BUILDING)
 
     def canTransport(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.TRANSPORT)
 
     def canAddOrder(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.ADD_ORDER)
 
     def canActivateOrder(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.ACTIVATE_ORDER)
 
     def canUpgradeBuilding(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.UPGRADE)
 
     def canAttach(self):
-        return True
+        return self._checkPermission(FORT_CLIENT_METHOD.ATTACH)
 
     def canCreateSortie(self):
-        return True
+        return self._checkPermission(FORT_CLIENT_METHOD.CREATE_SORTIE)
 
     def canCreateFortBattle(self):
-        return True
+        return self._checkPermission(FORT_CLIENT_METHOD.CREATE_JOIN_FORT_BATTLE)
 
     def canChangeDefHour(self):
-        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.CHANGE_DEF_HOUR)
 
     def canChangeOffDay(self):
-        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.CHANGE_OFF_DAY)
 
     def canChangePeriphery(self):
-        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.CHANGE_PERIPHERY)
 
     def canChangeVacation(self):
-        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.CHANGE_VACATION)
 
     def canChangeSettings(self):
-        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self.canChangeDefHour() and self.canChangeOffDay() and self.canChangePeriphery() and self.canChangeVacation()
 
     def canShutDownDefHour(self):
-        return self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.SHUTDOWN_DEF_HOUR)
+
+    def canCancelShutDownDefHour(self):
+        return self._checkPermission(FORT_CLIENT_METHOD.CANCEL_SHUTDOWN)
 
     def canRequestPublicInfo(self):
-        return True
+        return self.canRequestClanCard()
 
     def canRequestClanCard(self):
-        return True
+        return self._checkPermission(FORT_CLIENT_METHOD.GET_ENEMY_CLAN_CARD)
 
     def canAddToFavorite(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.ADD_FAVORITE)
 
     def canRemoveFavorite(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.REMOVE_FAVORITE)
 
     def canPlanAttack(self):
-        return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
+        return self._checkPermission(FORT_CLIENT_METHOD.PLAN_ATTACK)
+
+    def canActivateConsumable(self):
+        return self._checkPermission(FORT_CLIENT_METHOD.ACTIVATE_CONSUMABLE)
+
+    def canReturnConsumable(self):
+        return self._checkPermission(FORT_CLIENT_METHOD.RETURN_CONSUMABLE)
 
     def canViewContext(self):
         return self._roles & (CLAN_MEMBER_FLAGS.LEADER | CLAN_MEMBER_FLAGS.VICE_LEADER) > 0
 
     def canViewNotCommanderHelp(self):
-        return not self._roles & CLAN_MEMBER_FLAGS.LEADER > 0
+        return self._roles & CLAN_MEMBER_FLAGS.LEADER == 0
+
+    def _checkPermission(self, cmd):
+        cmdRoles = _FORT_CLIENT_METHOD_ROLES.get(cmd, 0)
+        if cmdRoles > 0 and self._roles & cmdRoles == 0:
+            return False
+        return True
 
 
 class NoFortLimits(interfaces.IFortLimits):
@@ -123,10 +138,6 @@ class IntroFortLimits(interfaces.IFortLimits):
 
     @storage_getter('users')
     def userStorage(self):
-        return None
-
-    @prbDispatcherProperty
-    def prbDispatcher(self):
         return None
 
     def getClanMembersCount(self):
@@ -234,6 +245,7 @@ class FortLimits(IntroFortLimits):
             return (restrict, restricType)
 
     def isSortieCreationValid(self, level = None):
+        from gui.prb_control.dispatcher import g_prbLoader
         fort = getClientFort()
         if fort is None:
             return (False, FORT_RESTRICTION.UNKNOWN)
@@ -243,7 +255,7 @@ class FortLimits(IntroFortLimits):
             return (False, FORT_RESTRICTION.STARTING_SCRIPT_NOT_DONE)
         elif len(fort.sorties) >= fortified_regions.g_cache.maxSorties:
             return (False, FORT_RESTRICTION.SORTIE_MAX_COUNT)
-        state = self.prbDispatcher.getFunctionalState()
+        state = g_prbLoader.getDispatcher().getFunctionalState()
         if not state.isInUnit(PREBATTLE_TYPE.SORTIE) and state.hasModalEntity:
             return (False, FORT_RESTRICTION.SORTIE_HAS_MODAL_ENTITY)
         else:

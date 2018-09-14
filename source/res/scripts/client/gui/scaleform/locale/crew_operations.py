@@ -33,3 +33,8 @@ class CREW_OPERATIONS(object):
     DROPINBARRACK_ERROR_NOCREW = '#crew_operations:dropInBarrack/error/noCrew'
     DROPINBARRACK_WARNING_NOSPACE_TOOLTIP_HEADER = DROPINBARRACK_WARNING_NOSPACE_TOOLTIP + '/header'
     DROPINBARRACK_WARNING_NOSPACE_TOOLTIP_BODY = DROPINBARRACK_WARNING_NOSPACE_TOOLTIP + '/body'
+    ROLECHANGE_WINDOWTITLE = '#crew_operations:roleChange/windowTitle'
+    ROLECHANGE_ACCEPTBUTTON = '#crew_operations:roleChange/acceptButton'
+    ROLECHANGE_VEHICLESELECTLABEL = '#crew_operations:roleChange/vehicleSelectlabel'
+    ROLECHANGE_ROLESELECTLABEL = '#crew_operations:roleChange/roleSelectLabel'
+    ROLECHANGE_FOOTERINFO = '#crew_operations:roleChange/footerInfo'

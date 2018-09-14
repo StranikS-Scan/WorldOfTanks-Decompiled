@@ -61,6 +61,7 @@ def packTankman(tankman, isCountPermanentSkills = True):
               'small': Tankman.getSmallIconPath(tankman.nationID, tankman.descriptor.iconID),
               'barracks': Tankman.getBarracksIconPath(tankman.nationID, tankman.descriptor.iconID)},
      'iconRole': {'big': Tankman.getRoleBigIconPath(tankman.descriptor.role),
+                  'medium': Tankman.getRoleMediumIconPath(tankman.descriptor.role),
                   'small': Tankman.getRoleSmallIconPath(tankman.descriptor.role)},
      'iconRank': {'big': Tankman.getRankBigIconPath(tankman.nationID, tankman.descriptor.rankID),
                   'small': Tankman.getRankSmallIconPath(tankman.nationID, tankman.descriptor.rankID)},

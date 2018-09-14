@@ -305,7 +305,7 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
          'levelIcon': '../maps/icons/filters/levels/level_%s.png' % item.getLevel(),
          'clanTag': '[%s]' % item.getClanAbbrev(),
          'defenceTime': defenceTime,
-         'defenceStartTime': item.getLocalDefHour(),
+         'defenceStartTime': item.getLocalDefHour()[0],
          'avgBuildingLvl': round(item.getAvgBuildingLevel(), 1),
          'availabilityDays': timestamp,
          'isFavorite': item.getClanDBID() in favorites,

@@ -37,6 +37,8 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
         if isCreator and unitState.isOpenedStateChanged():
             self.as_setOpenedS(unitState.isOpened(), vo_converters.makeUnitStateLabel(unitState))
         self._setActionButtonState()
+        if unitState.isChanged():
+            self._updateMembersData()
 
     def onUnitSettingChanged(self, opCode, value):
         if opCode == UNIT_OP.SET_COMMENT:

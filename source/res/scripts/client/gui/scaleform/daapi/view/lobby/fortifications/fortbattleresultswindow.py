@@ -129,7 +129,7 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
             resultText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFEAT_HEADER)
             descriptionStartText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFEAT_DESCRIPTION_START)
             descriptionEndText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFEAT_DESCRIPTION_END, clanTag='[%s]' % enemyClanAbbrev, numBuildings=enemyBuildingCapture)
-            resourceHeaderLabel = _ms(FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_BATTLES_LOSTPROMRES_LABEL)
+            resourceHeaderLabel = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESLOST_HEADER)
         else:
             g_fortSoundController.playFortClanWarResult('draw')
             resultText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TIE_HEADER)

@@ -8,7 +8,6 @@ from VehicleEffects import VehicleTrailEffects, VehicleExhaustEffects
 from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE
 import constants
 import vehicle_extras
-from OcclusionDecal import OcclusionDecal
 from helpers import bound_effects, DecalMap, isPlayerAvatar
 from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
@@ -142,7 +141,6 @@ class VehicleAppearance(object):
         self.__prevVelocity = None
         self.__prevTime = None
         self.__maxClimbAngle = math.radians(20.0)
-        self.__chassisOcclusionDecal = OcclusionDecal()
         self.__vehicleStickers = None
         self.onModelChanged = Event()
         return
@@ -248,8 +246,6 @@ class VehicleAppearance(object):
                 self.__periodicTimerIDEngine = None
             self.__crashedTracksCtrl.destroy()
             self.__crashedTracksCtrl = None
-            self.__chassisOcclusionDecal.destroy()
-            self.__chassisOcclusionDecal = None
             return
 
     def preStart(self, typeDesc):
@@ -521,7 +517,6 @@ class VehicleAppearance(object):
         if not isFirstInit:
             self.__detachStickers()
             self.__removeHavok()
-            self.__chassisOcclusionDecal.detach()
             self.__destroyLampLights()
             if hasattr(gun['model'], 'wg_gunRecoil'):
                 delattr(gun['model'], 'wg_gunRecoil')
@@ -575,7 +570,6 @@ class VehicleAppearance(object):
             self.__destroyExhaust()
             self.__attachStickers(items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha'], True)
         self.__updateCamouflage()
-        self.__chassisOcclusionDecal.attach(vehicle, self.modelsDesc)
         self.__applyVisibility()
         self.__vehicle.model.height = self.__computeVehicleHeight()
         self.onModelChanged()
@@ -1783,11 +1777,11 @@ def setupSplineTracks(fashion, vDesc, chassisModel, prereqs):
 
         if segmentModelLeft is not None and segmentModelRight is not None:
             if splineDesc['leftDesc'] is not None:
-                leftSpline = BigWorld.wg_createSplineTrack(chassisModel, splineDesc['leftDesc'], splineDesc['segmentLength'], segmentModelLeft, splineDesc['segmentOffset'], segment2ModelLeft, splineDesc['segment2Offset'], _ROOT_NODE_NAME, splineDesc['atlasUTiles'], splineDesc['atlasVTiles'])
+                leftSpline = BigWorld.wg_createSplineTrack(fashion, chassisModel, splineDesc['leftDesc'], splineDesc['segmentLength'], segmentModelLeft, splineDesc['segmentOffset'], segment2ModelLeft, splineDesc['segment2Offset'], _ROOT_NODE_NAME, splineDesc['atlasUTiles'], splineDesc['atlasVTiles'])
                 if leftSpline is not None:
                     chassisModel.root.attach(leftSpline)
             if splineDesc['rightDesc'] is not None:
-                rightSpline = BigWorld.wg_createSplineTrack(chassisModel, splineDesc['rightDesc'], splineDesc['segmentLength'], segmentModelRight, splineDesc['segmentOffset'], segment2ModelRight, splineDesc['segment2Offset'], _ROOT_NODE_NAME, splineDesc['atlasUTiles'], splineDesc['atlasVTiles'])
+                rightSpline = BigWorld.wg_createSplineTrack(fashion, chassisModel, splineDesc['rightDesc'], splineDesc['segmentLength'], segmentModelRight, splineDesc['segmentOffset'], segment2ModelRight, splineDesc['segment2Offset'], _ROOT_NODE_NAME, splineDesc['atlasUTiles'], splineDesc['atlasVTiles'])
                 if rightSpline is not None:
                     chassisModel.root.attach(rightSpline)
             fashion.setSplineTrack(leftSpline, rightSpline)

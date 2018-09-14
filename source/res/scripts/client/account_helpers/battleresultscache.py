@@ -31,43 +31,61 @@ class BattleResultsCache(object):
         self.__account = account
 
     def get(self, arenaUniqueID, callback):
-        if self.__ignore:
+        errorCode, results = self.__checkErrorsAndGetFromCache(arenaUniqueID, self.__account.name)
+        if errorCode is not None:
             if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER, None)
-            return
-        elif self.__waiting:
-            if callback is not None:
-                callback(AccountCommands.RES_COOLDOWN, None)
+                callback(errorCode, results)
             return
         else:
-            battleResults = load(self.__account.name, arenaUniqueID)
-            if battleResults is not None:
-                if callback is not None:
-                    callback(AccountCommands.RES_CACHE, convertToFullForm(battleResults))
-                return
             self.__waiting = True
-            proxy = partial(self.__onGetResponse, callback)
+            proxy = partial(self.__onGetResponse, callback, None)
             self.__account._doCmdInt3(AccountCommands.CMD_REQ_BATTLE_RESULTS, arenaUniqueID, 0, 0, proxy)
             return
 
-    def __onGetResponse(self, callback, requestID, resultID, errorStr, ext = {}):
+    def getOther(self, arenaUniqueID, resultsSubUrl, callback):
+        errorCode, results = self.__checkErrorsAndGetFromCache(arenaUniqueID, resultsSubUrl)
+        if errorCode is not None:
+            if callback is not None:
+                callback(errorCode, results)
+            return
+        else:
+            self.__waiting = True
+            proxy = partial(self.__onGetResponse, callback, resultsSubUrl)
+            self.__account._doCmdStr(AccountCommands.CMD_REQ_BATTLE_RESULTS_URL, resultsSubUrl, proxy)
+            return
+
+    def __checkErrorsAndGetFromCache(self, arenaUniqueID, uniqueFolderName):
+        if self.__ignore:
+            return (AccountCommands.RES_NON_PLAYER, None)
+        elif self.__waiting:
+            return (AccountCommands.RES_COOLDOWN, None)
+        battleResults = load(uniqueFolderName, arenaUniqueID)
+        if battleResults is not None:
+            return (AccountCommands.RES_CACHE, convertToFullForm(battleResults))
+        else:
+            return (None, None)
+
+    def __onGetResponse(self, callback, resultsSubUrl, requestID, resultID, errorStr, ext = None):
         if resultID != AccountCommands.RES_STREAM:
             self.__waiting = False
             if callback is not None:
                 callback(resultID, None)
             return
         else:
-            self.__account._subscribeForStream(requestID, partial(self.__onStreamComplete, callback))
+            self.__account._subscribeForStream(requestID, partial(self.__onStreamComplete, callback, resultsSubUrl))
             return
 
-    def __onStreamComplete(self, callback, isSuccess, data):
+    def __onStreamComplete(self, callback, resultsSubUrl, isSuccess, data):
         self.__waiting = False
         try:
+            isSelfResults = resultsSubUrl is None
             battleResults = cPickle.loads(zlib.decompress(data))
-            save(self.__account.name, battleResults)
+            folderName = self.__account.name if isSelfResults else resultsSubUrl
+            save(folderName, battleResults)
             if callback is not None:
                 callback(AccountCommands.RES_STREAM, convertToFullForm(battleResults))
-            self.__account.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_BATTLE_RESULTS_RECEIVED, battleResults[0], 0, 0)
+            if isSelfResults:
+                self.__account.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_BATTLE_RESULTS_RECEIVED, battleResults[0], 0, 0)
         except:
             LOG_CURRENT_EXCEPTION()
             if callback is not None:
@@ -94,10 +112,10 @@ def save(accountName, battleResults):
     return
 
 
-def load(accountName, arenaUniqueID):
+def load(uniqueFolderName, arenaUniqueID):
     fileHandler = None
     try:
-        fileName = os.path.join(getFolderName(accountName, arenaUniqueID), '%s.dat' % arenaUniqueID)
+        fileName = os.path.join(getFolderName(uniqueFolderName, arenaUniqueID), '%s.dat' % arenaUniqueID)
         if not os.path.isfile(fileName):
             return
         fileHandler = open(fileName, 'rb')
@@ -113,10 +131,10 @@ def load(accountName, arenaUniqueID):
         return
 
 
-def getFolderName(accountName, arenaUniqueID):
+def getFolderName(uniqueFolderName, arenaUniqueID):
     battleStartTime = arenaUniqueID & 4294967295L
     battleStartDay = battleStartTime / 86400
-    return os.path.join(CACHE_DIR, base64.b32encode('%s;%s' % (accountName, battleStartDay)))
+    return os.path.join(CACHE_DIR, base64.b32encode('%s;%s' % (uniqueFolderName, battleStartDay)))
 
 
 def clean():
@@ -133,11 +151,16 @@ def clean():
 
 
 def convertToFullForm(compactForm):
+    if len(compactForm) > 3:
+        uniqueSubUrl = compactForm[3]
+    else:
+        uniqueSubUrl = None
     fullForm = {'arenaUniqueID': compactForm[0],
      'personal': listToDict(VEH_FULL_RESULTS, compactForm[1]),
      'common': {},
      'players': {},
-     'vehicles': {}}
+     'vehicles': {},
+     'uniqueSubUrl': uniqueSubUrl}
     fullForm['personal']['details'] = VehicleInteractionDetails.fromPacked(fullForm['personal']['details']).toDict()
     commonAsList, playersAsList, vehiclesAsList = cPickle.loads(compactForm[2])
     fullForm['common'] = listToDict(COMMON_RESULTS, commonAsList)

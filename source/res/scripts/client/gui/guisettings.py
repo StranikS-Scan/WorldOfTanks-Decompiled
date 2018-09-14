@@ -11,12 +11,13 @@ MovingTextProps = namedtuple('MovingTextProps', 'show internalBrowser')
 LoginRssFeedProps = namedtuple('LoginRssFeedProps', 'show url internalBrowser')
 EULAProps = namedtuple('EULAProps', 'full url')
 BrowserProps = namedtuple('BrowserProps', 'url params')
+PostBattleExchangeProps = namedtuple('PostBattleExchangeProps', 'enabled url')
 
-def _convertMovingTextSetting(settings, item):
-    return settings._replace(**item.value)
+def _convertVector4ToTuple(_, item):
+    return item.value.tuple()
 
 
-def _convertLoginRssFeed(settings, item):
+def _convertToNamedTuple(settings, item):
     return settings._replace(**item.value)
 
 
@@ -29,20 +30,13 @@ def _convertEULASetting(settings, item):
     return settings._replace(**item.value)
 
 
-def _convertBrowser(settings, item):
-    return settings._replace(**item.value)
-
-
-def _convertVector4ToTuple(_, item):
-    return item.value.tuple()
-
-
-_SETTING_CONVERTERS = {'loginRssFeed': _convertLoginRssFeed,
- 'movingText': _convertMovingTextSetting,
+_SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
+ 'movingText': _convertToNamedTuple,
  'eula': _convertEULASetting,
  'markerScaleSettings': _convertVector4ToTuple,
  'markerBgSettings': _convertVector4ToTuple,
- 'browser': _convertBrowser}
+ 'browser': _convertToNamedTuple,
+ 'postBattleExchange': _convertToNamedTuple}
 _DEFAULT_SETTINGS = {'registrationURL': '',
  'recoveryPswdURL': '',
  'paymentURL': '',
@@ -74,7 +68,6 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'markerBgSettings': (0, 0, 0, 0),
  'specPrebatlesVisible': True,
  'battleStatsInHangar': True,
- 'freeXpToTankman': False,
  'roaming': True,
  'movingText': MovingTextProps(False, False),
  'loginRssFeed': LoginRssFeedProps(True, '', False),
@@ -87,7 +80,11 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'showDirectionLine': False,
  'isBattleCmdCoolDownVisible': False,
  'browser': BrowserProps('about:blank', ''),
- 'reportBugLinks': []}
+ 'reportBugLinks': [],
+ 'useXmppToCreatePrivate': False,
+ 'cache': [],
+ 'postBattleExchange': PostBattleExchangeProps(False, ''),
+ 'isXmppNotesEnabled': False}
 
 class GuiSettings(object):
 

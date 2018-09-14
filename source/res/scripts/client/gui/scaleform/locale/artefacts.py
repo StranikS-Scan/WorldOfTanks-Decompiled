@@ -164,3 +164,7 @@ class ARTEFACTS(object):
     RATION_JAPAN_ONUSE = '#artefacts:ration_japan/onUse'
     RATION_JAPAN_ALWAYS = '#artefacts:ration_japan/always'
     RATION_JAPAN_RESTRICTION = '#artefacts:ration_japan/restriction'
+    ARTILLERY_NAME = '#artefacts:artillery/name'
+    ARTILLERY_DESCR = '#artefacts:artillery/descr'
+    BOMBER_NAME = '#artefacts:bomber/name'
+    BOMBER_DESCR = '#artefacts:bomber/descr'

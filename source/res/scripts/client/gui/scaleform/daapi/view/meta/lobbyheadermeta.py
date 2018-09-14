@@ -94,7 +94,3 @@ class LobbyHeaderMeta(DAAPIModule):
     def as_showBubbleTooltipS(self, message, duration):
         if self._isDAAPIInited():
             return self.flashObject.as_showBubbleTooltip(message, duration)
-
-    def as_isEventSquadS(self, isEventSquad):
-        if self._isDAAPIInited():
-            return self.flashObject.as_isEventSquad(isEventSquad)

@@ -73,6 +73,7 @@ class BattleReplay():
         self.__replayCtrl.battleChatMessageCallback = self.onBattleChatMessage
         self.__replayCtrl.lockTargetCallback = self.onLockTarget
         self.__replayCtrl.cruiseModeCallback = self.onSetCruiseMode
+        self.__replayCtrl.equipmentIdCallback = self.onSetEquipmentId
         self.__isAutoRecordingEnabled = False
         self.__quitAfterStop = False
         self.__isPlayingPlayList = False
@@ -103,6 +104,7 @@ class BattleReplay():
         self.__isChatPlaybackEnabled = True
         self.__warpTime = -1.0
         self.__skipMessage = False
+        self.__equipmentId = None
         self.replayTimeout = 0
         self.enableAutoRecordingBattles(True)
         gui.Scaleform.CursorDelegator.g_cursorDelegator.detachCursor()
@@ -134,6 +136,7 @@ class BattleReplay():
         self.__replayCtrl.ammoButtonPressedCallback = None
         self.__replayCtrl.lockTargetCallback = None
         self.__replayCtrl.cruiseModeCallback = None
+        self.__replayCtrl.equipmentIdCallback = None
         self.__replayCtrl = None
         self.__settings = None
         self.__videoCameraMatrix = None
@@ -372,10 +375,16 @@ class BattleReplay():
     def getGunRotatorTargetPoint(self):
         return self.__replayCtrl.gunRotatorTargetPoint
 
-    def setGunMarkerParams(self, diameter, pos, dir):
-        self.__replayCtrl.gunMarkerDiameter = diameter
+    def setConsumablesPosition(self, pos, dir = Math.Vector3(1, 1, 1)):
         self.__replayCtrl.gunMarkerPosition = pos
         self.__replayCtrl.gunMarkerDirection = dir
+
+    def setGunMarkerParams(self, diameter, pos, dir):
+        controlMode = self.getControlMode()
+        if controlMode != 'mapcase':
+            self.__replayCtrl.gunMarkerDiameter = diameter
+            self.__replayCtrl.gunMarkerPosition = pos
+            self.__replayCtrl.gunMarkerDirection = dir
 
     def getGunMarkerParams(self, defaultPos, defaultDir):
         diameter = self.__replayCtrl.gunMarkerDiameter
@@ -461,18 +470,19 @@ class BattleReplay():
         self.__savedPlaybackSpeedIdx = self.__playbackSpeedIdx
         self.__playbackSpeedIdx = value
         newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
-        self.__replayCtrl.playbackSpeed = newSpeed
         self.__enableInGameEffects(0 < newSpeed < 8.0)
         player = BigWorld.player()
-        if newSpeed == 0.0:
-            self.__gunWasLockedBeforePause = player.gunRotator._VehicleGunRotator__isLocked
-            player.gunRotator.lock(True)
-            self.__showInfoMessage('replayPaused')
-        else:
-            player.gunRotator.lock(self.__gunWasLockedBeforePause)
-            newSpeedStr = self.__playbackSpeedModifiersStr[self.__playbackSpeedIdx]
-            self.__showInfoMessage('replaySpeedChange', {'speed': newSpeedStr})
-        if newSpeed == 0:
+        if newSpeed != self.__replayCtrl.playbackSpeed:
+            if newSpeed == 0.0:
+                self.__gunWasLockedBeforePause = player.gunRotator._VehicleGunRotator__isLocked
+                player.gunRotator.lock(True)
+                self.__showInfoMessage('replayPaused')
+            else:
+                player.gunRotator.lock(self.__gunWasLockedBeforePause)
+                newSpeedStr = self.__playbackSpeedModifiersStr[self.__playbackSpeedIdx]
+                self.__showInfoMessage('replaySpeedChange', {'speed': newSpeedStr})
+            self.__replayCtrl.playbackSpeed = newSpeed
+        if self.__replayCtrl.playbackSpeed == 0:
             BigWorld.callback(0, self.__updateAim)
 
     def getPlaybackSpeedIdx(self):
@@ -599,7 +609,10 @@ class BattleReplay():
             return
         else:
             controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
-            player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=self.getGunRotatorTargetPoint(), saveZoom=False, saveDist=False)
+            preferredPos = self.getGunRotatorTargetPoint()
+            if controlMode == 'mapcase':
+                _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0))
+            player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId)
             return
 
     def onPlayerVehicleIDChanged(self):
@@ -769,6 +782,7 @@ class BattleReplay():
         if not self.isPlaying or not self.__enableTimeWarp:
             return
         else:
+            BigWorld.wg_enableGUIBackground(True, False)
             if self.__isFinished:
                 self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
             self.__isFinished = False
@@ -795,6 +809,7 @@ class BattleReplay():
             self.__enableInGameEffects(False)
             self.__timeWarpCleanupCb = BigWorld.callback(0, self.__cleanupAfterTimeWarp)
         else:
+            BigWorld.wg_enableGUIBackground(False, False)
             newSpeed = self.__playbackSpeedModifiers[self.__playbackSpeedIdx]
             self.__enableInGameEffects(0 < newSpeed < 8.0)
             if self.__timeWarpCleanupCb is not None:
@@ -850,6 +865,16 @@ class BattleReplay():
             print 'SERVER_AIM_ACTIVE'
         else:
             print 'CLIENT_AIM_ACTIVE'
+
+    def setEquipmentID(self, value):
+        self.__replayCtrl.onSetEquipmentID(value)
+
+    def onSetEquipmentId(self, equipmentId):
+        self.__equipmentId = equipmentId
+        mapCaseMode = BigWorld.player().inputHandler.ctrls.get('mapcase', None)
+        if mapCaseMode is not None:
+            mapCaseMode.activateEquipment(equipmentId)
+        return
 
 
 def isPlaying():

@@ -5,6 +5,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view import dialogs
 from gui.Scaleform.daapi.view.lobby.techtree import RequestState, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.framework.managers.TextManager import TextManager, TextType
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import Processor, plugins
@@ -38,8 +39,10 @@ class UnlockItemConfirmator(plugins.DialogAbstractConfirmator):
 
     def _makeMeta(self):
         item = g_itemsCache.items.getItemByCD(self._unlockCtx.unlockCD)
-        ctx = {'xpCost': BigWorld.wg_getIntegralFormat(self._costCtx['xpCost']),
-         'freeXP': BigWorld.wg_getIntegralFormat(self._costCtx['freeXP']),
+        xpCost = BigWorld.wg_getIntegralFormat(self._costCtx['xpCost'])
+        freeXp = BigWorld.wg_getIntegralFormat(self._costCtx['freeXP'])
+        ctx = {'xpCost': TextManager.getText(TextType.EXP_TEXT, xpCost),
+         'freeXP': TextManager.getText(TextType.EXP_TEXT, freeXp),
          'typeString': item.userType,
          'userString': item.userName}
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:

@@ -123,17 +123,17 @@ class TrainingRoomMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setPlayerStateInOther(uid, stateString, vContourIcon, vShortName, vLevel, igrType)
 
-    def as_setPlayerChatRosterInTeam1S(self, uid, chatRoster):
+    def as_setPlayerTagsInTeam1S(self, uid, tags):
         if self._isDAAPIInited():
-            return self.flashObject.as_setPlayerChatRosterInTeam1(uid, chatRoster)
+            return self.flashObject.as_setPlayerTagsInTeam1(uid, tags)
 
-    def as_setPlayerChatRosterInTeam2S(self, uid, chatRoster):
+    def as_setPlayerTagsInTeam2S(self, uid, tags):
         if self._isDAAPIInited():
-            return self.flashObject.as_setPlayerChatRosterInTeam2(uid, chatRoster)
+            return self.flashObject.as_setPlayerTagsInTeam2(uid, tags)
 
-    def as_setPlayerChatRosterInOtherS(self, uid, chatRoster):
+    def as_setPlayerTagsInOtherS(self, uid, tags):
         if self._isDAAPIInited():
-            return self.flashObject.as_setPlayerChatRosterInOther(uid, chatRoster)
+            return self.flashObject.as_setPlayerTagsInOther(uid, tags)
 
     def as_enabledCloseButtonS(self, value):
         if self._isDAAPIInited():

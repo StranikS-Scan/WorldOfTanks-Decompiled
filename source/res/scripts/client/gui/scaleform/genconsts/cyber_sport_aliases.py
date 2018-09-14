@@ -2,6 +2,8 @@
 
 
 class CYBER_SPORT_ALIASES(object):
+    CYBER_SPORT_STATIC_PROFILE_UI = 'staticFormationProfileWindow.swf'
+    CYBER_SPORT_STATIC_PROFILE_PY = 'cyberSport/static'
     CYBER_SPORT_WINDOW_UI = 'CyberSportMainWindow.swf'
     CYBER_SPORT_WINDOW_PY = 'cyberSport/unitWindow'
     ROSTER_SLOT_SETTINGS_WINDOW_UI = 'rosterSlotSettingsWindow.swf'
@@ -14,8 +16,18 @@ class CYBER_SPORT_ALIASES(object):
     UNITS_LIST_VIEW_PY = 'cyberSport/unitWindow/unitsList'
     UNIT_VIEW_UI = 'UnitViewUI'
     UNIT_VIEW_PY = 'cyberSport/unitWindow/unit'
+    STATIC_FORMATION_STAFF_UI = 'StaticFormationStaffViewUI'
+    STATIC_FORMATION_STAFF_PY = 'StaticFormation/views/staff'
+    STATIC_FORMATION_SUMMARY_UI = 'StaticFormationSummaryViewUI'
+    STATIC_FORMATION_SUMMARY_PY = 'StaticFormation/views/summary'
+    STATIC_FORMATION_STATS_UI = 'StaticFormationStatsViewUI'
+    STATIC_FORMATION_STATS_PY = 'StaticFormation/views/stats'
+    STATIC_FORMATION_LADDER_UI = 'StaticFormationLadderViewUI'
+    STATIC_FORMATION_LADDER_PY = 'StaticFormation/views/ladder'
     VEHICLE_SELECTOR_POPUP_UI = 'vehicleSelector.swf'
     VEHICLE_SELECTOR_POPUP_PY = 'cyberSport/vehicleSelectorPopup'
+    LEGIONARIES_FILTER_POPOVER_UI = 'legionariesFilterPopover.swf'
+    LEGIONARIES_FILTER_POPOVER_PY = 'cyberSport/legionariesFilterPopover'
     RANGE_ROSTER_SETTINGS_VIEW = 'RangeRosterSettingsViewUI'
     VEHICLE_SELECTOR_VIEW = 'VehicleSelectorUI'
     ROSTER_SEPARATOR = 'separatorMcUI'
@@ -28,5 +40,10 @@ class CYBER_SPORT_ALIASES(object):
     AUTO_SEARCH_WAITING_PLAYERS_STATE = 'autoSearchWaitingPlayersState'
     AUTO_SEARCH_CONFIRMATION_STATE = 'autoSearchConfirmationState'
     AUTO_SEARCH_ERROR_STATE = 'autoSearchErrorState'
+    CS_ANIMATION_UI = 'CSAnimation.swf'
+    CS_ANIMATION_LEAGUE_DIVISION_UP = 'CSAnimationLeagueDivisionUpUI'
+    CS_ANIMATION_LEAGUE_DIVISION_UP_ALT = 'CSAnimationLeagueDivisionUpAltUI'
+    CS_ANIMATION_LEAGUE_DIVISION_DOWN = 'CSAnimationLeagueDivisionDownUI'
+    CS_ANIMATION_LEAGUE_UP = 'CSAnimationLeagueUpUI'
     FLASH_ALIASES = [INTRO_VIEW_UI, UNITS_LIST_VIEW_UI, UNIT_VIEW_UI]
     PYTHON_ALIASES = [INTRO_VIEW_PY, UNITS_LIST_VIEW_PY, UNIT_VIEW_PY]

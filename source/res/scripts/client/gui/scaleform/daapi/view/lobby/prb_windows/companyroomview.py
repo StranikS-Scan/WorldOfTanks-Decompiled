@@ -23,14 +23,16 @@ class CompanyRoomView(CompanyRoomMeta):
     def startListening(self):
         super(CompanyRoomView, self).startListening()
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
-        g_messengerEvents.users.onUsersRosterReceived += self.__onUsersRosterReceived
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUsersListReceived += self.__onUsersReceived
+        usersEvents.onUserActionReceived += self._onUserActionReceived
 
     def stopListening(self):
         super(CompanyRoomView, self).stopListening()
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
-        g_messengerEvents.users.onUsersRosterReceived -= self.__onUsersRosterReceived
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUsersListReceived -= self.__onUsersReceived
+        usersEvents.onUserActionReceived -= self._onUserActionReceived
 
     @process
     def requestToAssign(self, pID):
@@ -141,8 +143,8 @@ class CompanyRoomView(CompanyRoomMeta):
         if len(accounts):
             self.as_setRosterListS(1, False, self._makeAccountsData(accounts))
 
-    def __onUsersRosterReceived(self):
-        self._onUserRosterChanged(None, None)
+    def __onUsersReceived(self, _):
+        self._onUserActionReceived(None, None)
         return
 
     def __setSettings(self):

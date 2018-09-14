@@ -3,14 +3,19 @@ import base64
 import re
 from urllib import quote_plus
 import BigWorld
+from constants import TOKEN_TYPE
 from ConnectionManager import connectionManager
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from adisp import process, async
 from gui import GUI_SETTINGS
+from gui.game_control.controllers import Controller
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
+from gui.shared.utils.requesters import TokenRequester
 from helpers import getClientLanguage
 
 class URLMarcos(object):
+    __MACROS_PREFIX = '$'
 
     def __init__(self):
         super(URLMarcos, self).__init__()
@@ -19,12 +24,15 @@ class URLMarcos(object):
          'ENCODED_LOGIN': 'getEncodedLogin',
          'QUOTED_LOGIN': 'getQuotedLogin',
          'TARGET_URL': 'getTargetURL',
-         'DB_ID': 'getDatabaseID'}
-        filter = '\\$(' + reduce(lambda x, y: x + '|' + y, self.__macros.iterkeys()) + ')'
-        self.__filter = re.compile(filter)
+         'DB_ID': 'getDatabaseID',
+         'WGNI_TOKEN': 'getWgniToken'}
+        pattern = ('\\%s(' + reduce(lambda x, y: x + '|' + y, self.__macros.iterkeys()) + ')') % self.__MACROS_PREFIX
+        self.__filter = re.compile(pattern)
         self.__targetURL = ''
+        self.__tokenRqs = TokenRequester(TOKEN_TYPE.WGNI, cache=False)
 
     def clear(self):
+        self.__tokenRqs.clear()
         self.__macros.clear()
         self.__filter = None
         return
@@ -32,63 +40,91 @@ class URLMarcos(object):
     def hasMarcos(self, url):
         return len(self.__filter.findall(url)) > 0
 
-    def parse(self, url):
-        return self.__filter.sub(self._replace, url)
+    @async
+    @process
+    def parse(self, url, callback):
+        yield lambda callback: callback(True)
+        for macros in self.__filter.findall(url):
+            replacement = yield self._replace(macros)
+            url = url.replace(self._getUserMacrosName(macros), replacement)
 
-    def getLanguageCode(self):
+        callback(url)
+
+    @async
+    def getLanguageCode(self, callback):
         code = getClientLanguage()
-        return code.replace('_', '-')
+        callback(code.replace('_', '-'))
 
-    def getAreaID(self):
+    @async
+    def getAreaID(self, callback):
         areaID = connectionManager.areaID
         if areaID:
             result = str(areaID)
         else:
             result = 'errorArea'
-        return result
+        callback(result)
 
-    def getEncodedLogin(self):
+    @async
+    def getEncodedLogin(self, callback):
         login = connectionManager.loginName
         if login:
             result = login
         else:
             result = 'errorLogin'
-        return base64.b64encode(result)
+        callback(base64.b64encode(result))
 
-    def getQuotedLogin(self):
+    @async
+    def getQuotedLogin(self, callback):
         login = connectionManager.lastLoginName
         if login:
             result = quote_plus(login)
         else:
             result = ''
-        return result
+        callback(result)
 
-    def getDatabaseID(self):
+    @async
+    def getDatabaseID(self, callback):
         dbID = connectionManager.databaseID
         if dbID:
             result = str(dbID)
         else:
             result = 'errorID'
-        return result
+        callback(result)
 
-    def getTargetURL(self):
+    @async
+    def getTargetURL(self, callback):
         result = self.__targetURL
         if self.__targetURL:
             result = quote_plus(self.__targetURL)
-        return result
+        callback(result)
+
+    @async
+    def getWgniToken(self, callback):
+
+        def _cbWrapper(response):
+            if response and response.isValid():
+                callback(str(response.getToken()))
+            else:
+                callback('')
+
+        self.__tokenRqs.request()(_cbWrapper)
 
     def setTargetURL(self, targetURL):
         self.__targetURL = targetURL
 
-    def _replace(self, match):
-        macros = match.group(1)
+    @async
+    @process
+    def _replace(self, macros, callback):
+        yield lambda callback: callback(True)
         result = ''
-        if macros in self.__macros.keys():
-            getter = self.__macros[macros]
-            result = getattr(self, getter)()
+        if macros in self.__macros:
+            result = yield getattr(self, self.__macros[macros])()
         else:
             LOG_ERROR('URL marcos is not found', macros)
-        return result
+        callback(result)
+
+    def _getUserMacrosName(self, macros):
+        return '%s%s' % (self.__MACROS_PREFIX, str(macros))
 
 
 _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
@@ -103,10 +139,10 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.CLAN_CREATE: '_handleClanCreate',
  OpenLinkEvent.INVIETES_MANAGEMENT: '_handleInvitesManagementURL'}
 
-class ExternalLinksHandler(object):
+class ExternalLinksHandler(Controller):
 
-    def __init__(self):
-        super(ExternalLinksHandler, self).__init__()
+    def __init__(self, proxy):
+        super(ExternalLinksHandler, self).__init__(proxy)
         self.__urlMarcos = None
         return
 
@@ -135,6 +171,7 @@ class ExternalLinksHandler(object):
             if handler:
                 removeListener(eventType, handler)
 
+        super(ExternalLinksHandler, self).fini()
         return
 
     def open(self, url):
@@ -147,43 +184,50 @@ class ExternalLinksHandler(object):
             LOG_ERROR('There is error while opening web browser at page:', url)
             LOG_CURRENT_EXCEPTION()
 
-    def getURL(self, name):
+    @async
+    @process
+    def getURL(self, name, callback):
         urlSettings = GUI_SETTINGS.lookup(name)
         if urlSettings:
-            url = self.__urlMarcos.parse(str(urlSettings))
+            url = yield self.__urlMarcos.parse(str(urlSettings))
         else:
-            url = ''
-        return url
+            url = yield lambda callback: callback('')
+        callback(url)
 
     def _handleSpecifiedURL(self, event):
         self.open(event.url)
 
+    @process
+    def __openParsedUrl(self, urlName):
+        parsedUrl = yield self.getURL(urlName)
+        self.open(parsedUrl)
+
     def _handleOpenRegistrationURL(self, _):
-        self.open(self.getURL('registrationURL'))
+        self.__openParsedUrl('registrationURL')
 
     def _handleOpenRecoveryPasswordURL(self, _):
-        self.open(self.getURL('recoveryPswdURL'))
+        self.__openParsedUrl('recoveryPswdURL')
 
     def _handleOpenPaymentURL(self, _):
-        self.open(self.getURL('paymentURL'))
+        self.__openParsedUrl('paymentURL')
 
     def _handleSecuritySettingsURL(self, _):
-        self.open(self.getURL('securitySettingsURL'))
+        self.__openParsedUrl('securitySettingsURL')
 
     def _handleSupportURL(self, _):
-        self.open(self.getURL('supportURL'))
+        self.__openParsedUrl('supportURL')
 
     def _handleMigrationURL(self):
-        self.open(self.getURL('migrationURL'))
+        self.__openParsedUrl('migrationURL')
 
     def _handleFortDescription(self, _):
-        self.open(self.getURL('fortDescription'))
+        self.__openParsedUrl('fortDescription')
 
     def _handleClanSearch(self, _):
-        self.open(self.getURL('clanSearch'))
+        self.__openParsedUrl('clanSearch')
 
     def _handleClanCreate(self, _):
-        self.open(self.getURL('clanCreate'))
+        self.__openParsedUrl('clanCreate')
 
     def _handleInvitesManagementURL(self, _):
-        self.open(self.getURL('invitesManagementURL'))
+        self.__openParsedUrl('invitesManagementURL')

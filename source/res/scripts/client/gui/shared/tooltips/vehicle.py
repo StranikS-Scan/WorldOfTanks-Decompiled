@@ -27,23 +27,27 @@ class VehicleStatusField(ToolTipDataField):
     def __getTechTreeVehicleStatus(self, config, vehicle):
         nodeState = int(config.node.state)
         tooltip, level = None, InventoryVehicle.STATE_LEVEL.WARNING
+        parentCD = None
+        if config.node is not None:
+            parentCD = config.node.unlockProps.parentID
+        _, _, need2Unlock = getUnlockPrice(vehicle.intCD, parentCD)
         if not nodeState & NODE_STATE.UNLOCKED:
             if not nodeState & NODE_STATE.NEXT_2_UNLOCK:
                 tooltip = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked'
-            elif not nodeState & NODE_STATE.ENOUGH_XP:
+            elif need2Unlock > 0:
                 tooltip = '#tooltips:researchPage/module/status/notEnoughXP'
                 level = InventoryVehicle.STATE_LEVEL.CRITICAL
         else:
             if nodeState & NODE_STATE.IN_INVENTORY:
                 return self.__getVehicleStatus(False, vehicle)
-            if not nodeState & NODE_STATE.ENOUGH_MONEY:
+            canRentOrBuy, reason = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
+            if not canRentOrBuy:
                 level = InventoryVehicle.STATE_LEVEL.CRITICAL
-                if nodeState & NODE_STATE.PREMIUM:
+                if reason == 'gold_error':
                     tooltip = '#tooltips:moduleFits/gold_error'
-                else:
+                elif reason == 'credit_error':
                     tooltip = '#tooltips:moduleFits/credit_error'
-                canRentOrBuy, reason = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
-                if not canRentOrBuy and reason not in ('gold_error', 'credit_error'):
+                else:
                     tooltip = '#tooltips:moduleFits/operation_error'
         header, text = getComplexStatus(tooltip)
         if header is None and text is None:
@@ -141,7 +145,7 @@ class VehicleStatsField(ToolTipDataField):
                     unlockPriceStat.append(need)
                 if cost > 0:
                     result.append(('unlock_price', unlockPriceStat))
-            if buyPrice and not vehicle.isPremiumIGR:
+            if buyPrice and not (vehicle.isDisabledForBuy or vehicle.isPremiumIGR):
                 price = vehicle.buyPrice
                 needed = (0, 0)
                 if not isInInventory and (isNextToUnlock or isUnlocked) or isRented:

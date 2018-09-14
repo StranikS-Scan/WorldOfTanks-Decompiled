@@ -208,14 +208,9 @@ class _EventInfo(AppRef):
         if FINISH_TIME_LEFT_TO_SHOW > self.event.getFinishTimeLeft() > 0:
             gmtime = time.gmtime(self.event.getFinishTimeLeft())
             if gmtime.tm_hour > 0:
-                if self.event.getType() == constants.EVENT_TYPE.ACTION:
-                    fmt = i18n.makeString('#quests:item/timer/tillFinish/onlyHours')
-                else:
-                    fmt = i18n.makeString(QUESTS.ITEM_TIMER_TILLFINISH_LONGFORMAT)
-            elif self.event.getType() == constants.EVENT_TYPE.ACTION:
-                fmt = i18n.makeString('#quests:item/timer/tillFinish/lessThanHour')
+                fmt = i18n.makeString('#quests:item/timer/tillFinish/onlyHours')
             else:
-                fmt = i18n.makeString(QUESTS.ITEM_TIMER_TILLFINISH_SHORTFORMAT)
+                fmt = i18n.makeString('#quests:item/timer/tillFinish/lessThanHour')
             fmt %= {'hours': time.strftime('%H', gmtime),
              'min': time.strftime('%M', gmtime),
              'days': str(gmtime.tm_mday)}
@@ -224,31 +219,40 @@ class _EventInfo(AppRef):
 
     def _getActiveDateTimeString(self):
         i18nKey, args = None, {}
-        if self.event.getStartTimeLeft() > 0:
-            i18nKey = '#quests:details/header/activeDuration'
-            args = {'startTime': self._getDateTimeString(self.event.getStartTime()),
-             'finishTime': self._getDateTimeString(self.event.getFinishTime())}
-        elif self.event.getFinishTimeLeft() <= time_utils.HALF_YEAR:
-            i18nKey = '#quests:details/header/tillDate'
-            args = {'finishTime': self._getDateTimeString(self.event.getFinishTime())}
-        weekDays = self.event.getWeekDays()
-        intervals = self.event.getActiveTimeIntervals()
-        if len(weekDays) or len(intervals):
-            if i18nKey is None:
-                i18nKey = '#quests:details/header/schedule'
-            if len(weekDays):
-                days = ', '.join([ i18n.makeString('#menu:dateTime/weekDays/full/%d' % idx) for idx in self.event.getWeekDays() ])
-                i18nKey += 'Days'
-                args['days'] = days
-            if len(intervals):
-                times = []
-                for low, high in intervals:
-                    times.append('%s - %s' % (BigWorld.wg_getShortTimeFormat(low), BigWorld.wg_getShortTimeFormat(high)))
+        if self.event.getFinishTimeLeft() <= time_utils.ONE_DAY:
+            gmtime = time.gmtime(self.event.getFinishTimeLeft())
+            if gmtime.tm_hour > 0:
+                fmt = i18n.makeString(QUESTS.ITEM_TIMER_TILLFINISH_LONGFULLFORMAT)
+            else:
+                fmt = i18n.makeString(QUESTS.ITEM_TIMER_TILLFINISH_SHORTFULLFORMAT)
+            fmt %= {'hours': time.strftime('%H', gmtime)}
+            return fmt
+        else:
+            if self.event.getStartTimeLeft() > 0:
+                i18nKey = '#quests:details/header/activeDuration'
+                args = {'startTime': self._getDateTimeString(self.event.getStartTime()),
+                 'finishTime': self._getDateTimeString(self.event.getFinishTime())}
+            elif self.event.getFinishTimeLeft() <= time_utils.HALF_YEAR:
+                i18nKey = '#quests:details/header/tillDate'
+                args = {'finishTime': self._getDateTimeString(self.event.getFinishTime())}
+            weekDays = self.event.getWeekDays()
+            intervals = self.event.getActiveTimeIntervals()
+            if len(weekDays) or len(intervals):
+                if i18nKey is None:
+                    i18nKey = '#quests:details/header/schedule'
+                if len(weekDays):
+                    days = ', '.join([ i18n.makeString('#menu:dateTime/weekDays/full/%d' % idx) for idx in self.event.getWeekDays() ])
+                    i18nKey += 'Days'
+                    args['days'] = days
+                if len(intervals):
+                    times = []
+                    for low, high in intervals:
+                        times.append('%s - %s' % (BigWorld.wg_getShortTimeFormat(low), BigWorld.wg_getShortTimeFormat(high)))
 
-                i18nKey += 'Times'
-                times = ', '.join(times)
-                args['times'] = times
-        return i18n.makeString(i18nKey, **args)
+                    i18nKey += 'Times'
+                    times = ', '.join(times)
+                    args['times'] = times
+            return i18n.makeString(i18nKey, **args)
 
 
 class _QuestInfo(_EventInfo):
@@ -485,6 +489,16 @@ class _ActionInfo(_EventInfo):
             result.append(fmtData)
 
         return formatters.todict(result)
+
+    def _getActiveDateTimeString(self):
+        if self.event.getFinishTimeLeft() <= time_utils.QUARTER_HOUR:
+            return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOEND)
+        return super(_ActionInfo, self)._getActiveDateTimeString()
+
+    def _getTimerMsg(self):
+        if self.event.getFinishTimeLeft() <= time_utils.QUARTER_HOUR:
+            return makeHtmlString('html_templates:lobby/quests', 'comeToEnd')
+        return super(_ActionInfo, self)._getTimerMsg()
 
 
 class _PotapovQuestInfo(_QuestInfo):

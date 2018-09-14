@@ -6,6 +6,7 @@ from messenger import MessengerEntry
 import BigWorld
 import Math
 import Keys
+import Math
 from AvatarInputHandler import mathUtils
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import PLAYER_ENTITY_NAME
@@ -26,11 +27,17 @@ CURSOR_STRATEGIC = 'cursorStrategic'
 CAMERA_NORMAL = 'cameraNormal'
 CAMERA_VIDEO = 'cameraVideo'
 CAMERA_STRATEGIC = 'cameraStrategic'
+MARKER = 'marker'
 MODE_VIDEO = 'video'
 MODE_POSTMORTEM = 'postmortem'
 MODE_SNIPER = 'sniper'
 MODE_ARCADE = 'arcade'
 MODE_STRATEGIC = 'strategic'
+MODE_BATTLE_CONSUME = 'mapcase'
+
+def _isStrategic(ctrlMode):
+    return ctrlMode in (MODE_STRATEGIC, MODE_BATTLE_CONSUME)
+
 
 class VehicleLocation():
     AOI = 0
@@ -62,6 +69,7 @@ class Minimap(object):
         self.__backMarkers = {}
         self.__entries = {}
         self.__entrieLits = {}
+        self.__entrieMarkers = {}
         self.__enemyEntries = {}
         self.__main = None
         self.__vehiclesWaitStart = []
@@ -118,6 +126,7 @@ class Minimap(object):
         arena.onVehicleKilled += self.__onVehicleKilled
         arena.onVehicleAdded += self.__onVehicleAdded
         arena.onTeamKiller += self.__onTeamKiller
+        g_sessionProvider.getEquipmentsCtrl().onEquipmentMarkerShown += self.__onEquipmentMarkerShown
         self.__marks = {}
         if not g_sessionProvider.getCtx().isPlayerObserver():
             mp = BigWorld.player().getOwnVehicleMatrix()
@@ -165,7 +174,7 @@ class Minimap(object):
             for point in controls:
                 self.scaleMarker(point.handle, point.matrix, self.__markerScale)
 
-        if self.__currentMode != MODE_STRATEGIC and self.__cameraHandle is not None and self.__cameraMatrix is not None:
+        if not _isStrategic(self.__currentMode) and self.__cameraHandle is not None and self.__cameraMatrix is not None:
             self.scaleMarker(self.__cameraHandle, self.__cameraMatrix, self.__markerScale)
             vehicle = BigWorld.entity(self.__playerVehicleID)
             if vehicle.isAlive() and GUI_SETTINGS.showDirectionLine and self.__showDirectionLine:
@@ -182,6 +191,11 @@ class Minimap(object):
         for id in self.__entrieLits:
             originalMatrix = self.__entrieLits[id]['matrix']
             handle = self.__entrieLits[id]['handle']
+            self.scaleMarker(handle, originalMatrix, self.__markerScale)
+
+        for item in self.__entrieMarkers.itervalues():
+            originalMatrix = item['matrix']
+            handle = item['handle']
             self.scaleMarker(handle, originalMatrix, self.__markerScale)
 
         return
@@ -216,7 +230,7 @@ class Minimap(object):
                 self.showVehicleNames(self.__permanentNamesShow)
             if diff is None or settings_constants.GAME.SHOW_VECTOR_ON_MAP in diff:
                 vehicle = BigWorld.entity(self.__playerVehicleID)
-                if GUI_SETTINGS.showDirectionLine and self.__currentMode != MODE_STRATEGIC and vehicle.isAlive():
+                if GUI_SETTINGS.showDirectionLine and not _isStrategic(self.__currentMode) and vehicle.isAlive() and not g_sessionProvider.getCtx().isPlayerObserver():
                     if self.__showDirectionLine:
                         self.__ownUI.entryInvoke(self.__cameraHandle, ('showCameraDirectionLine', ()))
                     else:
@@ -292,6 +306,7 @@ class Minimap(object):
             self.__isStarted = False
             self.__entries = {}
             self.__entrieLits = {}
+            self.__entrieMarkers = {}
             self.__cameraHandle = None
             self.__cameraMatrix = None
             self.__marks = None
@@ -428,27 +443,7 @@ class Minimap(object):
             row = int(cellCount[0] * localPos[0] / mapSize[0])
             column = int(cellCount[1] * localPos[1] / mapSize[1])
             g_sessionProvider.getChatCommands().sendAttentionToCell(row * int(cellCount[1]) + column)
-        elif 'SPG' in player.vehicleTypeDescriptor.type.tags:
-            arenaDesc = BigWorld.player().arena.arenaType
-            bottomLeft, upperRight = arenaDesc.boundingBox
-            spaceSize = upperRight - bottomLeft
-            viewpoint = (upperRight + bottomLeft) * 0.5
-            viewpointTranslate = Math.Matrix()
-            viewpointTranslate.setTranslate((viewpoint.x, 0.0, viewpoint.y))
-            pos = ((localPos[0] - mapSize[0] * 0.5) / mapSize[0], (localPos[1] - mapSize[1] * 0.5) / mapSize[1])
-            worldPos = Math.Matrix(viewpointTranslate).applyPoint((pos[0] * spaceSize[0], 0.0, -pos[1] * spaceSize[1]))
-            player.inputHandler.onMinimapClicked(worldPos)
-
-    def __onMapClickInSimpleMode(self, x, y, bHighlightCellNVehicleSpecific):
-        localPos = (x - 0.5, y - 0.5)
-        mapSize = Minimap.__MINIMAP_SIZE
-        player = BigWorld.player()
-        if bHighlightCellNVehicleSpecific:
-            cellCount = Minimap.__MINIMAP_CELLS
-            row = int(cellCount[0] * localPos[0] / mapSize[0])
-            column = int(cellCount[1] * localPos[1] / mapSize[1])
-            g_sessionProvider.getChatCommands().sendAttentionToCell(row * int(cellCount[1]) + column)
-        elif 'SPG' in player.vehicleTypeDescriptor.type.tags:
+        else:
             arenaDesc = BigWorld.player().arena.arenaType
             bottomLeft, upperRight = arenaDesc.boundingBox
             spaceSize = upperRight - bottomLeft
@@ -479,8 +474,7 @@ class Minimap(object):
     def __onVehicleRemoved(self, id):
         if self.__entries.has_key(id):
             self.__delEntry(id)
-        if self.__entrieLits.has_key(id):
-            self.__delEntryLit(id)
+        self.__delEntryLit(id)
 
     def __onVehicleKilled(self, victimId, killerID, reason):
         self.__delEntryLit(victimId)
@@ -507,14 +501,10 @@ class Minimap(object):
 
         for id in set(entries).difference(set(arena.positions)):
             location = entries[id]['location']
-            if location == VehicleLocation.FAR:
+            if location in (VehicleLocation.FAR, VehicleLocation.AOI_TO_FAR):
                 if self.__permanentNamesShow or self.__onAltNamesShow:
                     if hasattr(entries[id]['matrix'], 'source'):
                         self.__addEntryLit(id, entries[id]['matrix'].source, not self.__onAltNamesShow)
-                self.__delEntry(id)
-            elif location == VehicleLocation.AOI_TO_FAR:
-                if self.__permanentNamesShow or self.__onAltNamesShow:
-                    self.__addEntryLit(id, entries[id]['matrix'].source, not self.__onAltNamesShow)
                 self.__delEntry(id)
 
         return
@@ -522,7 +512,7 @@ class Minimap(object):
     def __validateEntries(self):
         entrySet = set(self.__entries.iterkeys())
         vehiclesSet = set(BigWorld.player().arena.vehicles.iterkeys())
-        playerOnlySet = set((self.__playerVehicleID,))
+        playerOnlySet = {self.__playerVehicleID}
         for id in vehiclesSet.difference(entrySet) - playerOnlySet:
             self.__onVehicleAdded(id)
 
@@ -649,6 +639,12 @@ class Minimap(object):
         elif matrix is None:
             return
         else:
+            arena = BigWorld.player().arena
+            entryVehicle = arena.vehicles[id]
+            entityName = battleCtx.getPlayerEntityName(id, entryVehicle.get('team'))
+            markerType = entityName.base
+            if self.__currentMode == MODE_POSTMORTEM and markerType == 'ally':
+                return
             mp = Math.WGReplayAwaredSmoothTranslationOnlyMP()
             mp.source = matrix
             scaledMatrix = None
@@ -662,10 +658,6 @@ class Minimap(object):
                 handle = self.__ownUI.addEntry(scaledMatrix, self.zIndexManager.getVehicleIndex(id))
             entry = {'matrix': mp,
              'handle': handle}
-            arena = BigWorld.player().arena
-            entryVehicle = arena.vehicles[id]
-            entityName = battleCtx.getPlayerEntityName(id, entryVehicle.get('team'))
-            markerType = entityName.base
             entryName = entityName.name()
             self.__entrieLits[id] = entry
             vName = entryVehicle['vehicleType'].type.shortUserString
@@ -685,6 +677,34 @@ class Minimap(object):
         if entry is not None:
             self.__ownUI.delEntry(entry['handle'])
         return
+
+    def __addEntryMarker(self, marker, matrix):
+        if matrix is None:
+            return
+        else:
+            mp = Math.WGReplayAwaredSmoothTranslationOnlyMP()
+            mp.source = matrix
+            scaledMatrix = None
+            if self.__markerScale is not None:
+                scaleMatrix = Matrix()
+                scaleMatrix.setScale(Vector3(self.__markerScale, self.__markerScale, self.__markerScale))
+                scaledMatrix = mathUtils.MatrixProviders.product(scaleMatrix, mp)
+            zIndex = self.zIndexManager.getMarkerIndex(marker)
+            if scaledMatrix is None:
+                handle = self.__ownUI.addEntry(mp, zIndex)
+            else:
+                handle = self.__ownUI.addEntry(scaledMatrix, zIndex)
+            entry = {'matrix': mp,
+             'handle': handle}
+            self.__entrieMarkers[marker] = entry
+            self.__ownUI.entryInvoke(entry['handle'], ('init', ['fortConsumables',
+              marker,
+              '',
+              '',
+              'empty']))
+            if self.__markerScale is None:
+                self.__parentUI.call('minimap.entryInited', [])
+            return handle
 
     def __addEntry(self, id, location, doMark):
         battleCtx = g_sessionProvider.getCtx()
@@ -714,7 +734,7 @@ class Minimap(object):
             entryName = entityName.name()
             markMarker = ''
             if not entityName.isFriend:
-                if doMark:
+                if doMark and not g_sessionProvider.getCtx().isPlayerObserver():
                     if 'SPG' in entryVehicle['vehicleType'].type.tags:
                         if not self.__isFirstEnemySPGMarkedById.has_key(id):
                             self.__isFirstEnemySPGMarkedById[id] = False
@@ -792,7 +812,7 @@ class Minimap(object):
         self.__currentMode = mode
         if self.__cameraHandle is not None:
             self.__ownUI.delEntry(self.__cameraHandle)
-        if mode == MODE_STRATEGIC:
+        if _isStrategic(mode):
             m = Math.WGStrategicAreaViewMP()
             m.source = BigWorld.camera().invViewMatrix
             m.baseScale = (1.0, 1.0)
@@ -819,16 +839,16 @@ class Minimap(object):
             self.__ownUI.entryInvoke(self.__cameraHandle, ('init', ['player', mode]))
         else:
             vehicle = BigWorld.entity(self.__playerVehicleID)
-            self.__cameraHandle = self.__ownUI.addEntry(m, self.zIndexManager.getIndexByName(CAMERA_STRATEGIC if mode == MODE_STRATEGIC else CAMERA_NORMAL))
+            self.__cameraHandle = self.__ownUI.addEntry(m, self.zIndexManager.getIndexByName(CAMERA_STRATEGIC if _isStrategic(mode) else CAMERA_NORMAL))
             self.__cameraMatrix = m
             cursorType = CURSOR_NORMAL
-            if mode == MODE_STRATEGIC:
+            if _isStrategic(mode):
                 cursorType = CURSOR_STRATEGIC
             self.__ownUI.entryInvoke(self.__cameraHandle, ('gotoAndStop', [cursorType]))
-            if vehicle.isAlive() and GUI_SETTINGS.showDirectionLine and self.__showDirectionLine and cursorType == CURSOR_NORMAL:
+            if vehicle.isAlive() and GUI_SETTINGS.showDirectionLine and self.__showDirectionLine and cursorType == CURSOR_NORMAL and not g_sessionProvider.getCtx().isPlayerObserver():
                 self.__ownUI.entryInvoke(self.__cameraHandle, ('showCameraDirectionLine', ()))
         playerMarker = 'normal'
-        if mode == MODE_STRATEGIC:
+        if _isStrategic(mode):
             playerMarker = 'strategic'
         elif mode == MODE_POSTMORTEM or mode == MODE_VIDEO:
             self.__resetVehicleIfObserved(self.__observedVehicleId)
@@ -851,7 +871,7 @@ class Minimap(object):
             if self.__ownEntry.has_key('handle'):
                 self.__ownUI.entrySetMatrix(self.__ownEntry['handle'], mp)
             self.__callEntryFlash(BigWorld.player().playerVehicleID, 'init', ['player', playerMarker])
-        if mode != MODE_STRATEGIC and self.__markerScale is not None:
+        if not _isStrategic(mode) and self.__markerScale is not None:
             self.scaleMarker(self.__cameraHandle, self.__cameraMatrix, self.__markerScale)
             vehicle = BigWorld.entity(self.__playerVehicleID)
             if vehicle.isAlive() and GUI_SETTINGS.showDirectionLine and self.__showDirectionLine:
@@ -872,8 +892,7 @@ class Minimap(object):
     def isSpg(self):
         vehicle = BigWorld.entity(self.__playerVehicleID)
         vTypeDesc = vehicle.typeDescriptor
-        type = vehicle_getter.getVehicleIndicatorType(vTypeDesc)
-        return type == 'SPG'
+        return 'SPG' in vTypeDesc.type.tags and vehicle_getter.hasYawLimits(vTypeDesc)
 
     def handleRepeatKeyEvent(self, event):
         if not MessengerEntry.g_instance.gui.isEditing(event):
@@ -908,6 +927,13 @@ class Minimap(object):
         self.__showDirectionLine = g_settingsCore.getSetting(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
         self.__showSectorLine = g_settingsCore.getSetting(settings_constants.GAME.SHOW_SECTOR_ON_MAP)
 
+    def __onEquipmentMarkerShown(self, item, pos, dir, time):
+        marker = item.getMarker()
+        mp = Math.Matrix()
+        mp.translation = pos
+        handle = self.__addEntryMarker(marker, mp)
+        BigWorld.callback(int(time), partial(self.__ownUI.delEntry, handle))
+
 
 class EntryInfo(object):
 
@@ -928,6 +954,7 @@ class MinimapZIndexManager(object):
     _BACK_ICONS_RANGE = (25, 49)
     _DEAD_VEHICLE_RANGE = (50, 99)
     _VEHICLE_RANGE = (101, 150)
+    _MARKER_RANGE = (161, 180)
     _FIXED_INDEXES = {CAMERA_NORMAL: 100,
      'self': 151,
      CAMERA_STRATEGIC: 152,
@@ -941,6 +968,7 @@ class MinimapZIndexManager(object):
         self.__lastVehIndex = MinimapZIndexManager._VEHICLE_RANGE[0]
         self.__lastDeadVehIndex = MinimapZIndexManager._DEAD_VEHICLE_RANGE[0]
         self.__lastBackIconIndex = MinimapZIndexManager._BACK_ICONS_RANGE[0]
+        self.__lastMarkerIndex = MinimapZIndexManager._MARKER_RANGE[0]
 
     def getTeamPointIndex(self):
         self.__lastPointIndex += 1
@@ -962,6 +990,12 @@ class MinimapZIndexManager(object):
         if not self.__indexes.has_key(id):
             self.__indexes[id] = self.__lastBackIconIndex
             self.__lastBackIconIndex += 1
+        return self.__indexes[id]
+
+    def getMarkerIndex(self, id):
+        if not self.__indexes.has_key(id):
+            self.__indexes[id] = self.__lastMarkerIndex
+            self.__lastMarkerIndex += 1
         return self.__indexes[id]
 
     def getIndexByName(self, name):

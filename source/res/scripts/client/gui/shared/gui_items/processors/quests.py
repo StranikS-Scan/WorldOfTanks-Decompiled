@@ -41,7 +41,7 @@ class PotapovQuestSelect(_PotapovQuestsSelect):
 
     def __init__(self, quest):
         super(PotapovQuestSelect, self).__init__(g_eventsCache.potapov.getSelectedQuests().values() + [quest])
-        self.addPlugins([plugins.PotapovQuestSlotsValidator(), plugins.PotapovQuestChainsValidator(quest)])
+        self.addPlugins([plugins.PotapovQuestSlotsValidator(), plugins.PotapovQuestChainsValidator(quest), plugins.PotapovQuestSeasonsValidator(quest)])
 
     def _getMessagePrefix(self):
         return 'potapovQuests/select'

@@ -81,6 +81,7 @@ class BATTLE_RESULTS(object):
     COMMON_DETAILS_XPTITLEFIRSTVICTORY = '#battle_results:common/details/xpTitleFirstVictory'
     COMMON_DETAILS_RESOURCE = '#battle_results:common/details/resource'
     COMMON_DETAILS_DETAILEDREPORTBTN = '#battle_results:common/details/detailedReportBtn'
+    COMMON_RESULTSSHAREBTN = '#battle_results:common/resultsShareBtn'
     COMMON_DETAILS_BUYPREMIUMBTN = '#battle_results:common/details/buyPremiumBtn'
     TEAM_STATS_OWNTEAM = '#battle_results:team/stats/ownTeam'
     TEAM_STATS_ENEMYTEAM = '#battle_results:team/stats/enemyTeam'
@@ -103,6 +104,7 @@ class BATTLE_RESULTS(object):
     TEAM_RESOURCEHEADER_HEADER = TEAM_RESOURCEHEADER + '/header'
     TEAM_RESOURCEHEADER_BODY = TEAM_RESOURCEHEADER + '/body'
     TEAM_TEAMRESOURCETOTAL = '#battle_results:team/teamResourceTotal'
+    TEAM_TEAMINFLUENCETOTAL = '#battle_results:team/teamInfluenceTotal'
     TEAM_STATS_LABELS_SHOTS = '#battle_results:team/stats/labels_shots'
     TEAM_STATS_LABELS_HITS = '#battle_results:team/stats/labels_hits'
     TEAM_STATS_LABELS_EXPLOSIONHITS = '#battle_results:team/stats/labels_explosionHits'
@@ -121,7 +123,6 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_DAMAGEASSISTEDSELF = '#battle_results:team/stats/labels_damageAssistedSelf'
     TEAM_STATS_LABELS_CAPTUREPOINTSVAL = '#battle_results:team/stats/labels_capturePointsVal'
     TEAM_STATS_LABELS_MILEAGE = '#battle_results:team/stats/labels_mileage'
-    TEAM_STATS_LABELS_HEALEDHP = '#battle_results:team/stats/labels_healedHP'
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
     TEAM_STATS_CLOSE = '#battle_results:team/stats/close'
     DETAILS_STATS = '#battle_results:details/stats'
@@ -159,6 +160,8 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_FORTORDER = '#battle_results:details/calculations/fortOrder'
     DETAILS_CALCULATIONS_REFERRALBONUS = '#battle_results:details/calculations/referralBonus'
     TANKSELECTOR_NEXT = '#battle_results:tankSelector/next'
+    PLAYERS_TEAMMATE_UNKNOWN = '#battle_results:players/teammate/unknown'
+    PLAYERS_ENEMY_UNKNOWN = '#battle_results:players/enemy/unknown'
     COMMON_TOOLTIP_ENUM = (COMMON_TOOLTIP_ASSIST_HEADER,
      COMMON_TOOLTIP_ASSIST_DESCRIPTION,
      COMMON_TOOLTIP_ASSIST_PART1,

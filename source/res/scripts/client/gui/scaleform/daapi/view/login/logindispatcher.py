@@ -1,5 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/LoginDispatcher.py
 import json
+import BigWorld
+import constants
+import Settings
 from ConnectionManager import connectionManager
 from Event import Event
 from PlayerEvents import g_playerEvents
@@ -20,13 +23,11 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui import DialogsInterface
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
+from gui.social_network_login.Bridge import bridge as socialNetworkLogin
 from helpers import i18n
 from helpers.i18n import makeString
 from helpers.time_utils import makeLocalServerTime
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_TIMEOUT, getHostURL, REQUEST_RATE, HOST_AVAILABILITY
-import BigWorld
-import constants
-import Settings
 __author__ = 'd_trofimov'
 
 class LoginDispatcher(DisposableEntity, AppRef):
@@ -134,7 +135,7 @@ class LoginDispatcher(DisposableEntity, AppRef):
         self.__onLoggingTryingEndHdlr = None
         return
 
-    def onLogin(self, user, password, host, hdlr):
+    def onLogin(self, user, password, host, hdlr, isSocialToken2Login = False):
         self.__onLoggingTryingEndHdlr = hdlr
         self.__kickedFromServer = False
         self.__kickPeripheryID = None
@@ -143,7 +144,7 @@ class LoginDispatcher(DisposableEntity, AppRef):
             self.__closeCallbackId = None
         if g_steamAccount.isValid:
             user, password = g_steamAccount.getCredentials()
-        else:
+        elif not isSocialToken2Login:
             user = user.lower().strip()
             if len(user) < _LOGIN_NAME_MIN_LENGTH:
                 self.onSetStatus(i18n.makeString(MENU.LOGIN_STATUS_INVALID_LOGIN_LENGTH) % {'count': _LOGIN_NAME_MIN_LENGTH}, self.LOGIN_INVALID)
@@ -274,7 +275,12 @@ class LoginDispatcher(DisposableEntity, AppRef):
             elif connectionManager.isVersionsDiffered:
                 msg = ''
                 self.onHandleUpdateClientSoftwareNeeded()
-            self.onSetStatus(i18n.convert(i18n.makeString(msg)), self.ALL_VALID)
+            localizedMessage = i18n.convert(i18n.makeString(msg))
+            lastLoginType = Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('lastLoginType', 'basic')
+            if lastLoginType not in ('basic', 'wgni') and not Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readBool('rememberPwd', False):
+                from gui.social_network_login import Bridge as socialNetworkLogin
+                localizedMessage = socialNetworkLogin.getLogoutWarning(lastLoginType, False)
+            self.onSetStatus(localizedMessage, self.ALL_VALID)
             connectionManager.disconnect()
         return
 
@@ -295,7 +301,11 @@ class LoginDispatcher(DisposableEntity, AppRef):
             return
 
         token2 = str(msg_dict.get('token2', ''))
-        g_lobbyContext.setCredentials(self.__loginDataLoader.user, token2)
+        user = str(msg_dict.get('name', 'UNKNOWN'))
+        Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].writeString('user', user)
+        Settings.g_instance.save()
+        g_lobbyContext.setCredentials(user, token2)
+        socialNetworkLogin.setCredentials(user, token2)
         self.__loginDataLoader.saveUserToken(self.__loginDataLoader.passLength, token2)
         peripheryID, _ = g_preDefinedHosts.readPeripheryTL()
         if peripheryID != connectionManager.peripheryID:

@@ -7,7 +7,7 @@ from helpers.time_utils import makeLocalServerTime
 import messenger
 from messenger.m_constants import MESSENGER_I18N_FILE
 from messenger.proto.bw.cooldown import getOperationInCooldownMsg
-from messenger.proto.interfaces import IServerError
+from messenger.proto.interfaces import IChatError
 
 class ChannelNotFound(messenger.error):
 
@@ -19,7 +19,7 @@ class ChannelNotFound(messenger.error):
         return 'Not found a channel with id = %d, the first request from the server information on the channel with this id' % self.cid
 
 
-class ChatActionError(IServerError):
+class ChatActionError(IChatError):
 
     def __init__(self, title, message, isModal = False):
         super(ChatActionError, self).__init__()

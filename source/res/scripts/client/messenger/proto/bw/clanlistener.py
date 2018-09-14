@@ -3,9 +3,9 @@ import BigWorld
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from messenger.ext.player_helpers import getPlayerDatabaseID
-from messenger.proto.bw.entities import BWUserEntity
+from messenger.m_constants import USER_TAG
 from messenger.proto.bw.find_criteria import BWClanChannelFindCriteria
-from messenger.proto.entities import CurrentUserEntity
+from messenger.proto.entities import CurrentUserEntity, SharedUserEntity
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
@@ -85,11 +85,11 @@ class ClanListener(object):
             if member is not None:
                 if not isOnline:
                     user.update(isOnline=True)
-                    events.onUserRosterStatusUpdated(user)
+                    events.onUserStatusUpdated(user)
                     changed = True
             elif isOnline:
                 user.update(isOnline=False)
-                events.onUserRosterStatusUpdated(user)
+                events.onUserStatusUpdated(user)
                 changed = True
 
         if changed:
@@ -113,7 +113,7 @@ class ClanListener(object):
             if playerID == dbID:
                 user = CurrentUserEntity(dbID, name=name, clanAbbrev=clanAbbrev, clanRole=roleFlags)
             else:
-                user = BWUserEntity(dbID, name=name, clanAbbrev=clanAbbrev, clanRole=roleFlags, isOnline=isOnline)
+                user = SharedUserEntity(dbID, name=name, clanAbbrev=clanAbbrev, clanRole=roleFlags, isOnline=isOnline, tags={USER_TAG.CLAN_MEMBER})
             members.append(user)
 
         self.usersStorage._setClanMembersList(members)

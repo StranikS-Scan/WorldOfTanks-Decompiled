@@ -25,6 +25,7 @@ class QUESTS(object):
     BONUSES_CUSTOMIZATION_VALUE = '#quests:bonuses/customization/value'
     BONUSES_VEHICLES_NAME = '#quests:bonuses/vehicles/name'
     BONUSES_VEHICLES_CREWLVL = '#quests:bonuses/vehicles/crewLvl'
+    BONUSES_VEHICLES_RENTDAYS = '#quests:bonuses/vehicles/rentDays'
     BONUSES_VEHICLES_DESCRIPTION = '#quests:bonuses/vehicles/description'
     BONUSES_ITEM_TANKMENXP = '#quests:bonuses/item/tankmenXP'
     BONUSES_ITEM_XPFACTOR = '#quests:bonuses/item/xpFactor'
@@ -40,6 +41,8 @@ class QUESTS(object):
     BONUSES_TANKMEN_DESCRIPTION = '#quests:bonuses/tankmen/description'
     BONUSES_ITEM_TANKWOMAN = '#quests:bonuses/item/tankwoman'
     BONUSES_ITEM_ADDITIONBONUS = '#quests:bonuses/item/additionBonus'
+    BONUSES_ITEM_TANKMEN_NO_SKILLS = '#quests:bonuses/item/tankmen/no_skills'
+    BONUSES_ITEM_TANKMEN_WITH_SKILLS = '#quests:bonuses/item/tankmen/with_skills'
     QUESTS_TITLE = '#quests:quests/title'
     QUESTS_CONDITIONS = '#quests:quests/conditions'
     QUESTS_REQUIREMENTS = '#quests:quests/requirements'
@@ -97,8 +100,11 @@ class QUESTS(object):
     ITEM_TIMER_TILLFINISH_ONLYHOURS = '#quests:item/timer/tillFinish/onlyHours'
     ITEM_TIMER_TILLFINISH_LESSTHANHOUR = '#quests:item/timer/tillFinish/lessThanHour'
     ITEM_TIMER_TILLFINISH_SHORTFORMAT = '#quests:item/timer/tillFinish/shortFormat'
+    ITEM_TIMER_TILLFINISH_SHORTFULLFORMAT = '#quests:item/timer/tillFinish/shortFullFormat'
+    ITEM_TIMER_TILLFINISH_LONGFULLFORMAT = '#quests:item/timer/tillFinish/longFullFormat'
     PERSONAL_SEASONS_AWARDSBUTTON = '#quests:personal/seasons/awardsButton'
     PERSONAL_SEASONS_ITEMTITLE = '#quests:personal/seasons/itemTitle'
+    PERSONAL_SEASONS_SHORTSEASONNAME = '#quests:personal/seasons/shortSeasonName'
     PERSONAL_SEASONS_TILELABEL = '#quests:personal/seasons/tileLabel'
     PERSONAL_SEASONS_TILEPROGRESS = '#quests:personal/seasons/tileProgress'
     PERSONAL_SEASONS_SLOTS_NODATA = '#quests:personal/seasons/slots/noData'
@@ -131,6 +137,7 @@ class QUESTS(object):
     DETAILS_HEADER_COMPLETION_SINGLE_GROUPBYNATION = '#quests:details/header/completion/single/groupByNation'
     DETAILS_HEADER_COMPLETION_SINGLE_GROUPBYLEVEL = '#quests:details/header/completion/single/groupByLevel'
     DETAILS_HEADER_COMPLETION_SINGLE_GROUPBYCLASS = '#quests:details/header/completion/single/groupByClass'
+    DETAILS_HEADER_COMETOEND = '#quests:details/header/comeToEnd'
     DETAILS_TASKS_SUBTASK = '#quests:details/tasks/subTask'
     DETAILS_TASKS_NEXTTASK = '#quests:details/tasks/nextTask'
     DETAILS_TASKS_STRATEGIC = '#quests:details/tasks/strategic'
@@ -563,6 +570,7 @@ class QUESTS(object):
     DETAILS_MODIFIERS_ECONOMICS_EXCHANGERATEFORSHELLSANDEQS = '#quests:details/modifiers/economics/exchangeRateForShellsAndEqs'
     DETAILS_MODIFIERS_ECONOMICS_PAIDREMOVALCOST = '#quests:details/modifiers/economics/paidRemovalCost'
     DETAILS_MODIFIERS_ECONOMICS_PASSPORTCHANGECOST = '#quests:details/modifiers/economics/passportChangeCost'
+    DETAILS_MODIFIERS_ECONOMICS_FEMALEPASSPORTCHANGECOST = '#quests:details/modifiers/economics/femalePassportChangeCost'
     DETAILS_MODIFIERS_ECONOMICS_CLANCREATIONCOST = '#quests:details/modifiers/economics/clanCreationCost'
     DETAILS_MODIFIERS_ECONOMICS_FREEXPCONVERSIONDISCRECITY = '#quests:details/modifiers/economics/freeXPConversionDiscrecity'
     DETAILS_MODIFIERS_ECONOMICS_FREEXPTOTMANXPRATE = '#quests:details/modifiers/economics/freeXPToTManXPRate'
@@ -674,17 +682,17 @@ class QUESTS(object):
     QUESTTASKDETAILSVIEW_TASKDESCRIPTION_DOPREVTASKS = '#quests:QuestTaskDetailsView/taskDescription/doPrevTasks'
     QUESTTASKDETAILSVIEW_TASKDESCRIPTION_ONLYONETASK = '#quests:QuestTaskDetailsView/taskDescription/onlyOneTask'
     QUESTTASKDETAILSVIEW_FORADDITIONALAWARD = '#quests:QuestTaskDetailsView/forAdditionalAward'
+    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK3)
+    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3)
     QUESTSCONTROL_ADDITIONALTITLE_ENUM = (QUESTSCONTROL_ADDITIONALTITLE_NEEDRECEIVEDAWARD,
      QUESTSCONTROL_ADDITIONALTITLE_FREESLOTSANDFREEQUESTS,
      QUESTSCONTROL_ADDITIONALTITLE_FIRSTRUN,
      QUESTSCONTROL_ADDITIONALTITLE_EMPTY)
-    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3)
-    QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM = (QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK1, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK2, QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK3)
 
     @staticmethod
-    def questscontrol_additionaltitle(key):
-        outcome = '#quests:questsControl/additionalTitle/%s' % key
-        if outcome not in QUESTS.QUESTSCONTROL_ADDITIONALTITLE_ENUM:
+    def questspersonalwelcomeview_textblock_header(key):
+        outcome = '#quests:QuestsPersonalWelcomeView/textBlock/header/%s' % key
+        if outcome not in QUESTS.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 
@@ -696,8 +704,8 @@ class QUESTS(object):
         return outcome
 
     @staticmethod
-    def questspersonalwelcomeview_textblock_header(key):
-        outcome = '#quests:QuestsPersonalWelcomeView/textBlock/header/%s' % key
-        if outcome not in QUESTS.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:
+    def questscontrol_additionaltitle(key):
+        outcome = '#quests:questsControl/additionalTitle/%s' % key
+        if outcome not in QUESTS.QUESTSCONTROL_ADDITIONALTITLE_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome

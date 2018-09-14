@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/proto/entities.py
 from collections import deque
 from gui.LobbyContext import g_lobbyContext
-from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE
+from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG
 from messenger.proto.events import ChannelEvents, MemberEvents
 from messenger.storage import storage_getter
 
@@ -19,6 +19,12 @@ class ChatEntity(object):
 
     def getProtoType(self):
         return 0
+
+    def getPersistentState(self):
+        return None
+
+    def setPersistentState(self, state):
+        return False
 
 
 class _ChatCommand(ChatEntity):
@@ -278,6 +284,9 @@ class MemberEntity(ChatEntity, MemberEvents):
         self._status = status
         self.onMemberStatusChanged(self)
 
+    def isOnline(self):
+        return True
+
     def update(self, **kwargs):
         if 'status' in kwargs:
             self.setStatus(kwargs['status'])
@@ -294,21 +303,19 @@ class MemberEntity(ChatEntity, MemberEvents):
 
 
 class UserEntity(ChatEntity):
-    __slots__ = ('_databaseID', '_name', '_roster', '_isOnline', '_clanAbbrev', '_clanRole', '_group', '_isInXMPP')
+    __slots__ = ('_databaseID', '_name', '_note', '_tags', '_clanAbbrev', '_clanRole')
 
-    def __init__(self, databaseID, name = 'Unknown', roster = 0, isOnline = False, clanAbbrev = None, clanRole = 0, isInXMPP = False, group = None):
+    def __init__(self, databaseID, name = 'Unknown', tags = None, clanAbbrev = None, clanRole = 0):
         super(UserEntity, self).__init__()
         self._databaseID = databaseID
         self._name = name
-        self._roster = roster
-        self._isOnline = isOnline
-        self._isInXMPP = isInXMPP
+        self._note = ''
+        self._tags = tags or set()
         self._clanAbbrev = clanAbbrev
         self._clanRole = clanRole
-        self._group = group
 
     def __repr__(self):
-        return 'UserEntity(dbID={0!r:s}, fullName={1:>s}, roster={2:n}, isOnline={3!r:s}/{4!r:s}, clanRole={5:n})'.format(self._databaseID, self.getFullName(), self._roster, self._isOnline, self._isInXMPP, self._clanRole)
+        return 'UserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, clanRole={3:n})'.format(self._databaseID, self.getFullName(), self._tags, self._clanRole)
 
     def __eq__(self, other):
         return self.getID() == other.getID()
@@ -331,24 +338,32 @@ class UserEntity(ChatEntity):
             pDBID = self._databaseID
         else:
             pDBID = None
-        return g_lobbyContext.getPlayerFullName(self._name, clanAbbrev=clanAbbrev, pDBID=pDBID)
+        return g_lobbyContext.getPlayerFullName(self.getName(), clanAbbrev=clanAbbrev, pDBID=pDBID)
 
-    def getGroup(self):
-        return None
+    def getGroups(self):
+        return set()
 
-    def getRoster(self):
-        return self._roster
+    def getTags(self):
+        return self._tags.copy()
+
+    def addTags(self, tags):
+        self._tags = self._tags.union(tags)
+
+    def removeTags(self, tags):
+        self._tags = self._tags.difference(tags)
 
     def getGuiType(self):
-        name = USER_GUI_TYPE.OTHER
         if self.isFriend():
-            return USER_GUI_TYPE.FRIEND
-        if self.isIgnored():
+            if USER_TAG.SUB_TO in self.getTags():
+                return USER_GUI_TYPE.FRIEND
+            else:
+                return USER_GUI_TYPE.OTHER
+        elif self.isIgnored():
             return USER_GUI_TYPE.IGNORED
-        return name
+        return USER_GUI_TYPE.OTHER
 
     def isOnline(self):
-        return self._isOnline or self._isInXMPP
+        return False
 
     def getClanAbbrev(self):
         return self._clanAbbrev
@@ -356,27 +371,36 @@ class UserEntity(ChatEntity):
     def getClanRole(self):
         return self._clanRole
 
+    def getNote(self):
+        return self._note
+
     def isCurrentPlayer(self):
         return False
 
     def isFriend(self):
-        return False
+        return USER_TAG.FRIEND in self.getTags()
 
     def isIgnored(self):
-        return False
+        return USER_TAG.IGNORED in self.getTags()
 
     def isMuted(self):
-        return False
+        return USER_TAG.MUTED in self.getTags()
+
+    def setSharedProps(self, other):
+        self._clanAbbrev = other.getClanAbbrev()
+        self._clanRole = other.getClanRole()
+        tags = USER_TAG.filterSharedTags(other.getTags())
+        if tags:
+            self.addTags(tags)
+        return True
 
     def update(self, **kwargs):
         if 'name' in kwargs:
             self._name = kwargs['name']
-        if 'roster' in kwargs:
-            self._roster = kwargs['roster']
-        if 'isOnline' in kwargs:
-            self._isOnline = kwargs['isOnline']
-        if 'isInXMPP' in kwargs:
-            self._isInXMPP = kwargs['isInXMPP']
+        if 'note' in kwargs:
+            self._note = kwargs['note']
+        if 'tags' in kwargs:
+            self._tags = kwargs['tags']
         if 'clanAbbrev' in kwargs:
             self._clanAbbrev = kwargs['clanAbbrev']
         if 'clanRole' in kwargs:
@@ -386,29 +410,61 @@ class UserEntity(ChatEntity):
             self._name = member.getName()
             self._clanAbbrev = member.getClanAbbrev()
             self._clanRole = member.getClanRole()
+            self._tags.add(USER_TAG.CLAN_MEMBER)
         if 'noClan' in kwargs and kwargs['noClan']:
             self._clanAbbrev = None
             self._clanRole = 0
+            self._tags.discard(USER_TAG.CLAN_MEMBER)
         return
 
     def clear(self):
         self._databaseID = 0
-        self._name = ''
-        self._roster = 0
-        self._isOnline = False
-        self._isInXMPP = False
+        self._name = 'Unknown'
+        self._tags = set()
         self._clanAbbrev = None
         self._clanRole = 0
         return
 
 
+class SharedUserEntity(UserEntity):
+    __slots__ = ('_isOnline',)
+
+    def __init__(self, databaseID, name = 'Unknown', tags = None, isOnline = False, clanAbbrev = None, clanRole = 0):
+        super(SharedUserEntity, self).__init__(databaseID, name, tags, clanAbbrev, clanRole)
+        self._tags = tags or set()
+        self._isOnline = isOnline
+
+    def __repr__(self):
+        return 'SharedUserEntity(dbID={0!r:s}, fullName={1:>s}, tags={2!r:s}, isOnline={3!r:s}, clanRole={4:n})'.format(self._databaseID, self.getFullName(), self._tags, self._isOnline, self._clanRole)
+
+    def isOnline(self):
+        return self._isOnline
+
+    def update(self, **kwargs):
+        if 'isOnline' in kwargs:
+            self._isOnline = kwargs['isOnline']
+        super(SharedUserEntity, self).update(**kwargs)
+
+    def clear(self):
+        super(SharedUserEntity, self).clear()
+        self._isOnline = False
+
+
 class CurrentUserEntity(UserEntity):
 
     def __init__(self, databaseID, name = 'Unknown', clanAbbrev = None, clanRole = 0):
-        super(CurrentUserEntity, self).__init__(databaseID, name=name, isOnline=True, clanAbbrev=clanAbbrev, clanRole=clanRole)
+        super(CurrentUserEntity, self).__init__(databaseID, name=name, clanAbbrev=clanAbbrev, clanRole=clanRole, tags={USER_TAG.CURRENT})
 
     def __repr__(self):
         return 'CurrentUserEntity(dbID={0!r:s}, fullName={1:>s}, clanRole={2:n})'.format(self._databaseID, self.getFullName(), self._clanRole)
+
+    def getTags(self):
+        tags = super(CurrentUserEntity, self).getTags()
+        tags.add(USER_TAG.CURRENT)
+        return tags
+
+    def isOnline(self):
+        return True
 
     def getGuiType(self):
         return USER_GUI_TYPE.CURRENT_PLAYER

@@ -1,10 +1,11 @@
 # Embedded file name: scripts/client/ClientUnitMgr.py
 import cPickle
 from ClientUnit import ClientUnit
+from UnitBase import UnitBase
 import Event
 import constants
-from debug_utils import *
-from UnitBase import UnitBase, UNIT_SLOT, UNIT_BROWSER_CMD, CLIENT_UNIT_CMD, INV_ID_CLEAR_VEHICLE
+from debug_utils import LOG_DEBUG, LOG_DAN, LOG_CURRENT_EXCEPTION
+from UnitBase import UNIT_SLOT, UNIT_BROWSER_CMD, CLIENT_UNIT_CMD, INV_ID_CLEAR_VEHICLE, UNIT_BROWSER_TYPE
 from UnitRoster import UnitRosterSlot
 from gui.shared import g_itemsCache
 import AccountCommands
@@ -77,11 +78,13 @@ class ClientUnitMgr(object):
 
     def create(self, unitMgrFlags = 0):
         requestID = self.__getNextRequestID()
+        LOG_DAN('unit.createUnitMgr', requestID, unitMgrFlags)
         self.__account.base.createUnitMgr(requestID, unitMgrFlags)
         return requestID
 
     def join(self, unitMgrID, unitIdx = 1, vehInvID = 0, slotIdx = UNIT_SLOT.REMOVE):
         requestID = self.__getNextRequestID()
+        LOG_DAN('unit.joinUnit', requestID, unitMgrID, unitIdx, slotIdx)
         self.__account.base.joinUnit(requestID, unitMgrID, unitIdx, slotIdx)
         return requestID
 
@@ -91,6 +94,7 @@ class ClientUnitMgr(object):
             unitMgrID = self.id
         if not unitIdx:
             unitIdx = self.unitIdx
+        LOG_DAN('unit.__doUnitCmd', cmd, requestID, unitMgrID, unitIdx, uint64Arg, int32Arg, strArg)
         self.__account.base.doUnitCmd(cmd, requestID, unitMgrID, unitIdx, uint64Arg, int32Arg, strArg)
         return requestID
 
@@ -146,8 +150,8 @@ class ClientUnitMgr(object):
             rSlot = UnitRosterSlot(vehTypeID, nationNames, levels, vehClassNames)
             rosterSlots[rosterSlotIdx] = rSlot.pack()
 
-        LOG_DAN('setAllRosterSlots: rosterSlots=%r' % rosterSlots)
         requestID = self.__getNextRequestID()
+        LOG_DAN('unit.setAllRosterSlots: rosterSlots=%r' % rosterSlots, requestID, self.id, unitIdx)
         self.__account.base.setAllRosterSlots(requestID, self.id, unitIdx, rosterSlots.keys(), rosterSlots.values())
         return requestID
 
@@ -166,6 +170,7 @@ class ClientUnitMgr(object):
 
     def invite(self, accountsToInvite, comment):
         requestID = self.__getNextRequestID()
+        LOG_DAN('unit.sendUnitInvites', requestID, accountsToInvite, comment)
         self.__account.base.sendUnitInvites(requestID, accountsToInvite, comment)
         return requestID
 
@@ -186,6 +191,9 @@ class ClientUnitMgr(object):
 
     def giveLeadership(self, memberDBID, unitIdx = 0):
         return self.__doUnitCmd(CLIENT_UNIT_CMD.GIVE_LEADERSHIP, self.id, unitIdx, memberDBID)
+
+    def changeSortieDivision(self, division, unitIdx = 0):
+        return self.__doUnitCmd(CLIENT_UNIT_CMD.CHANGE_SORTIE_DIVISION, self.id, unitIdx, division)
 
     def _clearUnits(self):
         while len(self.units):
@@ -213,26 +221,32 @@ class ClientUnitBrowser(object):
         self.results.clear()
         return
 
-    def subscribe(self, vehTypes = [], showOtherLocations = False):
+    def subscribe(self, unitTypeFlags = UNIT_BROWSER_TYPE.NOT_RATED_UNITS, vehTypes = [], showOtherLocations = False):
         self.results = {}
-        self.__account.base.subscribeUnitBrowser(vehTypes, showOtherLocations)
+        LOG_DAN('unitBrowser.subscribeUnitBrowser', unitTypeFlags, vehTypes, showOtherLocations)
+        self.__account.base.subscribeUnitBrowser(unitTypeFlags, vehTypes, showOtherLocations)
 
     def unsubscribe(self):
         self.results = {}
         self.__account.base.unsubscribeUnitBrowser()
+        LOG_DAN('unitBrowser.unsubscribeUnitBrowser')
 
-    def recenter(self, targetRating, vehTypes = [], showOtherLocations = False):
+    def recenter(self, targetRating, unitTypeFlags = UNIT_BROWSER_TYPE.NOT_RATED_UNITS, vehTypes = [], showOtherLocations = False):
         self.results = {}
-        self.__account.base.recenterUnitBrowser(targetRating, vehTypes, showOtherLocations)
+        LOG_DAN('unitBrowser.recenterUnitBrowser', targetRating, unitTypeFlags, vehTypes, showOtherLocations)
+        self.__account.base.recenterUnitBrowser(targetRating, unitTypeFlags, vehTypes, showOtherLocations)
 
     def left(self):
+        LOG_DAN('unitBrowser.doUnitBrowserCmd', UNIT_BROWSER_CMD.LEFT)
         self.__account.base.doUnitBrowserCmd(UNIT_BROWSER_CMD.LEFT)
 
     def right(self):
+        LOG_DAN('unitBrowser.doUnitBrowserCmd', UNIT_BROWSER_CMD.RIGHT)
         self.__account.base.doUnitBrowserCmd(UNIT_BROWSER_CMD.RIGHT)
 
     def refresh(self):
         self.results = {}
+        LOG_DAN('unitBrowser.doUnitBrowserCmd', UNIT_BROWSER_CMD.REFRESH)
         self.__account.base.doUnitBrowserCmd(UNIT_BROWSER_CMD.REFRESH)
 
     def onError(self, errorCode, errorString):
@@ -279,7 +293,6 @@ class ClientUnitBrowser(object):
         self.__account.enqueueUnitAssembler(vehTypes)
 
     def _search(self, vehInvIDs = []):
-        vehTypes = []
         for vehInvID in vehInvIDs:
             vehicle = g_itemsCache.items.getVehicle(vehInvID)
             LOG_DAN('vehicle[%s]=%r' % (vehInvID, vehicle))
@@ -298,10 +311,12 @@ class ClientUnitBrowser(object):
         if not unitMgrID:
             unitMgrID = self._acceptUnitMgrID
             unitIdx = self._acceptUnitIdx
+        LOG_DAN('unitBrowser.acceptUnitAutoSearch', unitMgrID, unitIdx)
         self.__account.base.acceptUnitAutoSearch(unitMgrID, unitIdx)
 
     def declineSearch(self, unitMgrID = 0, unitIdx = 0):
         if not unitMgrID:
             unitMgrID = self._acceptUnitMgrID
             unitIdx = self._acceptUnitIdx
+        LOG_DAN('unitBrowser.declineSearch', unitMgrID, unitIdx)
         self.__account.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_UNIT_ASSEMBLER, unitMgrID, unitIdx, 0)

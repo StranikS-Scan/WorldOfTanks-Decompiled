@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/ParametersCache.py
 from gui.shared.utils import RELOAD_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, CLIP_VEHICLES_PROP_NAME, CLIP_VEHICLES_CD_PROP_NAME, GUN_CLIP, GUN_CAN_BE_CLIP, GUN_NORMAL
+from items import artefacts
 from items.vehicles import getVehicleType
-__author__ = 'i_maliavko'
 import BigWorld, nations, math, sys
 from debug_utils import *
 from helpers import i18n
@@ -82,14 +82,32 @@ class _ParametersCache(object):
         self.__cache.setdefault(nations.NONE_INDEX, {})[vehicles._EQUIPMENT] = {}
         equipments = self.__getItems(vehicles._EQUIPMENT, nations.NONE_INDEX)
         for eqpDescr in equipments:
-            equipmentNations = set()
+            equipmentNations, params = set(), {}
             for vDescr in self.__getItems(vehicles._VEHICLE):
                 if not eqpDescr.checkCompatibilityWithVehicle(vDescr)[0]:
                     continue
                 nation, id = vDescr.type.id
                 equipmentNations.add(nation)
 
-            self.__cache[nations.NONE_INDEX][vehicles._EQUIPMENT][eqpDescr.compactDescr] = {'nations': equipmentNations}
+            eqDescrType = type(eqpDescr)
+            if eqDescrType is artefacts.Artillery:
+                shellDescr = vehicles.getDictDescr(eqpDescr.shellCompactDescr)
+                shellParams = self.getShellParameters(shellDescr)
+                params.update({'damage': (shellDescr['damage'][0], shellDescr['damage'][0]),
+                 'piercingPower': eqpDescr.piercingPower,
+                 'caliber': shellParams['caliber'],
+                 'shotsNumberRange': eqpDescr.shotsNumberRange,
+                 'areaRadius': eqpDescr.areaRadius,
+                 'artDelayRange': eqpDescr.delayRange})
+            elif eqDescrType is artefacts.Bomber:
+                shellDescr = vehicles.getDictDescr(eqpDescr.shellCompactDescr)
+                params.update({'bombDamage': (shellDescr['damage'][0], shellDescr['damage'][0]),
+                 'piercingPower': eqpDescr.piercingPower,
+                 'bombsNumberRange': eqpDescr.bombsNumberRange,
+                 'areaSquare': eqpDescr.areaLength * eqpDescr.areaWidth,
+                 'flyDelayRange': eqpDescr.delayRange})
+            self.__cache[nations.NONE_INDEX][vehicles._EQUIPMENT][eqpDescr.compactDescr] = {'nations': equipmentNations,
+             'avgParams': params}
 
     def __precachOptionalDevices(self):
         self.__cache.setdefault(nations.NONE_INDEX, {})[vehicles._OPTIONALDEVICE] = {}
@@ -310,8 +328,10 @@ class _ParametersCache(object):
          'reloadTimeSecs': round(self.__SEC_IN_MINUTE / shotsPerMinute)}
 
     def getEquipmentParameters(self, itemDescr, _ = None):
-        eqpNations = self.__getParamFromCache(itemDescr['compactDescr'], 'nations', default=nations.INDICES.values())
-        return {'nations': eqpNations}
+        intCD = itemDescr['compactDescr']
+        result = {'nations': self.__getParamFromCache(intCD, 'nations', default=nations.INDICES.values())}
+        result.update(self.__getParamFromCache(intCD, 'avgParams', default={}))
+        return result
 
     def getOptionalDeviceParameters(self, itemDescr, vehicleDescr = None):
         weight = 0

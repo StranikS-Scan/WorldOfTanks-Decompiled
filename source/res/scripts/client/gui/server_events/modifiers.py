@@ -449,6 +449,7 @@ class EconomicsSet(ActionModifier):
          ('slotsPrices', bwr(self._handlerSlotsPrices)),
          ('creditsTankmanCost', bwr(self._handlerCreditsTankmanCost)),
          ('goldTankmanCost', bwr(self._handlerGoldTankmanCost)),
+         ('changeRoleCost', bwr(self._handlerChangeRoleCost)),
          ('creditsDropSkillsCost', bwr(self._handlerCreditsDropSkillsCost)),
          ('goldDropSkillsCost', bwr(self._handlerGoldDropSkillsCost)),
          ('clanCreationCost', bwr(self._handlerClanCreationCost)),
@@ -514,6 +515,10 @@ class EconomicsSet(ActionModifier):
             return self.__pack('goldTankmanCost', value, tankmanCost[2]['gold'], _DT.PERCENT)
         else:
             return float(value)
+
+    def _handlerChangeRoleCost(self, value):
+        default = g_itemsCache.items.shop.defaults.changeRoleCost
+        return self.__pack('changeRoleCost', value, default, _DT.PERCENT)
 
     def _handlerCreditsDropSkillsCost(self, value):
         dropSkillsCost = g_itemsCache.items.shop.defaults.dropSkillsCost

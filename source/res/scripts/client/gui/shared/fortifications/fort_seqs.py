@@ -437,6 +437,9 @@ class BattleItem(object):
     def getDefenderFullBuildList(self):
         return self.itemData.defenderFullBuildList or ()
 
+    def getActiveConsumables(self):
+        return dict(((slotIdx, (orderTypeID, level)) for orderTypeID, level, slotIdx in self.itemData.consumableList or ()))
+
     def getAllBuildList(self):
         result = []
         result += map(lambda item: (item, False), self.getDefenderBuildList())
@@ -708,6 +711,8 @@ class FortBattlesCache(object):
 _PublicInfoItemData = namedtuple('_PublicInfoItemData', ('clanDBID',
  'clanName',
  'clanAbbrev',
+ 'clanMotto',
+ 'clanDescr',
  'vacationStart',
  'vacationFinish',
  'startDefHour',
@@ -720,7 +725,7 @@ _PublicInfoItemData = namedtuple('_PublicInfoItemData', ('clanDBID',
  'battleCountForFort'))
 
 def makePublicInfoItemData():
-    return _PublicInfoItemData(-1, '', '', None, None, -1, -1, -1, -1, -1, -1, -1, -1)
+    return _PublicInfoItemData(-1, '', '', '', '', None, None, -1, -1, -1, -1, -1, -1, -1, -1)
 
 
 class IClanFortInfo(object):
@@ -752,7 +757,7 @@ class IClanFortInfo(object):
 
     def getLocalOffDay(self):
         from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
-        return adjustOffDayToLocal(self.getOffDay(), self.getLocalDefHour())
+        return adjustOffDayToLocal(self.getOffDay(), self.getLocalDefHour()[0])
 
     def getDefHourFor(self, timestamp):
         from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
@@ -760,7 +765,7 @@ class IClanFortInfo(object):
 
     def getLocalOffDayFor(self, timestamp):
         from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
-        return adjustOffDayToLocal(self.getOffDay(), self.getDefHourFor(timestamp))
+        return adjustOffDayToLocal(self.getOffDay(), self.getDefHourFor(timestamp)[0])
 
     def isAvailableForAttack(self, timestamp):
         return (False, True)
@@ -793,9 +798,12 @@ class PublicInfoItem(IClanFortInfo):
         return self.itemData.clanAbbrev
 
     def getVacationPeriod(self):
-        start = calendar.timegm(self.itemData.vacationStart.timetuple())
-        finish = calendar.timegm(self.itemData.vacationFinish.timetuple())
-        return (start, finish)
+        if self.itemData.vacationStart is not None and self.itemData.vacationFinish is not None:
+            start = calendar.timegm(self.itemData.vacationStart.timetuple())
+            finish = calendar.timegm(self.itemData.vacationFinish.timetuple())
+            return (start, finish)
+        else:
+            return (None, None)
 
     def getStartDefHour(self):
         return self.itemData.startDefHour
@@ -825,7 +833,7 @@ class PublicInfoItem(IClanFortInfo):
         return self.itemData.battleCountForFort
 
     def getAvailability(self):
-        return DaysAvailabilityIterator(time_utils.getTimeTodayForLocal(self.getLocalDefHour()), (self.getLocalOffDay(),), (self.getVacationPeriod(),), fortified_regions.g_cache.attackPreorderTime).next()
+        return DaysAvailabilityIterator(time_utils.getTimeTodayForLocal(*self.getLocalDefHour()), (self.getLocalOffDay(),), (self.getVacationPeriod(),), fortified_regions.g_cache.attackPreorderTime).next()
 
     def _makeItemData(self, itemData):
         try:
@@ -1216,7 +1224,7 @@ class ClanCardItem(IClanFortInfo):
     def getAvailability(self):
         from ClientFortifiedRegion import ATTACK_PLAN_RESULT
         maxPreorderLimit = FORTIFICATION_ALIASES.ACTIVE_EVENTS_FUTURE_LIMIT * time_utils.ONE_DAY
-        initialTime = time_utils.getTimeTodayForLocal(self.getLocalDefHour())
+        initialTime = time_utils.getTimeTodayForLocal(*self.getLocalDefHour())
         availableTimestamp = initialTime
         while not self.__fort.canPlanAttackOn(availableTimestamp, self) == ATTACK_PLAN_RESULT.OK:
             if time_utils.getTimeDeltaFromNow(availableTimestamp) <= maxPreorderLimit:

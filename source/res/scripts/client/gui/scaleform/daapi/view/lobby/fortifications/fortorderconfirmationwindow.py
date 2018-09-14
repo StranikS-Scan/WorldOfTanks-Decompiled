@@ -45,7 +45,7 @@ class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, Abstrac
         resultData = {}
         if self._orderID:
             orderTitle = i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(self._orderID))
-            order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(self._orderID))
+            order = self.fortCtrl.getFort().getOrder(self.getOrderIDbyUID(self._orderID))
             building = self.fortCtrl.getFort().getBuilding(order.buildingID)
             defRes = building.storage
             maxPurchase = int(defRes / order.productionCost)
@@ -67,7 +67,7 @@ class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, Abstrac
 
     @process
     def __requestToCreate(self, count):
-        orderTypeID = self.UI_ORDERS_BIND.index(self._orderID)
+        orderTypeID = self.getOrderIDbyUID(self._orderID)
         count = int(count)
         result = yield self.fortProvider.sendRequest(OrderCtx(orderTypeID, count, waitingID='fort/order/add'))
         if result:
@@ -84,6 +84,6 @@ class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, Abstrac
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
         if reason == BUILDING_UPDATE_REASON.DELETED:
-            order = self.fortCtrl.getFort().getOrder(self.UI_ORDERS_BIND.index(self._orderID))
+            order = self.fortCtrl.getFort().getOrder(self.getOrderIDbyUID(self._orderID))
             if order.buildingID == buildingTypeID:
                 self.destroy()

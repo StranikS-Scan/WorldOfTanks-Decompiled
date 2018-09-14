@@ -179,7 +179,7 @@ class VehiclesBonus(SimpleBonus):
 
     def formatValue(self):
         result = []
-        for item, crew in self.getVehicles():
+        for item, vehInfo in self.getVehicles():
             result.append(item.shortUserName)
 
         return ', '.join(result)
@@ -189,14 +189,22 @@ class VehiclesBonus(SimpleBonus):
 
     def formattedList(self):
         result = []
-        for item, crew in self.getVehicles():
-            if 'noCrew' not in crew:
-                tmanRoleLevel = calculateRoleLevel(crew.get('crewLvl', self.DEFAULT_CREW_LVL), crew.get('crewFreeXP', 0))
+        for item, vehInfo in self.getVehicles():
+            if 'noCrew' not in vehInfo:
+                tmanRoleLevel = calculateRoleLevel(vehInfo.get('crewLvl', self.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
             else:
                 tmanRoleLevel = None
+            vInfoLabels = []
+            if 'rent' in vehInfo:
+                rentDays = vehInfo.get('rent', {}).get('expires', {}).get('after', None)
+                if rentDays:
+                    rentDaysStr = makeHtmlString('html_templates:lobby/quests/bonuses', 'rentDays', {'value': str(rentDays)})
+                    vInfoLabels.append(rentDaysStr)
             if tmanRoleLevel is not None:
                 crewLvl = i18n.makeString('#quests:bonuses/vehicles/crewLvl', tmanRoleLevel)
-                result.append(i18n.makeString('#quests:bonuses/vehicles/name', name=item.userName, crew=crewLvl))
+                vInfoLabels.append(crewLvl)
+            if len(vInfoLabels):
+                result.append(i18n.makeString('#quests:bonuses/vehicles/name', name=item.userName, vehInfo='; '.join(vInfoLabels)))
             else:
                 result.append(item.userName)
 
@@ -212,10 +220,10 @@ class VehiclesBonus(SimpleBonus):
     def getVehicles(self):
         result = []
         if self._value is not None:
-            for intCD, crew in self._value.iteritems():
+            for intCD, vehInfo in self._value.iteritems():
                 item = g_itemsCache.items.getItemByCD(intCD)
                 if item is not None:
-                    result.append((item, crew))
+                    result.append((item, vehInfo))
 
         return result
 
@@ -272,19 +280,29 @@ class TankmenBonus(SimpleBonus):
      'skills',
      'isFemale'])
 
-    @classmethod
-    def _makeTmanInfoByDescr(cls, td):
-        return cls._TankmanInfoRecord(td.nationID, td.role, td.vehicleTypeID, td.firstNameID, td.fnGroupID, td.lastNameID, td.lnGroupID, td.iconID, td.iGroupID, td.isPremium, td.roleLevel, td.freeXP, td.skills, td.isFemale)
-
     def formatValue(self):
-        result = []
+        groups = {}
         for tmanInfo in self.getTankmenData():
-            if tmanInfo.isFemale:
-                result.append(i18n.makeString('#quests:bonuses/item/tankwoman'))
+            roleLevel = calculateRoleLevel(tmanInfo.roleLevel, tmanInfo.freeXP, typeID=(tmanInfo.nationID, tmanInfo.vehicleTypeID))
+            if tmanInfo.vehicleTypeID not in groups:
+                vehIntCD = vehicles.makeIntCompactDescrByID('vehicle', tmanInfo.nationID, tmanInfo.vehicleTypeID)
+                groups[tmanInfo.vehicleTypeID] = {'vehName': g_itemsCache.items.getItemByCD(vehIntCD).shortUserName,
+                 'skills': len(tmanInfo.skills),
+                 'roleLevel': roleLevel}
             else:
-                result.append(i18n.makeString('#quests:bonuses/tankmen/description', role=getRoleUserName(tmanInfo.role)))
+                group = groups[tmanInfo.vehicleTypeID]
+                group['skills'] = min(group['skills'], len(tmanInfo.skills))
+                group['roleLevel'] = min(group['roleLevel'], roleLevel)
 
-        return ', '.join(result)
+        result = []
+        for group in groups.itervalues():
+            if group['skills']:
+                labelI18nKey = '#quests:bonuses/item/tankmen/with_skills'
+            else:
+                labelI18nKey = '#quests:bonuses/item/tankmen/no_skills'
+            result.append(i18n.makeString(labelI18nKey, **group))
+
+        return ' '.join(result)
 
     def getTankmenData(self):
         result = []
@@ -302,6 +320,33 @@ class TankmenBonus(SimpleBonus):
 
     def getTooltipIcon(self):
         return RES_ICONS.MAPS_ICONS_REFERRAL_REFSYS_MEN_BW
+
+    @classmethod
+    def _makeTmanInfoByDescr(cls, td):
+        return cls._TankmanInfoRecord(td.nationID, td.role, td.vehicleTypeID, td.firstNameID, -1, td.lastNameID, -1, td.iconID, -1, td.isPremium, td.roleLevel, td.freeXP, td.skills, td.isFemale)
+
+
+class PotapovTankmenBonus(TankmenBonus):
+
+    def formatValue(self):
+        result = []
+        for tmanInfo in self.getTankmenData():
+            if tmanInfo.isFemale:
+                result.append(i18n.makeString('#quests:bonuses/item/tankwoman'))
+            else:
+                result.append(i18n.makeString('#quests:bonuses/tankmen/description', value=getRoleUserName(tmanInfo.role)))
+
+        return ', '.join(result)
+
+
+class RefSystemTankmenBonus(TankmenBonus):
+
+    def formatValue(self):
+        result = []
+        for tmanInfo in self.getTankmenData():
+            result.append(i18n.makeString('#quests:bonuses/tankmen/description', value=getRoleUserName(tmanInfo.role)))
+
+        return ', '.join(result)
 
 
 class CustomizationsBonus(SimpleBonus):
@@ -399,7 +444,9 @@ _BONUSES = {'credits': CreditsBonus,
  'tankmen': TankmenBonus,
  'customizations': CustomizationsBonus}
 _BONUSES_BY_TYPE = {(_ET.POTAPOV_QUEST, 'tokens'): PotapovTokensBonus,
- (_ET.POTAPOV_QUEST, 'dossier'): PotapovDossierBonus}
+ (_ET.POTAPOV_QUEST, 'dossier'): PotapovDossierBonus,
+ (_ET.POTAPOV_QUEST, 'tankmen'): PotapovTankmenBonus,
+ (_ET.REF_SYSTEM_QUEST, 'tankmen'): RefSystemTankmenBonus}
 
 def getBonusObj(quest, name, value):
     key = (quest.getType(), name)

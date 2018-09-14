@@ -64,9 +64,6 @@ class BattleControllersFactory(IControllerFactory):
         squad = self.channelsStorage.getChannelByCriteria(find_criteria.BWPrbChannelFindCriteria(PREBATTLE_TYPE.SQUAD))
         if squad is not None:
             channels.append(squad)
-        eventSquad = self.channelsStorage.getChannelByCriteria(find_criteria.BWPrbChannelFindCriteria(PREBATTLE_TYPE.EVENT_SQUAD))
-        if eventSquad is not None:
-            channels.append(eventSquad)
         for channel in channels:
             controller = self.factory(channel)
             if controller is not None:

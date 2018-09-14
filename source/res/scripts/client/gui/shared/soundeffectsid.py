@@ -42,6 +42,11 @@ class SoundEffectsId(object):
     FORT_CLAN_WAR_RESULT_WIN = 'fortClanWarResult_win'
     FORT_CLAN_WAR_RESULT_LOSE = 'fortClanWarResult_lose'
     FORT_CLAN_WAR_RESULT_DRAW = 'fortClanWarResult_draw'
+    CS_ANIMATION_LEAGUE_UP = 'cs_animation_league_up'
+    CS_ANIMATION_LEAGUE_DOWN = 'cs_animation_league_down'
+    CS_ANIMATION_DIVISION_UP = 'cs_animation_division_up'
+    CS_ANIMATION_DIVISION_UP_ALT = 'cs_animation_division_up_alt'
+    CS_ANIMATION_DIVISION_DOWN = 'cs_animation_division_down'
 
     @classmethod
     def getEndBuildingProcess(cls, buildingID):

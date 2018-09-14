@@ -217,14 +217,8 @@ class Shell(FittingItem):
         return (buyPrice[0] + buyPrice[1] * proxy.exchangeRateForShellsAndEqs, buyPrice[1])
 
     @property
-    def isEvent(self):
-        return self.intCD in (22346, 29994, 34826)
-
-    @property
     def type(self):
         """ Returns shells type string (`HOLLOW_CHARGE` etc.). """
-        if self.isEvent:
-            return 'EVENT'
         return self.descriptor['kind']
 
     @property
@@ -238,17 +232,16 @@ class Shell(FittingItem):
         else:
             caliber = self.descriptor['caliber']
             dimension = i18n.makeString('#item_types:shell/dimension/mm')
-        return i18n.makeString('#item_types:shell/name') % {'kind': i18n.makeString('#item_types:shell/kinds/' + self.type),
+        return i18n.makeString('#item_types:shell/name') % {'kind': i18n.makeString('#item_types:shell/kinds/' + self.descriptor['kind']),
          'name': self.userName,
          'caliber': BigWorld.wg_getNiceNumberFormat(caliber),
          'dimension': dimension}
 
     @property
     def icon(self):
-        unicName = self.descriptor['icon'][0]
         return _ICONS_MASK[:-4] % {'type': self.itemTypeName,
          'subtype': '',
-         'unicName': unicName if not self.isEvent else 'EVENT_' + unicName}
+         'unicName': self.descriptor['icon'][0]}
 
     @property
     def defaultLayoutValue(self):

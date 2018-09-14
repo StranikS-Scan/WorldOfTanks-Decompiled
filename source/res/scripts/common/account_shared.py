@@ -1,11 +1,15 @@
 # Embedded file name: scripts/common/account_shared.py
 import time
-import nations
 import collections
+import base64
+import struct
+import ArenaType
+import nations
 from items import vehicles, ITEM_TYPES
 from constants import IGR_TYPE, FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
 from debug_utils import *
 import ArenaType
+_ITEM_TYPE_VEHICLE = ITEM_TYPES['vehicle']
 _ITEM_TYPE_GUN = ITEM_TYPES['vehicleGun']
 _ITEM_TYPE_TURRET = ITEM_TYPES['vehicleTurret']
 
@@ -292,13 +296,18 @@ class NotificationItem(object):
 
     def __init__(self, item):
         self.item = item
+        cont = []
+        cont.append(item['type'])
         text = item['text']
-        s = item['type'] + '\n'
         for k in sorted(text.keys()):
-            s += k + '\n' + text[k] + '\n'
+            cont.append(k)
+            cont.append(text[k])
 
-        s += item['data']
-        self.asString = s
+        cont.append(item['data'])
+        for s in sorted(item['requiredTokens']):
+            cont.append(s)
+
+        self.asString = ''.join(cont)
 
     def __cmp__(self, other):
         if other is None:
@@ -314,3 +323,36 @@ class NotificationItem(object):
 
     def __hash__(self):
         return hash(self.asString)
+
+
+_POST_BATTLE_PACK_METHOD_VERSION = 1
+
+def packPostBattleUniqueSubUrl(arenaUniqueID, arenaTypeID, vehTypeCompDescr, xp):
+    return base64.urlsafe_b64encode(struct.pack('>QQ', *(arenaUniqueID, arenaTypeID << 40 | vehTypeCompDescr << 24 | xp << 8 | _POST_BATTLE_PACK_METHOD_VERSION)))[:-2]
+
+
+def unpackPostBattleUniqueSubUrl(packedData):
+    arenaUniqueID, value = struct.unpack('>QQ', base64.urlsafe_b64decode(str(packedData) + '=='))
+    version = int(value & 255)
+    value >>= 8
+    if version > _POST_BATTLE_PACK_METHOD_VERSION:
+        raise RuntimeError('url version is not valid', version)
+    xp = int(value & 65535)
+    value >>= 16
+    vehTypeCompDescr = int(value & 65535)
+    value >>= 16
+    typeID, nationID, vehTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
+    if typeID != _ITEM_TYPE_VEHICLE:
+        raise RuntimeError('item type is not vehicle', vehTypeCompDescr)
+    try:
+        vehicles.g_cache.vehicle(nationID, vehTypeID)
+    except Exception as e:
+        raise RuntimeError('unknown vehicle', nationID, vehTypeID, e.message)
+
+    if value not in ArenaType.g_cache:
+        raise RuntimeError('unknown arena type id', value)
+    return (arenaUniqueID,
+     int(value),
+     vehTypeCompDescr,
+     xp,
+     version)

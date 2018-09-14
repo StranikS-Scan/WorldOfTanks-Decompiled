@@ -7,6 +7,7 @@ from constants import CLAN_MEMBER_FLAGS
 from helpers import i18n
 from ids_generators import SequenceIDGenerator
 from helpers.i18n import makeString
+from gui import GUI_SETTINGS
 from gui.shared.utils.gui_items import ShopItem, VehicleItem
 from items import ITEM_TYPE_NAMES, ITEM_TYPE_INDICES, vehicles
 from debug_utils import LOG_DEBUG
@@ -366,3 +367,11 @@ def getClanRoleString(position = CLAN_MEMBER_FLAGS.LEADER):
     if position in CLAN_MEMBERS:
         return i18n.makeString('#menu:profile/header/clan/position/%s' % CLAN_MEMBERS[position])
     return ''
+
+
+def getPostBattleUniqueSubUrl(svrPackedData, clientPackedData):
+    return '%s/%s/%s ' % (GUI_SETTINGS.postBattleExchange.url, svrPackedData, clientPackedData)
+
+
+def parsePostBattleUniqueSubUrl(uniqueSubUrl):
+    return uniqueSubUrl.split('/')[1:]

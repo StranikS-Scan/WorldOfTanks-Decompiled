@@ -4,9 +4,10 @@ from constants import MAX_VEHICLE_LEVEL
 from adisp import process, async
 from gui import DialogsInterface
 from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.server_events import g_eventsCache
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, DismissTankmanDialogMeta, HtmlMessageDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, DismissTankmanDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
 
 def makeSuccess(**kwargs):
@@ -151,6 +152,25 @@ class ModuleTypeValidator(SyncValidator):
     def _validate(self):
         if self.module.itemTypeID not in self.allowableTypes:
             return makeError('invalid_module_type')
+        return makeSuccess()
+
+
+class EliteVehiclesValidator(SyncValidator):
+
+    def __init__(self, vehiclesCD):
+        super(EliteVehiclesValidator, self).__init__(self)
+        self.vehiclesCD = vehiclesCD
+
+    def _validate(self):
+        for vehCD in self.vehiclesCD:
+            item = g_itemsCache.items.getItemByCD(int(vehCD))
+            if item is None:
+                return makeError('invalid_vehicle')
+            if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
+                return makeError('invalid_module_type')
+            if not item.isElite:
+                return makeError('vehicle_not_elite')
+
         return makeSuccess()
 
 
@@ -359,6 +379,12 @@ class MessageConfirmator(I18nMessageAbstractConfirmator):
         return I18nConfirmDialogMeta(self.localeKey, self.ctx, self.ctx, focusedID=DIALOG_BUTTON_ID.SUBMIT)
 
 
+class ModuleBuyerConfirmator(I18nMessageAbstractConfirmator):
+
+    def _makeMeta(self):
+        return I18nConfirmDialogMeta(self.localeKey, meta=HtmlMessageLocalDialogMeta('html_templates:lobby/dialogs', self.localeKey, ctx=self.ctx))
+
+
 class HtmlMessageConfirmator(I18nMessageAbstractConfirmator):
 
     def __init__(self, localeKey, metaPath, metaKey, ctx = None, activeHandler = None, isEnabled = True):
@@ -506,6 +532,22 @@ class PotapovQuestChainsValidator(SyncValidator):
         for quest in g_eventsCache.potapov.getSelectedQuests().itervalues():
             if quest.getChainID() == self.quest.getChainID():
                 return makeError('TOO_MANY_QUESTS_IN_CHAIN')
+
+        return makeSuccess()
+
+
+class PotapovQuestSeasonsValidator(SyncValidator):
+
+    def __init__(self, quest):
+        super(PotapovQuestSeasonsValidator, self).__init__()
+        self.quest = quest
+
+    def _validate(self):
+        qVehClasses = self.quest.getVehicleClasses()
+        if len(qVehClasses) == 1:
+            for quest in g_eventsCache.potapov.getSelectedQuests().itervalues():
+                if len(quest.getVehicleClasses() & qVehClasses) and quest.getSeasonID() == self.quest.getSeasonID():
+                    return makeError('SEASON_LIMIT_THE_SAME_CLASS')
 
         return makeSuccess()
 

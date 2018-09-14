@@ -2,9 +2,9 @@
 import BigWorld
 from account_helpers import isPremiumAccount
 from adisp import async
-from abstract import AbstractRequester
+from gui.shared.utils.requesters import abstract
 
-class StatsRequester(AbstractRequester):
+class StatsRequester(abstract.AbstractSyncDataRequester):
 
     @async
     def _requestCache(self, callback):

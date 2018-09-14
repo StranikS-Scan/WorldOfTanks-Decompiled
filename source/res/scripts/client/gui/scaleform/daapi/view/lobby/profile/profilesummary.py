@@ -74,9 +74,6 @@ class ProfileSummary(ProfileAchievementSection, ProfileSummaryMeta):
          'significantAwardsLabel': PROFILE.SECTION_SUMMARY_LABELS_SIGNIFICANTAWARDS,
          'significantAwardsErrorText': PROFILE.SECTION_SUMMARY_ERRORTEXT_SIGNIFICANTAWARDS}
 
-    def requestData(self, data):
-        self.request(self._userID)
-
     def getPersonalScoreWarningText(self, data):
         battlesCount = BigWorld.wg_getIntegralFormat(data)
         return i18n.makeString(PROFILE.SECTION_SUMMARY_WARNING_PERSONALSCORE, count=battlesCount)

@@ -4,6 +4,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications import FortifiedWindowScopes
 from gui.Scaleform.daapi.view.lobby.fortifications.FortBattleDirectionPopover import FortBattleDirectionPopover
 from gui.Scaleform.daapi.view.lobby.fortifications.FortCalendarWindow import FortCalendarWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortClanStatisticsData import getDataObject as getWindowData
+from gui.Scaleform.daapi.view.lobby.fortifications.FortCombatReservesIntroWindow import FortCombatReservesIntroWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortDatePickerPopover import FortDatePickerPopover
 from gui.Scaleform.daapi.view.lobby.fortifications.FortChoiceDivisionWindow import FortChoiceDivisionWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortClanBattleRoom import FortClanBattleRoom
@@ -11,7 +12,9 @@ from gui.Scaleform.daapi.view.lobby.fortifications.FortDeclarationOfWarWindow im
 from gui.Scaleform.daapi.view.lobby.fortifications.FortDisableDefencePeriodWindow import FortDisableDefencePeriodWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortIntelligenceWindow import FortIntelligenceWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortIntelligenceNotAvailableWindow import FortIntelligenceNotAvailableWindow
+from gui.Scaleform.daapi.view.lobby.fortifications.FortOrderInfoWindow import FortOrderInfoWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortOrdersPanelComponent import FortOrdersPanelComponent
+from gui.Scaleform.daapi.view.lobby.fortifications.FortBattleRoomOrdersPanelComponent import FortBattleRoomOrdersPanelComponent
 from gui.Scaleform.daapi.view.lobby.fortifications.FortSettingsDayoffPopover import FortSettingsDayoffPopover
 from gui.Scaleform.daapi.view.lobby.fortifications.FortSettingsWindow import FortSettingsWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.components.FortIntelligenceClanDescription import FortIntelligenceClanDescription
@@ -51,6 +54,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.FortOrderPopover import FortO
 from gui.Scaleform.daapi.view.lobby.fortifications.FortTransportConfirmationWindow import FortTransportConfirmationWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortBuildingComponent import FortBuildingComponent
 from gui.Scaleform.daapi.view.lobby.fortifications.DemountBuildingWindow import DemountBuildingWindow
+from gui.Scaleform.daapi.view.lobby.fortifications.FortOrderSelectPopover import FortOrderSelectPopover
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.shared.events import ShowDialogEvent
 from gui.shared.utils.functions import getViewName
@@ -65,6 +69,7 @@ def getViewSettings():
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS, FortSettingsDefenceHourPopover, FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS, FortifiedWindowScopes.FORT_WINDOWED_MULTISCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS, FortSettingsVacationPopover, FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS, FortifiedWindowScopes.FORT_WINDOWED_MULTISCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS, FortDatePickerPopover, FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS, FortifiedWindowScopes.FORT_WINDOWED_MULTISCOPE),
+     GroupedViewSettings(FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_ALIAS, FortOrderSelectPopover, FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_ALIAS, FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_ALIAS, FortifiedWindowScopes.FORT_WINDOWED_MULTISCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_ORDER_CONFIRMATION_WINDOW_ALIAS, FortOrderConfirmationWindow, FORTIFICATION_ALIASES.FORT_ORDER_CONFIRMATION_WINDOW_UI, ViewTypes.TOP_WINDOW, ShowDialogEvent.SHOW_CONFIRM_ORDER_DIALOG, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_CREATION_CONGRATULATIONS_WINDOW_ALIAS, FortCreationCongratulationsWindow, FORTIFICATION_ALIASES.FORT_CREATION_CONGRATULATIONS_WINDOW_UI, ViewTypes.TOP_WINDOW, FORTIFICATION_ALIASES.FORT_CREATION_CONGRATULATIONS_WINDOW_ALIAS, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_ALIAS, FortCreateDirectionWindow, FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_ALIAS, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
@@ -85,9 +90,12 @@ def getViewSettings():
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW, DemountBuildingWindow, FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW_UI, ViewTypes.TOP_WINDOW, FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_ALIAS, FortDisableDefencePeriodWindow, FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_UI, ViewTypes.TOP_WINDOW, FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_ALIAS, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_ALIAS, FortSettingsWindow, FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_ALIAS, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
+     GroupedViewSettings(FORTIFICATION_ALIASES.FORT_ORDER_INFO_WINDOW_ALIAS, FortOrderInfoWindow, FORTIFICATION_ALIASES.FORT_ORDER_INFO_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_ORDER_INFO_WINDOW_ALIAS, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, FortBattleResultsWindow, FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
+     GroupedViewSettings(FORTIFICATION_ALIASES.FORT_COMBAT_RESERVES_INTRO_ALIAS, FortCombatReservesIntroWindow, FORTIFICATION_ALIASES.FORT_COMBAT_RESERVES_INTRO_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_COMBAT_RESERVES_INTRO_ALIAS, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      ViewSettings(FORTIFICATION_ALIASES.FORT_BUILDING_COMPONENT_ALIAS, FortBuildingComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(FORTIFICATION_ALIASES.FORT_ORDERS_PANEL_COMPONENT_ALIAS, FortOrdersPanelComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(FORTIFICATION_ALIASES.FORT_BATTLEROOM_ORDERS_PANEL_COMPONENT_ALIAS, FortBattleRoomOrdersPanelComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(FORTIFICATION_ALIASES.MAIN_VIEW_ALIAS, FortMainViewComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(FORTIFICATION_ALIASES.WELCOME_VIEW_ALIAS, FortWelcomeViewComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(FORTIFICATION_ALIASES.DISCONNECT_VIEW_ALIAS, FortDisconnectViewComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -126,9 +134,11 @@ class FortsBusinessHandler(PackageBusinessHandler):
          (FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW, self.__showViewSimple),
          (FORTIFICATION_ALIASES.FORT_CHOICE_DIVISION_WINDOW, self.__showViewSimple),
          (FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_ALIAS, self.__showViewSimple),
+         (FORTIFICATION_ALIASES.FORT_ORDER_INFO_WINDOW_ALIAS, self.__showOrderInfo),
          (FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_ALIAS, self.__showViewSimple),
          (FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, self.__showFortBattleResultsWindow),
-         (FORTIFICATION_ALIASES.FORT_NOT_COMMANDER_FIRST_ENTER_WINDOW_ALIAS, self.__showViewSimple)]
+         (FORTIFICATION_ALIASES.FORT_NOT_COMMANDER_FIRST_ENTER_WINDOW_ALIAS, self.__showViewSimple),
+         (FORTIFICATION_ALIASES.FORT_COMBAT_RESERVES_INTRO_ALIAS, self.__showViewSimple)]
         super(FortsBusinessHandler, self).__init__(listeners, EVENT_BUS_SCOPE.LOBBY)
 
     def _loadUniqueWindow(self, alias, ctx = None):
@@ -139,6 +149,11 @@ class FortsBusinessHandler(PackageBusinessHandler):
 
     def __showViewSimple(self, event):
         self.app.loadView(event.eventType, event.name, event.ctx)
+
+    def __showOrderInfo(self, event):
+        orderID = event.ctx.get('orderID', None)
+        self.app.loadView(FORTIFICATION_ALIASES.FORT_ORDER_INFO_WINDOW_ALIAS, str(orderID), event.ctx)
+        return
 
     def __showOrUpdateWindow(self, event):
         self.__loadOrUpdateWindow(event.eventType, event.name, event.ctx)

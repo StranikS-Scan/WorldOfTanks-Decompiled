@@ -7,18 +7,20 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.FreeXPInfoDialogMeta import FreeXPInfoMeta
 from gui.SystemMessages import SM_TYPE
+from gui.game_control.controllers import Controller
 from gui.shared import g_itemsCache
 from gui.shared.utils import CONST_CONTAINER
 from helpers.aop import Aspect, Pointcut, Weaver
 
-class WalletController(object):
+class WalletController(Controller):
 
     class STATUS(CONST_CONTAINER):
         SYNCING = 0
         NOT_AVAILABLE = 1
         AVAILABLE = 2
 
-    def __init__(self):
+    def __init__(self, proxy):
+        super(WalletController, self).__init__(proxy)
         self.onWalletStatusChanged = Event.Event()
         self.__currentStatus = None
         self.__currentCallbackId = None
@@ -34,8 +36,9 @@ class WalletController(object):
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
         self.__clearCallback()
         self.__clearWeaver()
+        super(WalletController, self).fini()
 
-    def start(self):
+    def onLobbyStarted(self, ctx):
         wallet = BigWorld.player().serverSettings['wallet']
         self.__useGold = bool(wallet[0])
         self.__useFreeXP = bool(wallet[1])
@@ -43,14 +46,11 @@ class WalletController(object):
             self.__checkFreeXPConditions()
         self.__processStatus(self.STATUS.AVAILABLE if g_itemsCache.items.stats.mayConsumeWalletResources else self.STATUS.SYNCING, True)
 
-    def stop(self):
+    def onBattleStarted(self):
         self.__clearWeaver()
 
-    def __clearWeaver(self):
-        if self.__weaver is not None:
-            self.__weaver.clear()
-            self.__weaver = None
-        return
+    def onDisconnected(self):
+        self.__clearWeaver()
 
     @property
     def status(self):
@@ -80,6 +80,17 @@ class WalletController(object):
     @property
     def useFreeXP(self):
         return self.__useFreeXP
+
+    def cleanWeave(self, obj):
+        if self.__weaver:
+            for value in obj:
+                self.__weaver.clear(idx=self.__weaver.findPointcut(value))
+
+    def __clearWeaver(self):
+        if self.__weaver is not None:
+            self.__weaver.clear()
+            self.__weaver = None
+        return
 
     def __processCallback(self):
         self.__currentCallbackId = None
@@ -143,11 +154,6 @@ class WalletController(object):
             self.__weaver.weave(pointcut=ResearchViewPointcut, aspects=[ShowXPInfoDialogAspect(self.cleanWeave)])
         if self.__weaver.findPointcut(ExchangeFreeXPToTankmanPointcut) is -1:
             self.__weaver.weave(pointcut=ExchangeFreeXPToTankmanPointcut, aspects=[ShowXPInfoDialogAspect(self.cleanWeave)])
-
-    def cleanWeave(self, obj):
-        if self.__weaver:
-            for value in obj:
-                self.__weaver.clear(idx=self.__weaver.findPointcut(value))
 
 
 class ShowXPInfoDialogAspect(Aspect):

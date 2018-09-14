@@ -48,14 +48,14 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
     def upgradeVisitedBuilding(self, uid):
         if not self._isAvailableBlinking():
             return
-        buildingID = self.UI_BUILDINGS_BIND.index(uid)
+        buildingID = self.getBuildingIDbyUID(uid)
         limits = self.fortCtrl.getLimits()
         isLevelUp, _ = limits.canUpgrade(buildingID)
         if isLevelUp:
             self.fortCtrl.addUpgradeVisitedBuildings(buildingID)
 
     def getBuildingTooltipData(self, uid):
-        buildingDescr = self.fortCtrl.getFort().getBuilding(self.UI_BUILDINGS_BIND.index(uid))
+        buildingDescr = self.fortCtrl.getFort().getBuilding(self.getBuildingIDbyUID(uid))
         return [uid, self.getCommonBuildTooltipData(buildingDescr)]
 
     def onUpdated(self, isFullUpdate):
@@ -64,10 +64,13 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
             self._animation = None
         return
 
+    def onStateChanged(self, state):
+        self.updateData(self._animation)
+
     def onBuildingChanged(self, buildingID, reason, ctx = None):
         animations = {}
         if reason == BUILDING_UPDATE_REASON.COMPLETED:
-            uid = self.UI_BUILDINGS_BIND[buildingID]
+            uid = self.getBuildingUIDbyID(buildingID)
             g_fortSoundController.playCompletedBuilding(uid)
         if reason in self.BUILDING_ANIMATIONS:
             dir = ctx.get('dir')
@@ -96,7 +99,7 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
     def onDirectionClosed(self, dir):
         self.updateData()
 
-    def onOrderReady(self, orderTypeID, count):
+    def onOrderChanged(self, orderTypeID, reason):
         self.updateData()
 
     def onShutdownDowngrade(self):

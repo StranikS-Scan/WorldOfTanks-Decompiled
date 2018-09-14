@@ -34,6 +34,10 @@ class HangarMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setControlsVisible(value)
 
+    def as_setVisibleS(self, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setVisible(value)
+
     def as_showHelpLayoutS(self):
         if self._isDAAPIInited():
             return self.flashObject.as_showHelpLayout()

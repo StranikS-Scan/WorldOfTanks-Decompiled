@@ -153,7 +153,13 @@ class INGAME_GUI(object):
     SHELLS_KINDS_ARMOR_PIERCING = '#ingame_gui:shells_kinds/ARMOR_PIERCING'
     SHELLS_KINDS_ARMOR_PIERCING_HE = '#ingame_gui:shells_kinds/ARMOR_PIERCING_HE'
     SHELLS_KINDS_ARMOR_PIERCING_CR = '#ingame_gui:shells_kinds/ARMOR_PIERCING_CR'
-    SHELLS_KINDS_EVENT = '#ingame_gui:shells_kinds/EVENT'
+    SHELLS_KINDS_PARAMS = '#ingame_gui:shells_kinds/params'
+    ORDERS_KINDS_SCOUT_PLANE = '#ingame_gui:orders_kinds/SCOUT_PLANE'
+    ORDERS_KINDS_SMOKE_COVER = '#ingame_gui:orders_kinds/SMOKE_COVER'
+    ORDERS_KINDS_ARTILLERY = '#ingame_gui:orders_kinds/ARTILLERY'
+    ORDERS_KINDS_BOMBER = '#ingame_gui:orders_kinds/BOMBER'
+    ORDERS_KINDS_DOT = '#ingame_gui:orders_kinds/DOT'
+    ORDERS_KINDS_LANDMINE = '#ingame_gui:orders_kinds/LANDMINE'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_NORMAL = '#ingame_gui:damage_panel/devices/turretRotator/normal'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_CRITICAL = '#ingame_gui:damage_panel/devices/turretRotator/critical'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_DESTROYED = '#ingame_gui:damage_panel/devices/turretRotator/destroyed'
@@ -344,6 +350,8 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_SELF = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_SELF'
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_ENEMY'
+    POTAPOVQUESTS_TIP = '#ingame_gui:potapovQuests/tip'
+    FORTCONSUMABLES_TIMER_POSTFIX = '#ingame_gui:fortConsumables/timer/postfix'
     CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
      CHAT_EXAMPLE_RELOADING_GUN,
      CHAT_EXAMPLE_RELOADING_CASSETTE,

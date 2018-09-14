@@ -22,6 +22,9 @@ class ModuleInfoWindow(View, ModuleInfoMeta, AbstractWindowView):
     def onCancelClick(self):
         self.destroy()
 
+    def onActionButtonClick(self):
+        pass
+
     def onWindowClose(self):
         self.destroy()
 
@@ -98,4 +101,18 @@ class ModuleInfoWindow(View, ModuleInfoMeta, AbstractWindowView):
         if isShell and self.__isAdditionalInfoShow is not None:
             moduleData['additionalInfo'] = self.__isAdditionalInfoShow
         self.as_setModuleInfoS(moduleData)
+        self._updateActionButton()
         return
+
+    def _updateActionButton(self):
+        isButtonVisible = False
+        buttonLabel = ''
+        canPurchase, canUnlock = False, False
+        isButtonVisible = canPurchase or canUnlock
+        if canPurchase:
+            buttonLabel = i18n.makeString(MENU.CONTEXTMENU_BUY)
+        elif canUnlock:
+            buttonLabel = i18n.makeString(MENU.UNLOCKS_UNLOCKBUTTON)
+        buttonData = {'visible': isButtonVisible,
+         'label': buttonLabel}
+        self.as_setActionButtonS(buttonData)

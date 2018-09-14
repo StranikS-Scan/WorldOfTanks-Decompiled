@@ -158,6 +158,9 @@ class PQCache(object):
             raise Exception, 'Invalid potapov quest id (%s)' % (potapovQuestID,)
         return self.__potapovQuestIDToQuestType[potapovQuestID]
 
+    def hasPotapovQuest(self, potapovQuestID):
+        return potapovQuestID in self.__potapovQuestIDToQuestType
+
     def questByUniqueQuestID(self, uniqueQuestID):
         return self.questByPotapovQuestID(self.getPotapovQuestIDByUniqueID(uniqueQuestID))
 

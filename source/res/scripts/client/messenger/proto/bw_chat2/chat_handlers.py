@@ -5,7 +5,7 @@ from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.battle_control.arena_info import getClientArena
-from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE
+from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE, USER_TAG
 from messenger.proto.bw_chat2 import admin_chat_cmd
 from messenger.proto.bw_chat2 import entities, limits, wrappers, errors
 from messenger.proto.bw_chat2 import provider
@@ -64,7 +64,7 @@ class _EntityChatHandler(provider.ResponseSeqHandler):
         register(self.__actions.initID, self._onEntityChatInit)
         register(self.__actions.deInitID, self._onEntityChatDeInit)
         register(self.__actions.onBroadcastID, self._onMessageBroadcast)
-        g_messengerEvents.users.onUsersRosterReceived += self.__me_onUsersRosterReceived
+        g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
         super(_EntityChatHandler, self).registerHandlers()
 
     def unregisterHandlers(self):
@@ -72,7 +72,7 @@ class _EntityChatHandler(provider.ResponseSeqHandler):
         unregister(self.__actions.initID, self._onEntityChatInit)
         unregister(self.__actions.deInitID, self._onEntityChatDeInit)
         unregister(self.__actions.onBroadcastID, self._onMessageBroadcast)
-        g_messengerEvents.users.onUsersRosterReceived -= self.__me_onUsersRosterReceived
+        g_messengerEvents.users.onUsersListReceived -= self.__me_onUsersListReceived
         super(_EntityChatHandler, self).unregisterHandlers()
 
     def broadcast(self, text, *args):
@@ -157,9 +157,11 @@ class _EntityChatHandler(provider.ResponseSeqHandler):
         if super(_EntityChatHandler, self)._onResponseFailure(ids, args):
             error = errors.createBroadcastError(args, self.__actions.broadcastID)
             if error:
-                g_messengerEvents.onServerErrorReceived(error)
+                g_messengerEvents.onErrorReceived(error)
 
-    def __me_onUsersRosterReceived(self):
+    def __me_onUsersListReceived(self, tags):
+        if USER_TAG.IGNORED not in tags:
+            return
         self.__isEnabled = True
         while self.__messagesQueue:
             self._addMessage(self.__messagesQueue.pop(0))
@@ -259,7 +261,7 @@ class UnitChatHandler(_EntityChatHandler):
             return
         else:
             settings = None
-            if prbType in PREBATTLE_TYPE.LIKE_SQUAD:
+            if prbType == PREBATTLE_TYPE.SQUAD:
                 settings = BATTLE_CHANNEL.SQUAD
             self.__channel = self._addChannel(entities.BWUnitChannelEntity(settings, prbType))
             return
@@ -326,7 +328,7 @@ class BattleChatCommandHandler(provider.ResponseDictHandler):
         if command:
             error = errors.createBattleCommandError(args, command)
             if error:
-                g_messengerEvents.onServerErrorReceived(error)
+                g_messengerEvents.onErrorReceived(error)
             else:
                 LOG_WARNING('Error is not resolved on the client', command, args)
 
@@ -359,7 +361,7 @@ class AdminChatCommandHandler(provider.ResponseDictHandler):
             return (False, None)
         else:
             if result.hasError():
-                g_messengerEvents.onServerErrorReceived(result.getError())
+                g_messengerEvents.onErrorReceived(result.getError())
             else:
                 decorator = admin_chat_cmd.makeDecorator(result, clientID)
                 if self.send(decorator):
@@ -380,7 +382,7 @@ class AdminChatCommandHandler(provider.ResponseDictHandler):
         if super(AdminChatCommandHandler, self)._onResponseFailure(ids, args):
             error = errors.createAdminCommandError(args)
             if error:
-                g_messengerEvents.onServerErrorReceived(error)
+                g_messengerEvents.onErrorReceived(error)
             else:
                 LOG_WARNING('Error is not resolved on the client', ids, args)
 

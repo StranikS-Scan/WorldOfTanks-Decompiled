@@ -16,6 +16,7 @@ _CFG = {'basic': {'v_scale': 1.3,
            'cam_start_target_pos': Math.Vector3(50, 0, 50),
            'cam_dist_constr': [6.0, 11.0],
            'cam_pitch_constr': [-70.0, -5.0],
+           'cam_yaw_constr': [-180.0, 180.0],
            'cam_sens': 0.005,
            'cam_pivot_pos': Math.Vector3(0, 1, 0),
            'cam_fluency': 0.05,
@@ -178,10 +179,11 @@ class OfflineMapCreator:
         global _CAM_START_TARGET_POS
         global _V_SCALE
         global _SPACE_NAME
+        global _CAM_START_ANGLES
         global _V_START_POS
         global _CAM_START_DIST
         global _CAM_DIST_CONSTR
-        global _CAM_START_ANGLES
+        global _CAM_YAW_CONSTR
         global _CAM_SENS
         cfg = _CFG[type]
         _SPACE_NAME = mapName
@@ -193,6 +195,7 @@ class OfflineMapCreator:
         _CAM_START_TARGET_POS = cfg['cam_start_target_pos']
         _CAM_DIST_CONSTR = cfg['cam_dist_constr']
         _CAM_PITCH_CONSTR = cfg['cam_pitch_constr']
+        _CAM_YAW_CONSTR = cfg['cam_yaw_constr']
         _CAM_SENS = cfg['cam_sens']
         _CAM_PIVOT_POS = cfg['cam_pivot_pos']
         _CAM_FLUENCY = cfg['cam_fluency']

@@ -3,8 +3,7 @@ import BigWorld
 from gui.shared.utils import ParametersCache, RELOAD_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, CLIP_VEHICLES_PROP_NAME, GUN_RELOADING_TYPE, GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, CLIP_VEHICLES_CD_PROP_NAME, UNICHARGED_VEHICLES_PROP_NAME, VEHICLES_PROP_NAME
 from debug_utils import *
 from gui import GUI_SETTINGS
-from items import vehicles, getTypeInfoByIndex, getTypeOfCompactDescr
-from items.vehicles import getVehicleType
+from items import vehicles, getTypeInfoByIndex, getTypeOfCompactDescr, artefacts
 
 class _ItemsParameters(object):
 
@@ -39,7 +38,21 @@ class _ItemsParameters(object):
                              ('gunRotationSpeed', lambda v: BigWorld.wg_getIntegralFormat(v)),
                              ('circularVisionRadius', lambda v: BigWorld.wg_getIntegralFormat(v)),
                              ('radioDistance', lambda v: BigWorld.wg_getIntegralFormat(v))),
-         vehicles._EQUIPMENT: tuple(),
+         vehicles._EQUIPMENT: {artefacts.Artillery: (('damage', lambda v: self.__formatRange(*v)),
+                                                     ('piercingPower', lambda v: self.__formatRange(*v)),
+                                                     ('caliber', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
+                                                     ('shotsNumberRange', lambda v: self.__formatRange(*v)),
+                                                     ('areaRadius', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
+                                                     ('artDelayRange', lambda v: self.__formatRange(*v))),
+                               artefacts.Bomber: (('bombDamage', lambda v: self.__formatRange(*v)),
+                                                  ('piercingPower', lambda v: self.__formatRange(*v)),
+                                                  ('bombsNumberRange', lambda v: self.__formatRange(*v)),
+                                                  ('areaSquare', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
+                                                  ('flyDelayRange', lambda v: self.__formatRange(*v)))},
+         vehicles._SHELL: (('caliber', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
+                           (PIERCING_POWER_PROP_NAME, lambda v: self.__formatRange(*v)),
+                           (DAMAGE_PROP_NAME, lambda v: self.__formatRange(*v)),
+                           ('explosionRadius', lambda v: (BigWorld.wg_getNiceNumberFormat(v) if v > 0 else None))),
          vehicles._OPTIONALDEVICE: (('weight', lambda v: (self.__formatRange(*v) if v[1] > 0 else None)),),
          vehicles._GUN: (('caliber', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
                          (SHELLS_COUNT_PROP_NAME, lambda v: self.__formatRange(*v)),
@@ -50,16 +63,19 @@ class _ItemsParameters(object):
                          ('avgDamage', lambda v: self.__formatList(v)),
                          ('dispertionRadius', lambda v: self.__formatRange(*v)),
                          (AIMING_TIME_PROP_NAME, lambda v: self.__formatRange(*v)),
-                         ('weight', lambda v: BigWorld.wg_getIntegralFormat(v))),
-         vehicles._SHELL: (('caliber', lambda v: BigWorld.wg_getNiceNumberFormat(v)),
-                           (PIERCING_POWER_PROP_NAME, lambda v: self.__formatRange(*v)),
-                           (DAMAGE_PROP_NAME, lambda v: self.__formatRange(*v)),
-                           ('explosionRadius', lambda v: (BigWorld.wg_getNiceNumberFormat(v) if v > 0 else None)))}
+                         ('weight', lambda v: BigWorld.wg_getIntegralFormat(v)))}
 
     def __getCommonParameters(self, itemTypeCompDescr, paramsDict, excluded = tuple()):
         result = list()
         if GUI_SETTINGS.technicalInfo:
-            for param in self.__itemCommonParamsList.get(getTypeOfCompactDescr(itemTypeCompDescr), tuple()):
+            compDescrType = getTypeOfCompactDescr(itemTypeCompDescr)
+            params = self.__itemCommonParamsList.get(compDescrType, {})
+            if compDescrType == vehicles._EQUIPMENT:
+                eqDescr = vehicles.getDictDescr(itemTypeCompDescr)
+                params = params.get(type(eqDescr), [])
+            else:
+                params = self.__itemCommonParamsList.get(compDescrType, [])
+            for param in params:
                 if type(param) == str:
                     if param not in excluded:
                         result.append([param, paramsDict.get(param)])
@@ -70,14 +86,6 @@ class _ItemsParameters(object):
                     formattedValue = formatFunc(paramValue)
                     if formattedValue is not None and paramName not in excluded:
                         result.append([paramName, formattedValue])
-                    healMult = {22346: 0.2,
-                     29994: 0.4,
-                     34826: 1}
-                    if paramName == DAMAGE_PROP_NAME and itemTypeCompDescr in healMult:
-                        healMultiplier = healMult[itemTypeCompDescr]
-                        healValue = map(lambda x: x * healMultiplier, paramValue)
-                        formattedHealValue = formatFunc(healValue)
-                        result.append(['heal', formattedHealValue])
 
         return result
 

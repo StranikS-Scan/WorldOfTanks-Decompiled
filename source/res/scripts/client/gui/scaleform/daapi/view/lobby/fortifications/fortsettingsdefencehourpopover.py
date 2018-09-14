@@ -27,12 +27,16 @@ class FortSettingsDefenceHourPopover(View, FortSettingsDefenceHourPopoverMeta, S
         self.as_setTextsS(data)
 
     def setData(self):
+        fort = self.fortCtrl.getFort()
         skipValues = []
         if constants.IS_KOREA:
             skipValues = [0, 7]
-        data = {'hour': self.fortCtrl.getFort().getLocalDefenceHour(),
+        defenceDate = fort.getLocalDefenceDate()
+        data = {'hour': defenceDate.tm_hour,
+         'minutes': defenceDate.tm_min,
          'skipValues': skipValues,
-         'isWrongLocalTime': self._isWrongLocalTime()}
+         'isWrongLocalTime': self._isWrongLocalTime(),
+         'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat()}
         self.as_setDataS(data)
 
     def onApply(self, defHour):

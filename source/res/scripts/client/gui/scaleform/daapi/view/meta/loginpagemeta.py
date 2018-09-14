@@ -3,7 +3,7 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class LoginPageMeta(DAAPIModule):
 
-    def onLogin(self, user, password, host):
+    def onLogin(self, user, password, host, isSocial):
         self._printOverrideError('onLogin')
 
     def onRegister(self):
@@ -11,6 +11,12 @@ class LoginPageMeta(DAAPIModule):
 
     def onRecovery(self):
         self._printOverrideError('onRecovery')
+
+    def onTextLinkClick(self, linkId):
+        self._printOverrideError('onTextLinkClick')
+
+    def onLoginBySocial(self, socialId, host):
+        self._printOverrideError('onLoginBySocial')
 
     def onSetRememberPassword(self, remember):
         self._printOverrideError('onSetRememberPassword')
@@ -48,6 +54,9 @@ class LoginPageMeta(DAAPIModule):
     def saveLastSelectedServer(self, server):
         self._printOverrideError('saveLastSelectedServer')
 
+    def changeAccount(self):
+        self._printOverrideError('changeAccount')
+
     def as_setDefaultValuesS(self, loginName, pwd, rememberPwd, rememberPwdVisible, isIgrCredentialsReset, showRecoveryLink):
         if self._isDAAPIInited():
             return self.flashObject.as_setDefaultValues(loginName, pwd, rememberPwd, rememberPwdVisible, isIgrCredentialsReset, showRecoveryLink)
@@ -80,10 +89,6 @@ class LoginPageMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setKeyboardLang(value)
 
-    def as_cancelLoginQueueS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_cancelLoginQueue()
-
     def as_doAutoLoginS(self):
         if self._isDAAPIInited():
             return self.flashObject.as_doAutoLogin()
@@ -95,3 +100,11 @@ class LoginPageMeta(DAAPIModule):
     def as_switchToAutoAndSubmitS(self, key):
         if self._isDAAPIInited():
             return self.flashObject.as_switchToAutoAndSubmit(key)
+
+    def as_showSimpleFormS(self, isShow, socialList):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showSimpleForm(isShow, socialList)
+
+    def as_showSocialFormS(self, haveToken, userName, icoPath, socialId):
+        if self._isDAAPIInited():
+            return self.flashObject.as_showSocialForm(haveToken, userName, icoPath, socialId)

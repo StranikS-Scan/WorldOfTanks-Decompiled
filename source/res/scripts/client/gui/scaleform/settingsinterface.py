@@ -657,7 +657,7 @@ class SettingsInterface(UIInterface):
             self.__altVoiceSetting.revert()
         if not g_sessionProvider.getCtx().isInBattle:
             SoundGroups.g_instance.enableVoiceSounds(False)
-        elif hasattr(BigWorld.player(), 'vehicle'):
+        elif hasattr(BigWorld.player(), 'vehicle') and BigWorld.player().vehicle:
             SoundGroups.g_instance.soundModes.setCurrentNation(nations.NAMES[BigWorld.player().vehicle.typeDescriptor.type.id[0]])
         g_settingsCore.clearStorages()
         self.__dialogIsVisibility = False

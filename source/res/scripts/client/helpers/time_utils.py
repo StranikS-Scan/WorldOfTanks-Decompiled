@@ -123,10 +123,12 @@ def getTillTimeString(timeValue, keyNamespace):
     if timeValue >= ONE_DAY:
         fmtKey = 'days'
         gmtime = time.gmtime(timeValue - ONE_DAY)
-    elif ONE_DAY > timeValue >= ONE_HOUR:
+    elif timeValue >= ONE_HOUR:
         fmtKey = 'hours'
-    else:
+    elif timeValue >= ONE_MINUTE:
         fmtKey = 'min'
+    else:
+        return i18n.makeString('%s/lessMin' % keyNamespace)
     fmtValues = {'day': str(time.struct_time(gmtime).tm_yday),
      'hour': time.strftime('%H', gmtime),
      'min': time.strftime('%M', gmtime),

@@ -86,6 +86,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_CYBER_SPORT_DIALOG = 'showCyberSportDialog'
     SHOW_CONFIRM_ORDER_DIALOG = 'showConfirmOrderDialog'
     SHOW_PUNISHMENT_DIALOG = 'showPunishmentDialog'
+    SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -131,7 +132,6 @@ class LoginEventEx(LoginEvent):
 
 class HideWindowEvent(HasCtxEvent):
     HIDE_SQUAD_WINDOW = 'hideSquadWindow'
-    HIDE_EVENT_SQUAD_WINDOW = 'hideEventSquadWindow'
     HIDE_COMPANY_WINDOW = 'hideCompanyWindow'
     HIDE_BATTLE_SESSION_WINDOW = 'hideBattleSessionWindow'
     HIDE_UNIT_WINDOW = 'hideUnitWindow'
@@ -164,10 +164,22 @@ class LobbySimpleEvent(HasCtxEvent):
     SHOW_HELPLAYOUT = 'showHelplayout'
     CLOSE_HELPLAYOUT = 'closeHelplayout'
     EVENTS_UPDATED = 'questUpdated'
+    HIDE_HANGAR = 'hideHangar'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
     UPDATE_TRAINING_SETTINGS = 'updateTrainingSettings'
+
+
+class TechnicalMaintenanceEvent(HasCtxEvent):
+    RESET_EQUIPMENT = 'resetEquipment'
+
+
+class ContactsEvent(HasCtxEvent):
+    EDIT_GROUP = 'editGroup'
+    REMOVE_GROUP = 'removeGroup'
+    CREATE_CONTACT_NOTE = 'createContactNote'
+    EDIT_CONTACT_NOTE = 'editContactNote'
 
 
 class FightButtonDisablingEvent(LobbySimpleEvent):
@@ -200,6 +212,7 @@ class CoolDownEvent(SharedEvent):
     PREBATTLE = 'prebattleCoolDown'
     FORTIFICATION = 'fortificationCoolDown'
     BW_CHAT2 = 'bwChat2CoolDown'
+    XMPP = 'xmppCoolDown'
 
     def __init__(self, eventType = None, requestID = 0, coolDown = 5.0):
         super(CoolDownEvent, self).__init__(eventType)

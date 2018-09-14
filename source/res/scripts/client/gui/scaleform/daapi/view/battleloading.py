@@ -3,7 +3,7 @@ import BattleReplay
 import BigWorld
 import constants
 from gui.battle_control import g_sessionProvider
-from gui.battle_control.arena_info import IArenaController, getClientArena, getArenaTypeID, getArenaGuiType
+from gui.battle_control.arena_info import IArenaController, getClientArena, getArenaTypeID
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.prb_control.formatters import getPrebattleFullDescription
@@ -31,7 +31,8 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
         super(BattleLoading, self)._populate()
         self.__addArenaTypeData()
         g_sessionProvider.addArenaCtrl(self)
-        BigWorld.wg_enableGUIBackground(True)
+        BigWorld.wg_updateColorGrading()
+        BigWorld.wg_enableGUIBackground(True, False)
         Waiting.close()
 
     def onLoadComplete(self):
@@ -40,7 +41,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
     def _dispose(self):
         Waiting.close()
         g_sessionProvider.removeArenaCtrl(self)
-        BigWorld.wg_enableGUIBackground(False)
+        BigWorld.wg_enableGUIBackground(False, True)
         super(BattleLoading, self)._dispose()
 
     def setBattleCtx(self, battleCtx):
@@ -94,7 +95,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
     def invalidatePlayerStatus(self, flags, vo, arenaDP):
         self.as_setPlayerStatusS(vo.team != arenaDP.getNumberOfTeam(), vo.vehicleID, vo.playerStatus)
 
-    def invalidateChatRosters(self):
+    def invalidateUsersTags(self):
         self.invalidateVehiclesInfo(self.__battleCtx.getArenaDP())
 
     def updateSpaceLoadProgress(self, progress):
@@ -104,7 +105,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
         if not BattleReplay.isPlaying():
             self.destroy()
         else:
-            BigWorld.wg_enableGUIBackground(False)
+            BigWorld.wg_enableGUIBackground(False, False)
 
     def __makeItem(self, vInfoVO, userGetter, isSpeaking, actionGetter, regionGetter, playerTeam):
         player = vInfoVO.player
@@ -138,7 +139,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
             self.as_setMapNameS(arenaType.name)
             self.as_setMapBGS('none')
             BigWorld.wg_setGUIBackground(BattleLoading.MAP_BG_SOURCE % arenaType.geometryName)
-        self.as_setTipS(tips.getTip(getArenaGuiType()))
+        self.as_setTipS(tips.getTip())
 
     def __addArenaExtraData(self, arenaDP):
         arena = getClientArena()
@@ -158,7 +159,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
             if descExtra:
                 self.as_setBattleTypeNameS(descExtra)
                 self.as_setBattleTypeFrameNumS(arena.guiType + 1)
-            elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING, constants.ARENA_GUI_TYPE.EVENT_BATTLES]:
+            elif arena.guiType in [constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.TRAINING]:
                 self.as_setBattleTypeNameS('#arenas:type/%s/name' % arenaSubType)
                 astStr = arenaSubType
                 if arenaSubType == 'assault':
@@ -169,6 +170,9 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
                     from time import strftime, localtime
                     from debug_utils import LOG_NOTE
                     LOG_NOTE('arenaUniqueID: %d | timestamp: %s' % (arena.arenaUniqueID, strftime('%d.%m.%Y %H:%M:%S', localtime())))
+            elif arena.guiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
+                self.as_setBattleTypeNameS('#menu:loading/battleTypes/%d' % arena.guiType)
+                self.as_setBattleTypeFrameNameS('neutral')
             else:
                 self.as_setBattleTypeNameS('#menu:loading/battleTypes/%d' % arena.guiType)
                 if arena.guiType in constants.ARENA_GUI_TYPE_LABEL.LABELS:

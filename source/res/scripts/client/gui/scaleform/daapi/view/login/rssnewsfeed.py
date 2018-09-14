@@ -6,6 +6,7 @@ import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.i18n import encodeUtf8
 from external_strings_utils import unicode_from_utf8
+from adisp import process, async
 from gui import GUI_SETTINGS, game_control
 from gui.shared.utils import findFirst
 from gui.game_control.links import URLMarcos
@@ -54,9 +55,11 @@ class RssNewsFeed(RssNewsFeedMeta, AppRef):
         super(RssNewsFeed, self)._dispose()
         return
 
+    @process
     def __requestFeed(self):
+        yield lambda callback: callback(True)
         if GUI_SETTINGS.loginRssFeed.show:
-            requestUrl = self.__getRssUrl()
+            requestUrl = yield self.__getRssUrl()
             from helpers.RSSDownloader import g_downloader as g_rss
             if g_rss is not None:
                 g_rss.download(self.__onRssFeedReceived, url=requestUrl)
@@ -88,10 +91,13 @@ class RssNewsFeed(RssNewsFeedMeta, AppRef):
         self.__clearCallback()
         self.__requestCbID = BigWorld.callback(self.UPDATE_INTERVAL, self.__updateCallback)
 
-    def __getRssUrl(self):
+    @async
+    @process
+    def __getRssUrl(self, callback):
         if constants.IS_CHINA:
-            return 'http://wot.kongzhong.com/erji/login_ticker.xml'
-        return self.__urlMacros.parse(str(GUI_SETTINGS.loginRssFeed.url))
+            callback('http://wot.kongzhong.com/erji/login_ticker.xml')
+        url = yield self.__urlMacros.parse(str(GUI_SETTINGS.loginRssFeed.url))
+        callback(url)
 
     def __prepareData(self, entryData):
         description = entryData.get('description')

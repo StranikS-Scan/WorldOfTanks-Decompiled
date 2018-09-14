@@ -9,7 +9,7 @@ UNKNOWN_VEHICLE_CLASS_NAME = 'unknown'
 UNKNOWN_PLAYER_NAME = i18n.makeString('#ingame_gui:players_panel/unknown_name')
 UNKNOWN_VEHICLE_LEVEL = -1
 UNKNOWN_VEHICLE_CLASS_ORDER = 100
-SQUAD_RANGE_TO_SHOW = xrange(2, 6)
+SQUAD_RANGE_TO_SHOW = xrange(2, 4)
 TEAM_RANGE = xrange(1, 3)
 
 class VEHICLE_STATUS(BitmaskHelper):

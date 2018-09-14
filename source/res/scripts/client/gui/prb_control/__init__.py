@@ -103,7 +103,6 @@ def getPrebattleTypeName(prbType = None):
 
 
 ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
- PREBATTLE_TYPE.EVENT_SQUAD: ARENA_GUI_TYPE.RANDOM,
  PREBATTLE_TYPE.TRAINING: ARENA_GUI_TYPE.TRAINING,
  PREBATTLE_TYPE.COMPANY: ARENA_GUI_TYPE.COMPANY}
 ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
@@ -193,7 +192,7 @@ def areSpecBattlesHidden():
 
 
 def isSquad(settings = None):
-    return getPrebattleType(settings=settings) in PREBATTLE_TYPE.LIKE_SQUAD
+    return getPrebattleType(settings=settings) == PREBATTLE_TYPE.SQUAD
 
 
 def isCompany(settings = None):

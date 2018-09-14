@@ -1,5 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortIntelligenceClanFilterPopover.py
+import time
 from gui.Scaleform.framework.managers.TextManager import TextType
+from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
@@ -35,15 +37,20 @@ class FortIntelligenceClanFilterPopover(View, FortIntelligenceClanFilterPopoverM
         minClanLevel = FORTIFICATION_ALIASES.CLAN_FILTER_MIN_LEVEL
         maxClanLevel = FORTIFICATION_ALIASES.CLAN_FILTER_MAX_LEVEL
         startDefenseHour = FORTIFICATION_ALIASES.CLAN_FILTER_MIN_HOUR
+        startDefenseMin = 0
         availability = FORTIFICATION_ALIASES.CLAN_FILTER_DAY_ANY
         cache = self.fortCtrl.getPublicInfoCache()
         if cache:
             minClanLevel, maxClanLevel, startDefenseHour, availability = cache.getDefaultFilterData()
+            selectedDate = time.localtime(time_utils.getTimeForUTC(time_utils.getCurrentTimestamp(), startDefenseHour))
+            startDefenseHour, startDefenseMin = selectedDate.tm_hour, selectedDate.tm_min
         data = {'minClanLevel': minClanLevel,
          'maxClanLevel': maxClanLevel,
          'startDefenseHour': startDefenseHour,
+         'startDefenseMinutes': startDefenseMin,
+         'isTwelveHoursFormat': self.app.utilsManager.isTwelveHoursFormat(),
          'isWrongLocalTime': self._isWrongLocalTime()}
-        defenceStart = self.fortCtrl.getFort().getLocalDefenceHour()
+        defenceStart, _ = self.fortCtrl.getFort().getLocalDefenceHour()
         if defenceStart != NOT_ACTIVATED:
             data['yourOwnClanStartDefenseHour'] = defenceStart
         self.as_setDataS(data)

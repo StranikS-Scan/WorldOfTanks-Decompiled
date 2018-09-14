@@ -6,8 +6,8 @@ from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter
 from messenger import MessengerEntry
 from messenger.m_constants import MESSENGER_COMMAND_TYPE
-from messenger.proto import getBattleCommandFactory
 from messenger.proto.events import g_messengerEvents
+from messenger.proto.migration import getBattleCommandFactory
 
 class ChatCommandsController(object):
 

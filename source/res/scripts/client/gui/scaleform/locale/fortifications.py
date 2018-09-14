@@ -28,6 +28,8 @@ class FORTIFICATIONS(object):
     GENERAL_ORDERTYPE_ADDITIONALBRIEFING = '#fortifications:General/orderType/additionalBriefing'
     GENERAL_ORDERTYPE_TACTICALTRAINING = '#fortifications:General/orderType/tacticalTraining'
     GENERAL_ORDERTYPE_SPECIALMISSION = '#fortifications:General/orderType/specialMission'
+    GENERAL_ORDERTYPE_ARTILLERY = '#fortifications:General/orderType/artillery'
+    GENERAL_ORDERTYPE_BOMBER = '#fortifications:General/orderType/bomber'
     FORTWELCOMEVIEW_CREATEFORTBTN = '#fortifications:FortWelcomeView/createFortBtn'
     FORTWELCOMEVIEW_TITLE = '#fortifications:FortWelcomeView/title'
     FORTWELCOMEVIEW_BUILDINGANDUPGRADING_TITLE = '#fortifications:FortWelcomeView/buildingAndUpgrading/title'
@@ -163,6 +165,7 @@ class FORTIFICATIONS(object):
     BUILDINGS_BUILDINGTOOLTIP_STORE = '#fortifications:Buildings/buildingTooltip/store'
     BUILDINGS_BUILDINGTOOLTIP_ORDER = '#fortifications:Buildings/buildingTooltip/order'
     BUILDINGS_TROWELLABEL = '#fortifications:Buildings/trowelLabel'
+    BUILDINGS_BUILDINGNAME_UNKNOWN = '#fortifications:Buildings/buildingName/unknown'
     BUILDINGS_BUILDINGNAME_BASE_BUILDING = '#fortifications:Buildings/buildingName/base_building'
     BUILDINGS_BUILDINGNAME_WARSCHOOL_BUILDING = '#fortifications:Buildings/buildingName/warSchool_building'
     BUILDINGS_BUILDINGNAME_TROPHY_BUILDING = '#fortifications:Buildings/buildingName/trophy_building'
@@ -172,6 +175,8 @@ class FORTIFICATIONS(object):
     BUILDINGS_BUILDINGNAME_FINANCE_BUILDING = '#fortifications:Buildings/buildingName/finance_building'
     BUILDINGS_BUILDINGNAME_CAR_BUILDING = '#fortifications:Buildings/buildingName/car_building'
     BUILDINGS_BUILDINGNAME_OFFICE_BUILDING = '#fortifications:Buildings/buildingName/office_building'
+    BUILDINGS_BUILDINGNAME_BOMBER_BUILDING = '#fortifications:Buildings/buildingName/bomber_building'
+    BUILDINGS_BUILDINGNAME_ARTILLERY_BUILDING = '#fortifications:Buildings/buildingName/artillery_building'
     ORDERS_COMBAT_PAYMENTS = '#fortifications:orders/COMBAT_PAYMENTS'
     ORDERS_TACTICAL_TRAINING = '#fortifications:orders/TACTICAL_TRAINING'
     ORDERS_ADDITIONAL_BRIEFING = '#fortifications:orders/ADDITIONAL_BRIEFING'
@@ -180,6 +185,10 @@ class FORTIFICATIONS(object):
     ORDERS_EVACUATION = '#fortifications:orders/EVACUATION'
     ORDERS_REQUISITION = '#fortifications:orders/REQUISITION'
     ORDERS_SPECIAL_MISSION = '#fortifications:orders/SPECIAL_MISSION'
+    ORDERS_ARTILLERY = '#fortifications:orders/ARTILLERY'
+    ORDERS_BOMBER = '#fortifications:orders/BOMBER'
+    ORDERTYPE_CONSUMABLE = '#fortifications:orderType/consumable'
+    ORDERTYPE_BATTLECONSUMABLE = '#fortifications:orderType/battleConsumable'
     BUILDINGS_MILITARY_BASE = '#fortifications:buildings/MILITARY_BASE'
     BUILDINGS_MILITARY_ACADEMY = '#fortifications:buildings/MILITARY_ACADEMY'
     BUILDINGS_TROPHY_BRIGADE = '#fortifications:buildings/TROPHY_BRIGADE'
@@ -189,6 +198,8 @@ class FORTIFICATIONS(object):
     BUILDINGS_FINANCIAL_DEPT = '#fortifications:buildings/FINANCIAL_DEPT'
     BUILDINGS_TRANSPORT_DEPT = '#fortifications:buildings/TRANSPORT_DEPT'
     BUILDINGS_OFFICE = '#fortifications:buildings/OFFICE'
+    BUILDINGS_ARTILLERY_SHOP = '#fortifications:buildings/ARTILLERY_SHOP'
+    BUILDINGS_BOMBER_SHOP = '#fortifications:buildings/BOMBER_SHOP'
     CONGRATULATIONWINDOW_BUTTONLBL = '#fortifications:CongratulationWindow/buttonLbl'
     CONGRATULATIONWINDOW_TITLELBL = '#fortifications:CongratulationWindow/titleLbl'
     CONGRATULATIONWINDOW_TEXTTITLE = '#fortifications:CongratulationWindow/textTitle'
@@ -232,6 +243,8 @@ class FORTIFICATIONS(object):
     BUILDINGS_DEFRESINFO_FINANCE_BUILDING = '#fortifications:Buildings/defResInfo/finance_building'
     BUILDINGS_DEFRESINFO_CAR_BUILDING = '#fortifications:Buildings/defResInfo/car_building'
     BUILDINGS_DEFRESINFO_OFFICE_BUILDING = '#fortifications:Buildings/defResInfo/office_building'
+    BUILDINGS_DEFRESINFO_BOMBER_BUILDING = '#fortifications:Buildings/defResInfo/bomber_building'
+    BUILDINGS_DEFRESINFO_ARTILLERY_BUILDING = '#fortifications:Buildings/defResInfo/artillery_building'
     BUILDINGS_PROCESSORDERINFO_WARSCHOOL_BUILDING = '#fortifications:Buildings/processOrderInfo/warSchool_building'
     BUILDINGS_PROCESSORDERINFO_TROPHY_BUILDING = '#fortifications:Buildings/processOrderInfo/trophy_building'
     BUILDINGS_PROCESSORDERINFO_TRAINING_BUILDING = '#fortifications:Buildings/processOrderInfo/training_building'
@@ -240,6 +253,8 @@ class FORTIFICATIONS(object):
     BUILDINGS_PROCESSORDERINFO_FINANCE_BUILDING = '#fortifications:Buildings/processOrderInfo/finance_building'
     BUILDINGS_PROCESSORDERINFO_CAR_BUILDING = '#fortifications:Buildings/processOrderInfo/car_building'
     BUILDINGS_PROCESSORDERINFO_OFFICE_BUILDING = '#fortifications:Buildings/processOrderInfo/office_building'
+    BUILDINGS_PROCESSORDERINFO_BOMBER_BUILDING = '#fortifications:Buildings/processOrderInfo/bomber_building'
+    BUILDINGS_PROCESSORDERINFO_ARTILLERY_BUILDING = '#fortifications:Buildings/processOrderInfo/artillery_building'
     ORDERS_ORDERPOPOVER_DURATIONTIME = '#fortifications:Orders/orderPopover/durationTime'
     ORDERS_ORDERPOPOVER_LEVELSLBL = '#fortifications:Orders/orderPopover/levelsLbl'
     ORDERS_ORDERPOPOVER_PRODUCTIONTIME = '#fortifications:Orders/orderPopover/productionTime'
@@ -256,11 +271,15 @@ class FORTIFICATIONS(object):
     ORDERS_ORDERPOPOVER_ORDERTYPE_ADDITIONALBRIEFING = '#fortifications:Orders/orderPopover/orderType/additionalBriefing'
     ORDERS_ORDERPOPOVER_ORDERTYPE_TACTICALTRAINING = '#fortifications:Orders/orderPopover/orderType/tacticalTraining'
     ORDERS_ORDERPOPOVER_ORDERTYPE_SPECIALMISSION = '#fortifications:Orders/orderPopover/orderType/specialMission'
+    ORDERS_ORDERPOPOVER_ORDERTYPE_ARTILLERY = '#fortifications:Orders/orderPopover/orderType/artillery'
+    ORDERS_ORDERPOPOVER_ORDERTYPE_BOMBER = '#fortifications:Orders/orderPopover/orderType/bomber'
+    ORDERS_ORDERPOPOVER_ORDERTYPE_EMPTYORDER = '#fortifications:Orders/orderPopover/orderType/emptyOrder'
     ORDERS_ORDERPOPOVER_ORDERNOTREADY = '#fortifications:Orders/orderPopover/orderNotReady'
     ORDERS_ORDERPOPOVER_INDEFENSIVE = '#fortifications:Orders/orderPopover/inDefensive'
     ORDERS_ORDERPOPOVER_NEXTBATTLE = '#fortifications:Orders/orderPopover/nextBattle'
     ORDERS_ORDERPOPOVER_SPECIALMISSION_SHORTDESCR = '#fortifications:Orders/orderPopover/specialMission/shortDescr'
     ORDERS_ORDERPOPOVER_SPECIALMISSION_DESCRIPTION = '#fortifications:Orders/orderPopover/specialMission/description'
+    ORDERS_ORDERPOPOVER_DETAILSBTN = '#fortifications:Orders/orderPopover/detailsBtn'
     ORDERS_SPECIALMISSION_AWARD = '#fortifications:Orders/specialMission/award'
     ORDERS_SPECIALMISSION_POSSIBLEAWARD = '#fortifications:Orders/specialMission/possibleAward'
     ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_1 = '#fortifications:Orders/specialMission/possibleAward/description/level/1'
@@ -378,6 +397,8 @@ class FORTIFICATIONS(object):
     BUILDINGSPROCESS_SHORTDESCR_INTENDANCY_BUILDING = '#fortifications:BuildingsProcess/shortDescr/intendancy_building'
     BUILDINGSPROCESS_SHORTDESCR_FINANCE_BUILDING = '#fortifications:BuildingsProcess/shortDescr/finance_building'
     BUILDINGSPROCESS_SHORTDESCR_CAR_BUILDING = '#fortifications:BuildingsProcess/shortDescr/car_building'
+    BUILDINGSPROCESS_SHORTDESCR_BOMBER_BUILDING = '#fortifications:BuildingsProcess/shortDescr/bomber_building'
+    BUILDINGSPROCESS_SHORTDESCR_ARTILLERY_BUILDING = '#fortifications:BuildingsProcess/shortDescr/artillery_building'
     BUILDINGSPROCESS_STATUSMSG_NOTAVAILABLE = '#fortifications:BuildingsProcess/statusMsg/notAvailable'
     BUILDINGSPROCESS_STATUSMSG_BUILT = '#fortifications:BuildingsProcess/statusMsg/built'
     BUILDINGSPROCESS_MAINLABEL_ACCESSCOUNT = '#fortifications:BuildingsProcess/mainLabel/accessCount'
@@ -391,6 +412,8 @@ class FORTIFICATIONS(object):
     BUILDINGSPROCESS_LONGDESCR_INTENDANCY_BUILDING = '#fortifications:BuildingsProcess/longDescr/intendancy_building'
     BUILDINGSPROCESS_LONGDESCR_FINANCE_BUILDING = '#fortifications:BuildingsProcess/longDescr/finance_building'
     BUILDINGSPROCESS_LONGDESCR_CAR_BUILDING = '#fortifications:BuildingsProcess/longDescr/car_building'
+    BUILDINGSPROCESS_LONGDESCR_BOMBER_BUILDING = '#fortifications:BuildingsProcess/longDescr/bomber_building'
+    BUILDINGSPROCESS_LONGDESCR_ARTILLERY_BUILDING = '#fortifications:BuildingsProcess/longDescr/artillery_building'
     BUILDINGSPROCESS_BUTTONLBL = '#fortifications:BuildingsProcess/buttonLbl'
     BUILDINGSPROCESS_BUTTONLBLBUILT = '#fortifications:BuildingsProcess/buttonLblBuilt'
     BUILDINGSPROCESS_ORDERINFO_HEADER = '#fortifications:BuildingsProcess/orderInfo/header'
@@ -622,6 +645,7 @@ class FORTIFICATIONS(object):
     FORTBATTLERESULTSWINDOW_TIE_DESCRIPTION_START = '#fortifications:fortBattleResultsWindow/tie/description/start'
     FORTBATTLERESULTSWINDOW_TIE_DESCRIPTION_END = '#fortifications:fortBattleResultsWindow/tie/description/end'
     FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_HEADER = '#fortifications:fortBattleResultsWindow/defResReceived/header'
+    FORTBATTLERESULTSWINDOW_DEFRESLOST_HEADER = '#fortifications:fortBattleResultsWindow/defResLost/header'
     FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_BYCLAN = '#fortifications:fortBattleResultsWindow/defResReceived/byClan'
     FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_BYPLAYER = '#fortifications:fortBattleResultsWindow/defResReceived/byPlayer'
     FORTBATTLERESULTSWINDOW_JOURNAL = '#fortifications:fortBattleResultsWindow/journal'
@@ -637,10 +661,39 @@ class FORTIFICATIONS(object):
     FORTNOTCOMMANDERFIRSTENTERWINDOW_TEXTTITLE = '#fortifications:fortNotCommanderFirstEnterWindow/textTitle'
     FORTNOTCOMMANDERFIRSTENTERWINDOW_TEXTDESCRIPTION = '#fortifications:fortNotCommanderFirstEnterWindow/textDescription'
     FORTNOTCOMMANDERFIRSTENTERWINDOW_APPLYBTNLABEL = '#fortifications:fortNotCommanderFirstEnterWindow/applyBtnLabel'
+    ORDERSELECTPOPOVER_ORDERLEVEL = '#fortifications:OrderSelectPopover/orderLevel'
+    ORDERSELECTPOPOVER_SELECTED = '#fortifications:OrderSelectPopover/selected'
+    ORDERSELECTPOPOVER_RETURNBTNLABEL = '#fortifications:OrderSelectPopover/returnBtnLabel'
+    ORDERSELECTPOPOVER_ORDERCOUNT = '#fortifications:OrderSelectPopover/orderCount'
+    ORDERSELECTPOPOVER_NOTAVAILABLE = '#fortifications:OrderSelectPopover/notAvailable'
+    FORTCOMBATRESERVESINTROWINDOW_WINDOWTITLE = '#fortifications:fortCombatReservesIntroWindow/windowTitle'
+    FORTCOMBATRESERVESINTROWINDOW_TITLE = '#fortifications:fortCombatReservesIntroWindow/title'
+    FORTCOMBATRESERVESINTROWINDOW_DESCRIPTION = '#fortifications:fortCombatReservesIntroWindow/description'
+    FORTCOMBATRESERVESINTROWINDOW_ARTILLERY_TITLE = '#fortifications:fortCombatReservesIntroWindow/artillery/title'
+    FORTCOMBATRESERVESINTROWINDOW_ARTILLERY_DESCRIPTION = '#fortifications:fortCombatReservesIntroWindow/artillery/description'
+    FORTCOMBATRESERVESINTROWINDOW_BOMBER_TITLE = '#fortifications:fortCombatReservesIntroWindow/bomber/title'
+    FORTCOMBATRESERVESINTROWINDOW_BOMBER_DESCRIPTION = '#fortifications:fortCombatReservesIntroWindow/bomber/description'
+    FORTCONSUMABLEORDER_PARAMS_LEVEL_LBL = '#fortifications:fortConsumableOrder/params/level_lbl'
+    FORTCONSUMABLEORDER_TITLEDESCR = '#fortifications:fortConsumableOrder/titleDescr'
+    FORTCONSUMABLEORDER_DESCR_11 = '#fortifications:fortConsumableOrder/descr/11'
+    FORTCONSUMABLEORDER_DESCR_12 = '#fortifications:fortConsumableOrder/descr/12'
+    FORTCONSUMABLEORDER_LEVELLBL = '#fortifications:fortConsumableOrder/levelLbl'
+    FORTCONSUMABLEORDER_BATTLEPARAMS = '#fortifications:fortConsumableOrder/battleParams'
+    FORTCONSUMABLEORDER_DESCR_ENUM = (FORTCONSUMABLEORDER_DESCR_11, FORTCONSUMABLEORDER_DESCR_12)
     SORTIE_DIVISION_NAME_ENUM = (SORTIE_DIVISION_NAME_ALL,
      SORTIE_DIVISION_NAME_ABSOLUTE,
      SORTIE_DIVISION_NAME_CHAMPION,
      SORTIE_DIVISION_NAME_MIDDLE)
+    GENERAL_ORDERTYPE_ENUM = (GENERAL_ORDERTYPE_BATTLEPAYMENTS,
+     GENERAL_ORDERTYPE_REQUISITION,
+     GENERAL_ORDERTYPE_EVACUATION,
+     GENERAL_ORDERTYPE_HEAVYTRUCKS,
+     GENERAL_ORDERTYPE_MILITARYMANEUVERS,
+     GENERAL_ORDERTYPE_ADDITIONALBRIEFING,
+     GENERAL_ORDERTYPE_TACTICALTRAINING,
+     GENERAL_ORDERTYPE_SPECIALMISSION,
+     GENERAL_ORDERTYPE_ARTILLERY,
+     GENERAL_ORDERTYPE_BOMBER)
     BUILDINGS_DEFRESINFO_ENUM = (BUILDINGS_DEFRESINFO_BASE_BUILDING,
      BUILDINGS_DEFRESINFO_WARSCHOOL_BUILDING,
      BUILDINGS_DEFRESINFO_TROPHY_BUILDING,
@@ -649,7 +702,9 @@ class FORTIFICATIONS(object):
      BUILDINGS_DEFRESINFO_INTENDANCY_BUILDING,
      BUILDINGS_DEFRESINFO_FINANCE_BUILDING,
      BUILDINGS_DEFRESINFO_CAR_BUILDING,
-     BUILDINGS_DEFRESINFO_OFFICE_BUILDING)
+     BUILDINGS_DEFRESINFO_OFFICE_BUILDING,
+     BUILDINGS_DEFRESINFO_BOMBER_BUILDING,
+     BUILDINGS_DEFRESINFO_ARTILLERY_BUILDING)
     BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM = (BUILDINGPOPOVER_HEADER_TITLESTATUS_FOUNDATION,
      BUILDINGPOPOVER_HEADER_TITLESTATUS_MODERNIZATION,
      BUILDINGPOPOVER_HEADER_TITLESTATUS_HALFDESTROY,
@@ -665,7 +720,10 @@ class FORTIFICATIONS(object):
      ORDERS_ORDERPOPOVER_ORDERTYPE_MILITARYMANEUVERS,
      ORDERS_ORDERPOPOVER_ORDERTYPE_ADDITIONALBRIEFING,
      ORDERS_ORDERPOPOVER_ORDERTYPE_TACTICALTRAINING,
-     ORDERS_ORDERPOPOVER_ORDERTYPE_SPECIALMISSION)
+     ORDERS_ORDERPOPOVER_ORDERTYPE_SPECIALMISSION,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_ARTILLERY,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_BOMBER,
+     ORDERS_ORDERPOPOVER_ORDERTYPE_EMPTYORDER)
     FORTMAINVIEW_ENUM = (FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT,
      FORTMAINVIEW_COMMON_TITLE,
      FORTMAINVIEW_DIRECTIONS_TITLE,
@@ -702,7 +760,9 @@ class FORTIFICATIONS(object):
      BUILDINGSPROCESS_LONGDESCR_TANKODROM_BUILDING,
      BUILDINGSPROCESS_LONGDESCR_INTENDANCY_BUILDING,
      BUILDINGSPROCESS_LONGDESCR_FINANCE_BUILDING,
-     BUILDINGSPROCESS_LONGDESCR_CAR_BUILDING)
+     BUILDINGSPROCESS_LONGDESCR_CAR_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_BOMBER_BUILDING,
+     BUILDINGSPROCESS_LONGDESCR_ARTILLERY_BUILDING)
     BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM = (BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FOUNDATION,
      BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_HALFDESTROY,
      BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_MODERNIZATION,
@@ -716,7 +776,8 @@ class FORTIFICATIONS(object):
      SETTINGSWINDOW_BLOCKCONDITION_INPROGRESS,
      SETTINGSWINDOW_BLOCKCONDITION_RECENTLYSCHEDULED)
     SETTINGSWINDOW_BLOCKDESCR_ENUM = (SETTINGSWINDOW_BLOCKDESCR_DEFENCEPERIODTIME, SETTINGSWINDOW_BLOCKDESCR_WEEKEND, SETTINGSWINDOW_BLOCKDESCR_VACATION)
-    BUILDINGS_BUILDINGNAME_ENUM = (BUILDINGS_BUILDINGNAME_BASE_BUILDING,
+    BUILDINGS_BUILDINGNAME_ENUM = (BUILDINGS_BUILDINGNAME_UNKNOWN,
+     BUILDINGS_BUILDINGNAME_BASE_BUILDING,
      BUILDINGS_BUILDINGNAME_WARSCHOOL_BUILDING,
      BUILDINGS_BUILDINGNAME_TROPHY_BUILDING,
      BUILDINGS_BUILDINGNAME_TRAINING_BUILDING,
@@ -724,7 +785,9 @@ class FORTIFICATIONS(object):
      BUILDINGS_BUILDINGNAME_INTENDANCY_BUILDING,
      BUILDINGS_BUILDINGNAME_FINANCE_BUILDING,
      BUILDINGS_BUILDINGNAME_CAR_BUILDING,
-     BUILDINGS_BUILDINGNAME_OFFICE_BUILDING)
+     BUILDINGS_BUILDINGNAME_OFFICE_BUILDING,
+     BUILDINGS_BUILDINGNAME_BOMBER_BUILDING,
+     BUILDINGS_BUILDINGNAME_ARTILLERY_BUILDING)
     BUILDINGSPROCESS_SHORTDESCR_ENUM = (BUILDINGSPROCESS_SHORTDESCR_WARSCHOOL_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_OFFICE_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_TROPHY_BUILDING,
@@ -732,7 +795,9 @@ class FORTIFICATIONS(object):
      BUILDINGSPROCESS_SHORTDESCR_TANKODROM_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_INTENDANCY_BUILDING,
      BUILDINGSPROCESS_SHORTDESCR_FINANCE_BUILDING,
-     BUILDINGSPROCESS_SHORTDESCR_CAR_BUILDING)
+     BUILDINGSPROCESS_SHORTDESCR_CAR_BUILDING,
+     BUILDINGSPROCESS_SHORTDESCR_BOMBER_BUILDING,
+     BUILDINGSPROCESS_SHORTDESCR_ARTILLERY_BUILDING)
     FORTINTELLIGENCE_CLANTYPES_ENUM = (FORTINTELLIGENCE_CLANTYPES_ALL, FORTINTELLIGENCE_CLANTYPES_BOOKED, FORTINTELLIGENCE_CLANTYPES_LAST)
     BUILDINGS_PROCESSORDERINFO_ENUM = (BUILDINGS_PROCESSORDERINFO_WARSCHOOL_BUILDING,
      BUILDINGS_PROCESSORDERINFO_TROPHY_BUILDING,
@@ -741,12 +806,32 @@ class FORTIFICATIONS(object):
      BUILDINGS_PROCESSORDERINFO_INTENDANCY_BUILDING,
      BUILDINGS_PROCESSORDERINFO_FINANCE_BUILDING,
      BUILDINGS_PROCESSORDERINFO_CAR_BUILDING,
-     BUILDINGS_PROCESSORDERINFO_OFFICE_BUILDING)
+     BUILDINGS_PROCESSORDERINFO_OFFICE_BUILDING,
+     BUILDINGS_PROCESSORDERINFO_BOMBER_BUILDING,
+     BUILDINGS_PROCESSORDERINFO_ARTILLERY_BUILDING)
+
+    @staticmethod
+    def fortconsumableorder_descr(key):
+        outcome = '#fortifications:fortConsumableOrder/descr/%s' % key
+        if outcome not in FORTIFICATIONS.FORTCONSUMABLEORDER_DESCR_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
 
     @staticmethod
     def sortie_division_name(key):
         outcome = '#fortifications:sortie/division_name/%s' % key
         if outcome not in FORTIFICATIONS.SORTIE_DIVISION_NAME_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def general_ordertype(key):
+        outcome = '#fortifications:General/orderType/%s' % key
+        if outcome not in FORTIFICATIONS.GENERAL_ORDERTYPE_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
             return None
         else:

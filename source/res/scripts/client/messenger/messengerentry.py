@@ -58,6 +58,7 @@ class MessengerEntry(object):
 
     def onAccountShowGUI(self):
         self.__playerHelper.onAccountShowGUI()
+        self.__storage.restoreFromCache()
         self.__protoPlugins.view(MESSENGER_SCOPE.LOBBY)
 
     def onAvatarInitGUI(self):
@@ -66,6 +67,7 @@ class MessengerEntry(object):
             self.__gui.switch(MESSENGER_SCOPE.BATTLE)
             return
         self.__playerHelper.onAvatarShowGUI()
+        self.__storage.restoreFromCache()
         scope = MESSENGER_SCOPE.BATTLE
         self.__protoPlugins.connect(scope)
         self.__gui.switch(scope)
@@ -81,12 +83,14 @@ class MessengerEntry(object):
     def __pe_onAccountBecomePlayer(self):
         scope = MESSENGER_SCOPE.LOBBY
         g_settings.update()
+        self.__storage.init()
         self.__protoPlugins.setFilters(self.__msgFiltersChain)
         self.__protoPlugins.connect(scope)
         self.__gui.switch(scope)
 
     def __pe_onAvatarBecomePlayer(self):
         g_settings.update()
+        self.__storage.init()
         self.__protoPlugins.setFilters(self.__msgFiltersChain)
         self.__playerHelper.onAvatarBecomePlayer()
 

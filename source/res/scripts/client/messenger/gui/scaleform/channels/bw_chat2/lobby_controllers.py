@@ -81,14 +81,14 @@ class TrainingChannelController(UnitChannelController, PrbListener):
     def _addListeners(self):
         super(UnitChannelController, self)._addListeners()
         uEvents = g_messengerEvents.users
-        uEvents.onUsersRosterReceived += self.__me_onUsersRosterReceived
-        uEvents.onUserRosterChanged += self.__me_onUserRosterChanged
+        uEvents.onUsersListReceived += self.__me_onUsersListReceived
+        uEvents.onUserActionReceived += self.__me_onUserActionReceived
 
     def _removeListeners(self):
         super(UnitChannelController, self)._removeListeners()
         uEvents = g_messengerEvents.users
-        uEvents.onUsersRosterReceived -= self.__me_onUsersRosterReceived
-        uEvents.onUserRosterChanged -= self.__me_onUserRosterChanged
+        uEvents.onUsersListReceived -= self.__me_onUsersListReceived
+        uEvents.onUserActionReceived -= self.__me_onUserActionReceived
         if self.__isListening:
             self.__isListening = False
             self.stopPrbListening()
@@ -113,9 +113,9 @@ class TrainingChannelController(UnitChannelController, PrbListener):
         self._channel.addMembers(members)
         self._refreshMembersDP()
 
-    def __me_onUsersRosterReceived(self):
+    def __me_onUsersListReceived(self, _):
         self._refreshMembersDP()
 
-    def __me_onUserRosterChanged(self, _, user):
+    def __me_onUserActionReceived(self, _, user):
         if self._channel.hasMember(user.getID()):
             self._refreshMembersDP()

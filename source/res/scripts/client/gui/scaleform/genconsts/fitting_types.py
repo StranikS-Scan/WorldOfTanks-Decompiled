@@ -7,6 +7,7 @@ class FITTING_TYPES(object):
     SHELL = 'shell'
     VEHICLE = 'vehicle'
     MODULE = 'module'
+    ORDER = 'order'
     STORE_SLOTS = [VEHICLE,
      MODULE,
      SHELL,

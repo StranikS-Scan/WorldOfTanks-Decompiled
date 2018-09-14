@@ -91,10 +91,10 @@ class ModuleBuyer(ModuleTradeProcessor):
         if conflictedEqs:
             self.__makeConflictMsg("', '".join([ eq.userName for eq in conflictedEqs ]))
         self.buyForCredits = buyForCredits
-        self.addPlugins((plugins.MoneyValidator(self._getOpPrice()), plugins.MessageConfirmator('buyInstallConfirmation', ctx={'name': item.userName,
-          'kind': self.item.userType,
-          'conflict': conflictMsg,
-          'price': BigWorld.wg_getIntegralFormat(self._getOpPrice()[0])}, isEnabled=install)))
+        self.addPlugins((plugins.MoneyValidator(self._getOpPrice()), plugins.ModuleBuyerConfirmator('confirmBuyAndInstall', ctx={'userString': item.userName,
+          'typeString': self.item.userType,
+          'conflictedEqs': conflictMsg,
+          'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice()[0])}, isEnabled=install)))
 
     def _isItemBuyingForCredits(self):
         if self.buyForCredits:

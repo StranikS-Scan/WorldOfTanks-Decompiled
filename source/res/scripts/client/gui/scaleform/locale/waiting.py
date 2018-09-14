@@ -62,6 +62,7 @@ class WAITING(object):
     TRAININGLEAVE = '#waiting:trainingLeave'
     APPLYMODULE = '#waiting:applyModule'
     SINHRONIZE = '#waiting:sinhronize'
+    CHANGINGROLE = '#waiting:changingRole'
     TUTORIAL_REQUEST_BONUS = '#waiting:tutorial-request-bonus'
     TUTORIAL_REQUEST_BATTLE_COUNT = '#waiting:tutorial-request-battle-count'
     TUTORIAL_REQUEST_UNLOCKS = '#waiting:tutorial-request-unlocks'
@@ -140,6 +141,9 @@ class WAITING(object):
     FORT_FAVORITE_ADD = '#waiting:fort/favorite/add'
     FORT_FAVORITE_REMOVE = '#waiting:fort/favorite/remove'
     FORT_SERVERCONNECTION = '#waiting:fort/serverConnection'
+    FORT_ACTIVATECONSUMABLE = '#waiting:fort/activateConsumable'
+    FORT_RETURNCONSUMABLE = '#waiting:fort/returnConsumable'
+    MESSENGER_SUBSCRIBE = '#waiting:messenger/subscribe'
     MESSAGE_ENUM = (MESSAGE_QUEUE,
      MESSAGE_USEAUTOSEARCH,
      MESSAGE_AUTOLOGIN,

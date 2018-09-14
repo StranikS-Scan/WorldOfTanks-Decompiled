@@ -25,8 +25,8 @@ class StrategicAimingSystem(IAimingSystem):
     def disable(self):
         pass
 
-    def getDesiredShotPoint(self):
-        return AimingSystems.getDesiredShotPoint(self._matrix.translation, Vector3(0, -1, 0), True, True)
+    def getDesiredShotPoint(self, terrainOnlyCheck = False):
+        return AimingSystems.getDesiredShotPoint(self._matrix.translation, Vector3(0, -1, 0), True, True, terrainOnlyCheck)
 
     def handleMovement(self, dx, dy):
         shift = self._matrix.applyVector(Vector3(dx, 0, dy))

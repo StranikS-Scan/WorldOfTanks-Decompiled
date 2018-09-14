@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/BrowserWindow.py
 from gui import game_control
+from gui.game_control.gc_constants import BROWSER
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserMeta import BrowserMeta
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
@@ -22,8 +23,9 @@ class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
         self.__browserID = ctx.get('browserID')
         self.__browser = game_control.g_instance.browser.getBrowser(self.__browserID)
         raise self.__browser is not None or AssertionError('Cannot find browser for browser window')
-        self.__size = ctx.get('size', game_control.g_instance.browser.BROWSER_SIZE)
+        self.__size = ctx.get('size', BROWSER.SIZE)
         self.__isDefault = ctx.get('isDefault', True)
+        self.__isAsync = ctx.get('isAsync', False)
         self.__isLoaded = True
         return
 
@@ -60,6 +62,8 @@ class BrowserWindow(View, AbstractWindowView, BrowserMeta, AppRef):
         self.__browser.onNavigate += self.__onNavigate
         game_control.g_instance.browser.onBrowserDeleted += self.__onBrowserDeleted
         self.addListener(VIEW_ALIAS.BROWSER_WINDOW, self.__onShow, EVENT_BUS_SCOPE.LOBBY)
+        if not self.__isAsync:
+            self.__onLoadStart(self.__url)
 
     def _dispose(self):
         self.__browser.onLoadStart -= self.__onLoadStart

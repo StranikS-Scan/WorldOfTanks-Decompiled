@@ -1,10 +1,9 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
-from collections import namedtuple
-from operator import methodcaller, itemgetter
-import pickle
 import types
 import math
+from collections import namedtuple
+from operator import methodcaller, itemgetter
 import BigWorld
 import constants
 import ArenaType
@@ -16,11 +15,13 @@ from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
 from gui.prb_control import getBattleID
 from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
+from gui.LobbyContext import g_lobbyContext
+from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
 from predefined_hosts import g_preDefinedHosts
 from constants import PREBATTLE_TYPE
-from debug_utils import LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_WARNING
 from helpers import i18n, time_utils
-from helpers.i18n import makeString as ms
+from helpers.i18n import makeString as ms, makeString
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as FORT
 from CurrentVehicle import g_currentVehicle
@@ -36,13 +37,22 @@ from gui.prb_control.items.unit_items import SupportedRosterSettings
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils import findFirst, CONST_CONTAINER
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipMethodField, ToolTipParameterField, ToolTipData, ToolTipAttrField
 from gui.shared import g_itemsCache
 from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.lobby.customization import CAMOUFLAGES_KIND_TEXTS, CAMOUFLAGES_NATIONS_TEXTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from items import vehicles
+from messenger.storage import storage_getter
+from messenger.m_constants import USER_TAG
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+
+class FortOrderParamField(ToolTipParameterField):
+
+    def _getValue(self):
+        return [self._tooltip.item.getParams()]
+
 
 class IgrTooltipData(ToolTipBaseData):
 
@@ -103,6 +113,95 @@ class EfficiencyTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, _, value):
         return value
+
+
+class ContactTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(ContactTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTACT)
+        self.__converter = ContactConverter()
+
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
+
+    def getDisplayableData(self, dbID, defaultName):
+        userEntity = self.usersStorage.getUser(dbID)
+        if userEntity is None:
+            return {'userProps': {'userName': defaultName}}
+        else:
+            commonGuiData = self.__converter.makeVO(userEntity, False)
+            statusDescription = ''
+            tags = userEntity.getTags()
+            if userEntity.isOnline():
+                if USER_TAG.PRESENCE_DND in tags:
+                    statusDescription = makeString(TOOLTIPS.CONTACT_STATUS_INBATTLE)
+                else:
+                    statusDescription = makeString(TOOLTIPS.CONTACT_STATUS_ONLINE)
+            commonGuiData['statusDescription'] = statusDescription
+            units = []
+            currentUnit = ''
+            region = g_lobbyContext.getRegionCode(userEntity.getID())
+            if region is not None:
+                currentUnit += self.__makeUnitStr(TOOLTIPS.CONTACT_UNITS_HOMEREALM, region)
+            clanAbbrev = userEntity.getClanAbbrev()
+            if clanAbbrev:
+                currentUnit += self.__addBR(currentUnit)
+                currentUnit += self.__makeUnitStr(TOOLTIPS.CONTACT_UNITS_CLAN, '[{0}]'.format(clanAbbrev))
+            if currentUnit != '':
+                units.append(currentUnit)
+            currentUnit = ''
+            if USER_TAG.IGNORED in tags:
+                currentUnit += self.__makeIconUnitStr('contactIgnored.png', TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_IGNORED)
+            elif USER_TAG.SUB_TO not in tags and (userEntity.isFriend() or USER_TAG.SUB_PENDING_IN in tags):
+                currentUnit += self.__addBR(currentUnit)
+                currentUnit += self.__makeIconUnitStr('contactConfirmNeeded.png', TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_PENDINGFRIENDSHIP)
+            if USER_TAG.REFERRER in tags:
+                currentUnit += self.__addBR(currentUnit)
+                currentUnit += self.__makeReferralStr(TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_RECRUITER)
+            elif USER_TAG.REFERRAL in tags:
+                currentUnit += self.__addBR(currentUnit)
+                currentUnit += self.__makeReferralStr(TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_RECRUIT)
+            if currentUnit != '':
+                units.append(currentUnit)
+            groupsStr = ''
+            userGroups = userEntity.getGroups()
+            if len(userGroups) > 0:
+                groupsStr += ', '.join(userGroups)
+            if clanAbbrev:
+                groupsStr += self.__addComma(groupsStr)
+                groupsStr += self.__converter.getClanFullName(clanAbbrev)
+            if USER_TAG.IGNORED in tags:
+                groupsStr += self.__addComma(groupsStr)
+                groupsStr += makeString(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_IGNORED)
+            if USER_TAG.SUB_PENDING_IN in tags:
+                groupsStr += self.__addComma(groupsStr)
+                groupsStr += makeString(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_FRIENDSHIPREQUEST)
+            if groupsStr != '':
+                units.append(self.__makeUnitStr(TOOLTIPS.CONTACT_UNITS_GROUPS, groupsStr + '.'))
+            if len(units) > 0:
+                commonGuiData['units'] = units
+            return commonGuiData
+
+    def __makeUnitStr(self, descr, val):
+        return makeHtmlString('html_templates:contacts/contact', 'tooltipUnitTxt', {'descr': makeString(descr),
+         'value': val})
+
+    def __makeIconUnitStr(self, icon, descr):
+        return self.__converter.makeIconTag(iconPath=icon) + ' ' + makeHtmlString('html_templates:contacts/contact', 'tooltipSimpleTxt', {'descr': makeString(descr)})
+
+    def __makeReferralStr(self, descr):
+        return self.__converter.makeIconTag(key='referrTag') + ' ' + makeHtmlString('html_templates:contacts/contact', 'tooltipSimpleTxt', {'descr': makeString(descr)})
+
+    def __addBR(self, currentUnit):
+        if currentUnit != '':
+            return '<br/>'
+        return ''
+
+    def __addComma(self, currStr):
+        if currStr != '':
+            return ', '
+        return ''
 
 
 class SortieDivisionTooltipData(ToolTipBaseData):
@@ -492,7 +591,7 @@ class ToolTipRefSysDescription(ToolTipBaseData):
             awardDescr = ', '.join(awardDescrPars)
             result.append({'leftTF': self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, xpCost),
              'rightTF': awardDescr,
-             'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON})
+             'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON})
 
         return result
 
@@ -504,7 +603,7 @@ class ToolTipRefSysAwards(ToolTipBaseData):
         super(ToolTipRefSysAwards, self).__init__(context, TOOLTIP_TYPE.REF_SYSTEM)
 
     def getDisplayableData(self, data):
-        xp, questIDs = pickle.loads(data)
+        xp, questIDs = cPickle.loads(data)
 
         def filterFunc(q):
             return q.getID() in questIDs
@@ -551,9 +650,9 @@ class ToolTipRefSysAwards(ToolTipBaseData):
     def __formatExpCount(self, value):
         value = BigWorld.wg_getIntegralFormat(value)
         value = self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, value)
-        iconLocal = RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON
+        iconLocal = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
         utilsManager = self.app.utilsManager
-        icon = utilsManager.getHtmlIconText(ImageUrlProperties(iconLocal, 18, 18, -9, 0))
+        icon = utilsManager.getHtmlIconText(ImageUrlProperties(iconLocal, 16, 16, -3, 0))
         return value + icon
 
     def __makeConditions(self):
@@ -576,8 +675,8 @@ class ToolTipRefSysXPMultiplier(ToolTipBaseData):
 
     def getDisplayableData(self):
         refSystem = game_control.g_instance.refSystem
-        xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON
-        icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(xpIcon, 18, 18, -9, 0))
+        xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
+        icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(xpIcon, 16, 16, -3, 0))
         expNum = self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, ms(BigWorld.wg_getNiceNumberFormat(refSystem.getMaxReferralXPPool())))
         titleText = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_TITLE))
         descriptionText = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_DESCRIPTION))
@@ -587,7 +686,7 @@ class ToolTipRefSysXPMultiplier(ToolTipBaseData):
         for i, (period, bonus) in enumerate(refSystem.getRefPeriods()):
             xpBonus = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
             condition = self.__formatPeriod(period)
-            xpBlocks.append({'xpIconSource': RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON,
+            xpBlocks.append({'xpIconSource': RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON,
              'multiplierText': self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, xpBonus),
              'descriptionText': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, condition)})
 
@@ -622,7 +721,7 @@ class ToolTipFortBuildingData(ToolTipBaseData, FortViewHelper):
         fort = self.fortCtrl.getFort()
         battleID = getBattleID()
         battle = fort.getBattle(battleID)
-        buildingTypeID = self.UI_BUILDINGS_BIND.index(buildingUID)
+        buildingTypeID = self.getBuildingIDbyUID(buildingUID)
         if battle.isDefence():
             isAttack = not isMine
         else:
@@ -832,3 +931,10 @@ class MapSmallTooltipData(ToolTipBaseData):
         return {'mapName': data.mapName,
          'description': data.description,
          'imageURL': data.imageURL}
+
+
+class FortConsumableOrderTooltipData(ToolTipData):
+
+    def __init__(self, context):
+        super(FortConsumableOrderTooltipData, self).__init__(context, TOOLTIP_TYPE.EQUIPMENT)
+        self.fields = (ToolTipAttrField(self, 'name', 'userName'), ToolTipMethodField(self, 'type', 'getUserType'), FortOrderParamField(self, 'params'))

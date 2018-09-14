@@ -122,7 +122,4 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
         return self.fortCtrl.getFort().getBuilding(self.getServerBuildId(isSource))
 
     def getServerBuildId(self, isSource = True):
-        if isSource:
-            return self.UI_BUILDINGS_BIND.index(self.__fromId)
-        else:
-            return self.UI_BUILDINGS_BIND.index(self.__toId)
+        return self.getBuildingIDbyUID(self.__fromId if isSource else self.__toId)

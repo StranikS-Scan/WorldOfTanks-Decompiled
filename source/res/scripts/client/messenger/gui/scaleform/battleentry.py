@@ -7,7 +7,7 @@ from gui.Scaleform.CommandArgsParser import CommandArgsParser
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from messenger import g_settings
-from messenger.formatters.users_messages import getUserRosterChangedMessage
+from messenger.formatters.users_messages import getUserActionReceivedMessage
 from messenger.gui.Scaleform.data.BattleSharedHistory import BattleSharedHistory
 from messenger.gui.Scaleform.view.BattleChannelView import BattleChannelView
 from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE, MESSENGER_COMMAND_TYPE
@@ -33,7 +33,7 @@ class BattleEntry(IGUIEntry):
     def channelsStorage(self):
         return None
 
-    @proto_getter(PROTO_TYPE.BW)
+    @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
         return None
 
@@ -88,8 +88,8 @@ class BattleEntry(IGUIEntry):
     def show(self):
         g_messengerEvents.channels.onMessageReceived += self.__me_onMessageReceived
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
-        g_messengerEvents.users.onUserRosterChanged += self.__me_onUsersRosterChanged
-        g_messengerEvents.onServerErrorReceived += self.__me_onServerErrorReceived
+        g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
+        g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated += self.__ms_onColorsSchemesUpdated
         self.__initialized = 0
@@ -101,8 +101,8 @@ class BattleEntry(IGUIEntry):
     def close(self, nextScope):
         g_messengerEvents.channels.onMessageReceived -= self.__me_onMessageReceived
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
-        g_messengerEvents.users.onUserRosterChanged -= self.__me_onUsersRosterChanged
-        g_messengerEvents.onServerErrorReceived -= self.__me_onServerErrorReceived
+        g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
+        g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
         g_settings.onUserPreferencesUpdated -= self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated -= self.__ms_onColorsSchemesUpdated
         self.dispossessUI()
@@ -142,8 +142,8 @@ class BattleEntry(IGUIEntry):
         self.__sharedHistory.addMessage(formatted)
         self.__flashCall(BTMS_COMMANDS.ShowActionFailureMessage(), [formatted])
 
-    def __me_onUsersRosterChanged(self, action, user):
-        message = getUserRosterChangedMessage(action, user)
+    def __me_onUserActionReceived(self, action, user):
+        message = getUserActionReceivedMessage(action, user)
         if message:
             self.__showErrorMessage(message)
 
@@ -169,7 +169,7 @@ class BattleEntry(IGUIEntry):
         else:
             LOG_ERROR('Controller not found', command)
 
-    def __me_onServerErrorReceived(self, error):
+    def __me_onErrorReceived(self, error):
         self.__showErrorMessage(error.getMessage())
 
     def __ms_onUserPreferencesUpdated(self):
@@ -312,19 +312,19 @@ class BattleEntry(IGUIEntry):
         return result
 
     def __onAddToFriends(self, _, uid, userName):
-        self.proto.users.addFriend(uid, userName)
+        self.proto.contacts.addFriend(uid, userName)
 
     def __onRemoveFromFriends(self, _, uid):
-        self.proto.users.removeFriend(uid)
+        self.proto.contacts.removeFriend(uid)
 
     def __onAddToIgnored(self, _, uid, userName):
-        self.proto.users.addIgnored(uid, userName)
+        self.proto.contacts.addIgnored(uid, userName)
 
     def __onRemoveFromIgnored(self, _, uid):
-        self.proto.users.removeIgnored(uid)
+        self.proto.contacts.removeIgnored(uid)
 
     def __onSetMuted(self, _, uid, userName):
-        self.proto.users.setMuted(uid, userName)
+        self.proto.contacts.setMuted(uid, userName)
 
     def __onUnsetMuted(self, _, uid):
-        self.proto.users.unsetMuted(uid)
+        self.proto.contacts.unsetMuted(uid)

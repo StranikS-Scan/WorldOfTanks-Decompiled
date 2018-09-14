@@ -185,8 +185,7 @@ SETTING_DEFAULTS = {'ver': 1,
  'gameplaysMask': 0,
  'vehicleLockMode': 0,
  'vehicleLockTimeFactors': {},
- 'observeBothTeams': True,
- 'allowEventBattles': False}
+ 'observeBothTeams': True}
 LIMIT_DEFAULTS = {'maxCountTotal': 256,
  'minCount': 1,
  'totalLevel': (0, 65535),

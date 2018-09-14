@@ -61,7 +61,7 @@ class FunctionalState(object):
         return self.hasModalEntity and not self.isIntroMode and (self.isInPrebattle() or self.isInUnit())
 
     def isNavigationDisabled(self):
-        return self.hasLockedState and (self.isInPreQueue() or self.isInPrebattle(PREBATTLE_TYPE.COMPANY) or self.isInPrebattle(PREBATTLE_TYPE.SQUAD) or self.isInPrebattle(PREBATTLE_TYPE.EVENT_SQUAD))
+        return self.hasLockedState and (self.isInPreQueue() or self.isInPrebattle(PREBATTLE_TYPE.COMPANY) or self.isInPrebattle(PREBATTLE_TYPE.SQUAD))
 
 
 class PlayerDecorator(object):

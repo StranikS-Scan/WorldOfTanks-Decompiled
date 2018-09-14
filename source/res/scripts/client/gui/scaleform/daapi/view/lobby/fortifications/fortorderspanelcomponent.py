@@ -1,6 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrdersPanelComponent.py
+import itertools
+import operator
+from ClientFortifiedRegion import ORDER_UPDATE_REASON
+from helpers import i18n
 from constants import CLAN_MEMBER_FLAGS
-from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework import AppRef
@@ -9,57 +12,68 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n
 
 class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
+    SLOTS_PROPS = {'slotsCount': -1,
+     'groupCount': -1,
+     'slotWidth': 50,
+     'paddings': 64,
+     'groupPadding': 18,
+     'ySlotPosition': 5,
+     'offsetSlot': -7}
 
     def _populate(self):
         super(FortOrdersPanelComponent, self)._populate()
         self.startFortListening()
-        self.__orders = []
         self._buildList()
 
     def _dispose(self):
         self.stopFortListening()
-        self.__orders = None
         super(FortOrdersPanelComponent, self)._dispose()
-        return
 
     def _buildList(self):
-        result = []
-        for buildingID in self.BUILDINGS:
-            orderID = self.fortCtrl.getFort().getBuildingOrder(buildingID)
-            uid = self.UI_BUILDINGS_BIND[buildingID]
-            order = self.fortCtrl.getFort().getOrder(orderID)
-            isRecharged = False
-            for savedOrder in self.__orders:
-                if savedOrder['orderID'] == self.UI_ORDERS_BIND[orderID]:
-                    if savedOrder['count'] < order.count:
-                        isRecharged = True
+        result = filter(None, map(self._buildData, self.BUILDINGS))
+        totalDifferentTypes = tuple(itertools.groupby(result, key=operator.itemgetter('orderType')))
+        propsData = dict(self.SLOTS_PROPS)
+        if result:
+            propsData['slotsCount'] = len(result)
+        if totalDifferentTypes:
+            propsData['groupCount'] = len(totalDifferentTypes) + 1
+        self.as_setPanelPropsS(propsData)
+        self.as_setOrdersS(result)
+        return
 
-            if isRecharged == True:
-                g_fortSoundController.playReadyOrder()
-            result.append({'enabled': order.hasBuilding,
-             'orderID': self.UI_ORDERS_BIND[orderID],
+    def _buildData(self, buildingID, isRecharged = False):
+        orderID = self.fortCtrl.getFort().getBuildingOrder(buildingID)
+        if orderID is None:
+            return
+        else:
+            orderUID = self.getOrderUIDbyID(orderID)
+            if orderUID == self.FORT_UNKNOWN:
+                return
+            builidngUID = self.getBuildingUIDbyID(buildingID)
+            order = self.fortCtrl.getFort().getOrder(orderID)
+            return {'fortOrderTypeID': order.orderID,
+             'orderGroup': order.group,
+             'orderType': order.type,
+             'enabled': order.hasBuilding,
+             'orderID': orderUID,
              'orderIcon': order.icon,
              'count': order.count,
              'level': order.level,
              'inProgress': order.inProgress,
-             'buildingStr': i18n.makeString(FORTIFICATIONS.buildings_buildingname(uid)),
+             'buildingStr': i18n.makeString(FORTIFICATIONS.buildings_buildingname(builidngUID)),
              'inCooldown': order.inCooldown,
              'cooldownPercent': order.getCooldownAsPercent(),
              'leftTime': order.getUsageLeftTime(),
              'isPermanent': order.isPermanent,
-             'isRecharged': isRecharged})
-
-        self.as_setOrdersS(result)
-        self.__orders = result
+             'isRecharged': isRecharged}
 
     def getOrderTooltipBody(self, orderID):
         header = i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(orderID))
         note = None
         fort = self.fortCtrl.getFort()
-        order = fort.getOrder(self.UI_ORDERS_BIND.index(orderID))
+        order = fort.getOrder(self.getOrderIDbyUID(orderID))
         buildingDescr = fort.getBuilding(order.buildingID)
         if order.hasBuilding:
             description = ''
@@ -93,7 +107,7 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
                 else:
                     description = self._getProgressInfo(description, order)
         else:
-            buildingStr = i18n.makeString(FORTIFICATIONS.buildings_buildingname(self.UI_BUILDINGS_BIND[order.buildingID]))
+            buildingStr = i18n.makeString(FORTIFICATIONS.buildings_buildingname(self.getBuildingUIDbyID(order.buildingID)))
             description = i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_ORDERNOTREADY, building=buildingStr)
         return makeTooltip(header, description, note)
 
@@ -127,5 +141,13 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
         else:
             return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_INDEFENSIVE)
 
-    def onUpdated(self, isFullUpdate):
-        self._buildList()
+    def onOrderChanged(self, orderTypeID, reason):
+        g_fortSoundController.playReadyOrder()
+        buildingTypeID, _, _, _ = self.fortCtrl.getFort().getOrderData(orderTypeID)
+        self.as_updateOrderS(self._buildData(buildingTypeID, reason == ORDER_UPDATE_REASON.ADDED))
+
+    def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
+        data = self._buildData(buildingTypeID)
+        if data is not None:
+            self.as_updateOrderS(data)
+        return

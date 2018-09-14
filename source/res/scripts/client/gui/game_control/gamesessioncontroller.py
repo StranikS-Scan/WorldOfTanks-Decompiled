@@ -5,12 +5,14 @@ import Event
 import account_shared
 import constants
 from adisp import process
+from gui.game_control.controllers import Controller
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import time_utils
 from debug_utils import *
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import g_itemsCache
 
-class GameSessionController(object):
+class GameSessionController(Controller, Notifiable):
     """ Game playing time and parent controlling class. """
     NOTIFY_PERIOD = time_utils.ONE_HOUR
     PLAY_TIME_LEFT_NOTIFY = time_utils.QUARTER_HOUR
@@ -22,12 +24,10 @@ class GameSessionController(object):
 
     def init(self):
         """ Singleton initialization method """
+        self.addNotificators(PeriodicNotifier(self.__getClosestPremiumNotification, self.__notifyPremiumTime), PeriodicNotifier(lambda : self.NOTIFY_PERIOD, self.__notifyClient), PeriodicNotifier(self.__getClosestNewDayNotification, self.__notifyNewDay))
         self.__sessionStartedAt = -1
         self.__stats = None
-        self.__notifyCallback = None
-        self.__notifyNewDayCallback = None
         self.__banCallback = None
-        self.__premiumTimeCallback = None
         self.__lastBanMsg = None
         self.isAdult = True
         self.isPlayTimeBlock = False
@@ -40,19 +40,22 @@ class GameSessionController(object):
 
     def fini(self):
         """        Singleton finalization method """
-        self.stop()
+        self._stop()
         self.onClientNotify.clear()
         self.onTimeTillBan.clear()
         self.onNewDayNotify.clear()
         self.onPremiumNotify.clear()
+        self.clearNotification()
         LOG_DEBUG('GameSessionController::fini')
+        super(GameSessionController, self).fini()
 
     @process
-    def start(self, sessionStartTime):
+    def onLobbyStarted(self, ctx):
         """
         Starting new game session.
-        @param sessionStartTime: session start time (server time)
+        @param ctx: lobby start context
         """
+        sessionStartTime = ctx.get('sessionStartedAt', -1)
         LOG_DEBUG('GameSessionController::start', sessionStartTime)
         from gui.shared.utils.requesters import StatsRequester
         self.__stats = yield StatsRequester().request()
@@ -64,33 +67,21 @@ class GameSessionController(object):
 
         if self.__doNotifyInStart:
             self.__notifyClient()
-        else:
-            self.__startNotifyCallback()
-        if self.__notifyNewDayCallback is None:
-            self.__startNewDayNotifyCallback()
+        self.startNotification()
         if self.__banCallback is None:
             self.__midnightBlockTime = self.MIDNIGHT_BLOCK_TIME - time_utils.getServerRegionalTimeCurrentDay()
             playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
             self.__playTimeBlockTime = playTimeLeft - self.PLAY_TIME_LEFT_NOTIFY
             self.isPlayTimeBlock = self.__playTimeBlockTime < self.__midnightBlockTime
             self.__banCallback = BigWorld.callback(self.__getBlockTime(), self.__onBanNotifyHandler)
-        if self.__premiumTimeCallback is None:
-            self.__startPremiumTimeNotifyCallback()
         g_clientUpdateManager.addCallbacks({'account': self.__onAccountChanged})
         return
 
-    def stop(self, doNotifyInStart = False):
-        """ Stopping current game session """
-        LOG_DEBUG('GameSessionController::stop')
-        self.__sessionStartedAt = -1
-        self.__stats = None
-        self.__doNotifyInStart = doNotifyInStart
-        self.__clearBanCallback()
-        self.__clearNewDayNotifyCallback()
-        self.__clearNotifyCallback()
-        self.__clearPremiumTimeNotifyCallback()
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        return
+    def onBattleStarted(self):
+        self._stop(True)
+
+    def onDisconnected(self):
+        self._stop()
 
     def isSessionStartedThisDay(self):
         """
@@ -157,6 +148,17 @@ class GameSessionController(object):
     def incBattlesCounter(self):
         self.__battles += 1
 
+    def _stop(self, doNotifyInStart = False):
+        """ Stopping current game session """
+        LOG_DEBUG('GameSessionController::stop')
+        self.stopNotification()
+        self.__sessionStartedAt = -1
+        self.__stats = None
+        self.__doNotifyInStart = doNotifyInStart
+        self.__clearBanCallback()
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        return
+
     def _getDailyPlayHours(self):
         """
         Returns value of this day playing time in seconds.
@@ -176,53 +178,20 @@ class GameSessionController(object):
         weekDaysCount = account_shared.currentWeekPlayDaysCount(time_utils._g_instance.serverUTCTime, serverRegionalSettings['starting_time_of_a_new_day'], serverRegionalSettings['starting_day_of_a_new_week'])
         return self._getDailyPlayHours() + sum(self.__stats.dailyPlayHours[1:weekDaysCount])
 
+    def __getClosestPremiumNotification(self):
+        premiumTime = time_utils.makeLocalServerTime(g_itemsCache.items.stats.premiumExpiryTime)
+        return time_utils.getTimeDeltaFromNow(premiumTime)
+
     def __getBlockTime(self):
         return (self.__playTimeBlockTime if self.isPlayTimeBlock else self.__midnightBlockTime) + 5
 
-    def __startNotifyCallback(self):
-        self.__clearNotifyCallback()
-        self.__notifyCallback = BigWorld.callback(self.NOTIFY_PERIOD, self.__notifyClient)
-
-    def __startNewDayNotifyCallback(self):
-        self.__clearNewDayNotifyCallback()
-        nextNotification = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
-        self.__notifyNewDayCallback = BigWorld.callback(nextNotification, self.__notifyNewDay)
-
-    def __startPremiumTimeNotifyCallback(self):
-        self.__clearPremiumTimeNotifyCallback()
-        premiumTime = time_utils.makeLocalServerTime(g_itemsCache.items.stats.premiumExpiryTime)
-        delta = time_utils.getTimeDeltaFromNow(premiumTime)
-        if delta > time_utils.ONE_DAY:
-            period = time_utils.ONE_DAY
-        elif delta > time_utils.ONE_HOUR:
-            period = time_utils.ONE_HOUR
-        else:
-            return
-        nextNotification = delta % period or period
-        self.__premiumTimeCallback = BigWorld.callback(nextNotification, self.__notifyPremiumTime)
-
-    def __clearNotifyCallback(self):
-        if self.__notifyCallback is not None:
-            BigWorld.cancelCallback(self.__notifyCallback)
-            self.__notifyCallback = None
-        return
-
-    def __clearNewDayNotifyCallback(self):
-        if self.__notifyNewDayCallback is not None:
-            BigWorld.cancelCallback(self.__notifyNewDayCallback)
-            self.__notifyNewDayCallback = None
-        return
+    def __getClosestNewDayNotification(self):
+        return time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
 
     def __clearBanCallback(self):
         if self.__banCallback is not None:
             BigWorld.cancelCallback(self.__banCallback)
             self.__banCallback = None
-        return
-
-    def __clearPremiumTimeNotifyCallback(self):
-        if self.__premiumTimeCallback is not None:
-            BigWorld.cancelCallback(self.__premiumTimeCallback)
-            self.__premiumTimeCallback = None
         return
 
     def __notifyClient(self):
@@ -231,18 +200,15 @@ class GameSessionController(object):
             playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
             playTimeLeft = max(playTimeLeft, 0)
         self.onClientNotify(self.sessionDuration, time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay(), playTimeLeft)
-        self.__startNotifyCallback()
         return
 
     def __notifyNewDay(self):
         nextNotification = time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()
         self.onNewDayNotify(nextNotification)
-        self.__startNewDayNotifyCallback()
 
     def __notifyPremiumTime(self):
         stats = g_itemsCache.items.stats
         self.onPremiumNotify(stats.isPremium, stats.attributes, stats.premiumExpiryTime)
-        self.__startPremiumTimeNotifyCallback()
 
     def __onBanNotifyHandler(self):
         """ Ban notification event handler """
@@ -254,6 +220,6 @@ class GameSessionController(object):
 
     def __onAccountChanged(self, diff):
         if 'attrs' in diff or 'premiumExpiryTime' in diff:
-            self.__startPremiumTimeNotifyCallback()
+            self.startNotification()
             stats = g_itemsCache.items.stats
             self.onPremiumNotify(stats.isPremium, stats.attributes, stats.premiumExpiryTime)

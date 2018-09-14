@@ -30,8 +30,12 @@ def convert(utf8String):
         return utf_8.decode('----')[0]
 
 
+def isValidKey(key):
+    return key and key[0] == '#'
+
+
 def doesTextExist(key):
-    if not key or key[0] != '#':
+    if not isValidKey(key):
         return False
     moName, subkey = key[1:].split(':', 1)
     if not moName or not subkey:

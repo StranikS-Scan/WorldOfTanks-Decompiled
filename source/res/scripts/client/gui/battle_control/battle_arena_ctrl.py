@@ -10,6 +10,17 @@ from gui.battle_control.arena_info.arena_vos import VehicleActions
 from messenger.storage import storage_getter
 PLAYERS_PANEL_LENGTH = 15
 
+def _getRoster(user):
+    roster = 0
+    if user.isFriend():
+        roster = 1
+    elif user.isIgnored():
+        roster = 2
+    if user.isMuted():
+        roster |= 4
+    return roster
+
+
 class EnemyTeamCtx(object):
     __slots__ = ('team', 'labelMaxLength', 'playerVehicleID', 'prebattleID', 'cameraVehicleID', 'denunciationsLeft', 'playerTeamKillSuspected')
 
@@ -137,10 +148,10 @@ class BattleArenaController(arena_info.IArenaController):
             self.__battleUI.vMarkersManager.setTeamKiller(vo.vehicleID)
         self.__updateTeamItem(vo, arenaDP)
 
-    def invalidateChatRosters(self):
+    def invalidateUsersTags(self):
         self.invalidateVehiclesInfo(self.__battleCtx.getArenaDP())
 
-    def invalidateChatRoster(self, user):
+    def invalidateUserTags(self, user):
         vehicleID = self.__battleCtx.getVehIDByAccDBID(user.getID())
         if vehicleID:
             arenaDP = self.__battleCtx.getArenaDP()
@@ -228,7 +239,7 @@ class BattleArenaController(arena_info.IArenaController):
         dbID = playerVO.accountDBID
         user = userGetter(dbID)
         if user:
-            roster = user.getRoster()
+            roster = _getRoster(user)
             isMuted = user.isMuted()
         else:
             roster = 0

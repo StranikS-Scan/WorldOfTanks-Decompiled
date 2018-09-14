@@ -14,6 +14,7 @@ class BattleDamageMessages(object):
         DROWNING = 5
 
     class ENTITY_TYPE:
+        UNKNOWN = 'unknown'
         SELF = 'self'
         ALLY = 'ally'
         ENEMY = 'enemy'
@@ -75,7 +76,7 @@ class BattleDamageMessages(object):
                     return self.ENTITY_TYPE.ENEMY
                 else:
                     return self.ENTITY_TYPE.ALLY
-            return ''
+            return self.ENTITY_TYPE.UNKNOWN
 
     def __getDamageInfo(self, code, entityID, targetID):
         postfix = ''

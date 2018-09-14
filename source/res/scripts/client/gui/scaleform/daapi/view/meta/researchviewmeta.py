@@ -9,17 +9,11 @@ class ResearchViewMeta(DAAPIModule):
     def request4Buy(self, itemCD):
         self._printOverrideError('request4Buy')
 
-    def request4Sell(self, itemCD):
-        self._printOverrideError('request4Sell')
+    def request4Info(self, itemCD, rootCD):
+        self._printOverrideError('request4Info')
 
     def request4SelectInHangar(self, itemCD):
         self._printOverrideError('request4SelectInHangar')
-
-    def request4ShowVehicleStatistics(self, itemCD):
-        self._printOverrideError('request4ShowVehicleStatistics')
-
-    def requestVehicleInfo(self, itemCD):
-        self._printOverrideError('requestVehicleInfo')
 
     def showSystemMessage(self, typeString, message):
         self._printOverrideError('showSystemMessage')

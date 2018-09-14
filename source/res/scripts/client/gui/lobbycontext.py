@@ -1,5 +1,7 @@
 # Embedded file name: scripts/client/gui/LobbyContext.py
+import BigWorld
 from ConnectionManager import connectionManager
+from helpers.ServerSettings import ServerSettings
 from account_helpers import isRoamingEnabled
 from debug_utils import LOG_ERROR
 from gui.shared import g_itemsCache
@@ -11,12 +13,16 @@ class _LobbyContext(object):
         super(_LobbyContext, self).__init__()
         self.__credentials = None
         self.__guiCtx = {}
+        self.__serverSettings = None
         return
 
     def clear(self):
         self.__credentials = None
         self.__guiCtx.clear()
         return
+
+    def onAccountBecomePlayer(self):
+        self.__serverSettings = ServerSettings(BigWorld.player().serverSettings)
 
     def onAccountShowGUI(self, ctx):
         self.__guiCtx = ctx or {}
@@ -32,6 +38,9 @@ class _LobbyContext(object):
 
     def getGuiCtx(self):
         return self.__guiCtx
+
+    def getServerSettings(self):
+        return self.__serverSettings
 
     def getPlayerFullName(self, pName, clanInfo = None, clanAbbrev = None, regionCode = None, pDBID = None):
         fullName = pName

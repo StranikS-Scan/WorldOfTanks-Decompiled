@@ -5,6 +5,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.TechnicalMaintenanceMeta import TechnicalMaintenanceMeta
 from gui.Scaleform.framework import AppRef
@@ -19,7 +20,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor, VehicleAutoRepairProcessor, VehicleAutoLoadProcessor, VehicleAutoEquipProcessor, VehicleRepairer
 from gui.shared.utils import decorators
 from gui.shared.utils.functions import getViewName
-from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA as _RC
 from gui.shared import events, g_itemsCache
 from gui.server_events import g_eventsCache
 from helpers import i18n
@@ -43,6 +44,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
     def _populate(self):
         super(View, self)._populate()
         g_itemsCache.onSyncCompleted += self._onShopResync
+        self.addListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'stats.credits': self.onCreditsChange,
          'stats.gold': self.onGoldChange,
          'cache.mayConsumeWalletResources': self.onGoldChange,
@@ -59,6 +61,7 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.stopGlobalListening()
+        self.removeListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
         super(View, self)._dispose()
 
     def onCreditsChange(self, value):
@@ -135,11 +138,10 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
                 action = None
                 if price != defaultPrice:
                     action = getItemActionTooltipData(shell)
-                unicName = shell.descriptor['icon'][0]
                 shells.append({'id': str(shell.intCD),
                  'compactDescr': shell.intCD,
                  'type': shell.type,
-                 'icon': '../maps/icons/ammopanel/ammo/%s' % (unicName if not shell.isEvent else 'EVENT_' + unicName),
+                 'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
                  'count': shell.count,
                  'userCount': shell.defaultCount,
                  'step': casseteCount,
@@ -180,9 +182,9 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
         if eId1 is not None or eId2 is not None or eId3 is not None or slotIndex is not None:
             selectedItems = map(lambda id: (items.getItemByCD(id) if id is not None else None), (eId1, eId2, eId3))
             currencies = [currency1, currency2, currency3]
-        inventoryVehicles = items.getVehicles(REQ_CRITERIA.INVENTORY).values()
-        data = g_itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT])).values()
-        data.sort(reverse=True)
+        inventoryVehicles = items.getVehicles(_RC.INVENTORY).values()
+        itemsCriteria = ~_RC.HIDDEN | _RC.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT])
+        data = sorted(g_itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, itemsCriteria).values(), reverse=True)
         vehicle.eqs = list(selectedItems)
         modules = []
         for module in data:
@@ -332,6 +334,12 @@ class TechnicalMaintenance(View, TechnicalMaintenanceMeta, AbstractWindowView, G
 
     def __seveCurrentLayout(self, **kwargs):
         self.__layout.update(kwargs)
+
+    def __resetEquipment(self, event):
+        equipmentCD = event.ctx.get('eqCD', None)
+        if equipmentCD is not None:
+            self.as_resetEquipmentS(equipmentCD)
+        return
 
     def __getStatus(self, reason):
         if reason is not None:

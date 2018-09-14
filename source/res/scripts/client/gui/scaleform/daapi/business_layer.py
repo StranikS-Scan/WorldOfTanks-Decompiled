@@ -1,12 +1,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/business_layer.py
 import BigWorld
 from debug_utils import *
+from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.daapi.settings.config import VIEWS_SETTINGS, VIEWS_PACKAGES
 from gui.Scaleform.framework import ViewTypes, g_entitiesFactories
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import SequenceIDLoader, PackageBusinessHandler
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowDialogEvent, LoginEventEx, LoginCreateEvent
@@ -59,13 +61,15 @@ class BusinessHandler(SequenceIDLoader):
          FORTIFICATION_ALIASES.FORT_BATTLE_DIRECTION_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_INTELLIGENCE_CLAN_FILTER_POPOVER_ALIAS: (self.__showViewSimple,),
          VIEW_ALIAS.BATTLE_TYPE_SELECT_POPOVER: (self.__showViewSimple,),
-         VIEW_ALIAS.SQUAD_TYPE_SELECT_POPOVER: (self.__showViewSimple,),
+         CONTACTS_ALIASES.CONTACTS_POPOVER: (self.__showViewSimple,),
          VIEW_ALIAS.ACCOUNT_POPOVER: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_SETTINGS_PERIPHERY_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_SETTINGS_DEFENCE_HOUR_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_SETTINGS_VACATION_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_SETTINGS_DAYOFF_POPOVER_ALIAS: (self.__showViewSimple,),
          FORTIFICATION_ALIASES.FORT_DATE_PICKER_POPOVER_ALIAS: (self.__showViewSimple,),
+         FORTIFICATION_ALIASES.FORT_ORDER_SELECT_POPOVER_ALIAS: (self.__showViewSimple,),
+         CYBER_SPORT_ALIASES.LEGIONARIES_FILTER_POPOVER_PY: (self.__showViewSimple,),
          VIEW_ALIAS.AWARD_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.RETRAIN_CREW: (self.__showViewSimple,),
@@ -77,8 +81,9 @@ class BusinessHandler(SequenceIDLoader):
          VIEW_ALIAS.VEHICLE_SELL_DIALOG: (self.__showViewSimple,),
          VIEW_ALIAS.PREMIUM_DIALOG: (self.__showViewSimple,),
          VIEW_ALIAS.PERSONAL_CASE: (self.__showViewSimple,),
+         VIEW_ALIAS.ROLE_CHANGE: (self.__showViewSimple,),
          VIEW_ALIAS.BATTLE_RESULTS: (self.__showViewSimple,),
-         VIEW_ALIAS.EVENTS_WINDOW: (self.__showViewSimple,),
+         VIEW_ALIAS.EVENTS_WINDOW: (self.__showEventWindow,),
          VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW: (self.__showViewSimple,),
          VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW: (self.__showViewSimple,),
@@ -89,6 +94,7 @@ class BusinessHandler(SequenceIDLoader):
          ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_DESTROY_DEVICE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_CONFIRM_MODULE: (self.__dlgsHdlr,),
+         ShowDialogEvent.SHOW_EXCHANGE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_CAPTCHA_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: (self.__dlgsHdlr,),
@@ -152,6 +158,15 @@ class BusinessHandler(SequenceIDLoader):
 
     def __showViewSimple(self, event):
         self.app.loadView(event.eventType, event.name, event.ctx)
+
+    def __showEventWindow(self, event):
+        container = self.app.containerManager.getContainer(ViewTypes.WINDOW)
+        window = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.EVENTS_WINDOW})
+        if window is None:
+            self.__showViewSimple(event)
+        else:
+            window.navigate(event.ctx.get('eventType'), event.ctx.get('eventID'))
+        return
 
     def __showRecruitWindow(self, event):
         windowContainer = self.app.containerManager.getContainer(ViewTypes.WINDOW)

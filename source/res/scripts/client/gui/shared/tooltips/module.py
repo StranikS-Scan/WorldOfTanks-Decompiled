@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 import gui
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_itemsCache, REQ_CRITERIA
@@ -86,12 +86,14 @@ class ModuleStatusField(ToolTipDataField):
         level = InventoryVehicle.STATE_LEVEL.WARNING
         nodeState = int(node.state)
         statusTemplate = '#tooltips:researchPage/module/status/%s'
+        parentCD = vehicle.intCD if vehicle is not None else None
+        _, _, need = getUnlockPrice(module.intCD, parentCD)
         if not nodeState & NODE_STATE.UNLOCKED:
             if not vehicle.isUnlocked:
                 header, text = getComplexStatus(statusTemplate % 'rootVehicleIsLocked')
             elif not nodeState & NODE_STATE.NEXT_2_UNLOCK:
                 header, text = getComplexStatus(statusTemplate % 'parentModuleIsLocked')
-            elif not nodeState & NODE_STATE.ENOUGH_XP:
+            elif need > 0:
                 header, text = getComplexStatus(statusTemplate % 'notEnoughXP')
                 level = InventoryVehicle.STATE_LEVEL.CRITICAL
             return status(header, text, level)

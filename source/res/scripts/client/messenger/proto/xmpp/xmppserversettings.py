@@ -1,9 +1,10 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/XmppServerSettings.py
 import types
 from debug_utils import LOG_ERROR
+from messenger.ext.player_helpers import getPlayerDatabaseID
 from messenger.proto.interfaces import IProtoSettings
-from messenger.proto.xmpp.gloox_wrapper import CONNECTION_IMPL_TYPE
-from messenger.proto.xmpp.jid import JID
+from messenger.proto.xmpp.gloox_constants import CONNECTION_IMPL_TYPE
+from messenger.proto.xmpp.jid import ContactJID
 import random
 _NUMBER_OF_ITEMS_IN_SAMPLE = 2
 
@@ -117,9 +118,11 @@ class XmppServerSettings(IProtoSettings):
     def isEnabled(self):
         return self.enabled
 
-    def getFullJID(self, databaseID):
+    def getFullJID(self, databaseID = None):
+        if databaseID is None:
+            databaseID = getPlayerDatabaseID()
         raise databaseID or AssertionError("Player's databaseID can not be empty")
-        jid = JID()
+        jid = ContactJID()
         jid.setNode(databaseID)
         jid.setDomain(self.domain)
         jid.setResource(self.resource)

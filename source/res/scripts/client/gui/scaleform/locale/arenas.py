@@ -91,8 +91,6 @@ class ARENAS(object):
     C_45_NORTH_AMERICA_DESCRIPTION = '#arenas:45_north_america/description'
     C_47_CANADA_A_NAME = '#arenas:47_canada_a/name'
     C_47_CANADA_A_DESCRIPTION = '#arenas:47_canada_a/description'
-    C_51_ASIA_NAME = '#arenas:51_asia/name'
-    C_51_ASIA_DESCRIPTION = '#arenas:51_asia/description'
     C_53_JAPAN_NAME = '#arenas:53_japan/name'
     C_53_JAPAN_DESCRIPTION = '#arenas:53_japan/description'
     C_59_ASIA_GREAT_WALL_NAME = '#arenas:59_asia_great_wall/name'

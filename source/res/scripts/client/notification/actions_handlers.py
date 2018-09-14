@@ -1,15 +1,15 @@
 # Embedded file name: scripts/client/notification/actions_handlers.py
 import BigWorld
 from adisp import process
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui import DialogsInterface, makeHtmlString, SystemMessages, game_control
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.prb_control import getBattleID
 from gui.prb_control.prb_helpers import prbInvitesProperty, prbDispatcherProperty
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.utils.requesters import DeprecatedStatsRequester
-from gui.shared.fortifications import fort_helpers
+from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
@@ -99,7 +99,7 @@ class ShowBattleResultsHandler(_ShowArenaResultHandler):
         results = yield DeprecatedStatsRequester().getBattleResults(long(arenaUniqueID))
         Waiting.hide('loadStats')
         if results:
-            shared_events.showBattleResults(arenaUniqueID, data=results)
+            shared_events.showBattleResultsFromData(results)
         else:
             self._updateNotification(notification)
 
@@ -148,7 +148,11 @@ class OpenPollHandler(_ActionHandler):
         if not link:
             LOG_ERROR('Poll link is not found', notification)
             return
-        game_control.g_instance.browser.load(link, title, showActionBtn=False)
+        self.__doOpen(link, title)
+
+    @process
+    def __doOpen(self, link, title):
+        yield game_control.g_instance.browser.load(link, title, showActionBtn=False)
 
 
 class AcceptPrbInviteHandler(_ActionHandler):
@@ -221,24 +225,55 @@ class AcceptPrbFortInviteHandler(_ActionHandler):
         else:
             battleID, peripheryID = notification.getSavedData()
             if battleID is not None and peripheryID is not None:
-                fort_helpers.tryToConnectFortBattle(battleID, peripheryID)
+                if battleID == getBattleID():
+                    fort_events.showFortBattleRoomWindow()
+                else:
+                    fort_helpers.tryToConnectFortBattle(battleID, peripheryID)
             else:
                 LOG_ERROR('Invalid fort battle data', battleID, peripheryID)
             return
+
+
+class ApproveFriendshipHandler(_ActionHandler):
+
+    @proto_getter(PROTO_TYPE.XMPP)
+    def proto(self):
+        return None
+
+    def isRequiredType(self, typeID):
+        return typeID == NOTIFICATION_TYPE.FRIENDSHIP_RQ
+
+    def handleAction(self, model, entityID):
+        self.proto.contacts.approveFriendship(entityID)
+
+
+class CancelFriendshipHandler(_ActionHandler):
+
+    @proto_getter(PROTO_TYPE.XMPP)
+    def proto(self):
+        return None
+
+    def isRequiredType(self, typeID):
+        return typeID == NOTIFICATION_TYPE.FRIENDSHIP_RQ
+
+    def handleAction(self, model, entityID):
+        self.proto.contacts.cancelFriendship(entityID)
 
 
 class NotificationsActionsHandlers(object):
 
     def __init__(self):
         super(NotificationsActionsHandlers, self).__init__()
-        nType = NOTIFICATION_TYPE
-        self.__handlers = {(nType.MESSAGE, 'showBattleResults'): ShowBattleResultsHandler,
-         (nType.MESSAGE, 'showTutorialBattleHistory'): ShowTutorialBattleHistoryHandler,
-         (nType.MESSAGE, 'showFortBattleResults'): ShowFortBattleResultsHandler,
-         (nType.MESSAGE, 'openPollInBrowser'): OpenPollHandler,
-         (nType.MESSAGE, 'acceptFortInvite'): AcceptPrbFortInviteHandler,
-         (nType.INVITE, 'acceptInvite'): AcceptPrbInviteHandler,
-         (nType.INVITE, 'declineInvite'): DeclinePrbInviteHandler}
+        _TYPE = NOTIFICATION_TYPE
+        self.__handlers = {(_TYPE.MESSAGE, 'showBattleResults'): ShowBattleResultsHandler,
+         (_TYPE.MESSAGE, 'showTutorialBattleHistory'): ShowTutorialBattleHistoryHandler,
+         (_TYPE.MESSAGE, 'showFortBattleResults'): ShowFortBattleResultsHandler,
+         (_TYPE.MESSAGE, 'openPollInBrowser'): OpenPollHandler,
+         (_TYPE.MESSAGE, 'acceptFortInvite'): AcceptPrbFortInviteHandler,
+         (_TYPE.INVITE, 'acceptInvite'): AcceptPrbInviteHandler,
+         (_TYPE.INVITE, 'declineInvite'): DeclinePrbInviteHandler,
+         (_TYPE.FRIENDSHIP_RQ, 'approveFriendship'): ApproveFriendshipHandler,
+         (_TYPE.FRIENDSHIP_RQ, 'cancelFriendship'): CancelFriendshipHandler}
 
     def handleAction(self, model, typeID, entityID, actionName):
         key = (typeID, actionName)

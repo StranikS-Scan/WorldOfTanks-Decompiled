@@ -5,6 +5,7 @@ from dossiers2.custom import records
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
 from dossiers2.custom.records import RECORD_DB_IDS as DOSSIER_REC_DB_IDS
+from debug_utils import *
 _divisionToRecordNames = {'MIDDLE': ('middleBattlesCount', 'fortResourceInMiddle'),
  'CHAMPION': ('championBattlesCount', 'fortResourceInChampion'),
  'ABSOLUTE': ('absoluteBattlesCount', 'fortResourceInAbsolute')}
@@ -97,6 +98,48 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehTypeCompDesc
     __updateAccountDossierImpl(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, vehDossierDescr, maxValuesChanged, frags8p)
 
 
+def updateRated7x7Dossier(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, vehDossierDescr):
+    __updateDossierCommonPart(dossierDescr, battleResults, dossierXP)
+
+
+def updateClubDossier(dossierDescr, battleResults, geometryID):
+    bonusCaps = BONUS_CAPS.get(battleResults['bonusType'])
+    if not bool(bonusCaps & BONUS_CAPS.DOSSIER_CLUB):
+        return
+    block = dossierDescr['total']
+    block['lastBattleTime'] = int(time.time())
+    block = dossierDescr.expand('clubBattles')
+    block['battlesCount'] += 1
+    team = battleResults['team']
+    winnerTeam = battleResults['winnerTeam']
+    if team == winnerTeam:
+        block['wins'] += 1
+    else:
+        if winnerTeam == 0:
+            LOG_ERROR('[EXCEPTION] updateClubDossier(dossierDescr, battleResults, geometryID): draw is not allowed for cybersport rated battles.')
+        block['losses'] += 1
+    for record in ('killedVehicles', 'lostVehicles', 'damageDealt', 'damageReceived', 'capturePoints', 'droppedCapturePoints'):
+        block[record] += battleResults['club'][record]
+
+    isInAttack = True
+    if isInAttack:
+        block['battlesCountInAttack'] += 1
+        block['damageDealtInAttack'] += battleResults['club']['damageDealt']
+    else:
+        block['damageDealtInDefence'] += battleResults['club']['damageDealt']
+    block = dossierDescr['vehicles']
+    for typeCompDescr, xp in battleResults['club']['vehicles']:
+        battlesCount, experience = block.get(typeCompDescr, (0, 0))
+        block[typeCompDescr] = (battlesCount + 1, experience + xp)
+
+    block = dossierDescr['maps']
+    battlesCount, wins = block.get(geometryID, (0, 0))
+    block[geometryID] = (battlesCount + 1, wins + 1 if team == winnerTeam else 0)
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS_RATED7X7):
+        for recordDBID in battleResults['club']['achievements']:
+            __processArenaAchievement(dossierDescr, recordDBID)
+
+
 def updateTankmanDossier(dossierDescr, battleResults):
     __updateTankmanDossierImpl(dossierDescr, battleResults)
 
@@ -153,6 +196,8 @@ def __updateDossierCommonPart(dossierDescr, results, dossierXP):
         __updateAggregatedValues(dossierDescr.expand('a15x15'), dossierDescr.expand('a15x15_2'), results, dossierXP, frags8p)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_7X7):
         __updateAggregatedValues(dossierDescr.expand('a7x7'), dossierDescr.expand('a7x7'), results, dossierXP, frags8p)
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_RATED7X7):
+        __updateAggregatedValues(dossierDescr.expand('rated7x7'), dossierDescr.expand('rated7x7'), results, dossierXP, frags8p)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_COMPANY):
         __updateBaseStatistics(dossierDescr.expand('company'), dossierDescr.expand('company2'), results, dossierXP)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_CLAN):
@@ -176,6 +221,8 @@ def __updateDossierCommonPart(dossierDescr, results, dossierXP):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('max15x15'), results, dossierXP)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAX7X7):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('max7x7'), results, dossierXP)
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXRATED7X7):
+        maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxRated7x7'), results, dossierXP)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXHISTORICAL):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxHistorical'), results, dossierXP)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_MAXSORTIE):
@@ -441,6 +488,8 @@ def __chooseAchievementBlock(bonusCaps):
         res.append(('historicalAchievements', ()))
     elif bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS_SORTIE):
         res.append(('fortAchievements', ()))
+    elif bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS_RATED7X7):
+        res.append(('achievementsRated7x7', ()))
     else:
         raise Exception, 'Unknown achievement mode'
     return res

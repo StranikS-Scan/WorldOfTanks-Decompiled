@@ -3,6 +3,7 @@ import ResMgr
 import ArenaType
 from debug_utils import *
 from constants import FORT_BUILDING_TYPE, FORT_ORDER_TYPE
+from items import vehicles
 _CONFIG_FILE = 'scripts/item_defs/fortified_regions.xml'
 
 def _getInt(section, name, default = 0):
@@ -78,13 +79,25 @@ class OrderType:
 
 
 class OrderTypeLevel:
-    __slots__ = ('effectValue', 'effectTime', 'productionCost', 'productionTime')
+    __slots__ = ('effectValue', 'effectTime', 'productionCost', 'productionTime', 'equipment')
 
     def __init__(self, subsection):
         self.effectValue = subsection['effect_value'].asInt
         self.effectTime = _getInt(subsection, 'effect_time')
         self.productionCost = subsection['production_cost'].asInt
         self.productionTime = subsection['production_time'].asInt
+        equipmentName = _getString(subsection, 'equipment', None)
+        if not equipmentName:
+            self.equipment = None
+        else:
+            cache = vehicles.g_cache
+            equipmentIDs = cache.equipmentIDs()
+            equipments = cache.equipments()
+            eqID = equipmentIDs.get(equipmentName)
+            if eqID is None:
+                raise Exception, "Unknown equipment '%s'" % equipmentName
+            self.equipment = equipments[eqID].compactDescr
+        return
 
 
 class TransportLevel:
@@ -105,17 +118,18 @@ class DefenceConditions:
 
 
 class Division:
-    __slots__ = ('minPoints', 'maxPoints', 'resourceBonus', 'maps')
+    __slots__ = ('minPoints', 'maxPoints', 'resourceBonus', 'influencePoints', 'maps')
 
     def __init__(self, subsection):
         self.minPoints = subsection['min_points'].asInt
         self.maxPoints = subsection['max_points'].asInt
         self.resourceBonus = subsection['resource_bonus'].asInt
+        self.influencePoints = subsection['influence_points'].asInt
         self.maps = set(subsection['maps'].asString.split())
 
 
 class FortifiedRegionCache:
-    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'buildings', 'orders', 'transportLevels', 'defenceConditions', 'divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'bonusFactors')
+    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'buildings', 'orders', 'transportLevels', 'defenceConditions', 'divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'bonusFactors', 'equipmentToOrder')
 
     def __init__(self):
         self.isSupported = False
@@ -152,6 +166,7 @@ class FortifiedRegionCache:
         self.bonusFactors = {}
         self.invalidPeripheryIDs = set()
         self.replacementPeripheryIDs = set()
+        self.equipmentToOrder = {}
         return
 
 
@@ -238,6 +253,12 @@ def init():
         if orderTypeID in orders:
             raise Exception, 'Duplicate order type (%s)' % (orderTypeID,)
         orders[orderTypeID] = OrderType(orderTypeID, orderName, subsection)
+
+    g_cache.equipmentToOrder = equipmentToOrder = {}
+    for orderTypeID, orderType in orders.items():
+        for level, order in orderType.levels.items():
+            if order.equipment:
+                equipmentToOrder[order.equipment] = (orderTypeID, level)
 
     g_cache.bonusFactors = factors = {}
     for name, subsection in section['fort_bonus_factors'].items():

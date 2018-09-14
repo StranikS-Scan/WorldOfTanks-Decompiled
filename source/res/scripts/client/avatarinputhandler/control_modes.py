@@ -370,6 +370,7 @@ class CatControlMode(IControlMode):
 class ArcadeControlMode(IControlMode):
     postmortemCamParams = property(lambda self: (self.__cam.angles, self.__cam.camera.pivotMaxDist))
     camera = property(lambda self: self.__cam)
+    aimingMode = property(lambda self: self.__aimingMode)
 
     def __init__(self, dataSection, avatarInputHandler):
         self.__aih = weakref.proxy(avatarInputHandler)
@@ -589,6 +590,7 @@ class ArcadeControlMode(IControlMode):
 
 class StrategicControlMode(IControlMode):
     camera = property(lambda self: self.__cam)
+    aimingMode = property(lambda self: self.__aimingMode)
 
     def __init__(self, dataSection, avatarInputHandler):
         self.__aih = weakref.proxy(avatarInputHandler)
@@ -680,6 +682,9 @@ class StrategicControlMode(IControlMode):
          CommandMapping.CMD_CM_CAMERA_ROTATE_DOWN,
          CommandMapping.CMD_CM_INCREASE_ZOOM,
          CommandMapping.CMD_CM_DECREASE_ZOOM), key):
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
+                return True
             dx = dy = dz = 0.0
             if cmdMap.isActive(CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT):
                 dx = -1.0
@@ -806,6 +811,7 @@ class StrategicControlMode(IControlMode):
 
 class SniperControlMode(IControlMode):
     camera = property(lambda self: self.__cam)
+    aimingMode = property(lambda self: self.__aimingMode)
     _LENS_EFFECTS_ENABLED = True
     _BINOCULARS_MODE_SUFFIX = ['usual', 'coated']
     BinocularsModeDesc = namedtuple('BinocularsModeDesc', ('background', 'distortion', 'rgbCube', 'greenOffset', 'blueOffset', 'aberrationRadius', 'distortionAmount'))
@@ -854,6 +860,7 @@ class SniperControlMode(IControlMode):
         self.__gunMarker.destroy()
         self.__cam.destroy()
         self.__binoculars.enabled = False
+        self.__binoculars.resetTextures()
         self.__aih = None
         return
 
@@ -930,6 +937,9 @@ class SniperControlMode(IControlMode):
                 dz = 1.0
             if cmdMap.isActive(CommandMapping.CMD_CM_DECREASE_ZOOM):
                 dz = -1.0
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
+                return True
             self.__cam.update(dx, dy, dz, False if dx == dy == 0.0 else True)
             return True
         else:
@@ -1565,6 +1575,37 @@ class _ShellingControl():
         self.__targetModel.visible = value
 
 
+class _PlayerGunInformation(object):
+
+    @staticmethod
+    def getCurrentShotInfo():
+        gunRotator = BigWorld.player().gunRotator
+        shotDesc = BigWorld.player().vehicleTypeDescriptor.shot
+        gunMat = AimingSystems.getPlayerGunMat(gunRotator.turretYaw, gunRotator.gunPitch)
+        position = gunMat.translation
+        velocity = gunMat.applyVector(Math.Vector3(0, 0, shotDesc['speed']))
+        return (position, velocity, Math.Vector3(0, -shotDesc['gravity'], 0))
+
+    @staticmethod
+    def updateMarkerDispersion(spgMarkerComponent, isServerAim = False):
+        dispersionAngle = BigWorld.player().gunRotator.dispersionAngle
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isClientReady:
+            d, s = replayCtrl.getSPGGunMarkerParams()
+            if d != -1.0 and s != -1.0:
+                dispersionAngle = d
+        elif replayCtrl.isRecording:
+            if replayCtrl.isServerAim and isServerAim:
+                replayCtrl.setSPGGunMarkerParams(dispersionAngle, 0.0)
+            elif not isServerAim:
+                replayCtrl.setSPGGunMarkerParams(dispersionAngle, 0.0)
+        spgMarkerComponent.setupConicDispersion(dispersionAngle)
+
+    @staticmethod
+    def updateServerMarkerDispersion(spgMarkerComponent):
+        _PlayerGunInformation.updateMarkerDispersion(spgMarkerComponent, True)
+
+
 class _SuperGunMarker():
     GUN_MARKER_CLIENT = 1
     GUN_MARKER_SERVER = 2
@@ -1577,11 +1618,11 @@ class _SuperGunMarker():
         replayCtrl = BattleReplay.g_replayCtrl
         replayCtrl.setUseServerAim(self.__show2)
         if isStrategic:
-            self.__gm1 = _SPGFlashGunMarker(self.GUN_MARKER_CLIENT)
+            self.__gm1 = _SPGFlashGunMarker(_PlayerGunInformation.getCurrentShotInfo, _PlayerGunInformation.updateMarkerDispersion, self.GUN_MARKER_CLIENT)
         else:
             self.__gm1 = _FlashGunMarker(self.GUN_MARKER_CLIENT, mode)
         if isStrategic:
-            self.__gm2 = _SPGFlashGunMarker(self.GUN_MARKER_SERVER, True)
+            self.__gm2 = _SPGFlashGunMarker(_PlayerGunInformation.getCurrentShotInfo, _PlayerGunInformation.updateServerMarkerDispersion, self.GUN_MARKER_SERVER, True)
         else:
             self.__gm2 = _FlashGunMarker(self.GUN_MARKER_SERVER, mode, True)
 
@@ -1695,8 +1736,10 @@ class _SPGFlashGunMarker(Flash):
     _SWF_FILE_NAME = 'crosshair_strategic.swf'
     _SWF_SIZE = (620, 620)
 
-    def __init__(self, key, isDebug = False):
+    def __init__(self, gunInfoFunc, dispersionUpdateFunc, key, isDebug = False):
         Flash.__init__(self, self._SWF_FILE_NAME, self._FLASH_CLASS)
+        self.__curShotInfoFunc = gunInfoFunc
+        self.__dispersionUpdateFunc = dispersionUpdateFunc
         self.key = key
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_GunMarker
@@ -1738,6 +1781,8 @@ class _SPGFlashGunMarker(Flash):
 
     def destroy(self):
         self.active(False)
+        self.__curShotInfoFunc = None
+        return
 
     def enable(self, state):
         if state is not None:
@@ -1811,24 +1856,10 @@ class _SPGFlashGunMarker(Flash):
             return
 
     def __spgUpdate(self, size):
-        gunRotator = BigWorld.player().gunRotator
-        shotDesc = BigWorld.player().vehicleTypeDescriptor.shot
         try:
-            dispersionAngle = gunRotator.dispersionAngle
-            pos3d, vel3d = gunRotator._VehicleGunRotator__getCurShotPosition()
-            gravity3d = Math.Vector3(0.0, -shotDesc['gravity'], 0.0)
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isClientReady:
-                d, s = replayCtrl.getSPGGunMarkerParams()
-                if d != -1.0 and s != -1.0:
-                    dispersionAngle = d
-                    size = s
-            elif replayCtrl.isRecording:
-                if replayCtrl.isServerAim and self.key == _SuperGunMarker.GUN_MARKER_SERVER:
-                    replayCtrl.setSPGGunMarkerParams(dispersionAngle, size)
-                elif self.key == _SuperGunMarker.GUN_MARKER_CLIENT:
-                    replayCtrl.setSPGGunMarkerParams(dispersionAngle, size)
-            self.component.wg_update(pos3d, vel3d, gravity3d, dispersionAngle, size)
+            pos3d, vel3d, gravity3d = self.__curShotInfoFunc()
+            self.__dispersionUpdateFunc(self.component)
+            self.component.wg_update(pos3d, vel3d, gravity3d, size)
         except:
             LOG_CURRENT_EXCEPTION()
 

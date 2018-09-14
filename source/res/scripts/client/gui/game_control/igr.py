@@ -1,12 +1,13 @@
 # Embedded file name: scripts/client/gui/game_control/IGR.py
 import Event
 import constants
-from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
+from gui.game_control.controllers import Controller
 
-class IGRController(object):
+class IGRController(Controller):
 
-    def __init__(self):
+    def __init__(self, proxy):
+        super(IGRController, self).__init__(proxy)
         self.__xpFactor = 1.0
         self.__roomType = constants.IGR_TYPE.NONE
         self.onIgrTypeChanged = Event.Event()
@@ -17,14 +18,15 @@ class IGRController(object):
     def fini(self):
         g_playerEvents.onIGRTypeChanged -= self.__onIGRTypeChanged
         self.onIgrTypeChanged.clear()
+        super(IGRController, self).fini()
 
-    def start(self, ctx = None):
+    def onLobbyStarted(self, ctx = None):
         data = (ctx or {}).get('igrData', {})
         self.__roomType = data.get('roomType', constants.IGR_TYPE.NONE)
         self.__xpFactor = data.get('igrXPFactor', 1.0)
         self.onIgrTypeChanged(self.__roomType, self.__xpFactor)
 
-    def clear(self):
+    def onDisconnected(self):
         self.__xpFactor = 1.0
         self.__roomType = constants.IGR_TYPE.NONE
 

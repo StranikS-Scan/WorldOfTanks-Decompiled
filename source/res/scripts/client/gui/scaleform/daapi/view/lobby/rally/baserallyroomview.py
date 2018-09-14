@@ -149,12 +149,14 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         self.addListener(events.CSVehicleSelectEvent.VEHICLE_SELECTED, self._onVehicleSelect)
         self._updateRallyData()
         self._setActionButtonState()
-        g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
-        g_messengerEvents.users.onUsersRosterReceived += self._onUsersRosterReceived
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUsersListReceived += self._onUsersReceived
+        usersEvents.onUserActionReceived += self._onUserActionReceived
 
     def _dispose(self):
-        g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
-        g_messengerEvents.users.onUsersRosterReceived -= self._onUsersRosterReceived
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUsersListReceived -= self._onUsersReceived
+        usersEvents.onUserActionReceived -= self._onUserActionReceived
         self._closeSendInvitesWindow()
         HideEvent = events.HideWindowEvent
         self.fireEvent(HideEvent(HideEvent.HIDE_VEHICLE_SELECTOR_WINDOW))
@@ -230,12 +232,12 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         if len(items):
             self.sendRequest(unit_ctx.SetVehicleUnitCtx(vTypeCD=items[0], waitingID='prebattle/change_settings'))
 
-    def _onUserRosterChanged(self, _, user):
+    def _onUserActionReceived(self, _, user):
         self._updateRallyData()
         if self._candidatesDP and self._candidatesDP.hasCandidate(user.getID()):
             self.rebuildCandidatesDP()
 
-    def _onUsersRosterReceived(self):
+    def _onUsersReceived(self, _):
         self._updateRallyData()
 
     def _updateVehiclesLabel(self, minVal, maxVal):

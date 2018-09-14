@@ -55,7 +55,7 @@ class FreeXPExchanger(Processor):
         self.gold = round(rate[1] * xp / rate[0])
         self.vehiclesCD = vehiclesCD
         super(FreeXPExchanger, self).__init__(plugins=(plugins.HtmlMessageConfirmator('exchangeXPConfirmation', 'html_templates:lobby/dialogs', 'confirmExchangeXP', {'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold),
-          'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.xp)}), plugins.MoneyValidator((0, self.gold))))
+          'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.xp)}), plugins.MoneyValidator((0, self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
 
     def _errorHandler(self, code, errStr = '', ctx = None):
         if len(errStr):

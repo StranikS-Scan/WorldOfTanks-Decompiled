@@ -228,7 +228,7 @@ def getItemFromHangar(type, itemID, nationId, position = None):
         inventoryVehTypeCompDesr = None
         for item in inventoryElements:
             vehTypeCompDesr = item.get('vehTypeCompDesr')
-            if item.get('id') == itemID and (item['vehTypeCompDesr'] is None or item['vehTypeCompDesr'] == g_currentVehicle.item.intCD):
+            if item.get('id') == itemID and (vehTypeCompDesr is None or vehTypeCompDesr == g_currentVehicle.item.intCD):
                 if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE or item.get('nationId') == nationId:
                     if item.get('isPermanent'):
                         permanentInventoryItem = item
@@ -239,10 +239,11 @@ def getItemFromHangar(type, itemID, nationId, position = None):
                         temporalInventoryItem = item
 
         if itemID in dosierElements:
-            return __createCiItem(itemID if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE else [None, itemID], inventoryCount + 1, type, True, g_currentVehicle.item.intCD)
+            return __createCiItem(itemID if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE else (nationId, itemID), inventoryCount + 1, type, True, g_currentVehicle.item.intCD)
         if temporalInventoryItem:
             return temporalInventoryItem
         if permanentInventoryItem:
+            permanentInventoryItem['quantity'] = inventoryCount
             return permanentInventoryItem
         isDefault = False
         for item in igrElements:
@@ -269,16 +270,12 @@ def areItemsInHangar(type, itemIDs, nationId):
         for itemID in itemIDs:
             if itemID in dosierElements:
                 return True
-            isInInventory = False
             for item in inventoryElements:
                 if item.get('id') == itemID and (item['vehTypeCompDesr'] is None or item['vehTypeCompDesr'] == g_currentVehicle.item.intCD):
                     if elementType == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE or item.get('nationId') == nationId:
-                        isInInventory = True
-                        break
+                        return True
 
-            return isInInventory
-
-        return
+        return False
 
 
 def isItemInHangar(type, itemID, nationId, position = None):

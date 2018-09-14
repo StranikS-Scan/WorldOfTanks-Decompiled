@@ -1,32 +1,27 @@
 # Embedded file name: scripts/client/gui/game_control/ChinaController.py
-import weakref
-import constants
+from adisp import process
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_eventBus, events
+from gui.game_control import gc_constants
+from gui.game_control.controllers import Controller
 
-class ChinaController(object):
-    BROWSER_COUNT = 999
+class ChinaController(Controller):
 
     def __init__(self, proxy):
-        self.__proxy = weakref.proxy(proxy)
+        super(ChinaController, self).__init__(proxy)
         self.__browserID = None
         return
 
-    def start(self):
-        g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyLoaded)
+    def onLobbyInited(self, event):
+        if not self._proxy.gameSession.battlesCount % gc_constants.BROWSER.CHINA_BROWSER_COUNT:
+            self.showBrowser()
 
-    def stop(self):
+    def onDisconnected(self):
         self.__browserID = None
-        g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyLoaded)
         return
 
+    @process
     def showBrowser(self):
-        self.__browserID = self._getBrowserController().load(title=MENU.BROWSER_WINDOW_TITLE, browserID=self.__browserID)
+        self.__browserID = yield self._getBrowserController().load(title=MENU.BROWSER_WINDOW_TITLE, browserID=self.__browserID)
 
     def _getBrowserController(self):
-        return self.__proxy.browser
-
-    def __handleLobbyLoaded(self, *args):
-        if constants.IS_CHINA:
-            if not self.__proxy.gameSession.battlesCount % self.BROWSER_COUNT:
-                self.showBrowser()
+        return self._proxy.getController(gc_constants.CONTROLLER.BROWSER)

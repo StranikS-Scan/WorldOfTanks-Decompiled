@@ -12,9 +12,8 @@ from functools import partial
 CONNECTION_STATUS = Enumeration('Connection status', ('disconnected', 'connected', 'connectionInProgress', 'disconnectingInProgress', 'kicked'))
 
 def getHardwareID():
-    import ResMgr, Settings
+    import Settings
     up = Settings.g_instance.userPrefs
-    loginInfo = None
     if up.has_key(Settings.KEY_LOGIN_INFO):
         loginInfo = up[Settings.KEY_LOGIN_INFO]
     else:
@@ -35,6 +34,7 @@ class AUTH_METHODS:
     BASIC = 'basic'
     EBANK = 'ebank'
     TOKEN2 = 'token2'
+    TOKEN = 'token'
 
 
 class ConnectionManager(Singleton):
@@ -50,6 +50,7 @@ class ConnectionManager(Singleton):
         self.__connectionStatus = CONNECTION_STATUS.disconnected
         self.onConnected = Event()
         self.onDisconnected = Event()
+        self.onRejected = Event()
         self.__rawStatus = ''
         self.__loginName = None
         self.__isVersionsDiffered = False
@@ -91,7 +92,7 @@ class ConnectionManager(Singleton):
         servers = [ (_serverNiceName(server), server.serverString) for server in BigWorld.serverDiscovery.servers ]
         self.searchServersCallbacks(servers)
 
-    def connect(self, url, login, password, publicKeyPath = None, nickName = None, token2 = '', isNeedSavingPwd = False):
+    def connect(self, url, login, password, publicKeyPath = None, nickName = None, token2 = '', isNeedSavingPwd = False, tokenLoginParams = None):
         self.disconnect()
         LOG_DEBUG('url: %s; login: %s; pass: %s; name: %s; token: %s' % (url,
          login,
@@ -99,51 +100,48 @@ class ConnectionManager(Singleton):
          nickName,
          token2))
         self.__isVersionsDiffered = False
-        if len(login) > 0 and url is not None:
-            self.__setConnectionStatus(CONNECTION_STATUS.connectionInProgress)
-            authMethod = AUTH_METHODS.BASIC
-            if constants.IS_VIETNAM:
-                authMethod = AUTH_METHODS.EBANK
-            dct = {'login': login,
-             'auth_method': authMethod,
-             'session': md5hex(getHardwareID())}
-            if nickName is not None:
-                dct['nickname'] = nickName
-                dct['auto_registration'] = 'true'
-            if constants.IS_IGR_ENABLED:
-                dct['is_igr'] = '1'
-            if token2:
-                dct['token2'] = token2
-                dct['auth_method'] = AUTH_METHODS.TOKEN2
-            dct['auth_realm'] = constants.AUTH_REALM
-            dct['game'] = 'wot'
-            dct['temporary'] = str(int(not isNeedSavingPwd))
+        self.__setConnectionStatus(CONNECTION_STATUS.connectionInProgress)
+        basicLoginParams = {'login': login,
+         'auth_method': AUTH_METHODS.EBANK if constants.IS_VIETNAM else AUTH_METHODS.BASIC}
+        loginParams = tokenLoginParams if tokenLoginParams is not None else basicLoginParams
+        loginParams['session'] = md5hex(getHardwareID())
+        loginParams['auth_realm'] = constants.AUTH_REALM
+        loginParams['game'] = 'wot'
+        loginParams['temporary'] = str(int(not isNeedSavingPwd))
+        if nickName is not None:
+            loginParams['nickname'] = nickName
+            loginParams['auto_registration'] = 'true'
+        if constants.IS_IGR_ENABLED:
+            loginParams['is_igr'] = '1'
+        if token2:
+            loginParams['token2'] = token2
+            loginParams['auth_method'] = AUTH_METHODS.TOKEN2
 
-            class LoginInfo:
-                pass
+        class LoginInfo:
+            pass
 
-            loginInfo = LoginInfo()
-            loginInfo.username = json.dumps(dct).encode('utf8')
-            loginInfo.password = password
-            loginInfo.inactivityTimeout = constants.CLIENT_INACTIVITY_TIMEOUT
-            if publicKeyPath is not None:
-                loginInfo.publicKeyPath = publicKeyPath
-            if constants.IS_DEVELOPMENT and login[0] == '@':
-                try:
-                    loginInfo.username = login[1:]
-                except Exception:
-                    loginInfo.username = login
+        loginInfo = LoginInfo()
+        loginInfo.username = json.dumps(loginParams).encode('utf8')
+        loginInfo.password = password
+        loginInfo.inactivityTimeout = constants.CLIENT_INACTIVITY_TIMEOUT
+        if publicKeyPath is not None:
+            loginInfo.publicKeyPath = publicKeyPath
+        if login and constants.IS_DEVELOPMENT and login[0] == '@':
+            try:
+                loginInfo.username = login[1:]
+            except IndexError:
+                loginInfo.username = login
 
-            BigWorld.connect(url, loginInfo, partial(self.connectionWatcher, nickName is not None))
-            self.__setConnectionStatus(CONNECTION_STATUS.connectionInProgress)
-            self.__loginName = login
-            if g_preDefinedHosts.predefined(url) or g_preDefinedHosts.roaming(url):
-                self.__host = g_preDefinedHosts.byUrl(url)
-            else:
-                for server in BigWorld.serverDiscovery.servers:
-                    if server.serverString == url:
-                        self.__host = self.__host._replace(name=server.ownerName)
-                        break
+        BigWorld.connect(url, loginInfo, partial(self.connectionWatcher, nickName is not None))
+        self.__setConnectionStatus(CONNECTION_STATUS.connectionInProgress)
+        self.__loginName = login
+        if g_preDefinedHosts.predefined(url) or g_preDefinedHosts.roaming(url):
+            self.__host = g_preDefinedHosts.byUrl(url)
+        else:
+            for server in BigWorld.serverDiscovery.servers:
+                if server.serverString == url:
+                    self.__host = self.__host._replace(name=server.ownerName)
+                    break
 
         return
 
@@ -224,6 +222,7 @@ class ConnectionManager(Singleton):
         elif stage == 1:
             if status != 'LOGGED_ON':
                 self.__setConnectionStatus(CONNECTION_STATUS.disconnected)
+                self.onRejected()
             else:
                 self.__setConnectionStatus(CONNECTION_STATUS.connected)
                 self.onConnected()

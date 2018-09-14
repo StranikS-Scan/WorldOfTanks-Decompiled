@@ -64,10 +64,6 @@ class EventDispatcher(AppRef):
         self.addSquadToCarousel(isReady)
         self.showSquadWindow(isInvitesOpen=isInvitesOpen)
 
-    def loadEventSquad(self, isInvitesOpen = False, isReady = False):
-        self.addEventSquadToCarousel(isReady)
-        self.showEventSquadWindow(isInvitesOpen=isInvitesOpen)
-
     def loadTrainingList(self):
         self.removeTrainingFromCarousel(False)
         self.addTrainingToCarousel()
@@ -120,11 +116,6 @@ class EventDispatcher(AppRef):
         self.removeSquadFromCarousel()
         self.requestToDestroyPrbChannel(PREBATTLE_TYPE.SQUAD)
 
-    def unloadEventSquad(self):
-        self._closeEventSquadWindow()
-        self.removeEventSquadFromCarousel()
-        self.requestToDestroyPrbChannel(PREBATTLE_TYPE.EVENT_SQUAD)
-
     def unloadCompany(self):
         self._fireHideEvent(events.HideWindowEvent.HIDE_COMPANY_WINDOW)
         self.removeCompanyFromCarousel()
@@ -164,21 +155,6 @@ class EventDispatcher(AppRef):
 
     def removeSquadFromCarousel(self):
         clientID = channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.SQUAD)
-        if not clientID:
-            LOG_ERROR('Client ID not found', '_removeSquadFromCarousel')
-            return
-        self._handleRemoveRequest(clientID)
-
-    def addEventSquadToCarousel(self, isReady = False):
-        clientID = channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.EVENT_SQUAD)
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'addSquadToCarousel')
-            return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=CHAT.CHANNELS_EVENTSQUAD, icon=RES_ICONS.MAPS_ICONS_MESSENGER_SQUAD_ICON, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.SQUAD_WINDOW_NY_PY}, openHandler=self.showEventSquadWindow, readyData=self.__getReadyPrbData(isReady), tooltipData=self.__getTooltipPrbData(CHAT.CHANNELS_EVENTSQUADREADY_TOOLTIP if isReady else CHAT.CHANNELS_EVENTSQUADNOTREADY_TOOLTIP))
-        self._handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
-
-    def removeEventSquadFromCarousel(self):
-        clientID = channel_num_gen.getClientID4Prebattle(PREBATTLE_TYPE.EVENT_SQUAD)
         if not clientID:
             LOG_ERROR('Client ID not found', '_removeSquadFromCarousel')
             return
@@ -319,9 +295,6 @@ class EventDispatcher(AppRef):
     def showSquadWindow(self, isInvitesOpen = False):
         self._fireShowEvent(PREBATTLE_ALIASES.SQUAD_WINDOW_PY, {'isInvitesOpen': isInvitesOpen})
 
-    def showEventSquadWindow(self, isInvitesOpen = False):
-        self._fireShowEvent(PREBATTLE_ALIASES.SQUAD_WINDOW_NY_PY, {'isInvitesOpen': isInvitesOpen})
-
     def showCompanyWindow(self):
         self._fireShowEvent(PREBATTLE_ALIASES.COMPANY_WINDOW_PY, self.__getCompanyWindowContext())
 
@@ -340,21 +313,6 @@ class EventDispatcher(AppRef):
          'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.handleEvent(events.ChannelManagementEvent(clientID, events.ChannelManagementEvent.REQUEST_TO_CHANGE, {'key': 'tooltipData',
          'value': self.__getTooltipPrbData(CHAT.CHANNELS_SQUADREADY_TOOLTIP if isTeamReady else CHAT.CHANNELS_SQUADNOTREADY_TOOLTIP),
-         'isShowByReq': False,
-         'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def setEventSquadTeamReadyInCarousel(self, prbType, isTeamReady):
-        clientID = channel_num_gen.getClientID4Prebattle(prbType)
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'setEventSquadTeamReadyInCarousel', prbType)
-            return
-        readyData = self.__getReadyPrbData(isTeamReady)
-        g_eventBus.handleEvent(events.ChannelManagementEvent(clientID, events.ChannelManagementEvent.REQUEST_TO_CHANGE, {'key': 'readyData',
-         'value': readyData,
-         'isShowByReq': False,
-         'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.handleEvent(events.ChannelManagementEvent(clientID, events.ChannelManagementEvent.REQUEST_TO_CHANGE, {'key': 'tooltipData',
-         'value': self.__getTooltipPrbData(CHAT.CHANNELS_EVENTSQUADREADY_TOOLTIP if isTeamReady else CHAT.CHANNELS_EVENTSQUADNOTREADY_TOOLTIP),
          'isShowByReq': False,
          'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -380,9 +338,6 @@ class EventDispatcher(AppRef):
 
     def _closeSquadWindow(self):
         self._fireHideEvent(events.HideWindowEvent.HIDE_SQUAD_WINDOW)
-
-    def _closeEventSquadWindow(self):
-        self._fireHideEvent(events.HideWindowEvent.HIDE_EVENT_SQUAD_WINDOW)
 
     def _fireEvent(self, event):
         g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)

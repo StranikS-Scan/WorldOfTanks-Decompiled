@@ -2,6 +2,7 @@
 import BigWorld
 import Event
 import BattleReplay
+import Settings
 from VOIP.voip_constants import VOIP_SUPPORTED_API
 from adisp import async, process
 from debug_utils import LOG_WARNING
@@ -44,9 +45,6 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
         devices = getVOIPManager().getCaptureDevices()
         while len(self.__captureDevicesCallbacks):
             self.__captureDevicesCallbacks.pop(0)(devices)
-
-        option = g_settingsCore.options.getSetting(SOUND.CAPTURE_DEVICES)
-        option.apply(option.get())
 
     def __showChatInitSuccessMessage(self):
         if GUI_SETTINGS.voiceChat and not BattleReplay.isPlaying():
@@ -107,7 +105,7 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
     @process
     def onAccountBecomePlayer(self):
         yield self.initialize(BigWorld.player().serverSettings['voipDomain'])
-        yield self.requestCaptureDevices()
+        yield self.requestCaptureDevices(True)
 
     @async
     def initialize(self, domain, callback):
@@ -122,10 +120,11 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
         if not voipMgr.isNotInitialized():
             return
         voipMgr.initialize(domain)
-        voipMgr.enable(g_settingsCore.getSetting(SOUND.VOIP_ENABLE))
+        voipSetting = g_settingsCore.options.getSetting(SOUND.VOIP_ENABLE)
+        voipMgr.enable(voipSetting._readValue(Settings.g_instance.userPrefs))
 
     @async
-    def requestCaptureDevices(self, callback):
+    def requestCaptureDevices(self, firstTime = False, callback = None):
         if getVOIPManager().getVOIPDomain() == '':
             LOG_WARNING('RequestCaptureDevices. Vivox is not supported')
             callback([])
@@ -134,7 +133,14 @@ class VoiceChatManager(VoiceChatManagerMeta, AppRef):
             LOG_WARNING('RequestCaptureDevices. Vivox has not been initialized')
             callback([])
             return
-        self.__captureDevicesCallbacks.append(callback)
+
+        def resetCapturedDevice(devices, firstTime = firstTime):
+            if firstTime:
+                option = g_settingsCore.options.getSetting(SOUND.CAPTURE_DEVICES)
+                option.apply(option.get(), firstTime)
+            callback(devices)
+
+        self.__captureDevicesCallbacks.append(resetCapturedDevice)
         getVOIPManager().requestCaptureDevices()
 
     def getPlayerDBID(self):

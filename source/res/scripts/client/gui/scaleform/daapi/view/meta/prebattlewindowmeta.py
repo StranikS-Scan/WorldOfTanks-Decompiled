@@ -56,6 +56,10 @@ class PrebattleWindowMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setCoolDownForReadyButton(value)
 
+    def as_resetReadyButtonCoolDownS(self):
+        if self._isDAAPIInited():
+            return self.flashObject.as_resetReadyButtonCoolDown()
+
     def as_toggleReadyBtnS(self, value):
         if self._isDAAPIInited():
             return self.flashObject.as_toggleReadyBtn(value)

@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/FortOrder.py
 from FortifiedRegionBase import FORT_EVENT_TYPE
 from constants import FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES
+from gui.shared.utils.ItemsParameters import g_instance as g_itemsParams
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import time_utils, i18n
@@ -16,14 +18,16 @@ class FortOrder(AppRef):
      FORT_ORDER_TYPE.REQUISITION: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_REQUISITION, RES_ICONS.MAPS_ICONS_ORDERS_BIG_REQUISITION),
      FORT_ORDER_TYPE.ADDITIONAL_BRIEFING: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_ADDITIONALBRIEFING, RES_ICONS.MAPS_ICONS_ORDERS_BIG_ADDITIONALBRIEFING),
      FORT_ORDER_TYPE.EVACUATION: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_EVACUATION, RES_ICONS.MAPS_ICONS_ORDERS_BIG_EVACUATION),
-     FORT_ORDER_TYPE.HEAVY_TRANSPORT: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_HEAVYTRANSPORT, RES_ICONS.MAPS_ICONS_ORDERS_BIG_HEAVYTRANSPORT)}
+     FORT_ORDER_TYPE.HEAVY_TRANSPORT: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_HEAVYTRANSPORT, RES_ICONS.MAPS_ICONS_ORDERS_BIG_HEAVYTRANSPORT),
+     FORT_ORDER_TYPE.ARTILLERY: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_ARTILLERY, RES_ICONS.MAPS_ICONS_ORDERS_BIG_ARTILLERY),
+     FORT_ORDER_TYPE.BOMBER: (RES_ICONS.MAPS_ICONS_ORDERS_SMALL_BOMBER, RES_ICONS.MAPS_ICONS_ORDERS_BIG_BOMBER)}
 
-    def __init__(self, orderID, proxy = None):
+    def __init__(self, orderID, proxy = None, level = 0):
         self.orderID = orderID
         self.buildingID = None
         self.count = 0
         self.maxCount = 0
-        self.level = 0
+        self.level = level
         self.finishTime = None
         self.effectTime = None
         self.effectValue = 0
@@ -35,6 +39,14 @@ class FortOrder(AppRef):
         self.isCompatible = False
         self.hasBuilding = False
         self.isSupported = True
+        if orderID in FORT_ORDER_TYPE.CONSUMABLES:
+            self.group = ORDER_TYPES.FORT_ORDER_CONSUMABLES_GROUP
+            self.type = ORDER_TYPES.FORT_ORDER_CONSUMABLES_ACTIVE_TYPE
+        else:
+            self.group = ORDER_TYPES.FORT_ORDER_GENERAL_GROUP
+            self.type = ORDER_TYPES.FORT_ORDER_GENERAL_ACTIVE_TYPE
+            if FORT_ORDER_TYPE.isOrderPermanent(orderID):
+                self.type = ORDER_TYPES.FORT_ORDER_GENERAL_PASSIVE_TYPE
         if proxy is not None:
             self.buildingID, self.count, self.level, orderData = proxy.getOrderData(orderID)
             self.isPermanent = FORT_ORDER_TYPE.isOrderPermanent(orderID)
@@ -88,20 +100,26 @@ class FortOrder(AppRef):
         return self.orderID == FORT_ORDER_TYPE.SPECIAL_MISSION
 
     @property
+    def isConsumable(self):
+        return self.orderID in FORT_ORDER_TYPE.CONSUMABLES
+
+    @property
     def userName(self):
         from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-        return i18n.makeString('#fortifications:General/orderType/%s' % FortViewHelper.UI_ORDERS_BIND[self.orderID])
+        return i18n.makeString('#fortifications:General/orderType/%s' % FortViewHelper.getOrderUIDbyID(self.orderID))
 
     @property
     def description(self):
+        from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
         if self.isSpecialMission:
             awardText = i18n.makeString(FORTIFICATIONS.ORDERS_SPECIALMISSION_POSSIBLEAWARD) + ' '
             bonusDescr = i18n.makeString(FORTIFICATIONS.orders_specialmission_possibleaward_description_level(self.level))
             return self.app.utilsManager.textManager.concatStyles(((TextType.NEUTRAL_TEXT, awardText), (TextType.MAIN_TEXT, bonusDescr)))
+        elif self.isConsumable:
+            return fort_formatters.getBonusText('', FortViewHelper.getBuildingUIDbyID(self.buildingID), ctx=dict(self.getParams()))
         else:
-            from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
             effectValueStr = '+' + str(abs(self.effectValue))
-            return fort_formatters.getBonusText('%s%%' % effectValueStr, FortViewHelper.UI_BUILDINGS_BIND[self.buildingID])
+            return fort_formatters.getBonusText('%s%%' % effectValueStr, FortViewHelper.getBuildingUIDbyID(self.buildingID))
 
     def _isSupported(self, orderID):
         if not self.app.varsManager.isFortificationBattleAvailable():
@@ -133,3 +151,20 @@ class FortOrder(AppRef):
 
     def getProductionLeftTimeStr(self):
         return self.app.utilsManager.textManager.getTimeDurationStr(self.getProductionLeftTime())
+
+    def getOperationDescription(self):
+        if self.isConsumable:
+            return i18n.makeString('#fortifications:fortConsumableOrder/descr/%d' % self.orderID)
+        return ''
+
+    def getUserType(self):
+        i18nKey = 'battleConsumable' if self.isConsumable else 'consumable'
+        return i18n.makeString('#fortifications:orderType/%s' % i18nKey, level=fort_formatters.getTextLevel(self.level))
+
+    def getParams(self):
+        if self.isConsumable:
+            from ClientFortifiedRegion import getBattleEquipmentByOrderID
+            eqDescr = getBattleEquipmentByOrderID(self.orderID, self.level)
+            if eqDescr is not None:
+                return g_itemsParams.getEquipment(eqDescr, isParameters=True)['parameters']
+        return []

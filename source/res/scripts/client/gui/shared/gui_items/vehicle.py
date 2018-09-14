@@ -159,6 +159,13 @@ class Vehicle(FittingItem, HasStrCD):
             return (self._buyPrice[0] - self.rentCompensation[0], self._buyPrice[1] - self.rentCompensation[1])
         return self._buyPrice
 
+    def getUnlockDescrByIntCD(self, intCD):
+        for unlockIdx, data in enumerate(self.descriptor.type.unlocksDescrs):
+            if intCD == data[1]:
+                return (unlockIdx, data[0], set(data[2:]))
+
+        return (-1, 0, set())
+
     def _calcSellPrice(self, proxy):
         if self.isRented:
             return (0, 0)
@@ -200,6 +207,7 @@ class Vehicle(FittingItem, HasStrCD):
         bonuses['commander'] = 0
         commanderEffRoleLevel = 0
         bonuses['brotherhood'] = tankmen.getSkillsConfig()['brotherhood']['crewLevelIncrease']
+        femalesCount = 0
         for tankmanID in crew:
             if tankmanID is None:
                 bonuses['brotherhood'] = 0
@@ -208,12 +216,16 @@ class Vehicle(FittingItem, HasStrCD):
             if not tmanInvData:
                 continue
             tdescr = tankmen.TankmanDescr(compactDescr=tmanInvData['compDescr'])
+            if tdescr.isFemale:
+                femalesCount += 1
             if 'brotherhood' not in tdescr.skills or tdescr.skills.index('brotherhood') == len(tdescr.skills) - 1 and tdescr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
                 bonuses['brotherhood'] = 0
             if tdescr.role == Tankman.ROLES.COMMANDER:
                 factor, addition = tdescr.efficiencyOnVehicle(self.descriptor)
                 commanderEffRoleLevel = round(tdescr.roleLevel * factor + addition)
 
+        if femalesCount and len(crew) != femalesCount:
+            bonuses['brotherhood'] = 0
         bonuses['commander'] += round((commanderEffRoleLevel + bonuses['brotherhood'] + bonuses['equipment']) / tankmen.COMMANDER_ADDITION_RATIO)
         return bonuses
 
@@ -352,6 +364,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def rentalIsOver(self):
         return self.isRented and self.rentLeftTime <= 0
+
+    @property
+    def rentalIsActive(self):
+        return self.isRented and self.rentLeftTime > 0
 
     @property
     def descriptor(self):
@@ -616,15 +632,13 @@ class Vehicle(FittingItem, HasStrCD):
             return (False, 'premiumIGR')
         return super(Vehicle, self).mayPurchase(money)
 
-    def mayRent(self, money):
-        if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, 'center_unavailable')
-        if not self.isRentable:
+    def mayRentOrBuy(self, money):
+        if self.isDisabledForBuy and not self.isRentable:
             return (False, 'rental_disabled')
-        if self.isPremiumIGR:
-            return (False, 'premiumIGR')
-        if not self.isRentAvailable:
-            return (False, 'rental_time_exceeded')
+        if self.isRentable and not self.isRentAvailable:
+            mayPurchase, reason = self.mayPurchase(money)
+            if not mayPurchase:
+                return (False, 'rental_time_exceeded')
         if self.minRentPrice:
             currency = ''
             if self.minRentPrice[1]:
@@ -636,15 +650,7 @@ class Vehicle(FittingItem, HasStrCD):
                 if self.minRentPrice[0] <= money[0]:
                     return (True, '')
             return (False, '%s_error' % currency)
-        return (True, '')
-
-    def mayRentOrBuy(self, money):
-        canRent, rentReason = self.mayRent(money)
-        canBuy, buyReason = self.mayPurchase(money)
-        reason = ''
-        if not canRent and not canBuy:
-            reason = rentReason if len(rentReason) > 0 else buyReason
-        return (canRent or canBuy, reason)
+        return self.mayPurchase(money)
 
     def getRentPackage(self, days = None):
         if days is not None:
@@ -717,6 +723,10 @@ def getTypeUserName(vehType, isElite):
         return i18n.makeString('#menu:header/vehicleType/elite/%s' % vehType)
     else:
         return i18n.makeString('#menu:header/vehicleType/%s' % vehType)
+
+
+def getTypeShortUserName(vehType):
+    return i18n.makeString('#menu:classes/short/%s' % vehType)
 
 
 def _getLevelIconName(vehLevel, postfix = ''):

@@ -23,7 +23,7 @@ class BaseRallyListView(BaseRallyListViewMeta):
 
     def _populate(self):
         super(BaseRallyListView, self)._populate()
-        g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived += self._onUserActionReceived
         self._searchDP = self.getPyDataProvider()
         self._searchDP.setFlashObject(self.as_getSearchDPS())
 
@@ -31,7 +31,7 @@ class BaseRallyListView(BaseRallyListViewMeta):
         if self._searchDP is not None:
             self._searchDP.fini()
             self._searchDP = None
-        g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived -= self._onUserActionReceived
         super(BaseRallyListView, self)._dispose()
         return
 
@@ -43,5 +43,5 @@ class BaseRallyListView(BaseRallyListViewMeta):
         self.as_setVehiclesTitleS(makeHtmlString('html_templates:lobby/rally/', 'vehiclesLabel', {'minValue': minVal,
          'maxValue': maxVal}))
 
-    def _onUserRosterChanged(self, _, user):
+    def _onUserActionReceived(self, _, user):
         pass

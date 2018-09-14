@@ -397,6 +397,16 @@ class FittingItem(GUIItem, HasIntCD):
         return (True, '')
 
     def mayRent(self, money):
+        return (False, '')
+
+    def mayRentOrBuy(self, money):
+        return self.mayPurchase(money)
+
+    def mayPurchaseWithExchange(self, money, exchangeRate):
+        priceCredits, _ = self.altPrice or self.buyPrice
+        moneyCredits, moneyGold = money
+        if priceCredits <= moneyGold * exchangeRate + moneyCredits:
+            return True
         return False
 
     def mayPurchase(self, money):

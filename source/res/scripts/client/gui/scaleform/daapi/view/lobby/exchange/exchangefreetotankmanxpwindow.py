@@ -79,13 +79,13 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractW
 
     def __getCurrentTankmanLevelCost(self, tankman):
         if tankman.roleLevel != MAX_SKILL_LEVEL or not tankman.hasNewSkill:
-            if len(tankman.descriptor.skills) == 0 or tankman.roleLevel != MAX_SKILL_LEVEL:
+            if tankman.descriptor.lastSkillNumber == 0 or tankman.roleLevel != MAX_SKILL_LEVEL:
                 nextSkillLevel = tankman.roleLevel
             else:
                 nextSkillLevel = tankman.descriptor.lastSkillLevel
             skillSeqNum = 0
             if tankman.roleLevel == MAX_SKILL_LEVEL:
-                skillSeqNum = len(tankman.descriptor.skills)
+                skillSeqNum = tankman.descriptor.lastSkillNumber
             return self.__calcLevelUpCost(tankman, nextSkillLevel, skillSeqNum) - tankman.descriptor.freeXP
         return 0
 
@@ -104,14 +104,17 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta, AbstractW
             for level in range(int(tankman.descriptor.lastSkillLevel + 1), toLevel, 1):
                 needXp += self.__calcLevelUpCost(tankman, level, tankman.descriptor.lastSkillNumber)
 
-            defaultRate = items.shop.defaults.freeXPToTManXPRate
             rate = items.shop.freeXPToTManXPRate
-            defaultNeedXp = self.__roundByModulo(needXp, defaultRate)
             needXp = self.__roundByModulo(needXp, rate)
-            defaultNeedXp /= defaultRate
             needXp /= rate
             self.__selectedXpForConvert = max(1, needXp)
-            defaultXpForConvert = max(1, defaultNeedXp)
+            defaultRate = items.shop.defaults.freeXPToTManXPRate
+            if defaultRate:
+                defaultNeedXp = self.__roundByModulo(needXp, defaultRate)
+                defaultNeedXp /= defaultRate
+                defaultXpForConvert = max(1, defaultNeedXp)
+            else:
+                defaultXpForConvert = self.__selectedXpForConvert
             actionPriceData = None
             if self.__selectedXpForConvert != defaultXpForConvert:
                 actionPriceData = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,

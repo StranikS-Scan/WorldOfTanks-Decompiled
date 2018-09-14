@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/jid.py
 import types
+from messenger import g_settings
 
 class BareJID(object):
     __slots__ = ('_node', '_domain')
@@ -129,3 +130,10 @@ class ContactJID(JID, _DatabaseIDGetter):
 
     def __hash__(self):
         return self.getDatabaseID()
+
+
+def makeContactJID(dbID):
+    jid = ContactBareJID()
+    jid.setNode(long(dbID))
+    jid.setDomain(g_settings.server.XMPP.domain)
+    return jid

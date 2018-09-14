@@ -7,7 +7,7 @@ from collections import defaultdict
 import BigWorld
 from Event import Event
 from adisp import async, process
-from constants import EVENT_TYPE
+from constants import EVENT_TYPE, EVENT_CLIENT_DATA
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -16,7 +16,7 @@ from gui.shared import events
 from gui.server_events import caches as quests_caches
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
 from gui.server_events.PQController import PQController
-from gui.server_events.event_items import Quest, Action, EventBattles, HistoricalBattle
+from gui.server_events.event_items import Action, EventBattles, HistoricalBattle, createQuest
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -78,7 +78,7 @@ class _EventsCache(object):
 
         if diff is not None:
             isQPUpdated = 'quests' in diff
-            isEventsDataUpdated = 'cache' in diff and (('eventsData', '_r') in diff['cache'] or 'eventsData' in diff['cache'])
+            isEventsDataUpdated = ('eventsData', '_r') in diff or 'eventsData' in diff
             isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
             hasVehicleUnlocks = False
             for intCD in diff.get('stats', {}).get('unlocks', set()):
@@ -257,7 +257,7 @@ class _EventsCache(object):
         storage = self.__cache['quests']
         if qID in storage:
             return storage[qID]
-        q = storage[qID] = Quest(qID, qData, self.__progress.getQuestProgress(qID))
+        q = storage[qID] = createQuest(qData.get('type', 0), qID, qData, self.__progress.getQuestProgress(qID), self.__progress.getTokenExpiryTime(qData.get('requiredToken')))
         return q
 
     def _makeAction(self, aID, aData):
@@ -394,22 +394,22 @@ class _EventsCache(object):
         return {}
 
     def __getQuestsData(self):
-        return self.__getEventsData('questsClientData')
+        return self.__getEventsData(EVENT_CLIENT_DATA.QUEST)
 
     def __getFortQuestsData(self):
-        return self.__getEventsData('fortQuestsClientData')
+        return self.__getEventsData(EVENT_CLIENT_DATA.FORT_QUEST)
 
     def __getPersonalQuestsData(self):
-        return self.__getEventsData('personalQuestsClientData')
+        return self.__getEventsData(EVENT_CLIENT_DATA.PERSONAL_QUEST)
 
     def __getActionsData(self):
-        return self.__getEventsData('actionsClientData')
+        return self.__getEventsData(EVENT_CLIENT_DATA.ACTION)
 
     def __getEventBattles(self):
-        return self.__getEventsData('eventBattlesClientData')
+        return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('eventBattles', {})
 
     def __getHistoricalBattlesData(self):
-        return self.__getEventsData('historicalBattlesClientData')
+        return self.__getEventsData(EVENT_CLIENT_DATA.HISTORICAL_BATTLES)
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

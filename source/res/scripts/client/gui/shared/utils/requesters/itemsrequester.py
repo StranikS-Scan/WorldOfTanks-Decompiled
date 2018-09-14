@@ -88,7 +88,7 @@ class VehsSuitableCriteria(RequestCriteria):
         super(VehsSuitableCriteria, self).__init__(PredicateCondition(lambda item: item.intCD in suitableCompDescrs))
 
 
-class REQ_CRITERIA:
+class REQ_CRITERIA(object):
     EMPTY = RequestCriteria()
     CUSTOM = staticmethod(lambda predicate: RequestCriteria(PredicateCondition(predicate)))
     HIDDEN = RequestCriteria(PredicateCondition(lambda item: item.isHidden))
@@ -118,10 +118,12 @@ class REQ_CRITERIA:
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
         IN_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
+        ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
 
     class TANKMAN:
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
         ROLES = staticmethod(lambda roles = tankmen.ROLES: RequestCriteria(PredicateCondition(lambda item: item.descriptor.role in roles)))
+        NATIVE_TANKS = staticmethod(lambda vehiclesList = []: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeDescr.type.compactDescr in vehiclesList)))
 
 
 class ItemsRequester(object):

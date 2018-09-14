@@ -187,6 +187,19 @@ class Tankman(GUIItem, HasStrCD):
             factor, addition = self.descriptor.efficiencyOnVehicle(self.vehicleDescr)
         return round(self.roleLevel * factor)
 
+    def getNextLevelXpCost(self):
+        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or not self.hasNewSkill:
+            descr = self.descriptor
+            if descr.lastSkillNumber == 0 or self.roleLevel != tankmen.MAX_SKILL_LEVEL:
+                nextSkillLevel = self.roleLevel
+            else:
+                nextSkillLevel = descr.lastSkillLevel
+            skillSeqNum = 0
+            if self.roleLevel == tankmen.MAX_SKILL_LEVEL:
+                skillSeqNum = descr.lastSkillNumber
+            return descr.levelUpXpCost(nextSkillLevel, skillSeqNum) - descr.freeXP
+        return 0
+
     @property
     def vehicleNativeType(self):
         for tag in vehicles.VEHICLE_CLASS_TAGS.intersection(self.vehicleNativeDescr.type.tags):
@@ -326,6 +339,10 @@ def getRoleIconName(role):
 
 def getRoleBigIconPath(role):
     return '../maps/icons/tankmen/roles/big/%s' % getRoleIconName(role)
+
+
+def getRoleMediumIconPath(role):
+    return '../maps/icons/tankmen/roles/medium/%s' % getRoleIconName(role)
 
 
 def getRoleSmallIconPath(role):

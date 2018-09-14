@@ -12,6 +12,7 @@ from gui.Scaleform.framework import AppRef, ViewTypes
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
 from gui.Scaleform.framework.managers import ContainerManager
 from gui.Scaleform.framework.managers import LoaderManager
+from gui.Scaleform.framework.managers import CacheManager
 from gui.Scaleform.framework.ToolTip import ToolTip
 from gui.Scaleform.framework.managers.StatsStorage import StatsStorage
 from gui.shared import EVENT_BUS_SCOPE
@@ -112,6 +113,7 @@ class App(ApplicationMeta, AppBase):
         self._voiceChatMgr = None
         self._gameInputMgr = None
         self._utilsMgr = None
+        self._cacheMgr = None
         self.__initialized = False
         self.__firingsAfterInit = {}
         AppRef.setReference(self.proxy)
@@ -215,6 +217,9 @@ class App(ApplicationMeta, AppBase):
         if self._loaderMgr is not None:
             self._loaderMgr.destroy()
             self._loaderMgr = None
+        if self._cacheMgr is not None:
+            self._cacheMgr.destroy()
+            self._cacheMgr = None
         if self._contextMgr is not None:
             self._contextMgr.destroy()
             self._contextMgr = None
@@ -273,6 +278,9 @@ class App(ApplicationMeta, AppBase):
 
     def setLoaderMgr(self, flashObject):
         self._loaderMgr.setFlashObject(flashObject)
+
+    def setCacheMgr(self, flashObject):
+        self._cacheMgr.setFlashObject(flashObject)
 
     def setContainerMgr(self, flashObject):
         self._containerMgr.setFlashObject(flashObject)
@@ -386,4 +394,6 @@ class App(ApplicationMeta, AppBase):
             raise Exception, 'Global vars manager is not defined'
         if self._gameInputMgr is None:
             raise Exception, 'Game input manager is not defined'
+        if self._cacheMgr is None:
+            raise Exception, 'Cache manager is not defined'
         return

@@ -2,6 +2,8 @@
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from FortifiedRegionBase import BuildingDescr
 from adisp import process
+from constants import FORT_BUILDING_TYPE
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -56,7 +58,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
 
     def requestBuildingInfo(self, uid):
         infoData = {}
-        id = self.UI_BUILDINGS_BIND.index(uid)
+        id = self.getBuildingIDbyUID(uid)
         buildingStatus = self.__getBuildingStatus(id)
         infoData['buildingName'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(FORTIFICATIONS.buildings_buildingname(uid)))
         infoData['buildingID'] = uid
@@ -118,19 +120,22 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         return result
 
     def __makeOrderInfoData(self, uid):
-        self._buildingID = self.UI_BUILDINGS_BIND.index(uid)
+        self._buildingID = self.getBuildingIDbyUID(uid)
         self._orderID = self.fortCtrl.getFort().getBuildingOrder(self._buildingID)
-        orderTitle = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(self.UI_ORDERS_BIND[self._orderID])))
+        orderTitle = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(self.getOrderUIDbyID(self._orderID))))
         descrMSG = i18n.makeString(FORTIFICATIONS.buildings_processorderinfo(uid))
         descrMSG = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, descrMSG)
         result = {}
         result['title'] = orderTitle
         result['description'] = descrMSG
-        buildingId = self.UI_BUILDINGS_BIND.index(uid)
-        buildingDescr = self.fortCtrl.getFort().getBuilding(self.UI_BUILDINGS_BIND.index(uid), BuildingDescr(typeID=buildingId))
+        buildingId = self.getBuildingIDbyUID(uid)
+        buildingDescr = self.fortCtrl.getFort().getBuilding(self.getBuildingIDbyUID(uid), BuildingDescr(typeID=buildingId))
         order = self.fortCtrl.getFort().getOrder(buildingDescr.typeRef.orderType)
         result['iconSource'] = order.icon
-        result['showAlertIcon'] = self._showOrderAlertIcon(order)
+        isCombatOrderBuilding = self._isCombatOrderBuilding(buildingId)
+        result['showAlertIcon'] = True if isCombatOrderBuilding else self._showOrderAlertIcon(order)
+        if isCombatOrderBuilding:
+            result['alertIconTooltip'] = TOOLTIPS.FORTIFICATION_BUILDINGPROCESS_ALERT_ONLYUSEDINCOMBAT
         result['iconLevel'] = None
         return result
 
@@ -139,7 +144,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
 
     @process
     def __requesToCreate(self, uid):
-        buildingTypeID = self.UI_BUILDINGS_BIND.index(uid)
+        buildingTypeID = self.getBuildingIDbyUID(uid)
         result = yield self.fortProvider.sendRequest(BuildingCtx(buildingTypeID, self.__buildingDirection, self.__buildingPosition, waitingID='fort/building/add'))
         if result:
             g_fortSoundController.playCreateBuilding()
@@ -155,12 +160,16 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         result['textInfo'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_TEXTINFO))
         self.as_setDataS(result)
 
+    def _isCombatOrderBuilding(self, id):
+        return id in [FORT_BUILDING_TYPE.BOMBER_SHOP, FORT_BUILDING_TYPE.ARTILLERY_SHOP]
+
     def __makeListData(self):
         result = []
         for id in self.BUILDINGS:
-            uid = self.UI_BUILDINGS_BIND[id]
+            uid = self.getBuildingUIDbyID(id)
+            isNewItem = self._isCombatOrderBuilding(id)
             id, name, shortDescr, statusMsg, status = self.__getStrings(uid, self.__getBuildingStatus(id))
-            result.append(self.__listFields(id, name, shortDescr, statusMsg, status))
+            result.append(self.__listFields(id, name, shortDescr, statusMsg, status, isNewItem))
 
         return result
 
@@ -189,12 +198,13 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
          statusMsg,
          status)
 
-    def __listFields(self, id, name, shortDescr, status, buildingStatus):
+    def __listFields(self, id, name, shortDescr, status, buildingStatus, isNewItem):
         return {'buildingID': id,
          'buildingName': name,
          'shortDescr': shortDescr,
          'statusLbl': status,
-         'buildingStatus': buildingStatus}
+         'buildingStatus': buildingStatus,
+         'isNewItem': isNewItem}
 
     def __makeMainLabel(self):
         buildingCount = len(self.fortCtrl.getFort().buildings) - 1

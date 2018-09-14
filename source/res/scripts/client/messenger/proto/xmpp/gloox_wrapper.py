@@ -2,114 +2,27 @@
 from collections import defaultdict
 import weakref
 import BigWorld
+from constants import IGR_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
-from messenger.proto.xmpp.jid import ContactJID
+from external_strings_utils import unicode_from_utf8
+from messenger.proto.xmpp.gloox_constants import PRESENCE, CONNECTION_STATE, DISCONNECT_REASON, GLOOX_EVENT
+from messenger.proto.xmpp.jid import ContactJID, ContactBareJID
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
-XmppClient = BigWorld.XmppClient
-
-class PRESENCE(object):
-    UNKNOWN = XmppClient.PRESENCE_UNKNOWN
-    AVAILABLE = XmppClient.PRESENCE_AVAILABLE
-    CHAT = XmppClient.PRESENCE_CHAT
-    AWAY = XmppClient.PRESENCE_AWAY
-    DND = XmppClient.PRESENCE_DND
-    XA = XmppClient.PRESENCE_XA
-    UNAVAILABLE = XmppClient.PRESENCE_UNAVAILABLE
-    RANGE = (UNKNOWN,
-     AVAILABLE,
-     CHAT,
-     AWAY,
-     DND,
-     XA,
-     UNAVAILABLE)
-
-
-PRESENCES_ORDER = (PRESENCE.AVAILABLE,
- PRESENCE.CHAT,
- PRESENCE.AWAY,
- PRESENCE.DND,
- PRESENCE.XA,
- PRESENCE.UNAVAILABLE,
- PRESENCE.UNKNOWN)
-PRESENCES_NAMES = dict([ (v, k) for k, v in PRESENCE.__dict__.iteritems() if v in PRESENCE.RANGE ])
-
-class SUBSCRIPTION(object):
-    OFF = XmppClient.SUBSCRIPTION_OFF
-    ON = XmppClient.SUBSCRIPTION_ON
-    PENDING = XmppClient.SUBSCRIPTION_PENDING
-
-
-SUBSCRIPTION_NAMES = dict([ (v, k) for k, v in SUBSCRIPTION.__dict__.iteritems() if not k.startswith('_') ])
-
-class CONNECTION_IMPL_TYPE(object):
-    TCP = 1
-    BOSH = 2
-
-
-class CONNECTION_STATE(object):
-    DISCONNECTED = XmppClient.STATE_DISCONNECTED
-    CONNECTING = XmppClient.STATE_CONNECTING
-    AUTHENTICATING = XmppClient.STATE_AUTHENTICATING
-    INITIALIZING = XmppClient.STATE_INITIALIZING
-    CONNECTED = XmppClient.STATE_CONNECTED
-
-
-class DISCONNECT_REASON(object):
-    BY_REQUEST = XmppClient.DISCONNECT_BY_REQUEST
-    AUTHENTICATION = XmppClient.DISCONNECT_AUTHENTICATION
-    OTHER_ERROR = XmppClient.DISCONNECT_OTHER_ERROR
-
-
-class LOG_LEVEL(object):
-    DEBUG = XmppClient.LOG_LEVEL_DEBUG
-    WARNING = XmppClient.LOG_LEVEL_WARNING
-    ERROR = XmppClient.LOG_LEVEL_ERROR
-
-
-class LOG_SOURCE(object):
-    UNKNOWN = 'Unknown source'
-    PARSER = 'Parser'
-    CLIENT = 'Client'
-    CLIENT_BASE = 'Clientbase'
-    COMPONENT = 'Component'
-    DND = 'Dns'
-    USER = 'User'
-    CONNECTION_TCP_BASE = 'ConnectionTCPBase'
-    CONNECTION_HTTP_PROXY = 'ConnectionHTTPProxy'
-    CONNECTION_S5_PROXY = 'ConnectionSOCKS5Proxy'
-    CONNECTION_TCP_CLIENT = 'ConnectionTCPClient'
-    CONNECTION_TCP_SERVER = 'ConnectionTCPServer'
-    CONNECTION_BOSH = 'ConnectionBOSH'
-    CONNECTION_TLS = 'ConnectionTLS'
-    S5B_MANAGER = 'S5BManager'
-    S5_BYTES_STREAM = 'SOCKS5Bytestream'
-    XML_INCOMING = 'XmlIncoming'
-    XML_OUTGOING = 'XmlOutgoing'
-    XML_STREAM = (XML_INCOMING, XML_OUTGOING)
-
-
-class IQ_TYPE(object):
-    GET = XmppClient.IQ_TYPE_GET
-    SET = XmppClient.IQ_TYPE_SET
-    RESULT = XmppClient.IQ_TYPE_RESULT
-    ERROR = XmppClient.IQ_TYPE_ERROR
-    INVALID = XmppClient.IQ_TYPE_INVALID
-
-
-class GLOOX_EVENT(object):
-    CONNECTED, LOGIN, DISCONNECTED, ROSTER_ITEM_SET, ROSTER_ITEM_REMOVED, ROSTER_RESOURCE_ADDED, ROSTER_RESOURCE_REMOVED, SUBSCRIPTION_REQUEST, LOG = ALL = range(0, 9)
-
-
-GLOOX_EVENTS_NAMES = dict([ (v, k) for k, v in GLOOX_EVENT.__dict__.iteritems() if v in GLOOX_EVENT.ALL ])
+from messenger.proto.xmpp.resources import Resource, ResourceWithIGR
 _GLOOX_EVENTS_LISTENERS = (('onConnect', 'onConnected'),
  ('onReady', 'onLogin'),
  ('onDisconnect', 'onDisconnected'),
+ ('onRosterResultReceived', 'onRosterResultReceived'),
  ('onNewRosterItem', 'onRosterItemSet'),
  ('onRosterItemRemove', 'onRosterItemRemoved'),
  ('onNewRosterResource', 'onRosterResourceAdded'),
  ('onRosterResourceRemove', 'onRosterResourceRemoved'),
  ('onSubscribe', 'onSubscriptionRequest'),
- ('onLog', 'onLog'))
+ ('onLog', 'onLog'),
+ ('onHandleIq', 'onHandleIq'),
+ ('onRosterQuerySend', 'onRosterQuerySend'),
+ ('onHandleMsg', 'onHandleMsg'),
+ ('onHandlePresenceWithIGR', 'onHandlePresenceWithIGR'))
 
 class ClientDecorator(object):
 
@@ -143,6 +56,9 @@ class ClientDecorator(object):
     def fini(self):
         client = self.__client
         for handlerName, _ in _GLOOX_EVENTS_LISTENERS:
+            if not hasattr(client, handlerName):
+                g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Handler no is found', handlerName)
+                continue
             setattr(client, handlerName, None)
 
         self.__handlers.clear()
@@ -155,7 +71,7 @@ class ClientDecorator(object):
         self.__client.connect(jid, host, port)
 
     def connectBosh(self, jid, host = '', port = -1, url = ''):
-        self.__address = (jid, url)
+        self.__address = (jid, host, port)
         self.__client.connectBosh(jid, host, port, url)
 
     def login(self, password):
@@ -189,8 +105,17 @@ class ClientDecorator(object):
             return
         self.__client.presence = presence
 
-    def sendIQ(self, iqType, body):
-        return self.__client.sendCustomQuery(iqType, body)
+    def setClientPresenceWithIGR(self, presence, igrID = 0, igrRoomID = 0):
+        if presence not in PRESENCE.RANGE:
+            g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Value of presence is invalid', presence)
+            return
+        self.__client.setPresenceWithIGR(presence, str(igrID), str(igrRoomID))
+
+    def sendIQ(self, query):
+        return self.__client.sendCustomQuery(query.getType(), query.getBody())
+
+    def sendMessage(self, message):
+        self.__client.sendCustomMessage(message.getType(), str(message.getTo()), message.getBody(), message.getCustomTag())
 
     def setContactToRoster(self, jid, name = '', groups = None):
         if groups is None:
@@ -201,14 +126,17 @@ class ClientDecorator(object):
     def removeContactFromRoster(self, jid):
         self.__client.remove(str(jid))
 
-    def setSubscribeTo(self, jid, message = ''):
+    def askSubscription(self, jid, message = ''):
         self.__client.subscribe(str(jid), message)
 
     def removeSubscribeTo(self, jid):
         self.__client.unsubscribe(str(jid))
 
-    def setSubscribeFrom(self, jid, message = ''):
+    def approveSubscription(self, jid, message = ''):
         self.__client.setSubscribed(str(jid), message)
+
+    def cancelSubscription(self, jid, message = ''):
+        self.__client.setUnsubscribed(str(jid), message)
 
     def registerHandler(self, event, handler):
         if event in GLOOX_EVENT.ALL:
@@ -246,6 +174,18 @@ class ClientDecorator(object):
         self.__handleEvent(GLOOX_EVENT.DISCONNECTED, reason, description)
         return
 
+    def onRosterResultReceived(self, roster):
+
+        def generator():
+            for jid, name, groups, to, from_ in roster:
+                yield (ContactJID(jid),
+                 name,
+                 groups,
+                 to,
+                 from_)
+
+        self.__handleEvent(GLOOX_EVENT.ROSTER_RESULT, generator)
+
     def onRosterItemSet(self, jid, name, groups, to, from_):
         self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_SET, ContactJID(jid), name, groups, to, from_)
 
@@ -253,16 +193,41 @@ class ClientDecorator(object):
         self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_REMOVED, ContactJID(jid))
 
     def onRosterResourceAdded(self, jid, priority, status, presence):
-        self.__handleEvent(GLOOX_EVENT.ROSTER_RESOURCE_ADDED, ContactJID(jid), priority, status, presence)
+        self.__handleEvent(GLOOX_EVENT.ROSTER_RESOURCE_ADDED, ContactJID(jid), Resource(priority, status, presence))
 
     def onRosterResourceRemoved(self, jid):
         self.__handleEvent(GLOOX_EVENT.ROSTER_RESOURCE_REMOVED, ContactJID(jid))
 
-    def onSubscriptionRequest(self, jid, message):
-        self.__handleEvent(GLOOX_EVENT.SUBSCRIPTION_REQUEST, ContactJID(jid), message)
+    def onSubscriptionRequest(self, jid, message, nickname):
+        self.__handleEvent(GLOOX_EVENT.SUBSCRIPTION_REQUEST, ContactJID(jid), nickname, message)
 
     def onLog(self, level, source, message):
         self.__handleEvent(GLOOX_EVENT.LOG, level, source, message)
+
+    def onHandleMsg(self, msgID, msgType, body, jidFrom, pyGlooxTag):
+        try:
+            body, _ = unicode_from_utf8(body)
+        except (UnicodeDecodeError, TypeError, ValueError):
+            LOG_CURRENT_EXCEPTION()
+
+        self.__handleEvent(GLOOX_EVENT.MESSAGE, msgID, msgType, body, ContactBareJID(jidFrom), pyGlooxTag)
+
+    def onHandlePresenceWithIGR(self, jidFrom, igrID, igrRoomID):
+        if igrID and igrID.isdigit():
+            igrID = int(igrID)
+        else:
+            igrID = IGR_TYPE.NONE
+        if igrRoomID and igrRoomID.isdigit():
+            igrRoomID = int(igrRoomID)
+        else:
+            igrRoomID = 0
+        self.__handleEvent(GLOOX_EVENT.IGR, ContactJID(jidFrom), ResourceWithIGR(igrID=igrID, igrRoomID=igrRoomID))
+
+    def onHandleIq(self, iqID, iqType, pyGlooxTag):
+        self.__handleEvent(GLOOX_EVENT.IQ, iqID, iqType, pyGlooxTag)
+
+    def onRosterQuerySend(self, iqID, jid, context):
+        self.__handleEvent(GLOOX_EVENT.ROSTER_QUERY, iqID, ContactJID(jid), context)
 
     def __handleEvent(self, eventName, *args, **kwargs):
         handlers = self.__handlers[eventName]

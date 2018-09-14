@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/wrappers.py
 import types
+import cPickle
 from gui.shared.utils import transport
 from helpers.time_utils import makeLocalServerTime
+from messenger.proto.entities import SharedUserEntity
 from messenger_common_chat2 import messageArgs
 
 class _MessageVO(object):
@@ -59,6 +61,18 @@ def ArenaHistoryIterator(value):
         history = []
     for sendAt, isCommonChannel, accountDBID, messageText in history:
         yield ArenaMessageVO(sendAt, isCommonChannel, accountDBID, messageText)
+
+
+def SearchResultIterator(value):
+    value = dict(value)
+    if 'strArg1' in value:
+        result = cPickle.loads(value['strArg1'])
+    else:
+        result = []
+    for name, dbID, clanAbbrev in result:
+        if not name:
+            continue
+        yield SharedUserEntity(long(dbID), name=name, clanAbbrev=clanAbbrev)
 
 
 class IDataFactory(object):

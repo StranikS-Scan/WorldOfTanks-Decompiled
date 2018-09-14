@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/messenger/ext/filters/__init__.py
+from gui import GUI_SETTINGS
 from messenger import g_settings
 from messenger.ext.filters import _chain, _collection
 from messenger.storage import storage_getter
@@ -30,6 +31,8 @@ class MessageFiltersChain(_chain.FiltersChain):
         self.playerCtx.onAccountAttrsChanged -= self.__pc_onAccountAttrsChanged
 
     def __ms_onUserPreferencesUpdated(self):
+        if GUI_SETTINGS.postBattleExchange.enabled:
+            self.addFilter('postBattleFilter', _collection.PostBattleLinksFilter())
         if g_settings.userPrefs.enableOlFilter:
             if not self.hasFilter('enableOlFilter'):
                 self.addFilter('olFilter', _collection.ObsceneLanguageFilter(), removed=['coloringOlFilter'])

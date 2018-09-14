@@ -58,10 +58,8 @@ class AccountValidator(object):
         for vehicleCD in g_itemsCache.items.stats.eliteVehicles:
             try:
                 g_itemsCache.items.getItemByCD(vehicleCD)
-            except Exception as e:
-                LOG_ERROR("Couldn't get vehicle using compact descriptor: ", vehicleCD)
-                LOG_ERROR('Exact exception message: ', e.message)
-                LOG_CURRENT_EXCEPTION()
+            except KeyError:
+                LOG_ERROR('No vehicle corresponding to compact descriptor: {0}. Account data is inconsistent.'.format(vehicleCD))
 
     def __validateInventoryVehicles(self):
         inventory = g_itemsCache.items.inventory

@@ -1,11 +1,13 @@
 # Embedded file name: scripts/client/gui/game_control/AOGAS.py
+import Event
 import BigWorld
+import time
+import weakref
 from constants import AOGAS_TIME, ACCOUNT_ATTR
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from enumerations import AttributeEnumItem, Enumeration
-import Event
+from gui.game_control.controllers import Controller
 from helpers import time_utils
-import time, weakref
 TIME_MODIFER = 3600
 AOGAS_FORCE_START_NOTIFY = False
 _DEFAULT_AOGAS_NOTIFY_TIMEOUT = 5000.0
@@ -30,9 +32,10 @@ class AOGAS_NOTIFY_PERIOD(object):
     AOND_END = 0.25 * TIME_MODIFER
 
 
-class AOGASController(object):
+class AOGASController(Controller):
 
-    def __init__(self):
+    def __init__(self, proxy):
+        super(AOGASController, self).__init__(proxy)
         self.onNotifyAccount = Event.Event()
         self.__isNotifyAccount = False
         self.__lastNotifyMessages = []
@@ -40,14 +43,12 @@ class AOGASController(object):
         self.__isAogasEnabled = True
         self.__notificator = _AOGASNotificator(self, '_AOGASController__notifyAccount')
 
-    def init(self):
-        pass
-
     def fini(self):
         self.__notificator.stop()
         self.onNotifyAccount.clear()
+        super(AOGASController, self).fini()
 
-    def start(self, ctx):
+    def onLobbyStarted(self, ctx):
         serverTime = ctx.get('aogasStartedAt')
         if serverTime is not None:
             self.__aogasStartedAt = time_utils.makeLocalServerTime(serverTime)
@@ -58,12 +59,12 @@ class AOGASController(object):
             self.__requestRequiredInfo()
         return
 
-    def stop(self):
+    def onDisconnected(self):
         self.__notificator.stop()
         self.__isNotifyAccount = False
         self.__lastNotifyMessages = []
 
-    def enableNotifyAccount(self):
+    def onLobbyInited(self, event):
         LOG_DEBUG('enableNotifyAccount ', self.__lastNotifyMessages)
         self.__isNotifyAccount = True
         for message in self.__lastNotifyMessages:
@@ -71,7 +72,7 @@ class AOGASController(object):
 
         self.__lastNotifyMessages = []
 
-    def disableNotifyAccount(self):
+    def onBattleStarted(self):
         LOG_DEBUG('disableNotifyAccount')
         self.__isNotifyAccount = False
 

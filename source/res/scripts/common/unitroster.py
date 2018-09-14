@@ -354,3 +354,11 @@ class FortRoster10(BaseUnitRoster):
     SLOT_TYPE = RosterSlot10
     DEFAULT_SLOT_PACK = RosterSlot10().pack()
     MAX_UNIT_POINTS_SUM = 150
+
+
+class ClubRoster10(BaseUnitRoster):
+    MAX_SLOTS = 7
+    MAX_EMPTY_SLOTS = 2
+    SLOT_TYPE = RosterSlot10
+    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    MAX_UNIT_POINTS_SUM = 70

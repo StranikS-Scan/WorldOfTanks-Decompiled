@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ReferralManagementWindow.py
 from operator import methodcaller
-import BigWorld
 import pickle
 import itertools
+import BigWorld
 from adisp import process
-from constants import PREBATTLE_TYPE, EVENT_TYPE
+from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING
 from gui import game_control, SystemMessages
 from gui.Scaleform.framework import AppRef
@@ -17,15 +17,16 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.prb_control.context import prb_ctx, SendInvitesCtx
 from gui.prb_control.prb_helpers import GlobalListener
-from gui.server_events import g_eventsCache
 from gui.shared.utils import findFirst
-from helpers import i18n
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
+from helpers import i18n, time_utils
 from gui.shared.events import OpenLinkEvent
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
-class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindowMeta, AppRef, GlobalListener):
+class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindowMeta, AppRef, GlobalListener, Notifiable):
     MIN_REF_NUMBER = 4
     TOTAL_QUESTS = 6
     BONUSES_PRIORITY = ('vehicles', 'tankmen', 'credits')
@@ -52,25 +53,35 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
     def _populate(self):
         super(ReferralManagementWindow, self)._populate()
         self.startGlobalListening()
-        g_messengerEvents.users.onUserRosterStatusUpdated += self.__onUserStatusUpdated
+        g_messengerEvents.users.onUserStatusUpdated += self.__onUserStatusUpdated
+        g_messengerEvents.users.onUserActionReceived += self.__onUserRosterChanged
+        g_messengerEvents.users.onUsersListReceived += self.__onUsersListReceived
         g_messengerEvents.users.onClanMembersListChanged += self.__onClanMembersListChanged
-        g_messengerEvents.users.onUserRosterChanged += self.__onUserRosterChanged
-        g_messengerEvents.users.onUsersRosterReceived += self.__onUserRosterReceived
         refSystem = game_control.g_instance.refSystem
         refSystem.onUpdated += self.__onRefSystemUpdated
         refSystem.onQuestsUpdated += self.__onRefSystemQuestsUpdated
+        self.addNotificator(PeriodicNotifier(self.__getClosestNotification, self.__update, (time_utils.ONE_MINUTE,)))
+        self.startNotification()
         self.__update()
 
     def _dispose(self):
+        self.clearNotification()
         refSystem = game_control.g_instance.refSystem
         refSystem.onUpdated -= self.__onRefSystemUpdated
         refSystem.onQuestsUpdated -= self.__onRefSystemQuestsUpdated
-        g_messengerEvents.users.onUsersRosterReceived -= self.__onUserRosterReceived
-        g_messengerEvents.users.onUserRosterChanged -= self.__onUserRosterChanged
+        g_messengerEvents.users.onUserStatusUpdated -= self.__onUserStatusUpdated
+        g_messengerEvents.users.onUserActionReceived -= self.__onUserRosterChanged
+        g_messengerEvents.users.onUsersListReceived -= self.__onUsersListReceived
         g_messengerEvents.users.onClanMembersListChanged -= self.__onClanMembersListChanged
-        g_messengerEvents.users.onUserRosterStatusUpdated -= self.__onUserStatusUpdated
         self.stopGlobalListening()
         super(ReferralManagementWindow, self)._dispose()
+
+    @classmethod
+    def __getClosestNotification(cls):
+        updates = map(lambda r: r.getBonus()[1], game_control.g_instance.refSystem.getReferrals())
+        if len(updates):
+            return min(updates)
+        return 0
 
     def __update(self):
         self.__makeData()
@@ -104,38 +115,28 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         numOfReferrals = len(referrals)
         for i, item in enumerate(referrals):
             referralNumber = self.app.utilsManager.textManager.getText(TextType.STATS_TEXT, ms('%d.' % (i + 1)))
-            reffererUser = self.usersStorage.getUser(item.getAccountDBID())
-            isOnline = reffererUser is not None and reffererUser.isOnline()
-            xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON
-            icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(xpIcon, 18, 18, -9, 0))
-            bonus, timeLeft = item.getBonus()
-            multiplier = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
-            if timeLeft:
-                multiplierTime = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(item.getBonusTimeLeftStr()))
-                expMultiplierText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
-            else:
-                expMultiplierText = ''
-            multiplierFactor = self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, multiplier)
-            multiplierStr = ms(icon + '<nobr>' + multiplierFactor + ' ' + expMultiplierText)
-            user = self.usersStorage.getUser(item.getAccountDBID())
-            if user is not None:
-                fullName = user.getFullName()
-                userName = user.getName()
-                clanAbbrev = user.getClanAbbrev()
-            else:
-                fullName = item.getFullName()
-                userName = item.getName()
-                clanAbbrev = item.getClanAbbrev()
-            referralData = {'accID': item.getAccountDBID(),
-             'fullName': fullName,
-             'userName': userName,
-             'clanAbbrev': clanAbbrev}
-            canInviteToSquad = self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite()
-            if not isOnline:
-                btnEnabled = False
-                btnTooltip = TOOLTIPS.REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE
-            elif not canInviteToSquad:
-                btnEnabled = False
+            dbID = item.getAccountDBID()
+            user = self.usersStorage.getUser(dbID)
+            if not user:
+                raise AssertionError('User must be defined')
+                isOnline = user.isOnline()
+                xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
+                icon = self.app.utilsManager.getHtmlIconText(ImageUrlProperties(xpIcon, 16, 16, -3, 0))
+                bonus, timeLeft = item.getBonus()
+                multiplier = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
+                if timeLeft:
+                    multiplierTime = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, ms(item.getBonusTimeLeftStr()))
+                    expMultiplierText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
+                else:
+                    expMultiplierText = ''
+                multiplierFactor = self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, multiplier)
+                multiplierStr = ms(icon + '<nobr>' + multiplierFactor + ' ' + expMultiplierText)
+                referralData = {'accID': dbID,
+                 'fullName': user.getFullName(),
+                 'userName': user.getName(),
+                 'clanAbbrev': user.getClanAbbrev()}
+                canInviteToSquad = self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite()
+                btnEnabled = canInviteToSquad or False
                 btnTooltip = TOOLTIPS.REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL
             else:
                 btnEnabled = True
@@ -156,7 +157,6 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
                  'referralNo': referralNumber})
 
         self.as_setTableDataS(result)
-        return
 
     def __makeProgresData(self):
         refSystem = game_control.g_instance.refSystem
@@ -164,7 +164,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
         currentXP = refSystem.getReferralsXPPool()
         progressText = '%(currentXP)s / %(totalXP)s %(icon)s' % {'currentXP': self.app.utilsManager.textManager.getText(TextType.CREDITS_TEXT, BigWorld.wg_getIntegralFormat(currentXP)),
          'totalXP': BigWorld.wg_getIntegralFormat(totalXP),
-         'icon': self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICON, 18, 18, -7, 0))}
+         'icon': self.app.utilsManager.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON, 16, 16, -3, 0))}
         text = i18n.makeString(MENU.REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_PROGRESS, progress=progressText)
         data = {'isCompleted': refSystem.isTotallyCompleted(),
          'text': self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, text)}
@@ -239,7 +239,7 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
 
     @process
     def __inviteOrCreateSquad(self, referralID):
-        if self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getPrbType() in PREBATTLE_TYPE.LIKE_SQUAD and self.prbFunctional.getPermissions().canSendInvite():
+        if self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite():
             user = self.usersStorage.getUser(referralID)
             if self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE:
                 result = yield self.prbDispatcher.create(prb_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=[referralID], isForced=True))
@@ -260,13 +260,15 @@ class ReferralManagementWindow(View, AbstractWindowView, ReferralManagementWindo
     def __onClanMembersListChanged(self, *args):
         self.__makeTableData()
 
-    def __onUserRosterReceived(self, *args):
-        self.__makeTableData()
+    def __onUsersListReceived(self, tags):
+        if USER_TAG.FRIEND in tags:
+            self.__makeTableData()
 
     def __onUserRosterChanged(self, *args):
         self.__makeTableData()
 
     def __onRefSystemUpdated(self):
+        self.startNotification()
         self.__update()
 
     def __onRefSystemQuestsUpdated(self):

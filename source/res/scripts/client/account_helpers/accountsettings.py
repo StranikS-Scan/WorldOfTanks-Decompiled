@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/account_helpers/AccountSettings.py
 import base64
+import copy
 import constants
 import BigWorld
 import Settings
@@ -12,6 +13,7 @@ KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
 CAROUSEL_FILTER = 'CAROUSEL_FILTER'
 BARRACKS_FILTER = 'barracks_filter'
+ORDERS_FILTER = 'ORDERS_FILTER'
 VEHICLE_BUY_WINDOW_SETTINGS = 'vehicleBuyWindowSettings'
 CURRENT_VEHICLE = 'current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
@@ -19,6 +21,8 @@ EULA_VERSION = 'EULA_VERSION'
 FORT_MEMBER_TUTORIAL = 'FORT_MEMBER_TUTORIAL'
 IGR_PROMO = 'IGR_PROMO'
 PROMO = 'PROMO'
+AWARDS = 'awards'
+CONTACTS = 'CONTACTS'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
@@ -40,10 +44,13 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                                  'tankType': 'None',
                                  'location': 3,
                                  'nationID': None},
+               ORDERS_FILTER: {'isSelected': False},
                GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False},
                EULA_VERSION: {'version': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
+               CONTACTS: {'showOfflineUsers': True,
+                          'showOthersCategory': True},
                'cs_intro_view_vehicle': {'nation': -1,
                                          'vehicleType': 'none',
                                          'isMain': False,
@@ -64,11 +71,15 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                                          'isMain': False,
                                          'level': -1,
                                          'compatibleOnly': True},
-               PROMO: {}},
+               PROMO: {},
+               AWARDS: {'vehicleResearchAward': -1,
+                        'victoryAward': -1,
+                        'battlesCountAward': -1}},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0},
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': [],
                                'selectedListVehicles': []},
-                'fortSettings': {'clanDBID': 0},
+                'fortSettings': {'clanDBID': 0,
+                                 'battleConsumesIntroShown': False},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,
@@ -427,7 +438,7 @@ class AccountSettings(object):
                 if constants.IS_DEVELOPMENT:
                     LOG_CURRENT_EXCEPTION()
 
-            return DEFAULT_VALUES[type][name]
+            return copy.deepcopy(DEFAULT_VALUES[type][name])
         else:
             return None
 

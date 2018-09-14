@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
-import cPickle as pickle
+from ClientFortifiedRegion import ClientFortifiedRegion
 import constants
 import gui
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -12,6 +12,7 @@ from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils import findFirst
+from gui.shared.fortifications.FortOrder import FortOrder
 from helpers.i18n import makeString
 from items import vehicles
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
@@ -428,3 +429,15 @@ class CustomizationContext(ToolTipContext):
         else:
             result = None
         return result
+
+
+class ContactContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude = None):
+        super(ContactContext, self).__init__(TOOLTIP_COMPONENT.CONTACT, fieldsToExclude)
+
+
+class FortOrderContext(FortificationContext):
+
+    def buildItem(self, fortOrderTypeID, level):
+        return FortOrder(int(fortOrderTypeID), level=int(level))

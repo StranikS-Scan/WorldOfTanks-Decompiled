@@ -1,16 +1,14 @@
 # Embedded file name: scripts/common/UnitBase.py
-import os
-import sys
-import time
 import struct
-import nations
-import constants
-from constants import VEHICLE_CLASSES, VEHICLE_CLASS_INDICES, IS_DEVELOPMENT
+from constants import VEHICLE_CLASS_INDICES
 from items import vehicles
-import UnitRoster
-from UnitRoster import UnitRoster, BaseUnitRosterSlot, _getVehClassTag, _BAD_CLASS_INDEX, buildNamesDict, _reprBitMaskFromDict, SortieRoster6, SortieRoster8, SortieRoster10, FortRoster10
+from UnitRoster import UnitRoster, BaseUnitRosterSlot, _getVehClassTag, _BAD_CLASS_INDEX
+from UnitRoster import buildNamesDict, _reprBitMaskFromDict
+from UnitRoster import SortieRoster6, SortieRoster8, SortieRoster10, FortRoster10, ClubRoster10
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
-from debug_utils import *
+from unit_helpers.ExtrasHandler import EmptyExtrasHandler, FortBattleExtrasHandler
+from unit_helpers.ExtrasHandler import ClubExtrasHandler
+from debug_utils import LOG_DAN, LOG_SVAN_DEV, LOG_VLK_DEV
 
 class UNIT_STATE:
     LOCKED = 1
@@ -21,14 +19,23 @@ class UNIT_STATE:
     IN_ARENA = 32
     SORTIE = 64
     FORT_BATTLE = 128
+    IN_PRE_ARENA = 256
     DEFAULT = 0
     PRE_QUEUE = 0
     PRE_SEARCH = 0
     MODAL_STATES = IN_QUEUE | IN_SEARCH
     CHANGING_TO_ARENA = IN_QUEUE | IN_ARENA
+    CHANGED_STATE_ASQ = IN_ARENA | IN_SEARCH | IN_QUEUE
 
 
 UNIT_STATE_NAMES = buildNamesDict(UNIT_STATE)
+
+class UNIT_BROWSER_TYPE:
+    NOT_RATED_UNITS = 1
+    RATED_CLUBS = 2
+
+
+UNIT_BROWSER_TYPE_NAMES = buildNamesDict(UNIT_BROWSER_TYPE)
 
 class UNIT_ERROR:
     OK = 0
@@ -95,6 +102,10 @@ class UNIT_ERROR:
     FORT_BATTLE_END = 61
     NO_AVAILABLE_SLOTS = 62
     TOO_FEW_POINTS = 63
+    BAD_DIVISION = 64
+    CANT_CHANGE_DIVISION = 65
+    CANNOT_LEAD = 66
+    CLUB_CHECKOUT_FAIL = 67
 
 
 OK = UNIT_ERROR.OK
@@ -124,6 +135,9 @@ class UNIT_OP:
     CHANGE_ROLE = 14
     MODAL_TIMESTAMP = 15
     GIVE_LEADERSHIP = 16
+    CHANGE_DIVISION = 17
+    EXTRAS_UPDATE = 18
+    EXTRAS_CLEAR = 19
 
 
 class UNIT_ROLE:
@@ -132,18 +146,20 @@ class UNIT_ROLE:
     COMMANDER_UPDATES = 2
     CHANGE_ROSTER = 4
     LEGIONARY = 16
-    CLAN_OFFICER = 32
+    MANAGER = 32
     IN_ARENA = 64
     OFFLINE = 128
+    CAN_LEAD = 256
     START_STOP_BATTLE = CHANGE_ROSTER
     ADD_REMOVE_MEMBERS = CHANGE_ROSTER
     INVITE_KICK_PLAYERS = CHANGE_ROSTER
     CREATOR = COMMANDER_UPDATES | CHANGE_ROSTER
-    CHANGE_LEADERSHIP = CREATOR | CLAN_OFFICER
+    CHANGE_LEADERSHIP = CREATOR | MANAGER
     SELF_ONLY = 65536
     SELF_UNLOCKED = 131072
     NON_IDLE = 262144
     NO_LEGIONARY_CANDIDATES = 524288
+    PRE_ARENA = 1048576
 
 
 UNIT_ROLE_NAMES = buildNamesDict(UNIT_ROLE)
@@ -204,6 +220,7 @@ class CLIENT_UNIT_CMD:
     SET_UNIT_COMMENT = 17
     SET_UNIT_DEV_MODE = 18
     GIVE_LEADERSHIP = 19
+    CHANGE_SORTIE_DIVISION = 20
 
 
 class UNIT_NOTIFY_ID:
@@ -218,6 +235,7 @@ class UNIT_MGR_FLAGS:
     SORTIE_DIVISION_8 = 8
     DIVISION_FLAG_MASK = SORTIE | SORTIE_DIVISION_8 | SORTIE_DIVISION_6
     FORT_BATTLE = 16
+    CLUBS = 32
 
 
 class ROSTER_TYPE:
@@ -226,7 +244,14 @@ class ROSTER_TYPE:
     SORTIE_ROSTER_8 = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8
     SORTIE_ROSTER_10 = UNIT_MGR_FLAGS.SORTIE
     FORT_ROSTER_10 = UNIT_MGR_FLAGS.FORT_BATTLE
-    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6 | UNIT_MGR_FLAGS.FORT_BATTLE
+    CLUB_ROSTER_10 = UNIT_MGR_FLAGS.CLUBS
+    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6 | UNIT_MGR_FLAGS.FORT_BATTLE | CLUB_ROSTER_10
+
+
+class EXTRAS_HANDLER_TYPE:
+    EMPTY = 0
+    FORT_BATTLE = 1
+    CLUBS = 2
 
 
 class SORTIE_DIVISION(object):
@@ -246,7 +271,11 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.SORTIE_ROSTER_6: SortieRoster6,
  ROSTER_TYPE.SORTIE_ROSTER_8: SortieRoster8,
  ROSTER_TYPE.SORTIE_ROSTER_10: SortieRoster10,
- ROSTER_TYPE.FORT_ROSTER_10: FortRoster10}
+ ROSTER_TYPE.FORT_ROSTER_10: FortRoster10,
+ ROSTER_TYPE.CLUB_ROSTER_10: ClubRoster10}
+EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
+ EXTRAS_HANDLER_TYPE.FORT_BATTLE: FortBattleExtrasHandler,
+ EXTRAS_HANDLER_TYPE.CLUBS: ClubExtrasHandler}
 
 class UnitBase(OpsUnpacker):
     _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qHi', '_setVehicle'),
@@ -258,19 +287,25 @@ class UnitBase(OpsUnpacker):
      UNIT_OP.SET_SLOT: ('', '_unpackRosterSlot'),
      UNIT_OP.CLEAR_VEHICLE: ('q', '_clearVehicle'),
      UNIT_OP.VEHICLE_DICT: ('', '_unpackVehicleDict'),
-     UNIT_OP.UNIT_STATE: ('B', '_setUnitState'),
+     UNIT_OP.UNIT_STATE: ('H', '_setUnitState'),
      UNIT_OP.CLOSE_SLOT: ('B', '_closeSlot'),
      UNIT_OP.OPEN_SLOT: ('B', '_openSlot'),
      UNIT_OP.SET_COMMENT: ('',
                            'setComment',
                            'S',
                            ['']),
-     UNIT_OP.CHANGE_ROLE: ('qB', '_changePlayerRole'),
+     UNIT_OP.CHANGE_ROLE: ('qH', '_changePlayerRole'),
      UNIT_OP.MODAL_TIMESTAMP: ('i', '_setModalTimestamp'),
-     UNIT_OP.GIVE_LEADERSHIP: ('Q', '_giveLeadership')})
+     UNIT_OP.GIVE_LEADERSHIP: ('Q', '_giveLeadership'),
+     UNIT_OP.CHANGE_DIVISION: ('i', '_changeSortieDivision'),
+     UNIT_OP.EXTRAS_UPDATE: ('',
+                             'onUnitExtrasUpdate',
+                             'S',
+                             ['']),
+     UNIT_OP.EXTRAS_CLEAR: (None, 'clearExtras')})
     MAX_PLAYERS = 250
 
-    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', packedUnit = '', rosterTypeID = ROSTER_TYPE.UNIT_ROSTER):
+    def __init__(self, slotDefs = {}, slotCount = 0, packedRoster = '', extras = '', packedUnit = '', rosterTypeID = ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID = EXTRAS_HANDLER_TYPE.EMPTY):
         if packedUnit:
             self.unpack(packedUnit)
         else:
@@ -282,6 +317,9 @@ class UnitBase(OpsUnpacker):
             self._freeSlots = set(xrange(0, slotCount))
             self._dirty = 1
             self._state = UNIT_STATE.DEFAULT
+            self._extrasHandlerID = extrasHandlerID
+            eHandler = self._extrasHandler = EXTRAS_HANDLER_TYPE_TO_HANDLER[extrasHandlerID](self)
+            self._extras = eHandler.unpack(extras) if extras else eHandler.new()
             self._initClean()
 
     def _initClean(self):
@@ -351,7 +389,7 @@ class UnitBase(OpsUnpacker):
     def _addPlayer(self, playerID, **kwargs):
         self._players[playerID] = kwargs
         self._dirty = 1
-        packed = struct.pack('<qiIBBHH', playerID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0))
+        packed = struct.pack(self._PLAYER_DATA, playerID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0))
         packed += packPascalString(kwargs.get('nickName', ''))
         packed += packPascalString(kwargs.get('clanAbbrev', ''))
         self._appendOp(UNIT_OP.ADD_PLAYER, packed)
@@ -401,13 +439,26 @@ class UnitBase(OpsUnpacker):
 
         return True
 
+    _HEADER = '<HHHHHHBi'
+    _PLAYER_DATA = '<qiIHBHH'
+
     def pack(self):
-        packed = struct.pack('<B', self._rosterTypeID)
+        packed = struct.pack('<BB', self._rosterTypeID, self._extrasHandlerID)
         packed += self._roster.getPacked()
         members = self._members
         players = self._players
         vehs = self._vehicles
-        packed += struct.pack('<HHHHBBi', len(members), len(vehs), len(players), self._readyMask, self._state, self._closedSlotMask, self._modalTimestamp)
+        extras = self._extras
+        extrasStr = self._extrasHandler.pack(extras)
+        args = (len(members),
+         len(vehs),
+         len(players),
+         len(extrasStr),
+         self._readyMask,
+         self._state,
+         self._closedSlotMask,
+         self._modalTimestamp)
+        packed += struct.pack(self._HEADER, *args)
         for playerID, veh in vehs.iteritems():
             packed += struct.pack('<qiH', playerID, veh['vehInvID'], veh['vehTypeCompDescr'])
 
@@ -415,34 +466,36 @@ class UnitBase(OpsUnpacker):
             packed += struct.pack('<Bq', slotIdx, member['playerID'])
 
         for playerID, playerData in players.iteritems():
-            packed += struct.pack('<qiIBBHH', playerID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0))
+            packed += struct.pack(self._PLAYER_DATA, playerID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0))
             packed += packPascalString(playerData.get('nickName', ''))
             packed += packPascalString(playerData.get('clanAbbrev', ''))
 
+        packed += extrasStr
         packed += packPascalString(self._strComment)
         self._packed = packed
         self._dirty = 0
         return packed
 
     _BHB_SIZE = struct.calcsize('<BHB')
-    _HEADER_SIZE = struct.calcsize('<HHHHBBi')
+    _HEADER_SIZE = struct.calcsize(_HEADER)
     _Bq_SIZE = struct.calcsize('<Bq')
-    _qiiBBHH_SIZE = struct.calcsize('<qiIBBHH')
+    _PLAYER_DATA_SIZE = struct.calcsize(_PLAYER_DATA)
     _qiH_SIZE = struct.calcsize('<qiH')
     _Hi_SIZE = struct.calcsize('<Hi')
     _Hq_SIZE = struct.calcsize('<Hq')
-    _B_SIZE = struct.calcsize('<B')
+    _BB_SIZE = struct.calcsize('<BB')
 
     def unpack(self, packed):
         self._initClean()
-        self._rosterTypeID = struct.unpack_from('<B', packed)[0]
+        self._rosterTypeID, self._extrasHandlerID = struct.unpack_from('<BB', packed)
         RosterType = ROSTER_TYPE_TO_CLASS.get(self._rosterTypeID)
+        self._extrasHandler = EXTRAS_HANDLER_TYPE_TO_HANDLER[self._extrasHandlerID](self)
         self._roster = RosterType()
-        unpacking = packed[self._B_SIZE:]
+        unpacking = packed[self._BB_SIZE:]
         unpacking = self._roster.unpack(unpacking)
         slotCount = self.getMaxSlotCount()
         self._freeSlots = set(xrange(0, slotCount))
-        memberCount, vehCount, playerCount, self._readyMask, self._state, self._closedSlotMask, self._modalTimestamp = struct.unpack_from('<HHHHBBi', unpacking)
+        memberCount, vehCount, playerCount, extrasLen, self._readyMask, self._state, self._closedSlotMask, self._modalTimestamp = struct.unpack_from(self._HEADER, unpacking)
         unpacking = unpacking[self._HEADER_SIZE:]
         for i in xrange(0, vehCount):
             playerID, vehInvID, vehTypeCompDescr = struct.unpack_from('<qiH', unpacking)
@@ -454,14 +507,16 @@ class UnitBase(OpsUnpacker):
             self._setMember(playerID, slotIdx)
             unpacking = unpacking[self._Bq_SIZE:]
 
-        sz = self._qiiBBHH_SIZE
+        sz = self._PLAYER_DATA_SIZE
         for i in xrange(0, playerCount):
-            playerID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from('<qiIBBHH', unpacking)
+            playerID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, unpacking)
             nickName, lenNickBytes = unpackPascalString(unpacking, sz)
             clanAbbrev, lenClanBytes = unpackPascalString(unpacking, sz + lenNickBytes)
             unpacking = unpacking[sz + lenNickBytes + lenClanBytes:]
             self._addPlayer(playerID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
 
+        self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
+        unpacking = unpacking[extrasLen:]
         for slotIdx in range(0, 7):
             slotMask = 1 << slotIdx
             if self._closedSlotMask & slotMask:
@@ -477,6 +532,12 @@ class UnitBase(OpsUnpacker):
 
     def isDirty(self):
         return self._dirty
+
+    def onUnitExtrasUpdate(self, updateStr):
+        LOG_VLK_DEV('UnitBase.onUnitExtrasUpdate')
+        self._extrasHandler.onUnitExtrasUpdate(self._extras, updateStr)
+        self.storeOp(UNIT_OP.EXTRAS_UPDATE, updateStr)
+        self._dirty = 1
 
     def getPacked(self):
         if self._dirty:
@@ -527,6 +588,7 @@ class UnitBase(OpsUnpacker):
         repr += '\n  },'
         repr += '\n  _freeSlots=%r,' % self._freeSlots
         repr += '\n  _roster=%r' % self._roster
+        repr += '\n _extras=%r' % self._extras
         repr += '\n  _strComment=%r' % self._strComment
         repr += '\n)'
         return repr
@@ -553,6 +615,7 @@ class UnitBase(OpsUnpacker):
 
         repr += '},'
         repr += '\n roster=%r' % self._roster.getPacked()
+        repr += '\n extras=%r' % self._extras
         repr += '\n)'
         return repr
 
@@ -658,6 +721,11 @@ class UnitBase(OpsUnpacker):
 
         return count
 
+    def clearExtras(self):
+        self._extras = self._extrasHandler.new()
+        self.storeOp(UNIT_OP.EXTRAS_CLEAR)
+        self._dirty = 1
+
     def _openSlot(self, slotIdx):
         self._closedSlotMask &= ~(1 << slotIdx)
         self._freeSlots.add(slotIdx)
@@ -720,8 +788,8 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        sz = self._qiiBBHH_SIZE
-        playerID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from('<qiIBBHH', packedOps)
+        sz = self._PLAYER_DATA_SIZE
+        playerID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, packedOps)
         nickName, lenNickBytes = unpackPascalString(packedOps, sz)
         clanAbbrev, lenClanBytes = unpackPascalString(packedOps, sz + lenNickBytes)
         playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
@@ -743,6 +811,22 @@ class UnitBase(OpsUnpacker):
         self._players[memberDBID]['role'] |= UNIT_ROLE.CREATOR
         self.storeOp(UNIT_OP.GIVE_LEADERSHIP, memberDBID)
         return
+
+    def _changeSortieDivision(self, division):
+        prevRosterTypeID = self._rosterTypeID
+        prevRoster = self._roster
+        LOG_SVAN_DEV('Previous roster type: {0} : {1}', prevRosterTypeID, prevRoster.__class__)
+        newRosterTypeID = SORTIE_DIVISION_LEVEL_TO_FLAGS.get(division)
+        if newRosterTypeID == prevRosterTypeID:
+            LOG_SVAN_DEV('New division is an active. No changes are required.')
+            return False
+        self._rosterTypeID = newRosterTypeID
+        RosterType = ROSTER_TYPE_TO_CLASS.get(newRosterTypeID)
+        newRoster = RosterType()
+        self._roster = newRoster
+        LOG_SVAN_DEV('New roster type: {0} : {1}', self._rosterTypeID, self._roster.__class__)
+        self.storeOp(UNIT_OP.CHANGE_DIVISION, division)
+        return True
 
     def _getLeaderDBID(self):
         return self._members.get(LEADER_SLOT, {}).get('playerID', 0)

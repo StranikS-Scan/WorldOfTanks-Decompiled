@@ -14,6 +14,7 @@ from ids_generators import SequenceIDGenerator
 from helpers import time_utils
 from messenger import g_settings
 import Event
+from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from predefined_hosts import g_preDefinedHosts
@@ -118,10 +119,12 @@ class _AcceptInvitesPostActions(ActionsChain):
 
 class PRB_INVITES_INIT_STEP(object):
     UNDEFINED = 0
-    RECEIVED_ROSTERS = 1
-    STARTED = 2
-    DATA_BUILD = 4
-    INITED = RECEIVED_ROSTERS | DATA_BUILD | STARTED
+    FRIEND_RECEIVED = 1
+    IGNORED_RECEIVED = 2
+    STARTED = 4
+    DATA_BUILD = 8
+    CONTACTS_RECEIVED = FRIEND_RECEIVED | IGNORED_RECEIVED
+    INITED = CONTACTS_RECEIVED | DATA_BUILD | STARTED
 
 
 class InvitesManager(object):
@@ -145,7 +148,7 @@ class InvitesManager(object):
 
     def init(self):
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
-        g_messengerEvents.users.onUsersRosterReceived += self.__me_onUsersRosterReceived
+        g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
         g_playerEvents.onPrebattleInvitesChanged += self.__pe_onPrebattleInvitesChanged
         g_playerEvents.onPrebattleInvitesStatus += self.__pe_onPrebattleInvitesStatus
 
@@ -153,7 +156,7 @@ class InvitesManager(object):
         self.__clearAcceptChain()
         self.__inited = PRB_INVITES_INIT_STEP.UNDEFINED
         self.__loader = None
-        g_messengerEvents.users.onUsersRosterReceived -= self.__me_onUsersRosterReceived
+        g_messengerEvents.users.onUsersListReceived -= self.__me_onUsersListReceived
         g_playerEvents.onPrebattleInvitesChanged -= self.__pe_onPrebattleInvitesChanged
         g_playerEvents.onPrebattleInvitesStatus -= self.__pe_onPrebattleInvitesStatus
         self.clear()
@@ -293,11 +296,8 @@ class InvitesManager(object):
         return inviteID
 
     def _addInvite(self, invite, userGetter):
-        if g_settings.userPrefs.invitesFromFriendsOnly:
-            user = userGetter(invite.creatorDBID)
-            if user is None or not user.isFriend():
-                LOG_DEBUG('Invite to be ignored:', invite)
-                return False
+        if self._isSenderIgnored(invite, userGetter):
+            return False
         self.__receivedInvites[invite.id] = invite
         if invite.isActive():
             self.__unreadInvitesCount += 1
@@ -306,11 +306,8 @@ class InvitesManager(object):
     def _updateInvite(self, other, userGetter):
         inviteID = other.id
         invite = self.__receivedInvites[inviteID]
-        if other.isActive() and g_settings.userPrefs.invitesFromFriendsOnly:
-            user = userGetter(invite.creatorDBID)
-            if user is None or not user.isFriend():
-                LOG_DEBUG('Invite to be ignored:', invite)
-                return False
+        if self._isSenderIgnored(invite, userGetter):
+            return False
         prevCount = invite.count
         invite = invite._merge(other)
         self.__receivedInvites[inviteID] = invite
@@ -323,6 +320,23 @@ class InvitesManager(object):
         if result:
             self.__receivedInvites.pop(inviteID)
         return result
+
+    def _isSenderIgnored(self, invite, userGetter):
+        user = userGetter(invite.creatorDBID)
+        areFriendsOnly = g_settings.userPrefs.invitesFromFriendsOnly
+        if user:
+            if areFriendsOnly:
+                if user.isFriend():
+                    return False
+                else:
+                    LOG_DEBUG('Invite is ignored, shows invites from friends only', invite)
+                    return True
+            if user.isIgnored():
+                LOG_DEBUG('Invite is ignored, there is the contact in ignore list', invite, user)
+                return True
+        elif areFriendsOnly:
+            LOG_DEBUG('Invite is ignored, shows invites from friends only', invite)
+        return areFriendsOnly
 
     def _buildReceivedInvitesList(self, invitesData):
         if self.__inited & PRB_INVITES_INIT_STEP.DATA_BUILD == 0:
@@ -338,6 +352,16 @@ class InvitesManager(object):
             invite = PrbInviteWrapper(id=inviteID, receiver=receiver, receiverDBID=receiverDBID, receiverClanAbbrev=receiverClanAbbrev, peripheryID=peripheryID, prebattleID=prebattleID, **data)
             self._addInvite(invite, userGetter)
 
+    def __initReceivedInvites(self):
+        step = PRB_INVITES_INIT_STEP.CONTACTS_RECEIVED
+        if self.__inited & step != step:
+            return
+        invitesData = getattr(BigWorld.player(), 'prebattleInvites', {})
+        LOG_DEBUG('Users roster received, list of invites are available', invitesData)
+        self._buildReceivedInvitesList(invitesData)
+        if self.__inited == PRB_INVITES_INIT_STEP.INITED:
+            self.onReceivedInviteListInited()
+
     def __clearAcceptChain(self):
         if self.__acceptChain is not None:
             self.__acceptChain.onStopped -= self.__accept_onPostActionsStopped
@@ -345,18 +369,25 @@ class InvitesManager(object):
             self.__acceptChain = None
         return
 
-    def __me_onUsersRosterReceived(self):
-        if self.__inited & PRB_INVITES_INIT_STEP.RECEIVED_ROSTERS == 0:
-            invitesData = getattr(BigWorld.player(), 'prebattleInvites', {})
-            LOG_DEBUG('Users roster received, list of invites is available', invitesData)
-            self.__inited |= PRB_INVITES_INIT_STEP.RECEIVED_ROSTERS
-            self._buildReceivedInvitesList(invitesData)
-            if self.__inited == PRB_INVITES_INIT_STEP.INITED:
-                self.onReceivedInviteListInited()
+    def __me_onUsersListReceived(self, tags):
+        doInit = False
+        if USER_TAG.FRIEND in tags:
+            doInit = True
+            step = PRB_INVITES_INIT_STEP.FRIEND_RECEIVED
+            if self.__inited & step == 0:
+                self.__inited |= step
+        if USER_TAG.IGNORED in tags:
+            doInit = True
+            step = PRB_INVITES_INIT_STEP.IGNORED_RECEIVED
+            if self.__inited & step == 0:
+                self.__inited |= step
+        if doInit:
+            self.__initReceivedInvites()
 
     def __pe_onPrebattleInvitesChanged(self, diff):
-        if self.__inited & PRB_INVITES_INIT_STEP.RECEIVED_ROSTERS == 0:
-            LOG_DEBUG('Received invites ignored. Manager waits for client will receive a roster list')
+        step = PRB_INVITES_INIT_STEP.CONTACTS_RECEIVED
+        if self.__inited & step != step:
+            LOG_DEBUG('Received invites are ignored. Manager waits for client will receive contacts')
             return
         else:
             prbInvites = diff.get(('prebattleInvites', '_r'))

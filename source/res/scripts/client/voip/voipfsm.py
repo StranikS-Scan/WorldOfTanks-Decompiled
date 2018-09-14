@@ -23,9 +23,6 @@ class VOIPFsm:
         self.__state = _STATE.NONE
         self.onStateChanged = Event.Event()
 
-    def inValidState(self):
-        return self.__state is not _STATE.NONE
-
     def getState(self):
         return self.__state
 
@@ -36,6 +33,12 @@ class VOIPFsm:
         oldState = self.__state
         self.__state = newState
         self.onStateChanged(oldState, newState)
+
+    def inNoneState(self):
+        return self.__state == _STATE.NONE
+
+    def reset(self):
+        self.__state = _STATE.NONE
 
     def update(self, voip):
         if self.__state == _STATE.NONE:

@@ -240,6 +240,6 @@ class VehicleSellDialog(View, VehicleSellDialogMeta, AbstractWindowView):
 
     def __shopResyncHandler(self, reason, diff):
         vehicle = g_itemsCache.items.getVehicle(self.vehInvID)
-        if reason == CACHE_SYNC_REASON.SHOP_RESYNC or vehicle is not None and not vehicle.rentalIsOver:
+        if reason == CACHE_SYNC_REASON.SHOP_RESYNC or vehicle is not None and vehicle.rentalIsActive:
             self.onWindowClose()
         return

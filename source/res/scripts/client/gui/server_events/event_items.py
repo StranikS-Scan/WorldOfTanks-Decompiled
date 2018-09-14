@@ -3,7 +3,6 @@ import operator
 import time
 from abc import ABCMeta
 from collections import namedtuple, OrderedDict
-from debug_utils import LOG_DEBUG
 import nations
 import constants
 import ResMgr
@@ -260,6 +259,19 @@ class Quest(ServerEventAbstract):
         isAccAvailable = self.accountReqs.isAvailable()
         isVehAvailable = self.vehicleReqs.isAnyVehicleAcceptable() or len(self.vehicleReqs.getSuitableVehicles()) > 0
         return isAccAvailable and isVehAvailable
+
+
+class PersonalQuest(Quest):
+
+    def __init__(self, qID, data, progress = None, expiryTime = None):
+        super(PersonalQuest, self).__init__(qID, data, progress)
+        self.expiryTime = expiryTime
+
+    def getFinishTime(self):
+        if self.expiryTime is not None:
+            return min(super(PersonalQuest, self).getFinishTime(), self.expiryTime)
+        else:
+            return super(PersonalQuest, self).getFinishTime()
 
 
 class Action(ServerEventAbstract):
@@ -697,10 +709,11 @@ class PQTile(object):
 
 class PotapovQuest(Quest):
 
-    def __init__(self, qID, pqType, pqProgress = None):
+    def __init__(self, qID, pqType, pqProgress = None, seasonID = None):
         super(PotapovQuest, self).__init__(qID, pqType.mainQuestInfo)
         self.__pqType = pqType
         self.__pqProgress = pqProgress
+        self.__seasonID = seasonID
 
     def getPQType(self):
         return self.__pqType
@@ -716,6 +729,12 @@ class PotapovQuest(Quest):
 
     def getTileID(self):
         return self.__pqType.tileID
+
+    def setSeasonID(self, seasonID):
+        self.__seasonID = seasonID
+
+    def getSeasonID(self):
+        return self.__seasonID
 
     def getUserType(self):
         return i18n.makeString('#quests:item/type/potapov')
@@ -853,3 +872,9 @@ def getTileGrayOverIconPath(tileIconID):
 
 def getTileAnimationPath(tileIconID):
     return '../flash/animations/questTiles/%s.swf' % tileIconID
+
+
+def createQuest(questType, qID, data, progress = None, expiryTime = None):
+    if questType == constants.EVENT_TYPE.PERSONAL_QUEST:
+        return PersonalQuest(qID, data, progress, expiryTime)
+    return Quest(qID, data, progress)

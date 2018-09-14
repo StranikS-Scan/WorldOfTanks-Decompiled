@@ -219,15 +219,15 @@ class LobbyChannelController(_ChannelController):
 
     def _addListeners(self):
         super(LobbyChannelController, self)._addListeners()
-        uEvents = g_messengerEvents.users
-        uEvents.onUsersRosterReceived += self.__me_onUsersRosterReceived
-        uEvents.onUserRosterChanged += self.__me_onUserRosterChanged
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUsersListReceived += self.__me_onUsersReceived
+        usersEvents.onUserActionReceived += self.__me_onUserActionReceived
 
     def _removeListeners(self):
         super(LobbyChannelController, self)._removeListeners()
-        uEvents = g_messengerEvents.users
-        uEvents.onUsersRosterReceived -= self.__me_onUsersRosterReceived
-        uEvents.onUserRosterChanged -= self.__me_onUserRosterChanged
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUsersListReceived -= self.__me_onUsersReceived
+        usersEvents.onUserActionReceived -= self.__me_onUserActionReceived
 
     def _fireInitEvent(self):
         g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LOBBY_CHANNEL_CTRL_INITED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -243,10 +243,10 @@ class LobbyChannelController(_ChannelController):
             self.fireDestroyEvent()
             self.proto.channels.removeChannelFromClient(self._channel)
 
-    def __me_onUsersRosterReceived(self):
+    def __me_onUsersReceived(self, _):
         self._refreshMembersDP()
 
-    def __me_onUserRosterChanged(self, _, user):
+    def __me_onUserActionReceived(self, _, user):
         if self._channel.hasMember(user.getID()):
             self._refreshMembersDP()
 

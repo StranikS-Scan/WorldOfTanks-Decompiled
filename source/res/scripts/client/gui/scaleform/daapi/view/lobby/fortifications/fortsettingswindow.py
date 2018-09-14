@@ -93,7 +93,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         if btnEnabled:
             ttBody = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_ENABLED_BODY
         else:
-            ttBody = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_DISABLED_BODY, period=time_utils.getTillTimeString(timeLeft, TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_DISABLED_BODY))
+            ttBody = i18n.makeString(TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_PEREPHERYBTN_DISABLED_BODY, period=time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUE))
         return makeTooltip(ttHeader, ttBody)
 
     def __makeDefencePeriodData(self):
@@ -138,7 +138,7 @@ class FortSettingsWindow(View, AbstractWindowView, FortSettingsWindowMeta, AppRe
         descriptionTooltip = TOOLTIPS.FORTIFICATION_FORTSETTINGSWINDOW_DAYOFFDESCRIPTION
         if inProcess:
             offDayChangeDate, nextOffDayUTC, _ = fort.events[FORT_EVENT_TYPE.OFF_DAY_CHANGE]
-            nextOffDayLocal = adjustOffDayToLocal(nextOffDayUTC, self.fortCtrl.getFort().getLocalDefenceHour())
+            nextOffDayLocal = adjustOffDayToLocal(nextOffDayUTC, self.fortCtrl.getFort().getLocalDefenceHour()[0])
             if nextOffDayLocal > NOT_ACTIVATED:
                 value = i18n.makeString(MENU.datetime_weekdays_full(str(nextOffDayLocal + 1)))
             else:

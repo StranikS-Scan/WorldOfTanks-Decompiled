@@ -1,10 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 from CurrentVehicle import g_currentVehicle
-from adisp import process
 from constants import QUEUE_TYPE
-from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui import SystemMessages
-from gui.Scaleform.Waiting import Waiting
+from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
@@ -13,9 +10,7 @@ from gui.Scaleform.framework import AppRef
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE_NAMES
-from gui.shared.gui_items.processors.module import ModuleBuyer, getInstallerProcessor
-from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
+from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE_NAMES
 from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH
 from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -25,6 +20,7 @@ from gui.shared.events import LobbySimpleEvent, LoadViewEvent
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from items import ITEM_TYPE_NAMES
+from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 
 class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
     __FITTING_SLOTS = (GUI_ITEM_TYPE_NAMES[2],
@@ -53,6 +49,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
             self.as_setHistoricalBattleS(historicalBattleID)
             self.as_setModulesEnabledS(historicalBattleID == -1)
             self.__updateAmmo(shellsData, historicalBattleID)
+            money = g_itemsCache.items.stats.money
+            exchangeRate = g_itemsCache.items.shop.exchangeRate
             vehicle = g_currentVehicle.item
             self.as_setVehicleHasTurretS(vehicle.hasTurrets)
             for type in AmmunitionPanel.__FITTING_SLOTS:
@@ -80,37 +78,44 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
                      'desc': module.getShortInfo(),
                      'target': target if thisTypeHBItem is not None else module.getTarget(vehicle),
                      'price': price,
+                     'money': money,
                      'currency': 'credits' if price[1] == 0 else 'gold',
                      'icon': module.icon if type in AmmunitionPanel.__ARTEFACTS_SLOTS else module.level,
-                     'actionPriceData': action}
+                     'actionPriceData': action,
+                     'exchangeRate': exchangeRate}
                     if type == ITEM_TYPE_NAMES[4]:
                         if module.isClipGun(vehicle.descriptor):
                             moduleData[EXTRA_MODULE_INFO] = CLIP_ICON_PATH
                     isFit, reason = True, ''
                     if not module.isInInventory:
-                        isFit, reason = module.mayPurchase(g_itemsCache.items.stats.money)
+                        isFit, reason = module.mayPurchase(money)
+                        if not isFit and reason == 'credit_error':
+                            isFit = module.mayPurchaseWithExchange(money, exchangeRate)
                     if type in AmmunitionPanel.__ARTEFACTS_SLOTS:
                         moduleData['removable'] = module.isRemovable
                         for i in xrange(3):
                             md = moduleData.copy()
                             if isFit:
-                                _, reason = module.mayInstall(vehicle, i)
+                                reason = self._getInstallReason(module, vehicle, reason, i)
                             isCurrent = module.isInstalled(vehicle, i)
                             if md.get('target') == 1:
                                 md['status'] = MENU.MODULEFITS_WRONG_SLOT if not isCurrent else self.__getStatus(reason)
                                 md['isSelected'] = isCurrent
+                                md['disabled'] = not isFit or not isCurrent or reason == 'unlock_error'
                             else:
                                 md['status'] = self.__getStatus(reason)
                                 md['isSelected'] = False
+                                md['disabled'] = not isFit or reason == 'unlock_error'
                             md['slotIndex'] = i
                             dataProvider[i].append(md)
 
                     else:
                         if isFit:
-                            isFit, reason = module.mayInstall(vehicle)
+                            reason = self._getInstallReason(module, vehicle, reason)
                         moduleData['removable'] = True
                         moduleData['isSelected'] = moduleData.get('target') == 1
                         moduleData['status'] = self.__getStatus(reason)
+                        moduleData['disabled'] = not isFit or reason == 'unlock_error'
                         dataProvider.append(moduleData)
 
                 self.as_setDataS(dataProvider, type)
@@ -122,6 +127,13 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
                 rentAvailable = vehicle.isRentable and canBuyOrRent
             self.as_updateVehicleStatusS(statusId, msg, msgLvl, rentAvailable)
         return
+
+    def _getInstallReason(self, module, vehicle, reason, slotIdx = None):
+        _, installReason = module.mayInstall(vehicle, slotIdx)
+        if reason == 'credit_error':
+            return installReason or reason
+        else:
+            return installReason
 
     def __updateAmmo(self, shellsData = None, historicalBattleID = -1):
         ammo = {'gunName': '',
@@ -148,11 +160,10 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
                 shellsData = map(lambda shell: (shell, shell.count), vehicle.shells)
             shells = ammo.get('shells')
             for shell, count in shellsData:
-                unicName = shell.descriptor['icon'][0]
                 shells.append({'id': str(shell.intCD),
                  'type': shell.type,
                  'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
-                 'icon': '../maps/icons/ammopanel/ammo/%s' % (unicName if not shell.isEvent else 'EVENT_' + unicName),
+                 'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
                  'count': count,
                  'historicalBattleID': historicalBattleID})
 
@@ -190,51 +201,9 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
              'vehicleDescr': vDescr}))
             return
 
-    @process
     def setVehicleModule(self, newId, slotIdx, oldId, isRemove):
-        isUseGold = isRemove and oldId is not None
-        vehicle = g_currentVehicle.item
-        newComponentItem = g_itemsCache.items.getItemByCD(int(newId))
-        if newComponentItem is None:
-            return
-        else:
-            oldComponentItem = None
-            if oldId:
-                oldComponentItem = g_itemsCache.items.getItemByCD(int(oldId))
-            if not isRemove and oldComponentItem and oldComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-                result = yield getInstallerProcessor(vehicle, oldComponentItem, slotIdx, False, True).request()
-                if result and result.auxData:
-                    for m in result.auxData:
-                        SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
-
-                if result and len(result.userMsg):
-                    SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-                if not result.success:
-                    return
-            conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-            if not newComponentItem.isInInventory and not isRemove:
-                Waiting.show('buyItem')
-                buyResult = yield ModuleBuyer(newComponentItem, count=1, buyForCredits=True, conflictedEqs=conflictedEqs, install=True).request()
-                Waiting.hide('buyItem')
-                if len(buyResult.userMsg):
-                    SystemMessages.g_instance.pushI18nMessage(buyResult.userMsg, type=buyResult.sysMsgType)
-                if buyResult.success:
-                    newComponentItem = g_itemsCache.items.getItemByCD(int(newId))
-                else:
-                    return
-            Waiting.show('applyModule')
-            result = yield getInstallerProcessor(vehicle, newComponentItem, slotIdx, not isRemove, isUseGold, conflictedEqs).request()
-            if result and result.auxData:
-                for m in result.auxData:
-                    SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
-
-            if result and len(result.userMsg):
-                SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-            if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                vehicle = g_itemsCache.items.getItemByCD(vehicle.intCD)
-                yield tryToLoadDefaultShellsLayout(vehicle)
-            Waiting.hide('applyModule')
-            return
+        invID = g_currentVehicle.invID
+        ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_MODULE, invID, newId, slotIdx, oldId, isRemove)
 
     def clearHistorical(self):
         self._update()

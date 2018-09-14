@@ -1,7 +1,15 @@
 # Embedded file name: scripts/client/messenger/ext/filters/_collection.py
+import re
+import sre_compile
+import pickle
 import BigWorld
-from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from account_shared import unpackPostBattleUniqueSubUrl
 from external_strings_utils import normalized_unicode_trim
+from gui import GUI_SETTINGS
+from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
+from gui.shared.utils import functions
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import html
 from messenger import g_settings
 from messenger.ext import g_olDictionary, g_dnDictionary
@@ -119,6 +127,37 @@ class HtmlEscapeFilter(IIncomingMessageFilter):
 
     def filter(self, senderID, text):
         return html.escape(text)
+
+
+class PostBattleLinksFilter(IIncomingMessageFilter):
+
+    def __init__(self):
+        try:
+            self.__pattern = re.compile('(%s)/(.*)/(.*)' % self.__getUrl(), re.M | re.S | re.U | re.I)
+        except sre_compile.error:
+            LOG_CURRENT_EXCEPTION()
+
+    def filter(self, senderID, text):
+        return self.__pattern.sub(self.__reSubHandler, text)
+
+    @classmethod
+    def __reSubHandler(cls, match):
+        try:
+            arenaUniqueID, arenaTypeID, vehTypeCompDescr, xp, _ = unpackPostBattleUniqueSubUrl(match.group(3))
+            return g_settings.htmlTemplates.format('postBattleSharingLink', {'linkCode': pickle.dumps((arenaUniqueID, match.group(2))),
+             'arena': functions.getArenaShortName(arenaTypeID),
+             'vehicle': Vehicle(typeCompDescr=vehTypeCompDescr).shortUserName,
+             'xp': BigWorld.wg_getIntegralFormat(xp),
+             'arrowButton': TextManager.getIcon(TextIcons.ARROW_BUTTON)})
+        except:
+            LOG_DEBUG('Invalid post battle results in message', match)
+            LOG_CURRENT_EXCEPTION()
+
+        return match.group()
+
+    @classmethod
+    def __getUrl(cls):
+        return re.escape(GUI_SETTINGS.postBattleExchange.url)
 
 
 class NormalizeMessageFilter(IOutgoingMessageFilter):

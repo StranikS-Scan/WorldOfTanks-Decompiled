@@ -27,7 +27,7 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
     def __init__(self, ctx = None):
         super(FortFixedPlayersWindow, self).__init__()
         self.__buildingUId = ctx.get('data', None)
-        self.__buildingId = self.UI_BUILDINGS_BIND.index(self.__buildingUId)
+        self.__buildingId = self.getBuildingIDbyUID(self.__buildingUId)
         self.__fixedPlayers = None
         self.__oldBuilding = None
         self.__isAssigned = None
@@ -42,7 +42,7 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
 
     def updateWindow(self, ctx):
         self.__buildingUId = ctx.get('data', None)
-        self.__buildingId = self.UI_BUILDINGS_BIND.index(self.__buildingUId)
+        self.__buildingId = self.getBuildingIDbyUID(self.__buildingUId)
         self.__makeData()
         return
 
@@ -79,7 +79,7 @@ class FortFixedPlayersWindow(AbstractWindowView, View, FortFixedPlayersWindowMet
         result = {}
         building = self.fortCtrl.getFort().getBuilding(self.__buildingId)
         self.__fixedPlayers = building.attachedPlayers
-        self.__oldBuilding = self.UI_BUILDINGS_BIND[self.fortCtrl.getFort().getAssignedBuildingID(BigWorld.player().databaseID)]
+        self.__oldBuilding = self.getBuildingUIDbyID(self.fortCtrl.getFort().getAssignedBuildingID(BigWorld.player().databaseID))
         self.__isAssigned = self.__buildingUId == self.__oldBuilding
         self.__limitFixedPlayers = building.typeRef.attachedPlayersLimit
         isVisible = True

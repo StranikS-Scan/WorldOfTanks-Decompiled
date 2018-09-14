@@ -49,7 +49,6 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
         g_prbCtrlEvents.onPreQueueFunctionalChanged += self.onPreQueueFunctionalChanged
         self.startGlobalListening()
-        game_control.g_instance.aogas.enableNotifyAccount()
         g_itemsCache.onSyncCompleted += self.onCacheResync
         g_eventsCache.onSyncCompleted += self.onEventsCacheResync
         g_clientUpdateManager.addCallbacks({'stats.credits': self.onMoneyUpdate,
@@ -60,6 +59,10 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         if IS_SHOW_SERVER_STATS:
             self._updateCurrentServerInfo()
         self.__updateAll()
+        self.addListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
+
+    def _onCustomizationShow(self, event):
+        self.as_setVisibleS(not event.ctx)
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
@@ -90,6 +93,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.__onStatsReceived(game_control.g_instance.serverStats.getStats())
 
     def _dispose(self):
+        self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
         g_eventsCache.onSyncCompleted -= self.onEventsCacheResync
         g_itemsCache.onSyncCompleted -= self.onCacheResync
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -267,12 +271,14 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.as_setVehicleIGRS(vehicleIgrTimeLeft)
 
     def __updateState(self):
-        enabledInRent = True
-        if g_currentVehicle.isPresent() and g_currentVehicle.isPremiumIGR():
-            vehDoss = g_itemsCache.items.getVehicleDossier(g_currentVehicle.item.intCD)
-            battlesCount = 0 if vehDoss is None else vehDoss.getTotalStats().getBattlesCount()
-            if battlesCount == 0:
-                enabledInRent = not g_currentVehicle.isDisabledInPremIGR() and not g_currentVehicle.isDisabledInRent()
+        enabledInRent = False
+        if g_currentVehicle.isPresent():
+            enabledInRent = not g_currentVehicle.isDisabledInRent()
+            if g_currentVehicle.isPremiumIGR():
+                vehDoss = g_itemsCache.items.getVehicleDossier(g_currentVehicle.item.intCD)
+                battlesCount = 0 if vehDoss is None else vehDoss.getTotalStats().getBattlesCount()
+                if battlesCount == 0:
+                    enabledInRent = not g_currentVehicle.isDisabledInPremIGR() and not g_currentVehicle.isDisabledInRent()
         isVehicleDisabled = False
         if self.prbDispatcher is not None:
             permission = self.prbDispatcher.getGUIPermissions()

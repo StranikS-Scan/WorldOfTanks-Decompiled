@@ -47,7 +47,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
         settings = self.unitFunctional.getRosterSettings()
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
-    def _onUserRosterChanged(self, _, user):
+    def _onUserActionReceived(self, _, user):
         self.__updateView(user)
 
     def _dispose(self):

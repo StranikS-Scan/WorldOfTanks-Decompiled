@@ -228,3 +228,19 @@ class RangeFilter(object):
         if valueLength > self.maxLength:
             valueToAdd *= self.maxLength / valueLength
         return self.filter.add(valueToAdd)
+
+
+def reduceToPI(inAngle):
+    outAngle = math.fmod(inAngle, 2.0 * math.pi)
+    if outAngle >= math.pi:
+        outAngle -= 2.0 * math.pi
+    elif outAngle <= -math.pi:
+        outAngle += 2.0 * math.pi
+    return outAngle
+
+
+def reduceTo2PI(inAngle):
+    outAngle = math.fmod(inAngle, 2.0 * math.pi)
+    if outAngle < 0.0:
+        outAngle += 2.0 * math.pi
+    return outAngle

@@ -104,7 +104,7 @@ class IFortListener(object):
     def onStateChanged(self, state):
         pass
 
-    def onOrderReady(self, orderTypeID, count):
+    def onOrderChanged(self, orderTypeID, reason):
         pass
 
     def onDossierChanged(self, compDossierDescr):
@@ -153,6 +153,9 @@ class IFortListener(object):
         pass
 
     def onEnemyStateChanged(self, battleID, isReady):
+        pass
+
+    def onConsumablesChanged(self, battleID, consumableOrderTypeID):
         pass
 
 
@@ -213,6 +216,9 @@ class IFortPermissions(object):
         return False
 
     def canShutDownDefHour(self):
+        return False
+
+    def canCancelShutDownDefHour(self):
         return False
 
     def canRequestPublicInfo(self):

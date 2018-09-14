@@ -6,14 +6,14 @@ class PrbSendInvitesWindowMeta(DAAPIModule):
     def showError(self, value):
         self._printOverrideError('showError')
 
-    def searchToken(self, value):
-        self._printOverrideError('searchToken')
-
     def setOnlineFlag(self, value):
         self._printOverrideError('setOnlineFlag')
 
     def sendInvites(self, accountsToInvite, comment):
         self._printOverrideError('sendInvites')
+
+    def getAllAvailableContacts(self):
+        self._printOverrideError('getAllAvailableContacts')
 
     def as_onReceiveSendInvitesCooldownS(self, value):
         if self._isDAAPIInited():
@@ -27,30 +27,14 @@ class PrbSendInvitesWindowMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_showClanOnly(showClanOnly)
 
-    def as_getFriendsDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getFriendsDP()
-
-    def as_getClanDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getClanDP()
-
-    def as_getSearchDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getSearchDP()
-
-    def as_getReceiverDPS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_getReceiverDP()
-
-    def as_onSearchResultReceivedS(self, result):
-        if self._isDAAPIInited():
-            return self.flashObject.as_onSearchResultReceived(result)
-
     def as_setWindowTitleS(self, value):
         if self._isDAAPIInited():
             return self.flashObject.as_setWindowTitle(value)
 
-    def as_setInvitesS(self, value):
+    def as_onContactUpdatedS(self, contact):
         if self._isDAAPIInited():
-            return self.flashObject.as_setInvites(value)
+            return self.flashObject.as_onContactUpdated(contact)
+
+    def as_onListStateChangedS(self, isEmpty):
+        if self._isDAAPIInited():
+            return self.flashObject.as_onListStateChanged(isEmpty)

@@ -23,6 +23,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
+    CONTACTS = 'CONTACTS'
 
 
 class ServerSettingsManager(object):
@@ -33,6 +34,7 @@ class ServerSettingsManager(object):
     CONTROLS = settings_constants.CONTROLS
     Section = namedtuple('Section', ['masks', 'offsets'])
     Offset = namedtuple('Offset', ['offset', 'mask'])
+    CONTACTS = settings_constants.CONTACTS
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -88,7 +90,9 @@ class ServerSettingsManager(object):
                                          'tankType': Offset(16, 16711680)}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={'isFreeXPInfoDialogShowed': 0}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
-     SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)})}
+     SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
+                                  CONTACTS.SHOW_OTHERS_CATEGORY: 1}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,

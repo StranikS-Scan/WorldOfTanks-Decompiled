@@ -52,7 +52,7 @@ class FortCreateDirectionWindow(AbstractWindowView, View, FortCreateDirectionWin
                 for building in buildings:
                     data = None
                     if building is not None:
-                        uid = self.UI_BUILDINGS_BIND[building.typeID]
+                        uid = self.getBuildingUIDbyID(building.typeID)
                         data = {'uid': uid,
                          'progress': self._getProgress(building.typeID, building.level),
                          'toolTipData': [i18n.makeString('#fortifications:Buildings/buildingName/%s' % uid), self.getCommonBuildTooltipData(building)]}

@@ -7,6 +7,7 @@ import Settings
 from adisp import async, process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.game_control.controllers import Controller
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils import graphics
 from gui.Scaleform.framework import AppRef, ViewTypes
@@ -14,12 +15,13 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 _GRAPHICS_SETTINGS_TAB_IDX = 1
 _Settings = namedtuple('_Settings', ['presetChangingVersion', 'lastBattleAvgFps'])
 
-class NotifyController(AppRef):
+class NotifyController(Controller, AppRef):
     LOW_FPS_VALUE = 20
     CURRENT_LOW_FPS_WARNING_VERSION = 1
     MIN_BATTLE_LENGHT = 180
 
-    def __init__(self):
+    def __init__(self, proxy):
+        super(NotifyController, self).__init__(proxy)
         self.__graphicsResetShown = False
         self.__settings = _Settings(0, None)
         return
@@ -31,12 +33,7 @@ class NotifyController(AppRef):
     def fini(self):
         self._stopListening()
         self.__writeSettings()
-
-    def start(self):
-        pass
-
-    def stop(self):
-        pass
+        super(NotifyController, self).fini()
 
     def updateBattleFpsInfo(self, avgBattleFps, battlePlayingTime):
         LOG_DEBUG('Updating battle fps info', avgBattleFps, battlePlayingTime)

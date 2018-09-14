@@ -120,6 +120,6 @@ class LobbyView(View, LobbyPageMeta, AppRef):
     def __showBattleResults(self):
         battleCtx = g_sessionProvider.getCtx()
         if GUI_SETTINGS.battleStatsInHangar and battleCtx.lastArenaUniqueID:
-            shared_events.showBattleResults(arenaUniqueID=battleCtx.lastArenaUniqueID)
+            shared_events.showMyBattleResults(battleCtx.lastArenaUniqueID)
             battleCtx.lastArenaUniqueID = None
         return

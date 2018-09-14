@@ -1,12 +1,13 @@
 # Embedded file name: scripts/client/Account.py
-import BigWorld, Keys
+import BigWorld
 import Event
 import cPickle
 import zlib
 import copy
+from functools import partial
 import AccountCommands
 import ClientPrebattle
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, Trader, CustomFilesCache, BattleResultsCache
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, Trader, CustomFilesCache, BattleResultsCache, ClientClubs
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents as events
 from account_helpers.settings_core import IntUserSettings
@@ -58,7 +59,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.battleResultsCache = g_accountRepository.battleResultsCache
         self.intUserSettings = g_accountRepository.intUserSettings
         self.fort = g_accountRepository.fort
-        self.fort._setAccount(self)
+        self.clubs = g_accountRepository.clubs
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -69,6 +70,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dossierCache.setAccount(self)
         self.battleResultsCache.setAccount(self)
         self.intUserSettings.setProxy(self, self.syncData)
+        self.fort._setAccount(self)
+        self.clubs.setAccount(self)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
         self.unitBrowser = ClientUnitBrowser(self)
@@ -105,6 +108,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.dossierCache.onAccountBecomePlayer()
         self.battleResultsCache.onAccountBecomePlayer()
         self.intUserSettings.onProxyBecomePlayer()
+        self.clubs.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         return
@@ -125,6 +129,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.dossierCache.onAccountBecomeNonPlayer()
             self.battleResultsCache.onAccountBecomeNonPlayer()
             self.intUserSettings.onProxyBecomeNonPlayer()
+            self.clubs.onAccountBecomeNonPlayer()
             self.__cancelCommands()
             self.syncData.setAccount(None)
             self.inventory.setAccount(None)
@@ -135,6 +140,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.dossierCache.setAccount(None)
             self.battleResultsCache.setAccount(None)
             self.intUserSettings.setProxy(None, None)
+            self.clubs.setAccount(None)
             self.fort.clear()
             events.onAccountBecomeNonPlayer()
             del self.inputHandler
@@ -352,6 +358,15 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if status != PREBATTLE_INVITE_STATUS.OK:
             events.onPrebattleInvitesStatus(dbID, name, status)
 
+    def receiveClubUpdate(self, clubDBID, clubData):
+        self.clubs.onClubUpdated(clubDBID, clubData)
+
+    def receiveNotification(self, notification):
+        LOG_DEBUG('receiveNotification', notification)
+
+    def sendNotificationReply(self, notificationID, purge, actionName):
+        self.base.doCmdInt2Str(0, AccountCommands.CMD_NOTIFICATION_REPLY, notificationID, purge, actionName)
+
     def handleKeyEvent(self, event):
         return False
 
@@ -501,6 +516,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, errorStr, ext.get('clanDBID', 0), ext.get('clanInfo', None))
         self._doCmdInt3(AccountCommands.CMD_REQ_PLAYER_CLAN_INFO, databaseID, 0, 0, proxy)
 
+    def cmdPublishBattleResults(self, uniqueSubUrl, arenaUniqueID):
+        self._doCmdInt2Str(AccountCommands.CMD_PUBLISH_BATTLE_RESULTS, arenaUniqueID, 0, uniqueSubUrl, None)
+        return
+
     def requestPlayerGlobalRating(self, accountID, callback):
         if events.isPlayerEntityChanging:
             return
@@ -564,11 +583,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if events.isPlayerEntityChanging:
             return
         self.base.createSquad()
-
-    def prb_createEventSquad(self):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.createEventSquad()
 
     def prb_createCompany(self, isOpened, comment, division = PREBATTLE_COMPANY_DIVISION.ABSOLUTE):
         if events.isPlayerEntityChanging:
@@ -824,15 +838,13 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.questProgress.synchronize(isFullSync, diff)
             self.trader.synchronize(isFullSync, diff)
             self.intUserSettings.synchronize(isFullSync, diff)
+            self.clubs.synchronize(isFullSync, diff)
             self.__synchronizeEventNotifications(diff)
             self.__synchronizeCacheDict(self.prebattleAutoInvites, diff.get('account', None), 'prebattleAutoInvites', 'replace', events.onPrebattleAutoInvitesChanged)
             self.__synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
             self.__synchronizeCacheDict(self.clanMembers, diff.get('cache', None), 'clanMembers', 'replace', events.onClanMembersListChanged)
+            self.__synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', lambda : events.onEventsDataChanged())
             cacheDiff = diff.get('cache', {})
-            eventsDataDiff = cacheDiff.get('eventsData', {})
-            synchronizeDicts(eventsDataDiff, self.eventsData)
-            if eventsDataDiff:
-                events.onEventsDataChanged()
             clanFortState = cacheDiff.get('clanFortState', None)
             if clanFortState is not None:
                 self.fort.onFortStateDiff(clanFortState)
@@ -924,23 +936,27 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if diff is None:
             return
         else:
-            repl = diff.get(('eventNotifications', '_r'), None)
-            if repl is not None:
-                self.eventNotifications = g_accountRepository.eventNotifications = repl
-                diffDict['added'].extend(repl)
-            diff = diff.get('eventNotifications', None)
-            if diff is not None:
-                diffDict.update(diff)
+            initialEventsData = diff.get(('eventsData', '_r'), {})
+            initial = initialEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS, None)
+            initialEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS_REV, None)
+            if initial is not None:
+                initial = cPickle.loads(zlib.decompress(initial))
+                self.eventNotifications = g_accountRepository.eventNotifications = initial
+                diffDict['added'].extend(initial)
+            updatedEventsData = diff.get('eventsData', {})
+            updated = updatedEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS, None)
+            updatedEventsData.pop(EVENT_CLIENT_DATA.NOTIFICATIONS_REV, None)
+            if updated is not None:
+                updated = cPickle.loads(zlib.decompress(updated))
                 eventNotifications = self.eventNotifications
-                removed = [ NotificationItem(item) for item in diffDict['removed'] ]
-                for removedItem in removed:
-                    for i in xrange(len(eventNotifications)):
-                        if removedItem == NotificationItem(eventNotifications[i]):
-                            eventNotifications.pop(i)
-                            break
-
-                eventNotifications.extend(diffDict['added'])
-            if repl is not None or diff is not None:
+                self.eventNotifications = updated
+                new = set([ NotificationItem(n) for n in updated ])
+                prev = set([ NotificationItem(n) for n in eventNotifications ])
+                added = new - prev
+                removed = prev - new
+                diffDict['added'].extend([ n.item for n in added ])
+                diffDict['removed'].extend([ n.item for n in removed ])
+            if initial is not None or updated is not None:
                 events.onEventNotificationsChanged(diffDict)
                 LOG_DZ('Account.__synchronizeEventNotifications, diff=%s' % (diffDict,))
             return
@@ -978,6 +994,7 @@ class _AccountRepository(object):
         self.customFilesCache = CustomFilesCache.CustomFilesCache()
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()
+        self.clubs = ClientClubs.ClientClubs(self.syncData)
         self.fort = ClientFortMgr()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

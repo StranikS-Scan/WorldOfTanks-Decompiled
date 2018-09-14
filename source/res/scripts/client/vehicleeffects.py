@@ -11,6 +11,7 @@ import helpers
 from items import _xml
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 import material_kinds
+from functools import partial
 
 class TankComponentNames():
     CHASSIS = 'chassis'
@@ -40,6 +41,12 @@ class DetailedEngineState(object):
 class VehicleTrailEffects():
     _DRAW_ORDER_IDX = 102
     enabled = property(lambda self: self.__enabled)
+    _TRAIL_E_PIXIE_ORDER = 0
+    _TRAIL_E_PIXIE_NODE = 1
+    _TRAIL_E_PIXIE_FILE = 2
+    _TRAIL_E_PIXIE_INDEX = 3
+    _TRAIL_E_PIXIE_ACTIVE = 4
+    _TRAIL_E_PIXIE_EFFECTS = 5
 
     def __init__(self, vehicle):
         self.__vehicle = vehicle
@@ -180,9 +187,22 @@ class VehicleTrailEffects():
                     if nodeEffect[1] == effectIndex and createdForActiveNode == isActiveNode:
                         return
 
-            pixie = Pixie.create(effectName)
-            pixie.drawOrder = drawOrder
-            node.attach(pixie)
+            elemDesc = [drawOrder,
+             node,
+             effectName,
+             effectIndex,
+             isActiveNode,
+             nodeEffects]
+            Pixie.createBG(effectName, partial(self._callbackTrailParticleLoaded, elemDesc))
+            return
+
+    def _callbackTrailParticleLoaded(self, elemDesc, pixie):
+        if pixie is None:
+            LOG_ERROR("Can't create pixie '%s'." % elemDesc[self._TRAIL_E_PIXIE_FILE])
+            return
+        else:
+            pixie.drawOrder = elemDesc[self._TRAIL_E_PIXIE_ORDER]
+            elemDesc[self._TRAIL_E_PIXIE_NODE].attach(pixie)
             basicRates = []
             for i in xrange(pixie.nSystems()):
                 try:
@@ -194,12 +214,12 @@ class VehicleTrailEffects():
                     source = pixie.system(i).action(16)
                     source.MultRate(0.01)
 
-            nodeEffects.append([pixie,
-             effectIndex,
+            elemDesc[self._TRAIL_E_PIXIE_EFFECTS].append([pixie,
+             elemDesc[self._TRAIL_E_PIXIE_INDEX],
              0,
              0,
              basicRates,
-             isActiveNode])
+             elemDesc[self._TRAIL_E_PIXIE_ACTIVE]])
             return
 
     def __updateNodeEffect(self, nodeEffect, node, nodeEffects, relSpeed, stopParticles):
@@ -296,6 +316,9 @@ class ExhaustEffectsCache():
     activeEffect = property(lambda self: self.__activeEffect)
     maxDrawOrder = property(lambda self: self.__maxDrawOrder)
     uniqueEffects = property(lambda self: self.__uniqueEffects)
+    node = property(lambda self: self.__node)
+    _EXHAUST_E_PIXE_NAME = 0
+    _EXHAUST_E_PIXE_LIST = 1
 
     def __init__(self, exhaustEffectsDescriptor, drawOrder, uniqueEffects = None):
         if uniqueEffects is None:
@@ -304,26 +327,40 @@ class ExhaustEffectsCache():
             self.__uniqueEffects = {name:effect.clone() for name, effect in uniqueEffects.iteritems()}
         self.__tables = []
         self.__maxDrawOrder = drawOrder - 1
+        self.__node = None
         for rangeTable in exhaustEffectsDescriptor.tables:
             effectsValues = []
             for name in rangeTable.values:
                 effect = self.__uniqueEffects.get(name)
                 if effect is None:
-                    effect = Pixie.create(name)
-                    self.__maxDrawOrder += 1
-                    effect.drawOrder = self.__maxDrawOrder
-                    self.__uniqueEffects[name] = effect
-                effectsValues.append(effect)
+                    elemDesc = [name, effectsValues]
+                    Pixie.createBG(name, partial(self._callbackExhaustPixieLoaded, elemDesc))
+                else:
+                    effectsValues.append(effect)
 
             self.__tables.append(RangeTable(rangeTable.keys, effectsValues))
 
         if self.__maxDrawOrder < drawOrder:
             self.__maxDrawOrder = drawOrder
         self.__activeEffect = None
-        for effect in self.__uniqueEffects.itervalues():
-            enablePixie(effect, False)
-
         return
+
+    def attachNode(self, node):
+        self.detach()
+        self.__node = node
+        for effect in self.__uniqueEffects.itervalues():
+            self.__node.attach(effect)
+
+    def detach(self):
+        if self.__node is not None:
+            for effect in self.__uniqueEffects.itervalues():
+                self.__node.detach(effect)
+
+            self.__node = None
+        return
+
+    def destroy(self):
+        self.detach()
 
     def clone(self, exhaustEffectsDescriptor, drawOrder):
         return ExhaustEffectsCache(exhaustEffectsDescriptor, drawOrder, self.__uniqueEffects)
@@ -332,6 +369,21 @@ class ExhaustEffectsCache():
         prevEffect = self.__activeEffect
         self.__activeEffect = self.__tables[engineLoad].lookup(engineRPM, prevEffect)
         return prevEffect != self.__activeEffect
+
+    def _callbackExhaustPixieLoaded(self, elemDesc, pixie):
+        effectName = elemDesc[self._EXHAUST_E_PIXE_NAME]
+        if pixie is None:
+            LOG_ERROR("Can't create pixie '%s'." % effectName)
+            return
+        else:
+            self.__maxDrawOrder += 1
+            pixie.drawOrder = self.__maxDrawOrder
+            self.__uniqueEffects[effectName] = pixie
+            elemDesc[self._EXHAUST_E_PIXE_LIST].append(pixie)
+            if self.__node is not None:
+                self.__node.attach(pixie)
+            enablePixie(pixie, False)
+            return
 
 
 class VehicleExhaustEffects():
@@ -354,21 +406,24 @@ class VehicleExhaustEffects():
                     effectsCache = ExhaustEffectsCache(exhaustDesc, 50 + idx)
                 else:
                     effectsCache = effectsCache.clone(exhaustDesc, effectsCache.maxDrawOrder + 1)
-                self.__exhaust.append([None, effectsCache])
+                self.__exhaust.append(effectsCache)
 
             return
 
     def destroy(self):
-        for node, pixieCache in self.__exhaust:
+        for pixieCache in self.__exhaust:
             if pixieCache.activeEffect is not None:
                 enablePixie(pixieCache.activeEffect, False)
                 pixieCache.activeEffect.clear()
+
+        for effectsCache in self.__exhaust:
+            effectsCache.destroy()
 
         self.__exhaust = []
         return
 
     def enable(self, isEnabled):
-        for node, pixieCache in self.__exhaust:
+        for pixieCache in self.__exhaust:
             activeEffect = pixieCache.activeEffect
             if activeEffect is not None:
                 enablePixie(activeEffect, isEnabled)
@@ -379,26 +434,20 @@ class VehicleExhaustEffects():
     def attach(self, hullModel, vehicleExhaustDescriptor):
         for nodeName, nodeAndCache in zip(vehicleExhaustDescriptor.nodes, self.__exhaust):
             node = hullModel.node(nodeName)
-            nodeAndCache[0] = node
-            for effect in nodeAndCache[1].uniqueEffects.itervalues():
-                node.attach(effect)
+            nodeAndCache.attachNode(node)
 
     def detach(self):
-        for node, pixieCache in self.__exhaust:
-            if node is not None:
-                for effect in pixieCache.uniqueEffects.itervalues():
-                    node.detach(effect)
-
-        return
+        for pixieCache in self.__exhaust:
+            pixieCache.detach()
 
     def changeExhaust(self, engineMode, rpm):
         if not self.__enabled:
             return
         else:
-            for node, pixieCache in self.__exhaust:
+            for pixieCache in self.__exhaust:
                 prevEffect = pixieCache.activeEffect
                 shouldReattach = pixieCache.changeActiveEffect(engineMode, rpm)
-                if shouldReattach and node is not None:
+                if shouldReattach and pixieCache.node is not None:
                     if prevEffect is not None:
                         enablePixie(prevEffect, False)
                     if pixieCache.activeEffect is not None:

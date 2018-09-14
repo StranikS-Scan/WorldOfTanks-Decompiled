@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileWindow.py
-from adisp import process
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.ProfileWindowMeta import ProfileWindowMeta
@@ -11,6 +10,9 @@ from gui.Scaleform.locale.PROFILE import PROFILE
 from helpers.i18n import makeString
 from gui.shared import g_itemsCache
 from PlayerEvents import g_playerEvents
+from messenger import g_settings
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from gui import game_control
@@ -26,8 +28,14 @@ class ProfileWindow(ProfileWindowMeta, AbstractWindowView, View, AppRef):
         super(ProfileWindow, self)._populate()
         g_playerEvents.onDossiersResync += self.__dossierResyncHandler
         self.__updateUserInfo()
-        g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
+        g_messengerEvents.users.onUserActionReceived += self._onUserActionReceived
         self.__checkUserRosterInfo()
+
+    def _dispose(self):
+        g_messengerEvents.users.onUserActionReceived -= self._onUserActionReceived
+        g_playerEvents.onDossiersResync -= self.__dossierResyncHandler
+        g_itemsCache.items.unloadUserDossier(self.__databaseID)
+        super(ProfileWindow, self)._dispose()
 
     def __checkUserRosterInfo(self):
         user = self.usersStorage.getUser(self.__databaseID)
@@ -36,18 +44,26 @@ class ProfileWindow(ProfileWindowMeta, AbstractWindowView, View, AppRef):
         self.as_addFriendAvailableS(enabledInroaming and not isFriend)
         isIgnored = user is not None and user.isIgnored()
         self.as_setIgnoredAvailableS(enabledInroaming and not isIgnored)
-        self.as_setCreateChannelAvailableS(enabledInroaming and isFriend)
+        self.as_setCreateChannelAvailableS(enabledInroaming)
         return
 
-    def __isEnabledInRoaming(self, uid):
+    def __isEnabledInRoaming(self, dbID):
         roamingCtrl = game_control.g_instance.roaming
-        return not roamingCtrl.isInRoaming() and not roamingCtrl.isPlayerInRoaming(uid)
+        if g_settings.server.XMPP.isEnabled():
+            isEnabled = roamingCtrl.isSameRealm(dbID)
+        else:
+            isEnabled = not roamingCtrl.isInRoaming() and not roamingCtrl.isPlayerInRoaming(dbID)
+        return isEnabled
 
     @storage_getter('users')
     def usersStorage(self):
         return None
 
-    def _onUserRosterChanged(self, _, user):
+    @proto_getter(PROTO_TYPE.MIGRATION)
+    def proto(self):
+        return None
+
+    def _onUserActionReceived(self, _, user):
         if user.getID() == self.__databaseID:
             self.__checkUserRosterInfo()
 
@@ -76,16 +92,13 @@ class ProfileWindow(ProfileWindowMeta, AbstractWindowView, View, AppRef):
          'tooltip': tooltip}
 
     def userAddFriend(self):
-        self.app.contextMenuManager.addFriend(self.__databaseID, self.__userName)
+        self.proto.contacts.addFriend(self.__databaseID, self.__userName)
 
     def userSetIgnored(self):
-        self.app.contextMenuManager.setIgnored(self.__databaseID, self.__userName)
+        self.proto.contacts.addIgnored(self.__databaseID, self.__userName)
 
     def userCreatePrivateChannel(self):
-        self.app.contextMenuManager.createPrivateChannel(self.__databaseID, self.__userName)
+        self.proto.contacts.createPrivateChannel(self.__databaseID, self.__userName)
 
     def onWindowClose(self):
-        g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
-        g_playerEvents.onDossiersResync -= self.__dossierResyncHandler
-        g_itemsCache.items.unloadUserDossier(self.__databaseID)
         self.destroy()

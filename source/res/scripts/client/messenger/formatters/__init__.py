@@ -137,16 +137,6 @@ class NCContextItemFormatter(object):
 
 
 SysMsgExtraData = namedtuple('SysMsgExtraData', 'type data')
-
-class SYS_MSG_EXTRA_HANDLER_TYPE(object):
-    PUNISHMENT = 1
-    REF_QUEST_AWARD = 2
-    FORT_RESULTS = 3
-    POTAPOV_QUEST_AWARD = 4
-    REF_SYS_STATUS = 5
-    POTAPOV_QUEST_AUTO_REWARD = 6
-
-
 from chat_shared import SYS_MESSAGE_TYPE
 from messenger.formatters import service_channel as sch_formatters
 SCH_SERVER_FORMATTERS_DICT = {SYS_MESSAGE_TYPE.serverReboot.index(): sch_formatters.ServerRebootFormatter(),
@@ -183,7 +173,6 @@ SCH_SERVER_FORMATTERS_DICT = {SYS_MESSAGE_TYPE.serverReboot.index(): sch_formatt
  SYS_MESSAGE_TYPE.fortBattleInvite.index(): sch_formatters.FortBattleInviteFormatter(),
  SYS_MESSAGE_TYPE.vehicleRented.index(): sch_formatters.VehicleRentedFormatter(),
  SYS_MESSAGE_TYPE.rentalsExpired.index(): sch_formatters.RentalsExpiredFormatter(),
- SYS_MESSAGE_TYPE.rentCompensation.index(): sch_formatters.RentCompensationFormatter(),
  SYS_MESSAGE_TYPE.refSystemQuests.index(): sch_formatters.RefSystemQuestsFormatter(),
  SYS_MESSAGE_TYPE.refSystemReferralBoughtVehicle.index(): sch_formatters.RefSystemReferralBoughtVehicleFormatter(),
  SYS_MESSAGE_TYPE.refSystemReferralContributedXP.index(): sch_formatters.RefSystemReferralContributedXPFormatter(),

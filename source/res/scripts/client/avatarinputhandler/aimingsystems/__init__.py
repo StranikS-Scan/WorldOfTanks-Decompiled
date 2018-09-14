@@ -77,9 +77,11 @@ def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravi
     return BigWorld.wg_getShotAngles(turretOffs, gunOffs, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
 
 
-def getDesiredShotPoint(start, dir, onlyOnGround = False, isStrategicMode = False):
+def getDesiredShotPoint(start, dir, onlyOnGround = False, isStrategicMode = False, terrainOnlyCheck = False):
     end = start + dir.scale(10000.0)
     if isStrategicMode:
+        if terrainOnlyCheck:
+            return __collideTerrainOnly(start, end)
         point1 = __collideStaticOnly(start, end)
         point2 = collideDynamicAndStatic(start, end, (BigWorld.player().playerVehicleID,), skipGun=isStrategicMode)
         if point1 is None or point2 is None:
@@ -129,6 +131,22 @@ def shootInSkyPoint(startPos, dir):
     if intersecPoint is not None:
         finalPoint = intersecPoint
     return finalPoint
+
+
+def __collideTerrainOnly(start, end):
+    waterHeight = BigWorld.wg_collideWater(start, end, False)
+    resultWater = None
+    if waterHeight != -1:
+        resultWater = start - Math.Vector3(0, waterHeight, 0)
+    testResTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128, lambda matKind, collFlags, itemId, chunkId: collFlags & 8)
+    result = testResTerrain[0] if testResTerrain is not None else None
+    if resultWater is not None:
+        distance = (result - start).length
+        if distance - waterHeight < 0.2:
+            return result
+        return resultWater
+    else:
+        return result
 
 
 def __collideStaticOnly(startPoint, endPoint):

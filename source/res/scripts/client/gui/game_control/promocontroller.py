@@ -1,84 +1,96 @@
 # Embedded file name: scripts/client/gui/game_control/PromoController.py
-import weakref
-import BigWorld
-from PlayerEvents import g_playerEvents
+from account_helpers import getPlayerDatabaseID
 from account_helpers.AccountSettings import AccountSettings, PROMO
 from debug_utils import LOG_DEBUG
+from adisp import async, process
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.game_control import gc_constants
+from gui.game_control.controllers import Controller
 from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from helpers import getClientVersion, i18n, getClientLanguage
+from helpers import getClientVersion, i18n
 
-class PromoController(object):
-    _PROMO_BROWSER_SIZE = (780, 470)
-    _PROMO_BROWSER_BACKGROUND = 'file:///gui/maps/promo_bg.png'
-    _PATCH_TEMPLATE = 'promo_patchnote'
-    _ACTION_PREFIX = 'promo_action'
+class PromoController(Controller):
+    PROMO_AUTO_VIEWS_TEST_VALUE = 5
 
     def __init__(self, proxy):
-        self.__proxy = weakref.proxy(proxy)
+        super(PromoController, self).__init__(proxy)
         self.__currentVersionPromoUrl = None
         self.__currentVersionBrowserID = None
         self.__currentVersionBrowserShown = False
         self.__promoShown = set()
         self.__availablePromo = set()
         self.__urlMacros = URLMarcos()
+        self._isPromoShown = False
         return
-
-    def init(self):
-        pass
 
     def fini(self):
+        self._stop()
         self.__urlMacros.clear()
         self.__urlMacros = None
+        super(PromoController, self).fini()
         return
 
-    def start(self):
-        self._updatePromo(self._getEventNotifications())
-        g_playerEvents.onEventNotificationsChanged += self.__onEventNotification
-        g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyLoaded)
+    def onLobbyInited(self, event):
+        self._updatePromo(self._getPromoEventNotifications())
+        self._getEventsFotificationController().onEventNotificationsChanged += self.__onEventNotification
         self._getBrowserController().onBrowserDeleted += self.__onBrowserDeleted
+        self._processPromo(self._getEventNotifications())
 
-    def stop(self):
-        self.__currentVersionPromoUrl = None
-        self.__currentVersionBrowserID = None
-        self.__currentVersionBrowserShown = False
-        self._getBrowserController().onBrowserDeleted -= self.__onBrowserDeleted
-        g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyLoaded)
-        g_playerEvents.onEventNotificationsChanged -= self.__onEventNotification
-        return
+    def onBattleStarted(self):
+        self._stop()
 
+    def onDisconnected(self):
+        self._stop()
+        self._isPromoShown = False
+
+    @process
     def showPatchPromo(self, isAsync = False):
-        self.__currentVersionBrowserID = self.__showPromoBrowser(self.__currentVersionPromoUrl, i18n.makeString(MENU.PROMO_PATCH_TITLE, version=getClientVersion()), browserID=self.__currentVersionBrowserID, isAsync=isAsync)
+        self.__currentVersionBrowserID = yield self.__showPromoBrowser(self.__currentVersionPromoUrl, i18n.makeString(MENU.PROMO_PATCH_TITLE, version=getClientVersion()), browserID=self.__currentVersionBrowserID, isAsync=isAsync)
 
     def isPatchPromoAvailable(self):
         return self.__currentVersionPromoUrl is not None
 
+    def _stop(self):
+        self.__currentVersionPromoUrl = None
+        self.__currentVersionBrowserID = None
+        self.__currentVersionBrowserShown = False
+        self._getBrowserController().onBrowserDeleted -= self.__onBrowserDeleted
+        self._getEventsFotificationController().onEventNotificationsChanged -= self.__onEventNotification
+        return
+
+    @process
     def _processPromo(self, promo):
-        if self.isPatchPromoAvailable() and self.__currentVersionPromoUrl not in self.__promoShown:
+        yield lambda callback: callback(True)
+        if self.isPatchPromoAvailable() and self.__currentVersionPromoUrl not in self.__promoShown and self.isPromoAutoViewsEnabled() and not self._isPromoShown:
             LOG_DEBUG('Showing patchnote promo:', self.__currentVersionPromoUrl)
             self.__promoShown.add(self.__currentVersionPromoUrl)
             self.__savePromoShown()
             self.__currentVersionBrowserShown = True
-            self.showPatchPromo()
+            self._isPromoShown = True
+            self.showPatchPromo(isAsync=True)
             return
-        actionsPromo = [ item for item in promo if item['type'].startswith(self._ACTION_PREFIX) ]
+        actionsPromo = [ item for item in promo if item.eventType.startswith(gc_constants.PROMO.TEMPLATE.ACTION) ]
         for actionPromo in actionsPromo:
-            promoUrl = self.__urlMacros.parse(actionPromo['data'])
-            promoTitle = actionPromo['text'].get(getClientLanguage())
-            if promoUrl not in self.__promoShown:
+            promoUrl = yield self.__urlMacros.parse(actionPromo.data)
+            promoTitle = actionPromo.text
+            if promoUrl not in self.__promoShown and not self._isPromoShown:
                 LOG_DEBUG('Showing action promo:', promoUrl)
                 self.__promoShown.add(promoUrl)
                 self.__savePromoShown()
-                self.__showPromoBrowser(promoUrl, promoTitle)
+                self._isPromoShown = True
+                yield self.__showPromoBrowser(promoUrl, promoTitle)
                 return
 
+    @process
     def _updatePromo(self, promosData):
-        for item in filter(lambda item: item['type'] in (self._PATCH_TEMPLATE, self._ACTION_PREFIX), promosData):
-            promoUrl = self.__urlMacros.parse(item['data'])
+        yield lambda callback: callback(True)
+        for item in filter(lambda item: item.eventType in (gc_constants.PROMO.TEMPLATE.PATCH, gc_constants.PROMO.TEMPLATE.ACTION), promosData):
+            promoUrl = yield self.__urlMacros.parse(item.data)
             self.__availablePromo.add(promoUrl)
-            if item['type'] == self._PATCH_TEMPLATE and self.__currentVersionPromoUrl is None:
+            if item.eventType == gc_constants.PROMO.TEMPLATE.PATCH and self.__currentVersionPromoUrl is None:
                 self.__currentVersionPromoUrl = promoUrl
 
         promoShownSource = AccountSettings.getFilter(PROMO)
@@ -87,23 +99,24 @@ class PromoController(object):
         return
 
     def _getEventNotifications(self):
-        return BigWorld.player().eventNotifications
+        return self._proxy.getController(gc_constants.CONTROLLER.EVENTS_NOTIFICATION).getEventsNotifications()
+
+    def _getPromoEventNotifications(self):
+        filterFunc = lambda item: item.eventType in (gc_constants.PROMO.TEMPLATE.PATCH, gc_constants.PROMO.TEMPLATE.ACTION)
+        return self._getEventsFotificationController().getEventsNotifications(filterFunc)
 
     def _getBrowserController(self):
-        return self.__proxy.browser
+        return self._proxy.getController(gc_constants.CONTROLLER.BROWSER)
+
+    def _getEventsFotificationController(self):
+        return self._proxy.getController(gc_constants.CONTROLLER.EVENTS_NOTIFICATION)
 
     def __savePromoShown(self):
         AccountSettings.setFilter(PROMO, self.__promoShown)
 
-    def __onEventNotification(self, diff):
-        self._updatePromo(self._getEventNotifications())
-        added = diff.get('added')
-        if added is not None:
-            self._processPromo(added)
-        return
-
-    def __handleLobbyLoaded(self, *args):
-        self._processPromo(self._getEventNotifications())
+    def __onEventNotification(self, added, removed):
+        self._updatePromo(self._getPromoEventNotifications())
+        self._processPromo(added)
 
     def __onBrowserDeleted(self, browserID):
         if self.__currentVersionBrowserID == browserID:
@@ -113,5 +126,12 @@ class PromoController(object):
                 g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, i18n.makeString(TOOLTIPS.HEADER_VERSIONINFOHINT)), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
-    def __showPromoBrowser(self, promoUrl, promoTitle, browserID = None, isAsync = True):
-        return self._getBrowserController().load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=self._PROMO_BROWSER_SIZE, background=self._PROMO_BROWSER_BACKGROUND, isDefault=False)
+    @async
+    @process
+    def __showPromoBrowser(self, promoUrl, promoTitle, browserID = None, isAsync = True, callback = None):
+        browserID = yield self._getBrowserController().load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, background=gc_constants.BROWSER.PROMO_BACKGROUND, isDefault=False)
+        callback(browserID)
+
+    @classmethod
+    def isPromoAutoViewsEnabled(cls):
+        return getPlayerDatabaseID() % cls.PROMO_AUTO_VIEWS_TEST_VALUE != 0 and g_lobbyContext.getServerSettings().isPromoAutoViewsEnabled()

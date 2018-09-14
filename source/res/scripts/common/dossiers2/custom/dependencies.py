@@ -31,11 +31,11 @@ def _set_A7X7_STATS_DEPENDENCIES():
      'wins': [_updateForTacticalOperations]})
 
 
-ACHIEVEMENT_DEPENDENCIES = {}
+ACHIEVEMENT15X15_DEPENDENCIES = {}
 
-def _set_ACHIEVEMENT_DEPENDENCIES():
-    global ACHIEVEMENT_DEPENDENCIES
-    ACHIEVEMENT_DEPENDENCIES.update({'warrior': [_updateBattleHeroes],
+def _set_ACHIEVEMENT15X15_DEPENDENCIES():
+    global ACHIEVEMENT15X15_DEPENDENCIES
+    ACHIEVEMENT15X15_DEPENDENCIES.update({'warrior': [_updateBattleHeroes],
      'invader': [_updateBattleHeroes],
      'sniper': [_updateBattleHeroes],
      'defender': [_updateBattleHeroes],
@@ -106,6 +106,13 @@ def _set_ACHIEVEMENT7X7_DEPENDENCIES():
      'noMansLand': [_updateAwardCount],
      'forTacticalOperations': [_updateAwardCount],
      'awardCount': [_updateBattleTested]})
+
+
+ACHIEVEMENTRATED7X7_DEPENDENCIES = {}
+
+def _set_ACHIEVEMENTRATED7X7_DEPENDENCIES():
+    global ACHIEVEMENTRATED7X7_DEPENDENCIES
+    ACHIEVEMENTRATED7X7_DEPENDENCIES.update({})
 
 
 HISTORICAL_ACHIEVEMENTS_DEPENDENCIES = {}
@@ -745,8 +752,9 @@ def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):
 def init():
     _set_A15X15_STATS_DEPENDENCIES()
     _set_A7X7_STATS_DEPENDENCIES()
-    _set_ACHIEVEMENT_DEPENDENCIES()
+    _set_ACHIEVEMENT15X15_DEPENDENCIES()
     _set_ACHIEVEMENT7X7_DEPENDENCIES()
+    _set_ACHIEVEMENTRATED7X7_DEPENDENCIES()
     _set_VEH_TYPE_FRAGS_DEPENDENCIES()
     _set_HISTORICAL_STATS_DEPENDENCIES()
     _set_HISTORICAL_ACHIEVEMENTS_DEPENDENCIES()

@@ -4,12 +4,10 @@ import sys
 import BigWorld
 from gui import SystemMessages
 from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import getBattleID
 from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty, prbDispatcherProperty
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.fortifications import fort_helpers
+from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
 from helpers import i18n, time_utils
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -41,7 +39,7 @@ class FortBattleDirectionPopover(View, FortBattleDirectionPopoverMeta, SmartPopO
     def requestToJoin(self, battleID):
         currentBattleID = getBattleID()
         if currentBattleID == battleID:
-            g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
+            fort_events.showFortBattleRoomWindow()
         else:
             battle = self.fortCtrl.getFort().getBattle(battleID)
             if battle is not None:

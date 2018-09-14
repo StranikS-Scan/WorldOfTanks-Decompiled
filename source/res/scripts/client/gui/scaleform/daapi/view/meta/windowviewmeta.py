@@ -12,14 +12,6 @@ class WindowViewMeta(DAAPIModule):
     def onTryClosing(self):
         self._printOverrideError('onTryClosing')
 
-    def as_showWaitingS(self, msg, props):
-        if self._isDAAPIInited():
-            return self.flashObject.as_showWaiting(msg, props)
-
-    def as_hideWaitingS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_hideWaiting()
-
     def as_getGeometryS(self):
         if self._isDAAPIInited():
             return self.flashObject.as_getGeometry()

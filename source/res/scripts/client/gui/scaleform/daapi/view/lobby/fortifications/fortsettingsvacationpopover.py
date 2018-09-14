@@ -50,5 +50,5 @@ class FortSettingsVacationPopover(View, FortSettingsVacationPopoverMeta, SmartPo
         dayStartUTC, _ = time_utils.getDayTimeBoundsForUTC(time_utils.getCurrentTimestamp())
         vacationStart = dayStartUTC + time_utils.ONE_DAY + fortified_regions.g_cache.minVacationPreorderTime
         self.as_setDataS({'startVacation': vacationStart,
-         'vacationDuration': fortified_regions.g_cache.maxVacationDuration / time_utils.ONE_DAY,
+         'vacationDuration': -1,
          'isAmericanStyle': False})

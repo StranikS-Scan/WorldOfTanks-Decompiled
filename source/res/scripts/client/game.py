@@ -241,6 +241,8 @@ def fini():
             EdgeDetectColorController.g_instance = None
         BigWorld.resetEntityManager(False, False)
         BigWorld.clearAllSpaces()
+        from gui.social_network_login.Bridge import bridge
+        bridge.fini()
         gui_personality.fini()
         tutorialLoaderFini()
         import LcdKeyboard

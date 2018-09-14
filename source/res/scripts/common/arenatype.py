@@ -167,6 +167,8 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing):
         cfg['artilleryPreparationChance'] = __readFloat('artilleryPreparationChance', section, defaultXml)
     if raiseIfMissing or section.has_key('mapActivities'):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
+    cfg['teamBasePositions'] = __readTeamBasePositions(section)
+    cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section)
     if IS_CLIENT or IS_WEB:
         if raiseIfMissing or __hasKey('description', section, defaultXml):
             cfg['description'] = i18n.makeString(__readString('description', section, defaultXml))
@@ -192,9 +194,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing):
             cfg['soundRemapping'] = section['soundRemapping']
     if IS_CLIENT:
         cfg['controlPoints'] = __readControlPoints(section)
-        cfg['teamBasePositions'] = __readTeamBasePositions(section)
-        cfg['teamSpawnPoints'] = __readTeamSpawPoints(section)
-        cfg['teamLowLevelSpawnPoints'] = __readTeamSpawPoints(section, nodeNameTemplate='team%d_low', required=False)
+        cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, nodeNameTemplate='team%d_low', required=False)
     return cfg
 
 
@@ -352,18 +352,18 @@ def __readTeamBasePositions(section):
             s = section[teamTag]
             if s is None:
                 raise Exception, "missing 'teamBasePositions/%s'" % teamTag
-            for s in s.values():
+            for name, value in s.items():
                 try:
-                    id = int(s.name[8:])
+                    id = int(name[8:])
                 except:
                     raise Exception, "wrong subsection 'teamBasePositions/%s/%s'" % (teamTag, s.name)
 
-                teamBases[teamIdx][id] = s.asVector2
+                teamBases[teamIdx][id] = value.readVector2('')
 
         return teamBases
 
 
-def __readTeamSpawPoints(section, nodeNameTemplate = 'team%d', required = True):
+def __readTeamSpawnPoints(section, nodeNameTemplate = 'team%d', required = True):
     team1, team2 = map(lambda idx: nodeNameTemplate % idx, (1, 2))
     section = section['teamSpawnPoints']
     if section is None:
@@ -376,6 +376,7 @@ def __readTeamSpawPoints(section, nodeNameTemplate = 'team%d', required = True):
                 if required:
                     raise Exception, "missing 'teamSpawnPoints/%s'" % teamTag
             else:
-                teamSpawnPoints[teamIdx].extend(s.readVector2s('position'))
+                for value in s.values():
+                    teamSpawnPoints[teamIdx].append(value.readVector2(''))
 
         return teamSpawnPoints

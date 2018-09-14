@@ -45,6 +45,9 @@ class FortMainViewMeta(DAAPIModule):
     def onViewReady(self):
         self._printOverrideError('onViewReady')
 
+    def onSelectOrderSelector(self, value):
+        self._printOverrideError('onSelectOrderSelector')
+
     def as_switchModeS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_switchMode(data)

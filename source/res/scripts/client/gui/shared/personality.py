@@ -88,6 +88,7 @@ def onAvatarBecomePlayer():
 
 
 def onAccountBecomePlayer():
+    g_lobbyContext.onAccountBecomePlayer()
     game_control.g_instance.onAccountBecomePlayer()
 
 
@@ -187,17 +188,17 @@ def start():
 def fini():
     Waiting.close()
     g_eventBus.removeListener(events.GUICommonEvent.APP_STARTED, onAppStarted)
-    game_control.g_instance.fini()
-    g_settingsCore.fini()
-    g_settingsCache.fini()
-    g_eventsCache.fini()
-    g_itemsCache.fini()
     LogitechMonitor.destroy()
     g_windowsManager.destroy()
     SystemMessages.g_instance.destroy()
     g_eventBus.clear()
     g_prbLoader.fini()
     g_clanCache.fini()
+    game_control.g_instance.fini()
+    g_settingsCore.fini()
+    g_settingsCache.fini()
+    g_eventsCache.fini()
+    g_itemsCache.fini()
     g_playerEvents.onIGRTypeChanged -= onIGRTypeChanged
     g_playerEvents.onAccountShowGUI -= onAccountShowGUI
     g_playerEvents.onAccountBecomeNonPlayer -= onAccountBecomeNonPlayer

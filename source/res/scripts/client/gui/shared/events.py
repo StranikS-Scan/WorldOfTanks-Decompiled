@@ -27,6 +27,7 @@ class HasCtxEvent(SharedEvent):
 
 
 class AppLifeCycleEvent(SharedEvent):
+    CREATING = 'app/creating'
     INITIALIZING = 'app/initializing'
     INITIALIZED = 'app/initialized'
     DESTROYED = 'app/destroyed'
@@ -58,6 +59,7 @@ class GameEvent(HasCtxEvent):
     GUI_VISIBILITY = 'game/guiVisibility'
     MARKERS_2D_VISIBILITY = 'game/markers2DVisibility'
     CROSSHAIR_VISIBILITY = 'game/crosshairVisibility'
+    GUN_MARKER_VISIBILITY = 'game/gunMarkerVisibility'
     CROSSHAIR_VIEW = 'game/crosshairView'
     FULL_STATS = 'game/fullStats'
     SHOW_CURSOR = 'game/showCursor'
@@ -65,6 +67,10 @@ class GameEvent(HasCtxEvent):
     NEXT_PLAYERS_PANEL_MODE = 'game/nextPlayersPanelMode'
     PLAYING_TIME_ON_ARENA = 'game/playingTimeOnArena'
     CHANGE_APP_RESOLUTION = 'game/changeAppResolution'
+    BATTLE_LOADING = 'game/battleLoading'
+
+    def __init__(self, eventType=None, ctx=None):
+        super(GameEvent, self).__init__(eventType, ctx)
 
 
 class GUICommonEvent(SharedEvent):
@@ -140,6 +146,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
     SHOW_CHECK_BOX_DIALOG = 'showCheckBoxDialog'
     SHOW_DESERTER_DLG = 'showDeserterDialog'
+    SHOW_CHRISTMAS_CONVERT_DIALOG = 'showChristmasConvertDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -296,7 +303,6 @@ class TutorialEvent(SharedEvent):
 
 class MessengerEvent(HasCtxEvent):
     PRB_CHANNEL_CTRL_INITED = 'prbChannelCtrlInited'
-    PRB_CHANNEL_CTRL_REQUEST_DESTROY = 'prbChannelCtrlRequestDestroy'
     PRB_CHANNEL_CTRL_DESTROYED = 'prbChannelCtrlDestroyed'
     LAZY_CHANNEL_CTRL_INITED = 'lazyChannelCtrlInited'
     LAZY_CHANNEL_CTRL_DESTROYED = 'lazyChannelCtrlDestroyed'
@@ -424,6 +430,7 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_CAP = 'globalMapCap'
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
+    NY_RULES = 'nyRules'
 
     def __init__(self, eventType, url='', title=''):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -473,3 +480,14 @@ class WGNCShowItemEvent(SharedEvent):
 
     def getTarget(self):
         return self.__target
+
+
+class MarkersManagerEvent(SharedEvent):
+    MARKERS_CREATED = 'markersCreated'
+
+    def __init__(self, eventType=None, markersManager=None):
+        super(MarkersManagerEvent, self).__init__(eventType)
+        self.__markersManager = markersManager
+
+    def getMarkersManager(self):
+        return self.__markersManager

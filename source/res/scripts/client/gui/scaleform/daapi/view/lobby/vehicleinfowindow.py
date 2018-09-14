@@ -4,13 +4,14 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import g_itemsCache
 from gui.shared.items_parameters import formatters
-from helpers import i18n
+from helpers import i18n, dependency
 from items import tankmen
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 class VehicleInfoWindow(VehicleInfoMeta):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
         super(VehicleInfoWindow, self).__init__()
@@ -55,31 +56,28 @@ class VehicleInfoWindow(VehicleInfoMeta):
             return
 
     def addToCompare(self):
-        getVehicleComparisonBasketCtrl().addVehicle(self.vehicleCompactDescr)
+        self.comparisonBasket.addVehicle(self.vehicleCompactDescr)
 
     def _populate(self):
         super(VehicleInfoWindow, self)._populate()
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange += self.__onVehCompareBasketChanged
-        comparisonBasket.onSwitchChange += self.__updateCompareButtonState
+        self.comparisonBasket.onChange += self.__onVehCompareBasketChanged
+        self.comparisonBasket.onSwitchChange += self.__updateCompareButtonState
         self.__updateCompareButtonState()
 
     def _dispose(self):
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onSwitchChange -= self.__updateCompareButtonState
-        comparisonBasket.onChange -= self.__onVehCompareBasketChanged
+        self.comparisonBasket.onSwitchChange -= self.__updateCompareButtonState
+        self.comparisonBasket.onChange -= self.__onVehCompareBasketChanged
         super(VehicleInfoWindow, self)._dispose()
 
     def __updateCompareButtonState(self):
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        if not comparisonBasket.isAvailable():
+        if not self.comparisonBasket.isAvailable():
             tooltip = VEH_COMPARE.COMPAREVEHICLEBTN_TOOLTIPS_MINICLIENT
-        elif comparisonBasket.isFull():
+        elif self.comparisonBasket.isFull():
             tooltip = MENU.VEHICLEINFO_COMPAREBTN_TOOLTIP
         else:
             tooltip = ''
-        self.as_setCompareButtonDataS({'visible': comparisonBasket.isEnabled(),
-         'enabled': comparisonBasket.isReadyToAdd(g_itemsCache.items.getItemByCD(self.vehicleCompactDescr)),
+        self.as_setCompareButtonDataS({'visible': self.comparisonBasket.isEnabled(),
+         'enabled': self.comparisonBasket.isReadyToAdd(g_itemsCache.items.getItemByCD(self.vehicleCompactDescr)),
          'label': MENU.VEHICLEINFO_COMPAREBTN_LABEL,
          'tooltip': tooltip})
 

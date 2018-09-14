@@ -4,21 +4,23 @@ import BigWorld
 from constants import EQUIP_TMAN_CODE
 from debug_utils import LOG_DEBUG
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
-from gui.game_control import getRestoreController
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared import g_itemsCache
 from gui.shared.formatters import formatPrice, formatPriceForCurrency
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeI18nError, plugins
 from gui.shared.money import Money, ZERO_MONEY, Currency
+from helpers import dependency
 from items import tankmen
 from items.tankmen import SKILL_INDICES, SKILL_NAMES
+from skeletons.gui.game_control import IRestoreController
 
 def _getSysMsgType(price):
     return CURRENCY_TO_SM_TYPE.get(price.getCurrency(byWeight=False), SM_TYPE.Information)
 
 
 class TankmanDismiss(ItemProcessor):
+    restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, tankman):
         vehicle = None
@@ -26,7 +28,7 @@ class TankmanDismiss(ItemProcessor):
             vehicle = g_itemsCache.items.getVehicle(tankman.vehicleInvID)
         confirmator = plugins.TankmanOperationConfirmator('protectedDismissTankman', tankman)
         super(TankmanDismiss, self).__init__(tankman, [confirmator, plugins.VehicleValidator(vehicle, isEnabled=tankman.vehicleInvID > 0)])
-        deletedTankmen = getRestoreController().getTankmenBeingDeleted()
+        deletedTankmen = self.restore.getTankmenBeingDeleted()
         if len(deletedTankmen) > 0 and tankman.isRestorable():
             self.addPlugin(plugins.BufferOverflowConfirmator({'dismissed': tankman,
              'deleted': deletedTankmen[0]}))

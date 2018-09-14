@@ -7,24 +7,27 @@ from gui.Scaleform.daapi.view.meta.VehicleCompareCartPopoverMeta import VehicleC
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control import getVehicleComparisonBasketCtrl
+from gui.christmas.christmas_controller import g_christmasCtrl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_dispatcher import showVehicleCompare
 from gui.shared.formatters import text_styles
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from nations import AVAILABLE_NAMES
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
         super(VehicleCompareCartPopover, self).__init__(ctx)
 
     def remove(self, vehId):
-        getVehicleComparisonBasketCtrl().removeVehicleByIdx(int(vehId))
+        self.comparisonBasket.removeVehicleByIdx(int(vehId))
 
     def removeAll(self):
-        getVehicleComparisonBasketCtrl().removeAllVehicles()
+        self.comparisonBasket.removeAllVehicles()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(VehicleCompareCartPopover, self)._onRegisterFlashComponent(viewPy, alias)
@@ -40,17 +43,19 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
         super(VehicleCompareCartPopover, self)._populate()
         self._cartDP = _VehicleCompareCartDataProvider()
         self._cartDP.setFlashObject(self.as_getDPS())
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        self._cartDP.rebuildList(comparisonBasket.getVehiclesCDs())
-        comparisonBasket.onChange += self.__onBasketChange
-        comparisonBasket.onSwitchChange += self.onWindowClose
+        self._cartDP.rebuildList(self.comparisonBasket.getVehiclesCDs())
+        self.comparisonBasket.onChange += self.__onBasketChange
+        self.comparisonBasket.onSwitchChange += self.onWindowClose
+        g_christmasCtrl.onOpenChestAnimationStarted += self.__updateButtonsState
+        g_christmasCtrl.onRibbonAnimationFinished += self.__updateButtonsState
         self.__initControls()
 
     def _dispose(self):
         super(VehicleCompareCartPopover, self)._dispose()
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange -= self.__onBasketChange
-        comparisonBasket.onSwitchChange -= self.onWindowClose
+        self.comparisonBasket.onChange -= self.__onBasketChange
+        self.comparisonBasket.onSwitchChange -= self.onWindowClose
+        g_christmasCtrl.onOpenChestAnimationStarted -= self.__updateButtonsState
+        g_christmasCtrl.onRibbonAnimationFinished -= self.__updateButtonsState
         self._cartDP.fini()
         self._cartDP = None
         return
@@ -69,16 +74,15 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
         self.__updateButtonsState()
 
     def __updateButtonsState(self):
-        basket = getVehicleComparisonBasketCtrl()
-        count = basket.getVehiclesCount()
+        count = self.comparisonBasket.getVehiclesCount()
         buttonsEnabled = count > 0
-        if basket.isFull():
+        if self.comparisonBasket.isFull():
             addBtnTT = VEH_COMPARE.CARTPOPOVER_FULLBASKETCMPBTN_TOOLTIP
-            addBtnIcon = RES_ICONS.MAPS_ICONS_BUTTONS_ALERTICON
+            addBtnIcon = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
         else:
             addBtnTT = VEH_COMPARE.CARTPOPOVER_OPENCMPBTN_TOOLTIP
             addBtnIcon = None
-        isNavigationEnabled = not g_prbLoader.getDispatcher().getFunctionalState().isNavigationDisabled()
+        isNavigationEnabled = not g_prbLoader.getDispatcher().getFunctionalState().isNavigationDisabled() and not g_christmasCtrl.isNavigationDisabled()
         self.as_updateToCmpBtnPropsS({'btnLabel': _ms(VEH_COMPARE.CARTPOPOVER_GOTOCOMPAREBTN_LABEL, value=count),
          'btnTooltip': addBtnTT,
          'btnEnabled': buttonsEnabled and isNavigationEnabled,
@@ -90,6 +94,7 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
 
 
 class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self):
         super(_VehicleCompareCartDataProvider, self).__init__()
@@ -114,7 +119,7 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         return
 
     def fini(self):
-        getVehicleComparisonBasketCtrl().onChange -= self.__onComparisonVehsChanged
+        self.comparisonBasket.onChange -= self.__onComparisonVehsChanged
         self.clear()
         self._dispose()
 
@@ -125,7 +130,7 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         self.__selectedID = selId
 
     def setFlashObject(self, movieClip, autoPopulate=True, setScript=True):
-        getVehicleComparisonBasketCtrl().onChange += self.__onComparisonVehsChanged
+        self.comparisonBasket.onChange += self.__onComparisonVehsChanged
         return super(_VehicleCompareCartDataProvider, self).setFlashObject(movieClip, autoPopulate, setScript)
 
     def getVO(self, index):
@@ -161,7 +166,7 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         if vehicle.isPremium:
             moduleType = 'premium'
         else:
-            moduleType = getVehicleComparisonBasketCtrl().getVehicleAt(index).getModulesType()
+            moduleType = self.comparisonBasket.getVehicleAt(index).getModulesType()
         complectation = _ms(VEH_COMPARE.cartpopover_moduletype(moduleType))
         return {'id': vehicleCD,
          'index': index,
@@ -178,4 +183,4 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         gui.game_control.VehComparisonBasket.onChange event handler
         :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
         """
-        self.rebuildList(getVehicleComparisonBasketCtrl().getVehiclesCDs())
+        self.rebuildList(self.comparisonBasket.getVehiclesCDs())

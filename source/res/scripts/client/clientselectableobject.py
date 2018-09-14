@@ -5,6 +5,7 @@ import Math
 import SoundGroups
 from ModelHitTester import SegmentCollisionResult
 from debug_utils import LOG_ERROR
+from christmas.ChristmasTank import ChristmasTank
 
 class ClientSelectableObject(BigWorld.Entity):
 
@@ -18,19 +19,31 @@ class ClientSelectableObject(BigWorld.Entity):
         self.__enabled = True
         self.__edged = False
         self.__clickSound = None
+        self.__onClickCallback = None
+        self.__tooltipID = 0
+        if hasattr(self, 'childObject') and self.childObject == 'ChristmasTank':
+            self.__childObject = ChristmasTank(self)
+        else:
+            self.__childObject = None
         return
 
     def prerequisites(self):
         return [self.modelName]
 
+    def tooltipID(self):
+        return self.__childObject.tooltipID() if self.__childObject is not None else 0
+
     def onEnterWorld(self, prereqs):
-        if self.modelName not in prereqs.failedIDs:
+        if self.modelName != '' and self.modelName not in prereqs.failedIDs:
             model = prereqs[self.modelName]
             self.model = model
             self.filter = BigWorld.DumbFilter()
             self.model.addMotor(BigWorld.Servo(self.matrix))
             if not self.__bspModel.setModel(self.model):
                 LOG_ERROR('ClientSelectableObject failed to setModel', self.modelName)
+        if self.__childObject is not None:
+            self.__childObject.onEnterWorld()
+        return
 
     def onLeaveWorld(self):
         if self.__clickSound is not None:
@@ -38,6 +51,9 @@ class ClientSelectableObject(BigWorld.Entity):
                 self.__clickSound.stop()
             self.__clickSound.releaseMatrix()
             self.__clickSound = None
+        if self.__childObject is not None:
+            self.__childObject.onLeaveWorld()
+            self.__childObject = None
         self.highlight(False)
         return
 
@@ -65,13 +81,20 @@ class ClientSelectableObject(BigWorld.Entity):
     def highlight(self, show):
         if show:
             if not self.__edged and self.__enabled:
-                BigWorld.wgAddEdgeDetectEntity(self, 0, 2, True)
+                BigWorld.wgAddEdgeDetectEntity(self, 0, 0, True)
                 self.__edged = True
         elif self.__edged:
             BigWorld.wgDelEdgeDetectEntity(self)
             self.__edged = False
 
+    def setOnClickCallback(self, callback):
+        self.__onClickCallback = callback
+
     def onClicked(self):
+        if self.__childObject is not None:
+            self.__childObject.onClicked()
+        if self.__onClickCallback is not None:
+            self.__onClickCallback()
         if self.__clickSound is None:
             if len(self.clickSoundName) > 0:
                 self.__clickSound = SoundGroups.g_instance.getSound3D(self.model.root, self.clickSoundName)

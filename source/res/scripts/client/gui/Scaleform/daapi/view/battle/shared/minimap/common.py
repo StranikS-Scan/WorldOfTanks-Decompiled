@@ -3,19 +3,24 @@
 from functools import partial
 import BigWorld
 import Math
+from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 from gui.Scaleform.daapi.view.battle.shared.minimap import entries, settings
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.shared.utils.plugins import IPlugin
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class SimplePlugin(IPlugin):
     __slots__ = ('__weakref__', '_arenaVisitor', '_arenaDP', '_ctrlMode', '_ctrlVehicleID')
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, parent):
         super(SimplePlugin, self).__init__(parent)
         self._arenaVisitor = None
         self._arenaDP = None
-        self._ctrlMode = 'arcade'
+        self._ctrlMode = CTRL_MODE_NAME.ARCADE
         self._ctrlVehicleID = 0
         return
 
@@ -74,16 +79,16 @@ class SimplePlugin(IPlugin):
         self._parentObj.playSound2D(soundID)
 
     def _isInStrategicMode(self):
-        return self._ctrlMode in ('strategic', 'mapcase')
+        return self._ctrlMode in (CTRL_MODE_NAME.STRATEGIC, CTRL_MODE_NAME.MAP_CASE)
 
     def _isInArcadeMode(self):
-        return self._ctrlMode in ('arcade', 'sniper')
+        return self._ctrlMode in (CTRL_MODE_NAME.ARCADE, CTRL_MODE_NAME.SNIPER)
 
     def _isInPostmortemMode(self):
-        return self._ctrlMode == 'postmortem'
+        return self._ctrlMode == CTRL_MODE_NAME.POSTMORTEM
 
     def _isInVideoMode(self):
-        return self._ctrlMode == 'video'
+        return self._ctrlMode == CTRL_MODE_NAME.VIDEO
 
 
 class EntriesPlugin(SimplePlugin):
@@ -164,14 +169,14 @@ class AttentionToCellPlugin(IntervalPlugin):
     def start(self):
         super(AttentionToCellPlugin, self).start()
         self._boundingBox = self._arenaVisitor.type.getBoundingBox()
-        ctrl = g_sessionProvider.shared.feedback
+        ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
         return
 
     def stop(self):
         self._boundingBox = (Math.Vector2(0, 0), Math.Vector2(0, 0))
-        ctrl = g_sessionProvider.shared.feedback
+        ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
         super(AttentionToCellPlugin, self).stop()

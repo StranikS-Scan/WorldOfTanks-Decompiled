@@ -1,152 +1,214 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/dispatcher.py
-import types
 import time
-from functools import partial
+import types
 import BigWorld
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from CurrentVehicle import g_currentVehicle
+from FortifiedRegionBase import FORT_ERROR
+from PlayerEvents import g_playerEvents
 from adisp import async, process
 from constants import IGR_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from FortifiedRegionBase import FORT_ERROR
-from gui import SystemMessages, DialogsInterface, GUI_SETTINGS, game_control
+from gui import SystemMessages, DialogsInterface, GUI_SETTINGS
 from gui.LobbyContext import g_lobbyContext
-from gui.prb_control import functional, prb_getters
-from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.prb_control.factories import ControlFactoryDecorator
-from gui.prb_control.functional.battle_session import AutoInvitesNotifier
-from gui.prb_control.functional.FunctionalCollection import FunctionalCollection
-from gui.prb_control.invites import InvitesManager
+from gui.prb_control.entities import initDevFunctional, finiDevFunctional
+from gui.prb_control.entities.base.unit.ctx import JoinUnitCtx
+from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control.factories import ControlFactoryComposite
 from gui.prb_control.formatters import messages
-from gui.prb_control.functional.interfaces import IGlobalListener
-from gui.prb_control.context import PrbCtrlRequestCtx, CreateFunctionalCtx
-from gui.prb_control.storage import PrbStorageDecorator
-from gui.prb_control.settings import PREBATTLE_RESTRICTION, FUNCTIONAL_FLAG
+from gui.prb_control.entities.base.ctx import CreatePrbEntityCtx, PrbCtrlRequestCtx
+from gui.prb_control.entities.base.entity import NotSupportedEntity
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.invites import InvitesManager, AutoInvitesNotifier
+from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import CTRL_ENTITY_TYPE as _CTRL_TYPE
-from gui.prb_control.settings import REQUEST_TYPE as _RQ_TYPE
-from gui.prb_control.settings import IGNORED_UNIT_MGR_ERRORS
 from gui.prb_control.settings import IGNORED_UNIT_BROWSER_ERRORS
-from gui.prb_control.settings import RETURN_INTRO_UNIT_MGR_ERRORS
-from PlayerEvents import g_playerEvents
-from gui.server_events import g_eventsCache
+from gui.prb_control.settings import IGNORED_UNIT_MGR_ERRORS
+from gui.prb_control.settings import PREBATTLE_RESTRICTION, FUNCTIONAL_FLAG
+from gui.prb_control.settings import REQUEST_TYPE as _RQ_TYPE
+from gui.prb_control.storages import PrbStorageDecorator
 from gui.shared import actions
 from gui.shared.fortifications import getClientFortMgr
 from gui.shared.utils.listeners_collection import ListenersCollection
-from UnitBase import UNIT_ERROR
+from helpers import dependency
+from skeletons.gui.game_control import IGameSessionController, IRentalsController
+from skeletons.gui.game_control import IIGRController, IFalloutController
+from skeletons.gui.server_events import IEventsCache
 
-class _PrebattleDispatcher(ListenersCollection):
+class _PreBattleDispatcher(ListenersCollection):
+    """
+    Dispatcher is a class that handles all actions from player related to
+    prebattles: select, join, create, etc. Also dispatcher itself is a listeners
+    collection that is used for global listening of prebattle events.
+    """
+    gameSession = dependency.descriptor(IGameSessionController)
+    rentals = dependency.descriptor(IRentalsController)
+    igrCtrl = dependency.descriptor(IIGRController)
+    falloutCtrl = dependency.descriptor(IFalloutController)
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
-        super(_PrebattleDispatcher, self).__init__()
-        self.__requestCtx = None
-        self.__collection = FunctionalCollection()
-        self.__factories = ControlFactoryDecorator()
-        self.__nextPrbFunctional = None
+        """
+        In init we're setting default request context, factories composite
+        default entity and supported listeners class.
+        """
+        super(_PreBattleDispatcher, self).__init__()
+        self.__requestCtx = PrbCtrlRequestCtx()
+        self.__factories = ControlFactoryComposite()
+        self.__entity = NotSupportedEntity()
         self._setListenerClass(IGlobalListener)
-        return
 
     def __del__(self):
-        LOG_DEBUG('_PrebattleDispatcher deleted')
+        """
+        Just a mark for logs that shows us when dispatcher was deleted.
+        """
+        LOG_DEBUG('_PreBattleDispatcher deleted')
 
     def start(self):
+        """
+        Start is called when dispatcher should start its job and process events.
+        """
         g_eventDispatcher.init(self)
-        result = self.__setFunctional(CreateFunctionalCtx())
-        self.__requestCtx = PrbCtrlRequestCtx()
+        result = self.__setDefault()
         self.__startListening()
-        functional.initDevFunctional()
+        initDevFunctional()
         if result & FUNCTIONAL_FLAG.LOAD_PAGE == 0:
             BigWorld.callback(0.001, lambda : g_eventDispatcher.loadHangar())
-        g_eventDispatcher.updateUI()
         if GUI_SETTINGS.specPrebatlesVisible and not prb_getters.areSpecBattlesHidden():
             g_eventDispatcher.addSpecBattlesToCarousel()
 
     def stop(self):
-        self.__nextPrbFunctional = None
+        """
+        Is called when its time to stop dispatchers work.
+        """
         self.__stopListening()
-        functional.finiDevFunctional()
+        finiDevFunctional()
         self.__clear(woEvents=True)
         g_eventDispatcher.fini()
-        return
 
-    def getPrbFunctional(self):
-        return self.__collection.getItem(_CTRL_TYPE.PREBATTLE)
-
-    def getUnitFunctional(self):
-        return self.__collection.getItem(_CTRL_TYPE.UNIT)
-
-    def getPreQueueFunctional(self):
-        return self.__collection.getItem(_CTRL_TYPE.PREQUEUE)
-
-    def getFunctional(self, ctrlType):
-        return self.__collection.getItem(ctrlType)
-
-    def getFunctionalCollection(self):
-        return self.__collection
+    def getEntity(self):
+        """
+        Getter for current entity.
+        Returns:
+            current prebattle entity
+        """
+        return self.__entity
 
     def getControlFactories(self):
+        """
+        Getter for factories composite.
+        Returns:
+            control factories
+        """
         return self.__factories
 
-    def hasModalEntity(self):
-        return self.__collection.hasModalEntity()
-
     def getFunctionalState(self):
-        return self.__collection.getState(self.__factories)
+        """
+        Gets current functional state.
+        Returns:
+            current functional state
+        """
+        factory = self.__factories.get(self.__entity.getCtrlType())
+        return factory.createStateEntity(self.__entity) if factory is not None else FunctionalState()
 
     @async
     @process
     def create(self, ctx, callback=None):
-        if ctx.getRequestType() == _RQ_TYPE.CREATE:
-            if not self.__requestCtx.isProcessing():
-                result = yield self.unlock(ctx)
-                if result:
-                    entry = self.__factories.createEntry(ctx)
-                    if entry:
-                        LOG_DEBUG('Request to create', ctx)
-                        self.__requestCtx = ctx
-                        entry.create(ctx, callback=callback)
-                    else:
-                        LOG_ERROR('Entry not found', ctx)
-                        if callback is not None:
-                            callback(False)
-                elif callback is not None:
-                    callback(False)
-            else:
-                LOG_ERROR('Request is processing', self.__requestCtx)
-                if callback is not None:
-                    callback(False)
-                yield lambda callback=None: callback
-        else:
-            LOG_ERROR('Invalid context to create', ctx)
+        """
+        Asynchronous method for prebattle creation. Using given context its
+        creates entry point via factories and uses it to create new prebattle.
+        Current entity will be destroyed.
+        Args:
+            ctx: creation context
+            callback: request callback
+        """
+        if ctx.getRequestType() != _RQ_TYPE.CREATE:
+            LOG_ERROR('Invalid context to create prebattle/unit', ctx)
             if callback is not None:
                 callback(False)
-            yield lambda callback=None: callback
-        return
+            return
+        else:
+            entry = self.__factories.createEntry(ctx)
+            if entry is None:
+                LOG_ERROR('Entry not found', ctx)
+                if callback is not None:
+                    callback(False)
+                return
+            if not entry.canCreate():
+                if callback is not None:
+                    callback(False)
+                return
+            ctx.addFlags(entry.getFunctionalFlags() | FUNCTIONAL_FLAG.SWITCH)
+            if not self.__validateJoinOp(ctx):
+                if callback is not None:
+                    callback(False)
+                return
+            result = yield self.unlock(ctx)
+            if not result:
+                if callback is not None:
+                    callback(False)
+                return
+            ctx.setForced(True)
+            LOG_DEBUG('Request to create', ctx)
+            self.__requestCtx = ctx
+            entry.create(ctx, callback=callback)
+            return
 
     @async
     @process
     def join(self, ctx, callback=None):
-        if self.__validateJoinOp(ctx):
-            result = yield self.unlock(ctx)
-            ctx.setForced(result)
-            if result:
-                entry = self.__factories.createEntry(ctx)
-                if entry:
-                    LOG_DEBUG('Request to join', ctx)
-                    self.__requestCtx = ctx
-                    entry.join(ctx, callback=callback)
-                else:
-                    LOG_ERROR('Entry not found', ctx)
-                    if callback is not None:
-                        callback(False)
-        else:
+        """
+        Asynchronous method for prebattle joining. Using given context its
+        creates entry point via factories and uses it to join another prebattle.
+        Current entity will be destroyed.
+        Args:
+            ctx: join context
+            callback: request callback
+        """
+        if ctx.getRequestType() != _RQ_TYPE.JOIN:
+            LOG_ERROR('Invalid context to join prebattle/unit', ctx)
             if callback is not None:
                 callback(False)
-            yield lambda callback=None: callback
-        return
+            return
+        else:
+            entry = self.__factories.createEntry(ctx)
+            if entry is None:
+                LOG_ERROR('Entry not found', ctx)
+                if callback is not None:
+                    callback(False)
+                return
+            if not entry.canJoin():
+                if callback is not None:
+                    callback(False)
+                return
+            ctx.addFlags(entry.getFunctionalFlags() | FUNCTIONAL_FLAG.SWITCH)
+            if not self.__validateJoinOp(ctx):
+                if callback is not None:
+                    callback(False)
+                return
+            result = yield self.unlock(ctx)
+            if not result:
+                if callback is not None:
+                    callback(False)
+                return
+            ctx.setForced(True)
+            LOG_DEBUG('Request to join', ctx)
+            self.__requestCtx = ctx
+            entry.join(ctx, callback=callback)
+            return
 
     @async
+    @process
     def leave(self, ctx, callback=None):
+        """
+        Asynchronous method for prebattle leaving. Using given context its
+        leaves current entity.
+        Args:
+            ctx: leave context
+            callback: request callback
+        """
         if ctx.getRequestType() != _RQ_TYPE.LEAVE:
             LOG_ERROR('Invalid context to leave prebattle/unit', ctx)
             if callback is not None:
@@ -158,217 +220,235 @@ class _PrebattleDispatcher(ListenersCollection):
                 callback(False)
             return
         else:
-            ctrlType = ctx.getCtrlType()
-            formation = self.__collection.getItem(ctx.getCtrlType())
-            if formation is not None:
-                if formation.hasLockedState():
-                    entityType = formation.getEntityType()
-                    SystemMessages.pushI18nMessage(messages.getLeaveDisabledMessage(ctrlType, entityType), type=SystemMessages.SM_TYPE.Warning)
+            entity = self.__entity
+            meta = entity.getConfirmDialogMeta(ctx)
+            if meta:
+                result = yield DialogsInterface.showDialog(meta)
+                if not result:
                     if callback is not None:
                         callback(False)
                     return
-                LOG_DEBUG('Request to leave formation', ctx)
-                self.__requestCtx = ctx
-                formation.leave(ctx, callback=callback)
-            else:
-                LOG_ERROR('Functional not found', ctx)
+            if not entity.isActive():
                 if callback is not None:
                     callback(False)
+                return
+            ctrlType = ctx.getCtrlType()
+            if entity.hasLockedState():
+                entityType = entity.getEntityType()
+                SystemMessages.pushI18nMessage(messages.getLeaveDisabledMessage(ctrlType, entityType), type=SystemMessages.SM_TYPE.Warning)
+                if callback is not None:
+                    callback(False)
+                return
+            LOG_DEBUG('Request to leave formation', ctx)
+            self.__requestCtx = ctx
+            entity.leave(ctx, callback=callback)
             return
 
     @async
     @process
     def unlock(self, unlockCtx, callback=None):
-        state = self.getFunctionalState()
-        result = True
-        if not state.isIntroMode:
-            canDoLeave = True
-        elif unlockCtx.hasFlags(FUNCTIONAL_FLAG.SWITCH):
-            if state.ctrlTypeID == unlockCtx.getCtrlType() and state.entityTypeID != unlockCtx.getEntityType():
-                canDoLeave = True
-                unlockCtx.removeFlags(FUNCTIONAL_FLAG.SWITCH)
-            else:
-                canDoLeave = False
+        """
+        Asynchronous method to leave from prebattle if player is in formation
+        and shows confirmation dialog.
+        Args:
+            unlockCtx: unlock context
+            callback: request callback
+        """
+        if isinstance(self.__entity, NotSupportedEntity):
+            if callback is not None:
+                callback(True)
+            return
         else:
-            canDoLeave = True
-        if canDoLeave:
-            factory = self.__factories.get(state.ctrlTypeID)
-            result = False
-            if factory:
-                ctx = factory.createLeaveCtx(unlockCtx.getFlags())
-                if ctx:
-                    meta = self.__collection.getConfirmDialogMeta(state.ctrlTypeID, unlockCtx)
-                    if meta:
-                        result = yield DialogsInterface.showDialog(meta)
-                    else:
-                        result = True
-                    if result:
-                        result = yield self.leave(ctx)
-                else:
-                    LOG_ERROR('Can not create leave ctx', state)
-            else:
+            state = self.getFunctionalState()
+            ctrlType = state.ctrlTypeID
+            factory = self.__factories.get(ctrlType)
+            if factory is None:
                 LOG_ERROR('Factory is not found', state)
-        if callback is not None:
-            callback(result)
-        yield lambda callback=None: callback
-        return
+                if callback is not None:
+                    callback(True)
+                return
+            ctx = factory.createLeaveCtx(unlockCtx.getFlags(), self.__entity.getEntityType())
+            result = yield self.leave(ctx)
+            if callback is not None:
+                callback(result)
+            return
 
     @async
     @process
     def select(self, entry, callback=None):
-        ctx = entry.makeDefCtx()
-        if ctx and self.__validateJoinOp(ctx):
-            result = yield self.unlock(ctx)
-            ctx.setForced(result)
-            if result:
-                LOG_DEBUG('Request to select', ctx)
-                self.__requestCtx = ctx
-                entry.select(ctx, callback=callback)
-            elif callback is not None:
-                callback(False)
-        else:
+        """
+        Asynchronous method to select prebattle mode and leave current mode if given entry
+        is not just visual.
+        Args:
+            entry: newly selected entry point
+            callback: request callback
+        """
+        if not entry.canSelect():
             if callback is not None:
                 callback(False)
-            yield lambda callback=None: callback
-        return
+            return
+        else:
+            ctx = entry.makeDefCtx()
+            ctx.addFlags(FUNCTIONAL_FLAG.SWITCH)
+            if not self.__validateJoinOp(ctx):
+                if callback is not None:
+                    callback(False)
+                return
+            if entry.isVisualOnly():
+                result = True
+            else:
+                result = yield self.unlock(ctx)
+            if not result:
+                if callback is not None:
+                    callback(False)
+                return
+            ctx.setForced(True)
+            LOG_DEBUG('Request to select', ctx)
+            self.__requestCtx = ctx
+            entry.select(ctx, callback=callback)
+            return
 
     @async
     def sendPrbRequest(self, ctx, callback=None):
-        prbFunctional = self.getFunctional(_CTRL_TYPE.PREBATTLE)
-        if prbFunctional:
-            prbFunctional.request(ctx, callback=callback)
-        else:
-            LOG_ERROR('prbFunctional is not found', ctx)
-            if callback is not None:
-                callback(False)
-        return
-
-    @async
-    def sendUnitRequest(self, ctx, callback=None):
-        unitFunctional = self.getFunctional(_CTRL_TYPE.UNIT)
-        if unitFunctional:
-            unitFunctional.request(ctx, callback=callback)
-        else:
-            LOG_ERROR('unitFunctional is not found', ctx)
-            if callback is not None:
-                callback(False)
-        return
-
-    @async
-    def sendPreQueueRequest(self, ctx, callback=None):
-        preQueueFunctional = self.getFunctional(_CTRL_TYPE.PREQUEUE)
-        if preQueueFunctional is not None:
-            preQueueFunctional.request(ctx, callback=callback)
-        else:
-            LOG_ERROR('preQueueFunctional is not found', ctx)
-            if callback is not None:
-                callback(False)
-        return
-
-    def exitFromQueue(self):
-        self.__collection.exitFromQueue()
-
-    def canPlayerDoAction(self):
-        canDo, restriction = self.__collection.canPlayerDoAction(False)
-        if canDo:
-            if g_currentPreviewVehicle.isPresent():
-                canDo = False
-                restriction = PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT
-            elif not g_currentVehicle.isReadyToFight():
-                if not g_currentVehicle.isPresent():
-                    canDo = False
-                    restriction = PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT
-                elif g_currentVehicle.isInBattle():
-                    canDo = False
-                    restriction = PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE
-                elif not g_currentVehicle.isCrewFull():
-                    canDo = False
-                    restriction = PREBATTLE_RESTRICTION.CREW_NOT_FULL
-                elif g_currentVehicle.isBroken():
-                    canDo = False
-                    restriction = PREBATTLE_RESTRICTION.VEHICLE_BROKEN
-                elif g_currentVehicle.isFalloutOnly() and not game_control.getFalloutCtrl().isSelected():
-                    canDo = False
-                    restriction = PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY
-                elif g_currentVehicle.isDisabledInRoaming():
-                    canDo = False
-                    restriction = PREBATTLE_RESTRICTION.VEHICLE_ROAMING
-                elif g_currentVehicle.isDisabledInPremIGR():
-                    canDo = False
-                    restriction = PREBATTLE_RESTRICTION.VEHICLE_IN_PREMIUM_IGR_ONLY
-                elif g_currentVehicle.isDisabledInRent():
-                    unit = self.getUnitFunctional()
-                    if unit is not None and unit.getFlags().isInPreArena():
-                        canDo = True
-                    else:
-                        canDo = False
-                        if g_currentVehicle.isPremiumIGR():
-                            restriction = PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER
-                        else:
-                            restriction = PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER
-            if canDo:
-                canDo, restriction = self.__collection.canPlayerDoAction(True)
-        return (canDo, restriction)
+        """
+        Asynchronous method for send request to prebattle.
+        Args:
+            ctx: request context
+            callback: request callback
+        """
+        self.__entity.request(ctx, callback=callback)
 
     def getPlayerInfo(self):
-        return self.__collection.getPlayerInfo(self.__factories)
+        """
+        Gets information of player (is creator, is ready, etc.) in current active entity.
+        Returns:
+            current player info
+        """
+        factory = self.__factories.get(self.__entity.getCtrlType())
+        return factory.createPlayerInfo(self.__entity) if factory is not None else PlayerDecorator()
 
     def doAction(self, action=None):
+        """
+        Processes action that comes from GUI by current entity.
+        Args:
+            action: given player's action
+        Returns:
+            was this action successful
+        """
         if not g_currentVehicle.isPresent():
             SystemMessages.pushMessage(messages.getInvalidVehicleMessage(PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT), type=SystemMessages.SM_TYPE.Error)
             return False
         LOG_DEBUG('Do GUI action', action)
-        return self.__collection.doAction(self.__factories, action)
+        return self.__entity.doAction(action)
 
-    def doSelectAction(self, action):
-        result = self.__collection.doSelectAction(action)
-        if result.isProcessed:
-            if result.newEntry is not None:
-                self.__doSelect(result.newEntry)
-            return True
+    @async
+    @process
+    def doSelectAction(self, action, callback=None):
+        """
+        Processes action that comes from GUI to change to another mode.
+        Args:
+            action: given player's select action
+            callback: request callback
+        """
+        selectResult = self.__entity.doSelectAction(action)
+        if selectResult.isProcessed:
+            result = True
+            if selectResult.newEntry is not None:
+                result = yield self.select(selectResult.newEntry)
+            if callback is not None:
+                callback(result)
+            return
         else:
             entry = self.__factories.createEntryByAction(action)
             if entry is not None:
-                self.__doSelect(entry)
-                return True
-            return False
+                result = yield self.select(entry)
+                if callback is not None:
+                    callback(result)
+                return
+            if callback is not None:
+                callback(False)
+            return
 
+    @async
     @process
-    def doLeaveAction(self, ctx):
-        meta = self.__collection.getConfirmDialogMeta(ctx.getCtrlType(), ctx)
-        if meta is not None:
-            isConfirmed = yield DialogsInterface.showDialog(meta)
+    def doLeaveAction(self, action, callback=None):
+        """
+        Processes action that comes from GUI to leave current mode.
+        Args:
+            action: given player's leave action
+            callback: callback function or None
+        """
+        factory = self.__factories.get(self.__entity.getCtrlType())
+        if factory is None:
+            LOG_ERROR('Factory is not found', self.__entity)
+            if callback is not None:
+                callback(True)
+            return
         else:
-            isConfirmed = yield lambda callback: callback(True)
-        if isConfirmed:
+            flags = FUNCTIONAL_FLAG.UNDEFINED
+            if action.isExit:
+                flags = FUNCTIONAL_FLAG.EXIT
+            elif self.__entity.canKeepMode():
+                flags = self.__entity.getModeFlags()
+            ctx = factory.createLeaveCtx(flags, entityType=self.__entity.getEntityType())
             yield self.leave(ctx)
-        return
+            return
 
     def getGUIPermissions(self):
-        return self.__collection.getGUIPermissions()
+        """
+        Gets available action in GUI for current player.
+        Returns:
+            current GUI permissions
+        """
+        return self.__entity.getPermissions()
 
-    def onCompanyStateChanged(self, _):
-        if not self.getPrbFunctional().hasLockedState():
+    def isRequestInProcess(self):
+        """
+        Is current request in process.
+        Returns:
+            is request in process now
+        """
+        return self.__requestCtx.isProcessing()
+
+    def ec_onCompanyStateChanged(self, state):
+        """
+        Events cache companies state subscriber. Updates UI on changed.
+        Args:
+            state: is companies currently enabled
+        """
+        if not self.__entity.hasLockedState():
             g_eventDispatcher.updateUI()
 
-    def setRequestCtx(self, ctx):
-        result = True
-        if self.__requestCtx.isProcessing():
-            LOG_ERROR('Request is processing', self.__requestCtx)
-            result = False
-        else:
-            self.__requestCtx = ctx
-        return result
+    def pe_onArenaCreated(self):
+        """
+        Player event listener for arena creation. Updates UI.
+        """
+        if self.__entity.hasLockedState():
+            g_eventDispatcher.updateUI()
 
-    def pe_onArenaJoinFailure(self, errorCode, _):
-        self.__collection.reset()
+    def pe_onArenaJoinFailure(self, errorCode, errorStr):
+        """
+        Player event listener for arena join failure. Pushes system message.
+        Args:
+            errorCode: join error code
+            errorStr: join error message
+        """
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
     def pe_onKickedFromArena(self, reasonCode):
-        self.__collection.reset()
+        """
+        Player event listener for arena kick. Resets state and pushes system message.
+        Args:
+            reasonCode: kick reason code
+        """
+        self.__entity.resetPlayerState()
         SystemMessages.pushMessage(messages.getKickReasonMessage(reasonCode), type=SystemMessages.SM_TYPE.Error)
 
     def pe_onPrebattleAutoInvitesChanged(self):
+        """
+        Player event listener for autoinvites state. Controls chat tab visibility of spec battles
+        and updates UI.
+        """
         if GUI_SETTINGS.specPrebatlesVisible:
             isHidden = prb_getters.areSpecBattlesHidden()
             if isHidden:
@@ -378,176 +458,274 @@ class _PrebattleDispatcher(ListenersCollection):
         g_eventDispatcher.updateUI()
 
     def pe_onPrebattleJoined(self):
+        """
+        Player event listener for prebattle join. Sets entity to proper legacy or
+        resets to default.
+        """
         if prb_getters.getClientPrebattle() is not None:
-            flags = self.__requestCtx.getFlags()
-            self.__setFunctional(CreateFunctionalCtx(_CTRL_TYPE.PREBATTLE, flags=flags))
+            self.__setLegacy(self.__requestCtx.getFlags())
         else:
             LOG_ERROR('ClientPrebattle is not defined')
-            self.__requestCtx.stopProcessing(result=False)
+            self.__setDefault()
+            g_eventDispatcher.loadHangar()
         return
 
     def pe_onPrebattleJoinFailure(self, errorCode):
+        """
+        Player event listener for prebattle join filure. Pushes system message and
+        resets current entity to default.
+        Args:
+            errorCode: join error code
+        """
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
-        self.__requestCtx.stopProcessing(result=False)
-        self.__requestCtx.clearFlags()
-        g_eventDispatcher.updateUI()
+        self.__setDefault()
+        g_eventDispatcher.loadHangar()
 
     def pe_onPrebattleLeft(self):
-        if self.__nextPrbFunctional is not None:
-            self.__nextPrbFunctional()
-            self.__nextPrbFunctional = None
-            return
-        else:
-            flags = self.__requestCtx.getFlags()
-            flags |= FUNCTIONAL_FLAG.LEAVE_ENTITY
+        """
+        Player event listener for prebattle left. Tries to keep current mode or
+        just unsets current entity.
+        """
+        flags = self.__requestCtx.getFlags()
+        if flags & FUNCTIONAL_FLAG.SWITCH == 0:
             prbType = 0
-            if flags & FUNCTIONAL_FLAG.SWITCH > 0:
-                prbFunctional = self.getFunctional(_CTRL_TYPE.PREBATTLE)
-                if prbFunctional is not None:
-                    prbType = prbFunctional.getEntityType()
-            self.__changePrbFunctional(flags=flags, prbType=prbType, stop=False)
-            return
-
-    def pe_onKickedFromPrebattle(self, _):
-        self.__changePrbFunctional(stop=True)
-
-    def gs_onTillBanNotification(self, isPlayTimeBan, timeTillBlock):
-        if prb_getters.isParentControlActivated():
-            self.__collection.reset()
-            key = '#system_messages:gameSessionControl/korea/{0:>s}'
-            if isPlayTimeBan:
-                SystemMessages.g_instance.pushI18nMessage(key.format('playTimeNotification'), timeTillBlock, type=SystemMessages.SM_TYPE.Warning)
-            else:
-                gameSession = game_control.g_instance.gameSession
-                notifyStartTime, blockTime = gameSession.getCurfewBlockTime()
-                formatter = lambda t: time.strftime('%H:%M', time.localtime(t))
-                SystemMessages.g_instance.pushI18nMessage(key.format('midnightNotification'), type=SystemMessages.SM_TYPE.Warning, preBlockTime=formatter(notifyStartTime), blockTime=formatter(blockTime))
-
-    def rc_onRentChange(self, vehicles):
-        if g_currentVehicle.isPresent() and g_currentVehicle.item.intCD in vehicles and g_currentVehicle.isDisabledInRent() and g_currentVehicle.isInPrebattle():
-            self.__collection.reset()
-
-    def igr_onRoomChange(self, roomType, _):
-        if roomType != IGR_TYPE.PREMIUM:
-            if g_currentVehicle.isPremiumIGR() and g_currentVehicle.isInPrebattle():
-                self.__collection.reset()
-
-    def ctrl_onPrebattleIntroModeJoined(self, prbType, isLeaving):
-        flags = self.__requestCtx.getFlags()
-        if not isLeaving:
-            self.__changePrbFunctional(flags=flags, prbType=prbType)
+            if flags & FUNCTIONAL_FLAG.EXIT == 0:
+                prbType = self.__entity.getEntityType()
+            self.__unsetEntity(self.__requestCtx)
+            self.__setLegacy(flags=flags, prbType=prbType)
         else:
-            self.__nextPrbFunctional = partial(self.__changePrbFunctional, flags=flags, prbType=prbType)
+            self.__unsetEntity(self.__requestCtx)
 
-    def ctrl_onPrebattleIntroModeLeft(self):
+    def pe_onKickedFromPrebattle(self, kickReason):
+        """
+        Player event listener for prebattle kick. Resets current entity to default.
+        """
+        self.__unsetEntity()
+        self.__setDefault()
+
+    def ctrl_onLegacyIntroModeJoined(self, prbType):
+        """
+        Prebattle control events listener for legacy intro join. Sets new legacy entity.
+        Args:
+            prbType: joined prebattle type
+        """
+        self.__setLegacy(flags=self.__requestCtx.getFlags(), prbType=prbType)
+
+    def ctrl_onLegacyIntroModeLeft(self):
+        """
+        Prebattle control events listener for legacy intro leave. Unsets current legacy entity
+        and inits default state if it is not switch.
+        """
         flags = self.__requestCtx.getFlags()
-        flags |= FUNCTIONAL_FLAG.LEAVE_INTRO
-        self.__changePrbFunctional(flags=flags)
+        self.__unsetEntity(self.__requestCtx)
+        if flags & FUNCTIONAL_FLAG.SWITCH == 0:
+            self.__setDefault()
 
-    def ctrl_onPrebattleInited(self):
-        self.__requestCtx.stopProcessing(result=True)
-        self.__setFunctional(CreateFunctionalCtx(_CTRL_TYPE.PREBATTLE, flags=self.__requestCtx.getFlags(), initCtx=self.__requestCtx))
-        g_eventDispatcher.updateUI()
+    def ctrl_onLegacyInited(self):
+        """
+        Prebattle control events listener for legacy init. Sets new legacy entity.
+        """
+        self.__setLegacy(flags=self.__requestCtx.getFlags())
 
     def ctrl_onUnitIntroModeJoined(self, prbType, flags):
-        self.__changeUnitFunctional(flags=flags, prbType=prbType)
+        """
+        Prebattle control events listener for unit intro mode join. Sets new unit entity.
+        Args:
+            prbType: intro prebattle type
+            flags: functional flags
+        """
+        self.__setUnit(flags=flags, prbType=prbType)
+
+    def ctrl_onUnitBrowserModeLeft(self, prbType):
+        """
+        Prebattle control events listener for unit browser mode leave. Unsets current unit entity
+        and tries to init intro mode if it is not switch.
+        Args:
+            prbType: intro prebattle type
+        """
+        flags = self.__requestCtx.getFlags()
+        if flags & FUNCTIONAL_FLAG.SWITCH == 0:
+            prbType = 0
+            if flags & FUNCTIONAL_FLAG.EXIT == 0:
+                unitEntity = self.__entity
+                if unitEntity.canKeepMode():
+                    prbType = unitEntity.getIntroType()
+                    flags |= unitEntity.getModeFlags()
+            self.__unsetEntity(self.__requestCtx)
+            self.__setUnit(flags=flags, prbType=prbType)
+        else:
+            self.__unsetEntity(self.__requestCtx)
 
     def ctrl_onUnitIntroModeLeft(self):
+        """
+        Prebattle control events listener for unit intro leave. Unsets current unit entity
+        and inits default state if it is not switch.
+        """
         flags = self.__requestCtx.getFlags()
-        flags |= FUNCTIONAL_FLAG.LEAVE_INTRO
-        self.__changeUnitFunctional(flags=flags)
+        self.__unsetEntity(self.__requestCtx)
+        if flags & FUNCTIONAL_FLAG.SWITCH == 0:
+            self.__setDefault()
 
-    def ctrl_onPreQueueFunctionalCreated(self, queueType):
-        self.__changePreQueueFunctional(flags=self.__requestCtx.getFlags(), queueType=queueType)
-        g_eventDispatcher.updateUI()
-
-    def ctrl_onPreQueueFunctionalDestroyed(self):
-        flags = self.__requestCtx.getFlags()
-        flags |= FUNCTIONAL_FLAG.LEAVE_PRE_QUEUE
-        self.__changePreQueueFunctional(flags=flags)
-
-    def unitMgr_onUnitJoined(self, unitMgrID, unitIdx):
-        unitFunctional = self.getFunctional(_CTRL_TYPE.UNIT)
-        if unitFunctional is not None and unitFunctional.getID() == unitMgrID and unitFunctional.getUnitIdx() == unitIdx:
-            unitFunctional.rejoin()
+    def unitMgr_onUnitJoined(self, unitMgrID, unitIdx, prbType):
+        """
+        Unit manager event listener for unit join. Sets unit entity if we're not already
+        joined to it.
+        Args:
+            unitMgrID: unit manager identifier
+            unitIdx: unit index
+            prbType: unit prebattle type
+        """
+        entity = self.__entity
+        ctx = JoinUnitCtx(unitMgrID, prbType)
+        if entity.isPlayerJoined(ctx):
+            entity.rejoin()
         else:
-            if unitFunctional is not None:
-                prbType = unitFunctional.getEntityType()
-            else:
-                prbType = 0
-            self.__changeUnitFunctional(flags=self.__requestCtx.getFlags(), prbType=prbType)
-        return
+            self.__setUnit(flags=self.__requestCtx.getFlags(), prbType=self.__requestCtx.getEntityType())
 
     def unitMgr_onUnitLeft(self, unitMgrID, unitIdx):
+        """
+        Unit manager listener for unit left. Tries to keep current mode or
+        just unsets current entity.
+        Args:
+            unitMgrID: unit manager identifier
+            unitIdx: unit index
+        """
         flags = self.__requestCtx.getFlags()
-        flags |= FUNCTIONAL_FLAG.LEAVE_ENTITY
-        prbType = 0
-        if flags & FUNCTIONAL_FLAG.SWITCH > 0:
-            unitFunctional = self.getFunctional(_CTRL_TYPE.UNIT)
-            if unitFunctional is not None:
-                prbType = unitFunctional.getEntityType()
-        self.__changeUnitFunctional(flags=flags, prbType=prbType)
-        g_eventDispatcher.updateUI()
-        return
+        if flags & FUNCTIONAL_FLAG.SWITCH == 0:
+            prbType = 0
+            if flags & FUNCTIONAL_FLAG.EXIT == 0:
+                unitEntity = self.__entity
+                if unitEntity.canKeepMode():
+                    prbType = unitEntity.getEntityType()
+                    flags |= unitEntity.getModeFlags() | FUNCTIONAL_FLAG.UNIT_BROWSER
+            self.__unsetEntity(self.__requestCtx)
+            self.__setUnit(flags=flags, prbType=prbType)
+        else:
+            self.__unsetEntity(self.__requestCtx)
 
     def unitMgr_onUnitRestored(self, unitMgrID, unitIdx):
-        unitFunctional = self.getFunctional(_CTRL_TYPE.UNIT)
-        flags = unitFunctional.getFlags()
-        pInfo = unitFunctional.getPlayerInfo()
-        if flags.isInPreArena() and pInfo.isInSlot:
-            g_eventDispatcher.loadHangar()
+        """
+        Unit manager event listener for unit restoration.
+        Args:
+            unitMgrID: unit manager identifier
+            unitIdx: unit index
+        """
+        self.__entity.restore()
 
     def unitMgr_onUnitErrorReceived(self, requestID, unitMgrID, unitIdx, errorCode, errorString):
-        unitFunctional = self.getFunctional(_CTRL_TYPE.UNIT)
-        if unitFunctional is not None:
-            unitFunctional.setLastError(errorCode)
-            if errorCode in RETURN_INTRO_UNIT_MGR_ERRORS and unitFunctional.canSwitchToIntro():
-                self.__requestCtx.addFlags(FUNCTIONAL_FLAG.SWITCH)
-            if errorCode == UNIT_ERROR.CANT_PICK_LEADER:
-                self.__requestCtx.removeFlags(FUNCTIONAL_FLAG.SWITCH)
-            elif errorCode == UNIT_ERROR.REMOVED_PLAYER:
-                if self.__requestCtx.getCtrlType() == _CTRL_TYPE.UNIT and unitFunctional.getEntityType() != self.__requestCtx.getEntityType():
-                    self.__requestCtx.removeFlags(FUNCTIONAL_FLAG.SWITCH)
-        else:
-            LOG_ERROR('Unit functional is not found')
+        """
+        Unit manager event listener for unit request error. Pushes system message.
+        Args:
+            requestID: request identifier
+            unitMgrID: unit manager identifier
+            unitIdx: unit index
+            errorCode: request error code
+            errorString: request error message
+        """
         if errorCode not in IGNORED_UNIT_MGR_ERRORS:
             msgType, msgBody = messages.getUnitMessage(errorCode, errorString)
             SystemMessages.pushMessage(msgBody, type=msgType)
-            self.__requestCtx.stopProcessing(result=False)
-            g_eventDispatcher.updateUI()
-        return
+            self.__requestCtx.stopProcessing()
 
     def unitBrowser_onErrorReceived(self, errorCode, errorString):
+        """
+        Unit browser event listener for request error. Pushes system message and resets current
+        entity to default.
+        Args:
+            errorCode: request error code
+            errorString: request error message
+        """
         if errorCode not in IGNORED_UNIT_BROWSER_ERRORS:
             msgType, msgBody = messages.getUnitBrowserMessage(errorCode, errorString)
             SystemMessages.pushMessage(msgBody, type=msgType)
+            self.__setDefault()
+
+    def ctrl_onPreQueueJoined(self, queueType):
+        """
+        Prebattle control events for pre queue join. Sets pre queue entity.
+        Args:
+            queueType: queue type
+        """
+        self.__setPreQueue(flags=self.__requestCtx.getFlags(), queueType=queueType)
+
+    def ctrl_onPreQueueLeft(self):
+        """
+        Prebattle control events for pre queue leave. Unsets current unit entity
+        and inits default state if it is not switch.
+        """
+        flags = self.__requestCtx.getFlags()
+        self.__unsetEntity(self.__requestCtx)
+        if flags & FUNCTIONAL_FLAG.SWITCH == 0:
+            self.__setDefault()
+
+    def gs_onTillBanNotification(self, isPlayTimeBan, timeTillBlock):
+        """
+        Game session listener for ban notification. Resets current entity to default.
+        Args:
+            isPlayTimeBan: is ban for play time
+            timeTillBlock: time when block will be activated
+        """
+        if prb_getters.isParentControlActivated():
+            self.__entity.resetPlayerState()
+            key = '#system_messages:gameSessionControl/korea/{0:>s}'
+            if isPlayTimeBan:
+                SystemMessages.pushI18nMessage(key.format('playTimeNotification'), timeTillBlock, type=SystemMessages.SM_TYPE.Warning)
+            else:
+                notifyStartTime, blockTime = self.gameSession.getCurfewBlockTime()
+                formatter = lambda t: time.strftime('%H:%M', time.localtime(t))
+                SystemMessages.pushI18nMessage(key.format('midnightNotification'), type=SystemMessages.SM_TYPE.Warning, preBlockTime=formatter(notifyStartTime), blockTime=formatter(blockTime))
+
+    def rc_onRentChange(self, vehicles):
+        """
+        Rental listener for vehicles state update. Resets current player's state.
+        Args:
+            vehicles: list of affected vehicle intCDs
+        """
+        if g_currentVehicle.isPresent() and g_currentVehicle.item.intCD in vehicles and g_currentVehicle.isDisabledInRent() and g_currentVehicle.isInPrebattle():
+            self.__entity.resetPlayerState()
+
+    def igr_onRoomChange(self, roomType, xpFactor):
+        """
+        IGR listener for room state. Resets current player's state when he is in premium IGR,
+        joined some prebattle and this room is no more premium.
+        Args:
+            roomType: new IGR room type
+            xpFactor: xp boost factor
+        """
+        if roomType != IGR_TYPE.PREMIUM:
+            if g_currentVehicle.isPremiumIGR() and g_currentVehicle.isInPrebattle():
+                self.__entity.resetPlayerState()
 
     def forMgr_onFortStateChanged(self):
+        """
+        Fort manager event listener for fort state update. Just refreshes UI.
+        """
         g_eventDispatcher.updateUI()
 
-    def fortMgr_onFortResponseReceived(self, requestID, resultCode, _):
-        self.__requestCtx.stopProcessing(result=resultCode in (FORT_ERROR.OK,))
-        g_eventDispatcher.updateUI()
+    def fortMgr_onFortResponseReceived(self, requestID, resultCode, resultString):
+        """
+        Fort manager event listener for fort response. Resets current entity to default on error.
+        """
+        if resultCode not in (FORT_ERROR.OK,):
+            self.__setDefault()
 
     def __startListening(self):
         """
-        Subscribes to player events.
+        Subscribes to player and system events.
         """
         g_playerEvents.onPrebattleJoined += self.pe_onPrebattleJoined
         g_playerEvents.onPrebattleJoinFailure += self.pe_onPrebattleJoinFailure
         g_playerEvents.onPrebattleLeft += self.pe_onPrebattleLeft
         g_playerEvents.onKickedFromPrebattle += self.pe_onKickedFromPrebattle
+        g_playerEvents.onArenaCreated += self.pe_onArenaCreated
         g_playerEvents.onArenaJoinFailure += self.pe_onArenaJoinFailure
         g_playerEvents.onKickedFromArena += self.pe_onKickedFromArena
         g_playerEvents.onPrebattleAutoInvitesChanged += self.pe_onPrebattleAutoInvitesChanged
-        gameSession = game_control.g_instance.gameSession
-        rentCtr = game_control.g_instance.rentals
-        igrCtr = game_control.g_instance.igr
-        if gameSession.lastBanMsg is not None:
-            self.gs_onTillBanNotification(*gameSession.lastBanMsg)
-        gameSession.onTimeTillBan += self.gs_onTillBanNotification
-        rentCtr.onRentChangeNotify += self.rc_onRentChange
-        igrCtr.onIgrTypeChanged += self.igr_onRoomChange
+        if self.gameSession.lastBanMsg is not None:
+            self.gs_onTillBanNotification(*self.gameSession.lastBanMsg)
+        self.gameSession.onTimeTillBan += self.gs_onTillBanNotification
+        self.rentals.onRentChangeNotify += self.rc_onRentChange
+        self.igrCtrl.onIgrTypeChanged += self.igr_onRoomChange
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitJoined += self.unitMgr_onUnitJoined
@@ -567,31 +745,33 @@ class _PrebattleDispatcher(ListenersCollection):
             fortMgr.onFortResponseReceived += self.fortMgr_onFortResponseReceived
         else:
             LOG_ERROR('Fort manager is not defined')
-        g_prbCtrlEvents.onPrebattleIntroModeJoined += self.ctrl_onPrebattleIntroModeJoined
-        g_prbCtrlEvents.onPrebattleIntroModeLeft += self.ctrl_onPrebattleIntroModeLeft
-        g_prbCtrlEvents.onPrebattleInited += self.ctrl_onPrebattleInited
+        g_prbCtrlEvents.onLegacyIntroModeJoined += self.ctrl_onLegacyIntroModeJoined
+        g_prbCtrlEvents.onLegacyIntroModeLeft += self.ctrl_onLegacyIntroModeLeft
+        g_prbCtrlEvents.onLegacyInited += self.ctrl_onLegacyInited
         g_prbCtrlEvents.onUnitIntroModeJoined += self.ctrl_onUnitIntroModeJoined
         g_prbCtrlEvents.onUnitIntroModeLeft += self.ctrl_onUnitIntroModeLeft
-        g_prbCtrlEvents.onPreQueueFunctionalCreated += self.ctrl_onPreQueueFunctionalCreated
-        g_prbCtrlEvents.onPreQueueFunctionalDestroyed += self.ctrl_onPreQueueFunctionalDestroyed
-        g_eventsCache.companies.onCompanyStateChanged += self.onCompanyStateChanged
+        g_prbCtrlEvents.onUnitBrowserModeLeft += self.ctrl_onUnitBrowserModeLeft
+        g_prbCtrlEvents.onPreQueueJoined += self.ctrl_onPreQueueJoined
+        g_prbCtrlEvents.onPreQueueLeft += self.ctrl_onPreQueueLeft
+        self.eventsCache.companies.onCompanyStateChanged += self.ec_onCompanyStateChanged
         return
 
     def __stopListening(self):
         """
-        Unsubscribe from player events.
+        Unsubscribe from player and system events.
         """
-        g_eventsCache.companies.onCompanyStateChanged -= self.onCompanyStateChanged
+        self.eventsCache.companies.onCompanyStateChanged -= self.ec_onCompanyStateChanged
         g_playerEvents.onPrebattleJoined -= self.pe_onPrebattleJoined
         g_playerEvents.onPrebattleJoinFailure -= self.pe_onPrebattleJoinFailure
         g_playerEvents.onPrebattleLeft -= self.pe_onPrebattleLeft
         g_playerEvents.onKickedFromPrebattle -= self.pe_onKickedFromPrebattle
+        g_playerEvents.onArenaCreated -= self.pe_onArenaCreated
         g_playerEvents.onArenaJoinFailure -= self.pe_onArenaJoinFailure
         g_playerEvents.onKickedFromArena -= self.pe_onKickedFromArena
         g_playerEvents.onPrebattleAutoInvitesChanged -= self.pe_onPrebattleAutoInvitesChanged
-        game_control.g_instance.gameSession.onTimeTillBan -= self.gs_onTillBanNotification
-        game_control.g_instance.rentals.onRentChangeNotify -= self.rc_onRentChange
-        game_control.g_instance.igr.onIgrTypeChanged -= self.igr_onRoomChange
+        self.gameSession.onTimeTillBan -= self.gs_onTillBanNotification
+        self.rentals.onRentChangeNotify -= self.rc_onRentChange
+        self.igrCtrl.onIgrTypeChanged -= self.igr_onRoomChange
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitJoined -= self.unitMgr_onUnitJoined
@@ -608,73 +788,140 @@ class _PrebattleDispatcher(ListenersCollection):
         g_prbCtrlEvents.clear()
 
     def __clear(self, woEvents=False):
+        """
+        Clears dispatchers current state and attributes.
+        Args:
+            woEvents: flag that we should not raise any events
+        """
         if self.__requestCtx:
             self.__requestCtx.clear()
             self.__requestCtx = None
-        if self.__collection is not None:
-            self.__collection.clear(woEvents=woEvents)
-            self.__collection = None
         if self.__factories is not None:
             self.__factories.clear()
             self.__factories = None
+        if self.__entity is not None:
+            self.__entity.fini(woEvents=woEvents)
+            self.__entity = None
         g_eventDispatcher.removeSpecBattlesFromCarousel()
         self.clear()
         return
 
-    def __changePrbFunctional(self, flags=FUNCTIONAL_FLAG.UNDEFINED, prbType=0, stop=True):
-        self.__setFunctional(CreateFunctionalCtx(_CTRL_TYPE.PREBATTLE, prbType, flags=flags))
-        if stop:
-            self.__requestCtx.stopProcessing(result=True)
+    def __setLegacy(self, flags=FUNCTIONAL_FLAG.UNDEFINED, prbType=0):
+        """
+        Sets current entity to legacy and stops request processing.
+        Args:
+            flags: functional flags
+            prbType: prebattle type
+        
+        Returns:
+            initialization result as flags
+        """
+        return self.__setEntity(CreatePrbEntityCtx(_CTRL_TYPE.LEGACY, prbType, flags=flags, initCtx=self.__requestCtx))
 
-    def __changeUnitFunctional(self, flags=FUNCTIONAL_FLAG.UNDEFINED, prbType=0):
-        self.__setFunctional(CreateFunctionalCtx(_CTRL_TYPE.UNIT, prbType, flags=flags, initCtx=self.__requestCtx))
-        self.__requestCtx.stopProcessing(result=True)
+    def __setUnit(self, flags=FUNCTIONAL_FLAG.UNDEFINED, prbType=0):
+        """
+        Sets current entity to unit and stops request processing.
+        Args:
+            flags: functional flags
+            prbType: prebattle type
+        
+        Returns:
+            initialization result as flags
+        """
+        return self.__setEntity(CreatePrbEntityCtx(_CTRL_TYPE.UNIT, prbType, flags=flags, initCtx=self.__requestCtx))
 
-    def __changePreQueueFunctional(self, flags=FUNCTIONAL_FLAG.UNDEFINED, queueType=0):
-        self.__setFunctional(CreateFunctionalCtx(_CTRL_TYPE.PREQUEUE, queueType, flags=flags))
-        self.__requestCtx.stopProcessing(result=True)
+    def __setPreQueue(self, flags=FUNCTIONAL_FLAG.UNDEFINED, queueType=0):
+        """
+        Sets current entity to queue and stops request processing.
+        Args:
+            flags: functional flags
+            queueType: queue type
+        
+        Returns:
+            initialization result as flags
+        """
+        return self.__setEntity(CreatePrbEntityCtx(_CTRL_TYPE.PREQUEUE, queueType, flags=flags, initCtx=self.__requestCtx))
+
+    def __setDefault(self):
+        """
+        Sets current entity to default (allowing the system to initialize
+        by itself) and stops request processing.
+        Returns:
+            initialization result as flags
+        """
+        return self.__setEntity(CreatePrbEntityCtx())
 
     def __validateJoinOp(self, ctx):
+        """
+        Validates join operation: is request in process, is player already joined,
+        or current entity has locked state.
+        Args:
+            ctx: join request context
+        
+        Returns:
+            was validation passed
+        """
         if self.__requestCtx.isProcessing():
             LOG_ERROR('Request is processing', self.__requestCtx)
             return False
-        for func in self.__collection.getIterator():
-            if func.isPlayerJoined(ctx):
-                LOG_DEBUG('Player already joined', ctx)
-                func.showGUI(ctx)
-                return False
-            if func.hasLockedState():
-                SystemMessages.pushI18nMessage('#system_messages:prebattle/hasLockedState', type=SystemMessages.SM_TYPE.Warning)
-                return False
-
+        if self.__entity.isPlayerJoined(ctx):
+            LOG_DEBUG('Player already joined', ctx)
+            self.__entity.showGUI(ctx)
+            return False
+        if self.__entity.hasLockedState():
+            SystemMessages.pushI18nMessage('#system_messages:prebattle/hasLockedState', type=SystemMessages.SM_TYPE.Warning)
+            return False
         return True
 
-    @process
-    def __doSelect(self, entry):
-        yield self.select(entry)
+    def __unsetEntity(self, ctx=None):
+        """
+        Unset current entity.
+        Args:
+            ctx: leave, join or create request context
+        """
+        if not isinstance(self.__entity, NotSupportedEntity):
+            self._invokeListeners('onPrbEntitySwitching')
+            self.__entity.fini(ctx=ctx)
+            self.__entity = NotSupportedEntity()
+            self.__requestCtx.stopProcessing(result=True)
 
-    def __setFunctional(self, ctx):
-        ctx.addFlags(self.__collection.getFunctionalFlags())
-        items = []
-        for created in self.__factories.createFunctional(ctx):
-            if ctx.hasFlags(FUNCTIONAL_FLAG.SET_GLOBAL_LISTENERS):
+    def __setEntity(self, ctx):
+        """
+        Set current entity and clear request context.
+        Args:
+            ctx: set entity context
+        
+        Returns:
+            initialization result as flags
+        """
+        created = self.__factories.createEntity(ctx)
+        if created is not None:
+            if created.getEntityFlags() & FUNCTIONAL_FLAG.SET_GLOBAL_LISTENERS > 0:
                 created.addMutualListeners(self)
-            items.append(created)
-
-        for item in items:
-            ctrlType = item.getCtrlType()
-            self.__collection.setFunctionalFlags(ctrlType, ctx.getFlags())
-            flag = self.__collection.setItem(item.getCtrlType(), item, ctx.getInitCtx())
-            ctx.addFlags(flag)
-
-        LOG_DEBUG('Functionals have been updated', ctx.getFlagsToStrings())
+            self.__entity = created
+            flag = self.__entity.init(ctx=ctx)
+            self._invokeListeners('onPrbEntitySwitched')
+            ctx.clearFlags()
+            ctx.addFlags(flag | created.getFunctionalFlags())
+        LOG_DEBUG('Entity have been updated', ctx.getFlagsToStrings())
         ctx.clear()
+        self.__requestCtx.stopProcessing(result=True)
+        self.__requestCtx = PrbCtrlRequestCtx()
+        g_eventDispatcher.updateUI()
         return ctx.getFlags()
 
 
 class _PrbPeripheriesHandler(object):
+    """
+    Class of handler for join to prebattle/unit that is on another periphery.
+    """
 
     def __init__(self, loader):
+        """
+        Constructor for default attrs initialization.
+        Args:
+            loader: prebattle control loader
+        """
         super(_PrbPeripheriesHandler, self).__init__()
         self.__joinChain = None
         self.__joinCtx = None
@@ -683,9 +930,15 @@ class _PrbPeripheriesHandler(object):
         return
 
     def __del__(self):
+        """
+        Delete method for debug purposes logging.
+        """
         LOG_DEBUG('_PrbPeripheriesHandler deleted')
 
     def fini(self):
+        """
+        Finalization.
+        """
         if self.__joinChain is not None:
             self.__joinChain.onStopped -= self.__onJoinChainStopped
             self.__joinChain.stop()
@@ -696,12 +949,20 @@ class _PrbPeripheriesHandler(object):
         return
 
     def join(self, peripheryID, ctx, postActions=None, finishActions=None):
+        """
+        Join to prebattle/unit that is on another periphery.
+        Args:
+            peripheryID: periphery identifier
+            ctx: join request context
+            postActions: post actions chain
+            finishActions: finish actions chain
+        """
         if not g_lobbyContext.isAnotherPeriphery(peripheryID):
             LOG_ERROR('Player is in given periphery', peripheryID)
             return
         else:
             if postActions:
-                if type(postActions) is types.ListType:
+                if isinstance(postActions, types.ListType):
                     actionsList = postActions
                 else:
                     LOG_ERROR('Argument "postActions" is invalid', postActions)
@@ -710,7 +971,7 @@ class _PrbPeripheriesHandler(object):
                 actionsList = []
             actionsList.extend([actions.DisconnectFromPeriphery(), actions.ConnectToPeriphery(peripheryID), self.__enableAction])
             if finishActions:
-                if type(finishActions) is types.ListType:
+                if isinstance(finishActions, types.ListType):
                     actionsList.extend(finishActions)
                 else:
                     LOG_ERROR('Argument "finishActions" is invalid', finishActions)
@@ -726,12 +987,25 @@ class _PrbPeripheriesHandler(object):
             return
 
     def activate(self):
+        """
+        Activate handler when player login to server and prbLoader is enabled.
+        """
         self.__enableAction.activate()
 
     def hasJoinAction(self):
+        """
+        Check if it has join action.
+        Returns:
+            has it join action
+        """
         return self.__joinCtx is not None
 
     def __onJoinChainStopped(self, isCompleted):
+        """
+        Callback listener for join action
+        Args:
+            isCompleted: was it completed
+        """
         if isCompleted and self.__joinCtx:
             ctx, self.__joinCtx = self.__joinCtx, None
             self.__doJoin(ctx)
@@ -741,6 +1015,11 @@ class _PrbPeripheriesHandler(object):
 
     @process
     def __doJoin(self, ctx):
+        """
+        Calls dispatcher join method with context given.
+        Args:
+            ctx: join request context
+        """
         dispatcher = self.__loader.getDispatcher()
         if dispatcher:
             yield dispatcher.join(ctx)
@@ -749,9 +1028,21 @@ class _PrbPeripheriesHandler(object):
 
 
 class _PrbControlLoader(object):
+    """
+    Loader for for next entities:
+    - prebattle dispatcher. When player login to server, it creates
+    prebattle dispatcher. And when GUI says isEnabled, it starts prebattle
+    dispatcher. When player come to battle or login page, it removes
+    prebattle dispatcher;
+    - invites manager for invitation to prebattle;
+    - notifier of auto invites.
+    """
     __slots__ = ('__prbDispatcher', '__invitesManager', '__autoNotifier', '__peripheriesHandler', '__storage', '__isEnabled')
 
     def __init__(self):
+        """
+        Constructor for default initialization.
+        """
         super(_PrbControlLoader, self).__init__()
         self.__prbDispatcher = None
         self.__invitesManager = None
@@ -762,6 +1053,10 @@ class _PrbControlLoader(object):
         return
 
     def init(self):
+        """
+        Loader initializations work: subscribe to required events.
+        Routine must invoke in BWPersonality module.
+        """
         if self.__invitesManager is None:
             self.__invitesManager = InvitesManager(self)
             self.__invitesManager.init()
@@ -775,6 +1070,10 @@ class _PrbControlLoader(object):
         return
 
     def fini(self):
+        """
+        Loader finalizes work: unsubscribe from events, removes prebattle dispatcher.
+        Routine must invoke in BWPersonality module.
+        """
         self.__removeDispatcher()
         if self.__invitesManager is not None:
             self.__invitesManager.fini()
@@ -791,24 +1090,60 @@ class _PrbControlLoader(object):
         return
 
     def getDispatcher(self):
+        """
+        Gets prebattle dispatcher.
+        Returns:
+            prebattle dispatcher or None. Returns None when
+            player come to battle or login page.
+        """
         return self.__prbDispatcher
 
     def getInvitesManager(self):
+        """
+        Gets manager for prebattle invites.
+        Returns:
+            invites manager
+        """
         return self.__invitesManager
 
     def getAutoInvitesNotifier(self):
+        """
+        Gets notifier for auto invites.
+        Returns:
+            auto notifier
+        """
         return self.__autoNotifier
 
     def getPeripheriesHandler(self):
+        """
+        Gets notifier for auto invites.
+        Returns:
+            peripheries handler
+        """
         return self.__peripheriesHandler
 
     def getStorage(self):
+        """
+        Gets storage decorator to hold local client settings.
+        Returns:
+            storage
+        """
         return self.__storage
 
     def isEnabled(self):
+        """
+        Is dispatcher enabled.
+        Returns:
+            obvious one - is dispatcher enabled.
+        """
         return self.__isEnabled
 
     def setEnabled(self, enabled):
+        """
+        Sets dispatcher enabled.
+        Args:
+            enabled: new state
+        """
         if self.__isEnabled ^ enabled:
             self.__isEnabled = enabled
             if self.__isEnabled and self.__prbDispatcher is not None:
@@ -816,18 +1151,37 @@ class _PrbControlLoader(object):
         return
 
     def onAccountShowGUI(self, ctx):
+        """
+        Listener for player event - show gui. Initializes dispatcher if needed.
+        Args:
+            ctx: gui init context
+        """
         if self.__prbDispatcher is None:
-            self.__prbDispatcher = _PrebattleDispatcher()
+            self.__prbDispatcher = _PreBattleDispatcher()
         if self.__isEnabled:
             self.__doStart()
         return
 
+    def onAccountBecomeNonPlayer(self):
+        """
+        Listener for player event - on become non player. Deletes dispatcher.
+        """
+        self.__isEnabled = False
+        self.__removeDispatcher()
+
     def onAvatarBecomePlayer(self):
+        """
+        Listener for player event - on become avatar. Deletes dispatcher.
+        """
         self.__isEnabled = False
         self.__removeDispatcher()
         self.__invitesManager.onAvatarBecomePlayer()
 
     def onDisconnected(self):
+        """
+        Listener for connection manager event - on disconnected. Deletes dispatcher
+        and clears all related data.
+        """
         self.__isEnabled = False
         self.__removeDispatcher()
         self.__autoNotifier.stop()
@@ -840,6 +1194,9 @@ class _PrbControlLoader(object):
         return
 
     def __doStart(self):
+        """
+        Do all the job related to loader statr.
+        """
         self.__storage.swap()
         self.__prbDispatcher.start()
         self.__invitesManager.start()
@@ -847,6 +1204,9 @@ class _PrbControlLoader(object):
         self.__peripheriesHandler.activate()
 
     def __removeDispatcher(self):
+        """
+        Removes prebattle dispatcher.
+        """
         if self.__prbDispatcher is not None:
             self.__prbDispatcher.stop()
             self.__prbDispatcher = None

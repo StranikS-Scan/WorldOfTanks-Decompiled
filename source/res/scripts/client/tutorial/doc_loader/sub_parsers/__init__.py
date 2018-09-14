@@ -505,6 +505,19 @@ def parseVarSet(xmlCtx, section, flags):
     return chapter.VarSet(varID, varSet)
 
 
+def parseBonus(xmlCtx, section):
+    tags = section.keys()
+    altBonusValues = None
+    if 'altBonus' in tags:
+        altBonusSec = section['altBonus']
+        altBonusValues = readValues(altBonusSec)
+    valueCondition = None
+    if 'valueCondition' in tags:
+        valueConditionSec = section['valueCondition']
+        valueCondition = _parseConditions(xmlCtx, valueConditionSec, [])
+    return chapter.Bonus(section.readInt('id', -1), section.readString('message'), readValues(section), altBonusValues, valueCondition)
+
+
 _DIALOG_SUB_PARERS = {}
 
 def setDialogsParsers(parsers):

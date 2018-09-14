@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
-from gui.battle_control import g_sessionProvider
+import functools
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
+from helpers import dependency
 from messenger.ext import isBattleChatEnabled
 from messenger.formatters import chat_message
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
@@ -14,19 +15,28 @@ from messenger_common_chat2 import MESSENGER_LIMITS
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_errors import ClientError
 from messenger.m_constants import CLIENT_ERROR_ID
+from skeletons.gui.battle_session import IBattleSessionProvider
 
-def _checkArenaInWaiting(func):
+class _check_arena_in_waiting(object):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def wrapper(*args, **kwargs):
-        if not g_sessionProvider.arenaVisitor.isArenaInWaiting():
-            func(*args, **kwargs)
-        else:
-            g_messengerEvents.onErrorReceived(ClientError(CLIENT_ERROR_ID.WAITING_BEFORE_START))
+    def __init__(self):
+        super(_check_arena_in_waiting, self).__init__()
 
-    return wrapper
+    def __call__(self, func):
+
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            if not self.sessionProvider.arenaVisitor.isArenaInWaiting():
+                func(*args, **kwargs)
+            else:
+                g_messengerEvents.onErrorReceived(ClientError(CLIENT_ERROR_ID.WAITING_BEFORE_START))
+
+        return wrapper
 
 
 class _ChannelController(BattleLayout):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, channel, messageBuilder, isSecondaryChannelCtrl=False):
         super(_ChannelController, self).__init__(channel, messageBuilder, isSecondaryChannelCtrl)
@@ -63,17 +73,17 @@ class TeamChannelController(_ChannelController):
     def __init__(self, channel):
         super(TeamChannelController, self).__init__(channel, chat_message.TeamMessageBuilder())
 
-    @_checkArenaInWaiting
+    @_check_arena_in_waiting()
     def sendCommand(self, command):
         self.proto.battleCmd.send(command)
 
-    @_checkArenaInWaiting
+    @_check_arena_in_waiting()
     def _broadcast(self, message):
         self.proto.arenaChat.broadcast(message, 0)
 
     def isEnabled(self):
         result = super(TeamChannelController, self).isEnabled()
-        hasAnyTeammates = g_sessionProvider.getArenaDP().getAlliesVehiclesNumber() > 1
+        hasAnyTeammates = self.sessionProvider.getArenaDP().getAlliesVehiclesNumber() > 1
         return result and hasAnyTeammates
 
     def _formatCommand(self, command):
@@ -95,7 +105,7 @@ class CommonChannelController(_ChannelController):
     def isEnabled(self):
         return isBattleChatEnabled(True)
 
-    @_checkArenaInWaiting
+    @_check_arena_in_waiting()
     def _broadcast(self, message):
         self.proto.arenaChat.broadcast(message, 1)
 

@@ -26,6 +26,9 @@ class CalendarMeta(BaseDAAPIComponent):
         return self.flashObject.as_selectDate(rawDate) if self._isDAAPIInited() else None
 
     def as_updateMonthEventsS(self, items):
+        """
+        :param items: Represented by Array (AS)
+        """
         return self.flashObject.as_updateMonthEvents(items) if self._isDAAPIInited() else None
 
     def as_setCalendarMessageS(self, message):

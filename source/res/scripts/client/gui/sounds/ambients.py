@@ -9,10 +9,10 @@ from constants import FORT_BUILDING_TYPE as FBT, ARENA_PERIOD as _PERIOD
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.Scaleform.framework import ViewTypes
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import g_appLoader
 from gui.app_loader.decorators import sf_lobby
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import WinStatus
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
@@ -21,6 +21,8 @@ from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiabl
 from gui.sounds import filters as snd_filters
 from gui.sounds.sound_constants import SoundFilters, PLAYING_SOUND_CHECK_PERIOD
 from gui.sounds.sound_utils import SOUND_DEBUG
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 def _getViewSoundEnv(view):
     """Check if view has '__sound_env__' attribute and return it.
@@ -277,20 +279,21 @@ class BattleSpaceEnv(SoundEnv, IArenaPeriodController):
     """Simple battle space sound environment, has logic to stop music event
     only after BEFOREBATTLE period on arena
     """
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, soundsCtrl):
         super(BattleSpaceEnv, self).__init__(soundsCtrl, 'battle', music=SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOADING), ambient=SoundEvent(_MC.AMBIENT_EVENT_COMBAT))
 
     def start(self):
         super(BattleSpaceEnv, self).start()
-        g_sessionProvider.addArenaCtrl(self)
-        periodCtrl = g_sessionProvider.shared.arenaPeriod
+        self.sessionProvider.addArenaCtrl(self)
+        periodCtrl = self.sessionProvider.shared.arenaPeriod
         if periodCtrl is not None:
             self._updateBattleAmbient(periodCtrl.getPeriod())
         return
 
     def stop(self):
-        g_sessionProvider.removeArenaCtrl(self)
+        self.sessionProvider.removeArenaCtrl(self)
         super(BattleSpaceEnv, self).stop()
 
     def setPeriodInfo(self, period, endTime, length, additionalInfo, soundID):
@@ -394,13 +397,14 @@ class BattleResultsEnv(SoundEnv):
     _sounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_VICTORY, checkFinish=True),
      WinStatus.DRAW: SoundEvent(_MC.MUSIC_EVENT_COMBAT_DRAW, checkFinish=True),
      WinStatus.LOSE: SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOSE, checkFinish=True)}
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, soundsCtrl):
         super(BattleResultsEnv, self).__init__(soundsCtrl, 'battleResults')
 
     def start(self):
         super(BattleResultsEnv, self).start()
-        lastWinStatus = g_sessionProvider.getCtx().extractLastArenaWinStatus()
+        lastWinStatus = self.sessionProvider.getCtx().extractLastArenaWinStatus()
         if lastWinStatus is not None:
             SOUND_DEBUG('There is last arena win status need to be processed', lastWinStatus)
             self._music = self._sounds.get(lastWinStatus.getStatus(), EmptySound())
@@ -451,9 +455,11 @@ class GuiAmbientsCtrl(object):
 
     def init(self):
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
+        g_appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
 
     def fini(self):
         g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
+        g_appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
         self.stopAllSounds()
         self._clearSoundEnv(self._spaceEnv)
         self._spaceEnv = None
@@ -461,7 +467,8 @@ class GuiAmbientsCtrl(object):
         return
 
     def start(self):
-        self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+        if self.app and self.app.loaderManager:
+            self.app.loaderManager.onViewLoaded += self.__onViewLoaded
 
     def stop(self, isDisconnected=False):
         if self.app and self.app.loaderManager:
@@ -535,11 +542,32 @@ class GuiAmbientsCtrl(object):
         return env
 
     def __onGUISpaceEntered(self, spaceID):
-        SOUND_DEBUG('GUI space has been changed', spaceID, spaceID in self._spaces)
+        SOUND_DEBUG('Entering GUI space', spaceID, spaceID in self._spaces)
         if spaceID in self._spaces:
             self._clearSoundEnv(self._spaceEnv)
             self._spaceEnv = self._buildSoundEnv(self._spaces[spaceID])
             self._restartSounds()
+
+    def __onGUISpaceLeft(self, spaceID):
+        """ Explicitly clear custom sound environments when leaving space.
+        
+        We don't have to wait for an actual view disposal since it might be
+        delayed for a significant amount of time.
+        """
+        SOUND_DEBUG('Leaving GUI space', spaceID, spaceID in self._spaces)
+        if self.app is not None and spaceID in self._spaces:
+            customViews = []
+            for vt in (ViewTypes.TOP_WINDOW, ViewTypes.WINDOW, ViewTypes.LOBBY_SUB):
+                container = self.app.containerManager.getContainer(vt)
+                for viewAlias in self._customEnvs[vt].iterkeys():
+                    view = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
+                    if view is not None:
+                        customViews.append(view)
+
+            for view in customViews:
+                self.__onViewDisposed(view)
+
+        return
 
     def __onViewLoaded(self, view):
         if view is not None and view.settings is not None:

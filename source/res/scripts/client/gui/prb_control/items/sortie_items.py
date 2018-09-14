@@ -29,19 +29,14 @@ def getDivisionLevelByUnit(unit):
 
 
 def getDivisionNameByType(rosterTypeID):
-    divisionName = ''
     for name, flags in SORTIE_DIVISION_NAME_TO_FLAGS.iteritems():
         if rosterTypeID == flags:
-            divisionName = name
-            break
-
-    return divisionName
+            return name
 
 
 def getDivisionNameByUnit(unit):
-    divisionName = ''
     if unit is None:
         LOG_ERROR('Unit is not defined')
-        return divisionName
+        return ''
     else:
         return getDivisionNameByType(unit.getRosterTypeID())

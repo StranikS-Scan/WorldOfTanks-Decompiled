@@ -8,13 +8,10 @@ from notification.settings import NOTIFICATION_STATE
 class NotificationsModel:
 
     def __init__(self, counter):
-        self.__layoutSettings = {'paddingRight': 0,
-         'paddingBottom': 0}
         self.__currentDisplayState = None
         self.__collection = NotificationsCollection()
         self.__listeners = NotificationsListeners()
         self.__counter = counter
-        self.onLayoutSettingsChanged = Event.Event()
         self.onDisplayStateChanged = Event.Event()
         self.onNotificationReceived = Event.Event()
         self.onNotificationUpdated = Event.Event()
@@ -64,14 +61,6 @@ class NotificationsModel:
     def getNotification(self, typeID, entityID):
         return self.__collection.getItem(typeID, entityID)
 
-    def setLayoutSettings(self, paddingRight, paddingBottom):
-        self.__layoutSettings = {'paddingRight': paddingRight,
-         'paddingBottom': paddingBottom}
-        self.onLayoutSettingsChanged(self.__layoutSettings)
-
-    def getLayoutSettings(self):
-        return self.__layoutSettings
-
     def incrementNotifiedMessagesCount(self, group, typeID, entityID):
         self.onNotifiedMessagesCountChanged(self.__counter.addNotification(group, typeID, entityID))
 
@@ -93,7 +82,6 @@ class NotificationsModel:
         self.__listeners.stop()
         self.__counter.resetUnreadCount()
         self.__counter = None
-        self.onLayoutSettingsChanged.clear()
         self.onDisplayStateChanged.clear()
         self.onNotificationReceived.clear()
         self.onNotifiedMessagesCountChanged.clear()

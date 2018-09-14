@@ -15,6 +15,7 @@ from items import vehicles as vehs_core
 from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings
 from avatar_helpers import getAvatarDatabaseID
+from graphics import GRAPHICS_SETTINGS
 SHELLS_COUNT_PROP_NAME = 'shellsCount'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
 RELOAD_MAGAZINE_TIME_PROP_NAME = 'reloadMagazineTime'
@@ -33,6 +34,7 @@ GUN_CAN_BE_CLIP = 1
 GUN_CLIP = 2
 GUN_NORMAL = 4
 CLIP_ICON_PATH = RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON
+HYDRAULIC_ICON_PATH = RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON
 EXTRA_MODULE_INFO = 'extraModuleInfo'
 _FLASH_OBJECT_SYS_ATTRS = ('isPrototypeOf', 'propertyIsEnumerable', 'hasOwnProperty')
 

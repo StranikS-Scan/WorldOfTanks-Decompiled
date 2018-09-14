@@ -22,15 +22,25 @@ class ListenersCollection(IListenersCollection):
         self._listeners = []
         self._clazz = None
         self._mutualListeners = None
+        self._isSuspended = False
         return
 
     def clear(self):
+        LOG_DEBUG('Listeners collection was cleared: ', self)
         while len(self._listeners):
             self._listeners.pop()
 
         self._clazz = None
         self._mutualListeners = None
         return
+
+    def suspend(self):
+        LOG_DEBUG('Listeners collection was suspended: ', self)
+        self._isSuspended = True
+
+    def resume(self):
+        LOG_DEBUG('Listeners collection was resumed: ', self)
+        self._isSuspended = False
 
     def addMutualListeners(self, mutualListeners):
         if isinstance(mutualListeners, ListenersCollection):
@@ -67,6 +77,8 @@ class ListenersCollection(IListenersCollection):
         self._clazz = listenerClass
 
     def _invokeListeners(self, event, *args, **kwargs):
+        if self._isSuspended:
+            return
         LOG_DEBUG(event, args, kwargs)
         for listener in self.getListenersIterator():
             notifier = getattr(listener, event)

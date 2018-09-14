@@ -1,19 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/items/unit_items.py
-from collections import namedtuple
 import itertools
 import weakref
+from collections import namedtuple
 from UnitBase import UNIT_ROLE, UNIT_FLAGS, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE
 from account_helpers import getAccountDatabaseID
+from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
-from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
-from gui.prb_control.context import unit_ctx
-from gui.prb_control.settings import CREATOR_SLOT_INDEX, UNIT_RESTRICTION
-from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.prb_control.settings import CREATOR_SLOT_INDEX
 from gui.shared import g_itemsCache
 from gui.shared.utils.decorators import ReprInjector
+from gui.shared.utils.requesters import REQ_CRITERIA
 
 class PlayerUnitInfo(object):
     __slots__ = ('dbID', 'unitIdx', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
@@ -40,7 +39,7 @@ class PlayerUnitInfo(object):
         return
 
     def __repr__(self):
-        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitIdx = {2:n} rating = {3:n}, isCreator = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n})'.format(self.dbID, self.getFullName(), self.unitIdx, self.rating, self.isCreator(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
+        return 'PlayerUnitInfo(dbID = {0:n}, fullName = {1:>s}, unitIdx = {2:n} rating = {3:n}, isCommander = {4!r:s}, role = {5:n}, accID = {6:n}, isReady={7!r:s}, isInSlot={8!r:s}, igrType = {9:n})'.format(self.dbID, self.getFullName(), self.unitIdx, self.rating, self.isCommander(), self.role, self.accID, self.isReady, self.isInSlot, self.igrType)
 
     def getFullName(self):
         return g_lobbyContext.getPlayerFullName(self.name, clanAbbrev=self.clanAbbrev, pDBID=self.dbID)
@@ -48,7 +47,7 @@ class PlayerUnitInfo(object):
     def getRegion(self):
         return g_lobbyContext.getRegionCode(self.dbID)
 
-    def isCreator(self):
+    def isCommander(self):
         return self.role & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR and self.slotIdx == CREATOR_SLOT_INDEX
 
     def isInvite(self):
@@ -95,23 +94,12 @@ class PlayerUnitInfo(object):
             return []
 
     def canAssignToSlot(self, slotIdx):
-        if self.unit is not None and not self.isCreator() and slotIdx != CREATOR_SLOT_INDEX:
+        if self.unit is not None and not self.isCommander() and slotIdx != CREATOR_SLOT_INDEX:
             slots = self.unit.getFreeSlots()
             if slotIdx in slots:
                 vehicles = self.getVehiclesToSlot(slotIdx)
                 return (len(vehicles) > 0, vehicles)
         return (False, [])
-
-    def canAssignToSlots(self, allSlots=False):
-        result = (True, UNIT_RESTRICTION.UNDEFINED)
-        if self.unit is not None:
-            if not len(self.unit.getFreeSlots()):
-                result = (False, UNIT_RESTRICTION.UNIT_IS_FULL)
-            elif not len(self.getAvailableSlots(allSlots=allSlots)):
-                result = (False, UNIT_RESTRICTION.VEHICLE_NOT_FOUND)
-            elif UnitFlags(self.unit.getFlags()).isLocked():
-                result = (False, UNIT_RESTRICTION.UNIT_IS_LOCKED)
-        return result
 
     def getVehiclesToSlots(self, allSlots=False):
         if self.unit is not None:
@@ -254,7 +242,19 @@ class UnitFlags(object):
         return self.__flagsDiff & UNIT_FLAGS.IN_PRE_ARENA > 0
 
 
-UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'levelsSeq', 'minTotalLevel', 'maxTotalLevel'))
+UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'levelsSeq'))
+UnitStats.__new__.__defaults__ = (0,
+ 0,
+ 0,
+ 0,
+ 0,
+ ())
+UnitFullData = namedtuple('UnitStats', ('unit', 'flags', 'stats', 'playerInfo', 'slotsIterator'))
+UnitFullData.__new__.__defaults__ = (None,
+ UnitFlags(0),
+ UnitStats(),
+ PlayerUnitInfo(-1L, 0, None),
+ SlotInfo(-1, SlotState()))
 
 @ReprInjector.simple(('_minLevel', 'minLevel'), ('_maxLevel', 'maxLevel'), ('_maxSlots', 'maxSlots'), ('_maxClosedSlots', 'maxClosedSlots'), ('_maxEmptySlots', 'maxEmptySlots'), ('_minTotalLevel', 'minTotalLevel'), ('_maxTotalLevel', 'maxTotalLevel'), ('_maxLegionariesCount', 'maxLegionariesCount'))
 class UnitRosterSettings(object):
@@ -346,40 +346,6 @@ class DynamicRosterSettings(UnitRosterSettings):
         return kwargs
 
 
-class BalancedSquadDynamicRosterSettings(DynamicRosterSettings):
-
-    def __init__(self, unit, lowerBound=0, upperBound=0):
-        self._lowerBound = lowerBound
-        self._upperBound = upperBound
-        super(BalancedSquadDynamicRosterSettings, self).__init__(unit)
-
-    def _extractSettings(self, unit):
-        kwargs = super(BalancedSquadDynamicRosterSettings, self)._extractSettings(unit)
-        accountDbID = getAccountDatabaseID()
-        if kwargs and unit.getCommanderDBID() != accountDbID:
-            vehicles = unit.getMemberVehicles(unit.getCommanderDBID())
-            if not vehicles:
-                unitVehicles = unit.getVehicles()
-                for accDbID, vInfos in unitVehicles.iteritems():
-                    if accDbID != accountDbID:
-                        vehicles.extend(vInfos)
-
-            minLevel, maxLevel = self._getVehicleLevels(vehicles)
-            kwargs['minLevel'] = minLevel
-            kwargs['maxLevel'] = maxLevel
-        return kwargs
-
-    def _getVehicleLevels(self, vehicles):
-        if vehicles:
-            levels = set([ vehInfo.vehLevel for vehInfo in vehicles ])
-            minLevel = max(MIN_VEHICLE_LEVEL, min(levels) + self._lowerBound)
-            maxLevel = min(MAX_VEHICLE_LEVEL, max(levels) + self._upperBound)
-        else:
-            minLevel = MIN_VEHICLE_LEVEL
-            maxLevel = MAX_VEHICLE_LEVEL
-        return (minLevel, maxLevel)
-
-
 class PredefinedRosterSettings(UnitRosterSettings):
 
     def __init__(self, rosterTypeID):
@@ -401,7 +367,9 @@ class PredefinedRosterSettings(UnitRosterSettings):
 _SUPPORTED_ROSTER_SETTINGS = {PREBATTLE_TYPE.UNIT: (ROSTER_TYPE.UNIT_ROSTER,),
  PREBATTLE_TYPE.SORTIE: (ROSTER_TYPE.SORTIE_ROSTER_6, ROSTER_TYPE.SORTIE_ROSTER_8, ROSTER_TYPE.SORTIE_ROSTER_10),
  PREBATTLE_TYPE.FORT_BATTLE: (ROSTER_TYPE.FORT_ROSTER_10,),
- PREBATTLE_TYPE.CLUBS: (ROSTER_TYPE.CLUB_ROSTER_10,)}
+ PREBATTLE_TYPE.CLUBS: (ROSTER_TYPE.CLUB_ROSTER_10,),
+ PREBATTLE_TYPE.FORT_COMMON: (ROSTER_TYPE.SORTIE_ROSTER_6,),
+ PREBATTLE_TYPE.E_SPORT_COMMON: (ROSTER_TYPE.UNIT_ROSTER,)}
 
 class SupportedRosterSettings(object):
 

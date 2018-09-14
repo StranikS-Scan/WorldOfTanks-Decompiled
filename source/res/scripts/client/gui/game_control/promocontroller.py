@@ -3,23 +3,25 @@
 from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings, PROMO, LAST_PROMO_PATCH_VERSION
 from account_shared import getClientMainVersion
-from debug_utils import LOG_DEBUG
 from adisp import async, process
+from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control import gc_constants
-from gui.game_control.controllers import Controller
 from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from helpers import i18n, isPlayerAccount
+from helpers import i18n, isPlayerAccount, dependency
+from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController
 
-class PromoController(Controller):
+class PromoController(IPromoController):
     PROMO_AUTO_VIEWS_TEST_VALUE = 5
+    browserCtrl = dependency.descriptor(IBrowserController)
+    eventsNotification = dependency.descriptor(IEventsNotificationsController)
 
-    def __init__(self, proxy):
-        super(PromoController, self).__init__(proxy)
+    def __init__(self):
+        super(PromoController, self).__init__()
         self.__currentVersionPromoUrl = None
         self.__currentVersionBrowserID = None
         self.__currentVersionBrowserShown = False
@@ -40,9 +42,9 @@ class PromoController(Controller):
         if not isPlayerAccount():
             return
         self._updatePromo(self._getPromoEventNotifications())
-        self._getEventsFotificationController().onEventNotificationsChanged += self.__onEventNotification
-        self._getBrowserController().onBrowserDeleted += self.__onBrowserDeleted
-        self._processPromo(self._getEventNotifications())
+        self.eventsNotification.onEventNotificationsChanged += self.__onEventNotification
+        self.browserCtrl.onBrowserDeleted += self.__onBrowserDeleted
+        self._processPromo(self.eventsNotification.getEventsNotifications())
 
     def onAvatarBecomePlayer(self):
         self._stop()
@@ -77,8 +79,8 @@ class PromoController(Controller):
         self.__currentVersionPromoUrl = None
         self.__currentVersionBrowserID = None
         self.__currentVersionBrowserShown = False
-        self._getBrowserController().onBrowserDeleted -= self.__onBrowserDeleted
-        self._getEventsFotificationController().onEventNotificationsChanged -= self.__onEventNotification
+        self.browserCtrl.onBrowserDeleted -= self.__onBrowserDeleted
+        self.eventsNotification.onEventNotificationsChanged -= self.__onEventNotification
         return
 
     @process
@@ -117,18 +119,12 @@ class PromoController(Controller):
         self.__savePromoShown()
         return
 
-    def _getEventNotifications(self):
-        return self._proxy.getController(gc_constants.CONTROLLER.EVENTS_NOTIFICATION).getEventsNotifications()
-
     def _getPromoEventNotifications(self):
-        filterFunc = lambda item: item.eventType == gc_constants.PROMO.TEMPLATE.ACTION
-        return self._getEventsFotificationController().getEventsNotifications(filterFunc)
 
-    def _getBrowserController(self):
-        return self._proxy.getController(gc_constants.CONTROLLER.BROWSER)
+        def filterFunc(item):
+            return item.eventType == gc_constants.PROMO.TEMPLATE.ACTION
 
-    def _getEventsFotificationController(self):
-        return self._proxy.getController(gc_constants.CONTROLLER.EVENTS_NOTIFICATION)
+        return self.eventsNotification.getEventsNotifications(filterFunc)
 
     def __savePromoShown(self):
         AccountSettings.setFilter(PROMO, self.__promoShown)
@@ -148,7 +144,7 @@ class PromoController(Controller):
     @async
     @process
     def __showPromoBrowser(self, promoUrl, promoTitle, browserID=None, isAsync=True, showWaiting=False, callback=None):
-        browserID = yield self._getBrowserController().load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True, showWaiting=showWaiting)
+        browserID = yield self.browserCtrl.load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True, showWaiting=showWaiting)
         callback(browserID)
 
     @classmethod

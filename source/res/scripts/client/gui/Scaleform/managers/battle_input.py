@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/battle_input.py
 import Keys
-from avatar_helpers.aim_global_binding import CTRL_MODE_NAME
+from AvatarInputHandler import aih_global_binding
+from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher
 
@@ -13,6 +14,7 @@ class BattleGUIKeyHandler(object):
 
 class BattleGameInputMgr(object):
     __slots__ = ('__consumers', '__keyHandlers')
+    __ctrlModeName = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.CTRL_MODE_NAME)
 
     def __init__(self):
         super(BattleGameInputMgr, self).__init__()
@@ -61,22 +63,19 @@ class BattleGameInputMgr(object):
                     if handler.handleEscKey(isDown):
                         return True
 
-            if isDown:
-                handler = avatar_getter.getInputHandler()
-                if handler is not None and handler.ctrlModeName != CTRL_MODE_NAME.MAP_CASE:
-                    event_dispatcher.showIngameMenu()
-                    event_dispatcher.toggleFullStats(False)
+            if isDown and self.__ctrlModeName != CTRL_MODE_NAME.MAP_CASE:
+                event_dispatcher.showIngameMenu()
+                event_dispatcher.toggleFullStats(False)
             return True
-        elif key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
+        if key in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             if not self.__consumers:
                 avatar_getter.setForcedGuiControlMode(isDown)
             return True
-        elif key == Keys.KEY_TAB and (mods != Keys.MODIFIER_CTRL or not isDown):
+        if key == Keys.KEY_TAB and (mods != Keys.MODIFIER_CTRL or not isDown):
             event_dispatcher.toggleFullStats(isDown)
             return True
-        elif key == Keys.KEY_TAB and mods == Keys.MODIFIER_CTRL and isDown:
+        if key == Keys.KEY_TAB and mods == Keys.MODIFIER_CTRL and isDown:
             if not self.__consumers:
                 event_dispatcher.setNextPlayerPanelMode()
             return True
-        else:
-            return False
+        return False

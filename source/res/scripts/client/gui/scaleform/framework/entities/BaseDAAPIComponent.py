@@ -6,7 +6,6 @@ from gui.Scaleform.framework.entities.abstract.BaseDAAPIComponentMeta import Bas
 from gui.shared import g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import ComponentEvent
-__author__ = 'd_dichkovsky'
 
 class BaseDAAPIComponent(BaseDAAPIComponentMeta):
 
@@ -24,6 +23,16 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         else:
             component = None
         return component
+
+    def reloadComponents(self):
+        """Destroys all components and create new components in the python only.
+        NOTE: This method is used in battle replay only, because replay destroys all entities
+        when player rewinds replay back.
+        """
+        snapshot = map(lambda (viewAlias, viewPy): (viewPy.flashObject, viewAlias), self.__components.iteritems())
+        self.__destroyPythonComponents(pyReloading=True)
+        for flashObject, alias in snapshot:
+            self.registerFlashComponent(flashObject, alias)
 
     def registerFlashComponent(self, component, alias, *args):
         from gui.Scaleform.framework import g_entitiesFactories
@@ -67,12 +76,11 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         return
 
     def _dispose(self):
-        while self.__components:
-            alias, viewPy = self.__components.popitem()
-            self._onUnregisterFlashComponent(viewPy, alias)
-            self.__fireRegisteringEvent(ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
-            viewPy.destroy()
+        self.__destroyPythonComponents(pyReloading=False)
+        super(BaseDAAPIComponent, self)._dispose()
 
+    def _disposeWithReloading(self):
+        self.__destroyPythonComponents(pyReloading=True)
         super(BaseDAAPIComponent, self)._dispose()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -88,6 +96,14 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         del self.__components[alias]
         self.__fireRegisteringEvent(ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
         viewPy.destroy()
+
+    def __destroyPythonComponents(self, pyReloading=False):
+        while self.__components:
+            alias, viewPy = self.__components.popitem()
+            self._onUnregisterFlashComponent(viewPy, alias)
+            self.__fireRegisteringEvent(ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
+            viewPy.setPyReloading(pyReloading)
+            viewPy.destroy()
 
     def __fireRegisteringEvent(self, event, componentPy, alias):
         g_eventBus.handleEvent(ComponentEvent(event, self, componentPy, alias), EVENT_BUS_SCOPE.GLOBAL)

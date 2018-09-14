@@ -4,7 +4,6 @@ import operator
 import weakref
 from collections import namedtuple
 from CurrentVehicle import g_currentVehicle
-from adisp import async
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
@@ -17,14 +16,15 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters.vehicle_filters import packIntVehicleTypesFilter
 from gui.server_events import caches
-from gui.server_events.EventsCache import g_eventsCache
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import Vehicle
 from gui.shared.utils import decorators
+from helpers import dependency
 from helpers import int2roman
 from helpers.i18n import makeString as _ms
 from potapov_quests import PQ_BRANCH
+from skeletons.gui.server_events import IEventsCache
 
 class _QuestsFilter(object):
     VEH_TYPE_DEFAULT = -1
@@ -71,6 +71,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
     DEFAULT_FILTERS = {QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM: (-1, QUEST_TASK_FILTERS_TYPES.ALL),
      QUESTS_ALIASES.SEASON_VIEW_TAB_FALLOUT: (-1, QUEST_TASK_FILTERS_TYPES.ALL)}
     _HEADER_ICON_PATH = '../maps/icons/quests/headers/%s.png'
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         super(_QuestsTileChainsView, self).__init__()
@@ -131,7 +132,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
 
     def _populate(self):
         super(_QuestsTileChainsView, self)._populate()
-        g_eventsCache.onProgressUpdated += self._onProgressUpdated
+        self.eventsCache.onProgressUpdated += self._onProgressUpdated
         vehTypeFilter, qStateFilter = self.__getCurrentFilters()
         self.as_setHeaderDataS({'noTasksText': _ms(QUESTS.TILECHAINSVIEW_NOTASKSLABEL_TEXT),
          'header': {'tileID': self.__tile.getID(),
@@ -151,7 +152,7 @@ class _QuestsTileChainsView(QuestsTileChainsViewMeta):
         self._populateTileData()
 
     def _dispose(self):
-        g_eventsCache.onProgressUpdated -= self._onProgressUpdated
+        self.eventsCache.onProgressUpdated -= self._onProgressUpdated
         self.__proxy = None
         super(_QuestsTileChainsView, self)._dispose()
         return

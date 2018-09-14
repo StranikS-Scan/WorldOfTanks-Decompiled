@@ -7,23 +7,23 @@ from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from constants import REF_SYSTEM_FLAG, EVENT_TYPE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from helpers import time_utils
-from helpers.i18n import makeString as _ms
-from shared_utils import findFirst
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.AwardWindow import ExplosionBackAward
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.game_control.controllers import Controller
-from gui.shared.formatters import icons, text_styles
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.AwardWindow import ExplosionBackAward
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import g_itemsCache, events, g_eventBus, event_dispatcher as shared_events, EVENT_BUS_SCOPE
-from gui.server_events import g_eventsCache
+from gui.shared.formatters import icons, text_styles
+from helpers import time_utils, dependency
+from helpers.i18n import makeString as _ms
 from messenger.m_constants import USER_TAG
 from messenger.proto.entities import SharedUserEntity, ClanInfo
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from shared_utils import findFirst
+from skeletons.gui.game_control import IRefSystemController
+from skeletons.gui.server_events import IEventsCache
 
 def _getRefSysCfg():
     return g_itemsCache.items.shop.refSystem or {}
@@ -135,10 +135,11 @@ class TankmanAward(ExplosionBackAward):
         return text_styles.main(additionalText)
 
 
-class RefSystem(Controller):
+class RefSystem(IRefSystemController):
+    eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, proxy):
-        super(RefSystem, self).__init__(proxy)
+    def __init__(self):
+        super(RefSystem, self).__init__()
         self.__referrers = []
         self.__referrals = []
         self.__quests = []
@@ -166,7 +167,7 @@ class RefSystem(Controller):
 
     def onLobbyStarted(self, ctx):
         g_clientUpdateManager.addCallbacks({'stats.refSystem': self.__onRefStatsUpdated})
-        g_eventsCache.onSyncCompleted += self.__onEventsUpdated
+        self.eventsCache.onSyncCompleted += self.__onEventsUpdated
         g_playerEvents.onShopResync += self.__onShopUpdated
         self.__update(g_itemsCache.items.stats.refSystem)
         self.__updateQuests()
@@ -248,7 +249,7 @@ class RefSystem(Controller):
 
     def __stop(self):
         g_playerEvents.onShopResync -= self.__onShopUpdated
-        g_eventsCache.onSyncCompleted -= self.__onEventsUpdated
+        self.eventsCache.onSyncCompleted -= self.__onEventsUpdated
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __getAwardParams(self, completedQuestIDs):
@@ -326,7 +327,7 @@ class RefSystem(Controller):
 
     def __updateQuests(self):
         self.__clearQuestsData()
-        refSystemQuests = g_eventsCache.getHiddenQuests(lambda x: x.getType() == EVENT_TYPE.REF_SYSTEM_QUEST)
+        refSystemQuests = self.eventsCache.getHiddenQuests(lambda x: x.getType() == EVENT_TYPE.REF_SYSTEM_QUEST)
         if refSystemQuests:
             self.__quests = self.__mapQuests(refSystemQuests.values())
             self.__totalXP, _ = self.__quests[-1]

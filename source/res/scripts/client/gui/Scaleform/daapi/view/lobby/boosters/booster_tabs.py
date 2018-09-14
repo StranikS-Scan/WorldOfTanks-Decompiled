@@ -13,20 +13,22 @@ from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.genConsts.ACTION_PRICE_CONSTANTS import ACTION_PRICE_CONSTANTS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.MENU import MENU
-from gui.goodies.Booster import BOOSTERS_ORDERS
-from gui.goodies.GoodiesCache import g_goodiesCache
-from gui.server_events import g_eventsCache, events_dispatcher as quests_events
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.goodies.goodie_items import BOOSTERS_ORDERS
+from gui.goodies.goodies_cache import g_goodiesCache
+from gui.server_events import events_dispatcher as quests_events
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors.goodies import BoosterActivator
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
+from gui.shared.utils import decorators
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
 from helpers.i18n import makeString as _ms
-from gui.shared.utils import decorators
+from skeletons.gui.server_events import IEventsCache
 MAX_GUI_COUNT = 999
 DEFAULT_SHOP_COUNT = 1
 
@@ -154,7 +156,7 @@ class InventoryBoostersTab(BoosterTab):
     def __activateBoosterRequest(self, booster):
         result = yield BoosterActivator(booster).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @staticmethod
     def __getActiveBoosterByType(bType):
@@ -226,6 +228,7 @@ class ShopBoostersTab(BoosterTab):
 
 
 class QuestsBoostersTab(BoosterTab):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         super(QuestsBoostersTab, self).__init__()
@@ -247,7 +250,7 @@ class QuestsBoostersTab(BoosterTab):
     def doAction(self, boosterID, questID):
         if questID and questID.isdigit():
             questID = int(questID)
-        quest = g_eventsCache.getAllQuests(includePotapovQuests=True).get(questID)
+        quest = self.eventsCache.getAllQuests(includePotapovQuests=True).get(questID)
         if quest is not None:
             quests_events.showEventsWindow(quest.getID(), quest.getType())
         elif self.__questsDescriptor and self.__questsDescriptor.getChapter(questID):
@@ -314,6 +317,7 @@ class QuestsBoostersTab(BoosterTab):
 
 
 class TabsContainer(object):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         self.__tabs = {TABS_IDS.INVENTORY: InventoryBoostersTab(),
@@ -330,7 +334,7 @@ class TabsContainer(object):
         g_clientUpdateManager.addCallbacks({'goodies': self.__onUpdateBoosters,
          'shop': self.__onUpdateBoosters,
          'stats': self.__onStatsChanged})
-        g_eventsCache.onSyncCompleted += self.__onQuestsUpdate
+        self.eventsCache.onSyncCompleted += self.__onQuestsUpdate
 
     def setCurrentTabIdx(self, currentTabIdx):
         self.__currentTabIdx = currentTabIdx
@@ -365,7 +369,7 @@ class TabsContainer(object):
         self.__currentTabIdx = None
         self.__eManager.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
-        g_eventsCache.onSyncCompleted -= self.__onQuestsUpdate
+        self.eventsCache.onSyncCompleted -= self.__onQuestsUpdate
         for tab in self.__tabs.itervalues():
             tab.fini()
 

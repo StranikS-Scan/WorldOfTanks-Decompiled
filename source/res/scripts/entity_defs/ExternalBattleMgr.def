@@ -1,0 +1,40 @@
+<ExternalBattleMgr.def>
+  <Implements>
+    <Interface>	UnitCallbacks	</Interface>
+  </Implements>
+  <BaseMethods>
+    <accountCall>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </accountCall>
+    <unitMgrCall>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </unitMgrCall>
+    <touchUnitRevision>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </touchUnitRevision>
+    <makeBattle>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </makeBattle>
+    <notifyAccountOffline>
+      <Arg>	UINT64	</Arg>
+    </notifyAccountOffline>
+    <onArenaMessage>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT64	</Arg>
+    </onArenaMessage>
+  </BaseMethods>
+</ExternalBattleMgr.def>

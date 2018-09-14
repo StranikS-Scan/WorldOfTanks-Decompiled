@@ -26,6 +26,9 @@ class ContactsListPopoverMeta(SmartPopOverView):
         self._printOverrideError('copyIntoGroup')
 
     def as_setInitInfoS(self, data):
+        """
+        :param data: Represented by ContactsWindowInitVO (AS)
+        """
         return self.flashObject.as_setInitInfo(data) if self._isDAAPIInited() else None
 
     def as_editGroupS(self, targetGroupName):

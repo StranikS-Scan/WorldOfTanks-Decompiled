@@ -14,4 +14,7 @@ class RssNewsFeedMeta(BaseDAAPIComponent):
         self._printOverrideError('openBrowser')
 
     def as_updateFeedS(self, feed):
+        """
+        :param feed: Represented by Vector.<RssItemVo> (AS)
+        """
         return self.flashObject.as_updateFeed(feed) if self._isDAAPIInited() else None

@@ -74,7 +74,7 @@ class FortOrderConfirmationWindow(FortOrderConfirmationWindowMeta, FortViewHelpe
         if result:
             g_fortSoundController.playCreateOrder()
             order = self.fortCtrl.getFort().getOrder(orderTypeID)
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ADDORDER, count=BigWorld.wg_getIntegralFormat(count), time=order.getProductionLeftTimeStr(), type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ADDORDER, count=BigWorld.wg_getIntegralFormat(count), time=order.getProductionLeftTimeStr(), type=SystemMessages.SM_TYPE.Warning)
         self.destroy()
 
     def getTimeStr(self, time):

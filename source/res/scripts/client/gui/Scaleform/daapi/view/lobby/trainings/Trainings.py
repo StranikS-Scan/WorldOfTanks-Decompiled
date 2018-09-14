@@ -2,28 +2,29 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/Trainings.py
 import ArenaType
 from adisp import process
+from constants import PREBATTLE_TYPE
 from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
+from gui.Scaleform.daapi.view.meta.TrainingFormMeta import TrainingFormMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.prb_control.context.prb_ctx import JoinTrainingCtx, LeavePrbCtx
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from gui.prb_control.prb_helpers import PrbListener
+from gui.Scaleform.locale.MENU import MENU
+from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control.entities.base.ctx import LeavePrbAction
+from gui.prb_control.entities.base.legacy.listener import ILegacyListener
+from gui.prb_control.entities.training.legacy.ctx import JoinTrainingCtx
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import getArenaFullName
 from gui.sounds.ambients import LobbySubViewEnv
-from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.meta.TrainingFormMeta import TrainingFormMeta
-from gui.Scaleform.Waiting import Waiting
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.Scaleform.locale.MENU import MENU
-from gui.shared.formatters import text_styles
 from helpers import i18n
 
-class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
+class Trainings(LobbySubView, TrainingFormMeta, ILegacyListener):
     __sound_env__ = LobbySubViewEnv
 
     def __init__(self, _=None):
@@ -33,6 +34,10 @@ class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
 
     def _populate(self):
         super(Trainings, self)._populate()
+        funcState = self.prbDispatcher.getFunctionalState()
+        if not funcState.isInLegacy(PREBATTLE_TYPE.TRAINING):
+            g_eventDispatcher.removeTrainingFromCarousel()
+            return
         Waiting.show('Flash')
         self.startPrbListening()
         self.addListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self.__createTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -50,7 +55,7 @@ class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
         return
 
     def onLeave(self):
-        self.prbDispatcher.doLeaveAction(LeavePrbCtx(waitingID='prebattle/leave'))
+        self._doLeave()
 
     def onWindowMinimize(self):
         g_eventDispatcher.loadHangar()
@@ -64,7 +69,7 @@ class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def onPrbListReceived(self, prebattles):
+    def onLegacyListReceived(self, prebattles):
         if Waiting.isOpened('Flash'):
             Waiting.hide('Flash')
         listData = []
@@ -105,5 +110,9 @@ class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
         settings = event.ctx.get('settings', None)
         if settings:
             settings.setWaitingID('prebattle/create')
-            yield g_prbLoader.getDispatcher().create(settings)
+            yield self.prbDispatcher.create(settings)
         return
+
+    @process
+    def _doLeave(self, isExit=True):
+        yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit=isExit))

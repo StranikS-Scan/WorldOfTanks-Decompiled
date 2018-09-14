@@ -8,16 +8,15 @@ from gui.Scaleform.daapi.view.meta.CompanyMainWindowMeta import CompanyMainWindo
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.prb_control import formatters
-from gui.prb_control.context import prb_ctx
-from gui.prb_control.context.prb_ctx import LeavePrbCtx
-from gui.prb_control.prb_helpers import PrbListener
+from gui.prb_control.entities.base.legacy.listener import ILegacyListener
+from gui.prb_control.entities.company.legacy.ctx import CompanySettingsCtx, JoinCompanyCtx
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FocusEvent
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
-class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
+class CompanyMainWindow(CompanyMainWindowMeta, ILegacyListener):
 
     def __init__(self, ctx):
         super(CompanyMainWindow, self).__init__()
@@ -30,7 +29,7 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
 
         return
 
-    def onTeamStatesReceived(self, functional, team1State, team2State):
+    def onTeamStatesReceived(self, entity, team1State, team2State):
         self.as_enableWndCloseBtnS(not team1State.isInQueue())
 
     def getFlashAliases(self):
@@ -70,10 +69,7 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
     def showPrebattleSendInvitesWindow(self):
         if self.canSendInvite():
             self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'company',
-             'ctrlType': CTRL_ENTITY_TYPE.PREBATTLE}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def onWindowClose(self):
-        self.prbDispatcher.doLeaveAction(LeavePrbCtx(waitingID='prebattle/leave'))
+             'ctrlType': CTRL_ENTITY_TYPE.LEGACY}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onWindowMinimize(self):
         self.minimizing()
@@ -89,7 +85,7 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
         return self.__clientID
 
     def canSendInvite(self):
-        return self.prbFunctional.getPermissions().canSendInvite()
+        return self.prbEntity.getPermissions().canSendInvite()
 
     def onBrowseRallies(self):
         self._currentView = PREBATTLE_ALIASES.COMPANY_LIST_VIEW_PY
@@ -121,12 +117,12 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
         self.destroy()
 
     def __isCompanyPreBattleAlreadyExists(self):
-        return self.prbFunctional.getID() != 0
+        return self.prbEntity.getID() != 0
 
     @process
     def __requestToCreate(self):
-        yield self.prbDispatcher.create(prb_ctx.CompanySettingsCtx(waitingID='prebattle/create', division=PREBATTLE_COMPANY_DIVISION.CHAMPION))
+        yield self.prbDispatcher.create(CompanySettingsCtx(waitingID='prebattle/create', division=PREBATTLE_COMPANY_DIVISION.CHAMPION))
 
     @process
     def __requestToJoin(self, prbID):
-        yield self.prbDispatcher.join(prb_ctx.JoinCompanyCtx(prbID, waitingID='prebattle/join'))
+        yield self.prbDispatcher.join(JoinCompanyCtx(prbID, waitingID='prebattle/join'))

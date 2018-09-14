@@ -52,7 +52,7 @@ class FortSettingsDayoffPopover(FortViewHelper, FortSettingsDayoffPopoverMeta):
         result = yield self.fortProvider.sendRequest(OffDayCtx(offDayUTC, waitingID='fort/settings'))
         if result:
             if offDay == NOT_ACTIVATED:
-                SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET_NOOFFDAY, type=SystemMessages.SM_TYPE.Warning)
+                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET_NOOFFDAY, type=SystemMessages.SM_TYPE.Warning)
             else:
                 dayOffString = i18n.makeString(MENU.datetime_weekdays_full(str(offDay + 1)))
-                SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET_OFFDAY, offDay=dayOffString, type=SystemMessages.SM_TYPE.Warning)
+                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET_OFFDAY, offDay=dayOffString, type=SystemMessages.SM_TYPE.Warning)

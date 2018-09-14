@@ -2,20 +2,21 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/CompanyListView.py
 import BigWorld
 from adisp import process
-from shared_utils import safeCancelCallback
 from constants import PREBATTLE_TYPE
-from gui.prb_control.prb_helpers import PrbListener
-from gui.shared import events, EVENT_BUS_SCOPE, rq_cooldown
 from gui.Scaleform.daapi.view.lobby.prb_windows import companies_dps
 from gui.Scaleform.daapi.view.meta.CompanyListMeta import CompanyListMeta
-from gui.prb_control.context import prb_ctx
+from gui.prb_control.entities.base.legacy.ctx import GetLegacyRosterCtx
+from gui.prb_control.entities.base.legacy.listener import ILegacyListener
+from gui.prb_control.entities.company.legacy.ctx import CompanySettingsCtx, JoinCompanyCtx, RequestCompaniesCtx
 from gui.prb_control.settings import REQUEST_TYPE
+from gui.shared import events, EVENT_BUS_SCOPE, rq_cooldown
 from messenger.ext import channel_num_gen
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
+from shared_utils import safeCancelCallback
 
-class CompanyListView(CompanyListMeta, PrbListener):
+class CompanyListView(CompanyListMeta, ILegacyListener):
 
     def __init__(self):
         super(CompanyListView, self).__init__(self.proto.messages.getCompanyRoomName())
@@ -36,11 +37,11 @@ class CompanyListView(CompanyListMeta, PrbListener):
 
     @process
     def createCompany(self):
-        yield self.prbDispatcher.create(prb_ctx.CompanySettingsCtx(waitingID='prebattle/create'))
+        yield self.prbDispatcher.create(CompanySettingsCtx(waitingID='prebattle/create'))
 
     @process
     def joinCompany(self, prbID):
-        yield self.prbDispatcher.join(prb_ctx.JoinCompanyCtx(prbID, waitingID='prebattle/join'))
+        yield self.prbDispatcher.join(JoinCompanyCtx(prbID, waitingID='prebattle/join'))
 
     def refreshCompaniesList(self, owner, isNotInBattle, division):
         self.__requestCompaniesList(isNotInBattle, division, owner)
@@ -54,14 +55,14 @@ class CompanyListView(CompanyListMeta, PrbListener):
     def getClientID(self):
         return channel_num_gen.getClientID4LazyChannel(self.proto.messages.getCompanyRoomName())
 
-    def onPrbListReceived(self, prebattles):
+    def onLegacyListReceived(self, prebattles):
         self.__proxy.as_hideWaitingS()
         if self.__listDP is not None:
             self.__listDP.buildList(prebattles)
             self.__listDP.refresh()
         return
 
-    def onPrbRosterReceived(self, prbID, roster):
+    def onLegacyRosterReceived(self, prbID, roster):
         if self.__listDP is not None:
             idx = self.__listDP.setPlayers(prbID, roster)
             self.__listDP.refresh()
@@ -89,7 +90,7 @@ class CompanyListView(CompanyListMeta, PrbListener):
         return
 
     def __requestCompaniesList(self, isNotInBattle=False, division=0, owner=''):
-        ctx = prb_ctx.RequestCompaniesCtx(isNotInBattle, division, owner)
+        ctx = RequestCompaniesCtx(isNotInBattle, division, owner)
 
         @process
         def _rq():
@@ -104,7 +105,7 @@ class CompanyListView(CompanyListMeta, PrbListener):
 
     @process
     def __requestRoster(self, prbID):
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.GetPrbRosterCtx(prbID, PREBATTLE_TYPE.COMPANY))
+        yield self.prbDispatcher.sendPrbRequest(GetLegacyRosterCtx(prbID, PREBATTLE_TYPE.COMPANY))
 
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.PREBATTLES_LIST:

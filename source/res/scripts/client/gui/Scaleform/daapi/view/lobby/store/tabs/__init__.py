@@ -2,22 +2,22 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/tabs/__init__.py
 import constants
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control import getVehicleComparisonBasketCtrl
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.shared import g_itemsCache
+from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import ZERO_MONEY
-from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO
+from gui.shared.utils import CLIP_ICON_PATH, HYDRAULIC_ICON_PATH, EXTRA_MODULE_INFO
+from helpers import i18n, time_utils, dependency
 from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES
-from gui.shared.formatters import text_styles, icons
-from helpers import i18n, time_utils
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 def _getBtnVehCompareData(vehicle):
-    comparisonBasket = getVehicleComparisonBasketCtrl()
+    comparisonBasket = dependency.instance(IVehicleComparisonBasket)
     state, tooltip = resolveStateTooltip(comparisonBasket, vehicle, enabledTooltip=VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, fullTooltip=VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
     return {'modeAvailable': comparisonBasket.isEnabled(),
      'btnEnabled': state,
@@ -232,6 +232,8 @@ class StoreModuleTab(StoreItemsTab):
         extraModuleInfo = None
         if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun():
             extraModuleInfo = CLIP_ICON_PATH
+        elif item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isHydraulicChassis():
+            extraModuleInfo = HYDRAULIC_ICON_PATH
         installedVehicles = item.getInstalledVehicles(invVehicles)
         return (extraModuleInfo, len(installedVehicles))
 

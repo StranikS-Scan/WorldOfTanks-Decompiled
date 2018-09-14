@@ -3,7 +3,7 @@
 import base64
 from urllib import quote_plus
 import constants
-from adisp import async
+from adisp import async, process
 from ConnectionManager import connectionManager
 from constants import TOKEN_TYPE
 from helpers import getClientLanguage
@@ -70,22 +70,6 @@ def getDatabaseID(args=None):
     return result
 
 
-def getTargetURL(args=None):
-    """
-    Gets target URL, that sets manual. Macros is $TARGET_URL.
-    trying to get target url from given args
-    or take it from stored attribute
-    @return: string containing quoted target URL.
-    """
-    if args:
-        result = args
-    else:
-        result = ''
-    if result:
-        result = quote_plus(result)
-    return result
-
-
 def getAuthRealm(args=None):
     return constants.AUTH_REALM
 
@@ -96,12 +80,11 @@ def getSyncMacroses():
      'ENCODED_LOGIN': getEncodedLogin,
      'QUOTED_LOGIN': getQuotedLogin,
      'DB_ID': getDatabaseID,
-     'AUTH_REALM': getAuthRealm,
-     'TARGET_URL': getTargetURL}
+     'AUTH_REALM': getAuthRealm}
 
 
 @async
-def getWgniToken(args, callback):
+def getWgniToken(proxy, args, callback):
     """
     Gets WGNI login token. Macros is $WGNI_TOKEN.
     @return: string containing WGNI token
@@ -121,8 +104,29 @@ def getWgniToken(args, callback):
     return
 
 
+@async
+@process
+def getTargetURL(proxy, args, callback):
+    """
+    Gets target URL, that sets manual. Macros is $TARGET_URL.
+    trying to get target url from given args
+    or take it from stored attribute
+    @return: string containing quoted target URL.
+    """
+    yield lambda callback: callback(True)
+    if args:
+        result = args
+    else:
+        result = ''
+    if result:
+        url = yield proxy.parse(result)
+        result = quote_plus(url)
+    callback(result)
+
+
 def getAsyncMacroses():
-    return {'WGNI_TOKEN': getWgniToken}
+    return {'WGNI_TOKEN': getWgniToken,
+     'TARGET_URL': getTargetURL}
 
 
 _tokenRqs = None

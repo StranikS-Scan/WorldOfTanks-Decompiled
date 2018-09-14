@@ -9,13 +9,14 @@ from gui.Scaleform.daapi.view.battle.fallout.battle_timer import FALLOUT_ENDING_
 from gui.Scaleform.daapi.view.logitech.LogitechMonitorMeta import LogitechMonitorBattleMonoScreenMeta, LogitechMonitorBattleColoredScreenMeta
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.controllers.debug_ctrl import IDebugPanel, DebugController
 from gui.battle_control.controllers.period_ctrl import ArenaPeriodController, ITimersBar
 from gui.shared.events import ComponentEvent
+from helpers import dependency
 from helpers import i18n
 from messenger.gui.Scaleform.legacy_entry import LegacyBattleEntry as MessengerBattleEntry
 from messenger.m_constants import MESSENGER_SCOPE
+from skeletons.gui.battle_session import IBattleSessionProvider
 _VIEW_CMDS = (CommandMapping.CMD_CHAT_SHORTCUT_ATTACK,
  CommandMapping.CMD_CHAT_SHORTCUT_BACKTOBASE,
  CommandMapping.CMD_CHAT_SHORTCUT_POSITIVE,
@@ -35,10 +36,11 @@ class _TimerPresenter(ITimersBar):
     """
     On-screen timer. Shared among colored/mono
     """
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, ui):
         super(_TimerPresenter, self).__init__()
-        arenaVisitor = g_sessionProvider.arenaVisitor
+        arenaVisitor = self.sessionProvider.arenaVisitor
         if arenaVisitor.gui.isFalloutBattle():
             self.__endingSoonTime = FALLOUT_ENDING_SOON_TIME
         else:
@@ -47,12 +49,12 @@ class _TimerPresenter(ITimersBar):
         self.__arenaPeriodCtrl = ArenaPeriodController()
 
     def start(self):
-        self.__arenaPeriodCtrl.startControl(weakref.proxy(g_sessionProvider.getCtx()), weakref.proxy(g_sessionProvider.arenaVisitor))
+        self.__arenaPeriodCtrl.startControl(weakref.proxy(self.sessionProvider.getCtx()), weakref.proxy(self.sessionProvider.arenaVisitor))
         self.__arenaPeriodCtrl.setViewComponents(weakref.proxy(self), weakref.proxy(self))
-        g_sessionProvider.addArenaCtrl(self.__arenaPeriodCtrl)
+        self.sessionProvider.addArenaCtrl(self.__arenaPeriodCtrl)
 
     def stop(self):
-        g_sessionProvider.removeArenaCtrl(self.__arenaPeriodCtrl)
+        self.sessionProvider.removeArenaCtrl(self.__arenaPeriodCtrl)
         self.__arenaPeriodCtrl.stopControl()
         self.__arenaPeriodCtrl.clearViewComponents()
 
@@ -81,7 +83,8 @@ class _TimerPresenter(ITimersBar):
 _FragsDisplayData = namedtuple('_FragsDisplayData', ('progress', 'allyFrags', 'enemyFrags'))
 
 def _makeFragsDisplayData(allyFrags, enemyFrags):
-    arenaDP = g_sessionProvider.getArenaDP()
+    sessionProvider = dependency.instance(IBattleSessionProvider)
+    arenaDP = sessionProvider.getArenaDP()
     vehsAlly = arenaDP.getAlliesVehiclesNumber()
     vehsEnemy = arenaDP.getEnemiesVehiclesNumber()
     if vehsAlly + vehsEnemy > 0:
@@ -167,6 +170,7 @@ class LogitechMonitorBattleMonoScreen(LogitechMonitorBattleMonoScreenMeta, _ITim
 
 
 class LogitechMonitorBattleColoredScreen(LogitechMonitorBattleColoredScreenMeta, IDebugPanel, _ITimerView, _IFragsView):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, frame):
         super(LogitechMonitorBattleColoredScreen, self).__init__(frame)
@@ -183,7 +187,7 @@ class LogitechMonitorBattleColoredScreen(LogitechMonitorBattleColoredScreenMeta,
         self._colorManager.populateUI(weakref.proxy(self._flashObject))
         self.__timerPresenter.start()
         self.__fragsPresenter.start()
-        vehStateCtrl = g_sessionProvider.shared.vehicleState
+        vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__isPostmortem = vehStateCtrl and vehStateCtrl.isInPostmortem
         if self.__isPostmortem:
             self.__onPostMortemSwitched()
@@ -201,7 +205,7 @@ class LogitechMonitorBattleColoredScreen(LogitechMonitorBattleColoredScreenMeta,
         self.__debugCtrl.clearViewComponents()
         self.__timerPresenter.stop()
         self.__fragsPresenter.stop()
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
         CommandMapping.g_instance.onMappingChanged -= self.setCommands
@@ -236,6 +240,6 @@ class LogitechMonitorBattleColoredScreen(LogitechMonitorBattleColoredScreenMeta,
         self.as_updateFrags(fragsDisplayData.progress, label)
 
     def __onPostMortemSwitched(self):
-        if not g_sessionProvider.getCtx().isPlayerObserver():
+        if not self.sessionProvider.getCtx().isPlayerObserver():
             self.__isPostmortem = True
             self.as_hideCommandMapping(True)

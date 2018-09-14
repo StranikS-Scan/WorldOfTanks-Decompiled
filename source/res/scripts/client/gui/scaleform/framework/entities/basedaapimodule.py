@@ -8,6 +8,7 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
     def __init__(self):
         super(BaseDAAPIModule, self).__init__()
         self.__isScriptSet = False
+        self.__isPyReloading = False
         self.__app = None
         return
 
@@ -16,7 +17,13 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
         return self.__app
 
     def setEnvironment(self, app):
+        """Sets some required environment for instance of DAAPIModule.
+        :param app: instance of application.
+        """
         self.__app = app
+
+    def setPyReloading(self, flag):
+        self.__isPyReloading = flag
 
     def _printOverrideError(self, methodName):
         LOG_ERROR('Method must be override!', methodName, self.__class__)
@@ -46,7 +53,7 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
         super(BaseDAAPIModule, self)._dispose()
         if self.flashObject is not None:
             try:
-                if self.__isScriptSet:
+                if self.__isScriptSet and not self.__isPyReloading:
                     self.as_disposeS()
             except:
                 LOG_ERROR('Error during %s flash disposing' % str(self))

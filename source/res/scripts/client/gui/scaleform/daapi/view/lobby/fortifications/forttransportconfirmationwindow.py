@@ -86,7 +86,7 @@ class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortV
             if result:
                 fromBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId())
                 toBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId(False))
-                SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_TRANSPORT, toBuilding=toBuild.userName, fromBuilding=fromBuild.userName, res=BigWorld.wg_getIntegralFormat(size), type=SystemMessages.SM_TYPE.Warning)
+                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_TRANSPORT, toBuilding=toBuild.userName, fromBuilding=fromBuild.userName, res=BigWorld.wg_getIntegralFormat(size), type=SystemMessages.SM_TYPE.Warning)
         else:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ERRORS_EVENT_COOLDOWN, type=SystemMessages.SM_TYPE.Error)
         self.__changeStateAndDestroy()

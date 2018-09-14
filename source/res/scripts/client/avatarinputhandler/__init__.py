@@ -3,6 +3,7 @@
 import functools
 import math
 from functools import partial
+from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
 import BattleReplay
 import DynamicCameras.ArcadeCamera
 import DynamicCameras.SniperCamera
@@ -16,24 +17,22 @@ import ResMgr
 import cameras
 import constants
 import control_modes
+from AvatarInputHandler import aih_global_binding, aih_constants, gun_marker_ctrl
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
+from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
+from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
 from Event import Event
-from avatar_helpers import aim_global_binding
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
 from debug_utils import *
 from gui import g_guiResetters, GUI_CTRL_MODE_FLAG
 from gui.app_loader import g_appLoader, settings
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
-from gui.battle_control.battle_constants import GUN_RELOADING_VALUE_TYPE
+from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from post_processing.post_effect_controllers import g_postProcessingEvents
-
-def _getAmmoGuiCtrl():
-    from gui.battle_control import g_sessionProvider
-    return g_sessionProvider.shared.ammo
-
-
+from skeletons.account_helpers.settings_core import ISettingsCore
+from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
 _INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 
 class _CTRL_TYPE():
@@ -42,7 +41,12 @@ class _CTRL_TYPE():
     DEVELOPMENT = 2
 
 
-_CTRL_MODE = aim_global_binding.CTRL_MODE_NAME
+_ShakeReason = aih_constants.ShakeReason
+_CTRL_MODE = aih_constants.CTRL_MODE_NAME
+_GUN_MARKER_TYPE = aih_constants.GUN_MARKER_TYPE
+_GUN_MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
+_BINDING_ID = aih_global_binding.BINDING_ID
+_CTRL_MODES = aih_constants.CTRL_MODES
 _CTRLS_FIRST = _CTRL_MODE.DEFAULT
 _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.STRATEGIC: ('StrategicControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
@@ -54,14 +58,6 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_
  _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.FALLOUT_DEATH: ('FalloutDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL)}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera, DynamicCameras.SniperCamera.SniperCamera, DynamicCameras.StrategicCamera.StrategicCamera)
-
-class ShakeReason():
-    OWN_SHOT = 0
-    OWN_SHOT_DELAYED = 1
-    HIT = 2
-    HIT_NO_DAMAGE = 3
-    SPLASH = 4
-
 
 class DynamicCameraSettings(object):
     settings = property(lambda self: self.__dynamic)
@@ -113,7 +109,7 @@ class DynamicCameraSettings(object):
         return ranges
 
 
-class AvatarInputHandler(CallbackDelayer):
+class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
     isSPG = property(lambda self: self.__isSPG)
@@ -121,10 +117,11 @@ class AvatarInputHandler(CallbackDelayer):
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
     isDetached = property(lambda self: self.__isDetached)
     isGuiVisible = property(lambda self: self.__isGUIVisible)
-    ctrlModeName = aim_global_binding.bind(aim_global_binding.BINDING_ID.CTRL_MODE_NAME)
-    __aimOffset = aim_global_binding.bind(aim_global_binding.BINDING_ID.AIM_OFFSET)
-    __gunMarkerPosition = aim_global_binding.bind(aim_global_binding.BINDING_ID.GUN_MARKER_POSITION)
+    isObserverFPV = property(lambda self: BigWorld.player().isObserver() and BigWorld.player().isObserverFPV)
+    __ctrlModeName = aih_global_binding.bindRW(_BINDING_ID.CTRL_MODE_NAME)
+    __aimOffset = aih_global_binding.bindRW(_BINDING_ID.AIM_OFFSET)
     _DYNAMIC_CAMERAS_ENABLED_KEY = 'global/dynamicCameraEnabled'
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     @staticmethod
     def enableDynamicCamera(enable, useHorizontalStabilizer=True):
@@ -145,15 +142,22 @@ class AvatarInputHandler(CallbackDelayer):
     def isSniperStabilized():
         return SniperAimingSystem.getStabilizerSettings()
 
+    @property
+    def ctrlModeName(self):
+        return self.__ctrlModeName
+
+    siegeModeControl = ComponentDescriptor()
+    siegeModeSoundNotifications = ComponentDescriptor()
+    steadyVehicleMatrixCalculator = ComponentDescriptor()
+
     def __init__(self):
         CallbackDelayer.__init__(self)
+        ComponentSystem.__init__(self)
         self.__alwaysShowAimKey = None
         self.__showMarkersKey = None
         sec = self._readCfg()
         self.onCameraChanged = Event()
         self.onPostmortemVehicleChanged = Event()
-        self.onSetReloading = Event()
-        self.onSetReloadingPercents = Event()
         self.__isArenaStarted = False
         self.__isStarted = False
         self.__targeting = _Targeting()
@@ -166,11 +170,24 @@ class AvatarInputHandler(CallbackDelayer):
         self.__isATSPG = False
         self.__setupCtrls(sec)
         self.__curCtrl = self.__ctrls[_CTRLS_FIRST]
-        self.ctrlModeName = _CTRLS_FIRST
+        self.__ctrlModeName = _CTRLS_FIRST
         self.__isDetached = False
         self.__waitObserverCallback = None
         self.__observerVehicle = None
+        self.__commands = []
         return
+
+    def __constructComponents(self):
+        player = BigWorld.player()
+        self.steadyVehicleMatrixCalculator = SteadyVehicleMatrixCalculator()
+        if player.vehicleTypeDescriptor.hasSiegeMode:
+            self.siegeModeControl = SiegeModeControl()
+            self.__commands.append(self.siegeModeControl)
+            self.siegeModeControl.onSiegeStateChanged += lambda *args: self.steadyVehicleMatrixCalculator.relinkSources()
+            self.siegeModeSoundNotifications = SiegeModeSoundNotifications()
+            self.siegeModeControl.onSiegeStateChanged += self.siegeModeSoundNotifications.onSiegeStateChanged
+            self.siegeModeControl.onRequestFail += self.__onRequestFail
+            self.siegeModeControl.onSiegeStateChanged += SiegeModeCameraShaker.shake
 
     def prerequisites(self):
         out = []
@@ -188,18 +205,25 @@ class AvatarInputHandler(CallbackDelayer):
             return BigWorld.player().handleKey(isDown, key, mods)
         elif not self.__isStarted or self.__isDetached:
             return False
+        for command in self.__commands:
+            if command.handleKeyEvent(isDown, key, mods, event):
+                return True
+
+        if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
+            if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
+                gui_event_dispatcher.toggleCrosshairVisibility()
+                return True
+            if self.__showMarkersKey is not None and key == self.__showMarkersKey and not self.__isGUIVisible:
+                gui_event_dispatcher.toggleMarkers2DVisibility()
+                return True
+            if key == Keys.KEY_F5 and constants.HAS_DEV_RESOURCES:
+                self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
+                return True
+        if key == Keys.KEY_SPACE and isDown and BigWorld.player().isObserver():
+            BigWorld.player().cell.switchObserverFPV(not BigWorld.player().isObserverFPV)
+            return True
         else:
-            if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
-                if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
-                    gui_event_dispatcher.toggleCrosshairVisibility()
-                    return True
-                if self.__showMarkersKey is not None and key == self.__showMarkersKey and not self.__isGUIVisible:
-                    gui_event_dispatcher.toggleMarkers2DVisibility()
-                    return True
-                if key == Keys.KEY_F5 and constants.HAS_DEV_RESOURCES:
-                    self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
-                    return True
-            return True if self.__curCtrl.handleKeyEvent(isDown, key, mods, event) else BigWorld.player().handleKey(isDown, key, mods)
+            return True if not self.isObserverFPV and self.__curCtrl.handleKeyEvent(isDown, key, mods, event) else BigWorld.player().handleKey(isDown, key, mods)
 
     def handleMouseEvent(self, dx, dy, dz):
         return False if not self.__isStarted or self.__isDetached else self.__curCtrl.handleMouseEvent(dx, dy, dz)
@@ -235,18 +259,24 @@ class AvatarInputHandler(CallbackDelayer):
             g_postProcessingEvents.onFocalPlaneChanged()
             return self.__curCtrl.getDesiredShotPoint()
 
-    def showGunMarker(self, flag):
-        self.__curCtrl.showGunMarker(flag)
+    def showGunMarker(self, isShown):
+        self.__curCtrl.setGunMarkerFlag(isShown, _GUN_MARKER_FLAG.CLIENT_MODE_ENABLED)
 
-    def showGunMarker2(self, flag):
-        self.__curCtrl.showGunMarker2(flag)
+    def showGunMarker2(self, isShown):
+        if not BattleReplay.isPlaying():
+            self.__curCtrl.setGunMarkerFlag(isShown, _GUN_MARKER_FLAG.SERVER_MODE_ENABLED)
+            if gun_marker_ctrl.useDefaultGunMarkers():
+                self.__curCtrl.setGunMarkerFlag(not isShown, _GUN_MARKER_FLAG.CLIENT_MODE_ENABLED)
+            replayCtrl = BattleReplay.g_replayCtrl
+            replayCtrl.setUseServerAim(isShown)
 
     def updateGunMarker(self, pos, dir, size, relaxTime, collData):
-        self.__gunMarkerPosition = (pos, relaxTime)
-        self.__curCtrl.updateGunMarker(pos, dir, size, relaxTime, collData)
+        """ Updates client's gun marker."""
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.CLIENT, pos, dir, size, relaxTime, collData)
 
     def updateGunMarker2(self, pos, dir, size, relaxTime, collData):
-        self.__curCtrl.updateGunMarker2(pos, dir, size, relaxTime, collData)
+        """ Updates server's gun marker."""
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.SERVER, pos, dir, size, relaxTime, collData)
 
     def setAimingMode(self, enable, mode):
         self.__curCtrl.setAimingMode(enable, mode)
@@ -274,6 +304,8 @@ class AvatarInputHandler(CallbackDelayer):
 
     def activatePostmortem(self, isRespawn):
         BigWorld.player().consistentMatrices.notifyPreBind(BigWorld.player())
+        if self.siegeModeSoundNotifications is not None:
+            self.siegeModeSoundNotifications = None
         if not isRespawn:
             try:
                 params = self.__curCtrl.postmortemCamParams
@@ -311,16 +343,12 @@ class AvatarInputHandler(CallbackDelayer):
 
         return
 
-    def reinitVehicleMatrix(self):
-        arcadeMode = self.__ctrls['arcade']
-        arcadeMode.camera.reinitMatrix()
-
     def deactivatePostmortem(self):
         self.onControlModeChanged('arcade')
         arcadeMode = self.__ctrls['arcade']
         arcadeMode.camera.setToVehicleDirection()
         self.__identifySPG()
-        self.setReloading(-1)
+        self.__constructComponents()
 
     def setKillerVehicleID(self, killerVehicleID):
         self.__killerVehicleID = killerVehicleID
@@ -331,13 +359,13 @@ class AvatarInputHandler(CallbackDelayer):
     def start(self):
         g_guiResetters.add(self.__onRecreateDevice)
         self.__identifySPG()
+        self.__constructComponents()
         for control in self.__ctrls.itervalues():
             control.create()
 
-        self.__addBattleCtrlListeners()
         if not self.__curCtrl.isManualBind():
             BigWorld.player().positionControl.bindToVehicle(True)
-        self.__curCtrl.enable(ctrlState=control_modes.dumpStateEmpty())
+        self.__curCtrl.enable()
         self.onCameraChanged('arcade')
         tmp = self.__curCtrl.getPreferredAutorotationMode()
         if tmp is not None:
@@ -353,8 +381,7 @@ class AvatarInputHandler(CallbackDelayer):
         self.__killerVehicleID = None
         arena = BigWorld.player().arena
         arena.onPeriodChange += self.__onArenaStarted
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged += self.__onVehicleChanged
         self.__onArenaStarted(arena.period)
         return
@@ -363,26 +390,29 @@ class AvatarInputHandler(CallbackDelayer):
         self.__isStarted = False
         import SoundGroups
         SoundGroups.g_instance.changePlayMode(1)
-        aim_global_binding.clear()
-        self.__removeBattleCtrlListeners()
+        aih_global_binding.clear()
         for control in self.__ctrls.itervalues():
             control.destroy()
 
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setPlayerVehicleID(0)
+        self.onCameraChanged.clear()
         self.onCameraChanged = None
+        self.onPostmortemVehicleChanged.clear()
+        self.onPostmortemVehicleChanged = None
         self.__targeting.enable(False)
         self.__killerVehicleID = None
         g_guiResetters.remove(self.__onRecreateDevice)
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStarted
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onVehicleChanged
+        ComponentSystem.destroy(self)
         CallbackDelayer.destroy(self)
         return
 
     def __onVehicleChanged(self, isStatic):
+        self.steadyVehicleMatrixCalculator.relinkSources()
         if self.__waitObserverCallback and self.__observerVehicle:
             player = BigWorld.player()
             ownVehicle = BigWorld.entity(player.playerVehicleID)
@@ -392,39 +422,50 @@ class AvatarInputHandler(CallbackDelayer):
                 self.__waitObserverCallback = None
         return
 
+    def setObservedVehicle(self, vehicleID):
+        for control in self.__ctrls.itervalues():
+            control.setObservedVehicle(vehicleID)
+
     def onControlModeChanged(self, eMode, **args):
-        if not self.__isArenaStarted and eMode != 'postmortem':
+        self.steadyVehicleMatrixCalculator.relinkSources()
+        if not self.__isArenaStarted and eMode != _CTRL_MODE.POSTMORTEM:
             return
         else:
             player = BigWorld.player()
-            isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags
+            isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags if player is not None else True
             if self.__waitObserverCallback:
                 self.__waitObserverCallback = None
-            if isObserverMode and eMode == 'postmortem':
+            if isObserverMode and eMode == _CTRL_MODE.POSTMORTEM:
                 player = BigWorld.player()
                 ownVehicle = BigWorld.entity(player.playerVehicleID)
                 vehicle = player.getVehicleAttached()
-                if (vehicle == ownVehicle or vehicle is None) and self.__observerVehicle is not None:
+                if (vehicle is ownVehicle or vehicle is None) and self.__observerVehicle is not None:
                     self.__waitObserverCallback = partial(self.onControlModeChanged, eMode, **args)
                     player.positionControl.followCamera(False)
                     player.positionControl.bindToVehicle(True, self.__observerVehicle)
                     return
-            if isObserverMode and self.ctrlModeName == _CTRL_MODE.POSTMORTEM:
+            if isObserverMode and self.__ctrlModeName == _CTRL_MODE.POSTMORTEM:
                 player = BigWorld.player()
                 self.__observerVehicle = player.vehicle.id if player.vehicle else None
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setControlMode(eMode)
-            ctrlState = self.__curCtrl.dumpState()
             self.__curCtrl.disable()
             prevCtrl = self.__curCtrl
             self.__curCtrl = self.__ctrls[eMode]
-            self.ctrlModeName = eMode
+            self.__ctrlModeName = eMode
             if player is not None:
                 if not prevCtrl.isManualBind() and self.__curCtrl.isManualBind():
-                    player.positionControl.bindToVehicle(False)
+                    if isObserverMode:
+                        player.positionControl.bindToVehicle(False, -1)
+                    else:
+                        player.positionControl.bindToVehicle(False)
                 if prevCtrl.isManualBind() and not self.__curCtrl.isManualBind():
-                    player.positionControl.bindToVehicle(True)
+                    if isObserverMode:
+                        player.positionControl.followCamera(False)
+                        player.positionControl.bindToVehicle(True, self.__observerVehicle)
+                    else:
+                        player.positionControl.bindToVehicle(True)
             if player is not None:
                 newAutoRotationMode = self.__curCtrl.getPreferredAutorotationMode()
                 if newAutoRotationMode is not None:
@@ -444,13 +485,27 @@ class AvatarInputHandler(CallbackDelayer):
             self.__curCtrl.setGUIVisible(self.__isGUIVisible)
             vehicle = player.getVehicleAttached()
             if isObserverMode:
-                self.__curCtrl.enable(ctrlState=ctrlState, vehicleID=self.__observerVehicle, **args)
+                self.__curCtrl.enable(vehicleID=self.__observerVehicle, **args)
             else:
-                self.__curCtrl.enable(ctrlState=ctrlState, **args)
+                self.__curCtrl.enable(**args)
             isReplayPlaying = replayCtrl.isPlaying
-            self.onCameraChanged(eMode, vehicle.id if isObserverMode or isReplayPlaying else None)
+            vehicleID = self.__observerVehicle if isObserverMode else (vehicle.id if isReplayPlaying else None)
+            self.onCameraChanged(eMode, vehicleID)
             if not isReplayPlaying:
                 self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
+            return
+
+    def onVehicleControlModeChanged(self, eMode):
+        LOG_DEBUG('onVehicleControlModeChanged: ', eMode, self.isObserverFPV)
+        if not self.isObserverFPV:
+            self.onControlModeChanged(_CTRL_MODE.POSTMORTEM)
+            return
+        else:
+            if eMode is None:
+                eMode = _CTRL_MODES[BigWorld.player().observerFPVControlMode]
+            targetPos = self.getDesiredShotPoint() if self.getDesiredShotPoint() is not None else Math.Vector3(0, 0, 0)
+            LOG_DEBUG('onVehicleControlModeChanged: ', eMode, targetPos)
+            self.onControlModeChanged(eMode, preferredPos=targetPos, aimingMode=0, saveZoom=False, saveDist=True, equipmentID=None, curVehicleID=BigWorld.player().getVehicleAttached(), isRemoteCamera=True)
             return
 
     def getTargeting(self):
@@ -466,15 +521,9 @@ class AvatarInputHandler(CallbackDelayer):
     def onMinimapClicked(self, worldPos):
         self.__curCtrl.onMinimapClicked(worldPos)
 
-    def setReloading(self, duration, startTime=None, baseTime=None):
-        self.onSetReloading(duration, startTime, baseTime)
-
-    def setReloadingInPercent(self, percent):
-        self.onSetReloadingPercents(percent)
-
     def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shakeReason):
-        if shakeReason == ShakeReason.OWN_SHOT_DELAYED:
-            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, impulsePosition, impulseDir, caliber, ShakeReason.OWN_SHOT)
+        if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
+            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, impulsePosition, impulseDir, caliber, _ShakeReason.OWN_SHOT)
             delayTime = self.__dynamicCameraSettings.settings['ownShotImpulseDelay']
             self.delayCallback(delayTime, shakeFuncBound)
             return
@@ -494,7 +543,7 @@ class AvatarInputHandler(CallbackDelayer):
                 vehicleSensitivity *= avatarVehicleTypeDesc.hull['swinging']['sensitivityToImpulse']
             impulseReason = None
             isDistant = False
-            if shakeReason == ShakeReason.OWN_SHOT:
+            if shakeReason == _ShakeReason.OWN_SHOT:
                 if vehicle is avatarVehicle:
                     impulseReason = cameras.ImpulseReason.MY_SHOT
                     isDistant = False
@@ -502,8 +551,8 @@ class AvatarInputHandler(CallbackDelayer):
                     impulseReason = cameras.ImpulseReason.OTHER_SHOT
                     isDistant = True
             elif vehicle is avatarVehicle:
-                if shakeReason == ShakeReason.HIT or shakeReason == ShakeReason.HIT_NO_DAMAGE:
-                    impulseValue *= 1.0 if shakeReason == ShakeReason.HIT else self.__dynamicCameraSettings.settings['zeroDamageHitSensitivity']
+                if shakeReason == _ShakeReason.HIT or shakeReason == _ShakeReason.HIT_NO_DAMAGE:
+                    impulseValue *= 1.0 if shakeReason == _ShakeReason.HIT else self.__dynamicCameraSettings.settings['zeroDamageHitSensitivity']
                     impulseReason = cameras.ImpulseReason.ME_HIT
                     isDistant = False
                 else:
@@ -583,6 +632,17 @@ class AvatarInputHandler(CallbackDelayer):
             camera.applyDistantImpulse(position, impulseValue, cameras.ImpulseReason.PROJECTILE_HIT)
             return
 
+    def onSpecificImpulse(self, position, impulse, specificCtrl=None):
+        if specificCtrl is None:
+            camera = getattr(self.ctrl, 'camera', None)
+        else:
+            camera = self.ctrls[specificCtrl].camera
+        if camera is None:
+            return
+        else:
+            camera.applyImpulse(position, impulse, cameras.ImpulseReason.MY_SHOT)
+            return
+
     def __adjustImpulse(self, impulseDir, impulseValue, camera, impulsePosition, vehicleSensitivity, impulseReason):
         if impulseReason in camera.getReasonsAffectCameraDirectly():
             dirToCamera = camera.camera.position - impulsePosition
@@ -635,7 +695,7 @@ class AvatarInputHandler(CallbackDelayer):
                             self.__ctrls[name] = classType(section[desc[1]] if desc[1] else None, self)
                             break
 
-            except:
+            except Exception as e:
                 LOG_DEBUG('Error while setting ctrls', name, desc, constants.HAS_DEV_RESOURCES)
                 LOG_CURRENT_EXCEPTION()
 
@@ -651,44 +711,25 @@ class AvatarInputHandler(CallbackDelayer):
         return
 
     def __onArenaStarted(self, period, *args):
-        self.__isArenaStarted = True if period == ARENA_PERIOD.BATTLE else False
-        show = self.__isGUIVisible and self.__isArenaStarted
-        self.__curCtrl.showGunMarker2(show and control_modes.useServerAim())
-        if constants.HAS_DEV_RESOURCES:
-            showArcadeAim = show
-        else:
-            showArcadeAim = show and not control_modes.useServerAim()
-        self.__curCtrl.showGunMarker(showArcadeAim)
+        self.__isArenaStarted = period == ARENA_PERIOD.BATTLE
+        self.__curCtrl.setGunMarkerFlag(self.__isArenaStarted, _GUN_MARKER_FLAG.CONTROL_ENABLED)
+        self.showGunMarker2(gun_marker_ctrl.useServerGunMarker())
+        self.showGunMarker(gun_marker_ctrl.useClientGunMarker())
 
     def __onRecreateDevice(self):
         self.__curCtrl.onRecreateDevice()
         self.__targeting.onRecreateDevice()
 
     def __onSettingsChanged(self, diff):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         if 'dynamicCamera' in diff or 'horStabilizationSnp' in diff:
-            dynamicCamera = g_settingsCore.getSetting('dynamicCamera')
-            horStabilizationSnp = g_settingsCore.getSetting('horStabilizationSnp')
+            dynamicCamera = self.settingsCore.getSetting('dynamicCamera')
+            horStabilizationSnp = self.settingsCore.getSetting('horStabilizationSnp')
             self.enableDynamicCamera(dynamicCamera, horStabilizationSnp)
 
-    def __addBattleCtrlListeners(self):
-        ammoCtrl = _getAmmoGuiCtrl()
-        if ammoCtrl is not None:
-            ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
-        return
-
-    def __removeBattleCtrlListeners(self):
-        ammoCtrl = _getAmmoGuiCtrl()
-        if ammoCtrl is not None:
-            ammoCtrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
-        return
-
-    def __onGunReloadTimeSet(self, _, state):
-        valueType = state.getValueType()
-        if valueType == GUN_RELOADING_VALUE_TYPE.TIME:
-            self.setReloading(state.getActualValue(), None, state.getBaseValue())
-        elif valueType == GUN_RELOADING_VALUE_TYPE.PERCENT:
-            self.setReloadingInPercent(state.getActualValue())
+    def __onRequestFail(self):
+        player = BigWorld.player()
+        if player is not None:
+            player.showVehicleError('cantSwitchEngineDestroyed')
         return
 
 
@@ -734,7 +775,9 @@ class _VertScreenshotCamera(object):
 
     def __init__(self):
         self.__isEnabled = False
-        self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Render/Shadows/qualityPreset', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Client Settings/std fog/enabled', 'Client Settings/Script tick')
+        self.__nearPlane = 0.0
+        self.__farPlane = 0.0
+        self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Render/Shadows/qualityPreset', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Visibility/Sky', 'Client Settings/Script tick')
 
     def destroy(self):
         self.enable(False)
@@ -751,6 +794,9 @@ class _VertScreenshotCamera(object):
                 BigWorld.setWatcher(k, v)
 
             FovExtended.instance().enabled = True
+            BigWorld.projection().nearPlane = self.__nearPlane
+            BigWorld.projection().farPlane = self.__farPlane
+            BigWorld.setWatcher('Render/Fog/enabled', True)
             LOG_DEBUG('Vertical screenshot camera is disabled')
             return
         self.__isEnabled = True
@@ -761,11 +807,7 @@ class _VertScreenshotCamera(object):
         halfSizesXZ = Math.Vector2(0.5 * (arenaBB[2] - arenaBB[0]), 0.5 * (arenaBB[3] - arenaBB[1]))
         camFov = math.radians(15.0)
         camPos = Math.Vector3(centerXZ.x, 0, centerXZ.z)
-        aspectRatio = 1.0
-        if not BigWorld.isVideoWindowed():
-            aspectRatio = BigWorld.getFullScreenAspectRatio()
-        else:
-            aspectRatio = BigWorld.screenWidth() / BigWorld.screenHeight()
+        aspectRatio = BigWorld.getAspectRatio()
         camPos.y = max(halfSizesXZ.x / math.sin(0.5 * camFov * aspectRatio), halfSizesXZ.y / math.sin(0.5 * camFov))
         camMatr = Math.Matrix()
         camMatr.setRotateYPR(Math.Vector3(0.0, math.pi * 0.5, 0.0))
@@ -784,12 +826,12 @@ class _VertScreenshotCamera(object):
             except TypeError:
                 LOG_WARNING('Failed to get/set watcher', name)
 
-        BigWorld.setWatcher('Client Settings/std fog/enabled', False)
+        self.__nearPlane = BigWorld.projection().nearPlane
+        self.__farPlane = BigWorld.projection().farPlane
+        BigWorld.setWatcher('Render/Fog/enabled', False)
         BigWorld.projection().fov = camFov
-        BigWorld.setWatcher('Render/Fov', camFov)
-        BigWorld.setWatcher('Render/Near Plane', max(0.1, camPos.y - 1000.0))
-        BigWorld.setWatcher('Render/Far Plane', camPos.y + 1000.0)
-        BigWorld.setWatcher('Render/Objects Far Plane/Enabled', False)
+        BigWorld.projection().nearPlane = max(0.1, camPos.y - 1000.0)
+        BigWorld.projection().farPlane = camPos.y + 1000
         BigWorld.setWatcher('Render/Shadows/qualityPreset', 7)
         BigWorld.setWatcher('Client Settings/Script tick', False)
         LOG_DEBUG('Vertical screenshot camera is enabled')

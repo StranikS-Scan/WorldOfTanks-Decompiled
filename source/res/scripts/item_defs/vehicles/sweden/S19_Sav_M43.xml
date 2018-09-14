@@ -1,0 +1,875 @@
+<S19_Sav_M43.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	43	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.237	</moving>
+    <still>	0.394	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.591	</firePenalty>
+  </invisibility>
+  <repairCost>	5.5	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	8	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	13	</armor_9>
+      <armor_10>	20	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7831	</weight>
+    <maxHealth>	216	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <models>
+      <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/sweden/S19_Sav_M43/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.32	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.586173 1.14516	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.00266163 0.194547 1.94208	</rayStart>
+        <rayEnd>	0.00266163 0.0152503 1.85348	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.219	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.10117 0.456124 0.290974	</rayStart>
+        <rayEnd>	-0.906954 0.408429 0.292628	</rayEnd>
+        <rayUp>	0.000109072 0.999856 -0.0169485	</rayUp>
+        <size>	0.558	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.01474 0.4349 0.29171	</rayStart>
+        <rayEnd>	0.993379 0.429653 0.291892	</rayEnd>
+        <rayUp>	-0.000147564 0.999425 -0.0338926	</rayUp>
+        <size>	0.558	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	-1.01906 0.797189 0.37544	</rayStart>
+        <rayEnd>	-0.825079 0.748543 0.377039	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.219	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.01906 0.797189 0.37544	</rayStart>
+        <rayEnd>	0.825079 0.748543 0.377039	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.219	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/sweden/S19_Sav_M43/Sav_M43_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.6 2.6 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_S19_Sav_M43>
+      <userString>	#sweden_vehicles:Chassis_S19_Sav_M43	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1850	</price>
+      <unlocks>
+        <chassis>	Chassis_S19_Sav_M43_2	  <cost>	1040	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3200	</weight>
+      <maxLoad>	12500	</maxLoad>
+      <terrainResistance>	1.3 1.7 2.5	</terrainResistance>
+      <brakeForce>	12000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/sweden/S19_Sav_M43/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <size>	0.45 0.35	</size>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.5	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.337729	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0949911	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.264027	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.375	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.337729	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0949911	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.264027	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.375	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.886198 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.882833 1.33768	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.053160 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.751630	</row2>
+            <row3>	0.000000 0.000000 -0.000002	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0731959	</minOffset>
+          <maxOffset>	0.0731959	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0686274	</minOffset>
+          <maxOffset>	0.0735294	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/sweden/S19_Sav_M43/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/sweden/S19_Sav_M43/track/segment.model	</segmentModelRight>
+        <left>	vehicles/sweden/S19_Sav_M43/track/left.track	</left>
+        <right>	vehicles/sweden/S19_Sav_M43/track/right.track	</right>
+        <segmentLength>	0.1	</segmentLength>
+        <segmentOffset>	0.012	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0162	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.035	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.013	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.035	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
+    </Chassis_S19_Sav_M43>
+    <Chassis_S19_Sav_M43_2>
+      <userString>	#sweden_vehicles:Chassis_S19_Sav_M43_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4400	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3200	</weight>
+      <maxLoad>	14000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <brakeForce>	12000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/sweden/S19_Sav_M43/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_a23	</textureSet>
+        <size>	0.45 0.35	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.5	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.337729	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0949911	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.264027	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.375	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.337729	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0949911	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.264027	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.375	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.886198 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.882833 1.33768	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.020820 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.743870	</row2>
+            <row3>	0.000000 0.000000 -0.000006	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0731959	</minOffset>
+          <maxOffset>	0.0731959	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0686274	</minOffset>
+          <maxOffset>	0.0735294	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/sweden/S19_Sav_M43/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/sweden/S19_Sav_M43/track/segment.model	</segmentModelRight>
+        <left>	vehicles/sweden/S19_Sav_M43/track/left.track	</left>
+        <right>	vehicles/sweden/S19_Sav_M43/track/right.track	</right>
+        <segmentLength>	0.1	</segmentLength>
+        <segmentOffset>	0.012	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0162	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.013	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.035	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.026	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.035	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+      </trackNodes>
+    </Chassis_S19_Sav_M43_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_S19_Sav_M43>
+      <userString>	#sweden_vehicles:Turret_1_S19_Sav_M43	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+      </armor>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+      <weight>	100	</weight>
+      <maxHealth>	54	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_kan_m_02>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	_75mm_kan_m_41_ikv_L_50_neglkrut	  <cost>	2250	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	50	</armor_1>
+            <armor_4>	0	</armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-20 15	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 14 1 14	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <reloadTime>	4.2	</reloadTime>
+          <models>
+            <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/sweden/S19_Sav_M43/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_75mm_kan_m_02>
+        <_75mm_kan_m_41_ikv_L_50_neglkrut>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	_105mm_kan_m_44_sav	  <cost>	3800	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	50	</armor_1>
+            <armor_4>	0	</armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-20 15	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 14 1 14	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	4.4	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/sweden/S19_Sav_M43/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+        </_75mm_kan_m_41_ikv_L_50_neglkrut>
+        <_105mm_kan_m_44_sav>	shared	  <maxAmmo>	41	</maxAmmo>
+          <unlocks>
+            <vehicle>	S14_Ikv_103	  <cost>	10830	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	50	</armor_1>
+            <armor_4>	0	</armor_4>
+            <gun>	30	</gun>
+          </armor>
+          <turretYawLimits>	-20 15	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 14 1 14	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	S14_Ikv_103	  <cost>	27350	</cost>
+            </vehicle>
+          </unlocks>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.56	</shotDispersionRadius>
+          <reloadTime>	9.8	</reloadTime>
+          <aimingTime>	3.5	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.22	</turretRotation>
+            <afterShot>	5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/sweden/S19_Sav_M43/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+        </_105mm_kan_m_44_sav>
+      </guns>
+      <models>
+        <undamaged>	vehicles/sweden/S19_Sav_M43/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/sweden/S19_Sav_M43/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/sweden/S19_Sav_M43/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/sweden/S19_Sav_M43/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/sweden/S19_Sav_M43/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.000000 -0.012335	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.600 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </Turret_1_S19_Sav_M43>
+  </turrets0>
+  <engines>
+    <Scania_Vabis_1664>	shared	  <unlocks>
+        <engine>	Scania_Vabis_L_603	  <cost>	160	</cost>
+        </engine>
+      </unlocks>
+    </Scania_Vabis_1664>
+    <Scania_Vabis_L_603>	shared	</Scania_Vabis_L_603>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <_25_W_Sv_1_m_39>	shared	  <unlocks>
+        <radio>	_25_W_Sv_1_m_39_42	  <cost>	350	</cost>
+        </radio>
+      </unlocks>
+    </_25_W_Sv_1_m_39>
+    <_25_W_Sv_1_m_39_42>	shared	  <unlocks>
+        <radio>	Ra_100	  <cost>	3200	</cost>
+        </radio>
+      </unlocks>
+    </_25_W_Sv_1_m_39_42>
+    <Ra_100>	shared	</Ra_100>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_S19_Sav_M43>
+        <alpha>	0.171063	</alpha>
+      </Chassis_S19_Sav_M43>
+      <Chassis_S19_Sav_M43_2>
+        <alpha>	0.130813	</alpha>
+      </Chassis_S19_Sav_M43_2>
+    </chassis>
+    <engines>
+      <Scania_Vabis_1664>
+        <bravo>	37.53347	</bravo>
+      </Scania_Vabis_1664>
+      <Scania_Vabis_L_603>
+        <bravo>	42.81989	</bravo>
+      </Scania_Vabis_L_603>
+    </engines>
+  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Scania_Vabis_1664>
+          <smplEnginePower>	150	</smplEnginePower>
+        </Scania_Vabis_1664>
+        <Scania_Vabis_L_603>
+          <smplEnginePower>	170	</smplEnginePower>
+        </Scania_Vabis_L_603>
+      </engines>
+      <chassis>
+        <Chassis_S19_Sav_M43>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.171063	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.171063	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.171063	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.171063	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.171063	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.171063	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_S19_Sav_M43>
+        <Chassis_S19_Sav_M43_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.130813	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.130813	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.130813	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.130813	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.130813	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.130813	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_S19_Sav_M43_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	swedish_flag	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</S19_Sav_M43.xml>

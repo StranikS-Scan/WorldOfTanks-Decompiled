@@ -1492,6 +1492,7 @@ def setupTracksFashion(fashion, vDesc, isCrashedTrack=False):
     trackParams = vDesc.chassis['trackParams']
     swingingCfg = vDesc.hull['swinging']
     splineDesc = vDesc.chassis['splineDesc']
+    leveredSuspensionCfg = vDesc.chassis['leveredSuspension']
     pp = tuple((p * m for p, m in zip(swingingCfg['pitchParams'], _PITCH_SWINGING_MODIFIERS)))
     splineLod = 9999
     if splineDesc is not None:
@@ -1508,12 +1509,13 @@ def setupTracksFashion(fashion, vDesc, isCrashedTrack=False):
         for wheel in wheelsCfg['wheels']:
             fashion.addWheel(wheel[0], wheel[2], wheel[1], wheel[3], wheel[4])
 
-        for groundGroup in groundNodesCfg['groups']:
-            nodes = _createWheelsListByTemplate(groundGroup[3], groundGroup[1], groundGroup[2])
-            retValue = not fashion.addGroundNodesGroup(nodes, groundGroup[0], groundGroup[4], groundGroup[5])
+        if leveredSuspensionCfg is None:
+            for groundGroup in groundNodesCfg['groups']:
+                nodes = _createWheelsListByTemplate(groundGroup[3], groundGroup[1], groundGroup[2])
+                retValue = not fashion.addGroundNodesGroup(nodes, groundGroup[0], groundGroup[4], groundGroup[5])
 
-        for groundNode in groundNodesCfg['nodes']:
-            retValue = not fashion.addGroundNode(groundNode[0], groundNode[1], groundNode[2], groundNode[3])
+            for groundNode in groundNodesCfg['nodes']:
+                retValue = not fashion.addGroundNode(groundNode[0], groundNode[1], groundNode[2], groundNode[3])
 
         for suspensionArm in suspensionArmsCfg:
             if suspensionArm[3] is not None and suspensionArm[4] is not None:

@@ -2,15 +2,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingSettingsWindow.py
 import ArenaType
 from account_helpers import gameplay_ctx
-from gui.Scaleform.daapi.view.lobby.trainings import formatters
-from gui.prb_control.context.prb_ctx import TrainingSettingsCtx
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
-from gui.prb_control.prb_helpers import prbFunctionalProperty
+from gui.prb_control import prbEntityProperty
+from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx
 from gui.prb_control.prb_getters import getTrainingBattleRoundLimits
-from helpers import i18n
-from gui.shared import g_itemsCache
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared import g_itemsCache
+from helpers import i18n
 
 class ArenasCache(object):
 
@@ -48,8 +48,8 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         self.__isCreateRequest = ctx.get('isCreateRequest', False)
         self.__arenasCache = ArenasCache()
 
-    @prbFunctionalProperty
-    def prbFunctional(self):
+    @prbEntityProperty
+    def prbEntity(self):
         return None
 
     def onWindowClose(self):
@@ -65,7 +65,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
     def getInfo(self):
         settings = TrainingSettingsCtx()
         if not self.__isCreateRequest:
-            settings = settings.fetch(self.prbFunctional.getSettings())
+            settings = settings.fetch(self.prbEntity.getSettings())
         if g_itemsCache.isSynced():
             accountAttrs = g_itemsCache.items.stats.attributes
         else:
@@ -81,7 +81,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
          'canChangeArena': True,
          'maxBattleTime': maxBound / 60}
         if not self.__isCreateRequest:
-            permissions = self.prbFunctional.getPermissions()
+            permissions = self.prbEntity.getPermissions()
             info['canMakeOpenedClosed'] = permissions.canMakeOpenedClosed()
             info['canChangeComment'] = permissions.canChangeComment()
             info['canChangeArena'] = permissions.canChangeArena()

@@ -80,5 +80,5 @@ class FortDisableDefencePeriodWindow(FortDisableDefencePeriodWindowMeta, FortVie
         result = yield self.fortProvider.sendRequest(DefencePeriodCtx(waitingID='fort/settings'))
         if result:
             g_fortSoundController.playDefencePeriodDeactivated()
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURDEACTIVATED, type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURDEACTIVATED, type=SystemMessages.SM_TYPE.Warning)
         self.destroy()

@@ -4,15 +4,16 @@ from gui.Scaleform.daapi.view.lobby.user_cm_handlers import USER
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import UserContextMenuInfo
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info.settings import INVITATION_DELIVERY_STATUS as _D_STATUS
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.denunciator import DENUNCIATIONS, BattleDenunciator, DENUNCIATIONS_MAP
+from helpers import dependency
 from helpers import i18n
 from constants import DENUNCIATIONS_PER_DAY
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class DYN_SQUAD_OPTION_ID(object):
     SENT_INVITATION = 'sendInvitationToSquad'
@@ -55,13 +56,15 @@ _OPTION_ICONS = {USER.ADD_TO_FRIENDS: 'addToFriends',
  DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation'}
 
 class PlayerContextMenuInfo(UserContextMenuInfo):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, databaseID, userName):
         super(PlayerContextMenuInfo, self).__init__(databaseID, userName)
-        self.isAlly = g_sessionProvider.getCtx().isAlly(accID=databaseID)
+        self.isAlly = self.sessionProvider.getCtx().isAlly(accID=databaseID)
 
 
 class PlayerMenuHandler(AbstractContextMenuHandler):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, cmProxy, ctx=None):
         self.__denunciator = BattleDenunciator()
@@ -83,7 +86,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     @property
     def arenaGuiType(self):
-        return g_sessionProvider.arenaVisitor.gui
+        return self.sessionProvider.arenaVisitor.gui
 
     def fini(self):
         g_eventBus.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
@@ -128,16 +131,16 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         self.__denunciator.makeAppeal(self.__userInfo.databaseID, self.__userInfo.userName, DENUNCIATIONS.BOT, self.__arenaUniqueID)
 
     def sendInvitation(self):
-        g_sessionProvider.invitations.send(self.__userInfo.databaseID)
+        self.sessionProvider.invitations.send(self.__userInfo.databaseID)
 
     def acceptInvitation(self):
-        g_sessionProvider.invitations.accept(self.__userInfo.databaseID)
+        self.sessionProvider.invitations.accept(self.__userInfo.databaseID)
 
     def rejectInvitation(self):
-        g_sessionProvider.invitations.reject(self.__userInfo.databaseID)
+        self.sessionProvider.invitations.reject(self.__userInfo.databaseID)
 
     def _initFlashValues(self, ctx):
-        self.__vInfo = g_sessionProvider.getArenaDP().getVehicleInfo(long(ctx.vehicleID))
+        self.__vInfo = self.sessionProvider.getArenaDP().getVehicleInfo(long(ctx.vehicleID))
         player = self.__vInfo.player
         self.__userInfo = PlayerContextMenuInfo(player.accountDBID, player.name)
 
@@ -167,7 +170,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     def __addDyncSquadInfo(self, options):
         make = self._makeItem
-        ctx = g_sessionProvider.getCtx()
+        ctx = self.sessionProvider.getCtx()
         if not ctx.isInvitationEnabled() or ctx.hasSquadRestrictions():
             return options
         elif not self.__userInfo.isAlly:

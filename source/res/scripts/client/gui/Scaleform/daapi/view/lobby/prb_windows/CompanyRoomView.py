@@ -8,7 +8,7 @@ from gui.Scaleform.genConsts.COMPANY_ALIASES import COMPANY_ALIASES
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control import formatters, prb_getters
-from gui.prb_control.context import prb_ctx
+from gui.prb_control.entities.base.legacy.ctx import AssignLegacyCtx, ChangeOpenedCtx, ChangeCommentCtx, ChangeDivisionCtx
 from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -40,100 +40,102 @@ class CompanyRoomView(CompanyRoomMeta):
 
     @process
     def requestToAssign(self, pID):
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.AssignPrbCtx(pID, PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1, 'prebattle/assign'))
+        yield self.prbDispatcher.sendPrbRequest(AssignLegacyCtx(pID, PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1, 'prebattle/assign'))
 
     @process
     def requestToUnassign(self, pID):
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.AssignPrbCtx(pID, PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM1, 'prebattle/assign'))
+        yield self.prbDispatcher.sendPrbRequest(AssignLegacyCtx(pID, PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM1, 'prebattle/assign'))
 
     @process
     def requestToChangeOpened(self, isOpened):
-        result = yield self.prbDispatcher.sendPrbRequest(prb_ctx.ChangeOpenedCtx(isOpened, 'prebattle/change_settings'))
+        result = yield self.prbDispatcher.sendPrbRequest(ChangeOpenedCtx(isOpened, 'prebattle/change_settings'))
         if not result:
-            self.as_setOpenedS(self.prbFunctional.getSettings()[PREBATTLE_SETTING_NAME.IS_OPENED])
+            self.as_setOpenedS(self.prbEntity.getSettings()[PREBATTLE_SETTING_NAME.IS_OPENED])
 
     @process
     def requestToChangeComment(self, comment):
-        result = yield self.prbDispatcher.sendPrbRequest(prb_ctx.ChangeCommentCtx(comment, 'prebattle/change_settings'))
+        result = yield self.prbDispatcher.sendPrbRequest(ChangeCommentCtx(comment, 'prebattle/change_settings'))
         if not result:
-            self.as_setCommentS(self.prbFunctional.getSettings()[PREBATTLE_SETTING_NAME.COMMENT])
+            self.as_setCommentS(self.prbEntity.getSettings()[PREBATTLE_SETTING_NAME.COMMENT])
 
     @process
     def requestToChangeDivision(self, divisionID):
         self.__selectedDivision = divisionID
-        result = yield self.prbDispatcher.sendPrbRequest(prb_ctx.ChangeDivisionCtx(divisionID, 'prebattle/change_settings'))
+        result = yield self.prbDispatcher.sendPrbRequest(ChangeDivisionCtx(divisionID, 'prebattle/change_settings'))
         if not result:
-            self.as_setDivisionS(self.prbFunctional.getSettings()[PREBATTLE_SETTING_NAME.DIVISION])
+            self.as_setDivisionS(self.prbEntity.getSettings()[PREBATTLE_SETTING_NAME.DIVISION])
 
     def getCompanyName(self):
         return formatters.getCompanyName()
 
     def canKickPlayer(self):
-        return False if self.prbFunctional.getTeamState(team=1).isInQueue() else self.prbFunctional.getPermissions().canKick(team=1)
+        return False if self.prbEntity.getTeamState(team=1).isInQueue() else self.prbEntity.getPermissions().canKick(team=1)
 
     def canMoveToAssigned(self):
-        result = self.prbFunctional.getPermissions().canAssignToTeam(team=1)
+        result = self.prbEntity.getPermissions().canAssignToTeam(team=1)
         if result:
-            result, _ = self.prbFunctional.getLimits().isMaxCountValid(1, True)
+            maxCountValidation = self.prbEntity.getLimits().isMaxCountValid(1, True)
+            result = maxCountValidation is None or maxCountValidation.isValid
         return result
 
     def canMoveToUnassigned(self):
-        result = self.prbFunctional.getPermissions().canAssignToTeam(team=1)
+        result = self.prbEntity.getPermissions().canAssignToTeam(team=1)
         if result:
-            result, _ = self.prbFunctional.getLimits().isMaxCountValid(1, False)
+            maxCountValidation = self.prbEntity.getLimits().isMaxCountValid(1, False)
+            result = maxCountValidation is None or maxCountValidation.isValid
         return result
 
     def canMakeOpenedClosed(self):
-        return self.prbFunctional.getPermissions().canMakeOpenedClosed()
+        return self.prbEntity.getPermissions().canMakeOpenedClosed()
 
     def canChangeComment(self):
-        return self.prbFunctional.getPermissions().canChangeComment()
+        return self.prbEntity.getPermissions().canChangeComment()
 
     def canChangeDivision(self):
-        return self.prbFunctional.getPermissions().canChangeDivision()
+        return self.prbEntity.getPermissions().canChangeDivision()
 
-    def onSettingUpdated(self, functional, settingName, settingValue):
+    def onSettingUpdated(self, entity, settingName, settingValue):
         if settingName == PREBATTLE_SETTING_NAME.DIVISION:
-            if not functional.isCreator():
+            if not entity.isCommander():
                 self.as_setDivisionS(settingValue)
         elif settingName == PREBATTLE_SETTING_NAME.IS_OPENED:
-            if not functional.isCreator():
+            if not entity.isCommander():
                 self.as_setOpenedS(settingValue)
         elif settingName == PREBATTLE_SETTING_NAME.COMMENT:
-            if not functional.isCreator():
+            if not entity.isCommander():
                 self.as_setCommentS(settingValue)
         elif settingName == PREBATTLE_SETTING_NAME.LIMITS:
-            self.__setLimits(functional.getRosters(), functional.getSettings().getTeamLimits(1))
+            self.__setLimits(entity.getRosters(), entity.getSettings().getTeamLimits(1))
 
-    def onRostersChanged(self, functional, rosters, full):
+    def onRostersChanged(self, entity, rosters, full):
         if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
             self.as_setRosterListS(1, True, self._makeAccountsData(rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]))
         if PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM1 in rosters:
             self.as_setRosterListS(1, False, self._makeAccountsData(rosters[PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM1]))
         if full:
-            self.as_toggleReadyBtnS(not functional.getPlayerInfo().isReady())
+            self.as_toggleReadyBtnS(not entity.getPlayerInfo().isReady())
         if not self.canSendInvite():
             self._closeSendInvitesWindow()
-        self.__setLimits(functional.getRosters(), functional.getSettings().getTeamLimits(1))
+        self.__setLimits(entity.getRosters(), entity.getSettings().getTeamLimits(1))
         self.as_refreshPermissionsS()
 
-    def onTeamStatesReceived(self, functional, team1State, team2State):
+    def onTeamStatesReceived(self, entity, team1State, team2State):
         self.as_enableReadyBtnS(self.isReadyBtnEnabled())
         self.as_enableLeaveBtnS(self.isLeaveBtnEnabled())
         self.as_refreshPermissionsS()
         if team1State.isInQueue():
             self._closeSendInvitesWindow()
 
-    def onPlayerStateChanged(self, functional, roster, playerInfo):
-        super(CompanyRoomView, self).onPlayerStateChanged(functional, roster, playerInfo)
-        self.__setLimits(functional.getRosters(), functional.getSettings().getTeamLimits(1))
+    def onPlayerStateChanged(self, entity, roster, playerInfo):
+        super(CompanyRoomView, self).onPlayerStateChanged(entity, roster, playerInfo)
+        self.__setLimits(entity.getRosters(), entity.getSettings().getTeamLimits(1))
 
     def _populate(self):
         super(CompanyRoomView, self)._populate()
         self.__setSettings()
-        rosters = self.prbFunctional.getRosters()
+        rosters = self.prbEntity.getRosters()
         self._setRosterList(rosters)
-        self.__setLimits(rosters, self.prbFunctional.getSettings().getTeamLimits(1))
+        self.__setLimits(rosters, self.prbEntity.getSettings().getTeamLimits(1))
 
     def _setRosterList(self, rosters):
         accounts = rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]
@@ -148,14 +150,14 @@ class CompanyRoomView(CompanyRoomMeta):
         return
 
     def __setSettings(self):
-        settings = self.prbFunctional.getSettings()
+        settings = self.prbEntity.getSettings()
         self.as_setOpenedS(settings[PREBATTLE_SETTING_NAME.IS_OPENED])
         self.as_setCommentS(settings[PREBATTLE_SETTING_NAME.COMMENT])
         self.__selectedDivision = settings[PREBATTLE_SETTING_NAME.DIVISION]
         self.as_setDivisionsListS(companies_dps.getDivisionsList(addAll=False), settings[PREBATTLE_SETTING_NAME.DIVISION])
 
     def __setLimits(self, rosters, teamLimits):
-        settings = self.prbFunctional.getSettings()
+        settings = self.prbEntity.getSettings()
         self.__selectedDivision = settings[PREBATTLE_SETTING_NAME.DIVISION]
         totalLimit = prb_getters.getTotalLevelLimits(teamLimits)
         totalLevel = 0

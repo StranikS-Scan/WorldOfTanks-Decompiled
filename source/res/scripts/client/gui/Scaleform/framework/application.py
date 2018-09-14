@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/application.py
 import weakref
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core import settings_constants
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import g_guiResetters, g_repeatKeyHandlers, GUI_CTRL_MODE_FLAG
@@ -11,6 +10,8 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
 from gui.shared.events import AppLifeCycleEvent, GameEvent
 from gui.shared import EVENT_BUS_SCOPE
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class DAAPIRootBridge(object):
     __slots__ = ('__pyScript', '__rootPath', '__initCallback', '__isInited')
@@ -47,6 +48,7 @@ class DAAPIRootBridge(object):
 
 
 class SFApplication(Flash, ApplicationMeta):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, swfName, appNS, daapiBridge=None):
         super(SFApplication, self).__init__(swfName, path=SCALEFORM_SWF_PATH_V3)
@@ -69,12 +71,12 @@ class SFApplication(Flash, ApplicationMeta):
         self._imageManager = None
         self.__initialized = False
         self.__ns = appNS
-        self.__geShowed = False
         self.__firingsAfterInit = {}
         self.__guiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
         self.__aliasToLoad = []
         self.__daapiBridge = daapiBridge or DAAPIRootBridge()
         self.__daapiBridge.setPyScript(self.proxy)
+        self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.CREATING))
         return
 
     @property
@@ -164,22 +166,6 @@ class SFApplication(Flash, ApplicationMeta):
         else:
             result = False
         return result
-
-    def toggleEditor(self):
-        from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-        from gui.shared.events import LoadViewEvent, GUIEditorEvent
-        if not self.__geShowed:
-            self.updateStage(1024, 768, 1)
-            self.component.movie.x = 320
-            self.component.movie.y = 100
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.G_E_INSPECT_WINDOW), scope=EVENT_BUS_SCOPE.GLOBAL)
-            self.__geShowed = True
-        else:
-            self.component.movie.x = 0
-            self.component.movie.y = 0
-            self.fireEvent(GUIEditorEvent(GUIEditorEvent.HIDE_GUIEditor), scope=EVENT_BUS_SCOPE.GLOBAL)
-            self.__geShowed = False
-            self.updateScale()
 
     def active(self, state):
         if state is not self.isActive:
@@ -369,12 +355,11 @@ class SFApplication(Flash, ApplicationMeta):
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.INITIALIZED))
 
     def updateScale(self):
-        index = g_settingsCore.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
-        g_settingsCore.options.getSetting('interfaceScale').setSystemValue(index)
+        index = self.settingsCore.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
+        self.settingsCore.options.getSetting('interfaceScale').setSystemValue(index)
 
     def updateStage(self, w, h, scale):
-        if not self.__geShowed:
-            self.as_updateStageS(w, h, scale)
+        self.as_updateStageS(w, h, scale)
 
     def fireEventAfterInitialization(self, event, scope=EVENT_BUS_SCOPE.DEFAULT):
         if self.__initialized:

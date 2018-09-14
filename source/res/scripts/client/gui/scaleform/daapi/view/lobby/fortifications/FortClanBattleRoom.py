@@ -1,39 +1,39 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanBattleRoom.py
 import ArenaType
-from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.shared.utils.MethodsRules import MethodsRules
-from gui.shared.utils.functions import makeTooltip
-from helpers import i18n, int2roman
 from UnitBase import UNIT_OP
 from adisp import process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE, FORT_BUILDING_TYPE, FORT_BUILDING_STATUS
-from shared_utils import findFirst, CONST_CONTAINER
+from debug_utils import LOG_ERROR
+from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import rally_dps
-from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
-from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
+from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
+from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.context.unit_ctx import LeaveUnitCtx
-from gui.prb_control.prb_helpers import UnitListener
-from gui.prb_control import settings
 from gui.prb_control import prb_getters
+from gui.prb_control import settings
+from gui.prb_control.entities.base.unit.ctx import LeaveUnitCtx
+from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
-from gui import SystemMessages
 from gui.shared import events
+from gui.shared.ClanCache import g_clanCache
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.ClanCache import g_clanCache
-from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared.formatters import icons, text_styles
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+from gui.shared.utils.MethodsRules import MethodsRules
+from gui.shared.utils.functions import makeTooltip
+from helpers import i18n, int2roman
+from shared_utils import findFirst, CONST_CONTAINER
 
-class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, MethodsRules):
+class FortClanBattleRoom(FortClanBattleRoomMeta, IUnitListener, FortViewHelper, MethodsRules):
 
     class TIMER_GLOW_COLORS(CONST_CONTAINER):
         NORMAL = int('BB6200', 16)
@@ -71,35 +71,35 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, M
 
     def onUnitSettingChanged(self, opCode, value):
         if opCode == UNIT_OP.SET_COMMENT:
-            self.as_setCommentS(self.unitFunctional.getCensoredComment())
+            self.as_setCommentS(self.prbEntity.getCensoredComment())
         elif opCode in [UNIT_OP.CLOSE_SLOT, UNIT_OP.OPEN_SLOT]:
             self._setActionButtonState()
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
-        functional = self.unitFunctional
-        pInfo = functional.getPlayerInfo(dbID=dbID)
+        entity = self.prbEntity
+        pInfo = entity.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
                 slotCost = vInfo.vehLevel
             else:
-                slotState = functional.getSlotState(slotIdx)
+                slotState = entity.getSlotState(slotIdx)
                 vehicleVO = None
                 if slotState.isClosed:
                     slotCost = settings.UNIT_CLOSED_SLOT_COST
                 else:
                     slotCost = 0
             self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
-        if pInfo.isCreator() or pInfo.isCurrentPlayer():
+        if pInfo.isCurrentPlayer() or pInfo.isCommander():
             self._setActionButtonState()
         return
 
     def onUnitMembersListChanged(self):
-        functional = self.unitFunctional
+        entity = self.prbEntity
         if self._candidatesDP:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self._updateMembersData()
         self._setActionButtonState()
 
@@ -111,19 +111,19 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, M
 
     def onUnitRejoin(self):
         super(FortClanBattleRoom, self).onUnitRejoin()
-        functional = self.unitFunctional
+        entity = self.prbEntity
         if self._candidatesDP:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self._updateMembersData()
         self.__setTimerDelta()
         self.__updateHeaderTeamSection()
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.ClanBattleCandidatesDP()
-        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
+        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.prbEntity.getCandidates())
 
     def rebuildCandidatesDP(self):
-        self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+        self._candidatesDP.rebuild(self.prbEntity.getCandidates())
 
     def inviteFriendRequest(self):
         self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.FORT_BATTLE],
@@ -147,15 +147,15 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, M
         return
 
     def _updateRallyData(self):
-        functional = self.unitFunctional
-        data = vo_converters.makeFortBattleVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
+        entity = self.prbEntity
+        data = vo_converters.makeFortBattleVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
         self.as_updateRallyS(data)
 
     def _getVehicleSelectorDescription(self):
         return FORTIFICATIONS.SORTIE_VEHICLESELECTOR_DESCRIPTION
 
     def _setActionButtonState(self):
-        self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
+        self.as_setActionButtonStateS(ActionButtonStateVO(self.prbEntity))
 
     @MethodsRules.delayable()
     def __initData(self):
@@ -184,9 +184,9 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, M
     @MethodsRules.delayable('__initData')
     def __makeMainVO(self):
         result = {}
-        extra = self.unitFunctional.getExtra()
+        extra = self.prbEntity.getExtra()
         (_, _, arenaTypeID), _ = self.__currentBuilding
-        unitPermissions = self.unitFunctional.getPermissions()
+        unitPermissions = self.prbEntity.getPermissions()
         activeConsumes = extra.getConsumables()
         result['mapID'] = arenaTypeID
         arenaType = ArenaType.g_cache.get(arenaTypeID)
@@ -209,11 +209,11 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, M
 
     @MethodsRules.delayable('__initData')
     def __setReadyStatus(self):
-        self.as_updateReadyStatusS(self.unitFunctional.getFlags().isInQueue(), self.__battle.isEnemyReadyForBattle())
+        self.as_updateReadyStatusS(self.prbEntity.getFlags().isInQueue(), self.__battle.isEnemyReadyForBattle())
 
     @MethodsRules.delayable('__initData')
     def __setTimerDelta(self):
-        isInBattle = self.unitFunctional.getFlags().isInArena()
+        isInBattle = self.prbEntity.getFlags().isInArena()
         self.as_setTimerDeltaS({'deltaTime': self.__battle.getRoundStartTimeLeft() if not isInBattle else 0,
          'htmlFormatter': "<font face='$FieldFont' size='18' color='#FFDD99'>###</font>",
          'alertHtmlFormatter': "<font face='$FieldFont' size='18' color='#ff7f00'>###</font>",
@@ -284,7 +284,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, M
         return False
 
     def __updateHeaderTeamSection(self):
-        isInBattle = self.unitFunctional.getFlags().isInArena()
+        isInBattle = self.prbEntity.getFlags().isInArena()
         if not isInBattle:
             titleText = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLEROOM_TEAMSECTIONTITLE_PREPARETEAM)
             formatter = text_styles.standard
@@ -328,7 +328,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, M
 
     def __leaveOnError(self):
         SystemMessages.pushI18nMessage('#system_messages:fortification/fortBattleFinished', type=SystemMessages.SM_TYPE.Error)
-        self.unitFunctional.leave(LeaveUnitCtx(flags=FUNCTIONAL_FLAG.UNDEFINED))
+        self.prbEntity.leave(LeaveUnitCtx(flags=FUNCTIONAL_FLAG.UNDEFINED))
 
     @process
     def __requestMineClanEmblem(self):

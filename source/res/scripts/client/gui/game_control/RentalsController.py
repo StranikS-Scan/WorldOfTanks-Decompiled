@@ -3,15 +3,15 @@
 from operator import itemgetter
 import BigWorld
 import Event
-from gui.game_control.controllers import Controller
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import time_utils
+from skeletons.gui.game_control import IRentalsController
 
-class RentalsController(Controller):
+class RentalsController(IRentalsController):
 
-    def __init__(self, proxy):
-        super(RentalsController, self).__init__(proxy)
+    def __init__(self):
+        super(RentalsController, self).__init__()
         self.onRentChangeNotify = Event.Event()
         self.__rentNotifyTimeCallback = None
         self.__vehiclesForUpdate = []

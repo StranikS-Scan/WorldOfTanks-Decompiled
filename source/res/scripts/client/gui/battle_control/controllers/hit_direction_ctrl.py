@@ -4,13 +4,14 @@ from functools import partial
 import weakref
 import BigWorld
 from account_helpers.settings_core.settings_constants import DAMAGE_INDICATOR, GRAPHICS
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN, BATTLE_CTRL_ID
 from gui.battle_control.view_components import IViewComponentsController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.battle_control.battle_constants import HIT_FLAGS
+from helpers import dependency
 from shared_utils import CONST_CONTAINER
+from skeletons.account_helpers.settings_core import ISettingsCore
 _AGGREGATED_HIT_BITS = HIT_FLAGS.IS_BLOCKED | HIT_FLAGS.HP_DAMAGE | HIT_FLAGS.IS_CRITICAL
 _VISUAL_DAMAGE_INDICATOR_SETTINGS = (DAMAGE_INDICATOR.TYPE,
  DAMAGE_INDICATOR.VEHICLE_INFO,
@@ -142,6 +143,7 @@ class _HitDirection(object):
 
 class HitDirectionController(IViewComponentsController):
     __slots__ = ('__pull', '__ui', '__isVisible', '__callbackIDs', '__damageIndicatorPreset', '__weakref__')
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(HitDirectionController, self).__init__()
@@ -158,13 +160,16 @@ class HitDirectionController(IViewComponentsController):
 
     def startControl(self):
         g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.__damageIndicatorPreset = g_settingsCore.getSetting(DAMAGE_INDICATOR.PRESETS)
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__damageIndicatorPreset = self.settingsCore.getSetting(DAMAGE_INDICATOR.PRESETS)
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def stopControl(self):
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         g_eventBus.removeListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__clearHideCallbacks()
+
+    def getContainer(self):
+        return self.__ui
 
     def getHit(self, idx):
         if idx < len(self.__pull):
@@ -236,6 +241,13 @@ class HitDirectionController(IViewComponentsController):
         if hitData.isBattleConsumables():
             return False
         return False if self.__damageIndicatorPreset == DAMAGE_INDICATOR_PRESETS.WITHOUT_CRITS and hitData.isCritical() and hitData.getDamage() == 0 else True
+
+    def _hideAllHits(self):
+        """
+        Hides all visible hits.
+        """
+        for hit in self.__pull:
+            hit.hide()
 
     def __getNextHit(self):
         find = self.__pull[0]
@@ -311,3 +323,17 @@ class HitDirectionController(IViewComponentsController):
                     break
 
         return
+
+
+class HitDirectionControllerPlayer(HitDirectionController):
+
+    def stopControl(self):
+        self._hideAllHits()
+        super(HitDirectionControllerPlayer, self).stopControl()
+
+
+def createHitDirectionController(setup):
+    if setup.isReplayPlaying:
+        return HitDirectionControllerPlayer()
+    else:
+        return HitDirectionController()

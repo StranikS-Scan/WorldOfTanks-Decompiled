@@ -1,28 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/NotifyController.py
-import cPickle
 import base64
+import cPickle
 from collections import namedtuple
 import BigWorld
 import Settings
 from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.app_loader.decorators import sf_lobby
-from gui.game_control.controllers import Controller
-from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.shared import event_dispatcher
-from gui.shared.utils import graphics
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.app_loader.decorators import sf_lobby
+from gui.shared import event_dispatcher
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.utils import graphics
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import INotifyController
 _Settings = namedtuple('_Settings', ['presetChangingVersion', 'lastBattleAvgFps'])
 
-class NotifyController(Controller):
+class NotifyController(INotifyController):
     LOW_FPS_VALUE = 20
     CURRENT_LOW_FPS_WARNING_VERSION = 1
     MIN_BATTLE_LENGHT = 180
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, proxy):
-        super(NotifyController, self).__init__(proxy)
+    def __init__(self):
+        super(NotifyController, self).__init__()
         self.__graphicsResetShown = False
         self.__settings = _Settings(0, None)
         return
@@ -63,8 +68,7 @@ class NotifyController(Controller):
     def __handleUiUpdated(self, _):
         self._stopUIListening()
         yield lambda callback: callback(True)
-        from gui.battle_control import g_sessionProvider
-        if g_sessionProvider.getCtx().wasInBattle:
+        if self.sessionProvider.getCtx().wasInBattle:
             return
         graphicsStatus = graphics.getStatus()
         if not self.__graphicsResetShown and graphicsStatus.isReset():
@@ -125,9 +129,8 @@ class NotifyController(Controller):
 
     @classmethod
     def __getGraphicsPresetSetting(cls):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         from account_helpers.settings_core.settings_constants import GRAPHICS
-        return g_settingsCore.options.getSetting(GRAPHICS.PRESETS)
+        return cls.settingsCore.options.getSetting(GRAPHICS.PRESETS)
 
     def __downgradePresetIndex(self):
         presetSetting = self.__getGraphicsPresetSetting()
@@ -144,9 +147,8 @@ class NotifyController(Controller):
 
     def __isNeedToShowPresetChangingDialog(self):
         avgFps = self.__settings.lastBattleAvgFps
-        presetSetting = self.__getGraphicsPresetSetting()
-        isCustomPreset = presetSetting.isCustom()
-        canToDowngradePreset = presetSetting.get() < len(graphics.getGraphicsPresetsIndices()) - 1
+        isCustomPreset = BigWorld.isCustomGraphicPreset()
+        canToDowngradePreset = BigWorld.canToDowngradePreset()
         return avgFps and avgFps <= self.LOW_FPS_VALUE and not isCustomPreset and canToDowngradePreset and self.__settings.presetChangingVersion < self.CURRENT_LOW_FPS_WARNING_VERSION
 
     def __clearCurrentFpsInfo(self):

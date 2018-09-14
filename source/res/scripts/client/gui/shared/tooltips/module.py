@@ -175,6 +175,9 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
             vDescr = vehicle.descriptor if vehicle is not None else None
             if module.isClipGun(vDescr):
                 block.append(formatters.packImageTextBlockData(title=text_styles.standard(MENU.MODULEINFO_CLIPGUNLABEL), desc='', img=RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
+        elif module.itemTypeID == GUI_ITEM_TYPE.CHASSIS:
+            if module.isHydraulicChassis():
+                block.append(formatters.packImageTextBlockData(title=text_styles.standard(MENU.MODULEINFO_HYDRAULICCHASSISLABEL), desc='', img=RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         return block
 
 

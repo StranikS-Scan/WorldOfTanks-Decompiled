@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/fallout/repair_timer.py
 from gui.Scaleform.daapi.view.meta.RepairPointTimerMeta import RepairPointTimerMeta
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import REPAIR_STATE_ID
+from helpers import dependency
 from helpers import time_utils
+from skeletons.gui.battle_session import IBattleSessionProvider
 _STATES_TO_SHOW_TIMES = {REPAIR_STATE_ID.REPAIRING: 'progress',
  REPAIR_STATE_ID.COOLDOWN: 'cooldown'}
 
 class RepairPointTimer(RepairPointTimerMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(RepairPointTimer, self).__init__()
@@ -17,7 +19,7 @@ class RepairPointTimer(RepairPointTimerMeta):
     def _populate(self):
         super(RepairPointTimer, self)._populate()
         self.as_useActionScriptTimerS(False)
-        ctrl = g_sessionProvider.dynamic.repair
+        ctrl = self.sessionProvider.dynamic.repair
         if ctrl is not None:
             for pointIndex, stateID, isInPoint in ctrl.getPointsStates():
                 if isInPoint and stateID in _STATES_TO_SHOW_TIMES:
@@ -31,7 +33,7 @@ class RepairPointTimer(RepairPointTimerMeta):
         return
 
     def _dispose(self):
-        ctrl = g_sessionProvider.dynamic.repair
+        ctrl = self.sessionProvider.dynamic.repair
         if ctrl is not None:
             ctrl.onStateCreated -= self.__onRepairPointStateCreated
             ctrl.onTimerUpdated -= self.__onRepairPointTimerUpdated

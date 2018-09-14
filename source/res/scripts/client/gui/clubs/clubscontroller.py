@@ -4,10 +4,10 @@ import weakref
 from functools import partial
 from collections import namedtuple
 import BigWorld
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_NOTE
 from PlayerEvents import g_playerEvents
+from helpers import dependency
 from messenger.storage import storage_getter
 from messenger.ext import isSenderIgnored
 from messenger.proto.events import g_messengerEvents
@@ -25,6 +25,8 @@ from gui.clubs.items import SeasonState, SeasonInfo
 from gui.clubs.settings import BROKEN_WEB_CHECK_PERIOD, CLIENT_CLUB_STATE, CLUB_REQUEST_TYPE, OTHER_CLUB_SUBSCRIPTION
 from gui.clubs.club_helpers import getClientClubsMgr, isClubsEnabled, ClubsSeasonsCache
 from gui.clubs.requests import ClubRequestsController
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.clubs import IClubsController
 
 def _showError(result, ctx):
     i18nMsg = club_fmts.getRequestErrorMsg(result, ctx)
@@ -326,7 +328,8 @@ class _AccountClubProfile(object):
         return 'AccountClubProfile(state = %s, synced = %s, waitForSync = %d)' % (self.__state, self._isSynced, self._waitForSync)
 
 
-class ClubsController(subscriptions.ClubsListeners):
+class ClubsController(subscriptions.ClubsListeners, IClubsController):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(ClubsController, self).__init__()
@@ -361,7 +364,7 @@ class ClubsController(subscriptions.ClubsListeners):
             clubsMgr.onClientClubsUnitInfoChanged += self.__onClientClubsUnitInfoChanged
         g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
         g_playerEvents.onIGRTypeChanged += self.__onIGRTypeChanged
-        g_settingsCore.onSettingsChanged += self.__onAccountSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__onAccountSettingsChanged
         g_clientUpdateManager.addCallbacks({'cache.relatedToClubs': self.__onSpaAttrChanged,
          'cache.eSportSeasonState': self.__onSeasonStateChanged})
         self._accountProfile.resync(firstInit=True, callback=lambda : self._seasonsCache.start())
@@ -376,7 +379,7 @@ class ClubsController(subscriptions.ClubsListeners):
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_playerEvents.onCenterIsLongDisconnected -= self.__onCenterIsLongDisconnected
         g_playerEvents.onIGRTypeChanged -= self.__onIGRTypeChanged
-        g_settingsCore.onSettingsChanged -= self.__onAccountSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onAccountSettingsChanged
         clubsMgr = getClientClubsMgr()
         if clubsMgr is not None:
             clubsMgr.onClientClubsNotification -= self.__onClientClubsNotification
@@ -463,7 +466,7 @@ class ClubsController(subscriptions.ClubsListeners):
 
     @async
     @process
-    def sendRequest(self, ctx, callback, allowDelay=None):
+    def sendRequest(self, ctx, callback=None, allowDelay=None):
         yield lambda callback: callback(None)
         if ctx.getConfirmID():
             success = yield DialogsInterface.showI18nConfirmDialog(ctx.getConfirmID())
@@ -563,6 +566,3 @@ class ClubsController(subscriptions.ClubsListeners):
 
     def __repr__(self):
         return 'ClubsCtrl(profile = %s, subscriptions = %s)' % (str(self._accountProfile), self.__subscriptions.keys())
-
-
-g_clubsCtrl = ClubsController()

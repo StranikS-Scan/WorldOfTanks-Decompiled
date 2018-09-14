@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_constants.py
-from avatar_helpers.aim_global_binding import CTRL_MODE_NAME
 from enumerations import Enumeration, AttributeEnumItem
 from shared_utils import CONST_CONTAINER
 
@@ -66,6 +65,8 @@ class VEHICLE_VIEW_STATE(object):
     VEHICLE_ENGINE_STATE = 524288
     VEHICLE_MOVEMENT_STATE = 1048576
     DEATH_INFO = 2097152
+    VEHICLE_CHANGED = 4194304
+    SIEGE_MODE = 8388608
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')
@@ -73,7 +74,7 @@ VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'chassis', 'su
 VEHICLE_DEVICE_IN_COMPLEX_ITEM = {'leftTrack': 'chassis',
  'rightTrack': 'chassis'}
 VEHICLE_COMPLEX_ITEMS = {'chassis': ('leftTrack', 'rightTrack')}
-DEVICE_STATES_RANGE = ('normal', 'critical', 'destroyed', 'repaired')
+DEVICE_STATES_RANGE = ('normal', 'critical', 'destroyed')
 DEVICE_STATE_AS_DAMAGE = ('critical', 'destroyed')
 
 class VEHICLE_INDICATOR_TYPE(object):
@@ -193,25 +194,6 @@ class CROSSHAIR_VIEW_ID(object):
     POSTMORTEM = 4
 
 
-_CTRL_MODE_TO_VIEW_ID = {CTRL_MODE_NAME.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
- CTRL_MODE_NAME.STRATEGIC: CROSSHAIR_VIEW_ID.STRATEGIC,
- CTRL_MODE_NAME.SNIPER: CROSSHAIR_VIEW_ID.SNIPER,
- CTRL_MODE_NAME.POSTMORTEM: CROSSHAIR_VIEW_ID.POSTMORTEM,
- CTRL_MODE_NAME.FALLOUT_DEATH: CROSSHAIR_VIEW_ID.POSTMORTEM}
-
-def getCrosshairViewIDByCtrlMode(ctrlMode):
-    """Gets viewID by avatar control mode.
-    If control mode has not UI, that function return CROSSHAIR_VIEW_ID.UNDEFINED
-    :param ctrlMode: string containing one of CTRL_MODE_NAME.
-    :return: integer containing one of CROSSHAIR_VIEW_ID.
-    """
-    if ctrlMode in _CTRL_MODE_TO_VIEW_ID:
-        viewID = _CTRL_MODE_TO_VIEW_ID[ctrlMode]
-    else:
-        viewID = CROSSHAIR_VIEW_ID.UNDEFINED
-    return viewID
-
-
 class GUN_RELOADING_VALUE_TYPE(object):
     TIME = 1
     PERCENT = 2
@@ -240,3 +222,8 @@ class PERSONAL_EFFICIENCY_TYPE(CONST_CONTAINER):
 
 class CACHE_RECORDS_IDS(CONST_CONTAINER):
     TMP_IGNORED = 0
+
+
+class NET_TYPE_OVERRIDE(CONST_CONTAINER):
+    DISABLED = -1
+    SIEGE_MODE = 5

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/hints_manager.py
-from account_helpers.settings_core.SettingsCore import g_settingsCore
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial import settings
 from tutorial.data.hints import HintProps
 from tutorial.doc_loader.parsers import HintsParser
@@ -9,6 +10,7 @@ from tutorial.gui.Scaleform.hints.proxy import HintsProxy
 _DESCRIPTOR_PATH = '{0:>s}/once-only-hints.xml'.format(settings.DOC_DIRECTORY)
 
 class HintsManager(object):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(HintsManager, self).__init__()
@@ -42,7 +44,7 @@ class HintsManager(object):
 
     def __loadHintsData(self):
         LOG_DEBUG('Hints are loading')
-        shownHints = g_settingsCore.serverSettings.getOnceOnlyHintsSettings()
+        shownHints = self.settingsCore.serverSettings.getOnceOnlyHintsSettings()
         shownHints = [ key for key, value in shownHints.iteritems() if value == 1 ]
         self._data = HintsParser.parse(_DESCRIPTOR_PATH, shownHints)
 
@@ -66,7 +68,7 @@ class HintsManager(object):
             hint = self.__activeHints[itemID]
             self.__hideHint(itemID)
             self._data.markAsShown(hint)
-            g_settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: 1})
+            self.settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: 1})
             if self._data.hintsCount == 0:
                 self.stop()
 

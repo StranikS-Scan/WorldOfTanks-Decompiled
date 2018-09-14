@@ -264,6 +264,7 @@ class FittingItem(GUIItem, HasIntCD):
         self.isBoughtForCredits = isBoughtForCredits
         self.rentInfo = RentalInfoProvider()
         self.restoreInfo = None
+        self._personalDiscountPrice = None
         if proxy is not None and proxy.isSynced():
             self.defaultPrice = proxy.shop.defaults.getItemPrice(self.intCompactDescr)
             if self.defaultPrice is None:

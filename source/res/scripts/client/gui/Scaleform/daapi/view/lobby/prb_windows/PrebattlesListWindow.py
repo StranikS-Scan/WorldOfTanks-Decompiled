@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrebattlesListWindow.py
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.prb_control.prb_helpers import GlobalListener
+from gui.prb_control.entities.listener import IGlobalListener
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
-class PrebattlesListWindow(AbstractWindowView, GlobalListener):
+class PrebattlesListWindow(AbstractWindowView, IGlobalListener):
 
     def __init__(self, name):
         super(PrebattlesListWindow, self).__init__()

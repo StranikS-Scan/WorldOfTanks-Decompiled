@@ -37,6 +37,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TECH_CUSTOMIZATION_BONUS = 'techCustomizationBonus'
     BOOSTER = 'booster'
     VEHICLE_FILTER = 'vehicleFilter'
+    CHRISTMAS = 'christmas'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_slot_vo.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH
+from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from shared_utils import findFirst
 
@@ -40,6 +40,8 @@ class FittingSlotVO(dict):
             self['level'] = module.level
             if slotType == 'vehicleGun' and module.isClipGun(vehicle.descriptor):
                 self[EXTRA_MODULE_INFO] = CLIP_ICON_PATH
+            elif slotType == 'vehicleChassis' and module.isHydraulicChassis():
+                self[EXTRA_MODULE_INFO] = HYDRAULIC_ICON_PATH
         if module is None:
             self['id'] = -1
             self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX

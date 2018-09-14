@@ -3,11 +3,13 @@
 import BigWorld
 from account_helpers import isPremiumAccount
 from adisp import async
-from helpers import time_utils
 from gui.shared.money import Money
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from helpers import time_utils, dependency
+from skeletons.gui.game_control import IWalletController
 
 class StatsRequester(AbstractSyncDataRequester):
+    wallet = dependency.descriptor(IWalletController)
 
     @async
     def _requestCache(self, callback):
@@ -50,8 +52,7 @@ class StatsRequester(AbstractSyncDataRequester):
         """
         @return: account gold actual balance
         """
-        from gui import game_control
-        return self.getCacheValue('gold', 0) if self.mayConsumeWalletResources or not game_control.g_instance.wallet.useGold else 0
+        return self.getCacheValue('gold', 0) if self.mayConsumeWalletResources or not self.wallet.useGold else 0
 
     @property
     def actualMoney(self):
@@ -69,8 +70,7 @@ class StatsRequester(AbstractSyncDataRequester):
         """
         @return: account free experience value
         """
-        from gui import game_control
-        return self.getCacheValue('freeXP', 0) if self.mayConsumeWalletResources or not game_control.g_instance.wallet.useFreeXP else 0
+        return self.getCacheValue('freeXP', 0) if self.mayConsumeWalletResources or not self.wallet.useFreeXP else 0
 
     @property
     def vehiclesXPs(self):

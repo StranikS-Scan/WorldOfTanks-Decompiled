@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import entries
 from gui.Scaleform.daapi.view.battle.shared.minimap import plugins
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
-from gui.battle_control import minimap_utils, g_sessionProvider
+from gui.battle_control import minimap_utils
 from gui.battle_control.battle_constants import NEUTRAL_TEAM, REPAIR_STATE_ID
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
@@ -43,14 +43,14 @@ class FalloutGlobalSettingsPlugin(GlobalSettingsPlugin):
     def start(self):
         super(FalloutGlobalSettingsPlugin, self).start()
         if GUI_SETTINGS.minimapSize:
-            ctrl = g_sessionProvider.dynamic.respawn
+            ctrl = self.sessionProvider.dynamic.respawn
             if ctrl is not None:
                 ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibilityChanged
         return
 
     def stop(self):
         if GUI_SETTINGS.minimapSize:
-            ctrl = g_sessionProvider.dynamic.respawn
+            ctrl = self.sessionProvider.dynamic.respawn
             if ctrl is not None:
                 ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibilityChanged
         super(FalloutGlobalSettingsPlugin, self).stop()
@@ -322,7 +322,7 @@ class FlagsAndVehiclesPlugin(plugins.ArenaVehiclesPlugin):
         return _F_STATES.NEUTRAL
 
     def __getFlagMarkerStateByVehicle(self, vehicleID):
-        battleCtx = g_sessionProvider.getCtx()
+        battleCtx = self.sessionProvider.getCtx()
         if battleCtx.isObserver(vehicleID):
             state = _F_STATES.NEUTRAL
         else:
@@ -422,13 +422,13 @@ class RepairPointsPlugin(common.EntriesPlugin):
     def start(self):
         super(RepairPointsPlugin, self).start()
         self.__addRepairPoints()
-        ctrl = g_sessionProvider.dynamic.repair
+        ctrl = self.sessionProvider.dynamic.repair
         if ctrl is not None:
             ctrl.onStateCreated += self.__onRepairPointStateCreated
         return
 
     def stop(self):
-        ctrl = g_sessionProvider.dynamic.repair
+        ctrl = self.sessionProvider.dynamic.repair
         if ctrl is not None:
             ctrl.onStateCreated -= self.__onRepairPointStateCreated
         super(RepairPointsPlugin, self).stop()

@@ -23,13 +23,13 @@ class CyberSportUnitView(CyberSportUnitMeta):
         return requests
 
     def onUnitFlagsChanged(self, flags, timeLeft):
-        functional = self.unitFunctional
-        pInfo = functional.getPlayerInfo()
-        rosterSettings = functional.getRosterSettings()
-        isCreator = pInfo.isCreator()
+        entity = self.prbEntity
+        pInfo = entity.getPlayerInfo()
+        rosterSettings = entity.getRosterSettings()
+        isCreator = pInfo.isCommander()
         if flags.isLockedStateChanged():
             vehGetter = pInfo.getVehiclesToSlot
-            slotGetter = functional.getSlotState
+            slotGetter = entity.getSlotState
             slotLabels = map(lambda idx: vo_converters.makeSlotLabel(flags, slotGetter(idx), isCreator, len(vehGetter(idx))), rosterSettings.getAllSlotsRange())
             self.as_lockUnitS(flags.isLocked(), slotLabels)
         if isCreator and flags.isOpenedStateChanged():
@@ -40,75 +40,75 @@ class CyberSportUnitView(CyberSportUnitMeta):
 
     def onUnitSettingChanged(self, opCode, value):
         if opCode == UNIT_OP.SET_COMMENT:
-            self.as_setCommentS(self.unitFunctional.getCensoredComment())
+            self.as_setCommentS(self.prbEntity.getCensoredComment())
         elif opCode in [UNIT_OP.CLOSE_SLOT, UNIT_OP.OPEN_SLOT]:
-            functional = self.unitFunctional
-            unitFlags = functional.getFlags()
-            slotState = functional.getSlotState(value)
-            pInfo = functional.getPlayerInfo()
+            entity = self.prbEntity
+            unitFlags = entity.getFlags()
+            slotState = entity.getSlotState(value)
+            pInfo = entity.getPlayerInfo()
             canAssign, vehicles = pInfo.canAssignToSlot(value)
             vehCount = len(vehicles)
-            slotLabel = vo_converters.makeSlotLabel(unitFlags, slotState, pInfo.isCreator(), vehCount)
+            slotLabel = vo_converters.makeSlotLabel(unitFlags, slotState, pInfo.isCommander(), vehCount)
             if opCode == UNIT_OP.CLOSE_SLOT:
                 self.as_closeSlotS(value, settings.UNIT_CLOSED_SLOT_COST, slotLabel)
             else:
                 self.as_openSlotS(value, canAssign, slotLabel, vehCount)
-            unitStats = functional.getStats()
-            canDoAction, restriction = functional.validateLevels(stats=unitStats)
-            self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
+            unitStats = entity.getStats()
+            result = entity.validateLevels()
+            self.as_setTotalLabelS(result.isValid, vo_converters.makeTotalLevelLabel(unitStats, result.restriction), unitStats.curTotalLevel)
             self._setActionButtonState()
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
-        functional = self.unitFunctional
-        pInfo = functional.getPlayerInfo(dbID=dbID)
+        entity = self.prbEntity
+        pInfo = entity.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange())
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
-                slotState = functional.getSlotState(slotIdx)
+                slotState = entity.getSlotState(slotIdx)
                 vehicleVO = None
                 if slotState.isClosed:
                     slotCost = settings.UNIT_CLOSED_SLOT_COST
                 else:
                     slotCost = 0
             self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
-            unitStats = functional.getStats()
-            canDoAction, restriction = functional.validateLevels(stats=unitStats)
-            self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
-        if pInfo.isCurrentPlayer() or functional.getPlayerInfo().isCreator():
+            unitStats = entity.getStats()
+            result = entity.validateLevels()
+            self.as_setTotalLabelS(result.isValid, vo_converters.makeTotalLevelLabel(unitStats, result.restriction), unitStats.curTotalLevel)
+        if pInfo.isCurrentPlayer() or entity.isCommander():
             self._setActionButtonState()
         return
 
     def onUnitMembersListChanged(self):
-        functional = self.unitFunctional
+        entity = self.prbEntity
         if self._candidatesDP:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self._updateMembersData()
         self._setActionButtonState()
-        unitStats = functional.getStats()
-        canDoAction, restriction = functional.validateLevels(stats=unitStats)
-        self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
-        self._updateLabels(functional)
+        unitStats = entity.getStats()
+        result = entity.validateLevels()
+        self.as_setTotalLabelS(result.isValid, vo_converters.makeTotalLevelLabel(unitStats, result.restriction), unitStats.curTotalLevel)
+        self._updateLabels(entity)
 
     def onUnitRejoin(self):
         super(CyberSportUnitView, self).onUnitRejoin()
-        functional = self.unitFunctional
+        entity = self.prbEntity
         if self._candidatesDP:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self._updateMembersData()
-        unitStats = functional.getStats()
-        canDoAction, restriction = functional.validateLevels(stats=unitStats)
-        self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
-        self._updateLabels(functional)
+        unitStats = entity.getStats()
+        result = entity.validateLevels()
+        self.as_setTotalLabelS(result.isValid, vo_converters.makeTotalLevelLabel(unitStats, result.restriction), unitStats.curTotalLevel)
+        self._updateLabels(entity)
 
     def toggleFreezeRequest(self):
-        self.requestToLock(not self.unitFunctional.getFlags().isLocked())
+        self.requestToLock(not self.prbEntity.getFlags().isLocked())
 
     def toggleStatusRequest(self):
-        self.requestToOpen(not self.unitFunctional.getFlags().isOpened())
+        self.requestToOpen(not self.prbEntity.getFlags().isOpened())
 
     def showSettingsRoster(self, slots):
         container = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
@@ -116,7 +116,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
         if window is not None:
             window.updateSlots(slots)
         else:
-            levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
+            levelsRange = self.prbEntity.getRosterSettings().getLevelsRange()
             self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY, ctx={'settings': slots,
              'section': 'cs_unit_view_settings',
              'levelsRange': levelsRange}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -133,13 +133,13 @@ class CyberSportUnitView(CyberSportUnitMeta):
         self.requestToCloseSlot(slotIndex)
 
     def _updateRallyData(self):
-        functional = self.unitFunctional
-        data = vo_converters.makeUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
+        entity = self.prbEntity
+        data = vo_converters.makeUnitVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
         self.as_updateRallyS(data)
-        self._updateLabels(functional)
+        self._updateLabels(entity)
 
-    def _updateLabels(self, functional):
-        _, unit = functional.getUnit()
+    def _updateLabels(self, entity):
+        _, unit = entity.getUnit()
         if unit is None:
             return
         else:
@@ -152,7 +152,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
             return
 
     def _setActionButtonState(self):
-        self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
+        self.as_setActionButtonStateS(ActionButtonStateVO(self.prbEntity))
 
     def _getVehicleSelectorDescription(self):
         return CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_UNIT
@@ -160,7 +160,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
     def _populate(self):
         super(CyberSportUnitView, self)._populate()
         self.addListener(events.CSRosterSlotSettingsWindow.APPLY_SLOT_SETTINGS, self.__applyRosterSettings)
-        settings = self.unitFunctional.getRosterSettings()
+        settings = self.prbEntity.getRosterSettings()
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
     def _dispose(self):
@@ -173,7 +173,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.CandidatesDataProvider()
-        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
+        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.prbEntity.getCandidates())
 
     def rebuildCandidatesDP(self):
-        self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+        self._candidatesDP.rebuild(self.prbEntity.getCandidates())

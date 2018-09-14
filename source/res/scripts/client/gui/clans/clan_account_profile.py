@@ -4,8 +4,8 @@ import weakref
 from collections import namedtuple, defaultdict
 from adisp import process
 from client_request_lib.exceptions import ResponseCodes
-from helpers import time_utils
 from account_helpers import getAccountDatabaseID
+from gui.awards.event_dispatcher import showClanJoinAward
 from messenger.ext import passCensor
 from shared_utils import CONST_CONTAINER
 from debug_utils import LOG_DEBUG
@@ -13,7 +13,7 @@ from gui.shared import g_itemsCache
 from gui.clans import contexts, formatters as clans_fmts
 from gui.clans.restrictions import ClanMemberPermissions, DefaultClanMemberPermissions
 from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES, INVITE_LIMITS_LIFE_TIME
-from gui.clans.clan_helpers import ClanCache, CachedValue
+from gui.clans.clan_helpers import ClanCache, CachedValue, isInClanEnterCooldown
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 
 class SYNC_KEYS(CONST_CONTAINER):
@@ -101,7 +101,10 @@ class ClanAccountProfile(object):
 
     def isInClanEnterCooldown(self):
         self.resyncWebClanInfo()
-        return time_utils.getCurrentTimestamp() - self._vitalWebInfo[SYNC_KEYS.CLAN_INFO].getClanCooldownTill() <= 0 if self._vitalWebInfo[SYNC_KEYS.CLAN_INFO] else False
+        return isInClanEnterCooldown(self.getClanCooldownTill()) if self._vitalWebInfo[SYNC_KEYS.CLAN_INFO] else False
+
+    def getClanCooldownTill(self):
+        return self._vitalWebInfo[SYNC_KEYS.CLAN_INFO].getClanCooldownTill()
 
     def hasClanInvite(self, clanDbID):
         return clanDbID in self._cache[_CACHE_KEYS.INVITES] if self._cache[_CACHE_KEYS.INVITES] else False
@@ -258,6 +261,15 @@ class ClanAccountProfile(object):
         :param notifID:
         :param item: instance of gui.wgnc.proxy_data._ProxyDataItem
         """
+
+        def __updateAfterAction():
+            apps = self._cache[_CACHE_KEYS.APPS] or set()
+            apps.discard(item.getClanId())
+            self._cache[_CACHE_KEYS.APPS] = apps
+            count = self._vitalWebInfo[SYNC_KEYS.APPS]
+            if count:
+                self.__changeWebInfo(SYNC_KEYS.APPS, count - 1, 'onAccountAppsReceived')
+
         if item.getType() == WGNC_DATA_PROXY_TYPE.CLAN_INVITE:
             invites = self._cache[_CACHE_KEYS.INVITES] or set()
             invites.add(item.getClanId())
@@ -266,13 +278,12 @@ class ClanAccountProfile(object):
             if count != self._vitalWebInfo[SYNC_KEYS.INVITES]:
                 self.__changeWebInfo(SYNC_KEYS.INVITES, count, 'onAccountInvitesReceived')
             self._syncState |= SYNC_KEYS.INVITES
-        elif item.getType() == WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED or item.getType() == WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED:
-            apps = self._cache[_CACHE_KEYS.APPS] or set()
-            apps.discard(item.getClanId())
-            self._cache[_CACHE_KEYS.APPS] = apps
-            count = self._vitalWebInfo[SYNC_KEYS.APPS]
-            if count:
-                self.__changeWebInfo(SYNC_KEYS.APPS, count - 1, 'onAccountAppsReceived')
+        elif item.getType() == WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED:
+            __updateAfterAction()
+            if self.isInClan():
+                showClanJoinAward(self.getClanAbbrev(), self.getClanName(), self.getClanDbID())
+        elif item.getType() == WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED:
+            __updateAfterAction()
         if self.isInClan():
             self.getClanDossier().processWgncNotification(notifID, item)
 
@@ -317,14 +328,19 @@ class ClanAccountProfile(object):
 
     def _resyncBwInfo(self, clanDbID=0, clanBwInfo=None):
         needToRaiseEvent = self._clanDbID != clanDbID or self._clanBwInfo != clanBwInfo
+        hasEnteredClan = False
         if self._clanDbID != clanDbID:
             self._syncState = 0
             self._vitalWebInfo[SYNC_KEYS.CLAN_INFO] = None
             self._vitalWebInfo[SYNC_KEYS.INVITES] = None
             self._vitalWebInfo[SYNC_KEYS.APPS] = None
+            if not self._clanDbID and clanDbID:
+                hasEnteredClan = True
         self._clanDbID, self._clanBwInfo = clanDbID, clanBwInfo
         if needToRaiseEvent:
             self._clansCtrl.notify('onAccountClanProfileChanged', self)
+        if hasEnteredClan:
+            showClanJoinAward(self.getClanAbbrev(), self.getClanName(), self.getClanDbID())
         return
 
     def __changeWebInfo(self, fieldName, value, eventName):

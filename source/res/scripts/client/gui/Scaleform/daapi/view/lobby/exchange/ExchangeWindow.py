@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeWindow.py
-import BigWorld
-from PlayerEvents import g_playerEvents
-from gui import SystemMessages, game_control
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.ExchangeWindowMeta import ExchangeWindowMeta
 from gui.shared import g_itemsCache
 from gui.shared.gui_items.processors.common import GoldToCreditsExchanger
 from gui.shared.utils import decorators
+from helpers import dependency
+from skeletons.gui.game_control import IWalletController
 
 class ExchangeWindow(ExchangeWindowMeta):
+    wallet = dependency.descriptor(IWalletController)
 
     def _populate(self):
         super(ExchangeWindow, self)._populate()
@@ -19,20 +20,20 @@ class ExchangeWindow(ExchangeWindowMeta):
         self.as_exchangeRateS({'value': g_itemsCache.items.shop.defaults.exchangeRate,
          'actionValue': g_itemsCache.items.shop.exchangeRate,
          'actionMode': True})
-        self.as_setWalletStatusS(game_control.g_instance.wallet.componentsStatuses)
+        self.as_setWalletStatusS(self.wallet.componentsStatuses)
 
     @decorators.process('transferMoney')
     def exchange(self, gold):
         result = yield GoldToCreditsExchanger(gold).request()
         if result and len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             self.onWindowClose()
 
     def _subscribe(self):
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCreditsCallBack,
          'stats.gold': self._setGoldCallBack,
          'shop.exchangeRate': self.__setExchangeRateCallBack})
-        game_control.g_instance.wallet.onWalletStatusChanged += self.__setWalletCallback
+        self.wallet.onWalletStatusChanged += self.__setWalletCallback
         g_itemsCache.onSyncCompleted += self.__setExchangeRateCallBack
 
     def __setExchangeRateCallBack(self, *args):
@@ -52,6 +53,6 @@ class ExchangeWindow(ExchangeWindowMeta):
 
     def _dispose(self):
         g_itemsCache.onSyncCompleted -= self.__setExchangeRateCallBack
-        game_control.g_instance.wallet.onWalletStatusChanged -= self.__setWalletCallback
+        self.wallet.onWalletStatusChanged -= self.__setWalletCallback
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(ExchangeWindow, self)._dispose()

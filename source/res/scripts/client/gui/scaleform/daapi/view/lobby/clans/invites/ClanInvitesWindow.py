@@ -6,7 +6,6 @@ import BigWorld
 from debug_utils import LOG_DEBUG
 import gui
 from gui.Scaleform.locale.WAITING import WAITING
-from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.clan_helpers import ClanListener
 from gui.clans import formatters
 from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES
@@ -23,14 +22,17 @@ from gui.shared.event_dispatcher import showClanSendInviteWindow
 from gui.shared.formatters import text_styles
 from gui.shared.events import CoolDownEvent
 from gui.shared.view_helpers import CooldownHelper
+from helpers import dependency
 from helpers import i18n
 from helpers.i18n import makeString as _ms
+from skeletons.gui.clans import IClanController
 
 class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
     __coolDownRequests = [CLAN_REQUESTED_DATA_TYPE.CLAN_APPLICATIONS, CLAN_REQUESTED_DATA_TYPE.CLAN_INVITES]
 
     def __init__(self, *args):
         super(ClanInvitesWindow, self).__init__()
+        self.__actualRequestsCount = '0'
         self.__processedInvitesCount = '0'
         self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLAN)
         self.__clanDbID = self.clanProfile.getClanDbID()
@@ -54,9 +56,6 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
 
     def onInvitesButtonClick(self):
         showClanSendInviteWindow(self.clanProfile.getClanDbID())
-
-    def onClanAppsCountReceived(self, clanDbID, appsCount):
-        self.__updateTabsState()
 
     def onWindowClose(self):
         self.destroy()
@@ -123,7 +122,8 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
         paginator = self.__pagiatorsController.getPanginator(alias, filter)
         if alias == CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS:
             if filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL:
-                pass
+                self.__actualRequestsCount = self.formatInvitesCount(paginator)
+                self.__updateTabsState()
             elif filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED:
                 pass
             elif filter == CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED:
@@ -170,13 +170,13 @@ class ClanInvitesWindow(ClanInvitesWindowMeta, ClanListener, ClanEmblemsHelper):
          'freePlacesInClanText': freePlacesInClanText})
 
     def __updateTabsState(self):
-        clanDossier = g_clanCtrl.getClanDossier(g_clanCtrl.getClanDbID())
-        self.as_setDataS({'tabDataProvider': [{'label': i18n.makeString(CLANS.CLANINVITESWINDOW_TABREQUESTS, value=str(clanDossier.getAppsCount() or '0')),
+        self.as_setDataS({'tabDataProvider': [{'label': i18n.makeString(CLANS.CLANINVITESWINDOW_TABREQUESTS, value=self.__actualRequestsCount),
                               'linkage': CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_LINKAGE}, {'label': i18n.makeString(CLANS.CLANINVITESWINDOW_TABINVITES, value=self.__processedInvitesCount),
                               'linkage': CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_LINKAGE}]})
 
 
 class _PaginatorsController(object):
+    clanCtrl = dependency.descriptor(IClanController)
 
     def __init__(self, clanDbID):
         super(_PaginatorsController, self).__init__()
@@ -214,13 +214,13 @@ class _PaginatorsController(object):
         return inProgress
 
     def __setUpPaginators(self):
-        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL, ClanInvitesPaginator(g_clanCtrl, ClanApplicationsCtx, self.__clanDbID, [CLAN_INVITE_STATES.ACTIVE]))
-        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED, ClanInvitesPaginator(g_clanCtrl, ClanApplicationsCtx, self.__clanDbID, [CLAN_INVITE_STATES.EXPIRED]))
-        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED, ClanInvitesPaginator(g_clanCtrl, ClanApplicationsCtx, self.__clanDbID, list(CLAN_INVITE_STATES.PROCESSED)))
-        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL, ClanInvitesPaginator(g_clanCtrl, ClanInvitesCtx, self.__clanDbID, [CLAN_INVITE_STATES.ACTIVE]))
-        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED, ClanInvitesPaginator(g_clanCtrl, ClanInvitesCtx, self.__clanDbID, [CLAN_INVITE_STATES.EXPIRED]))
-        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED, ClanInvitesPaginator(g_clanCtrl, ClanInvitesCtx, self.__clanDbID, list(CLAN_INVITE_STATES.PROCESSED)))
-        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_ALL, ClanInvitesPaginator(g_clanCtrl, ClanInvitesCtx, self.__clanDbID, list(CLAN_INVITE_STATES.ALL)))
+        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL, ClanInvitesPaginator(self.clanCtrl, ClanApplicationsCtx, self.__clanDbID, [CLAN_INVITE_STATES.ACTIVE]))
+        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED, ClanInvitesPaginator(self.clanCtrl, ClanApplicationsCtx, self.__clanDbID, [CLAN_INVITE_STATES.EXPIRED]))
+        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_REQUESTS_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED, ClanInvitesPaginator(self.clanCtrl, ClanApplicationsCtx, self.__clanDbID, list(CLAN_INVITE_STATES.PROCESSED)))
+        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL, ClanInvitesPaginator(self.clanCtrl, ClanInvitesCtx, self.__clanDbID, [CLAN_INVITE_STATES.ACTIVE]))
+        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED, ClanInvitesPaginator(self.clanCtrl, ClanInvitesCtx, self.__clanDbID, [CLAN_INVITE_STATES.EXPIRED]))
+        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED, ClanInvitesPaginator(self.clanCtrl, ClanInvitesCtx, self.__clanDbID, list(CLAN_INVITE_STATES.PROCESSED)))
+        self.__addPaginator(CLANS_ALIASES.CLAN_PROFILE_INVITES_VIEW_ALIAS, CLANS_ALIASES.INVITE_WINDOW_FILTER_ALL, ClanInvitesPaginator(self.clanCtrl, ClanInvitesCtx, self.__clanDbID, list(CLAN_INVITE_STATES.ALL)))
 
     def __addPaginator(self, viewAlias, filter, panginator):
         self.__paginators[viewAlias, filter] = panginator

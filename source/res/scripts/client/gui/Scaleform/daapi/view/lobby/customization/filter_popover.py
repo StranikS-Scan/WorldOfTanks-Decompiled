@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/filter_popover.py
 from constants import IGR_TYPE
-from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
-from gui.game_control import getIGRCtrl
-from gui.shared.formatters import text_styles, icons
-from gui.shared.utils.functions import makeTooltip
-from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.daapi.view.meta.CustomizationFiltersPopoverMeta import CustomizationFiltersPopoverMeta
-from helpers.i18n import makeString as _ms
+from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization import g_customizationController
 from gui.customization.shared import CUSTOMIZATION_TYPE, getBonusIcon16x16, FILTER_TYPE, QUALIFIER_TYPE_INDEX, PURCHASE_TYPE, DEFAULT_GROUP_VALUE, EMBLEM_IGR_GROUP_NAME
+from gui.shared.formatters import text_styles, icons
+from gui.shared.utils.functions import makeTooltip
+from helpers import dependency
+from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IIGRController
 _BONUS_TOOLTIPS = (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_BONUS_ENTIRECREW,
  VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_BONUS_COMMANDER,
  VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_BONUS_AIMER,
@@ -21,13 +21,14 @@ _PURCHASE_TYPE_LABELS = (VEHICLE_CUSTOMIZATION.FILTER_POPOVER_WAYSTOBUY_BUY, VEH
 
 def _getPurchaseTypeVO():
     result = []
+    igrCtrl = dependency.instance(IIGRController)
     for purchaseType, label in zip(PURCHASE_TYPE.ALL, _PURCHASE_TYPE_LABELS):
         purchaseVO = {'label': label,
          'enabled': True}
         if purchaseType == PURCHASE_TYPE.IGR:
             if not GUI_SETTINGS.igrEnabled:
                 continue
-            purchaseVO['enabled'] = getIGRCtrl().getRoomType() == IGR_TYPE.PREMIUM
+            purchaseVO['enabled'] = igrCtrl.getRoomType() == IGR_TYPE.PREMIUM
             purchaseVO['tooltipDisabled'] = makeTooltip(_ms(VEHICLE_CUSTOMIZATION.FILTER_TOOLTIP_IGR_DISABLED_HEADER), _ms(VEHICLE_CUSTOMIZATION.FILTER_TOOLTIP_IGR_DISABLED_BODY, icon=_ms(icons.premiumIgrSmall())))
         result.append(purchaseVO)
 

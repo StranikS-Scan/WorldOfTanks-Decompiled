@@ -1,16 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/squad_window.py
 from constants import PREBATTLE_TYPE
-from gui.Scaleform.locale.MENU import MENU
-from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.Scaleform.daapi.view.meta.SquadWindowMeta import SquadWindowMeta
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
-from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from gui.prb_control.context import unit_ctx
-from gui.prb_control.formatters import messages
-from gui.shared import events, EVENT_BUS_SCOPE
 from gui.prb_control import settings
+from gui.prb_control.formatters import messages
+from gui.prb_control.entities.base.ctx import LeavePrbAction
+from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import i18n
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
@@ -23,9 +22,6 @@ class SquadWindow(SquadWindowMeta):
     def getPrbType(self):
         return PREBATTLE_TYPE.SQUAD
 
-    def onWindowClose(self):
-        self.prbDispatcher.doLeaveAction(unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.UNDEFINED))
-
     def onWindowMinimize(self):
         self.destroy()
 
@@ -37,7 +33,7 @@ class SquadWindow(SquadWindowMeta):
         return PREBATTLE_ALIASES.SQUAD_VIEW_PY
 
     def onUnitFlagsChanged(self, flags, timeLeft):
-        self.as_enableWndCloseBtnS(not self.unitFunctional.getFlags().isInQueue())
+        self.as_enableWndCloseBtnS(not self.prbEntity.hasLockedState())
 
     def onUnitPlayerOnlineStatusChanged(self, pInfo):
         if pInfo.isOffline():

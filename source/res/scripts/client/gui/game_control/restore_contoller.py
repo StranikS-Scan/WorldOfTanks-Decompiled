@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/restore_contoller.py
+import operator
 import time
 from operator import itemgetter
-import operator
 import BigWorld
 import Event
 from account_helpers.AccountSettings import AccountSettings, LAST_RESTORE_NOTIFICATION
 from gui import SystemMessages
-from gui.game_control.controllers import Controller
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Money
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import time_utils
+from skeletons.gui.game_control import IRestoreController
 DEFAULT_MAX_TANKMEN_BUFFER_LENGTH = 100
 
 def getTankmenRestoreInfo(tankman):
@@ -23,14 +23,14 @@ def getTankmenRestoreInfo(tankman):
     return (price, config.creditsDuration - dismissalLength)
 
 
-class RestoreController(Controller, Notifiable):
+class RestoreController(IRestoreController, Notifiable):
 
-    def __init__(self, proxy):
+    def __init__(self):
         """
         RestoreController send event onRestoreChangeNotify on restore left time change
         :param proxy: <_GameControllers>
         """
-        super(RestoreController, self).__init__(proxy)
+        super(RestoreController, self).__init__()
         self.__eventManager = Event.EventManager()
         self.__restoreNotifyTimeCallback = None
         self.__vehiclesForUpdate = []
@@ -44,10 +44,10 @@ class RestoreController(Controller, Notifiable):
 
     def init(self):
         g_itemsCache.onSyncCompleted += self._update
+        self.addNotificator(PeriodicNotifier(self.__getClosestTankmanUpdateTime, self.__updateTankmenList))
 
     def onLobbyInited(self, _):
-        self.__tankmanLiveTime = g_itemsCache.items.shop.tankmenRestoreConfig.goldDuration
-        self.addNotificator(PeriodicNotifier(self.__getClosestTankmanUpdateTime, self.__updateTankmenList))
+        self.__tankmanLiveTime = g_itemsCache.items.shop.tankmenRestoreConfig.creditsDuration
         if self.__restoreNotifyTimeCallback is None:
             self.__startRestoreTimeNotifyCallback()
         self.__checkLimitedRestoreNotification()
@@ -64,6 +64,7 @@ class RestoreController(Controller, Notifiable):
 
     def fini(self):
         self._stop()
+        self.clearNotification()
         g_itemsCache.onSyncCompleted -= self._update
         super(RestoreController, self).fini()
 
@@ -102,17 +103,18 @@ class RestoreController(Controller, Notifiable):
         self.__clearRestoreTimeNotifyCallback()
         self.__vehiclesForUpdate = None
         self.__eventManager.clear()
-        self.clearNotification()
+        self.stopNotification()
         self.__tankmenList = []
         return
 
     def _update(self, _, invalidItems):
+        restoreConfig = g_itemsCache.items.shop.tankmenRestoreConfig
+        self.__maxTankmenBufferLength = restoreConfig.limit
+        self.__tankmanLiveTime = restoreConfig.creditsDuration
         if invalidItems == {} or any([ tmanID < 0 for tmanID in invalidItems.get(GUI_ITEM_TYPE.TANKMAN, []) ]):
             self.__updateTankmenList()
         self.__clearRestoreTimeNotifyCallback()
         self.__startRestoreTimeNotifyCallback()
-        self.__maxTankmenBufferLength = g_itemsCache.items.shop.tankmenRestoreConfig.limit
-        self.__tankmanLiveTime = g_itemsCache.items.shop.tankmenRestoreConfig.goldDuration
 
     def __startRestoreTimeNotifyCallback(self):
         self.__vehiclesForUpdate = []
@@ -179,6 +181,6 @@ class RestoreController(Controller, Notifiable):
             showMessage = time_utils.getTimeDeltaTilNow(lastRestoreNotification) >= time_utils.ONE_DAY
         if len(vehicles) and showMessage and not self.__checkForNotify:
             AccountSettings.setSettings(LAST_RESTORE_NOTIFICATION, time.time())
-            SystemMessages.g_instance.pushI18nMessage('#system_messages:restoreController/hasLimitedRestoreVehicles', type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage('#system_messages:restoreController/hasLimitedRestoreVehicles', type=SystemMessages.SM_TYPE.Warning)
         self.__checkForNotify = True
         return

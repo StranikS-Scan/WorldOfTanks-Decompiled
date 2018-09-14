@@ -23,6 +23,9 @@ class ReferralManagementWindowMeta(AbstractWindowView):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setTableDataS(self, referrals):
+        """
+        :param referrals: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_setTableData(referrals) if self._isDAAPIInited() else None
 
     def as_setAwardDataDataS(self, data):

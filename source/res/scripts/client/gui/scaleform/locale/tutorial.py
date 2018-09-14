@@ -61,6 +61,7 @@ class TUTORIAL(object):
     TUTORIALQUEST_AWARDWINDOW_TITLE_QUEST5 = '#tutorial:tutorialQuest/awardWindow/title/quest5'
     TUTORIALQUEST_AWARDWINDOW_DESCRIPTION_QUEST5 = '#tutorial:tutorialQuest/awardWindow/description/quest5'
     TUTORIALQUEST_AWARD_QUEST5 = '#tutorial:tutorialQuest/award/quest5'
+    TUTORIALQUEST_AWARD_QUEST5_ALTBONUS = '#tutorial:tutorialQuest/award/quest5/altBonus'
     TUTORIALQUEST_AWARD_QUEST5_KR = '#tutorial:tutorialQuest/award/quest5/kr'
     TUTORIALQUEST_TITLE_QUEST6 = '#tutorial:tutorialQuest/title/quest6'
     TUTORIALQUEST_CONDITION_QUEST6 = '#tutorial:tutorialQuest/condition/quest6'
@@ -148,3 +149,5 @@ class TUTORIAL(object):
     CHAIN9_HINT_SELECT = '#tutorial:chain9/hint/select'
     CHAIN9_HINT_SUBMIT = '#tutorial:chain9/hint/submit'
     CUSTOMIZATION_SLOTS = '#tutorial:customization/slots'
+    ALCHEMY_BTN = '#tutorial:alchemy/btn'
+    CHRISTMAS_DECORATIONLIST = '#tutorial:christmas/decorationList'

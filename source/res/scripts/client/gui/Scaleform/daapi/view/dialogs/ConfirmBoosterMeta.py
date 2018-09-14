@@ -4,7 +4,7 @@ import math
 from Event import EventManager, Event
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.framework import ScopeTemplates
-from gui.goodies.GoodiesCache import g_goodiesCache
+from gui.goodies.goodies_cache import g_goodiesCache
 from gui.shared import events
 from gui.shared.gui_items.processors.goodies import BoosterBuyer
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
@@ -59,7 +59,7 @@ class BuyBoosterMeta(I18nConfirmDialogMeta):
     def submit(self, count, currency):
         result = yield BoosterBuyer(self.__booster, count, currency == Currency.GOLD).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def __onStatsChanged(self, stats):
         if 'credits' in stats:

@@ -8,6 +8,7 @@ import nations
 import constants
 from goodies.goodie_constants import GOODIE_STATE
 from account_shared import LayoutIterator
+from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr
 from adisp import async, process
 from debug_utils import LOG_WARNING, LOG_DEBUG
@@ -24,6 +25,7 @@ from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChass
 from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.Tankman import Tankman
+from skeletons.gui.clubs import IClubsController
 
 def _getDiffID(itemdID):
     if isinstance(itemdID, tuple):
@@ -183,6 +185,7 @@ class ItemsRequester(object):
      GUI_ITEM_TYPE.RADIO: VehicleRadio,
      GUI_ITEM_TYPE.VEHICLE: Vehicle,
      GUI_ITEM_TYPE.TANKMAN: Tankman}
+    clubsCtrl = dependency.descriptor(IClubsController)
 
     def __init__(self):
         self.inventory = InventoryRequester()
@@ -333,6 +336,13 @@ class ItemsRequester(object):
                     invalidate[GUI_ITEM_TYPE.TANKMAN].add(itemID * -1)
                 invalidate[GUI_ITEM_TYPE.VEHICLE].add(itemID)
 
+        if 'goodies' in diff:
+            vehicleDiscounts = self.shop.getVehicleDiscountDescriptions()
+            for goodieID in diff['goodies'].iterkeys():
+                if goodieID in vehicleDiscounts:
+                    vehicleDiscount = vehicleDiscounts[goodieID]
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleDiscount.target.targetValue)
+
         for itemTypeID, uniqueIDs in invalidate.iteritems():
             self._invalidateItems(itemTypeID, uniqueIDs)
 
@@ -355,7 +365,7 @@ class ItemsRequester(object):
         if tmanInvData is not None:
             tankman = self.__makeTankman(tmanInvID, tmanInvData)
         else:
-            duration = self.shop.tankmenRestoreConfig.goldDuration
+            duration = self.shop.tankmenRestoreConfig.creditsDuration
             tankmanData = self.recycleBin.getTankman(tmanInvID, duration)
             if tankmanData is not None:
                 tankman = self.__makeDismissedTankman(tmanInvID, tankmanData)
@@ -382,7 +392,7 @@ class ItemsRequester(object):
             if criteria(item):
                 result[invID] = item
 
-        duration = self.shop.tankmenRestoreConfig.goldDuration
+        duration = self.shop.tankmenRestoreConfig.creditsDuration
         dismissedTankmenData = self.recycleBin.getTankmen(duration)
         for invID, tankmanData in dismissedTankmenData.iteritems():
             item = self.__makeDismissedTankman(invID, tankmanData)
@@ -453,15 +463,18 @@ class ItemsRequester(object):
         else:
             return VehicleDossier(dossier, vehTypeCompDescr, playerDBID=databaseID)
 
+    def getVehicleDossiersIterator(self):
+        for intCD, dossier in self.dossiers.getVehDossiersIterator():
+            yield (intCD, dossiers2.getVehicleDossierDescr(dossier))
+
     def getAccountDossier(self, databaseID=None):
         """
         Returns account dossier item
         @return: AccountDossier object
         """
         if databaseID is None:
-            from gui.clubs.ClubsController import g_clubsCtrl
             dossierDescr = self.__getAccountDossierDescr()
-            seasonDossiers = dict(((s.getSeasonID(), s.getDossierDescr()) for s in g_clubsCtrl.getSeasons()))
+            seasonDossiers = dict(((s.getSeasonID(), s.getDossierDescr()) for s in self.clubsCtrl.getSeasons()))
             return AccountDossier(dossierDescr, rated7x7Seasons=seasonDossiers)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
         dossier, _, seasons = container.get(int(databaseID))

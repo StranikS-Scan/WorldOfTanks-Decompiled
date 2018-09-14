@@ -2,34 +2,6 @@
 # Embedded file name: scripts/client/gui/game_control/gc_constants.py
 from shared_utils import CONST_CONTAINER
 
-class CONTROLLER(CONST_CONTAINER):
-    RELOGIN = 'relogin'
-    AOGAS = 'aogas'
-    GAME_SESSION = 'gameSession'
-    RENTALS = 'rentals'
-    RESTORE = 'restore'
-    IGR = 'igr'
-    WALLET = 'wallet'
-    LANGUAGE = 'language'
-    NOTIFIER = 'notifier'
-    LINKS = 'links'
-    INTERNAL_LINKS = 'internalLinks'
-    SOUND_CHECKER = 'soundChecker'
-    SERVER_STATS = 'serverStats'
-    REF_SYSTEM = 'refSystem'
-    BROWSER = 'browser'
-    PROMO = 'promo'
-    EVENTS_NOTIFICATION = 'eventsNotifications'
-    CHINA = 'china'
-    AWARD = 'award'
-    BOOSTERS = 'boosters'
-    FALLOUT = 'fallout'
-    SCREENCAST = 'screencastController'
-    CLAN_LOCK = 'clanLock'
-    VEH_COMPARISON_BASKET = 'vehComparisonBasket'
-    ENCYCLOPEDIA = 'encyclopedia'
-
-
 class BROWSER(CONST_CONTAINER):
     CHINA_BROWSER_COUNT = 999
     SIZE = (990, 550)

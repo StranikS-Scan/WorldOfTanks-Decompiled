@@ -1,27 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/wallet.py
 import BigWorld
-from adisp import process
 import Event
+from adisp import process
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.FreeXPInfoDialogMeta import FreeXPInfoMeta
 from gui.SystemMessages import SM_TYPE
-from gui.game_control.controllers import Controller
 from gui.shared import g_itemsCache
-from shared_utils import CONST_CONTAINER
+from helpers import dependency
 from helpers.aop import Aspect, Pointcut, Weaver
+from shared_utils import CONST_CONTAINER
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IWalletController
 
-class WalletController(Controller):
+class WalletController(IWalletController):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     class STATUS(CONST_CONTAINER):
         SYNCING = 0
         NOT_AVAILABLE = 1
         AVAILABLE = 2
 
-    def __init__(self, proxy):
-        super(WalletController, self).__init__(proxy)
+    def __init__(self):
+        super(WalletController, self).__init__()
         self.onWalletStatusChanged = Event.Event()
         self.__currentStatus = None
         self.__currentCallbackId = None
@@ -102,7 +105,7 @@ class WalletController(Controller):
                 message += '_gold'
             elif not self.__useGold:
                 message += '_freexp'
-            SystemMessages.g_instance.pushI18nMessage(message, type=SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(message, type=SM_TYPE.Warning)
         return
 
     def __clearCallback(self):
@@ -124,7 +127,7 @@ class WalletController(Controller):
                         message += '_gold'
                     elif not self.__useGold:
                         message += '_freexp'
-                    SystemMessages.g_instance.pushI18nMessage(message, type=SM_TYPE.Information)
+                    SystemMessages.pushI18nMessage(message, type=SM_TYPE.Information)
             elif self.isSyncing and self.__currentCallbackId is None:
                 self.__currentCallbackId = BigWorld.callback(30, self.__processCallback)
         return
@@ -145,9 +148,8 @@ class WalletController(Controller):
 
     def __checkFreeXPConditions(self):
         from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        filters = g_settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        filters = self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
         if filters['isFreeXPInfoDialogShowed']:
             return
         self.__weaver = Weaver()
@@ -158,6 +160,7 @@ class WalletController(Controller):
 
 
 class ShowXPInfoDialogAspect(Aspect):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, callBack):
         super(ShowXPInfoDialogAspect, self).__init__()
@@ -167,11 +170,10 @@ class ShowXPInfoDialogAspect(Aspect):
     def atCall(self, cd):
         from gui import DialogsInterface
         from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        filters = g_settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        filters = self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
         filters['isFreeXPInfoDialogShowed'] = True
-        g_settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
+        self.settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
         cd.avoid()
         yield DialogsInterface.showDialog(FreeXPInfoMeta())
         cd.function(*cd._packArgs(), **cd._kwargs)

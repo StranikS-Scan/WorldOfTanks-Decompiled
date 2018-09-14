@@ -331,19 +331,23 @@ class _PixieEffectDesc(_EffectDesc):
 
     def create(self, model, list, args):
         elem = {}
-        elem['newPos'] = args.get('position', None)
-        nodePos = self._nodeName
-        if elem['newPos'] is not None:
-            nodePos = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
-        scale = args.get('scale')
-        if scale is not None:
-            elem['scale'] = scale
-        elem['surfaceNormal'] = args.get('surfaceNormal', None)
-        surfaceMatKind = args.get('surfaceMatKind', None)
-        if surfaceMatKind is not None and self._surfaceMatKinds is not None:
-            if surfaceMatKind not in self._surfaceMatKinds:
-                return
-        elem['node'] = _findTargetNode(model, nodePos, elem['newPos'][1] if elem['newPos'] else None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
+        node = args.get('node', None)
+        if node is None:
+            elem['newPos'] = args.get('position', None)
+            nodePos = self._nodeName
+            if elem['newPos'] is not None:
+                nodePos = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
+            scale = args.get('scale')
+            if scale is not None:
+                elem['scale'] = scale
+            elem['surfaceNormal'] = args.get('surfaceNormal', None)
+            surfaceMatKind = args.get('surfaceMatKind', None)
+            if surfaceMatKind is not None and self._surfaceMatKinds is not None:
+                if surfaceMatKind not in self._surfaceMatKinds:
+                    return
+            elem['node'] = _findTargetNode(model, nodePos, elem['newPos'][1] if elem['newPos'] else None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
+        else:
+            elem['node'] = node
         elem['model'] = model
         elem['typeDesc'] = self
         elem['pixie'] = None
@@ -539,7 +543,7 @@ class _BaseSoundEvent(_EffectDesc, object):
 
     def _getName(self, args):
         isPlayer, id = self._isPlayer(args)
-        return (self._soundName[0 if isPlayer else 1], id)
+        return ((self._soundName[0 if isPlayer else 1],), id)
 
     def _register(self, list, node, sound):
         elem = {'typeDesc': self}
@@ -575,18 +579,24 @@ class _NodeSoundEffectDesc(_BaseSoundEvent, object):
 
     def create(self, model, list, args):
         soundName, id = self._getName(args)
-        if soundName == '':
+        if len(soundName) < 1:
             return
         else:
             vehicle = args.get('entity', None)
             if vehicle is not None and vehicle.isAlive() and vehicle.isStarted:
-                local = args.get('position', None)
-                if local is not None:
-                    local = local[1].translation
+                nodeDesc = args.get('position', None)
+                nodeName = self._nodeName
+                nodeLocalPos = None
+                if nodeDesc is not None:
+                    nodeName = string.split(nodeDesc[0], '/') if nodeDesc[0] else []
+                    nodeLocalPos = nodeDesc[1]
+                node = _findTargetNode(model, nodeName, nodeLocalPos)
+                hitPoint = args.get('hitPoint', None)
+                if hitPoint is None:
+                    local = nodeLocalPos.translation
                 else:
-                    local = Math.Vector3(0.0, 0.0, 0.0)
-                node = _findTargetNodeSafe(model, self._nodeName)
-                objectName = soundName + str(id) + '_' + str(local)
+                    local = hitPoint - node.actualNode.position
+                objectName = soundName[0] + str(id) + '_' + str(local)
                 soundObject = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode, local)
                 if soundObject is not None:
                     damageFactor = args.get('damageFactor', None)
@@ -597,13 +607,15 @@ class _NodeSoundEffectDesc(_BaseSoundEvent, object):
                             damage_size = 'SWITCH_ext_damage_size_small'
                         elif factor > 8925.0 / 100.0:
                             damage_size = 'SWITCH_ext_damage_size_large'
-                        LOG_DEBUG('Sound Name = {0} Damage Size = {1}'.format(soundName, damage_size))
+                        LOG_DEBUG('Sound Name = {0} Damage Size = {1}'.format(soundName[0], damage_size))
                         soundObject.setSwitch('SWITCH_ext_damage_size', damage_size)
                     startParams = args.get('soundParams', ())
                     for soundStartParam in startParams:
                         soundObject.setRTPC(soundStartParam.name, soundStartParam.value)
 
-                    soundObject.play(soundName)
+                    for sndName in soundName:
+                        soundObject.play(sndName)
+
                     self._register(list, node, soundObject)
                     return soundObject
             else:
@@ -616,17 +628,27 @@ class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
 
     def __init__(self, dataSection):
         _EffectDesc.__init__(self, dataSection)
-        pcSounds, npcSounds = dataSection.readString('wwsoundPC', '').split(';'), dataSection.readString('wwsoundNPC', '').split(';')
-        if pcSounds is not None and len(pcSounds) > 1:
-            pcSounds = (pcSounds[0].split()[0], pcSounds[1].split()[0])
-        else:
-            pcSounds = None
-        if npcSounds is not None and len(npcSounds) > 1:
-            npcSounds = (npcSounds[0].split()[0], npcSounds[1].split()[0])
-        else:
-            npcSounds = None
+        pcSounds, npcSounds = dataSection.readString('wwsoundPC', ''), dataSection.readString('wwsoundNPC', '')
+        if pcSounds == '' and npcSounds == '':
+            pcSounds = npcSounds = dataSection.readString('wwsound', '')
+        pcSounds = self.__parceNames(pcSounds)
+        npcSounds = self.__parceNames(npcSounds)
         self._soundName = (pcSounds, npcSounds)
-        return
+
+    def __parceNames(self, events):
+        if events == '':
+            return None
+        else:
+            events = events.split(';')
+            resultEvents = ([], [])
+            lineNum = 0
+            for eventLists in events:
+                for evntName in eventLists.split(','):
+                    resultEvents[lineNum].append(evntName.split()[0])
+
+                lineNum += 1
+
+            return resultEvents
 
     def _getName(self, args):
         isPlayer, id = self._isPlayer(args)
@@ -646,10 +668,12 @@ class _CollisionSoundEffectDesc(_NodeSoundEffectDesc):
         impulse = args.get('impulse', None)
         if impulse is not None:
             impulseParam = SoundStartParam('RTPC_ext_collision_impulse_static_object', impulse)
-            soundParams = args.get('soundParams', [impulseParam])
+            soundParams = args.get('soundParams', [])
+            soundParams.append(impulseParam)
             args['soundParams'] = soundParams
         object = _NodeSoundEffectDesc.create(self, model, list, args)
-        if damageFactor is not None and object is not None:
+        isPlayer, _ = self._isPlayer(args)
+        if damageFactor is not None and object is not None and isPlayer:
             object.play('collision_static_object_damage')
         return
 
@@ -695,110 +719,120 @@ class _SoundEffectDesc(_EffectDesc, object):
     def create(self, model, list, args):
         soundName = 'EMPTY_EVENT'
         entityID = args.get('entity_id', None)
-        playerID = BigWorld.player().playerVehicleID
-        attackedVehicle = BigWorld.player().getVehicleAttached()
-        attackerID = args.get('attackerID')
-        if entityID is not None:
-            isPlayerVehicle = playerID == entityID or not BigWorld.entity(playerID).isAlive() and attackedVehicle.id == entityID
-        else:
-            isPlayerVehicle = args.get('isPlayerVehicle')
-            if isPlayerVehicle is None:
-                if args.has_key('entity') and hasattr(args['entity'], 'isPlayerVehicle'):
-                    isPlayerVehicle = args['entity'].isPlayerVehicle
-                else:
-                    isPlayerVehicle = False
-        if attackerID is None or attackedVehicle is None:
-            fromPC = False
-        else:
-            fromPC = attackerID == playerID or not BigWorld.entity(playerID).isAlive() and attackedVehicle.id == attackerID
-        if not fromPC:
-            soundName = self._soundNames[0 if isPlayerVehicle else 1] if self._soundNames is not None else self._soundName
-        if entityID is not None:
-            if soundName.startswith('expl_') and playerID != entityID:
-                soundName = self._soundNames[1] if self._soundNames is not None else self._soundName
-        elem = {'typeDesc': self}
-        elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
-        pos = Math.Matrix(node.actualNode).translation
-        startParams = args.get('soundParams', ())
-        if self._dynamic is True or self._stopSyncVisual:
-            objectName = soundName + '_NODE_' + str(entityID) + '_' + str(self._nodeName)
+        player = BigWorld.player()
+        if not hasattr(player, 'playerVehicleID'):
+            elem = {'typeDesc': self}
+            elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
+            objectName = self._soundName
             elem['sound'] = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
-            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList dynamic, ', soundName, args, node.actualNode, self._nodeName, elem['sound'])
-            if SoundGroups.DEBUG_TRACE_STACK is True:
-                import traceback
-                traceback.print_stack()
-            for soundStartParam in startParams:
-                elem['sound'].setRTPC(soundStartParam.name, soundStartParam.value)
-
-            elem['sound'].play(soundName)
-        elif self._switch_shell_type and self._switch_impact_type:
-            if self._impactNames is None:
-                raise Exception('impact tags are invalid <%s> <%s> <%s> <%s> <%s>' % (self._soundName,
-                 self._soundNames,
-                 self._switch_impact_surface,
-                 self._switch_shell_type,
-                 self._switch_impact_type))
-            m = Math.Matrix(node.actualNode)
-            hitdir = args.get('hitdir')
-            if hitdir is not None:
-                m.translation -= hitdir
-            if fromPC:
-                soundName = self._impactNames[1]
-            elif isPlayerVehicle:
-                soundName = self._impactNames[0]
-            else:
-                soundName = self._impactNames[2]
-            if hitdir is not None:
-                t = m.applyToOrigin()
-                m.setRotateY(hitdir.yaw)
-                m.translation = t
-            sound = SoundGroups.g_instance.WWgetSoundPos(soundName, soundName + '_MODEL_' + str(id(model)), m.translation)
-            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList impacts, ', soundName, args, str(id(model)), sound)
-            if SoundGroups.DEBUG_TRACE_STACK is True:
-                import traceback
-                traceback.print_stack()
-            if sound is not None:
-                if self._switch_impact_surface:
-                    sound.setSwitch('SWITCH_ext_impact_surface', self._switch_impact_surface)
-                sound.setSwitch('SWITCH_ext_shell_type', self._switch_shell_type)
-                sound.setSwitch('SWITCH_ext_impact_type', self._switch_impact_type)
-                damage_size = 'SWITCH_ext_damage_size_medium'
-                if args.has_key('damageFactor'):
-                    factor = args.get('damageFactor', 0.0)
-                    if factor < 4335.0 / 100.0:
-                        damage_size = 'SWITCH_ext_damage_size_small'
-                    elif factor > 8925.0 / 100.0:
-                        damage_size = 'SWITCH_ext_damage_size_large'
-                sound.setSwitch('SWITCH_ext_damage_size', damage_size)
-                sound.play()
-                for soundStartParam in startParams:
-                    sound.setRTPC(soundStartParam.name, soundStartParam.value)
-
-        elif len(startParams) > 0:
-            sound = SoundGroups.g_instance.WWgetSoundPos(soundName, soundName + '_POS_' + str(id(pos)), pos)
-            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList WWgetSoundPos, ', soundName, args, sound, pos)
-            if SoundGroups.DEBUG_TRACE_STACK is True:
-                import traceback
-                traceback.print_stack()
-            if sound is not None:
-                sound.play()
-                for soundStartParam in startParams:
-                    sound.setRTPC(soundStartParam.name, soundStartParam.value)
-
+            elem['sound'].play(objectName)
+            list.append(elem)
+            return
         else:
-            idd = SoundGroups.g_instance.playSoundPos(soundName, pos)
-            if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
-                LOG_DEBUG('SOUND: EffectList playSoundPos, ', soundName, args, idd, pos)
-            if SoundGroups.DEBUG_TRACE_STACK is True:
-                import traceback
-                traceback.print_stack()
-            if idd == 0:
-                LOG_ERROR('Failed to start sound effect, event ' + soundName)
-        list.append(elem)
-        return
+            playerID = player.playerVehicleID
+            attackedVehicle = player.getVehicleAttached()
+            attackerID = args.get('attackerID')
+            if entityID is not None:
+                isPlayerVehicle = playerID == entityID or not BigWorld.entity(playerID).isAlive() and attackedVehicle.id == entityID
+            else:
+                isPlayerVehicle = args.get('isPlayerVehicle')
+                if isPlayerVehicle is None:
+                    if args.has_key('entity') and hasattr(args['entity'], 'isPlayerVehicle'):
+                        isPlayerVehicle = args['entity'].isPlayerVehicle
+                    else:
+                        isPlayerVehicle = False
+            if attackerID is None or attackedVehicle is None:
+                fromPC = False
+            else:
+                fromPC = attackerID == playerID or not BigWorld.entity(playerID).isAlive() and attackedVehicle.id == attackerID
+            if not fromPC:
+                soundName = self._soundNames[0 if isPlayerVehicle else 1] if self._soundNames is not None else self._soundName
+            if entityID is not None:
+                if soundName.startswith('expl_') and playerID != entityID:
+                    soundName = self._soundNames[1] if self._soundNames is not None else self._soundName
+            elem = {'typeDesc': self}
+            elem['node'] = node = _findTargetNodeSafe(model, self._nodeName)
+            pos = Math.Matrix(node.actualNode).translation
+            startParams = args.get('soundParams', ())
+            if self._dynamic is True or self._stopSyncVisual:
+                objectName = soundName + '_NODE_' + str(entityID) + '_' + str(self._nodeName)
+                elem['sound'] = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
+                if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
+                    LOG_DEBUG('SOUND: EffectList dynamic, ', soundName, args, node.actualNode, self._nodeName, elem['sound'])
+                if SoundGroups.DEBUG_TRACE_STACK is True:
+                    import traceback
+                    traceback.print_stack()
+                for soundStartParam in startParams:
+                    elem['sound'].setRTPC(soundStartParam.name, soundStartParam.value)
+
+                elem['sound'].play(soundName)
+            elif self._switch_shell_type and self._switch_impact_type:
+                if self._impactNames is None:
+                    raise Exception('impact tags are invalid <%s> <%s> <%s> <%s> <%s>' % (self._soundName,
+                     self._soundNames,
+                     self._switch_impact_surface,
+                     self._switch_shell_type,
+                     self._switch_impact_type))
+                m = Math.Matrix(node.actualNode)
+                hitdir = args.get('hitdir')
+                if hitdir is not None:
+                    m.translation -= hitdir
+                if fromPC:
+                    soundName = self._impactNames[1]
+                elif isPlayerVehicle:
+                    soundName = self._impactNames[0]
+                else:
+                    soundName = self._impactNames[2]
+                if hitdir is not None:
+                    t = m.applyToOrigin()
+                    m.setRotateY(hitdir.yaw)
+                    m.translation = t
+                sound = SoundGroups.g_instance.WWgetSoundPos(soundName, soundName + '_MODEL_' + str(id(model)), m.translation)
+                if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
+                    LOG_DEBUG('SOUND: EffectList impacts, ', soundName, args, str(id(model)), sound)
+                if SoundGroups.DEBUG_TRACE_STACK is True:
+                    import traceback
+                    traceback.print_stack()
+                if sound is not None:
+                    if self._switch_impact_surface:
+                        sound.setSwitch('SWITCH_ext_impact_surface', self._switch_impact_surface)
+                    sound.setSwitch('SWITCH_ext_shell_type', self._switch_shell_type)
+                    sound.setSwitch('SWITCH_ext_impact_type', self._switch_impact_type)
+                    damage_size = 'SWITCH_ext_damage_size_medium'
+                    if args.has_key('damageFactor'):
+                        factor = args.get('damageFactor', 0.0)
+                        if factor < 4335.0 / 100.0:
+                            damage_size = 'SWITCH_ext_damage_size_small'
+                        elif factor > 8925.0 / 100.0:
+                            damage_size = 'SWITCH_ext_damage_size_large'
+                    sound.setSwitch('SWITCH_ext_damage_size', damage_size)
+                    sound.play()
+                    for soundStartParam in startParams:
+                        sound.setRTPC(soundStartParam.name, soundStartParam.value)
+
+            elif len(startParams) > 0:
+                sound = SoundGroups.g_instance.WWgetSoundPos(soundName, soundName + '_POS_' + str(id(pos)), pos)
+                if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
+                    LOG_DEBUG('SOUND: EffectList WWgetSoundPos, ', soundName, args, sound, pos)
+                if SoundGroups.DEBUG_TRACE_STACK is True:
+                    import traceback
+                    traceback.print_stack()
+                if sound is not None:
+                    sound.play()
+                    for soundStartParam in startParams:
+                        sound.setRTPC(soundStartParam.name, soundStartParam.value)
+
+            else:
+                idd = SoundGroups.g_instance.playSoundPos(soundName, pos)
+                if SoundGroups.DEBUG_TRACE_EFFECTLIST is True:
+                    LOG_DEBUG('SOUND: EffectList playSoundPos, ', soundName, args, idd, pos)
+                if SoundGroups.DEBUG_TRACE_STACK is True:
+                    import traceback
+                    traceback.print_stack()
+                if idd == 0:
+                    LOG_ERROR('Failed to start sound effect, event ' + soundName)
+            list.append(elem)
+            return
 
     def delete(self, elem, reason):
         if elem.has_key('sound') and elem['sound'] is not None:

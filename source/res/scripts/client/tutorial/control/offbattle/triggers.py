@@ -2,15 +2,15 @@
 # Embedded file name: scripts/client/tutorial/control/offbattle/triggers.py
 from constants import QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.prb_control.prb_helpers import GlobalListener
+from gui.prb_control.entities.listener import IGlobalListener
 from tutorial import LOG_ERROR
 from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
+from tutorial.control.offbattle.context import OffBattleClientCtx
 from tutorial.control.offbattle.functional import ContentChangedEvent
 from tutorial.control.triggers import Trigger
-from tutorial.control.offbattle.context import OffBattleClientCtx
 __all__ = ['TutorialQueueTrigger', 'AllBonusesTrigger']
 
-class TutorialQueueTrigger(Trigger, GlobalListener):
+class TutorialQueueTrigger(Trigger, IGlobalListener):
     _inQueue = GlobalStorage(GLOBAL_FLAG.IN_QUEUE, False)
 
     def __init__(self, triggerID, popUpID):

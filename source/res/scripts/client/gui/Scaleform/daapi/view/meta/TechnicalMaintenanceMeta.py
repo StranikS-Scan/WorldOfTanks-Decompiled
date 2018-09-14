@@ -29,9 +29,15 @@ class TechnicalMaintenanceMeta(AbstractWindowView):
         self._printOverrideError('updateEquipmentCurrency')
 
     def as_setDataS(self, data):
+        """
+        :param data: Represented by MaintenanceVO (AS)
+        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setEquipmentS(self, installed, setup, modules):
+        """
+        :param modules: Represented by Array (AS)
+        """
         return self.flashObject.as_setEquipment(installed, setup, modules) if self._isDAAPIInited() else None
 
     def as_onAmmoInstallS(self):

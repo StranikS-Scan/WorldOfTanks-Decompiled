@@ -3,11 +3,12 @@
 import struct
 import BigWorld
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
+from skeletons.gui.battle_session import IBattleClientCache
 _CACHE_MAX_LENGTH = 4096
 _RECORD_HEADER_FORMAT = 'HH'
 _RECORD_HEADER_SIZE = struct.calcsize(_RECORD_HEADER_FORMAT)
 
-class BattleClientCache(object):
+class BattleClientCache(IBattleClientCache):
     """
     Represents wrapper over client cache stored on the server.
     

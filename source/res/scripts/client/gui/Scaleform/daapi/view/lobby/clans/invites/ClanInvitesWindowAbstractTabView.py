@@ -95,12 +95,15 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
         self.resyncClanInfo()
 
     def filterBy(self, filterName):
+        self.__removePaginatorHandlers()
         self.__filterName = filterName
-        paginator = self._getCurrentPaginator()
-        if paginator.isSynced():
-            self._onListUpdated(None, True, True, (paginator.getLastStatus(), paginator.getLastResult()))
+        newPaginator = self._getCurrentPaginator()
+        newPaginator.onListUpdated += self._onListUpdated
+        newPaginator.onListItemsUpdated += self._onListItemsUpdated
+        if newPaginator.isSynced():
+            self._onListUpdated(None, True, True, (newPaginator.getLastStatus(), newPaginator.getLastResult()))
         else:
-            self._sendRefreshRequest(paginator)
+            self._sendRefreshRequest(newPaginator, sort=self._getDefaultSortFields())
         return
 
     def onSortChanged(self, dataProvider, sort):
@@ -181,10 +184,16 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
             self.showWaiting(True)
             paginator.right()
 
-    def _sendRefreshRequest(self, paginator):
+    def _sendRefreshRequest(self, paginator, sort=None):
         self.showWaiting(True)
+        defFilter = self._getDefaultFilterName()
+        if self.currentFilterName != defFilter:
+            defPaginator = self._getPaginatorByFilterName(defFilter)
+            defPaginator.markAsUnSynced()
+            if not defPaginator.isInProgress():
+                defPaginator.refresh()
         if not paginator.isInProgress():
-            paginator.refresh()
+            paginator.refresh(sort=sort)
         else:
             self.showWaiting(False)
 
@@ -198,9 +207,15 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
         super(ClanInvitesWindowAbstractTabView, self)._populate()
 
     def _dispose(self):
+        self.__removePaginatorHandlers()
         self.__refreshBtnController.stop()
         self.stopClanListening()
         super(ClanInvitesWindowAbstractTabView, self)._dispose()
+
+    def __removePaginatorHandlers(self):
+        paginator = self._getCurrentPaginator()
+        paginator.onListUpdated -= self._onListUpdated
+        paginator.onListItemsUpdated -= self._onListItemsUpdated
 
     def _onAttachedToWindow(self):
         super(ClanInvitesWindowAbstractTabView, self)._onAttachedToWindow()

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/CrashedTracks.py
 import weakref
+from AvatarInputHandler import mathUtils
+import Math
 import BigWorld
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
@@ -66,7 +68,7 @@ class CrashedTrackController:
     def __setupTrackAssembler(self, entity):
         modelNames = getPartModelsFromDesc(self.__vehicleDesc, 'destroyed')
         compoundAssembler = BigWorld.CompoundAssembler()
-        compoundAssembler.addRootPart(modelNames.chassis, TankPartNames.CHASSIS, [('Tank', ''), ('V', 'Tank')], entity.matrix)
+        compoundAssembler.addRootPart(modelNames.chassis, TankPartNames.CHASSIS, entity.filter.groundPlacingMatrix)
         compoundAssembler.assemblerName = TankPartNames.CHASSIS
         compoundAssembler.spaceID = entity.spaceID
         return compoundAssembler
@@ -161,11 +163,13 @@ class CrashedTrackController:
             self.__loading = False
             model = resources[TankPartNames.CHASSIS]
             self.__model = model
+            self.__model.matrix = self.__entity.filter.groundPlacingMatrix
             self.__fashion = BigWorld.WGVehicleFashion(True, 1.0, False)
             setupTracksFashion(self.__fashion, self.__vehicleDesc, True)
             self.__model.setupFashions([self.__fashion])
-            self.__fashion.setupSwinging(self.__baseTrackFashion.localSwingingMatrix, 'V')
-            self.__model.node('V', self.__fashion.localSwingingMatrix)
+            rotationMProv = mathUtils.MatrixProviders.product(self.__entity.model.node('hull'), Math.MatrixInverse(self.__model.node('Tank')))
+            self.__fashion.setupSwinging(rotationMProv, 'V')
+            self.__model.node('V', rotationMProv)
             self.__fashion.setCrashEffectCoeff(0.0)
             self.__setupTracksHiding()
             self.__entity.addModel(self.__model)

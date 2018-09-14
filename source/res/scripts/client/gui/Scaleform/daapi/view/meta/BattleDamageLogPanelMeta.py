@@ -26,6 +26,9 @@ class BattleDamageLogPanelMeta(BaseDAAPIComponent):
         return self.flashObject.as_updateSummaryAssistValue(value) if self._isDAAPIInited() else None
 
     def as_detailStatsS(self, isVisible, messages):
+        """
+        :param messages: Represented by Vector.<MessageRenderModel> (AS)
+        """
         return self.flashObject.as_detailStats(isVisible, messages) if self._isDAAPIInited() else None
 
     def as_addDetailMessageS(self, valueColor, value, actionTypeImg, vehicleTypeImg, vehicleName):

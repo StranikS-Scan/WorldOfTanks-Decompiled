@@ -23,13 +23,25 @@ class RecruitParametersMeta(BaseDAAPIComponent):
         self._printOverrideError('onTankmanRoleChanged')
 
     def as_setVehicleClassDataS(self, data):
+        """
+        :param data: Represented by RecruitParametersVO (AS)
+        """
         return self.flashObject.as_setVehicleClassData(data) if self._isDAAPIInited() else None
 
     def as_setVehicleDataS(self, data):
+        """
+        :param data: Represented by RecruitParametersVO (AS)
+        """
         return self.flashObject.as_setVehicleData(data) if self._isDAAPIInited() else None
 
     def as_setTankmanRoleDataS(self, data):
+        """
+        :param data: Represented by RecruitParametersVO (AS)
+        """
         return self.flashObject.as_setTankmanRoleData(data) if self._isDAAPIInited() else None
 
     def as_setNationsDataS(self, data):
+        """
+        :param data: Represented by RecruitParametersVO (AS)
+        """
         return self.flashObject.as_setNationsData(data) if self._isDAAPIInited() else None

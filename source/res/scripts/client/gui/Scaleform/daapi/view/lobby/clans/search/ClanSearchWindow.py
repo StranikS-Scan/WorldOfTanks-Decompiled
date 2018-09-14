@@ -16,7 +16,6 @@ from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import CooldownHelper
 from gui.shared.view_helpers import ClanEmblemsHelper
-from gui.clans.clan_controller import g_clanCtrl
 from helpers.i18n import makeString as _ms
 _SEARCH_LIMIT = 18
 _SEARCH_MAX_CHARS = 70
@@ -39,7 +38,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
 
     def __init__(self, ctx):
         super(ClanSearchWindow, self).__init__()
-        self.__clanFinder = ClanFinder(g_clanCtrl, None, _SEARCH_LIMIT)
+        self.__clanFinder = ClanFinder(self.clansCtrl, None, _SEARCH_LIMIT)
         self.__clanFinder.init()
         self._cooldown = CooldownHelper(self.__coolDownRequests, self._onCooldownHandle, CoolDownEvent.CLAN)
         self.__isFirstPageRequested = False
@@ -88,8 +87,8 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         self.__initControls()
         self._updateControlsState()
         self._cooldown.start()
-        if not g_clanCtrl.getAccountProfile().isSynced():
-            g_clanCtrl.getAccountProfile().resync()
+        if not self.clansCtrl.getAccountProfile().isSynced():
+            self.clansCtrl.getAccountProfile().resync()
         self.__clanFinder.setRecommended(True)
         self.__doSearch('')
 
@@ -98,7 +97,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         self._cooldown = None
         self.stopClanListening()
         self.__clanFinder.onListUpdated -= self._onClansListUpdated
-        g_clanCtrl.clearClanCommonDataCache()
+        self.clansCtrl.clearClanCommonDataCache()
         self._searchDP.fini()
         self._searchDP = None
         super(ClanSearchWindow, self)._dispose()
@@ -189,7 +188,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
 
     def __applyFoundData(self, data):
         self._showDummy(False)
-        g_clanCtrl.updateClanCommonDataCache([ ClanCommonData.fromClanSearchData(item) for item in data ])
+        self.clansCtrl.updateClanCommonDataCache([ ClanCommonData.fromClanSearchData(item) for item in data ])
         self._searchDP.rebuildList(data)
         self.__lastSuccessfullyFoundClans = data
 
@@ -199,7 +198,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
         """
         self.as_showWaitingS(WAITING.PREBATTLE_AUTO_SEARCH, {})
         self._searchDP.rebuildList(None)
-        isValid, reason = g_clanCtrl.getLimits().canSearchClans(text)
+        isValid, reason = self.clansCtrl.getLimits().canSearchClans(text)
         if self.__clanFinder.isRecommended() or isValid:
             self._showDummy(False)
             self.__isFirstPageRequested = True

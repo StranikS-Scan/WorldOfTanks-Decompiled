@@ -1,30 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ExchangeDialogMeta.py
 import math
-import Event
 import operator
 import BigWorld
+import Event
 from adisp import async
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from helpers import i18n
-from gui import game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared import events
-from gui.shared.utils import decorators, CLIP_ICON_PATH
-from gui.shared.ItemsCache import g_itemsCache
-from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from gui.shared.gui_items.processors.common import FreeXPExchanger, GoldToCreditsExchanger
-from gui.shared.formatters import icons, text_styles
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.genConsts.CONFIRM_EXCHANGE_DIALOG_TYPES import CONFIRM_EXCHANGE_DIALOG_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.managers.ColorSchemeManager import ColorSchemeManager
+from gui.shared import events
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.formatters import icons, text_styles
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.processors.common import FreeXPExchanger, GoldToCreditsExchanger
+from gui.shared.utils import decorators, CLIP_ICON_PATH
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IWalletController
 STEP_SIZE = 1
 I18N_NEEDGOLDTEXT_KEY = '{0:>s}/needGoldText'
 I18N_NEEDITEMSTEXT_KEY = '{0:>s}/needItemsText'
@@ -35,12 +35,7 @@ TEXT_COLOR_ID_XP = 'textColorXp'
 TEXT_COLOR_ID_CREDITS = 'textColorCredits'
 
 class _ExchangeDialogMeta(I18nConfirmDialogMeta):
-    """
-    Base meta for ConfirmExchangeDialog
-    allows to exchange gold for other currency
-    :param typeCompactDescr: <int> item compact descriptor
-    :param key: <str> localization key
-    """
+    wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, typeCompactDescr, key):
         self.__typeCompactDescr = typeCompactDescr
@@ -49,14 +44,14 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
         self._items = g_itemsCache.items
         self.colorManager = ColorSchemeManager()
         super(_ExchangeDialogMeta, self).__init__(key, scope=ScopeTemplates.LOBBY_SUB_SCOPE)
-        game_control.g_instance.wallet.onWalletStatusChanged += self._onStatsChanged
+        self.wallet.onWalletStatusChanged += self._onStatsChanged
 
     def destroy(self):
         """
         destroy operation after exchange dialog close
         """
         self._items = None
-        game_control.g_instance.wallet.onWalletStatusChanged -= self._onStatsChanged
+        self.wallet.onWalletStatusChanged -= self._onStatsChanged
         self.onInvalidate.clear()
         self.onCloseDialog.clear()
         return

@@ -76,6 +76,14 @@ class _LobbyContext(object):
     def getGuiCtx(self):
         return self.__guiCtx
 
+    @property
+    def collectUiStats(self):
+        return self.__guiCtx.get('collectUiStats', True)
+
+    @property
+    def needLogUXEvents(self):
+        return self.__guiCtx.get('logUXEvents', False)
+
     def getServerSettings(self):
         return self.__serverSettings
 

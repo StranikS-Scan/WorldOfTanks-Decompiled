@@ -14,6 +14,7 @@ from items import vehicles, tankmen
 from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, FORT_QUEST_SUFFIX
 from bonus_readers import readBonusSection, readUTC
 from optional_bonuses import walkBonuses, FilterVisitor, StripVisitor
+from optional_bonuses import walkBonuses, FilterVisitor, StripVisitor
 _WEEKDAYS = {'Mon': 1,
  'Tue': 2,
  'Wed': 3,
@@ -225,6 +226,7 @@ class Source(object):
         elif FORT_QUEST_SUFFIX in id:
             raise Exception('Quest must not contain "stronghold" in its id.')
         tOption = curTime > time.gmtime()
+        showCongrats = questSection.readBool('showCongrats', eventType in (EVENT_TYPE.POTAPOV_QUEST,))
         info = {'id': id,
          'hidden': questSection.readBool('hidden', False),
          'serverOnly': questSection.readBool('serverOnly', False),
@@ -239,6 +241,7 @@ class Source(object):
          'gStartTime': gStartTime,
          'gFinishTime': gFinishTime,
          'disableGui': questSection.readBool('disableGui', False),
+         'showCongrats': showCongrats,
          'requiredToken': requiredToken,
          'Toption': None if not tOption else startTime,
          'priority': questSection.readInt('priority', 0),

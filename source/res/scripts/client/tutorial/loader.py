@@ -17,7 +17,7 @@ _LOBBY_DISPATCHER = _settings.TUTORIAL_LOBBY_DISPATCHER
 _BATTLE_DISPATCHER = _settings.TUTORIAL_BATTLE_DISPATCHER
 
 class RunCtx(object):
-    __slots__ = ('cache', 'isFirstStart', 'databaseID', 'isAfterBattle', 'restart', 'bonusCompleted', 'battlesCount', 'newbieBattlesCount', 'initialChapter', 'globalFlags')
+    __slots__ = ('cache', 'isFirstStart', 'databaseID', 'isAfterBattle', 'restart', 'bonusCompleted', 'battlesCount', 'newbieBattlesCount', 'initialChapter', 'globalFlags', 'canResolveChapterOnStart')
 
     def __init__(self, cache, **kwargs):
         super(RunCtx, self).__init__()
@@ -32,6 +32,7 @@ class RunCtx(object):
         self.initialChapter = kwargs.get('initialChapter', None)
         self.globalFlags = kwargs.get('globalFlags', {})
         self.globalFlags[GLOBAL_FLAG.IN_QUEUE] = kwargs.get('isInTutorialQueue', False)
+        self.canResolveChapterOnStart = kwargs.get('canResolveChapterOnStart', True)
         return
 
     def __repr__(self):
@@ -186,10 +187,15 @@ class TutorialLoader(object):
     def leaveLobby(self):
         self.stop(restore=False)
 
-    def goToBattle(self):
+    def goToBattleLoading(self):
         self.__afterBattle = True
         self.__doClear()
-        self.__doAutoRun((_SETTINGS.BATTLE_V2, _SETTINGS.BATTLE_QUESTS), {})
+        self.__doAutoRun((_SETTINGS.BATTLE_V2, _SETTINGS.BATTLE_QUESTS), {'canResolveChapterOnStart': False})
+
+    def goToBattle(self):
+        if self.__tutorial is not None:
+            self.__tutorial.startBattle()
+        return
 
     def leaveBattle(self):
         self.stop(restore=False)

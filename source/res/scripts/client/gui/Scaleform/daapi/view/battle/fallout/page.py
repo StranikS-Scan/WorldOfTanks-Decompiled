@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/fallout/page.py
 from constants import ATTACK_REASON_INDICES
+from gui.Scaleform.daapi.view.battle.fallout import markers2d
+from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.meta.FalloutBattlePageMeta import FalloutBattlePageMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.FALLOUT import FALLOUT
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import i18n
@@ -19,41 +20,44 @@ _FALLOUT_COMPONENTS_TO_CTRLS = ((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIAS
  (BATTLE_CTRL_ID.FLAG_NOTS, (BATTLE_VIEW_ALIASES.FLAG_NOTIFICATION,)))
 _VEHICLE_STATE_HANDLERS = {VEHICLE_VIEW_STATE.DESTROYED: '_updateDestroyed',
  VEHICLE_VIEW_STATE.SWITCHING: '_switching'}
+_FALLOUT_EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, markers2d.FalloutMarkersManager)
 
 class FalloutBasePage(FalloutBattlePageMeta):
 
-    def __init__(self, components=_FALLOUT_COMPONENTS_TO_CTRLS, fullStatsAlias=''):
-        super(FalloutBasePage, self).__init__(components=components, fullStatsAlias=fullStatsAlias)
+    def __init__(self, components=_FALLOUT_COMPONENTS_TO_CTRLS, external=_FALLOUT_EXTERNAL_COMPONENTS, fullStatsAlias=''):
+        super(FalloutBasePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)
         self.__isInRespawn = False
+        self.__hasGasAttack = None
+        return
 
-    def _populate(self):
-        super(FalloutBasePage, self)._populate()
-        ctrl = g_sessionProvider.dynamic.respawn
+    def _startBattleSession(self):
+        super(FalloutBasePage, self)._startBattleSession()
+        ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibility
-        self.__hasGasAttack = g_sessionProvider.arenaVisitor.hasGasAttack()
-        ctrl = g_sessionProvider.shared.vehicleState
+        self.__hasGasAttack = self.sessionProvider.arenaVisitor.hasGasAttack()
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None and self.__hasGasAttack:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         self.__isGasAttackStarted = False
-        ctrl = g_sessionProvider.dynamic.gasAttack
+        ctrl = self.sessionProvider.dynamic.gasAttack
         if ctrl is not None and self.__hasGasAttack:
             ctrl.onPreparing += self.__onGasAttack
             ctrl.onStarted += self.__onGasAttack
         return
 
-    def _dispose(self):
-        ctrl = g_sessionProvider.dynamic.respawn
+    def _stopBattleSession(self):
+        ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.onRespawnVisibilityChanged -= self.__onRespawnVisibility
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None and self.__hasGasAttack:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        ctrl = g_sessionProvider.dynamic.gasAttack
+        ctrl = self.sessionProvider.dynamic.gasAttack
         if ctrl is not None and self.__hasGasAttack:
             ctrl.onPreparing -= self.__onGasAttack
             ctrl.onStarted -= self.__onGasAttack
-        super(FalloutBasePage, self)._dispose()
+        super(FalloutBasePage, self)._stopBattleSession()
         return
 
     def _updateDestroyed(self, deathReasonID=None):

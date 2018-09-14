@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/fallout/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.battle.shared.page import BattlePageBusinessHandler
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates
-from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.app_loader.settings import APP_NAME_SPACE
-from gui.shared import EVENT_BUS_SCOPE
 
 def getContextMenuHandlers():
     pass
@@ -23,8 +21,10 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.fallout import stats_exchange
     from gui.Scaleform.daapi.view.battle.fallout import minimap
     from gui.Scaleform.daapi.view.battle.fallout import battle_timer
+    from gui.Scaleform.daapi.view.battle.fallout import fallout_battle_loading
     return (ViewSettings(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE, page.FalloutClassicPage, 'falloutClassicPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE, page.FalloutMultiteamPage, 'falloutMultiteamPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, fallout_battle_loading.FalloutMultiTeamBattleLoading, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.FalloutStatisticsDataController, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.FALLOUT_CLASSIC_STATS, full_stats.FalloutClassicFullStats, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.FALLOUT_MULTITEAM_STATS, full_stats.FalloutMultiTeamFullStats, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -39,12 +39,4 @@ def getViewSettings():
 
 
 def getBusinessHandlers():
-    return (_FalloutPackageBusinessHandler(),)
-
-
-class _FalloutPackageBusinessHandler(PackageBusinessHandler):
-    __slots__ = ()
-
-    def __init__(self):
-        listeners = ((VIEW_ALIAS.FALLOUT_CLASSIC_PAGE, self.loadViewBySharedEvent), (VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE, self.loadViewBySharedEvent))
-        super(_FalloutPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
+    return (BattlePageBusinessHandler(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE, VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE),)

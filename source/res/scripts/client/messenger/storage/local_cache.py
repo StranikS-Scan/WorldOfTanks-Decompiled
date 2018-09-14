@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/messenger/storage/local_cache.py
 import types
 import Event
-from account_helpers.settings_core.SettingsCache import g_settingsCache
+from helpers import dependency
 from helpers.local_cache import FileLocalCache, PickleIO, CryptIO
+from skeletons.account_helpers.settings_core import ISettingsCache
 _MESSENGER_CACHE_VERSION = 3
 _MESSENGER_CACHE_MIN_REV = 1
 _MESSENGER_CACHE_MAX_REV = 32767
@@ -47,6 +48,7 @@ class SimpleCachedStorage(object):
 
 class RevCachedStorage(SimpleCachedStorage):
     __slots__ = ('__rev', '__isRevRqSent', '__record')
+    settingsCache = dependency.descriptor(ISettingsCache)
 
     def __init__(self):
         super(RevCachedStorage, self).__init__()
@@ -54,11 +56,11 @@ class RevCachedStorage(SimpleCachedStorage):
 
     def init(self):
         self.__reset()
-        g_settingsCache.onSyncCompleted += self.__onSyncCompleted
+        self.settingsCache.onSyncCompleted += self.__onSyncCompleted
 
     def clear(self):
         self.__reset()
-        g_settingsCache.onSyncCompleted -= self.__onSyncCompleted
+        self.settingsCache.onSyncCompleted -= self.__onSyncCompleted
         super(RevCachedStorage, self).clear()
 
     def makeRecordInCache(self):
@@ -103,10 +105,10 @@ class RevCachedStorage(SimpleCachedStorage):
         raise NotImplementedError
 
     def __getServerRev(self):
-        return g_settingsCache.getSetting(self._getServerRevKey(), None)
+        return self.settingsCache.getSetting(self._getServerRevKey(), None)
 
     def __setServerRev(self, rev):
-        g_settingsCache.setSettings({self._getServerRevKey(): rev})
+        self.settingsCache.setSettings({self._getServerRevKey(): rev})
 
     def __reset(self):
         self.__rev = None

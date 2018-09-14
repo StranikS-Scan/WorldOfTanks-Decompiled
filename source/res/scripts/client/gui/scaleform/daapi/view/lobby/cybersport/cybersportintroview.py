@@ -5,7 +5,6 @@ from helpers.i18n import makeString as _ms
 from adisp import process
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.prb_control.prb_helpers import unitFunctionalProperty
 from gui.shared import events
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME as _VCN
 from gui.shared.ItemsCache import g_itemsCache
@@ -21,7 +20,6 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
-from gui.game_control.battle_availability import isHourInForbiddenList
 from predefined_hosts import g_preDefinedHosts
 _ACCEPTED_VEH_TYPES = (_VCN.LIGHT_TANK, _VCN.MEDIUM_TANK, _VCN.HEAVY_TANK)
 
@@ -133,7 +131,7 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener):
         self._section = 'selectedIntroVehicles'
 
     def showSelectorPopup(self):
-        rosterSettings = self.unitFunctional.getRosterSettings()
+        rosterSettings = self.prbEntity.getRosterSettings()
         self.fireEvent(events.LoadViewEvent(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, ctx={'isMultiSelect': False,
          'infoText': CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_INTRO,
          'componentsOffset': 45,
@@ -164,10 +162,6 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener):
             result = yield self.clubsCtrl.sendRequest(club_ctx.RevokeApplicationCtx(state.getClubDbID(), 'clubs/app/revoke'))
             if result.isSuccess():
                 SystemMessages.pushMessage(club_fmts.getAppRevokeSysMsg(self.getClub()))
-
-    @unitFunctionalProperty
-    def unitFunctional(self):
-        return None
 
     def setData(self, initialData):
         pass
@@ -289,7 +283,7 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener):
     def __updateSelectedVehicles(self, event):
         if event.ctx is not None and len(event.ctx) > 0:
             vehIntCD = int(event.ctx[0])
-            self.unitFunctional.setSelectedVehicles(self._section, [vehIntCD])
+            self.prbEntity.setSelectedVehicles(self._section, [vehIntCD])
             self.__updateAutoSearchVehicle([vehIntCD])
         return
 
@@ -297,7 +291,7 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener):
         if len(vehsIntCD):
             vehIntCD = vehsIntCD[0]
             vehicle = g_itemsCache.items.getItemByCD(vehIntCD)
-            levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
+            levelsRange = self.prbEntity.getRosterSettings().getLevelsRange()
             if vehicle.level not in levelsRange:
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLELEVEL
@@ -311,7 +305,7 @@ class CyberSportIntroView(CyberSportIntroMeta, MyClubListener):
             self.as_setNoVehiclesS(TOOLTIPS.CYBERSPORT_NOVEHICLESINHANGAR)
 
     def __getSelectedVehicles(self):
-        return self.unitFunctional.getSelectedVehicles(self._section)
+        return self.prbEntity.getSelectedVehicles(self._section)
 
     def __isLadderRegulated(self):
         """Check if ladder regulation label should be shown.

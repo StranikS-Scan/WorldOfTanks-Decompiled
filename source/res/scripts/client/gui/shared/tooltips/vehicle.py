@@ -1,33 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import constants
+from BigWorld import wg_getIntegralFormat as _int
+from debug_utils import LOG_DEBUG
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from gui.game_control import getFalloutCtrl
-from gui.shared.economics import getGUIPrice
+from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
-from gui.shared.items_parameters import RELATIVE_PARAMS, MAX_RELATIVE_VALUE, formatters as param_formatter, params_helper
-from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
-from helpers import i18n, time_utils, int2roman
-from gui.shared import g_itemsCache
-from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.gui_items import RentalInfoProvider
-from gui.shared.gui_items.Vehicle import Vehicle, getTypeBigIconPath
-from gui.shared.tooltips import formatters
-from gui.shared.money import Money, Currency
-from helpers.i18n import makeString as _ms
-from BigWorld import wg_getIntegralFormat as _int
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
-from gui.shared.items_parameters.formatters import MEASURE_UNITS
 from gui.shared.gui_items.Tankman import Tankman
-from debug_utils import LOG_DEBUG
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from gui.shared.gui_items.Vehicle import Vehicle, getTypeBigIconPath
+from gui.shared.items_parameters import RELATIVE_PARAMS, MAX_RELATIVE_VALUE, formatters as param_formatter, params_helper
+from gui.shared.items_parameters.formatters import MEASURE_UNITS
+from gui.shared.money import Money, Currency
+from gui.shared.tooltips import formatters
+from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
+from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
+from helpers import i18n, time_utils, int2roman, dependency
+from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IFalloutController
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _ARTEFACT_TYPES = (_EQUIPMENT, _OPTION_DEVICE)
@@ -286,7 +285,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
         minRentPrice = self.configuration.minRentPrice
         rentals = self.configuration.rentals
         futureRentals = self.configuration.futureRentals
-        paddings = formatters.packPadding(left=-4)
+        paddings = formatters.packPadding(left=-5)
         neededValue = 0
         actionPrc = 0
         if buyPrice and sellPrice:
@@ -332,7 +331,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                     block.append(makePriceBlock(buyPriceText, CURRENCY_SETTINGS.RESTORE_PRICE, neededValue, oldPrice, actionPrc, valueWidth=self._valueWidth))
                     if self.vehicle.hasLimitedRestore():
                         timeKey, formattedTime = getTimeLeftInfo(self.vehicle.restoreInfo.getRestoreTimeLeft(), None)
-                        block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main('#tooltips:vehicle/restoreLeft/%s' % timeKey), value=text_styles.main(formattedTime), icon=ICON_TEXT_FRAMES.ALERT if timeKey == 'hours' else ICON_TEXT_FRAMES.EMPTY, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-4)))
+                        block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main('#tooltips:vehicle/restoreLeft/%s' % timeKey), value=text_styles.main(formattedTime), icon=ICON_TEXT_FRAMES.ALERT if timeKey == 'hours' else ICON_TEXT_FRAMES.EMPTY, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
                 elif not (self.vehicle.isDisabledForBuy or self.vehicle.isPremiumIGR or self.vehicle.isTelecom):
                     price = self.vehicle.buyPrice
                     actionPrc = self.vehicle.actionPrc
@@ -343,7 +342,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                     neededValue = _getNeedValue(price, currency)
                     if isInInventory or not isInInventory and not isUnlocked and not isNextToUnlock:
                         neededValue = None
-                    block.append(makePriceBlock(buyPriceText, CURRENCY_SETTINGS.getBuySetting(currency), neededValue, oldPrice, 0, valueWidth=self._valueWidth))
+                    block.append(makePriceBlock(buyPriceText, CURRENCY_SETTINGS.getBuySetting(currency), neededValue, oldPrice, actionPrc, valueWidth=self._valueWidth))
             if sellPrice and not self.vehicle.isTelecom:
                 sellPrice = self.vehicle.sellPrice
                 if sellPrice.isSet(Currency.GOLD):
@@ -377,7 +376,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 rentLeftInfo = rentFormatter.getRentLeftStr(rentLeftKey, formatter=lambda key, countType, count, _=None: {'left': count,
                  'descr': i18n.makeString(key % countType)})
                 if rentLeftInfo:
-                    block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(rentLeftInfo['descr']), value=text_styles.main(rentLeftInfo['left']), icon=ICON_TEXT_FRAMES.RENTALS, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-4, bottom=-16)))
+                    block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(rentLeftInfo['descr']), value=text_styles.main(rentLeftInfo['left']), icon=ICON_TEXT_FRAMES.RENTALS, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5, bottom=-16)))
             notEnoughMoney = neededValue > 0
             hasAction = actionPrc > 0
             return (block, notEnoughMoney or hasAction)
@@ -388,7 +387,7 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
      VEHICLE_CLASS_NAME.MEDIUM_TANK: ('damageAvgPerMinute', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed'),
      VEHICLE_CLASS_NAME.HEAVY_TANK: ('damageAvg', 'piercingPower', 'hullArmor', 'turretArmor'),
      VEHICLE_CLASS_NAME.SPG: ('damageAvg', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
-     VEHICLE_CLASS_NAME.AT_SPG: ('piercingPower', 'shotDispersionAngle', 'damageAvgPerMinute', 'speedLimits', 'chassisRotationSpeed'),
+     VEHICLE_CLASS_NAME.AT_SPG: ('piercingPower', 'shotDispersionAngle', 'damageAvgPerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime'),
      'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
 
     def __init__(self, vehicle, configuration, valueWidth, leftPadding, rightPadding):
@@ -400,6 +399,7 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         block = []
         comparator = params_helper.idealCrewComparator(self.vehicle)
         if self.configuration.params and not self.configuration.simplifiedOnly:
+            params = self.PARAMS.get(self.vehicle.type, 'default')
             for paramName in self.PARAMS.get(self.vehicle.type, 'default'):
                 if paramName in paramsDict:
                     paramInfo = comparator.getExtendedData(paramName)
@@ -507,6 +507,7 @@ class AdditionalStatsBlockConstructor(VehicleTooltipBlockConstructor):
 
 
 class StatusBlockConstructor(VehicleTooltipBlockConstructor):
+    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def construct(self):
         block = []
@@ -607,7 +608,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             state, level = vehicle.getState()
             if state == Vehicle.VEHICLE_STATE.SERVER_RESTRICTION:
                 return
-            isSuitableVeh = getFalloutCtrl().isSuitableVeh(vehicle)
+            isSuitableVeh = self.falloutCtrl.isSuitableVeh(vehicle)
             if not isSuitableVeh:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % Vehicle.VEHICLE_STATE.NOT_SUITABLE)
                 level = Vehicle.VEHICLE_STATE_LEVEL.WARNING

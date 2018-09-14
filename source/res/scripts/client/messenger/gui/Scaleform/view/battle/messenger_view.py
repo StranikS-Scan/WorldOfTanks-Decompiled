@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/battle/messenger_view.py
 import weakref
 import BigWorld
+from helpers import dependency
 from helpers import i18n
 import BattleReplay
 from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE
@@ -13,7 +14,6 @@ from gui.Scaleform.genConsts.BATTLE_MESSAGES_CONSTS import BATTLE_MESSAGES_CONST
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info.interfaces import IContactsAndPersonalInvitationsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import EVENT_BUS_SCOPE
@@ -29,6 +29,7 @@ from gui.shared.events import ChannelManagementEvent
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.events import CoolDownEvent
 from gui.shared.view_helpers import CooldownHelper
+from skeletons.gui.battle_session import IBattleSessionProvider
 _UNKNOWN_RECEIVER_LABEL = 'N/A'
 _UNKNOWN_RECEIVER_ORDER = 100
 _CONSUMERS_LOCK_ENTER = (BATTLE_VIEW_ALIASES.RADIAL_MENU,)
@@ -115,6 +116,7 @@ def _isSet(number, mask):
 
 
 class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndPersonalInvitationsController):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(BattleMessengerView, self).__init__()
@@ -345,6 +347,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         receiver, isReset = self.__addReceiver(clientID, controller)
         if receiver is not None:
             self.as_setReceiverS(_makeReceiverVO(*receiver), isReset)
+        self.__restoreLastReceiverInBattle()
         if self.__invalidateReceiverIndex():
             self.as_changeReceiverS(self.__receiverIndex)
         return
@@ -382,11 +385,13 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self.fireEvent(ChannelManagementEvent(0, ChannelManagementEvent.REGISTER_BATTLE, {'component': self}), scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(ChannelManagementEvent.MESSAGE_FADING_ENABLED, self.__handleMessageFadingEnabled, EVENT_BUS_SCOPE.GLOBAL)
         self.__restoreLastReceiverInBattle()
-        g_sessionProvider.addArenaCtrl(self)
+        self.sessionProvider.addArenaCtrl(self)
         self.as_setupListS(_makeSettingsVO(self._arenaVisitor))
         self._ignoreActionCooldown.start()
         if self.isToxicPanelAvailable():
             self.as_enableToxicPanelS()
+        if self.__invalidateReceiverIndex():
+            self.as_changeReceiverS(self.__receiverIndex)
 
     def _dispose(self):
         self.__receivers = []
@@ -394,7 +399,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self._ignoreActionCooldown = None
         self.fireEvent(ChannelManagementEvent(0, ChannelManagementEvent.UNREGISTER_BATTLE), scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(ChannelManagementEvent.MESSAGE_FADING_ENABLED, self.__handleMessageFadingEnabled, EVENT_BUS_SCOPE.GLOBAL)
-        g_sessionProvider.removeArenaCtrl(self)
+        self.sessionProvider.removeArenaCtrl(self)
         super(BattleMessengerView, self)._dispose()
         return
 
@@ -412,7 +417,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
             contact = self.usersStorage.getUser(accountDbID)
             if contact is not None and contact.isIgnored():
                 pInfo = self._battleCtx.getPlayerFullNameParts(accID=accountDbID)
-                template = i18n.makeString(MESSENGER.CHAT_TOXICMESSAGES_BLOCKEDMESSAGE, playerName=pInfo.playerName, clanName=pInfo.clanAbbrev)
+                template = i18n.makeString(MESSENGER.CHAT_TOXICMESSAGES_BLOCKEDMESSAGE, playerName=pInfo.playerName)
                 self.as_updateMessagesS(accountDbID, text_styles.main(template))
             else:
                 self.as_restoreMessagesS(accountDbID)
@@ -527,8 +532,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
                         self.__receiverIndex = idx
                     break
 
-        self.__invalidateReceiverIndex()
-
     def __findReceiverIndexByModifiers(self):
         for idx, (clientID, settings, _) in enumerate(self.__receivers):
             modifiers = settings.bwModifiers
@@ -542,6 +545,12 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self.__invalidateReceiverIndex()
 
     def __invalidateReceiverIndex(self):
+        """
+        Try to find an available receiver if the current one is not available and update
+        current receiver index.
+        
+        :return: True if current receiver index has been changed; otherwise - False.
+        """
         return self.__findNextReceiverIndex() if not self.__isReceiverAvailable(self.__receiverIndex) else False
 
     def __findNextReceiverIndex(self):

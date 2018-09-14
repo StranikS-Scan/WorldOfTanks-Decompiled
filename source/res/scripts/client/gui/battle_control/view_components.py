@@ -135,13 +135,14 @@ class _ComponentsBridge(object):
             if index is None:
                 LOG_ERROR('View component data is broken', ctrlID, componentID, self.__indexes)
                 return
+            if ctrlID not in self.__components:
+                return
             components = self.__components[ctrlID]
             components[index] = None
             if filter(lambda item: item is not None, components):
                 return
             if ctrlID in self.__ctrls:
-                ctrl = self.__ctrls.pop(ctrlID)
-                self.__components.pop(ctrlID)
+                ctrl = self.__ctrls[ctrlID]
                 ctrl.clearViewComponents()
             return
 

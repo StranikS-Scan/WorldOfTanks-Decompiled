@@ -20,9 +20,16 @@ class FortDeclarationOfWarWindowMeta(AbstractWindowView):
         return self.flashObject.as_setupHeader(title, description) if self._isDAAPIInited() else None
 
     def as_setupClansS(self, myClan, enemyClan):
+        """
+        :param myClan: Represented by ClanInfoVO (AS)
+        :param enemyClan: Represented by ClanInfoVO (AS)
+        """
         return self.flashObject.as_setupClans(myClan, enemyClan) if self._isDAAPIInited() else None
 
     def as_setDirectionsS(self, data):
+        """
+        :param data: Represented by Vector.<ConnectedDirectionsVO> (AS)
+        """
         return self.flashObject.as_setDirections(data) if self._isDAAPIInited() else None
 
     def as_selectDirectionS(self, uid):

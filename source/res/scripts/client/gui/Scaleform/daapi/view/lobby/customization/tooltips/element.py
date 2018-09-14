@@ -1,23 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
 import BigWorld
-from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.locale.MENU import MENU
 import nations
+from CurrentVehicle import g_currentVehicle
 from constants import IGR_TYPE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.game_control import getIGRCtrl
-from gui.shared.ItemsCache import g_itemsCache
 from gui import makeHtmlString
-from gui.shared.formatters import text_styles, icons
-from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters as params_formatters
-from gui.shared.tooltips.common import BlocksTooltipData
-from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from helpers.i18n import makeString as _ms
-from nations import NONE_INDEX as ANY_NATION
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.customization import g_customizationController as controller
 from gui.customization.shared import DURATION, CUSTOMIZATION_TYPE, PURCHASE_TYPE
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.formatters import text_styles, icons
+from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters as params_formatters
+from gui.shared.tooltips import formatters, TOOLTIP_TYPE
+from gui.shared.tooltips.common import BlocksTooltipData
+from helpers import dependency
+from helpers.i18n import makeString as _ms
+from nations import NONE_INDEX as ANY_NATION
+from skeletons.gui.game_control import IIGRController
 
 class STATUS(object):
     NONE = 0
@@ -65,6 +66,7 @@ class SimplifiedStatsBlockConstructor(object):
 class ElementTooltip(BlocksTooltipData):
     """Tooltip data provider for the customization elements in customization windows.
     """
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, context):
         super(ElementTooltip, self).__init__(context, TOOLTIP_TYPE.TECH_CUSTOMIZATION)
@@ -308,7 +310,7 @@ class ElementTooltip(BlocksTooltipData):
             wasBought - specifies if item is already bought;
             status - one of the STATUS constants
         """
-        if self._item.getIgrType() == getIGRCtrl().getRoomType():
+        if self._item.getIgrType() == self.igrCtrl.getRoomType():
             buyItems = [{'value': 0,
               'type': BUY_ITEM_TYPE.ALREADY_HAVE_IGR,
               'isSale': False,

@@ -1,19 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/main_view.py
+from CurrentVehicle import g_currentVehicle
 from adisp import process
 from constants import IGR_TYPE, EVENT_TYPE
-from CurrentVehicle import g_currentVehicle
 from gui import DialogsInterface, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.game_control import getIGRCtrl
-from gui.server_events import events_dispatcher
-from gui.shared import events
-from gui.shared.ItemsCache import g_itemsCache
-from gui.shared.events import LobbySimpleEvent
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.formatters import text_styles, icons
-from gui.shared.utils.functions import makeTooltip, getAbsoluteUrl
-from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
@@ -22,10 +13,19 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.customization import g_customizationController
+from gui.customization.shared import checkInQuest, formatPriceCredits, formatPriceGold, getSalePriceString, DURATION, CUSTOMIZATION_TYPE, QUALIFIER_TYPE, QUALIFIER_TYPE_INDEX, FILTER_TYPE
+from gui.server_events import events_dispatcher
+from gui.shared import events
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.events import LobbySimpleEvent
+from gui.shared.formatters import text_styles, icons
+from gui.shared.utils.functions import makeTooltip, getAbsoluteUrl
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared import getDialogRemoveElement, getDialogReplaceElement
-from gui.customization.shared import checkInQuest, formatPriceCredits, formatPriceGold, getSalePriceString, DURATION, CUSTOMIZATION_TYPE, QUALIFIER_TYPE, QUALIFIER_TYPE_INDEX, FILTER_TYPE
-from gui.customization import g_customizationController
+from skeletons.gui.game_control import IIGRController
 _DURATION_TOOLTIPS = {DURATION.PERMANENT: (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_ALWAYS, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_LOWERCASE_ALWAYS),
  DURATION.MONTH: (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_MONTH, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_LOWERCASE_MONTH),
  DURATION.WEEK: (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_WEEK, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_FILTER_DURATION_LOWERCASE_WEEK)}
@@ -127,6 +127,7 @@ def _getInvoiceItemDialogMeta(dialogType, cType, carouselItem, l10nExtraParams):
 
 
 class MainView(CustomizationMainViewMeta):
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, ctx=None):
         super(MainView, self).__init__()
@@ -300,7 +301,7 @@ class MainView(CustomizationMainViewMeta):
             elif element.isInDossier:
                 label = text_styles.main(VEHICLE_CUSTOMIZATION.CAROUSEL_ITEMLABEL_PURCHASED)
             elif element.getIgrType() != IGR_TYPE.NONE:
-                if element.getIgrType() == getIGRCtrl().getRoomType():
+                if element.getIgrType() == self.igrCtrl.getRoomType():
                     label = text_styles.main(VEHICLE_CUSTOMIZATION.CAROUSEL_ITEMLABEL_PURCHASED)
                 else:
                     label = icons.premiumIgrSmall()

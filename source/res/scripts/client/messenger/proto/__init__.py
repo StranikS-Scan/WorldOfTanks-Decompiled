@@ -41,6 +41,10 @@ class ProtoPluginsDecorator(IProtoPlugin):
     def setFilters(self, msgFilterChain):
         self._invoke('setFilters', weakref.proxy(msgFilterChain))
 
+    def init(self):
+        for plugin in self.__readonly__.itervalues():
+            plugin.init()
+
     def clear(self):
         for plugin in self.__readonly__.itervalues():
             plugin.clear()

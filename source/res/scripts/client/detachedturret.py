@@ -41,11 +41,10 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
 
     def __prepareModelAssembler(self):
         assembler = BigWorld.CompoundAssembler(self.__vehDescr.name, self.spaceID)
-        skeleton = tankStructure.CRASHED_SKELETON
         turretModel = self.__vehDescr.turret['models']['exploded']
         gunModel = self.__vehDescr.gun['models']['exploded']
-        assembler.addRootPart(turretModel, TankPartNames.TURRET, skeleton.turret, mathUtils.createIdentityMatrix())
-        assembler.addPart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN, skeleton.gun, mathUtils.createIdentityMatrix())
+        assembler.addRootPart(turretModel, TankPartNames.TURRET)
+        assembler.emplacePart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
         return assembler
 
     def prerequisites(self):
@@ -149,7 +148,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
                 surfaceMaterial = calcSurfaceMaterialNearPoint(self.position, Math.Vector3(0, extent, 0), self.spaceID)
                 self.__detachmentEffects.notifyAboutBeingPulled(True, surfaceMaterial.effectIdx)
                 if surfaceMaterial.matKind == 0:
-                    LOG_ERROR('calcSurfaceMaterialNearPoint failed to find the collision point')
+                    LOG_ERROR('calcSurfaceMaterialNearPoint failed to find the collision point at: ', self.position)
             else:
                 self.__detachmentEffects.notifyAboutBeingPulled(False, None)
         return SERVER_TICK_LENGTH

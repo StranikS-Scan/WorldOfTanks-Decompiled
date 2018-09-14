@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ContactsSettingsView.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from account_helpers.AccountSettings import AccountSettings, CONTACTS
-from account_helpers.settings_core.SettingsCore import g_settingsCore
+from helpers import dependency
 from messenger.gui.Scaleform.meta.ContactsSettingsViewMeta import ContactsSettingsViewMeta
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class ContactsSettingsView(ContactsSettingsViewMeta):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(ContactsSettingsView, self).__init__()
@@ -15,7 +17,7 @@ class ContactsSettingsView(ContactsSettingsViewMeta):
         return
 
     def onOk(self, data):
-        g_settingsCore.serverSettings.setSectionSettings(CONTACTS, self.__currentData)
+        self.settingsCore.serverSettings.setSectionSettings(CONTACTS, self.__currentData)
         self.as_closeViewS()
 
     def showOfflineUsers(self, value):
@@ -35,7 +37,7 @@ class ContactsSettingsView(ContactsSettingsViewMeta):
 
     def _getInitDataObject(self):
         defaults = AccountSettings.getFilterDefault(CONTACTS)
-        self.__startData = g_settingsCore.serverSettings.getSection(CONTACTS, defaults)
+        self.__startData = self.settingsCore.serverSettings.getSection(CONTACTS, defaults)
         self.__startData['showOfflineUsers'] = bool(self.__startData['showOfflineUsers'])
         self.__startData['showOthersCategory'] = bool(self.__startData['showOthersCategory'])
         self.__currentData = self.__startData.copy()

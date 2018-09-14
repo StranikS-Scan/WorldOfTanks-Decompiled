@@ -4,7 +4,7 @@ import nations
 from items import vehicles, ITEM_TYPES
 from account_shared import AmmoIterator
 from constants import PREBATTLE_ACCOUNT_STATE, VEHICLE_CLASSES, ARENA_GUI_TYPE, PREBATTLE_ROLE, PREBATTLE_COMPANY_DIVISION, IGR_TYPE, IS_DEVELOPMENT
-from debug_utils import LOG_WARNING
+from debug_utils import LOG_DEBUG
 
 def decodeRoster(roster):
     return (roster & 15, not roster & 240)
@@ -84,6 +84,10 @@ def isVehicleValid(vehDescr, vehAmmo, limits):
         return (True, None)
 
 
+def isObserver(vehCompDescr):
+    return bool(vehCompDescr) and 'observer' in vehicles.getVehicleType(vehCompDescr).tags
+
+
 def isTeamValid(accountsInfo, limits):
     minLevel, maxLevel = limits['level']
     tagsLimits = limits['tags']
@@ -123,7 +127,7 @@ def isTeamValid(accountsInfo, limits):
         if observerCount > 0 and count == observerCount:
             if not IS_DEVELOPMENT:
                 return (False, 'limit/observerVehicles')
-            LOG_WARNING('Ignoring limit for observers in development mode.')
+            LOG_DEBUG('Ignoring limit for observers in development mode.')
         minTotalLevel, maxTotalLevel = limits['totalLevel']
         if not minTotalLevel <= totalLevel <= maxTotalLevel:
             return (False, 'limit/totalLevel')

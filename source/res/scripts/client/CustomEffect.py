@@ -1,17 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CustomEffect.py
-import BigWorld
 import copy
 import Math
 import material_kinds
 from items import _xml
-from functools import partial
 from debug_utils import *
-import weakref
-from helpers.PixieBG import PixieBG
+from helpers.PixieNode import EffectNode
+from helpers import EffectsList
 gTemplates = None
 gNodes = None
 gConstantGroup = None
+gEffectLists = dict()
+
+def getEffectList(name):
+    global gEffectLists
+    return gEffectLists.get(name, None)
+
 
 class RangeTable(object):
 
@@ -30,179 +34,6 @@ class RangeTable(object):
         return foundValue if idx == -1 or len(self.values) <= idx else self.values[idx]
 
 
-class PixieNode(object):
-    _PIXIE_NAME = 0
-    _PIXIE_ENABLED = 1
-    _PIXIE_REF = 2
-    _PIXIE_TTL = 3
-
-    def __init__(self, node, waterY, drawOrder, effects):
-        self.__node = node
-        self.__activated = False
-        self.__nodeDefaultLocalTranslation = Math.Matrix(self.__node.local).translation
-        self.__drawOrder = drawOrder
-        self.__waterY = waterY
-        self.__effects = dict()
-        self.__ttlCallbacks = dict()
-        for effectName, effectDesc in effects.iteritems():
-            self.__effects[effectDesc[0]] = [effectName,
-             False,
-             None,
-             effectDesc[1]]
-
-        return
-
-    def deactivate(self):
-        for cbkId in self.__ttlCallbacks.values():
-            if cbkId is not None:
-                BigWorld.cancelCallback(cbkId)
-
-        for effectDesc in self.__effects.values():
-            if effectDesc[PixieNode._PIXIE_REF] is not None:
-                self.__detach(effectDesc)
-
-        self.__ttlCallbacks = dict()
-        self.__activated = False
-        return
-
-    def destroy(self):
-        self.deactivate()
-        self.__effects = None
-        self.__node = None
-        return
-
-    def __attach(self, pixie):
-        self.__node.attach(pixie)
-        pixie.drawOrder = self.__drawOrder
-        PixieBG.enablePixie(pixie, True)
-        PixieCache.pixiesCount += 1
-
-    def __attachTTL(self, effectDesc, effectID, pixie):
-        ttl = effectDesc[PixieNode._PIXIE_TTL]
-        if pixie is not None:
-            self.__node.attach(pixie)
-            effectDesc[PixieNode._PIXIE_REF] = pixie
-            pixie.drawOrder = self.__drawOrder
-            PixieBG.enablePixie(pixie, True)
-            self.__ttlCallbacks[effectID] = BigWorld.callback(ttl, partial(self.__detachTTL, effectID))
-            PixieCache.pixiesCount += 1
-        return
-
-    def __detachTTL(self, effectID):
-        effectDesc = self.__effects[effectID]
-        self.__detach(effectDesc)
-        del self.__ttlCallbacks[effectID]
-
-    def __detach(self, effectDesc):
-        pixieRef = effectDesc[PixieNode._PIXIE_REF]
-        if not self.__node.isDangling and pixieRef is not None and pixieRef.attached:
-            self.__node.detach(pixieRef)
-        PixieCache.pixiesCount -= 1
-        effectDesc[PixieNode._PIXIE_REF] = None
-        return
-
-    def enable(self, effectID, enable):
-        effectDesc = self.__effects.get(effectID, None)
-        if self.__node.isDangling or effectDesc is None:
-            return False
-        else:
-            if effectDesc[PixieNode._PIXIE_ENABLED] != enable:
-                if enable:
-                    self.__activated = True
-                    if effectDesc[PixieNode._PIXIE_TTL] > 0.0:
-                        ttlCbk = self.__ttlCallbacks.get(effectID, None)
-                        if ttlCbk is not None:
-                            BigWorld.cancelCallback(ttlCbk)
-                            self.__ttlCallbacks[effectID] = BigWorld.callback(effectDesc[PixieNode._PIXIE_TTL], partial(self.__detachTTL, effectID))
-                        else:
-                            PixieCache.getPixie(effectDesc[PixieNode._PIXIE_NAME], (weakref.ref(self), effectID))
-                    else:
-                        pixieRef = effectDesc[PixieNode._PIXIE_REF]
-                        if pixieRef is None:
-                            PixieCache.getPixie(effectDesc[PixieNode._PIXIE_NAME], (weakref.ref(self), effectID))
-                        else:
-                            self.__attach(pixieRef)
-                elif effectDesc[PixieNode._PIXIE_REF] is not None and effectDesc[PixieNode._PIXIE_TTL] == 0.0:
-                    self.__detach(effectDesc)
-                effectDesc[PixieNode._PIXIE_ENABLED] = enable
-            return
-
-    def correctWater(self, waterShiftRel):
-        if self.__waterY:
-            self.__node.local.translation = waterShiftRel + self.__nodeDefaultLocalTranslation
-
-    def onLoadedCallback(self, pixie, effectID, clone):
-        if self.__node.isDangling:
-            return False
-        elif not self.__activated:
-            return False
-        effectDesc = self.__effects[effectID]
-        prevPixie = effectDesc[PixieNode._PIXIE_REF]
-        if prevPixie is not None:
-            self.__detach(effectDesc)
-        if effectDesc[PixieNode._PIXIE_TTL] > 0.0:
-            ttlCbk = self.__ttlCallbacks.get(effectID, None)
-            if ttlCbk is not None:
-                BigWorld.cancelCallback(ttlCbk)
-            if clone:
-                pixie = pixie.clone()
-            self.__attachTTL(effectDesc, effectID, pixie)
-            return True
-        elif effectDesc[PixieNode._PIXIE_ENABLED]:
-            if clone:
-                pixie = pixie.clone()
-            effectDesc[PixieNode._PIXIE_REF] = pixie
-            self.__attach(pixie)
-            return True
-        else:
-            return False
-
-
-class PixieCache(object):
-    pixieCache = dict()
-    refCount = 0
-    pixiesCount = 0
-
-    @staticmethod
-    def getPixie(name, callbackData):
-        pixieInfo = PixieCache.pixieCache.get(name, [None, set()])
-        cbksSize = len(pixieInfo[1])
-        pixieInfo[1].add(callbackData)
-        if cbksSize == 0:
-            pixieInfo[0] = PixieBG(name, PixieCache.onPixieLoaded)
-            PixieCache.pixieCache[name] = pixieInfo
-        return
-
-    @staticmethod
-    def incref():
-        PixieCache.refCount += 1
-
-    @staticmethod
-    def decref():
-        PixieCache.refCount -= 1
-        if PixieCache.refCount == 0:
-            PixieCache.pixieCache.clear()
-
-    @staticmethod
-    def onPixieLoaded(pixieBG):
-        pixieInfo = PixieCache.pixieCache.get(pixieBG.name, None)
-        if pixieInfo is not None:
-            callbacks = pixieInfo[1]
-            origPixieAccepted = False
-            for callback in callbacks:
-                node = callback[0]()
-                if node is not None:
-                    if node.onLoadedCallback(pixieBG.pixie, callback[1], origPixieAccepted):
-                        origPixieAccepted = True
-
-            if not origPixieAccepted:
-                pixieBG.pixie.removeAllSystems()
-            PixieCache.pixieCache[pixieBG.name] = [None, set()]
-        else:
-            pixieBG.pixie.removeAllSystems()
-        return
-
-
 class SelectorDescFactory:
 
     @staticmethod
@@ -210,6 +41,7 @@ class SelectorDescFactory:
         SelectorDescFactory.readConstants(section)
         SelectorDescFactory.readNodes(section)
         SelectorDescFactory.readTemplates(section)
+        SelectorDescFactory.readEffectLists(section)
 
     @staticmethod
     def releseFactory():
@@ -231,6 +63,21 @@ class SelectorDescFactory:
                 selectorTemplate = SelectorDescFactory.create(template[1]['selector'])
                 if selectorTemplate is not None and templateName != '':
                     gTemplates[templateName] = selectorTemplate
+
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+        return
+
+    @staticmethod
+    def readEffectLists(dataSection):
+        try:
+            section = dataSection['effectLists']
+            if section is None:
+                return
+            for effectList in section.items():
+                name = effectList[0]
+                gEffectLists[name] = EffectsList.effectsFromSection(effectList[1])
 
         except Exception:
             LOG_CURRENT_EXCEPTION()
@@ -292,6 +139,8 @@ class SelectorDescFactory:
             selector = RangeSelectorDesc()
         elif selectorType == 'effect':
             selector = EffectSelectorDesc()
+        elif selectorType == 'effectList':
+            selector = EffectListSelectorDesc()
         elif selectorType == 'matkind':
             selector = MatkindSelectorDesc()
         elif selectorType == 'union':
@@ -491,11 +340,16 @@ class UnionSelectorDesc(SelectorDesc):
 
 class EffectSelectorDesc(SelectorDesc):
 
+    @property
+    def isEffectList(self):
+        return self._effectList is True
+
     def __init__(self):
         super(EffectSelectorDesc, self).__init__()
         self.__hardPoint = None
         self._id = None
         self.__ttl = 0.0
+        self._effectList = False
         return
 
     def read(self, dataSection, effects):
@@ -511,7 +365,10 @@ class EffectSelectorDesc(SelectorDesc):
             except:
                 pass
 
-        self.__makeId(effects)
+        if self.__hardPoint is not None:
+            self.__makeIdWithHP(effects)
+        else:
+            self.__makeId(effects)
         return
 
     def fillTemplate(self, args, effects):
@@ -535,9 +392,9 @@ class EffectSelectorDesc(SelectorDesc):
             effectID = effects.get(self._variable, None)
             if effectID is None:
                 effectID = len(effects)
-                effects[self._variable] = (effectID, self.__ttl)
+                effects[self._variable] = (effectID, self.__ttl, self._effectList)
             else:
-                effectID = effectID[0]
+                effectID = effectID[EffectNode.EFFECT_ID]
             self._id = effectID
         return
 
@@ -569,11 +426,24 @@ class EffectSelectorDesc(SelectorDesc):
             effectID = nodeEffects[4].get(self._variable, None)
             if effectID is None:
                 effectID = len(nodeEffects[4])
-                nodeEffects[4][self._variable] = (effectID, self.__ttl)
+                nodeEffects[4][self._variable] = (effectID, self.__ttl, self._effectList)
             else:
-                effectID = effectID[0]
+                effectID = effectID[EffectNode.EFFECT_ID]
             self._id = (self._id, effectID)
         return
+
+
+class EffectListSelectorDesc(EffectSelectorDesc):
+
+    def __init__(self):
+        super(EffectListSelectorDesc, self).__init__()
+        self._effectList = True
+
+    def read(self, dataSection, effects):
+        super(EffectListSelectorDesc, self).read(dataSection, effects)
+
+    def fillTemplate(self, args, effects):
+        super(EffectListSelectorDesc, self).fillTemplate(args, effects)
 
 
 class EffectDescriptorBase(object):
@@ -728,7 +598,7 @@ class MainCustomSelector(MainSelectorBase):
                 node = model.node(nodeName)
                 model.node(nodeName, Math.Matrix(node.localMatrix))
                 drawOrderBase = args.get('drawOrderBase', 0)
-                self._effectNodes[nodeDesc[0]] = PixieNode(node, nodeDesc[2], drawOrderBase + nodeDesc[3], nodeDesc[4])
+                self._effectNodes[nodeDesc[0]] = EffectNode(model, node, nodeDesc[2], drawOrderBase + nodeDesc[3], nodeDesc[4])
             except:
                 LOG_ERROR('Node %s is not found' % nodeName)
                 continue
@@ -757,7 +627,7 @@ class ExhaustMainSelector(MainSelectorBase):
                 node = model.node(nodeName)
                 model.node(nodeName, Math.Matrix(node.localMatrix))
                 drawOrderBase = args.get('drawOrderBase', 0)
-                self._effectNodes[nodeName] = PixieNode(node, False, drawOrderBase, self._effectSelector.effects)
+                self._effectNodes[nodeName] = EffectNode(model, node, False, drawOrderBase, self._effectSelector.effects)
             except:
                 LOG_ERROR('Node %s is not found' % nodeName)
                 continue

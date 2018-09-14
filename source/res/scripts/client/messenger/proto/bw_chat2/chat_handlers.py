@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/chat_handlers.py
 from collections import namedtuple
 import weakref
+import BattleReplay
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
+from helpers import dependency
 from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE, USER_TAG
 from messenger.proto.bw_chat2 import admin_chat_cmd
 from messenger.proto.bw_chat2 import entities, limits, wrappers, errors
@@ -16,6 +18,7 @@ from messenger.storage import storage_getter
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS
+from skeletons.gui.battle_session import IBattleSessionProvider
 _ActionsCollection = namedtuple('_ActionsCollection', 'initID deInitID onBroadcastID broadcastID')
 
 class _EntityChatHandler(provider.ResponseSeqHandler):
@@ -137,7 +140,8 @@ class _EntityChatHandler(provider.ResponseSeqHandler):
 
     def _onEntityChatInit(self, _, args):
         if self.__isInited:
-            LOG_WARNING('EntityChat already is inited', self)
+            if not BattleReplay.g_replayCtrl.isPlaying:
+                LOG_WARNING('EntityChat already is inited', self)
             return
         self.__isInited = True
         self._doInit(dict(args))
@@ -265,7 +269,7 @@ class UnitChatHandler(_EntityChatHandler):
             return
         else:
             settings = None
-            if prbType in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT):
+            if prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES:
                 settings = BATTLE_CHANNEL.SQUAD
             self.__channel = self._addChannel(entities.BWUnitChannelEntity(settings, prbType))
             return
@@ -333,6 +337,7 @@ class ClubChatHandler(_EntityChatHandler):
 
 
 class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFactory):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, provider):
         super(BattleChatCommandHandler, self).__init__(provider)
@@ -354,8 +359,7 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
         if scope != MESSENGER_SCOPE.BATTLE:
             return
         else:
-            from gui.battle_control import g_sessionProvider
-            arena = g_sessionProvider.arenaVisitor.getArenaSubscription()
+            arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
             if arena is not None:
                 arena.onVehicleKilled += self.__onVehicleKilled
             return

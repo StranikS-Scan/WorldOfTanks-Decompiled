@@ -2,16 +2,28 @@
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
 import BigWorld
 import constants
-from debug_utils import LOG_ERROR
+from account_helpers.AccountSettings import AccountSettings, MANUAL_BOX_OPEN
+from adisp import process
+from debug_utils import LOG_ERROR, LOG_WARNING
+from gui import SystemMessages
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward
+from gui.Scaleform.genConsts.CHRISTMAS_ALIASES import CHRISTMAS_ALIASES
+from gui.Scaleform.locale.CHRISTMAS import CHRISTMAS
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.goodies.Booster import _BOOSTER_DESCRIPTION_LOCALE
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.goodies.goodie_items import _BOOSTER_DESCRIPTION_LOCALE
+from gui.server_events.bonuses import getChristmasBonusObj, ChristmasToyTokensBonus
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward
-from helpers import i18n
+from helpers import i18n, int2roman
+BOTTOM_BUTTONS_PADDING = 32
+HEADER_TEXT_OFFSET = 185
+MIN_WINDOW_HEIGHT = 422
 
 class ResearchAward(ExplosionBackAward):
 
@@ -182,18 +194,24 @@ class FalloutAwardWindow(AwardAbstract):
 
     def handleBodyButton(self):
         if self._isMaxLvl:
-            from gui.prb_control.context import PrebattleAction
+            from gui.prb_control.entities.base.ctx import PrbAction
             from gui.prb_control.dispatcher import g_prbLoader
             from gui.prb_control.settings import PREBATTLE_ACTION_NAME
             dispatcher = g_prbLoader.getDispatcher()
             if dispatcher is not None:
-                dispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.FALLOUT))
+                self.__doSelect(dispatcher)
             else:
                 LOG_ERROR('Prebattle dispatcher is not defined')
         else:
             from gui.server_events.events_dispatcher import showEventsWindow
             showEventsWindow(eventType=constants.EVENT_TYPE.BATTLE_QUEST)
         return
+
+    @process
+    def __doSelect(self, dispatcher):
+        from gui.prb_control.entities.base.ctx import PrbAction
+        from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+        yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.FALLOUT))
 
 
 class ClanJoinAward(AwardAbstract):
@@ -294,3 +312,289 @@ class TelecomAward(AwardAbstract):
         if hasattr(item, 'invID'):
             g_currentVehicle.selectVehicle(item.invID)
         shared_events.showHangar()
+
+
+class ChristmasAward(AwardAbstract):
+
+    def __init__(self, color, bonuses, christmasController):
+        self.__christmasController = christmasController
+        self.__needManualOpen = AccountSettings.getSettings(MANUAL_BOX_OPEN)
+        self.__alreadyOpened = False
+        self.__color = color
+        self.__toys, self.__additionalBonuses = self.__getBonuses(bonuses)
+
+    def getAutoAnimationStart(self):
+        return not self.__needManualOpen
+
+    def getWindowTitle(self):
+        return i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_TITLE)
+
+    def getBackgroundImage(self):
+        return CHRISTMAS_ALIASES.AWARD_TOP_ANIMATION
+
+    def getAwardImage(self):
+        mainToy = self.__getMainToy()
+        img = ''
+        if mainToy:
+            img = self.__getAnimItemData(self.__getMainToy())['toyImage']
+        return img
+
+    def getHeader(self):
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_HEADER))
+
+    def getDescription(self):
+        return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_DESCRIPTION))
+
+    def getAdditionalText(self):
+        return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_DESCRIPTION_GIFTS, gifts=self.__additionalBonuses))
+
+    def getButtonStates(self):
+        return (False, False, self.__christmasController.isEventInProgress())
+
+    def getBodyButtonText(self):
+        if self.__alreadyOpened or not self.__needManualOpen:
+            btnLabel = i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_ACTIVATEBTN_DECORATETREE_LABEL)
+        else:
+            btnLabel = i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_ACTIVATEBTN_OPENBOX_LABEL)
+        return btnLabel
+
+    def useBackgroundAnimation(self):
+        return True
+
+    def getBackgroundAnimationVoName(self):
+        return CHRISTMAS_ALIASES.ANIMATION_DATA_CLASS
+
+    def forceUseBackImage(self):
+        return True
+
+    def autoControlBackAnimation(self):
+        return False
+
+    def useEndedBackAnimation(self):
+        return True
+
+    def getBackgroundAnimationData(self):
+        mainToy = self.__getMainToy()
+        return {'mainItem': self.__getAnimItemData(mainToy),
+         'additionalItems': self.__geAdditionalToysData(mainToy),
+         'animationPath': 'xmasAwardAnimationBox_%s.swf' % self.__color,
+         'animationLinkage': 'ChristmasAwardAnimation_%s_UI' % self.__color} if mainToy else None
+
+    def isNeedAdditionalBodyClick(self):
+        return not self.__alreadyOpened
+
+    def handleAdditionalBodyBtnClick(self):
+        self.__alreadyOpened = True
+
+    def handleBodyButton(self):
+        if self.__christmasController.isEventInProgress():
+            if self.__christmasController.isChestOnScene():
+                g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CHRISTMAS_CHESTS), EVENT_BUS_SCOPE.LOBBY)
+            else:
+                g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CHRISTMAS), EVENT_BUS_SCOPE.LOBBY)
+        else:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CHRISTMAS_COMMON_ERROR, type=SystemMessages.SM_TYPE.Error)
+
+    def hasCheckBox(self):
+        return True
+
+    def getCheckBoxData(self):
+        return (not self.__needManualOpen, i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_CHECKBOX_LABEL))
+
+    def handleCheckBoxSelect(self, isSelected):
+        self.__needManualOpen = not isSelected
+        AccountSettings.setSettings(MANUAL_BOX_OPEN, not isSelected)
+
+    def clear(self):
+        self.__christmasController = None
+        self.__additionalBonuses = None
+        self.__color = None
+        self.__toys = None
+        self.__additionalBonuses = None
+        return
+
+    @staticmethod
+    def getEffectSound():
+        pass
+
+    def __getBonuses(self, bonuses):
+        simpleBonusesList = []
+        toys = {}
+        for n, v in bonuses.iteritems():
+            b = getChristmasBonusObj(n, v)
+            if b is not None:
+                if b.isShowInGUI():
+                    if b.getName() == 'customizations':
+                        continue
+                    elif isinstance(b, ChristmasToyTokensBonus):
+                        toys = b.getToys()
+                    else:
+                        simpleBonusesList.extend(b.formattedList())
+
+        additionalBonuses = ', '.join(simpleBonusesList)
+        return (toys, additionalBonuses)
+
+    def __getMainToy(self):
+        return max(self.__toys.iterkeys(), key=lambda item: item.ratingValue)
+
+    def __geAdditionalToysData(self, mainToy):
+        additionalToys = []
+        for toy, count in self.__toys.iteritems():
+            counter = 0
+            while counter < count:
+                counter += 1
+                if toy != mainToy or counter > 1:
+                    additionalToys.append(self.__getAnimItemData(toy))
+
+        if len(additionalToys) in (0, 2):
+            return additionalToys
+        else:
+            LOG_WARNING('Incorrect SSE %s box quest. Expected 0 or 2 additional toys' % self.__color)
+            return []
+
+    def __getAnimItemData(self, toy):
+        return {'toyImage': '../maps/icons/christmas/decorations/big/decoration_%s.png' % toy.id,
+         'rankImage': '../maps/icons/christmas/decorations/big/rank_%s.png' % toy.rank}
+
+
+class ChristmasPackAward(AwardAbstract):
+    __PACKS = [5,
+     7,
+     10,
+     15,
+     20]
+
+    def __init__(self, color, boxCount, bonuses, christmasController):
+        self.__christmasController = christmasController
+        self.__color = color
+        self.__boxCount = boxCount
+        self.__additionalBonuses = self.__getBonuses(bonuses)
+
+    def getWindowTitle(self):
+        return i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_TITLE)
+
+    def getBackgroundImage(self):
+        return CHRISTMAS_ALIASES.AWARD_TOP_ANIMATION
+
+    def getAwardImage(self):
+        return None
+
+    def getPackImage(self):
+        if self.__boxCount in self.__PACKS:
+            ind = self.__PACKS.index(self.__boxCount)
+            return RES_ICONS.maps_icons_christmas_awards_packcounters_packall(ind + 1)
+        LOG_ERROR('Unknown Pack Count %s' % self.__boxCount)
+
+    def getHeader(self):
+        return text_styles.highTitle(i18n.makeString(MENU.AWARDWINDOW_CHRISTMASPACK_HEADER, count=self.__boxCount))
+
+    def getDescription(self):
+        return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_CHRISTMASPACK_DESCRIPTION, count=self.__boxCount))
+
+    def getAdditionalText(self):
+        return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_CHRISTMASPACK_DESCRIPTION_GIFTS, gifts=self.__additionalBonuses))
+
+    def getButtonStates(self):
+        return (False, False, self.__christmasController.isEventInProgress())
+
+    def getBodyButtonText(self):
+        return i18n.makeString(MENU.AWARDWINDOW_CHRISTMAS_ACTIVATEBTN_DECORATETREE_LABEL)
+
+    def getBackgroundAnimationVoName(self):
+        return CHRISTMAS_ALIASES.ANIMATION_DATA_CLASS
+
+    def useBackgroundAnimation(self):
+        return True
+
+    def autoControlBackAnimation(self):
+        return False
+
+    def isNeedAdditionalBodyClick(self):
+        return False
+
+    def getBackgroundAnimationData(self):
+        return {'animationPath': 'xmasAwardAnimationBox_%s.swf' % self.__color,
+         'animationLinkage': 'ChristmasAwardAnimation_%s_UI' % self.__color}
+
+    def handleBodyButton(self):
+        if self.__christmasController.isEventInProgress():
+            if self.__christmasController.isChestOnScene():
+                g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CHRISTMAS_CHESTS), EVENT_BUS_SCOPE.LOBBY)
+            else:
+                g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CHRISTMAS), EVENT_BUS_SCOPE.LOBBY)
+        else:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CHRISTMAS_COMMON_ERROR, type=SystemMessages.SM_TYPE.Error)
+
+    def clear(self):
+        self.__christmasController = None
+        self.__additionalBonuses = None
+        self.__color = None
+        self.__boxCount = None
+        return
+
+    def __getBonuses(self, bonuses):
+        simpleBonusesList = []
+        for n, v in bonuses.iteritems():
+            b = getChristmasBonusObj(n, v)
+            if b is not None:
+                if b.isShowInGUI():
+                    if b.getName() == 'customizations' or isinstance(b, ChristmasToyTokensBonus):
+                        continue
+                    else:
+                        simpleBonusesList.extend(b.formattedList())
+
+        return ', '.join(simpleBonusesList)
+
+
+class ChristmasLvlUpAward(AwardAbstract):
+
+    def __init__(self, lvl, christmasController):
+        super(ChristmasLvlUpAward, self).__init__()
+        self.__lvl = lvl
+        self.__christmasController = christmasController
+
+    def getWindowTitle(self):
+        return i18n.makeString(CHRISTMAS.AWARDWINDOW_CHRISTMASTREE_LVLUP_TITLE)
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_CHRISTMAS_AWARDBACK
+
+    def getHeader(self):
+        return i18n.makeString(CHRISTMAS.AWARDWINDOW_CHRISTMASTREE_LVLUP_HEADER, lvl=int2roman(self.__lvl))
+
+    def getDescription(self):
+        return text_styles.main(i18n.makeString(CHRISTMAS.AWARDWINDOW_CHRISTMASTREE_LVLUP_DESCRIPTION))
+
+    def getAdditionalText(self):
+        return text_styles.main(i18n.makeString(CHRISTMAS.AWARDWINDOW_CHRISTMASTREE_LVLUP_ADDITIONALTEXT))
+
+    def getChristmasBodyButtonText(self):
+        return i18n.makeString(CHRISTMAS.AWARDWINDOW_CHRISTMASTREE_LVLUP_BODYBTN)
+
+    def getMinWindowHeight(self):
+        return MIN_WINDOW_HEIGHT
+
+    def getHeaderTextOffset(self):
+        return HEADER_TEXT_OFFSET
+
+    def getBottomButtonsPadding(self):
+        return BOTTOM_BUTTONS_PADDING
+
+    def getButtonStates(self):
+        return (False, True, self.__christmasController.isEventInProgress())
+
+    def handleBodyButton(self):
+        if self.__christmasController.isEventInProgress():
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CHRISTMAS_CHESTS), EVENT_BUS_SCOPE.LOBBY)
+        else:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CHRISTMAS_COMMON_ERROR, type=SystemMessages.SM_TYPE.Error)
+
+    def handleCloseButton(self):
+        if self.__christmasController.isEventInProgress():
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CHRISTMAS_CHESTS), EVENT_BUS_SCOPE.LOBBY)
+
+    def clear(self):
+        super(ChristmasLvlUpAward, self).clear()
+        self.__lvl = None
+        self.__christmasController = None
+        return

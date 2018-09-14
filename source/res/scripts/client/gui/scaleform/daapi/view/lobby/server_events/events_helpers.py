@@ -1,39 +1,37 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
-from functools import partial
-import time
 import operator
+import time
 import types
 from collections import namedtuple, defaultdict
+from functools import partial
 import BigWorld
 import constants
 from adisp import async
 from constants import EVENT_TYPE
-from gui.LobbyContext import g_lobbyContext
-from gui.server_events.bonuses import getTutorialBonusObj
-from gui.shared.utils.requesters.ItemsRequester import FALLOUT_QUESTS_CRITERIA
-from potapov_quests import PQ_BRANCH
 from debug_utils import LOG_ERROR
-from dossiers2.custom.records import RECORD_DB_IDS
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import GUI_SETTINGS
 from gui import makeHtmlString
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.server_events.EventsCache import g_eventsCache
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.server_events import formatters, conditions, settings as quest_settings, caches
+from gui.server_events.bonuses import getTutorialBonusObj
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.shared.gui_items import Vehicle
+from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.processors import quests as quests_proc
 from gui.shared.utils.decorators import process
-from gui.server_events import formatters, conditions, settings as quest_settings, caches
-from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
-from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from helpers import i18n, int2roman, time_utils
-from shared_utils import CONST_CONTAINER
+from gui.shared.utils.requesters.ItemsRequester import FALLOUT_QUESTS_CRITERIA
+from helpers import i18n, int2roman, time_utils, dependency
+from potapov_quests import PQ_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
+from shared_utils import CONST_CONTAINER
+from skeletons.gui.server_events import IEventsCache
 _AWARDS_PER_PAGE = 3
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
@@ -61,7 +59,8 @@ RENDER_BACKS = {1: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_EXP,
  5006: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_6,
  DEFAULTS_GROUPS.UNGROUPED_QUESTS: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_OTHER_QUESTS,
  DEFAULTS_GROUPS.UNGROUPED_ACTIONS: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_SALES,
- DEFAULTS_GROUPS.CURRENTLY_AVAILABLE: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_CURRENTLY_AVAILABLE}
+ DEFAULTS_GROUPS.CURRENTLY_AVAILABLE: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_CURRENTLY_AVAILABLE,
+ 5: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_NY2016}
 
 class EVENT_STATUS(CONST_CONTAINER):
     COMPLETED = 'done'
@@ -131,6 +130,7 @@ class _EventInfo(object):
                     'hasConditions': hasConditions,
                     'hasRequirements': len(requirements) > 0},
          'awardsDataProvider': getCarouselAwardVO(self.event.getBonuses()),
+         'taskToUnlock': self._getUnlockedTokens(),
          'requirements': {'title': '',
                           'description': '',
                           'containerElements': requirements},
@@ -215,6 +215,19 @@ class _EventInfo(object):
                 result[eID] = svrEvents[eID]
 
         return result
+
+    def _getUnlockedTokens(self):
+        childQuestsNames = self.event.getParentsName()
+        if len(childQuestsNames) == 1:
+            questTokenName = childQuestsNames.values()[0][0]
+            parentTokenName = self.event.getParents().values()[0][0]
+            return {'label': formatters.formatGold(TOOLTIPS.AWARDITEM_BATTLETOKEN_ONE_BODY, name=questTokenName),
+             'linkID': parentTokenName,
+             'isNotAvailable': False}
+        else:
+            return {'label': formatters.formatGold(TOOLTIPS.AWARDITEM_BATTLETOKEN_DESCRIPTION),
+             'linkID': None,
+             'isNotAvailable': False} if len(childQuestsNames) > 1 else {}
 
     def _getStatus(self, pCur=None):
         return (EVENT_STATUS.NONE, '')
@@ -332,7 +345,7 @@ class _QuestInfo(_EventInfo):
                     flist = b.formattedList()
                     if flist:
                         vehiclesList.extend(flist)
-                elif b.hasIconFormat() and useIconFormat:
+                elif b.hasIconFormat() and useIconFormat or b.isVisualOnly():
                     iconBonusesList.extend(b.getList())
                 else:
                     flist = b.formattedList()
@@ -734,29 +747,37 @@ def getTutorialQuestsBoosters():
 
 
 def getBoosterQuests():
+    eventsCache = dependency.instance(IEventsCache)
     hasTopVehicle = len(g_itemsCache.items.getVehicles(FALLOUT_QUESTS_CRITERIA.TOP_VEHICLE))
     isFalloutQuestEnabled = g_lobbyContext.getServerSettings().isFalloutQuestEnabled()
-    return g_eventsCache.getAllQuests(lambda q: q.isAvailable()[0] and not q.isCompleted() and len(q.getBonuses('goodies')) and not (q.getType() == EVENT_TYPE.POTAPOV_QUEST and q.getPQType().branch == PQ_BRANCH.FALLOUT and (not isFalloutQuestEnabled or not hasTopVehicle)), includePotapovQuests=True)
+    return eventsCache.getAllQuests(lambda q: q.isAvailable()[0] and not q.isCompleted() and len(q.getBonuses('goodies')) and not (q.getType() == EVENT_TYPE.POTAPOV_QUEST and q.getPQType().branch == PQ_BRANCH.FALLOUT and (not isFalloutQuestEnabled or not hasTopVehicle)), includePotapovQuests=True)
 
 
 class _PotapovDependenciesResolver(object):
+    eventsCache = dependency.descriptor(IEventsCache)
     _DEPENDENCIES_LIST = namedtuple('HandlersList', ['cache',
      'progress',
      'selectProcessor',
      'refuseProcessor',
      'rewardsProcessor',
      'sorter'])
-    _RANDOM_DEPENDENCIES = _DEPENDENCIES_LIST(g_eventsCache.random, g_eventsCache.randomQuestsProgress, quests_proc.RandomQuestSelect, quests_proc.RandomQuestRefuse, quests_proc.PotapovQuestsGetRegularReward, partial(sorted, cmp=Vehicle.compareByVehTypeName))
-    _FALLOUT_DEPENDENCIES = _DEPENDENCIES_LIST(g_eventsCache.fallout, g_eventsCache.falloutQuestsProgress, quests_proc.FalloutQuestSelect, quests_proc.FalloutQuestRefuse, quests_proc.PotapovQuestsGetRegularReward, sorted)
+
+    @classmethod
+    def _makeRandomDependencies(cls):
+        return cls._DEPENDENCIES_LIST(cls.eventsCache.random, cls.eventsCache.randomQuestsProgress, quests_proc.RandomQuestSelect, quests_proc.RandomQuestRefuse, quests_proc.PotapovQuestsGetRegularReward, partial(sorted, cmp=Vehicle.compareByVehTypeName))
+
+    @classmethod
+    def _makeFalloutDependencies(cls):
+        return cls._DEPENDENCIES_LIST(cls.eventsCache.fallout, cls.eventsCache.falloutQuestsProgress, quests_proc.FalloutQuestSelect, quests_proc.FalloutQuestRefuse, quests_proc.PotapovQuestsGetRegularReward, sorted)
 
     @classmethod
     def chooseList(cls, questsType=None):
         if questsType is None:
             questsType = caches.getNavInfo().selectedPQType
         if questsType == QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM:
-            depList = cls._RANDOM_DEPENDENCIES
+            depList = cls._makeRandomDependencies()
         else:
-            depList = cls._FALLOUT_DEPENDENCIES
+            depList = cls._makeFalloutDependencies()
         return depList
 
 
@@ -813,6 +834,16 @@ def getCarouselAwardVO(bonuses, isReceived=False):
 
     while len(result) % _AWARDS_PER_PAGE != 0 and len(result) > _AWARDS_PER_PAGE:
         result.append({})
+
+    return result
+
+
+def getChristmasCarouselAwardVO(bonuses, isReceived=False):
+    result = []
+    for bonus in bonuses:
+        if not bonus.isShowInGUI():
+            continue
+        result.extend(bonus.getCarouselList(isReceived, True))
 
     return result
 

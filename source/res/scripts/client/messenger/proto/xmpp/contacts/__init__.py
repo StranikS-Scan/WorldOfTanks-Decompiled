@@ -3,6 +3,7 @@
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from constants import IS_IGR_ENABLED
+from helpers import dependency
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID, CLIENT_ERROR_ID, USER_TAG, CLIENT_ACTION_ID, MESSENGER_SCOPE
 from messenger.proto import notations
@@ -24,12 +25,15 @@ from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA as _LOG
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE, CONTACT_LIMIT, CONTACT_ERROR_ID, LIMIT_ERROR_ID
 from messenger.storage import storage_getter
 from predefined_hosts import g_preDefinedHosts
-from debug_utils import LOG_UNEXPECTED, LOG_DEBUG
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IIGRController
 _MAX_TRIES_FAILED_IN_LOBBY = 2
 _MAX_TRIES_FAILED_IN_BATTLE = 1
 
 class _UserPresence(ClientHolder):
     __slots__ = ('__scope',)
+    igrCtrl = dependency.descriptor(IIGRController)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(_UserPresence, self).__init__()
@@ -61,10 +65,8 @@ class _UserPresence(ClientHolder):
                 continue
             query = self.__createQuery(presence)
             if IS_IGR_ENABLED:
-                from gui.game_control import getIGRCtrl
-                ctrl = getIGRCtrl()
-                if ctrl:
-                    query.setIgrID(ctrl.getRoomType())
+                if self.igrCtrl:
+                    query.setIgrID(self.igrCtrl.getRoomType())
             client.sendPresence(query)
 
         return True
@@ -81,8 +83,7 @@ class _UserPresence(ClientHolder):
         if item.url:
             query.setGameServerHost(item.url)
         if self.__scope == MESSENGER_SCOPE.BATTLE and presence == PRESENCE.DND:
-            from gui.battle_control import g_sessionProvider
-            query.setArenaGuiLabel(g_sessionProvider.arenaVisitor.gui.getLabel())
+            query.setArenaGuiLabel(self.sessionProvider.arenaVisitor.gui.getLabel())
         return query
 
     def __onIGRTypeChanged(self, igrID, _):

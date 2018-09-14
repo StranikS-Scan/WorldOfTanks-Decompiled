@@ -9,6 +9,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clubs import events_dispatcher as club_events
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui import makeHtmlString
 from gui.clans.clan_helpers import ClanListener
@@ -17,16 +18,16 @@ from gui.shared import g_itemsCache
 from gui.shared.fortifications import isStartingScriptDone
 from gui.shared.ClanCache import ClanInfo
 from gui.shared.formatters import text_styles
-from gui.shared.utils.functions import getAbsoluteUrl
+from gui.shared.utils.functions import getAbsoluteUrl, makeTooltip
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper, ClanEmblemsHelper
-from gui.clans.settings import CLAN_CONTROLLER_STATES
-from gui.clubs.ClubsController import g_clubsCtrl
 from gui.clubs.contexts import GetPlayerInfoCtx
 from gui.Scaleform.daapi.view.meta.ProfileSummaryWindowMeta import ProfileSummaryWindowMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.shared import events
+from skeletons.gui.clubs import IClubsController
 
 class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClubEmblemsHelper, ClanEmblemsHelper, ClanListener):
+    clubsCtrl = dependency.descriptor(IClubsController)
 
     def __init__(self, *args):
         super(ProfileSummaryWindow, self).__init__(*args)
@@ -102,8 +103,8 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClubEmblemsHelper, ClanEmbl
 
     @process
     def _requestClubInfo(self):
-        if g_clubsCtrl.getState().isAvailable():
-            result = yield g_clubsCtrl.sendRequest(GetPlayerInfoCtx(self._userID), allowDelay=True)
+        if self.clubsCtrl.getState().isAvailable():
+            result = yield self.clubsCtrl.sendRequest(GetPlayerInfoCtx(self._userID), allowDelay=True)
             if result.isSuccess() and result.data:
                 pInfo = result.data
                 clubDbID = pInfo.getClubDbID()
@@ -113,16 +114,23 @@ class ProfileSummaryWindow(ProfileSummaryWindowMeta, ClubEmblemsHelper, ClanEmbl
                      'division': pInfo.getDivisionString()})
                 else:
                     leagueLabel = text_styles.main('--')
-                self.as_setClubDataS({'id': clubDbID,
+                clubDataVO = {'id': clubDbID,
                  'header': pInfo.getClubUserName(),
                  'topLabel': _ms(PROFILE.PROFILE_SUMMARY_CLUB_POST),
                  'topValue': text_styles.main(pInfo.getRoleString()),
                  'bottomLabel': _ms(PROFILE.PROFILE_SUMMARY_CLUB_LADDER),
-                 'bottomValue': leagueLabel,
-                 'btnLabel': _ms(PROFILE.PROFILE_SUMMARY_CLUB_BTNLABEL),
-                 'btnEnabled': True,
-                 'btnVisible': True})
+                 'bottomValue': leagueLabel}
+                clubDataVO.update(self._getClubProfileButtonParams(True))
+                self.as_setClubDataS(clubDataVO)
                 self.requestClubEmblem32x32(clubDbID, pInfo.getEmblem32x32())
+
+    def _getClubProfileButtonParams(self, isEnabled):
+        buttonParams = {'btnEnabled': isEnabled,
+         'btnVisible': True,
+         'btnLabel': _ms(PROFILE.PROFILE_SUMMARY_CLUB_BTNLABEL)}
+        if not isEnabled:
+            buttonParams['btnTooltip'] = makeTooltip(attention='#menu:header/account/popover/crewButton/disabledTooltip')
+        return buttonParams
 
     @process
     def _receiveRating(self, databaseID):

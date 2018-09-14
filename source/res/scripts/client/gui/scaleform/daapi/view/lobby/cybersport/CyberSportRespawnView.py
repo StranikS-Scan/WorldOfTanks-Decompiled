@@ -6,13 +6,13 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.CyberSportRespawnViewMeta import CyberSportRespawnViewMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
-from gui.prb_control.prb_helpers import UnitListener
+from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.shared.utils.functions import getArenaGeomentryName
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
-class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListener):
+class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, IUnitListener):
     __background_alpha__ = 1.0
     MAP_BG_SOURCE = '../maps/icons/map/screen/%s.dds'
 
@@ -22,11 +22,11 @@ class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListene
         self.currentState = ''
 
     def onUnitRejoin(self):
-        if not self.unitFunctional.getFlags().isInIdle():
+        if not self.prbEntity.getFlags().isInIdle():
             self.__clearState()
 
     def onUnitFlagsChanged(self, flags, timeLeft):
-        if self.unitFunctional.hasLockedState():
+        if self.prbEntity.hasLockedState():
             if flags.isInQueue() or flags.isInArena():
                 self.currentState = CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_RESPAWN_STATE
             elif flags.isInPreArena():
@@ -38,27 +38,27 @@ class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListene
             self.__clearState()
 
     def onUnitPlayerStateChanged(self, pInfo):
-        if self.unitFunctional.getFlags().isInIdle():
+        if self.prbEntity.getFlags().isInIdle():
             self.__initState()
 
     def onUnitExtraChanged(self, extra):
-        extra = self.unitFunctional.getExtra()
+        extra = self.prbEntity.getExtra()
         self.__swapTeamsInMinimap(extra.isBaseDefence)
 
     def _populate(self):
         super(CyberSportRespawnView, self)._populate()
-        self.startUnitListening()
-        extra = self.unitFunctional.getExtra()
+        self.startPrbListening()
+        extra = self.prbEntity.getExtra()
         if extra is not None:
             geometryName = getArenaGeomentryName(extra.mapID)
             self.as_setMapBGS(self.MAP_BG_SOURCE % geometryName)
             self.__swapTeamsInMinimap(extra.isBaseDefence)
         else:
-            LOG_ERROR('No extra data was give for club unit: ', self.unitFunctional.getUnit())
+            LOG_ERROR('No extra data was give for club unit: ', self.prbEntity.getUnit())
         return
 
     def _dispose(self):
-        self.stopUnitListening()
+        self.stopPrbListening()
         super(CyberSportRespawnView, self)._dispose()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
@@ -91,7 +91,7 @@ class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListene
         self.as_hideAutoSearchS()
 
     def __createAutoUpdateModel(self, state, countDownSeconds, ctxMessage, playersReadiness):
-        permissions = self.unitFunctional.getPermissions(unitIdx=self.unitFunctional.getUnitIdx())
+        permissions = self.prbEntity.getPermissions(unitIdx=self.prbEntity.getUnitIdx())
         model = {'state': state,
          'countDownSeconds': countDownSeconds,
          'contextMessage': ctxMessage,

@@ -3,7 +3,7 @@
 from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
-from gui.shared.utils import GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_CLIP, CLIP_ICON_PATH, EXTRA_MODULE_INFO
+from gui.shared.utils import GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_CLIP, CLIP_ICON_PATH, EXTRA_MODULE_INFO, HYDRAULIC_ICON_PATH
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils.functions import stripShortDescrTags
 from items import ITEM_TYPE_NAMES
@@ -58,6 +58,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
         extraParamsInfo = params.get('extras', {})
         isGun = module.itemTypeName == ITEM_TYPE_NAMES[4]
         isShell = module.itemTypeName == ITEM_TYPE_NAMES[10]
+        isChassis = module.itemTypeName == ITEM_TYPE_NAMES[2]
         excludedParametersNames = extraParamsInfo.get('excludedParams', tuple())
         if isGun:
             if 'maxShotDistance' in moduleParameters:
@@ -78,6 +79,10 @@ class ModuleInfoWindow(ModuleInfoMeta):
                 imgPath = 'img://gui' + imgPathArr[1]
                 moduleData['otherParameters'] = {'headerText': i18n.makeString(MENU.MODULEINFO_PARAMETERSCLIPGUNLABEL, imgPath),
                  'params': otherParamsInfoList}
+        if isChassis:
+            if moduleParameters['isHydraulic']:
+                description = i18n.makeString(MENU.MODULEINFO_HYDRAULICCHASSISLABEL)
+                extraModuleInfo = HYDRAULIC_ICON_PATH
         moduleData['description'] = description
         paramsList = []
         for paramName, paramValue in formattedModuleParameters:

@@ -23,6 +23,9 @@ class ProfileWindowMeta(AbstractWindowView):
         self._printOverrideError('userCreatePrivateChannel')
 
     def as_setInitDataS(self, data):
+        """
+        :param data: Represented by ProfileWindowInitVO (AS)
+        """
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
     def as_addFriendAvailableS(self, value):

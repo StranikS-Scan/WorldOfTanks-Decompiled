@@ -6,17 +6,19 @@ from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.shared.formatters import icons, text_styles
+from helpers import dependency
 from helpers import i18n
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.server_events import event_items, caches
 from gui.shared.gui_items import Vehicle
-from gui.server_events import g_eventsCache, events_dispatcher as quest_events, settings as quest_settings, formatters as quests_fmts
+from gui.server_events import events_dispatcher as quest_events, settings as quest_settings, formatters as quests_fmts
 from gui.Scaleform.daapi.view.meta.QuestsSeasonsViewMeta import QuestsSeasonsViewMeta
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from skeletons.gui.server_events import IEventsCache
 
 def _getQuestsCache():
     return events_helpers.getPotapovQuestsCache()
@@ -36,6 +38,7 @@ def _packTabDataItem(label, tabID):
 
 
 class QuestsSeasonsView(QuestsSeasonsViewMeta):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         super(QuestsSeasonsView, self).__init__()
@@ -78,15 +81,15 @@ class QuestsSeasonsView(QuestsSeasonsViewMeta):
 
     def _populate(self):
         super(QuestsSeasonsView, self)._populate()
-        g_eventsCache.onSelectedQuestsChanged += self._onSelectedQuestsChanged
-        g_eventsCache.onProgressUpdated += self._onProgressUpdated
+        self.eventsCache.onSelectedQuestsChanged += self._onSelectedQuestsChanged
+        self.eventsCache.onProgressUpdated += self._onProgressUpdated
         self.__populateViewData()
         self.__populateSeasonsData()
         self.__populateSlotsData()
 
     def _dispose(self):
-        g_eventsCache.onSelectedQuestsChanged -= self._onSelectedQuestsChanged
-        g_eventsCache.onProgressUpdated -= self._onProgressUpdated
+        self.eventsCache.onSelectedQuestsChanged -= self._onSelectedQuestsChanged
+        self.eventsCache.onProgressUpdated -= self._onProgressUpdated
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__proxy = None
         super(QuestsSeasonsView, self)._dispose()

@@ -30,7 +30,6 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
         super(VehicleSelectorPopup, self)._populate()
         self.addListener(HideWindowEvent.HIDE_VEHICLE_SELECTOR_WINDOW, self.onWindowForceClose)
         self.initFilters()
-        self.updateData()
         self.as_setListModeS(self.__isMultiSelect)
         self.as_setInfoTextS(self.__infoText, self.__componentsOffset)
 

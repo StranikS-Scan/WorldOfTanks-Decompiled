@@ -207,8 +207,11 @@ def getArenaUniqueID(avatar=None):
 def updateVehicleSetting(code, value, avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
+    vehicleid = avatar.playerVehicleID
+    if avatar.getVehicleAttached() is not None:
+        vehicleid = avatar.getVehicleAttached().id
     try:
-        avatar.updateVehicleSetting(code, value)
+        avatar.updateVehicleSetting(vehicleid, code, value)
     except AttributeError:
         LOG_CURRENT_EXCEPTION()
         LOG_WARNING('Attribute "updateVehicleSetting" is not found')

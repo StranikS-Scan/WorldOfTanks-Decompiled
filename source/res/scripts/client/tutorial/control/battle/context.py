@@ -4,7 +4,8 @@ from collections import namedtuple
 import struct
 import BigWorld
 import SoundGroups
-from gui.battle_control import g_sessionProvider
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from tutorial.control import context
 from tutorial.control.context import ClientCtx, GlobalStorage
 from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
@@ -142,9 +143,10 @@ class ExtendedBattleClientCtx(ClientCtx, namedtuple('ExtendedBattleClientCtx', A
 
 
 class BattleStartReqs(context.StartReqs):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def isEnabled(self):
-        return g_sessionProvider.arenaVisitor.gui.isTutorialBattle()
+        return self.sessionProvider.arenaVisitor.gui.isTutorialBattle()
 
     def prepare(self, ctx):
         clientCtx = BattleClientCtx.fetch()

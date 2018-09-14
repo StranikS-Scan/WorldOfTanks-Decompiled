@@ -6,7 +6,6 @@ import random
 from functools import partial
 import weakref
 from helpers.EffectsList import EffectsListPlayer
-from AvatarInputHandler import ShakeReason
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from helpers import i18n
 from helpers.EntityExtra import EntityExtra
@@ -70,8 +69,8 @@ class ShowShooting(EntityExtra):
                 data['_timerID'] = BigWorld.callback(burstInterval, partial(self.__doShot, data))
                 effPlayer.play(gunModel)
                 withShot = 2
-            if data['entity'].isPlayerVehicle:
-                avatar = BigWorld.player()
+            avatar = BigWorld.player()
+            if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
                 avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot)
             if not vehicle.appearance.isInWater:
                 groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')

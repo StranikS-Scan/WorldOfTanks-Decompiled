@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/key_mapping.py
 import BigWorld
+import CommandMapping
 import Keys
+from helpers.i18n import makeString
+from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 BW_TO_SCALEFORM = {Keys.KEY_NONE: 666,
  Keys.KEY_MOUSE0: 0,
  Keys.KEY_MOUSE1: 1,
@@ -145,3 +148,17 @@ def getBigworldKey(scaleformKey):
 
 def getScaleformKey(bigworldKey):
     return BW_TO_SCALEFORM.get(bigworldKey, voidSymbol)
+
+
+def getKey(command):
+    """Get bigworld's keyboard key assigned to to specified command.
+    """
+    commandName = CommandMapping.g_instance.getName(command)
+    return CommandMapping.g_instance.get(commandName)
+
+
+def getReadableKey(command):
+    """Get a human readable key name from assigned to specified command.
+    """
+    key = getKey(command)
+    return makeString(READABLE_KEY_NAMES.key(BigWorld.keyToString(key)))

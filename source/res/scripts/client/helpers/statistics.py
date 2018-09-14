@@ -4,10 +4,12 @@ import BigWorld
 import ResMgr
 import Settings
 from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
-from account_helpers.settings_core import SettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.shared.utils import graphics
 from debug_utils import LOG_DEBUG, LOG_NOTE
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 STATISTICS_VERSION = '0.0.2'
 
 class _STATISTICS_STATE:
@@ -59,6 +61,8 @@ _HANGAR_LOADING_STATES_IDS = [HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE,
 
 class StatisticsCollector:
     update = property(lambda self: self.__updateFunc)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         self.__state = _STATISTICS_STATE.STOPPED
@@ -80,9 +84,8 @@ class StatisticsCollector:
         if self.__state != _STATISTICS_STATE.STOPPED:
             self.__state = _STATISTICS_STATE.STOPPED
             BigWorld.enableBattleStatisticCollector(False)
-            SettingsCore.g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
-            from gui.battle_control import g_sessionProvider
-            ctrl = g_sessionProvider.shared.drrScale
+            self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+            ctrl = self.sessionProvider.shared.drrScale
             if ctrl is not None:
                 ctrl.onDRRChanged -= self.__onDRRChanged
         return
@@ -99,9 +102,8 @@ class StatisticsCollector:
     def __updatePrebattle(self):
         if BigWorld.player().arena.period == ARENA_PERIOD.BATTLE and self.__state == _STATISTICS_STATE.STARTED:
             BigWorld.enableBattleStatisticCollector(True)
-            SettingsCore.g_settingsCore.onSettingsChanged += self.__onSettingsChanged
-            from gui.battle_control import g_sessionProvider
-            ctrl = g_sessionProvider.shared.drrScale
+            self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+            ctrl = self.sessionProvider.shared.drrScale
             if ctrl is not None:
                 ctrl.onDRRChanged += self.__onDRRChanged
             self.__state = _STATISTICS_STATE.IN_PROGRESS
@@ -124,13 +126,18 @@ class StatisticsCollector:
             if proceed:
                 ret['cpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(_HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE)
                 ret['gpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(_HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE)
-                ret['graphicsEngine'] = SettingsCore.g_settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
+                ret['graphicsEngine'] = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
                 if not self.__hangarLoaded:
                     self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_STRAIGHT_INTO_BATTLE
-                ret['graphicsPreset'] = SettingsCore.g_settingsCore.getSetting(GRAPHICS.PRESETS)
-                windowMode = SettingsCore.g_settingsCore.getSetting(GRAPHICS.FULLSCREEN)
-                ret['windowMode'] = 1 if windowMode else 0
-                resolutionContainer = graphics.g_monitorSettings.currentVideoMode if windowMode else graphics.g_monitorSettings.currentWindowSize
+                ret['graphicsPreset'] = self.settingsCore.getSetting(GRAPHICS.PRESETS)
+                windowMode = BigWorld.getWindowMode()
+                windowModeLUT = {BigWorld.WindowModeWindowed: 0,
+                 BigWorld.WindowModeExclusiveFullscreen: 1,
+                 BigWorld.WindowModeBorderless: 2}
+                ret['windowMode'] = windowModeLUT.get(windowMode, 0)
+                resolutionContainer = graphics.g_monitorSettings.currentWindowSize
+                if windowMode == BigWorld.WindowModeExclusiveFullscreen:
+                    resolutionContainer = graphics.g_monitorSettings.currentVideoMode
                 ret['screenResWidth'] = resolutionContainer.width
                 ret['screenResHeight'] = resolutionContainer.height
                 ret['drrScale'] = int(round(BigWorld.getDRRScale() * 100))
@@ -144,33 +151,11 @@ class StatisticsCollector:
         return ret
 
     def __onSettingsChanged(self, diff):
-        if GRAPHICS.DYNAMIC_RENDERER in diff:
-            self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_DRR_SCALE_CHANGED
-        importantSettings = set([GRAPHICS.TEXTURE_QUALITY,
-         GRAPHICS.LIGHTING_QUALITY,
-         GRAPHICS.SHADOWS_QUALITY,
-         GRAPHICS.EFFECTS_QUALITY,
-         GRAPHICS.SNIPER_MODE_EFFECTS_QUALITY,
-         GRAPHICS.FLORA_QUALITY,
-         GRAPHICS.POST_PROCESSING_QUALITY,
-         GRAPHICS.SNIPER_MODE_GRASS_ENABLED,
-         GRAPHICS.VEHICLE_DUST_ENABLED,
-         GRAPHICS.DRR_AUTOSCALER_ENABLED])
-        keys = set(diff.keys())
-        if importantSettings & keys:
-            self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_GS_MAJOR_CHANGED
-        otherSettings = set([GRAPHICS.TERRAIN_QUALITY,
-         GRAPHICS.WATER_QUALITY,
-         GRAPHICS.DECALS_QUALITY,
-         GRAPHICS.OBJECT_LOD,
-         GRAPHICS.SPEEDTREE_QUALITY,
-         GRAPHICS.FAR_PLANE,
-         GRAPHICS.MOTION_BLUR_QUALITY,
-         GRAPHICS.SEMITRANSPARENT_LEAVES_ENABLED,
-         GRAPHICS.VEHICLE_TRACES_ENABLED,
-         GRAPHICS.FPS_PERFOMANCER])
-        if otherSettings & keys:
-            self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_GS_MINOR_CHANGED
+        videoModeSizeChangeKeys = [GRAPHICS.WINDOW_SIZE, GRAPHICS.RESOLUTION, GRAPHICS.BORDERLESS_SIZE]
+        if any((sizeChangeKey in diff for sizeChangeKey in videoModeSizeChangeKeys)):
+            self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_RESOLUTION_CHANGED
+        if GRAPHICS.VIDEO_MODE in diff:
+            self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_WM_CHANGED
 
     def __onHangarSpaceLoaded(self):
         self.__hangarLoaded = True

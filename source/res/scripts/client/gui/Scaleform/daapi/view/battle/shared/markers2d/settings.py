@@ -7,7 +7,18 @@ MARKER_POSITION_ADJUSTMENT = Vector3(0.0, 12.0, 0.0)
 MARKERS_MANAGER_SWF = 'vehicleMarkersManager.swf'
 MARKERS_COLOR_SCHEME_PREFIX = 'vm_'
 
-class DAMAGE_TYPE:
+class MARKER_SYMBOL_NAME(object):
+    VEHICLE_MARKER = 'VehicleMarker'
+    EQUIPMENT_MARKER = 'FortConsumablesMarker'
+    FLAG_MARKER = 'FlagIndicatorUI'
+    FLAG_CAPTURE_MARKER = 'CaptureIndicatorUI'
+    REPAIR_MARKER = 'RepairPointIndicatorUI'
+    SAFE_ZONE_MARKER = 'SafeZoneIndicatorUI'
+    RESOURCE_MARKER = 'ResourcePointMarkerUI'
+    STATIC_OBJECT_MARKER = 'StaticObjectMarker'
+
+
+class DAMAGE_TYPE(object):
     FROM_UNKNOWN = 0
     FROM_ALLY = 1
     FROM_ENEMY = 2
@@ -15,11 +26,7 @@ class DAMAGE_TYPE:
     FROM_PLAYER = 4
 
 
-EQUIPMENT_MARKER_TYPE = 'FortConsumablesMarker'
-FLAG_MARKER_TYPE = 'FlagIndicatorUI'
-FLAG_CAPTURE_MARKER_TYPE = 'CaptureIndicatorUI'
-
-class FLAG_TYPE:
+class FLAG_TYPE(object):
     ALLY = 'ally'
     ENEMY = 'enemy'
     NEUTRAL = 'neutral'
@@ -27,11 +34,7 @@ class FLAG_TYPE:
     COOLDOWN = 'cooldown'
 
 
-REPAIR_MARKER_TYPE = 'RepairPointIndicatorUI'
-SAFE_ZONE_MARKER_TYPE = 'SafeZoneIndicatorUI'
-RESOURCE_MARKER_TYPE = 'ResourcePointMarkerUI'
-
-class RESOURCE_STATE:
+class RESOURCE_STATE(object):
     FREEZE = 'freeze'
     COOLDOWN = 'cooldown'
     READY = 'ready'

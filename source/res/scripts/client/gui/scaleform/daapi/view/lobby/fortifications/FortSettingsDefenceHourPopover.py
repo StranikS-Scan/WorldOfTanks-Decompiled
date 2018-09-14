@@ -58,4 +58,4 @@ class FortSettingsDefenceHourPopover(FortSettingsDefenceHourPopoverMeta, FortVie
             start = time_utils.getTimeTodayForUTC(defHourUTC)
             finish = time_utils.getTimeTodayForUTC(defHourUTC + 1)
             defenceHourStr = '%s - %s' % (BigWorld.wg_getShortTimeFormat(start), BigWorld.wg_getShortTimeFormat(finish))
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET, defenceHour=defenceHourStr, type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET, defenceHour=defenceHourStr, type=SystemMessages.SM_TYPE.Warning)

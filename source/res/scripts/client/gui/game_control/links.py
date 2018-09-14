@@ -59,7 +59,7 @@ class URLMarcos(object):
         yield lambda callback: callback(True)
         result = ''
         if macros in self.__asyncMacroses:
-            result = yield self.__asyncMacroses[macros](args)
+            result = yield self.__asyncMacroses[macros](self, args)
         elif macros in self.__syncMacroses:
             result = self.__syncMacroses[macros](args)
         else:

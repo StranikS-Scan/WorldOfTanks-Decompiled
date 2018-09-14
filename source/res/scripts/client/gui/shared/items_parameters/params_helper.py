@@ -25,7 +25,7 @@ _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
  ITEM_TYPES.vehicle: params.VehicleParams}
 
 def _getParamsProvider(item, vehicleDescr=None):
-    if isinstance(item.descriptor, vehicles.VehicleDescr):
+    if vehicles.isVehicleDescr(item.descriptor):
         return _ITEM_TYPE_HANDLERS[ITEM_TYPES.vehicle](item)
     else:
         itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(item.descriptor['compactDescr'])

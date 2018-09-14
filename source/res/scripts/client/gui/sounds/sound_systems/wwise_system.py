@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/sounds/sound_systems/wwise_system.py
 import WWISE
 import SoundGroups
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.sounds.abstract import SoundSystemAbstract
-from gui.sounds.sound_constants import SoundSystems, HQRenderState
+from gui.sounds.sound_constants import SoundSystems, SPEAKERS_CONFIG
 _LAPTOP_SOUND_PRESET = 2
 
 class WWISESoundSystem(SoundSystemAbstract):
@@ -32,6 +32,24 @@ class WWISESoundSystem(SoundSystemAbstract):
             wwiseEvent = 'ue_set_preset_bassboost_off'
         WWISE.WW_eventGlobalSync(wwiseEvent)
         LOG_DEBUG('WWISE: triggered {0}'.format(wwiseEvent))
+
+    def getSystemSpeakersPresetID(self):
+        return WWISE.WW_getSystemSpeakersConfig()
+
+    def getUserSpeakersPresetID(self):
+        return WWISE.WW_getUserSpeakersConfig()
+
+    def setUserSpeakersPresetID(self, presetID):
+        if presetID not in SPEAKERS_CONFIG.RANGE:
+            LOG_ERROR('Invalid value of presetID {}'.format(presetID))
+            return
+        if self.getUserSpeakersPresetID() == presetID:
+            LOG_DEBUG('WWISE: Sounds preset is already set. Do nothing')
+        else:
+            WWISE.WW_setUserSpeakersConfig(presetID)
+            LOG_DEBUG('WWISE: New sounds preset is set. New value is {}'.format(presetID))
+            WWISE.WW_reinit()
+            LOG_DEBUG('WWISE: Sound system is reinitialized')
 
     def setSoundSystem(self, soundSystemID):
         if soundSystemID == _LAPTOP_SOUND_PRESET:

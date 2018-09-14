@@ -3,10 +3,12 @@
 from collections import namedtuple, defaultdict
 import Event
 from debug_utils import LOG_ERROR
+from helpers import dependency
 from helpers.html.templates import XMLCollection
 from messenger import doc_loaders
 from messenger.doc_loaders.html_templates import MessageTemplates
 from messenger.m_constants import BATTLE_CHANNEL
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 def _getAccountRepository():
     import Account
@@ -117,14 +119,10 @@ def _makeDefUserPrefs():
 
 class MessengerSettings(object):
     __slots__ = ('__colorsSchemes', '__messageFormatters', '__eManager', '__isUserPrefsInited', 'lobby', 'battle', 'userPrefs', 'htmlTemplates', 'msgTemplates', 'server', 'onUserPreferencesUpdated', 'onColorsSchemesUpdated')
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
-        self.__colorsSchemes = {'groups': _ColorScheme(['default']),
-         'rosters': _ColorScheme(['online', 'offline']),
-         'contacts': _ColorScheme(['online', 'offline']),
-         'battle/player': _ColorScheme(['default', 'colorBlind']),
-         'battle/message': _ColorScheme(['default', 'colorBlind']),
-         'battle/receiver': _ColorScheme(['default', 'colorBlind'])}
+        self.__colorsSchemes = {}
         self.lobby = _LobbySettings()
         self.battle = _BattleSettings()
         self.userPrefs = _makeDefUserPrefs()
@@ -139,16 +137,20 @@ class MessengerSettings(object):
         return
 
     def init(self):
+        self.__colorsSchemes.update({'groups': _ColorScheme(['default']),
+         'rosters': _ColorScheme(['online', 'offline']),
+         'contacts': _ColorScheme(['online', 'offline']),
+         'battle/player': _ColorScheme(['default', 'colorBlind']),
+         'battle/message': _ColorScheme(['default', 'colorBlind']),
+         'battle/receiver': _ColorScheme(['default', 'colorBlind'])})
         from messenger.proto import ServerSettings
         self.server = ServerSettings()
         doc_loaders.load(self)
         self.lobby.onSettingsLoaded(self)
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged += self.__accs_onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__accs_onSettingsChanged
 
     def fini(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.__accs_onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__accs_onSettingsChanged
         self.__eManager.clear()
         self.__colorsSchemes.clear()
         self.__messageFormatters.clear()
@@ -160,8 +162,7 @@ class MessengerSettings(object):
         else:
             settings = {}
         self.server.update(settings)
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        if g_settingsCore.getSetting('isColorBlind'):
+        if self.settingsCore.getSetting('isColorBlind'):
             csName = 'colorBlind'
         else:
             csName = 'default'

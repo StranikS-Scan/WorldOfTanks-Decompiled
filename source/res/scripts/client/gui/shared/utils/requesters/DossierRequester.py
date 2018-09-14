@@ -211,6 +211,14 @@ class DossierRequester(AbstractSyncDataRequester):
     def getVehicleDossier(self, vehTypeCompDescr):
         return self.getCacheValue((constants.DOSSIER_TYPE.VEHICLE, vehTypeCompDescr), (0, ''))[1]
 
+    def getVehDossiersIterator(self):
+        """ Returns iterator through all player's vehicle dossiers
+        :return: each call returns pair (veh_int_cd, dossier_str)
+        """
+        for (dossierType, vehIntCD), records in self._data.iteritems():
+            if dossierType == constants.DOSSIER_TYPE.VEHICLE:
+                yield (vehIntCD, records[1])
+
     def getUserDossierRequester(self, databaseID):
         databaseID = int(databaseID)
         return self.__users.setdefault(databaseID, UserDossier(databaseID))

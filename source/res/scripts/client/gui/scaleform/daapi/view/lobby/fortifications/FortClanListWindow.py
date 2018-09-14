@@ -1,20 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanListWindow.py
 import BigWorld
-from gui import game_control
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.FortClanListWindowMeta import FortClanListWindowMeta
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.clans.formatters import getClanRoleString
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.formatters import icons, text_styles
-from gui.clans.formatters import getClanRoleString
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IGameSessionController
 
 class FortClanListWindow(FortClanListWindowMeta, FortViewHelper):
+    gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self, _=None):
         super(FortClanListWindow, self).__init__()
@@ -22,14 +23,12 @@ class FortClanListWindow(FortClanListWindowMeta, FortViewHelper):
     def _populate(self):
         super(FortClanListWindow, self)._populate()
         self.startFortListening()
-        ctrl = game_control.g_instance
-        ctrl.gameSession.onNewDayNotify += self.__gameSession_onNewDayNotify
+        self.gameSession.onNewDayNotify += self.__gameSession_onNewDayNotify
         self._update()
 
     def _dispose(self):
         self.stopFortListening()
-        ctrl = game_control.g_instance
-        ctrl.gameSession.onNewDayNotify -= self.__gameSession_onNewDayNotify
+        self.gameSession.onNewDayNotify -= self.__gameSession_onNewDayNotify
         super(FortClanListWindow, self)._dispose()
 
     def _update(self):

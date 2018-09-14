@@ -131,6 +131,9 @@ class ApplicationMeta(BaseDAAPIModule):
         return self.flashObject.as_registerManagers() if self._isDAAPIInited() else None
 
     def as_setLibrariesListS(self, list):
+        """
+        :param list: Represented by Vector.<String> (AS)
+        """
         return self.flashObject.as_setLibrariesList(list) if self._isDAAPIInited() else None
 
     def as_updateStageS(self, w, h, scale):

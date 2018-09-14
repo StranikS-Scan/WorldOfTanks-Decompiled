@@ -14,6 +14,9 @@ class CyberSportRespawnViewMeta(View):
         return self.flashObject.as_setMapBG(imgsource) if self._isDAAPIInited() else None
 
     def as_changeAutoSearchStateS(self, value):
+        """
+        :param value: Represented by AutoSearchVO (AS)
+        """
         return self.flashObject.as_changeAutoSearchState(value) if self._isDAAPIInited() else None
 
     def as_hideAutoSearchS(self):

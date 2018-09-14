@@ -179,8 +179,14 @@ class SETTINGS(object):
     INTERFACESCALEDISABLED_BODY = '#settings:interfaceScaleDisabled/body'
     INTERFACESCALEDISABLED_ATTENTION = '#settings:interfaceScaleDisabled/attention'
     INTERFACESCALEDISABLED_WARNING = '#settings:interfaceScaleDisabled/warning'
-    FULLSCREEN = '#settings:fullScreen'
-    FULLSCREEN_DESCRIPTION = '#settings:fullScreen/description'
+    SCREENMODE = '#settings:screenMode'
+    SCREENMODE_DESCRIPTION = '#settings:screenMode/description'
+    SCREENMODE_LABEL = '#settings:screenMode/label'
+    SCREENMODE_FULLSCREEN = '#settings:screenMode/fullscreen'
+    SCREENMODE_WINDOWED = '#settings:screenMode/windowed'
+    SCREENMODE_BORDERLESS = '#settings:screenMode/borderless'
+    BORDERLESSSIZE = '#settings:borderlessSize'
+    BORDERLESSSIZE_DESCRIPTION = '#settings:borderlessSize/description'
     GAMMA = '#settings:gamma'
     GAMMA_DESCRIPTION = '#settings:gamma/description'
     SMOOTHING = '#settings:smoothing'
@@ -238,14 +244,57 @@ class SETTINGS(object):
     SOUNDS_BASSBOOST_DESCRIPTION = '#settings:sounds/bassBoost/description'
     SOUNDS_SOUNDQUALITY = '#settings:sounds/soundQuality'
     SOUNDS_SOUNDQUALITY_DESCRIPTION = '#settings:sounds/soundQuality/description'
-    SOUNDS_SOUNDDEVICE_LABEL = '#settings:sounds/soundDevice/label'
-    SOUNDS_SOUNDDEVICE_ACOUSTICS = '#settings:sounds/soundDevice/acoustics'
-    SOUNDS_SOUNDDEVICE_ACOUSTICS_HEADER = '#settings:sounds/soundDevice/acoustics/header'
-    SOUNDS_SOUNDDEVICE_ACOUSTICS_BODY = '#settings:sounds/soundDevice/acoustics/body'
+    SOUNDS_ACOUSTICTYPE_ACOUSTICS20 = '#settings:sounds/acousticType/acoustics20'
+    SOUNDS_ACOUSTICTYPE_ACOUSTICS51 = '#settings:sounds/acousticType/acoustics51'
+    SOUNDS_ACOUSTICTYPE_ACOUSTICS71 = '#settings:sounds/acousticType/acoustics71'
+    SOUNDS_ACOUSTICTYPE_AUTO = '#settings:sounds/acousticType/auto'
+    SOUNDS_ACOUSTICTYPE_TESTBUTTON = '#settings:sounds/acousticType/testButton'
+    SOUNDS_ACOUSTICTYPE_POPOVER_TITLE = '#settings:sounds/acousticType/popover/title'
+    SOUNDS_ACOUSTICTYPE_POPOVER_HEADPHONES = '#settings:sounds/acousticType/popover/headphones'
+    SOUNDS_ACOUSTICTYPE_POPOVER_LAPTOP = '#settings:sounds/acousticType/popover/laptop'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS20 = '#settings:sounds/acousticType/popover/acoustics20'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS51 = '#settings:sounds/acousticType/popover/acoustics51'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS71 = '#settings:sounds/acousticType/popover/acoustics71'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFT = '#settings:sounds/acousticType/popover/item/left'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHT = '#settings:sounds/acousticType/popover/item/right'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTSIDE = '#settings:sounds/acousticType/popover/item/leftSide'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTSIDE = '#settings:sounds/acousticType/popover/item/rightSide'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTFRONT = '#settings:sounds/acousticType/popover/item/leftFront'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTFRONT = '#settings:sounds/acousticType/popover/item/rightFront'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTBACK = '#settings:sounds/acousticType/popover/item/leftBack'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTBACK = '#settings:sounds/acousticType/popover/item/rightBack'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_CENTER = '#settings:sounds/acousticType/popover/item/center'
+    SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_SUB = '#settings:sounds/acousticType/popover/item/sub'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS20 = '#settings:sounds/soundDevice/acoustics20'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS20_HEADER = '#settings:sounds/soundDevice/acoustics20/header'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS20_BODY = '#settings:sounds/soundDevice/acoustics20/body'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS51 = '#settings:sounds/soundDevice/acoustics51'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS51_HEADER = '#settings:sounds/soundDevice/acoustics51/header'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS51_BODY = '#settings:sounds/soundDevice/acoustics51/body'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS71 = '#settings:sounds/soundDevice/acoustics71'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS71_HEADER = '#settings:sounds/soundDevice/acoustics71/header'
+    SOUNDS_SOUNDDEVICE_ACOUSTICS71_BODY = '#settings:sounds/soundDevice/acoustics71/body'
+    SOUNDS_SOUNDDEVICE_AUTO = '#settings:sounds/soundDevice/auto'
+    SOUNDS_SOUNDDEVICE_AUTO_HEADER = '#settings:sounds/soundDevice/auto/header'
+    SOUNDS_SOUNDDEVICE_AUTO_BODY = '#settings:sounds/soundDevice/auto/body'
     SOUNDS_SOUNDDEVICE_HEADPHONES = '#settings:sounds/soundDevice/headphones'
     SOUNDS_SOUNDDEVICE_HEADPHONES_HEADER = '#settings:sounds/soundDevice/headphones/header'
     SOUNDS_SOUNDDEVICE_HEADPHONES_BODY = '#settings:sounds/soundDevice/headphones/body'
     SOUNDS_SOUNDDEVICE_LAPTOP = '#settings:sounds/soundDevice/laptop'
+    SOUNDS_SPEAKERS_SIDES_HEADER = '#settings:sounds/speakers/sides/header'
+    SOUNDS_SPEAKERS_SIDES_BODY = '#settings:sounds/speakers/sides/body'
+    SOUNDS_SPEAKERS_FRONT_HEADER = '#settings:sounds/speakers/front/header'
+    SOUNDS_SPEAKERS_FRONT_BODY = '#settings:sounds/speakers/front/body'
+    SOUNDS_SPEAKERS_BACK_HEADER = '#settings:sounds/speakers/back/header'
+    SOUNDS_SPEAKERS_BACK_BODY = '#settings:sounds/speakers/back/body'
+    SOUNDS_SPEAKERS_SIDELONG_HEADER = '#settings:sounds/speakers/sidelong/header'
+    SOUNDS_SPEAKERS_SIDELONG_BODY = '#settings:sounds/speakers/sidelong/body'
+    SOUNDS_SPEAKERS_CENTER_HEADER = '#settings:sounds/speakers/center/header'
+    SOUNDS_SPEAKERS_CENTER_BODY = '#settings:sounds/speakers/center/body'
+    SOUNDS_SPEAKERS_SUB_HEADER = '#settings:sounds/speakers/sub/header'
+    SOUNDS_SPEAKERS_SUB_BODY = '#settings:sounds/speakers/sub/body'
+    SOUNDS_SPEAKERS_OPTIONALSUB_HEADER = '#settings:sounds/speakers/optionalsub/header'
+    SOUNDS_SPEAKERS_OPTIONALSUB_BODY = '#settings:sounds/speakers/optionalsub/body'
     SOUNDS_SOUNDDEVICE_LAPTOP_HEADER = '#settings:sounds/soundDevice/laptop/header'
     SOUNDS_SOUNDDEVICE_LAPTOP_BODY = '#settings:sounds/soundDevice/laptop/body'
     SOUND_SOUNDMODES_DEFAULT = '#settings:sound/soundModes/default'
@@ -401,24 +450,13 @@ class SETTINGS(object):
     KEYBOARD_KEYSBLOCKS_COMMAND_ITEM07 = '#settings:keyboard/keysBlocks/command/item07'
     KEYBOARD_KEYSBLOCKS_COMMAND_ITEM08 = '#settings:keyboard/keysBlocks/command/item08'
     KEYBOARD_KEYSBLOCKS_GROUP_SHORTCUTS = '#settings:keyboard/keysBlocks/group/shortcuts'
-    KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET = '#settings:keyboard/keysBlocks/command/my_target'
-    KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_EXT = '#settings:keyboard/keysBlocks/command/my_target/ext'
+    KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_FOLLOW_ME = '#settings:keyboard/keysBlocks/command/my_target/follow_me'
     KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK = '#settings:keyboard/keysBlocks/command/attack'
-    KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK_EXT = '#settings:keyboard/keysBlocks/command/attack/ext'
-    KEYBOARD_KEYSBLOCKS_COMMAND_TO_BASE = '#settings:keyboard/keysBlocks/command/to_base'
-    KEYBOARD_KEYSBLOCKS_COMMAND_TO_BACK = '#settings:keyboard/keysBlocks/command/to_back'
-    KEYBOARD_KEYSBLOCKS_COMMAND_TO_BACK_EXT = '#settings:keyboard/keysBlocks/command/to_back/ext'
-    KEYBOARD_KEYSBLOCKS_COMMAND_FOLLOW_ME = '#settings:keyboard/keysBlocks/command/follow_me'
-    KEYBOARD_KEYSBLOCKS_COMMAND_FOLLOW_ME_EXT = '#settings:keyboard/keysBlocks/command/follow_me/ext'
+    KEYBOARD_KEYSBLOCKS_COMMAND_TO_BASE_TO_BACK = '#settings:keyboard/keysBlocks/command/to_base/to_back'
     KEYBOARD_KEYSBLOCKS_COMMAND_POSITIVE = '#settings:keyboard/keysBlocks/command/positive'
     KEYBOARD_KEYSBLOCKS_COMMAND_NEGATIVE = '#settings:keyboard/keysBlocks/command/negative'
-    KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME = '#settings:keyboard/keysBlocks/command/help_me'
-    KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP = '#settings:keyboard/keysBlocks/command/help_me_temp'
-    KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP_EXT = '#settings:keyboard/keysBlocks/command/help_me_temp/ext'
-    KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP2 = '#settings:keyboard/keysBlocks/command/help_me_temp2'
-    KEYBOARD_KEYSBLOCKS_COMMAND_STOP = '#settings:keyboard/keysBlocks/command/stop'
-    KEYBOARD_KEYSBLOCKS_COMMAND_STOP_EXT = '#settings:keyboard/keysBlocks/command/stop/ext'
-    KEYBOARD_KEYSBLOCKS_COMMAND_RELOAD = '#settings:keyboard/keysBlocks/command/reload'
+    KEYBOARD_KEYSBLOCKS_COMMAND_SOS_HELP_ME = '#settings:keyboard/keysBlocks/command/sos/help_me'
+    KEYBOARD_KEYSBLOCKS_COMMAND_RELOAD_STOP = '#settings:keyboard/keysBlocks/command/reload/stop'
     KEYBOARD_KEYSBLOCKS_GROUP_CAMERA = '#settings:keyboard/keysBlocks/group/camera'
     KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_UP = '#settings:keyboard/keysBlocks/command/camera_up'
     KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_DOWN = '#settings:keyboard/keysBlocks/command/camera_down'
@@ -637,24 +675,13 @@ class SETTINGS(object):
      KEYBOARD_KEYSBLOCKS_COMMAND_ITEM06,
      KEYBOARD_KEYSBLOCKS_COMMAND_ITEM07,
      KEYBOARD_KEYSBLOCKS_COMMAND_ITEM08,
-     KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET,
-     KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_EXT,
+     KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_FOLLOW_ME,
      KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK,
-     KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK_EXT,
-     KEYBOARD_KEYSBLOCKS_COMMAND_TO_BASE,
-     KEYBOARD_KEYSBLOCKS_COMMAND_TO_BACK,
-     KEYBOARD_KEYSBLOCKS_COMMAND_TO_BACK_EXT,
-     KEYBOARD_KEYSBLOCKS_COMMAND_FOLLOW_ME,
-     KEYBOARD_KEYSBLOCKS_COMMAND_FOLLOW_ME_EXT,
+     KEYBOARD_KEYSBLOCKS_COMMAND_TO_BASE_TO_BACK,
      KEYBOARD_KEYSBLOCKS_COMMAND_POSITIVE,
      KEYBOARD_KEYSBLOCKS_COMMAND_NEGATIVE,
-     KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME,
-     KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP,
-     KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP_EXT,
-     KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP2,
-     KEYBOARD_KEYSBLOCKS_COMMAND_STOP,
-     KEYBOARD_KEYSBLOCKS_COMMAND_STOP_EXT,
-     KEYBOARD_KEYSBLOCKS_COMMAND_RELOAD,
+     KEYBOARD_KEYSBLOCKS_COMMAND_SOS_HELP_ME,
+     KEYBOARD_KEYSBLOCKS_COMMAND_RELOAD_STOP,
      KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_UP,
      KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_DOWN,
      KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_LEFT,
@@ -668,6 +695,45 @@ class SETTINGS(object):
      KEYBOARD_KEYSBLOCKS_COMMAND_SIZEUP,
      KEYBOARD_KEYSBLOCKS_COMMAND_SIZEDOWN,
      KEYBOARD_KEYSBLOCKS_COMMAND_VISIBLE)
+    SOUNDS_ACOUSTICTYPE_ENUM = (SOUNDS_ACOUSTICTYPE_ACOUSTICS20,
+     SOUNDS_ACOUSTICTYPE_ACOUSTICS51,
+     SOUNDS_ACOUSTICTYPE_ACOUSTICS71,
+     SOUNDS_ACOUSTICTYPE_AUTO,
+     SOUNDS_ACOUSTICTYPE_TESTBUTTON,
+     SOUNDS_ACOUSTICTYPE_POPOVER_TITLE,
+     SOUNDS_ACOUSTICTYPE_POPOVER_HEADPHONES,
+     SOUNDS_ACOUSTICTYPE_POPOVER_LAPTOP,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS20,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS51,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS71,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFT,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHT,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTSIDE,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTSIDE,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTFRONT,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTFRONT,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTBACK,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTBACK,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_CENTER,
+     SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_SUB)
+    SOUNDS_SOUNDDEVICE_ENUM = (SOUNDS_SOUNDDEVICE_ACOUSTICS20,
+     SOUNDS_SOUNDDEVICE_ACOUSTICS20_HEADER,
+     SOUNDS_SOUNDDEVICE_ACOUSTICS20_BODY,
+     SOUNDS_SOUNDDEVICE_ACOUSTICS51,
+     SOUNDS_SOUNDDEVICE_ACOUSTICS51_HEADER,
+     SOUNDS_SOUNDDEVICE_ACOUSTICS51_BODY,
+     SOUNDS_SOUNDDEVICE_ACOUSTICS71,
+     SOUNDS_SOUNDDEVICE_ACOUSTICS71_HEADER,
+     SOUNDS_SOUNDDEVICE_ACOUSTICS71_BODY,
+     SOUNDS_SOUNDDEVICE_AUTO,
+     SOUNDS_SOUNDDEVICE_AUTO_HEADER,
+     SOUNDS_SOUNDDEVICE_AUTO_BODY,
+     SOUNDS_SOUNDDEVICE_HEADPHONES,
+     SOUNDS_SOUNDDEVICE_HEADPHONES_HEADER,
+     SOUNDS_SOUNDDEVICE_HEADPHONES_BODY,
+     SOUNDS_SOUNDDEVICE_LAPTOP,
+     SOUNDS_SOUNDDEVICE_LAPTOP_HEADER,
+     SOUNDS_SOUNDDEVICE_LAPTOP_BODY)
 
     @classmethod
     def graphicssettingsoptions(cls, key0):
@@ -700,6 +766,24 @@ class SETTINGS(object):
     def keyboard_keysblocks_command(cls, key0):
         outcome = '#settings:keyboard/keysBlocks/command/{}'.format(key0)
         if outcome not in cls.KEYBOARD_KEYSBLOCKS_COMMAND_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def sounds_acoustictype(cls, key0):
+        outcome = '#settings:sounds/acousticType/{}'.format(key0)
+        if outcome not in cls.SOUNDS_ACOUSTICTYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def sounds_sounddevice(cls, key0):
+        outcome = '#settings:sounds/soundDevice/{}'.format(key0)
+        if outcome not in cls.SOUNDS_SOUNDDEVICE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

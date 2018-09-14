@@ -3,6 +3,7 @@
 import BigWorld
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.GetPremiumPopoverMeta import GetPremiumPopoverMeta
+from gui.christmas.christmas_controller import g_christmasCtrl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import event_dispatcher
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -37,9 +38,9 @@ class GetPremiumPopover(GetPremiumPopoverMeta):
         awardStr = text_styles.neutral(BATTLE_RESULTS.GETPREMIUMPOPOVER_AWARD)
         descriptionText = _ms(BATTLE_RESULTS.GETPREMIUMPOPOVER_DESCRIPTIONTEXT, prem=premStr, award=awardStr)
         prbDispatcher = g_prbLoader.getDispatcher()
-        isNavigationEnabled = True
+        isNavigationEnabled = not g_christmasCtrl.isNavigationDisabled()
         if prbDispatcher:
-            isNavigationEnabled = not prbDispatcher.getFunctionalState().isNavigationDisabled()
+            isNavigationEnabled = not prbDispatcher.getFunctionalState().isNavigationDisabled() and isNavigationEnabled
         result = {'arenaUniqueID': data.arenaUniqueID,
          'headerTF': {'htmlText': text_styles.highTitle(BATTLE_RESULTS.GETPREMIUMPOPOVER_HEADERTEXT)},
          'creditsTF': {'htmlText': text_styles.promoTitle(creditsDiff)},

@@ -35,11 +35,23 @@
       </values>
     </bonus>
     <bonus>	Bonus15	  <id>	15	</id>
+      <valueCondition>
+        <condition>
+          <global-active>	PlayerOwnVehicle	</global-active>
+        </condition>
+      </valueCondition>
       <values>
         <strBonus>
           <asString>	_(#tutorial:tutorialQuest/award/quest5)	</asString>
         </strBonus>
       </values>
+      <altBonus>
+        <values>
+          <strBonus>
+            <asString>	_(#tutorial:tutorialQuest/award/quest5/altBonus)	</asString>
+          </strBonus>
+        </values>
+      </altBonus>
     </bonus>
     <bonus>	Bonus16	  <id>	16	</id>
       <values>

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/sounds/abstract.py
-import SoundGroups
-from gui.sounds.sound_constants import SoundSystems, HQRenderState
+from gui.sounds.sound_constants import SoundSystems, SPEAKERS_CONFIG
 
 class SoundSystemAbstract(object):
 
@@ -49,6 +48,24 @@ class SoundSystemAbstract(object):
     def setBassBoost(self, isEnabled):
         """
         Enable/disable bass boost.
+        """
+        pass
+
+    def getSystemSpeakersPresetID(self):
+        """Gets ID of speaker's preset that is supported by system.
+        :return: integer containing ID of speaker's preset.
+        """
+        return SPEAKERS_CONFIG.AUTO_DETECTION
+
+    def getUserSpeakersPresetID(self):
+        """Gets ID of speaker's preset that player selects.
+        :return: integer containing ID of speaker's preset.
+        """
+        return SPEAKERS_CONFIG.AUTO_DETECTION
+
+    def setUserSpeakersPresetID(self, presetID):
+        """Sets new ID of speaker's preset that player selects.
+        :param presetID: integer containing ID of speaker's preset.
         """
         pass
 

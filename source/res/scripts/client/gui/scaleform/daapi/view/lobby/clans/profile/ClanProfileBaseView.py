@@ -3,7 +3,6 @@
 import BigWorld
 from adisp import process
 from gui import SystemMessages
-from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.contexts import CreateApplicationCtx
 from helpers import i18n
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
@@ -63,7 +62,7 @@ class ClanProfileBaseView(ClanProfileBaseViewMeta, ClanEmblemsHelper, ClanListen
     def _sendApplication(self):
         self.as_showWaitingS(True)
         context = CreateApplicationCtx([self._clanDossier.getDbID()])
-        result = yield g_clanCtrl.sendRequest(context, allowDelay=True)
+        result = yield self.clansCtrl.sendRequest(context, allowDelay=True)
         if result.isSuccess():
             clanInfo = yield self._clanDossier.requestClanInfo()
             SystemMessages.pushMessage(clans_fmts.getAppSentSysMsg(clanInfo.getClanName(), clanInfo.getTag()))

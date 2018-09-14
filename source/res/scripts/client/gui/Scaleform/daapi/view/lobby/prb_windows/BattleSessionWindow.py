@@ -1,22 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BattleSessionWindow.py
+import functools
 import BigWorld
 import constants
-import functools
 import nations
 from adisp import process
-from debug_utils import LOG_DEBUG
+from gui import makeHtmlString
+from gui import SystemMessages
+from gui.Scaleform.daapi.view.meta.BattleSessionWindowMeta import BattleSessionWindowMeta
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.prb_control import formatters, prb_getters
+from gui.prb_control.entities.base.legacy.ctx import AssignLegacyCtx, KickPlayerCtx, SetPlayerStateCtx
+from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME, PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils import functions
+from helpers import time_utils, i18n
 from shared_utils import safeCancelCallback
-from gui.prb_control import formatters, prb_getters
-from gui.prb_control.context import prb_ctx
-from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.view.meta.BattleSessionWindowMeta import BattleSessionWindowMeta
-from gui import makeHtmlString
-from helpers import time_utils
+from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS
 
 class BattleSessionWindow(BattleSessionWindowMeta):
     START_TIME_SYNC_PERIOD = 10
@@ -40,62 +42,128 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HideWindowEvent.HIDE_BATTLE_SESSION_WINDOW, self.__handleBSWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def onTeamStatesReceived(self, functional, team1State, team2State):
+    def onTeamStatesReceived(self, entity, team1State, team2State):
         self.as_enableReadyBtnS(self.isReadyBtnEnabled())
         self.as_enableLeaveBtnS(self.isLeaveBtnEnabled())
         if team1State.isInQueue():
             self._closeSendInvitesWindow()
 
-    def onRostersChanged(self, functional, rosters, full):
+    def onRostersChanged(self, entity, rosters, full):
         self._setRosterList(rosters)
-        self.__updateCommonRequirements(functional.getTeamLimits(), rosters)
+        self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
 
-    def onPlayerStateChanged(self, functional, roster, playerInfo):
-        super(BattleSessionWindow, self).onPlayerStateChanged(functional, roster, playerInfo)
-        self.as_setInfoS(self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbFunctional.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
-        self.__updateCommonRequirements(functional.getTeamLimits(), functional.getRosters())
+    def onPlayerStateChanged(self, entity, roster, playerInfo):
+        super(BattleSessionWindow, self).onPlayerStateChanged(entity, roster, playerInfo)
+        self.as_setInfoS(self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
+        rosters = entity.getRosters()
+        self._setRosterList(rosters)
+        self.__updateCommonRequirements(entity.getTeamLimits(), rosters)
 
-    def onSettingUpdated(self, functional, settingName, settingValue):
+    def onSettingUpdated(self, entity, settingName, settingValue):
         pass
 
     def canMoveToAssigned(self):
-        result = self.prbFunctional.getPermissions().canAssignToTeam(self._getPlayerTeam())
-        if result:
-            result, _ = self.prbFunctional.getLimits().isMaxCountValid(self._getPlayerTeam(), True)
-        return result
+        return self.prbEntity.getPermissions().canAssignToTeam(self._getPlayerTeam())
 
     def canMoveToUnassigned(self):
-        result = self.prbFunctional.getPermissions().canAssignToTeam(self._getPlayerTeam())
-        if result:
-            result, _ = self.prbFunctional.getLimits().isMaxCountValid(self._getPlayerTeam(), False)
-        return result
+        return self.prbEntity.getPermissions().canAssignToTeam(self._getPlayerTeam())
 
     def canKickPlayer(self):
-        return self.prbFunctional.getPermissions().canKick(self._getPlayerTeam())
+        return self.prbEntity.getPermissions().canKick(self._getPlayerTeam())
 
     def canSendInvite(self):
-        return self.prbFunctional.getPermissions().canSendInvite()
+        return self.prbEntity.getPermissions().canSendInvite()
+
+    def __checkObserversCondition(self):
+        observerCount = 0
+        accounts = self.prbEntity.getRosters()[self._getPlayerTeam() | PREBATTLE_ROSTER.ASSIGNED]
+        for account in accounts:
+            if account.isVehicleSpecified():
+                vehicle = account.getVehicle()
+                if vehicle.isObserver:
+                    observerCount += 1
+
+        return observerCount >= PREBATTLE_MAX_OBSERVERS_IN_TEAM
+
+    def __getPlayersMaxCount(self):
+        playersMaxCount = self.prbEntity.getTeamLimits()['maxCount'][0]
+        if self.prbEntity.getSettings()['bonusType'] in OBSERVERS_BONUS_TYPES:
+            playersMaxCount -= PREBATTLE_MAX_OBSERVERS_IN_TEAM
+        return playersMaxCount
+
+    def __checkPlayersCondition(self):
+        playerCount = 0
+        accounts = self.prbEntity.getRosters()[self._getPlayerTeam() | PREBATTLE_ROSTER.ASSIGNED]
+        for account in accounts:
+            if account.isVehicleSpecified():
+                vehicle = account.getVehicle()
+                if not vehicle.isObserver:
+                    playerCount += 1
+
+        return playerCount >= self.__getPlayersMaxCount()
+
+    def __getUnassignedPlayerByAccID(self, accID):
+        accounts = self.prbEntity.getRosters()[self._getPlayerTeam() | PREBATTLE_ROSTER.UNASSIGNED]
+        for account in accounts:
+            if account.accID == accID:
+                return account
+
+        return None
+
+    def requestToAssignMember(self, pID):
+        playerInfo = self.__getUnassignedPlayerByAccID(pID)
+        if playerInfo is not None and playerInfo.isReady():
+            observersCondition = self.__checkObserversCondition()
+            playersCondition = self.__checkPlayersCondition()
+            if observersCondition and playersCondition:
+                self._showActionErrorMessage(PREBATTLE_ERRORS.ROSTER_LIMIT)
+                return
+            if playerInfo.isVehicleSpecified() and playerInfo.getVehicle().isObserver:
+                if observersCondition:
+                    self._showActionErrorMessage(PREBATTLE_ERRORS.OBSERVERS_LIMIT)
+                    return
+            elif playersCondition:
+                self._showActionErrorMessage(PREBATTLE_ERRORS.PLAYERS_LIMIT)
+                return
+        self.__doRequestToAssignMember(pID)
+        return
 
     @process
-    def requestToAssignMember(self, pID):
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.AssignPrbCtx(pID, self._getPlayerTeam() | PREBATTLE_ROSTER.ASSIGNED, 'prebattle/assign'))
+    def requestToReady(self, value):
+        if value:
+            waitingID = 'prebattle/player_ready'
+        else:
+            waitingID = 'prebattle/player_not_ready'
+        ctx = SetPlayerStateCtx(value, waitingID=waitingID)
+        result = yield self.prbDispatcher.sendPrbRequest(ctx)
+        if result:
+            self.as_toggleReadyBtnS(not value)
+        else:
+            self._showActionErrorMessage(ctx.getLastErrorString())
+
+    @process
+    def __doRequestToAssignMember(self, pID):
+        ctx = AssignLegacyCtx(pID, self._getPlayerTeam() | PREBATTLE_ROSTER.ASSIGNED, 'prebattle/assign')
+        result = yield self.prbDispatcher.sendPrbRequest(ctx)
+        if not result:
+            self._showActionErrorMessage(ctx.getLastErrorString())
 
     @process
     def requestToUnassignMember(self, pID):
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.AssignPrbCtx(pID, self._getPlayerTeam() | PREBATTLE_ROSTER.UNASSIGNED, 'prebattle/assign'))
+        yield self.prbDispatcher.sendPrbRequest(AssignLegacyCtx(pID, self._getPlayerTeam() | PREBATTLE_ROSTER.UNASSIGNED, 'prebattle/assign'))
 
     @process
     def requestToKickPlayer(self, pID):
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.KickPlayerCtx(pID, 'prebattle/kick'))
+        yield self.prbDispatcher.sendPrbRequest(KickPlayerCtx(pID, 'prebattle/kick'))
 
     def _populate(self):
         super(BattleSessionWindow, self)._populate()
-        rosters = self.prbFunctional.getRosters()
-        teamLimits = self.prbFunctional.getTeamLimits()
+        rosters = self.prbEntity.getRosters()
+        teamLimits = self.prbEntity.getTeamLimits()
         self.__syncStartTime()
         self._setRosterList(rosters)
         self.__updateCommonRequirements(teamLimits, rosters)
-        self.as_setInfoS(self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbFunctional.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
+        self.as_setInfoS(self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbEntity.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
         self.__updateLimits(teamLimits, rosters)
 
     def _dispose(self):
@@ -107,12 +175,12 @@ class BattleSessionWindow(BattleSessionWindowMeta):
 
     def _getPlayerTeam(self):
         if self.__team is None:
-            self.__team = self.prbFunctional.getPlayerTeam()
+            self.__team = self.prbEntity.getPlayerTeam()
         return self.__team
 
     def _setRosterList(self, rosters):
         playerTeam = self._getPlayerTeam()
-        self.as_setRosterListS(playerTeam, True, self._makeAccountsData(rosters[playerTeam | PREBATTLE_ROSTER.ASSIGNED]))
+        self.as_setRosterListS(playerTeam, True, self._makeAccountsData(rosters[playerTeam | PREBATTLE_ROSTER.ASSIGNED], PREBATTLE_PLAYERS_COMPARATORS.OBSERVERS_TO_BOTTOM))
         self.as_setRosterListS(playerTeam, False, self._makeAccountsData(rosters[playerTeam | PREBATTLE_ROSTER.UNASSIGNED]))
 
     def __handleBSWindowHide(self, _):
@@ -130,7 +198,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
 
     def __syncStartTime(self):
         self.__clearSyncStartTimeCallback()
-        startTime = self.prbFunctional.getSettings()[PREBATTLE_SETTING_NAME.START_TIME]
+        startTime = self.prbEntity.getSettings()[PREBATTLE_SETTING_NAME.START_TIME]
         startTime = formatters.getStartTimeLeft(startTime)
         self.__cancelTimerCallback()
         self.__showTimer(startTime)
@@ -151,7 +219,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         return
 
     def __setStaticData(self):
-        settings = self.prbFunctional.getSettings()
+        settings = self.prbEntity.getSettings()
         extraData = settings[PREBATTLE_SETTING_NAME.EXTRA_DATA]
         self.__arenaName = functions.getArenaShortName(settings[PREBATTLE_SETTING_NAME.ARENA_TYPE_ID])
         self.__firstTeam, self.__secondTeam = formatters.getPrebattleOpponents(extraData)
@@ -250,3 +318,11 @@ class BattleSessionWindow(BattleSessionWindowMeta):
             return '-'
         else:
             return '{0:>s}-{1:>s}'.format(minString, maxString)
+
+    def _showActionErrorMessage(self, errType):
+        errors = {PREBATTLE_ERRORS.ROSTER_LIMIT: (SYSTEM_MESSAGES.BATTLESESSION_ERROR_LIMITS, {}),
+         PREBATTLE_ERRORS.PLAYERS_LIMIT: (SYSTEM_MESSAGES.BATTLESESSION_ERROR_ADDPLAYER, {'numPlayers': self.__getPlayersMaxCount()}),
+         PREBATTLE_ERRORS.OBSERVERS_LIMIT: (SYSTEM_MESSAGES.BATTLESESSION_ERROR_ADDOBSERVER, {'numPlayers': PREBATTLE_MAX_OBSERVERS_IN_TEAM})}
+        errMsg = errors.get(errType)
+        if errMsg:
+            SystemMessages.pushMessage(i18n.makeString(errMsg[0], **errMsg[1]), type=SystemMessages.SM_TYPE.Error)

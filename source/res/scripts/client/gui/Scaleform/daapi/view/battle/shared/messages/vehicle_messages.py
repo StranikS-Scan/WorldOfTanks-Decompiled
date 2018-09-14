@@ -3,7 +3,6 @@
 from MemoryCriticalController import g_critMemHandler
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
-from gui.battle_control import g_sessionProvider
 from gui.shared.events import GameEvent
 from helpers import i18n
 from items import vehicles
@@ -38,7 +37,7 @@ class VehicleMessages(fading_messages.FadingMessages):
             self.__handleMemoryCriticalMessage(message)
 
         g_critMemHandler.onMemCrit += self.__handleMemoryCriticalMessage
-        ctrl = g_sessionProvider.shared.messages
+        ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
             ctrl.onShowVehicleMessageByCode += self.__onShowVehicleMessageByCode
             ctrl.onShowVehicleMessageByKey += self.__onShowVehicleMessageByKey
@@ -48,7 +47,7 @@ class VehicleMessages(fading_messages.FadingMessages):
     def _removeGameListeners(self):
         self.removeListener(GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade)
         g_critMemHandler.onMemCrit -= self.__handleMemoryCriticalMessage
-        ctrl = g_sessionProvider.shared.messages
+        ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
             ctrl.onShowVehicleMessageByCode -= self.__onShowVehicleMessageByCode
             ctrl.onShowVehicleMessageByKey -= self.__onShowVehicleMessageByKey
@@ -83,7 +82,7 @@ class VehicleMessages(fading_messages.FadingMessages):
         self.showMessage(key, args, extra)
 
     def __formatEntity(self, entityID):
-        ctx = g_sessionProvider.getCtx()
+        ctx = self.sessionProvider.getCtx()
         vTypeInfoVO = ctx.getArenaDP().getVehicleInfo(entityID).vehicleType
         playerName = ctx.getPlayerFullName(entityID, showVehShortName=False)
         iconTag = _VEHICLE_TYPE_FORMATTER.format(vTypeInfoVO.classTag)

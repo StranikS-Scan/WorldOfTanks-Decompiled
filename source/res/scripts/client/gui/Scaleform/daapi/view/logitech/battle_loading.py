@@ -2,14 +2,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/logitech/battle_loading.py
 from gui.Scaleform import getPathForFlash, SCALEFORM_SWF_PATH
 from gui.Scaleform.daapi.view.logitech.LogitechMonitorMeta import LogitechMonitorBattleLoadingColoredScreenMeta, LogitechMonitorMonoScreenMeta
-from gui.battle_control import g_sessionProvider
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 def _getData():
     """
     :return: (arenaDescription, arenaTypeName, icon)
     """
-    ctx = g_sessionProvider.getCtx()
-    return (ctx.getArenaDescriptionString(), ctx.getArenaTypeName(), ctx.getArenaScreenIcon()) if ctx is not None else (None, None, None)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    if sessionProvider is not None:
+        ctx = sessionProvider.getCtx()
+        if ctx is not None:
+            return (ctx.getArenaDescriptionString(), ctx.getArenaTypeName(), ctx.getArenaScreenIcon())
+    return (None, None, None)
 
 
 class LogitechMonitorBattleLoadingMonoScreen(LogitechMonitorMonoScreenMeta):

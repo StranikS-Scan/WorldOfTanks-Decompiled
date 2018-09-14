@@ -25,6 +25,9 @@ class NoAppFactory(AlwaysValidObject, IAppFactory):
     def destroyLobby(self):
         LOG_DEBUG('NoAppFactory.destroyLobby')
 
+    def reloadLobbyPackages(self):
+        LOG_DEBUG('NoAppFactory.reloadLobbyPackages')
+
     def createBattle(self, _):
         LOG_DEBUG('NoAppFactory.createBattle')
 
@@ -75,7 +78,13 @@ class AS3_AppFactory(IAppFactory):
             self.__apps[_SPACE.SF_LOBBY] = lobby
         lobby.active(True)
         g_windowsStoredData.start()
-        BattleReplay.g_replayCtrl.onCommonSwfLoaded()
+        return
+
+    def reloadLobbyPackages(self):
+        LOG_DEBUG('Reload app', _SPACE.SF_LOBBY)
+        lobby = self.__apps[_SPACE.SF_LOBBY]
+        if lobby is not None:
+            self.__importer.load(lobby.proxy, sf_config.COMMON_PACKAGES + sf_config.LOBBY_PACKAGES)
         return
 
     def destroyLobby(self):
@@ -87,18 +96,24 @@ class AS3_AppFactory(IAppFactory):
                 self.__importer.unload(self.__packages[_SPACE.SF_LOBBY])
                 self.__apps[_SPACE.SF_LOBBY] = None
         g_windowsStoredData.stop()
-        BattleReplay.g_replayCtrl.onCommonSwfUnloaded()
         return
 
     def showLobby(self):
-        LOG_DEBUG('Shows lobby')
+        LOG_DEBUG('Shows lobby application')
         self._setActive(_SPACE.SF_LOBBY, True)
         BattleReplay.g_replayCtrl.onCommonSwfLoaded()
 
     def hideLobby(self):
-        LOG_DEBUG('Hides lobby')
+        LOG_DEBUG('Hides lobby application')
         self._setActive(_SPACE.SF_LOBBY, False)
-        BattleReplay.g_replayCtrl.onCommonSwfUnloaded()
+
+    def showBattle(self):
+        LOG_DEBUG('Shows battle application')
+        self._setActive(_SPACE.SF_BATTLE, True)
+
+    def hideBattle(self):
+        LOG_DEBUG('Hides battle application')
+        self._setActive(_SPACE.SF_BATTLE, False)
 
     def createBattle(self, arenaGuiType):
         LOG_DEBUG('Creating app', _SPACE.SF_BATTLE)
@@ -203,32 +218,30 @@ class AS3_AppFactory(IAppFactory):
             return
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY), EVENT_BUS_SCOPE.LOBBY)
 
-    def goToBattleLoading(self, appNS, arenaGuiType):
-        if appNS != _SPACE.SF_LOBBY:
+    def loadBattlePage(self, appNS, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
+        if appNS != _SPACE.SF_BATTLE:
             return
-        if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
-            event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_LOADING)
-        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
-            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTI_TEAM_BATTLE_LOADING)
         else:
-            event = events.LoadViewEvent(VIEW_ALIAS.BATTLE_LOADING)
-        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
+            battle = self.__apps[_SPACE.SF_BATTLE]
+            if battle is not None:
+                self._loadBattlePage(arenaGuiType)
+            return
 
-    def goToBattle(self, appNS, arenaGuiType):
+    def goToBattleLoading(self, appNS):
+        if appNS != _SPACE.SF_BATTLE:
+            return
+        else:
+            battle = self.__apps[_SPACE.SF_BATTLE]
+            if battle is not None:
+                self._toggleBattleLoading(True)
+            return
+
+    def goToBattlePage(self, appNS):
         if appNS != _SPACE.SF_BATTLE:
             return
         battle = self.__apps[_SPACE.SF_BATTLE]
         if battle:
-            if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
-                event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE)
-            elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_CLASSIC:
-                event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE)
-            elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
-                event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE)
-            else:
-                event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
-            g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
-            battle.component.visible = True
+            self._toggleBattleLoading(False)
 
     def showDisconnectDialog(self, appNS, description):
         if appNS == _SPACE.SF_LOBBY:
@@ -245,7 +258,25 @@ class AS3_AppFactory(IAppFactory):
     def _setActive(self, appNS, isActive):
         app = self.__apps[appNS]
         if app:
+            app.component.visible = isActive
             app.active(isActive)
+
+    @staticmethod
+    def _loadBattlePage(arenaGuiType):
+        if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
+            event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE)
+        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_CLASSIC:
+            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE)
+        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
+            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE)
+        else:
+            event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
+        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
+
+    @staticmethod
+    def _toggleBattleLoading(toggle):
+        event = events.GameEvent(events.GameEvent.BATTLE_LOADING, ctx={'isShown': toggle})
+        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
 
 
 def createAppFactory():

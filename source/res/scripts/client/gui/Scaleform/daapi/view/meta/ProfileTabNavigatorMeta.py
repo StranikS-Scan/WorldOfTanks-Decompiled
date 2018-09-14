@@ -11,4 +11,7 @@ class ProfileTabNavigatorMeta(BaseDAAPIComponent):
     """
 
     def as_setInitDataS(self, data):
+        """
+        :param data: Represented by ProfileMenuInfoVO (AS)
+        """
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None

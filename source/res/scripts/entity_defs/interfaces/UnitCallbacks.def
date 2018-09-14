@@ -1,0 +1,30 @@
+<UnitCallbacks.def>
+  <BaseMethods>
+    <onUnitCallOk>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </onUnitCallOk>
+    <onUnitError>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </onUnitError>
+    <onUnitJoin>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </onUnitJoin>
+    <onUnitLeave>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT32	</Arg>
+    </onUnitLeave>
+    <onUnitUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </onUnitUpdate>
+  </BaseMethods>
+</UnitCallbacks.def>

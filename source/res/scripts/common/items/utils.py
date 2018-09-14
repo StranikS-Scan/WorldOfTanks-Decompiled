@@ -9,6 +9,7 @@ from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
 from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS, CAMOUFLAGE_KIND_INDICES
 from VehicleDescrCrew import VehicleDescrCrew
 from VehicleQualifiersApplier import VehicleQualifiersApplier
+from debug_utils import *
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
@@ -84,6 +85,10 @@ def getChassisRotationSpeed(vehicleDescr, factors):
 
 def getInvisibility(factors, baseInvisibility, isMoving):
     return (baseInvisibility[0 if isMoving else 1] + factors['invisibility'][0]) * factors['invisibility'][1]
+
+
+def getEnginePower(vehicleDescr, factor):
+    return vehicleDescr.physics['enginePower'] * factor
 
 
 if IS_CLIENT:

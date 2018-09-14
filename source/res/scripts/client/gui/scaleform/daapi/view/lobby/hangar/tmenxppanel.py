@@ -28,7 +28,7 @@ class TmenXpPanel(TmenXpPanelMeta):
         if not result.success:
             self.as_setTankmenXpPanelS(vehicle.isElite, vehicle.isXPToTman)
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _onVehicleChange(self):
         vehicle = g_currentVehicle.item

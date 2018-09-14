@@ -8,6 +8,7 @@ class BATTLE_VIEW_ALIASES(object):
     Generated with yaml.
     __author__ = 'yaml_processor'
     """
+    BATTLE_LOADING = 'battleLoading'
     TEAM_BASES_PANEL = 'teamBasesPanel'
     VEHICLE_MESSAGES = 'battleVehicleMessages'
     VEHICLE_ERROR_MESSAGES = 'battleVehicleErrorMessages'
@@ -41,6 +42,9 @@ class BATTLE_VIEW_ALIASES(object):
     FALLOUT_MULTITEAM_STATS = 'falloutMultiteamStats'
     FALLOUT_SCORE_PANEL = 'falloutScorePanel'
     BATTLE_END_WARNING_PANEL = 'battleEndWarningPanel'
-    CROSSHAIR_PANEL = 'crosshairPanel'
     POSTMORTEM_PANEL = 'postmortemPanel'
     BATTLE_DAMAGE_LOG_PANEL = 'battleDamageLogPanel'
+    CROSSHAIR_PANEL = 'crosshairPanel'
+    MARKERS_2D = 'markers2D'
+    HIT_DIRECTION = 'hitDirection'
+    SIEGE_MODE_INDICATOR = 'siegeModeIndicator'

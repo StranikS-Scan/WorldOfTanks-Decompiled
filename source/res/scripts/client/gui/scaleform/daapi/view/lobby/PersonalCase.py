@@ -1,37 +1,36 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PersonalCase.py
 import constants
-from adisp import async
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from debug_utils import LOG_ERROR
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.shared.formatters import text_styles
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
-from gui.shared.utils.functions import getViewName
-from helpers import i18n, strcmp
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.prb_helpers import GlobalListener
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
-from items import tankmen
-from gui import TANKMEN_ROLES_ORDER_DICT, SystemMessages
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
-from gui.shared.events import LoadViewEvent
-from gui.shared.utils import decorators, isVehicleObserver, roundByModulo
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import TankmanSkill
-from gui.shared.gui_items.dossier import dumpDossier
-from gui.shared.gui_items.serializers import packTankman, packVehicle
-from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import EVENT_BUS_SCOPE, events, g_itemsCache
-from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.money import Money
 from account_helpers.settings_core.settings_constants import TUTORIAL
+from adisp import async
+from debug_utils import LOG_ERROR
+from gui import SystemMessages
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
+from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
+from gui.Scaleform.locale.MENU import MENU
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.shared import EVENT_BUS_SCOPE, events, g_itemsCache
+from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.events import LoadViewEvent
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.dossier import dumpDossier
+from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport
+from gui.shared.gui_items.serializers import packTankman, packVehicle
+from gui.shared.money import Money
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips.formatters import packActionTooltipData
+from gui.shared.utils import decorators, isVehicleObserver, roundByModulo
+from gui.shared.utils.functions import getViewName
+from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import i18n, strcmp
+from items import tankmen
 
-class PersonalCase(PersonalCaseMeta, GlobalListener):
+class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     def __init__(self, ctx=None):
         super(PersonalCase, self).__init__()
@@ -59,8 +58,6 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
         isFreeXpChanged = 'freeXP' in stats
         if isVehicleChanged:
             tankman = g_itemsCache.items.getTankman(self.tmanInvID)
-            if isVehsLockExist:
-                return self.destroy()
             if tankman.isInTank:
                 vehicle = g_itemsCache.items.getVehicle(tankman.vehicleInvID)
                 if vehicle.isLocked:
@@ -87,15 +84,12 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
         self.__setRetrainingData()
         self.__setDocumentsData()
 
-    def onPrbFunctionalFinished(self):
+    def onPrbEntitySwitched(self):
         self.__setCommonData()
 
-    def onPlayerStateChanged(self, functional, roster, accountInfo):
+    def onPlayerStateChanged(self, entity, roster, accountInfo):
         if accountInfo.isCurrentPlayer():
             self.__setCommonData()
-
-    def onUnitFunctionalFinished(self):
-        self.__setCommonData()
 
     def onUnitPlayerStateChanged(self, pInfo):
         if pInfo.isCurrentPlayer():
@@ -129,7 +123,7 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
         proc = TankmanDismiss(tankman)
         result = yield proc.request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('retraining')
     def retrainingTankman(self, inventoryID, innationID, tankmanCostTypeIdx):
@@ -138,7 +132,7 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
         proc = TankmanRetraining(tankman, vehicleToRecpec, tankmanCostTypeIdx)
         result = yield proc.request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('unloading')
     def unloadTankman(self, tmanInvID, currentVehicleID):
@@ -151,7 +145,7 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
             unloader = TankmanUnload(tmanVehicle, tankman.vehicleSlotIdx)
             result = yield unloader.request()
             if len(result.userMsg):
-                SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             return
 
     @decorators.process('updating')
@@ -166,7 +160,7 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
         tankman = g_itemsCache.items.getTankman(int(invengoryID))
         result = yield TankmanChangePassport(tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('studying')
     def addTankmanSkill(self, invengoryID, skillName):
@@ -174,7 +168,7 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
         processor = TankmanAddSkill(tankman, skillName)
         result = yield processor.request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def openExchangeFreeToTankmanXpWindow(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, getViewName(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, self.tmanInvID), {'tankManId': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
@@ -188,11 +182,13 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
         g_itemsCache.onSyncCompleted += self._refreshData
         self.startGlobalListening()
         self.setupContextHints(TUTORIAL.PERSONAL_CASE)
+        self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         self.stopGlobalListening()
         g_itemsCache.onSyncCompleted -= self._refreshData
         g_clientUpdateManager.removeObjectCallbacks(self)
+        self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
         super(PersonalCase, self)._dispose()
 
     @decorators.process('updating')
@@ -220,6 +216,10 @@ class PersonalCase(PersonalCaseMeta, GlobalListener):
     def __setSkillsData(self):
         data = yield self.dataProvider.getSkillsData()
         self.as_setSkillsDataS(data)
+
+    def __updatePrbState(self, *args):
+        if not self.prbEntity.getPermissions().canChangeVehicle():
+            self.destroy()
 
 
 class PersonalCaseDataProvider(object):

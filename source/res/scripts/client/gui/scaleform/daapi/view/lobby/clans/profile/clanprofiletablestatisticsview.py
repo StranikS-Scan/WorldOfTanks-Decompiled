@@ -4,10 +4,10 @@ import BigWorld
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.clans.profile import getI18ArenaById
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
-from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.items import formatField, isValueAvailable
 from gui.shared.utils import sortByFields
 from gui.shared.utils.functions import makeTooltip
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from adisp import process
 from gui.shared.formatters import icons, text_styles
@@ -17,6 +17,7 @@ from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from helpers import time_utils
 from gui.clans import formatters
+from skeletons.gui.clans import IClanController
 
 def _packColumn(columndID, label, buttonWidth, tooltip, enabled, icon='', sortOrder=-1, showSeparator=True, textAlign='left'):
     return {'id': columndID,
@@ -42,6 +43,7 @@ class _SORT_IDS:
 
 
 class ClanProfileTableStatisticsView(ClanProfileTableStatisticsViewMeta):
+    clanCtrl = dependency.descriptor(IClanController)
 
     def __init__(self):
         super(ClanProfileTableStatisticsView, self).__init__()
@@ -52,7 +54,7 @@ class ClanProfileTableStatisticsView(ClanProfileTableStatisticsViewMeta):
     def setProxy(self, proxy, clanDossier):
         proxy.showWaiting()
         provinces = yield clanDossier.requestProvinces()
-        showTreasury = clanDossier.isMyClan() and g_clanCtrl.getLimits().canSeeTreasury(clanDossier).success
+        showTreasury = clanDossier.isMyClan() and self.clanCtrl.getLimits().canSeeTreasury(clanDossier).success
         hasProvinces = len(provinces) > 0
         if self.isDisposed():
             return

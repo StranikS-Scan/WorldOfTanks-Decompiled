@@ -3,7 +3,7 @@
   <groundCollisionLight>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -14,6 +14,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_ground ; collision_static_object_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -21,7 +22,7 @@
   <groundCollisionHeavy>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -32,6 +33,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_ground ; collision_static_object_suspension_ground	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -39,7 +41,7 @@
   <sandCollisionLight>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -50,6 +52,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_sand ; collision_static_object_suspension_sand	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -57,7 +60,7 @@
   <sandCollisionHeavy>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -68,6 +71,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_sand ; collision_static_object_suspension_sand	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -75,7 +79,7 @@
   <snowCollisionLight>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -86,6 +90,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_snow ; collision_static_object_suspension_snow	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -93,7 +98,7 @@
   <snowCollisionHeavy>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -104,6 +109,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_snow ; collision_static_object_suspension_snow	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -111,7 +117,7 @@
   <stoneCollisionLight>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -123,6 +129,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_stone ; collision_static_object_suspension_stone	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -130,7 +137,7 @@
   <stoneCollisionHeavy>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -142,6 +149,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_stone ; collision_static_object_suspension_stone	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -149,7 +157,7 @@
   <woodCollisionLight>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -160,6 +168,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_wood; collision_static_object_suspension_wood	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -167,7 +176,7 @@
   <woodCollisionHeavy>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -178,6 +187,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_wood; collision_static_object_suspension_wood	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -185,7 +195,7 @@
   <metalCollisionLight>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -196,6 +206,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_metal; collision_static_object_suspension_metal	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -203,7 +214,7 @@
   <metalCollisionHeavy>
     <variant1>
       <timeline>
-        <impactEnd>	2.0	</impactEnd>
+        <impactEnd>	5.0	</impactEnd>
       </timeline>
       <effects>
         <pixie>
@@ -214,6 +225,7 @@
         <collisionSound>
           <startKey>	start	</startKey>
           <wwsoundPC>	collision_static_object_hull_metal; collision_static_object_suspension_metal	</wwsoundPC>
+          <wwsoundNPC>	collision_static_object_hull_NPC ; collision_static_object_suspension_NPC	</wwsoundNPC>
         </collisionSound>
       </effects>
     </variant1>
@@ -299,11 +311,11 @@
           <file>	particles/Tank/tank_collision_light_tank.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <collisionSound>
           <startKey>	start	</startKey>
-          <wwsoundPC>	phys_friction_pc	</wwsoundPC>
+          <wwsoundPC>	collision_tank_silence_pc	</wwsoundPC>
           <wwsoundNPC>	phys_friction_npc	</wwsoundNPC>
-        </sound>
+        </collisionSound>
       </effects>
     </variant1>
   </collisionLight>
@@ -318,14 +330,10 @@
           <file>	particles/Tank/tank_collision_hard1_tank.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <collisionSound>
           <startKey>	start	</startKey>
-          <wwsound>	phys_coll_light_npc	</wwsound>
-        </sound>
-        <sound>
-          <startKey>	start	</startKey>
-          <wwsound>	phys_friction_after_coll_npc	</wwsound>
-        </sound>
+          <wwsound>	phys_coll_light_npc, phys_friction_after_coll_npc	</wwsound>
+        </collisionSound>
       </effects>
     </variant1>
   </collisionHeavy>
@@ -340,16 +348,11 @@
           <file>	particles/Tank/tank_collision_hard1_tank.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <collisionSound>
           <startKey>	start	</startKey>
-          <wwsoundPC>	phys_coll_light_pc	</wwsoundPC>
-          <wwsoundNPC>	phys_coll_light_npc	</wwsoundNPC>
-        </sound>
-        <sound>
-          <startKey>	start	</startKey>
-          <wwsoundPC>	phys_friction_after_coll_pc	</wwsoundPC>
-          <wwsoundNPC>	phys_friction_after_coll_npc	</wwsoundNPC>
-        </sound>
+          <wwsoundPC>	collision_tank_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_coll_light_npc , phys_friction_after_coll_npc	</wwsoundNPC>
+        </collisionSound>
       </effects>
     </variant1>
   </collisionHeavy1>
@@ -364,16 +367,11 @@
           <file>	particles/Tank/tank_collision_hard2_tank.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <collisionSound>
           <startKey>	start	</startKey>
-          <wwsoundPC>	phys_coll_med_pc	</wwsoundPC>
-          <wwsoundNPC>	phys_coll_med_npc	</wwsoundNPC>
-        </sound>
-        <sound>
-          <startKey>	start	</startKey>
-          <wwsoundPC>	phys_friction_after_coll_pc	</wwsoundPC>
-          <wwsoundNPC>	phys_friction_after_coll_npc	</wwsoundNPC>
-        </sound>
+          <wwsoundPC>	collision_tank_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_coll_med_npc , phys_friction_after_coll_npc	</wwsoundNPC>
+        </collisionSound>
       </effects>
     </variant1>
   </collisionHeavy2>
@@ -388,16 +386,11 @@
           <file>	particles/Tank/tank_collision_hard3_tank.xml	</file>
           <force>	1	</force>
         </pixie>
-        <sound>
+        <collisionSound>
           <startKey>	start	</startKey>
-          <wwsoundPC>	phys_coll_heavy_pc	</wwsoundPC>
-          <wwsoundNPC>	phys_coll_heavy_npc	</wwsoundNPC>
-        </sound>
-        <sound>
-          <startKey>	start	</startKey>
-          <wwsoundPC>	phys_friction_after_coll_pc	</wwsoundPC>
-          <wwsoundNPC>	phys_friction_after_coll_npc	</wwsoundNPC>
-        </sound>
+          <wwsoundPC>	collision_tank_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_coll_heavy_npc , phys_friction_after_coll_npc	</wwsoundNPC>
+        </collisionSound>
       </effects>
     </variant1>
   </collisionHeavy3>

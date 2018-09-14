@@ -2,11 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/team_bases_panel.py
 from gui.Scaleform.daapi.view.meta.TeamBasesPanelMeta import TeamBasesPanelMeta
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.controllers import team_bases_ctrl
 from gui.shared.utils.functions import getBattleSubTypeBaseNumder
 from gui.shared.utils.functions import isControlPointExists
+from helpers import dependency
 from helpers import i18n, time_utils
+from skeletons.gui.battle_session import IBattleSessionProvider
 _MAX_INVADERS_COUNT = 3
 
 class _TeamBaseSettingItem(object):
@@ -61,6 +62,7 @@ def _getSettingItem(clientID, ownTeam, arenaTypeID):
 
 
 class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesPanel):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(TeamBasesPanel, self).__init__()
@@ -69,13 +71,13 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesPanel):
         self.as_setOffsetForEnemyPointsS()
 
     def addCapturingTeamBase(self, clientID, playerTeam, points, _, timeLeft, invadersCnt, capturingStopped):
-        item = _getSettingItem(clientID, playerTeam, g_sessionProvider.arenaVisitor.type.getID())
+        item = _getSettingItem(clientID, playerTeam, self.sessionProvider.arenaVisitor.type.getID())
         self.as_addS(clientID, item.getWeight(), item.getColor(), item.getCapturingString(), points, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt))
         if capturingStopped:
             self.stopTeamBaseCapturing(clientID, points)
 
     def addCapturedTeamBase(self, clientID, playerTeam, timeLeft, invadersCnt):
-        item = _getSettingItem(clientID, playerTeam, g_sessionProvider.arenaVisitor.type.getID())
+        item = _getSettingItem(clientID, playerTeam, self.sessionProvider.arenaVisitor.type.getID())
         self.as_addS(clientID, item.getWeight(), item.getColor(), item.getCapturingString(), 100, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt))
 
     def updateTeamBasePoints(self, clientID, points, rate, timeLeft, invadersCnt):
@@ -85,7 +87,7 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesPanel):
         self.as_stopCaptureS(clientID, points)
 
     def setTeamBaseCaptured(self, clientID, playerTeam):
-        item = _getSettingItem(clientID, playerTeam, g_sessionProvider.arenaVisitor.type.getID())
+        item = _getSettingItem(clientID, playerTeam, self.sessionProvider.arenaVisitor.type.getID())
         self.as_setCapturedS(clientID, item.getCapturedString())
 
     def removeTeamBase(self, clientID):

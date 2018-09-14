@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
-from account_helpers.settings_core.SettingsCache import g_settingsCache
-import constants
 import BigWorld
+import constants
 from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS
 from adisp import process, async
 from debug_utils import LOG_DEBUG
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCache
+from skeletons.gui.game_control import IIGRController
 
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
@@ -28,8 +30,8 @@ def _initializeDefaultSettings(core, data, initialized):
     controlsData = data['controlsData'] = {CONTROLS.MOUSE_HORZ_INVERSION: core.getSetting(CONTROLS.MOUSE_HORZ_INVERSION),
      CONTROLS.MOUSE_VERT_INVERSION: core.getSetting(CONTROLS.MOUSE_VERT_INVERSION),
      CONTROLS.BACK_DRAFT_INVERSION: core.getSetting(CONTROLS.BACK_DRAFT_INVERSION)}
-    from gui import game_control
-    if game_control.g_instance.igr.getRoomType() == constants.IGR_TYPE.NONE:
+    igrCtrl = dependency.instance(IIGRController)
+    if igrCtrl.getRoomType() == constants.IGR_TYPE.NONE:
         import Settings
         section = Settings.g_instance.userPrefs
         if section.has_key(Settings.KEY_MESSENGER_PREFERENCES):
@@ -76,7 +78,6 @@ def _initializeDefaultSettings(core, data, initialized):
                 LOG_DEBUG('Controls preferences is not available.')
 
     data['markersData'] = AccountSettings.getSettings('markers')
-    data['keyboardData'] = core.options.getSetting('keyboard').getCurrentMapping()
     data['graphicsData'] = {GAME.LENS_EFFECT: core.getSetting(GAME.LENS_EFFECT)}
     data['marksOnGun'] = {GAME.SHOW_MARKS_ON_GUN: core.getSetting(GAME.SHOW_MARKS_ON_GUN)}
     return
@@ -96,6 +97,10 @@ def _reinitializeDefaultSettings(core, data, initialized, callback=None):
     return
 
 
+def _getSettingsCache():
+    return dependency.instance(ISettingsCache)
+
+
 def _migrateTo3(core, data, initialized):
     aimData = data['aimData']
     if not initialized:
@@ -110,7 +115,7 @@ def _migrateTo3(core, data, initialized):
 def _migrateTo4(core, data, initialized):
     gameData = data['gameData']
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
     if storedValue & 128:
         gameData[GAME.REPLAY_ENABLED] = 2
     else:
@@ -123,7 +128,7 @@ def _migrateTo5(core, data, initialized):
 
 def _migrateTo6(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
     maskOffset = 7168
     currentMask = (storedValue & maskOffset) >> 10
     import ArenaType
@@ -177,7 +182,7 @@ def _migrateTo17(core, data, initialized):
 def _migrateTo18(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from constants import QUEUE_TYPE
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.FALLOUT, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.FALLOUT, 0)
     currentType = storedValue & 3
     if currentType > 0:
         oldTypeToNewType = {1: QUEUE_TYPE.FALLOUT_CLASSIC,
@@ -212,7 +217,7 @@ def _migrateTo22(core, data, initialized):
 
 def _migrateTo23(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
     settingOffset = 1610612736
     currentValue = (storedValue & settingOffset) >> 29
     if currentValue == 0:
@@ -229,7 +234,7 @@ def _migrateTo25(core, data, initialized):
 
 def _migrateTo26(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
     maskOffset = 1
     if (storedValue & maskOffset) >> 0:
         clear = data['clear']

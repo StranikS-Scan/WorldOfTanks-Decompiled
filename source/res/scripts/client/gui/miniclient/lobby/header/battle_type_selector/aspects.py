@@ -23,7 +23,7 @@ class CommandBattle(_BattleTypeDisable):
 
     def __init__(self):
         _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT,
-         PREBATTLE_ACTION_NAME.UNIT,
+         PREBATTLE_ACTION_NAME.E_SPORT,
          2,
          SELECTOR_BATTLE_TYPES.UNIT))
 
@@ -40,19 +40,19 @@ class SortieBattle(_BattleTypeDisable):
 class TrainingBattle(_BattleTypeDisable):
 
     def __init__(self):
-        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAINING, 6))
+        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAININGS_LIST, 6))
 
 
 class SpecialBattle(_BattleTypeDisable):
 
     def __init__(self):
-        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLE, 5))
+        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 5))
 
 
 class CompanyBattle(_BattleTypeDisable):
 
     def __init__(self):
-        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, 3))
+        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANIES_LIST, 3))
 
 
 class FalloutBattle(_BattleTypeDisable):

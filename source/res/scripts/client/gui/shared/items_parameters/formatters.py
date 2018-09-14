@@ -55,7 +55,9 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'turretRotationSpeed': MENU.TANK_PARAMS_GPS,
  'invisibilityStillFactor': MENU.TANK_PARAMS_PERCENT,
  'invisibilityMovingFactor': MENU.TANK_PARAMS_PERCENT,
- 'maxShotDistance': MENU.TANK_PARAMS_M}
+ 'maxShotDistance': MENU.TANK_PARAMS_M,
+ 'switchOnTime': MENU.TANK_PARAMS_S,
+ 'switchOffTime': MENU.TANK_PARAMS_S}
 NO_COLORIZE_FORMATTERS = (text_styles.stats, text_styles.stats, text_styles.stats)
 NO_BONUS_SIMPLIFIED_FORMATTERS = (text_styles.warning, text_styles.warning, text_styles.warning)
 NO_BONUS_BASE_FORMATTERS = (text_styles.error, text_styles.stats, text_styles.stats)
@@ -63,7 +65,7 @@ SIMPLIFIED_FORMATTERS = (text_styles.critical, text_styles.warning, text_styles.
 BASE_FORMATTERS = (text_styles.error, text_styles.stats, text_styles.bonusAppliedText)
 RELATIVE_POWER_PARAMS = ('damage', 'piercingPower', 'reloadTime', 'reloadTimeSecs', 'gunRotationSpeed', 'turretRotationSpeed', 'turretYawLimits', 'pitchLimits', 'gunYawLimits', 'clipFireRate', 'aimingTime', 'shotDispersionAngle', 'damageAvgPerMinute')
 RELATIVE_ARMOR_PARAMS = ('maxHealth', 'hullArmor', 'turretArmor')
-RELATIVE_MOBILITY_PARAMS = ('vehicleWeight', 'enginePower', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed')
+RELATIVE_MOBILITY_PARAMS = ('vehicleWeight', 'enginePower', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime')
 RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor', 'invisibilityMovingFactor')
 RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
 PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
@@ -190,7 +192,9 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'avgDamage': _listFormat,
  'dispertionRadius': _niceRangeFormat,
  'invisibilityStillFactor': _niceListFormat,
- 'invisibilityMovingFactor': _niceListFormat}
+ 'invisibilityMovingFactor': _niceListFormat,
+ 'switchOnTime': _niceFormat,
+ 'switchOffTime': _niceFormat}
 _SMART_ROUND_PARAMS = ('damage', 'piercingPower', 'bombDamage', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'dispertionRadius', 'aimingTime', 'weight', 'vehicleWeight', 'invisibilityStillFactor', 'invisibilityMovingFactor')
 _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
@@ -229,13 +233,13 @@ def simplifiedVehicleParameter(parameter):
         return mainFormatter(paramStr)
 
 
-def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None):
+def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None, allowSmartRound=True):
     if parameterState is None and isinstance(paramValue, (tuple, list)):
         parameterState = [None] * len(paramValue)
     formatSettings = formatSettings or FORMAT_SETTINGS
     settings = formatSettings.get(parameterName, _listFormat)
     rounder = settings['rounder']
-    doSmartRound = parameterName in _SMART_ROUND_PARAMS
+    doSmartRound = allowSmartRound and parameterName in _SMART_ROUND_PARAMS
 
     def applyFormat(value, state):
         if doSmartRound:
@@ -248,24 +252,27 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
             paramStr = _colorize(paramStr, state, colorScheme)
         return paramStr
 
-    if isinstance(paramValue, (tuple, list)):
-        if doSmartRound and len(set(paramValue)) == 1:
-            if paramValue[0] > 0:
-                return applyFormat(paramValue[0], parameterState[0])
-            return
-        else:
-            separator = settings['separator']
-            paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
-            return separator.join(paramsList)
-    else:
-        if paramValue != 0:
-            return applyFormat(paramValue, parameterState)
+    if paramValue is None:
         return
-    return
+    else:
+        if isinstance(paramValue, (tuple, list)):
+            if doSmartRound and len(set(paramValue)) == 1:
+                if paramValue[0] > 0:
+                    return applyFormat(paramValue[0], parameterState[0])
+                return
+            else:
+                separator = settings['separator']
+                paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
+                return separator.join(paramsList)
+        else:
+            if paramValue != 0:
+                return applyFormat(paramValue, parameterState)
+            return
+        return
 
 
 def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
-    if isinstance(descriptor, vehicles.VehicleDescr):
+    if vehicles.isVehicleDescr(descriptor):
         compactDescr = descriptor.type.compactDescr
     else:
         compactDescr = descriptor['compactDescr']

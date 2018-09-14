@@ -3,12 +3,13 @@
 import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
-from account_helpers.settings_core.SettingsCache import g_settingsCache
 from account_helpers.settings_core.migrations import migrateToVersion
 from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from helpers import dependency
 from shared_utils import CONST_CONTAINER
+from skeletons.account_helpers.settings_core import ISettingsCache
 
 class SETTINGS_SECTIONS(CONST_CONTAINER):
     GAME = 'GAME'
@@ -40,6 +41,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
 
 
 class ServerSettingsManager(object):
+    settingsCache = dependency.descriptor(ISettingsCache)
     GAME = settings_constants.GAME
     GRAPHICS = settings_constants.GRAPHICS
     SOUND = settings_constants.SOUND
@@ -193,7 +195,8 @@ class ServerSettingsManager(object):
                                   TUTORIAL.FIRE_EXTINGUISHER_USED: 10,
                                   TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED: 11}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={'FalloutQuestsTab': 0,
-                                         'CustomizationSlotsHint': 1}, offsets={}),
+                                         'CustomizationSlotsHint': 1,
+                                         'ChristmasDecorationListHint': 2}, offsets={}),
      SETTINGS_SECTIONS.FEEDBACK: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                   DAMAGE_INDICATOR.PRESETS: 1,
                                   DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -261,7 +264,7 @@ class ServerSettingsManager(object):
         storageKey = 'AIM_%(section)s_%(number)d' % {'section': section.upper(),
          'number': number}
         settingsKey = 'AIM_%(number)d' % {'number': number}
-        storedValue = g_settingsCache.getSectionSettings(storageKey, None)
+        storedValue = self.settingsCache.getSectionSettings(storageKey, None)
         masks = self.SECTIONS[settingsKey].masks
         offsets = self.SECTIONS[settingsKey].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
@@ -299,7 +302,7 @@ class ServerSettingsManager(object):
                 settingsKey = 'AIM_%(number)d' % {'number': number}
                 storageKey = 'AIM_%(section)s_%(number)d' % {'section': section.upper(),
                  'number': number}
-                storingValue = storedValue = g_settingsCache.getSetting(storageKey)
+                storingValue = storedValue = self.settingsCache.getSetting(storageKey)
                 masks = self.SECTIONS[settingsKey].masks
                 offsets = self.SECTIONS[settingsKey].offsets
                 storingValue = self._mapValues(value, storingValue, masks, offsets)
@@ -313,13 +316,13 @@ class ServerSettingsManager(object):
         storingValue = self._buildAimSettings(settings)
         if not storingValue:
             return
-        g_settingsCache.setSettings(storingValue)
+        self.settingsCache.setSettings(storingValue)
         LOG_DEBUG('Applying AIM server settings: ', settings)
         self._core.onSettingsChanged(settings)
 
     def getMarkersSetting(self, section, key, default=None):
         storageKey = 'MARKERS_%(section)s' % {'section': section.upper()}
-        storedValue = g_settingsCache.getSectionSettings(storageKey, None)
+        storedValue = self.settingsCache.getSectionSettings(storageKey, None)
         masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
         offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
@@ -328,7 +331,7 @@ class ServerSettingsManager(object):
         settingToServer = {}
         for section, options in settings.iteritems():
             storageKey = 'MARKERS_%(section)s' % {'section': section.upper()}
-            storingValue = storedValue = g_settingsCache.getSetting(storageKey)
+            storingValue = storedValue = self.settingsCache.getSetting(storageKey)
             masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
             offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
             storingValue = self._mapValues(options, storingValue, masks, offsets)
@@ -342,20 +345,20 @@ class ServerSettingsManager(object):
         storingValue = self._buildMarkersSettings(settings)
         if not storingValue:
             return
-        g_settingsCache.setSettings(storingValue)
+        self.settingsCache.setSettings(storingValue)
         LOG_DEBUG('Applying MARKER server settings: ', settings)
         self._core.onSettingsChanged(settings)
 
     def getVersion(self):
-        return g_settingsCache.getVersion()
+        return self.settingsCache.getVersion()
 
     def setSettings(self, settings):
-        g_settingsCache.setSettings(settings)
+        self.settingsCache.setSettings(settings)
         LOG_DEBUG('Applying server settings: ', settings)
         self._core.onSettingsChanged(settings)
 
     def getSetting(self, key, default=None):
-        return g_settingsCache.getSetting(key, default)
+        return self.settingsCache.getSetting(key, default)
 
     def getSection(self, section, defaults=None):
         result = {}
@@ -389,19 +392,19 @@ class ServerSettingsManager(object):
         self.setSettings(settingToServer)
 
     def getSectionSettings(self, section, key, default=None):
-        storedValue = g_settingsCache.getSectionSettings(section, None)
+        storedValue = self.settingsCache.getSectionSettings(section, None)
         masks = self.SECTIONS[section].masks
         offsets = self.SECTIONS[section].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def setSectionSettings(self, section, settings):
         storedSettings = self.getSection(section)
-        storedValue = g_settingsCache.getSectionSettings(section, None)
+        storedValue = self.settingsCache.getSectionSettings(section, None)
         storingValue = self._buildSectionSettings(section, settings)
         if storedValue == storingValue:
             return
         else:
-            g_settingsCache.setSectionSettings(section, storingValue)
+            self.settingsCache.setSectionSettings(section, storingValue)
             settingsDiff = {}
             for k, v in settings.iteritems():
                 sV = storedSettings.get(k)
@@ -413,7 +416,7 @@ class ServerSettingsManager(object):
             return
 
     def _buildSectionSettings(self, section, settings):
-        storedValue = g_settingsCache.getSectionSettings(section, None)
+        storedValue = self.settingsCache.getSectionSettings(section, None)
         storingValue = storedValue if storedValue is not None else 0
         sectionMasks = self.SECTIONS[section]
         masks = sectionMasks.masks
@@ -447,14 +450,13 @@ class ServerSettingsManager(object):
     @async
     @process
     def _updateToVersion(self, callback=None):
-        currentVersion = g_settingsCache.getVersion()
+        currentVersion = self.settingsCache.getVersion()
         data = {'gameData': {},
          'gameExtData': {},
          'gameplayData': {},
          'controlsData': {},
          'aimData': {},
          'markersData': {},
-         'keyboardData': {},
          'graphicsData': {},
          'marksOnGun': {},
          'fallout': {},
@@ -494,9 +496,6 @@ class ServerSettingsManager(object):
         markersData = data.get('markersData', {})
         if markersData:
             settings.update(self._buildMarkersSettings(markersData))
-        keyboardData = data.get('keyboardData', {})
-        if keyboardData:
-            settings.update(keyboardData)
         marksOnGun = data.get('marksOnGun', {})
         if marksOnGun:
             settings[SETTINGS_SECTIONS.MARKS_ON_GUN] = self._buildSectionSettings(SETTINGS_SECTIONS.MARKS_ON_GUN, marksOnGun)

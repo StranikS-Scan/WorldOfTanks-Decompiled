@@ -225,7 +225,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         if vehicle.isBroken:
             result = yield VehicleRepairer(vehicle).request()
             if result and len(result.userMsg):
-                SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def fillVehicle(self, needRepair, needAmmo, needEquipment, isPopulate, isUnload, isOrderChanged, shells, equipment):
         shellsLayout = []
@@ -287,10 +287,10 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
         if result and result.auxData:
             for m in result.auxData:
-                SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
+                SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
         if result and len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         self.destroy()
 
     def __seveCurrentLayout(self, **kwargs):

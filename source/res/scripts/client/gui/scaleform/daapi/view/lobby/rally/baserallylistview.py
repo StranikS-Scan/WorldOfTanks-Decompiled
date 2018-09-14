@@ -19,9 +19,6 @@ class BaseRallyListView(BaseRallyListViewMeta):
     def setData(self, initialData):
         pass
 
-    def canBeClosed(self, callback):
-        callback(True)
-
     def _populate(self):
         super(BaseRallyListView, self)._populate()
         g_messengerEvents.users.onUserActionReceived += self._onUserActionReceived

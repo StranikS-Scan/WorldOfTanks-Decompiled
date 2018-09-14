@@ -3,13 +3,13 @@
 from adisp import process
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattlesListWindow import PrebattlesListWindow
+from gui.Scaleform.daapi.view.meta.BattleSessionListMeta import BattleSessionListMeta
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.prb_control import formatters
-from gui.prb_control.context import prb_ctx
-from gui.prb_control.functional.battle_session import AutoInvitesRequester
-from gui.Scaleform.daapi.view.meta.BattleSessionListMeta import BattleSessionListMeta
+from gui.prb_control.entities.battle_session.legacy.ctx import JoinBattleSessionCtx
+from gui.prb_control.entities.battle_session.legacy.requester import AutoInvitesRequester
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.events import FocusEvent
 from messenger.ext import channel_num_gen
@@ -46,7 +46,7 @@ class BattleSessionList(PrebattlesListWindow, BattleSessionListMeta):
 
     @process
     def __requestToJoin(self, prbID, prbType):
-        yield self.prbDispatcher.join(prb_ctx.JoinBattleSessionCtx(prbID, prbType, 'prebattle/join'))
+        yield self.prbDispatcher.join(JoinBattleSessionCtx(prbID, prbType, 'prebattle/join'))
 
     def __onBSListReceived(self, sessions):
         result = []

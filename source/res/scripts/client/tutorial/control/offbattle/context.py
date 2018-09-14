@@ -93,8 +93,7 @@ class OffbattleStartReqs(context.StartReqs):
         cache = ctx.cache
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            state = dispatcher.getFunctionalState()
-            if state.isInPreQueue(QUEUE_TYPE.TUTORIAL):
+            if dispatcher.getEntity().isInQueue():
                 cache.setRefused(True).write()
                 return False
         if ctx.restart:

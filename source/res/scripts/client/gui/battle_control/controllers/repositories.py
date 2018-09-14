@@ -7,7 +7,6 @@ from gui.battle_control.battle_constants import getBattleCtrlName
 from gui.battle_control.controllers import arena_load_ctrl
 from gui.battle_control.controllers import avatar_stats_ctrl
 from gui.battle_control.controllers import chat_cmd_ctrl
-from gui.battle_control.controllers import crosshair_proxy
 from gui.battle_control.controllers import consumables
 from gui.battle_control.controllers import debug_ctrl
 from gui.battle_control.controllers import drr_scale_ctrl
@@ -26,6 +25,7 @@ from gui.battle_control.controllers import vehicle_state_ctrl
 from gui.battle_control.controllers import personal_efficiency_ctrl
 from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import tmp_ignore_list_ctrl
+from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -40,7 +40,7 @@ class BattleSessionSetup(object):
     @property
     def isReplayPlaying(self):
         if self.replayCtrl is not None:
-            return self.replayCtrl.isPlaying
+            return self.replayCtrl.isPlaying and not self.replayCtrl.isBattleSimulation
         else:
             return False
             return
@@ -105,7 +105,7 @@ class _ControllersLocator(object):
         self._repository.destroy()
 
 
-class SharedControllersLocator(_ControllersLocator):
+class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     __slots__ = ()
 
     @property
@@ -169,7 +169,7 @@ class SharedControllersLocator(_ControllersLocator):
         return self._repository.getController(BATTLE_CTRL_ID.TMP_IGNORE_LIST_CTRL)
 
 
-class DynamicControllersLocator(_ControllersLocator):
+class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
     __slots__ = ()
 
     @property
@@ -275,6 +275,7 @@ class SharedControllersRepository(_ControllersRepository):
     @classmethod
     def create(cls, setup):
         repository = cls()
+        from gui.battle_control.controllers import crosshair_proxy
         repository.addController(crosshair_proxy.CrosshairDataProxy())
         ammo = consumables.createAmmoCtrl(setup)
         repository.addController(ammo)
@@ -294,7 +295,7 @@ class SharedControllersRepository(_ControllersRepository):
             repository.addController(tmpIgnoreListCtrl)
         repository.addArenaController(arena_load_ctrl.ArenaLoadController(), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
-        repository.addViewController(hit_direction_ctrl.HitDirectionController(), setup)
+        repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
         return repository
 
 

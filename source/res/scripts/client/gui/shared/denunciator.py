@@ -3,14 +3,15 @@
 import BigWorld
 import constants
 from debug_utils import LOG_ERROR
+from helpers import dependency
 from helpers import i18n
 from gui import SystemMessages
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.battle_control import g_sessionProvider
 from gui.shared import g_itemsCache
 from messenger import MessengerEntry, g_settings
 from messenger.storage import storage_getter
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class DENUNCIATIONS(object):
     APPEAL = 'appeal'
@@ -84,6 +85,7 @@ class LobbyDenunciator(Denunciator):
 
 
 class BattleDenunciator(Denunciator):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def getDenunciationsLeft(self):
         return getattr(BigWorld.player(), 'denunciationsLeft', 0)
@@ -93,7 +95,7 @@ class BattleDenunciator(Denunciator):
         return BigWorld.player().arenaUniqueID
 
     def _getViolatorKind(self, player, violatorID):
-        arenaDP = g_sessionProvider.getArenaDP()
+        arenaDP = self.sessionProvider.getArenaDP()
         vehicleID = arenaDP.getVehIDByAccDBID(violatorID)
         violator = arenaDP.getVehicleInfo(vehicleID)
         if player.team == violator.team:

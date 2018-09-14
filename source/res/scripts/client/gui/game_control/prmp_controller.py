@@ -1,31 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/prmp_controller.py
 import Event
-from account_helpers.settings_core.SettingsCache import g_settingsCache
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from adisp import process, async
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import pushI18nMessage
-from gui.game_control.controllers import Controller
 from gui.game_control.links import URLMarcos
-from gui.server_events.EventsCache import g_eventsCache
 from gui.shared.notifications import NotificationPriorityLevel
+from helpers import dependency
 from helpers.http.url_formatters import addParamsToUrlQuery
+from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
+from skeletons.gui.game_control import IEncyclopediaController
+from skeletons.gui.server_events import IEventsCache
 _ACTIVATION_TOKEN = 'prmp:encyclopediaEnabled'
 _MAX_RECOMMENDATION_ID = 32767
 _RECOMMENDATIONS_COUNT = 6
 
-class EncyclopediaController(Controller):
-    """
-    Manages queue of encyclopedia recommendations and activation state of encyclopedia feature
-    """
+class EncyclopediaController(IEncyclopediaController):
+    eventsCache = dependency.descriptor(IEventsCache)
+    settingsCache = dependency.descriptor(ISettingsCache)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, proxy):
-        super(EncyclopediaController, self).__init__(proxy)
+    def __init__(self):
+        super(EncyclopediaController, self).__init__()
         self.__activated = False
         self.__recommendations = []
         self.__eventManager = Event.EventManager()
@@ -44,7 +43,7 @@ class EncyclopediaController(Controller):
         return
 
     def onAccountBecomePlayer(self):
-        g_settingsCache.onSyncCompleted += self.__updateRecommendations
+        self.settingsCache.onSyncCompleted += self.__updateRecommendations
 
     def onConnected(self):
         if GUI_SETTINGS.lookup('encyclopedia'):
@@ -58,7 +57,7 @@ class EncyclopediaController(Controller):
 
     def onAvatarBecomePlayer(self):
         self.__isLobbyStarted = False
-        g_settingsCache.onSyncCompleted -= self.__updateRecommendations
+        self.settingsCache.onSyncCompleted -= self.__updateRecommendations
 
     def onDisconnected(self):
         self.__isStateSynced = False
@@ -89,8 +88,8 @@ class EncyclopediaController(Controller):
             self.__recommendations.remove(recId)
         self.__recommendations.insert(0, recId)
         self.__recommendations = self.__recommendations[:_RECOMMENDATIONS_COUNT]
-        _setEncyclopediaRecommendationsSections(self.__recommendations)
-        g_settingsCore.serverSettings.setHasNewEncyclopediaRecommendations()
+        _setEncyclopediaRecommendationsSections(self.__recommendations, self.settingsCore)
+        self.settingsCore.serverSettings.setHasNewEncyclopediaRecommendations()
         self.onNewRecommendationReceived()
         if self.isActivated():
             pushI18nMessage(SYSTEM_MESSAGES.PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION, priority=NotificationPriorityLevel.MEDIUM)
@@ -100,11 +99,11 @@ class EncyclopediaController(Controller):
         if recId in self.__recommendations:
             self.__recommendations.remove(recId)
             self.__recommendations.append(recId)
-            _setEncyclopediaRecommendationsSections(self.__recommendations)
+            _setEncyclopediaRecommendationsSections(self.__recommendations, self.settingsCore)
 
     def resetHasNew(self):
         self.__hasNewRecommendations = False
-        g_settingsCore.serverSettings.setHasNewEncyclopediaRecommendations(False)
+        self.settingsCore.serverSettings.setHasNewEncyclopediaRecommendations(False)
 
     @async
     @process
@@ -119,14 +118,14 @@ class EncyclopediaController(Controller):
         return
 
     def __updateRecommendations(self):
-        self.__recommendations = _getEncyclopediaRecommendations()
-        self.__hasNewRecommendations = g_settingsCore.serverSettings.getHasNewEncyclopediaRecommendations()
+        self.__recommendations = _getEncyclopediaRecommendations(self.settingsCore)
+        self.__hasNewRecommendations = self.settingsCore.serverSettings.getHasNewEncyclopediaRecommendations()
 
     def __updateActivationState(self, *_):
         if self.__baseUrl is None or not self.__isSuitableLanguage or self.__isStateSynced:
             return False
         else:
-            tokensCount = g_eventsCache.questsProgress.getTokenCount(_ACTIVATION_TOKEN)
+            tokensCount = self.eventsCache.questsProgress.getTokenCount(_ACTIVATION_TOKEN)
             newState = g_lobbyContext.getServerSettings().isEncyclopediaEnabled(tokensCount)
             self.__isStateSynced = True
             if newState != self.__activated:
@@ -135,8 +134,8 @@ class EncyclopediaController(Controller):
             return
 
 
-def _getEncyclopediaRecommendations():
-    recsDict = g_settingsCore.serverSettings.getEncyclopediaRecommendations()
+def _getEncyclopediaRecommendations(settingsCore):
+    recsDict = settingsCore.serverSettings.getEncyclopediaRecommendations()
     result = []
     for i in range(1, _RECOMMENDATIONS_COUNT + 1):
         value = recsDict.get('item_%i' % i)
@@ -146,9 +145,9 @@ def _getEncyclopediaRecommendations():
     return result
 
 
-def _setEncyclopediaRecommendationsSections(ids):
+def _setEncyclopediaRecommendationsSections(ids, settingsCore):
     dataToSave = _buildServerSettingsSectionsDict(ids + [0] * (_RECOMMENDATIONS_COUNT - len(ids)))
-    g_settingsCore.serverSettings.setEncyclopediaRecommendationsSections(dataToSave)
+    settingsCore.serverSettings.setEncyclopediaRecommendationsSections(dataToSave)
 
 
 def _buildServerSettingsSectionsDict(listOfIds):

@@ -5,12 +5,15 @@ import BattleReplay
 import BigWorld
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_DEBUG
+from AvatarInputHandler import AvatarInputHandler
 from gui.Scaleform.daapi.view.battle.shared import destroy_times_mapping as _mapping
 from gui.Scaleform.daapi.view.meta.DestroyTimersPanelMeta import DestroyTimersPanelMeta
 from gui.Scaleform.genConsts.BATTLE_DESTROY_TIMER_STATES import BATTLE_DESTROY_TIMER_STATES
-from gui.battle_control import g_sessionProvider, avatar_getter
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.shared.utils.TimeInterval import TimeInterval
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 _TIMER_STATES = BATTLE_DESTROY_TIMER_STATES
 
 class _TimerComponent(object):
@@ -157,7 +160,8 @@ class _ReplayCollection(_TimersCollection):
 
 
 def _createTimersCollection(panel):
-    if BattleReplay.g_replayCtrl.isPlaying:
+    sessionProvider = dependency.instance(IBattleSessionProvider)
+    if sessionProvider.isReplayPlaying:
         collection = _ReplayCollection(weakref.proxy(panel))
     else:
         collection = _DefaultCollection(weakref.proxy(panel))
@@ -165,6 +169,7 @@ def _createTimersCollection(panel):
 
 
 class DestroyTimersPanel(DestroyTimersPanelMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, mapping=None):
         super(DestroyTimersPanel, self).__init__()
@@ -179,7 +184,7 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
 
     def _populate(self):
         super(DestroyTimersPanel, self)._populate()
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             checkStatesIDs = (VEHICLE_VIEW_STATE.FIRE, VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER, VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER)
@@ -190,16 +195,19 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
 
         handler = avatar_getter.getInputHandler()
         if handler is not None:
-            handler.onCameraChanged += self.__onCameraChanged
+            if isinstance(handler, AvatarInputHandler):
+                handler.onCameraChanged += self.__onCameraChanged
         return
 
     def _dispose(self):
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         handler = avatar_getter.getInputHandler()
         if handler is not None:
-            handler.onCameraChanged -= self.__onCameraChanged
+            if isinstance(handler, AvatarInputHandler):
+                handler.onCameraChanged -= self.__onCameraChanged
+        self.__hideAll()
         self.__timers.clear()
         self.__mapping.clear()
         self.__stopSound()

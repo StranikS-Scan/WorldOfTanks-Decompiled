@@ -6,22 +6,23 @@ from PlayerEvents import g_playerEvents
 from adisp import async
 from debug_utils import LOG_DEBUG
 from gui import g_tankActiveCamouflage
+from gui.battle_control import arena_visitor
+from gui.battle_control import avatar_getter
+from gui.battle_control import controllers
 from gui.battle_control.arena_info import invitations
 from gui.battle_control.arena_info.arena_dp import ArenaDataProvider
 from gui.battle_control.arena_info.listeners import ListenersCollection
-from gui.battle_control import avatar_getter
+from gui.battle_control.battle_cache import BattleClientCache
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE
 from gui.battle_control.battle_ctx import BattleContext
-from gui.battle_control.battle_cache import BattleClientCache
-from gui.battle_control import arena_visitor
-from gui.battle_control import controllers
+from gui.battle_control.hit_data import HitData
 from gui.battle_control.requests import AvatarRequestsController
 from gui.battle_control.view_components import createComponentsBridge
-from gui.battle_control.hit_data import HitData
+from skeletons.gui.battle_session import IBattleSessionProvider
 BattleExitResult = namedtuple('BattleExitResult', 'isDeserter playerInfo')
 
-class BattleSessionProvider(object):
+class BattleSessionProvider(IBattleSessionProvider):
     """This class is backend of GUI for one battle session."""
     __slots__ = ('__ctx', '__sharedRepo', '__dynamicRepo', '__requestsCtrl', '__arenaDP', '__arenaListeners', '__viewComponentsBridge', '__weakref__', '__arenaVisitor', '__invitations', '__isReplayPlaying', '__battleCache')
 
@@ -80,6 +81,14 @@ class BattleSessionProvider(object):
         """
         return self.__battleCache
 
+    @property
+    def isReplayPlaying(self):
+        """
+        Returns flag is this battle actually replay.
+        :return: boolean flag
+        """
+        return self.__isReplayPlaying
+
     def getCtx(self):
         """
         Gets instance of ammo controller.
@@ -112,6 +121,35 @@ class BattleSessionProvider(object):
         if ctrl is not None:
             ctrl.spawnVehicle(vID)
         g_tankActiveCamouflage[vDesc.type.compactDescr] = self.__arenaVisitor.type.getVehicleCamouflageKind()
+        return
+
+    def updateObservedVehicleData(self, vID, extraData):
+        ctrl = self.__sharedRepo.ammo
+        if ctrl is not None:
+            ctrl.clear(False)
+            ctrl.setGunSettings(extraData.gunSettings)
+            for intCD, quantity, quantityInClip in extraData.orderedAmmo:
+                ctrl.setShells(intCD, quantity, quantityInClip)
+
+            ctrl.setCurrentShellCD(extraData.currentShellCD)
+            ctrl.setNextShellCD(extraData.nextShellCD)
+            ctrl.setGunReloadTime(extraData.reloadTimeLeft, extraData.reloadBaseTime)
+        ctrl = self.__sharedRepo.equipments
+        if ctrl is not None:
+            ctrl.clear(False)
+            for intCD, quantity, stage, timeRemaining in extraData.orderedEquipment:
+                ctrl.setEquipment(intCD, quantity, stage, timeRemaining)
+
+        ctrl = self.__sharedRepo.optionalDevices
+        if ctrl is not None:
+            ctrl.clear(False)
+            for deviceID, isOn in extraData.orderedOptionalDevices:
+                ctrl.setOptionalDevice(deviceID, isOn)
+
+        ctrl = self.__sharedRepo.vehicleState
+        if ctrl is not None:
+            ctrl.refreshVehicleStateValue(VEHICLE_VIEW_STATE.HEALTH)
+            ctrl.notifyStateChanged(VEHICLE_VIEW_STATE.VEHICLE_CHANGED, vID)
         return
 
     def getArenaDP(self):
@@ -183,12 +221,10 @@ class BattleSessionProvider(object):
         """ Gets result if player exits battle that are helped to notify player about penalty (if they have).
         :return: instance of BattleExitResult(isDeserter, player).
         """
-        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle():
+        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isEventBattle():
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
-            if self.__arenaVisitor.gui.isEventBattle():
-                isDeserter = False
-            elif self.__arenaVisitor.hasRespawns():
+            if self.__arenaVisitor.hasRespawns():
                 isDeserter = not vStats.stopRespawn
             else:
                 isDeserter = avatar_getter.isVehicleAlive() and not avatar_getter.isVehicleOverturned()
@@ -255,13 +291,13 @@ class BattleSessionProvider(object):
         """Player's vehicle is destroyed, switchers GUI to postmortem mode."""
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
-            ctrl.clear()
+            ctrl.clear(False)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear()
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
-            ctrl.clear()
+            ctrl.clear(False)
         ctrl = self.__sharedRepo.feedback
         if ctrl is not None:
             ctrl.setPlayerVehicle(0L)
@@ -330,13 +366,13 @@ class BattleSessionProvider(object):
             ctrl.update(stats)
         return
 
-    def addHitDirection(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive):
+    def addHitDirection(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID):
         hitDirectionCtrl = self.__sharedRepo.hitDirection
         if hitDirectionCtrl is not None:
             atackerVehInfo = self.__arenaDP.getVehicleInfo(attackerID)
             atackerVehType = atackerVehInfo.vehicleType
             isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
-            playerVehType = self.__arenaDP.getVehicleInfo().vehicleType
+            playerVehType = self.__arenaDP.getVehicleInfo(damagedID).vehicleType
             hitDirectionCtrl.addHit(HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive))
         return
 

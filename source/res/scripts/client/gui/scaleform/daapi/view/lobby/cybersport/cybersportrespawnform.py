@@ -29,7 +29,7 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
 
     def __init__(self):
         super(CyberSportRespawnForm, self).__init__()
-        self.__extra = self.unitFunctional.getExtra()
+        self.__extra = self.prbEntity.getExtra()
         self.__timerCallback = None
         self.__warningCallback = None
         return
@@ -46,16 +46,16 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
             self.__updateWarning()
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
-        functional = self.unitFunctional
-        pInfo = functional.getPlayerInfo(dbID=dbID)
+        entity = self.prbEntity
+        pInfo = entity.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange())
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
-                slotState = functional.getSlotState(slotIdx)
+                slotState = entity.getSlotState(slotIdx)
                 vehicleVO = None
                 if slotState.isClosed:
                     slotCost = settings.UNIT_CLOSED_SLOT_COST
@@ -63,7 +63,7 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
                     slotCost = 0
             self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
             self.__updateTotal()
-        if pInfo.isCurrentPlayer() or functional.getPlayerInfo().isCreator():
+        if pInfo.isCurrentPlayer() or entity.isCommander():
             self._setActionButtonState()
         return
 
@@ -73,7 +73,7 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
         self.__updateTotal()
 
     def onUnitExtraChanged(self, extra):
-        self.__extra = self.unitFunctional.getExtra()
+        self.__extra = self.prbEntity.getExtra()
         self.__updateHeader()
         self.__updateTimer()
         self.__updateWarning()
@@ -96,7 +96,7 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
         self.__updateTimer()
         self.__updateWarning()
         self.__updateTotal()
-        settings = self.unitFunctional.getRosterSettings()
+        settings = self.prbEntity.getRosterSettings()
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
     def _dispose(self):
@@ -109,10 +109,9 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
         return CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_RESPAWN
 
     def _setActionButtonState(self):
-        functional = self.unitFunctional
-        pInfo = functional.getPlayerInfo()
-        isCreator = pInfo.isCreator()
-        isEnabled, _ = functional.canPlayerDoAction()
+        entity = self.prbEntity
+        isCreator = entity.isCommander()
+        result = entity.canPlayerDoAction()
         if isCreator:
             isReady = False
             stateString = '#cyberSport:respawn/fight/status/commander'
@@ -120,16 +119,16 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
             isReady = True
             stateString = '#cyberSport:respawn/fight/status/private'
         actionBtnData = {'toolTipData': '#tooltips:cyberSport/respawn/fightBtn/body',
-         'isEnabled': isEnabled,
+         'isEnabled': result.isValid,
          'label': '#cyberSport:respawn/fight/label',
          'isReady': isReady,
          'stateString': stateString}
         self.as_setActionButtonStateS(actionBtnData)
 
     def _updateRallyData(self):
-        functional = self.unitFunctional
-        if functional is not None:
-            data = vo_converters.makeStaticFormationUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
+        entity = self.prbEntity
+        if entity is not None:
+            data = vo_converters.makeStaticFormationUnitVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
             self.as_updateRallyS(data)
         return
 
@@ -172,7 +171,7 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
     def __showWarning(self, timeLeft):
         self.__warningCallback = None
         level = 'warning' if timeLeft <= self.WARNING_TIME else 'info'
-        isInQueue = self.unitFunctional is not None and self.unitFunctional.getFlags().isInQueue()
+        isInQueue = self.prbEntity is not None and self.prbEntity.getFlags().isInQueue()
         msgStatus = 'ready' if isInQueue else level
         status = makeHtmlString('html_templates:lobby/cyberSport/respawn/status', msgStatus)
         tooltip = '#tooltips:cyberSport/respawn/status/%s' % msgStatus
@@ -188,7 +187,7 @@ class CyberSportRespawnForm(CyberSportRespawnFormMeta, MyClubListener, ClubEmble
         return
 
     def __updateTotal(self):
-        functional = self.unitFunctional
-        unitStats = functional.getStats()
-        canDoAction, restriction = functional.validateLevels(stats=unitStats)
-        self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
+        entity = self.prbEntity
+        unitStats = entity.getStats()
+        result = entity.validateLevels()
+        self.as_setTotalLabelS(result.isValid, vo_converters.makeTotalLevelLabel(unitStats, result.restriction), unitStats.curTotalLevel)

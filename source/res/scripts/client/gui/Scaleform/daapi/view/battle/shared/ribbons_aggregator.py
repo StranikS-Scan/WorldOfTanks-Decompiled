@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_aggregator.py
 import Event
+import BattleReplay
 from debug_utils import LOG_UNEXPECTED
 from collections import defaultdict, OrderedDict
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class _Ribbon(object):
     __slots__ = ()
@@ -332,6 +334,7 @@ class _IgnoreRuleByKill(_Rule):
 
 
 class RibbonsAggregator(object):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(RibbonsAggregator, self).__init__()
@@ -344,8 +347,8 @@ class RibbonsAggregator(object):
 
     def start(self):
         if self.__feedbackProvider is None:
-            self.__feedbackProvider = g_sessionProvider.shared.feedback
-            self.__feedbackProvider.onPlayerFeedbackReceived += self.__onPlayerFeedbackReceived
+            self.__feedbackProvider = self.sessionProvider.shared.feedback
+            self.__feedbackProvider.onPlayerFeedbackReceived += self._onPlayerFeedbackReceived
         return
 
     def stop(self):
@@ -354,7 +357,7 @@ class RibbonsAggregator(object):
         self.onRibbonAdded.clear()
         self.onRibbonUpdated.clear()
         if self.__feedbackProvider is not None:
-            self.__feedbackProvider.onPlayerFeedbackReceived -= self.__onPlayerFeedbackReceived
+            self.__feedbackProvider.onPlayerFeedbackReceived -= self._onPlayerFeedbackReceived
             self.__feedbackProvider = None
         return
 
@@ -396,7 +399,7 @@ class RibbonsAggregator(object):
                 else:
                     self.__rules[etype] = newRule
 
-    def __onPlayerFeedbackReceived(self, events):
+    def _onPlayerFeedbackReceived(self, events):
         """
         Callback on player feedback event (see BattleFeedbackAdaptor). Aggregates player feedback
         events according to some rules and converts them to appropriate battle efficiency events
@@ -483,3 +486,18 @@ class RibbonsAggregator(object):
             if killRibbons is not None:
                 sortedRibons.append(killRibbons[-1])
         return sortedRibons
+
+
+class RibbonsAggregatorPlayer(RibbonsAggregator):
+
+    def _onPlayerFeedbackReceived(self, events):
+        if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            return
+        super(RibbonsAggregatorPlayer, self)._onPlayerFeedbackReceived(events)
+
+
+def createRibbonsAggregator():
+    if BattleReplay.g_replayCtrl.isPlaying:
+        return RibbonsAggregatorPlayer()
+    else:
+        return RibbonsAggregator()

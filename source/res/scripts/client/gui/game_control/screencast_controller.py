@@ -1,19 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/screencast_controller.py
 import BigWorld
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.game_control.controllers import Controller
 from gui.shared.utils import getPlayerDatabaseID
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IScreenCastController
 
-class ScreenCastController(Controller, IArenaVehiclesController):
+class ScreenCastController(IScreenCastController, IArenaVehiclesController):
     """Handle player database ID and set controller
     WOTD-67437
     """
     __slots__ = ('_isSet', '_isBattleCtrlInit', '_dbID')
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self, proxy):
-        super(ScreenCastController, self).__init__(proxy)
+    def __init__(self):
+        super(ScreenCastController, self).__init__()
         self._isSet = False
         self._isBattleCtrlInit = False
         self._dbID = 0
@@ -22,13 +24,13 @@ class ScreenCastController(Controller, IArenaVehiclesController):
         """Clear control
         """
         if self._isBattleCtrlInit:
-            g_sessionProvider.removeArenaCtrl(self)
+            self.sessionProvider.removeArenaCtrl(self)
 
     def onAvatarBecomePlayer(self):
         """Listener for event onAvatarBecomePlayer
         """
         if not self._isBattleCtrlInit:
-            g_sessionProvider.addArenaCtrl(self)
+            self.sessionProvider.addArenaCtrl(self)
             self._isBattleCtrlInit = True
             self.__checkDbID()
 
@@ -36,7 +38,7 @@ class ScreenCastController(Controller, IArenaVehiclesController):
         """Listener for event onAccountBecomePlayer
         """
         if self._isBattleCtrlInit:
-            g_sessionProvider.removeArenaCtrl(self)
+            self.sessionProvider.removeArenaCtrl(self)
             self._isBattleCtrlInit = False
 
     def invalidateArenaInfo(self):

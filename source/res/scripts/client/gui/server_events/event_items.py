@@ -154,6 +154,12 @@ class ServerEventAbstract(object):
     def getBonuses(self, bonusName=None):
         return []
 
+    def getParents(self):
+        return []
+
+    def getParentsName(self):
+        return []
+
     def _checkConditions(self):
         return True
 
@@ -179,7 +185,7 @@ class Quest(ServerEventAbstract):
         tmpData = copy.deepcopy(data)
         super(Quest, self).__init__(qID, data)
         self._progress = progress
-        self._children, self._parents = {}, {}
+        self._children, self._parents, self._parentsName = {}, {}, {}
         conds = dict(tmpData['conditions'])
         preBattle = dict(conds['preBattle'])
         self.accountReqs = AccountRequirements(self.getType(), preBattle['account'])
@@ -233,6 +239,12 @@ class Quest(ServerEventAbstract):
 
     def getParents(self):
         return self._parents
+
+    def setParentsName(self, parentsName):
+        self._parentsName = parentsName
+
+    def getParentsName(self):
+        return self._parentsName
 
     def getBonusCount(self, groupByKey=None, progress=None):
         progress = progress or self._progress

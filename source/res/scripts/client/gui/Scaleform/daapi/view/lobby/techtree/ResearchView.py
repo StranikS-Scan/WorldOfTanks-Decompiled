@@ -3,12 +3,13 @@
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getTreeNodeCompareData
 from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
-from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getTreeNodeCompareData
 from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from helpers import dependency
+from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket
 
 class ResearchView(LobbySubView, ResearchViewMeta):
     """
@@ -19,6 +20,8 @@ class ResearchView(LobbySubView, ResearchViewMeta):
     - refreshes data by server diff.
     """
     __background_alpha__ = 0.0
+    wallet = dependency.descriptor(IWalletController)
+    cmpBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, data):
         super(ResearchView, self).__init__()
@@ -118,6 +121,15 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         result = self._data.invalidatePrbState()
         if len(result):
             self.as_setNodesStatesS(NODE_STATE_FLAGS.VEHICLE_CAN_BE_CHANGED, result)
+
+    def invalidateDiscounts(self, data):
+        """
+        Updates discount prices of nodes
+        """
+        if self._data.invalidateDiscounts(data):
+            self._data.invalidateCredits()
+            self._data.invalidateGold()
+            self.redraw()
 
     def invalidateVehLocks(self, locks):
         """

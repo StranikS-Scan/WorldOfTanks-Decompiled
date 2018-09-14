@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanRequestsView.py
 import BigWorld
+from adisp import process
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.clans import formatters
+from gui.clans.clan_helpers import isInClanEnterCooldown
 from gui.clans.items import formatField, isValueAvailable
-from gui.clans.contexts import AcceptApplicationCtx, DeclineApplicationCtx, CreateInviteCtx
+from gui.clans.contexts import AcceptApplicationCtx, DeclineApplicationCtx, CreateInviteCtx, AccountsInfoCtx
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
 from gui.Scaleform.daapi.view.meta.ClanRequestsViewMeta import ClanRequestsViewMeta
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesWindowAbstractTabView import *
@@ -69,21 +71,10 @@ class ClanRequestsView(ClanRequestsViewMeta):
     def _onAttachedToWindow(self):
         super(ClanRequestsView, self)._onAttachedToWindow()
         self._cooldown.start()
-        self.actualRequestsPaginator.onListUpdated += self._onListUpdated
-        self.actualRequestsPaginator.onListItemsUpdated += self._onListItemsUpdated
-        self.expiredRequestsPaginator.onListUpdated += self._onListUpdated
-        self.expiredRequestsPaginator.onListItemsUpdated += self._onListItemsUpdated
-        self.processedRequestsPaginator.onListUpdated += self._onListUpdated
-        self.processedRequestsPaginator.onListItemsUpdated += self._onListItemsUpdated
         self.filterBy(self.currentFilterName)
 
     def _dispose(self):
-        self.actualRequestsPaginator.onListUpdated -= self._onListUpdated
-        self.actualRequestsPaginator.onListItemsUpdated -= self._onListItemsUpdated
-        self.expiredRequestsPaginator.onListUpdated -= self._onListUpdated
-        self.expiredRequestsPaginator.onListItemsUpdated -= self._onListItemsUpdated
-        self.processedRequestsPaginator.onListUpdated -= self._onListUpdated
-        self.processedRequestsPaginator.onListItemsUpdated -= self._onListItemsUpdated
+        self._cooldown.stop()
         self._cooldown.stop()
         self._cooldown = None
         super(ClanRequestsView, self)._dispose()
@@ -113,13 +104,26 @@ class ClanRequestsView(ClanRequestsViewMeta):
         return (('status', False),)
 
     def _getSecondSortFields(self):
-        if self.currentFilterName == CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED:
+        if self.currentFilterName == CLANS_ALIASES.INVITE_WINDOW_FILTER_PROCESSED or self.currentFilterName == CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED:
             return ('updatedAt',)
         else:
             return ('createdAt',)
 
     def _createSearchDP(self):
         return RequestDataProvider(self)
+
+    @process
+    def _onListUpdated(self, selectedID, isFullUpdate, isReqInCoolDown, result):
+        yield lambda callback: callback(None)
+        status, data = result
+        accountsInfo = tuple()
+        if status is True and data:
+            ctx = AccountsInfoCtx(tuple((item.getAccountDbID() for item in data)))
+            accountsResponse = yield self.clansCtrl.sendRequest(ctx)
+            if accountsResponse.isSuccess():
+                accountsInfo = ctx.getDataObj(accountsResponse.data)
+        self.dataProvider.setAccountsInfo(accountsInfo)
+        super(ClanRequestsView, self)._onListUpdated(selectedID, isFullUpdate, isReqInCoolDown, result)
 
     def _makeFilters(self):
         return [{'alias': CLANS_ALIASES.INVITE_WINDOW_FILTER_ACTUAL,
@@ -142,17 +146,27 @@ class RequestDataProvider(ClanInvitesAbstractDataProvider):
 
     def __init__(self, proxy):
         super(RequestDataProvider, self).__init__(proxy)
+        self.__accountsInfo = {}
+
+    def setAccountsInfo(self, acc_info):
+        self.__accountsInfo = dict(((info.getDbID(), info) for info in acc_info))
 
     def getStatusByDbID(self, dbID):
         return self.getExtraData(dbID)
+
+    def invalidateItems(self):
+        for item in self.collection:
+            if self._isDataRow(item):
+                item['actions'] = self.__buildActionsSection(item['userInfo']['dbID'], self.getStatusByDbID(item['dbID']))
 
     def _buildExtraData(self, item, prevExtra):
         return item.getStatus()
 
     def _makeVO(self, item, extraData):
+        accountDbId = item.getAccountDbID()
         return {'dbID': item.getDbID(),
          'userInfo': {'userName': item.getAccountName(),
-                      'dbID': item.getAccountDbID()},
+                      'dbID': accountDbId},
          'personalRating': formatField(getter=item.getPersonalRating, formatter=BigWorld.wg_getIntegralFormat),
          'battlesCount': formatField(getter=item.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat),
          'wins': formatField(getter=item.getBattlesPerformanceAvg, formatter=lambda value: BigWorld.wg_getNiceNumberFormat(value) + '%'),
@@ -161,21 +175,18 @@ class RequestDataProvider(ClanInvitesAbstractDataProvider):
                     'tooltip': self._makeTooltip(body=self._makeRequestTooltip(status=item.getStatus(), user=formatField(getter=item.getChangerName), date=formatField(getter=item.getUpdatedAt, formatter=formatters.formatShortDateShortTimeString)))},
          'canShowContextMenu': True,
          'messageTooltip': self._makeTooltip(body=item.getComment() if isValueAvailable(getter=item.getComment) else str()),
-         'actions': self.__buildActionsSection(item.getStatus())}
-
-    def invalidateItems(self):
-        for item in self.collection:
-            if self._isDataRow(item):
-                item['actions'] = self.__buildActionsSection(self.getStatusByDbID(item['dbID']))
+         'actions': self.__buildActionsSection(accountDbId, item.getStatus())}
 
     def _makeRequestTooltip(self, status, date, user=None):
         if status == CLAN_INVITE_STATES.ACCEPTED:
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTACCEPTED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_BYUSER)), text_styles.stats(user))
         if status == CLAN_INVITE_STATES.DECLINED or status == CLAN_INVITE_STATES.DECLINED_RESENT:
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTDECLINED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_BYUSER)), text_styles.stats(user))
-        return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTSENT)), text_styles.main(date)) if status == CLAN_INVITE_STATES.EXPIRED or status == CLAN_INVITE_STATES.EXPIRED_RESENT or status == CLAN_INVITE_STATES.ACTIVE else None
+        if status == CLAN_INVITE_STATES.EXPIRED or status == CLAN_INVITE_STATES.EXPIRED_RESENT:
+            return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTEXPIRED)), text_styles.main(date))
+        return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTSENT)), text_styles.main(date)) if status == CLAN_INVITE_STATES.ACTIVE else None
 
-    def __buildActionsSection(self, inviteStatus):
+    def __buildActionsSection(self, accountDbId, inviteStatus):
         acceptButtonEnabled = False
         declineButtonEnabled = False
         inviteButtonEnabled = False
@@ -191,9 +202,13 @@ class RequestDataProvider(ClanInvitesAbstractDataProvider):
                 acceptButtonVisible = True
                 declineButtonEnabled = self.isActionsAllowed()
                 if not clanHasFreeSpaces:
-                    acceptButtonTooltip = CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_CANTSENDINVITE_BODY
+                    acceptButtonTooltip = self._makeTooltip(body=_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_CANTSENDINVITE_BODY))
                 else:
-                    acceptButtonEnabled = self.isActionsAllowed()
+                    accInfo = self.__accountsInfo.get(accountDbId)
+                    if accInfo and isInClanEnterCooldown(accInfo.getClanCooldownTill()):
+                        acceptButtonTooltip = self._makeTooltip(body=_ms(text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_CANTACCEPTREQUESTDUETOCD_BODY)), text_styles.main(formatters.formatShortDateShortTimeString(accInfo.getClanCooldownTill())))))
+                    else:
+                        acceptButtonEnabled = self.isActionsAllowed()
         elif self.proxy.currentFilterName == CLANS_ALIASES.INVITE_WINDOW_FILTER_EXPIRED:
             if inviteStatus == CLAN_INVITE_STATES.EXPIRED:
                 inviteButtonVisible = True
@@ -218,4 +233,4 @@ class RequestDataProvider(ClanInvitesAbstractDataProvider):
          'inviteButtonVisible': inviteButtonVisible,
          'inviteButtonText': _ms(CLANS.CLANINVITESWINDOW_TABLE_INVITEBUTTON),
          'inviteButtonTooltip': self._makeTooltip(body=_ms(invBtnTooltip)),
-         'acceptButtonTooltip': self._makeTooltip(body=_ms(acceptButtonTooltip))}
+         'acceptButtonTooltip': acceptButtonTooltip}

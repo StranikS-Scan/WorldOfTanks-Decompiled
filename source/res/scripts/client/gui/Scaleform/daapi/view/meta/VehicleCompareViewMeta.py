@@ -57,3 +57,6 @@ class VehicleCompareViewMeta(View):
 
     def as_setVehiclesCountTextS(self, text):
         return self.flashObject.as_setVehiclesCountText(text) if self._isDAAPIInited() else None
+
+    def as_setAttentionVisibleS(self, value):
+        return self.flashObject.as_setAttentionVisible(value) if self._isDAAPIInited() else None

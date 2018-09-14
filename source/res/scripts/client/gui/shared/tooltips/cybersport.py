@@ -37,8 +37,8 @@ class CybersportSlotToolTipData(CybersportToolTipData):
             unitIdx = int(unitIdx)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            functional = dispatcher.getUnitFunctional()
-            return vo_converters.getUnitRosterData(functional, unitIdx, int(index))
+            entity = dispatcher.getEntity()
+            return vo_converters.getUnitRosterData(entity, unitIdx, int(index))
         else:
             super(CybersportSlotToolTipData, self).getDisplayableData(index, unitIdx)
             return
@@ -51,13 +51,13 @@ class CybersportSlotSelectedToolTipData(CybersportToolTipData):
             unitIdx = int(unitIdx)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            functional = dispatcher.getUnitFunctional()
-            _, unit = functional.getUnit(unitIdx)
+            entity = dispatcher.getEntity()
+            _, unit = entity.getUnit(unitIdx)
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:
                 vehicle = g_itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
-                return vo_converters.makeVehicleVO(vehicle, functional.getRosterSettings().getLevelsRange())
+                return vo_converters.makeVehicleVO(vehicle, entity.getRosterSettings().getLevelsRange())
         return super(CybersportSlotSelectedToolTipData, self).getDisplayableData(index, unitIdx)
 
 
@@ -68,8 +68,8 @@ class SquadSlotSelectedToolTipData(CybersportToolTipData):
             unitIdx = int(unitIdx)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            functional = dispatcher.getUnitFunctional()
-            _, unit = functional.getUnit(unitIdx)
+            entity = dispatcher.getEntity()
+            _, unit = entity.getUnit(unitIdx)
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:
@@ -102,10 +102,11 @@ class CybersportUnitLevelToolTipData(CybersportToolTipData):
         statusMsg = ms(TOOLTIPS.CYBERSPORT_UNITLEVEL_BODY_TOTALLEVEL, sumLevels=level)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            functional = dispatcher.getUnitFunctional()
-            if functional:
-                requiredLevel = functional.getRosterSettings().getMinTotalLevel()
-                canDoAction, restriction = functional.validateLevels()
+            entity = dispatcher.getEntity()
+            if entity:
+                requiredLevel = entity.getRosterSettings().getMinTotalLevel()
+                levelsValidation = entity.validateLevels()
+                canDoAction, restriction = levelsValidation.isValid, levelsValidation.restriction
                 if restriction == UNIT_RESTRICTION.MIN_TOTAL_LEVEL:
                     statusLevel = 'critical'
                     statusMsg = ms(TOOLTIPS.CYBERSPORT_UNITLEVEL_BODY_MINTOTALLEVELERROR, sumLevels=level)
@@ -113,7 +114,7 @@ class CybersportUnitLevelToolTipData(CybersportToolTipData):
                     statusLevel = 'critical'
                     statusMsg = ms(TOOLTIPS.CYBERSPORT_UNITLEVEL_BODY_MAXTOTALLEVELERROR, sumLevels=level)
                 elif restriction == UNIT_RESTRICTION.INVALID_TOTAL_LEVEL:
-                    msg, ctx = ActionButtonStateVO.getInvalidVehicleLevelsMessage(functional)
+                    msg, ctx = ActionButtonStateVO.getInvalidVehicleLevelsMessage(levelsValidation.ctx)
                     reason = i18n.makeString(msg, **ctx)
                     description = makeHtmlString('html_templates:lobby/cyberSport/unit', 'invalidLevelDescription', {'description': description,
                      'reason': reason})

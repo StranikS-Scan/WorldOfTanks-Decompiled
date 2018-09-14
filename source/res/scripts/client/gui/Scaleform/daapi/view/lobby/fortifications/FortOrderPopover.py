@@ -11,15 +11,17 @@ from gui.Scaleform.daapi.view.meta.FortOrderPopoverMeta import FortOrderPopoverM
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.server_events import events_dispatcher as quests_events
 from gui.shared import events
-from gui.server_events import g_eventsCache, events_dispatcher as quests_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, time_formatters
 from gui.shared.fortifications.context import OrderCtx
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.server_events import IEventsCache
 
 class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, ctx=None):
         super(FortOrderPopover, self).__init__()
@@ -137,11 +139,11 @@ class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
     def _populate(self):
         super(FortOrderPopover, self)._populate()
         self.startFortListening()
-        g_eventsCache.onSyncCompleted += self.onEventsSyncCompleted
+        self.eventsCache.onSyncCompleted += self.onEventsSyncCompleted
         self._prepareAndSetData()
 
     def _dispose(self):
-        g_eventsCache.onSyncCompleted -= self.onEventsSyncCompleted
+        self.eventsCache.onSyncCompleted -= self.onEventsSyncCompleted
         self.stopFortListening()
         super(FortOrderPopover, self)._dispose()
 
@@ -228,7 +230,7 @@ class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
 
     @classmethod
     def __getFortQuest(cls):
-        fortQuests = g_eventsCache.getQuests(lambda q: q.getType() == constants.EVENT_TYPE.FORT_QUEST)
+        fortQuests = cls.eventsCache.getQuests(lambda q: q.getType() == constants.EVENT_TYPE.FORT_QUEST)
         return fortQuests.values()[0] if len(fortQuests) else None
 
     @classmethod

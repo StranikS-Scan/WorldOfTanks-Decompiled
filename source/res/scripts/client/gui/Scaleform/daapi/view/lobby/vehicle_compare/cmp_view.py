@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_view.py
+from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_parameters import IVehCompareView, VehCompareBasketParamsCache
@@ -7,15 +8,18 @@ from gui.Scaleform.daapi.view.meta.VehicleCompareViewMeta import VehicleCompareV
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT
 from gui.shared import g_eventBus, events
+from gui.shared import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters.params_helper import getAllParametersTitles
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IVehicleComparisonBasket
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
@@ -23,6 +27,7 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
 
 class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     __background_alpha__ = 0.0
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
         super(VehicleCompareView, self).__init__(ctx)
@@ -39,16 +44,22 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
          'index': int(index)}), EVENT_BUS_SCOPE.LOBBY)
 
     def onRemoveAllVehicles(self):
-        getVehicleComparisonBasketCtrl().removeAllVehicles()
+        self.comparisonBasket.removeAllVehicles()
 
     def onRemoveVehicle(self, index):
-        getVehicleComparisonBasketCtrl().removeVehicleByIdx(int(index))
+        self.comparisonBasket.removeVehicleByIdx(int(index))
 
     def onCrewLevelChanged(self, index, crewLevelID):
-        getVehicleComparisonBasketCtrl().setVehicleCrew(int(index), int(crewLevelID))
+        self.comparisonBasket.setVehicleCrew(int(index), int(crewLevelID))
+        self.__updateDifferenceAttention()
 
     def onGoToPreviewClick(self, vehicleID):
-        showVehiclePreview(int(vehicleID), VIEW_ALIAS.VEHICLE_COMPARE)
+        intVehicleID = int(vehicleID)
+        vehicle = g_itemsCache.items.getItemByCD(intVehicleID)
+        if vehicle.isPreviewAllowed():
+            showVehiclePreview(intVehicleID, VIEW_ALIAS.VEHICLE_COMPARE)
+        else:
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.VEHICLECOMPARE_PREVIEWNOTALLOWED, vehicle=vehicle.userName, type=SystemMessages.SM_TYPE.Error)
 
     def onGoToHangarClick(self, vehicleID):
         selectVehicleInHangar(int(vehicleID))
@@ -57,6 +68,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         deltas = self.__paramsCache.getParametersDelta(int(index), paramID)
         self.as_setParamsDeltaS({'paramID': paramID,
          'deltas': deltas})
+        self.__updateDifferenceAttention()
 
     def onBackClick(self):
         event = g_entitiesFactories.makeLoadEvent(self.__backAlias)
@@ -70,23 +82,25 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.__vehDP.setFlashObject(self.as_getVehiclesDPS())
         self.__paramsCache = VehCompareBasketParamsCache(self.__vehDP)
         self.__updateUI()
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange += self.__updateUI
-        comparisonBasket.onSwitchChange += self.__onComparingDisabled
+        self.comparisonBasket.onChange += self.__updateUI
+        self.comparisonBasket.onSwitchChange += self.__onComparingDisabled
+        self.comparisonBasket.onParametersChange += self.__onVehicleParamsChanged
 
     def _dispose(self):
         super(VehicleCompareView, self)._dispose()
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange -= self.__updateUI
-        comparisonBasket.onSwitchChange -= self.__onComparingDisabled
+        self.comparisonBasket.onChange -= self.__updateUI
+        self.comparisonBasket.onSwitchChange -= self.__onComparingDisabled
+        self.comparisonBasket.onParametersChange -= self.__onVehicleParamsChanged
         self.__paramsCache.dispose()
         self.__paramsCache = None
         self.__vehDP.fini()
         self.__vehDP = None
+        self.comparisonBasket.writeCache()
         return
 
     def __updateUI(self, *data):
-        self.as_setVehiclesCountTextS(text_styles.main(_ms(VEH_COMPARE.VEHICLECOMPAREVIEW_TOPPANEL_VEHICLESCOUNT, count=text_styles.stats(getVehicleComparisonBasketCtrl().getVehiclesCount()))))
+        self.as_setVehiclesCountTextS(text_styles.main(_ms(VEH_COMPARE.VEHICLECOMPAREVIEW_TOPPANEL_VEHICLESCOUNT, count=text_styles.stats(self.comparisonBasket.getVehiclesCount()))))
+        self.__updateDifferenceAttention()
 
     def __onComparingDisabled(self):
         """
@@ -101,6 +115,29 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
          'backBtnLabel': VEH_COMPARE.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': backBtnDescrLabel,
          'titleText': text_styles.promoTitle(VEH_COMPARE.VEHICLECOMPAREVIEW_HEADER)}
+
+    def __updateDifferenceAttention(self):
+        """
+        Show/hide difference attention icon(WOTD-68988).
+        Two or more different tanks have difference crew or modules -> show icon, otherwise - hide
+        """
+        vehiclesCount = self.comparisonBasket.getVehiclesCount()
+        show = False
+        if vehiclesCount > 1 and len(set(self.comparisonBasket.getVehiclesCDs())) > 1:
+            show = True
+            comparisonDataIter = self.comparisonBasket.getVehiclesPropertiesIter(lambda vehCmpData: (vehCmpData.getModulesType(), vehCmpData.getCrewLevel()))
+            prevModuleType, prevCrewLevel = next(comparisonDataIter)
+            for moduleType, crewLevel in comparisonDataIter:
+                if prevModuleType != moduleType or prevCrewLevel != crewLevel:
+                    break
+                prevModuleType, prevCrewLevel = moduleType, crewLevel
+            else:
+                show = False
+
+        self.as_setAttentionVisibleS(show)
+
+    def __onVehicleParamsChanged(self, _):
+        self.__updateDifferenceAttention()
 
 
 class VehiclesDataProvider(ListDAAPIDataProvider, IVehCompareView):

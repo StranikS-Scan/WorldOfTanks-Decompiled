@@ -7,7 +7,6 @@ from gui.shared.utils import graphics
 from gui import g_guiResetters
 from account_helpers.settings_core import settings_constants
 from ConnectionManager import connectionManager
-from gui.shared.utils.graphics import g_monitorSettings
 
 class InterfaceScaleManager(object):
     onScaleChanged = Event.Event()
@@ -48,14 +47,14 @@ class InterfaceScaleManager(object):
         self.__scaleValue = self.getScaleByIndex(self.__index)
         self.onScaleChanged(self.__scaleValue)
 
-    def getScaleOptions(self):
-        options = self._getOptions()
-        currMonitor = g_monitorSettings.activeMonitor
-        if self.proxy.getSetting(settings_constants.GRAPHICS.FULLSCREEN):
-            resolutionInd = self.proxy.getSetting(settings_constants.GRAPHICS.RESOLUTION)
-            return options[1][currMonitor][resolutionInd]
-        else:
-            return options[0][currMonitor][self.proxy.getSetting(settings_constants.GRAPHICS.WINDOW_SIZE)]
+    @staticmethod
+    def getScaleOptions():
+        """
+        Return list of scales for the current resolution.
+        This list does not depend on what is set in SettingsWindow.
+        :return: list of scales, for example: ['auto', 'x1', ...]
+        """
+        return graphics.getInterfaceScalesList(BigWorld.screenSize())
 
     def getScaleByIndex(self, ind, powerOfTwo=True):
         scaleLength = len(self.getScaleOptions())
@@ -68,16 +67,3 @@ class InterfaceScaleManager(object):
             if ind == 0:
                 return scaleLength - 1
             return ind
-
-    def _getOptions(self):
-        return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.wg_getCurrentResolution(True)), self.__getScales(graphics.getSuitableVideoModes())]
-
-    def __getScales(self, modesVariety, additionalSize=None):
-        result = []
-        for i in xrange(len(modesVariety)):
-            modes = sorted(set([ (mode.width, mode.height) for mode in modesVariety[i] ]))
-            if additionalSize is not None:
-                modes.append(additionalSize[0:2])
-            result.append(map(graphics.getInterfaceScalesList, modes))
-
-        return result

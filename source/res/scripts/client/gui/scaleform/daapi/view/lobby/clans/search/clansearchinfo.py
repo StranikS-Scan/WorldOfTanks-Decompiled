@@ -5,7 +5,6 @@ import BigWorld
 from adisp import process
 from gui import SystemMessages
 from gui.clans import formatters as clans_fmts
-from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.contexts import CreateApplicationCtx
 from gui.clans.clan_helpers import ClanListener
 from gui.clans.items import formatField
@@ -49,7 +48,7 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
     def sendRequest(self):
         self.as_setWaitingVisibleS(True)
         context = CreateApplicationCtx([self.__selectedClan.getClanDbID()])
-        result = yield g_clanCtrl.sendRequest(context, allowDelay=True)
+        result = yield self.clansCtrl.sendRequest(context, allowDelay=True)
         if result.isSuccess():
             SystemMessages.pushMessage(clans_fmts.getAppSentSysMsg(self.__selectedClan.getClanName(), self.__selectedClan.getClanAbbrev()))
         self._updateSetaledState()
@@ -91,7 +90,7 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
         sendRequestBtnVisible = True
         sendRequestBtnEnabled = True
         sendRequestTooltip = None
-        reason = g_clanCtrl.getLimits().canSendApplication(_ClanAdapter(self.__selectedClan)).reason
+        reason = self.clansCtrl.getLimits().canSendApplication(_ClanAdapter(self.__selectedClan)).reason
         if reason == CLIENT_CLAN_RESTRICTIONS.NO_RESTRICTIONS:
             pass
         elif reason == CLIENT_CLAN_RESTRICTIONS.OWN_CLAN:

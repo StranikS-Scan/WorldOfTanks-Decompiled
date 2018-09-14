@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesSortieListView.py
 import BigWorld
+from adisp import process
 from constants import PREBATTLE_TYPE
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
@@ -11,13 +12,12 @@ from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.battle_availability import getForbiddenPeriods
-from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import int2roman
 from helpers.time_utils import ONE_HOUR
-from messenger.proto.events import g_messengerEvents
 from messenger.m_constants import USER_ACTION_ID
+from messenger.proto.events import g_messengerEvents
 from predefined_hosts import g_preDefinedHosts
 
 def formatGuiTimeLimitStr(startHour, endHour):
@@ -29,12 +29,19 @@ def formatGuiTimeLimitStr(startHour, endHour):
      'endTime': _formatHour(endHour)}
 
 
-class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
+def _createTableBtnInfo(label, btnId, buttonWidth, sortOrder, toolTip):
+    return {'label': label,
+     'id': btnId,
+     'buttonWidth': buttonWidth,
+     'sortOrder': sortOrder,
+     'toolTip': toolTip}
+
+
+class FortBattlesSortieListView(FortListMeta, FortListener):
 
     def __init__(self):
         super(FortBattlesSortieListView, self).__init__()
         self._divisionsDP = None
-        self._isBackButtonClicked = False
         self.__clientIdx = None
         self.__sortiesCurfewCtrl = None
         return
@@ -47,7 +54,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
          USER_ACTION_ID.TMP_IGNORED_REMOVED,
          USER_ACTION_ID.TMP_IGNORED_ADDED,
          USER_ACTION_ID.SUBSCRIPTION_CHANGED):
-            unitMgrID = self.unitFunctional.getID()
+            unitMgrID = self.prbEntity.getID()
             if unitMgrID <= 0:
                 self.__updateSearchDP(self.fortProvider.getState())
 
@@ -59,13 +66,10 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
             self.as_selectByIndexS(-1)
             self._searchDP.setSelectedID(None)
             self.as_setDetailsS(None)
-            cache = self.fortCtrl.getSortiesCache()
+            cache = self.prbEntity.getBrowser()
             if cache:
                 cache.clearSelectedID()
         return
-
-    def onUnitFunctionalInited(self):
-        self.unitFunctional.setEntityType(PREBATTLE_TYPE.SORTIE)
 
     def onSortieChanged(self, cache, item):
         prevIdx = self._searchDP.getSelectedIdx()
@@ -101,22 +105,16 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
         self.as_selectByIndexS(-1)
         self._searchDP.setSelectedID(None)
         self.as_setDetailsS(None)
-        cache = self.fortCtrl.getSortiesCache()
+        cache = self.prbEntity.getBrowser()
         if cache:
             cache.clearSelectedID()
             if cache.setRosterTypeID(rosterTypeID):
                 self._searchDP.rebuildList(cache)
         return
 
-    def canBeClosed(self, callback):
-        self._isBackButtonClicked = True
-        super(FortBattlesSortieListView, self).canBeClosed(callback)
-
     def _populate(self):
         super(FortBattlesSortieListView, self)._populate()
         self.startFortListening()
-        if self.unitFunctional.getEntityType() != PREBATTLE_TYPE.NONE:
-            self.unitFunctional.setEntityType(PREBATTLE_TYPE.SORTIE)
         self._divisionsDP = sorties_dps.DivisionsDataProvider()
         self._divisionsDP.init(self.as_getDivisionsDPS())
         self.__updateSearchDP(self.fortProvider.getState())
@@ -126,18 +124,11 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
         self._initListColumns()
 
     def _initListColumns(self):
-        self.as_setTableHeaderS({'tableHeader': [self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_NAME, 'creatorName', 141, 0, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN),
-                         self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_DESCR, 'description', 140, 1, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_DESCR),
-                         self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_DIVISION, 'commandSize', 115, 2, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN),
-                         self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_MEMBERSCOUNT, 'playersCount', 107, 3, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN),
-                         self._createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_STATUS, 'isInBattle', 74, 4, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_STATUS)]})
-
-    def _createTableBtnInfo(self, label, btnId, buttonWidth, sortOrder, toolTip):
-        return {'label': label,
-         'id': btnId,
-         'buttonWidth': buttonWidth,
-         'sortOrder': sortOrder,
-         'toolTip': toolTip}
+        self.as_setTableHeaderS({'tableHeader': [_createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_NAME, 'creatorName', 141, 0, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTNAMEBTN),
+                         _createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_DESCR, 'description', 140, 1, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_DESCR),
+                         _createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_DIVISION, 'commandSize', 115, 2, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTDIVISIONBTN),
+                         _createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_MEMBERSCOUNT, 'playersCount', 107, 3, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_SORTSQUADBTN),
+                         _createTableBtnInfo(FORTIFICATIONS.SORTIE_LISTVIEW_LISTCOLUMNS_STATUS, 'isInBattle', 74, 4, TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_STATUS)]})
 
     def _dispose(self):
         self.stopFortListening()
@@ -145,9 +136,6 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
         if self._divisionsDP:
             self._divisionsDP.fini()
             self._divisionsDP = None
-        if self._isBackButtonClicked:
-            self.fortCtrl.removeSortiesCache()
-            self._isBackButtonClicked = False
         g_messengerEvents.users.onUserActionReceived -= self.onContactsUpdated
         if self.__sortiesCurfewCtrl:
             self.__sortiesCurfewCtrl.onStatusChanged -= self.__onSortieStatusChanged
@@ -166,7 +154,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
             return
         else:
             self.__clientIdx = index
-            cache = self.fortCtrl.getSortiesCache()
+            cache = self.prbEntity.getBrowser()
             if cache and not cache.isRequestInProcess:
                 if not cache.setSelectedID(vo['sortieID']):
                     self.as_selectByIndexS(-1)
@@ -183,7 +171,7 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
             self._searchDP.clear()
             self._searchDP.refresh()
             return
-        cache = self.fortCtrl.getSortiesCache()
+        cache = self.prbEntity.getBrowser()
         if cache:
             self.as_setSelectedDivisionS(self._divisionsDP.getIndexByTypeID(cache.getRosterTypeID()))
             self._searchDP.rebuildList(cache)

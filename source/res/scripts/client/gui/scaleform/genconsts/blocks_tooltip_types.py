@@ -23,6 +23,7 @@ class BLOCKS_TOOLTIP_TYPES(object):
     TOOLTIP_BUILDUP_BLOCK_NORMAL_VEHICLE_BG_LINKAGE = 'TooltipBuildUpBlockNormalVehicleBgUI'
     TOOLTIP_VEHICLE_HEADER_LINKAGE = 'VehicleHeaderBlockUI'
     TOOLTIP_IMAGE_LIST_BLOCK_LINKAGE = 'ImageListBlockUI'
+    TOOLTIP_XMAS_EVENT_PROGRESS_BLOCK_LINKAGE = 'XmasEventProgressBlockUI'
     ALIGN_LEFT = 'left'
     ALIGN_RIGHT = 'right'
     ALIGN_CENTER = 'center'

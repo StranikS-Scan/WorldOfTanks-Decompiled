@@ -11,4 +11,7 @@ class ProfileTechniqueMeta(ProfileSection):
     """
 
     def as_responseVehicleDossierS(self, data):
+        """
+        :param data: Represented by ProfileVehicleDossierVO (AS)
+        """
         return self.flashObject.as_responseVehicleDossier(data) if self._isDAAPIInited() else None

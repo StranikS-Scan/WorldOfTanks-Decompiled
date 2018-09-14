@@ -14,4 +14,7 @@ class ContactNoteManageViewMeta(BaseManageContactViewMeta):
         self._printOverrideError('sendData')
 
     def as_setUserPropsS(self, value):
+        """
+        :param value: Represented by ContactUserPropVO (AS)
+        """
         return self.flashObject.as_setUserProps(value) if self._isDAAPIInited() else None

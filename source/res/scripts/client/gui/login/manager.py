@@ -1,23 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/Manager.py
-import time
 import pickle
+import time
 import BigWorld
-import constants
 import Settings
-from debug_utils import LOG_DEBUG
-from gui import SystemMessages, makeHtmlString, GUI_SETTINGS
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.LobbyContext import g_lobbyContext
+import constants
 from ConnectionManager import connectionManager, CONNECTION_METHOD
 from Preferences import Preferences
 from Servers import Servers, DevelopmentServers
+from debug_utils import LOG_DEBUG
+from gui import SystemMessages, makeHtmlString, GUI_SETTINGS
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_MINUTE
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_ENABLED, AUTO_LOGIN_QUERY_URL
+from skeletons.gui.login_manager import ILoginManager
 _PERIPHERY_DEFAULT_LIFETIME = 15 * ONE_MINUTE
 
-class Manager(object):
+class Manager(ILoginManager):
 
     def __init__(self):
         self._preferences = None

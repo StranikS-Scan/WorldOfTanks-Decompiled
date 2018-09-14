@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanPersonalInvitesView.py
 import BigWorld
 from gui.clans import formatters
-from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.clan_helpers import ClanPersonalInvitesPaginator, ClanListener
 from gui.clans.items import ClanCommonData, formatField, isValueAvailable
 from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, CLAN_INVITE_STATES
@@ -15,14 +14,16 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import CooldownHelper
 from gui.shared.utils import getPlayerDatabaseID
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.html import escape
+from skeletons.gui.clans import IClanController
 
 class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
 
     def __init__(self):
         super(ClanPersonalInvitesView, self).__init__()
-        self._paginator = ClanPersonalInvitesPaginator(g_clanCtrl, getPlayerDatabaseID(), [CLAN_INVITE_STATES.ACTIVE])
+        self._paginator = ClanPersonalInvitesPaginator(self.clansCtrl, getPlayerDatabaseID(), [CLAN_INVITE_STATES.ACTIVE])
         self._cooldown = CooldownHelper([CLAN_REQUESTED_DATA_TYPE.ACCEPT_APPLICATION,
          CLAN_REQUESTED_DATA_TYPE.ACCEPT_INVITE,
          CLAN_REQUESTED_DATA_TYPE.DECLINE_APPLICATION,
@@ -99,7 +100,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
         self._cooldown.stop()
         self._cooldown = None
         self.stopClanListening()
-        g_clanCtrl.clearClanCommonDataCache()
+        self.clansCtrl.clearClanCommonDataCache()
         super(ClanPersonalInvitesView, self)._dispose()
         return
 
@@ -115,7 +116,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
                 self._showDummy(CLANS.CLANPERSONALINVITESWINDOW_NOINVITES)
                 self.dataProvider.rebuildList(None, False)
             else:
-                g_clanCtrl.updateClanCommonDataCache([ ClanCommonData.fromClanPersonalInviteWrapper(item) for item in data ])
+                self.clansCtrl.updateClanCommonDataCache([ ClanCommonData.fromClanPersonalInviteWrapper(item) for item in data ])
                 self.dataProvider.rebuildList(data, self._paginator.canMoveRight())
                 self.as_hideDummyS()
         else:
@@ -160,6 +161,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
 
 
 class PersonalInvitesDataProvider(ClanInvitesAbstractDataProvider):
+    clansCtrl = dependency.descriptor(IClanController)
 
     def __init__(self, proxy):
         super(PersonalInvitesDataProvider, self).__init__(proxy)
@@ -271,7 +273,11 @@ class PersonalInvitesDataProvider(ClanInvitesAbstractDataProvider):
             elif not clanHasFreeSpaces:
                 acceptButtonTooltip = CLANS.CLANINVITESWINDOW_TOOLTIPS_TABLE_CANTSENDINVITE_BODY
             else:
-                acceptButtonEnabled = self.isActionsAllowed()
+                accProfile = self.clansCtrl.getAccountProfile()
+                if accProfile.isInClanEnterCooldown():
+                    acceptButtonTooltip = _ms(text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_CANTACCEPTREQUESTDUETOCD_BODY)), text_styles.main(formatters.formatShortDateShortTimeString(accProfile.getClanCooldownTill()))))
+                else:
+                    acceptButtonEnabled = self.isActionsAllowed()
         return {'acceptButtonEnabled': acceptButtonEnabled,
          'declineButtonEnabled': declineButtonEnabled,
          'acceptButtonVisible': acceptButtonVisible,

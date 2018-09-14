@@ -112,7 +112,7 @@ class FortDemountBuildingWindow(FortDemountBuildingWindowMeta, FortViewHelper):
         result = yield self.fortProvider.sendRequest(BuildingCtx(buildingTypeID, isAdd=False, waitingID='fort/building/delete'))
         if result:
             g_fortSoundController.playDeleteBuilding()
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEMOUNTBUILDING, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEMOUNTBUILDING, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
         self.destroy()
 
     def __updateInputChecker(self):

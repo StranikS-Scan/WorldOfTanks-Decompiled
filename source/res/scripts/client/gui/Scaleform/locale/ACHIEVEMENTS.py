@@ -555,9 +555,6 @@ class ACHIEVEMENTS(object):
     BANNERMAN = '#achievements:bannerman'
     BANNERMAN_DESCR = '#achievements:bannerman_descr'
     BANNERMAN_CONDITION = '#achievements:bannerman_condition'
-    SAURONEYE = '#achievements:sauronEye'
-    SAURONEYE_DESCR = '#achievements:sauronEye_descr'
-    SAURONEYE_CONDITION = '#achievements:sauronEye_condition'
     MARKIPROTECTOR = '#achievements:markIProtector'
     MARKIPROTECTOR_DESCR = '#achievements:markIProtector_descr'
     MARKIPROTECTOR_CONDITION = '#achievements:markIProtector_condition'
@@ -570,6 +567,18 @@ class ACHIEVEMENTS(object):
     MARKIREPAIRER = '#achievements:markIRepairer'
     MARKIREPAIRER_DESCR = '#achievements:markIRepairer_descr'
     MARKIREPAIRER_CONDITION = '#achievements:markIRepairer_condition'
+    XMASTREEBRONZE = '#achievements:xmasTreeBronze'
+    XMASTREEBRONZE_DESCR = '#achievements:xmasTreeBronze_descr'
+    XMASTREEBRONZE_CONDITION = '#achievements:xmasTreeBronze_condition'
+    XMASTREEBRONZE_NOTIFICATION = '#achievements:xmasTreeBronze_notification'
+    XMASTREESILVER = '#achievements:xmasTreeSilver'
+    XMASTREESILVER_DESCR = '#achievements:xmasTreeSilver_descr'
+    XMASTREESILVER_CONDITION = '#achievements:xmasTreeSilver_condition'
+    XMASTREESILVER_NOTIFICATION = '#achievements:xmasTreeSilver_notification'
+    XMASTREEGOLD = '#achievements:xmasTreeGold'
+    XMASTREEGOLD_DESCR = '#achievements:xmasTreeGold_descr'
+    XMASTREEGOLD_CONDITION = '#achievements:xmasTreeGold_condition'
+    XMASTREEGOLD_NOTIFICATION = '#achievements:xmasTreeGold_notification'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -1183,9 +1192,6 @@ class ACHIEVEMENTS(object):
      BANNERMAN,
      BANNERMAN_DESCR,
      BANNERMAN_CONDITION,
-     SAURONEYE,
-     SAURONEYE_DESCR,
-     SAURONEYE_CONDITION,
      MARKIPROTECTOR,
      MARKIPROTECTOR_DESCR,
      MARKIPROTECTOR_CONDITION,
@@ -1198,6 +1204,18 @@ class ACHIEVEMENTS(object):
      MARKIREPAIRER,
      MARKIREPAIRER_DESCR,
      MARKIREPAIRER_CONDITION,
+     XMASTREEBRONZE,
+     XMASTREEBRONZE_DESCR,
+     XMASTREEBRONZE_CONDITION,
+     XMASTREEBRONZE_NOTIFICATION,
+     XMASTREESILVER,
+     XMASTREESILVER_DESCR,
+     XMASTREESILVER_CONDITION,
+     XMASTREESILVER_NOTIFICATION,
+     XMASTREEGOLD,
+     XMASTREEGOLD_DESCR,
+     XMASTREEGOLD_CONDITION,
+     XMASTREEGOLD_NOTIFICATION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,

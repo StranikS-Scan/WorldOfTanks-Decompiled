@@ -2,10 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderSelectPopover.py
 import constants
 from adisp import process
-from debug_utils import LOG_DEBUG
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers.i18n import makeString as _ms
-from gui.prb_control.prb_helpers import UnitListener
+from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.shared.fortifications.context import ActivateConsumableCtx, ReturnConsumableCtx
 from gui.Scaleform.daapi.view.meta.FortOrderSelectPopoverMeta import FortOrderSelectPopoverMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -14,7 +13,7 @@ from gui.shared.formatters import icons, text_styles
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 
-class FortOrderSelectPopover(FortOrderSelectPopoverMeta, FortViewHelper, UnitListener):
+class FortOrderSelectPopover(FortOrderSelectPopoverMeta, FortViewHelper, IUnitListener):
 
     def __init__(self, ctx=None):
         super(FortOrderSelectPopover, self).__init__()
@@ -57,7 +56,7 @@ class FortOrderSelectPopover(FortOrderSelectPopoverMeta, FortViewHelper, UnitLis
 
     def __updateData(self):
         fort = self.fortCtrl.getFort()
-        extra = self.unitFunctional.getExtra()
+        extra = self.prbEntity.getExtra()
         result = []
         activeConsumes = dict(((otID, slotIdx) for slotIdx, (otID, level) in extra.getConsumables().iteritems()))
         for orderTypeID in constants.FORT_ORDER_TYPE.CONSUMABLES:

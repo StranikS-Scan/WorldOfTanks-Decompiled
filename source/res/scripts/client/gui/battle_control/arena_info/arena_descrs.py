@@ -172,7 +172,8 @@ class ArenaWithBasesDescription(DefaultArenaGuiDescription):
 
     def isInvitationEnabled(self):
         guiVisitor = self._visitor.gui
-        return not BattleReplay.g_replayCtrl.isPlaying and (guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
+        replayCtrl = BattleReplay.g_replayCtrl
+        return (not replayCtrl.isPlaying or replayCtrl.isBattleSimulation) and (guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
 
     def isQuestEnabled(self):
         guiVisitor = self._visitor.gui

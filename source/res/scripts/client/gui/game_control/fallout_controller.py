@@ -2,39 +2,41 @@
 # Embedded file name: scripts/client/gui/game_control/fallout_controller.py
 import weakref
 import Event
-from UnitBase import INV_ID_CLEAR_VEHICLE, FALLOUT_QUEUE_TYPE_TO_ROSTER, UNIT_OP
 import account_helpers
+from UnitBase import INV_ID_CLEAR_VEHICLE, FALLOUT_QUEUE_TYPE_TO_ROSTER, UNIT_OP
 from account_helpers.AccountSettings import FALLOUT_VEHICLES
-from account_helpers.settings_core import g_settingsCore
 from adisp import process
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.FALLOUT import FALLOUT
-from gui.game_control.controllers import Controller
-from gui.prb_control.context import unit_ctx
-from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.prb_helpers import GlobalListener
-from gui.prb_control.storage import prequeue_storage_getter
-from gui.server_events import g_eventsCache
+from gui.prb_control.entities.base.ctx import LeavePrbAction
+from gui.prb_control.entities.base.unit.ctx import SetVehiclesUnitCtx
+from gui.prb_control.entities.fallout.squad.ctx import ChangeFalloutQueueTypeCtx
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.storages import prequeue_storage_getter
 from gui.shared import g_itemsCache
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import Vehicle
-from helpers import int2roman, i18n
+from helpers import int2roman, i18n, dependency
 from shared_utils import findFirst
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IFalloutController
+from skeletons.gui.server_events import IEventsCache
 
-class _BaseDataStorage(object):
+class _BaseDataStorage(IGlobalListener):
 
     def __init__(self, proxy):
         super(_BaseDataStorage, self).__init__()
         self._proxy = weakref.proxy(proxy)
 
     def init(self):
+        self.startGlobalListening()
         self._proxy.onSettingsChanged()
 
     def fini(self):
-        pass
+        self.stopGlobalListening()
 
     def isEnabled(self):
         return False
@@ -77,6 +79,7 @@ class _BaseDataStorage(object):
 
 
 class _UserDataStorage(_BaseDataStorage):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     @prequeue_storage_getter(QUEUE_TYPE.FALLOUT)
     def falloutStorage(self):
@@ -85,11 +88,12 @@ class _UserDataStorage(_BaseDataStorage):
     def init(self):
         super(_UserDataStorage, self).init()
         g_itemsCache.onSyncCompleted += self.__onItemsResync
-        g_settingsCore.onSettingsChanged += self.__onSettingsResync
+        self.settingsCore.onSettingsChanged += self.__onSettingsResync
 
     def fini(self):
         g_itemsCache.onSyncCompleted -= self.__onItemsResync
-        g_settingsCore.onSettingsChanged -= self.__onSettingsResync
+        self.settingsCore.onSettingsChanged -= self.__onSettingsResync
+        super(_UserDataStorage, self).fini()
 
     def isEnabled(self):
         return self.falloutStorage.isEnabled()
@@ -147,8 +151,8 @@ class _UserDataStorage(_BaseDataStorage):
     def __onItemsResync(self, updateReason, _):
         if updateReason in (CACHE_SYNC_REASON.INVENTORY_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
             self.falloutStorage.validateSelectedVehicles()
-        if not (self.isEnabled() and self._proxy.isAvailable()):
-            g_eventDispatcher.removeFalloutFromCarousel()
+        if not (self.isEnabled() and self._proxy.isAvailable()) and self.prbDispatcher.getFunctionalState().isInFallout():
+            self.__leave()
 
     def __onSettingsResync(self, diff):
         if {'falloutBattleType', 'isEnabled'} & set(diff.keys()):
@@ -160,8 +164,12 @@ class _UserDataStorage(_BaseDataStorage):
             self.falloutStorage.validateSelectedVehicles()
             self._proxy.onVehiclesChanged()
 
+    @process
+    def __leave(self):
+        yield self.prbDispatcher.doLeaveAction(LeavePrbAction())
 
-class _SquadDataStorage(_BaseDataStorage, GlobalListener):
+
+class _SquadDataStorage(_BaseDataStorage):
 
     def __init__(self, proxy):
         super(_SquadDataStorage, self).__init__(proxy)
@@ -169,21 +177,19 @@ class _SquadDataStorage(_BaseDataStorage, GlobalListener):
         self.__battleType = QUEUE_TYPE.UNKNOWN
 
     def init(self):
-        rosterType = self.unitFunctional.getRosterType()
+        rosterType = self.prbEntity.getRosterType()
         self.__battleType, _ = findFirst(lambda (k, v): v == rosterType, FALLOUT_QUEUE_TYPE_TO_ROSTER.iteritems(), (QUEUE_TYPE.UNKNOWN, None))
         self.__updateVehicles()
         self.startGlobalListening()
         g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesUpdated})
-        if self.isEnabled():
-            g_eventDispatcher.addFalloutToCarousel()
         super(_SquadDataStorage, self).init()
         return
 
     def fini(self):
-        self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
         self.__vehicles = []
         self.__battleType = QUEUE_TYPE.UNKNOWN
+        super(_SquadDataStorage, self).fini()
 
     def isEnabled(self):
         return self.getBattleType() in QUEUE_TYPE.FALLOUT
@@ -231,11 +237,11 @@ class _SquadDataStorage(_BaseDataStorage, GlobalListener):
         return list(self.__vehicles)
 
     def canChangeBattleType(self):
-        return self.unitFunctional.isCreator()
+        return self.prbEntity.isCommander()
 
     def onUnitSettingChanged(self, opCode, value):
         if opCode == UNIT_OP.CHANGE_FALLOUT_TYPE:
-            rosterType = self.unitFunctional.getRosterType()
+            rosterType = self.prbEntity.getRosterType()
             self.__battleType, _ = findFirst(lambda (k, v): v == rosterType, FALLOUT_QUEUE_TYPE_TO_ROSTER.iteritems(), (QUEUE_TYPE.UNKNOWN, None))
             self.__updateVehicles()
             self._proxy.onSettingsChanged()
@@ -252,17 +258,17 @@ class _SquadDataStorage(_BaseDataStorage, GlobalListener):
 
     @process
     def __setVehicles(self, vehsList):
-        yield self.prbDispatcher.sendUnitRequest(unit_ctx.SetVehiclesCtx(vehsList, 'prebattle/change_settings'))
+        yield self.prbDispatcher.sendPrbRequest(SetVehiclesUnitCtx(vehsList, 'prebattle/change_settings'))
 
     @process
     def __setFalloutType(self, eventType):
-        yield self.prbDispatcher.sendUnitRequest(unit_ctx.ChangeFalloutQueueTypeCtx(eventType, 'prebattle/change_settings'))
+        yield self.prbDispatcher.sendPrbRequest(ChangeFalloutQueueTypeCtx(eventType, 'prebattle/change_settings'))
 
     def __updateVehicles(self):
-        maxVehs = self.unitFunctional.getRoster().MAX_VEHICLES
+        maxVehs = self.prbEntity.getRoster().MAX_VEHICLES
         valid = [INV_ID_CLEAR_VEHICLE] * maxVehs
         if self._proxy.getConfig().hasRequiredVehicles():
-            slots = self.unitFunctional.getVehiclesInfo()
+            slots = self.prbEntity.getVehiclesInfo()
             vehicles = map(lambda vInfo: vInfo.vehInvID, slots)
             vehGetter = g_itemsCache.items.getVehicle
             for idx, invID in enumerate(vehicles[:maxVehs]):
@@ -281,10 +287,11 @@ class _SquadDataStorage(_BaseDataStorage, GlobalListener):
             self.__setVehicles(self.__vehicles)
 
 
-class FalloutController(Controller, GlobalListener):
+class FalloutController(IFalloutController, IGlobalListener):
+    eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, proxy):
-        super(FalloutController, self).__init__(proxy)
+    def __init__(self):
+        super(FalloutController, self).__init__()
         self.__evtManager = Event.EventManager()
         self.onSettingsChanged = Event.Event(self.__evtManager)
         self.onAutomatchChanged = Event.Event(self.__evtManager)
@@ -302,7 +309,7 @@ class FalloutController(Controller, GlobalListener):
 
     def onLobbyInited(self, event):
         self.startGlobalListening()
-        unitFunc = self.unitFunctional
+        unitFunc = self.prbEntity
         if unitFunc is not None and unitFunc.getEntityType() == PREBATTLE_TYPE.FALLOUT:
             self.__dataStorage = _SquadDataStorage(self)
         else:
@@ -321,7 +328,7 @@ class FalloutController(Controller, GlobalListener):
         self.stopGlobalListening()
 
     def isAvailable(self):
-        return g_eventsCache.isFalloutEnabled()
+        return self.eventsCache.isFalloutEnabled()
 
     def isEnabled(self):
         return self.isAvailable() and self.__dataStorage.isEnabled()
@@ -351,7 +358,7 @@ class FalloutController(Controller, GlobalListener):
         self.__dataStorage.moveSelectedVehicle(vehInvID)
 
     def getConfig(self):
-        return g_eventsCache.getFalloutConfig(self.getBattleType())
+        return self.eventsCache.getFalloutConfig(self.getBattleType())
 
     def getSelectedSlots(self):
         return self.__dataStorage.getSelectedSlots()
@@ -405,26 +412,22 @@ class FalloutController(Controller, GlobalListener):
     def setAutomatch(self, isAutomatch):
         self.__dataStorage.setAutomatch(isAutomatch)
 
-    def onUnitFunctionalInited(self):
-        unitFunc = self.unitFunctional
-        if unitFunc is not None and unitFunc.getEntityType() == PREBATTLE_TYPE.FALLOUT:
+    def onPrbEntitySwitched(self):
+        entity = self.prbEntity
+        funcState = self.prbDispatcher.getFunctionalState()
+        if funcState.isInFallout():
+            if entity.getEntityType() == PREBATTLE_TYPE.FALLOUT:
+                self.__dataStorage.fini()
+                self.__dataStorage = _SquadDataStorage(self)
+                self.__dataStorage.init()
+            else:
+                self.__dataStorage.fini()
+                self.__dataStorage = _UserDataStorage(self)
+                self.__dataStorage.init()
+        else:
             self.__dataStorage.fini()
-            self.__dataStorage = _SquadDataStorage(self)
+            self.__dataStorage = _BaseDataStorage(self)
             self.__dataStorage.init()
-        return
-
-    def onUnitFunctionalFinished(self):
-        self.__dataStorage.fini()
-        self.__dataStorage = _UserDataStorage(self)
-        self.__dataStorage.init()
-
-    def onUnitRejoin(self):
-        unitFunc = self.unitFunctional
-        if unitFunc is not None and unitFunc.getEntityType() == PREBATTLE_TYPE.FALLOUT:
-            self.__dataStorage.fini()
-            self.__dataStorage = _SquadDataStorage(self)
-            self.__dataStorage.init()
-        return
 
     def isSuitableVeh(self, vehicle):
         return not (self.isSelected() and not vehicle.isFalloutAvailable) and vehicle.getCustomState() not in Vehicle.VEHICLE_STATE.CUSTOM

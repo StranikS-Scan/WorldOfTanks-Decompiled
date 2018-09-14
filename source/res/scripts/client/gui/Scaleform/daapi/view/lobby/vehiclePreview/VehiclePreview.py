@@ -14,24 +14,24 @@ from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.customization.shared import getBonusIcon42x42
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import event_dispatcher
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.economics import getGUIPrice
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
-from gui.shared.gui_items.Vehicle import getLobbyDescription
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IVehicleComparisonBasket
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
 TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
@@ -46,6 +46,7 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
 
 class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
         super(VehiclePreview, self).__init__(ctx)
@@ -64,9 +65,8 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         g_currentPreviewVehicle.onVehicleUnlocked += self.__updateBtnState
         g_currentPreviewVehicle.onVehicleInventoryChanged += self.__onInventoryChanged
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange += self.__onCompareBasketChanged
-        comparisonBasket.onSwitchChange += self.__updateHeaderData
+        self.comparisonBasket.onChange += self.__onCompareBasketChanged
+        self.comparisonBasket.onSwitchChange += self.__updateHeaderData
         if g_currentPreviewVehicle.isPresent():
             self.__updateHeaderData()
             self.__fullUpdate()
@@ -80,9 +80,8 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         g_currentPreviewVehicle.onVehicleUnlocked -= self.__updateBtnState
         g_currentPreviewVehicle.onVehicleInventoryChanged -= self.__onInventoryChanged
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange -= self.__onCompareBasketChanged
-        comparisonBasket.onSwitchChange -= self.__updateHeaderData
+        self.comparisonBasket.onChange -= self.__onCompareBasketChanged
+        self.comparisonBasket.onSwitchChange -= self.__updateHeaderData
         g_currentPreviewVehicle.selectNoVehicle()
 
     def closeView(self):
@@ -109,7 +108,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         """
         Add to compare button click handler
         """
-        getVehicleComparisonBasketCtrl().addVehicle(self.__vehicleCD)
+        self.comparisonBasket.addVehicle(self.__vehicleCD, {'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
 
     def __fullUpdate(self):
         selectedTabInd = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX)
@@ -131,9 +130,8 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         return data
 
     def __getVehCompareData(self, vehicle):
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        state, tooltip = resolveStateTooltip(comparisonBasket, vehicle, enabledTooltip=None, fullTooltip=VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
-        return {'modeAvailable': comparisonBasket.isEnabled(),
+        state, tooltip = resolveStateTooltip(self.comparisonBasket, vehicle, enabledTooltip=None, fullTooltip=VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
+        return {'modeAvailable': self.comparisonBasket.isEnabled(),
          'btnEnabled': state,
          'btnTooltip': tooltip,
          'label': text_styles.main(VEH_COMPARE.VEHPREVIEW_COMPAREINFO_ADDTOCOMPARE)}

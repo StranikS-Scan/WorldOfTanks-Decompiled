@@ -5,18 +5,18 @@ from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.game_control import getFalloutCtrl
-from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE_NAMES
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import g_itemsCache
-from gui.shared.events import LoadViewEvent
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from helpers import i18n
 from gui.shared import event_dispatcher as shared_events
+from gui.shared import g_itemsCache
+from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.events import LoadViewEvent
+from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE_NAMES
+from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IFalloutController
 
 class AmmunitionPanel(AmmunitionPanelMeta):
     __FITTING_SLOTS = (GUI_ITEM_TYPE_NAMES[2],
@@ -28,6 +28,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
      GUI_ITEM_TYPE_NAMES[11])
     __ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[9], GUI_ITEM_TYPE_NAMES[11])
     OPTIONAL_DEVICE_SLOTS_COUNT = 3
+    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def update(self):
         self._update()
@@ -53,16 +54,13 @@ class AmmunitionPanel(AmmunitionPanelMeta):
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
-        self.__falloutCtrl = getFalloutCtrl()
-        self.__falloutCtrl.onSettingsChanged += self._updateFalloutSettings
+        self.falloutCtrl.onSettingsChanged += self._updateFalloutSettings
         self.update()
 
     def _dispose(self):
-        self.__falloutCtrl.onSettingsChanged -= self._updateFalloutSettings
-        self.__falloutCtrl = None
+        self.falloutCtrl.onSettingsChanged -= self._updateFalloutSettings
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(AmmunitionPanel, self)._dispose()
-        return
 
     def _updateFalloutSettings(self):
         self._update()

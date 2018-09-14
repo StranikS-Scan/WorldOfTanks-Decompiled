@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/MapCaseMode.py
 from ArtilleryEquipment import ArtilleryEquipment
-from AvatarInputHandler.ArtyHitMarker import ArtyHitMarker
+from AvatarInputHandler import gun_marker_ctrl
+from AvatarInputHandler.aih_constants import GUN_MARKER_TYPE
 from helpers.CallbackDelayer import CallbackDelayer
 from AvatarInputHandler.DynamicCameras import StrategicCamera
 import BattleReplay
@@ -12,7 +13,7 @@ import Keys
 import Math
 from Math import Vector2, Vector3
 import weakref
-from AvatarInputHandler.control_modes import IControlMode, dumpStateEmpty
+from AvatarInputHandler.control_modes import IControlMode
 from AvatarInputHandler import AimingSystems
 import SoundGroups
 from constants import SERVER_TICK_LENGTH
@@ -102,46 +103,29 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
         if len(myArtyEquipment) > 1:
             LOG_ERROR('This map has multiple (%d) UDO of ArtilleryEquipment for team %d' % (len(myArtyEquipment), myTeam))
         myArtyEquipment = myArtyEquipment[0]
-        self.__artyEquipmentUDO = myArtyEquipment
-        self.__marker = ArtyHitMarker(self.__getArtyShotInfo, self.__updateMarkerComponent, self.__getDesiredBombardmentState)
+        self.__marker = gun_marker_ctrl.createArtyHit(myArtyEquipment, self.equipment.areaRadius)
+        self.__marker.setPosition(position)
         self.__marker.create()
-        self.__marker.enable(None)
-        self.__marker.setReloading(0, isReloading=False)
-        self.__marker.setupShotParams({'maxDistance': 1000.0,
-         'gravity': self.__artyEquipmentUDO.gravity})
-        self.__marker.setGUIVisible(True)
+        self.__marker.enable()
         self.processHover(position)
         self.writeStateToReplay()
-        return
 
     def destroy(self):
         _DefaultStrikeSelector.destroy(self)
         _VehiclesSelector.destroy(self)
-        self.__marker.destroy()
-        self.__marker = None
+        if self.__marker is not None:
+            self.__marker.disable()
+            self.__marker.destroy()
+            self.__marker = None
         return
 
     def setGUIVisible(self, isVisible):
         if self.__marker:
-            self.__marker.setGUIVisible(isVisible)
+            self.__marker.setVisible(isVisible)
 
     def onRecreateDevice(self):
         if self.__marker:
             self.__marker.onRecreateDevice()
-
-    def __updateMarkerComponent(self, component):
-        component.setupFlatRadialDispersion(self.equipment.areaRadius)
-
-    def __getDesiredBombardmentState(self):
-        startPos = self.hitPosition + self.__artyEquipmentUDO.position
-        endPos = self.hitPosition
-        return (endPos, startPos, self.__artyEquipmentUDO.launchVelocity)
-
-    def __getArtyShotInfo(self):
-        launchPosition = self.hitPosition + self.__artyEquipmentUDO.position
-        launchVelocity = self.__artyEquipmentUDO.launchVelocity
-        gravity = Vector3(0, -self.__artyEquipmentUDO.gravity, 0)
-        return (launchPosition, launchVelocity, gravity)
 
     def processSelection(self, position, reset=False):
         self.hitPosition = position
@@ -151,7 +135,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
         return True
 
     def __markerForceUpdate(self):
-        self.__marker.update(self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), 1000.0, None)
+        self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), 1000.0, None)
         return
 
     def processHover(self, position, force=False):
@@ -163,7 +147,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
                 self.__marker.setPosition(position)
                 BigWorld.callback(SERVER_TICK_LENGTH, self.__markerForceUpdate)
             else:
-                self.__marker.update(position, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
+                self.__marker.update(GUN_MARKER_TYPE.CLIENT, position, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
             self.hitPosition = position
             self.writeStateToReplay()
             return
@@ -174,7 +158,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
     def processReplayHover(self):
         replayCtrl = BattleReplay.g_replayCtrl
         _, self.hitPosition, direction = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0))
-        self.__marker.update(self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
+        self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
         return
 
     def writeStateToReplay(self):
@@ -186,7 +170,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
 
     def __intersected(self, vehicles):
         vPositions = [ v.position for v in vehicles ]
-        pointsInside = self.__marker.component.wg_pointsInside(vPositions)
+        pointsInside = self.__marker.getPointsInside(vPositions)
         for v, isInside in zip(vehicles, pointsInside):
             if isInside:
                 yield v
@@ -343,9 +327,6 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         self.__aih = None
         return
 
-    def dumpState(self):
-        return dumpStateEmpty()
-
     def enable(self, **args):
         SoundGroups.g_instance.changePlayMode(2)
         targetPos = args.get('preferredPos', Vector3(0, 0, 0))
@@ -492,7 +473,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
     def isManualBind(self):
         return True
 
-    def updateGunMarker(self, pos, dir, size, relaxTime, collData):
+    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             assert self.__isEnabled

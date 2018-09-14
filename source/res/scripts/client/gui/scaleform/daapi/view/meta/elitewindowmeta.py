@@ -11,4 +11,7 @@ class EliteWindowMeta(AbstractWindowView):
     """
 
     def as_setVehicleS(self, vehicle):
+        """
+        :param vehicle: Represented by VehicleVO (AS)
+        """
         return self.flashObject.as_setVehicle(vehicle) if self._isDAAPIInited() else None

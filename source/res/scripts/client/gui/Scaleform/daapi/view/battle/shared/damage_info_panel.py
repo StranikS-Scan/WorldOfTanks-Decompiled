@@ -4,8 +4,9 @@ import operator
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.DamageInfoPanelMeta import DamageInfoPanelMeta
 from gui.Scaleform.genConsts.DAMAGE_INFO_PANEL_CONSTS import DAMAGE_INFO_PANEL_CONSTS
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 _DEVICE_NAME_TO_ID = {'gunHealth': DAMAGE_INFO_PANEL_CONSTS.GUN,
  'turretRotatorHealth': DAMAGE_INFO_PANEL_CONSTS.TURRET_ROTATOR,
  'surveyingDeviceHealth': DAMAGE_INFO_PANEL_CONSTS.SURVEYING_DEVICE,
@@ -79,6 +80,7 @@ def _getDevicesSnapshot(fetcher):
 
 
 class DamageInfoPanel(DamageInfoPanelMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(DamageInfoPanel, self).__init__()
@@ -89,13 +91,13 @@ class DamageInfoPanel(DamageInfoPanelMeta):
 
     def _populate(self):
         super(DamageInfoPanel, self)._populate()
-        feedback = g_sessionProvider.shared.feedback
+        feedback = self.sessionProvider.shared.feedback
         if feedback is not None:
             feedback.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         return
 
     def _dispose(self):
-        feedback = g_sessionProvider.shared.feedback
+        feedback = self.sessionProvider.shared.feedback
         if feedback is not None:
             feedback.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         self.__devicesSnap.clear()

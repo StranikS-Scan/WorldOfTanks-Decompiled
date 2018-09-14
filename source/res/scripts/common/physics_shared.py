@@ -4,6 +4,7 @@ import BigWorld
 import Math
 import math
 import material_kinds
+import collections
 from math import pi
 from constants import IS_CLIENT, IS_CELLAPP, VEHICLE_PHYSICS_MODE
 from debug_utils import *
@@ -292,9 +293,37 @@ g_defaultXPhysicsCfg = {'gravity': 9.81,
  'angVelocityFactor0': 1.0,
  'gimletGoalWOnSpot': 0.0,
  'gimletGoalWOnMove': 0.0,
- 'gimletGoalWOnSpot': 0.0,
- 'powerFactor': 1.0,
- 'rotationFactor': 1.0}
+ 'rotationFactor': 1.0,
+ 'roadWheelPositions': (0.0, 0.0),
+ 'siegeMode': {'smplEnginePower': 1.0,
+               'powerFactor': 1.0,
+               'angVelocityFactor': 1.0,
+               'angVelocityFactor0': 1.0,
+               'gimletGoalWOnSpot': 0.0,
+               'gimletGoalWOnMove': 0.0,
+               'rotationFactor': 1.0},
+ 'hullAiming': {'pitch': {'correctionCenterZ': 0.0,
+                          'correctionSpeed': 0.3,
+                          'pitchMin': -0.2,
+                          'pitchMax': 0.2,
+                          'correctionStiffness': 30.0,
+                          'correctionDamping': 0.25,
+                          'correctionScale': 0.5},
+                'yaw': {'gimletForce': 4.0,
+                        'stiffness': 8000.0,
+                        'damping': 400.0,
+                        'preciseRestitution': 0.3,
+                        'dampingYawDist': 0.03,
+                        'preciseYawDist': 0.03}},
+ 'hullCOM': (0.0, 1.0, 0.0),
+ 'stiffnessFactors': (1.0,
+                      1.0,
+                      1.0,
+                      1.0,
+                      1.0),
+ 'hullInertiaFactors': (1.0, 1.0, 1.8),
+ 'engineLoses': (0.5, 0.8),
+ 'enableSabilization': True}
 if IS_CELLAPP:
 
     def _booleanFromString(stringValue):
@@ -415,39 +444,57 @@ def computeRotationalCohesion(rotSpeedLimit, mass, length, width, enginePower):
     return (rotSpeedLimit * inertia / ANG_ACCELERATION_TIME + enginePower / rotSpeedLimit) / mg
 
 
+def updateXPhysicsCfg(baseCfg, typeDesc, cfg):
+    if typeDesc.type.xphysics['detailed'] != baseCfg:
+        __deepUpdate(typeDesc.type.xphysics['detailed'], baseCfg)
+    engName = typeDesc.engine['name']
+    engCfg = baseCfg['engines'].get(engName)
+    if engCfg:
+        __deepUpdate(cfg, engCfg)
+    chsName = typeDesc.chassis['name']
+    chsCfg = baseCfg['chassis'].get(chsName)
+    if chsCfg:
+        __deepUpdate(cfg, chsCfg)
+        groundsSrc = cfg['grounds'].copy()
+        softCfg = groundsSrc['soft']
+        del groundsSrc['soft']
+        idMap = EFFECT_MATERIAL_INDEXES_BY_NAMES
+        cfg['grounds'] = dict(((idMap[nm], dict(sub.items() + [('soft', softCfg)])) for nm, sub in groundsSrc.iteritems()))
+    fakeGearBox = baseCfg.get('fakegearbox')
+    if fakeGearBox is not None:
+        cfg['fakegearbox'] = fakeGearBox
+    return
+
+
 def configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityFactor):
-    cfg = copy.copy(g_defaultXPhysicsCfg)
+    cfg = copy.deepcopy(g_defaultXPhysicsCfg)
+    if typeDesc.hasSiegeMode:
+        defaultVehicleDescr = typeDesc.defaultVehicleDescr
+        siegeVehicleDescr = typeDesc.siegeVehicleDescr
+    else:
+        defaultVehicleDescr = typeDesc
     try:
         cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
     except:
         cfg['fakegearbox'] = False
 
     if baseCfg:
-        if typeDesc.type.xphysics['detailed'] != baseCfg:
-            typeDesc.type.xphysics['detailed'].update(baseCfg)
-        engName = typeDesc.engine['name']
-        engCfg = baseCfg['engines'].get(engName)
-        if engCfg:
-            cfg.update(engCfg)
-        chsName = typeDesc.chassis['name']
-        chsCfg = baseCfg['chassis'].get(chsName)
-        if chsCfg:
-            cfg.update(chsCfg)
-            groundsSrc = cfg['grounds'].copy()
-            softCfg = groundsSrc['soft']
-            del groundsSrc['soft']
-            idMap = EFFECT_MATERIAL_INDEXES_BY_NAMES
-            cfg['grounds'] = dict(((idMap[nm], dict(sub.items() + [('soft', softCfg)])) for nm, sub in groundsSrc.iteritems()))
-        fakeGearBox = baseCfg.get('fakegearbox')
-        if fakeGearBox is not None:
-            cfg['fakegearbox'] = fakeGearBox
-    cfg.update(g_xphysicsOverrides)
+        updateXPhysicsCfg(baseCfg, defaultVehicleDescr, cfg)
+        if typeDesc.hasSiegeMode:
+            siegeBaseCfg = siegeVehicleDescr.type.xphysics['detailed']
+            updateXPhysicsCfg(siegeBaseCfg, siegeVehicleDescr, cfg['siegeMode'])
+    __deepUpdate(cfg, g_xphysicsOverrides)
     cfg['fullMass'] = typeDesc.physics['weight'] * WEIGHT_SCALE
     bmin, bmax, _ = typeDesc.chassis['hitTester'].bbox
     sizeX = bmax[0] - bmin[0]
-    sizeZ = bmax[2] - bmin[2]
+    if typeDesc.hasSiegeMode and typeDesc.type.useHullZ:
+        bmin_, bmax_, _ = typeDesc.hull['hitTester'].bbox
+        sizeZ = bmax_[2] - bmin_[2]
+    else:
+        sizeZ = bmax[2] - bmin[2]
     hullCenter = (bmin + bmax) * 0.5
     cfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
+    cfg['useComplexForm'] = typeDesc.type.name == 'sweden:S11_Strv_103B'
     cfg['gravity'] = cfg['gravity'] * gravityFactor
     cfg['engineTorque'] = tuple(((arg, val * gravityFactor) for arg, val in cfg['engineTorque']))
     offsZ = hullCenter[2]
@@ -484,6 +531,19 @@ def configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityF
     cfg['gearIncreaseFactor'] = 0.85
     cfg['gearDecreaseFactor'] = 0.85
     cfg['gearVelocities'] = (0.0, 15.0, 15.0, 9.0, 15.0, 24.0, 42.0, 60.0, 0.0, 0.0, 0.0)
+    wheelPositions = cfg['roadWheelPositions']
+    comz = sum(wheelPositions) / len(wheelPositions)
+    hullCom = Math.Vector3((0.0, cfg['clearance'] + cfg['bodyHeight'] * 0.5 + cfg['hullCOMShiftY'], comz))
+    cfg['siegeMode']['isAvailable'] = typeDesc.hasSiegeMode
+    hullAimingParams = typeDesc.type.hullAimingParams
+    hullAimingParamsPitch = hullAimingParams['pitch']
+    hullAimingPitchCfg = cfg['hullAiming']['pitch']
+    hullAimingPitchCfg['correctionCenterZ'] = hullAimingParamsPitch['wheelCorrectionCenterZ']
+    hullAimingPitchCfg['correctionSpeed'] = hullAimingParamsPitch['wheelsCorrectionSpeed']
+    hullAimingPitchCfg['pitchMin'] = -hullAimingParamsPitch['wheelsCorrectionAngles']['pitchMax']
+    hullAimingPitchCfg['pitchMax'] = -hullAimingParamsPitch['wheelsCorrectionAngles']['pitchMin']
+    withHullAiming = hullAimingParams['yaw']['isAvailable'] or hullAimingParamsPitch['isAvailable']
+    cfg['enableSabilization'] = not withHullAiming
     if not physics.configure(cfg):
         LOG_ERROR('configureXPhysics: configure failed')
     comz = 0.0 if IS_CLIENT else physics.hullCOMZ
@@ -501,6 +561,14 @@ def applyRotationAndPowerFactors(cfg):
         cfg['gimletGoalWOnMove'] = cfg['gimletGoalWOnMove'] * cfg['rotationFactor']
         cfg['wPushedRot'] = cfg['gimletGoalWOnSpot']
         cfg['wPushedDiag'] = cfg['gimletGoalWOnMove']
+        siegeModeCfg = cfg['siegeMode']
+        siegeModeCfg['smplEnginePower'] = siegeModeCfg['smplEnginePower'] * cfg['powerFactor']
+        siegeModeCfg['angVelocityFactor'] = siegeModeCfg['angVelocityFactor'] * cfg['rotationFactor']
+        siegeModeCfg['smplRotSpeed'] = arm * siegeModeCfg['angVelocityFactor0'] * cfg['rotationFactor']
+        siegeModeCfg['gimletGoalWOnSpot'] = siegeModeCfg['gimletGoalWOnSpot'] * cfg['rotationFactor']
+        siegeModeCfg['gimletGoalWOnMove'] = siegeModeCfg['gimletGoalWOnMove'] * cfg['rotationFactor']
+        siegeModeCfg['wPushedRot'] = siegeModeCfg['gimletGoalWOnSpot']
+        siegeModeCfg['wPushedDiag'] = siegeModeCfg['gimletGoalWOnMove']
     except:
         LOG_CURRENT_EXCEPTION()
 
@@ -694,6 +762,26 @@ def initVehiclePhysics(physics, typeDesc, forcedCfg, saveTransform, IS_EDITOR=Fa
     suspDamp = _computeSuspDamp(fullMass) * stiffness
     trackLen = _computeTrackLength(clearance, blen)
     indent = boxHeight / 2
+    hullAimingLength = length
+    if IS_CLIENT and typeDesc.isPitchHullAimingAvailable:
+        hardRatio = 0
+        hullAngleMin = typeDesc.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMin']
+        hullAngleMax = typeDesc.type.hullAimingParams['pitch']['wheelsCorrectionAngles']['pitchMax']
+        backSpringLength = blen * math.sin(abs(hullAngleMax)) * 1.25
+        frontSpringLength = blen * math.sin(abs(hullAngleMin)) * 1.25
+        hullAimingLength = max(backSpringLength, frontSpringLength)
+    if IS_CLIENT and typeDesc.hasSiegeMode and typeDesc.isPitchHullAimingAvailable:
+        springsLengthList = tuple((length for _ in xrange(0, carrierSpringPairs)))
+        hullAimingSpringsLengthList = tuple((hullAimingLength for _ in xrange(0, carrierSpringPairs)))
+        for descriptor in [typeDesc.defaultVehicleDescr, typeDesc.siegeVehicleDescr]:
+            if descriptor.chassis['suspensionSpringsLength'] is not None:
+                break
+            hullAimingEnabled = descriptor.type.hullAimingParams['pitch']['isEnabled']
+            descriptor.chassis['suspensionSpringsLength'] = {'left': hullAimingSpringsLengthList if hullAimingEnabled else springsLengthList,
+             'right': hullAimingSpringsLengthList if hullAimingEnabled else springsLengthList}
+
+    if IS_CLIENT and typeDesc.type.hullAimingParams['pitch']['isEnabled']:
+        length = hullAimingLength
     sdir = Math.Vector3((0, -1, 0))
     stepZ = trackLen / (carrierSpringPairs - 1)
     begZ = -trackLen * 0.5
@@ -890,8 +978,22 @@ def initVehiclePhysicsFromParams(physics, params):
     typeDesc.turret['hitTester'].bbox = (params['turretHitTesterMin'], params['turretHitTesterMax'], None)
     typeDesc.turret['gunPosition'] = params['gunPosition']
     typeDesc.type = _SimpleObject()
+    typeDesc.type.name = ''
     typeDesc.type.xphysics = {}
     typeDesc.type.xphysics['detailed'] = {'chassis': {'Chassis': typeDesc.chassis}}
+    typeDesc.shot = {'gravity': 9.8,
+     'speed': 100.0}
+    typeDesc.gun = {}
+    typeDesc.gun['staticTurretYaw'] = None
+    typeDesc.hasSiegeMode = False
+    typeDesc.type.isRotationStill = False
+    typeDesc.type.useHullZ = False
+    typeDesc.type.hullAimingParams = {'pitch': {'isAvailable': False,
+               'wheelCorrectionCenterZ': 0.0,
+               'wheelsCorrectionSpeed': 0.2,
+               'wheelsCorrectionAngles': {'pitchMax': 1.0,
+                                          'pitchMin': 1.0}},
+     'yaw': {'isAvailable': False}}
     initVehiclePhysics(physics, typeDesc, None, False, True)
     physics.visibilityMask = 4294967295L
     return
@@ -915,3 +1017,13 @@ def encodeNormalisedRPM(normalRPM):
 
 def decodeNormalisedRPM(code):
     return decodeRestrictedValueFromUint(code, 8, 0.0, MAX_NORMALISED_RPM)
+
+
+def __deepUpdate(orig_dict, new_dict):
+    for key, val in new_dict.iteritems():
+        if isinstance(val, collections.Mapping):
+            tmp = __deepUpdate(orig_dict.get(key, {}), val)
+            orig_dict[key] = tmp
+        orig_dict[key] = new_dict[key]
+
+    return orig_dict

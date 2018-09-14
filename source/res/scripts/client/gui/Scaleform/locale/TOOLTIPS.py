@@ -177,6 +177,7 @@ class TOOLTIPS(object):
     USEFREEXP = '#tooltips:useFreeXP'
     FREEXP = '#tooltips:freeXP'
     TURNOFFCOMBATCHAT = '#tooltips:turnOffCombatChat'
+    ENABLEPOSTMORTEMEFFECT = '#tooltips:enablePostMortemEffect'
     SHOWMARKSONGUN = '#tooltips:showMarksOnGun'
     SHOWSIMPLIFIEDVEHPARAMS = '#tooltips:showSimplifiedVehParams'
     FORTIFICATION_FOUNDATION = '#tooltips:fortification/foundation'
@@ -393,6 +394,8 @@ class TOOLTIPS(object):
     AWARDITEM_GOLD = '#tooltips:awardItem/gold'
     AWARDITEM_FREEXP = '#tooltips:awardItem/freeXP'
     AWARDITEM_PREMIUM = '#tooltips:awardItem/premium'
+    AWARDITEM_BATTLETOKEN_ONE = '#tooltips:awardItem/battleToken/one'
+    AWARDITEM_BATTLETOKEN_SEVERAL = '#tooltips:awardItem/battleToken/several'
     FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED = '#tooltips:falloutBattleSelectorWindow/btnInSquadDisabled'
     FALLOUTBATTLESELECTORWINDOW_BTNDISABLED = '#tooltips:falloutBattleSelectorWindow/btnDisabled'
     MASTERVOLUMETOGGLEOFF = '#tooltips:masterVolumeToggleOff'
@@ -417,6 +420,9 @@ class TOOLTIPS(object):
     NOTIFICATIONSVIEW_TAB_INFO = '#tooltips:notificationsView/tab/info'
     NOTIFICATIONSVIEW_TAB_INVITES = '#tooltips:notificationsView/tab/invites'
     NOTIFICATIONSVIEW_TAB_OFFERS = '#tooltips:notificationsView/tab/offers'
+    XMAS_PROGRESSBAR_RULESBUTTON = '#tooltips:xmas/progressBar/rulesButton'
+    XMAS_CUSTOMIZATION_TAB_TREE = '#tooltips:xmas/customization/tab/tree'
+    XMAS_CUSTOMIZATION_TAB_TANK = '#tooltips:xmas/customization/tab/tank'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
     TEMPLATE_MINUTES_SHORT = '#tooltips:template/minutes/short'
@@ -597,6 +603,7 @@ class TOOLTIPS(object):
     ACTIONPRICE_FORACTION = '#tooltips:actionPrice/forAction'
     ACTIONPRICE_FORACTIONS = '#tooltips:actionPrice/forActions'
     ACTIONPRICE_RENTCOMPENSATION = '#tooltips:actionPrice/rentCompensation'
+    ACTIONPRICE_FORPERSONALDISCOUNT = '#tooltips:actionPrice/forPersonalDiscount'
     ACTIONPRICE_SELL_HEADER = '#tooltips:actionPrice/sell/header'
     ACTIONPRICE_SELL_BODY = '#tooltips:actionPrice/sell/body'
     ACTIONPRICE_SELL_TYPE_VEHICLE = '#tooltips:actionPrice/sell/type/vehicle'
@@ -616,6 +623,8 @@ class TOOLTIPS(object):
     CHATCONTACTSLISTONLY_BODY = '#tooltips:chatContactsListOnly/body'
     TURNOFFCOMBATCHAT_HEADER = '#tooltips:turnOffCombatChat/header'
     TURNOFFCOMBATCHAT_BODY = '#tooltips:turnOffCombatChat/body'
+    ENABLEPOSTMORTEMEFFECT_HEADER = '#tooltips:enablePostMortemEffect/header'
+    ENABLEPOSTMORTEMEFFECT_BODY = '#tooltips:enablePostMortemEffect/body'
     SHOWMARKSONGUN_HEADER = '#tooltips:showMarksOnGun/header'
     SHOWMARKSONGUN_BODY = '#tooltips:showMarksOnGun/body'
     SHOWVEHMODELSONMAP_HEADER = '#tooltips:showVehModelsOnMap/header'
@@ -1034,6 +1043,7 @@ class TOOLTIPS(object):
     HEADER_INFO_PLAYERS_ONLINE_FULL_BODY = '#tooltips:header/info/players_online_full/body'
     HEADER_VERSIONINFOHINT = '#tooltips:header/versionInfoHint'
     SETTING_WINDOW_CONTROLS_KEY_INPUT_WARNING = '#tooltips:setting_window/controls/key_input/warning'
+    SETTING_WINDOW_CONTROLS_KEY_INPUT_PTT_WARNING = '#tooltips:setting_window/controls/key_input/ptt/warning'
     HEADER_BUTTONS_HANGAR_HEADER = '#tooltips:header/buttons/hangar/header'
     HEADER_BUTTONS_HANGAR_BODY = '#tooltips:header/buttons/hangar/body'
     HEADER_BUTTONS_INVENTORY_HEADER = '#tooltips:header/buttons/inventory/header'
@@ -1408,29 +1418,6 @@ class TOOLTIPS(object):
     CYBERSPORT_UNIT_FIGHTBTN_PRESSFORNOTREADY_BODY = '#tooltips:cyberSport/unit/fightBtn/pressForNotReady/body'
     CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE_HEADER = '#tooltips:cyberSport/unit/fightBtn/eventVehicleWrongMode/header'
     CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE_BODY = '#tooltips:cyberSport/unit/fightBtn/eventVehicleWrongMode/body'
-    HISTORICALBATTLES_SHOWBATTLEHISTORY_HEADER = '#tooltips:historicalBattles/showBattleHistory/header'
-    HISTORICALBATTLES_SHOWBATTLEHISTORY_BODY = '#tooltips:historicalBattles/showBattleHistory/body'
-    HISTORICALBATTLES_DATESTATUS_STARTDATE = '#tooltips:historicalBattles/dateStatus/startDate'
-    HISTORICALBATTLES_DATESTATUS_ENDDATE = '#tooltips:historicalBattles/dateStatus/endDate'
-    HISTORICALBATTLES_DATESTATUS_ACTIVE = '#tooltips:historicalBattles/dateStatus/active'
-    HISTORICALBATTLES_DATESTATUS_FUTURE = '#tooltips:historicalBattles/dateStatus/future'
-    HISTORICALBATTLES_VEHICLE_NOTREADY_HEADER = '#tooltips:historicalBattles/vehicle/notReady/header'
-    HISTORICALBATTLES_VEHICLE_NOTREADY_CREW = '#tooltips:historicalBattles/vehicle/notReady/crew'
-    HISTORICALBATTLES_VEHICLE_NOTREADY_INBATTLE = '#tooltips:historicalBattles/vehicle/notReady/inBattle'
-    HISTORICALBATTLES_VEHICLE_NOTREADY_BROKEN = '#tooltips:historicalBattles/vehicle/notReady/broken'
-    HISTORICALBATTLES_VEHICLE_NOTAVAILABLE_HEADER = '#tooltips:historicalBattles/vehicle/notAvailable/header'
-    HISTORICALBATTLES_VEHICLE_NOTAVAILABLE_BODY = '#tooltips:historicalBattles/vehicle/notAvailable/body'
-    HISTORICALBATTLES_FIGHTBUTTON_ENABLED = '#tooltips:historicalBattles/fightButton/enabled'
-    HISTORICALBATTLES_FIGHTBUTTON_ENABLED_DESCRIPTION = '#tooltips:historicalBattles/fightButton/enabled/description'
-    HISTORICALBATTLES_FIGHTBUTTON_DISABLED = '#tooltips:historicalBattles/fightButton/disabled'
-    HISTORICALBATTLES_FIGHTBUTTON_DISABLED_FUTURE = '#tooltips:historicalBattles/fightButton/disabled/future'
-    HISTORICALBATTLES_FIGHTBUTTON_DISABLED_NOVEHICLE = '#tooltips:historicalBattles/fightButton/disabled/noVehicle'
-    HISTORICALBATTLES_FIGHTBUTTON_DISABLED_CREW = '#tooltips:historicalBattles/fightButton/disabled/crew'
-    HISTORICALBATTLES_FIGHTBUTTON_DISABLED_INBATTLE = '#tooltips:historicalBattles/fightButton/disabled/inBattle'
-    HISTORICALBATTLES_FIGHTBUTTON_DISABLED_BROKEN = '#tooltips:historicalBattles/fightButton/disabled/broken'
-    HISTORICALBATTLES_FIGHTBUTTON_DISABLED_MONEY = '#tooltips:historicalBattles/fightButton/disabled/money'
-    HISTORICALBATTLES_MODULES_TITLE = '#tooltips:historicalBattles/modules/title'
-    HISTORICALBATTLES_MODULES_SUBTITLE = '#tooltips:historicalBattles/modules/subTitle'
     FORTIFICATION_BATTLEROOMLEGIONARIES_HEADER = '#tooltips:fortification/battleRoomLegionaries/header'
     FORTIFICATION_BATTLEROOMLEGIONARIES_BODY = '#tooltips:fortification/battleRoomLegionaries/body'
     FORTIFICATION_BATTLEROOMLEGIONARIES_TEAMSECTION_HEADER = '#tooltips:fortification/battleRoomLegionaries/teamSection/header'
@@ -2197,6 +2184,12 @@ class TOOLTIPS(object):
     AWARDITEM_FREEXP_BODY = '#tooltips:awardItem/freeXP/body'
     AWARDITEM_PREMIUM_HEADER = '#tooltips:awardItem/premium/header'
     AWARDITEM_PREMIUM_BODY = '#tooltips:awardItem/premium/body'
+    AWARDITEM_BATTLETOKEN_ONE_HEADER = '#tooltips:awardItem/battleToken/one/header'
+    AWARDITEM_BATTLETOKEN_ONE_BODY = '#tooltips:awardItem/battleToken/one/body'
+    AWARDITEM_BATTLETOKEN_SEVERAL_HEADER = '#tooltips:awardItem/battleToken/several/header'
+    AWARDITEM_BATTLETOKEN_SEVERAL_BODY = '#tooltips:awardItem/battleToken/several/body'
+    AWARDITEM_BATTLETOKEN_SEVERAL_LINE = '#tooltips:awardItem/battleToken/several/line'
+    AWARDITEM_BATTLETOKEN_DESCRIPTION = '#tooltips:awardItem/battleToken/description'
     AWARDITEM_BERTHS_HEADER = '#tooltips:awardItem/berths/header'
     AWARDITEM_BERTHS_BODY = '#tooltips:awardItem/berths/body'
     AWARDITEM_CREDITSFACTOR_HEADER = '#tooltips:awardItem/creditsFactor/header'
@@ -2295,6 +2288,8 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_EXPLOSIONRADIUS = '#tooltips:tank_params/desc/explosionRadius'
     TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR = '#tooltips:tank_params/desc/invisibilityStillFactor'
     TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR = '#tooltips:tank_params/desc/invisibilityMovingFactor'
+    TANK_PARAMS_DESC_SWITCHONTIME = '#tooltips:tank_params/desc/switchOnTime'
+    TANK_PARAMS_DESC_SWITCHOFFTIME = '#tooltips:tank_params/desc/switchOffTime'
     VEHICLEPARAMS_TITLE_VALUETEMPLATE = '#tooltips:vehicleParams/title/valueTemplate'
     VEHICLEPARAMS_POSSIBLEBONUSES_DESC = '#tooltips:vehicleParams/possibleBonuses/desc'
     VEHICLEPARAMS_BONUSES_TITLE = '#tooltips:vehicleParams/bonuses/title'
@@ -2354,6 +2349,48 @@ class TOOLTIPS(object):
     HANGAR_HEADER_PERSONALQUESTS_INPROGRESS_BODY = '#tooltips:hangar/header/personalQuests/inprogress/body'
     HANGAR_HEADER_PERSONALQUESTS_AWARD_HEADER = '#tooltips:hangar/header/personalQuests/award/header'
     HANGAR_HEADER_PERSONALQUESTS_AWARD_BODY = '#tooltips:hangar/header/personalQuests/award/body'
+    SETTINGS_KEY_ENEMY_BODY = '#tooltips:settings/key/enemy/body'
+    SETTINGS_KEY_ALLY_BODY = '#tooltips:settings/key/ally/body'
+    SETTINGS_KEY_TARGET_ENEMY = '#tooltips:settings/key/target/enemy'
+    SETTINGS_KEY_TARGET_ALLY = '#tooltips:settings/key/target/ally'
+    SETTINGS_KEYFOLLOWME_TITLE = '#tooltips:settings/keyFollowMe/title'
+    SETTINGS_KEYMOVEMENT_TITLE = '#tooltips:settings/keyMovement/title'
+    SETTINGS_SUPPORT_SUBTITLE = '#tooltips:settings/support/subtitle'
+    SETTINGS_FOLLOWME_SUBTITLE = '#tooltips:settings/followMe/subtitle'
+    SETTINGS_DEFENDBASE_SUBTITLE = '#tooltips:settings/defendBase/subtitle'
+    SETTINGS_TURNBACK_SUBTITLE = '#tooltips:settings/turnBack/subtitle'
+    SETTINGS_NEEDHELP_SUBTITLE = '#tooltips:settings/needHelp/subtitle'
+    SETTINGS_HELPME_SUBTITLE = '#tooltips:settings/helpMe/subtitle'
+    SETTINGS_RELOAD_SUBTITLE = '#tooltips:settings/reload/subtitle'
+    SETTINGS_STOP_SUBTITLE = '#tooltips:settings/stop/subtitle'
+    SETTINGS_DEFENDBASE_ENEMY_BODY = '#tooltips:settings/defendBase/enemy/body'
+    SETTINGS_NEEDHELP_ENEMY_BODY = '#tooltips:settings/needHelp/enemy/body'
+    SETTINGS_RELOAD_ENEMY_BODY = '#tooltips:settings/reload/enemy/body'
+    SETTINGS_SWITCHMODE_BODY = '#tooltips:settings/switchMode/body'
+    XMAS_XMASTREE_TITLE = '#tooltips:xmas/xmasTree/title'
+    XMAS_XMASTREE_DESCRIPTION_NOTOYS = '#tooltips:xmas/xmasTree/description/noToys'
+    XMAS_XMASTREE_DESCRIPTION = '#tooltips:xmas/xmasTree/description'
+    XMAS_XMASTREE_PROGRESS = '#tooltips:xmas/xmasTree/progress'
+    XMAS_XMASTREE_AWARD = '#tooltips:xmas/xmasTree/award'
+    XMAS_XMASTREE_NOTE = '#tooltips:xmas/xmasTree/note'
+    XMAS_CONDITIONS = '#tooltips:xmas/conditions'
+    XMAS_EMPTYTOYPLACE_HEADER = '#tooltips:xmas/emptyToyPlace/header'
+    XMAS_EMPTYTOYPLACE_BODY = '#tooltips:xmas/emptyToyPlace/body'
+    XMAS_INSTRUCTION_TITLE = '#tooltips:xmas/instruction/title'
+    XMAS_INSTRUCTION_DESCRIPTION = '#tooltips:xmas/instruction/description'
+    XMAS_APPLYBTN_DISABLED_HEADER = '#tooltips:xmas/applyBtn/disabled/header'
+    XMAS_SLOT_TITLE = '#tooltips:xmas/slot/title'
+    XMAS_SLOT_DESCRIPTION = '#tooltips:xmas/slot/description'
+    XMAS_SLOT_POINTS = '#tooltips:xmas/slot/points'
+    CHRISTMAS_QUESTS_BOXAWARD_HEADER = '#tooltips:christmas/quests/boxAward/header'
+    CHRISTMAS_QUESTS_BOXAWARD_BODY = '#tooltips:christmas/quests/boxAward/body'
+    XMAS_PROGRESSBAR_RULESBUTTON_BODY = '#tooltips:xmas/progressBar/rulesButton/body'
+    XMAS_BTN_CONVERSION_BTN_HEADER = '#tooltips:xmas/btn/conversion/btn/header'
+    XMAS_BTN_CONVERSION_BTN_BODY = '#tooltips:xmas/btn/conversion/btn/body'
+    XMAS_AWARD_ALREADYRECEIVED = '#tooltips:xmas/award/alreadyReceived'
+    XMAS_AWARD_ALLRECEIVED = '#tooltips:xmas/award/allReceived'
+    XMAS_CUSTOMIZATION_TAB_TREE_BODY = '#tooltips:xmas/customization/tab/tree/body'
+    XMAS_CUSTOMIZATION_TAB_TANK_BODY = '#tooltips:xmas/customization/tab/tank/body'
     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,
@@ -2515,7 +2552,9 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_AIMINGTIME,
      TANK_PARAMS_DESC_EXPLOSIONRADIUS,
      TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,
-     TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR)
+     TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR,
+     TANK_PARAMS_DESC_SWITCHONTIME,
+     TANK_PARAMS_DESC_SWITCHOFFTIME)
     BATTLERESULTS_EFFICIENCYHEADER_ENUM = (BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMASSIST,
      BATTLERESULTS_EFFICIENCYHEADER_SUMMARMOR,
@@ -2539,6 +2578,8 @@ class TOOLTIPS(object):
      AWARDITEM_GOLD_HEADER,
      AWARDITEM_FREEXP_HEADER,
      AWARDITEM_PREMIUM_HEADER,
+     AWARDITEM_BATTLETOKEN_ONE_HEADER,
+     AWARDITEM_BATTLETOKEN_SEVERAL_HEADER,
      AWARDITEM_BERTHS_HEADER,
      AWARDITEM_CREDITSFACTOR_HEADER,
      AWARDITEM_FREEXPFACTOR_HEADER,
@@ -2554,6 +2595,8 @@ class TOOLTIPS(object):
      AWARDITEM_GOLD_BODY,
      AWARDITEM_FREEXP_BODY,
      AWARDITEM_PREMIUM_BODY,
+     AWARDITEM_BATTLETOKEN_ONE_BODY,
+     AWARDITEM_BATTLETOKEN_SEVERAL_BODY,
      AWARDITEM_BERTHS_BODY,
      AWARDITEM_CREDITSFACTOR_BODY,
      AWARDITEM_FREEXPFACTOR_BODY,

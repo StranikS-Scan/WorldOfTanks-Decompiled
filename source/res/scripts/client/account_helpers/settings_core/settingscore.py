@@ -1,15 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/SettingsCore.py
 import Event
+import BigWorld
 from InterfaceScaleManager import InterfaceScaleManager
 from Vibroeffects import VibroManager
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
 from adisp import process
 from debug_utils import LOG_DEBUG
+from skeletons.account_helpers.settings_core import ISettingsCore
 
-class _SettingsCore(object):
+class SettingsCore(ISettingsCore):
     onSettingsChanged = Event.Event()
+
+    def __init__(self):
+        super(SettingsCore, self).__init__()
+        self.__serverSettings = None
+        self.__interfaceScale = None
+        self.__storages = None
+        self.__options = None
+        return
 
     def init(self):
         from account_helpers.settings_core import options, settings_storages, settings_constants
@@ -26,7 +36,7 @@ class _SettingsCore(object):
         DAMAGE_LOG = settings_constants.DAMAGE_LOG
         BATTLE_EVENTS = settings_constants.BATTLE_EVENTS
         self.__serverSettings = ServerSettingsManager(self)
-        self.interfaceScale = InterfaceScaleManager(self)
+        self.__interfaceScale = InterfaceScaleManager(self)
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
         GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME)
         EXTENDED_GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME_EXTENDED)
@@ -34,7 +44,6 @@ class _SettingsCore(object):
         GAMEPLAY_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAMEPLAY)
         GRAPHICS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GRAPHICS)
         SOUND_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.SOUND)
-        KEYBOARD_SETTINGS_STORAGE = settings_storages.KeyboardSettingsStorage(self.serverSettings, self)
         CONTROLS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.CONTROLS)
         AIM_SETTINGS_STORAGE = settings_storages.AimSettingsStorage(self.serverSettings, self)
         MARKERS_SETTINGS_STORAGE = settings_storages.MarkersSettingsStorage(self.serverSettings, self)
@@ -47,7 +56,6 @@ class _SettingsCore(object):
          'extendedGame': EXTENDED_GAME_SETTINGS_STORAGE,
          'gameplay': GAMEPLAY_SETTINGS_STORAGE,
          'sound': SOUND_SETTINGS_STORAGE,
-         'keyboard': KEYBOARD_SETTINGS_STORAGE,
          'controls': CONTROLS_SETTINGS_STORAGE,
          'aim': AIM_SETTINGS_STORAGE,
          'markers': MARKERS_SETTINGS_STORAGE,
@@ -61,7 +69,8 @@ class _SettingsCore(object):
          'feedback': FEEDBACK_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
-        self.__options = options.SettingsContainer(((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
+        graphicSettings = tuple(map(lambda settingName: (settingName, options.GraphicSetting(settingName)), BigWorld.generateGfxSettings()))
+        self.__options = options.SettingsContainer(graphicSettings + ((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_SERVER_AIM, options.StorageAccountSetting(GAME.ENABLE_SERVER_AIM, storage=GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_ALPHA, options.StorageAccountSetting(GAME.MINIMAP_ALPHA, storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_POSTMORTEM, options.PostProcessingSetting(GAME.ENABLE_POSTMORTEM, 'mortem_post_effect', storage=GAME_SETTINGS_STORAGE)),
@@ -105,45 +114,26 @@ class _SettingsCore(object):
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.REFRESH_RATE, options.RefreshRateSetting(storage=VIDEO_SETTINGS_STORAGE)),
-         (GRAPHICS.FULLSCREEN, options.FullscreenSetting(storage=VIDEO_SETTINGS_STORAGE)),
+         (GRAPHICS.VIDEO_MODE, options.VideoModeSettings(storage=VIDEO_SETTINGS_STORAGE)),
+         (GRAPHICS.BORDERLESS_SIZE, options.BorderlessSizeSettings()),
          (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
-         (GRAPHICS.GRAPHICS_QUALITY_HD_SD, options.GraphicsQualityNote()),
-         (GRAPHICS.GAMMA, options.GammaSetting()),
          (GRAPHICS.TRIPLE_BUFFERED, options.TripleBufferedSetting()),
          (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
          (GRAPHICS.MULTISAMPLING, options.MultisamplingSetting()),
          (GRAPHICS.CUSTOM_AA, options.CustomAASetting()),
+         (GRAPHICS.GRAPHICS_QUALITY_HD_SD, options.GraphicsQualityNote()),
+         (GRAPHICS.GAMMA, options.GammaSetting()),
          (GRAPHICS.ASPECT_RATIO, options.AspectRatioSetting()),
          (GRAPHICS.FPS_PERFOMANCER, options.FPSPerfomancerSetting(GRAPHICS.FPS_PERFOMANCER, storage=GRAPHICS_SETTINGS_STORAGE)),
-         (GRAPHICS.DRR_AUTOSCALER_ENABLED, options.GraphicSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED)),
-         (GRAPHICS.DYNAMIC_RENDERER, options.DynamicRendererSetting()),
          (GRAPHICS.COLOR_FILTER_INTENSITY, options.ColorFilterIntensitySetting()),
-         (GRAPHICS.COLOR_FILTER_IMAGES, options.ReadOnlySetting(lambda : graphics.getGraphicSettingImages(GRAPHICS.COLOR_GRADING_TECHNIQUE))),
+         (GRAPHICS.COLOR_FILTER_IMAGES, options.ReadOnlySetting(lambda : graphics.getGraphicSettingImages('COLOR_GRADING_TECHNIQUE'))),
          (GRAPHICS.FOV, options.FOVSetting(GRAPHICS.FOV, storage=FOV_SETTINGS_STORAGE)),
-         (GRAPHICS.DYNAMIC_FOV_ENABLED, options.DynamicFOVEnabledSetting(storage=FOV_SETTINGS_STORAGE)),
-         (GRAPHICS.PRESETS, options.GraphicsPresetSetting()),
-         (GRAPHICS.RENDER_PIPELINE, options.GraphicSetting(GRAPHICS.RENDER_PIPELINE)),
-         (GRAPHICS.TEXTURE_QUALITY, options.TextureQualitySetting()),
-         (GRAPHICS.DECALS_QUALITY, options.GraphicSetting(GRAPHICS.DECALS_QUALITY)),
-         (GRAPHICS.OBJECT_LOD, options.GraphicSetting(GRAPHICS.OBJECT_LOD)),
-         (GRAPHICS.FAR_PLANE, options.GraphicSetting(GRAPHICS.FAR_PLANE)),
-         (GRAPHICS.TERRAIN_QUALITY, options.TerrainQualitySetting()),
-         (GRAPHICS.SHADOWS_QUALITY, options.GraphicSetting(GRAPHICS.SHADOWS_QUALITY)),
-         (GRAPHICS.LIGHTING_QUALITY, options.GraphicSetting(GRAPHICS.LIGHTING_QUALITY)),
-         (GRAPHICS.SPEEDTREE_QUALITY, options.GraphicSetting(GRAPHICS.SPEEDTREE_QUALITY)),
-         (GRAPHICS.FLORA_QUALITY, options.FloraQualitySetting()),
-         (GRAPHICS.WATER_QUALITY, options.GraphicSetting(GRAPHICS.WATER_QUALITY)),
-         (GRAPHICS.EFFECTS_QUALITY, options.GraphicSetting(GRAPHICS.EFFECTS_QUALITY)),
-         (GRAPHICS.POST_PROCESSING_QUALITY, options.GraphicSetting(GRAPHICS.POST_PROCESSING_QUALITY)),
-         (GRAPHICS.MOTION_BLUR_QUALITY, options.GraphicSetting(GRAPHICS.MOTION_BLUR_QUALITY)),
-         (GRAPHICS.SNIPER_MODE_EFFECTS_QUALITY, options.GraphicSetting(GRAPHICS.SNIPER_MODE_EFFECTS_QUALITY)),
-         (GRAPHICS.VEHICLE_DUST_ENABLED, options.GraphicSetting(GRAPHICS.VEHICLE_DUST_ENABLED)),
-         (GRAPHICS.SNIPER_MODE_GRASS_ENABLED, options.GraphicSetting(GRAPHICS.SNIPER_MODE_GRASS_ENABLED)),
-         (GRAPHICS.VEHICLE_TRACES_ENABLED, options.GraphicSetting(GRAPHICS.VEHICLE_TRACES_ENABLED)),
-         (GRAPHICS.COLOR_GRADING_TECHNIQUE, options.GraphicSetting(GRAPHICS.COLOR_GRADING_TECHNIQUE)),
-         (GRAPHICS.SEMITRANSPARENT_LEAVES_ENABLED, options.GraphicSetting(GRAPHICS.SEMITRANSPARENT_LEAVES_ENABLED)),
          (GRAPHICS.GRAPHICS_SETTINGS_LIST, options.ReadOnlySetting(lambda : graphics.GRAPHICS_SETTINGS.ALL())),
          (GRAPHICS.INTERFACE_SCALE, options.InterfaceScaleSetting(GRAPHICS.INTERFACE_SCALE)),
+         (GRAPHICS.DYNAMIC_RENDERER, options.DynamicRendererSetting()),
+         (GRAPHICS.DYNAMIC_FOV_ENABLED, options.DynamicFOVEnabledSetting(storage=FOV_SETTINGS_STORAGE)),
+         (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
+         (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
          (SOUND.MASTER_TOGGLE, options.SoundEnableSetting()),
          (SOUND.SOUND_QUALITY, options.SoundQualitySetting()),
          (SOUND.SOUND_QUALITY_VISIBLE, options.ReadOnlySetting(options.SoundQualitySetting.isAvailable)),
@@ -164,7 +154,8 @@ class _SettingsCore(object):
          (SOUND.VOIP_SUPPORTED, options.VOIPSupportSetting()),
          (SOUND.BASS_BOOST, options.BassBoostSetting()),
          (SOUND.NIGHT_MODE, options.NightModeSetting()),
-         (SOUND.SOUND_DEVICE, options.SoundDevicePresetSetting(SOUND.SOUND_DEVICE, SOUND.SOUND_DEVICE)),
+         (SOUND.SOUND_DEVICE, options.SoundDevicePresetSetting(SOUND.SOUND_DEVICE, SOUND.SOUND_DEVICE, isPreview=True)),
+         (SOUND.SOUND_SPEAKERS, options.SoundSpeakersPresetSetting(isPreview=True)),
          (SOUND.ALT_VOICES, options.AltVoicesSetting(SOUND.ALT_VOICES, storage=SOUND_SETTINGS_STORAGE)),
          (SOUND.DETECTION_ALERT_SOUND, options.DetectionAlertSound()),
          (SOUND.GAME_EVENT_AMBIENT, options.SoundSetting('ev_ambient')),
@@ -179,7 +170,7 @@ class _SettingsCore(object):
          (CONTROLS.MOUSE_HORZ_INVERSION, options.MouseInversionSetting(CONTROLS.MOUSE_HORZ_INVERSION, 'horzInvert', storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.MOUSE_VERT_INVERSION, options.MouseInversionSetting(CONTROLS.MOUSE_VERT_INVERSION, 'vertInvert', storage=CONTROLS_SETTINGS_STORAGE)),
          (CONTROLS.BACK_DRAFT_INVERSION, options.BackDraftInversionSetting(storage=CONTROLS_SETTINGS_STORAGE)),
-         (CONTROLS.KEYBOARD, options.KeyboardSettings(storage=KEYBOARD_SETTINGS_STORAGE)),
+         (CONTROLS.KEYBOARD, options.KeyboardSettings()),
          (CONTROLS.KEYBOARD_IMPORTANT_BINDS, options.ReadOnlySetting(lambda : options.KeyboardSettings.getKeyboardImportantBinds())),
          (AIM.ARCADE, options.AimSetting('arcade', storage=AIM_SETTINGS_STORAGE)),
          (AIM.SNIPER, options.AimSetting('sniper', storage=AIM_SETTINGS_STORAGE)),
@@ -232,13 +223,15 @@ class _SettingsCore(object):
         self.interfaceScale.init()
 
     def fini(self):
-        self.options.dump()
-        self.__storages = None
         if self.__options is not None:
+            self.__options.dump()
             self.__options.fini()
             self.__options = None
+        self.__storages = None
         self.__serverSettings = None
-        self.interfaceScale.fini()
+        if self.__interfaceScale is not None:
+            self.__interfaceScale.fini()
+            self.__interfaceScale = None
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
         AccountSettings.clearCache()
         LOG_DEBUG('SettingsCore is destroyed')
@@ -251,6 +244,10 @@ class _SettingsCore(object):
     @property
     def storages(self):
         return self.__storages
+
+    @property
+    def interfaceScale(self):
+        return self.__interfaceScale
 
     @property
     def serverSettings(self):
@@ -287,6 +284,7 @@ class _SettingsCore(object):
         if graphicsSettings:
             LOG_DEBUG('Apply graphic settings: ', graphicsSettings)
             self.onSettingsChanged(graphicsSettings)
+            BigWorld.updateCurrentPresetIndex()
 
     def revertSettings(self):
         self.__options.revert()
@@ -320,6 +318,3 @@ class _SettingsCore(object):
     def __onAccountSettingsChanging(self, key, value):
         LOG_DEBUG('Apply account setting: ', {key: value})
         self.onSettingsChanged({key: value})
-
-
-g_settingsCore = _SettingsCore()

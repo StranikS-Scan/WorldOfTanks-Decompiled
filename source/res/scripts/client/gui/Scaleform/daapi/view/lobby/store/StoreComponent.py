@@ -12,16 +12,19 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.StoreComponentMeta import StoreComponentMeta
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
-from gui.game_control import g_instance, getVehicleComparisonBasketCtrl
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache, event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IVehicleComparisonBasket, IRentalsController, IRestoreController
 
 class StoreComponent(LobbySubView, StoreComponentMeta):
     _DATA_PROVIDER = 'dataProvider'
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    rentals = dependency.descriptor(IRentalsController)
+    restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, _=None):
         super(StoreComponent, self).__init__()
@@ -58,7 +61,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
             return
 
     def onAddVehToCompare(self, itemCD):
-        getVehicleComparisonBasketCtrl().addVehicle(int(itemCD))
+        self.comparisonBasket.addVehicle(int(itemCD))
 
     def requestFilterData(self, filterType):
         """
@@ -75,12 +78,11 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         super(StoreComponent, self)._populate()
         self.__setNations()
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdate})
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange += self.__onVehCompareBasketChanged
-        comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
+        self.comparisonBasket.onChange += self.__onVehCompareBasketChanged
+        self.comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
         g_itemsCache.onSyncCompleted += self._update
-        g_instance.rentals.onRentChangeNotify += self._onTableUpdate
-        g_instance.restore.onRestoreChangeNotify += self._onTableUpdate
+        self.rentals.onRentChangeNotify += self._onTableUpdate
+        self.restore.onRestoreChangeNotify += self._onTableUpdate
         self.__populateFilters()
 
     def _dispose(self):
@@ -100,11 +102,10 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         self.__clearSubFilter()
         self._table = None
         g_itemsCache.onSyncCompleted -= self._update
-        g_instance.rentals.onRentChangeNotify -= self._onTableUpdate
-        g_instance.restore.onRestoreChangeNotify -= self._onTableUpdate
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange -= self.__onVehCompareBasketChanged
-        comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
+        self.rentals.onRentChangeNotify -= self._onTableUpdate
+        self.restore.onRestoreChangeNotify -= self._onTableUpdate
+        self.comparisonBasket.onChange -= self.__onVehCompareBasketChanged
+        self.comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
         g_clientUpdateManager.removeObjectCallbacks(self)
         return
 
@@ -113,7 +114,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
 
     def _update(self, *args):
         self.as_updateS()
-        self.as_setVehicleCompareAvailableS(getVehicleComparisonBasketCtrl().isEnabled())
+        self.as_setVehicleCompareAvailableS(self.comparisonBasket.isEnabled())
 
     def _getTabClass(self, type):
         """

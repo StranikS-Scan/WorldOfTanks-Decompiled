@@ -24,6 +24,8 @@ class AppLoaderListener(object):
             self.__loader.goToLogin()
         elif spaceID == _SPACE_ID.LOBBY:
             self.__loader.goToLobby()
+        elif spaceID == _SPACE_ID.BATTLE_LOADING:
+            self.__loader.goToBattleLoading()
         elif spaceID == _SPACE_ID.BATTLE:
             self.__loader.goToBattle()
 

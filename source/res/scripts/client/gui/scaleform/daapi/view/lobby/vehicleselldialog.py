@@ -1,33 +1,34 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleSellDialog.py
 import BigWorld
+from account_helpers.AccountSettings import AccountSettings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from gui import SystemMessages, makeHtmlString
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.game_control import getRestoreController
+from gui.shared import g_itemsCache
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.formatters import text_styles
+from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from account_helpers.AccountSettings import AccountSettings
-from gui import SystemMessages, makeHtmlString
-from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import g_itemsCache
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.gui_items.processors.vehicle import VehicleSeller
 from gui.shared.gui_items.vehicle_modules import Shell
-from gui.shared.utils import decorators, flashObject2Dict
 from gui.shared.money import Money
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.formatters.tankmen import formatDeletedTankmanStr
-from helpers import int2roman
+from gui.shared.tooltips.formatters import packItemActionTooltipData
+from gui.shared.utils import decorators, flashObject2Dict
+from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import int2roman, dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IRestoreController
 
 class VehicleSellDialog(VehicleSellDialogMeta):
+    restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, ctx=None):
         """ Ctor """
@@ -84,14 +85,13 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         else:
             description = DIALOGS.vehicleselldialog_vehicletype(vehicle.type)
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(vehicle.level)), text_styles.main(_ms(DIALOGS.VEHICLESELLDIALOG_VEHICLE_LEVEL)))
-        restoreController = getRestoreController()
-        tankmenGoingToBuffer, deletedTankmen = restoreController.getTankmenDeletedBySelling(vehicle)
+        tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(vehicle)
         deletedCount = len(deletedTankmen)
         if deletedCount > 0:
             recoveryBufferFull = True
             deletedStr = formatDeletedTankmanStr(deletedTankmen[0])
-            maxCount = restoreController.getMaxTankmenBufferLength()
-            currCount = len(restoreController.getDismissedTankmen())
+            maxCount = self.restore.getMaxTankmenBufferLength()
+            currCount = len(self.restore.getDismissedTankmen())
             if deletedCount == 1:
                 crewTooltip = text_styles.concatStylesToMultiLine(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_HEADER)), text_styles.main(_ms(TOOLTIPS.VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_BODY, maxVal=maxCount, curVal=currCount, sourceName=tankmenGoingToBuffer[-1].fullUserName, targetInfo=deletedStr)))
             else:
@@ -244,7 +244,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         removalCost = g_itemsCache.items.shop.paidRemovalCost
         result = yield VehicleSeller(vehicle, removalCost, shells, eqs, optDevs, inventory, isDismissCrew).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     def sell(self, vehicleCD, shells, eqs, optDevs, inventory, isDismissCrew):
         """

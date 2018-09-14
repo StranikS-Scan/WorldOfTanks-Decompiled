@@ -12,7 +12,6 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getBtnCompareData
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
-from gui.game_control import getWalletCtrl, getVehicleComparisonBasketCtrl
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -116,7 +115,6 @@ class Research(ResearchMeta):
     def invalidateVehCompare(self):
         """
         Updates compare add icon status of nodes if change status of comparison basket fullness.
-        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
         """
         super(Research, self).invalidateVehCompare()
         self.as_setRootNodeVehCompareDataS(getBtnCompareData(g_itemsCache.items.getItemByCD(self._data.getRootCD())))
@@ -148,7 +146,7 @@ class Research(ResearchMeta):
 
     def invalidatePrbState(self):
         """
-        Player's PRB state was changed in prb, unit or prequeue functional.
+        Player's PRB state was changed in prb, unit or prequeue entity.
         """
         self.redraw()
         super(Research, self).invalidatePrbState()
@@ -182,11 +180,11 @@ class Research(ResearchMeta):
         self.as_setWalletStatusS(status)
 
     def compareVehicle(self, itemCD):
-        getVehicleComparisonBasketCtrl().addVehicle(int(itemCD))
+        self.cmpBasket.addVehicle(int(itemCD))
 
     def _populate(self):
         super(Research, self)._populate()
-        self.as_setWalletStatusS(getWalletCtrl().componentsStatuses)
+        self.as_setWalletStatusS(self.wallet.componentsStatuses)
         self.setupContextHints(self.__getContextHintsID())
 
     def _dispose(self):

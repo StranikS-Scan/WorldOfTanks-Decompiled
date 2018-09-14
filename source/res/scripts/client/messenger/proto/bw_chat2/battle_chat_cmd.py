@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/battle_chat_cmd.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
+from helpers import dependency
 from helpers import i18n
 from messenger import g_settings
 from messenger.ext.channel_num_gen import getClientID4BattleChannel
@@ -11,6 +12,7 @@ from messenger.proto.interfaces import IBattleCommandFactory
 from messenger_common_chat2 import messageArgs, BATTLE_CHAT_COMMANDS
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
+from skeletons.gui.battle_session import IBattleSessionProvider
 _TARGETED_CMD_NAMES = ('ATTACKENEMY', 'TURNBACK', 'FOLLOWME', 'HELPMEEX', 'SUPPORTMEWITHFIRE', 'STOP')
 _PUBLIC_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE', 'POSITIVE', 'NEGATIVE', 'RELOADING_READY', 'RELOADING_UNAVAILABLE', 'HELPME', 'RELOADINGGUN', 'RELOADING_CASSETE', 'RELOADING_READY_CASSETE')
 _PRIVATE_CMD_NAMES = ('TURNBACK', 'FOLLOWME', 'HELPMEEX', 'STOP')
@@ -63,6 +65,7 @@ class _OutCmdDecorator(OutChatCommand):
 
 class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     __slots__ = ('_commandID',)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, commandID, args):
         super(_ReceivedCmdDecorator, self).__init__(args, getClientID4BattleChannel(BATTLE_CHANNEL.TEAM.name))
@@ -124,8 +127,7 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         return self.getFirstTargetID() == avatar_getter.getPlayerVehicleID()
 
     def _getTarget(self):
-        from gui.battle_control import g_sessionProvider
-        target = g_sessionProvider.getCtx().getPlayerFullName(vID=self.getFirstTargetID())
+        target = self.sessionProvider.getCtx().getPlayerFullName(vID=self.getFirstTargetID())
         if self.isReceiver():
             target = g_settings.battle.targetFormat % {'target': target}
         return target

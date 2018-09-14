@@ -124,4 +124,4 @@ class FortCreateDirectionWindow(FortCreateDirectionWindowMeta, FortViewHelper):
             if result:
                 g_fortSoundController.playDeleteDirection()
                 directionName = i18n.makeString('#fortifications:General/directionName%d' % dirID)
-                SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DIRECTIONCLOSED, direction=directionName, type=SystemMessages.SM_TYPE.Warning)
+                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DIRECTIONCLOSED, direction=directionName, type=SystemMessages.SM_TYPE.Warning)

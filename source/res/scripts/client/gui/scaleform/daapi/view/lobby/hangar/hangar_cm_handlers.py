@@ -7,13 +7,14 @@ from gui import SystemMessages
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from gui.shared.utils import decorators
+from helpers import dependency
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 class CREW(object):
     PERSONAL_CASE = 'personalCase'
@@ -59,7 +60,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         tankman = g_itemsCache.items.getTankman(self._tankmanID)
         result = yield TankmanUnload(g_currentVehicle.item, tankman.vehicleSlotIdx).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _generateOptions(self, ctx=None):
         return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'))]
@@ -138,6 +139,7 @@ class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
 
 class VehicleContextMenuHandler(SimpleVehicleCMHandler):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, cmProxy, ctx=None):
         super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.INFO: 'showVehicleInfo',
@@ -170,7 +172,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         self.__favoriteVehicle(False)
 
     def compareVehicle(self):
-        getVehicleComparisonBasketCtrl().addVehicle(self.vehCD)
+        self.comparisonBasket.addVehicle(self.vehCD)
 
     def _initFlashValues(self, ctx):
         self.vehInvID = int(ctx.inventoryId)
@@ -216,9 +218,8 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             return options
 
     def _manageVehCompareOptions(self, options, vehicle):
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        if comparisonBasket.isEnabled():
-            options.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': comparisonBasket.isReadyToAdd(vehicle)}))
+        if self.comparisonBasket.isEnabled():
+            options.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(vehicle)}))
 
     @process
     def __favoriteVehicle(self, isFavorite):

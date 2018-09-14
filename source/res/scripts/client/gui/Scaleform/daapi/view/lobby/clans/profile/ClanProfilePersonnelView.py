@@ -60,14 +60,14 @@ def _packStat(description, tooltip, icon, isEnabled, text):
      'enabled': isEnabled}
 
 
-def _packColumn(columdID, label, buttonWidth, tooltip, icon='', sortOrder=-1, showSeparator=True):
+def _packColumn(columdID, label, buttonWidth, tooltip, icon='', sortOrder=-1, showSeparator=True, defaultSortDirection='descending'):
     return {'id': columdID,
      'label': _ms(label),
      'iconSource': icon,
      'buttonWidth': buttonWidth,
      'toolTip': tooltip,
      'sortOrder': sortOrder,
-     'defaultSortDirection': 'descending',
+     'defaultSortDirection': defaultSortDirection,
      'buttonHeight': 34,
      'showSeparator': showSeparator}
 
@@ -120,13 +120,6 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
     def channelsStorage(self):
         return None
 
-    def _dispose(self):
-        if self.__membersDP:
-            self.__membersDP.fini()
-            self.__membersDP = None
-        super(ClanProfilePersonnelView, self)._dispose()
-        return
-
     @process
     def setClanDossier(self, clanDossier):
         super(ClanProfilePersonnelView, self).setClanDossier(clanDossier)
@@ -149,7 +142,7 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
          _packStat(CLANS.PERSONNELVIEW_CLANSTATS_AVGBATTLESCOUNT, CLANS.PERSONNELVIEW_CLANSTATS_AVGBATTLESCOUNT_TOOLTIP, 'avgBattlesCount40x32.png', *self.__membersDP.getAvgBattlesCount()),
          _packStat(CLANS.PERSONNELVIEW_CLANSTATS_AVGWINS, CLANS.PERSONNELVIEW_CLANSTATS_AVGWINS_TOOLTIP, 'avgWins40x32.png', *self.__membersDP.getAvgPerformanceBattles()),
          _packStat(CLANS.PERSONNELVIEW_CLANSTATS_AVGEXP, CLANS.PERSONNELVIEW_CLANSTATS_AVGEXP_TOOLTIP, 'avgExp40x32.png', *self.__membersDP.getAvgXp())]
-        headers = [_packColumn(_SORT_IDS.USER_NAME, _ms(CLANS.PERSONNELVIEW_TABLE_PLAYER, count=text_styles.stats(str(membersCount)), max=str(MAX_MEMBERS_IN_CLAN)), 223, CLANS.PERSONNELVIEW_TABLE_PLAYER_TOOLTIP),
+        headers = [_packColumn(_SORT_IDS.USER_NAME, _ms(CLANS.PERSONNELVIEW_TABLE_PLAYER, count=text_styles.stats(str(membersCount)), max=str(MAX_MEMBERS_IN_CLAN)), 223, CLANS.PERSONNELVIEW_TABLE_PLAYER_TOOLTIP, defaultSortDirection='ascending'),
          _packColumn(_SORT_IDS.POST, CLANS.PERSONNELVIEW_TABLE_POST, 275, CLANS.PERSONNELVIEW_TABLE_POST_TOOLTIP),
          _packColumn(_SORT_IDS.RATING, '', 100, CLANS.PERSONNELVIEW_TABLE_PERSONALRATING_TOOLTIP, RES_ICONS.MAPS_ICONS_STATISTIC_RATING24),
          _packColumn(_SORT_IDS.BATTLES_COUNT, '', 100, CLANS.PERSONNELVIEW_TABLE_BATTLESCOUNT_TOOLTIP, RES_ICONS.MAPS_ICONS_STATISTIC_BATTLES24),
@@ -183,6 +176,13 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
     def onClanAppsCountReceived(self, clanDbID, appsCount):
         if self._clanDossier.getDbID() == clanDbID:
             self._updateHeaderState()
+
+    def _dispose(self):
+        if self.__membersDP:
+            self.__membersDP.fini()
+            self.__membersDP = None
+        super(ClanProfilePersonnelView, self)._dispose()
+        return
 
     def _updateHeaderState(self):
         limits = self.clansCtrl.getLimits()
@@ -225,17 +225,8 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
         super(_ClanMembersDataProvider, self).setFlashObject(movieClip, autoPopulate, setScript)
         usersEvents = g_messengerEvents.users
         usersEvents.onUserActionReceived += self.__me_onUserActionReceived
-
-    def __me_onUserActionReceived(self, actionID, contact):
-        if actionID == USER_ACTION_ID.FRIEND_REMOVED or actionID == USER_ACTION_ID.FRIEND_ADDED or actionID == USER_ACTION_ID.MUTE_SET or actionID == USER_ACTION_ID.MUTE_UNSET or actionID == USER_ACTION_ID.NOTE_CHANGED or actionID == USER_ACTION_ID.IGNORED_ADDED or actionID == USER_ACTION_ID.IGNORED_REMOVED or actionID == USER_ACTION_ID.TMP_IGNORED_ADDED or actionID == USER_ACTION_ID.TMP_IGNORED_REMOVED:
-            self.buildList(self.__accountsList)
-            self.refresh()
-
-    def _dispose(self):
-        usersEvents = g_messengerEvents.users
-        usersEvents.onUserActionReceived -= self.__me_onUserActionReceived
-        self.__sortMapping.clear()
-        super(_ClanMembersDataProvider, self)._dispose()
+        usersEvents.onClanMembersListChanged += self.__me_onClanMembersListChanged
+        usersEvents.onUserStatusUpdated += self.__me_onUserStatusUpdated
 
     @storage_getter('users')
     def userStorage(self):
@@ -337,6 +328,27 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
          'daysInClan': items.formatField(getter=memberData.getDaysInClan, formatter=BigWorld.wg_getIntegralFormat),
          'canShowContextMenu': memberDBID != getAccountDatabaseID(),
          'contactItem': userVO}
+
+    def _dispose(self):
+        usersEvents = g_messengerEvents.users
+        usersEvents.onUserActionReceived -= self.__me_onUserActionReceived
+        usersEvents.onClanMembersListChanged -= self.__me_onClanMembersListChanged
+        usersEvents.onUserStatusUpdated -= self.__me_onUserStatusUpdated
+        self.__sortMapping.clear()
+        super(_ClanMembersDataProvider, self)._dispose()
+
+    def __me_onUserActionReceived(self, actionID, contact):
+        if actionID == USER_ACTION_ID.FRIEND_REMOVED or actionID == USER_ACTION_ID.FRIEND_ADDED or actionID == USER_ACTION_ID.MUTE_SET or actionID == USER_ACTION_ID.MUTE_UNSET or actionID == USER_ACTION_ID.NOTE_CHANGED or actionID == USER_ACTION_ID.IGNORED_ADDED or actionID == USER_ACTION_ID.IGNORED_REMOVED or actionID == USER_ACTION_ID.TMP_IGNORED_ADDED or actionID == USER_ACTION_ID.TMP_IGNORED_REMOVED:
+            self.buildList(self.__accountsList)
+            self.refresh()
+
+    def __me_onClanMembersListChanged(self):
+        self.buildList(self.__accountsList)
+        self.refresh()
+
+    def __me_onUserStatusUpdated(self, _):
+        self.buildList(self.__accountsList)
+        self.refresh()
 
     def __sortingMethod(self, item, field):
         valueGetter = self.__sortMapping[field]

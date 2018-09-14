@@ -3,21 +3,22 @@
 import operator
 import sys
 import BigWorld
-from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.prb_control.prb_getters import getBattleID
-from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty, prbDispatcherProperty
-from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
-from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
-from helpers import i18n, time_utils
+from constants import PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
+from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
 from gui.Scaleform.daapi.view.meta.FortBattleDirectionPopoverMeta import FortBattleDirectionPopoverMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.prb_control import prbPeripheriesHandlerProperty, prbDispatcherProperty
+from gui.prb_control.prb_getters import getBattleID
 from gui.shared.formatters import text_styles, icons
+from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
+from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
+from helpers import i18n, time_utils
 
 class FortBattleDirectionPopover(FortBattleDirectionPopoverMeta, FortViewHelper):
     INVALIDATE_INTERVAL = 60
@@ -38,7 +39,7 @@ class FortBattleDirectionPopover(FortBattleDirectionPopoverMeta, FortViewHelper)
 
     def requestToJoin(self, battleID):
         currentBattleID = getBattleID()
-        if currentBattleID == battleID and self.prbDispatcher.getUnitFunctional().hasEntity():
+        if currentBattleID == battleID and self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.FORT_BATTLE):
             fort_events.showFortBattleRoomWindow()
         else:
             battle = self.fortCtrl.getFort().getBattle(battleID)

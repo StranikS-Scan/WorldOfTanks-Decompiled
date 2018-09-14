@@ -17,6 +17,9 @@ class ClanInvitesViewWithTableMeta(BaseDAAPIComponent):
         self._printOverrideError('refreshTable')
 
     def as_setDataS(self, data):
+        """
+        :param data: Represented by ClanInvitesViewVO (AS)
+        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_getTableDPS(self):

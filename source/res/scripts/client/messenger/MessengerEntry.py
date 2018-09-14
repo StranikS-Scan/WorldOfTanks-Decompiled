@@ -35,6 +35,7 @@ class MessengerEntry(object):
         g_settings.init()
         self.__gui.init()
         self.__msgFiltersChain.init()
+        self.__protoPlugins.init()
         self.__protoPlugins.setFilters(self.__msgFiltersChain)
         g_playerEvents.onAccountShowGUI += self.__pe_onAccountShowGUI
         g_playerEvents.onGuiCacheSyncCompleted += self.__pe_onGuiCacheSyncCompleted
@@ -65,11 +66,11 @@ class MessengerEntry(object):
         self.__protoPlugins.view(MESSENGER_SCOPE.LOBBY)
 
     def onAvatarInitGUI(self):
+        self.__playerHelper.onAvatarShowGUI()
         import BattleReplay
         if BattleReplay.g_replayCtrl.isPlaying:
             self.__gui.switch(MESSENGER_SCOPE.BATTLE)
             return
-        self.__playerHelper.onAvatarShowGUI()
         self.__storage.restoreFromCache()
         scope = MESSENGER_SCOPE.BATTLE
         self.__protoPlugins.connect(scope)

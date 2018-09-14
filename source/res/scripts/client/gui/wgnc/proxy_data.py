@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
-from gui.awards.event_dispatcher import showClanJoinAward
-from gui.game_control import getEncyclopediaController
+from account_helpers import getAccountDatabaseID
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from account_helpers import getAccountDatabaseID
+from helpers import dependency
+from skeletons.gui.game_control import IEncyclopediaController
 
 class _ProxyDataItem(object):
 
@@ -113,10 +113,6 @@ class ClanAppAcceptedItem(_ClanPersonalAppItem):
     def getType(self):
         return WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED
 
-    def show(self, notID):
-        showClanJoinAward(self.getClanTag(), self.getClanName(), self.getClanId())
-        super(ClanAppAcceptedItem, self).show(notID)
-
 
 class _ClanInviteActionResultItem(_ProxyDataItem):
 
@@ -145,6 +141,7 @@ class ClanInviteAcceptedItem(_ClanInviteActionResultItem):
 
 
 class EncyclopediaContentItem(_ProxyDataItem):
+    encyclopedia = dependency.descriptor(IEncyclopediaController)
 
     def __init__(self, contentId):
         self.__contentId = contentId
@@ -153,7 +150,7 @@ class EncyclopediaContentItem(_ProxyDataItem):
         return WGNC_DATA_PROXY_TYPE.UNDEFINED
 
     def show(self, _):
-        getEncyclopediaController().addEncyclopediaRecommendation(self.__contentId)
+        self.encyclopedia.addEncyclopediaRecommendation(self.__contentId)
 
 
 class ProxyDataHolder(object):

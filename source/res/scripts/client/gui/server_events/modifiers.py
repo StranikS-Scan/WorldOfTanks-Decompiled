@@ -6,7 +6,7 @@ import BigWorld
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
 import constants
-from gui.goodies.GoodiesCache import g_goodiesCache
+from gui.goodies.goodies_cache import g_goodiesCache
 from gui.shared.economics import getActionPrc
 import nations
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR

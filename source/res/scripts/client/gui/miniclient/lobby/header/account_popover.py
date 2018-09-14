@@ -45,7 +45,7 @@ class CrewButtonStatusAspect(aop.Aspect):
     def atCall(self, cd):
         cd.avoid()
         return {'isEnabled': False,
-         'disabledTooltip': _ms('#menu:header/account/popover/crew_button/disabledTooltip')}
+         'disabledTooltip': makeTooltip(attention='#menu:header/account/popover/crewButton/disabledTooltip')}
 
 
 class CrewButtonStatusPointcut(aop.Pointcut):

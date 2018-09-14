@@ -7,6 +7,7 @@ import XmlConfigReader
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from . import goodie_constants
 from . import goodie_helpers
+from items.vehicles import makeVehicleTypeCompDescrByName
 _CONFIG_FILE = 'scripts/server_xml/goodies.xml'
 g_cache = None
 
@@ -32,6 +33,8 @@ def _readGoodieTarget(reader, subsectionName):
             name = section.readString('name', '')
             if name == '':
                 name = None
+            if name and t == goodie_helpers.GOODIE_TARGET_TYPE.ON_BUY_VEHICLE:
+                name = makeVehicleTypeCompDescrByName(name)
             limit = section.readInt('limit', 0)
             if limit == 0:
                 limit = None

@@ -12,6 +12,9 @@
     <Login></Login>
     <DetachedTurret></DetachedTurret>
     <OfflineFlag></OfflineFlag>
+    <ChristmassTree></ChristmassTree>
+    <ClientSelectableCameraObject></ClientSelectableCameraObject>
+    <AnimatedGiftBox></AnimatedGiftBox>
   </ClientServerEntities>
   <ServerOnlyEntities>
     <Admin></Admin>
@@ -56,7 +59,12 @@
     <AccountSurrogate></AccountSurrogate>
     <ClubBucket></ClubBucket>
     <RankedMatchmaker></RankedMatchmaker>
+    <RandomBattleMatchmaker></RandomBattleMatchmaker>
+    <CompanyMatchmaker></CompanyMatchmaker>
     <SandboxMgr></SandboxMgr>
     <SingletonLock></SingletonLock>
+    <ExternalBattleMgr></ExternalBattleMgr>
+    <ExternalUnitMgr></ExternalUnitMgr>
+    <ExternalUnitQueue></ExternalUnitQueue>
   </ServerOnlyEntities>
 </entities.xml>

@@ -116,6 +116,9 @@ class LoginPageMeta(View):
         return self.flashObject.as_switchToAutoAndSubmit(key) if self._isDAAPIInited() else None
 
     def as_showSimpleFormS(self, isShow, socialList):
+        """
+        :param socialList: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_showSimpleForm(isShow, socialList) if self._isDAAPIInited() else None
 
     def as_showSocialFormS(self, haveToken, userName, icoPath, socialId):

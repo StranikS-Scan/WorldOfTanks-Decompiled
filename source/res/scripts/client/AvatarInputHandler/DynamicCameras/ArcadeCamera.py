@@ -1,23 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/ArcadeCamera.py
 import math
+from collections import namedtuple
 import BattleReplay
 import BigWorld
+import GUI
 import Keys
 import Math
 import Settings
 import constants
-import GUI
-from AvatarInputHandler import mathUtils, cameras
+from AvatarInputHandler import mathUtils, cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.ArcadeAimingSystem import ArcadeAimingSystem
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, AccelerationSmoother
 from AvatarInputHandler.VideoCamera import KeySensor
 from AvatarInputHandler.cameras import ICamera, readFloat, readVec2, ImpulseReason, FovExtended
 from Math import Vector2, Vector3, Vector4, Matrix
-from avatar_helpers import aim_global_binding
-from debug_utils import LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
+from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
-from collections import namedtuple
+from constants import AVATAR_SUBFILTERS
+from skeletons.account_helpers.settings_core import ISettingsCore
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 
 def getCameraAsSettingsHolder(settingsDataSec):
@@ -83,6 +85,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
      ImpulseReason.VEHICLE_EXPLOSION,
      ImpulseReason.HE_EXPLOSION)
     _DYNAMIC_ENABLED = True
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     @staticmethod
     def enableDynamicCamera(enable):
@@ -123,7 +126,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     angles = property(lambda self: (self.__aimingSystem.yaw, self.__aimingSystem.pitch))
     aimingSystem = property(lambda self: self.__aimingSystem)
     vehicleMProv = property(__getVehicleMProv, __setVehicleMProv)
-    __aimOffset = aim_global_binding.bind(aim_global_binding.BINDING_ID.AIM_OFFSET)
+    __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, dataSec, defaultOffset=None):
         CallbackDelayer.__init__(self)
@@ -156,6 +159,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         else:
             self.__defaultAimOffset = Vector2()
             self.__cam = None
+        self.__isRemoteCamera = False
         return
 
     def create(self, pivotPos, onChangeControlMode=None, postmortemMode=False):
@@ -243,7 +247,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             shiftMat.setIdentity()
         return
 
-    def enable(self, preferredPos=None, closesDist=False, postmortemParams=None, turretYaw=None, gunPitch=None):
+    def enable(self, preferredPos=None, closesDist=False, postmortemParams=None, turretYaw=None, gunPitch=None, isRemoteCamera=False):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setAimClipPosition(self.__aimOffset)
@@ -273,6 +277,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self.__inputInertia.teleport(self.__calcRelativeDist())
         self.vehicleMProv = vehicleMProv
         self.__setModelsToCollideWith(self.__vehiclesToCollideWith)
+        self.__isRemoteCamera = isRemoteCamera
         BigWorld.camera(self.__cam)
         self.__aimingSystem.enable(preferredPos, turretYaw, gunPitch)
         self.__aimingSystem.aimMatrix = self.__calcAimMatrix()
@@ -419,6 +424,8 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def __cameraUpdate(self):
         if not (self.__autoUpdateDxDyDz.x == 0.0 and self.__autoUpdateDxDyDz.y == 0.0 and self.__autoUpdateDxDyDz.z == 0.0):
             self.__update(self.__autoUpdateDxDyDz.x, self.__autoUpdateDxDyDz.y, self.__autoUpdateDxDyDz.z)
+        player = BigWorld.player()
+        vehicle = player.getVehicleAttached()
         inertDt = deltaTime = self.measureDeltaTime()
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
@@ -450,10 +457,20 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         upRotMat.postMultiply(relCamPosMatrix)
         self.__cam.up = upRotMat.applyVector(Vector3(0, 1, 0))
         relTranslation = relCamPosMatrix.translation
-        self.__setCameraPosition(relTranslation)
         shotPoint = self.__calcFocalPoint(virginShotPoint, deltaTime)
         vehToShotPoint = shotPoint - vehiclePos
+        if self.__isRemoteCamera and vehicle is not None:
+            relTranslation = player.remoteCameraArcade.relTranslation
+            vehToShotPoint = player.remoteCameraArcade.shotPoint
+            getVector3 = getattr(player.filter, 'getVector3', None)
+            if getVector3 is not None:
+                time = BigWorld.serverTime()
+                relTranslation = getVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_REL_TRANSLATION, time)
+                vehToShotPoint = getVector3(AVATAR_SUBFILTERS.CAMERA_ARCADE_SHOT_POINT, time)
+            else:
+                LOG_WARNING("ArcadeCamera.__cameraUpdate, the filter doesn't have getVector3 method!")
         self.__setCameraAimPoint(vehToShotPoint)
+        self.__setCameraPosition(relTranslation)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
             aimOffset = replayCtrl.getAimClipPosition()
@@ -465,6 +482,8 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
                 replayCtrl.setAimClipPosition(aimOffset)
         self.__cam.aimPointClipCoords = aimOffset
         self.__aimOffset = aimOffset
+        if vehicle is not None and not player.isObserver():
+            vehicle.setArcadeCameraDataForObservers(vehToShotPoint, relTranslation)
         if self.__shiftKeySensor is not None:
             self.__shiftKeySensor.update(1.0)
             if self.__shiftKeySensor.currentVelocity.lengthSquared > 0.0:
@@ -623,10 +642,9 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             ds = ds['arcadeMode/camera']
         self.__userCfg = dict()
         ucfg = self.__userCfg
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        ucfg['horzInvert'] = g_settingsCore.getSetting('mouseHorzInvert')
-        ucfg['vertInvert'] = g_settingsCore.getSetting('mouseVertInvert')
-        ucfg['sniperModeByShift'] = g_settingsCore.getSetting('sniperModeByShift')
+        ucfg['horzInvert'] = self.settingsCore.getSetting('mouseHorzInvert')
+        ucfg['vertInvert'] = self.settingsCore.getSetting('mouseVertInvert')
+        ucfg['sniperModeByShift'] = self.settingsCore.getSetting('sniperModeByShift')
         ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
         ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
         ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)

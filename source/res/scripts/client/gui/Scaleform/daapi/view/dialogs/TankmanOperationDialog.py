@@ -3,25 +3,27 @@
 import constants
 import nations
 from account_helpers import isLongDisconnectedFromCenter
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.meta.TankmanOperationDialogMeta import TankmanOperationDialogMeta
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS
-from gui.Scaleform.daapi.view.meta.TankmanOperationDialogMeta import TankmanOperationDialogMeta
-from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
-from gui.shared.formatters.tankmen import formatDeletedTankmanStr
+from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles, icons, currency
+from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items.serializers import packTankman
 from gui.shared.money import Currency
-from helpers import time_utils
-from helpers.i18n import makeString as _ms
 from gui.shared.utils.functions import makeTooltip
-from gui.shared.ItemsCache import g_itemsCache
+from helpers import time_utils, dependency
+from helpers.i18n import makeString as _ms
 from items.tankmen import MAX_SKILL_LEVEL
+from skeletons.gui.game_control import IRestoreController
 
 class _TankmanOperationDialogBase(TankmanOperationDialogMeta):
+    restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, meta, handler):
         super(_TankmanOperationDialogBase, self).__init__(text_styles.middleTitle(meta.getMessage()), meta.getTitle(), meta.getButtonLabels(), meta.getCallbackWrapper(handler))
@@ -116,9 +118,7 @@ class DismissTankmanDialog(_TankmanOperationDialogBase):
         viewPy.errorMsg = text_styles.error(DIALOGS.PROTECTEDDISMISSTANKMAN_ERRORMESSAGE)
 
     def _buildVO(self):
-        from gui.game_control import getRestoreController
-        restoreController = getRestoreController()
-        deletedTankmen = restoreController.getTankmenBeingDeleted()
+        deletedTankmen = self.restore.getTankmenBeingDeleted()
         alertImgSrc = ''
         alertText = ''
         alertTooltip = ''
@@ -127,7 +127,7 @@ class DismissTankmanDialog(_TankmanOperationDialogBase):
             alertTooltip = TOOLTIPS.DISMISSTANKMANDIALOG_CANTRESTORALERT
         elif len(deletedTankmen) > 0:
             alertImgSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
-            alertTooltip = makeTooltip(TOOLTIPS.DISMISSTANKMANDIALOG_BUFFERISFULL_HEADER, _ms(TOOLTIPS.DISMISSTANKMANDIALOG_BUFFERISFULL_BODY, placeCount=restoreController.getMaxTankmenBufferLength(), currCount=len(restoreController.getDismissedTankmen()), tankmanNew=self._tankman.fullUserName, tankmanOld=formatDeletedTankmanStr(deletedTankmen[0])))
+            alertTooltip = makeTooltip(TOOLTIPS.DISMISSTANKMANDIALOG_BUFFERISFULL_HEADER, _ms(TOOLTIPS.DISMISSTANKMANDIALOG_BUFFERISFULL_BODY, placeCount=self.restore.getMaxTankmenBufferLength(), currCount=len(self.restore.getDismissedTankmen()), tankmanNew=self._tankman.fullUserName, tankmanOld=formatDeletedTankmanStr(deletedTankmen[0])))
         return {'alertText': alertText,
          'alertTooltip': alertTooltip,
          'alertImgSrc': alertImgSrc,
@@ -161,9 +161,11 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
             restorePriceStr = str(currency.getBWFormatter(Currency.CREDITS)(restorePrice.credits))
             if self._showPeriodEndWarning:
                 daysCount = lengthInHours / time_utils.HOURS_IN_DAY
-                warningTexts.append(text_styles.alert(_ms(DIALOGS.RESTORETANKMNAN_NEWPERIODWARNING, daysCount=daysCount)))
+                warningTexts.append(text_styles.alert(_ms(DIALOGS.RESTORETANKMAN_NEWPERIODWARNING, daysCount=daysCount)))
             if constants.IS_KOREA and restorePrice.gold > 0:
                 warningTexts.append(text_styles.standard(DIALOGS.BUYVEHICLEDIALOG_WARNING))
+        if isLongDisconnectedFromCenter():
+            warningTexts.append(text_styles.error(DIALOGS.RESTORETANKMAN_DISCONNECTEDFROMCENTER))
         return {'questionText': text_styles.stats(_ms(DIALOGS.RESTORETANKMAN_PRICE)),
          'restoreCurrency': restoreCurrency,
          'restorePrice': restorePriceStr,

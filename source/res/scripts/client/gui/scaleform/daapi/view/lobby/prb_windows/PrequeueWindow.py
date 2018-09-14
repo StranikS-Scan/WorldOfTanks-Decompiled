@@ -5,13 +5,13 @@ from adisp import process
 from gui.Scaleform.daapi.view.meta.PrequeueWindowMeta import PrequeueWindowMeta
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
-from gui.prb_control.context import pre_queue_ctx
-from gui.prb_control.prb_helpers import QueueListener
+from gui.prb_control.entities.base.ctx import LeavePrbAction
+from gui.prb_control.entities.base.pre_queue.listener import IPreQueueListener
 from gui.shared import events, EVENT_BUS_SCOPE
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
-class PrequeueWindow(PrequeueWindowMeta, QueueListener):
+class PrequeueWindow(PrequeueWindowMeta, IPreQueueListener):
 
     def __init__(self, queueName='prequeue'):
         super(PrequeueWindow, self).__init__()
@@ -24,27 +24,26 @@ class PrequeueWindow(PrequeueWindowMeta, QueueListener):
         self.destroy()
 
     def requestToEnqueue(self):
-        self.preQueueFunctional.doAction()
+        self.prbEntity.doAction()
 
-    @process
     def requestToLeave(self):
-        yield self.prbDispatcher.leave(pre_queue_ctx.LeavePreQueueCtx(waitingID='prebattle/leave'))
+        self._doLeave()
 
     def showFAQWindow(self):
         self.fireEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.FAQ_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def isEnqueueBtnEnabled(self):
-        return g_currentVehicle.isReadyToPrebattle() and not self.preQueueFunctional.isInQueue()
+        return g_currentVehicle.isReadyToPrebattle() and not self.prbEntity.isInQueue()
 
     def isLeaveBtnEnabled(self):
-        return not self.preQueueFunctional.isInQueue()
+        return not self.prbEntity.isInQueue()
 
     def startListening(self):
-        self.startQueueListening()
+        self.startPrbListening()
         g_currentVehicle.onChanged += self._handleCurrentVehicleChanged
 
     def stopListening(self):
-        self.stopQueueListening()
+        self.stopPrbListening()
         g_currentVehicle.onChanged -= self._handleCurrentVehicleChanged
 
     def _populate(self):
@@ -58,3 +57,7 @@ class PrequeueWindow(PrequeueWindowMeta, QueueListener):
 
     def _handleCurrentVehicleChanged(self):
         self.as_enableEnqueueBtnS(self.isEnqueueBtnEnabled())
+
+    @process
+    def _doLeave(self, isExit=True):
+        yield self.prbDispatcher.doLeaveAction(LeavePrbAction(isExit))

@@ -693,6 +693,10 @@ _AccountClanData.__new__.__defaults__ = (0,
 
 class AccountClanData(_AccountClanData, FieldsCheckerMixin):
 
+    @fmtUnavailableValue(fields=('account_id',))
+    def getDbID(self):
+        return self.account_id
+
     def getClanCooldownTill(self):
         return time_utils.getTimestampFromUTC(self.in_clan_cooldown_till.timetuple())
 

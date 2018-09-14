@@ -1,31 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/ClubStaffView.py
 import BigWorld
-from adisp import process
-from club_shared import CLUB_LIMITS
 from account_helpers import getAccountDatabaseID
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.AccountSettings import AccountSettings, LAST_CLUB_OPENED_FOR_APPS
 from account_helpers.AccountSettings import SHOW_INVITE_COMMAND_BTN_ANIMATION
-from gui.Scaleform.daapi.view.lobby.cyberSport.ClubProfileWindow import ClubPage
-from gui.Scaleform.locale.WAITING import WAITING
-from gui.game_control import getIGRCtrl
-from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
-from helpers.i18n import makeString as _ms
+from adisp import process
+from club_shared import CLUB_LIMITS
 from gui import DialogsInterface, SystemMessages
+from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.lobby.cyberSport.ClubProfileWindow import ClubPage
+from gui.Scaleform.daapi.view.meta.StaticFormationStaffViewMeta import StaticFormationStaffViewMeta
+from gui.Scaleform.genConsts.FORMATION_MEMBER_TYPE import FORMATION_MEMBER_TYPE
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.WAITING import WAITING
 from gui.clubs import events_dispatcher as club_events, formatters as club_fmts
 from gui.clubs.contexts import OpenCloseClubCtx, AssignOfficerCtx, AssignPrivateCtx, KickMemberCtx, DestroyClubCtx, LeaveClubCtx
 from gui.clubs.settings import CLUB_REQUEST_TYPE
 from gui.shared import events
-from gui.shared.formatters import text_styles
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.Scaleform.daapi.view.meta.StaticFormationStaffViewMeta import StaticFormationStaffViewMeta
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
-from gui.Scaleform.genConsts.FORMATION_MEMBER_TYPE import FORMATION_MEMBER_TYPE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
+from gui.shared.formatters import text_styles
+from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from helpers import dependency
+from helpers.i18n import makeString as _ms
 from messenger.m_constants import USER_TAG
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IIGRController
 
 def _getFlashMemberType(member):
     if member.isOwner():
@@ -38,7 +39,8 @@ def _getFlashMemberType(member):
 
 def _getStatusIcon(contact):
     if USER_TAG.PRESENCE_DND in contact.getTags():
-        if g_settingsCore.getSetting('isColorBlind'):
+        settingsCore = dependency.instance(ISettingsCore)
+        if settingsCore.getSetting('isColorBlind'):
             return RES_ICONS.MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_BUSYBLIND
         else:
             return RES_ICONS.MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_BUSY
@@ -89,6 +91,7 @@ def _packTableHeaders():
 
 
 class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self):
         StaticFormationStaffViewMeta.__init__(self)
@@ -361,7 +364,7 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
             else:
                 removeBtnTooltip = TOOLTIPS.STATICFORMATIONSTAFFVIEW_REMOVEMEMBERBTN
             isValid, userData = self.getGuiUserDataWithStatus(dbID)
-            userData.update({'igrType': getIGRCtrl().getRoomType()})
+            userData.update({'igrType': self.igrCtrl.getRoomType()})
             members.append({'memberId': dbID,
              'canRemoved': self.__canBeRemoved(profile, club, member, membersCount, limits),
              'canPassOwnership': limits.canTransferOwnership(profile, club).success,

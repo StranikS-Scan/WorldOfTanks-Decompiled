@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.lobby.boosters.booster_tabs import TabsContainer, 
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.meta.BoostersWindowMeta import BoostersWindowMeta
-from gui.goodies.Booster import MAX_ACTIVE_BOOSTERS_COUNT, BOOSTER_QUALITY_NAMES
+from gui.goodies.goodie_items import MAX_ACTIVE_BOOSTERS_COUNT, BOOSTER_QUALITY_NAMES
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS

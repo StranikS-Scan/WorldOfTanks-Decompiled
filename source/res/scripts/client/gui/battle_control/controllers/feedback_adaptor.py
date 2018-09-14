@@ -44,7 +44,7 @@ class BattleFeedbackAdaptor(IBattleController):
     Class adapts some events from Avatar, Vehicle, ... to GUI event (FEEDBACK_EVENT_ID) to display
     response on player actions.
     """
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onMinimapFeedbackReceived', '__isPEEnabled', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onDevelopmentInfoSet', 'onMinimapFeedbackReceived', '__isPEEnabled', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -54,6 +54,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.__visible = set()
         self.__pending = {}
         self.__attrs = {}
+        self.__devInfo = {}
         self.__eventsCache = {}
         self.onPlayerFeedbackReceived = Event.Event()
         self.onPlayerSummaryFeedbackReceived = Event.Event()
@@ -64,6 +65,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onMinimapVehicleAdded = Event.Event()
         self.onMinimapVehicleRemoved = Event.Event()
         self.onMinimapFeedbackReceived = Event.Event()
+        self.onDevelopmentInfoSet = Event.Event()
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.FEEDBACK
@@ -82,7 +84,8 @@ class BattleFeedbackAdaptor(IBattleController):
         self.__arenaDP = None
         self.__arenaVisitor = None
         self.__attrs = {}
-        self.__eventsCache = {}
+        self.__devInfo.clear()
+        self.__eventsCache.clear()
         return
 
     def getCachedEvent(self, eventID):
@@ -101,9 +104,21 @@ class BattleFeedbackAdaptor(IBattleController):
                     is disabled.
         """
         if vID:
-            self.__isPEEnabled = not self.__arenaDP.isObserver(vID)
+            self.__isPEEnabled = True
         else:
             self.__isPEEnabled = False
+
+    def getVehicleProxy(self, vehicleID):
+        """ Gets proxy of vehicle's entity if it is visible.
+        :param vehicleID: long containing ID of vehicle.
+        :return: proxy of vehicle's entity or None.
+        """
+        proxy = None
+        if vehicleID in self.__visible:
+            vehicle = BigWorld.entity(vehicleID)
+            if vehicle is not None:
+                proxy = vehicle.proxy
+        return proxy
 
     def getVisibleVehicles(self):
         getInfo = self.__arenaDP.getVehicleInfo
@@ -230,6 +245,26 @@ class BattleFeedbackAdaptor(IBattleController):
     def setVehicleHasAmmo(self, vehicleID, hasAmmo):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_HAS_AMMO, vehicleID, hasAmmo)
 
+    def setDevelopmentInfo(self, code, info):
+        """ Sets some development information that are received from server.
+        Adaptor stores last received information for one code (DEVELOPMENT_INFO).
+        :param code: DEVELOPMENT_INFO.*.
+        :param info: received information.
+        """
+        self.__devInfo[code] = info
+        self.onDevelopmentInfoSet(code, info)
+
+    def getDevelopmentInfo(self, code):
+        """ Gets desired development information by code.
+        :param code: DEVELOPMENT_INFO.*.
+        :return: last received information or None.
+        """
+        if code in self.__devInfo:
+            return self.__devInfo[code]
+        else:
+            return None
+            return None
+
     def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):
         if attackerID:
             aInfo = self.__arenaDP.getVehicleInfo(attackerID)
@@ -239,21 +274,5 @@ class BattleFeedbackAdaptor(IBattleController):
         return
 
 
-class BattleFeedbackPlayer(BattleFeedbackAdaptor):
-
-    def handleBattleEventsSummary(self, summary):
-        pass
-
-    def handleBattleEvents(self, events):
-        pass
-
-    def setVehicleNewHealth(self, vehicleID, newHealth, attackerID=0, attackReasonID=0):
-        self._setVehicleHealthChanged(vehicleID, newHealth, attackerID=attackerID, attackReasonID=attackReasonID)
-
-
 def createFeedbackAdaptor(setup):
-    if setup.isReplayPlaying:
-        adaptor = BattleFeedbackPlayer(setup)
-    else:
-        adaptor = BattleFeedbackAdaptor(setup)
-    return adaptor
+    return BattleFeedbackAdaptor(setup)

@@ -11,7 +11,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, FittingItem
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import formatModuleParamName, baseFormatParameter
 from gui.shared.tooltips.formatters import packItemActionTooltipData
-from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH
+from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers.i18n import makeString as _ms
 from gui.shared.formatters import text_styles
@@ -184,6 +184,9 @@ class _PopoverLogicProvider(object):
             if self._slotType == 'vehicleGun':
                 if module.isClipGun(self._vehicle.descriptor):
                     moduleData[EXTRA_MODULE_INFO] = CLIP_ICON_PATH
+            elif self._slotType == 'vehicleChassis':
+                if module.isHydraulicChassis():
+                    moduleData[EXTRA_MODULE_INFO] = HYDRAULIC_ICON_PATH
             modulesList.append(moduleData)
 
         return modulesList

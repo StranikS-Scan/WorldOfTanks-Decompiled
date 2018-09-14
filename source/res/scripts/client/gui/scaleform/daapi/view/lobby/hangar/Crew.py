@@ -142,7 +142,7 @@ class Crew(CrewMeta):
         tankman = g_itemsCache.items.getTankman(int(tmanInvID))
         result = yield TankmanEquip(tankman, g_currentVehicle.item, int(slot)).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def unloadAllTankman(self):
         self.unloadCrew()
@@ -152,7 +152,7 @@ class Crew(CrewMeta):
     def unloadCrew():
         result = yield TankmanUnload(g_currentVehicle.item).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def openPersonalCase(self, value, tabNumber):
         shared_events.showPersonalCase(int(value), int(tabNumber), EVENT_BUS_SCOPE.LOBBY)

@@ -98,7 +98,7 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         result = yield self.fortProvider.sendRequest(UpgradeCtx(self.intBuildingID, waitingID='fort/building/upgrade'))
         if result:
             g_fortSoundController.playUpgradeBuilding()
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_MODERNIZATIONBUILDING, buildingName=building.userName, buildingLevel=building.getUserLevel(True), type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_MODERNIZATIONBUILDING, buildingName=building.userName, buildingLevel=building.getUserLevel(True), type=SystemMessages.SM_TYPE.Warning)
         self.destroy()
 
     def _populate(self):

@@ -1,26 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_obtain_windows.py
 import constants
-from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.Scaleform.locale.MENU import MENU
-from gui.shared.formatters import text_styles
-from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleRestoreProcessor
 from account_helpers.AccountSettings import AccountSettings, VEHICLE_BUY_WINDOW_SETTINGS
 from debug_utils import LOG_ERROR
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.VehicleBuyWindowMeta import VehicleBuyWindowMeta
-from gui import SystemMessages
+from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_itemsCache
+from gui.shared.formatters import text_styles
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter, VehicleRestoreProcessor
+from gui.shared.money import Money, ZERO_MONEY
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.formatters import packItemActionTooltipData, packItemRentActionTooltipData
 from gui.shared.utils import decorators
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import Money, ZERO_MONEY
-from gui.shared.tooltips.formatters import packActionTooltipData
-from helpers import i18n, time_utils
-from gui.game_control import g_instance as g_gameCtrl
+from helpers import i18n, time_utils, dependency
+from skeletons.gui.game_control import IRentalsController
 
 class VehicleBuyWindow(VehicleBuyWindowMeta):
+    rentals = dependency.descriptor(IRentalsController)
 
     def __init__(self, ctx=None):
         super(VehicleBuyWindow, self).__init__()
@@ -40,14 +41,14 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         super(VehicleBuyWindow, self)._populate()
         self._initData()
         g_itemsCache.onSyncCompleted += self._initData
-        g_gameCtrl.rentals.onRentChangeNotify += self._onRentChange
+        self.rentals.onRentChangeNotify += self._onRentChange
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCreditsCallBack,
          'stats.gold': self.__setGoldCallBack})
 
     def _dispose(self):
         g_itemsCache.onSyncCompleted -= self._initData
         g_clientUpdateManager.removeObjectCallbacks(self)
-        g_gameCtrl.rentals.onRentChangeNotify -= self._onRentChange
+        self.rentals.onRentChangeNotify -= self._onRentChange
         super(VehicleBuyWindow, self)._dispose()
 
     def _getGuiFields(self, vehicle):
@@ -183,7 +184,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         if data.buySlot:
             result = yield VehicleSlotBuyer(showConfirm=False, showWarning=False).request()
             if len(result.userMsg):
-                SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if not result.success:
                 return
         if data.rentId != -1:
@@ -191,7 +192,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
         else:
             result = yield self._getObtainVehicleProcessor(vehicle, data).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             self.storeSettings(data.isHasBeenExpanded)
         self.onWindowClose()
@@ -210,11 +211,11 @@ class VehicleRestoreWindow(VehicleBuyWindow):
 
     def _populate(self):
         super(VehicleRestoreWindow, self)._populate()
-        g_gameCtrl.rentals.onRentChangeNotify += self.__onRestoreChange
+        self.rentals.onRentChangeNotify += self.__onRestoreChange
 
     def _dispose(self):
         super(VehicleRestoreWindow, self)._dispose()
-        g_gameCtrl.rentals.onRentChangeNotify -= self.__onRestoreChange
+        self.rentals.onRentChangeNotify -= self.__onRestoreChange
 
     def _addPriceBlock(self, result, vehicle, vehiclePricesActionData):
         disabled = not vehicle.isRestoreAvailable() or constants.IS_CHINA and vehicle.rentalIsActive

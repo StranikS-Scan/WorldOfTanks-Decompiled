@@ -109,3 +109,25 @@ class GUI_CTRL_MODE_FLAG(object):
     MOVING_DISABLED = 4
     AIMING_ENABLED = 8
     GUI_ENABLED = CURSOR_ATTACHED | CURSOR_VISIBLE
+
+
+def getGuiServicesConfig(manager):
+    """ Configures services for package gui.
+    :param manager: helpers.dependency.DependencyManager
+    """
+    from gui import battle_control
+    from gui import clans
+    from gui import clubs
+    from gui import game_control
+    from gui import login
+    from gui import server_events
+    from gui import sounds
+    from gui import Scaleform as _sf
+    manager.install(game_control.getGameControllersConfig)
+    manager.install(_sf.getScaleformConfig)
+    manager.install(login.getLoginManagerConfig)
+    manager.install(server_events.getServerEventsConfig)
+    manager.install(battle_control.getBattleSessionConfig)
+    manager.install(sounds.getSoundsConfig)
+    manager.install(clans.getClanServicesConfig)
+    manager.install(clubs.getClubsServicesConfig)

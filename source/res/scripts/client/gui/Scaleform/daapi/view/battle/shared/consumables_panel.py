@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/consumables_panel.py
+import BigWorld
 import math
 from functools import partial
-import BigWorld
 import CommandMapping
 import SoundGroups
 from constants import EQUIPMENT_STAGES
@@ -10,14 +10,16 @@ from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, GUN_RELOADING_VALUE_TYPE
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getScaleformKey
+from helpers import dependency
 from helpers import i18n
 from shared_utils import forEach
+from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentSound
 AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/%s'
 NO_AMMO_ICON_PATH = '../maps/icons/ammopanel/battle_ammo/NO_%s'
 COMMAND_AMMO_CHOICE_MASK = 'CMD_AMMO_CHOICE_{0:d}'
@@ -45,6 +47,7 @@ TOOLTIP_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}\n/{{BODY}}{1:>s}{{/BODY}}'
 TOOLTIP_NO_BODY_FORMAT = '{{HEADER}}{0:>s}{{/HEADER}}'
 
 class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(ConsumablesPanel, self).__init__()
@@ -65,7 +68,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
         self.__keys.clear()
         self.__keys = keys
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         return
@@ -84,14 +87,16 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def _dispose(self):
         self.__removeListeners()
         self.__keys.clear()
+        self.as_resetS()
         super(ConsumablesPanel, self)._dispose()
 
     def __addListeners(self):
-        vehicleCtrl = g_sessionProvider.shared.vehicleState
+        vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
             vehicleCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
-        ammoCtrl = g_sessionProvider.shared.ammo
+            vehicleCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             self.__fillShells(ammoCtrl)
             ammoCtrl.onShellsAdded += self.__onShellsAdded
@@ -99,13 +104,14 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             ammoCtrl.onNextShellChanged += self.__onNextShellChanged
             ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
             ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
-        eqCtrl = g_sessionProvider.shared.equipments
+            ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
+        eqCtrl = self.sessionProvider.shared.equipments
         if eqCtrl is not None:
             self.__fillEquipments(eqCtrl)
             eqCtrl.onEquipmentAdded += self.__onEquipmentAdded
             eqCtrl.onEquipmentUpdated += self.__onEquipmentUpdated
             eqCtrl.onEquipmentCooldownInPercent += self.__onEquipmentCooldownInPercent
-        optDevicesCtrl = g_sessionProvider.shared.optionalDevices
+        optDevicesCtrl = self.sessionProvider.shared.optionalDevices
         if optDevicesCtrl is not None:
             self.__fillOptionalDevices(optDevicesCtrl)
             optDevicesCtrl.onOptionalDeviceAdded += self.__onOptionalDeviceAdded
@@ -117,24 +123,25 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def __removeListeners(self):
         g_eventBus.removeListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
         CommandMapping.g_instance.onMappingChanged -= self.__onMappingChanged
-        vehicleCtrl = g_sessionProvider.shared.vehicleState
+        vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
             vehicleCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
             vehicleCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        ammoCtrl = g_sessionProvider.shared.ammo
+        ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl is not None:
             ammoCtrl.onShellsAdded -= self.__onShellsAdded
             ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
             ammoCtrl.onNextShellChanged -= self.__onNextShellChanged
             ammoCtrl.onCurrentShellChanged -= self.__onCurrentShellChanged
             ammoCtrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
-        eqCtrl = g_sessionProvider.shared.equipments
+            ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
+        eqCtrl = self.sessionProvider.shared.equipments
         if eqCtrl is not None:
             eqCtrl.onEquipmentAdded -= self.__onEquipmentAdded
             eqCtrl.onEquipmentUpdated -= self.__onEquipmentUpdated
             eqCtrl.onEquipmentCooldownInPercent -= self.__onEquipmentCooldownInPercent
-        optDevicesCtrl = g_sessionProvider.shared.optionalDevices
+        optDevicesCtrl = self.sessionProvider.shared.optionalDevices
         if optDevicesCtrl is not None:
             optDevicesCtrl.onOptionalDeviceAdded -= self.__onOptionalDeviceAdded
             optDevicesCtrl.onOptionalDeviceUpdated -= self.__onOptionalDeviceUpdated
@@ -171,7 +178,8 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         return fmt.format(header, body)
 
     def __getKeysGenerator(self):
-        getEquipment = g_sessionProvider.shared.equipments.getEquipment
+        hasEquipment = self.sessionProvider.shared.equipments.hasEquipment
+        getEquipment = self.sessionProvider.shared.equipments.getEquipment
         for idx, intCD in enumerate(self.__cds):
             if not intCD:
                 yield (idx,
@@ -182,9 +190,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             handler = None
             if idx in AMMO_RANGE:
                 handler = partial(self.__handleAmmoPressed, intCD)
-            elif idx in EQUIPMENT_RANGE or idx in ORDERS_RANGE:
+            elif (idx in EQUIPMENT_RANGE or idx in ORDERS_RANGE) and hasEquipment(intCD):
                 item = getEquipment(intCD)
-                if item and item.getTag() and item.getQuantity() > 0:
+                if item is not None and item.getTag() and item.getQuantity() > 0:
                     if item.isEntityRequired():
                         handler = partial(self.__handleEquipmentExpanded, intCD)
                     else:
@@ -218,19 +226,19 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 handler()
 
     def __handleAmmoPressed(self, intCD):
-        ctrl = g_sessionProvider.shared.ammo
+        ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
             ctrl.changeSetting(intCD)
         return
 
     def __handleEquipmentPressed(self, intCD, entityName=None):
-        ctrl = g_sessionProvider.shared.equipments
+        ctrl = self.sessionProvider.shared.equipments
         if ctrl is None:
             return
         else:
             result, error = ctrl.changeSetting(intCD, entityName=entityName, avatar=BigWorld.player())
             if not result and error:
-                ctrl = g_sessionProvider.shared.messages
+                ctrl = self.sessionProvider.shared.messages
                 if ctrl is not None:
                     ctrl.showVehicleError(error.key, error.ctx)
             else:
@@ -238,13 +246,13 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             return
 
     def __handleEquipmentExpanded(self, intCD):
-        ctrl = g_sessionProvider.shared.equipments
+        ctrl = self.sessionProvider.shared.equipments
         if ctrl is None:
             return
         else:
             result, error = ctrl.changeSetting(intCD)
-            if not result and error:
-                ctrl = g_sessionProvider.shared.messages
+            if not result and error is not None:
+                ctrl = self.sessionProvider.shared.messages
                 if ctrl is not None:
                     ctrl.showVehicleError(error.key, error.ctx)
                 return
@@ -268,7 +276,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             self.__expandEquipmentSlot(self.__cds.index(intCD), slots)
             self.__keys.clear()
             self.__keys = keys
-            ctrl = g_sessionProvider.shared.vehicleState
+            ctrl = self.sessionProvider.shared.vehicleState
             if ctrl is not None:
                 ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             return
@@ -307,11 +315,14 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             index = self.__cds.index(currShellCD)
             valueType = state.getValueType()
             if valueType == GUN_RELOADING_VALUE_TYPE.TIME:
-                self.as_setCoolDownTimeS(index, state.getActualValue())
+                self.as_setCoolDownTimeS(index, state.getActualValue(), state.getBaseValue(), state.getTimePassed(), state.isReloading())
             elif valueType == GUN_RELOADING_VALUE_TYPE.PERCENT:
                 self.as_setCoolDownPosAsPercentS(index, state.getActualValue())
         else:
             LOG_ERROR('Ammo is not found in panel', currShellCD, self.__cds)
+
+    def __onGunSettingsSet(self, gunSettings):
+        self.__reset()
 
     def __onEquipmentAdded(self, intCD, item):
         if item:
@@ -343,7 +354,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
                 self.__updateOrderSlot(idx, item)
             else:
                 if not quantity:
-                    SoundGroups.g_instance.playSound2D('battle_equipment_%d' % intCD)
+                    soundName = 'battle_equipment_%d' % intCD
+                    if soundName in EquipmentSound.getSounds():
+                        SoundGroups.g_instance.playSound2D(soundName)
                 self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
                 self.onPopUpClosed()
         else:
@@ -406,14 +419,19 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
     def __onOptionalDeviceUpdated(self, intCD, isOn):
         if intCD in self.__cds:
-            self.as_setCoolDownTimeS(self.__cds.index(intCD), -1 if isOn else 0)
+            duration = -1 if isOn else 0
+            self.as_setCoolDownTimeS(self.__cds.index(intCD), duration, duration, 0, False)
         else:
             LOG_ERROR('Optional device is not found in panel', intCD, self.__cds)
 
     def __onPostMortemSwitched(self):
+        self.__keys.clear()
         self.as_switchToPosmortemS()
 
     def __onRespawnBaseMoving(self):
+        self.__reset()
+
+    def __reset(self):
         self.__cds = [None] * PANEL_MAX_LENGTH
         self.__mask = 0
         self.__keys.clear()
@@ -422,9 +440,9 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         return
 
     def __onVehicleStateUpdated(self, state, value):
-        if state != VEHICLE_VIEW_STATE.DEVICES:
-            return
-        else:
+        if state == VEHICLE_VIEW_STATE.SWITCHING:
+            self.__reset()
+        elif state == VEHICLE_VIEW_STATE.DEVICES:
             deviceName, _, actualState = value
             if deviceName in VEHICLE_DEVICE_IN_COMPLEX_ITEM:
                 itemName = VEHICLE_DEVICE_IN_COMPLEX_ITEM[deviceName]
@@ -433,14 +451,14 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             idx = int(self.as_updateEntityStateS(itemName, actualState))
             if idx and idx < len(self.__cds):
                 intCD = self.__cds[idx]
-                ctrl = g_sessionProvider.shared.equipments
+                ctrl = self.sessionProvider.shared.equipments
                 if ctrl is None:
                     return
                 item = ctrl.getEquipment(intCD)
                 if item and item.isEntityRequired():
                     bwKey, _ = self.__genKey(idx)
                     self.__keys[bwKey] = partial(self.__handleEquipmentPressed, self.__cds[idx], deviceName)
-            return
+        return
 
     def __expandEquipmentSlot(self, index, slots):
         self.as_expandEquipmentSlotS(index, slots)

@@ -9,21 +9,17 @@ class IProtoPlugin(object):
     __slots__ = ('__weakref__',)
 
     def connect(self, scope):
-        """
-        Connects client to required chat protocol.
+        """Connects client to required chat protocol.
         :param scope: integer that containing one of MESSENGER_SCOPE.*.
         """
         pass
 
     def disconnect(self):
-        """
-        Disconnects client from required chat protocol.
-        """
+        """Disconnects client from required chat protocol."""
         pass
 
     def view(self, scope):
-        """
-        Routine invokes when player starts to view GUI.
+        """Routine invokes when player starts to view GUI.
         :param scope: integer that containing one of MESSENGER_SCOPE.*.
         """
         pass
@@ -35,15 +31,16 @@ class IProtoPlugin(object):
         """
         pass
 
+    def init(self):
+        """Initializes required chat protocol."""
+        pass
+
     def clear(self):
-        """
-        Clears plugin data.
-        """
+        """Clears plugin data."""
         pass
 
     def isConnected(self):
-        """
-        Is plugin connected to specified chat server.
+        """Is plugin connected to specified chat server.
         :return: bool
         """
         return False

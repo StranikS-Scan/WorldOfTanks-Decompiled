@@ -3,8 +3,8 @@
 import BigWorld
 import constants
 from adisp import process, async
-from items import vehicles, tankmen, ITEM_TYPE_NAMES
-from debug_utils import *
+from items import vehicles, tankmen, ITEM_TYPE_NAMES, parseIntCompactDescr
+from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 
@@ -32,6 +32,9 @@ class AccountValidator(object):
         INVENTORY_SHELL_MISMATCH = 1010
         INVENTORY_EQ_MISMATCH = 1011
         INVENTORY_VEHICLE_CREW_MISMATCH = 1012
+        DOSSIER_CAMOUFLAGES_ERROR = 1013
+        DOSSIER_INSCRIPTIONS_ERROR = 1014
+        DOSSIER_EMBLEMS_ERROR = 1015
 
     @classmethod
     def __packItemData(cls, itemTypeID, itemData, *args):
@@ -91,10 +94,34 @@ class AccountValidator(object):
             except Exception as e:
                 raise ValidateException(e.message, errorCode, self.__packItemData(itemTypeID, itemData))
 
+    def __validateCustomization(self):
+        for intCD, dossier in g_itemsCache.items.getVehicleDossiersIterator():
+            _, nationID, _ = parseIntCompactDescr(intCD)
+            customization = vehicles.g_cache.customization(nationID)
+            camouflages = customization['camouflages']
+            inscriptions = customization['inscriptions']
+            emblems = vehicles.g_cache.playerEmblems()[1]
+            for camoID in list(dossier['camouflages']):
+                if camoID not in camouflages:
+                    raise ValidateException('Invalid camounflage for vehicle %s' % intCD, self.CODES.DOSSIER_CAMOUFLAGES_ERROR, ('camouflage', camoID))
+
+            for insID in list(dossier['inscriptions']):
+                if insID not in inscriptions:
+                    raise ValidateException('Invalid insription for vehicle %s' % intCD, self.CODES.DOSSIER_INSCRIPTIONS_ERROR, ('inscription', insID))
+
+            for emblemID in list(dossier['emblems']):
+                if emblemID not in emblems:
+                    raise ValidateException('Invalid emblem for vehicle %s' % intCD, self.CODES.DOSSIER_EMBLEMS_ERROR, ('emblem', emblemID))
+
     @async
     @process
     def validate(self, callback):
-        yield lambda callback: callback(True)
+
+        @async
+        def _fake(callback):
+            callback(True)
+
+        yield _fake()
         handlers = [lambda : self.__validateInvItem(GUI_ITEM_TYPE.CHASSIS, self.CODES.INVENTORY_CHASSIS_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.TURRET, self.CODES.INVENTORY_TURRET_MISMATCH),
          lambda : self.__validateInvItem(GUI_ITEM_TYPE.GUI, self.CODES.INVENTORY_GUN_MISMATCH),

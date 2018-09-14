@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/queries.py
+from debug_utils import LOG_DEBUG
 from helpers import i18n
 from tutorial.control import ContentQuery
+from tutorial.control.functional import FunctionalConditions
 from tutorial.doc_loader import getQuestsDescriptor
 
 class AwardWindowContentQuery(ContentQuery):
@@ -14,12 +16,19 @@ class AwardWindowContentQuery(ContentQuery):
         content['description'] = self.getVar(value, default=value)
         content['header'] = self.__getAwardHeader(content, chapter)
         content['bgImage'] = self.__getAwardIcon(content, chapter)
-        content['bonuses'] = chapter.getBonus().getValues()
+        content['bonuses'] = None
+        bonus = chapter.getBonus()
+        altBonusConditions = FunctionalConditions(bonus.getAltBonusValuesConditions())
+        if altBonusConditions.allConditionsOk() and bonus.getAltValues():
+            content['bonuses'] = bonus.getAltValues()
+        else:
+            content['bonuses'] = bonus.getValues()
         content['chapterID'] = chapterID
         progrCondition = chapter.getProgressCondition()
         if progrCondition.getID() == 'vehicleBattlesCount':
             content['vehicle'] = progrCondition.getValues().get('vehicle')
         content['showQuestsBtn'] = not descriptor.areAllBonusesReceived(self._bonuses.getCompleted())
+        return
 
     def __getAwardHeader(self, content, chapter):
         value = content['header']

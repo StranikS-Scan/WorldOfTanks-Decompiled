@@ -7,7 +7,6 @@ import operator
 from collections import namedtuple
 from operator import itemgetter
 from constants import SHELL_TYPES
-from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
 from gui.shared.items_parameters.comparator import BACKWARD_QUALITY_PARAMS
@@ -16,7 +15,7 @@ from gui.shared.items_parameters import functions
 from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP, RELOAD_TIME_PROP_NAME, GUN_CAN_BE_CLIP
 from helpers import time_utils
 from items import getTypeOfCompactDescr, vehicles, getTypeInfoByIndex, ITEM_TYPES
-from items.utils import getRadioDistance, getCircularVisionRadius, getTurretRotationSpeed, getChassisRotationSpeed, getReloadTime, getCrewAffectedFactors, getGunAimingTime, getClientInvisibility, getClientShotDispersion
+from items import utils as items_utils
 from gui.shared.items_parameters import formatters
 MAX_VISION_RADIUS = 500
 MIN_VISION_RADIUS = 150
@@ -170,10 +169,15 @@ class ChassisParams(WeightedParam):
     def rotationSpeed(self):
         return int(round(math.degrees(self._itemDescr['rotationSpeed'])))
 
+    @property
+    def isHydraulic(self):
+        return self.precachedParams.isHydraulic
+
     def getParamsDict(self):
         return {'maxLoad': self.maxLoad,
          'rotationSpeed': self.rotationSpeed,
-         'weight': self.weight}
+         'weight': self.weight,
+         'isHydraulic': self.isHydraulic}
 
 
 class TurretParams(WeightedParam):
@@ -245,7 +249,7 @@ class VehicleParams(_ParameterBase):
     def chassisRotationSpeed(self):
         allTrfs = self.__factors['chassis/terrainResistance']
         avgTrf = sum(allTrfs) / len(allTrfs)
-        return math.degrees(getChassisRotationSpeed(self._itemDescr, self.__factors)) / avgTrf
+        return math.degrees(items_utils.getChassisRotationSpeed(self._itemDescr, self.__factors)) / avgTrf
 
     @property
     def hullArmor(self):
@@ -275,24 +279,27 @@ class VehicleParams(_ParameterBase):
 
     @property
     def reloadTime(self):
-        reloadTime = getReloadTime(self._itemDescr, self.__factors)
+        reloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors)
         return getShotsPerMinute(self._itemDescr.gun, reloadTime)
 
     @property
     def turretRotationSpeed(self):
-        return round(math.degrees(getTurretRotationSpeed(self._itemDescr, self.__factors)), 2) if self.__hasTurret() else None
+        return round(math.degrees(items_utils.getTurretRotationSpeed(self._itemDescr, self.__factors)), 2) if self.__hasTurret() else None
 
     @property
     def gunRotationSpeed(self):
-        return round(math.degrees(getTurretRotationSpeed(self._itemDescr, self.__factors)), 2) if not self.__hasTurret() else None
+        if self._itemDescr.isYawHullAimingAvailable:
+            return self.chassisRotationSpeed
+        else:
+            return round(math.degrees(items_utils.getTurretRotationSpeed(self._itemDescr, self.__factors)), 2) if not self.__hasTurret() else None
 
     @property
     def circularVisionRadius(self):
-        return round(getCircularVisionRadius(self._itemDescr, self.__factors))
+        return round(items_utils.getCircularVisionRadius(self._itemDescr, self.__factors))
 
     @property
     def radioDistance(self):
-        return round(getRadioDistance(self._itemDescr, self.__factors))
+        return round(items_utils.getRadioDistance(self._itemDescr, self.__factors))
 
     @property
     def turretArmor(self):
@@ -308,11 +315,11 @@ class VehicleParams(_ParameterBase):
 
     @property
     def aimingTime(self):
-        return getGunAimingTime(self._itemDescr, self.__factors)
+        return items_utils.getGunAimingTime(self._itemDescr, self.__factors)
 
     @property
     def shotDispersionAngle(self):
-        shotDispersion = getClientShotDispersion(self._itemDescr, self.__factors['shotDispersion'][0])
+        shotDispersion = items_utils.getClientShotDispersion(self._itemDescr, self.__factors['shotDispersion'][0])
         return round(shotDispersion * 100, 2)
 
     @property
@@ -371,7 +378,9 @@ class VehicleParams(_ParameterBase):
 
     @property
     def gunYawLimits(self):
-        if self.__hasTurret():
+        if self._itemDescr.isYawHullAimingAvailable:
+            return (0, 0)
+        elif self.__hasTurret():
             return None
         else:
             return self.__getGunYawLimits()
@@ -380,7 +389,7 @@ class VehicleParams(_ParameterBase):
     @property
     def pitchLimits(self):
         limits = []
-        for limit in self._itemDescr.gun['pitchLimits']['absolute']:
+        for limit in self.__getPitchLimitsValues():
             limits.append(math.degrees(limit) * -1)
 
         return sorted(limits)
@@ -404,8 +413,24 @@ class VehicleParams(_ParameterBase):
         if self.__hasClipGun():
             gunParams = self._itemDescr.gun
             clipData = gunParams['clip']
-            reloadTime = getReloadTime(self._itemDescr, self.__factors)
+            reloadTime = items_utils.getReloadTime(self._itemDescr, self.__factors)
             return (reloadTime, clipData[1], clipData[0])
+        else:
+            return None
+            return None
+
+    @property
+    def switchOnTime(self):
+        if self._itemDescr.hasSiegeMode:
+            return self._itemDescr.type.siegeModeParams['switchOnTime']
+        else:
+            return None
+            return None
+
+    @property
+    def switchOffTime(self):
+        if self._itemDescr.hasSiegeMode:
+            return self._itemDescr.type.siegeModeParams['switchOffTime']
         else:
             return None
             return None
@@ -435,7 +460,9 @@ class VehicleParams(_ParameterBase):
          'relativeCamouflage': self.relativeCamouflage,
          'pitchLimits': self.pitchLimits,
          'invisibilityStillFactor': self.invisibilityStillFactor,
-         'invisibilityMovingFactor': self.invisibilityMovingFactor}
+         'invisibilityMovingFactor': self.invisibilityMovingFactor,
+         'switchOnTime': self.switchOnTime,
+         'switchOffTime': self.switchOffTime}
         conditionalParams = ('turretYawLimits', 'gunYawLimits', 'clipFireRate', 'gunRotationSpeed', 'turretRotationSpeed', 'turretArmor', 'reloadTimeSecs')
         result.update(self.__packConditionalParams(conditionalParams))
         return result
@@ -481,7 +508,7 @@ class VehicleParams(_ParameterBase):
 
     def __getPenalties(self, vehicle):
         crew, emptySlots, otherVehicleSlots = functions.extractCrewDescrs(vehicle, replaceNone=False)
-        crewFactors = getCrewAffectedFactors(vehicle.descriptor, crew)
+        crewFactors = items_utils.getCrewAffectedFactors(vehicle.descriptor, crew)
         result = {}
         currParams = self.getParamsDict()
         roles = vehicle.descriptor.type.crewRoles
@@ -543,12 +570,31 @@ class VehicleParams(_ParameterBase):
 
     def __getInvisibilityValues(self):
         camouflageFactor = self.__factors.get('camouflage', 1)
-        moving, still = getClientInvisibility(self._itemDescr, camouflageFactor, self.__factors)
+        moving, still = items_utils.getClientInvisibility(self._itemDescr, camouflageFactor, self.__factors)
         moving *= ONE_HUNDRED_PERCENTS
         still *= ONE_HUNDRED_PERCENTS
         movingAtShot = moving * self.invisibilityFactorAtShot
         stillAtShot = still * self.invisibilityFactorAtShot
         return (_Invisibility(moving, movingAtShot), _Invisibility(still, stillAtShot))
+
+    def __getPitchLimitsValues(self):
+        if self._itemDescr.isPitchHullAimingAvailable:
+            hullAimingParams = self._itemDescr.type.hullAimingParams
+            wheelsCorrectionAngles = hullAimingParams['pitch']['wheelsCorrectionAngles']
+            hullAimingPitchMin = wheelsCorrectionAngles['pitchMin']
+            hullAimingPitchMax = wheelsCorrectionAngles['pitchMax']
+            if self._itemDescr.gun['staticPitch'] is not None:
+                return (hullAimingPitchMin, hullAimingPitchMax)
+            else:
+                pitchLimits = self._itemDescr.gun['pitchLimits']
+                minPitch = pitchLimits['minPitch']
+                maxPitch = pitchLimits['maxPitch']
+                hullAimingPitchMin = wheelsCorrectionAngles['pitchMin']
+                hullAimingPitchMax = wheelsCorrectionAngles['pitchMax']
+                return (min([ key for _, key in minPitch ]) + hullAimingPitchMin, max([ key for _, key in maxPitch ]) + hullAimingPitchMax)
+        else:
+            return self._itemDescr.gun['pitchLimits']['absolute']
+        return
 
     def __hasClipGun(self):
         return self._itemDescr.gun['clip'][0] != 1

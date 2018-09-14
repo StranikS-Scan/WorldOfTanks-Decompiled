@@ -208,8 +208,9 @@ class ShotPointCalculatorPlanar(object):
     aimPlane = property(lambda self: self.__aimPlane)
 
     def __init__(self):
-        self.__vehicleMat = BigWorld.player().getOwnVehicleStabilisedMatrix()
-        self.__vehicleDesc = BigWorld.player().vehicleTypeDescriptor
+        player = BigWorld.player()
+        self.__vehicleMat = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
+        self.__vehicleDesc = player.vehicleTypeDescriptor
         self.__aimPlane = _AimPlane()
         self.__getTurretMat = functools.partial(AimingSystems.getTurretJointMat, self.__vehicleDesc, self.__vehicleMat)
 

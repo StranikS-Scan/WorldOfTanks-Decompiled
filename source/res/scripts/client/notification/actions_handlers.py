@@ -4,28 +4,29 @@ from collections import defaultdict
 import BigWorld
 from adisp import process
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui import DialogsInterface, makeHtmlString, SystemMessages, game_control
+from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
-from gui.awards.event_dispatcher import showClanJoinAward
 from gui.clans import contexts as clan_ctxs
-from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.clubs import contexts as club_ctx, events_dispatcher as club_events
 from gui.clubs.club_helpers import ClubListener
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.prb_control.prb_getters import getBattleID
-from gui.prb_control.prb_helpers import prbInvitesProperty, prbDispatcherProperty
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events, event_dispatcher
-from gui.shared.gui_items.processors.common import BattleResultsGetter
 from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
+from gui.shared.gui_items.processors.common import BattleResultsGetter
+from gui.shared.utils import decorators
 from gui.wgnc import g_wgncProvider
+from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
-from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
-from gui.shared.utils import decorators
+from skeletons.gui.clans import IClanController
+from skeletons.gui.game_control import IBrowserController
 
 class _ActionHandler(object):
 
@@ -142,6 +143,7 @@ class _ShowClanInvitesHandler(_ActionHandler):
 
 
 class _ClanAppHandler(_ActionHandler):
+    clanCtrl = dependency.descriptor(IClanController)
 
     def _getAccountID(self, model, entityID):
         return model.getNotification(self.getNotType(), entityID).getAccountID()
@@ -163,7 +165,7 @@ class _AcceptClanAppHandler(_ClanAppHandler):
     @process
     def handleAction(self, model, entityID, action):
         super(_AcceptClanAppHandler, self).handleAction(model, entityID, action)
-        yield g_clanCtrl.sendRequest(clan_ctxs.AcceptApplicationCtx(self._getApplicationID(model, entityID)), allowDelay=True)
+        yield self.clanCtrl.sendRequest(clan_ctxs.AcceptApplicationCtx(self._getApplicationID(model, entityID)), allowDelay=True)
 
 
 class _DeclineClanAppHandler(_ClanAppHandler):
@@ -179,7 +181,7 @@ class _DeclineClanAppHandler(_ClanAppHandler):
     @process
     def handleAction(self, model, entityID, action):
         super(_DeclineClanAppHandler, self).handleAction(model, entityID, action)
-        yield g_clanCtrl.sendRequest(clan_ctxs.DeclineApplicationCtx(self._getApplicationID(model, entityID)), allowDelay=True)
+        yield self.clanCtrl.sendRequest(clan_ctxs.DeclineApplicationCtx(self._getApplicationID(model, entityID)), allowDelay=True)
 
 
 class _ShowClanAppUserInfoHandler(_ClanAppHandler):
@@ -204,6 +206,7 @@ class _ShowClanAppUserInfoHandler(_ClanAppHandler):
 
 
 class _ClanInviteHandler(_ActionHandler):
+    clanCtrl = dependency.descriptor(IClanController)
 
     def __init__(self):
         super(_ClanInviteHandler, self).__init__()
@@ -230,9 +233,7 @@ class _AcceptClanInviteHandler(_ClanInviteHandler):
         clanTag = entity.getClanTag()
         result = yield showAcceptClanInviteDialog(clanName, clanTag)
         if result:
-            reqResult = yield g_clanCtrl.sendRequest(clan_ctxs.AcceptInviteCtx(self._getInviteID(model, entityID)), allowDelay=True)
-            if reqResult.isSuccess():
-                showClanJoinAward(clanName, clanTag, entity.getClanId())
+            yield self.clanCtrl.sendRequest(clan_ctxs.AcceptInviteCtx(self._getInviteID(model, entityID)), allowDelay=True)
 
 
 class _DeclineClanInviteHandler(_ClanInviteHandler):
@@ -248,7 +249,7 @@ class _DeclineClanInviteHandler(_ClanInviteHandler):
     @process
     def handleAction(self, model, entityID, action):
         super(_DeclineClanInviteHandler, self).handleAction(model, entityID, action)
-        yield g_clanCtrl.sendRequest(clan_ctxs.DeclineInviteCtx(self._getInviteID(model, entityID)), allowDelay=True)
+        yield self.clanCtrl.sendRequest(clan_ctxs.DeclineInviteCtx(self._getInviteID(model, entityID)), allowDelay=True)
 
 
 class _ShowClanProfileHandler(_ActionHandler):
@@ -328,6 +329,7 @@ class ShowTutorialBattleHistoryHandler(_ShowArenaResultHandler):
 
 
 class OpenPollHandler(_ActionHandler):
+    browserCtrl = dependency.descriptor(IBrowserController)
 
     @classmethod
     def getNotType(cls):
@@ -351,7 +353,7 @@ class OpenPollHandler(_ActionHandler):
 
     @process
     def __doOpen(self, link, title):
-        yield game_control.g_instance.browser.load(link, title, showActionBtn=False)
+        yield self.browserCtrl.load(link, title, showActionBtn=False)
 
 
 class AcceptPrbInviteHandler(_ActionHandler):

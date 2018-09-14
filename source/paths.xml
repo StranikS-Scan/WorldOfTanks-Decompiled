@@ -1,6 +1,7 @@
 <root>
   <Paths>
-    <Path>./res_mods/0.9.16</Path>
+    <Path>./res_mods/0.9.17</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/0.9.17</Path>
     <Path type="sd,hd">./res/packages/shared_content.pkg</Path>
     <Path type="hd">./res/packages/shared_content_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/shared_content_sandbox.pkg</Path>
@@ -83,12 +84,10 @@
     <Path type="hd">./res/packages/95_lost_city_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/96_prohorovka_defense.pkg</Path>
     <Path type="hd">./res/packages/96_prohorovka_defense_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/h04_remday_2015.pkg</Path>
-    <Path type="hd">./res/packages/h04_remday_2015_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/h06_vetday_2015.pkg</Path>
-    <Path type="hd">./res/packages/h06_vetday_2015_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/hangar_Halloween_v2.pkg</Path>
-    <Path type="hd">./res/packages/hangar_Halloween_v2_hd.pkg</Path>
+    <Path type="sd,hd">./res/packages/h09_bday_CN_2016.pkg</Path>
+    <Path type="hd">./res/packages/h09_bday_CN_2016_hd.pkg</Path>
+    <Path type="sd,hd">./res/packages/hangar_premium_23feb_v3.pkg</Path>
+    <Path type="hd">./res/packages/hangar_premium_23feb_v3_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/hangar_premium_v2.pkg</Path>
     <Path type="hd">./res/packages/hangar_premium_v2_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/hangar_v2.pkg</Path>
@@ -98,6 +97,7 @@
     <Path type="sandbox,sd,hd">./res/packages/misc.pkg</Path>
     <Path type="hd">./res/packages/misc_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/particles.pkg</Path>
+    <Path type="sandbox,sd,hd">./res/packages/scripts.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/vehicles_level_01.pkg</Path>
     <Path type="hd">./res/packages/vehicles_level_01_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/vehicles_level_02.pkg</Path>
@@ -119,6 +119,5 @@
     <Path type="sd,hd">./res/packages/vehicles_level_10.pkg</Path>
     <Path type="hd">./res/packages/vehicles_level_10_hd.pkg</Path>
     <Path>./res</Path>
-    <Path>./res_bw</Path>
   </Paths>
 </root>

@@ -4,14 +4,16 @@ import uuid
 import BigWorld
 import ResMgr
 import constants
+from adisp import process, async
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from external_strings_utils import unicode_from_utf8
+from gui import GUI_SETTINGS
+from gui.Scaleform.daapi.view.meta.RssNewsFeedMeta import RssNewsFeedMeta
+from gui.game_control.links import URLMarcos
+from helpers import dependency
 from helpers.i18n import encodeUtf8
 from shared_utils import findFirst
-from external_strings_utils import unicode_from_utf8
-from adisp import process, async
-from gui import GUI_SETTINGS, game_control
-from gui.game_control.links import URLMarcos
-from gui.Scaleform.daapi.view.meta.RssNewsFeedMeta import RssNewsFeedMeta
+from skeletons.gui.game_control import IExternalLinksController, IBrowserController
 
 class RssNewsFeed(RssNewsFeedMeta):
     UPDATE_INTERVAL = 60
@@ -19,6 +21,8 @@ class RssNewsFeed(RssNewsFeedMeta):
     DESCRIPTION_TAIL = '...'
     DESCRIPTION_CUT_LENGTH = DESCRIPTION_MAX_LENGTH - len(DESCRIPTION_TAIL)
     SHOW_NEWS_COUNT = 3
+    externalBrowser = dependency.descriptor(IExternalLinksController)
+    internalBrowser = dependency.descriptor(IBrowserController)
 
     def __init__(self):
         super(RssNewsFeed, self).__init__()
@@ -32,9 +36,9 @@ class RssNewsFeed(RssNewsFeedMeta):
 
     def openBrowser(self, linkToOpen):
         if linkToOpen:
-            openBrowser = game_control.g_instance.links.open
+            openBrowser = self.externalBrowser.open
             if GUI_SETTINGS.loginRssFeed.internalBrowser:
-                browser = game_control.g_instance.browser
+                browser = self.internalBrowser
                 if browser is not None:
                     openBrowser = browser.load
                 else:

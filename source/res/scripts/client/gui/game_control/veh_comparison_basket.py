@@ -1,19 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/veh_comparison_basket.py
 from collections import namedtuple
+from itertools import imap
+import BigWorld
 import Event
 from adisp import process
-from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.LobbyContext import g_lobbyContext
 from gui.SystemMessages import SM_TYPE
-from gui.game_control.controllers import Controller
 from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.processors.module import PreviewVehicleModuleInstaller
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers.local_cache import FileLocalCache
 from items import getTypeOfCompactDescr, ITEM_TYPE_NAMES
+from items.vehicles import VehicleDescr
+from skeletons.gui.game_control import IVehicleComparisonBasket
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
 _ChangedData = namedtuple('_ChangedData', ('addedIDXs', 'addedCDs', 'removedIDXs', 'removedCDs', 'isFullChanged'))
 _COMPARE_INVALID_CRITERIA = ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.SECRET
@@ -80,25 +84,56 @@ class MODULES_TYPES(object):
     CUSTOM = 'custom'
 
 
+class _VehCmpCache(FileLocalCache):
+    VERSION = 1
+
+    def __init__(self, databaseID, dataSetter, dataGetter):
+        super(_VehCmpCache, self).__init__('veh_cmp_cache', ('basket_state', databaseID), async=True)
+        self.__dataSetter = dataSetter
+        self.__dataGetter = dataGetter
+
+    def _getCache(self):
+        vehsData = []
+        for vehCompareData in self.__dataGetter():
+            vehsData.append((vehCompareData.getVehicleStrCD(), vehCompareData.getCrewLevel()))
+
+        return (self.VERSION, vehsData)
+
+    def _setCache(self, data):
+        if isinstance(data, (tuple, list)) and len(data) == 2:
+            if self.VERSION == data[0]:
+                self.__dataSetter(data[1])
+        return data
+
+    def clear(self):
+        self.__dataSetter = None
+        self.__dataGetter = None
+        super(_VehCmpCache, self).clear()
+        return
+
+
 class _VehCompareData(object):
 
-    def __init__(self, vehicleCD):
+    def __init__(self, vehicleIntCD, isFromCache=False):
         super(_VehCompareData, self).__init__()
         self.__isActualModules = True
         self.__isInInventory = False
+        self.__isFromCache = isFromCache
         self.__invVehStrCD = None
-        self.__vehicleCD = vehicleCD
+        self.__crewLvl = None
+        self.__crewData = None
+        self.__intCD = vehicleIntCD
         self.initVehicle()
-        self.__stockVehStrCD = _makeStrCD(self._getStockVehicle(self.__vehicleCD))
+        self.__stockVehStrCD = _makeStrCD(self._getStockVehicle(self.__intCD))
         if self.__isInInventory:
-            self.__crewLvl = CREW_TYPES.CURRENT
+            self.setCrewLevel(CREW_TYPES.CURRENT)
         else:
-            self.__crewLvl = CREW_TYPES.SKILL_100
+            self.setCrewLevel(CREW_TYPES.SKILL_100)
         self.__strCD = self.__invVehStrCD if self.__isInInventory else self.__stockVehStrCD
         return
 
     def initVehicle(self):
-        vehicle = self._getVehicle(self.__vehicleCD)
+        vehicle = self._getVehicle(self.__intCD)
         self.__isActualModules = True
         self.__isInInventory = vehicle.isInInventory
         if self.__isInInventory:
@@ -109,16 +144,32 @@ class _VehCompareData(object):
         return
 
     def setCrewLevel(self, crewLvl):
-        assert crewLvl in CREW_TYPES.ALL, 'Unsupported crew level type!'
-        self.__crewLvl = crewLvl
-
-    def getVehicleCD(self):
-        return self.__vehicleCD
+        assert crewLvl in CREW_TYPES.ALL, 'Unsupported crew level type: {}'.format(crewLvl)
+        if self.__crewLvl != crewLvl:
+            self.__crewLvl = crewLvl
+            self.updateCrewData()
 
     def setVehicleStrCD(self, strCD):
         self.__strCD = strCD
 
+    def updateCrewData(self):
+        vehicle = g_itemsCache.items.getItemByCD(self.__intCD)
+        if self.__crewLvl == CREW_TYPES.CURRENT:
+            crew = vehicle.crew
+        else:
+            crew = vehicle.getCrewBySkillLevels(self.__crewLvl)
+        self.__crewData = map(lambda crewData: (crewData[0], crewData[1].strCD if crewData[1] else None), crew)
+
+    def getVehicleCD(self):
+        """
+        :return: int, vehicle intCD
+        """
+        return self.__intCD
+
     def getVehicleStrCD(self):
+        """
+        :return: str, vehicle strCD
+        """
         return self.__strCD
 
     def getModulesType(self, strCD=None):
@@ -136,11 +187,17 @@ class _VehCompareData(object):
     def getStockVehStrCD(self):
         return self.__stockVehStrCD
 
-    def isInInventory(self):
-        return self.__isInInventory
-
     def getCrewLevel(self):
         return self.__crewLvl
+
+    def getCrewData(self):
+        return self.__crewData
+
+    def isFromCache(self):
+        return self.__isFromCache
+
+    def isInInventory(self):
+        return self.__isInInventory
 
     def isActualModules(self):
         return self.__isActualModules
@@ -174,7 +231,7 @@ class _VehCompareData(object):
         :param strCD: string vehicle compact descriptor
         :return: clone of vehicle without any optional devices but installed suitable chassis
         """
-        cloneVehicle = Vehicle(strCD, typeCompDescr=self.__vehicleCD)
+        cloneVehicle = Vehicle(strCD, typeCompDescr=self.__intCD)
         vehDescriptor = cloneVehicle.descriptor
         for i, optDevice in enumerate(vehDescriptor.optionalDevices):
             if optDevice is not None:
@@ -211,9 +268,8 @@ def _ErrorNotification(func):
 
     def funcWithMessage(self, *args, **kwargs):
         if self.isEnabled() and self.isAvailable():
-            func(self, *args, **kwargs)
-        else:
-            SystemMessages.g_instance.pushI18nMessage('#system_messages:vehicleCompare/disabled', type=SM_TYPE.Error)
+            return func(self, *args, **kwargs)
+        SystemMessages.pushI18nMessage('#system_messages:vehicleCompare/disabled', type=SM_TYPE.Error)
 
     return funcWithMessage
 
@@ -232,16 +288,18 @@ def _indexCanBePerformed(func):
     return __wrapper
 
 
-class VehComparisonBasket(Controller):
+class VehComparisonBasket(IVehicleComparisonBasket):
 
-    def __init__(self, proxy):
-        super(VehComparisonBasket, self).__init__(proxy)
+    def __init__(self):
+        super(VehComparisonBasket, self).__init__()
         self.__vehicles = []
         self.__isFull = False
         self.onChange = Event.Event()
         self.onParametersChange = Event.Event()
         self.onSwitchChange = Event.Event()
         self.__isEnabled = True
+        self.__cache = None
+        return
 
     def onConnected(self):
         self.__vehicles = []
@@ -250,17 +308,27 @@ class VehComparisonBasket(Controller):
         self.__isEnabled = g_lobbyContext.getServerSettings().isVehicleComparingEnabled()
 
     def onLobbyInited(self, event):
+        if self.isEnabled() and self.isAvailable():
+            if self.__cache is None:
+                self.__cache = self._createCache()
+                if self.__cache is not None:
+                    self.__cache.read()
         self.__initHandlers()
+        return
 
     def onAvatarBecomePlayer(self):
         self.__disposeHandlers()
 
     def onDisconnected(self):
+        self.writeCache()
+        self.__disposeCache()
         self.__vehicles = []
         self.__disposeHandlers()
         super(VehComparisonBasket, self).onDisconnected()
 
     def fini(self):
+        self.writeCache()
+        self.__disposeCache()
         self.__vehicles = None
         self.onChange.clear()
         self.onParametersChange.clear()
@@ -293,11 +361,21 @@ class VehComparisonBasket(Controller):
             LOG_DEBUG('Modules has not been applied because they are not different.')
 
     @_ErrorNotification
-    def addVehicle(self, vehicleCompactDesr):
+    def addVehicle(self, vehicleCompactDesr, initParameters=None):
+        """
+        Adds vehicle object into the basket
+        :param vehicleCompactDesr: vehicle intCD
+        :param initParameters: some additional parameters which vehicle should have while adding
+        :return: bool. True if vehicle successfully added, otherwise False
+        """
         assert isinstance(vehicleCompactDesr, (int, float))
         if self.__canBeAdded():
-            self.__vehicles.append(self._createVehCompareData(vehicleCompactDesr))
-            self.__applyChanges(addedIDXs=[len(self.__vehicles) - 1], addedCDs=[vehicleCompactDesr])
+            vehCmpData = self._createVehCompareData(vehicleCompactDesr, initParameters)
+            if vehCmpData:
+                self.__vehicles.append(vehCmpData)
+                self.__applyChanges(addedIDXs=[len(self.__vehicles) - 1], addedCDs=[vehicleCompactDesr])
+                return True
+        return False
 
     @_ErrorNotification
     def addVehicles(self, vehCDs):
@@ -365,6 +443,9 @@ class VehComparisonBasket(Controller):
     def getVehiclesCDs(self):
         return map(lambda vehCompareData: vehCompareData.getVehicleCD(), self.__vehicles)
 
+    def getVehiclesPropertiesIter(self, getter):
+        return imap(getter, self.__vehicles)
+
     def getVehiclesCount(self):
         return len(self.__vehicles)
 
@@ -372,9 +453,66 @@ class VehComparisonBasket(Controller):
     def getVehicleAt(self, index):
         return self.__vehicles[index]
 
+    def writeCache(self):
+        """
+        Initiates comparison basket data saving
+        """
+        if self.__cache:
+            self.__cache.write()
+
     @staticmethod
-    def _createVehCompareData(cd):
-        return _VehCompareData(cd)
+    def _createVehCompareData(intCD, initParameters=None):
+        """
+        This method creates new vehicle data item for comparison basket
+        :param intCD: Vehicle intCD
+        :param initParameters: some additional parameters which new instance of data should have
+        :return _VehCompareData:
+        """
+        vehCmpData = None
+        initParameters = initParameters or {}
+        strCD = initParameters.get('strCD')
+        crewLvl = initParameters.get('crewLvl')
+        fromCache = initParameters.get('isFromCache')
+        try:
+            vehCmpData = _VehCompareData(intCD, fromCache)
+            if strCD is not None:
+                vehCmpData.setVehicleStrCD(strCD)
+            if crewLvl is not None:
+                vehCmpData.setCrewLevel(crewLvl)
+        except:
+            LOG_ERROR('Vehicle could not been added properly, intCD = {}'.format(intCD))
+            LOG_CURRENT_EXCEPTION()
+
+        return vehCmpData
+
+    def _createCache(self):
+        databaseID = BigWorld.player().databaseID if BigWorld.player() else None
+        return _VehCmpCache(databaseID, self._applyVehiclesFromCache, self._getVehiclesIterator) if databaseID is not None else None
+
+    def _applyVehiclesFromCache(self, data):
+        """
+        Restores vehicle from cached data
+        :param data: tuple - (strCD, crewLvl)
+        :return:
+        """
+        if not data:
+            return
+        vehCDs = []
+        for strCD, crewLvl in data:
+            intCD = VehicleDescr(strCD).type.compactDescr
+            vehCmpData = self._createVehCompareData(intCD, {'strCD': strCD,
+             'crewLvl': crewLvl,
+             'isFromCache': True})
+            if vehCmpData:
+                self.__vehicles.append(vehCmpData)
+                vehCDs.append(intCD)
+
+        if vehCDs:
+            self.__applyChanges(addedIDXs=range(0, len(vehCDs)), addedCDs=vehCDs)
+
+    def _getVehiclesIterator(self):
+        for vehCmpData in self.__vehicles:
+            yield vehCmpData
 
     def __applyChanges(self, addedIDXs=None, addedCDs=None, removedIDXs=None, removedCDs=None):
         oldVal = self.__isFull
@@ -398,7 +536,8 @@ class VehComparisonBasket(Controller):
             changedIDXs = []
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
-                isModulesChanged = set(diff.keys()).intersection(set(GUI_ITEM_TYPE.VEHICLE_MODULES))
+                diffKeys = diff.keys()
+                isModulesChanged = set(diffKeys).intersection(set(GUI_ITEM_TYPE.VEHICLE_MODULES))
                 for changedVehCD in vehDiff:
                     for idx, vehCompareData in enumerate(self.__vehicles):
                         if changedVehCD == vehCompareData.getVehicleCD():
@@ -412,6 +551,10 @@ class VehComparisonBasket(Controller):
                             elif isModulesChanged:
                                 vehCompareData.initVehicle()
                                 changedIDXs.append(idx)
+                            elif vehCompareData.getCrewLevel() == CREW_TYPES.CURRENT:
+                                if GUI_ITEM_TYPE.TANKMAN in diffKeys:
+                                    vehCompareData.updateCrewData()
+                                    changedIDXs.append(idx)
 
             if changedIDXs:
                 self.onParametersChange(changedIDXs)
@@ -423,8 +566,14 @@ class VehComparisonBasket(Controller):
             self.onSwitchChange()
 
     def __canBeAdded(self):
-        if self.__isFull:
+        if self.isFull():
             LOG_DEBUG("Couldn't add vehicle into the comparison basket, basket is full!")
             return False
         else:
             return True
+
+    def __disposeCache(self):
+        if self.__cache is not None:
+            self.__cache.clear()
+            self.__cache = None
+        return

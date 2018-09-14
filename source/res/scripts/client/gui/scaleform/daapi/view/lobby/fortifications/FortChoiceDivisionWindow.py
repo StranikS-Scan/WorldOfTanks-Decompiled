@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortChoiceDivisionWindow.py
-from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
-from helpers import i18n
 from UnitBase import SORTIE_DIVISION
-from constants import PREBATTLE_TYPE
 from adisp import process
+from constants import PREBATTLE_TYPE
+from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.meta.FortChoiceDivisionWindowMeta import FortChoiceDivisionWindowMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS
-from gui.prb_control.prb_helpers import prbDispatcherProperty
+from gui.prb_control.entities.base.unit.ctx import ChangeDivisionUnitCtx
 from gui.prb_control.items.unit_items import SupportedRosterSettings
+from gui.prb_control import prbDispatcherProperty
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from gui.shared.formatters.text_styles import main, standard, highTitle
-from gui.prb_control.context import unit_ctx
+from helpers import i18n
 
 def _getTextLevels(lvl):
     return main(fort_formatters.getTextLevel(lvl))
@@ -36,7 +36,7 @@ class FortChoiceDivisionWindow(FortChoiceDivisionWindowMeta):
 
     @process
     def sendRequest(self, request):
-        yield self.prbDispatcher.sendUnitRequest(request)
+        yield self.prbDispatcher.sendPrbRequest(request)
 
     def selectedDivision(self, divisionID):
         if self.__divisionID is None:
@@ -49,7 +49,7 @@ class FortChoiceDivisionWindow(FortChoiceDivisionWindowMeta):
     def changedDivision(self, divisionID):
         if divisionID != self.__divisionID:
             self.__divisionID = divisionID
-            self.sendRequest(unit_ctx.ChangeDivisionCtx(divisionID, 'prebattle/changeDivision'))
+            self.sendRequest(ChangeDivisionUnitCtx(int(divisionID), 'prebattle/changeDivision'))
 
     def _populate(self):
         super(FortChoiceDivisionWindow, self)._populate()

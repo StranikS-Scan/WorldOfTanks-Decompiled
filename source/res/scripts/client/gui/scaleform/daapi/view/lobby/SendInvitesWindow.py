@@ -5,8 +5,8 @@ from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.SendInvitesWindowMeta import SendInvitesWindowMeta
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.prb_control.context import SendInvitesCtx
-from gui.prb_control.prb_helpers import prbDispatcherProperty
+from gui.prb_control import prbDispatcherProperty, prbEntityProperty
+from gui.prb_control.entities.base.ctx import SendInvitesCtx
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import i18n
@@ -53,6 +53,10 @@ class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
     def prbDispatcher(self):
         pass
 
+    @prbEntityProperty
+    def prbEntity(self):
+        pass
+
     @property
     def pyTree(self):
         tree = None
@@ -77,12 +81,8 @@ class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
         return i18n.makeString(DIALOGS.SENDINVITES_COMMON_TITLE)
 
     def sendInvites(self, accountsToInvite, comment):
-        functional = self.prbDispatcher.getFunctional(self._ctrlType)
-        if functional:
-            functional.request(SendInvitesCtx(accountsToInvite, comment))
-            self.__showSentInviteMessages(accountsToInvite)
-        else:
-            LOG_ERROR('Functional is not found', self._ctrlType)
+        self.prbEntity.request(SendInvitesCtx(accountsToInvite, comment))
+        self.__showSentInviteMessages(accountsToInvite)
 
     def onWindowClose(self):
         self.destroy()

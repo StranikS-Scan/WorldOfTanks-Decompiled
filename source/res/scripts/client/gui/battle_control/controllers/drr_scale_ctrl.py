@@ -4,14 +4,16 @@ import weakref
 import BigWorld
 import Keys
 from Event import Event
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui import g_repeatKeyHandlers
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
+from helpers import dependency
 from helpers import drr_scale
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class DRRScaleController(IBattleController):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, messages):
         super(DRRScaleController, self).__init__()
@@ -30,13 +32,13 @@ class DRRScaleController(IBattleController):
         return
 
     def handleKey(self, key, isDown):
-        if key in (Keys.KEY_MINUS, Keys.KEY_NUMPADMINUS) and BigWorld.isKeyDown(Keys.KEY_RSHIFT) and isDown and not g_settingsCore.getSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED):
+        if key in (Keys.KEY_MINUS, Keys.KEY_NUMPADMINUS) and BigWorld.isKeyDown(Keys.KEY_RSHIFT) and isDown and not self.settingsCore.getSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED):
             result = drr_scale.stepDown()
             if result is not None and self.__messages:
                 self.__messages.showVehicleMessage('DRR_SCALE_STEP_DOWN', {'scale': drr_scale.getPercent(result)})
                 self.onDRRChanged()
             return True
-        elif key in (Keys.KEY_EQUALS, Keys.KEY_ADD) and BigWorld.isKeyDown(Keys.KEY_RSHIFT) and isDown and not g_settingsCore.getSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED):
+        elif key in (Keys.KEY_EQUALS, Keys.KEY_ADD) and BigWorld.isKeyDown(Keys.KEY_RSHIFT) and isDown and not self.settingsCore.getSetting(GRAPHICS.DRR_AUTOSCALER_ENABLED):
             result = drr_scale.stepUp()
             if result is not None and self.__messages:
                 self.__messages.showVehicleMessage('DRR_SCALE_STEP_UP', {'scale': drr_scale.getPercent(result)})

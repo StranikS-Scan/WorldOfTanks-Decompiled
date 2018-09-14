@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/user_prefs.py
 import types
+from helpers import dependency
 from messenger.doc_loaders import _xml_helpers
+from skeletons.account_helpers.settings_core import ISettingsCore
 _userProps = {'datetimeIdx': ('readInt',
                  'writeInt',
                  lambda value: value in xrange(0, 4),
@@ -60,16 +62,16 @@ def loadDefault(xmlCtx, section, messengerSettings):
 
 def loadFromServer(messengerSettings):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    from account_helpers.settings_core.SettingsCore import g_settingsCore
     data = messengerSettings.userPrefs._asdict()
-    core = g_settingsCore.serverSettings
+    settingsCore = dependency.instance(ISettingsCore)
+    core = settingsCore.serverSettings
     for key, (_, _, _, isExtended) in _userProps.iteritems():
         section = SETTINGS_SECTIONS.GAME_EXTENDED if isExtended else SETTINGS_SECTIONS.GAME
         settingValue = core.getSectionSettings(section, key, None)
         if settingValue is not None:
             data[key] = settingValue
 
-    version = g_settingsCore.serverSettings.getVersion()
+    version = settingsCore.serverSettings.getVersion()
     if version is not None:
         data['version'] = version
     messengerSettings.saveUserPreferences(data)

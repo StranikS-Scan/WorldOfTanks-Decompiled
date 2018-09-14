@@ -1,129 +1,141 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/PreQueueFactory.py
 import inspect
+import gui.prb_control.prb_getters
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
-from gui.prb_control.context.pre_queue_ctx import LeavePreQueueCtx
 from gui.prb_control.factories.ControlFactory import ControlFactory
-from gui.prb_control.functional import battle_tutorial
-from gui.prb_control.functional import not_supported
-from gui.prb_control.functional import fallout
-from gui.prb_control.functional import prequeue
-from gui.prb_control.functional import random
-from gui.prb_control.functional import sandbox_queue
+from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
+from gui.prb_control.entities.fallout.pre_queue.entity import FalloutClassicEntity, FalloutMultiTeamEntity
+from gui.prb_control.entities.fallout.pre_queue.entity import NoFalloutEntity
+from gui.prb_control.entities.fallout.pre_queue.entity import FalloutClassicEntryPoint, FalloutMultiTeamEntryPoint
+from gui.prb_control.entities.fallout.pre_queue.entity import NoFalloutEntryPoint
+from gui.prb_control.entities.fallout.pre_queue.entity import falloutQueueTypeFactory
+from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, RandomEntryPoint
+from gui.prb_control.entities.sandbox.pre_queue.entity import SandboxEntity, SandboxEntryPoint
+from gui.prb_control.entities.tutorial.pre_queue.entity import TutorialEntity, TutorialEntryPoint
 from gui.prb_control.items import FunctionalState
-import gui.prb_control.prb_getters
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE, PREBATTLE_ACTION_NAME_TO_QUEUE_TYPE
-from gui.prb_control.settings import FUNCTIONAL_FLAG as _FLAG
-from gui.prb_control.storage import prequeue_storage_getter
+from gui.prb_control.settings import FUNCTIONAL_FLAG as _FLAG, FUNCTIONAL_FLAG
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
+from gui.prb_control.storages import prequeue_storage_getter
 __all__ = ('PreQueueFactory',)
-_SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: random.RandomQueueFunctional,
- QUEUE_TYPE.FALLOUT_CLASSIC: fallout.FalloutClassicQueueFunctional,
- QUEUE_TYPE.FALLOUT_MULTITEAM: fallout.FalloutMultiTeamQueueFunctional,
- QUEUE_TYPE.TUTORIAL: battle_tutorial.TutorialQueueFunctional,
- QUEUE_TYPE.SANDBOX: sandbox_queue.SandboxQueueFunctional}
-_SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM_QUEUE: (prequeue.PreQueueEntry, (PREBATTLE_ACTION_NAME_TO_QUEUE_TYPE[PREBATTLE_ACTION_NAME.RANDOM_QUEUE], _FLAG.UNDEFINED)),
- PREBATTLE_ACTION_NAME.FALLOUT: (fallout.NoFalloutEntry, (PREBATTLE_ACTION_NAME_TO_QUEUE_TYPE[PREBATTLE_ACTION_NAME.FALLOUT], _FLAG.FALLOUT_BATTLES_INTRO)),
- PREBATTLE_ACTION_NAME.FALLOUT_CLASSIC: (prequeue.PreQueueEntry, (PREBATTLE_ACTION_NAME_TO_QUEUE_TYPE[PREBATTLE_ACTION_NAME.FALLOUT_CLASSIC], _FLAG.FALLOUT_BATTLES)),
- PREBATTLE_ACTION_NAME.FALLOUT_MULTITEAM: (prequeue.PreQueueEntry, (PREBATTLE_ACTION_NAME_TO_QUEUE_TYPE[PREBATTLE_ACTION_NAME.FALLOUT_MULTITEAM], _FLAG.FALLOUT_BATTLES)),
- PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL: (prequeue.PreQueueEntry, (PREBATTLE_ACTION_NAME_TO_QUEUE_TYPE[PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL], _FLAG.BATTLE_TUTORIAL)),
- PREBATTLE_ACTION_NAME.SANDBOX: (prequeue.PreQueueEntry, (PREBATTLE_ACTION_NAME_TO_QUEUE_TYPE[PREBATTLE_ACTION_NAME.SANDBOX], _FLAG.UNDEFINED))}
+_SUPPORTED_QUEUES = {QUEUE_TYPE.RANDOMS: RandomEntity,
+ QUEUE_TYPE.FALLOUT_CLASSIC: FalloutClassicEntity,
+ QUEUE_TYPE.FALLOUT_MULTITEAM: FalloutMultiTeamEntity,
+ QUEUE_TYPE.TUTORIAL: TutorialEntity,
+ QUEUE_TYPE.SANDBOX: SandboxEntity}
+_SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.RANDOM: RandomEntryPoint,
+ PREBATTLE_ACTION_NAME.FALLOUT: NoFalloutEntryPoint,
+ PREBATTLE_ACTION_NAME.FALLOUT_CLASSIC: FalloutClassicEntryPoint,
+ PREBATTLE_ACTION_NAME.FALLOUT_MULTITEAM: FalloutMultiTeamEntryPoint,
+ PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL: TutorialEntryPoint,
+ PREBATTLE_ACTION_NAME.SANDBOX: SandboxEntryPoint}
 
 class PreQueueFactory(ControlFactory):
+    """
+    Creates entry point, ctx or entity for prequeue control.
+    """
 
     @prequeue_storage_getter(QUEUE_TYPE.FALLOUT)
     def falloutStorage(self):
+        """
+        Decorated property getter for fallout storage.
+        """
         return None
 
     @prequeue_storage_getter(QUEUE_TYPE.SANDBOX)
     def pveStorage(self):
+        """
+        Decorated property getter for PvE storage.
+        """
         return None
 
     def createEntry(self, ctx):
+        """
+        Routine can not be invoke, i.e. preQueue entity has not any entries.
+        """
         LOG_ERROR('preQueue functional has not any entries')
         return None
 
     def createEntryByAction(self, action):
         return self._createEntryByAction(action, _SUPPORTED_ENTRY_BY_ACTION)
 
-    def createFunctional(self, ctx):
+    def createEntity(self, ctx):
         if ctx.getCtrlType() == CTRL_ENTITY_TYPE.PREQUEUE:
-            if ctx.hasFlags(_FLAG.SWITCH) and (ctx.hasFlags(_FLAG.LEAVE_ENTITY) or ctx.hasFlags(_FLAG.LEAVE_INTRO)):
-                created = None
+            queueType = ctx.getEntityType()
+            if queueType:
+                created = self.__createByQueueType(queueType, ctx)
             else:
-                queueType = ctx.getEntityType()
-                if queueType:
-                    created = self._createByQueueType(queueType, ctx)
-                else:
-                    created = self._createDefaultFunctional(ctx)
+                created = self.__createDefaultEntity(ctx)
         else:
-            created = self._createByAccountState(ctx)
+            created = self.__createByAccountState(ctx)
         return created
 
-    def createStateEntity(self, functional):
-        return FunctionalState(CTRL_ENTITY_TYPE.PREQUEUE, functional.getEntityType(), True, functional.isInQueue(), funcFlags=functional.getFunctionalFlags())
+    def createStateEntity(self, entity):
+        return FunctionalState(CTRL_ENTITY_TYPE.PREQUEUE, entity.getEntityType(), True, entity.isInQueue(), funcFlags=entity.getFunctionalFlags())
 
-    def createLeaveCtx(self, flags=_FLAG.UNDEFINED):
-        return LeavePreQueueCtx(waitingID='prebattle/leave', flags=flags)
+    def createLeaveCtx(self, flags=FUNCTIONAL_FLAG.UNDEFINED, entityType=0):
+        return LeavePreQueueCtx(waitingID='prebattle/leave', flags=flags, entityType=entityType)
 
-    def _createByAccountState(self, ctx):
+    def __createByAccountState(self, ctx):
+        """
+        Tries to create entity by current account state.
+        Args:
+            ctx: creation request context.
+        
+        Returns:
+            new prebattle prequeue entity
+        """
         queueType = gui.prb_control.prb_getters.getQueueType()
-        if queueType:
-            created = self._createByQueueType(queueType, ctx)
-        else:
-            created = self._createDefaultFunctional(ctx)
-        return created
+        return self.__createByQueueType(queueType, ctx) if queueType else self.__createDefaultEntity(ctx)
 
-    def _createByQueueType(self, queueType, ctx):
+    def __createByQueueType(self, queueType, ctx):
+        """
+        Tries to create entity by given queue type.
+        Args:
+            queueType: queue type
+            ctx: creation request context.
+        
+        Returns:
+            new prebattle prequeue entity
+        """
         if ctx.getCtrlType() != CTRL_ENTITY_TYPE.PREQUEUE:
-            return self._createDefaultFunctional(ctx)
-        ctx.removeFlags(_FLAG.PRE_QUEUE_BITMASK)
-        if queueType in _SUPPORTED_QUEUES:
+            return self.__createDefaultEntity(ctx)
+        elif queueType in _SUPPORTED_QUEUES:
             clazz = _SUPPORTED_QUEUES[queueType]
             assert inspect.isclass(clazz), 'Class is not found, checks settings'
             created = clazz()
-            ctx.addFlags(created.getFunctionalFlags())
+            return created
         else:
-            LOG_ERROR('Queue with given type is not supported', queueType)
-            ctx.addFlags(_FLAG.PRE_QUEUE)
-            created = not_supported.NotSupportedFunctional()
+            return None
+
+    def __createDefaultEntity(self, ctx):
+        """
+        Creates default entity for prequeue.
+        Args:
+            ctx: creation request context.
+        
+        Returns:
+            new prebattle prequeue entity
+        """
+        created = self.__createDefaultByStorage(ctx)
+        if created is None:
+            if ctx.hasFlags(_FLAG.FALLOUT):
+                created = NoFalloutEntity()
+            else:
+                created = RandomEntity()
         return created
 
-    def _createDefaultFunctional(self, ctx):
-        created = None
-        if ctx.hasFlags(_FLAG.NO_PREBATTLE) and ctx.hasFlags(_FLAG.NO_UNIT):
-            isProcessed, created = self._createDefaultByStorage(ctx)
-            if not isProcessed:
-                if ctx.hasFlags(_FLAG.FALLOUT_BATTLES_INTRO):
-                    ctx.removeFlags(_FLAG.PRE_QUEUE_BITMASK)
-                    created = fallout.FalloutNoQueueFunctional()
-                    ctx.addFlags(created.getFunctionalFlags())
-                elif not ctx.hasFlags(_FLAG.RANDOM_BATTLES):
-                    ctx.removeFlags(_FLAG.PRE_QUEUE_BITMASK)
-                    created = random.RandomQueueFunctional()
-                    ctx.addFlags(created.getFunctionalFlags())
-        elif not ctx.hasFlags(_FLAG.NO_QUEUE):
-            ctx.removeFlags(_FLAG.PRE_QUEUE_BITMASK)
-            created = prequeue.NoPreQueueFunctional()
-            ctx.addFlags(created.getFunctionalFlags())
-        return created
-
-    def _createDefaultByStorage(self, ctx):
+    def __createDefaultByStorage(self, ctx):
+        """
+        Tries to create default entity for prequeue by storage.
+        Args:
+            ctx: creation request context.
+        
+        Returns:
+            new prebattle prequeue entity
+        """
         if self.falloutStorage.isModeSelected():
-            if not ctx.hasFlags(_FLAG.FALLOUT_BATTLES):
-                ctx.removeFlags(_FLAG.PRE_QUEUE_BITMASK)
-                created = fallout.falloutQueueTypeFactory(self.falloutStorage.getBattleType())
-                ctx.addFlags(created.getFunctionalFlags())
-            else:
-                created = None
-            return (True, created)
-        elif self.pveStorage.isModeSelected():
-            if not ctx.hasFlags(_FLAG.SANDBOX):
-                ctx.removeFlags(_FLAG.PRE_QUEUE_BITMASK)
-                created = sandbox_queue.SandboxQueueFunctional()
-                ctx.addFlags(created.getFunctionalFlags())
-            else:
-                created = None
-            return (True, created)
+            return falloutQueueTypeFactory(self.falloutStorage.getBattleType())
         else:
-            return (False, None)
+            return SandboxEntity() if self.pveStorage.isModeSelected() else None

@@ -3,15 +3,14 @@
 from collections import namedtuple
 import BigWorld
 import Event
-from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
 from helpers import getLocalizedData
-from gui.game_control.controllers import Controller
+from skeletons.gui.game_control import IEventsNotificationsController
 
-class EventsNotificationsController(Controller):
+class EventsNotificationsController(IEventsNotificationsController):
 
-    def __init__(self, proxy):
-        super(EventsNotificationsController, self).__init__(proxy)
+    def __init__(self):
+        super(EventsNotificationsController, self).__init__()
         self.__eventMgr = Event.EventManager()
         self.onEventNotificationsChanged = Event.Event(self.__eventMgr)
 

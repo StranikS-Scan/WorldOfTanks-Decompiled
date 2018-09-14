@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileWindow.py
 from adisp import process
-from debug_utils import LOG_DEBUG
-from gui import SystemMessages
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.ProfileWindowMeta import ProfileWindowMeta
@@ -10,10 +8,8 @@ from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import getProfileCommon
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.WAITING import WAITING
 from helpers.i18n import makeString
-from gui.clans import formatters as clans_fmts
 from gui.clans.clan_helpers import ClanListener, showClanInviteSystemMsg
 from gui.clans.contexts import CreateInviteCtx
-from gui.clans.clan_controller import g_clanCtrl
 from gui.shared import g_itemsCache
 from PlayerEvents import g_playerEvents
 from messenger import g_settings
@@ -121,9 +117,9 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
     @process
     def userAddToClan(self):
         self.as_showWaitingS(WAITING.CLANS_INVITES_SEND, {})
-        profile = g_clanCtrl.getAccountProfile()
+        profile = self.clansCtrl.getAccountProfile()
         context = CreateInviteCtx(profile.getClanDbID(), [self.__databaseID])
-        result = yield g_clanCtrl.sendRequest(context, allowDelay=True)
+        result = yield self.clansCtrl.sendRequest(context, allowDelay=True)
         showClanInviteSystemMsg(self.__userName, result.isSuccess(), result.getCode())
         self.__updateAddToClanBtn()
         self.as_hideWaitingS()

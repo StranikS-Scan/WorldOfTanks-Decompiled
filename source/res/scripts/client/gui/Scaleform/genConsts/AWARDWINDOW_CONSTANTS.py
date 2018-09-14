@@ -10,3 +10,4 @@ class AWARDWINDOW_CONSTANTS(object):
     """
     EXPLOSION_BACK_ANIMATION_PATH = '../flash/awardWindowAnimation.swf'
     EXPLOSION_BACK_ANIMATION_LINKAGE = 'ExplosionAwardWindowAnimationUI'
+    ANIMATION_DATA_CLASS = 'net.wg.gui.lobby.components.data.StoppableAnimationLoaderVO'

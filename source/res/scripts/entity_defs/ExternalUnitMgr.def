@@ -1,0 +1,18 @@
+<ExternalUnitMgr.def>
+  <Parent>	UnitMgr	</Parent>
+  <BaseMethods>
+    <onExternalUnitQueueCrash>
+      <Arg>	UINT8	</Arg>
+    </onExternalUnitQueueCrash>
+    <ping>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
+    </ping>
+    <touchRevision>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
+    </touchRevision>
+  </BaseMethods>
+</ExternalUnitMgr.def>

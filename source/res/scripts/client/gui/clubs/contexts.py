@@ -1,10 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/contexts.py
-from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN
 from club_shared import CLUB_LIMITS
 from external_strings_utils import truncate_utf8
-from gui.prb_control import settings as prb_settings
-from gui.prb_control.context import PrbCtrlRequestCtx
 from gui.clubs.settings import CLUB_REQUEST_TYPE, DEFAULT_COOLDOWN
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import RequestCtx
@@ -412,41 +409,6 @@ class GetClubsContendersCtx(ClubRequestCtx):
 
     def getRequestType(self):
         return CLUB_REQUEST_TYPE.GET_CLUBS_CONTENDERS
-
-
-@ReprInjector.withParent(('__battleID', 'battleID'), ('__slotIdx', 'slotIdx'))
-class JoinClubBattleCtx(PrbCtrlRequestCtx):
-
-    def __init__(self, clubDbID, joinTime, allowDelay=True, waitingID='', isUpdateExpected=False):
-        super(JoinClubBattleCtx, self).__init__(ctrlType=prb_settings.CTRL_ENTITY_TYPE.UNIT, entityType=PREBATTLE_TYPE.CLUBS, waitingID=waitingID, flags=prb_settings.FUNCTIONAL_FLAG.SWITCH)
-        self.__clubDbID = clubDbID
-        self.__joinTime = joinTime
-        self.__isUpdateExpected = isUpdateExpected
-        self.__allowDelay = allowDelay
-
-    def getID(self):
-        return self.__clubDbID
-
-    def isUpdateExpected(self):
-        return self.__isUpdateExpected
-
-    def isAllowDelay(self):
-        return self.__allowDelay
-
-    def getCooldown(self):
-        return REQUEST_COOLDOWN.CLUBS_ANY_CMD_COOLDOWN
-
-    def getRequestType(self):
-        return CLUB_REQUEST_TYPE.JOIN_UNIT
-
-    def getClubDbID(self):
-        return self.__clubDbID
-
-    def getJoiningTime(self):
-        return self.__joinTime
-
-    def _setUpdateExpected(self, value):
-        self.__isUpdateExpected = value
 
 
 @ReprInjector.withParent(('getUserDbID', 'userDbID'))

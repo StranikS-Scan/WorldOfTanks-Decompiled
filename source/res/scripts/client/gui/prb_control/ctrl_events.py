@@ -3,22 +3,31 @@
 import Event
 
 class _PrbCtrlEvents(object):
-    __slots__ = ('__eManager', 'onPrebattleIntroModeJoined', 'onPrebattleIntroModeLeft', 'onUnitIntroModeLeft', 'onPrebattleInited', 'onUnitIntroModeJoined', 'onPreQueueFunctionalCreated', 'onPreQueueFunctionalDestroyed', 'onPreQueueFunctionalChanged', 'onVehicleClientStateChanged')
+    """
+    Class for gui specific events in prebattle/unit.
+    """
+    __slots__ = ('__eManager', 'onLegacyIntroModeJoined', 'onLegacyIntroModeLeft', 'onUnitIntroModeLeft', 'onLegacyInited', 'onUnitIntroModeJoined', 'onUnitBrowserModeLeft', 'onPreQueueJoined', 'onPreQueueLeft', 'onVehicleClientStateChanged')
 
     def __init__(self):
+        """
+        Events initialization
+        """
         super(_PrbCtrlEvents, self).__init__()
         self.__eManager = Event.EventManager()
-        self.onPrebattleIntroModeJoined = Event.Event(self.__eManager)
-        self.onPrebattleIntroModeLeft = Event.Event(self.__eManager)
-        self.onPrebattleInited = Event.Event(self.__eManager)
+        self.onLegacyIntroModeJoined = Event.Event(self.__eManager)
+        self.onLegacyIntroModeLeft = Event.Event(self.__eManager)
+        self.onLegacyInited = Event.Event(self.__eManager)
         self.onUnitIntroModeJoined = Event.Event(self.__eManager)
         self.onUnitIntroModeLeft = Event.Event(self.__eManager)
-        self.onPreQueueFunctionalCreated = Event.Event(self.__eManager)
-        self.onPreQueueFunctionalDestroyed = Event.Event(self.__eManager)
-        self.onPreQueueFunctionalChanged = Event.Event(self.__eManager)
+        self.onUnitBrowserModeLeft = Event.Event(self.__eManager)
+        self.onPreQueueJoined = Event.Event(self.__eManager)
+        self.onPreQueueLeft = Event.Event(self.__eManager)
         self.onVehicleClientStateChanged = Event.Event(self.__eManager)
 
     def clear(self):
+        """
+        Events subscriptions clear
+        """
         self.__eManager.clear()
 
 

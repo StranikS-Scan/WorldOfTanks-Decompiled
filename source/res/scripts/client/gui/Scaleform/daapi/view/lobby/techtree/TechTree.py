@@ -14,7 +14,6 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.sounds.ambients import LobbySubViewEnv
@@ -76,7 +75,7 @@ class TechTree(TechTreeMeta):
         """
         :param vehCD: float
         """
-        getVehicleComparisonBasketCtrl().addVehicle(int(vehCD))
+        self.cmpBasket.addVehicle(int(vehCD))
 
     def request4Restore(self, itemCD):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))

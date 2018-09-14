@@ -65,7 +65,7 @@ class OfflineMapCreator:
         global _V_START_ANGLES
         try:
             LOG_DEBUG('OfflineMapCreator.Create( %s )' % mapName)
-            g_appLoader.showBattle()
+            g_appLoader.showBattlePage()
             cfgType = 'basic'
             self.__loadCfg(cfgType, mapName)
             BigWorld.worldDrawEnabled(False)

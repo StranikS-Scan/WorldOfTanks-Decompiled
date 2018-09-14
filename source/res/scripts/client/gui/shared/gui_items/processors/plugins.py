@@ -12,8 +12,9 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
-from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
+from helpers import dependency
+from skeletons.gui.server_events import IEventsCache
 _SHELLS_MONEY_ERRORS = {Currency.CREDITS: 'SHELLS_NO_CREDITS',
  Currency.GOLD: 'SHELLS_NO_GOLD'}
 _EQS_MONEY_ERRORS = {Currency.CREDITS: 'EQS_NO_CREDITS',
@@ -103,13 +104,14 @@ class VehicleValidator(SyncValidator):
         self.isInInventory = prop.get('isInInventory', False) or setAll
 
     def _validate(self):
-        if not self.vehicle:
+        if self.vehicle is None:
             return makeError('invalid_vehicle')
-        if self.isBroken and self.vehicle.isBroken:
+        elif self.isBroken and self.vehicle.isBroken:
             return makeError('vehicle_need_repair')
-        if self.isLocked and self.vehicle.isLocked:
+        elif self.isLocked and self.vehicle.isLocked:
             return makeError('vehicle_locked')
-        return makeError('vehicle_not_found_in_inventory') if self.isInInventory and not self.vehicle.isInInventory else makeSuccess()
+        else:
+            return makeError('vehicle_not_found_in_inventory') if self.isInInventory and not self.vehicle.isInInventory else makeSuccess()
 
 
 class VehicleRoleValidator(SyncValidator):
@@ -120,13 +122,14 @@ class VehicleRoleValidator(SyncValidator):
         self.role = role
 
     def _validate(self):
-        if not self.vehicle:
+        if self.vehicle is None:
             return makeError('invalid_vehicle')
-        if self.vehicle:
-            mainRoles = set(map(lambda r: r[0], self.vehicle.descriptor.type.crewRoles))
-            if self.role not in mainRoles:
-                return makeError('invalid_role')
-        return makeSuccess()
+        else:
+            if self.vehicle is not None:
+                mainRoles = set(map(lambda r: r[0], self.vehicle.descriptor.type.crewRoles))
+                if self.role not in mainRoles:
+                    return makeError('invalid_role')
+            return makeSuccess()
 
 
 class VehicleSellValidator(SyncValidator):
@@ -146,9 +149,10 @@ class VehicleLockValidator(SyncValidator):
         self.vehicle = vehicle
 
     def _validate(self):
-        if not self.vehicle:
+        if self.vehicle is None:
             return makeError('invalid_vehicle')
-        return makeError('vehicle_locked') if self.vehicle.isLocked else makeSuccess()
+        else:
+            return makeError('vehicle_locked') if self.vehicle.isLocked else makeSuccess()
 
 
 class ModuleValidator(SyncValidator):
@@ -557,12 +561,16 @@ class PotapovQuestValidator(SyncValidator):
         return makeSuccess()
 
 
-class PotapovQuestsLockedByVehicle(SyncValidator):
+class _EventsCacheValidator(SyncValidator):
+    eventsCache = dependency.descriptor(IEventsCache)
+
+
+class PotapovQuestsLockedByVehicle(_EventsCacheValidator):
 
     def __init__(self, quests, messageKeyPrefix=''):
         super(PotapovQuestsLockedByVehicle, self).__init__()
         self._messageKeyPrefix = messageKeyPrefix
-        self._lockedChains = g_eventsCache.getLockedQuestTypes()
+        self._lockedChains = self.eventsCache.getLockedQuestTypes()
         self.quests = quests
 
     def _validate(self):
@@ -584,21 +592,21 @@ class PotapovQuestSlotsValidator(SyncValidator):
         return makeError('NOT_ENOUGH_SLOTS') if not self._questsProgress.getPotapovQuestsFreeSlots(self.__removedCount) else makeSuccess()
 
 
-class PotapovQuestChainsValidator(SyncValidator):
+class PotapovQuestChainsValidator(_EventsCacheValidator):
 
     def __init__(self, quest):
         super(PotapovQuestChainsValidator, self).__init__()
         self.quest = quest
 
     def _validate(self):
-        for quest in g_eventsCache.potapov.getSelectedQuests().itervalues():
+        for quest in self.eventsCache.potapov.getSelectedQuests().itervalues():
             if quest.getChainID() == self.quest.getChainID():
                 return makeError('TOO_MANY_QUESTS_IN_CHAIN')
 
         return makeSuccess()
 
 
-class PotapovQuestSeasonsValidator(SyncValidator):
+class PotapovQuestSeasonsValidator(_EventsCacheValidator):
 
     def __init__(self, quest):
         super(PotapovQuestSeasonsValidator, self).__init__()
@@ -607,7 +615,7 @@ class PotapovQuestSeasonsValidator(SyncValidator):
     def _validate(self):
         qVehClasses = self.quest.getVehicleClasses()
         if len(qVehClasses) == 1:
-            for quest in g_eventsCache.potapov.getSelectedQuests().itervalues():
+            for quest in self.eventsCache.potapov.getSelectedQuests().itervalues():
                 if len(quest.getVehicleClasses() & qVehClasses) and quest.getSeasonID() == self.quest.getSeasonID():
                     return makeError('SEASON_LIMIT_THE_SAME_CLASS')
 
@@ -702,3 +710,30 @@ class IsLongDisconnectedFromCenter(SyncValidator):
 
     def _validate(self):
         return makeError('disconnected_from_center') if isLongDisconnectedFromCenter() else makeSuccess()
+
+
+class ChestsValidator(SyncValidator):
+
+    def __init__(self, chests):
+        super(ChestsValidator, self).__init__()
+        self.__chests = chests
+
+    def _validate(self):
+        if not self.__chests or not sum(self.__chests.values()):
+            return makeError('NO_CHESTS')
+        else:
+            return makeSuccess()
+
+
+class ChristmasAlchemyValidator(SyncValidator):
+
+    def __init__(self, items):
+        super(ChristmasAlchemyValidator, self).__init__()
+        self.__items = items
+
+    def _validate(self):
+        if self.__items is None or len(filter(lambda itemID: itemID > 0, self.__items)) < 5:
+            return makeError('NOT_ENOUGH_SELECTED')
+        else:
+            return makeSuccess()
+            return

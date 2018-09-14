@@ -1,0 +1,622 @@
+<A115_Chrysler_K.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	35	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.036	</moving>
+    <still>	0.073	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.11	</firePenalty>
+  </invisibility>
+  <repairCost>	4.5	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	120.7	</armor_1>
+      <armor_2>	152.4	</armor_2>
+      <armor_3>	76.2	</armor_3>
+      <armor_4>	76.2	</armor_4>
+      <armor_5>	38.1	</armor_5>
+      <armor_6>	25.4	</armor_6>
+      <armor_7>	76.2	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	19.1	</armor_9>
+      <armor_10>	76.2	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	35709	</weight>
+    <maxHealth>	1200	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A115_Chrysler_K/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A115_Chrysler_K/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A115_Chrysler_K/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 38.00 0.48 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.24 38.00 0.48 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.24	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000025 0.86605 -1.95431	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A115_Chrysler_K/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A115_Chrysler_K/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.930443 0.605958 2.99129	</rayStart>
+        <rayEnd>	-0.930443 0.432787 2.89122	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.35	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.91807 0.471287 -0.782898	</rayStart>
+        <rayEnd>	-1.72667 0.413262 -0.782898	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	1	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.91807 0.471287 -0.782898	</rayStart>
+        <rayEnd>	1.72667 0.413262 -0.782898	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	1	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A115_Chrysler_K/Chrysler_K_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2 2 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_A115_Chrysler_K>
+      <userString>	#usa_vehicles:Chassis_A115_Chrysler_K	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	63000	</maxLoad>
+      <terrainResistance>	1 1.1 2	</terrainResistance>
+      <brakeForce>	60000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A115_Chrysler_K/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A115_Chrysler_K/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A115_Chrysler_K/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	t97	</textureSet>
+        <size>	0.6 0.8	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.37	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.39355	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.312	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.312	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.39355	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.312	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.312	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.05629 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A115_Chrysler_K/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A115_Chrysler_K/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.57065 2.51932	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.916890 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.310320 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.478600	</row2>
+            <row3>	-0.000084 0.000001 0.000031	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A115_Chrysler_K/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A115_Chrysler_K/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A115_Chrysler_K/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A115_Chrysler_K/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A115_Chrysler_K/track/left.track	</left>
+        <right>	vehicles/american/A115_Chrysler_K/track/right.track	</right>
+        <segmentLength>	0.166	</segmentLength>
+        <segmentOffset>	0.222	</segmentOffset>
+        <segment2Offset>	0.082	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0043	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.075	</maxAmplitude>
+        <maxOffset>	0.075	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1050	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.234	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.269	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.284	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.297	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.28	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.25	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.224	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.176	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.234	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.269	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.284	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.297	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.28	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.25	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.224	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.176	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.07	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.07	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_A115_Chrysler_K>
+  </chassis>
+  <turrets0>
+    <Turret_1_A115_Chrysler_K>
+      <userString>	#usa_vehicles:Turret_1_A115_Chrysler_K	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	228.6	</armor_1>
+        <armor_2>	215.9	</armor_2>
+        <armor_3>	127	</armor_3>
+        <armor_4>	88.9	</armor_4>
+        <armor_5>	38.1	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	88.9	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	177.8	</armor_9>
+        <armor_10>	203.2	</armor_10>
+        <armor_11>	139.7	</armor_11>
+        <armor_12>	76.2	</armor_12>
+        <armor_13>	63.5	</armor_13>
+        <armor_14>	50.8	</armor_14>
+        <armor_15>	101.6	</armor_15>
+        <armor_16>	152.4	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	10000	</weight>
+      <maxHealth>	300	</maxHealth>
+      <rotationSpeed>	24	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	160	</maxHealth>
+        <maxRegenHealth>	80	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_Gun_T5E1_2>	shared	  <maxAmmo>	100	</maxAmmo>
+          <armor>
+            <armor_1>	228.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	203.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	45	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	10.1	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <models>
+            <undamaged>	vehicles/american/A115_Chrysler_K/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A115_Chrysler_K/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A115_Chrysler_K/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A115_Chrysler_K/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A115_Chrysler_K/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0013139 -0.0736716 2.61533	</rayStart>
+              <rayEnd>	0.00761542 -0.128481 2.61343	</rayEnd>
+              <rayUp>	0.114 0.109 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.2 0.6 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_Gun_T5E1_2>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A115_Chrysler_K/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A115_Chrysler_K/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A115_Chrysler_K/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A115_Chrysler_K/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A115_Chrysler_K/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.000025 0.491709 1.40896	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.44244 0.652318 -0.0754307	</rayStart>
+          <rayEnd>	-1.29353 0.519325 -0.0636684	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.44244 0.652318 -0.0754307	</rayStart>
+          <rayEnd>	1.29353 0.519325 -0.0636684	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.960 -0.013 1.027 0.000 0.607 0.084 0.610 0.560 0.483 0.470 0.380 0.550 0.397 0.510 0.070	</physicsShape>
+      <camouflage>
+        <tiling>	1.2 1.2 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_A115_Chrysler_K>
+  </turrets0>
+  <engines>
+    <Chrysler_1200_HP>	shared	</Chrysler_1200_HP>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <SCR_528A1>	shared	</SCR_528A1>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Chrysler_1200_HP>
+          <smplEnginePower>	1100	</smplEnginePower>
+        </Chrysler_1200_HP>
+      </engines>
+      <chassis>
+        <Chassis_A115_Chrysler_K>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.110688	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.110688	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.110688	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.110688	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.110688	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.110688	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A115_Chrysler_K>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</A115_Chrysler_K.xml>

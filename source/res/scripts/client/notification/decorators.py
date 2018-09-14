@@ -3,12 +3,12 @@
 import BigWorld
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INVITES import INVITES
-from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanAppActionHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
+from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
-from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings
+from helpers import dependency
 from helpers import i18n
 from messenger import g_settings
 from messenger.formatters.users_messages import makeFriendshipRequestText
@@ -18,9 +18,10 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE, NOTIFICATION_GROUP
 from notification.settings import makePathToIcon
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
-from gui.clubs.ClubsController import g_clubsCtrl
 from gui.clubs.formatters import ClubInviteHtmlTextFormatter, ClubAppsHtmlTextFormatter
 from helpers import time_utils
+from skeletons.gui.clans import IClanController
+from skeletons.gui.clubs import IClubsController
 
 def _makeShowTime():
     return BigWorld.time()
@@ -389,6 +390,7 @@ class WGNCPopUpDecorator(_NotificationDecorator):
 
 class ClubInviteDecorator(_NotificationDecorator):
     __slots__ = ('_createdAt',)
+    clubsCtrl = dependency.descriptor(IClubsController)
 
     def __init__(self, invite):
         self._createdAt = invite.getTimestamp()
@@ -422,7 +424,7 @@ class ClubInviteDecorator(_NotificationDecorator):
         return (self.showAt(), self._createdAt)
 
     def _make(self, invite=None, settings=None):
-        invite = invite or g_clubsCtrl.getProfile().getInvite(self._entityID)
+        invite = invite or self.clubsCtrl.getProfile().getInvite(self._entityID)
         if not invite:
             LOG_ERROR('Invite not found', self._entityID)
             self._vo = {}
@@ -523,6 +525,7 @@ class _ClanBaseDecorator(_NotificationDecorator):
 
 
 class _ClanDecorator(_ClanBaseDecorator):
+    clanCtrl = dependency.descriptor(IClanController)
 
     def __init__(self, entityID, entity=None, settings=None):
         self._settings = None
@@ -576,8 +579,9 @@ class _ClanSingleDecorator(_ClanDecorator):
 
 class ClanSingleAppDecorator(_ClanSingleDecorator):
 
-    def __init__(self, entityID, entity=None, userName=None, settings=None):
+    def __init__(self, entityID, entity=None, isInClanEnterCooldown=False, settings=None, userName=None):
         self.__userName = userName
+        self.__isInClanEnterCooldown = isInClanEnterCooldown
         super(ClanSingleAppDecorator, self).__init__(entityID, entity, settings)
 
     def getUserName(self):
@@ -602,9 +606,9 @@ class ClanSingleAppDecorator(_ClanSingleDecorator):
         return ClanSingleNotificationHtmlTextFormatter('appTitle', 'appComment', 'showUserProfileAction')
 
     def _getButtonsStates(self, entity):
-        if self._state in (CLAN_APPLICATION_STATES.ACCEPTED, CLAN_APPLICATION_STATES.DECLINED) or not g_clanCtrl.getAccountProfile().getMyClanPermissions().canHandleClanInvites() or not g_clanCtrl.isEnabled():
+        if self._state in (CLAN_APPLICATION_STATES.ACCEPTED, CLAN_APPLICATION_STATES.DECLINED) or not self.clanCtrl.getAccountProfile().getMyClanPermissions().canHandleClanInvites() or not self.clanCtrl.isEnabled() or self.__isInClanEnterCooldown:
             submit = cancel = NOTIFICATION_BUTTON_STATE.HIDDEN
-        elif not g_clanCtrl.isAvailable():
+        elif not self.clanCtrl.isAvailable():
             submit = cancel = NOTIFICATION_BUTTON_STATE.VISIBLE
         else:
             submit = cancel = NOTIFICATION_BUTTON_STATE.DEFAULT
@@ -612,8 +616,13 @@ class ClanSingleAppDecorator(_ClanSingleDecorator):
          'cancel': cancel}
 
     def _getText(self, formatter, entity):
-        stateStr = '#invites:clans/state/app/%s' % self._state
-        return formatter.getText((self.__userName, stateStr, False))
+        if self.__isInClanEnterCooldown:
+            stateStr = INVITES.CLANS_STATE_APP_ERROR_INCLANENTERCOOLDOWN
+            isWarning = True
+        else:
+            stateStr = '#invites:clans/state/app/%s' % self._state
+            isWarning = False
+        return formatter.getText((self.__userName, stateStr, isWarning))
 
 
 class ClanSingleInviteDecorator(_ClanSingleDecorator):
@@ -643,9 +652,9 @@ class ClanSingleInviteDecorator(_ClanSingleDecorator):
         return ClanSingleNotificationHtmlTextFormatter('inviteTitle', 'inviteComment', 'showClanProfileAction')
 
     def _getButtonsStates(self, entity):
-        if self._state in (CLAN_INVITE_STATES.ACCEPTED, CLAN_INVITE_STATES.DECLINED) or g_clanCtrl.getAccountProfile().isInClan() or not g_clanCtrl.isEnabled() or self.__isInClanEnterCooldown():
+        if self._state in (CLAN_INVITE_STATES.ACCEPTED, CLAN_INVITE_STATES.DECLINED) or self.clanCtrl.getAccountProfile().isInClan() or not self.clanCtrl.isEnabled() or self.__isInClanEnterCooldown():
             submit = cancel = NOTIFICATION_BUTTON_STATE.HIDDEN
-        elif not g_clanCtrl.isAvailable():
+        elif not self.clanCtrl.isAvailable():
             submit = cancel = NOTIFICATION_BUTTON_STATE.VISIBLE
         else:
             submit = cancel = NOTIFICATION_BUTTON_STATE.DEFAULT
@@ -662,16 +671,16 @@ class ClanSingleInviteDecorator(_ClanSingleDecorator):
         return formatter.getText((_getClanName((entity.getClanName(), entity.getClanTag())), stateStr, isWarning))
 
     def __isInClanEnterCooldown(self):
-        profile = g_clanCtrl.getAccountProfile()
+        profile = self.clanCtrl.getAccountProfile()
         return not profile.isInClan() and profile.isInClanEnterCooldown()
 
 
 class _ClanMultiDecorator(_ClanDecorator):
 
     def _getButtonsStates(self, entity):
-        if not g_clanCtrl.isEnabled():
+        if not self.clanCtrl.isEnabled():
             submit = NOTIFICATION_BUTTON_STATE.HIDDEN
-        elif not g_clanCtrl.isAvailable():
+        elif not self.clanCtrl.isAvailable():
             submit = NOTIFICATION_BUTTON_STATE.VISIBLE
         else:
             submit = NOTIFICATION_BUTTON_STATE.DEFAULT

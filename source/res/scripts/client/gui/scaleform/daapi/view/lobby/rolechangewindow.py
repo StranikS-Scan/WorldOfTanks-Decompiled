@@ -102,9 +102,9 @@ class RoleChangeWindow(RoleChangeMeta):
     def changeRole(self, role, vehicleId):
         result = yield TankmanChangeRole(self.__tankman, role, int(vehicleId)).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         if result.auxData:
-            SystemMessages.g_instance.pushMessage(result.auxData.userMsg, type=result.auxData.sysMsgType)
+            SystemMessages.pushMessage(result.auxData.userMsg, type=result.auxData.sysMsgType)
         if result.success:
             self.onWindowClose()
 

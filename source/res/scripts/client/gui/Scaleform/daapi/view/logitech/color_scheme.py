@@ -5,6 +5,8 @@ import Math
 import ResMgr
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.windows import UIInterface
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class ColorSchemeManager(UIInterface):
     COLOR_SCHEMES_FILE = 'gui/gui_colors.xml'
@@ -32,6 +34,7 @@ class ColorSchemeManager(UIInterface):
     COLOR_BLIND_TAG = 'color_blind'
     __colors = {}
     __isXMLRead = False
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         UIInterface.__init__(self)
@@ -44,8 +47,7 @@ class ColorSchemeManager(UIInterface):
     def populateUI(self, proxy):
         UIInterface.populateUI(self, proxy)
         self.uiHolder.addExternalCallbacks({self.GET_COLORS: self.onGetColors})
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged += self.__onAccountSettingsChange
+        self.settingsCore.onSettingsChanged += self.__onAccountSettingsChange
         self.update()
         self.inited = True
 
@@ -53,8 +55,7 @@ class ColorSchemeManager(UIInterface):
         self.inited = False
         if self.uiHolder is not None:
             self.uiHolder.removeExternalCallbacks(self.GET_COLORS)
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.__onAccountSettingsChange
+        self.settingsCore.onSettingsChanged -= self.__onAccountSettingsChange
         UIInterface.dispossessUI(self)
         return
 
@@ -62,8 +63,7 @@ class ColorSchemeManager(UIInterface):
         self.__notifyFlash()
 
     def update(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        isColorBlind = g_settingsCore.getSetting('isColorBlind')
+        isColorBlind = self.settingsCore.getSetting('isColorBlind')
         self.__colorGroup = 'color_blind' if isColorBlind else 'default'
         self.__notifyFlash()
 

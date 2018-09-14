@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/chains/functional.py
+from adisp import process
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EVENT_STATUS
 from gui.shared.ItemsCache import g_itemsCache
@@ -48,15 +49,19 @@ class FunctionalCloseHint(FunctionalEffect):
 class FunctionalSwitchToRandom(FunctionalEffect):
 
     def triggerEffect(self):
-        from gui.prb_control.context import PrebattleAction
         from gui.prb_control.dispatcher import g_prbLoader
-        from gui.prb_control.settings import PREBATTLE_ACTION_NAME
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            dispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.RANDOM_QUEUE))
+            self.__doSelect(dispatcher)
         else:
             LOG_ERROR('Prebattle dispatcher is not defined')
         return
+
+    @process
+    def __doSelect(self, dispatcher):
+        from gui.prb_control.entities.base.ctx import PrbAction
+        from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+        yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
 
 
 class FunctionalShowUnlockedChapter(FunctionalEffect):

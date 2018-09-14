@@ -13,6 +13,15 @@
   <batchingEnabled>	0	</batchingEnabled>
   <wwloadingMusic>	music_euro_vilage	</wwloadingMusic>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_env_Mountain	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	env_Mountain.bnk	</bank>
+    </loadBanks>
+  </soundRemapping>
   <gameplayTypes>
     <ctf>
       <teamBasePositions>
@@ -42,4 +51,6 @@
       </teamBasePositions>
     </assault2>
   </gameplayTypes>
+  <mapActivities></mapActivities>
+  <roadMap></roadMap>
 </18_cliff.xml>

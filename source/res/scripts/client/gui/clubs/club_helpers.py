@@ -3,17 +3,20 @@
 import weakref
 from collections import defaultdict, namedtuple
 import BigWorld
+import Event
 import dossiers2
 from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
 from gui.clubs import interfaces, formatters as club_fmts
-from gui.clubs.contexts import GetClubsCtx, JoinClubBattleCtx, FindClubsCtx, GetCompletedSeasonsCtx
+from gui.clubs.contexts import GetClubsCtx, FindClubsCtx, GetCompletedSeasonsCtx
 from gui.clubs.items import ClubListItem
 from gui.clubs.settings import OTHER_CLUB_SUBSCRIPTION, MY_CLUB_SUBSCRIPTION, CLIENT_CLUB_STATE as _CCS
 from gui.shared.gui_items.dossier import ClubDossier
 from gui.shared.utils.ListPaginator import ListPaginator
+from helpers import dependency
+from skeletons.gui.clubs import IClubsController
 
 def isClubsEnabled():
     return g_lobbyContext.getServerSettings().isClubsEnabled()
@@ -39,11 +42,7 @@ def isRelatedToClubs():
 
 
 class ClubListener(interfaces.IClubListener):
-
-    @property
-    def clubsCtrl(self):
-        from gui.clubs.ClubsController import g_clubsCtrl
-        return g_clubsCtrl
+    clubsCtrl = dependency.descriptor(IClubsController)
 
     @property
     def clubsState(self):
@@ -138,10 +137,64 @@ class ClubFinder(ListPaginator):
             self.onListUpdated(self._selectedID, True, True, map(ClubListItem.build, reversed(self.__lastResult)))
 
 
+class ClubPaginatorComposite(ClubListener):
+
+    def __init__(self):
+        super(ClubPaginatorComposite, self).__init__()
+        self.__searchPattern = None
+        self.__paginator = None
+        self._eManager = Event.EventManager()
+        self.onListUpdated = Event.Event(self._eManager)
+        return
+
+    def init(self):
+        self.__paginator = ClubListPaginator(self.clubsCtrl)
+        self.__paginator.onListUpdated += self.__onListUpdated
+
+    def fini(self):
+        if self.__paginator is not None:
+            self.__paginator.onListUpdated -= self.__onListUpdated
+            self.__paginator.fini()
+            self.__paginator = None
+        self._eManager.clear()
+        return
+
+    def setPattern(self, pattern):
+        if self.__searchPattern is None:
+            self.__paginator.onListUpdated -= self.__onListUpdated
+            self.__paginator.fini()
+            self.__paginator = ClubFinder(self.clubsCtrl)
+            self.__paginator.init()
+            self.__paginator.onListUpdated += self.__onListUpdated
+        self.__searchPattern = pattern
+        self.__paginator.setPattern(pattern)
+        return
+
+    def clearPattern(self):
+        if self.__searchPattern is not None:
+            self.__searchPattern = None
+            self.__paginator.onListUpdated -= self.__onListUpdated
+            self.__paginator.fini()
+            self.__paginator = ClubListPaginator(self.clubsCtrl)
+            self.__paginator.init()
+            self.__paginator.onListUpdated += self.__onListUpdated
+        return
+
+    def getPattern(self):
+        return self.__searchPattern
+
+    def getPaginator(self):
+        return self.__paginator
+
+    def __onListUpdated(self, selectedID, isFullUpdate, isReqInCoolDown, result):
+        self.onListUpdated(selectedID, isFullUpdate, isReqInCoolDown, result, self.__searchPattern)
+
+
 @process
 def tryToConnectClubBattle(club, joinTime):
     from gui import DialogsInterface, SystemMessages
     from gui.prb_control.dispatcher import g_prbLoader
+    from gui.prb_control.entities.e_sport.unit.club.ctx import JoinClubBattleCtx
     from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
     yield lambda callback: callback(None)
     if not club:

@@ -3,7 +3,7 @@
 import ResMgr
 from helpers.html import translation
 from items import _xml
-from tutorial.data.chapter import Bonus, Chapter, Scene
+from tutorial.data.chapter import Chapter, Scene
 from tutorial.data.descriptor import DescriptorData
 from tutorial.data.hints import HintsData
 from tutorial.doc_loader import sub_parsers
@@ -64,7 +64,7 @@ class DescriptorParser(object):
         tags = section.keys()
         if 'bonus' in tags:
             subSection = section['bonus']
-            return Bonus(subSection.readInt('id', -1), subSection.readString('message'), sub_parsers.readValues(subSection))
+            return sub_parsers.parseBonus(xmlCtx, subSection)
         if 'bonus-ref' in tags:
             bonusID = sub_parsers.parseID(xmlCtx, section['bonus-ref'], 'Specify a bonus ID')
             if bonusID in bonuses:
@@ -213,7 +213,8 @@ class BonusRefParser(object):
         result = {}
         for _, subSec in _xml.getChildren(xmlCtx, section, 'bonuses'):
             bonusID = sub_parsers.parseID(xmlCtx, subSec, 'Specify a bonus ID')
-            result[bonusID] = Bonus(subSec.readInt('id', -1), subSec.readString('message'), sub_parsers.readValues(subSec))
+            bonus = sub_parsers.parseBonus(xmlCtx, subSec)
+            result[bonusID] = bonus
 
         return result
 

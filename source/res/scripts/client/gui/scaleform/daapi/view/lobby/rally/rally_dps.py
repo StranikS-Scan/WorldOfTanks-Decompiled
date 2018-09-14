@@ -3,6 +3,7 @@
 import weakref
 import operator
 import BigWorld
+from gui.prb_control import prbEntityProperty
 from helpers import html
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
@@ -18,7 +19,6 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clubs.formatters import getLeagueString, getDivisionString
 from gui.clubs.settings import CLIENT_CLUB_STATE, getLadderChevron16x16, getLadderChevron128x128
 from gui.prb_control.items.unit_items import getUnitCandidatesComparator
-from gui.prb_control.prb_helpers import unitFunctionalProperty
 from gui.shared.formatters import icons, text_styles
 from gui.shared.view_helpers import UsersInfoHelper
 from shared_utils import findFirst
@@ -177,12 +177,12 @@ class StaticFormationCandidatesDP(CandidatesDataProvider):
 
 class ManualSearchDataProvider(BaseRallyListDataProvider):
 
-    @unitFunctionalProperty
-    def unitFunctional(self):
+    @prbEntityProperty
+    def prbEntity(self):
         return None
 
     def getVO(self, unitIndex=None):
-        return makeUnitShortVO(self.unitFunctional, unitIndex)
+        return makeUnitShortVO(self.prbEntity, unitIndex)
 
     def buildList(self, selectedID, result):
         self.clear()

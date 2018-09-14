@@ -32,6 +32,9 @@ class BattleSessionWindowMeta(PrebattleWindow):
         return self.flashObject.as_setInfo(wins, map, firstTeam, secondTeam, count, description, comment) if self._isDAAPIInited() else None
 
     def as_setNationsLimitsS(self, nations):
+        """
+        :param nations: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_setNationsLimits(nations) if self._isDAAPIInited() else None
 
     def as_setClassesLimitsS(self, vehicleLevels, classesLimitsAreIdentical):

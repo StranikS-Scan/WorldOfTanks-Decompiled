@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/Browser.py
-from gui import game_control
 from gui.Scaleform.daapi.view.meta.BrowserMeta import BrowserMeta
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.formatters import icons
-from helpers import i18n
 from gui.shared import g_eventBus
 from gui.shared.events import BrowserEvent
+from gui.shared.formatters import icons
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IBrowserController
 
 class Browser(BrowserMeta):
+    browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self):
         super(Browser, self).__init__()
@@ -20,7 +21,7 @@ class Browser(BrowserMeta):
 
     def init(self, browserID):
         self.__browserID = browserID
-        self.__browser = game_control.getBrowserCtrl().getBrowser(self.__browserID)
+        self.__browser = self.browserCtrl.getBrowser(self.__browserID)
         assert self.__browser is not None, 'Cannot find browser'
         if not self.__browser.hasBrowser:
             g_eventBus.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
@@ -76,7 +77,7 @@ class Browser(BrowserMeta):
         self.__browser.onLoadEnd -= self.__onLoadEnd
         self.__browser.onNavigate -= self.__onNavigate
         self.__browser = None
-        game_control.g_instance.browser.delBrowser(self.__browserID)
+        self.browserCtrl.delBrowser(self.__browserID)
         g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         super(Browser, self)._dispose()
         return
@@ -89,7 +90,7 @@ class Browser(BrowserMeta):
     def __onLoadStart(self, url):
         pass
 
-    def __onLoadEnd(self, url, isLoaded=True):
+    def __onLoadEnd(self, _, isLoaded=True):
         self.__isLoaded = self.__isLoaded and isLoaded
         if not self.__isLoaded:
             self.__showDataUnavailableView()
@@ -100,14 +101,14 @@ class Browser(BrowserMeta):
         else:
             self.as_loadingStopS()
 
-    def __onNavigate(self, url):
+    def __onNavigate(self, _):
         self.as_hideServiceViewS()
         self.__isLoaded = True
 
     def __handleBrowserCreated(self, event):
         if event.ctx['browserID'] == self.__browserID:
             g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
-            self.__browser = game_control.g_instance.browser.getBrowser(self.__browserID)
+            self.__browser = self.browserCtrl.getBrowser(self.__browserID)
             assert self.__browser is not None, 'Cannot find browser'
             self.__prepareBrowser()
         return

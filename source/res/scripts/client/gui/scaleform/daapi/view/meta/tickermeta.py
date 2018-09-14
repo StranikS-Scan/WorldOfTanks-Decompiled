@@ -14,4 +14,7 @@ class TickerMeta(BaseDAAPIComponent):
         self._printOverrideError('showBrowser')
 
     def as_setItemsS(self, items):
+        """
+        :param items: Represented by Vector.<RSSEntryVO> (AS)
+        """
         return self.flashObject.as_setItems(items) if self._isDAAPIInited() else None

@@ -4,7 +4,7 @@ import fortified_regions
 from gui.LobbyContext import g_lobbyContext
 from helpers import i18n
 from collections import namedtuple
-from gui.prb_control.prb_helpers import UnitListener
+from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.daapi.view.meta.SlotsPanelMeta import SlotsPanelMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -33,7 +33,7 @@ def _makeEmptySlotVO(slotIdx, isInactive):
     return _makeSlotVO(ORDER_TYPES.EMPTY_ORDER, slotIdx, isInactive=isInactive, orderIcon=RES_ICONS.MAPS_ICONS_ARTEFACT_EMPTYORDER)
 
 
-class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, UnitListener):
+class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, IUnitListener):
 
     def __init__(self, _=None):
         super(FortBattleRoomOrdersPanelComponent, self).__init__()
@@ -60,16 +60,16 @@ class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, UnitLis
     def _populate(self):
         super(FortBattleRoomOrdersPanelComponent, self)._populate()
         self.startFortListening()
-        self.startUnitListening()
+        self.startPrbListening()
         self.__updateSlots()
 
     def _dispose(self):
-        self.stopUnitListening()
+        self.stopPrbListening()
         self.stopFortListening()
         super(FortBattleRoomOrdersPanelComponent, self)._dispose()
 
     def _isConsumablesAvailable(self):
-        return self.unitFunctional.getExtra().canUseEquipments
+        return self.prbEntity.getExtra().canUseEquipments
 
     def _getSlotsProps(self):
         return {'slotsCount': 3,
@@ -86,8 +86,8 @@ class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, UnitLis
         if not self._isConsumablesAvailable():
             return
         else:
-            extra = self.unitFunctional.getExtra()
-            consumablesVisible = self.fortCtrl.getPermissions().canActivateConsumable() and self.unitFunctional.getPermissions().canChangeConsumables()
+            extra = self.prbEntity.getExtra()
+            consumablesVisible = self.fortCtrl.getPermissions().canActivateConsumable() and self.prbEntity.getPermissions().canChangeConsumables()
             consumablesDisabled = not g_lobbyContext.getServerSettings().isFortsEnabled()
             result = []
             if extra is not None:

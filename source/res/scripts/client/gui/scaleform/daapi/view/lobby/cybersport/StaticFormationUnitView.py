@@ -3,25 +3,25 @@
 import BigWorld
 from UnitBase import UNIT_OP
 from gui import makeHtmlString
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.formatters import text_styles, icons
-from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
-from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters, rally_dps
+from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.StaticFormationUnitMeta import StaticFormationUnitMeta
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clubs import events_dispatcher as club_events
 from gui.clubs.club_helpers import ClubListener
 from gui.clubs.settings import getLadderChevron64x64, getLadderBackground
+from gui.game_control.battle_availability import isHourInForbiddenList
 from gui.prb_control import settings
-from gui.prb_control.context import unit_ctx
+from gui.prb_control.entities.e_sport.unit.club.ctx import ChangeRatedUnitCtx
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import g_itemsCache
+from gui.shared.formatters import text_styles, icons
+from gui.shared.utils.functions import makeTooltip
 from gui.shared.view_helpers.emblems import ClubEmblemsHelper
-from gui.game_control.battle_availability import isHourInForbiddenList
 from helpers import int2roman
 
 class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblemsHelper):
@@ -29,7 +29,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
 
     def __init__(self):
         super(StaticFormationUnitView, self).__init__()
-        self.__extra = self.unitFunctional.getExtra()
+        self.__extra = self.prbEntity.getExtra()
         self.__clubDBID = self.__extra.clubDBID
 
     def getCoolDownRequests(self):
@@ -72,10 +72,10 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         return legionnairesString
 
     def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
-        functional = self.unitFunctional
-        _, unit = functional.getUnit()
+        entity = self.prbEntity
+        _, unit = entity.getUnit()
         if self._candidatesDP is not None:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self.__updateHeader()
         self._updateMembersData()
@@ -83,10 +83,8 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         return
 
     def onUnitFlagsChanged(self, flags, timeLeft):
-        functional = self.unitFunctional
-        pInfo = functional.getPlayerInfo()
-        isCreator = pInfo.isCreator()
-        if isCreator and flags.isOpenedStateChanged():
+        entity = self.prbEntity
+        if entity.isCommander() and flags.isOpenedStateChanged():
             self.as_setOpenedS(flags.isOpened(), vo_converters.makeStaticFormationStatusLbl(flags))
         if flags.isChanged():
             self._updateMembersData()
@@ -95,17 +93,17 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
 
     def onUnitSettingChanged(self, opCode, value):
         if opCode == UNIT_OP.SET_COMMENT:
-            self.as_setCommentS(self.unitFunctional.getCensoredComment())
+            self.as_setCommentS(self.prbEntity.getCensoredComment())
         elif opCode in [UNIT_OP.CLOSE_SLOT, UNIT_OP.OPEN_SLOT]:
-            functional = self.unitFunctional
-            _, unit = functional.getUnit()
-            unitFlags = functional.getFlags()
-            slotState = functional.getSlotState(value)
-            pInfo = functional.getPlayerInfo()
+            entity = self.prbEntity
+            _, unit = entity.getUnit()
+            unitFlags = entity.getFlags()
+            slotState = entity.getSlotState(value)
+            pInfo = entity.getPlayerInfo()
             canAssign, vehicles = pInfo.canAssignToSlot(value)
             canTakeSlot = not (pInfo.isLegionary() and unit.isClub())
             vehCount = len(vehicles)
-            slotLabel = vo_converters.makeStaticSlotLabel(unitFlags, slotState, pInfo.isCreator(), vehCount, pInfo.isLegionary(), unit.isRated())
+            slotLabel = vo_converters.makeStaticSlotLabel(unitFlags, slotState, pInfo.isCommander(), vehCount, pInfo.isLegionary(), unit.isRated())
             if opCode == UNIT_OP.CLOSE_SLOT:
                 self.as_closeSlotS(value, settings.UNIT_CLOSED_SLOT_COST, slotLabel)
             else:
@@ -114,16 +112,16 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
             self._setActionButtonState()
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
-        functional = self.unitFunctional
-        pInfo = functional.getPlayerInfo(dbID=dbID)
+        entity = self.prbEntity
+        pInfo = entity.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange())
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
-                slotState = functional.getSlotState(slotIdx)
+                slotState = entity.getSlotState(slotIdx)
                 vehicleVO = None
                 if slotState.isClosed:
                     slotCost = settings.UNIT_CLOSED_SLOT_COST
@@ -131,15 +129,15 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
                     slotCost = 0
             self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
             self.__updateTotalData()
-        if pInfo.isCurrentPlayer() or functional.getPlayerInfo().isCreator():
+        if pInfo.isCurrentPlayer() or entity.isCommander():
             self._setActionButtonState()
         return
 
     def onUnitMembersListChanged(self):
-        functional = self.unitFunctional
-        _, unit = functional.getUnit()
+        entity = self.prbEntity
+        _, unit = entity.getUnit()
         if self._candidatesDP is not None:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self.__updateHeader()
         self._updateMembersData()
@@ -147,17 +145,17 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         return
 
     def onUnitExtraChanged(self, extra):
-        self.__extra = self.unitFunctional.getExtra()
+        self.__extra = self.prbEntity.getExtra()
         self.__updateHeader()
         self._updateMembersData()
         self.__updateTotalData()
 
     def onUnitRejoin(self):
         super(StaticFormationUnitView, self).onUnitRejoin()
-        functional = self.unitFunctional
-        _, unit = functional.getUnit()
+        entity = self.prbEntity
+        _, unit = entity.getUnit()
         if self._candidatesDP is not None:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self.__updateHeader()
         self._updateMembersData()
@@ -165,27 +163,27 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         return
 
     def toggleStatusRequest(self):
-        self.requestToOpen(not self.unitFunctional.getFlags().isOpened())
+        self.requestToOpen(not self.prbEntity.getFlags().isOpened())
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.StaticFormationCandidatesDP()
-        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
+        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.prbEntity.getCandidates())
 
     def rebuildCandidatesDP(self):
-        self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+        self._candidatesDP.rebuild(self.prbEntity.getCandidates())
 
     def setRankedMode(self, isRated):
-        self.sendRequest(unit_ctx.ChangeRatedUnitCtx(isRated, 'prebattle/change_settings'))
+        self.sendRequest(ChangeRatedUnitCtx(isRated, 'prebattle/change_settings'))
 
     def showTeamCard(self):
         club_events.showClubProfile(self.__clubDBID)
 
     def onSlotsHighlihgtingNeed(self, databaseID):
-        functional = self.unitFunctional
-        availableSlots = list(functional.getPlayerInfo(databaseID).getAvailableSlots(True))
-        pInfo = functional.getPlayerInfo(dbID=databaseID)
+        entity = self.prbEntity
+        availableSlots = list(entity.getPlayerInfo(databaseID).getAvailableSlots(True))
+        pInfo = entity.getPlayerInfo(dbID=databaseID)
         if not pInfo.isInSlot and pInfo.isLegionary():
-            _, unit = functional.getUnit()
+            _, unit = entity.getUnit()
             if unit.isRated():
                 self.as_highlightSlotsS([])
                 return []
@@ -197,12 +195,12 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         return availableSlots
 
     def _updateRallyData(self):
-        functional = self.unitFunctional
-        data = vo_converters.makeStaticFormationUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
+        entity = self.prbEntity
+        data = vo_converters.makeStaticFormationUnitVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
         self.as_updateRallyS(data)
 
     def _setActionButtonState(self):
-        self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
+        self.as_setActionButtonStateS(ActionButtonStateVO(self.prbEntity))
 
     def _getVehicleSelectorDescription(self):
         return CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_UNIT
@@ -210,10 +208,10 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
     def _populate(self):
         super(StaticFormationUnitView, self)._populate()
         self.startClubListening(self.__clubDBID)
-        settings = self.unitFunctional.getRosterSettings()
+        settings = self.prbEntity.getRosterSettings()
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
         self.__updateHeader()
-        _, unit = self.unitFunctional.getUnit()
+        _, unit = self.prbEntity.getUnit()
         self.as_setLegionnairesCountS(False, self.__makeLegionnairesCountString(unit))
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
         self.clubsCtrl.getAvailabilityCtrl().onStatusChanged += self.onStatusChanged
@@ -299,7 +297,7 @@ class StaticFormationUnitView(StaticFormationUnitMeta, ClubListener, ClubEmblems
         return
 
     def __updateTotalData(self):
-        functional = self.unitFunctional
-        unitStats = functional.getStats()
-        canDoAction, restriction = functional.validateLevels(stats=unitStats)
-        self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
+        entity = self.prbEntity
+        unitStats = entity.getStats()
+        result = entity.validateLevels()
+        self.as_setTotalLabelS(result.isValid, vo_converters.makeTotalLevelLabel(unitStats, result.restriction), unitStats.curTotalLevel)

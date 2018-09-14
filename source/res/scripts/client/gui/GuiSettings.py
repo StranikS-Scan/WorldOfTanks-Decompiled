@@ -124,7 +124,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'userRoomsService': '',
  'cryptLoginInfo': True,
  'compulsoryIntroVideos': [],
- 'encyclopedia': {}}
+ 'encyclopedia': {},
+ 'useDefaultGunMarkers': False}
 
 class GuiSettings(object):
 

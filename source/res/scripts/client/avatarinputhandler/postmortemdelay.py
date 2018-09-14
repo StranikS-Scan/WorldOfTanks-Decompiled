@@ -93,7 +93,8 @@ class PostmortemDelay:
         vehicle = BigWorld.entity(vehicleID)
         if vehicle is None:
             if vehicleID == BigWorld.player().playerVehicleID:
-                targetMatrix = BigWorld.player().getOwnVehicleStabilisedMatrix()
+                steadyMatrix = BigWorld.player().inputHandler.steadyVehicleMatrixCalculator
+                targetMatrix = steadyMatrix.outputMProv
                 self.__setCameraSettings(targetMP=targetMatrix, pivotSettings=self.__savedPivotSettings, cameraDistance=self.__savedCameraDistance, yawPitch=self.__savedYawPitch)
                 return True
             return False

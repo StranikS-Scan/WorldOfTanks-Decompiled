@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_help.py
 import Keys
-from account_helpers.settings_core import g_settingsCore
 from account_helpers.settings_core.settings_constants import CONTROLS
 from gui.Scaleform.daapi.view.meta.IngameHelpWindowMeta import IngameHelpWindowMeta
 from gui.Scaleform.genConsts.KEYBOARD_KEYS import KEYBOARD_KEYS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.shared import event_dispatcher
 from gui.shared.utils.key_mapping import getScaleformKey
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 _CHANGED_KEYS_IN_HELP = (KEYBOARD_KEYS.FORWARD,
  KEYBOARD_KEYS.BACKWARD,
  KEYBOARD_KEYS.LEFT,
@@ -27,8 +28,8 @@ _CHANGED_KEYS_IN_HELP = (KEYBOARD_KEYS.FORWARD,
  KEYBOARD_KEYS.SHOW_HUD)
 _FIXED_KEYS_IN_HELP = ((KEYBOARD_KEYS.TOGGLE_PLAYER_PANEL_MODES, Keys.KEY_TAB), (KEYBOARD_KEYS.SHOW_EX_PLAYER_INFO, Keys.KEY_LALT))
 
-def getChangedKeysInfo():
-    setting = g_settingsCore.options.getSetting(CONTROLS.KEYBOARD)
+def getChangedKeysInfo(settingsCore):
+    setting = settingsCore.options.getSetting(CONTROLS.KEYBOARD)
     getter = setting.getSetting
     for key in _CHANGED_KEYS_IN_HELP:
         yield (key, getter(key).get())
@@ -40,6 +41,7 @@ def getFixedKeysInfo():
 
 
 class IngameHelpWindow(IngameHelpWindowMeta, BattleGUIKeyHandler):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def onWindowClose(self):
         self.destroy()
@@ -58,7 +60,7 @@ class IngameHelpWindow(IngameHelpWindowMeta, BattleGUIKeyHandler):
         super(IngameHelpWindow, self)._populate()
         if self.app is not None:
             self.app.registerGuiKeyHandler(self)
-        vo = dict(((key, value) for key, value in getChangedKeysInfo()))
+        vo = dict(((key, value) for key, value in getChangedKeysInfo(self.settingsCore)))
         vo.update(dict(((key, value) for key, value in getFixedKeysInfo())))
         self.as_setKeysS(vo)
         return

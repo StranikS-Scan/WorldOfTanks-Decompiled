@@ -5,15 +5,18 @@ import Keys
 import Math
 import CommandMapping
 from account_helpers import AccountSettings
-from account_helpers.settings_core import g_settingsCore, settings_constants
+from account_helpers.settings_core import settings_constants
 from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import component
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
-from gui.battle_control import minimap_utils, avatar_getter, g_sessionProvider
+from gui.battle_control import minimap_utils, avatar_getter
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from helpers import dependency
 from messenger import MessengerEntry
+from skeletons.gui.battle_session import IBattleSessionProvider
+from PlayerEvents import g_playerEvents
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _MARK_CELL_UNIQUE_ID = 0
@@ -54,7 +57,7 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         if self.__sizeIndex != newSize:
             self.__sizeIndex = newSize
             self._parentObj.as_setSizeS(self.__sizeIndex)
-        value = int(g_settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA))
+        value = int(self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_ALPHA))
         if value:
             self._parentObj.as_setAlphaS(1 - value / 100.0)
 
@@ -116,18 +119,32 @@ class GlobalSettingsPlugin(common.SimplePlugin):
 
 
 class TeamsOrControlsPointsPlugin(common.SimplePlugin):
-    __slots__ = ('__personalTeam',)
+    __slots__ = ('__personalTeam', '__entries')
 
     def __init__(self, parentObj):
         super(TeamsOrControlsPointsPlugin, self).__init__(parentObj)
         self.__personalTeam = 0
+        self.__entries = []
 
     def start(self):
         super(TeamsOrControlsPointsPlugin, self).start()
+        g_playerEvents.onTeamChanged += self.__onTeamChanged
+        self.restart()
+
+    def stop(self):
+        g_playerEvents.onTeamChanged -= self.__onTeamChanged
+        super(TeamsOrControlsPointsPlugin, self).stop()
+
+    def restart(self):
+        [ self._delEntry(x) for x in self.__entries ]
+        self.__entries = []
         self.__personalTeam = self._arenaDP.getNumberOfTeam()
         self.__addTeamSpawnPoints()
         self.__addTeamBasePositions()
         self.__addControlPoints()
+
+    def __onTeamChanged(self, teamID):
+        self.restart()
 
     def __addPointEntry(self, symbol, position, number):
         matrix = Math.Matrix()
@@ -135,6 +152,7 @@ class TeamsOrControlsPointsPlugin(common.SimplePlugin):
         entryID = self._addEntry(symbol, _C_NAME.TEAM_POINTS, matrix=matrix, active=True)
         if entryID:
             self._invoke(entryID, 'setPointNumber', number)
+            self.__entries.append(entryID)
 
     def __addTeamSpawnPoints(self):
         points = self._arenaVisitor.getTeamSpawnPointsIterator(self.__personalTeam)
@@ -161,6 +179,7 @@ class TeamsOrControlsPointsPlugin(common.SimplePlugin):
 
 
 class MarkCellPlugin(common.AttentionToCellPlugin):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def setAttentionToCell(self, x, y, isRightClick):
         if isRightClick:
@@ -169,7 +188,7 @@ class MarkCellPlugin(common.AttentionToCellPlugin):
                 matrix = minimap_utils.makePointMatrixByLocal(x, y, *self._boundingBox)
                 handler.onMinimapClicked(matrix.translation)
         else:
-            commands = g_sessionProvider.shared.chatCommands
+            commands = self.sessionProvider.shared.chatCommands
             if commands is not None:
                 commands.sendAttentionToCell(minimap_utils.makeCellIndex(x, y))
         return

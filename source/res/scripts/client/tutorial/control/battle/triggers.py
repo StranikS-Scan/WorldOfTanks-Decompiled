@@ -3,7 +3,8 @@
 import BigWorld
 import TriggersManager
 from constants import ARENA_PERIOD
-from gui.battle_control import g_sessionProvider
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from tutorial import g_tutorialWeaver
 from tutorial.control.battle import aspects
 from tutorial.control.triggers import Trigger, TriggerWithValidateVar
@@ -50,6 +51,7 @@ class VehicleOnArenaTrigger(TriggerWithValidateVar):
 
 
 class PlayerVehicleNoAmmoTrigger(Trigger):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, triggerID, stateFlagID=None):
         super(PlayerVehicleNoAmmoTrigger, self).__init__(triggerID)
@@ -91,7 +93,7 @@ class PlayerVehicleNoAmmoTrigger(Trigger):
         super(PlayerVehicleNoAmmoTrigger, self).clear()
 
     def __addListeners(self):
-        ammoCtrl = g_sessionProvider.shared.ammo
+        ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl:
             ammoCtrl.onShellsAdded += self.__onShellsAdded
             ammoCtrl.onShellsUpdated += self.__onShellsUpdated
@@ -99,7 +101,7 @@ class PlayerVehicleNoAmmoTrigger(Trigger):
                 self.__ammoLayout[intCD] = quantity
 
     def __removeListeners(self):
-        ammoCtrl = g_sessionProvider.shared.ammo
+        ammoCtrl = self.sessionProvider.shared.ammo
         if ammoCtrl:
             ammoCtrl.onShellsAdded -= self.__onShellsAdded
             ammoCtrl.onShellsUpdated -= self.__onShellsUpdated

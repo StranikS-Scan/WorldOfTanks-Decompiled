@@ -668,8 +668,8 @@ class _FortsBusinessHandler(PackageBusinessHandler):
         alias = name = FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS
         window = self.findViewByAlias(ViewTypes.WINDOW, alias)
         if window is not None:
-            if event.ctx.get('modeFlags') == FUNCTIONAL_FLAG.SHOW_ENTITIES_BROWSER:
-                window.loadListView()
+            if event.ctx.get('modeFlags') == FUNCTIONAL_FLAG.UNIT_BROWSER:
+                window.onBrowseRallies()
         self.loadViewWithDefName(alias, name, event.ctx)
         return
 

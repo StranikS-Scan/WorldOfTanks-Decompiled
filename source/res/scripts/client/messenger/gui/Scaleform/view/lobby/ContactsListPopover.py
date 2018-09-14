@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ContactsListPopover.py
 from account_helpers.AccountSettings import AccountSettings, CONTACTS
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.locale.WAITING import WAITING
+from helpers import dependency
 from helpers.i18n import makeString
 from messenger.gui.Scaleform.meta.ContactsListPopoverMeta import ContactsListPopoverMeta
 from messenger.gui.Scaleform.view.lobby.ContactsCMListener import ContactsCMListener
@@ -13,8 +13,10 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
         super(ContactsListPopover, self).__init__(ctx)
@@ -69,7 +71,7 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
             if tree:
                 g_messengerEvents.users.onEmptyGroupsChanged += self.__onEmptyGroupsChanged
                 tree.onGroupToggled += self.__onGroupToggled
-                settings = g_settingsCore.serverSettings.getSection(CONTACTS, AccountSettings.getFilterDefault(CONTACTS))
+                settings = self.settingsCore.serverSettings.getSection(CONTACTS, AccountSettings.getFilterDefault(CONTACTS))
                 onlineMode = None if settings['showOfflineUsers'] else True
                 showOthers = bool(settings['showOthersCategory'])
                 tree.showContacts(onlineMode=onlineMode, showVisibleOthers=showOthers, showEmptyGroups=True)
@@ -107,7 +109,7 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
         self.startListenContextMenu()
         g_messengerEvents.onPluginConnected += self.__onPluginConnected
         g_messengerEvents.onPluginDisconnected += self.__onPluginDisconnected
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         if self.proto.isConnected():
             self.as_hideWaitingS()
         else:
@@ -119,12 +121,11 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
         tree = self.pyTree
         if tree:
             tree.onGroupToggled -= self.__onGroupToggled
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.stopListenContextMenu()
         g_messengerEvents.users.onEmptyGroupsChanged -= self.__onEmptyGroupsChanged
         g_messengerEvents.onPluginConnected -= self.__onPluginConnected
         g_messengerEvents.onPluginDisconnected -= self.__onPluginDisconnected
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(ContactsListPopover, self)._dispose()
 
     def _onEditGroup(self, event):

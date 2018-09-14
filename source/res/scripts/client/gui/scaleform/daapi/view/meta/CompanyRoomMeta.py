@@ -62,6 +62,9 @@ class CompanyRoomMeta(BasePrebattleRoomView):
         return self.flashObject.as_setMaxCountLimitLabel(label) if self._isDAAPIInited() else None
 
     def as_setInvalidVehiclesS(self, data):
+        """
+        :param data: Represented by Vector.<CompanyRoomInvalidVehiclesVO> (AS)
+        """
         return self.flashObject.as_setInvalidVehicles(data) if self._isDAAPIInited() else None
 
     def as_setChangeSettingCoolDownS(self, coolDown):

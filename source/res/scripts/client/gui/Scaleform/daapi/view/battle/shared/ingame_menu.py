@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_menu.py
-import BattleReplay
 import constants
+import BattleReplay
 from ConnectionManager import connectionManager
 from adisp import process
 from gui import DialogsInterface, GUI_SETTINGS
-from gui import game_control, makeHtmlString
+from gui import makeHtmlString
 from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
@@ -15,14 +15,18 @@ from gui.Scaleform.genConsts.GLOBAL_VARS_MGR_CONSTS import GLOBAL_VARS_MGR_CONST
 from gui.Scaleform.genConsts.INTERFACE_STATES import INTERFACE_STATES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
-from gui.battle_control import g_sessionProvider
 from gui.battle_control import event_dispatcher as battle_event_dispatcher
 from gui.shared import event_dispatcher as shared_event_dispatcher
 from gui.shared import events
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IServerStatsController
+from gui.Scaleform.locale.MENU import MENU
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
+    serverStats = dependency.descriptor(IServerStatsController)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def onWindowClose(self):
         self.destroy()
@@ -55,12 +59,15 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             self.app.registerGuiKeyHandler(self)
         self.__setServerSettings()
         self.__setServerStats()
+        self.__setMenuButtonsLabels()
         return
 
     def __updateNewSettingsCount(self):
         newSettingsCount = len(getNewSettings())
         if newSettingsCount > 0:
             self.as_setSettingsBtnCounterS(str(newSettingsCount))
+        else:
+            self.as_removeSettingsBtnCounterS()
 
     def _dispose(self):
         if self.app is not None:
@@ -85,7 +92,17 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
 
     def __setServerStats(self):
         if constants.IS_SHOW_SERVER_STATS:
-            self.as_setServerStatsS(*game_control.g_instance.serverStats.getFormattedStats())
+            self.as_setServerStatsS(*self.serverStats.getFormattedStats())
+
+    def __setMenuButtonsLabels(self):
+        quitLabel = ''
+        if self.app.varsManager.isTutorialRunning(GLOBAL_VARS_MGR_CONSTS.BATTLE):
+            quitLabel = MENU.LOBBY_MENU_BUTTONS_REFUSE_TRAINING
+        elif BattleReplay.isPlaying():
+            quitLabel = MENU.INGAME_MENU_BUTTONS_REPLAYEXIT
+        else:
+            quitLabel = MENU.INGAME_MENU_BUTTONS_LOGOFF
+        self.as_setMenuButtonsLabelsS(MENU.INGAME_MENU_BUTTONS_HELP, MENU.INGAME_MENU_BUTTONS_SETTINGS, MENU.INGAME_MENU_BUTTONS_BACK, quitLabel)
 
     @process
     def __doLeaveTutorial(self):
@@ -96,7 +113,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
 
     @process
     def __doLeaveArena(self):
-        exitResult = g_sessionProvider.getExitResult()
+        exitResult = self.sessionProvider.getExitResult()
         if exitResult.playerInfo is not None:
             igrType = exitResult.playerInfo.igrType
         else:
@@ -107,9 +124,14 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             i18nKey = 'quitBattle'
         if exitResult.isDeserter:
             result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(i18nKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
+        elif BattleReplay.isPlaying():
+            result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitReplay', focusedID=DIALOG_BUTTON_ID.CLOSE))
         else:
             result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitBattle', focusedID=DIALOG_BUTTON_ID.CLOSE))
         if result:
-            g_sessionProvider.exit()
-            self.destroy()
+            self.__doExit()
         return
+
+    def __doExit(self):
+        self.sessionProvider.exit()
+        self.destroy()

@@ -3,12 +3,12 @@
 import Event
 import constants
 from PlayerEvents import g_playerEvents
-from gui.game_control.controllers import Controller
+from skeletons.gui.game_control import IIGRController
 
-class IGRController(Controller):
+class IGRController(IIGRController):
 
-    def __init__(self, proxy):
-        super(IGRController, self).__init__(proxy)
+    def __init__(self):
+        super(IGRController, self).__init__()
         self.__xpFactor = 1.0
         self.__roomType = constants.IGR_TYPE.NONE
         self.onIgrTypeChanged = Event.Event()

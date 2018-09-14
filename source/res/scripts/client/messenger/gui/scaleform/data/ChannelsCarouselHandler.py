@@ -198,11 +198,10 @@ class ChannelsCarouselHandler(object):
         clientID = event.clientID
         if clientID in self.__handlers:
             criteria, openHandler, viewType = self.__handlers.pop(clientID)
-            window = None
-            if self.app is not None:
+            if event.ctx.get('closeWindow', True) and self.app is not None:
                 window = self.app.containerManager.getView(viewType, criteria)
-            if window is not None:
-                window.destroy()
+                if window is not None:
+                    window.destroy()
             targetList.removeItem(clientID)
             self.__showByReqs.pop(clientID, None)
         return

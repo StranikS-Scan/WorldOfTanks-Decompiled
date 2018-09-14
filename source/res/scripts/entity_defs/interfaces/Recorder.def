@@ -1,0 +1,69 @@
+<Recorder.def>
+  <Properties>
+    <recordingService>
+      <Type>	MAILBOX	</Type>
+      <Flags>	BASE	</Flags>
+    </recordingService>
+    <backupService>
+      <Type>	MAILBOX	</Type>
+      <Flags>	BASE	</Flags>
+    </backupService>
+    <backupSearchTimer>
+      <Type>	INT32	</Type>
+      <Flags>	BASE	</Flags>
+    </backupSearchTimer>
+    <recordingName>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+    </recordingName>
+    <spaceID>
+      <Type>	INT32	</Type>
+      <Flags>	BASE	</Flags>
+    </spaceID>
+  </Properties>
+  <BaseMethods>
+    <setUpRecording>
+      <Args>
+        <name>	STRING	</name>
+        <shouldRecordAoIEvents>	UINT8	</shouldRecordAoIEvents>
+        <metaDataList>	ARRAY	  <of>	TUPLE	  <of>	STRING	</of>
+            <size>	2	</size>
+          </of>
+        </metaDataList>
+      </Args>
+      <ReturnValues></ReturnValues>
+    </setUpRecording>
+    <tearDownRecording>
+      <ReturnValues></ReturnValues>
+    </tearDownRecording>
+    <onCellCreated>
+      <Args>
+        <spaceID>	INT32	</spaceID>
+      </Args>
+    </onCellCreated>
+    <onServiceDestroyed>
+      <Args>
+        <service>	MAILBOX	</service>
+      </Args>
+    </onServiceDestroyed>
+  </BaseMethods>
+  <CellMethods>
+    <startRecording>
+      <Args>
+        <recordingLabel>	STRING	</recordingLabel>
+        <shouldRecordAoIEvents>	UINT8	</shouldRecordAoIEvents>
+      </Args>
+    </startRecording>
+    <onGetSpaceRecorders>
+      <Args>
+        <spaceRecorders>	ARRAY	  <of>	MAILBOX	</of>
+        </spaceRecorders>
+      </Args>
+    </onGetSpaceRecorders>
+    <onLoseSpaceRecorder>
+      <Args>
+        <lostRecorder>	MAILBOX	</lostRecorder>
+      </Args>
+    </onLoseSpaceRecorder>
+  </CellMethods>
+</Recorder.def>

@@ -1,28 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
-import urlparse
 import Event
-from WebBrowser import WebBrowser
-from debug_utils import LOG_WARNING, LOG_DEBUG
-from gui.app_loader import g_appLoader
-from gui.game_control.controllers import Controller
-from gui.game_control.gc_constants import BROWSER
-from ids_generators import SequenceIDGenerator
+from WebBrowser import WebBrowser, LOG_BROWSER
 from adisp import async, process
+from debug_utils import LOG_WARNING
 from gui import GUI_SETTINGS
-from gui.game_control.links import URLMarcos
-from gui.game_control.browser_filters import getFilters as _getGlobalFilters
-from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import LoadViewEvent, BrowserEvent, OpenLinkEvent
-from gui.shared.utils.functions import getViewName
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.app_loader import g_appLoader
+from gui.game_control.browser_filters import getFilters as _getGlobalFilters
+from gui.game_control.gc_constants import BROWSER
+from gui.game_control.links import URLMarcos
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus
+from gui.shared.events import LoadViewEvent, BrowserEvent
+from gui.shared.utils.functions import getViewName
+from ids_generators import SequenceIDGenerator
+from skeletons.gui.game_control import IBrowserController
 
-class BrowserController(Controller):
+class BrowserController(IBrowserController):
     _BROWSER_TEXTURE = 'BrowserBg'
     _ALT_BROWSER_TEXTURE = 'AltBrowserBg'
 
-    def __init__(self, proxy):
-        super(BrowserController, self).__init__(proxy)
+    def __init__(self):
+        super(BrowserController, self).__init__()
         self.__browsers = {}
         self.__browsersCallbacks = {}
         self.__browserIDGenerator = SequenceIDGenerator()
@@ -96,12 +95,15 @@ class BrowserController(Controller):
             browser = WebBrowser(webBrowserID, app, texture, size, url, handlers=self.__filters)
             self.__browsers[browserID] = browser
             if self.__isCreatingBrowser():
+                LOG_BROWSER('CTRL: Queueing a browser creation: ', browserID, url)
                 self.__pendingBrowsers[browserID] = ctx
             else:
                 self.__createBrowser(ctx)
         elif browserID in self.__pendingBrowsers:
+            LOG_BROWSER('CTRL: Re-queuing a browser creation, overriding: ', browserID, url)
             self.__pendingBrowsers[browserID] = ctx
         elif browserID in self.__browsers:
+            LOG_BROWSER('CTRL: Re-navigating an existing browser: ', browserID, url)
             self.__browsers[browserID].navigate(url)
         callback(browserID)
         return
@@ -111,12 +113,9 @@ class BrowserController(Controller):
 
     def delBrowser(self, browserID):
         if browserID in self.__browsers:
+            LOG_BROWSER('CTRL: Deleting a browser: ', browserID)
             browser = self.__browsers.pop(browserID)
-            loadStart, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
-            if loadStart is not None:
-                browser.onLoadStart -= loadStart
-            if loadEnd is not None:
-                browser.onLoadEnd -= loadEnd
+            self.__clearCallbacks(browserID, browser)
             browser.destroy()
             if self.__creatingBrowserID == browserID:
                 self.__creatingBrowserID = None
@@ -128,6 +127,7 @@ class BrowserController(Controller):
         return self.__creatingBrowserID is not None
 
     def __createDone(self, ctx):
+        LOG_BROWSER('CTRL: Finished creating a browser: ', self.__creatingBrowserID)
         self.__creatingBrowserID = None
         g_eventBus.handleEvent(BrowserEvent(BrowserEvent.BROWSER_CREATED, ctx=ctx))
         self.__tryCreateNextPendingBrowser()
@@ -140,46 +140,58 @@ class BrowserController(Controller):
 
     def __createBrowser(self, ctx):
         browserID = ctx['browserID']
+        LOG_BROWSER('CTRL: Creating a browser: ', browserID, ctx['url'])
         self.__creatingBrowserID = browserID
-        self.__browsers[browserID].create()
-        self.onBrowserAdded(browserID)
-
-        def browserCallback(url, isLoaded):
-            self.__clearCallback(browserID)
-            if isLoaded:
-                self.__showBrowser(browserID, ctx)
-            else:
-                LOG_WARNING('Browser request url was not loaded!', url)
+        if not self.__browsers[browserID].create():
+            LOG_BROWSER('CTRL: Failed the create step: ', browserID)
+            self.delBrowser(browserID)
             self.__createDone(browserID)
-
-        if ctx['isAsync']:
-            self.__browsersCallbacks[browserID] = (None, browserCallback)
-            self.__browsers[browserID].onLoadEnd += browserCallback
+            return
         else:
-            self.__browsersCallbacks[browserID] = (browserCallback, None)
-            self.__browsers[browserID].onReady += browserCallback
-        return
+            self.onBrowserAdded(browserID)
+
+            def failedCreationCallback():
+                LOG_BROWSER('CTRL: Failed a creation: ', browserID)
+                self.__clearCallbacks(browserID, self.__browsers[browserID])
+                self.delBrowser(browserID)
+                self.__createDone(browserID)
+
+            def successfulCreationCallback(url, isLoaded):
+                LOG_BROWSER('CTRL: Successful creation, show window: ', browserID, isLoaded)
+                self.__clearCallbacks(browserID, self.__browsers[browserID])
+                if isLoaded:
+                    self.__showBrowser(browserID, ctx)
+                else:
+                    LOG_WARNING('Browser request url was not loaded!', url)
+                self.__createDone(browserID)
+
+            self.__browsers[browserID].onFailedCreation += failedCreationCallback
+            if ctx['isAsync']:
+                self.__browsersCallbacks[browserID] = (None, successfulCreationCallback, failedCreationCallback)
+                self.__browsers[browserID].onLoadEnd += successfulCreationCallback
+            else:
+                self.__browsersCallbacks[browserID] = (successfulCreationCallback, None, failedCreationCallback)
+                self.__browsers[browserID].onReady += successfulCreationCallback
+            return
 
     def __stop(self):
         while self.__browsers:
             browserID, browser = self.__browsers.popitem()
-            ready, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
+            self.__clearCallbacks(browserID, browser)
+            browser.destroy()
+
+    def __clearCallbacks(self, browserID, browser):
+        ready, loadEnd, failed = self.__browsersCallbacks.pop(browserID, (None, None, None))
+        if browser is not None:
+            if failed is not None:
+                browser.onFailedCreation -= failed
             if ready is not None:
                 browser.onReady -= ready
             if loadEnd is not None:
                 browser.onLoadEnd -= loadEnd
-            browser.destroy()
-
-        return
-
-    def __clearCallback(self, browserID):
-        ready, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
-        if ready is not None:
-            self.__browsers[browserID].onReady -= ready
-        if loadEnd is not None:
-            self.__browsers[browserID].onLoadEnd -= loadEnd
         return
 
     def __showBrowser(self, browserID, ctx):
+        LOG_BROWSER('CTRL: Showing a browser: ', browserID, ctx['url'])
         if ctx.get('showWindow'):
             g_eventBus.handleEvent(LoadViewEvent(VIEW_ALIAS.BROWSER_WINDOW, getViewName(VIEW_ALIAS.BROWSER_WINDOW, browserID), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)

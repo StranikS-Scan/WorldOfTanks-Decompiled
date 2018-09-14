@@ -2,17 +2,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_panel.py
 import BigWorld
 from debug_utils import LOG_DEBUG_DEV
+from helpers import dependency
 from helpers import i18n
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, GRAPHICS
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.Scaleform.daapi.view.meta.RibbonsPanelMeta import RibbonsPanelMeta
-from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import RibbonsAggregator
+from gui.Scaleform.daapi.view.battle.shared import ribbons_aggregator
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES as _BET
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.battle_control import avatar_getter
-from gui.battle_control import g_sessionProvider
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 _RIBBON_SOUNDS_ENABLED = True
 _SHOW_RIBBON_SOUND_NAME = 'show_ribbon'
 _HIDE_RIBBON_SOUND_NAME = 'hide_ribbon'
@@ -137,6 +138,8 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
 _AGGREGATED_RIBBON_TYPES = (_BET.CAPTURE,)
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(BattleRibbonsPanel, self).__init__()
@@ -146,8 +149,8 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__isWithVehName = True
         self.__isExtendedAnim = True
         self.__isVisible = True
-        self.__arenaDP = g_sessionProvider.getCtx().getArenaDP()
-        self.__ribbonsAggregator = RibbonsAggregator()
+        self.__arenaDP = self.sessionProvider.getCtx().getArenaDP()
+        self.__ribbonsAggregator = ribbons_aggregator.createRibbonsAggregator()
         self.__ribbonsAggregator.onRibbonAdded += self.__showRibbon
         self.__ribbonsAggregator.onRibbonUpdated += self.__showRibbon
 
@@ -165,16 +168,16 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
 
     def _populate(self):
         super(BattleRibbonsPanel, self)._populate()
-        self.__enabled = bool(g_settingsCore.getSetting(BATTLE_EVENTS.SHOW_IN_BATTLE)) and self.__arenaDP is not None
-        self.__isWithRibbonName = bool(g_settingsCore.getSetting(BATTLE_EVENTS.EVENT_NAME))
-        self.__isWithVehName = bool(g_settingsCore.getSetting(BATTLE_EVENTS.VEHICLE_INFO))
-        self.__isExtendedAnim = g_settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == _EXTENDED_RENDER_PIPELINE
+        self.__enabled = bool(self.settingsCore.getSetting(BATTLE_EVENTS.SHOW_IN_BATTLE)) and self.__arenaDP is not None
+        self.__isWithRibbonName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.EVENT_NAME))
+        self.__isWithVehName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.VEHICLE_INFO))
+        self.__isExtendedAnim = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == _EXTENDED_RENDER_PIPELINE
         for settingName in _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES:
             key = _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES[settingName]
-            self.__userPreferences[key] = bool(g_settingsCore.getSetting(settingName))
+            self.__userPreferences[key] = bool(self.settingsCore.getSetting(settingName))
 
         self.__setupView()
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         g_eventBus.addListener(GameEvent.GUI_VISIBILITY, self.__onGUIVisibilityChanged, scope=EVENT_BUS_SCOPE.BATTLE)
         if self.__enabled:
             self.__ribbonsAggregator.start()
@@ -184,7 +187,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__ribbonsAggregator.onRibbonAdded -= self.__showRibbon
         self.__ribbonsAggregator.onRibbonUpdated -= self.__showRibbon
         g_eventBus.removeListener(GameEvent.GUI_VISIBILITY, self.__onGUIVisibilityChanged, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         if self.__enabled:
             self.__ribbonsAggregator.stop()
         self.__arenaDP = None
@@ -225,9 +228,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
 
         if addSettings:
             enabled = bool(addSettings.get(BATTLE_EVENTS.SHOW_IN_BATTLE, self.__enabled)) and self.__arenaDP is not None
-            self.__isWithRibbonName = bool(g_settingsCore.getSetting(BATTLE_EVENTS.EVENT_NAME))
-            self.__isWithVehName = bool(g_settingsCore.getSetting(BATTLE_EVENTS.VEHICLE_INFO))
-            self.__isExtendedAnim = g_settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == _EXTENDED_RENDER_PIPELINE
+            self.__isWithRibbonName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.EVENT_NAME))
+            self.__isWithVehName = bool(self.settingsCore.getSetting(BATTLE_EVENTS.VEHICLE_INFO))
+            self.__isExtendedAnim = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == _EXTENDED_RENDER_PIPELINE
             if self.__enabled != enabled:
                 self.__enabled = enabled
                 if self.__enabled:

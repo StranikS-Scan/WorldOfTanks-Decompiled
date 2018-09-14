@@ -16,7 +16,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.tooltips.formatters import packItemRentActionTooltipData
 from gui.shared.tooltips.formatters import getActionPriceData
-from gui.shared.utils import CLIP_ICON_PATH
+from gui.shared.utils import CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
 from helpers import i18n, html
 __all__ = ('ResearchItemsObjDumper', 'ResearchItemsXMLDumper', 'NationObjDumper', 'NationXMLDumper')
 
@@ -91,6 +91,8 @@ class ResearchBaseDumper(_BaseDumper):
         else:
             if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun(rootItem.descriptor):
                 extraInfo = CLIP_ICON_PATH
+            elif item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isHydraulicChassis():
+                extraInfo = HYDRAULIC_ICON_PATH
             vClass.update({'name': item.itemTypeName})
         data = {'id': nodeCD,
          'nameString': item.shortUserName,

@@ -1,17 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/functional.py
 import copy
-from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from account_helpers.settings_core.SettingsCore import g_settingsCore
+from gui.shared import event_dispatcher
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from helpers import dependency
 from shared_utils import findFirst
+from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial.control.functional import FunctionalEffect, FunctionalShowWindowEffect, FunctionalRunTriggerEffect
 from tutorial.logger import LOG_ERROR
-from gui.shared import event_dispatcher
 
 class SaveTutorialSettingEffect(FunctionalEffect):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def triggerEffect(self):
         setting = self.getTarget()
@@ -19,19 +20,7 @@ class SaveTutorialSettingEffect(FunctionalEffect):
             LOG_ERROR('Tutorial setting is not found', self._effect.getTargetID())
             return
         else:
-            g_settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.TUTORIAL, {setting.getSettingName(): setting.getSettingValue()})
-            return
-
-
-class SaveAccountSettingEffect(FunctionalEffect):
-
-    def triggerEffect(self):
-        setting = self.getTarget()
-        if setting is None:
-            LOG_ERROR('Tutorial setting is not found', self._effect.getTargetID())
-            return
-        else:
-            AccountSettings.setSettings(setting.getSettingName(), setting.getSettingValue())
+            self.settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.TUTORIAL, {setting.getSettingName(): setting.getSettingValue()})
             return
 
 

@@ -1,24 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyMainWindow.py
 import BigWorld
+from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
 from gui.Scaleform.daapi.view.meta.BaseRallyMainWindowMeta import BaseRallyMainWindowMeta
 from gui.Scaleform.locale.WAITING import WAITING
-from gui.prb_control.prb_helpers import GlobalListener
+from gui.prb_control.entities.base.ctx import LeavePrbAction
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared.events import FocusEvent
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
-class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
+class BaseRallyMainWindow(BaseRallyMainWindowMeta, IGlobalListener):
     LEADERSHIP_NOTIFICATION_TIME = 2.5
 
     def __init__(self, ctx=None):
         super(BaseRallyMainWindow, self).__init__()
         self._currentView = None
-        self._isBackClicked = False
         self._leadershipNotificationCallback = None
         return
 
@@ -29,14 +30,21 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.getClientID()}))
 
     def onSourceLoaded(self):
-        if self.unitFunctional and not self.unitFunctional.hasEntity():
+        state = self.prbDispatcher.getFunctionalState()
+        if not state.isInUnit():
             self.destroy()
 
     def isPlayerInSlot(self, databaseID=None):
-        pInfo = self.unitFunctional.getPlayerInfo(dbID=databaseID)
+        pInfo = self.prbEntity.getPlayerInfo(dbID=databaseID)
         return pInfo.isInSlot
 
     def getIntroViewAlias(self):
+        pass
+
+    def getBrowserViewAlias(self, prbType):
+        pass
+
+    def getRoomViewAlias(self, prbType):
         pass
 
     def getPrbType(self):
@@ -53,32 +61,19 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
         return chat
 
     def canGoBack(self):
-        return self._currentView != self.getIntroViewAlias()
+        return self.prbEntity.canKeepMode()
 
     def onBackClick(self):
-        self._isBackClicked = True
-        self._goToNextView()
+        self._doLeave(False)
 
-    def _goToNextView(self, closeForced=False):
-        if NavigationStack.hasHistory(self.getNavigationKey()):
-            self._viewToUnload = NavigationStack.current(self.getNavigationKey())
-            self._viewToLoad = NavigationStack.prev(self.getNavigationKey())
-            if self._viewToLoad is None:
-                self._requestViewLoad(self.getIntroViewAlias(), None, closeForced=closeForced)
-            else:
-                self._processStacks(closeForced=closeForced)
-        else:
-            self._requestViewLoad(self.getIntroViewAlias(), None, closeForced=closeForced)
-        return
-
-    def _applyViewLoad(self):
-        super(BaseRallyMainWindow, self)._applyViewLoad()
-        self._isBackClicked = False
+    def onPrbEntitySwitched(self):
+        self._loadView()
 
     def _populate(self):
         super(BaseRallyMainWindow, self)._populate()
         self.startGlobalListening()
         self._showLeadershipNotification()
+        self._loadView()
 
     def _dispose(self):
         self.stopGlobalListening()
@@ -116,8 +111,7 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
             return
 
     def _showLeadershipNotification(self):
-        functional = self.unitFunctional
-        if functional and functional.getShowLeadershipNotification():
+        if self.prbEntity.getShowLeadershipNotification():
             self.as_showWaitingS(WAITING.PREBATTLE_GIVELEADERSHIP, {})
             self._leadershipNotificationCallback = BigWorld.callback(self.LEADERSHIP_NOTIFICATION_TIME, self._cancelLeadershipNotification)
 
@@ -129,7 +123,36 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
 
     def _cancelLeadershipNotification(self):
         self._clearLeadershipNotification()
-        functional = self.unitFunctional
-        if functional:
-            functional.doLeadershipNotificationShown()
+        self.prbEntity.doLeadershipNotificationShown()
         self.as_hideWaitingS()
+
+    def _loadView(self):
+        entity = self.prbEntity
+        unitMgrID = entity.getID()
+        prbType = entity.getEntityType()
+        funcFlags = entity.getFunctionalFlags()
+        if unitMgrID > 0:
+            self._loadRoomView(prbType)
+        elif funcFlags & FUNCTIONAL_FLAG.UNIT_BROWSER:
+            self._loadBrowserView(prbType)
+        elif funcFlags & FUNCTIONAL_FLAG.UNIT_INTRO:
+            self._loadIntroView()
+        else:
+            LOG_ERROR('No view was loaded in rally window!')
+
+    def _loadRoomView(self, prbType):
+        roomAlias = self.getRoomViewAlias(prbType)
+        if roomAlias:
+            self._requestViewLoad(roomAlias, self.prbEntity.getID())
+
+    def _loadIntroView(self):
+        introAlias = self.getIntroViewAlias()
+        if introAlias:
+            self._requestViewLoad(introAlias, None)
+        return
+
+    def _loadBrowserView(self, prbType):
+        browserAlias = self.getBrowserViewAlias(prbType)
+        if browserAlias:
+            self._requestViewLoad(browserAlias, None)
+        return

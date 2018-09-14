@@ -22,8 +22,8 @@ class QuestsCurrentTabMeta(QuestsTab):
     def collapse(self, id):
         self._printOverrideError('collapse')
 
-    def as_showNoDataS(self):
-        return self.flashObject.as_showNoData() if self._isDAAPIInited() else None
+    def as_showNoDataS(self, text):
+        return self.flashObject.as_showNoData(text) if self._isDAAPIInited() else None
 
     def as_showWaitingS(self, value):
         return self.flashObject.as_showWaiting(value) if self._isDAAPIInited() else None
@@ -32,6 +32,9 @@ class QuestsCurrentTabMeta(QuestsTab):
         return self.flashObject.as_showNoSelect() if self._isDAAPIInited() else None
 
     def as_updateQuestInfoS(self, data):
+        """
+        :param data: Represented by QuestDataVO (AS)
+        """
         return self.flashObject.as_updateQuestInfo(data) if self._isDAAPIInited() else None
 
     def as_setSelectedQuestS(self, questID):

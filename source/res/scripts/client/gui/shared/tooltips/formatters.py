@@ -49,9 +49,10 @@ def packTotalItemsBlockData(counter, text, counterVisible):
      'counterVisible': counterVisible})
 
 
-def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None):
+def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None, vertCentred=False):
     data = {'name': name,
-     'value': value}
+     'value': value,
+     'vertCentred': vertCentred}
     if valueWidth != -1:
         data['valueWidth'] = valueWidth
     if gap != -1:
@@ -126,10 +127,11 @@ def packImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=
     return packBlockDataItem(linkage, data, padding)
 
 
-def packSaleTextParameterBlockData(name, saleData, actionStyle=ACTION_PRICE_CONSTANTS.STATE_CAMOUFLAGE, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None):
+def packSaleTextParameterBlockData(name, saleData, actionStyle=ACTION_PRICE_CONSTANTS.STATE_CAMOUFLAGE, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None, currency=None):
     data = {'name': name,
      'saleData': saleData,
-     'actionStyle': actionStyle}
+     'actionStyle': actionStyle,
+     'currency': currency}
     return packBlockDataItem(linkage, data, padding)
 
 

@@ -3,16 +3,18 @@
 import weakref
 from gui import makeHtmlString
 from gui.Scaleform.windows import UIInterface
-from gui.battle_control import g_sessionProvider
+from helpers import dependency
 from messenger import g_settings
 from messenger.ext import isBattleChatEnabled
 from messenger.gui.Scaleform import BTMS_COMMANDS, FILL_COLORS
 from messenger.gui.Scaleform.cmd_args_parser import CommandArgsParser
 from messenger.gui.interfaces import IBattleChannelView
 from messenger.m_constants import BATTLE_CHANNEL
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class BattleChannelView(UIInterface, IBattleChannelView):
     _lastReceiver = BATTLE_CHANNEL.TEAM.name
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, sharedHistory):
         super(BattleChannelView, self).__init__()
@@ -57,7 +59,7 @@ class BattleChannelView(UIInterface, IBattleChannelView):
             if controller and controller.getChannel().isJoined():
                 if controller.getSettings() == BATTLE_CHANNEL.SQUAD and not isBattleChatEnabled():
                     canBeSetSquadController = (clientID, controller)
-                elif controller.getSettings() != BATTLE_CHANNEL.TEAM or g_sessionProvider.getArenaDP().getAlliesVehiclesNumber() > 1:
+                elif controller.getSettings() != BATTLE_CHANNEL.TEAM or self.sessionProvider.getArenaDP().getAlliesVehiclesNumber() > 1:
                     canBeSetControllers.append((clientID, controller))
 
         if canBeSetSquadController:

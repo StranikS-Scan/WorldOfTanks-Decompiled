@@ -59,7 +59,7 @@ class ListPaginator(object):
     def revertOffset(self):
         self._offset = self._prevOffset
 
-    def refresh(self):
+    def refresh(self, *args, **kwargs):
         self._request()
 
     def setSelectedID(self, selectedID):

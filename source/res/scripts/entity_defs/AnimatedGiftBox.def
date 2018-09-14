@@ -1,0 +1,45 @@
+<AnimatedGiftBox.def>
+  <Parent>	ClientSelectableCameraObject	</Parent>
+  <Properties>
+    <effect_appearance>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </effect_appearance>
+    <effect_opening>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </effect_opening>
+    <effect_wait>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </effect_wait>
+    <effect_on_scene>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </effect_on_scene>
+    <animation_appearance>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </animation_appearance>
+    <animation_opening>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </animation_opening>
+    <animation_wait>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </animation_wait>
+    <animation_done>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </animation_done>
+  </Properties>
+</AnimatedGiftBox.def>

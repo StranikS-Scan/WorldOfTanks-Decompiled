@@ -2,11 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/fallout/flag_nots.py
 from gui.Scaleform.daapi.view.meta.FlagNotificationMeta import FlagNotificationMeta
 from gui.Scaleform.genConsts.FLAG_NOTIFICATION_CONSTS import FLAG_NOTIFICATION_CONSTS
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE as _STATE
 from gui.battle_control.controllers.flag_nots_ctrl import IFlagNotificationView
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class FlagNotification(FlagNotificationMeta, IFlagNotificationView):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def showFlagDelivered(self):
         self.as_setStateS(FLAG_NOTIFICATION_CONSTS.STATE_FLAG_DELIVERED)
@@ -22,13 +24,13 @@ class FlagNotification(FlagNotificationMeta, IFlagNotificationView):
 
     def _populate(self):
         super(FlagNotification, self)._populate()
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         return
 
     def _dispose(self):
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         super(FlagNotification, self)._dispose()

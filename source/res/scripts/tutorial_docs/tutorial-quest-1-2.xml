@@ -15,7 +15,7 @@
         <activate>	ShowBattleButtonHint	  <condition>
             <global-inactive>	BattleButtonHintCooldown	</global-inactive>
             <active>	BattleButtonOnScene	</active>
-            <inactive>	Bonus2Received	</inactive>
+            <bonus-not-received>	TutorialQuest_2	</bonus-not-received>
             <inactive>	IsInQueue	</inactive>
             <inactive>	LobbyMenuOnScene	</inactive>
             <inactive>	FightBtnDisabled	</inactive>

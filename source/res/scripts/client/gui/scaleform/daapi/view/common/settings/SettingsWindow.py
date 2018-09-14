@@ -4,7 +4,6 @@ import functools
 import VOIP
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import *
-from gui.GraphicsPresets import GraphicsPresets
 from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings, invalidateSettings
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
@@ -13,10 +12,11 @@ from gui.shared.utils import flashObject2Dict, decorators
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.common.settings.SettingsParams import SettingsParams
 from account_helpers.settings_core import settings_constants
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.options import APPLY_METHOD
+from helpers import dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
+from skeletons.account_helpers.settings_core import ISettingsCore
 _PAGES = (SETTINGS.GAMETITLE,
  SETTINGS.GRAFICTITLE,
  SETTINGS.SOUNDTITLE,
@@ -39,6 +39,7 @@ def _setLastTabIndex(idx):
 
 
 class SettingsWindow(SettingsWindowMeta):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
@@ -94,23 +95,23 @@ class SettingsWindow(SettingsWindowMeta):
 
     def __apply(self, settings, restartApproved=False, isCloseWnd=False):
         LOG_DEBUG('Settings window: apply settings', restartApproved, settings)
-        g_settingsCore.isDeviseRecreated = False
-        g_settingsCore.isChangesConfirmed = True
+        self.settingsCore.isDeviseRecreated = False
+        self.settingsCore.isChangesConfirmed = True
         isRestart = self.params.apply(settings, restartApproved)
         if settings_constants.GRAPHICS.INTERFACE_SCALE in settings:
             self.__updateInterfaceScale()
         isPresetApplied = self.__isGraphicsPresetApplied(settings)
-        if g_settingsCore.isChangesConfirmed and isCloseWnd:
+        if self.settingsCore.isChangesConfirmed and isCloseWnd:
             self.onWindowClose()
         if isRestart:
             BigWorld.savePreferences()
             if restartApproved:
                 BigWorld.callback(0.3, self.__restartGame)
-            elif g_settingsCore.isDeviseRecreated:
+            elif self.settingsCore.isDeviseRecreated:
                 self.onRecreateDevice()
-                g_settingsCore.isDeviseRecreated = False
+                self.settingsCore.isDeviseRecreated = False
             else:
-                BigWorld.callback(0.0, functools.partial(BigWorld.changeVideoMode, -1, BigWorld.isVideoWindowed()))
+                BigWorld.callback(0.0, functools.partial(BigWorld.changeVideoMode, -1, BigWorld.getWindowMode()))
         elif not isPresetApplied:
             DialogsInterface.showI18nInfoDialog('graphicsPresetNotInstalled', None)
         return
@@ -218,6 +219,24 @@ class SettingsWindow(SettingsWindowMeta):
         self.onRecreateDevice()
         return result
 
+    def autodetectAcousticType(self):
+        option = self.settingsCore.options.getSetting(settings_constants.SOUND.SOUND_SPEAKERS)
+        return option.getSystemPreset()
+
+    def canSelectAcousticType(self, index):
+        index = int(index)
+        option = self.settingsCore.options.getSetting(settings_constants.SOUND.SOUND_SPEAKERS)
+        if not option.isPresetSupportedByIndex(index):
+
+            def apply(result):
+                LOG_DEBUG('Player result', result)
+                self.as_onSoundSpeakersPresetApplyS(result)
+
+            DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', callback=apply)
+            return False
+        else:
+            return True
+
     def startVOIPTest(self, isStart):
         LOG_DEBUG('Vivox test: %s' % str(isStart))
         rh = VOIP.getVOIPManager()
@@ -227,27 +246,27 @@ class SettingsWindow(SettingsWindowMeta):
     @decorators.process('__updateCaptureDevices')
     def updateCaptureDevices(self):
         yield self.bwProto.voipController.requestCaptureDevices()
-        opt = g_settingsCore.options.getSetting(settings_constants.SOUND.CAPTURE_DEVICES)
+        opt = self.settingsCore.options.getSetting(settings_constants.SOUND.CAPTURE_DEVICES)
         self.as_setCaptureDevicesS(opt.get(), opt.getOptions())
 
     def altVoicesPreview(self):
-        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
+        setting = self.settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
         setting.playPreviewSound()
 
     def altBulbPreview(self, sampleID):
-        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.DETECTION_ALERT_SOUND)
+        setting = self.settingsCore.options.getSetting(settings_constants.SOUND.DETECTION_ALERT_SOUND)
         setting.playPreviewSound(sampleID)
 
     def stopVoicesPreview(self):
-        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
+        setting = self.settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
         setting.clearPreviewSound()
 
     def stopAltBulbPreview(self):
-        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.DETECTION_ALERT_SOUND)
+        setting = self.settingsCore.options.getSetting(settings_constants.SOUND.DETECTION_ALERT_SOUND)
         setting.clearPreviewSound()
 
     def isSoundModeValid(self):
-        setting = g_settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
+        setting = self.settingsCore.options.getSetting(settings_constants.SOUND.ALT_VOICES)
         return setting.isSoundModeValid()
 
     def showWarningDialog(self, dialogID, settings, isCloseWnd):
@@ -277,9 +296,10 @@ class SettingsWindow(SettingsWindowMeta):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
 
     def __isGraphicsPresetApplied(self, settings):
+        allsettings = BigWorld.getGraphicsPresetPropertyNames()
         isGraphicsQualitySettings = False
         for settingKey in settings.iterkeys():
-            if settingKey in GraphicsPresets.GRAPHICS_QUALITY_SETTINGS:
+            if settingKey in allsettings:
                 isGraphicsQualitySettings = True
                 break
 

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/vehicle_view_states.py
-from gui.prb_control.prb_helpers import prbDispatcherProperty
+from gui.prb_control import prbDispatcherProperty
 
 class IVehicleViewState(object):
     __slots__ = ()

@@ -18,7 +18,6 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control import settings
 from gui.prb_control.items.sortie_items import getDivisionNameByType, getDivisionLevel
 from gui.prb_control.items.sortie_items import getDivisionLevelByUnit
@@ -27,7 +26,7 @@ from gui.shared.ItemsCache import g_itemsCache
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 
-class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
+class FortBattlesRoomView(FortRoomMeta, FortViewHelper):
 
     def __init__(self):
         super(FortBattlesRoomView, self).__init__()
@@ -35,7 +34,7 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         return
 
     def showChangeDivisionWindow(self):
-        _, unit = self.unitFunctional.getUnit(self.unitFunctional.getUnitIdx())
+        _, unit = self.prbEntity.getUnit(self.prbEntity.getUnitIdx())
         event_dispatcher.showChangeDivisionWindow(getDivisionLevelByUnit(unit))
 
     def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
@@ -58,56 +57,52 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
 
     def onUnitSettingChanged(self, opCode, value):
         if opCode == UNIT_OP.SET_COMMENT:
-            self.as_setCommentS(self.unitFunctional.getCensoredComment())
+            self.as_setCommentS(self.prbEntity.getCensoredComment())
         elif opCode in (UNIT_OP.CLOSE_SLOT, UNIT_OP.OPEN_SLOT):
             self._setActionButtonState()
-        elif opCode == UNIT_OP.CHANGE_DIVISION:
-            functional = self.unitFunctional
-            data = vo_converters.makeSortieVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
-            self.as_updateRallyS(data)
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
-        functional = self.unitFunctional
-        pInfo = functional.getPlayerInfo(dbID=dbID)
+        entity = self.prbEntity
+        pInfo = entity.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange())
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), entity.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
-                slotState = functional.getSlotState(slotIdx)
+                slotState = entity.getSlotState(slotIdx)
                 vehicleVO = None
                 if slotState.isClosed:
                     slotCost = settings.UNIT_CLOSED_SLOT_COST
                 else:
                     slotCost = 0
             self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
-        if pInfo.isCreator() or pInfo.isCurrentPlayer():
+        if pInfo.isCurrentPlayer() or pInfo.isCommander():
             self._setActionButtonState()
         return
 
     def onUnitMembersListChanged(self):
-        functional = self.unitFunctional
+        entity = self.prbEntity
         if self._candidatesDP:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self._updateMembersData()
         self._setActionButtonState()
 
     def onUnitRejoin(self):
         super(FortBattlesRoomView, self).onUnitRejoin()
-        functional = self.unitFunctional
+        entity = self.prbEntity
         if self._candidatesDP:
-            self._candidatesDP.rebuild(functional.getCandidates())
+            self._candidatesDP.rebuild(entity.getCandidates())
         self._updateMembersData()
         self.__updateLabels()
 
     def onSlotsHighlihgtingNeed(self, databaseID):
-        functional = self.unitFunctional
-        availableSlots = list(functional.getPlayerInfo(databaseID).getAvailableSlots(True))
-        pInfo = functional.getPlayerInfo(dbID=databaseID)
+        entity = self.prbEntity
+        availableSlots = list(entity.getPlayerInfo(databaseID).getAvailableSlots(True))
+        pInfo = entity.getPlayerInfo(dbID=databaseID)
         if not pInfo.isInSlot and pInfo.isLegionary():
-            _, unit = functional.getUnit()
+            _, unit = entity.getUnit()
             if unit.getLegionaryCount() >= unit.getLegionaryMaxCount():
                 legionariesSlots = unit.getLegionarySlots().values()
                 self.as_highlightSlotsS(legionariesSlots)
@@ -116,30 +111,29 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         return availableSlots
 
     def onClientStateChanged(self, state):
-        if self.unitFunctional.getID() > 0 and state.getStateID() == CLIENT_FORT_STATE.DISABLED:
+        if self.prbEntity.getID() > 0 and state.getStateID() == CLIENT_FORT_STATE.DISABLED:
             self._setActionButtonState()
 
     def isPlayerLeginary(self, databaseID=None):
-        pInfo = self.unitFunctional.getPlayerInfo(dbID=databaseID)
+        pInfo = self.prbEntity.getPlayerInfo(dbID=databaseID)
         return pInfo.isLegionary
 
     def initCandidatesDP(self):
         self._candidatesDP = rally_dps.SortieCandidatesLegionariesDP()
-        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
+        self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.prbEntity.getCandidates())
 
     def rebuildCandidatesDP(self):
-        self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+        self._candidatesDP.rebuild(self.prbEntity.getCandidates())
 
     def _updateMembersData(self):
-        functional = self.unitFunctional
-        dataOne, slots = vo_converters.makeSlotsVOs(functional, functional.getUnitIdx(), app=self.app)
+        entity = self.prbEntity
+        dataOne, slots = vo_converters.makeSlotsVOs(entity, entity.getUnitIdx(), app=self.app)
         self.__updateLabels()
         self.as_setMembersS(dataOne, slots)
         self._setActionButtonState()
 
     def _populate(self):
         super(FortBattlesRoomView, self)._populate()
-        self.startFortListening()
         minLevel, maxLvl = self._getDivisionLvls()
         if maxLvl == minLevel:
             self.__updateVehiclesLabelSingle(fort_formatters.getTextLevel(maxLvl))
@@ -151,7 +145,6 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
 
     def _dispose(self):
         super(FortBattlesRoomView, self)._dispose()
-        self.stopFortListening()
         g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onSettingsChanged
         self.removeListener(events.CoolDownEvent.PREBATTLE, self._handleChangedDivision, scope=EVENT_BUS_SCOPE.LOBBY)
         self._cancelChangeDivisionCooldown()
@@ -161,7 +154,7 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         self.as_setChangeDivisionButtonEnabledS(True)
 
     def _setChangeDivisionCooldown(self):
-        cooldown = self.unitFunctional.getCooldownTime(REQUEST_TYPE.CHANGE_DIVISION)
+        cooldown = self.prbEntity.getCooldownTime(REQUEST_TYPE.CHANGE_DIVISION)
         if cooldown > 0:
             self.as_setChangeDivisionButtonEnabledS(False)
             self._changeDivisionCooldown = BigWorld.callback(cooldown, self._changeDivisionCallback)
@@ -173,13 +166,13 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         return
 
     def _updateRallyData(self):
-        functional = self.unitFunctional
-        data = vo_converters.makeSortieVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
+        entity = self.prbEntity
+        data = vo_converters.makeSortieVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
         self.__updateLabels()
         self.as_updateRallyS(data)
 
     def _getDivisionLvls(self):
-        _, unit = self.unitFunctional.getUnit(self.unitFunctional.getUnitIdx())
+        _, unit = self.prbEntity.getUnit(self.prbEntity.getUnitIdx())
         type_id = unit.getRosterTypeID()
         division = getDivisionNameByType(type_id)
         return MIN_MAX_VEH_LVLS_MAPPING[getDivisionLevel(division)].DEFAULT_LEVELS
@@ -193,7 +186,15 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
             self._setChangeDivisionCooldown()
 
     def _setActionButtonState(self):
-        self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
+        self.as_setActionButtonStateS(ActionButtonStateVO(self.prbEntity))
+
+    def _startListening(self):
+        super(FortBattlesRoomView, self)._startListening()
+        self.startFortListening()
+
+    def _stopListening(self):
+        super(FortBattlesRoomView, self)._stopListening()
+        self.stopFortListening()
 
     def __updateVehiclesLabelSingle(self, level):
         vehicleLvl = text_styles.main(i18n.makeString(FORTIFICATIONS.SORTIE_ROOM_LEVEL, level=level))
@@ -205,7 +206,7 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
             self.as_showLegionariesToolTipS(True)
         else:
             self.as_showLegionariesToolTipS(False)
-        _, unit = self.unitFunctional.getUnit()
+        _, unit = self.prbEntity.getUnit()
         if unit and (unit.getLegionaryCount() or self._candidatesDP.legionariesCount > 0):
             self.as_showLegionariesCountS(True, self.__playersLabel(unit.getLegionaryCount(), unit.getLegionaryMaxCount()), i18n.makeString(TOOLTIPS.FORTIFICATION_SORTIE_BATTLEROOM_LEGIONARIESCOUNT_BODY, count=unit.getLegionaryMaxCount()))
         else:
@@ -224,13 +225,13 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         return result
 
     def __getSlots(self):
-        functional = self.unitFunctional
-        _, slots = vo_converters.makeSlotsVOs(functional, functional.getUnitIdx(), app=self.app)
+        entity = self.prbEntity
+        _, slots = vo_converters.makeSlotsVOs(entity, entity.getUnitIdx(), app=self.app)
         return slots
 
     def __updateOrdersBg(self):
-        unitPermissions = self.unitFunctional.getPermissions()
-        activeConsumes = self.unitFunctional.getExtra().getConsumables()
+        unitPermissions = self.prbEntity.getPermissions()
+        activeConsumes = self.prbEntity.getExtra().getConsumables()
         self.as_showOrdersBgS(bool(not unitPermissions.canChangeConsumables() and len(activeConsumes)))
 
     def __onSettingsChanged(self, diff):

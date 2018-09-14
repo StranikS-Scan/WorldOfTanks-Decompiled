@@ -5,8 +5,9 @@ from adisp import process
 from constants import PREBATTLE_TYPE, INVITATION_TYPE
 from gui.battle_control.arena_info.settings import INVITATION_DELIVERY_STATUS
 from gui.battle_control.requests.context import SendInvitesCtx
-from gui.prb_control.prb_helpers import prbInvitesProperty
+from gui.prb_control import prbInvitesProperty
 from ids_generators import SequenceIDGenerator
+from skeletons.gui.battle_session import ISquadInvitationsHandler
 from unit_roster_config import SquadRoster
 _STATUS = INVITATION_DELIVERY_STATUS
 _SEND_ACTION_NAME = 'DynSquad.SendInvitationToSquad'
@@ -143,7 +144,7 @@ class SquadInvitationsFilter(object):
         return False if not invite.isActive() else True
 
 
-class _SquadInvitationsHandler(object):
+class _SquadInvitationsHandler(ISquadInvitationsHandler):
     __slots__ = ('__sessionProvider',)
 
     def __init__(self, setup):

@@ -27,7 +27,23 @@ class EmptyExtrasHandler(object):
         pass
 
 
-class ClanBattleExtrasHandler(EmptyExtrasHandler):
+class SimpleExtrasHandler(EmptyExtrasHandler):
+
+    def pack(self, extras):
+        return cPickle.dumps(extras, -1)
+
+    def unpack(self, extrasStr):
+        return cPickle.loads(extrasStr)
+
+    def reset(self, extras):
+        return extras
+
+    def updateUnitExtras(self, extras, updateStr):
+        update = cPickle.loads(updateStr)
+        extras.update(update)
+
+
+class ClanBattleExtrasHandler(SimpleExtrasHandler):
 
     def __init__(self, unit=None):
         self._unit = unit
@@ -50,20 +66,11 @@ class ClanBattleExtrasHandler(EmptyExtrasHandler):
             result.update(initial)
         return result
 
-    def pack(self, extras):
-        return cPickle.dumps(extras, -1)
-
-    def unpack(self, extrasStr):
-        return cPickle.loads(extrasStr)
-
-    def reset(self, extras):
-        return extras
-
     def updateUnitExtras(self, extras, updateStr):
         self._processor.unpackOps(updateStr)
 
 
-class ClubExtrasHandler(EmptyExtrasHandler):
+class ClubExtrasHandler(SimpleExtrasHandler):
 
     def __init__(self, unit=None):
         self._unit = unit
@@ -83,12 +90,6 @@ class ClubExtrasHandler(EmptyExtrasHandler):
         if initial:
             result.update(initial)
         return result
-
-    def pack(self, extras):
-        return cPickle.dumps(extras, -1)
-
-    def unpack(self, extrasStr):
-        return cPickle.loads(extrasStr)
 
     def reset(self, extras):
         return {'clubDBID': extras['clubDBID'],
@@ -111,7 +112,7 @@ class ClubExtrasHandler(EmptyExtrasHandler):
             extras.update(update)
 
 
-class SortieExtrasHandler(EmptyExtrasHandler):
+class SortieExtrasHandler(SimpleExtrasHandler):
 
     def __init__(self, unit=None):
         self._unit = unit
@@ -123,38 +124,15 @@ class SortieExtrasHandler(EmptyExtrasHandler):
             result.update(initial)
         return result
 
-    def pack(self, extras):
-        return cPickle.dumps(extras, -1)
 
-    def unpack(self, extrasStr):
-        return cPickle.loads(extrasStr)
-
-    def reset(self, extras):
-        return extras
-
-    def updateUnitExtras(self, extras, updateStr):
-        update = cPickle.loads(updateStr)
-        LOG_DEBUG_DEV('updateUnitExtras', update)
-        extras.update(update)
+class SquadExtrasHandler(SimpleExtrasHandler):
+    pass
 
 
-class SquadExtrasHandler(EmptyExtrasHandler):
+class ExternalExtrasHandler(SimpleExtrasHandler):
 
     def new(self, initial=None):
-        result = {}
+        result = {'rev': 1}
         if initial:
             result.update(initial)
         return result
-
-    def pack(self, extras):
-        return cPickle.dumps(extras, -1)
-
-    def unpack(self, extrasStr):
-        return cPickle.loads(extrasStr)
-
-    def reset(self, extras):
-        return extras
-
-    def updateUnitExtras(self, extras, updateStr):
-        update = cPickle.loads(updateStr)
-        extras.update(update)

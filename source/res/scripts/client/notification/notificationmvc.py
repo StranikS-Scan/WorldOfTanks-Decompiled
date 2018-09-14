@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationMVC.py
 from notification.AlertController import AlertController
-from notification.LayoutController import LayoutController
 from notification.NotificationsCounter import NotificationsCounter
 from notification.NotificationsModel import NotificationsModel
 from notification.NotificationVisibilityController import NotificationVisibilityController
@@ -13,7 +12,6 @@ class _NotificationMVC:
     def __init__(self):
         self.__model = None
         self.__alertsController = None
-        self.__layoutController = None
         self.__visibilityController = None
         self.__actionsHandlers = None
         self.__actionsHandlers = None
@@ -24,7 +22,6 @@ class _NotificationMVC:
         self.__model = NotificationsModel(self.__unreadMessagesCounter)
         self.__actionsHandlers = NotificationsActionsHandlers()
         self.__alertsController = AlertController(self.__model)
-        self.__layoutController = LayoutController(self.__model)
         self.__visibilityController = NotificationVisibilityController(self.__model)
         self.__visibilityController.registerNotifications((NOTIFICATION_TYPE.CLUB_INVITE,))
 
@@ -39,12 +36,10 @@ class _NotificationMVC:
 
     def cleanUp(self):
         self.__alertsController.cleanUp()
-        self.__layoutController.cleanUp()
         self.__actionsHandlers.cleanUp()
         self.__visibilityController.cleanUp()
         self.__model.cleanUp()
         self.__alertsController = None
-        self.__layoutController = None
         self.__actionsHandlers = None
         self.__visibilityController = None
         self.__model = None

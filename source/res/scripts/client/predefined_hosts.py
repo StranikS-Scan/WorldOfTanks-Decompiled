@@ -32,9 +32,13 @@ class PING_STATUSES(object):
     HIGH = 1
     NORM = 2
     LOW = 3
+    REQUESTED = 4
 
 
-def getPingStatus(pingVal):
+PingData = namedtuple('PingData', 'value, status')
+_DEFAULT_PING_DATA = PingData(UNDEFINED_PING_VAL, PING_STATUSES.UNDEFINED)
+
+def _getPingStatus(pingVal):
     if pingVal < _DEFINED_PING_VAL:
         return PING_STATUSES.UNDEFINED
     elif pingVal <= _LOW_PING_BOUNDARY_VAL:
@@ -57,8 +61,9 @@ class HOST_AVAILABILITY(object):
     NOT_AVAILABLE = -1
     NOT_RECOMMENDED = 0
     RECOMMENDED = 1
-    UNKNOWN = 2
+    REQUESTED = 2
     IGNORED = 3
+    UNKNOWN = 4
 
 
 class REQUEST_RATE(object):
@@ -83,8 +88,8 @@ class CSIS_ACTION(BitmaskHelper):
 
 _csisQueryMutex = threading.Lock()
 
-def _CSISResponseParser(out):
-    result = {}
+def _CSISResponseParser(out, requestedIDs):
+    result = _createDefaultCSISResponse(requestedIDs)
     root = ResMgr.DataSection().createSectionFromString(out)
     itemsSec = None
     if root is not None:
@@ -99,6 +104,10 @@ def _CSISResponseParser(out):
     return result
 
 
+def _createDefaultCSISResponse(requestedIDs):
+    return dict(map(lambda reqID: (reqID, HOST_AVAILABILITY.UNKNOWN), requestedIDs))
+
+
 class _CSISRequestWorker(threading.Thread):
 
     def __init__(self, url, callback, params=None):
@@ -106,13 +115,6 @@ class _CSISRequestWorker(threading.Thread):
         self.__url = url
         self.__callback = callback
         self.__params = params
-
-    def _makeUrl(self):
-        url = self.__url
-        if self.__params is not None and len(self.__params):
-            data = urlencode(map(lambda param: ('periphery', param), self.__params))
-            url = '{0:>s}?{1:>s}'.format(self.__url, data)
-        return url
 
     def run(self):
         if self.__callback is None:
@@ -128,8 +130,9 @@ class _CSISRequestWorker(threading.Thread):
                     urllib2.build_opener(urllib2.HTTPHandler())
                     info = urllib2.urlopen(req, timeout=CSIS_REQUEST_TIMEOUT)
                     if info.code == 200 and info.headers.type == 'text/xml':
-                        response = _CSISResponseParser(info.read())
+                        response = _CSISResponseParser(info.read(), self.__params)
                 except IOError:
+                    response = _createDefaultCSISResponse(self.__params)
                     LOG_CURRENT_EXCEPTION()
 
             finally:
@@ -144,6 +147,17 @@ class _CSISRequestWorker(threading.Thread):
                 _csisQueryMutex.release()
 
             return
+
+    def _makeUrl(self):
+        url = self.__url
+        if self.__params is not None and len(self.__params):
+            data = urlencode(map(lambda param: ('periphery', param), self.__params))
+            url = '{0:>s}?{1:>s}'.format(self.__url, data)
+        return url
+
+
+def _getCSISWorker(csisUrl, receiveCsisResponse, peripheries):
+    return _CSISRequestWorker(csisUrl, receiveCsisResponse, peripheries)
 
 
 class _LoginAppUrlIterator(list):
@@ -207,26 +221,28 @@ class _PingRequester(object):
         self.__lastUpdateTime = 0
         self.__setPingCallback = False
         try:
-            BigWorld.WGPinger.setOnPingCallback(self.__onPingPerformed)
+            BigWorld.WGPinger.setOnPingCallback(self.__pingCallback)
             self.__setPingCallback = True
         except AttributeError:
             LOG_CURRENT_EXCEPTION()
 
     def request(self, peripheries, forced=False):
         if _isReplay('Ping'):
-            self.__onPingPerformed([])
+            self.__updatePing([], PING_STATUSES.UNDEFINED)
             return
         peripheries = map(lambda host: host.url, peripheries)
         if not self.__isRequestPingInProgress and peripheries:
             cooldownTime = _PING_FORCE_COOLDOWN_TIME if forced else _PING_COOLDOWN_TIME
             if time.time() - self.__lastUpdateTime >= cooldownTime:
+                pData = map(lambda periphery: (periphery, UNDEFINED_PING_VAL), peripheries)
                 try:
                     LOG_DEBUG('Ping starting', peripheries)
                     self.__isRequestPingInProgress = True
+                    self.__updatePing(pData, PING_STATUSES.REQUESTED)
                     BigWorld.WGPinger.ping(peripheries)
                 except (AttributeError, TypeError):
                     LOG_CURRENT_EXCEPTION()
-                    self.__onPingPerformed([])
+                    self.__updatePing(pData, PING_STATUSES.UNDEFINED)
 
             else:
                 self.__pingPerformedCallback(self.__pingResult)
@@ -249,17 +265,25 @@ class _PingRequester(object):
 
         return
 
-    def __onPingPerformed(self, result):
-        LOG_DEBUG('Ping performed', result)
+    def __pingCallback(self, result):
+        LOG_DEBUG('Ping performed {}'.format(result))
+        self.__updatePing(result)
+
+    def __updatePing(self, pingData, state=None):
         self.__isRequestPingInProgress = False
         self.__lastUpdateTime = time.time()
+        for rKey, pData in self.__pingResult.iteritems():
+            self.__pingResult[rKey] = PingData(pData.value, PING_STATUSES.UNDEFINED)
+
         try:
-            self.__pingResult = dict(result)
+            for periphery, pingValue in pingData:
+                self.__pingResult[periphery] = PingData(pingValue, state if state is not None else _getPingStatus(pingValue))
+
         except Exception:
             LOG_CURRENT_EXCEPTION()
-            self.__pingResult = {}
 
         self.__pingPerformedCallback(self.__pingResult)
+        return
 
 
 class _PreDefinedHostList(object):
@@ -323,6 +347,13 @@ class _PreDefinedHostList(object):
 
     def getPingResult(self):
         return self.__pingRequester.result()
+
+    def getHostPingData(self, host):
+        """
+        :param host: [str]
+        :return: [PingData]
+        """
+        return self.getPingResult().get(host, _DEFAULT_PING_DATA)
 
     def autoLoginQuery(self, callback):
         if callback is None:
@@ -475,7 +506,7 @@ class _PreDefinedHostList(object):
         elif GUI_SETTINGS.csisRequestRate == REQUEST_RATE.NEVER:
             defAvail = HOST_AVAILABILITY.IGNORED
         elif len(g_preDefinedHosts.hosts()) > 1:
-            defAvail = HOST_AVAILABILITY.UNKNOWN
+            defAvail = HOST_AVAILABILITY.REQUESTED
         else:
             defAvail = HOST_AVAILABILITY.IGNORED
         return defAvail
@@ -531,7 +562,7 @@ class _PreDefinedHostList(object):
     def _determineRecommendHost(self):
         defAvail = HOST_AVAILABILITY.NOT_AVAILABLE
         csisResGetter = self.__csisResponse.get
-        queryResult = map(lambda host: (host, self.__pingRequester.result().get(host.url, -1), csisResGetter(host.peripheryID, defAvail)), self.peripheries())
+        queryResult = map(lambda host: (host, self.getHostPingData(host.url).value, csisResGetter(host.peripheryID, defAvail)), self.peripheries())
         self.__recommended = filter(lambda item: item[2] == HOST_AVAILABILITY.RECOMMENDED, queryResult)
         if not len(self.__recommended):
             self.__recommended = filter(lambda item: item[2] == HOST_AVAILABILITY.NOT_RECOMMENDED, queryResult)
@@ -579,7 +610,8 @@ class _PreDefinedHostList(object):
                     allHosts = self.hosts()
                     peripheries = map(lambda host: host.peripheryID, allHosts)
                     LOG_DEBUG('CSIS query sending', peripheries)
-                    _CSISRequestWorker(self.__csisUrl, self.__receiveCsisResponse, peripheries).start()
+                    worker = _getCSISWorker(self.__csisUrl, self.__receiveCsisResponse, peripheries)
+                    worker.start()
                 else:
                     self.__finishCsisQuery()
         else:
@@ -626,7 +658,7 @@ class _PreDefinedHostList(object):
 
     def __filterRecommendedByPing(self, recommended):
         result = recommended
-        filtered = filter(lambda item: item[1] > -1, recommended)
+        filtered = filter(lambda item: item[1] > UNDEFINED_PING_VAL, recommended)
         if len(filtered):
             minPingTime = min(filtered, key=lambda item: item[1])[1]
             maxPingTime = 1.2 * minPingTime

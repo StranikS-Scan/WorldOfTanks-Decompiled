@@ -3,12 +3,13 @@
 from collections import namedtuple
 from account_helpers import getAccountDatabaseID, getPlayerID
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
+from gui.prb_control.settings import PREBATTLE_PLAYERS_COMPARATORS
 from gui.shared.gui_items.Vehicle import Vehicle
 
 class PlayerPrbInfo(object):
     __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode')
 
-    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, functional=None):
+    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None):
         self.accID = accID
         self.name = name
         self.dbID = dbID
@@ -19,8 +20,8 @@ class PlayerPrbInfo(object):
         self.clanDBID = clanDBID
         self.clanAbbrev = clanAbbrev
         self.roster = roster
-        if functional is not None:
-            self.isCreator = functional.isCreator(pDatabaseID=self.dbID)
+        if entity is not None:
+            self.isCreator = entity.isCommander(pDatabaseID=self.dbID)
         else:
             self.isCreator = False
         return
@@ -104,7 +105,22 @@ class PrbPropsInfo(object):
         return 'PrbPropsInfo(wins = {0!r:s}, battlesCount = {1:n}, createTime = {2:n}'.format(self.wins, self.battlesCount, self.createTime)
 
 
-def getPlayersComparator():
+def getPlayersComparator(playerComparatorType=PREBATTLE_PLAYERS_COMPARATORS.REGULAR):
+    """
+    Sort criteria for players:
+    mode PREBATTLE_PLAYERS_COMPARATORS.REGULAR:
+    1. time of accession (common criteria).
+    2. first in the list is commander.
+    mode PREBATTLE_PLAYERS_COMPARATORS.OBSERVERS_TO_BOTTOM:
+    1. time of accession (common criteria).
+    2. observers sorts to bottom list.
+    
+    Args:
+        playerComparatorType: PREBATTLE_PLAYERS_COMPARATORS type
+    
+    Returns:
+        cmp function according to PREBATTLE_PLAYERS_COMPARATORS type request
+    """
 
     def comparator(player, other):
         if player.isCreator ^ other.isCreator:
@@ -113,4 +129,15 @@ def getPlayersComparator():
             result = cmp(player.time, other.time)
         return result
 
-    return comparator
+    def comparator_observers_to_bottom(player, other):
+        player_is_observer = player.isVehicleSpecified() and player.getVehicle().isObserver
+        other_is_observer = other.isVehicleSpecified() and other.getVehicle().isObserver
+        if player_is_observer ^ other_is_observer:
+            result = 1 if player_is_observer else -1
+        else:
+            result = cmp(player.time, other.time)
+        return result
+
+    comparators = {PREBATTLE_PLAYERS_COMPARATORS.REGULAR: comparator,
+     PREBATTLE_PLAYERS_COMPARATORS.OBSERVERS_TO_BOTTOM: comparator_observers_to_bottom}
+    return comparators.get(playerComparatorType, comparator)

@@ -67,6 +67,7 @@ class WAITING(object):
     CHANGINGROLE = '#waiting:changingRole'
     GETCLUBINFO = '#waiting:getClubInfo'
     LOADINGDATA = '#waiting:loadingData'
+    UPGRADINGCHRISTMASITEM = '#waiting:upgradingChristmasItem'
     TUTORIAL_REQUEST_BONUS = '#waiting:tutorial-request-bonus'
     TUTORIAL_REQUEST_BATTLE_COUNT = '#waiting:tutorial-request-battle-count'
     TUTORIAL_REQUEST_UNLOCKS = '#waiting:tutorial-request-unlocks'

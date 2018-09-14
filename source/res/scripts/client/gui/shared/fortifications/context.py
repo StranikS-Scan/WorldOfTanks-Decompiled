@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/context.py
-from constants import REQUEST_COOLDOWN, PREBATTLE_TYPE
-from gui.prb_control.context import PrbCtrlRequestCtx
-from gui.prb_control import settings as prb_settings
-from gui.prb_control.prb_getters import getUnitIdx
+from constants import REQUEST_COOLDOWN
 from gui.shared.fortifications.settings import FORT_REQUEST_TYPE
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import RequestCtx
@@ -148,23 +145,6 @@ class UpgradeCtx(FortRequestCtx):
 
     def getBuildingTypeID(self):
         return self.__buildingTypeID
-
-
-@ReprInjector.withParent(('__divisionLevel', 'divisionLevel'))
-class CreateSortieCtx(FortRequestCtx):
-
-    def __init__(self, divisionLevel=10, waitingID=''):
-        super(CreateSortieCtx, self).__init__(waitingID)
-        self.__divisionLevel = divisionLevel
-
-    def getRequestType(self):
-        return FORT_REQUEST_TYPE.CREATE_SORTIE
-
-    def getDivisionLevel(self):
-        return self.__divisionLevel
-
-    def __repr__(self):
-        return 'CreateSortieCtx(buildingTypeID={0:n}, waitingID={1:>s})'.format(self.__divisionLevel, self.getWaitingID())
 
 
 @ReprInjector.withParent(('__unitMgrID', 'unitMgrID'), ('__peripheryID', 'peripheryID'))
@@ -389,38 +369,6 @@ class AttackCtx(FortRequestCtx):
         return FORT_REQUEST_TYPE.PLAN_ATTACK
 
 
-@ReprInjector.withParent(('__battleID', 'battleID'), ('__slotIdx', 'slotIdx'))
-class CreateOrJoinFortBattleCtx(PrbCtrlRequestCtx):
-    __slots__ = ('__battleID', '__slotIdx', '__isUpdateExpected')
-
-    def __init__(self, battleID, slotIdx=-1, waitingID='', isUpdateExpected=False, flags=prb_settings.FUNCTIONAL_FLAG.UNDEFINED):
-        super(CreateOrJoinFortBattleCtx, self).__init__(ctrlType=prb_settings.CTRL_ENTITY_TYPE.UNIT, entityType=PREBATTLE_TYPE.FORT_BATTLE, waitingID=waitingID, flags=flags, isForced=True)
-        self.__battleID = battleID
-        self.__slotIdx = slotIdx
-        self.__isUpdateExpected = isUpdateExpected
-
-    def isUpdateExpected(self):
-        return self.__isUpdateExpected
-
-    def getCooldown(self):
-        return REQUEST_COOLDOWN.CALL_FORT_METHOD
-
-    def getUnitIdx(self):
-        return getUnitIdx()
-
-    def getRequestType(self):
-        return FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE
-
-    def getID(self):
-        return self.__battleID
-
-    def getSlotIdx(self):
-        return self.__slotIdx
-
-    def _setUpdateExpected(self, value):
-        self.__isUpdateExpected = value
-
-
 @ReprInjector.withParent(('__consumableOrderTypeID', 'consumableOrderTypeID'), ('__slotIdx', 'slotIdx'))
 class ActivateConsumableCtx(FortRequestCtx):
 
@@ -453,4 +401,4 @@ class ReturnConsumableCtx(FortRequestCtx):
         return FORT_REQUEST_TYPE.RETURN_CONSUMABLE
 
 
-__all__ = ('FortRequestCtx', 'CreateFortCtx', 'DeleteFortCtx', 'DirectionCtx', 'BuildingCtx', 'TransportationCtx', 'OrderCtx', 'AttachCtx', 'OrderCtx', 'UpgradeCtx', 'CreateSortieCtx', 'RequestSortieUnitCtx', 'DefenceHourCtx', 'OffDayCtx', 'PeripheryCtx', 'VacationCtx', 'SettingsCtx', 'FortPublicInfoCtx', 'RequestClanCardCtx', 'FavoriteCtx', 'CreateOrJoinFortBattleCtx', 'ActivateConsumableCtx', 'ReturnConsumableCtx')
+__all__ = ('FortRequestCtx', 'CreateFortCtx', 'DeleteFortCtx', 'DirectionCtx', 'BuildingCtx', 'TransportationCtx', 'OrderCtx', 'AttachCtx', 'OrderCtx', 'UpgradeCtx', 'RequestSortieUnitCtx', 'DefenceHourCtx', 'OffDayCtx', 'PeripheryCtx', 'VacationCtx', 'SettingsCtx', 'FortPublicInfoCtx', 'RequestClanCardCtx', 'FavoriteCtx', 'ActivateConsumableCtx', 'ReturnConsumableCtx')

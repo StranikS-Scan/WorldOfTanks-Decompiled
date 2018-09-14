@@ -81,7 +81,8 @@ class LinerItemPacker(TermsItemPacker):
         values = data.get('values', None)
         discript = data.get('discript', None)
         if values is not None and discript is not None:
-            blocks = [formatters.packTextParameterBlockData(discript, values)]
+            packer = formatters.packTextParameterBlockData
+            blocks = [ packer(value=values[i], name=discript[i]) for i in range(0, len(values)) ]
             blockToInsert = formatters.packBuildUpBlockData(blocks)
             items.append(blockToInsert)
         return items

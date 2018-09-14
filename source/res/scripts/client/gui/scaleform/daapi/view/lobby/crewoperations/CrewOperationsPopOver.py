@@ -135,7 +135,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
     def __processReturnCrew(self):
         result = yield TankmanReturn(g_currentVehicle.item).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def __getInitCrewOperationObject(self, operationId, errorId=None, warningId='', operationAvailable=False):
         context = '#crew_operations:%s'

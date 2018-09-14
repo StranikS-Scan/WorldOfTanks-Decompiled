@@ -34,7 +34,7 @@ class FortSettingsVacationPopover(FortSettingsVacationPopoverMeta, FortViewHelpe
         result = yield self.fortProvider.sendRequest(VacationCtx(vacationStartUTC, vacationDurationUTC, waitingID='fort/settings'))
         if result:
             vacationPeriod = '%s - %s' % (time_utils.getDateTimeFormat(vacationStartUTC), time_utils.getDateTimeFormat(vacationStartUTC + vacationDurationUTC))
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_VACATIONSET, vacationPeriod=vacationPeriod, type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_VACATIONSET, vacationPeriod=vacationPeriod, type=SystemMessages.SM_TYPE.Warning)
         self.destroy()
 
     def __setTexts(self):

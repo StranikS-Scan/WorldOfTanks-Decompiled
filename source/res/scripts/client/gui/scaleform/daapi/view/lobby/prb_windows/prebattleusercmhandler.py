@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrebattleUserCMHandler.py
 from adisp import process
-from gui.prb_control.context import prb_ctx
-from gui.prb_control.prb_helpers import PrbListener
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import AppealCMHandler, USER
+from gui.prb_control.entities.base.legacy.ctx import KickPlayerCtx
+from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 KICK_FROM_PREBATTLE = 'kickPlayerFromPrebattle'
 
-class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
+class PrebattleUserCMHandler(AppealCMHandler, ILegacyListener):
 
     def __init__(self, cmProxy, ctx=None):
         super(PrebattleUserCMHandler, self).__init__(cmProxy, ctx)
-        self._isCreator = self.prbFunctional.isCreator()
+        self._isCreator = self.prbEntity.isCommander()
         self.startPrbListening()
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -26,7 +26,7 @@ class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
         super(PrebattleUserCMHandler, self).fini()
         return
 
-    def onPlayerRemoved(self, functional, playerInfo):
+    def onPlayerRemoved(self, entity, playerInfo):
         self.onContextMenuHide()
 
     def kickPlayerFromPrebattle(self):
@@ -39,7 +39,7 @@ class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
         return options
 
     def _addPrebattleInfo(self, options, userCMInfo):
-        disabled = self.prbFunctional.getTeamState().isInQueue()
+        disabled = self.prbEntity.getTeamState().isInQueue()
         if self._canKickPlayer():
             options.append(self._makeItem(KICK_FROM_PREBATTLE, MENU.contextmenu(KICK_FROM_PREBATTLE), {'enabled': not disabled}))
         return options
@@ -50,11 +50,11 @@ class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
         return handlers
 
     def _canKickPlayer(self):
-        playerInfo = self.prbFunctional.getPlayerInfoByDbID(self.databaseID)
-        team = self.prbFunctional.getPlayerTeam(playerInfo.accID)
-        return self.prbFunctional.getPermissions().canKick(team)
+        playerInfo = self.prbEntity.getPlayerInfoByDbID(self.databaseID)
+        team = self.prbEntity.getPlayerTeam(playerInfo.accID)
+        return self.prbEntity.getPermissions().canKick(team)
 
     @process
     def _kickPlayerFromPrebattle(self, databaseID):
-        playerInfo = self.prbFunctional.getPlayerInfoByDbID(databaseID)
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.KickPlayerCtx(playerInfo.accID, 'prebattle/kick'))
+        playerInfo = self.prbEntity.getPlayerInfoByDbID(databaseID)
+        yield self.prbDispatcher.sendPrbRequest(KickPlayerCtx(playerInfo.accID, 'prebattle/kick'))

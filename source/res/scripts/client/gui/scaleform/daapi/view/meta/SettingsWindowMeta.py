@@ -43,6 +43,12 @@ class SettingsWindowMeta(AbstractWindowView):
     def onCounterTargetVisited(self, itemName):
         self._printOverrideError('onCounterTargetVisited')
 
+    def autodetectAcousticType(self):
+        self._printOverrideError('autodetectAcousticType')
+
+    def canSelectAcousticType(self, index):
+        self._printOverrideError('canSelectAcousticType')
+
     def as_setDataS(self, settingsData):
         return self.flashObject.as_setData(settingsData) if self._isDAAPIInited() else None
 
@@ -72,3 +78,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_setCountersDataS(self, tabsList):
         return self.flashObject.as_setCountersData(tabsList) if self._isDAAPIInited() else None
+
+    def as_onSoundSpeakersPresetApplyS(self, isApply):
+        return self.flashObject.as_onSoundSpeakersPresetApply(isApply) if self._isDAAPIInited() else None

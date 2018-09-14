@@ -71,15 +71,27 @@ class TrainingRoomMeta(View):
         return self.flashObject.as_updateTimeout(roundLenString) if self._isDAAPIInited() else None
 
     def as_setTeam1S(self, data):
+        """
+        :param data: Represented by TrainingRoomTeamVO (AS)
+        """
         return self.flashObject.as_setTeam1(data) if self._isDAAPIInited() else None
 
     def as_setTeam2S(self, data):
+        """
+        :param data: Represented by TrainingRoomTeamVO (AS)
+        """
         return self.flashObject.as_setTeam2(data) if self._isDAAPIInited() else None
 
     def as_setOtherS(self, data):
+        """
+        :param data: Represented by TrainingRoomTeamVO (AS)
+        """
         return self.flashObject.as_setOther(data) if self._isDAAPIInited() else None
 
     def as_setInfoS(self, data):
+        """
+        :param data: Represented by TrainingRoomInfoVO (AS)
+        """
         return self.flashObject.as_setInfo(data) if self._isDAAPIInited() else None
 
     def as_setArenaVoipChannelsS(self, arenaVoipChannels):

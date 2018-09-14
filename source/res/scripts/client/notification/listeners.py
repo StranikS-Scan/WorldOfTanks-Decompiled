@@ -1,19 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
 import collections
-import weakref
 import operator
-from account_helpers.settings_core.SettingsCore import g_settingsCore
+import weakref
+from adisp import process
 from debug_utils import LOG_DEBUG
-from gui.clans.clan_account_profile import SYNC_KEYS
-from gui.clans.clan_helpers import ClanListener
-from gui.clubs.settings import CLIENT_CLUB_STATE
-from gui.clubs.club_helpers import ClubListener
 from gui.LobbyContext import g_lobbyContext
-from gui.prb_control.prb_helpers import GlobalListener, prbInvitesProperty
+from gui.clans.clan_account_profile import SYNC_KEYS
+from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
+from gui.clans.contexts import GetClanInfoCtx
+from gui.clubs.club_helpers import ClubListener
+from gui.clubs.settings import CLIENT_CLUB_STATE
+from gui.prb_control import prbInvitesProperty
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.notifications import MsgCustomEvents
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from helpers import time_utils
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
@@ -23,7 +26,6 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClubInviteDecorator, ClubAppsDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
-from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 
 class _NotificationListener(object):
 
@@ -39,6 +41,12 @@ class _NotificationListener(object):
         self._model = lambda : None
 
     def request(self):
+        pass
+
+
+class _WGNCNotificationListener(_NotificationListener):
+
+    def onProviderEnabled(self):
         pass
 
 
@@ -139,7 +147,7 @@ class FortServiceChannelListener(_NotificationListener):
                         del self.__fortInvitesData[battleID]
 
 
-class PrbInvitesListener(_NotificationListener, GlobalListener):
+class PrbInvitesListener(_NotificationListener, IGlobalListener):
 
     @prbInvitesProperty
     def prbInvites(self):
@@ -164,34 +172,13 @@ class PrbInvitesListener(_NotificationListener, GlobalListener):
             prbInvites.onInvitesListInited -= self.__onInviteListInited
             prbInvites.onReceivedInviteListModified -= self.__onInviteListModified
 
-    def onPrbFunctionalInited(self):
+    def onPrbEntitySwitched(self):
         self.__updateInvites()
 
-    def onPrbFunctionalFinished(self):
-        self.__updateInvites()
-
-    def onTeamStatesReceived(self, functional, team1State, team2State):
-        self.__updateInvites()
-
-    def onIntroUnitFunctionalInited(self):
-        self.__updateInvites()
-
-    def onIntroUnitFunctionalFinished(self):
-        self.__updateInvites()
-
-    def onUnitFunctionalInited(self):
-        self.__updateInvites()
-
-    def onUnitFunctionalFinished(self):
+    def onTeamStatesReceived(self, entity, team1State, team2State):
         self.__updateInvites()
 
     def onUnitFlagsChanged(self, flags, timeLeft):
-        self.__updateInvites()
-
-    def onPreQueueFunctionalInited(self):
-        self.__updateInvites()
-
-    def onPreQueueFunctionalFinished(self):
         self.__updateInvites()
 
     def onEnqueued(self, queueType, *args):
@@ -398,7 +385,7 @@ class ClubsInvitesListener(_NotificationListener, ClubListener):
             return
 
 
-class _ClanNotificationsCommonListener(_NotificationListener, ClanListener):
+class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
 
     def __init__(self):
         super(_ClanNotificationsCommonListener, self).__init__()
@@ -419,6 +406,7 @@ class _ClanNotificationsCommonListener(_NotificationListener, ClanListener):
                 proxyDataItem = notification.getProxyItemByType(newReceivedItemType)
                 if proxyDataItem is None:
                     continue
+                notification.marked = True
                 itemsByType.append(proxyDataItem)
 
             itemsByTypeCount = len(itemsByType)
@@ -485,7 +473,7 @@ class _ClanNotificationsCommonListener(_NotificationListener, ClanListener):
         raise NotImplementedError
 
     def _canBeShown(self):
-        return self.clansCtrl.isEnabled() and self.clansCtrl.getAccountProfile() is not None and g_settingsCore.getSetting('receiveClanInvitesNotifications')
+        return self.clansCtrl.isEnabled() and self.clansCtrl.getAccountProfile() is not None and self.settingsCore.getSetting('receiveClanInvitesNotifications')
 
     def _updateAllNotifications(self):
         pass
@@ -548,8 +536,15 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
     def _getNewReceivediItemType(self):
         return wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP
 
+    @process
     def _addSingleNotification(self, item):
-        self.__addUserNotification(ClanSingleAppDecorator, (item.getID(), item), item)
+        ctx = GetClanInfoCtx(item.getAccountID())
+        accountResponse = yield self.clansCtrl.sendRequest(ctx)
+        isInCooldown = False
+        if accountResponse.isSuccess():
+            accountInfo = ctx.getDataObj(accountResponse.data)
+            isInCooldown = isInClanEnterCooldown(accountInfo.getClanCooldownTill())
+        self.__addUserNotification(ClanSingleAppDecorator, (item.getID(), item, isInCooldown), item)
 
     def _addMultiNotification(self, items, count=None):
         count = int(len(items) if items else count)
@@ -651,14 +646,14 @@ class _ClanPersonalInvitesListener(_ClanNotificationsCommonListener):
         return isCtrlrEnabled and not profile.isInClan()
 
 
-class WGNCListener(_NotificationListener):
+class _WGNCListener(_WGNCNotificationListener):
 
     def __init__(self):
-        super(WGNCListener, self).__init__()
+        super(_WGNCListener, self).__init__()
         self.__offset = 0
 
     def start(self, model):
-        result = super(WGNCListener, self).start(model)
+        result = super(_WGNCListener, self).start(model)
         g_wgncEvents.onItemShowByDefault += self.__onItemShowByDefault
         g_wgncEvents.onItemShowByAction += self.__onItemShowByAction
         g_wgncEvents.onItemUpdatedByAction += self.__onItemUpdatedByAction
@@ -670,17 +665,16 @@ class WGNCListener(_NotificationListener):
             addNotification(WGNCPopUpDecorator(notification.notID, popUp))
 
         self.__offset = 0.1
-        g_wgncProvider.showNoMarkedNots()
-        g_wgncProvider.setEnabled(True)
-        self.__offset = 0
         return result
+
+    def onProviderEnabled(self):
+        self.__offset = 0
 
     def stop(self):
         g_wgncEvents.onItemShowByDefault -= self.__onItemShowByDefault
         g_wgncEvents.onItemShowByAction -= self.__onItemShowByAction
         g_wgncEvents.onItemUpdatedByAction -= self.__onItemUpdatedByAction
-        g_wgncProvider.setNotsAsMarked()
-        super(WGNCListener, self).stop()
+        super(_WGNCListener, self).stop()
 
     def __onItemShowByDefault(self, notID, item):
         model = self._model()
@@ -696,7 +690,32 @@ class WGNCListener(_NotificationListener):
             model.updateNotification(NOTIFICATION_TYPE.WGNC_POP_UP, notID, item, False)
 
 
-class BattleTutorialListener(_NotificationListener, GlobalListener):
+class _WGNCListenersContainer(_NotificationListener):
+
+    def __init__(self):
+        super(_WGNCListenersContainer, self).__init__()
+        self.__collection = (_WGNCListener(), _ClanAppsListener(), _ClanPersonalInvitesListener())
+
+    def start(self, model):
+        for listener in self.__collection:
+            listener.start(model)
+
+        g_wgncProvider.showNoMarkedNots()
+        g_wgncProvider.setEnabled(True)
+        for listener in self.__collection:
+            listener.onProviderEnabled()
+
+        return super(_WGNCListenersContainer, self).start(model)
+
+    def stop(self):
+        for listener in self.__collection:
+            listener.stop()
+
+        g_wgncProvider.setNotsAsMarked()
+        super(_WGNCListenersContainer, self).stop()
+
+
+class BattleTutorialListener(_NotificationListener, IGlobalListener):
     _messagesIDs = tutorial_helper.TutorialGlobalStorage(tutorial_helper.TUTORIAL_GLOBAL_VAR.SERVICE_MESSAGES_IDS, [])
 
     @proto_getter(PROTO_TYPE.BW)
@@ -746,34 +765,20 @@ class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
         super(NotificationsListeners, self).__init__()
-        self.__serviceListener = ServiceChannelListener()
-        self.__fortMsgsListener = FortServiceChannelListener()
-        self.__invitesListener = PrbInvitesListener()
-        self.__friendshipRqs = FriendshipRqsListener()
-        self.__wgnc = WGNCListener()
-        self.__clubsInvitesListener = ClubsInvitesListener()
-        self.__clanAppsListener = _ClanAppsListener()
-        self.__clanInvitesListener = _ClanPersonalInvitesListener()
-        self.__tutorialListener = BattleTutorialListener()
+        self.__listeners = (ServiceChannelListener(),
+         FortServiceChannelListener(),
+         PrbInvitesListener(),
+         FriendshipRqsListener(),
+         _WGNCListenersContainer(),
+         ClubsInvitesListener(),
+         _ClanAppsListener(),
+         _ClanPersonalInvitesListener(),
+         BattleTutorialListener())
 
     def start(self, model):
-        self.__serviceListener.start(model)
-        self.__fortMsgsListener.start(model)
-        self.__invitesListener.start(model)
-        self.__friendshipRqs.start(model)
-        self.__wgnc.start(model)
-        self.__clubsInvitesListener.start(model)
-        self.__clanAppsListener.start(model)
-        self.__clanInvitesListener.start(model)
-        self.__tutorialListener.start(model)
+        for listener in self.__listeners:
+            listener.start(model)
 
     def stop(self):
-        self.__serviceListener.stop()
-        self.__fortMsgsListener.stop()
-        self.__invitesListener.stop()
-        self.__friendshipRqs.stop()
-        self.__wgnc.stop()
-        self.__clubsInvitesListener.stop()
-        self.__clanAppsListener.stop()
-        self.__clanInvitesListener.stop()
-        self.__tutorialListener.stop()
+        for listener in self.__listeners:
+            listener.stop()

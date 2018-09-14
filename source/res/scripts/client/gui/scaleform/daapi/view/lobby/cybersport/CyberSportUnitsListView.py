@@ -2,37 +2,32 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportUnitsListView.py
 from functools import partial
 from UnitBase import UNIT_BROWSER_TYPE
+from adisp import process
 from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.rally.rally_dps import ManualSearchDataProvider
 from gui.Scaleform.daapi.view.meta.CyberSportUnitsListMeta import CyberSportUnitsListMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.clubs import events_dispatcher as club_events
 from gui.clubs.club_helpers import ClubListener
 from gui.clubs.settings import getLadderChevron64x64, CLIENT_CLUB_STATE
-from gui.prb_control.functional import unit_ext
-from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events
-from gui.clubs import events_dispatcher as club_events
 from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import ClubEmblemsHelper, CooldownHelper
 from helpers import int2roman
 from helpers.i18n import makeString as _ms
 
-class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListener, ClubEmblemsHelper):
+class CyberSportUnitsListView(CyberSportUnitsListMeta, ClubListener, ClubEmblemsHelper):
 
     def __init__(self):
         super(CyberSportUnitsListView, self).__init__()
-        self._isBackButtonClicked = False
         self._unitTypeFlags = UNIT_BROWSER_TYPE.ALL
         self._cooldown = CooldownHelper(self.getCoolDownRequests(), self._onCooldownHandle, events.CoolDownEvent.PREBATTLE)
         self.__currentEmblem = None
         return
-
-    def onUnitFunctionalInited(self):
-        self.unitFunctional.setEntityType(PREBATTLE_TYPE.UNIT)
 
     def getPyDataProvider(self):
         return ManualSearchDataProvider()
@@ -40,26 +35,22 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
     def getCoolDownRequests(self):
         return [REQUEST_TYPE.UNITS_LIST]
 
-    def canBeClosed(self, callback):
-        self._isBackButtonClicked = True
-        callback(True)
-
     def setTeamFilters(self, showOnlyStatic):
         self._unitTypeFlags = UNIT_BROWSER_TYPE.RATED_CLUBS if showOnlyStatic else UNIT_BROWSER_TYPE.ALL
         self.__recenterList()
 
     def loadPrevious(self):
-        listReq = unit_ext.getListReq()
+        listReq = self.prbEntity.getBrowser()
         if listReq:
             listReq.request(req=REQUEST_TYPE.UNITS_NAV_LEFT)
 
     def loadNext(self):
-        listReq = unit_ext.getListReq()
+        listReq = self.prbEntity.getBrowser()
         if listReq:
             listReq.request(req=REQUEST_TYPE.UNITS_NAV_RIGHT)
 
     def refreshTeams(self):
-        listReq = unit_ext.getListReq()
+        listReq = self.prbEntity.getBrowser()
         if listReq:
             listReq.request(req=REQUEST_TYPE.UNITS_REFRESH)
 
@@ -67,7 +58,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         if index != self._searchDP.selectedRallyIndex:
             self.__currentEmblem = None
         cfdUnitID, vo = self._searchDP.getRally(index)
-        listReq = unit_ext.getListReq()
+        listReq = self.prbEntity.getBrowser()
         if listReq:
             listReq.setSelectedID(cfdUnitID)
         self.__setDetailsData(cfdUnitID, vo)
@@ -76,13 +67,15 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
     def showRallyProfile(self, clubDBID):
         club_events.showClubProfile(clubDBID)
 
+    def onPrbEntitySwitching(self):
+        browser = self.prbEntity.getBrowser()
+        if browser:
+            browser.stop()
+
     def _populate(self):
         super(CyberSportUnitsListView, self)._populate()
         self._cooldown.start()
-        self.startUnitListening()
-        if self.unitFunctional.getEntityType() != PREBATTLE_TYPE.NONE:
-            self.unitFunctional.setEntityType(PREBATTLE_TYPE.UNIT)
-        unit_ext.initListReq(self._unitTypeFlags).start(self.__onUnitsListUpdated)
+        self.prbEntity.getBrowser().start(self.__onUnitsListUpdated)
         self.as_setSearchResultTextS(_ms(CYBERSPORT.WINDOW_UNITLISTVIEW_FOUNDTEAMS), '', self.__getFiltersData())
         headerDescription = CYBERSPORT.WINDOW_UNITLISTVIEW_DESCRIPTION
         headerTitle = CYBERSPORT.WINDOW_UNITLISTVIEW_TITLE
@@ -97,14 +90,6 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
     def _dispose(self):
         self._cooldown.stop()
         self._cooldown = None
-        if self._isBackButtonClicked:
-            unit_ext.destroyListReq()
-            self._isBackButtonClicked = False
-        else:
-            listReq = unit_ext.getListReq()
-            if listReq:
-                listReq.stop()
-        self.stopUnitListening()
         super(CyberSportUnitsListView, self)._dispose()
         return
 
@@ -135,7 +120,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
          'enabled': False}
 
     def __updateVehicleLabel(self):
-        settings = self.unitFunctional.getRosterSettings()
+        settings = self.prbEntity.getRosterSettings()
         self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
     def __getFiltersData(self):
@@ -154,7 +139,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         return
 
     def __setDetailsData(self, unitID, vo):
-        _, unit = self.unitFunctional.getUnit(unitID)
+        _, unit = self.prbEntity.getUnit(unitID)
         if unit is not None and unit.isClub():
             self.__setDetails(unitID, vo, unit.getExtra())
         else:
@@ -209,7 +194,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         self.__refreshDetails(self._searchDP.selectedRallyIndex)
 
     def __recenterList(self):
-        listReq = unit_ext.getListReq()
+        listReq = self.prbEntity.getBrowser()
         if listReq:
             listReq.request(req=REQUEST_TYPE.UNITS_RECENTER, unitTypeFlags=self._unitTypeFlags)
 

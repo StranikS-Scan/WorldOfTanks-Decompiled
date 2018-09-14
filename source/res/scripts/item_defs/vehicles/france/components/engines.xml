@@ -63,6 +63,7 @@
     <Moteur_moderne_3M_27_1_01>	76	</Moteur_moderne_3M_27_1_01>
     <Maybach_HL_230_F>	79	</Maybach_HL_230_F>
     <Maybach_HL_295_003_Somua>	80	</Maybach_HL_295_003_Somua>
+    <Maybach_HL_235_850>	82	</Maybach_HL_235_850>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -248,8 +249,8 @@
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	348	</rpm_min>
-      <rpm_max>	2154	</rpm_max>
+      <rpm_min>	328	</rpm_min>
+      <rpm_max>	2216	</rpm_max>
     </Hispano-Suiza_HS110>
     <Hispano-Suiza_HS110_A>
       <userString>	#france_vehicles:Hispano-Suiza_HS110_A	</userString>
@@ -264,8 +265,8 @@
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	348	</rpm_min>
-      <rpm_max>	2154	</rpm_max>
+      <rpm_min>	328	</rpm_min>
+      <rpm_max>	2216	</rpm_max>
     </Hispano-Suiza_HS110_A>
     <SOFAM_12GSds_A>
       <userString>	#france_vehicles:SOFAM_12GSds_A	</userString>
@@ -297,8 +298,8 @@
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	356	</rpm_min>
-      <rpm_max>	2131	</rpm_max>
+      <rpm_min>	338	</rpm_min>
+      <rpm_max>	2184	</rpm_max>
     </SOFAM_12GSds>
     <Renault_S6>
       <userString>	#france_vehicles:Renault_S6	</userString>
@@ -695,6 +696,23 @@
       <rpm_min>	466	</rpm_min>
       <rpm_max>	2107	</rpm_max>
     </Maybach_HL_234P50>
+    <Maybach_HL_235_850>
+      <userString>	#france_vehicles:Maybach_HL_235_850	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
+    </Maybach_HL_235_850>
     <Aster>
       <userString>	#france_vehicles:Aster	</userString>
       <tags>	diesel	</tags>
@@ -805,8 +823,8 @@
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	295	</rpm_min>
-      <rpm_max>	2313	</rpm_max>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
     </Saurer>
     <Aster_M>
       <userString>	#france_vehicles:Aster_M	</userString>
@@ -1057,20 +1075,20 @@
     </Continental_AV-1790-7B>
     <Cummins_VT8-460>
       <userString>	#france_vehicles:Cummins_VT8-460	</userString>
-      <tags>	diesel	</tags>
+      <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	13500	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	460	</power>
-      <weight>	1656	</weight>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	550	</weight>
       <maxHealth>	176	</maxHealth>
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	398	</rpm_min>
-      <rpm_max>	2005	</rpm_max>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2901	</rpm_max>
     </Cummins_VT8-460>
     <Moteur_moderne_3M_27_1_01>
       <userString>	#france_vehicles:Moteur_moderne_3M_27_1_01	</userString>
@@ -1095,16 +1113,16 @@
       <level>	9	</level>
       <price>	96000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	960	</power>
       <weight>	750	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	362	</rpm_min>
-      <rpm_max>	2972	</rpm_max>
+      <rpm_min>	471	</rpm_min>
+      <rpm_max>	2089	</rpm_max>
     </Maybach_HL_295_003_Somua>
     <Maybach_HL_295_IGR>
       <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
@@ -1206,8 +1224,8 @@
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	348	</rpm_min>
-      <rpm_max>	2154	</rpm_max>
+      <rpm_min>	328	</rpm_min>
+      <rpm_max>	2216	</rpm_max>
     </Hispano-Suiza_HS110_IGR>
   </shared>
 </engines.xml>

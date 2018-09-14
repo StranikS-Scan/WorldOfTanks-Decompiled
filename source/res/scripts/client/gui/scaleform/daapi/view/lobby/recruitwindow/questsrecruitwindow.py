@@ -1,16 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/QuestsRecruitWindow.py
 import nations
-from items import tankmen
 from gui import SystemMessages
-from gui.shared.utils import decorators
-from gui.shared.gui_items import Tankman
-from gui.server_events import g_eventsCache
-from gui.shared.gui_items.processors.quests import PotapovQuestsGetTankwomanReward
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.QuestRecruitWindowMeta import QuestRecruitWindowMeta
+from gui.shared.gui_items import Tankman
+from gui.shared.gui_items.processors.quests import PotapovQuestsGetTankwomanReward
+from gui.shared.utils import decorators
+from helpers import dependency
+from items import tankmen
+from skeletons.gui.server_events import IEventsCache
 
 class QuestsRecruitWindow(QuestRecruitWindowMeta):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, ctx=None):
         super(QuestsRecruitWindow, self).__init__()
@@ -33,10 +35,10 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
 
     @decorators.process('updating')
     def onApply(self, data):
-        potapovQuest = g_eventsCache.potapov.getQuests().get(self.__questID)
+        potapovQuest = self.eventsCache.potapov.getQuests().get(self.__questID)
         result = yield PotapovQuestsGetTankwomanReward(potapovQuest, int(data.nation), int(data.vehicle), data.tankmanRole).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             self.destroy()
 
@@ -54,7 +56,7 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
         selectedNationID = int(selectedNationID)
         nationName = nations.NAMES[selectedNationID]
         if self.__currentSelectedNationID != selectedNationID:
-            firstNameID, lastNameID, iconID = g_eventsCache.potapov.getNextTankwomanIDs(selectedNationID, self.__isPremium, int(self.__fnGroup), int(self.__lnGroup), int(self.__iGroupID))
+            firstNameID, lastNameID, iconID = self.eventsCache.potapov.getNextTankwomanIDs(selectedNationID, self.__isPremium, int(self.__fnGroup), int(self.__lnGroup), int(self.__iGroupID))
             rankID = Tankman.calculateRankID(tankmen.MAX_SKILL_LEVEL, self.__freeXpValue)
             self.as_setInitDataS({'name': Tankman.getFullUserName(selectedNationID, firstNameID, lastNameID),
              'nation': nationName,

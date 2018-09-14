@@ -46,22 +46,9 @@
             <effect-not-triggered>	FreeXpExchangeSubmitButtonHint	</effect-not-triggered>
           </condition>
         </show-hint>
-        <activate>	ShowCongratulation	  <condition>
-            <active>	FreeXpChanged	</active>
-            <inactive>	BonusReceived	</inactive>
-          </condition>
-        </activate>
-        <show-award-window>	CongratulationWindow	  <condition>
-            <active>	BonusReceived	</active>
-            <active>	FreeXpChanged	</active>
-            <active>	ShowCongratulation	</active>
-          </condition>
-        </show-award-window>
         <refuse-training>
           <condition>
             <active>	FreeXpChanged	</active>
-            <active>	BonusReceived	</active>
-            <active>	ShowCongratulation	</active>
           </condition>
         </refuse-training>
       </runtime-effects>
@@ -134,12 +121,16 @@
     </trigger>
     <trigger>	FreeXpExchangeTrigger	  <type>	freeXP	</type>
       <on-effects>
-        <activate>	FreeXpChanged	</activate>
+        <show-award-window>	CongratulationWindow	  <condition>
+            <bonus-not-received>	Chain_8	</bonus-not-received>
+          </condition>
+        </show-award-window>
         <request-bonus>
           <condition>
-            <inactive>	BonusReceived	</inactive>
+            <bonus-not-received>	Chain_8	</bonus-not-received>
           </condition>
         </request-bonus>
+        <activate>	FreeXpChanged	</activate>
       </on-effects>
       <off-effects>
         <refuse-training></refuse-training>

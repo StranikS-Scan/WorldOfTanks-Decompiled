@@ -72,7 +72,7 @@ class FortFixedPlayersWindow(FortFixedPlayersWindowMeta, FortViewHelper):
             if result:
                 g_fortSoundController.playAttachedToBuilding()
                 building = self.fortCtrl.getFort().getBuilding(self.__buildingId)
-                SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_FIXEDPLAYERTOBUILDING, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
+                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_FIXEDPLAYERTOBUILDING, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
 
     def __makeData(self):
         result = {}

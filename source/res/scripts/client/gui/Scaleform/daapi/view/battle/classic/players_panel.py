@@ -1,34 +1,39 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/players_panel.py
-from account_helpers.settings_core import g_settingsCore
+from account_helpers.settings_core.settings_constants import GAME
+from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.PlayersPanelMeta import PlayersPanelMeta
 from gui.Scaleform.genConsts.PLAYERS_PANEL_STATE import PLAYERS_PANEL_STATE
 from gui.battle_control import avatar_getter
 from gui.battle_control.controllers.period_ctrl import IPlayersPanelsSwitcher
 from gui.shared import events, EVENT_BUS_SCOPE
-_LEGACY_TO_NEW_MODE = {'hidden': PLAYERS_PANEL_STATE.HIDEN,
- 'short': PLAYERS_PANEL_STATE.SHORT,
- 'medium': PLAYERS_PANEL_STATE.MEDIUM,
- 'medium2': PLAYERS_PANEL_STATE.LONG,
- 'large': PLAYERS_PANEL_STATE.FULL}
-_NEW_TO_LEGACY_MODE = dict(((v, k) for k, v in _LEGACY_TO_NEW_MODE.iteritems()))
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+_PLAYERS_PANEL_STATE_RANGE = (PLAYERS_PANEL_STATE.HIDEN,
+ PLAYERS_PANEL_STATE.SHORT,
+ PLAYERS_PANEL_STATE.MEDIUM,
+ PLAYERS_PANEL_STATE.LONG,
+ PLAYERS_PANEL_STATE.FULL)
 
-def _getNewModeFromSetting():
-    state = g_settingsCore.getSetting('ppState')
-    if state in _LEGACY_TO_NEW_MODE:
-        converted = _LEGACY_TO_NEW_MODE[state]
-    else:
-        converted = _LEGACY_TO_NEW_MODE['large']
-    return converted
+class PlayerPanelStateSetting(object):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
+    @classmethod
+    def read(cls):
+        state = cls.settingsCore.getSetting(GAME.PLAYERS_PANELS_STATE)
+        if state in _PLAYERS_PANEL_STATE_RANGE:
+            return state
+        else:
+            return PLAYERS_PANEL_STATE.MEDIUM
 
-def _writeSettingFromNewMode(mode):
-    if mode in _NEW_TO_LEGACY_MODE:
-        state = _NEW_TO_LEGACY_MODE[mode]
-        g_settingsCore.applySetting('ppState', state)
-        return True
-    else:
-        return False
+    @classmethod
+    def write(cls, state):
+        if state in _PLAYERS_PANEL_STATE_RANGE:
+            cls.settingsCore.applySetting(GAME.PLAYERS_PANELS_STATE, state)
+            return True
+        else:
+            LOG_ERROR('State of players panel is invalid', state)
+            return False
 
 
 class PlayersPanel(PlayersPanelMeta, IPlayersPanelsSwitcher):
@@ -38,7 +43,7 @@ class PlayersPanel(PlayersPanelMeta, IPlayersPanelsSwitcher):
         self.__mode = PLAYERS_PANEL_STATE.FULL
 
     def tryToSetPanelModeByMouse(self, mode):
-        if mode != self.__mode and _writeSettingFromNewMode(mode):
+        if mode != self.__mode and PlayerPanelStateSetting.write(mode):
             self.__mode = mode
             self.as_setPanelModeS(mode)
 
@@ -46,13 +51,13 @@ class PlayersPanel(PlayersPanelMeta, IPlayersPanelsSwitcher):
         avatar_getter.switchToOtherPlayer(int(vehicleID))
 
     def setInitialMode(self):
+        self.__mode = PlayerPanelStateSetting.read()
         self.as_setPanelModeS(self.__mode)
 
     def setLargeMode(self):
         self.as_setPanelModeS(PLAYERS_PANEL_STATE.FULL)
 
     def _populate(self):
-        self.__mode = _getNewModeFromSetting()
         super(PlayersPanel, self)._populate()
         self.addListener(events.GameEvent.NEXT_PLAYERS_PANEL_MODE, self.__handleNextMode, EVENT_BUS_SCOPE.BATTLE)
 
@@ -62,6 +67,6 @@ class PlayersPanel(PlayersPanelMeta, IPlayersPanelsSwitcher):
 
     def __handleNextMode(self, _):
         mode = (self.__mode + 1) % (PLAYERS_PANEL_STATE.FULL + 1)
-        if _writeSettingFromNewMode(mode):
+        if PlayerPanelStateSetting.write(mode):
             self.__mode = mode
             self.as_setPanelModeS(mode)

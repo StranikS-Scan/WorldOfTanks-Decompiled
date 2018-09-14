@@ -41,9 +41,15 @@ class ContainerManagerMeta(BaseDAAPIModule):
         return self.flashObject.as_bringToFront(cType, vName) if self._isDAAPIInited() else None
 
     def as_showContainersS(self, viewTypes):
+        """
+        :param viewTypes: Represented by Vector.<String> (AS)
+        """
         return self.flashObject.as_showContainers(viewTypes) if self._isDAAPIInited() else None
 
     def as_hideContainersS(self, viewTypes):
+        """
+        :param viewTypes: Represented by Vector.<String> (AS)
+        """
         return self.flashObject.as_hideContainers(viewTypes) if self._isDAAPIInited() else None
 
     def as_isContainerShownS(self, viewType):

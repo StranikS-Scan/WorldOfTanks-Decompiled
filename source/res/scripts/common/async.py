@@ -119,8 +119,14 @@ def await_deferred(d):
         except:
             promise.set_exception(*sys.exc_info())
 
-    d.addCallback(callback)
-    d.addErrback(errback)
+    futureCallback = getattr(d, 'addCallback', None)
+    if futureCallback is not None:
+        futureCallback(callback)
+        futureErrback = getattr(d, 'addErrback', None)
+        if futureErrback is not None:
+            futureErrback(errback)
+    else:
+        callback(d)
     return promise.get_future()
 
 
@@ -412,7 +418,8 @@ class _AsyncExecutor(object):
         try:
             future = next(*args)
             future.then(self.__resume)
-            self.__promise.set_cancel_handler(future.cancel)
+            handler = getattr(future, 'cancel', None)
+            self.__promise.set_cancel_handler(handler)
         except AsyncReturn as r:
             self.__promise.set_value(r.value)
         except StopIteration:

@@ -1,19 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeFreeToTankmanXpWindow.py
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.Scaleform.daapi.view.meta.ExchangeFreeToTankmanXpWindowMeta import ExchangeFreeToTankmanXpWindowMeta
 from gui.shared import g_itemsCache
 from gui.shared.events import SkillDropEvent
 from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor
 from gui.shared.gui_items.serializers import packTankmanSkill
-from gui.shared.utils import decorators
-from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.money import Money
-from gui import SystemMessages, game_control
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips.formatters import packActionTooltipData
+from gui.shared.utils import decorators
+from helpers import dependency
 from items.tankmen import MAX_SKILL_LEVEL
+from skeletons.gui.game_control import IWalletController
 
 class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
+    wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, ctx=None):
         super(ExchangeFreeToTankmanXpWindow, self).__init__()
@@ -29,7 +32,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
         xpConverter = TankmanFreeToOwnXpConvertor(tankman, self.__selectedXpForConvert)
         result = yield xpConverter.request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         self.onWindowClose()
 
     def calcValueRequest(self, toLevel):
@@ -70,18 +73,18 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
 
     def _populate(self):
         super(ExchangeFreeToTankmanXpWindow, self)._populate()
-        self.as_setWalletStatusS(game_control.g_instance.wallet.status)
+        self.as_setWalletStatusS(self.wallet.status)
         g_clientUpdateManager.addCallbacks({'stats.freeXP': self.__onFreeXpChanged,
          'inventory.8.compDescr': self.__onTankmanChanged})
         self.addListener(SkillDropEvent.SKILL_DROPPED_SUCCESSFULLY, self.__skillDropWindowCloseHandler)
-        game_control.g_instance.wallet.onWalletStatusChanged += self.__setWalletCallback
+        self.wallet.onWalletStatusChanged += self.__setWalletCallback
         g_itemsCache.onSyncCompleted += self.__onFreeXpChanged
         self.__prepareAndSendInitData()
 
     def _dispose(self):
         g_itemsCache.onSyncCompleted -= self.__onFreeXpChanged
         self.removeListener(SkillDropEvent.SKILL_DROPPED_SUCCESSFULLY, self.__skillDropWindowCloseHandler)
-        game_control.g_instance.wallet.onWalletStatusChanged -= self.__setWalletCallback
+        self.wallet.onWalletStatusChanged -= self.__setWalletCallback
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(ExchangeFreeToTankmanXpWindow, self)._dispose()
 

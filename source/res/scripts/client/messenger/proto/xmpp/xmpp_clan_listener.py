@@ -5,7 +5,7 @@ from PlayerEvents import g_playerEvents
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.shared.utils import getPlayerDatabaseID
 from messenger import g_settings
-from messenger.m_constants import GAME_ONLINE_STATUS, USER_TAG, PROTO_TYPE
+from messenger.m_constants import GAME_ONLINE_STATUS, USER_TAG
 from messenger.proto.entities import ClanInfo
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp import entities

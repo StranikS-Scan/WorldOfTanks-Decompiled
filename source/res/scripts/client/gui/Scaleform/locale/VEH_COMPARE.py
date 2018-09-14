@@ -122,6 +122,8 @@ class VEH_COMPARE(object):
     VEHICLECOMPAREVIEW_TOOLTIPS_BTNMODULES_BODY = '#veh_compare:vehicleCompareView/tooltips/btnModules/body'
     VEHICLECOMPAREVIEW_TOOLTIPS_CREWDROPDOWN_HEADER = '#veh_compare:vehicleCompareView/tooltips/crewDropDown/header'
     VEHICLECOMPAREVIEW_TOOLTIPS_CREWDROPDOWN_BODY = '#veh_compare:vehicleCompareView/tooltips/crewDropDown/body'
+    VEHICLECOMPAREVIEW_TOOLTIPS_DIFFERENTMODULESORCREW_HEADER = '#veh_compare:vehicleCompareView/tooltips/differentModulesOrCrew/header'
+    VEHICLECOMPAREVIEW_TOOLTIPS_DIFFERENTMODULESORCREW_BODY = '#veh_compare:vehicleCompareView/tooltips/differentModulesOrCrew/body'
     VEHICLECOMPAREVIEW_TOOLTIPS_INFO_HEADER = '#veh_compare:vehicleCompareView/tooltips/info/header'
     VEHICLECOMPAREVIEW_TOOLTIPS_INFO_BODY = '#veh_compare:vehicleCompareView/tooltips/info/body'
     VEHICLECOMPAREVIEW_TOOLTIPS_ATTENTIONEQUIPMENT_HEADER = '#veh_compare:vehicleCompareView/tooltips/attentionEquipment/header'

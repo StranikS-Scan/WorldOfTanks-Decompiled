@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/potapovquests.py
 import BigWorld
+from helpers import dependency
 from helpers import i18n
 from gui import makeHtmlString
 from gui.LobbyContext import g_lobbyContext
-from gui.server_events import g_eventsCache
 from gui.shared.tooltips import ToolTipDataField, ToolTipData, TOOLTIP_TYPE, ToolTipMethodField, formatters
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -15,6 +15,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.shared.formatters import icons
 from gui.shared.tooltips import contexts
+from skeletons.gui.server_events import IEventsCache
 
 class PrivateQuestsTileMethodField(ToolTipMethodField):
 
@@ -117,10 +118,11 @@ class PrivateQuestsTileStatusField(ToolTipDataField):
 
 
 class PrivateQuestsChainNameField(ToolTipDataField):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def _getValue(self):
         tileID, chainID = self._tooltip.item
-        tile = g_eventsCache.potapov.getTiles()[tileID]
+        tile = self.eventsCache.potapov.getTiles()[tileID]
         chainMajorTag = tile.getChainMajorTag(chainID)
         if chainMajorTag is not None:
             vehicleTypeStr = i18n.makeString('#tooltips:privateQuests/progress/type/%s' % chainMajorTag)
@@ -136,19 +138,21 @@ class PrivateQuestsChainConditionsField(ToolTipDataField):
 
 
 class PrivateQuestsChainParamsField(ToolTipDataField):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def _getValue(self):
         tileID, chainID = self._tooltip.item
-        tile = g_eventsCache.potapov.getTiles()[tileID]
+        tile = self.eventsCache.potapov.getTiles()[tileID]
         tokensCount = tile.getChainTotalTokensCount(chainID, isMainBonuses=True)
         return (('sheets', tokensCount), ('recruitTankmanFemale', ''))
 
 
 class PrivateQuestsChainStatusField(ToolTipDataField):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def _getValue(self):
         tileID, chainID = self._tooltip.item
-        tile = g_eventsCache.potapov.getTiles()[tileID]
+        tile = self.eventsCache.potapov.getTiles()[tileID]
         status, level = 'notReceived', Vehicle.VEHICLE_STATE_LEVEL.WARNING
         for quest in tile.getQuests().get(chainID, {}).itervalues():
             if quest.isFinal() and quest.isCompleted():

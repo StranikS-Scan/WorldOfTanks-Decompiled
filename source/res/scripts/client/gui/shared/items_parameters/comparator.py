@@ -12,7 +12,10 @@ BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'shellReloadingTime',
  'clipFireRate',
  'reloadMagazineTime',
- 'weight']
+ 'weight',
+ 'switchOnTime',
+ 'switchOffTime']
+NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
  'pitchLimits': (True, False)}
@@ -28,8 +31,9 @@ DEFAULT_AVG_VALUE = (sys.maxint, -1)
 
 def getParamExtendedData(paramName, value, otherValue, penalties=None):
     possibleBonuses, bonuses, penalties = penalties if penalties is not None else ([], [], [])
-    if otherValue is None or otherValue == DEFAULT_AVG_VALUE:
-        otherValue = value
+    if paramName not in NEGATIVE_PARAMS:
+        if otherValue is None or otherValue == DEFAULT_AVG_VALUE:
+            otherValue = value
     return _ParameterInfo(paramName, value, rateParameterState(paramName, value, otherValue), possibleBonuses, bonuses, penalties)
 
 
@@ -125,9 +129,20 @@ def _getComparableValue(currentValue, comparableList, idx):
 
 def _getParamStateInfo(paramName, val1, val2, valueIdx=None):
     if val1 is None or val2 is None:
+        hasNoParam = True
         diff = 0
     else:
+        hasNoParam = False
+        if isinstance(val1, float):
+            val1 = round(val1, 2)
+        if isinstance(val2, float):
+            val2 = round(val2, 2)
         diff = val1 - val2
+    if paramName in NEGATIVE_PARAMS and hasNoParam:
+        if val1 is None:
+            return (PARAM_STATE.BETTER, diff)
+        else:
+            return (PARAM_STATE.WORSE, diff)
     if diff == 0:
         return (PARAM_STATE.NORMAL, diff)
     else:

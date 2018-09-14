@@ -6,7 +6,6 @@ import MusicControllerWWISE
 import constants
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
-from UnitBase import FALLOUT_QUEUE_TYPE_TO_ROSTER
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
 from gui.LobbyContext import g_lobbyContext
@@ -15,16 +14,14 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.prb_control import prb_getters, prbEntityProperty
 from gui.Scaleform.locale.MENU import MENU
-from gui.prb_control import prb_getters
-from gui.prb_control.prb_helpers import preQueueFunctionalProperty, prbDispatcherProperty
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.sounds.ambients import BattleQueueEnv
 from helpers.i18n import makeString
-from shared_utils import findFirst
 TYPES_ORDERED = (('heavyTank', '#item_types:vehicle/tags/heavy_tank/name'),
  ('mediumTank', '#item_types:vehicle/tags/medium_tank/name'),
  ('lightTank', '#item_types:vehicle/tags/light_tank/name'),
@@ -191,12 +188,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__provider = None
         return
 
-    @preQueueFunctionalProperty
-    def preQueueFunctional(self):
-        return None
-
-    @prbDispatcherProperty
-    def prbDispatcher(self):
+    @prbEntityProperty
+    def prbEntity(self):
         return None
 
     def onEscape(self):
@@ -211,9 +204,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         return
 
     def exitClick(self):
-        if self.prbDispatcher is not None:
-            self.prbDispatcher.exitFromQueue()
-        return
+        self.prbEntity.exitFromQueue()
 
     def onStartBattle(self):
         self.__stopUpdateScreen()
@@ -233,10 +224,9 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         super(BattleQueue, self)._dispose()
 
     def __updateClientState(self):
-        if self.prbDispatcher is not None:
-            permissions = self.prbDispatcher.getUnitFunctional().getPermissions()
-            if permissions and not permissions.canExitFromQueue():
-                self.as_showExitS(False)
+        permissions = self.prbEntity.getPermissions()
+        if not permissions.canExitFromQueue():
+            self.as_showExitS(False)
         guiType = prb_getters.getArenaGUIType(queueType=self.__provider.getQueueType())
         title = '#menu:loading/battleTypes/%d' % guiType
         description = '#menu:loading/battleTypes/desc/%d' % guiType
@@ -252,7 +242,6 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
          'title': title,
          'description': description,
          'additional': additional})
-        return
 
     def __stopUpdateScreen(self):
         if self.__timerCallback is not None:
@@ -264,22 +253,9 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         return
 
     def __updateQueueInfo(self):
-        if prb_getters.isCompany():
-            qType = constants.QUEUE_TYPE.COMPANIES
-        elif self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInUnit():
-            funcState = self.prbDispatcher.getFunctionalState()
-            if funcState.entityTypeID == constants.PREBATTLE_TYPE.FALLOUT:
-                rosterType = funcState.rosterType
-                qType, _ = findFirst(lambda (k, v): v == rosterType, FALLOUT_QUEUE_TYPE_TO_ROSTER.iteritems(), (constants.QUEUE_TYPE.RANDOMS, None))
-            elif funcState.entityTypeID == constants.PREBATTLE_TYPE.EVENT:
-                qType = constants.QUEUE_TYPE.EVENT_BATTLES
-            else:
-                qType = constants.QUEUE_TYPE.RANDOMS
-        else:
-            qType = prb_getters.getQueueType()
+        qType = self.prbEntity.getQueueType()
         self.__provider = _providerFactory(self, qType)
         self.__provider.start()
-        return
 
     def __updateTimer(self):
         self.__timerCallback = None

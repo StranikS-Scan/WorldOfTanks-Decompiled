@@ -7,15 +7,18 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.server_events import g_eventsCache, formatters
+from gui.server_events import formatters
 from gui.server_events.formatters import PROGRESS_BAR_TYPE
 from gui.shared.ItemsCache import g_itemsCache
 from gui import SystemMessages
+from helpers import dependency
 from shared_utils import findFirst
+from skeletons.gui.server_events import IEventsCache
 NO_PROGRESS_COUNT = -1
 _EVENT_STATUS = events_helpers.EVENT_STATUS
 
 class TutorialQuestsTab(QuestsCurrentTab):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         super(TutorialQuestsTab, self).__init__()
@@ -26,8 +29,6 @@ class TutorialQuestsTab(QuestsCurrentTab):
         g_clientUpdateManager.addCallbacks({'stats.tutorialsCompleted': self.__onEventsUpdated,
          'stats.dossier': self.__onEventsUpdated})
         self._invalidateEventsData()
-        if self._navInfo.tutorial.questID:
-            self._selectQuest(self._navInfo.tutorial.questID)
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -40,12 +41,15 @@ class TutorialQuestsTab(QuestsCurrentTab):
         if alias == QUESTS_ALIASES.TUTORIAL_HANGAR_QUEST_DETAILS_PY_ALIAS:
             self.components.get(alias).setQuestsDescriptor(self.__questsDescriptor)
 
+    def _getDefaultQuestID(self):
+        return self._navInfo.tutorial.questID
+
     def _selectQuest(self, questID):
-        motiveQuests = g_eventsCache.getMotiveQuests(filterFunc=self._filterFunc)
+        motiveQuests = self.eventsCache.getMotiveQuests(filterFunc=self._filterFunc)
         if questID in motiveQuests or self.__questsDescriptor is not None and self.__questsDescriptor.getChapter(questID) is not None:
             return self.as_setSelectedQuestS(questID)
         else:
-            if questID in g_eventsCache.getMotiveQuests(filterFunc=lambda q: q.isCompleted()):
+            if questID in self.eventsCache.getMotiveQuests(filterFunc=lambda q: q.isCompleted()):
                 sortedQuests = sorted(motiveQuests.values(), key=lambda q: q.getPriority())
                 nextQuest = findFirst(None, sortedQuests)
                 if nextQuest:
@@ -75,7 +79,7 @@ class TutorialQuestsTab(QuestsCurrentTab):
                      'detailsLinkage': QUESTS_ALIASES.TUTORIAL_HANGAR_QUEST_DETAILS_LINKAGE,
                      'detailsPyAlias': QUESTS_ALIASES.TUTORIAL_HANGAR_QUEST_DETAILS_PY_ALIAS})
 
-        svrEvents = self._applyFilters(g_eventsCache.getMotiveQuests().values())
+        svrEvents = self._applyFilters(self.eventsCache.getMotiveQuests().values())
         if len(svrEvents):
             result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_MANEUVERSQUESTS))
             for e in svrEvents:

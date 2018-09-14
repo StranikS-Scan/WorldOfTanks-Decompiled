@@ -51,3 +51,9 @@ class FreeExperienceConversion(GoodieTarget):
 
     def __init__(self, targetID=None, limit=None):
         super(FreeExperienceConversion, self).__init__(targetID, limit)
+
+
+class BuyVehicle(GoodieTarget):
+
+    def __init__(self, targetID, limit=None):
+        super(BuyVehicle, self).__init__(targetID, limit)

@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/elements.py
-import Math
 import time
 from collections import namedtuple
+import Math
 from constants import IGR_TYPE
-from gui.game_control import getIGRCtrl
-from helpers import time_utils
-from helpers.i18n import makeString as _ms
 from gui.customization.shared import BONUS_ICONS
+from helpers import time_utils, dependency
+from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IIGRController
 
 class QualifierBase(object):
 
@@ -109,6 +109,7 @@ class InstalledElement(namedtuple('InstalledElement', 'cType elementID duration 
 
 class Element(object):
     __slots__ = ('_rawData', '_qualifier', '_price', '__isInDossier', '__isInShop', '__isInQuests', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName')
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, params):
         self.__isInShop = params['isInShop']
@@ -198,7 +199,7 @@ class Element(object):
 
     @property
     def isInDossier(self):
-        return self.__isInDossier or self.getIgrType() == getIGRCtrl().getRoomType() and getIGRCtrl().getRoomType() != IGR_TYPE.NONE
+        return self.__isInDossier or self.getIgrType() == self.igrCtrl.getRoomType() and self.igrCtrl.getRoomType() != IGR_TYPE.NONE
 
     @property
     def isInShop(self):
@@ -308,7 +309,7 @@ class Camouflage(Element):
 
     def getGroup(self):
         groupName = self._rawData['groupName']
-        if getIGRCtrl().getRoomType() == IGR_TYPE.PREMIUM:
+        if self.igrCtrl.getRoomType() == IGR_TYPE.PREMIUM:
             groupName = groupName[3:] if groupName.startswith('IGR') else groupName
         return groupName
 

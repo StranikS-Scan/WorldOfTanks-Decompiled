@@ -3,17 +3,18 @@
 import weakref
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG
-from gui import game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.game_control import getVehicleComparisonBasketCtrl
-from gui.prb_control.prb_helpers import GlobalListener
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.ItemsCache import CACHE_SYNC_REASON, g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from helpers import dependency
+from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket, IRentalsController
 INV_ITEM_VCDESC_KEY = 'compDescr'
 CACHE_VEHS_LOCK_KEY = 'vehsLock'
 STAT_DIFF_KEY = 'stats'
 INVENTORY_DIFF_KEY = 'inventory'
 CACHE_DIFF_KEY = 'cache'
+GOODIES_DIFF_KEY = 'goodies'
 _STAT_DIFF_FORMAT = STAT_DIFF_KEY + '.{0:>s}'
 CREDITS_DIFF_KEY = _STAT_DIFF_FORMAT.format('credits')
 GOLD_DIFF_KEY = _STAT_DIFF_FORMAT.format('gold')
@@ -96,6 +97,7 @@ class _StatsListener(_Listener):
 
 
 class _ItemsCacheListener(_Listener):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self):
         super(_ItemsCacheListener, self).__init__()
@@ -104,24 +106,33 @@ class _ItemsCacheListener(_Listener):
     def startListen(self, page):
         super(_ItemsCacheListener, self).startListen(page)
         g_clientUpdateManager.addCallbacks({INVENTORY_DIFF_KEY: self.__onInventoryUpdate,
-         CACHE_DIFF_KEY: self.__onCacheUpdate})
+         CACHE_DIFF_KEY: self.__onCacheUpdate,
+         GOODIES_DIFF_KEY: self.__onGoodiesUpdate})
         g_itemsCache.onSyncCompleted += self.__items_onSyncCompleted
         g_playerEvents.onCenterIsLongDisconnected += self.__center_onIsLongDisconnected
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange += self.__onVehCompareBasketChanged
-        comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
+        self.comparisonBasket.onChange += self.__onVehCompareBasketChanged
+        self.comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
 
     def stopListen(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_itemsCache.onSyncCompleted -= self.__items_onSyncCompleted
         g_playerEvents.onCenterIsLongDisconnected -= self.__center_onIsLongDisconnected
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange -= self.__onVehCompareBasketChanged
-        comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
+        self.comparisonBasket.onChange -= self.__onVehCompareBasketChanged
+        self.comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
         super(_ItemsCacheListener, self).stopListen()
 
     def __onInventoryUpdate(self, _):
         self._page.invalidateInventory(self.__invalidated)
+
+    def __onGoodiesUpdate(self, goodies):
+        invalidated = set()
+        vehicleDiscounts = g_itemsCache.items.shop.getVehicleDiscountDescriptions()
+        for goodieID in goodies:
+            vehicleDiscount = vehicleDiscounts.get(goodieID)
+            if vehicleDiscount:
+                invalidated.add(vehicleDiscount.target.targetValue)
+
+        self._page.invalidateDiscounts(invalidated)
 
     def __onCacheUpdate(self, cache):
         if CACHE_VEHS_LOCK_KEY in cache:
@@ -165,13 +176,14 @@ class _ItemsCacheListener(_Listener):
 
 
 class _WalletStatusListener(_Listener):
+    wallet = dependency.descriptor(IWalletController)
 
     def startListen(self, page):
         super(_WalletStatusListener, self).startListen(page)
-        game_control.g_instance.wallet.onWalletStatusChanged += self.__onWalletStatusChanged
+        self.wallet.onWalletStatusChanged += self.__onWalletStatusChanged
 
     def stopListen(self):
-        game_control.g_instance.wallet.onWalletStatusChanged -= self.__onWalletStatusChanged
+        self.wallet.onWalletStatusChanged -= self.__onWalletStatusChanged
         super(_WalletStatusListener, self).stopListen()
 
     def __onWalletStatusChanged(self, status):
@@ -179,20 +191,21 @@ class _WalletStatusListener(_Listener):
 
 
 class _RentChangeListener(_Listener):
+    rentals = dependency.descriptor(IRentalsController)
 
     def startListen(self, page):
         super(_RentChangeListener, self).startListen(page)
-        game_control.g_instance.rentals.onRentChangeNotify += self.__onRentChange
+        self.rentals.onRentChangeNotify += self.__onRentChange
 
     def stopListen(self):
-        game_control.g_instance.rentals.onRentChangeNotify -= self.__onRentChange
+        self.rentals.onRentChangeNotify -= self.__onRentChange
         super(_RentChangeListener, self).stopListen()
 
     def __onRentChange(self, vehicles):
         self._page.invalidateRent(vehicles)
 
 
-class _PrbGlobalListener(_Listener, GlobalListener):
+class _PrbGlobalListener(_Listener, IGlobalListener):
 
     def startListen(self, page):
         super(_PrbGlobalListener, self).startListen(page)
@@ -202,30 +215,15 @@ class _PrbGlobalListener(_Listener, GlobalListener):
         super(_PrbGlobalListener, self).stopListen()
         self.stopGlobalListening()
 
-    def onPrbFunctionalInited(self):
-        self._page.invalidatePrbState()
-
-    def onPrbFunctionalFinished(self):
-        self._page.invalidatePrbState()
-
-    def onPreQueueFunctionalInited(self):
-        self._page.invalidatePrbState()
-
-    def onPreQueueFunctionalFinished(self):
+    def onPrbEntitySwitched(self):
         self._page.invalidatePrbState()
 
     def onPreQueueSettingsChanged(self, diff):
         self._page.invalidatePrbState()
 
-    def onPlayerStateChanged(self, functional, roster, accountInfo):
+    def onPlayerStateChanged(self, entity, roster, accountInfo):
         if accountInfo.isCurrentPlayer():
             self._page.invalidatePrbState()
-
-    def onUnitFunctionalInited(self):
-        self._page.invalidatePrbState()
-
-    def onUnitFunctionalFinished(self):
-        self._page.invalidatePrbState()
 
     def onUnitPlayerStateChanged(self, pInfo):
         if pInfo.isCurrentPlayer():

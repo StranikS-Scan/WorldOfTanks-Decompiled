@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/team_overrides.py
-from account_helpers.settings_core import g_settingsCore
 from account_helpers.settings_core.settings_constants import SOUND
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info import settings
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 _DELIVERY_STATUS = settings.INVITATION_DELIVERY_STATUS
 _P_STATUS = settings.PLAYER_STATUS
 
 class DefaultTeamOverrides(object):
     __slots__ = ('team', 'personal', 'isReplayPlaying')
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, team, personal, isReplayPlaying=False):
         super(DefaultTeamOverrides, self).__init__()
@@ -78,7 +80,7 @@ class PlayerTeamOverrides(DefaultTeamOverrides):
 
     def getPlayerStatus(self, vo):
         status = super(PlayerTeamOverrides, self).getPlayerStatus(vo)
-        if self.personal.vehicleID == vo.vehicleID and vo.isSquadMan() and self.__isVoipSupported and not g_settingsCore.getSetting(SOUND.VOIP_ENABLE) and not self.isReplayPlaying:
+        if self.personal.vehicleID == vo.vehicleID and vo.isSquadMan() and self.__isVoipSupported and not self.settingsCore.getSetting(SOUND.VOIP_ENABLE) and not self.isReplayPlaying:
             status |= _P_STATUS.IS_VOIP_DISABLED
         return status
 

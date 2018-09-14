@@ -2,31 +2,35 @@
 # Embedded file name: scripts/client/gui/prb_control/invites.py
 from collections import namedtuple, defaultdict
 import BigWorld
+import Event
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from account_helpers import isRoamingEnabled
-from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES, PREBATTLE_TYPE
+from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import SystemMessages
 from gui.LobbyContext import g_lobbyContext
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+from gui.prb_control import prb_getters
+from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.prb_control.items import prb_seqs
 from gui.prb_control.settings import PRB_INVITE_STATE
-from gui.battle_control import g_sessionProvider as g_battleCtrl
 from gui.shared import g_itemsCache
-from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from gui.shared.actions import ActionsChain
+from gui.shared.utils import getPlayerDatabaseID, getPlayerName, showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
-from ids_generators import SequenceIDGenerator
+from helpers import dependency
 from helpers import time_utils
-import Event
+from ids_generators import SequenceIDGenerator
 from messenger import g_settings
+from messenger.ext import isNotFriendSenderIgnored
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
-from messenger.ext import isNotFriendSenderIgnored
 from predefined_hosts import g_preDefinedHosts
 from shared_utils.account_helpers.ClientInvitations import UniqueId
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 def isInviteSenderIgnoredInBattle(user, areFriendsOnly, isFromBattle):
     return isNotFriendSenderIgnored(user, False) if isFromBattle else isNotFriendSenderIgnored(user, areFriendsOnly)
@@ -84,11 +88,7 @@ class PrbInviteWrapper(_PrbInviteData):
         from gui.prb_control.dispatcher import g_prbLoader
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher:
-            prbFunctional = dispatcher.getPrbFunctional()
-            unitFunctional = dispatcher.getUnitFunctional()
-            if self.type in PREBATTLE_TYPE.UNIT_MGR_PREBATTLES and self._isCurrentPrebattle(unitFunctional):
-                return True
-            if self._isCurrentPrebattle(prbFunctional):
+            if self._isCurrentPrebattle(dispatcher.getEntity()):
                 return True
         return False
 
@@ -138,8 +138,8 @@ class PrbInviteWrapper(_PrbInviteData):
     def isSameBattle(self, arenaUniqueID):
         return False
 
-    def _isCurrentPrebattle(self, functional):
-        return functional is not None and self.prebattleID == functional.getID()
+    def _isCurrentPrebattle(self, entity):
+        return entity is not None and self.prebattleID == entity.getID()
 
     def _merge(self, other):
         data = {}
@@ -246,6 +246,7 @@ def _getNewInvites():
 
 class InvitesManager(UsersInfoHelper):
     __clanInfo = None
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, loader):
         super(InvitesManager, self).__init__()
@@ -354,12 +355,9 @@ class InvitesManager(UsersInfoHelper):
         elif invite.clientID in self.__invites:
             dispatcher = self.__loader.getDispatcher()
             if dispatcher:
-                prbFunctional = dispatcher.getPrbFunctional()
-                unitFunctional = dispatcher.getUnitFunctional()
-                preQueueFunctional = dispatcher.getPreQueueFunctional()
                 if invite.alreadyJoined:
                     return False
-                if prbFunctional and prbFunctional.hasLockedState() or unitFunctional and unitFunctional.hasLockedState() or preQueueFunctional and preQueueFunctional.hasLockedState():
+                if dispatcher.getEntity().hasLockedState():
                     return False
             another = invite.anotherPeriphery
             if another:
@@ -524,7 +522,7 @@ class InvitesManager(UsersInfoHelper):
             name, abbrev = ('', None)
             if userDBID:
                 if g_appLoader.getSpaceID() == GUI_GLOBAL_SPACE_ID.BATTLE:
-                    ctx = g_battleCtrl.getCtx()
+                    ctx = self.sessionProvider.getCtx()
                     isUserInBattle = ctx.getVehIDByAccDBID(userDBID) != 0
                     if isUserInBattle:
                         name, abbrev = ctx.getPlayerFullNameParts(accID=userDBID, showVehShortName=False)[1:3]
@@ -678,3 +676,80 @@ class InvitesManager(UsersInfoHelper):
 
     def __isInviteSenderIgnoredInBattle(self, invite, userGetter):
         return isInviteSenderIgnoredInBattle(userGetter(invite.creatorDBID), g_settings.userPrefs.invitesFromFriendsOnly, invite.isCreatedInBattle())
+
+
+class AutoInvitesNotifier(object):
+
+    def __init__(self, loader):
+        super(AutoInvitesNotifier, self).__init__()
+        self.__notified = set()
+        self.__isStarted = False
+        self.__loader = loader
+
+    def __del__(self):
+        LOG_DEBUG('AutoInvitesNotifier deleted')
+
+    def start(self):
+        if self.__isStarted:
+            self.__doNotify()
+            return
+        self.__isStarted = True
+        g_playerEvents.onPrebattleAutoInvitesChanged += self.__pe_onPrbAutoInvitesChanged
+        self.__doNotify()
+
+    def stop(self):
+        if not self.__isStarted:
+            return
+        self.__isStarted = False
+        g_playerEvents.onPrebattleAutoInvitesChanged -= self.__pe_onPrbAutoInvitesChanged
+        self.__notified.clear()
+
+    def fini(self):
+        self.stop()
+        self.__loader = None
+        return
+
+    def getNotified(self):
+        result = []
+        for invite in prb_seqs.AutoInvitesIterator():
+            if invite.prbID in self.__notified:
+                result.append(invite)
+
+        return result
+
+    @classmethod
+    def hasInvite(cls, prbID):
+        return prbID in prb_getters.getPrebattleAutoInvites()
+
+    @classmethod
+    def getInvite(cls, prbID):
+        return prb_seqs.AutoInviteItem(prbID, **prb_getters.getPrebattleAutoInvites().get(prbID, {}))
+
+    def canAcceptInvite(self, invite):
+        result = True
+        dispatcher = self.__loader.getDispatcher()
+        if dispatcher is not None and dispatcher.getEntity().hasLockedState():
+            result = False
+        peripheryID = invite.peripheryID
+        if result and g_lobbyContext.isAnotherPeriphery(peripheryID):
+            result = g_lobbyContext.isPeripheryAvailable(peripheryID)
+        return result
+
+    def __doNotify(self):
+        haveInvites = False
+        for invite in prb_seqs.AutoInvitesIterator():
+            prbID = invite.prbID
+            haveInvites = True
+            if prbID in self.__notified:
+                continue
+            if not len(invite.description):
+                continue
+            g_eventDispatcher.fireAutoInviteReceived(invite)
+            showInvitationInWindowsBar()
+            self.__notified.add(prbID)
+
+        if not haveInvites:
+            self.__notified.clear()
+
+    def __pe_onPrbAutoInvitesChanged(self):
+        self.__doNotify()

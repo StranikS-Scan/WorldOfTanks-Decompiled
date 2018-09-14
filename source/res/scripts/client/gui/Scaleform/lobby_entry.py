@@ -46,6 +46,7 @@ class LobbyEntry(SFApplication):
     def beforeDelete(self):
         from gui.Scaleform.Waiting import Waiting
         Waiting.setWainingViewGetter(None)
+        Waiting.close()
         super(LobbyEntry, self).beforeDelete()
         return
 
@@ -56,7 +57,9 @@ class LobbyEntry(SFApplication):
         return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), DefaultContainer(ViewTypes.WAITING), PopUpContainer(ViewTypes.WINDOW), PopUpContainer(ViewTypes.BROWSER), PopUpContainer(ViewTypes.TOP_WINDOW), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
 
     def _createToolTipManager(self):
-        return ToolTip(GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
+        tooltip = ToolTip(GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
+        tooltip.setEnvironment(self)
+        return tooltip
 
     def _createGlobalVarsManager(self):
         return GlobalVarsManager()

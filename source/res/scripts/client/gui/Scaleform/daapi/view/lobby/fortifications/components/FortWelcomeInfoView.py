@@ -21,7 +21,6 @@ from gui.shared.fortifications.settings import CLIENT_FORT_STATE, FORT_RESTRICTI
 from helpers import i18n
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.shared import event_dispatcher as shared_events
-from gui.clans.clan_controller import g_clanCtrl
 
 class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper, ClanListener):
 
@@ -77,7 +76,7 @@ class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper, ClanListener)
         return {'canRoleCreateFortRest': self.fortCtrl.getPermissions().canCreate() and self._isMyClan,
          'canCreateFortLim': self.fortCtrl.getLimits().isCreationValid()[0] and self._isMyClan,
          'joinClanAvailable': not g_clanCache.isInClan and self._isMyClan,
-         'clanSearchAvailable': g_clanCtrl.isEnabled()}
+         'clanSearchAvailable': self.clansCtrl.isEnabled()}
 
     def __updateData(self):
         data = self.getData()
@@ -130,7 +129,7 @@ class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper, ClanListener)
     def requestFortCreation(self):
         result = yield self.fortProvider.sendRequest(CreateFortCtx('fort/create'))
         if result:
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_CREATED, type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_CREATED, type=SystemMessages.SM_TYPE.Warning)
         self.onFortCreationDone()
 
     def openClanResearch(self):

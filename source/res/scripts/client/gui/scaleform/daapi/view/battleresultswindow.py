@@ -1,64 +1,65 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/BattleResultsWindow.py
-from collections import defaultdict
-import re
 import math
 import operator
+import re
+from collections import defaultdict
 from functools import partial
 import BigWorld
+import nations
+import potapov_quests
+from CurrentVehicle import g_currentVehicle
+from account_helpers import getAccountDatabaseID
+from account_helpers.AccountSettings import AccountSettings
+from account_shared import getFairPlayViolationName
+from adisp import async, process
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, IGR_TYPE, EVENT_TYPE, FINISH_REASON as FR, FLAG_ACTION
+from debug_utils import LOG_DEBUG
+from dossiers2.custom.records import RECORD_DB_IDS, DB_ID_TO_RECORD
+from dossiers2.ui import achievements
+from dossiers2.ui.achievements import MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
+from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS, isAchievementRegistered
+from gui import makeHtmlString, GUI_SETTINGS, SystemMessages
 from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
+from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
+from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
+from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
+from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_control import arena_visitor
+from gui.battle_results import formatters as battle_res_fmts
 from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
 from gui.battle_results.VehicleProgressHelper import VehicleProgressHelper, PROGRESS_ACTION
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showResearchView, showPersonalCase, showBattleResultsFromData
-from gui.shared.utils.functions import getArenaSubTypeName
-from gui.shared.crits_mask_parser import critsParserGenerator, CRIT_MASK_SUB_TYPES
-import nations
-import potapov_quests
-from account_helpers.AccountSettings import AccountSettings
-from account_helpers import getAccountDatabaseID
-from account_shared import getFairPlayViolationName
-from debug_utils import LOG_DEBUG
-from helpers import i18n, time_utils
-from adisp import async, process
-from CurrentVehicle import g_currentVehicle
-from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, IGR_TYPE, EVENT_TYPE, FINISH_REASON as FR, FLAG_ACTION, TEAMS_IN_ARENA
-from dossiers2.custom.records import RECORD_DB_IDS, DB_ID_TO_RECORD
-from dossiers2.ui import achievements
-from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
-from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS, isAchievementRegistered
-from gui import makeHtmlString, GUI_SETTINGS, SystemMessages
-from gui.server_events import g_eventsCache, events_dispatcher as quests_events
-from gui.shared import g_itemsCache, events
-from gui.shared.utils import isVehicleObserver
-from items import vehicles as vehicles_core, vehicles
-from items.vehicles import VEHICLE_CLASS_TAGS
-from shared_utils import findFirst, isDefaultDict
+from gui.christmas.christmas_controller import g_christmasCtrl
 from gui.clubs import events_dispatcher as club_events
 from gui.clubs.club_helpers import ClubListener
 from gui.clubs.settings import getLeagueByDivision, getDivisionWithinLeague
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.server_events import events_dispatcher as quests_events
+from gui.shared import g_itemsCache, events
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.fortifications.FortBuilding import FortBuilding
-from gui.shared.gui_items.dossier import getAchievementFactory
-from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
-from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
-from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
-from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
-from messenger.storage import storage_getter
-from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.shared.crits_mask_parser import critsParserGenerator, CRIT_MASK_SUB_TYPES
+from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showResearchView, showPersonalCase, showBattleResultsFromData
 from gui.shared.formatters import text_styles, icons, numbers
-from gui.battle_results import formatters as battle_res_fmts
+from gui.shared.fortifications.FortBuilding import FortBuilding
+from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
+from gui.shared.gui_items.dossier import getAchievementFactory
+from gui.shared.money import Money, ZERO_MONEY
+from gui.shared.utils import isVehicleObserver
+from gui.shared.utils.functions import getArenaSubTypeName
 from gui.shared.utils.functions import makeTooltip
 from gui.sounds.ambients import BattleResultsEnv
-from gui.shared.money import Money, ZERO_MONEY
-from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
+from helpers import i18n, time_utils, dependency
+from items import vehicles as vehicles_core
+from items.vehicles import VEHICLE_CLASS_TAGS
+from messenger.storage import storage_getter
+from shared_utils import findFirst, isDefaultDict
+from skeletons.gui.server_events import IEventsCache
 
 def _wrapEmblemUrl(emblemUrl):
     return ' <IMG SRC="img://%s" width="24" height="24" vspace="-10"/>' % emblemUrl
@@ -313,6 +314,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
     __playersNameCache = dict()
     __rated7x7Animations = set()
     __buyPremiumCache = set()
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, ctx=None):
         super(BattleResultsWindow, self).__init__()
@@ -356,7 +358,9 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
 
     def showEventsWindow(self, eID, eventType):
         prbDispatcher = g_prbLoader.getDispatcher()
-        return SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error) if prbDispatcher and prbDispatcher.getFunctionalState().isNavigationDisabled() else quests_events.showEventsWindow(eID, eventType)
+        if prbDispatcher and prbDispatcher.getFunctionalState().isNavigationDisabled():
+            return SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error)
+        return SystemMessages.pushI18nMessage('#system_messages:christmas/animationInProcess', type=SystemMessages.SM_TYPE.Error) if g_christmasCtrl.isNavigationDisabled() else quests_events.showEventsWindow(eID, eventType)
 
     def saveSorting(self, iconType, sortDirection, bonusType):
         AccountSettings.setSettings('statsSorting' if bonusType != ARENA_BONUS_TYPE.SORTIE else 'statsSortingSortie', {'iconType': iconType,
@@ -630,7 +634,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 creditsData.append(self.__getStatsLine())
             creditsWithoutPremTotal = self.__calculateTotalCredits(sourceData, eventCredits, premCreditsFactor, isPremium, aogasFactor, creditsBase, orderCredits, boosterCredits, creditsToDraw, creditsPenalty, creditsCompensation, hasViolation, False)
             squadXP = sourceData['squadXP']
-            showSquadLabels = isPlayerInSquad and bonusType == ARENA_BONUS_TYPE.REGULAR and g_eventsCache.isSquadXpFactorsEnabled()
+            showSquadLabels = isPlayerInSquad and bonusType == ARENA_BONUS_TYPE.REGULAR and self.eventsCache.isSquadXpFactorsEnabled()
             squadHasBonus = False
             if showSquadLabels:
                 squadBonusInfo = playerAvatarData.get('squadBonusInfo', {})
@@ -650,8 +654,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                         if typeCompDescr is not None:
                             level = g_itemsCache.items.getItemByCD(typeCompDescr).level
                             key = (distance, level)
-                            showSquadLabels = key not in g_eventsCache.getSquadZeroBonuses()
-                        squadHasBonus = distance in g_eventsCache.getSquadBonusLevelDistance()
+                            showSquadLabels = key not in self.eventsCache.getSquadZeroBonuses()
+                        squadHasBonus = distance in self.eventsCache.getSquadBonusLevelDistance()
                 else:
                     showSquadLabels = False
             if dailyXpFactor == 1 and showSquadLabels and squadHasBonus:
@@ -1022,7 +1026,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 achieveData = self._packAchievement(achieve)
                 if achieveData not in achievementsLeft:
                     achievementsLeft.append(achieveData)
-            achievementsRight.sort(key=lambda k: k['isEpic'], reverse=True)
+            achievementsRight.sort(key=lambda k: (k['isEpic'], k['title']), reverse=True)
 
         return
 
@@ -1113,10 +1117,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         piercings = iInfo['piercings']
         damageInfo = {'damageTotalItems': piercings}
         if int(iInfo['damageDealt']) > 0:
-            damageInfo['damageDealtVals'] = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_two_liner', {'line1': BigWorld.wg_getIntegralFormat(iInfo['damageDealt']),
-             'line2': BigWorld.wg_getIntegralFormat(piercings)})
-            damageInfo['damageDealtNames'] = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_two_liner', {'line1': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART1, vals=valsStr),
-             'line2': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART2)})
+            damageInfo['damageDealtVals'] = [BigWorld.wg_getIntegralFormat(iInfo['damageDealt']), BigWorld.wg_getIntegralFormat(piercings)]
+            damageInfo['damageDealtNames'] = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART1, vals=valsStr), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_PART2)]
         return damageInfo
 
     def __getArmorUsingInfo(self, iInfo, valsStr):
@@ -1124,24 +1126,16 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         damageBlocked = iInfo.get('damageBlockedByArmor', 0)
         armorUsingInfo = {'armorTotalItems': usedArmorCount}
         if usedArmorCount > 0 or damageBlocked > 0:
-            armorUsingInfo['armorVals'] = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_three_liner', {'line1': BigWorld.wg_getIntegralFormat(iInfo['rickochetsReceived']),
-             'line2': BigWorld.wg_getIntegralFormat(iInfo['noDamageDirectHitsReceived']),
-             'line3': BigWorld.wg_getIntegralFormat(damageBlocked)})
-            armorUsingInfo['armorNames'] = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_three_liner', {'line1': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART1),
-             'line2': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART2),
-             'line3': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART3, vals=valsStr)})
+            armorUsingInfo['armorVals'] = [BigWorld.wg_getIntegralFormat(iInfo['rickochetsReceived']), BigWorld.wg_getIntegralFormat(iInfo['noDamageDirectHitsReceived']), BigWorld.wg_getIntegralFormat(damageBlocked)]
+            armorUsingInfo['armorNames'] = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART1), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_PART3, vals=valsStr)]
         return armorUsingInfo
 
     def __getAssistInfo(self, iInfo, valsStr):
         damageAssisted = iInfo.get('damageAssistedTrack', 0) + iInfo.get('damageAssistedRadio', 0)
         assistInfo = {'damageAssisted': damageAssisted}
         if damageAssisted > 0:
-            assistInfo['damageAssistedVals'] = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_three_liner', {'line1': BigWorld.wg_getIntegralFormat(iInfo['damageAssistedRadio']),
-             'line2': BigWorld.wg_getIntegralFormat(iInfo['damageAssistedTrack']),
-             'line3': BigWorld.wg_getIntegralFormat(damageAssisted)})
-            assistInfo['damageAssistedNames'] = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_three_liner', {'line1': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART1, vals=valsStr),
-             'line2': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2, vals=valsStr),
-             'line3': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_TOTAL, vals=valsStr)})
+            assistInfo['damageAssistedVals'] = [BigWorld.wg_getIntegralFormat(iInfo['damageAssistedRadio']), BigWorld.wg_getIntegralFormat(iInfo['damageAssistedTrack']), BigWorld.wg_getIntegralFormat(damageAssisted)]
+            assistInfo['damageAssistedNames'] = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART1, vals=valsStr), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_PART2, vals=valsStr), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_TOTAL, vals=valsStr)]
         return assistInfo
 
     def __getCritsInfo(self, iInfo):
@@ -1218,11 +1212,11 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
          'captureTotalItems': capturePoints,
          'defenceTotalItems': defencePoints}
         if capturePoints > 0:
-            data['captureVals'] = BigWorld.wg_getIntegralFormat(capturePoints)
-            data['captureNames'] = i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_CAPTURE_TOTALPOINTS)
+            data['captureVals'] = [BigWorld.wg_getIntegralFormat(capturePoints)]
+            data['captureNames'] = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_CAPTURE_TOTALPOINTS)]
         if defencePoints > 0:
-            data['defenceVals'] = BigWorld.wg_getIntegralFormat(defencePoints)
-            data['defenceNames'] = i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_TOTALPOINTS)
+            data['defenceVals'] = [BigWorld.wg_getIntegralFormat(defencePoints)]
+            data['defenceNames'] = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_TOTALPOINTS)]
         return data
 
     def __makeTooltipModuleLabel(self, key, suffix):
@@ -1413,7 +1407,6 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         finishReason = commonData.get('finishReason', 0)
         bots = commonData.get('bots', {})
         playerNamePosition = bonusType in (ARENA_BONUS_TYPE.FORT_BATTLE, ARENA_BONUS_TYPE.CYBERSPORT, ARENA_BONUS_TYPE.RATED_CYBERSPORT)
-        isPlayerObserver = isVehicleObserver(pCommonData.get('typeCompDescr', 0))
         fairPlayViolationName = _getFairPlayViolationName(pCommonData)
         if self.__isFallout and not isMultiTeamMode:
             isSolo = findFirst(lambda pData: pData['team'] == playerTeam, playersData.itervalues()) is None
@@ -1558,7 +1551,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                         if not achive.isApproachable():
                             achievementsList.append(self._packAchievement(achive, isUnique=True))
 
-                achievementsList.sort(key=lambda k: k['isEpic'], reverse=True)
+                achievementsList.sort(key=lambda k: (k['isEpic'], k['title']), reverse=True)
             row['achievements'] = achievementsList
             row['medalsCount'] = len(achievementsList)
             isVehObserver = isVehicleObserver(vInfo.get('typeCompDescr', 0))
@@ -1630,7 +1623,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                     squads[team][prebattleID] = 1
                 else:
                     squads[team][prebattleID] += 1
-            if not (isPlayerObserver and isVehObserver):
+            if not isVehObserver:
                 stat[team].append(row)
 
         for team, data in stat.iteritems():
@@ -1763,7 +1756,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 return cmp(aQuest.getID(), bQuest.getID())
 
             from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
-            quests = g_eventsCache.getQuests()
+            quests = self.eventsCache.getQuests()
             commonQuests, potapovQuests = [], {}
             for qID, qProgress in questsProgress.iteritems():
                 pGroupBy, pPrev, pCur = qProgress
@@ -1780,9 +1773,9 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 if potapov_quests.g_cache.isPotapovQuest(qID):
                     pqID = potapov_quests.g_cache.getPotapovQuestIDByUniqueID(qID)
                     if self.__isFallout:
-                        questsCache = g_eventsCache.fallout
+                        questsCache = self.eventsCache.fallout
                     else:
-                        questsCache = g_eventsCache.random
+                        questsCache = self.eventsCache.random
                     quest = questsCache.getQuests()[pqID]
                     progress = potapovQuests.setdefault(quest, {})
                     progress.update({qID: isCompleted})
@@ -2084,6 +2077,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         prbDispatcher = g_prbLoader.getDispatcher()
         if prbDispatcher and prbDispatcher.getFunctionalState().isNavigationDisabled():
             return SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error)
+        if g_christmasCtrl.isNavigationDisabled():
+            return SystemMessages.pushI18nMessage('#system_messages:christmas/animationInProcess', type=SystemMessages.SM_TYPE.Error)
         if unlockType in (PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE, PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE):
             showResearchView(itemId)
             self.onWindowClose()

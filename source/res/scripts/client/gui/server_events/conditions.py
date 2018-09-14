@@ -1,22 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/conditions.py
-import weakref
 import operator
+import weakref
 from abc import ABCMeta, abstractmethod
 import BigWorld
-import constants
-from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
-import nations
 import account_helpers
+import constants
+import nations
 from debug_utils import LOG_WARNING
-from helpers import i18n, int2roman
-from items import vehicles
 from gui import makeHtmlString
 from gui.clubs import formatters as club_fmts, settings as club_settings
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import g_itemsCache
 from gui.server_events import formatters
+from gui.shared import g_itemsCache
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
+from helpers import i18n, int2roman, dependency
+from items import vehicles
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.clubs import IClubsController
+from skeletons.gui.game_control import IIGRController
+from skeletons.gui.server_events import IEventsCache
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.COMPANY: 'company',
  constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
@@ -424,6 +427,7 @@ class OrGroup(_ConditionsGroup):
 
 
 class IGR(_Requirement, _Updatable):
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, path, data):
         super(IGR, self).__init__('igrType', dict(data), path)
@@ -441,8 +445,7 @@ class IGR(_Requirement, _Updatable):
         return False
 
     def _isAvailable(self):
-        from gui import game_control
-        return game_control.g_instance.igr.getRoomType() in self._igrTypes
+        return self.igrCtrl.getRoomType() in self._igrTypes
 
     def _format(self, svrEvents, event=None):
         result = []
@@ -554,6 +557,7 @@ class InClan(_Requirement):
 
 
 class Token(_Requirement):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, path, data):
         super(Token, self).__init__('token', dict(data), path)
@@ -620,20 +624,19 @@ class Token(_Requirement):
         return result
 
     def __getTokensCount(self):
-        from gui.server_events import g_eventsCache
-        return g_eventsCache.questsProgress.getTokenCount(self._id)
+        return self.eventsCache.questsProgress.getTokenCount(self._id)
 
     def __getUniqueGroupTokensCount(self, svrEvents, group):
         uniqueTokens = set()
         for qID in group.getGroupEvents():
             quest = svrEvents.get(qID)
-            uniqueTokens |= set(quest.getChildren().keys())
+            if quest is not None:
+                uniqueTokens |= set(quest.getChildren().keys())
 
         return len(uniqueTokens)
 
     def __getGroup(self, groupID):
-        from gui.server_events import g_eventsCache
-        return g_eventsCache.getGroups().get(groupID, None)
+        return self.eventsCache.getGroups().get(groupID, None)
 
     def __repr__(self):
         return 'Token<id=%s; %s=%d; consumable=%r>' % (self._id,
@@ -1541,6 +1544,7 @@ class ClubDivision(_Condition):
 
 
 class HasClub(_Requirement):
+    clubsCtrl = dependency.descriptor(IClubsController)
 
     def __init__(self, path):
         super(HasClub, self).__init__('hasClub', {}, path)
@@ -1550,8 +1554,7 @@ class HasClub(_Requirement):
         self._mustHaveClub = not self._mustHaveClub
 
     def _isAvailable(self):
-        from gui.clubs.ClubsController import g_clubsCtrl
-        return g_clubsCtrl.getProfile().hasClub() is self._mustHaveClub
+        return self.clubsCtrl.getProfile().hasClub() is self._mustHaveClub
 
     def _format(self, svrEvents, event=None):
         return [formatters.packTextBlock(i18n.makeString('#quests:details/conditions/clubs/hasClub'), isAvailable=self.isAvailable())] if event is None or not event.isGuiDisabled() else []

@@ -154,6 +154,7 @@ class MENU(object):
     INGAME_MENU_TITLE = '#menu:ingame_menu/title'
     INGAME_MENU_BUTTONS_SETTINGS = '#menu:ingame_menu/buttons/settings'
     INGAME_MENU_BUTTONS_LOGOFF = '#menu:ingame_menu/buttons/logoff'
+    INGAME_MENU_BUTTONS_REPLAYEXIT = '#menu:ingame_menu/buttons/replayExit'
     INGAME_MENU_BUTTONS_HELP = '#menu:ingame_menu/buttons/help'
     INGAME_MENU_BUTTONS_BACK = '#menu:ingame_menu/buttons/back'
     INGAME_MENU_LINKS_REPORT_BUG = '#menu:ingame_menu/links/report_bug'
@@ -428,6 +429,8 @@ class MENU(object):
     TANK_PARAMS_ENGINEPOWERPERTON = '#menu:tank_params/enginePowerPerTon'
     TANK_PARAMS_SPEEDLIMITS = '#menu:tank_params/speedLimits'
     TANK_PARAMS_CHASSISROTATIONSPEED = '#menu:tank_params/chassisRotationSpeed'
+    TANK_PARAMS_SWITCHONTIME = '#menu:tank_params/switchOnTime'
+    TANK_PARAMS_SWITCHOFFTIME = '#menu:tank_params/switchOffTime'
     TANK_PARAMS_HULLARMOR = '#menu:tank_params/hullArmor'
     TANK_PARAMS_FACEFRONTBOARDINMM = '#menu:tank_params/faceFrontBoardInMM'
     TANK_PARAMS_TURRETARMOR = '#menu:tank_params/turretArmor'
@@ -808,6 +811,7 @@ class MENU(object):
     MODULEINFO_PARAMETERSLABEL = '#menu:moduleInfo/parametersLabel'
     MODULEINFO_PARAMETERSCLIPGUNLABEL = '#menu:moduleInfo/parametersClipGunLabel'
     MODULEINFO_CLIPGUNLABEL = '#menu:moduleInfo/clipGunLabel'
+    MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
     MODULEINFO_PARAMS_MAXLOAD = '#menu:moduleInfo/params/maxLoad'
     MODULEINFO_PARAMS_BOMBSNUMBERRANGE = '#menu:moduleInfo/params/bombsNumberRange'
     MODULEINFO_PARAMS_AREASQUARE = '#menu:moduleInfo/params/areaSquare'
@@ -879,6 +883,8 @@ class MENU(object):
     VEHICLEINFO_PARAMS_INVISIBILITYSTILLFACTOR = '#menu:vehicleInfo/params/invisibilityStillFactor'
     VEHICLEINFO_PARAMS_INVISIBILITYMOVINGFACTOR = '#menu:vehicleInfo/params/invisibilityMovingFactor'
     VEHICLEINFO_PARAMS_RELOADTIMESECS = '#menu:vehicleInfo/params/reloadTimeSecs'
+    VEHICLEINFO_PARAMS_SWITCHONTIME = '#menu:vehicleInfo/params/switchOnTime'
+    VEHICLEINFO_PARAMS_SWITCHOFFTIME = '#menu:vehicleInfo/params/switchOffTime'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
     VEHICLEINFO_TABS_BASE = '#menu:vehicleInfo/tabs/base'
     VEHICLEINFO_TABS_STATISTIC = '#menu:vehicleInfo/tabs/statistic'
@@ -1538,6 +1544,18 @@ class MENU(object):
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD = '#menu:awardWindow/personalMission/nextButtonAward'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_HEADER = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/header'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_BODY = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/body'
+    AWARDWINDOW_CHRISTMAS_TITLE = '#menu:awardWindow/christmas/title'
+    AWARDWINDOW_CHRISTMAS_HEADER = '#menu:awardWindow/christmas/header'
+    AWARDWINDOW_CHRISTMASPACK_HEADER = '#menu:awardWindow/christmasPack/header'
+    AWARDWINDOW_CHRISTMAS_DESCRIPTION = '#menu:awardWindow/christmas/description'
+    AWARDWINDOW_CHRISTMASPACK_DESCRIPTION = '#menu:awardWindow/christmasPack/description'
+    AWARDWINDOW_CHRISTMAS_DESCRIPTION_GIFTS = '#menu:awardWindow/christmas/description/gifts'
+    AWARDWINDOW_CHRISTMASPACK_DESCRIPTION_GIFTS = '#menu:awardWindow/christmasPack/description/gifts'
+    AWARDWINDOW_CHRISTMAS_ACTIVATEBTN_OPENBOX_LABEL = '#menu:awardWindow/christmas/activateBtn/openBox/label'
+    AWARDWINDOW_CHRISTMAS_ACTIVATEBTN_DECORATETREE_LABEL = '#menu:awardWindow/christmas/activateBtn/decorateTree/label'
+    AWARDWINDOW_CHRISTMAS_CHECKBOX_LABEL = '#menu:awardWindow/christmas/checkBox/label'
+    AWARDWINDOW_CHRISTMAS_MINICLIENT_WARNING = '#menu:awardWindow/christmas/miniclient/warning'
+    AWARDWINDOW_CHRISTMAS_MINICLIENT_WARNINGLINK = '#menu:awardWindow/christmas/miniclient/warningLink'
     REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
@@ -1622,10 +1640,13 @@ class MENU(object):
     BOOSTER_QUALITY_SMALL = '#menu:booster/quality/small'
     BOOSTER_QUALITY_MEDIUM = '#menu:booster/quality/medium'
     BOOSTER_QUALITY_BIG = '#menu:booster/quality/big'
+    DISCOUNT_USERNAME_VEHICLE = '#menu:discount/userName/vehicle'
+    DISCOUNT_DESCRIPTION_VEHICLE = '#menu:discount/description/vehicle'
     CONTEXTMENU_VIEWCLANPROFILE = '#menu:contextMenu/viewClanProfile'
     CONTEXTMENU_COPYCLANNAME = '#menu:contextMenu/copyClanName'
     ONLINECOUNTER_TOTAL = '#menu:onlineCounter/total'
     ONLINECOUNTER_DELIMITER = '#menu:onlineCounter/delimiter'
+    ONLINECOUNTER_UNAVAILABLE = '#menu:onlineCounter/unavailable'
     HANGAR_HEADER_BATTLE_QUESTS_LABEL_ACTIVE = '#menu:hangar_header/battle_quests_label/active'
     HANGAR_HEADER_BATTLE_QUESTS_LABEL_INACTIVE = '#menu:hangar_header/battle_quests_label/inactive'
     HANGAR_HEADER_PERSONAL_QUESTS_LABEL_ACTIVE = '#menu:hangar_header/personal_quests_label/active'
@@ -2067,7 +2088,9 @@ class MENU(object):
      VEHICLEINFO_PARAMS_INVISIBILITY,
      VEHICLEINFO_PARAMS_INVISIBILITYSTILLFACTOR,
      VEHICLEINFO_PARAMS_INVISIBILITYMOVINGFACTOR,
-     VEHICLEINFO_PARAMS_RELOADTIMESECS)
+     VEHICLEINFO_PARAMS_RELOADTIMESECS,
+     VEHICLEINFO_PARAMS_SWITCHONTIME,
+     VEHICLEINFO_PARAMS_SWITCHOFFTIME)
     TRAINING_INFO_ENUM = (TRAINING_INFO_TITLE,
      TRAINING_INFO_STARTBUTTON,
      TRAINING_INFO_SETTINGSBUTTON,
@@ -2184,6 +2207,8 @@ class MENU(object):
      TANK_PARAMS_ENGINEPOWERPERTON,
      TANK_PARAMS_SPEEDLIMITS,
      TANK_PARAMS_CHASSISROTATIONSPEED,
+     TANK_PARAMS_SWITCHONTIME,
+     TANK_PARAMS_SWITCHOFFTIME,
      TANK_PARAMS_HULLARMOR,
      TANK_PARAMS_FACEFRONTBOARDINMM,
      TANK_PARAMS_TURRETARMOR,

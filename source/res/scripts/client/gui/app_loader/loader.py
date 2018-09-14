@@ -122,9 +122,6 @@ class _AppLoader(object):
         self.__appFactory.createLobby()
         self.__updateState()
 
-    def startBattle(self):
-        self.__appFactory.createBattle(self.__ctx.arenaGuiType)
-
     def startLogitech(self):
         self.__appFactory.createLogitech()
 
@@ -138,11 +135,14 @@ class _AppLoader(object):
     def showLobby(self):
         return self.changeSpace(_SPACE_ID.LOBBY)
 
-    def showBattleLoading(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
+    def createBattle(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
         self.__ctx.arenaGuiType = arenaGuiType
+        self.__appFactory.createBattle(arenaGuiType)
+
+    def showBattleLoading(self):
         return self.changeSpace(_SPACE_ID.BATTLE_LOADING)
 
-    def showBattle(self):
+    def showBattlePage(self):
         return self.changeSpace(_SPACE_ID.BATTLE)
 
     def destroyBattle(self):

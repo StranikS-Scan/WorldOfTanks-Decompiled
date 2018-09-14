@@ -6,13 +6,13 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from messenger.formatters import TimeFormatter
-from notification.NotificationLayoutView import NotificationLayoutView
 from notification import NotificationMVC
+from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE, NOTIFICATION_GROUP
 from gui.shared.formatters import icons
 from helpers.i18n import makeString as _ms
 
-class NotificationListView(NotificationsListMeta, NotificationLayoutView):
+class NotificationListView(NotificationsListMeta, BaseNotificationView):
     """
     Represents notifications center popover.
     Contains tabs with lists of grouped messages.

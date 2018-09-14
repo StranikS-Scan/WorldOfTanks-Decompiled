@@ -6,7 +6,6 @@ from gui.clans import formatters
 from gui.clans.items import formatField, isValueAvailable
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesViewWithTable import ClanInvitesAbstractDataProvider
 from gui.Scaleform.daapi.view.meta.ClanInvitesViewMeta import ClanInvitesViewMeta
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesWindowAbstractTabView import *
 from gui.shared.formatters import text_styles
 from helpers.i18n import makeString as _ms
@@ -38,31 +37,9 @@ class ClanInvitesView(ClanInvitesViewMeta):
         if self.actualInvitesPaginator.isSynced():
             self._enableRefreshBtn(True)
 
-    def _populate(self):
-        super(ClanInvitesView, self)._populate()
-
     def _onAttachedToWindow(self):
         super(ClanInvitesView, self)._onAttachedToWindow()
-        self.allInvitesPaginator.onListUpdated += self._onListUpdated
-        self.allInvitesPaginator.onListItemsUpdated += self._onListItemsUpdated
-        self.actualInvitesPaginator.onListUpdated += self._onListUpdated
-        self.actualInvitesPaginator.onListItemsUpdated += self._onListItemsUpdated
-        self.expiredInvitesPaginator.onListUpdated += self._onListUpdated
-        self.expiredInvitesPaginator.onListItemsUpdated += self._onListItemsUpdated
-        self.processedInvitesPaginator.onListUpdated += self._onListUpdated
-        self.processedInvitesPaginator.onListItemsUpdated += self._onListItemsUpdated
         self.filterBy(self.currentFilterName)
-
-    def _dispose(self):
-        self.allInvitesPaginator.onListUpdated -= self._onListUpdated
-        self.allInvitesPaginator.onListItemsUpdated -= self._onListItemsUpdated
-        self.actualInvitesPaginator.onListUpdated -= self._onListUpdated
-        self.actualInvitesPaginator.onListItemsUpdated -= self._onListItemsUpdated
-        self.expiredInvitesPaginator.onListUpdated -= self._onListUpdated
-        self.expiredInvitesPaginator.onListItemsUpdated -= self._onListItemsUpdated
-        self.processedInvitesPaginator.onListUpdated -= self._onListUpdated
-        self.processedInvitesPaginator.onListItemsUpdated -= self._onListItemsUpdated
-        super(ClanInvitesView, self)._dispose()
 
     def _createSearchDP(self):
         return InviteDataProvider(self)

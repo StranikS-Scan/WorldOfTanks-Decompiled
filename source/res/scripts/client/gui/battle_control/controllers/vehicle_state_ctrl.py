@@ -150,7 +150,10 @@ class _RpmStateHandler(_StateHandler):
         if self.__simMode:
             self.__simRpm(vehicle)
         scaledRmp = self.__scaleRmp(self.__rpm, vehicle)
-        if abs(scaledRmp - self.__visibleRpm) > _RPM_DELTA_THRESHOLD:
+        player = BigWorld.player()
+        if not self.__simMode and player is not None and not player.isVehicleAlive:
+            states.append((VEHICLE_VIEW_STATE.RPM, -1))
+        elif abs(scaledRmp - self.__visibleRpm) > _RPM_DELTA_THRESHOLD:
             self.__visibleRpm = scaledRmp
             states.append((VEHICLE_VIEW_STATE.RPM, self.__visibleRpm))
         return states
@@ -314,7 +317,10 @@ class _SpeedStateHandler(_StateHandler):
             player = BigWorld.player()
             if player is None:
                 return ()
-            speed, _ = player.getOwnVehicleSpeeds()
+            if player.isVehicleAlive:
+                speed, _ = player.getOwnVehicleSpeeds()
+            else:
+                speed = 0
         else:
             try:
                 speed = vehicle.speedInfo.value[0]
@@ -491,7 +497,10 @@ class _VehicleUpdater(object):
         if vehicle is not None and vehicle.isStarted:
             if not vehicle.isAlive() and self.__isAlive:
                 self.__isAlive = False
-                states.append((VEHICLE_VIEW_STATE.DESTROYED, 0))
+                if vehicle.health > 0 and not vehicle.isCrewActive:
+                    states.append((VEHICLE_VIEW_STATE.CREW_DEACTIVATED, 0))
+                else:
+                    states.append((VEHICLE_VIEW_STATE.DESTROYED, 0))
             for handler in self.__handlers:
                 newStates = handler(vehicle)
                 states.extend(newStates)
@@ -630,6 +639,14 @@ class VehicleStateController(IBattleController):
             return None
             return None
 
+    def refreshVehicleStateValue(self, stateID):
+        """
+        Re-calls Update on the cached value of the vehicle state, nothing if not cached
+        :param stateID: id of state, listed within VEHICLE_VIEW_STATE
+        """
+        if stateID in self.__cachedStateValues:
+            self.onVehicleStateUpdated(stateID, self.__cachedStateValues[stateID])
+
     def invalidate(self, state, value, vehicleID=0):
         """
         Invalidates vehicle sates. The method should be invoked by vehicle state change trigger.
@@ -656,7 +673,6 @@ class VehicleStateController(IBattleController):
         """
         self.__isRqToSwitch = False
         if avatar_getter.getPlayerVehicleID() == self.__vehicleID:
-            self.__waitingTI.stop()
             if self.__updater is not None:
                 self.__updater.stop()
                 self.__updater.updateOnce()
@@ -699,7 +715,7 @@ class VehicleStateController(IBattleController):
         avatar has been switched to the required vehicle.
         """
         vehicle = BigWorld.entity(self.__vehicleID)
-        if vehicle is not None:
+        if vehicle is not None and vehicle.isStarted:
             self.__waitingTI.stop()
             self._setup(vehicle)
         return

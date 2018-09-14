@@ -2,36 +2,36 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/barracks/Barracks.py
 import BigWorld
 from AccountCommands import LOCK_REASON
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.game_control import getRestoreController
-from gui.game_control.restore_contoller import getTankmenRestoreInfo
-from gui.prb_control.prb_helpers import GlobalListener
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from account_helpers.AccountSettings import AccountSettings, BARRACKS_FILTER
 from CurrentVehicle import g_currentVehicle
-from helpers import i18n, time_utils
+from account_helpers.AccountSettings import AccountSettings, BARRACKS_FILTER
 from debug_utils import LOG_ERROR
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui import SystemMessages
-from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi import LobbySubView
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
+from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.game_control.restore_contoller import getTankmenRestoreInfo
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events, g_itemsCache, event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
+from gui.shared.formatters import text_styles, icons, moneyWithIcon
 from gui.shared.gui_items import Tankman, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.utils import decorators
-from gui.sounds.ambients import LobbySubViewEnv
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
-from helpers.i18n import makeString as _ms
-from gui.shared.formatters import text_styles, icons, moneyWithIcon
-from gui.shared.utils.functions import makeTooltip
 from gui.shared.tooltips.tankman import getRecoveryStatusText, formatRecoveryLeftValue
+from gui.shared.utils import decorators
+from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.sounds.ambients import LobbySubViewEnv
+from helpers import i18n, time_utils, dependency
+from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IRestoreController
 
 def _packTankmanData(tankman):
     tankmanVehicle = g_itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
@@ -117,8 +117,9 @@ def _makeRecoveryPeriodText(restoreInfo):
     return text_styles.main(timeStr) if price.credits == 0 else text_styles.credits(timeStr)
 
 
-class Barracks(BarracksMeta, LobbySubView, GlobalListener):
+class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
     __sound_env__ = LobbySubViewEnv
+    restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, ctx=None):
         super(Barracks, self).__init__()
@@ -146,7 +147,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
         result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def setTankmenFilter(self):
         self.as_setTankmenFilterS(self.filter['nation'], self.filter['role'], self.filter['tankType'], self.filter['location'], self.filter['nationID'])
@@ -178,7 +179,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
             else:
                 result = yield TankmanDismiss(tankman).request()
             if len(result.userMsg):
-                SystemMessages.g_instance.pushMessage(result.userMsg, type=result.sysMsgType)
+                SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
             return
 
     def update(self):
@@ -206,11 +207,11 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         g_clientUpdateManager.addCallbacks({'inventory.8': self.__updateTankmen,
          'stats.berths': self.__updateTankmen,
          'recycleBin.tankmen': self.__updateTankmen})
-        getRestoreController().onTankmenBufferUpdated += self.__updateDismissedTankmen
+        self.restore.onTankmenBufferUpdated += self.__updateDismissedTankmen
         self.setTankmenFilter()
 
     def _dispose(self):
-        getRestoreController().onTankmenBufferUpdated -= self.__updateDismissedTankmen
+        self.restore.onTankmenBufferUpdated -= self.__updateDismissedTankmen
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_itemsCache.onSyncCompleted -= self.__updateTankmen
         self.stopGlobalListening()
@@ -276,7 +277,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         return
 
     def __showDismissedTankmen(self, criteria):
-        tankmen = getRestoreController().getDismissedTankmen()
+        tankmen = self.restore.getDismissedTankmen()
         tankmenList = list()
         for tankman in tankmen:
             if not criteria(tankman):
@@ -309,7 +310,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
             tankmenList.append(tankmanData)
 
         tankmenCountStr = _ms(MENU.BARRACKS_DISMISSEDTANKMENCOUNT, curValue=len(tankmenList), total=len(tankmen))
-        placeCount = getRestoreController().getMaxTankmenBufferLength()
+        placeCount = self.restore.getMaxTankmenBufferLength()
         placeCountStr = _ms(MENU.BARRACKS_RECOVERYCOUNT, total=placeCount, info=icons.info())
         noInfoData = None
         hasNoInfoData = len(tankmenList) == 0

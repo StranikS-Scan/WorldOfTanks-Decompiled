@@ -1,0 +1,1013 @@
+<S17_EMIL_1952_E2.xml>
+  <crew>
+    <commander>	radioman
+
+			loader	</commander>
+    <driver></driver>
+    <gunner>	loader	</gunner>
+  </crew>
+  <speedLimits>
+    <forward>	56	</forward>
+    <backward>	18	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.052	</moving>
+    <still>	0.105	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.158	</firePenalty>
+  </invisibility>
+  <repairCost>	9.0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	system/maps/null_exclusion_mask.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	80	</armor_1>
+      <armor_2>	115	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	30	</armor_4>
+      <armor_5>	18	</armor_5>
+      <armor_6>	15	</armor_6>
+      <armor_7>	70	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	30	</armor_9>
+      <armor_10>	40	</armor_10>
+      <armor_11>	70	</armor_11>
+      <armor_12>	330	</armor_12>
+      <armor_13>	150	</armor_13>
+      <armor_14>	50	</armor_14>
+      <armor_15>	50	</armor_15>
+      <armor_16>	115	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	12573	</weight>
+    <maxHealth>	1360	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/sweden/S17_EMIL_1952_E2/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.22 36.00 0.36 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.12	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.41989 0.624192	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/sweden/S17_EMIL_1952_E2/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/sweden/S17_EMIL_1952_E2/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.640507 0.26176 2.28011	</rayStart>
+        <rayEnd>	-0.579495 0.0798563 2.22363	</rayEnd>
+        <rayUp>	0.0636538 0.0206541 -0.997758	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.31532 0.369024 0.822451	</rayStart>
+        <rayEnd>	-1.17114 0.230415 0.822141	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.25	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.31532 0.369024 0.822451	</rayStart>
+        <rayEnd>	1.17114 0.230415 0.822141	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.25	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/sweden/S17_EMIL_1952_E2/EMIL_1952_E2_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.6 2.6 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_S17_EMIL_1952_E2>
+      <userString>	#sweden_vehicles:Chassis_S17_EMIL_1952_E2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	28000	</price>
+      <unlocks>
+        <chassis>	Chassis_S17_EMIL_1952_E2_2	  <cost>	24500	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	30	</leftTrack>
+        <rightTrack>	30	</rightTrack>
+      </armor>
+      <weight>	7500	</weight>
+      <maxLoad>	38000	</maxLoad>
+      <terrainResistance>	1.4 1.5 2.5	</terrainResistance>
+      <brakeForce>	37000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	27	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/sweden/S17_EMIL_1952_E2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.46 0.67	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.15	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.352754	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.0888506	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.153056	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.0888506	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.153056	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L6	</name>
+          <radius>	0.435829	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.352754	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.352754	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.0888506	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.153056	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.0888506	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.153056	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R6	</name>
+          <radius>	0.435829	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.352754	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.01468 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/sweden/S17_EMIL_1952_E2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/sweden/S17_EMIL_1952_E2/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.1976 1.95218	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.473540 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.295890	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/sweden/S17_EMIL_1952_E2/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/sweden/S17_EMIL_1952_E2/track/segment.model	</segmentModelRight>
+        <left>	vehicles/sweden/S17_EMIL_1952_E2/track/left.track	</left>
+        <right>	vehicles/sweden/S17_EMIL_1952_E2/track/right.track	</right>
+        <segmentLength>	0.119	</segmentLength>
+        <segmentOffset>	0.287	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0177	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.05	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.05	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_S17_EMIL_1952_E2>
+    <Chassis_S17_EMIL_1952_E2_2>
+      <userString>	#sweden_vehicles:Chassis_S17_EMIL_1952_E2_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	64200	</price>
+      <armor>
+        <leftTrack>	30	</leftTrack>
+        <rightTrack>	30	</rightTrack>
+      </armor>
+      <weight>	7500	</weight>
+      <maxLoad>	40000	</maxLoad>
+      <terrainResistance>	1.3 1.4 2.3	</terrainResistance>
+      <brakeForce>	37000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/sweden/S17_EMIL_1952_E2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.46 0.67	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.15	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.352754	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.0888506	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.153056	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.0888506	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.153056	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L6	</name>
+          <radius>	0.435829	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.352754	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.352754	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.0888506	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.153056	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.0888506	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.153056	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R6	</name>
+          <radius>	0.435829	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.352754	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.01468 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/sweden/S17_EMIL_1952_E2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/sweden/S17_EMIL_1952_E2/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.1976 1.95218	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.473540 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.295890	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/sweden/S17_EMIL_1952_E2/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/sweden/S17_EMIL_1952_E2/track/segment.model	</segmentModelRight>
+        <left>	vehicles/sweden/S17_EMIL_1952_E2/track/left.track	</left>
+        <right>	vehicles/sweden/S17_EMIL_1952_E2/track/right.track	</right>
+        <segmentLength>	0.119	</segmentLength>
+        <segmentOffset>	0.287	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0177	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.034	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.05	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.05	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_S17_EMIL_1952_E2_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_S17_EMIL_1952_E2>
+      <userString>	#sweden_vehicles:Turret_1_S17_EMIL_1952_E2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	215	</armor_1>
+        <armor_2>	360	</armor_2>
+        <armor_3>	60	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	30	</armor_6>
+        <armor_7>	70	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	120	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	14000	</weight>
+      <maxHealth>	340	</maxHealth>
+      <rotationSpeed>	20	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_TK_105_9>	shared	  <maxAmmo>	40	</maxAmmo>
+          <unlocks>
+            <gun>	_120mm_akan_L_40	  <cost>	62600	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	215	</armor_1>
+            <armor_2>	360	</armor_2>
+            <armor_3>	60	</armor_3>
+            <armor_4>	30	</armor_4>
+            <armor_5>	25	</armor_5>
+            <armor_6>	20	</armor_6>
+            <armor_7>	70	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	150	</armor_10>
+            <armor_11>	100	</armor_11>
+            <gun>	40	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -8 1 -8	</minPitch>
+            <maxPitch>	0 12 0.388889 12 0.430556 6 0.569444 6 0.611111 12 1 12	</maxPitch>
+          </pitchLimits>
+          <clip>
+            <count>	4	</count>
+            <rate>	20	</rate>
+          </clip>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	30	</reloadTime>
+          <aimingTime>	3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/sweden/S17_EMIL_1952_E2/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/sweden/S17_EMIL_1952_E2/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/sweden/S17_EMIL_1952_E2/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00125024 0.226416 4.79951	</rayStart>
+              <rayEnd>	0.0109001 0.234265 4.79852	</rayEnd>
+              <rayUp>	0.1 0.095 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_TK_105_9>
+        <_120mm_akan_L_40>	shared	  <maxAmmo>	40	</maxAmmo>
+          <unlocks>
+            <vehicle>	S16_Kranvagn	  <cost>	238000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	215	</armor_1>
+            <armor_2>	360	</armor_2>
+            <armor_3>	60	</armor_3>
+            <armor_4>	30	</armor_4>
+            <armor_5>	25	</armor_5>
+            <armor_6>	20	</armor_6>
+            <armor_7>	70	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	150	</armor_10>
+            <armor_11>	100	</armor_11>
+            <gun>	50	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -8 1 -8	</minPitch>
+            <maxPitch>	0 12 0.388889 12 0.430556 6 0.569444 6 0.611111 12 1 12	</maxPitch>
+          </pitchLimits>
+          <clip>
+            <count>	4	</count>
+            <rate>	18	</rate>
+          </clip>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	40	</reloadTime>
+          <aimingTime>	2.8	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/sweden/S17_EMIL_1952_E2/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/sweden/S17_EMIL_1952_E2/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/sweden/S17_EMIL_1952_E2/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00127156 0.228571 3.12822	</rayStart>
+              <rayEnd>	0.00729516 0.22958 3.12794	</rayEnd>
+              <rayUp>	0.104 0.098 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.5 1.5 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_120mm_akan_L_40>
+      </guns>
+      <models>
+        <undamaged>	vehicles/sweden/S17_EMIL_1952_E2/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/sweden/S17_EMIL_1952_E2/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/sweden/S17_EMIL_1952_E2/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/sweden/S17_EMIL_1952_E2/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.001797 0.486649 -0.155565	</gunPosition>
+      <emblemSlots>
+        <inscription>
+          <rayStart>	-0.962093 0.333869 -1.8881	</rayStart>
+          <rayEnd>	-0.764515 0.302833 -1.88808	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.814	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	0.963755 0.28332 -1.55034	</rayStart>
+          <rayEnd>	0.76618 0.252285 -1.55036	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.585	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <physicsShape>	1.796 -0.818 1.000 0.000 0.952 -0.023 0.500 0.500 0.500 0.500 0.115 0.500 0.350 0.000 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	0.7 1.4 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_S17_EMIL_1952_E2>
+  </turrets0>
+  <engines>
+    <AV_1195>	shared	  <unlocks>
+        <engine>	AVS_1195	  <cost>	24700	</cost>
+        </engine>
+      </unlocks>
+    </AV_1195>
+    <AVS_1195>	shared	</AVS_1195>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <Ra_400>	shared	  <unlocks>
+        <radio>	Ra_421	  <cost>	9400	</cost>
+        </radio>
+      </unlocks>
+    </Ra_400>
+    <Ra_421>	shared	</Ra_421>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_S17_EMIL_1952_E2>
+        <alpha>	0.150938	</alpha>
+      </Chassis_S17_EMIL_1952_E2>
+      <Chassis_S17_EMIL_1952_E2_2>
+        <alpha>	0.140875	</alpha>
+      </Chassis_S17_EMIL_1952_E2_2>
+    </chassis>
+    <engines>
+      <AV_1195>
+        <bravo>	142.733	</bravo>
+      </AV_1195>
+      <AVS_1195>
+        <bravo>	175.773	</bravo>
+      </AVS_1195>
+    </engines>
+  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <AV_1195>
+          <smplEnginePower>	400	</smplEnginePower>
+        </AV_1195>
+        <AVS_1195>
+          <smplEnginePower>	520	</smplEnginePower>
+        </AVS_1195>
+      </engines>
+      <chassis>
+        <Chassis_S17_EMIL_1952_E2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.150938	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.150938	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.150938	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.150938	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.150938	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.150938	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_S17_EMIL_1952_E2>
+        <Chassis_S17_EMIL_1952_E2_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.140875	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.140875	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.140875	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.140875	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.140875	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.140875	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_S17_EMIL_1952_E2_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	swedish_flag	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</S17_EMIL_1952_E2.xml>

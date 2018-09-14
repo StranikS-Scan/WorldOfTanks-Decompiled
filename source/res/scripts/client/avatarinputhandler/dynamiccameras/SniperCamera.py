@@ -2,19 +2,23 @@
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/SniperCamera.py
 import BattleReplay
 import BigWorld
+import GUI
+import Keys
+import Math
 import Settings
 import constants
-import GUI
-from AvatarInputHandler import mathUtils, cameras
+from AvatarInputHandler import mathUtils, cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
+from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.DynamicCameras import CameraDynamicConfig
 from AvatarInputHandler.DynamicCameras import createCrosshairMatrix, createOscillatorFromSection, AccelerationSmoother
 from AvatarInputHandler.cameras import ICamera, readFloat, readVec3, ImpulseReason, FovExtended
 from Math import Vector2, Vector3, Matrix
-from account_helpers.settings_core.SettingsCore import g_settingsCore
-from avatar_helpers import aim_global_binding
-from debug_utils import LOG_WARNING
+from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
+from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from constants import AVATAR_SUBFILTERS
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return SniperCamera(settingsDataSec)
@@ -36,8 +40,9 @@ class SniperCamera(ICamera, CallbackDelayer):
     _MIN_REL_SPEED_ACC_SMOOTHING = 0.7
     camera = property(lambda self: self.__cam)
     aimingSystem = property(lambda self: self.__aimingSystem)
-    __aimOffset = aim_global_binding.bind(aim_global_binding.BINDING_ID.AIM_OFFSET)
-    __zoomFactor = aim_global_binding.bind(aim_global_binding.BINDING_ID.ZOOM_FACTOR)
+    settingsCore = dependency.descriptor(ISettingsCore)
+    __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
+    __zoomFactor = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.ZOOM_FACTOR)
 
     def __init__(self, dataSec, defaultOffset=None, binoculars=None):
         CallbackDelayer.__init__(self)
@@ -62,6 +67,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__crosshairMatrix = createCrosshairMatrix(offsetFromNearPlane=self.__dynamicCfg['aimMarkerDistance'])
             self.__prevTime = BigWorld.time()
             self.__autoUpdateDxDyDz = Vector3(0, 0, 0)
+            self.__isRemoteCamera = False
             if BattleReplay.g_replayCtrl.isPlaying:
                 BattleReplay.g_replayCtrl.setDataCallback('applyZoom', self.__applySerializedZoom)
             return
@@ -72,15 +78,15 @@ class SniperCamera(ICamera, CallbackDelayer):
             if not self.__cfg['increasedZoom']:
                 self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][:3][-1]
                 self.delayCallback(0.0, self.__applyZoom, self.__cfg['zoom'])
-        if 'fov' in diff:
+        if 'fov' in diff and self.camera is BigWorld.camera():
             self.delayCallback(0.01, self.__applyZoom, self.__cfg['zoom'])
 
     def create(self, onChangeControlMode=None):
         self.__onChangeControlMode = onChangeControlMode
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def destroy(self):
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
@@ -90,7 +96,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         CallbackDelayer.destroy(self)
         return
 
-    def enable(self, targetPos, saveZoom):
+    def enable(self, targetPos, saveZoom, isRemoteCamera=False):
         self.__prevTime = BigWorld.time()
         player = BigWorld.player()
         if saveZoom:
@@ -99,13 +105,14 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][0]
         self.__applyZoom(self.__zoom)
         self.__setupCamera(targetPos)
-        vehicle = BigWorld.entity(player.playerVehicleID)
+        vehicle = player.getVehicleAttached()
         if self.__waitVehicleCallbackId is not None:
             BigWorld.cancelCallback(self.__waitVehicleCallbackId)
         if vehicle is None:
-            self.__whiteVehicleCallbackId = BigWorld.callback(0.1, self.__waitVehicle)
+            self.__waitVehicleCallbackId = BigWorld.callback(0.1, self.__waitVehicle)
         else:
             self.__showVehicle(False)
+        self.__isRemoteCamera = isRemoteCamera
         BigWorld.camera(self.__cam)
         if self.__cameraUpdate(False) >= 0.0:
             self.delayCallback(0.0, self.__cameraUpdate)
@@ -194,16 +201,24 @@ class SniperCamera(ICamera, CallbackDelayer):
         return (dx * self.__curSense * (-1 if self.__cfg['horzInvert'] else 1), dy * self.__curSense * (-1 if self.__cfg['vertInvert'] else 1))
 
     def __showVehicle(self, show):
-        vehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
+        player = BigWorld.player()
+        vehicle = player.getVehicleAttached()
         if vehicle is not None:
+            LOG_DEBUG('__showVehicle: ', vehicle.id, show)
             vehicle.show(show)
         return
 
     def __setupCamera(self, targetPos):
-        self.__aimingSystem.enable(targetPos)
+        vehicleTypeDescriptor = BigWorld.player().vehicleTypeDescriptor
+        playerGunMatFunction = AimingSystems.getPlayerGunMat
+        if vehicleTypeDescriptor is not None and vehicleTypeDescriptor.isYawHullAimingAvailable:
+            playerGunMatFunction = AimingSystems.getCenteredPlayerGunMat
+        self.__aimingSystem.enable(targetPos, playerGunMatFunction)
+        return
 
     def __waitVehicle(self):
-        vehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
+        player = BigWorld.player()
+        vehicle = player.getVehicleAttached()
         if vehicle is not None and vehicle.isStarted:
             self.__waitVehicleCallbackId = None
         else:
@@ -251,6 +266,23 @@ class SniperCamera(ICamera, CallbackDelayer):
                 self.__applyZoom(self.__zoom)
             return
 
+    def __getRemoteAim(self, allowModeChange=True):
+        player = BigWorld.player()
+        vehicle = player.getVehicleAttached()
+        pos = Math.Vector3(vehicle.position)
+        pos += player.remoteCameraSniper.camMatrixTranslation
+        camMat = mathUtils.createTranslationMatrix(-pos)
+        dir = player.remoteCameraSniper.camMatrixRotation
+        getVector3 = getattr(player.filter, 'getVector3', None)
+        if getVector3 is not None:
+            time = BigWorld.serverTime()
+            dirFiltered = getVector3(AVATAR_SUBFILTERS.CAMERA_SNIPER_ROTATION, time)
+            dir = dirFiltered
+        else:
+            LOG_WARNING("SniperCamera.__getRemoteAim, the filter doesn't have getVector3 method!")
+        camMat.postMultiply(mathUtils.createRotationMatrix(dir))
+        return camMat
+
     def __cameraUpdate(self, allowModeChange=True):
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
@@ -259,16 +291,32 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__rotateAndZoom(self.__autoUpdateDxDyDz.x, self.__autoUpdateDxDyDz.y, self.__autoUpdateDxDyDz.z)
         self.__aimingSystem.update(deltaTime)
         localTransform, impulseTransform = self.__updateOscillators(deltaTime)
-        aimMatrix = cameras.getAimMatrix(self.__defaultAimOffset.x, self.__defaultAimOffset.y)
-        camMat = Matrix(aimMatrix)
-        rodMat = mathUtils.createTranslationMatrix(-self.__dynamicCfg['pivotShift'])
-        antiRodMat = mathUtils.createTranslationMatrix(self.__dynamicCfg['pivotShift'])
-        camMat.postMultiply(rodMat)
-        camMat.postMultiply(localTransform)
-        camMat.postMultiply(antiRodMat)
-        camMat.postMultiply(self.__aimingSystem.matrix)
-        camMat.invert()
+        player = BigWorld.player()
+        vehicle = player.getVehicleAttached()
+        zoom = self.__zoom
+        if self.__isRemoteCamera and vehicle is not None:
+            camMat = self.__getRemoteAim(allowModeChange)
+            if camMat is None:
+                return 0.0
+            zoom = float(player.remoteCameraSniper.zoom)
+        else:
+            aimMatrix = cameras.getAimMatrix(self.__defaultAimOffset.x, self.__defaultAimOffset.y)
+            camMat = Matrix(aimMatrix)
+            rodMat = mathUtils.createTranslationMatrix(-self.__dynamicCfg['pivotShift'])
+            antiRodMat = mathUtils.createTranslationMatrix(self.__dynamicCfg['pivotShift'])
+            camMat.postMultiply(rodMat)
+            camMat.postMultiply(localTransform)
+            camMat.postMultiply(antiRodMat)
+            camMat.postMultiply(self.__aimingSystem.matrix)
+            camMat.invert()
+        if not player.isObserver() and vehicle is not None:
+            relTranslation = self.__cam.position - vehicle.position
+            rot = Math.Vector3(camMat.yaw, camMat.pitch, camMat.roll)
+            vehicle.setSniperCameraDataForObservers(relTranslation, rot, zoom)
         self.__cam.set(camMat)
+        if zoom != self.__zoom:
+            self.__zoom = zoom
+            self.__applyZoom(self.__zoom)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
             aimOffset = replayCtrl.getAimClipPosition()
@@ -282,14 +330,21 @@ class SniperCamera(ICamera, CallbackDelayer):
                 replayCtrl.setAimClipPosition(aimOffset)
         self.__aimOffset = aimOffset
         self.__binoculars.setMaskCenter(binocularsOffset.x, binocularsOffset.y)
-        player = BigWorld.player()
-        if allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrix.translation) or player.isGunLocked):
+        if not self.__isRemoteCamera and allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrix.translation) or player.isGunLocked):
             self.__onChangeControlMode(False)
             return -1
+        else:
+            return 0.0
 
     def __calcAimOffset(self, aimLocalTransform=None):
+        player = BigWorld.player()
+        vehicle = player.getVehicleAttached()
+        if self.__isRemoteCamera and vehicle is not None:
+            aimingSystemMatrix = self.__getRemoteAim(False)
+            aimingSystemMatrix.invert()
+        else:
+            aimingSystemMatrix = self.__aimingSystem.matrix
         worldCrosshair = Matrix(self.__crosshairMatrix)
-        aimingSystemMatrix = self.__aimingSystem.matrix
         if aimLocalTransform is not None:
             worldCrosshair.postMultiply(aimLocalTransform)
         worldCrosshair.postMultiply(aimingSystemMatrix)
@@ -378,12 +433,12 @@ class SniperCamera(ICamera, CallbackDelayer):
             ds = ds['sniperMode/camera']
         self.__userCfg = dict()
         ucfg = self.__userCfg
-        ucfg['horzInvert'] = g_settingsCore.getSetting('mouseHorzInvert')
-        ucfg['vertInvert'] = g_settingsCore.getSetting('mouseVertInvert')
-        ucfg['increasedZoom'] = g_settingsCore.getSetting('increasedZoom')
+        ucfg['horzInvert'] = self.settingsCore.getSetting('mouseHorzInvert')
+        ucfg['vertInvert'] = self.settingsCore.getSetting('mouseVertInvert')
+        ucfg['increasedZoom'] = self.settingsCore.getSetting('increasedZoom')
         maxZoom = bcfg['zooms'][-1] if ucfg['increasedZoom'] else bcfg['zooms'][:3][-1]
         ucfg['zoom'] = readFloat(ds, 'zoom', 0.0, maxZoom, bcfg['zooms'][0])
-        ucfg['sniperModeByShift'] = g_settingsCore.getSetting('sniperModeByShift')
+        ucfg['sniperModeByShift'] = self.settingsCore.getSetting('sniperModeByShift')
         ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
         ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
         ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)

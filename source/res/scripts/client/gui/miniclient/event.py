@@ -15,4 +15,4 @@ class _ParametrizeInitAspect(aop.Aspect):
 class InitEventPointcut(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.server_events.EventsCache', 'g_eventsCache', 'isEventEnabled', aspects=(_ParametrizeInitAspect,))
+        aop.Pointcut.__init__(self, 'gui.server_events.EventsCache', 'EventsCache', 'isEventEnabled', aspects=(_ParametrizeInitAspect,))

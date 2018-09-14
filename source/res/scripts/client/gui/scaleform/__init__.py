@@ -3,6 +3,7 @@
 import os
 from gui.Scaleform.locale.MENU import MENU
 from nations import NAMES
+from skeletons.gui.system_messages import ISystemMessages
 SCALEFORM_SUPPORT = False
 try:
     import _Scaleform
@@ -62,3 +63,13 @@ def getPathForFlash(path, base=SCALEFORM_SWF_PATH_V3):
     :return: relative path from specified starting point
     """
     return os.path.relpath(path, base)
+
+
+def getScaleformConfig(manager):
+    """ Configures services for package Scaleform.
+    :param manager: helpers.dependency.DependencyManager
+    """
+    from gui.Scaleform.SystemMessagesInterface import SystemMessagesInterface
+    messages = SystemMessagesInterface()
+    messages.init()
+    manager.bindInstance(ISystemMessages, messages, finalizer='destroy')

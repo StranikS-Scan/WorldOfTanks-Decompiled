@@ -3,13 +3,13 @@
 from account_helpers import getAccountDatabaseID
 from adisp import process
 from avatar_helpers import getAvatarDatabaseID
+from gui import GUI_SETTINGS, DialogsInterface
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
-from gui.Scaleform.locale.MENU import MENU
-from gui import GUI_SETTINGS, DialogsInterface
 from gui.Scaleform.daapi.view.meta.ReportBugPanelMeta import ReportBugPanelMeta
-from gui import game_control
-from helpers import i18n
+from gui.Scaleform.locale.MENU import MENU
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IExternalLinksController
 
 class ReportBugPanel(ReportBugPanelMeta):
 
@@ -49,4 +49,5 @@ def makeHyperLink(linkType, textId):
 def reportBugOpenConfirm(accountId):
     isOk = yield DialogsInterface.showI18nConfirmDialog('reportBug', focusedID=DIALOG_BUTTON_ID.SUBMIT)
     if isOk:
-        game_control.g_instance.links.open(getForumURL(accountId))
+        links = dependency.instance(IExternalLinksController)
+        links.open(getForumURL(accountId))

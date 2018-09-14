@@ -119,10 +119,10 @@ def checkAmmoLevel(vehicles, callback):
                 result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
                 if result and result.auxData:
                     for m in result.auxData:
-                        SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
+                        SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
                 if result and len(result.userMsg):
-                    SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+                    SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             showAmmoWarning = showAmmoWarning or not vehicle.isAmmoFull
 
     if showAmmoWarning:

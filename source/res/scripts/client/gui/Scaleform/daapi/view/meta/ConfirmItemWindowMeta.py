@@ -14,10 +14,13 @@ class ConfirmItemWindowMeta(AbstractWindowView):
         self._printOverrideError('submit')
 
     def as_setDataS(self, value):
+        """
+        :param value: Represented by ConfirmItemWindowVO (AS)
+        """
         return self.flashObject.as_setData(value) if self._isDAAPIInited() else None
 
-    def as_setSettingsS(self, data):
+    def as_setSettingsS(self, value):
         """
-        :param data: Represented by DialogSettingsVO (AS)
+        :param value: Represented by DialogSettingsVO (AS)
         """
-        return self.flashObject.as_setSettings(data) if self._isDAAPIInited() else None
+        return self.flashObject.as_setSettings(value) if self._isDAAPIInited() else None

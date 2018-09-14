@@ -3,6 +3,7 @@
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.TutorialHangarQuestDetailsMeta import TutorialHangarQuestDetailsMeta
+from gui.christmas.christmas_controller import g_christmasCtrl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events.bonuses import getTutorialBonusObj
 from gui.server_events import formatters
@@ -40,6 +41,8 @@ class TutorialHangarQuestDetails(TutorialHangarQuestDetailsMeta):
         prbDispatcher = g_prbLoader.getDispatcher()
         if prbDispatcher and prbDispatcher.getFunctionalState().isNavigationDisabled():
             return SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error)
+        if g_christmasCtrl.isNavigationDisabled():
+            return SystemMessages.pushI18nMessage('#system_messages:christmas/animationInProcess', type=SystemMessages.SM_TYPE.Error)
         if type == CONDITION_TYPE.CHAIN:
             event_dispatcher.runTutorialChain(id)
         elif type == CONDITION_TYPE.TUTORIAL:

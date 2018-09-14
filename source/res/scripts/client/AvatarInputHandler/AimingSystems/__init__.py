@@ -35,30 +35,65 @@ class IAimingSystem(object):
         pass
 
 
-def getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw=0.0):
-    turretOffset = vehicleTypeDescriptor.chassis['hullPosition'] + vehicleTypeDescriptor.hull['turretPositions'][0]
+def getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw=0.0, overrideTurretLocalZ=None):
+    turretOffset = getTurretJointOffset(vehicleTypeDescriptor)
+    if overrideTurretLocalZ is not None:
+        turretOffset.z = overrideTurretLocalZ
     turretJointMat = mathUtils.createRTMatrix(Vector3(turretYaw, 0, 0), turretOffset)
     turretJointMat.postMultiply(vehicleMatrix)
     return turretJointMat
 
 
-def getGunJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch):
-    gunOffset = vehicleTypeDescriptor.turret['gunPosition']
+def getTurretJointOffset(vehicleTypeDescriptor):
+    return vehicleTypeDescriptor.chassis['hullPosition'] + vehicleTypeDescriptor.hull['turretPositions'][0]
+
+
+def getGunJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch, overrideTurretLocalZ=None):
+    gunOffset = Vector3(vehicleTypeDescriptor.turret['gunPosition'])
+    if overrideTurretLocalZ is not None:
+        offset = getTurretJointOffset(vehicleTypeDescriptor)
+        yOffset = math.tan(gunPitch) * offset.z
+        gunOffset.y += yOffset
     gunMat = mathUtils.createRTMatrix(Vector3(0, gunPitch, 0), gunOffset)
     gunMat.postMultiply(turretMatrix)
     return gunMat
 
 
-def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0):
+def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None):
     player = BigWorld.player()
-    vehicleTypeDescriptor = player.vehicleTypeDescriptor
-    vehicleMatrix = player.getOwnVehicleStabilisedMatrix()
-    turretMat = getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw)
-    return (turretMat, getGunJointMat(vehicleTypeDescriptor, turretMat, gunPitch))
+    if player.isObserver() and player.getVehicleAttached() is not None:
+        vehicleTypeDescriptor = player.getVehicleAttached().typeDescriptor
+    else:
+        vehicleTypeDescriptor = player.vehicleTypeDescriptor
+    isPitchHullAimingAvailable = vehicleTypeDescriptor.isPitchHullAimingAvailable
+    vehicleMatrix = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
+    correctGunPitch = gunPitch
+    if isPitchHullAimingAvailable:
+        vehicleMatrix = player.inputHandler.steadyVehicleMatrixCalculator.stabilisedMProv
+        correctGunPitch = 0.0
+    turretMat = getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw, overrideTurretLocalZ)
+    gunMat = getGunJointMat(vehicleTypeDescriptor, turretMat, correctGunPitch, overrideTurretLocalZ)
+    if not isPitchHullAimingAvailable:
+        return (turretMat, gunMat)
+    else:
+        turretMatTranslation = turretMat.translation
+        gunMatTranslation = gunMat.translation
+        vehicleMatrix = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
+        turretMat = getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw)
+        gunMat = getGunJointMat(vehicleTypeDescriptor, turretMat, gunPitch)
+        if overrideTurretLocalZ is not None:
+            gunMatTranslation += _calculateGunPointOffsetFromHullCenter(vehicleTypeDescriptor, vehicleMatrix, player.inputHandler.steadyVehicleMatrixCalculator.stabilisedMProv, gunPitch, overrideTurretLocalZ)
+        turretMat.translation = turretMatTranslation
+        gunMat.translation = gunMatTranslation
+        return (turretMat, gunMat)
 
 
-def getPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
-    return getPlayerTurretMats(turretYaw, gunPitch)[1]
+def getPlayerGunMat(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None):
+    return getPlayerTurretMats(turretYaw, gunPitch, overrideTurretLocalZ)[1]
+
+
+def getCenteredPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
+    return getPlayerTurretMats(turretYaw, gunPitch, 0.0)[1]
 
 
 def getTurretMatrixProvider(vehicleTypeDescriptor, vehicleMatrixProvider, turretYawMatrixProvider):
@@ -77,6 +112,18 @@ def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravi
     speed = vehTypeDescr.shot['speed']
     gravity = vehTypeDescr.shot['gravity'] if not compensateGravity else 0.0
     return BigWorld.wg_getShotAngles(turretOffs, gunOffs, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
+
+
+def _calculateGunPointOffsetFromHullCenter(vehicleTypeDescriptor, steadyMatrix, stabilisedMatrix, gunPitch, overrideTurretLocalZ):
+    turretOffset = getTurretJointOffset(vehicleTypeDescriptor)
+    hullLocal = Math.Matrix(steadyMatrix)
+    hullLocal.invert()
+    hullLocal.preMultiply(stabilisedMatrix)
+    projectedOffset = math.cos(hullLocal.pitch) * abs(turretOffset.z - overrideTurretLocalZ)
+    upVector = Math.Matrix(steadyMatrix).applyToAxis(1)
+    upOffsetGunPitch = math.tan(-gunPitch) * projectedOffset
+    upOffsetHullPitch = math.tan(hullLocal.pitch) * projectedOffset
+    return upVector * (upOffsetGunPitch + upOffsetHullPitch)
 
 
 def _getDesiredShotPointUncached(start, dir, onlyOnGround, isStrategicMode, terrainOnlyCheck):

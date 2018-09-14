@@ -17,38 +17,38 @@ class CHAT_COMMANDS(object):
     BACKTOBASE = 'BACKTOBASE'
     POSITIVE = 'POSITIVE'
     NEGATIVE = 'NEGATIVE'
-    HELPME = 'HELPME'
+    SOS = 'HELPME'
     RELOADINGGUN = 'RELOADINGGUN'
     FOLLOWME = 'FOLLOWME'
     TURNBACK = 'TURNBACK'
-    HELPMEEX = 'HELPMEEX'
+    HELPME = 'HELPMEEX'
     SUPPORTMEWITHFIRE = 'SUPPORTMEWITHFIRE'
     ATTACKENEMY = 'ATTACKENEMY'
     STOP = 'STOP'
 
 
-KB_MAPPING = {CHAT_COMMANDS.ATTACK: CommandMapping.CMD_CHAT_SHORTCUT_ATTACK,
+KB_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: CommandMapping.CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET,
+ CHAT_COMMANDS.ATTACK: CommandMapping.CMD_CHAT_SHORTCUT_ATTACK,
  CHAT_COMMANDS.BACKTOBASE: CommandMapping.CMD_CHAT_SHORTCUT_BACKTOBASE,
  CHAT_COMMANDS.POSITIVE: CommandMapping.CMD_CHAT_SHORTCUT_POSITIVE,
  CHAT_COMMANDS.NEGATIVE: CommandMapping.CMD_CHAT_SHORTCUT_NEGATIVE,
- CHAT_COMMANDS.HELPME: CommandMapping.CMD_CHAT_SHORTCUT_HELPME,
+ CHAT_COMMANDS.SOS: CommandMapping.CMD_CHAT_SHORTCUT_HELPME,
  CHAT_COMMANDS.RELOADINGGUN: CommandMapping.CMD_CHAT_SHORTCUT_RELOAD}
 TARGET_ACTIONS = [CHAT_COMMANDS.FOLLOWME,
  CHAT_COMMANDS.TURNBACK,
- CHAT_COMMANDS.HELPMEEX,
+ CHAT_COMMANDS.HELPME,
  CHAT_COMMANDS.SUPPORTMEWITHFIRE,
  CHAT_COMMANDS.ATTACKENEMY,
  CHAT_COMMANDS.STOP]
-DENIED_ACTIONS = [CHAT_COMMANDS.ATTACK]
 DEFAULT_CUT = 'default'
 ALLY_CUT = 'ally'
 ENEMY_CUT = 'enemy'
 ENEMY_SPG_CUT = 'enemy_spg'
-TARGET_TRANSLATION_MAPPING = {CHAT_COMMANDS.ATTACK: {ALLY_CUT: CHAT_COMMANDS.FOLLOWME,
-                        ENEMY_CUT: CHAT_COMMANDS.SUPPORTMEWITHFIRE,
-                        ENEMY_SPG_CUT: CHAT_COMMANDS.ATTACKENEMY},
+TARGET_TRANSLATION_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: {ALLY_CUT: CHAT_COMMANDS.FOLLOWME,
+                             ENEMY_CUT: CHAT_COMMANDS.SUPPORTMEWITHFIRE,
+                             ENEMY_SPG_CUT: CHAT_COMMANDS.ATTACKENEMY},
  CHAT_COMMANDS.BACKTOBASE: {ALLY_CUT: CHAT_COMMANDS.TURNBACK},
- CHAT_COMMANDS.HELPME: {ALLY_CUT: CHAT_COMMANDS.HELPMEEX},
+ CHAT_COMMANDS.SOS: {ALLY_CUT: CHAT_COMMANDS.HELPME},
  CHAT_COMMANDS.RELOADINGGUN: {ALLY_CUT: CHAT_COMMANDS.STOP}}
 
 class ChatCommandsController(IBattleController):
@@ -93,11 +93,15 @@ class ChatCommandsController(IBattleController):
         target = BigWorld.target()
         for chatCmd, keyboardCmd in KB_MAPPING.iteritems():
             if cmdMap.isFired(keyboardCmd, key):
+                action = chatCmd
                 crosshairType = self.__getCrosshairType(player, target)
                 if crosshairType != DEFAULT_CUT and chatCmd in TARGET_TRANSLATION_MAPPING and crosshairType in TARGET_TRANSLATION_MAPPING[chatCmd]:
-                    self.handleChatCommand(TARGET_TRANSLATION_MAPPING[chatCmd][crosshairType], target.id)
+                    action = TARGET_TRANSLATION_MAPPING[chatCmd][crosshairType]
+                if action in TARGET_ACTIONS:
+                    if crosshairType != DEFAULT_CUT:
+                        self.handleChatCommand(action, targetID=target.id)
                 else:
-                    self.handleChatCommand(chatCmd)
+                    self.handleChatCommand(action)
 
     def handleChatCommand(self, action, targetID=None):
         if action in TARGET_ACTIONS:
@@ -240,12 +244,11 @@ class ChatCommandsController(IBattleController):
 
     def __isTargetCorrect(self, player, target):
         import Vehicle
-        from gui.battle_control import g_sessionProvider
         from helpers import isPlayerAvatar
         if target is not None and isinstance(target, Vehicle.Vehicle):
             if target.isAlive():
                 if player is not None and isPlayerAvatar():
-                    vInfo = g_sessionProvider.getArenaDP().getVehicleInfo(target.id)
+                    vInfo = self.__arenaDP.getVehicleInfo(target.id)
                     return not vInfo.isActionsDisabled()
         return False
 

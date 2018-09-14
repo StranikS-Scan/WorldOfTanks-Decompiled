@@ -71,8 +71,12 @@
     <fireKey>	KEY_0	</fireKey>
     <satelliteKeys></satelliteKeys>
   </CMD_AMMO_CHOICE_0>
-  <CMD_CHAT_SHORTCUT_ATTACK>
+  <CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET>
     <fireKey>	KEY_T	</fireKey>
+    <satelliteKeys></satelliteKeys>
+  </CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET>
+  <CMD_CHAT_SHORTCUT_ATTACK>
+    <fireKey>	KEY_F3	</fireKey>
     <satelliteKeys></satelliteKeys>
   </CMD_CHAT_SHORTCUT_ATTACK>
   <CMD_CHAT_SHORTCUT_BACKTOBASE>
@@ -211,4 +215,7 @@
     <fireKey>	KEY_C	</fireKey>
     <satelliteKeys></satelliteKeys>
   </CMD_RELOAD_PARTIAL_CLIP>
+  <CMD_VEHICLE_SWITCH_SIEGE_MODE>
+    <fireKey>	KEY_X	</fireKey>
+  </CMD_VEHICLE_SWITCH_SIEGE_MODE>
 </command_mapping.xml>

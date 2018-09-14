@@ -20,6 +20,7 @@ from gui.clans.subscriptions import ClansListeners
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
 from gui.wgnc import g_wgncEvents
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.clans import IClanController
 
 def _showError(result, ctx):
     i18nMsg = clan_formatters.getRequestErrorMsg(result, ctx)
@@ -390,10 +391,10 @@ class _ClanDossier(object):
          self.__webCache.keys())
 
 
-class _ClanController(ClansListeners):
+class ClanController(ClansListeners, IClanController):
 
     def __init__(self):
-        super(_ClanController, self).__init__()
+        super(ClanController, self).__init__()
         self.__cache = {}
         self.__searchDataCache = {}
         self.__state = None
@@ -572,6 +573,3 @@ class _ClanController(ClansListeners):
 
     def __repr__(self):
         return 'ClanCtrl(state = %s, profile = %s)' % (str(self.__state), self.__profile)
-
-
-g_clanCtrl = _ClanController()

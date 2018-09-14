@@ -3,7 +3,6 @@
 import BigWorld
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, QUEUE_TYPE
-from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
@@ -13,22 +12,22 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.game_control import getFalloutCtrl
 from gui.prb_control import settings
 from gui.prb_control.items.sortie_items import getDivisionNameByType, getDivisionLevel
 from gui.prb_control.settings import UNIT_RESTRICTION
-from gui.server_events import g_eventsCache
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, Vehicle
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n, int2roman
+from helpers import i18n, int2roman, dependency
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
+from skeletons.gui.game_control import IFalloutController
+from skeletons.gui.server_events import IEventsCache
 
 def getPlayerStatus(slotState, pInfo):
     if slotState.isClosed:
@@ -181,7 +180,7 @@ def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
     return {'isInvite': pInfo.isInvite(),
      'dbID': pInfo.dbID,
      'accID': pInfo.accID,
-     'isCommander': pInfo.isCreator(),
+     'isCommander': pInfo.isCommander(),
      'userName': pInfo.name,
      'fullName': pInfo.getFullName(),
      'clanAbbrev': pInfo.clanAbbrev,
@@ -237,8 +236,9 @@ def makeUnitStateLabel(unitState):
     return makeHtmlString('html_templates:lobby/cyberSport', 'teamUnlocked' if unitState.isOpened() else 'teamLocked', {})
 
 
-def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRange=None, checkForVehicles=True):
-    isPlayerCreator = pInfo.isCreator()
+def _getSlotsData(unitIdx, fullData, app=None, levelsRange=None, checkForVehicles=True):
+    pInfo = fullData.playerInfo
+    isPlayerCreator = pInfo.isCommander()
     isPlayerInSlot = pInfo.isInSlot
     slots = []
     userGetter = storage_getter('users')().getUser
@@ -247,7 +247,7 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
     canTakeSlot = not pInfo.isLegionary()
     bwPlugin = proto_getter(PROTO_TYPE.BW_CHAT2)(None)
     isPlayerSpeaking = bwPlugin.voipController.isPlayerSpeaking
-    falloutCtrl = getFalloutCtrl()
+    falloutCtrl = dependency.instance(IFalloutController)
     isFallout = falloutCtrl.isEnabled()
     if isFallout:
         falloutBattleType = falloutCtrl.getBattleType()
@@ -255,6 +255,7 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
     else:
         falloutBattleType = QUEUE_TYPE.UNKNOWN
         falloutCfg = None
+    unit = fullData.unit
     if unit is None:
         makeVO = makePlayerVO
     elif unit.isFortBattle():
@@ -271,7 +272,8 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
         roster = unit.getRoster()
         rosterSlots = roster.slots
         isDefaultSlot = roster.isDefaultSlot
-    for slotInfo in slotsIter:
+    unitState = fullData.flags
+    for slotInfo in fullData.slotsIterator:
         index = slotInfo.index
         slotState = slotInfo.state
         player = slotInfo.player
@@ -317,7 +319,8 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
          'restrictions': restrictions,
          'isFallout': isFallout}
         if unit.isSquad():
-            if g_eventsCache.isBalancedSquadEnabled():
+            eventsCache = dependency.instance(IEventsCache)
+            if eventsCache.isBalancedSquadEnabled():
                 isVisibleAdtMsg = player and player.isCurrentPlayer() and not isPlayerCreator and not vehicle and unit and bool(unit.getVehicles())
                 if isVisibleAdtMsg:
                     rangeString = toRomanRangeString(levelsRange, 1)
@@ -326,7 +329,7 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
                     additionMsg = ''
                 slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
                  'additionalMsg': additionMsg})
-            elif g_eventsCache.isSquadXpFactorsEnabled():
+            elif eventsCache.isSquadXpFactorsEnabled():
                 vehicles = unit.getVehicles()
                 levels = unit.getSelectedVehicleLevels()
                 isVisibleAdtMsg = False
@@ -335,11 +338,11 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
                 unitHasXpPenalty = False
                 if vehicles:
                     distance = levels[-1] - levels[0]
-                    unitHasXpBonus = distance in g_eventsCache.getSquadBonusLevelDistance()
-                    unitHasXpPenalty = distance in g_eventsCache.getSquadPenaltyLevelDistance()
+                    unitHasXpBonus = distance in eventsCache.getSquadBonusLevelDistance()
+                    unitHasXpPenalty = distance in eventsCache.getSquadPenaltyLevelDistance()
                     isVisibleAdtMsg = unitHasXpBonus and player and player.isCurrentPlayer() and not vehicle
                     if isVisibleAdtMsg:
-                        maxDistance = max(g_eventsCache.getSquadBonusLevelDistance())
+                        maxDistance = max(eventsCache.getSquadBonusLevelDistance())
                         minLevel = max(MIN_VEHICLE_LEVEL, levels[0] - maxDistance)
                         maxLevel = min(MAX_VEHICLE_LEVEL, levels[0] + maxDistance)
                         rangeString = toRomanRangeString(range(minLevel, maxLevel + 1), 1)
@@ -361,7 +364,8 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
             isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
             additionMsg = ''
             if isVisibleAdtMsg:
-                vehiclesNames = [ veh.userName for veh in g_eventsCache.getEventVehicles() ]
+                eventsCache = dependency.instance(IEventsCache)
+                vehiclesNames = [ veh.userName for veh in eventsCache.getEventVehicles() ]
                 additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=', '.join(vehiclesNames)))
             slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
              'additionalMsg': additionMsg})
@@ -395,79 +399,51 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
     return slots
 
 
-def makeSlotsVOs(unitFunctional, unitIdx=None, app=None):
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is None:
-        return {}
+def makeSlotsVOs(unitEntity, unitIdx=None, app=None):
+    fullData = unitEntity.getUnitFullData(unitIdx=unitIdx)
+    slots = _getSlotsData(unitIdx, fullData, app, unitEntity.getRosterSettings().getLevelsRange())
+    isRosterSet = fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES)
+    return (isRosterSet, slots)
+
+
+def getUnitMaxLevel(unitEntity, unitIdx=None, app=None):
+    _, unit = unitEntity.getUnit(unitIdx=unitIdx)
+    division = getDivisionNameByType(unit.getRosterTypeID())
+    return getDivisionLevel(division)
+
+
+def makeUnitShortVO(unitEntity, unitIdx=None, app=None):
+    fullData = unitEntity.getUnitFullData(unitIdx=unitIdx)
+    return {'isFreezed': fullData.flags.isLocked(),
+     'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
+     'slots': _getSlotsData(unitIdx, fullData, app, unitEntity.getRosterSettings().getLevelsRange()),
+     'description': unitEntity.getCensoredComment(unitIdx=unitIdx)}
+
+
+def makeSortieShortVO(unitEntity, unitIdx=None, app=None):
+    fullData = unitEntity.getUnitFullData(unitIdx=unitIdx)
+    division = getDivisionNameByType(fullData.unit.getRosterTypeID())
+    divisionTypeStr = i18n.makeString(FORTIFICATIONS.sortie_division_name(division))
+    if divisionTypeStr:
+        description = divisionTypeStr
     else:
-        unit, unitState, unitStats, pInfo, slotsIter = fullData
-        slots = _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange())
-        isRosterSet = unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES)
-        return (isRosterSet, slots)
-
-
-def getUnitMaxLevel(unitFunctional, unitIdx=None, app=None):
-    level = 10
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is not None:
-        unit, unitState, unitStats, pInfo, slotsIter = fullData
-        division = getDivisionNameByType(unit.getRosterTypeID())
-        level = getDivisionLevel(division)
-    return level
-
-
-def makeUnitShortVO(unitFunctional, unitIdx=None, app=None):
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is None:
-        return {}
-    else:
-        unit, unitState, _, pInfo, slotsIter = fullData
-        return {'isFreezed': unitState.isLocked(),
-         'hasRestrictions': unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
-         'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
-
-
-def makeSortieShortVO(unitFunctional, unitIdx=None, app=None):
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is None:
-        title = i18n.makeString(FORTIFICATIONS.SORTIE_LISTVIEW_ALERTTEXT_TITLE)
-        body = i18n.makeString(FORTIFICATIONS.SORTIE_LISTVIEW_ALERTTEXT_BODY)
-        alertView = {'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON,
-         'titleMsg': text_styles.alert(title),
-         'bodyMsg': text_styles.main(body),
-         'buttonLbl': FORTIFICATIONS.SORTIE_LISTVIEW_ENTERBTN}
-        return {'isShowAlertView': True,
-         'alertView': alertView}
-    else:
-        unit, unitState, unitStats, pInfo, slotsIter = fullData
-        division = getDivisionNameByType(unit.getRosterTypeID())
-        divisionTypeStr = i18n.makeString(FORTIFICATIONS.sortie_division_name(division))
-        unit, unitState, _, pInfo, slotsIter = fullData
-        if divisionTypeStr:
-            description = divisionTypeStr
-        else:
-            description = unitFunctional.getCensoredComment(unitIdx=unitIdx)
-        return {'isFreezed': unitState.isLocked(),
-         'hasRestrictions': unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
-         'description': description}
+        description = unitEntity.getCensoredComment(unitIdx=unitIdx)
+    return {'isFreezed': fullData.flags.isLocked(),
+     'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
+     'slots': _getSlotsData(unitIdx, fullData, app, unitEntity.getRosterSettings().getLevelsRange()),
+     'description': description}
 
 
 def makeMsg(value):
     return i18n.makeString(value)
 
 
-def makeFortBattleShortVO(unitFunctional, unitIdx=None, app=None):
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is None:
-        return {}
-    else:
-        unit, unitState, _, pInfo, slotsIter = fullData
-        return {'isFreezed': unitState.isLocked(),
-         'hasRestrictions': unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
-         'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
+def makeFortBattleShortVO(unitEntity, unitIdx=None, app=None):
+    fullData = unitEntity.getUnitFullData(unitIdx=unitIdx)
+    return {'isFreezed': fullData.flags.isLocked(),
+     'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
+     'slots': _getSlotsData(unitIdx, fullData, app, unitEntity.getRosterSettings().getLevelsRange()),
+     'description': unitEntity.getCensoredComment(unitIdx=unitIdx)}
 
 
 def makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role, roleID):
@@ -487,114 +463,83 @@ def makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role, role
      'fullName': member.getFullName()}
 
 
-def makeUnitVO(unitFunctional, unitIdx=None, app=None):
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is None:
-        return {}
-    else:
-        unit, unitState, unitStats, pInfo, slotsIter = fullData
-        isPlayerCreator = pInfo.isCreator()
-        canDoAction, restriction = unitFunctional.validateLevels(stats=unitStats)
-        sumLevelsStr = makeTotalLevelLabel(unitStats, restriction)
-        return {'isCommander': isPlayerCreator,
-         'isFreezed': unitState.isLocked(),
-         'hasRestrictions': unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-         'statusLbl': makeUnitStateLabel(unitState),
-         'statusValue': unitState.isOpened(),
-         'sumLevelsInt': unitStats.curTotalLevel,
-         'sumLevels': sumLevelsStr,
-         'sumLevelsError': canDoAction,
-         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
-         'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
+def makeUnitVO(unitEntity, unitIdx=None, app=None):
+    fullData = unitEntity.getUnitFullData(unitIdx=unitIdx)
+    isPlayerCreator = fullData.playerInfo.isCommander()
+    levelsValidation = unitEntity.validateLevels()
+    canDoAction, restriction = levelsValidation.isValid, levelsValidation.restriction
+    sumLevelsStr = makeTotalLevelLabel(fullData.stats, restriction)
+    return {'isCommander': isPlayerCreator,
+     'isFreezed': fullData.flags.isLocked(),
+     'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
+     'statusLbl': makeUnitStateLabel(fullData.flags),
+     'statusValue': fullData.flags.isOpened(),
+     'sumLevelsInt': fullData.stats.curTotalLevel,
+     'sumLevels': sumLevelsStr,
+     'sumLevelsError': canDoAction,
+     'slots': _getSlotsData(unitIdx, fullData, app, unitEntity.getRosterSettings().getLevelsRange()),
+     'description': unitEntity.getCensoredComment(unitIdx=unitIdx)}
 
 
-def makeStaticFormationUnitVO(unitFunctional, unitIdx=None, app=None):
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is None:
-        return {}
-    else:
-        unit, unitState, unitStats, pInfo, slotsIter = fullData
-        isPlayerCreator = pInfo.isCreator()
-        canDoAction, restriction = unitFunctional.validateLevels(stats=unitStats)
-        sumLevelsStr = makeTotalLevelLabel(unitStats, restriction)
-        return {'isCommander': isPlayerCreator,
-         'statusLbl': makeStaticFormationStatusLbl(unitState),
-         'statusValue': unitState.isOpened(),
-         'sumLevelsInt': unitStats.curTotalLevel,
-         'sumLevels': sumLevelsStr,
-         'sumLevelsError': canDoAction,
-         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
-         'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
+def makeStaticFormationUnitVO(unitEntity, unitIdx=None, app=None):
+    fullData = unitEntity.getUnitFullData(unitIdx=unitIdx)
+    isPlayerCreator = fullData.playerInfo.isCommander()
+    levelsValidation = unitEntity.validateLevels()
+    canDoAction, restriction = levelsValidation.isValid, levelsValidation.restriction
+    sumLevelsStr = makeTotalLevelLabel(fullData.stats, restriction)
+    return {'isCommander': isPlayerCreator,
+     'statusLbl': makeStaticFormationStatusLbl(fullData.flags),
+     'statusValue': fullData.flags.isOpened(),
+     'sumLevelsInt': fullData.stats.curTotalLevel,
+     'sumLevels': sumLevelsStr,
+     'sumLevelsError': canDoAction,
+     'slots': _getSlotsData(unitIdx, fullData, app, unitEntity.getRosterSettings().getLevelsRange()),
+     'description': unitEntity.getCensoredComment(unitIdx=unitIdx)}
 
 
 def makeStaticFormationStatusLbl(unitState):
     return CYBERSPORT.STATICFORMATION_UNITVIEW_OPENROOM_STATUS if unitState.isOpened() else CYBERSPORT.STATICFORMATION_UNITVIEW_CLOSEDROOM_STATUS
 
 
-def makeSortieVO(unitFunctional, unitIdx=None, app=None):
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is None:
-        return
-    else:
-        unit, unitState, unitStats, pInfo, slotsIter = fullData
-        division = getDivisionNameByType(unit.getRosterTypeID())
-        divisionTypeStr = i18n.makeString(FORTIFICATIONS.sortie_division_name(division))
-        divisionStr = i18n.makeString(FORTIFICATIONS.SORTIE_ROOM_DIVISION)
-        divisionLbl = ''.join((text_styles.standard(divisionStr), text_styles.main(divisionTypeStr)))
-        isPlayerCreator = pInfo.isCreator()
-        canDoAction, restriction = unitFunctional.validateLevels(stats=unitStats)
-        sumLevelsStr = makeTotalLevelLabel(unitStats, restriction)
-        return {'isCommander': isPlayerCreator,
-         'isFreezed': unitState.isLocked(),
-         'hasRestrictions': unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-         'statusLbl': makeUnitStateLabel(unitState),
-         'statusValue': unitState.isOpened(),
-         'sumLevelsInt': unitStats.curTotalLevel,
-         'sumLevels': sumLevelsStr,
-         'sumLevelsError': canDoAction,
-         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
-         'description': unitFunctional.getCensoredComment(unitIdx=unitIdx),
-         'divisionLbl': divisionLbl}
+def makeSortieVO(unitEntity, unitIdx=None, app=None):
+    fullData = unitEntity.getUnitFullData(unitIdx=unitIdx)
+    division = getDivisionNameByType(fullData.unit.getRosterTypeID())
+    divisionTypeStr = i18n.makeString(FORTIFICATIONS.sortie_division_name(division))
+    divisionStr = i18n.makeString(FORTIFICATIONS.SORTIE_ROOM_DIVISION)
+    divisionLbl = ''.join((text_styles.standard(divisionStr), text_styles.main(divisionTypeStr)))
+    isPlayerCreator = fullData.playerInfo.isCommander()
+    levelsValidation = unitEntity.validateLevels()
+    canDoAction, restriction = levelsValidation.isValid, levelsValidation.restriction
+    sumLevelsStr = makeTotalLevelLabel(fullData.stats, restriction)
+    return {'isCommander': isPlayerCreator,
+     'isFreezed': fullData.flags.isLocked(),
+     'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
+     'statusLbl': makeUnitStateLabel(fullData.flags),
+     'statusValue': fullData.flags.isOpened(),
+     'sumLevelsInt': fullData.stats.curTotalLevel,
+     'sumLevels': sumLevelsStr,
+     'sumLevelsError': canDoAction,
+     'slots': _getSlotsData(unitIdx, fullData, app, unitEntity.getRosterSettings().getLevelsRange()),
+     'description': unitEntity.getCensoredComment(unitIdx=unitIdx),
+     'divisionLbl': divisionLbl}
 
 
-def makeFortBattleVO(unitFunctional, unitIdx=None, app=None):
-    fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
-    if fullData is None:
-        return {}
-    else:
-        unit, unitState, unitStats, pInfo, slotsIter = fullData
-        isPlayerCreator = pInfo.isCreator()
-        canDoAction, restriction = unitFunctional.validateLevels(stats=unitStats)
-        sumLevelsStr = makeTotalLevelLabel(unitStats, restriction)
-        return {'isCommander': isPlayerCreator,
-         'isFreezed': unitState.isLocked(),
-         'hasRestrictions': unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
-         'statusLbl': makeUnitStateLabel(unitState),
-         'statusValue': unitState.isOpened(),
-         'sumLevelsInt': unitStats.curTotalLevel,
-         'sumLevels': sumLevelsStr,
-         'sumLevelsError': canDoAction,
-         'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
-         'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
-
-
-def makeSquadVO(squadFunctional, app=None):
-    fullData = squadFunctional.getUnitFullData()
-    if fullData is None:
-        return {}
-    else:
-        unitState, unitStats, pInfo, slotsIter = fullData
-        slotsData = _getSlotsData(-1, None, unitState, pInfo, slotsIter, app, checkForVehicles=False)
-        return {'isCommander': squadFunctional.isCreator(),
-         'isFreezed': unitState.isLocked(),
-         'hasRestrictions': False,
-         'statusLbl': makeUnitStateLabel(unitState),
-         'statusValue': unitState.isOpened(),
-         'sumLevelsInt': unitStats.curTotalLevel,
-         'sumLevels': '',
-         'sumLevelsError': False,
-         'slots': slotsData,
-         'description': ''}
+def makeFortBattleVO(unitEntity, unitIdx=None, app=None):
+    fullData = unitEntity.getUnitFullData(unitIdx=unitIdx)
+    isPlayerCreator = fullData.playerInfo.isCommander()
+    levelsValidation = unitEntity.validateLevels()
+    canDoAction, restriction = levelsValidation.isValid, levelsValidation.restriction
+    sumLevelsStr = makeTotalLevelLabel(fullData.stats, restriction)
+    return {'isCommander': isPlayerCreator,
+     'isFreezed': fullData.flags.isLocked(),
+     'hasRestrictions': fullData.unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
+     'statusLbl': makeUnitStateLabel(fullData.flags),
+     'statusValue': fullData.flags.isOpened(),
+     'sumLevelsInt': fullData.stats.curTotalLevel,
+     'sumLevels': sumLevelsStr,
+     'sumLevelsError': canDoAction,
+     'slots': _getSlotsData(unitIdx, fullData, app, unitEntity.getRosterSettings().getLevelsRange()),
+     'description': unitEntity.getCensoredComment(unitIdx=unitIdx)}
 
 
 def makeUnitRosterVO(unit, pInfo, index=None, isSortie=False, levelsRange=None):
@@ -607,7 +552,7 @@ def makeUnitRosterVO(unit, pInfo, index=None, isSortie=False, levelsRange=None):
     roster = unit.getRoster()
     rosterSlots = roster.slots
     isDefaultSlot = roster.isDefaultSlot
-    return getUnitRosterModel(vehicleVOs, makeUnitRosterConditions(rosterSlots, isDefaultSlot, index, isSortie, levelsRange), pInfo.isCreator())
+    return getUnitRosterModel(vehicleVOs, makeUnitRosterConditions(rosterSlots, isDefaultSlot, index, isSortie, levelsRange), pInfo.isCommander())
 
 
 def makeUnitRosterConditions(slots, isDefaultSlot, index=None, isSortie=False, levelsRange=None):
@@ -656,12 +601,12 @@ def getUnitRosterModel(vehiclesData, conditions, isCreator):
      'isCreator': isCreator}
 
 
-def getUnitRosterData(unitFunctional, unitIdx=None, index=None):
-    _, unit = unitFunctional.getUnit(unitIdx)
+def getUnitRosterData(unitEntity, unitIdx=None, index=None):
+    _, unit = unitEntity.getUnit(unitIdx)
     if unit is None:
         result = {}
     else:
-        result = makeUnitRosterVO(unit, unitFunctional.getPlayerInfo(unitIdx=unitIdx), index=index, isSortie=unit.isSortie(), levelsRange=unitFunctional.getRosterSettings().getLevelsRange())
+        result = makeUnitRosterVO(unit, unitEntity.getPlayerInfo(unitIdx=unitIdx), index=index, isSortie=unit.isSortie(), levelsRange=unitEntity.getRosterSettings().getLevelsRange())
     return result
 
 

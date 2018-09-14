@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/AOGAS.py
-import Event
-import BigWorld
 import time
 import weakref
+import BigWorld
+import Event
 from constants import AOGAS_TIME, ACCOUNT_ATTR
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from enumerations import AttributeEnumItem, Enumeration
-from gui.game_control.controllers import Controller
 from helpers import time_utils
+from skeletons.gui.game_control import IAOGASController
 TIME_MODIFER = 3600
 AOGAS_FORCE_START_NOTIFY = False
 _DEFAULT_AOGAS_NOTIFY_TIMEOUT = 5000.0
@@ -33,10 +33,10 @@ class AOGAS_NOTIFY_PERIOD(object):
     AOND_END = 0.25 * TIME_MODIFER
 
 
-class AOGASController(Controller):
+class AOGASController(IAOGASController):
 
-    def __init__(self, proxy):
-        super(AOGASController, self).__init__(proxy)
+    def __init__(self):
+        super(AOGASController, self).__init__()
         self.onNotifyAccount = Event.Event()
         self.__isNotifyAccount = False
         self.__lastNotifyMessages = []

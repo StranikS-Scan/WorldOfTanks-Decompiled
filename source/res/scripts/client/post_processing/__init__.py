@@ -26,6 +26,8 @@ class _Effect:
         self.__chain = None
         self.__ctrl = None
         self.__curQuality = {}
+        self.__curQuality['MOTION_BLUR'] = 0
+        self.__curQuality['POST_PROCESSING'] = 0
         return
 
     def prerequisites(self):
@@ -96,6 +98,8 @@ class WGPostProcessing:
         self.__modes = dict()
         self.__settings = dict()
         self.__curMode = None
+        self.__curQuality['MOTION_BLUR'] = 0
+        self.__curQuality['POST_PROCESSING'] = 0
         return
 
     def prerequisites(self):

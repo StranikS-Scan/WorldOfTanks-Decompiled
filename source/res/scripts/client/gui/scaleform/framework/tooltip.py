@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/ToolTip.py
 from gui import makeHtmlString
 from gui.Scaleform.framework.entities.abstract.ToolTipMgrMeta import ToolTipMgrMeta
+from gui.shared import events
 from helpers import i18n
 from gui.app_loader import g_appLoader
 
@@ -25,11 +26,14 @@ class ToolTip(ToolTipMgrMeta):
         :param noTooltipSpaceIDs: list of spaceIDs, for which tooltips should not be displayed
         """
         super(ToolTip, self).__init__()
+        self._areTooltipsDisabled = False
         self._isAllowedTypedTooltip = True
         self._noTooltipSpaceIDs = noTooltipSpaceIDs
 
     def onCreateTypedTooltip(self, tooltipType, args, stateType):
-        if not self._isAllowedTypedTooltip:
+        if self._areTooltipsDisabled:
+            return
+        elif not self._isAllowedTypedTooltip:
             return
         else:
             from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS
@@ -50,23 +54,29 @@ class ToolTip(ToolTipMgrMeta):
                             self.as_showS(tooltipData, linkage)
                 elif linkage is not None:
                     self.as_showS(args, linkage)
-                else:
-                    return
             return
 
     def onCreateComplexTooltip(self, tooltipId, stateType):
+        if self._areTooltipsDisabled:
+            return
         self.__genComplexToolTip(tooltipId, stateType, self.__getDefaultTooltipType())
 
     def _populate(self):
         super(ToolTip, self)._populate()
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
+        self.addListener(events.AppLifeCycleEvent.CREATING, self.__onAppCreating)
 
     def _dispose(self):
-        super(ToolTip, self)._dispose()
         g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
+        self.removeListener(events.AppLifeCycleEvent.CREATING, self.__onAppCreating)
+        super(ToolTip, self)._dispose()
 
     def __onGUISpaceEntered(self, spaceID):
         self._isAllowedTypedTooltip = spaceID not in self._noTooltipSpaceIDs
+
+    def __onAppCreating(self, appNS):
+        if self.app.appNS != appNS:
+            self._areTooltipsDisabled = True
 
     def __getDefaultTooltipType(self):
         from gui.Scaleform.daapi.settings.tooltips import TOOLTIPS

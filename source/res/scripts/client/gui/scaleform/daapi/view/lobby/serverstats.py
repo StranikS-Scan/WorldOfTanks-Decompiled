@@ -4,17 +4,21 @@ import constants
 from adisp import process
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
+from gui.prb_control.entities.base.legacy.listener import ILegacyListener
+from helpers import dependency
 from helpers import i18n
 from ConnectionManager import connectionManager
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, REQUEST_RATE
-from gui import GUI_SETTINGS, game_control, DialogsInterface, makeHtmlString
-from gui.prb_control.prb_helpers import PrbListener
+from gui import GUI_SETTINGS, DialogsInterface, makeHtmlString
 from gui.shared import events
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.ServerStatsMeta import ServerStatsMeta
+from skeletons.gui.game_control import IServerStatsController, IReloginController
 
-class ServerStats(ServerStatsMeta, PrbListener):
+class ServerStats(ServerStatsMeta, ILegacyListener):
+    serverStats = dependency.descriptor(IServerStatsController)
+    reloginCtrl = dependency.descriptor(IReloginController)
 
     def __init__(self):
         super(ServerStats, self).__init__()
@@ -28,8 +32,8 @@ class ServerStats(ServerStatsMeta, PrbListener):
         else:
             success = yield DialogsInterface.showI18nConfirmDialog('changePeriphery')
         if success:
-            game_control.g_instance.relogin.doRelogin(peripheryID)
-        if not success:
+            self.reloginCtrl.doRelogin(peripheryID, self.__onReloing)
+        else:
             self.as_changePeripheryFailedS()
 
     def startListenCsisUpdate(self, startListen):
@@ -60,12 +64,12 @@ class ServerStats(ServerStatsMeta, PrbListener):
             g_preDefinedHosts.onCsisQueryStart += self.__onServersUpdate
             g_preDefinedHosts.onCsisQueryComplete += self.__onServersUpdate
             g_preDefinedHosts.onPingPerformed += self.__onServersUpdate
-        game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
+        self.serverStats.onStatsReceived += self.__onStatsReceived
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self._updateRoamingCtrl, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self._updateRoamingCtrl, scope=EVENT_BUS_SCOPE.LOBBY)
-        game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
+        self.serverStats.onStatsReceived -= self.__onStatsReceived
         if not constants.IS_CHINA:
             g_preDefinedHosts.stopCSISUpdate()
             g_preDefinedHosts.onCsisQueryComplete -= self.__onServersUpdate
@@ -114,19 +118,19 @@ class ServerStats(ServerStatsMeta, PrbListener):
     def _updateRoamingCtrl(self, event=None):
         isRoamingCtrlDisabled = False
         if self.prbDispatcher:
-            for func in self.prbDispatcher.getFunctionalCollection().getIterator():
-                if func.hasLockedState():
-                    isRoamingCtrlDisabled = True
-                    break
-
+            isRoamingCtrlDisabled = self.prbDispatcher.getEntity().hasLockedState()
         self.as_disableRoamingDDS(isRoamingCtrlDisabled)
 
     def __onStatsReceived(self):
         if constants.IS_SHOW_SERVER_STATS:
-            self.as_setServerStatsS(*game_control.g_instance.serverStats.getFormattedStats())
+            self.as_setServerStatsS(*self.serverStats.getFormattedStats())
 
     def __onServersUpdate(self, _=None):
         self._updateServersList()
 
     def __wrapServerName(self, name):
         return makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': name}) if constants.IS_CHINA else name
+
+    def __onReloing(self, isCompleted):
+        if not isCompleted:
+            self.as_changePeripheryFailedS()

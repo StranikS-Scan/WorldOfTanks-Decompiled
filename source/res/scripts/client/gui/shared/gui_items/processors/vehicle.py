@@ -1,24 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
-import BigWorld
 import AccountCommands
+import BigWorld
+from AccountCommands import VEHICLE_SETTINGS_FLAG
 from account_shared import LayoutIterator
 from adisp import process, async
 from debug_utils import LOG_DEBUG
-from AccountCommands import VEHICLE_SETTINGS_FLAG
-from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.game_control import getRestoreController
-from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
-from helpers import time_utils
-from helpers.i18n import makeString
-from shared_utils import findFirst
 from gui import SystemMessages
+from gui.LobbyContext import g_lobbyContext
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.formatters import formatPrice, formatGoldPrice
+from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
 from gui.shared.money import Money, ZERO_MONEY, Currency
+from helpers import time_utils, dependency
+from helpers.i18n import makeString
+from shared_utils import findFirst
+from skeletons.gui.game_control import IRestoreController
 
 def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     if crewType != -1:
@@ -299,6 +298,7 @@ class VehicleSlotBuyer(Processor):
 
 
 class VehicleSeller(ItemProcessor):
+    restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, vehicle, dismantlingGoldCost, shells=[], eqs=[], optDevs=[], inventory=[], isCrewDismiss=False):
         self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, dismantlingGoldCost)
@@ -306,7 +306,7 @@ class VehicleSeller(ItemProcessor):
         bufferOverflowCtx = {}
         isBufferOverflowed = False
         if isCrewDismiss:
-            tankmenGoingToBuffer, deletedTankmen = getRestoreController().getTankmenDeletedBySelling(vehicle)
+            tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(vehicle)
             countOfDeleted = len(deletedTankmen)
             if countOfDeleted > 0:
                 isBufferOverflowed = True
@@ -592,7 +592,7 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
     defaultLayout = []
     for shell in vehicle.shells:
         if shell.defaultCount > shell.inventoryCount:
-            SystemMessages.g_instance.pushI18nMessage('#system_messages:charge/inventory_error', type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage('#system_messages:charge/inventory_error', vehicle=vehicle.userName, type=SystemMessages.SM_TYPE.Warning)
             yield lambda callback: callback(None)
             break
         defaultLayout.extend(shell.defaultLayoutValue)
@@ -600,10 +600,10 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
         result = yield VehicleLayoutProcessor(vehicle, defaultLayout).request()
         if result and result.auxData:
             for m in result.auxData:
-                SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
+                SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
         if result and len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if callback is not None:
             callback(True)
             return

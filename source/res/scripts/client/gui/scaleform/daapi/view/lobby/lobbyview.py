@@ -1,29 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyView.py
-import BigWorld
+from account_helpers.AccountSettings import AccountSettings, CHRISTMAS_STARTED, CHRISTMAS_FINISHED, CHRISTMAS_PAUSED, CHRISTMAS_STARTED_AGAIN
 import constants
-import CommandMapping
-from PlayerEvents import g_playerEvents
-from gui import game_control, SystemMessages
 import gui
-from messenger.proto import proto_getter
-from messenger.m_constants import PROTO_TYPE
+from PlayerEvents import g_playerEvents
+from gui import SystemMessages
 from gui.LobbyContext import g_lobbyContext
-from gui.battle_control import g_sessionProvider
+from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.locale.CHRISTMAS import CHRISTMAS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.christmas.christmas_controller import g_christmasCtrl
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.shared.ItemsCache import g_itemsCache
-from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared import EVENT_BUS_SCOPE, events, event_dispatcher as shared_events
-from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.events import OpenLinkEvent
+from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import getViewName
-from helpers import i18n
+from helpers import i18n, dependency
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IIGRController
+from christmas_shared import EVENT_STATE
 
 class LobbyView(LobbyPageMeta):
     VIEW_WAITING = (VIEW_ALIAS.LOBBY_HANGAR,
@@ -40,11 +44,14 @@ class LobbyView(LobbyPageMeta):
      VIEW_ALIAS.LOBBY_TECHTREE,
      FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS,
      VIEW_ALIAS.BATTLE_QUEUE,
-     VIEW_ALIAS.BATTLE_LOADING,
-     VIEW_ALIAS.LOBBY_ACADEMY)
+     VIEW_ALIAS.LOBBY_ACADEMY,
+     VIEW_ALIAS.LOBBY_CHRISTMAS)
 
     class COMPONENTS:
         HEADER = 'lobbyHeader'
+
+    igrCtrl = dependency.descriptor(IIGRController)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
@@ -59,7 +66,7 @@ class LobbyView(LobbyPageMeta):
 
     def _populate(self):
         View._populate(self)
-        self.__currIgrType = gui.game_control.g_instance.igr.getRoomType()
+        self.__currIgrType = self.igrCtrl.getRoomType()
         g_prbLoader.setEnabled(True)
         self.addListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
@@ -68,19 +75,24 @@ class LobbyView(LobbyPageMeta):
         self.app.loaderManager.onViewLoadInit += self.__onViewLoadInit
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
         self.app.loaderManager.onViewLoadError += self.__onViewLoadError
-        game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrTypeChanged
+        self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.__showBattleResults()
         battlesCount = g_itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
         g_lobbyContext.updateBattlesCount(battlesCount)
+        g_christmasCtrl.onEventStarted += self.__updateChristmasState
+        g_christmasCtrl.onEventStopped += self.__updateChristmasState
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         self.bwProto.voipController.invalidateMicrophoneMute()
+        self.__checkChristmasState()
 
     def _dispose(self):
-        game_control.g_instance.igr.onIgrTypeChanged -= self.__onIgrTypeChanged
+        self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.app.loaderManager.onViewLoadError -= self.__onViewLoadError
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         self.app.loaderManager.onViewLoadInit -= self.__onViewLoadInit
         g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
+        g_christmasCtrl.onEventStarted -= self.__updateChristmasState
+        g_christmasCtrl.onEventStopped -= self.__updateChristmasState
         self.removeListener(events.LobbySimpleEvent.SHOW_HELPLAYOUT, self.__showHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__closeHelpLayout, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
@@ -135,12 +147,35 @@ class LobbyView(LobbyPageMeta):
             Waiting.show('loadPage')
 
     def __subViewTransferStop(self, alias):
-        if alias != VIEW_ALIAS.BATTLE_LOADING and alias in self.VIEW_WAITING:
+        if alias in self.VIEW_WAITING:
             Waiting.hide('loadPage')
 
     def __showBattleResults(self):
-        battleCtx = g_sessionProvider.getCtx()
+        battleCtx = self.sessionProvider.getCtx()
         if battleCtx.lastArenaUniqueID:
             shared_events.showMyBattleResults(battleCtx.lastArenaUniqueID)
             battleCtx.lastArenaUniqueID = None
         return
+
+    def __updateChristmasState(self, *args):
+        self.__checkChristmasState()
+
+    def __checkChristmasState(self):
+        if g_christmasCtrl.getGlobalState() == EVENT_STATE.IN_PROGRESS:
+            if not AccountSettings.getSettings(CHRISTMAS_STARTED):
+                SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.CHRISTMAS_EVENT_STARTED), type=SystemMessages.SM_TYPE.Information)
+                if not constants.IS_CHINA:
+                    self.fireEvent(OpenLinkEvent(OpenLinkEvent.NY_RULES, title=i18n.makeString(CHRISTMAS.NYMARATHON_PROMO_TITLE)))
+                AccountSettings.setSettings(CHRISTMAS_STARTED, True)
+            elif AccountSettings.getSettings(CHRISTMAS_PAUSED) and not AccountSettings.getSettings(CHRISTMAS_STARTED_AGAIN):
+                SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.CHRISTMAS_EVENT_INPROGRESSAGAIN), type=SystemMessages.SM_TYPE.Information)
+                AccountSettings.setSettings(CHRISTMAS_STARTED_AGAIN, True)
+                AccountSettings.setSettings(CHRISTMAS_PAUSED, False)
+        elif g_christmasCtrl.getGlobalState() == EVENT_STATE.SUSPENDED:
+            if not AccountSettings.getSettings(CHRISTMAS_PAUSED):
+                SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.CHRISTMAS_EVENT_SUSPENDED), type=SystemMessages.SM_TYPE.Information)
+                AccountSettings.setSettings(CHRISTMAS_PAUSED, True)
+                AccountSettings.setSettings(CHRISTMAS_STARTED_AGAIN, False)
+        elif g_christmasCtrl.getGlobalState() == EVENT_STATE.FINISHED and not AccountSettings.getSettings(CHRISTMAS_FINISHED):
+            SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.CHRISTMAS_EVENT_FINISHED), type=SystemMessages.SM_TYPE.Information)
+            AccountSettings.setSettings(CHRISTMAS_FINISHED, True)

@@ -8,17 +8,19 @@ from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.arena_info import settings
-from gui.server_events import g_eventsCache
 from gui.shared.gui_items import Vehicle
-from gui.shared.gui_items.Vehicle import getShortUserName, VEHICLE_TAGS
+from gui.shared.gui_items.Vehicle import getShortUserName, VEHICLE_TAGS, VEHICLE_CLASS_NAME
+from helpers import dependency
 from items.vehicles import VEHICLE_CLASS_TAGS
+from skeletons.gui.server_events import IEventsCache
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
 _DELIVERY_STATUS = settings.INVITATION_DELIVERY_STATUS
+_VEHICLE_CLASS_TAGS = set(VEHICLE_CLASS_NAME.ALL())
 
 def getClassTag(tags):
-    subSet = VEHICLE_CLASS_TAGS & tags
+    subSet = _VEHICLE_CLASS_TAGS & tags
     result = None
     if len(subSet):
         result = list(subSet).pop()
@@ -39,6 +41,7 @@ def isPremiumIGR(tags):
 
 class PlayerInfoVO(object):
     __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'potapovQuestIDs', 'isPrebattleCreator', 'forbidInBattleInvitations')
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, accountDBID=0L, name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, potapovQuestIDs=None, isPrebattleCreator=False, forbidInBattleInvitations=False, **kwargs):
         super(PlayerInfoVO, self).__init__()
@@ -71,11 +74,11 @@ class PlayerInfoVO(object):
         return self.name if self.name else settings.UNKNOWN_PLAYER_NAME
 
     def getRandomPotapovQuests(self):
-        pQuests = g_eventsCache.random.getQuests()
+        pQuests = self.eventsCache.random.getQuests()
         return self.__getPotapovQuests(pQuests)
 
     def getFalloutPotapovQuests(self):
-        pQuests = g_eventsCache.fallout.getQuests()
+        pQuests = self.eventsCache.fallout.getQuests()
         return self.__getPotapovQuests(pQuests)
 
     def __getPotapovQuests(self, pQuests):
@@ -275,6 +278,9 @@ class VehicleArenaInfoVO(object):
 
     def isObserver(self):
         return self.vehicleType.isObserver
+
+    def isSPG(self):
+        return self.vehicleType.classTag == VEHICLE_CLASS_NAME.SPG
 
     def isActionsDisabled(self):
         return not self.player.accountDBID

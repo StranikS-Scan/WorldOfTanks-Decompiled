@@ -4,7 +4,6 @@ import BigWorld
 from helpers import i18n
 
 class Waiting(object):
-    _Waiting__waitingStack = []
     __wainingViewGetter = None
     __waitingStack = []
     __suspendStack = []

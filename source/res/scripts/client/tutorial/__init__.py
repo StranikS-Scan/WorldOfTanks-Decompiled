@@ -103,7 +103,8 @@ class Tutorial(object):
                 self._gui.onPageChanging += self.__onPageChanging
                 self._gui.onItemFound += self.__onItemFound
                 self._gui.onItemLost += self.__onItemLost
-                self.__tryRunFirstState(INITIAL_FLAG.CHAPTER_RESOLVED)
+                if ctx.canResolveChapterOnStart:
+                    self.__tryRunFirstState(INITIAL_FLAG.CHAPTER_RESOLVED)
             self.onStarted()
             return True
 
@@ -367,6 +368,10 @@ class Tutorial(object):
 
     def unlockState(self, targetID):
         self._currentState.unlock(targetID)
+
+    def startBattle(self):
+        self.__tryRunFirstState(INITIAL_FLAG.CHAPTER_RESOLVED)
+        return True
 
     def __timeLoop(self):
         self.__callbackID = None

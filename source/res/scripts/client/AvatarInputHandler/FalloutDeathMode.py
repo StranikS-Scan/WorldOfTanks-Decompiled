@@ -4,15 +4,15 @@ import weakref
 import BigWorld
 import GUI
 import SoundGroups
+from AvatarInputHandler import aih_global_binding
 from DynamicCameras.ArcadeCamera import ArcadeCamera
-from avatar_helpers import aim_global_binding
-from control_modes import IControlMode, dumpStateEmpty, _ARCADE_CAM_PIVOT_POS
+from control_modes import IControlMode, _ARCADE_CAM_PIVOT_POS
 from mathUtils import clamp
 
 class FalloutDeathMode(IControlMode):
     curVehicleID = property(lambda self: self.__curVehicleID)
     aimingMode = property(lambda self: self._aimingMode)
-    __aimOffset = aim_global_binding.bind(aim_global_binding.BINDING_ID.AIM_OFFSET)
+    __aimOffset = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, dataSection, avatarInputHandler):
         self.__aih = weakref.proxy(avatarInputHandler)
@@ -31,9 +31,6 @@ class FalloutDeathMode(IControlMode):
         self.__cam.destroy()
         self.__cam = None
         return
-
-    def dumpState(self):
-        return dumpStateEmpty()
 
     def enable(self, **args):
         SoundGroups.g_instance.changePlayMode(0)

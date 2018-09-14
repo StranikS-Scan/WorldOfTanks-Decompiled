@@ -1,0 +1,53 @@
+<christmas-chain.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Chrismtas	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+    <scene>	Chrismtas	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items>
+        <gui-item>	AlchemyBtn	  <on-scene-effects>
+            <show-hint>	AlchemyBtnHint	</show-hint>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <refuse-training></refuse-training>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <tutorial-setting>	AlchemyBtnSetting	  <setting-name>	alchemyBtnShown	</setting-name>
+      <setting-value>	True	</setting-value>
+    </tutorial-setting>
+    <hint>	AlchemyBtnHint	  <item-id>	AlchemyBtn	</item-id>
+      <text>	_(#tutorial:alchemy/btn)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	False	</loop>
+      </arrow>
+      <actions>
+        <click>	AlchemyBtn	  <effects>
+            <save-account-setting>	AlchemyBtnSetting	</save-account-setting>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	AlchemyBtn	  <effects>
+            <save-account-setting>	AlchemyBtnSetting	</save-account-setting>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	AlchemyBtn	  <effects>
+            <save-account-setting>	AlchemyBtnSetting	</save-account-setting>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers></triggers>
+  <vars></vars>
+</christmas-chain.xml>

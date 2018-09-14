@@ -265,6 +265,11 @@ class SYSTEM_MESSAGES(object):
     ACTIONACHIEVEMENTS_TITLE = '#system_messages:actionAchievements/title'
     TRAINING_ERROR_SWAPTEAMS = '#system_messages:training/error/swapTeams'
     TRAINING_ERROR_DOACTION = '#system_messages:training/error/doAction'
+    TRAINING_ERROR_SELECTOBSERVER = '#system_messages:training/error/selectObserver'
+    TRAINING_ERROR_ADDPLAYER = '#system_messages:training/error/AddPlayer'
+    BATTLESESSION_ERROR_ADDPLAYER = '#system_messages:battlesession/error/AddPlayer'
+    BATTLESESSION_ERROR_ADDOBSERVER = '#system_messages:battlesession/error/AddObserver'
+    BATTLESESSION_ERROR_LIMITS = '#system_messages:battlesession/error/Limits'
     GAMESESSIONCONTROL_KOREA_SESSIONTIME = '#system_messages:gameSessionControl/korea/sessionTime'
     GAMESESSIONCONTROL_KOREA_TIMETILLMIDNIGHT = '#system_messages:gameSessionControl/korea/timeTillMidnight'
     GAMESESSIONCONTROL_KOREA_PLAYTIMELEFT = '#system_messages:gameSessionControl/korea/playTimeLeft'
@@ -873,6 +878,7 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_WRONG_UNIT_REQUISITES = '#system_messages:unit/errors/WRONG_UNIT_REQUISITES'
     UNIT_ERRORS_REMOVE_PLAYER_FAIL = '#system_messages:unit/errors/REMOVE_PLAYER_FAIL'
     UNIT_ERRORS_GET_VEHICLE_FAIL = '#system_messages:unit/errors/GET_VEHICLE_FAIL'
+    UNIT_ERRORS_ASSIGN_MEMBER_FAIL = '#system_messages:unit/errors/ASSIGN_MEMBER_FAIL'
     UNIT_ERRORS_FAIL_UNIT_METHOD = '#system_messages:unit/errors/FAIL_UNIT_METHOD'
     UNIT_ERRORS_BAD_SLOT_IDX = '#system_messages:unit/errors/BAD_SLOT_IDX'
     UNIT_ERRORS_INSUFFICIENT_ROLE = '#system_messages:unit/errors/INSUFFICIENT_ROLE'
@@ -939,6 +945,11 @@ class SYSTEM_MESSAGES(object):
     INFO_NOAVAILABLE = '#system_messages:info/noAvailable'
     DRR_SCALE_STEP_UP = '#system_messages:drr_scale/step_up'
     DRR_SCALE_STEP_DOWN = '#system_messages:drr_scale/step_down'
+    CHRISTMAS_EVENT_STARTED = '#system_messages:christmas/event/started'
+    CHRISTMAS_EVENT_FINISHED = '#system_messages:christmas/event/finished'
+    CHRISTMAS_EVENT_INPROGRESSAGAIN = '#system_messages:christmas/event/inProgressAgain'
+    CHRISTMAS_EVENT_SUSPENDED = '#system_messages:christmas/event/suspended'
+    CHRISTMAS_ANIMATIONINPROCESS = '#system_messages:christmas/animationInProcess'
     FORTIFICATION_FIXEDPLAYERTOBUILDING = '#system_messages:fortification/fixedPlayerToBuilding'
     FORTIFICATION_MODERNIZATIONBUILDING = '#system_messages:fortification/modernizationBuilding'
     FORTIFICATION_BUILDINGPROCESS = '#system_messages:fortification/buildingProcess'
@@ -1084,8 +1095,21 @@ class SYSTEM_MESSAGES(object):
     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_COMMENT = '#system_messages:telecom/notifications/vehicleRemoved/comment'
     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT = '#system_messages:telecom/notifications/vehicleRemoved/subcomment'
     VEHICLECOMPARE_DISABLED = '#system_messages:vehicleCompare/disabled'
+    VEHICLECOMPARE_PREVIEWNOTALLOWED = '#system_messages:vehicleCompare/previewNotAllowed'
     PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION = '#system_messages:prmp/notification/newEncyclopediaRecommendation'
     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES = '#system_messages:restoreController/hasLimitedRestoreVehicles'
+    CHRISTMASITEM_CONVERSION_SUCCESS = '#system_messages:christmasItem/conversion/success'
+    CHRISTMASITEM_CONVERSION_ERRORS_SERVER_ERROR = '#system_messages:christmasItem/conversion/errors/server_error'
+    CHRISTMASITEM_CONVERSION_ERRORS_NOT_ENOUGH_ITEMS = '#system_messages:christmasItem/conversion/errors/NOT_ENOUGH_ITEMS'
+    CHRISTMASITEM_CONVERSION_ERRORS_NOT_ENOUGH_SELECTED = '#system_messages:christmasItem/conversion/errors/NOT_ENOUGH_SELECTED'
+    CHRISTMASITEM_CONVERSION_ERRORS_RANK_LIMIT_EXCEEDED = '#system_messages:christmasItem/conversion/errors/RANK_LIMIT_EXCEEDED'
+    CHRISTMASITEM_CONVERSION_ERRORS_NO_ITEM = '#system_messages:christmasItem/conversion/errors/NO_ITEM'
+    CHRISTMASITEM_CHRISTMASTREEFILL_SUCCESS = '#system_messages:christmasItem/christmasTreeFill/success'
+    CHRISTMASITEM_CHRISTMASTREEFILL_ERRORS_SERVER_ERROR = '#system_messages:christmasItem/christmasTreeFill/errors/server_error'
+    CHRISTMASCHEST_OPEN_ERRORS_NO_CHESTS = '#system_messages:christmasChest/open/errors/NO_CHESTS'
+    CHRISTMASCHEST_OPEN_ERRORS_SERVER_ERROR = '#system_messages:christmasChest/open/errors/server_error'
+    CHRISTMASCHEST_OPEN_SUCCESS = '#system_messages:christmasChest/open/success'
+    CHRISTMAS_COMMON_ERROR = '#system_messages:christmas/common/error'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1099,6 +1123,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_WRONG_UNIT_REQUISITES,
      UNIT_ERRORS_REMOVE_PLAYER_FAIL,
      UNIT_ERRORS_GET_VEHICLE_FAIL,
+     UNIT_ERRORS_ASSIGN_MEMBER_FAIL,
      UNIT_ERRORS_FAIL_UNIT_METHOD,
      UNIT_ERRORS_BAD_SLOT_IDX,
      UNIT_ERRORS_INSUFFICIENT_ROLE,
@@ -1568,6 +1593,11 @@ class SYSTEM_MESSAGES(object):
      ACTIONACHIEVEMENTS_TITLE,
      TRAINING_ERROR_SWAPTEAMS,
      TRAINING_ERROR_DOACTION,
+     TRAINING_ERROR_SELECTOBSERVER,
+     TRAINING_ERROR_ADDPLAYER,
+     BATTLESESSION_ERROR_ADDPLAYER,
+     BATTLESESSION_ERROR_ADDOBSERVER,
+     BATTLESESSION_ERROR_LIMITS,
      GAMESESSIONCONTROL_KOREA_SESSIONTIME,
      GAMESESSIONCONTROL_KOREA_TIMETILLMIDNIGHT,
      GAMESESSIONCONTROL_KOREA_PLAYTIMELEFT,
@@ -2176,6 +2206,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_WRONG_UNIT_REQUISITES,
      UNIT_ERRORS_REMOVE_PLAYER_FAIL,
      UNIT_ERRORS_GET_VEHICLE_FAIL,
+     UNIT_ERRORS_ASSIGN_MEMBER_FAIL,
      UNIT_ERRORS_FAIL_UNIT_METHOD,
      UNIT_ERRORS_BAD_SLOT_IDX,
      UNIT_ERRORS_INSUFFICIENT_ROLE,
@@ -2242,6 +2273,11 @@ class SYSTEM_MESSAGES(object):
      INFO_NOAVAILABLE,
      DRR_SCALE_STEP_UP,
      DRR_SCALE_STEP_DOWN,
+     CHRISTMAS_EVENT_STARTED,
+     CHRISTMAS_EVENT_FINISHED,
+     CHRISTMAS_EVENT_INPROGRESSAGAIN,
+     CHRISTMAS_EVENT_SUSPENDED,
+     CHRISTMAS_ANIMATIONINPROCESS,
      FORTIFICATION_FIXEDPLAYERTOBUILDING,
      FORTIFICATION_MODERNIZATIONBUILDING,
      FORTIFICATION_BUILDINGPROCESS,
@@ -2387,8 +2423,21 @@ class SYSTEM_MESSAGES(object):
      TELECOM_NOTIFICATIONS_VEHICLEREMOVED_COMMENT,
      TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT,
      VEHICLECOMPARE_DISABLED,
+     VEHICLECOMPARE_PREVIEWNOTALLOWED,
      PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION,
-     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES)
+     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES,
+     CHRISTMASITEM_CONVERSION_SUCCESS,
+     CHRISTMASITEM_CONVERSION_ERRORS_SERVER_ERROR,
+     CHRISTMASITEM_CONVERSION_ERRORS_NOT_ENOUGH_ITEMS,
+     CHRISTMASITEM_CONVERSION_ERRORS_NOT_ENOUGH_SELECTED,
+     CHRISTMASITEM_CONVERSION_ERRORS_RANK_LIMIT_EXCEEDED,
+     CHRISTMASITEM_CONVERSION_ERRORS_NO_ITEM,
+     CHRISTMASITEM_CHRISTMASTREEFILL_SUCCESS,
+     CHRISTMASITEM_CHRISTMASTREEFILL_ERRORS_SERVER_ERROR,
+     CHRISTMASCHEST_OPEN_ERRORS_NO_CHESTS,
+     CHRISTMASCHEST_OPEN_ERRORS_SERVER_ERROR,
+     CHRISTMASCHEST_OPEN_SUCCESS,
+     CHRISTMAS_COMMON_ERROR)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

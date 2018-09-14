@@ -24,6 +24,11 @@ from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
 from constants import ARENA_PERIOD
+from gui.Scaleform.framework.ViewTypes import TOP_WINDOW
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 def _isVideoCameraCtrl(mode):
     from AvatarInputHandler.control_modes import VideoCameraControlMode
@@ -43,6 +48,7 @@ REPLAY_TIME_MARK_CLIENT_READY = 2147483648L
 REPLAY_TIME_MARK_REPLAY_FINISHED = 2147483649L
 REPLAY_TIME_MARK_CURRENT_TIME = 2147483650L
 FAST_FORWARD_STEP = 20.0
+_BATTLE_SIMULATION_KEY_PATH = 'development/replayBattleSimulation'
 
 class BattleReplay():
     isPlaying = property(lambda self: self.__replayCtrl.isPlaying())
@@ -62,11 +68,15 @@ class BattleReplay():
     scriptModalWindowsEnabled = property(lambda self: self.__replayCtrl.scriptModalWindowsEnabled)
     currentTime = property(lambda self: self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME))
     warpTime = property(lambda self: self.__warpTime)
+    rewind = property(lambda self: self.__rewind)
 
     def resetUpdateGunOnTimeWarp(self):
         self.__updateGunOnTimeWarp = False
 
     isUpdateGunOnTimeWarp = property(lambda self: self.__updateGunOnTimeWarp)
+    isBattleSimulation = property(lambda self: self.__isBattleSimulation)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         userPrefs = Settings.g_instance.userPrefs
@@ -91,11 +101,10 @@ class BattleReplay():
         self.__isFinished = False
         self.__isMenuShowed = False
         self.__updateGunOnTimeWarp = False
-        g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
-        g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
-        g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanging
+        self.__isBattleSimulation = False
+        battleSimulationSection = userPrefs[_BATTLE_SIMULATION_KEY_PATH]
+        if battleSimulationSection is not None:
+            self.__isBattleSimulation = battleSimulationSection.asBool
         self.__playerDatabaseID = 0
         self.__serverSettings = dict()
         if isPlayerAccount():
@@ -130,17 +139,24 @@ class BattleReplay():
 
         return
 
+    def subscribe(self):
+        g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
+        g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
+        g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanging
+
+    def unsubscribe(self):
+        g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
+        g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
+        g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
+
     def destroy(self):
         self.stop()
         self.onCommandReceived.clear()
         self.onCommandReceived = None
         self.onAmmoSettingChanged.clear()
         self.onAmmoSettingChanged = None
-        g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
-        g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
-        g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanging
         self.enableAutoRecordingBattles(False)
         self.__replayCtrl.replayFinishedCallback = None
         self.__replayCtrl.controlModeChangedCallback = None
@@ -273,6 +289,8 @@ class BattleReplay():
 
     def handleKeyEvent(self, isDown, key, mods, isRepeat, event):
         if not self.isPlaying:
+            return False
+        elif self.isBattleSimulation:
             return False
         elif self.isTimeWarpInProgress:
             return True
@@ -570,7 +588,8 @@ class BattleReplay():
                  'clientVersionFromXml': clientVersionFromXml,
                  'serverName': connectionManager.serverUserName,
                  'regionCode': constants.AUTH_REALM,
-                 'serverSettings': self.__serverSettings}
+                 'serverSettings': self.__serverSettings,
+                 'hasMods': self.__replayCtrl.hasMods}
                 self.__replayCtrl.recMapName = arenaName
                 self.__replayCtrl.recPlayerVehicleName = vehicleName
                 self.__replayCtrl.setArenaInfoStr(json.dumps(arenaInfo))
@@ -665,19 +684,27 @@ class BattleReplay():
     def __onAmmoButtonPressed(self, idx):
         self.onAmmoSettingChanged(idx)
 
-    def onLockTarget(self, lock):
+    def onLockTarget(self, lock, playVoiceNotifications=True):
         player = BigWorld.player()
         if not isPlayerAvatar():
             return
+        import SoundGroups
         if self.isPlaying:
             if lock == 1:
-                player.soundNotifications.play('target_captured')
+                SoundGroups.g_instance.playSound2D('ui_target_locked')
             elif lock == 0:
-                player.soundNotifications.play('target_unlocked')
+                SoundGroups.g_instance.playSound2D('ui_target_unlocked')
             else:
-                player.soundNotifications.play('target_lost')
+                SoundGroups.g_instance.playSound2D('ui_target_lost')
+            if playVoiceNotifications:
+                if lock == 1:
+                    player.soundNotifications.play('target_captured')
+                elif lock == 0:
+                    player.soundNotifications.play('target_unlocked')
+                else:
+                    player.soundNotifications.play('target_lost')
         elif self.isRecording:
-            self.__replayCtrl.onLockTarget(lock)
+            self.__replayCtrl.onLockTarget(lock, playVoiceNotifications)
 
     def onBattleChatMessage(self, messageText, isCurrentPlayer):
         from messenger import MessengerEntry
@@ -822,6 +849,7 @@ class BattleReplay():
             BigWorld.wg_enableGUIBackground(True, False)
             if self.__isFinished:
                 self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
+                self.__closeModalWindow()
             self.__isFinished = False
             self.__warpTime = time
             self.__rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
@@ -842,7 +870,19 @@ class BattleReplay():
                 self.__timeWarpCleanupCb = BigWorld.callback(0.0, self.__cleanupAfterTimeWarp)
             g_replayEvents.onTimeWarpStart()
             g_replayEvents.onMuteSound(True)
+            self.__rewind = False
             return
+
+    @classmethod
+    def __closeModalWindow(cls):
+        app = g_appLoader.getDefBattleApp()
+        if app is not None:
+            topWindowContainer = app.containerManager.getContainer(TOP_WINDOW)
+            if topWindowContainer is not None:
+                pyView = topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'simpleDialog'})
+                if pyView is not None:
+                    topWindowContainer.remove(pyView)
+        return
 
     def __cleanupAfterTimeWarp(self):
         BigWorld.wg_clearDecals()
@@ -882,12 +922,11 @@ class BattleReplay():
         return self.__isFinished
 
     def onSetCruiseMode(self, mode):
-        from gui.battle_control import g_sessionProvider
-        from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
         if self.isRecording:
             self.__replayCtrl.onSetCruiseMode(mode)
         elif self.isPlaying:
-            g_sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CRUISE_MODE, mode)
+            from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+            self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CRUISE_MODE, mode)
 
     def isNeedToPlay(self, entity_id):
         return self.__replayCtrl.isEffectNeedToPlay(entity_id)
@@ -967,12 +1006,16 @@ def _JSON_Encode(obj):
 
 
 def isPlaying():
-    return g_replayCtrl.isPlaying or g_replayCtrl.isTimeWarpInProgress
+    if g_replayCtrl is not None:
+        return g_replayCtrl.isPlaying or g_replayCtrl.isTimeWarpInProgress
+    else:
+        return False
+        return
 
 
 def isLoading():
-    return g_replayCtrl.isLoading
+    return g_replayCtrl is not None and g_replayCtrl.isLoading
 
 
 def isFinished():
-    return g_replayCtrl.isFinishedNoPlayCheck()
+    return g_replayCtrl is not None and g_replayCtrl.isFinishedNoPlayCheck()

@@ -44,6 +44,9 @@ class PrebattleWindowMeta(AbstractWindowView):
         self._printOverrideError('getClientID')
 
     def as_setRosterListS(self, team, assigned, rosters):
+        """
+        :param rosters: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_setRosterList(team, assigned, rosters) if self._isDAAPIInited() else None
 
     def as_setPlayerStateS(self, team, assigned, data):

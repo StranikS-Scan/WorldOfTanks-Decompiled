@@ -23,6 +23,9 @@ class RoleChangeMeta(AbstractWindowView):
         return self.flashObject.as_setCommonData(data) if self._isDAAPIInited() else None
 
     def as_setRolesS(self, roles):
+        """
+        :param roles: Represented by Array (AS)
+        """
         return self.flashObject.as_setRoles(roles) if self._isDAAPIInited() else None
 
     def as_setPriceS(self, priceString, enoughGold):

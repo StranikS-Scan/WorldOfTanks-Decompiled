@@ -4,11 +4,11 @@ from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import Notificati
 from gui.shared.notifications import NotificationPriorityLevel
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from notification.NotificationLayoutView import NotificationLayoutView
 from notification import NotificationMVC
+from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import NOTIFICATION_STATE, NOTIFICATION_GROUP
 
-class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutView):
+class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView):
 
     def __init__(self):
         mvc = NotificationMVC.g_instance
@@ -21,9 +21,6 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
         super(NotificationPopUpViewer, self).__init__()
         self.setModel(mvc.getModel())
 
-    def _onLayoutSettingsChanged(self, settings):
-        self.as_layoutInfoS(settings)
-
     def onClickAction(self, typeID, entityID, action):
         NotificationMVC.g_instance.handleAction(typeID, entityID, action)
 
@@ -35,9 +32,10 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
 
     def setListClear(self):
         self.__noDisplayingPopups = True
-        if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
+        if self._model is not None and self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
             if len(self.__pendingMessagesQueue) > 0:
                 self.__showAlertMessage(self.__pendingMessagesQueue.pop(0))
+        return
 
     def getMessageActualTime(self, msTime):
         return TimeFormatter.getActualMsgTimeStr(msTime)
@@ -50,7 +48,6 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
         self._model.onDisplayStateChanged += self.__displayStateChangeHandler
         mvcInstance = NotificationMVC.g_instance
         mvcInstance.getAlertController().onAllAlertsClosed -= self.__allAlertsMessageCloseHandler
-        self.as_layoutInfoS(self._model.getLayoutSettings())
         self.as_initInfoS(self.__maxAvailableItemsCount, self.__messagesPadding)
         self._model.setup()
 

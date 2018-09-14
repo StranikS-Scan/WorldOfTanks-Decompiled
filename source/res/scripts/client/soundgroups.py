@@ -453,10 +453,9 @@ class SoundGroups(object):
     def setMasterVolume(self, volume):
         self.__masterVolume = volume
         self.__muffledVolume = self.__masterVolume * self.getVolume('masterFadeVivox')
-        masterVolume = (self.__muffledVolume if self.__muffled else self.__masterVolume) * 100.0
-        WWISE.WW_setRTCPGlobal('RTPC_ext_menu_volume_master', masterVolume)
+        masterVolume = self.__muffledVolume if self.__muffled else self.__masterVolume
         self.savePreferences()
-        WWISE.WW_onMasterVolumeChanged(self.__masterVolume)
+        WWISE.WW_setMasterVolume(masterVolume)
         self.onMusicVolumeChanged('music', self.__masterVolume, self.getVolume('music'))
         self.onMusicVolumeChanged('ambient', self.__masterVolume, self.getVolume('ambient'))
 
@@ -511,7 +510,7 @@ class SoundGroups(object):
 
     def applyPreferences(self):
         if not self.__isWindowVisible:
-            WWISE.WW_setRTCPGlobal('RTPC_ext_menu_volume_master', 0.0)
+            WWISE.WW_setMasterVolume(0.0)
             return
         self.setMasterVolume(self.__masterVolume)
         for categoryName in self.__volumeByCategory.keys():
@@ -544,11 +543,12 @@ class SoundGroups(object):
     def __onCameraChanged(self, cameraName, currentVehicleId=None):
         if cameraName != 'postmortem':
             return
-        elif BigWorld.entity(BigWorld.player().playerVehicleID).isAlive():
-            return
-        elif currentVehicleId is None:
-            return
         else:
+            playerVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
+            if playerVehicle is not None and playerVehicle.isAlive():
+                return
+            if currentVehicleId is None:
+                return
             self.changePlayMode(0)
             return
 
@@ -623,13 +623,13 @@ class SoundGroups(object):
             traceback.print_stack()
         return WWISE.WW_getCameraOriented(event, pos)
 
-    def WWgetSoundObject(self, objectName, matrix, local=(0.0, 0.0, 0.0)):
+    def WWgetSoundObject(self, objectName, matrix, local=(0.0, 0.0, 0.0), auxSend=False):
         if DEBUG_TRACE_SOUND is True:
             LOG_DEBUG('SOUND: WWgetSoundObject', objectName, matrix, local)
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return WWISE.WW_getSoundObject(objectName, matrix, local)
+        return WWISE.WW_getSoundObject(objectName, matrix, local, auxSend)
 
     def WWgetSound(self, eventName, objectName, matrix, local=(0.0, 0.0, 0.0)):
         if DEBUG_TRACE_SOUND is True:

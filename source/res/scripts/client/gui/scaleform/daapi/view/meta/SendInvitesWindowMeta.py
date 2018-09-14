@@ -29,6 +29,9 @@ class SendInvitesWindowMeta(AbstractWindowView):
         return self.flashObject.as_setDefaultOnlineFlag(onlineFlag) if self._isDAAPIInited() else None
 
     def as_setInvalidUserTagsS(self, tags):
+        """
+        :param tags: Represented by Vector.<String> (AS)
+        """
         return self.flashObject.as_setInvalidUserTags(tags) if self._isDAAPIInited() else None
 
     def as_setWindowTitleS(self, value):

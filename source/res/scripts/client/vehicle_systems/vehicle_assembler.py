@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/vehicle_assembler.py
-from CustomEffectManager import CustomEffectManager
+import functools
+import weakref
 from vehicle_systems import model_assembler
 from vehicle_systems.CompoundAppearance import CompoundAppearance
 from vehicle_systems.components.world_connectors import GunRotatorConnector
-from vehicle_systems.model_assembler import prepareCompoundAssembler
-from vehicle_systems.tankStructure import getPartModelsFromDesc
-import functools
+from vehicle_systems.model_assembler import prepareCompoundAssembler, createEffects, createSwingingAnimator
 from vehicle_systems.components.vehicle_audition_wwise import EngineAuditionWWISE, TrackCrashAuditionWWISE
-import weakref
 import BigWorld
 import WoT
 from vehicle_systems.components.engine_state import DetailedEngineStateWWISE
@@ -16,7 +14,9 @@ from vehicle_systems.components.highlighter import Highlighter
 from helpers import gEffectsDisabled
 import Vehicular
 import DataLinks
-from vehicle_systems.tankStructure import TankNodeNames, TankPartNames
+from vehicle_systems.tankStructure import TankPartNames
+TANK_FRICTION_EVENT = 'collision_tank_friction_pc'
+VEHICLE_PRIORITY_GROUP = 1
 
 def createAssembler():
     return PanzerAssemblerWWISE()
@@ -108,33 +108,30 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                 appearance.engineAudition = self.__assembleEngineAudition(isPlayer, appearance)
                 appearance.detailedEngineState.onEngineStart += appearance.engineAudition.onEngineStart
                 appearance.detailedEngineState.onStateChanged += appearance.engineAudition.onStateChanged
-                _createEffects(appearance)
+                createEffects(appearance)
             if isPlayer:
                 gunRotatorConnector = GunRotatorConnector(appearance)
                 appearance.addComponent(gunRotatorConnector)
+                appearance.frictionAudition = Vehicular.FrictionAudition(TANK_FRICTION_EVENT)
         self.__createTrackCrashControl(appearance)
         appearance.highlighter = Highlighter()
-        lodCalcInst = Vehicular.LodCalculator(DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True)
+        isLodTopPriority = isPlayer
+        lodCalcInst = Vehicular.LodCalculator(DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, VEHICLE_PRIORITY_GROUP, isLodTopPriority)
         appearance.lodCalculator = lodCalcInst
         lodLink = DataLinks.createFloatLink(lodCalcInst, 'lodDistance')
+        lodStateLink = lodCalcInst.lodStateLink
         if not appearance.damageState.isCurrentModelDamaged:
             model_assembler.assembleRecoil(appearance, lodLink)
+            model_assembler.assembleLeveredSuspensionIfNeed(appearance, lodStateLink)
             _assembleSwinging(appearance, lodLink)
+            model_assembler.assembleSuspensionSound(appearance, lodLink, isPlayer)
+            model_assembler.assembleSuspensionController(appearance)
         model_assembler.setupTurretRotations(appearance)
-
-
-def _createEffects(appearance):
-    if gEffectsDisabled():
-        appearance.customEffectManager = None
-        return
-    else:
-        appearance.customEffectManager = CustomEffectManager(appearance)
-        return
 
 
 def _assembleSwinging(appearance, lodLink):
     compoundModel = appearance.compoundModel
-    appearance.swingingAnimator = swingingAnimator = model_assembler.createSwingingAnimator(appearance.typeDescriptor, compoundModel.node(TankPartNames.HULL).localMatrix, appearance.compoundModel.matrix, lodLink)
+    appearance.swingingAnimator = swingingAnimator = createSwingingAnimator(appearance.typeDescriptor, compoundModel.node(TankPartNames.HULL).localMatrix, appearance.compoundModel.matrix, lodLink)
     compoundModel.node(TankPartNames.HULL, swingingAnimator)
     appearance.fashions.chassis.setupSwinging(swingingAnimator, 'V')
     if hasattr(appearance.filter, 'placingCompensationMatrix'):

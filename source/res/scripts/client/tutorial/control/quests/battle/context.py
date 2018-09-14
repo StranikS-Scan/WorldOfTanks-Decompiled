@@ -3,17 +3,19 @@
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core.settings_constants import TUTORIAL
 from constants import ARENA_GUI_TYPE, IS_DEVELOPMENT
-from gui.battle_control import g_sessionProvider
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from tutorial.control import context
 
 class BattleQuestsStartReqs(context.StartReqs):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def isEnabled(self):
         areSettingsInited = self.__areSettingsInited()
         arenaGuiTypes = [ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.SANDBOX, ARENA_GUI_TYPE.RATED_SANDBOX]
         if IS_DEVELOPMENT:
             arenaGuiTypes.append(ARENA_GUI_TYPE.TRAINING)
-        return g_sessionProvider.arenaVisitor.getArenaGuiType() in arenaGuiTypes and areSettingsInited
+        return self.sessionProvider.arenaVisitor.getArenaGuiType() in arenaGuiTypes and areSettingsInited
 
     def __areSettingsInited(self):
         validateSettings = (TUTORIAL.FIRE_EXTINGUISHER_INSTALLED, TUTORIAL.MEDKIT_INSTALLED, TUTORIAL.REPAIRKIT_INSTALLED)

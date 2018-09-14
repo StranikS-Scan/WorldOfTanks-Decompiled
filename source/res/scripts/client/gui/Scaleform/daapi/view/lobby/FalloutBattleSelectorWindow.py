@@ -1,43 +1,38 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/FalloutBattleSelectorWindow.py
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.game_control import getFalloutCtrl
-from gui.prb_control.context import PrebattleAction
-from gui.prb_control.prb_helpers import GlobalListener
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from adisp import process
 from gui.Scaleform.daapi.view.meta.FalloutBattleSelectorWindowMeta import FalloutBattleSelectorWindowMeta
 from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.formatters.text_styles import promoSubTitle, main
 from gui.shared.utils.functions import makeTooltip
+from helpers import dependency
 from messenger.ext import channel_num_gen
 from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
+from skeletons.gui.game_control import IFalloutController
 
-class FalloutBattleSelectorWindow(FalloutBattleSelectorWindowMeta, GlobalListener):
-
-    def __init__(self, ctx=None):
-        super(FalloutBattleSelectorWindow, self).__init__(ctx)
-        self.__falloutCtrl = None
-        return
+class FalloutBattleSelectorWindow(FalloutBattleSelectorWindowMeta, IGlobalListener):
+    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def onSelectCheckBoxAutoSquad(self, isSelected):
-        self.__falloutCtrl.setAutomatch(isSelected)
+        self.falloutCtrl.setAutomatch(isSelected)
 
     def onWindowMinimize(self):
         self.destroy()
 
     def onWindowClose(self):
-        self.destroy()
         if not self.prbDispatcher.getFunctionalState().hasLockedState:
-            self.prbDispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.RANDOM_QUEUE))
+            self.__doClose()
 
     def onDominationBtnClick(self):
-        self.prbDispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.FALLOUT_CLASSIC))
-        self.destroy()
+        self.__doSelect(PREBATTLE_ACTION_NAME.FALLOUT_CLASSIC)
 
     def onMultiteamBtnClick(self):
-        self.prbDispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.FALLOUT_MULTITEAM))
-        self.destroy()
+        self.__doSelect(PREBATTLE_ACTION_NAME.FALLOUT_MULTITEAM)
 
     def onEnqueued(self, queueType, *args):
         self.as_setBtnStatesS(self.__getBtnsStateData(False))
@@ -47,8 +42,11 @@ class FalloutBattleSelectorWindow(FalloutBattleSelectorWindowMeta, GlobalListene
         self.as_setBtnStatesS(self.__getBtnsStateData(True))
         self._onBtnsDisableStateChanged()
 
+    def onPrbEntitySwitched(self):
+        self.destroy()
+
     def onUnitFlagsChanged(self, flags, timeLeft):
-        if self.unitFunctional.hasLockedState():
+        if self.prbEntity.hasLockedState():
             if flags.isInSearch() or flags.isInQueue() or flags.isInArena():
                 self.as_setBtnStatesS(self.__getBtnsStateData(False))
         else:
@@ -61,21 +59,17 @@ class FalloutBattleSelectorWindow(FalloutBattleSelectorWindowMeta, GlobalListene
     def _populate(self):
         super(FalloutBattleSelectorWindow, self)._populate()
         self.startGlobalListening()
-        self.__falloutCtrl = getFalloutCtrl()
-        self.__falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
-        self.__falloutCtrl.onAutomatchChanged += self.__updateFalloutSettings
+        self.falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
+        self.falloutCtrl.onAutomatchChanged += self.__updateFalloutSettings
         self.__updateFalloutSettings()
-        if self.prbDispatcher.getFunctionalState().hasLockedState or not self.__falloutCtrl.canChangeBattleType():
+        if self.prbDispatcher.getFunctionalState().hasLockedState or not self.falloutCtrl.canChangeBattleType():
             self.as_setBtnStatesS(self.__getBtnsStateData(False))
 
     def _dispose(self):
         self.stopGlobalListening()
-        if self.__falloutCtrl:
-            self.__falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
-            self.__falloutCtrl.onAutomatchChanged -= self.__updateFalloutSettings
-        self.__falloutCtrl = None
+        self.falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
+        self.falloutCtrl.onAutomatchChanged -= self.__updateFalloutSettings
         super(FalloutBattleSelectorWindow, self)._dispose()
-        return
 
     def _getTooltipData(self):
         data = {'autoSquadStr': makeTooltip(TOOLTIPS.FALLOUTBATTLESELECTORWINDOW_INFO_HEADER, TOOLTIPS.FALLOUTBATTLESELECTORWINDOW_INFO_BODY, attention=TOOLTIPS.FALLOUTBATTLESELECTORWINDOW_INFO_ALERT)}
@@ -84,7 +78,7 @@ class FalloutBattleSelectorWindow(FalloutBattleSelectorWindowMeta, GlobalListene
         if self.prbDispatcher.getFunctionalState().hasLockedState:
             data['dominationStr'] = TOOLTIPS.FALLOUTBATTLESELECTORWINDOW_BTNDISABLED
             data['multiteamStr'] = TOOLTIPS.FALLOUTBATTLESELECTORWINDOW_BTNDISABLED
-        elif not self.__falloutCtrl.canChangeBattleType():
+        elif not self.falloutCtrl.canChangeBattleType():
             data['dominationStr'] = TOOLTIPS.FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED
             data['multiteamStr'] = TOOLTIPS.FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED
         return data
@@ -99,7 +93,7 @@ class FalloutBattleSelectorWindow(FalloutBattleSelectorWindowMeta, GlobalListene
          'autoSquadCheckboxEnabled': isEnabled}
 
     def __updateFalloutSettings(self):
-        if not self.__falloutCtrl.isEnabled():
+        if not self.falloutCtrl.isEnabled():
             return self.onWindowClose()
         self.as_setInitDataS({'windowTitle': FALLOUT.BATTLESELECTORWINDOW_TITLE,
          'headerTitleStr': promoSubTitle(FALLOUT.BATTLESELECTORWINDOW_HEADERTITLESTR),
@@ -111,11 +105,19 @@ class FalloutBattleSelectorWindow(FalloutBattleSelectorWindowMeta, GlobalListene
          'multiteamDescStr': main(FALLOUT.BATTLESELECTORWINDOW_MULTITEAM_DESCR),
          'multiteamBattleBtnStr': FALLOUT.BATTLESELECTORWINDOW_MULTITEAMBATTLEBTNLBL,
          'bgImg': RES_ICONS.MAPS_ICONS_LOBBY_FALLOUTBATTLESELECTORBG,
-         'multiteamAutoSquadEnabled': self.__falloutCtrl.isAutomatch(),
+         'multiteamAutoSquadEnabled': self.falloutCtrl.isAutomatch(),
          'multiteamAutoSquadLabel': FALLOUT.FALLOUTBATTLESELECTORWINDOW_AUTOSQUAD_LABEL,
          'tooltipData': self._getTooltipData()})
-        if self.prbDispatcher.getFunctionalState().hasLockedState or not self.__falloutCtrl.canChangeBattleType():
+        if self.prbDispatcher.getFunctionalState().hasLockedState or not self.falloutCtrl.canChangeBattleType():
             self.as_setBtnStatesS(self.__getBtnsStateData(False))
         else:
             self.as_setBtnStatesS(self.__getBtnsStateData(True))
         self._onBtnsDisableStateChanged()
+
+    @process
+    def __doClose(self):
+        yield self.prbDispatcher.doLeaveAction(LeavePrbAction())
+
+    @process
+    def __doSelect(self, prebattleActionName):
+        yield self.prbDispatcher.doSelectAction(PrbAction(prebattleActionName))

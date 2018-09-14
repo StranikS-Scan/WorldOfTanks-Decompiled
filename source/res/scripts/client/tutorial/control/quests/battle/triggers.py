@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/battle/triggers.py
-from gui.battle_control import g_sessionProvider
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from tutorial.control.triggers import TriggerWithValidateVar
 
 class UseItemsTrigger(TriggerWithValidateVar):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def run(self):
         self.isRunning = True
         if not self.isSubscribed:
             self.isSubscribed = True
-            eqCtrl = g_sessionProvider.shared.equipments
+            eqCtrl = self.sessionProvider.shared.equipments
             if eqCtrl is not None:
                 eqCtrl.onEquipmentUpdated += self.__onEquipmentUpdated
         self.toggle(isOn=self.isOn())
@@ -25,7 +27,7 @@ class UseItemsTrigger(TriggerWithValidateVar):
             self.toggle(isOn=self.isOn(True))
 
     def clear(self):
-        eqCtrl = g_sessionProvider.shared.equipments
+        eqCtrl = self.sessionProvider.shared.equipments
         if eqCtrl is not None:
             eqCtrl.onEquipmentUpdated -= self.__onEquipmentUpdated
         self.isSubscribed = False
@@ -34,19 +36,20 @@ class UseItemsTrigger(TriggerWithValidateVar):
 
 
 class InstallItemsTrigger(TriggerWithValidateVar):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def run(self):
         self.isRunning = True
         if not self.isSubscribed:
             self.isSubscribed = True
-            eqCtrl = g_sessionProvider.shared.equipments
+            eqCtrl = self.sessionProvider.shared.equipments
             if eqCtrl is not None:
                 eqCtrl.onEquipmentUpdated += self.__onEquipmentAdded
         self.toggle(isOn=self.isOn())
         return
 
     def isOn(self):
-        eqCtrl = g_sessionProvider.shared.equipments
+        eqCtrl = self.sessionProvider.shared.equipments
         if eqCtrl is not None:
             conditionVar = self.getVar()
             itemsList = conditionVar.get('items', [])
@@ -60,7 +63,7 @@ class InstallItemsTrigger(TriggerWithValidateVar):
         self.toggle(isOn=self.isOn())
 
     def clear(self):
-        eqCtrl = g_sessionProvider.shared.equipments
+        eqCtrl = self.sessionProvider.shared.equipments
         if eqCtrl is not None:
             eqCtrl.onEquipmentUpdated -= self.__onEquipmentAdded
         self.isSubscribed = False

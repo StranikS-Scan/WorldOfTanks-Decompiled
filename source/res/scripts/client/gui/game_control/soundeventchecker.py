@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/SoundEventChecker.py
-from gui.app_loader.decorators import sf_lobby
-from gui.game_control.controllers import Controller
-from gui.shared import g_itemsCache
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.app_loader.decorators import sf_lobby
+from gui.shared import g_itemsCache
 from gui.shared.SoundEffectsId import SoundEffectsId
+from skeletons.gui.game_control import ISoundEventChecker
 
-class SoundEventChecker(Controller):
+class SoundEventChecker(ISoundEventChecker):
 
-    def __init__(self, proxy):
-        super(SoundEventChecker, self).__init__(proxy)
+    def __init__(self):
+        super(SoundEventChecker, self).__init__()
         self.__credits, self.__gold = (0, 0)
 
     @sf_lobby

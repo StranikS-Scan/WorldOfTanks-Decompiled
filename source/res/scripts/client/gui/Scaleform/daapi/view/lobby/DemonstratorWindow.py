@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/DemonstratorWindow.py
 import ArenaType
 from gui.Scaleform.daapi.view.meta.DemonstratorWindowMeta import DemonstratorWindowMeta
-from gui.prb_control.context import PrebattleAction
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.base.ctx import PrbAction
 
 class DemonstratorWindow(DemonstratorWindowMeta):
 
@@ -27,7 +27,7 @@ class DemonstratorWindow(DemonstratorWindowMeta):
     def onMapSelected(self, mapID):
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            dispatcher.doAction(PrebattleAction(None, mapID=mapID))
+            dispatcher.doAction(PrbAction(None, mapID=mapID))
             self.onWindowClose()
         return
 

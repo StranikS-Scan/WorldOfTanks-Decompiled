@@ -2,13 +2,15 @@
 # Embedded file name: scripts/client/gui/customization/quests.py
 from collections import namedtuple
 from gui.customization.shared import CUSTOMIZATION_TYPE, TYPE_NAME
+from helpers import dependency
+from skeletons.gui.server_events import IEventsCache
 _QuestData = namedtuple('QuestData', ('id', 'name', 'count'))
 
 class Quests(object):
+    _questsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, events, dependencies):
         self.__events = events
-        self._questsCache = dependencies.g_questsCache
         self._currentVehicle = dependencies.g_currentVehicle
 
     def init(self):

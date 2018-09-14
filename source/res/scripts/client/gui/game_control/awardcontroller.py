@@ -4,47 +4,53 @@ import types
 import weakref
 from abc import ABCMeta, abstractmethod
 import ArenaType
-import potapov_quests
 import gui.awards.event_dispatcher as shared_events
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
-from gui.goodies import g_goodiesCache
-from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
-from gui.prb_control.storage import prequeue_storage_getter
-from potapov_quests import PQ_BRANCH
-from constants import EVENT_TYPE, QUEUE_TYPE
-from helpers import i18n
-from chat_shared import SYS_MESSAGE_TYPE
+import potapov_quests
+from FortifiedRegionBase import FORT_ATTACK_RESULT
+from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
+from chat_shared import SYS_MESSAGE_TYPE
+from christmas_shared import BOX_COLORS
+from constants import EVENT_TYPE, QUEUE_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
-from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
-from messenger.proto.events import g_messengerEvents
-from messenger.formatters import NCContextItemFormatter, TimeFormatter
-from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import POTAPOV_QUESTS_GROUP
+from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
-from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.server_events import g_eventsCache, events_dispatcher as quests_events
-from gui.game_control.controllers import Controller
-from gui.shared.gui_items.dossier.factories import getAchievementFactory
+from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.christmas.christmas_controller import g_christmasCtrl
+from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
+from gui.goodies import g_goodiesCache
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
+from gui.prb_control.storages import prequeue_storage_getter
+from gui.server_events import events_dispatcher as quests_events
+from gui.shared import g_itemsCache, EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import g_itemsCache, EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.utils.transport import z_loads
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.prb_control.prb_helpers import GlobalListener
-from PlayerEvents import g_playerEvents
-from FortifiedRegionBase import FORT_ATTACK_RESULT
+from helpers import dependency
+from helpers import i18n
+from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
+from messenger.formatters import NCContextItemFormatter, TimeFormatter
+from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
+from messenger.proto.events import g_messengerEvents
+from potapov_quests import PQ_BRANCH
+from skeletons.gui.game_control import IRefSystemController, IAwardController
+from skeletons.gui.server_events import IEventsCache
 
-class AwardController(Controller, GlobalListener):
+class AwardController(IAwardController, IGlobalListener):
+    refSystem = dependency.descriptor(IRefSystemController)
+    eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, proxy):
-        super(AwardController, self).__init__(proxy)
-        self.__handlers = [QuestBoosterAwardHandler(self),
+    def __init__(self):
+        self.__handlers = [BattleQuestsAutoWindowHandler(self),
+         QuestBoosterAwardHandler(self),
          BoosterAfterBattleAwardHandler(self),
          PunishWindowHandler(self),
          RefSystemQuestsWindowHandler(self),
@@ -61,7 +67,10 @@ class AwardController(Controller, GlobalListener):
          PotapovQuestsAutoWindowHandler(self),
          GoldFishHandler(self),
          FalloutVehiclesBuyHandler(self),
-         TelecomHandler(self)]
+         TelecomHandler(self),
+         ChtistmasBoxAfterBattleAwardHandler(self),
+         ChtistmasBoxTokenQuestAwardHandler(self)]
+        super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
 
@@ -94,9 +103,11 @@ class AwardController(Controller, GlobalListener):
 
     def onAvatarBecomePlayer(self):
         self.__isLobbyLoaded = False
+        self.stopGlobalListening()
 
     def onDisconnected(self):
         self.__isLobbyLoaded = False
+        self.stopGlobalListening()
         for handler in self.__handlers:
             handler.stop()
 
@@ -107,7 +118,7 @@ class AwardController(Controller, GlobalListener):
         for handler in self.__handlers:
             handler.start()
 
-    def onPlayerStateChanged(self, functional, roster, accountInfo):
+    def onPlayerStateChanged(self, entity, roster, accountInfo):
         self.handlePostponed()
 
     def onUnitFlagsChanged(self, flags, timeLeft):
@@ -139,6 +150,9 @@ class AwardHandler(object):
         if self._needToShowAward(args):
             self._awardCtrl.postponeOrCall(self._showAward, args)
 
+    def isShowCongrats(self, quest):
+        return quest.getData().get('showCongrats', False) if quest else False
+
     @abstractmethod
     def _needToShowAward(self, ctx):
         pass
@@ -149,6 +163,7 @@ class AwardHandler(object):
 
 
 class ServiceChannelHandler(AwardHandler):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, type, awardCtrl):
         super(ServiceChannelHandler, self).__init__(awardCtrl)
@@ -204,13 +219,21 @@ class RefSystemQuestsWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         completedQuestIDs = message.data.get('completedQuestIDs', set())
+        allQuests = self.eventsCache.getAllQuests(includePotapovQuests=True)
+        for uniqueQuestID in completedQuestIDs:
+            if uniqueQuestID in allQuests:
+                q = allQuests[uniqueQuestID]
+                if not self.isShowCongrats(q):
+                    return
+
         for tmanCompDescr in message.data.get('tankmen') or []:
-            self._awardCtrl._proxy.refSystem.showTankmanAwardWindow(Tankman(tmanCompDescr), completedQuestIDs)
+            self._awardCtrl.refSystem.showTankmanAwardWindow(Tankman(tmanCompDescr), completedQuestIDs)
 
-        for vehTypeCompDescr in message.data.get('vehicles') or {}:
-            self._awardCtrl._proxy.refSystem.showVehicleAwardWindow(Vehicle(typeCompDescr=abs(vehTypeCompDescr)), completedQuestIDs)
+        for vehiclesData in message.data.get('vehicles', []):
+            for vehTypeCompDescr in vehiclesData:
+                self._awardCtrl.refSystem.showVehicleAwardWindow(Vehicle(typeCompDescr=abs(vehTypeCompDescr)), completedQuestIDs)
 
-        self._awardCtrl._proxy.refSystem.showCreditsAwardWindow(message.data.get('credits', 0), completedQuestIDs)
+        self._awardCtrl.refSystem.showCreditsAwardWindow(message.data.get('credits', 0), completedQuestIDs)
 
 
 class FortResultsWindowHandler(ServiceChannelHandler):
@@ -254,9 +277,8 @@ class PotapovQuestsBonusHandler(ServiceChannelHandler):
 
         return
 
-    @staticmethod
-    def __tryToShowTokenAward(tID, tCount, completedQuestIDs):
-        for q in g_eventsCache.getQuestsByTokenBonus(tID):
+    def __tryToShowTokenAward(self, tID, tCount, completedQuestIDs):
+        for q in self.eventsCache.getQuestsByTokenBonus(tID):
             if q.getType() == EVENT_TYPE.POTAPOV_QUEST and q.getQuestBranch() == PQ_BRANCH.REGULAR:
                 pqType = q.getPQType()
                 if pqType.mainQuestID in completedQuestIDs or pqType.addQuestID in completedQuestIDs:
@@ -295,20 +317,21 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         data = ctx[1].data
-        allQuests = g_eventsCache.getAllQuests(includePotapovQuests=True)
+        allQuests = self.eventsCache.getAllQuests(includePotapovQuests=True)
         needToShowVehAwardWindow = False
         for qID in data.get('completedQuestIDs', set()):
             if qID in allQuests:
                 for tokenID, children in allQuests[qID].getChildren().iteritems():
                     for chID in children:
                         chQuest = allQuests[chID]
-                        if chQuest.getType() == EVENT_TYPE.POTAPOV_QUEST:
+                        if chQuest.getType() == EVENT_TYPE.POTAPOV_QUEST or self.isShowCongrats(chQuest):
                             needToShowVehAwardWindow = True
                             break
 
         if needToShowVehAwardWindow:
-            for vehTypeCompDescr in data.get('vehicles') or {}:
-                quests_events.showVehicleAward(Vehicle(typeCompDescr=abs(vehTypeCompDescr)))
+            for vehiclesData in data.get('vehicles', []):
+                for vehTypeCompDescr in vehiclesData:
+                    quests_events.showVehicleAward(Vehicle(typeCompDescr=abs(vehTypeCompDescr)))
 
 
 class MotiveQuestsWindowHandler(ServiceChannelHandler):
@@ -318,41 +341,60 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         data = ctx[1].data
-        motiveQuests = g_eventsCache.getMotiveQuests()
+        motiveQuests = self.eventsCache.getMotiveQuests()
         for qID in data.get('completedQuestIDs', set()):
-            if qID in motiveQuests:
+            if qID in motiveQuests and self.isShowCongrats(motiveQuests[qID]):
                 quests_events.showMotiveAward(motiveQuests[qID])
 
 
 class QuestBoosterAwardHandler(ServiceChannelHandler):
 
-    def __init__(self, awardCtrl):
-        super(QuestBoosterAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+    def __init__(self, awardCtrl, type=SYS_MESSAGE_TYPE.tokenQuests.index()):
+        super(QuestBoosterAwardHandler, self).__init__(type, awardCtrl)
 
     def _showAward(self, ctx):
-        data = ctx[1].data
-        goodies = data.get('goodies', {})
-        for boosterID in goodies:
-            booster = g_goodiesCache.getBooster(boosterID)
-            if booster is not None and booster.enabled:
-                shared_events.showBoosterAward(booster)
+        if not g_christmasCtrl.areAwardsWindowsLocked():
+            data = ctx[1].data
+            goodies = data.get('goodies', {})
+            for boosterID in goodies:
+                booster = g_goodiesCache.getBooster(boosterID)
+                if booster is not None and booster.enabled:
+                    shared_events.showBoosterAward(booster)
 
         return
 
 
-class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
+class BoosterAfterBattleAwardHandler(QuestBoosterAwardHandler):
 
     def __init__(self, awardCtrl):
-        super(BoosterAfterBattleAwardHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(BoosterAfterBattleAwardHandler, self).__init__(awardCtrl, SYS_MESSAGE_TYPE.battleResults.index())
+
+
+class ChtistmasBoxAfterBattleAwardHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl, sysMessageType=SYS_MESSAGE_TYPE.battleResults.index()):
+        super(ChtistmasBoxAfterBattleAwardHandler, self).__init__(sysMessageType, awardCtrl)
 
     def _showAward(self, ctx):
-        goodies = ctx[1].data.get('goodies', {})
-        for boosterID in goodies:
-            booster = g_goodiesCache.getBooster(boosterID)
-            if booster is not None and booster.enabled:
-                shared_events.showBoosterAward(booster)
+        if g_christmasCtrl.isEventInProgress():
+            questsBonuses = ctx[1].data.get('quests', {})
+            for qID, bonuses in questsBonuses.iteritems():
+                if bonuses:
+                    for color in BOX_COLORS:
+                        if qID.startswith(color) and 'tokens' in bonuses:
+                            quest = self.eventsCache.getAllQuests().get(qID)
+                            if quest:
+                                bonusData = quest.getData().get('bonus', {})
+                                if 'repeat' in bonusData:
+                                    shared_events.showChristmasPackAward(color, bonusData['repeat'], bonuses, g_christmasCtrl)
+                                else:
+                                    shared_events.showChristmasAward(color, bonuses, g_christmasCtrl)
 
-        return
+
+class ChtistmasBoxTokenQuestAwardHandler(ChtistmasBoxAfterBattleAwardHandler):
+
+    def __init__(self, awardCtrl):
+        super(ChtistmasBoxTokenQuestAwardHandler, self).__init__(awardCtrl, SYS_MESSAGE_TYPE.tokenQuests.index())
 
 
 class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
@@ -365,14 +407,15 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         completedQuests = {}
-        allQuests = g_eventsCache.getAllQuests(includePotapovQuests=True, filterFunc=lambda quest: self._isAppropriate(quest))
+        allQuests = self.eventsCache.getAllQuests(includePotapovQuests=True, filterFunc=lambda quest: self._isAppropriate(quest))
         completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
         for uniqueQuestID in completedQuestUniqueIDs:
             questID, ctx = self._getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs)
             if questID in allQuests:
                 quest = allQuests[questID]
-                ctx.update(eventsCache=g_eventsCache)
-                completedQuests[questID] = (quest, ctx)
+                if self.isShowCongrats(quest):
+                    ctx.update(eventsCache=self.eventsCache)
+                    completedQuests[questID] = (quest, ctx)
 
         for quest, context in completedQuests.itervalues():
             self._showWindow(quest, context)
@@ -399,8 +442,8 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
         """ Gather the data needed by award window and get real quest id.
         
         :param uniqueQuestID: unique id of the quest (considering its sub quests)
-        :param completedQuest: dict {questID: (quest, context)}
-        :param completedQuestIDs: list with ids of completed quests
+        :param completedQuests: dict {questID: (quest, context)}
+        :param completedQuestUniqueIDs: list with ids of completed quests
         
         :return: tuple (quest id, context)
         """
@@ -453,7 +496,7 @@ class RefSysStatusWindowHandler(ServiceChannelHandler):
 
     def __showRefSystemNotification(self, methodName, **ctx):
         try:
-            getattr(self._awardCtrl._proxy.refSystem, methodName)(**ctx)
+            getattr(self._awardCtrl.refSystem, methodName)(**ctx)
         except:
             LOG_ERROR('There is exception while processing notification center window', methodName, ctx)
             LOG_CURRENT_EXCEPTION()
@@ -553,6 +596,7 @@ class VehiclesResearchHandler(SpecialAchievement):
 
 
 class FalloutVehiclesBuyHandler(AwardHandler):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def start(self):
         hasVehicleLvl8 = False
@@ -578,7 +622,7 @@ class FalloutVehiclesBuyHandler(AwardHandler):
         return self._awardCtrl.canShow() is False or self._shouldBeShown()
 
     def _shouldBeShown(self):
-        return g_eventsCache.isFalloutEnabled() and (not self.falloutStorage.hasVehicleLvl8() or not self.falloutStorage.hasVehicleLvl10())
+        return self.eventsCache.isFalloutEnabled() and (not self.falloutStorage.hasVehicleLvl8() or not self.falloutStorage.hasVehicleLvl10())
 
     def _showAward(self, ctx=None):
         if self._shouldBeShown():

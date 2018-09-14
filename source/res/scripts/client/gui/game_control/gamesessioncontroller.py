@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/GameSessionController.py
-import time
-import sys
 import operator
+import sys
+import time
 import BigWorld
 import Event
 import account_shared
 import constants
-from helpers import time_utils
 from debug_utils import LOG_DEBUG
-from gui.shared import g_itemsCache
-from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
-from gui.game_control.controllers import Controller
+from gui.shared import g_itemsCache
+from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
+from helpers import time_utils
+from skeletons.gui.game_control import IGameSessionController
 _BAN_RESTR = constants.RESTRICTION_TYPE.BAN
 
 def _checkForNegative(t):
@@ -46,7 +46,7 @@ def _getSevUtc():
     return time_utils._g_instance.serverUTCTime
 
 
-class GameSessionController(Controller, Notifiable):
+class GameSessionController(IGameSessionController, Notifiable):
     NOTIFY_PERIOD = time_utils.ONE_HOUR
     TIME_RESERVE = 59
     PLAY_TIME_LEFT_NOTIFY = time_utils.QUARTER_HOUR + TIME_RESERVE

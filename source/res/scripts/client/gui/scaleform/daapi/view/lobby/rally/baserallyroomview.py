@@ -5,7 +5,6 @@ from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT
 from adisp import process
 from debug_utils import LOG_DEBUG
-from gui import DialogsInterface
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BaseRallyRoomViewMeta import BaseRallyRoomViewMeta
 from gui.Scaleform.framework import ViewTypes
@@ -13,9 +12,8 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
-from gui.prb_control.context import unit_ctx
-from gui.prb_control.prb_helpers import UnitListener
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG, REQUEST_TYPE
+from gui.prb_control.entities.base.unit.ctx import AssignUnitCtx, CloseSlotUnitCtx, LockUnitCtx, KickPlayerUnitCtx, ChangeCommentUnitCtx, ChangeOpenedUnitCtx, SetRostersSlotsUnitCtx, SetVehicleUnitCtx, RosterSlotCtx
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE
 from gui.shared import events
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -25,7 +23,7 @@ from helpers import i18n
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.proto.events import g_messengerEvents
 
-class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
+class BaseRallyRoomView(BaseRallyRoomViewMeta):
 
     def __init__(self):
         super(BaseRallyRoomView, self).__init__()
@@ -33,29 +31,29 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
         return
 
     def requestToAssign(self, pID, slotIdx):
-        self.sendRequest(unit_ctx.AssignUnitCtx(pID, slotIdx, 'prebattle/assign'))
+        self.sendRequest(AssignUnitCtx(pID, slotIdx, 'prebattle/assign'))
 
     def requestToUnassign(self, pID):
-        self.sendRequest(unit_ctx.AssignUnitCtx(pID, UNIT_SLOT.REMOVE, 'prebattle/assign'))
+        self.sendRequest(AssignUnitCtx(pID, UNIT_SLOT.REMOVE, 'prebattle/assign'))
 
     def requestToCloseSlot(self, slotIdx):
-        slotState = self.unitFunctional.getSlotState(slotIdx)
-        self.sendRequest(unit_ctx.CloseSlotCtx(slotIdx, not slotState.isClosed, 'prebattle/change_settings'))
+        slotState = self.prbEntity.getSlotState(slotIdx)
+        self.sendRequest(CloseSlotUnitCtx(slotIdx, not slotState.isClosed, 'prebattle/change_settings'))
 
     def requestToKickUser(self, databaseID):
-        self.sendRequest(unit_ctx.KickPlayerCtx(databaseID, 'prebattle/kick'))
+        self.sendRequest(KickPlayerUnitCtx(databaseID, 'prebattle/kick'))
 
     def requestToLock(self, isLocked):
-        self.sendRequest(unit_ctx.LockUnitCtx(isLocked, 'prebattle/change_settings'))
+        self.sendRequest(LockUnitCtx(isLocked, 'prebattle/change_settings'))
 
     def requestToOpen(self, isOpened):
-        self.sendRequest(unit_ctx.ChangeOpenedUnitCtx(isOpened, 'prebattle/change_settings'))
+        self.sendRequest(ChangeOpenedUnitCtx(isOpened, 'prebattle/change_settings'))
 
     def requestToChangeComment(self, comment):
-        self.sendRequest(unit_ctx.ChangeCommentUnitCtx(comment, 'prebattle/change_settings'))
+        self.sendRequest(ChangeCommentUnitCtx(comment, 'prebattle/change_settings'))
 
     def requestToUpdateRoster(self, data):
-        c = unit_ctx.SetRostersSlotsCtx('prebattle/change_settings')
+        c = SetRostersSlotsUnitCtx('prebattle/change_settings')
         for i in range(0, len(data)):
             c.addRosterSlot(i * 2, self.__getRosterSlotCtx(data[i][0]))
             c.addRosterSlot(i * 2 + 1, self.__getRosterSlotCtx(data[i][1]))
@@ -63,37 +61,24 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
         self.sendRequest(c)
 
     @process
-    def canBeClosed(self, callback):
-        flags = FUNCTIONAL_FLAG.SWITCH if self.unitFunctional.canSwitchToIntro() else FUNCTIONAL_FLAG.UNDEFINED
-        ctx = unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', flags=flags, entityType=self.unitFunctional.getEntityType())
-        meta = self.unitFunctional.getConfirmDialogMeta(ctx)
-        if meta:
-            isConfirmed = yield DialogsInterface.showDialog(meta)
-        else:
-            isConfirmed = yield lambda callback: callback(True)
-        if isConfirmed:
-            isConfirmed = yield self.prbDispatcher.leave(ctx)
-        callback(isConfirmed)
-
-    @process
     def sendRequest(self, request):
-        yield self.prbDispatcher.sendUnitRequest(request)
+        yield self.prbDispatcher.sendPrbRequest(request)
 
     def onUnitPlayersListChanged(self):
         if self._candidatesDP is not None:
-            self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+            self._candidatesDP.rebuild(self.prbEntity.getCandidates())
         return
 
     def onUnitPlayerInfoChanged(self, pInfo):
         if pInfo.isInSlot:
             self._updateMembersData()
         elif self._candidatesDP is not None:
-            self._candidatesDP.rebuild(self.unitFunctional.getCandidates())
+            self._candidatesDP.rebuild(self.prbEntity.getCandidates())
         return
 
     def onUnitPlayerStateChanged(self, pInfo):
         self.__setMemberStatus(pInfo)
-        if pInfo.isCurrentPlayer() or self.unitFunctional.isCreator():
+        if pInfo.isCurrentPlayer() or self.prbEntity.isCommander():
             self._setActionButtonState()
 
     def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
@@ -149,11 +134,9 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
         pass
 
     def startListening(self):
-        self.startUnitListening()
         g_currentVehicle.onChanged += self.__handleCurrentVehicleChanged
 
     def stopListening(self):
-        self.stopUnitListening()
         g_currentVehicle.onChanged -= self.__handleCurrentVehicleChanged
 
     def _populate(self):
@@ -184,7 +167,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
 
     def assignSlotRequest(self, slotIndex, playerId):
         if playerId == -1:
-            if self.unitFunctional.getPlayerInfo().isCreator():
+            if self.prbEntity.isCommander():
                 LOG_DEBUG('Request to assign is ignored. Creator can not move to another slots')
                 return
             playerId = account_helpers.getAccountDatabaseID()
@@ -197,8 +180,8 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
             self.requestToUnassign(playerId)
 
     def chooseVehicleRequest(self):
-        playerInfo = self.unitFunctional.getPlayerInfo()
-        levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
+        playerInfo = self.prbEntity.getPlayerInfo()
+        levelsRange = self.prbEntity.getRosterSettings().getLevelsRange()
         slotIdx = playerInfo.slotIdx
         vehicles = playerInfo.getSlotsToVehicles(True).get(slotIdx)
         if vehicles is not None:
@@ -218,11 +201,11 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
          'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def toggleReadyStateRequest(self):
-        self.unitFunctional.doAction()
+        self.prbEntity.doAction()
 
     def ignoreUserRequest(self, databaseID):
-        playerInfo = self.unitFunctional.getPlayerInfo()
-        if playerInfo.isCreator():
+        playerInfo = self.prbEntity.getPlayerInfo()
+        if playerInfo.isCommander():
             self.requestToKickUser(databaseID)
 
     def onSlotsHighlihgtingNeed(self, databaseID):
@@ -231,7 +214,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
         return availableSlots
 
     def getAvailableSlots(self, databaseID):
-        availableSlots = list(self.unitFunctional.getPlayerInfo(databaseID).getAvailableSlots(True))
+        availableSlots = list(self.prbEntity.getPlayerInfo(databaseID).getAvailableSlots(True))
         return availableSlots
 
     def editDescriptionRequest(self, description):
@@ -246,7 +229,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
 
     def _selectVehicles(self, items):
         if len(items):
-            self.sendRequest(unit_ctx.SetVehicleUnitCtx(vTypeCD=items[0], waitingID='prebattle/change_settings'))
+            self.sendRequest(SetVehicleUnitCtx(vTypeCD=items[0], waitingID='prebattle/change_settings'))
 
     def _onUserActionReceived(self, _, user):
         self._updateRallyData()
@@ -255,7 +238,9 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
         return
 
     def _onUsersReceived(self, _):
-        self._updateRallyData()
+        if self.prbEntity is not None:
+            self._updateRallyData()
+        return
 
     def _updateVehiclesLabel(self, minVal, maxVal):
         vehicleLvl = text_styles.main(i18n.makeString(CYBERSPORT.WINDOW_UNIT_RANGEVALUE, minVal=minVal, maxVal=maxVal))
@@ -275,7 +260,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
 
     def isPlayerInUnit(self, databaseID):
         result = False
-        players = self.unitFunctional.getPlayers()
+        players = self.prbEntity.getPlayers()
         for dbId, playerInfo in players.iteritems():
             if dbId == databaseID:
                 result = True
@@ -284,16 +269,16 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
         return result
 
     def isPlayerInSlot(self, databaseID=None):
-        pInfo = self.unitFunctional.getPlayerInfo(dbID=databaseID)
+        pInfo = self.prbEntity.getPlayerInfo(dbID=databaseID)
         return pInfo.isInSlot
 
     def __getRosterSlotCtx(self, item):
         if item is None:
-            return unit_ctx.RosterSlotCtx()
+            return RosterSlotCtx()
         elif item.selectedVehicle > 0:
-            return unit_ctx.RosterSlotCtx(item.selectedVehicle)
+            return RosterSlotCtx(item.selectedVehicle)
         else:
-            settings = self.unitFunctional.getRosterSettings()
+            settings = self.prbEntity.getRosterSettings()
             levels = (settings.getMinLevel(), settings.getMaxLevel())
             if len(item.vLevelRange) == 2:
                 i0 = int(item.vLevelRange[0])
@@ -301,18 +286,18 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
                 levels = (i0, i1) if i0 != i1 else i0
             elif len(item.vLevelRange) == 1:
                 levels = int(item.vLevelRange[0])
-            return unit_ctx.RosterSlotCtx(nationNames=item.nationIDRange, levels=levels, vehClassNames=item.vTypeRange)
+            return RosterSlotCtx(nationNames=item.nationIDRange, levels=levels, vehClassNames=item.vTypeRange)
             return
 
     def __setMemberStatus(self, pInfo):
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
-            slotState = self.unitFunctional.getSlotState(slotIdx)
+            slotState = self.prbEntity.getSlotState(slotIdx)
             self.as_setMemberStatusS(slotIdx, vo_converters.getPlayerStatus(slotState, pInfo))
 
     def _updateMembersData(self):
-        functional = self.unitFunctional
-        self.as_setMembersS(*vo_converters.makeSlotsVOs(functional, functional.getUnitIdx(), app=self.app))
+        entity = self.prbEntity
+        self.as_setMembersS(*vo_converters.makeSlotsVOs(entity, entity.getUnitIdx(), app=self.app))
         self._setActionButtonState()
 
     def __handleCurrentVehicleChanged(self):

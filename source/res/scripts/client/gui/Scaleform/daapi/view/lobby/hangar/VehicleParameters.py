@@ -3,7 +3,6 @@
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core import settings_constants
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.Scaleform.daapi.view.meta.VehicleParametersMeta import VehicleParametersMeta
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -12,8 +11,11 @@ from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIData
 from gui.shared.formatters import text_styles
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class VehicleParameters(VehicleParametersMeta):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(VehicleParameters, self).__init__()
@@ -48,7 +50,7 @@ class VehicleParameters(VehicleParametersMeta):
 
     def _populate(self):
         super(VehicleParameters, self)._populate()
-        g_settingsCore.onSettingsChanged += self.__onSettingsChange
+        self.settingsCore.onSettingsChanged += self.__onSettingsChange
         self._vehParamsDP = self._createDataProvider()
         self._vehParamsDP.setFlashObject(self.as_getDPS())
         self._updateProviderType()
@@ -58,7 +60,7 @@ class VehicleParameters(VehicleParametersMeta):
         self._vehParamsDP.fini()
         self._vehParamsDP = None
         self._paramsProviderCls = None
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChange
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChange
         super(VehicleParameters, self)._dispose()
         return
 
@@ -69,7 +71,7 @@ class VehicleParameters(VehicleParametersMeta):
         self._vehParamsDP.rebuildList(self._getVehicleCache())
 
     def _updateProviderType(self):
-        isSimplified = g_settingsCore.getSetting(settings_constants.GAME.SIMPLIFIED_TTC)
+        isSimplified = self.settingsCore.getSetting(settings_constants.GAME.SIMPLIFIED_TTC)
         if isSimplified:
             alias = HANGAR_ALIASES.VEH_PARAMS_RENDERER_UI
         else:
@@ -133,7 +135,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
         return data
 
     def _makeAdvancedParamVO(self, param):
-        if param.value is not None:
+        if param.value:
             data = super(_VehParamsGenerator, self)._makeAdvancedParamVO(param)
             data.update({'titleText': formatters.formatVehicleParamName(param.name, False),
              'valueText': formatters.colorizedFormatParameter(param, self._getBaseFormatters()),
@@ -142,7 +144,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
              'tooltip': self._tooltipType})
             return data
         else:
-            return
+            return None
 
     def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
         data = super(_VehParamsGenerator, self)._makeSimpleParamHeaderVO(param, isOpen, comparator)

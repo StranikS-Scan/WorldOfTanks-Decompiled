@@ -193,7 +193,7 @@ class READABLE_KEY_NAMES(object):
     KEY_LCDKB_DOWN = '#readable_key_names:KEY_LCDKB_DOWN'
     KEY_LCDKB_MENU = '#readable_key_names:KEY_LCDKB_MENU'
     KEY_IME_CHAR = '#readable_key_names:KEY_IME_CHAR'
-    ALL_ENUM = (KEY_NONE,
+    KEY_ENUM = (KEY_NONE,
      KEY_ESCAPE,
      KEY_1,
      KEY_2,
@@ -381,9 +381,9 @@ class READABLE_KEY_NAMES(object):
      KEY_IME_CHAR)
 
     @classmethod
-    def all(cls, key0):
-        outcome = '#readable_key_names:{}'.format(key0)
-        if outcome not in cls.ALL_ENUM:
+    def key(cls, bwKey):
+        outcome = '#readable_key_names:KEY_{}'.format(bwKey)
+        if outcome not in cls.KEY_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

@@ -1,17 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/damage_log_panel.py
-import weakref
 import BigWorld
-import BattleReplay
+from helpers import dependency
 from shared_utils import BitmaskHelper
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.settings_constants import DAMAGE_LOG
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.BattleDamageLogPanelMeta import BattleDamageLogPanelMeta
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGES as _IMAGES
-from gui.battle_control import g_sessionProvider
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class _DETAILS_LOG_VIEW_MODE(object):
     UNDEFINED = -1
@@ -36,12 +35,14 @@ def _logDamageFormatter(value):
 
 
 class DamageLogPanel(BattleDamageLogPanelMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(DamageLogPanel, self).__init__()
         self.__efficiencyCtrl = None
-        self.__arenaDP = g_sessionProvider.getCtx().getArenaDP()
-        self.__vehStateCtrl = g_sessionProvider.shared.vehicleState
+        self.__arenaDP = self.sessionProvider.getCtx().getArenaDP()
+        self.__vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__logViewMode = _DETAILS_LOG_VIEW_MODE.UNDEFINED
         self.__contentMask = 0
         self.__isVisible = True
@@ -49,14 +50,14 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def _populate(self):
         super(DamageLogPanel, self)._populate()
-        self.__efficiencyCtrl = g_sessionProvider.shared.personalEfficiencyCtrl
-        settingGetter = g_settingsCore.getSetting
+        self.__efficiencyCtrl = self.sessionProvider.shared.personalEfficiencyCtrl
+        settingGetter = self.settingsCore.getSetting
         self._invalidateComponentVisibility()
         if self.__efficiencyCtrl is not None:
             self._updateContent(settingGetter(DAMAGE_LOG.SHOW_DETAILS), settingGetter(DAMAGE_LOG.TOTAL_DAMAGE), settingGetter(DAMAGE_LOG.BLOCKED_DAMAGE), settingGetter(DAMAGE_LOG.ASSIST_DAMAGE))
             self.__efficiencyCtrl.onTotalEfficiencyUpdated += self._onTotalEfficiencyUpdated
             self.__efficiencyCtrl.onPersonalEfficiencyReceived += self._onEfficiencyReceived
-        g_settingsCore.onSettingsChanged += self._onSettingsChanged
+        self.settingsCore.onSettingsChanged += self._onSettingsChanged
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling += self._onVehicleControlling
@@ -72,7 +73,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling -= self._onVehicleControlling
-        g_settingsCore.onSettingsChanged -= self._onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self._onSettingsChanged
         if self.__efficiencyCtrl is not None:
             self.__efficiencyCtrl.onTotalEfficiencyUpdated -= self._onTotalEfficiencyUpdated
             self.__efficiencyCtrl.onPersonalEfficiencyReceived -= self._onEfficiencyReceived
@@ -142,9 +143,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def _invalidateComponentVisibility(self):
         isVisible = True
-        if BattleReplay.g_replayCtrl.isPlaying:
-            isVisible = False
-        elif self.__vehStateCtrl is None:
+        if self.__vehStateCtrl is None:
             isVisible = self.__isVisible
         elif self.__vehStateCtrl.isInPostmortem:
             if self.__arenaDP is None:
@@ -158,7 +157,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         return
 
     def _onSettingsChanged(self, diff):
-        settingGetter = g_settingsCore.getSetting
+        settingGetter = self.settingsCore.getSetting
         if DAMAGE_LOG.SHOW_DETAILS in diff or DAMAGE_LOG.TOTAL_DAMAGE in diff or DAMAGE_LOG.ASSIST_DAMAGE in diff or DAMAGE_LOG.BLOCKED_DAMAGE in diff:
             self._updateContent(settingGetter(DAMAGE_LOG.SHOW_DETAILS), settingGetter(DAMAGE_LOG.TOTAL_DAMAGE), settingGetter(DAMAGE_LOG.BLOCKED_DAMAGE), settingGetter(DAMAGE_LOG.ASSIST_DAMAGE))
 

@@ -37,5 +37,4 @@ class CONTROLS(object):
     KEYBOARD_KEY_RIGHT_ALT = '#controls:keyboard/key_right_alt'
     KEYBOARD_KEY_BACKSPACE = '#controls:keyboard/key_backspace'
     KEYBOARD_KEY_PRINT_SCREEN = '#controls:keyboard/key_print_screen'
-    KEYBOARD_SEQUENCE_CTRL_ENTER = '#controls:keyboard/sequence_ctrl_enter'
     KEYBOARD_SEQUENCE_SHIFT_ENTER = '#controls:keyboard/sequence_shift_enter'

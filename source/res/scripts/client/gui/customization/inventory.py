@@ -2,12 +2,14 @@
 # Embedded file name: scripts/client/gui/customization/inventory.py
 from account_helpers.AccountSettings import AccountSettings
 from gui.customization.shared import CUSTOMIZATION_TYPE, TYPE_NAME
+from helpers import dependency
+from skeletons.gui.server_events import IEventsCache
 
 class Inventory(object):
+    _questsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, events, dependencies):
         self._events = events
-        self._questsCache = dependencies.g_questsCache
         self._currentVehicle = dependencies.g_currentVehicle
         self._itemsCache = dependencies.g_itemsCache
         self._vehiclesCache = dependencies.g_vehiclesCache

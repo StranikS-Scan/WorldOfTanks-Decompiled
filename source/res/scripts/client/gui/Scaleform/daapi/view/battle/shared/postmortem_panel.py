@@ -1,19 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/postmortem_panel.py
 from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.doc_loaders import messages_panel_reader
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-from account_helpers.settings_core import g_settingsCore
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.PostmortemPanelMeta import PostmortemPanelMeta
 from gui.shared.gui_items import Vehicle
 from constants import ATTACK_REASON_INDICES
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from debug_utils import LOG_CURRENT_EXCEPTION
+from helpers import dependency
 from helpers import int2roman
 from items import vehicles
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 _POSTMORTEM_PANEL_SETTINGS_PATH = 'gui/postmortem_panel.xml'
 _VEHICLE_SMALL_ICON_RES_PATH = '../maps/icons/vehicle/small/{0}.png'
 _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
@@ -40,6 +41,8 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
     If the message is found, it will be stored in an internal variable.
     """
     __slots__ = ('__messages', '__deathInfo')
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(_BasePostmortemPanel, self).__init__()
@@ -60,13 +63,13 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
         super(_BasePostmortemPanel, self)._dispose()
 
     def _addGameListeners(self):
-        ctrl = g_sessionProvider.shared.messages
+        ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
             ctrl.onShowVehicleMessageByCode += self.__onShowVehicleMessageByCode
         return
 
     def _removeGameListeners(self):
-        ctrl = g_sessionProvider.shared.messages
+        ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
             ctrl.onShowVehicleMessageByCode -= self.__onShowVehicleMessageByCode
         return
@@ -114,13 +117,13 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
 
     def _addGameListeners(self):
         super(_SummaryPostmortemPanel, self)._addGameListeners()
-        ctrl = g_sessionProvider.shared.feedback
+        ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onPostmortemSummaryReceived += self.__onPostmortemSummaryReceived
             missedEvent = ctrl.getCachedEvent(FEEDBACK_EVENT_ID.POSTMORTEM_SUMMARY)
             if missedEvent:
                 self.__onPostmortemSummaryReceived(missedEvent)
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             deathInfo = ctrl.getStateValue(VEHICLE_VIEW_STATE.DEATH_INFO)
             if deathInfo:
@@ -128,7 +131,7 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
         return
 
     def _removeGameListeners(self):
-        ctrl = g_sessionProvider.shared.feedback
+        ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onPostmortemSummaryReceived -= self.__onPostmortemSummaryReceived
         super(_SummaryPostmortemPanel, self)._removeGameListeners()
@@ -151,9 +154,8 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
             self._prepareMessage(msgCode, killerVehID=vehID)
         return
 
-    @staticmethod
-    def __getPostfixByKiller(killerVehID):
-        battleCtx = g_sessionProvider.getCtx()
+    def __getPostfixByKiller(self, killerVehID):
+        battleCtx = self.sessionProvider.getCtx()
         if battleCtx.isCurrentPlayer(killerVehID):
             return _ENTITIES_POSTFIX.SELF_SUICIDE
         elif battleCtx.isAlly(killerVehID):
@@ -181,12 +183,12 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self.__healthPercent = 0
         self.__isInPostmortem = False
         self.__deathAlreadySet = False
-        self.__isColorBlind = g_settingsCore.getSetting('isColorBlind')
+        self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
         return
 
     def _addGameListeners(self):
         super(PostmortemPanel, self)._addGameListeners()
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             ctrl.onVehicleControlling += self.__onVehicleControlling
@@ -196,16 +198,16 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             if vehicle is not None:
                 self.__setPlayerInfo(vehicle.id)
                 self.__onVehicleControlling(vehicle)
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         return
 
     def _removeGameListeners(self):
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             ctrl.onVehicleControlling -= self.__onVehicleControlling
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(PostmortemPanel, self)._removeGameListeners()
         return
 
@@ -216,7 +218,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         self.__healthPercent = normalizeHealthPercent(health, self.__maxHealth)
 
     def __setPlayerInfo(self, vehicleID):
-        self.__playerInfo = g_sessionProvider.getCtx().getPlayerFullNameParts(vID=vehicleID, showVehShortName=True)
+        self.__playerInfo = self.sessionProvider.getCtx().getPlayerFullNameParts(vID=vehicleID, showVehShortName=True)
 
     def __onVehicleControlling(self, vehicle):
         self.__maxHealth = vehicle.typeDescriptor.maxHealth
@@ -226,8 +228,9 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.HEALTH:
-            self.__setHealthPercent(value)
-            self.__updateVehicleInfo()
+            if self.__maxHealth != 0:
+                self.__setHealthPercent(value)
+                self.__updateVehicleInfo()
         elif state == VEHICLE_VIEW_STATE.PLAYER_INFO:
             self.__setPlayerInfo(value)
 
@@ -251,7 +254,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             if deathInfo:
                 reason = self.__makeReasonInfo(deathInfo)
                 killerVehID = deathInfo['killerVehicle']
-                battleCtx = g_sessionProvider.getCtx()
+                battleCtx = self.sessionProvider.getCtx()
                 if killerVehID and not battleCtx.isCurrentPlayer(killerVehID) and battleCtx.getArenaDP().getVehicleInfo(killerVehID).vehicleType.compactDescr:
                     showVehicle = True
                     vTypeInfoVO = battleCtx.getArenaDP().getVehicleInfo(killerVehID).vehicleType
@@ -280,7 +283,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
          'color': color}
         entityID = deathInfo['killerVehicle']
         if entityID:
-            names['killer'] = g_sessionProvider.getCtx().getPlayerFullName(entityID, showVehShortName=False)
+            names['killer'] = self.sessionProvider.getCtx().getPlayerFullName(entityID, showVehShortName=False)
         device = deathInfo['device']
         if device:
             names['device'] = device

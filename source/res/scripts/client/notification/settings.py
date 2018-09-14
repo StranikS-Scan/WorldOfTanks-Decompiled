@@ -63,13 +63,6 @@ class NOTIFICATION_BUTTON_STATE(object):
     DEFAULT = VISIBLE | ENABLED
 
 
-class LAYOUT_PADDING(object):
-    HANGAR = (4, 235)
-    OTHER = (0, 35)
-    LIST = (45, 34)
-    CUSTOMIZATION = (4, 210)
-
-
 def makePathToIcon(iconName):
     result = ''
     if iconName and len(iconName):

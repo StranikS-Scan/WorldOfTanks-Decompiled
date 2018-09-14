@@ -103,10 +103,7 @@ class TweenManager(TweenManagerMeta):
         return
 
     def createTween(self, tween):
-        if tween.isOnCodeBased:
-            tweenPY = _PythonTween(self.__id)
-        else:
-            tweenPY = _FlashTween(self.__id)
+        tweenPY = _PythonTween(self.__id)
         self.__id += 1
         tweenPY.onTweenStart += self.__onTweenStarted
         tweenPY.setFlashObject(tween)
@@ -587,14 +584,3 @@ class _PythonTween(_AbstractTween, PythonTweenMeta):
 
     def complete(self):
         super(_PythonTween, self).complete()
-
-
-from gui.Scaleform.framework.entities.abstract.FlashTweenMeta import FlashTweenMeta
-
-class _FlashTween(_AbstractTween, FlashTweenMeta):
-
-    def __init__(self, idx):
-        super(_FlashTween, self).__init__(idx)
-
-    def setPropToTargetDO(self, data, ratio):
-        self.moveOnPositionS(round(ratio * 100))

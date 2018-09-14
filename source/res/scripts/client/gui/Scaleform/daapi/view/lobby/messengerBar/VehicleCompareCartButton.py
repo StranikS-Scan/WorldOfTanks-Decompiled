@@ -1,32 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/VehicleCompareCartButton.py
 from gui.Scaleform.daapi.view.meta.ButtonWithCounterMeta import ButtonWithCounterMeta
-from gui.game_control import getVehicleComparisonBasketCtrl
+from helpers import dependency
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 class VehicleCompareCartButton(ButtonWithCounterMeta):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self):
         super(VehicleCompareCartButton, self).__init__()
 
     def _populate(self):
         super(VehicleCompareCartButton, self)._populate()
-        comparisonBasketCtrl = getVehicleComparisonBasketCtrl()
-        comparisonBasketCtrl.onChange += self.__onCountChanged
-        comparisonBasketCtrl.onSwitchChange += self.destroy
-        self.__changeCount(comparisonBasketCtrl.getVehiclesCount())
+        self.comparisonBasket.onChange += self.__onCountChanged
+        self.comparisonBasket.onSwitchChange += self.destroy
+        self.__changeCount(self.comparisonBasket.getVehiclesCount())
 
     def _dispose(self):
-        comparisonBasketCtrl = getVehicleComparisonBasketCtrl()
-        comparisonBasketCtrl.onChange -= self.__onCountChanged
-        comparisonBasketCtrl.onSwitchChange -= self.destroy
+        self.comparisonBasket.onChange -= self.__onCountChanged
+        self.comparisonBasket.onSwitchChange -= self.destroy
         super(VehicleCompareCartButton, self)._dispose()
 
-    def __onCountChanged(self, changedData):
+    def __onCountChanged(self, _):
         """
         gui.game_control.VehComparisonBasket.onChange event handler
-        :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
+        :param _: instance of gui.game_control.veh_comparison_basket._ChangedData
         """
-        self.__changeCount(getVehicleComparisonBasketCtrl().getVehiclesCount())
+        self.__changeCount(self.comparisonBasket.getVehiclesCount())
 
     def __changeCount(self, count):
         self.as_setCountS(count)

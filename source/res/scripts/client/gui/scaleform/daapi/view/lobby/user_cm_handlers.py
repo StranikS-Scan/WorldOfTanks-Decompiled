@@ -2,33 +2,33 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/user_cm_handlers.py
 import math
 from adisp import process
+from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
-from gui import SystemMessages
+from gui import SystemMessages, DialogsInterface
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.clans.clan_controller import g_clanCtrl
+from gui.christmas.christmas_controller import g_christmasCtrl
 from gui.clans.clan_helpers import showClanInviteSystemMsg
 from gui.clans.contexts import CreateInviteCtx
-from gui.game_control import getVehicleComparisonBasketCtrl
-from gui.prb_control.context import SendInvitesCtx, PrebattleAction
-from gui.prb_control.prb_helpers import prbDispatcherProperty, prbFunctionalProperty
+from gui.prb_control import prbDispatcherProperty, prbEntityProperty
+from gui.prb_control.entities.base.ctx import PrbAction, SendInvitesCtx
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.server_events import g_eventsCache
 from gui.shared import g_itemsCache, event_dispatcher as shared_events, utils
 from gui.shared.ClanCache import ClanInfo
 from gui.shared.denunciator import LobbyDenunciator, DENUNCIATIONS, DENUNCIATIONS_MAP
-from helpers import i18n
-from constants import DENUNCIATIONS_PER_DAY
+from gui.shared.utils.functions import showSentInviteMessage
+from helpers import i18n, dependency
 from helpers.i18n import makeString
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
-from gui.shared.utils.functions import showSentInviteMessage
+from skeletons.gui.clans import IClanController
+from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.server_events import IEventsCache
 
 class _EXTENDED_OPT_IDS(object):
     VEHICLE_COMPARE = 'userVehicleCompare'
@@ -56,6 +56,8 @@ class USER(object):
 
 
 class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
+    eventsCache = dependency.descriptor(IEventsCache)
+    clanCtrl = dependency.descriptor(IClanController)
 
     def __init__(self, cmProxy, ctx=None):
         super(BaseUserCMHandler, self).__init__(cmProxy, ctx, handlers=self._getHandlers())
@@ -68,8 +70,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def usersStorage(self):
         return None
 
-    @prbFunctionalProperty
-    def prbFunctional(self):
+    @prbEntityProperty
+    def prbEntity(self):
         return None
 
     @proto_getter(PROTO_TYPE.MIGRATION)
@@ -77,7 +79,11 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return None
 
     def canInvite(self):
-        return self.prbDispatcher.getFunctionalCollection().canSendInvite(self.databaseID)
+        if self.prbEntity is not None:
+            return self.prbEntity.getPermissions().canSendInvite()
+        else:
+            return False
+            return
 
     def isSquadCreator(self):
         return False
@@ -100,18 +106,16 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 clanInfo = ClanInfo(*clanInfo)
                 shared_events.showClanProfileWindow(clanID, clanInfo.getClanAbbrev())
             else:
-                from gui import DialogsInterface
-                key = 'clan data is not available'
-                DialogsInterface.showI18nInfoDialog(key, lambda result: None, I18nInfoDialogMeta(key, messageCtx={'userName': key}))
+                DialogsInterface.showI18nInfoDialog('clan_data_not_available', lambda result: None)
 
         shared_events.requestProfile(self.databaseID, self.userName, successCallback=onDossierReceived)
 
     @process
     def sendClanInvite(self):
-        profile = g_clanCtrl.getAccountProfile()
+        profile = self.clanCtrl.getAccountProfile()
         userName = self.userName
         context = CreateInviteCtx(profile.getClanDbID(), [self.databaseID])
-        result = yield g_clanCtrl.sendRequest(context, allowDelay=True)
+        result = yield self.clanCtrl.sendRequest(context, allowDelay=True)
         showClanInviteSystemMsg(userName, result.isSuccess(), result.getCode())
 
     def createPrivateChannel(self):
@@ -142,18 +146,16 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         utils.copyToClipboard(self.userName)
 
     def createSquad(self):
-        self.prbDispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.SQUAD, accountsToInvite=(self.databaseID,)))
+        self._doSelect(PREBATTLE_ACTION_NAME.SQUAD, (self.databaseID,))
 
     def createEventSquad(self):
-        self.prbDispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.EVENT_SQUAD, accountsToInvite=(self.databaseID,)))
+        self._doSelect(PREBATTLE_ACTION_NAME.EVENT_SQUAD, (self.databaseID,))
 
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
-        for func in self.prbDispatcher.getFunctionalCollection().getIterator():
-            if func.getPermissions().canSendInvite():
-                func.request(SendInvitesCtx([self.databaseID], ''))
-                showSentInviteMessage(user)
-                break
+        if self.prbEntity.getPermissions().canSendInvite():
+            self.prbEntity.request(SendInvitesCtx([self.databaseID], ''))
+            showSentInviteMessage(user)
 
     def getOptions(self, ctx=None):
         return self._generateOptions(ctx) if not self._getUseCmInfo().isCurrentPlayer else None
@@ -237,11 +239,12 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return options
 
     def _addSquadInfo(self, options, isIgnored):
-        if not isIgnored and not self.isSquadCreator():
-            canCreate = self.prbDispatcher.getFunctionalCollection().canCreateSquad()
+        if not isIgnored and not self.isSquadCreator() and self.prbDispatcher is not None:
+            canCreate = self.prbEntity.getPermissions().canCreateSquad()
             options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate}))
-            if g_eventsCache.isEventEnabled():
-                options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate}))
+            if self.eventsCache.isEventEnabled():
+                options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
+                 'textColor': 13347959}))
         return options
 
     def _addPrebattleInfo(self, options, userCMInfo):
@@ -277,22 +280,26 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
     def _addClanProfileInfo(self, options, userCMInfo):
         if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and userCMInfo.hasClan and self.showClanProfile:
-            options.append(self._makeItem(USER.CLAN_INFO, MENU.contextmenu(USER.CLAN_INFO), optInitData={'enabled': g_clanCtrl.isAvailable()}))
+            options.append(self._makeItem(USER.CLAN_INFO, MENU.contextmenu(USER.CLAN_INFO), optInitData={'enabled': self.clanCtrl.isAvailable()}))
         return options
 
     def _addInviteClanInfo(self, options, userCMInfo):
         if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and not userCMInfo.hasClan:
-            profile = g_clanCtrl.getAccountProfile()
+            profile = self.clanCtrl.getAccountProfile()
             canHandleClanInvites = profile.getMyClanPermissions().canHandleClanInvites()
             if profile.isInClan() and canHandleClanInvites:
-                isEnabled = g_clanCtrl.isAvailable()
+                isEnabled = self.clanCtrl.isAvailable()
                 canHandleClanInvites = profile.getMyClanPermissions().canHandleClanInvites()
                 if isEnabled:
-                    profile = g_clanCtrl.getAccountProfile()
+                    profile = self.clanCtrl.getAccountProfile()
                     dossier = profile.getClanDossier()
                     isEnabled = canHandleClanInvites and not dossier.isClanInviteSent(userCMInfo.databaseID) and not dossier.hasClanApplication(userCMInfo.databaseID)
                 options.append(self._makeItem(USER.SEND_CLAN_INVITE, MENU.contextmenu(USER.SEND_CLAN_INVITE), optInitData={'enabled': isEnabled}))
         return options
+
+    @process
+    def _doSelect(self, prebattleActionName, accountsToInvite=None):
+        yield self.prbDispatcher.doSelectAction(PrbAction(prebattleActionName, accountsToInvite=accountsToInvite))
 
 
 class AppealCMHandler(BaseUserCMHandler):
@@ -332,12 +339,16 @@ class AppealCMHandler(BaseUserCMHandler):
             self._vehicleCD = int(vehicleCD)
         clientArenaIdx = getattr(ctx, 'clientArenaIdx', 0)
         self._arenaUniqueID = g_lobbyContext.getArenaUniqueIDByClientID(clientArenaIdx)
+        self._arenaGuiType = getattr(ctx, 'arenaType', ARENA_GUI_TYPE.UNKNOWN)
+        self._isAlly = getattr(ctx, 'isAlly', False)
         super(AppealCMHandler, self)._initFlashValues(ctx)
         return
 
     def _clearFlashValues(self):
         super(AppealCMHandler, self)._clearFlashValues()
         self._vehicleCD = None
+        self._arenaGuiType = None
+        self._isAlly = None
         return
 
     def _getHandlers(self):
@@ -361,7 +372,7 @@ class AppealCMHandler(BaseUserCMHandler):
             if not vehicle.isSecret:
                 isEnabled = True
                 if vehicle.isPreviewAllowed():
-                    isEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
+                    isEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled() and not g_christmasCtrl.isNavigationDisabled()
                     action = USER.VEHICLE_PREVIEW
                     label = MENU.contextmenu(USER.VEHICLE_PREVIEW)
                 else:
@@ -375,8 +386,12 @@ class AppealCMHandler(BaseUserCMHandler):
         return self._denunciator.isAppealsForTopicEnabled(self.databaseID, topicID, self._arenaUniqueID)
 
     def _getSubmenuData(self):
+        if self._isAlly or self._arenaGuiType in (ARENA_GUI_TYPE.UNKNOWN, ARENA_GUI_TYPE.TRAINING):
+            order = DENUNCIATIONS.ORDER
+        else:
+            order = DENUNCIATIONS.ENEMY_ORDER
         make = self._makeItem
-        return [ make(denunciation, MENU.contextmenu(denunciation), optInitData={'enabled': self._isAppealsForTopicEnabled(denunciation)}) for denunciation in DENUNCIATIONS.ORDER ]
+        return [ make(denunciation, MENU.contextmenu(denunciation), optInitData={'enabled': self._isAppealsForTopicEnabled(denunciation)}) for denunciation in order ]
 
     def _createSubMenuItem(self):
         labelStr = '{} {}/{}'.format(i18n.makeString(MENU.CONTEXTMENU_APPEAL), self._denunciator.getDenunciationsLeft(), DENUNCIATIONS_PER_DAY)
@@ -384,9 +399,10 @@ class AppealCMHandler(BaseUserCMHandler):
 
 
 class UserVehicleCMHandler(AppealCMHandler):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def compareVehicle(self):
-        getVehicleComparisonBasketCtrl().addVehicle(self._vehicleCD)
+        self.comparisonBasket.addVehicle(self._vehicleCD)
 
     def _getHandlers(self):
         handlers = super(UserVehicleCMHandler, self)._getHandlers()
@@ -399,9 +415,8 @@ class UserVehicleCMHandler(AppealCMHandler):
         return options
 
     def _manageVehCompareOptions(self, options):
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        if comparisonBasket.isEnabled():
-            options.insert(2, self._makeItem(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, MENU.contextmenu(_EXTENDED_OPT_IDS.VEHICLE_COMPARE), {'enabled': comparisonBasket.isReadyToAdd(g_itemsCache.items.getItemByCD(self._vehicleCD))}))
+        if self.comparisonBasket.isEnabled():
+            options.insert(2, self._makeItem(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, MENU.contextmenu(_EXTENDED_OPT_IDS.VEHICLE_COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(g_itemsCache.items.getItemByCD(self._vehicleCD))}))
 
 
 class UserContextMenuInfo(object):

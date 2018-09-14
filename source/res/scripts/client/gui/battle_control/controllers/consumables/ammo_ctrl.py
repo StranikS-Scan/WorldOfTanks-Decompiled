@@ -136,6 +136,8 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
             return 0.0
 
 
+_TIME_CORRECTION_THRESHOLD = 0.01
+
 class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
     __slots__ = ()
 
@@ -153,7 +155,11 @@ class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
         """
         if actualTime > 0:
             if self._actualTime <= 0:
-                self._startTime = BigWorld.serverTime()
+                correction = baseTime - actualTime
+                if correction > _TIME_CORRECTION_THRESHOLD:
+                    self._startTime = BigWorld.serverTime() - correction
+                else:
+                    self._startTime = BigWorld.serverTime()
         else:
             self._startTime = 0.0
         self._actualTime = actualTime
@@ -363,7 +369,7 @@ class AmmoController(MethodsRules, IBattleController):
         interval = self.__gunSettings.clip.interval
         self.triggerReloadEffect(timeLeft)
         if interval > 0:
-            if self.__ammo[self.__currShellCD][1] != 1:
+            if not (self.__ammo[self.__currShellCD][1] == 1 and timeLeft == 0 or self.__ammo[self.__currShellCD][1] == 0 and timeLeft > 0):
                 baseTime = interval
         isIgnored = False
         if CommandMapping.g_instance.isActive(CommandMapping.CMD_CM_SHOOT):
@@ -567,7 +573,11 @@ class AmmoReplayRecorder(AmmoController):
 
     def setGunReloadTime(self, timeLeft, baseTime):
         if self.__timeRecord is not None:
-            self.__timeRecord(0, timeLeft)
+            if timeLeft < 0:
+                self.__timeRecord(0, -1)
+            else:
+                startTime = baseTime - timeLeft
+                self.__timeRecord(startTime, baseTime)
         super(AmmoReplayRecorder, self).setGunReloadTime(timeLeft, baseTime)
         return
 

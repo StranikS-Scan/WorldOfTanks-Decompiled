@@ -1,23 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/battle_v2/proxy.py
 import weakref
-from Math import Matrix
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.battle.shared import indicators
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.app_loader.decorators import sf_battle
-from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info import player_format
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.battle_session import IBattleSessionProvider
 from tutorial.doc_loader import gui_config
 from tutorial.gui import GUIProxy, GUI_EFFECT_NAME
 from tutorial.gui.Scaleform import effects_player as _shared_player
 from tutorial.gui.Scaleform.battle_v2 import settings, effects
 _Event = events.ComponentEvent
 _COMPONENT_EFFECTS = (GUI_EFFECT_NAME.SHOW_GREETING, GUI_EFFECT_NAME.SHOW_HINT, GUI_EFFECT_NAME.NEXT_TASK)
+_REQUIRED_BATTLE_ALIASES = {BATTLE_VIEW_ALIASES.BATTLE_TUTORIAL, BATTLE_VIEW_ALIASES.MINIMAP, BATTLE_VIEW_ALIASES.MARKERS_2D}
 
 class TutorialFullNameFormatter(player_format.PlayerFullNameFormatter):
 
@@ -28,29 +29,8 @@ class TutorialFullNameFormatter(player_format.PlayerFullNameFormatter):
         return name
 
 
-class _MarkerManagerProxy(object):
-
-    def __init__(self, app):
-        self.__battleApp = app
-
-    def clear(self):
-        self.__battleApp = None
-        return
-
-    def createStaticMarker(self, pos, symbol):
-        mProv = Matrix()
-        mProv.translation = pos
-        handle = self.__battleApp.markersManager.createMarker(mProv, symbol)
-        return (mProv, handle)
-
-    def invokeMarker(self, handle, function, args=None):
-        self.__battleApp.markersManager.invokeMarker(handle, function, args)
-
-    def destroyStaticMarker(self, handle):
-        self.__battleApp.markersManager.destroyMarker(handle)
-
-
 class SfBattleProxy(GUIProxy):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(SfBattleProxy, self).__init__()
@@ -61,7 +41,9 @@ class SfBattleProxy(GUIProxy):
          GUI_EFFECT_NAME.NEXT_TASK: effects.NextTaskEffect()})
         self.__tutorial = None
         self.__minimap = None
-        self.__markersManager = None
+        self.__markers2D = None
+        self.__registered = set()
+        self.__isGuiLoaded = False
         return
 
     @sf_battle
@@ -80,8 +62,8 @@ class SfBattleProxy(GUIProxy):
     def getViewSettings():
         return settings.BATTLE_VIEW_SETTINGS
 
-    def getMarkersManager(self):
-        return self.__markersManager
+    def getMarkers2DPlugin(self):
+        return self.__markers2D
 
     def getMinimapPlugin(self):
         return self.__minimap
@@ -114,7 +96,6 @@ class SfBattleProxy(GUIProxy):
             for effect in self.__effects.filterByName(GUI_EFFECT_NAME.SHOW_DIALOG):
                 effect.setApplication(proxy)
 
-            self.__markersManager = _MarkerManagerProxy(proxy)
             addSettings = g_entitiesFactories.addSettings
             try:
                 for item in self.getViewSettings():
@@ -125,7 +106,7 @@ class SfBattleProxy(GUIProxy):
                 LOG_CURRENT_EXCEPTION()
 
         if result:
-            g_sessionProvider.getCtx().setPlayerFullNameFormatter(TutorialFullNameFormatter())
+            self.sessionProvider.getCtx().setPlayerFullNameFormatter(TutorialFullNameFormatter())
         return result
 
     def fini(self):
@@ -134,11 +115,10 @@ class SfBattleProxy(GUIProxy):
         """
         self.eManager.clear()
         self.__effects.clear()
+        self.__registered.clear()
         self.__tutorial = None
         self.__minimap = None
-        if self.__markersManager is not None:
-            self.__markersManager.clear()
-            self.__markersManager = None
+        self.__markers2D = None
         removeSettings = g_entitiesFactories.removeSettings
         for item in self.getViewSettings():
             removeSettings(item.alias)
@@ -146,7 +126,7 @@ class SfBattleProxy(GUIProxy):
         removeListener = g_eventBus.removeListener
         removeListener(_Event.COMPONENT_REGISTERED, self.__onComponentRegistered, scope=EVENT_BUS_SCOPE.GLOBAL)
         removeListener(_Event.COMPONENT_UNREGISTERED, self.__onComponentUnregistered, scope=EVENT_BUS_SCOPE.GLOBAL)
-        g_sessionProvider.getCtx().resetPlayerFullNameFormatter()
+        self.sessionProvider.getCtx().resetPlayerFullNameFormatter()
         return
 
     def clear(self):
@@ -288,17 +268,24 @@ class SfBattleProxy(GUIProxy):
 
     def __onComponentRegistered(self, event):
         alias = event.alias
+        self.__registered.add(alias)
         if alias == BATTLE_VIEW_ALIASES.BATTLE_TUTORIAL:
             proxy = weakref.proxy(event.componentPy)
             for effect in self.__effects.filterByName(*_COMPONENT_EFFECTS):
                 effect.setComponent(proxy)
 
             self.__tutorial = proxy
-            self.onGUILoaded()
         elif alias == BATTLE_VIEW_ALIASES.MINIMAP:
             plugin = event.componentPy.getPlugin('tutorial')
             if plugin is not None:
                 self.__minimap = plugin
+        elif alias == BATTLE_VIEW_ALIASES.MARKERS_2D:
+            plugin = event.componentPy.getPlugin('tutorial')
+            if plugin is not None:
+                self.__markers2D = plugin
+        if not self.__isGuiLoaded and self.__registered.issuperset(_REQUIRED_BATTLE_ALIASES):
+            self.__isGuiLoaded = True
+            self.onGUILoaded()
         return
 
     def __onComponentUnregistered(self, event):
@@ -311,4 +298,7 @@ class SfBattleProxy(GUIProxy):
         elif alias == BATTLE_VIEW_ALIASES.MINIMAP and self.__minimap is not None:
             self.__minimap.stop()
             self.__minimap = None
+        elif alias == BATTLE_VIEW_ALIASES.MARKERS_2D and self.__markers2D is not None:
+            self.__markers2D.stop()
+            self.__markers2D = None
         return

@@ -4,15 +4,16 @@ import json
 import random
 import weakref
 from collections import defaultdict, namedtuple
+import WWISE
 import BigWorld
 import ResMgr
 import ScaleformFileLoader
 import Settings
-import WWISE
 import constants
 from ConnectionManager import connectionManager, LOGIN_STATUS
 from PlayerEvents import g_playerEvents
 from adisp import process
+from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
 from external_strings_utils import isAccountLoginValid, isPasswordValid, _PASSWORD_MIN_LENGTH, _PASSWORD_MAX_LENGTH
 from gui import DialogsInterface, GUI_SETTINGS, Scaleform
 from gui.Scaleform import getPathForFlash, SCALEFORM_STARTUP_VIDEO_MASK, DEFAULT_VIDEO_BUFFERING_TIME
@@ -25,17 +26,16 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.BAN_REASON import BAN_REASON
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.WAITING import WAITING
-from gui.battle_control import g_sessionProvider
-from gui.login import g_loginManager
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent
-from helpers import getFullClientVersion
+from helpers import getFullClientVersion, dependency
 from helpers.i18n import makeString as _ms
+from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
 from helpers.time_utils import makeLocalServerTime
 from predefined_hosts import AUTO_LOGIN_QUERY_URL, AUTO_LOGIN_QUERY_ENABLED, g_preDefinedHosts
-from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
-from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
+from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.login_manager import ILoginManager
 
 class INVALID_FIELDS:
     ALL_VALID = 0
@@ -170,6 +170,7 @@ class BackgroundMode(object):
 
 
 class LoginView(LoginPageMeta):
+    loginManager = dependency.descriptor(ILoginManager)
 
     def __init__(self, ctx=None):
         LoginPageMeta.__init__(self, ctx=ctx)
@@ -183,8 +184,8 @@ class LoginView(LoginPageMeta):
         self.__customLoginStatus = None
         self._autoSearchVisited = False
         self._rememberUser = False
-        g_loginManager.servers.updateServerList()
-        self._servers = g_loginManager.servers
+        self.loginManager.servers.updateServerList()
+        self._servers = self.loginManager.servers
         return
 
     def onRegister(self, host):
@@ -197,30 +198,30 @@ class LoginView(LoginPageMeta):
         g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
         self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
         self.__customLoginStatus = None
-        result = self.__validateCredentials(userName.lower().strip(), password.strip(), bool(g_loginManager.getPreference('token2')))
+        result = self.__validateCredentials(userName.lower().strip(), password.strip(), bool(self.loginManager.getPreference('token2')))
         if result.isValid:
             Waiting.show('login')
-            g_loginManager.initiateLogin(userName, password, serverName, isSocialToken2Login, isSocialToken2Login or self._rememberUser)
+            self.loginManager.initiateLogin(userName, password, serverName, isSocialToken2Login, isSocialToken2Login or self._rememberUser)
         else:
             self.as_setErrorMessageS(result.errorMessage, result.invalidFields)
         return
 
     def resetToken(self):
-        g_loginManager.clearToken2Preference()
+        self.loginManager.clearToken2Preference()
 
     def showLegal(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LEGAL_INFO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def isPwdInvalid(self, password):
         isInvalid = False
-        if not constants.IS_DEVELOPMENT and not g_loginManager.getPreference('token2'):
+        if not constants.IS_DEVELOPMENT and not self.loginManager.getPreference('token2'):
             from external_strings_utils import isPasswordValid
             isInvalid = not isPasswordValid(password)
         return isInvalid
 
     def isLoginInvalid(self, login):
         isInvalid = False
-        if not constants.IS_DEVELOPMENT and not g_loginManager.getPreference('token2'):
+        if not constants.IS_DEVELOPMENT and not self.loginManager.getPreference('token2'):
             from external_strings_utils import isAccountLoginValid
             isInvalid = not isAccountLoginValid(login)
         return isInvalid
@@ -229,7 +230,7 @@ class LoginView(LoginPageMeta):
         self.fireEvent(OpenLinkEvent(OpenLinkEvent.RECOVERY_PASSWORD))
 
     def isToken(self):
-        return bool(g_loginManager.getPreference('token2'))
+        return bool(self.loginManager.getPreference('token2'))
 
     def onEscape(self):
 
@@ -241,7 +242,7 @@ class LoginView(LoginPageMeta):
         DialogsInterface.showI18nConfirmDialog('quit', buttonHandler, focusedID=DIALOG_BUTTON_ID.CLOSE)
 
     def startListenCsisUpdate(self, startListenCsis):
-        g_loginManager.servers.startListenCsisQuery(startListenCsis)
+        self.loginManager.servers.startListenCsisQuery(startListenCsis)
 
     def onExitFromAutoLogin(self):
         pass
@@ -277,7 +278,8 @@ class LoginView(LoginPageMeta):
         self.__backgroundMode.show()
         if self.__capsLockCallbackID is None:
             self.__capsLockCallbackID = BigWorld.callback(0.1, self.__checkUserInputState)
-        g_sessionProvider.getCtx().lastArenaUniqueID = None
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        sessionProvider.getCtx().lastArenaUniqueID = None
         self._setData()
         self._showForm()
         return
@@ -303,15 +305,15 @@ class LoginView(LoginPageMeta):
         return
 
     def _setData(self):
-        self._rememberUser = g_loginManager.getPreference('remember_user')
+        self._rememberUser = self.loginManager.getPreference('remember_user')
         if self._rememberUser:
-            password = '*' * g_loginManager.getPreference('password_length')
+            password = '*' * self.loginManager.getPreference('password_length')
         else:
             password = ''
         if GUI_SETTINGS.clearLoginValue:
             login = password = ''
         else:
-            login = g_loginManager.getPreference('login')
+            login = self.loginManager.getPreference('login')
         self.as_setDefaultValuesS(login, password, self._rememberUser, GUI_SETTINGS.rememberPassVisible, GUI_SETTINGS.igrCredentialsReset, not GUI_SETTINGS.isEmpty('recoveryPswdURL'))
         self.__updateServersList()
 
@@ -456,7 +458,7 @@ class LoginView(LoginPageMeta):
         isValid = True
         errorMessage = None
         invalidFields = None
-        if isToken2Login or constants.IS_DEVELOPMENT:
+        if isToken2Login or constants.IS_DEVELOPMENT and len(userName):
             return _ValidateCredentialsResult(isValid, errorMessage, invalidFields)
         else:
             if len(userName) < _LOGIN_NAME_MIN_LENGTH:

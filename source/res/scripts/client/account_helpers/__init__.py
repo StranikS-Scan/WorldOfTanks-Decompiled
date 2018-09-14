@@ -4,7 +4,7 @@ import datetime
 import BigWorld
 from constants import ACCOUNT_ATTR
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
-from shared_utils.account_helpers import BattleResultsCache, ClientClubs
+from shared_utils.account_helpers import BattleResultsCache, ClientClubs, ClientChristmas
 from shared_utils.account_helpers import ClientInvitations
 from helpers.time_utils import getCurrentTimestamp
 
@@ -56,3 +56,11 @@ def getAccountDatabaseID():
 
 def isLongDisconnectedFromCenter():
     return getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False)
+
+
+def getAccountHelpersConfig(manager):
+    """ Configures services for package gui.
+    :param manager: helpers.dependency.DependencyManager.
+    """
+    from account_helpers import settings_core
+    manager.install(settings_core.getSettingsCoreConfig)

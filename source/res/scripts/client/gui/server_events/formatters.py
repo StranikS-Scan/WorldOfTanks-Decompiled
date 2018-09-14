@@ -260,6 +260,10 @@ def formatYellow(msg, *args, **kwargs):
     return makeHtmlString('html_templates:lobby/quests', 'yellowTemplate', {'msg': i18n.makeString(msg, *args, **kwargs)})
 
 
+def formatGold(msg, *args, **kwargs):
+    return makeHtmlString('html_templates:lobby/quests', 'goldTemplate', {'msg': i18n.makeString(msg, *args, **kwargs)})
+
+
 def formatIndex(index, msg):
     return makeHtmlString('html_templates:lobby/quests', 'index', {'index': index,
      'label': msg})

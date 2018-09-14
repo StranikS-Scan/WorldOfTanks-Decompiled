@@ -63,7 +63,7 @@ class FortBattleResultsWindow(FortBattleResultsWindowMeta):
         else:
             self.as_notAvailableInfoS(battleID)
             msg = SYSTEM_MESSAGES.FORTIFICATION_ERRORS_BATTLE_INFO_NOT_AVAILABLE
-            SystemMessages.g_instance.pushI18nMessage(msg, type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(msg, type=SystemMessages.SM_TYPE.Warning)
 
     @classmethod
     def _packAchievement(cls, achieve, isUnique=False):

@@ -38,6 +38,9 @@ class BaseRallyRoomViewMeta(BaseRallyView):
         self._printOverrideError('showFAQWindow')
 
     def as_updateRallyS(self, rally):
+        """
+        :param rally: Represented by IRallyVO (AS)
+        """
         return self.flashObject.as_updateRally(rally) if self._isDAAPIInited() else None
 
     def as_setMembersS(self, hasRestrictions, slots):
@@ -50,9 +53,15 @@ class BaseRallyRoomViewMeta(BaseRallyView):
         return self.flashObject.as_setMemberOffline(slotIndex, isOffline) if self._isDAAPIInited() else None
 
     def as_setMemberVehicleS(self, slotIdx, slotCost, veh):
+        """
+        :param veh: Represented by VehicleVO (AS)
+        """
         return self.flashObject.as_setMemberVehicle(slotIdx, slotCost, veh) if self._isDAAPIInited() else None
 
     def as_setActionButtonStateS(self, data):
+        """
+        :param data: Represented by ActionButtonVO (AS)
+        """
         return self.flashObject.as_setActionButtonState(data) if self._isDAAPIInited() else None
 
     def as_setCommentS(self, value):
@@ -65,4 +74,7 @@ class BaseRallyRoomViewMeta(BaseRallyView):
         return self.flashObject.as_highlightSlots(slotsIdx) if self._isDAAPIInited() else None
 
     def as_setVehiclesTitleS(self, value, tooltip):
+        """
+        :param tooltip: Represented by TooltipDataVO (AS)
+        """
         return self.flashObject.as_setVehiclesTitle(value, tooltip) if self._isDAAPIInited() else None

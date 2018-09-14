@@ -3,7 +3,7 @@
 import math
 import Math
 import material_kinds
-from CustomEffect import PixieCache
+from helpers.PixieNode import PixieCache
 from CustomEffect import EffectSettings
 from svarog_script.py_component import Component
 from vehicle_systems.tankStructure import TankNodeNames
@@ -16,6 +16,10 @@ class CustomEffectManager(Component):
     _LEFT_TRACK = 1
     _RIGHT_TRACK = 2
     _DRAW_ORDER_IDX = 50
+
+    @property
+    def variables(self):
+        return self.__variableArgs
 
     def __init__(self, appearance):
         if _ENABLE_VALUE_TRACKER or _ENABLE_VALUE_TRACKER_ENGINE or _ENABLE_PIXIE_TRACKER:
@@ -137,6 +141,7 @@ class CustomEffectManager(Component):
         self.__variableArgs['RPM'] = self.__engineState.relativeRPM
         self.__gearUP = False
         self.__variableArgs['engineLoad'] = self.__engineState.mode
+        self.__variableArgs['engineState'] = self.__engineState.engineState
         self.__variableArgs['engineStart'] = self.__engineState.starting
         self.__variableArgs['physicLoad'] = self.__engineState.physicLoad
         for effectSelector in self.__selectors:

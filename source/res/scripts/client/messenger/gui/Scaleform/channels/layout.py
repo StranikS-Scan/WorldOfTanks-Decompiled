@@ -96,7 +96,7 @@ class LobbyLayout(IChannelController):
         if result:
             self._broadcast(message)
         else:
-            SystemMessages.g_instance.pushI18nMessage(errorMsg, type=SystemMessages.SM_TYPE.Error)
+            SystemMessages.pushI18nMessage(errorMsg, type=SystemMessages.SM_TYPE.Error)
         return result
 
     def addMessage(self, message, doFormatting=True):

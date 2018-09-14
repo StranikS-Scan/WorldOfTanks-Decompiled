@@ -1,127 +1,132 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/UnitFactory.py
-from UnitBase import ROSTER_TYPE
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.prb_control import prb_getters
-from gui.prb_control.context.unit_ctx import LeaveUnitCtx
 from gui.prb_control.factories.ControlFactory import ControlFactory
-from gui.prb_control.functional import unit
-from gui.prb_control.items import PlayerDecorator, FunctionalState, unit_items
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
+from gui.prb_control.entities.base.unit.ctx import LeaveUnitCtx
+from gui.prb_control.entities.base.unit.entity import UnitIntroEntity
+from gui.prb_control.entities.e_sport.unit.club.entity import ClubBrowserEntity, ClubEntity
+from gui.prb_control.entities.e_sport.unit.club.entity import ClubBrowserEntryPoint, ClubEntryPoint
+from gui.prb_control.entities.e_sport.unit.entity import ESportIntroEntity, ESportIntroEntry
+from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntity, PublicEntity
+from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntryPoint, PublicEntryPoint
+from gui.prb_control.entities.event.squad.entity import EventBattleSquadEntity, EventBattleSquadEntryPoint
+from gui.prb_control.entities.fallout.squad.entity import FalloutSquadEntity, FalloutSquadEntryPoint
+from gui.prb_control.entities.fort.unit.fort_battle.entity import FortBattleBrowserEntity, FortBattleEntity
+from gui.prb_control.entities.fort.unit.fort_battle.entity import FortBattleBrowserEntryPoint, FortBattleEntryPoint
+from gui.prb_control.entities.fort.unit.entity import FortIntroEntity, FortIntroEntryPoint
+from gui.prb_control.entities.fort.unit.sortie.entity import SortieBrowserEntity, SortieEntity
+from gui.prb_control.entities.fort.unit.sortie.entity import SortieBrowserEntryPoint, SortieEntryPoint
+from gui.prb_control.entities.random.squad.entity import RandomSquadEntity, RandomSquadEntryPoint
+from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
 __all__ = ('UnitFactory',)
-_PAN = PREBATTLE_ACTION_NAME
-_SUPPORTED_ENTRY_BY_ACTION = {_PAN.SQUAD: (unit.SquadEntry, None),
- _PAN.EVENT_SQUAD: (unit.EventSquadEntry, None),
- _PAN.UNIT: (unit.UnitIntro, (PREBATTLE_TYPE.UNIT,)),
- _PAN.FORT: (unit.UnitIntro, (PREBATTLE_TYPE.SORTIE,))}
-_SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: unit.SquadEntry,
- PREBATTLE_TYPE.EVENT: unit.EventSquadEntry,
- PREBATTLE_TYPE.FALLOUT: unit.FalloutSquadEntry,
- PREBATTLE_TYPE.UNIT: unit.UnitEntry,
- PREBATTLE_TYPE.SORTIE: unit.UnitEntry,
- PREBATTLE_TYPE.FORT_BATTLE: unit.FortBattleEntry,
- PREBATTLE_TYPE.CLUBS: unit.ClubBattleEntry}
+_SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: RandomSquadEntryPoint,
+ PREBATTLE_ACTION_NAME.EVENT_SQUAD: EventBattleSquadEntryPoint,
+ PREBATTLE_ACTION_NAME.E_SPORT: ESportIntroEntry,
+ PREBATTLE_ACTION_NAME.CLUBS_LIST: ClubBrowserEntryPoint,
+ PREBATTLE_ACTION_NAME.PUBLICS_LIST: PublicBrowserEntryPoint,
+ PREBATTLE_ACTION_NAME.FORT: FortIntroEntryPoint,
+ PREBATTLE_ACTION_NAME.SORTIES_LIST: SortieBrowserEntryPoint,
+ PREBATTLE_ACTION_NAME.FORT_BATTLES_LIST: FortBattleBrowserEntryPoint}
+_SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntryPoint,
+ PREBATTLE_TYPE.EVENT: EventBattleSquadEntryPoint,
+ PREBATTLE_TYPE.FALLOUT: FalloutSquadEntryPoint,
+ PREBATTLE_TYPE.UNIT: PublicEntryPoint,
+ PREBATTLE_TYPE.SORTIE: SortieEntryPoint,
+ PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntryPoint,
+ PREBATTLE_TYPE.CLUBS: ClubEntryPoint}
+_SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity,
+ PREBATTLE_TYPE.FORT_COMMON: FortIntroEntity}
+_SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
+ PREBATTLE_TYPE.SORTIE: SortieBrowserEntity,
+ PREBATTLE_TYPE.FORT_BATTLE: FortBattleBrowserEntity,
+ PREBATTLE_TYPE.CLUBS: ClubBrowserEntity}
+_SUPPORTED_UNIT_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntity,
+ PREBATTLE_TYPE.EVENT: EventBattleSquadEntity,
+ PREBATTLE_TYPE.FALLOUT: FalloutSquadEntity,
+ PREBATTLE_TYPE.UNIT: PublicEntity,
+ PREBATTLE_TYPE.SORTIE: SortieEntity,
+ PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntity,
+ PREBATTLE_TYPE.CLUBS: ClubEntity}
 
 class UnitFactory(ControlFactory):
+    """
+    Creates entry point, ctx or entity for unit control.
+    """
 
     def createEntry(self, ctx):
-        if not ctx.getRequestType():
-            entry = unit.UnitIntro(ctx.getEntityType())
-        else:
-            clazz = _SUPPORTED_ENTRY_BY_TYPE.get(ctx.getEntityType())
-            if clazz is not None:
-                entry = clazz()
-            else:
-                entry = None
-                LOG_ERROR('Prebattle type is not supported', ctx)
-        return entry
+        return self._createEntryByType(ctx.getEntityType(), _SUPPORTED_ENTRY_BY_TYPE)
 
     def createEntryByAction(self, action):
         return self._createEntryByAction(action, _SUPPORTED_ENTRY_BY_ACTION)
 
-    def createFunctional(self, ctx):
+    def createEntity(self, ctx):
         if ctx.getCtrlType() == CTRL_ENTITY_TYPE.UNIT:
-            created = self._createByAccountState(ctx)
+            created = self.__createByAccountState(ctx)
         else:
-            created = self._createByFlags(ctx)
+            created = self.__createByFlags(ctx)
         return created
 
-    def createPlayerInfo(self, functional):
-        info = functional.getPlayerInfo(unitIdx=functional.getUnitIdx())
-        return PlayerDecorator(info.isCreator(), info.isReady)
+    def createPlayerInfo(self, entity):
+        info = entity.getPlayerInfo(unitIdx=entity.getUnitIdx())
+        return PlayerDecorator(info.isCommander(), info.isReady)
 
-    def createStateEntity(self, functional):
-        return FunctionalState(CTRL_ENTITY_TYPE.UNIT, functional.getEntityType(), True, functional.hasLockedState(), isinstance(functional, unit.IntroFunctional), functional.getFlags(), functional.getFunctionalFlags(), functional.getRosterType())
+    def createStateEntity(self, entity):
+        return FunctionalState(CTRL_ENTITY_TYPE.UNIT, entity.getEntityType(), True, entity.hasLockedState(), isinstance(entity, UnitIntroEntity), entity.getFlags(), entity.getFunctionalFlags(), entity.getRosterType())
 
-    def createLeaveCtx(self, flags=FUNCTIONAL_FLAG.UNDEFINED):
-        return LeaveUnitCtx(waitingID='prebattle/leave', flags=flags)
+    def createLeaveCtx(self, flags=FUNCTIONAL_FLAG.UNDEFINED, entityType=0):
+        return LeaveUnitCtx(waitingID='prebattle/leave', flags=flags, entityType=entityType)
 
-    def _createByAccountState(self, ctx):
+    def __createByAccountState(self, ctx):
+        """
+        Tries to create entity by current account state.
+        Args:
+            ctx: creation request context.
+        
+        Returns:
+            new prebattle unit entity
+        """
         unitMrg = prb_getters.getClientUnitMgr()
         if unitMrg is None:
-            return self._createNoUnitFunctional(ctx)
+            return
         else:
             if unitMrg.id and unitMrg.unitIdx:
                 entity = prb_getters.getUnit(unitMrg.unitIdx, safe=True)
                 if entity:
-                    flags = FUNCTIONAL_FLAG.UNIT
-                    if ctx.hasFlags(FUNCTIONAL_FLAG.UNIT_INTRO) and entity.getPrebattleType() == ctx.getEntityType():
-                        flags |= FUNCTIONAL_FLAG.SWITCH
-                    if entity.isSquad():
-                        flags |= FUNCTIONAL_FLAG.SQUAD
-                    if entity.isEvent():
-                        flags |= FUNCTIONAL_FLAG.EVENT_BATTLES
-                    if entity.isFalloutSquad():
-                        flags |= FUNCTIONAL_FLAG.FALLOUT_SQUAD
-                    ctx.removeFlags(FUNCTIONAL_FLAG.UNIT_BITMASK | FUNCTIONAL_FLAG.ACTIONS_BITMASK)
-                    ctx.addFlags(flags)
-                    created = self._createUnitFunctional(entity.getPrebattleType(), unit_items.DynamicRosterSettings(entity), flags=flags)
+                    return self._createEntityByType(entity.getPrebattleType(), _SUPPORTED_UNIT_BY_TYPE)
                 else:
                     LOG_ERROR('Unit is not found in unit manager', unitMrg.unitIdx, unitMrg.units)
                     unitMrg.leave()
-                    created = self._createNoUnitFunctional(ctx)
-            else:
-                created = self._createByPrbType(ctx)
-            return created
+                    return
+            return self.__createByPrbType(ctx)
 
-    def _createByFlags(self, ctx):
-        if not ctx.hasFlags(FUNCTIONAL_FLAG.UNIT):
-            created = self._createByAccountState(ctx)
-        else:
-            created = self._createNoUnitFunctional(ctx)
-        return created
+    def __createByFlags(self, ctx):
+        """
+        Tries to create entity by context flags.
+        Args:
+            ctx: creation request context.
+        
+        Returns:
+            new prebattle unit entity
+        """
+        return self.__createByAccountState(ctx) if not ctx.hasFlags(FUNCTIONAL_FLAG.UNIT) else None
 
-    def _createByPrbType(self, ctx):
+    def __createByPrbType(self, ctx):
+        """
+        Tries to create entity by prebattle type.
+        Args:
+            ctx: creation request context.
+        
+        Returns:
+            new prebattle unit entity
+        """
         if ctx.getCtrlType() != CTRL_ENTITY_TYPE.UNIT:
-            return self._createNoUnitFunctional(ctx)
-        prbType = ctx.getEntityType()
-        if prbType:
-            ctx.removeFlags(FUNCTIONAL_FLAG.UNIT_BITMASK)
-            ctx.addFlags(FUNCTIONAL_FLAG.UNIT_INTRO)
-            created = unit.IntroFunctional(prbType, ctx.getFlags() & FUNCTIONAL_FLAG.ACTIONS_BITMASK, unit_items.SupportedRosterSettings.last(prbType))
+            return None
         else:
-            created = self._createNoUnitFunctional(ctx)
-        return created
-
-    @staticmethod
-    def _createNoUnitFunctional(ctx):
-        if ctx.hasFlags(FUNCTIONAL_FLAG.LEAVE_ENTITY) and ctx.hasFlags(FUNCTIONAL_FLAG.UNIT_INTRO):
-            return
-        else:
-            if not ctx.hasFlags(FUNCTIONAL_FLAG.NO_UNIT):
-                ctx.removeFlags(FUNCTIONAL_FLAG.UNIT_BITMASK)
-                ctx.addFlags(FUNCTIONAL_FLAG.NO_UNIT)
-                created = unit.NoUnitFunctional()
-            else:
-                created = None
-            return created
-
-    @staticmethod
-    def _createUnitFunctional(prbType, rosterSettings, flags=FUNCTIONAL_FLAG.UNIT):
-        if prbType == PREBATTLE_TYPE.SQUAD:
-            classz = unit.SquadUnitFunctional
-        else:
-            classz = unit.UnitFunctional
-        return classz(prbType, rosterSettings, flags)
+            prbType = ctx.getEntityType()
+            if prbType in _SUPPORTED_INTRO_BY_TYPE:
+                return self._createEntityByType(prbType, _SUPPORTED_INTRO_BY_TYPE)
+            return self._createEntityByType(prbType, _SUPPORTED_BROWSER_BY_TYPE) if prbType in _SUPPORTED_BROWSER_BY_TYPE and ctx.hasFlags(FUNCTIONAL_FLAG.UNIT_BROWSER) else None

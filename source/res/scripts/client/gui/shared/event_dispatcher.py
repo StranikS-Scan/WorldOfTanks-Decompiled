@@ -101,16 +101,16 @@ def hideBattleResults():
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showAwardWindow(award, isUniqueName=True):
+def showAwardWindow(award, isUniqueName=True, viewAlias=VIEW_ALIAS.AWARD_WINDOW):
     """
     :param award: AwardAbstract instance object
     :param isUniqueName:
     """
     if isUniqueName:
-        name = getUniqueViewName(VIEW_ALIAS.AWARD_WINDOW)
+        name = getUniqueViewName(viewAlias)
     else:
-        name = VIEW_ALIAS.AWARD_WINDOW
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.AWARD_WINDOW, name=name, ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
+        name = viewAlias
+    g_eventBus.handleEvent(events.LoadViewEvent(viewAlias, name=name, ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMissionAwardWindow(award):

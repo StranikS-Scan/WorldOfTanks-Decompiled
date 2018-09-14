@@ -4,13 +4,14 @@ import functools
 import weakref
 import BigWorld
 import constants
+import arena_bonus_type_caps
 import win_points
 from gui import GUI_SETTINGS
 _GUI_TYPE = constants.ARENA_GUI_TYPE
 _GUI_TYPE_LABEL = constants.ARENA_GUI_TYPE_LABEL
 _BONUS_TYPE = constants.ARENA_BONUS_TYPE
 _PERIOD = constants.ARENA_PERIOD
-_CAPS = constants.ARENA_BONUS_TYPE_CAPS
+_CAPS = arena_bonus_type_caps.ARENA_BONUS_TYPE_CAPS
 
 def _getClientArena(avatar=None):
     if avatar is None:
@@ -358,22 +359,22 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
         self._bonusType = _BONUS_TYPE.UNKNOWN
 
     def hasFlags(self):
-        return _CAPS.get(self._bonusType) & _CAPS.FLAG_MECHANICS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.FLAG_MECHANICS)
 
     def hasResourcePoints(self):
-        return _CAPS.get(self._bonusType) & _CAPS.RESOURCE_POINTS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.RESOURCE_POINTS)
 
     def hasRepairPoints(self):
-        return _CAPS.get(self._bonusType) & _CAPS.REPAIR_MECHANICS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.REPAIR_MECHANICS)
 
     def hasRage(self):
-        return _CAPS.get(self._bonusType) & _CAPS.RAGE_MECHANICS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.RAGE_MECHANICS)
 
     def hasRespawns(self):
-        return _CAPS.get(self._bonusType) & _CAPS.RESPAWN > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.RESPAWN)
 
     def hasGasAttack(self):
-        return _CAPS.get(self._bonusType) & _CAPS.GAS_ATTACK_MECHANICS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.GAS_ATTACK_MECHANICS)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):

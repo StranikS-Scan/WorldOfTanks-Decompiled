@@ -3,10 +3,11 @@
 import BigWorld
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING, LOG_DEBUG
-from gui.game_control import getBrowserCtrl, getPromoController
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE
+from helpers import dependency
+from skeletons.gui.game_control import IBrowserController, IPromoController
 
 @ReprInjector.simple(('_name', 'name'))
 class _Action(object):
@@ -64,6 +65,7 @@ class _OpenBrowser(_Action):
 @ReprInjector.withParent()
 class OpenInternalBrowser(_OpenBrowser):
     __slots__ = ('_browserID',)
+    browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self, name, url):
         super(OpenInternalBrowser, self).__init__(name, url)
@@ -71,34 +73,26 @@ class OpenInternalBrowser(_OpenBrowser):
         return
 
     def invoke(self, _, actor=None):
-        ctrl = self._getContoller()
-        if ctrl:
-            if actor:
-                title = actor.getTopic()
-            else:
-                title = None
-            self._doInvoke(ctrl, title)
+        if actor:
+            title = actor.getTopic()
         else:
-            LOG_ERROR('Browser controller is not found')
+            title = None
+        self.__doInvoke(title)
         return
-
-    def _getContoller(self):
-        return getBrowserCtrl()
 
     @process
     def _doInvoke(self, ctrl, title):
-        self._browserID = yield ctrl.load(self._url, browserID=self._browserID, title=title)
+        self._browserID = yield self.browserCtrl.load(self._url, browserID=self._browserID, title=title)
 
 
 @ReprInjector.withParent()
 class OpenPromoBrowser(OpenInternalBrowser):
-
-    def _getContoller(self):
-        return getPromoController()
+    __slots__ = ()
+    promoCtrl = dependency.descriptor(IPromoController)
 
     @process
     def _doInvoke(self, ctrl, title):
-        ctrl.showPromo(self._url, title)
+        self.promoCtrl.showPromo(self._url, title)
 
 
 @ReprInjector.withParent()

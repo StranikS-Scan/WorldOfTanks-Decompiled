@@ -2,8 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/MinimapLobby.py
 import ArenaType
 from gui.Scaleform.daapi.view.meta.MinimapLobbyMeta import MinimapLobbyMeta
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class MinimapLobby(MinimapLobbyMeta):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(MinimapLobby, self).__init__()
@@ -15,12 +18,10 @@ class MinimapLobby(MinimapLobbyMeta):
 
     def _populate(self):
         super(MinimapLobby, self)._populate()
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged += self.onSettingsChanging
+        self.settingsCore.onSettingsChanged += self.onSettingsChanging
 
     def _dispose(self):
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.onSettingsChanging
+        self.settingsCore.onSettingsChanged -= self.onSettingsChanging
         super(MinimapLobby, self)._dispose()
 
     def onSettingsChanging(self, diff):

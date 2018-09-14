@@ -36,6 +36,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_GUN_DAMAGED = '#ingame_gui:player_errors/cant_shoot/gun_damaged'
     PLAYER_ERRORS_CANT_SHOOT_GUN_RELOAD = '#ingame_gui:player_errors/cant_shoot/gun_reload'
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
+    PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
     PLAYER_ERRORS_EQUIPMENT_ALREADYACTIVATED = '#ingame_gui:player_errors/equipment/alreadyActivated'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE = '#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_ALLTANKMENARESAFE = '#ingame_gui:player_errors/equipment/medkit/allTankmenAreSafe'
@@ -481,6 +482,12 @@ class INGAME_GUI(object):
     BATTLEMESSENGER_TOXIC_BLACKLIST_CANT_ADD_IN_BLACKLIST_BODY = '#ingame_gui:battleMessenger/toxic/blackList/CANT_ADD_IN_BLACKLIST/body'
     BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST_HEADER = '#ingame_gui:battleMessenger/toxic/blackList/REMOVE_FROM_BLACKLIST/header'
     BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST_BODY = '#ingame_gui:battleMessenger/toxic/blackList/REMOVE_FROM_BLACKLIST/body'
+    SIEGEMODE_HINT_PRESS = '#ingame_gui:siegeMode/hint/press'
+    SIEGEMODE_HINT_FORMODE_0 = '#ingame_gui:siegeMode/hint/forMode/0'
+    SIEGEMODE_HINT_FORMODE_1 = '#ingame_gui:siegeMode/hint/forMode/1'
+    SIEGEMODE_HINT_FORMODE_2 = '#ingame_gui:siegeMode/hint/forMode/2'
+    SIEGEMODE_HINT_FORMODE_3 = '#ingame_gui:siegeMode/hint/forMode/3'
+    SIEGEMODE_HINT_NOBINDING = '#ingame_gui:siegeMode/hint/noBinding'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,
@@ -526,6 +533,10 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_ASSISTTRACK,
      EFFICIENCYRIBBONS_ASSISTSPOT,
      EFFICIENCYRIBBONS_CRITS)
+    SIEGEMODE_HINT_FORMODE_ENUM = (SIEGEMODE_HINT_FORMODE_0,
+     SIEGEMODE_HINT_FORMODE_1,
+     SIEGEMODE_HINT_FORMODE_2,
+     SIEGEMODE_HINT_FORMODE_3)
 
     @classmethod
     def chat_shortcuts(cls, key0):
@@ -549,6 +560,15 @@ class INGAME_GUI(object):
     def efficiencyribbons(cls, key0):
         outcome = '#ingame_gui:efficiencyRibbons/{}'.format(key0)
         if outcome not in cls.EFFICIENCYRIBBONS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def siegeModeHint(cls, mode):
+        outcome = '#ingame_gui:siegeMode/hint/forMode/{}'.format(mode)
+        if outcome not in cls.SIEGEMODE_HINT_FORMODE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

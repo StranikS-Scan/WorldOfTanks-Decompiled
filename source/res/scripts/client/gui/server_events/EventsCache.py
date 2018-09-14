@@ -31,6 +31,7 @@ from items import getTypeOfCompactDescr
 from potapov_quests import _POTAPOV_QUEST_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import makeTupleByDict
+from skeletons.gui.server_events import IEventsCache
 QUEUE_TYPE_TO_ARENA_BONUS_TYPE = {QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_BONUS_TYPE.FALLOUT_CLASSIC,
  QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_BONUS_TYPE.FALLOUT_MULTITEAM}
 
@@ -78,7 +79,7 @@ class _PotapovComposer(object):
         return result
 
 
-class _EventsCache(object):
+class EventsCache(IEventsCache):
     USER_QUESTS = (EVENT_TYPE.BATTLE_QUEST,
      EVENT_TYPE.TOKEN_QUEST,
      EVENT_TYPE.FORT_QUEST,
@@ -278,7 +279,7 @@ class _EventsCache(object):
     def getEventVehicles(self):
         from gui.shared import g_itemsCache
         result = []
-        for v in g_eventsCache.getEventBattles().vehicles:
+        for v in self.getEventBattles().vehicles:
             item = g_itemsCache.items.getItemByCD(v)
             if item.isInInventory:
                 result.append(item)
@@ -427,12 +428,14 @@ class _EventsCache(object):
                 if qID in result:
                     result[qID].setGroupID(gID)
 
-        children, parents = self._makeQuestsRelations(result)
+        children, parents, parentsName = self._makeQuestsRelations(result)
         for qID, q in result.iteritems():
             if qID in children:
                 q.setChildren(children[qID])
             if qID in parents:
                 q.setParents(parents[qID])
+            if qID in parentsName:
+                q.setParentsName(parentsName[qID])
 
         return result
 
@@ -523,12 +526,14 @@ class _EventsCache(object):
                 children[parentID][tokenID] = makeTokens.get(tokenID, [])
 
         parents = defaultdict(dict)
+        parentsName = defaultdict(dict)
         for parentID, tokens in children.iteritems():
             for tokenID, chn in tokens.iteritems():
                 for childID in chn:
                     parents[childID][tokenID] = [parentID]
+                    parentsName[childID][tokenID] = [quests[parentID].getUserName()]
 
-        return (children, parents)
+        return (children, parents, parentsName)
 
     def __invalidateData(self, callback=lambda *args: None):
         self.__clearCache()
@@ -694,5 +699,8 @@ class _EventsCache(object):
     def __onLockedQuestsChanged(self):
         self.__lockedQuestIds = BigWorld.player().potapovQuestsLock
 
+    def __getNewYearData(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('christmasEvent', {})
 
-g_eventsCache = _EventsCache()
+    def getNYData(self):
+        return self.__getNewYearData()

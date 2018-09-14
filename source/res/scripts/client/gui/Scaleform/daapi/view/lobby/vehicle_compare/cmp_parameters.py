@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_parameters.py
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.game_control.veh_comparison_basket import CREW_TYPES
-from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.items_parameters import formatters
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE, VehiclesComparator, getParamExtendedData
 from gui.shared.items_parameters.formatters import FORMAT_SETTINGS
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator
-from gui.shared.items_parameters import formatters
+from helpers import dependency
+from skeletons.gui.game_control import IVehicleComparisonBasket
 _HEADER_PARAM_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleBonusTitle, text_styles.middleTitle)
 _HEADER_PARAM_NO_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleTitle, text_styles.middleTitle)
 _PARAM_COLOR_SCHEME = (text_styles.main, text_styles.bonusAppliedText, text_styles.main)
@@ -77,13 +78,13 @@ class _VehParamsValuesGenerator(VehParamsBaseGenerator):
 
     def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
         data = super(_VehParamsValuesGenerator, self)._makeSimpleParamHeaderVO(param, isOpen, comparator)
-        data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__headerScheme, _CMP_FORMAT_SETTINGS)
+        data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__headerScheme, _CMP_FORMAT_SETTINGS, False)
         return data
 
     def _makeAdvancedParamVO(self, param):
         data = super(_VehParamsValuesGenerator, self)._makeAdvancedParamVO(param)
         if param.value:
-            data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__bodyScheme, _CMP_FORMAT_SETTINGS)
+            data['text'] = formatters.formatParameter(param.name, param.value, param.state, self.__bodyScheme, _CMP_FORMAT_SETTINGS, False)
         else:
             data['text'] = getUndefinedParam()
         return data
@@ -91,39 +92,42 @@ class _VehParamsValuesGenerator(VehParamsBaseGenerator):
 
 class _VehCompareParametersData(object):
 
-    def __init__(self, cache, vehIntCD, isInInventory, crewLvl, modulesType, vehicleStrCD, showWarning):
+    def __init__(self, cache, vehIntCD, isInInventory, crewInfo, modulesType, vehicleStrCD, showWarning):
         super(_VehCompareParametersData, self).__init__()
         self.__crewLvl = None
+        self.__crewData = None
         self.__modulesType = None
         self.__isInInventory = None
         self.__currentVehParams = None
         self.__vehicleStrCD = None
         self.__vehicle = None
-        self.__isCrewLvlInvalid = False
+        self.__isCrewInvalid = False
         self.__isInInvInvalid = False
         self.__isCurrVehParamsInvalid = False
-        self.__vehicleCD = vehIntCD
+        self.__vehicleIntCD = vehIntCD
         self.setIsInInventory(isInInventory)
         self.setVehicleStrCD(vehicleStrCD)
-        self.setCrewLvl(crewLvl)
+        self.setCrewLvl(*crewInfo)
         self.setModulesType(modulesType)
         self.__cache = cache
         self.__paramGenerator = _VehParamsValuesGenerator(*_COLOR_SCHEMES)
         self.__parameters = self.__initParameters(vehIntCD, self.__vehicle, showWarning)
         return
 
-    def setCrewLvl(self, newVal):
-        if self.__crewLvl != newVal:
-            self.__crewLvl = newVal
-            if self.__crewLvl == CREW_TYPES.CURRENT:
-                vehicle = g_itemsCache.items.getItemByCD(self.__vehicleCD)
-                crewLevels = map(lambda crewData: crewData[1].roleLevel if crewData[1] else None, vehicle.crew)
-            else:
-                crewLevels = (self.__crewLvl,)
-            self.__vehicle.crew = self.__vehicle.getCrewBySkillLevels(*crewLevels)
-            self.__isCrewLvlInvalid = True
+    def setCrewLvl(self, crewLvl, crewData):
+        """
+        Updates crew information
+        :param crewLvl: int, one of gui.game_control.veh_comparison_basket.CREW_TYPES
+        :param crewData: list, [(crewIndex, tankmanStrCD), ...]
+        :return: bool, True if new incoming data is not similar as existed, otherwise - False
+        """
+        if self.__crewLvl != crewLvl or self.__crewData != crewData:
+            self.__crewLvl = crewLvl
+            self.__crewData = crewData
+            self.__vehicle.crew = map(lambda strCD: (strCD[0], Tankman(strCD[1]) if strCD[1] else None), crewData)
+            self.__isCrewInvalid = True
             self.__isCurrVehParamsInvalid = True
-        return self.__isCrewLvlInvalid
+        return self.__isCrewInvalid
 
     def setVehicleStrCD(self, vehicleStrCD):
         if self.__vehicleStrCD != vehicleStrCD:
@@ -147,17 +151,21 @@ class _VehCompareParametersData(object):
         return self.__isInInvInvalid
 
     def dispose(self):
+        self.__crewData = None
         self.__cache = None
         self.__paramGenerator = None
         self.__currentVehParams = None
         self.__parameters = None
         return
 
+    def getVehicleIntCD(self):
+        return self.__vehicleIntCD
+
     def getFormattedParameters(self, vehMaxParams):
-        if self.__isCrewLvlInvalid:
-            if self.__isCrewLvlInvalid:
+        if self.__isCrewInvalid:
+            if self.__isCrewInvalid:
                 self.__parameters.update(crewLevelIndx=CREW_TYPES.ALL.index(self.__crewLvl))
-                self.__isCrewLvlInvalid = False
+                self.__isCrewInvalid = False
         if self.__isInInvInvalid:
             crewListParams = [{'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_SKILL100,
               'id': CREW_TYPES.SKILL_100,
@@ -210,7 +218,7 @@ class _VehCompareParametersData(object):
                     return None
             else:
                 deltaVals = states[1]
-            return formatters.formatParameter(pInfo.name, deltaVals, states, _DELTA_PARAM_COLOR_SCHEME, _CMP_FORMAT_SETTINGS)
+            return formatters.formatParameter(pInfo.name, deltaVals, states, _DELTA_PARAM_COLOR_SCHEME, _CMP_FORMAT_SETTINGS, False)
         else:
             return None
 
@@ -251,15 +259,15 @@ class IVehCompareView(object):
 
 
 class VehCompareBasketParamsCache(object):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, view):
         super(VehCompareBasketParamsCache, self).__init__()
         self.__cache = []
         self.__view = view
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange += self.__onVehCountChanged
-        comparisonBasket.onParametersChange += self.__onVehParamsChanged
-        for vehInd in range(comparisonBasket.getVehiclesCount()):
+        self.comparisonBasket.onChange += self.__onVehCountChanged
+        self.comparisonBasket.onParametersChange += self.__onVehParamsChanged
+        for vehInd in range(self.comparisonBasket.getVehiclesCount()):
             self.__addParamData(vehInd)
 
         self.__rebuildList()
@@ -270,9 +278,8 @@ class VehCompareBasketParamsCache(object):
             self.__cache.pop().dispose()
 
         self.__cache = None
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange -= self.__onVehCountChanged
-        comparisonBasket.onParametersChange -= self.__onVehParamsChanged
+        self.comparisonBasket.onChange -= self.__onVehCountChanged
+        self.comparisonBasket.onParametersChange -= self.__onVehParamsChanged
         return
 
     def getParametersDelta(self, index, paramName):
@@ -295,8 +302,8 @@ class VehCompareBasketParamsCache(object):
         return outcome
 
     def __addParamData(self, index):
-        vehCompareData = getVehicleComparisonBasketCtrl().getVehicleAt(index)
-        paramsData = _VehCompareParametersData(self.__cache, vehCompareData.getVehicleCD(), vehCompareData.isInInventory(), vehCompareData.getCrewLevel(), vehCompareData.getModulesType(), vehCompareData.getVehicleStrCD(), not vehCompareData.isActualModules())
+        vehCompareData = self.comparisonBasket.getVehicleAt(index)
+        paramsData = _VehCompareParametersData(self.__cache, vehCompareData.getVehicleCD(), vehCompareData.isInInventory(), (vehCompareData.getCrewLevel(), vehCompareData.getCrewData()), vehCompareData.getModulesType(), vehCompareData.getVehicleStrCD(), not vehCompareData.isActualModules())
         self.__cache.insert(index, paramsData)
 
     def __rebuildList(self):
@@ -322,11 +329,11 @@ class VehCompareBasketParamsCache(object):
     def __onVehParamsChanged(self, data):
         isBestScoreInvalid = False
         for index in data:
-            basketVehData = getVehicleComparisonBasketCtrl().getVehicleAt(index)
+            basketVehData = self.comparisonBasket.getVehicleAt(index)
             paramsVehData = self.__cache[index]
             paramsVehData.setIsInInventory(basketVehData.isInInventory())
             paramsVehData.setModulesType(basketVehData.getModulesType())
-            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setCrewLvl(basketVehData.getCrewLevel())
+            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setCrewLvl(basketVehData.getCrewLevel(), basketVehData.getCrewData())
             isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setVehicleStrCD(basketVehData.getVehicleStrCD())
 
         if self.__cache:

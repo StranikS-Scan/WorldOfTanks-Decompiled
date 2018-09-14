@@ -14,13 +14,14 @@ ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
 class DebugGizmo:
 
-    def __init__(self, spaceID, modelName='helpers/models/position_gizmo.model'):
+    def __init__(self, modelName='helpers/models/position_gizmo.model'):
         self.model = BigWorld.Model(modelName)
-        BigWorld.player().addModel(self.model, spaceID)
+        BigWorld.player().addModel(self.model)
         self.motor = BigWorld.Servo(Math.Matrix())
         self.model.addMotor(self.motor)
 
     def __del__(self):
+        BigWorld.player().delModel(self.model)
         self.model.delMotor(self.motor)
 
     def visible(self, show):

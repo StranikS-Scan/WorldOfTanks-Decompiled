@@ -11,6 +11,9 @@ class IconPriceDialogMeta(IconDialog):
     """
 
     def as_setMessagePriceS(self, price, currency, actionPriceData):
+        """
+        :param actionPriceData: Represented by ActionPriceVO (AS)
+        """
         return self.flashObject.as_setMessagePrice(price, currency, actionPriceData) if self._isDAAPIInited() else None
 
     def as_setPriceLabelS(self, label):

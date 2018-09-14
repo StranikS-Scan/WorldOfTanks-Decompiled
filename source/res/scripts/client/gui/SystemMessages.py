@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/SystemMessages.py
-from abc import ABCMeta, abstractmethod
 from enumerations import Enumeration
 from gui.shared.money import Currency
+from helpers import dependency
+from skeletons.gui.system_messages import ISystemMessages
 SM_TYPE = Enumeration('System message type', ['Error',
  'Warning',
  'Information',
@@ -23,33 +24,13 @@ SM_TYPE = Enumeration('System message type', ['Error',
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold}
 
-class BaseSystemMessages(object):
-    __metaclass__ = ABCMeta
+def _getSystemMessages():
+    return dependency.instance(ISystemMessages)
 
-    @abstractmethod
-    def init(self):
-        pass
-
-    @abstractmethod
-    def destroy(self):
-        pass
-
-    @abstractmethod
-    def pushMessage(self, text, type=SM_TYPE.Information):
-        pass
-
-    @abstractmethod
-    def pushI18nMessage(self, key, *args, **kwargs):
-        pass
-
-
-g_instance = None
 
 def pushMessage(text, type=SM_TYPE.Information, priority=None):
-    if g_instance:
-        g_instance.pushMessage(text, type, priority)
+    _getSystemMessages().pushMessage(text, type, priority)
 
 
 def pushI18nMessage(key, *args, **kwargs):
-    if g_instance:
-        g_instance.pushI18nMessage(key, *args, **kwargs)
+    _getSystemMessages().pushI18nMessage(key, *args, **kwargs)

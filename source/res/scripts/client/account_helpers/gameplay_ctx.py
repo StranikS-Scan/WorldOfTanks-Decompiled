@@ -3,6 +3,8 @@
 import ArenaType
 import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 _ASSAULT2_GP_NAME = constants.ARENA_GAMEPLAY_NAMES[6]
 ENABLED_ARENA_GAMEPLAY_NAMES = constants.ARENA_GAMEPLAY_NAMES[:3] + (_ASSAULT2_GP_NAME,)
 if constants.IS_DEVELOPMENT:
@@ -18,8 +20,8 @@ def getDefaultMask():
 
 def getMask():
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    from account_helpers.settings_core.SettingsCore import g_settingsCore
-    settingsMask = userMask = g_settingsCore.serverSettings.getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, 'gameplayMask', getDefaultMask())
+    settingsCore = dependency.instance(ISettingsCore)
+    settingsMask = userMask = settingsCore.serverSettings.getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, 'gameplayMask', getDefaultMask())
     ctfMask = 1 << constants.ARENA_GAMEPLAY_IDS['ctf']
     nationsMask = 1 << constants.ARENA_GAMEPLAY_IDS['nations']
     if not userMask:
@@ -54,5 +56,5 @@ def isCreationEnabled(gameplayName):
 
 def _setMask(gameplayMask):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    from account_helpers.settings_core.SettingsCore import g_settingsCore
-    g_settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, {'gameplayMask': gameplayMask})
+    settingsCore = dependency.instance(ISettingsCore)
+    settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, {'gameplayMask': gameplayMask})

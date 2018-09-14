@@ -6,18 +6,21 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.doc_loaders.EULAVersionLoader import EULAVersionLoader
 from gui.shared import EVENT_BUS_SCOPE
+from helpers import dependency
 from helpers import getClientLanguage
 from gui import makeHtmlString, GUI_SETTINGS
 from gui.shared.events import CloseWindowEvent, LoadViewEvent
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from Event import Event
 from adisp import async
+from skeletons.account_helpers.settings_core import ISettingsCore
 VERSION_TAG = 'showLicense'
 EULA_TEMPLATES_FILE_PATH = 'gui/EULA_templates.xml'
 EULA_FILE_PATH = 'text/EULA.xml'
 
 class EULADispatcher(EventSystemEntity):
     onEULAClosed = Event()
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(EULADispatcher, self).__init__()
@@ -51,9 +54,8 @@ class EULADispatcher(EventSystemEntity):
     def processLicense(self, callback=None):
         self.EULACallback = callback
         from account_helpers.AccountSettings import AccountSettings, EULA_VERSION
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         defaults = AccountSettings.getFilterDefault(EULA_VERSION)
-        filters = g_settingsCore.serverSettings.getSection(EULA_VERSION, defaults)
+        filters = self.settingsCore.serverSettings.getSection(EULA_VERSION, defaults)
         self.serverVersion = int(filters['version'])
         self.isShow = False
         xmlVersion = self.EULAVersion.xmlVersion
@@ -68,9 +70,8 @@ class EULADispatcher(EventSystemEntity):
     def __saveVersionFile(self):
         self.__showLicense = False
         from account_helpers.AccountSettings import EULA_VERSION
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         version = {'version': self.EULAVersion.xmlVersion}
-        g_settingsCore.serverSettings.setSectionSettings(EULA_VERSION, version)
+        self.settingsCore.serverSettings.setSectionSettings(EULA_VERSION, version)
         self.serverVersion = None
         self.EULACallback(True)
         return

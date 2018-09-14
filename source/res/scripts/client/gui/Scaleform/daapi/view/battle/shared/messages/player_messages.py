@@ -3,7 +3,7 @@
 from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
-from gui.battle_control import g_sessionProvider, avatar_getter
+from gui.battle_control import avatar_getter
 from items import vehicles
 
 class PlayerMessages(fading_messages.FadingMessages):
@@ -16,11 +16,11 @@ class PlayerMessages(fading_messages.FadingMessages):
 
     def _addGameListeners(self):
         super(PlayerMessages, self)._addGameListeners()
-        ctrl = g_sessionProvider.shared.messages
+        ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
             ctrl.onShowPlayerMessageByCode += self.__onShowPlayerMessageByCode
             ctrl.onShowPlayerMessageByKey += self.__onShowPlayerMessageByKey
-        ctrl = g_sessionProvider.shared.equipments
+        ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentUpdated += self.__onCombatEquipmentUpdated
         arena = avatar_getter.getArena()
@@ -29,11 +29,11 @@ class PlayerMessages(fading_messages.FadingMessages):
         return
 
     def _removeGameListeners(self):
-        ctrl = g_sessionProvider.shared.messages
+        ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
             ctrl.onShowPlayerMessageByCode -= self.__onShowPlayerMessageByCode
             ctrl.onShowPlayerMessageByKey -= self.__onShowPlayerMessageByKey
-        ctrl = g_sessionProvider.shared.equipments
+        ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentUpdated -= self.__onCombatEquipmentUpdated
         arena = avatar_getter.getArena()
@@ -44,7 +44,7 @@ class PlayerMessages(fading_messages.FadingMessages):
 
     def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID):
         LOG_DEBUG('onShowPlayerMessage', code, postfix, targetID, attackerID, equipmentID)
-        getFullName = g_sessionProvider.getCtx().getPlayerFullName
+        getFullName = self.sessionProvider.getCtx().getPlayerFullName
         if equipmentID:
             equipment = vehicles.g_cache.equipments().get(equipmentID)
             if equipment is not None:
@@ -62,7 +62,7 @@ class PlayerMessages(fading_messages.FadingMessages):
             self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
 
     def __onCombatEquipmentUsed(self, shooterID, eqID):
-        battleCxt = g_sessionProvider.getCtx()
+        battleCxt = self.sessionProvider.getCtx()
         if not battleCxt.isCurrentPlayer(shooterID):
             equipment = vehicles.g_cache.equipments().get(eqID)
             getFullName = battleCxt.getPlayerFullName

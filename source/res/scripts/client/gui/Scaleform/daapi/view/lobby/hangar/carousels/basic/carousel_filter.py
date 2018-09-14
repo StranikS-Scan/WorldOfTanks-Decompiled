@@ -3,9 +3,10 @@
 import constants
 import nations
 from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER_1, CAROUSEL_FILTER_2
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 def _filterDict(dictionary, keys):
     """ Filter dict leaving only acceptable keys.
@@ -118,6 +119,7 @@ class _CarouselFilter(object):
 
 
 class CarouselFilter(_CarouselFilter):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(CarouselFilter, self).__init__()
@@ -125,11 +127,11 @@ class CarouselFilter(_CarouselFilter):
         self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
 
     def save(self):
-        g_settingsCore.serverSettings.setSections(self._sections, self._filters)
+        self.settingsCore.serverSettings.setSections(self._sections, self._filters)
 
     def load(self):
         defaultFilters = AccountSettings.getFilterDefaults(self._sections)
-        savedFilters = g_settingsCore.serverSettings.getSections(self._sections, defaultFilters)
+        savedFilters = self.settingsCore.serverSettings.getSections(self._sections, defaultFilters)
         self._filters = defaultFilters
         for key, value in defaultFilters.iteritems():
             savedFilters[key] = type(value)(savedFilters[key])

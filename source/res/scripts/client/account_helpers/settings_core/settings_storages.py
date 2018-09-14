@@ -53,12 +53,12 @@ class ServerSettingsStorage(ISettingsStorage):
 class VideoSettingsStorage(ISettingsStorage):
 
     @property
-    def fullscreen(self):
-        return self._settings.get('isFullscreen', g_monitorSettings.isFullscreen)
+    def windowMode(self):
+        return self._settings.get('windowMode', g_monitorSettings.windowMode)
 
-    @fullscreen.setter
-    def fullscreen(self, value):
-        self.store({'option': 'isFullscreen',
+    @windowMode.setter
+    def windowMode(self, value):
+        self.store({'option': 'windowMode',
          'value': value})
 
     @property
@@ -124,8 +124,8 @@ class VideoSettingsStorage(ISettingsStorage):
             LOG_DEBUG('Applying video settings: ', self._settings)
             cWindowSize = g_monitorSettings.currentWindowSize
             windowSizeWidth, windowSizeHeight = self.windowSize
-            cIsFullScreen = g_monitorSettings.isFullscreen
-            isFullscreen = self.fullscreen
+            cWindowMode = g_monitorSettings.windowMode
+            windowMode = self.windowMode
             cVideoMode = g_monitorSettings.currentVideoMode
             videoMode = self.videoMode
             monitor = self.monitor
@@ -133,30 +133,30 @@ class VideoSettingsStorage(ISettingsStorage):
             windowSizeChanged = cWindowSize is not None and windowSizeWidth is not None and windowSizeHeight is not None and (windowSizeWidth != cWindowSize.width or windowSizeHeight != cWindowSize.height)
             monitorChanged = monitor != cMonitor
             videModeChanged = cVideoMode is not None and videoMode is not None and videoMode.index != cVideoMode.index
-            fullScreenChanged = isFullscreen != cIsFullScreen
+            windowModeChanged = windowMode != cWindowMode
             deviseRecreated = False
             if monitorChanged:
                 g_monitorSettings.changeMonitor(monitor)
-                deviseRecreated = isFullscreen or cIsFullScreen
-            if windowSizeChanged and not isFullscreen:
+                deviseRecreated = windowMode == BigWorld.WindowModeExclusiveFullscreen or cWindowMode == BigWorld.WindowModeExclusiveFullscreen
+            if windowSizeChanged and windowMode == BigWorld.WindowModeWindowed:
                 deviseRecreated = True
                 g_monitorSettings.changeWindowSize(windowSizeWidth, windowSizeHeight)
-            elif (not monitorChanged or restartApproved) and (videModeChanged or fullScreenChanged):
+            elif (not monitorChanged or restartApproved) and (videModeChanged or windowModeChanged):
                 deviseRecreated = True
-                BigWorld.changeVideoMode(videoMode.index, not isFullscreen)
+                BigWorld.changeVideoMode(videoMode.index, windowMode)
             self.clear()
             self._core.isDeviseRecreated = deviseRecreated
             if deviseRecreated:
 
-                def wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cIsFullScreen):
+                def wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode):
 
                     def revert():
                         if monitorChanged:
                             g_monitorSettings.changeMonitor(cMonitor)
-                        if windowSizeChanged and not cIsFullScreen:
+                        if windowSizeChanged and cWindowMode == BigWorld.WindowModeWindowed:
                             g_monitorSettings.changeWindowSize(cWindowSize.width, cWindowSize.height)
-                        elif not monitorChanged and (videModeChanged or fullScreenChanged):
-                            BigWorld.changeVideoMode(cVideoMode.index, not cIsFullScreen)
+                        elif not monitorChanged and (videModeChanged or windowModeChanged):
+                            BigWorld.changeVideoMode(cVideoMode.index, cWindowMode)
 
                     return revert
 
@@ -164,7 +164,7 @@ class VideoSettingsStorage(ISettingsStorage):
                 def confirmator(callback=None):
                     BigWorld.callback(0.0, lambda : DialogsInterface.showI18nConfirmDialog('graphicsChangeConfirmation', callback, TimerConfirmDialogMeta('graphicsChangeConfirmation', timer=15)))
 
-                return (confirmator, wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cIsFullScreen))
+                return (confirmator, wrapper(monitorChanged, windowSizeChanged, cMonitor, cWindowSize, cVideoMode, cWindowMode))
         return super(VideoSettingsStorage, self).apply(restartApproved)
 
 
@@ -189,18 +189,6 @@ class MessengerSettingsStorage(object):
 
     def clear(self):
         self._settings.clear()
-
-
-class KeyboardSettingsStorage(ISettingsStorage):
-
-    def apply(self, restartApproved):
-        if self._settings:
-            self._manager.setSettings(self._settings)
-        return super(KeyboardSettingsStorage, self).apply(restartApproved)
-
-    def extract(self, settingOption, default=None):
-        default = self._manager.getSetting(settingOption, default)
-        return self._settings.get(settingOption, default)
 
 
 class AimSettingsStorage(ISettingsStorage):

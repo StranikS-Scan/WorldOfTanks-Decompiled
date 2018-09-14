@@ -4,13 +4,14 @@ import re
 import Event
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
+from helpers import dependency
 from messenger.gui.Scaleform.data import contacts_vo_converter as _vo_converter
 from messenger.m_constants import USER_TAG as _TAG
 from messenger.m_constants import USER_ACTION_ID as _ACTION_ID
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import UserTagsFindCriteria
 from messenger.storage import storage_getter
-from account_helpers.settings_core.SettingsCore import g_settingsCore
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class _Category(object):
     __slots__ = ('_converter', '_visible', '_avoid', '_forced')
@@ -660,6 +661,7 @@ class _OpenedTreeCreator():
 
 
 class ContactsDataProvider(DAAPIDataProvider):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(ContactsDataProvider, self).__init__()
@@ -668,7 +670,7 @@ class ContactsDataProvider(DAAPIDataProvider):
         self.__isEmpty = True
         self.__list = []
         self.onTotalStatusChanged = Event.Event()
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     @storage_getter('users')
     def usersStorage(self):
@@ -785,7 +787,7 @@ class ContactsDataProvider(DAAPIDataProvider):
 
     def _dispose(self):
         self.__categories.clear(True)
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(ContactsDataProvider, self)._dispose()
 
     def __setEmpty(self):

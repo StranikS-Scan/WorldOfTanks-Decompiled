@@ -4,6 +4,7 @@ from AccountCommands import LOCK_REASON
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.prb_control import prbDispatcherProperty
 from gui.Scaleform.daapi.view.lobby.techtree.dumpers import _BaseDumper
 from gui.shared.economics import getGUIPrice
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, MAX_PATH_LIMIT
@@ -11,7 +12,6 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import RESEARCH_ITEMS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import makeDefUnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.prb_control.prb_helpers import prbDispatcherProperty
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -261,6 +261,17 @@ class _ItemsData(object):
                     result.append((nodeCD, state))
 
         return result
+
+    def invalidateDiscounts(self, discountTargets):
+        """
+        Updates discount prices of nodes
+        """
+        nodes = self._getNodesToInvalidate()
+        for node in nodes:
+            if node['id'] in discountTargets:
+                return True
+
+        return False
 
     def isHasVehicles(self):
         return bool(len(self.getInventoryVehicles()) > 0)

@@ -17,6 +17,9 @@ class SkillDropMeta(AbstractWindowView):
         self._printOverrideError('dropSkills')
 
     def as_setDataS(self, data):
+        """
+        :param data: Represented by SkillDropModel (AS)
+        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
     def as_setGoldS(self, value):

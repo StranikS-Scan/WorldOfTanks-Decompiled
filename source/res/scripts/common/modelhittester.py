@@ -19,11 +19,19 @@ class ModelHitTester(object):
     def __init__(self, dataSection=None):
         self.__bspModel = None
         self.__bspModelName = None
+        self.__bspModelDown = None
+        self.__bspModelNameDown = None
+        self.__bspModelUp = None
+        self.__bspModelNameUp = None
         if dataSection is not None:
             modelTag = 'collisionModelClient' if IS_CLIENT else 'collisionModelServer'
             self.__bspModelName = dataSection.readString(modelTag)
             if not self.__bspModelName:
                 raise Exception('<%s> is missing or wrong' % modelTag)
+            modelTagDown = modelTag + 'Down'
+            self.__bspModelNameDown = dataSection.readString(modelTagDown)
+            modelTagUp = modelTag + 'Up'
+            self.__bspModelNameUp = dataSection.readString(modelTagUp)
         return
 
     def getBspModel(self):
@@ -41,29 +49,47 @@ class ModelHitTester(object):
                 raise Exception("wrong collision model '%s'" % self.bspModelName)
             self.__bspModel = bspModel
             self.bbox = bspModel.getBoundingBox()
+            if self.__bspModelNameDown:
+                bspModel = BigWorld.WGBspCollisionModel()
+                if not bspModel.setModelName(self.__bspModelNameDown):
+                    raise Exception("wrong collision model '%s'" % self.__bspModelNameDown)
+                self.__bspModelDown = bspModel
+                self.bboxDown = bspModel.getBoundingBox()
+            if self.__bspModelNameUp:
+                bspModel = BigWorld.WGBspCollisionModel()
+                if not bspModel.setModelName(self.__bspModelNameUp):
+                    raise Exception("wrong collision model '%s'" % self.__bspModelNameUp)
+                self.__bspModelUp = bspModel
+                self.bboxUp = bspModel.getBoundingBox()
             return
 
     def releaseBspModel(self):
         if self.__bspModel is not None:
             self.__bspModel = None
             del self.bbox
+            if self.__bspModelDown is not None:
+                self.__bspModelDown = None
+                del self.bboxDown
+            if self.__bspModelUp is not None:
+                self.__bspModelUp = None
+                del self.bboxUp
         return
 
-    def localAnyHitTest(self, start, stop):
-        return self.__bspModel.collideSegmentAny(start, stop)
+    def localAnyHitTest(self, start, stop, value=0):
+        return self.__getBspModel(value).collideSegmentAny(start, stop)
 
-    def localHitTest(self, start, stop):
-        return self.__bspModel.collideSegment(start, stop)
+    def localHitTest(self, start, stop, value=0):
+        return self.__getBspModel(value).collideSegment(start, stop)
 
-    def localHitTestFull_debug(self, start, stop):
+    def localHitTestFull_debug(self, start, stop, value=0):
         assert IS_DEVELOPMENT
         LOG_DEBUG('localHitTestFull_debug', self.bspModelName, start, stop)
-        return self.__bspModel.collideSegmentFull_debug(start, stop)
+        return self.__getBspModel(value).collideSegmentFull_debug(start, stop)
 
-    def worldHitTest(self, start, stop, worldMatrix):
+    def worldHitTest(self, start, stop, worldMatrix, value=0):
         worldToLocal = Matrix(worldMatrix)
         worldToLocal.invert()
-        testRes = self.__bspModel.collideSegment(worldToLocal.applyPoint(start), worldToLocal.applyPoint(stop))
+        testRes = self.__getBspModel(value).collideSegment(worldToLocal.applyPoint(start), worldToLocal.applyPoint(stop))
         if testRes is None:
             return
         else:
@@ -76,11 +102,19 @@ class ModelHitTester(object):
 
             return res
 
-    def localSphericHitTest(self, center, radius, bOutsidePolygonsOnly=True):
-        return self.__bspModel.collideSphere(center, radius, bOutsidePolygonsOnly)
+    def localSphericHitTest(self, center, radius, bOutsidePolygonsOnly=True, value=0):
+        return self.__getBspModel(value).collideSphere(center, radius, bOutsidePolygonsOnly)
 
-    def localCollidesWithTriangle(self, triangle, hitDir):
-        return self.__bspModel.collidesWithTriangle(triangle, hitDir)
+    def localCollidesWithTriangle(self, triangle, hitDir, value=0):
+        return self.__getBspModel(value).collidesWithTriangle(triangle, hitDir)
+
+    def __getBspModel(self, value):
+        if value > 0.5 and self.__bspModelUp:
+            return self.__bspModelUp
+        elif value < -0.5 and self.__bspModelDown:
+            return self.__bspModelDown
+        else:
+            return self.__bspModel
 
 
 def segmentMayHitVolume(boundingRadius, center, segmentStart, segmentEnd):

@@ -7,7 +7,10 @@ import Math
 import TriggersManager
 from constants import ARENA_PERIOD
 from PlayerEvents import g_playerEvents
-from gui.battle_control import g_sessionProvider, avatar_getter
+from gui.battle_control import avatar_getter
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 from tutorial import g_tutorialWeaver
 from tutorial.control.battle import aspects
 from tutorial.control.battle.context import BattleClientCtx
@@ -32,19 +35,19 @@ class _IMarker(object):
 
 
 class _DirectionIndicatorCtrl(_IMarker):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, indicator, shapes, position):
         super(_DirectionIndicatorCtrl, self).__init__()
         self.__shapes = shapes
         shape = self.__shapes[0]
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        if g_settingsCore.getSetting('isColorBlind'):
+        if self.settingsCore.getSetting('isColorBlind'):
             shape = self.__shapes[1]
         self.__indicator = indicator
         self.__indicator.setShape(shape)
         if position is not None:
             self.__indicator.track(position)
-        g_settingsCore.onSettingsChanged += self.__as_onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__as_onSettingsChanged
         return
 
     def update(self, distance, position=None):
@@ -58,8 +61,7 @@ class _DirectionIndicatorCtrl(_IMarker):
         if self.__indicator is not None:
             self.__indicator.remove()
         self.__indicator = None
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.__as_onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__as_onSettingsChanged
         return
 
     def __as_onSettingsChanged(self, diff):
@@ -121,30 +123,30 @@ class _AreaMarker(_AimMarker):
 
 class _StaticWorldMarker2D(_IMarker):
 
-    def __init__(self, vm, data, position, distance):
+    def __init__(self, objectID, markers2D, data, position, distance):
         super(_StaticWorldMarker2D, self).__init__()
-        self.__vmRef = weakref.ref(vm)
         offset = data.get('offset', Math.Vector3(0, 0, 0))
-        _, self.__handle = vm.createStaticMarker(Math.Vector3(position[:]) + offset, 'StaticObjectMarker')
-        if self.__handle is not -1:
-            vm.invokeMarker(self.__handle, 'init', [data.get('shape', 'arrow'),
-             data.get('min-distance', 0),
-             data.get('max-distance', 0),
-             distance])
+        if markers2D.addStaticObject(objectID, Math.Vector3(position[:]) + offset):
+            markers2D.setupStaticObject(objectID, data.get('shape', 'arrow'), data.get('min-distance', 0), data.get('max-distance', 0), distance)
+            self.__objectID = objectID
+            self.__markers2D = weakref.ref(markers2D)
+        else:
+            self.__objectID = ''
+            self.__markers2D = lambda : None
 
     def update(self, distance):
-        vm = self.__vmRef()
-        if vm is not None and self.__handle is not -1:
-            vm.invokeMarker(self.__handle, 'setDistance', [distance])
+        markers2D = self.__markers2D()
+        if markers2D is not None and self.__objectID:
+            markers2D.setDistanceToObject(self.__objectID, distance)
         return
 
     def clear(self):
-        LOG_DEBUG('_StaticWorldMarker2D.clear', self.__handle)
-        vm = self.__vmRef()
-        if vm is not None:
-            vm.destroyStaticMarker(self.__handle)
-        self.__vmRef = None
-        self.__handle = -1
+        LOG_DEBUG('_StaticWorldMarker2D.clear', self.__objectID)
+        markers2D = self.__markers2D()
+        if markers2D is not None and self.__objectID:
+            markers2D.delStaticObject(self.__objectID)
+        self.__objectID = ''
+        self.__markers2D = lambda : None
         return
 
 
@@ -214,6 +216,7 @@ class _StaticObjectMarker3D(_IMarker):
 
 
 class _VehicleMarker(_IMarker):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, vehicleID, period, dIndicator=None):
         super(_VehicleMarker, self).__init__()
@@ -223,7 +226,7 @@ class _VehicleMarker(_IMarker):
         self.__dIndicator = dIndicator
 
     def update(self, manager):
-        feedback = g_sessionProvider.shared.feedback
+        feedback = self.sessionProvider.shared.feedback
         vehicle = BigWorld.entities.get(self.__vehicleID)
         if vehicle is not None and vehicle.isStarted and not vehicle.isPlayerVehicle:
             if self.__nextTime <= BigWorld.time():
@@ -296,9 +299,9 @@ class FunctionalShowMarker(FunctionalEffect):
         typeID = data.getTypeID()
         entityID = self._tutorial.getVars().get(data.getVarRef())
         marker = None
-        vMarkers = self._gui.getMarkersManager()
+        markers2D = self._gui.getMarkers2DPlugin()
         minimap = self._gui.getMinimapPlugin()
-        if vMarkers is None:
+        if markers2D is None:
             LOG_ERROR('Markers manager is not defined')
             return
         elif minimap is None:
@@ -306,14 +309,14 @@ class FunctionalShowMarker(FunctionalEffect):
             return
         else:
             if typeID is TriggersManager.TRIGGER_TYPE.AIM:
-                marker = self.__make4Aim(typeID, entityID, vMarkers, data)
+                marker = self.__make4Aim(typeID, entityID, markers2D, data)
             elif typeID is TriggersManager.TRIGGER_TYPE.AREA:
-                marker = self.__make4Area(typeID, entityID, vMarkers, minimap, data)
+                marker = self.__make4Area(typeID, entityID, markers2D, minimap, data)
             elif typeID is TriggersManager.TRIGGER_TYPE.AIM_AT_VEHICLE:
                 marker = self.__make4Vehicle(entityID, data)
             return marker
 
-    def __make4Aim(self, typeID, triggerID, vMarkers, data):
+    def __make4Aim(self, typeID, triggerID, markers2D, data):
         tManager = TriggersManager.g_manager
         if tManager is None or not tManager.isEnabled():
             LOG_ERROR('TriggersManager is not defined or is not enabled')
@@ -331,9 +334,9 @@ class FunctionalShowMarker(FunctionalEffect):
                     LOG_ERROR('Directional indicator not found')
                 else:
                     indicatorCtrl = _DirectionIndicatorCtrl(indicator, ('green', 'green'), position)
-            return _AimMarker(typeID, triggerID, _StaticWorldMarker2D(vMarkers, data.getWorldData(), position, distance), _StaticObjectMarker3D(data.getModelData(), position), indicatorCtrl)
+            return _AimMarker(typeID, triggerID, _StaticWorldMarker2D(triggerID, markers2D, data.getWorldData(), position, distance), _StaticObjectMarker3D(data.getModelData(), position), indicatorCtrl)
 
-    def __make4Area(self, typeID, triggerID, vMarkers, minimap, data):
+    def __make4Area(self, typeID, triggerID, markers2D, minimap, data):
         tManager = TriggersManager.g_manager
         if tManager is None or not tManager.isEnabled():
             LOG_ERROR('TriggersManager is not defined or is not enabled')
@@ -351,7 +354,7 @@ class FunctionalShowMarker(FunctionalEffect):
                     LOG_ERROR('Directional indicator not found', triggerID)
                 else:
                     indicatorCtrl = _DirectionIndicatorCtrl(indicator, ('green', 'green'), position)
-            return _AreaMarker(typeID, triggerID, _StaticWorldMarker2D(vMarkers, data.getWorldData(), position, distance), _StaticMinimapMarker2D(data.getID(), minimap, position), _StaticObjectMarker3D(data.getModelData(), position), _StaticObjectMarker3D(data.getGroundData(), position), indicatorCtrl)
+            return _AreaMarker(typeID, triggerID, _StaticWorldMarker2D(triggerID, markers2D, data.getWorldData(), position, distance), _StaticMinimapMarker2D(data.getID(), minimap, position), _StaticObjectMarker3D(data.getModelData(), position), _StaticObjectMarker3D(data.getGroundData(), position), indicatorCtrl)
 
     def __make4Vehicle(self, vehicleID, data):
         if vehicleID is None:
@@ -542,9 +545,10 @@ class FunctionalShowBattleDialogEffect(FunctionalShowDialogEffect):
 
 
 class FunctionalShowGreeting(FunctionalEffect):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def triggerEffect(self):
-        if g_sessionProvider.arenaVisitor.isArenaNotStarted():
+        if self.sessionProvider.arenaVisitor.isArenaNotStarted():
             greeting = self.getTarget()
             if greeting is not None:
                 if self._gui.playEffect(GUI_EFFECT_NAME.SHOW_GREETING, greeting.getData()):
@@ -559,7 +563,7 @@ class FunctionalShowGreeting(FunctionalEffect):
         return False
 
     def isStillRunning(self):
-        result = g_sessionProvider.arenaVisitor.isArenaNotStarted()
+        result = self.sessionProvider.arenaVisitor.isArenaNotStarted()
         if not result:
             self._gui.stopEffect(GUI_EFFECT_NAME.SHOW_GREETING, self._effect.getTargetID())
         return result

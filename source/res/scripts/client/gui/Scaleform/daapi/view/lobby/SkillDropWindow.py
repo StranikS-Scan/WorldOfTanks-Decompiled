@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SkillDropWindow.py
 import cPickle as pickle
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from items import tankmen
 from gui import SystemMessages
 from gui.shared.utils import decorators
@@ -9,7 +9,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.serializers import packTankman
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.processors.tankman import TankmanDropSkills
-from gui.shared.money import Money, Currency
+from gui.shared.money import Money
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.Scaleform.daapi.view.meta.SkillDropMeta import SkillDropMeta
 from gui.shared import events, g_itemsCache
@@ -116,7 +116,7 @@ class SkillDropWindow(SkillDropMeta):
         proc = TankmanDropSkills(tankman, dropSkillCostIdx)
         result = yield proc.request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             self.onWindowClose()
             self.fireEvent(events.SkillDropEvent(events.SkillDropEvent.SKILL_DROPPED_SUCCESSFULLY))

@@ -137,11 +137,7 @@ def readVec3(dataSec, name, minVal, maxVal, defaultVal):
 
 
 def getScreenAspectRatio():
-    if BigWorld.isVideoWindowed():
-        size = BigWorld.screenSize()
-        return size[0] / size[1]
-    else:
-        return BigWorld.getFullScreenAspectRatio()
+    return BigWorld.getAspectRatio()
 
 
 def getProjectionMatrix():

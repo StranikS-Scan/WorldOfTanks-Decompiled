@@ -14,12 +14,12 @@ class XmppPlugin(IProtoPlugin):
     __slots__ = ('__client', '__contacts', '__connection', '__logger', '__messages', '__isClientInited', '__nicknameResolver', '__clanListener')
 
     def __init__(self):
-        self.__client = ClientDecorator()
-        self.__contacts = ContactsManager()
-        self.__connection = ConnectionHandler()
-        self.__messages = MessagesManager()
-        self.__logger = LogHandler()
-        self.__nicknameResolver = NicknameResolver()
+        self.__client = None
+        self.__contacts = None
+        self.__connection = None
+        self.__messages = None
+        self.__logger = None
+        self.__nicknameResolver = None
         self.__clanListener = None
         self.__isClientInited = False
         return
@@ -56,6 +56,14 @@ class XmppPlugin(IProtoPlugin):
 
     def isConnected(self):
         return self.__client.isConnected()
+
+    def init(self):
+        self.__client = ClientDecorator()
+        self.__contacts = ContactsManager()
+        self.__connection = ConnectionHandler()
+        self.__messages = MessagesManager()
+        self.__logger = LogHandler()
+        self.__nicknameResolver = NicknameResolver()
 
     def clear(self):
         if self.__isClientInited:

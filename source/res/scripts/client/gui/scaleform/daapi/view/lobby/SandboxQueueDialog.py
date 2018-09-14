@@ -20,7 +20,7 @@ class SandboxQueueDialog(PvESandboxQueueWindowMeta):
     def cancel(self):
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            dispatcher.exitFromQueue()
+            dispatcher.getEntity().exitFromQueue()
         self.destroy()
         return
 
@@ -38,7 +38,7 @@ class SandboxQueueDialog(PvESandboxQueueWindowMeta):
                            'betweenPointcutsTextAlias': MENU.PVESANDBOX_QUEUE_UNITS}})
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            if not dispatcher.getPreQueueFunctional().isInQueue():
+            if not dispatcher.getEntity().isInQueue():
                 BigWorld.callback(0.0, self.destroy)
         return
 

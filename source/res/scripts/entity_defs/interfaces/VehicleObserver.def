@@ -1,0 +1,53 @@
+<VehicleObserver.def>
+  <Properties>
+    <observerFPVControlMode>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </observerFPVControlMode>
+    <remoteCameraArcade>
+      <Type>	REMOTE_CAMERA_ARCADE_DATA	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </remoteCameraArcade>
+    <remoteCameraSniper>
+      <Type>	REMOTE_CAMERA_SNIPER_DATA	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </remoteCameraSniper>
+    <remoteCameraStrategic>
+      <Type>	REMOTE_CAMERA_STRATEGIC_DATA	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </remoteCameraStrategic>
+    <vehiclesVisibleDirectly>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </vehiclesVisibleDirectly>
+    <vehiclesVisibleIndirectly>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </vehiclesVisibleIndirectly>
+  </Properties>
+  <CellMethods>
+    <switchObserverFPVControlMode>
+      <Exposed></Exposed>
+      <Arg>	UINT8	</Arg>
+    </switchObserverFPVControlMode>
+    <setRemoteCameraArcade>
+      <Exposed></Exposed>
+      <Arg>	REMOTE_CAMERA_ARCADE_DATA	</Arg>
+    </setRemoteCameraArcade>
+    <setRemoteCameraSniper>
+      <Exposed></Exposed>
+      <Arg>	REMOTE_CAMERA_SNIPER_DATA	</Arg>
+    </setRemoteCameraSniper>
+    <setRemoteCameraStrategic>
+      <Exposed></Exposed>
+      <Arg>	REMOTE_CAMERA_STRATEGIC_DATA	</Arg>
+    </setRemoteCameraStrategic>
+    <receiveVisibilityUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+    </receiveVisibilityUpdate>
+  </CellMethods>
+</VehicleObserver.def>

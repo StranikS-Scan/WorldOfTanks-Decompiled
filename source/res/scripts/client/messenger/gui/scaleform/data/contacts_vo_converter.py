@@ -7,13 +7,14 @@ from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from helpers import dependency
 from helpers import i18n
 from helpers.html import escape
 from messenger import g_settings
 from messenger.m_constants import USER_TAG
 from messenger.storage import storage_getter
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from predefined_hosts import g_preDefinedHosts
+from skeletons.account_helpers.settings_core import ISettingsCore
 _CATEGORY_I18N_KEY = {CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_FRIENDS,
  CONTACTS_ALIASES.GROUP_FORMATIONS_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_FORMATIONS,
  CONTACTS_ALIASES.GROUP_OTHER_CATEGORY_ID: I18N_MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER}
@@ -21,6 +22,13 @@ _DEF_RULES = CONTACTS_ALIASES.GROUP_IS_RESIZABLE
 _MUTABLE_RULE = CONTACTS_ALIASES.GROUP_CAN_BE_MANAGED
 _FRIENDS_RULES = CONTACTS_ALIASES.GROUP_IS_DROP_ALLOWED | CONTACTS_ALIASES.GROUP_IS_RESIZABLE
 _IGNORED_RULES = CONTACTS_ALIASES.GROUP_IS_DROP_ALLOWED | CONTACTS_ALIASES.GROUP_IS_RESIZABLE
+
+class _WOT_GAME_RESOURCE(object):
+    ONLINE = 'user_is_online'
+    UNKNOWN = 'unknown'
+    BUSY = 'user_is_busy'
+    BUSY_BLIND = 'user_is_busy_violet'
+
 
 def makeClanFullName(clanAbbrev):
     formatted = ''
@@ -99,7 +107,9 @@ class CategoryConverter(object):
 
 class ContactConverter(object):
     _colors = {}
+    settingsCore = dependency.descriptor(ISettingsCore)
 
+    @classmethod
     def getIcons(self, tags, note):
         icons = []
         if USER_TAG.IGR_BASE in tags:
@@ -119,24 +129,26 @@ class ContactConverter(object):
             icons.append(RES_ICONS.MAPS_ICONS_MESSENGER_CONTACTNOTE)
         return icons
 
-    def getColor(self, tags, isOnline):
+    @classmethod
+    def getColor(cls, tags, isOnline):
         if USER_TAG.CURRENT in tags:
-            colors = self._getColors('currentUser')
+            colors = cls._getColors('currentUser')
         elif {USER_TAG.FRIEND, USER_TAG.SUB_TO}.issubset(tags):
-            colors = self._getColors('friend')
+            colors = cls._getColors('friend')
         elif {USER_TAG.CLAN_MEMBER, USER_TAG.OTHER_CLAN_MEMBER}.issubset(tags):
-            colors = self._getColors('clanMember')
+            colors = cls._getColors('clanMember')
         elif USER_TAG.CLUB_MEMBER in tags:
-            colors = self._getColors('clanMember')
+            colors = cls._getColors('clanMember')
         else:
-            colors = self._getColors('others')
+            colors = cls._getColors('others')
         if isOnline:
             color = colors[0]
         else:
             color = colors[1]
         return color
 
-    def makeVO(self, contact, includeIcons=True):
+    @classmethod
+    def makeVO(cls, contact, useBigIcons=False):
         dbID = contact.getID()
         tags = contact.getTags()
         note = contact.getNote()
@@ -145,24 +157,24 @@ class ContactConverter(object):
             pass
         elif contact.getClanAbbrev():
             tags.add(USER_TAG.OTHER_CLAN_MEMBER)
-        baseUserProps = self.makeBaseUserProps(contact)
-        baseUserProps['rgb'] = self.getColor(tags, isOnline)
-        baseUserProps['icons'] = self.getIcons(tags, note)
+        baseUserProps = cls.makeBaseUserProps(contact)
+        baseUserProps['rgb'] = cls.getColor(tags, isOnline)
+        baseUserProps['icons'] = cls.getIcons(tags, note)
         baseUserProps['tags'] = list(tags)
-        resourceId = contact.getResourceID() or WG_GAMES.TANKS
-        if resourceId != WG_GAMES.TANKS:
-            for prefix in WG_GAMES.ALL:
-                if prefix != WG_GAMES.TANKS:
-                    if prefix in resourceId:
-                        resourceId = prefix
-                        break
-
+        resourceIconId = cls.getGuiResourceID(contact)
+        isColorBlind = cls.settingsCore.getSetting('isColorBlind')
+        if resourceIconId == WG_GAMES.TANKS:
+            if contact.isOnline():
+                if USER_TAG.PRESENCE_DND in tags:
+                    resourceIconId = _WOT_GAME_RESOURCE.BUSY_BLIND if isColorBlind else _WOT_GAME_RESOURCE.BUSY
+                else:
+                    resourceIconId = _WOT_GAME_RESOURCE.ONLINE
+            else:
+                resourceIconId = _WOT_GAME_RESOURCE.UNKNOWN
         return {'userProps': baseUserProps,
          'dbID': dbID,
          'note': escape(note),
-         'isOnline': isOnline,
-         'isColorBlind': g_settingsCore.getSetting('isColorBlind'),
-         'resource': resourceId}
+         'resource': RES_ICONS.getContactStatusIcon('48x48' if useBigIcons else '24x24', resourceIconId)}
 
     @classmethod
     def makeBaseUserProps(cls, contact):
@@ -178,6 +190,20 @@ class ContactConverter(object):
         else:
             ctx = None
         return makeHtmlString('html_templates:contacts/contact', key, ctx=ctx)
+
+    @classmethod
+    def getGuiResourceID(cls, contact):
+        resourceId = contact.getResourceID()
+        if resourceId:
+            for prefix in WG_GAMES.ALL:
+                if prefix != WG_GAMES.TANKS:
+                    if prefix in resourceId:
+                        resourceId = prefix
+                        break
+
+        if not resourceId:
+            resourceId = WG_GAMES.TANKS
+        return resourceId
 
     @classmethod
     def _getColors(cls, name):

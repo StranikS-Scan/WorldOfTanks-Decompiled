@@ -85,14 +85,17 @@ class OptionalDevicesController(IBattleController):
 
     def setOptionalDevice(self, deviceID, isOn):
         intCD = _makeIntCD(deviceID)
+        deviceIsOn = False
         if deviceID in self.__optionalDevices:
+            deviceIsOn = self.__optionalDevices[deviceID]
             self.__optionalDevices[deviceID] = isOn
             self.onOptionalDeviceUpdated(intCD, isOn)
         else:
             self.__optionalDevices[deviceID] = isOn
             self.__order.append(deviceID)
             self.onOptionalDeviceAdded(intCD, self.getDescriptor(deviceID), isOn)
-        DevicesSound.playSound(deviceID, isOn)
+        if deviceIsOn != isOn:
+            DevicesSound.playSound(deviceID, isOn)
 
     def __pe_onArenaPeriodChange(self, period, *args):
         if period == ARENA_PERIOD.AFTERBATTLE:

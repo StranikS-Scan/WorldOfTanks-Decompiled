@@ -11,14 +11,15 @@ from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import g_itemsCache
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.gui_items.dossier import dumpDossier
-from helpers import i18n
+from helpers import i18n, dependency
 from nations import NAMES
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 class ProfileTechnique(ProfileTechniqueMeta):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, *args):
         super(ProfileTechnique, self).__init__(*args)
@@ -109,7 +110,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
                  'tankIconPath': vehicle.iconSmall,
                  'typeIconPath': '../maps/icons/filters/tanks/%s.png' % vehicle.type,
                  'isInHangar': isInHangar,
-                 'compareModeAvailable': getVehicleComparisonBasketCtrl().isEnabled()})
+                 'compareModeAvailable': self.comparisonBasket.isEnabled()})
 
         return result
 

@@ -34,8 +34,6 @@ _HIST_BATTLEFIELD_POSTFIX = 'battlefield'
 TANK_EXPERT_GROUP = [_total(_TANK_EXPERT_PREFIX)]
 MECH_ENGINEER_GROUP = [_total(_MECH_ENGINEER_PREFIX)]
 for _nID, name in enumerate(nations.AVAILABLE_NAMES):
-    if name == 'sweden':
-        continue
     TANK_EXPERT_GROUP.append(_total('%s%d' % (_TANK_EXPERT_PREFIX, _nID)))
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))
 
@@ -47,6 +45,7 @@ POTAPOV_QUESTS_GROUP = [_single('firstMerit'),
  _total('readyForBattleATSPG'),
  _total('readyForBattleALL'),
  _total('tankwomenProgress')]
+CHRISTMAS_QUESTS_GROUP = [_single('xmasTreeBronze'), _single('xmasTreeSilver'), _single('xmasTreeGold')]
 IGNORED_BY_BATTLE_RESULTS = [achievements.MARK_OF_MASTERY_RECORD, _single7x7('victoryMarch')]
 for record in records.RECORD_DB_IDS:
     if record[1] in ('maxXP', 'maxFrags', 'maxDamage', 'maxWinPoints', 'maxCoins'):

@@ -1,0 +1,22 @@
+<CompanyMatchmaker.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <enqueue>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </enqueue>
+    <dequeue>
+      <Arg>	MAILBOX	</Arg>
+    </dequeue>
+    <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onArenaCreated>
+  </BaseMethods>
+</CompanyMatchmaker.def>

@@ -2,10 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/LobbyTicker.py
 import BigWorld
 from debug_utils import LOG_ERROR
+from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.common.BaseTicker import BaseTicker
-from gui import GUI_SETTINGS, game_control
+from helpers import dependency
+from skeletons.gui.game_control import IBrowserController
 
 class LobbyTicker(BaseTicker):
+    browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self):
         super(LobbyTicker, self).__init__()
@@ -13,7 +16,7 @@ class LobbyTicker(BaseTicker):
     def _handleBrowserLink(self, link):
         openBrowser = BigWorld.wg_openWebBrowser
         if GUI_SETTINGS.movingText.internalBrowser:
-            browser = game_control.g_instance.browser
+            browser = self.browserCtrl
             if browser is not None:
                 openBrowser = browser.load
             else:

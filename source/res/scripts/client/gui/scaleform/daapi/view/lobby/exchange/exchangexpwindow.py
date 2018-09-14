@@ -1,23 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeXPWindow.py
 import BigWorld
-from gui import SystemMessages, game_control
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getVehicleTypeAssetPath, getNationsAssetPath, NATION_ICON_PREFIX_131x31
 from gui.Scaleform.daapi.view.meta.ExchangeXpWindowMeta import ExchangeXpWindowMeta
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import g_itemsCache
+from gui.shared.formatters import icons
 from gui.shared.formatters.text_styles import builder
 from gui.shared.gui_items.processors.common import FreeXPExchanger
 from gui.shared.utils.decorators import process
-from helpers import i18n
-from gui.Scaleform.locale.MENU import MENU
-from gui.shared.formatters import icons
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IWalletController
 
 class ExchangeXPWindow(ExchangeXpWindowMeta):
+    wallet = dependency.descriptor(IWalletController)
 
     def _populate(self):
         super(ExchangeXPWindow, self)._populate()
@@ -25,7 +26,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         self.as_setPrimaryCurrencyS(g_itemsCache.items.stats.actualGold)
         self.__setRates()
         self.as_totalExperienceChangedS(g_itemsCache.items.stats.actualFreeXP)
-        self.as_setWalletStatusS(game_control.g_instance.wallet.status)
+        self.as_setWalletStatusS(self.wallet.status)
         self.__prepareAndPassVehiclesData()
 
     def _subscribe(self):
@@ -36,7 +37,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
          'inventory.1': self.__vehiclesDataChangedCallBack,
          'stats.vehTypeXP': self.__vehiclesDataChangedCallBack,
          'stats.freeXP': self.__setFreeXPCallBack})
-        game_control.g_instance.wallet.onWalletStatusChanged += self.__setWalletCallback
+        self.wallet.onWalletStatusChanged += self.__setWalletCallback
         g_itemsCache.onSyncCompleted += self.__setXPConversationCallBack
 
     def __vehiclesDataChangedCallBack(self, _):
@@ -117,7 +118,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         xpToExchange = min(commonXp, exchangeXP)
         result = yield FreeXPExchanger(xpToExchange, vehTypeCompDescrs, freeConversion=self.__xpForFree).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             self.destroy()
 
@@ -126,7 +127,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
 
     def _dispose(self):
         g_itemsCache.onSyncCompleted -= self.__setXPConversationCallBack
-        game_control.g_instance.wallet.onWalletStatusChanged -= self.__setWalletCallback
+        self.wallet.onWalletStatusChanged -= self.__setWalletCallback
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(ExchangeXPWindow, self)._dispose()
 

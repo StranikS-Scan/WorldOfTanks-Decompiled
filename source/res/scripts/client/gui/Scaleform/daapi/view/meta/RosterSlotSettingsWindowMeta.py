@@ -41,6 +41,9 @@ class RosterSlotSettingsWindowMeta(AbstractWindowView):
         return self.flashObject.as_selectTab(index) if self._isDAAPIInited() else None
 
     def as_setListDataS(self, listData):
+        """
+        :param listData: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_setListData(listData) if self._isDAAPIInited() else None
 
     def as_setStaticDataS(self, data):

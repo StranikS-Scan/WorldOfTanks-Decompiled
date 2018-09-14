@@ -1,5 +1,14 @@
 <quests-shared-triggers.xml>
   <triggers>
+    <trigger>	PermanentOwnVehicleTrigger	  <type>	permanentOwnVehicle	</type>
+      <validate-var>	VehicleConditionVar	</validate-var>
+      <on-effects>
+        <global-activate>	PlayerOwnVehicle	</global-activate>
+      </on-effects>
+      <off-effects>
+        <global-inactivate>	PlayerOwnVehicle	</global-inactivate>
+      </off-effects>
+    </trigger>
     <trigger>	PveChainShownTrigger	  <type>	tutorialAccountSetting	</type>
       <validate-var>	PveChainShownVar	</validate-var>
       <on-effects>
@@ -131,96 +140,323 @@
     <trigger>	BattleTutorialBonusesTrigger	  <type>	allTutorialBonuses	</type>
       <validate-var>	BattleTutorialSettingVar	</validate-var>
       <on-effects>
-        <activate>	BattleBonusesReceived	</activate>
+        <request-bonus>	TutorialQuest_1	  <condition>
+            <bonus-not-received>	TutorialQuest_1	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	BattleBonusesReceived	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	RandomBattlesCountTrigger	  <type>	randomBattlesCount	</type>
       <on-effects>
-        <activate>	RandomBattlesCountComplete	</activate>
+        <show-award-window>	TutorialAwardWindow2	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow2	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_2	</bonus-not-received>
+          </condition>
+        </show-award-window>
+        <request-bonus>	TutorialQuest_2	  <condition>
+            <bonus-not-received>	TutorialQuest_2	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	RandomBattlesCountComplete	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow2ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter2Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter2Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow2CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter2Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	InstallModuleTrigger	  <type>	installModule	</type>
       <on-effects>
-        <activate>	ModuleInstalled	</activate>
+        <show-award-window>	TutorialAwardWindow3	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow3	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_3	</bonus-not-received>
+          </condition>
+        </show-award-window>
+        <request-bonus>	TutorialQuest_3	  <condition>
+            <bonus-not-received>	TutorialQuest_3	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	ModuleInstalled	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow3ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter3Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter3Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow3CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter3Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	BuyVehicleTrigger	  <type>	buyVehicle	</type>
       <validate-var>	Level2Var	</validate-var>
       <on-effects>
-        <activate>	Vehicle2LvlBought	</activate>
+        <show-award-window>	TutorialAwardWindow4	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow4	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_4	</bonus-not-received>
+          </condition>
+        </show-award-window>
+        <request-bonus>	TutorialQuest_4	  <condition>
+            <bonus-not-received>	TutorialQuest_4	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	Vehicle2LvlBought	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow4ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter4Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter4Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow4CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter4Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	BuySlotTrigger	  <type>	buySlot	</type>
       <on-effects>
-        <activate>	SlotBought	</activate>
+        <show-award-window>	TutorialAwardWindow5	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow5	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_5	</bonus-not-received>
+          </condition>
+        </show-award-window>
         <request-bonus>	TutorialQuest_5	  <condition>
             <bonus-not-received>	TutorialQuest_5	</bonus-not-received>
           </condition>
         </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	SlotBought	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow5ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter5Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter5Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow5CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter5Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	VehicleBattlesTrigger	  <type>	vehicleBattlesCount	</type>
       <validate-var>	VehicleConditionVar	</validate-var>
       <on-effects>
-        <activate>	VehicleBattlesComplete	</activate>
+        <show-award-window>	TutorialAwardWindow6	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow6	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_6	</bonus-not-received>
+          </condition>
+        </show-award-window>
+        <request-bonus>	TutorialQuest_6	  <condition>
+            <bonus-not-received>	TutorialQuest_6	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	VehicleBattlesComplete	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow6ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter6Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter6Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow6CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter6Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	xpExchangeTrigger	  <type>	xpExchange	</type>
       <on-effects>
-        <activate>	XpExchanged	</activate>
+        <show-award-window>	TutorialAwardWindow7	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow7	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_7	</bonus-not-received>
+          </condition>
+        </show-award-window>
+        <request-bonus>	TutorialQuest_7	  <condition>
+            <bonus-not-received>	TutorialQuest_7	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	XpExchanged	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow7ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter7Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter7Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow7CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter7Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	BuyVehicle3LvlTrigger	  <type>	buyVehicle	</type>
       <validate-var>	Level3Var	</validate-var>
       <on-effects>
-        <activate>	Vehicle3LvlBought	</activate>
+        <show-award-window>	TutorialAwardWindow8	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow8	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_8	</bonus-not-received>
+          </condition>
+        </show-award-window>
+        <request-bonus>	TutorialQuest_8	  <condition>
+            <bonus-not-received>	TutorialQuest_8	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	Vehicle3LvlBought	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow8ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter8Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter8Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow8CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter8Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	PremiumDiscountTrigger	  <type>	premiumDiscount	</type>
       <validate-update-only></validate-update-only>
       <on-effects>
-        <activate>	PremiumDiscountUsed	</activate>
+        <show-award-window>	TutorialAwardWindow9	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow9	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_9	</bonus-not-received>
+          </condition>
+        </show-award-window>
         <request-bonus>	TutorialQuest_9	  <condition>
             <bonus-not-received>	TutorialQuest_9	</bonus-not-received>
           </condition>
         </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	PremiumDiscountUsed	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow9ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter9Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter9Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow9CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter9Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	BuyVehicle4LvlTrigger	  <type>	buyVehicle	</type>
       <validate-var>	Level4Var	</validate-var>
       <on-effects>
-        <activate>	Vehicle4LvlBought	</activate>
+        <show-award-window>	TutorialAwardWindow10	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow10	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_10	</bonus-not-received>
+          </condition>
+        </show-award-window>
+        <request-bonus>	TutorialQuest_10	  <condition>
+            <bonus-not-received>	TutorialQuest_10	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
-      <off-effects>
-        <inactivate>	Vehicle4LvlBought	</inactivate>
-      </off-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow10ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter10Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <show-unlocked-chapter>	Chapter10Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow10CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter10Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	MedKitInstallTrigger	  <type>	installItems	</type>
       <validate-var>	MedKitsConditionVar	</validate-var>
@@ -249,7 +485,6 @@
       <validate-var>	Chapter11Var	</validate-var>
       <validate-update-only></validate-update-only>
       <on-effects>
-        <clear-scene></clear-scene>
         <go-scene>	Hangar	  <condition>
             <inactive>	IsInQueue	</inactive>
           </condition>
@@ -293,7 +528,6 @@
       <validate-var>	Chapter12Var	</validate-var>
       <validate-update-only></validate-update-only>
       <on-effects>
-        <clear-scene></clear-scene>
         <go-scene>	Hangar	  <condition>
             <inactive>	IsInQueue	</inactive>
           </condition>
@@ -337,7 +571,6 @@
       <validate-var>	Chapter13Var	</validate-var>
       <validate-update-only></validate-update-only>
       <on-effects>
-        <clear-scene></clear-scene>
         <go-scene>	Hangar	  <condition>
             <inactive>	IsInQueue	</inactive>
           </condition>
@@ -357,252 +590,15 @@
     <trigger>	OptionalDeviceInstallTrigger	  <type>	installItems	</type>
       <validate-var>	OptionalDeviceConditionVar	</validate-var>
       <on-effects>
-        <activate>	OptionalDeviceInstalled	</activate>
-      </on-effects>
-      <off-effects>
-        <inactivate>	OptionalDeviceInstalled	</inactivate>
-      </off-effects>
-    </trigger>
-    <trigger>	AwardWindow2ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter2Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
+        <show-award-window>	TutorialAwardWindow14	  <condition>
+            <effect-not-triggered>	TutorialAwardWindow14	</effect-not-triggered>
+            <bonus-not-received>	TutorialQuest_14	</bonus-not-received>
           </condition>
-        </go-scene>
-        <inactivate>	ShowAward2	</inactivate>
-        <inactivate>	RandomBattlesCountComplete	</inactivate>
-        <activate>	CloseChapter2	</activate>
-        <show-unlocked-chapter>	Chapter2Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow2CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter2Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward2	</inactivate>
-        <inactivate>	RandomBattlesCountComplete	</inactivate>
-        <activate>	CloseChapter2	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow3ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter3Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
+        </show-award-window>
+        <request-bonus>	TutorialQuest_14	  <condition>
+            <bonus-not-received>	TutorialQuest_14	</bonus-not-received>
           </condition>
-        </go-scene>
-        <inactivate>	ShowAward3	</inactivate>
-        <inactivate>	ModuleInstalled	</inactivate>
-        <activate>	CloseChapter3	</activate>
-        <show-unlocked-chapter>	Chapter3Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow3CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter3Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward3	</inactivate>
-        <inactivate>	ModuleInstalled	</inactivate>
-        <activate>	CloseChapter3	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow4ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter4Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
-          </condition>
-        </go-scene>
-        <inactivate>	ShowAward4	</inactivate>
-        <inactivate>	Vehicle2LvlBought	</inactivate>
-        <activate>	CloseChapter4	</activate>
-        <show-unlocked-chapter>	Chapter4Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow4CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter4Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward4	</inactivate>
-        <inactivate>	Vehicle2LvlBought	</inactivate>
-        <activate>	CloseChapter4	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow5ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter5Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
-          </condition>
-        </go-scene>
-        <inactivate>	ShowAward5	</inactivate>
-        <inactivate>	SlotBought	</inactivate>
-        <activate>	CloseChapter5	</activate>
-        <show-unlocked-chapter>	Chapter5Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow5CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter5Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward5	</inactivate>
-        <inactivate>	SlotBought	</inactivate>
-        <activate>	CloseChapter5	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow6ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter6Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
-          </condition>
-        </go-scene>
-        <inactivate>	ShowAward6	</inactivate>
-        <inactivate>	VehicleBattlesComplete	</inactivate>
-        <activate>	CloseChapter6	</activate>
-        <show-unlocked-chapter>	Chapter6Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow6CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter6Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward6	</inactivate>
-        <inactivate>	VehicleBattlesComplete	</inactivate>
-        <activate>	CloseChapter6	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow7ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter7Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
-          </condition>
-        </go-scene>
-        <inactivate>	ShowAward7	</inactivate>
-        <inactivate>	XpExchanged	</inactivate>
-        <activate>	CloseChapter7	</activate>
-        <show-unlocked-chapter>	Chapter7Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow7CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter7Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward7	</inactivate>
-        <inactivate>	XpExchanged	</inactivate>
-        <activate>	CloseChapter7	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow8ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter8Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
-          </condition>
-        </go-scene>
-        <inactivate>	ShowAward8	</inactivate>
-        <inactivate>	Vehicle3LvlBought	</inactivate>
-        <activate>	CloseChapter8	</activate>
-        <show-unlocked-chapter>	Chapter8Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow8CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter8Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward8	</inactivate>
-        <inactivate>	Vehicle3LvlBought	</inactivate>
-        <activate>	CloseChapter8	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow9ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter9Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
-          </condition>
-        </go-scene>
-        <inactivate>	ShowAward9	</inactivate>
-        <inactivate>	PremiumDiscountUsed	</inactivate>
-        <activate>	CloseChapter9	</activate>
-        <show-unlocked-chapter>	Chapter9Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow9CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter9Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward9	</inactivate>
-        <inactivate>	PremiumDiscountUsed	</inactivate>
-        <activate>	CloseChapter9	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow10ProcessTrigger	  <type>	windowProcessed	</type>
-      <validate-var>	Chapter10Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <clear-scene></clear-scene>
-        <go-scene>	Hangar	  <condition>
-            <inactive>	IsInQueue	</inactive>
-          </condition>
-        </go-scene>
-        <inactivate>	ShowAward10	</inactivate>
-        <inactivate>	Vehicle4LvlBought	</inactivate>
-        <activate>	CloseChapter10	</activate>
-        <show-unlocked-chapter>	Chapter10Var	</show-unlocked-chapter>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
-    <trigger>	AwardWindow10CloseTrigger	  <type>	windowClosed	</type>
-      <validate-var>	Chapter10Var	</validate-var>
-      <validate-update-only></validate-update-only>
-      <on-effects>
-        <inactivate>	ShowAward10	</inactivate>
-        <inactivate>	Vehicle4LvlBought	</inactivate>
-        <activate>	CloseChapter10	</activate>
-        <activate>	ShowQuestsControlHint	</activate>
+        </request-bonus>
       </on-effects>
       <off-effects></off-effects>
     </trigger>
@@ -610,14 +606,10 @@
       <validate-var>	Chapter14Var	</validate-var>
       <validate-update-only></validate-update-only>
       <on-effects>
-        <clear-scene></clear-scene>
         <go-scene>	Hangar	  <condition>
             <inactive>	IsInQueue	</inactive>
           </condition>
         </go-scene>
-        <inactivate>	ShowAward14	</inactivate>
-        <inactivate>	OptionalDeviceInstalled	</inactivate>
-        <activate>	CloseChapter14	</activate>
         <show-unlocked-chapter>	Chapter14Var	</show-unlocked-chapter>
       </on-effects>
       <off-effects></off-effects>
@@ -626,9 +618,6 @@
       <validate-var>	Chapter14Var	</validate-var>
       <validate-update-only></validate-update-only>
       <on-effects>
-        <inactivate>	ShowAward14	</inactivate>
-        <inactivate>	OptionalDeviceInstalled	</inactivate>
-        <activate>	CloseChapter14	</activate>
         <activate>	ShowQuestsControlHint	</activate>
       </on-effects>
       <off-effects></off-effects>

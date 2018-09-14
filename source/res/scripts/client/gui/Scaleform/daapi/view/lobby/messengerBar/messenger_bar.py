@@ -8,12 +8,12 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import events
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from helpers import int2roman
+from helpers import int2roman, dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 def _formatIcon(iconName, width=32, height=32):
     return makeHtmlString('html_templates:lobby/messengerBar', 'iconTemplate', {'iconName': iconName,
@@ -22,22 +22,21 @@ def _formatIcon(iconName, width=32, height=32):
 
 
 class _CompareBasketListener(object):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, view):
         super(_CompareBasketListener, self).__init__()
         self.__currentCartPopover = None
         self.__view = view
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange += self.__onChanged
-        comparisonBasket.onSwitchChange += self.__updateBtnVisibility
+        self.comparisonBasket.onChange += self.__onChanged
+        self.comparisonBasket.onSwitchChange += self.__updateBtnVisibility
         self.__getContainerManager().onViewAddedToContainer += self.__onViewAddedToContainer
-        self.__updateBtnVisibility(comparisonBasket)
+        self.__updateBtnVisibility()
         return
 
     def dispose(self):
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange -= self.__onChanged
-        comparisonBasket.onSwitchChange -= self.__updateBtnVisibility
+        self.comparisonBasket.onChange -= self.__onChanged
+        self.comparisonBasket.onSwitchChange -= self.__updateBtnVisibility
         self.__getContainerManager().onViewAddedToContainer -= self.__onViewAddedToContainer
         self.__view = None
         self.__clearCartPopover()
@@ -48,24 +47,25 @@ class _CompareBasketListener(object):
         gui.game_control.VehComparisonBasket.onChange event handler
         :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData
         """
-        comparisonBasket = getVehicleComparisonBasketCtrl()
         if changedData.addedCDs:
             cMgr = self.__getContainerManager()
             if not cMgr.isViewAvailable(ViewTypes.LOBBY_SUB, {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.VEHICLE_COMPARE}):
-                if comparisonBasket.getVehiclesCount() == 1:
-                    self.__view.as_openVehicleCompareCartPopoverS(True)
-                else:
-                    vehicle = g_itemsCache.items.getItemByCD(changedData.addedCDs[-1])
-                    vehName = '  '.join([int2roman(vehicle.level), vehicle.shortUserName])
-                    vehTypeIcon = RES_ICONS.maps_icons_vehicletypes_gold(vehicle.type + '.png')
-                    self.__view.as_showAddVehicleCompareAnimS({'vehName': vehName,
-                     'vehType': vehTypeIcon})
+                vehCmpData = self.comparisonBasket.getVehicleAt(changedData.addedIDXs[-1])
+                if not vehCmpData.isFromCache():
+                    if self.comparisonBasket.getVehiclesCount() == 1:
+                        self.__view.as_openVehicleCompareCartPopoverS(True)
+                    else:
+                        vehicle = g_itemsCache.items.getItemByCD(vehCmpData.getVehicleCD())
+                        vehName = '  '.join([int2roman(vehicle.level), vehicle.shortUserName])
+                        vehTypeIcon = RES_ICONS.maps_icons_vehicletypes_gold(vehicle.type + '.png')
+                        self.__view.as_showAddVehicleCompareAnimS({'vehName': vehName,
+                         'vehType': vehTypeIcon})
         if changedData.addedCDs or changedData.removedCDs:
-            self.__updateBtnVisibility(comparisonBasket)
+            self.__updateBtnVisibility()
 
-    def __updateBtnVisibility(self, comparisonBasket=getVehicleComparisonBasketCtrl()):
-        isButtonVisible = self.__currentCartPopover is not None or comparisonBasket.getVehiclesCount() > 0
-        self.__view.as_setVehicleCompareCartButtonVisibleS(isButtonVisible and comparisonBasket.isEnabled())
+    def __updateBtnVisibility(self):
+        isButtonVisible = self.__currentCartPopover is not None or self.comparisonBasket.getVehiclesCount() > 0
+        self.__view.as_setVehicleCompareCartButtonVisibleS(isButtonVisible and self.comparisonBasket.isEnabled())
         return
 
     def __getContainerManager(self):

@@ -7,7 +7,7 @@ from gui.Scaleform.daapi.view.lobby.fortifications.FortBattleRoomOrdersPanelComp
 class FortSortieOrdersPanelComponent(FortBattleRoomOrdersPanelComponent):
 
     def _isConsumablesAvailable(self):
-        _, unit = self.unitFunctional.getUnit(self.unitFunctional.getUnitIdx())
+        _, unit = self.prbEntity.getUnit(self.prbEntity.getUnitIdx())
         return unit is not None and unit.getRosterTypeID() == UnitBase.ROSTER_TYPE.SORTIE_ROSTER_10
 
     def _getSlotsProps(self):

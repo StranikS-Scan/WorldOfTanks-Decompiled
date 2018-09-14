@@ -3,22 +3,24 @@
 from collections import defaultdict
 import constants
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from items import getTypeOfCompactDescr
 from shared_utils import CONST_CONTAINER
-from gui import SystemMessages, game_control
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared import events
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.formatters import text_styles
-from gui.server_events import g_eventsCache, formatters, settings as quest_settings, caches as quest_caches
+from gui.server_events import formatters, settings as quest_settings
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.daapi.view.meta.QuestsCurrentTabMeta import QuestsCurrentTabMeta
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IIGRController
+from skeletons.gui.server_events import IEventsCache
 
 class QuestsCurrentTab(QuestsCurrentTabMeta):
 
@@ -27,23 +29,29 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         QUESTS = 1
         ACTIONS = 2
 
+    igrCtrl = dependency.descriptor(IIGRController)
+    eventsCache = dependency.descriptor(IEventsCache)
+
     def __init__(self):
         super(QuestsCurrentTab, self).__init__()
         self.__collapsedGroups = []
         self.__currentVehicle = None
+        self.__selectedQuestID = None
         return
 
     def getSortedTableData(self, tableData):
         return events_helpers.getSortedTableData(tableData)
 
     def _selectQuest(self, questID):
-        quests = g_eventsCache.getEvents()
+        quests = self.eventsCache.getEvents()
         if questID in quests:
             quest = quests.get(questID)
             if self._isAvailableQuestForTab(quest):
                 info = events_helpers.getEventDetails(quest, quests)
+                self.__selectedQuestID = questID
                 self.as_setSelectedQuestS(questID)
                 self.as_updateQuestInfoS(info)
+                quest_settings.visitEventGUI(quest)
         else:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.QUESTS_NOQUESTSWITHGIVENID)
 
@@ -56,9 +64,9 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         self.as_showWaitingS(True)
         svrEvents = self._getEvents()
         event = svrEvents.get(eventID)
-        if eventID != self._navInfo.common.questID:
-            self._navInfo.selectCommonQuest(eventID)
-            quest_settings.visitEventGUI(event)
+        self._navInfo.selectCommonQuest(eventID)
+        self.__selectedQuestID = eventID
+        quest_settings.visitEventGUI(event)
         info = None
         if event is not None:
             info = events_helpers.getEventDetails(event, svrEvents)
@@ -81,13 +89,14 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         else:
             self.__collapsedGroups.append(groupID)
         self._invalidateEventsData()
+        self.as_setSelectedQuestS(self._navInfo.common.questID)
 
     def _populate(self):
         super(QuestsCurrentTab, self)._populate()
         self.__currentVehicle = g_currentVehicle
         self.__currentVehicle.onChanged += self.__onEventsUpdated
-        g_eventsCache.onSyncCompleted += self.__onEventsCacheSyncCompleted
-        game_control.g_instance.igr.onIgrTypeChanged += self.__onEventsUpdated
+        self.eventsCache.onSyncCompleted += self.__onEventsCacheSyncCompleted
+        self.igrCtrl.onIgrTypeChanged += self.__onEventsUpdated
         g_clientUpdateManager.addCallbacks({'quests': self.__onEventsUpdated,
          'cache.eventsData': self.__onEventsUpdated,
          'inventory.1': self.__onEventsUpdated,
@@ -96,8 +105,12 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         self._hideCompleted = False
         self.addListener(events.LobbySimpleEvent.EVENTS_UPDATED, self.__onEventsUpdated)
         self._invalidateEventsData()
-        if self._navInfo.common.questID:
-            self._selectQuest(self._navInfo.common.questID)
+        defaultQuestID = self._getDefaultQuestID()
+        if defaultQuestID:
+            self._selectQuest(defaultQuestID)
+
+    def _getDefaultQuestID(self):
+        return self._navInfo.common.questID
 
     def _invalidateEventsData(self):
         svrEvents = self._getEvents()
@@ -145,7 +158,16 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
              'bckgrImage': events_helpers.RENDER_BACKS.get(DEFAULTS_GROUPS.UNGROUPED_ACTIONS)})
             self.__addGroupRecords(groupRecord, ungroupedActions, result, DEFAULTS_GROUPS.UNGROUPED_ACTIONS)
         if not result:
-            self.as_showNoDataS()
+            statusText = ''
+            if self.__filterType == self.FILTER_TYPE.ACTIONS:
+                statusText = QUESTS.QUESTS_CURRENT_NOACTIONS
+            elif self.__filterType == self.FILTER_TYPE.QUESTS:
+                statusText = QUESTS.QUESTS_CURRENT_NOQUESTS
+            elif self.__filterType == self.FILTER_TYPE.ALL_EVENTS:
+                statusText = QUESTS.QUESTS_CURRENT_NODATA
+            self.as_showNoDataS(statusText)
+            self.__selectedQuestID = None
+            self._navInfo.selectCommonQuest(None)
         else:
             self.as_setQuestsDataS({'quests': result,
              'isSortable': True,
@@ -155,26 +177,30 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
             if self._navInfo.common.questID not in visibleQuestIDs:
                 self._navInfo.selectCommonQuest(None)
                 self.as_showNoSelectS()
-            self.as_setSelectedQuestS(self._navInfo.common.questID)
+                self.__selectedQuestID = None
+                self.as_setSelectedQuestS(self._navInfo.common.questID)
+            elif self._navInfo.common.questID != self.__selectedQuestID:
+                self.__selectedQuestID = self._navInfo.common.questID
+                self.as_setSelectedQuestS(self._navInfo.common.questID)
         return
 
     def _dispose(self):
         self.__currentVehicle.onChanged -= self.__onEventsUpdated
         self.__currentVehicle = None
         g_clientUpdateManager.removeObjectCallbacks(self)
-        game_control.g_instance.igr.onIgrTypeChanged -= self.__onEventsUpdated
-        g_eventsCache.onSyncCompleted -= self.__onEventsCacheSyncCompleted
+        self.igrCtrl.onIgrTypeChanged -= self.__onEventsUpdated
+        self.eventsCache.onSyncCompleted -= self.__onEventsCacheSyncCompleted
         self.removeListener(events.LobbySimpleEvent.EVENTS_UPDATED, self.__onEventsUpdated)
         super(QuestsCurrentTab, self)._dispose()
         return
 
     @classmethod
     def _getEvents(cls):
-        return g_eventsCache.getEvents()
+        return cls.eventsCache.getEvents()
 
     @classmethod
     def _getGroups(cls):
-        return g_eventsCache.getGroups()
+        return cls.eventsCache.getGroups()
 
     @classmethod
     def _isQuest(cls, svrEvent):
@@ -243,5 +269,5 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
                 return self.__onEventsUpdated()
 
     def __onEventsUpdated(self, *args):
-        quest_settings.updateCommonEventsSettings(g_eventsCache.getEvents())
+        quest_settings.updateCommonEventsSettings(self.eventsCache.getEvents())
         self._invalidateEventsData()

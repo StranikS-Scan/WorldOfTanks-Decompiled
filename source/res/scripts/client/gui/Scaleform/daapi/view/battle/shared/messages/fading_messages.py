@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/fading_messages.py
 import operator
-from account_helpers.settings_core import g_settingsCore
+from account_helpers.settings_core.settings_constants import GRAPHICS
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.meta.BattleMessageListMeta import BattleMessageListMeta
 from gui.Scaleform.genConsts.BATTLE_MESSAGES_CONSTS import BATTLE_MESSAGES_CONSTS
 from gui.app_loader.decorators import sf_battle
-from gui.battle_control import g_sessionProvider
 from gui.doc_loaders import messages_panel_reader
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 _MESSAGES_SETTINGS_PATH = 'gui/{}'
 _EXTRA_COLOR_FORMAT = '<font color="#{0:02X}{1:02X}{2:02X}">{3:>s}</font>'
 _COLOR_TO_METHOD = {BATTLE_MESSAGES_CONSTS.COLOR_YELLOW: 'as_showYellowMessageS',
@@ -18,12 +20,14 @@ _COLOR_TO_METHOD = {BATTLE_MESSAGES_CONSTS.COLOR_YELLOW: 'as_showYellowMessageS'
  BATTLE_MESSAGES_CONSTS.COLOR_SELF: 'as_showSelfMessageS'}
 
 class FadingMessages(BattleMessageListMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, name, file):
         super(BattleMessageListMeta, self).__init__()
         self.__name = name
         self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(file)
-        self.__isColorBlind = g_settingsCore.getSetting('isColorBlind')
+        self.__isColorBlind = self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND)
         self.__messages = {}
         self.__styles = None
         return
@@ -64,16 +68,16 @@ class FadingMessages(BattleMessageListMeta):
         return
 
     def _addGameListeners(self):
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
 
     def _removeGameListeners(self):
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
 
     def __formatEntitiesEx(self, args, extra=None):
         if extra is None:
             extra = ()
         manager = self.app.colorManager
-        battleCtx = g_sessionProvider.getCtx()
+        battleCtx = self.sessionProvider.getCtx()
         isTeamKiller = battleCtx.isTeamKiller
         isSquadMan = battleCtx.isSquadMan
         for argName, vID in extra:

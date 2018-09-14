@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_dp.py
+import BigWorld
 import operator
 from constants import TEAMS_IN_ARENA
 from debug_utils import LOG_NOTE, LOG_WARNING, LOG_DEBUG
@@ -12,10 +13,11 @@ from gui.battle_control.arena_info import squad_finder
 from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.battle_constants import MULTIPLE_TEAMS_TYPE
 from gui.battle_control.battle_constants import PLAYER_GUI_PROPS
+from skeletons.gui.battle_session import IArenaDataProvider
 _OP = settings.INVALIDATE_OP
 _INVITATION_STATUS = settings.INVITATION_DELIVERY_STATUS
 
-class ArenaDataProvider(object):
+class ArenaDataProvider(IArenaDataProvider):
     """ Data provider containing precached information about vehicles in arena,
     their statistics.
     """
@@ -200,6 +202,11 @@ class ArenaDataProvider(object):
     def isMultipleTeams(self):
         return len(self.__teamsOnArena) > TEAMS_IN_ARENA.MIN_TEAMS
 
+    def switchCurrentTeam(self, team):
+        self.__playerTeam = team
+        from PlayerEvents import g_playerEvents
+        g_playerEvents.onTeamChanged(team)
+
     def getMultiTeamsType(self):
         if self.isMultipleTeams():
             squadTeamNumber = self.__squadFinder.getNumberOfSquads()
@@ -279,10 +286,24 @@ class ArenaDataProvider(object):
         return self.__getStateFlag(vID, 'isSquadMan', playerTeam=self.__playerTeam, prebattleID=prebattleID)
 
     def isTeamKiller(self, vID):
+        """ Is desired player team-killer. Note: shows only team-killer for his team.
+        :param vID: vehicle ID from player.arena.vehicles.
+        :return: True - if player is team-killer, otherwise - False.
+        """
         return self.__getStateFlag(vID, 'isTeamKiller', playerTeam=self.__playerTeam)
 
     def isObserver(self, vID):
+        """ Is desired player observer. @see WOTD-5872.
+        :param vID: vehicle ID from player.arena.vehicles
+        :return: True - if player is observer, otherwise - False.
+        """
         return self.__getStateFlag(vID, 'isObserver')
+
+    def isPlayerObserver(self):
+        """ Is current player observer.
+        :return: True - if current player is observer, otherwise - False.
+        """
+        return self.__getStateFlag(self.__playerVehicleID, 'isObserver')
 
     def getVehIDByAccDBID(self, accDBID):
         """

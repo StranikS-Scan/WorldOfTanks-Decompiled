@@ -6,12 +6,13 @@ from collections import defaultdict, namedtuple
 from constants import ARENA_GUI_TYPE
 import constants
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.battle_control import g_sessionProvider
 from gui.shared.utils.functions import rnd_choice_loop
+from helpers import dependency
 from helpers import i18n
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items.vehicles import VEHICLE_CLASS_TAGS
 import nations
+from skeletons.gui.battle_session import IBattleSessionProvider
 ALL = 'all'
 ANY = 'any'
 EXCEPT = 'except'
@@ -24,6 +25,7 @@ _FoundTip = namedtuple('_FoundTip', 'status, body, icon')
 
 class _TipsCriteria(object):
     __slots__ = ('_count', '_classTag', '_nation', '_level')
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(_TipsCriteria, self).__init__()
@@ -84,11 +86,11 @@ class SandboxTipsCriteria(_TipsCriteria):
 
     def find(self):
         playerBaseYPos = enemyBaseYPos = 0
-        arenaDP = g_sessionProvider.getCtx().getArenaDP()
+        arenaDP = self.sessionProvider.getCtx().getArenaDP()
         playerTeam = 1
         if arenaDP is not None:
             playerTeam = arenaDP.getNumberOfTeam()
-        visitor = g_sessionProvider.arenaVisitor
+        visitor = self.sessionProvider.arenaVisitor
         positions = visitor.type.getTeamBasePositionsIterator()
         for team, position, number in positions:
             if team == playerTeam:

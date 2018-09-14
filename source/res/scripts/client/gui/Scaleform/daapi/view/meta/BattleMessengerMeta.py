@@ -53,6 +53,9 @@ class BattleMessengerMeta(BaseDAAPIComponent):
         return self.flashObject.as_setupList(data) if self._isDAAPIInited() else None
 
     def as_setReceiverS(self, data, isResetReceivers):
+        """
+        :param data: Represented by BattleMessengerReceiverVO (AS)
+        """
         return self.flashObject.as_setReceiver(data, isResetReceivers) if self._isDAAPIInited() else None
 
     def as_changeReceiverS(self, receiver):
@@ -71,6 +74,9 @@ class BattleMessengerMeta(BaseDAAPIComponent):
         return self.flashObject.as_setUserPreferences(tooltipStr) if self._isDAAPIInited() else None
 
     def as_setReceiversS(self, receivers):
+        """
+        :param receivers: Represented by Vector.<BattleMessengerReceiverVO> (AS)
+        """
         return self.flashObject.as_setReceivers(receivers) if self._isDAAPIInited() else None
 
     def as_enableToSendMessageS(self):

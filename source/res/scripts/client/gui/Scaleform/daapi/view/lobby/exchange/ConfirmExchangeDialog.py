@@ -29,7 +29,7 @@ class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
         exchangedValue = goldValue * self.meta.getExchangeRate()
         result = yield self.meta.submit(goldValue, exchangedValue)
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             self._callHandler(True, self.meta.getTypeCompDescr())
             self.destroy()

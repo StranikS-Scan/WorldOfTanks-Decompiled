@@ -146,7 +146,7 @@ class Grousers(OptionalDevice):
 
         def updateVehicleDescrAttrs(self, vehicleDescr):
             r = vehicleDescr.physics['terrainResistance']
-            vehicleDescr.physics['terrainResistance'] = (r[0], r[1] * self.__factorMedium, r[2] * self.__factorSoft)
+            vehicleDescr.physics['terrainResistance'] = (r[0], r[1] * self.factorMedium, r[2] * self.factorSoft)
 
     else:
 
@@ -154,8 +154,8 @@ class Grousers(OptionalDevice):
             pass
 
     def _readConfig(self, xmlCtx, section):
-        self.__factorSoft = _xml.readPositiveFloat(xmlCtx, section, 'softGroundResistanceFactor')
-        self.__factorMedium = _xml.readPositiveFloat(xmlCtx, section, 'mediumGroundResistanceFactor')
+        self.factorSoft = _xml.readPositiveFloat(xmlCtx, section, 'softGroundResistanceFactor')
+        self.factorMedium = _xml.readPositiveFloat(xmlCtx, section, 'mediumGroundResistanceFactor')
 
 
 class AntifragmentationLining(OptionalDevice):

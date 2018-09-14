@@ -723,4 +723,40 @@
       </lastDeathReasonID>
     </Properties>
   </BATTLE_EVENTS_SUMMARY>
+  <REMOTE_CAMERA_ARCADE_DATA>	FIXED_DICT	  <Properties>
+      <time>
+        <Type>	FLOAT64	</Type>
+      </time>
+      <relTranslation>
+        <Type>	VECTOR3	</Type>
+      </relTranslation>
+      <shotPoint>
+        <Type>	VECTOR3	</Type>
+      </shotPoint>
+    </Properties>
+  </REMOTE_CAMERA_ARCADE_DATA>
+  <REMOTE_CAMERA_SNIPER_DATA>	FIXED_DICT	  <Properties>
+      <time>
+        <Type>	FLOAT64	</Type>
+      </time>
+      <camMatrixTranslation>
+        <Type>	VECTOR3	</Type>
+      </camMatrixTranslation>
+      <camMatrixRotation>
+        <Type>	VECTOR3	</Type>
+      </camMatrixRotation>
+      <zoom>
+        <Type>	UINT8	</Type>
+      </zoom>
+    </Properties>
+  </REMOTE_CAMERA_SNIPER_DATA>
+  <REMOTE_CAMERA_STRATEGIC_DATA>	FIXED_DICT	  <Properties>
+      <time>
+        <Type>	FLOAT64	</Type>
+      </time>
+      <shotPoint>
+        <Type>	VECTOR3	</Type>
+      </shotPoint>
+    </Properties>
+  </REMOTE_CAMERA_STRATEGIC_DATA>
 </alias.xml>

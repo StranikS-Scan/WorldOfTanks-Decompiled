@@ -97,7 +97,6 @@ class CYBERSPORT(object):
     WINDOW_UNIT_CANCELSLOTSETTINGS = '#cyberSport:window/unit/cancelSlotSettings'
     WINDOW_UNIT_MESSAGE_CANDIDATE = '#cyberSport:window/unit/message/candidate'
     WINDOW_UNIT_MESSAGE_UNITISLOCKED = '#cyberSport:window/unit/message/unitIsLocked'
-    WINDOW_UNIT_MESSAGE_VEHICLENOTFOUND = '#cyberSport:window/unit/message/vehicleNotFound'
     WINDOW_UNIT_MESSAGE_UNITISFULL = '#cyberSport:window/unit/message/unitIsFull'
     WINDOW_UNIT_MESSAGE_CURFEW = '#cyberSport:window/unit/message/curfew'
     WINDOW_UNIT_MESSAGE_VEHICLENOTSELECTED = '#cyberSport:window/unit/message/vehicleNotSelected'

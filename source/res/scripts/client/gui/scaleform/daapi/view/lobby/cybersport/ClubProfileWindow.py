@@ -3,6 +3,7 @@
 import account_helpers
 from adisp import process
 from club_shared import RESTRICTION_REASONS_NAMES, RESTRICTION_REASONS
+from constants import PREBATTLE_TYPE
 from gui import makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.view.meta.StaticFormationProfileWindowMeta import StaticFormationProfileWindowMeta
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
@@ -13,12 +14,13 @@ from gui.clubs import formatters as club_fmts
 from gui.clubs.club_helpers import ClubListener, tryToConnectClubBattle
 from gui.clubs.contexts import SendApplicationCtx, RevokeApplicationCtx
 from gui.clubs.settings import CLIENT_CLUB_RESTRICTIONS, APPLICATIONS_COUNT, CLIENT_CLUB_STATE
-from gui.prb_control.prb_helpers import GlobalListener
+from gui.game_control.battle_availability import isHourInForbiddenList
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
-from gui.shared.view_helpers.emblems import ClubEmblemsHelper
 from gui.shared.formatters import text_styles, icons
-from gui.game_control.battle_availability import isHourInForbiddenList
+from gui.shared.view_helpers.emblems import ClubEmblemsHelper
 from helpers import i18n
 DEFAULT_WINDOW_SIZE = {'width': 1006,
  'height': 596}
@@ -43,7 +45,7 @@ STATE_MAP = [(CYBER_SPORT_ALIASES.STATIC_FORMATION_SUMMARY_UI, CYBER_SPORT_ALIAS
  (CYBER_SPORT_ALIASES.STATIC_FORMATION_STATS_UI, CYBER_SPORT_ALIASES.STATIC_FORMATION_STATS_PY),
  (CYBER_SPORT_ALIASES.STATIC_FORMATION_LADDER_UI, CYBER_SPORT_ALIASES.STATIC_FORMATION_LADDER_PY)]
 
-class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalListener, ClubEmblemsHelper):
+class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, IGlobalListener, ClubEmblemsHelper):
 
     def __init__(self, ctx=None):
         super(ClubProfileWindow, self).__init__()
@@ -61,12 +63,7 @@ class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalLi
             self.destroy()
         return
 
-    def onUnitFunctionalInited(self):
-        club = self.clubsCtrl.getClub(self.__clubDbID)
-        if club:
-            self.__updateActionButton(club)
-
-    def onUnitFunctionalFinished(self):
+    def onPrbEntitySwitched(self):
         club = self.clubsCtrl.getClub(self.__clubDbID)
         if club:
             self.__updateActionButton(club)
@@ -138,7 +135,7 @@ class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalLi
         elif action == ACTIONS.REVOKE_APPLICATION:
             self.__revokeApplication()
         elif action == ACTIONS.SHOW_UNIT_WINDOW and self._isMemberInClubUnit():
-            self.unitFunctional.showGUI()
+            self.prbEntity.showGUI()
 
     def onWindowClose(self):
         self.destroy()
@@ -302,8 +299,8 @@ class ClubProfileWindow(StaticFormationProfileWindowMeta, ClubListener, GlobalLi
          tooltipBody)
 
     def _isMemberInClubUnit(self):
-        _, unit = self.unitFunctional.getUnit(safe=True)
-        return unit is not None and unit.isClub()
+        funcState = self.prbDispatcher.getFunctionalState()
+        return funcState.isInUnit(PREBATTLE_TYPE.CLUBS) and funcState.funcFlags & FUNCTIONAL_FLAG.UNIT > 0
 
     def __updateFormationData(self, club):
         link = makeHtmlString('html_templates:lobby/clubs', 'link', {'text': i18n.makeString(CYBERSPORT.STATICFORMATIONPROFILEWINDOW_HYPERLINK_TEXT),

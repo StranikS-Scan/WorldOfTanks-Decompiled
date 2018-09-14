@@ -3,7 +3,7 @@
 import BigWorld
 from ConnectionManager import connectionManager, LOGIN_STATUS
 from gui import makeHtmlString
-from gui.login import g_loginManager, SOCIAL_NETWORKS
+from gui.login.social_networks import SOCIAL_NETWORKS
 from gui.Scaleform.Waiting import Waiting
 from LoginView import LoginView, INVALID_FIELDS
 from helpers.i18n import makeString as _ms
@@ -21,14 +21,14 @@ class SocialLoginView(LoginView):
 
     def __init__(self, ctx=None):
         LoginView.__init__(self, ctx=ctx)
-        self.__userName = g_loginManager.getPreference('name')
-        self.__lastLoginType = g_loginManager.getPreference('login_type')
+        self.__userName = self.loginManager.getPreference('name')
+        self.__lastLoginType = self.loginManager.getPreference('login_type')
 
     def changeAccount(self):
-        logOutAccount = g_loginManager.getPreference('login_type')
-        g_loginManager.clearPreferences()
-        g_loginManager.writePreferences()
-        self.__lastLoginType = g_loginManager.getPreference('login_type')
+        logOutAccount = self.loginManager.getPreference('login_type')
+        self.loginManager.clearPreferences()
+        self.loginManager.writePreferences()
+        self.__lastLoginType = self.loginManager.getPreference('login_type')
         self._setData()
         self._showForm()
         self.as_setErrorMessageS(self.__getLogoutWarning(logOutAccount), INVALID_FIELDS.ALL_VALID)
@@ -51,17 +51,17 @@ class SocialLoginView(LoginView):
         LoginView._dispose(self)
 
     def _showForm(self):
-        socialList = g_loginManager.getAvailableSocialNetworks()
+        socialList = self.loginManager.getAvailableSocialNetworks()
         if self.__lastLoginType in socialList and self._rememberUser:
-            self.as_showSocialFormS(len(g_loginManager.getPreference('token2')) != 0, self.__userName, makeHtmlString('html_templates:socialNetworkLogin', 'transparentLogo', {'socialNetwork': self.__lastLoginType}), self.__lastLoginType)
+            self.as_showSocialFormS(len(self.loginManager.getPreference('token2')) != 0, self.__userName, makeHtmlString('html_templates:socialNetworkLogin', 'transparentLogo', {'socialNetwork': self.__lastLoginType}), self.__lastLoginType)
         else:
             self.as_showSimpleFormS(True, self.__setSocialDataList(socialList))
 
     def _onLoginRejected(self, loginStatus, responseData):
-        socialList = g_loginManager.getAvailableSocialNetworks()
+        socialList = self.loginManager.getAvailableSocialNetworks()
         if self.__lastLoginType in socialList and (loginStatus == LOGIN_STATUS.SESSION_END or loginStatus == LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD):
             Waiting.hide('login')
-            g_loginManager.clearToken2Preference()
+            self.loginManager.clearToken2Preference()
             self._showForm()
             self.as_setErrorMessageS(_ms('#menu:login/status/SOCIAL_SESSION_END'), INVALID_FIELDS.PWD_INVALID)
             self._dropLoginQueue(loginStatus)
@@ -70,7 +70,7 @@ class SocialLoginView(LoginView):
 
     def __initiateSocialLogin(self, socialNetworkName, serverName, isRegistration):
         self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
-        if g_loginManager.initiateSocialLogin(socialNetworkName, serverName, self._rememberUser, isRegistration=isRegistration):
+        if self.loginManager.initiateSocialLogin(socialNetworkName, serverName, self._rememberUser, isRegistration=isRegistration):
             initLoginError = ''
         else:
             initLoginError = _ms('#menu:login/social/status/SYSTEM_ERROR')
@@ -83,7 +83,7 @@ class SocialLoginView(LoginView):
         to handle cases like choosing wrong social network, or misclicking on social
         network and then typing wrong password using basic login.
         """
-        self.__lastLoginType = g_loginManager.getPreference('login_type')
+        self.__lastLoginType = self.loginManager.getPreference('login_type')
 
     def __setSocialDataList(self, socialList):
         socialDataList = []
@@ -94,10 +94,9 @@ class SocialLoginView(LoginView):
 
         return socialDataList
 
-    @staticmethod
-    def __getLogoutWarning(socialNetworkName):
+    def __getLogoutWarning(self, socialNetworkName):
         localizationString = '#menu:login/social/warning/SOCIAL_NETWORK_LOGOUT'
-        formatter = {'userName': g_loginManager.getPreference('name'),
+        formatter = {'userName': self.loginManager.getPreference('name'),
          'socialNetworkLink': makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': socialNetworkName,
                                'socialNetworkOfficialName': _ms('#tooltips:login/social/' + socialNetworkName)})}
         if socialNetworkName != SOCIAL_NETWORKS.WGNI:

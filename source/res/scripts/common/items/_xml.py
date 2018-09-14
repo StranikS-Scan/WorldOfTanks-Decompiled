@@ -87,26 +87,35 @@ def readIntOrNone(xmlCtx, section, subsectionName):
         return
 
 
-def readFloat(xmlCtx, section, subsectionName):
-    wrongVal = -1000000.0
-    v = section.readFloat(subsectionName, wrongVal)
-    if v < wrongVal + 1.0:
-        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
-    return v
+def readFloat(xmlCtx, section, subsectionName, defaultValue=None):
+    if defaultValue is not None and not section.has_key(subsectionName):
+        return defaultValue
+    else:
+        wrongVal = -1000000.0
+        v = section.readFloat(subsectionName, wrongVal)
+        if v < wrongVal + 1.0:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        return v
 
 
-def readPositiveFloat(xmlCtx, section, subsectionName):
-    v = section.readFloat(subsectionName, -1000000.0)
-    if v <= 0.0:
-        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
-    return v
+def readPositiveFloat(xmlCtx, section, subsectionName, defaultValue=None):
+    if defaultValue is not None and not section.has_key(subsectionName):
+        return defaultValue
+    else:
+        v = section.readFloat(subsectionName, -1000000.0)
+        if v <= 0.0:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        return v
 
 
-def readNonNegativeFloat(xmlCtx, section, subsectionName):
-    v = section.readFloat(subsectionName, -1000000.0)
-    if v < 0.0:
-        raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
-    return v
+def readNonNegativeFloat(xmlCtx, section, subsectionName, defaultValue=None):
+    if defaultValue is not None and not section.has_key(subsectionName):
+        return defaultValue
+    else:
+        v = section.readFloat(subsectionName, -1000000.0)
+        if v < 0.0:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        return v
 
 
 def readFraction(xmlCtx, section, subsectionName):

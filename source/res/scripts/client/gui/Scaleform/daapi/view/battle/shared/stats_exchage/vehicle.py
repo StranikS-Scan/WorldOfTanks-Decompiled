@@ -19,12 +19,16 @@ class VehiclesSortedIDsComposer(broker.SingleSideComposer, ISortedIDsComposer):
     def addSortIDs(self, isEnemy, arenaDP):
         self._items = vos_collections.VehiclesInfoCollection().ids(arenaDP)
 
+    def removeObserverIDs(self, arenaDP):
+        self._items = [ id for id in self._items if not arenaDP.getVehicleInfo(id).vehicleType.isObserver ]
+
 
 class AllySortedIDsComposer(VehiclesSortedIDsComposer):
 
     def addSortIDs(self, isEnemy, arenaDP):
         assert not isEnemy
         self._items = vos_collections.AllyItemsCollection(sortKey=self._sortKey).ids(arenaDP)
+        self.removeObserverIDs(arenaDP)
 
 
 class EnemySortedIDsComposer(VehiclesSortedIDsComposer):
@@ -32,6 +36,7 @@ class EnemySortedIDsComposer(VehiclesSortedIDsComposer):
     def addSortIDs(self, isEnemy, arenaDP):
         assert isEnemy
         self._items = vos_collections.EnemyItemsCollection(sortKey=self._sortKey).ids(arenaDP)
+        self.removeObserverIDs(arenaDP)
 
 
 class BiSortedIDsComposer(broker.BiDirectionComposer, ISortedIDsComposer):

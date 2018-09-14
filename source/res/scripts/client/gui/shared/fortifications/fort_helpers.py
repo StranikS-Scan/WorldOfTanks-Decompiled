@@ -10,7 +10,7 @@ from FortifiedRegionBase import NOT_ACTIVATED
 from gui import DialogsInterface, SystemMessages
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
-from gui.shared.fortifications.context import CreateOrJoinFortBattleCtx
+from gui.prb_control.entities.fort.unit.fort_battle.ctx import CreateOrJoinFortBattleCtx
 from gui.shared.fortifications.settings import ROSTER_INTRO_WINDOW
 from helpers import time_utils
 

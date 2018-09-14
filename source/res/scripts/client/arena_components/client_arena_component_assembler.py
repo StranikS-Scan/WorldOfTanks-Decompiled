@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/arena_components/client_arena_component_assembler.py
-from constants import ARENA_BONUS_TYPE_CAPS
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from debug_utils import LOG_WARNING
 from client_arena_component_system import ClientArenaComponentSystem
 
@@ -37,7 +37,7 @@ class ClientArenaComponentAssembler(object):
     def _assembleBonusCapsComponents(componentSystem):
         from arena_components.assembler_helper import ARENA_BONUS_TYPE_CAP_COMPONENTS
         for name, (bonusFlag, componentClass) in ARENA_BONUS_TYPE_CAP_COMPONENTS.iteritems():
-            isBonusTypeCapActive = ARENA_BONUS_TYPE_CAPS.get(componentSystem.bonusType) & bonusFlag
+            isBonusTypeCapActive = ARENA_BONUS_TYPE_CAPS.checkAny(componentSystem.bonusType, bonusFlag)
             if isBonusTypeCapActive:
                 ClientArenaComponentAssembler._addArenaComponent(componentSystem, name, componentClass)
 

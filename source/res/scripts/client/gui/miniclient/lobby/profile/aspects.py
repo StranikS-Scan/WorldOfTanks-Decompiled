@@ -12,3 +12,10 @@ class MakeClanBtnUnavailable(aop.Aspect):
         original_return_value['btnEnabled'] = False
         original_return_value['btnTooltip'] = makeTooltip(None, None, None, makeString(MINICLIENT.PROFILE_WARNING))
         return original_return_value
+
+
+class MakeClubProfileButtonUnavailable(aop.Aspect):
+
+    def atCall(self, cd):
+        cd.change()
+        return ([False], {})

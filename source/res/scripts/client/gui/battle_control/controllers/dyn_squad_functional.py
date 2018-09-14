@@ -3,7 +3,6 @@
 import BigWorld
 import CommandMapping
 import Keys
-from account_helpers.settings_core import g_settingsCore
 from account_helpers.settings_core.settings_constants import SOUND
 from constants import IS_CHINA
 from debug_utils import LOG_DEBUG
@@ -11,24 +10,19 @@ from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from gui.app_loader.decorators import sf_battle
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
-from gui.prb_control.prb_helpers import prbInvitesProperty
+from gui.prb_control import prbInvitesProperty
 from gui.shared.SoundEffectsId import SoundEffectsId
+from gui.shared.utils.key_mapping import getKey, getReadableKey
+from helpers import dependency
 from helpers.i18n import makeString
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_messages import ClientActionMessage
 from messenger.proto.shared_messages import ACTION_MESSAGE_TYPE
+from skeletons.account_helpers.settings_core import ISettingsCore
 SQUAD_MEMBERS_COUNT = 2
 FULL_SQUAD_MEMBERS_COUNT = 3
-
-def _getKey(command):
-    """Get bigworld's keyboard key assigned to the provided command
-    """
-    commandName = CommandMapping.g_instance.getName(command)
-    return CommandMapping.g_instance.get(commandName)
-
 
 def _getVIOPState(key):
     """Get the current state of VOIP in the client considering bind key, region and VOIP settings.
@@ -37,16 +31,11 @@ def _getVIOPState(key):
         return 'withoutVOIP'
     elif key == Keys.KEY_NONE:
         return 'specifyVOIP'
-    elif g_settingsCore.getSetting(SOUND.VOIP_ENABLE):
+    settingsCore = dependency.instance(ISettingsCore)
+    if settingsCore.getSetting(SOUND.VOIP_ENABLE):
         return 'disableVOIP'
     else:
         return 'enableVOIP'
-
-
-def _getReadableKey(key):
-    """Get a human readable key name.
-    """
-    return makeString(READABLE_KEY_NAMES.all('KEY_%s' % BigWorld.keyToString(key)))
 
 
 class DynSquadArenaController(object):
@@ -172,16 +161,18 @@ class DynSquadMessagesController(DynSquadArenaController):
         self.__sendMessage('#messenger:client/dynSquad/inviteSent', receiver=invite.receiver)
 
     def _squadCreatedImOwner(self, squadNum):
-        key = _getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        keyName = getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        key = getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
         state = _getVIOPState(key)
         message = '#messenger:client/dynSquad/created/owner/%s' % state
-        self.__sendMessage(message, squadNum=squadNum, keyName=_getReadableKey(key))
+        self.__sendMessage(message, squadNum=squadNum, keyName=keyName)
 
     def _squadCreatedImRecruit(self, squadNum):
-        key = _getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        keyName = getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        key = getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
         state = _getVIOPState(key)
         message = '#messenger:client/dynSquad/created/recruit/%s' % state
-        self.__sendMessage(message, squadNum=squadNum, keyName=_getReadableKey(key))
+        self.__sendMessage(message, squadNum=squadNum, keyName=keyName)
 
     def _squadCreatedByAllies(self, squadNum):
         self.__sendMessage('#messenger:client/dynSquad/created/allies', squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ALLY)
@@ -190,10 +181,11 @@ class DynSquadMessagesController(DynSquadArenaController):
         self.__sendMessage('#messenger:client/dynSquad/created/enemies', squadNum=squadNum, squadType=DYN_SQUAD_TYPE.ENEMY)
 
     def _iAmJoinedSquad(self, squadNum):
-        key = _getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        keyName = getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE)
+        key = getKey(CommandMapping.CMD_VOICECHAT_ENABLE)
         state = _getVIOPState(key)
         message = '#messenger:client/dynSquad/inviteAccepted/myself/%s' % state
-        self.__sendMessage(message, squadNum=squadNum, keyName=_getReadableKey(key))
+        self.__sendMessage(message, squadNum=squadNum, keyName=keyName)
 
     def _someoneJoinedAlliedSquad(self, squadNum, receiver):
         self.__sendMessage('#messenger:client/dynSquad/inviteAccepted/user', squadNum=squadNum, receiver=receiver, squadType=DYN_SQUAD_TYPE.ALLY)

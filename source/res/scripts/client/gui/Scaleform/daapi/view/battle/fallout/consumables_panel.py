@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/fallout/consumables_panel.py
 import rage
 from gui.Scaleform.daapi.view.meta.FalloutConsumablesPanelMeta import FalloutConsumablesPanelMeta
-from gui.battle_control import g_sessionProvider
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class FalloutConsumablesPanel(FalloutConsumablesPanelMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(FalloutConsumablesPanel, self).__init__()
@@ -13,7 +15,7 @@ class FalloutConsumablesPanel(FalloutConsumablesPanelMeta):
 
     def _populate(self):
         super(FalloutConsumablesPanel, self)._populate()
-        self.__hasRage = g_sessionProvider.arenaVisitor.hasRage()
+        self.__hasRage = self.sessionProvider.arenaVisitor.hasRage()
         if self.__hasRage:
             self._startRage()
 
@@ -23,10 +25,10 @@ class FalloutConsumablesPanel(FalloutConsumablesPanelMeta):
         super(FalloutConsumablesPanel, self)._dispose()
 
     def _startRage(self):
-        vehicleCtrl = g_sessionProvider.shared.vehicleState
+        vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
-        avatarStatsCtrl = g_sessionProvider.shared.privateStats
+        avatarStatsCtrl = self.sessionProvider.shared.privateStats
         if avatarStatsCtrl is not None:
             avatarStatsCtrl.onUpdated += self.__onAvatarStatsUpdated
             self.__currentValue = avatarStatsCtrl.getStats().get('ragePoints', 0)
@@ -36,10 +38,10 @@ class FalloutConsumablesPanel(FalloutConsumablesPanelMeta):
         return
 
     def _stopRage(self):
-        avatarStatsCtrl = g_sessionProvider.shared.privateStats
+        avatarStatsCtrl = self.sessionProvider.shared.privateStats
         if avatarStatsCtrl is not None:
             avatarStatsCtrl.onUpdated -= self.__onAvatarStatsUpdated
-        vehicleCtrl = g_sessionProvider.shared.vehicleState
+        vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
             vehicleCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         return

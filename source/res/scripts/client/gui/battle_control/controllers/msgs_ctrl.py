@@ -73,9 +73,11 @@ class BattleMessagesController(IBattleController):
             return
         elif targetID == attackerID and self.__battleCtx.isObserver(targetID):
             return
-        elif not avatar.isVehicleAlive and targetID == avatar.inputHandler.ctrl.curVehicleID:
-            return
         else:
+            if not avatar.isVehicleAlive:
+                observedVehicleID = avatar.observedVehicleID if avatar.isObserver() else avatar.inputHandler.ctrl.curVehicleID
+                if targetID == observedVehicleID:
+                    return
             code, postfix, sound, soundExt = self.__getKillInfo(avatar, targetID, attackerID, equipmentID, reason)
             if sound is not None:
                 avatar.soundNotifications.play(sound)
@@ -171,10 +173,10 @@ class BattleMessagesPlayer(BattleMessagesController):
             return
         super(BattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
 
-    def showVehicleDamageInfo(self, avatar, code, entityID, extra, equipmentID):
+    def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        super(BattleMessagesPlayer, self).showVehicleDamageInfo(avatar, code, entityID, extra, equipmentID)
+        super(BattleMessagesPlayer, self).showVehicleDamageInfo(avatar, code, targetID, entityID, extra, equipmentID)
 
     def showVehicleMessage(self, key, args=None):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:

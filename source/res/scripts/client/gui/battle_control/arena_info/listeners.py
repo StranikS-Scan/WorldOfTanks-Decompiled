@@ -10,7 +10,7 @@ from gui.battle_control.arena_info.invitations import SquadInvitationsFilter
 from gui.battle_control.battle_constants import WinStatus
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
-from gui.prb_control.prb_helpers import prbInvitesProperty
+from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
 

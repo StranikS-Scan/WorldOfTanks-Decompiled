@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/xmpp/lobby_controllers.py
 import BigWorld
+from debug_utils import LOG_DEBUG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from gui.shared.utils import backoff
+from messenger import g_settings
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.gui.Scaleform.channels.layout import LobbyLayout
 from messenger.m_constants import PROTO_TYPE, CLIENT_ACTION_ID
@@ -25,9 +27,14 @@ class _ChannelController(LobbyLayout):
         super(_ChannelController, self).__init__(channel, mBuilder or XmppLobbyMessageBuilder())
         self._hasUnreadMessages = False
         self.fireInitEvent()
+        self.__isChat2Enabled = g_settings.server.BW_CHAT2.isEnabled()
 
     @proto_getter(PROTO_TYPE.XMPP)
     def proto(self):
+        return None
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def proto_v2(self):
         return None
 
     def canSendMessage(self):
@@ -76,6 +83,19 @@ class _ChannelController(LobbyLayout):
     def _fireDestroyEvent(self):
         g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LOBBY_CHANNEL_CTRL_DESTROYED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    def _broadcast(self, message):
+        if not self.__parseCommandLine(message):
+            self._sendMsg(message)
+
+    def _sendMsg(self, message):
+        raise NotImplementedError
+
+    def __parseCommandLine(self, message):
+        result = False
+        if self.__isChat2Enabled:
+            result, _ = self.proto_v2.adminChat.parseLine(message, self._channel.getClientID())
+        return result
+
 
 class ChatSessionController(_ChannelController):
 
@@ -108,7 +128,7 @@ class ChatSessionController(_ChannelController):
         g_messengerEvents.users.onUserStatusUpdated -= self.__onUserStatusUpdated
         super(ChatSessionController, self)._removeListeners()
 
-    def _broadcast(self, message):
+    def _sendMsg(self, message):
         self.proto.messages.sendChatMessage(self._channel.getID(), message)
 
     def __onUserStatusUpdated(self, user):
@@ -141,7 +161,7 @@ class UserRoomController(_ChannelController):
         events.onUserActionReceived -= self.__me_onUserActionReceived
         super(UserRoomController, self)._removeListeners()
 
-    def _broadcast(self, message):
+    def _sendMsg(self, message):
         self.proto.messages.sendGroupChatMessage(self._channel.getID(), message)
 
     def __me_onUsersListReceived(self, _):
@@ -182,7 +202,7 @@ class LazyUserRoomController(_ChannelController):
     def exit(self):
         self.proto.messages.leaveFromMUC(self._channel.getID())
 
-    def _broadcast(self, message):
+    def _sendMsg(self, message):
         self.proto.messages.sendGroupChatMessage(self._channel.getID(), message)
 
     def _fireInitEvent(self):

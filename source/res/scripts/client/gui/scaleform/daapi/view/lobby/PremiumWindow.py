@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PremiumWindow.py
 import BigWorld
+from gui import makeHtmlString, SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.meta.PremiumWindowMeta import PremiumWindowMeta
@@ -9,20 +10,21 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import g_itemsCache
 from gui.shared.events import LobbySimpleEvent
+from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.processors.common import PremiumAccountBuyer
+from gui.shared.money import Money
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.shared.money import Money
-from gui.shared.tooltips.formatters import packActionTooltipData
-from gui import makeHtmlString, game_control, SystemMessages
-from gui.shared.utils.decorators import process
-from helpers import i18n, time_utils
-from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import formatters
+from gui.shared.tooltips.formatters import packActionTooltipData
+from gui.shared.utils.decorators import process
+from helpers import i18n, time_utils, dependency
+from skeletons.gui.game_control import IGameSessionController
 BTN_WIDTH = 120
 PREMIUM_PACKET_LOCAL_KEY = '#menu:premium/packet/days%s'
 
 class PremiumWindow(PremiumWindowMeta):
+    gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self, ctx=None):
         super(PremiumWindow, self).__init__()
@@ -52,13 +54,13 @@ class PremiumWindow(PremiumWindowMeta):
          'stats.unlocks': self.__onUpdateHandler,
          'cache.mayConsumeWalletResources': self.__onUpdateHandler,
          'goodies': self.__onUpdateHandler})
-        game_control.g_instance.gameSession.onPremiumNotify += self.__onUpdateHandler
+        self.gameSession.onPremiumNotify += self.__onUpdateHandler
         g_itemsCache.onSyncCompleted += self.__onUpdateHandler
         self.__populateData()
 
     def _dispose(self):
         g_itemsCache.onSyncCompleted -= self.__onUpdateHandler
-        game_control.g_instance.gameSession.onPremiumNotify -= self.__onUpdateHandler
+        self.gameSession.onPremiumNotify -= self.__onUpdateHandler
         g_clientUpdateManager.removeObjectCallbacks(self)
         self._items = None
         self._actualPremiumCost = None
@@ -96,10 +98,10 @@ class PremiumWindow(PremiumWindowMeta):
             arenaUniqueID = 0
             result = yield PremiumAccountBuyer(days, cost, arenaUniqueID, withoutBenefits=True).request()
         if len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             if arenaUniqueID and self._premiumBonusesDiff:
-                SystemMessages.g_instance.pushI18nMessage('#system_messages:premium/post_battle_premium', type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM, **self._premiumBonusesDiff)
+                SystemMessages.pushI18nMessage('#system_messages:premium/post_battle_premium', type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM, **self._premiumBonusesDiff)
             becomePremium = g_itemsCache.items.stats.isPremium and not wasPremium
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.PREMIUM_BOUGHT, ctx={'arenaUniqueID': arenaUniqueID,
              'becomePremium': becomePremium}))

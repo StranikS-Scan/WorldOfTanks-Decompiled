@@ -6,11 +6,11 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from collections import namedtuple
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
-from gui.goodies.GoodiesCache import g_goodiesCache
+from gui.goodies.goodies_cache import g_goodiesCache
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_FORMATTERS
+from helpers import dependency
 from shared_utils import findFirst
-from gui.server_events import g_eventsCache
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmanSkill
@@ -22,6 +22,7 @@ from gui.shared.formatters import text_styles
 from helpers.i18n import makeString
 from items import vehicles
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from skeletons.gui.server_events import IEventsCache
 
 class StatsConfiguration(object):
     __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals')
@@ -250,12 +251,13 @@ class PotapovQuestsTileContext(ToolTipContext):
 class QuestContext(ToolTipContext):
     """ Common quest class for tool tip context
     """
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, fieldsToExclude=None):
         super(QuestContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, eventID):
-        return g_eventsCache.getEvents().get(eventID, None)
+        return self.eventsCache.getEvents().get(eventID, None)
 
 
 class BaseHangarParamContext(ToolTipContext):

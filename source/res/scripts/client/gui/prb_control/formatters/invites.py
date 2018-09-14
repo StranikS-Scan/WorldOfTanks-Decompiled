@@ -9,9 +9,7 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.INVITES import INVITES as I18N_INVITES
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.prb_control.formatters import getBattleSessionStartTimeString
-from gui.prb_control.prb_helpers import prbInvitesProperty
-from gui.prb_control.prb_helpers import prbDispatcherProperty
-from gui.prb_control.prb_helpers import prbAutoInvitesProperty
+from gui.prb_control import prbDispatcherProperty, prbAutoInvitesProperty, prbInvitesProperty
 from gui.prb_control.settings import PRB_INVITE_STATE
 from gui.shared.fortifications import formatters as fort_fmt
 from helpers import i18n, html
@@ -75,7 +73,7 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID):
     key, kwargs = None, {}
     isAnotherPeriphery = g_lobbyContext.isAnotherPeriphery(peripheryID)
     if funcState.doLeaveToAcceptInvite(invitePrbType):
-        if funcState.isInPrebattle() or funcState.isInUnit():
+        if funcState.isInLegacy() or funcState.isInUnit():
             entityName = getPrbName(funcState.entityTypeID)
         else:
             if funcState.isInFallout():

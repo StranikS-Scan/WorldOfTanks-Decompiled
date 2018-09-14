@@ -6,16 +6,17 @@ import Math
 from Math import Vector2, Vector3
 import functools
 import math
+from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 import BombersWing
 import Flock
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING, LOG_ERROR
 import CombatSelectedArea
-from gui.battle_control import g_sessionProvider
 from items import vehicles
 import items
 import BattleReplay
+from skeletons.gui.battle_session import IBattleSessionProvider
 _ENABLE_DEBUG_DRAW = False
 _ENABLE_DEBUG_LOG = False
 
@@ -43,6 +44,7 @@ class _DebugFrontLine(CallbackDelayer):
 
 
 class CombatEquipmentManager(object):
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def testArtyStrike(self, id=33, offset=Vector3(0, 0, 0)):
         if not IS_DEVELOPMENT:
@@ -147,7 +149,7 @@ class CombatEquipmentManager(object):
         if area is not None:
             area.setGUIVisible(self.__isGUIVisible)
         self.__callbackDelayer.delayCallback(timer, functools.partial(self.__delayedAreaDestroy, areaUID))
-        ctrl = g_sessionProvider.shared.equipments
+        ctrl = self.guiSessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.showMarker(eq, pos, dir, timer)
         return

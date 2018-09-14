@@ -8,11 +8,54 @@ from adisp import async
 from constants import WIN_XP_FACTOR_MODE
 from debug_utils import LOG_DEBUG
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
-from goodies.goodie_helpers import NamedGoodieData, getPremiumCost, getPriceWithDiscount
+from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData, getPriceTupleWithDiscount
 from gui.shared.money import Money
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 _VehiclesRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'restoreDuration restoreCooldown restorePriceModif')
-_TankmenRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'freeDuration creditsDuration goldDuration cost limit')
+_TankmenRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'freeDuration creditsDuration cost limit')
+_TargetData = namedtuple('_TargetData', 'targetType, targetValue, limit')
+_ResourceData = namedtuple('_ResourceData', 'resourceType, value, isPercentage')
+_ConditionData = namedtuple('_ConditionData', 'conditionType, value')
+
+class _NamedGoodieData(GoodieData):
+    """
+    variety - GOODIE_VARIETY.BOOSTER or GOODIE_VARIETY.DISCOUNT
+    
+    target - (targetType, targetValue, limit) - denotes the type of the discountable/boostable entity
+             targetType - one of GOODIE_TARGET_TYPEs
+             targetValue - the name of the target (for example premium packet name)
+             limit - limits resource usage (for example 100% discount on free xp conversion, but no more than 20 gold)
+    
+    enabled - denotes whether a goodie of that type can be given
+    
+    lifetime - lifetime of a goodie [seconds]
+    
+    useby - time after which a goodie will no longer be valid and be lost [seconds]
+    
+    counter - denotes how many goodies will be given initially [deprecated]
+    
+    autostart - denotes whether to activate a goodie right after creation True or False
+    
+    condition - (conditionType, value) - denotes internal condition for a goodie (for example vehicle level)
+                conditionType - one of GOODIE_CONDITION_TYPEs
+                value - condition value (e.g. vehicle level)
+    
+    resource - (resourceType, value, isPercentage)
+               resourceType - one of GOODIE_RESOURCE_TYPEs
+               value - discount/booster value on that given resource
+               isPercentage - True if percentage, False otherwise
+    """
+
+    @staticmethod
+    def __new__(cls, variety, target, enabled, lifetime, useby, counter, autostart, condition, resource):
+        return GoodieData.__new__(cls, variety, _TargetData(*target) if target else None, enabled, lifetime, useby, counter, autostart, _ConditionData(*condition) if condition else None, _ResourceData(*resource) if resource else None)
+
+    def getTargetValue(self):
+        if self.target.targetType == GOODIE_TARGET_TYPE.ON_BUY_PREMIUM:
+            return int(self.target.targetValue.split('_')[1])
+        else:
+            return self.target.targetValue
+
 
 class ShopCommonStats(object):
     __metaclass__ = ABCMeta
@@ -98,7 +141,7 @@ class ShopCommonStats(object):
     @property
     def tankmenRestoreConfig(self):
         config = self.__getRestoreConfig().get('tankmen', {})
-        return _TankmenRestoreConfig(config.get('freeDuration', 0), config.get('creditsDuration', 0), config.get('goldDuration', 0), Money(credits=config.get('creditsCost', 0)), config.get('limit', 100))
+        return _TankmenRestoreConfig(config.get('freeDuration', 0), config.get('creditsDuration', 0), Money(credits=config.get('creditsCost', 0)), config.get('limit', 100))
 
     def sellPriceModifiers(self, compDescr):
         sellPriceModif = self.sellPriceModif
@@ -350,7 +393,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
             goodies = data['goodies'].get('goodies', {})
             formattedGoodies = {}
             for goodieID, goodieData in goodies.iteritems():
-                formattedGoodies[goodieID] = NamedGoodieData(*goodieData)
+                formattedGoodies[goodieID] = _NamedGoodieData(*goodieData)
 
             data['goodies']['goodies'] = formattedGoodies
         return data
@@ -424,7 +467,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
     def freeXPConversionLimit(self):
         goody = self.bestGoody(self.personalXPExchangeDiscounts)
         if goody:
-            return goody.target[2] * self.defaults.freeXPConversion[0]
+            return goody.target.limit * self.defaults.freeXPConversion[0]
         else:
             return None
             return None
@@ -459,6 +502,36 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
     def personalXPExchangeDiscounts(self):
         return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION)
 
+    @property
+    def personalVehicleDiscounts(self):
+        """
+        Return personal vehicle discounts in account
+        """
+        return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_BUY_VEHICLE)
+
+    def getVehicleDiscountDescriptions(self):
+        """
+        Return vehicle discounts descriptions
+        """
+        return self.__getDiscountsDescriptionsByTarget(GOODIE_TARGET_TYPE.ON_BUY_VEHICLE)
+
+    def getPersonalVehicleDiscountPrice(self, typeCompDescr):
+        """
+        Return price with max discount for selected vehicle
+        """
+        defaultPrice = self.defaults.getItemPrice(typeCompDescr)
+        currency = defaultPrice.getCurrency()
+        personalVehicleDiscountPrice = None
+        for discountID, discount in self.personalVehicleDiscounts.iteritems():
+            if discount.getTargetValue() == typeCompDescr:
+                discountPrice = getPriceTupleWithDiscount(defaultPrice, discount.resource)
+                if discountPrice is not None:
+                    tempPrice = Money(*discountPrice)
+                    if personalVehicleDiscountPrice is None or tempPrice.get(currency) <= personalVehicleDiscountPrice.get(currency):
+                        personalVehicleDiscountPrice = tempPrice
+
+        return personalVehicleDiscountPrice
+
     def bestGoody(self, goodies):
         if goodies:
             _, goody = sorted(goodies.iteritems(), key=lambda (_, goody): goody.resource[1])[-1]
@@ -466,6 +539,12 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
         else:
             return None
             return None
+
+    def __getDiscountsDescriptionsByTarget(self, targetType):
+        """
+        Gets all possible discounts descriptions by targetType
+        """
+        return dict(filter(lambda (discountID, item): item.target.targetType == targetType and item.enabled, self.discounts.iteritems()))
 
     def __applyGoodyToStudyCost(self, prices, goody):
 
@@ -477,9 +556,12 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
 
         return tuple(map(convert, prices))
 
-    def __personalDiscountsByTarget(self, targetID):
-        discounts = filter(lambda (discountID, item): item.targetID == targetID and item.enabled, self.discounts.iteritems())
-        return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, discounts))
+    def __personalDiscountsByTarget(self, targetType):
+        """
+        Gets discounts by targetType in account
+        """
+        discounts = self.__getDiscountsDescriptionsByTarget(targetType)
+        return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, discounts.iteritems()))
 
 
 class DefaultShopRequester(ShopCommonStats):

@@ -2996,14 +2996,44 @@
       </value>
     </achievement>
     <achievement>
-      <name>	falloutAchievements:sauronEye	</name>
+      <name>	singleAchievements:xmasTreeBronze	</name>
       <type>	dict	</type>
       <value>
-        <item>	repeatable	  <name>	type	</name>
+        <item>	single	  <name>	type	</name>
         </item>
-        <item>	special	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
-        <item>	300.1	  <name>	weight	</name>
+        <item>	1420.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:xmasTreeSilver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1420.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:xmasTreeGold	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1420.2	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>

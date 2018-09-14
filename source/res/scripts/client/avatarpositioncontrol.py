@@ -105,7 +105,7 @@ class AvatarPositionControl(CallbackDelayer):
         if bValue:
             self.__doBind(vehicleID)
         else:
-            self.__doUnbind()
+            self.__doUnbind(vehicleID)
         return
 
     def followCamera(self, bValue=True):
@@ -139,8 +139,11 @@ class AvatarPositionControl(CallbackDelayer):
     def __doBind(self, vehicleID):
         self.__avatar.cell.bindToVehicle(vehicleID)
 
-    def __doUnbind(self):
-        self.__avatar.cell.bindToVehicle(0)
+    def __doUnbind(self, vehicleID=None):
+        if vehicleID is None:
+            vehicleID = 0
+        self.__avatar.cell.bindToVehicle(vehicleID)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setPlayerVehicleID(0)
+        return

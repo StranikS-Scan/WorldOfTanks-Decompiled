@@ -23,4 +23,7 @@ class SimpleWindowMeta(AbstractWindowView):
         return self.flashObject.as_setImage(imgPath, imgBottomMargin) if self._isDAAPIInited() else None
 
     def as_setButtonsS(self, buttonsList, align, btnWidth):
+        """
+        :param buttonsList: Represented by Vector.<SimpleWindowBtnVo> (AS)
+        """
         return self.flashObject.as_setButtons(buttonsList, align, btnWidth) if self._isDAAPIInited() else None

@@ -145,7 +145,7 @@ class FortBuildingProcessWindow(FortBuildingProcessWindowMeta, FortViewHelper):
         if result:
             g_fortSoundController.playCreateBuilding()
             building = self.fortCtrl.getFort().getBuilding(buildingTypeID)
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_BUILDINGPROCESS, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_BUILDINGPROCESS, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
         self.destroy()
 
     def __makeData(self):

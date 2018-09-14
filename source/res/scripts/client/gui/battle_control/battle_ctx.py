@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_ctx.py
-import BigWorld
 import Settings
 from gui.battle_control.arena_info import player_format
+from skeletons.gui.battle_session import IBattleContext
 from unit_roster_config import SquadRoster
 
-class BattleContext(object):
+class BattleContext(IBattleContext):
 
     def __init__(self):
         super(BattleContext, self).__init__()
@@ -128,7 +128,7 @@ class BattleContext(object):
         return self.__arenaDP.isObserver(vID)
 
     def isPlayerObserver(self):
-        return self.isObserver(getattr(BigWorld.player(), 'playerVehicleID', -1))
+        return self.__arenaDP.isPlayerObserver()
 
     def isInTeam(self, teamIdx, vID=None, accID=None):
         return self._isInTeams([teamIdx], vID, accID)

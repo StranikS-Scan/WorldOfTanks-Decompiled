@@ -12,7 +12,8 @@ BATTLE_PACKAGES = _BATTLE_RELEASE_PACKAGES
 COMMON_PACKAGES = _COMMON_RELEASE_PACKAGES
 BATTLE_PACKAGES_BY_ARENA_TYPE = {ARENA_GUI_TYPE.FALLOUT_CLASSIC: ('gui.Scaleform.daapi.view.battle.fallout',),
  ARENA_GUI_TYPE.FALLOUT_MULTITEAM: ('gui.Scaleform.daapi.view.battle.fallout',),
- ARENA_GUI_TYPE.TUTORIAL: ('gui.Scaleform.daapi.view.battle.tutorial',)}
+ ARENA_GUI_TYPE.TUTORIAL: ('gui.Scaleform.daapi.view.battle.tutorial',),
+ ARENA_GUI_TYPE.EVENT_BATTLES: ('gui.Scaleform.daapi.view.battle.event',)}
 BATTLE_PACKAGES_BY_DEFAULT = ('gui.Scaleform.daapi.view.battle.classic',)
 if HAS_DEV_RESOURCES:
     LOBBY_PACKAGES += _LOBBY_DEBUG_PACKAGES

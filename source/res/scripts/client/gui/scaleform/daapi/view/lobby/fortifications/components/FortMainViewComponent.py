@@ -3,39 +3,38 @@
 import time
 import BigWorld
 import fortified_regions
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from account_helpers.AccountSettings import AccountSettings, FORT_MEMBER_TUTORIAL, ORDERS_FILTER
 from adisp import process
-from constants import PREBATTLE_TYPE, FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
-from ClientFortifiedRegion import BUILDING_UPDATE_REASON
+from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
-from gui.clans.clan_controller import g_clanCtrl
-from gui.clans.clan_helpers import ClanListener
 from gui.LobbyContext import g_lobbyContext
-from gui.prb_control.context.unit_ctx import JoinModeCtx
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.settings import FUNCTIONAL_FLAG
-from gui.Scaleform.daapi.view.meta.FortMainViewMeta import FortMainViewMeta
 from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects
 from gui.Scaleform.daapi.view.lobby.fortifications.FortRosterIntroWindow import FortRosterIntroWindow
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
+from gui.Scaleform.daapi.view.meta.FortMainViewMeta import FortMainViewMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.clans.clan_helpers import ClanListener
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.formatters import text_styles
 from gui.shared.fortifications import events_dispatcher as fort_events
 from gui.shared.fortifications.context import DirectionCtx
-from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.fortifications.fort_helpers import getRosterIntroWindowSetting
 from gui.shared.fortifications.fort_helpers import setRosterIntroWindowSetting
+from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.fortifications.settings import MUST_SHOW_FORT_UPGRADE, MUST_SHOW_DEFENCE_START
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, time_utils, setHangarVisibility
@@ -56,8 +55,8 @@ def shouldShowIntroWindow(type):
         return not getRosterIntroWindowSetting(type) and getRosterIntroWindowSetting(MUST_SHOW_DEFENCE_START)
 
 
-def _maySeeFortUpgradeWindow():
-    profile = g_clanCtrl.getAccountProfile()
+def _maySeeFortUpgradeWindow(clansCtrl):
+    profile = clansCtrl.getAccountProfile()
     return profile.isInClan() and profile.getRole() == CLAN_MEMBER_FLAGS.RECRUIT
 
 
@@ -111,7 +110,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
 
     def _tryShowFortRosterIntroWindow(self):
         type = None
-        if _maySeeFortUpgradeWindow() and shouldShowIntroWindow(FortRosterIntroWindow.TYPE_FORT_UPGRADE):
+        if _maySeeFortUpgradeWindow(self.clansCtrl) and shouldShowIntroWindow(FortRosterIntroWindow.TYPE_FORT_UPGRADE):
             type = FortRosterIntroWindow.TYPE_FORT_UPGRADE
         elif shouldShowIntroWindow(FortRosterIntroWindow.TYPE_DEFENCE_START):
             type = FortRosterIntroWindow.TYPE_DEFENCE_START
@@ -164,7 +163,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
         self.app.containerManager.onViewAddedToContainer -= self.__onViewAdddedToContainer
         super(FortMainViewComponent, self)._dispose()
         self.stopFortListening()
-        self.stopFortListening()
+        self.startClanListening()
         self.removeListener(events.FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.FortEvent.TRANSPORTATION_STEP, self.__onTransportingStep, scope=EVENT_BUS_SCOPE.FORT)
         self.__clanDBID = None
@@ -193,7 +192,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
         if result:
             g_fortSoundController.playCreateDirection()
             directionName = i18n.makeString('#fortifications:General/directionName%d' % dirId)
-            SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DIRECTIONOPENED, direction=directionName, type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DIRECTIONOPENED, direction=directionName, type=SystemMessages.SM_TYPE.Warning)
             self.__currentModeIsDirty = True
 
     def __onTransportingStep(self, event):
@@ -292,7 +291,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
             self.__currentModeIsDirty = True
         if reason == BUILDING_UPDATE_REASON.UPGRADED and buildingTypeID == FORT_BUILDING_TYPE.MILITARY_BASE:
             commandCenterLevel = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE).level
-            if commandCenterLevel == FORT_BATTLE_DIVISIONS.ABSOLUTE.minFortLevel and _maySeeFortUpgradeWindow():
+            if commandCenterLevel == FORT_BATTLE_DIVISIONS.ABSOLUTE.minFortLevel and _maySeeFortUpgradeWindow(self.clansCtrl):
                 self.__showRosterIntroWindow(FortRosterIntroWindow.TYPE_FORT_UPGRADE)
             if commandCenterLevel == FORT_BATTLE_DIVISIONS.CHAMPION.minFortLevel:
                 self.__defenceHourArrowVisible = self.__setTutorialArrowToDefenseHourSettingsVisibility()
@@ -302,7 +301,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
 
     def onClanProfileClick(self):
         if self.clansCtrl.isEnabled():
-            clan = g_clanCtrl.getAccountProfile()
+            clan = self.clansCtrl.getAccountProfile()
             shared_events.showClanProfileWindow(clan.getClanDbID(), clan.getClanAbbrev())
         else:
             LOG_ERROR("Couldn't invoke Clan Profile Window. Functionality is Unavailable!")
@@ -383,7 +382,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
     def __makeSystemMessages():
         startDefResCount = str(fortified_regions.g_cache.startResource)
         startDefResCount = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_FORTIFICATIONSTARTUP, defResCount=startDefResCount)
-        SystemMessages.g_instance.pushI18nMessage(startDefResCount, type=SystemMessages.SM_TYPE.FortificationStartUp)
+        SystemMessages.pushI18nMessage(startDefResCount, type=SystemMessages.SM_TYPE.FortificationStartUp)
 
     def __updateCurrentMode(self):
         if self.__currentModeIsDirty:
@@ -393,8 +392,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
     def __joinToSortie(self):
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            flags = FUNCTIONAL_FLAG.SHOW_ENTITIES_BROWSER
-            yield dispatcher.join(JoinModeCtx(PREBATTLE_TYPE.SORTIE, flags=flags))
+            yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.SORTIES_LIST))
         else:
             LOG_ERROR('Prebattle dispatcher is not defined')
         return

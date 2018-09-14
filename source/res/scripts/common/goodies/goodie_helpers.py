@@ -1,22 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/goodie_helpers.py
-from copy import deepcopy
 from collections import namedtuple
-from debug_utils import LOG_ERROR
-from Goodies import GoodieException
+from copy import deepcopy
 from GoodieConditions import MaxVehicleLevel
 from GoodieDefinition import GoodieDefinition
 from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience
-from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion
+from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion, BuyVehicle
 from GoodieValue import GoodieValue
+from Goodies import GoodieException
+from debug_utils import LOG_ERROR
 from goodie_constants import GOODIE_TARGET_TYPE, GOODIE_CONDITION_TYPE, GOODIE_RESOURCE_TYPE
-GoodieData = namedtuple('GoodieData', 'variety target enabled lifetime useby limit autostart condition resource')
+GoodieData = namedtuple('GoodieData', 'variety target enabled lifetime useby counter autostart condition resource')
 _CONDITIONS = {GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL: MaxVehicleLevel}
 _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
  GOODIE_TARGET_TYPE.ON_BUY_SLOT: BuySlot,
  GOODIE_TARGET_TYPE.ON_POST_BATTLE: PostBattle,
  GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN: BuyGoldTankmen,
- GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION: FreeExperienceConversion}
+ GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION: FreeExperienceConversion,
+ GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: BuyVehicle}
 _RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
  GOODIE_RESOURCE_TYPE.CREDITS: Credits,
  GOODIE_RESOURCE_TYPE.XP: Experience,
@@ -32,7 +33,8 @@ GOODIE_TARGET_TO_TEXT = {BuyPremiumAccount: 'premium',
  BuySlot: 'slot',
  PostBattle: 'post_battle',
  BuyGoldTankmen: 'gold_tankmen',
- FreeExperienceConversion: 'free_xp_conversion'}
+ FreeExperienceConversion: 'free_xp_conversion',
+ BuyVehicle: 'vehicle'}
 GOODIE_TEXT_TO_CONDITION = {'max_vehicle_level': GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL}
 GOODIE_TEXT_TO_RESOURCE = {'credits': GOODIE_RESOURCE_TYPE.CREDITS,
  'experience': GOODIE_RESOURCE_TYPE.XP,
@@ -43,20 +45,8 @@ GOODIE_TEXT_TO_TARGET = {'premium': GOODIE_TARGET_TYPE.ON_BUY_PREMIUM,
  'slot': GOODIE_TARGET_TYPE.ON_BUY_SLOT,
  'post_battle': GOODIE_TARGET_TYPE.ON_POST_BATTLE,
  'gold_tankmen': GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN,
- 'free_xp_conversion': GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION}
-
-class NamedGoodieData(GoodieData):
-
-    def getTargetValue(self):
-        if self.target[0] == GOODIE_TARGET_TYPE.ON_BUY_PREMIUM:
-            return int(self.target[1].split('_')[1])
-        else:
-            return self.target[1]
-
-    @property
-    def targetID(self):
-        return self.target[0]
-
+ 'free_xp_conversion': GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION,
+ 'vehicle': GOODIE_TARGET_TYPE.ON_BUY_VEHICLE}
 
 def loadDefinitions(d):
     goodies = {'goodies': {},
@@ -79,15 +69,30 @@ def loadDefinitions(d):
     return goodies
 
 
-def getPriceWithDiscount(price, value):
-    if value[2]:
-        result = int(price - price * (value[1] / float(100)))
+def getPriceWithDiscount(price, resourceData):
+    """
+    Translates goodie value into the final price
+    """
+    _, value, isPercentage = resourceData
+    if isPercentage:
+        result = int(price - price * (value / float(100)))
         if result < 0:
             return 0
         else:
             return result
     else:
-        return price - value[1]
+        return max(price - value, 0)
+
+
+def getPriceTupleWithDiscount(price, resourceData):
+    """
+    Translates goodie value into the final price tuple
+    """
+    resourceType, _, _ = resourceData
+    if resourceType == GOODIE_RESOURCE_TYPE.CREDITS:
+        return (getPriceWithDiscount(price[0], resourceData), 0)
+    else:
+        return (0, getPriceWithDiscount(price[1], resourceData)) if resourceType == GOODIE_RESOURCE_TYPE.GOLD else None
 
 
 def getPremiumCost(premiumCosts, goodie):

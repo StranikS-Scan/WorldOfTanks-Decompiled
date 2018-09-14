@@ -16,23 +16,16 @@ class BWProtoPlugin(IProtoPlugin):
 
     def __init__(self):
         super(BWProtoPlugin, self).__init__()
-        self.__provider = BWChatProvider()
-        self.__adminChat = chat_handlers.AdminChatCommandHandler(self.__provider)
-        self.__adminChat.registerHandlers()
-        self.__users = UsersHandler(self.__provider)
-        self.__users.registerHandlers()
-        self.__arenaChat = chat_handlers.ArenaChatHandler(self.__provider, self.__adminChat)
-        self.__arenaChat.registerHandlers()
-        self.__battleCmd = chat_handlers.BattleChatCommandHandler(self.__provider)
-        self.__battleCmd.registerHandlers()
-        self.__unitChat = chat_handlers.UnitChatHandler(self.__provider, self.__adminChat)
-        self.__unitChat.registerHandlers()
-        self.__clubChat = chat_handlers.ClubChatHandler(self.__provider, self.__adminChat)
-        self.__clubChat.registerHandlers()
+        self.__provider = None
+        self.__adminChat = None
+        self.__users = None
+        self.__arenaChat = None
+        self.__battleCmd = None
+        self.__unitChat = None
+        self.__clubChat = None
         self.__clubListener = None
-        self.__voipProvider = VOIPChatProvider(self.__provider)
-        self.__voipProvider.registerHandlers()
-        self.__voipCtrl = VOIPChatController()
+        self.__voipProvider = None
+        self.__voipCtrl = None
         self.__isConnected = False
         return
 
@@ -114,6 +107,24 @@ class BWProtoPlugin(IProtoPlugin):
     def setFilters(self, msgFilterChain):
         self.__provider.setFilters(msgFilterChain)
 
+    def init(self):
+        self.__provider = BWChatProvider()
+        self.__adminChat = chat_handlers.AdminChatCommandHandler(self.__provider)
+        self.__adminChat.registerHandlers()
+        self.__users = UsersHandler(self.__provider)
+        self.__users.registerHandlers()
+        self.__arenaChat = chat_handlers.ArenaChatHandler(self.__provider, self.__adminChat)
+        self.__arenaChat.registerHandlers()
+        self.__battleCmd = chat_handlers.BattleChatCommandHandler(self.__provider)
+        self.__battleCmd.registerHandlers()
+        self.__unitChat = chat_handlers.UnitChatHandler(self.__provider, self.__adminChat)
+        self.__unitChat.registerHandlers()
+        self.__clubChat = chat_handlers.ClubChatHandler(self.__provider, self.__adminChat)
+        self.__clubChat.registerHandlers()
+        self.__voipProvider = VOIPChatProvider(self.__provider)
+        self.__voipProvider.registerHandlers()
+        self.__voipCtrl = VOIPChatController()
+
     def clear(self):
         if self.__arenaChat:
             self.__arenaChat.unregisterHandlers()
@@ -140,6 +151,7 @@ class BWProtoPlugin(IProtoPlugin):
             self.__voipProvider.clear()
             self.__voipProvider = None
         if self.__voipCtrl:
+            self.__voipCtrl.stop()
             self.__voipCtrl = None
         if self.__provider:
             self.__provider.clear()

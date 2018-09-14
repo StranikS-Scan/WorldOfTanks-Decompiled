@@ -16,17 +16,18 @@ class ActionButtonStateVO(dict):
      UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS,
      UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED)
 
-    def __init__(self, unitFunctional):
+    def __init__(self, unitEntity):
         super(ActionButtonStateVO, self).__init__()
-        self._playerInfo = unitFunctional.getPlayerInfo()
-        self.__unitIsValid, self.__restrictionType = unitFunctional.canPlayerDoAction()
+        self._playerInfo = unitEntity.getPlayerInfo()
+        result = unitEntity.canPlayerDoAction()
+        self.__unitIsValid, self.__restrictionType = result.isValid, result.restriction
+        self.__validationCtx = result.ctx
         self.__isEnabled = self._isEnabled(self.__unitIsValid, self.__restrictionType)
-        self.__stats = unitFunctional.getStats()
-        self.__flags = unitFunctional.getFlags()
-        self.__settings = unitFunctional.getRosterSettings()
+        self.__stats = unitEntity.getStats()
+        self.__flags = unitEntity.getFlags()
+        self.__settings = unitEntity.getRosterSettings()
         self.__canTakeSlot = not self._playerInfo.isLegionary()
         self.__INVALID_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_IS_FULL: (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {}),
-         UNIT_RESTRICTION.VEHICLE_NOT_FOUND: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTFOUND, {}),
          UNIT_RESTRICTION.UNIT_IS_LOCKED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISLOCKED, {}),
          UNIT_RESTRICTION.VEHICLE_NOT_SELECTED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTSELECTED, {}),
          UNIT_RESTRICTION.VEHICLE_NOT_VALID: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLENOTVALID, {}),
@@ -36,9 +37,9 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_ISINBATTLE, {}),
          UNIT_RESTRICTION.MIN_SLOTS: (CYBERSPORT.WINDOW_UNIT_MESSAGE_MINSLOTS, {}),
          UNIT_RESTRICTION.NOT_READY_IN_SLOTS: (CYBERSPORT.WINDOW_UNIT_MESSAGE_WAITING, {}),
-         UNIT_RESTRICTION.MIN_TOTAL_LEVEL: self.__levelMessage(),
-         UNIT_RESTRICTION.MAX_TOTAL_LEVEL: self.__levelMessage(),
-         UNIT_RESTRICTION.INVALID_TOTAL_LEVEL: ActionButtonStateVO.getInvalidVehicleLevelsMessage(unitFunctional),
+         UNIT_RESTRICTION.MIN_TOTAL_LEVEL: (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, self.__validationCtx),
+         UNIT_RESTRICTION.MAX_TOTAL_LEVEL: (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, self.__validationCtx),
+         UNIT_RESTRICTION.INVALID_TOTAL_LEVEL: ActionButtonStateVO.getInvalidVehicleLevelsMessage(self.__validationCtx),
          UNIT_RESTRICTION.IS_IN_IDLE: self._getIdleStateStr(),
          UNIT_RESTRICTION.IS_IN_ARENA: self._getArenaStateStr(),
          UNIT_RESTRICTION.NEED_PLAYERS_SEARCH: ('', {}),
@@ -86,7 +87,7 @@ class ActionButtonStateVO(dict):
 
     def _getLabel(self):
         label = CYBERSPORT.WINDOW_UNIT_READY
-        if self._playerInfo.isCreator():
+        if self._playerInfo.isCommander():
             label = CYBERSPORT.WINDOW_UNIT_FIGHT
         if self._playerInfo.isReady and self.__restrictionType != UNIT_RESTRICTION.IS_IN_IDLE:
             label = CYBERSPORT.WINDOW_UNIT_NOTREADY
@@ -137,18 +138,15 @@ class ActionButtonStateVO(dict):
         else:
             return (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {})
 
-    def __levelMessage(self):
-        if self.__restrictionType == UNIT_RESTRICTION.MAX_TOTAL_LEVEL:
-            return (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, {'level': self.__stats.maxTotalLevel})
-        return (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, {'level': self.__stats.minTotalLevel}) if self.__restrictionType == UNIT_RESTRICTION.MIN_TOTAL_LEVEL else ('', {})
-
     @staticmethod
-    def getInvalidVehicleLevelsMessage(unitFunctional):
-        stats = unitFunctional.getStats()
-        vehLevels = unitFunctional.getUnitInvalidLevels(stats=stats)
-        stateString = CYBERSPORT.WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_UNRESOLVED
-        if len(vehLevels):
-            stateStringCandidate = CYBERSPORT.window_unit_message_invalidlevelerror('_'.join(map(lambda level: str(level), vehLevels)))
-            if stateStringCandidate is not None:
-                stateString = stateStringCandidate
-        return (stateString, {})
+    def getInvalidVehicleLevelsMessage(ctx):
+        if ctx is None:
+            return ('', {})
+        else:
+            vehLevels = ctx.get('vehLevels', ())
+            stateString = CYBERSPORT.WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_UNRESOLVED
+            if len(vehLevels):
+                stateStringCandidate = CYBERSPORT.window_unit_message_invalidlevelerror('_'.join(map(lambda level: str(level), vehLevels)))
+                if stateStringCandidate is not None:
+                    stateString = stateStringCandidate
+            return (stateString, {})

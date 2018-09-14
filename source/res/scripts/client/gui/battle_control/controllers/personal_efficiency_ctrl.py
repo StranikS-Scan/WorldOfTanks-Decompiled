@@ -179,18 +179,5 @@ class PersonalEfficiencyController(IBattleController):
         self.onTotalEfficiencyUpdated(dict(self.__totalEfficiency))
 
 
-class PersonalEfficiencyPlayer(PersonalEfficiencyController):
-
-    def _onPlayerFeedbackReceived(self, events):
-        pass
-
-    def _onPlayerSummaryFeedbackReceived(self, event):
-        pass
-
-
 def createEfficiencyCtrl(setup, feedback):
-    if setup.isReplayPlaying:
-        ctrl = PersonalEfficiencyPlayer(feedback)
-    else:
-        ctrl = PersonalEfficiencyController(feedback)
-    return ctrl
+    return PersonalEfficiencyController(feedback)

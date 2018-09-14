@@ -62,7 +62,7 @@ class ClubInviteHtmlTextFormatter(object):
         return makeHtmlString('html_templates:lobby/clubs', 'inviteTitle', ctx={'sender': creatorFullName})
 
     def getComment(self, invite):
-        return makeHtmlString('html_templates:lobby/clubs', 'inviteComment') % {'eventType': 'showClubProfile'}
+        return makeHtmlString('html_templates:lobby/clubs', 'inviteCommentWithDetails', {'eventType': 'showClubProfile'})
 
     def getNote(self, invite):
         note = ''

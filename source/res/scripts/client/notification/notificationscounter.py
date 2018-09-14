@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationsCounter.py
-from debug_utils import LOG_DEBUG
-from gui.prb_control.prb_helpers import prbInvitesProperty
+from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_GROUP
@@ -57,7 +56,9 @@ class _InviteGroupCounter(_GroupCounter):
         return None
 
     def resetUnreadCount(self):
-        self.prbInvites.resetUnreadCount()
+        if self.prbInvites is not None:
+            self.prbInvites.resetUnreadCount()
+        return
 
     @classmethod
     def getGroupID(cls):

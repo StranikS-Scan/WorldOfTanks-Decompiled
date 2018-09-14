@@ -12,6 +12,7 @@ from warnings import warn_explicit
 from traceback import format_exception
 from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT
 from constants import LEAKS_DETECTOR_MAX_EXECUTION_TIME
+from contextlib import contextmanager
 _src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
 _g_logMapping = {}
 GCDUMP_CROWBAR_SWITCH = False
@@ -49,6 +50,14 @@ class _LogWrapper(object):
 
 class CriticalError(BaseException):
     pass
+
+
+@contextmanager
+def suppress(*exceptions):
+    try:
+        yield
+    except exceptions:
+        pass
 
 
 def init():
@@ -280,17 +289,18 @@ def disabled(func):
     return empty_func
 
 
-def disabled_if(flag, msg=''):
-    if flag:
+def disabled_if(checker, msg=''):
 
-        def disable_func(func):
-            LOG_DEBUG_DEV('Method ({}) disabled. {} ', func.__name__, msg)
-            return disabled(func)
+    def disable_func(func):
 
-    else:
+        @wraps(func)
+        def wrapped(*args, **kwargs):
+            if checker():
+                LOG_DEBUG_DEV('Method ({}) disabled. {} ', func.__name__, msg)
+                return disabled(func)
+            return func(*args, **kwargs)
 
-        def disable_func(func):
-            return func
+        return wrapped
 
     return disable_func
 

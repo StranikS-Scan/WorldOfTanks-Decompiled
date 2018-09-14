@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/page.py
+from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import SharedPage
 from gui.Scaleform.framework import ViewTypes
@@ -12,10 +13,9 @@ _CLASSIC_COMPONENTS_TO_CTRLS = ((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIAS
 
 class ClassicPage(SharedPage):
 
-    def __init__(self, components=_CLASSIC_COMPONENTS_TO_CTRLS, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
-        self._toggling = set()
+    def __init__(self, components=_CLASSIC_COMPONENTS_TO_CTRLS, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
         self._fullStatsAlias = fullStatsAlias
-        super(ClassicPage, self).__init__(components=components)
+        super(ClassicPage, self).__init__(components=components, external=external)
 
     def __del__(self):
         LOG_DEBUG('ClassicPage is deleted')
@@ -54,13 +54,14 @@ class ClassicPage(SharedPage):
                 return
             if self.as_isComponentVisibleS(self._fullStatsAlias) != isShown:
                 if isShown:
-                    self._toggling = set(self.as_getComponentsVisibilityS())
+                    if len(self._fsToggling) == 0:
+                        self._fsToggling = set(self.as_getComponentsVisibilityS())
                     if permanent is not None:
-                        self._toggling.difference_update(permanent)
-                    self._setComponentsVisibility(visible={self._fullStatsAlias}, hidden=self._toggling)
+                        self._fsToggling.difference_update(permanent)
+                    self._setComponentsVisibility(visible={self._fullStatsAlias}, hidden=self._fsToggling)
                 else:
-                    self._setComponentsVisibility(visible=self._toggling, hidden={self._fullStatsAlias})
-                    self._toggling.clear()
+                    self._setComponentsVisibility(visible=self._fsToggling, hidden={self._fullStatsAlias})
+                    self._fsToggling.clear()
                 if self._isInPostmortem:
                     self.as_setPostmortemTipsVisibleS(not isShown)
             return
@@ -72,6 +73,10 @@ class ClassicPage(SharedPage):
     def _handleToggleFullStats(self, event):
         self._toggleFullStats(event.ctx['isDown'])
 
+    def _onBattleLoadingStart(self):
+        self._toggleFullStats(False)
+        super(ClassicPage, self)._onBattleLoadingStart()
+
     def _handleGUIToggled(self, event):
         if self._fullStatsAlias and not self.as_isComponentVisibleS(self._fullStatsAlias):
             self._toggleGuiVisible()
@@ -80,3 +85,9 @@ class ClassicPage(SharedPage):
         super(ClassicPage, self)._switchToPostmortem()
         if self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.RADIAL_MENU):
             self._toggleRadialMenu(False)
+
+    def _changeCtrlMode(self, ctrlMode):
+        if ctrlMode == CTRL_MODE_NAME.VIDEO:
+            self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL})
+        else:
+            self._setComponentsVisibility(visible={BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL})

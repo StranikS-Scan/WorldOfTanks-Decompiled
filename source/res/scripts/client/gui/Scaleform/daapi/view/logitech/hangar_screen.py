@@ -4,21 +4,22 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.logitech.LogitechMonitorMeta import LogitechMonitorMonoScreenMeta, LogitechMonitorHangarColoredScreenMeta
-from gui.game_control import getFalloutCtrl
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.prb_control.prb_helpers import GlobalListener
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import g_itemsCache
-from helpers import i18n
+from helpers import i18n, dependency
 from items.vehicles import getVehicleType
+from skeletons.gui.game_control import IFalloutController
 
-class LogitechMonitorHangarMonoScreen(LogitechMonitorMonoScreenMeta, GlobalListener):
+class LogitechMonitorHangarMonoScreen(LogitechMonitorMonoScreenMeta, IGlobalListener):
+    falloutCtrl = dependency.descriptor(IFalloutController)
 
     def _onLoaded(self):
         g_currentVehicle.onChanged += self.__onVehicleChange
         if g_currentVehicle.item:
             self.__updateText()
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
-        falloutCtrl = getFalloutCtrl()
+        falloutCtrl = self.falloutCtrl
         if falloutCtrl is not None:
             falloutCtrl.onSettingsChanged += self.__onFalloutSettingsChanged
         self.startGlobalListening()
@@ -28,7 +29,7 @@ class LogitechMonitorHangarMonoScreen(LogitechMonitorMonoScreenMeta, GlobalListe
         self.stopGlobalListening()
         g_currentVehicle.onChanged -= self.__onVehicleChange
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
-        falloutCtrl = getFalloutCtrl()
+        falloutCtrl = self.falloutCtrl
         if falloutCtrl is not None:
             falloutCtrl.onSettingsChanged -= self.__onFalloutSettingsChanged
         return

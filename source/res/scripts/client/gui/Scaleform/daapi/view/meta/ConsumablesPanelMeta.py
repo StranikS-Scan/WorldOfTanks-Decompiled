@@ -25,8 +25,8 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setItemTimeQuantityInSlotS(self, idx, quantity, timeRemaining, maxTime):
         return self.flashObject.as_setItemTimeQuantityInSlot(idx, quantity, timeRemaining, maxTime) if self._isDAAPIInited() else None
 
-    def as_setCoolDownTimeS(self, idx, timeRemaining):
-        return self.flashObject.as_setCoolDownTime(idx, timeRemaining) if self._isDAAPIInited() else None
+    def as_setCoolDownTimeS(self, idx, duration, baseTime, startTime, isReloading):
+        return self.flashObject.as_setCoolDownTime(idx, duration, baseTime, startTime, isReloading) if self._isDAAPIInited() else None
 
     def as_setCoolDownPosAsPercentS(self, idx, percent):
         return self.flashObject.as_setCoolDownPosAsPercent(idx, percent) if self._isDAAPIInited() else None

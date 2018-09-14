@@ -1,26 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/SwitchPeripheryWindow.py
-from ConnectionManager import connectionManager
 import constants
-from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
-from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
-from gui.Scaleform.daapi.view.meta.SwitchPeripheryWindowMeta import SwitchPeripheryWindowMeta
-from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.shared.formatters import text_styles
-from helpers.i18n import makeString as _ms
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
-from predefined_hosts import g_preDefinedHosts, REQUEST_RATE
-from gui import GUI_SETTINGS
-from gui import DialogsInterface
-from gui import game_control
+from ConnectionManager import connectionManager
 from adisp import process
+from debug_utils import LOG_DEBUG
+from gui import DialogsInterface
+from gui import GUI_SETTINGS
+from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
+from gui.Scaleform.daapi.view.meta.SwitchPeripheryWindowMeta import SwitchPeripheryWindowMeta
+from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
+from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
+from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.formatters import text_styles
+from helpers import dependency
+from helpers.i18n import makeString as _ms
+from predefined_hosts import g_preDefinedHosts, REQUEST_RATE
+from skeletons.gui.game_control import IReloginController
 
 class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
     _BTN_WIDTH = 140
     _CLOSE_BTN_ACTION = 'closeAction'
     _SWITCH_BTN_ACTION = 'switchAction'
+    relogin = dependency.descriptor(IReloginController)
 
     def __init__(self, ctx):
         super(SwitchPeripheryWindow, self).__init__()
@@ -114,7 +116,7 @@ class SwitchPeripheryWindow(SwitchPeripheryWindowMeta):
         else:
             success = yield DialogsInterface.showI18nConfirmDialog('changePeriphery')
         if success:
-            game_control.g_instance.relogin.doRelogin(peripheryID, extraChainSteps=self.__ctx.getExtraChainSteps())
+            self.relogin.doRelogin(peripheryID, extraChainSteps=self.__ctx.getExtraChainSteps())
 
     def __onServersUpdate(self, _):
         self._updateServersList()

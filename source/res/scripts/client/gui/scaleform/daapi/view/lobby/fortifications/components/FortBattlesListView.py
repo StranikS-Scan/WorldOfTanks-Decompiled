@@ -1,20 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesListView.py
 import BigWorld
-from constants import PREBATTLE_TYPE
-from gui.shared.formatters import text_styles
-from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from helpers import i18n, time_utils, int2roman
-from gui.prb_control.prb_helpers import UnitListener
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortClanBattleListMeta import FortClanBattleListMeta
+from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters import text_styles
 from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE, FORT_BATTLE_DIVISIONS
+from helpers import i18n, time_utils, int2roman
 
-class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
+class FortBattlesListView(FortClanBattleListMeta, FortListener):
 
     def __init__(self):
         super(FortBattlesListView, self).__init__()
@@ -33,15 +31,12 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
             self.as_selectByIndexS(-1)
             self._searchDP.setSelectedID(None)
             self.as_setDetailsS(None)
-            cache = self.fortCtrl.getFortBattlesCache()
+            cache = self.prbEntity.getBrowser()
             if cache is not None:
                 cache.clearSelectedID()
         self.__refreshCallback()
         self.__updateNextBattleCount()
         return
-
-    def onUnitFunctionalInited(self):
-        self.unitFunctional.setEntityType(PREBATTLE_TYPE.FORT_BATTLE)
 
     def onFortBattleChanged(self, cache, item, battleItem):
         prevIdx = self._searchDP.getSelectedIdx()
@@ -71,7 +66,7 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
 
     def onFortBattleUnitReceived(self, clientIdx):
         self._searchDP.refresh()
-        cache = self.fortCtrl.getFortBattlesCache()
+        cache = self.prbEntity.getBrowser()
         if cache is not None and cache.getSelectedIdx() == clientIdx:
             self.__makeDetailsData(clientIdx)
         return
@@ -81,7 +76,7 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
         if vo is None:
             return
         else:
-            cache = self.fortCtrl.getFortBattlesCache()
+            cache = self.prbEntity.getBrowser()
             if cache is not None and not cache.isRequestInProcess:
                 battleID, _ = vo['sortieID']
                 if not cache.setSelectedID(battleID):
@@ -97,10 +92,7 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
 
     def _populate(self):
         super(FortBattlesListView, self)._populate()
-        if self.unitFunctional.getEntityType() != PREBATTLE_TYPE.NONE:
-            self.unitFunctional.setEntityType(PREBATTLE_TYPE.FORT_BATTLE)
-        self.startFortListening()
-        cache = self.fortCtrl.getFortBattlesCache()
+        cache = self.prbEntity.getBrowser()
         if cache:
             self._searchDP.rebuildList(cache)
         self.__refreshCallback()
@@ -108,7 +100,6 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
 
     def _dispose(self):
         self.__clearCallback()
-        self.stopFortListening()
         super(FortBattlesListView, self)._dispose()
 
     def __clearCallback(self):
@@ -118,14 +109,14 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
         return
 
     def __processCallback(self):
-        cache = self.fortCtrl.getFortBattlesCache()
+        cache = self.prbEntity.getBrowser()
         if cache:
             self._searchDP.rebuildList(cache)
             self.__refreshCallback()
 
     def __refreshCallback(self):
         self.__clearCallback()
-        cache = self.fortCtrl.getFortBattlesCache()
+        cache = self.prbEntity.getBrowser()
         if cache:
             delta = 2 * time_utils.ONE_WEEK
             for item, battleItem in cache.getIterator():
@@ -166,7 +157,7 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
          'textAlign': textAlign}
 
     def __updateNextBattleCount(self):
-        cache = self.fortCtrl.getFortBattlesCache()
+        cache = self.prbEntity.getBrowser()
         if cache is None:
             return
         else:
@@ -177,7 +168,7 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
 
     def __makeDetailsData(self, clientIdx):
         result = self._searchDP.getUnitVO(clientIdx)
-        cache = self.fortCtrl.getFortBattlesCache()
+        cache = self.prbEntity.getBrowser()
         maxVehicleLevel = FORT_BATTLE_DIVISIONS.ABSOLUTE.maxVehicleLevel
         if cache is not None:
             item, battleItem = cache.getItem(cache.getSelectedID())
@@ -224,7 +215,7 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
             self._searchDP.refresh()
             return
         else:
-            cache = self.fortCtrl.getFortBattlesCache()
+            cache = self.prbEntity.getBrowser()
             if cache is not None:
                 self.__refreshCallback()
                 self._searchDP.rebuildList(cache)

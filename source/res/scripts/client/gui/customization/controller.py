@@ -5,8 +5,6 @@ from Event import Event
 from gui import GUI_SETTINGS
 from CurrentVehicle import g_currentVehicle
 from gui.shared.ItemsCache import g_itemsCache
-from gui.server_events.EventsCache import g_eventsCache
-from gui.game_control import g_instance as g_gameControlInstance
 from items.vehicles import g_cache as g_vehiclesCache
 from items.qualifiers import g_cache as g_qualifiersCache
 from gui import g_tankActiveCamouflage
@@ -19,7 +17,7 @@ from gui.customization.slots import Slots
 from gui.customization.filter import Filter
 from gui.customization.cart import Cart
 from gui.customization.bonus_panel import BonusPanel
-_ExternalDependencies = namedtuple('ExternalDependencies', 'g_currentVehicle g_questsCache g_itemsCache g_gameControlInstance ' + 'g_vehiclesCache g_tankActiveCamouflage, g_qualifiersCache')
+_ExternalDependencies = namedtuple('ExternalDependencies', 'g_currentVehicle g_itemsCache ' + 'g_vehiclesCache g_tankActiveCamouflage, g_qualifiersCache')
 
 class _Events(object):
 
@@ -134,9 +132,7 @@ class Controller(object):
 
 
 _externalDependencies = (g_currentVehicle,
- g_eventsCache,
  g_itemsCache,
- g_gameControlInstance,
  g_vehiclesCache,
  g_tankActiveCamouflage,
  g_qualifiersCache)

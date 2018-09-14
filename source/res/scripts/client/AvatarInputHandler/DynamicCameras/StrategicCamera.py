@@ -6,15 +6,17 @@ import BigWorld
 import Math
 import Settings
 import constants
-from AvatarInputHandler import mathUtils, cameras
+from AvatarInputHandler import mathUtils, cameras, aih_global_binding
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
 from AvatarInputHandler.cameras import ICamera, getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
 from ClientArena import Plane
 from Math import Vector2, Vector3
-from avatar_helpers import aim_global_binding
-from debug_utils import LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
+from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
+from constants import AVATAR_SUBFILTERS
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return StrategicCamera(settingsDataSec)
@@ -36,7 +38,8 @@ class StrategicCamera(ICamera, CallbackDelayer):
 
     camera = property(lambda self: self.__cam)
     aimingSystem = property(lambda self: self.__aimingSystem)
-    __aimOffset = aim_global_binding.bind(aim_global_binding.BINDING_ID.AIM_OFFSET)
+    settingsCore = dependency.descriptor(ISettingsCore)
+    __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, dataSec):
         CallbackDelayer.__init__(self)
@@ -53,6 +56,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__dxdydz = Vector3(0, 0, 0)
         self.__needReset = 0
         self.__smoothingPivotDelta = 0
+        self.__isRemoteCamera = False
         return
 
     def create(self, onChangeControlMode=None):
@@ -74,7 +78,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
             self.__aimingSystem = None
         return
 
-    def enable(self, targetPos, saveDist):
+    def enable(self, targetPos, saveDist, isRemoteCamera=False):
         self.__prevTime = BigWorld.time()
         self.__aimingSystem.enable(targetPos)
         srcMat = mathUtils.createRotationMatrix((0.0, -math.pi * 0.499, 0.0))
@@ -85,6 +89,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         camTarget = Math.MatrixProduct()
         camTarget.b = self.__aimingSystem.matrix
         self.__cam.target = camTarget
+        self.__isRemoteCamera = isRemoteCamera
         BigWorld.camera(self.__cam)
         BigWorld.player().positionControl.moveTo(self.__aimingSystem.matrix.translation)
         BigWorld.player().positionControl.followCamera(True)
@@ -217,7 +222,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
             if replayCtrl.isRecording:
                 replayCtrl.setAimClipPosition(aimOffset)
         self.__aimOffset = aimOffset
-        shotDescr = BigWorld.player().vehicleTypeDescriptor.shot
+        shotDescr = BigWorld.player().getVehicleDescriptor().shot
         BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Math.Vector3(0, -shotDescr['gravity'], 0), aimOffset)
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
@@ -247,6 +252,19 @@ class StrategicCamera(ICamera, CallbackDelayer):
         maxPivotHeight = distRange[1] - distRange[0]
         self.__camDist = mathUtils.clamp(0, maxPivotHeight, self.__camDist)
         self.__cfg['camDist'] = self.__camDist
+        player = BigWorld.player()
+        if self.__isRemoteCamera:
+            cameraShotPoint = player.remoteCameraStrategic.shotPoint
+            getVector3 = getattr(player.filter, 'getVector3', None)
+            if getVector3 is not None:
+                time = BigWorld.serverTime()
+                cameraShotPoint = getVector3(AVATAR_SUBFILTERS.CAMERA_STRATEGIC_SHOT_POINT, time)
+            self.__aimingSystem.updateTargetPos(cameraShotPoint)
+            self.__camDist = player.remoteCameraStrategic.shotPoint.y
+        vehicle = player.getVehicleAttached()
+        if not player.isObserver() and vehicle is not None:
+            shotPoint = self.__aimingSystem.getDesiredShotPoint()
+            vehicle.setStrategicCameraDataForObservers(Math.Vector3(shotPoint.x, self.__camDist, shotPoint.z))
         camDistWithSmoothing = self.__camDist + self.__smoothingPivotDelta - self.__aimingSystem.heightFromPlane
         self.__cam.pivotPosition = Math.Vector3(0.0, camDistWithSmoothing, 0.0)
         if self.__dxdydz.z != 0 and self.__onChangeControlMode is not None and mathUtils.almostZero(self.__camDist - maxPivotHeight):
@@ -297,9 +315,8 @@ class StrategicCamera(ICamera, CallbackDelayer):
             ds = ds['strategicMode/camera']
         self.__userCfg = dict()
         ucfg = self.__userCfg
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        ucfg['horzInvert'] = g_settingsCore.getSetting('mouseHorzInvert')
-        ucfg['vertInvert'] = g_settingsCore.getSetting('mouseVertInvert')
+        ucfg['horzInvert'] = self.settingsCore.getSetting('mouseHorzInvert')
+        ucfg['vertInvert'] = self.settingsCore.getSetting('mouseVertInvert')
         ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
         ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
         ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)

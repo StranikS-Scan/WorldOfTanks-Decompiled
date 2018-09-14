@@ -3,6 +3,8 @@
 import BigWorld
 from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE, ACCOUNT_ATTR
 from gui.prb_control.settings import makePrebattleSettings, VEHICLE_MAX_LEVEL
+from helpers import dependency
+from skeletons.gui.game_control import IGameSessionController
 
 def isInRandomQueue():
     return getattr(BigWorld.player(), 'isInRandomQueue', False)
@@ -227,8 +229,8 @@ def isBattleSession(settings=None):
 
 
 def isParentControlActivated():
-    from gui import game_control
-    return game_control.g_instance.gameSession.isParentControlActive and not isTraining()
+    gameSession = dependency.instance(IGameSessionController)
+    return gameSession.isParentControlActive and not isTraining()
 
 
 def getClientUnitMgr():

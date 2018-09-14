@@ -1,20 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/chains/triggers.py
+from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import Vehicle
+from helpers import dependency
+from skeletons.gui.game_control import IFalloutController, IIGRController
+from skeletons.gui.server_events import IEventsCache
 from tutorial.control import game_vars, g_tutorialWeaver
-from tutorial.logger import LOG_DEBUG
 from tutorial.control.chains import aspects
 from tutorial.control.triggers import Trigger, TriggerWithSubscription
-from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
-from gui.game_control import getFalloutCtrl
-from gui.prb_control.prb_helpers import GlobalListener
-from gui.server_events.EventsCache import g_eventsCache
-from gui import game_control
+from tutorial.logger import LOG_DEBUG
 __all__ = ('SimpleDialogTrigger', 'BuyNextLevelVehicleTrigger', 'CurrentVehicleRequiredLevelTrigger', 'RentedVehicleTrigger', 'CurrentVehicleMaintenanceStateTrigger', 'CurrentVehicleLockedTrigger', 'TankmanPriceDiscountTrigger', 'QueueTrigger', 'FightButtonDisabledTrigger', 'CurrentVehicleNeedChangeTrigger', 'IsInSandBoxPreQueueTrigger')
 
 class SimpleDialogTrigger(Trigger):
@@ -87,7 +87,7 @@ class RentedVehicleTrigger(Trigger):
         self.toggle(isOn=self.isOn())
 
 
-class _CurrentVehicleViewStateTrigger(Trigger, GlobalListener):
+class _CurrentVehicleViewStateTrigger(Trigger, IGlobalListener):
 
     def run(self):
         if not self.isSubscribed:
@@ -101,7 +101,7 @@ class _CurrentVehicleViewStateTrigger(Trigger, GlobalListener):
             self.isSubscribed = False
         super(_CurrentVehicleViewStateTrigger, self).clear()
 
-    def onPlayerStateChanged(self, functional, roster, accountInfo):
+    def onPlayerStateChanged(self, entity, roster, accountInfo):
         if accountInfo.isCurrentPlayer():
             self.toggle(isOn=self.isOn())
 
@@ -109,16 +109,7 @@ class _CurrentVehicleViewStateTrigger(Trigger, GlobalListener):
         if pInfo.isCurrentPlayer():
             self.toggle(isOn=self.isOn())
 
-    def onPrbFunctionalInited(self):
-        self.toggle(isOn=self.isOn())
-
-    def onUnitFunctionalInited(self):
-        self.toggle(isOn=self.isOn())
-
-    def onPrbFunctionalFinished(self):
-        self.toggle(isOn=self.isOn())
-
-    def onUnitFunctionalFinished(self):
+    def onPrbEntitySwitched(self):
         self.toggle(isOn=self.isOn())
 
 
@@ -158,12 +149,6 @@ class CurrentVehicleNeedChangeTrigger(_CurrentVehicleViewStateTrigger):
 
 class QueueTrigger(_CurrentVehicleViewStateTrigger):
 
-    def onPreQueueFunctionalInited(self):
-        self.toggle(isOn=self.isOn())
-
-    def onPreQueueFunctionalFinished(self):
-        self.toggle(isOn=self.isOn())
-
     def onEnqueued(self, queueType, *args):
         self.toggle(isOn=self.isOn())
 
@@ -171,7 +156,7 @@ class QueueTrigger(_CurrentVehicleViewStateTrigger):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        return self.preQueueFunctional is not None and self.preQueueFunctional.isInQueue()
+        return self.prbEntity.isInQueue()
 
 
 class TankmanPriceDiscountTrigger(TriggerWithSubscription):
@@ -193,7 +178,7 @@ class TankmanPriceDiscountTrigger(TriggerWithSubscription):
         self.toggle(isOn=self.isOn())
 
 
-class IsInSandBoxPreQueueTrigger(Trigger, GlobalListener):
+class IsInSandBoxPreQueueTrigger(Trigger, IGlobalListener):
 
     def run(self):
         self.isRunning = True
@@ -209,13 +194,8 @@ class IsInSandBoxPreQueueTrigger(Trigger, GlobalListener):
     def onPreQueueSettingsChanged(self, _):
         self.toggle(isOn=self.isOn())
 
-    def onPreQueueFunctionalInited(self):
+    def onPrbEntitySwitched(self):
         self.toggle(isOn=self.isOn())
-
-    def onPreQueueFunctionalFinished(self):
-        state = self.prbDispatcher.getFunctionalState()
-        if state.isInPreQueue(queueType=QUEUE_TYPE.SANDBOX):
-            self.toggle(isOn=self.isOn())
 
     def toggle(self, isOn=True, **kwargs):
         super(IsInSandBoxPreQueueTrigger, self).toggle(isOn=isOn, benefit=False)
@@ -233,13 +213,15 @@ class IsInSandBoxOrRandomPreQueueTrigger(IsInSandBoxPreQueueTrigger):
         state = self.prbDispatcher.getFunctionalState()
         return state.isInPreQueue(queueType=QUEUE_TYPE.SANDBOX) or state.isInPreQueue(queueType=QUEUE_TYPE.RANDOMS)
 
-    def onPreQueueFunctionalFinished(self):
-        state = self.prbDispatcher.getFunctionalState()
-        if state.isInPreQueue(queueType=QUEUE_TYPE.SANDBOX) or state.isInPreQueue(queueType=QUEUE_TYPE.RANDOMS):
-            self.toggle(isOn=self.isOn())
+    def onPrbEntitySwitched(self):
+        if self.isOn():
+            self.toggle(isOn=True)
 
 
-class FightButtonDisabledTrigger(Trigger, GlobalListener):
+class FightButtonDisabledTrigger(Trigger, IGlobalListener):
+    falloutCtrl = dependency.descriptor(IFalloutController)
+    igrCtrl = dependency.descriptor(IIGRController)
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def run(self):
         self.isRunning = True
@@ -248,11 +230,10 @@ class FightButtonDisabledTrigger(Trigger, GlobalListener):
             self.startGlobalListening()
             g_eventBus.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
             g_currentVehicle.onChanged += self.__onVehicleChanged
-            falloutCtrl = getFalloutCtrl()
-            falloutCtrl.onVehiclesChanged += self.__updateFalloutSettings
-            falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
-            g_eventsCache.onSyncCompleted += self.__onEventsCacheResync
-            game_control.g_instance.igr.onIgrTypeChanged -= self.__onIGRChanged
+            self.falloutCtrl.onVehiclesChanged += self.__updateFalloutSettings
+            self.falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
+            self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
+            self.igrCtrl.onIgrTypeChanged -= self.__onIGRChanged
         self.toggle(isOn=self.isOn())
 
     def clear(self):
@@ -260,11 +241,10 @@ class FightButtonDisabledTrigger(Trigger, GlobalListener):
             self.stopGlobalListening()
             g_eventBus.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
             g_currentVehicle.onChanged -= self.__onVehicleChanged
-            falloutCtrl = getFalloutCtrl()
-            falloutCtrl.onVehiclesChanged -= self.__updateFalloutSettings
-            falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
-            g_eventsCache.onSyncCompleted -= self.__onEventsCacheResync
-            game_control.g_instance.igr.onIgrTypeChanged -= self.__onIGRChanged
+            self.falloutCtrl.onVehiclesChanged -= self.__updateFalloutSettings
+            self.falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
+            self.eventsCache.onSyncCompleted -= self.__onEventsCacheResync
+            self.igrCtrl.onIgrTypeChanged -= self.__onIGRChanged
         self.isSubscribed = False
         self.isRunning = False
 
@@ -272,11 +252,11 @@ class FightButtonDisabledTrigger(Trigger, GlobalListener):
         items = battle_selector_items.getItems()
         state = self.prbDispatcher.getFunctionalState()
         selected = items.update(state)
-        canDo, _ = self.prbDispatcher.canPlayerDoAction()
-        isFightBtnDisabled = not canDo or selected.isFightButtonForcedDisabled()
+        result = self.prbEntity.canPlayerDoAction()
+        isFightBtnDisabled = not result.isValid or selected.isFightButtonForcedDisabled()
         return isFightBtnDisabled
 
-    def onPlayerStateChanged(self, functional, roster, accountInfo):
+    def onPlayerStateChanged(self, entity, roster, accountInfo):
         if accountInfo.isCurrentPlayer():
             self.toggle(isOn=self.isOn())
 
@@ -284,22 +264,7 @@ class FightButtonDisabledTrigger(Trigger, GlobalListener):
         if pInfo.isCurrentPlayer():
             self.toggle(isOn=self.isOn())
 
-    def onPrbFunctionalInited(self):
-        self.toggle(isOn=self.isOn())
-
-    def onUnitFunctionalInited(self):
-        self.toggle(isOn=self.isOn())
-
-    def onPrbFunctionalFinished(self):
-        self.toggle(isOn=self.isOn())
-
-    def onUnitFunctionalFinished(self):
-        self.toggle(isOn=self.isOn())
-
-    def onPreQueueFunctionalInited(self):
-        self.toggle(isOn=self.isOn())
-
-    def onPreQueueFunctionalFinished(self):
+    def onPrbEntitySwitched(self):
         self.toggle(isOn=self.isOn())
 
     def onPreQueueSettingsChanged(self, _):

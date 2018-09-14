@@ -779,7 +779,15 @@
             <collisionModelServer>	vehicles/german/G126_HWK_12/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G126_HWK_12/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
-          <emblemSlots></emblemSlots>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000001 0.0064458 1.76891	</rayStart>
+              <rayEnd>	-0.0258403 0.00901199 1.76891	</rayEnd>
+              <rayUp>	0.055 0.055 5	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <drivenJoints>
             <master>

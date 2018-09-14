@@ -12,7 +12,7 @@ from VersionUpdater import VersionUpdaterBase
 from wotdecorators import singleton
 ACCOUNT_DOSSIER_VERSION = 104
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
-VEHICLE_DOSSIER_VERSION = 95
+VEHICLE_DOSSIER_VERSION = 96
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
 TANKMAN_DOSSIER_VERSION = 66
 TANKMAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromTankmanDossier%d'
@@ -3371,6 +3371,109 @@ def __updateFromVehicleDossier94(compDescr):
 
     setVersion(updateCtx, 95)
     return (95, updateCtx['dossierCompDescr'])
+
+
+def __updateFromVehicleDossier95(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'globalMapCommon',
+     'maxGlobalMapCommon',
+     'fallout',
+     'maxFallout',
+     'falloutAchievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    battlesOnStunningVehiclesOffsets = {'fortBattles': 104,
+     'globalMapCommon': 116,
+     'a15x15_2': 44,
+     'fortSorties': 104,
+     'historical': 104,
+     'rated7x7': 104,
+     'clan2': 44,
+     'fallout': 128,
+     'company2': 44,
+     'a7x7': 108}
+    for block, offset in battlesOnStunningVehiclesOffsets.iteritems():
+        lastFieldKey = {'a7x7': 'battlesCountBefore9_0',
+         'globalMapCommon': 'battlesCountBefore9_0',
+         'fallout': 'deathCount'}.get(block, 'damageBlockedByArmor')
+        packing = {lastFieldKey: (offset - 4, 'I'),
+         'battlesOnStunningVehicles': (offset, 'I'),
+         'stunNum': (offset + 4, 'I'),
+         'damageAssistedStun': (offset + 8, 'I')}
+        values = getStaticSizeBlockRecordValues(updateCtx, block, packing)
+        if not values:
+            continue
+        lastField = values[lastFieldKey]
+        stunNum = values['stunNum']
+        damageAssistedStun = values['damageAssistedStun']
+        if damageAssistedStun <= 65535:
+            continue
+        if 0 == stunNum:
+            setStaticSizeBlockRecordValues(updateCtx, block, {lastFieldKey: (offset - 4, 'I'),
+             'damageAssistedStun': (offset + 8, 'I')}, {lastFieldKey: lastField + (damageAssistedStun & 4294901760L),
+             'damageAssistedStun': damageAssistedStun & 65535})
+        if 0 != stunNum and damageAssistedStun > 65535:
+            if 'a15x15_2' != block:
+                continue
+            else:
+                piercingPacking = {'noDamageDirectHitsReceived': (16, 'I'),
+                 'directHitsReceived': (12, 'I'),
+                 'potentialDamageReceived': (36, 'I'),
+                 'piercingsReceived': (20, 'I')}
+                damageReceivedPacking = {'damageReceived': (40, 'I')}
+                data = getStaticSizeBlockRecordValues(updateCtx, 'a15x15_2', piercingPacking)
+                data.update(getStaticSizeBlockRecordValues(updateCtx, 'a15x15', damageReceivedPacking))
+                if data['piercingsReceived'] < 50 or data['directHitsReceived'] < 50:
+                    continue
+                else:
+                    potentialDamagePerHit = 1.0 * data['potentialDamageReceived'] / data['directHitsReceived']
+                    aproxDamageBlockedByArmor = data['potentialDamageReceived'] - data['damageReceived']
+                    if data['noDamageDirectHitsReceived'] < 50 or aproxDamageBlockedByArmor <= 65535:
+                        continue
+                    potentialDamagePerHitForBlockedDamage = 1.0 * lastField / data['noDamageDirectHitsReceived']
+                    while 1:
+                        aproxDamageBlockedByArmor >= lastField + (damageAssistedStun & 4294901760L) and potentialDamagePerHit > potentialDamagePerHitForBlockedDamage and lastField += 65536
+                        damageAssistedStun -= 65536
+                        potentialDamagePerHitForBlockedDamage = 1.0 * lastField / data['noDamageDirectHitsReceived']
+
+                    if damageAssistedStun >= 0:
+                        setStaticSizeBlockRecordValues(updateCtx, block, {lastFieldKey: (offset - 4, 'I'),
+                         'damageAssistedStun': (offset + 8, 'I')}, {lastFieldKey: lastField,
+                         'damageAssistedStun': damageAssistedStun})
+
+    setVersion(updateCtx, 96)
+    return (96, updateCtx['dossierCompDescr'])
 
 
 def __bootstrapTankmanDossierFrom(ver, compDescr):

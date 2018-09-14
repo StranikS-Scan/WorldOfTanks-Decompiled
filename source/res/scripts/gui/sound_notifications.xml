@@ -1,0 +1,650 @@
+<sound_notifications.xml>
+  <gun_reloaded>
+    <fx>
+      <wwsound>	gun_reloaded	</wwsound>
+      <playRules>	0	</playRules>
+    </fx>
+  </gun_reloaded>
+  <target_captured>
+    <voice>
+      <wwsound>	vo_target_captured	</wwsound>
+      <playRules>	2	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </voice>
+  </target_captured>
+  <target_lost>
+    <voice>
+      <wwsound>	vo_target_lost	</wwsound>
+      <playRules>	2	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </voice>
+  </target_lost>
+  <target_unlocked>
+    <voice>
+      <wwsound>	vo_target_unlocked	</wwsound>
+      <playRules>	2	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </voice>
+  </target_unlocked>
+  <enemy_hp_damaged_by_projectile_by_player>
+    <voice>
+      <wwsound>	vo_enemy_hp_damaged_by_projectile_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_hp_damaged_by_projectile_by_player>
+  <enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player>
+    <voice>
+      <wwsound>	vo_enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player>
+  <enemy_hp_damaged_by_projectile_and_gun_damaged_by_player>
+    <voice>
+      <wwsound>	vo_enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_hp_damaged_by_projectile_and_gun_damaged_by_player>
+  <enemy_hp_damaged_by_explosion_at_direct_hit_by_player>
+    <voice>
+      <wwsound>	vo_enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_hp_damaged_by_explosion_at_direct_hit_by_player>
+  <enemy_no_hp_damage_at_attempt_by_player>
+    <voice>
+      <wwsound>	vo_armor_not_pierced_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_no_hp_damage_at_attempt_by_player>
+  <enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player>
+    <voice>
+      <wwsound>	vo_enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player>
+  <enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player>
+    <voice>
+      <wwsound>	vo_enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player>
+  <enemy_no_hp_damage_at_no_attempt_by_player>
+    <voice>
+      <wwsound>	vo_enemy_no_hp_damage_at_no_attempt_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_no_hp_damage_at_no_attempt_by_player>
+  <enemy_no_piercing_by_player>
+    <voice>
+      <wwsound>	vo_armor_not_pierced_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_no_piercing_by_player>
+  <enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player>
+    <voice>
+      <wwsound>	vo_enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player>
+  <enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player>
+    <voice>
+      <wwsound>	vo_enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player>
+  <enemy_ricochet_by_player>
+    <voice>
+      <wwsound>	vo_armor_ricochet_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_ricochet_by_player>
+  <enemy_hp_damaged_by_near_explosion_by_player>
+    <voice>
+      <wwsound>	vo_damage_by_near_explosion_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_hp_damaged_by_near_explosion_by_player>
+  <enemy_no_hp_damage_by_near_explosion_by_player>
+    <voice>
+      <wwsound>	vo_damage_by_near_explosion_by_player	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </enemy_no_hp_damage_by_near_explosion_by_player>
+  <enemy_fire_started_by_player>
+    <voice>
+      <wwsound>	vo_enemy_fire_started_by_player	</wwsound>
+      <playRules>	3	</playRules>
+    </voice>
+  </enemy_fire_started_by_player>
+  <damage_by_near_explosion_by_enemy>
+    <voice>
+      <wwsound>	vo_damage_by_near_explosion_by_enemy	</wwsound>
+      <playRules>	2	</playRules>
+    </voice>
+  </damage_by_near_explosion_by_enemy>
+  <enemy_killed_by_player>
+    <voice>
+      <wwsound>	vo_enemy_killed_by_player	</wwsound>
+      <playRules>	1	</playRules>
+    </voice>
+  </enemy_killed_by_player>
+  <enemy_killed>
+    <voice>
+      <wwsound>	vo_enemy_killed	</wwsound>
+      <playRules>	1	</playRules>
+    </voice>
+  </enemy_killed>
+  <enemy_sighted>
+    <voice>
+      <wwsound>	vo_enemy_sighted	</wwsound>
+      <playRules>	2	</playRules>
+      <minTimeBetweenEvents>	2	</minTimeBetweenEvents>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </voice>
+  </enemy_sighted>
+  <enemies_sighted>
+    <voice>
+      <wwsound>	vo_enemies_sighted	</wwsound>
+      <playRules>	2	</playRules>
+      <minTimeBetweenEvents>	2	</minTimeBetweenEvents>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </voice>
+  </enemies_sighted>
+  <enemy_sighted_for_team>
+    <fx>
+      <wwsound>	enemy_sighted_for_team	</wwsound>
+      <playRules>	2	</playRules>
+      <shouldBindToPlayer>	False	</shouldBindToPlayer>
+    </fx>
+  </enemy_sighted_for_team>
+  <ally_killed>
+    <voice>
+      <wwsound>	vo_ally_killed_by_player	</wwsound>
+      <playRules>	1	</playRules>
+    </voice>
+  </ally_killed>
+  <ally_killed_by_player>
+    <voice>
+      <wwsound>	vo_ally_killed_by_player	</wwsound>
+      <playRules>	1	</playRules>
+    </voice>
+  </ally_killed_by_player>
+  <ally_killed_by_enemy>
+    <fx>
+      <wwsound>	expl_ally_NPC	</wwsound>
+      <playRules>	2	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </fx>
+  </ally_killed_by_enemy>
+  <vehicle_destroyed>
+    <voice>
+      <wwsound>	vo_vehicle_destroyed	</wwsound>
+      <playRules>	1	</playRules>
+    </voice>
+  </vehicle_destroyed>
+  <crew_deactivated>
+    <voice>
+      <wwsound>	vo_crew_deactivated	</wwsound>
+      <playRules>	1	</playRules>
+    </voice>
+  </crew_deactivated>
+  <engine_damaged>
+    <voice>
+      <wwsound>	vo_engine_damaged	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </engine_damaged>
+  <engine_destroyed>
+    <voice>
+      <wwsound>	vo_engine_destroyed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </engine_destroyed>
+  <engine_functional>
+    <voice>
+      <wwsound>	vo_engine_functional	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </engine_functional>
+  <ammo_bay_damaged>
+    <voice>
+      <wwsound>	vo_ammo_bay_damaged	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </ammo_bay_damaged>
+  <fuel_tank_damaged>
+    <voice>
+      <wwsound>	vo_fuel_tank_damaged	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </fuel_tank_damaged>
+  <radio_damaged>
+    <voice>
+      <wwsound>	vo_radio_damaged	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </radio_damaged>
+  <track_damaged>
+    <voice>
+      <wwsound>	vo_track_damaged	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	1.0	</minTimeBetweenEvents>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </track_damaged>
+  <track_destroyed>
+    <voice>
+      <wwsound>	vo_track_destroyed	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	1.0	</minTimeBetweenEvents>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </track_destroyed>
+  <track_functional>
+    <fx>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </fx>
+    <voice>
+      <wwsound>	vo_track_functional	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </track_functional>
+  <track_functional_can_move>
+    <fx>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </fx>
+    <voice>
+      <wwsound>	vo_track_functional_can_move	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </track_functional_can_move>
+  <gun_damaged>
+    <voice>
+      <wwsound>	vo_gun_damaged	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </gun_damaged>
+  <gun_destroyed>
+    <voice>
+      <wwsound>	vo_gun_destroyed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </gun_destroyed>
+  <gun_functional>
+    <voice>
+      <wwsound>	vo_gun_functional	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </gun_functional>
+  <turret_rotator_damaged>
+    <voice>
+      <wwsound>	vo_turret_rotator_damaged	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </turret_rotator_damaged>
+  <turret_rotator_destroyed>
+    <voice>
+      <wwsound>	vo_turret_rotator_destroyed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </turret_rotator_destroyed>
+  <turret_rotator_functional>
+    <voice>
+      <wwsound>	vo_turret_rotator_functional	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </turret_rotator_functional>
+  <surveying_devices_damaged>
+    <voice>
+      <wwsound>	vo_surveying_devices_damaged	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </surveying_devices_damaged>
+  <surveying_devices_destroyed>
+    <voice>
+      <wwsound>	vo_surveying_devices_destroyed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </surveying_devices_destroyed>
+  <surveying_devices_functional>
+    <voice>
+      <wwsound>	vo_surveying_devices_functional	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </surveying_devices_functional>
+  <commander_killed>
+    <voice>
+      <wwsound>	vo_commander_killed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </commander_killed>
+  <driver_killed>
+    <voice>
+      <wwsound>	vo_driver_killed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </driver_killed>
+  <radioman_killed>
+    <voice>
+      <wwsound>	vo_radioman_killed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </radioman_killed>
+  <gunner_killed>
+    <voice>
+      <wwsound>	vo_gunner_killed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </gunner_killed>
+  <loader_killed>
+    <voice>
+      <wwsound>	vo_loader_killed	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </loader_killed>
+  <fire_started>
+    <voice>
+      <wwsound>	vo_fire_started	</wwsound>
+      <timeout>	10	</timeout>
+      <playRules>	2	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </voice>
+  </fire_started>
+  <fire_stopped>
+    <voice>
+      <wwsound>	vo_fire_stopped	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </voice>
+  </fire_stopped>
+  <attack>
+    <voice>
+      <wwsound>	vo_chat_shotcuts_attack	</wwsound>
+      <playRules>	3	</playRules>
+    </voice>
+  </attack>
+  <back_to_base>
+    <voice>
+      <wwsound>	vo_chat_shotcuts_back_to_base	</wwsound>
+      <playRules>	3	</playRules>
+    </voice>
+  </back_to_base>
+  <follow_me>
+    <voice>
+      <wwsound>	vo_chat_shotcuts_follow_me	</wwsound>
+      <playRules>	3	</playRules>
+    </voice>
+  </follow_me>
+  <help_me>
+    <voice>
+      <wwsound>	vo_chat_shotcuts_help_me	</wwsound>
+      <playRules>	3	</playRules>
+    </voice>
+  </help_me>
+  <attack_the_enemy>
+    <voice>
+      <wwsound>	vo_chat_shotcuts_attack_the_enemy	</wwsound>
+      <playRules>	3	</playRules>
+    </voice>
+  </attack_the_enemy>
+  <positive>
+    <voice>
+      <wwsound>	vo_chat_shotcuts_positive	</wwsound>
+      <playRules>	3	</playRules>
+    </voice>
+  </positive>
+  <negative>
+    <voice>
+      <wwsound>	vo_chat_shotcuts_negative	</wwsound>
+      <playRules>	3	</playRules>
+    </voice>
+  </negative>
+  <chat_shortcut_common_fx>
+    <voice>
+      <wwsound>	minimap_attention	</wwsound>
+      <playRules>	0	</playRules>
+    </voice>
+  </chat_shortcut_common_fx>
+  <start_battle>
+    <voice>
+      <wwsound>	vo_start_battle	</wwsound>
+      <playRules>	0	</playRules>
+    </voice>
+  </start_battle>
+  <sight_convergence>
+    <fx>
+      <wwsound>	sight_convergence	</wwsound>
+      <playRules>	0	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+    </fx>
+  </sight_convergence>
+  <gun_intuition>
+    <fx>
+      <wwsound>	gun_intuition	</wwsound>
+      <playRules>	0	</playRules>
+    </fx>
+  </gun_intuition>
+  <observed_by_enemy>
+    <fx>
+      <wwsound>	lightbulb	</wwsound>
+      <playRules>	0	</playRules>
+    </fx>
+  </observed_by_enemy>
+  <show_ribbon>
+    <voice>
+      <wwsound>	lbe_appear	</wwsound>
+      <playRules>	0	</playRules>
+    </voice>
+  </show_ribbon>
+  <hide_ribbon>
+    <voice>
+      <wwsound>	lbe_disappear	</wwsound>
+      <playRules>	0	</playRules>
+    </voice>
+  </hide_ribbon>
+  <increment_ribbon_counter>
+    <voice>
+      <wwsound>	lbe_counter	</wwsound>
+      <playRules>	0	</playRules>
+    </voice>
+  </increment_ribbon_counter>
+  <dyn_squad_platoon_joined>
+    <voice>
+      <wwsound>	vo_dp_platoon_joined	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	20	</minTimeBetweenEvents>
+    </voice>
+  </dyn_squad_platoon_joined>
+  <dyn_squad_platoon_created>
+    <voice>
+      <wwsound>	vo_dp_platoon_created	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	20	</minTimeBetweenEvents>
+    </voice>
+  </dyn_squad_platoon_created>
+  <dyn_squad_platoon_dismissed>
+    <voice>
+      <wwsound>	vo_dp_platoon_dismissed	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	20	</minTimeBetweenEvents>
+    </voice>
+  </dyn_squad_platoon_dismissed>
+  <dyn_squad_been_excluded_platoon>
+    <voice>
+      <wwsound>	vo_dp_been_excluded_platoon	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	20	</minTimeBetweenEvents>
+    </voice>
+  </dyn_squad_been_excluded_platoon>
+  <dyn_squad_left_platoon>
+    <voice>
+      <wwsound>	vo_dp_left_platoon	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	20	</minTimeBetweenEvents>
+    </voice>
+  </dyn_squad_left_platoon>
+  <dyn_squad_assistance_been_requested>
+    <voice>
+      <wwsound>	vo_dp_assistance_been_requested	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	20	</minTimeBetweenEvents>
+    </voice>
+  </dyn_squad_assistance_been_requested>
+  <dyn_squad_player_joined_platoon>
+    <voice>
+      <wwsound>	vo_dp_player_joined_platoon	</wwsound>
+      <playRules>	3	</playRules>
+      <minTimeBetweenEvents>	20	</minTimeBetweenEvents>
+    </voice>
+  </dyn_squad_player_joined_platoon>
+  <point_repair>
+    <fx>
+      <wwsound>	point_repair	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </fx>
+    <voice>
+      <wwsound>	vo_flt_repair	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </point_repair>
+  <consumed_flag>
+    <fx>
+      <wwsound>	delivery_flag	</wwsound>
+      <playRules>	1	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </fx>
+  </consumed_flag>
+  <take_flag>
+    <fx>
+      <wwsound>	capture_flag	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </fx>
+    <voice>
+      <wwsound>	vo_flt_take_flag	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </take_flag>
+  <deliver_flag>
+    <fx>
+      <wwsound>	delivery_flag	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </fx>
+    <voice>
+      <wwsound>	vo_flt_deliver_flag	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </deliver_flag>
+  <enemy_take_flag>
+    <voice>
+      <wwsound>	vo_flt_enemy_take_flag	</wwsound>
+      <playRules>	3	</playRules>
+      <timeout>	9	</timeout>
+    </voice>
+  </enemy_take_flag>
+  <ally_take_flag>
+    <voice>
+      <wwsound>	vo_flt_ally_flag	</wwsound>
+      <playRules>	3	</playRules>
+      <timeout>	9	</timeout>
+    </voice>
+  </ally_take_flag>
+  <ally_drop_flag>
+    <voice>
+      <wwsound>	vo_flt_drop_flag	</wwsound>
+      <playRules>	3	</playRules>
+      <timeout>	9	</timeout>
+    </voice>
+  </ally_drop_flag>
+  <ally_deliver_flag>
+    <voice>
+      <wwsound>	vo_flt_ally_captured	</wwsound>
+      <playRules>	3	</playRules>
+      <timeout>	9	</timeout>
+    </voice>
+  </ally_deliver_flag>
+  <respawn>
+    <voice>
+      <wwsound>	vo_flt_ready_for_action	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </respawn>
+  <combat_reserve>
+    <voice>
+      <wwsound>	vo_flt_combat_reserve	</wwsound>
+      <playRules>	3	</playRules>
+      <shouldBindToPlayer>	True	</shouldBindToPlayer>
+      <timeout>	9	</timeout>
+    </voice>
+  </combat_reserve>
+  <crew_member_contusion>
+    <fx>
+      <wwsound>	crew_member_contusion	</wwsound>
+      <playRules>	0	</playRules>
+    </fx>
+  </crew_member_contusion>
+</sound_notifications.xml>

@@ -410,7 +410,7 @@ class TankmanRestore(ItemProcessor):
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        makeI18nError('restore_tankman/%s' % errStr, defaultSysMsgKey='restore_tankman/server_error')
+        return makeI18nError('restore_tankman/%s' % errStr, defaultSysMsgKey='restore_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
         restorePrice, _ = getTankmenRestoreInfo(self.__tankman)
